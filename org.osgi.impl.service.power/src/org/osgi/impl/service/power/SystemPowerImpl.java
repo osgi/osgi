@@ -42,7 +42,7 @@ import org.osgi.service.power.*;
  * 
  * It informs all listeners when the system power changes.
  * 
- * @author Olivier Pavé, Siemens AG
+ * @author Olivier Pavï¿½, Siemens AG
  */
 public class SystemPowerImpl implements SystemPower {
 	

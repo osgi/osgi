@@ -36,7 +36,7 @@ import org.osgi.service.power.*;
 /**
  * 
  * 
- * @author Olivier Pavé, Siemens AG
+ * @author Olivier Pavï¿½, Siemens AG
  * @version $Revision$
  */
 public class PowerManager implements SystemPowerStateListener {
