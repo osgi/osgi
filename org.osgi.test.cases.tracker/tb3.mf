@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bundle-Name: test.cases.servicetracker.tb3
+Bundle-Name: test.cases.tracker.tb3
 Bundle-Description: TB3 for service tracker test case
 Bundle-Vendor: Ericsson Radio Systems AB
 Bundle-Version: $(version)
