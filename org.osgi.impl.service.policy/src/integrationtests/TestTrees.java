@@ -34,6 +34,7 @@ import junit.framework.TestCase;
 import org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager;
 import org.eclipse.osgi.framework.internal.core.OSGi;
 import org.eclipse.osgi.framework.internal.defaultadaptor.DefaultAdaptor;
+import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.PackagePermission;
@@ -266,4 +267,24 @@ public class TestTrees extends TestCase {
 		} catch (AccessControlException e) {}
 		
 	}
+	
+	public void testPermissionAdmin() throws Exception {
+		startFramework(true);
+		
+		DmtSession session = dmtAdmin.getSession(PermissionAdminPlugin.dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
+		String value = session.getNodeValue("Default/PermissionInfo").getString();
+		// the default permission is already set at startup, let's check if it is there
+		assertEquals(new PermissionInfo(PackagePermission.class.getName(),"*","IMPORT").getEncoded()+"\n",value);
+
+		session.createInteriorNode("1");
+		session.setNodeValue("1/Location",new DmtData("http://location1"));
+		PermissionInfo pi = new PermissionInfo(AdminPermission.class.getName(),"*","*");
+		session.setNodeValue("1/PermissionInfo",new DmtData(pi.getEncoded()));
+		session.close();
+		
+		PermissionInfo[] permissions = permissionAdmin.getPermissions("http://location1");
+		assertEquals(1,permissions.length);
+		assertEquals(permissions[0],pi);
+	}
+
 }
