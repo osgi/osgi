@@ -28,7 +28,7 @@ import org.osgi.service.dmt.*;
 import org.osgi.service.event.*;
 
 import org.osgi.service.monitor.Monitorable;
-import org.osgi.service.monitor.UpdateListener;
+import org.osgi.service.monitor.MonitorListener;
 
 public class ClientActivator implements BundleActivator 
 {
@@ -36,7 +36,7 @@ public class ClientActivator implements BundleActivator
 
     private BundleContext bc;
     private ServiceReference factoryRef;
-    private ServiceReference updateRef;
+    private ServiceReference monListenerRef;
     private ServiceRegistration serviceReg;
 
     public void start(BundleContext bc) throws BundleException
@@ -49,13 +49,13 @@ public class ClientActivator implements BundleActivator
             factoryRef = getServiceReference(DmtAdmin.class);
             DmtAdmin factory = (DmtAdmin) getService(factoryRef, DmtAdmin.class);
 
-            updateRef = getServiceReference(UpdateListener.class);
-            UpdateListener updateListener = (UpdateListener) getService(updateRef, UpdateListener.class);
+            monListenerRef = getServiceReference(MonitorListener.class);
+            MonitorListener monitorListener = (MonitorListener) getService(monListenerRef, MonitorListener.class);
 
-            if(factory == null || updateListener == null)
+            if(factory == null || monitorListener == null)
                 throw new Exception("Error retrieving services.");
 
-            SimpleClient client = new SimpleClient(factory, updateListener, bc);
+            SimpleClient client = new SimpleClient(factory, monitorListener, bc);
 
             // register configuration client
             Hashtable config = new Hashtable();
@@ -97,7 +97,7 @@ public class ClientActivator implements BundleActivator
     public void stop(BundleContext bc) throws BundleException 
     {
         serviceReg.unregister();
-        bc.ungetService(updateRef);
+        bc.ungetService(monListenerRef);
         bc.ungetService(factoryRef);
     }
 
