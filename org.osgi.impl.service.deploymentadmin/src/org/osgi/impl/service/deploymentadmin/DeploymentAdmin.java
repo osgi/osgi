@@ -90,6 +90,7 @@ public class DeploymentAdmin implements PackageHandler, BundleActivator {
 			throw new PackageHandlerException(e.getMessage());
 		}
 		catch (Exception e) {
+            e.printStackTrace();
 			throw new PackageHandlerException(e.getClass().getName()
 					+ " exception occured during MEG container invocation");
 		}

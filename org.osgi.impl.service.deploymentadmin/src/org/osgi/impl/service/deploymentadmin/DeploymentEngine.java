@@ -98,6 +98,7 @@ public class DeploymentEngine extends ServiceTracker {
 				installApp(new URL(appURL), packageType, data);
 			}
 			catch (Exception e) {
+                e.printStackTrace();
 				throw new PackageHandlerException(e.getMessage());
 			}
 			// if there is not descriptor file than the default type is suite
@@ -118,6 +119,7 @@ public class DeploymentEngine extends ServiceTracker {
 					}
 					catch (IOException e) {
 						e.printStackTrace();
+                        
 					}
 			}
 		}
