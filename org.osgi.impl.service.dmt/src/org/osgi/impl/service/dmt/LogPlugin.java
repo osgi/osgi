@@ -103,6 +103,11 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 		createLeafNode(nodeUri, data);
 	}
 
+    public void setDefaultNodeValue(String nodeUri) throws DmtException {
+        throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
+                "The specified node has no default value.");
+    }
+    
 	public void setNodeType(String nodeUri, String type) throws DmtException {
 		throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
 				"Cannot set type property of log nodes.");
@@ -168,6 +173,11 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 		createInteriorNode(nodeUri);
 	}
 
+    public void createLeafNode(String nodeUri) throws DmtException {
+        throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
+                "The specified node has no default value.");
+    }
+    
 	public void createLeafNode(String nodeUri, DmtData value)
 			throws DmtException {
 		String[] path = prepareUri(nodeUri);
@@ -199,6 +209,12 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 								"No such node allowed");
 	}
 
+    public void createLeafNode(String nodeUri, DmtData value, String mimeType)
+            throws DmtException {
+        // TODO check mime type?
+        createLeafNode(nodeUri, value);
+    }
+    
 	public void copy(String nodeUri, String newNodeUri, boolean recursive)
 			throws DmtException {
 		// TODO allow cloning
