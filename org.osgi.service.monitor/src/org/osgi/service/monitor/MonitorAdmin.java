@@ -2,14 +2,14 @@
  * $Header$
  *
  * Copyright (c) OSGi Alliance (2004, 2005). All Rights Reserved.
- * 
+ *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
  * patent rights (such a third party may or may not be a member of the OSGi
  * Alliance). The OSGi Alliance is not responsible and shall not be held
  * responsible in any manner for identifying or failing to identify any or all
  * such third party intellectual property rights.
- * 
+ *
  * This document and the information contained herein are provided on an "AS IS"
  * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
@@ -198,6 +198,31 @@ public interface MonitorAdmin {
      */
     public boolean resetStatusVariable(String path)
             throws IllegalArgumentException;
+    
+    /**
+     * Returns a human readable description of a StatusVariable addressed by its
+     * ID in [Monitorable_ID]/[StatusVariable_ID] format. The <code>null</code>
+     * value may be returned if there is no description for the given
+     * StatusVariable.
+     * <p>
+     * The entity that queries a StatusVariable needs to hold
+     * <code>MonitorPermission</code> for the given target with the
+     * <code>read</code> action present.
+     * 
+     * @param path
+     *            the full path of the StatusVariable in
+     *            [Monitorable_ID]/[StatusVariable_ID] format
+     * @return the human readable description of this StatusVariable or null if
+     *         it is not set
+     * @throws IllegalArgumentException 
+     *             if the path is invalid or points to a non-existing
+     *             StatusVariable
+     * @throws SecurityException 
+     *             if the caller does not hold a <code>MonitorPermission</code> 
+     *             for the StatusVariable specified by <code>path</code> with 
+     *             the <code>read</code> action present
+     */
+    public String getDescription(String path) throws IllegalArgumentException;
 
     /**
      * Starts a time based Monitoring Job with the parameters provided.
