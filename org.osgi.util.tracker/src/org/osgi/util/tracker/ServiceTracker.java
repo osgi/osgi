@@ -710,6 +710,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 *  
 	 */
 	class Tracked extends Hashtable implements ServiceListener {
+		static final long serialVersionUID = -7420065199791006079L;
 		/**
 		 * List of ServiceReferences in the process of being added.
 		 */
