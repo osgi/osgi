@@ -36,7 +36,7 @@ public class Activator extends Object implements
 		this.bc = bc;
 		scheduler = new SchedulerImpl(bc);
 		schedulerService = bc.registerService(
-				"org.osgi.impl.service.scheduler.Scheduler", scheduler,
+				"org.osgi.service.application.Scheduler", scheduler,
 				null);
 		System.out.println("Scheduler service started successfully!");
 	}
