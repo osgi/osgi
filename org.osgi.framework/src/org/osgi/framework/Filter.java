@@ -1,6 +1,6 @@
 /*
  * $Header$
- *
+ * 
  * Copyright (c) OSGi Alliance (2000, 2004). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
@@ -41,10 +41,10 @@ import java.util.Dictionary;
  * Some examples of LDAP filters are:
  * 
  * <pre>
- *    &quot;(cn=Babs Jensen)&quot;
- *    &quot;(!(cn=Tim Howes))&quot;
- *    &quot;(&amp;(&quot; + Constants.OBJECTCLASS + &quot;=Person)(|(sn=Jensen)(cn=Babs J*)))&quot;
- *    &quot;(o=univ*of*mich*)&quot;
+ *     &quot;(cn=Babs Jensen)&quot;
+ *     &quot;(!(cn=Tim Howes))&quot;
+ *     &quot;(&amp;(&quot; + Constants.OBJECTCLASS + &quot;=Person)(|(sn=Jensen)(cn=Babs J*)))&quot;
+ *     &quot;(o=univ*of*mich*)&quot;
  * </pre>
  * 
  * @version $Revision$

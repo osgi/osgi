@@ -1,7 +1,7 @@
 /*
  * $Header$
  *
- * Copyright (c) OSGi Alliance (2000, 2002).
+ * Copyright (c) OSGi Alliance (2000, 2004).
  * All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
@@ -33,10 +33,11 @@ import java.util.Dictionary;
 /**
  * Defines standard names for the OSGi environment property, service property,
  * and Manifest header attribute keys.
- *
- * <p>The values associated with these keys are of type <tt>java.lang.String</tt>,
+ * 
+ * <p>
+ * The values associated with these keys are of type <tt>java.lang.String</tt>,
  * unless otherwise indicated.
- *
+ * 
  * @version $Revision$
  * @since 1.1
  * @see Bundle#getHeaders()
@@ -44,792 +45,913 @@ import java.util.Dictionary;
  * @see BundleContext#registerService(String[],Object,Dictionary)
  */
 
-public interface Constants
-{
-    /**
-     * Location identifier of the OSGi <i>system bundle</i>, which is
-     * defined to be &quot;System Bundle&quot;.
-     */
-    public static final String SYSTEM_BUNDLE_LOCATION = "System Bundle";
-
-    /**
-     * Manifest header (named &quot;Bundle-Category&quot;)
-     * identifying the bundle's category.
-     * <p>The attribute value may be retrieved from the
-     * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-     */
-    public static final String BUNDLE_CATEGORY = "Bundle-Category";
-
-    /**
-     * Manifest header (named &quot;Bundle-ClassPath&quot;)
-     * identifying a list of nested JAR files, which are bundle resources used
-     * to extend the bundle's classpath.
-     *
-     * <p>The attribute value may be retrieved from the
-     * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-     */
-    public static final String BUNDLE_CLASSPATH = "Bundle-ClassPath";
-
-    /**
-     * Manifest header (named &quot;Bundle-Copyright&quot;)
-     * identifying the bundle's copyright information, which may be retrieved
-     * from the <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-     */
-    public static final String BUNDLE_COPYRIGHT = "Bundle-Copyright";
-
-    /**
-     * Manifest header (named &quot;Bundle-Description&quot;)
-     * containing a brief description of the bundle's functionality.
-     * <p>The attribute value may be retrieved from the
-     * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-     */
-    public static final String BUNDLE_DESCRIPTION = "Bundle-Description";
-
-    /**
-     * Manifest header (named &quot;Bundle-Name&quot;)
-     * identifying the bundle's name.
-     * <p>The attribute value may be retrieved from the
-     * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-     */
-    public static final String BUNDLE_NAME = "Bundle-Name";
-
-    /**
-     * Manifest header (named &quot;Bundle-NativeCode&quot;)
-     * identifying a number of hardware environments and the native language code
-     * libraries that the bundle is carrying for each of these environments.
-     *
-     * <p>The attribute value may be retrieved from the
-     * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-     */
-    public static final String BUNDLE_NATIVECODE = "Bundle-NativeCode";
-
-    /**
-     * Manifest header (named &quot;Export-Package&quot;)
-     * identifying the names (and optionally version numbers) of the packages
-     * that the bundle offers to the Framework for export.
-     *
-     * <p>The attribute value may be retrieved from the
-     * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-     */
-    public static final String EXPORT_PACKAGE = "Export-Package";
-
-    /**
-     * Manifest header (named &quot;Export-Service&quot;)
-     * identifying the fully qualified class names of the services that the
-     * bundle may register (used for informational purposes only).
-     *
-     * <p>The attribute value may be retrieved from the
-     * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-     */
-    public static final String EXPORT_SERVICE = "Export-Service";
-
-    /**
-     * Manifest header (named &quot;Import-Package&quot;)
-     * identifying the names (and optionally, version numbers) of the packages
-     * that the bundle is dependent on.
-     *
-     * <p>The attribute value may be retrieved from the
-     * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-     */
-    public static final String IMPORT_PACKAGE = "Import-Package";
-
-    /**
-     * Manifest header (named &quot;DynamicImport-Package&quot;)
-     * identifying the names of the packages
-     * that the bundle may dynamically import during execution.
-     *
-     * <p>The attribute value may be retrieved from the
-     * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-     * @since 1.2
-     */
-    public static final String DYNAMICIMPORT_PACKAGE = "DynamicImport-Package";
-
-    /**
-     * Manifest header (named &quot;Import-Service&quot;)
-     * identifying the fully qualified class names of the services that the
-     * bundle requires (used for informational purposes only).
-     *
-     * <p>The attribute value may be retrieved from the
-     * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-     */
-    public static final String IMPORT_SERVICE = "Import-Service";
-
-    /**
-     * Manifest header (named &quot;Bundle-Vendor&quot;)
-     * identifying the bundle's vendor.
-     *
-     * <p>The attribute value may be retrieved from the
-     * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-     */
-    public static final String BUNDLE_VENDOR = "Bundle-Vendor";
-
-    /**
-     * Manifest header (named &quot;Bundle-Version&quot;)
-     * identifying the bundle's version.
-     *
-     * <p>The attribute value may be retrieved from the
-     * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-     */
-    public static final String BUNDLE_VERSION = "Bundle-Version";
-
-    /**
-     * Manifest header (named &quot;Bundle-DocURL&quot;)
-     * identifying the bundle's documentation URL, from which further
-     * information about the bundle may be obtained.
-     *
-     * <p>The attribute value may be retrieved from the
-     * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-     */
-    public static final String BUNDLE_DOCURL = "Bundle-DocURL";
-
-    /**
-     * Manifest header (named &quot;Bundle-ContactAddress&quot;)
-     * identifying the contact address where problems with the
-     * bundle may be reported; for example, an email address.
-     *
-     * <p>The attribute value may be retrieved from the
-     * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-     */
-    public static final String BUNDLE_CONTACTADDRESS = "Bundle-ContactAddress";
-
-    /**
-     * Manifest header attribute (named &quot;Bundle-Activator&quot;)
-     * identifying the bundle's activator class.
-     *
-     * <p>If present, this header specifies the name of the bundle resource
-     * class that implements the <tt>BundleActivator</tt> interface and whose
-     * <tt>start</tt> and <tt>stop</tt> methods are called by the Framework
-     * when the bundle is started and stopped, respectively.
-     *
-     * <p>The attribute value may be retrieved from the
-     * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-     */
-    public static final String BUNDLE_ACTIVATOR = "Bundle-Activator";
-
-    /**
-     * Manifest header (named &quot;Bundle-UpdateLocation&quot;)
-     * identifying the location from which a new bundle version is
-     * obtained during a bundle update operation.
-     *
-     * <p>The attribute value may be retrieved from the
-     * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-     */
-    public static final String BUNDLE_UPDATELOCATION = "Bundle-UpdateLocation";
-
-    /**
-     * Manifest header attribute (named &quot;specification-version&quot;)
-     * identifying the version of a package specified in the
-	 * Export-Package or Import-Package manifest header.
-     *
-     * <p>The attribute value is encoded in the Export-Package or
-	 * Import-Package manifest header like:
-     * <pre>
-     * Import-Package: org.osgi.framework ; specification-version="1.1"
-     * </pre>
-     */
-    public static final String PACKAGE_SPECIFICATION_VERSION =
-    "specification-version";
-
-    /**
-     * Manifest header attribute (named &quot;processor&quot;) identifying the processor
-	 * required to run native bundle code specified in the Bundle-NativeCode manifest header).
-     *
-	 * <p>The attribute value is encoded in the Bundle-NativeCode manifest header like:
-     * <pre>
-     * Bundle-NativeCode: http.so ; processor=x86 ...
-     * </pre>
-     */
-    public static final String BUNDLE_NATIVECODE_PROCESSOR = "processor";
-
-    /**
-     * Manifest header attribute (named &quot;osname&quot;) identifying the
-     * operating system required to run native bundle code specified in the Bundle-NativeCode
-	 * manifest header).
-	 * <p>The attribute value is encoded in the Bundle-NativeCode manifest header like:
-     * <pre>
-     * Bundle-NativeCode: http.so ; osname=Linux ...
-     * </pre>
-     */
-    public static final String BUNDLE_NATIVECODE_OSNAME = "osname";
-
-    /**
-     * Manifest header attribute (named &quot;osversion&quot;) identifying the
-     * operating system version required to run native bundle code specified in the Bundle-NativeCode
-	 * manifest header).
-	 * <p>The attribute value is encoded in the Bundle-NativeCode manifest header like:
-     * <pre>
-     * Bundle-NativeCode: http.so ; osversion="2.34" ...
-     * </pre>
-     */
-    public static final String BUNDLE_NATIVECODE_OSVERSION = "osversion";
-
-    /**
-     * Manifest header attribute (named &quot;language&quot;) identifying the
-     * language in which the native bundle code is written specified in the
-	 * Bundle-NativeCode manifest header. See ISO 639 for possible values.
-	 * <p>The attribute value is encoded in the Bundle-NativeCode manifest header like:
-     * <pre>
-     * Bundle-NativeCode: http.so ; language=nl_be ...
-     * </pre>
-     */
-    public static final String BUNDLE_NATIVECODE_LANGUAGE = "language";
-
-    /**
-     * Manifest header (named &quot;Bundle-RequiredExecutionEnvironment&quot;)
-     * identifying the required
-     * execution environment for the bundle.  The service platform may run this
-     * bundle if any of the execution environments named in this header matches
-     * one of the execution environments it
-     * implements.
-     *
-     * <p>The attribute value may be retrieved from the
-     * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-     * @since 1.2
-     */
-    public static final String BUNDLE_REQUIREDEXECUTIONENVIRONMENT = "Bundle-RequiredExecutionEnvironment";
-
-
-    /*
-     * Framework environment properties.
-     */
-
-    /**
-     * Framework environment property (named &quot;org.osgi.framework.version&quot;)
-     * identifying the Framework version.
-     *
-     * <p>The value of this property may be retrieved by calling the
-    * <tt>BundleContext.getProperty</tt> method.
-     */
-    public static final String FRAMEWORK_VERSION =
-    "org.osgi.framework.version";
-
-    /**
-     * Framework environment property (named &quot;org.osgi.framework.vendor&quot;)
-     * identifying the Framework implementation vendor.
-     *
-     * <p>The value of this property may be retrieved by calling the
-     * <tt>BundleContext.getProperty</tt> method.
-     */
-    public static final String FRAMEWORK_VENDOR = "org.osgi.framework.vendor";
-
-    /**
-     * Framework environment property (named &quot;org.osgi.framework.language&quot;)
-     * identifying the Framework implementation language (see ISO 639 for possible values).
-     *
-     * <p>The value of this property may be retrieved by calling the
-     * <tt>BundleContext.getProperty</tt> method.
-     */
-    public static final String FRAMEWORK_LANGUAGE =
-    "org.osgi.framework.language";
-
-    /**
-     * Framework environment property (named &quot;org.osgi.framework.os.name&quot;)
-     * identifying the Framework host-computer's operating system.
-     *
-     * <p>The value of this property may be retrieved by calling the <tt>BundleContext.getProperty</tt> method.
-     */
-    public static final String FRAMEWORK_OS_NAME =
-    "org.osgi.framework.os.name";
-
-    /**
-     * Framework environment property (named &quot;org.osgi.framework.os.version&quot;)
-     * identifying the Framework host-computer's operating system version number.
-     *
-     * <p>The value of this property may be retrieved by calling the <tt>BundleContext.getProperty</tt> method.
-     */
-    public static final String FRAMEWORK_OS_VERSION =
-    "org.osgi.framework.os.version";
-
-    /**
-     * Framework environment property (named &quot;org.osgi.framework.processor&quot;)
-     * identifying the Framework host-computer's processor name.
-     * <p>The value of this property may be retrieved by calling the <tt>BundleContext.getProperty</tt> method.
-     */
-    public static final String FRAMEWORK_PROCESSOR =
-    "org.osgi.framework.processor";
-
-    /**
-     * Framework environment property (named &quot;org.osgi.framework.executionenvironment&quot;)
-     * identifying execution environments provided by the Framework.
-     * <p>The value of this property may be retrieved by calling the <tt>BundleContext.getProperty</tt> method.
-     * @since 1.2
-     */
-    public static final String FRAMEWORK_EXECUTIONENVIRONMENT =
-    "org.osgi.framework.executionenvironment";
-
-
-    /*
-     * Service properties.
-     */
-
-    /**
-     * Service property (named &quot;objectClass&quot;)
-     * identifying all of the class names under which a service was registered in the Framework
-     * (of type <tt>java.lang.String[]</tt>).
-     *
-     * <p>This property is set by the Framework when a service is registered.
-     */
-    public static final String OBJECTCLASS = "objectClass";
-
-    /**
-     * Service property (named &quot;service.id&quot;) identifying a service's
-     * registration number (of type <tt>java.lang.Long</tt>).
-     *
-     * <p>The value of this property is assigned by the Framework when a
-     * service is registered. The Framework assigns a unique value that
-     * is larger than all previously assigned values since the Framework was
-     * started.
-     * These values are NOT persistent across restarts of the Framework.
-     */
-    public static final String SERVICE_ID = "service.id";
-
-    /**
-     * Service property (named &quot;service.pid&quot;) identifying a service's
-     * persistent identifier.
-     *
-     * <p>This property may be supplied in the <tt>properties</tt>
-     * <tt>Dictionary</tt> object passed to the <tt>BundleContext.registerService</tt> method.
-     *
-     * <p>A service's persistent identifier uniquely identifies the service
-     * and persists across multiple Framework invocations.
-     *
-     * <p>By convention, every bundle has its own unique namespace,
-     * starting with the bundle's identifier (see {@link Bundle#getBundleId})
-     * and followed by a dot (.). A bundle may use this as the prefix of the
-     * persistent identifiers for the services it registers.
-     */
-    public static final String SERVICE_PID = "service.pid";
-
-    /**
-     * Service property (named &quot;service.ranking&quot;)
-     * identifying a service's ranking number (of type <tt>java.lang.Integer</tt>).
-     *
-     * <p>This property may be supplied in the <tt>properties
-     * Dictionary</tt> object passed to the <tt>BundleContext.registerService</tt> method.
-     *
-     * <p>The service ranking is used by the Framework to determine the
-     * <i>default</i> service to be returned from a call to the
-     * {@link BundleContext#getServiceReference}method:
-     * If more than one service implements the specified class, the <tt>ServiceReference</tt> object with
-     * the highest ranking is returned.
-     *
-     * <p>The default ranking is zero (0). A service with a ranking of <tt>Integer.MAX_VALUE</tt>
-     * is very likely to be returned as the default service, whereas a service with a ranking of
-     * <tt>Integer.MIN_VALUE</tt> is very unlikely to be returned.
-     *
-     * <p>If the supplied property value is not of type <tt>java.lang.Integer</tt>,
-     * it is deemed to have a ranking value of zero.
-     */
-     public static final String SERVICE_RANKING = "service.ranking";
-
-    /**
-     * Service property (named &quot;service.vendor&quot;) identifying a service's vendor.
-     *
-     * <p>This property may be supplied in the properties <tt>Dictionary</tt> object passed to
-     * the <tt>BundleContext.registerService</tt> method.
-     */
-     public static final String SERVICE_VENDOR = "service.vendor";
-
-    /**
-     * Service property (named &quot;service.description&quot;)
-     * identifying a service's description.
-     *
-     * <p>This property may be supplied in the properties <tt>Dictionary</tt>
-     * object passed to the <tt>BundleContext.registerService</tt> method.
-     */
-	public static final String SERVICE_DESCRIPTION = "service.description";
-
+public interface Constants {
 	/**
-	 * Manifest header (named &quot;Bundle-SymbolicName&quot;)
-	 * identifying the bundle's symbolic name.
-	 * <p>The attribute value may be retrieved from the
-	 * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-	 * @since 1.3 
+	 * Location identifier of the OSGi <i>system bundle </i>, which is defined
+	 * to be &quot;System Bundle&quot;.
 	 */
-	public final static String BUNDLE_SYMBOLICNAME = "Bundle-SymbolicName";
-	
+	public static final String	SYSTEM_BUNDLE_LOCATION					= "System Bundle";
+
 	/**
-	 * Manifest header attribute (named &quot;singleton&quot;)
-	 * identifying whether a bundle is a singleton.
-	 * The default value is <tt>false</tt>.
-	 *
-	 * <p>The attribute value is encoded in the Bundle-SymbolicName
+	 * Manifest header (named &quot;Bundle-Category&quot;) identifying the
+	 * bundle's category.
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 */
+	public static final String	BUNDLE_CATEGORY							= "Bundle-Category";
+
+	/**
+	 * Manifest header (named &quot;Bundle-ClassPath&quot;) identifying a list
+	 * of nested JAR files, which are bundle resources used to extend the
+	 * bundle's classpath.
+	 * 
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 */
+	public static final String	BUNDLE_CLASSPATH						= "Bundle-ClassPath";
+
+	/**
+	 * Manifest header (named &quot;Bundle-Copyright&quot;) identifying the
+	 * bundle's copyright information, which may be retrieved from the
+	 * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt>
+	 * method.
+	 */
+	public static final String	BUNDLE_COPYRIGHT						= "Bundle-Copyright";
+
+	/**
+	 * Manifest header (named &quot;Bundle-Description&quot;) containing a brief
+	 * description of the bundle's functionality.
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 */
+	public static final String	BUNDLE_DESCRIPTION						= "Bundle-Description";
+
+	/**
+	 * Manifest header (named &quot;Bundle-Name&quot;) identifying the bundle's
+	 * name.
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 */
+	public static final String	BUNDLE_NAME								= "Bundle-Name";
+
+	/**
+	 * Manifest header (named &quot;Bundle-NativeCode&quot;) identifying a
+	 * number of hardware environments and the native language code libraries
+	 * that the bundle is carrying for each of these environments.
+	 * 
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 */
+	public static final String	BUNDLE_NATIVECODE						= "Bundle-NativeCode";
+
+	/**
+	 * Manifest header (named &quot;Export-Package&quot;) identifying the names
+	 * (and optionally version numbers) of the packages that the bundle offers
+	 * to the Framework for export.
+	 * 
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 */
+	public static final String	EXPORT_PACKAGE							= "Export-Package";
+
+	/**
+	 * Manifest header (named &quot;Export-Service&quot;) identifying the fully
+	 * qualified class names of the services that the bundle may register (used
+	 * for informational purposes only).
+	 * 
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 */
+	public static final String	EXPORT_SERVICE							= "Export-Service";
+
+	/**
+	 * Manifest header (named &quot;Import-Package&quot;) identifying the names
+	 * (and optionally, version numbers) of the packages that the bundle is
+	 * dependent on.
+	 * 
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 */
+	public static final String	IMPORT_PACKAGE							= "Import-Package";
+
+	/**
+	 * Manifest header (named &quot;DynamicImport-Package&quot;) identifying the
+	 * names of the packages that the bundle may dynamically import during
+	 * execution.
+	 * 
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * 
+	 * @since 1.2
+	 */
+	public static final String	DYNAMICIMPORT_PACKAGE					= "DynamicImport-Package";
+
+	/**
+	 * Manifest header (named &quot;Import-Service&quot;) identifying the fully
+	 * qualified class names of the services that the bundle requires (used for
+	 * informational purposes only).
+	 * 
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 */
+	public static final String	IMPORT_SERVICE							= "Import-Service";
+
+	/**
+	 * Manifest header (named &quot;Bundle-Vendor&quot;) identifying the
+	 * bundle's vendor.
+	 * 
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 */
+	public static final String	BUNDLE_VENDOR							= "Bundle-Vendor";
+
+	/**
+	 * Manifest header (named &quot;Bundle-Version&quot;) identifying the
+	 * bundle's version.
+	 * 
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 */
+	public static final String	BUNDLE_VERSION							= "Bundle-Version";
+
+	/**
+	 * Manifest header (named &quot;Bundle-DocURL&quot;) identifying the
+	 * bundle's documentation URL, from which further information about the
+	 * bundle may be obtained.
+	 * 
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 */
+	public static final String	BUNDLE_DOCURL							= "Bundle-DocURL";
+
+	/**
+	 * Manifest header (named &quot;Bundle-ContactAddress&quot;) identifying the
+	 * contact address where problems with the bundle may be reported; for
+	 * example, an email address.
+	 * 
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 */
+	public static final String	BUNDLE_CONTACTADDRESS					= "Bundle-ContactAddress";
+
+	/**
+	 * Manifest header attribute (named &quot;Bundle-Activator&quot;)
+	 * identifying the bundle's activator class.
+	 * 
+	 * <p>
+	 * If present, this header specifies the name of the bundle resource class
+	 * that implements the <tt>BundleActivator</tt> interface and whose
+	 * <tt>start</tt> and <tt>stop</tt> methods are called by the Framework
+	 * when the bundle is started and stopped, respectively.
+	 * 
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 */
+	public static final String	BUNDLE_ACTIVATOR						= "Bundle-Activator";
+
+	/**
+	 * Manifest header (named &quot;Bundle-UpdateLocation&quot;) identifying the
+	 * location from which a new bundle version is obtained during a bundle
+	 * update operation.
+	 * 
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 */
+	public static final String	BUNDLE_UPDATELOCATION					= "Bundle-UpdateLocation";
+
+	/**
+	 * Manifest header attribute (named &quot;specification-version&quot;)
+	 * identifying the version of a package specified in the Export-Package or
+	 * Import-Package manifest header.
+	 * 
+	 * <p>
+	 * The attribute value is encoded in the Export-Package or Import-Package
 	 * manifest header like:
+	 * 
 	 * <pre>
-	 * Bundle-SymbolicName: com.acme.module.test; singleton=true
+	 *  Import-Package: org.osgi.framework ; specification-version=&quot;1.1&quot;
 	 * </pre>
-	 * @since 1.3 
 	 */
-	public final static String SINGLETON_ATTRIBUTE = "singleton";
+	public static final String	PACKAGE_SPECIFICATION_VERSION			= "specification-version";
+
+	/**
+	 * Manifest header attribute (named &quot;processor&quot;) identifying the
+	 * processor required to run native bundle code specified in the
+	 * Bundle-NativeCode manifest header).
+	 * 
+	 * <p>
+	 * The attribute value is encoded in the Bundle-NativeCode manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *  Bundle-NativeCode: http.so ; processor=x86 ...
+	 * </pre>
+	 */
+	public static final String	BUNDLE_NATIVECODE_PROCESSOR				= "processor";
+
+	/**
+	 * Manifest header attribute (named &quot;osname&quot;) identifying the
+	 * operating system required to run native bundle code specified in the
+	 * Bundle-NativeCode manifest header).
+	 * <p>
+	 * The attribute value is encoded in the Bundle-NativeCode manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *  Bundle-NativeCode: http.so ; osname=Linux ...
+	 * </pre>
+	 */
+	public static final String	BUNDLE_NATIVECODE_OSNAME				= "osname";
+
+	/**
+	 * Manifest header attribute (named &quot;osversion&quot;) identifying the
+	 * operating system version required to run native bundle code specified in
+	 * the Bundle-NativeCode manifest header).
+	 * <p>
+	 * The attribute value is encoded in the Bundle-NativeCode manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *  Bundle-NativeCode: http.so ; osversion=&quot;2.34&quot; ...
+	 * </pre>
+	 */
+	public static final String	BUNDLE_NATIVECODE_OSVERSION				= "osversion";
+
+	/**
+	 * Manifest header attribute (named &quot;language&quot;) identifying the
+	 * language in which the native bundle code is written specified in the
+	 * Bundle-NativeCode manifest header. See ISO 639 for possible values.
+	 * <p>
+	 * The attribute value is encoded in the Bundle-NativeCode manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *  Bundle-NativeCode: http.so ; language=nl_be ...
+	 * </pre>
+	 */
+	public static final String	BUNDLE_NATIVECODE_LANGUAGE				= "language";
+
+	/**
+	 * Manifest header (named &quot;Bundle-RequiredExecutionEnvironment&quot;)
+	 * identifying the required execution environment for the bundle. The
+	 * service platform may run this bundle if any of the execution environments
+	 * named in this header matches one of the execution environments it
+	 * implements.
+	 * 
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * 
+	 * @since 1.2
+	 */
+	public static final String	BUNDLE_REQUIREDEXECUTIONENVIRONMENT		= "Bundle-RequiredExecutionEnvironment";
+
+	/*
+	 * Framework environment properties.
+	 */
+
+	/**
+	 * Framework environment property (named
+	 * &quot;org.osgi.framework.version&quot;) identifying the Framework
+	 * version.
+	 * 
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * <tt>BundleContext.getProperty</tt> method.
+	 */
+	public static final String	FRAMEWORK_VERSION						= "org.osgi.framework.version";
+
+	/**
+	 * Framework environment property (named
+	 * &quot;org.osgi.framework.vendor&quot;) identifying the Framework
+	 * implementation vendor.
+	 * 
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * <tt>BundleContext.getProperty</tt> method.
+	 */
+	public static final String	FRAMEWORK_VENDOR						= "org.osgi.framework.vendor";
+
+	/**
+	 * Framework environment property (named
+	 * &quot;org.osgi.framework.language&quot;) identifying the Framework
+	 * implementation language (see ISO 639 for possible values).
+	 * 
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * <tt>BundleContext.getProperty</tt> method.
+	 */
+	public static final String	FRAMEWORK_LANGUAGE						= "org.osgi.framework.language";
+
+	/**
+	 * Framework environment property (named
+	 * &quot;org.osgi.framework.os.name&quot;) identifying the Framework
+	 * host-computer's operating system.
+	 * 
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * <tt>BundleContext.getProperty</tt> method.
+	 */
+	public static final String	FRAMEWORK_OS_NAME						= "org.osgi.framework.os.name";
+
+	/**
+	 * Framework environment property (named
+	 * &quot;org.osgi.framework.os.version&quot;) identifying the Framework
+	 * host-computer's operating system version number.
+	 * 
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * <tt>BundleContext.getProperty</tt> method.
+	 */
+	public static final String	FRAMEWORK_OS_VERSION					= "org.osgi.framework.os.version";
+
+	/**
+	 * Framework environment property (named
+	 * &quot;org.osgi.framework.processor&quot;) identifying the Framework
+	 * host-computer's processor name.
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * <tt>BundleContext.getProperty</tt> method.
+	 */
+	public static final String	FRAMEWORK_PROCESSOR						= "org.osgi.framework.processor";
+
+	/**
+	 * Framework environment property (named
+	 * &quot;org.osgi.framework.executionenvironment&quot;) identifying
+	 * execution environments provided by the Framework.
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * <tt>BundleContext.getProperty</tt> method.
+	 * 
+	 * @since 1.2
+	 */
+	public static final String	FRAMEWORK_EXECUTIONENVIRONMENT			= "org.osgi.framework.executionenvironment";
+
+	/*
+	 * Service properties.
+	 */
+
+	/**
+	 * Service property (named &quot;objectClass&quot;) identifying all of the
+	 * class names under which a service was registered in the Framework (of
+	 * type <tt>java.lang.String[]</tt>).
+	 * 
+	 * <p>
+	 * This property is set by the Framework when a service is registered.
+	 */
+	public static final String	OBJECTCLASS								= "objectClass";
+
+	/**
+	 * Service property (named &quot;service.id&quot;) identifying a service's
+	 * registration number (of type <tt>java.lang.Long</tt>).
+	 * 
+	 * <p>
+	 * The value of this property is assigned by the Framework when a service is
+	 * registered. The Framework assigns a unique value that is larger than all
+	 * previously assigned values since the Framework was started. These values
+	 * are NOT persistent across restarts of the Framework.
+	 */
+	public static final String	SERVICE_ID								= "service.id";
+
+	/**
+	 * Service property (named &quot;service.pid&quot;) identifying a service's
+	 * persistent identifier.
+	 * 
+	 * <p>
+	 * This property may be supplied in the <tt>properties</tt>
+	 * <tt>Dictionary</tt>
+	 * object passed to the <tt>BundleContext.registerService</tt> method.
+	 * 
+	 * <p>
+	 * A service's persistent identifier uniquely identifies the service and
+	 * persists across multiple Framework invocations.
+	 * 
+	 * <p>
+	 * By convention, every bundle has its own unique namespace, starting with
+	 * the bundle's identifier (see {@link Bundle#getBundleId}) and followed by
+	 * a dot (.). A bundle may use this as the prefix of the persistent
+	 * identifiers for the services it registers.
+	 */
+	public static final String	SERVICE_PID								= "service.pid";
+
+	/**
+	 * Service property (named &quot;service.ranking&quot;) identifying a
+	 * service's ranking number (of type <tt>java.lang.Integer</tt>).
+	 * 
+	 * <p>
+	 * This property may be supplied in the <tt>properties
+	 * Dictionary</tt>
+	 * object passed to the <tt>BundleContext.registerService</tt> method.
+	 * 
+	 * <p>
+	 * The service ranking is used by the Framework to determine the <i>default
+	 * </i> service to be returned from a call to the
+	 * {@link BundleContext#getServiceReference}method: If more than one
+	 * service implements the specified class, the <tt>ServiceReference</tt>
+	 * object with the highest ranking is returned.
+	 * 
+	 * <p>
+	 * The default ranking is zero (0). A service with a ranking of
+	 * <tt>Integer.MAX_VALUE</tt> is very likely to be returned as the default
+	 * service, whereas a service with a ranking of <tt>Integer.MIN_VALUE</tt>
+	 * is very unlikely to be returned.
+	 * 
+	 * <p>
+	 * If the supplied property value is not of type <tt>java.lang.Integer</tt>,
+	 * it is deemed to have a ranking value of zero.
+	 */
+	public static final String	SERVICE_RANKING							= "service.ranking";
+
+	/**
+	 * Service property (named &quot;service.vendor&quot;) identifying a
+	 * service's vendor.
+	 * 
+	 * <p>
+	 * This property may be supplied in the properties <tt>Dictionary</tt>
+	 * object passed to the <tt>BundleContext.registerService</tt> method.
+	 */
+	public static final String	SERVICE_VENDOR							= "service.vendor";
+
+	/**
+	 * Service property (named &quot;service.description&quot;) identifying a
+	 * service's description.
+	 * 
+	 * <p>
+	 * This property may be supplied in the properties <tt>Dictionary</tt>
+	 * object passed to the <tt>BundleContext.registerService</tt> method.
+	 */
+	public static final String	SERVICE_DESCRIPTION						= "service.description";
+
+	/**
+	 * Manifest header (named &quot;Bundle-SymbolicName&quot;) identifying the
+	 * bundle's symbolic name.
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * 
+	 * @since 1.3
+	 */
+	public final static String	BUNDLE_SYMBOLICNAME						= "Bundle-SymbolicName";
+
+	/**
+	 * Manifest header attribute (named &quot;singleton&quot;) identifying
+	 * whether a bundle is a singleton. The default value is <tt>false</tt>.
+	 * 
+	 * <p>
+	 * The attribute value is encoded in the Bundle-SymbolicName manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *  Bundle-SymbolicName: com.acme.module.test; singleton=true
+	 * </pre>
+	 * 
+	 * @since 1.3
+	 */
+	public final static String	SINGLETON_ATTRIBUTE						= "singleton";
 
 	/**
 	 * Manifest header attribute (named &quot;fragment-attachment&quot;)
-	 * identifying if and when a fragment may attach to a host bundle.
-	 * The default value is <tt>&quot;always&quot;</tt>.
-	 *
-	 * <p>The attribute value is encoded in the Bundle-SymbolicName
-	 * manifest header like:
+	 * identifying if and when a fragment may attach to a host bundle. The
+	 * default value is <tt>&quot;always&quot;</tt>.
+	 * 
+	 * <p>
+	 * The attribute value is encoded in the Bundle-SymbolicName manifest header
+	 * like:
+	 * 
 	 * <pre>
-	 * Bundle-SymbolicName: com.acme.module.test; fragment-attachment="never"
+	 *  Bundle-SymbolicName: com.acme.module.test; fragment-attachment=&quot;never&quot;
 	 * </pre>
+	 * 
 	 * @see Constants#FRAGMENT_ATTACHMENT_ALWAYS
 	 * @see Constants#FRAGMENT_ATTACHMENT_RESOLVETIME
 	 * @see Constants#FRAGMENT_ATTACHMENT_NEVER
-	 * @since 1.3 
+	 * @since 1.3
 	 */
-	public final static String FRAGMENT_ATTACHMENT_ATTRIBUTE = "fragment-attachment";
+	public final static String	FRAGMENT_ATTACHMENT_ATTRIBUTE			= "fragment-attachment";
 
 	/**
-	 * Manifest header attribute value (named &quot;always&quot;)
-	 * identifying a fragment attachment type of always.  A fragment
-	 * attachment type of always indicates that fragments are allowed to 
-	 * attach to the host bundle at any time (while the host is resolved 
-	 * or during the process of resolving the host bundle).
-	 *
-     * <p>The attribute value is encoded in the 
-     * Bundle-SymbolicName manifest header like:
+	 * Manifest header attribute value (named &quot;always&quot;) identifying a
+	 * fragment attachment type of always. A fragment attachment type of always
+	 * indicates that fragments are allowed to attach to the host bundle at any
+	 * time (while the host is resolved or during the process of resolving the
+	 * host bundle).
+	 * 
+	 * <p>
+	 * The attribute value is encoded in the Bundle-SymbolicName manifest header
+	 * like:
+	 * 
 	 * <pre>
-	 * Bundle-SymbolicName: com.acme.module.test; fragment-attachment="always"
+	 *  Bundle-SymbolicName: com.acme.module.test; fragment-attachment=&quot;always&quot;
 	 * </pre>
+	 * 
 	 * @see Constants#FRAGMENT_ATTACHMENT_ATTRIBUTE
-	 * @since 1.3 
+	 * @since 1.3
 	 */
-	public final static String FRAGMENT_ATTACHMENT_ALWAYS = "always";
+	public final static String	FRAGMENT_ATTACHMENT_ALWAYS				= "always";
 
 	/**
 	 * Manifest header attribute value (named &quot;resolve-time&quot;)
-	 * identifying a fragment attachment type of resolve-time.  A fragment
-	 * attachment type of resolve-time indicates that fragments are allowed to 
-	 * attach to the host bundle only during the process of resolving the 
-	 * host bundle.
-	 *
-     * <p>The attribute value is encoded in the 
-     * Bundle-SymbolicName manifest header like:
+	 * identifying a fragment attachment type of resolve-time. A fragment
+	 * attachment type of resolve-time indicates that fragments are allowed to
+	 * attach to the host bundle only during the process of resolving the host
+	 * bundle.
+	 * 
+	 * <p>
+	 * The attribute value is encoded in the Bundle-SymbolicName manifest header
+	 * like:
+	 * 
 	 * <pre>
-	 * Bundle-SymbolicName: com.acme.module.test; fragment-attachment="resolve-time"
+	 *  Bundle-SymbolicName: com.acme.module.test; fragment-attachment=&quot;resolve-time&quot;
 	 * </pre>
+	 * 
 	 * @see Constants#FRAGMENT_ATTACHMENT_ATTRIBUTE
-	 * @since 1.3 
+	 * @since 1.3
 	 */
-	public final static String FRAGMENT_ATTACHMENT_RESOLVETIME = "resolve-time";
-
+	public final static String	FRAGMENT_ATTACHMENT_RESOLVETIME			= "resolve-time";
 
 	/**
-	 * Manifest header attribute value (named &quot;never&quot;)
-	 * identifying a fragment attachment type of never.  A fragment
-	 * attachment type of never indicates that no fragments are allowed to 
-	 * attach to the host bundle at any time.
-	 *
-     * <p>The attribute value is encoded in the 
-     * Bundle-SymbolicName manifest header like:
+	 * Manifest header attribute value (named &quot;never&quot;) identifying a
+	 * fragment attachment type of never. A fragment attachment type of never
+	 * indicates that no fragments are allowed to attach to the host bundle at
+	 * any time.
+	 * 
+	 * <p>
+	 * The attribute value is encoded in the Bundle-SymbolicName manifest header
+	 * like:
+	 * 
 	 * <pre>
-	 * Bundle-SymbolicName: com.acme.module.test; fragment-attachment="never"
+	 *  Bundle-SymbolicName: com.acme.module.test; fragment-attachment=&quot;never&quot;
 	 * </pre>
+	 * 
 	 * @see Constants#FRAGMENT_ATTACHMENT_ATTRIBUTE
-	 * @since 1.3 
+	 * @since 1.3
 	 */
-	public final static String FRAGMENT_ATTACHMENT_NEVER = "never";
+	public final static String	FRAGMENT_ATTACHMENT_NEVER				= "never";
 
 	/**
-	 * Manifest header (named &quot;Bundle-Localization&quot;)
-	 * identifying the base name of the bundle's localization file.
-	 * <p>The attribute value may be retrieved from the
-	 * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-	 * @since 1.3 
+	 * Manifest header (named &quot;Bundle-Localization&quot;) identifying the
+	 * base name of the bundle's localization file.
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * 
+	 * @since 1.3
 	 */
-	public final static String BUNDLE_LOCALIZATION = "Bundle-Localization";
-	
+	public final static String	BUNDLE_LOCALIZATION						= "Bundle-Localization";
+
 	/**
 	 * Default value for the Bundle-Localization manifest header.
 	 * 
 	 * @see #BUNDLE_LOCALIZATION
-	 * @since 1.3 
+	 * @since 1.3
 	 */
-	public final static String BUNDLE_LOCALIZATION_DEFAULT_BASENAME = "META-INF/bundle";
+	public final static String	BUNDLE_LOCALIZATION_DEFAULT_BASENAME	= "META-INF/bundle";
 
 	/**
-	 * Manifest header (named &quot;Require-Bundle&quot;)
-	 * identifying the symbolic names of other bundles
-	 * required by the bundle.
-	 *
-	 * <p>The attribute value may be retrieved from the
-	 * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-	 * @since 1.3 
-	 */
-	public final static String REQUIRE_BUNDLE = "Require-Bundle";
-
-	/**
-	 * Manifest header attribute (named &quot;bundle-version&quot;)
-	 * identifying a range of versions for a bundle specified in the
-	 * Require-Bundle or Fragment-Host manifest headers.
-	 * The default value is <tt>0.0.0</tt>.
-	 *
-	 * <p>The attribute value is encoded in the Require-Bundle manifest
-	 * header like:
-	 * <pre>
-	 * Require-Bundle: com.acme.module.test; bundle-version="1.1"
-	 * Require-Bundle: com.acme.module.test; bundle-version="[1.0,2.0)"
-	 * </pre>
-	 * <p>
-	 * The bundle-version attribute value uses a mathematical interval
-	 * notation to specify a range of bundle versions.  A bundle-version
-	 * attribute value specified as a single version means a version range that includes any
-	 * bundle version greater than or equal to the specified version.
-	 * @since 1.3 
-	 */
-	public static final String BUNDLE_VERSION_ATTRIBUTE = "bundle-version";
-
-	/**
-	 * Manifest header (named &quot;Fragment-Host&quot;)
-	 * identifying the symbolic name 
-	 * of another bundle for which that the bundle is a fragment.
-	 *
-	 * <p>The attribute value may be retrieved from the
-	 * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-	 * @since 1.3 
-	 */
-	public final static String FRAGMENT_HOST = "Fragment-Host";
-
-	/**
-	 * Manifest header directive (named &quot;multiple-hosts&quot;)
-	 * identifying if the fragment should attach to each bundle
-	 * selected by the Fragment-Host manifest header.
-	 * The default value is <tt>false</tt>.
-	 *
-	 * <p>The directive value is encoded in the Fragment-Host
-	 * manifest header like:
-	 * <pre>
-	 * Fragment-Host: com.acme.module.test; multiple-hosts="false"
-	 * </pre>
-	 * @since 1.3 
-	 */
-	public final static String MULTIPLE_HOSTS_DIRECTIVE = "multiple-hosts";
-
-	/**
-	 * Manifest header attribute (named &quot;selection-filter&quot;) is used for
-	 * selection by filtering based upon system properties.
+	 * Manifest header (named &quot;Require-Bundle&quot;) identifying the
+	 * symbolic names of other bundles required by the bundle.
 	 * 
-	 * <p>The attribute value is encoded in 
-	 * manifest headers like:
-	 * <pre>
-	 * Bundle-NativeCode: libgtk.so; selection-filter="(ws=gtk)"; ...
-	 * Bundle-ClassPath: base.jar, gtk.jar; selection-filter="(ws=gtk)", ...
-	 * </pre>
-	 * @since 1.3 
-	 */
-	public final static String SELECTION_FILTER_ATTRIBUTE = "selection-filter";
-
-	/**
-	 * Manifest header (named &quot;Bundle-ManifestVersion&quot;)
-	 * identifying the bundle manifest version.  A bundle manifest may 
-	 * express the version of the syntax in which it is written by specifying 
-	 * a bundle manifest version. Bundles exploiting OSGi R4, or later, 
-	 * syntax must specify a bundle manifest version.
 	 * <p>
-	 * The bundle manifest version defined by OSGi R4 or, more specifically, 
-	 * by V1.3 of the OSGi Framework Specification is "2".
-	 *
-	 * <p>The attribute value may be retrieved from the
-	 * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-	 * @since 1.3 
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * 
+	 * @since 1.3
 	 */
-	public final static String BUNDLE_MANIFESTVERSION = "Bundle-ManifestVersion"; 
+	public final static String	REQUIRE_BUNDLE							= "Require-Bundle";
 
 	/**
-	 * Manifest header attribute (named &quot;version&quot;)
-	 * identifying the version of a package specified in the
-	 * Export-Package or Import-Package manifest header.
-	 *
-     * <p>The attribute value is encoded in the Export-Package or
-	 * Import-Package manifest header like:
+	 * Manifest header attribute (named &quot;bundle-version&quot;) identifying
+	 * a range of versions for a bundle specified in the Require-Bundle or
+	 * Fragment-Host manifest headers. The default value is <tt>0.0.0</tt>.
+	 * 
+	 * <p>
+	 * The attribute value is encoded in the Require-Bundle manifest header
+	 * like:
+	 * 
 	 * <pre>
-	 * Import-Package: org.osgi.framework; version="1.1"
+	 *  Require-Bundle: com.acme.module.test; bundle-version=&quot;1.1&quot;
+	 *  Require-Bundle: com.acme.module.test; bundle-version=&quot;[1.0,2.0)&quot;
 	 * </pre>
-	 * @since 1.3 
+	 * 
+	 * <p>
+	 * The bundle-version attribute value uses a mathematical interval notation
+	 * to specify a range of bundle versions. A bundle-version attribute value
+	 * specified as a single version means a version range that includes any
+	 * bundle version greater than or equal to the specified version.
+	 * 
+	 * @since 1.3
 	 */
-	public final static String VERSION_ATTRIBUTE = "version";
+	public static final String	BUNDLE_VERSION_ATTRIBUTE				= "bundle-version";
+
+	/**
+	 * Manifest header (named &quot;Fragment-Host&quot;) identifying the
+	 * symbolic name of another bundle for which that the bundle is a fragment.
+	 * 
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * 
+	 * @since 1.3
+	 */
+	public final static String	FRAGMENT_HOST							= "Fragment-Host";
+
+	/**
+	 * Manifest header directive (named &quot;multiple-hosts&quot;) identifying
+	 * if the fragment should attach to each bundle selected by the
+	 * Fragment-Host manifest header. The default value is <tt>false</tt>.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Fragment-Host manifest header like:
+	 * 
+	 * <pre>
+	 *  Fragment-Host: com.acme.module.test; multiple-hosts=&quot;false&quot;
+	 * </pre>
+	 * 
+	 * @since 1.3
+	 */
+	public final static String	MULTIPLE_HOSTS_DIRECTIVE				= "multiple-hosts";
+
+	/**
+	 * Manifest header attribute (named &quot;selection-filter&quot;) is used
+	 * for selection by filtering based upon system properties.
+	 * 
+	 * <p>
+	 * The attribute value is encoded in manifest headers like:
+	 * 
+	 * <pre>
+	 *  Bundle-NativeCode: libgtk.so; selection-filter=&quot;(ws=gtk)&quot;; ...
+	 *  Bundle-ClassPath: base.jar, gtk.jar; selection-filter=&quot;(ws=gtk)&quot;, ...
+	 * </pre>
+	 * 
+	 * @since 1.3
+	 */
+	public final static String	SELECTION_FILTER_ATTRIBUTE				= "selection-filter";
+
+	/**
+	 * Manifest header (named &quot;Bundle-ManifestVersion&quot;) identifying
+	 * the bundle manifest version. A bundle manifest may express the version of
+	 * the syntax in which it is written by specifying a bundle manifest
+	 * version. Bundles exploiting OSGi R4, or later, syntax must specify a
+	 * bundle manifest version.
+	 * <p>
+	 * The bundle manifest version defined by OSGi R4 or, more specifically, by
+	 * V1.3 of the OSGi Framework Specification is "2".
+	 * 
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * 
+	 * @since 1.3
+	 */
+	public final static String	BUNDLE_MANIFESTVERSION					= "Bundle-ManifestVersion";
+
+	/**
+	 * Manifest header attribute (named &quot;version&quot;) identifying the
+	 * version of a package specified in the Export-Package or Import-Package
+	 * manifest header.
+	 * 
+	 * <p>
+	 * The attribute value is encoded in the Export-Package or Import-Package
+	 * manifest header like:
+	 * 
+	 * <pre>
+	 *  Import-Package: org.osgi.framework; version=&quot;1.1&quot;
+	 * </pre>
+	 * 
+	 * @since 1.3
+	 */
+	public final static String	VERSION_ATTRIBUTE						= "version";
 
 	/**
 	 * Manifest header attribute (named &quot;bundle-symbolic-name&quot;)
-	 * identifying the symbolic name of a bundle which exports a package specified 
-	 * in the Import-Package manifest header.
-	 *
-     * <p>The attribute value is encoded in the Import-Package manifest header like:
+	 * identifying the symbolic name of a bundle which exports a package
+	 * specified in the Import-Package manifest header.
+	 * 
+	 * <p>
+	 * The attribute value is encoded in the Import-Package manifest header
+	 * like:
+	 * 
 	 * <pre>
-	 * Import-Package: org.osgi.framework; bundle-symbolic-name="com.acme.module.test"
+	 *  Import-Package: org.osgi.framework; bundle-symbolic-name=&quot;com.acme.module.test&quot;
 	 * </pre>
-	 * @since 1.3 
+	 * 
+	 * @since 1.3
 	 */
-	public final static String BUNDLE_SYMBOLICNAME_ATTRIBUTE = "bundle-symbolic-name";
+	public final static String	BUNDLE_SYMBOLICNAME_ATTRIBUTE			= "bundle-symbolic-name";
 
 	/**
-	 * Manifest header directive (named &quot;resolution&quot;)
-	 * identifying the resolution type in the Import-Package or Require-Bundle manifest header.
-	 *
-     * <p>The directive value is encoded in the Import-Package or 
-     * Require-Bundle manifest header like:
+	 * Manifest header directive (named &quot;resolution&quot;) identifying the
+	 * resolution type in the Import-Package or Require-Bundle manifest header.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Import-Package or Require-Bundle
+	 * manifest header like:
+	 * 
 	 * <pre>
-	 * Import-Package: org.osgi.framework; resolution:="optional"
-	 * Require-Bundle: com.acme.module.test; resolution:="optional"
+	 *  Import-Package: org.osgi.framework; resolution:=&quot;optional&quot;
+	 *  Require-Bundle: com.acme.module.test; resolution:=&quot;optional&quot;
 	 * </pre>
+	 * 
 	 * @see Constants#RESOLUTION_MANDATORY
 	 * @see Constants#RESOLUTION_OPTIONAL
-	 * @since 1.3 
+	 * @since 1.3
 	 */
-	public final static String RESOLUTION_DIRECTIVE = "resolution";
+	public final static String	RESOLUTION_DIRECTIVE					= "resolution";
 
 	/**
-	 * Manifest header directive value (named &quot;mandatory&quot;)
-	 * identifying a mandatory resolution type.  A mandatory resolution
-	 * type indicates that the import package or require bundle must be 
-	 * resolved when the bundle is resolved. If such an import or require 
-	 * bundle cannot be resolved, the module fails to resolve.
-	 *
-     * <p>The directive value is encoded in the Import-Package or 
-     * Require-Bundle manifest header like:
+	 * Manifest header directive value (named &quot;mandatory&quot;) identifying
+	 * a mandatory resolution type. A mandatory resolution type indicates that
+	 * the import package or require bundle must be resolved when the bundle is
+	 * resolved. If such an import or require bundle cannot be resolved, the
+	 * module fails to resolve.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Import-Package or Require-Bundle
+	 * manifest header like:
+	 * 
 	 * <pre>
-	 * Import-Package: org.osgi.framework; resolution:="manditory"
-	 * Require-Bundle: com.acme.module.test; resolution:="manditory"
+	 *  Import-Package: org.osgi.framework; resolution:=&quot;manditory&quot;
+	 *  Require-Bundle: com.acme.module.test; resolution:=&quot;manditory&quot;
 	 * </pre>
+	 * 
 	 * @see Constants#RESOLUTION_DIRECTIVE
-	 * @since 1.3 
+	 * @since 1.3
 	 */
-	public final static String RESOLUTION_MANDATORY = "mandatory";
+	public final static String	RESOLUTION_MANDATORY					= "mandatory";
 
 	/**
-	 * Manifest header directive value (named &quot;optional&quot;)
-	 * identifying an optional resolution type.  An optional resolution
-	 * type indicates that the import or require bundle is optional 
-	 * and the bundle may be resolved without the import or require bundle 
-	 * being resolved. If the import or require bundle is not resolved when 
-	 * the bundle is resolved, the import or require bundle may not be 
-	 * resolved before the bundle is refreshed.
-	 *
-     * <p>The directive value is encoded in the Import-Package or 
-     * Require-Bundle manifest header like:
+	 * Manifest header directive value (named &quot;optional&quot;) identifying
+	 * an optional resolution type. An optional resolution type indicates that
+	 * the import or require bundle is optional and the bundle may be resolved
+	 * without the import or require bundle being resolved. If the import or
+	 * require bundle is not resolved when the bundle is resolved, the import or
+	 * require bundle may not be resolved before the bundle is refreshed.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Import-Package or Require-Bundle
+	 * manifest header like:
+	 * 
 	 * <pre>
-	 * Import-Package: org.osgi.framework; resolution:="optional"
-	 * Require-Bundle: com.acme.module.test; resolution:="optional"
+	 *  Import-Package: org.osgi.framework; resolution:=&quot;optional&quot;
+	 *  Require-Bundle: com.acme.module.test; resolution:=&quot;optional&quot;
 	 * </pre>
+	 * 
 	 * @see Constants#RESOLUTION_DIRECTIVE
-	 * @since 1.3 
+	 * @since 1.3
 	 */
-	public final static String RESOLUTION_OPTIONAL = "optional";
+	public final static String	RESOLUTION_OPTIONAL						= "optional";
 
 	/**
-	 * Manifest header directive (named &quot;grouping&quot;)
-	 * identifying the package grouping specified in the Import-Package 
-	 * or Export-Package manifest header.
-	 *
-     * <p>The directive value is encoded in the Import-Package or Export-Package 
-     * manifest header like:
-	 * <pre>
-	 * Export-Package: org.osgi.framework; grouping:="coregroup"
-	 * </pre>
-	 * @since 1.3 
-	 */
-	public final static String GROUPING_DIRECTIVE = "grouping";
-
-	/**
-	 * Manifest header directive (named &quot;include&quot;)
-	 * identifying a list of classes and/or resources of the specified package 
-	 * which must be allowed to be exported in the Export-Package manifest header.
-	 *
-     * <p>The directive value is encoded in the Export-Package 
-     * manifest header like:
-	 * <pre>
-	 * Export-Package: org.osgi.framework; include:="MyStuff*"
-	 * </pre>
-	 * @since 1.3 
-	 */
-	public final static String INCLUDE_DIRECTIVE = "include";
-
-	/**
-	 * Manifest header directive (named &quot;exclude&quot;)
-	 * identifying a list of classes and/or resources of the specified package 
-	 * which must not be allowed to be exported in the Export-Package manifest header.
-	 *
-     * <p>The directive value is encoded in the Export-Package 
-     * manifest header like:
-	 * <pre>
-	 * Export-Package: org.osgi.framework; exclude:="MyStuff*"
-	 * </pre>
-	 * @since 1.3 
-	 */
-	public final static String EXCLUDE_DIRECTIVE = "exclude";
-
-	/**
-	 * Manifest header directive (named &quot;mandatory&quot;)
-	 * identifying names of matching attributes which must be specified 
-	 * by matching Import-Package statements in the Export-Package manifest header.
-	 *
-     * <p>The directive value is encoded in the Export-Package 
-     * manifest header like:
-	 * <pre>
-	 * Export-Package: org.osgi.framework; mandatory:="bundle-symbolic-name"
-	 * </pre>
-	 * @since 1.3 
-	 */
-	public final static String MANDATORY_DIRECTIVE = "mandatory";
-
-	/**
-	 * Manifest header directive (named &quot;visibility&quot;)
-	 * identifying the visibility of a reqiured bundle in the Require-Bundle
+	 * Manifest header directive (named &quot;grouping&quot;) identifying the
+	 * package grouping specified in the Import-Package or Export-Package
 	 * manifest header.
-	 *
-     * <p>The directive value is encoded in the Require-Bundle 
-     * manifest header like:
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Import-Package or Export-Package
+	 * manifest header like:
+	 * 
 	 * <pre>
-	 * Require-Bundle: com.acme.module.test; visibility:="reexport"
+	 *  Export-Package: org.osgi.framework; grouping:=&quot;coregroup&quot;
 	 * </pre>
+	 * 
+	 * @since 1.3
+	 */
+	public final static String	GROUPING_DIRECTIVE						= "grouping";
+
+	/**
+	 * Manifest header directive (named &quot;include&quot;) identifying a list
+	 * of classes and/or resources of the specified package which must be
+	 * allowed to be exported in the Export-Package manifest header.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Export-Package manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *  Export-Package: org.osgi.framework; include:=&quot;MyStuff*&quot;
+	 * </pre>
+	 * 
+	 * @since 1.3
+	 */
+	public final static String	INCLUDE_DIRECTIVE						= "include";
+
+	/**
+	 * Manifest header directive (named &quot;exclude&quot;) identifying a list
+	 * of classes and/or resources of the specified package which must not be
+	 * allowed to be exported in the Export-Package manifest header.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Export-Package manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *  Export-Package: org.osgi.framework; exclude:=&quot;MyStuff*&quot;
+	 * </pre>
+	 * 
+	 * @since 1.3
+	 */
+	public final static String	EXCLUDE_DIRECTIVE						= "exclude";
+
+	/**
+	 * Manifest header directive (named &quot;mandatory&quot;) identifying names
+	 * of matching attributes which must be specified by matching Import-Package
+	 * statements in the Export-Package manifest header.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Export-Package manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *  Export-Package: org.osgi.framework; mandatory:=&quot;bundle-symbolic-name&quot;
+	 * </pre>
+	 * 
+	 * @since 1.3
+	 */
+	public final static String	MANDATORY_DIRECTIVE						= "mandatory";
+
+	/**
+	 * Manifest header directive (named &quot;visibility&quot;) identifying the
+	 * visibility of a reqiured bundle in the Require-Bundle manifest header.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Require-Bundle manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *  Require-Bundle: com.acme.module.test; visibility:=&quot;reexport&quot;
+	 * </pre>
+	 * 
 	 * @see Constants#VISIBILITY_PRIVATE
 	 * @see Constants#VISIBILITY_REEXPORT
-	 * @since 1.3 
+	 * @since 1.3
 	 */
-	public final static String VISIBILITY_DIRECTIVE = "visibility";
+	public final static String	VISIBILITY_DIRECTIVE					= "visibility";
 
 	/**
-	 * Manifest header directive value (named &quot;private&quot;)
-	 * identifying a private visibility type.  A private visibility 
-	 * type indicates that any packages that are exported by the 
-	 * required bundle are not made visible on the export signature 
-	 * of the requiring bundle.
-	 *
-     * <p>The directive value is encoded in the 
-     * Require-Bundle manifest header like:
+	 * Manifest header directive value (named &quot;private&quot;) identifying a
+	 * private visibility type. A private visibility type indicates that any
+	 * packages that are exported by the required bundle are not made visible on
+	 * the export signature of the requiring bundle.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Require-Bundle manifest header
+	 * like:
+	 * 
 	 * <pre>
-	 * Require-Bundle: com.acme.module.test; visibility:="private"
+	 *  Require-Bundle: com.acme.module.test; visibility:=&quot;private&quot;
 	 * </pre>
+	 * 
 	 * @see Constants#VISIBILITY_DIRECTIVE
-	 * @since 1.3 
+	 * @since 1.3
 	 */
-	public final static String VISIBILITY_PRIVATE = "private";
+	public final static String	VISIBILITY_PRIVATE						= "private";
 
 	/**
-	 * Manifest header directive value (named &quot;reexport&quot;)
-	 * identifying a reexport visibility type.  A reexport visibility 
-	 * type indicates any packages that are exported by the required bundle 
-	 * are re-exported by the requiring bundle. Any arbitrary arbitrary 
-	 * matching attributes with which they were exported by the required 
-	 * bundle are deleted.
-	 *
-     * <p>The directive value is encoded in the 
-     * Require-Bundle manifest header like:
+	 * Manifest header directive value (named &quot;reexport&quot;) identifying
+	 * a reexport visibility type. A reexport visibility type indicates any
+	 * packages that are exported by the required bundle are re-exported by the
+	 * requiring bundle. Any arbitrary arbitrary matching attributes with which
+	 * they were exported by the required bundle are deleted.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Require-Bundle manifest header
+	 * like:
+	 * 
 	 * <pre>
-	 * Require-Bundle: com.acme.module.test; visibility:="reexport"
+	 *  Require-Bundle: com.acme.module.test; visibility:=&quot;reexport&quot;
 	 * </pre>
+	 * 
 	 * @see Constants#VISIBILITY_DIRECTIVE
-	 * @since 1.3 
+	 * @since 1.3
 	 */
-	public final static String VISIBILITY_REEXPORT = "reexport";
+	public final static String	VISIBILITY_REEXPORT						= "reexport";
 
 	/**
-	 * Manifest header (named &quot;Reexport-Package&quot;)
-	 * identifying the names of the packages
-	 * that the bundle offers to the Framework for reexport.
-	 *
-	 * <p>The attribute value may be retrieved from the
-	 * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-	 * @since 1.3 
+	 * Manifest header (named &quot;Reexport-Package&quot;) identifying the
+	 * names of the packages that the bundle offers to the Framework for
+	 * reexport.
+	 * 
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * 
+	 * @since 1.3
 	 */
-	public final static String REEXPORT_PACKAGE = "Reexport-Package";}
+	public final static String	REEXPORT_PACKAGE						= "Reexport-Package";
+}
