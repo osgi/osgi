@@ -1,7 +1,7 @@
 /*
  * $Header$
  *
- * Copyright (c) OSGi Alliance (2002).
+ * Copyright (c) OSGi Alliance (2002, 2004).
  * All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
@@ -123,6 +123,7 @@ public interface UPnPAction {
 	 *         <tt>null</tt> if the action has no output arguments.
 	 *
 	 * @throws Exception The execution fails for some reason.
+	 * @throws UPnPException  A UPnP error has occured.
 	 *
 	 * @see UPnPStateVariable
 	 */

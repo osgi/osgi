@@ -81,7 +81,7 @@ public interface UPnPDevice {
 	 * Constant for the value of the service property <tt>DEVICE_CATEGORY</tt>
 	 * used for all UPnP devices. Value is "UPnP".
 	 * 
-	 * @see org.osgi.service.device.Constants#DEVICE_CATEGORY
+	 * @see "<code>org.osgi.service.device.Constants.DEVICE_CATEGORY</code>"
 	 */
 	String	DEVICE_CATEGORY								= "UPnP";
 	/**

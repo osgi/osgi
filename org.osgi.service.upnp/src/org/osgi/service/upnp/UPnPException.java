@@ -1,7 +1,7 @@
 /*
  * $Header$
  *
- * Copyright (c) OSGi Alliance (2002).
+ * Copyright (c) OSGi Alliance (2004).
  * All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
@@ -30,10 +30,13 @@ package org.osgi.service.upnp;
 /**
  * There are several defined error situations describing UPnP problems while a
  * control point invokes actions to UPnPDevices.
+ * 
+ * @since 1.1
  */
 import java.lang.Exception;
 
 public class UPnPException extends Exception {
+    static final long serialVersionUID = -262013318122195146L;
 	/**
 	 * Key for an error information that is an int type variable and that is
 	 * used to identify occured errors.

@@ -1,7 +1,7 @@
 /*
  * $Header$
  *
- * Copyright (c) OSGi Alliance (2002).
+ * Copyright (c) OSGi Alliance (2004).
  * All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
@@ -29,6 +29,8 @@
  * To keep the current values getting from subscribed UPnPDevices. 
  * 
  * The actual values of the UPnPStateVaraible are passed as Java object type. 
+ * 
+ * @since 1.1
  **/
 package org.osgi.service.upnp;
 
