@@ -140,7 +140,7 @@ public abstract class ApplicationDescriptor {
 
 	protected abstract BundleContext getBundleContext();
 
-	public ScheduledApplication schedule( Map arguments, Date date, boolean launchOnOverdue )
+	public ServiceReference schedule( Map arguments, Date date, boolean launchOnOverdue )
 																		throws Exception {
 		ServiceReference serviceRef = getBundleContext()
 				.getServiceReference("org.osgi.service.application.Scheduler");
