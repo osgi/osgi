@@ -31,7 +31,7 @@ group-load: \
   org.osgi.impl.service.event.jar,
   org.osgi.impl.service.dmt.jar,
   org.osgi.impl.service.application.jar,
-  org.osgi.impl.service.deployment.jar,
+  org.osgi.impl.service.deploymentadmin.jar,
   org.osgi.impl.service.monitor.jar, 
   org.osgi.impl.service.basiccontainer.jar,
   org.osgi.impl.service.megcontainer.jar
