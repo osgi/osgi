@@ -30,7 +30,7 @@ package org.osgi.service.component;
 import java.util.Dictionary;
 
 /**
- * When a component is declared with the <tt>factory=&quot;true&quot;</tt>
+ * When a component is declared with the <tt>factory</tt>
  * attribute on it's <tt>component</tt> element, the Service Component Runtime
  * will register a ComponentFactory service to allow instances of the component
  * to be created rather than automatically create component instances as

@@ -39,7 +39,7 @@ import org.osgi.framework.BundleContext;
  * ComponentContext, the component’s implementation class must implement a
  * 
  * <pre>
- * void activate(ComponentContext context);
+ * protected void activate(ComponentContext context);
  * </pre>
  * 
  * method. However, the component is not required to implement this method.
@@ -48,7 +48,7 @@ import org.osgi.framework.BundleContext;
  * implementation class must implement a
  * 
  * <pre>
- * void deactivate(ComponentContext context);
+ * protected void deactivate(ComponentContext context);
  * </pre>
  * 
  * method. However, the component is not required to implement this method.
@@ -104,14 +104,14 @@ public interface ComponentContext {
 
 	/**
 	 * If the component is registered as a service using the
-	 * <tt>factory=&quot;true&quot;</tt> attribute, then this method returns
+	 * <tt>servicefactory=&quot;true&quot;</tt> attribute, then this method returns
 	 * the bundle using the service provided by this component.
 	 * <p>
 	 * This method will return <tt>null</tt> if the component is either:
 	 * <ul>
 	 * <li>Not a service, then no bundle can be using it as a service.
 	 * <li>Is a service but did not specify the
-	 * <tt>factory=&quot;true&quot;</tt> attribute, then all bundles will use
+	 * <tt>servicefactory=&quot;true&quot;</tt> attribute, then all bundles will use
 	 * this component.
 	 * </ul>
 	 * 
