@@ -33,6 +33,8 @@ import org.osgi.service.metatype.ObjectClassDefinition;
 public class MetaTypeProviderImpl implements MetaTypeProvider {
 
 	public static final String	METADATA_NOT_FOUND		= "METADATA_NOT_FOUND";		//$NON-NLS-1$
+	public static final String	OCD_ID_NOT_FOUND		= "OCD_ID_NOT_FOUND";		//$NON-NLS-1$
+	public static final String	ASK_INVALID_LOCALE		= "ASK_INVALID_LOCALE";		//$NON-NLS-1$
 
 	public static final String	METADATA_FOLDER			= "/META-INF/metatype/";	//$NON-NLS-1$
 	public static final String	META_FILE_EXT			= ".XML";					//$NON-NLS-1$
@@ -102,9 +104,9 @@ public class MetaTypeProviderImpl implements MetaTypeProvider {
 			String fileName = (String) allFileKeys.nextElement();
 
 			if (fileName.toUpperCase().endsWith(META_FILE_EXT)) {
+
 				Vector allOCDsInFile = null;
 				java.net.URL[] urls = FragmentUtils.findEntries(bundle, fileName);
-
 				if (urls != null) {
 					for (int i = 0; i < urls.length; i++) {
 						try {
@@ -155,6 +157,11 @@ public class MetaTypeProviderImpl implements MetaTypeProvider {
 	public ObjectClassDefinition getObjectClassDefinition(String pid,
 			String locale) {
 
+		if (isInvalidLocale(locale)) {
+			throw new IllegalArgumentException(
+					Msg.formatter.getString(ASK_INVALID_LOCALE, pid, locale));				
+		}
+
 		ObjectClassDefinitionImpl ocd;
 		if (_allPidOCDs.containsKey(pid)) {
 			ocd = (ObjectClassDefinitionImpl) ((ObjectClassDefinitionImpl) _allPidOCDs.get(pid)).clone();
@@ -168,8 +175,21 @@ public class MetaTypeProviderImpl implements MetaTypeProvider {
 				return (ObjectClassDefinition) ocd;
 			}
 			else {
-				return null;
+				throw new IllegalArgumentException(
+						Msg.formatter.getString(OCD_ID_NOT_FOUND,
+								pid));
 			}
+	}
+
+	/**
+	 * Internal Method - Check if the locale is invalid.
+	 */
+	public boolean isInvalidLocale(String locale) {
+
+		// Just a simple check here.
+		// The locale should be the format of "language" + "_" + "country".
+		return ((locale == null) || ((locale.length()>3) && (locale.charAt(2)=='_'))) //$NON-NLS-1$
+			? false : true;
 	}
 
 	/*
