@@ -159,7 +159,7 @@ public class PermissionAdminPlugin implements DmtDataPlugin {
 	
 	public void open(String subtreeUri, int lockMode, DmtSession session)
 			throws DmtException {
-		String[] path = getPath(subtreeUri); // this is also a check if it starts with the right subpath
+//		String[] path = getPath(subtreeUri); // this is also a check if it starts with the right subpath
 		loadFromPermissionAdmin();
 		dirty = false;
 		atomic = (lockMode == DmtSession.LOCK_TYPE_ATOMIC);
@@ -375,7 +375,7 @@ public class PermissionAdminPlugin implements DmtDataPlugin {
 		}
 		if (path.length==1) {
 			if (DEFAULT.equals(path[0])) {
-				return new String[] { LOCATION };
+				return new String[] { PERMISSIONINFO };
 			} else {
 				return new String[] { LOCATION, PERMISSIONINFO };
 			}
