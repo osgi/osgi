@@ -239,6 +239,7 @@
 		<echo>project.buildpath:      ${project.buildpath}</echo>
 		<echo>javac:                  ${javac}</echo>
 		<echo>p:                      ${p}</echo>
+		<echo>btool.manifestVersion:  ${btool.manifestVersion}</echo>
 		<echo>btool.analyse:          ${btool.analyse}</echo>
 		<echo>btool.showmanifest:     ${btool.showmanifest}</echo>
 		<echo>btool.noversion:     	  ${btool.noversion}</echo>
