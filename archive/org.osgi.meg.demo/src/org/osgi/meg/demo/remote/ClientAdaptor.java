@@ -66,14 +66,14 @@ public class ClientAdaptor implements RemoteAlertSender {
 
 		private Socket			s		= null;
 		private PrintWriter		out		= null;
-		private BufferedReader	in		= null;
+		private LineReader	    in		= null;
 
 		public CommandThread(String host, int port) throws Exception {
 			super("ClientAdaptor");
 			try {
 				s = new Socket(host, port);
 				out = new PrintWriter(s.getOutputStream(), true);
-				in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+				in = new LineReader(new InputStreamReader(s.getInputStream()));
 			}
 			catch (Exception e) {
 				if (null != s)
