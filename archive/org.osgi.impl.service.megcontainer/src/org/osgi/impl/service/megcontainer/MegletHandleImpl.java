@@ -61,8 +61,8 @@ public final class MegletHandleImpl extends MegletHandle {
 
 	public MegletHandleImpl(MegletContainer megletContainer, Meglet meglet,
 			MegletDescriptor appDesc, BundleContext bc) throws Exception {
-		super("TODOPID", appDesc);
-		//TODO
+		super( appDesc.getPID(), appDesc );
+
 		appDescRef = megletContainer.getReference( appDesc );		
 		pid = appDesc.getPID();
 		
