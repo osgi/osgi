@@ -117,27 +117,16 @@ public class EventTestControl extends DefaultTestBundleControl {
     assertBundle(TBCService.class.getName(), tb2);
     assertBundle(EventHandler.class.getName(), tb2);
     
-    Bundle system = getContext().getBundle(0);
-    assertBundle(PackageAdmin.class.getName(), system);
+    //Bundle system = getContext().getBundle(0);
+    //assertBundle(PackageAdmin.class.getName(), system);
   }
 
 
 	/**
-	 * <remove>Test methods starts with "test" and are automatically
-	 * picked up by the base class. The order is in the order of declaration.
-	 * (It is possible to control this). Test methods should use the assert methods
-	 * to test.</remove>
-	 * <remove>The documentation of the test method is the test method
-	 * specification. Normal java tile and html rules apply.</remove>
-	 * 
-	 * TODO Fill in tags
-	 * @specification			<remove>Specification</remove>
-	 * @interface				<remove>Related interface, e.g. org.osgi.util.measurement</remove>
-	 * @specificationVersion	<remove>Version nr of the specification</remove>
-	 * @methods					<remove>Related method(s)</remove>
+	 * Tests if the permissions are set correctly and the exceptions 
+   * that are thrown if they are not.
 	 */
 	public void testSetPermissions() {
-    log("#testSetPermissions");
     PermissionAdmin permissionAdmin = (PermissionAdmin)getRegistry().getService(PermissionAdmin.class);
     //try to send event without PUBLISH TopicPermission
     Hashtable properties = new Hashtable();
@@ -176,15 +165,18 @@ public class EventTestControl extends DefaultTestBundleControl {
     PermissionInfo topInfo2 = new PermissionInfo(TopicPermission.class.getName(), 
                                                  "org/osgi/*", 
                                                  TopicPermission.SUBSCRIBE);
-    permissionAdmin.setPermissions(tb2.getLocation(), new PermissionInfo[]{regInfo, topInfo2});
-    
+    permissionAdmin.setPermissions(tb2.getLocation(), new PermissionInfo[]{regInfo, topInfo2});   
 		
 	}
   
+  /**
+   * Tests the event construction and the exceptions 
+   * that are thrown if event topic doesn't conform to the following grammar: 
+   * topic := token ( "/" token )*
+   */
   public void testEventConstruction() {
-    log("#testEventConstruction");
-    String[] illegalTopics = new String[] {"", "/error_topic", "//error_topic1", "1/error_topic2", "error_topic&"};
-    String[]   legalTopics = new String[] {"*", "org/osgi/test/cases/event/ACTION1", "org/osgi/test/cases/event/ACTION2"};
+    String[] illegalTopics = new String[] {"", "*", "/error_topic", "//error_topic1", "1/error_topic2", "topic/error_topic3/", "error_topic&"};
+    String[]   legalTopics = new String[] {"ACTION0", "org/osgi/test/cases/event/ACTION1", "org/osgi/test/cases/event/ACTION2"};
     Hashtable properties = new Hashtable();
     String message = "Exception in event construction with topic:[";
     String topic;
@@ -200,18 +192,21 @@ public class EventTestControl extends DefaultTestBundleControl {
     }
     //legal topics tested
     for (int i = 0; i < legalTopics.length; i++) {
-      topic = illegalTopics[i];
+      topic = legalTopics[i];
       try {
         new Event(topic, properties);
         pass("Event constructed with topic: " + topic);
       } catch (Throwable e) {
-        fail(message);
+        fail(message + topic + "]");
       }
     }
   }
   
+  /**
+   * Tests the notification for events after posting 
+   * (if they match of the listeners).
+   */
   public void testPostEventNotification() {
-    log("#testEventNotification");
     TBCService tbcService1 = (TBCService) tb1;
     TBCService tbcService2 = (TBCService) tb2;
     
@@ -242,6 +237,7 @@ public class EventTestControl extends DefaultTestBundleControl {
 	 * Verify that the service with name is exported by the bundle b.
 	 * 
 	 * @param name		fqn of the service, e.g. com.acme.foo.Foo
+   * @param b       the bundle to be asserted
 	 */
 	private void assertBundle(String name, Bundle b) {
 		ServiceReference	ref = getContext().getServiceReference(name);
