@@ -337,7 +337,7 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
     ControlUnitFactory provider = (ControlUnitFactory)providers.get(cuType);
     
     if (provider == null) {
-      throw new ControlUnitAdminException(ControlUnitAdminException.NO_SUCH_CONTROL_UNIT_ERROR);
+      throw new ControlUnitAdminException(ControlUnitAdminException.NO_SUCH_CONTROL_UNIT_TYPE_ERROR);
     }
     
     return provider.queryStateVariable(cuID, varID);
@@ -354,7 +354,7 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
     ControlUnitFactory provider = (ControlUnitFactory)providers.get(cuType);
     
     if (provider == null) {
-      throw new ControlUnitAdminException(ControlUnitAdminException.NO_SUCH_CONTROL_UNIT_ERROR);
+      throw new ControlUnitAdminException(ControlUnitAdminException.NO_SUCH_CONTROL_UNIT_TYPE_ERROR);
     }
     
     return provider.invokeAction(cuID, actionID, arguments);
