@@ -32,6 +32,7 @@ package org.osgi.service.component;
  * @version $Revision$
  */
 public class ComponentException extends RuntimeException {
+	static final long serialVersionUID = -7438212656298726924L;
 	/**
 	 * Nested exception.
 	 */

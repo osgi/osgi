@@ -27,33 +27,43 @@
 package org.osgi.service.component;
 
 import java.util.Dictionary;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 /**
- * A ComponentContext interface is used by a Service Component to interact with
- * it execution context including locating services by reference name. In order
- * to be notified when a component is activated and to obtain a
- * ComponentContext, the component's implementation class must implement a
+ * A ComponentContext object is used by a Service Component to interact with it
+ * execution context including locating services by reference name.
+ * 
+ * <p>
+ * A component's implementation class may optional implement an activate method:
  * 
  * <pre>
  * protected void activate(ComponentContext context);
  * </pre>
  * 
- * method. However, the component is not required to implement this method.
+ * If a component implements this method, this method will be called when the
+ * component is activated to provide the component's ComponentContext object.
+ * 
  * <p>
- * In order to be called when the component is deactivated, a component's
- * implementation class must implement a
+ * A component's implementation class may optional implement a deactivate
+ * method:
  * 
  * <pre>
  * protected void deactivate(ComponentContext context);
  * </pre>
  * 
- * method. However, the component is not required to implement this method.
+ * If a component implements this method, this method will be called when the
+ * component is deactivated.
+ * 
  * <p>
- * These methods will be called by the Service Component Runtime using
- * reflection and may be private methods to avoid being public methods on the
- * component's provided service object.
+ * The activate and deactivate methods will be called using reflection and must
+ * be at least protected accessible. These methods do not need to be public
+ * methods so that they do not appear as public methods on the component's
+ * provided service object. The methods will be located by looking through the
+ * component's implementation class hierarchy for the first declaration of the
+ * method. If the method is declared protected or public, the method will
+ * called.
  * 
  * @version $Revision$
  */
@@ -61,7 +71,7 @@ public interface ComponentContext {
 	/**
 	 * Returns the component properties for this ComponentContext.
 	 * 
-	 * @return properties for this ComponentContext. The properties are read
+	 * @return The properties for this ComponentContext. The properties are read
 	 *         only and cannot be modified.
 	 */
 	public Dictionary getProperties();
@@ -117,11 +127,18 @@ public interface ComponentContext {
 	public Bundle getUsingBundle();
 
 	/**
+	 * Returns the ComponentInstance object for this component.
+	 * 
+	 * @return The ComponentInstance object for this component.
+	 */
+	public ComponentInstance getComponentInstance();
+
+	/**
 	 * Enables the specified component name. The specified component name must
 	 * be in the same bundle as this component.
 	 * 
-	 * @param name of a component or <tt>null</tt> to indicate all components
-	 *        in the bundle.
+	 * @param name The name of a component or <tt>null</tt> to indicate all
+	 *        components in the bundle.
 	 */
 	public void enableComponent(String name);
 
@@ -129,14 +146,7 @@ public interface ComponentContext {
 	 * Disables the specified component name. The specified component name must
 	 * be in the same bundle as this component.
 	 * 
-	 * @param name of a component.
+	 * @param name The name of a component.
 	 */
 	public void disableComponent(String name);
-
-	/**
-	 * Returns the ComponentInstance object for this component.
-	 * 
-	 * @return The ComponentInstance object for this component.
-	 */
-	public ComponentInstance getComponentInstance();
 }

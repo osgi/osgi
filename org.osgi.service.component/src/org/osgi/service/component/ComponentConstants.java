@@ -34,7 +34,7 @@ package org.osgi.service.component;
 public interface ComponentConstants {
 	/**
 	 * Manifest header (named &quot;Service-Component&quot;) identifying the XML
-	 * resources within the bundle containing the bundle's Service Component
+	 * documents within the bundle containing the bundle's Service Component
 	 * descriptions.
 	 * <p>
 	 * The attribute value may be retrieved from the <tt>Dictionary</tt>

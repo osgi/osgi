@@ -41,7 +41,7 @@ public interface ComponentFactory {
 	 * Create a new instance of the component. Additional properties may be
 	 * provided for the component instance.
 	 * 
-	 * @param properties Additional properties for the component.
+	 * @param properties Additional properties for the component instance.
 	 * @return A ComponentInstance object encapsulating the component instance.
 	 *         The returned component instance has been activated.
 	 */
