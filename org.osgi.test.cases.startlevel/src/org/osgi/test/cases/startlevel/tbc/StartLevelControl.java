@@ -76,12 +76,12 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
 
     Bundle tb1 = getContext().installBundle(getWebServer() + "tb1.jar");
     tb1.start();
-    assertEquals("bundle.getState", Bundle.RESOLVED, tb1.getState());
+    assertEquals("getState() = INSTALLED | RESOLVED", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     sl.setInitialBundleStartLevel(10);
     Bundle tb2 = getContext().installBundle(getWebServer() + "tb2.jar");
     tb2.start();
-    assertEquals("bundle.getState", Bundle.ACTIVE, tb2.getState());
+    assertEquals("getState() = ACTIVE", true, inState(tb2, Bundle.ACTIVE));
 
     tb1.uninstall();
     tb2.stop();
@@ -132,27 +132,27 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
 
     sl.setStartLevel(20);
     Thread.sleep(1000);
-    assertEquals("bundle.getState", false, isActive(tb1));
+      assertEquals("getState() = INSTALLED | RESOLVED", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     sl.setStartLevel(10);
     Thread.sleep(1000);
-    assertEquals("bundle.getState", false, isActive(tb1));
+      assertEquals("getState() = INSTALLED | RESOLVED", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     tb1.start();
-    assertEquals("bundle.getState", false, isActive(tb1));
+      assertEquals("getState() = INSTALLED | RESOLVED", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     sl.setStartLevel(20);
     Thread.sleep(1000);
-    assertEquals("bundle.getState", true, isActive(tb1));
+      assertEquals("getState() = ACTIVE", true, inState(tb1, Bundle.ACTIVE));
 
     sl.setStartLevel(10);
     Thread.sleep(1000);
-    assertEquals("bundle.getState", false, isActive(tb1));
+      assertEquals("getState() = INSTALLED | RESOLVED", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     tb1.stop();
     sl.setStartLevel(20);
     Thread.sleep(1000);
-    assertEquals("bundle.getState", false, isActive(tb1));
+      assertEquals("getState() = INSTALLED | RESOLVED", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     tb1.uninstall();
   }
@@ -166,26 +166,26 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
 
     sl.setBundleStartLevel(tb1, 5);
     Thread.sleep(2000);
-    assertEquals("Startlevel 10/5 stop", false, isActive(tb1));
+    assertEquals("Startlevel 10/5 stop", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     sl.setBundleStartLevel(tb1, 15);
     Thread.sleep(2000);
-    assertEquals("StartLevel 10/15 stop", false, isActive(tb1));
+    assertEquals("StartLevel 10/15 stop", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     tb1.start();
-    assertEquals("StartLevel 10/15 start", false, isActive(tb1));
+    assertEquals("StartLevel 10/15 start", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     sl.setBundleStartLevel(tb1, 5);
     Thread.sleep(2000);
-    assertEquals("StartLevel 10/5 start", true, isActive(tb1));
+    assertEquals("StartLevel 10/5 start", true, inState(tb1, Bundle.ACTIVE));
 
     sl.setBundleStartLevel(tb1, 15);
     Thread.sleep(2000);
-    assertEquals("StartLevel 10/15 start", false, isActive(tb1));
+    assertEquals("StartLevel 10/15 start", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     sl.setBundleStartLevel(tb1, 5);
     Thread.sleep(2000);
-    assertEquals("StartLevel 10/5 start", true, isActive(tb1));
+    assertEquals("StartLevel 10/5 start", true, inState(tb1, Bundle.ACTIVE));
 
     tb1.stop();
     tb1.uninstall();
@@ -255,7 +255,7 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
 
     try {
       tb5.start();
-      assertEquals("bundle.getState", true, isActive(tb5));
+        assertEquals("getState() = ACTIVE", true, inState(tb5, Bundle.ACTIVE));
 
     } catch (Exception e) {
     }
@@ -263,19 +263,19 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
     //FrameworkEvent.ERROR due to active startlevel change
     sl.setStartLevel(4);
     Thread.sleep(1000);
-    assertEquals("bundle.getState", false, isActive(tb5));
-    
+      assertEquals("getState() = INSTALLED | RESOLVED", true, inState(tb5, Bundle.INSTALLED | Bundle.RESOLVED));
+
     //no FrameworkEvent.ERROR
     sl.setStartLevel(5);
     Thread.sleep(1000);
-    assertEquals("bundle.getState", true, isActive(tb5));
-    
+      assertEquals("getState() = ACTIVE", true, inState(tb5, Bundle.ACTIVE));
+
     
     //FrameworkEvent.ERROR due to bundle startlevel change
     sl.setBundleStartLevel(tb5, 6);
     Thread.sleep(2000);
-    assertEquals("bundle.getState", false, isActive(tb5));
-    
+      assertEquals("getState() = INSTALLED | RESOLVED", true, inState(tb5, Bundle.INSTALLED | Bundle.RESOLVED));
+
     tb5.uninstall();
   }
 
@@ -320,10 +320,9 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
     }
   }
 	
-	boolean isActive( Bundle b ) {
-		return (b.getState() & Bundle.ACTIVE)!=0;
+
+	boolean inState(Bundle b, int stateMask) {
+		return (b.getState() & stateMask) != 0;
 	}
-
-
 }
 
