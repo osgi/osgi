@@ -2,13 +2,12 @@ package org.osgi.meglet;
 
 import java.util.Dictionary;
 import java.util.Map;
-import org.osgi.service.application.Application;
 import org.osgi.service.component.ComponentContext;
 
 /**
  * A MEG Application, also called a Meglet.
  */
-public class Mobilet implements Application {
+public class Mobilet  {
 	ComponentContext	context;
 	Map					args;
 
