@@ -46,7 +46,7 @@ public class BundleException extends Exception
     /**
      * Nested exception.
      */
-    private transient Throwable cause;
+    private Throwable cause;
 
     /**
      * Creates a <tt>BundleException</tt> that wraps another exception.
