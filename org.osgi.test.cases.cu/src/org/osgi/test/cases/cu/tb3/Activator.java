@@ -56,7 +56,7 @@ public class Activator implements BundleActivator {
 		
 		p.clear();
 		p.put(ControlUnitConstants.EVENT_SYNC, "");
-		p.put(ControlUnitConstants.EVENT_FILTER, "(&(osg.control.id=window.1)(osg.control.type=window)(osg.control.var.id=state))");
+		p.put(ControlUnitConstants.EVENT_FILTER, "(&(org.osgi.control.id=window.1)(org.osgi.control.type=window)(org.osgi.control.var.id=state))");
 		regList2 = context.registerService(StateVariableListener.class.getName(), new EventFilterListener(), p);
 	}
 	

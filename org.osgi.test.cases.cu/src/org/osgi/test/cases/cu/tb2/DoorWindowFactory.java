@@ -31,6 +31,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import org.osgi.service.cu.ControlUnit;
+import org.osgi.service.cu.ControlUnitException;
 import org.osgi.service.cu.admin.*;
 import org.osgi.service.cu.admin.spi.*;
 
@@ -110,7 +111,7 @@ public class DoorWindowFactory implements ControlUnitFactory {
 	 * @see org.osgi.service.cu.admin.spi.ControlUnitFactory#findControlUnits(java.lang.String, java.lang.Object)
 	 */
 	public String[] findControlUnits(String finderId, Object arguments)
-			throws Exception {
+			throws ControlUnitException {
 		return null;
 	}
 
@@ -132,7 +133,7 @@ public class DoorWindowFactory implements ControlUnitFactory {
 	 * @see org.osgi.service.cu.admin.spi.ControlUnitFactory#queryStateVariable(java.lang.String, java.lang.String)
 	 */
 	public Object queryStateVariable(String cuId, String varId)
-			throws Exception {
+			throws ControlUnitException {
 		
 		DoorWindow elt = (DoorWindow)elts.get(cuId);
 
@@ -150,7 +151,7 @@ public class DoorWindowFactory implements ControlUnitFactory {
 	 * @see org.osgi.service.cu.admin.spi.ControlUnitFactory#invokeAction(java.lang.String, java.lang.String, java.lang.Object)
 	 */
 	public Object invokeAction(String cuId, String actionId, Object arguments)
-			throws Exception {
+			throws ControlUnitException {
 		DoorWindow elt;
 		elt = (DoorWindow)elts.get(cuId);
 
@@ -167,7 +168,7 @@ public class DoorWindowFactory implements ControlUnitFactory {
 	 * @see org.osgi.service.cu.admin.spi.ControlUnitFactory#createControlUnit(java.lang.String, java.lang.Object)
 	 */
 	public String createControlUnit(String constructorId, Object arguments)
-			throws Exception {
+			throws ControlUnitException {
 		if (((constructorId == "door.create") || (constructorId == "window.create")) && (arguments == null)) {
 			if (nbEltCreated < 5) {
 				
@@ -178,7 +179,7 @@ public class DoorWindowFactory implements ControlUnitFactory {
 				
 				// Notify CUAdmin if call back is set
 				if (adminCallback != null) {
-					adminCallback.controlUnitEvent(ControlUnitListener.CONTROL_UNIT_ADDED, type, name);
+					adminCallback.controlUnitEvent(ControlUnitAdminListener.CONTROL_UNIT_ADDED, type, name);
 					
 					if (constructorId == "window.create")
 						adminCallback.hierarchyChanged(HierarchyListener.ATTACHED, type, name, "door", "door.1");
@@ -197,14 +198,14 @@ public class DoorWindowFactory implements ControlUnitFactory {
 	 * @throws Exception
 	 * @see org.osgi.service.cu.admin.spi.ControlUnitFactory#destroyControlUnit(java.lang.String)
 	 */
-	public void destroyControlUnit(String controlUnitId) throws Exception {
+	public void destroyControlUnit(String controlUnitId) throws ControlUnitException {
 		
 		DoorWindow elt = (DoorWindow)elts.remove(controlUnitId);
 		
 		// Notify CUAdmin if call back is set
 		if ((elt != null) && (adminCallback != null)) {
 			nbEltCreated--;
-			adminCallback.controlUnitEvent(ControlUnitListener.CONTROL_UNIT_REMOVED, type, controlUnitId);
+			adminCallback.controlUnitEvent(ControlUnitAdminListener.CONTROL_UNIT_REMOVED, type, controlUnitId);
 		}
 	}
 	
@@ -284,10 +285,10 @@ class DoorWindow implements ControlUnit {
 	 * @throws Exception
 	 * @see org.osgi.service.cu.ControlUnit#queryStateVariable(java.lang.String)
 	 */
-	public Object queryStateVariable(String varId) throws Exception {		
+	public Object queryStateVariable(String varId) throws ControlUnitException {		
 		if (varId == "state")
 			return new Byte (getState());
-		else throw (new IllegalArgumentException());
+		else throw (new ControlUnitException(ControlUnitException.NO_SUCH_STATE_VARIABLE_ERROR));
 	}
 
 	/**
@@ -297,7 +298,7 @@ class DoorWindow implements ControlUnit {
 	 * @throws Exception
 	 * @see org.osgi.service.cu.ControlUnit#invokeAction(java.lang.String, java.lang.Object)
 	 */
-	public Object invokeAction(String actionId, Object arguments) throws Exception {
+	public Object invokeAction(String actionId, Object arguments) throws ControlUnitException {
 		
 		// The following actions can be invoked on a door
 		// void open()
@@ -316,6 +317,6 @@ class DoorWindow implements ControlUnit {
 			}
 			return null;
 		}
-		else throw (new IllegalArgumentException());
+		else throw (new ControlUnitException(ControlUnitException.NO_SUCH_ACTION_ERROR));
 	}
 }

@@ -27,6 +27,7 @@
 
 package org.osgi.test.cases.cu.tb1;
 
+import org.osgi.service.cu.ControlUnitException;
 import org.osgi.service.cu.admin.spi.CUAdminCallback;
 import org.osgi.service.cu.admin.spi.ManagedControlUnit;
 
@@ -70,7 +71,7 @@ public class HipModule implements ManagedControlUnit {
 	 * @throws Exception
 	 * @see org.osgi.service.cu.ControlUnit#queryStateVariable(java.lang.String)
 	 */
-	public Object queryStateVariable(String varId) throws Exception {
+	public Object queryStateVariable(String varId) throws ControlUnitException {
 		return null;
 	}
 
@@ -82,7 +83,7 @@ public class HipModule implements ManagedControlUnit {
 	 * @see org.osgi.service.cu.ControlUnit#invokeAction(java.lang.String, java.lang.Object)
 	 */
 	public Object invokeAction(String actionId, Object arguments)
-			throws Exception {
+			throws ControlUnitException {
 		return null;
 	}
 }

@@ -94,16 +94,16 @@ public class TestControl extends DefaultTestBundleControl {
 	 * Enumerates through all constants defined in ControlUnitConstants interface.
 	 */
 	public void testControlUnitConstants() {
-		log("osg.control.id", ControlUnitConstants.ID);
-		log("osg.control.type", ControlUnitConstants.TYPE);
-		log("osg.control.version", ControlUnitConstants.VERSION);
-		log("osg.control.parent.id", ControlUnitConstants.PARENT_ID);
-		log("osg.control.parent.type", ControlUnitConstants.PARENT_TYPE);
-	  	log("osg.control.event.auto_receive", ControlUnitConstants.EVENT_AUTO_RECEIVE);
-	  	log("osg.control.event.filter", ControlUnitConstants.EVENT_FILTER);
-	  	log("osg.control.event.sync", ControlUnitConstants.EVENT_SYNC);
-	  	log("osg.control.var.id", ControlUnitConstants.STATE_VARIABLE_ID);
-	  	log("osg.control.var.list_sv", ControlUnitConstants.STATE_VARIABLES_LIST);
+		log("org.osgi.control.id", ControlUnitConstants.ID);
+		log("org.osgi.control.type", ControlUnitConstants.TYPE);
+		log("org.osgi.control.version", ControlUnitConstants.VERSION);
+		log("org.osgi.control.parent.id", ControlUnitConstants.PARENT_ID);
+		log("org.osgi.control.parent.type", ControlUnitConstants.PARENT_TYPE);
+	  	log("org.osgi.control.event.auto_receive", ControlUnitConstants.EVENT_AUTO_RECEIVE);
+	  	log("org.osgi.control.event.filter", ControlUnitConstants.EVENT_FILTER);
+	  	log("org.osgi.control.event.sync", ControlUnitConstants.EVENT_SYNC);
+	  	log("org.osgi.control.var.id", ControlUnitConstants.STATE_VARIABLE_ID);
+	  	log("org.osgi.control.var.list_sv", ControlUnitConstants.STATE_VARIABLES_LIST);
 	}
 	
 	/**
