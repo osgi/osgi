@@ -5,7 +5,7 @@
  * MEMBERS as MEMBER LICENSED MATERIALS under the terms of section 3.2 of the OSGi MEMBER AGREEMENT.
  */
 
-package org.osgi.test.cases.servicetracker.tb2;
+package org.osgi.test.cases.tracker.tb1;
 
 
 /**
@@ -13,8 +13,8 @@ package org.osgi.test.cases.servicetracker.tb2;
 
    @author Ericsson Telecom AB
 */
-public interface TestService2
-    {
-
+public class TestService1Impl implements TestService1
+{
+    
 }
 

@@ -26,7 +26,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.servicetracker.tbc;
+package org.osgi.test.cases.tracker.tbc;
 
 import java.util.*;
 

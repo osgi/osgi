@@ -5,7 +5,7 @@
  * MEMBERS as MEMBER LICENSED MATERIALS under the terms of section 3.2 of the OSGi MEMBER AGREEMENT.
  */
 
-package org.osgi.test.cases.servicetracker.tb2;
+package org.osgi.test.cases.tracker.tb2;
 
 import java.util.*;
 

@@ -5,10 +5,10 @@
  * MEMBERS as MEMBER LICENSED MATERIALS under the terms of section 3.2 of the OSGi MEMBER AGREEMENT.
  */
 
-package org.osgi.test.cases.servicetracker.tb4;
+package org.osgi.test.cases.tracker.tb4;
 
 import org.osgi.framework.*;
-import org.osgi.test.cases.servicetracker.tb2.*;
+import org.osgi.test.cases.tracker.tb2.*;
 
 /**
    Bundle for exporting packages

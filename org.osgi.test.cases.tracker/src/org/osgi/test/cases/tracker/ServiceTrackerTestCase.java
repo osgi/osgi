@@ -28,7 +28,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.servicetracker;
+package org.osgi.test.cases.tracker;
 
 import org.osgi.test.cases.util.*;
 
