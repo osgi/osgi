@@ -18,8 +18,10 @@
 
 package org.osgi.impl.service.policy.permadmin;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
+import org.osgi.impl.service.policy.util.HashCalculator;
 import org.osgi.impl.service.policy.util.Splitter;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtDataPlugIn;
@@ -39,25 +41,29 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 	private final PermissionAdmin	permissionAdmin;
 	public static final String dataRootURI = "./OSGi/Policies/Java/Bundle";
 
+	private static final class Entry {
+		boolean isDefault = false;
+		String location;
+		PermissionInfo[] permissionInfo;
+	};
+
 	/* internal state variables, that will be dumped back into the permission admin
 	 * at commit
 	 */
-	private PermissionInfo[]	defaultPermissions;
-	private String[]	locations;
-	private HashMap	permissions; // location -> PermissionInfo[]
+	private HashMap	entries;
 
-	/**
-	 * reverse hash lookup table, for efficiency
-	 */
-	private HashMap reverseHash = new HashMap();
+	private HashCalculator	hashCalculator;
+	private DmtMetaNode	rootMetaNode = new RootMetaNode();
 	
 	/**
 	 * create a new PermissionAdmin plugin for the DMT admin. It is the responsibility
 	 * of the caller to register in the service registry.
 	 * @param permissionAdmin
+	 * @throws NoSuchAlgorithmException
 	 */
-	public PermissionAdminPlugin(PermissionAdmin permissionAdmin) {
+	public PermissionAdminPlugin(PermissionAdmin permissionAdmin) throws NoSuchAlgorithmException {
 		this.permissionAdmin = permissionAdmin;
+		hashCalculator = new HashCalculator();
 	}
 	
 	public void open(String subtreeUri, int lockMode, DmtSession session)
@@ -70,13 +76,19 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 	 * loads all settings from the permission admin
 	 */
 	private void loadFromPermissionAdmin() {
-		locations = permissionAdmin.getLocations();
+		String[] locations = permissionAdmin.getLocations();
 		if (locations==null) locations=new String[0];
-		permissions = new HashMap();
+		entries = new HashMap();
 		for(int i=0;i<locations.length;i++) {
-			permissions.put(locations[i],permissionAdmin.getPermissions(locations[i]));
+			Entry e = new Entry();
+			e.location = locations[i];
+			e.permissionInfo = permissionAdmin.getPermissions(e.location);
+			entries.put(hashCalculator.getHash(e.location),e);
 		}
-		defaultPermissions = permissionAdmin.getDefaultPermissions();
+		Entry e = new Entry();
+		e.isDefault = true;
+		e.permissionInfo = permissionAdmin.getDefaultPermissions();
+		if (e.permissionInfo!=null) entries.put("Default",e);
 	}
 
 	/**
@@ -88,6 +100,10 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 	 */
 	public DmtMetaNode getMetaNode(String nodeUri, DmtMetaNode generic)
 			throws DmtException {
+		String[] path = getPath(nodeUri);
+		if (path.length==0) {
+			return rootMetaNode = new RootMetaNode();
+		}
 		throw new IllegalStateException("not implemented");
 		// TODO Auto-generated method stub
 	}
@@ -221,8 +237,15 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 	}
 
 	public boolean isNodeUri(String nodeUri) {
-		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
+		String[] path = getPath(nodeUri);
+		if (path.length==0) { return true; }
+		if (path.length>=1) {
+			if (!entries.containsKey(path[1])) return false;
+		}
+		if (path.length>2) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -291,13 +314,13 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		// TODO Auto-generated method stub
 	}
 
-	/**
-	 * @param nodeUri
-	 * @return
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.DmtReadOnly#getChildNodeNames(java.lang.String)
-	 */
 	public String[] getChildNodeNames(String nodeUri) throws DmtException {
+		String[] path = getPath(nodeUri);
+		if (path.length==0) {
+			String keys[] = new String[0];
+			keys = (String[]) entries.keySet().toArray(keys);
+			return keys;
+		}
 		throw new IllegalStateException("not implemented");
 		// TODO Auto-generated method stub
 	}
