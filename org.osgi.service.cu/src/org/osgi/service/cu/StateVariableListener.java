@@ -37,8 +37,8 @@ package org.osgi.service.cu;
  * of received events and to specify certain control unit and/or state variables
  * to listen for. The key of this property is
  * {@link ControlUnitConstants#EVENT_FILTER} with value of type
- * <code>String</code> representing LDAP filtering expression. The properties
- * which may be used in the LDAP filer are {@link ControlUnitConstants#TYPE},
+ * <code>String</code> representing LDAP filtering expression. The properties,
+ * which may be used in the LDAP filter are {@link ControlUnitConstants#TYPE},
  * {@link ControlUnitConstants#ID} and
  * {@link ControlUnitConstants#STATE_VARIABLE_ID}. The listener will be notified
  * only for changes in the value of the state variables whose id and type of the
@@ -62,12 +62,12 @@ package org.osgi.service.cu;
  * <p>
  * 
  * Listeners may use the {@link ControlUnitConstants#EVENT_SYNC} property to
- * specify that events are to be delivered synchronously.
+ * specify that events should be delivered synchronously.
  * <p>
  * 
  * A listener that has the property
  * {@link ControlUnitConstants#EVENT_AUTO_RECEIVE} receive automatically the
- * current values of all registered control units and state variables that matche
+ * current values of all registered control units and state variables that match
  * the current filter.
  * 
  * @version $Revision$

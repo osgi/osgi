@@ -42,7 +42,7 @@ package org.osgi.service.cu.admin;
  * type <code>String</code> representing LDAP filtering expression.
  * <p>
  * 
- * The properties, which may be used in the LDAP filer are:
+ * The properties, which may be used in the LDAP filter are:
  * <ul>
  * <li>{@link ControlUnitAdmin#EVENT_TYPE} - to limit the types of events
  * received by the listener. Valid values are {@link #DETACHED} and
@@ -61,8 +61,8 @@ package org.osgi.service.cu.admin;
 public interface HierarchyListener {
 
   /**
-   * This constant is used as first parameter in {@link #hierarchyChanged} 
-   * method to indicate that the control control has detached from the given
+   * This constant is used as first parameter in {@link #hierarchyChanged}
+   * method to indicate that the control unit has detached from the given
    * parent.
    * <p>
    * 
@@ -71,16 +71,28 @@ public interface HierarchyListener {
   public static final int DETACHED = 1;
 
   /**
-   * This constant is used as first parameter in {@link #hierarchyChanged} 
-   * method to indicate that the control control has attached to the given
-   * parent.
+   * This constant is used as first parameter in {@link #hierarchyChanged}
+   * method to indicate that the control unit has attached to the given parent.
    * <p>
    * 
    * The value of this constant is 2
    */
   public static final int ATTACHED = 2;
 
-  public void hierarchyChanged(int eventType, String controlUnitType, String controlUnitID,
-                               String parentControlUnitType, String parentControlUnitID);
+  /**
+   * This callback method is invoked from the <code>ControlUnitAdmin</code> in
+   * order to notify the registered listeners for a new hierachy event.
+   * 
+   * @param eventType the type of the event - either {@link #ATTACHED} or
+   *          {@link #DETACHED}.
+   * @param controlUnitType the type of the unit for which the event is fired
+   * @param controlUnitID the ID of the unit for which the event is fired
+   * @param parentControlUnitType the parent unit's type, where the change
+   *          occured
+   * @param parentControlUnitID the parent unit's ID, where the change occured
+   */
+  public void hierarchyChanged(int eventType, String controlUnitType,
+                               String controlUnitID, String parentControlUnitType,
+                               String parentControlUnitID);
 
 }

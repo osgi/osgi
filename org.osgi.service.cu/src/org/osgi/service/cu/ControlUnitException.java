@@ -26,110 +26,197 @@
  */
 package org.osgi.service.cu;
 
+import java.io.PrintStream;
+import java.io.PrintWriter;
+
 /**
  * Custom exception throw from some control unit related methods.<BR>
  * 
- * It has an error code, defining the type of error which occured, and an
+ * It has an error code, defining the type of error, which occurred, and an
  * optional application exception.
- *  
+ * 
  * @version $Revision$
  */
 public class ControlUnitException extends Exception {
-  
+
   /**
-   * Error code which signals that an undetermined error has occured. 
-   * The application exception should be checked for more information about 
-   * the actual error.
+   * Error code which signals that an undetermined error has occurred. The
+   * application exception should be checked for more information about the
+   * actual error.
    */
   public static final int UNDETERMINED_APPLICATION_ERROR = 0;
-  
+
   /**
-   * Error code which signals that the invocation of an attempt to invoke an 
-   * non-existing method was made.
+   * This error code means that the user has tried to invoke non-existent
+   * action of the unit.
    */
   public static final int NO_SUCH_ACTION_ERROR = 1;
-  
+
   /**
-   * Error code which signals that an attempt to query the value of an 
-   * non-existing state variable was made.
+   * This error code means, that the user has tried to read the value
+   * of non-existent state variable.
    */
   public static final int NO_SUCH_STATE_VARIABLE_ERROR = 2;
-  
+
   /**
-   * Error code which signals that an attempt to invoke action with illegal
-   * arguments was made.
+   * This error code means, that the user has supplied an invalid argument
+   * for action invocation.
    */
   public static final int ILLEGAL_ACTION_ARGUMENTS_ERROR = 3;
-  
+
   private int errorCode;
   private Exception applicationException;
-  
+
   /**
    * Constructs a new control unit exception with the given error code.
    * 
    * @param errorCode the error code
    */
   public ControlUnitException(int errorCode) {
+    super();
     this.errorCode = errorCode;
   }
-  
+
   /**
-   * Constructs a new control unit exception with the given message and error code.
+   * Constructs a new control unit exception with the given message and error
+   * code.
    * 
    * @param message the detail message
    * @param errorCode the error code
    */
   public ControlUnitException(String message, int errorCode) {
     super(message);
-    
     this.errorCode = errorCode;
   }
-  
+
   /**
-   * Constructs a new undetermined error control unit exception with the given 
-   * application exception. <BR>
+   * Creates a new exception with assigned application error.<br>
    * 
-   * The error code of the constructed exception will be {@link #UNDETERMINED_APPLICATION_ERROR}.
-   * The application exception may be retrieved by the {@link #getApplicationException()} method.
+   * The error code of the constructed exception will be
+   * {@link #UNDETERMINED_APPLICATION_ERROR}. The application exception may be
+   * retrieved by the {@link #getApplicationException()} method.
    * 
    * @param exception the actual application exception
    */
   public ControlUnitException(Exception exception) {
     this(null, exception);
   }
-  
+
   /**
-   * Constructs a new undetermined application error exception with the given message 
-   * and exception. <BR>
+   * Constructs a new exception with the specified message and assigned application
+   * error.<br>
    * 
-   * The error code of the constructed exception will be {@link #UNDETERMINED_APPLICATION_ERROR}.
-   * The application exception may be retrieved by the {@link #getApplicationException()} method. 
+   * The error code of the constructed exception will be
+   * {@link #UNDETERMINED_APPLICATION_ERROR}. The application exception may be
+   * retrieved by the {@link #getApplicationException()} method.
    * 
    * @param message detail message
    * @param exception the actual application exception
    */
   public ControlUnitException(String message, Exception exception) {
     this(message, UNDETERMINED_APPLICATION_ERROR);
-    
     this.applicationException = exception;
   }
-  
+
   /**
    * Returns the error code for this control unit exception.
    * 
-   * @return error code
+   * @return The error code
    */
   public int getErrorCode() {
     return errorCode;
   }
-  
+
   /**
    * Returns the application exception, if any, for this control unit exception.
-   *  
-   * @return application exception or <code>null</code> if there is no application exception
+   * 
+   * @return The application exception or <code>null</code> if there is no
+   *         application exception
    */
   public Exception getApplicationException() {
     return applicationException;
+  }
+
+  /**
+   * Prints the stack trace of the application exception too (if there is one)
+   * 
+   * @see java.lang.Throwable#printStackTrace()
+   */
+  public void printStackTrace() {
+    if (applicationException != null) {
+      synchronized (System.err) {
+        super.printStackTrace();
+        applicationException.printStackTrace();
+      }
+    } else {
+      super.printStackTrace();
+    }
+  }
+
+  /**
+   * Prints the stack trace of the application exception too (if there is one)
+   * 
+   * @see java.lang.Throwable#printStackTrace(java.io.PrintWriter)
+   */
+  public void printStackTrace(PrintWriter s) {
+    if (applicationException != null) {
+      synchronized (s) {
+        super.printStackTrace(s);
+        applicationException.printStackTrace(s);
+      }
+    } else {
+      super.printStackTrace(s);
+    }
+  }
+
+  /**
+   * Prints the stack trace of the application exception too (if there is one)
+   * 
+   * @see java.lang.Throwable#printStackTrace(java.io.PrintStream)
+   */
+  public void printStackTrace(PrintStream s) {
+    if (applicationException != null) {
+      synchronized (s) {
+        super.printStackTrace(s);
+        applicationException.printStackTrace(s);
+      }
+    } else {
+      super.printStackTrace(s);
+    }
+  }
+
+  /*
+   * @see java.lang.Object#toString()
+   */
+  public String toString() {
+    StringBuffer buffer = new StringBuffer();
+    buffer.append("ControlUnitException[");
+    buffer.append(" error = ").append(errorCode);
+    switch (errorCode) {
+      case UNDETERMINED_APPLICATION_ERROR:
+        buffer.append("UNDETERMINED_APPLICATION_ERROR");
+        break;
+      case NO_SUCH_ACTION_ERROR:
+        buffer.append("NO_SUCH_ACTION_ERROR");
+        break;
+      case NO_SUCH_STATE_VARIABLE_ERROR:
+        buffer.append("NO_SUCH_STATE_VARIABLE_ERROR");
+        break;
+      case ILLEGAL_ACTION_ARGUMENTS_ERROR:
+        buffer.append("ILLEGAL_ACTION_ARGUMENTS_ERROR");
+        break;
+      default:
+        buffer.append(errorCode);
+    }
+    String msg = super.getMessage();
+    if( msg != null ) {
+      buffer.append(",message = ").append(msg);
+    }
+    if (applicationException != null) {
+      buffer.append(",applicationException = ").append(applicationException);
+    }
+    buffer.append("]");
+    return buffer.toString();
   }
 
 }

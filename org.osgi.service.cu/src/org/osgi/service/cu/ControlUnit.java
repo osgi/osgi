@@ -65,14 +65,14 @@ public interface ControlUnit {
    * Returns id of the control unit, which uniquely identifies it in the scope of
    * its parent.
    * 
-   * @return the id of the control unit
+   * @return The id of the control unit
    */
   public String getId();
 
   /**
    * Returns type of the control unit.
    * 
-   * @return the type of the control unit
+   * @return The type of the control unit
    */
   public String getType();
 
@@ -81,9 +81,9 @@ public interface ControlUnit {
    * by a control unit and their types are defined by the metadata of the
    * control unit.
    * 
-   * @param stateVariableID the id of the variable
-   * @return value of the variable
-   * @throws ControlUnitException if the state variable's value can not be
+   * @param stateVariableID The id of the variable
+   * @return The value of the variable
+   * @throws ControlUnitException if the state variable's value cannot be
    * retrieved for some reason. {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getApplicationException()} methods can be used 
    * to determine the actual cause.
@@ -98,10 +98,10 @@ public interface ControlUnit {
    * @param actionID the id of the action
    * @param arguments the input argument(s). If the argument is only one this is
    *          the argument itself. If the arguments are more then one, the value
-   *          must be a <code>Object[]</code> and arguments are retrieved from
-   *          that array.
+   *          must be a <code>Object</code> array and arguments are retrieved 
+   *          from that array.
    * 
-   * @return the output argument(s) or <code>null</code> if the action does
+   * @return The output argument(s) or <code>null</code> if the action does
    *         not return value.
    * @throws ControlUnitException if error prevents the execution of the action.
    * {@link ControlUnitException#getErrorCode()}

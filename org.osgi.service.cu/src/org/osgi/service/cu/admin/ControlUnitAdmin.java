@@ -60,7 +60,7 @@ public interface ControlUnitAdmin {
 
   /**
    * Actions defined in the metadata of the control unit, which starts with this
-   * prefix may be used for searching the control units.
+   * prefix, may be used for searching the control units.
    * <p>
    * 
    * The value of this constant is "$find."
@@ -73,9 +73,9 @@ public interface ControlUnitAdmin {
    * in their filter definition to narrow the type of events they wish to
    * receive. It's value must be a string representation of one of the possible
    * values for the <code>eventType</code> parameter of
-   * {@link ControlUnitAdminListener#controlUnitEvent}for
-   * <code>ControlUnitListeners</code> or
-   * {@link HierarchyListener#hierarchyChanged}for
+   * {@link ControlUnitAdminListener#controlUnitEvent} for
+   * <code>ControlUnitAdminListener</code>
+   * {@link HierarchyListener#hierarchyChanged} for
    * <code>HierarchyListeners</code>. If the filter doesn't restrict the
    * event types to be received the listener will receive all events matching
    * the control unit-filtering criterion.
@@ -89,7 +89,7 @@ public interface ControlUnitAdmin {
    * Returns all distinct types of control units currently exported in the
    * framework.
    * 
-   * @return array of Control Unit types or null, if there are no Control Unit
+   * @return An array of Control Unit types or null, if there are no Control Unit
    *         types exported in the framework.
    */
   public String[] getControlUnitTypes();
@@ -98,16 +98,17 @@ public interface ControlUnitAdmin {
    * Returns the current version for given type of control units currently
    * exported in the framework.
    * 
-   * @return type, or null, if the give type has no version
    * @param controlUnitType control unit type
+   * @return The type, or <code>null</code>, if the give type has no version
    * @throws java.lang.IllegalArgumentException if there is no such type of
    *           units exported in the framework
    */
   public String getControlUnitTypeVersion(String controlUnitType);
 
   /**
-   * Returns ids of the control units with a given type and satisfying a given
-   * finder method with the supplied argument(s). Supported finder methods are
+   * Returns the IDs of control units of the specified type, located by the 
+   * finder method specified by it’s ID an according the given finder 
+   * parameters. Supported finder methods are
    * specific to the type of the control unit and are specified in the control
    * unit metadata as a special class of actions with identifier starting with
    * <code>"$find."</code>.
@@ -134,11 +135,10 @@ public interface ControlUnitAdmin {
    * @param  finderID  the id of the finder method. Must start with <code>"$find."<code>.
    * @param  arguments  the <code>finder</code> argument(s). If the argument is only 
    *         one this is the argument itself. If the arguments are more then one, the 
-   *         value must be a <code>Object[]</code> and arguments are retrieved from 
-   *         that array.
+   *         value must be a <code>Object</code> array and arguments are retrieved from it. 
    *
-   * @return array of <code>ControlUnit<code> identifiers.
-   * @throws ControlUnitException if the search operation can not be performed due to an error.
+   * @return An array of <code>ControlUnit<code> identifiers
+   * @throws ControlUnitException if the search operation cannot be performed due to an error.
    * {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getApplicationException()} methods can be used 
    * to determine the actual cause.
@@ -152,7 +152,7 @@ public interface ControlUnitAdmin {
    * @param controlUnitType the type of the Control Unit
    * @param controlUnitID the id of the Control Unit
    * 
-   * @return <code>ControlUnit</code> identified by the specified
+   * @return The <code>ControlUnit</code> identified by the specified
    *         <code>(controlUnitType, controlUnitId)</code> pair or
    *         <code>null</code> if there is not such control unit exported in
    *         the framework.
@@ -169,7 +169,7 @@ public interface ControlUnitAdmin {
    * @param parentControlUnitID the id of the parent Control Unit.
    * @param childControlUnitType the type of the child Control Units.
    * 
-   * @return an array of child control units.
+   * @return An array of child control units
    */
   public String[] getSubControlUnits(String parentControlUnitType, String parentControlUnitID,
                                      String childControlUnitType);
@@ -178,8 +178,8 @@ public interface ControlUnitAdmin {
    * Returns types of the exported control units that may be parents of control
    * units with a given type.
    * 
-   * @return parent types or null if the given control unit may have no parents
    * @param childControlUnitType child unit type
+   * @return The parent types or null if the given control unit may have no parents
    */
   public String[] getParentControlUnitTypes(String childControlUnitType);
 
@@ -187,11 +187,11 @@ public interface ControlUnitAdmin {
    * Returns ids of the exported control units of given type that are parents of
    * control units with a given type and id.
    * 
-   * @return parent types or null if the given control unit has no parents of
-   *         the given type
    * @param childControlUnitType child unit type
    * @param childControlUnitID child unit id
    * @param parentControlUnitType parent units type
+   * @return The parent types or null if the given control unit has no parents of
+   *         the given type
    */
   public String[] getParentControlUnits(String childControlUnitType, String childControlUnitID,
                                         String parentControlUnitType);
@@ -219,10 +219,10 @@ public interface ControlUnitAdmin {
    * @param  constructorID  the id of the constructors. Must start with <code>"$create."<code>.
    * @param  arguments - the 'constructors' argument(s). If the argument is only 
    *         one this is the argument itself. If the arguments are more then one, the 
-   *         value must be a <code>Object[]</code> and arguments are retrieved from that array.
+   *         value must be a <code>Object</code> array and arguments are retrieved from that array.
    *
-   * @return the id of the newly created control unit.
-   * @throws ControlUnitException if the control unit can not be created for some
+   * @return The ID of the newly created control unit
+   * @throws ControlUnitException if the control unit cannot be created for some
    * reason. {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getApplicationException()} methods can be used 
    * to determine the actual cause.
@@ -239,7 +239,7 @@ public interface ControlUnitAdmin {
    * 
    * @param controlUnitType - the type of the Control Unit.
    * @param controlUnitID - controlUnitId control unit id.
-   * @throws ControlUnitException if the control unit can not be destroyed for some
+   * @throws ControlUnitException if the control unit cannot be destroyed for some
    * reason. {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getApplicationException()} methods can be used 
    * to determine the actual cause.
@@ -248,11 +248,11 @@ public interface ControlUnitAdmin {
       throws ControlUnitException;
 
   /**
-   * Returns types of the exported control units that may be children of a
+   * Returns types of the exported control units that may be children of
    * control units with a given type.
    * 
    * @param parentControlUnitType parent control unit type
-   * @return array of the child control unit types.
+   * @return An array of the child control unit types
    */
   public String[] getSubControlUnitTypes(String parentControlUnitType);
 
@@ -263,11 +263,11 @@ public interface ControlUnitAdmin {
    * @param controlUnitType the type of the control unit
    * @param controlUnitId the id of the control unit
    * @param stateVariableID the id of the variable
-   * @throws ControlUnitException if the state variable's value can not be
+   * @return The value of the variable
+   * @throws ControlUnitException if the state variable's value cannot be
    * retrieved for some reason. {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getApplicationException()} methods can be used 
    * to determine the actual cause.
-   * @return value of the variable
    */
   public Object queryStateVariable(String controlUnitType, String controlUnitId, String stateVariableID)
       throws ControlUnitException;
@@ -280,10 +280,9 @@ public interface ControlUnitAdmin {
    * @param actionID the id of the action
    * @param arguments the input argument(s). If the argument is only one this is
    *          the argument itself. If the arguments are more then one, the value
-   *          must be a <code>Object[]</code> and arguments are retrieved from
-   *          that array.
+   *          must be a <code>Object</code> array and arguments are retrieved from it.
    * 
-   * @return the output argument(s) or <code>null</code> if the action does
+   * @return The output argument(s) or <code>null</code> if the action does
    *         not return value.
    * @throws ControlUnitException if an error prevents the execution of the action.
    * {@link ControlUnitException#getErrorCode()}

@@ -95,7 +95,7 @@ public interface ControlUnitAdminListener {
 
   /**
    * This constant is used as first parameter in
-   * {@link #controlUnitEvent controlUnitEvent}method to indicate that control
+   * {@link #controlUnitEvent controlUnitEvent} method to indicate that control
    * units of the given type are no more available. When the event is of this
    * type the parameter of {@link #controlUnitEvent controlUnitEvent} method
    * specifying a control unit id is <code>null</code>.

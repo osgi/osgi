@@ -34,7 +34,7 @@ import org.osgi.service.cu.ControlUnitException;
  * then one resources of the same type manageable through the Control Unit
  * abstraction. The ControlUnitFactory services should not be used directly by
  * the applications. Instead application access
- * {@link org.osgi.service.cu.admin.ControlUnitAdmin}service, which delegates
+ * {@link org.osgi.service.cu.admin.ControlUnitAdmin} service, which delegates
  * the requests to the appropriate <code>ControlUnitFactory</code> or
  * {@link org.osgi.service.cu.admin.spi.ManagedControlUnit ManagedControlUnit} 
  * service. ControlUnitFactories are suitable for representing variable number
@@ -43,7 +43,7 @@ import org.osgi.service.cu.ControlUnitException;
  * because the corresponding wrapper may be created on demand.
  * <p>
  * 
- * {@link org.osgi.service.cu.admin.ControlUnitAdmin}service is responsible for
+ * {@link org.osgi.service.cu.admin.ControlUnitAdmin} service is responsible for
  * tracking all <code>ControlUnitFactory</code> services registered in the
  * service registry of the framework. <br>
  * One <code>ControlUnitFactory</code> may be responsible for providing
@@ -103,12 +103,12 @@ public interface ControlUnitFactory {
    * <code>null</code> is returned.
    * 
    * @param controlUnitID the id of the requested control unit
-   * @return <code>ControlUnit</code> object with the given id.
+   * @return The <code>ControlUnit</code> object with the given ID
    */
   public ControlUnit getControlUnit(String controlUnitID);
 
   /**
-   * Returns ids of the control unit iunit instances, which are children of a control 
+   * Returns ids of the control unit instances, which are children of a control 
    * unit with a given type, and id. Supplying <code>null</code> as arguments
    * to this method results in returning only control units exported by this
    * factory, which have no parent.
@@ -116,14 +116,14 @@ public interface ControlUnitFactory {
    * @param parentControlUnitType type of the parent control unit
    * @param parentControlUnitID id of the parent control unit
    * 
-   * @return the sub-control units of the specified control unit.
+   * @return The sub-control units of the specified control unit
    */
   public String[] getControlUnits(String parentControlUnitType, String parentControlUnitID);
 
   /**
    * Returns the ids of all control units currently exported by this factory.
    * 
-   * @return control unit ids or null, if the factory expors no units
+   * @return The control unit IDs or <code>null</code>, if the factory doesn't exports units.
    */
   public String[] listControlUnits();
 
@@ -146,12 +146,11 @@ public interface ControlUnitFactory {
    *          <code>"$find."<code>.
    * @param  arguments  the <code>finder</code> argument(s). If the argument is only 
    *         one this is the argument itself. If the arguments are more then one, the 
-   *         value must be a <code>Object[]</code> and arguments are retrieved from 
-   *         that array.
+   *         value must be a <code>Object</code> array and arguments are retrieved from it. 
    * 
    * @return the sub-control units of the specified control unit.
    *
-   * @throws ControlUnitException if the search operation can not be performed due to an error.
+   * @throws ControlUnitException if the search operation cannot be performed due to an error.
    * {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getApplicationException()} methods can be used 
    * to determine the actual cause.
@@ -159,14 +158,14 @@ public interface ControlUnitFactory {
   public String[] findControlUnits(String finderID, Object arguments) throws ControlUnitException;
 
   /**
-   * Returns the ids of the parents of a given control unit specified by its id.
+   * Returns the parent unit IDs for the specified child control unit.
    * This method returns only ids of the control units for a specified parent
    * type.
    * 
-   * @return ids of parent units or <code>null</code>, if the given control
-   *         unit has no parents of the specified type
    * @param childControlUnitID id of the child unit
    * @param parentControlUnitType type of the returned parent units
+   * @return The IDs of parent units or <code>null</code>, if the given control
+   *         unit has no parents of the specified type
    */
   public String[] getParents(String childControlUnitID, String parentControlUnitType);
 
@@ -177,11 +176,11 @@ public interface ControlUnitFactory {
    * @param controlUnitID the id of the control unit provided by this factory
    * @param stateVariableID the id of the variable
    * 
-   * @return value of the variable
-   * * @throws ControlUnitException if the state variable's value can not be
+   * @throws ControlUnitException if the state variable's value cannot be
    * retrieved for some reason. {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getApplicationException()} methods can be used 
    * to determine the actual cause.
+   * @return The value of the variable
    */
   public Object queryStateVariable(String controlUnitID, String stateVariableID) throws ControlUnitException;
 
@@ -195,13 +194,13 @@ public interface ControlUnitFactory {
    *          must be a <code>Object[]</code> and arguments are retrieved from
    *          that array.
    * 
-   * @return the output argument(s) or <code>null</code> if the action does
-   *         not return value.
-   * 
    * @throws ControlUnitException if an error prevents the execution of the action.
    * {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getApplicationException()} methods can be used 
    * to determine the actual cause.
+   * 
+   * @return The output argument(s) or <code>null</code> if the action does
+   *         not return value
    */
   public Object invokeAction(String controlUnitID, String actionID, Object arguments)
       throws ControlUnitException;
@@ -221,14 +220,14 @@ public interface ControlUnitFactory {
    *          <code>"$create."<code>.
    * @param  arguments - the 'constructors' argument(s). If the argument is only 
    *         one this is the argument itself. If the arguments are more then one, the 
-   *         value must be a <code>Object[]</code> and arguments are retrieved from that array.
+   *         value must be a <code>Object</code> array and arguments are retrieved from it.
    *
-   * @return the id of the newly created control unit.
-   *
-   * @throws ControlUnitException if the control unit can not be created for some
+   * @throws ControlUnitException if the control unit cannot be created for some
    * reason. {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getApplicationException()} methods can be used 
    * to determine the actual cause.
+   * 
+   * @return the id of the newly created control unit.
    */
   public String createControlUnit(String constructorID, Object arguments)
       throws ControlUnitException;
@@ -242,7 +241,7 @@ public interface ControlUnitFactory {
    * presence of an action with id <code>"$destroy"</code>.
    * 
    * @param controlUnitID control unit id.
-   * @throws ControlUnitException if the control unit can not be destroyed for some
+   * @throws ControlUnitException if the control unit cannot be destroyed for some
    * reason. {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getApplicationException()} methods can be used 
    * to determine the actual cause.

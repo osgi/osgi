@@ -30,7 +30,7 @@ import org.osgi.service.cu.ControlUnitException;
 
 /**
  * <code>ControlUnitAdminException</code> is a subclass of 
- * {@link org.osgi.service.cu.ControlUnitException} which
+ * {@link org.osgi.service.cu.ControlUnitException}, which
  * provides additional error codes 
  * related with the operating over control units through the 
  * {@link org.osgi.service.cu.admin.ControlUnitAdmin} and 
@@ -41,38 +41,40 @@ import org.osgi.service.cu.ControlUnitException;
 public class ControlUnitAdminException extends ControlUnitException {
 
   /**
-   * Error code which signals that an attempt to perfom and operation over
-   * a non-existing unit was made. 
+   * This error code means that the user tried to perform an operation
+   * over non-existent control unit.
    */
   public static final int NO_SUCH_CONTROL_UNIT_ERROR = 5;
   
   /**
-   * Error code which signals that an attempt to create control unit via 
-   * a non-existing constructor was made.
+   * This error code means that the user attempted to create a control
+   * unit, but its factory doesn't provide the requested constructor
+   * method.
    */
   public static final int NO_SUCH_CONSTUCTOR_ERROR = 7;
 
   /**
-   * Error code which signals that an attempt to perform a search with a 
-   * non-existing finder was made.
+   * This error code means that the user tried to perform a search, but
+   * the there is not finder method that matches the given finder id.
    */
   public static final int NO_SUCH_FINDER_ERROR = 8;
-  
+
   /**
-   * Error code which signals that an attempt to create a control unit of 
-   * a type which does not support control unit creation was made.
+   * This error code means that someone has tried to create a control
+   * unit dynamically, but it's factory doesn't provide any constructor
+   * methods.
    */
   public static final int CREATION_NOT_SUPPORTED_ERROR = 9;
-  
+
   /**
-   * Error code which signals that an attempt to destoy a control unit of 
-   * a type which does not support control unit destruction was made.
+   * This error code means that the user has tried to destroy a control unit
+   * which factory doesn't define a destructor method.
    */
   public static final int DESTRUCTION_NOT_SUPPORTED_ERROR = 10;
 
   /**
-   * Error code which signals that  an attempt to perform a search opperation
-   * over a control unit type which does not support searching was made.
+   * This error code means that the user has tried to search for a control unit
+   * but a finder method(s) are not defined.
    */
   public static final int SEARCHING_NOT_SUPPORTED_ERROR = 11;
     
@@ -120,6 +122,60 @@ public class ControlUnitAdminException extends ControlUnitException {
    */
   public ControlUnitAdminException(String message, Exception exception) {
     super(message, exception);
+  }
+  
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
+  public String toString() {
+    int errorCode = getErrorCode();
+    StringBuffer buffer = new StringBuffer();
+    buffer.append("ControlUnitException[");
+    buffer.append(" error = ").append(errorCode);
+    switch (errorCode) {
+      case UNDETERMINED_APPLICATION_ERROR:
+        buffer.append("UNDETERMINED_APPLICATION_ERROR");
+        break;
+      case NO_SUCH_ACTION_ERROR:
+        buffer.append("NO_SUCH_ACTION_ERROR");
+        break;
+      case NO_SUCH_STATE_VARIABLE_ERROR:
+        buffer.append("NO_SUCH_STATE_VARIABLE_ERROR");
+        break;
+      case ILLEGAL_ACTION_ARGUMENTS_ERROR:
+        buffer.append("ILLEGAL_ACTION_ARGUMENTS_ERROR");
+        break;
+      case NO_SUCH_CONTROL_UNIT_ERROR:
+        buffer.append("NO_SUCH_CONTROL_UNIT_ERROR");
+        break;
+      case  NO_SUCH_CONSTUCTOR_ERROR:
+        buffer.append("NO_SUCH_CONSTUCTOR_ERROR");
+        break;
+      case NO_SUCH_FINDER_ERROR:
+        buffer.append("NO_SUCH_FINDER_ERROR");
+        break;
+      case CREATION_NOT_SUPPORTED_ERROR:
+        buffer.append("CREATION_NOT_SUPPORTED_ERROR");
+        break;
+      case DESTRUCTION_NOT_SUPPORTED_ERROR:
+        buffer.append("DESTRUCTION_NOT_SUPPORTED_ERROR");
+        break;
+      case SEARCHING_NOT_SUPPORTED_ERROR:
+        buffer.append("SEARCHING_NOT_SUPPORTED_ERROR");
+        break;
+      default:
+        buffer.append(errorCode);
+    }
+    String msg = getMessage();
+    if( msg != null ) {
+      buffer.append(",message = ").append(msg);
+    }
+    Exception applicationException = getApplicationException();
+    if (applicationException != null) {
+      buffer.append(",applicationException = ").append(applicationException);
+    }
+    buffer.append("]");
+    return buffer.toString();
   }
   
 }
