@@ -1,6 +1,7 @@
 package org.osgi.service.application;
 
 import org.osgi.framework.ServiceReference;
+import java.security.*;
 
 /**
  * ApplicationHandle is an OSGi service interface which represents an instance
@@ -38,7 +39,7 @@ public abstract class ApplicationHandle {
 	 * 
 	 * @modelguid {8C7D95E9-A8E2-40F1-9BFD-C55A5B80148F}
 	 */
-	public abstract int getState();
+	public abstract int getState() throws Exception;
 
 	/**
 	 * Returns the unique identifier of this instance. This value is also
@@ -100,7 +101,10 @@ public abstract class ApplicationHandle {
 	 * @modelguid {CEAB58E4-91B8-4E7A-AEEB-9C14C812E607}
 	 */
 	public final void destroy() throws Exception {
-
+		AccessController.checkPermission(new ApplicationAdminPermission( getInstanceID(), 
+				ApplicationAdminPermission.MANIPULATE));
+		
+		destroySpecific();
 	}
 
 	/**

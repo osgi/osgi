@@ -2,9 +2,12 @@ package org.osgi.service.application;
 
 import java.io.IOException;
 import java.util.Map;
-
+import java.security.*;
+import org.osgi.service.log.LogService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import java.io.*;
+import java.util.*;
 
 /**
  * An OSGi service that represents an installed application and stores
@@ -144,7 +147,36 @@ public abstract class ApplicationDescriptor {
 	 */
 	public final ServiceReference launch(Map arguments)
 			throws SingletonException, Exception {
-		return null;
+
+		AccessController.checkPermission( new ApplicationAdminPermission(
+			getPID(), ApplicationAdminPermission.LAUNCH ) );
+
+		BundleContext bc = getBundleContext();
+
+		Map props = getProperties("en");
+		String isLocked = (String)props.get("application.locked");
+		if (isLocked != null && isLocked.equalsIgnoreCase("true"))
+			throw new Exception("Application is locked, can't launch!");
+		String isLaunchable = (String)props.get("application.launchable");
+ 		if (isLaunchable == null || !isLaunchable.equalsIgnoreCase("true"))
+ 			throw new Exception("Cannot launch the application!");
+		String isSingleton = (String)props.get("application.singleton");
+		if (isSingleton == null || isSingleton.equalsIgnoreCase("true")) {
+			ServiceReference[] appHandles = bc.getServiceReferences(
+					"org.osgi.service.application.ApplicationHandle", null);
+			if (appHandles != null)
+				for (int k = 0; k != appHandles.length; k++) {
+					ApplicationHandle handle = (ApplicationHandle) bc
+							.getService(appHandles[k]);
+					ServiceReference appDescRef = handle.getApplicationDescriptor();
+					ApplicationDescriptor appDesc = (ApplicationDescriptor)bc.getService( appDescRef );
+					bc.ungetService( appDescRef );
+					bc.ungetService(appHandles[k]);
+					if (appDesc == this)
+						throw new Exception("Singleton Exception!");
+				}
+		}
+		return launchSpecific( arguments );
 	}
 
 	/**
@@ -224,6 +256,23 @@ public abstract class ApplicationDescriptor {
 	 * @modelguid {A627693E-D67C-45EE-B683-4EA2B93AF982}
 	 */
 	public final void lock() {
+		String pid = getPID();
+
+		AccessController.checkPermission( new ApplicationAdminPermission( pid,
+				ApplicationAdminPermission.LOCK ) );
+
+		if( lockedApplications == null )
+			lockedApplications = loadVector( "LockedApplications" );
+
+		boolean save = false;
+		synchronized( synchronizer ) {
+			if (!lockedApplications.contains( pid )) {
+				lockedApplications.add( pid );
+				save = true;
+			}
+		}
+		if( save )
+			saveVector( lockedApplications, "LockedApplications" );
 	}
 
 	/**
@@ -238,6 +287,22 @@ public abstract class ApplicationDescriptor {
 	 * @modelguid {739EAD89-AF58-4C38-9833-B8E86E56C44E}
 	 */
 	public final void unlock() {
+		String pid = getPID();
+
+		AccessController.checkPermission( new ApplicationAdminPermission( pid,
+				ApplicationAdminPermission.LOCK ) );
+
+		if( lockedApplications == null )
+			lockedApplications = loadVector( "LockedApplications" );
+		boolean save = false;
+		synchronized( synchronizer ) {
+			if (lockedApplications.contains( pid )) {
+				lockedApplications.remove( pid );
+				save = true;
+			}
+		}
+		if( save )
+			saveVector( lockedApplications, "LockedApplications" );
 	}
 
 	/**
@@ -249,7 +314,11 @@ public abstract class ApplicationDescriptor {
 	 * @modelguid {54F610F8-B6E8-4B44-A973-A39A177452D4}
 	 */
 	public final boolean isLocked() {
-		return false;
+		String pid = getPID();
+
+		if( lockedApplications == null )
+			lockedApplications = loadVector( "LockedApplications" );
+		return lockedApplications.contains( pid );
 	}
 
 	/**
@@ -263,4 +332,80 @@ public abstract class ApplicationDescriptor {
 	 */
 	protected abstract BundleContext getBundleContext();
 
+	private static Vector lockedApplications = null;
+	private static Object synchronizer = new Object();
+	
+	private Vector loadVector(String fileName) {
+		synchronized( synchronizer ) {
+			Vector resultVector = new Vector();
+			try {
+				File vectorFile = getBundleContext().getDataFile(fileName);
+				if (vectorFile.exists()) {
+					FileInputStream stream = new FileInputStream(vectorFile);
+					String codedIds = "";
+					byte[] buffer = new byte[1024];
+					int length;
+					while ((length = stream.read(buffer, 0, buffer.length)) > 0)
+						codedIds += new String(buffer);
+					stream.close();
+					if (!codedIds.equals("")) {
+						int index = 0;
+						while (index != -1) {
+							int comma = codedIds.indexOf(',', index);
+							String name;
+							if (comma >= 0)
+								name = codedIds.substring(index, comma);
+							else
+								name = codedIds.substring(index);
+							resultVector.add(name.trim());
+							index = comma;
+						}
+					}
+				}
+			}
+			catch (Exception e) {
+				log( LogService.LOG_ERROR,
+					"Exception occurred at loading '" + fileName + "'!", e);
+			}
+		return resultVector;
+		}
+	}
+
+	private void saveVector(Vector vector, String fileName) {
+		synchronized( synchronizer ) {
+			try {
+				File vectorFile = getBundleContext().getDataFile(fileName);
+				FileOutputStream stream = new FileOutputStream(vectorFile);
+				for (int i = 0; i != vector.size(); i++)
+					stream.write((((i == 0) ? "" : ",") + (String) vector.get(i))
+							.getBytes());
+				stream.close();
+			}
+			catch (Exception e) {
+				log( LogService.LOG_ERROR,
+					"Exception occurred at saving '" + fileName + "'!", e);
+			}
+		}
+	}
+
+	protected boolean log( int severity, String message, Throwable throwable) {
+		System.out.println("Serverity:" + severity + " Message:" + message
+				+ " Throwable:" + throwable);
+
+		ServiceReference serviceRef = getBundleContext()
+				.getServiceReference("org.osgi.service.log.LogService");
+		if (serviceRef != null) {
+			LogService logService = (LogService) getBundleContext().getService(serviceRef);
+			if (logService != null) {
+				try {
+					logService.log(severity, message, throwable);
+					return true;
+				}
+				finally {
+					getBundleContext().ungetService(serviceRef);
+				}
+			}
+		}
+		return false;
+	}
 }
