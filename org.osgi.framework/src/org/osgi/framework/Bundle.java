@@ -27,6 +27,7 @@
 
 package org.osgi.framework;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Dictionary;
@@ -795,8 +796,9 @@ public abstract interface Bundle {
 	 * @since 1.3
 	 * @exception java.lang.IllegalStateException If this bundle has been
 	 *            uninstalled.
+	 * @throws java.io.IOException If there is an I/O error.
 	 */
-	public Enumeration getResources(String name);
+	public Enumeration getResources(String name) throws IOException;
 
 	/**
 	 * Returns an Enumeration of all the paths (<code>String</code) objects) to 
