@@ -208,12 +208,16 @@ public class TreeNodeImpl implements TreeNode {
         if (isLeaf())
         	return commander.command("gv " + uri());
         else
-            return "NA";
+            return "N/A";
 	}
 
 	public String getNodeAcl() throws CommanderException {
         return commander.command("ga " + uri());
 	}
+    
+    public String getEffectiveNodeAcl() throws CommanderException {
+        return commander.command("gea " + uri());
+    }
 
 	public String getMetaNode() throws CommanderException {
         return commander.command("gm " + uri());
