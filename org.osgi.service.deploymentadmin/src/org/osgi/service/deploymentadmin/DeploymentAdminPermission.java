@@ -67,14 +67,28 @@ public class DeploymentAdminPermission extends Permission {
     public static final String ACTION_UNINSTALL  = "uninstall";
     public static final String ACTION_INVENTORY  = "inventory";
     
+    private String actions;
+    
+    static {
+        System.out.println("88888888888888888888888888888888888888888888888");
+        System.out.println("888888888888888888       8888888888888888888888");
+        System.out.println("8888888888888888 88888888  88888888888888888888");
+        System.out.println("888888888888888 888 888 888 8888888888888888888");
+        System.out.println("888888888888888 88888888888 8888888888888888888");
+        System.out.println("888888888888888 888 888 88 88888888888888888888");
+        System.out.println("88888888888888888         888888888888888888888");
+        System.out.println("88888888888888888888888888888888888888888888888");
+    }
+    
     /**
      * Creates a new DeploymentAdminPermission for the given target and action.
      * @param target Target string.
      * @param action Action string.
      */
     public DeploymentAdminPermission(String target, String action) {
-        // TODO
         super(target);
+        System.out.println(">>>***>>> <INIT>");
+        this.actions = action;
     }
 
     /**
@@ -85,8 +99,16 @@ public class DeploymentAdminPermission extends Permission {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object obj) {
-        // TODO
-        return false;
+        System.out.println(">>>***>>> implies equals 1");
+        if (!(obj instanceof DeploymentAdminPermission))
+            return false;
+        System.out.println(">>>***>>> implies equals 2");
+        DeploymentAdminPermission other = (DeploymentAdminPermission) obj;
+        System.out.println(">>>***>>> implies equals 3");
+        System.out.println(getName() + "\t" + other.getName());
+        System.out.println(getActions() + "\t" + other.getActions());
+        return getName().equals(other.getName()) && 
+               getActions().equals(other.getActions());
     }
 
     /**
@@ -95,8 +117,7 @@ public class DeploymentAdminPermission extends Permission {
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
-        // TODO
-        return 0;
+        return (getName() + getActions()).hashCode();
     }
 
     /**
@@ -106,8 +127,7 @@ public class DeploymentAdminPermission extends Permission {
      * @see java.security.Permission#getActions()
      */
     public String getActions() {
-        // TODO
-        return null;
+        return actions;
     }
 
     /**
@@ -118,8 +138,8 @@ public class DeploymentAdminPermission extends Permission {
      * @see java.security.Permission#implies(java.security.Permission)
      */
     public boolean implies(Permission permission) {
-        // TODO
-        return false;
+        System.out.println(">>>***>>> implies called");
+        return equals(permission);
     }
 
     /**
@@ -129,7 +149,6 @@ public class DeploymentAdminPermission extends Permission {
      * @see java.security.Permission#newPermissionCollection()
      */
     public PermissionCollection newPermissionCollection() {
-        // TODO
         return super.newPermissionCollection();
     }
 }
