@@ -2,10 +2,10 @@
 <project name="project" default="run"> 
 	<target name="run">
 		
-		<java jar="../org.osgi.impl.framework.jar"
+		<java jar="../org.osgi.impl.framework.eclipse.jar"
 			fork="true"
-		>
-			<jvmarg line="-Dorg.osgi.test.watchdog=10"/>
+		>			
+			<jvmarg line="-Dorg.osgi.test.watchdog=120"/>
 			<jvmarg line="-Dorg.osgi.test.seewait=true"/>
 			<jvmarg line="-Djava.security.manager"/>
 			<jvmarg line="-Djava.security.policy=policy"/>
@@ -13,12 +13,14 @@
 			<jvmarg line="-Dorg.osgi.service.http.port=8080"/>
 			 
 			<jvmarg line="-Dorg.osgi.framework.system.packages=javax.xml.parsers;specification-version=1.1,javax.xml.transform,javax.xml.transform.stream,org.xml.sax;specification-version=2.0,org.xml.sax.helpers;specification-version=2.0,javax.crypto,javax.crypto.spec,javax.swing,javax.swing.border,javax.swing.text"/>
-			<arg line="-init"/>
-			<arg line="-istart ../../osgi.released/osgi.jar"/>
-			<arg line="-istart ../osgi.refimpl.jar"/>
-			<arg line="-istart ../org.osgi.tools.console.jar"/>
-			<arg line="-istart ../osgi.target.jar"/>
-			<arg line="-launch"/>
+			
+			<arg line="-console"/>
+			<arg line="init"/>
+			<arg line="launch"/>
+			<arg line="'install file:../../osgi.released/osgi.jar start'"/>
+			<arg line="'install file:../org.osgi.tools.console.jar start'"/>
+			<arg line="'install file:../osgi.target.jar start'"/>
+			<arg line="'install file:../osgi.refimpl.jar start'"/>
 			
 		</java>
 	</target>
