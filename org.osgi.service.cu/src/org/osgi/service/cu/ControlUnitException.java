@@ -37,7 +37,7 @@ import java.io.PrintWriter;
  * 
  * @version $Revision$
  */
-public class ControlUnitException extends RuntimeException {
+public class ControlUnitException extends Exception {
 
   /**
    * Error code which signals that an undetermined error has occurred. The

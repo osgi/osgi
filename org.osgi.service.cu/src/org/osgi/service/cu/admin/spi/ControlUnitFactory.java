@@ -28,6 +28,7 @@ package org.osgi.service.cu.admin.spi;
 
 import org.osgi.service.cu.ControlUnit;
 import org.osgi.service.cu.ControlUnitException;
+import org.osgi.service.cu.admin.ControlUnitAdminException;
 
 /**
  * This interface must be registered as an OSGi service in order to make more
@@ -168,8 +169,10 @@ public interface ControlUnitFactory {
    * @param parentControlUnitType type of the returned parent units
    * @return The IDs of parent units or <code>null</code>, if the given control
    *         unit has no parents of the specified type
+   * @throws ControlUnitAdminException if there is no such child control unit 
+   *         provided in the framework 
    */
-  public String[] getParents(String childControlUnitID, String parentControlUnitType);
+  public String[] getParents(String childControlUnitID, String parentControlUnitType) throws ControlUnitAdminException;
 
   /**
    * Queries a control unit with a specified id for the value of the specified

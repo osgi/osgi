@@ -123,7 +123,7 @@ public interface ControlUnitAdmin {
    * @throws ControlUnitAdminException if there is no such type of units exported in the framework
    * @throws NullPointerException if the controlUnitType is <code>null</code>.
    */
-  public String getControlUnitTypeVersion(String controlUnitType);
+  public String getControlUnitTypeVersion(String controlUnitType) throws ControlUnitAdminException;
 
   /**
    * Returns the IDs of control units of the specified type, located by the 
@@ -180,7 +180,7 @@ public interface ControlUnitAdmin {
    * @throws ControlUnitAdminException if there is no such type of units exported in the framework 
    * @throws NullPointerException if the controlUnitType or controlUnitID is <code>null</code>.
    */
-  public ControlUnit getControlUnit(String controlUnitType, String controlUnitID);
+  public ControlUnit getControlUnit(String controlUnitType, String controlUnitID) throws ControlUnitAdminException;
 
   /**
    * Returns ids of children of a control unit specified by a given type and id.
@@ -219,11 +219,13 @@ public interface ControlUnitAdmin {
    * @param parentControlUnitType parent units type
    * @return The parent types or null if the given control unit has no parents of
    *         the given type
+   * @throws ControlUnitAdminException if there is no such child control unit 
+   *         provided in the framework 
    * @throws NullPointerException if the childControlUnitType,
    *         childControlUnitID or parentControlUnitType is <code>null</code>.
    */
   public String[] getParentControlUnits(String childControlUnitType, String childControlUnitID,
-                                        String parentControlUnitType);
+                                        String parentControlUnitType) throws ControlUnitAdminException;
 
   /**
    * Explicitly creates control unit instance of a specified type using a
