@@ -1,0 +1,6 @@
+org.osgi.test.cases.xml.tb1.A
+# Comment line
+org.osgi.test.cases.xml.tb1.B 	# Trailing comment
+	    org.osgi.test.cases.xml.tb1.C
+
+org.osgi.test.cases.xml.tb1.D
