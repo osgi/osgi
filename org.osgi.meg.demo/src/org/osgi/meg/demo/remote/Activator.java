@@ -19,10 +19,14 @@ package org.osgi.meg.demo.remote;
 
 import java.io.*;
 import java.util.Dictionary;
+import java.util.Hashtable;
 import org.osgi.framework.*;
 import org.osgi.impl.service.dmt.api.RemoteAlertSender;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.permissionadmin.PermissionInfo;
+//import org.osgi.service.dmt.DmtSession;
 
 public class Activator implements BundleActivator {
 	
@@ -46,8 +50,11 @@ public class Activator implements BundleActivator {
 		try {
 			serviceRef = bc.getServiceReference(DmtAdmin.class.getName());
 			DmtAdmin factory = (DmtAdmin) bc.getService(serviceRef);
-			factory.getSession(".", DmtSession.LOCK_TYPE_ATOMIC);
+			//factory.getSession(".", DmtSession.LOCK_TYPE_ATOMIC);
 
+            // TODO remove, this is now done in DmtAdminActivator
+            //initRemotePermissions(bc, "server");
+            
 			if (null == host) {
 				System.out
 						.println("Enter host name (press 'enter' for localhost): ");
@@ -78,7 +85,35 @@ public class Activator implements BundleActivator {
 		}
 	}
 
-	public void stop(BundleContext bc) throws BundleException {
+    // TODO remove this method
+	private void initRemotePermissions(BundleContext bc, String server)
+            throws Exception {
+	    System.out.println("Granting all permissions to remote server '" + server + "'.");
+
+        ServiceReference configRef = bc.getServiceReference(ConfigurationAdmin.class.getName());
+        if(configRef == null)
+            throw new Exception("Cannot find ConfigurationAdmin service.");
+
+        ConfigurationAdmin ca = (ConfigurationAdmin) bc.getService(configRef);
+        if(ca == null)
+            throw new Exception("ConfigurationAdmin service no longer registered.");
+
+
+        Configuration config = ca.getConfiguration("org.osgi.impl.service.dmt.permissions", null);
+        Dictionary properties = config.getProperties();
+        if(properties == null)
+            properties = new Hashtable();
+        properties.put("server", new String[] { 
+                new PermissionInfo(AdminPermission.class.getName(), "", "").getEncoded(), 
+                new PermissionInfo(ServicePermission.class.getName(), 
+                                   "org.osgi.*", ServicePermission.GET).getEncoded() 
+        });
+        config.update(properties);
+        
+        bc.ungetService(configRef);
+    }
+
+    public void stop(BundleContext bc) throws BundleException {
 		remoteAlertSenderReg.unregister();
 		clientAdaptor.stop();
 		bc.ungetService(serviceRef);
