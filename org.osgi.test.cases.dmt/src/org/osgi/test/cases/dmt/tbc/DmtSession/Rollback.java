@@ -32,7 +32,7 @@
  * Jan 21, 2005  Andre Assad
  * 1             Implement MEG TCK
  * ===========   ==============================================================
- * Feb 11, 2005  Luiz Felipe Guimar„es
+ * Feb 11, 2005  Luiz Felipe Guimar√£es
  * 1             Updates after formal inspection (BTC_MEG_TCK_CODE-INSPR-002)
  * ===========   ==============================================================
  */

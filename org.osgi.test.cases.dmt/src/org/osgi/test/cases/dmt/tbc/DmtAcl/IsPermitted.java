@@ -29,10 +29,10 @@
  * Date          Author(s)
  * CR            Headline
  * ============  ==============================================================
- * Jan 31, 2005  AndrÈ Assad
+ * Jan 31, 2005  Andr√© Assad
  * 1             Implement MEG TCK
  * ============  ==============================================================
- * Feb 11, 2005  AndrÈ Assad
+ * Feb 11, 2005  Andr√© Assad
  * 1             Updates after formal inspection (BTC_MEG_TCK_CODE-INSPR-001)
  * ============  ==============================================================
  */
@@ -131,7 +131,7 @@ public class IsPermitted {
 		dmtAcl = new org.osgi.service.dmt.DmtAcl("Add=" + principal
 				+ "&Delete=" + principal + "&Get=*");
 		try {
-			dmtAcl.isPermitted("*INVALID_&PRINCIP¡L", DmtAcl.DELETE | DmtAcl.GET);
+			dmtAcl.isPermitted("*INVALID_&PRINCIP√ÅL", DmtAcl.DELETE | DmtAcl.GET);
 			// should not reach
 			tbc
 					.fail("No Exception thrown on isPermitted when an invalid principal is passed");
