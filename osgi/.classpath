@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="/org.osgi.framework"/>
-	<classpathentry kind="src" path="/org.osgi.service.cm"/>
-	<classpathentry kind="src" path="/org.osgi.service.device"/>
-	<classpathentry kind="src" path="/org.osgi.service.http"/>
-	<classpathentry kind="src" path="/org.osgi.service.io"/>
-	<classpathentry kind="src" path="/org.osgi.service.log"/>
-	<classpathentry kind="src" path="/org.osgi.service.metatype"/>
-	<classpathentry kind="src" path="/org.osgi.service.packageadmin"/>
-	<classpathentry kind="src" path="/org.osgi.service.permissionadmin"/>
-	<classpathentry kind="src" path="/org.osgi.service.prefs"/>
-	<classpathentry kind="src" path="/org.osgi.service.provisioning"/>
-	<classpathentry kind="src" path="/org.osgi.service.upnp"/>
-	<classpathentry kind="src" path="/org.osgi.service.url"/>
-	<classpathentry kind="src" path="/org.osgi.service.useradmin"/>
-	<classpathentry kind="src" path="/org.osgi.service.wireadmin"/>
-	<classpathentry kind="src" path="/org.osgi.util.measurement"/>
-	<classpathentry kind="src" path="/org.osgi.util.position"/>
-	<classpathentry kind="src" path="/org.osgi.util.tracker"/>
-	<classpathentry kind="src" path="/org.osgi.util.xml"/>
-	<classpathentry kind="src" path="/org.osgi.service.startlevel"/>
-	<classpathentry kind="src" path="/org.osgi.service.component"/>
-	<classpathentry kind="src" path="/org.osgi.service.dmt"/>
-	<classpathentry kind="src" path="/org.osgi.service.event"/>
-	<classpathentry kind="src" path="/org.osgi.service.condpermadmin"/>
-	<classpathentry kind="src" path="/org.osgi.service.application"/>
-	<classpathentry kind="src" path="/org.osgi.service.monitor"/>
-	<classpathentry kind="src" path="/org.osgi.util.mobile"/>
-	<classpathentry kind="src" path="/org.osgi.service.deploymentadmin"/>
-	<classpathentry kind="src" path="/org.osgi.util.gsm"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.framework"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.cm"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.device"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.http"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.io"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.log"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.metatype"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.packageadmin"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.permissionadmin"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.prefs"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.provisioning"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.upnp"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.url"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.useradmin"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.wireadmin"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.util.measurement"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.util.position"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.util.tracker"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.util.xml"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.startlevel"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.component"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.dmt"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.event"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.condpermadmin"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.application"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.monitor"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.util.mobile"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.deploymentadmin"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.util.gsm"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
