@@ -47,7 +47,7 @@ public class LineReader {
             c = in.read();
         }
 
-        int lastC = c;
+        lastC = c;
 
         return buf.toString();
     }
