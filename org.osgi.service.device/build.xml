@@ -1,0 +1,4 @@
+<project name="osgi-spec" default="publish">
+	<property name="project.name" value="org.osgi.test.cases.classpath"/>
+	<import file="../cnf/build.xml"/>
+</project>

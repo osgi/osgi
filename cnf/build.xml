@@ -84,11 +84,7 @@
 	      then the jar is org.osgi.example.jar with the
 	      package of org.osgi.example 
 	-->
-	<property name="bin.includes" value= "${project.name}.jar"/>
-	<property name="jars.compile.order" value= "${project.name}.jar"/>
-	<property name="expand.${project.name}.jar" value= "${project.name}"/>
 	<property name="p" value= "${project.name}"/>
-
 
 	<!-- 
 	     PUBLISH
@@ -98,25 +94,63 @@
 	     The publish will not run if none of the files is changed. This
 	     target does NOT check projects it dependends on!
 	-->
-	<target name="publish" depends="check" > <!-- unless="jar.ok" -->
-		<delete>
-			<fileset dir="${project}" includes="${jars.compile.order}" />
-		</delete>
-		<antcall target="compile"/>
+	<target name="publish" depends="check" > 
+		<echo>Publish ${project}</echo>
 		
-		<!-- For each jar file, build it -->
-		<foreach list="${jars.compile.order}" 
-			delimiter=" ," 
-			target="jar" 
-			param="item.jarFile" 
-			inheritAll="true"/>
+		<!-- Compile project dependencies -->
+		<foreach delimiter=" ," list="${project.buildpath}" 
+			target="subcompile"  param="item.dir"/>
+
+		<!-- Build project dependencies -->
+		<foreach delimiter=" ," list="${project.buildpath}" 
+			target="subbuild"  param="item.dir"/>
+
+		<antcall target="local"/>
+	</target>
+
+	<target name="local">
+		<!-- Compile our own classes -->
+		<antcall target="compile"/>		
+		<!-- Build any jar files if necessary -->
+		<antcall target="local-jars"/>
+	</target>
 		
-		<!-- Release each JAR file -->
-		<foreach list="${bin.includes}" 
-			delimiter=" ," 
-			target="release" 
-			param="item.jarFile" 
-			inheritAll="true"/>
+	<target name="subcompile">
+		<echo>Compiling ${item.dir}</echo>
+		
+		<ant dir="${item.dir}" target="compile" 
+			inheritall="false">
+		</ant>
+	</target>
+
+	<target name="subbuild">
+		<echo>Building ${item.dir}</echo>
+		
+		<ant dir="${item.dir}" target="local-jars" 
+			inheritall="false">
+			<property name="release.dir" value="${project}"/>
+		</ant>
+	</target>
+
+	<target name="local-jars" if="jars.compile.order">
+		<echo>JARs ${jars.compile.order}</echo>
+			<delete>
+				<fileset dir="${project}" includes="${jars.compile.order}" />
+			</delete>
+			
+			<!-- For each jar file, build it -->
+			<foreach list="${jars.compile.order}" 
+				delimiter=" ," 
+				target="jar" 
+				param="item.jarFile" 
+				inheritAll="true"/>
+			
+			<!-- Release each JAR file -->
+			<foreach list="${bin.includes}" 
+				delimiter=" ," 
+				target="release" 
+				param="item.jarFile" 
+				inheritAll="true"/>
 	</target>
 
 	<!--
@@ -134,8 +168,8 @@
 	    to check this dependency. We check the "src" directory for
 	    dependents as well as the manifests and build files.
 	-->
-	<target name="check">
-		<uptodate property="jar.ok" targetfile="${workspace}/cnf/cache/${project.name}">
+	<target name="check" if="project.sourcepath">
+		<uptodate property="jar.ok" targetfile="${workspace}/cnf/cache/${project.name}" >
 			<srcfiles dir="${project.sourcepath}" includes="**/*" />
 			<srcfiles dir="${workspace}/cnf" includes="build.xml" />
 			<srcfiles dir="${workspace}/cnf" includes="build.properties" />
@@ -171,12 +205,12 @@
 	     ignoreVersions      Do not use version on automatic import/export
 	-->
 	<target name="jar">
+		<echo>JAR ${item.jarFile}</echo>
 		<btool jar="${project}/${item.jarFile}" 
 			eclipse="${project}" 
 			analyse="${btool.analyse}" 
 			showmanifest="${btool.showmanifest}" 
 			sources="${btool.sources}" 
-			silent="${btool.silent}" 
 			includeProperty="include.${item.jarFile}" 
 			expandProperty="expand.${item.jarFile}" 
 			contentFoldersProperty="source.${item.jarFile}" 
@@ -184,21 +218,20 @@
 			includeExportProperty="includeExport.${item.jarFile}" 
 			ipaProperty="ipa.${item.jarFile}" 
 			ignoreVersions="${btool.noversion}" />
+		
 	</target>
 	
-	<!--
-	     BEFORE
-	     This target should be called if the project depends on
-	     other projects that need to be build before. It will
-	     use btool to get a list of projects that this project
-	     depends on via the Eclipse .classpath file. Each of these
-	     projects will be build before this is published.
-	-->
-	<target name="before">
-		<foreach delimiter="," list="${project.buildpath}" target="dependent" param="item.dir"/>
-		<antcall target="publish" inheritall="false"/>
+	
+	
+	<target name="sign">
+		<signjar 
+			jar="${project}/${item.jarFile}"
+			
+			verbose="${verbose}" 
+		>
+		</signjar>
 	</target>
-
+	
 	<target name="dependent">
 		<ant dir="${item.dir}" antfile="${item.dir}/build.xml" target="publish" inheritall="false"/>
 	</target>
@@ -210,17 +243,22 @@
 	     is true, we assume someone else has done the 
 	     compiling for us.
 	-->
-	<target name="compile">
+	<target name="compile" if="project.sourcepath">
+		<echo>Compile ${project.sourcepath}</echo>
+		<property name="project.bootclasspath" value=""/>
+		
 		<javac fork="yes" 
 			executable="javac" 
-			srcdir="${project}" 
+			srcdir="${project.sourcepath}" 
 			destdir="${project.bindir}" 
 			classpath="${project.classpath}" 
 			bootclasspath="${project.bootclasspath}" 
 			deprecation="true" 
 			listfiles="true" 
 			target="${javac.target}" 
-			source="${project.sourcepath}" />
+			source="${javac.source}" 
+			verbose="${verbose}"
+		/>
 	</target>
 
 	
@@ -228,7 +266,7 @@
 	     CLEAN
 	-->
 	<target name="clean">
-		<delete>
+		<delete failonerror="false">
 			<fileset dir="${project.bindir}" includes="**/*.bak **/*.class" />
 			<fileset dir="${project}" includes="**/*.bak **/~* ${jars.compile.order}" />
 			<fileset dir="${workspace}/cnf/cache" includes="${project.name}" />
@@ -250,6 +288,7 @@
 		<echo>VERS: ${project.version}</echo>
 		<echo>CAT:  ${project.category}</echo>
 		<echo>DEP:  ${project.buildpath}</echo>
+		<echo>VRB:  ${verbose}</echo>
 	</target>
 
 	<target name="none">
