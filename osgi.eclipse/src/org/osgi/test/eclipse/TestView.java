@@ -192,7 +192,8 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 							result = handler.getRun().doTestCase(testcase);
 							if (monitor.isCanceled())
 								return Status.CANCEL_STATUS;
-							Thread.sleep(3000);
+							if (i.hasNext())
+								Thread.sleep(3000);
 						}
 					}
 					catch (InterruptedException ee) {
@@ -318,8 +319,10 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 								.getPort()));
 						for (int i = 0; i < locations.length; i++) {
 							URL url = new URL("file:" + locations[i]);
+							InputStream in = url.openStream();
 							target.install(url.getFile() + "~keep~", url
 									.openStream());
+							in.close();
 						}
 						target.close();
 					}
