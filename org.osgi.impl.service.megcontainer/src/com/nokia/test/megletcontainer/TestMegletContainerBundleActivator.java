@@ -151,8 +151,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 						continue;
 					boolean found = false;
 					for( int q=0; q != objectClasses.length; q++ )
-						if( objectClasses[ q ].equals( ApplicationHandle.class.getName()) )
-						{
+						if( objectClasses[ q ].equals( ApplicationHandle.class.getName()) ) {
 							found = true;
 							break;
 						}
