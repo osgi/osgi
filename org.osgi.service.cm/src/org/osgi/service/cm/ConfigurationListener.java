@@ -27,71 +27,31 @@
 package org.osgi.service.cm;
 
 /**
- * Listener for Configuration changes.
+ * Listener for Configuration Events.
  * 
  * <p>
  * <tt>ConfigurationListener</tt> objects are registered with the Framework
- * service registry and are notified when a <tt>Configuration</tt> object is
- * updated or deleted.
+ * service registry and are notified with a <tt>ConfigurationEvent</tt> object
+ * when an event is broadcast.
  * <p>
- * <tt>ConfigurationListener</tt> objects are passed the type of configuration
- * change.
+ * <tt>ConfigurationListener</tt> objects can inspect the received
+ * <tt>ConfigurationEvent</tt> object to determine its type, the pid of the
+ * <tt>Configuration</tt> object with which it is associated, and the
+ * Configuration Admin service that broadcasted the event.
  * 
  * <p>
- * One of the change methods will be called with <tt>CM_UPDATED</tt> when
- * <tt>Configuration.update</tt> is called or with <tt>CM_DELETED</tt> when
- * <tt>Configuration.delete</tt> is called. Notification will be asynchronous
- * to the update or delete method call.
- * 
- * The design is very lightweight in that is does not pass <tt>Configuration</tt>
- * objects, the listener is merely advised that the configuration information
- * for a given pid has changed. If the listener wants to locate the <tt>Configuration</tt>
- * object for the specified pid, it must use <tt>ConfigurationAdmin</tt>.
- * 
- * <p>
- * Security Considerations. Bundles wishing to monitor <tt>Configuration</tt>
- * changes will require
- * <tt>ServicePermission[ConfigurationListener,REGISTER]</tt> to register a
- * <tt>ConfigurationListener</tt> service.
- * Since <tt>Configuration</tt> objects are not passed to the listener,
- * no sensitive configuration information is available to the listener.
+ * Security Considerations. Bundles wishing to monitor configuration events will
+ * require <tt>ServicePermission[ConfigurationListener,REGISTER]</tt> to
+ * register a <tt>ConfigurationListener</tt> service.
  * 
  * @version $Revision$
  */
 public interface ConfigurationListener {
 	/**
-	 * Change type that indicates that <tt>Configuration.update</tt> was
-	 * called.
-	 */
-	static final int	CM_UPDATED	= 1;
-	/**
-	 * Change type that indicates that <tt>Configuration.delete</tt> was
-	 * called.
-	 */
-	static final int	CM_DELETED	= 2;
-
-	/**
-	 * Receives notification a configuration has changed.
+	 * Receives notification of a broadcast <tt>ConfigurationEvent</tt>
+	 * object.
 	 * 
-	 * <p>
-	 * This method is only called if the target of the configuration is a
-	 * ManagedService.
-	 * 
-	 * @param pid The pid of the configuration which changed.
-	 * @param type The type of the configuration change.
+	 * @param event The broadcasted <tt>ConfigurationEvent</tt> object.
 	 */
-	void configurationChanged(String pid, int type);
-
-	/**
-	 * Receives notification a factory configuration has changed.
-	 * 
-	 * <p>
-	 * This method is only called if the target of the configuration is a
-	 * ManagedServiceFactory.
-	 * 
-	 * @param factoryPid The factory pid for the changed configuration.
-	 * @param pid The pid of the configuration which changed.
-	 * @param type The type of the configuration change.
-	 */
-	void factoryConfigurationChanged(String factoryPid, String pid, int type);
+	void configurationEvent(ConfigurationEvent event);
 }
