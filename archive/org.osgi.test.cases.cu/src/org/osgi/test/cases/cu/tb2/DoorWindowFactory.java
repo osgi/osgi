@@ -159,7 +159,7 @@ public class DoorWindowFactory implements ControlUnitFactory {
 
 		if (elt != null)
 			return elt.invokeAction(actionId, arguments);
-		else throw (new IllegalArgumentException());
+		else throw (new ControlUnitException(ControlUnitException.NO_SUCH_ACTION_ERROR));
 	}
 
 	/**
@@ -171,6 +171,13 @@ public class DoorWindowFactory implements ControlUnitFactory {
 	 */
 	public String createControlUnit(String constructorId, Object arguments)
 			throws ControlUnitException {
+		
+		if ((constructorId != "$create.door") && (constructorId != "$create.window"))
+			throw (new ControlUnitException(ControlUnitException.NO_SUCH_ACTION_ERROR));
+			
+		if (arguments != null)
+			throw (new ControlUnitException(ControlUnitException.ILLEGAL_ACTION_ARGUMENTS_ERROR));
+		
 		if (((constructorId == "$create.door") || (constructorId == "$create.window")) && (arguments == null)) {
 			if (nbEltCreated < 5) {
 				
@@ -190,7 +197,6 @@ public class DoorWindowFactory implements ControlUnitFactory {
 			else
 				return null;
 		}
-		else throw (new IllegalArgumentException());
 		
 		return null;
 	}
