@@ -16,11 +16,12 @@
  */
 package com.nokia.test.megletsample2;
 
-import org.osgi.service.application.*;
+import java.io.*;
+import java.util.Map;
+
+import org.osgi.meglet.Meglet;
 import org.osgi.service.event.*;
 import org.osgi.service.log.LogService;
-import java.io.*;
-import java.util.*;
 
 public class TestApplication2 extends Meglet implements EventHandler {
 	String	fileName		= null;
@@ -30,7 +31,7 @@ public class TestApplication2 extends Meglet implements EventHandler {
 		super();
 	}
 
-	protected void start(Map args, InputStream stateStorage) throws Exception {
+	public void start(Map args, InputStream stateStorage) throws Exception {
 		if (args != null)
 			fileName = (String) args.get("TestResult");
 		if (stateStorage != null) {
@@ -43,7 +44,7 @@ public class TestApplication2 extends Meglet implements EventHandler {
 			writeResult("RESUME:" + storedString);
 	}
 
-	protected void stop(OutputStream stateStorage) throws Exception {
+	public void stop(OutputStream stateStorage) throws Exception {
 		if (stateStorage != null) {
 			storedString = "StorageTestString";
 			ObjectOutputStream ois = new ObjectOutputStream(stateStorage);
@@ -86,6 +87,22 @@ public class TestApplication2 extends Meglet implements EventHandler {
 		}
 	}
 
+	/**
+	 * @param string
+	 */
+	private void unregisterForEvents(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * @param string
+	 */
+	private void registerForEvents(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	private void writeResult(String result) {
 		try {
 			if (fileName == null)
@@ -96,5 +113,23 @@ public class TestApplication2 extends Meglet implements EventHandler {
 			stream.close();
 		}
 		catch (IOException e) {}
+	}
+
+	/**
+	 * 
+	 * @see org.osgi.service.component.ComponentInstance#dispose()
+	 */
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * @return
+	 * @see org.osgi.service.component.ComponentInstance#getInstance()
+	 */
+	public Object getInstance() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

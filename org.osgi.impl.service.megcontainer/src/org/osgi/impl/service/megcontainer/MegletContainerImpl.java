@@ -21,13 +21,16 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.net.URL;
 import java.util.*;
+
 import javax.xml.parsers.*;
-import org.w3c.dom.*;
+
 import org.osgi.framework.*;
+import org.osgi.meglet.Meglet;
 import org.osgi.service.application.*;
 import org.osgi.service.event.*;
-import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.log.LogService;
+import org.osgi.service.packageadmin.PackageAdmin;
+import org.w3c.dom.*;
 
 class EventSubscribe {
 	public final static int	START			= 1;
@@ -58,7 +61,7 @@ class MEGBundleDescriptor {
  */
 
 public class MegletContainerImpl implements BundleListener,
-		EventHandler, MegletContainer {
+		EventHandler {
 	private BundleContext	bc;
 	private Vector			bundleIDs;
 	private Hashtable		bundleHash;
@@ -205,14 +208,14 @@ public class MegletContainerImpl implements BundleListener,
 		try {
 			ServiceReference []appList =
 					bc.getServiceReferences( "org.osgi.service.application.ApplicationHandle",
-									"(application.pid="+ appDesc.getApplicationPID() + ")" );
+									"(application.pid="+ appDesc.getPID() + ")" );
 			if( appList == null || appList.length == 0 )
         return true;
       if( !resume )
         return false;
       
       ApplicationHandle appHandle = (ApplicationHandle)bc.getService( appList[ 0 ] );      
-      boolean result = appHandle.getApplicationState() == MegletHandle.SUSPENDED;      
+      boolean result = appHandle.getState() == MegletHandle.SUSPENDED;      
       bc.ungetService( appList[ 0 ] );
       
       return result;
@@ -302,7 +305,7 @@ public class MegletContainerImpl implements BundleListener,
 			}
 			Dictionary properties = new Hashtable(desc.applications[i]
 					.getProperties((Locale.getDefault()).getLanguage()));
-			properties.put( Constants.SERVICE_PID , desc.applications[i].getApplicationPID());
+			properties.put( Constants.SERVICE_PID , desc.applications[i].getPID());
 			desc.serviceRegistrations[i] = bc.registerService(
 					"org.osgi.service.application.ApplicationDescriptor",
 					desc.applications[i], properties);
@@ -704,7 +707,7 @@ public class MegletContainerImpl implements BundleListener,
 														"org.osgi.service.application.ApplicationHandle",
 														"(application.pid="
 																+ bundleDesc.applications[i]
-																		.getApplicationPID()
+																		.getPID()
 																+ ")");
 										if (references == null
 												|| references.length == 0)

@@ -17,10 +17,11 @@
  */
 package com.nokia.test.megletsample;
 
-import org.osgi.service.application.*;
-import org.osgi.service.event.*;
 import java.io.*;
-import java.util.*;
+import java.util.Map;
+
+import org.osgi.meglet.Meglet;
+import org.osgi.service.event.Event;
 
 public class TestApplication extends Meglet
 {
@@ -32,7 +33,7 @@ public class TestApplication extends Meglet
     super();    
   }
   
-  protected void start( Map args, InputStream stateStorage ) throws Exception
+  public void start( Map args, InputStream stateStorage ) throws Exception
   {
     if( args != null )
       fileName = (String)args.get( "TestResult" );
@@ -48,7 +49,7 @@ public class TestApplication extends Meglet
       writeResult( "RESUME:" + storedString );
   }
 
-  protected void stop( OutputStream stateStorage ) throws Exception
+  public void stop( OutputStream stateStorage ) throws Exception
   {
     if( stateStorage != null ) {
       storedString = "StorageTestString";      
@@ -77,4 +78,22 @@ public class TestApplication extends Meglet
       stream.close();      
     }catch( IOException e ) {}
   }
+
+/**
+ * 
+ * @see org.osgi.service.component.ComponentInstance#dispose()
+ */
+public void dispose() {
+	// TODO Auto-generated method stub
+	
+}
+
+/**
+ * @return
+ * @see org.osgi.service.component.ComponentInstance#getInstance()
+ */
+public Object getInstance() {
+	// TODO Auto-generated method stub
+	return null;
+}
 }
