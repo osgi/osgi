@@ -143,7 +143,23 @@ public class TestMegletContainerBundleActivator extends Object implements
 					ServiceReference serviceRef = ((ServiceEvent)event.
 							 														getProperty( "event" )).getServiceReference();					
 
-					if( serviceRef != null && serviceRef.getProperty( "application.pid" ) != null &&
+					if( serviceRef == null )
+						continue;
+					
+					String objectClasses[] = (String []) serviceRef.getProperty( Constants.OBJECTCLASS );
+					if( objectClasses == null )
+						continue;
+					boolean found = false;
+					for( int q=0; q != objectClasses.length; q++ )
+						if( objectClasses[ q ].equals( ApplicationHandle.class.getName()) )
+						{
+							found = true;
+							break;
+						}
+					if( !found )
+						continue;
+					
+					if( serviceRef.getProperty( "application.pid" ) != null &&
 							serviceRef.getProperty( "application.pid" ).equals( pid ) &&
 							serviceRef.getProperty( "application.state" ) != null &&
 							serviceRef.getProperty( "application.state" ).equals( requiredState ) ) {
