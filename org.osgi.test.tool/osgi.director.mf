@@ -10,7 +10,7 @@ Bundle-Vendor: OSGi Alliance
 Bundle-Version: 3.0
 Bundle-Category: osgi,test
 Bundle-ClassPath: .,ifc112.jar
-$(IMPORT-PACKAGE)
+DynamicImport-Package: *
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
 CVS-Header: $Header$
