@@ -323,6 +323,12 @@ public class TestMegletContainerBundleActivator extends Object implements
 		else
 			System.out
 					.println("Checking the recurring schedule                  PASSED");
+		if (!testCase_schedulerFilterMatching())
+			System.out
+					.println("Checking the filter matching of the scheduler    FAILED");
+		else
+			System.out
+					.println("Checking the filter matching of the scheduler    PASSED");
 		if (!testCase_uninstallMegletBundle())
 			System.out
 					.println("Meglet bundle uninstall from Meglet container    FAILED");
@@ -1423,6 +1429,52 @@ public class TestMegletContainerBundleActivator extends Object implements
 		}
 	}
 
+	public boolean testCase_schedulerFilterMatching() {
+		try {
+			ApplicationDescriptor appDesc = appDescs[0];
+			if (lookupAppHandle(appDesc) != null)
+				throw new Exception(
+						"There's a running instance of the appDesc!");
+			Map args = createArgs();
+			if (args == null)
+				throw new Exception("Cannot create the arguments of launch!");
+			appDesc.schedule(args, "com/nokia/test/ScheduleEvent", "(propi=hallo)", false);
+			
+			Hashtable propi = new Hashtable();
+			propi.put( "propi", "hello" );
+			
+			sendEvent(new Event("com/nokia/test/ScheduleEvent", null), false);
+			sendEvent(new Event("com/nokia/test/ScheduleEvent", propi), false);
+			appHandle = lookupAppHandle(appDesc);
+			if (appHandle != null )
+				throw new Exception("Application was scheduled inspite of non-recurring!");
+			
+			propi.put( "propi", "hallo" );
+			
+			sendEvent(new Event("com/nokia/test/ScheduleEvent", propi), false);
+			
+			appHandle = lookupAppHandle(appDesc);
+			if (appHandle == null
+					|| appHandle.getAppStatus() != ApplicationHandle.RUNNING)
+				throw new Exception("Application wasn't scheduled!");
+			if (!checkResultFile("START"))
+				throw new Exception("Result of the schedule is not START!");
+			String appName = (String) appDesc.getProperties("").get(
+					ApplicationDescriptor.APPLICATION_NAME);
+			if (!checkEvent("starting", appName))
+				throw new Exception("Didn't received the starting event!");
+			if (!checkEvent("started", appName))
+				throw new Exception("Didn't received the started event!");
+			if (!testCase_stopApplication())
+				return false;
+			return true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	public boolean testCase_lockApplication() {
 		try {
 			ApplicationDescriptor appDesc = appDescs[0];
