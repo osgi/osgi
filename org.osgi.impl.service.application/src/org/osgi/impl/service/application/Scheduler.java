@@ -26,14 +26,14 @@ import org.osgi.service.application.*;
 import org.osgi.service.event.*;
 import org.osgi.service.log.LogService;
 
-public class SchedulerImpl implements Runnable, EventHandler {
+public class Scheduler implements Runnable, EventHandler {
 	private BundleContext	bc;
 	private Vector							scheduledApps;
 	private boolean							stopped;
 	private Thread							schedulerThread;
 	private ServiceRegistration	serviceReg;
 
-	public SchedulerImpl(BundleContext bc) {
+	public Scheduler(BundleContext bc) {
 		this.bc = bc;
 		scheduledApps = new Vector();
 		loadScheduledApplications();

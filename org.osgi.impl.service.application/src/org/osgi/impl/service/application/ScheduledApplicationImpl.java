@@ -29,7 +29,7 @@ import org.osgi.service.log.LogService;
  */
 public class ScheduledApplicationImpl implements ScheduledApplication, Serializable {
 	private BundleContext				bc;
-	private SchedulerImpl				scheduler;
+	private Scheduler				scheduler;
 	
 	private String							pid;
 	private Hashtable						args;
@@ -39,9 +39,9 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 
 	private ServiceRegistration	serviceReg;
 
-	public ScheduledApplicationImpl(SchedulerImpl scheduler, BundleContext bc,
+	public ScheduledApplicationImpl(Scheduler scheduler, BundleContext bc,
 			String pid, Map args, String topic, String eventFilter, boolean recurring ) {
-		this.scheduler = (SchedulerImpl)scheduler;
+		this.scheduler = (Scheduler)scheduler;
 		this.bc = bc;
 		this.pid = pid;
 		if( args != null )
@@ -53,10 +53,10 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 		this.recurring = recurring;
 	}
 
-	void validate(SchedulerImpl scheduler, BundleContext bc)
+	void validate(Scheduler scheduler, BundleContext bc)
 			throws Exception {
 		this.bc = bc;
-		this.scheduler = (SchedulerImpl)scheduler;
+		this.scheduler = (Scheduler)scheduler;
 	}
 	
 	String getPid() {
@@ -109,7 +109,7 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 			scheduler.removeScheduledApplication( this );
 		}
 		catch (Exception e) {
-			SchedulerImpl.log( bc, LogService.LOG_ERROR,
+			Scheduler.log( bc, LogService.LOG_ERROR,
 				"Exception occurred at removing a scheduled application!", e);
 		}
 	}

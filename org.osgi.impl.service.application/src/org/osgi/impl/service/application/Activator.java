@@ -24,28 +24,24 @@ import org.osgi.framework.*;
  */
 public class Activator extends Object implements
 		BundleActivator {
-	static BundleContext		bc;
-	private ServiceRegistration	schedulerService;
-	private SchedulerImpl		scheduler;
+	private Scheduler		scheduler;
+	private ApplicationDescriptorImpl appDescImpl;
 
 	public Activator() {
 		super();
 	}
 
 	public void start(BundleContext bc) throws Exception {
-		Activator.bc = bc;
-		scheduler = new SchedulerImpl(bc);
-		schedulerService = bc.registerService(
-				"org.osgi.service.application.Scheduler", scheduler,
-				null);
+		scheduler = new Scheduler(bc);
+		appDescImpl = new ApplicationDescriptorImpl( bc, scheduler );
 		System.out.println("Scheduler service started successfully!");
 	}
 
 	public void stop(BundleContext bc) throws Exception {
 		//unregistering the service
 		scheduler.stop();
-		schedulerService.unregister();
-		Activator.bc = null;
+		scheduler = null;
+		appDescImpl = null;
 		System.out.println("Scheduler service stopped successfully!");
 	}
 }

@@ -35,37 +35,28 @@ import org.osgi.framework.*;
 import org.osgi.service.application.*;
 import org.osgi.service.application.ApplicationDescriptor.Delegate;
 
-/**
- *
- * TODO Add Javadoc comment for this type.
- * 
- * @version $Revision$
- */
 public class ApplicationDescriptorImpl implements Delegate {
 	private ApplicationDescriptor descriptor;
 	private boolean								locked;
 	private static Properties			locks;
 	private BundleContext         bc;
+	private Scheduler             scheduler;
 	
-	/**
-	 * @param d
-	 * @see org.osgi.service.application.ApplicationDescriptor.Delegate#setApplicationDescriptor(org.osgi.service.application.ApplicationDescriptor)
-	 */
+	public ApplicationDescriptorImpl( BundleContext bc, Scheduler scheduler ) {
+		this.bc = bc;
+	}
+	
 	public synchronized void setApplicationDescriptor(ApplicationDescriptor d) {
 		descriptor = d;
 	}
 
-	/**
-	 * @return
-	 * @see org.osgi.service.application.ApplicationDescriptor.Delegate#isLocked()
-	 */
 	public boolean isLocked() {
 		return doLock(true, false );
 	}
 
 	synchronized boolean doLock(boolean query, boolean newState) {
 		try {
-			File f = Activator.bc.getDataFile("locks");
+			File f = bc.getDataFile("locks");
 			if ( locks == null ) {
 				Properties locks = new Properties();
 				locks = new Properties();
@@ -93,30 +84,18 @@ public class ApplicationDescriptorImpl implements Delegate {
 		return false;
 	}
 	
-	/**
-	 * 
-	 * @see org.osgi.service.application.ApplicationDescriptor.Delegate#lock()
-	 */
 	public void lock() {
 		doLock(false, true);
 	}
 
-	/**
-	 * 
-	 * @see org.osgi.service.application.ApplicationDescriptor.Delegate#unlock()
-	 */
 	public void unlock() {
 		doLock(false, false);
 	}
 
 	public ServiceReference schedule(Map args, String topic, String filter, boolean recurs) {
-		return null;
+		return scheduler.addScheduledApplication( descriptor.getPID(), args, topic, filter, recurs );
 	}
 
-	/**
-	 * @param arguments
-	 * @see org.osgi.service.application.ApplicationDescriptor.Delegate#launch(java.util.Map)
-	 */
 	public void launch(Map arguments) throws Exception {
 		AccessController.checkPermission( new ApplicationAdminPermission(
 				descriptor.getPID(), ApplicationAdminPermission.LAUNCH ) );
