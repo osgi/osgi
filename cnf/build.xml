@@ -97,6 +97,7 @@
 				Default properties
 		-->
 
+		<property file="${workspace}/cnf/global.properties" />
 		<loadproperties description="expand properties ALSO in keys!" srcfile="${project}/build.properties">
 			<filterchain>
 				<expandproperties />
