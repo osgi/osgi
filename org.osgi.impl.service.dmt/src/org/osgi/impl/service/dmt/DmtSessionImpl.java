@@ -770,9 +770,9 @@ class EventList {
 
     static String getTopic(int type) {
         switch(type) {
-        case ADD: return "org.osgi.service.dmt.DmtEvent.ADDED";
-        case DELETE: return "org.osgi.service.dmt.DmtEvent.DELETED";
-        case REPLACE: return "org.osgi.service.dmt.DmtEvent.REPLACED";
+        case ADD: return "org/osgi/service/dmt/DmtEvent/ADDED";
+        case DELETE: return "org/osgi/service/dmt/DmtEvent/DELETED";
+        case REPLACE: return "org/osgi/service/dmt/DmtEvent/REPLACED";
         }
         throw new IllegalArgumentException("Unknown event type.");
     }
