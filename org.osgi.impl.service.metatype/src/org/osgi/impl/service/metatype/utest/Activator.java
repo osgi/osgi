@@ -4,6 +4,7 @@
  * Copyright (c) IBM Corporation (2005)
  *
  * These materials have been contributed  to the OSGi Alliance as 
+ * "MEMBER LICENSED MATERIALS" as defined in, and subject to the terms of, 
  * the OSGi Member Agreement, specifically including but not limited to, 
  * the license rights and warranty disclaimers as set forth in Sections 3.2 
  * and 12.1 thereof, and the applicable Statement of Work. 
@@ -13,12 +14,18 @@
  */
 package org.osgi.impl.service.metatype.utest;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import org.osgi.framework.*;
 import org.osgi.service.metatype.*;
 import org.osgi.util.tracker.ServiceTracker;
 
-/*
+/**
+ * The unit test bundle for MetaType Service. 
  * 
+ * @author	Julian Chen
+ * @version 1.0
  */
 public class Activator implements BundleActivator {
 
@@ -84,14 +91,14 @@ public class Activator implements BundleActivator {
 
 				for (int pidIdx = 0; pidIdx < pids.length; pidIdx++) {
 					System.out
-							.println("\tThis is PIDs: (" + pids[pidIdx] + ")");
+							.println("\n\tThis is PID: (" + pids[pidIdx] + ")");
 					ObjectClassDefinition ocd = mti.getObjectClassDefinition(
 							pids[pidIdx], null);
 					showOCD(ocd);
 				}
 
 				for (int fpidIdx = 0; fpidIdx < factoryPids.length; fpidIdx++) {
-					System.out.println("\tThis is FPIDs: ("
+					System.out.println("\n\tThis is FPID: ("
 							+ factoryPids[fpidIdx] + ")");
 					ObjectClassDefinition ocd = mti.getObjectClassDefinition(
 							factoryPids[fpidIdx], null);
@@ -100,44 +107,47 @@ public class Activator implements BundleActivator {
 			}
 		}
 		tracker.close();
-
 	}
-	public void showOCD(ObjectClassDefinition ocd) {
+
+	/*
+	 * 
+	 */
+	private void showOCD(ObjectClassDefinition ocd) {
 
 		AttributeDefinition[] ADs = ocd
 				.getAttributeDefinitions(ObjectClassDefinition.ALL);
 
 		for (int adIdx = 0; adIdx < ADs.length; adIdx++) {
-			System.out.println("\t\tOCD name: (" + ocd.getName() + ")");
-			System.out.println("\t\tOCD id: (" + ocd.getID() + ")");
-			System.out.println("\t\tOCD description: ("
-					+ ocd.getDescription() + ")");
+			System.out.println("\t\tOCD name: \"" + ocd.getName() + "\"");
+			System.out.println("\t\tOCD id: \"" + ocd.getID() + "\"");
+			System.out.println("\t\tOCD description: \""
+					+ ocd.getDescription() + "\"");
 			try {
 			ocd.getIcon(0);
 			} catch (Exception e) {}
 
-			System.out.println("\t\tAD[" + adIdx + "] name: ("
-					+ ADs[adIdx].getName() + ")");
-			System.out.println("\t\tAD[" + adIdx + "] id: ("
-					+ ADs[adIdx].getID() + ")");
-			System.out.println("\t\tAD[" + adIdx + "] type: ("
-					+ ADs[adIdx].getType() + ")");
+			System.out.println("\t\tAD[" + adIdx + "] name: \""
+					+ ADs[adIdx].getName() + "\"");
+			System.out.println("\t\tAD[" + adIdx + "] id: \""
+					+ ADs[adIdx].getID() + "\"");
+			System.out.println("\t\tAD[" + adIdx + "] type: \""
+					+ getString(ADs[adIdx].getType()) + "\"");
 			System.out.println("\t\tAD[" + adIdx
-					+ "] cardinality: ("
-					+ ADs[adIdx].getCardinality() + ")");
+					+ "] cardinality: \""
+					+ ADs[adIdx].getCardinality() + "\"");
 			System.out.println("\t\tAD[" + adIdx
-					+ "] description: ("
-					+ ADs[adIdx].getDescription() + ")");
+					+ "] description: \""
+					+ ADs[adIdx].getDescription() + "\"");
 
 			String[] defaultValues = ADs[adIdx].getDefaultValue();
 			if (defaultValues != null) {
 				System.out.println("\t\t\tThere are total "
 						+ defaultValues.length
-						+ " default values.");
+						+ " default value(s).");
 				for (int dfValIdx = 0; dfValIdx < defaultValues.length; dfValIdx++) {
 					System.out.println("\t\t\t - Default Value["
-							+ dfValIdx + "]: ("
-							+ defaultValues[dfValIdx] + ")");
+							+ dfValIdx + "]: \""
+							+ defaultValues[dfValIdx] + "\"");
 				}
 			}
 			else {
@@ -147,11 +157,11 @@ public class Activator implements BundleActivator {
 			String[] optionLabels = ADs[adIdx].getOptionLabels();
 			if (optionLabels != null) {
 				System.out.println("\t\t\tThere are total "
-						+ optionLabels.length + " option labels.");
+						+ optionLabels.length + " option label(s).");
 				for (int optLabIdx = 0; optLabIdx < optionLabels.length; optLabIdx++) {
 					System.out.println("\t\t\t - Option Labels["
-							+ optLabIdx + "]: ("
-							+ optionLabels[optLabIdx] + ")");
+							+ optLabIdx + "]: \""
+							+ optionLabels[optLabIdx] + "\"");
 				}
 			}
 			else {
@@ -164,8 +174,8 @@ public class Activator implements BundleActivator {
 						+ optionValues.length + " option values.");
 				for (int optValIdx = 0; optValIdx < optionValues.length; optValIdx++) {
 					System.out.println("\t\t\t - Option Values["
-							+ optValIdx + "]: ("
-							+ optionValues[optValIdx] + ")");
+							+ optValIdx + "]: \""
+							+ optionValues[optValIdx] + "\"");
 				}
 			}
 			else {
@@ -173,6 +183,51 @@ public class Activator implements BundleActivator {
 			}
 			System.out.println();
 		}
-		System.out.println();
+	}
+
+	/*
+	 * 
+	 */
+	private String getString(int idx) {
+
+		String res = null;
+		switch (idx) {
+			case AttributeDefinition.STRING :
+				res = new String("STRING");
+				break;
+			case AttributeDefinition.LONG :
+				res = new String("LONG");
+				break;
+			case AttributeDefinition.INTEGER :
+				res = new String("INTEGER");
+				break;
+			case AttributeDefinition.SHORT :
+				res = new String("SHORT");
+				break;
+			case AttributeDefinition.CHARACTER :
+				res = new String("CHARACTER");
+				break;
+			case AttributeDefinition.BYTE :
+				res = new String("BYTE");
+				break;
+			case AttributeDefinition.DOUBLE :
+				res = new String("DOUBLE");
+				break;
+			case AttributeDefinition.FLOAT :
+				res = new String("FLOAT");
+				break;
+			case AttributeDefinition.BIGINTEGER :
+				res = new String("BIGINTEGER");
+				break;
+			case AttributeDefinition.BIGDECIMAL :
+				res = new String("BIGDECIMAL");
+				break;
+			case AttributeDefinition.BOOLEAN :
+				res = new String("BOOLEAN");
+				break;
+			default :
+				res = new String("Unknown Data Type");
+		}
+		return res;
 	}
 }
