@@ -36,6 +36,31 @@ import org.osgi.service.condpermadmin.Condition;
  *  
  */
 public class UserPromptCondition implements Condition {
+	protected static interface UserPromptConditionFactory {
+		public UserPromptCondition getInstance(
+				Bundle bundle,
+				String levels,
+				String defaultLevel, 
+				String catalogName, 
+				String message);
+	}
+
+	private static UserPromptConditionFactory factory = null;
+	static {
+		String factoryName = System.getProperty("org.osgi.util.mobile.userpromptcondition.factory");
+		if (factoryName!=null) {
+			try {
+				factory = (UserPromptConditionFactory) Class.forName(factoryName).newInstance();
+			}
+			catch (IllegalAccessException e) {
+			}
+			catch (InstantiationException e) {
+			}
+			catch (ClassNotFoundException e) {
+			}
+		}
+	}
+
 	/**
 	 * Creates an UserPrompt object with the given prompt string and permission
 	 * level. The user should be given choice as to what level of permission is
@@ -51,12 +76,14 @@ public class UserPromptCondition implements Condition {
 	 * 		it starts with a '%' sign, then the message is looked up from the catalog specified
 	 * 		by the catalogName parameter. The key is the rest of the string after the '%' sign.
 	 */
-	public UserPromptCondition(Bundle bundle,
+	public static Condition getInstance(Bundle bundle,
 					String levels,
 					String defaultLevel, 
 					String catalogName, 
 					String message) 
 	{
+		if (factory==null) return null;
+		return factory.getInstance(bundle,levels,defaultLevel,catalogName,message);
 	}
 
 	/**
@@ -115,6 +142,9 @@ public class UserPromptCondition implements Condition {
 	 * @return true, if all conditions are satisfied
 	 */
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
-		return false;
+		for(int i=0;i<conds.length;i++) {
+			if (!conds[i].isSatisfied()) return false;
+		}
+		return true;
 	}
 }
