@@ -117,9 +117,13 @@ public class MegletContainer implements BundleListener,
 		MEGBundleDescriptor desc = getBundleDescriptor(
 					((MegletDescriptor)appDesc).getBundleId() );
 		int i = getApplicationIndex( desc, appDesc );
-		if (!checkDependencies(desc.dependencies[i]))
-			throw new Exception(
-					"Can't start the application because of failed dependencies!");
+        
+    String depResult = checkDependencies(desc.dependencies[i]);      
+		if ( depResult != null )
+    {
+      System.err.println( depResult );
+			throw new Exception("Can't start the application because of failed dependencies!");
+    }
 
 		Class megletClass = Class.forName( appDesc.getStartClass() );
 		Constructor constructor = megletClass.getConstructor( new Class[0] );
@@ -160,14 +164,14 @@ public class MegletContainer implements BundleListener,
 				"Application wasn't installed onto the meglet container!");
 	}
 
-	private boolean checkDependencies(Dependencies deps) {
+	private String checkDependencies(Dependencies deps) {
 		try {
 			if (deps.requiredServices != null) {
 				for (int i = 0; i != deps.requiredServices.length; i++) {
 					ServiceReference servRef = bc
 							.getServiceReference(deps.requiredServices[i]);
 					if (servRef == null) {
-						return false;
+						return "Cannot find \"" + deps.requiredServices[i] + "\" service for launch!";
 					}
 				}
 			}
@@ -175,22 +179,22 @@ public class MegletContainer implements BundleListener,
 				ServiceReference pkgAdminSrv = bc
 						.getServiceReference("org.osgi.service.packageadmin.PackageAdmin");
 				if (pkgAdminSrv == null)
-					return true;
+					return "Cannot find PackageAdmin to check the required packages!";
 				PackageAdmin pkgAdmin = (PackageAdmin) bc
 						.getService(pkgAdminSrv);
 				for (int j = 0; j != deps.requiredPackages.length; j++)
 					if (pkgAdmin.getExportedPackage(deps.requiredPackages[j]) == null) {
 						bc.ungetService(pkgAdminSrv);
-						return false;
+						return "Cannot find \"" + deps.requiredPackages[j] + "\" package for launch!";
 					}
 				bc.ungetService(pkgAdminSrv);
 			}
-			return true;
+			return null;
 		}
 		catch (Exception e) {
 			log(bc, LogService.LOG_ERROR,
 				"Exception occurred at checking the dependencies of a meglet!", e);
-			return false;
+			return "Exception occurred at checking the dependencies!";
 		}
 	}
 
@@ -224,7 +228,12 @@ public class MegletContainer implements BundleListener,
 			int i = getApplicationIndex( desc, appDesc );
 			if( i == -1 )
 				return false;
-			return checkDependencies(desc.dependencies[i]);
+            
+      String depResult = checkDependencies(desc.dependencies[i]);
+      if( depResult != null) {
+//        System.err.println( depResult );
+      }        
+			return true;
 		}
 		catch (Exception e) {
 			log(bc, LogService.LOG_ERROR,
