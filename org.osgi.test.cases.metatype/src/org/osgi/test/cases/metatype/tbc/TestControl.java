@@ -33,12 +33,7 @@ import org.osgi.service.metatype.*;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
- * <remove>The TemplateControl controls is downloaded in the target and will control the
- * test run. The description of this test cases should contain the overall
- * execution of the run. This description is usuall quite minimal because the
- * main description is in the TemplateTestCase.</remove>
- * 
- * TODO Add Javadoc comment for this.
+ * Get a Meta Type Service and do diverse tests.
  * 
  * @version $Revision$
  */
@@ -46,6 +41,12 @@ public class TestControl extends DefaultTestBundleControl {
 	MetaTypeService mts;
 	
 
+	/**
+	 * Check if the meta type service is present.
+	 * 
+	 * @return
+	 * @see org.osgi.test.cases.util.DefaultTestBundleControl#checkPrerequisites()
+	 */
 	public boolean checkPrerequisites() {
 		ServiceReference ref = getContext().getServiceReference(MetaTypeService.class.getName());
 		if ( ref == null )
@@ -55,18 +56,9 @@ public class TestControl extends DefaultTestBundleControl {
 		return true;
 	}
 	/**
-	 * <remove>Test methods starts with "test" and are automatically
-	 * picked up by the base class. The order is in the order of declaration.
-	 * (It is possible to control this). Test methods should use the assert methods
-	 * to test.</remove>
-	 * <remove>The documentation of the test method is the test method
-	 * specification. Normal java tile and html rules apply.</remove>
-	 * 
-	 * TODO Fill in tags
-	 * @specification			<remove>Specification</remove>
-	 * @interface				<remove>Related interface, e.g. org.osgi.util.measurement</remove>
-	 * @specificationVersion	<remove>Version nr of the specification</remove>
-	 * @methods					<remove>Related method(s)</remove>
+	 * @specification			Meta Type Service
+	 * @interface				MetaTypeInformation
+	 * @specificationVersion	1.0
 	 */
 	public void testMTS() throws Exception {
 		Bundle b = installBundle("tb1.jar");
