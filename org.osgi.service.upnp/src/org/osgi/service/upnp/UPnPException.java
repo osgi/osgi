@@ -1,4 +1,5 @@
 /*
+ * $Header$
  *
  * Copyright (c) The Open Services Gateway Initiative (2002).
  * All Rights Reserved.

@@ -1,6 +1,5 @@
 /*
- * $Header: /cvshome/repository/org/osgi/service/upnp/UPnPLocalStateVariable.java,
- * v 1.20 2003/12/30 
+ * $Header$
  *
  * Copyright (c) The Open Services Gateway Initiative (2002).
  * All Rights Reserved.
