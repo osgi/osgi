@@ -30,10 +30,10 @@ public class EclipseProject {
 	protected File			eclipseProject;
 	protected boolean		root;
 	protected File			workspace;
-	protected File			file;
+	protected File	` ø		file;
 	protected Locator		locator;
 	Vector					sourceFolders	= new Vector();
-	final String			PATHSEP			= ",";
+	final String			PEP			= ",";
 	private StringBuffer	sourcepath		= new StringBuffer(1024);
 	private StringBuffer	classpath		= new StringBuffer(1024);
 	private StringBuffer	bootclasspath	= new StringBuffer(1024);
@@ -89,6 +89,9 @@ public class EclipseProject {
 	}
 
 	boolean isBoot( String path ) {
+		if ( path == null )
+			return false;
+		
 		File	file = new File(path);
 		return file.getName().startsWith("ee.");
 	}
@@ -243,12 +246,7 @@ public class EclipseProject {
 							cp.level = level + 1;
 							before.add(cp);
 							cp.execute(properties);
-							if (path.startsWith("/ee.")) {
-								addBootclasspath(cp.getClasspath());
-							}
-							else {
-								addClasspath(cp.getClasspath());
-							}
+							addClasspath(cp.getClasspath());
 						}
 						catch (Exception e) {
 							// TODO Auto-generated catch block
@@ -303,23 +301,23 @@ public class EclipseProject {
 						 * var is a dir or jar/zip file the first component of
 						 * which is a variable name.
 						 */
-						if (root || exported) {
-							int index = path.indexOf('/');
-							String variable = (index < 0) ? path : path
-									.substring(0, index);
-							String value = (String) properties.get(variable);
-							if (value == null) {
-								value = variable;
-							}
-							if (value == null) {
-								throw new SAXParseException(
-										"Undefined property \"" + value + "\"",
-										locator);
-							}
-							String result = (index < 0) ? value : (value + path
-									.substring(index + 1));
-							addClasspath(result);
-						}
+//						if (root || exported) {
+//							int index = path.indexOf('/');
+//							String variable = (index < 0) ? path : path
+//									.substring(0, index);
+//							String value = (String) properties.get(variable);
+//							if (value != null) {
+//								value = variable;
+//							}
+//							if (value == null) {
+//								throw new SAXParseException(
+//										"Undefined property \"" + value + "\"",
+//										locator);
+//							}
+//							String result = (index < 0) ? value : (value + path
+//									.substring(index + 1));
+//							addClasspath(result);
+//						}
 					}
 					else
 						if ("output".equals(kind)) {

@@ -68,14 +68,13 @@
 	<property file="${workspace}/cnf/build.properties" />
 	<property name="JAVA_HOME" value="${env.JAVA_HOME}"/>
 	<property name="p" value= "${project.name}"/>
-	
-	<!-- get the classpath and build info from eclipse -->
-	<echo>Project xx ${project}</echo>
-	<btool eclipse="${project}" />
-
-	<property name="bin.includes" value="${project.name}.jar"/>
 	<property name="javac" value="${JAVA_HOME}/bin/javac"/>
 	<property name="java" value="${JAVA_HOME}/bin/java"/>
+	<property name="bin.includes" value="${project.name}.jar"/>
+	
+	<!-- get the classpath and build info from eclipse -->
+	<echo>Project ${project}</echo>
+
 
 	<!-- 
 	     PUBLISH
@@ -86,7 +85,8 @@
 	     target does NOT check projects it dependends on!
 	-->
 	<target name="publish" > 
-		<echo>Publish ${project} | ${p}</echo>
+		<echo>Publish ${p}</echo>
+		<btool eclipse="${project}" />
 		
 		<!-- Build project dependencies -->
 		<foreach delimiter=" ," list="${project.buildpath}" 
@@ -200,19 +200,6 @@
 	
 	
 	
-	<target name="sign">
-		<signjar 
-			jar="${project}/${item.jarFile}"
-			
-			verbose="${verbose}" 
-		>
-		</signjar>
-	</target>
-	
-	<target name="dependent">
-		<ant dir="${item.dir}" target="publish" inheritall="false"/>
-	</target>
-
 
 	<!--
 	     COMPILE
@@ -221,7 +208,9 @@
 	     compiling for us.
 	-->
 	<target name="compile" if="project.sourcepath" >
-		<echo>Compile ${project.sourcepath}</echo>
+		<echo>Compile ${project.sourcepath} 
+		${project.bootclasspath}
+		${project.classpath}</echo>
 		<property name="project.bootclasspath" value=""/>
 		
 		<javac fork="yes" 
@@ -235,7 +224,6 @@
 			target="${javac.target}" 
 			source="${javac.source}" 
 			debug="${javac.debug}" 
-			verbose="${verbose}"
 			includeAntRuntime="no"
 		/>
 	</target>
@@ -245,6 +233,7 @@
 	     CLEAN
 	-->
 	<target name="clean" depends="localclean">
+		<btool eclipse="${project}" />
 		<foreach delimiter="," list="${project.buildpath}" target="clean.item" param="item.dir"/>
 	</target>
 

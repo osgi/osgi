@@ -54,6 +54,7 @@ public class BTool extends Task {
 	 * include Deliver AND all the paths to be searched.
 	 */
 	public void execute() throws BuildException {
+		System.out.println("BTOOL " + eclipse );
 		try {
 			if (eclipse == null)
 				throw new IllegalArgumentException(
@@ -268,11 +269,13 @@ public class BTool extends Task {
 		if (eclipse != null) {
 			String classpath = eclipse.getClasspath();
 			if (classpath != null) {
+				verify("classpath", classpath);
 				addProperty(infoPrefix + ".classpath", classpath.replace(',',
 						File.pathSeparatorChar));
 			}
 			String bootclasspath = eclipse.getBootclasspath();
 			if (bootclasspath != null) {
+				verify("bootclasspath", bootclasspath);
 				addProperty(infoPrefix + ".bootclasspath", bootclasspath
 						.replace(',', File.pathSeparatorChar));
 			}
@@ -289,8 +292,23 @@ public class BTool extends Task {
 			else
 				addProperty(infoPrefix + ".bindir", sourcePath.replace(',',
 						File.pathSeparatorChar));
-			addProperty(infoPrefix + ".buildpath", eclipse.getBuildPath());
+			
+			String buildpath = eclipse.getBuildPath();
+			if ( buildpath != null ) {
+				verify("buildpath", buildpath);
+				addProperty(infoPrefix + ".buildpath", eclipse.getBuildPath());
+			}
 		}
+	}
+	
+	void verify(String type, String paths) throws BuildException {
+//		StringTokenizer st = new StringTokenizer(paths," ,");
+//		while (st.hasMoreTokens()) {
+//			String s = st.nextToken();
+//			File	f = new File( s );
+//			if ( ! f.exists() )
+//				throw new BuildException("Non existent file in " + infoPrefix + "." + type + " -> " + s );
+//		}
 	}
 
 	/**
