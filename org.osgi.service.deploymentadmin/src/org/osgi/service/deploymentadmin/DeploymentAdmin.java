@@ -33,5 +33,5 @@ package org.osgi.service.deploymentadmin;
  * 
  * @version $Revision$
  */
-public interface DeploymentAdmin {
+public interface DeploymentAdmin { 
 }
