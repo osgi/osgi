@@ -323,13 +323,15 @@ class Packages {
 			BundleImpl b = (BundleImpl) moreBundles.get(i);
 			for (Iterator j = b.getExports(); j.hasNext();) {
 				PkgEntry pe = (PkgEntry) j.next();
-				if (pe.pkg.provider == pe) {
-					for (Iterator k = getPackageImporters(pe.name).iterator(); k
-							.hasNext();) {
-						Bundle ib = (Bundle) k.next();
-						if (!affected.contains(ib)) {
-							moreBundles.add(ib);
-							affected.add(ib);
+				if ( pe.pkg != null && pe.pkg.provider == pe) {
+					Collection pis = getPackageImporters(pe.name);
+					if (pis != null) {
+						for (Iterator k = pis.iterator(); k.hasNext();) {
+							Bundle ib = (Bundle) k.next();
+							if (!affected.contains(ib)) {
+								moreBundles.add(ib);
+								affected.add(ib);
+							}
 						}
 					}
 				}
