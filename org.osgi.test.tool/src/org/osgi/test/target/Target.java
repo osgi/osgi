@@ -247,6 +247,7 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 				DatagramSocket announce = new DatagramSocket();
 				DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg
 						.getBytes().length, InetAddress.getByName(ipaddr), 2001);
+				//TODO check if unconnected
 				try {
 					announce.send(packet);
 				}
