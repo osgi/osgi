@@ -57,12 +57,35 @@ public interface DmtSession extends Dmt {
      * be rolled back.
      */
     static final int LOCK_TYPE_ATOMIC    = 2;
+    
+    /**
+     * The session is open, all session operations are available
+     */
+    static final int STATE_OPEN          = 0;
+    
+    /**
+     * The session is closed, DMT manipulation operations are not available,
+     * they throw <code>InvalidStateException</code> if tried.
+     */
+    static final int STATE_CLOSED        = 1;
+    
+    /**
+     * The session is invalid because of it was timed out or a fatal exception
+     * happened in an atomic session. DMT manipulation operations are not 
+     * available, they throw <code>InvalidStateException</code> if tried. 
+     */
+    static final int STATE_INVALID       = 2;
+    
+    /**
+     * Get the current state of this session
+     * @return the state of the session, one of the <code>STATE_...</code>
+     * constants
+     */
+    int getState();
 
     /**
      * Gives the type of lock the session currently has.
      * @return One of the <code>LOCK_TYPE_...</code> constants.
-     * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
      */
     int getLockType();
 
@@ -72,8 +95,6 @@ public interface DmtSession extends Dmt {
      * in this case <code>null</code> is returned.
      * @return the identifier of the remote server that initiated the
      * session, or <code>null</code> for local sessions
-     * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
      */
     String getPrincipal();
 
@@ -81,8 +102,6 @@ public interface DmtSession extends Dmt {
      * The unique identifier of the session. The ID is generated automatically,
      * and it is guaranteed to be unique on a machine.
      * @return the session identification number
-     * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
      */
     int getSessionId();
 
@@ -106,7 +125,7 @@ public interface DmtSession extends Dmt {
      * the node
      * <li> <code>DATA_STORE_FAILURE</code>
      * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
+     * timeout, or if the session is already closed.
      */
     void execute(String nodeUri, String data) throws DmtException;
 
@@ -123,12 +142,36 @@ public interface DmtSession extends Dmt {
      * session's subtree
      * <li> <code>COMMAND_NOT_ALLOWED</code>
      * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
+     * timeout, or if the session is already closed.
      */
     boolean isLeafNode(String nodeUri) throws DmtException;
 
     /**
-     * Gives the Access Control List associated with a given node.
+     * Gives the Access Control List associated with a given node. The returned
+     * DmtAcl does not take inheritance into account, it gives the ACL 
+     * specifically given to the node.
+     * @param nodeUri the URI of the node
+     * @return the Access Control List belonging to the node or <code>null</code>
+     * if none defined
+     * @throws DmtException with the following possible error codes
+     * <li> <code>NODE_NOT_FOUND</code>
+     * <li> <code>URI_TOO_LONG</code>
+     * <li> <code>INVALID_URI</code>
+     * <li> <code>PERMISSION_DENIED</code>
+     * <li> <code>OTHER_ERROR</code> if the URI is not within the current
+     * session's subtree
+     * <li> <code>COMMAND_NOT_ALLOWED</code>
+     * <li> <code>DATA_STORE_FAILURE</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed.
+     */
+    DmtAcl getNodeAcl(String nodeUri) throws DmtException;
+
+    /**
+     * Gives the Access Control List in effect for a given node. The returned 
+     * DmtAcl takes inheritance into accout, that is if there is no ACL defined
+     * for the node, it will be derived from the closest ancestor having an
+     * ACL defined.
      * @param nodeUri the URI of the node
      * @return the Access Control List belonging to the node
      * @throws DmtException with the following possible error codes
@@ -141,9 +184,9 @@ public interface DmtSession extends Dmt {
      * <li> <code>COMMAND_NOT_ALLOWED</code>
      * <li> <code>DATA_STORE_FAILURE</code>
      * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
+     * timeout, or if the session is already closed.
      */
-    DmtAcl getNodeAcl(String nodeUri) throws DmtException;
+    DmtAcl getEffectiveNodeAcl(String nodeUri) throws DmtException;
 
     /**
      * Set the Access Control List associated with a given node.
@@ -159,7 +202,7 @@ public interface DmtSession extends Dmt {
      * <li> <code>COMMAND_NOT_ALLOWED</code>
      * <li> <code>DATA_STORE_FAILURE</code>
      * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
+     * timeout, or if the session is already closed.
      */
     void setNodeAcl(String nodeUri, DmtAcl acl) throws DmtException;
 
@@ -168,8 +211,6 @@ public interface DmtSession extends Dmt {
      * if the session was created without specifying a root, which means that
      * the target of this session is the whole DMT.
      * @return the root URI
-     * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
      */
     String getRootUri();
 }
