@@ -37,6 +37,7 @@ package org.osgi.framework;
  * if the service object is an <tt>instanceof Configurable</tt>.
  *
  * @version $Revision$
+ * @deprecated Please use the Configuration Admin
  */
 public abstract interface Configurable
 {
@@ -53,6 +54,7 @@ public abstract interface Configurable
      * @return The configuration object for this service.
      * @exception java.lang.SecurityException If the caller does not have
      * an appropriate permission and the Java Runtime Environment supports permissions.
+     * @deprecated Please use the Configuration Admin
      */
     public abstract Object getConfigurationObject();
 }
