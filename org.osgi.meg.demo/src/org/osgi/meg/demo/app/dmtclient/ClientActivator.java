@@ -32,7 +32,7 @@ import org.osgi.service.monitor.UpdateListener;
 
 public class ClientActivator implements BundleActivator 
 {
-    static final String SERVICE_PID = "com.nokia.osgi.megtest.service.dmt.client";
+    static final String SERVICE_PID = "org.osgi.meg.demo.app.dmtclient";
 
     private BundleContext bc;
     private ServiceReference factoryRef;
