@@ -38,7 +38,7 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 	int			min						= Integer.MIN_VALUE;
 	String[]	validNames				= null;
 	DmtData[]	validValues				= null;
-	int			format					= DmtDataType.NULL;
+	int			format					= DmtData.FORMAT_NULL;
 	String		namePattern             = null;
 	String		valuePattern			= null;
 	String[]	mimeTypes				= null;
@@ -46,7 +46,7 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 	// Interior node with default properties
 	public DmtMetaNodeImpl() {
 		leaf = false;
-		format = DmtDataType.NODE;
+		format = DmtData.FORMAT_NODE;
 	}
 
 	// Leaf node in ConfigurationPlugin
@@ -64,7 +64,7 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 			boolean isPermanent) {
 		leaf = false;
 		extendable = true;
-		format = DmtDataType.NODE;
+		format = DmtData.FORMAT_NODE;
 		scope = isPermanent ? PERMANENT : DYNAMIC;
 		setCommon(description, allowInfinte);
 	}
