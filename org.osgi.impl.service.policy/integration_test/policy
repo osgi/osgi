@@ -1,3 +1,1 @@
-grant codebase "file:../org.osgi.impl.framework.eclipse.jar" {
-        permission java.security.AllPermission;
-};
+keystore file:keystore;
