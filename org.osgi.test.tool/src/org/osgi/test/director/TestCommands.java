@@ -9,7 +9,6 @@ package org.osgi.test.director;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-
 import org.osgi.framework.*;
 import org.osgi.test.script.*;
 import org.osgi.test.service.*;
@@ -82,17 +81,14 @@ public class TestCommands implements CommandProvider {
 		int max = Integer.parseInt(tag.getAttribute("max", "10000"));
 		int count = Integer.parseInt(tag.getAttribute("count", "1"));
 		int poll = Integer.parseInt(tag.getAttribute("poll", "500"));
-
 		String filter = tag.getContentsAsString();
 		if (filter.length() == 0)
 			throw new RuntimeException("Need filter argument to waitfor");
-
 		long deadline = System.currentTimeMillis() + max * 1000;
 		while (deadline > System.currentTimeMillis()) {
 			ServiceReference ref[] = context.getServiceReferences(null, filter);
 			if (ref != null && ref.length >= count)
 				return tag;
-
 			Thread.sleep(poll);
 		}
 		throw new RuntimeException("Timed out");
@@ -133,18 +129,18 @@ public class TestCommands implements CommandProvider {
 		long wait = (lastExecution + separate) - System.currentTimeMillis();
 		if (wait > 0)
 			Thread.sleep(wait);
-
 		lastExecution = System.currentTimeMillis();
 		try {
 			TestCase tc = handler.getTestCase(name);
 			if (tc == null)
 				throw new RuntimeException("No such test case: " + name);
-
 			return handler.run.doTestCase(tc);
-		} catch (Throwable t) {
+		}
+		catch (Throwable t) {
 			t.printStackTrace();
 			return new Tag("exception", "" + t);
-		} finally {
+		}
+		finally {
 			lastExecution = System.currentTimeMillis();
 		}
 	}
@@ -155,23 +151,27 @@ public class TestCommands implements CommandProvider {
 	public Tag _delay(ScriptContext context, Tag tag) throws Exception {
 		int value = Integer.parseInt(tag.getAttribute("duration", "10"));
 		String type = tag.getAttribute("type", "sec");
-
 		if (type == null || type.startsWith("sec"))
 			value *= 1000;
-		else if (type.equals("minute"))
-			value *= 60 * 1000;
-		else if (type.equals("hour"))
-			value *= 60 * 60 * 1000;
-		else if (type.equals("week"))
-			value *= 60 * 60 * 1000 * 24 * 7;
-		else if (type.equals("day"))
-			value *= 60 * 60 * 1000 * 24;
-		else if (type.equals("ms"))
-			;
-
+		else
+			if (type.equals("minute"))
+				value *= 60 * 1000;
+			else
+				if (type.equals("hour"))
+					value *= 60 * 60 * 1000;
+				else
+					if (type.equals("week"))
+						value *= 60 * 60 * 1000 * 24 * 7;
+					else
+						if (type.equals("day"))
+							value *= 60 * 60 * 1000 * 24;
+						else
+							if (type.equals("ms"))
+								;
 		Thread.sleep(value);
 		return tag;
 	}
+
 	/**
 	 * Space two test case execution in time so the target has some time to come
 	 * to rest.
@@ -179,23 +179,27 @@ public class TestCommands implements CommandProvider {
 	public Tag _separate(ScriptContext context, Tag tag) throws Exception {
 		int value = Integer.parseInt(tag.getAttribute("duration", "2"));
 		String type = tag.getAttribute("type", "sec");
-
 		if (type == null || type.startsWith("sec"))
 			value *= 1000;
-		else if (type.equals("minute"))
-			value *= 60 * 1000;
-		else if (type.equals("hour"))
-			value *= 60 * 60 * 1000;
-		else if (type.equals("week"))
-			value *= 60 * 60 * 1000 * 24 * 7;
-		else if (type.equals("day"))
-			value *= 60 * 60 * 1000 * 24;
-		else if (type.equals("ms"))
-			;
-
+		else
+			if (type.equals("minute"))
+				value *= 60 * 1000;
+			else
+				if (type.equals("hour"))
+					value *= 60 * 60 * 1000;
+				else
+					if (type.equals("week"))
+						value *= 60 * 60 * 1000 * 24 * 7;
+					else
+						if (type.equals("day"))
+							value *= 60 * 60 * 1000 * 24;
+						else
+							if (type.equals("ms"))
+								;
 		separate = value;
 		return tag;
 	}
+
 	/**
 	 * Cancel a run.
 	 */
@@ -210,7 +214,6 @@ public class TestCommands implements CommandProvider {
 	public Tag _istart(ScriptContext context, Tag tag) throws Exception {
 		Hashtable phased = new Hashtable();
 		Tag result = new Tag("istart");
-
 		for (Enumeration e = tag.getContents("url").elements(); e
 				.hasMoreElements();) {
 			Tag urltag = (Tag) e.nextElement();
@@ -219,23 +222,23 @@ public class TestCommands implements CommandProvider {
 				Bundle bundle = this.context.installBundle(url);
 				phased.put(url, bundle);
 				bundle.update();
-			} catch (Exception ee) {
+			}
+			catch (Exception ee) {
 				result.addAttribute("exception", "" + ee);
 				ee.printStackTrace();
 			}
 		}
-
 		for (Enumeration e = phased.keys(); e.hasMoreElements();) {
 			String url = (String) e.nextElement();
-
 			Bundle b = (Bundle) phased.get(url);
 			try {
 				b.start();
-			} catch (Exception ee) {
+			}
+			catch (Exception ee) {
 				ee.printStackTrace();
 				result.addAttribute("exception", "" + e);
 			}
-			result.addContent(new Tag("bundle", new String[]{"url", url}));
+			result.addContent(new Tag("bundle", new String[] {"url", url}));
 		}
 		return result;
 	}
@@ -245,11 +248,13 @@ public class TestCommands implements CommandProvider {
 	 * 
 	 * <pre>
 	 * 
-	 *   -host host
-	 *   -port port
-	 *   -forever
-	 *   -debug
-	 *   -logging
+	 *  
+	 *    -host host
+	 *    -port port
+	 *    -forever
+	 *    -debug
+	 *    -logging
+	 *   
 	 *  
 	 * </pre>
 	 */
@@ -258,22 +263,25 @@ public class TestCommands implements CommandProvider {
 		int options = 0;
 		String host = "localhost";
 		int port = 3191;
-
 		String arg = intp.nextArgument();
 		while (arg != null) {
 			if (arg.equals("-host"))
 				host = intp.nextArgument();
-			else if (arg.equals("-port"))
-				port = Integer.parseInt(intp.nextArgument());
-			else if (arg.equals("-forever"))
-				options |= IHandler.OPTION_FOREVER;
-			else if (arg.equals("-debug"))
-				options |= IHandler.OPTION_DEBUG;
-			else if (arg.equals("-logging"))
-				options |= IHandler.OPTION_LOGGING;
 			else
-				throw new RuntimeException("No such option: " + arg);
-
+				if (arg.equals("-port"))
+					port = Integer.parseInt(intp.nextArgument());
+				else
+					if (arg.equals("-forever"))
+						options |= IHandler.OPTION_FOREVER;
+					else
+						if (arg.equals("-debug"))
+							options |= IHandler.OPTION_DEBUG;
+						else
+							if (arg.equals("-logging"))
+								options |= IHandler.OPTION_LOGGING;
+							else
+								throw new RuntimeException("No such option: "
+										+ arg);
 			arg = intp.nextArgument();
 		}
 		handler.startRun(host, port, options);
@@ -287,8 +295,10 @@ public class TestCommands implements CommandProvider {
 	 * 
 	 * <pre>
 	 * 
-	 *   script-url
-	 *   -output file
+	 *  
+	 *    script-url
+	 *    -output file
+	 *   
 	 *  
 	 * </pre>
 	 */
@@ -308,7 +318,8 @@ public class TestCommands implements CommandProvider {
 					}
 					Script script = new Script(new URL(input));
 					result = script.execute();
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					result = new Tag("exception", "" + e);
 					e.printStackTrace();
 				}
@@ -332,7 +343,9 @@ public class TestCommands implements CommandProvider {
 	 * 
 	 * <pre>
 	 * 
-	 *   testcase ...
+	 *  
+	 *    testcase ...
+	 *   
 	 *  
 	 * </pre>
 	 */
@@ -343,7 +356,6 @@ public class TestCommands implements CommandProvider {
 			TestCase tc = handler.getTestCase(arg);
 			if (tc == null)
 				throw new RuntimeException("No such test case: " + arg);
-
 			Tag tag = handler.run.doTestCase(tc);
 			result.addContent(tag);
 			arg = intp.nextArgument();
@@ -356,14 +368,14 @@ public class TestCommands implements CommandProvider {
 	 */
 	public Object _stoprun(CommandInterpreter intp) throws Exception {
 		String result = handler.stopRun();
-
 		if (installed != null) {
 			Bundle bundles[] = this.context.getBundles();
 			for (int i = 0; i < bundles.length; i++) {
 				if (installed.get(bundles[i]) != null)
 					try {
 						bundles[i].uninstall();
-					} catch (Exception e) {
+					}
+					catch (Exception e) {
 						e.printStackTrace();
 					};
 			}
@@ -371,5 +383,4 @@ public class TestCommands implements CommandProvider {
 		}
 		return result;
 	}
-
 }

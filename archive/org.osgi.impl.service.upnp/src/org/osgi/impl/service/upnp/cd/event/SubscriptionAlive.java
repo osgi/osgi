@@ -1,8 +1,6 @@
 package org.osgi.impl.service.upnp.cd.event;
 
-import java.util.Hashtable;
 import java.util.Enumeration;
-import java.net.*;
 
 // This class is a utility thread which wakes up based on a time period and checks for all invalid
 // subscriptions based on subscription timeout period. Removes all invalid subscriptions from the

@@ -1,27 +1,13 @@
 package org.osgi.impl.service.provisioning;
 
-import java.util.Dictionary;
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.ByteArrayOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipEntry;
-import java.util.Enumeration;
-import java.util.Vector;
-import java.util.Hashtable;
+import java.io.*;
 import java.net.URL;
-import java.net.URLEncoder;
-
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.ServiceRegistration;
-import org.osgi.util.tracker.ServiceTracker;
+import java.util.*;
+import java.util.zip.*;
+import org.osgi.framework.*;
+import org.osgi.service.permissionadmin.*;
 import org.osgi.service.provisioning.ProvisioningService;
-import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.service.permissionadmin.PermissionAdmin;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * The ProvisioningService to register in the service registry.  Not much happening here, 

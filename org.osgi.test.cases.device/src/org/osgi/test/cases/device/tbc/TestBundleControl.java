@@ -2,7 +2,6 @@ package org.osgi.test.cases.device.tbc;
 
 import java.lang.reflect.*;
 import java.util.*;
-
 import org.osgi.framework.*;
 import org.osgi.service.device.*;
 import org.osgi.test.cases.device.tbc.locators.*;
@@ -11,98 +10,101 @@ import org.osgi.test.service.*;
 
 /**
  * The activator of the device access test case
- *
+ * 
  * @author ProSyst
  * @version 1.0
  */
 public class TestBundleControl extends Thread implements BundleActivator {
-	ServiceRegistration testCaseSR = null;
-	private int message = -1;
+	ServiceRegistration			testCaseSR			= null;
+	private int					message				= -1;
 	/**
 	 * Constant for no message in the post box
 	 */
-	public static final int MESSAGE_NONE = -1;
+	public static final int		MESSAGE_NONE		= -1;
 	/**
 	 * Constant for OK message in the post box
 	 */
-	public static final int MESSAGE_OK = 0;
+	public static final int		MESSAGE_OK			= 0;
 	/**
 	 * Constant for ERROR message in the post box
 	 */
-	public static final int MESSAGE_ERROR = 1;
-	
-	private BundleContext bc = null;
-	private ServiceReference linkRef = null;
-	private TestCaseLink link = null;
-	public static String tcHome = null;
-	private boolean finish = false;
-	
-	public boolean noDriverFoundCalled = false;
-	private int timeout = 50;
-	private String[] methods = {
-		"standaloneDriverTest",
-		"deviceDetectionTest",
-		"driverLoadingTest",
-		"defaultSelectionTest",
-		"redirectionTest"
-	};
-	
-	public void start(BundleContext bc) throws Exception{
+	public static final int		MESSAGE_ERROR		= 1;
+	private BundleContext		bc					= null;
+	private ServiceReference	linkRef				= null;
+	private TestCaseLink		link				= null;
+	public static String		tcHome				= null;
+	private boolean				finish				= false;
+	public boolean				noDriverFoundCalled	= false;
+	private int					timeout				= 50;
+	private String[]			methods				= {"standaloneDriverTest",
+			"deviceDetectionTest", "driverLoadingTest", "defaultSelectionTest",
+			"redirectionTest"						};
+
+	public void start(BundleContext bc) throws Exception {
 		this.bc = bc;
 		linkRef = bc.getServiceReference(TestCaseLink.class.getName());
-		link = (TestCaseLink)bc.getService(linkRef);
+		link = (TestCaseLink) bc.getService(linkRef);
 		try {
-			timeout = Integer.parseInt(System.getProperty("osgi.test.device.timeout", "50"));
-			if (timeout <= 0) timeout = 50; // to prevent some unpleasant situations 
-		} catch (NumberFormatException e) {
+			timeout = Integer.parseInt(System.getProperty(
+					"osgi.test.device.timeout", "50"));
+			if (timeout <= 0)
+				timeout = 50; // to prevent some unpleasant situations
+		}
+		catch (NumberFormatException e) {
 			e.printStackTrace();
-			System.out.println("wrong value for timeout: " + System.getProperty("osgi.test.device.timeout") + " Timeout set to 50");
+			System.out.println("wrong value for timeout: "
+					+ System.getProperty("osgi.test.device.timeout")
+					+ " Timeout set to 50");
 		}
 		start();
 	}
-	
+
 	public void stop(BundleContext bc) throws Exception {
 		quit();
 	}
-	
-	
+
 	public void run() {
 		int progress = 0;
-		ServiceRegistration sr = bc.registerService(TestBundleControl.class.getName(), this, null);
+		ServiceRegistration sr = bc.registerService(TestBundleControl.class
+				.getName(), this, null);
 		try {
 			link.log("Test bundle control started Ok.");
-			tcHome = (String)link.receive(10000);
-			for (int i=0; !finish && i<methods.length; i++) {
-				Method method = getClass().getDeclaredMethod(methods[i], new Class[0]);
+			tcHome = (String) link.receive(10000);
+			for (int i = 0; !finish && i < methods.length; i++) {
+				Method method = getClass().getDeclaredMethod(methods[i],
+						new Class[0]);
 				method.invoke(this, new Object[0]);
-				link.send("" + 100 * (i+1) / methods.length);
+				link.send("" + 100 * (i + 1) / methods.length);
 			}
-		} catch (InvocationTargetException xe) {
+		}
+		catch (InvocationTargetException xe) {
 			Throwable e = xe.getTargetException();
 			e.printStackTrace();
-			if (e instanceof BundleException ) {
+			if (e instanceof BundleException) {
 				BundleException ee = (BundleException) e;
 				Throwable eee = ee.getNestedException();
-				if ( eee != null ) {
+				if (eee != null) {
 					eee.printStackTrace();
 				}
 			}
-			
-		} catch (Exception remainder) {
+		}
+		catch (Exception remainder) {
 			remainder.printStackTrace();
-		} finally {
+		}
+		finally {
 			try {
 				link.send("ready");
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 			}
 			sr.unregister();
 			quit();
 		}
 	}
-	
+
 	/**
-	Releases the reference to the TestCaseLink.
+	 * Releases the reference to the TestCaseLink.
 	 */
 	void quit() {
 		if (!finish) {
@@ -111,7 +113,7 @@ public class TestBundleControl extends Thread implements BundleActivator {
 			finish = true;
 		}
 	}
-	
+
 	public int setMessage(int m) {
 		if (this.message != MESSAGE_NONE && m != MESSAGE_NONE) {
 			return -1;
@@ -119,15 +121,14 @@ public class TestBundleControl extends Thread implements BundleActivator {
 		this.message = m;
 		return 0;
 	}
-	
+
 	protected int getMessage() {
 		return this.message;
 	}
-	
+
 	/*---------------------------------------------------------------------------------------------*/
 	/*------------------------- Test methods ------------------------------------------------------*/
 	/*---------------------------------------------------------------------------------------------*/
-	
 	/**
 	 * Tests driver handling when there are no locator services registered
 	 */
@@ -138,81 +139,89 @@ public class TestBundleControl extends Thread implements BundleActivator {
 		Bundle driverBundle_1 = null;
 		Bundle driverBundle_2 = null;
 		String subtest = "standalone driver test";
-		
 		try {
-			
 			sysProps.put("device.test.mode", "0");
-			log(subtest, "installing and starting device bundle 1 (standart device from the device detection test)");
+			log(
+					subtest,
+					"installing and starting device bundle 1 (standart device from the device detection test)");
 			deviceBundle_1 = bc.installBundle(tcHome + "dev1.jar");
 			deviceBundle_1.start();
-			log(subtest, "installing and starting device bundle 2 (standalone test device)");
+			log(subtest,
+					"installing and starting device bundle 2 (standalone test device)");
 			deviceBundle_2 = bc.installBundle(tcHome + "dev2.jar");
 			deviceBundle_2.start();
-			
-			log(subtest, "installing driver one - it should attatch to device 2 (standalone test device)");
+			log(
+					subtest,
+					"installing driver one - it should attatch to device 2 (standalone test device)");
 			driverBundle_2 = bc.installBundle(tcHome + "drv7.jar");
 			driverBundle_2.start();
 			// wait for driver to attach or to be rejected
-			waitFor(subtest, "device attachment"); 
-			
-			log(subtest, "installing and starting basic driver bundle - it should attach to device 1");
-			driverBundle_1 = bc.installBundle(tcHome +  "drv1.jar");
+			waitFor(subtest, "device attachment");
+			log(subtest,
+					"installing and starting basic driver bundle - it should attach to device 1");
+			driverBundle_1 = bc.installBundle(tcHome + "drv1.jar");
 			driverBundle_1.start();
 			// wait for driver to attach or to be rejected
 			waitFor(subtest, "device attachment");
-			
 			log(subtest, "registering a locator service");
-			ServiceRegistration reg = bc.registerService(DriverLocator.class.getName(), new EmptyLocator(this), null);
-			
-			log(subtest, "uninstalling driver 2. This should invoke the findDrivers method for the standalone device");
+			ServiceRegistration reg = bc.registerService(DriverLocator.class
+					.getName(), new EmptyLocator(this), null);
+			log(
+					subtest,
+					"uninstalling driver 2. This should invoke the findDrivers method for the standalone device");
 			driverBundle_2.uninstall();
 			waitFor(subtest, "findDrivers call");
-			
 			log(subtest, "removing locator");
 			reg.unregister();
-			
-			log(subtest, "installing driver 2. It should attach to device 2 again");
+			log(subtest,
+					"installing driver 2. It should attach to device 2 again");
 			driverBundle_2 = bc.installBundle(tcHome + "drv7.jar");
 			driverBundle_2.start();
 			// wait for driver to attach or to be rejected
-			waitFor(subtest, "device attachment"); 
-			
-		} finally {
+			waitFor(subtest, "device attachment");
+		}
+		finally {
 			try {
-				if (driverBundle_1 != null) driverBundle_1.uninstall();
-			} catch (Exception e) {
+				if (driverBundle_1 != null)
+					driverBundle_1.uninstall();
+			}
+			catch (Exception e) {
 			}
 			try {
-				if (deviceBundle_1 != null) deviceBundle_1.uninstall();
-			} catch (Exception e) {
+				if (deviceBundle_1 != null)
+					deviceBundle_1.uninstall();
+			}
+			catch (Exception e) {
 			}
 			try {
-				if (driverBundle_2 != null) driverBundle_2.uninstall();
-			} catch (Exception e) {
+				if (driverBundle_2 != null)
+					driverBundle_2.uninstall();
+			}
+			catch (Exception e) {
 			}
 			try {
-				if (deviceBundle_2 != null) deviceBundle_2.uninstall();
-			} catch (Exception e) {
+				if (deviceBundle_2 != null)
+					deviceBundle_2.uninstall();
+			}
+			catch (Exception e) {
 			}
 		}
-		
-		log(subtest, "finished"); 
+		log(subtest, "finished");
 	}
-	
-	
+
 	/**
-	 * Tests if devices are correctly recognized from the device manager and
-	 * if the corresponding drivers are installed (which is the only way
-	 * to check if the device manager has detected a device registration))
+	 * Tests if devices are correctly recognized from the device manager and if
+	 * the corresponding drivers are installed (which is the only way to check
+	 * if the device manager has detected a device registration))
 	 */
 	public void deviceDetectionTest() {
 		Hashtable sysProps = System.getProperties();
 		Bundle deviceBundle = null;
 		String subtest = "basic test";
 		log(subtest, "registering services");
-		ServiceRegistration locatorSR = bc.registerService("org.osgi.service.device.DriverLocator",
-			new BasicTestLocator(this), null);
-		
+		ServiceRegistration locatorSR = bc.registerService(
+				"org.osgi.service.device.DriverLocator", new BasicTestLocator(
+						this), null);
 		for (int i = 0; i < 5; i++) {
 			noDriverFoundCalled = false;
 			log(subtest, "installing bundle! Test mode = " + i);
@@ -221,39 +230,46 @@ public class TestBundleControl extends Thread implements BundleActivator {
 				deviceBundle = bc.installBundle(tcHome + "dev1.jar");
 				deviceBundle.start();
 				// wait for drivers to attach or to be rejected
-				// default timeout is 5 seconds. On slower hosts increase the timeout by setting
+				// default timeout is 5 seconds. On slower hosts increase the
+				// timeout by setting
 				// the osgi.test.device.timeout property to a higher value
-				// timeout is calculated with the folloing formula: osgi.test.device.timeout * 100 milliseconds
-				// so the default value for osgi.testdevice.timeout is 50. 
-				// Setting a lower value will decrease the timeout. Setting to zero or negative will have no effect
-				
+				// timeout is calculated with the folloing formula:
+				// osgi.test.device.timeout * 100 milliseconds
+				// so the default value for osgi.testdevice.timeout is 50.
+				// Setting a lower value will decrease the timeout. Setting to
+				// zero or negative will have no effect
 				waitFor(subtest, "device detection");
-				
-				// wait a specific timeout for the noDriverFoundMethod to be called 
+				// wait a specific timeout for the noDriverFoundMethod to be
+				// called
 				if ((i == 2) || (i == 3)) {
 					int counter = 0;
 					while (!noDriverFoundCalled && counter++ < 100) {
 						try {
 							Thread.sleep(timeout);
-						} catch (InterruptedException ie) {
+						}
+						catch (InterruptedException ie) {
 							ie.printStackTrace();
 						}
 					}
-					
-					if (noDriverFoundCalled) log(subtest, "noDriverFound called OK");
+					if (noDriverFoundCalled)
+						log(subtest, "noDriverFound called OK");
 				}
-			} catch (BundleException be) {
+			}
+			catch (BundleException be) {
 				be.printStackTrace();
 				log(subtest, "Error while installing basice device bundle");
-			} finally {
+			}
+			finally {
 				if (deviceBundle != null) {
 					try {
 						deviceBundle.uninstall();
-					} catch (BundleException be) {
+					}
+					catch (BundleException be) {
 						be.printStackTrace();
 						/* Nothing to do about this!!! */
 					}
-					/* the device manager is not obliged to remove idle drivers
+					/*
+					 * the device manager is not obliged to remove idle drivers
 					 * so I have to remove them manually
 					 */
 					uninstallDrivers();
@@ -262,7 +278,7 @@ public class TestBundleControl extends Thread implements BundleActivator {
 		}
 		locatorSR.unregister();
 	}
-	
+
 	/**
 	 * Tests the correct behaviour of the device manager against registred
 	 * driver locators and driver selectors
@@ -270,42 +286,47 @@ public class TestBundleControl extends Thread implements BundleActivator {
 	public void driverLoadingTest() {
 		String subtest = "driver loading test";
 		log(subtest, "registering locators and selector");
-		
 		// registering locators
-		ServiceRegistration locator1SR = bc.registerService("org.osgi.service.device.DriverLocator",
-			new DriverLoadingLocator1(this), null);
-		ServiceRegistration locator2SR = bc.registerService("org.osgi.service.device.DriverLocator",
-			new DriverLoadingLocator2(this), null);
-		ServiceRegistration locator3SR = bc.registerService("org.osgi.service.device.DriverLocator",
-			new DriverLoadingLocator3(this), null);
+		ServiceRegistration locator1SR = bc.registerService(
+				"org.osgi.service.device.DriverLocator",
+				new DriverLoadingLocator1(this), null);
+		ServiceRegistration locator2SR = bc.registerService(
+				"org.osgi.service.device.DriverLocator",
+				new DriverLoadingLocator2(this), null);
+		ServiceRegistration locator3SR = bc.registerService(
+				"org.osgi.service.device.DriverLocator",
+				new DriverLoadingLocator3(this), null);
 		// registering selector
-		ServiceRegistration selector = bc.registerService("org.osgi.service.device.DriverSelector",
-			new DriverLoadingTestSelector1(this) , null);
-		
+		ServiceRegistration selector = bc.registerService(
+				"org.osgi.service.device.DriverSelector",
+				new DriverLoadingTestSelector1(this), null);
 		// registering one selector more - this should be ignored
-		ServiceRegistration uselessSelector = bc.registerService("org.osgi.service.device.DriverSelector",
-			new DriverLoadingTestSelector2(this), null);
-		
+		ServiceRegistration uselessSelector = bc.registerService(
+				"org.osgi.service.device.DriverSelector",
+				new DriverLoadingTestSelector2(this), null);
 		Hashtable sysProps = System.getProperties();
 		sysProps.put("device.test.mode", "100");
-		
 		// install the bundle representing the device
 		Bundle deviceBundle = null;
-		//    InputStream is = this.getClass().getResourceAsStream("/basicdev.jar");
+		//    InputStream is =
+		// this.getClass().getResourceAsStream("/basicdev.jar");
 		try {
 			log(subtest, "installing device bundle");
 			deviceBundle = bc.installBundle(tcHome + "dev1.jar");
 			deviceBundle.start();
-			
 			waitFor(subtest, "device attachment");
-		} catch (BundleException be) {
+		}
+		catch (BundleException be) {
 			be.printStackTrace();
-			log("driver loading test", "Error while installing the device bundle");
-		} finally {
+			log("driver loading test",
+					"Error while installing the device bundle");
+		}
+		finally {
 			if (deviceBundle != null) {
 				try {
 					deviceBundle.uninstall();
-				} catch (BundleException be) {
+				}
+				catch (BundleException be) {
 					be.printStackTrace();
 					/* Nothing to do about this!!! */
 				}
@@ -315,13 +336,14 @@ public class TestBundleControl extends Thread implements BundleActivator {
 			locator3SR.unregister();
 			selector.unregister();
 			uselessSelector.unregister();
-			/* the device manager is not obliged to remove idle drivers
-			 * so I have to remove them manually
+			/*
+			 * the device manager is not obliged to remove idle drivers so I
+			 * have to remove them manually
 			 */
 			uninstallDrivers();
 		}
 	}
-	
+
 	/**
 	 * Tests the default selection algorythm
 	 */
@@ -329,34 +351,39 @@ public class TestBundleControl extends Thread implements BundleActivator {
 		String subtest = "default selection test";
 		Hashtable sysProps = System.getProperties();
 		sysProps.put("device.test.mode", "100");
-		ServiceRegistration locatorSR = bc.registerService("org.osgi.service.device.DriverLocator",
-			new DefaultSelectionLocator(this), null);
+		ServiceRegistration locatorSR = bc.registerService(
+				"org.osgi.service.device.DriverLocator",
+				new DefaultSelectionLocator(this), null);
 		Bundle deviceBundle = null;
 		try {
 			log(subtest, "installing device bundle");
 			deviceBundle = bc.installBundle(tcHome + "dev1.jar");
 			deviceBundle.start();
 			waitFor(subtest, "device attachment");
-		} catch (BundleException be) {
+		}
+		catch (BundleException be) {
 			be.printStackTrace();
 			log(subtest, "Error while installing the device bundle");
-		} finally {
+		}
+		finally {
 			if (deviceBundle != null) {
 				try {
 					deviceBundle.uninstall();
-				} catch (BundleException be) {
+				}
+				catch (BundleException be) {
 					be.printStackTrace();
 					/* Nothing to do about this!!! */
 				}
 			}
 			locatorSR.unregister();
-			/* the device manager is not obliged to remove idle drivers
-			 * so I have to remove them manually
+			/*
+			 * the device manager is not obliged to remove idle drivers so I
+			 * have to remove them manually
 			 */
 			uninstallDrivers();
 		}
 	}
-	
+
 	/**
 	 * Tests rediretion
 	 */
@@ -364,28 +391,28 @@ public class TestBundleControl extends Thread implements BundleActivator {
 		Hashtable sysProps = System.getProperties();
 		sysProps.put("device.test.mode", "100");
 		String subtest = "redirection test";
-		
-		ServiceRegistration locator1SR = bc.registerService("org.osgi.service.device.DriverLocator",
-			new RedirectionLocator1(this), null);
-		
+		ServiceRegistration locator1SR = bc.registerService(
+				"org.osgi.service.device.DriverLocator",
+				new RedirectionLocator1(this), null);
 		Bundle deviceBundle = null;
 		try {
 			log(subtest, "installing device bundle");
 			deviceBundle = bc.installBundle(tcHome + "dev1.jar");
 			deviceBundle.start();
 			waitFor(subtest, "device attachment");
-			
 			/*
-			 * Subtest removed - as stated in the spec the device manager must call
-			 * all locator until one finds a driver. The calling order is not specified
-			 * so I can't be sure that the dummy locator will be called.
+			 * Subtest removed - as stated in the spec the device manager must
+			 * call all locator until one finds a driver. The calling order is
+			 * not specified so I can't be sure that the dummy locator will be
+			 * called.
 			 */
 			// REMOVED
-			//      // FIX - as locators may be called in a differenr thread I have to
+			//      // FIX - as locators may be called in a differenr thread I have
+			// to
 			//      // set some kind of timeout before checking the flag
 			//      for (int i = 0; (i < 1000) && !RedirectionLocator2.called; i++) {
 			//      	try {
-			//        	Thread.sleep(5);  // 5 seconds should be enough for everything
+			//        	Thread.sleep(5); // 5 seconds should be enough for everything
 			//      	} catch (InterruptedException ie) {
 			//        	ie.printStackTrace(); // nothing much more to do about this
 			//      	}
@@ -397,73 +424,82 @@ public class TestBundleControl extends Thread implements BundleActivator {
 			//      	log("redirection test", "second locator not called! Error!");
 			//      }
 			// REMOVED
-			
-		} catch (BundleException be) {
+		}
+		catch (BundleException be) {
 			be.printStackTrace();
 			log("redirection test", "Error while installing the device bundle");
-		} finally {
+		}
+		finally {
 			if (deviceBundle != null) {
 				try {
 					deviceBundle.uninstall();
-				} catch (BundleException be) {
+				}
+				catch (BundleException be) {
 					be.printStackTrace();
 					/* Nothing to do about this!!! */
 				}
 			}
 			locator1SR.unregister();
-			/* the device manager is not obliged to remove idle drivers
-			 * so I have to remove them manually
+			/*
+			 * the device manager is not obliged to remove idle drivers so I
+			 * have to remove them manually
 			 */
 			uninstallDrivers();
 		}
 	}
-	
-	
-	
-	
+
 	/*---------------------------------------------------------------------------------------------*/
 	/*-------------------------------- utility methods --------------------------------------------*/
 	/*---------------------------------------------------------------------------------------------*/
-	
 	private void uninstallDrivers() {
 		Bundle[] bundles = bc.getBundles();
-		for(int i = 0; i < bundles.length; i++) {
+		for (int i = 0; i < bundles.length; i++) {
 			try {
-				if ("test_driver".equals(bundles[i].getHeaders().get("Bundle-Category"))) {
+				if ("test_driver".equals(bundles[i].getHeaders().get(
+						"Bundle-Category"))) {
 					bundles[i].uninstall();
 				}
-			} catch (Throwable t) {
-				/* ignore and proceed with the next bundle*/
+			}
+			catch (Throwable t) {
+				/* ignore and proceed with the next bundle */
 			}
 		}
 	}
-	
+
 	private void waitFor(String subtest, String message) {
 		int counter = 0;
 		int m = TestBundleControl.MESSAGE_NONE;
-		while (((m = getMessage()) == TestBundleControl.MESSAGE_NONE) && counter++ < 100 ) {
+		while (((m = getMessage()) == TestBundleControl.MESSAGE_NONE)
+				&& counter++ < 100) {
 			try {
 				Thread.sleep(timeout);
-			} catch (InterruptedException ie) {
+			}
+			catch (InterruptedException ie) {
 				ie.printStackTrace();
 			}
 		}
 		switch (m) {
-		case TestBundleControl.MESSAGE_OK : log(subtest, message + " OK"); break;
-		case TestBundleControl.MESSAGE_NONE : log(subtest, message + " timed out!"); break;
-		case TestBundleControl.MESSAGE_ERROR : log(subtest,  "error message received dor " + message); break;
-		default : log(subtest, "unkown message received");
+			case TestBundleControl.MESSAGE_OK :
+				log(subtest, message + " OK");
+				break;
+			case TestBundleControl.MESSAGE_NONE :
+				log(subtest, message + " timed out!");
+				break;
+			case TestBundleControl.MESSAGE_ERROR :
+				log(subtest, "error message received dor " + message);
+				break;
+			default :
+				log(subtest, "unkown message received");
 		}
 		setMessage(TestBundleControl.MESSAGE_NONE);
 	}
-	
+
 	public void log(String subtest, String toLog) {
 		try {
 			link.log("[" + subtest + "] " + toLog);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
 }

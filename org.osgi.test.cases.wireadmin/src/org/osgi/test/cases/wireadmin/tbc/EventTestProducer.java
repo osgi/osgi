@@ -9,10 +9,9 @@ import org.osgi.service.wireadmin.Wire;
  * @author Vasil Panushev
  */
 public class EventTestProducer implements Producer {
-
-	private boolean crash = false;
-	private boolean ccCrashed = false;
-	private boolean polledCrashed = false;
+	private boolean	crash			= false;
+	private boolean	ccCrashed		= false;
+	private boolean	polledCrashed	= false;
 
 	public EventTestProducer(boolean cr) {
 		this.crash = cr;
@@ -32,5 +31,4 @@ public class EventTestProducer implements Producer {
 		}
 		return "42";
 	}
-
 }

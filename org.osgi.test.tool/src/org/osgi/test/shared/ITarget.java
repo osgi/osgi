@@ -8,15 +8,20 @@ package org.osgi.test.shared;
 
 import java.io.*;
 
-public interface ITarget {   
+public interface ITarget {
 	void linkClosed();
-	void install( String name , InputStream in ) throws Exception;
-	void uninstall( String name ) throws Exception;
-	void push( String name, Object msg );
+
+	void install(String name, InputStream in) throws Exception;
+
+	void uninstall(String name) throws Exception;
+
+	void push(String name, Object msg);
+
 	//TestCaseLinkImpl getTestCaseLink( String name );
 	//TestCaseLinkImpl getTestCaseLink( Bundle bundle );
 	void setProperties() throws IOException;
+
 	void reboot(int cause);
+
 	void updateFramework();
 }
-

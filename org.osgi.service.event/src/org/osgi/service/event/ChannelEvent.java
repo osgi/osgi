@@ -1,12 +1,10 @@
 package org.osgi.service.event;
 
 import java.util.Map;
-
 import org.osgi.framework.Filter;
 
 /** @modelguid {174175DA-0495-4872-B17D-DC45B96DEC7D} */
 public class ChannelEvent {
-
 	/** @modelguid {00859CE2-FDEE-477D-88FF-8DCE1E4E1F13} */
 	public ChannelEvent(String topic, Map properties) {
 	}
@@ -45,5 +43,4 @@ public class ChannelEvent {
 	public String toString() {
 		return "";
 	}
-
 }

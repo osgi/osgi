@@ -8,80 +8,81 @@ package org.osgi.test.target;
 
 import java.util.*;
 import java.io.*;
-
 import org.osgi.framework.*;
 import org.osgi.test.service.*;
 import org.osgi.test.shared.*;
 
 /**
-	This class implements the link between the director and the
-	test bundle on the target, on the target side.
+ * This class implements the link between the director and the test bundle on
+ * the target, on the target side.
  */
-public class TestCaseLinkImpl 
-	implements 
-		TestCaseLink
-{
-	String  				name;
-	Bundle  				bundle;
-	org.osgi.test.shared.Queue   				queue = new org.osgi.test.shared.Queue();
-	TargetLink  			director;
-	
+public class TestCaseLinkImpl implements TestCaseLink {
+	String						name;
+	Bundle						bundle;
+	org.osgi.test.shared.Queue	queue	= new org.osgi.test.shared.Queue();
+	TargetLink					director;
 
 	/**
-		Constructor for the test case link.
-	*/
-	TestCaseLinkImpl(  TargetLink director, Bundle bundle, String name ) {
-		this.bundle 	= bundle;
-		this.name   	= name;
-		this.director   = director;
+	 * Constructor for the test case link.
+	 */
+	TestCaseLinkImpl(TargetLink director, Bundle bundle, String name) {
+		this.bundle = bundle;
+		this.name = name;
+		this.director = director;
 	}
-	
+
 	/**
-		Interface from test bundle to send an object
-		to its testcase on the directors side.
-	*/
-	public void send( Object msg ) throws IOException {
-		director.sendToRun( name, msg );
+	 * Interface from test bundle to send an object to its testcase on the
+	 * directors side.
+	 */
+	public void send(Object msg) throws IOException {
+		director.sendToRun(name, msg);
 	}
-	
+
 	/**
-		This method is called to log information in the testbundle.
-		It will be compared with a reference output on the
-		director.
-	*/
+	 * This method is called to log information in the testbundle. It will be
+	 * compared with a reference output on the director.
+	 */
 	public void log(String log) throws IOException {
-		System.out.println( "Log: " + log );
-		director.sendLog( name, new Log(new Date(), log) );
+		System.out.println("Log: " + log);
+		director.sendLog(name, new Log(new Date(), log));
 	}
 
 	/**
-		method to call when an object send by the testcase
-		on the directors framework needs to be received.
-	*/
+	 * method to call when an object send by the testcase on the directors
+	 * framework needs to be received.
+	 */
 	public Object receive(long timeout) {
-		return queue.pop( timeout );
+		return queue.pop(timeout);
 	}
 
-
 	/**
-		Called when the testcase on the director has send a message
-		to the testbundle on this target. The testbundle can 
-		wait for this message at receive. We will send this object
-		to that guy.
-	*/
+	 * Called when the testcase on the director has send a message to the
+	 * testbundle on this target. The testbundle can wait for this message at
+	 * receive. We will send this object to that guy.
+	 */
 	void push(Object o) {
-		if ( queue != null )
+		if (queue != null)
 			queue.push(o);
-	}   
-	
-	public String getName() 	{ return name; }
-	public Bundle getBundle()   { return bundle; }
-	
-	
-	void close()
-	{
-		System.out.println( "Closing " + bundle.getBundleId() + " " + bundle.getLocation() );
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Bundle getBundle() {
+		return bundle;
+	}
+
+	void close() {
+		System.out.println("Closing " + bundle.getBundleId() + " "
+				+ bundle.getLocation());
 		queue.releaseAll();
-		try{ bundle.uninstall(); } catch( Exception e ) {e.printStackTrace(); }
+		try {
+			bundle.uninstall();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

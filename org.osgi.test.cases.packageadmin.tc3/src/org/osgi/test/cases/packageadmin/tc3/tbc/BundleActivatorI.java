@@ -4,45 +4,35 @@
  * This source code is owned by Ericsson Telecom AB, and is being distributed to OSGi
  * MEMBERS as MEMBER LICENSED MATERIALS under the terms of section 3.2 of the OSGi MEMBER AGREEMENT.
  */
-
 package org.osgi.test.cases.packageadmin.tc3.tbc;
 
 import org.osgi.framework.*;
 
 /**
-   Bundle activator for the TestBundleControl.
+ * Bundle activator for the TestBundleControl.
+ * 
+ * @author Ericsson Telecom AB
+ */
+public class BundleActivatorI implements BundleActivator {
+	TBC	tbc;
 
-   @author Ericsson Telecom AB
-*/
+	/**
+	 * Starts the TestBundleControl object.
+	 */
+	public void start(BundleContext bc) {
+		try {
+			tbc = new TBC(bc);
+			tbc.start();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-public class BundleActivatorI implements BundleActivator
-{
-    TBC     tbc;
-    
-    /**
-       Starts the TestBundleControl object.
-    */
-    public void start(BundleContext bc)
-    {
-        try
-        {
-            tbc = new TBC(bc);
-            tbc.start();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-    
-    /**
-       Stops the TestBundleControl.
-    */
-    public void stop(BundleContext bc)
-    {
-        tbc.quit();
-    }
-    
-    
-    
+	/**
+	 * Stops the TestBundleControl.
+	 */
+	public void stop(BundleContext bc) {
+		tbc.quit();
+	}
 }

@@ -1,13 +1,9 @@
 package org.osgi.impl.service.upnp.cp.control;
 
-import java.util.Hashtable;
-import java.util.Dictionary;
-import java.util.Vector;
+import java.io.*;
 import java.net.Socket;
-import java.io.OutputStream;
-import java.io.ByteArrayOutputStream;
-import org.osgi.impl.service.upnp.cp.util.*;
 import java.util.*;
+import org.osgi.impl.service.upnp.cp.util.*;
 
 public class ControlImpl implements Control, SOAPConstants {
 	private Hashtable serviceObjects;	

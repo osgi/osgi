@@ -1,6 +1,5 @@
 package org.osgi.impl.service.upnp.cp.util;
 
-import java.util.*;
 
 public interface EventService 
 {	

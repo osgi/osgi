@@ -1,8 +1,6 @@
 package org.osgi.impl.service.upnp.cd.ssdp;
 
 import java.util.Hashtable;
-import java.util.Vector;
-import java.util.Enumeration;
 
 // This class contains upnp device info for sending NOTIFY ans M-SEARCH responses. 
 public class DeviceDetails{

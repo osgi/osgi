@@ -1,6 +1,5 @@
 package org.osgi.impl.service.upnp.cp.control;
 
-import java.util.Hashtable;
 
 public class SOAPParser {
 	public ParsedRequest theParsedRequest;  

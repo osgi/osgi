@@ -1,11 +1,7 @@
 package org.osgi.impl.service.provisioning;
 
-import java.util.Dictionary;
 import java.util.Hashtable;
-
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.*;
 import org.osgi.service.provisioning.ProvisioningService;
 
 /**

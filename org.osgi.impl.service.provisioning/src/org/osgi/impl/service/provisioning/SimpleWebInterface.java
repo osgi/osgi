@@ -1,15 +1,8 @@
 package org.osgi.impl.service.provisioning;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.ByteArrayOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.Enumeration;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 import java.util.zip.ZipInputStream;
 import org.osgi.service.provisioning.ProvisioningService;
 
@@ -45,8 +38,8 @@ public class SimpleWebInterface extends Thread {
 			      ProvisioningLog log)
         throws IOException {
         ss = new ServerSocket(port);
-        this.svc = svc;
-        this.log = log;
+        SimpleWebInterface.svc = svc;
+        SimpleWebInterface.log = log;
         start();
     }
 

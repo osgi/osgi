@@ -7,63 +7,61 @@
 package org.osgi.test.director;
 
 import java.net.*;
-
 import org.osgi.framework.*;
 import org.osgi.test.script.*;
 import org.osgi.test.service.*;
 
-
 /**
  * Keep track of a script.
- *
- * The script content is a URL. This object is registered in the
- * registry and acts as a TestCase. When is executed, it will
- * actually run the script content. Note that Run does not call
- * test, but detects this class instead.
+ * 
+ * The script content is a URL. This object is registered in the registry and
+ * acts as a TestCase. When is executed, it will actually run the script
+ * content. Note that Run does not call test, but detects this class instead.
  */
 public class ScriptEditor implements TestCase {
-	String					name;
-	URL 					path;
-	ServiceRegistration		registration;
-	
+	String				name;
+	URL					path;
+	ServiceRegistration	registration;
+
 	public ScriptEditor(String name, URL path) {
 		this.name = name;
 		this.path = path;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public URL getPath() {
 		return path;
 	}
-	
-	
+
 	public String getDescription() {
 		return name + " - " + path;
 	}
-	
+
 	public String getIconName() {
 		return null;
 	}
 
-	public int test(TestRun run) {throw new RuntimeException("Should not be called"); }
-	
+	public int test(TestRun run) {
+		throw new RuntimeException("Should not be called");
+	}
+
 	public Tag execute() throws Exception {
-		Script			script = new Script(path);
+		Script script = new Script(path);
 		return script.execute();
 	}
 
-	public void abort() {}
-	
-	
+	public void abort() {
+	}
+
 	public void delete() {
 		registration.unregister();
 	}
-	
+
 	public Tag getContent() throws Exception {
-		Script			script = new Script(path);
+		Script script = new Script(path);
 		return script.getScript();
 	}
 }

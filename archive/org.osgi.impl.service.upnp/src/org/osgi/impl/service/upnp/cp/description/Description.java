@@ -2,7 +2,6 @@ package org.osgi.impl.service.upnp.cp.description;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
 import org.osgi.framework.BundleContext;
 
 public class Description {			

@@ -1,4 +1,5 @@
 package org.osgi.test.cases.wireadmin.tbc;
+
 import org.osgi.service.wireadmin.Producer;
 import org.osgi.service.wireadmin.Wire;
 
@@ -8,8 +9,8 @@ import org.osgi.service.wireadmin.Wire;
  * @author Neviana Ducheva
  */
 public class ProducerImpl implements Producer {
-	WireAdminControl wac;
-	String pid;
+	WireAdminControl	wac;
+	String				pid;
 
 	public ProducerImpl(WireAdminControl wac, String pid) {
 		this.wac = wac;
@@ -19,7 +20,8 @@ public class ProducerImpl implements Producer {
 	public void consumersConnected(Wire[] wires) {
 		//    if (System.getProperty("dump.now") != null) {
 		//      System.out.println("**********************************************************************");
-		//      System.out.println("cc called and will set counter to " + (wac.synchCounter + 1));
+		//      System.out.println("cc called and will set counter to " +
+		// (wac.synchCounter + 1));
 		//      System.out.println("producer is: " + pid + " " + hashCode());
 		//      System.out.println("**********************************************************************");
 		//    }

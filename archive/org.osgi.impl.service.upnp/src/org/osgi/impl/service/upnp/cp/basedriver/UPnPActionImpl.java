@@ -1,10 +1,9 @@
 package org.osgi.impl.service.upnp.cp.basedriver;
 
 import java.util.*;
-import org.osgi.service.upnp.*;
 import org.osgi.impl.service.upnp.cp.description.*;
-import org.osgi.impl.service.upnp.cp.util.*;
-import org.osgi.impl.service.upnp.cp.control.*;
+import org.osgi.impl.service.upnp.cp.util.Converter;
+import org.osgi.service.upnp.*;
 
 
 public class UPnPActionImpl implements UPnPAction  {

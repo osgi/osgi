@@ -9,10 +9,9 @@ import org.osgi.service.wireadmin.Wire;
  * @author Vasil Panushev
  */
 public class EventTestConsumer implements Consumer {
-
-	private boolean crash = false;
-	private boolean pcCrashed = false;
-	private boolean updatedCrashed = false;
+	private boolean	crash			= false;
+	private boolean	pcCrashed		= false;
+	private boolean	updatedCrashed	= false;
 
 	public EventTestConsumer(boolean cr) {
 		this.crash = cr;

@@ -12,22 +12,42 @@ import java.util.*;
 
 /**
  * IMplement a dummy UI.
- *
- * This class implements the IApplet interface that is used
- * to have a UI. If no UI exists, this dummy can be instantiated
- * and used instead. This saves a lot of null checks.
+ * 
+ * This class implements the IApplet interface that is used to have a UI. If no
+ * UI exists, this dummy can be instantiated and used instead. This saves a lot
+ * of null checks.
  */
-
 class Dummy implements IApplet {
-	public void setMessage(String s) {}
-	public void setError(String s) {}
-	public void setProgress(int prec) {}
-	public void setResult(TestCase id, int n) {}
-	public void setTargetProperties(Dictionary d) {}
-	public void finished() {}
-	public void bundlesChanged() {}
-	public void targetsChanged() {}
-	public void casesChanged() {}
-	public void alive(String msg) {}
-	public void step(String msg) {}
+	public void setMessage(String s) {
+	}
+
+	public void setError(String s) {
+	}
+
+	public void setProgress(int prec) {
+	}
+
+	public void setResult(TestCase id, int n) {
+	}
+
+	public void setTargetProperties(Dictionary d) {
+	}
+
+	public void finished() {
+	}
+
+	public void bundlesChanged() {
+	}
+
+	public void targetsChanged() {
+	}
+
+	public void casesChanged() {
+	}
+
+	public void alive(String msg) {
+	}
+
+	public void step(String msg) {
+	}
 }

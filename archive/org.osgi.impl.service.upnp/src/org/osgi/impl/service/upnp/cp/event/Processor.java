@@ -1,8 +1,7 @@
 package org.osgi.impl.service.upnp.cp.event;
 
-import java.net.*;
 import java.io.*;
-import java.util.*;
+import java.net.Socket;
 
 public final class Processor implements Runnable {
 	private GenaServer genaServer; 

@@ -1,22 +1,20 @@
 package org.osgi.test.cases.wireadmin.tbc;
 
 import java.util.Dictionary;
-
 import org.osgi.service.wireadmin.Wire;
 import org.osgi.service.wireadmin.WireAdminEvent;
 import org.osgi.service.wireadmin.WireAdminListener;
 
 /**
- * Used to test the correct event dispatchment within the wire admin
- * as required in the rfc
+ * Used to test the correct event dispatchment within the wire admin as required
+ * in the rfc
  * 
  * @author Vasil Panushev
  */
 public class TestWireAdminListener implements WireAdminListener {
-
-	private WireAdminControl control = null;
-	private boolean dummy = false;
-	protected boolean called = false;
+	private WireAdminControl	control	= null;
+	private boolean				dummy	= false;
+	protected boolean			called	= false;
 
 	public TestWireAdminListener(WireAdminControl control, boolean dummy) {
 		this.control = control;
@@ -24,7 +22,7 @@ public class TestWireAdminListener implements WireAdminListener {
 	}
 
 	/**
-	 * Called whenever event is dispatched in the wire admin 
+	 * Called whenever event is dispatched in the wire admin
 	 * 
 	 * @param event describes the fired event
 	 */
@@ -35,25 +33,32 @@ public class TestWireAdminListener implements WireAdminListener {
 		}
 		Wire wire = event.getWire();
 		Dictionary dict = null;
-
-		control.log("wire listener", "received event " + getEventName(event.getType()));
+		control.log("wire listener", "received event "
+				+ getEventName(event.getType()));
 		if (wire != null) {
 			dict = event.getWire().getProperties();
 			String prop = (String) dict.get("org.osgi.test.wireadmin.property");
-			control.log("wire listener", "wire is " + ("42".equals(prop) ? "OK" : "other than expected"));
-		} else {
-			control.log("wire listener", "event.getWire() returned null. No specific wire was responsible for the event");
+			control.log("wire listener", "wire is "
+					+ ("42".equals(prop) ? "OK" : "other than expected"));
 		}
-
+		else {
+			control
+					.log("wire listener",
+							"event.getWire() returned null. No specific wire was responsible for the event");
+		}
 		if ((event.getType() & (WireAdminEvent.CONSUMER_EXCEPTION + WireAdminEvent.PRODUCER_EXCEPTION)) != 0) {
 			Throwable t = event.getThrowable();
 			if (t == null) {
 				control.log("wire listener", "Throwable not passed! Error");
-			} else {
+			}
+			else {
 				if ("testing".equals(t.getMessage()))
-					control.log("wire listener", "correct Throwable passed! OK");
+					control
+							.log("wire listener",
+									"correct Throwable passed! OK");
 				else
-					control.log("wire listener", "wrong Throwable passed! Error");
+					control.log("wire listener",
+							"wrong Throwable passed! Error");
 			}
 		}
 		synchronized (WireAdminControl.synch) {

@@ -4,17 +4,12 @@
  * This source code is owned by Ericsson Telecom AB, and is being distributed to OSGi
  * MEMBERS as MEMBER LICENSED MATERIALS under the terms of section 3.2 of the OSGi MEMBER AGREEMENT.
  */
-
 package org.osgi.test.cases.packageadmin.tc1.tb2;
 
-
 /**
-   Bundle for exporting packages
-
-   @author Ericsson Telecom AB
-*/
-public class TestService2Impl implements TestService2
-{
-    
+ * Bundle for exporting packages
+ * 
+ * @author Ericsson Telecom AB
+ */
+public class TestService2Impl implements TestService2 {
 }
-

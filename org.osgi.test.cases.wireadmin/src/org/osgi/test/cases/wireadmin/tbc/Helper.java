@@ -1,4 +1,5 @@
 package org.osgi.test.cases.wireadmin.tbc;
+
 import java.util.Enumeration;
 import java.util.Hashtable;
 import org.osgi.framework.BundleContext;
@@ -10,24 +11,25 @@ import org.osgi.service.wireadmin.*;
  * Contains some helper methods for registering/unregistering producers
  * 
  * $Log$
- * Revision 1.1  2004/07/07 13:15:26  pkriens
- * *** empty log message ***
- *
- * Revision 1.2  2003/11/14 07:18:29  vpanushev
- * resolved issues 243 and 246
- *
+ * Revision 1.2  2004/11/03 10:55:32  pkriens
+ * Format and clean up of warnings
+ * Revision 1.1 2004/07/07 13:15:26 pkriens *** empty log
+ * message ***
+ * 
+ * Revision 1.2 2003/11/14 07:18:29 vpanushev resolved issues 243 and 246
+ * 
  * 
  * @author Neviana Ducheva
  */
 public class Helper {
-	BundleContext context;
-	private Hashtable consumers = null;
-	private Hashtable producers = null;
-	private ServiceRegistration regConsumer = null;
-	private ServiceRegistration regProducer = null;
-	private ServiceRegistration regConsumerEvents = null;
-	private ServiceRegistration regProducerEvents = null;
-	WireAdminControl wac;
+	BundleContext				context;
+	private Hashtable			consumers			= null;
+	private Hashtable			producers			= null;
+	private ServiceRegistration	regConsumer			= null;
+	private ServiceRegistration	regProducer			= null;
+	private ServiceRegistration	regConsumerEvents	= null;
+	private ServiceRegistration	regProducerEvents	= null;
+	WireAdminControl			wac;
 
 	public Helper(BundleContext context, WireAdminControl wac) {
 		this.context = context;
@@ -38,17 +40,25 @@ public class Helper {
 
 	public void registerConsumer(String consumerPID, Object[] flavors) {
 		Hashtable p = new Hashtable();
-		p.put(org.osgi.service.wireadmin.WireConstants.WIREADMIN_CONSUMER_FLAVORS, flavors);
+		p
+				.put(
+						org.osgi.service.wireadmin.WireConstants.WIREADMIN_CONSUMER_FLAVORS,
+						flavors);
 		p.put(org.osgi.framework.Constants.SERVICE_PID, consumerPID);
-		regConsumer = context.registerService(Consumer.class.getName(), new ConsumerImpl(wac, consumerPID), p);
+		regConsumer = context.registerService(Consumer.class.getName(),
+				new ConsumerImpl(wac, consumerPID), p);
 		consumers.put(consumerPID, regConsumer);
 	}
 
 	public void registerProducer(String producerPID, Class[] flavors) {
 		Hashtable p = new Hashtable();
-		p.put(org.osgi.service.wireadmin.WireConstants.WIREADMIN_PRODUCER_FLAVORS, flavors);
+		p
+				.put(
+						org.osgi.service.wireadmin.WireConstants.WIREADMIN_PRODUCER_FLAVORS,
+						flavors);
 		p.put(org.osgi.framework.Constants.SERVICE_PID, producerPID);
-		regProducer = context.registerService(Producer.class.getName(), new ProducerImpl(wac, producerPID), p);
+		regProducer = context.registerService(Producer.class.getName(),
+				new ProducerImpl(wac, producerPID), p);
 		producers.put(producerPID, regProducer);
 	}
 
@@ -60,7 +70,8 @@ public class Helper {
 				regConsumer = null;
 				consumers.remove(consumerPID);
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -73,7 +84,8 @@ public class Helper {
 				regProducer = null;
 				producers.remove(producerPID);
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -95,7 +107,8 @@ public class Helper {
 			for (int counter = 0; counter < wires.length; counter++) {
 				wa.deleteWire(wires[counter]);
 			}
-		} catch (InvalidSyntaxException e) { /*no way*/
+		}
+		catch (InvalidSyntaxException e) { /* no way */
 		}
 	}
 
@@ -109,16 +122,26 @@ public class Helper {
 
 	protected void registerEventConsumer(boolean crash) {
 		Hashtable h = new Hashtable();
-		h.put(org.osgi.service.wireadmin.WireConstants.WIREADMIN_CONSUMER_FLAVORS, new Class[] { String.class });
-		h.put(org.osgi.framework.Constants.SERVICE_PID, "consumer.event.test.pid");
-		regConsumerEvents = context.registerService(Consumer.class.getName(), new EventTestConsumer(crash), h);
+		h
+				.put(
+						org.osgi.service.wireadmin.WireConstants.WIREADMIN_CONSUMER_FLAVORS,
+						new Class[] {String.class});
+		h.put(org.osgi.framework.Constants.SERVICE_PID,
+				"consumer.event.test.pid");
+		regConsumerEvents = context.registerService(Consumer.class.getName(),
+				new EventTestConsumer(crash), h);
 	}
 
 	protected void registerEventProducer(boolean crash) {
 		Hashtable h = new Hashtable();
-		h.put(org.osgi.service.wireadmin.WireConstants.WIREADMIN_CONSUMER_FLAVORS, new Class[] { String.class });
-		h.put(org.osgi.framework.Constants.SERVICE_PID, "producer.event.test.pid");
-		regProducerEvents = context.registerService(Producer.class.getName(), new EventTestProducer(crash), h);
+		h
+				.put(
+						org.osgi.service.wireadmin.WireConstants.WIREADMIN_CONSUMER_FLAVORS,
+						new Class[] {String.class});
+		h.put(org.osgi.framework.Constants.SERVICE_PID,
+				"producer.event.test.pid");
+		regProducerEvents = context.registerService(Producer.class.getName(),
+				new EventTestProducer(crash), h);
 	}
 
 	protected void unregisterEventConsumer() {

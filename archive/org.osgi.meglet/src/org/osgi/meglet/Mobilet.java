@@ -2,18 +2,15 @@ package org.osgi.meglet;
 
 import java.util.Dictionary;
 import java.util.Map;
-
 import org.osgi.service.application.Application;
 import org.osgi.service.component.ComponentContext;
 
 /**
  * A MEG Application. a.k.a Meglet
  */
-
 public class Mobilet implements Application {
-
-	ComponentContext context;
-	Map args;
+	ComponentContext	context;
+	Map					args;
 
 	void activate(ComponentContext context) {
 		this.context = context;
@@ -31,7 +28,8 @@ public class Mobilet implements Application {
 	public void stopApplication() throws Exception {
 		try {
 			stop();
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 		}
 		args = null;
 		context = null;
@@ -52,17 +50,21 @@ public class Mobilet implements Application {
 	protected Object locateService(String name) {
 		return context.locateService(name);
 	}
+
 	protected Object[] locateServices(String name) {
 		return context.locateServices(name);
 	}
 
 	protected void suspend() throws Exception {
 	}
-	protected void resume()  throws Exception {
+
+	protected void resume() throws Exception {
 	}
-	protected void start()  throws Exception {
+
+	protected void start() throws Exception {
 	}
-	protected void stop()  throws Exception {
+
+	protected void stop() throws Exception {
 	}
 
 	protected void requestStop() {

@@ -4,7 +4,6 @@
  */
 package org.osgi.test.script;
 
-
 /**
  * Provides the context of a script. A context can provide variables, input
  * parameters and a user for running a script.
@@ -21,6 +20,7 @@ class Context implements ScriptContext {
 	public String getUser() {
 		return null;
 	}
+
 	public Object getVariable(String var) {
 		return script.variables.get(var);
 	}
@@ -36,6 +36,4 @@ class Context implements ScriptContext {
 	public Tag getInput() {
 		return input;
 	}
-
 }
-
