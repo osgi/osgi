@@ -19,7 +19,7 @@
  */</template><template context="newtype_context" deleted="false" description="Newly created files" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.newtype" name="newtype">/*
  * $$Header$$
  * 
- * Copyright (c) The OSGi Alliance (${year}). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (${year}). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
