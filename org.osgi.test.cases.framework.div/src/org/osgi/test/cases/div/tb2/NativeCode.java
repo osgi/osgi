@@ -20,7 +20,7 @@ public class NativeCode implements BundleActivator {
 	 */
 	static {
 		try {
-			System.loadLibrary("native");
+			System.loadLibrary("Native");
 			initOk = true;
 		}
 		catch (UnsatisfiedLinkError ule) {
