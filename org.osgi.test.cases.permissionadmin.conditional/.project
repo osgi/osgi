@@ -3,6 +3,7 @@
 	<name>org.osgi.test.cases.permissionadmin.conditional</name>
 	<comment></comment>
 	<projects>
+		<project>org.osgi.framework</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
