@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-Name: SCR
+Bundle-SymbolicName: scr
+Bundle-Activator: scr.Activator
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+${PRIVATE-PACKAGE}
+
+
