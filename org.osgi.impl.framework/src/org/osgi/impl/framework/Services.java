@@ -91,36 +91,26 @@ public class Services {
 				}
 				/* Change 2004 Nov. 4 because previous check was not taking
 				 * into account superclasses */
-//				Class c;
-//				try {
-//					c = Class.forName(classes[i], true, cl);
-//				}
-//				catch (ClassNotFoundException e) {
-//					throw new IllegalArgumentException("Class does not exist: "
-//							+ classes[i]);
-//				}
-//				if (!(service instanceof ServiceFactory)
-//						&& !c.isInstance(service)) {
-//					throw new IllegalArgumentException("Object " + service
-//							+ " is not an instance of " + classes[i]);
-//				}
-				requiredInterfaces.add(classes[i]);
-				
-			}
-			
-			if (!(service instanceof ServiceFactory)) {
-				Class target = service.getClass();
-				while ( target != null ) {
-					Class interfaces[] = target.getInterfaces();
-					for ( int i=0; i<interfaces.length; i++ )
-						requiredInterfaces.remove(interfaces[i].getName());
-					target = target.getSuperclass();
+				Class c;
+				try {
+					c = Class.forName(classes[i], true, bundle.getClassLoader());
 				}
-				if ( !requiredInterfaces.isEmpty())
-				throw new IllegalArgumentException("Object " + service
-						+ " is not an instance of " + requiredInterfaces );
+				catch (ClassNotFoundException e) {
+					try {
+						PkgEntry pe = getPackageEntry(classes[i]);
+						c = Class.forName(classes[i], true, pe.bundle.getClassLoader());
+					} catch( ClassNotFoundException ee ) {
+						throw new IllegalArgumentException("Class does not exist in bundle nor in exported space: "
+							+ classes[i]);
+					}
+				}
+				/* End change */
+				if (!(service instanceof ServiceFactory)
+						&& !c.isInstance(service)) {
+					throw new IllegalArgumentException("Object " + service
+							+ " is not an instance of " + classes[i]);
+				}
 			}
-			/* End change */
 			
 			res = new ServiceRegistrationImpl(bundle, service,
 					new PropertiesDictionary(properties, classes, null));
@@ -139,6 +129,21 @@ public class Services {
 		return res;
 	}
 
+		/**
+		 * Utility method to get the PkgEntry from the class name
+		 * 
+		 * @param name
+		 * @return
+		 */
+	PkgEntry getPackageEntry(String name ) {
+		int pos = name.lastIndexOf('.');
+		if (pos != -1) {
+			String pkg = name.substring(0, pos);
+			return Main.framework.packages.getProvider(pkg);
+		}
+		return null;
+	}
+	
 	/**
 	 * Get a service implementing a certain class.
 	 * 
