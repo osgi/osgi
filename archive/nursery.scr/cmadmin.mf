@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-Name: CMAdmin
+Bundle-Activator: scr.ComponentRuntime
+Component: cmadmin.CMCommand;mandatory=log;mandatory=cm;
+ service=org.osgi.tools.command.CommandProvider;
+ passive=true
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+${PRIVATE-PACKAGE}
+
+
