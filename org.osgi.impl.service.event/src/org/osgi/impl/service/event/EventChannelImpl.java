@@ -136,13 +136,15 @@ public class EventChannelImpl implements EventChannel, FrameworkListener, Bundle
   public void frameworkEvent(FrameworkEvent event)
   {
     Hashtable props = new Hashtable();
-    
-    props.put( "bundle.id",           new Long( event.getBundle().getBundleId() ) );
-    props.put( "bundle.location",     event.getBundle().getLocation() );    
+    Bundle bundle = event.getBundle();
+    if ( bundle != null ) {
+	    props.put( "bundle.id",           new Long( bundle.getBundleId() ) );
+	    props.put( "bundle.location",     bundle.getLocation() );    
+	    props.put( "bundle.object",       bundle );
+    }
 //  --------------   OSGI R4, OSGI R4, OSGI R4, OSGI R4, OSGI R4, OSGI R4 --------------------------
 //  props.put( "bundle.symbolicName", );
 //  --------------   OSGI R4, OSGI R4, OSGI R4, OSGI R4, OSGI R4, OSGI R4 --------------------------
-    props.put( "bundle.object",       event.getBundle() );
     
     if( event.getThrowable() != null )
     {
