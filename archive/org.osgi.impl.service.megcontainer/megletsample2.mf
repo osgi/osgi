@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-Name: Meglet2
+Bundle-Vendor: Nokia
+Bundle-Version: 1.0
+Bundle-ClassPath: .
+Import-Package: org.osgi.service.application, org.osgi.service.event, org.osgi.service.log
+Export-Package: com.nokia.osgi.megtest.megapplication2
