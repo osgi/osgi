@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -294,6 +295,83 @@ public class BundleTest extends TestCase {
 	}
 
 	public void testNothing() throws Exception {}
+
+	private OCD createOCD1() throws Exception {
+		OCD ocd = of.createOCD();
+		ocd.setId("ocd1");
+		ocd.setName("ocdName1");
+		
+		AD ad;
+		
+		ad = of.createAD();
+		ad.setId("ad_string1");
+		ad.setCardinality(0);
+		ad.setType("String");
+		ocd.getAD().add(ad);
+
+		ad = of.createAD();
+		ad.setId("ad_string1");
+		ad.setCardinality(0);
+		ad.setType("String");
+		ocd.getAD().add(ad);
+
+		ad = of.createAD();
+		ad.setId("ad_stringArray");
+		ad.setCardinality(4);
+		ad.setType("String");
+		ocd.getAD().add(ad);
+		
+		ad = of.createAD();
+		ad.setId("ad_stringVector");
+		ad.setCardinality(-4);
+		ad.setType("String");
+		ocd.getAD().add(ad);
+		
+		ad = of.createAD();
+		ad.setId("ad_intArray");
+		ad.setCardinality(4);
+		ad.setType("Integer");
+		ocd.getAD().add(ad);
+
+		ad = of.createAD();
+		ad.setId("ad_intVector");
+		ad.setCardinality(-4);
+		ad.setType("Integer");
+		ocd.getAD().add(ad);
+
+		ad = of.createAD();
+		ad.setId("ad_intVector_unlimited");
+		ad.setCardinality(Integer.MIN_VALUE);
+		ad.setType("Integer");
+		ocd.getAD().add(ad);
+
+		ad = of.createAD();
+		ad.setId("ad_int1");
+		ad.setCardinality(0);
+		ad.setType("Integer");
+		ocd.getAD().add(ad);
+
+		ad = of.createAD();
+		ad.setId("ad_int2");
+		ad.setCardinality(0);
+		ad.setType("Integer");
+		ocd.getAD().add(ad);
+
+		return ocd;
+	}
+
+	public void assertArrayEquals(java.lang.Object o1,java.lang.Object o2) {
+		Class c1 = o1.getClass();
+		Class c2 = o2.getClass();
+		assertEquals(c2,c1);
+		assertTrue(c1.isArray());
+		if (int[].class.equals(c1)) {
+			assertTrue(Arrays.equals((int[])o1,(int[])o2));
+		} else {
+			assertTrue(Arrays.equals((java.lang.Object[])o1,(java.lang.Object[])o2));
+		}
+		
+	}
 	
 	public void testBasic() throws Exception {
 		DummyDeploymentPackage dp = new DummyDeploymentPackage();
@@ -301,6 +379,8 @@ public class BundleTest extends TestCase {
 		resourceProcessor.begin(dp,ResourceProcessor.INSTALL);
 
 		MetaData md = of.createMetaData();
+		md.getOCD().add(createOCD1());
+
 		Designate d = of.createDesignate();
 		md.getDesignate().add(d);
 		d.setFactory(false);
@@ -309,29 +389,56 @@ public class BundleTest extends TestCase {
 		Object o = of.createObject();
 		d.setObject(o);
 		o.setOcdref("ocd1");
+
 		Attribute attr = of.createAttribute();
-		attr.setAdref("ad1");
+		attr.setAdref("ad_string1");
 		attr.setContent("data");
 		o.getAttribute().add(attr);
 		
-		OCD ocd = of.createOCD();
-		ocd.setId("ocd1");
-		ocd.setName("ocdName1");
+		attr = of.createAttribute();
+		attr.setAdref("ad_int1");
+		attr.setContent("2");
+		o.getAttribute().add(attr);
 		
-		AD ad = of.createAD();
-		ad.setId("ad1");
-		ad.setCardinality(0);
-		ad.setType("String");
+		attr = of.createAttribute();
+		attr.setAdref("ad_intArray");
+		attr.setContent("1");
+		o.getAttribute().add(attr);
 		
-		ocd.getAD().add(ad);
+		attr = of.createAttribute();
+		attr.setAdref("ad_intArray");
+		attr.setContent("2");
+		o.getAttribute().add(attr);
+		
+		attr = of.createAttribute();
+		attr.setAdref("ad_intVector");
+		attr.setContent("1");
+		o.getAttribute().add(attr);
 
-		md.getOCD().add(ocd);
+		attr = of.createAttribute();
+		attr.setAdref("ad_intVector");
+		attr.setContent("2");
+		o.getAttribute().add(attr);
 		
+		attr = of.createAttribute();
+		attr.setAdref("ad_stringArray");
+		attr.setContent("foo");
+		o.getAttribute().add(attr);
+
+		attr = of.createAttribute();
+		attr.setAdref("ad_stringArray");
+		attr.setContent("bar");
+		o.getAttribute().add(attr);
+
+		//jaxbContext.createMarshaller().marshal(md,System.out);
 		resourceProcessor.process("foo/autoconf.xml",getStream(md));
 
 		resourceProcessor.complete(true);
 		
 		DummyConfiguration conf = (DummyConfiguration) configurationAdmin.configurations.get("pid1");
-		assertEquals("data",conf.properties.get("ad1"));
+		assertEquals("data",conf.properties.get("ad_string1"));
+		assertEquals(new Integer(2),conf.properties.get("ad_int1"));
+		assertArrayEquals(new int[] { 1,2 }, conf.properties.get("ad_intArray"));
+		assertArrayEquals(new String[] { "foo", "bar" }, conf.properties.get("ad_stringArray"));
 	}
 }
