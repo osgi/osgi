@@ -87,7 +87,7 @@ public class DefaultTestCase implements TestCase, HttpContext, BundleActivator {
 	 * framework. This bundle will perform the various tests and log the
 	 * results.
 	 * 
-	 * @see org.osgi.test.cases.classpath.tbc.TestBundleControl
+	 * @see org.osgi.test.cases.framework.classpath.tbc.TestBundleControl
 	 */
 	public int test(TestRun run) {
 		System.out.println("Running test case " + getName());
