@@ -42,7 +42,7 @@ package org.osgi.framework;
  * <p>
  * Unlike normal <code>BundleListener</code> objects,
  * <code>SynchronousBundleListener</code> s are synchronously called during bundle
- * life cycle processing. The bundle life cycle processing will not proceed
+ * lifecycle processing. The bundle lifecycle processing will not proceed
  * until all <code>SynchronousBundleListener</code> s have completed.
  * <code>SynchronousBundleListener</code> objects will be called prior to
  * <code>BundleListener</code> objects.
