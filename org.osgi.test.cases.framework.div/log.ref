@@ -46,3 +46,5 @@ Install: BundleException thrown when EE requirements not fulfilled. OK
 Install: No BundleException thrown when EE requirements fulfilled. OK
 Update: BundleException thrown when EE requirements not fulfilled. OK
 Update: No BundleException thrown when EE requirements fulfilled. OK
+.
+Testing Native code selection filter: Started Ok.

@@ -33,7 +33,8 @@ public class Activator extends Thread implements FrameworkListener,
 			"testBundleClassPath", "testNativeCode", "testFrameworkListener",
 			"testFileAccess",
 			/* "testDoubleManifestTags", removed since spec changed */
-			"testBundleZero", "testEERequirement"};
+			"testBundleZero", "testEERequirement",
+			"testNativeCodeFilter"};
 
 	/**
 	 * start. Gets a reference to the TestCaseLink to communicate with the
@@ -233,6 +234,36 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 		catch (BundleException be) {
 			log("Native code not installed ", "" + be);
+			reportProcessorOS();
+		}
+		catch (UnsatisfiedLinkError ule) {
+			log("Testing native code:", "" + ule);
+			reportProcessorOS();
+		}
+	}
+
+	/**
+	 * Tests native code selection filter. The bundle should be loaded even if
+	 * no native code clause matches the selection filter.
+	 */
+	void testNativeCodeFilter() throws Exception {
+		Bundle tb;
+		String res;
+		try {
+			tb = _context.installBundle(_tcHome + "tb12.jar");
+			try {
+				tb.start();
+				log(".", "");
+				log("Testing Native code selection filter:", "Started Ok.");
+			}
+			catch (BundleException be) {
+				log("Error: Selection filter should not match any native code clause ", ""+be);
+				reportProcessorOS();
+			}
+			tb.uninstall();
+		}
+		catch (BundleException be) {
+			log("Bundle not installed:", "" + be);
 			reportProcessorOS();
 		}
 		catch (UnsatisfiedLinkError ule) {
