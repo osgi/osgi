@@ -34,20 +34,20 @@ import java.util.Dictionary;
 /**
  * When a component is declared with the <tt>factory=&quot;true&quot;</tt>
  * attribute on it's <tt>component</tt> element, the Service Component Runtime
- * will register a ComponentFactory service to allow instances of the component 
- * to be created rather than automatically create component instances as 
- * necessary.  
+ * will register a ComponentFactory service to allow instances of the component
+ * to be created rather than automatically create component instances as
+ * necessary.
  * 
  * @version $Revision$
  */
 public interface ComponentFactory {
 	/**
-	 * Create a new instance of the component. Additional properties
-	 * may be provided for the component instance.
+	 * Create a new instance of the component. Additional properties may be
+	 * provided for the component instance.
+	 * 
 	 * @param properties Additional properties for the component.
-	 * @return A ComponentInstance object encapsulating 
-	 * the component instance. The returned component instance has been
-	 * activated.
+	 * @return A ComponentInstance object encapsulating the component instance.
+	 *         The returned component instance has been activated.
 	 */
 	public ComponentInstance newInstance(Dictionary properties);
 }

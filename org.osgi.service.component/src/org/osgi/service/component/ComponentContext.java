@@ -35,55 +35,61 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 /**
- * A ComponentContext interface is used by a Service Component to interact 
- * with it execution context including locating services by reference name. 
- * In order to be notified when a component is activated and to obtain a 
+ * A ComponentContext interface is used by a Service Component to interact with
+ * it execution context including locating services by reference name. In order
+ * to be notified when a component is activated and to obtain a
  * ComponentContext, the component’s implementation class must implement a
- * <pre>void activate(ComponentContext context);</pre>
- * method. However, the component is not required to implement this method. 
- * <p>
- * In order to be called when the component is deactivated, a component's 
- * implementation class must implement a
- * <pre>void deactivate(ComponentContext context);</pre>
+ * 
+ * <pre>
+ * void activate(ComponentContext context);
+ * </pre>
+ * 
  * method. However, the component is not required to implement this method.
  * <p>
- * These methods will be called by the Service Component Runtime 
- * using reflection and may be private 
- * methods to avoid being public methods on the component’s provided service 
- * object.
+ * In order to be called when the component is deactivated, a component's
+ * implementation class must implement a
+ * 
+ * <pre>
+ * void deactivate(ComponentContext context);
+ * </pre>
+ * 
+ * method. However, the component is not required to implement this method.
+ * <p>
+ * These methods will be called by the Service Component Runtime using
+ * reflection and may be private methods to avoid being public methods on the
+ * component’s provided service object.
  * 
  * @version $Revision$
  */
 
 public interface ComponentContext {
 	/**
-	 * Returns the component properties for  
-	 * this ComponentContext. 
+	 * Returns the component properties for this ComponentContext.
 	 * 
-	 * @return properties for this ComponentContext. The properties are read only 
-	 * and cannot be modified.
+	 * @return properties for this ComponentContext. The properties are read
+	 *         only and cannot be modified.
 	 */
 	public Dictionary getProperties();
 
 	/**
 	 * Returns the service object for the specified service reference name.
 	 * 
-	 * @param name The name of a service reference as specified in 
-	 * a <tt>reference</tt> element in this component's description.
-	 * @return A service object for the referenced service or <tt>null</tt> 
-	 * if the reference cardinality is <tt>0..1</tt> or <tt>0..n</tt> and 
-	 * no matching service is available. 
+	 * @param name The name of a service reference as specified in a
+	 *        <tt>reference</tt> element in this component's description.
+	 * @return A service object for the referenced service or <tt>null</tt> if
+	 *         the reference cardinality is <tt>0..1</tt> or <tt>0..n</tt>
+	 *         and no matching service is available.
 	 */
 	public Object locateService(String name);
 
 	/**
 	 * Returns the service objects for the specified service reference name.
 	 * 
-	 * @param name The name of a service reference as specified in 
-	 * a <tt>reference</tt> element in this component's description.
-	 * @return An array of service objects for the referenced service or <tt>null</tt> 
-	 * if the reference cardinality is <tt>0..1</tt> or <tt>0..n</tt> and 
-	 * no matching service is available. 
+	 * @param name The name of a service reference as specified in a
+	 *        <tt>reference</tt> element in this component's description.
+	 * @return An array of service objects for the referenced service or
+	 *         <tt>null</tt> if the reference cardinality is <tt>0..1</tt>
+	 *         or <tt>0..n</tt> and no matching service is available.
 	 */
 	public Object[] locateServices(String name);
 
@@ -96,35 +102,33 @@ public interface ComponentContext {
 
 	/**
 	 * If the component is registered as a service using the
-	 * <tt>factory=&quot;true&quot;</tt> attribute, 
-	 * then this method returns the bundle using the service provided 
-	 * by this component.
+	 * <tt>factory=&quot;true&quot;</tt> attribute, then this method returns
+	 * the bundle using the service provided by this component.
 	 * <p>
-	 * This method will return <tt>null</tt> if the component is either: 
+	 * This method will return <tt>null</tt> if the component is either:
 	 * <ul>
-	 * <li>Not a service, then no bundle can be using 
-	 * it as a service. 
-	 * <li>Is a service but did not specify
-	 * the <tt>factory=&quot;true&quot;</tt> attribute, then all bundles will 
-	 * use this component.
-	 * </ul> 
+	 * <li>Not a service, then no bundle can be using it as a service.
+	 * <li>Is a service but did not specify the
+	 * <tt>factory=&quot;true&quot;</tt> attribute, then all bundles will use
+	 * this component.
+	 * </ul>
 	 * 
 	 * @return The bundle using this component as a service or <tt>null</tt>.
 	 */
 	public Bundle getUsingBundle();
 
 	/**
-	 * Enables the specified component name. 
-	 * The specified component name must be in the same bundle as this component. 
+	 * Enables the specified component name. The specified component name must
+	 * be in the same bundle as this component.
 	 * 
-	 * @param name of a component or <tt>null</tt> to indicate all
-	 * components in the bundle.
+	 * @param name of a component or <tt>null</tt> to indicate all components
+	 *        in the bundle.
 	 */
 	public void enableComponent(String name);
 
 	/**
-	 * Disables the specified component name.
-	 * The specified component name must be in the same bundle as this component. 
+	 * Disables the specified component name. The specified component name must
+	 * be in the same bundle as this component.
 	 * 
 	 * @param name of a component.
 	 */
@@ -132,7 +136,7 @@ public interface ComponentContext {
 
 	/**
 	 * Returns the ComponentInstance object for this component.
-	 *  
+	 * 
 	 * @return The ComponentInstance object for this component.
 	 */
 	public ComponentInstance getComponentInstance();
