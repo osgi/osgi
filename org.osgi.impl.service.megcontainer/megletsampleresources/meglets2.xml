@@ -22,7 +22,7 @@
     <subscribe event="com/nokia/megtest/SubscribeEvent" action="handle"/>
     <subscribe event="com/nokia/megtest/RequestStop" action="handle"/>
     <subscribe event="com/nokia/megtest/RequestSuspend" action="handle"/>
-    <required_services value="org.osgi.service.application.Scheduler, org.osgi.service.event.EventAdmin"/>
+    <required_services value="org.osgi.service.event.EventAdmin"/>
     <required_logical_resource value="org.osgi.service.application"/>
     <required_logical_resource value="org.osgi.service.event"/>
     <scr:component name="TestApplication2 component" 
