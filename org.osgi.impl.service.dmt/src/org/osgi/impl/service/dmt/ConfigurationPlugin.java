@@ -173,6 +173,10 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 	}
 
 	//----- Dmt methods -----//
+    public void commit() throws DmtException {
+        Service.commit(true);
+    }
+    
 	public void rollback() throws DmtException {
 		Service.reset();
 	}
@@ -463,7 +467,7 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 
 	//----- DmtReadOnly methods -----//
 	public void close() throws DmtException {
-		Service.commit(false);
+		Service.close();
 	}
 
 	public boolean isNodeUri(String nodeUri) {
@@ -704,14 +708,34 @@ class Service {
 		lockMode = lm;
 	}
 
+    static void close() throws DmtException {
+        // TODO is it OK to forget all partially set properties when the session is closed?
+        try {
+            commit(false);
+        } finally {
+            lockMode = DmtSession.LOCK_TYPE_SHARED;
+            reset();
+        }
+    }
+
+    /*
+     * Commit pending changes to the Configuration Admin. Intermediate commit
+     * leaves partially set properties in place (this is used in EXCLUSIVE
+     * sessions and at intermediate commits of ATOMIC sessions), while a
+     * non-intermediate commit (called when a session is closed) throws away all
+     * incomplete information.
+     */
 	static void commit(boolean intermediate) throws DmtException {
 		System.out.println("Commit (intermediate=" + intermediate
 				+ ", lockMode=" + lockMode + ")");
 		String root = ConfigurationPluginActivator.PLUGIN_ROOT + '/';
 		String pid;
+        // TODO handle case when deletedPids or services is not empty because of an error
+        // (currently the 'close' following the 'commit' error will try to continue committing)
 		Iterator i = deletedPids.iterator();
 		while (i.hasNext()) {
 			pid = (String) i.next();
+            i.remove();
 			Configuration config = getConfig(pid, root + pid);
 			if (config == null)
 				throw new DmtException(
@@ -728,7 +752,6 @@ class Service {
 						"Error deleting configuration.", e);
 			}
 		}
-		deletedPids = new Vector();
 		i = services.values().iterator();
 		while (i.hasNext()) {
 			Service service = (Service) i.next();
@@ -744,13 +767,10 @@ class Service {
 						properties, true);
 				if (!properties.equals(conf.getProperties()))
 					conf.update(properties);
-				if (incompleteProperties.size() != 0) {
-					if (intermediate)
-						service.resetService(incompleteProperties);
-					else
-                        // TODO is it OK to forget all partially set properties when the session is closed?
-						i.remove(); 
-				}
+				if (incompleteProperties.size() != 0)
+				    service.resetService(incompleteProperties);
+                else
+                    i.remove();
 			}
 			catch (IOException e) {
 				throw new DmtException(root + pid,
@@ -758,19 +778,14 @@ class Service {
 						"Error updating configuration.", e);
 			}
 		}
-		if (!intermediate) {
-			lockMode = DmtSession.LOCK_TYPE_SHARED;
-			services = new Hashtable();
-		}
 	}
 
-	static void reset() {
-		// forget everything
-		lockMode = DmtSession.LOCK_TYPE_SHARED;
-		services = new Hashtable();
-		deletedPids = new Vector();
-	}
-
+    static void reset() {
+        // forget everything
+        services = new Hashtable();
+        deletedPids = new Vector();        
+    }
+    
 	static void commitIfNeeded() throws DmtException {
 		System.out.println("Optional commit (lockMode=" + lockMode + ")");
 		switch (lockMode) {
