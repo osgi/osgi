@@ -2,7 +2,7 @@
   <application>
     <class value = "${p}.app.events.TestApplication"/>
     <locale name = "en">
-      <name value = "MEG Test Application" />
+      <name value = "app.events" />
       <icon value = "TestIcon.gif" />
     </locale>
     <locale name = "hu">
