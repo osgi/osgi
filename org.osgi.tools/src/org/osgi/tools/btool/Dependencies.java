@@ -3,32 +3,31 @@ package org.osgi.tools.btool;
 import java.io.*;
 import java.util.*;
 import java.util.jar.*;
-import java.util.regex.*;
 
 public class Dependencies {
-	BTool			btool;
-	Set				referred	= new HashSet();
-	Set				contained	= new HashSet();
-	Map				dot			= new HashMap();
-	List			includeExport;
-	List			excludeImport;
-	Manifest		manifest;
-	Collection		classpath;
-	static byte		SkipTable[]	= {0, //  0 non existent
-								-1, //  1 CONSTANT_utf8 UTF 8, handled in
-								// method
-								-1, //  2
-								4, //  3 CONSTANT_Integer
-								4, //  4 CONSTANT_Float
-								8, //  5 CONSTANT_Long (index +=2!)
-								8, //  6 CONSTANT_Double (index +=2!)
-								-1, //  7 CONSTANT_Class
-								2, //  8 CONSTANT_String
-								4, //  9 CONSTANT_FieldRef
-								4, // 10 CONSTANT_MethodRef
-								4, // 11 CONSTANT_InterfaceMethodRef
-								4 // 12 CONSTANT_NameAndType
-								};
+	BTool		btool;
+	Set			referred	= new HashSet();
+	Set			contained	= new HashSet();
+	Map			dot			= new HashMap();
+	List		includeExport;
+	List		excludeImport;
+	Manifest	manifest;
+	Collection	classpath;
+	static byte	SkipTable[]	= {0, //  0 non existent
+							-1, //  1 CONSTANT_utf8 UTF 8, handled in
+							// method
+							-1, //  2
+							4, //  3 CONSTANT_Integer
+							4, //  4 CONSTANT_Float
+							8, //  5 CONSTANT_Long (index +=2!)
+							8, //  6 CONSTANT_Double (index +=2!)
+							-1, //  7 CONSTANT_Class
+							2, //  8 CONSTANT_String
+							4, //  9 CONSTANT_FieldRef
+							4, // 10 CONSTANT_MethodRef
+							4, // 11 CONSTANT_InterfaceMethodRef
+							4 // 12 CONSTANT_NameAndType
+							};
 
 	public Dependencies(BTool btool, Collection classpath, Manifest manifest,
 			Map resources, List excludeImport, List includeExport) {
@@ -87,8 +86,8 @@ public class Dependencies {
 		// Special case for Bundle Activator, it is also
 		// a reference that might point outside our bundle
 		String act = manifest.getActivator();
-		if (act != null) { 
-			System.out.println("Found " + act + " -> " + act );
+		if (act != null) {
+			System.out.println("Found " + act + " -> " + act);
 			String packageName = base(act.replace('.', '/') + ".class");
 			referred.add(packageName);
 		}
@@ -224,11 +223,13 @@ public class Dependencies {
 	 *       
 	 *        
 	 *         
-	 *                	 [L*               =&gt; remove [L, try again
-	 *                	 [* &amp;&amp; length=2     =&gt; ignore (int,byte,char etc class)
-	 *                	 [*                =&gt; remove [, try again
-	 *                ;                =&gt; remove ;, try again (do not know why)
-	 *                	 A i in skip | &lt;i&gt;* =&gt; ignore
+	 *          
+	 *                 	 [L*               =&gt; remove [L, try again
+	 *                 	 [* &amp;&amp; length=2     =&gt; ignore (int,byte,char etc class)
+	 *                 	 [*                =&gt; remove [, try again
+	 *                 ;                =&gt; remove ;, try again (do not know why)
+	 *                 	 A i in skip | &lt;i&gt;* =&gt; ignore
+	 *           
 	 *          
 	 *         
 	 *        
@@ -321,29 +322,41 @@ public class Dependencies {
 	 * @param name
 	 * @return
 	 */
-	static Pattern	versionMatch	= Pattern
-											.compile("version\\s+((\\w|\\.)+)");
-
 	Package makePackage(String name) throws IOException {
 		if ("META-INF".equals(name))
 			return null;
-		String version = null;
-		String packname = name.replace('/', '.');
-		String info = name + "/packageinfo";
-		Source source = findResource(info);
-		if (source != null) {
-			InputStream in = source.getEntry(info);
-			byte[] buffer = readAll(in, 0);
-			String s = new String(buffer);
-			Matcher m = versionMatch.matcher(s);
-			if (m.find()) {
-				version = m.group(1);
+		try {
+			String version = null;
+			String packname = name.replace('/', '.');
+			String info = name + "/packageinfo";
+			Source source = findResource(info);
+			if (source != null) {
+				InputStream in = source.getEntry(info);
+				byte[] buffer = readAll(in, 0);
+				String s = new String(buffer);
+				Map map = getMap(s);
+				if (map.containsKey("version")) {
+					version = (String) map.get("version");
+				}
 			}
+			//		if ( version == null ){
+			//			version = findVersionInManifest(name, version, source);
+			//		}
+			return new Package(packname, version);
 		}
-		//		if ( version == null ){
-		//			version = findVersionInManifest(name, version, source);
-		//		}
-		return new Package(packname, version);
+		catch (Exception e) {
+			btool.warning("Invalid packagedefinition " + name );
+		}
+		return null;
+	}
+
+	Map getMap(String definition) {
+		Map map = new Hashtable();
+		StringTokenizer st = new StringTokenizer(definition, " ");
+		while (st.hasMoreTokens()) {
+			map.put(st.nextToken(), st.nextToken());
+		}
+		return map;
 	}
 
 	/**

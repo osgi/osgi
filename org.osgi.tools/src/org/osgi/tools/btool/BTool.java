@@ -150,7 +150,7 @@ public class BTool extends Task {
 	 */
 	private void getPermissions() {
 		if (permissions == null)
-			permissions = zipname.replaceFirst("\\.jar$", ".perm");
+			permissions = replaceExt(zipname, ".jar", ".perm");
 		File f = new File(permissions);
 		if (!f.exists())
 			f = new File("permissions.perm");
@@ -159,6 +159,7 @@ public class BTool extends Task {
 			addContents(perms);
 		}
 	}
+
 
 	private void getManifest() throws IOException {
 		// In certain cases we do not want to fallback
@@ -175,8 +176,9 @@ public class BTool extends Task {
 				}
 			}
 		}
-		if (manifestSource == null)
-			manifestSource = zipname.replaceFirst("\\.jar$", ".mf");
+		if (manifestSource == null) {
+			manifestSource = replaceExt(zipname,".jar", ".mf" );
+		}
 		File f = new File(manifestSource);
 		if (!f.exists())
 			f = new File(projectDir, "Manifest.mf");
@@ -195,6 +197,14 @@ public class BTool extends Task {
 		System.out
 				.println("New manifest, activator " + manifest.getActivator());
 		this.showmanifest = showmanifest;
+	}
+
+	private String replaceExt(String name, String extFrom, String extTo) {
+		int n = name.lastIndexOf(extFrom);
+		if ( n < 0 )
+			return null;
+		
+		return name.substring(0,n) + extTo;
 	}
 
 	/**
