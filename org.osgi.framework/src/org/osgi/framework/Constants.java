@@ -822,20 +822,24 @@ public interface Constants {
 	public final static String	RESOLUTION_OPTIONAL						= "optional";
 
 	/**
-	 * Manifest header directive (named &quot;grouping&quot;) identifying the
-	 * package grouping specified in the Import-Package or Export-Package
-	 * manifest header.
+	 * Manifest header directive (named &quot;uses&quot;) identifying a list of
+	 * packages that an exported package uses.
 	 * 
 	 * <p>
-	 * The directive value is encoded in the Import-Package or Export-Package
-	 * manifest header like:
+	 * The directive value is encoded in the Export-Package manifest header like:
 	 * 
 	 * <pre>
-	 *  Export-Package: org.osgi.framework; grouping:=&quot;coregroup&quot;
+	 *  Export-Package: org.osgi.util.tracker; uses:=&quot;org.osgi.framework&quot;
 	 * </pre>
 	 * 
 	 * @since 1.3
 	 */
+	public final static String	USES_DIRECTIVE						= "uses";
+
+	/**
+	 * @deprecated use {@link Constants#USES_DIRECTIVE}
+	 */
+	// TODO remove when framework RI is updated to the "uses" directive.
 	public final static String	GROUPING_DIRECTIVE						= "grouping";
 
 	/**
