@@ -3,6 +3,7 @@ Bundle-Name: MonitorAdmin
 Bundle-SymbolicName: ${p}
 Bundle-Vendor: Nokia
 Bundle-Version: 1.0
+Bundle-Activator: ${p}.JavaPolicyPlugin
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
