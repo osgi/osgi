@@ -19,22 +19,23 @@ package org.osgi.impl.service.policy.permadmin;
 
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtMetaNode;
+import org.osgi.service.dmt.DmtDataType;
 
 /**
  *
- * Meta node for permission admin root.
+ * Meta node for PermissionInfo.
  * 
  * @version $Revision$
  */
-public final class RootMetaNode implements DmtMetaNode {
+public final class PermissionInfoMetaNode implements DmtMetaNode {
 	public boolean canDelete() { return false; }
 	public boolean canAdd() { return false; }
-	public boolean canGet() { return false; }
+	public boolean canGet() { return true; }
 	public boolean canReplace() { return false; }
 	public boolean canExecute() { return false;	}
-	public boolean isLeaf() { return false;	}
-	public boolean isPermanent() { return true; }
-	public String getDescription() { return "permission data stored in PermissionAdmin service"; }
+	public boolean isLeaf() { return true;	}
+	public boolean isPermanent() { return false; }
+	public String getDescription() { return "Permission Info array"; }
 	public int getMaxOccurrence() {	return 1; }
 	public boolean isZeroOccurrenceAllowed() { return false; }
 	public DmtData getDefault() { return null; }
@@ -43,7 +44,7 @@ public final class RootMetaNode implements DmtMetaNode {
 	public int getMax() { return 0; }
 	public int getMin() { return 0;	}
 	public DmtData[] getValidValues() { return null; }
-	public int getFormat() { return 0; }
+	public int getFormat() { return DmtDataType.STRING; }
 	public String getRegExp() {	return null; }
 	public String[] getMimeTypes() { return null; }
 	public String getReferredURI() { return null; }

@@ -39,12 +39,34 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  */
 public class PermissionAdminPlugin implements DmtDataPlugIn {
 	private final PermissionAdmin	permissionAdmin;
+
 	public static final String dataRootURI = "./OSGi/Policies/Java/Bundle";
+	public static final String PERMISSIONINFO = "PermissionInfo";
+	public static final String LOCATION = "Location";
+	public static final String	DEFAULT	= "Default";
 
 	private static final class Entry {
 		boolean isDefault = false;
 		String location;
 		PermissionInfo[] permissionInfo;
+
+		/**
+		 * @param nodename the name of the node inside the entry to be checked 
+		 * @return true, if it exists
+		 */
+		public boolean isNodeUri(String nodename) {
+			if (PERMISSIONINFO.equals(nodename)) return true;
+			if (LOCATION.equals(nodename) && !isDefault) return true;
+			return false;
+		}
+
+		public DmtData getNodeValue(String nodename) {
+			if (PERMISSIONINFO.equals(nodename)) return new DmtData(permissionInfo[0].getEncoded()+"\n");
+			if (LOCATION.equals(nodename)) return new DmtData(location);
+
+			// isNodeUri should prevent this
+			throw new IllegalStateException();
+		}
 	};
 
 	/* internal state variables, that will be dumped back into the permission admin
@@ -54,6 +76,8 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 
 	private HashCalculator	hashCalculator;
 	private DmtMetaNode	rootMetaNode = new RootMetaNode();
+	private DmtMetaNode	permissionInfoMetaNode = new PermissionInfoMetaNode();
+
 	
 	/**
 	 * create a new PermissionAdmin plugin for the DMT admin. It is the responsibility
@@ -88,21 +112,21 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		Entry e = new Entry();
 		e.isDefault = true;
 		e.permissionInfo = permissionAdmin.getDefaultPermissions();
-		if (e.permissionInfo!=null) entries.put("Default",e);
+		if (e.permissionInfo!=null) entries.put(DEFAULT,e);
 	}
 
-	/**
-	 * @param nodeUri
-	 * @param generic
-	 * @return
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.DmtDataPlugIn#getMetaNode(java.lang.String, org.osgi.service.dmt.DmtMetaNode)
-	 */
 	public DmtMetaNode getMetaNode(String nodeUri, DmtMetaNode generic)
 			throws DmtException {
 		String[] path = getPath(nodeUri);
 		if (path.length==0) {
 			return rootMetaNode = new RootMetaNode();
+		}
+		if (path.length==1) {
+			// TODO
+			throw new IllegalStateException("not implemented");
+		}
+		if (path.length==2) {
+			if (path[1].equals(PERMISSIONINFO)) return permissionInfoMetaNode;
 		}
 		throw new IllegalStateException("not implemented");
 		// TODO Auto-generated method stub
@@ -237,10 +261,15 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 	}
 
 	public boolean isNodeUri(String nodeUri) {
+		Entry e = null;
 		String[] path = getPath(nodeUri);
 		if (path.length==0) { return true; }
 		if (path.length>=1) {
-			if (!entries.containsKey(path[1])) return false;
+			e = (Entry) entries.get(path[0]);
+			if (e==null) return false;
+		}
+		if (path.length==2) {
+			return e.isNodeUri(path[1]);
 		}
 		if (path.length>2) {
 			return false;
@@ -248,15 +277,14 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		return true;
 	}
 
-	/**
-	 * @param nodeUri
-	 * @return
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.DmtReadOnly#getNodeValue(java.lang.String)
-	 */
 	public DmtData getNodeValue(String nodeUri) throws DmtException {
-		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
+		String path[] = getPath(nodeUri);
+		if (path.length!=2) {
+			// metanodes should prevent this
+			throw new IllegalStateException();
+		}
+		Entry e = (Entry) entries.get(path[0]);
+		return e.getNodeValue(path[1]);
 	}
 
 	/**
@@ -334,6 +362,7 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 	private String[] getPath(String nodeUri) {
 		if (!nodeUri.startsWith(dataRootURI)) 
 			throw new IllegalStateException("Dmt should not give me URIs that are not mine");
-		return Splitter.split(nodeUri.substring(dataRootURI.length()),'/',0);
+		if (nodeUri.length()==dataRootURI.length()) return new String[] {};
+		return Splitter.split(nodeUri.substring(dataRootURI.length()+1),'/',0);
 	}
 }

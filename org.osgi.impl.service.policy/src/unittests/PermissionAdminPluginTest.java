@@ -19,6 +19,7 @@ package unittests;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.impl.service.policy.permadmin.PermissionAdminPlugin;
+import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -68,4 +69,10 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 		assertEquals("Default",childNames[0]);
 	}
 
+	public void testSimpleDefault() throws Exception {
+		permAdmin.setDefaultPermissions(new PermissionInfo[] {ADMINPERMISSION});
+		DmtSession dmtSession = dmtFactory.getTree(null,ROOT);
+		DmtData pinfo = dmtSession.getNodeValue(ROOT+"/Default/PermissionInfo");
+		assertEquals(ADMINPERMISSION.getEncoded()+"\n",pinfo.getString());
+	}
 }
