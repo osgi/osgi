@@ -106,7 +106,6 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
         // TODO check publisher permissions
         
         checkString(monitorableId, "Monitorable ID");
-        // TODO change javadoc to request monitorableId/* READ permission 
         checkPermission(monitorableId + "/*", MonitorPermission.READ);
         
         Monitorable monitorable = trustedGetMonitorable(monitorableId);
@@ -128,6 +127,17 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
         
         Monitorable monitorable = trustedGetMonitorable(path.monId);
         return monitorable.resetStatusVariable(path.varId);
+    }
+    
+    public String getDescription(String pathStr)
+            throws IllegalArgumentException {
+        // TODO check publisher permissions
+        
+        Path path = Path.getPath(pathStr);
+        checkPermission(pathStr, MonitorPermission.READ);
+        
+        Monitorable monitorable = trustedGetMonitorable(path.monId);
+        return monitorable.getDescription(path.varId);
     }
     
     // If events are turned off for a path containing *, the list of actual
@@ -546,6 +556,119 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
         if(str == null || str.length() == 0)
             throw new IllegalArgumentException(
                     paramName + " parameter is null or empty.");
+    }
+    
+    private class MonitorableWrapper implements Monitorable {
+        private String           id;
+        private Monitorable      monitorable;
+        private ServiceReference reference;
+
+        /**
+         * Retrieves and stores the Monitorable with the specified ID. The ID is
+         * matched against the "service.pid" property of the Monitorable
+         * registrations. The caller does not need ServicePermissions for this
+         * operation to succeed.
+         * 
+         * @param monitorableId the ID of the Monitorable to be wrapped, must be
+         *        non-null and non-empty
+         * @throws IllegalArgumentException if no Monitorable is registered with
+         *         the given ID
+         */
+        public MonitorableWrapper(final String monitorableId) 
+                throws IllegalArgumentException {
+            
+            id = monitorableId;
+            
+            AccessController.doPrivileged(new PrivilegedAction() {
+                public Object run() {
+                    // initialize 'monitorable' and 'reference' variables
+                    retrieveMonitorable(); 
+                    return null;
+                }
+            });
+        }
+
+        private void retrieveMonitorable()
+                throws IllegalArgumentException {
+            ServiceReference[] refs = tracker.getServiceReferences();
+            if (refs == null)
+                throw new IllegalArgumentException("Monitorable id '" + id
+                        + "' not found (no matching services registered)");
+            
+            for (int i = 0; i < refs.length; i++)
+                if (id.equals(refs[i].getProperty("service.pid"))) {
+                    monitorable = (Monitorable) tracker.getService(refs[i]);
+                    if (monitorable == null)
+                        throw new IllegalArgumentException("Monitorable id '"
+                                + id + "' not found (monitorable no longer registered.");
+                    reference = refs[i];
+                    return;
+                }
+                
+            throw new IllegalArgumentException("Monitorable id '" + id
+                    + "' not found (no matching service registered).");
+        }
+
+        public String[] getStatusVariableNames() {
+            Bundle bundle = getBundle();
+            String[] names = monitorable.getStatusVariableNames();
+            
+            // filter out all status variables that the Monitorable does not
+            // have PUBLISH permissions for (inefficient)
+            List validNameList = new Vector();
+            for (int i = 0; i < names.length; i++) {
+                MonitorPermission publishPermission =
+                    new MonitorPermission(id + '/' + names[i], MonitorPermission.PUBLISH);
+                if(bundle.hasPermission(publishPermission))
+                    validNameList.add(names[i]);
+            }
+            
+            return (String[]) 
+                validNameList.toArray(new String[validNameList.size()]);
+        }
+
+        public StatusVariable getStatusVariable(String varId) 
+                throws IllegalArgumentException {
+            checkPublishPermission(varId);
+            return monitorable.getStatusVariable(varId);
+        }
+
+        public boolean notifiesOnChange(String varId) 
+                throws IllegalArgumentException {
+            checkPublishPermission(varId);
+            return monitorable.notifiesOnChange(varId);
+        }
+
+        public boolean resetStatusVariable(String varId)
+                throws IllegalArgumentException {
+            checkPublishPermission(varId);
+            return monitorable.resetStatusVariable(varId);
+        }
+
+        public String getDescription(String varId) 
+                throws IllegalArgumentException {
+            checkPublishPermission(varId);
+            return monitorable.getDescription(varId);
+        }
+        
+        private void checkPublishPermission(String varId) {
+            String path = id + "/" + varId; 
+            MonitorPermission publishPermission = 
+                new MonitorPermission(path, MonitorPermission.PUBLISH);
+            if(!getBundle().hasPermission(publishPermission))
+                throw new IllegalArgumentException(
+                        "Status variable '" + path + "' does not exist");
+        }
+        
+        // TODO would it be OK to get the bundle only once?
+        private Bundle getBundle() {
+            Bundle bundle = reference.getBundle();
+            if(bundle == null)
+                throw new IllegalArgumentException(
+                        "Unable to retrieve status variable(s): Monitorable '" +
+                        id + "' has been unregistered.");
+            return bundle;
+        }
     }
 }
 
