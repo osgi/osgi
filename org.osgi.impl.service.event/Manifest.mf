@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-Name: EventManager
+Bundle-Vendor: Nokia
+Bundle-Version: 1.0
+Bundle-Activator: $(p).EventManagerBundleActivator
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
