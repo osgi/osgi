@@ -19,6 +19,9 @@ package org.osgi.impl.service.dmt;
 
 import org.osgi.service.dmt.*;
 
+// TODO remove Referential Integrity members and getters
+// TODO fill in the validNames attribute properly
+// TODO consider using the nameRegExp attribute
 public class DmtMetaNodeImpl implements DmtMetaNode {
 	// TODO make variables private, add constructors, add setters
 	boolean		deletable				= false;
@@ -27,7 +30,7 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 	boolean		replaceable				= true;
 	boolean		executable				= false;
 	boolean		leaf; // there is no meaningful default
-	boolean		permanent				= true;
+	int         scope                   = PERMANENT;
 	String		description				= null;
 	int			maxOccurrence			= 1;
 	boolean		zeroOccurrenceAllowed	= false;
@@ -36,8 +39,10 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 	boolean		hasMinimum				= false;
 	int			max						= Integer.MAX_VALUE;
 	int			min						= Integer.MIN_VALUE;
+	String[]	validNames				= null;
 	DmtData[]	validValues				= null;
 	int			format					= DmtDataType.NULL;
+	String		nameRegExp              = null;
 	String		regExp					= null;
 	String[]	mimeTypes				= null;
 	String		referredURI				= null;
@@ -54,7 +59,7 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 	public DmtMetaNodeImpl(String description, boolean allowInfinte,
 			DmtData[] validValues, int format) {
 		leaf = true;
-		permanent = false;
+		scope = DYNAMIC;
 		this.validValues = validValues;
 		this.format = format;
 		setCommon(description, allowInfinte);
@@ -66,37 +71,30 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 		leaf = false;
 		extendable = true;
 		format = DmtDataType.NODE;
-		permanent = isPermanent;
+		scope = isPermanent ? PERMANENT : DYNAMIC;
 		setCommon(description, allowInfinte);
 	}
 
-	public boolean canDelete() {
-		return deletable;
-	}
-
-	public boolean canAdd() {
-		return extendable;
-	}
-
-	public boolean canGet() {
-		return retrievable;
-	}
-
-	public boolean canReplace() {
-		return replaceable;
-	}
-
-	public boolean canExecute() {
-		return executable;
-	}
+    
+    
+    public boolean can(int operation) {
+        switch(operation) {
+        case CMD_DELETE:  return deletable;
+        case CMD_ADD:     return extendable;
+        case CMD_GET:     return retrievable;
+        case CMD_REPLACE: return replaceable;
+        case CMD_EXECUTE: return executable;
+        }
+        return false;
+    }
 
 	public boolean isLeaf() {
 		return leaf;
 	}
 
-	public boolean isPermanent() {
-		return permanent;
-	}
+    public int getScope() {
+        return scope;        
+    }
 
 	public String getDescription() {
 		return description;
@@ -130,6 +128,9 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 		return min;
 	}
 
+    public String[] getValidNames() {
+        return validNames;
+    }
 	public DmtData[] getValidValues() {
 		return validValues;
 	}
@@ -138,6 +139,10 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 		return format;
 	}
 
+    public String getNameRegExp() {
+        return nameRegExp;
+    }
+    
 	public String getRegExp() {
 		return regExp;
 	}
@@ -146,6 +151,7 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 		return mimeTypes;
 	}
 
+	/*
 	public String getReferredURI() {
 		return referredURI;
 	}
@@ -157,6 +163,7 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 	public String[] getChildURIs() {
 		return childURIs;
 	}
+	*/
 
 	private void setCommon(String description, boolean allowInfinte) {
 		this.description = description;

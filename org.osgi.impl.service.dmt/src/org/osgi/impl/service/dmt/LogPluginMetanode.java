@@ -52,33 +52,25 @@ public class LogPluginMetanode implements DmtMetaNode {
 	private boolean	isLeaf;
 
 	/* ---------------------------------------------------------------------- */
-	public boolean canDelete() {
-		return canDelete;
-	}
 
-	public boolean canAdd() {
-		return canAdd;
-	}
+    public boolean can(int operation) {
+        switch(operation) {
+        case CMD_DELETE:  return canDelete;
+        case CMD_ADD:     return canAdd;
+        case CMD_GET:     return canGet;
+        case CMD_REPLACE: return canReplace;
+        case CMD_EXECUTE: return canExecute;
+        }
+        return false;
+    }       
 
-	public boolean canGet() {
-		return canGet;
-	}
-
-	public boolean canReplace() {
-		return canReplace;
-	}
-
-	public boolean canExecute() {
-		return canExecute;
-	}
-
-	public boolean isLeaf() {
+    public boolean isLeaf() {
 		return isLeaf;
 	}
 
-	public boolean isPermanent() {
-		// TODO Auto-generated method stub
-		return false;
+	public int getScope() {
+        // TODO
+		return DYNAMIC;
 	}
 
 	public String getDescription() {
@@ -121,6 +113,11 @@ public class LogPluginMetanode implements DmtMetaNode {
 		return 0;
 	}
 
+    public String[] getValidNames() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
 	public DmtData[] getValidValues() {
 		// TODO Auto-generated method stub
 		return null;
@@ -131,27 +128,17 @@ public class LogPluginMetanode implements DmtMetaNode {
 		return 0;
 	}
 
+    public String getNameRegExp() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
 	public String getRegExp() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public String[] getMimeTypes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getReferredURI() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String[] getDependentURIs() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String[] getChildURIs() {
 		// TODO Auto-generated method stub
 		return null;
 	}
