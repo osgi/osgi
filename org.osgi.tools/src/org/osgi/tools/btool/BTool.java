@@ -57,6 +57,7 @@ public class BTool extends Task {
 	 * include Deliver AND all the paths to be searched.
 	 */
 	public void execute() throws BuildException {
+		File zipfile = null;
 		try {
 			if (eclipse == null)
 				throw new IllegalArgumentException(
@@ -66,8 +67,11 @@ public class BTool extends Task {
 				setProperties();
 				return;
 			}
-			File f = new File(zipname);
-			modified = f.lastModified();
+			zipfile = new File(zipname);
+			if (!zipfile.exists())
+				archiveChanged = true;
+			
+			modified = zipfile.lastModified();
 			trace("Zip name " + zipname);
 			getManifest(); // Read manifest
 			getPermissions();
@@ -82,8 +86,12 @@ public class BTool extends Task {
 			addContentPackages(planned);
 			expands(); // Expands contents of another jar
 			includes(); // Add contents of another jar
-			if (ipa != null)
+			if (ipa != null) {
+				File	buildProperties = new File( projectDir, "build.properties");
+				if ( buildProperties.lastModified() > modified )
+					archiveChanged = true;
 				ipa.execute();
+			}
 			if (properties.size() > 0)
 				addContents(new PropertyResource(this, "osgi.properties",
 						properties));
@@ -155,6 +163,8 @@ public class BTool extends Task {
 		projectDir = null;
 		if (failok || errors.isEmpty())
 			return;
+		
+		zipfile.delete();
 		throw new BuildException("Errors found");
 	}
 
@@ -193,6 +203,9 @@ public class BTool extends Task {
 		if (manifestSource == null) {
 			manifestSource = replaceExt(zipname, ".jar", ".mf");
 		}
+		if ( manifestSource == null )
+			return;
+
 		File f = new File(manifestSource);
 		if (!f.exists())
 			f = new File(projectDir, "Manifest.mf");
