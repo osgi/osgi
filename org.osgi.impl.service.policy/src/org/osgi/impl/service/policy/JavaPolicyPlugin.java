@@ -21,6 +21,8 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
+import org.osgi.impl.service.policy.dmtprincipal.DmtPrincipalPlugin;
 import org.osgi.impl.service.policy.permadmin.PermissionAdminPlugin;
 import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.permissionadmin.PermissionAdmin;
@@ -38,6 +40,15 @@ public final class JavaPolicyPlugin implements BundleActivator {
 			Hashtable props = new Hashtable();
 			props.put("dataRootURIs",PermissionAdminPlugin.dataRootURI);
 			context.registerService(DmtDataPlugin.class.getName(),permissionAdminPlugin,props);
+		}
+		
+		ServiceReference dmtPrincipalPermissionAdminReference = context.getServiceReference(DmtPrincipalPermissionAdmin.class.getName());
+		if (dmtPrincipalPermissionAdminReference!=null) {
+			DmtPrincipalPlugin dmtPrincipalPlugin = new DmtPrincipalPlugin((DmtPrincipalPermissionAdmin) context.getService(dmtPrincipalPermissionAdminReference));
+			Hashtable props = new Hashtable();
+			props.put("dataRootURIs",DmtPrincipalPlugin.dataRootURI);
+			context.registerService(DmtPrincipalPlugin.class.getName(),dmtPrincipalPlugin,props);
+		
 		}
 	}
 
