@@ -40,7 +40,7 @@ public class ApplicationDescriptorImpl implements Delegate {
 	private boolean								locked;
 	private static Properties			locks;
 	private Scheduler             scheduler;
-		
+	
 	public synchronized void setApplicationDescriptor(ApplicationDescriptor d) {
 		descriptor = d;
 	}
