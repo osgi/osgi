@@ -98,15 +98,23 @@ public class Model extends ServiceTracker implements Runnable, ChannelListener {
 		});
 		trackAppDescr.open();
 		// TODO eliminate this
-		//ServiceReference sref = context.getServiceReference(DmtExecPlugIn.class
-		//		.getName());
-		//execPlugin = (DmtExecPlugIn) context.getService(sref);
-		System.out.println("Ignored, not sure what to do here with an exec plugin?");
-		
+		ServiceReference sref = context.getServiceReference(DmtExecPlugIn.class
+				.getName());
+		execPlugin = (DmtExecPlugIn) context.getService(sref);
 		// register ChannelListener
 		Hashtable config = new Hashtable();
 		config.put("topic", "*");
 		context.registerService(ChannelListener.class.getName(), this, config);
+		initRefreshInstApps();
+	}
+
+	private void initRefreshInstApps() {
+		Timer t = new Timer();
+		t.schedule(new TimerTask() {
+			public void run() {
+				desktop.refreshInstApps();
+			}
+		}, 0, 1000);
 	}
 
 	private static byte[] createImageData(ServiceReference reference,
@@ -192,8 +200,7 @@ public class Model extends ServiceTracker implements Runnable, ChannelListener {
 
 	public void installApp(String url) throws DmtException {
 		// TODO eliminate this
-		//execPlugin.execute(null, "./OSGi/deploy/install", url);
-		System.out.println("Ignored, not sure what to do here with an exec plugin?");
+		execPlugin.execute(null, "./OSGi/deploy/install", url);
 	}
 
 	public void uninstallApp(ApplicationDescriptor descr) throws Exception {
