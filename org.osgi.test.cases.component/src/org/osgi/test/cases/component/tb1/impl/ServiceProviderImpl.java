@@ -29,6 +29,8 @@
 
 package org.osgi.test.cases.component.tb1.impl;
 
+import java.util.Dictionary;
+
 import org.osgi.test.cases.component.tb1.ServiceProvider;
 import org.osgi.test.cases.component.tbc.TestService;
 
@@ -36,6 +38,9 @@ import org.osgi.test.cases.component.tbc.TestService;
  * @version $Revision$
  */
 public class ServiceProviderImpl implements ServiceProvider {
+  
+  public ServiceProviderImpl() {
+  }
 
   public int getSimpleTestService() {
     return PARAM_CONST;
@@ -43,5 +48,9 @@ public class ServiceProviderImpl implements ServiceProvider {
   
   public TestService getObjectTestService() {
     return new TestService(PARAM_CONST);
+  }
+  
+  public Dictionary getProperties() {
+    return null;
   }
 }

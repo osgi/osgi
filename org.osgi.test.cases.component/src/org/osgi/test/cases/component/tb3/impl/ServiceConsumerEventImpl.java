@@ -29,6 +29,8 @@
 
 package org.osgi.test.cases.component.tb3.impl;
 
+import java.util.Dictionary;
+
 import org.osgi.test.cases.component.tb1.ServiceProvider;
 import org.osgi.test.cases.component.tb3.ServiceConsumerEvent;
 import org.osgi.test.cases.component.tbc.TestService;
@@ -39,6 +41,9 @@ import org.osgi.test.cases.component.tbc.TestService;
 public class ServiceConsumerEventImpl implements ServiceConsumerEvent {
 
   private ServiceProvider serviceProvider;
+
+  public ServiceConsumerEventImpl() {
+  }
 
   protected void bindServiceProvider(ServiceProvider serviceProvider) {
     this.serviceProvider = serviceProvider;
@@ -53,5 +58,9 @@ public class ServiceConsumerEventImpl implements ServiceConsumerEvent {
   
   public TestService getObjectTestService() {
     return serviceProvider.getObjectTestService();
+  }
+  
+  public Dictionary getProperties() {
+    return null;
   }
 }

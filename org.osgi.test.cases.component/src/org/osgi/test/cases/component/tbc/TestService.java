@@ -40,11 +40,11 @@ public class TestService {
     this.param = param;
   }
 
-  public int getParam() {
+  public int getParameter() {
     return param;
   }
 
-  public void setParam(int param) {
+  public void setParameter(int param) {
     this.param = param;
   }
 }

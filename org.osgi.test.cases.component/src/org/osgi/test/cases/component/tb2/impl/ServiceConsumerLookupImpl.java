@@ -43,6 +43,9 @@ public class ServiceConsumerLookupImpl implements ServiceConsumerLookup {
 
   private ComponentContext context;
 
+  public ServiceConsumerLookupImpl() {
+  }
+
   protected void activate(ComponentContext context) {
     this.context = context;
   }

@@ -27,6 +27,7 @@
 
 package org.osgi.test.cases.component.tbc;
 
+import java.util.Dictionary;
 
 /**
  * Dummy service to check exporter
@@ -40,4 +41,6 @@ public interface TBCService {
   public int getSimpleTestService();
 
   public TestService getObjectTestService();
+  
+  public Dictionary getProperties();
 }
