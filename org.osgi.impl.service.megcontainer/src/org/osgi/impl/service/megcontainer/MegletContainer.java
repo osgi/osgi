@@ -60,15 +60,14 @@ class MEGBundleDescriptor {
  * The realization of the MEG container
  */
 
-public class MegletContainerImpl implements BundleListener, MegletContainer,
-		EventHandler {
+public class MegletContainer implements BundleListener, EventHandler {
 	private BundleContext	bc;
 	private Vector			bundleIDs;
 	private Hashtable		bundleHash;
 	private int				height;
 	private int				width;
 
-	public MegletContainerImpl( BundleContext bc ) throws Exception {
+	public MegletContainer( BundleContext bc ) throws Exception {
 		this.bc = bc;
 		bundleHash = new Hashtable();
 		bundleIDs = loadVector("BundleIDs");
@@ -215,7 +214,7 @@ public class MegletContainerImpl implements BundleListener, MegletContainer,
         return false;
       
       ApplicationHandle appHandle = (ApplicationHandle)bc.getService( appList[ 0 ] );      
-      boolean result = appHandle.getState() == MegletHandle.SUSPENDED;      
+      boolean result = appHandle.getState() == MegletHandleImpl.SUSPENDED;      
       bc.ungetService( appList[ 0 ] );
       
       return result;
@@ -723,7 +722,7 @@ public class MegletContainerImpl implements BundleListener, MegletContainer,
 												|| references.length == 0)
 											break;
 										for (int k = 0; k != references.length; k++) {
-											MegletHandle handle = (MegletHandle) bc
+											MegletHandleImpl handle = (MegletHandleImpl) bc
 													.getService(references[k]);
 											switch (bundleDesc.eventSubscribes[i].eventAction[j]) {
 												case EventSubscribe.STOP :

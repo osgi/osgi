@@ -79,21 +79,20 @@ public class TestApplication extends Meglet
     }catch( IOException e ) {}
   }
 
-/**
- * 
- * @see org.osgi.service.component.ComponentInstance#dispose()
- */
-public void dispose() {
-	// TODO Auto-generated method stub
-	
-}
+  /**
+   * 
+   * @see org.osgi.service.component.ComponentInstance#dispose()
+   */
+  public void dispose() {
+  	// TODO Auto-generated method stub	
+  }
 
-/**
- * @return
- * @see org.osgi.service.component.ComponentInstance#getInstance()
- */
-public Object getInstance() {
-	// TODO Auto-generated method stub
-	return null;
-}
+  /**
+   * @return
+   * @see org.osgi.service.component.ComponentInstance#getInstance()
+   */
+  public Object getInstance() {
+  	// TODO Auto-generated method stub
+  	return null;
+  }
 }
