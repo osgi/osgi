@@ -237,4 +237,52 @@ public class PackageAdminImpl implements PackageAdmin
 	t.start();
     }
 
+	/* (non-Javadoc)
+	 * @see org.osgi.service.packageadmin.PackageAdmin#resolveBundles(org.osgi.framework.Bundle[])
+	 */
+	public boolean resolveBundles(Bundle[] bundles) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.osgi.service.packageadmin.PackageAdmin#getProvidingBundles(java.lang.String)
+	 */
+	public ProvidingBundle[] getProvidingBundles(String symbolicName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.osgi.service.packageadmin.PackageAdmin#getBundles(java.lang.String, java.lang.String)
+	 */
+	public Bundle[] getBundles(String symbolicName, String versionRange) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.osgi.service.packageadmin.PackageAdmin#getFragments(org.osgi.framework.Bundle)
+	 */
+	public Bundle[] getFragments(Bundle bundle) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.osgi.service.packageadmin.PackageAdmin#getHosts(org.osgi.framework.Bundle)
+	 */
+	public Bundle[] getHosts(Bundle bundle) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.osgi.service.packageadmin.PackageAdmin#getBundleType(org.osgi.framework.Bundle)
+	 */
+	public int getBundleType(Bundle bundle) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

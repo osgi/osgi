@@ -1207,4 +1207,44 @@ class BundleImpl implements Bundle, Comparable
     System.out.println(message);
     throw new BundleException(message);
   }
+
+/* (non-Javadoc)
+ * @see org.osgi.framework.Bundle#getHeaders(java.lang.String)
+ */
+public Dictionary getHeaders(String localeString) {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+/* (non-Javadoc)
+ * @see org.osgi.framework.Bundle#getSymbolicName()
+ */
+public String getSymbolicName() {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+/* (non-Javadoc)
+ * @see org.osgi.framework.Bundle#loadClass(java.lang.String)
+ */
+public Class loadClass(String name) throws ClassNotFoundException {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+/* (non-Javadoc)
+ * @see org.osgi.framework.Bundle#getEntryPaths(java.lang.String)
+ */
+public Enumeration getEntryPaths(String path) {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+/* (non-Javadoc)
+ * @see org.osgi.framework.Bundle#getEntry(java.lang.String)
+ */
+public URL getEntry(String name) {
+	// TODO Auto-generated method stub
+	return null;
+}
 }
