@@ -25,8 +25,6 @@
  */
 package org.osgi.service.dmt;
 
-import java.text.MessageFormat;
-
 /**
  * Data structure carried in an alert (client initiated notification).
  * The DmtAlertItem describes details of various alerts that can be
@@ -44,13 +42,9 @@ import java.text.MessageFormat;
  */
 public class DmtAlertItem {
 
-    private static final MessageFormat xmlTag =
-        new MessageFormat("<{0}>{1}</{0}>");
-
-    private String source;
+   private String source;
     private String type;
     private String format;
-    private String mark;
     private String data;
 
     /**
@@ -61,21 +55,13 @@ public class DmtAlertItem {
      * alert item
      * @param type The type of the alert item
      * @param format The format of the alert item
-     * @param mark The markup of the alert item (as defined by OMA DM
-     * standards) If this is <code>null</code>, but at least one of
-     * the other parameters are not <code>null</code>, the markup
-     * string returned by the <code>getMark()</code> method is created
-     * using the other parameters. If this parameter is not
-     * <code>null</code>, the <code>getMark()</code> method returns
-     * this value.
      * @param data The data of the alert item
      */
     public DmtAlertItem(String source, String type, String format,
-                        String mark, String data) {
+                        String data) {
         this.source = source;
         this.type   = type;
         this.format = format;
-        this.mark   = mark;
         this.data   = data;
     }
 
@@ -110,28 +96,7 @@ public class DmtAlertItem {
         return format;
     }
 
-    /**
-     * Get the markup data associated with the alert item. There might
-     * be no markup associated with the alert item.
-     * @return The markup data associated with the alert item, in the
-     * format defined by OMA DM specifications.  Can be
-     * <code>null</code>.
-     */
-    public String getMark() {
-        if(mark == null && (source != null || type != null ||
-                            format != null || data != null)) {
-
-            // TODO insert newlines and indentations for readable XML output
-            return wrap("Item", wrap("Source", wrap("LocURI", source)) +
-                                wrap("Meta",   wrap("Type", type) +
-                                               wrap("Format", format)) +
-                                wrap("Data",   data));
-        }
-
-        return mark;
-    }
-
-    /**
+     /**
      * Get the data associated with the alert item. There might be no
      * data associated with the alert item.
      * @return The data associated with the alert item.  Can be
@@ -144,35 +109,6 @@ public class DmtAlertItem {
     public String toString() {
         return
             "DmtAlertItem(\"" + source + "\", \"" + type + "\", \"" +
-            format + "\", \"" + mark + "\", \"" + data + "\")";
+            format + "\", \"" + data + "\")";
     }
-
-
-    private String wrap(String name, String content) {
-        if(content == null || content.length() == 0)
-            return "";
-
-        return xmlTag.format(new Object[] { name, content });
-    }
-
-    // TODO remove test code
-    /*
-    public static void main(String[] args) {
-        printMark("source", "type", "format", "mark", "data");
-        printMark(  null,   "type", "format",  null,  "data");
-        printMark("source",  null,  "format",  null,  "data");
-        printMark("source", "type",   null,    null,  "data");
-        printMark("source", "type", "format",  null,  "data");
-        printMark("source", "type", "format",  null,   null );
-        printMark("source",  null,    null,    null,  "data");
-        printMark(  null,    null,    null,    null,   null );
-    }
-
-    private static void printMark(String source, String type, String format,
-                                  String mark, String data) {
-        DmtAlertItem ai = new DmtAlertItem(source, type, format, mark, data);
-        System.out.println("AlertItem: " + ai);
-        System.out.println("Mark: " + ai.getMark());
-    }
-    */
 }
