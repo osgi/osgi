@@ -27,6 +27,7 @@
 package org.osgi.service.application;
 
 import java.util.*;
+import java.io.*;
 import org.osgi.framework.*;
 import org.osgi.service.log.LogService;
 import org.osgi.service.event.*;
@@ -51,8 +52,8 @@ public abstract class Meglet implements EventHandler {
 
 	public Meglet() {}
 
-	protected void start( Map args ) throws Exception {}
-	protected void stop() throws Exception {}
+	protected void start( Map args, InputStream stateStorage ) throws Exception {}
+	protected void stop( OutputStream stateStorage ) throws Exception {}
 	public void handleEvent(Event event) {}
 
 	protected final void requestStop() {
@@ -122,14 +123,14 @@ public abstract class Meglet implements EventHandler {
 	}
 
 	public final void startApplication( Map args ) throws Exception {
-		start( args );
+		start( args, null );
 	}
 
 	public final void stopApplication() throws Exception {
 		listenedTopics.clear();
 		changeServiceRegistration();
 
-		stop();
+		stop( null );
 
 		if( eventAdminServiceRef != null ) {
 			bc.ungetService( eventAdminServiceRef );
