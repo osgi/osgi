@@ -462,16 +462,8 @@ public class MegletContainer implements BundleListener, EventHandler {
 
 			NodeList listNodeList = null;
 			
-			try{
-				System.out.println( "Entering...");
-				listNodeList = doc.getElementsByTagName( "descriptor" );
-				System.out.println( "Success...");
-			}catch( Throwable e ) {
-				System.out.println( e );
-				e.printStackTrace();
-			}finally{
-				System.out.println( "Leaving...");
-			}
+			listNodeList = doc.getElementsByTagName( "descriptor" );
+
 			if( listNodeList.getLength() != 1 )
 				throw new Exception( "One descriptor must be present in the meglets.xml file!" );
 
@@ -680,7 +672,7 @@ public class MegletContainer implements BundleListener, EventHandler {
 			bundleHash.put(new Long(bundleID), descriptor);
 			return descs;
 		}
-		catch (Exception e) {
+		catch (Throwable e) {
 			log(bc, LogService.LOG_ERROR,
 				"Exception occurred at parsing a meglet bundle!", e);
 			return null;
