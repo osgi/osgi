@@ -1,0 +1,38 @@
+Manifest-Version: 1.0
+Bundle-Name: osgi.refimpl
+Bundle-Activator: org.osgi.tools.group.Group
+Bundle-Description: OSGi Service Platform Release 3, All Reference Implementations
+Bundle-Copyright: Copyright (c) The OSGi Alliance (2000, 2002). All Rights Reserved.
+CVS-Header: $Header$
+Bundle-Vendor: OSGi
+Bundle-Version: 3.0
+Bundle-Category: osgi
+Bundle-DocUrl: http://www.osgi.org/
+Import-Package: org.osgi.framework; specification-version=1.2
+Export-Package: javax.servlet;specification-version=2.1,
+ javax.servlet.http;specification-version=2.1,
+ javax.microedition.io
+Bundle-Classpath: .,servlet.jar
+group-load: org.osgi.impl.service.application.jar,
+  org.osgi.impl.service.basiccontainer.jar, \
+  org.osgi.impl.service.cm.jar,
+  org.osgi.impl.service.device.basicdriverlocator.jar,
+  org.osgi.impl.service.device.manager.jar,
+  org.osgi.impl.service.dmt.jar,
+  org.osgi.impl.service.event.jar,
+  org.osgi.impl.service.http.jar,
+  org.osgi.impl.service.io.jar,
+  org.osgi.impl.service.log.jar,
+  org.osgi.impl.service.megcontainer.jar, \
+  org.osgi.impl.service.deployment.jar,
+  org.osgi.impl.service.monitor.jar,
+  org.osgi.impl.service.prefs.jar,
+  org.osgi.impl.service.provisioning.jar,
+  org.osgi.impl.service.upnp.cd.jar,
+  org.osgi.impl.service.upnp.cp.jar,
+  org.osgi.impl.service.useradmin.jar,
+  org.osgi.impl.service.wireadmin.jar,
+  org.osgi.impl.bundle.saxon.jar,
+  org.osgi.impl.bundle.rsh.jar
+
+

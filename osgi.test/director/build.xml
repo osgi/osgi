@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="project" default="runAllTests"> 
+	<target name="runAllTests">		
+		<java jar="../org.osgi.impl.framework.jar"
+			fork="true"
+		>
+			<jvmarg line="-Dorg.osgi.service.http.port=81"/>
+			<jvmarg line="-Xverify:none"/>
+			<jvmarg line="-Dorg.osgi.framework.system.packages=javax.xml.parsers,javax.xml.transform,javax.xml.transform.stream,org.xml.sax,org.xml.sax.helpers,javax.crypto,javax.crypto.spec"/>
+			<arg line="-init"/>
+			<arg line="-istart ../osgi.jar"/>
+			<arg line="-istart ../osgi.min.jar"/>
+			<arg line="-istart ../org.osgi.tools.console.jar"/>
+			<arg line="-istart ../osgi.director.jar"/>
+			<arg line="-istart ../osgi.test.jar"/>
+			<arg line="-launch"/>
+			
+		</java>
+	</target>
+	<target name="runEmpty">		
+		<java jar="../org.osgi.impl.framework.jar"
+			fork="true"
+		>
+			<jvmarg line="-Dorg.osgi.service.http.port=81"/>
+			<jvmarg line="-Xverify:none"/>
+			<jvmarg line="-Dorg.osgi.framework.system.packages=javax.xml.parsers,javax.xml.transform,javax.xml.transform.stream,org.xml.sax,org.xml.sax.helpers,javax.crypto,javax.crypto.spec"/>
+			<arg line="-init"/>
+			<arg line="-istart ../osgi.jar"/>
+			<arg line="-istart ../osgi.min.jar"/>
+			<arg line="-istart ../org.osgi.tools.console.jar"/>
+			<arg line="-istart ../osgi.director.jar"/>
+			<arg line="-launch"/>
+			
+		</java>
+	</target>
+</project>
