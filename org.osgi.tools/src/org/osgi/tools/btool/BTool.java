@@ -373,8 +373,7 @@ public class BTool extends Task {
 				System.err.println("One error detected");
 			else
 				System.err.println(errors.size() + " Errors detected");
-			
-			if ( failok )
+			if (failok)
 				System.err.println("FAIL ALLOWED");
 		}
 	}
@@ -704,10 +703,9 @@ public class BTool extends Task {
 			String file = st.nextToken().trim();
 			String outname = null;
 			boolean preprocess = false;
-			
-			if ( file.startsWith("[") && file.endsWith("]")) {
+			if (file.startsWith("[") && file.endsWith("]")) {
 				preprocess = true;
-				file = file.substring(1,file.length()-1).trim();
+				file = file.substring(1, file.length() - 1).trim();
 			}
 			int n = file.indexOf('=');
 			if (n > 0) {
@@ -725,8 +723,15 @@ public class BTool extends Task {
 			else
 				s = project;
 			
-			Resource r = new FileResource(this, outname, new File(s.getFile(),file), preprocess );
+			Resource r;
 			
+			if ( preprocess )
+				r = new FileResource(this, outname, new File(s.getFile(),
+					file), preprocess);
+			else {
+				r = new Resource(this,s,outname);
+				r.setSourcePath(file);
+			}
 			addContents(r);
 		}
 	}
