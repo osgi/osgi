@@ -497,7 +497,7 @@ public class CMControl extends DefaultTestBundleControl {
 		ManagedServiceImpl ms = new ManagedServiceImpl(s);
 		Hashtable props = new Hashtable();
 		props.put(Constants.SERVICE_PID, pid);
-		/* TODO: Testa registreda service.pid med annat än String */
+		/* TODO: Testa registered service.pid with other String */
 		registerService(ManagedService.class.getName(), ms, props);
 		return ms;
 	}
