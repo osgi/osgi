@@ -26,7 +26,7 @@ public class ManifestResource extends FileResource {
 		}
 		if ( key.equals("FILE-SECTION")) {
 			StringBuffer sb = new StringBuffer();
-			for (Iterator i=btool.contents.iterator(); i.hasNext(); ) {
+			for (Iterator i=btool.contents.values().iterator(); i.hasNext(); ) {
 				Resource r = (Resource) i.next();
 				sb.append("\r\n");
 				sb.append("Name: ");

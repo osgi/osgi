@@ -104,5 +104,13 @@ public class PackageResource extends Resource {
 	
 	public boolean equals(Object o) { return path.equals(((PackageResource)o).path); }
 
+
+    /**
+     * @return
+     */
+    public int getType() {
+        return type;
+    }
+
 }
 

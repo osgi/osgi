@@ -15,7 +15,7 @@ public class DependenciesCheck extends TestCase {
 	public void testDependencies() throws IOException {
 		Manifest	manifest = new Manifest( getClass().getResourceAsStream("test.mf"));
 		Source s = new ZipSource( new File("test/test.jar") );
-		Vector v = new Vector();
+		Map v = new TreeMap(); 
 		collect( v, s, "");
 		Source cmjar = new ZipSource( new File("test/org.osgi.service.cm.zip"));
 		Source fwjar = new ZipSource( new File("test/org.osgi.framework.jar"));
@@ -31,11 +31,11 @@ public class DependenciesCheck extends TestCase {
 		System.out.println("Contained " + dep.getContained() );
 	}
 	
-	void collect( Vector v, Source source, String path ) throws IOException {
+	void collect( Map v, Source source, String path ) throws IOException {
 		if ( source.isDirectory(path)) {
 			String prefix = path.length()==0 ? path : path + "/";
 			PackageResource p = new PackageResource(null,source,path);
-			v.add(p );
+			v.put(p.getPath(),p );
 			Collection subs = source.getResources(path);
 			for ( Iterator i=subs.iterator(); i.hasNext(); ) {
 				String s = (String) i.next();
@@ -44,7 +44,7 @@ public class DependenciesCheck extends TestCase {
 			
 		} else {
 			Resource r = new Resource(null,source,path);
-			v.add(r);
+			v.put(r.getPath(), r);
 		}
 	}
 

@@ -32,13 +32,13 @@ public class Dependencies {
 							};
 
 	public Dependencies(Collection classpath, Manifest manifest,
-			Collection resources, List excludeImport, List includeExport) {
+			Map resources, List excludeImport, List includeExport) {
 		this.manifest = manifest;
 		this.classpath = classpath;
 		this.includeExport = includeExport;
 		this.excludeImport = excludeImport;
 
-		for (Iterator i = resources.iterator(); i.hasNext();) {
+		for (Iterator i = resources.values().iterator(); i.hasNext();) {
 			Resource r = (Resource) i.next();
 			dot.put(r.getPath(), r);
 		}

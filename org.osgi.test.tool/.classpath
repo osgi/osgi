@@ -4,7 +4,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/cnf/jar/ifc112.jar"/>
 	<classpathentry kind="lib" path="/cnf/jar/servlet.jar"/>
-	<classpathentry kind="src" path="/osgi"/>
-	<classpathentry kind="src" path="/org.osgi.tools"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.tools"/>
+	<classpathentry exported="true" kind="src" path="/osgi"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

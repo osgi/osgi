@@ -16,7 +16,7 @@ public class Resource implements Comparable {
 		this.source = source;
 	}
 	
-	String getPath() {
+	public String getPath() {
 		return path;
 	}
 	public int hashCode() { return path.hashCode(); }

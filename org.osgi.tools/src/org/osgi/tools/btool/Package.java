@@ -51,4 +51,11 @@ public class Package implements Comparable {
 		Package p = (Package) o;
 		return name.compareTo(p.name);
 	}
+
+    /**
+     * @return
+     */
+    public Object getPath() {
+        return getName().replace('.','/');
+    }
 }
