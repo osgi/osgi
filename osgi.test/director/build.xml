@@ -8,7 +8,7 @@
 			<jvmarg line="-Xverify:none"/>
 			<jvmarg line="-Dorg.osgi.framework.system.packages=javax.xml.parsers,javax.xml.transform,javax.xml.transform.stream,org.xml.sax,org.xml.sax.helpers,javax.crypto,javax.crypto.spec"/>
 			<arg line="-init"/>
-			<arg line="-istart ../osgi.jar"/>
+			<arg line="-istart ../../osgi.released/osgi.jar"/>
 			<arg line="-istart ../osgi.min.jar"/>
 			<arg line="-istart ../org.osgi.tools.console.jar"/>
 			<arg line="-istart ../osgi.director.jar"/>
