@@ -1,1 +1,4 @@
 *.backup.*
+xml
+javadoc.xml
+mif
