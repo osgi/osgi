@@ -36,24 +36,24 @@ import java.util.*;
  * operations on or to get sensitive information about a bundle.
  * 
  * <ul>
- *   <li>The <tt>{@link AdminPermission#METADATA}</tt> action allows calls to
+ *   <li>The <code>{@link AdminPermission#METADATA}</code> action allows calls to
  *   	<ul>
  *         <li>{@link Bundle#getHeaders()}
  *         <li>{@link Bundle#getHeaders(String)}
  *         <li>{@link Bundle#getLocation()}
  *         </ul>
- *   <li>The <tt>{@link AdminPermission#RESOURCE}</tt> action allows calls to
+ *   <li>The <code>{@link AdminPermission#RESOURCE}</code> action allows calls to
  *   	<ul>
  *   		<li>{@link Bundle#getResource(String)}
  *   		<li>{@link Bundle#getEntry(String)}
  *   		<li>{@link Bundle#getEntryPaths(String)}
  *   		<li>Bundle resource/entry URL creation
  *   	</ul>
- *   <li>The <tt>{@link AdminPermission#METADATA}</tt> action allows calls to
+ *   <li>The <code>{@link AdminPermission#METADATA}</code> action allows calls to
  *   	<ul>
  *   		<li>{@link Bundle#loadClass(String)}
  *   	</ul>
- *   <li>The <tt>{@link AdminPermission#LIFECYCLE}</tt> action allows calls to
+ *   <li>The <code>{@link AdminPermission#LIFECYCLE}</code> action allows calls to
  *   	<ul>
  *   		<li>{@link BundleContext#installBundle(String)}
  *   		<li>{@link BundleContext#installBundle(String, InputStream)}
@@ -61,30 +61,30 @@ import java.util.*;
  *   		<li>{@link Bundle#update(InputStream)}
  *   		<li>{@link Bundle#uninstall()}
  *   	</ul>
- *   <li>The <tt>{@link AdminPermission#EXECUTE}</tt> action allows calls to
+ *   <li>The <code>{@link AdminPermission#EXECUTE}</code> action allows calls to
  *   	<ul>
  *   		<li>{@link Bundle#start()}
  *   		<li>{@link Bundle#stop()}
  *   		<li>{@link org.osgi.service.startlevel.StartLevel#setBundleStartLevel(Bundle, int)}
  *   	</ul>
- *   <li>The <tt>{@link AdminPermission#LISTENER}</tt> action allows calls to
+ *   <li>The <code>{@link AdminPermission#LISTENER}</code> action allows calls to
  *   	<ul>
  *   		<li>{@link BundleContext#addBundleListener(BundleListener)} for 
- *   				<tt>SynchronousBundleListener</tt>
+ *   				<code>SynchronousBundleListener</code>
  *   		<li>{@link BundleContext#removeBundleListener(BundleListener)} for 
- *   				<tt>SynchronousBundleListener</tt>
+ *   				<code>SynchronousBundleListener</code>
  *   	</ul>
- *   <li>The <tt>{@link AdminPermission#PERMISSION}</tt> action allows calls to
+ *   <li>The <code>{@link AdminPermission#PERMISSION}</code> action allows calls to
  *   	<ul>
  *   		<li>{@link org.osgi.service.permissionadmin.PermissionAdmin#setPermissions(String, PermissionInfo[])}
  *   		<li>{@link org.osgi.service.permissionadmin.PermissionAdmin#setDefaultPermissions(PermissionInfo[])}
  *   	</ul>
- *   <li>The <tt>{@link AdminPermission#RESOLVE}</tt> action allows calls to
+ *   <li>The <code>{@link AdminPermission#RESOLVE}</code> action allows calls to
  *   	<ul>
- *   		<li>{@link org.osgi.service.packageadmin.PackageAdmin#refreshPackages(Bundle[])}</tt>
- *   		<li>{@link org.osgi.service.packageadmin.PackageAdmin#resolveBundles(Bundle[])}</tt>
+ *   		<li>{@link org.osgi.service.packageadmin.PackageAdmin#refreshPackages(Bundle[])}</code>
+ *   		<li>{@link org.osgi.service.packageadmin.PackageAdmin#resolveBundles(Bundle[])}</code>
  *   	</ul>
- *   <li>The <tt>{@link AdminPermission#STARTLEVEL}</tt> action allows calls to
+ *   <li>The <code>{@link AdminPermission#STARTLEVEL}</code> action allows calls to
  *   	<ul>
  *   		<li>{@link org.osgi.service.startlevel.StartLevel#setStartLevel(int)}
  *   		<li>{@link org.osgi.service.startlevel.StartLevel#setInitialBundleStartLevel(int)}
@@ -117,52 +117,52 @@ public final class AdminPermission extends Permission
 	protected String filter;
 	
     /**
-     * The action string <tt>class</tt> (Value is "class").
+     * The action string <code>class</code> (Value is "class").
      */
     public final static String CLASS = "class"; //$NON-NLS-1$
 
     /**
-     * The action string <tt>execute</tt> (Value is "execute").
+     * The action string <code>execute</code> (Value is "execute").
      */
     public final static String EXECUTE = "execute"; //$NON-NLS-1$
     
     /**
-     * The action string <tt>lifecycle</tt> (Value is "lifecycle").
+     * The action string <code>lifecycle</code> (Value is "lifecycle").
      */
     public final static String LIFECYCLE = "lifecycle"; //$NON-NLS-1$
     
     /**
-     * The action string <tt>listener</tt> (Value is "listener").
+     * The action string <code>listener</code> (Value is "listener").
      */
     public final static String LISTENER = "listener"; //$NON-NLS-1$
     
     /**
-     * The action string <tt>metadata</tt> (Value is "metadata").
+     * The action string <code>metadata</code> (Value is "metadata").
      */
     public final static String METADATA = "metadata"; //$NON-NLS-1$
 
     /**
-     * The action string <tt>permission</tt> (Value is "permission").
+     * The action string <code>permission</code> (Value is "permission").
      */
     public final static String PERMISSION = "permission"; //$NON-NLS-1$
 	
     /**
-     * The action string <tt>resolve</tt> (Value is "resolve").
+     * The action string <code>resolve</code> (Value is "resolve").
      */
     public final static String RESOLVE = "resolve"; //$NON-NLS-1$
 
     /**
-     * The action string <tt>resource</tt> (Value is "resource").
+     * The action string <code>resource</code> (Value is "resource").
      */
     public final static String RESOURCE = "resource"; //$NON-NLS-1$
     
     /**
-     * The action string <tt>startlevel</tt> (Value is "startlevel").
+     * The action string <code>startlevel</code> (Value is "startlevel").
      */
     public final static String STARTLEVEL = "startlevel"; //$NON-NLS-1$
 
     /**
-     * The action string <tt>extensionLifecycle</tt> (Value is "extensionLifecycle").
+     * The action string <code>extensionLifecycle</code> (Value is "extensionLifecycle").
      */
     public final static String EXTENSIONLIFECYCLE = "extensionLifecycle"; //$NON-NLS-1$
 
@@ -216,7 +216,7 @@ public final class AdminPermission extends Permission
     protected Filter filterImpl;
     
 	/**
-     * Creates a new <tt>AdminPermission</tt> object that matches 
+     * Creates a new <code>AdminPermission</code> object that matches 
      * all bundles and has all actions.  Equivalent to 
      * AdminPermission("*","*");
      */
@@ -226,15 +226,15 @@ public final class AdminPermission extends Permission
     }
     
     /**
-     * Creates a new <tt>AdminPermission</tt> object for use by the <code>Policy</code>
-     * object to instantiate new <tt>Permission</tt> objects.
+     * Creates a new <code>AdminPermission</code> object for use by the <code>Policy</code>
+     * object to instantiate new <code>Permission</code> objects.
      * 
      * Null arguments are equivalent to "*"
      *
      * @param filter an X.500 Distinguished Name suffix or "*" to match all bundles
-     * @param actions <tt>class</tt>, <tt>execute</tt>, <tt>lifecycle</tt>, 
-     * <tt>listener</tt>, <tt>metadata</tt>, <tt>permission</tt>, <tt>resolve</tt>, 
-     * <tt>resource</tt>, <tt>startlevel</tt>, or "*" to indicate all actions
+     * @param actions <code>class</code>, <code>execute</code>, <code>lifecycle</code>, 
+     * <code>listener</code>, <code>metadata</code>, <code>permission</code>, <code>resolve</code>, 
+     * <code>resource</code>, <code>startlevel</code>, or "*" to indicate all actions
      */
     public AdminPermission(String filter, String actions)
     {
@@ -247,13 +247,13 @@ public final class AdminPermission extends Permission
     }
 
     /**
-     * Creates a new <tt>AdminPermission</tt> object for use by the <code>Policy</code>
-     * object to instantiate new <tt>Permission</tt> objects.
+     * Creates a new <code>AdminPermission</code> object for use by the <code>Policy</code>
+     * object to instantiate new <code>Permission</code> objects.
      * 
      * @param bundle A bundle
-     * @param actions <tt>class</tt>, <tt>execute</tt>, <tt>lifecycle</tt>, 
-     * <tt>listener</tt>, <tt>metadata</tt>, <tt>permission</tt>, <tt>resolve</tt>, 
-     * <tt>resource</tt>, <tt>startlevel</tt>, or "*" to indicate all actions
+     * @param actions <code>class</code>, <code>execute</code>, <code>lifecycle</code>, 
+     * <code>listener</code>, <code>metadata</code>, <code>permission</code>, <code>resolve</code>, 
+     * <code>resource</code>, <code>startlevel</code>, or "*" to indicate all actions
      */
     public AdminPermission(Bundle bundle, String actions) {
     	super(bundle.toString());
@@ -561,7 +561,7 @@ public final class AdminPermission extends Permission
     }
      
     /**
-     * Called by <tt><@link AdminPermission#implies(Permission)></tt> on an AdminPermission
+     * Called by <code><@link AdminPermission#implies(Permission)></code> on an AdminPermission
      * which was constructed with a Bundle.  This method loads a dictionary with the
      * filter-matchable properties of this bundle.  The dictionary is cached so this lookup
      * only happens once.
@@ -619,7 +619,7 @@ public final class AdminPermission extends Permission
      * This method throws an exception if the specified permission was not
      * constructed with a bundle.
      * 
-     * <p>This method returns <tt>true</tt> if
+     * <p>This method returns <code>true</code> if
      * The specified permission is an AdminPermission AND
      * <ul>
      * 	<li>this object's filter is an X.500 Distinguished name suffix that 
@@ -631,13 +631,13 @@ public final class AdminPermission extends Permission
      * AND this object's actions include all of the specified permission's actions 	 
      *
      * Special case: if the specified permission was constructed with "*", then this method
-     * returns <tt>true</tt> if this object's filter is "*" and this object's actions include
+     * returns <code>true</code> if this object's filter is "*" and this object's actions include
      * all of the specified permission's actions
      * 
      * @param p The permission to interrogate.
      *
-     * @return <tt>true</tt> if the specified permission is implied by
-     * this object; <tt>false</tt> otherwise.
+     * @return <code>true</code> if the specified permission is implied by
+     * this object; <code>false</code> otherwise.
      * @throws RuntimeException if specified permission was not constructed with
      * a bundle or "*"
      */
@@ -678,13 +678,13 @@ public final class AdminPermission extends Permission
     }
     
     /**
-     * Returns the canonical string representation of the <tt>AdminPermission</tt> actions.
+     * Returns the canonical string representation of the <code>AdminPermission</code> actions.
      *
-     * <p>Always returns present <tt>AdminPermission</tt> actions in the following order:
-     * <tt>CLASS</tt>, <tt>EXECUTE</tt>, <tt>LIFECYCLE</tt>, <tt>LISTENER</tt>, 
-     * <tt>METADATA</tt>, <tt>PERMISSION</tt>, <tt>RESOLVE</tt>, <tt>RESOURCE</tt>, 
-     * <tt>STARTLEVEL</tt>.
-     * @return Canonical string representation of the <tt>AdminPermission</tt> actions.
+     * <p>Always returns present <code>AdminPermission</code> actions in the following order:
+     * <code>CLASS</code>, <code>EXECUTE</code>, <code>LIFECYCLE</code>, <code>LISTENER</code>, 
+     * <code>METADATA</code>, <code>PERMISSION</code>, <code>RESOLVE</code>, <code>RESOURCE</code>, 
+     * <code>STARTLEVEL</code>.
+     * @return Canonical string representation of the <code>AdminPermission</code> actions.
      */
 	public String getActions() {
 		if (actions == null) {
@@ -755,12 +755,12 @@ public final class AdminPermission extends Permission
 	}
 	
     /**
-     * Determines the equality of two <tt>AdminPermission</tt> objects. <p>Two 
-     * <tt>AdminPermission</tt> objects are equal.
+     * Determines the equality of two <code>AdminPermission</code> objects. <p>Two 
+     * <code>AdminPermission</code> objects are equal.
      *
      * @param obj The object being compared for equality with this object.
-     * @return <tt>true</tt> if <tt>obj</tt> is equivalent to this 
-     * <tt>AdminPermission</tt>; <tt>false</tt> otherwise.
+     * @return <code>true</code> if <code>obj</code> is equivalent to this 
+     * <code>AdminPermission</code>; <code>false</code> otherwise.
      */
     public boolean equals(Object obj)
     {
@@ -794,10 +794,10 @@ public final class AdminPermission extends Permission
 	}
 	
     /**
-     * Returns a new <tt>PermissionCollection</tt> object suitable for storing
-     * <tt>AdminPermission</tt>s.
+     * Returns a new <code>PermissionCollection</code> object suitable for storing
+     * <code>AdminPermission</code>s.
      * 
-     * @return A new <tt>PermissionCollection</tt> object.
+     * @return A new <code>PermissionCollection</code> object.
      */
 
     public PermissionCollection newPermissionCollection()
@@ -807,7 +807,7 @@ public final class AdminPermission extends Permission
 }
 
 /**
- * Stores a collection of <tt>AdminPermission</tt>s.
+ * Stores a collection of <code>AdminPermission</code>s.
  */
 final class AdminPermissionCollection extends PermissionCollection
 {
@@ -830,15 +830,15 @@ final class AdminPermissionCollection extends PermissionCollection
     }
 
     /**
-     * Adds a permission to the <tt>AdminPermission</tt> objects. The key for 
+     * Adds a permission to the <code>AdminPermission</code> objects. The key for 
      * the hashtable is the name
      *
-     * @param permission The <tt>AdminPermission</tt> object to add.
+     * @param permission The <code>AdminPermission</code> object to add.
      *
      * @exception IllegalArgumentException If the permission is not an
-     * <tt>AdminPermission</tt> instance.
+     * <code>AdminPermission</code> instance.
      *
-     * @exception SecurityException If this <tt>AdminPermissionCollection</tt>
+     * @exception SecurityException If this <code>AdminPermissionCollection</code>
      * object has been marked read-only.
      */
 
@@ -872,13 +872,13 @@ final class AdminPermissionCollection extends PermissionCollection
 
     /**
      * Determines if the specified permissions implies the permissions
-     * expressed in <tt>permission</tt>.
+     * expressed in <code>permission</code>.
      *
-     * @param permission The Permission object to compare with the <tt>AdminPermission</tt>
+     * @param permission The Permission object to compare with the <code>AdminPermission</code>
      *  objects in this collection.
      *
-     * @return <tt>true</tt> if <tt>permission</tt> is implied by an 
-     * <tt>AdminPermission</tt> in this collection, <tt>false</tt> otherwise.
+     * @return <code>true</code> if <code>permission</code> is implied by an 
+     * <code>AdminPermission</code> in this collection, <code>false</code> otherwise.
      */
     public boolean implies(Permission permission)
     {
@@ -900,10 +900,10 @@ final class AdminPermissionCollection extends PermissionCollection
  
 
     /**
-     * Returns an enumeration of all <tt>AdminPermission</tt> objects in the
+     * Returns an enumeration of all <code>AdminPermission</code> objects in the
      * container.
      *
-     * @return Enumeration of all <tt>AdminPermission</tt> objects.
+     * @return Enumeration of all <code>AdminPermission</code> objects.
      */
 
     public Enumeration elements()

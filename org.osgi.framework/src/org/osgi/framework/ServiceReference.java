@@ -133,14 +133,14 @@ public abstract interface ServiceReference {
 
 	/**
 	 * Tests if the bundle which registered the service referenced by this
-	 * <tt>ServiceReference</tt> and the specified bundle use the same source
+	 * <code>ServiceReference</code> and the specified bundle use the same source
 	 * for the package of the specified class name.
 	 * <p>
 	 * This method performs the following checks:
 	 * <ol>
 	 * <li>Get the package name from the specified class name.</li>
 	 * <li>For the bundle that registered the service referenced by this
-	 * <tt>ServiceReference</tt> (registrant bundle); find the source for the
+	 * <code>ServiceReference</code> (registrant bundle); find the source for the
 	 * package. If no source is found then return <code>true</code> if the
 	 * registrant bundle is equal to the specified bundle; otherwise return
 	 * <code>false</code>.</li>
@@ -149,10 +149,10 @@ public abstract interface ServiceReference {
 	 * otherwise return <code>false</code>.</li>
 	 * </ol>
 	 * 
-	 * @param bundle The <tt>Bundle</tt> object to check.
+	 * @param bundle The <code>Bundle</code> object to check.
 	 * @param className The class name to check.
 	 * @return <code>true</code> if the bundle which registered the service
-	 *         referenced by this <tt>ServiceReference</tt> and the specified
+	 *         referenced by this <code>ServiceReference</code> and the specified
 	 *         bundle use the same source for the package of the specified class
 	 *         name. Otherwise <code>false</code> is returned.
 	 * 

@@ -28,25 +28,25 @@
 package org.osgi.framework;
 
 /**
- * A <tt>ServiceEvent</tt> listener.
+ * A <code>ServiceEvent</code> listener.
  *
- * <p><tt>AllServiceListener</tt> is a listener interface that may be implemented by a bundle
+ * <p><code>AllServiceListener</code> is a listener interface that may be implemented by a bundle
  * developer.
- * <p>An <tt>AllServiceListener</tt> object is registered with the Framework using the
- * <tt>BundleContext.addServiceListener</tt> method.
- * <tt>AllServiceListener</tt> objects are called with a <tt>ServiceEvent</tt> object when
+ * <p>An <code>AllServiceListener</code> object is registered with the Framework using the
+ * <code>BundleContext.addServiceListener</code> method.
+ * <code>AllServiceListener</code> objects are called with a <code>ServiceEvent</code> object when
  * a service is registered, modified, or is in the process of unregistering.
  *
- * <p><tt>ServiceEvent</tt> object delivery to <tt>AllServiceListener</tt> objects is filtered by the
+ * <p><code>ServiceEvent</code> object delivery to <code>AllServiceListener</code> objects is filtered by the
  * filter specified when the listener was registered. If the Java Runtime Environment
  * supports permissions, then additional filtering is done.
- * <tt>ServiceEvent</tt> objects are only delivered to the listener if the bundle which defines
- * the listener object's class has the appropriate <tt>ServicePermission</tt> to get the service
+ * <code>ServiceEvent</code> objects are only delivered to the listener if the bundle which defines
+ * the listener object's class has the appropriate <code>ServicePermission</code> to get the service
  * using at least one of the named classes the service was registered under.
  * 
  * <p>
- * Unlike normal <tt>ServiceListener</tt> objects,
- * <tt>AllServiceListener</tt> objects receive all ServiceEvent objects regardless of the
+ * Unlike normal <code>ServiceListener</code> objects,
+ * <code>AllServiceListener</code> objects receive all ServiceEvent objects regardless of the
  * whether the package source of the listening bundle is equal to the package source of
  * the bundle that registered the service. This means that the listener may not be able to
  * cast the service object to any of its corresponding service interfaces if the service

@@ -61,7 +61,7 @@ import java.util.Dictionary;
  * meant to be shared with other bundles in the OSGi environment.
  * 
  * <p>
- * The <tt>Bundle</tt> object associated with a <tt>BundleContext</tt> object
+ * The <code>Bundle</code> object associated with a <code>BundleContext</code> object
  * is called the <em>context bundle</em>.
  *
  * <p>
