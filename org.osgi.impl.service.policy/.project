@@ -3,11 +3,29 @@
 	<name>org.osgi.impl.service.policy</name>
 	<comment></comment>
 	<projects>
+		<project>cnf</project>
+		<project>org.osgi.impl.framework.eclipse</project>
+		<project>org.osgi.impl.service.cm</project>
+		<project>org.osgi.impl.service.dmt</project>
+		<project>org.osgi.impl.service.event</project>
+		<project>org.osgi.impl.service.log</project>
+		<project>org.osgi.service.condpermadmin</project>
+		<project>org.osgi.service.deploymentadmin</project>
+		<project>org.osgi.service.dmt</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
 			<name>org.eclipse.jdt.core.javabuilder</name>
 			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.ui.externaltools.ExternalToolBuilder</name>
+			<arguments>
+				<dictionary>
+					<key>LaunchConfigHandle</key>
+					<value>&lt;project&gt;/.externalToolBuilders/policy bundle jar.launch</value>
+				</dictionary>
 			</arguments>
 		</buildCommand>
 	</buildSpec>
