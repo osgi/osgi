@@ -95,13 +95,17 @@ public class DmtPrincipalPermissionAdminImpl
         Hashtable newPermissions = new Hashtable();
         Enumeration keys = properties.keys();
         while (keys.hasMoreElements()) {
-            String principal = (String) keys.nextElement();
+            String key = (String) keys.nextElement();
 
+            // TODO what about other mandatory fields?  Maybe ignore everything that is not a String[]?
+            if(key == "service.pid")
+                continue;
+            
             String[] permStrings;
             try {
-                permStrings = (String[]) properties.get(principal);
+                permStrings = (String[]) properties.get(key);
             } catch (ClassCastException e) {
-                throw new ConfigurationException(principal,
+                throw new ConfigurationException(key,
                         "Invalid permission specification, value must be an array of Strings.");
             }
             
@@ -110,11 +114,11 @@ public class DmtPrincipalPermissionAdminImpl
                 try {
                     permInfos[i] = new PermissionInfo(permStrings[i]);
                 } catch (IllegalArgumentException e) {
-                    throw new ConfigurationException(principal,
+                    throw new ConfigurationException(key,
                             "Invalid permission string: " + e.getMessage());
                 }
             }
-            newPermissions.put(principal, permInfos);
+            newPermissions.put(key, permInfos);
         }
         permissions = newPermissions;
     }
