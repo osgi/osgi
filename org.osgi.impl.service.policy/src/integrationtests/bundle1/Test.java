@@ -17,8 +17,32 @@
  */
 package integrationtests.bundle1;
 
-public class Test {
-	public static void foo() {
-		
+import java.security.PrivilegedAction;
+import java.security.PrivilegedExceptionAction;
+
+public class Test  {
+	
+	/**
+	 * call a method. The sole purpose is that the run() method in the action will
+	 * be run with this (eg. Test) class in the call stack. So permission checks will
+	 * be done with this class's rights.
+	 * @param action
+	 * @return
+	 */
+	public static Object doAction(PrivilegedAction action) {
+		return action.run();
 	}
+
+	/**
+	 * call a method. The sole purpose is that the run() method in the action will
+	 * be run with this (eg. Test) class in the call stack. So permission checks will
+	 * be done with this class's rights.
+	 * @param action
+	 * @return
+	 * @throws Exception
+	 */
+	public static Object doAction(PrivilegedExceptionAction action) throws Exception {
+		return action.run();
+	}
+
 }
