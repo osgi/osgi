@@ -20,12 +20,15 @@
 	<property file="${workspace}/cnf/build.properties" />
 	<btool eclipse="${project}" />
 
-
+	<property name="p" value= "${project.name}"/>
 	
 	<target name="publish" depends="many,one"/>
 	
 	<target name="many" depends="compile" if="jars.compile.order">
-		<echo>Many ${${jars.compile.order}</echo>
+		<echo>Many ${jars.compile.order} ${p}</echo>
+		<delete>
+			<fileset dir="${project}" includes="${jars.compile.order}" />
+		</delete>
 		<foreach list="${jars.compile.order}" delimiter=" ," target="buildJar" param="item.jarFile" inheritAll="true">
 		</foreach>
 	</target>
