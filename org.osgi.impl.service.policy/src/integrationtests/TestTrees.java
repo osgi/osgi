@@ -56,11 +56,11 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 
 public class TestTrees extends TestCase {
 	public static final String	ORG_OSGI_IMPL_SERVICE_POLICY_JAR	= "file:../org.osgi.impl.service.policy.jar";
-	public static final String	ORG_OSGI_IMPL_SERVICE_DMT_JAR	= "file:../org.osgi.impl.service.dmt.jar";
-	public static final String	ORG_OSGI_IMPL_SERVICE_LOG_JAR	= "file:../org.osgi.impl.service.log.jar";
-	public static final String	ORG_OSGI_IMPL_SERVICE_CM_JAR	= "file:../org.osgi.impl.service.cm.jar";
-	public static final String	ORG_OSGI_IMPL_SERVICE_EVENT_MAPPER_JAR	= "file:../org.osgi.impl.service.event.mapper.jar";
-	public static final String	ORG_OSGI_IMPL_SERVICE_EVENT_JAR	= "file:../org.osgi.impl.service.event.jar";
+	public static final String	ORG_OSGI_IMPL_SERVICE_DMT_JAR	= "file:../../org.osgi.impl.service.dmt/org.osgi.impl.service.dmt.jar";
+	public static final String	ORG_OSGI_IMPL_SERVICE_LOG_JAR	= "file:../../org.osgi.impl.service.log/org.osgi.impl.service.log.jar";
+	public static final String	ORG_OSGI_IMPL_SERVICE_CM_JAR	= "file:../../org.osgi.impl.service.cm/org.osgi.impl.service.cm.jar";
+	public static final String	ORG_OSGI_IMPL_SERVICE_EVENT_MAPPER_JAR	= "file:../../org.osgi.impl.service.event/org.osgi.impl.service.event.mapper.jar";
+	public static final String	ORG_OSGI_IMPL_SERVICE_EVENT_JAR	= "file:../../org.osgi.impl.service.event/org.osgi.impl.service.event.jar";
 
 	public static final String PRINCIPAL1 = "principal1";
 	public static final String PRINCIPAL1_HASH = "zDcCo9K+A67rtQI3TQEDg6_LEIw";
