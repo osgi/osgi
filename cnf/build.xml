@@ -69,6 +69,8 @@
 	<property name="javac" value="javac"/>
 	<btool eclipse="${project}" />
 	
+	<property name="bin.includes" value="${project.name}.jar"/>
+	
 	<!-- 
 	     PUBLISH
 	     The main target. It will build the jar file(s) and publish the 
