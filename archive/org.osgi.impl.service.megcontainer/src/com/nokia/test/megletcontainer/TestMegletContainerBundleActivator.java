@@ -99,9 +99,6 @@ public class TestMegletContainerBundleActivator extends Object implements
 	}
 
 	boolean waitStateChangeEvent( int state, String pid ) {
-
-		/* TODO TODO TODO TODO TODO */
-
 		long time = System.currentTimeMillis();
 		
 		try {
