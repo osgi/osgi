@@ -3,8 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry sourcepath="/osgi.released/ee.foundation.jar" kind="lib" path="/osgi.released/ee.foundation.jar"/>
-	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
 	<classpathentry kind="src" path="/org.osgi.impl.service.dmt"/>
+	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
 	<classpathentry kind="lib" path="/cnf/jar/junit.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
