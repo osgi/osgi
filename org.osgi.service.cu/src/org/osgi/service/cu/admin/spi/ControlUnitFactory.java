@@ -238,7 +238,7 @@ public interface ControlUnitFactory {
    * Explicitly removes control unit instance with a given id. Some type of
    * control units may not support explicit removing of the resources
    * represented by the corresponding control units. In that case this method
-   * throws <code>IllegalArgumentException</code>. Support for explicit
+   * throws <code>ControlUnitAdminException</code>. Support for explicit
    * destroying of Control Units is specified in the control unit metadata by
    * presence of an action with id <code>"$destroy"</code>.
    * 

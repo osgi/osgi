@@ -30,14 +30,14 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 
 /**
- * Custom exception throw from some control unit related methods.<BR>
+ * Custom exception thrown from some control unit related methods.<BR>
  * 
  * It has an error code, defining the type of error, which occurred, and an
  * optional nested exception.
  * 
  * @version $Revision$
  */
-public class ControlUnitException extends Exception {
+public class ControlUnitException extends RuntimeException {
 
   /**
    * Error code which signals that an undetermined error has occurred. The

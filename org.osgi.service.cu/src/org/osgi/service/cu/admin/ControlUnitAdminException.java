@@ -77,6 +77,12 @@ public class ControlUnitAdminException extends ControlUnitException {
    * but a finder method(s) are not defined.
    */
   public static final int SEARCHING_NOT_SUPPORTED_ERROR = 11;
+  
+  /**
+   * This error code means that the user tried to perform an operation
+   * over non-existent control unit type.
+   */
+  public static final int NO_SUCH_CONTROL_UNIT_TYPE_ERROR = 5;
     
   /**
    * Constructs a new control unit exception with the given error code.

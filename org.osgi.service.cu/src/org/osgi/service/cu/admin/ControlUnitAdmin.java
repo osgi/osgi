@@ -120,8 +120,7 @@ public interface ControlUnitAdmin {
    * 
    * @param controlUnitType control unit type
    * @return The type, or <code>null</code>, if the give type has no version
-   * @throws java.lang.IllegalArgumentException if there is no such type of
-   *           units exported in the framework
+   * @throws ControlUnitAdminException if there is no such type of units exported in the framework
    * @throws NullPointerException if the controlUnitType is <code>null</code>.
    */
   public String getControlUnitTypeVersion(String controlUnitType);
@@ -178,6 +177,7 @@ public interface ControlUnitAdmin {
    *         <code>(controlUnitType, controlUnitId)</code> pair or
    *         <code>null</code> if there is not such control unit exported in
    *         the framework.
+   * @throws ControlUnitAdminException if there is no such type of units exported in the framework 
    * @throws NullPointerException if the controlUnitType or controlUnitID is <code>null</code>.
    */
   public ControlUnit getControlUnit(String controlUnitType, String controlUnitID);
@@ -194,6 +194,7 @@ public interface ControlUnitAdmin {
    * 
    * @return An array of child control units or null if there are 
    * no child control units found for this parent type and id.
+   * 
    * @throws NullPointerException if the childControlUnitType is <code>null</code>.
    */
   public String[] getSubControlUnits(String parentControlUnitType, String parentControlUnitID,
@@ -262,7 +263,7 @@ public interface ControlUnitAdmin {
   /**
    * Explicitly removes control unit instance with a given type and id. Some
    * type of control units may not support explicit removing. In that case this
-   * method throws <code>IllegalArgumentException</code>. Support for
+   * method throws <code>ControlUnitAdminException</code>. Support for
    * explicit removing of Control Units is specified in the control unit
    * metadata by presence of an action with id <code>"$destroy"</code>.
    * 
