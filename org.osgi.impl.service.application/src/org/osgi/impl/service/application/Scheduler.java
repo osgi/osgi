@@ -18,7 +18,7 @@
 package org.osgi.impl.service.application;
 
 import java.io.*;
-import java.security.AccessController;
+//import java.security.AccessController; /* TODO */
 import java.util.*;
 
 import org.osgi.framework.*;
@@ -55,8 +55,8 @@ public class Scheduler implements Runnable, EventHandler {
 	public synchronized ServiceReference addScheduledApplication(String pid,
 			Map arguments, String topic, String eventFilter, boolean recurring) {
 
-		AccessController.checkPermission(new ApplicationAdminPermission(pid,
-				ApplicationAdminPermission.SCHEDULE));
+//		AccessController.checkPermission(new ApplicationAdminPermission(pid,  /* TODO */
+//				ApplicationAdminPermission.SCHEDULE));
 
 		ScheduledApplicationImpl app = new ScheduledApplicationImpl(this, bc,
 				pid, arguments, topic, eventFilter, recurring);
@@ -72,9 +72,9 @@ public class Scheduler implements Runnable, EventHandler {
 	public synchronized void removeScheduledApplication(
 			ScheduledApplication scheduledApplication) throws Exception {
 
-		AccessController.checkPermission(new ApplicationAdminPermission(
-				((ScheduledApplicationImpl)scheduledApplication).getPid(),
-				ApplicationAdminPermission.SCHEDULE));
+//		AccessController.checkPermission(new ApplicationAdminPermission( /* TODO */
+//				((ScheduledApplicationImpl)scheduledApplication).getPid(),
+//				ApplicationAdminPermission.SCHEDULE));
 
 		scheduledApps.remove( scheduledApplication );
 		changeServiceReg();
