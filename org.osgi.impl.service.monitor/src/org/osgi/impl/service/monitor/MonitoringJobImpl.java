@@ -109,9 +109,11 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
         sleep();
 
         while(running) {
+            monitorAdmin.scheduledUpdate(kpiNames, this);
+            /*
             for(int i = 0; i < kpiNames.length; i++)
                 monitorAdmin.scheduledUpdate(kpiNames[i], this);
-
+            */
             if(reportCount > 0) {
                 reportCount--;
                 if(reportCount == 0)

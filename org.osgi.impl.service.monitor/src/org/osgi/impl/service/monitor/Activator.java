@@ -85,7 +85,7 @@ public class Activator implements BundleActivator
             };
         monitorableTracker.open();
 
-        MonitorAdminImpl monitorAdmin = new MonitorAdminImpl(monitorableTracker, eventChannel, alertSender);
+        MonitorAdminImpl monitorAdmin = new MonitorAdminImpl(bc, monitorableTracker, eventChannel, alertSender);
         String[] services = new String[] {
             MonitorAdmin.class.getName(),
             UpdateListener.class.getName()

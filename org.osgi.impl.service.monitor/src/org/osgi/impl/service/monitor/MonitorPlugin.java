@@ -17,6 +17,8 @@
  */
 package org.osgi.impl.service.monitor;
 
+import java.lang.reflect.Array;
+import java.text.MessageFormat;
 import java.util.*;
 import org.osgi.framework.*;
 import org.osgi.service.dmt.*;
@@ -26,6 +28,11 @@ import org.osgi.util.tracker.ServiceTracker;
 
 public class MonitorPlugin implements DmtDataPlugIn
 {
+    private static final MessageFormat kpiTag = 
+        new MessageFormat("<kpi type=\"{0}\" cardinality=\"{1}\">\n{2}</kpi>");
+    private static final MessageFormat valueTag =
+        new MessageFormat("    <value>{0}</value>\n");
+
     private BundleContext bc;
     private ServiceTracker tracker;
     private MonitorAdminImpl monitorAdmin;
@@ -192,7 +199,7 @@ public class MonitorPlugin implements DmtDataPlugIn
 
         // path.length == 7, path[4].equals("TrapRef"), path[6].equals("TrapRefID")
 
-        // TODO set trap ref id leaf, if the node exists
+        server.setTrapRefId(path[5], data, nodeUri);
     }
 
     public void setNodeType(String nodeUri, String type) throws DmtException {
@@ -219,7 +226,8 @@ public class MonitorPlugin implements DmtDataPlugIn
 
         // path.length == 6, path[4].equals("TrapRef") because only this is deletable
 
-        // TODO delete trap ref interior node
+        // TODO make TrapRefID node separately deletable if it is separately creatable
+        server.deleteTrapRef(path[5], nodeUri);
     }
 
     public void createInteriorNode(String nodeUri) throws DmtException {
@@ -249,7 +257,7 @@ public class MonitorPlugin implements DmtDataPlugIn
         // path[4].equals("TrapRef") 
 
         if(path.length == 6) {
-            // TODO add trap ref interior node
+            server.addTrapRef(path[5], nodeUri);
             return;
         }
 
@@ -271,10 +279,17 @@ public class MonitorPlugin implements DmtDataPlugIn
             throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
                                    "Cannot add nodes at the specified position.");
 
+        Monitorable monitorable = getMonitorable(path[0], nodeUri);
+        KpiWrapper kpi = getKpi(monitorable, path[0], path[1], nodeUri);
+
+        // path[2].equals("Server") because parent must be an interior node
+
         if(path.length == 4)
             throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
                                    "Cannot add leaf node at the specified position.");
 
+        Server server = kpi.getServer(path[3], nodeUri);
+        
         // TODO replace this with the canAdd check in DmtAdmin based on the meta-data
         if(path.length == 5 || !path[4].equals("TrapRef"))
             throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
@@ -286,7 +301,13 @@ public class MonitorPlugin implements DmtDataPlugIn
             throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
                                    "Cannot add leaf node at the specified position.");
 
-        // TODO adding TrapRefID leaf nodes
+        server.getTrapRefId(path[5], nodeUri);
+        
+        // path.length == 7, path[5] is not an existing trap reference name
+
+        // TODO allow adding TrapRefID leaf nodes?  Currently automatically created with parent.
+        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
+                               "Cannot add TrapRefID nodes manually.");
     }
 
     public void clone(String nodeUri, String newNodeUri, boolean recursive) throws DmtException {
@@ -374,21 +395,6 @@ public class MonitorPlugin implements DmtDataPlugIn
         return false;
     }
 
-    /*
-    private String getResultXml(KPI kpi) {
-        int type = kpi.getType();
-        switch(type) {
-        case KPI.TYPE_STRING:  return null; // kpi.getString());
-        case KPI.TYPE_INTEGER: return null; // kpi.getInteger();
-        case KPI.TYPE_FLOAT:   return null; // kpi.getFloat();
-        case KPI.TYPE_OBJECT:  return null; // kpi.getObject();
-        default:
-            throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED, 
-                                   "KPI type '" + type + "' not supported yet.");
-        }
-    }
-    */
-
     public DmtData getNodeValue(String nodeUri) throws DmtException {
         String[] path = prepareUri(nodeUri);
 
@@ -410,17 +416,15 @@ public class MonitorPlugin implements DmtDataPlugIn
 
             // path[2].equals("Results")
 
-            // TODO return result in proper xml format
-
             int type = kpiValue.getType();
             switch(type) {
-            case KPI.TYPE_INTEGER: return new DmtData(kpiValue.getInteger());
-            case KPI.TYPE_STRING:  return new DmtData(kpiValue.getString());
-            case KPI.TYPE_OBJECT:
-            case KPI.TYPE_FLOAT:
+            case KPI.TYPE_STRING:  return createScalarResult("string",  kpiValue.getString());
+            case KPI.TYPE_INTEGER: return createScalarResult("integer", Integer.toString(kpiValue.getInteger()));
+            case KPI.TYPE_FLOAT:   return createScalarResult("float",   Float.toString(kpiValue.getFloat()));
+            case KPI.TYPE_OBJECT:  return createObjectResult(kpiValue);
             default:
                 throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED, 
-                                       "KPI type '" + type + "' not supported yet.");
+                                       "Unknown KPI type '" + type + "'.");
             }
         }
 
@@ -528,7 +532,8 @@ public class MonitorPlugin implements DmtDataPlugIn
 
         // path.length == 6, path[4].equals("TrapRef")
 
-        return new String[] { "TrapRefId" };
+        // TODO make this optional if TrapRefID nodes are creatable/deletable
+        return new String[] { "TrapRefID" };
     }
 
 
@@ -574,6 +579,46 @@ public class MonitorPlugin implements DmtDataPlugIn
         return new KpiWrapper(monId + '/' + id, kpi, monitorAdmin);
     }
 
+    private DmtData createObjectResult(KPI kpi) {
+        System.out.println("createObjectResult " + kpi);
+        Object data = kpi.getObject();
+        if(data.getClass().isArray())
+            return createArrayResult(data);
+        else if(data instanceof Vector) {
+            Vector vector = (Vector) data;
+            Object[] array;
+            if(vector.size() == 0)
+                array = new String[] {};
+            else
+                array = (Object[]) 
+                    Array.newInstance(vector.firstElement().getClass(),
+                                      vector.size());
+            return createArrayResult(vector.toArray(array));
+        }
+        else
+            return createScalarResult(data.getClass().getName().toLowerCase(), 
+                                      data.toString());
+    }
+
+    private DmtData createArrayResult(Object array) {
+        System.out.println("createArrayResult " + array);
+        String type = array.getClass().getComponentType().getName().toLowerCase();
+
+        StringBuffer sb = new StringBuffer();
+        for(int i = 0; i < Array.getLength(array); i++)
+            sb.append(valueTag.format(new Object[] { Array.get(array, i).toString() }));
+        
+        return new DmtData(kpiTag.format(new Object[] { type, "array", sb.toString() }));
+    }
+
+    private DmtData createScalarResult(String type, String data) {
+        System.out.println("createScalarResult " + type + " " + data);
+        String result = kpiTag.format(new Object[] { type, "scalar", 
+                                      valueTag.format(new Object[] { data })});
+        System.out.println("result: " + result);
+        return new DmtData(result, true);
+    }
+    
     private static String[] prepareUri(String nodeUri) {
         // assuming that nodeUri starts with the monitoring root node
         int rootLen = Activator.PLUGIN_ROOT.length();
@@ -785,9 +830,32 @@ class Server {
         value = data.getInt();
     }
 
-    // TODO TrapRef manipulation methods
+    void setTrapRefId(String name, DmtData data, String nodeUri) throws DmtException {
+        if(!trapRef.containsKey(name))
+            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+                                   "The trap reference with the specified ID does not exist.");
+        
+        if(data.getFormat() != DmtDataType.STRING)
+            throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED,
+                                   "Trap reference leaf must have string format.");
+        
+        // TODO check if data is "null" if this is valid in a DmtData
+        trapRef.put(name, data.getString());
+    }
 
-
+    // TODO allow separate creation of TrapRef/<X>/TrapRefID nodes?
+    void addTrapRef(String name, String nodeUri) throws DmtException {
+    	if(trapRef.put(name, name) != null)
+    		throw new DmtException(nodeUri, DmtException.NODE_ALREADY_EXISTS,
+                                   "A trap reference with the given ID already exists.");
+    }
+    
+    void deleteTrapRef(String name, String nodeUri) throws DmtException {
+    	if(trapRef.remove(name) == null)
+            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+                                   "The trap reference with the specified ID does not exist.");
+    }
+    
     void destroy() {
         stopJob();
     }

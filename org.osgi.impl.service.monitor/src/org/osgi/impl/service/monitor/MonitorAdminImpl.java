@@ -18,9 +18,12 @@
 package org.osgi.impl.service.monitor;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 import java.util.Iterator;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 import org.osgi.service.dmt.DmtAlertSender;
@@ -59,12 +62,14 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
     private static final String MONITOR_EVENT_TOPIC = "org.osgi.service.monitor.MonitorEvent";
     private static final int MONITORING_ALERT_CODE = 1226;
 
+    private BundleContext bc;
     private ServiceTracker tracker;
     private EventChannel eventChannel;
     private DmtAlertSender alertSender;
     private Vector jobs;
 
-    public MonitorAdminImpl(ServiceTracker tracker, EventChannel eventChannel, DmtAlertSender alertSender) {
+    public MonitorAdminImpl(BundleContext bc, ServiceTracker tracker, EventChannel eventChannel, DmtAlertSender alertSender) {
+        this.bc = bc;
         this.tracker = tracker;
         this.eventChannel = eventChannel;
         this.alertSender = alertSender;
@@ -73,7 +78,7 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
     }
 
     public KPI getKPI(String path) throws IllegalArgumentException {
-        // TODO check the rights of the caller
+        // TODO check caller permissions, check publisher permissions
 
         return trustedGetKpi(path);
     }
@@ -81,7 +86,7 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
     public MonitoringJob startJob(String initiator, String[] kpiNames, int schedule, int count) 
         throws IllegalArgumentException {
 
-        // TODO check the rights of the caller
+        // TODO check caller permissions, check publisher permissions
 
         return startJob(initiator, kpiNames, schedule, count, true);
     }
@@ -90,11 +95,37 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
         return (MonitoringJob[]) jobs.toArray(new MonitoringJob[jobs.size()]);
     }
 
+    public Monitorable[] getMonitorables() {
+        // TODO check caller permissions, check publisher permissions
+    	Vector monitorables = new Vector();
+        ServiceReference[] monitorableRefs = tracker.getServiceReferences();
+
+        if(monitorableRefs == null)
+            return null;
+        
+        for(int i = 0; i < monitorableRefs.length; i++) {
+            // TODO should this check be done here?
+            String servicePid = (String) monitorableRefs[i].getProperty("service.pid");
+            Monitorable monitorable = (Monitorable) tracker.getService(monitorableRefs[i]);
+            if(servicePid != null && monitorable != null)
+                monitorables.add(monitorable);
+        }
+        
+        int size = monitorables.size();
+        return size == 0 ? null : 
+            (Monitorable[]) monitorables.toArray(new Monitorable[size]);
+    }
+
+    public Monitorable getMonitorable(String id) throws IllegalArgumentException {
+        // TODO check caller permissions, check publisher permissions
+        return trustedGetMonitorable(id);
+    }
+
     public synchronized void updated(KPI kpi) {
         sendEvent(kpi, null);
 
         Vector listeners = new Vector();
-        Vector serverIds = new Vector();
+        Vector remoteJobs = new Vector();
 
         Iterator i = jobs.iterator();
         while(i.hasNext()) {
@@ -103,7 +134,7 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
                 if(job.isLocal())
                     listeners.add(job.getInitiator());
                 else
-                    serverIds.add(job.getInitiator());
+                    remoteJobs.add(job);
             }
         }
 
@@ -113,9 +144,11 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
         else if(matchNum > 1)
             sendEvent(kpi, (String[]) listeners.toArray(new String[matchNum]));
 
-        Iterator j = serverIds.iterator();
-        while(j.hasNext())
-            sendAlert(kpi, (String) j.next());
+        Iterator j = remoteJobs.iterator();
+        while(j.hasNext()) {
+            MonitoringJob job = (MonitoringJob) j.next();
+            sendAlert(getValidKpis(job.getKpiNames()), job.getInitiator());
+        }
     }
 
     private void sendEvent(KPI kpi, Object initiators) {
@@ -128,7 +161,25 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
         eventChannel.postEvent(event);
     }
 
-    private void sendAlert(KPI kpi, String initiator) {
+    private void sendAlert(List kpis, String initiator) {
+        DmtAlertItem[] items = new DmtAlertItem[kpis.size()];
+        
+        Iterator iterator = kpis.iterator();
+        for(int i = 0; iterator.hasNext(); i++) {
+			KPI kpi = (KPI) iterator.next();
+			items[i] = createAlertItem(kpi);
+        }
+
+        try {
+            alertSender.sendAlert(initiator, MONITORING_ALERT_CODE, items);
+        } catch(DmtException e) {
+            // TODO what to do here?    (codes: ALERT_NOT_ROUTED, REMOTE_ERROR)
+            System.out.println("MonitorAdmin: error delivering alert:");
+            e.printStackTrace(System.out);
+        }
+    }
+    
+    private DmtAlertItem createAlertItem(KPI kpi) {
         String data = null;
 
         switch(kpi.getType()) {
@@ -138,19 +189,10 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
         case KPI.TYPE_OBJECT:  data = "" + kpi.getObject();  break;
         }
 
-        DmtAlertItem[] items = new DmtAlertItem[] 
-            { new DmtAlertItem(Activator.PLUGIN_ROOT + "/" + kpi.getPath(),
-                               null, // TODO fill in with proper alert type
-                               "chr", // TODO send result in XML format
-                               null, data) };
-
-        try {
-            alertSender.sendAlert(initiator, MONITORING_ALERT_CODE, items);
-        } catch(DmtException e) {
-            // TODO what to do here?    (codes: ALERT_NOT_ROUTED, REMOTE_ERROR)
-            System.out.println("MonitorAdmin: error delivering alert:");
-            e.printStackTrace(System.out);
-        }
+        return new DmtAlertItem(Activator.PLUGIN_ROOT + "/" + kpi.getPath(),
+        		                "x-oma-trap:" + kpi.getPath(),
+                                "chr", // TODO send result in XML format
+                                null, data);
     }
 
     synchronized MonitoringJob startJob(String initiator, String[] kpiNames, int schedule, int count, boolean local)
@@ -187,19 +229,16 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
         jobs.remove(job);
     }
 
-    synchronized void scheduledUpdate(String path, MonitoringJob job) {
-        KPI kpi;
-        try {
-            kpi = trustedGetKpi(path);
-        } catch(IllegalArgumentException e) {
-            // Ignore KPIs that are (temporarily) unavailable
-            return;
-        }
-
-        if(job.isLocal())
-            sendEvent(kpi, job.getInitiator());
-        else
-            sendAlert(kpi, job.getInitiator());
+    synchronized void scheduledUpdate(String[] paths, MonitoringJob job) {
+        String initiator = job.getInitiator();
+        Vector kpis = getValidKpis(paths);
+        
+        if(job.isLocal()) {
+        	Iterator i = kpis.iterator();
+            while (i.hasNext())
+				sendEvent((KPI) i.next(), initiator);
+        } else
+            sendAlert(kpis, initiator);
     }
 
     private static String getId(String path) {
@@ -216,36 +255,51 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
         return path.substring(path.indexOf('/') + 1);
     }
 
-    private synchronized KPI trustedGetKpi(String path) throws IllegalArgumentException {
+    private Vector getValidKpis(String[] paths) {
+        Vector kpis = new Vector();
+        for (int i = 0; i < paths.length; i++) {
+            try {
+                kpis.add(trustedGetKpi(paths[i]));
+            } catch(IllegalArgumentException e) {
+                // Ignore KPIs that are (temporarily) unavailable
+            }           
+        }
+        return kpis;
+    }
+
+    private KPI trustedGetKpi(String path) throws IllegalArgumentException {
         if(path == null)
             throw new IllegalArgumentException("Path argument is null.");
 
-        String id = getId(path);
-        String kpiName = getKpiName(path);
-
-        ServiceReference[] monitorables = tracker.getServiceReferences();
-
-        if(monitorables == null)
-            throw new IllegalArgumentException("Monitorable id '" + id + "' not found (no monitorables registered).");
-
-        for(int i = 0; i < monitorables.length; i++) {
-            String servicePid = (String) monitorables[i].getProperty("service.pid");
-            if(servicePid == null) // TODO change this to proper ex. specified on the API (or maybe no ex.)
-                throw new IllegalStateException("No service.pid property of Monitorable service.");
-            if(servicePid.equals(id)) {
-                Monitorable monitorable = (Monitorable) tracker.getService(monitorables[i]);
-                if(monitorable == null)
-                    throw new IllegalArgumentException(
-                        "Monitorable id '" + id + "' not found (monitorable no longer registered.");
-                KPI kpi = monitorable.getKpi(kpiName);
-                if(kpi == null)
-                    throw new IllegalArgumentException("KPI '" + kpiName + "' not found in Monitorable '" + id + "'.");
-                return kpi;
-            }
+        KPI kpi = trustedGetMonitorable(getId(path)).getKpi(getKpiName(path));
+        if(kpi == null)
+        	throw new IllegalArgumentException("KPI '" + getKpiName(path) + 
+                    "' not found in Monitorable '" + getId(path) + "'.");
+        return kpi;
+    }
+    
+    private Monitorable trustedGetMonitorable(String id) throws IllegalArgumentException {
+    	if(id == null)
+            throw new IllegalArgumentException("Monitorable ID argument is null.");
+        
+        // TODO check ID for filter-illegal characters
+        ServiceReference[] refs;
+        try {
+            refs = bc.getServiceReferences(Monitorable.class.getName(), "(service.pid=" + id + ")");
+        } catch(InvalidSyntaxException e) {
+            // should not be reached if the above TODO is done
+            throw new IllegalArgumentException("Invalid characters in Monitorable ID '" + id + 
+                                               "': ." + e.getMessage());
         }
 
-        throw new IllegalArgumentException("Monitorable id '" + id + "' not found (no matching service registered).");
+        if(refs == null)
+            throw new IllegalArgumentException("Monitorable id '" + id + "' not found (no matching service registered).");
+
+        // TODO is it allowed to give the tracker a reference that was not given by it?
+        Monitorable monitorable = (Monitorable) tracker.getService(refs[0]);
+        if(monitorable == null)
+            throw new IllegalArgumentException("Monitorable id '" + id + "' not found (monitorable no longer registered.");
+
+        return monitorable;
     }
-
-
 }
