@@ -37,7 +37,7 @@ import org.osgi.service.cu.admin.spi.ManagedControlUnit;
  * @version $Revision$
  */
 public class HipModule implements ManagedControlUnit {
-	private static final String id = "hip";
+	private static final String id = "hip.id";
 	private static final String type = "hip";
 	private CUAdminCallback adminCallback; 
 	

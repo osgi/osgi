@@ -54,12 +54,12 @@ public class Activator implements BundleActivator {
         // Register a HierarchyListener without filter
 		Hashtable p = new Hashtable();
 		p.put(ControlUnitConstants.EVENT_SYNC, "");
-		regList1 = context.registerService(HierarchyListener.class.getName(), new NoFilterListener(), null);
+		regList1 = context.registerService(HierarchyListener.class.getName(), new NoFilterListener(), p);
 
 		// Register a HierarchyListener with a filter containing all possible properties
 		p.clear();
 		p.put(ControlUnitConstants.EVENT_SYNC, "");
-		p.put(ControlUnitConstants.EVENT_FILTER, "(&(org.osgi.control.event.type=1)(org.osgi.control.id=window.1)(org.osgi.control.type=window)(org.osgi.control.parent.type=door)(org.osgi.control.parent.id=door.1))");
+		p.put(ControlUnitConstants.EVENT_FILTER, "(&(org.osgi.control.event.type=1)(org.osgi.control.id=hip.position.id)(org.osgi.control.type=hip.position)(org.osgi.control.parent.type=hip)(org.osgi.control.parent.id=hip.id))");
 		regList2 = context.registerService(HierarchyListener.class.getName(), new EventFilterListener(), p);
 	}
 	
