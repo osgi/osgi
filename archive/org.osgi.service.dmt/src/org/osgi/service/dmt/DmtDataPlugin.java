@@ -47,11 +47,14 @@ public interface DmtDataPlugin extends Dmt {
      * @param lockMode One of the lock type constants specified in
      * <code>DmtSession</code>
      * @param session The session from which this plugin instance is accessed
-     * @throws DmtException
+     * @throws DmtException with the following possible error codes
+     * <li> <code>NODE_NOT_FOUND</code>
+     * <li> <code>OTHER_ERROR</code> [TODO can we specify this more precisely?]
+     * @throws SecurityException if some underlying operation failed because of
+     * lack of permissions
      */
     void open(String subtreeUri, int lockMode, DmtSession session)
         throws DmtException;
-    //TODO specify exceptions, can we assume that every parameter is correct?
 
     /**
      * Tells whether the plugin can handle atomic transactions. If a session is

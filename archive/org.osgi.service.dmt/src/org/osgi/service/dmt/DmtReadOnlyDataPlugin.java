@@ -43,8 +43,11 @@ public interface DmtReadOnlyDataPlugin extends DmtReadOnly {
      * is accessed can be useful for example in the case of sending alerts.
      * @param subtreeUri The subtree which is locked in the current session
      * @param session The session from which this plugin instance is accessed
-     * @throws DmtException
+     * @throws DmtException with the following possible error codes
+     * <li> <code>NODE_NOT_FOUND</code>
+     * <li> <code>OTHER_ERROR</code> [TODO can we specify this more precisely?]
+     * @throws SecurityException if some underlying operation failed because of
+     * lack of permissions
      */
     void open(String subtreeUri, DmtSession session) throws DmtException;
-    //TODO specify exceptions
 }
