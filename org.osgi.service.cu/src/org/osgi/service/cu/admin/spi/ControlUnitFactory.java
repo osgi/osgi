@@ -157,6 +157,8 @@ public interface ControlUnitFactory {
    * {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
+   * @throws ControlUnitAdminException if searching is not supported by the 
+   * factory or there is no finder with the given finderID.
    */
   public String[] findControlUnits(String finderID, Object arguments) throws ControlUnitException;
 
@@ -168,9 +170,9 @@ public interface ControlUnitFactory {
    * @param childControlUnitID id of the child unit
    * @param parentControlUnitType type of the returned parent units
    * @return The IDs of parent units or <code>null</code>, if the given control
-   *         unit has no parents of the specified type
+   *         unit has no parents of the specified type.
    * @throws ControlUnitAdminException if there is no such child control unit 
-   *         provided in the framework 
+   *         provided in the framework. 
    */
   public String[] getParents(String childControlUnitID, String parentControlUnitType) throws ControlUnitAdminException;
 
@@ -185,7 +187,9 @@ public interface ControlUnitFactory {
    * retrieved for some reason. {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
-   * @return The value of the variable
+   * @throws ControlUnitAdminException if a control unit with the given 
+   * controlUnitID does not exist.
+   * @return The value of the variable.
    */
   public Object queryStateVariable(String controlUnitID, String stateVariableID) throws ControlUnitException;
 
@@ -203,9 +207,10 @@ public interface ControlUnitFactory {
    * {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
-   * 
+   * @throws ControlUnitAdminException if a control unit with the given 
+   * controlUnitID does not exist.
    * @return The output argument(s) or <code>null</code> if the action does
-   *         not return value
+   *         not return value.
    */
   public Object invokeAction(String controlUnitID, String actionID, Object arguments)
       throws ControlUnitException;
@@ -231,7 +236,8 @@ public interface ControlUnitFactory {
    * reason. {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
-   * 
+   * @throws ControlUnitAdminException if creation is not supported 
+   * by the factory or there is no constructor with the given constructorID.
    * @return the id of the newly created control unit.
    */
   public String createControlUnit(String constructorID, Object arguments)
@@ -250,6 +256,8 @@ public interface ControlUnitFactory {
    * reason. {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
+   * @throws ControlUnitAdminException if destruction of control units is 
+   * not supported by the factory.
    */
   public void destroyControlUnit(String controlUnitID) throws ControlUnitException;
 }

@@ -127,7 +127,7 @@ public interface ControlUnitAdmin {
 
   /**
    * Returns the IDs of control units of the specified type, located by the 
-   * finder method specified by itÂ’s ID an according the given finder 
+   * finder method specified by it’s ID an according the given finder 
    * parameters. Supported finder methods are
    * specific to the type of the control unit and are specified in the control
    * unit metadata as a special class of actions with identifier starting with
@@ -162,6 +162,9 @@ public interface ControlUnitAdmin {
    * {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
+   * @throws ControlUnitAdminException if there is no such a type of control units 
+   * available in the framework, searching is not supported by this type or it  
+   * does not have a finder with the given finderID.
    * @throws NullPointerException if the controlUnitType or finderID is <code>null</code>.
    */
   public String[] findControlUnits(String controlUnitType, String finderID, Object arguments)
@@ -177,7 +180,7 @@ public interface ControlUnitAdmin {
    *         <code>(controlUnitType, controlUnitId)</code> pair or
    *         <code>null</code> if there is not such control unit exported in
    *         the framework.
-   * @throws ControlUnitAdminException if there is no such type of units exported in the framework 
+   * @throws ControlUnitAdminException if there is no such type of units exported in the framework. 
    * @throws NullPointerException if the controlUnitType or controlUnitID is <code>null</code>.
    */
   public ControlUnit getControlUnit(String controlUnitType, String controlUnitID) throws ControlUnitAdminException;
@@ -220,7 +223,7 @@ public interface ControlUnitAdmin {
    * @return The parent types or null if the given control unit has no parents of
    *         the given type
    * @throws ControlUnitAdminException if there is no such child control unit 
-   *         provided in the framework 
+   *         provided in the framework. 
    * @throws NullPointerException if the childControlUnitType,
    *         childControlUnitID or parentControlUnitType is <code>null</code>.
    */
@@ -257,6 +260,9 @@ public interface ControlUnitAdmin {
    * reason. {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
+   * @throws ControlUnitAdminException if there is no such a type of control units 
+   * available in the framework, creation is not supported for this type or it  
+   * does not have a constructor with the given constructorID.
    * @throws NullPointerException if the controlUnitType or constructorID is <code>null</code>.
    */
   public String createControlUnit(String controlUnitType, String constructorID,
@@ -275,6 +281,9 @@ public interface ControlUnitAdmin {
    * reason. {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
+   * @throws ControlUnitAdminException if there is no such a type of control units 
+   * available in the framework or destruction of control units is not 
+   * supported for this type.
    * @throws NullPointerException if the controlUnitType or controlUnitID is <code>null</code>.
    */
   public void destroyControlUnit(String controlUnitType, String controlUnitID)
@@ -302,6 +311,9 @@ public interface ControlUnitAdmin {
    * retrieved for some reason. {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
+   * @throws ControlUnitAdminException if there is no such a type of control units 
+   * available in the framework or a control unit with the given controlUnitType
+   * and controlUnitID does not exist.
    * @throws NullPointerException if the controlUnitType, controlUnitID or stateVariableID is <code>null</code>.
    */
   public Object queryStateVariable(String controlUnitType, String controlUnitID, String stateVariableID)
@@ -323,6 +335,9 @@ public interface ControlUnitAdmin {
    * {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
+   * @throws ControlUnitAdminException if there is no such a type of control units 
+   * available in the framework or a control unit with the given controlUnitType
+   * and controlUnitID does not exist.
    * @throws NullPointerException if the controlUnitType, controlUnitID or actionID is <code>null</code>.
    */
   public Object invokeAction(String controlUnitType, String controlUnitID, String actionID, Object arguments)
