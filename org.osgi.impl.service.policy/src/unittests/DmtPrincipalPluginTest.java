@@ -111,4 +111,14 @@ public class DmtPrincipalPluginTest extends DmtPluginTestCase implements DmtPrin
 		assertEquals(1,pi.length);
 		assertEquals(ADMINPERMISSION,pi[0]);
 	}
+
+	public void testDelete() throws Exception {
+		principalPermissions.put(PRINCIPAL1,new PermissionInfo[]{});
+		principalPermissions.put(PRINCIPAL2,new PermissionInfo[]{});
+		newAtomicSession();
+		dmtSession.deleteNode(PRINCIPAL1_HASH);
+		dmtSession.close();
+		assertNull(principalPermissions.get(PRINCIPAL1));
+		assertNotNull(principalPermissions.get(PRINCIPAL2));
+	}
 }

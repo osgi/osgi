@@ -114,6 +114,8 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 	private static final DmtMetaNode rootMetaNode = new RootMetaNode("tree representing DMT Principal permissions");
 	private static final DmtMetaNode principalMetaNode = new PrincipalMetaNode();
 	private static final DmtMetaNode permissionInfoMetaNode = new PermissionInfoMetaNode();
+	private static final DmtMetaNode principalPermissionMetaNode = new PrincipalPermissionMetaNode();
+	
 	private final HashCalculator hashCalculator;
 
 	public DmtPrincipalPlugin(DmtPrincipalPermissionAdmin dmtPrincipalPermissionAdmin) throws NoSuchAlgorithmException {
@@ -144,8 +146,7 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 		String[] path = getPath(nodeUri);
 		if (path.length==0) return rootMetaNode;
 		if (path.length==1) {
-			// TODO
-			throw new IllegalStateException();
+			return principalPermissionMetaNode;
 		}
 		if (path.length==2) {
 			if (PRINCIPAL.equals(path[1])) return principalMetaNode;
@@ -181,7 +182,10 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 	}
 
 	public void deleteNode(String nodeUri) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
+		String[] path = getPath(nodeUri);
+		if (path.length!=1) throw new IllegalStateException(); // should not get here
+		currentState.remove(path[0]);
+		dirty = true;
 	}
 
 	public void createInteriorNode(String nodeUri) throws DmtException {
