@@ -67,15 +67,19 @@ public class Dependencies {
 			else {
 				Resource r = (Resource) dot.get(entry);
 				if (r != null) {
-					JarInputStream jarStream = new JarInputStream(r
-							.getInputStream());
-					JarEntry jarEntry = jarStream.getNextJarEntry();
-					while (jarEntry != null) {
-						addContained(base(jarEntry.getName()));
-						if (jarEntry.getName().endsWith(".class")) {
-							doStream(jarStream);
+					InputStream in = r.getInputStream();
+					if ( in == null ) 
+						btool.errors.add("BundleClasspath contains non existent entry " + entry );
+					else {
+						JarInputStream jarStream = new JarInputStream(in);
+						JarEntry jarEntry = jarStream.getNextJarEntry();
+						while (jarEntry != null) {
+							addContained(base(jarEntry.getName()));
+							if (jarEntry.getName().endsWith(".class")) {
+								doStream(jarStream);
+							}
+							jarEntry = jarStream.getNextJarEntry();
 						}
-						jarEntry = jarStream.getNextJarEntry();
 					}
 				}
 				else
