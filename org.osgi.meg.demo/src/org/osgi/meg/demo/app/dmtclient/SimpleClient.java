@@ -40,13 +40,13 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
 
     private DmtAdmin factory;
 
-    private UpdateListener updateListener;
+    private MonitorListener monitorListener;
 
     private int updateCount = 0;
 
-    public SimpleClient(DmtAdmin factory, UpdateListener updateListener, BundleContext bc) {
+    public SimpleClient(DmtAdmin factory, MonitorListener monitorListener, BundleContext bc) {
         this.factory = factory;
-        this.updateListener = updateListener;
+        this.monitorListener = monitorListener;
         this.bc = bc;        
     }
 
@@ -138,7 +138,7 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
 
             //ma.startJob("schedule-listener", new String[] { pid + "/NumOfChanges" }, 60, 5);
 
-            ma.startJob("2nd-change-listener", new String[] { pid + "/NumOfChanges" }, 0, 2);
+            ma.startJob("2nd-change-listener", new String[] { pid + "/NumOfChanges" }, 2);
 
             bc.ungetService(monitorRef);
 
@@ -382,97 +382,91 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
         setUpdateCount(updateCount + 1);
     }
 
-    public KPI getKpi(String id)
+    public StatusVariable getStatusVariable(String id)
     {
-        if(matchingId(id, "NumOfChanges"))
-            return getUpdateKpi();
+        if(id.equals("NumOfChanges"))
+            return getUpdateVar();
         
-        if(matchingId(id, "CPULoad"))
-            return getLoadKpi();
+        if(id.equals("CPULoad"))
+            return getLoadVar();
         
-        if(matchingId(id, "Doubles"))
-            return getDoubles();
-        
-        throw new IllegalArgumentException("KPI '" + id + "' not found in Monitorable '" + 
-                                           ClientActivator.SERVICE_PID + "'.");
+        throw new IllegalArgumentException("Status Variable '" + id + 
+                "' not found in Monitorable '" + ClientActivator.SERVICE_PID + 
+                "'.");
     }
  
-	public String[] getKpiNames()
+	public String[] getStatusVariableNames()
     {
-        return new String[] { "NumOfChanges", "CPULoad", "Doubles" };
-    }
-
-    public String[] getKpiPaths()
-    {
-        return new String[] {
-            ClientActivator.SERVICE_PID + "/NumOfChanges",
-            ClientActivator.SERVICE_PID + "/CPULoad",
-            ClientActivator.SERVICE_PID + "/Doubles"
-        };
-    }
-
-    public KPI[] getKpis()
-    {
-        return new KPI[] { getUpdateKpi(), getLoadKpi(), getDoubles() };
+        return new String[] { "NumOfChanges", "CPULoad" };
     }
 
     public boolean notifiesOnChange(String id) 
     {
-        if(matchingId(id, "NumOfChanges"))
+        if(id.equals("NumOfChanges"))
             return true;
         
-        if(matchingId(id, "CPULoad") || matchingId(id, "Doubles"))
+        if(id.equals("CPULoad"))
             return false;
 
-        throw new IllegalArgumentException("KPI '" + id + "' not found in Monitorable '" + 
-                                           ClientActivator.SERVICE_PID + "'.");
+        throw new IllegalArgumentException("Status Variable '" + id + 
+                "' not found in Monitorable '" + ClientActivator.SERVICE_PID + 
+                "'.");
     }
 
-    public boolean resetKpi(String id)
+    public boolean resetStatusVariable(String id)
     {
-        if(matchingId(id, "NumOfChanges")) {
+        if(id.equals("NumOfChanges")) {
             setUpdateCount(0);
             return true;
         }
 
-        if(matchingId(id, "CPULoad") || matchingId(id, "Doubles"))
+        if(id.equals("CPULoad"))
             return false;
 
-        throw new IllegalArgumentException("KPI '" + id + "' not found in Monitorable '" + 
-                                           ClientActivator.SERVICE_PID + "'.");
-    }
-
-    private boolean matchingId(String id, String name) {
-        return id.equals(name)
-                || id.equals(ClientActivator.SERVICE_PID + '/' + name);
+        throw new IllegalArgumentException("Status Variable '" + id + 
+                "' not found in Monitorable '" + ClientActivator.SERVICE_PID + 
+                "'.");
     }
     
+    public String getDescription(String id) {
+        if(id.equals("NumOfChanges"))
+            return "Number of times the configuration has been updated.";
+        
+        if(id.equals("CPULoad"))
+            return "CPU load percentage indicator (dummy)";
+
+        throw new IllegalArgumentException("Status Variable '" + id + 
+                "' not found in Monitorable '" + ClientActivator.SERVICE_PID + 
+                "'.");
+    }
+
     private void setUpdateCount(int newUpdateCount)
     {
         updateCount = newUpdateCount;
-        updateListener.updated(getUpdateKpi());
+        monitorListener.updated(ClientActivator.SERVICE_PID, getUpdateVar());
     }
 
     private static Random random = new Random();
 
-    private KPI getLoadKpi() {
-        return new KPI(ClientActivator.SERVICE_PID, "CPULoad", 
-                       "CPU load percentage indicator (dummy)", KPI.CM_SI,
-                       random.nextInt(101));
+    private StatusVariable getLoadVar() {
+        return new StatusVariable(ClientActivator.SERVICE_PID, "CPULoad", 
+                       StatusVariable.CM_SI, random.nextInt(101));
     }
 
-    private KPI getUpdateKpi() {
-        return new KPI(ClientActivator.SERVICE_PID, "NumOfChanges", 
-                       "Number of times the configuration has been updated.", KPI.CM_CC, updateCount);
+    private StatusVariable getUpdateVar() {
+        return new StatusVariable(ClientActivator.SERVICE_PID, "NumOfChanges", 
+                       StatusVariable.CM_CC, updateCount);
     }
 
-    private KPI getDoubles() {
+    /*
+    private StatusVariable getDoubles() {
         double[] doubles = new double[random.nextInt(4)];
         for(int i = 0; i < doubles.length; i++)
 			doubles[i] = random.nextDouble();
-    	return new KPI(ClientActivator.SERVICE_PID, "Doubles",
-                       "Some pretty doubles!", KPI.CM_SI, doubles);
+    	return new StatusVariable(ClientActivator.SERVICE_PID, "Doubles",
+                       "Some pretty doubles!", StatusVariable.CM_SI, doubles);
     }
+    */
 
     public void handleEvent(Event event) {
         String topic = event.getTopic();
@@ -492,41 +486,45 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
 	}
 
 	private void monitorEvent(Event event) {
-        String path = event.getProperty("monitorable.pid") + "/" + event.getProperty("kpi.name");
-        Object listeners = event.getProperty("listener.id");
+        String path = event.getProperty("mon.monitorable.pid") + "/" + 
+                event.getProperty("mon.statusvariable.name");
+        Object listeners = event.getProperty("mon.listener.id");
 
         if(listeners == null)
-            System.out.println("Change event received for KPI '" + path + "'.");
+            System.out.println("Change event received for Status Variable '" + 
+                    path + "'.");
         else {
             String listenerStr;
             if(listeners instanceof String)
                 listenerStr = (String) listeners;
             else                // String[]
                 listenerStr = Arrays.asList((Object[])listeners).toString();
-            System.out.println("Monitor event received for KPI '" + path + 
-                               "' addressed to the following listener(s): " + listenerStr);
+            System.out.println("Monitor event received for Status Variable '" +
+                    path + "' addressed to the following listener(s): " + 
+                    listenerStr);
         }
 
         String error = null;
-        KPI kpi = null;
+        StatusVariable var = null;
 
+        // TODO get var from event
         try {
             ServiceReference ref = bc.getServiceReference(MonitorAdmin.class.getName());
             if(ref != null) {
                 MonitorAdmin ma = (MonitorAdmin) bc.getService(ref);
                 if(ma != null)
-                    kpi = ma.getKPI(path);
+                    var = ma.getStatusVariable(path);
                 else
                     error = "MonitorAdmin service no longer registered.";
             } else
                 error = "Cannot find MonitorAdmin service.";
         } catch(IllegalArgumentException e) {
-            error = "KPI for given path no longer exists.";
+            error = "Status Variable for given path no longer exists.";
         }
 
         if(error != null)
-            System.out.println("Error retrieving new value of KPI: " + error);
+            System.out.println("Error retrieving new value of Status Variable: " + error);
         else
-            System.out.println("Value: " + kpi);
+            System.out.println("Value: " + var);
     }
 }
