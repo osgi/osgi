@@ -32,18 +32,42 @@ import java.util.*;
 import org.osgi.framework.*;
 import org.osgi.service.metatype.MetaTypeService;
 
+/**
+ * Register the metatype service and wait till someone uses it. Then initialize
+ * the list of metatypes from bundles.
+ * 
+ * This information should be cached because it is horrendously expensive to
+ * rebuild this list all the time. However, that is for real implementations.
+ * 
+ * @version $Revision$
+ */
 public class Activator implements BundleActivator, BundleListener {
 	private Map		bundles	= new Hashtable();	// bundle -> MTI
 	boolean			initialized;
 	BundleContext	context;
 
+	/**
+	 * Register the MetatTypeService. 
+	 * 
+	 * We use a proxy so that we can use public methods.
+	 * 
+	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
+	 */
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
-
 		context.registerService(MetaTypeService.class.getName(), new MTS(this),
 				null);
 	}
 
+	/**
+	 * Check if a bunlde has meta data, if so parse
+	 * it and construct the internal structures.
+	 * 
+	 * We assume the metatype info is stoed in the META-INF/metatype
+	 * directory. We parse all the files in that directory
+	 * according to the meta data schema.
+	 * 
+	 */
 	void parseBundle(Bundle target) throws IOException, Exception {
 		MTI mti = new MTI(target, null);
 
@@ -55,10 +79,17 @@ public class Activator implements BundleActivator, BundleListener {
 		bundles.put(target, mti);
 	}
 
+	/** 
+	 * We let the framework do the clean up ... as it should.
+	 */
 	public void stop(BundleContext context) throws Exception {
-		System.out.println("Goodbye World");
 	}
 
+	/**
+	 * Once we are initialized, we listen to changes to the
+	 * bundle set. 
+	 * 
+	 */
 	public void bundleChanged(BundleEvent event) {
 		try {
 			switch (event.getType()) {
@@ -86,7 +117,18 @@ public class Activator implements BundleActivator, BundleListener {
 		}
 	}
 
-	// TODO handle caching, this is not
+	/**
+	 * This method is called by the MetaType Service proxy. It checks
+	 * if we are already initialized, if not, we do that.
+	 * 
+	 * We now go through all the bundles and check their
+	 * meta data. This is obviously expensive.
+	 * 
+	 * @param bundle	The bundle to analyze
+	 * @return			The MetaTypeInformation object
+	 */
+	// TODO handle caching, this is not acceptable for a real
+	// world impl.
 	MTI getMTI(Bundle bundle) {
 
 		try {

@@ -31,7 +31,6 @@ import java.util.*;
 
 /**
  *
- * TODO Add Javadoc comment for this type.
  * 
  * @version $Revision$
  */
@@ -58,15 +57,5 @@ public class OCD {
 
 	void addIcon(int size, String url ) {
 		icons.put( new Integer(size), url );
-	}
-	
-	public String toString() {
-		StringBuffer	sb = new StringBuffer();
-		sb.append( name );
-		sb.append( "(" );
-		sb.append( id );
-		sb.append( "): " );
-		sb.append( attributes );
-		return sb.toString();
 	}
 }

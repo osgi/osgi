@@ -30,7 +30,9 @@ package org.osgi.impl.service.metatype;
 import org.osgi.service.metatype.AttributeDefinition;
 
 /**
- *
+ * The ADProxy class has a pointer to an AD and a link to the
+ * OCD that can perform string translations. This is the
+ * object returned for an AttributeDefinition when requested.
  * 
  * @version $Revision$
  */

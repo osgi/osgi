@@ -37,17 +37,34 @@ import org.osgi.service.metatype.*;
 import org.xmlpull.v1.*;
 
 /**
- * 
+ * The MTI implements the MetaTypeInformation interface. It maintains a registry
+ * of OCDs and PIDs.
  * 
  * @version $Revision$
  */
 public class MTI implements MetaTypeInformation, Serializable {
 	final static String[]	EMPTY_STRINGS			= {};
+
+	/*
+	 * The given name space.
+	 */
 	final static String		NAMESPACE				= "http://www.org.osgi/xmlns/metatype/v1.0.0/md";
+
+	/**
+	 * This list is ordered according to the type numbers in AttributeDefinition
+	 * ... if you change the order, strange effects are to be expected. The list
+	 * is used to translate a type name in the <AD>element to the
+	 * AttributeDefinition type int.
+	 */
 	final static String[]	TYPE_NAMES				= {"<>", "String", "Long",
 			"Integer", "Short", "Character", "Byte", "Double", "Float",
 			"BigInteger", "BigDecimal", "Boolean",	};
 
+	/**
+	 * This list is ordered according to the type numbers in AttributeDefinition
+	 * ... if you change the order, strange effects are to be expected. The list
+	 * is used to create arrays for cardinality more than 0.
+	 */
 	final static Object[][]	EMPTY_ARRAYS			= {null, new String[0],
 			new Long[0], new Integer[0], new Short[0], new Character[0],
 			new Byte[0], new Double[0], new Float[0], null, null,
@@ -58,26 +75,42 @@ public class MTI implements MetaTypeInformation, Serializable {
 	Map						factories				= new Hashtable();
 	String					localizationBaseName	= null;
 
-	transient Bundle		bundle;
+	Bundle					bundle;
 	private String[]		locales;
 
-	public MTI(Bundle bundle, String localizationBaseName ) {
+	/**
+	 * This method should be local, however, it is public so I can test it with
+	 * JUnit.
+	 * 
+	 * @param bundle
+	 * @param localizationBaseName
+	 */
+	public MTI(Bundle bundle, String localizationBaseName) {
 		this.bundle = bundle;
-		if ( localizationBaseName == null )
-		localizationBaseName = (String) bundle.getHeaders().get(
+		if (localizationBaseName == null)
+			localizationBaseName = (String) bundle.getHeaders().get(
 					Constants.BUNDLE_LOCALIZATION);
 		if (localizationBaseName == null)
 			localizationBaseName = "META-INF/bundle";
-		
+
 		this.localizationBaseName = localizationBaseName;
 	}
 
+	/**
+	 * Parse the meta data from a bundle.
+	 * 
+	 * <pre>
+	 *   MetaData ::= OCD * Designate *
+	 * </pre>
+	 * @param url Points to the resource containing the meta data
+	 * @throws Exception If anything fails
+	 */
 	public void parseMetaData(URL url) throws Exception {
 		XmlPullParser parser = new KXmlParser();
 		parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
 		parser.setInput(new InputStreamReader(url.openStream()));
 
-		int n = parser.nextTag();
+		parser.nextTag(); // Skip document start
 		parser.require(XmlPullParser.START_TAG, NAMESPACE, "MetaData");
 		while (parser.nextTag() == XmlPullParser.START_TAG
 				&& parser.getName().equals("OCD"))
@@ -92,6 +125,15 @@ public class MTI implements MetaTypeInformation, Serializable {
 		parser.require(XmlPullParser.END_TAG, NAMESPACE, "MetaData");
 	}
 
+	/**
+	 * 
+	 * <pre>
+	 *   Designate ::= Object ?
+	 * </pre>
+	 * 
+	 * @param parser
+	 * @throws Exception
+	 */
 	void parseDesignate(XmlPullParser parser) throws Exception {
 		parser.require(XmlPullParser.START_TAG, null, "Designate");
 		String pid = parser.getAttributeValue(null, "pid");
@@ -109,6 +151,14 @@ public class MTI implements MetaTypeInformation, Serializable {
 		parser.require(XmlPullParser.END_TAG, null, "Designate");
 	}
 
+	/**
+	 * 
+	 * <pre>
+	 *   OCD ::= AD * Icon *
+	 * </pre>
+	 * @param parser
+	 * @throws Exception
+	 */
 	private void parseOCD(XmlPullParser parser) throws Exception {
 		parser.require(XmlPullParser.START_TAG, null, "OCD");
 
@@ -117,22 +167,27 @@ public class MTI implements MetaTypeInformation, Serializable {
 		ocd.id = parser.getAttributeValue(null, "id");
 		ocd.name = parser.getAttributeValue(null, "name");
 
-		println(parser);
-
 		while (parser.nextTag() == XmlPullParser.START_TAG
-				&& parser.getName().equals("AD"))
-			parseAD(ocd, parser);
-
+				&& parser.getName().equals("AD")) {
+			AD ad = parseAD(parser);
+			ocd.addAD(ad);
+		}
 		while (parser.getEventType() == XmlPullParser.START_TAG
 				&& parser.getName().equals("Icon")) {
 			parseIcon(ocd, parser);
 			parser.nextTag();
 		}
 
-		ocds.put( ocd.id, ocd );
+		ocds.put(ocd.id, ocd);
 		parser.require(XmlPullParser.END_TAG, null, "OCD");
 	}
 
+	/*
+	 * <pre>
+	 *   Object ::= Attribute *
+	 * </pre>
+	 * 
+	 */
 	private O parseObject(XmlPullParser parser) throws Exception {
 		parser.require(XmlPullParser.START_TAG, null, "Object");
 		O o = new O();
@@ -155,6 +210,16 @@ public class MTI implements MetaTypeInformation, Serializable {
 		return o;
 	}
 
+	/**
+	 * 
+	 * <pre>
+	 *   Attribute ::= 
+	 * </pre>
+	 * @param parser
+	 * @param ad
+	 * @return
+	 * @throws Exception
+	 */
 	private Object[] parseAttribute(XmlPullParser parser, AD ad)
 			throws Exception {
 		parser.require(XmlPullParser.START_TAG, null, "Attribute");
@@ -166,6 +231,13 @@ public class MTI implements MetaTypeInformation, Serializable {
 		return new Object[] {key, value};
 	}
 
+	/**
+	 * A content string is a single string with space separated fields.
+	 * 
+	 * @param ad	The AD for the content
+	 * @param content A string with space separated fields
+	 * @return A scalar, Vector or [] depending on ad
+	 */
 	private Object parseContent(AD ad, String content) {
 		Object value = null;
 		if (ad.cardinality == 0)
@@ -184,6 +256,14 @@ public class MTI implements MetaTypeInformation, Serializable {
 		return value;
 	}
 
+	/**
+	 * Parse the value of the field depending on its
+	 * scalar type.
+	 * 
+	 * @param type	Scalar type from AttributeDefinition
+	 * @param content String containing scalar
+	 * @return object
+	 */
 	private Object parseSimple(int type, String content) {
 		content = content.trim();
 		switch (type) {
@@ -216,6 +296,13 @@ public class MTI implements MetaTypeInformation, Serializable {
 		throw new RuntimeException("Invalid data type: " + type);
 	}
 
+	/**
+	 * Parse the icon from the input
+	 * 
+	 * @param ocd
+	 * @param parser
+	 * @throws Exception
+	 */
 	private void parseIcon(OCD ocd, XmlPullParser parser) throws Exception {
 		parser.require(XmlPullParser.START_TAG, null, "Icon");
 		int size = Integer.parseInt(parser.getAttributeValue(null, "size"));
@@ -225,16 +312,32 @@ public class MTI implements MetaTypeInformation, Serializable {
 		parser.require(XmlPullParser.END_TAG, null, "Icon");
 	}
 
-	private int lookup(String[] typeNames, String attributeValue) {
+	/**
+	 * Utiltity to find the index of a string. Simple linear
+	 * search.
+	 * 
+	 * @param typeNames		List of string
+	 * @param searched		Value to be searched 
+	 * @return
+	 */
+	private int lookup(String[] typeNames, String searched) {
 		for (int i = 0; i < typeNames.length; i++) {
-			if (attributeValue.equals(typeNames[i])) {
+			if (searched.equals(typeNames[i])) {
 				return i;
 			}
 		}
-		throw new RuntimeException("Invalid type name: " + attributeValue);
+		throw new RuntimeException("Invalid type name: " + searched );
 	}
 
-	private void parseAD(OCD ocd, XmlPullParser parser) throws Exception {
+	/**
+	 * <pre>
+	 *   AD ::= Option*
+	 * </pre>
+	 * @param ocd		The parent class
+	 * @param parser
+	 * @throws Exception
+	 */
+	private AD parseAD(XmlPullParser parser) throws Exception {
 		parser.require(XmlPullParser.START_TAG, null, "AD");
 		AD ad = new AD();
 		ad.description = parser.getAttributeValue(null, "description");
@@ -254,100 +357,87 @@ public class MTI implements MetaTypeInformation, Serializable {
 				ad.defaultValue[i] = st.nextToken();
 		}
 
-		println(parser);
-
 		while (parser.nextTag() == XmlPullParser.START_TAG
-				&& parser.getName().equals("Option"))
-			parseOption(parser, ad);
+				&& parser.getName().equals("Option")) {
+			String[] assoc = parseOption(parser);
+			ad.addOption(assoc[0], assoc[1]);
+		}
 
-		ocd.addAD(ad);
 		parser.require(XmlPullParser.END_TAG, null, "AD");
+		return ad;
 	}
 
-	private void parseOption(XmlPullParser parser, AD ad) throws Exception {
+	/**
+	 * Parse an option.
+	 * 
+	 * @param parser
+	 * @param ad
+	 * @throws Exception
+	 */
+	private String[] parseOption(XmlPullParser parser) throws Exception {
 		parser.require(XmlPullParser.START_TAG, null, "Option");
-		println(parser);
 		String label = parser.getAttributeValue(null, "label");
 		String value = parser.getAttributeValue(null, "value");
-		ad.addOption(label, value);
 		parser.nextTag();
 		parser.require(XmlPullParser.END_TAG, null, "Option");
+		return new String[] { label, value };
 	}
 
-	private void println(XmlPullParser parser) throws XmlPullParserException {
-		switch (parser.getEventType()) {
-			case XmlPullParser.COMMENT :
-				System.out.print("COMMENT");
-				break;
-			case XmlPullParser.END_DOCUMENT :
-				System.out.print("END DOC");
-				break;
-			case XmlPullParser.END_TAG :
-				System.out.print("</");
-				break;
-			case XmlPullParser.ENTITY_REF :
-				System.out.print("ENTITY REF");
-				break;
-			case XmlPullParser.IGNORABLE_WHITESPACE :
-				System.out.print("WS");
-				break;
-			case XmlPullParser.PROCESSING_INSTRUCTION :
-				System.out.print("PI");
-				break;
-			case XmlPullParser.START_DOCUMENT :
-				System.out.print("START DOC");
-				break;
-			case XmlPullParser.START_TAG :
-				System.out.print("<");
-				break;
-			case XmlPullParser.TEXT :
-				System.out.print("TEXT");
-				break;
-			case XmlPullParser.DOCDECL :
-				System.out.print("DOC DECL");
-				break;
-		}
-		System.out.print(" ");
-		System.out.print(parser.getName());
-		int count = parser.getAttributeCount();
-		for (int i = 0; i < count; i++) {
-			System.out.print(" ");
-			System.out.print(parser.getAttributeName(i));
-			System.out.print("=");
-			System.out.print(parser.getAttributeValue(i));
-		}
-		System.out.println();
-	}
-
+	/**
+	 * Return the pids for this bundle.
+	 * 
+	 * @return
+	 * @see org.osgi.service.metatype.MetaTypeInformation#getPids()
+	 */
 	public String[] getPids() {
 		return (String[]) pids.keySet().toArray(EMPTY_STRINGS);
 	}
 
+	/**
+	 * Return the factory pids for this bundle.
+	 * 
+	 * @return
+	 * @see org.osgi.service.metatype.MetaTypeInformation#getFactoryPids()
+	 */
 	public String[] getFactoryPids() {
 		return (String[]) factories.keySet().toArray(EMPTY_STRINGS);
 	}
 
+	/**
+	 * Return the associated bundle.
+	 * 
+	 * @return
+	 * @see org.osgi.service.metatype.MetaTypeInformation#getBundle()
+	 */
 	public Bundle getBundle() {
 		return (Bundle) bundle;
 	}
 
+	/**
+	 * Get the associated OCD. This is an OCDProxy that is customized
+	 * for the given locale.
+	 * 
+	 * @param id
+	 * @param locale
+	 * @return
+	 * @see org.osgi.service.metatype.MetaTypeProvider#getObjectClassDefinition(java.lang.String, java.lang.String)
+	 */
 	public ObjectClassDefinition getObjectClassDefinition(String id,
 			String locale) {
 
-		if ( locale == null )
+		if (locale == null)
 			locale = Locale.getDefault().toString();
-		
+
 		OCD ocd = (OCD) ocds.get(id);
-		
-		if ( locale.equals("") )
-			return new OCDProxy(ocd,null);
-		
+
+		if (locale.equals(""))
+			return new OCDProxy(ocd, null);
+
 		locale = "_" + locale;
 		URL url = null;
 
 		while (true) {
-			String resource = localizationBaseName + locale
-			+ ".properties";
+			String resource = localizationBaseName + locale + ".properties";
 			url = bundle.getResource(resource);
 			if (url != null)
 				break;
@@ -361,6 +451,13 @@ public class MTI implements MetaTypeInformation, Serializable {
 		return new OCDProxy(ocd, url);
 	}
 
+	/**
+	 * Analyze the bundles for the locales. Note that depending on the
+	 * resolve state, the answer may vary.
+	 * 
+	 * @return
+	 * @see org.osgi.service.metatype.MetaTypeProvider#getLocales()
+	 */
 	public String[] getLocales() {
 
 		if ((bundle.getState() & (Bundle.RESOLVED | Bundle.STARTING | Bundle.ACTIVE)) != 0) {
@@ -377,10 +474,6 @@ public class MTI implements MetaTypeInformation, Serializable {
 		}
 		else
 			return null;
-	}
-
-	public String getLocalizationBaseName() {
-		return localizationBaseName;
 	}
 
 	String parseLocaleResource(String baseName, String resource) {

@@ -29,6 +29,11 @@ package org.osgi.impl.service.metatype;
 
 import java.util.*;
 
+/**
+ * Holds an object.
+ *
+ * @version $Revision$
+ */
 public class O {
 	OCD		ocd;
 	Map		properties = new Hashtable();

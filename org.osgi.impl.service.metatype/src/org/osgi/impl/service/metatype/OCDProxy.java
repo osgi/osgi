@@ -114,7 +114,4 @@ public class OCDProxy implements ObjectClassDefinition {
 		return url.openStream();
 	}
 
-	public String toString() {
-		return ocd.toString();
-	}
 }

@@ -31,6 +31,13 @@ import org.osgi.framework.Bundle;
 import org.osgi.service.metatype.*;
 import org.osgi.service.metatype.MetaTypeService;
 
+/**
+ * This is a proxy for the activator and is used as the
+ * Meta Type Service.
+ *
+ * 
+ * @version $Revision$
+ */
 public class MTS implements MetaTypeService {
 	Activator model;
 	/**

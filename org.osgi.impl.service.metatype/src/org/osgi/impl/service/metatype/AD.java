@@ -30,11 +30,14 @@ package org.osgi.impl.service.metatype;
 import java.util.*;
 
 /**
- * 
+ * The AD class maintains the information for the Attribute Definiton. However,
+ * a proxy implements the AttributeDefinition interface. The responsibility
+ * of the proxy is to handle translations. This class is basically a place
+ * holder.
  * 
  * @version $Revision$
  */
-public class AD {
+class AD {
 	String		name;
 	String		id;
 	String		description;
@@ -52,9 +55,4 @@ public class AD {
 		// are translated!!
 		options.put(value, label);
 	}
-	
-	public String toString() {
-		return name + "(" + id + "):" + type + ":" + cardinality;  
-	}
-
 }
