@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
+import org.osgi.impl.service.policy.RootMetaNode;
 import org.osgi.impl.service.policy.util.HashCalculator;
 import org.osgi.impl.service.policy.util.Splitter;
 import org.osgi.service.dmt.DmtData;
@@ -79,7 +80,7 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 	 */
 	public static final String dataRootURI = "./OSGi/Policies/Java/DmtPrincipal";
 	
-	private static final DmtMetaNode rootMetaNode = new RootMetaNode();
+	private static final DmtMetaNode rootMetaNode = new RootMetaNode("tree representing DMT Principal permissions");
 	private final HashCalculator hashCalculator;
 
 	public DmtPrincipalPlugin(DmtPrincipalPermissionAdmin dmtPrincipalPermissionAdmin) throws NoSuchAlgorithmException {

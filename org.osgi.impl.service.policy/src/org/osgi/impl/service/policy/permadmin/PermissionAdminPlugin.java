@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
+import org.osgi.impl.service.policy.RootMetaNode;
 import org.osgi.impl.service.policy.util.HashCalculator;
 import org.osgi.impl.service.policy.util.Splitter;
 import org.osgi.service.dmt.DmtData;
@@ -50,7 +51,7 @@ public class PermissionAdminPlugin implements DmtDataPlugin {
 	/*
 	 * ------------------------------------- 
 	 */
-	private final static DmtMetaNode	rootMetaNode = new RootMetaNode();
+	private final static DmtMetaNode	rootMetaNode = new RootMetaNode("permissions associated with bundle locations");
 	private final static DmtMetaNode	permissionInfoMetaNode = new PermissionInfoMetaNode();
 	private final static DmtMetaNode 	defaultMetaNode = new DefaultMetaNode();
 	private final static DmtMetaNode	locationMetaNode = new LocationMetaNode();

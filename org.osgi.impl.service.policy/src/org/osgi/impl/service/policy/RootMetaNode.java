@@ -15,18 +15,22 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package org.osgi.impl.service.policy.permadmin;
+package org.osgi.impl.service.policy;
 
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtMetaNode;
 
 /**
  *
- * Meta node for permission admin root.
+ * Meta node for  tree root.
  * 
  * @version $Revision$
  */
 public final class RootMetaNode implements DmtMetaNode {
+	private final String description;
+	public RootMetaNode(String description) {
+		this.description = description;
+	}
 	public boolean canDelete() { return false; }
 	public boolean canAdd() { return false; }
 	public boolean canGet() { return false; }
@@ -34,7 +38,7 @@ public final class RootMetaNode implements DmtMetaNode {
 	public boolean canExecute() { return false;	}
 	public boolean isLeaf() { return false;	}
 	public boolean isPermanent() { return true; }
-	public String getDescription() { return "permission data stored in PermissionAdmin service"; }
+	public String getDescription() { return description; }
 	public int getMaxOccurrence() {	return 1; }
 	public boolean isZeroOccurrenceAllowed() { return false; }
 	public DmtData getDefault() { return null; }
