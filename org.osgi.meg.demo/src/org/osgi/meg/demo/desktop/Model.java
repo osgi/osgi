@@ -21,7 +21,6 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 import org.osgi.framework.*;
-import org.osgi.meg.demo.util.Splitter;
 import org.osgi.service.application.*;
 import org.osgi.service.dmt.*;
 import org.osgi.service.event.*;

@@ -23,9 +23,6 @@ import java.util.Vector;
 
 import javax.swing.tree.TreeNode;
 
-import org.osgi.meg.demo.util.*;
-
-
 public class TreeNodeImpl implements TreeNode {
 
     private String       label;

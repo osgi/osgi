@@ -85,9 +85,9 @@ public class Desktop extends javax.swing.JFrame implements ActionListener {
 	void initGUI() {
 		try {
 			iconSuspended = new ImageIcon(getClass().getResource(
-					"/suspended.gif"));
-			iconRunning = new ImageIcon(getClass().getResource("/running.gif"));
-			iconNoIcon = new ImageIcon(getClass().getResource("/noicon.gif"));
+					"suspended.gif"));
+			iconRunning = new ImageIcon(getClass().getResource("running.gif"));
+			iconNoIcon = new ImageIcon(getClass().getResource("noicon.gif"));
 			GridBagLayout flayout = new GridBagLayout();
 			this.setSize(800, 500);
 			this.getContentPane().setLayout(flayout);

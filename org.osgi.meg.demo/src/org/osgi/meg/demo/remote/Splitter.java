@@ -15,7 +15,7 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package org.osgi.meg.demo.util;
+package org.osgi.meg.demo.remote;
 
 import java.util.Vector;
 
