@@ -18,7 +18,6 @@ continue: 12                          34
 export-package: org.osgi.dummy1;                         specification-version="0.0", org.osgi.dummy2,org.osgi.dummy3;specification-version="19.67.34"
 export-service: should contain the exported services, not used by framework
 fakeheader: This bundle is defined by developper and should be ignored by framework
-import-package: org.osgi.framework
 import-service: should contain the imported services, not used by framework
 manifest-version: 1.0
 max-length: xxxxxxxxx xxxxxxxxx xxxxxxxxx xxxxxxxxx xxxxxxxxx xxxxxxEND

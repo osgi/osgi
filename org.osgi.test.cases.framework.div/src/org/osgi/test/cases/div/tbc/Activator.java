@@ -111,19 +111,21 @@ public class Activator extends Thread implements FrameworkListener,
 			// them.
 			for (Enumeration e = sort(h.keys()); e.hasMoreElements();) {
 				String key = (String) e.nextElement();
-				String value = (String) h.get(key);
-				StringBuffer result = new StringBuffer();
-				for (int i = 0; i < value.length(); i++) {
-					char c = value.charAt(i);
-					if (c < 128)
-						result.append(c);
-					else {
-						String hex = Integer.toHexString(c);
-						result.append("\\u").append(
-								"0000".substring(hex.length())).append(hex);
+				if ( ! key.equalsIgnoreCase("import-package")) {
+					String value = (String) h.get(key);
+					StringBuffer result = new StringBuffer();
+					for (int i = 0; i < value.length(); i++) {
+						char c = value.charAt(i);
+						if (c < 128)
+							result.append(c);
+						else {
+							String hex = Integer.toHexString(c);
+							result.append("\\u").append(
+									"0000".substring(hex.length())).append(hex);
+						}
 					}
+					_link.log(key.toLowerCase() + ": " + result);
 				}
-				_link.log(key.toLowerCase() + ": " + result);
 			}
 			tb.stop();
 			tb.uninstall();
