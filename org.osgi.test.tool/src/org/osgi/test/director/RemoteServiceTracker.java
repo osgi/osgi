@@ -6,10 +6,10 @@
  */
 package org.osgi.test.director;
 
-import java.util.*;
+import java.util.Vector;
 import org.osgi.framework.*;
-import org.osgi.test.service.*;
-import org.osgi.util.tracker.*;
+import org.osgi.test.service.RemoteService;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * Track the RemoteService services in the registry. When such a service is

@@ -5,7 +5,7 @@
 package org.osgi.test.script;
 
 import java.lang.reflect.*;
-import java.net.*;
+import java.net.URL;
 import java.util.*;
 
 /**

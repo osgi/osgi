@@ -10,9 +10,9 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import org.osgi.framework.*;
-import org.osgi.service.packageadmin.*;
-import org.osgi.service.permissionadmin.*;
-import org.osgi.test.service.*;
+import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.service.permissionadmin.PermissionAdmin;
+import org.osgi.test.service.TestCaseLink;
 import org.osgi.test.shared.*;
 
 /**

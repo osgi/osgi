@@ -1,19 +1,17 @@
 package org.osgi.test.cases.wireadmin.tbc;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceRegistration;
+import java.util.*;
+import org.osgi.framework.*;
 import org.osgi.service.wireadmin.*;
 
 /**
  * Contains some helper methods for registering/unregistering producers
  * 
  * $Log$
- * Revision 1.2  2004/11/03 10:55:32  pkriens
+ * Revision 1.3  2004/11/03 11:47:09  pkriens
  * Format and clean up of warnings
- * Revision 1.1 2004/07/07 13:15:26 pkriens *** empty log
+ * Revision 1.2 2004/11/03 10:55:32 pkriens Format and
+ * clean up of warnings Revision 1.1 2004/07/07 13:15:26 pkriens *** empty log
  * message ***
  * 
  * Revision 1.2 2003/11/14 07:18:29 vpanushev resolved issues 243 and 246

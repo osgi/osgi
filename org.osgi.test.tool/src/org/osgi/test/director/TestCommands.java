@@ -7,12 +7,12 @@
 package org.osgi.test.director;
 
 import java.io.*;
-import java.net.*;
+import java.net.URL;
 import java.util.*;
 import org.osgi.framework.*;
 import org.osgi.test.script.*;
-import org.osgi.test.service.*;
-import org.osgi.test.shared.*;
+import org.osgi.test.service.TestCase;
+import org.osgi.test.shared.IHandler;
 import org.osgi.tools.command.*;
 
 /**
@@ -249,11 +249,13 @@ public class TestCommands implements CommandProvider {
 	 * <pre>
 	 * 
 	 *  
-	 *    -host host
-	 *    -port port
-	 *    -forever
-	 *    -debug
-	 *    -logging
+	 *   
+	 *     -host host
+	 *     -port port
+	 *     -forever
+	 *     -debug
+	 *     -logging
+	 *    
 	 *   
 	 *  
 	 * </pre>
@@ -296,8 +298,10 @@ public class TestCommands implements CommandProvider {
 	 * <pre>
 	 * 
 	 *  
-	 *    script-url
-	 *    -output file
+	 *   
+	 *     script-url
+	 *     -output file
+	 *    
 	 *   
 	 *  
 	 * </pre>
@@ -344,7 +348,9 @@ public class TestCommands implements CommandProvider {
 	 * <pre>
 	 * 
 	 *  
-	 *    testcase ...
+	 *   
+	 *     testcase ...
+	 *    
 	 *   
 	 *  
 	 * </pre>

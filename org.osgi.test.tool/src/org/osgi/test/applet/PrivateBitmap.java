@@ -6,7 +6,7 @@
  */
 package org.osgi.test.applet;
 
-import netscape.application.*;
+import netscape.application.Bitmap;
 import netscape.util.*;
 
 /**

@@ -6,9 +6,7 @@
 package org.osgi.test.cases.wireadmin.tb2;
 
 import java.util.Hashtable;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.*;
 import org.osgi.service.wireadmin.*;
 
 /**

@@ -9,11 +9,11 @@
 package org.osgi.test.target;
 
 import java.io.*;
-import java.util.*;
-import java.net.*;
+import java.net.URL;
+import java.util.Vector;
 import org.osgi.framework.*;
 import org.osgi.service.permissionadmin.*;
-import org.osgi.util.tracker.*;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * Implements a permissionpolicy. It will tried to read a resource from the
@@ -21,9 +21,11 @@ import org.osgi.util.tracker.*;
  * 
  * <pre>
  * 
- *   '(' permission-class [ '&quot;' name-parameter '&quot;' [ '&quot;' action [ ',' action ] ... '&quot;' ] ] ')'
- *  Or
- *   '#' *
+ *  
+ *    '(' permission-class [ '&quot;' name-parameter '&quot;' [ '&quot;' action [ ',' action ] ... '&quot;' ] ] ')'
+ *   Or
+ *    '#' *
+ *   
  *  
  * </pre>
  * 

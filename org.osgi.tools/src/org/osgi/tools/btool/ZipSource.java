@@ -18,7 +18,7 @@ import java.util.zip.*;
  */
 public class ZipSource implements Source {
 	Map		entries;
-	ZipFile zip;
+	ZipFile	zip;
 	File	file;
 
 	public ZipSource(File zipfile) throws IOException {
@@ -26,29 +26,30 @@ public class ZipSource implements Source {
 		zip = new ZipFile(zipfile);
 	}
 
-	public File getFile() { return file; }
-	
+	public File getFile() {
+		return file;
+	}
+
 	public InputStream getEntry(String resourceName) throws IOException {
 		ZipEntry entry = zip.getEntry(resourceName);
 		if (entry != null) {
 			return zip.getInputStream(entry);
-		} else
+		}
+		else
 			return null;
 	}
 
 	public boolean isDirectory(String path) {
 		if (path.equals(""))
 			return true;
-		
 		return entries.containsKey(path);
 	}
 
 	/**
-	 * Do not think this is overdone. Many zip files
-	 * exist that do not have directories! Each entry has a full
-	 * name and directories are, in a way, optional. However, some
-	 * tools expect them. So we have to traverse the ZIP and
-	 * figure out the tree from the names.
+	 * Do not think this is overdone. Many zip files exist that do not have
+	 * directories! Each entry has a full name and directories are, in a way,
+	 * optional. However, some tools expect them. So we have to traverse the ZIP
+	 * and figure out the tree from the names.
 	 */
 	private void checkZip() {
 		if (entries == null) {
@@ -63,51 +64,50 @@ public class ZipSource implements Source {
 			}
 		}
 	}
-	
+
 	class Node {
-		String path;
-		List   subs;
-		void add(String sub ) {
-			if ( subs== null)
+		String	path;
+		List	subs;
+
+		void add(String sub) {
+			if (subs == null)
 				subs = new Vector();
-			subs.add(sub);			
+			subs.add(sub);
 		}
-		
-		public String toString() { return "'" + path + "'" + ":" + subs; }
+
+		public String toString() {
+			return "'" + path + "'" + ":" + subs;
+		}
 	}
-	void add( String path ) {
-		if ( path.equals("."))
+
+	void add(String path) {
+		if (path.equals("."))
 			return;
-		
 		int n = path.lastIndexOf("/");
 		String dir;
 		String name;
-		if ( n < 0 ) {
+		if (n < 0) {
 			dir = "";
 			name = path;
-			
-		} else {
-			dir = path.substring(0,n);
-			name = path.substring(n+1);
 		}
-		Node node = (Node) entries.get(dir); 
-		if ( node == null ) {
+		else {
+			dir = path.substring(0, n);
+			name = path.substring(n + 1);
+		}
+		Node node = (Node) entries.get(dir);
+		if (node == null) {
 			node = new Node();
 			node.path = dir;
-			entries.put(dir,node);
+			entries.put(dir, node);
 		}
 		node.add(name);
 	}
-	
-	
-	
-	
-	
+
 	public Collection getResources(String dir) {
 		checkZip();
-		Node node= (Node) entries.get(dir);
-		if ( node == null )
-			return null;		
+		Node node = (Node) entries.get(dir);
+		if (node == null)
+			return null;
 		return node.subs;
 	}
 
@@ -117,9 +117,8 @@ public class ZipSource implements Source {
 		// is not required to have directories which would
 		// file a simple getEntry check ...
 		ZipEntry entry = zip.getEntry(path);
-		if ( entry != null )
+		if (entry != null)
 			return true;
-		
 		return entries.containsKey(path);
 	}
 
@@ -127,5 +126,3 @@ public class ZipSource implements Source {
 		return "Z: " + zip.getName();
 	}
 }
-
-

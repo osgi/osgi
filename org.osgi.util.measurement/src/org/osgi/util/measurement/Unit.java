@@ -25,10 +25,9 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.util.measurement;
 
-import java.util.*;
+import java.util.Hashtable;
 
 /**
  * A unit system for measurements.
@@ -43,7 +42,6 @@ import java.util.*;
  * 
  * @version $Revision$
  */
-
 /*
  * This local class maintains the information about units. It can calculate new
  * units when two values are multiplied, divided, added or subtracted. <p> The
@@ -60,7 +58,6 @@ import java.util.*;
  * multiplied, like longitude and lattitude. These special units can however, be
  * divided and multiplied by the basic 7 constants of the SI, e.g. deg/s.
  */
-
 public class Unit {
 	private final static long	UNITY		= createType(0, 0, 0, 0, 0, 0, 0,
 													0, 0);
@@ -84,73 +81,60 @@ public class Unit {
 	private final static long	cd_MASK		= MASK << cd_SHIFT;
 	private final static long	rad_MASK	= MASK << rad_SHIFT;
 	private final static long	x_MASK		= MASK << x_SHIFT;
-
 	/** No Unit (Unity) */
 	public final static Unit	unity		= new Unit("", UNITY);					// Unity
-
 	/* SI Base Units */
 	/** The length unit meter (m) */
 	public final static Unit	m			= new Unit("m", createType(0, 0, 0,
 													0, 0, 0, 0, 0, 1));			// Distance
 	// meter
-
 	/** The time unit second (s) */
 	public final static Unit	s			= new Unit("s", createType(0, 0, 0,
 													0, 0, 0, 0, 1, 0));			// Time
 	// Seconds
 	// s
-
 	/** The mass unit kilogram (kg) */
 	public final static Unit	kg			= new Unit("kg", createType(0, 0,
 													0, 0, 0, 0, 1, 0, 0));			// Mass
 	// kilogram
 	// kg
-
 	/** The temperature unit kelvin (K) */
 	public final static Unit	K			= new Unit("K", createType(0, 0, 0,
 													0, 0, 1, 0, 0, 0));			// Temperature
 	// kelvin
 	// K
-
 	/** The electric current unit ampere (A) */
 	public final static Unit	A			= new Unit("A", createType(0, 0, 0,
 													0, 1, 0, 0, 0, 0));			// Current
 	// ampere
 	// A
-
 	/** The amount of substance unit mole (mol) */
 	public final static Unit	mol			= new Unit("mol", createType(0, 0,
 													0, 1, 0, 0, 0, 0, 0));			// Substance
 	// mole
 	// mol
-
 	/** The luminous intensity unit candela (cd) */
 	public final static Unit	cd			= new Unit("cd", createType(0, 0,
 													1, 0, 0, 0, 0, 0, 0));			// Light
 	// candela
 	// cd
-
 	/* SI Derived Units */
 	/** The speed unit meter per second (m/s) */
 	public final static Unit	m_s			= new Unit("m/s", createType(0, 0,
 													0, 0, 0, 0, 0, -1, 1));		// Speed
 	// m/s
-
 	/** The acceleration unit meter per second squared (m/s <sup>2 </sup>) */
 	public final static Unit	m_s2		= new Unit("m/s2", createType(0, 0,
 													0, 0, 0, 0, 0, -2, 1));		// Acceleration
 	// m/s^2
-
 	/** The area unit square meter(m <sup>2 </sup>) */
 	public final static Unit	m2			= new Unit("m2", createType(0, 0,
 													0, 0, 0, 0, 0, 0, 2));			// Surface
 	// m^2
-
 	/** The volume unit cubic meter (m <sup>3 </sup>) */
 	public final static Unit	m3			= new Unit("m3", createType(0, 0,
 													0, 0, 0, 0, 0, 0, 3));			// Volume
 	// m^3
-
 	/**
 	 * The frequency unit hertz (Hz).
 	 * <p>
@@ -159,7 +143,6 @@ public class Unit {
 	public final static Unit	Hz			= new Unit("Hz", createType(0, 0,
 													0, 0, 0, 0, 0, -1, 0));		// Frequency
 	// 1/s
-
 	/**
 	 * The force unit newton (N).
 	 * <p>
@@ -169,7 +152,6 @@ public class Unit {
 													0, 0, 0, 1, -2, 1));			// Force
 	// newton
 	// (m*kg)/s^2
-
 	/**
 	 * The pressure unit pascal (Pa).
 	 * <p>
@@ -180,7 +162,6 @@ public class Unit {
 													0, 0, 0, 0, 1, -2, -1));		// Pressure
 	// pascal
 	// kg/(m*s^2)
-
 	/**
 	 * The energy unit joule (J).
 	 * <p>
@@ -191,7 +172,6 @@ public class Unit {
 													0, 0, 0, 1, -2, 2));			// Energy
 	// joule
 	// (m^2*kg)/s^2
-
 	/**
 	 * The power unit watt (W).
 	 * <p>
@@ -202,7 +182,6 @@ public class Unit {
 													0, 0, 0, 1, -3, 2));			// Power
 	// watt
 	// (m^2*kg)/s^3
-
 	/**
 	 * The electric charge unit coulomb (C).
 	 * <p>
@@ -212,7 +191,6 @@ public class Unit {
 													0, 1, 0, 0, 1, 0));			// Charge
 	// coulumb
 	// s*A
-
 	/**
 	 * The electric potential difference unit volt (V).
 	 * <p>
@@ -224,7 +202,6 @@ public class Unit {
 	// Potent.
 	// volt
 	// (m^2*kg)/(s^3*A)
-
 	/**
 	 * The capacitance unit farad (F).
 	 * <p>
@@ -235,7 +212,6 @@ public class Unit {
 													0, 2, 0, -1, 4, -2));			// Capacitance
 	// farad
 	// (s^4*A^2)/(m^2*kg)
-
 	/**
 	 * The electric resistance unit ohm.
 	 * <p>
@@ -246,7 +222,6 @@ public class Unit {
 													0, 0, -2, 0, 1, -3, 2));		// Resistance
 	// ohm
 	// (m^2*kg)/(s^3*A^2)
-
 	/**
 	 * The electric conductance unit siemens (S).
 	 * <p>
@@ -257,7 +232,6 @@ public class Unit {
 													0, 2, 0, -1, 3, -2));			// Conductance
 	// siemens
 	// (s^3*A^2)/(m^2*kg)
-
 	/**
 	 * The magnetic flux unit weber (Wb).
 	 * <p>
@@ -269,7 +243,6 @@ public class Unit {
 	// Flux
 	// weber
 	// (m^2*kg)/(s^2*A)
-
 	/**
 	 * The magnetic flux density unit tesla (T).
 	 * <p>
@@ -282,7 +255,6 @@ public class Unit {
 	// Dens.
 	// tesla
 	// kg/(s^2*A)
-
 	/**
 	 * The illuminance unit lux (lx).
 	 * <p>
@@ -292,7 +264,6 @@ public class Unit {
 													1, 0, 0, 0, 0, 0, -2));		// Illuminace
 	// lux
 	// cd/m^2
-
 	/**
 	 * The absorbed dose unit gray (Gy).
 	 * <p>
@@ -304,7 +275,6 @@ public class Unit {
 	// dose
 	// gray
 	// m^2/s^2
-
 	/**
 	 * The catalytic activity unit katal (kat).
 	 * <p>
@@ -315,34 +285,29 @@ public class Unit {
 	// Act.
 	// katal
 	// mol/s
-
 	/** The angle unit radians (rad) */
 	public final static Unit	rad			= new Unit("rad", createType(0, 1,
 													0, 0, 0, 0, 0, 0, 0));			// Angle
 	// radians
 	// rad
-
 	/**
 	 * An array containing all units defined. The first seven items must be m,
 	 * s, kg, K, A, mol, cd, rad in this order!
 	 */
-	private final static Unit[]	allUnits	= new Unit[]{m, s, kg, K, A, mol,
+	private final static Unit[]	allUnits	= new Unit[] {m, s, kg, K, A, mol,
 			cd, rad, m_s, m_s2, m2, m3, Hz, N, Pa, J, W, C, V, F, Ohm, S, Wb,
 			T, lx, Gy, kat, unity			};
-	private final static Unit[]	sortedUnits	= new Unit[]{cd, kat, kg, lx, mol,
-			m, rad, s, unity, A, C, F, J, Hz, K, N, Ohm, Pa, S, T, V,  Wb, W, Gy};
+	private final static Unit[]	sortedUnits	= new Unit[] {cd, kat, kg, lx, mol,
+			m, rad, s, unity, A, C, F, J, Hz, K, N, Ohm, Pa, S, T, V, Wb, W, Gy};
 	private static Hashtable	base;
-
 	private String				name;
 	private long				type;
 
 	/**
 	 * Creates a new <tt>Unit</tt> instance.
 	 * 
-	 * @param name
-	 *            the name of the <tt>Unit</tt>
-	 * @param type
-	 *            the type of the <tt>Unit</tt>
+	 * @param name the name of the <tt>Unit</tt>
+	 * @param type the type of the <tt>Unit</tt>
 	 */
 	private Unit(String name, long type) {
 		this.name = name;
@@ -372,8 +337,7 @@ public class Unit {
 	 * <tt>Unit</tt> object. The <tt>Unit</tt> objects are considered equal
 	 * if their exponents are equal.
 	 * 
-	 * @param obj
-	 *            the <tt>Unit</tt> object that should be checked for equality
+	 * @param obj the <tt>Unit</tt> object that should be checked for equality
 	 * 
 	 * @return true if the specified <tt>Unit</tt> object is equal to this
 	 *         <tt>Unit</tt> object.
@@ -382,11 +346,9 @@ public class Unit {
 		if (this == obj) {
 			return true;
 		}
-
 		if (!(obj instanceof Unit)) {
 			return false;
 		}
-
 		return ((Unit) obj).type == type;
 	}
 
@@ -403,15 +365,13 @@ public class Unit {
 	 * Returns a new <tt>Unit</tt> that is the multiplication of this
 	 * <tt>Unit</tt> and the <tt>Unit</tt> specified
 	 * 
-	 * @param that
-	 *            the <tt>Unit</tt> that will be multiplied with this
-	 *            <tt>Unit</tt>
+	 * @param that the <tt>Unit</tt> that will be multiplied with this
+	 *        <tt>Unit</tt>
 	 * 
 	 * @return a new <tt>Unit</tt> that is the multiplication of this
 	 *         <tt>Unit</tt> and the <tt>Unit</tt> specified
 	 * 
-	 * @exception RuntimeException
-	 *                if both <tt>Unit</tt> s are special
+	 * @exception RuntimeException if both <tt>Unit</tt> s are special
 	 * 
 	 * @see Unit#isSpecial
 	 */
@@ -420,7 +380,6 @@ public class Unit {
 			throw new ArithmeticException("Cannot multiply " + this + " with "
 					+ that);
 		}
-
 		return find(this.type - UNITY + that.type);
 	}
 
@@ -428,14 +387,12 @@ public class Unit {
 	 * Returns a new <tt>Unit</tt> that is the division of this <tt>Unit</tt>
 	 * and the <tt>Unit</tt> specified
 	 * 
-	 * @param that
-	 *            the <tt>Unit</tt> that this <tt>Unit</tt> will be divided
-	 *            with
+	 * @param that the <tt>Unit</tt> that this <tt>Unit</tt> will be divided
+	 *        with
 	 * @return a new <tt>Unit</tt> that is the division of this <tt>Unit</tt>
 	 *         and the <tt>Unit</tt> specified
 	 * 
-	 * @exception RuntimeException
-	 *                if both <tt>Unit</tt> s are special
+	 * @exception RuntimeException if both <tt>Unit</tt> s are special
 	 * 
 	 * @see Unit#isSpecial
 	 */
@@ -444,11 +401,9 @@ public class Unit {
 			if (this.type == that.type) {
 				return Unit.unity;
 			}
-
 			throw new ArithmeticException("Cannot divide " + this + " by "
 					+ that);
 		}
-
 		return find(this.type - that.type + UNITY);
 	}
 
@@ -456,20 +411,18 @@ public class Unit {
 	 * Returns a new <tt>Unit</tt> that is the addition of this <tt>Unit</tt>
 	 * and the <tt>Unit</tt> specified.
 	 * 
-	 * @param that
-	 *            the <tt>Unit</tt> that should be added to this <tt>Unit</tt>
+	 * @param that the <tt>Unit</tt> that should be added to this
+	 *        <tt>Unit</tt>
 	 * 
 	 * @return a new <tt>Unit</tt> that is the addition of this <tt>Unit</tt>
 	 *         and the <tt>Unit</tt> specified.
 	 * 
-	 * @exception RuntimeException
-	 *                if the two <tt>Unit</tt> s are not the same
+	 * @exception RuntimeException if the two <tt>Unit</tt> s are not the same
 	 */
 	Unit add(Unit that) {
 		if (!this.equals(that)) {
 			throw new ArithmeticException("Cannot add " + this + " to " + that);
 		}
-
 		return this;
 	}
 
@@ -477,9 +430,8 @@ public class Unit {
 	 * Returns a new <tt>Unit</tt> that is the subtraction between this
 	 * <tt>Unit</tt> and the <tt>Unit</tt> specified.
 	 * 
-	 * @param that
-	 *            the <tt>Unit</tt> that will be subtracted from this
-	 *            <tt>Unit</tt>
+	 * @param that the <tt>Unit</tt> that will be subtracted from this
+	 *        <tt>Unit</tt>
 	 * @return a new <tt>Unit</tt> that is the subtraction between this
 	 *         <tt>Unit</tt> and the <tt>Unit</tt> specified.
 	 * 
@@ -491,7 +443,6 @@ public class Unit {
 			throw new ArithmeticException("Cannot subtract " + that + " from "
 					+ this);
 		}
-
 		return this;
 	}
 
@@ -500,8 +451,7 @@ public class Unit {
 	 * found, it will be created and added to the list of all units under a null
 	 * name.
 	 * 
-	 * @param type
-	 *            the type of the <tt>Unit</tt> to find
+	 * @param type the type of the <tt>Unit</tt> to find
 	 * 
 	 * @return the <tt>Unit</tt>
 	 */
@@ -510,25 +460,19 @@ public class Unit {
 			synchronized (Unit.class) {
 				if (base == null) {
 					int size = allUnits.length;
-
 					base = new Hashtable(size << 1);
-
 					for (int i = 0; i < size; i++) {
 						base.put(allUnits[i], allUnits[i]);
 					}
 				}
 			}
 		}
-
 		Unit unit = new Unit(null, type);
 		Unit out = (Unit) base.get(unit);
-
 		if (out == null) {
 			base.put(unit, unit);
-
 			out = unit;
 		}
-
 		return out;
 	}
 
@@ -548,10 +492,8 @@ public class Unit {
 			int cd = (int) (((type >> cd_SHIFT) & MASK) - ZERO);
 			int rad = (int) (((type >> rad_SHIFT) & MASK) - ZERO);
 			int x = (int) ((type >> x_SHIFT) & MASK);
-
 			StringBuffer numerator = new StringBuffer();
 			StringBuffer denominator = new StringBuffer();
-
 			addSIname(m, "m", numerator, denominator);
 			addSIname(s, "s", numerator, denominator);
 			addSIname(kg, "kg", numerator, denominator);
@@ -560,12 +502,10 @@ public class Unit {
 			addSIname(mol, "mol", numerator, denominator);
 			addSIname(cd, "cd", numerator, denominator);
 			addSIname(rad, "rad", numerator, denominator);
-
 			if (denominator.length() > 0) {
 				if (numerator.length() == 0) {
 					numerator.append("1");
 				}
-
 				numerator.append("/");
 				numerator.append((Object) denominator); /*
 														 * we use (Object) to
@@ -574,49 +514,46 @@ public class Unit {
 														 * append(StringBuffer)
 														 */
 			}
-
 			name = numerator.toString();
 		}
-
 		return name;
 	}
 
 	public static Unit fromString(String unit) {
 		Unit result = Unit.unity;
 		boolean div = false;
-
-		outer : while (unit.length() > 0) {
+		outer: while (unit.length() > 0) {
 			if (unit.startsWith("/")) {
-				if ( div )
-					throw new IllegalArgumentException("Only 1 slash (/) allowed in unit");
+				if (div)
+					throw new IllegalArgumentException(
+							"Only 1 slash (/) allowed in unit");
 				div = true;
 				unit = unit.substring(1);
 				continue outer;
-			} else
+			}
+			else
 				for (int i = 0; i < sortedUnits.length; i++) {
 					Unit rover = sortedUnits[i];
-					String prefix= rover.name;
-					if ( rover == Unit.unity )
+					String prefix = rover.name;
+					if (rover == Unit.unity)
 						prefix = "1";
-					
 					if (unit.startsWith(prefix)) {
 						Unit current = sortedUnits[i];
 						unit = unit.substring(prefix.length());
 						int exponent = 1;
 						if (unit.length() > 0) {
 							char digit = unit.charAt(0);
-
 							if (digit > '0' && digit <= '5') {
 								exponent = digit - '0';
 								unit = unit.substring(1);
 							}
 						}
-
 						if (div) {
 							for (int e = 0; e < exponent; e++) {
 								result = result.div(current);
 							}
-						} else {
+						}
+						else {
 							for (int e = 0; e < exponent; e++) {
 								result = result.mul(current);
 							}
@@ -624,7 +561,7 @@ public class Unit {
 						continue outer;
 					}
 				}
-				throw new IllegalArgumentException("Unknown unit name "+ unit);
+			throw new IllegalArgumentException("Unknown unit name " + unit);
 		}
 		return result;
 	}
@@ -633,13 +570,10 @@ public class Unit {
 			StringBuffer denominator) {
 		if (si != 0) {
 			StringBuffer sb = (si > 0) ? numerator : denominator;
-
 			if (sb.length() > 0) {
 				sb.append("*");
 			}
-
 			sb.append(name);
-
 			int power = Math.abs(si);
 			if (power > 1) {
 				sb.append("^");
@@ -656,6 +590,4 @@ public class Unit {
 	private boolean isSpecial() {
 		return (type & x_MASK) != 0;
 	}
-
 }
-

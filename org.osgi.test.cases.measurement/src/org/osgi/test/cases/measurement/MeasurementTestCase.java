@@ -25,12 +25,9 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
-
 package org.osgi.test.cases.measurement;
 
 import org.osgi.test.cases.util.*;
 
 public class MeasurementTestCase extends DefaultTestCase {
 }
-

@@ -6,7 +6,7 @@
  */
 package org.osgi.test.shared;
 
-import java.util.*;
+import java.util.Vector;
 
 /**
  * A save multithreaded queue.

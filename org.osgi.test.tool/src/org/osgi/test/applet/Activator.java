@@ -5,8 +5,8 @@ package org.osgi.test.applet;
  * Created: Wednesday, September 05, 2001 9:23:01 AM
  * Modified: Wednesday, September 05, 2001 9:23:01 AM
  */
-import org.osgi.framework.*;
 import netscape.application.*;
+import org.osgi.framework.*;
 
 public class Activator extends Thread implements BundleActivator {
 	TestApplet		applet;

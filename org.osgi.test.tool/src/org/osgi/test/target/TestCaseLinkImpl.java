@@ -6,10 +6,10 @@
  */
 package org.osgi.test.target;
 
-import java.util.*;
-import java.io.*;
-import org.osgi.framework.*;
-import org.osgi.test.service.*;
+import java.io.IOException;
+import java.util.Date;
+import org.osgi.framework.Bundle;
+import org.osgi.test.service.TestCaseLink;
 import org.osgi.test.shared.*;
 
 /**

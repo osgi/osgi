@@ -1,7 +1,6 @@
 package org.osgi.test.cases.wireadmin.tbc;
 
-import org.osgi.service.wireadmin.Consumer;
-import org.osgi.service.wireadmin.Wire;
+import org.osgi.service.wireadmin.*;
 
 public class WireAPITestConsumerImpl implements Consumer {
 	private WireAdminControl	wac	= null;

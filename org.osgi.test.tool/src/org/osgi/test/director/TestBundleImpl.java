@@ -7,10 +7,10 @@
 package org.osgi.test.director;
 
 import java.io.*;
-import java.util.*;
-import org.osgi.test.service.*;
-import org.osgi.test.shared.*;
-import org.osgi.test.script.*;
+import java.util.Vector;
+import org.osgi.test.script.Tag;
+import org.osgi.test.service.TestBundle;
+import org.osgi.test.shared.Log;
 
 /**
  * Represents the testbundle on the testcase side.
@@ -22,24 +22,24 @@ import org.osgi.test.script.*;
 class TestBundleImpl implements TestBundle {
 	final static int			LOOKAHEAD	= 4;
 	Run							run;											// Link
-																				   // to
-																				   // director
+	// to
+	// director
 	String						name;											// Name
-																				   // of
-																				   // bundle
+	// of
+	// bundle
 	org.osgi.test.shared.Queue	queue		= new org.osgi.test.shared.Queue(); // for
-																				   // send
+	// send
 	boolean						installed	= true;							// When
-																				   // installed
+	// installed
 	boolean						finished;										// When
-																					// finished
+	// finished
 	int							errors		= 0;								// # of
-																					 // errors
+	// errors
 	Vector						input		= new Vector();					// Look
-																				  // ahead
-																				  // for
-																				  // reference
-																				  // output
+	// ahead
+	// for
+	// reference
+	// output
 	BufferedReader				ref;
 	InputStream					refIn;
 

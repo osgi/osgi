@@ -1,7 +1,7 @@
 package org.osgi.test.shared;
 
-import java.util.*;
-import org.osgi.test.service.*;
+import java.util.Dictionary;
+import org.osgi.test.service.TestCase;
 
 public interface IApplet {
 	void setMessage(String message);

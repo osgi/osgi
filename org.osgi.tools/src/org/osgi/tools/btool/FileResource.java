@@ -1,12 +1,11 @@
 package org.osgi.tools.btool;
 
-
 import java.io.*;
-import java.util.*;
+import java.util.Date;
 
 public class FileResource extends Resource {
-	File file;
-	boolean preprocess;
+	File	file;
+	boolean	preprocess;
 
 	FileResource(BTool btool, String path, File file, boolean preprocess) {
 		super(btool, null, path);
@@ -15,24 +14,21 @@ public class FileResource extends Resource {
 	}
 
 	InputStream getInputStream() throws IOException {
-		if ( !preprocess )
+		if (!preprocess)
 			return super.getInputStream();
-		
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		BufferedReader br = new BufferedReader(
-				new InputStreamReader(new FileInputStream(file),"UTF8"));
-		PrintWriter pw = new PrintWriter(new OutputStreamWriter(out,"UTF8"));
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				new FileInputStream(file), "UTF8"));
+		PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, "UTF8"));
 		parse(br, pw, 500);
 		pw.print("\r\n");
 		pw.close();
 		out.close();
-		return new ByteArrayInputStream(out
-				.toByteArray());
+		return new ByteArrayInputStream(out.toByteArray());
 	}
-	
+
 	void parse(BufferedReader rdr, PrintWriter pw, int linewidth)
 			throws IOException {
-
 		String line = rdr.readLine();
 		while (line != null) {
 			line = process(line);
@@ -64,7 +60,6 @@ public class FileResource extends Resource {
 	}
 
 	String process(String line) throws IOException {
-
 		int start = 0;
 		while (true) {
 			start = line.indexOf("$(", start);
@@ -77,40 +72,40 @@ public class FileResource extends Resource {
 				if (end > start) {
 					String key = line.substring(start + 2, end);
 					String value = replace(key);
-					if ( value == null ) {
+					if (value == null) {
 						value = "Not-found: " + key;
 					}
-					line = line.substring(0, start)
-							+ value
+					line = line.substring(0, start) + value
 							+ line.substring(end + 1);
 				}
-			} else
+			}
+			else
 				start++;
 		}
 	}
 
 	protected String replace(String key) throws IOException {
-
 		String value = (String) btool.properties.get(key);
 		if (value != null)
 			return value;
 		if (key.equals("DATE"))
 			return new Date() + "";
-		else if (key.equals("BTOOL"))
-			return "OSGi Bundle tool utiltity v" + btool.version;
-		else if (key.equals("FILE-SECTION"))
-			return "Comment: File section should go here";
-		else if (key.equals("ADMIN")) {
-			return "(org.osgi.framework.AdminPermission)";
-		}
+		else
+			if (key.equals("BTOOL"))
+				return "OSGi Bundle tool utiltity v" + btool.version;
+			else
+				if (key.equals("FILE-SECTION"))
+					return "Comment: File section should go here";
+				else
+					if (key.equals("ADMIN")) {
+						return "(org.osgi.framework.AdminPermission)";
+					}
 		value = System.getProperty(key);
 		if (value != null)
 			return value;
-		
 		value = btool.getProject().getProperty(key);
 		if (value != null)
 			return value;
-		
 		File file = new File(key);
 		if (file.exists()) {
 			StringBuffer sb = new StringBuffer();
@@ -134,7 +129,6 @@ public class FileResource extends Resource {
 			}
 			return replace(sb.toString());
 		}
-		return "Comment: NOT FOUND "+ key;
+		return "Comment: NOT FOUND " + key;
 	}
-
 }

@@ -6,7 +6,7 @@
  */
 package org.osgi.test.shared;
 
-import java.io.*;
+import java.io.IOException;
 
 /**
  * Exception thrown when a reply indicates an exception on the execution side.

@@ -1,7 +1,6 @@
 package org.osgi.test.cases.wireadmin.tbc;
 
-import org.osgi.service.wireadmin.Producer;
-import org.osgi.service.wireadmin.Wire;
+import org.osgi.service.wireadmin.*;
 
 /**
  * A simple producer for test purposes

@@ -6,9 +6,9 @@
  */
 package org.osgi.test.director;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.IOException;
+import java.net.URL;
+import java.util.StringTokenizer;
 import org.osgi.framework.*;
 import org.osgi.test.shared.*;
 
@@ -32,9 +32,9 @@ public class Director implements BundleActivator {
 	boolean					cont	= true; // To keep us alive
 	Discovery				discovery;		// Simplified JINI ;-)
 	BundleActivator			activator;		// Activator of applet start
-												 // code
+	// code
 	public static Handler	handler;		// The handler for the
-											 // applet/script
+	// applet/script
 	IApplet					applet;		// Results.
 	TestCommands			commands;		// CommandProvider
 
@@ -49,7 +49,7 @@ public class Director implements BundleActivator {
 		handler = new Handler(context); // Controller
 		discovery = new Discovery(context); // Our mini JINI
 		commands = new TestCommands(handler, context); // Interface for
-													   // script/console
+		// script/console
 		String ui = getProperty("org.osgi.test.ui", null);
 		String script = getProperty("org.osgi.test.batch.script", null);
 		if (script != null) {

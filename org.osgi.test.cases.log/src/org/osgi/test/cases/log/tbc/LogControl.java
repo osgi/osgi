@@ -97,8 +97,7 @@ public class LogControl extends DefaultTestBundleControl {
 	 * String[]) { String[] p = (String[]) property; System.out.println(keys[i] + "= {
 	 * "); for(int j = 0; j < p.length; j++) { System.out.println(" " + p[j]); }
 	 * System.out.println("}"); } else { System.out.println(keys[i] + "=" +
-	 * property); }
-	 *  }
+	 * property); } }
 	 */
 }
 //        "testAnotherBundle"

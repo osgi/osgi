@@ -193,7 +193,7 @@ public class HttpTestServlet1 extends javax.servlet.http.HttpServlet {
 															.setContentType("image/jpeg");
 													ServletOutputStream out = response
 															.getOutputStream(); // binary
-																				// output
+													// output
 													InputStream in = (InputStream) AccessController
 															.doPrivileged(new PrivilegedAction() {
 																public Object run() {

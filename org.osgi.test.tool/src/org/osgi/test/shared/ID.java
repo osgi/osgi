@@ -6,7 +6,7 @@
  */
 package org.osgi.test.shared;
 
-import java.io.*;
+import java.io.Serializable;
 
 /**
  * The ID class implements a logical representation/name of a java object. It

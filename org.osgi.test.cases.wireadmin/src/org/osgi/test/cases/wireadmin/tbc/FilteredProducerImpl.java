@@ -1,14 +1,12 @@
 package org.osgi.test.cases.wireadmin.tbc;
 
-import org.osgi.service.wireadmin.Producer;
-import org.osgi.service.wireadmin.Wire;
+import org.osgi.service.wireadmin.*;
 
 public class FilteredProducerImpl implements Producer {
-
-	protected Wire wire = null;
+	protected Wire	wire	= null;
 
 	/**
-	 * This method should not be called in the test. 
+	 * This method should not be called in the test.
 	 * 
 	 * @return value out of range to indicate the wrong call
 	 */
@@ -26,7 +24,8 @@ public class FilteredProducerImpl implements Producer {
 			if (wait) {
 				try {
 					Thread.sleep(100 * i);
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 				}
 			}
 			wire.update(new Integer(i));

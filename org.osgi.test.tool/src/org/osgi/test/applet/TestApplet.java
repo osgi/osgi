@@ -12,10 +12,10 @@ import java.net.*;
 import java.util.*;
 import netscape.application.*;
 import netscape.application.Timer;
-import netscape.constructor.*;
+import netscape.constructor.Plan;
 import org.osgi.framework.*;
 import org.osgi.test.director.*;
-import org.osgi.test.script.*;
+import org.osgi.test.script.Tag;
 import org.osgi.test.service.*;
 import org.osgi.test.shared.*;
 
@@ -55,9 +55,11 @@ import org.osgi.test.shared.*;
  * 
  * <pre>
  * 
- *  Mastering Netscape IFC, Steven Holzner, ISBN 0-7821-2116-0
- *  Using Netscape IFC, Arun Rao, ISBN 0-7897-1251-2
- *  Late Night Netscape IFC, Jason Beaver et al, ISBN 1-56276-540-X
+ *  
+ *   Mastering Netscape IFC, Steven Holzner, ISBN 0-7821-2116-0
+ *   Using Netscape IFC, Arun Rao, ISBN 0-7897-1251-2
+ *   Late Night Netscape IFC, Jason Beaver et al, ISBN 1-56276-540-X
+ *   
  *  
  * </pre>
  * 
@@ -81,8 +83,10 @@ import org.osgi.test.shared.*;
  * 
  * <pre>
  * 
- *  http://developer.netscape.com/docs/technote/security/sectn2.html
- *  http://developer.netscape.com/docs/technote/security/prefwrangler.html
+ *  
+ *   http://developer.netscape.com/docs/technote/security/sectn2.html
+ *   http://developer.netscape.com/docs/technote/security/prefwrangler.html
+ *   
  *  
  * </pre>
  * 
@@ -92,7 +96,7 @@ public class TestApplet extends Application implements ExtendedTarget, IApplet,
 		TextViewOwner {
 	final static String	NOHOST	= "no host found";
 	Timer				tick;						// Mouse emulator to
-													  // prevent bug
+	// prevent bug
 	String				pwd;						// Last opened directory
 	Popup				hosts;						// List of target hosts
 	ListView			cases;						// List of testcases
@@ -103,27 +107,27 @@ public class TestApplet extends Application implements ExtendedTarget, IApplet,
 	Button				control;					// Start/stop button
 	Button				logging;					// Check for log output
 	Button				debug;						// Check for debug
-														// output
+	// output
 	Button				local;						// Only local hosts
 	Button				forever;					// No timeout
 	Button				xml;						// Show raw XML
 	Button				single;					// Single stepping support
 	TextField			prefix;					// Contains bundle name
-													// prefix.
+	// prefix.
 	Dictionary			targetProperties;			// Properties of target
-													   // (VM + Framework)
+	// (VM + Framework)
 	RemoteService		target;					// Current selected target
-													// ID
+	// ID
 	boolean				run;						// If running a test run
 	TextField			framework;					// Framework info from
-													   // targetProperties
+	// targetProperties
 	TextField			os;						// OS info from
-													// targetProperties
-													// (Framework)
+	// targetProperties
+	// (Framework)
 	TextField			vm;						// VM info from
-													// targetProperties
+	// targetProperties
 	Properties			cm;						// Configuration Management
-													 // properties
+	// properties
 	ListView			bundles;					// Bundle manager
 	Handler				handler;
 	Hashtable			history	= new Hashtable();

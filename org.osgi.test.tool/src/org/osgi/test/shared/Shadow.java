@@ -6,8 +6,8 @@
  */
 package org.osgi.test.shared;
 
-import org.osgi.framework.*;
 import java.util.*;
+import org.osgi.framework.*;
 
 /**
  * The Shadow class is a helper for making a shadow registry of the Framework
@@ -21,7 +21,7 @@ import java.util.*;
 public abstract class Shadow implements ServiceListener {
 	BundleContext	_context;						// Framework context
 	Hashtable		_wrappers	= new Hashtable();	// ServiceReference ->
-														// Object wrapper
+	// Object wrapper
 	String			_filter;						// Filter for this shadow
 	Class			_clazz;						// Clazz for this shadow
 

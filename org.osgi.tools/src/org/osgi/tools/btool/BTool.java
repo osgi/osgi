@@ -48,7 +48,7 @@ public class BTool extends Task {
 	IPA					ipa;
 	private File		workspaceDir;
 	private File		projectDir;
-	String				prebuild = "";
+	String				prebuild		= "";
 
 	/**
 	 * Try out the Deliver program. Syntax: Please note that the classpath must
@@ -152,10 +152,8 @@ public class BTool extends Task {
 	private void getPermissions() {
 		if (permissions == null)
 			permissions = replaceExt(zipname, ".jar", ".perm");
-		
-		if ( permissions == null )
+		if (permissions == null)
 			return;
-		
 		File f = new File(permissions);
 		if (!f.exists())
 			f = new File("permissions.perm");
@@ -164,7 +162,6 @@ public class BTool extends Task {
 			addContents(perms);
 		}
 	}
-
 
 	private void getManifest() throws IOException {
 		// In certain cases we do not want to fallback
@@ -182,9 +179,8 @@ public class BTool extends Task {
 			}
 		}
 		if (manifestSource == null) {
-			manifestSource = replaceExt(zipname,".jar", ".mf" );
+			manifestSource = replaceExt(zipname, ".jar", ".mf");
 		}
-	
 		File f = new File(manifestSource);
 		if (!f.exists())
 			f = new File(projectDir, "Manifest.mf");
@@ -205,12 +201,11 @@ public class BTool extends Task {
 
 	private String replaceExt(String name, String extFrom, String extTo) {
 		int n = name.lastIndexOf(extFrom);
-		if ( n < 0 ) {
-			trace("Cannot find extension: " + name + " " + extFrom );
+		if (n < 0) {
+			trace("Cannot find extension: " + name + " " + extFrom);
 			return null;
 		}
-		
-		return name.substring(0,n) + extTo;
+		return name.substring(0, n) + extTo;
 	}
 
 	/**
@@ -286,39 +281,40 @@ public class BTool extends Task {
 			else {
 				addProperty(infoPrefix + ".bindir", sourcePath);
 			}
-			
 			/**
-			 * The prebuild is an attribute that is prepended to the
-			 * dependency path derived from the Eclipse project
+			 * The prebuild is an attribute that is prepended to the dependency
+			 * path derived from the Eclipse project
 			 */
 			String buildpath = eclipse.getBuildPath();
-			StringBuffer		sb = new StringBuffer();
+			StringBuffer sb = new StringBuffer();
 			String del = "";
-			
-			StringTokenizer st = new StringTokenizer(prebuild," ," );
-			while ( st.hasMoreTokens()) {
+			StringTokenizer st = new StringTokenizer(prebuild, " ,");
+			while (st.hasMoreTokens()) {
 				sb.append(del);
-				sb.append(new File(workspaceDir, st.nextToken()).getAbsoluteFile());
+				sb.append(new File(workspaceDir, st.nextToken())
+						.getAbsoluteFile());
 				del = EclipseProject.PATHSEP;
 			}
-			if ( buildpath != null && buildpath.length()>0 ) {
+			if (buildpath != null && buildpath.length() > 0) {
 				sb.append(del);
 				sb.append(buildpath);
 			}
-			if ( sb.length() > 0 ) {
+			if (sb.length() > 0) {
 				addProperty(infoPrefix + ".buildpath", sb.toString());
-			}	
+			}
 		}
 	}
-	
+
 	void verify(String type, String paths) throws BuildException {
-//		StringTokenizer st = new StringTokenizer(paths,EclipseProject.PATHSEP);
-//		while (st.hasMoreTokens()) {
-//			String s = st.nextToken();
-//			File	f = new File( s );
-//			if ( ! f.exists() )
-//				throw new BuildException("Non existent file in " + infoPrefix + "." + type + " -> " + s );
-//		}
+		//		StringTokenizer st = new
+		// StringTokenizer(paths,EclipseProject.PATHSEP);
+		//		while (st.hasMoreTokens()) {
+		//			String s = st.nextToken();
+		//			File f = new File( s );
+		//			if ( ! f.exists() )
+		//				throw new BuildException("Non existent file in " + infoPrefix + "." +
+		// type + " -> " + s );
+		//		}
 	}
 
 	/**
@@ -811,11 +807,9 @@ public class BTool extends Task {
 		if (eclipse != null) {
 			String cp = eclipse.getClasspath();
 			String bp = eclipse.getBootclasspath();
-			if ( bp != null && bp.length() > 0 )
+			if (bp != null && bp.length() > 0)
 				cp = cp + EclipseProject.PATHSEP + bp;
-			
-			StringTokenizer st = new StringTokenizer(cp,
-					EclipseProject.PATHSEP);
+			StringTokenizer st = new StringTokenizer(cp, EclipseProject.PATHSEP);
 			while (st.hasMoreElements()) {
 				String file = st.nextToken().trim();
 				File f = new File(file);
@@ -1059,6 +1053,7 @@ public class BTool extends Task {
 			ipa = new IPA(this, ipas);
 		}
 	}
+
 	/**
 	 * @param prebuild The prebuild to set.
 	 */

@@ -35,7 +35,7 @@ public class Dependencies {
 		this.classpath = classpath;
 		this.includeExport = includeExport;
 		this.excludeImport = excludeImport;
-		this.btool=btool;
+		this.btool = btool;
 		for (Iterator i = resources.values().iterator(); i.hasNext();) {
 			Resource r = (Resource) i.next();
 			dot.put(r.getPath(), r);
@@ -225,11 +225,13 @@ public class Dependencies {
 	 *        
 	 *         
 	 *          
-	 *                 	 [L*               =&gt; remove [L, try again
-	 *                 	 [* &amp;&amp; length=2     =&gt; ignore (int,byte,char etc class)
-	 *                 	 [*                =&gt; remove [, try again
-	 *                 ;                =&gt; remove ;, try again (do not know why)
-	 *                 	 A i in skip | &lt;i&gt;* =&gt; ignore
+	 *           
+	 *                  	 [L*               =&gt; remove [L, try again
+	 *                  	 [* &amp;&amp; length=2     =&gt; ignore (int,byte,char etc class)
+	 *                  	 [*                =&gt; remove [, try again
+	 *                  ;                =&gt; remove ;, try again (do not know why)
+	 *                  	 A i in skip | &lt;i&gt;* =&gt; ignore
+	 *            
 	 *           
 	 *          
 	 *         
@@ -346,7 +348,7 @@ public class Dependencies {
 			return new Package(packname, version);
 		}
 		catch (Exception e) {
-			btool.warning("Invalid packagedefinition " + name );
+			btool.warning("Invalid packagedefinition " + name);
 		}
 		return null;
 	}

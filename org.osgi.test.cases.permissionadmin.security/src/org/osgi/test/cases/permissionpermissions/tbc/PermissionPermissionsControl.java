@@ -25,58 +25,47 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.test.cases.permissionpermissions.tbc;
 
 import org.osgi.service.permissionadmin.*;
 import org.osgi.test.cases.util.*;
 
 public class PermissionPermissionsControl extends DefaultTestBundleControl {
+	PermissionAdmin	permissionAdmin;
 
-    PermissionAdmin permissionAdmin;
+	public boolean checkPrerequisites() {
+		return serviceAvailable(PermissionAdmin.class) && securityNeeded(true);
+	}
 
-    public boolean checkPrerequisites() {
-        return serviceAvailable(PermissionAdmin.class) &&
-               securityNeeded(true);
-    }
+	public void prepare() throws Exception {
+		/* Get the PermissionAdmin service */
+		permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
+	}
 
-    public void prepare() throws Exception {
-        /* Get the PermissionAdmin service */
-        permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
-    }
-    
-    public void testSecurity() throws Exception {
-        try {
-            permissionAdmin.setDefaultPermissions(null);
-            fail("Were able to set default permissions without " 
-                 + "admin permission");
-        }
-        catch(SecurityException e) {
-            pass("Correctly got SecurityException when setting default " 
-                 + "permissions without admin permission");
-        }
-
-        try {
-            permissionAdmin.setPermissions("fake.jar", null);
-            fail("Were able to set permissions without " 
-                 + "admin permission");
-        }
-        catch(SecurityException e) {
-            pass("Correctly got SecurityException when setting " 
-                 + "permissions without admin permission");
-        }
-        
-/*
-        trace("Will try to write to a file");
-        File f = getContext().getDataFile("nicke.txt");
-        FileOutputStream o = new FileOutputStream(f);
-        o.write(65);
-        o.write(66);
-        o.write(67);
-        o.close();
-        trace("Succeeded writing to the file!");
-        try { Thread.sleep(30000); } catch(InterruptedException e) {}
-*/
-    }        
+	public void testSecurity() throws Exception {
+		try {
+			permissionAdmin.setDefaultPermissions(null);
+			fail("Were able to set default permissions without "
+					+ "admin permission");
+		}
+		catch (SecurityException e) {
+			pass("Correctly got SecurityException when setting default "
+					+ "permissions without admin permission");
+		}
+		try {
+			permissionAdmin.setPermissions("fake.jar", null);
+			fail("Were able to set permissions without " + "admin permission");
+		}
+		catch (SecurityException e) {
+			pass("Correctly got SecurityException when setting "
+					+ "permissions without admin permission");
+		}
+		/*
+		 * trace("Will try to write to a file"); File f =
+		 * getContext().getDataFile("nicke.txt"); FileOutputStream o = new
+		 * FileOutputStream(f); o.write(65); o.write(66); o.write(67);
+		 * o.close(); trace("Succeeded writing to the file!"); try {
+		 * Thread.sleep(30000); } catch(InterruptedException e) {}
+		 */
+	}
 }
-

@@ -7,7 +7,7 @@
 package org.osgi.test.shared;
 
 import java.io.*;
-import java.util.*;
+import java.util.Dictionary;
 
 /**
  * This class is the network link between the target framework and the director.

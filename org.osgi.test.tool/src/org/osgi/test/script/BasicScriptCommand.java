@@ -4,7 +4,7 @@
  */
 package org.osgi.test.script;
 
-import java.util.*;
+import java.util.Enumeration;
 
 /**
  * Provides the basic scripting commands. It is registered always as a script

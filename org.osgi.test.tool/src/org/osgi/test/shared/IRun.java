@@ -1,7 +1,7 @@
 package org.osgi.test.shared;
 
-import java.util.*;
-import java.io.*;
+import java.io.IOException;
+import java.util.Dictionary;
 
 public interface IRun {
 	void linkClosed() throws Exception;

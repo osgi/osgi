@@ -7,9 +7,9 @@
 package org.osgi.test.director;
 
 import java.io.*;
-import java.net.*;
+import java.net.Socket;
 import java.util.*;
-import org.osgi.test.script.*;
+import org.osgi.test.script.Tag;
 import org.osgi.test.service.*;
 import org.osgi.test.shared.*;
 
@@ -28,7 +28,7 @@ import org.osgi.test.shared.*;
 public class Run implements IRun, TestRun {
 	Handler		handler;						// Our boss
 	TargetLink	target;						// Link to the target, only
-												 // open during testcase exec.
+	// open during testcase exec.
 	int			progress;						// Where we currently are
 	Hashtable	testbundles	= new Hashtable();	// name -> test link
 	int			options;						// Bitmap of options
@@ -38,11 +38,11 @@ public class Run implements IRun, TestRun {
 	Tag			history;						// Current history
 	Tag			top;							// Top of current histiry
 	long		lasttime;						// Separates testcases at least
-												 // 2 secs
+	// 2 secs
 	boolean		hadProperties;					// Waits until properties
-													 // are send after closing
-													 // link.
 
+	// are send after closing
+	// link.
 	/**
 	 * Create run for a handler, applet, host, port and set of testcases.
 	 * 

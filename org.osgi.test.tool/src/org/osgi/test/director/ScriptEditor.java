@@ -6,8 +6,8 @@
  */
 package org.osgi.test.director;
 
-import java.net.*;
-import org.osgi.framework.*;
+import java.net.URL;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.script.*;
 import org.osgi.test.service.*;
 

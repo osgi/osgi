@@ -10,7 +10,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import org.osgi.framework.*;
-import org.osgi.test.script.*;
+import org.osgi.test.script.Tag;
 import org.osgi.test.service.*;
 import org.osgi.test.shared.*;
 
@@ -29,21 +29,21 @@ import org.osgi.test.shared.*;
 public class Handler implements BundleListener {
 	BundleContext			context;					// Framework interface
 	TestCaseTracker			caseTracker;				// Holds wrappers
-														   // around the
-														   // testcases
+	// around the
+	// testcases
 	RemoteServiceTracker	targetTracker;				// Wrappers around the
-														  // targets
+	// targets
 	HttpTracker				httpTracker;				// Registers a
-														   // servlet for
-														   // results + target
+	// servlet for
+	// results + target
 	Run						run;						// An active test run
 	Hashtable				bundles	= new Hashtable();	// id -> id
 	IApplet					applet	= new Dummy();
 	Hashtable				lastHistory;				// TestCase -> Tag
 	File					directory;					// Where test results
-														  // are stored
+	// are stored
 	String					lastRun;					// Name of last made
-														  // test result file.
+	// test result file.
 	String					program;					// Test program
 	String					campaign;					// Test campaign
 	String					applicant;					// Applicant Id

@@ -6,9 +6,9 @@
  */
 package org.osgi.test.director;
 
-import org.osgi.test.shared.*;
-import org.osgi.test.service.*;
-import java.util.*;
+import java.util.Dictionary;
+import org.osgi.test.service.TestCase;
+import org.osgi.test.shared.IApplet;
 
 /**
  * IMplement a dummy UI.

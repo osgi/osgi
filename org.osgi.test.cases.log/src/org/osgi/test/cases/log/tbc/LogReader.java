@@ -45,7 +45,7 @@ public class LogReader implements LogListener {
 		logService.log(LogService.LOG_INFO, stopString);
 		/* Wait until the magic stopString has arrived */
 		synchronized (this) // issue 149: MUST not be synchronized when we log
-							// the stopString
+		// the stopString
 		{
 			while (waitingToStop) {
 				try {
@@ -81,8 +81,8 @@ public class LogReader implements LogListener {
 						/* Is it for me? */
 						if (message.equals(stopString)) {
 							synchronized (this) // issue 149: MUST not be
-												// synchronized when we log the
-												// stopString
+							// synchronized when we log the
+							// stopString
 							{
 								waitingToStop = false;
 								this.notify();

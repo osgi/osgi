@@ -1,9 +1,7 @@
 package org.osgi.test.cases.wireadmin.tbc;
 
 import java.util.Dictionary;
-import org.osgi.service.wireadmin.Wire;
-import org.osgi.service.wireadmin.WireAdminEvent;
-import org.osgi.service.wireadmin.WireAdminListener;
+import org.osgi.service.wireadmin.*;
 
 /**
  * Used to test the correct event dispatchment within the wire admin as required

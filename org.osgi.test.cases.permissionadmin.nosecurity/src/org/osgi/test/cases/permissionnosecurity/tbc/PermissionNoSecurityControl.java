@@ -25,7 +25,6 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.test.cases.permissionnosecurity.tbc;
 
 import org.osgi.framework.*;
@@ -33,39 +32,35 @@ import org.osgi.service.permissionadmin.*;
 import org.osgi.test.cases.util.*;
 
 public class PermissionNoSecurityControl extends DefaultTestBundleControl {
+	PermissionAdmin	permissionAdmin;
 
-    PermissionAdmin permissionAdmin;
+	public boolean checkPrerequisites() {
+		return serviceAvailable(PermissionAdmin.class) && securityNeeded(false);
+	}
 
-    public boolean checkPrerequisites() {
-        return serviceAvailable(PermissionAdmin.class) &&
-               securityNeeded(false);
-    }
+	public void prepare() throws Exception {
+		/* Get the PermissionAdmin service */
+		permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
+	}
 
-    public void prepare() throws Exception {
-        /* Get the PermissionAdmin service */
-        permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
-    }
-    
-    public void testSecurity() throws Exception {
-        try {
-            permissionAdmin.setDefaultPermissions(null);
-            pass("Expected behaviour when setting default " 
-                 + "permissions without admin permission");
-        }
-        catch(SecurityException e) {
-            fail("Got SecurityException when setting default " 
-                 + "permissions without SecurityManager");
-        }
-
-        try {
-            permissionAdmin.setPermissions("fake.jar", null);
-            pass("Expected behaviour when setting " 
-                 + "permissions without admin permission");
-        }
-        catch(SecurityException e) {
-            fail("Got SecurityException when setting " 
-                 + "permissions without SecurityManager");
-        }
-    }        
+	public void testSecurity() throws Exception {
+		try {
+			permissionAdmin.setDefaultPermissions(null);
+			pass("Expected behaviour when setting default "
+					+ "permissions without admin permission");
+		}
+		catch (SecurityException e) {
+			fail("Got SecurityException when setting default "
+					+ "permissions without SecurityManager");
+		}
+		try {
+			permissionAdmin.setPermissions("fake.jar", null);
+			pass("Expected behaviour when setting "
+					+ "permissions without admin permission");
+		}
+		catch (SecurityException e) {
+			fail("Got SecurityException when setting "
+					+ "permissions without SecurityManager");
+		}
+	}
 }
-

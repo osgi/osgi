@@ -1,37 +1,19 @@
 package org.osgi.test.cases.wireadmin.tbc;
 
-import java.util.Date;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.Constants;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.permissionadmin.PermissionAdmin;
-import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.service.wireadmin.BasicEnvelope;
-import org.osgi.service.wireadmin.Consumer;
-import org.osgi.service.wireadmin.Producer;
-import org.osgi.service.wireadmin.Wire;
-import org.osgi.service.wireadmin.WireAdmin;
-import org.osgi.service.wireadmin.WireAdminEvent;
-import org.osgi.service.wireadmin.WireAdminListener;
-import org.osgi.service.wireadmin.WireConstants;
-import org.osgi.service.wireadmin.WirePermission;
+import java.util.*;
+import org.osgi.framework.*;
+import org.osgi.service.permissionadmin.*;
+import org.osgi.service.wireadmin.*;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
  * Contains the test methods of the wireadmin test case
  * 
  * $Log$
- * Revision 1.2  2004/11/03 10:55:32  pkriens
+ * Revision 1.3  2004/11/03 11:47:09  pkriens
  * Format and clean up of warnings
- * Revision 1.1 2004/07/07 13:15:26 pkriens ***
+ * Revision 1.2 2004/11/03 10:55:32 pkriens
+ * Format and clean up of warnings Revision 1.1 2004/07/07 13:15:26 pkriens ***
  * empty log message ***
  * 
  * Revision 1.7 2003/12/16 15:06:17 vpanushev 1. test_wireadmin_DeleteWire is
@@ -1078,10 +1060,10 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		fpi.updateWire(2, true);
 		counter = 0;
 		while ((counter++ < 500) && (FilteredConsumerImpl.valuesReceived < 4)) { // timeout
-																				 // increased
-																				 // to
-																				 // 25
-																				 // seconds
+			// increased
+			// to
+			// 25
+			// seconds
 			Thread.sleep(50);
 		}
 		FilteredConsumerImpl.valuesReceived = 0;
@@ -1120,12 +1102,12 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		Integer mask = new Integer(0xFFFFFFFF);
 		// register the listeners
 		TestWireAdminListener listener = new TestWireAdminListener(this, false); // should
-																				 // receive
-																				 // all
-																				 // events
+		// receive
+		// all
+		// events
 		TestWireAdminListener dummy = new TestWireAdminListener(this, true); // shouldn't
-																			 // receive
-																			 // events
+		// receive
+		// events
 		//real listener
 		Hashtable walProps = new Hashtable();
 		walProps.put(WireConstants.WIREADMIN_EVENTS, mask);
@@ -1783,7 +1765,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	// default
 	private void dumpWires(String filter) {
 		synchronized (this.getClass()) { // to avoid messups when called from
-										 // different threads
+			// different threads
 			try {
 				Wire[] wiress = wa.getWires(filter);
 				if (wiress == null) {
@@ -1803,7 +1785,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 
 	private void dumpProducers(String filter) {
 		synchronized (this.getClass()) { // to avoid messups when called from
-										 // different threads
+			// different threads
 			try {
 				ServiceReference[] producers = context.getServiceReferences(
 						Producer.class.getName(), filter);
@@ -1833,7 +1815,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 
 	private void dumpConsumers(String filter) {
 		synchronized (this.getClass()) { // to avoid messups when called from
-										 // different threads
+			// different threads
 			try {
 				ServiceReference[] consumers = context.getServiceReferences(
 						Consumer.class.getName(), filter);

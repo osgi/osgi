@@ -34,16 +34,16 @@ public class EclipseProject {
 	protected Locator		locator;
 	Vector					sourceFolders	= new Vector();
 	static final String		PATHSEP			= File.pathSeparator;		// This
-																			   // must
-																			   // be
-																			   // path
-																			   // separator
-																			   // for
-																			   // ant
-																			   // script
-																			   // path
-																			   // processing
-																			   // (subant)
+	// must
+	// be
+	// path
+	// separator
+	// for
+	// ant
+	// script
+	// path
+	// processing
+	// (subant)
 	private StringBuffer	sourcepath		= new StringBuffer(1024);
 	private StringBuffer	classpath		= new StringBuffer(1024);
 	private StringBuffer	bootclasspath	= new StringBuffer(1024);
@@ -51,7 +51,7 @@ public class EclipseProject {
 	private String			bindir;
 	List					before			= new Vector();
 	int						level;
-	private Hashtable		dependingOn = new Hashtable();
+	private Hashtable		dependingOn		= new Hashtable();
 
 	public EclipseProject(File eclipseProject, boolean root) {
 		this.eclipseProject = eclipseProject;
@@ -258,7 +258,8 @@ public class EclipseProject {
 								cp = new EclipseProject(otherEclipseProject,
 										false);
 								dependingOn.put(otherEclipseProject, cp);
-							} else {
+							}
+							else {
 							}
 							if (cp.level <= level)
 								cp.level = level + 1;

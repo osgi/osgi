@@ -6,13 +6,13 @@
  */
 package org.osgi.test.director;
 
-import java.io.*;
+import java.io.InputStream;
 import java.net.*;
 import java.util.*;
 import org.osgi.framework.*;
-import org.osgi.test.script.*;
-import org.osgi.test.service.*;
-import org.osgi.util.tracker.*;
+import org.osgi.test.script.Tag;
+import org.osgi.test.service.TestCase;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * Track the testcases in the service registry.

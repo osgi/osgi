@@ -25,16 +25,12 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
-
 package org.osgi.test.cases.xml;
 
-import org.osgi.test.cases.util.*;
-
-
+import org.osgi.test.cases.util.DefaultTestCase;
 
 /**
  * This is the test-case control bundle for the XML Parser Service test suite
  */
-public class XMLTestCase extends DefaultTestCase { }
-
+public class XMLTestCase extends DefaultTestCase {
+}

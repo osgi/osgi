@@ -4,10 +4,10 @@
  */
 package org.osgi.test.script;
 
-import java.io.*;
+import java.io.StringReader;
 import javax.xml.parsers.*;
 import org.xml.sax.*;
-import org.xml.sax.helpers.*;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Handles the low level parsing details.

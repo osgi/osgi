@@ -6,8 +6,8 @@
  */
 package org.osgi.test.shared;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * A log record used to send log information from the target to the director.

@@ -6,10 +6,10 @@
  */
 package org.osgi.test.director;
 
-import java.net.*;
-import java.util.*;
+import java.net.InetAddress;
+import java.util.Properties;
 import org.osgi.framework.*;
-import org.osgi.test.service.*;
+import org.osgi.test.service.RemoteService;
 
 /**
  * Used by Discovery to implement a RemoteService.

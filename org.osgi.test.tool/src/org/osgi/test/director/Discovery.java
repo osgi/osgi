@@ -6,11 +6,11 @@
  */
 package org.osgi.test.director;
 
-import java.io.*;
+import java.io.InterruptedIOException;
 import java.net.*;
 import java.util.*;
-import org.osgi.framework.*;
-import org.osgi.test.service.*;
+import org.osgi.framework.BundleContext;
+import org.osgi.test.service.RemoteService;
 
 /**
  * The Discovery class keeps track remote services on the local net and
@@ -20,8 +20,10 @@ import org.osgi.test.service.*;
  * 
  * <pre>
  * 
- * 		application=&lt;app&gt; host=&lt;host&gt; port=&lt;port&gt;
- * 	
+ *  
+ *  		application=&lt;app&gt; host=&lt;host&gt; port=&lt;port&gt;
+ *  	
+ *  
  * </pre>
  * 
  * This class picks these messages up and parses them. If a service is detected
@@ -37,8 +39,8 @@ public class Discovery extends Thread {
 	DatagramSocket			listener;
 	boolean					cont		= true;
 	Hashtable				services	= new Hashtable();	// RemoteService
-															   // ->
-															   // RemoteServiceImpl
+	// ->
+	// RemoteServiceImpl
 	static final long		LEASE		= 20000;			// ms == 20 secs
 
 	/**

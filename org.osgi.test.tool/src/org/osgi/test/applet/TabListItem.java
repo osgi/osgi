@@ -1,7 +1,7 @@
 package org.osgi.test.applet;
 
+import java.util.StringTokenizer;
 import netscape.application.*;
-import java.util.*;
 
 public class TabListItem extends ListItem {
 	int	tabs[];

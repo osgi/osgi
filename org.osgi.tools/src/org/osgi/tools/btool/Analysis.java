@@ -6,12 +6,9 @@
  */
 package org.osgi.tools.btool;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.io.*;
+import java.util.*;
+import java.util.zip.*;
 
 /**
  * @author Peter Kriens
@@ -20,58 +17,55 @@ import java.util.zip.ZipFile;
  * Preferences - Java - Code Style - Code Templates
  */
 public class Analysis {
-    BTool    btool;
-    String   zipfile;
-    Manifest manifest;
-    private Object dependencies;
+	BTool			btool;
+	String			zipfile;
+	Manifest		manifest;
+	private Object	dependencies;
 
-    Analysis(BTool btool, Dependencies dependencies, String zipfile) {
-        this.btool = btool;
-        this.zipfile = zipfile;
-    }
+	Analysis(BTool btool, Dependencies dependencies, String zipfile) {
+		this.btool = btool;
+		this.zipfile = zipfile;
+	}
 
-    /**
-     *  
-     */
-    public void execute() throws Exception {
-        
-        ZipFile zip = new ZipFile(new File(zipfile));
-        ZipEntry entry = zip.getEntry("META-INF/MANIFEST.MF");
-        manifest = new Manifest(zip.getInputStream(entry));
-        checkActivator();
-    }
+	/**
+	 *  
+	 */
+	public void execute() throws Exception {
+		ZipFile zip = new ZipFile(new File(zipfile));
+		ZipEntry entry = zip.getEntry("META-INF/MANIFEST.MF");
+		manifest = new Manifest(zip.getInputStream(entry));
+		checkActivator();
+	}
 
-    private void checkActivator() throws IOException {
-        String activator = manifest.getValue("Bundle-Activator");
-        if ( activator == null )
-            return;
-        
-        activator = activator.replace('.','/') + ".class";
-        Resource activatorResource = (Resource) btool.contents.get(activator);
-        if ( activatorResource != null )
-            return;
-        
-        // The activator might come from the import
-        String pack = Dependencies.base(activator);
-        Dependencies deps = btool.initDependencies();
-        
-        if ( deps.getImported().contains(pack)) {
-            System.out.println( "Check act " + pack + " " + deps.referred );
-            btool.warnings.add("Activator from import " + activator );
-        	return;
-        }
-        
-        btool.errors.add("Activator not found " + activator );
-    }
-    
-    void report() throws IOException {
-    	System.out.println("-------------------------------------------------------");
-    	prt("Imports         : ", btool.getImports() );
-    	prt("Exports         : ", btool.getExports() );
-    	prt("Private         : ", btool.getPrivates() );
-    	prt("Activator       : ",  manifest.getValue("Bundle-Activator") );
-    	System.out.println("-------------------------------------------------------");
-    }
+	private void checkActivator() throws IOException {
+		String activator = manifest.getValue("Bundle-Activator");
+		if (activator == null)
+			return;
+		activator = activator.replace('.', '/') + ".class";
+		Resource activatorResource = (Resource) btool.contents.get(activator);
+		if (activatorResource != null)
+			return;
+		// The activator might come from the import
+		String pack = Dependencies.base(activator);
+		Dependencies deps = btool.initDependencies();
+		if (deps.getImported().contains(pack)) {
+			System.out.println("Check act " + pack + " " + deps.referred);
+			btool.warnings.add("Activator from import " + activator);
+			return;
+		}
+		btool.errors.add("Activator not found " + activator);
+	}
+
+	void report() throws IOException {
+		System.out
+				.println("-------------------------------------------------------");
+		prt("Imports         : ", btool.getImports());
+		prt("Exports         : ", btool.getExports());
+		prt("Private         : ", btool.getPrivates());
+		prt("Activator       : ", manifest.getValue("Bundle-Activator"));
+		System.out
+				.println("-------------------------------------------------------");
+	}
 
 	private void prt(String string, String value) {
 		System.out.print(string);
@@ -79,12 +73,10 @@ public class Analysis {
 	}
 
 	private void prt(String string, Collection imports) {
-		for ( Iterator i=imports.iterator(); i.hasNext(); ) {
+		for (Iterator i = imports.iterator(); i.hasNext();) {
 			System.out.print(string);
 			System.out.println(i.next());
 			string = "                  ";
 		}
 	}
-
-    
 }

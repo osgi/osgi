@@ -7,16 +7,16 @@
 package org.osgi.test.director;
 
 import java.io.*;
-import java.net.*;
-import java.util.*;
-import javax.servlet.*;
+import java.net.URL;
+import java.util.Hashtable;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.*;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.*;
 import org.osgi.framework.*;
 import org.osgi.service.http.*;
-import org.osgi.util.tracker.*;
-import org.xml.sax.*;
+import org.osgi.util.tracker.ServiceTracker;
+import org.xml.sax.SAXException;
 
 /**
  * Track Http Service objects and register our servlet /test/director and
@@ -77,11 +77,13 @@ class HttpTracker extends ServiceTracker implements HttpContext {
  * 
  * <pre>
  * 
- *   source  	name of source test result file (no dir), 
- *   			e.g. 1009163849.xml
- *   style   	name of the style sheet, these are 
- *   			stored in the www directory. e.g. testresult.html
- *   clear   	Clear the style sheet cache
+ *  
+ *    source  	name of source test result file (no dir), 
+ *    			e.g. 1009163849.xml
+ *    style   	name of the style sheet, these are 
+ *    			stored in the www directory. e.g. testresult.html
+ *    clear   	Clear the style sheet cache
+ * 
  * 
  */
 

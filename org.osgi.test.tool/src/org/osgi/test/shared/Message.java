@@ -18,20 +18,20 @@ public class Message implements Serializable {
 	int							_type;						// Type code
 	Object						_content;					// payload
 	int							_requestID			= 0;	// ID of
-																 // request
+	// request
 	int							_responseID			= 0;	// ID of
-																  // request in
-																  // response
+	// request in
+	// response
 	transient Link				_link;						// Pointer to
-																// owning link
-																// class
+	// owning link
+	// class
 	transient Message			_reply;					// Associated reply
-															// when request
+	// when request
 	transient Thread			_thread;					// Thread waiting
-															// for us when
-															// canceled.
+	// for us when
+	// canceled.
 	static int					_nextID				= 97;	// Transaction
-																  // id counter
+	// id counter
 	transient Message			_source;					// Source message
 
 	/**

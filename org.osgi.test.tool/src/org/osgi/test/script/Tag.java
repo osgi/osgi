@@ -4,9 +4,9 @@
  */
 package org.osgi.test.script;
 
-import java.util.*;
-import java.text.*;
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * The Tag class represents a minimal XML tree. It consist of a named element
@@ -16,17 +16,17 @@ import java.io.*;
  */
 public class Tag {
 	Tag						parent;									// Parent
-																		  // element
+	// element
 	String					name;										// Name
-																		   // of
-																		   // the
-																		   // tag
+	// of
+	// the
+	// tag
 	Hashtable				attributes	= new Hashtable();				// Attributes
-																			 // name
-																			 // ->
-																			 // value
+	// name
+	// ->
+	// value
 	Vector					content		= new Vector();				// Content
-																			// elements
+	// elements
 	static SimpleDateFormat	format		= new SimpleDateFormat(
 												"yyyyMMddhhmmss.SSS");
 

@@ -1,80 +1,79 @@
 package org.osgi.tools.btool;
 
-
 import java.io.*;
-import java.security.*;
+import java.security.MessageDigest;
 
 public class Resource implements Comparable {
-	Source source;
-	String path;
+	Source	source;
+	String	path;
 	BTool	btool;
 	String	sourcePath;
 	byte[]	extra;
-	
+
 	public Resource(BTool btool, Source source, String path) {
 		this.path = path;
 		this.btool = btool;
 		this.source = source;
-		if ( btool == null ) {
+		if (btool == null) {
 			System.out.println("No Btool ");
 			throw new RuntimeException("No btool");
 		}
 	}
-	
+
 	public String getPath() {
 		return path;
 	}
-	public int hashCode() { return path.hashCode(); }
-	public boolean equals(Object other) { return path.equals(((PackageResource)other).name); }
+
+	public int hashCode() {
+		return path.hashCode();
+	}
+
+	public boolean equals(Object other) {
+		return path.equals(((PackageResource) other).name);
+	}
 
 	public int compareTo(Object other) {
-		return path.compareTo(((Resource)other).path);
+		return path.compareTo(((Resource) other).path);
 	}
-	
-
-
-
 
 	boolean isClass() {
 		return path.endsWith(".class");
 	}
 
 	InputStream getInputStream() throws IOException {
-	    Source source = this.source;
-	    if ( source == null ) {
-	        source = btool.project;
-	    }
-	    try {
-			if ( sourcePath != null )
+		Source source = this.source;
+		if (source == null) {
+			source = btool.project;
+		}
+		try {
+			if (sourcePath != null)
 				return source.getEntry(sourcePath);
 			return source.getEntry(path);
-	    }
-	    catch(FileNotFoundException e) {
-            btool.errors.add("Resource not found " + this);
-	        return null;
-	    }
+		}
+		catch (FileNotFoundException e) {
+			btool.errors.add("Resource not found " + this);
+			return null;
+		}
 	}
-	
-	
-	public String getName() { return getPath(); }
-	
 
-	
-	
-	public String toString() { 
-	    StringBuffer	sb = new StringBuffer();
-	    if ( source != null )
-	        sb.append(source.getFile().getName());
-	    else 
-	        sb.append("<>");
-	    sb.append(":");
-	    sb.append( getPath() );
-	    if ( sourcePath != null ) {
-	        sb.append("[");
-	        sb.append(sourcePath);
-	        sb.append("]");
-	    }
-	    return sb.toString();
+	public String getName() {
+		return getPath();
+	}
+
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		if (source != null)
+			sb.append(source.getFile().getName());
+		else
+			sb.append("<>");
+		sb.append(":");
+		sb.append(getPath());
+		if (sourcePath != null) {
+			sb.append("[");
+			sb.append(sourcePath);
+			sb.append("]");
+		}
+		return sb.toString();
 	}
 
 	/**
@@ -82,14 +81,12 @@ public class Resource implements Comparable {
 	 */
 	String getChecksum() {
 		try {
-				
 			InputStream in = getInputStream();
-			if ( in == null )
+			if (in == null)
 				return null;
-			if ( btool == null )
+			if (btool == null)
 				return "XXXXXXXXX ";
-			
-			byte [] data = btool.readAll(in,0);
+			byte[] data = btool.readAll(in, 0);
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			md.update(data);
 			byte[] digest = md.digest();
@@ -100,12 +97,12 @@ public class Resource implements Comparable {
 				sb.append(Integer.toHexString((0xFF & digest[i])));
 			}
 			return sb.toString();
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-
 
 	/**
 	 * @param sourcePath The sourcePath to set.
@@ -114,20 +111,21 @@ public class Resource implements Comparable {
 		this.sourcePath = sourcePath;
 	}
 
-    /**
-     * @return
-     */
-    public byte [] getExtra() {
-        return extra;
-    }
-    public void setExtra(byte[]extra) {
-        this.extra = extra;
-    }
+	/**
+	 * @return
+	 */
+	public byte[] getExtra() {
+		return extra;
+	}
 
-    /**
-     * @return
-     */
-    public Source getSource() {
-        	return source;
-    }
+	public void setExtra(byte[] extra) {
+		this.extra = extra;
+	}
+
+	/**
+	 * @return
+	 */
+	public Source getSource() {
+		return source;
+	}
 }

@@ -25,11 +25,9 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.test.cases.useradmin;
 
-import org.osgi.test.cases.util.*;
+import org.osgi.test.cases.util.DefaultTestCase;
 
 public class UserAdminTestCase extends DefaultTestCase {
 }
-
