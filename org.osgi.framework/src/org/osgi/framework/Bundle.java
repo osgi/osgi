@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) OSGi Alliance (2000, 2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -37,13 +37,13 @@ import java.util.Enumeration;
  * An installed bundle in the Framework.
  * 
  * <p>
- * A <code>Bundle</code> object is the access point to define the life cycle
+ * A <code>Bundle</code> object is the access point to define the lifecycle
  * of an installed bundle. Each bundle installed in the OSGi environment will
  * have an associated <code>Bundle</code> object.
  * 
  * <p>
  * A bundle will have a unique identity, a <code>long</code>, chosen by the
- * Framework. This identity will not change during the life cycle of a bundle,
+ * Framework. This identity will not change during the lifecycle of a bundle,
  * even when the bundle is updated. Uninstalling and then reinstalling the
  * bundle will create a new unique identity.
  * 
