@@ -123,7 +123,8 @@ public abstract class ApplicationHandle {
 	 * @modelguid {CEAB58E4-91B8-4E7A-AEEB-9C14C812E607}
 	 */
 	public final void destroy() throws Exception {
-
+		delegate.destroy();
+		destroySpecific();
 	}
 
 	/**
