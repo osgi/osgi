@@ -19,6 +19,7 @@ package unittests;
 
 import org.osgi.impl.service.policy.condpermadmin.ConditionalPermissionAdminPlugin;
 import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtSession;
 import unittests.util.DmtPluginTestCase;
 
@@ -64,8 +65,19 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 		assertNotNull(dmtSession);
 	}
 
+	public void newAtomicSession() throws DmtException {
+		dmtSession = dmtFactory.getSession(ConditionalPermissionAdminPlugin.dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
+		assertNotNull(dmtSession);
+	}
+	
 	public void testRegister() throws Exception {
 		newSession();
-		
+	}
+
+	public void testRootMetaNode() throws Exception {
+		newSession();
+		DmtMetaNode mn = dmtSession.getMetaNode(ConditionalPermissionAdminPlugin.dataRootURI);
+		assertNotNull(mn);
+		assertEquals(false,mn.canDelete());
 	}
 }

@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import org.osgi.impl.service.policy.RootMetaNode;
 import org.osgi.impl.service.policy.util.HashCalculator;
 import org.osgi.impl.service.policy.util.Splitter;
 import org.osgi.service.condpermadmin.ConditionInfo;
@@ -59,6 +60,11 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 	 * a map of String->ConditionalPermission, where the key is the hash as seen in the tree
 	 */
 	private Map conditionalPermissions;
+	
+	/**
+	 * metanode given back by asking about ./OSGi/Policies/Java/ConditionalPermission
+	 */
+	private static final DmtMetaNode rootMetaNode = new RootMetaNode("permissions specified by conditions");
 	
 	/**
 	 * internal representation of a conditional permission
@@ -136,6 +142,10 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 
 	public DmtMetaNode getMetaNode(String nodeUri)
 			throws DmtException {
+		String[] path = getPath(nodeUri);
+		if (path.length==0) {
+			return rootMetaNode;
+		}
 		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
