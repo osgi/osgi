@@ -22,25 +22,38 @@ import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.log.LogService;
 
-public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
+public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator, Runnable {
     
-	private BundleContext 		context;
-	private ServiceRegistration registration;
-    private Logger 				logger;
+	private BundleContext 		  context;
+	private ServiceRegistration   registration;
+    private Logger 				  logger;
+    private boolean 			  busy;
+    private Thread			  	  thread;
+    private Transaction			  transaction;
+
+    private static final int      ACTION_INSTALL   = 0;
+    private static final int      ACTION_UPDATE    = 1;
+    private static final int      ACTION_UNINSTALL = 2;
+    private int 			      actAction;
+    private DeploymentPackageImpl actDp;
+    private WrappedJarInputStream actJis;
     
-    private Set     dps = new HashSet();	// deployment packages
-    private Integer nexDpId = new Integer(0);
-	
-	// BundleActivator interface impl.
+    // persisted fields
+    private Set     dps = new HashSet();		// deployment packages
+    private Integer nextDpId = new Integer(0);  // id of the next DP
+    
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
 		load();
-		
         registration = context.registerService(DeploymentAdmin.class.getName(), this, null);
-        
         initLogger();
+        transaction = Transaction.createTransaction(logger);
 	}
 	
+	public void stop(BundleContext context) throws Exception {
+	    registration.unregister();
+	}
+
 	private void initLogger() {
         ServiceReference ref = context.getServiceReference(LogService.class.getName());
         if (null != ref)
@@ -49,14 +62,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             logger = new Logger();
     }
 
-	// BundleActivator interface impl.
-	public void stop(BundleContext context) throws Exception {
-	    registration.unregister();
-	}
-	
-    private int nexDpId() {
-        int ret = nexDpId.intValue(); 
-        nexDpId = new Integer(ret + 1);
+    private synchronized int nextDpId() {
+        int ret = nextDpId.intValue(); 
+        nextDpId = new Integer(ret + 1);
         try {
             save();
         } catch (IOException e) {
@@ -67,15 +75,30 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
         return ret;
     }
-	
-	// DeploymentAdmin interface impl.
-	public DeploymentPackage installDeploymentPackage(InputStream in) {
-		DeploymentPackageImpl dp = null;
-        WrappedJarInputStream jis = null;
+
+    private Thread newThread() {
+        return new Thread(this, "DeploymentAdmin scheduler thread");
+    }
+
+    public synchronized void uninstallDeploymentPackage(long id) {
+        waitTillBusy();
+        
+        actDp = (DeploymentPackageImpl) getDeploymentPackage(id);
+        if (null == actDp)
+            //TODO DeploymentAdminException has to be propagated to the caller instead
+            throw new RuntimeException("Internal error");
+        
+        actAction = ACTION_UNINSTALL;
+        thread = newThread();
+        thread.start();
+    }
+    
+    public synchronized DeploymentPackage installDeploymentPackage(InputStream in) {
+	    waitTillBusy();
         
         try {
-            jis = new WrappedJarInputStream(in);
-            dp = new DeploymentPackageImpl(jis, context, this);
+            actJis = new WrappedJarInputStream(in);
+            actDp = new DeploymentPackageImpl(actJis, context, this, logger, transaction);
         }
         catch (Exception e) {
             // TODO exception has to be propagated to the caller instead
@@ -83,59 +106,75 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             return null;
         }
         
-        checkPermission(dp.getName(), "installDeploymentPackage");
-        
-        try {
-            if (isUpdate(dp)) {
-                // update
-                DeploymentPackageImpl p = null;
-                for (Iterator iter = dps.iterator(); iter.hasNext();) {
-                    p = (DeploymentPackageImpl) iter.next();
-                    if (dp.equals(p)) {
-                        break;
-                    }
-                }
-                if (null == p)
-                    throw new RuntimeException("Internal error");
-                p.update(jis);
-            } else {
-                // install
-                dp.install();
-                dp.setId(nexDpId());
-                dps.add(dp);
-            }
-        }
-        catch (Exception e) {
-            // TODO exception has to be propagated to the caller instead
-            logger.log(e);
-            return null;
-        }
+        checkPermission("name: "  + actDp.getName(), 
+                DeploymentAdminPermission.ACTION_INSTALL_DP);
 
-		try {
-            save();
-        }
-        catch (IOException e) {
-            logger.log(Logger.LOG_ERROR, "Error occured during persisting " +
-            		"deployment packages.");
-            logger.log(e);
+        thread = newThread();
+        if (isUpdate(actDp)) {
+            actAction = ACTION_UPDATE;
+            
+            // find the package to update
+            DeploymentPackageImpl p = null;
+            for (Iterator iter = dps.iterator(); iter.hasNext();) {
+                p = (DeploymentPackageImpl) iter.next();
+                if (actDp.equals(p))
+                    break;
+            }
+            if (null == p)
+                // TODO propagate to the caller
+                throw new RuntimeException("Internal error");
+            else
+                actDp = p;
+        } else {
+            actAction = ACTION_INSTALL;
+            actDp.setId(nextDpId());
         }
 		
-		return dp;
+        thread.start();
+        
+		return actDp;
 	}
 
-    // DeploymentAdmin interface impl.
-	public DeploymentPackage[] listDeploymentPackages() {
-	    checkPermission("", "listDeploymentPackages");
+	public DeploymentPackage getDeploymentPackage(long id) {
+        for (Iterator iter = dps.iterator(); iter.hasNext();) {
+            DeploymentPackageImpl p = (DeploymentPackageImpl) iter.next();
+            if (actDp.getId() == id)
+                return p;
+        }
+        return null;
+	}
+	
+	public boolean cancel() {
+	    if (null == actDp)
+	        return false;
+	    else  {
+	        actDp.cancel(); 
+	        return true;
+	    }
+	}
+	
+    private synchronized void waitTillBusy() {
+        while (busy) {
+            try {
+                wait();
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        busy = true;
+    }
+
+	public synchronized DeploymentPackage[] listDeploymentPackages() {
+	    checkPermission("", DeploymentAdminPermission.ACTION_LIST_DPS);
 		return (DeploymentPackage[]) dps.toArray(new DeploymentPackage[0]);
 	}
 	
-	// DeploymentAdmin interface impl.
     public String location(String symbName, String version) {
         return symbName;
     }
-
 	
-    private boolean isUpdate(DeploymentPackageImpl dp) {
+    private synchronized boolean isUpdate(DeploymentPackageImpl dp) {
         if (dp.fixPack())
             return true;
         
@@ -148,7 +187,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return false;
     }
 
-    void onUninstallDp(DeploymentPackageImpl dp) {
+    // TODO eliminate this
+    synchronized void onUninstallDp(DeploymentPackageImpl dp) {
 	    dps.remove(dp);
 	    try {
             save();
@@ -160,7 +200,10 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
 	}
 
-    private void save() throws IOException {
+    /*
+     * Saves persistent data.
+     */
+    private synchronized void save() throws IOException {
         File f = context.getDataFile(this.getClass().getName() + ".obj");
         if (null == f) {
             logger.log(Logger.LOG_WARNING, "Platform does not have file system support. " + 
@@ -170,13 +213,16 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         
         FileOutputStream fos = new FileOutputStream(f);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(nexDpId);
+        oos.writeObject(nextDpId);
         oos.writeObject(dps);
         oos.close();
         fos.close();
     }
 
-    private void load() {
+    /*
+     * Reads persistent data
+     */
+    private synchronized void load() {
         File f = context.getDataFile(this.getClass().getName() + ".obj");
         if (!f.exists())  
             return;
@@ -185,7 +231,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         try {
             fis = new FileInputStream(f);
             DPObjectInputStream ois = new DPObjectInputStream(fis);
-            nexDpId = (Integer) ois.readObject();
+            nextDpId = (Integer) ois.readObject();
             dps = (Set) ois.readObject();
             ois.close();
             fis.close();
@@ -208,8 +254,58 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             }
         }
     }
-    
-	private class DPObjectInputStream extends ObjectInputStream {
+
+	private void checkPermission(String name, String action) {
+	    SecurityManager sm = System.getSecurityManager();
+	    if (null == sm)
+	        return;
+	    Permission perm = new DeploymentAdminPermission(name, action);
+	    sm.checkPermission(perm);
+	}
+
+    public void run() {
+        transaction.start(actDp);
+        try {
+	        switch (actAction) {
+	            case ACTION_INSTALL :
+	                actDp.install();
+	                dps.add(actDp);
+	                break;
+	            case ACTION_UPDATE :
+	                actDp.update(actJis);
+	                break;
+	            case ACTION_UNINSTALL :
+	                actDp.uninstall();
+	                break;
+	            default :
+	                break;
+	        }
+	        
+	        save();
+	        transaction.commit();
+	        actDp = null;
+        } catch (Exception e) {
+            transaction.rollback();
+            logger.log(e);
+        } finally {
+            if (null != actJis) {
+                try {
+                    actJis.close();
+                }
+                catch (IOException e) {
+                    logger.log(e);
+                }
+            }
+            
+            busy = false;
+        }
+    }
+
+    /*
+     * Encapsulates the deserialization task of the DeploymentPackageImpl
+     * objects.
+     */
+    private class DPObjectInputStream extends ObjectInputStream {
         public DPObjectInputStream(FileInputStream in) throws IOException {
             super(in);
             enableResolveObject(true);
@@ -226,13 +322,5 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             return obj;
         }
 	}
-	
-	private void checkPermission(String filter, String action) {
-	    SecurityManager sm = System.getSecurityManager();
-	    if (null == sm)
-	        return;
-	    Permission perm = new DeploymentAdminPermission(filter, action);
-	    sm.checkPermission(perm);
-	}
-
+    
 }

@@ -223,6 +223,8 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
     // FOR TEST ONLY
     public Set getResources(DeploymentPackage dp, String resName) {
         Hashtable ht = (Hashtable) dps.get(dp);
+        if (null == ht)
+            return null;
         Set s = (Set) ht.get(resName);
         return s;
     }

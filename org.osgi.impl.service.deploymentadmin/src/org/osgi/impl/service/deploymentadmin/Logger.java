@@ -31,7 +31,7 @@ public class Logger {
         this.service = null;
     }
     
-    public void log(int severity, String log) {
+    public synchronized void log(int severity, String log) {
         if (null != service) {
             service.log(severity, log);
         } else {
@@ -39,7 +39,7 @@ public class Logger {
         }
     }
     
-    public void log(Exception exception) {
+    public synchronized void log(Exception exception) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintWriter pw = new PrintWriter(baos, true);
         exception.printStackTrace(pw);

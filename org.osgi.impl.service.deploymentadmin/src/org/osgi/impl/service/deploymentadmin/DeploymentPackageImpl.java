@@ -3,7 +3,10 @@ package org.osgi.impl.service.deploymentadmin;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.security.AccessController;
 import java.security.Permission;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -17,6 +20,7 @@ import java.util.jar.Manifest;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -44,8 +48,13 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     private String 						  customizerBundle;
     private Hashtable                     filters = new Hashtable();
     private HashSet 					  resources = new HashSet();
-    // it contains BundleEntries
+    
+    // these Sets contains BundleEntries
     private Set 						  bundles  = new HashSet();
+    private transient Set				  newBundles;
+    private transient Set				  updatedBundles;
+    private transient Set				  pendingBundles;
+    
     private int 						  id;
     
     public boolean equals(Object obj) {
@@ -103,11 +112,13 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
     
     public DeploymentPackageImpl(WrappedJarInputStream in, BundleContext context,
-            DeploymentAdminImpl admin) throws Exception {
+            DeploymentAdminImpl admin, Logger logger, Transaction transaction) throws Exception {
         this.context = context;
         this.admin = admin;
         this.stream = in;
         this.manifest = stream.getManifest();
+        this.logger = logger;
+        this.transaction = transaction;
         
         dpManVer = manifest.getMainAttributes().getValue("DeploymentPackage-ManifestVersion");
         dpName = manifest.getMainAttributes().getValue("DeploymentPackage-Name");
@@ -115,30 +126,21 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         isFixPack = (null != manifest.getMainAttributes().getValue("DeploymentPackage-FixPack"));
         customizerBundle = manifest.getMainAttributes().getValue("DeploymentPackage-ProcessorBundle");
         
-        initLogger();
-        
         startTracker();
-    }
-    
-    private void initLogger() {
-        ServiceReference ref = context.getServiceReference(LogService.class.getName());
-        if (null != ref)
-            logger = new Logger((LogService) context.getService(ref));
-        else
-            logger = new Logger();
     }
     
     protected void finalize() throws Throwable {
         stopTracker();
     }
 
-    private Bundle installBundle(BundleEntry bundleEntry, JarInputStream jis)
+    private Bundle installBundle(final BundleEntry bundleEntry, final JarInputStream jis)
             throws BundleException 
     {
         Bundle b = context.installBundle(bundleEntry.location, jis);
         BundleEntry be = new BundleEntry(bundleEntry);
         be.id = new Long(b.getBundleId());
         bundles.add(be);
+        newBundles.add(be);
         transaction.addRecord(new TransactionRecord(
                 Transaction.INSTALLBUNDLE, new Object[] {b, bundles, be}));
         return b;
@@ -168,6 +170,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             Bundle b = bundles[i];
             if (b.getLocation().equals(bundleEntry.location)) {
                 b.update(jis);
+                updatedBundles.add(bundleEntry);
                 transaction.addRecord(new TransactionRecord(
                         Transaction.UPDATEBUNDLE, new Object[] {b}));
                 return b;
@@ -177,7 +180,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
     
     private void startBundle(Bundle b) throws BundleException {
-        b.start();
+        if (b.getState() != Bundle.ACTIVE)
+            b.start();
         transaction.addRecord(new TransactionRecord(
                 Transaction.STARTBUNDLE, new Object[] {b}));
     }
@@ -186,7 +190,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         for (Iterator iter = bundles.iterator(); iter.hasNext();) {
             BundleEntry entry = (BundleEntry) iter.next();
             Bundle b = context.getBundle(entry.id.longValue());
-            startBundle(b);
+            if (!isCustomizerBundle(entry))
+                startBundle(b);
         }
     }
     
@@ -295,22 +300,22 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
 
     public boolean isNew(Bundle b) {
-        // TODO Auto-generated method stub
-        return false;
+        BundleEntry be = new BundleEntry(b);
+        return newBundles.contains(be);
     }
 
     public boolean isUpdated(Bundle b) {
-        // TODO Auto-generated method stub
-        return false;
+        BundleEntry be = new BundleEntry(b);
+        return updatedBundles.contains(be);
     }
 
     public boolean isPendingRemoval(Bundle b) {
-        // TODO Auto-generated method stub
-        return false;
+        BundleEntry be = new BundleEntry(b);
+        return pendingBundles.contains(be);
     }
 
     public File getDataFile(Bundle bundle) {
-        // TODO Auto-generated method stub
+        // TODO ???
         return null;
     }
 
@@ -318,17 +323,17 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         this.admin = deploymentAdmin;
     }
 
-    private void transactionStart() {
+    /*private void transactionStart() {
         transaction = new Transaction(this, logger);
-    }
+    }*/
     
-    private void transactionCommit() {
+    /*private void transactionCommit() {
         transaction.commit();
-    }
+    }*/
     
-    private void transactionRollback() {
+    /*private void transactionRollback() {
         transaction.rollback();
-    }
+    }*/
 
     private void transactionStep(int tranCode, Object[] params) {
         transaction.addRecord(new TransactionRecord(tranCode, params));
@@ -386,7 +391,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     // DeploymentPackage interface impl.
     public void install() throws Exception {
-        transactionStart();
+        newBundles = new HashSet();
+        
+        //transactionStart();
         extractFilters(manifest.getMainAttributes().getValue(
         		"DeploymentPackage-Processing"));
         try {
@@ -419,18 +426,18 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             }
             startBundles();
         } catch (Exception e) {
-            transactionRollback();
+            //transactionRollback();
             throw e;
         }
 
-        transactionCommit();
+        //transactionCommit();
     }
 
     // TODO throw exceptions
     public void uninstall() {
-        checkPermission(getName(), "uninstall");
+        //checkPermission(getName(), DeploymentAdminPermission.ACTION_UNINSTALL_DP);
         
-        transactionStart();
+        //transactionStart();
         try {
             stopNonCustomizerBundles();
             for (Iterator iter = resources.iterator(); iter.hasNext();) {
@@ -445,15 +452,17 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                     		"resource " + resName);
                 }
             }
+            pendingBundles = bundles;
             dropResources(resources);
             uninstallBundles(bundles);
         } catch (Exception e) {
             logger.log(e);
-            transactionRollback();
+            //transactionRollback();
             // TODO throw e;
         }
 
-        transactionCommit();
+        //transactionCommit();
+        // TODO eliminate this
         admin.onUninstallDp(this);
     }
 
@@ -461,8 +470,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     public void update(WrappedJarInputStream in) throws Exception {
         this.stream = in;
         this.manifest = in.getManifest();
+        newBundles = new HashSet();
+        updatedBundles = new HashSet();
        
-        transactionStart();
+        //transactionStart();
         
         Hashtable oldFilters = new Hashtable(filters);
         extractFilters(manifest.getMainAttributes().getValue(
@@ -513,9 +524,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                 entry = stream.nextEntry();
             }
             
-            Set bundlesToUninstall = new HashSet(bundles);
-            bundlesToUninstall.removeAll(bundlesNotToUninstall);
-            uninstallBundles(bundlesToUninstall);
+            pendingBundles = new HashSet(bundles);
+            pendingBundles.removeAll(bundlesNotToUninstall);
+            uninstallBundles(pendingBundles);
 
             Set resourcesToDrop = new HashSet(resources);
             resourcesToDrop.removeAll(resourcesNotToDrop);
@@ -524,10 +535,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             DeploymentPackageVerifier.verify(this);
             startBundles();
         } catch (Exception e) {
-            transactionRollback();
+            //transactionRollback();
             throw e;
         }
-        transactionCommit();
+        //transactionCommit();
     }
 
     private ServiceReference findProcessor(String resName, Hashtable filters) {
@@ -604,5 +615,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 	    Permission perm = new DeploymentAdminPermission(filter, action);
 	    sm.checkPermission(perm);
 	}
+
+    public void cancel() {
+        // TODO Auto-generated method stub
+    }
    
 }

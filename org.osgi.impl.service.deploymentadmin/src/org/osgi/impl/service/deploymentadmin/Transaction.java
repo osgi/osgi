@@ -1,5 +1,8 @@
 package org.osgi.impl.service.deploymentadmin;
 
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -8,6 +11,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 
@@ -33,18 +37,30 @@ public class Transaction {
         "RESOURCES"
     };
     
-    private List    steps      = new Vector();
-    private HashSet processors = new HashSet();
+    private List                  steps;
+    private HashSet               processors;
     private Logger                logger;
     private DeploymentPackageImpl dp;
     
-    public Transaction(DeploymentPackageImpl dp, Logger logger) {
-        this.dp = dp;
+    // Transaction is singleton
+    private static Transaction instance = null;
+    private Transaction(Logger logger) {
         this.logger = logger;
+    }
+    public static Transaction createTransaction(Logger logger) {
+        if (null == instance)
+            instance = new Transaction(logger);
+        return instance;
+    }
+    
+    public void start(DeploymentPackageImpl dp) {
+        this.dp = dp;
+        steps = new Vector();
+        processors = new HashSet();
         logger.log(Logger.LOG_INFO, "Transaction started");
     }
 
-    public void addRecord(TransactionRecord record) {
+    public synchronized void addRecord(TransactionRecord record) {
         if (PROCESSOR == record.code) {
             ResourceProcessor proc = (ResourceProcessor) record.objs[0];
             if (processors.contains(proc)) {
@@ -61,7 +77,7 @@ public class Transaction {
         logger.log(Logger.LOG_INFO, "Transaction record added:\n" + record);
     }
     
-    public void commit() {
+    public synchronized void commit() {
         try {
 	        for (Iterator iter = steps.iterator(); iter.hasNext();) {
 	            TransactionRecord element = (TransactionRecord) iter.next();
@@ -98,7 +114,7 @@ public class Transaction {
         logger.log(Logger.LOG_INFO, "Transaction committed");
     }
 
-    public void rollback() {
+    public synchronized void rollback() {
         try {
             if (steps.size() <= 0) {
                 logger.log(Logger.LOG_INFO, "Transaction rolled back");
@@ -110,7 +126,7 @@ public class Transaction {
 	            logger.log(Logger.LOG_INFO, "Rollback\n" + element);
 	            switch (element.code) {
 	                case INSTALLBUNDLE : {
-	                    ((Bundle) element.objs[0]).uninstall();
+	                    uninstallBundle((Bundle) element.objs[0]);
 	                    Set bundles = (Set) element.objs[1];
 	                    BundleEntry be = (BundleEntry) element.objs[2];
 	                    bundles.remove(be);
@@ -151,6 +167,19 @@ public class Transaction {
             logger.log(e);
         }
         logger.log(Logger.LOG_INFO, "Transaction rolled back");
+    }
+
+    private void uninstallBundle(final Bundle bundle) throws BundleException {
+        try {
+            AccessController.doPrivileged(new PrivilegedExceptionAction() {
+                public Object run() throws BundleException {
+                    bundle.uninstall();
+                    return null;
+                }
+            });
+        } catch (PrivilegedActionException e) {
+            throw (BundleException) e.getException();
+        }
     }
 
 }
