@@ -6,8 +6,6 @@
 
 <project name="package" default="none">
 
-	<!-- Where are we properties, ant seems to be not so good
-	     with relative directories -->
 	<dirname property="project" file="${ant.file}" />
 	<dirname property="workspace" file="${project}" />
 	<basename property="project.name" file="${project}" />
@@ -66,15 +64,11 @@
 	<property file="${project}/build.properties" />		
 	<property file="${env.HOME}/osgi.properties" />
 	<property file="${workspace}/cnf/build.properties" />
+	
 	<property name="p" value= "${project.name}"/>
 	<property name="javac" value="javac"/>
-	<property name="java" value="java"/>
-	<property name="bin.includes" value="${project.name}.jar"/>
+	<btool eclipse="${project}" />
 	
-	<!-- get the classpath and build info from eclipse -->
-	<echo>Project ${project}</echo>
-
-
 	<!-- 
 	     PUBLISH
 	     The main target. It will build the jar file(s) and publish the 
@@ -84,9 +78,7 @@
 	     target does NOT check projects it dependends on!
 	-->
 	<target name="publish" > 
-		<echo>Publish ${p}</echo>
-		<btool eclipse="${project}" />
-		
+		<echo>Publish ${p}</echo>		
 		<!-- Build project dependencies -->
 		<foreach delimiter=" ," list="${project.buildpath}" 
 			target="publish.item"  param="item.dir"/>
@@ -105,8 +97,7 @@
 	
 	<target name="local" depends="compile,jars">
 	</target>
-		
-
+	
 	<target name="jars" if="jars.compile.order">
 		<echo>JARs ${jars.compile.order}</echo>
 			<delete>
@@ -135,27 +126,6 @@
 	<target name="release" if="release.dir">
 		<copy overwrite="true" todir="${release.dir}" verbose="${verbose}" file="${item.jarFile}" />
 	</target>
-	
-	<!--
-	    CHECK
-	    See if we have any dependents changed since the last time we did 
-	    this build. We keep a flag in the cnf/cache directory
-	    to check this dependency. We check the "src" directory for
-	    dependents as well as the manifests and build files.
-	-->
-	<target name="check" if="project.sourcepath">
-		<uptodate property="jar.ok" targetfile="${workspace}/cnf/cache/${project.name}" >
-			<srcfiles dir="${project.sourcepath}" includes="**/*" />
-			<srcfiles dir="${workspace}/cnf" includes="build.xml" />
-			<srcfiles dir="${workspace}/cnf" includes="build.properties" />
-			<srcfiles dir="." includes="*.mf" />
-			<srcfiles dir="." includes="build.properties" />
-			<srcfiles dir="." includes="build.xml" />
-		</uptodate>
-		<mkdir dir="${workspace}/cnf/cache"/>
-		<touch file="${workspace}/cnf/cache/${project.name}" />
-	</target>
-		
 
 	<!--
 	     JAR
@@ -196,9 +166,7 @@
 			ignoreVersions="${btool.noversion}" />
 		
 	</target>
-	
-	
-	
+
 
 	<!--
 	     COMPILE
@@ -232,7 +200,6 @@
 	     CLEAN
 	-->
 	<target name="clean" depends="localclean">
-		<btool eclipse="${project}" />
 		<foreach delimiter="," list="${project.buildpath}" target="clean.item" param="item.dir"/>
 	</target>
 
