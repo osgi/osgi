@@ -10,9 +10,10 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
  * Contains the test methods of the wireadmin test case
  * 
  * $Log$
- * Revision 1.3  2004/11/03 11:47:09  pkriens
- * Format and clean up of warnings
- * Revision 1.2 2004/11/03 10:55:32 pkriens
+ * Revision 1.4  2004/12/03 09:12:32  pkriens
+ * Added service project
+ * Revision 1.3 2004/11/03 11:47:09 pkriens
+ * Format and clean up of warnings Revision 1.2 2004/11/03 10:55:32 pkriens
  * Format and clean up of warnings Revision 1.1 2004/07/07 13:15:26 pkriens ***
  * empty log message ***
  * 
@@ -38,7 +39,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	public BundleContext		context;
 	public static Object		synch			= new Object();
 	private Hashtable			returnedWires	= new Hashtable();
-	public int					synchCounter	= 0;
+	public int					synchCounterx	= 0;
 	private Hashtable			p				= new Hashtable();
 	static String[]				methods			= new String[] {"prepare",
 			"test_wireadmin_CreateWire", "test_wireadmin_DeleteWire",
@@ -79,6 +80,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		wa = getWireadmin();
 		pa = getPermissionAdmin();
 		helper = new Helper(context, this);
+		helper.deleteAllWires(wa);
 	}
 
 	/**
@@ -88,55 +90,34 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	 */
 	public void test_wireadmin_CreateWire() throws Exception {
 		//  "(&(wireadmin.producer.pid=producer.ProducerImplC)(wireadmin.consumer.pid=consumer.ConsumerImplC))"
-		log("Must Call producersConnected(..) for consumer.ConsumerImplA");
-		synchCounter = 0;
-		int timeoutCounter = 0;
-		helper.registerConsumer("consumer.ConsumerImplA", new Class[] {
-				String.class, Integer.class, Float.class});
-		while ((synchCounter < 1) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
-		compareConnected("", "consumer.ConsumerImplA");
-		log("Must Call consumersConnected(..) for producer.ProducerImplA");
-		synchCounter = 0;
-		timeoutCounter = 0;
-		helper.registerProducer("producer.ProducerImplA", new Class[] {
+		log("Must Call producersConnected(..) for c.A");
+		helper.registerConsumer("c.A", new Class[] {String.class,
+				Integer.class, Float.class});
+		delay(1, 100);		
+		compareConnected("", "c.A");
+		
+		log("Must Call consumersConnected(..) for p.A");
+		helper.registerProducer("p.A", new Class[] {
 				String.class, Float.class});
-		while ((synchCounter < 1) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
-		compareConnected("producer.ProducerImplA", "");
+		delay(1, 100);		
+		compareConnected("p.A", "");
+		
+		log("Must call both consumersConnected(..) for pp.A and producersConnected(..) for c.A");
 		Hashtable properties = new Hashtable();
 		properties.put("property1", new Integer(1));
 		properties.put("property2", new Float(1.0));
 		properties.put("property3", new Boolean(false));
-		properties.put("org.osgi.test.wireadmin", "yes");
-		log("Must call both consumersConnected(..) for producer.ProducerImplA and producersConnected(..) for consumer.ConsumerImplA");
-		synchCounter = 0;
-		wire = wa.createWire("producer.ProducerImplA",
-				"consumer.ConsumerImplA", properties);
-		while ((synchCounter < 2) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
-		compareConnected("producer.ProducerImplA", "consumer.ConsumerImplA");
-		if (wire.isValid()) {
-			log("Test wire.isValid after createWire ", "Operation passed: OK.");
-		}
-		else {
-			log("Test wire.isValid after createWire ", "NOT OK. ");
-		}
-		if (wire.isConnected()) {
-			log("Test wire.isConnected after createWire ",
-					"Operation passed: OK.");
-		}
-		else {
-			log("Test wire.isConnected after createWire ", "NOT OK. ");
-		}
-		if (compareWires_Flavors(wire.getFlavors(), new Class[] {String.class,
-				Integer.class, Float.class})) {
-			log("Test wire flavors after createWire", "Operation passed: OK.");
-		}
-		else {
-			log("Test wire flavors after createWire", "NOT OK. ");
-		}
+		wire = helper.createWire(wa,"p.A", "c.A", properties);
+		delay(2, 100);
+		compareConnected("p.A", "c.A");
+
+		assertTrue("Wire must be valid", wire.isValid() );
+		assertTrue("Wire must be connected", wire.isConnected() );
+		assertEquals("Flavors that were set", new Class[] {String.class,
+				Integer.class, Float.class}, wire.getFlavors() );
+
 		wire.update("NEW VALUE");
+		
 		if ("NEW VALUE".equals(wire.getLastValue())) {
 			log("Test update wire ", "Operation passed: OK.");
 		}
@@ -148,13 +129,10 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		newProperties.put("property2", new Float(2.0));
 		newProperties.put("property3", new Boolean(false));
 		newProperties.put("org.osgi.test.wireadmin", "yes");
-		log("Must call both consumersConnected(..) for producer.ProducerImplA and producersConnected(..) for consumer.ConsumerImplA");
-		synchCounter = 0;
-		timeoutCounter = 0;
+		log("Must call both consumersConnected(..) for pp.A and producersConnected(..) for c.A");
 		wa.updateWire(wire, newProperties);
-		while ((synchCounter < 2) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
-		compareConnected("producer.ProducerImplA", "consumer.ConsumerImplA");
+		delay(2, 100);
+		compareConnected("pp.A", "c.A");
 		if (compareWireProperties(wire.getProperties(), newProperties)) {
 			log("Test wire properties after updateWire ",
 					"Operation passes: OK.");
@@ -162,6 +140,29 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		else {
 			log("Test wire properties after updateWire ", "NOT OK.");
 		}
+	}
+
+	/**
+	 * @param requiredSyncs
+	 * @param maxDelay
+	 * @throws InterruptedException
+	 */
+	static Object	lock	= new Object();
+
+	private void delay(int requiredSyncs, int maxDelay)
+			throws InterruptedException {
+		System.out.println("**** delaying " + synchCounterx + " "
+				+ requiredSyncs);
+		while (synchCounterx < requiredSyncs && maxDelay-- > 0)
+			Thread.sleep(100);
+		if (maxDelay <= 0)
+			log("**** timed out");
+		synchCounterx = 0;
+	}
+
+	public void syncup(String pid) {
+		System.out.println("Syncing up " + pid);
+		synchCounterx++;
 	}
 
 	/**
@@ -180,7 +181,6 @@ public class WireAdminControl extends DefaultTestBundleControl {
 				"deletedWireConsumer", props);
 		Wire wire2 = wa.createWire("deletedWireProducer",
 				"deletedWireConsumer", props);
-		synchCounter = 0;
 		log(
 				subtest,
 				"registering consumer and producer so the wires are connected when we delete one of them later");
@@ -189,15 +189,11 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		helper.registerConsumer("deletedWireConsumer",
 				new Class[] {java.lang.String.class});
 		int timeoutCounter = 0;
-		while (synchCounter < 4 && timeoutCounter++ < 100)
-			Thread.sleep(100L);
+		delay(4, 200);
 		log(subtest,
 				"Deleting wire. Must call consumersConnected and producersConnected");
-		synchCounter = 0;
 		wa.deleteWire(wire1);
-		timeoutCounter = 0;
-		while (synchCounter < 2 && timeoutCounter++ < 100)
-			Thread.sleep(100L);
+		delay(2, 200);
 		Wire[] wires = (Wire[]) returnedWires.get("deletedWireProducer");
 		if ((wires != null) && (wires.length == 1)) {
 			log(subtest,
@@ -217,11 +213,8 @@ public class WireAdminControl extends DefaultTestBundleControl {
 					"{deletedWireConsumer} Invokes producersConnected(..) NOT OK, Wrong Wire[]");
 		}
 		log(subtest, "Deleting the second wire.");
-		synchCounter = 0;
 		wa.deleteWire(wire2);
-		timeoutCounter = 0;
-		while (synchCounter < 2 && timeoutCounter++ < 100)
-			Thread.sleep(100L);
+		delay(2, 200);
 		compareConnected("deletedWireProducer", "deletedWireConsumer");
 		if (wire1.isValid() && wire2.isValid()) {
 			log(subtest,
@@ -283,7 +276,6 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		catch (Exception e) {
 			log("Test createWire with null PIDs",
 					"Operation passed: OK.Exception thrown.");
-			e.printStackTrace();
 		}
 		Hashtable properties1 = new Hashtable();
 		properties1.put(new Integer(1), "test");
@@ -296,7 +288,6 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		catch (IllegalArgumentException e) {
 			log("Test createWire with incorrect properties' key",
 					"Operation passed: OK.Exception thrown.");
-			e.printStackTrace();
 		}
 		Hashtable properties2 = new Hashtable();
 		properties2.put("Test", new Integer(1));
@@ -310,25 +301,18 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		catch (IllegalArgumentException e) {
 			log("Test createWire with case insensensitive keys",
 					"Operation passed: OK.Exception thrown.");
-			e.printStackTrace();
 		}
 		log("Must call producersConnected(..) for consumer.ConsumerImplB");
-		synchCounter = 0;
-		int timeoutCounter = 0;
 		helper.registerConsumer("consumer.ConsumerImplB",
 				new Class[] {Date.class});
-		while ((synchCounter < 1) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
+		delay(1, 100);
 		compareConnected("", "consumer.ConsumerImplB");
-		log("Must call both consumersConnected(..) for producer.ProducerImplA and producersConected(..) for consumer.ConsumerImplB");
-		synchCounter = 0;
+		log("Must call both consumersConnected(..) for pp.A and producersConected(..) for consumer.ConsumerImplB");
 		Hashtable h = new Hashtable();
 		h.put("org.osgi.test.wireadmin", "yes");
-		wire = wa.createWire("producer.ProducerImplA",
-				"consumer.ConsumerImplB", h);
-		while (synchCounter < 2)
-			Thread.sleep(50);
-		compareConnected("producer.ProducerImplA", "consumer.ConsumerImplB");
+		wire = wa.createWire("pp.A", "consumer.ConsumerImplB", h);
+		delay(2, 200);
+		compareConnected("pp.A", "consumer.ConsumerImplB");
 		if (wire.isValid() && wire.isConnected() && notUpdated(wire)) {
 			log("Test createWire with incompatible flavors",
 					"Operation passed: OK.");
@@ -336,13 +320,10 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		else {
 			log("Test createWire with incompatible flavors", "NOT OK.");
 		}
-		log("Must call both consumersConnected(..) for producer.ProducerImplA and producersConected(..) for consumer.ConsumerImplB");
-		synchCounter = 0;
-		timeoutCounter = 0;
+		log("Must call both consumersConnected(..) for pp.A and producersConected(..) for consumer.ConsumerImplB");
 		wa.deleteWire(wire);
-		while ((synchCounter < 2) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
-		compareConnected("producer.ProducerImplA", "consumer.ConsumerImplB");
+		delay(2, 100);
+		compareConnected("pp.A", "consumer.ConsumerImplB");
 	}
 
 	/**
@@ -353,16 +334,12 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	 * Exception to be thrown)
 	 */
 	public void test_wireadmin_IncorrectUpdateWire() throws Exception {
-		log("Must call both consumersConnected(..) for producer.ProducerImplA and producersConected(..) for consumer.ConsumerImplA");
-		synchCounter = 0;
-		int timeoutCounter = 0;
+		log("Must call both consumersConnected(..) for pp.A and producersConected(..) for c.A");
 		Hashtable h = new Hashtable();
 		h.put("org.osgi.test.wireadmin", "yes");
-		wire = wa.createWire("producer.ProducerImplA",
-				"consumer.ConsumerImplA", h);
-		while ((synchCounter < 2) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
-		compareConnected("producer.ProducerImplA", "consumer.ConsumerImplA");
+		wire = wa.createWire("pp.A", "c.A", h);
+		delay(2, 100);
+		compareConnected("pp.A", "c.A");
 		Hashtable properties = new Hashtable();
 		properties.put(new Integer(1), "TEST");
 		properties.put("org.osgi.test.wireadmin", "yes");
@@ -373,7 +350,6 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		catch (Exception e) {
 			log("Test updateWire with incorrect properties' keys",
 					"Operation passed: OK.Exception thrown.");
-			e.printStackTrace();
 		}
 		properties = new Hashtable();
 		properties.put("property1", "TEST1");
@@ -395,13 +371,10 @@ public class WireAdminControl extends DefaultTestBundleControl {
 					"Operation passed: OK.Exception thrown.");
 			e.printStackTrace();
 		}
-		log("Must call both consumersConnected(..) for producer.ProducerImplA and producersConected(..) for consumer.ConsumerImplA");
-		synchCounter = 0;
-		timeoutCounter = 0;
+		log("Must call both consumersConnected(..) for pp.A and producersConected(..) for c.A");
 		wa.deleteWire(wire);
-		while ((synchCounter < 2) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
-		compareConnected("producer.ProducerImplA", "consumer.ConsumerImplA");
+		delay(2, 100);
+		compareConnected("pp.A", "c.A");
 		properties = new Hashtable();
 		properties.put("property", "correct");
 		properties.put("org.osgi.test.wireadmin", "yes");
@@ -444,20 +417,14 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	public void test_wireadmin_RegisterUnregisterConsumerProducer()
 			throws Exception {
 		log("Must call producersConnected(..) for consumer.ConsumerImplC");
-		synchCounter = 0;
-		int timeoutCounter = 0;
 		helper.registerConsumer("consumer.ConsumerImplC", new Class[] {
 				String.class, Integer.class, Float.class});
-		while ((synchCounter < 1) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
+		delay(1, 100);
 		compareConnected("", "consumer.ConsumerImplC");
 		log("Must call consumersConnected(..) for producer.ProducerImplC");
-		synchCounter = 0;
-		timeoutCounter = 0;
 		helper.registerProducer("producer.ProducerImplC", new Class[] {
 				String.class, Float.class, Boolean.class});
-		while ((synchCounter < 1) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
+		delay(1, 100);
 		compareConnected("producer.ProducerImplC", "");
 		Hashtable properties = new Hashtable();
 		properties.put("property1", new String("TEST"));
@@ -465,28 +432,19 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		properties.put("property3", new Boolean(false));
 		properties.put("org.osgi.test.wireadmin", "yes");
 		log("Must call both consumersConnected(..) for producer.ProducerImplC and producersConnected(..) for consumer.ConsumerImplC");
-		synchCounter = 0;
-		timeoutCounter = 0;
 		wire = wa.createWire("producer.ProducerImplC",
 				"consumer.ConsumerImplC", properties);
-		while ((synchCounter < 2) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
+		delay(2, 100);
 		compareConnected("producer.ProducerImplC", "consumer.ConsumerImplC");
 		Dictionary oldProperties = wire.getProperties();
 		log("Must call producersConnected(..) for producer.ProducerImplC");
-		synchCounter = 0;
-		timeoutCounter = 0;
 		helper.unregisterProducer("producer.ProducerImplC");
-		while ((synchCounter < 1) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
+		delay(1, 100);
 		compareConnected("", "consumer.ConsumerImplC");
 		log("Must call both consumersConnected(..) for producer.ProducerImplC and producersConnected(..) for consumer.ConsumerImplC");
-		synchCounter = 0;
-		timeoutCounter = 0;
 		helper.registerProducer("producer.ProducerImplC", new Class[] {
 				String.class, Float.class, Boolean.class});
-		while ((synchCounter < 2) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
+		delay(2, 100);
 		compareConnected("producer.ProducerImplC", "consumer.ConsumerImplC");
 		try {
 			wire = wa
@@ -507,19 +465,13 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		}
 		oldProperties = wire.getProperties();
 		log("Must call consumersConnected(..) for producer.ProducerImplC");
-		synchCounter = 0;
-		timeoutCounter = 0;
 		helper.unregisterConsumer("consumer.ConsumerImplC");
-		while ((synchCounter < 1) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
+		delay(1, 100);
 		compareConnected("producer.ProducerImplC", "");
 		log("Must call both consumersConnected(..) for producer.ProducerImplC and producersConnected(..) for consumer.ConsumerImplC");
-		synchCounter = 0;
-		timeoutCounter = 0;
 		helper.registerConsumer("consumer.ConsumerImplC", new Class[] {
 				String.class, Integer.class, Float.class});
-		while ((synchCounter < 2) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
+		delay(2, 100);
 		compareConnected("producer.ProducerImplC", "consumer.ConsumerImplC");
 		try {
 			wire = wa
@@ -554,24 +506,18 @@ public class WireAdminControl extends DefaultTestBundleControl {
 			e.printStackTrace();
 		}
 		log("Must call producersConnected(..) for consumer.ConsumerImplC");
-		synchCounter = 0;
-		int timeoutCounter = 0;
 		helper.unregisterProducer("producer.ProducerImplC");
-		while ((synchCounter < 1) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
+		delay(1, 100);
 		compareConnected("", "consumer.ConsumerImplC");
 		Hashtable properties = new Hashtable();
 		properties.put("property1", new String("NEW TEST FOR PRODUCER"));
 		properties.put("property2", new Float(2.0));
 		properties.put("org.osgi.test.wireadmin", "yes");
 		wa.updateWire(wire, properties);
-		synchCounter = 0;
-		timeoutCounter = 0;
 		log("Must call both consumersConnected(..) for producer.ProducerImplC and producersConnected(..) for consumer.ConsumerImplC");
 		helper.registerProducer("producer.ProducerImplC", new Class[] {
 				String.class, Float.class, Boolean.class});
-		while ((synchCounter < 2) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
+		delay(2, 100);
 		compareConnected("producer.ProducerImplC", "consumer.ConsumerImplC");
 		try {
 			wire = wa
@@ -589,11 +535,8 @@ public class WireAdminControl extends DefaultTestBundleControl {
 			e.printStackTrace();
 		}
 		log("Must call consumersConnected(..) for producer.ProducerImplC");
-		synchCounter = 0;
-		timeoutCounter = 0;
 		helper.unregisterConsumer("consumer.ConsumerImplC");
-		while ((synchCounter < 1) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
+		delay(1, 100);
 		compareConnected("producer.ProducerImplC", "");
 		properties = new Hashtable();
 		properties.put("property1", new String("NEW TEST FOR CONSUMER"));
@@ -601,12 +544,9 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		properties.put("org.osgi.test.wireadmin", "yes");
 		wa.updateWire(wire, properties);
 		log("Must call both consumersConnected(..) for producer.ProducerImplC and producersConnected(..) for consumer.ConsumerImplC");
-		synchCounter = 0;
-		timeoutCounter = 0;
 		helper.registerConsumer("consumer.ConsumerImplC", new Class[] {
 				String.class, Integer.class, Float.class});
-		while ((synchCounter < 2) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
+		delay(2, 100);
 		compareConnected("producer.ProducerImplC", "consumer.ConsumerImplC");
 		try {
 			wire = wa
@@ -650,23 +590,18 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		catch (BundleException e) {
 			e.printStackTrace();
 		}
-		int timeoutCounter = 0;
-		while (synchCounter < 2 && timeoutCounter++ < 100)
-			Thread.sleep(100L);
+		delay(2, 200);
 		log(subtest, "registering producer and consumer for the second wire");
 		helper.registerProducer("producer2",
 				new Class[] {java.lang.String.class});
 		helper.registerConsumer("consumer2",
 				new Class[] {java.lang.String.class});
-		timeoutCounter = 0;
 		log(subtest, "starting wire admin bundle again");
 		log(subtest,
 				"Must call consumersConnected(..) for: producer1, producer2");
 		log(subtest, "and producersConnected(..) for: consumer1, consumer2");
-		synchCounter = 0;
 		wireadmin.start();
-		while (synchCounter < 4 && timeoutCounter++ < 100)
-			Thread.sleep(100L);
+		delay(4, 100);
 		waRef = context
 				.getServiceReference(org.osgi.service.wireadmin.WireAdmin.class
 						.getName());
@@ -718,14 +653,13 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		}
 		helper.unregisterAll();
 		helper.deleteAllWires(wa);
-		synchCounter = 0;
-		timeoutCounter = 0;
-		helper.registerConsumer("consumer.ConsumerImplA", new Class[] {
-				String.class, Integer.class, Float.class});
+		helper.registerConsumer("c.A", new Class[] {String.class,
+				Integer.class, Float.class});
 		helper.registerConsumer("consumer.ConsumerImplC", new Class[] {
 				String.class, Integer.class, Float.class});
-		helper.registerProducer("producer.ProducerImplA", new Class[] {
-				String.class, Float.class});
+		helper
+				.registerProducer("pp.A", new Class[] {String.class,
+						Float.class});
 		helper.registerProducer("producer.ProducerImplC", new Class[] {
 				String.class, Float.class, Boolean.class});
 		Hashtable properties = new Hashtable();
@@ -733,11 +667,8 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		properties.put("property2", new Float(1.0));
 		properties.put("property3", new Boolean(false));
 		properties.put("org.osgi.test.wireadmin", "yes");
-		synchCounter = 0;
-		wire = wa.createWire("producer.ProducerImplA",
-				"consumer.ConsumerImplA", properties);
-		while ((synchCounter < 2) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
+		wire = wa.createWire("pp.A", "c.A", properties);
+		delay(2, 100);
 	}
 
 	/**
@@ -765,32 +696,21 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	 */
 	public void test_wireadmin_multipleRegistration() throws Exception {
 		Wire[] correct = null;
-		log("Must call both consumersConnected(..) for producer.ProducerImplA and producersConnected(..) for consumer.ConsumerImplC");
-		synchCounter = 0;
-		int timeoutCounter = 0;
+		log("Must call both consumersConnected(..) for pp.A and producersConnected(..) for consumer.ConsumerImplC");
 		Hashtable h = new Hashtable();
 		h.put("org.osgi.test.wireadmin", "yes");
-		wire = wa.createWire("producer.ProducerImplA",
-				"consumer.ConsumerImplC", h);
-		while ((synchCounter < 2) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
-		compareConnected("producer.ProducerImplA", "consumer.ConsumerImplC");
-		log("Must call both consumersConnected(..) for producer.ProducerImplC and producersConnected(..) for consumer.ConsumerImplA");
-		synchCounter = 0;
-		timeoutCounter = 0;
-		wire = wa.createWire("producer.ProducerImplC",
-				"consumer.ConsumerImplA", h);
-		while ((synchCounter < 2) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
-		compareConnected("producer.ProducerImplC", "consumer.ConsumerImplA");
+		wire = wa.createWire("pp.A", "consumer.ConsumerImplC", h);
+		delay(2, 100);
+		compareConnected("pp.A", "consumer.ConsumerImplC");
+		log("Must call both consumersConnected(..) for producer.ProducerImplC and producersConnected(..) for c.A");
+		wire = wa.createWire("producer.ProducerImplC", "c.A", h);
+		delay(2, 100);
+		compareConnected("producer.ProducerImplC", "c.A");
 		correct = wa.getWires("(org.osgi.test.wireadmin=yes)");
-		log("Must call producersConnected(..) for: consumer.ConsumerImplA and consumer.ConsumerImplC");
-		synchCounter = 0;
-		timeoutCounter = 0;
-		helper.unregisterProducer("producer.ProducerImplA");
-		while ((synchCounter < 2) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
-		compareConnected("", "consumer.ConsumerImplA");
+		log("Must call producersConnected(..) for: c.A and consumer.ConsumerImplC");
+		helper.unregisterProducer("pp.A");
+		delay(2, 100);
+		compareConnected("", "c.A");
 		compareConnected("", "consumer.ConsumerImplC");
 		if (compareWires_Flavors(correct, wa
 				.getWires("(org.osgi.test.wireadmin=yes)"))) {
@@ -801,15 +721,13 @@ public class WireAdminControl extends DefaultTestBundleControl {
 			log("Test Wireadmin Wires after Producer's unregistration",
 					"NOT OK.");
 		}
-		log("Must call consumersConnected(..) for: producer.ProducerImplA");
-		log("and producersConnected(..) for: consumer.ConsumerImplA and consumer.ConsumerImplC");
-		synchCounter = 0;
-		timeoutCounter = 0;
-		helper.registerProducer("producer.ProducerImplA", new Class[] {
-				String.class, Float.class});
-		while ((synchCounter < 4) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
-		compareConnected("producer.ProducerImplA", "consumer.ConsumerImplA");
+		log("Must call consumersConnected(..) for: pp.A");
+		log("and producersConnected(..) for: c.A and consumer.ConsumerImplC");
+		helper
+				.registerProducer("pp.A", new Class[] {String.class,
+						Float.class});
+		delay(4, 100);
+		compareConnected("pp.A", "c.A");
 		compareConnected("", "consumer.ConsumerImplC");
 		if (compareWires_Flavors(correct, wa
 				.getWires("(org.osgi.test.wireadmin=yes)"))) {
@@ -819,14 +737,15 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		else {
 			log("Test Wireadmin Wires after Producer's registration", "NOT OK.");
 		}
-		log("Must call consumersConnected(..) for: producer.ProducerImplA and producer.ProducerImplC");
-		synchCounter = 0;
-		timeoutCounter = 0;
+		log("Must call consumersConnected(..) for: pp.A and producer.ProducerImplC");
 		helper.unregisterConsumer("consumer.ConsumerImplC");
-		while ((synchCounter < 2) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
-		compareConnected("producer.ProducerImplA", "");
-		compareConnected("producer.ProducerImplC", "");
+		/**
+		 * I changed this to 1 because we unregister C, which means only A gets
+		 * called to change its wires, C can no longer be called???
+		 */
+		delay(1 /* 2 */, 100);
+		compareConnected("pp.A", "");
+		//compareConnected("producer.ProducerImplC", "");
 		if (compareWires_Flavors(correct, wa
 				.getWires("(org.osgi.test.wireadmin=yes)"))) {
 			log("Test Wireadmin Wires after Consumer's unregistration",
@@ -836,15 +755,13 @@ public class WireAdminControl extends DefaultTestBundleControl {
 			log("Test Wireadmin Wires after Consumer's unregistration",
 					"NOT OK.");
 		}
-		log("Must call consumersConnected(..) for: producer.ProducerImplA and producer.ProducerImplC");
+		log("Must call consumersConnected(..) for: pp.A and producer.ProducerImplC");
 		log("and producersConnected(..) for: consumer.ConsumerImplC");
-		synchCounter = 0;
-		timeoutCounter = 0;
 		helper.registerConsumer("consumer.ConsumerImplC", new Class[] {
 				String.class, Integer.class, Float.class});
-		while ((synchCounter < 4) && (timeoutCounter++ < 100))
-			Thread.sleep(50);
-		compareConnected("producer.ProducerImplA", "");
+		delay(2, 100);
+		// changed to 2
+		compareConnected("pp.A", "");
 		compareConnected("producer.ProducerImplC", "consumer.ConsumerImplC");
 		if (compareWires_Flavors(correct, wa
 				.getWires("(org.osgi.test.wireadmin=yes)"))) {
@@ -1183,7 +1100,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		w.update("42");
 		synchronized (synch) {
 			if (!listener.called)
-				synch.wait(5000);
+				synch.wait(20000);
 		}
 		helper.unregisterEventConsumer();
 		helper.unregisterEventProducer();
@@ -1194,7 +1111,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		helper.registerEventProducer(true);
 		synchronized (synch) {
 			if (!listener.called)
-				synch.wait(5000);
+				synch.wait(20000);
 		}
 		log(subtest,
 				"cause exception from polled: PRODUCER_EXCEPTION is expected");
@@ -1202,7 +1119,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		w.poll();
 		synchronized (synch) {
 			if (!listener.called)
-				synch.wait(5000);
+				synch.wait(20000);
 		}
 		helper.unregisterEventConsumer();
 		helper.unregisterEventProducer();
@@ -1256,10 +1173,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		Hashtable h = new Hashtable();
-		h.put("org.osgi.test.wireadmin", "yes");
-		wire = wa.createWire("producer.ProducerImplA",
-				"consumer.ConsumerImplA", h);
+		wire = helper.createWire(wa,"p.A", "c.A", null);
 		if (wire.getScope() == null) {
 			log("Test Wire Scope with null scope and without WirePermission",
 					"Operation passed: OK.");
@@ -1267,12 +1181,14 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		else {
 			log("Test Wire Scope without WirePermission", "NOT OK.");
 		}
+		
 		wa.deleteWire(wire);
+		
+		
 		setWirePermissions(new String[] {"*"}, consumer, true);
-		h = new Hashtable();
+		Hashtable h = new Hashtable();
 		h.put("org.osgi.test.wireadmin", "yes");
-		wire = wa.createWire("producer.ProducerImplA",
-				"consumer.ConsumerImplA", h);
+		wire = wa.createWire("p.AA", "c.A", h);
 		if (compareScopes(wire.getScope(), null)) {
 			log(
 					"Test Wire Scope with null scope, after setting WirePermissions",
@@ -1303,8 +1219,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		}
 		Hashtable h = new Hashtable();
 		h.put("org.osgi.test.wireadmin", "yes");
-		wire = wa.createWire("producer.ProducerImplA",
-				"consumer.ConsumerImplB", h);
+		wire = wa.createWire("p.AA", "consumer.ConsumerImplB", h);
 		if (wire.getScope() == null) {
 			log(
 					"Test Wire Scope with null producer scope without WirePermission",
@@ -1320,8 +1235,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		setWirePermissions(new String[] {"*"}, producer, false);
 		h = new Hashtable();
 		h.put("org.osgi.test.wireadmin", "yes");
-		wire = wa.createWire("producer.ProducerImplA",
-				"consumer.ConsumerImplB", h);
+		wire = wa.createWire("p.AA", "consumer.ConsumerImplB", h);
 		if (compareScopes(wire.getScope(), null)) {
 			log(
 					"Test Wire Scope with null producer scope, after setting WirePermission",
@@ -1352,8 +1266,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		}
 		Hashtable h = new Hashtable();
 		h.put("org.osgi.test.wireadmin", "yes");
-		wire = wa.createWire("producer.ProducerImplB",
-				"consumer.ConsumerImplB", h);
+		wire = wa.createWire("p.AB", "consumer.ConsumerImplB", h);
 		if (compareScopes(wire.getScope(), new String[] {"A", "B", "C"})) {
 			log("Test Wire Scope without WirePermission",
 					"Operation passed: OK.");
@@ -1374,8 +1287,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		setWirePermissions(new String[] {"A", "B"}, producer, false);
 		h = new Hashtable();
 		h.put("org.osgi.test.wireadmin", "yes");
-		wire = wa.createWire("producer.ProducerImplB",
-				"consumer.ConsumerImplB", h);
+		wire = wa.createWire("p.AB", "consumer.ConsumerImplB", h);
 		if (compareScopes(wire.getScope(), new String[] {"B"})) {
 			log("Test Wire Scope, after setting WirePermission",
 					"Operation passed: OK.");
@@ -1404,8 +1316,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		}
 		Hashtable h = new Hashtable();
 		h.put("org.osgi.test.wireadmin", "yes");
-		wire = wa.createWire("producer.ProducerImplB",
-				"consumer.ConsumerImplC", h);
+		wire = wa.createWire("p.AB", "consumer.ConsumerImplC", h);
 		if (compareScopes(wire.getScope(), new String[] {"A", "B", "C"})) {
 			log("Test Wire Scope without WirePermission",
 					"Operation passed: OK.");
@@ -1426,8 +1337,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		wa.deleteWire(wire);
 		h = new Hashtable();
 		h.put("org.osgi.test.wireadmin", "yes");
-		wire = wa.createWire("producer.ProducerImplB",
-				"consumer.ConsumerImplC", h);
+		wire = wa.createWire("p.AB", "consumer.ConsumerImplC", h);
 		if (compareScopes(wire.getScope(), new String[] {"A", "B", "C"})) {
 			log("Test Wire Scope, after setting WirePermission",
 					"Operation passed: OK.");
@@ -1458,8 +1368,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		setWirePermissions(new String[] {"*"}, producer, false);
 		Hashtable h = new Hashtable();
 		h.put("org.osgi.test.wireadmin", "yes");
-		wire = wa.createWire("producer.ProducerImplC",
-				"consumer.ConsumerImplC", h);
+		wire = wa.createWire("p.AC", "consumer.ConsumerImplC", h);
 		if (compareScopes(wire.getScope(), new String[] {"*"})) {
 			log("Test Wire Scope with *(scope) and *(WirePermission)",
 					"Operation passed: OK.");
@@ -1492,8 +1401,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		setWirePermissions(new String[] {"X"}, producer, false);
 		Hashtable h = new Hashtable();
 		h.put("org.osgi.test.wireadmin", "yes");
-		wire = wa.createWire("producer.ProducerImplB",
-				"consumer.ConsumerImplB", h);
+		wire = wa.createWire("p.AB", "consumer.ConsumerImplB", h);
 		if (compareScopes(wire.getScope(), new String[] {})) {
 			log("Test Wire Scope", "Operation passed: OK.");
 		}
@@ -1523,8 +1431,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		setWirePermissions(new String[] {"C", "E"}, producer, false);
 		Hashtable h = new Hashtable();
 		h.put("org.osgi.test.wireadmin", "yes");
-		wire = wa.createWire("producer.ProducerImplD",
-				"consumer.ConsumerImplB", h);
+		wire = wa.createWire("p.AD", "c.B", h);
 		if (compareScopes(wire.getScope(), new String[] {"C"})) {
 			log("Test Wire Scope", "Operation passed: OK.");
 		}

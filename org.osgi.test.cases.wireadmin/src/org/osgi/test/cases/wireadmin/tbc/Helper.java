@@ -8,9 +8,10 @@ import org.osgi.service.wireadmin.*;
  * Contains some helper methods for registering/unregistering producers
  * 
  * $Log$
- * Revision 1.3  2004/11/03 11:47:09  pkriens
- * Format and clean up of warnings
- * Revision 1.2 2004/11/03 10:55:32 pkriens Format and
+ * Revision 1.4  2004/12/03 09:12:32  pkriens
+ * Added service project
+ * Revision 1.3 2004/11/03 11:47:09 pkriens Format and
+ * clean up of warnings Revision 1.2 2004/11/03 10:55:32 pkriens Format and
  * clean up of warnings Revision 1.1 2004/07/07 13:15:26 pkriens *** empty log
  * message ***
  * 
@@ -148,5 +149,14 @@ public class Helper {
 
 	protected void unregisterEventProducer() {
 		regProducerEvents.unregister();
+	}
+
+	public Wire createWire(WireAdmin wa, String from, String to, Dictionary dict) {
+		System.out.println("Wire from "  + from + " to "  + to + " : " + dict );
+		if ( dict == null )
+			dict = new Hashtable();
+		dict.put("org.osgi.test.wireadmin", "yes");
+		Wire wire = wa.createWire( from, to, dict );
+		return wire;
 	}
 }

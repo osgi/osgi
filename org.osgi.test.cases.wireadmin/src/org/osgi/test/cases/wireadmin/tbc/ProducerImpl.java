@@ -25,7 +25,7 @@ public class ProducerImpl implements Producer {
 		//      System.out.println("**********************************************************************");
 		//    }
 		wac.addInHashtable(pid, wires);
-		wac.synchCounter++;
+		wac.syncup(pid+ " " + wires); 
 	}
 
 	public Object polled(Wire wire) {

@@ -40,7 +40,7 @@ public class ConsumerImpl implements Consumer {
 		//      }
 		//    }
 		wac.addInHashtable(pid, wires);
-		wac.synchCounter++;
+		wac.syncup(pid + " " + wires);
 	}
 
 	public void updated(Wire wire, Object value) {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.application"/>
 	<classpathentry kind="lib" path="/osgi.released/osgi.jar"/>
 	<classpathentry sourcepath="/ee.minimum" kind="lib" path="/osgi.released/ee.minimum.jar"/>
 	<classpathentry sourcepath="/org.osgi.test.cases/src" kind="lib" path="/osgi.released/osgi.internal.jar"/>
