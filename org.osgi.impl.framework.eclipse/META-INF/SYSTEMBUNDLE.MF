@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Export-Package: org.osgi.framework; version=1.3,
+ org.osgi.service.packageadmin; version=1.2,
+ org.osgi.service.permissionadmin; version=1.1,
+ org.osgi.service.url; version=1.0,
+ org.osgi.service.startlevel; version=1.0,
+ org.osgi.util.tracker; version=1.2,
+ org.eclipse.osgi.framework.eventmgr,
+ org.eclipse.osgi.framework.msg; version=1.0,
+ org.eclipse.osgi.service.debug,
+ org.eclipse.osgi.service.resolver,
+ org.eclipse.osgi.service.systembundle,
+ org.eclipse.osgi.util
+Export-Service: org.osgi.service.packageadmin.PackageAdmin,
+ org.osgi.service.permissionadmin.PermissionAdmin,
+ org.osgi.service.startlevel.StartLevel,
+ org.eclipse.osgi.service.debug.DebugOptions
+Bundle-Name: %systemBundle
+Bundle-SymbolicName: org.eclipse.osgi; singleton=true
+Bundle-Activator: org.eclipse.osgi.framework.internal.core.SystemBundleActivator
+Bundle-Description: %systemBundle
+Bundle-Copyright: %copyright
+Bundle-Vendor: %eclipse.org
+Bundle-Version: 3.1.0.equinox01
+Bundle-Localization: systembundle
+Bundle-DocUrl: http://www.eclipse.org
