@@ -1,0 +1,45 @@
+##
+## Property file describing database for BasicDriverLocator.
+## 
+## At least one property, "count", must exist, describing how many
+## entries exists in database.
+##
+## Each entry is then prefixes by a number (rising sequence from
+## zero to "count"-1.
+## 
+##   count=<int value>                # number of entries in database
+##   <count>.category=<string value>  # driver category
+##   <count>.url=<string value>       # URL to driver bundle
+##   <count>.id=<string value>        # Unique driver ID
+##   <count>.desc=<string value>      # Driver description
+##   <count>.product=<string value>   # Product this driver handles
+##   <count>.vendor=<string value>    # Driver vendor
+    
+count=4
+0.category=test
+0.url=file:./lib/driver2.jar
+0.id=driver2
+0.desc=Driver2
+0.product=device1
+0.vendor=Gatespace
+1.category=test
+1.url=file:./lib/driver3.jar
+1.id=driver3
+1.desc=Driver3
+1.product=device2
+1.vendor=Gatespace
+2.category=test
+2.url=file:./lib/driver4.jar
+2.id=driver4
+2.desc=Driver4
+2.product=device2
+2.vendor=Gatespace
+3.category=test
+3.url=file:./lib/driver5.jar
+3.id=driver5
+3.desc=Driver5
+3.product=xdevice2
+3.vendor=Gatespace
+
+
+

@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-Name: impl.service.device.basicdriverlocator
+Bundle-Description: OSGi Device Manager Reference Implementation by Gatespace AB
+Bundle-Vendor: OSGi
+Bundle-Version: 1.1
+Bundle-Copyright: Copyright (c) The Open Services Gateway Initiative (2000-2002). All Rights Reserved.
+Bundle-DocURL: http://www.gatespace.com
+Bundle-ContactAddress: osgiref@gatespace.com
+Bundle-Activator: org.osgi.impl.service.device.basicdriverlocator.DriverLocatorBA
+Import-Package: org.osgi.framework;specification-version=1.1,
+ 		org.osgi.service.log;specification-version=1.1,
+ 		org.osgi.util.tracker;specification-version=1.1,
+ 		org.osgi.service.device; specification-version=1.1
+Import-Service: org.osgi.service.log.LogService
+Export-Service: org.osgi.service.device.DriverLocator
+
+
+
