@@ -27,7 +27,7 @@
 
 package org.osgi.test.cases.cu.tb4;
 
-import org.osgi.service.cu.admin.ControlUnitListener;
+import org.osgi.service.cu.admin.ControlUnitAdminListener;
 
 /**
  * Listener of control unit changes registered without filter.
@@ -35,7 +35,7 @@ import org.osgi.service.cu.admin.ControlUnitListener;
  *  
  * @version $Revision$
  */
-public class NoFilterListener implements ControlUnitListener {
+public class NoFilterListener implements ControlUnitAdminListener {
 	
 	/**
 	 * @param eventType

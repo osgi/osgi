@@ -27,6 +27,7 @@
 
 package org.osgi.test.cases.cu.tb1;
 
+import org.osgi.service.cu.ControlUnitException;
 import org.osgi.service.cu.admin.spi.CUAdminCallback;
 import org.osgi.service.cu.admin.spi.ManagedControlUnit;
 import org.osgi.util.measurement.*;
@@ -93,13 +94,13 @@ public class HipGyro implements ManagedControlUnit {
 	 * @throws Exception
 	 * @see org.osgi.service.cu.ControlUnit#queryStateVariable(java.lang.String)
 	 */
-	public Object queryStateVariable(String varId) throws Exception {
+	public Object queryStateVariable(String varId) throws ControlUnitException {
 		// short rawOutput
 		if (varId == "hip.gyro.rawOutput") {
 			rawOutput++;
 			return new Short(rawOutput);
 		}	
-		else throw (new IllegalArgumentException());
+		else throw (new ControlUnitException(ControlUnitException.NO_SUCH_STATE_VARIABLE_ERROR));
 	}
 
 	/**
@@ -110,12 +111,12 @@ public class HipGyro implements ManagedControlUnit {
 	 * @see org.osgi.service.cu.ControlUnit#invokeAction(java.lang.String, java.lang.Object)
 	 */
 	public Object invokeAction(String actionId, Object arguments)
-			throws Exception {
+			throws ControlUnitException {
 		
 		// void calibrate (Measurement ZRO, Measurement tiltAngle);
 		if (actionId == "hip.gyro.calibrate") {
 			if (arguments == null)
-				throw (new IllegalArgumentException());
+				throw (new ControlUnitException(ControlUnitException.ILLEGAL_ACTION_ARGUMENTS_ERROR));
 			Object[] args = (Object[])arguments;
 			if (	(args[0] instanceof Measurement) &&
 					(args[1] instanceof Measurement)){
@@ -124,7 +125,7 @@ public class HipGyro implements ManagedControlUnit {
 				ZROValid = true;
 				return null;
 			}
-			else throw (new IllegalArgumentException());
+			else throw (new ControlUnitException(ControlUnitException.NO_SUCH_ACTION_ERROR));
 		}
 		
 		// Measurement getZRO();

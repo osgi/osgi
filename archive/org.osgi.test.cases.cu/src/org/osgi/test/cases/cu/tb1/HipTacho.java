@@ -27,6 +27,7 @@
 
 package org.osgi.test.cases.cu.tb1;
 
+import org.osgi.service.cu.ControlUnitException;
 import org.osgi.service.cu.admin.spi.CUAdminCallback;
 import org.osgi.service.cu.admin.spi.ManagedControlUnit;
 
@@ -91,13 +92,13 @@ public class HipTacho implements ManagedControlUnit {
 	 * @throws Exception
 	 * @see org.osgi.service.cu.ControlUnit#queryStateVariable(java.lang.String)
 	 */
-	public Object queryStateVariable(String varId) throws Exception {
+	public Object queryStateVariable(String varId) throws ControlUnitException {
 		// rawOutput
 		if (varId == "hip.tacho.rawOutput") {
 			rawOutput++;
 			return new Byte(rawOutput);
 		}
-		else throw (new IllegalArgumentException());
+		else throw (new ControlUnitException(ControlUnitException.NO_SUCH_STATE_VARIABLE_ERROR));
 	}
 
 	/**
@@ -108,17 +109,17 @@ public class HipTacho implements ManagedControlUnit {
 	 * @see org.osgi.service.cu.ControlUnit#invokeAction(java.lang.String, java.lang.Object)
 	 */
 	public Object invokeAction(String actionId, Object arguments)
-			throws Exception {
+			throws ControlUnitException {
 		//void calibrate(byte dpp)
 		if (actionId == "hip.tacho.calibrate") {
 			if (arguments == null)
-				throw (new IllegalArgumentException());
+				throw (new ControlUnitException(ControlUnitException.ILLEGAL_ACTION_ARGUMENTS_ERROR));
 			if (arguments instanceof Byte) {
 				dpp = ((Byte)arguments).byteValue();
 				dppValid = true;
 				return null;
 			}
-			else throw (new IllegalArgumentException());
+			else throw (new ControlUnitException(ControlUnitException.ILLEGAL_ACTION_ARGUMENTS_ERROR));
 		}
 		
 		//byte getDpp()

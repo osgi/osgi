@@ -55,13 +55,13 @@ public class Activator implements BundleActivator {
         // Register a ControlUnitListener without filter
 		Hashtable p = new Hashtable();
 		p.put(ControlUnitConstants.EVENT_SYNC, "");
-		regList1 = context.registerService(ControlUnitListener.class.getName(), new NoFilterListener(), p);
+		regList1 = context.registerService(ControlUnitAdminListener.class.getName(), new NoFilterListener(), p);
 
 		// Register a COntrolUnitListener with a filter that includes all possible properties
 		p.clear();
 		p.put(ControlUnitConstants.EVENT_SYNC, "");		
-		p.put(ControlUnitConstants.EVENT_FILTER, "(&(osg.control.event.type=1)(osg.control.id=window.1)(osg.control.type=window))");
-		regList2 = context.registerService(ControlUnitListener.class.getName(), new EventFilterListener(), p);
+		p.put(ControlUnitConstants.EVENT_FILTER, "(&(org.osgi.control.event.type=1)(org.osgi.control.id=window.1)(org.osgi.control.type=window))");
+		regList2 = context.registerService(ControlUnitAdminListener.class.getName(), new EventFilterListener(), p);
 	}
 	
 	public void stop(BundleContext context) throws Exception {
