@@ -19,12 +19,14 @@
 package org.osgi.service.application;
 
 import java.util.*;
+
 import org.osgi.framework.*;
 
 public interface Scheduler {
 
 	public ServiceReference addScheduledApplication(
-			ApplicationDescriptor appDescriptor, Map arguments, Date date, boolean launchOnOverdue ) throws Exception;
+			String pid,  Map arguments, String topic, String eventFilter, 
+      boolean recurring ) throws Exception;
 
 	public void removeScheduledApplication(
 			ScheduledApplication scheduledApplication) throws Exception;

@@ -1183,6 +1183,22 @@ public class TestMegletContainerBundleActivator extends Object implements
 			return false;
 		}
 	}
+	
+	String getFilterFromNow( int delaySec ) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.add( Calendar.SECOND, delaySec );
+		
+		String filter = "(&";
+		filter += "(year=" 		+ calendar.get( Calendar.YEAR ) +")";
+		filter += "(month=" 	+	calendar.get( Calendar.MONTH ) +")";
+		filter += "(day=" 		+	calendar.get( Calendar.DAY_OF_MONTH ) +")";
+		filter += "(hour=" 		+	calendar.get( Calendar.HOUR_OF_DAY ) +")";
+		filter += "(minute="	+ calendar.get( Calendar.MINUTE ) +")";
+		filter += "(second="	+ calendar.get( Calendar.SECOND ) +")";
+		filter += ")";
+		
+		return filter;
+	}
 
 	boolean testCase_scheduleAnApplication() {
 		try {
@@ -1193,9 +1209,8 @@ public class TestMegletContainerBundleActivator extends Object implements
 			Map args = createArgs();
 			if (args == null)
 				throw new Exception("Cannot create the arguments of launch!");
-			appDesc.schedule(args, new Date(System.currentTimeMillis() + 500),
-					true);
-			Thread.sleep(1000);
+			appDesc.schedule(args, "org/osgi/timer", getFilterFromNow( 2 ), false);
+			Thread.sleep(3000);
 			appHandle = lookupAppHandle(appDesc);
 			if (appHandle == null
 					|| appHandle.getAppStatus() != ApplicationHandle.RUNNING)
@@ -1227,11 +1242,9 @@ public class TestMegletContainerBundleActivator extends Object implements
 			Map args = createArgs();
 			if (args == null)
 				throw new Exception("Cannot create the arguments of launch!");
-			appDesc.schedule(args, new Date(System.currentTimeMillis() + 1500),
-					true);
-			appDesc.schedule(args, new Date(System.currentTimeMillis() + 500),
-					true);
-			Thread.sleep(1000);
+			appDesc.schedule(args, "org/osgi/timer", getFilterFromNow( 4 ), false);
+			appDesc.schedule(args, "org/osgi/timer", getFilterFromNow( 2 ), false);
+			Thread.sleep(3000);
 			appHandle = lookupAppHandle(appDesc);
 			if (appHandle == null
 					|| appHandle.getAppStatus() != ApplicationHandle.RUNNING)
@@ -1246,7 +1259,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Didn't received the started event!");
 			if (!testCase_stopApplication())
 				return false;
-			Thread.sleep(1000);
+			Thread.sleep(2000);
 			appHandle = lookupAppHandle(appDesc);
 			if (appHandle == null
 					|| appHandle.getAppStatus() != ApplicationHandle.RUNNING)
@@ -1276,11 +1289,10 @@ public class TestMegletContainerBundleActivator extends Object implements
 			Map args = createArgs();
 			if (args == null)
 				throw new Exception("Cannot create the arguments of launch!");
-			appDesc.schedule(args, new Date(System.currentTimeMillis() + 500),
-					true);
+			appDesc.schedule(args, "org/osgi/timer", getFilterFromNow( 3 ), false);
 			if (!restart_scheduler())
 				return false;
-			Thread.sleep(1000);
+			Thread.sleep(4000);
 			appHandle = lookupAppHandle(appDesc);
 			if (appHandle == null
 					|| appHandle.getAppStatus() != ApplicationHandle.RUNNING)
@@ -1313,11 +1325,11 @@ public class TestMegletContainerBundleActivator extends Object implements
 			if (args == null)
 				throw new Exception("Cannot create the arguments of launch!");
 			ServiceReference serviceRef = appDesc.
-			    schedule(args, new Date(System.currentTimeMillis() + 500), true);
+					schedule(args, "org/osgi/timer", getFilterFromNow( 2 ), false);
 			ScheduledApplication schedApp = (ScheduledApplication)bc.getService( serviceRef );
 			schedApp.remove();
 			bc.ungetService( serviceRef );
-			Thread.sleep(1000);
+			Thread.sleep(3000);
 			appHandle = lookupAppHandle(appDesc);
 			if (appHandle != null )
 				throw new Exception("Application was scheduled inspite of removing!");

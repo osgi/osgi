@@ -19,6 +19,7 @@ package org.osgi.impl.service.scheduler;
 
 import java.io.*;
 import java.util.*;
+
 import org.osgi.framework.*;
 import org.osgi.service.application.*;
 import org.osgi.service.application.Scheduler;
@@ -27,71 +28,69 @@ import org.osgi.service.log.LogService;
 /**
  * The realization of the ScheduledApplication interface
  */
-public class ScheduledApplicationImpl implements ScheduledApplication,
-		Comparable, Serializable {
-	private ApplicationDescriptor	appDesc;
-	private Date								schedDate;
-	private Hashtable						args;
+public class ScheduledApplicationImpl implements ScheduledApplication, Serializable {
 	private BundleContext				bc;
-	private String							appUID;
-	private boolean							launchOnOverdue;
 	private SchedulerImpl				scheduler;
+	
+	private String							pid;
+	private Hashtable						args;
+	private String							topic;
+	private String  						eventFilter;
+	private boolean							recurring;
+
 	private ServiceRegistration	serviceReg;
 
 	public ScheduledApplicationImpl(Scheduler scheduler, BundleContext bc,
-			ApplicationDescriptor appDesc, Map args, Date schedDate, boolean launchOnOverdue ) {
+			String pid, Map args, String topic, String eventFilter, boolean recurring ) {
 		this.scheduler = (SchedulerImpl)scheduler;
 		this.bc = bc;
-		this.appDesc = appDesc;
-		this.schedDate = schedDate;
-		this.args = new Hashtable(args);
-		this.appUID = appDesc.getApplicationPID();
-		this.launchOnOverdue = launchOnOverdue;
+		this.pid = pid;
+		if( args != null )
+			this.args = new Hashtable( args );
+		else
+			this.args = null;
+		this.topic = topic;
+		this.eventFilter = eventFilter;
+		this.recurring = recurring;
 	}
 
-	public void validate(Scheduler scheduler, BundleContext bc)
+	void validate(Scheduler scheduler, BundleContext bc)
 			throws Exception {
 		this.bc = bc;
 		this.scheduler = (SchedulerImpl)scheduler;
-
-		try {
-			ServiceReference[] references = bc.getServiceReferences(
-					"org.osgi.service.application.ApplicationDescriptor", null);
-			if (references == null || references.length == 0)
-				return;
-
-			for (int i = 0; i != references.length; i++) {
-				try {
-					ApplicationDescriptor appDesc = (ApplicationDescriptor) bc
-						.getService(references[i]);
-					if( appDesc.getApplicationPID().equals( appUID ) ) {
-						this.appDesc = appDesc;
-						break;
-					}
-					bc.ungetService(references[i]);
-				}catch( SecurityException e ) {}
-			}
-		}
-		catch (Exception e) {
-			SchedulerImpl.log( bc, LogService.LOG_ERROR,
-				"Exception occurred at searching the application descriptors!", e);
-		}
 	}
-
-	public Date getDate() {
-		return (Date) schedDate.clone();
-	}
-
-	public boolean launchOnOverdue() {
-		return launchOnOverdue;
+	
+	String getPid() {
+		return new String( pid );
 	}
 
 	public Map getArguments() {
+		if( args == null )
+			return null;
 		return new Hashtable( args );
 	}
 
-	public ApplicationDescriptor getApplicationDescriptor() {
-		return appDesc;
+	public String getTopic() {
+		return new String( topic );
+	}
+
+	public String getEventFilter() {
+		return new String( eventFilter );
+	}
+
+	public boolean isRecurring() {
+		return recurring;
+	}
+
+	public ServiceReference getApplicationDescriptor() {
+		try {
+			ServiceReference refs[] = bc.getServiceReferences( 
+					"org.osgi.service.application.ApplicationDescriptor",
+					"(" + ApplicationDescriptor.APPLICATION_PID + "=" + pid +")" );
+			if( refs != null && refs.length != 0 )
+				return refs[ 0 ];
+		}catch( InvalidSyntaxException e ) {}
+		return null;
 	}
 
 	void register() {
@@ -116,36 +115,23 @@ public class ScheduledApplicationImpl implements ScheduledApplication,
 		}
 	}
 
-	public int compareTo(Object schedObj) {
-		ScheduledApplicationImpl schedApp = (ScheduledApplicationImpl) schedObj;
-		int compResult = getDate().compareTo(schedApp.getDate());
-		if (compResult != 0)
-			return compResult;
-		if (getArguments().size() < schedApp.getArguments().size())
-			return -1;
-		if (getArguments().size() > schedApp.getArguments().size())
-			return 1;
-		if (schedApp.equals(this))
-			return 0;
-		if (hashCode() < schedApp.hashCode())
-			return -1;
-		else
-			return 1;
-	}
-
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-		out.writeObject(appUID);
-		out.writeObject(schedDate);
+		out.writeObject(pid);
 		out.writeObject(args);
+		out.writeObject(topic);
+		out.writeObject(eventFilter);
+		out.writeObject( new Boolean( recurring ) );
 	}
 
 	private void readObject(java.io.ObjectInputStream in) throws IOException,
 			ClassNotFoundException {
-		appDesc = null;
 		bc = null;
-		appUID = (String) in.readObject();
-		schedDate = (Date) in.readObject();
+		pid= (String) in.readObject();
 		args = (Hashtable) in.readObject();
+		topic = (String) in.readObject();
+		eventFilter = (String) in.readObject();
+		Boolean recurring = (Boolean) in.readObject();		
+		this.recurring = recurring.booleanValue();
 	}
 	
 	ServiceReference getReference() {

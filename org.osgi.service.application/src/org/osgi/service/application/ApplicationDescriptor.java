@@ -140,7 +140,8 @@ public abstract class ApplicationDescriptor {
 
 	protected abstract BundleContext getBundleContext();
 
-	public ServiceReference schedule( Map arguments, Date date, boolean launchOnOverdue )
+	public ServiceReference schedule( Map arguments, String topic, String eventFilter, 
+			                              boolean recurring )
 																		throws Exception {
 		ServiceReference serviceRef = getBundleContext()
 				.getServiceReference("org.osgi.service.application.Scheduler");
@@ -152,7 +153,7 @@ public abstract class ApplicationDescriptor {
 			throw new Exception( "Scheduler service not found!" );
 
 		try {
-			return scheduler.addScheduledApplication(this, arguments, date, launchOnOverdue);
+			return scheduler.addScheduledApplication(getApplicationPID(), arguments, topic, eventFilter, recurring);
 		}finally {
 			getBundleContext().ungetService(serviceRef);
 		}
