@@ -20,12 +20,13 @@ package org.osgi.meg.demo.remote;
 import java.io.*;
 
 public class ServerTest implements RemoteReceiver {
+	
+	private static final int SOCKET_TIMEOUT = 10000;
+	
 	RMServer	rms	= null;
 
 	public static void main(String[] args) throws IOException {
-		int port = 7777;
-		if ( args.length> 0 )
-			port = Integer.parseInt(args[0]);
+		int port = Integer.parseInt(args[0]);
 		ServerTest st = new ServerTest(port);
 	}
 
@@ -33,7 +34,7 @@ public class ServerTest implements RemoteReceiver {
 		System.out.println("=============================");
 		System.out.println("= Management Server started =");
 		System.out.println("=============================\r\n,");
-		rms = new RMServer(port);
+		rms = new RMServer(port, SOCKET_TIMEOUT);
 		rms.setReceiver(this);
 		Consol c = new Consol();
 		c.start();
