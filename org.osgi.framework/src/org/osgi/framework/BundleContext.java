@@ -554,6 +554,62 @@ public abstract interface BundleContext {
 			String filter) throws InvalidSyntaxException;
 
 	/**
+	 * Returns a list of <code>ServiceReference</code> objects. This method
+	 * returns a list of <code>ServiceReference</code> objects for services which
+	 * implement and were registered under the specified class and match the
+	 * specified filter criteria.
+	 * 
+	 * <p>
+	 * The list is valid at the time of the call to this method, however as the
+	 * Framework is a very dynamic environment, services can be modified or
+	 * unregistered at anytime.
+	 * 
+	 * <p>
+	 * <code>filter</code> is used to select the registered service whose
+	 * properties objects contain keys and values which satisfy the filter. See
+	 * {@link Filter}for a description of the filter string syntax.
+	 * 
+	 * <p>
+	 * If <code>filter</code> is <code>null</code>, all registered services are
+	 * considered to match the filter.
+	 * <p>
+	 * If <code>filter</code> cannot be parsed, an {@link InvalidSyntaxException}
+	 * will be thrown with a human readable message where the filter became
+	 * unparsable.
+	 * 
+	 * <p>
+	 * The following steps are required to select a service:
+	 * <ol>
+	 * <li>If the Java Runtime Environment supports permissions, the caller is
+	 * checked for the <code>ServicePermission</code> to get the service with the
+	 * specified class. If the caller does not have the correct permission,
+	 * <code>null</code> is returned.
+	 * <li>If the filter string is not <code>null</code>, the filter string is
+	 * parsed and the set of registered services which satisfy the filter is
+	 * produced. If the filter string is <code>null</code>, then all registered
+	 * services are considered to satisfy the filter.
+	 * <li>If <code>clazz</code> is not <code>null</code>, the set is further
+	 * reduced to those services which are an <code>instanceof</code> and were
+	 * registered under the specified class. The complete list of classes of
+	 * which a service is an instance and which were specified when the service
+	 * was registered is available from the service's
+	 * {@link Constants#OBJECTCLASS}property.
+	 * <li>An array of <code>ServiceReference</code> to the selected services is
+	 * returned.
+	 * </ol>
+	 * 
+	 * @param clazz The class name with which the service was registered, or
+	 *        <code>null</code> for all services.
+	 * @param filter The filter criteria.
+	 * @return An array of <code>ServiceReference</code> objects, or <code>null</code>
+	 *         if no services are registered which satisfy the search.
+	 * @exception InvalidSyntaxException If <code>filter</code> contains an
+	 *            invalid filter string which cannot be parsed.
+	 */
+	public abstract ServiceReference[] getAllServiceReferences(String clazz, 
+			String filter) throws InvalidSyntaxException;
+
+	/**
 	 * Returns a <code>ServiceReference</code> object for a service that
 	 * implements, and was registered under, the specified class.
 	 * 

@@ -1265,4 +1265,8 @@ public class BundleContextImpl implements BundleContext, EventDispatcher {
 	protected boolean isValid() {
 		return valid;
 	}
+
+	public ServiceReference[] getAllServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
+		throw new UnsupportedOperationException();
+	}
 }

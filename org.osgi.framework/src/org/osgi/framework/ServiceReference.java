@@ -129,5 +129,27 @@ public abstract interface ServiceReference {
 	 * @since 1.1
 	 */
 	public abstract Bundle[] getUsingBundles();
+
+	/**
+	 * Returns true if the bundle which registered the service referenced by this
+	 * <tt>ServiceReference</tt> and the specified bundle use the same source for
+	 * the package of the specified class name.
+	 * <p>
+	 * This method performs the following checks: <br>
+	 * 1)  Get the package name from the className <br>
+	 * 2)  For the bundle that registered the service referenced by this
+	 * <tt>ServiceReference</tt> object (registrant bundle); find the source for the package.  
+	 * If no source is found then return true if the registrant bundle is equal to 
+	 * the specified bundle; otherwise return false; <br>
+	 * 3)  If the package source of the registrant bundle is equal to the package source of the 
+	 * specified bundle then return true; otherwise return false. <br>
+	 * @param bundle the <tt>Bundle</tt> object to check the package source for
+	 * @param className the class name to check the package source for
+	 * @return true if the bundle which registered the service referenced by this
+	 * <tt>ServiceReference</tt> and the specified bundle use the same source for
+	 * the package of the specified class name; otherwise false is returned.
+	 */
+	public abstract boolean isAssignableTo(Bundle bundle, String className); 
+
 }
 

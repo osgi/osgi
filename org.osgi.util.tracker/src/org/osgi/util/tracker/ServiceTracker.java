@@ -233,23 +233,21 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		if (DEBUG) {
 			System.out.println("ServiceTracker.open: " + filter); //$NON-NLS-1$
 		}
-		tracked = new Tracked();
+		tracked = createTracked();
 		trackingCount = 0;
 		ServiceReference[] references;
 		synchronized (tracked) {
 			try {
 				context.addServiceListener(tracked, listenerFilter);
 				if (listenerFilter == null) { // user supplied filter
-					references = context.getServiceReferences(null, filter
-							.toString());
+					references = getInitialReferences(null, filter);
 				}
 				else { // constructor supplied filter
 					if (trackClass == null) {
 						references = new ServiceReference[] {trackReference};
 					}
 					else {
-						references = context.getServiceReferences(trackClass,
-								null);
+						references = getInitialReferences(trackClass, null);
 					}
 				}
 			}
@@ -269,6 +267,27 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Returns a new <code>Tracked</code> object for this <code>ServiceTracker</code> object.
+	 * @return a new <code>Tracked</code> object for this <code>ServiceTracker</code> object.
+	 */
+	protected Tracked createTracked() {
+		return new Tracked();
+	}
+
+	/**
+	 * Returns the list of initial <code>ServiceReference</code> objects that
+	 * will be tracked by this <code>ServiceTracker</code> object.
+	 * @param trackClass the class name with which the service was registered, 
+	 * or null for all services.
+	 * @param filter the filter criteria or null for all services.
+	 * @return the list of initial <code>ServiceReference</code> objects.
+	 * @throws InvalidSyntaxException if the filter uses an invalid syntax.
+	 */
+	protected ServiceReference[] getInitialReferences(String trackClass, Filter filter) throws InvalidSyntaxException {
+		return context.getServiceReferences(trackClass, filter == null ? null : filter.toString());
 	}
 
 	/**

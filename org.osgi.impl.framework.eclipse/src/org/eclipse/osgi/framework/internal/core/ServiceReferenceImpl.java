@@ -11,6 +11,7 @@
 
 package org.eclipse.osgi.framework.internal.core;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -212,5 +213,9 @@ public class ServiceReferenceImpl implements ServiceReference, Comparable {
 		}
 
 		return compare;
+	}
+
+	public boolean isAssignableTo(Bundle bundle, String className) {
+		throw new UnsupportedOperationException();
 	}
 }
