@@ -14,3 +14,4 @@ Export-Package: javax.servlet,
     org.osgi.service.http;specification-version=1.1.0,
     org.osgi.test.service;specification-version=1.1.0,
     org.osgi.test.cases.util;specification-version=1.1.0
+Bundle-Classpath: .,osgi.eclipse.jar
