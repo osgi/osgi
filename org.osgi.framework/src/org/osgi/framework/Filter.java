@@ -51,11 +51,11 @@ import java.util.Dictionary;
  * @since 1.1
  */
 public interface Filter {
-	//### Case sensitivity description for other methods
 	/**
 	 * Filter using a service's properties.
 	 * <p>
-	 * The filter is executed using properties of the referenced service.
+	 * The filter is executed using the keys and values of the referenced service's
+	 * properties.  The keys are case insensitively matched with the filter.
 	 * 
 	 * @param reference The reference to the service whose properties are used
 	 *        in the match.
@@ -68,6 +68,7 @@ public interface Filter {
 	/**
 	 * Filter using a <code>Dictionary</code> object. The Filter is executed using
 	 * the <code>Dictionary</code> object's keys and values.
+	 * The keys are case insensitively matched with the filter.
 	 * 
 	 * @param dictionary The <code>Dictionary</code> object whose keys are used in
 	 *        the match.
@@ -112,7 +113,7 @@ public interface Filter {
 	/**
 	 * Filter with case sensitivity using a <code>Dictionary</code> object. The
 	 * Filter is executed using the <code>Dictionary</code> object's keys and
-	 * values. The keys are case sensitivley matched with the filter.
+	 * values. The keys are case sensitively matched with the filter.
 	 * 
 	 * @param dictionary The <code>Dictionary</code> object whose keys are used in
 	 *        the match.
