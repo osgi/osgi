@@ -1,0 +1,66 @@
+/*
+ * ============================================================================
+ * (c) Copyright 2004 Nokia
+ * This material, including documentation and any related computer programs,
+ * is protected by copyright controlled by Nokia and its licensors. 
+ * All rights are reserved.
+ * 
+ * These materials have been contributed  to the Open Services Gateway 
+ * Initiative (OSGi)as "MEMBER LICENSED MATERIALS" as defined in, and subject 
+ * to the terms of, the OSGi Member Agreement specifically including, but not 
+ * limited to, the license rights and warranty disclaimers as set forth in 
+ * Sections 3.2 and 12.1 thereof, and the applicable Statement of Work. 
+ * All company, brand and product names contained within this document may be 
+ * trademarks that are the sole property of the respective owners.  
+ * The above notice must be included on all copies of this document.
+ * ============================================================================
+ */
+package org.osgi.impl.service.deploymentadmin;
+
+import java.io.Serializable;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.jar.Attributes;
+
+public class ResourceEntry implements Serializable {
+
+    private String     name;
+    private Hashtable  attrs = new Hashtable();
+
+    public ResourceEntry(String name, Attributes attrs) {
+        this.name = name;
+        extractAttrs(attrs);
+    }
+    
+    public boolean equals(Object o) {
+        if (!(o instanceof ResourceEntry))
+            return false;
+        ResourceEntry other = (ResourceEntry) o;
+        return getName().equals(other.getName());
+    }
+    
+    public int hashCode() {
+        return name.hashCode();
+    }
+    
+    public String toString() {
+        return getName();
+    }
+    
+    public String getValue(String name) {
+        return (String) attrs.get(name);
+    }
+
+    public String getName() {
+        return name;
+    }
+    
+    private void extractAttrs(Attributes as) {
+        for (Iterator iter = as.keySet().iterator(); iter.hasNext();) {
+            Attributes.Name key = (Attributes.Name) iter.next();
+            Object value = as.getValue(key);
+            attrs.put(key.toString(), value);
+        }
+    }
+
+}

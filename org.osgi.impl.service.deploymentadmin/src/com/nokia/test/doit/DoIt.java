@@ -19,6 +19,7 @@ import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.PackagePermission;
@@ -104,7 +105,7 @@ public class DoIt implements BundleActivator {
 
     public void start(BundleContext context) throws Exception {
         this.context = context;
-        setPermissions();
+        //setPermissions();
         
         ServiceReference ref = context.getServiceReference(DeploymentAdmin.class.getName());
 		da = (DeploymentAdmin) context.getService(ref);
@@ -149,38 +150,6 @@ public class DoIt implements BundleActivator {
             is = new FileInputStream(HOME + "easygame_update_nr.dp");
 			da.installDeploymentPackage(is);
 			is.close();
-        } else if ("test".equalsIgnoreCase(line)) {
-            boolean ret;
-            int ok = 0;
-            int error = 0;
-            
-            if (ret = test_simple_01_01()) ++ok; else ++error;
-            System.out.println("** test_simple_01_01 *********************** " + (ret ? "ok" : "ERROR"));
-            
-            if (ret = test_simple_01_02()) ++ok; else ++error;
-            System.out.println("** test_simple_01_02 *********************** " + (ret ? "ok" : "ERROR"));
-            
-            if (ret = test_simple_01_03()) ++ok; else ++error;
-            System.out.println("** test_simple_01_03 *********************** " + (ret ? "ok" : "ERROR"));
-            
-            if (ret = test_simple_01_04()) ++ok; else ++error;
-            System.out.println("** test_simple_01_04 *********************** " + (ret ? "ok" : "ERROR"));
-            
-            if (ret = test_customizer_01_01()) ++ok; else ++error;
-            System.out.println("** test_customizer_01_01 ******************* " + (ret ? "ok" : "ERROR"));
-            
-            if (ret = test_drop_bundles_01()) ++ok; else ++error;
-            System.out.println("** test_drop_bundles_01 ******************** " + (ret ? "ok" : "ERROR"));
-            
-            if (ret = test_drop_bundles_and_resources_01()) ++ok; else ++error;
-            System.out.println("** test_drop_bundles_and_resources_01 ****** " + (ret ? "ok" : "ERROR"));
-            
-            if (ret = test_bundlefilter_01()) ++ok; else ++error;
-            System.out.println("** test_bundlefilter_01 ******************** " + (ret ? "ok" : "ERROR"));
-            
-            System.out.println("\n================================");
-            System.out.println("RESULT: OK = " + ok + " ERROR = " + error);
-            System.out.println("================================");
         } else if ("tdb".equalsIgnoreCase(line)) {
             int ok = 0;
             int error = 0;
@@ -253,9 +222,9 @@ public class DoIt implements BundleActivator {
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
             throw new Exception("Table 'game' is missing");
         if (-1 != Arrays.asList(db.tableNames(null)).indexOf("score"))
-            throw new Exception("Table 'score' is missing");
+            throw new Exception("Table 'score' is present");
         if (-1 != Arrays.asList(db.tableNames(null)).indexOf("tmp"))
-            throw new Exception("Table 'tmp' is missing");
+            throw new Exception("Table 'tmp' is present");
         if (!((Object[]) db.findRow(null, "player", new Integer(1)))[1].equals("Joe_Upd"))
             throw new Exception("Row with '1' primary key is not updated");
         if (!((Object[]) db.findRow(null, "game", new Integer(1)))[1].equals("chess_Upd"))
@@ -343,14 +312,14 @@ public class DoIt implements BundleActivator {
             throw new Exception("Table 'tmp' is missing");
         
         ServiceReference[] refs = context.getServiceReferences(
-                ResourceProcessor.class.getName(), "(id=db_test_03)");
+                ResourceProcessor.class.getName(), "(" + Constants.SERVICE_PID + "=db_test_03)");
         ResourceProcessor rp = (ResourceProcessor) context.getService(refs[0]);
         Set s = ((DbResourceProcessor) rp).getResources(dp, "db_test_01_t.dbscript");
         if (null == s || !s.contains("tmp"))
             throw new Exception("RP with id 'db_test_03' HASN'T receive the " +
             		"'db_test_01_t.dbscript' resource");
         refs = context.getServiceReferences(
-                ResourceProcessor.class.getName(), "(id=default_id)");
+                ResourceProcessor.class.getName(), "(" + Constants.SERVICE_PID + "=default_pid)");
         rp = (ResourceProcessor) context.getService(refs[0]);
         s = ((DbResourceProcessor) rp).getResources(dp, "db_test_01_t.dbscript");
         if (null != s && s.contains("tmp"))
@@ -370,8 +339,7 @@ public class DoIt implements BundleActivator {
 		
 		try {Thread.sleep(3000);} catch (Exception e) {}
        
-		// TODO not in interface yet, remove later ### pkr
-		//da.cancel();
+		da.cancel();
 		
 		try {Thread.sleep(3000);} catch (Exception e) {}
 		
@@ -384,340 +352,7 @@ public class DoIt implements BundleActivator {
         db.reset(null);
     }
     
-    private boolean test_bundlefilter_01() {
-        FileInputStream is = null;
-        try {
-            // install
-            
-	        is = new FileInputStream(HOME + "test_bundlefilter_01.dp");
-			da.installDeploymentPackage(is);
-			
-			// cleanup
-			
-			DeploymentPackage[] dps = da.listDeploymentPackages();
-			for (int i = 0; i < dps.length; i++) {
-			    if (dps[i].getName().equals("test_bundlefilter_01")) {
-			        dps[i].uninstall();
-			        break;
-			    }
-            }
-			
-			return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            if (null != is)
-                try {
-                    is.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-        }
-    }
-
-    private boolean test_drop_bundles_and_resources_01() {
-        FileInputStream is1 = null;
-        FileInputStream is2 = null;
-        try {
-            // install
-            
-	        is1 = new FileInputStream(HOME + "test_drop_bundles_and_resources_01.dp");
-			da.installDeploymentPackage(is1);
-			
-			Bundle[] bs = context.getBundles();
-			StringBuffer found = new StringBuffer("");
-			for (int i = 0; i < bs.length; i++) {
-                Bundle b = bs[i];
-                if (b.getLocation().equals("example_rp_test_drop_bundles_01"))
-                    found.append("01");
-                if (b.getLocation().equals("example_rp_test_drop_bundles_02"))
-                    found.append("02");
-            }
-			
-			if ( !(found.toString().equals("0102") || found.toString().equals("0201")) )
-			    return false;
-			
-			// update
-			
-			is2 = new FileInputStream(HOME + "test_drop_bundles_and_resources_02.dp");
-			da.installDeploymentPackage(is2);
-			
-			bs = context.getBundles();
-			found = new StringBuffer("");
-			for (int i = 0; i < bs.length; i++) {
-                Bundle b = bs[i];
-                if (b.getLocation().equals("example_rp_test_drop_bundles_01"))
-                    found.append("01");
-                if (b.getLocation().equals("example_rp_test_drop_bundles_02"))
-                    found.append("02");
-            }
-			
-			// cleanup
-			
-			DeploymentPackage[] dps = da.listDeploymentPackages();
-			for (int i = 0; i < dps.length; i++) {
-			    if (dps[i].getName().equals("test_drop_bundles_and_resources_01")) {
-			        dps[i].uninstall();
-			        break;
-			    }
-            }
-			
-			return found.toString().equals("01");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            if (null != is1)
-                try {
-                    is1.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-        }
-    }
-
-    private boolean test_drop_bundles_01() {
-        FileInputStream is1 = null;
-        FileInputStream is2 = null;
-        try {
-            // install
-            
-	        is1 = new FileInputStream(HOME + "test_drop_bundles_01.dp");
-			da.installDeploymentPackage(is1);
-			
-			Bundle[] bs = context.getBundles();
-			StringBuffer found = new StringBuffer("");
-			for (int i = 0; i < bs.length; i++) {
-                Bundle b = bs[i];
-                if (b.getLocation().equals("example_rp_test_drop_bundles_01"))
-                    found.append("01");
-                if (b.getLocation().equals("example_rp_test_drop_bundles_02"))
-                    found.append("02");
-            }
-			
-			if ( !(found.toString().equals("0102") || found.toString().equals("0201")) )
-			    return false;
-			
-			// update
-			
-			is2 = new FileInputStream(HOME + "test_drop_bundles_02.dp");
-			da.installDeploymentPackage(is2);
-			
-			bs = context.getBundles();
-			found = new StringBuffer("");
-			for (int i = 0; i < bs.length; i++) {
-                Bundle b = bs[i];
-                if (b.getLocation().equals("example_rp_test_drop_bundles_01"))
-                    found.append("01");
-                if (b.getLocation().equals("example_rp_test_drop_bundles_02"))
-                    found.append("02");
-                if (b.getLocation().equals("example_rp_test_drop_bundles_03"))
-                    found.append("03");
-            }
-			
-			// cleanup
-			
-			DeploymentPackage[] dps = da.listDeploymentPackages();
-			for (int i = 0; i < dps.length; i++) {
-			    if (dps[i].getName().equals("test_drop_bundles_01")) {
-			        dps[i].uninstall();
-			        break;
-			    }
-            }
-			
-			return found.toString().equals("0103") || found.toString().equals("0301");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            if (null != is1)
-                try {
-                    is1.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-        }
-    }
-
-    private boolean test_simple_01_01() {
-        FileInputStream is = null;
-        try {
-	        is = new FileInputStream(HOME + "test_simple_01_01.dp");
-			da.installDeploymentPackage(is);
-			
-			Bundle[] bs = context.getBundles();
-			boolean found = false;
-			for (int i = 0; i < bs.length; i++) {
-                Bundle b = bs[i];
-                if (b.getLocation().equals("com.nokia.easygame")) {
-                    found = true;
-                    break;
-                }
-            }
-			
-			// cleanup
-			
-			DeploymentPackage[] dps = da.listDeploymentPackages();
-			for (int i = 0; i < dps.length; i++) {
-			    if (dps[i].getName().equals("test_simple_01_01")) {
-			        dps[i].uninstall();
-			        break;
-			    }
-            }
-			
-			return found;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            if (null != is)
-                try {
-                    is.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-        }
-    }
-    
-    private boolean test_simple_01_02() {
-        FileInputStream is = null;
-        try {
-	        is = new FileInputStream(HOME + "test_simple_01_02.dp");
-			da.installDeploymentPackage(is);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            if (null != is)
-                try {
-                    is.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-        }
-        
-        // cleanup
-		
-		DeploymentPackage[] dps = da.listDeploymentPackages();
-		for (int i = 0; i < dps.length; i++) {
-		    if (dps[i].getName().equals("test_simple_01_02")) {
-		        dps[i].uninstall();
-		        break;
-		    }
-        }
-		
-		return true;
-    }
-
-    private boolean test_simple_01_03() {
-        FileInputStream is = null;
-        boolean found = false;
-        try {
-	        is = new FileInputStream(HOME + "test_simple_01_03.dp");
-			da.installDeploymentPackage(is);
-			
-			Bundle[] bs = context.getBundles();
-			for (int i = 0; i < bs.length; i++) {
-                Bundle b = bs[i];
-                if (b.getLocation().equals("com.nokia.easygame")) {
-                    found = true;
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            if (null != is)
-                try {
-                    is.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-        }
-        
-        // cleanup
-		
-		DeploymentPackage[] dps = da.listDeploymentPackages();
-		for (int i = 0; i < dps.length; i++) {
-		    if (dps[i].getName().equals("test_simple_01_03")) {
-		        dps[i].uninstall();
-		        break;
-		    }
-        }
-        
-        return !found;
-    }
-    
-    private boolean test_simple_01_04() {
-        FileInputStream is = null;
-        try {
-	        is = new FileInputStream(HOME + "test_simple_01_04.dp");
-			da.installDeploymentPackage(is);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            if (null != is)
-                try {
-                    is.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-        }
-        
-        // cleanup
-		
-		DeploymentPackage[] dps = da.listDeploymentPackages();
-		for (int i = 0; i < dps.length; i++) {
-		    if (dps[i].getName().equals("test_simple_01_04")) {
-		        dps[i].uninstall();
-		        break;
-		    }
-        }
-		
-		return true;
-    }
-    
-    private boolean test_customizer_01_01() {
-        FileInputStream is2 = null;
-        try {
-	        is2 = new FileInputStream(HOME + "test_customizer_01_01.dp");
-			da.installDeploymentPackage(is2);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            if (null != is2)
-                try {
-                    is2.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-        }
-        
-        // cleanup
-        
-        DeploymentPackage[] dps = da.listDeploymentPackages();
-		for (int i = 0; i < dps.length; i++) {
-		    if (dps[i].getName().equals("test_customizer_01_01")) {
-		        dps[i].uninstall();
-		        break;
-		    }
-        }
-
-		return true;
-    }
-    
+    // FOR TEST ONLY
     public static void main(String[] args) throws IOException {
         FileInputStream is = null;
         try {

@@ -25,70 +25,68 @@ import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
+/**
+ * WrappedJarInputStream class wraps the JarInputStream implementation  
+ * to override its behaviour according to the needs of the deployment 
+ * packages (DPs). See nextEntry(), close() and realClose() methods! 
+ */
 public class WrappedJarInputStream extends JarInputStream {
     
-    class Entry {
-        private String 	   name;
-        private JarEntry   jarEntry;
-        private Attributes attributes;
-        
-        public Entry(JarEntry jarEntry) throws IOException {
-            this.jarEntry = jarEntry;
-            this.name = jarEntry.getName();
-            this.attributes = jarEntry.getAttributes();
+    /**
+     * Extends the JarEntry functionality according to the needs of 
+     * the deployment packages (DPs). It is able to sign bundles, 
+     * resources and their missing variations.
+     */
+    public class Entry extends JarEntry {
+        private boolean    missing;
+        private Attributes attrs;
+
+        private Entry(JarEntry je) throws IOException {
+            super(je);
+            attrs = je.getAttributes();
         }
         
-        public Entry(String name, Attributes attributes) {
-            this.jarEntry = null;
-            this.attributes = attributes;
-            this.name = name;
+        private Entry(String name, Attributes attrs) {
+            super(name);
+            String miss = attrs.getValue(DAConstants.MISSING);
+            if (null == miss || !Boolean.valueOf(miss).booleanValue())
+                throw new RuntimeException("Internal error.");
+            
+            this.attrs = attrs;
+            missing = true;
         }
         
         public boolean isBundle() {
-            if (null == jarEntry)
-                return false;
-            String symbName = attributes.getValue("Bundle-SymbolicName");
-            String version = attributes.getValue("Bundle-Version");
+            String symbName = attrs.getValue(DAConstants.BUNDLE_SYMBOLIC_NAME);
+            String version = attrs.getValue(DAConstants.BUNDLE_VERSION);
             return null != symbName && null != version;
         }
         
-        public boolean isMissingBundle() {
-            if (null == jarEntry)
-                return false;
-            String str = attributes.getValue("MissingResource-Bundle");
-            return null != str;
-        }
-
-        public boolean isMissingResource() {
-            if (isBundle())
-                return false;
-            String str = attributes.getValue("MissingResource-Resource");
-            return null != str;
+        public boolean isCustomizerBundle() {
+            String cust = attrs.getValue(DAConstants.CUSTOMIZER);
+            boolean isCust = Boolean.valueOf(cust).booleanValue();
+            return isBundle() && isCust;
         }
 
         public boolean isResource() {
             return !isBundle();
         }
+        
+        public boolean isMissing() {
+            return missing;
+        }
 
         public Attributes getAttributes() {
-            return attributes;
-        }
-
-        public JarEntry getJarEntry() {
-            return jarEntry;
-        }
-
-        public String getName() {
-            return name;
+            return attrs;
         }
     }
     
     private Map			   resourceNames;
     private boolean		   hasToClose = false;
+    private Entry          actEntry;
     
 	public WrappedJarInputStream(InputStream is) throws IOException {
-		super(is);
-		resourceNames = new HashMap(getManifest().getEntries());
+	    this(is, false);
 	}
 
 	public WrappedJarInputStream(InputStream is, boolean verify)
@@ -97,42 +95,61 @@ public class WrappedJarInputStream extends JarInputStream {
 		resourceNames = new HashMap(getManifest().getEntries());
 	}
 	
+	/**
+	 * Gives back the next Entry in the dployment package.
+	 * The entry can be:<p> bundle<p> missing bundle<p> resource<p>
+	 * missing resource 
+	 * @return The next Entry or <code>null</code> if there is no 
+	 * more entries.
+	 * @throws IOException
+	 */
     public Entry nextEntry() throws IOException {
-        Entry entry;
-        if (hasToClose)
-            closeEntry();
+        // if the actual entry has not been closed with CloseEntry()  
+        // we do not move towards
+        if (null != actEntry)
+            return actEntry;
+        
         JarEntry je = getNextJarEntry();
         if (null == je) {
+            // The stream ended but we may have missing bundles/resources
             Iterator it = resourceNames.keySet().iterator();
             if (!it.hasNext())
-                entry = null;
+                // The stream ended and we have no more missing bundles/resources 
+                actEntry = null;
             else {
-                String key = (String) it.next();
-                entry = new Entry(key, (Attributes) resourceNames.get(key));
+                String name = (String) it.next();
+                actEntry = new Entry(name, (Attributes) resourceNames.get(name));
+            
+                // remove to ensure that the sequence of Entries ends
                 it.remove();
             }
         }
         else {
-            hasToClose = true;
-            entry = new Entry(je);
+            // We have opened a JarEntries so we have to close it 
+            // when nextEntry() is called next time
+            actEntry = new Entry(je);
+            
+            // remove to ensure that the sequence of Entries ends
             resourceNames.remove(je.getName());
         }
-        return entry;
+        return actEntry;
     }
 
 	public void close() throws IOException {
-		// does nothing
-		// because OSGi BundleContext.installBundle(String location, InputStream
-		// in)
-		// method closes the "in" InputStream and this behaviour is not allowed
-		// in JarInputStream
+		// Does nothing because e.g. OSGi 
+	    // BundleContext.installBundle(String location, InputStream in)
+		// method closes the entire JarInputStream but only the actual 
+	    // JarEntry has to be closed. To really close the stream call 
+	    // the realClose() method.
 	}
 	
+	// See the close() method!
 	void realClose() throws IOException {
 	    close();
 	}
 	
     public void closeEntry() throws IOException {
-        // nextEntry() does everything
+        super.closeEntry();
+        actEntry = null;
     }
 }

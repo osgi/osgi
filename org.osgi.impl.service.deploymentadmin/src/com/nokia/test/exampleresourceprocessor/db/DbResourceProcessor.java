@@ -19,9 +19,12 @@ import java.util.Vector;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.deploymentadmin.Logger;
+import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 
 import com.nokia.test.db.Db;
@@ -55,7 +58,7 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
     
     private transient Object                dbSession;
     private transient ByteArrayOutputStream copy;
-    private transient String 				id;
+    private transient String 				pid;
     
     /*
      * Side effect means table creation in case of this Resource Processor
@@ -75,9 +78,9 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
         s.add(tableName);
     }
     
-    public void begin(DeploymentPackage dp, int operation) {
-        this.actDp = dp;
-        this.actOp = operation;
+    public void begin(DeploymentSession session) {
+        this.actDp = session.getSourceDeploymentPackage();
+        this.actOp = session.getDeploymentAction();
         dbSession = db.begin();
         
         copy = new ByteArrayOutputStream();
@@ -90,66 +93,57 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
         }
     }
 
-    public void complete(boolean commit) {
-        if (commit) {
-            db.commit(dbSession);
-        } else {
-            db.rollback(dbSession);
-            
-            try {
-                ObjectInputStream ois = new ObjectInputStream(
-                        new ByteArrayInputStream(copy.toByteArray()));
-                dps = (Hashtable) ois.readObject();
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void process(String resName, InputStream stream) throws Exception {
+    public void process(String resName, InputStream stream) throws DeploymentException {
         deleteTables(resName);
         
-        BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-        String line = br.readLine();
-        while (null != line) {
-            if (line.startsWith("TABLE")) {
-                String[] parts = Splitter.split(line, ' ', 0);
-                String tableName = parts[1]; 
-                FieldDef[] fieldDefs = getFieldDefs(parts);
-                db.createTable(dbSession, tableName, fieldDefs);
-                putSideEffect(resName, tableName);
-            } else if (line.startsWith("INSERT")) {
-                String[] parts = Splitter.split(line, ' ', 0);
-                String tableName = parts[1];
-                Object[] row = getRow(db.getFieldDefs(dbSession, tableName), parts[2]);
-                db.insertRow(dbSession, tableName, row);
-            } else if (line.startsWith("DELETE")) {
-                String[] parts = Splitter.split(line, ' ', 0);
-                String tableName = parts[1];
-                FieldDef[] fieldDefs = db.getFieldDefs(dbSession, tableName);
-                int keyInd = FieldDef.indexOfKeyField(fieldDefs);
-                switch (fieldDefs[keyInd].type.intValue()) {
-                    case FieldDef.INTEGER :
-                        db.deleteRow(dbSession, tableName, new Integer(parts[2]));
-                        break;
-                    case FieldDef.STRING :
-                        db.deleteRow(dbSession, tableName, new String(parts[2]));
-                        break;
-                    default :
-                        break;
-                }
-            } else if (line.startsWith("SLEEP")) {
-                String[] parts = Splitter.split(line, ' ', 0);
-                long time = Integer.parseInt(parts[1]);
-                try {
-                    System.out.println("SLEEP " + time + "ms");
-                    Thread.sleep(time);
-                }
-                catch (InterruptedException e) {
-                }
-            }
-            line = br.readLine();
+        try {
+	        BufferedReader br = new BufferedReader(new InputStreamReader(stream));
+	        String line = br.readLine();
+	        while (null != line) {
+	            if (line.startsWith("TABLE")) {
+	                String[] parts = Splitter.split(line, ' ', 0);
+	                String tableName = parts[1]; 
+	                FieldDef[] fieldDefs = getFieldDefs(parts);
+	                db.createTable(dbSession, tableName, fieldDefs);
+	                putSideEffect(resName, tableName);
+	            } else if (line.startsWith("INSERT")) {
+	                String[] parts = Splitter.split(line, ' ', 0);
+	                String tableName = parts[1];
+	                Object[] row = getRow(db.getFieldDefs(dbSession, tableName), parts[2]);
+	                db.insertRow(dbSession, tableName, row);
+	            } else if (line.startsWith("DELETE")) {
+	                String[] parts = Splitter.split(line, ' ', 0);
+	                String tableName = parts[1];
+	                FieldDef[] fieldDefs = db.getFieldDefs(dbSession, tableName);
+	                int keyInd = FieldDef.indexOfKeyField(fieldDefs);
+	                switch (fieldDefs[keyInd].type.intValue()) {
+	                    case FieldDef.INTEGER :
+	                        db.deleteRow(dbSession, tableName, new Integer(parts[2]));
+	                        break;
+	                    case FieldDef.STRING :
+	                        db.deleteRow(dbSession, tableName, new String(parts[2]));
+	                        break;
+	                    default :
+	                        break;
+	                }
+	            } else if (line.startsWith("SLEEP")) {
+	                String[] parts = Splitter.split(line, ' ', 0);
+	                long time = Integer.parseInt(parts[1]);
+	                try {
+	                    System.out.println("SLEEP " + time + "ms");
+	                    Thread.sleep(time);
+	                }
+	                catch (InterruptedException e) {
+	                }
+	            }
+	            line = br.readLine();
+	        }
+        } catch (IOException e) {
+            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
+                    e.getMessage(), e);
+        } catch (Exception e) {
+            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
+                    e.getMessage(), e);
         }
     }
 
@@ -200,7 +194,7 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
         return (FieldDef[]) ret.toArray(new FieldDef[] {});
     }
 
-    public void dropped(String resName) throws Exception {
+    public void dropped(String resName) throws DeploymentException {
         Hashtable ht = (Hashtable) dps.get(actDp);
         Set effects = (Set) ht.get(resName);
         for (Iterator iter = effects.iterator(); iter.hasNext();) {
@@ -215,19 +209,20 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
     }
 
     public void start(BundleContext context) throws Exception {
-        String s = (String) context.getBundle().getHeaders().get("id");
-        id = null == s ? "default_id" : s;
+        String s = (String) context.getBundle().getHeaders().get("pid");
+        pid = null == s ? "default_pid" : s;
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         db = (Db) context.getService(ref);
         Dictionary	d = new Hashtable();
 		d.put("type", "db");
-		d.put("id", id);
+		d.put("id", pid);
+		d.put(Constants.SERVICE_PID, pid);
         context.registerService(ResourceProcessor.class.getName(), this, d);
-        System.out.println("DbResourceProcessor started. Id: " + id);
+        System.out.println("DbResourceProcessor started. Id: " + pid);
     }
 
     public void stop(BundleContext context) throws Exception {
-        System.out.println("DbResourceProcessor stopped. Id: " + id);
+        System.out.println("DbResourceProcessor stopped. Id: " + pid);
     }
     
     // FOR TEST ONLY
@@ -237,6 +232,51 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
             return null;
         Set s = (Set) ht.get(resName);
         return s;
+    }
+
+    /**
+     * @see org.osgi.service.deploymentadmin.ResourceProcessor#dropAllResources()
+     */
+    public void dropAllResources() throws DeploymentException {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     * @throws DeploymentException
+     * @see org.osgi.service.deploymentadmin.ResourceProcessor#prepare()
+     */
+    public void prepare() throws DeploymentException {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     * @see org.osgi.service.deploymentadmin.ResourceProcessor#commit()
+     */
+    public void commit() {
+        db.commit(dbSession);
+    }
+
+    /**
+     * @see org.osgi.service.deploymentadmin.ResourceProcessor#rollback()
+     */
+    public void rollback() {
+        db.rollback(dbSession);
+        
+        try {
+            ObjectInputStream ois = new ObjectInputStream(
+                    new ByteArrayInputStream(copy.toByteArray()));
+            dps = (Hashtable) ois.readObject();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @see org.osgi.service.deploymentadmin.ResourceProcessor#cancel()
+     */
+    public void cancel() {
+        // TODO Auto-generated method stub
     }
     
     // FOR TEST ONLY

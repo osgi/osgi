@@ -13,6 +13,7 @@ import java.util.Vector;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 
 public class Transaction {
@@ -40,22 +41,22 @@ public class Transaction {
     private List                  steps;
     private HashSet               processors;
     private Logger                logger;
-    private DeploymentPackageImpl dp;
+    private DeploymentSession	  session;
     private boolean 			  cancelled;
     
     // Transaction is singleton
-    private static Transaction instance = null;
-    private Transaction(Logger logger) {
-        this.logger = logger;
+    private static Transaction instance;
+    private Transaction() {
     }
-    public static Transaction createTransaction(Logger logger) {
+    public static Transaction createTransaction(DeploymentSession session, Logger logger) {
         if (null == instance)
-            instance = new Transaction(logger);
+            instance = new Transaction();
+        instance.logger = logger;
+        instance.session = session;
         return instance;
     }
     
-    public void start(DeploymentPackageImpl dp) {
-        this.dp = dp;
+    public void start() {
         steps = new Vector();
         processors = new HashSet();
         cancelled = false;
@@ -72,9 +73,7 @@ public class Transaction {
                 return true;
             }
             else {
-                DeploymentPackage dp = (DeploymentPackage) record.objs[1];
-                int lce = ((Integer) record.objs[2]).intValue();
-                proc.begin(dp, lce);
+                proc.begin(session);
                 processors.add(proc);
             }
         }
@@ -95,7 +94,7 @@ public class Transaction {
 	                    break;
 	                case UNINSTALLBUNDLE :
 	                    ((Bundle) element.objs[0]).uninstall();
-	                    dp.stopCustomizerBundle();
+	                    // TODO dp.stopCustomizerBundle();
 	                    break;
 	                case STARTBUNDLE :
 	                    break;
@@ -103,7 +102,7 @@ public class Transaction {
 	                    break;
 	                case PROCESSOR:
 	                    ResourceProcessor proc = (ResourceProcessor) element.objs[0];
-	                    proc.complete(true);
+	                    proc.commit();
 	                    break;
 	                case FILTERS:
 	                    break;
@@ -133,11 +132,9 @@ public class Transaction {
 	            switch (element.code) {
 	                case INSTALLBUNDLE : {
 	                    uninstallBundle((Bundle) element.objs[0]);
-	                    Set bundles = (Set) element.objs[1];
-	                    BundleEntry be = (BundleEntry) element.objs[2];
-	                    bundles.remove(be);
 	                    break;
-	                } case UPDATEBUNDLE :
+	                } 
+	                case UPDATEBUNDLE :
 	                    break;
 	                case UNINSTALLBUNDLE : {
 	                    Set bundles = (Set) element.objs[1];
@@ -152,7 +149,7 @@ public class Transaction {
 	                    break;
 	                case PROCESSOR:
 	                    ResourceProcessor proc = (ResourceProcessor) element.objs[0];
-	                    proc.complete(false);
+	                    proc.rollback();
 	                    break;
 	                case FILTERS:
 	                    Hashtable filters = (Hashtable) element.objs[0];

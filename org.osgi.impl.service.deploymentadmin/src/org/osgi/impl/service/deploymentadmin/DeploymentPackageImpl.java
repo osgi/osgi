@@ -1,3 +1,20 @@
+/*
+ * ============================================================================
+ * (c) Copyright 2004 Nokia
+ * This material, including documentation and any related computer programs,
+ * is protected by copyright controlled by Nokia and its licensors. 
+ * All rights are reserved.
+ * 
+ * These materials have been contributed  to the Open Services Gateway 
+ * Initiative (OSGi)as "MEMBER LICENSED MATERIALS" as defined in, and subject 
+ * to the terms of, the OSGi Member Agreement specifically including, but not 
+ * limited to, the license rights and warranty disclaimers as set forth in 
+ * Sections 3.2 and 12.1 thereof, and the applicable Statement of Work. 
+ * All company, brand and product names contained within this document may be 
+ * trademarks that are the sole property of the respective owners.  
+ * The above notice must be included on all copies of this document.
+ * ============================================================================
+ */
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.File;
@@ -11,8 +28,10 @@ import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
@@ -24,8 +43,11 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
+import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
@@ -34,35 +56,54 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     private transient BundleContext 	  context;
     private transient Logger 		      logger; 
-    private transient Tracker             tracker;
-    private transient DeploymentAdminImpl admin;
-    private transient Transaction		  transaction;
+    //private transient Tracker             tracker;
+    //private transient DeploymentAdminImpl admin;
+    //private transient Transaction		  transaction;
 
-    private transient WrappedJarInputStream stream;
-    private transient Manifest			    manifest;
-    private transient boolean 			    isFixPack;
-
-    private String 			              dpManVer;
-    private String 			              dpName;
-    private String 			              dpVersion;
-    private String 						  customizerBundle;
-    private Hashtable                     filters = new Hashtable();
-    private HashSet 					  resources = new HashSet();
+    //private transient WrappedJarInputStream stream;
+    //private transient Manifest			    manifest;
+    //private transient boolean 			    isFixPack;
+    
+    // TODO create a VersionRange class
+    private String  fixPackRange;	
+    private String  dpName;
+    private String  dpVersion;
+    private Integer id;
+    
+    private Map mainSection = new Hashtable();
+    private Vector bundleEntries = new Vector();
+    private Vector resourceEntries = new Vector();
+    
+    //private Hashtable                     filters = new Hashtable();
+    //private HashSet 					  resources = new HashSet();
     
     // these Sets contains BundleEntries
-    private Set 						  bundles  = new HashSet();
-    private transient Set				  newBundles;
-    private transient Set				  updatedBundles;
-    private transient Set				  pendingBundles;
+    //private Set 						  bundles  = new HashSet();
+    //private transient Set				  newBundles;
+    //private transient Set				  updatedBundles;
+    //private transient Set				  pendingBundles;
     
-    private int 						  id;
+    // to create a non-empty DP
+    public DeploymentPackageImpl(Manifest manifest, int id) {
+        dpName = manifest.getMainAttributes().getValue("DeploymentPackage-Name");
+        fixPackRange = manifest.getMainAttributes().getValue("DeploymentPackage-FixPack");
+        dpVersion = manifest.getMainAttributes().getValue("DeploymentPackage-Version");
+        this.id = new Integer(id);
+        
+        processMainSection(manifest);
+        processNameSections(manifest);
+    }
+    
+    // to create an empty DP
+    public DeploymentPackageImpl() {
+    }
     
     public boolean equals(Object obj) {
         if (null == obj)
             return false;
-        if (!(obj instanceof DeploymentPackageImpl))
+        if (!(obj instanceof DeploymentPackage))
             return false;
-        DeploymentPackageImpl other = (DeploymentPackageImpl) obj;
+        DeploymentPackage other = (DeploymentPackage) obj;
         return getName().equals(other.getName()) &&
                getVersion().equals(other.getVersion());
     }
@@ -72,24 +113,210 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
     
     public String toString() {
-        StringBuffer b = new StringBuffer();
-        b.append("{");
-        b.append(getName() + " " + getVersion() + " ");
-        b.append("filters: " + filters);
-        b.append("id: " + id);
-        b.append("}");
-        return b.toString();
+        return "{" + getName() + " " + getVersion() + "}";
     }
 
-    private class Tracker extends ServiceTracker {
-        public Tracker() {
-            super(DeploymentPackageImpl.this.context, ResourceProcessor.class
-                    .getName(), null);
+    private void processMainSection(Manifest manifest) {
+        Attributes attrs = manifest.getMainAttributes();
+        for (Iterator iter = attrs.keySet().iterator(); iter.hasNext();) {
+            Attributes.Name key = (Attributes.Name) iter.next();
+            Object value = attrs.getValue(key);
+            mainSection.put(key.toString(), value);
+        }
+    }
+
+    private void processNameSections(Manifest manifest) {
+        Map entries = manifest.getEntries();
+        for (Iterator iter = entries.keySet().iterator(); iter.hasNext();) {
+            String resPath = (String) iter.next();
+            Attributes attrs = (Attributes) entries.get(resPath);
+            String bSn = (String) attrs.getValue("Bundle-SymbolicName");
+            String bVer = (String) attrs.getValue("Bundle-Version");
+            if (null != bSn && null != bVer) {
+                // bundle
+                BundleEntry be = new BundleEntry(bSn, bVer);
+                bundleEntries.add(be);
+            } else {
+                // resource
+                resourceEntries.add(new ResourceEntry(resPath, attrs));
+            }
         }
     }
     
+    Vector getBundleEntries() {
+        return bundleEntries;
+    }
+    
+    Vector getResourceEntries() {
+        return resourceEntries;
+    }
+
+    /**
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getBundleSymNameVersionPairs()
+     */
+    public String[][] getBundleSymNameVersionPairs() {
+        String[][] ret = new String[bundleEntries.size()][2];
+        int i = 0;
+        for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            ret[i][0] = be.symbName;
+            ret[i][1] = be.version;
+            ++i;    
+        }
+        return ret;
+    }
+    
+    /**
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResources()
+     */
+    public String[] getResources() {
+        String[]ret = new String[resourceEntries.size()];
+        int i = 0;
+        for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
+            ResourceEntry re = (ResourceEntry) iter.next();
+            ret[i] = re.getName();
+            ++i;    
+        }
+        return ret;
+    }
+
+    /**
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResourceHeader(java.lang.String, java.lang.String)
+     */
+    public String getResourceHeader(String name, String header) {
+        for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
+            ResourceEntry re = (ResourceEntry) iter.next();
+            if (re.getName().equals(name))
+                return re.getValue(header);
+        }
+        return null;
+    }
+
+    /**
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getHeader(java.lang.String)
+     */
+    public String getHeader(String name) {
+        return (String) mainSection.get(name);
+    }
+
+    /**
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getId()
+     */
+    public long getId() {
+        return null == id ? -1 : id.longValue();
+    }
+
+    /**
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getName()
+     */
+    public String getName() {
+        return dpName;
+    }
+
+    /**
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getVersion()
+     */
+    public Version getVersion() {
+        return new Version(dpVersion); 
+    }
+
+    /**
+     * @param arg0
+     * @return
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getBundle(java.lang.String)
+     */
+    public Bundle getBundle(String arg0) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * @param arg0
+     * @return
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResourceProcessor(java.lang.String)
+     */
+    public ServiceReference getResourceProcessor(String arg0) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * @throws DeploymentException
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#uninstall()
+     */
+    public void uninstall() throws DeploymentException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    /**
+     * @return
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#uninstallForceful()
+     */
+    public boolean uninstallForceful() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    boolean fixPack() {
+        return fixPackRange != null;
+    }
+    
+    /********************************************************************/
+    /********************************************************************/
+    /********************************************************************/
+    /********************************************************************/
+
+    // Class to track resource processors
+    /*private class Tracker extends ServiceTracker {
+        public Tracker() {
+            super(DeploymentPackageImpl.this.context, 
+                    ResourceProcessor.class.getName(), null);
+        }
+    }
+    
+    DeploymentPackageImpl(Manifest manifest, 
+                          BundleContext context, 
+                          DeploymentAdminImpl admin,
+                          Logger logger,
+                          Transaction transaction) 
+    {
+        this.context = context;
+        this.admin = admin;
+        this.logger = logger;
+        this.transaction = transaction;
+        
+        dpManVer = manifest.getMainAttributes().getValue("DeploymentPackage-ManifestVersion");
+        dpName = manifest.getMainAttributes().getValue("DeploymentPackage-Name");
+        isFixPack = (null != manifest.getMainAttributes().getValue("DeploymentPackage-FixPack"));
+        customizerBundle = manifest.getMainAttributes().getValue("DeploymentPackage-ProcessorBundle");
+        dpVersion = new Version(manifest.getMainAttributes().getValue("DeploymentPackage-Version"));
+        
+        processNameSections(manifest);
+    }
+    
+
+    public boolean equals(Object obj) {
+        if (null == obj)
+            return false;
+        if (!(obj instanceof DeploymentPackage))
+            return false;
+        DeploymentPackage other = (DeploymentPackage) obj;
+        return getName().equals(other.getName()) &&
+               getVersion().equals(other.getVersion());
+    }
+    
+    public int hashCode() {
+        return (getName() + getVersion()).hashCode();
+    }
+    
+    public String toString() {
+        return "{" + getName() + " " + getVersion() + "}";
+    }
+    
     void startTracker() {
-        tracker = new Tracker();
+        if (null == tracker)
+            tracker = new Tracker();
         tracker.open();
     }
     
@@ -106,34 +333,21 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         this.admin = admin;
     }
 
-    
-    public boolean fixPack() {
-        return isFixPack;
-    }
-    
-    public DeploymentPackageImpl(WrappedJarInputStream in, BundleContext context,
-            DeploymentAdminImpl admin, Logger logger, Transaction transaction) throws Exception {
-        this.context = context;
-        this.admin = admin;
-        this.stream = in;
-        this.manifest = stream.getManifest();
-        this.logger = logger;
-        this.transaction = transaction;
-        
-        dpManVer = manifest.getMainAttributes().getValue("DeploymentPackage-ManifestVersion");
-        dpName = manifest.getMainAttributes().getValue("DeploymentPackage-Name");
-        dpVersion = manifest.getMainAttributes().getValue("DeploymentPackage-Version");
-        isFixPack = (null != manifest.getMainAttributes().getValue("DeploymentPackage-FixPack"));
-        customizerBundle = manifest.getMainAttributes().getValue("DeploymentPackage-ProcessorBundle");
-        
-        startTracker();
-    }
-    
-    protected void finalize() throws Throwable {
-        stopTracker();
+    public String[][] getBundleSymNameVersionPairs() {
+        return null;
     }
 
-    private Bundle installBundle(final BundleEntry bundleEntry, final JarInputStream jis)
+    /**
+     * @param arg0
+     * @return
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResourceProcessor(java.lang.String)
+     */
+    /*public ServiceReference getResourceProcessor(String arg0) {
+        // TODO Auto-generated method stub
+        return null;
+    }*/
+
+    /*private Bundle installBundle(final BundleEntry bundleEntry, final JarInputStream jis)
             throws BundleException 
     {
         Bundle b = context.installBundle(bundleEntry.location, jis);
@@ -144,9 +358,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         transaction.addRecord(new TransactionRecord(
                 Transaction.INSTALLBUNDLE, new Object[] {b, bundles, be}));
         return b;
-    }
+    }*/
 
-    private void uninstallBundles(Set set) throws BundleException {
+    /*private void uninstallBundles(Set set) throws BundleException {
         for (Iterator iter = set.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             Bundle b = context.getBundle(be.id.longValue());
@@ -160,9 +374,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             transaction.addRecord(new TransactionRecord(
                     Transaction.UNINSTALLBUNDLE, new Object[] {b, bundles, be}));
         }
-     }
+     }*/
 
-    private Bundle updateBundle(BundleEntry bundleEntry, JarInputStream jis)
+    /*private Bundle updateBundle(BundleEntry bundleEntry, JarInputStream jis)
     		throws BundleException 
     {
         Bundle[] bundles = context.getBundles();
@@ -177,16 +391,16 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             }
         }
         return null;
-    }
+    }*/
     
-    private void startBundle(Bundle b) throws BundleException {
+    /*private void startBundle(Bundle b) throws BundleException {
         if (b.getState() != Bundle.ACTIVE)
             b.start();
         transaction.addRecord(new TransactionRecord(
                 Transaction.STARTBUNDLE, new Object[] {b}));
-    }
+    }*/
 
-    private void startBundles() throws BundleException {
+    /*private void startBundles() throws BundleException {
         for (Iterator iter = bundles.iterator(); iter.hasNext();) {
             BundleEntry entry = (BundleEntry) iter.next();
             Bundle b = context.getBundle(entry.id.longValue());
@@ -215,11 +429,11 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 	                    Transaction.STOPBUNDLE, new Object[] {b}));
             }
         }
-    }
+    }*/
     
     // called from the Transaction.commit because RP in the processor 
     // bundle is needed until ResourceProcessor.complete
-    void stopCustomizerBundle() throws BundleException {
+    /*void stopCustomizerBundle() throws BundleException {
         for (Iterator iter = bundles.iterator(); iter.hasNext();) {
             BundleEntry bentry = (BundleEntry) iter.next();
             if (isCustomizerBundle(bentry)) {
@@ -240,16 +454,16 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             return null;
         String location = admin.location(symbName, version);
         return new BundleEntry(location, symbName, version, -1);
-    }
+    }*/
 
-    private boolean isCustomizerBundle(BundleEntry bentry) {
+    /*private boolean isCustomizerBundle(BundleEntry bentry) {
         if (bentry.symbName.equals(customizerBundle))
         	return true;
         else
             return false;
-    }
+    }*/
 
-    private void extractFilters(String str) throws InvalidSyntaxException {
+    /*private void extractFilters(String str) throws InvalidSyntaxException {
         if (null == str)
             return;
         String[] filters = Splitter.split(str, ',', 0);
@@ -266,7 +480,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             
             addFilter(resFilter, procFilter);
         }
-    }
+    }/*
     
     // TODO is it needed?
     private boolean isBundleFilter(String filter) {
@@ -285,11 +499,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return dpName;
     }
 
-    public String getVersion() {
-        return dpVersion;
-    }
-
-    public Bundle[] listBundles() {
+    /*public Bundle[] listBundles() {
         Vector ret = new Vector(bundles.size());
         for (Iterator iter = bundles.iterator(); iter.hasNext();) {
             BundleEntry bentry = (BundleEntry) iter.next();
@@ -297,29 +507,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             ret.add(b);
         }
         return (Bundle[]) ret.toArray(new Bundle[] {});
-    }
+    }*/
 
-    public boolean isNew(Bundle b) {
-        BundleEntry be = new BundleEntry(b);
-        return newBundles.contains(be);
-    }
-
-    public boolean isUpdated(Bundle b) {
-        BundleEntry be = new BundleEntry(b);
-        return updatedBundles.contains(be);
-    }
-
-    public boolean isPendingRemoval(Bundle b) {
-        BundleEntry be = new BundleEntry(b);
-        return pendingBundles.contains(be);
-    }
-
-    public File getDataFile(Bundle bundle) {
-        // TODO ???
-        return null;
-    }
-
-    public void setDeploymentAdmin(DeploymentAdminImpl deploymentAdmin) {
+    /*public void setDeploymentAdmin(DeploymentAdminImpl deploymentAdmin) {
         this.admin = deploymentAdmin;
     }
 
@@ -339,7 +529,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             ResourceProcessor proc = (ResourceProcessor) tracker.
             		getService(findProcessor(resFilter, filters));
             transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, 
-                    new Object[] {proc, this, new Integer(ResourceProcessor.UPDATE)}));
+                    new Object[] {proc, this, new Integer(DeploymentSession.UPDATE)}));
             proc.dropped(resFilter);
             removeFilter(resFilter);
         }
@@ -374,7 +564,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
 
     // DeploymentPackage interface impl.
-    public void install() throws Exception {
+    void install() throws Exception {
         newBundles = new HashSet();
         
         extractFilters(manifest.getMainAttributes().getValue(
@@ -394,7 +584,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                 String resName = entry.getName();
                 ServiceReference procRef = findProcessor(resName, filters);
                 if (null != procRef) {
-                    processResource(procRef, resName, ResourceProcessor.INSTALL);
+                    processResource(procRef, resName, DeploymentSession.INSTALL);
                     addResource(resName);
                 }
                 else {
@@ -420,7 +610,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                 String resName = (String) iter.next();
                 ServiceReference procRef = findProcessor(resName, filters);
                 if (null != procRef) {
-                    processResource(procRef, resName, ResourceProcessor.UNINSTALL);
+                    processResource(procRef, resName, DeploymentSession.UNINSTALL);
                     removeResource(iter);
                 } else {
                     // it is catched by the catch clause
@@ -441,7 +631,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
 
     // TODO restart customizer first
-    public void update(WrappedJarInputStream in) throws Exception {
+    void update(WrappedJarInputStream in) throws Exception {
         this.stream = in;
         this.manifest = in.getManifest();
         newBundles = new HashSet();
@@ -479,10 +669,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                     ServiceReference procRefOld = findProcessor(resName, oldFilters);
                     ServiceReference procRefNew = findProcessor(resName, filters);
 	                if (null != procRefOld) {
-	                    processResource(procRefOld, resName, ResourceProcessor.UPDATE);
+	                    processResource(procRefOld, resName, DeploymentSession.UPDATE);
 	                    resourcesNotToDrop.add(resName);
 	                } else if (null != procRefNew) {
-	                    processResource(procRefNew, resName, ResourceProcessor.UPDATE);
+	                    processResource(procRefNew, resName, DeploymentSession.UPDATE);
 	                    resourcesNotToDrop.add(resName);
 	                } else {
 	                    // it is catched by the catch clause
@@ -584,6 +774,6 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 	        return;
 	    Permission perm = new DeploymentAdminPermission(filter, action);
 	    sm.checkPermission(perm);
-	}
-
+	}*/
+   
 }

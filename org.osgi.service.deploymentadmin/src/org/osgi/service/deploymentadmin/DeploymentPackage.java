@@ -28,79 +28,115 @@
 package org.osgi.service.deploymentadmin;
 
 import org.osgi.framework.Bundle;
-import java.io.File;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
 
 /**
-  * The ResourcePackage object represents the a resource package (already installed
-  * or being currently processed)
+  * The DeploymentPackage object represents a deployment package (already installed
+  * or being currently processed).
   */
 public interface DeploymentPackage {
-/**
-  * Returns the identifier of the deployment package.  Every installed deployment package 
-  * has its own unique identifier.  Once uninstalled, a deployment package will have an 
-  * identifier value of -1.
-  * @return The ID of the resource package.
-  */
-  long getId();
-/**
-  * Returns the name of the deployment package.
-  * @return The name of the deployment package.
-  */
-  String getName();
-/**
-  * Returns the version of the deployment package.
-  */
-  String getVersion();
-/**
-  * Uninstalls the deployment package. After uninstallation, the deployment package 
-  * object becomes stale.  This can be checked by using DeploymentPackage:getId(), which 
-  * will return a -1 when stale.   
-  */
-  void uninstall();
-/**
-  * Lists the bundles belonging to the deployment package.  The returned list is not 
-  * guaranteed to be up-to-date before the complete() method on ResourceProcessor is called.
-  * @return An array of bundles contained within the deployment package.    
-  */
-  Bundle[] listBundles ();
-/**
-  * Allows querying whether the specified bundle is being newly installed by the current 
-  * operation on the deployment package.  This method gives resource processors the ability 
-  * to query the effects of the current operation, which may be either commit or rollback.  
-  * In the case of a rollback, the bundle would be returned to its previous version before the 
-  * update operation was attempted.
-  * @param b Bundle to query.
-  * @return True if the bundle is newly installed by this deployment package, other False.
-  * @throws ###WhatException Throws an exception if called outside an operation on this deployment package.
-  */
-  boolean isNew(Bundle b);
-/**
-  * Allows querying whether this bundle is being updated by the current operation on the 
-  * deployment package.  This method allows resource processors to query the effects of the 
-  * current operation, which may be either commit or rollback.  If the operation commits, the 
-  * bundle will be uninstalled.  In the case of a rollback, the bundle would be returned to its 
-  * previous version before the update operation was attempted.  
-  * @param b Bundle to query.
-  * @return True if the bundle is updated by this deployment package, otherwise False.
-  * @throws ###WhatException Throws an exception if called outside an operation on this deployment package.
-  */
-  boolean isUpdated(Bundle b);
-/**
-  * Allows querying whether this bundle is pending removal within the current operation on 
-  * the deployment package.  This method allows resource processors to query the effects of 
-  * the current operation, which may be either commit or rollback.  If the operation commits, 
-  * the bundle will be uninstalled.  In the case of a rollback, the bundle will not be 
-  * uninstalled.  
-  * @param b Bundle to query.
-  * @return True if the bundle is updated by this deployment package, otherwise False.
-  * @throws ###WhatException Throws an exception if called outside an operation on this deployment package.
-  */
-  boolean isPendingRemoval(Bundle b);
-/**
-  * Returns the private data area descriptor area of the specified bundle, which must be a 
-  * part of the deployment package.  
-  * @param bundle A specified bundle
-  * @return The private data area descriptor of the bundle, or null in case of error.
-  */
-  File getDataFile( Bundle bundle );
+ 
+	/**
+	 * Returns the identifier of the deployment package.  Every installed deployment package 
+	 * has its own unique identifier.
+	 * @return The ID of the resource package.
+	 */
+    long getId();
+	  
+	/**
+	 * Returns the name of the deployment package.
+	 * @return The name of the deployment package.
+	 */
+	String getName();
+	  
+	/**
+	 * Returns the version of the deployment package.
+	 * @return version of the deployment package
+	 */
+	Version getVersion();
+	  
+	/**
+	 * Returns an 2D array of strings representing the bundles and their version that
+	 * are specified in the manifest of this deployment package
+	 * @return The 2d string array corresponding to bundle symbolic name and version pairs
+	 */
+    String[][] getBundleSymNameVersionPairs();  
+ 
+    /**
+     * Returns the bundle instance that corresponds to the bundle's name/version pair.
+     * This method will return null for request for bundle/version pairs that are not part 
+     * of this deployment package.
+     * As this instance is transient, this method may return null if the bundle/version pair
+     * is part of this deployment package, but is not currently defined to the framework.
+     * @return The deployment package instance for a given bundle name/version pair.
+     */
+    Bundle getBundle(String bundleSymName);
+    
+    /**
+     * Returns an array of strings representing the resources that are specified in 
+     * the  manifest of this deployment package
+     * @return The string array corresponding to resources
+     */
+    String[] getResources();   
+    
+    /**
+     * At the time of deployment, resource processor service instances are located to 
+     * processor the resources contained in a deployment package.  This call returns a 
+     * service reference 
+     * to the corresponding service instance.
+     * If this call is made during deployment, prior to the locating of the service to 
+     * process a given resource, null will be returned.
+     * Services can be updated after a deployment packahge has been deployed.  In this event, 
+     * this call will return a reference to the updated service, not to the instance that was
+     * used at deployment time.
+     * @return resource procesor for the resource 
+     */
+    ServiceReference getResourceProcessor(String resource);    
+
+    /**
+     * Returns the requested deployment package manifest header from the main section. 
+     * Header names are case insensitive.  
+     * @param name the requested header
+     * @return the value of the header
+     */
+    String getHeader(String name);
+
+    /**
+     * Returns the requested deployment package manifest header from the name 
+     * section determined by the path parameter. Header names are case insensitive.  
+     * @param name the requested header
+     * @return the value of the header
+     */
+    String getResourceHeader(String path, String header);
+    
+	/**
+	  * Uninstalls the deployment package. After uninstallation, the deployment package 
+	  * object becomes stale.  This can be checked by using DeploymentPackage:getId(), which 
+	  * will return a -1 when stale.   
+	  * @throws DeploymentException if the deployment package could not be successfully uninstalled. 
+	  */
+    void uninstall() throws DeploymentException;
+ 
+    /**
+     * This method is called to completely uninstall a deployment package, which couldn't be uninstalled
+     * using traditional means due to exceptions.
+     * @return true if the operation was successful
+     */  
+    boolean uninstallForceful();  
+ 
+    /**
+     * Returns a hash code value for the object.
+     * @return a hash code value for this object
+     */
+    int hashCode();
+  
+    /**
+     * Indicates whether some other object is "equal to" this one. Two deployment packages 
+     * are equal if they have the sam name and version.
+     * @param other the reference object with which to compare.
+     * @return true if this object is the same as the obj argument; false otherwise.
+     */
+    boolean equals(Object other);
+  
 }

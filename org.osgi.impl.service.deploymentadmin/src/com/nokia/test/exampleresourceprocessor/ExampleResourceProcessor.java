@@ -28,9 +28,9 @@ import org.osgi.service.deploymentadmin.ResourceProcessor;
  * Resource files that have a resource name begining with "bye" are stored persistently 
  * and printed at uninstall.
  */
-public class ExampleResourceProcessor implements ResourceProcessor, BundleActivator,
-		Serializable {
-
+public class ExampleResourceProcessor /*implements ResourceProcessor, BundleActivator,
+		Serializable*/ {
+/*
     // the id of the RP (this string is printed before 
     // each tranBuffer lines)
     private transient String            id;
@@ -203,6 +203,6 @@ public class ExampleResourceProcessor implements ResourceProcessor, BundleActiva
 	}
 
 	public void stop(BundleContext context) throws Exception {
-	}
+	}*/
 	
 }

@@ -1,0 +1,251 @@
+/*
+ * ============================================================================
+ * (c) Copyright 2004 Nokia
+ * This material, including documentation and any related computer programs,
+ * is protected by copyright controlled by Nokia and its licensors. 
+ * All rights are reserved.
+ * 
+ * These materials have been contributed  to the Open Services Gateway 
+ * Initiative (OSGi)as "MEMBER LICENSED MATERIALS" as defined in, and subject 
+ * to the terms of, the OSGi Member Agreement specifically including, but not 
+ * limited to, the license rights and warranty disclaimers as set forth in 
+ * Sections 3.2 and 12.1 thereof, and the applicable Statement of Work. 
+ * All company, brand and product names contained within this document may be 
+ * trademarks that are the sole property of the respective owners.  
+ * The above notice must be included on all copies of this document.
+ * ============================================================================
+ */
+package org.osgi.impl.service.deploymentadmin;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.Vector;
+import java.util.jar.JarInputStream;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.deploymentadmin.DeploymentException;
+import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.deploymentadmin.DeploymentSession;
+import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.util.tracker.ServiceTracker;
+
+public class DeploymentSessionImpl implements DeploymentSession {
+    
+    private DeploymentPackageImpl       srcDp;
+    private DeploymentPackageImpl       targetDp;
+    private int                         action;
+    private Transaction                 transaction;
+    private Logger                      logger;
+    private BundleContext               context;
+    private Tracker                     tracker;
+    
+    /*
+     * Class to track resource processors
+     */
+    private class Tracker extends ServiceTracker {
+        public Tracker() {
+            super(DeploymentSessionImpl.this.context, 
+                    ResourceProcessor.class.getName(), null);
+        }
+    }
+
+    DeploymentSessionImpl(DeploymentPackageImpl srcDp, DeploymentPackageImpl targetDp, int action,
+            Logger logger, BundleContext context) 
+    {
+        this.srcDp = srcDp;
+        this.targetDp = targetDp;
+        this.action = action;
+        this.logger = logger;
+        this.context = context;
+        tracker = new Tracker();
+    }
+
+    /**
+     * @return
+     * @see org.osgi.service.deploymentadmin.DeploymentSession#getDeploymentAction()
+     */
+    public int getDeploymentAction() {
+        return action;
+    }
+
+    /**
+     * @return
+     * @see org.osgi.service.deploymentadmin.DeploymentSession#getTargetDeploymentPackage()
+     */
+    public DeploymentPackage getTargetDeploymentPackage() {
+        return targetDp;
+    }
+
+    /**
+     * @return
+     * @see org.osgi.service.deploymentadmin.DeploymentSession#getSourceDeploymentPackage()
+     */
+    public DeploymentPackage getSourceDeploymentPackage() {
+        return srcDp;
+    }
+
+    /**
+     * @param arg0
+     * @return
+     * @see org.osgi.service.deploymentadmin.DeploymentSession#getDataFile(org.osgi.framework.Bundle)
+     */
+    public File getDataFile(Bundle arg0) {
+        // TODO
+        return null;
+    }
+
+    void go(WrappedJarInputStream wjis) throws DeploymentException {
+        tracker.open();
+        transaction = Transaction.createTransaction(this, logger);
+        try {
+            transaction.start();
+            processBundles(wjis);
+            processResources(wjis);
+            // TODO startBundles();
+        } catch (Exception e) {
+            transaction.rollback();
+            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR, 
+                    e.getMessage(), e);
+        }
+        transaction.commit();
+        tracker.close();
+    }
+
+    private void processResources(WrappedJarInputStream wjis) throws DeploymentException, IOException {
+        WrappedJarInputStream.Entry entry = wjis.nextEntry();
+        while (null != entry && entry.isResource()) 
+        {
+            if (!entry.isMissing())
+                processResource(entry, wjis);
+            else
+                ; // do nothing
+            wjis.closeEntry();
+            entry = wjis.nextEntry();
+        }
+        
+        dropResources();
+    }
+
+    /*
+     * Drop rsources that don't present in the DP and are not 
+     * marked as missing resources
+     */
+    private void dropResources() throws DeploymentException {
+        Set toDrop = new HashSet(targetDp.getResourceEntries());
+        Set tmpSet = new HashSet(srcDp.getResourceEntries());
+        toDrop.removeAll(tmpSet);
+        for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
+            ResourceEntry re = (ResourceEntry) iter.next();
+            dropResource(re);
+        }
+    }
+
+    /*
+     * Drops a particluar resource
+     */
+    private void dropResource(ResourceEntry re) throws DeploymentException {
+        ResourceProcessor proc = findProcessor(re.getValue(DAConstants.RP_PID));
+        transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, 
+                new Object[] {proc}));
+        proc.dropped(re.getName());
+    }
+
+    private ResourceProcessor findProcessor(String pid) {
+        ServiceReference[] refs = tracker.getServiceReferences();
+        for (int i = 0; i < refs.length; i++) {
+            ServiceReference ref = refs[i];
+            String s_pid = (String) ref.getProperty(Constants.SERVICE_PID);
+            if (pid.equals(s_pid))
+                return (ResourceProcessor) tracker.getService(ref);
+        }
+        return null;
+    }
+    
+    private void processResource(WrappedJarInputStream.Entry entry, JarInputStream jis) throws DeploymentException {
+        String pid = entry.getAttributes().getValue(DAConstants.RP_PID);
+        ResourceProcessor proc = findProcessor(pid);
+        transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, 
+                new Object[] {proc}));
+        proc.process(entry.getName(), jis);
+    }
+    
+    private void processBundles(WrappedJarInputStream wjis) throws BundleException, IOException {
+        WrappedJarInputStream.Entry entry = wjis.nextEntry();
+        while (null != entry && entry.isBundle()) 
+        {
+            if (!entry.isMissing()) {
+                Bundle b = processBundle(entry, wjis);
+                if (entry.isCustomizerBundle())
+                    startBundle(b);
+            }
+            else
+                ; // do nothing
+            wjis.closeEntry();
+            entry = wjis.nextEntry();
+        }
+        
+        // TODO dropBundles();
+    }
+    
+    private Bundle processBundle(WrappedJarInputStream.Entry entry, WrappedJarInputStream wjis) 
+    		throws BundleException 
+    {
+        Bundle ret;
+        BundleEntry be = new BundleEntry(entry);
+        Vector srcEntries = srcDp.getBundleEntries();
+        Vector targetEntries = targetDp.getBundleEntries();
+        if (targetEntries.contains(be)) {
+            ret = updateBundle(be, wjis);
+        } else {
+            ret = installBundle(be, wjis);
+        }
+        return ret;
+    }
+
+    private Bundle installBundle(BundleEntry be, JarInputStream jis)
+    		throws BundleException
+    {
+		Bundle b = context.installBundle(be.symbName, jis);
+		be.id = new Long(b.getBundleId());
+		transaction.addRecord(new TransactionRecord(
+		        Transaction.INSTALLBUNDLE, new Object[] {b}));
+		return b;
+    }
+    
+    private Bundle updateBundle(BundleEntry be, JarInputStream jis)
+			throws BundleException 
+    {
+        Bundle[] bundles = context.getBundles();
+        for (int i = 0; i < bundles.length; i++) {
+            Bundle b = bundles[i];
+            if (b.getLocation().equals(be.symbName)) {
+                b.update(jis);
+                transaction.addRecord(new TransactionRecord(
+                        Transaction.UPDATEBUNDLE, new Object[] {b}));
+                return b;
+            }
+        }
+        return null;
+    }
+    
+    private void startBundle(Bundle b) throws BundleException {
+        if (b.getState() != Bundle.ACTIVE)
+            b.start();
+        transaction.addRecord(new TransactionRecord(
+                Transaction.STARTBUNDLE, new Object[] {b}));
+    }
+
+    public void cancel() {
+        // TODO
+    }
+    
+}
