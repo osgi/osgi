@@ -30,11 +30,11 @@
 
 package org.osgi.test.cases.classpath.tbc;
 
-import java.net.*;
-
 import org.osgi.framework.*;
 import org.osgi.test.cases.classpath.tbc.exp.*;
 import org.osgi.test.cases.util.*;
+
+import java.net.*;
 
 public class ClassPathControl extends DefaultTestBundleControl {
 	static String[]	methods	= new String[]{"testImportUninstalledCode",
