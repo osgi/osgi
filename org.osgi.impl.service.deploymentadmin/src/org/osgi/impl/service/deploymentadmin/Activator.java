@@ -39,7 +39,7 @@ import org.osgi.framework.*;
 public class Activator implements BundleActivator {
 	DeploymentPlugin			deploymentPlugin = new DeploymentPlugin();
 	URLProtocolPlugin			urlProtocolPlugin = new URLProtocolPlugin();
-	DeploymentAdmin				deploymentAdmin = new DeploymentAdmin();
+	DeploymentAdminImpl			deploymentAdmin = new DeploymentAdminImpl();
 	ApplicationContainerPackageHandler applicationContainerPackageHandler = new ApplicationContainerPackageHandler();
 	
 	public void start(BundleContext context) throws Exception {

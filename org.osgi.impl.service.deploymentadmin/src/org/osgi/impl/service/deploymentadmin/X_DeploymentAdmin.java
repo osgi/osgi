@@ -26,7 +26,7 @@ import org.osgi.impl.service.megcontainer.MEGContainer;
 import org.osgi.service.application.ApplicationContainer;
 import org.osgi.util.tracker.ServiceTracker;
 
-public class DeploymentAdmin implements PackageHandler, BundleActivator {
+public class X_DeploymentAdmin implements PackageHandler, BundleActivator {
 	// the DeploymentAdmin notifies the MEG Container that a bundle was
 	// installed
 	private static final String	CONTAINER_MEG	= "MEG";
