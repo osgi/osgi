@@ -1,9 +1,10 @@
 Manifest-Version: 1.0
 Bundle-Name: MEGContainer
+Bundle-SymbolicName: ${p}
 Bundle-Vendor: Nokia
 Bundle-Version: 1.0
 Bundle-ClassPath: .,nanoxml.jar
-Bundle-Activator: $(p).MEGContainerBundleActivator
+Bundle-Activator: $(p).Activator
 DynamicImport-Package: *
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
