@@ -195,4 +195,14 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 		assertEquals(1,pi.length);
 		assertEquals(IMPORTFRAMEWORKPERMISSION,pi[0]);
 	}
+	
+	public void testPermissionChildNodes() throws Exception {
+		permAdmin.setPermissions(LOCATION1,new PermissionInfo[]{ADMINPERMISSION});
+		newAtomicSession();
+		String[] names = dmtSession.getChildNodeNames(LOCATION1_HASH);
+		Arrays.sort(names);
+		assertEquals(2,names.length);
+		assertEquals("Location",names[0]);
+		assertEquals("PermissionInfo",names[1]);
+	}
 }

@@ -371,6 +371,13 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 			keys = (String[]) entries.keySet().toArray(keys);
 			return keys;
 		}
+		if (path.length==1) {
+			if (DEFAULT.equals(path[0])) {
+				return new String[] { LOCATION };
+			} else {
+				return new String[] { LOCATION, PERMISSIONINFO };
+			}
+		}
 		throw new IllegalStateException("not implemented");
 		// TODO Auto-generated method stub
 	}
