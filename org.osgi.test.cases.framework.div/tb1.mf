@@ -1,12 +1,12 @@
 Manifest-Version: 1.0
 $(IMPORT-PACKAGE)
-Bundle-Name: test.cases.div.tb1
+Bundle-Name: test.cases.framework.div.tb1
 Bundle-Description: Contains the manifest checked by the test case.
 Bundle-Vendor: Ericsson Radio Systems AB
 Bundle-Version: 1.0.0
 Bundle-DocURL: http://www.ericsson.com
 Bundle-ContactAddress: info@ericsson.com
-Bundle-Activator: org.osgi.test.cases.div.tb1.CheckManifest
+Bundle-Activator: org.osgi.test.cases.framework.div.tb1.CheckManifest
 FakeHeader: This bundle is defined by developper and should be
   ignored by framework
 Export-Package: org.osgi.dummy1;

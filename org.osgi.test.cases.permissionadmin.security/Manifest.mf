@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
-Bundle-Name: test.cases.permissionpermissions
+Bundle-Name: test.cases.permissionadmin.security
 Bundle-Description: Tests the Permission Admin service
 Bundle-Version: 3.0
-Bundle-Activator: org.osgi.test.cases.permissionpermissions.PermissionPermissionsTestCase
+Bundle-Activator: org.osgi.test.cases.permissionadmin.security.PermissionPermissionsTestCase
 Bundle-Vendor: OSGi Alliance
 Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org

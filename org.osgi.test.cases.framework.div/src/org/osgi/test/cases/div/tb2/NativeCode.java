@@ -4,7 +4,7 @@
  * This source code is owned by Ericsson Radio Systems AB, and is being distributed to OSGi 
  * MEMBERS as MEMBER LICENSED MATERIALS under the terms of section 3.2 of the OSGi MEMBER AGREEMENT. 
  */
-package org.osgi.test.cases.div.tb2;
+package org.osgi.test.cases.div.tb2; // could not rename this package without rebuilding native so/dll
 
 import org.osgi.framework.*;
 
@@ -20,7 +20,7 @@ public class NativeCode implements BundleActivator {
 	 */
 	static {
 		try {
-			System.loadLibrary("Native");
+			System.loadLibrary("native");
 			initOk = true;
 		}
 		catch (UnsatisfiedLinkError ule) {

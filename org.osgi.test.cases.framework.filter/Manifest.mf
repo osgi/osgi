@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bundle-Name: test.cases.filter
+Bundle-Name: test.cases.framework.filter
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
 Bundle-Description: Tests filter operations. The following elements are tested:
  <pre>
@@ -25,7 +25,7 @@ Bundle-Version: 3.0
 Bundle-DocUrl: http://membercvs.osgi.org/test/3
 Bundle-ContactAddress: speccomments@mail.osgi.org
 Bundle-Category: osgi,test
-Bundle-Activator: org.osgi.test.cases.filter.FilterTestCase
+Bundle-Activator: org.osgi.test.cases.framework.filter.FilterTestCase
 CVS-Header: $Header$
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)

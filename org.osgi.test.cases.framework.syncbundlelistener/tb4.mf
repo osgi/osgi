@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bundle-Name: test.cases.syncbundlelistener.tb4
+Bundle-Name: test.cases.framework.syncbundlelistener.tb4
 Bundle-Description: Causes bundle events 
 Bundle-Vendor: Ericsson Telecom AB
 Bundle-Version: $(version)

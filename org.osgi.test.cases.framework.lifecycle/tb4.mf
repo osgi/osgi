@@ -5,6 +5,6 @@ Bundle-Vendor: Ericsson Radio Systems AB
 Bundle-Version: 1.0
 Bundle-DocURL: http://www.ericsson.com
 Bundle-ContactAddress: info@ericsson.com
-Bundle-Activator: org.osgi.test.cases.lifecycle.tb4.BrokenStream
+Bundle-Activator: org.osgi.test.cases.framework.lifecycle.tb4.BrokenStream
 $(IMPORT-PACKAGE)
 

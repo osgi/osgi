@@ -8,8 +8,8 @@
 
 $(PACKAGEPERMISSIONS)
 (org.osgi.framework.PackagePermission "org.osgi.test.cases.*" "import")
-(org.osgi.framework.ServicePermission "org.osgi.test.cases.lifecycle.servicereferencegetter.ServiceReferenceGetter" "register,get")
+(org.osgi.framework.ServicePermission "org.osgi.test.cases.framework.lifecycle.servicereferencegetter.ServiceReferenceGetter" "register,get")
 (org.osgi.framework.ServicePermission "org.osgi.test.*" "get")
 (org.osgi.framework.ServicePermission "org.osgi.framework.*" "get,register")
-(org.osgi.framework.ServicePermission "org.osgi.test.cases.lifecycle.servicereferencegetter.*" "get,register")
+(org.osgi.framework.ServicePermission "org.osgi.test.cases.framework.lifecycle.servicereferencegetter.*" "get,register")
 

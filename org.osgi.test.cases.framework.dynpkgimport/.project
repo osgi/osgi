@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>org.osgi.test.cases.dynpkgimport</name>
+	<name>org.osgi.test.cases.framework.dynpkgimport</name>
 	<comment></comment>
 	<projects>
 	</projects>

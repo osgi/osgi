@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bundle-Name: test.cases.registry.tbc
+Bundle-Name: test.cases.framework.registry.tbc
 Bundle-Description: Tests the Service Registry control bundle
 Bundle-Version: 3.0
 Bundle-Activator: $(p).tbc.RegistryControl
