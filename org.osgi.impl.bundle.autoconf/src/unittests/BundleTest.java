@@ -206,6 +206,7 @@ public class BundleTest extends TestCase {
 		public DeploymentPackage installDeploymentPackage(InputStream in) { throw new IllegalStateException(); }
 		public DeploymentPackage[] listDeploymentPackages() { throw new IllegalStateException(); }
 		public String location(String symbName, String version) { return location(symbName,version); }
+		public boolean cancel() { throw new IllegalStateException(); }
 	}
 	
 	public final class DummyDeploymentPackage implements DeploymentPackage {
