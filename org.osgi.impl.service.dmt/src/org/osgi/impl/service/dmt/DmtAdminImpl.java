@@ -18,23 +18,27 @@
 package org.osgi.impl.service.dmt;
 
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
+import org.osgi.impl.service.dmt.api.RemoteAlertSender;
 import org.osgi.service.dmt.*;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.util.tracker.ServiceTracker;
 
 public class DmtAdminImpl implements DmtAdmin {
     private DmtPrincipalPermissionAdmin dmtPermissionAdmin;
 	private DmtPluginDispatcher	dispatcher;
 	private EventAdmin eventChannel;
+	private ServiceTracker remoteAdapterTracker;
 
     // OPTIMIZE maybe make some context object to store these references
-	public DmtAdminImpl(DmtPrincipalPermissionAdmin dmtPermissionAdmin, 
-                        DmtPluginDispatcher dispatcher, 
-                        EventAdmin eventChannel) {
+    public DmtAdminImpl(DmtPrincipalPermissionAdmin dmtPermissionAdmin,
+            DmtPluginDispatcher dispatcher, EventAdmin eventChannel,
+            ServiceTracker remoteAdapterTracker) {
         this.dmtPermissionAdmin = dmtPermissionAdmin;
-		this.dispatcher = dispatcher;
+        this.dispatcher = dispatcher;
         this.eventChannel = eventChannel;
-	}
+        this.remoteAdapterTracker = remoteAdapterTracker;
+    }
 
 	public DmtSession getSession(String subtreeUri) throws DmtException {
 		return getSession(null, subtreeUri, DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -55,4 +59,50 @@ public class DmtAdminImpl implements DmtAdmin {
 		return new DmtSessionImpl(principal, subtreeUri, lockMode, 
                                   permissions, eventChannel, dispatcher);
 	}
+
+    public void sendAlert(String principal, int code, DmtAlertItem[] items)
+            throws DmtException {
+        RemoteAlertSender alertSender = getAlertSender(principal);
+        if (alertSender == null) {
+            if (principal == null)
+                throw new DmtException(null, DmtException.ALERT_NOT_ROUTED,
+                        "Remote adapter not found or is not "
+                                + "unique, cannot route alert without "
+                                + "principal name.");
+            throw new DmtException(null, DmtException.ALERT_NOT_ROUTED,
+                    "Cannot find remote adapter that can send "
+                            + "the alert to server '" + principal + "'.");
+        }
+        
+        try {
+            alertSender.sendAlert(principal, code, items);
+        }
+        catch (Exception e) {
+            String message = "Error sending remote alert";
+            if (principal != null)
+                message = message + " to server '" + principal + "'";
+            throw new DmtException(null, DmtException.REMOTE_ERROR, message
+                    + ".", e);
+        }
+    }
+    
+    private RemoteAlertSender getAlertSender(String principal) {
+        Object[] alertSenders = remoteAdapterTracker.getServices();
+        
+        if (principal == null) { // return adapter if unique and accepts anything
+            if(alertSenders.length != 1)
+                return null;
+            RemoteAlertSender alertSender = (RemoteAlertSender) alertSenders[0];
+            return alertSender.acceptServerId(null) ? alertSender : null;
+        }
+            
+        // find adapter that accepts alerts for the given principal
+        for(int i = 0; i < alertSenders.length; i++) {
+            RemoteAlertSender alertSender = (RemoteAlertSender) alertSenders[i];
+            if (alertSender.acceptServerId(principal))
+                return alertSender;
+        }
+        
+        return null;
+    }
 }
