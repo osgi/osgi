@@ -20,31 +20,40 @@ package org.osgi.impl.service.dmt;
 import org.osgi.framework.*;
 import org.osgi.impl.service.dmt.api.RemoteAlertSender;
 import org.osgi.service.dmt.*;
+import org.osgi.service.event.EventChannel;
 import org.osgi.util.tracker.ServiceTracker;
 
 // TODO cleanup service registrations properly in case of error
 // TODO check that the service is not registered already?
-// TODO when stop() is called, notify the impl. to release all refs to other
-// services
+// TODO when stop() is called, notify the impl. to release all refs to other services
 // (these should be done in all activators!)
 public class DmtAdminActivator implements BundleActivator {
 	private ServiceRegistration	sessionReg;
 	private ServiceRegistration	alertReg;
-	private ServiceTracker		remoteAdapterTracker;
+    private ServiceReference    eventChannelRef;
+    private ServiceTracker		remoteAdapterTracker;
 	private ServiceTracker		pluginTracker;
 
 	public void start(BundleContext bc) throws BundleException {
 		try {
+            eventChannelRef = 
+                bc.getServiceReference(EventChannel.class.getName());
+            if(eventChannelRef == null)
+                throw new BundleException("Cannot find Event Channel service.");
+            EventChannel eventChannel = 
+                (EventChannel) bc.getService(eventChannelRef);
+            if(eventChannel == null)
+                throw new BundleException("Event Channel service no longer registered.");
+            
 			DmtPlugInDispatcher dispatcher = new DmtPlugInDispatcher(bc);
-			//tracker = new ServiceTracker(bc, DmtDataPlugIn.class.getName(),
-			// dispatcher);
+			//tracker = new ServiceTracker(bc, DmtDataPlugIn.class.getName(), dispatcher);
 			String filter = "(|(objectClass=org.osgi.service.dmt.DmtDataPlugIn)"
 					+ "(objectClass=org.osgi.service.dmt.DmtExecPlugIn))";
 			pluginTracker = new ServiceTracker(bc, bc.createFilter(filter),
 					dispatcher);
 			pluginTracker.open();
 			// creating the services
-			DmtFactoryImpl dmtFactory = new DmtFactoryImpl(dispatcher);
+			DmtFactoryImpl dmtFactory = new DmtFactoryImpl(dispatcher, eventChannel);
 			DmtAlertSenderImpl dmtAlertSender = new DmtAlertSenderImpl(bc);
 			remoteAdapterTracker = new ServiceTracker(bc,
 					RemoteAlertSender.class.getName(), dmtAlertSender);
@@ -54,8 +63,7 @@ public class DmtAdminActivator implements BundleActivator {
 					dmtFactory, null);
 			alertReg = bc.registerService(DmtAlertSender.class.getName(),
 					dmtAlertSender, null);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.out.println("Exception:" + e.getMessage());
 			throw new BundleException("Failure in start() method.", e);
 		}

@@ -17,13 +17,19 @@
  */
 package org.osgi.impl.service.dmt;
 
-import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtFactory;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.event.EventChannel;
 
 public class DmtFactoryImpl implements DmtFactory {
 	private DmtPlugInDispatcher	dispatcher;
+	private EventChannel eventChannel;
 
-	public DmtFactoryImpl(DmtPlugInDispatcher dispatcher) {
+	public DmtFactoryImpl(DmtPlugInDispatcher dispatcher,
+			              EventChannel eventChannel) {
 		this.dispatcher = dispatcher;
+        this.eventChannel = eventChannel;
 	}
 
 	public DmtSession getTree(String principal) throws DmtException {
@@ -37,6 +43,7 @@ public class DmtFactoryImpl implements DmtFactory {
 
 	public DmtSession getTree(String principal, String subtreeUri, int lockMode)
 			throws DmtException {
-		return new DmtSessionImpl(principal, subtreeUri, lockMode, dispatcher);
+		return new DmtSessionImpl(principal, subtreeUri, lockMode, 
+                                  eventChannel, dispatcher);
 	}
 }
