@@ -4,6 +4,6 @@
 	
 	<target name="signtestbundles">
 		<signjar jar="integrationtests.bundle1.jar" alias="sarahbar" 
-			keystore="test_certificates/keystore" storepass="123456"/>
+			keystore="integration_test/keystore" storepass="123456"/>
 	</target>
 </project>
