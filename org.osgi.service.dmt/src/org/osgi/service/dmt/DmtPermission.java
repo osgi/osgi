@@ -27,18 +27,24 @@ package org.osgi.service.dmt;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
 
 // TODO implement methods
 
 /**
  * DmtPermission controls access to management objects in the Device
  * Management Tree (DMT). It is intended to control local access to
- * the DMT. DMTPermission target string identifies the management
+ * the DMT. DmtPermission target string identifies the management
  * object URI and the action field lists the OMA DM commands that are
  * permitted on the management object. Example:
  *
  * <pre>
- * DMTPermission(&quot;./OSGi/bundles&quot;, &quot;Add,Replace,Get&quot;);
+ * DmtPermission(&quot;./OSGi/bundles&quot;, &quot;Add,Replace,Get&quot;);
  * </pre>
  *
  * This means that owner of this permission can execute Add, Replace
@@ -48,43 +54,103 @@ import java.security.PermissionCollection;
  * permission can access children nodes of the target node. Example
  *
  * <pre>
- * DMTPermission(&quot;./OSGi/bundles/*&quot;, &quot;Get&quot;);
+ * DmtPermission(&quot;./OSGi/bundles/*&quot;, &quot;Get&quot;);
  * </pre>
  *
  * This means that owner of this permission has Get access on every
  * child node of ./OSGi/bundles. The asterix does not necessarily have
  * to follow a '/' character. For example the 
- * <code>&quot;./OSGi/a*&quot;/<code> target matches the 
+ * <code>&quot;./OSGi/a*&quot;<code> target matches the 
  * <code>./OSGi/applications</code> subtree.
  * <p>If wildcard is present in the actions
  * field, all legal OMA DM commands are allowed on the designated
  * nodes(s) by the owner of the permission.
  */
 public class DmtPermission extends Permission {
+    // TODO serialization
 	// TODO add static final serialVersionUID
-	//### Actions!!
+    
+    private static final String ADD_STRING     = "Add";
+    private static final String DELETE_STRING  = "Delete";
+    private static final String EXEC_STRING    = "Exec";
+    private static final String GET_STRING     = "Get";
+    private static final String REPLACE_STRING = "Replace";
+    
+    // does this permission have a wildcard at the end?
+    private boolean prefixPath;
+
+    // the name without the wildcard on the end
+    private String path;
+    
+    // the actions mask
+    private int mask;
+    
+    // the actions string (redundant)
+    private String actions;
+
+    private void init(String name, int mask) {
+        if(name == null)
+            throw new NullPointerException("Name parameter cannot be null.");
+        
+        // URI must be absolute, i.e. equal to . or beginning with ./
+        if(!name.startsWith("./") && !name.equals("."))
+            throw new IllegalArgumentException(
+                    "Name parameter is not an absolute URI.");
+        
+        if (name.endsWith("*")) {
+            prefixPath = true;
+            path = name.substring(0, name.length() - 1);
+        }
+        else {
+            // Trailing slash ignored
+            if(name.endsWith("/"))
+                name = name.substring(0, name.length() - 1);
+            
+            prefixPath = false;
+            path = name;
+        }
+        
+        if(mask == 0)
+            throw new IllegalArgumentException("Action mask cannot be empty.");
+        
+        this.mask = mask;
+    }
+
     /**
      * Creates a new DmtPermission object for the specified DMT URI
      * with the specified actions.
      *
-     * @param dmturi URI of the management object (or subtree).
+     * @param dmtUri URI of the management object (or subtree).
      * @param actions OMA DM actions allowed.
      */
-    public DmtPermission(String dmturi, String actions) {
-        // TODO
-        super("DMTPermission " + dmturi + " " + actions);
+    public DmtPermission(String dmtUri, String actions) {
+        super(dmtUri);
+        
+        this.actions = actions;
+        
+        init(dmtUri, getMask(actions));
     }
 
     /**
-     * Checks two DMTPermission objects for equality. Two
-     * DMTPermissions are equal if they have the same target and
+     * Checks two DmtPermission objects for equality. Two
+     * DmtPermissions are equal if they have the same target and
      * action strings.
      *
      * @return true if the two objects are equal.
      */
     public boolean equals(Object obj) {
-        // TODO
-        return true;
+        if(obj == this)
+            return true;
+        
+        if(!(obj instanceof DmtPermission))
+            return false;
+
+        DmtPermission other = (DmtPermission) obj;
+
+        return
+            mask == other.mask && 
+            prefixPath == other.prefixPath &&
+            path.equals(other.path);
     }
 
     /**
@@ -93,45 +159,172 @@ public class DmtPermission extends Permission {
      * @return Action list for this permission object.
      */
     public String getActions() {
-        // TODO
-        return null;
+        return actions;
     }
 
     /**
      * Returns hash code for this permission object. If two
-     * DMTPermission objects are equal according to the equals method,
+     * DmtPermission objects are equal according to the equals method,
      * then calling the hashCode method on each of the two
-     * DMTPermission objects must produce the same integer result.
+     * DmtPermission objects must produce the same integer result.
      *
      * @return hash code for this permission object.
      */
     public int hashCode() {
-        // TODO
-        return 0;
+        return
+            new Integer(mask).hashCode() ^
+            new Boolean(prefixPath).hashCode() ^ 
+            path.hashCode();
     }
 
     /**
-     * Checks if this DMTPermission object &quot;implies&quot; the
+     * Checks if this DmtPermission object &quot;implies&quot; the
      * specified permission.
      *
      * @param p Permission to check.
-     * @return true if this DMTPermission object implies the specified
+     * @return true if this DmtPermission object implies the specified
      * permission.
      */
     public boolean implies(Permission p) {
-        // TODO
-        return true;
+        if(!(p instanceof DmtPermission))
+            return false;
+
+        DmtPermission other = (DmtPermission) p;
+
+        if((mask & other.mask) != other.mask)
+            return false;
+
+        return impliesPath(other);
     }
 
     /**
      * Returns a new PermissionCollection object for storing
-     * DMTPermission objects.
+     * DmtPermission objects.
      *
      * @return the new PermissionCollection.
      */
     public PermissionCollection newPermissionCollection() {
-        // TODO
-        return null;
+        return new DmtPermissionCollection();
+    }
+    
+
+    private static int getMask(String actions) {
+        int mask = 0;
+
+        if(actions == null)
+            throw new NullPointerException("actions parameter cannot be null.");
+
+        if(actions.equals("*"))
+            return DmtAcl.ALL_PERMISSION;
+        
+        // TODO throw exception on empty tokens (now swallowed by the tokenizer)
+        StringTokenizer st = new StringTokenizer(actions, ",");
+        while(st.hasMoreTokens()) {
+            String action = st.nextToken();
+            if(action.equalsIgnoreCase(GET_STRING)) {
+                mask |= DmtAcl.GET;
+            } else if(action.equalsIgnoreCase(ADD_STRING)) {
+                mask |= DmtAcl.ADD;
+            } else if(action.equalsIgnoreCase(REPLACE_STRING)) {
+                mask |= DmtAcl.REPLACE;
+            } else if(action.equalsIgnoreCase(DELETE_STRING)) {
+                mask |= DmtAcl.DELETE;
+            } else if(action.equalsIgnoreCase(EXEC_STRING)) {
+                mask |= DmtAcl.EXEC;
+            } else
+                throw new IllegalArgumentException(
+                        "Invalid action '" + action + "'");
+        }
+        
+        return mask;
+    }
+
+    int getMask() {
+        return mask;
+    }
+
+    boolean impliesPath(DmtPermission p) {
+        return prefixPath ? p.path.startsWith(path) :
+            !p.prefixPath && p.path.equals(path);
     }
 }
 
+final class DmtPermissionCollection extends PermissionCollection {
+    // OPTIMIZE keep a special flag for permissions of "*" path
+    // TODO serialization
+    
+    private List perms;
+    
+    /**
+     * Create an empty DmtPermissionCollection object.
+     */
+    public DmtPermissionCollection() {
+        perms = new ArrayList();
+    }
+    
+    /**
+     * Adds a permission to the DmtPermissionCollection.
+     * 
+     * @param permission the Permission object to add
+     * @exception IllegalArgumentException if the permission is not a
+     *            DmtPermission
+     * @exception SecurityException if this DmtPermissionCollection object has
+     *            been marked readonly
+     */
+    public void add(Permission permission) {
+        if (!(permission instanceof DmtPermission))
+            throw new IllegalArgumentException(
+                    "Cannot add permission, invalid permission type: "
+                            + permission);
+        if (isReadOnly())
+            throw new SecurityException(
+                    "Cannot add permission, collection is marked read-only.");
+
+        // No need to synchronize because all adds are done sequentially
+        // before any implies() calls
+        perms.add(permission);
+    }
+    
+    /**
+     * Check and see if this set of permissions implies the permissions
+     * specified n the parameter.
+     * 
+     * @param permission the Permission object to compare
+     * @return true if the parameter permission is a proper subset of the
+     *         permissions in the collection, false otherwise
+     */
+    public boolean implies(Permission permission) 
+    {
+        if (!(permission instanceof DmtPermission))
+            return false;
+        
+        DmtPermission other = (DmtPermission) permission;
+        
+        int required = other.getMask();
+        int available = 0;
+        int needed = required;
+        
+        Iterator i = perms.iterator();
+        while (i.hasNext()) {
+            DmtPermission p = (DmtPermission) i.next();
+            if (((needed & p.getMask()) != 0) && p.impliesPath(other)) {
+                available |=  p.getMask();
+                if ((available & required) == required)
+                    return true;
+                needed = (required ^ available);
+            }
+        }
+
+        return false;
+    }
+    
+    /**
+     * Returns an enumeration of all the DmtPermission objects in the container.
+     * 
+     * @return an enumeration of all the DmtPermission objects.
+     */
+    public Enumeration elements() {
+        // Convert Iterator into Enumeration
+        return Collections.enumeration(perms);
+    }
+}
