@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="src" path="/org.osgi.service.deploymentadmin"/>
 	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
 	<classpathentry kind="src" path="/org.osgi.impl.service.megcontainer"/>
 	<classpathentry sourcepath="/osgi.released/ee.foundation.jar" kind="lib" path="/osgi.released/ee.foundation.jar"/>
