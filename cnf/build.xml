@@ -24,13 +24,13 @@
 	
 	<target name="publish" depends="many,one"/>
 	
-	<target name="many" depends="compile" if="${jars.compile.order}">
+	<target name="many" depends="compile" if="jars.compile.order">
 		<echo>Many ${${jars.compile.order}</echo>
 		<foreach list="${jars.compile.order}" delimiter=" ," target="buildJar" param="item.jarFile" inheritAll="true">
 		</foreach>
 	</target>
 
-	<target name="one" depends="compile" unless="${jars.compile.order}">
+	<target name="one" depends="compile" unless="jars.compile.order">
 		<echo>One ${project.name}.jar</echo>
 		<btool jar="${project.name}.jar"
 			auto="true"
