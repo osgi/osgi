@@ -38,6 +38,8 @@ public interface MetaTypeInformation extends MetaTypeProvider {
 	/**
 	 * Return the PIDs (for ManagedServices) for which ObjectClassDefinition
 	 * information is available.
+	 * ### how dynamic is this? I.e. what happens when a bundle register/unregisters
+	 * ### a Managed Service?
 	 * 
 	 * @return Array of PIDs.
 	 */

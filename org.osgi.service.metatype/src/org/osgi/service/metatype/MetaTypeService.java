@@ -51,6 +51,7 @@ public interface MetaTypeService {
 	 * 
 	 * @param bundle The bundle for which meta type information is requested.
 	 * @return MetaTypeInformation object for the specified bundle.
+	 * ### will this always return an object? Or can it return null. I assume it is always?
 	 */
 	MetaTypeInformation getMetaTypeInformation(Bundle bundle);
 }

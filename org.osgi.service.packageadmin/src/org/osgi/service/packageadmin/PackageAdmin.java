@@ -236,6 +236,7 @@ public interface PackageAdmin {
 	 * If the specified bundle is a fragment then <tt>null</tt> is returned.
 	 * If no fragments are attached to the specified bundle then <tt>null</tt>
 	 * is returned.
+	 * ### what do you get when the bundle is not resolved?
 	 * 
 	 * @param bundle The bundle whose attached fragment bundles are to be
 	 *        returned.
