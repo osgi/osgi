@@ -66,7 +66,7 @@ public class PackageResource extends Resource {
 			if ( source.isDirectory(path))
 				r = new PackageResource(btool,source,path);
 			else
-				r = new Resource(source,path);
+				r = new Resource(btool,source,path);
 			result.add(r);
 		}
 		return result;

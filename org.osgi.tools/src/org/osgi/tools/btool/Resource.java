@@ -15,6 +15,10 @@ public class Resource implements Comparable {
 		this.path = path;
 		this.btool = btool;
 		this.source = source;
+		if ( btool == null ) {
+			System.out.println("No Btool ");
+			throw new RuntimeException("No btool");
+		}
 	}
 	
 	public String getPath() {
@@ -29,10 +33,6 @@ public class Resource implements Comparable {
 	
 
 
-	Resource(Source source, String path) {
-		this.source = source;
-		this.path = path;
-	}
 
 
 	boolean isClass() {
@@ -82,11 +82,14 @@ public class Resource implements Comparable {
 	 */
 	String getChecksum() {
 		try {
+				
 			InputStream in = getInputStream();
 			if ( in == null )
 				return null;
+			if ( btool == null )
+				return "XXXXXXXXX ";
 			
-			byte [] data = btool.readAll(getInputStream(),0);
+			byte [] data = btool.readAll(in,0);
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			md.update(data);
 			byte[] digest = md.digest();

@@ -25,7 +25,7 @@ import org.xml.sax.helpers.*;
  * @version Eclipse 3.0
  */
 public class EclipseProject {
-	private static final boolean	DEBUG			= false;
+	private final boolean	DEBUG			= false;
 	protected Hashtable				properties;
 	protected File					eclipseProject;
 	protected boolean				root;
@@ -33,7 +33,7 @@ public class EclipseProject {
 	protected File					file;
 	protected Locator				locator;
 	Vector							sourceFolders	= new Vector();
-	final static String				PATHSEP			= ",";
+	final String				PATHSEP			= ",";
 	private StringBuffer			sourcepath		= new StringBuffer(1024);
 	private StringBuffer			classpath		= new StringBuffer(1024);
 	private StringBuffer			bootclasspath	= new StringBuffer(1024);
@@ -55,7 +55,7 @@ public class EclipseProject {
 	 * @return
 	 */
 	private String checkNull(String s) {
-		return s.length()==0 ? null : s;
+		return s.length() == 0 ? null : s;
 	}
 
 	public String getClasspath() {
@@ -270,12 +270,16 @@ public class EclipseProject {
 							if (libFile.exists()) {
 								path = libFile.getAbsolutePath();
 							}
+							else
+								System.err.println("Non existent lib in classpath: " + path );
 						}
 						else {
 							File libFile = new File(eclipseProject, path);
 							if (libFile.exists()) {
 								path = libFile.getAbsolutePath();
 							}
+							else
+								System.err.println("Non existent lib in classpath: " + path );
 						}
 						addClasspath(path);
 					}

@@ -6,31 +6,29 @@ import java.util.jar.*;
 import java.util.regex.*;
 
 public class Dependencies {
-    BTool		btool;
-	Set			referred	= new HashSet();
-	Set			contained	= new HashSet();
-	Map			dot			= new HashMap();
-	List		includeExport;
-	List		excludeImport;
-
-	Manifest	manifest;
-	Collection	classpath;
-
-	static byte	SkipTable[]	= {0, //  0 non existent
-							-1, //  1 CONSTANT_utf8 UTF 8, handled in
-							// method
-							-1, //  2
-							4, //  3 CONSTANT_Integer
-							4, //  4 CONSTANT_Float
-							8, //  5 CONSTANT_Long (index +=2!)
-							8, //  6 CONSTANT_Double (index +=2!)
-							-1, //  7 CONSTANT_Class
-							2, //  8 CONSTANT_String
-							4, //  9 CONSTANT_FieldRef
-							4, // 10 CONSTANT_MethodRef
-							4, // 11 CONSTANT_InterfaceMethodRef
-							4 // 12 CONSTANT_NameAndType
-							};
+	BTool			btool;
+	Set				referred	= new HashSet();
+	Set				contained	= new HashSet();
+	Map				dot			= new HashMap();
+	List			includeExport;
+	List			excludeImport;
+	Manifest		manifest;
+	Collection		classpath;
+	static byte		SkipTable[]	= {0, //  0 non existent
+								-1, //  1 CONSTANT_utf8 UTF 8, handled in
+								// method
+								-1, //  2
+								4, //  3 CONSTANT_Integer
+								4, //  4 CONSTANT_Float
+								8, //  5 CONSTANT_Long (index +=2!)
+								8, //  6 CONSTANT_Double (index +=2!)
+								-1, //  7 CONSTANT_Class
+								2, //  8 CONSTANT_String
+								4, //  9 CONSTANT_FieldRef
+								4, // 10 CONSTANT_MethodRef
+								4, // 11 CONSTANT_InterfaceMethodRef
+								4 // 12 CONSTANT_NameAndType
+								};
 
 	public Dependencies(BTool btool, Collection classpath, Manifest manifest,
 			Map resources, List excludeImport, List includeExport) {
@@ -38,7 +36,6 @@ public class Dependencies {
 		this.classpath = classpath;
 		this.includeExport = includeExport;
 		this.excludeImport = excludeImport;
-
 		for (Iterator i = resources.values().iterator(); i.hasNext();) {
 			Resource r = (Resource) i.next();
 			dot.put(r.getPath(), r);
@@ -49,11 +46,9 @@ public class Dependencies {
 		String bundleClasspath = manifest.getValue("bundle-classpath");
 		if (bundleClasspath == null)
 			bundleClasspath = ".";
-
 		StringTokenizer st = new StringTokenizer(bundleClasspath, ",");
 		while (st.hasMoreTokens()) {
 			String entry = st.nextToken();
-
 			if (".".equals(entry)) {
 				for (Iterator i = dot.values().iterator(); i.hasNext();) {
 					Resource r = (Resource) i.next();
@@ -62,13 +57,14 @@ public class Dependencies {
 					}
 					if (r.getPath().endsWith(".class")) {
 						InputStream in = r.getInputStream();
-						if ( in != null )
-						    doStream(in);
+						if (in != null)
+							doStream(in);
 						else
-						    System.err.println("Cannot parse " + r.getPath());
+							System.err.println("Cannot parse " + r.getPath());
 					}
 				}
-			} else {
+			}
+			else {
 				Resource r = (Resource) dot.get(entry);
 				if (r != null) {
 					JarInputStream jarStream = new JarInputStream(r
@@ -81,7 +77,8 @@ public class Dependencies {
 						}
 						jarEntry = jarStream.getNextJarEntry();
 					}
-				} else
+				}
+				else
 					System.out.println("No such bundle-classpath entry "
 							+ entry);
 			}
@@ -90,9 +87,10 @@ public class Dependencies {
 		// Special case for Bundle Activator, it is also
 		// a reference that might point outside our bundle
 		String act = manifest.getActivator();
-		if ( act != null ) {
-		    String packageName = base(act.replace('.','/')+ ".class");
-		    referred.add(packageName);
+		if (act != null) { 
+			System.out.println("Found " + act + " -> " + act );
+			String packageName = base(act.replace('.', '/') + ".class");
+			referred.add(packageName);
 		}
 		referred.removeAll(contained);
 	}
@@ -126,7 +124,6 @@ public class Dependencies {
 	void addContained(String packagePath) {
 		if (!contained.contains(packagePath))
 			contained.add(packagePath);
-
 	}
 
 	/**
@@ -141,7 +138,6 @@ public class Dependencies {
 	 */
 	Collection parseClassFile(DataInputStream in) throws IOException {
 		Vector classes = new Vector();
-
 		Hashtable pool = new Hashtable();
 		try {
 			int magic = in.readInt();
@@ -151,7 +147,7 @@ public class Dependencies {
 			in.readShort(); // minor version
 			in.readShort(); // major version
 			int count = in.readUnsignedShort();
-			process : for (int i = 1; i < count; i++) {
+			process: for (int i = 1; i < count; i++) {
 				byte tag = in.readByte();
 				switch (tag) {
 					case 0 :
@@ -188,7 +184,8 @@ public class Dependencies {
 						break;
 				}
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -204,7 +201,8 @@ public class Dependencies {
 				String normalized = normalize(next);
 				if (normalized != null)
 					set.add(normalized);
-			} else
+			}
+			else
 				throw new IllegalArgumentException("Invalid class, parent=");
 		}
 		return set;
@@ -225,11 +223,13 @@ public class Dependencies {
 	 *      
 	 *       
 	 *        
-	 *               	 [L*               =&gt; remove [L, try again
-	 *               	 [* &amp;&amp; length=2     =&gt; ignore (int,byte,char etc class)
-	 *               	 [*                =&gt; remove [, try again
-	 *               ;                =&gt; remove ;, try again (do not know why)
-	 *               	 A i in skip | &lt;i&gt;* =&gt; ignore
+	 *         
+	 *                	 [L*               =&gt; remove [L, try again
+	 *                	 [* &amp;&amp; length=2     =&gt; ignore (int,byte,char etc class)
+	 *                	 [*                =&gt; remove [, try again
+	 *                ;                =&gt; remove ;, try again (do not know why)
+	 *                	 A i in skip | &lt;i&gt;* =&gt; ignore
+	 *          
 	 *         
 	 *        
 	 *       
@@ -244,7 +244,6 @@ public class Dependencies {
 	 * be used for normal resource names.
 	 */
 	String normalize(String s) {
-
 		if (s.startsWith("[L"))
 			return normalize(s.substring(2));
 		if (s.startsWith("["))
@@ -262,7 +261,6 @@ public class Dependencies {
 	 *  
 	 */
 	static String base(String name) {
-
 		int index = name.lastIndexOf('/');
 		if (index > 0)
 			return name.substring(0, index);
@@ -277,10 +275,11 @@ public class Dependencies {
 	public Set getContained() throws IOException {
 		return convertToPackage(contained, includeExport, null);
 	}
+
 	/**
 	 * @param contained2
-	 * @return @throws
-	 *         IOException
+	 * @return
+	 * @throws IOException
 	 */
 	private Set convertToPackage(Collection names, List includes, List excludes)
 			throws IOException {
@@ -290,7 +289,6 @@ public class Dependencies {
 			if (excludes != null && in(excludes, name)) {
 				continue;
 			}
-
 			if (includes == null || in(includes, name)) {
 				Package p = makePackage(name);
 				if (p != null)
@@ -313,7 +311,7 @@ public class Dependencies {
 				if (name.startsWith(prefix.substring(0, prefix.length() - 1)))
 					return true;
 			}
-			if ( name.equals(prefix) )
+			if (name.equals(prefix))
 				return true;
 		}
 		return false;
@@ -329,7 +327,6 @@ public class Dependencies {
 	Package makePackage(String name) throws IOException {
 		if ("META-INF".equals(name))
 			return null;
-
 		String version = null;
 		String packname = name.replace('/', '.');
 		String info = name + "/packageinfo";
@@ -366,7 +363,8 @@ public class Dependencies {
 				Package p = find(name.replace('/', '.'), manifest.getExports());
 				if (p != null) {
 					version = p.version;
-				} else {
+				}
+				else {
 					InputStream jin = source.getEntry("META-INF/MANIFEST.MF");
 					java.util.jar.Manifest jmanifest = new java.util.jar.Manifest(
 							jin);
@@ -385,7 +383,8 @@ public class Dependencies {
 					}
 				}
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		return version;
@@ -405,8 +404,8 @@ public class Dependencies {
 
 	/**
 	 * @param string
-	 * @return @throws
-	 *         IOException
+	 * @return
+	 * @throws IOException
 	 */
 	private Source findResource(String string) throws IOException {
 		for (Iterator i = classpath.iterator(); i.hasNext();) {
@@ -441,13 +440,12 @@ public class Dependencies {
 		return result;
 	}
 
-    /**
-     * @return
-     */
-    public Set getImported() {
-        Set result = new HashSet(referred);
-        result.removeAll(contained);
-        return result;
-    }
-
+	/**
+	 * @return
+	 */
+	public Set getImported() {
+		Set result = new HashSet(referred);
+		result.removeAll(contained);
+		return result;
+	}
 }

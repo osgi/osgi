@@ -107,7 +107,7 @@ public class BTool extends Task {
 					if (manifestSource != null)
 						doAnalysis();
 					else
-						errors.add("No manifest to analyse");
+						warnings.add("No manifest to analyse");
 				}
 			}
 			showErrors();
@@ -188,6 +188,7 @@ public class BTool extends Task {
 		this.showmanifest = false;
 		ManifestResource mf = new ManifestResource(this, manifestSource, false);
 		manifest = new Manifest(mf.getInputStream());
+		System.out.println("New manifest, activator " + manifest.getActivator());
 		this.showmanifest = showmanifest;
 	}
 

@@ -14,7 +14,7 @@ public class ManifestResource extends FileResource {
 	
 	protected String replace(String key) throws IOException {
 		if ( !replace )
-			return null;
+			return super.replace(key);
 		
 		if ( key.equals("IMPORT-PACKAGE") ) {
 			Collection imports = btool.getImports();
@@ -44,6 +44,7 @@ public class ManifestResource extends FileResource {
 					sb.append("Digest-Algorithms: MD5\r\n");
 					sb.append("MD5-Digest: ");
 					sb.append( checksum  );
+					sb.append("\r\n");
 				}
 				if ( r instanceof PackageResource ) {
 					PackageResource p = (PackageResource) r;
