@@ -30,31 +30,31 @@ import org.osgi.framework.Bundle;
 import org.osgi.service.condpermadmin.Condition;
 
 /**
- * Class representing an IMSI condition. Instances of this class contain a
- * string value that is matched against the IMSI of the subscriber.
+ * Class representing an IMEI condition. Instances of this class contain a
+ * string value that is matched against the IMEI of the device.
  */
-public class IMSI implements Condition {
+public class IMEICondition implements Condition {
 	/**
-	 * Creates an IMSI object.
+	 * Creates an IMEI object.
 	 * 
 	 * @param bundle ignored
-	 * @param imsi The IMSI value of the subscriber.
+	 * @param imei The IMEI value of the device.
 	 */
-	public IMSI(Bundle bundle, String imsi) {
+	public IMEICondition(Bundle bundle, String imei) {
 	}
 
 	/**
-	 * Checks whether the condition is true. The IMSI of the object instance is
-	 * compared against the IMSI of the device's user.
+	 * Checks whether the condition is satisfied. The IMEI of the object
+	 * instance is compared against the IMEI of the device.
 	 * 
-	 * @return true if the IMSI value match.
+	 * @return true if the IMEI value matches.
 	 */
 	public boolean isSatisfied() {
 		return true;
 	}
 
 	/**
-	 * Checks whether the condition is evaluated
+	 * Checks whether the condition is evaluated.
 	 * 
 	 * @return always true
 	 */
@@ -63,7 +63,7 @@ public class IMSI implements Condition {
 	}
 
 	/**
-	 * Checks whether the condition can change
+	 * check whether the condition can change.
 	 * 
 	 * @return always false
 	 */
@@ -72,14 +72,13 @@ public class IMSI implements Condition {
 	}
 
 	/**
-	 * Checks whether an array of IMSI conditions match
+	 * Checks for an array of IMEI conditions if they all match this device
 	 * 
-	 * @param conds an array, containing only IMSI conditions
+	 * @param conds an array, containing only IMEI conditions
 	 * @param context ignored
-	 * @return true, if they all match
+	 * @return true if all conditions match
 	 */
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

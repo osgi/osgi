@@ -41,7 +41,7 @@ import org.osgi.service.condpermadmin.Condition;
  * resetTransferCost() is always put in a finally block, to ensure proper
  * stacking behavior.
  */
-public class TransferCost implements Condition {
+public class TransferCostCondition implements Condition {
 	private static ThreadLocal	context	= new ThreadLocal();
 
 	/**
@@ -52,7 +52,7 @@ public class TransferCost implements Condition {
 	 * @param cost The abstract limit cost. Possible values are "LOW","MEDIUM"
 	 *        and "HIGH".
 	 */
-	public TransferCost(Bundle bundle, String cost) {
+	public TransferCostCondition(Bundle bundle, String cost) {
 	}
 
 	/**
@@ -109,7 +109,6 @@ public class TransferCost implements Condition {
 	 * @return true if all transfer costs are below limit
 	 */
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

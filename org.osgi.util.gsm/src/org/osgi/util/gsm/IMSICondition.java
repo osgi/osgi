@@ -30,31 +30,31 @@ import org.osgi.framework.Bundle;
 import org.osgi.service.condpermadmin.Condition;
 
 /**
- * Class representing an IMEI condition. Instances of this class contain a
- * string value that is matched against the IMEI of the device.
+ * Class representing an IMSI condition. Instances of this class contain a
+ * string value that is matched against the IMSI of the subscriber.
  */
-public class IMEI implements Condition {
+public class IMSICondition implements Condition {
 	/**
-	 * Creates an IMEI object.
+	 * Creates an IMSI object.
 	 * 
 	 * @param bundle ignored
-	 * @param imei The IMEI value of the device.
+	 * @param imsi The IMSI value of the subscriber.
 	 */
-	public IMEI(Bundle bundle, String imei) {
+	public IMSICondition(Bundle bundle, String imsi) {
 	}
 
 	/**
-	 * Checks whether the condition is satisfied. The IMEI of the object
-	 * instance is compared against the IMEI of the device.
+	 * Checks whether the condition is true. The IMSI of the object instance is
+	 * compared against the IMSI of the device's user.
 	 * 
-	 * @return true if the IMEI value matches.
+	 * @return true if the IMSI value match.
 	 */
 	public boolean isSatisfied() {
 		return true;
 	}
 
 	/**
-	 * Checks whether the condition is evaluated.
+	 * Checks whether the condition is evaluated
 	 * 
 	 * @return always true
 	 */
@@ -63,7 +63,7 @@ public class IMEI implements Condition {
 	}
 
 	/**
-	 * check whether the condition can change.
+	 * Checks whether the condition can change
 	 * 
 	 * @return always false
 	 */
@@ -72,11 +72,11 @@ public class IMEI implements Condition {
 	}
 
 	/**
-	 * Checks for an array of IMEI conditions if they all match this device
+	 * Checks whether an array of IMSI conditions match
 	 * 
-	 * @param conds an array, containing only IMEI conditions
+	 * @param conds an array, containing only IMSI conditions
 	 * @param context ignored
-	 * @return true if all conditions match
+	 * @return true, if they all match
 	 */
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
 		return false;
