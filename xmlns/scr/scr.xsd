@@ -11,23 +11,26 @@ Use of the namespace is optional if the document only contains a single componen
 Otherwise the namespace must be used.
 		</documentation>
 	</annotation>
-	
+
 	<element name="component" type="scr:Tcomponent"></element>
 
 	<complexType name="Tcomponent">
 		<sequence>
-			<element name="implementation" minOccurs="1" maxOccurs="1" type="scr:Timplementation"></element>
-			<element name="property" minOccurs="0" maxOccurs="unbounded" type="scr:Tproperty"></element>
-			<element name="service" minOccurs="0" maxOccurs="1" type="scr:Tservice"></element>
-			<element name="reference" minOccurs="0" maxOccurs="unbounded" type="scr:Treference"></element>
+			<element name="implementation" type="scr:Timplementation" minOccurs="1" maxOccurs="1"></element>
+			<choice minOccurs="0" maxOccurs="unbounded">
+				<element name="property" type="scr:Tproperty"></element>
+				<element name="properties" type="scr:Tproperties"></element>
+			</choice>
+			<element name="service" type="scr:Tservice" minOccurs="0" maxOccurs="1"></element>
+			<element name="reference" type="scr:Treference" minOccurs="0" maxOccurs="unbounded"></element>
 		</sequence>
 		<attribute name="autoenable" type="boolean" default="true" use="optional"></attribute>
-		<attribute name="name" type="string" use="required"></attribute>
+		<attribute name="name" type="token" use="required"></attribute>
 		<attribute name="factory" type="string" use="optional"></attribute>
 	</complexType>
 
 	<complexType name="Timplementation">
-		<attribute name="class" type="string" use="required"></attribute>
+		<attribute name="class" type="token" use="required"></attribute>
 	</complexType>
 
 	<complexType name="Tproperty">
@@ -35,30 +38,34 @@ Otherwise the namespace must be used.
 			<extension base="string">
 				<attribute name="name" type="string" use="required"></attribute>
 				<attribute name="value" type="string" use="optional"></attribute>
-				<attribute name="type" use="optional" default="String" type="scr:TjavaTypes"></attribute>
+				<attribute name="type" type="scr:TjavaTypes" use="optional" default="String"></attribute>
 			</extension>
 		</simpleContent>
 	</complexType>
 
+	<complexType name="Tproperties">
+		<attribute name="entry" type="string" use="required"></attribute>
+	</complexType>
+
 	<complexType name="Tservice">
 		<sequence>
-			<element name="provide" minOccurs="1" maxOccurs="unbounded" type="scr:Tprovide"></element>
+			<element name="provide" type="scr:Tprovide" minOccurs="1" maxOccurs="unbounded"></element>
 		</sequence>
 		<attribute name="servicefactory" type="boolean" default="false" use="optional"></attribute>
 	</complexType>
 
-	<complexType name="Treference">
-		<attribute name="name" type="NMTOKEN" use="required"></attribute>
-		<attribute name="interface" type="string" use="required"></attribute>
-		<attribute name="cardinality" default="1..1" use="optional" type="scr:Tcardinality"></attribute>
-		<attribute name="policy" use="optional" default="static" type="scr:Tpolicy"></attribute>
-		<attribute name="target" type="string" use="optional"></attribute>
-		<attribute name="bind" type="string" use="optional"></attribute>
-		<attribute name="unbind" type="string" use="optional"></attribute>
+	<complexType name="Tprovide">
+		<attribute name="interface" type="token" use="required"></attribute>
 	</complexType>
 
-	<complexType name="Tprovide">
-		<attribute name="interface" type="string" use="required"></attribute>
+	<complexType name="Treference">
+		<attribute name="name" type="NMTOKEN" use="required"></attribute>
+		<attribute name="interface" type="token" use="required"></attribute>
+		<attribute name="cardinality" type="scr:Tcardinality" default="1..1" use="optional"></attribute>
+		<attribute name="policy" type="scr:Tpolicy" use="optional" default="static"></attribute>
+		<attribute name="target" type="string" use="optional"></attribute>
+		<attribute name="bind" type="token" use="optional"></attribute>
+		<attribute name="unbind" type="token" use="optional"></attribute>
 	</complexType>
 
 	<simpleType name="TjavaTypes">
