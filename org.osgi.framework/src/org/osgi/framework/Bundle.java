@@ -779,6 +779,9 @@ public abstract interface Bundle {
 	 * searched when a bundle has not been resolved. If this bundle is a
 	 * fragment bundle then <tt>null</tt> is returned.
 	 * 
+	 * ### How are split packages treated???
+	 * ### shouldn't we mention that this can create a classloader?
+	 * 
 	 * @param name The name of the resource. See
 	 *        <tt>java.lang.ClassLoader.getResources</tt> for a description of
 	 *        the format of a resource name.
