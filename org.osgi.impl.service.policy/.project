@@ -12,6 +12,7 @@
 		<project>org.osgi.service.condpermadmin</project>
 		<project>org.osgi.service.deploymentadmin</project>
 		<project>org.osgi.service.dmt</project>
+		<project>org.osgi.tools</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
