@@ -6,12 +6,45 @@
  */
 package org.osgi.test.cases.framework.div.tbc;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
-import org.osgi.framework.*;
-import org.osgi.test.cases.framework.div.tb6.*;
-import org.osgi.test.service.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Vector;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.ServiceReference;
+import org.osgi.test.cases.framework.div.tb6.BundleClass;
+import org.osgi.test.cases.framework.div.tbc.Bundle.GetEntry;
+import org.osgi.test.cases.framework.div.tbc.Bundle.GetEntryPaths;
+import org.osgi.test.cases.framework.div.tbc.Bundle.GetResource;
+import org.osgi.test.cases.framework.div.tbc.Bundle.GetResources;
+import org.osgi.test.cases.framework.div.tbc.Bundle.GetSymbolicName;
+import org.osgi.test.cases.framework.div.tbc.Bundle.LoadClass;
+import org.osgi.test.cases.framework.div.tbc.BundleException.GetCause;
+import org.osgi.test.cases.framework.div.tbc.BundleException.InitCause;
+import org.osgi.test.cases.framework.div.tbc.Constants.ConstantsValues;
+import org.osgi.test.cases.framework.div.tbc.Version.CompareTo;
+import org.osgi.test.cases.framework.div.tbc.Version.Equals;
+import org.osgi.test.cases.framework.div.tbc.Version.GetMajor;
+import org.osgi.test.cases.framework.div.tbc.Version.GetMicro;
+import org.osgi.test.cases.framework.div.tbc.Version.GetMinor;
+import org.osgi.test.cases.framework.div.tbc.Version.HashCode;
+import org.osgi.test.cases.framework.div.tbc.Version.InstanceOf;
+import org.osgi.test.service.TestCaseLink;
 
 /**
  * This is the bundle initially installed and started by the TestCase when
@@ -31,10 +64,18 @@ public class Activator extends Thread implements FrameworkListener,
 	static String[]				methods		= new String[] {
 			"testManifestHeaders", "testMissingManifestHeaders",
 			"testBundleClassPath", "testNativeCode", "testFrameworkListener",
-			"testFileAccess",
-			/* "testDoubleManifestTags", removed since spec changed */
-			"testBundleZero", "testEERequirement",
-			"testNativeCodeFilter"};
+			"testFileAccess", "testBundleZero", "testEERequirement",
+			"testNativeCodeFilter", 
+			"testBundleGetEntryPath", "testBundleGetEntryPaths",
+			"testBundleGetResources", "testBundleGetResource",
+			"testBundleGetSymbolicName", "testBundleHashCode",
+			"testBundleLoadClass", "testBundleConstantsValues",
+			"testBundleExceptionGetCause", "testBundleExceptionInitCause",
+			"testConstantsValues", "testFrameworkEventConstants",
+			"testVersionConstructors", "testVersionEquals",
+			"testVersionGetMajor", "testVersionGetMinor",
+			"testVersionGetMicro", "testVersionCompareTo",
+			"testConstantsValues", "testVersionInstanceOf" };
 
 	/**
 	 * start. Gets a reference to the TestCaseLink to communicate with the
@@ -112,7 +153,7 @@ public class Activator extends Thread implements FrameworkListener,
 			// them.
 			for (Enumeration e = sort(h.keys()); e.hasMoreElements();) {
 				String key = (String) e.nextElement();
-				if ( ! key.equalsIgnoreCase("import-package")) {
+				if (!key.equalsIgnoreCase("import-package")) {
 					String value = (String) h.get(key);
 					StringBuffer result = new StringBuffer();
 					for (int i = 0; i < value.length(); i++) {
@@ -241,6 +282,7 @@ public class Activator extends Thread implements FrameworkListener,
 			reportProcessorOS();
 		}
 	}
+
 
 	/**
 	 * Tests native code selection filter. The bundle should be loaded even if
@@ -540,4 +582,209 @@ public class Activator extends Thread implements FrameworkListener,
 		catch (Throwable ignored) {
 		}
 	}
+
+	void testBundleGetEntryPath() {
+		try {
+			new GetEntry(_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	void testBundleGetEntryPaths() {
+		try {
+			new GetEntryPaths(_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	void testBundleGetResource() {
+		try {
+			new GetResource(_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	void testBundleGetResources() {
+		try {
+			new GetResources(_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	void testBundleGetSymbolicName() {
+		try {
+			new GetSymbolicName(_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	void testBundleHashCode() {
+		try {
+			new HashCode(_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	void testBundleLoadClass() {
+		try {
+			new LoadClass(_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	void testBundleConstantsValues() {
+		try {
+			new org.osgi.test.cases.framework.div.tbc.Bundle.ConstantsValues(
+					_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	void testBundleExceptionGetCause() {
+		try {
+			new GetCause(_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	void testBundleExceptionInitCause() {
+		try {
+			new InitCause(_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	void testConstantsValues() {
+		try {
+			new ConstantsValues(_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	void testFrameworkEventConstants() {
+		try {
+			new org.osgi.test.cases.framework.div.tbc.FrameworkEvent.Constants(
+					_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	void testVersionConstructors() {
+		try {
+			new org.osgi.test.cases.framework.div.tbc.Version.Constructors(
+					_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	void testVersionEquals() {
+		try {
+			new Equals(_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	void testVersionGetMajor() {
+		try {
+			new GetMajor(_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	void testVersionGetMinor() {
+		try {
+			new GetMinor(_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	void testVersionGetMicro() {
+		try {
+			new GetMicro(_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	void testVersionCompareTo() {
+		try {
+			new CompareTo(_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	void testVersionInstanceOf() {
+		try {
+			new InstanceOf(_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}		
+	}
+	
+	void testVersionConstantsValues() {
+		try {
+			new org.osgi.test.cases.framework.div.tbc.Version.Constants(
+					_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+
 }
