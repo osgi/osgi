@@ -17,6 +17,7 @@
  */
 package unittests;
 
+import java.security.AccessControlContext;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.TreeSet;
@@ -70,14 +71,14 @@ public class DummyConditionalPermissionAdmin extends TreeSet implements
 		}
 	}
 	
-	public ConditionalPermissionInfo addCollection(ConditionInfo[] conds,
-			PermissionInfo[] perms) {
+	public ConditionalPermissionInfo addConditionalPermissionInfo(ConditionInfo[] conds, PermissionInfo[] perms) 
+	{
 		PI pi = new PI(conds,perms);
 		add(pi);
 		return pi;
 	}
 
-	public Enumeration getCollections() {
+	public Enumeration getConditionalPermissionInfos() {
 		final Iterator iter = iterator();
 		
 		return new Enumeration() {
@@ -87,7 +88,15 @@ public class DummyConditionalPermissionAdmin extends TreeSet implements
 
 			public Object nextElement() {
 				return iter.next();
-			} };
+			} 
+		};
+	}
+
+
+
+	public AccessControlContext getAccessControlContext(String[] signers) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
