@@ -1,15 +1,13 @@
 /*
- * $Header$
- * 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
- * 
+ *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
  * patent rights (such a third party may or may not be a member of the OSGi
  * Alliance). The OSGi Alliance is not responsible and shall not be held
  * responsible in any manner for identifying or failing to identify any or all
  * such third party intellectual property rights.
- * 
+ *
  * This document and the information contained herein are provided on an "AS IS"
  * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
@@ -20,20 +18,47 @@
  * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
  * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
+ *
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.dmt;
+/*
+ * REVISION HISTORY:
+ *
+ * Date         Author(s)
+ * CR           Headline
+ * ===========  ==============================================================
+ * Jan 31, 2005 Andre Assad
+ * CR 1         Implement MEG TCK
+ * ===========  ==============================================================
+ */
 
-import org.osgi.test.cases.util.DefaultTestCase;
+package org.osgi.test.cases.dmt.tbc.DmtSession;
+
+import org.osgi.test.cases.dmt.tbc.DmtTestControl;
+
 
 /**
- *
- * This class may remain empty
+ * @author Andre Assad
  * 
- * @version $Revision$
+ * @methodUnderTest org.osgi.service.dmt.DmtSession
+ * @generalDescription This Test Case Validates the constraints specified on the
+ *                     session 5.2 of the rfc0085, according to MEG reference
+ *                     documentation (rfc0085).
  */
-public class TestCase extends DefaultTestCase {
+public class Constraints {
+	private DmtTestControl tbc;
+
+	public Constraints(DmtTestControl tbc) {
+		this.tbc = tbc;
+	}
+
+	public void run() {
+	    //testConstraints001();
+	}
+    
+    public void testConstraints001() {
+
+    }
 }
