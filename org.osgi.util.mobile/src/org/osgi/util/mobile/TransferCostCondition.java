@@ -32,14 +32,11 @@ import org.osgi.service.condpermadmin.Condition;
 /**
  * Class representing abstract transfer cost values. Implementation assigns
  * concrete bearers to abstract transfer costs. <br>
- * There is a static setTransferCostLimit() method that sets the current transfer
- * cost limit in a thread local variable. The TransferCost condition will check
- * this, and will fail if the cost is greater. The setTransferCostLimit() and
- * resetTransferCostLimit() methods behave stack-like, putting and removing costs
- * from a stack. The limit is always the value on the top. This way nested
- * permission checks can be implemented. It is recommended that
- * resetTransferCostLimit() is always put in a finally block, to ensure proper
- * stacking behavior.
+ * There is a static setTransferCost() method that sets the current transfer
+ * cost in a thread local variable. The TransferCost condition will check
+ * this, and will fail if the cost is greater. It is recommended that
+ * resetTransferCost() is always put in a finally block, to ensure that if
+ * something fails, the cost value is removed.
  */
 public class TransferCostCondition implements Condition {
 	private static ThreadLocal	context	= new ThreadLocal();
@@ -47,41 +44,62 @@ public class TransferCostCondition implements Condition {
 	public static final String LOW = "LOW";
 	public static final String MEDIUM = "MEDIUM";
 	public static final String HIGH = "HIGH";
-	
+
+	private static final TransferCostCondition lowCostLimit = new TransferCostCondition();
+	private static final TransferCostCondition mediumCostLimit = new TransferCostCondition();
+	private static final TransferCostCondition highCostLimit = new TransferCostCondition();
+
+	// default constructor is public, and we don't want that
+	private TransferCostCondition() {};
+
 	/**
-	 * Creates a TransferCost object. This constructor is intended to be called
+	 * Creates a TransferCostCondition object. This constructor is intended to be called
 	 * when Permission Admin initializes the object.
 	 * 
 	 * @param bundle ignored
-	 * @param cost The abstract limit cost. Possible values are "LOW","MEDIUM"
-	 *        and "HIGH". A null string means there are no limits.
+	 * @param costLimit The abstract limit cost. Possible values are "LOW","MEDIUM"
+	 *        and "HIGH". 
 	 */
-	public TransferCostCondition(Bundle bundle, String cost) {
+	public static Condition getInstance(Bundle bundle, String costLimit) {
+		if (costLimit.equals("LOW")) return lowCostLimit;
+		if (costLimit.equals("MEDIUM")) return mediumCostLimit;
+		if (costLimit.equals("HIGH")) return highCostLimit;
+		throw new IllegalArgumentException("unknown costLimit: "+costLimit);
 	}
 
 	/**
-	 * Sets a thread-local transfer cost limit. All isSatisfied() method calls
-	 * in this thread will check for this limit. The caller MUST call
+	 * Sets a thread-local transfer cost. All isSatisfied() method calls
+	 * in this thread will check for this cost, and only those permissions will be
+	 * activated, that have a cost limit higher than this. The caller MUST call
 	 * resetTransferCost(), after the permission checks are done. If this
-	 * function is not called, the default behavior is 'no limit'.
+	 * function is not called, the default behavior is 'no checks permformed, all tests
+	 * succeed'.
 	 * 
-	 * @param cost the upper limit of transfer cost
+	 * @param cost the cost of the current transaction. Only those conditions will evaluate to true,
+	 * 			that are equal or higher than this.
 	 */
-	public static void setTransferCostLimit(String cost) {
+	public static void setTransferCost(String cost) {
+		if (cost==null) { context.set(null); return; }
+		if (LOW.equals(cost)) { context.set(LOW); return; }
+		if (MEDIUM.equals(cost)) { context.set(MEDIUM); return; }
+		if (HIGH.equals(cost)) { context.set(HIGH); return; }
+
+		throw new IllegalArgumentException("unknown cost: "+cost);
 	}
 
 	/**
-	 * Resets the transfer cost to the previous value.
+	 * Resets the transfer cost. After this, the transfer cost checks always succeed.
 	 */
-	public static void resetTransferCostLimit() {
+	public static void resetTransferCost() {
+		context.set(null);
 	}
 
 	/**
 	 * Gets the current transfer cost.
 	 * @return the transfer cost value, or null
 	 */
-	protected static String getTransferCostLimit() {
-		return null;
+	protected static String getTransferCost() {
+		return (String) context.get();
 	}
 
 	/**
@@ -92,24 +110,34 @@ public class TransferCostCondition implements Condition {
 	 *         limit set in thread context
 	 */
 	public boolean isSatisfied() {
-		return true;
+		String cost = getTransferCost();
+		if (cost==null) return true;
+		if (this==highCostLimit) return true;
+		if (this==lowCostLimit) {
+			return cost==LOW;
+		}
+		if (this==mediumCostLimit) {
+			return cost==LOW || cost==MEDIUM;
+		}
+		throw new IllegalStateException("unknown enum for cost created: "+cost);
 	}
 
 	/**
 	 * Checks whether the condition is evaluated.
 	 * 
-	 * @return always false
+	 * @return true if the condition status can be evaluated instantly
 	 */
 	public boolean isEvaluated() {
-		return false;
+		return true;
 	}
 
 	/**
 	 * check whether the condition can change.
 	 * 
-	 * @return always true
+	 * @return true if the condition can change
 	 */
 	public boolean isMutable() {
+		if (this==highCostLimit) return false;
 		return true;
 	}
 
@@ -121,6 +149,10 @@ public class TransferCostCondition implements Condition {
 	 * @return true if all transfer costs are below limit
 	 */
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
-		return false;
+		// we don't use context
+		for(int i=0;i<conds.length;i++) {
+			if (!conds[i].isSatisfied()) return false;
+		}
+		return true;
 	}
 }
