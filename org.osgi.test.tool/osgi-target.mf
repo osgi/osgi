@@ -9,4 +9,3 @@ Bundle-Copyright: Copyright (c) The Open Services Gateway Initiative (2000, 2002
 CVS-Header: $Header$
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
- 

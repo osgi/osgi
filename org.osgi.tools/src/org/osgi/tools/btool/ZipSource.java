@@ -96,7 +96,7 @@ public class ZipSource implements Source {
 			node.path = dir;
 			entries.put(dir,node);
 		}
-		node.add(path);
+		node.add(name);
 	}
 	
 	
@@ -107,7 +107,7 @@ public class ZipSource implements Source {
 		checkZip();
 		Node node= (Node) entries.get(dir);
 		if ( node == null )
-			return null;
+			return null;		
 		return node.subs;
 	}
 

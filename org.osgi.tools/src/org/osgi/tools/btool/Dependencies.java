@@ -6,6 +6,7 @@ import java.util.jar.*;
 import java.util.regex.*;
 
 public class Dependencies {
+    BTool		btool;
 	Set			referred	= new HashSet();
 	Set			contained	= new HashSet();
 	Map			dot			= new HashMap();
@@ -31,7 +32,7 @@ public class Dependencies {
 							4 // 12 CONSTANT_NameAndType
 							};
 
-	public Dependencies(Collection classpath, Manifest manifest,
+	public Dependencies(BTool btool, Collection classpath, Manifest manifest,
 			Map resources, List excludeImport, List includeExport) {
 		this.manifest = manifest;
 		this.classpath = classpath;
@@ -61,7 +62,10 @@ public class Dependencies {
 					}
 					if (r.getPath().endsWith(".class")) {
 						InputStream in = r.getInputStream();
-						doStream(in);
+						if ( in != null )
+						    doStream(in);
+						else
+						    System.err.println("Cannot parse " + r.getPath());
 					}
 				}
 			} else {

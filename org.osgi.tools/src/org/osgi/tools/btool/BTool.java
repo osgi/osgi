@@ -92,24 +92,28 @@ public class BTool extends Task {
                         properties));
 
             openZip();
-
+            int n=0;
             for (Iterator i = contents.values().iterator(); i.hasNext();) {
                 Resource r = (Resource) i.next();
                 try {
                     InputStream in = r.getInputStream();
                     if (in != null) {
                         addToZip(r.getPath(), r.getInputStream(), r.getExtra());
+                        n++;
                     }
                 } catch (Exception e1) {
                     System.err.println("Could not read stream " + r);
                     e1.printStackTrace();
                 }
             }
-            closeZip();
-            doManifest();
-            if (analyse && manifestSource != null)
-                doAnalysis();
-
+            if ( n == 0 )
+                errors.add("No files in ZIP");
+            else {
+	            closeZip();
+	            doManifest();
+	            if (analyse && manifestSource != null)
+	                doAnalysis();
+            }	
             showErrors();
         } catch (Throwable e) {
             e.printStackTrace();
@@ -229,6 +233,7 @@ public class BTool extends Task {
                     .replace(',', File.pathSeparatorChar));
             addProperty(infoPrefix + ".bindir", eclipse.getBindir().replace(
                     ',', File.pathSeparatorChar));
+            addProperty(infoPrefix + ".buildpath", eclipse.getBuildPath());
         }
     }
 
@@ -322,19 +327,8 @@ public class BTool extends Task {
             Collection sub = p.getResources();
             for (Iterator ir = sub.iterator(); ir.hasNext();) {
                 Resource r = (Resource) ir.next();
-                if (r.getPath().endsWith("/CVS"))
-                    continue;
-
-                if (r.getPath().endsWith(".java")) {
-                    trace("Java file: " + r.getPath());
-                    if (sources) {
-                        Resource rr = new Resource(this, r.source,
-                                sourcesPrefix + r.getPath());
-                        rr.setSourcePath(r.getPath());
-                        addContents(rr);
-                    }
-                } else
-                    addContents(r);
+                r = modify(r);
+                addContents(r);
             }
         }
     }
@@ -343,6 +337,9 @@ public class BTool extends Task {
      * @param p
      */
     void addContents(Resource p) {
+        if ( p == null )
+            return;
+        
         if (!contents.containsKey(p.getPath()))
             contents.put(p.getPath(), p);
         else
@@ -587,9 +584,12 @@ public class BTool extends Task {
                 if (source != null) {
                     addRecursive(source, pack, export);
                 }
+                else
+                    errors.add("Cannot find package " + pack );
             } else {
                 Source source = findSource(pack);
                 if (source != null) {
+                    trace("Source for package " + source.getFile() );
                     PackageResource pr = new PackageResource(this, source, pack);
                     pr.setType(export ? PackageResource.EXPORT
                             : PackageResource.PRIVATE);
@@ -597,13 +597,35 @@ public class BTool extends Task {
                         addExport(pr);
                     addContents(pr);
                     for (Iterator i = pr.getResources().iterator(); i.hasNext();) {
-                        addContents((Resource) i.next());
+                        Resource r = (Resource) i.next();
+                        trace("Adding " + r );
+                        r  = modify(r);
+                        addContents(r);
                     }
                 }
+                else 
+                    errors.add("Cannot find package " + pack );                    
             }
         }
     }
 
+    
+    Resource modify(Resource r ) {
+        if ( r.getPath().endsWith("CVS"))
+            return null;
+        
+        if ( r.getPath().endsWith(".java")
+                || r.getPath().endsWith("package.html")) {
+            if (sources) {
+                Resource rr = new Resource(this, r.getSource(), sourcesPrefix + r.getPath());
+                rr.setSourcePath(r.getPath());
+                return rr;
+            }
+            return null;
+        }
+        return r;
+    }
+    
     void includes() throws IOException {
         if (includes == null)
             return;
@@ -648,18 +670,12 @@ public class BTool extends Task {
             throws IOException {
         if (path.equals("META-INF/MANIFEST.MF"))
             return;
-
-        if (path.endsWith("/CVS"))
+        
+        
+        Resource r = new Resource(this,source,path);
+        r = modify(r);
+        if ( r == null )
             return;
-        if (path.endsWith(".java")) {
-            trace("Java file: " + path);
-            if (sources) {
-                Resource rr = new Resource(this, source, sourcesPrefix + path);
-                rr.setSourcePath(path);
-                addContents(rr);
-            }
-            return;
-        }
 
         if (source.isDirectory(path)) {
             trace("Dir " + path);
@@ -679,7 +695,7 @@ public class BTool extends Task {
             }
         } else {
             trace("File " + path);
-            addContents(new Resource(source, path));
+            addContents(r);
         }
     }
 
@@ -895,7 +911,7 @@ public class BTool extends Task {
      */
     Dependencies initDependencies() throws IOException {
         if (dependencies == null) {
-            dependencies = new Dependencies(mainClasspath, manifest, contents,
+            dependencies = new Dependencies(this,mainClasspath, manifest, contents,
                     excludeImport, includeExport);
             dependencies.calculate();
         }

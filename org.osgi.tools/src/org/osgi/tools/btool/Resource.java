@@ -44,9 +44,15 @@ public class Resource implements Comparable {
 	    if ( source == null ) {
 	        source = btool.project;
 	    }
-		if ( sourcePath != null )
-			return source.getEntry(sourcePath);
-		return source.getEntry(path);
+	    try {
+			if ( sourcePath != null )
+				return source.getEntry(sourcePath);
+			return source.getEntry(path);
+	    }
+	    catch(FileNotFoundException e) {
+            btool.errors.add("Resource not found " + this);
+	        return null;
+	    }
 	}
 	
 	
@@ -113,5 +119,12 @@ public class Resource implements Comparable {
     }
     public void setExtra(byte[]extra) {
         this.extra = extra;
+    }
+
+    /**
+     * @return
+     */
+    public Source getSource() {
+        	return source;
     }
 }

@@ -25,7 +25,7 @@ public class DependenciesCheck extends TestCase {
 		classpath.add(eejar);
 		classpath.add(cmjar);
 		
-		Dependencies dep = new Dependencies(classpath, manifest,v,null,null);
+		Dependencies dep = new Dependencies(null,classpath, manifest,v,null,null);
 		dep.calculate();
 		System.out.println("Referred " + dep.getReferred() );
 		System.out.println("Contained " + dep.getContained() );

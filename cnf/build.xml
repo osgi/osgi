@@ -4,48 +4,53 @@
 	<dirname property="project" file="${ant.file}" />
 	<dirname property="workspace" file="${project}" />
 
-	<taskdef name="btool" classname="org.osgi.tools.btool.BTool" classpath="../cnf/jar/btool.jar" />
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
-		<classpath>
-			<dirset dir="../cnf/ant-contrib" />
-			<fileset dir="../cnf/ant-contrib" includes="**/*.jar" />
-		</classpath>
-	</taskdef>
-
-	
-	<property file="${project}/build.properties" />	
+	<taskdef name="btool" classname="org.osgi.tools.btool.BTool" 
+		classpath="../osgi.released/btool.jar" />
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="../cnf/ant-contrib/ant-contrib-0.6.jar"/>
 	
 	
+	<property file="${project}/build.properties" />		
 	<property file="${env.HOME}/osgi.properties" />
 	<property file="${workspace}/cnf/build.properties" />
 	<btool eclipse="${project}" />
 
+
+	<!-- Defaults, these value will be valid if the build.properties file is not present -->
+	<property name="bin.includes" value= "${project.name}.jar"/>
+	<property name="jars.compile.order" value= "${project.name}.jar"/>
+	<property name="expand.${project.name}.jar" value= "${project.name}"/>
+	
 	<property name="p" value= "${project.name}"/>
 	
-	<target name="publish" depends="many,one"/>
-	
-	<target name="many" depends="compile" if="jars.compile.order">
-		<echo>Many ${jars.compile.order} ${p}</echo>
+
+	<target name="publish" depends="check" unless="jar.ok">
+		<antcall target="compile"/>
 		<delete>
 			<fileset dir="${project}" includes="${jars.compile.order}" />
 		</delete>
-		<foreach list="${jars.compile.order}" delimiter=" ," target="buildJar" param="item.jarFile" inheritAll="true">
-		</foreach>
+		<foreach list="${jars.compile.order}" delimiter=" ," target="buildJar" param="item.jarFile" inheritAll="true"/>
+		<foreach list="${bin.includes}" delimiter=" ," target="release" param="item.jarFile" inheritAll="true"/>
 	</target>
-
-	<target name="one" depends="compile" unless="jars.compile.order">
-		<echo>One ${project.name}.jar</echo>
-		<btool jar="${project.name}.jar"
-			auto="true"
-			eclipse="${project}" 
-			analyse="${btool.analyse}" 
-			showmanifest="false" 
-			ignoreVersions="true" />
+	
+	<target name="release">
+		<echo>Release ${item.jarFile}</echo>
+		<copy overwrite="true" todir="../osgi.released" file="${item.jarFile}" />
 	</target>
-
+	
+	<target name="check">
+		<uptodate property="jar.ok" targetfile="../cnf/${project.name}">
+			<srcfiles dir="src" includes="**/*" />
+			<srcfiles dir="../cnf" includes="build.xml" />
+			<srcfiles dir="../cnf" includes="build.properties" />
+			<srcfiles dir="." includes="*.mf" />
+			<srcfiles dir="." includes="build.properties" />
+			<srcfiles dir="." includes="build.xml" />
+		</uptodate>
+		<touch file="../cnf/cache/${project.name}" />
+	</target>
+		
 
 	<target name="buildJar">
-		<echo>${cwd}/${item.jarFile}</echo>
 		<btool jar="${item.jarFile}" 
 			eclipse="${project}" 
 			analyse="${btool.analyse}" 
@@ -58,14 +63,10 @@
 			excludeImportProperty="excludeImport.${item.jarFile}" 
 			includeExportProperty="includeExport.${item.jarFile}" 
 			ipaProperty="ipa.${item.jarFile}" 
-			ignoreVersions="true" />
+			ignoreVersions="${btool.noversion}" />
 	</target>
 
 	<target name="compile" unless="eclipse.running">
-		<echo>${eclipse.buildId}</echo>
-		<echo>Classpath ${project.classpath} </echo>
-		<echo>Sourcepath ${project.sourcepath} </echo>
-		<echo>Bootpath ${project.bootclasspath} </echo>
 		<javac fork="no" executable="${JAVA_HOME}/bin/javac" srcdir="${project.sourcepath}" destdir="${project.bindir}" classpath="${project.classpath}" bootclasspath="${project.bootclasspath}" deprecation="true" listfiles="true" target="${javac.target}" source="${javac.source}" />
 	</target>
 
