@@ -49,8 +49,15 @@ public interface DmtExecPlugin {
      * @param data The data of the EXEC operation. The format of the data 
      * is not specified, it depends on the definition of the managed object 
      * (the node). Can be <code>null</code>.
-     * @throws DmtException
+     * @throws DmtException with the following possible error codes
+     * <li> <code>NODE_NOT_FOUND</code> if the plugin does not allow executing
+     * unexisting nodes
+     * <li> <code>OTHER_ERROR</code> [TODO can we specify this more precisely?]
+     * <li> <code>COMMAND_NOT_ALLOWED</code> if the node is non-executable
+     * <li> <code>DATA_STORE_FAILURE</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed.
      */
     void execute(DmtSession session, String nodeUri, String data) 
-         throws DmtException; //TODO specify exceptions
+         throws DmtException;
 }
