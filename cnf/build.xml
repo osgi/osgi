@@ -97,6 +97,7 @@
 				Default properties
 		-->
 
+		<echo>project ${project.name}</echo>
 		<loadproperties description="expand properties ALSO in keys!" 
 			srcfile="${project}/build.properties">
 			<filterchain>
@@ -104,19 +105,8 @@
 			</filterchain>
 		</loadproperties>
 
-		<loadproperties description="expand properties ALSO in keys!" 
-			srcfile="${env.HOME}/osgi.properties">
-			<filterchain>
-		          <expandproperties/>
-			</filterchain>
-		</loadproperties>
-
-		<loadproperties description="expand properties ALSO in keys!" 
-			srcfile="${workspace}/cnf/build.properties">
-			<filterchain>
-		          <expandproperties/>
-			</filterchain>
-		</loadproperties>
+		<property file="${env.HOME}/osgi.properties"/>
+		<property file="${workspace}/cnf/build.properties"/>
 
 		<property name="prebuild" value="" />
 		<!-- get the classpath and build info from eclipse -->
@@ -186,7 +176,7 @@
 	-->
 	<target name="-jar">
 		<echo>JAR ${item.jarFile}</echo>
-		<btool jar="${project}/${item.jarFile}" eclipse="${project}" analyse="${btool.analyse}" showmanifest="${btool.showmanifest}" includeProperty="include.${item.jarFile}" expandProperty="expand.${item.jarFile}" contentFoldersProperty="source.${item.jarFile}" excludeImportProperty="excludeImport.${item.jarFile}" includeExportProperty="includeExport.${item.jarFile}" ipaProperty="ipa.${item.jarFile}" verbose="${verbose}" sources="${btool.sources}" ignoreVersions="${btool.noversion}" />
+		<btool jar="${project}/${item.jarFile}" failok="${btool.failok}" eclipse="${project}" analyse="${btool.analyse}" showmanifest="${btool.showmanifest}" includeProperty="include.${item.jarFile}" expandProperty="expand.${item.jarFile}" contentFoldersProperty="source.${item.jarFile}" excludeImportProperty="excludeImport.${item.jarFile}" includeExportProperty="includeExport.${item.jarFile}" ipaProperty="ipa.${item.jarFile}" verbose="${verbose}" sources="${btool.sources}" ignoreVersions="${btool.noversion}" />
 	</target>
 
 	<!--
