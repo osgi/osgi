@@ -29,16 +29,16 @@ package org.osgi.service.webapplication;
 import java.util.Dictionary;
 
 /**
- * A WebApplicationService object is implemented by a Web Application Bundle to
- * register its web application with the Web Container. It does this by
- * registering an object implementing this service with the OSGi Framework
- * service registry, under the name of this interface.
+ * A WebApplication service is registered by a Web Application Bundle to
+ * advertise its web application to the Web Container. It does this by
+ * registering an object implementing this service with the framework,
+ * under the name of this interface.
  * 
  * @version $Revision$
  */
 public interface WebApplication {
 	/**
-	 * The version of the WebApplicationService API used during translation
+	 * The version of the WebApplication API used during translation
 	 * time. This value should be used by WAB translation tools to set the
 	 * service property WEBAPP_VERSION. The value "1.0.0" is currently the only
 	 * valid value.
@@ -46,14 +46,14 @@ public interface WebApplication {
 	public static final String	API_VERSION				= "1.0.0";													//$NON-NLS-1$
 	/**
 	 * The fully qualified name of this interface -
-	 * "org.osgi.service.webapplication.WebApplicationService". This is the
-	 * Service class to use to register the WebApplicationService with OSGi.
+	 * "org.osgi.service.webapplication.WebApplication". This is the
+	 * service name to use to register the WebApplication with the framework.
 	 */
-	public static final String	WEBAPP_SERVICE			= "org.osgi.service.webapplication.WebApplicationService";	//$NON-NLS-1$
+	public static final String	WEBAPP_SERVICE			= "org.osgi.service.webapplication.WebApplication";	//$NON-NLS-1$
 	/**
 	 * The service property (named "webapp.context") for the Web Application
 	 * context root. This service property must be set when registering a
-	 * WebApplicationService with OSGi. A WebApplicationService registered
+	 * WebApplication with the framework. A WebApplication service registered
 	 * without this service property set must be ignored by the Web Container
 	 * bundle. The value of this property must be of type String and must be a
 	 * legal web application context.
@@ -103,7 +103,7 @@ public interface WebApplication {
 
 	/**
 	 * This method must be called by the Web Container to report any exception
-	 * that occurs during the deployment of this WebApplicationService.
+	 * that occurs during the deployment of this WebApplication service.
 	 * 
 	 * @param e The Exception that occurred during deployment.
 	 */
