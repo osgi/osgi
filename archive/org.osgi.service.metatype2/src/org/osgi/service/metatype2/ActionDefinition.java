@@ -31,7 +31,7 @@ package org.osgi.service.metatype2;
  * An interface to describe an action.
  *
  * <p>An <tt>ActionDefinition</tt> object defines a description of an action.
- * An action is very similar to an attribute, it adds the definition of the
+ * An action is very similar to an attribute, it only adds the definition of the
  * input arguments if any.
  *
  * @version $Revision$
@@ -41,8 +41,8 @@ public interface ActionDefinition extends ExtendedAttributeDefinition {
 	/**
 	 * The <code>VOID(13)</code> type. 
 	 * 
-	 * The action may have VOID type, which means that it does not 
-	 * have output artguments.
+	 * The action may have VOID type meaning that it does not 
+	 * have output results.
 	 */
 	public static final int VOID = 13;
 	

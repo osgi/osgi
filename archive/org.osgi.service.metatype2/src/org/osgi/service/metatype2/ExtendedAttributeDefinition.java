@@ -34,8 +34,8 @@ import org.osgi.service.metatype.ObjectClassDefinition;
 /**
  * An interface to describe a complex attribute.
  *
- * <p>An <code>ExtendedAttributeDefinition</code> object defines a description of the
- * data type of an object with a complex type not only limited to primitive types.
+ * <p>An <code>ExtendedAttributeDefinition</code> object defines the description of an
+ * attribute whose data type can be complex.
  *
  * @version $Revision$
  */
@@ -79,7 +79,7 @@ public interface ExtendedAttributeDefinition extends AttributeDefinition {
     static final String READ_ONLY = "readOnly";
 
     /**
-	 * Return the additional properties for this attribute.
+	 * Return the additional properties of this attribute.
 	 *
 	 * @return Return a dictionary that contains the additional properties or null
 	 * if there is no additional properties.
@@ -88,10 +88,10 @@ public interface ExtendedAttributeDefinition extends AttributeDefinition {
     
     /**
 	 * Return the object class definition attached to this attribute if the
-	 * type is OBJECT_CLASS.
+	 * type (as returned by <code>getType()</code>) is OBJECT_CLASS.
 	 *
-	 * @return Returns the definiton of the class if this attribute has the 
-	 * type OBJECT_CLASS, null otherwise.
+	 * @return Returns the definiton of the class attached to this attribute if its 
+	 * type is OBJECT_CLASS, null otherwise.
 	 */
     ObjectClassDefinition getObjectClassDefinition();
 }

@@ -31,33 +31,32 @@ import org.osgi.service.metatype.ObjectClassDefinition;
 import org.osgi.service.metatype.AttributeDefinition;
 
 /**
- * Description for the data type information of an
- * object class that may contain attributes and actions.
+ * Defines an object class that may contain attributes and actions.
  *
  * @version $Revision$
  */
 public interface ExtendedObjectClassDefinition extends ObjectClassDefinition{
 
     /**
-	 * Return the attribute definition of the specified id.
+	 * Return the definition of the attribute with the specified ID.
 	 *
-	 * @param id The id of the attribute searched
-	 * @return The definition of the attribute or <code>null</code> if the id is not found
+	 * @param id The ID of the requested attribute
+	 * @return The definition of the attribute or <code>null</code> if no such attribute exists
 	 */
     AttributeDefinition getAttributeDefinition(String id);
 
     /**
-	 * Return all actions defined in this object.
+	 * Return the definitions of all actions defined in this class.
 	 *
 	 * @return An array of action definitions or <code>null</code> if no actions are found
 	 */
     ActionDefinition[] getActionDefinitions();
 
     /**
-	 * Return the action definition of the specified id.
+	 * Return the definition of the action with the specified ID.
 	 *
-	 * @param id The id of the action searched
-	 * @return The definition of the action or <code>null</code> if the id is not found
+	 * @param id The ID of the requested action
+	 * @return The definition of the action or <code>null</code> if no such action exists
 	 */
     ActionDefinition getActionDefinition(String id);
 }
