@@ -37,13 +37,17 @@ public class NativeCode implements BundleActivator {
 	 * Starts the bundle. Excercises the native code.
 	 */
 	public void start(BundleContext bc) throws BundleException {
+		test();
+	}
+
+	public static void test() throws BundleException {
+		NativeCode n = new NativeCode();
 		if (initOk) {
-			count(10000000);
+			n.count(10000000);
 		}
 		else
 			throw new BundleException("Native code not initialized.");
 	}
-
 	/**
 	 * Stops the bundle.
 	 */

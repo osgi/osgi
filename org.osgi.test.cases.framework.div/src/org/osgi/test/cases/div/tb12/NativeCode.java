@@ -4,7 +4,7 @@
  * This source code is owned by Ericsson Radio Systems AB, and is being distributed to OSGi 
  * MEMBERS as MEMBER LICENSED MATERIALS under the terms of section 3.2 of the OSGi MEMBER AGREEMENT. 
  */
-package org.osgi.test.cases.div.tb2; // could not rename this package without rebuilding native so/dll
+package org.osgi.test.cases.div.tb12; // could not rename this package without rebuilding native so/dll
 
 import org.osgi.framework.*;
 
@@ -14,34 +14,11 @@ import org.osgi.framework.*;
  * @author Ericsson Radio Systems AB
  */
 public class NativeCode implements BundleActivator {
-	static boolean	initOk	= false;
-	/**
-	 * Static initializer to load the native library.
-	 */
-	static {
-		try {
-			System.loadLibrary("Native");
-			initOk = true;
-		}
-		catch (UnsatisfiedLinkError ule) {
-			// initOk will remain false.
-		}
-	}
-
-	/**
-	 * The native method.
-	 */
-	public native void count(int i);
-
 	/**
 	 * Starts the bundle. Excercises the native code.
 	 */
 	public void start(BundleContext bc) throws BundleException {
-		if (initOk) {
-			count(10000000);
-		}
-		else
-			throw new BundleException("Native code not initialized.");
+		org.osgi.test.cases.div.tb2.NativeCode.test();
 	}
 
 	/**
