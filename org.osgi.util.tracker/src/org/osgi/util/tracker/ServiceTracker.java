@@ -286,10 +286,9 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 			System.out.println("ServiceTracker.close: " + filter); //$NON-NLS-1$
 		}
 		tracked.close();
-		ServiceReference references[] = getServiceReferences();
+		ServiceReference[] references = getServiceReferences();
 		Tracked outgoing = tracked;
 		tracked = null;
-		trackingCount = -1;
 		try {
 			context.removeServiceListener(outgoing);
 		}
@@ -301,6 +300,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 				outgoing.untrack(references[i]);
 			}
 		}
+		trackingCount = -1;
 		if (DEBUG) {
 			if ((cachedReference == null) && (cachedService == null)) {
 				System.out
@@ -444,7 +444,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 			if (length == 0) {
 				return null;
 			}
-			ServiceReference references[] = new ServiceReference[length];
+			ServiceReference[] references = new ServiceReference[length];
 			Enumeration keys = tracked.keys();
 			for (int i = 0; i < length; i++) {
 				references[i] = (ServiceReference) keys.nextElement();
@@ -576,12 +576,12 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 			return null;
 		}
 		synchronized (tracked) {
-			ServiceReference references[] = getServiceReferences();
+			ServiceReference[] references = getServiceReferences();
 			int length = (references == null) ? 0 : references.length;
 			if (length == 0) {
 				return null;
 			}
-			Object objects[] = new Object[length];
+			Object[] objects = new Object[length];
 			for (int i = 0; i < length; i++) {
 				objects[i] = getService(references[i]);
 			}
