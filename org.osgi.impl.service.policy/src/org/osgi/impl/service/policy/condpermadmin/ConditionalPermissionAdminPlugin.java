@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import org.osgi.impl.service.policy.PermissionInfoMetaNode;
 import org.osgi.impl.service.policy.RootMetaNode;
 import org.osgi.impl.service.policy.util.HashCalculator;
 import org.osgi.impl.service.policy.util.Splitter;
@@ -46,6 +47,9 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  */
 public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 	
+	private static final String	PERMISSIONINFO	= "PermissionInfo";
+	private static final String CONDITIONINFO = "ConditionInfo";
+
 	/**
 	 * the conditional permission admin to communicate with
 	 */
@@ -62,10 +66,20 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 	private Map conditionalPermissions;
 	
 	/**
-	 * metanode given back by asking about ./OSGi/Policies/Java/ConditionalPermission
+	 * metanode given back when asked about ./OSGi/Policies/Java/ConditionalPermission
 	 */
 	private static final DmtMetaNode rootMetaNode = new RootMetaNode("permissions specified by conditions");
+
+	/**
+	 * metanode given back when asked about ./OSGi/Policies/Java/ConditionalPermission/[...]/PermissionInfo
+	 */
+	private static final DmtMetaNode permissionInfoMetaNode = new PermissionInfoMetaNode();
 	
+	/**
+	 * metanode given back when asked about ./OSGi/Policies/Java/ConditionalPermission/[...]/ConditionInfo
+	 */
+	private static final DmtMetaNode conditionInfoMetaNode = new ConditionInfoMetaNode();
+
 	/**
 	 * internal representation of a conditional permission
 	 */
@@ -76,6 +90,24 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 		public ConditionalPermission(ConditionInfo[] conditionInfo,PermissionInfo permissionInfo[]) {
 			this.conditionInfo = conditionInfo;
 			this.permissionInfo = permissionInfo;
+		}
+
+		public DmtData getNodeValue(String nodeName) {
+			if (nodeName.equals(PERMISSIONINFO)) {
+				StringBuffer sb = new StringBuffer();
+				for(int i=0;i<permissionInfo.length;i++) {
+					sb.append(permissionInfo[i].getEncoded());
+					sb.append('\n');
+				}
+				return new DmtData(sb.toString());
+			} else {
+				StringBuffer sb = new StringBuffer();
+				for(int i=0;i<conditionInfo.length;i++) {
+					sb.append(conditionInfo[i].getEncoded());
+					sb.append('\n');
+				}
+				return new DmtData(sb.toString());
+			}
 		}
 	}
 
@@ -123,19 +155,20 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 			Arrays.sort(conditionInfo,conditionInfoComparator);
 			Arrays.sort(permissionInfo,permissionInfoComparator);
 			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < conditionInfo.length; i++) {
-				ConditionInfo info = conditionInfo[i];
-				sb.append(info.getEncoded());
-				sb.append('\n');
-			}
 			for (int i = 0; i < permissionInfo.length; i++) {
 				PermissionInfo info = permissionInfo[i];
 				sb.append(info.getEncoded());
 				sb.append('\n');
 			}
+			for (int i = 0; i < conditionInfo.length; i++) {
+				ConditionInfo info = conditionInfo[i];
+				sb.append(info.getEncoded());
+				sb.append('\n');
+			}
 			
 			// add to tree
-			conditionalPermissions.put(hashCalculator.getHash(sb.toString()),
+			String hash = hashCalculator.getHash(sb.toString());
+			conditionalPermissions.put(hash,
 					new ConditionalPermission(e.getConditionInfos(),e.getPermissionInfos()));
 		}
 	}
@@ -146,7 +179,15 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 		if (path.length==0) {
 			return rootMetaNode;
 		}
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
+		if (path.length==1) {
+			// TODO
+			throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
+		}
+		if (path[1].equals(PERMISSIONINFO)) {
+			return permissionInfoMetaNode;
+		} else {
+			return conditionInfoMetaNode;
+		}
 	}
 
 	public boolean supportsAtomic() {
@@ -203,11 +244,19 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 	public boolean isNodeUri(String nodeUri) {
 		String[] path = getPath(nodeUri);
 		if (path.length==0) return true;
+		ConditionalPermission cp = (ConditionalPermission) conditionalPermissions.get(path[0]);
+		if (cp==null) return false;
+		if (path.length==1) return true;
+		if (path.length!=2) return false;
+		if (path[1].equals(PERMISSIONINFO)) return true;
+		if (path[1].equals(CONDITIONINFO)) return true;
 		return false;
 	}
 
 	public DmtData getNodeValue(String nodeUri) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
+		String[] path = getPath(nodeUri);
+		ConditionalPermission cp = (ConditionalPermission) conditionalPermissions.get(path[0]);
+		return cp.getNodeValue(path[1]);
 	}
 
 	public String getNodeTitle(String nodeUri) throws DmtException {
