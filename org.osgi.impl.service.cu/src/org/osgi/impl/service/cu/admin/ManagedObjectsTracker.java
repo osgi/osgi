@@ -169,6 +169,8 @@ abstract class ManagedObjectsTracker implements ServiceListener {
         synchronized (reference) {
           onManagedObjectModified(reference, getType(reference));
         }
+        
+        break;
       }
       
       case ServiceEvent.UNREGISTERING : {
