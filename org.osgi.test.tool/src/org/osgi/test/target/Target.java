@@ -374,7 +374,13 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 		ticks = 0; // for watchdog
 		try {
 			log("Installing " + name, null);
-			Bundle bundle = context.installBundle(name, in);
+			Bundle bundle = find(name);
+			if ( bundle == null ) {
+				bundle = context.installBundle(name, in);
+			} else {
+				bundle.update(in);
+			}
+			in.close();
 			permission.setPermissions(bundle);
 			TestCaseLinkImpl control = new TestCaseLinkImpl(run, bundle, name);
 			links.addElement(control);
@@ -391,6 +397,18 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 	}
 
 	/**
+	 * @param name
+	 * @return
+	 */
+	private Bundle find(String name) {
+		Bundle b[] = context.getBundles();
+		for ( int i=0; i<b.length; i++ )
+			if ( b[i].getLocation().equals(name))
+				return b[i];
+		return null;
+	}
+
+	/**
 	 * Request from the director to uninstall an installed bundle.
 	 * 
 	 * @param name name of the bundle.
@@ -398,8 +416,10 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 	public void uninstall(String name) throws Exception {
 		log("Uninstalling " + name, null);
 		TestCaseLinkImpl control = getTestCaseLink(name);
-		control.getBundle().uninstall();
-		links.removeElement(control);
+		if ( control != null ) {
+			control.getBundle().uninstall();
+			links.removeElement(control);
+		}
 	}
 
 	/**
@@ -429,7 +449,7 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 			if (control.getName().equals(name))
 				return control;
 		}
-		throw new RuntimeException("Could not find bundle " + name);
+		return null;
 	}
 
 	/**
