@@ -63,7 +63,16 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 
 	/** internal representation of the tree */
 	HashMap	entries;
+	
+	/**
+	 * true, if data needs to be written back to the permission admin
+	 */
 	boolean dirty;
+	
+	/**
+	 * true, if we are in atomic transaction
+	 */
+	boolean atomic;
 
 
 	private final class Entry {
@@ -139,6 +148,7 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		String[] path = getPath(subtreeUri); // this is also a check if it starts with the right subpath
 		loadFromPermissionAdmin();
 		dirty = false;
+		atomic = (lockMode == DmtSession.LOCK_TYPE_ATOMIC);
 	}
 
 	/**
@@ -185,13 +195,10 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		// TODO Auto-generated method stub
 	}
 
-	/**
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.Dmt#rollback()
-	 */
 	public void rollback() throws DmtException {
-		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
+		// simply don't write data back to the permission admin
+		entries = null;
+		dirty = false;
 	}
 
 	/**
@@ -309,6 +316,10 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		}
 		
 		// TODO the others
+
+		// some cleanup
+		entries = null;
+		dirty = false;
 	}
 
 	public boolean isNodeUri(String nodeUri) {

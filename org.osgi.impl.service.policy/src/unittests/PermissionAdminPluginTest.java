@@ -21,6 +21,7 @@ import org.osgi.framework.AdminPermission;
 import org.osgi.impl.service.policy.permadmin.PermissionAdminPlugin;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtFactory;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -58,6 +59,11 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 		assertNotNull(dmtSession);
 	}
 
+	public void newAtomicSession() throws DmtException {
+		dmtSession = dmtFactory.getTree(null,ROOT,DmtSession.LOCK_TYPE_ATOMIC);
+		assertNotNull(dmtSession);
+	}
+	
 	public void testRegister() throws Exception {
 		newSession();
 		DmtMetaNode mn = dmtSession.getMetaNode(ROOT);
@@ -118,6 +124,14 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 		dmtSession.close();
 		PermissionInfo[] permissionInfo = permAdmin.getDefaultPermissions();
 		assertNull(permissionInfo);
-		
+	}
+	
+	public void testRollback1() throws Exception {
+		permAdmin.setDefaultPermissions(new PermissionInfo[] {ADMINPERMISSION});
+		newAtomicSession();
+		dmtSession.deleteNode(ROOT+"/Default");
+		dmtSession.rollback();
+		PermissionInfo[] permissionInfo = permAdmin.getDefaultPermissions();
+		assertEquals(1,permissionInfo.length);
 	}
 }
