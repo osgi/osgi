@@ -1,0 +1,220 @@
+/*
+ * $Header$
+ * 
+ * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * 
+ * Implementation of certain elements of the OSGi Specification may be subject
+ * to third party intellectual property rights, including without limitation,
+ * patent rights (such a third party may or may not be a member of the OSGi
+ * Alliance). The OSGi Alliance is not responsible and shall not be held
+ * responsible in any manner for identifying or failing to identify any or all
+ * such third party intellectual property rights.
+ * 
+ * This document and the information contained herein are provided on an "AS IS"
+ * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
+ * HEREIN WILL NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE
+ * OSGI ALLIANCE BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF
+ * USE OF DATA, INTERRUPTION OF BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR
+ * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
+ * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
+ * 
+ * All Company, brand and product names may be trademarks that are the sole
+ * property of their respective owners. All rights reserved.
+ */
+package org.osgi.meg.demo.console;
+
+import java.io.*;
+import java.io.ByteArrayOutputStream;
+import org.osgi.framework.*;
+import org.osgi.service.dmt.*;
+import org.osgi.tools.command.*;
+import org.osgi.util.tracker.ServiceTracker;
+
+/**
+ * 
+ * TODO Add Javadoc comment for this type.
+ * 
+ * @version $Revision$
+ */
+public class DmtConsole implements BundleActivator, CommandProvider {
+	ServiceTracker	dmtTracker;
+
+	public void start(BundleContext context) throws Exception {
+		dmtTracker = new ServiceTracker(context, DmtFactory.class.getName(),
+				null);
+		dmtTracker.open();
+		context.registerService(CommandProvider.class.getName(), this, null);
+	}
+
+	public void stop(BundleContext context) throws Exception {
+	}
+
+	public String getHelp() {
+		return "DMT CONSOLE\r\n" + "dmtcd <uri>\r\n"
+				+ "list dmt [-r] [-s] uri\r\n" + "show dmt <uri>\r\n";
+	}
+
+	public Object toString(Object o) {
+		if (o instanceof Node) {
+			return ((Node) o).toString();
+		}
+		return null;
+	}
+
+	public Object _dmtcd(CommandInterpreter intp) {
+		String pwd = calcURI(intp, intp.nextArgument());
+		if (!pwd.endsWith("/"))
+			pwd = pwd + "/";
+		intp.setVariable("dmt.pwd", pwd);
+		return null;
+	}
+
+	private String calcURI(CommandInterpreter intp, String string) {
+		if (string == null)
+			string = "";
+		if (string.startsWith("."))
+			return string;
+		String prefix = (String) intp.getVariable("dmt.pwd");
+		if (prefix == null)
+			prefix = "./";
+		if (string.length() == 0)
+			return prefix.substring(0, prefix.length() - 1);
+		else
+			return prefix + string;
+	}
+
+	public Object _listdmt(CommandInterpreter intp) throws DmtException {
+		boolean recursive = false;
+		boolean show = false;
+		String arg = intp.nextArgument();
+		while (arg != null) {
+			if (arg.startsWith("-r"))
+				recursive = true;
+			else
+				if (arg.startsWith("-s"))
+					show = true;
+				else {
+					if (arg.startsWith("-"))
+						throw new RuntimeException("Invalid option " + arg);
+					else
+						break;
+				}
+			arg = intp.nextArgument();
+		}
+		return new Node(intp, arg, intp.getUser(), show, recursive);
+	}
+
+	class Node {
+		boolean				show;
+		boolean				recursive;
+		CommandInterpreter	intp;
+		String				uri;
+		String				principal;
+
+		Node(CommandInterpreter intp, String uri, String principal,
+				boolean show, boolean recursive) {
+			this.intp = intp;
+			this.uri = calcURI(intp, uri);
+			this.show = show;
+			this.recursive = recursive;
+			this.principal = principal;
+		}
+
+		public String toString() {
+			try {
+				DmtFactory dmt = (DmtFactory) dmtTracker.getService();
+				if (dmt == null)
+					throw new RuntimeException("No DmtFactory service present");
+				DmtSession session = dmt.getTree(null);
+				ByteArrayOutputStream bout = new ByteArrayOutputStream();
+				PrintWriter pw = new PrintWriter(new OutputStreamWriter(bout,
+						"UTF-8"));
+				try {
+					toString(pw, session, uri, 0);
+				}
+				catch (Exception e) {
+					pw.println("Exception in printing this node " + uri + " "
+							+ e);
+				}
+				pw.close();
+				return new String(bout.toByteArray(), "UTF-8");
+			}
+			catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return super.toString();
+		}
+
+		void toString(PrintWriter pw, DmtSession session, String uri, int level)
+				throws DmtException {
+			String indent = "                                                 "
+					.substring(0, level);
+			String title;
+			try {
+				title = session.getNodeTitle(uri);
+			}
+			catch (Exception e) {
+				title = uri;
+			}
+			pw.println(indent + title);
+			indent = indent + " -";
+			if (show) {
+				// TODO: Spec should not allow errors for optional attributes but require a well known default value
+				pw.println(indent + "ACL                 : "
+						+ session.getNodeAcl(uri));
+				try {
+					pw.println(indent + "Timestamp           : "
+							+ session.getNodeTimestamp(uri));
+				}
+				catch (DmtException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				if (session.isLeafNode(uri)) {
+					try {
+						pw.println(indent + "Version             : "
+								+ session.getNodeVersion(uri));
+					}
+					catch (DmtException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					try {
+						pw.println(indent + "Size                : "
+								+ session.getNodeSize(uri));
+					}
+					catch (DmtException e3) {
+						// TODO Auto-generated catch block
+						e3.printStackTrace();
+					}
+					try {
+						pw.println(indent + "Type                : "
+								+ session.getNodeType(uri));
+					}
+					catch (DmtException e4) {
+						// TODO Auto-generated catch block
+						e4.printStackTrace();
+					}
+					try {
+						pw.println(indent + "Value               : "
+								+ session.getNodeValue(uri));
+					}
+					catch (DmtException e5) {
+						// TODO Auto-generated catch block
+						e5.printStackTrace();
+					}
+				}
+			}
+			if (recursive && !session.isLeafNode(uri)) {
+				String[] children = session.getChildNodeNames(uri);
+				for (int i = 0; children != null && i < children.length; i++) {
+					toString(pw, session, uri + "/" + children[i], level + 4);
+				}
+			}
+		}
+	}
+}
