@@ -22,7 +22,7 @@ import java.io.*;
 public class ClientTest {
 	public static void main(String[] args) throws IOException {
 		int port = Integer.parseInt(args[1]);
-		ClientAdaptor ca = new ClientAdaptor(null, args[0], port);
+		ClientAdaptor ca = new ClientAdaptor(null, args[0], port, 10);
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		String cmd;
 		while (!(cmd = in.readLine()).equals("bye")) {

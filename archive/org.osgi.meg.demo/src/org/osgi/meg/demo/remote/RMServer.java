@@ -22,8 +22,6 @@ import java.net.*;
 
 public class RMServer extends Thread {
 	
-	private static final int SOCKET_TIMEOUT = 5000;
-	
 	private String			command;
 	private RemoteReceiver	receiver;
 	private int 			port;
@@ -33,10 +31,12 @@ public class RMServer extends Thread {
 	private BufferedReader	in;
 	private boolean			running;
 	private boolean			connected;
+	private int				socketTimeout;
 
-	public RMServer(int port) {
+	public RMServer(int port, int socketTimeout) {
 		super("RMServer");
 		this.port = port;
+		this.socketTimeout = socketTimeout;
 		start();
 	}
 
@@ -72,7 +72,7 @@ public class RMServer extends Thread {
 			System.out.println("Waiting for connection request...");
 			try {
 				serverSocket = new ServerSocket(port);
-				serverSocket.setSoTimeout(SOCKET_TIMEOUT);
+				serverSocket.setSoTimeout(socketTimeout);
 				clientSocket = serverSocket.accept();
 			} catch (SocketTimeoutException e) {
 				try {
@@ -89,7 +89,7 @@ public class RMServer extends Thread {
 			}
 			
 			try {
-				clientSocket.setSoTimeout(SOCKET_TIMEOUT);
+				clientSocket.setSoTimeout(socketTimeout);
 				out = new PrintWriter(clientSocket.getOutputStream(), true);
 				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 				setConnected(true);
@@ -148,6 +148,7 @@ public class RMServer extends Thread {
 					}
 				} // while (running && connected)
 			} catch (IOException e) {
+				e.printStackTrace();
 			} finally {
 				try {
 					setConnected(false);

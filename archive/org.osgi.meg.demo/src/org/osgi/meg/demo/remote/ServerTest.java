@@ -36,7 +36,7 @@ public class ServerTest implements RemoteReceiver {
 		System.out.println("=============================");
 		System.out.println("= Management Server started =");
 		System.out.println("=============================\r\n,");
-		rms = new RMServer(port);
+		rms = new RMServer(port, SOCKET_TIMEOUT);
 		rms.setReceiver(this);
 		Consol c = new Consol();
 		c.start();
