@@ -44,16 +44,16 @@
 package org.osgi.test.cases.dmt.tbc;
 
 import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.*;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.test.cases.dmt.tbc.DmtSession.*;
 import org.osgi.test.cases.dmt.tbc.DmtAcl.*;
-import org.osgi.test.cases.dmt.tbc.DmtAdmin.*;
+import org.osgi.test.cases.dmt.tbc.DmtAdmin.GetSession;
 import org.osgi.test.cases.dmt.tbc.DmtData.*;
-import org.osgi.test.cases.dmt.tbc.DmtDataType.*;
+import org.osgi.test.cases.dmt.tbc.DmtData.DmtData;
+import org.osgi.test.cases.dmt.tbc.DmtDataType.DmtDataTypeConstants;
 import org.osgi.test.cases.dmt.tbc.DmtException.*;
-import org.osgi.test.cases.dmt.tbc.DmtPrincipalPermission.*;
+import org.osgi.test.cases.dmt.tbc.DmtPrincipalPermission.DmtPrincipalPermission;
+import org.osgi.test.cases.dmt.tbc.DmtSession.*;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
@@ -96,7 +96,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 
 	public static final String INVALID_URI = "./OSGi/log/#@~z";
 
-	public static final String INVALID_LEAFNAME = "%&ã#&$#";
+	public static final String INVALID_LEAFNAME = "%&Ã£#&$#";
 
 	public static final String LONG_NAME = "sdsdqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfgzcvddddddsd";
 

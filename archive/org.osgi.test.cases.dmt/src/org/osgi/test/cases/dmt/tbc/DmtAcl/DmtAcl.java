@@ -29,21 +29,22 @@
  * Date          Author(s)
  * CR            Headline
  * ============  ==============================================================
- * Jan 31, 2005  André Assad
+ * Jan 31, 2005  AndrÃ© Assad
  * 1             Implement MEG TCK
  * ============  ==============================================================
- * Feb 11, 2005  André Assad
+ * Feb 11, 2005  AndrÃ© Assad
  * 1             Updates after formal inspection (BTC_MEG_TCK_CODE-INSPR-001)
  * ============  ==============================================================
- * Mar 04, 2005  André Assad
+ * Mar 04, 2005  AndrÃ© Assad
  * 23            Update test cases according to changes in the DmtAcl API
  * ============  ==============================================================
  */
 
 package org.osgi.test.cases.dmt.tbc.DmtAcl;
 
-
 import org.osgi.test.cases.dmt.tbc.DmtTestControl;
+
+
 
 /**
  * @author Andre Assad
@@ -286,7 +287,7 @@ public class DmtAcl {
 	 *                  invalid principal.
 	 */
 	public void testDmtAcl009() {
-		String principal = "%INVALID*_PRINCIPAL_NÂME";
+		String principal = "%INVALID*_PRINCIPAL_NÃ‚ME";
 		org.osgi.service.dmt.DmtAcl dmtAcl = null;
 		dmtAcl = new org.osgi.service.dmt.DmtAcl("Add=" + principal
 				+ "&Delete=" + principal + "&Get=*");
@@ -346,7 +347,7 @@ public class DmtAcl {
 	 *                  element.
 	 */
 	public void testDmtAcl012() {
-		String[] principal = { "www.cesar.org.br", "%INVALID*_PRINCIPAL_NÂME" };
+		String[] principal = { "www.cesar.org.br", "%INVALID*_PRINCIPAL_NÃ‚ME" };
 		int[] perm = { org.osgi.service.dmt.DmtAcl.GET, org.osgi.service.dmt.DmtAcl.EXEC};
 		org.osgi.service.dmt.DmtAcl newDmtAcl = null;
 		try {

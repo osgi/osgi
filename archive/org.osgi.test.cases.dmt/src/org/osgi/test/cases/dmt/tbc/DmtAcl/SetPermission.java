@@ -29,13 +29,13 @@
  * Date          Author(s)
  * CR            Headline
  * ============  ==============================================================
- * Jan 31, 2005  André Assad
+ * Jan 31, 2005  AndrÃ© Assad
  * 1             Implement MEG TCK
  * ============  ==============================================================
- * Feb 11, 2005  André Assad
+ * Feb 11, 2005  AndrÃ© Assad
  * 1             Updates after formal inspection (BTC_MEG_TCK_CODE-INSPR-001)
  * ============  ==============================================================
- * Mar 04, 2005  André Assad
+ * Mar 04, 2005  AndrÃ© Assad
  * 23            Updates after changes in the DmtAcl API
  * ============  ==============================================================
  */
