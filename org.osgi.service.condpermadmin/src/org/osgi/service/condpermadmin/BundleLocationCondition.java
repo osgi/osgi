@@ -11,7 +11,7 @@ import java.util.Dictionary;
 import org.osgi.framework.Bundle;
 
 /**
- * @author Peter Nagy <peter.1.nagy@nokia.com>
+ * @author Peter Nagy 
  */
 public class BundleLocationCondition implements Condition {
 

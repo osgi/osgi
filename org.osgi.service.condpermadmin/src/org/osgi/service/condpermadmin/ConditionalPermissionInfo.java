@@ -7,7 +7,7 @@ package org.osgi.service.condpermadmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 /**
- * @author Peter Nagy <peter.1.nagy@nokia.com>
+ * @author Peter Nagy 
  */
 public interface ConditionalPermissionInfo {
 	void delete();

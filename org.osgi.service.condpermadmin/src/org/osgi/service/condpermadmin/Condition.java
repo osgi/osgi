@@ -7,7 +7,7 @@ package org.osgi.service.condpermadmin;
 import java.util.Dictionary;
 
 /**
- * @author Peter Nagy <peter.1.nagy@nokia.com>
+ * @author Peter Nagy 
  */
 public interface Condition {
 	boolean isEvaluated();

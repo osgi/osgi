@@ -5,7 +5,7 @@
 package org.osgi.service.condpermadmin;
 
 /**
- * @author Peter Nagy <peter.1.nagy@nokia.com>
+ * @author Peter Nagy
  */
 public final class ConditionInfo {
 	final String type;
