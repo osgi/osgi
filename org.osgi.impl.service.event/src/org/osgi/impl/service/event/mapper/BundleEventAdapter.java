@@ -69,6 +69,8 @@ public class BundleEventAdapter extends EventAdapter {
 				typename = UNRESOLVED;
 				break;
 			default :
+				//### Should this really throw an exception?
+				//###  normally unknown events are ignored
 				throw new RuntimeException("Invalid BundleEvent type ("
 						+ event.getType() + ")");
 		}
