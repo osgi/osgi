@@ -275,7 +275,16 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 	public void close() throws DmtException {
 		if (!dirty) return;
 
-		// TODO: check if current tree is consistent
+		// check if current tree is consistent
+		Collection coll = entries.values();
+		for (Iterator iter = coll.iterator(); iter.hasNext();) {
+			Entry e = (Entry) iter.next();
+			if (e.isDefault) continue;
+			if ((e.location==null)||(e.location.equals(""))) {
+				throw new DmtException(dataRootURI,DmtException.INVALID_DATA,"location is empty");
+			}
+		}
+		
 		
 		// the default
 		Entry defaulte = (Entry) entries.get(DEFAULT);
@@ -290,7 +299,6 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		// SECOND delete those locations from the permissionadmin, that are not in our
 		// table.
 		Set locationSet = new TreeSet();
-		Collection coll = entries.values();
 		for (Iterator iter = coll.iterator(); iter.hasNext();) {
 			Entry entry = (Entry) iter.next();
 			if (entry.isDefault) continue;
@@ -371,7 +379,7 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 	/**
 	 * return the path elements, from our base
 	 * @param nodeUri
-	 * @return
+	 * @return an array of nodenames
 	 */
 	private String[] getPath(String nodeUri) {
 		if (!nodeUri.startsWith(dataRootURI)) 
