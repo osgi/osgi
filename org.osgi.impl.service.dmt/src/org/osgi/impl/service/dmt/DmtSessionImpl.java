@@ -350,17 +350,13 @@ public class DmtSessionImpl implements DmtSession {
         String[] pluginChildNodes = getDataPlugin(uri).getChildNodeNames(uri);
         
         // remove null entries from the returned array (if it is non-null)
-        if (pluginChildNodes == null)
-            return null;
+        if (pluginChildNodes == null) return new String[0];
         List processedChildNodes = new Vector();
         
         for (int i = 0; i < pluginChildNodes.length; i++) {
             if (pluginChildNodes[i] != null)
                 processedChildNodes.add(pluginChildNodes[i]);
         }
-        
-        if (processedChildNodes.size() == 0)
-            return null;
         
         return (String[]) processedChildNodes
                 .toArray(new String[processedChildNodes.size()]);
