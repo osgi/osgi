@@ -20,7 +20,8 @@ package org.osgi.meg.demo.remote;
 import java.io.*;
 
 public class ClientTest {
-	public static void main(String[] args) throws IOException {
+	
+	public static void main(String[] args) throws Exception {
 		int port = Integer.parseInt(args[1]);
 		ClientAdaptor ca = new ClientAdaptor(null, args[0], port, 10);
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -36,4 +37,5 @@ public class ClientTest {
 		ca.stop();
 		in.close();
 	}
+	
 }

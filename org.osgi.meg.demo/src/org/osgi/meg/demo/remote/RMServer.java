@@ -35,8 +35,10 @@ public class RMServer extends Thread {
 
 	public RMServer(int port, int socketTimeout) {
 		super("RMServer");
+		
 		this.port = port;
 		this.socketTimeout = socketTimeout;
+		setRunning(true);
 		start();
 	}
 
@@ -66,30 +68,28 @@ public class RMServer extends Thread {
 	}
 
 	public void run() {
-		setRunning(true);
+		try {
+			serverSocket = new ServerSocket(port);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			setRunning(false);
+		}
 		
 		while (isRunning()) {
 			System.out.println("Waiting for connection request...");
+			
 			try {
-				serverSocket = new ServerSocket(port);
-				serverSocket.setSoTimeout(socketTimeout);
 				clientSocket = serverSocket.accept();
-			} catch (SocketTimeoutException e) {
-				try {
-					serverSocket.close();
-				}
-				catch (IOException ioe) {
-					ioe.printStackTrace();
-				}
-				continue;
-			} catch (IOException e) {
+			}
+			catch (IOException e) {
 				e.printStackTrace();
 				setRunning(false);
 				continue;
 			}
 			
 			try {
-				clientSocket.setSoTimeout(socketTimeout);
+				//clientSocket.setSoTimeout(socketTimeout);
 				out = new PrintWriter(clientSocket.getOutputStream(), true);
 				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 				setConnected(true);
@@ -97,16 +97,12 @@ public class RMServer extends Thread {
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				if (null != out)
-					out.close();
-				if (null != in) {
-					try {
-						in.close();
+				try {
+					if (null != clientSocket)
 						clientSocket.close();
-					}
-					catch (IOException ioe) {
-						ioe.printStackTrace();
-					}
+				}
+				catch (IOException ee) {
+					ee.printStackTrace();
 				}
 				setRunning(false);
 				continue;
@@ -152,19 +148,21 @@ public class RMServer extends Thread {
 			} finally {
 				try {
 					setConnected(false);
-					if (null != in)
-						in.close();
-					if (null != out)
-						out.close();
 					if (null != clientSocket)
 						clientSocket.close();
-					serverSocket.close();
 					System.out.println("Client has disconnected");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		} // while (running)
+		
+		try {
+			serverSocket.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	} 
 
 	private String readBlock() throws IOException {

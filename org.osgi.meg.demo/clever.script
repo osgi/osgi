@@ -1,13 +1,44 @@
+# initial steps
+#################################
+
 setNodeAcl . Add=*&Exec=*&Get=*&Delete=*&Replace=*
-x ./OSGi/deploy/install file://localhost/eclipse/workspaceMEG/org.osgi.meg.demo/tm.txt
+
+# install an application
+#################################
+
+x ./OSGi/deploy/install file:../../org.osgi.meg.demo/tm.txt
+
+# launch an application
+#################################
+
+# get installed applications
 gc ./OSGi/applications
+
+# put the result into a String array called "apps", the separator is '/'
+# e.g. the result of the previous command is: app1/app2/app3 then the command
+# puts the "", "" and "" Strings into the array
 <$toArray$> / apps
+
 ci ./OSGi/applications/<$apps[0]$>/launch/1
-cl ./OSGi/applications/<$apps[0]$>/launch/1/player chr:Ivan
+cl ./OSGi/applications/<$apps[0]$>/launch/1/player chr:Joe
 x ./OSGi/applications/<$apps[0]$>/launch/1 ""
-gc ./OSGi/application_instances
-<$toArray$> / instances
-x ./OSGi/application_instances/<$instances[0]$> SUSPEND
+
+# get logs
+#################################
 ci ./OSGi/log/a
 cl ./OSGi/log/a/maxrecords int:7
 x ./OSGi/log/a ""
+
+# create and change configuration
+#################################
+ci ./OSGi/mon/org.osgi.meg.demo.app.events.TestApplication/TestParameter/Server/myjob
+sv ./OSGi/mon/org.osgi.meg.demo.app.events.TestApplication/TestParameter/Server/myjob/Reporting/Type chr:EV
+sv ./OSGi/mon/org.osgi.meg.demo.app.events.TestApplication/TestParameter/Server/myjob/Reporting/Value int:1
+sv ./OSGi/mon/org.osgi.meg.demo.app.events.TestApplication/TestParameter/Server/myjob/Enabled boolean:true
+cl ./OSGi/cfg/org.osgi.meg.demo.app.events.TestApplication/TestParameter chr:something
+
+# close the session to commit changes
+close
+
+# open the session again
+open . server

@@ -19,7 +19,6 @@ package org.osgi.meg.demo.remote.gui;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -46,7 +45,6 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Vector;
 
 
 public class ServerTestGUI extends javax.swing.JFrame implements ActionListener, TreeSelectionListener {
@@ -78,7 +76,9 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
     private JLabel           jLabelProps;
     private JTextArea        jTextAreaAlert;
     private JTextArea        jTextAreaCommandLog;
-    private JComboBox 	 	 jComboBoxScripts; 
+    private JComboBox 	 	 jComboBoxScripts;
+    private JLabel 			 jLabelScripts; 
+    private JProgressBar 	 jProgressBarWaiting = new JProgressBar();
 	
     // action commands
     private String OPEN            = "Open";
@@ -113,22 +113,22 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
         rms = new RMServer(port, socketTimeout);
         commander = new Commander(rms, this);
         rms.setReceiver(commander);
-        rootNode = new TreeNodeImpl(root, null, commander);
         try {
 			runner = new ScriptRunner(commander);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		rootNode = new TreeNodeImpl(root, null, commander);
 
         initGUI();
         refreshToolBar();
         setVisible(true);
         
-        waitForClient();
+        showProgressBar();
     }
     
-    private void waitForClient() {
+    /*private void waitForClient() {
     	final Timer timer = new Timer();
     	final JFrame fr = ServerTestGUI.this;
     	
@@ -165,7 +165,7 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
 			}
 			
 		}, 0);
-    }
+    }*/
     
     private void destroy() {
     	try {
@@ -209,11 +209,7 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
 			setSize(1000, 800);
             setTitle("Remote DMT manager");
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-            this.addWindowListener(new WindowAdapter() {
-                    public void windowClosed(WindowEvent e) {
-                        destroy();
-                    }
-                });
+
 			{
                 jTabbedPane = new JTabbedPane(); 
                 this.getContentPane().add(jTabbedPane, BorderLayout.CENTER);
@@ -289,23 +285,13 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
                         jButtonSetValue.addActionListener(this);
                     }
                     {
-                    	JLabel jLabelScripts = new JLabel("  Scripts: ");
+                    	jLabelScripts = new JLabel("  Scripts: ");
                         jComboBoxScripts = new JComboBox(runner.getscriptFiles());
                         jComboBoxScripts.addActionListener(this);
                         jToolBar.add(jLabelScripts);
                         jToolBar.add(jComboBoxScripts);
                     }
                 }
-                /*{
-                    treeModel = new DefaultTreeModel(rootNode);
-                    jTree = new JTree(treeModel);
-                    jTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-                    jTree.setShowsRootHandles(true);
-                    jTree.addTreeSelectionListener(this);
-                    
-                    JScrollPane jScrollPaneTree = new JScrollPane(jTree);
-                    this.jPanelTree.add(jScrollPaneTree, BorderLayout.CENTER);
-                }*/
                 {
                 	jLabelProps = new JLabel("<html><b><font color=\"#bb000f\">Properties:</b></html>");
                     this.jPanelTree.add(jLabelProps, BorderLayout.SOUTH);
@@ -344,17 +330,23 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
 	        String s = (String) cb.getSelectedItem();
 	        try {
 	        	jTextAreaCommandLog.append("Runs script: " + s + "-------------------\n");
-	        	jTextAreaCommandLog.append("Result:\n");
+	        	
+	        	
 				String result = runner.runScript(s);
+				
+				
 				jTextAreaCommandLog.append(result);
+				jTextAreaCommandLog.append("-------------------\n");
 			}
 			catch (CommanderException ex) {
-				// TODO
 				ex.printStackTrace();
+				JOptionPane.showMessageDialog(this, 
+						"Code: " + ex.getCode() + "\nTrace:\n" + ex.getTrace() , 
+						"Error", JOptionPane.ERROR_MESSAGE);
 			}
 			catch (IOException ex) {
-				// TODO
 				ex.printStackTrace();
+				JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		
@@ -512,10 +504,12 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
             jButtonOpen.setEnabled(false);
             jButtonClose.setEnabled(true);
             jButtonRefresh.setEnabled(true);
+            jProgressBarWaiting.setVisible(true);
         } else {
             jButtonOpen.setEnabled(true);
             jButtonClose.setEnabled(false);
             jButtonRefresh.setEnabled(false);
+            jProgressBarWaiting.setVisible(false);
         }
         if (!opened || null == jTree.getLastSelectedPathComponent()) {
         	jButtonSetACL.setEnabled(false);
@@ -546,10 +540,39 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
     }
 
 	public void setConnected(boolean b) {
-		if (false == b) {
+		if (b) {
+			new Thread(new Runnable() {
+				public void run() {
+					try {
+						open();
+						refreshToolBar();
+						hideProgressBar();
+						refreshToolBar();
+					} catch (CommanderException e) {
+						e.printStackTrace();
+					}
+				}}).start();
+		} else {
 			close();
-			waitForClient();
+			showProgressBar();
+			refreshToolBar();
 		}
+	}
+	
+	private void showProgressBar() {
+		jProgressBarWaiting = new JProgressBar();
+		jProgressBarWaiting.setIndeterminate(true);
+		jProgressBarWaiting.setMinimum(0);
+		jProgressBarWaiting.setMaximum(5);
+		jProgressBarWaiting.setStringPainted(true);
+		jProgressBarWaiting.setString("WAITING FOR CLIENT");
+		getContentPane().add(jProgressBarWaiting, BorderLayout.SOUTH);
+		validate();		
+	}
+	
+	private void hideProgressBar() {
+		getContentPane().remove(jProgressBarWaiting);
+		validate();
 	}
 
 }

@@ -23,16 +23,17 @@ import org.osgi.impl.service.dmt.api.RemoteAlertSender;
 import org.osgi.service.dmt.*;
 
 /* Description of the protocol at the end of this file */
-// TODO what should be used instead of the System.exit() calls?
+
 public class ClientAdaptor implements RemoteAlertSender {
+	
 	private boolean				goon	 = true;
 	private String				message	 = null;
 	private CommandProcessor	cp		 = null;
 	private int					pingTime;
 
-	public ClientAdaptor(DmtFactory fact, String host, int port, int pingTime) {
+	public ClientAdaptor(DmtFactory fact, String host, int port, int pingTime) throws Exception {
 		this.pingTime = pingTime;
-		CommandThread ct = new CommandThread(this, host, port);
+		CommandThread ct = new CommandThread(host, port);
 		cp = new CommandProcessor(fact);
 		ct.start();
 	}
@@ -41,8 +42,9 @@ public class ClientAdaptor implements RemoteAlertSender {
 		goon = false;
 	}
 
+	// TODO
 	public boolean acceptServerId(String serverid) {
-		return true; // todo
+		return true;
 	}
 
 	public void sendAlert(String serverid, String sessionid, int code,
@@ -61,28 +63,27 @@ public class ClientAdaptor implements RemoteAlertSender {
 	}
 
 	private class CommandThread extends Thread {
-		private ClientAdaptor	parent	= null;
+
 		private Socket			s		= null;
 		private PrintWriter		out		= null;
 		private BufferedReader	in		= null;
 
-		public CommandThread(ClientAdaptor parent, String host, int port) {
+		public CommandThread(String host, int port) throws Exception {
 			super("ClientAdaptor");
-			this.parent = parent;
 			try {
 				s = new Socket(host, port);
-				s.setSoTimeout(10000);
 				out = new PrintWriter(s.getOutputStream(), true);
 				in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			}
-			catch (UnknownHostException e) {
-				System.err.println("Don't know about host: " + host);
-				System.exit(1);
-			}
-			catch (IOException e) {
-				System.err.println("Couldn't get I/O for the connection to: "
-						+ host + ":" + port);
-				System.exit(1);
+			catch (Exception e) {
+				if (null != s)
+					try {
+						s.close();
+					}
+					catch (IOException ee) {
+						ee.printStackTrace();
+					}
+				throw e;
 			}
 		}
 
@@ -90,17 +91,17 @@ public class ClientAdaptor implements RemoteAlertSender {
 			String command;
 			String result;
 			try {
-				while (parent.goon) {
+				while (goon) {
 					try {
 						Thread.sleep(pingTime);
 					}
 					catch (InterruptedException e) {
 					}
-					if (parent.message != null) { //alert
+					if (message != null) { //alert
 						out.println("alert:");
-						out.println(parent.message);
+						out.println(message);
 						out.println("block_end");
-						parent.message = null;
+						message = null;
 						result = in.readLine();
 						if (!result.equals("alert_ok")) {
 							System.out
@@ -111,14 +112,14 @@ public class ClientAdaptor implements RemoteAlertSender {
 					out.println("ping");
 					result = in.readLine();
 					if (null == result) {
-						parent.goon = false;
+						goon = false;
 						continue;
 					}
 					if (result.equals("ping_ok"))
 						continue;
 					if (result.startsWith("cmd:")) {
 						command = result.substring(4);
-						result = parent.cp.processCommand(command);
+						result = cp.processCommand(command);
 						out.println("result:");
 						out.println(result);
 						out.println("block_end");
@@ -130,16 +131,22 @@ public class ClientAdaptor implements RemoteAlertSender {
 					}
 				} // while
 				out.println("bye");
-				out.close();
-				in.close();
-				s.close();
 			} // try
 			catch (IOException e) {
 				e.printStackTrace();
+			} finally {
+				try {
+					s.close();
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		} // run
 	} // commandthread
 }
+
+
 /*       Admin  RMServer        ClientAdaptor App
  * ---------------------------------------------
  *        |       |     ping         |       |
