@@ -3,7 +3,7 @@
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.application"/>
 	<classpathentry sourcepath="/osgi.released/ee.foundation.jar" kind="lib" path="/osgi.released/ee.foundation.jar"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.dmt"/>
 	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
+	<classpathentry kind="src" path="/org.osgi.service.dmt"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

@@ -19,7 +19,6 @@ package org.osgi.impl.service.application;
 
 import java.util.*;
 import org.osgi.framework.*;
-import org.osgi.impl.service.dmt.Splitter;
 import org.osgi.service.application.*;
 import org.osgi.service.dmt.*;
 
@@ -296,7 +295,7 @@ public class ApplicationPlugin implements BundleActivator, DmtReadOnlyDataPlugin
 			if ("state".equals(sarr[4])) {
 				int state = -1;
 				try {
-					state = handle.getApplicationState();
+					state = handle.getState();
 				}catch( Exception e ) {}
 				return new DmtData( state );
 			}

@@ -15,7 +15,7 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package org.osgi.impl.service.scheduler;
+package org.osgi.impl.service.application;
 
 import org.osgi.framework.*;
 import org.osgi.impl.service.application.SchedulerImpl;
