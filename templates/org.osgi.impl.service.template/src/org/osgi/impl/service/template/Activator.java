@@ -27,7 +27,6 @@
 package org.osgi.impl.service.template;
 
 import org.osgi.framework.*;
-import org.osgi.tools.command.CommandProvider;
 
 /**
  * 
