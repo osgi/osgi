@@ -7,6 +7,6 @@ Bundle-DocURL: http://www.ericsson.com
 Bundle-ContactAddress: info@ericsson.com
 Bundle-Activator: $(p).tbc.Activator
 $(IMPORT-PACKAGE)
-Export-Package: org.osgi.test.cases.logproxy
+$(EXPORT-PACKAGE)
 
 

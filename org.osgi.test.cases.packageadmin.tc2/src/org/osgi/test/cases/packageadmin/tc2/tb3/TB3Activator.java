@@ -7,8 +7,9 @@
 
 package org.osgi.test.cases.packageadmin.tc2.tb3;
 
-import org.osgi.framework.*;
 import java.util.*;
+
+import org.osgi.framework.*;
 
 /**
    Bundle for exporting packages

@@ -8,15 +8,11 @@
 package org.osgi.test.cases.packageadmin.tc2.tbc;
 
 import java.io.*;
-import java.util.*;
-//import java.net.*;
-import java.lang.reflect.*;
+import java.net.*;
 
 import org.osgi.framework.*;
 import org.osgi.service.packageadmin.*;
 import org.osgi.test.service.*;
-
-import java.net.*;
 
 /**
    This is the bundle initially installed and started by the TestCase

@@ -9,8 +9,6 @@ package org.osgi.test.cases.packageadmin.tc2.tbc;
 
 import org.osgi.framework.*;
 
-import org.osgi.test.service.*;
-
 /**
    Bundle activator for the TestBundleControl.
 

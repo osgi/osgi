@@ -7,9 +7,10 @@
 
 package org.osgi.test.cases.packageadmin.tc2.tb2;
 
+import java.util.*;
+
 import org.osgi.framework.*;
 import org.osgi.test.cases.packageadmin.tc2.tb1.*;
-import java.util.*;
 
 /**
    Bundle for exporting packages
