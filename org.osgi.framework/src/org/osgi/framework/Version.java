@@ -118,6 +118,7 @@ public class Version implements Comparable {
 	 *       digit ::= [0..9]
 	 *       alpha ::= [a..zA..Z]
 	 * </pre>
+	 * There must be no whitespace in version.
 	 * 
 	 * @param version String representation of the version identifier.
 	 * @throws IllegalArgumentException If <code>version</code> is improperly
