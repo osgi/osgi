@@ -120,7 +120,7 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 	}
 	
 	public void testCreateDefault() throws Exception {
-		newSession();
+		newAtomicSession();
 		dmtSession.createInteriorNode(ROOT+"/Default");
 		dmtSession.setNodeValue(ROOT+"/Default/PermissionInfo",new DmtData(ADMINPERMISSION.getEncoded()));
 		dmtSession.close();
@@ -130,11 +130,20 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 
 	public void testRemoveDefault() throws Exception {
 		permAdmin.setDefaultPermissions(new PermissionInfo[] {ADMINPERMISSION});
-		newSession();
+		newAtomicSession();
 		dmtSession.deleteNode(ROOT+"/Default");
 		dmtSession.close();
 		PermissionInfo[] permissionInfo = permAdmin.getDefaultPermissions();
 		assertNull(permissionInfo);
+	}
+	
+	public void testNonAtomicWrite() throws Exception {
+		// changing the tree is only allowed if the session is atomic
+		newSession();
+		try {
+			dmtSession.createInteriorNode("1");
+			fail();
+		} catch (DmtException e) {}
 	}
 	
 	public void testRollback1() throws Exception {

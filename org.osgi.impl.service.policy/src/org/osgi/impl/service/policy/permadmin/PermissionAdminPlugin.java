@@ -121,7 +121,6 @@ public class PermissionAdminPlugin implements DmtDataPlugin {
 		}
 
 		public void setNodeValue(String nodename, DmtData data) throws IllegalArgumentException {
-			dirty = true;
 			if (nodename.equals(PERMISSIONINFO)) {
 				String[] ss = Splitter.split(data.getString(),'\n',0);
 				PermissionInfo[] pis = new PermissionInfo[ss.length]; 
@@ -223,6 +222,7 @@ public class PermissionAdminPlugin implements DmtDataPlugin {
 		}
 		Entry e = (Entry) entries.get(path[0]);
 		try {
+			switchToWriteMode(nodeUri);
 			e.setNodeValue(path[1],data);
 		} catch (IllegalArgumentException iae) {
 			throw new DmtException(nodeUri,DmtException.METADATA_MISMATCH,"cannot parse permission",iae);
@@ -234,21 +234,22 @@ public class PermissionAdminPlugin implements DmtDataPlugin {
 	}
 
 	public void deleteNode(String nodeUri) throws DmtException {
+		switchToWriteMode(nodeUri);
 		String[] path = getPath(nodeUri);
 		if (path.length!=1) {
 			// should not get here, metanode info should prevent this
 			throw new IllegalStateException();
 		}
 		entries.remove(path[0]); // isNodeUri already checked this
-		dirty = true;
 	}
 
 	public void createInteriorNode(String nodeUri) throws DmtException {
 		String path[] = getPath(nodeUri);
-		if (path.length!=1) throw new IllegalStateException();
+		
+		switchToWriteMode(nodeUri);
+		
 		if (path[0].equals(DEFAULT)) {
 			entries.put(DEFAULT,new Entry(true,null,new PermissionInfo[]{}));
-			dirty = true;
 			return;
 		}
 
@@ -384,6 +385,11 @@ public class PermissionAdminPlugin implements DmtDataPlugin {
 		// TODO Auto-generated method stub
 	}
 
+	private void switchToWriteMode(String nodeUri) throws DmtException {
+		if (!atomic) throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,
+				"modifying tree is only allowed in atomic sessions");
+		dirty=true;
+	}
 
 	/**
 	 * return the path elements, from our base
