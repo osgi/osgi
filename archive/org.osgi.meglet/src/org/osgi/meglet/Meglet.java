@@ -176,6 +176,7 @@ public abstract class Meglet implements EventHandler, ComponentInstance {
 	 *             if topic is null
 	 */
 	protected final void registerForEvents(String topic, String eventFilter) {
+		/* TODO */
 		listenedTopics.add( topic );
 		changeServiceRegistration();
 	}
@@ -196,6 +197,7 @@ public abstract class Meglet implements EventHandler, ComponentInstance {
 	 *             if topic is null
 	 */
 	protected final void unregisterForEvents(String topic, String eventFilter) {
+		/* TODO */
 		listenedTopics.remove( topic );
 		changeServiceRegistration();
 	}
