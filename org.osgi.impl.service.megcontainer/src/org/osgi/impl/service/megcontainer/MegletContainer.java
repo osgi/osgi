@@ -477,6 +477,11 @@ public class MegletContainer implements BundleListener,
 
 			while( applicationNode != null ) {
 				if( applicationNode.getNodeType() == Node.ELEMENT_NODE  && applicationNode.getNodeName().equals( "application" ) ) {
+					
+					String uniqueID = getAttributeValue( applicationNode, "pid" );
+					if( uniqueID == null )
+						throw new Exception( "Application PID is missing!" );
+					
 					Properties props = new Properties();
 					Hashtable names = new Hashtable();
 					Hashtable icons = new Hashtable();
@@ -487,6 +492,8 @@ public class MegletContainer implements BundleListener,
 					LinkedList requiredServices = new LinkedList();
 					LinkedList requiredPackages = new LinkedList();
 
+					props.put( ApplicationDescriptor.APPLICATION_PID, uniqueID );
+					
 					NodeList nodeList = applicationNode.getChildNodes();
 
 					for(int i=0; i < nodeList.getLength(); i++ ) {
