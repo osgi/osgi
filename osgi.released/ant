@@ -1,9 +1,0 @@
-#! /bin/sh
-if [ -z "$ANT_HOME" -o ! -d "$ANT_HOME" ] ; then
-  ANT_HOME=${PWD}/../cnf/ant
-
-  # make it fully qualified
-  ANT_HOME=`cd "$ANT_HOME" && pwd`
-fi
-
-"${ANT_HOME}/bin/ant" $@
