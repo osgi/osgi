@@ -34,17 +34,53 @@ package org.osgi.service.dmt;
 public interface Dmt extends DmtReadOnly {
 
     /**
-     * Rolls back a series of DMT operations issued in the current session
-     * since it was opened.
+     * Rolls back a series of DMT operations issued in the current atomic
+     * session since the last transaction boundary. Transaction boundaries are
+     * the {@link DmtReadOnly#open open} call that starts the session, and all
+     * subsequent {@link #commit commit} and {@link #rollback rollback} calls.
+     * 
      * @throws DmtException with the following possible error codes
-     * <li> <code>ROLLBACK_FAILED</code> in case the rollback did not
-     * succeed
-     * <li> <code>FEATURE_NOT_SUPPORTED</code> in case the session was not
-     * created using the <code>LOCK_TYPE_ATOMIC</code> lock type.
-     * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
+     *         <li><code>ROLLBACK_FAILED</code> in case the rollback did not
+     *         succeed
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> in case the session was
+     *         not created using the <code>LOCK_TYPE_ATOMIC</code> lock type.
+     * @throws IllegalStateException if the session is invalidated because of
+     *         timeout, or if the session is already closed.
+     * @throws SecurityException if the caller does not have the necessary
+     *         permissions to execute the underlying management operation
      */
     void rollback() throws DmtException;
+    
+    /**
+     * Commits a series of DMT operations issued in the current atomic session
+     * since the last transaction boundary. Transaction boundaries are the
+     * {@link DmtReadOnly#open open} call that starts the session, and all
+     * subsequent {@link #commit commit} and {@link #rollback rollback} calls.
+     * <p>
+     * This method can fail even if all operations were successful. This can
+     * happen due to some multi-node semantic constraints defined by a specific
+     * implementation. For example, node A can be required to always have
+     * children A.B, A.C and A.D. If this condition is broken when
+     * <code>commit()</code> is executed, the method will fail, and throw an
+     * exception.
+     * 
+     * @throws DmtException with the following possible error codes
+     *         <li><code>TRANSACTION_ERROR</code> if error occured because of
+     *         lack of two phase commit in the underlying plugins. An example:
+     *         plugin A has committed successfully but plugin B failed, so the
+     *         whole session must fail, but A can not undo the commit
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> in case the session was
+     *         not created using the <code>LOCK_TYPE_ATOMIC</code> lock type.
+     *         <li><code>COMMAND_FAILED</code> if an underlying plugin failed
+     *         to commit
+     *         <li><code>DATA_STORE_FAILURE</code>
+     *         <li><code>METADATA_MISMATCH</code>
+     * @throws IllegalStateException if the session is invalidated because of
+     *         timeout, or if the session is already closed.
+     * @throws SecurityException if the caller does not have the necessary
+     *         permissions to execute the underlying management operation
+     */
+    void commit() throws DmtException;
 
     /**
      * Set the title property of a node.
@@ -65,7 +101,9 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>DATA_STORE_FAILURE</code>
      * <li> <code>TRANSACTION_ERROR</code>
      * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
+     * timeout, or if the session is already closed.
+     * @throws SecurityException if the caller does not have the necessary
+     * permissions to execute the underlying management operation
      */
     void setNodeTitle(String nodeUri, String title) throws DmtException;
 
@@ -90,7 +128,9 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>FORMAT_NOT_SUPPORTED</code>
      * <li> <code>TRANSACTION_ERROR</code>
      * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
+     * timeout, or if the session is already closed.
+     * @throws SecurityException if the caller does not have the necessary
+     * permissions to execute the underlying management operation
      */
     void setNodeValue(String nodeUri, DmtData data) throws DmtException;
 
@@ -112,7 +152,9 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>DATA_STORE_FAILURE</code>
      * <li> <code>TRANSACTION_ERROR</code>
      * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
+     * timeout, or if the session is already closed.
+     * @throws SecurityException if the caller does not have the necessary
+     * permissions to execute the underlying management operation
      */
     void setDefaultNodeValue(String nodeUri) throws DmtException;
     
@@ -137,7 +179,9 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>FORMAT_NOT_SUPPORTED</code>
      * <li> <code>TRANSACTION_ERROR</code>
      * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
+     * timeout, or if the session is already closed.
+     * @throws SecurityException if the caller does not have the necessary
+     * permissions to execute the underlying management operation
      */
     void setNodeType(String nodeUri, String type) throws DmtException;
 
@@ -158,7 +202,9 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>DATA_STORE_FAILURE</code>
      * <li> <code>TRANSACTION_ERROR</code>
      * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
+     * timeout, or if the session is already closed.
+     * @throws SecurityException if the caller does not have the necessary
+     * permissions to execute the underlying management operation
      */
     void deleteNode(String nodeUri) throws DmtException;
 
@@ -176,7 +222,9 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>DATA_STORE_FAILURE</code>
      * <li> <code>TRANSACTION_ERROR</code>
      * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
+     * timeout, or if the session is already closed.
+     * @throws SecurityException if the caller does not have the necessary
+     * permissions to execute the underlying management operation
      */
     void createInteriorNode(String nodeUri) throws DmtException;
 
@@ -197,7 +245,9 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>DATA_STORE_FAILURE</code>
      * <li> <code>TRANSACTION_ERROR</code>
      * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
+     * timeout, or if the session is already closed.
+     * @throws SecurityException if the caller does not have the necessary
+     * permissions to execute the underlying management operation
      */
     void createInteriorNode(String nodeUri, String type) throws DmtException;
 
@@ -220,7 +270,9 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>DATA_STORE_FAILURE</code>
      * <li> <code>TRANSACTION_ERROR</code>
      * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
+     * timeout, or if the session is already closed.
+     * @throws SecurityException if the caller does not have the necessary
+     * permissions to execute the underlying management operation
      */
     void createLeafNode(String nodeUri) throws DmtException;
 
@@ -248,7 +300,9 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>FORMAT_NOT_SUPPORTED</code>
      * <li> <code>TRANSACTION_ERROR</code>
      * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
+     * timeout, or if the session is already closed.
+     * @throws SecurityException if the caller does not have the necessary
+     * permissions to execute the underlying management operation
      */
     void createLeafNode(String nodeUri, DmtData value) throws DmtException;
 
@@ -272,7 +326,9 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>FORMAT_NOT_SUPPORTED</code>
      * <li> <code>TRANSACTION_ERROR</code>
      * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
+     * timeout, or if the session is already closed.
+     * @throws SecurityException if the caller does not have the necessary
+     * permissions to execute the underlying management operation
      */
     void createLeafNode(String nodeUri, DmtData value, String mimeType)
                     throws DmtException;
@@ -299,7 +355,9 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>FORMAT_NOT_SUPPORTED</code>
      * <li> <code>TRANSACTION_ERROR</code>
      * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
+     * timeout, or if the session is already closed.
+     * @throws SecurityException if the caller does not have the necessary
+     * permissions to execute the underlying management operation
      */
     void copy(String nodeUri, String newNodeUri, boolean recursive)
         throws DmtException;
@@ -324,7 +382,9 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>DATA_STORE_FAILURE</code>
      * <li> <code>TRANSACTION_ERROR</code>
      * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed or rolled back.
+     * timeout, or if the session is already closed.
+     * @throws SecurityException if the caller does not have the necessary
+     * permissions to execute the underlying management operation
      */
     void renameNode(String nodeUri, String newName) throws DmtException;
 }
