@@ -344,7 +344,7 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
 
   boolean testCase_installMegletBundle()
   {
-    return installMegletBundle( "testmegapplication.jar" );
+    return installMegletBundle( "megletsample.jar" );
   }
 
   boolean testCase_lookUpMegletContainer()
@@ -842,7 +842,7 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
   boolean testCase_autoStartCheck()
   {
     try{
-      if( !installMegletBundle( "testmegapplication2.jar" ) )
+      if( !installMegletBundle( "megletsample2.jar" ) )
         return false;
 
       ApplicationDescriptor appDesc = appDescs[ 0 ];
