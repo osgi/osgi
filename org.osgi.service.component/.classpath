@@ -2,6 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="/org.osgi.framework"/>
-	<classpathentry sourcepath="/ee.foundation" kind="lib" path="/osgi.released/ee.minimum.jar"/>
+	<classpathentry sourcepath="/ee.minimum" kind="lib" path="/osgi.released/ee.minimum.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
