@@ -314,6 +314,12 @@ public abstract class DefaultTestBundleControl
         catch(Throwable e) {
             e.printStackTrace();
             log("During execution of test bundle control " + e);
+            try {
+				link.send("ready");
+			}
+			catch (IOException e1) {
+				e1.printStackTrace();
+			}
         }
         finally {
             link = null;
@@ -351,16 +357,16 @@ public abstract class DefaultTestBundleControl
 
 
     private void logMethodBegin(String methodName) {
-        log("[method name=\"" + methodName + "\"]");
+        log("[begin=" + methodName + "]");
     }
 
     private void logMethodEnd(String methodName) {
-        log("[/method]");
+        log("[end=" + methodName + "]");
         log("");
     }
 
     public void setReqMarker(String marker) {
-        log("[req name=\"" + marker + "\"/]");
+        log("[req=" + marker + "]");
     }
 
     // public void clearReqMarker
