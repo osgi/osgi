@@ -188,6 +188,12 @@ public class DynPkgImportControl extends DefaultTestBundleControl implements
 			tb2.uninstall();
 			return;
 		}
+//		System.out.println("ts class " + ts.getClass());
+//		System.out.println("tlx state" + tlx.getState());
+//		ServiceReference ref = getContext().getServiceReference(PackageAdmin.class.getName());
+//		PackageAdmin admin = (PackageAdmin) getContext().getService(ref);
+//		ExportedPackage ep = admin.getExportedPackage("org.osgi.test.cases.dynpkgimport.tlx");
+//		System.out.println("tlx pack " + ep.getExportingBundle().getLocation());
 		fail("got no NoClassDefFoundError");
 	}
 
