@@ -13,12 +13,9 @@
 package org.osgi.impl.framework;
 
 import java.io.*;
-import java.net.*;
+import java.net.URL;
 import java.security.*;
 import java.util.*;
-import java.util.jar.*;
-
-import org.osgi.framework.*;
 
 /**
  * Classloader for bundle JAR files.

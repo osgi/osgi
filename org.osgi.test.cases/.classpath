@@ -3,8 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="/osgi.released/ee.minimum.jar"/>
 	<classpathentry kind="lib" path="/osgi.released/osgi.jar"/>
-	<classpathentry kind="src" path="/org.osgi.test.tool"/>
-	<classpathentry kind="lib" path="/osgi.released/osgi-internal.jar"/>
 	<classpathentry kind="lib" path="/cnf/jar/servlet.jar"/>
+	<classpathentry kind="lib" path="/osgi.released/osgi.internal.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
