@@ -465,50 +465,70 @@ public interface Constants
 	/**
 	 * Manifest header attribute (named &quot;fragment-attachment&quot;)
 	 * identifying if and when a fragment may attach to a host bundle.
-	 * The default value is <tt>&quot;open&quot;</tt>.
+	 * The default value is <tt>&quot;always&quot;</tt>.
 	 *
 	 * <p>The attribute value is encoded in the Bundle-SymbolicName
 	 * manifest header like:
 	 * <pre>
-	 * Bundle-SymbolicName: com.acme.module.test; fragment-attachment="restricted"
+	 * Bundle-SymbolicName: com.acme.module.test; fragment-attachment="never"
 	 * </pre>
-	 * @see Constants#FRAGMENT_ATTACHMENT_OPEN
-	 * @see Constants#FRAGMENT_ATTACHMENT_CLOSED
+	 * @see Constants#FRAGMENT_ATTACHMENT_ALWAYS
+	 * @see Constants#FRAGMENT_ATTACHMENT_RESOLVETIME
+	 * @see Constants#FRAGMENT_ATTACHMENT_NEVER
 	 * @since 1.3 
 	 */
 	public final static String FRAGMENT_ATTACHMENT_ATTRIBUTE = "fragment-attachment";
 
 	/**
-	 * Manifest header attribute value (named &quot;open&quot;)
-	 * identifying an open fragment attachment type.  An open fragment
-	 * attachment type indicates that fragments are allowed to 
-	 * attach to the host bundle.
+	 * Manifest header attribute value (named &quot;always&quot;)
+	 * identifying a fragment attachment type of always.  A fragment
+	 * attachment type of always indicates that fragments are allowed to 
+	 * attach to the host bundle at any time (while the host is resolved 
+	 * or during the process of resolving the host bundle).
 	 *
      * <p>The attribute value is encoded in the 
      * Bundle-SymbolicName manifest header like:
 	 * <pre>
-	 * Bundle-SymbolicName: com.acme.module.test; fragment-attachment="open"
+	 * Bundle-SymbolicName: com.acme.module.test; fragment-attachment="always"
 	 * </pre>
 	 * @see Constants#FRAGMENT_ATTACHMENT_ATTRIBUTE
 	 * @since 1.3 
 	 */
-	public final static String FRAGMENT_ATTACHMENT_OPEN = "open";
+	public final static String FRAGMENT_ATTACHMENT_ALWAYS = "always";
 
 	/**
-	 * Manifest header attribute value (named &quot;closed&quot;)
-	 * identifying a closed fragment attachment type.  A closed fragment
-	 * attachment type indicates that no fragments are allowed to 
+	 * Manifest header attribute value (named &quot;resolve-time&quot;)
+	 * identifying a fragment attachment type of resolve-time.  A fragment
+	 * attachment type of resolve-time indicates that fragments are allowed to 
+	 * attach to the host bundle only during the process of resolving the 
+	 * host bundle.
+	 *
+     * <p>The attribute value is encoded in the 
+     * Bundle-SymbolicName manifest header like:
+	 * <pre>
+	 * Bundle-SymbolicName: com.acme.module.test; fragment-attachment="resolve-time"
+	 * </pre>
+	 * @see Constants#FRAGMENT_ATTACHMENT_ATTRIBUTE
+	 * @since 1.3 
+	 */
+	public final static String FRAGMENT_ATTACHMENT_RESOLVETIME = "resolve-time";
+
+
+	/**
+	 * Manifest header attribute value (named &quot;never&quot;)
+	 * identifying a fragment attachment type of never.  A fragment
+	 * attachment type of never indicates that no fragments are allowed to 
 	 * attach to the host bundle at any time.
 	 *
      * <p>The attribute value is encoded in the 
      * Bundle-SymbolicName manifest header like:
 	 * <pre>
-	 * Bundle-SymbolicName: com.acme.module.test; fragment-attachment="closed"
+	 * Bundle-SymbolicName: com.acme.module.test; fragment-attachment="never"
 	 * </pre>
 	 * @see Constants#FRAGMENT_ATTACHMENT_ATTRIBUTE
 	 * @since 1.3 
 	 */
-	public final static String FRAGMENT_ATTACHMENT_CLOSED = "closed";
+	public final static String FRAGMENT_ATTACHMENT_NEVER = "never";
 
 	/**
 	 * Manifest header (named &quot;Bundle-Localization&quot;)
