@@ -149,23 +149,20 @@ public class MonitorPermission extends Permission {
         while (st.hasMoreTokens()) {
             String action = st.nextToken();
             if (action.equalsIgnoreCase(READ)) {
-                mask |= READ_FLAG;
-                if(varId.equals("")) // implies prefixVarId 
-                    mask |= DISCOVER_FLAG; // (target is */*, mon*/* or monId/*)
+                addToMask(READ_FLAG, READ);
             } else if (action.equalsIgnoreCase(RESET)) {
-                mask |= RESET_FLAG;
+                addToMask(RESET_FLAG, RESET);
             } else if (action.equalsIgnoreCase(PUBLISH)) {
-                mask |= PUBLISH_FLAG;
+                addToMask(PUBLISH_FLAG, PUBLISH);
             } else if (action.equalsIgnoreCase(DISCOVER)) {
                 if(!varId.equals("")) // implies prefixVarId
                     throw new IllegalArgumentException(
                             "Invalid target for 'discover' action, " + 
                             "StatusVariable name in target must be '*'.");
-                mask |= DISCOVER_FLAG;
+                addToMask(DISCOVER_FLAG, DISCOVER);
             } else if (action.equalsIgnoreCase(SWITCHEVENTS)) {
-                mask |= SWITCHEVENTS_FLAG;                
+                addToMask(SWITCHEVENTS_FLAG, SWITCHEVENTS);
             } else if (action.toLowerCase().startsWith(STARTJOB)) {
-                // TODO which param counts if there are multiple startjob actions?
                 minJobInterval = 0;
 
                 int slen = STARTJOB.length();
@@ -183,11 +180,24 @@ public class MonitorPermission extends Permission {
                                         + action + "'.");
                     }
                 }
-                mask |= STARTJOB_FLAG;
+                addToMask(STARTJOB_FLAG, STARTJOB);
             } else
                 throw new IllegalArgumentException("Invalid action '" + action
                         + "'");
         }
+        
+        // "read" implies "discover" for targets */*, mon*/* and monId/*
+        // the varId == "" check identifies exactly these targets
+        if((mask & READ_FLAG) != 0 && varId.equals(""))
+            mask |= DISCOVER_FLAG;
+    }
+    
+    private void addToMask(int action, String actionString) {
+        if((mask & action) != 0)
+            throw new IllegalArgumentException("Invalid action string: " + 
+                    actionString + " appears multiple times.");
+        
+        mask |= action;
     }
 
     /**
