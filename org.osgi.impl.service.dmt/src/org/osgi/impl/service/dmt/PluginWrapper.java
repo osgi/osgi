@@ -128,15 +128,38 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
     }
 
     /*
-     * NOTE: This is a combination of the rollback and close methods: if this
-     * class wraps a read-only plugin, this call is redirected to close method.
+     * NOTE: if this class wraps a read-only plugin, this call is ignored
+     */
+    public void commit() throws DmtException {
+        // TODO what happens with DmtDataPlugins that do not support transactions?
+        if(dataPlugin == null) // ignore commit for read-only plugins
+            return;
+        
+        if (securityContext == null) {                      // local caller
+            dataPlugin.commit();
+            return;
+        }
+
+        
+        try {                                               // remote caller
+            AccessController.doPrivileged(new PrivilegedExceptionAction() {
+                public Object run() throws DmtException {
+                    dataPlugin.commit();
+                    return null;
+                }
+            }, securityContext);
+        } catch (PrivilegedActionException e) {
+            throw (DmtException) e.getException();
+        }
+    }
+    
+    /*
+     * NOTE: if this class wraps a read-only plugin, this call is ignored
      */
     public void rollback() throws DmtException {
         // TODO what happens with DmtDataPlugins that do not support transactions?
-        if(dataPlugin == null) { // redirect to close for read-only plugins
-            close();
+        if(dataPlugin == null) // ignore rollback for read-only plugins
             return;
-        }
         
         if (securityContext == null) {                      // local caller
             dataPlugin.rollback();
