@@ -32,7 +32,9 @@ import java.util.*;
  * Provides access to metatypes.
  *
  * @version $Revision$
-*/
+ * @deprecated The org.osgi.service.metatype package has been replaced by 
+ * the org.osgi.service.metatype2 package.
+ */
 public interface MetaTypeProvider {
    /**
     * Return the definition of this object class for a locale.

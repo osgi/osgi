@@ -34,6 +34,8 @@ package org.osgi.service.metatype;
  * data type of a property/attribute.
  *
  * @version $Revision$
+ * @deprecated The org.osgi.service.metatype package has been replaced by 
+ * the org.osgi.service.metatype2 package.
  */
 public interface AttributeDefinition {
 

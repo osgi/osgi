@@ -34,6 +34,8 @@ import java.io.*;
  * objectclass.
  *
  * @version $Revision$
+ * @deprecated The org.osgi.service.metatype package has been replaced by 
+ * the org.osgi.service.metatype2 package.
  */
 public interface ObjectClassDefinition {
 
@@ -111,7 +113,7 @@ public interface ObjectClassDefinition {
 	 *
 	 * <p>The icon may depend on the localization.
 	 *
-	 * @param   sizeHint        size of an icon, e.g. a 16x16 pixels icon then size = 16
+	 * @param   size        size of an icon, e.g. a 16x16 pixels icon then size = 16
 	 * @return  An InputStream representing an icon or <tt>null</tt>
 	 */
     InputStream getIcon( int size ) throws IOException;
