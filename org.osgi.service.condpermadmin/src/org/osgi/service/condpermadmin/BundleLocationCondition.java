@@ -27,6 +27,7 @@
 package org.osgi.service.condpermadmin;
 
 import java.io.FilePermission;
+import java.util.Dictionary;
 import org.osgi.framework.Bundle;
 import org.osgi.service.condpermadmin.Condition;
 
@@ -93,10 +94,11 @@ public class BundleLocationCondition implements Condition {
 	/**
 	 * This method should never get called since this is an immutable Condition. As implemented it simply loops through all the Conditions calling isSatisfied()
 	 * @param conds the conditions to check for satisfiability.
+	 * @param context not used.
 	 * @return true if all of the conditions are satisfied.
 	 * @see org.osgi.service.condpermadmin.Condition#isSatisfied(org.osgi.service.condpermadmin.Condition[])
 	 */
-	public boolean isSatisfied(Condition[] conds) {
+	public boolean isSatisfied(Condition[] conds, Dictionary context) {
 		for(int i = 0; i < conds.length; i++) {
 			if (!conds[i].isSatisfied()) return false;
 		}

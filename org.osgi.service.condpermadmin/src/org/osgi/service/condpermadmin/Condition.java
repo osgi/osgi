@@ -28,6 +28,8 @@
 
 package org.osgi.service.condpermadmin;
 
+import java.util.Dictionary;
+
 /**
  * This interface is used to implement Conditions that are bound to Permissions
  * using ConditionalPermissionCollection. The Permissions of the
@@ -58,6 +60,15 @@ public interface Condition {
 	 * this method is not static, it should be implemented as if it were static.
 	 * All of the passed Conditions will have the same type and will correspond
 	 * to the class type of the object on which this method is invoked.
+	 *
+	 * @param conds the array of Conditions that must be satisfied
+	 * @param context a Dictionary object that implementors can use to track 
+	 * state. If this method is invoked multiple times in the same permission 
+	 * evaluation, the same Dictionary will be passed multiple times. The
+	 * SecurityManager treats this Dictionary as an opaque object simply
+	 * creates an empty dictionary and passes it to subsequent invocations
+	 * if multiple invocatios are needed.
+	 * @return true if all the Conditions are satisfied.
 	 */
-	boolean isSatisfied(Condition conds[]);
+	boolean isSatisfied(Condition conds[], Dictionary context);
 }
