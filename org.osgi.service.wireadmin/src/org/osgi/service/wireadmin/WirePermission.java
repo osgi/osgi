@@ -87,7 +87,7 @@ final public class WirePermission extends BasicPermission {
 	 * Package private constructor used by WirePermissionCollection.
 	 * 
 	 * @param name class name
-	 * @param action mask
+	 * @param mask action mask
 	 */
 	WirePermission(String name, int mask) {
 		super(name);
@@ -97,7 +97,7 @@ final public class WirePermission extends BasicPermission {
 	/**
 	 * Called by constructors and when deserialized.
 	 * 
-	 * @param action mask
+	 * @param mask action mask
 	 */
 	private void init(int mask) {
 		if ((mask == ACTION_NONE) || ((mask & ACTION_ALL) != mask)) {
@@ -407,7 +407,7 @@ final class WirePermissionCollection extends PermissionCollection {
 	 * Determines if a set of permissions implies the permissions expressed in
 	 * <tt>permission</tt>.
 	 * 
-	 * @param p The Permission object to compare.
+	 * @param permission The Permission object to compare.
 	 * 
 	 * @return <tt>true</tt> if <tt>permission</tt> is a proper subset of a
 	 *         permission in the set; <tt>false</tt> otherwise.

@@ -197,7 +197,7 @@ public final class UserAdminPermission extends BasicPermission {
 	 * <tt>UserAdminPermissionCollection</tt>.
 	 * 
 	 * @param name class name
-	 * @param action mask
+	 * @param mask action mask
 	 */
 	UserAdminPermission(String name, int mask) {
 		super(name);
@@ -207,7 +207,7 @@ public final class UserAdminPermission extends BasicPermission {
 	/**
 	 * Called by constructors and when deserialized.
 	 * 
-	 * @param action mask
+	 * @param mask action mask
 	 */
 	private void init(int mask) {
 		if (getName().equals(ADMIN)) {

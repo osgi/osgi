@@ -28,6 +28,8 @@
 
 package org.osgi.framework;
 
+import java.util.Dictionary;
+
 /**
  * Defines standard names for the OSGi environment property, service property,
  * and Manifest header attribute keys.
@@ -37,9 +39,9 @@ package org.osgi.framework;
  *
  * @version $Revision$
  * @since 1.1
- * @see Bundle#getHeaders
+ * @see Bundle#getHeaders()
  * @see BundleContext#getProperty
- * @see BundleContext#registerService
+ * @see BundleContext#registerService(String[],Object,Dictionary)
  */
 
 public interface Constants

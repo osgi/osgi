@@ -109,7 +109,7 @@ public final class PackagePermission extends BasicPermission
      * Package private constructor used by PackagePermissionCollection.
      *
      * @param name class name
-     * @param action mask
+     * @param mask action mask
      */
     PackagePermission(String name, int mask)
     {
@@ -120,7 +120,7 @@ public final class PackagePermission extends BasicPermission
     /**
      * Called by constructors and when deserialized.
      *
-     * @param action mask
+     * @param mask action mask
      */
     private void init(int mask)
     {
@@ -483,7 +483,7 @@ final class PackagePermissionCollection extends PermissionCollection
      * Determines if the specified permissions implies the permissions
      * expressed in <tt>permission</tt>.
      *
-     * @param p The Permission object to compare with this <tt>PackagePermission</tt> object.
+     * @param permission The Permission object to compare with this <tt>PackagePermission</tt> object.
      *
      * @return <tt>true</tt> if <tt>permission</tt> is a proper subset of a permission in
      * the set; <tt>false</tt> otherwise.

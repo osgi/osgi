@@ -28,6 +28,7 @@
 
 package org.osgi.framework;
 
+import java.util.Dictionary;
 import java.util.EventObject;
 
 /**
@@ -61,7 +62,7 @@ public class ServiceEvent extends EventObject
      *
      * <p>The value of <tt>REGISTERED</tt> is 0x00000001.
      *
-     * @see BundleContext#registerService
+     * @see BundleContext#registerService(String[],Object,Dictionary)
      */
     public final static int REGISTERED = 0x00000001;
 

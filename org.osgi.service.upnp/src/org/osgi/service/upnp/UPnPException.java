@@ -44,7 +44,7 @@ public class UPnPException extends Exception {
 	 * This constructor creates a UPnPException on the specified error code and
 	 * error description.
 	 * 
-	 * @param erorCode errorCode which defined UPnP Device Architecture V1.0.
+	 * @param errorCode errorCode which defined UPnP Device Architecture V1.0.
 	 * @param errordesc errorDescription which explain the type of propblem.
 	 */
 	public UPnPException(int errorCode, String errordesc) {

@@ -330,7 +330,7 @@ public abstract class Assert {
 	 * <code>got</code> is of an unexpected type, the classname of
 	 * <code>got</code> is logged.
 	 *
-	 * @param test the log description
+	 * @param message the log description
 	 * @param want the exception that is specified to be thrown
 	 * @param got the exception that was thrown
 	 */

@@ -57,7 +57,7 @@ public class BundleEvent extends EventObject
      * The bundle has been installed.
      * <p>The value of <tt>INSTALLED</tt> is 0x00000001.
      *
-     * @see BundleContext#installBundle
+     * @see BundleContext#installBundle(String)
      */
     public final static int INSTALLED = 0x00000001;
 
@@ -81,7 +81,7 @@ public class BundleEvent extends EventObject
      * The bundle has been updated.
      * <p>The value of <tt>UPDATED</tt> is 0x00000008.
      *
-     * @see Bundle#update
+     * @see Bundle#update()
      */
     public final static int UPDATED = 0x00000008;
 

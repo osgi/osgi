@@ -112,7 +112,7 @@ final public class ServicePermission extends BasicPermission
      * Package private constructor used by ServicePermissionCollection.
      *
      * @param name class name
-     * @param action mask
+     * @param mask action mask
      */
     ServicePermission(String name, int mask)
     {
@@ -124,7 +124,7 @@ final public class ServicePermission extends BasicPermission
     /**
      * Called by constructors and when deserialized.
      *
-     * @param action mask
+     * @param mask action mask
      */
     private void init(int mask)
     {
@@ -461,7 +461,7 @@ final class ServicePermissionCollection extends PermissionCollection
      * Determines if a set of permissions implies the permissions
      * expressed in <tt>permission</tt>.
      *
-     * @param p The Permission object to compare.
+     * @param permission The Permission object to compare.
      *
      * @return <tt>true</tt> if <tt>permission</tt> is a proper subset of a permission in
      * the set; <tt>false</tt> otherwise.

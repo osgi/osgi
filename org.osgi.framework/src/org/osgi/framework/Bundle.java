@@ -509,7 +509,7 @@ public abstract interface Bundle
 	 * Returns this bundle's location identifier.
 	 *
 	 * <p>The bundle location identifier is the location passed to
-	 * {@link BundleContext#installBundle}when a bundle is installed.
+	 * <tt>BundleContext.installBundle</tt> when a bundle is installed.
 	 *
 	 * <p>This method will continue to return this bundle's location
 	 * identifier while this bundle is in the <tt>UNINSTALLED</tt> state.

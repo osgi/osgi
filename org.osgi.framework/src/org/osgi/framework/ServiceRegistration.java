@@ -40,7 +40,7 @@ import java.util.Dictionary;
  * unregister the service.
  *
  * @version $Revision$
- * @see BundleContext#registerService
+ * @see BundleContext#registerService(String[],Object,Dictionary)
  */
 
 public abstract interface ServiceRegistration

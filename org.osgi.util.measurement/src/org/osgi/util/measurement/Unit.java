@@ -435,7 +435,7 @@ public class Unit {
 	 * @return a new <tt>Unit</tt> that is the subtraction between this
 	 *         <tt>Unit</tt> and the <tt>Unit</tt> specified.
 	 * 
-	 * @return RuntimeException if the <tt>Unit</tt> specified is not the same
+	 * @throws RuntimeException if the <tt>Unit</tt> specified is not the same
 	 *         as this <tt>Unit</tt>
 	 */
 	Unit sub(Unit that) {

@@ -28,6 +28,8 @@
 
 package org.osgi.framework;
 
+import java.util.Dictionary;
+
 /**
  * A reference to a service.
  *
@@ -79,7 +81,7 @@ public abstract interface ServiceReference
      *
      * <p> This method is <i>case-preserving</i>; this means that every key in the returned array must have
      * the same case as the corresponding key in the properties <tt>Dictionary</tt> that was
-     * passed to the {@link BundleContext#registerService} or {@link ServiceRegistration#setProperties} methods.
+     * passed to the {@link BundleContext#registerService(String[],Object,Dictionary)} or {@link ServiceRegistration#setProperties} methods.
      *
      * @return An array of property keys.
      */
@@ -93,7 +95,7 @@ public abstract interface ServiceReference
      *
      * @return The bundle that registered the service referenced by this <tt>ServiceReference</tt> object;
      * <tt>null</tt> if that service has already been unregistered.
-     * @see BundleContext#registerService
+     * @see BundleContext#registerService(String[],Object,Dictionary)
      */
     public abstract Bundle getBundle();
 

@@ -27,8 +27,9 @@
  */
 package org.osgi.service.cm;
 
-import java.io.*;
-import org.osgi.framework.*;
+import java.io.IOException;
+import java.util.Dictionary;
+import org.osgi.framework.InvalidSyntaxException;
 
 /**
  * Service for administering configuration data.
@@ -133,7 +134,7 @@ public interface ConfigurationAdmin {
 	 * 
 	 * The properties of the new <tt>Configuration</tt> object are
 	 * <tt>null</tt> until the first time that its
-	 * {@link Configuration#update}method is called.
+	 * {@link Configuration#update(Dictionary)}method is called.
 	 * 
 	 * <p>
 	 * It is not required that the <tt>factoryPid</tt> maps to a registered
@@ -157,7 +158,7 @@ public interface ConfigurationAdmin {
 	 * 
 	 * The properties of the new <tt>Configuration</tt> object are
 	 * <tt>null</tt> until the first time that its
-	 * {@link Configuration#update}method is called.
+	 * {@link Configuration#update(Dictionary)}method is called.
 	 * 
 	 * <p>
 	 * It is not required that the <tt>factoryPid</tt> maps to a registered

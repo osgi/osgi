@@ -42,7 +42,7 @@ public class BasicEnvelope implements Envelope {
 	 * Constructor.
 	 * 
 	 * @param value Content of this envelope, may be <tt>null</tt>.
-	 * @param identifying Identifying object for this <tt>Envelope</tt>
+	 * @param identification Identifying object for this <tt>Envelope</tt>
 	 *        object, must not be <tt>null</tt>
 	 * @param scope Scope name for this object, must not be <tt>null</tt>
 	 * @see Envelope

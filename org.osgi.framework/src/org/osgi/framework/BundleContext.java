@@ -206,7 +206,7 @@ public abstract interface BundleContext
     /**
 	 * Adds the specified <tt>ServiceListener</tt> object with the specified
 	 * <tt>filter</tt> to this context bundle's list of listeners. <p>See
-	 * {@link #getBundle}for a definition of context bundle, and
+	 * {@link #getBundle()}for a definition of context bundle, and
 	 * {@link Filter}for a description of the filter syntax.
 	 * <tt>ServiceListener</tt> objects are notified when a service has a lifecycle state
 	 * change.
@@ -270,7 +270,7 @@ public abstract interface BundleContext
 
     /**
 	 * Removes the specified <tt>ServiceListener</tt> object from this context bundle's list of listeners.
-	 * See {@link #getBundle}for a definition of context bundle.
+	 * See {@link #getBundle()}for a definition of context bundle.
 	 *
 	 * <p>If <tt>listener</tt> is not contained in this context bundle's list
 	 * of listeners, this method does nothing.
@@ -283,7 +283,7 @@ public abstract interface BundleContext
     /**
 	 * Adds the specified <tt>BundleListener</tt> object to this context bundle's
 	 * list of listeners if not already present.
-	 * See {@link #getBundle}for a definition of context bundle.
+	 * See {@link #getBundle()}for a definition of context bundle.
 	 * BundleListener objects are notified when a bundle has a lifecycle state change.
 	 *
 	 * <p>If this context bundle's list of listeners already contains a
@@ -300,7 +300,7 @@ public abstract interface BundleContext
 
     /**
 	 * Removes the specified <tt>BundleListener</tt> object from this context bundle's list of listeners.
-	 * See {@link #getBundle}for a definition of context bundle.
+	 * See {@link #getBundle()}for a definition of context bundle.
 	 *
 	 * <p> If <tt>listener</tt> is not contained in this context bundle's list
 	 * of listeners, this method does nothing.
@@ -313,7 +313,7 @@ public abstract interface BundleContext
     /**
 	 * Adds the specified <tt>FrameworkListener</tt> object to this context bundle's
 	 * list of listeners if not already present.
-	 * See {@link #getBundle}for a definition of context bundle.
+	 * See {@link #getBundle()}for a definition of context bundle.
 	 * FrameworkListeners are notified of general Framework events.
 	 *
 	 * <p> If this context bundle's list of listeners already contains a
@@ -331,7 +331,7 @@ public abstract interface BundleContext
     /**
 	 * Removes the specified <tt>FrameworkListener</tt> object from this context
 	 * bundle's list of listeners.
-	 * See {@link #getBundle}for a definition of context bundle.
+	 * See {@link #getBundle()}for a definition of context bundle.
 	 *
 	 * <p> If <tt>listener</tt> is not contained in this context bundle's list
 	 * of listeners, this method does nothing.
@@ -349,7 +349,7 @@ public abstract interface BundleContext
 	 * bundle registering the service and should not be shared with other
 	 * bundles.
 	 * The registering bundle is defined to be the context bundle.
-	 * See {@link #getBundle}for a definition of context bundle.
+	 * See {@link #getBundle()}for a definition of context bundle.
 	 * Other bundles can locate the service by using either the
 	 * {@link #getServiceReferences}or {@link #getServiceReference}method.
 	 *
@@ -505,7 +505,7 @@ public abstract interface BundleContext
 	 * is incremented by one. Each time the service is released by
 	 * {@link #ungetService}the context bundle's use count for that service is decremented by one.
 	 * <p>When a bundle's use count for a service drops to zero, the bundle should no longer use that service.
-	 * See {@link #getBundle}for a definition of context bundle.
+	 * See {@link #getBundle()}for a definition of context bundle.
 	 *
 	 * <p>This method will always return <tt>null</tt> when the
 	 * service associated with this <tt>reference</tt> has been unregistered.
@@ -547,7 +547,7 @@ public abstract interface BundleContext
 	 * If the context bundle's use count for the service is zero, this method
 	 * returns <tt>false</tt>. Otherwise, the context bundle's use count
 	 * for the service is decremented by one.
-	 * See {@link #getBundle}for a definition of context bundle.
+	 * See {@link #getBundle()}for a definition of context bundle.
 	 *
 	 * <p>The service's service object should no longer be used and all references to it
 	 * should be destroyed when a bundle's use count for the service drops to zero.
@@ -583,7 +583,7 @@ public abstract interface BundleContext
 	 * persistent storage area provided for the context bundle by the Framework
 	 * can be obtained by calling this method with an empty string (" ")
 	 * as <tt>filename</tt>.
-	 * See {@link #getBundle}for a definition of context bundle.
+	 * See {@link #getBundle()}for a definition of context bundle.
 	 *
 	 * <p>If the Java Runtime Environment supports permissions,
 	 * the Framework will ensure that the bundle has the <tt>java.io.FilePermission</tt> with actions

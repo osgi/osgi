@@ -128,7 +128,7 @@ public interface ConfigurationPlugin {
 	 * 
 	 * @param reference reference to the Managed Service or Managed Service
 	 *        Factory
-	 * @param configuration The configuration properties. This argument must not
+	 * @param properties The configuration properties. This argument must not
 	 *        contain the "service.bundleLocation" property. The value of this
 	 *        property may be obtained from the
 	 *        <tt>Configuration.getBundleLocation</tt> method.
