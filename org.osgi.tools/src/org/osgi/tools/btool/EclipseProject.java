@@ -22,36 +22,29 @@ import com.icl.saxon.aelfred.SAXParserImpl;
  * Class to read an eclipse .classpath file
  * 
  * @author BJ Hargrave (hargrave@us.ibm.com)
+ * 
+ * Adapted by Peter Kriens
+ * 
  * @version Eclipse 3.0
  */
+
 public class EclipseProject {
-	private final boolean	DEBUG			= false;
-	protected Hashtable		properties;
-	protected File			eclipseProject;
-	protected boolean		root;
-	protected File			workspace;
-	protected File			file;
-	protected Locator		locator;
-	Vector					sourceFolders	= new Vector();
-	static final String		PATHSEP			= File.pathSeparator;		// This
-	// must
-	// be
-	// path
-	// separator
-	// for
-	// ant
-	// script
-	// path
-	// processing
-	// (subant)
-	private StringBuffer	sourcepath		= new StringBuffer(1024);
-	private StringBuffer	classpath		= new StringBuffer(1024);
-	private StringBuffer	bootclasspath	= new StringBuffer(1024);
-	private String			buildpath		= null;
-	private String			bindir;
-	List					before			= new Vector();
-	int						level;
-	private Hashtable		dependingOn		= new Hashtable();
+	Hashtable			properties;
+	File				eclipseProject;
+	boolean				root;
+	File				workspace;
+	File				projectFile;
+	Locator				locator;
+	Vector				sourceFolders	= new Vector();
+	static final String	PATHSEP			= File.pathSeparator;	// This
+	List				sourcepath		= new Vector();
+	List				classpath		= new Vector();
+	List				bootclasspath	= new Vector();
+	String				buildpath		= null;
+	String				bindir;
+	List				before			= new Vector();
+	int					level;
+	Hashtable			dependingOn		= new Hashtable();
 
 	public EclipseProject(File eclipseProject, boolean root) {
 		this.eclipseProject = eclipseProject;
@@ -59,45 +52,52 @@ public class EclipseProject {
 	}
 
 	public String getSourcepath() {
-		return checkNull(sourcepath.toString());
-	}
-
-	/**
-	 * @return
-	 */
-	private String checkNull(String s) {
-		if ( s== null )
-			return s;
-		return s.length() == 0 ? null : s;
+		return toPath(sourcepath);
 	}
 
 	public String getClasspath() {
-		return checkNull(classpath.toString());
+		return toPath(classpath);
+	}
+
+	/**
+	 * Make into a path and remove duplicates.
+	 * 
+	 * @param c
+	 * @return
+	 */
+	String toPath(Collection c) {
+		StringBuffer sb = new StringBuffer();
+		String del = "";
+		HashSet set = new HashSet();
+		for (Iterator i = c.iterator(); i.hasNext();) {
+			Object entry = i.next();
+			if (set.contains(entry))
+				continue;
+			set.add(entry);
+			sb.append(del);
+			sb.append(entry);
+			del = PATHSEP;
+		}
+		return sb.toString();
 	}
 
 	public String getBootclasspath() {
-		return checkNull(bootclasspath.toString());
+		return toPath(bootclasspath);
 	}
 
 	public String getBindir() {
 		return checkNull(bindir);
 	}
 
-	protected void addSourcepath(String path) {
-		if (sourcepath.length() > 0) {
-			sourcepath.append(PATHSEP);
-		}
-		sourcepath.append(path);
+	void addSourcepath(String path) {
+		sourcepath.add(path);
 	}
 
-	protected void addClasspath(String path) {
+	void addClasspath(String path) {
 		if (isBoot(path))
 			addBootclasspath(path);
 		else {
-			if (classpath.length() > 0) {
-				classpath.append(PATHSEP);
-			}
-			classpath.append(path);
+			classpath.add(path);
 		}
 	}
 
@@ -108,18 +108,15 @@ public class EclipseProject {
 		return file.getName().startsWith("ee.");
 	}
 
-	protected void addBootclasspath(String path) {
-		if (bootclasspath.length() > 0) {
-			bootclasspath.append(PATHSEP);
-		}
-		bootclasspath.append(path);
+	void addBootclasspath(String path) {
+		bootclasspath.add(path);
 	}
 
-	protected void setBindir(String path) {
+	void setBindir(String path) {
 		bindir = path;
 	}
 
-	protected void execute(Hashtable properties) {
+	void execute(Hashtable properties) {
 		try {
 			this.properties = properties;
 			if (!eclipseProject.isDirectory()) {
@@ -127,23 +124,15 @@ public class EclipseProject {
 						+ " is not a directory");
 			}
 			workspace = eclipseProject.getParentFile();
-			file = new File(eclipseProject, ".classpath");
-			if (!file.exists()) {
-				if (DEBUG) {
-					System.out.println("No classpath for "
-							+ eclipseProject.getPath());
-				}
-				return;
-			}
-			if (DEBUG) {
-				System.out.println("file=" + file.getAbsolutePath());
-			}
+			projectFile = new File(eclipseProject, ".classpath");
+			if (!projectFile.exists())
+				throw new RuntimeException("No classpath for "
+						+ eclipseProject.getPath());
 			SAXParserImpl saxParser = new SAXParserImpl();
-			saxParser.parse(file, new Handler());
+			saxParser.parse(projectFile, new Handler());
 		}
 		catch (Throwable e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -174,196 +163,135 @@ public class EclipseProject {
 	 * We must handle exported attribute. All kind="src" entry for this folder
 	 * are automatically exported.
 	 */
-	private class Handler extends DefaultHandler {
+	class Handler extends DefaultHandler {
 		public void startElement(String uri, String localName, String tag,
 				Attributes attrs) throws SAXException {
-			if (DEBUG) {
-				System.out.print(tag + ":");
-			}
-			if (!tag.equals("classpathentry")) {
-				return;
-			}
-			String kind = null;
-			String path = null;
-			String output = null;
-			boolean exported = false;
-			int size = attrs.getLength();
-			for (int i = 0; i < size; i++) {
-				String key = attrs.getQName(i);
-				String value = attrs.getValue(i);
-				if (key.equals("kind")) {
-					if (DEBUG) {
-						System.out.print(" kind=" + value);
-					}
-					kind = value;
-				}
-				else
-					if (key.equals("path")) {
-						if (DEBUG) {
-							System.out.print(" path=" + value);
-						}
-						if (value.equals("")) {
-							path = ".";
-						}
-						else {
-							path = value;
-						}
-					}
-					else
-						if (key.equals("output")) {
-							if (DEBUG) {
-								System.out.print(" output=" + value);
-							}
-							output = value;
-						}
-						else
-							if (key.equals("rootpath")) {
-								// we don't need this attribute
-							}
-							else
-								if (key.equals("sourcepath")) {
-									// we don't need this attribute
-								}
-								else
-									if (key.equals("exported")) {
-										exported = Boolean.valueOf(value)
-												.booleanValue();
-									}
-									else
-										if (key.equals("excluding")) {
-											// we don't need this attribute
-										}
-										else {
-											throw new SAXParseException(
-													"Unexpected attribute \""
-															+ key + "\"",
-													locator);
-										}
-			}
-			if (DEBUG) {
-				System.out.println();
-			}
-			if ("src".equals(kind)) {
-				/*
-				 * src is either a source folder within the current project dir
-				 * or another project dir.
-				 */
-				sourceFolders.add(path);
-				if (path.startsWith("/")) {
-					if (root || exported) {
-						File otherEclipseProject = new File(workspace, path);
-						EclipseProject cp;
-						try {
-							cp = (EclipseProject) dependingOn
-									.get(otherEclipseProject);
-							if (cp == null) {
-								cp = new EclipseProject(otherEclipseProject,
-										false);
-								dependingOn.put(otherEclipseProject, cp);
-							}
-							else {
-							}
-							if (cp.level <= level)
-								cp.level = level + 1;
-							before.add(cp);
-							cp.execute(properties);
-							addClasspath(cp.getClasspath());
-						}
-						catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-				else {
-					File srcFile = new File(eclipseProject, path);
-					path = srcFile.getAbsolutePath();
-					addSourcepath(path);
-					if (output != null) {
-						File outDir = new File(srcFile, output);
-						path = outDir.getAbsolutePath();
-						addClasspath(path);
-					}
-				}
-			}
+
+			if (tag.equals("classpath"))
+				doClasspath(attrs);
 			else
-				if ("lib".equals(kind)) {
-					/*
-					 * lib is a jar/zip file or a directory.
-					 */
-					if (root || exported) {
-						if (path.startsWith("/")) { // relative to workspace
-							File libFile = new File(workspace, path
-									.substring(1));
-							if (libFile.exists()) {
-								path = libFile.getAbsolutePath();
-							}
-							else
-								System.err
-										.println("Non existent lib in classpath: "
-												+ path);
-						}
-						else {
-							File libFile = new File(eclipseProject, path);
-							if (libFile.exists()) {
-								path = libFile.getAbsolutePath();
-							}
-							else
-								System.err
-										.println("Non existent lib in classpath: "
-												+ path);
-						}
-						addClasspath(path);
-					}
-				}
+				if (tag.equals("classpathentry"))
+					doClasspathEntry(attrs);
 				else
-					if ("var".equals(kind)) {
-						/*
-						 * var is a dir or jar/zip file the first component of
-						 * which is a variable name.
-						 */
-						//						if (root || exported) {
-						//							int index = path.indexOf('/');
-						//							String variable = (index < 0) ? path : path
-						//									.substring(0, index);
-						//							String value = (String) properties.get(variable);
-						//							if (value != null) {
-						//								value = variable;
-						//							}
-						//							if (value == null) {
-						//								throw new SAXParseException(
-						//										"Undefined property \"" + value + "\"",
-						//										locator);
-						//							}
-						//							String result = (index < 0) ? value : (value + path
-						//									.substring(index + 1));
-						//							addClasspath(result);
-						//						}
-					}
-					else
-						if ("output".equals(kind)) {
-							/*
-							 * output is the output folder within the current
-							 * eclipse dir.
-							 */
-							path = new File(eclipseProject, path)
-									.getAbsolutePath();
-							setBindir(path);
-							addClasspath(path);
-						}
-						else
-							if ("con".equals(kind)) {
-								/*
-								 * con is a container. Don't know how to find
-								 * its value :-(
-								 */
-							}
-							else {
-								throw new SAXParseException(
-										"Unexpected attribute value \"" + kind
-												+ "\"", locator);
-							}
+					System.err
+							.println("Invalid tag in .classpath file, ignored "
+									+ tag);
 		}
+
+		void doClasspath(Attributes attrs) {
+		}
+
+		void doClasspathEntry(Attributes attrs) {
+			String kind = attrs.getValue("kind");
+			String path = attrs.getValue("path");
+			String output = attrs.getValue("output");
+			String sourcePath = attrs.getValue("sourcepath");
+			boolean exported = false;
+			String s = attrs.getValue("exported");
+			if (s != null)
+				exported = Boolean.valueOf(s).booleanValue();
+
+			if (path.equals(""))
+				path = ".";
+
+			if ("src".equals(kind))
+				doSrc(path, exported);
+			else
+				if ("lib".equals(kind))
+					doLib(path, sourcePath, exported);
+				else
+					if ("output".equals(kind))
+						doOutput(path);
+					else
+						System.out.println("Unknown kind: " + kind);
+		}
+	}
+
+	/**
+	 * 
+	 * &lt;classpathentry kind="src" path="/org.osgi.framework"/&gt;
+	 * 
+	 * @param path
+	 * @param exported
+	 */
+	void doSrc(String path, boolean exported) {
+		File file = getPath(path);
+		String absolute = file.getAbsolutePath();
+		sourceFolders.add(absolute);
+
+		if (path.startsWith("/")) {
+			// Absolute directory, == other project
+			// Let another eclipse handle it ...
+			if (root || exported) {
+				EclipseProject cp = getEclipseProject(path);
+				if (cp.level <= level)
+					cp.level = level + 1;
+				before.add(cp);
+				cp.execute(properties);
+				classpath.addAll(cp.classpath);
+			}
+			// We must ignore non-exports from foreign projects
+		}
+		else {
+			// A local src dir in current project
+			addSourcepath(absolute);
+			addClasspath(absolute);
+		}
+	}
+
+	/**
+	 * 
+	 * &lt;classpathentry sourcepath="/osgi.released/ee.foundation.jar"
+	 * kind="lib" path="/osgi.released/ee.foundation.jar" /&gt;
+	 * 
+	 * @param path
+	 * @param sourcePath
+	 * @param exported
+	 */
+	void doLib(String path, String sourcePath, boolean exported) {
+		if (root || exported) {
+			File libFile = getPath(path);
+			if (!libFile.exists())
+				throw new RuntimeException("No such lib " + path
+						+ " for project " + this);
+
+			addClasspath(libFile.getAbsolutePath());
+		}
+		// Ignore non exported entries for foreign projects
+	}
+
+	/**
+	 * &ltclasspathentry kind="output" path="src"/&gt;
+	 * 
+	 * @param path
+	 */
+	void doOutput(String path) {
+		path = getPath(path).getAbsolutePath();
+		setBindir(path);
+		addClasspath(path);
+	}
+
+	EclipseProject getEclipseProject(String path) {
+		File project = new File(workspace, path);
+		EclipseProject cp = (EclipseProject) dependingOn.get(project);
+		if (cp == null) {
+			cp = new EclipseProject(project, false);
+			dependingOn.put(project, cp);
+		}
+		return cp;
+	}
+
+	File getPath(String path) {
+		if (path == null)
+			return null;
+
+		if (path.equals(""))
+			path = ".";
+
+		if (path.startsWith("/"))
+			return new File(workspace, path.substring(1));
+		else
+			return new File(eclipseProject, path);
 	}
 
 	/**
@@ -418,4 +346,14 @@ public class EclipseProject {
 		}
 		return buildpath = sb.toString();
 	}
+
+	/**
+	 * @return
+	 */
+	String checkNull(String s) {
+		if (s == null)
+			return s;
+		return s.length() == 0 ? null : s;
+	}
+
 }

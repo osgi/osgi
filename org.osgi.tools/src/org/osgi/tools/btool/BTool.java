@@ -50,7 +50,7 @@ public class BTool extends Task {
 	private File		projectDir;
 	String				prebuild		= "";
 	long				modified;
-	boolean				archiveChanged = false;
+	boolean				archiveChanged	= false;
 
 	/**
 	 * Try out the Deliver program. Syntax: Please note that the classpath must
@@ -70,7 +70,7 @@ public class BTool extends Task {
 			zipfile = new File(zipname);
 			if (!zipfile.exists())
 				archiveChanged = true;
-			
+
 			modified = zipfile.lastModified();
 			trace("Zip name " + zipname);
 			getManifest(); // Read manifest
@@ -87,8 +87,8 @@ public class BTool extends Task {
 			expands(); // Expands contents of another jar
 			includes(); // Add contents of another jar
 			if (ipa != null) {
-				File	buildProperties = new File( projectDir, "build.properties");
-				if ( buildProperties.lastModified() > modified )
+				File buildProperties = new File(projectDir, "build.properties");
+				if (buildProperties.lastModified() > modified)
 					archiveChanged = true;
 				ipa.execute();
 			}
@@ -96,7 +96,7 @@ public class BTool extends Task {
 				addContents(new PropertyResource(this, "osgi.properties",
 						properties));
 			trace("Date of archive: " + modified);
-			if ( archiveChanged ) {
+			if (archiveChanged) {
 				openZip();
 				int n = 0;
 				for (Iterator i = contents.values().iterator(); i.hasNext();) {
@@ -107,7 +107,8 @@ public class BTool extends Task {
 					try {
 						InputStream in = r.getInputStream();
 						if (in != null) {
-							addToZip(r.getPath(), r.getInputStream(), r.getExtra());
+							addToZip(r.getPath(), r.getInputStream(), r
+									.getExtra());
 							n++;
 						}
 					}
@@ -125,10 +126,11 @@ public class BTool extends Task {
 						if (manifestSource != null)
 							doAnalysis();
 						else
-							warnings.add("No manifest to analyse"); 
+							warnings.add("No manifest to analyse");
 					}
 				}
-			} else {
+			}
+			else {
 				System.out.println("Archive not changed");
 			}
 			showErrors();
@@ -163,13 +165,13 @@ public class BTool extends Task {
 		projectDir = null;
 		if (failok || errors.isEmpty())
 			return;
-		
+
 		zipfile.delete();
 		throw new BuildException("Errors found");
 	}
 
 	/**
-	 *  
+	 * 
 	 */
 	private void getPermissions() {
 		if (permissions == null)
@@ -203,7 +205,7 @@ public class BTool extends Task {
 		if (manifestSource == null) {
 			manifestSource = replaceExt(zipname, ".jar", ".mf");
 		}
-		if ( manifestSource == null )
+		if (manifestSource == null)
 			return;
 
 		File f = new File(manifestSource);
@@ -217,11 +219,11 @@ public class BTool extends Task {
 			return;
 		}
 		manifestSource = f.getAbsolutePath();
-		if ( f.lastModified() > modified ) {
+		if (f.lastModified() > modified) {
 			trace("Newer manifest");
 			archiveChanged = true;
 		}
-		
+
 		boolean showmanifest = this.showmanifest;
 		this.showmanifest = false;
 		ManifestResource mf = new ManifestResource(this, manifestSource, false);
@@ -239,7 +241,7 @@ public class BTool extends Task {
 	}
 
 	/**
-	 *  
+	 * 
 	 */
 	private void doAnalysis() throws Exception {
 		initDependencies();
@@ -266,15 +268,15 @@ public class BTool extends Task {
 				addExport(p);
 				trace("Exporting " + p.name + "-" + p.getVersion());
 			}
-			//            packages = manifest.getImports();
-			//            for (int i = 0; packages != null && i < packages.length; i++) {
-			//                PackageResource p = new PackageResource(this, null,
-			//                        PackageResource.nameToPath(packages[i].getName()));
-			//                p.setType(PackageResource.IMPORT);
-			//                p.setVersion(packages[i].getVersion());
-			//                imports.add(p);
-			//                trace("Importing " + p.name + "-" + p.getVersion());
-			//            }
+			// packages = manifest.getImports();
+			// for (int i = 0; packages != null && i < packages.length; i++) {
+			// PackageResource p = new PackageResource(this, null,
+			// PackageResource.nameToPath(packages[i].getName()));
+			// p.setType(PackageResource.IMPORT);
+			// p.setVersion(packages[i].getVersion());
+			// imports.add(p);
+			// trace("Importing " + p.name + "-" + p.getVersion());
+			// }
 		}
 	}
 
@@ -336,19 +338,19 @@ public class BTool extends Task {
 	}
 
 	void verify(String type, String paths) throws BuildException {
-		//		StringTokenizer st = new
+		// StringTokenizer st = new
 		// StringTokenizer(paths,EclipseProject.PATHSEP);
-		//		while (st.hasMoreTokens()) {
-		//			String s = st.nextToken();
-		//			File f = new File( s );
-		//			if ( ! f.exists() )
-		//				throw new BuildException("Non existent file in " + infoPrefix + "." +
+		// while (st.hasMoreTokens()) {
+		// String s = st.nextToken();
+		// File f = new File( s );
+		// if ( ! f.exists() )
+		// throw new BuildException("Non existent file in " + infoPrefix + "." +
 		// type + " -> " + s );
-		//		}
+		// }
 	}
 
 	/**
-	 *  
+	 * 
 	 */
 	private void setSourceFolders() {
 		if (contentFolders != null) {
@@ -388,7 +390,7 @@ public class BTool extends Task {
 	}
 
 	/**
-	 *  
+	 * 
 	 */
 	private void showErrors() {
 		int n = 0;
@@ -470,9 +472,19 @@ public class BTool extends Task {
 		return null;
 	}
 
+	List findSources(String path) {
+		Vector result = new Vector();
+		for (Iterator e = mainClasspath.iterator(); e.hasNext();) {
+			Source source = (Source) e.next();
+			if (source.contains(path))
+				result.add(source);
+		}
+		return result;
+	}
+
 	/**
 	 * Get the version of this application.
-	 *  
+	 * 
 	 */
 	String version() throws IOException {
 		InputStream in = getClass().getResourceAsStream("osgi.properties");
@@ -541,8 +553,8 @@ public class BTool extends Task {
 			actual.close();
 			CRC32 checksum = new CRC32();
 			checksum.update(buffer);
-			//if ( extra != null )
-			//	checksum.update( extra );
+			// if ( extra != null )
+			// checksum.update( extra );
 			ZipEntry ze = new ZipEntry(name);
 			ze.setSize(buffer.length);
 			ze.setCrc(checksum.getValue());
@@ -574,7 +586,7 @@ public class BTool extends Task {
 	 * the temorary file is added to the _zipname file.
 	 * 
 	 * The temporary file is then deleted.
-	 *  
+	 * 
 	 */
 	void doManifest() {
 		if (manifestSource == null)
@@ -672,15 +684,22 @@ public class BTool extends Task {
 	void expands() throws IOException {
 		if (expands == null)
 			return;
+
 		StringTokenizer st = new StringTokenizer(expands, " ,");
-		while (st.hasMoreElements()) {
+		outer: while (st.hasMoreElements()) {
 			String pack = st.nextToken().trim().replace('.', '/');
 			trace("Expand " + pack);
 			boolean export = pack.startsWith("[") && pack.endsWith("]");
 			if (export) {
-				pack = pack.substring(1, pack.length() - 1);
-				trace("export " + pack);
+				pack = pack.substring(1, pack.length() - 1).trim();
 			}
+
+			boolean merge = pack.startsWith("{") && pack.endsWith("}");
+			if (merge) {
+				pack = pack.substring(1, pack.length() - 1).trim();
+				trace("Merging ... " + pack);
+			}
+
 			if (pack.endsWith("/*")) {
 				pack = pack.substring(0, pack.length() - 2);
 				Source source = findSource(pack);
@@ -691,24 +710,30 @@ public class BTool extends Task {
 					errors.add("Cannot find package " + pack);
 			}
 			else {
-				Source source = findSource(pack);
-				if (source != null) {
-					trace("Source for package " + source.getFile());
-					PackageResource pr = new PackageResource(this, source, pack);
-					pr.setType(export ? PackageResource.EXPORT
-							: PackageResource.PRIVATE);
-					if (export)
-						addExport(pr);
-					addContents(pr);
-					for (Iterator i = pr.getResources().iterator(); i.hasNext();) {
-						Resource r = (Resource) i.next();
-						trace("Adding " + r);
-						r = modify(r);
-						addContents(r);
-					}
-				}
-				else
+				List sources = findSources(pack);
+				if (sources.isEmpty())
 					errors.add("Cannot find package " + pack);
+				else {
+					Iterator s = sources.iterator();
+					do {
+						Source source = (Source) s.next();
+						trace("Source for package " + source.getFile());
+						PackageResource pr = new PackageResource(this, source,
+								pack );
+						pr.setType(export ? PackageResource.EXPORT
+								: PackageResource.PRIVATE);
+						if (export)
+							addExport(pr);
+						addContents(pr);
+						for (Iterator i = pr.getResources().iterator(); i
+								.hasNext();) {
+							Resource r = (Resource) i.next();
+							trace("Adding " + r);
+							r = modify(r);
+							addContents(r);
+						}
+					} while (merge && s.hasNext());
+				}
 			}
 		}
 	}
