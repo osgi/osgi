@@ -53,20 +53,20 @@ public class MetaData  {
     public static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
     public static final String JAXP_SCHEMA_SOURCE = "http://java.sun.com/xml/jaxp/properties/schemaSource";
 
-    public ArrayList designate = new ArrayList();
-    public ArrayList ocd = new ArrayList();
+    public Designate[] designates;
+    public OCD[] ocds;
     
     public static class Designate {
     	public String pid;
     	public boolean factory;
     	public String bundle;
     	public boolean optional;
-    	public ArrayList objects = new ArrayList();
+    	public Object[] objects;
     };
     
     public static class Object {
     	public String type;
-    	public ArrayList attributes = new ArrayList();
+    	public Attribute[] attributes;
     }
     
     public static class Attribute {
@@ -75,8 +75,8 @@ public class MetaData  {
 
     public static class OCD {
     	public String name,description,id;
-    	public ArrayList ad = new ArrayList();
-    	public ArrayList icon = new ArrayList();
+    	public AD[] ads;
+    	public Icon[] icons;
     }
     
     public static class AD {
@@ -85,7 +85,7 @@ public class MetaData  {
     	public int cardinality;
     	public int type;
     	public String defaultValue;
-    	public ArrayList option = new ArrayList();
+    	public Option[] options;
     }
     
     public static class Icon {
@@ -120,6 +120,13 @@ public class MetaData  {
 		private Object currentObject;
 		private OCD currentOCD;
 		private AD currentAD;
+		private ArrayList designateA = new ArrayList(10);
+		private ArrayList ocdsA = new ArrayList(10);
+		private ArrayList objectsA = new ArrayList(10);
+		private ArrayList adsA = new ArrayList(10);
+		private ArrayList attributesA = new ArrayList(10);
+		private ArrayList iconsA = new ArrayList(10);
+		private ArrayList optionsA = new ArrayList(10);
 		
 		public void setDocumentLocator(Locator arg0) {
 		}
@@ -153,7 +160,9 @@ public class MetaData  {
 						currentOCD.id = attr.getValue("id");
 						currentOCD.name = attr.getValue("name");
 						currentOCD.description = attr.getValue("description");
-						ocd.add(currentOCD);
+						adsA.clear();
+						iconsA.clear();
+						ocdsA.add(currentOCD);
 					} else if ("Designate".equals(localName)){
 						state = DESIGNATE;
 						currentDesignate = new Designate();
@@ -161,7 +170,8 @@ public class MetaData  {
 						currentDesignate.factory = getBool(attr,"factory",false);
 						currentDesignate.bundle = attr.getValue("bundle");
 						currentDesignate.optional = getBool(attr,"optional",false);
-						designate.add(currentDesignate);
+						objectsA.clear();
+						designateA.add(currentDesignate);
 					} else {
 						throw new IllegalStateException(localName);
 					}
@@ -169,7 +179,8 @@ public class MetaData  {
 				case DESIGNATE:
 					state = OBJECT;
 					currentObject = new Object();
-					currentDesignate.objects.add(currentObject);
+					attributesA.clear();
+					objectsA.add(currentObject);
 					currentObject.type = attr.getValue("type");
 					break;
 				case OBJECT:
@@ -178,13 +189,13 @@ public class MetaData  {
 					Attribute a = new Attribute();
 					a.name = attr.getValue("name");
 					a.content = attr.getValue("content");
-					currentObject.attributes.add(a);
+					attributesA.add(a);
 					break;
 				case OCD:
 					if ("AD".equals(localName)) {
 						state = AD;
 						currentAD = new AD();
-						currentOCD.ad.add(currentAD);
+						adsA.add(currentAD);
 						currentAD.name = attr.getValue("name");
 						currentAD.description = attr.getValue("description");
 						currentAD.id = attr.getValue("id");
@@ -218,13 +229,14 @@ public class MetaData  {
 						
 						// TODO min, max
 						currentAD.defaultValue = attr.getValue("default");
+						optionsA.clear();
 						
 					} else {
 						state = ICON;
 						Icon icon = new Icon();
 						icon.resource = attr.getValue("resource");
 						icon.size = Integer.parseInt(attr.getValue("size"));
-						currentOCD.icon.add(icon);
+						iconsA.add(icon);
 					}
 					break;
 				case AD:
@@ -232,7 +244,7 @@ public class MetaData  {
 					Option option = new Option();
 					option.label = attr.getValue("label");
 					option.value = attr.getValue("value");
-					currentAD.option.add(option);
+					optionsA.add(option);
 					break;
 			    default:
 			    	throw new IllegalStateException(""+state);
@@ -253,13 +265,27 @@ public class MetaData  {
 		public void endElement(String arg0, String arg1, String arg2) throws SAXException {
 			switch(state) {
 				case OCD:
+					state = METADATA;
+					currentOCD.ads = new AD[adsA.size()];
+					adsA.toArray(currentOCD.ads);
+					currentOCD.icons = new Icon[iconsA.size()];
+					iconsA.toArray(currentOCD.icons);
+					break;
 				case DESIGNATE:
 					state = METADATA;
+					currentDesignate.objects = new Object[objectsA.size()];
+					objectsA.toArray(currentDesignate.objects);
 					break;
 				case OBJECT:
 					state = DESIGNATE;
+					currentObject.attributes = new Attribute[attributesA.size()];
+					attributesA.toArray(currentObject.attributes);
 					break;
 				case AD:
+					state = OCD;
+					currentAD.options = new Option[optionsA.size()];
+					optionsA.toArray(currentAD.options);
+					break;
 				case ICON:
 					state = OCD;
 					break;
@@ -270,7 +296,10 @@ public class MetaData  {
 					state = OBJECT;
 					break;
 				case METADATA:
-					// the end!
+					designates = new Designate[designateA.size()];
+					designateA.toArray(designates);
+					ocds = new OCD[ocdsA.size()];
+					ocdsA.toArray(ocds);
 					break;
 			    default:
 			    	throw new IllegalStateException(""+state);
