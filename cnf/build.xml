@@ -13,6 +13,7 @@
 	     with relative directories -->
 	<dirname property="project" file="${ant.file}" />
 	<dirname property="workspace" file="${project}" />
+	<basename property="project.name" file="${project}" />
 	<property environment="env"/>
 	
 	<!-- Task defs, removed the recursive search for performance
@@ -68,6 +69,7 @@
 	<property file="${project}/build.properties" />		
 	<property file="${env.HOME}/osgi.properties" />
 	<property file="${workspace}/cnf/build.properties" />
+	<property name="p" value= "${project.name}"/>
 	
 	<!-- get the classpath and build info from eclipse -->
 	<btool eclipse="${project}" />
@@ -84,7 +86,6 @@
 	      then the jar is org.osgi.example.jar with the
 	      package of org.osgi.example 
 	-->
-	<property name="p" value= "${project.name}"/>
 
 	<!-- 
 	     PUBLISH
@@ -95,7 +96,7 @@
 	     target does NOT check projects it dependends on!
 	-->
 	<target name="publish" depends="check" > 
-		<echo>Publish ${project}</echo>
+		<echo>Publish ${project} | ${p}</echo>
 		
 		<!-- Compile project dependencies -->
 		<foreach delimiter=" ," list="${project.buildpath}" 
@@ -217,6 +218,7 @@
 			excludeImportProperty="excludeImport.${item.jarFile}" 
 			includeExportProperty="includeExport.${item.jarFile}" 
 			ipaProperty="ipa.${item.jarFile}" 
+			verbose="${verbose}"
 			ignoreVersions="${btool.noversion}" />
 		
 	</target>
