@@ -65,7 +65,7 @@ public class Measurement implements Comparable {
 	final double	error;
 	final long		time;
 	final Unit		unit;
-	private String	name;
+	private transient String	name;
 
 	/**
 	 * Create a new <tt>Measurement</tt> object from a String.
