@@ -6,7 +6,7 @@ import org.osgi.service.application.Application;
 import org.osgi.service.component.ComponentContext;
 
 /**
- * A MEG Application. a.k.a Meglet
+ * A MEG Application, also called a Meglet.
  */
 public class Mobilet implements Application {
 	ComponentContext	context;
