@@ -141,7 +141,7 @@ public class BTool extends Task {
 		ipa = null;
 		workspaceDir = null;
 		projectDir = null;
-		if (errors.isEmpty())
+		if (failok || errors.isEmpty())
 			return;
 		throw new BuildException("Errors found");
 	}
@@ -373,6 +373,9 @@ public class BTool extends Task {
 				System.err.println("One error detected");
 			else
 				System.err.println(errors.size() + " Errors detected");
+			
+			if ( failok )
+				System.err.println("FAIL ALLOWED");
 		}
 	}
 
