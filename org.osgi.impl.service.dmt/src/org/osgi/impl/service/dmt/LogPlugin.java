@@ -26,7 +26,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 	private BundleContext		bc;
 	private LogService			logservice;
 	private LogReaderService	logreaderservice;
-	private DmtAlertSender		alertsender;
+	private DmtAdmin		    alertsender;
 	private Hashtable			requests;
 	private final static String	FILTER	= "filter";
 	private final static String	EXCLUDE	= "exclude";
@@ -35,11 +35,11 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 	private boolean				debug	= false;
 
 	LogPlugin(BundleContext bc, LogService ls, LogReaderService lrs,
-			DmtAlertSender das) {
+			DmtAdmin da) {
 		this.bc = bc;
 		this.logservice = ls;
 		this.logreaderservice = lrs;
-		this.alertsender = das;
+		this.alertsender = da;
 		requests = new Hashtable();
 	}
 
@@ -90,6 +90,10 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 	}
 
 	//----- Dmt methods -----//
+    
+    public void commit() throws DmtException {
+    }    
+    
 	public void rollback() throws DmtException {
 	}
 
@@ -382,8 +386,8 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 		Vector records = getResult(lr);
 		String result = formatResult(records);
 		DmtAlertItem[] items = new DmtAlertItem[1];
-		items[0] = new DmtAlertItem(nodeUri, null, null, null, result);
-		alertsender.sendAlert(session, 1224, items);
+		items[0] = new DmtAlertItem(nodeUri, null, null, result);
+		alertsender.sendAlert(session.getPrincipal(), 1224, items);
 	}
 
 	//----- Private utility methods -----//
