@@ -44,45 +44,45 @@ public class ControlUnitAdminException extends ControlUnitException {
    * This error code means that the user tried to perform an operation
    * over non-existent control unit.
    */
-  public static final int NO_SUCH_CONTROL_UNIT_ERROR = 5;
+  public static final int NO_SUCH_CONTROL_UNIT_ERROR = 4;
   
   /**
    * This error code means that the user attempted to create a control
    * unit, but its factory doesn't provide the requested constructor
    * method.
    */
-  public static final int NO_SUCH_CONSTUCTOR_ERROR = 7;
+  public static final int NO_SUCH_CONSTUCTOR_ERROR = 5;
 
   /**
    * This error code means that the user tried to perform a search, but
    * the there is not finder method that matches the given finder id.
    */
-  public static final int NO_SUCH_FINDER_ERROR = 8;
+  public static final int NO_SUCH_FINDER_ERROR = 6;
 
   /**
    * This error code means that someone has tried to create a control
    * unit dynamically, but it's factory doesn't provide any constructor
    * methods.
    */
-  public static final int CREATION_NOT_SUPPORTED_ERROR = 9;
+  public static final int CREATION_NOT_SUPPORTED_ERROR = 7;
 
   /**
    * This error code means that the user has tried to destroy a control unit
    * which factory doesn't define a destructor method.
    */
-  public static final int DESTRUCTION_NOT_SUPPORTED_ERROR = 10;
+  public static final int DESTRUCTION_NOT_SUPPORTED_ERROR = 8;
 
   /**
    * This error code means that the user has tried to search for a control unit
    * but a finder method(s) are not defined.
    */
-  public static final int SEARCHING_NOT_SUPPORTED_ERROR = 11;
+  public static final int SEARCHING_NOT_SUPPORTED_ERROR = 9;
   
   /**
    * This error code means that the user tried to perform an operation
    * over non-existent control unit type.
    */
-  public static final int NO_SUCH_CONTROL_UNIT_TYPE_ERROR = 5;
+  public static final int NO_SUCH_CONTROL_UNIT_TYPE_ERROR = 10;
     
   /**
    * Constructs a new control unit exception with the given error code.
