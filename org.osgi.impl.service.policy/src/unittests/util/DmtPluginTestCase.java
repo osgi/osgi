@@ -18,6 +18,7 @@
 package unittests.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Dictionary;
 import junit.framework.TestCase;
@@ -35,6 +36,9 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.dmt.DmtAdminActivator;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
 import org.osgi.impl.service.dmt.api.RemoteAlertSender;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.cm.ManagedService;
 import org.osgi.service.dmt.DmtAlertSender;
 import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.dmt.DmtAdmin;
@@ -55,11 +59,15 @@ public class DmtPluginTestCase extends TestCase {
 	public DmtAdmin dmtFactory;
 	public DmtAlertSender dmtAlertSender;
 	public DmtPrincipalPermissionAdmin dmtPrincipalPermissionAdmin;
+	public DummyConfigurationAdmin	configurationAdmin;
 	
 	public class DummyContext implements BundleContext {
 		public ServiceReference getServiceReference(String clazz) {
 			if (clazz.equals(EventChannel.class.getName())) {
 				return new DummyServiceReference(new DummyEventChannel());
+			}
+			if (clazz.equals(ConfigurationAdmin.class.getName())){
+				return new DummyServiceReference(configurationAdmin);
 			}
 			throw new IllegalStateException();
 		}
@@ -116,7 +124,15 @@ public class DmtPluginTestCase extends TestCase {
 				dmtPrincipalPermissionAdmin = (DmtPrincipalPermissionAdmin) service;
 				return null;
  			}
+			if (ManagedService.class.getName().equals(clazz)) {
+				return null;
+			}
 			throw new IllegalStateException();
+		}
+
+		public ServiceRegistration registerService(String[] clazzes, Object service, Dictionary properties) {
+			for(int i=0;i<clazzes.length;i++) registerService(clazzes[i],service,properties);
+			return null;
 		}
 		
 		// not used methods
@@ -132,10 +148,17 @@ public class DmtPluginTestCase extends TestCase {
 		public void removeBundleListener(BundleListener listener) {throw new IllegalStateException();}
 		public void addFrameworkListener(FrameworkListener listener) {throw new IllegalStateException();}
 		public void removeFrameworkListener(FrameworkListener listener) {throw new IllegalStateException();}
-		public ServiceRegistration registerService(String[] clazzes, Object service, Dictionary properties) {throw new IllegalStateException();}
 		public boolean ungetService(ServiceReference reference) {throw new IllegalStateException();}
 		public File getDataFile(String filename) {throw new IllegalStateException();}
 	};
+	
+	public class DummyConfigurationAdmin implements ConfigurationAdmin {
+		public Configuration createFactoryConfiguration(String factoryPid) throws IOException { throw new IllegalStateException(); }
+		public Configuration createFactoryConfiguration(String factoryPid, String location) throws IOException { throw new IllegalStateException();		}
+		public Configuration getConfiguration(String pid, String location) throws IOException { throw new IllegalStateException();}
+		public Configuration getConfiguration(String pid) throws IOException { throw new IllegalStateException(); }
+		public Configuration[] listConfigurations(String filter) throws IOException, InvalidSyntaxException { throw new IllegalStateException();}
+	}
 	
 	public class DummyEventChannel implements EventChannel {
 		public void postEvent(ChannelEvent event) {}
@@ -184,12 +207,14 @@ public class DmtPluginTestCase extends TestCase {
 	public void setUp() throws Exception {
 		dmtAdminActivator = new DmtAdminActivator();
 		dmtBundleContext = new DummyContext(); 
+		configurationAdmin = new DummyConfigurationAdmin();
 		dmtAdminActivator.start(dmtBundleContext);
 	}
 	
 	public void tearDown() throws Exception {
 		dmtAlertSender = null;
 		dmtFactory = null;
+		configurationAdmin = null;
 		dmtRemoteAlertSenderServiceListener = null;
 		dmtAdminActivator = null;
 		dmtBundleContext = null;
