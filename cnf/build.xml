@@ -13,8 +13,8 @@
 	     with relative directories -->
 	<dirname property="project" file="${ant.file}" />
 	<dirname property="workspace" file="${project}" />
-	<echo>${project} to  ${release.dir}</echo>
-		
+	<property environment="env"/>
+	
 	<!-- Task defs, removed the recursive search for performance
 	     reasons 
 	-->
@@ -72,6 +72,8 @@
 	<!-- get the classpath and build info from eclipse -->
 	<btool eclipse="${project}" />
 
+	<property name="javac" value="${env.JAVA_HOME}/bin/javac"/>
+	<property name="java" value="${env.JAVA_HOME}/bin/java"/>
 
 	<!-- 
 	   The build property may be absent. In that case 
@@ -122,7 +124,7 @@
 	    Copy the JAR file to the osgi.released directory.
 	-->
 	<target name="release" if="release.dir">
-		<copy overwrite="true" todir="${release.dir}" file="${item.jarFile}" />
+		<copy overwrite="true" todir="${release.dir}" verbose="${verbose}" file="${item.jarFile}" />
 	</target>
 	
 	<!--
@@ -134,7 +136,7 @@
 	-->
 	<target name="check">
 		<uptodate property="jar.ok" targetfile="${workspace}/cnf/cache/${project.name}">
-			<srcfiles dir="src" includes="**/*" />
+			<srcfiles dir="${project.sourcepath}" includes="**/*" />
 			<srcfiles dir="${workspace}/cnf" includes="build.xml" />
 			<srcfiles dir="${workspace}/cnf" includes="build.properties" />
 			<srcfiles dir="." includes="*.mf" />
@@ -208,17 +210,17 @@
 	     is true, we assume someone else has done the 
 	     compiling for us.
 	-->
-	<target name="compile" unless="eclipse.running">
+	<target name="compile">
 		<javac fork="yes" 
-			executable="${JAVA_HOME}/bin/javac" 
-			srcdir="${project.sourcepath}" 
+			executable="javac" 
+			srcdir="${project}" 
 			destdir="${project.bindir}" 
 			classpath="${project.classpath}" 
 			bootclasspath="${project.bootclasspath}" 
 			deprecation="true" 
 			listfiles="true" 
 			target="${javac.target}" 
-			source="${javac.source}" />
+			source="${project.sourcepath}" />
 	</target>
 
 	
