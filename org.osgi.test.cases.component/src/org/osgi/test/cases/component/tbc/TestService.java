@@ -1,5 +1,7 @@
 /*
- * $Header$
+ * $Header:
+ * /cvshome/build/org.osgi.test.cases.component/src/org/osgi/test/cases/component/tb1/TestService.java,
+ * v 1.1 2005/01/28 16:53:17 i_karabashev Exp $
  * 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
@@ -27,17 +29,22 @@
 
 package org.osgi.test.cases.component.tbc;
 
-
 /**
- * Dummy service to check exporter
- * 
  * @version $Revision$
  */
-public interface TBCService {
+public class TestService {
+  
+  private int param;
+  
+  public TestService(int param) {
+    this.param = param;
+  }
 
-  public static final int PARAM_CONST = 123;
+  public int getParam() {
+    return param;
+  }
 
-  public int getSimpleTestService();
-
-  public TestService getObjectTestService();
+  public void setParam(int param) {
+    this.param = param;
+  }
 }

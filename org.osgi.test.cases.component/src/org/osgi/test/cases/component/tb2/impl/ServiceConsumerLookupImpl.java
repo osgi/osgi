@@ -1,5 +1,7 @@
 /*
- * $Header$
+ * $Header:
+ * /cvshome/build/org.osgi.test.cases.component/src/org/osgi/test/cases/component/tb2/impl/ServiceConsumerLookupImpl.java,
+ * v 1.1 2005/01/28 14:57:53 i_karabashev Exp $
  * 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
@@ -25,19 +27,41 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.component.tbc;
+package org.osgi.test.cases.component.tb2.impl;
 
+import java.util.Dictionary;
+
+import org.osgi.service.component.ComponentContext;
+import org.osgi.test.cases.component.tb1.ServiceProvider;
+import org.osgi.test.cases.component.tb2.ServiceConsumerLookup;
+import org.osgi.test.cases.component.tbc.TestService;
 
 /**
- * Dummy service to check exporter
- * 
  * @version $Revision$
  */
-public interface TBCService {
+public class ServiceConsumerLookupImpl implements ServiceConsumerLookup {
 
-  public static final int PARAM_CONST = 123;
+  private ComponentContext context;
 
-  public int getSimpleTestService();
+  protected void activate(ComponentContext context) {
+    this.context = context;
+  }
 
-  public TestService getObjectTestService();
+  protected void deactivate(ComponentContext context) {
+    this.context = null;
+  }
+
+  public Dictionary getProperties() {
+    return context.getProperties();
+  }
+
+  public int getSimpleTestService() {
+    ServiceProvider serviceProvider = (ServiceProvider) context.locateService("serviceProvider");
+    return serviceProvider.getSimpleTestService();
+  }
+  
+  public TestService getObjectTestService() {
+    ServiceProvider serviceProvider = (ServiceProvider) context.locateService("serviceProvider");
+    return serviceProvider.getObjectTestService();
+  }
 }

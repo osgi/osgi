@@ -1,5 +1,7 @@
 /*
- * $Header$
+ * $Header:
+ * /cvshome/build/org.osgi.test.cases.component/src/org/osgi/test/cases/component/tb1/impl/ServiceProviderImpl.java,
+ * v 1.1 2005/01/28 14:57:53 i_karabashev Exp $
  * 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
@@ -25,19 +27,21 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.component.tbc;
+package org.osgi.test.cases.component.tb1.impl;
 
+import org.osgi.test.cases.component.tb1.ServiceProvider;
+import org.osgi.test.cases.component.tbc.TestService;
 
 /**
- * Dummy service to check exporter
- * 
  * @version $Revision$
  */
-public interface TBCService {
+public class ServiceProviderImpl implements ServiceProvider {
 
-  public static final int PARAM_CONST = 123;
-
-  public int getSimpleTestService();
-
-  public TestService getObjectTestService();
+  public int getSimpleTestService() {
+    return PARAM_CONST;
+  }
+  
+  public TestService getObjectTestService() {
+    return new TestService(PARAM_CONST);
+  }
 }

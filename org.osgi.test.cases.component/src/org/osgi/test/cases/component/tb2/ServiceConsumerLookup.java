@@ -1,5 +1,7 @@
 /*
- * $Header$
+ * $Header:
+ * /cvshome/build/org.osgi.test.cases.component/src/org/osgi/test/cases/component/tb2/ServiceConsumerLookup.java,
+ * v 1.1 2005/01/28 14:57:34 i_karabashev Exp $
  * 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
@@ -25,19 +27,16 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.component.tbc;
+package org.osgi.test.cases.component.tb2;
 
+import java.util.Dictionary;
+
+import org.osgi.test.cases.component.tbc.TBCService;
 
 /**
- * Dummy service to check exporter
- * 
  * @version $Revision$
  */
-public interface TBCService {
+public interface ServiceConsumerLookup extends TBCService {
 
-  public static final int PARAM_CONST = 123;
-
-  public int getSimpleTestService();
-
-  public TestService getObjectTestService();
+  public Dictionary getProperties();
 }

@@ -1,5 +1,7 @@
 /*
- * $Header$
+ * $Header:
+ * /cvshome/build/org.osgi.test.cases.component/src/org/osgi/test/cases/component/tb3/impl/ServiceConsumerEventImpl.java,
+ * v 1.1 2005/01/28 14:57:53 i_karabashev Exp $
  * 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
@@ -25,19 +27,31 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.component.tbc;
+package org.osgi.test.cases.component.tb3.impl;
 
+import org.osgi.test.cases.component.tb1.ServiceProvider;
+import org.osgi.test.cases.component.tb3.ServiceConsumerEvent;
+import org.osgi.test.cases.component.tbc.TestService;
 
 /**
- * Dummy service to check exporter
- * 
  * @version $Revision$
  */
-public interface TBCService {
+public class ServiceConsumerEventImpl implements ServiceConsumerEvent {
 
-  public static final int PARAM_CONST = 123;
+  private ServiceProvider serviceProvider;
 
-  public int getSimpleTestService();
+  protected void bindServiceProvider(ServiceProvider serviceProvider) {
+    this.serviceProvider = serviceProvider;
+  }
+  protected void unbindServiceProvider(ServiceProvider serviceProvider) {
+    this.serviceProvider = null;
+  }
 
-  public TestService getObjectTestService();
+  public int getSimpleTestService() {
+    return serviceProvider.getSimpleTestService();
+  }
+  
+  public TestService getObjectTestService() {
+    return serviceProvider.getObjectTestService();
+  }
 }
