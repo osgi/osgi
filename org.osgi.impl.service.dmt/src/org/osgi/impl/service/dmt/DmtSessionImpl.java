@@ -269,7 +269,6 @@ public class DmtSessionImpl implements DmtSession {
 		return true;
 	}
 
-	// TODO get isLeaf directly from plugin instead of metadata 
 	public synchronized boolean isLeafNode(String nodeUri) throws DmtException {
         checkSession();
 		String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
@@ -336,7 +335,7 @@ public class DmtSessionImpl implements DmtSession {
 	public synchronized DmtData getNodeValue(String nodeUri)
             throws DmtException {
         checkSession();
-        final String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_LEAF);
+        String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_LEAF);
         checkNodePermission(uri, DmtAcl.GET);
         return getDataPlugin(uri).getNodeValue(uri);
     }
@@ -677,13 +676,7 @@ public class DmtSessionImpl implements DmtSession {
     }
     
     private boolean isLeafNodeNoCheck(String uri) throws DmtException {
-        // TODO what should be done if there is no metaNode information
-        DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
-        if (metaNode != null)
-            return metaNode.isLeaf();
-        // TODO hack: try to find out the type of node by calling getNodeValue and getChildNodeNames
-        // TODO specify in the standard the exception the plugin has to throw if the node type is invalid for the op.
-        return false;
+        return getDataPlugin(uri).isLeafNode(uri);
     }
 
     private static DmtAcl getEffectiveNodeAclNoCheck(String uri) {
