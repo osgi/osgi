@@ -97,7 +97,7 @@ public class BTool extends Task {
 			setSourceFolders(); // Read the list of folders that are included
 			
 			if ( auto ) {
-			    System.out.println("Adding full bindir to JAR " + eclipse.getBindir() );;
+			    trace("Adding full bindir to JAR " + eclipse.getBindir() );;
 		        DirSource ds = new DirSource( new File(eclipse.getBindir()));
 		        addRecursive(ds,"");
 			}
@@ -562,6 +562,16 @@ public class BTool extends Task {
 
 		if ( path.endsWith("/CVS"))
 		    return;
+		if ( path.endsWith(".java")) {
+			trace("Java file: " + path);
+			if (sources) {
+				Resource rr = new Resource(this, source,
+						sourcesPrefix + path );
+				rr.setSourcePath(path);
+				addContents(rr);
+			}
+		    return;
+		}
 		
 		if (source.isDirectory(path)) {
 			trace("Dir " + path);
