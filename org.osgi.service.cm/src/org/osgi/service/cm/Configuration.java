@@ -35,36 +35,36 @@ import java.util.*;
  * <code>ManagedServiceFactory</code> object.
  * 
  * The Configuration Admin service uses this interface to represent the
- * configuration information for a <code>ManagedService</code> or for a service
- * instance of a <code>ManagedServiceFactory</code>.
+ * configuration information for a <code>ManagedService</code> or for a
+ * service instance of a <code>ManagedServiceFactory</code>.
  * 
  * <p>
  * A <code>Configuration</code> object contains a configuration dictionary and
  * allows the properties to be updated via this object. Bundles wishing to
  * receive configuration dictionaries do not need to use this class - they
- * register a <code>ManagedService</code> or <code>ManagedServiceFactory</code>.
- * Only administrative bundles, and bundles wishing to update their own
- * configurations need to use this class.
+ * register a <code>ManagedService</code> or
+ * <code>ManagedServiceFactory</code>. Only administrative bundles, and
+ * bundles wishing to update their own configurations need to use this class.
  * 
  * <p>
  * The properties handled in this configuration have case insensitive
- * <code>String</code> objects as keys. However, case is preserved from the last
- * set key/value.
+ * <code>String</code> objects as keys. However, case is preserved from the
+ * last set key/value.
  * <p>
  * A configuration can be <i>bound </i> to a bundle location (
  * <code>Bundle.getLocation()</code>). The purpose of binding a
- * <code>Configuration</code> object to a location is to make it impossible for
- * another bundle to forge a PID that would match this configuration. When a
+ * <code>Configuration</code> object to a location is to make it impossible
+ * for another bundle to forge a PID that would match this configuration. When a
  * configuration is bound to a specific location, and a bundle with a different
  * location registers a corresponding <code>ManagedService</code> object or
- * <code>ManagedServiceFactory</code> object, then the configuration is not passed
- * to the updated method of that object.
+ * <code>ManagedServiceFactory</code> object, then the configuration is not
+ * passed to the updated method of that object.
  * 
  * <p>
- * If a configuration's location is <code>null</code>, it is not yet bound to a
- * location. It will become bound to the location of the first bundle that
- * registers a <code>ManagedService</code> or <code>ManagedServiceFactory</code>
- * object with the corresponding PID.
+ * If a configuration's location is <code>null</code>, it is not yet bound to
+ * a location. It will become bound to the location of the first bundle that
+ * registers a <code>ManagedService</code> or
+ * <code>ManagedServiceFactory</code> object with the corresponding PID.
  * <p>
  * The same <code>Configuration</code> object is used for configuring both a
  * Managed Service Factory and a Managed Service. When it is important to
@@ -93,10 +93,10 @@ public interface Configuration {
 	 * If called just after the configuration is created and before update has
 	 * been called, this method returns <code>null</code>.
 	 * 
-	 * @return A private copy of the properties for the caller or <code>null</code>.
-	 *         These properties must not contain the "service.bundleLocation"
-	 *         property. The value of this property may be obtained from the
-	 *         <code>getBundleLocation</code> method.
+	 * @return A private copy of the properties for the caller or
+	 *         <code>null</code>. These properties must not contain the
+	 *         "service.bundleLocation" property. The value of this property may
+	 *         be obtained from the <code>getBundleLocation</code> method.
 	 * @throws IllegalStateException if this configuration has been deleted
 	 */
 	Dictionary getProperties();
@@ -118,7 +118,8 @@ public interface Configuration {
 	 * registered, its updated method must be called asynchronously. Else, this
 	 * callback is delayed until aforementioned registration occurs.
 	 * 
-	 * Also intiates a call to any <code>ConfigurationListener</code>s asynchronously.
+	 * Also intiates a call to any <code>ConfigurationListener</code> s
+	 * asynchronously to provide notification of this update.
 	 * 
 	 * @param properties the new set of properties for this configuration
 	 * @throws IOException if update cannot be made persistent
@@ -134,12 +135,13 @@ public interface Configuration {
 	 * 
 	 * Removes this configuration object from the persistent store. Notify
 	 * asynchronously the corresponding Managed Service or Managed Service
-	 * Factory. A <code>ManagedService</code> object is notified by a call to its
-	 * <code>updated</code> method with a <code>null</code> properties argument. A
-	 * <code>ManagedServiceFactory</code> object is notified by a call to its
-	 * <code>deleted</code> method.
+	 * Factory. A <code>ManagedService</code> object is notified by a call to
+	 * its <code>updated</code> method with a <code>null</code> properties
+	 * argument. A <code>ManagedServiceFactory</code> object is notified by a
+	 * call to its <code>deleted</code> method.
 	 * 
-	 * Also intiates a call to any <code>ConfigurationListener</code>s asynchronously.
+	 * Also intiates a call to any <code>ConfigurationListener</code> s
+	 * asynchronously to provide notification of this delete.
 	 * 
 	 * @throws IOException If delete fails
 	 * @throws IllegalStateException if this configuration has been deleted
@@ -156,12 +158,11 @@ public interface Configuration {
 	String getFactoryPid();
 
 	/**
-	 * Update the <code>Configuration</code> object with the current properties.
+	 * Update the <code>Configuration</code> object with the current
+	 * properties.
 	 * 
 	 * Initiate the <code>updated</code> callback to the Managed Service or
 	 * Managed Service Factory with the current properties asynchronously.
-	 * 
-	 * Also intiates a call to any <code>ConfigurationListener</code>s asynchronously.
 	 * 
 	 * <p>
 	 * This is the only way for a bundle that uses a Configuration Plugin
@@ -181,8 +182,8 @@ public interface Configuration {
 	 * location.
 	 * 
 	 * If the bundleLocation parameter is <code>null</code> then the
-	 * <code>Configuration</code> object will not be bound to a location. It will
-	 * be set to the bundle's location before the first time a Managed
+	 * <code>Configuration</code> object will not be bound to a location. It
+	 * will be set to the bundle's location before the first time a Managed
 	 * Service/Managed Service Factory receives this <code>Configuration</code>
 	 * object via the updated method and before any plugins are called. The
 	 * bundle location will be set persistently.
@@ -205,11 +206,12 @@ public interface Configuration {
 	 * <p>
 	 * This call requires <code>AdminPermission</code>.
 	 * 
-	 * @return location to which this configuration is bound, or <code>null</code>.
+	 * @return location to which this configuration is bound, or
+	 *         <code>null</code>.
 	 * @throws SecurityException if the caller does not have
 	 *         <code>AdminPermission</code>.
-	 * @throws IllegalStateException if this <code>Configuration</code> object has
-	 *         been deleted.
+	 * @throws IllegalStateException if this <code>Configuration</code> object
+	 *         has been deleted.
 	 */
 	String getBundleLocation();
 
