@@ -29,42 +29,42 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
     private MonitorAdminImpl monitorAdmin;
 
     private String initiator;
-    private String[] kpiNames;
+    private String[] varNames;
     private int reportCount;
     private long schedule;
 
     private boolean local;
     private boolean running;
 
-    // The subset of kpiNames that is monitored.  This differs from kpiNames
+    // The subset of varNames that is monitored.  This differs from varNames
     // only in case of remote monitoring jobs with trap references.
-    private String[] monitoredKpiNames;
+    private String[] monitoredVarNames;
     
-    // For change-based jobs, to count events for each monitored KPI.
+    // For change-based jobs, to count events for each monitored status var.
     private int[] callCounters;
 
     MonitoringJobImpl(MonitorAdminImpl monitorAdmin, String initiator, 
-                      String[] kpiNames, long schedule, int reportCount, 
+                      String[] varNames, long schedule, int reportCount, 
                       boolean local) {
 
         this.monitorAdmin = monitorAdmin;
 
         this.initiator = initiator;
-        this.kpiNames = kpiNames;
+        this.varNames = varNames;
         this.schedule = schedule;
         this.reportCount = reportCount;
 
         this.local = local;
         
-        if(local || kpiNames.length == 1)
-        	monitoredKpiNames = kpiNames;
-        else // the first KPI is to be monitored, the rest are only references
-            monitoredKpiNames = new String[] { kpiNames[0] };
+        if(local || varNames.length == 1)
+        	monitoredVarNames = varNames;
+        else // the first var. is to be monitored, the rest are only references
+            monitoredVarNames = new String[] { varNames[0] };
 
         running = true;
 
         if(isChangeBased()) {
-            callCounters = new int[monitoredKpiNames.length];
+            callCounters = new int[monitoredVarNames.length];
             Arrays.fill(callCounters, 0);
         } else                  // timer based
             (new Thread(this)).start();
@@ -74,14 +74,14 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
         return schedule == 0;
     }
 
-    // returns true if kpiName is monitored by this job AND
-    // this method has been called 'reportCount' times for this kpi
-    boolean isNthCall(String kpiName) {
+    // returns true if varName is monitored by this job AND
+    // this method has been called 'reportCount' times for this status variable
+    boolean isNthCall(String varName) {
         if(!isChangeBased())
             throw new IllegalStateException(
                     "isNthCall() can only be called for change-based jobs.");
         
-        int i = Arrays.asList(monitoredKpiNames).indexOf(kpiName);
+        int i = Arrays.asList(monitoredVarNames).indexOf(varName);
         if(i < 0)
             return false;
 
@@ -100,8 +100,8 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
         return initiator;
     }
 
-    public String[] getKpiNames() {
-        return (String[]) kpiNames.clone();
+    public String[] getStatusVariableNames() {
+        return (String[]) varNames.clone();
     }
 
     public long getSchedule() {
@@ -123,7 +123,7 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
         sleep();
 
         while(running) {
-            monitorAdmin.scheduledUpdate(kpiNames, this);
+            monitorAdmin.scheduledUpdate(varNames, this);
             if(reportCount > 0) {
                 reportCount--;
                 if(reportCount == 0)
