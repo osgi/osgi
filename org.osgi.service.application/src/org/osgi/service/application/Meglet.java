@@ -122,15 +122,15 @@ public abstract class Meglet implements EventHandler {
 		changeServiceRegistration();
 	}
 
-	public final void startApplication( Map args ) throws Exception {
-		start( args, null );
+	public final void startApplication( Map args, InputStream stateStorage ) throws Exception {
+		start( args, stateStorage );
 	}
 
-	public final void stopApplication() throws Exception {
+	public final void stopApplication( OutputStream stateStorage ) throws Exception {
 		listenedTopics.clear();
 		changeServiceRegistration();
 
-		stop( null );
+		stop( stateStorage );
 
 		if( eventAdminServiceRef != null ) {
 			bc.ungetService( eventAdminServiceRef );
@@ -146,10 +146,6 @@ public abstract class Meglet implements EventHandler {
 	protected final Dictionary getApplicationProperties() {
 		return null;
 	}
-
-	public abstract void suspendApplication() throws Exception;
-
-	public abstract void resumeApplication() throws Exception;
 
 	void init( ApplicationHandle appHandle, BundleContext bc ) {
 		this.bc = bc;
