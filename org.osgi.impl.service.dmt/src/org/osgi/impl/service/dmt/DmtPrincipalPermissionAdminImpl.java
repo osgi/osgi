@@ -19,6 +19,7 @@
 package org.osgi.impl.service.dmt;
 
 import java.io.IOException;
+import java.security.Permission;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -47,14 +48,14 @@ public class DmtPrincipalPermissionAdminImpl
     }
 
     public synchronized Map getPrincipalPermissions() {
-        System.getSecurityManager().checkPermission(new AdminPermission());
+        checkPermission(new AdminPermission());
         return (Map) permissions.clone();
     }
 
     public synchronized void setPrincipalPermissions(Map permissions)
         throws IOException, IllegalArgumentException
     {
-        System.getSecurityManager().checkPermission(new AdminPermission());
+        checkPermission(new AdminPermission());
 
         // store permissions immediately, this will be overwritten by itself
         // when the (asynchronous) update arrives from the config. admin
@@ -121,5 +122,11 @@ public class DmtPrincipalPermissionAdminImpl
             newPermissions.put(key, permInfos);
         }
         permissions = newPermissions;
+    }
+    
+    private void checkPermission(Permission p) {
+        SecurityManager sm = System.getSecurityManager();
+        if(sm  != null)
+            sm.checkPermission(p);
     }
 }

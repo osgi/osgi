@@ -54,7 +54,7 @@ public class DmtSessionImpl implements DmtSession {
 	private static final Class[] PERMISSION_CONSTRUCTOR_SIG = 
         new Class[] { String.class, String.class };
 
-    private static Hashtable	acls;
+	private static Hashtable	acls;
     
 	static {
 		acls = new Hashtable();
@@ -88,7 +88,10 @@ public class DmtSessionImpl implements DmtSession {
         this.eventChannel = eventChannel;
         
         if(principal != null) { // remote session
-            System.getSecurityManager().checkPermission(new DmtPrincipalPermission(principal));
+            SecurityManager sm = System.getSecurityManager();
+            if(sm != null)
+                sm.checkPermission(new DmtPrincipalPermission(principal));
+            
             try {
                 securityContext = getSecurityContext(permissions);
             } catch(Exception e) {
@@ -896,7 +899,9 @@ public class DmtSessionImpl implements DmtSession {
     }
 
     private static void checkLocalPermission(String uri, String actions) {
-        System.getSecurityManager().checkPermission(new DmtPermission(uri, actions));
+        SecurityManager sm = System.getSecurityManager();
+        if(sm != null)
+            sm.checkPermission(new DmtPermission(uri, actions));
     }
 
 	// TODO the action names should be retrieved from the DmtAcl class somehow
