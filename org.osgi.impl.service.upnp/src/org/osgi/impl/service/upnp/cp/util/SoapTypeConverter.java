@@ -44,20 +44,20 @@ public class SoapTypeConverter {
 																SoapTypeConstants.SOAP_TYPE_BIN_HEX);
 	public static TypeConverter	URI_Converter			= new StringConverter(
 																SoapTypeConstants.SOAP_TYPE_URI);			// it
-																											 // does
-																											 // not
-																											 // verify
-																											 // whether
-																											 // URI
-																											 // is
-																											 // correct
+	// does
+	// not
+	// verify
+	// whether
+	// URI
+	// is
+	// correct
 	public static TypeConverter	UUID_Converter			= new StringConverter(
 																SoapTypeConstants.SOAP_TYPE_UUID);			// it
-																											  // does
-																											  // not
-																											  // verify
-																											  // whether
-																											  // UUID
-																											  // is
-																											  // correct
+	// does
+	// not
+	// verify
+	// whether
+	// UUID
+	// is
+	// correct
 }

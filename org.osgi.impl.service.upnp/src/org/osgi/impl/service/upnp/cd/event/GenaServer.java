@@ -10,7 +10,7 @@ import org.osgi.impl.service.upnp.cd.control.ControlImpl;
 // and does necessary processing.
 public class GenaServer extends Thread {
 	private boolean			done	= false;	// Flag indicating when to
-												   // stop
+	// stop
 	public Socket			client;
 	private EventRegistry	eventRegistry;
 	public ControlImpl		cti;

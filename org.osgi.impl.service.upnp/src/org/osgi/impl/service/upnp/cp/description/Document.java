@@ -131,10 +131,10 @@ public class Document {
 			move(xmlFile);
 			xmlPtr++;
 			checkSchemaOrDtd(xmlFile); // Checks for all the schema and dtd
-									   // declarations.
+			// declarations.
 			value = xmlFile.charAt(xmlPtr);
 			while (value != '>') { // Fetches the root element name and root
-								   // element attributes.
+				// element attributes.
 				if (rflag == true) {
 					rootAttr = rootAttr + value;
 				}
@@ -152,7 +152,7 @@ public class Document {
 			rootElement = new Element(rootE);
 			rootElement.addAttributes(rootAttr);
 			while (value != '<') { // eliminates white spaces after the root
-								   // element.
+				// element.
 				value = xmlFile.charAt(xmlPtr);
 				xmlPtr++;
 			}
@@ -167,7 +167,7 @@ public class Document {
 			}
 			distribute(); // places all the elements into the xml tree.
 			makeDeviceOrService(); // Identifies whether xml file is of type
-								   // device or service.
+			// device or service.
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());

@@ -30,7 +30,7 @@ public class DeviceRenewalThread extends Thread {
 					}
 				}
 				Thread.sleep(5000); //### added so this thread does not consume
-									// all time - pkr
+				// all time - pkr
 			}
 			catch (Exception e) {
 			}

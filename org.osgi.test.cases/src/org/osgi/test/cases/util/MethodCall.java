@@ -25,100 +25,91 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.test.cases.util;
 
 import java.lang.reflect.*;
 
 /**
  * This class represents a method call.
- *
- * <p>A method call is represented
- * by the name of the method, the type of the parameters and the
- * actual parameters.
+ * 
  * <p>
- * When <code>invoke</code> is called, all "reflection magic" is taken
- * care of inside this class.
+ * A method call is represented by the name of the method, the type of the
+ * parameters and the actual parameters.
+ * <p>
+ * When <code>invoke</code> is called, all "reflection magic" is taken care of
+ * inside this class.
  */
-
 public class MethodCall {
-    private String name;
-    private Class[] paramClasses;
-    private Object[] paramObjects;
-    
-    private static final Class[]    NO_CLASSES = new Class[0];
-    private static final Object[]   NO_OBJECTS = new Object[0];
-    
-    /**
-     * Construct a new MethodCall with no parameters 
-     *
-     * @param name          the name of the method
-     */
-    public MethodCall(String name) {
-        this.name = name;
-        this.paramClasses = NO_CLASSES;
-        this.paramObjects = NO_OBJECTS;
-    }
-    
-    /**
-     * Constructs a new MethodCall with one parameter.
-     *
-     * @param name          the name of the method
-     * @param paramClass    the type of the paramater
-     * @param paramObject   the parameter
-     */
-    public MethodCall(String name, Class paramClass, Object paramObject) {
-        this.name = name;
-        this.paramClasses = new Class[] { paramClass };
-        this.paramObjects = new Object[] { paramObject };
-    }
+	private String					name;
+	private Class[]					paramClasses;
+	private Object[]				paramObjects;
+	private static final Class[]	NO_CLASSES	= new Class[0];
+	private static final Object[]	NO_OBJECTS	= new Object[0];
 
-    /**
-     * Constructs a new MethodCall with more than one parameter.
-     *
-     * @param name          the name of the method
-     * @param paramClasses  an array containing the paramatertypes.
-     * @param paramObjects  an array containing the parameters
-     */
-    public MethodCall(String name, Class[] paramClasses, Object[] paramObjects) {
-        this.name = name;
-        this.paramClasses = paramClasses;
-        this.paramObjects = paramObjects;
-    }
-    
-    /**
-     * Returns the name of the method.
-     */
-    public String getName() {
-        return name;
-    }
-    
-    /**
-     * Invokes the method with the specified parameters.
-     *
-     * @param o             the object to invoke the method on
-     * @return              whatever the method returns (see 
-     *                      java.lang.reflect.Method.invoke() for details)
-     * @throws Throwable    rethrows anything that was thrown by the
-     *                      reflective invoke call. <
-     *                      b>Note!</b> <code>InvocationTargetException</code>
-     *                      is unwrapped and the "real" Exception is rethrown!
-     */
-    public Object invoke(Object o) throws Throwable {
-        Object returnObject = null;
+	/**
+	 * Construct a new MethodCall with no parameters
+	 * 
+	 * @param name the name of the method
+	 */
+	public MethodCall(String name) {
+		this.name = name;
+		this.paramClasses = NO_CLASSES;
+		this.paramObjects = NO_OBJECTS;
+	}
 
-        try {
-            Method m = o.getClass().getDeclaredMethod(name, paramClasses);
-            returnObject = m.invoke(o, paramObjects);
-        }
-        catch(InvocationTargetException e) {
-            throw e.getTargetException();
-        }
-        
-        return returnObject;
-    }
-    
-        
+	/**
+	 * Constructs a new MethodCall with one parameter.
+	 * 
+	 * @param name the name of the method
+	 * @param paramClass the type of the paramater
+	 * @param paramObject the parameter
+	 */
+	public MethodCall(String name, Class paramClass, Object paramObject) {
+		this.name = name;
+		this.paramClasses = new Class[] {paramClass};
+		this.paramObjects = new Object[] {paramObject};
+	}
+
+	/**
+	 * Constructs a new MethodCall with more than one parameter.
+	 * 
+	 * @param name the name of the method
+	 * @param paramClasses an array containing the paramatertypes.
+	 * @param paramObjects an array containing the parameters
+	 */
+	public MethodCall(String name, Class[] paramClasses, Object[] paramObjects) {
+		this.name = name;
+		this.paramClasses = paramClasses;
+		this.paramObjects = paramObjects;
+	}
+
+	/**
+	 * Returns the name of the method.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Invokes the method with the specified parameters.
+	 * 
+	 * @param o the object to invoke the method on
+	 * @return whatever the method returns (see
+	 *         java.lang.reflect.Method.invoke() for details)
+	 * @throws Throwable rethrows anything that was thrown by the reflective
+	 *         invoke call. < b>Note! </b>
+	 *         <code>InvocationTargetException</code> is unwrapped and the
+	 *         "real" Exception is rethrown!
+	 */
+	public Object invoke(Object o) throws Throwable {
+		Object returnObject = null;
+		try {
+			Method m = o.getClass().getDeclaredMethod(name, paramClasses);
+			returnObject = m.invoke(o, paramObjects);
+		}
+		catch (InvocationTargetException e) {
+			throw e.getTargetException();
+		}
+		return returnObject;
+	}
 }
-
-
