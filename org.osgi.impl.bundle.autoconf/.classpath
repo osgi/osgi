@@ -3,8 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="/org.osgi.service.deploymentadmin"/>
 	<classpathentry kind="src" path="/org.osgi.framework"/>
-	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
-	<classpathentry sourcepath="/org.osgi.test.cases/src" kind="lib" path="/osgi.released/osgi.internal.jar"/>
 	<classpathentry kind="lib" path="/cnf/jar/saxon.jar"/>
 	<classpathentry kind="lib" path="/cnf/jar/junit.jar"/>
 	<classpathentry kind="lib" path="jaxme/jaxme2.jar"/>
@@ -14,5 +12,7 @@
 	<classpathentry kind="lib" path="jaxme/jaxmepm.jar"/>
 	<classpathentry kind="lib" path="jaxme/jaxmexs.jar"/>
 	<classpathentry sourcepath="/osgi.released/ee.foundation.jar" kind="lib" path="/osgi.released/ee.foundation.jar"/>
+	<classpathentry kind="src" path="/org.osgi.service.cm"/>
+	<classpathentry kind="src" path="/org.osgi.service.metatype"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
