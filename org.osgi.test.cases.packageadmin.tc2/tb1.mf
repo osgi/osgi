@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-Name: PackageAdmin TestCase2 testbundle1
+Bundle-Description: Exporting Packages, updating
+Bundle-Vendor: Ericsson
+Bundle-Version: $(version)
+Bundle-Activator: $(p).tb1.TB1Activator
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+
+
+
