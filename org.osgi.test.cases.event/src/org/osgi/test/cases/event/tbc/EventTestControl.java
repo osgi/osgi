@@ -154,21 +154,20 @@ public class EventTestControl extends DefaultTestBundleControl {
     PermissionInfo topInfo1 = new PermissionInfo(TopicPermission.class.getName(), 
                                                  "org/*", 
                                                  TopicPermission.SUBSCRIBE);
-    permissionAdmin.setPermissions(tb1.getLocation(), new PermissionInfo[]{regInfo, topInfo1});
+    addPermissions(permissionAdmin, tb1, new PermissionInfo[]{regInfo, topInfo1});
     
     //set permissions to tb2
     PermissionInfo topInfo2 = new PermissionInfo(TopicPermission.class.getName(), 
                                                  "org/osgi/*", 
                                                  TopicPermission.SUBSCRIBE);
-    permissionAdmin.setPermissions(tb2.getLocation(), new PermissionInfo[]{regInfo, topInfo2});
+    addPermissions(permissionAdmin, tb2, new PermissionInfo[]{regInfo, topInfo2});
     
     //try to send event without PUBLISH TopicPermission
     Hashtable properties = new Hashtable();
     Hashtable ht = new Hashtable();
     ht.put("topic", "org/osgi/test/cases/event");
     //Event event1 = new Event("org/osgi/test/cases/event/ACTION1", properties);
-    //String message = "The caller does not have TopicPermission[topic,PUBLISH] for the topic: [";    
-
+    //String message = "The caller does not have TopicPermission[topic,PUBLISH] for the topic: [";
 //    try {
 //      eventAdmin.sendEvent(event1);
 //      failException(message + event1.getTopic() + "]", SecurityException.class);
@@ -181,15 +180,13 @@ public class EventTestControl extends DefaultTestBundleControl {
     PermissionInfo permInfo = new PermissionInfo(ServicePermission.class.getName(), 
                                                  "org.osgi.service.event.EventAdmin", 
                                                  ServicePermission.GET);    
-    permissionAdmin.setPermissions(getContext().getBundle().getLocation(), 
-                                   new PermissionInfo[]{permInfo});
+    addPermissions(permissionAdmin, getContext().getBundle(), new PermissionInfo[]{permInfo});
 //    try {
 //      eventAdmin.sendEvent(event1);
 //      failException(message + event1.getTopic() + "]", SecurityException.class);
 //    } catch (Throwable e) {
 //      assertException(message + event1.getTopic() + "]", SecurityException.class, e);
-//    }    
-    
+//    }
     PermissionInfo[] perm = permissionAdmin.getPermissions(getContext().getBundle().getLocation());
     assertNotNull("Permissions of [" + getContext().getBundle().getLocation() + "]", perm);
     for (int i = 0; i < perm.length; i++) {
@@ -277,6 +274,46 @@ public class EventTestControl extends DefaultTestBundleControl {
       assertEvent(event, tb1, tbcService1, eventsMap1[i].booleanValue());
       assertEvent(event, tb2, tbcService2, eventsMap2[i].booleanValue());
     }
+    trackerProvider1.close();
+    trackerProvider2.close();
+  }
+  
+  /**
+   * Tests the notification for events after sending 
+   * (if they match of the listeners).
+   */
+  public void testSendEventNotification() {
+    ServiceTracker trackerProvider1 = new ServiceTracker(getContext(), "org.osgi.test.cases.event.tb1.Activator", null);
+    trackerProvider1.open();
+    TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+    
+    ServiceTracker trackerProvider2 = new ServiceTracker(getContext(), "org.osgi.test.cases.event.tb2.Activator", null);
+    trackerProvider2.open();
+    TBCService tbcService2 = (TBCService) trackerProvider2.getService();
+    
+    String[] topics;
+    topics = new String[] {"org/osgi/test/*", "org/osgi/newtest1/*", "org/osgi1/*", "Event1"};
+    tbcService1.setTopics(topics);
+    
+    topics = new String[] {"org/osgi/test/*", "org/osgi/newtest1/newtest2/*", "org/osgi2/*"};
+    tbcService2.setTopics(topics);    
+    
+    String[] events = new String[] {"org/osgi/test/Event0", "Event1", "org/osgi1/Event2", "org/osgi1/test/Event3", 
+                                    "org/osgi/newtest1/Event4", "org/osgi/newtest2/Event5", "org/osgi2/test/Event6"};
+    Boolean[] eventsMap1 = new Boolean[] {Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, 
+                                          Boolean.TRUE, Boolean.FALSE, Boolean.FALSE};
+    Boolean[] eventsMap2 = new Boolean[] {Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, 
+                                          Boolean.FALSE, Boolean.FALSE, Boolean.TRUE};
+    
+    Event event;
+    for (int i = 0; i < events.length; i++) {
+      event = new Event(events[i], new Hashtable());
+      eventAdmin.sendEvent(event);
+      assertEvent(event, tb1, tbcService1, eventsMap1[i].booleanValue());
+      assertEvent(event, tb2, tbcService2, eventsMap2[i].booleanValue());
+    }
+    trackerProvider1.close();
+    trackerProvider2.close();
   }
 
 	
@@ -291,7 +328,6 @@ public class EventTestControl extends DefaultTestBundleControl {
     try {
       ref = getContext().getServiceReferences(name, null);
     } catch (InvalidSyntaxException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     assertNotNull(name + "  service must be registered ", ref);
@@ -299,11 +335,10 @@ public class EventTestControl extends DefaultTestBundleControl {
       ServiceReference reference = ref[i];
       assertEquals("Invalid exporter for " + name, b, reference.getBundle());
     }
-		//assertEquals("Invalid exporter for " + name, b, ref.getBundle());
 	}
   
   private void assertEvent(Event eventPassed, Bundle bundle, TBCService tbcService, boolean recieved) {
-    pass("                Passed event: " + eventPassed);
+    pass(">>>Passed event: " + eventPassed);
     pass("Bundle's event handler topic: " + arrayToString(tbcService.getTopics()));
     Event eventReceived = tbcService.getLastReceivedEvent();
     assertEquals("In [" + bundle.getSymbolicName() + "] received event [" + eventReceived + "]",
@@ -337,5 +372,20 @@ public class EventTestControl extends DefaultTestBundleControl {
     uninstallBundle(tb1);
     tb2.stop();
     uninstallBundle(tb2);
-	}  
+	}
+  
+  private void addPermissions(PermissionAdmin permissionAdmin, Bundle bundle, PermissionInfo[] toAdd) {
+    PermissionInfo[] oldPerm = permissionAdmin.getPermissions(bundle.getLocation());
+    int oldLen = 0;
+    if (oldPerm != null) oldLen = oldPerm.length;
+    PermissionInfo[] newPerm = new PermissionInfo[oldLen + toAdd.length];
+    int i = 0;
+    for (; i < oldLen; i++) {
+      newPerm[i] = oldPerm[i];      
+    }
+    for (int j = 0; j < toAdd.length; j++) {
+      newPerm[i] = toAdd[j];      
+    }
+    permissionAdmin.setPermissions(bundle.getLocation(), newPerm);
+  }
 }
