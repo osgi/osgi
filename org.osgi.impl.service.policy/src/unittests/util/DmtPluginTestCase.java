@@ -33,6 +33,7 @@ import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.dmt.DmtAdminActivator;
+import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
 import org.osgi.impl.service.dmt.api.RemoteAlertSender;
 import org.osgi.service.dmt.DmtAlertSender;
 import org.osgi.service.dmt.DmtDataPlugin;
@@ -53,6 +54,7 @@ public class DmtPluginTestCase extends TestCase {
 	public ServiceListener newServiceTracker;
 	public DmtAdmin dmtFactory;
 	public DmtAlertSender dmtAlertSender;
+	public DmtPrincipalPermissionAdmin dmtPrincipalPermissionAdmin;
 	
 	public class DummyContext implements BundleContext {
 		public ServiceReference getServiceReference(String clazz) {
@@ -70,7 +72,7 @@ public class DmtPluginTestCase extends TestCase {
 		}
 
 		public Filter createFilter(String filter) throws InvalidSyntaxException {
-			if (filter.equals("(|(objectClass=org.osgi.service.dmt.DmtDataPlugIn)(objectClass=org.osgi.service.dmt.DmtExecPlugIn))")){
+			if (filter.equals("(|(objectClass=org.osgi.service.dmt.DmtDataPlugin)(objectClass=org.osgi.service.dmt.DmtExecPlugin))")){
 				return new DummyFilter("plugin");
 			}
 			if (filter.equals("(objectClass=org.osgi.impl.service.dmt.api.RemoteAlertSender)")) {
@@ -110,6 +112,10 @@ public class DmtPluginTestCase extends TestCase {
 				dmtAlertSender = (DmtAlertSender) service;
 				return null;
 			}
+			if (DmtPrincipalPermissionAdmin.class.getName().equals(clazz)) {
+				dmtPrincipalPermissionAdmin = (DmtPrincipalPermissionAdmin) service;
+				return null;
+ 			}
 			throw new IllegalStateException();
 		}
 		
