@@ -266,4 +266,12 @@ public class ComponentContextImpl implements ComponentContext {
 	}
 	
 	
+	/**
+	 * @return
+	 * @see org.osgi.service.component.ComponentContext#getServiceReference()
+	 */
+	public ServiceReference getServiceReference() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
 }

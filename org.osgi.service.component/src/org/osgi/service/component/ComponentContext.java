@@ -28,8 +28,7 @@ package org.osgi.service.component;
 
 import java.util.Dictionary;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
+import org.osgi.framework.*;
 
 /**
  * A ComponentContext object is used by a Service Component to interact with it
@@ -81,9 +80,9 @@ public interface ComponentContext {
 	 * 
 	 * @param name The name of a service reference as specified in a
 	 *        <code>reference</code> element in this component's description.
-	 * @return A service object for the referenced service or <code>null</code> if
-	 *         the reference cardinality is <code>0..1</code> or <code>0..n</code>
-	 *         and no matching service is available.
+	 * @return A service object for the referenced service or <code>null</code>
+	 *         if the reference cardinality is <code>0..1</code> or
+	 *         <code>0..n</code> and no matching service is available.
 	 * @throws ComponentException If the Service Component Runtime catches an
 	 *         exception while activating the target service.
 	 */
@@ -95,8 +94,9 @@ public interface ComponentContext {
 	 * @param name The name of a service reference as specified in a
 	 *        <code>reference</code> element in this component's description.
 	 * @return An array of service objects for the referenced service or
-	 *         <code>null</code> if the reference cardinality is <code>0..1</code>
-	 *         or <code>0..n</code> and no matching service is available.
+	 *         <code>null</code> if the reference cardinality is
+	 *         <code>0..1</code> or <code>0..n</code> and no matching
+	 *         service is available.
 	 * @throws ComponentException If the Service Component Runtime catches an
 	 *         exception while activating a target service.
 	 */
@@ -110,16 +110,20 @@ public interface ComponentContext {
 	public BundleContext getBundleContext();
 
 	/**
-	 * If the component is registered as a service using the
-	 * <code>servicefactory=&quot;true&quot;</code> attribute, then this method
-	 * returns the bundle using the service provided by this component.
+	 * If this component is registered as a service using the
+	 * <code>servicefactory=&quot;true&quot;</code> attribute, then this
+	 * method returns the bundle using the service provided by this component.
 	 * <p>
-	 * This method will return <code>null</code> if the component is either:
+	 * This method will return <code>null</code> if:
 	 * <ul>
-	 * <li>Not a service, then no bundle can be using it as a service.
-	 * <li>Is a service but did not specify the
-	 * <code>servicefactory=&quot;true&quot;</code> attribute, then all bundles
-	 * will use this component.
+	 * <li>This component is not a service, then no bundle can be using it as a
+	 * service.
+	 * <li>This component is a service but did not specify the
+	 * <code>servicefactory=&quot;true&quot;</code> attribute, then all
+	 * bundles using the service provided by this component will share this
+	 * component instance.
+	 * <li>The service provided by this component is not currently being used
+	 * by any bundle.
 	 * </ul>
 	 * 
 	 * @return The bundle using this component as a service or <code>null</code>.
@@ -137,8 +141,8 @@ public interface ComponentContext {
 	 * Enables the specified component name. The specified component name must
 	 * be in the same bundle as this component.
 	 * 
-	 * @param name The name of a component or <code>null</code> to indicate all
-	 *        components in the bundle.
+	 * @param name The name of a component or <code>null</code> to indicate
+	 *        all components in the bundle.
 	 */
 	public void enableComponent(String name);
 
@@ -149,4 +153,19 @@ public interface ComponentContext {
 	 * @param name The name of a component.
 	 */
 	public void disableComponent(String name);
+
+	/**
+	 * If this component is registered as a service using the
+	 * <code>service</code> element, then this method returns the service
+	 * reference of the service provided by this component.
+	 * <p>
+	 * This method will return <code>null</code> if this component is not
+	 * registered as a service.
+	 * 
+	 * @return The <code>ServiceReference</code> object for this component or
+	 *         <code>null</code> if this component is not registered as a
+	 *         service.
+	 */
+	public ServiceReference getServiceReference();
+
 }
