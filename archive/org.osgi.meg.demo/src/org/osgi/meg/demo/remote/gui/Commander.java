@@ -17,7 +17,9 @@
  */
 package org.osgi.meg.demo.remote.gui;
 
-import org.osgi.meg.demo.remote.*;
+import org.osgi.meg.demo.remote.CommanderException;
+import org.osgi.meg.demo.remote.RMServer;
+import org.osgi.meg.demo.remote.RemoteReceiver;
 
 public class Commander implements RemoteReceiver {
     

@@ -23,6 +23,7 @@ import org.osgi.service.dmt.*;
 
 // TODO support non-recursive clone operation if necessary
 public class CommandProcessor {
+	
 	private DmtFactory	fact	= null;
 	private DmtSession	session	= null;
 
@@ -35,15 +36,16 @@ public class CommandProcessor {
 		command = command.trim();
 		if (command.length() == 0)
 			return "";
-		//System.out.println("Command :" + command);
+		
 		if (command.equals("help")) {
 			return help();
 		}
+		
 		String[] args = tokenize(command);
 		String cmd = args[0].toLowerCase();
 		String uri = null;
 		if (args.length > 1 && args[1] != null) {
-			uri = args[1]; // TODO take care if protocol changes!
+			uri = args[1]; // take care if protocol changes!
 		}
 		try {
 			if (cmd.equals("open")) {
@@ -229,4 +231,5 @@ public class CommandProcessor {
 		sb.append("\n");
 		return new String(sb);
 	}
+	
 }

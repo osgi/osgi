@@ -24,14 +24,16 @@ import org.osgi.impl.service.dmt.api.RemoteAlertSender;
 import org.osgi.service.dmt.DmtFactory;
 
 public class Activator implements BundleActivator {
+	
+	private static final String	HOST     = "localhost";
 	private static final int	PORT	 = 7777;
 	private static final int	PINGTIME = 10;
+	
 	private ServiceReference	serviceRef;
 	private ServiceRegistration	remoteAlertSenderReg;
 	private ClientAdaptor		clientAdaptor;
 
 	public void start(BundleContext bc) throws BundleException {
-		
 		Bundle bundle = bc.getBundle();
 		Dictionary headers = bundle.getHeaders();
 		String host = (String) headers.get("Host-name");
@@ -40,12 +42,10 @@ public class Activator implements BundleActivator {
 		if (null != pingTimeStr)
 			pingTime = Integer.parseInt((String) headers.get("Ping-time"));
 		
-		System.out.println("Remote adapter activated.");
 		try {
 			serviceRef = bc.getServiceReference(DmtFactory.class.getName());
 			DmtFactory factory = (DmtFactory) bc.getService(serviceRef);
-			// TODO get the parameters from configuration
-			//String host = null;
+
 			if (null == host) {
 				System.out
 						.println("Enter host name (press 'enter' for localhost): ");
@@ -59,25 +59,24 @@ public class Activator implements BundleActivator {
 				}
 			}
 			if (host == null || "".equals(host))
-				host = "localhost";
+				host = HOST;
+			
 			System.out.println("Remote adapter connects to server: " + host + ":" + PORT);
-			//creating the adaptor
 			clientAdaptor = new ClientAdaptor(factory, host, PORT, pingTime);
-			System.out.println("Remote adapter connected to server " + host
-					+ ":" + PORT);
-			//registering the remote alert sender service
+			System.out.println("Remote adapter connected to server " + host + ":" + PORT);
 			remoteAlertSenderReg = bc.registerService(RemoteAlertSender.class
 					.getName(), clientAdaptor, null);
+			
+			System.out.println("Remote adapter activated.");
 		}
 		catch (Throwable e) {
 			System.out.println("Exception while starting remote adapter:");
-			e.printStackTrace(System.out);
+			e.printStackTrace();
 			throw new BundleException("Failure in start() method.", e);
 		}
 	}
 
 	public void stop(BundleContext bc) throws BundleException {
-		//unregistering the service
 		remoteAlertSenderReg.unregister();
 		clientAdaptor.stop();
 		bc.ungetService(serviceRef);

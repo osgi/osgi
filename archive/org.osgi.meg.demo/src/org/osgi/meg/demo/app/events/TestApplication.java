@@ -25,9 +25,14 @@ import org.osgi.service.event.*;
 import org.osgi.service.monitor.KPI;
 import org.osgi.service.monitor.Monitorable;
 import org.osgi.service.monitor.UpdateListener;
+import java.awt.Color;
 import java.io.*;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Timer;
+import java.util.TimerTask;
+import javax.swing.JLabel;
+import javax.swing.WindowConstants;
 
 public class TestApplication 
         extends MEGApplication 
@@ -43,6 +48,7 @@ public class TestApplication
     
     private ServiceRegistration reg = null;
 	private UpdateListener updateListener = null;
+	private Gui	gui;
 
 	public TestApplication(MEGApplicationContext context) {
 		super(context);
@@ -54,11 +60,14 @@ public class TestApplication
             fileName = (String) context.getLaunchArgs().get("TestResult");
         else
             fileName = null;
+        
+        gui = new Gui();
 	}
 
 	public void startApplication() throws Exception {
 		writeResult("START");
-
+		gui.startAnim();
+		
         Hashtable config = new Hashtable();
         config.put("service.pid", SERVICE_PID);
         reg = Activator.context.registerService(
@@ -71,17 +80,20 @@ public class TestApplication
 
 	public void stopApplication() throws Exception {
 		writeResult("STOP");
-        
+		gui.stopAnim();
+		
 		reg.unregister();
         context.ungetServiceObject(updateListener);
 	}
 
 	public void suspendApplication() throws Exception {
 		writeResult("SUSPEND");
+		gui.stopAnim();
 	}
 
 	public void resumeApplication() throws Exception {
 		writeResult("RESUME");
+		gui.startAnim();
 	}
 
 	public void channelEvent(ChannelEvent event) {
@@ -113,6 +125,8 @@ public class TestApplication
         
         if(testParameter != testParameterOld)
             updateListener.updated(getTestParameterKpi());
+        
+        gui.refreshGui();
 	}
 
 	public String[] getKpiNames() {
@@ -152,4 +166,56 @@ public class TestApplication
     private boolean matchingId(String id, String name) {
         return name.equals(id) || (SERVICE_PID + '/' + name).equals(id);
     }
+    
+    private class Gui extends javax.swing.JFrame {
+    	
+    	private final   JLabel    label;
+    	private 	    boolean   running = true;
+		private 		Timer	  timer;
+		private 		TimerTask task;
+
+		public Gui() {
+			timer = new Timer();
+			
+    		setSize(200, 80);
+            setTitle("Test application");
+			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+			
+			label = new JLabel("parameter: " + testParameter);
+			getContentPane().add(label);
+			
+			setVisible(true);
+    	}
+
+		private void startAnim() {
+			task = new TimerTask() {
+				int r = 0;
+				int d = 5;
+				public void run() {
+					label.setForeground(new Color(r,0,0));
+					validate();
+					r = (r + d) % 255;
+					if (r == 0) {
+						if (d > 0)
+							r = 255;
+						else
+							r = 0;
+						d = -d;
+					}
+				}};
+			
+			timer.schedule(task, 0, 1000/25);
+		}
+		
+		private void stopAnim() {
+			task.cancel();
+		}
+
+		private void refreshGui() {
+    		label.setText("parameter: " + testParameter);
+    		validate();
+    	}
+
+    }
+    
 }

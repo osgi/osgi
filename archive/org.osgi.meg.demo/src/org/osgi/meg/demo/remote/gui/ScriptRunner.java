@@ -15,7 +15,7 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package org.osgi.meg.demo.remote;
+package org.osgi.meg.demo.remote.gui;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -24,7 +24,8 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Vector;
-import org.osgi.meg.demo.remote.gui.Commander;
+import org.osgi.meg.demo.remote.CommanderException;
+import org.osgi.meg.demo.remote.Splitter;
 
 public class ScriptRunner {
 	
@@ -40,9 +41,11 @@ public class ScriptRunner {
 		Properties props = new Properties();
 		props.load(new FileInputStream(PROPERTY_FILE));
 		String scriptsStr = props.getProperty("scripts");
-		String[] scripts = Splitter.split(scriptsStr, ',', 0);
-		for (int i = 0; i < scripts.length; i++)
-			scriptFiles.add(scripts[i]);
+		if (null != scriptsStr) {
+			String[] scripts = Splitter.split(scriptsStr, ',', 0);
+			for (int i = 0; i < scripts.length; i++)
+				scriptFiles.add(scripts[i]);
+		}
 	}
 	
 	public Vector getscriptFiles() {
@@ -58,14 +61,19 @@ public class ScriptRunner {
 		try {
 			String line = reader.readLine();
 			while (null != line) {
-				if (!isMacroCommand(line)) {
-					line = substitute(line);
-					commandResult = commander.command(line);
+				if (null != line)
+					result.append(line + "\n");
+
+				if (!isComment(line) && !line.trim().equals("")) {
+					if (isMacroCommand(line)) {
+						execMacroCommand(line, commandResult.trim());
+					} else {
+						line = substitute(line);
+						commandResult = commander.command(line);
+						if (null != commandResult)
+							result.append(commandResult);
+					}
 				}
-				else {
-					execMacroCommand(line, commandResult.trim());
-				}
-				result.append(commandResult);
 				line = reader.readLine();
 			}
 			return result.toString();
@@ -107,6 +115,10 @@ public class ScriptRunner {
 			return true;
 		else
 			return false;
+	}
+	
+	private boolean isComment(String line) {
+		return line.startsWith("#");
 	}
 
 	private void execMacroCommand(String line, String commandResult) {
