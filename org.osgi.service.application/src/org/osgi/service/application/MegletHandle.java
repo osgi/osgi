@@ -158,7 +158,8 @@ public final class MegletHandle extends ApplicationHandle {
 	private void setStatus(int status) {
 		this.status = status;
 
-		serviceReg.setProperties( properties() );
+		if( status != NONEXISTENT )
+			serviceReg.setProperties( properties() );
 	}
 
 	private Hashtable properties() {
