@@ -28,6 +28,7 @@
 package org.osgi.impl.service.application;
 
 import org.osgi.service.application.*;
+import java.security.*;
 
 /**
  * 
@@ -53,9 +54,9 @@ public class ApplicationHandleImpl implements ApplicationHandle.Delegate {
 	 * @return
 	 * @see org.osgi.service.application.ApplicationHandle.Delegate#willDestroy()
 	 */
-	public boolean destroy() {
-		// TODO Auto-generated method stub
-		return false;
+	public void destroy() throws Exception {
+		AccessController.checkPermission(new ApplicationAdminPermission( handle.getInstanceID(), 
+				ApplicationAdminPermission.MANIPULATE));
 	}
 
 }

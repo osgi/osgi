@@ -138,7 +138,7 @@ public abstract class ApplicationHandle {
 
 	public interface Delegate {
 		void setApplicationHandle(ApplicationHandle d, ApplicationDescriptor.Delegate descriptor );
-		boolean destroy();
+		void destroy() throws Exception;
 	}
 
 }
