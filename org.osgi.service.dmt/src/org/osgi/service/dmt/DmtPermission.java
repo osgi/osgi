@@ -67,14 +67,46 @@ import java.util.StringTokenizer;
  */
 public class DmtPermission extends Permission {
     // TODO serialization
-	// TODO add static final serialVersionUID
-    
-    private static final String ADD_STRING     = "Add";
-    private static final String DELETE_STRING  = "Delete";
-    private static final String EXEC_STRING    = "Exec";
-    private static final String GET_STRING     = "Get";
-    private static final String REPLACE_STRING = "Replace";
-    
+    // TODO add static final serialVersionUID
+
+    /**
+     * Holders of DmtPermission with the Add action present can create new nodes
+     * in the DMT, that is they are authorized to execute the
+     * createInteriorNode() or createLeafNode() methods of the DmtSession.
+     */
+    public static final String ADD = "Add";
+
+    /**
+     * Holders of DmtPermission with the Delete action present can delete nodes
+     * from the DMT, that is they are authorized to execute the deleteNode()
+     * method of the DmtSession.
+     */
+    public static final String DELETE = "Delete";
+
+    /**
+     * Holders of DmtPermission with the Exec action present can execute nodes
+     * in the DMT, that is they are authorized to call the execute() method of
+     * the DmtSession.
+     */
+    public static final String EXEC = "Exec";
+
+    /**
+     * Holders of DmtPermission with the Get action present can query DMT node
+     * value or properties, that is they are authorized to execute the
+     * getChildNodeNames(), getNodeSize(), getNodeTimeStamp(), getNodeTitle(),
+     * getNodeType(), getNodeVersion(), getNodeAcl() or getNodeValue()
+     * methods of the DmtSession.
+     */
+    public static final String GET = "Get";
+
+    /**
+     * Holders of DmtPermission with the Replace action present can update DMT node
+     * value or properties, that is they are authorized to execute the
+     * setNodeTitle(), setNodeType(), setNodeAcl() or setNodeValue()
+     * methods of the DmtSession.
+     */
+    public static final String REPLACE = "Replace";
+
     // does this permission have a wildcard at the end?
     private boolean prefixPath;
 
@@ -153,9 +185,12 @@ public class DmtPermission extends Permission {
     }
 
     /**
-     * Returns the String representation of the action list.
-     *
-     * @return Action list for this permission object.
+     * Returns the String representation of the action list. 
+     * 
+     * @return Action list for this permission object. The allowed actions
+     * are listed in this order: Add, Delete, Exec, Get, Replace. The wildcard
+     * character is not used in the returned string, even if the class was
+     * created using the * wildcard.
      */
     public String getActions() {
         return actions;
@@ -220,15 +255,15 @@ public class DmtPermission extends Permission {
         StringTokenizer st = new StringTokenizer(actions, ",");
         while(st.hasMoreTokens()) {
             String action = st.nextToken();
-            if(action.equalsIgnoreCase(GET_STRING)) {
+            if (action.equalsIgnoreCase(GET)) {
                 mask |= DmtAcl.GET;
-            } else if(action.equalsIgnoreCase(ADD_STRING)) {
+            } else if (action.equalsIgnoreCase(ADD)) {
                 mask |= DmtAcl.ADD;
-            } else if(action.equalsIgnoreCase(REPLACE_STRING)) {
+            } else if (action.equalsIgnoreCase(REPLACE)) {
                 mask |= DmtAcl.REPLACE;
-            } else if(action.equalsIgnoreCase(DELETE_STRING)) {
+            } else if (action.equalsIgnoreCase(DELETE)) {
                 mask |= DmtAcl.DELETE;
-            } else if(action.equalsIgnoreCase(EXEC_STRING)) {
+            } else if (action.equalsIgnoreCase(EXEC)) {
                 mask |= DmtAcl.EXEC;
             } else
                 throw new IllegalArgumentException(
