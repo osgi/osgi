@@ -30,33 +30,18 @@ package org.osgi.impl.service.application;
 import org.osgi.service.application.*;
 import java.security.*;
 
-/**
- * 
- * TODO Add Javadoc comment for this type.
- * 
- * @version $Revision$
- */
 public class ApplicationHandleImpl implements ApplicationHandle.Delegate {
 	ApplicationHandle	handle;
 	ApplicationDescriptorImpl descriptor;
 	
-	/**
-	 * @param d
-	 * @see org.osgi.service.application.ApplicationHandle.Delegate#setApplicationHandle(org.osgi.service.application.ApplicationHandle)
-	 */
 	public void setApplicationHandle(
 			ApplicationHandle handle, ApplicationDescriptor.Delegate descriptor ) {
 		this.handle = handle;
 		this.descriptor = (ApplicationDescriptorImpl) descriptor;
 	}
 
-	/**
-	 * @return
-	 * @see org.osgi.service.application.ApplicationHandle.Delegate#willDestroy()
-	 */
 	public void destroy() throws Exception {
 		AccessController.checkPermission(new ApplicationAdminPermission( handle.getInstanceID(), 
 				ApplicationAdminPermission.MANIPULATE));
 	}
-
 }
