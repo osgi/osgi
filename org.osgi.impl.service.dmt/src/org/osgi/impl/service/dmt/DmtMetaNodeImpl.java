@@ -45,9 +45,12 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 	String		nameRegExp              = null;
 	String		regExp					= null;
 	String[]	mimeTypes				= null;
+    
+    /*
 	String		referredURI				= null;
 	String[]	dependentURIs			= null;
 	String[]	childURIs				= null;
+    */
 
 	// Interior node with default properties
 	public DmtMetaNodeImpl() {
