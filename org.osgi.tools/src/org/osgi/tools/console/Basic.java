@@ -356,7 +356,7 @@ public class Basic implements CommandProvider {
 		if (ref != null) {
 			PackageAdmin pa = (PackageAdmin) _context.getService(ref);
 			if (pa != null) {
-				ExportedPackage packs[] = pa.getExportedPackages(null);
+				ExportedPackage packs[] = pa.getExportedPackages((Bundle)null);
 				for (int i = 0; packs != null && i < packs.length; i++) {
 					if (filter == null
 							|| packs[i].getName().indexOf(filter) >= 0) {
