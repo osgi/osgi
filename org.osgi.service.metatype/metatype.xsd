@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.osgi.org/xmlns/metatype/v2.0.0" xmlns:mt="http://www.osgi.org/xmlns/metatype/v2.0.0">
+
+	<element name="metatype" type="mt:metatypeType"></element>
+
+	<complexType name="metatypeType">
+		<sequence minOccurs="1" maxOccurs="unbounded">
+			<element name="objectclassdefinition" minOccurs="1" maxOccurs="1" type="mt:ocdType"></element>
+			<element name="attributedefinition" minOccurs="0" maxOccurs="unbounded" type="mt:adType"></element>
+		</sequence>
+		<attribute name="localization" type="string" use="optional"></attribute>
+	</complexType>
+
+	<attributeGroup name="entityGroup">
+		<attribute name="description" type="mt:localizableString" use="required" />
+		<attribute name="name" type="mt:localizableString" use="required" />
+	</attributeGroup>
+
+	<complexType name="ocdType">
+		<sequence>
+			<element name="attribute" maxOccurs="unbounded" minOccurs="1" type="mt:arefType"></element>
+			<element name="icon" maxOccurs="1" minOccurs="0" type="mt:iconType"></element>
+		</sequence>
+		<attributeGroup ref="mt:entityGroup"></attributeGroup>
+		<attribute name="pid" type="string" use="required" />
+		<attribute name="type" default="MS" use="optional" type="mt:managedServiceType"></attribute>
+	</complexType>
+
+	<complexType name="arefType">
+		<attribute name="ref" type="IDREF" use="required" />
+		<attribute name="required" default="true" type="boolean" use="optional" />
+	</complexType>
+
+	<complexType name="adType">
+		<sequence>
+			<element name="validate" maxOccurs="1" minOccurs="0" type="mt:validateType"></element>
+			<element name="defaultvalue" maxOccurs="unbounded" minOccurs="0" type="mt:defaultValueType"></element>
+		</sequence>
+		<attributeGroup ref="mt:entityGroup"></attributeGroup>
+		<attribute name="cardinality" type="integer" use="optional" default="0" />
+		<attribute name="id" type="ID" use="required" />
+		<attribute name="type" use="required" type="mt:javaTypes"></attribute>
+	</complexType>
+
+	<complexType name="iconType">
+		<attribute name="resource" type="mt:localizableString" use="required" />
+		<attribute name="size" type="positiveInteger" use="required" />
+	</complexType>
+
+	<simpleType name="managedServiceType">
+		<restriction base="string">
+			<enumeration value="MS" />
+			<enumeration value="MSF" />
+		</restriction>
+	</simpleType>
+
+	<complexType name="defaultValueType">
+		<attribute name="value" type="string" use="required" />
+	</complexType>
+
+	<complexType name="validateType">
+		<choice>
+			<element name="range" type="mt:rangeType" minOccurs="1" maxOccurs="1"></element>
+			<element name="option" maxOccurs="unbounded" minOccurs="1" type="mt:optionType"></element>
+		</choice>
+	</complexType>
+
+	<complexType name="rangeType">
+		<attribute name="max" type="string" use="required" />
+		<attribute name="min" type="string" use="required" />
+	</complexType>
+
+	<complexType name="optionType">
+		<attribute name="label" type="mt:localizableString" use="required" />
+		<attribute name="value" type="string" use="required" />
+	</complexType>
+
+	<simpleType name="javaTypes">
+		<restriction base="string">
+			<enumeration value="String"></enumeration>
+			<enumeration value="Long"></enumeration>
+			<enumeration value="Double"></enumeration>
+			<enumeration value="Float"></enumeration>
+			<enumeration value="Integer"></enumeration>
+			<enumeration value="Byte"></enumeration>
+			<enumeration value="Char"></enumeration>
+			<enumeration value="Boolean"></enumeration>
+			<enumeration value="Short"></enumeration>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="localizableString">
+		<restriction base="string"></restriction>
+	</simpleType>
+
+</schema>
