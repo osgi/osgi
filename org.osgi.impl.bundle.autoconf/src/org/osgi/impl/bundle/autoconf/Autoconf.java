@@ -34,6 +34,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 import org.osgi.service.metatype.MetaTypeService;
@@ -43,6 +44,7 @@ public class Autoconf implements BundleActivator,ResourceProcessor {
 	BundleContext context;
 	ConfigurationAdmin configurationAdmin;
 	MetaTypeService metaTypeService;
+	DeploymentAdmin deploymentAdmin;
 	SAXParser saxp;
 	int operation;
 	DeploymentPackage deploymentPackage;
@@ -63,6 +65,10 @@ public class Autoconf implements BundleActivator,ResourceProcessor {
 		ref = context.getServiceReference(MetaTypeService.class.getName());
 		if (ref==null) { throw new Exception("cannot get Meta Type Service"); }
 		metaTypeService = (MetaTypeService) context.getService(ref);
+		
+		ref = context.getServiceReference(DeploymentAdmin.class.getName());
+		if (ref==null) { throw new Exception("cannot get Deployment Admin"); }
+		deploymentAdmin =  (DeploymentAdmin) context.getService(ref);
 
 		Hashtable d = new Hashtable();
 		d.put("processor","AutoconfProcessor"); // TODO this is just an "example" in rfc88 5.2.5
@@ -70,6 +76,7 @@ public class Autoconf implements BundleActivator,ResourceProcessor {
 	}
 
 	public void stop(BundleContext context) throws Exception {
+		deploymentPackage = null;
 	}
 
 	public void begin(DeploymentPackage rp, int operation) {
@@ -78,7 +85,7 @@ public class Autoconf implements BundleActivator,ResourceProcessor {
 	}
 
 	public void complete(boolean commit) {
-		throw new IllegalStateException("not implemented yet");
+		if (!commit) throw new IllegalStateException("rollback not implemented yet");
 	}
 
 	public void process(String name, InputStream stream) throws Exception {
@@ -86,6 +93,9 @@ public class Autoconf implements BundleActivator,ResourceProcessor {
 		is.setPublicId(name);
 		MetaData m = new MetaData(saxp,is);
 		
+		for(int i = 0; i < m.designates.length; i++) {
+			
+		}
 		// TODO check for consistency
 	}
 

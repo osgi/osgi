@@ -47,6 +47,8 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.bundle.autoconf.Autoconf;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.deploymentadmin.DeploymentAdmin;
+import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 import org.osgi.service.metatype.MetaTypeInformation;
 import org.osgi.service.metatype.MetaTypeService;
@@ -58,6 +60,7 @@ public class BundleTest extends TestCase {
 	public ResourceProcessor resourceProcessor;
 	public DummyConfigurationAdmin configurationAdmin;
 	public DummyMetaTypeService metaTypeService;
+	public DummyDeploymentAdmin deploymentAdmin;
 	
 	public final class DummyBundleContext implements BundleContext {
 		public ServiceReference[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
@@ -86,6 +89,9 @@ public class BundleTest extends TestCase {
 			}
 			if (clazz.equals(MetaTypeService.class.getName())) {
 				return metaTypeService;
+			}
+			if (clazz.equals(DeploymentAdmin.class.getName())) {
+				return deploymentAdmin;
 			}
 			throw new IllegalStateException();
 		}
@@ -144,12 +150,34 @@ public class BundleTest extends TestCase {
 		public MetaTypeInformation getMetaTypeInformation(Bundle bundle) { throw new IllegalStateException(); }
 	}
 
+	public final class DummyDeploymentAdmin implements DeploymentAdmin {
+		public DeploymentPackage installDeploymentPackage(InputStream in) { throw new IllegalStateException(); }
+		public DeploymentPackage[] listDeploymentPackages() { throw new IllegalStateException(); }
+		public String location(String symbName, String version) { return location(symbName,version); }
+	}
+	
+	public final class DummyDeploymentPackage implements DeploymentPackage {
+		public long getId() { throw new IllegalStateException(); }
+		public String getName() { throw new IllegalStateException(); }
+		public String getVersion() { throw new IllegalStateException(); }
+		public void uninstall() { throw new IllegalStateException(); }
+		public Bundle[] listBundles() { throw new IllegalStateException(); }
+		public boolean isNew(Bundle b) { throw new IllegalStateException(); }
+		public boolean isUpdated(Bundle b) { throw new IllegalStateException(); }
+		public boolean isPendingRemoval(Bundle b) { throw new IllegalStateException(); }
+		public File getDataFile(Bundle bundle) { throw new IllegalStateException(); }
+	}
+
+	public static String location(String symbname,String version) {
+		return "bundle://"+symbname+"-"+version;
+	}
 	protected void setUp() throws Exception {
 		super.setUp();
 		resourceProcessor = null;
 		bundleContext = new DummyBundleContext();
 		metaTypeService = new DummyMetaTypeService();
 		configurationAdmin = new DummyConfigurationAdmin();
+		deploymentAdmin = new DummyDeploymentAdmin();
 		activator = new Autoconf();
 		activator.start(bundleContext);
 		
@@ -161,11 +189,16 @@ public class BundleTest extends TestCase {
 		activator = null;
 		bundleContext = null;
 		configurationAdmin = null;
+		deploymentAdmin = null;
 		metaTypeService = null;
 		super.tearDown();
 	}
 
-	public void test1() throws Exception {
-		
+	public void testNothing() throws Exception {}
+	
+	public void testBasic() throws Exception {
+		DeploymentPackage dp = new DummyDeploymentPackage();
+		resourceProcessor.begin(dp,ResourceProcessor.INSTALL);
+		resourceProcessor.complete(true);
 	}
 }
