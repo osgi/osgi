@@ -888,6 +888,10 @@ public abstract interface Bundle {
 	 * classloader is not used to search for entries. Only the contents of the
 	 * bundle and its attatched fragments are searched for the specified
 	 * entries.
+	 *
+	 * <p>
+	 * If this bundle's state is <code>INSTALLED</code>, this method will
+	 * attempt to resolve the bundle before attempting to find entries.
 	 * 
 	 * <p>
 	 * This method is intended to be used to obtain configuration, setup,
