@@ -7,11 +7,7 @@ Bundle-Copyright: Copyright (c) The Open Services Gateway Initiative (2000-2002)
 Bundle-DocURL: http://www.gatespace.com
 Bundle-ContactAddress: osgiref@gatespace.com
 Bundle-Activator: org.osgi.impl.service.device.manager.DeviceManagerImpl
-Export-package: org.osgi.service.device; specification-version=1.1
-Import-Package: org.osgi.framework;specification-version=1.1,
- 		org.osgi.service.log;specification-version=1.1,
- 		org.osgi.util.tracker;specification-version=1.1
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
 Import-Service: org.osgi.service.log.LogService
-
-
-
