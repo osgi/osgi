@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import org.osgi.impl.service.policy.PermissionInfoMetaNode;
 import org.osgi.impl.service.policy.RootMetaNode;
 import org.osgi.impl.service.policy.util.HashCalculator;
@@ -93,6 +94,7 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 		}
 
 		public DmtData getNodeValue(String nodeName) {
+			// note: nodeName is already checked here
 			if (nodeName.equals(PERMISSIONINFO)) {
 				StringBuffer sb = new StringBuffer();
 				for(int i=0;i<permissionInfo.length;i++) {
@@ -175,6 +177,7 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 
 	public DmtMetaNode getMetaNode(String nodeUri)
 			throws DmtException {
+		// note: nodeUri is already checked here
 		String[] path = getPath(nodeUri);
 		if (path.length==0) {
 			return rootMetaNode;
@@ -254,6 +257,7 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 	}
 
 	public DmtData getNodeValue(String nodeUri) throws DmtException {
+		// note: nodeUri and metanode are already checked here
 		String[] path = getPath(nodeUri);
 		ConditionalPermission cp = (ConditionalPermission) conditionalPermissions.get(path[0]);
 		return cp.getNodeValue(path[1]);
@@ -280,7 +284,14 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 	}
 
 	public String[] getChildNodeNames(String nodeUri) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
+		String[] path = getPath(nodeUri);
+		if (path.length==0) {
+			Set hashes = conditionalPermissions.keySet();
+			String children[] = new String[hashes.size()];
+			return (String[]) hashes.toArray(children);
+		} else {
+			return new String[] { PERMISSIONINFO, CONDITIONINFO };
+		}
 	}
 
 	/**

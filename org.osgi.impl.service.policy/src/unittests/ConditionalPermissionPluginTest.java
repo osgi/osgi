@@ -53,6 +53,8 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 	 */
 	public DummyConditionalPermissionAdmin condPermAdmin;
 
+	public static final String ROOT = ConditionalPermissionAdminPlugin.dataRootURI;
+	
 	public static final ConditionInfo LOC1CONDITION = new ConditionInfo(
 			BundleLocationCondition.class.getName(),
 			new String[] {"http://example.com/loc1"});
@@ -117,5 +119,14 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 		assertEquals(RFC_EXAMPLEPERM[0].getEncoded()+"\n"+RFC_EXAMPLEPERM[1].getEncoded()+"\n",pis.getString());
 		DmtData cis = dmtSession.getNodeValue(RFC_EXAMPLEHASH+"/ConditionInfo");
 		assertEquals(RFC_EXAMPLECOND[0].getEncoded()+"\n",cis.getString());
+	}
+	
+	public void testRootListing() throws Exception {
+		condPermAdmin.addCollection(RFC_EXAMPLECOND,RFC_EXAMPLEPERM);
+		newSession();
+		String ch[] = dmtSession.getChildNodeNames(ROOT);
+		assertEquals(1,ch.length);
+		assertEquals(RFC_EXAMPLEHASH,ch[0]);
+		
 	}
 }
