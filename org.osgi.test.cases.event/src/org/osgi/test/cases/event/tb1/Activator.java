@@ -31,6 +31,7 @@ import java.util.Hashtable;
 
 import org.osgi.framework.*;
 import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
 import org.osgi.test.cases.event.tbc.TBCService;
@@ -49,18 +50,26 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
   
 	public void start(BundleContext context) throws Exception {
     this.context = context;
-		context.registerService(TBCService.class.getName(), this, null);
-    //serviceReg = context.registerService(EventHandler.class.getName(), this, null);
+    context.registerService(this.getClass().getName(), this, null);
 	}
   
 	public void stop(BundleContext context) throws Exception {
+    if (serviceReg != null) {
+      serviceReg.unregister();
+      serviceReg = null;
+    }
+    this.context = null;
 	}
   
   public void setTopics(String[] topics) {
     Hashtable ht = new Hashtable();
     ht.put(EventConstants.EVENT_TOPIC, topics);
+//    ht.put("didi", "DIDI");
+//    System.out.println("topics class = " + topics.getClass());//didi
+//    System.out.println("topics toString = " + topics);//didi
     if (serviceReg == null) {
       serviceReg = context.registerService(EventHandler.class.getName(), this, ht);
+      //getTopics();
     } else {
       serviceReg.setProperties(ht);
     }
@@ -68,6 +77,12 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
   
   public String[] getTopics() {
     ServiceReference serviceRef = context.getServiceReference(EventHandler.class.getName());
+    Object obj = serviceRef.getProperty(EventConstants.EVENT_TOPIC);
+//    System.out.println("obj class = " + obj.getClass());//didi
+//    System.out.println("obj toString = " + obj);//didi
+//    Object obj1 = serviceRef.getProperty("didi");
+//    System.out.println("obj1 class = " + obj1.getClass());//didi
+//    System.out.println("obj1 toString = " + obj1);//didi
     String[] topics = (String[]) serviceRef.getProperty(EventConstants.EVENT_TOPIC);
     return topics;
   }

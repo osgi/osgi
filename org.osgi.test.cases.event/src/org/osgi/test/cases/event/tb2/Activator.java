@@ -52,11 +52,15 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
   
 	public void start(BundleContext context) throws Exception {
     this.context = context;
-    context.registerService(TBCService.class.getName(), this, null);
-    //serviceReg = context.registerService(EventHandler.class.getName(), this, null);
+    context.registerService(this.getClass().getName(), this, null);
 	}
   
 	public void stop(BundleContext context) throws Exception {
+    if (serviceReg != null) {
+      serviceReg.unregister();
+      serviceReg = null;
+    }
+    this.context = null;
 	}
   
   public void setTopics(String[] topics) {
