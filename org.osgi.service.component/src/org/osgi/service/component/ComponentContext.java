@@ -1,7 +1,7 @@
 /*
  * $Header$
  *
- * Copyright (c) OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -58,7 +58,7 @@ import org.osgi.framework.BundleContext;
  * 
  * <p>
  * The activate and deactivate methods will be called using reflection and must
- * be at least protected accessible. These methods do not need to be public
+ * be protected or public accessible. These methods do not need to be public
  * methods so that they do not appear as public methods on the component's
  * provided service object. The methods will be located by looking through the
  * component's implementation class hierarchy for the first declaration of the
