@@ -85,8 +85,9 @@
 		<dirname property="project" file="${ant.file}" />
 		<dirname property="workspace" file="${project}" />
 		<basename property="project.name" file="${project}" />
+		<property name="p" value="${project.name}" />
 		<property environment="env" />
-		
+
 		<taskdef resource="org/osgi/tools/btool/taskdef.properties" classpath="${workspace}/cnf/jar/btool.jar" />
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${workspace}/cnf/ant-contrib/ant-contrib-0.6.jar" />
 
@@ -95,9 +96,27 @@
 				User properties
 				Default properties
 		-->
-		<property file="${project}/build.properties" />
-		<property file="${env.HOME}/osgi.properties" />
-		<property file="${workspace}/cnf/build.properties" />
+
+		<loadproperties description="expand properties ALSO in keys!" 
+			srcfile="${project}/build.properties">
+			<filterchain>
+		          <expandproperties/>
+			</filterchain>
+		</loadproperties>
+
+		<loadproperties description="expand properties ALSO in keys!" 
+			srcfile="${env.HOME}/osgi.properties">
+			<filterchain>
+		          <expandproperties/>
+			</filterchain>
+		</loadproperties>
+
+		<loadproperties description="expand properties ALSO in keys!" 
+			srcfile="${workspace}/cnf/build.properties">
+			<filterchain>
+		          <expandproperties/>
+			</filterchain>
+		</loadproperties>
 
 		<property name="prebuild" value="" />
 		<!-- get the classpath and build info from eclipse -->
@@ -110,7 +129,6 @@
 		<!-- mark init has been run -->
 		<property name="initialized" value="set" />
 		<echo>Enter project ${project.name}</echo>
-
 	</target>
 
 	<!-- 
@@ -128,19 +146,7 @@
 	     Compile the sources. 
 	-->
 	<target name="compile" depends="init" if="project.sourcepath">
-		<javac fork="yes"
-		       executable="${javac}"
-		       srcdir="${project.sourcepath}"
-		       destdir="${project.bindir}"
-		       classpath="${project.classpath}"
-		       bootclasspath="${project.bootclasspath}"
-		       deprecation="true"
-		       listfiles="true"
-		       target="${javac.target}"
-		       source="${javac.source}"
-		       debug="${javac.debug}"
-		       includeAntRuntime="no"
-		       verbose="${verbose}" />
+		<javac fork="yes" executable="${javac}" srcdir="${project.sourcepath}" destdir="${project.bindir}" classpath="${project.classpath}" bootclasspath="${project.bootclasspath}" deprecation="true" listfiles="true" target="${javac.target}" source="${javac.source}" debug="${javac.debug}" includeAntRuntime="no" verbose="${verbose}" />
 	</target>
 
 	<!-- 
@@ -180,19 +186,7 @@
 	-->
 	<target name="-jar">
 		<echo>JAR ${item.jarFile}</echo>
-		<btool jar="${project}/${item.jarFile}"
-		       eclipse="${project}"
-		       analyse="${btool.analyse}"
-		       showmanifest="${btool.showmanifest}"
-		       includeProperty="include.${item.jarFile}"
-		       expandProperty="expand.${item.jarFile}"
-		       contentFoldersProperty="source.${item.jarFile}"
-		       excludeImportProperty="excludeImport.${item.jarFile}"
-		       includeExportProperty="includeExport.${item.jarFile}"
-		       ipaProperty="ipa.${item.jarFile}"
-		       verbose="${verbose}"
-			   sources="${btool.sources}"
-		       ignoreVersions="${btool.noversion}" />
+		<btool jar="${project}/${item.jarFile}" eclipse="${project}" analyse="${btool.analyse}" showmanifest="${btool.showmanifest}" includeProperty="include.${item.jarFile}" expandProperty="expand.${item.jarFile}" contentFoldersProperty="source.${item.jarFile}" excludeImportProperty="excludeImport.${item.jarFile}" includeExportProperty="includeExport.${item.jarFile}" ipaProperty="ipa.${item.jarFile}" verbose="${verbose}" sources="${btool.sources}" ignoreVersions="${btool.noversion}" />
 	</target>
 
 	<!--
