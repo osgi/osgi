@@ -25,7 +25,7 @@ import org.osgi.service.cm.ManagedService;
 
 import org.osgi.service.dmt.*;
 
-import org.osgi.service.event.ChannelListener;
+import org.osgi.service.event.*;
 
 import org.osgi.service.monitor.Monitorable;
 import org.osgi.service.monitor.UpdateListener;
@@ -72,7 +72,7 @@ public class ClientActivator implements BundleActivator
             String[] services = new String[] {
                 ManagedService.class.getName(),
                 Monitorable.class.getName(),
-                ChannelListener.class.getName()
+                EventHandler.class.getName()
             };
 
             serviceReg = bc.registerService(services, client, config);

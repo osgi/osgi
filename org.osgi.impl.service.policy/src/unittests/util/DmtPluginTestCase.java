@@ -63,7 +63,7 @@ public class DmtPluginTestCase extends TestCase {
 	
 	public class DummyContext implements BundleContext {
 		public ServiceReference getServiceReference(String clazz) {
-			if (clazz.equals(EventChannel.class.getName())) {
+			if (clazz.equals(EventAdmin.class.getName())) {
 				return new DummyServiceReference(new DummyEventChannel());
 			}
 			if (clazz.equals(ConfigurationAdmin.class.getName())){
@@ -150,6 +150,18 @@ public class DmtPluginTestCase extends TestCase {
 		public void removeFrameworkListener(FrameworkListener listener) {throw new IllegalStateException();}
 		public boolean ungetService(ServiceReference reference) {throw new IllegalStateException();}
 		public File getDataFile(String filename) {throw new IllegalStateException();}
+
+		/**
+		 * @param clazz
+		 * @param filter
+		 * @return
+		 * @throws InvalidSyntaxException
+		 * @see org.osgi.framework.BundleContext#getAllServiceReferences(java.lang.String, java.lang.String)
+		 */
+		public ServiceReference[] getAllServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	};
 	
 	public class DummyConfigurationAdmin implements ConfigurationAdmin {
@@ -160,9 +172,9 @@ public class DmtPluginTestCase extends TestCase {
 		public Configuration[] listConfigurations(String filter) throws IOException, InvalidSyntaxException { throw new IllegalStateException();}
 	}
 	
-	public class DummyEventChannel implements EventChannel {
-		public void postEvent(ChannelEvent event) {}
-		public void sendEvent(ChannelEvent event) {}
+	public class DummyEventChannel implements EventAdmin {
+		public void postEvent(Event event) {}
+		public void sendEvent(Event event) {}
 	}
 	
 	public class DummyServiceReference implements ServiceReference {
@@ -183,6 +195,10 @@ public class DmtPluginTestCase extends TestCase {
 		public String[] getPropertyKeys() {	throw new IllegalStateException();}
 		public Bundle getBundle() {	throw new IllegalStateException();}
 		public Bundle[] getUsingBundles() {	throw new IllegalStateException();}
+		public boolean isAssignableTo(Bundle bundle, String className) {
+			// TODO Auto-generated method stub
+			return false;
+		}
 	}
 
 	public class DummyFilter implements Filter {

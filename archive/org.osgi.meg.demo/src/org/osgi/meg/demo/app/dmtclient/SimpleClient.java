@@ -24,7 +24,7 @@ import org.osgi.service.dmt.*;
 import org.osgi.service.event.*;
 import org.osgi.service.monitor.*;
 
-public class SimpleClient implements ManagedService, Monitorable, ChannelListener
+public class SimpleClient implements ManagedService, Monitorable, EventHandler
 {
     private BundleContext bc;
 
@@ -394,7 +394,7 @@ public class SimpleClient implements ManagedService, Monitorable, ChannelListene
                        "Some pretty doubles!", KPI.CM_SI, doubles);
     }
 
-    public void channelEvent(ChannelEvent event) {
+    public void handleEvent(Event event) {
         String topic = event.getTopic();
 
         if(topic.equals("org.osgi.service.monitor.MonitorEvent"))
@@ -405,13 +405,13 @@ public class SimpleClient implements ManagedService, Monitorable, ChannelListene
             System.out.println("Unexpected event received on topic '" + topic + "'.");
     }
 
-	private void dmtEvent(ChannelEvent event) {
+	private void dmtEvent(Event event) {
         System.out.println("DMT event for session '" + event.getProperty("session.id") + 
                            "' received on topic '" + event.getProperty("topic") +
                            "' for nodes '" + Arrays.asList((String[])event.getProperty("nodes")) + "'.");
 	}
 
-	private void monitorEvent(ChannelEvent event) {
+	private void monitorEvent(Event event) {
         String path = event.getProperty("monitorable.pid") + "/" + event.getProperty("kpi.name");
         Object listeners = event.getProperty("listener.id");
 
