@@ -32,7 +32,7 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 	IProgressMonitor	progress;
 	int					lastWork	= 0;
 	Label				status;
-	
+
 	public TestView() {
 		packageAdmin = (PackageAdmin) getService(PackageAdmin.class);
 		handler = Activator.handler;
@@ -91,7 +91,6 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 
 	public void setMessage(String message) {
 	}
-
 
 	public void setError(String message) {
 		TestResult tr = new TestResult(message);
@@ -258,14 +257,22 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 		return Activator.getContext().getService(ref);
 	}
 
-	static void error(String msg, Throwable throwable) {
-		if ( throwable != null ) {
-			MessageDialog.openError(new Shell(),"OSGi Test Harness Error",  msg + ": " + throwable.getMessage());
-			if (throwable != null)
-				throwable.printStackTrace();
-		} else {
-			MessageDialog.openWarning(new Shell(),"OSGi Test Harness Warning",msg);			
-		}
+	static void error(final String msg, final Throwable throwable) {
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				if (throwable != null) {
+					MessageDialog.openError(new Shell(),
+							"OSGi Test Harness Error", msg + ": "
+									+ throwable.getMessage());
+					if (throwable != null)
+						throwable.printStackTrace();
+				}
+				else {
+					MessageDialog.openWarning(new Shell(),
+							"OSGi Test Harness Warning", msg);
+				}
+			}
+		});
 	}
 
 	Bundle activate(String location) {
@@ -295,37 +302,52 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 	public Object[] getElements(Object inputElement) {
 		return ((Collection) inputElement).toArray();
 	}
-	
-	void install( String locations[] ) throws UnknownHostException, IOException, Exception {
-		RemoteService remote = getTarget();
-		if ( remote != null ) {
-			TargetLink	target = new TargetLink(this);
-			target.open(new Socket(remote.getHost(), remote.getPort()));
-			for ( int i=0; i<locations.length; i++ ) {
-				URL url = new URL("file:"+locations[i]);
-				target.install(url.getFile()+"~keep~", url.openStream() );
+
+	void install(final String locations[]) throws UnknownHostException,
+			IOException, Exception {
+		final TestView parent = this;
+		Job job = new Job("Test Job") {
+			public IStatus run(IProgressMonitor monitor) {
+				try {
+					progress = monitor;
+					monitor.beginTask("Test run", 100);
+					RemoteService remote = getTarget();
+					if (remote != null) {
+						TargetLink target = new TargetLink(parent);
+						target.open(new Socket(remote.getHost(), remote
+								.getPort()));
+						for (int i = 0; i < locations.length; i++) {
+							URL url = new URL("file:" + locations[i]);
+							target.install(url.getFile() + "~keep~", url
+									.openStream());
+						}
+						target.close();
+					}
+					return Status.OK_STATUS;
+				}
+				catch (Throwable t) {
+					error("Could not install", t);
+					return Status.CANCEL_STATUS;
+				}
 			}
-			target.close();
-		}
+		};
+		job.setSystem(true);
+		job.schedule();
 	}
 
 	public void linkClosed() throws Exception {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void push(String bundle, Object msg) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void sendLog(String bundle, Log log) throws IOException {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void stopped(String bundle) {
 		// TODO Auto-generated method stub
-		
 	}
 }
