@@ -24,7 +24,7 @@ import org.osgi.framework.*;
 import org.osgi.service.cm.*;
 import org.osgi.service.dmt.*;
 
-// TODO set mime type for all returned DmtData objects?
+// TODO handle mime types of data?
 // TODO handle all keys case insensitively
 // TODO handle temporary deletion/addition of intermediate entries in array/vector
 // TODO vector can store mixed types in Configuration Admin
@@ -33,8 +33,7 @@ import org.osgi.service.dmt.*;
 // TODO synchronization
 // TODO put Service and Property into separate java files
 // TODO maybe put configuration plugin into separate package
-// Nasty things can happen (?) if the ConfigurationAdmin service returns data
-// types not in the spec.
+// Nasty things can happen (?) if the ConfigurationAdmin service returns data types not in the spec.
 public class ConfigurationPlugin implements DmtDataPlugin {
     // Strings that are valid values of the 'cardinality' leaf node
     private static final String[] validCardinalityStrings = new String[] {
@@ -113,12 +112,9 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 					null, prop.getValueFormat());
 		}
 		if (prop.isSimple())
-			throw new DmtException(
-					nodeUri,
-					DmtException.NODE_NOT_FOUND,
-					"The given key '"
-							+ path[1]
-							+ "' specifies simple configuration data, it has no subnodes.");
+			throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+					"The given key '" + path[1] +
+			        "' specifies simple configuration data, it has no subnodes.");
 		if (path.length == 3) { // ./OSGi/cfg/<service_pid>/<key>/(type|cardinality|value)
 			if (path[2].equals("type")) {
 				if (!prop.hasType())
@@ -126,7 +122,7 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 							DmtException.NODE_NOT_FOUND,
 							"The type has not been set for the specified configuration item.");
 				return new DmtMetaNodeImpl("Data type of configuration value.",
-						false, validComplexTypeData, DmtDataType.STRING);
+						false, validComplexTypeData, DmtData.FORMAT_STRING);
 			}
 			else
 				if (path[2].equals("cardinality")) {
@@ -136,14 +132,14 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 								"The cardinality has not been set for the specified configuration item.");
 					return new DmtMetaNodeImpl(
 							"Cardinality of the configuration value.", false,
-							validCardinalityData, DmtDataType.STRING);
+							validCardinalityData, DmtData.FORMAT_STRING);
 					// path[2].equals("value")
 				}
 				else
 					if (prop.isCompleteComplexScalar())
 						return new DmtMetaNodeImpl(
 								"Complex scalar configuration data.", false,
-								null, DmtDataType.STRING);
+								null, DmtData.FORMAT_STRING);
 					else
 						if (prop.isCompleteNonScalar()) // array or vector
 							return new DmtMetaNodeImpl(
@@ -237,13 +233,16 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 		if (index < 0)
 			throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
 					"Value index out of range.");
-		// TODO element is set in Boolean array/vector if the DmtData has STRING
-		// "true"/"false" in it, should be error
-		// TODO likewise, element may be set in non-Boolean array/vector even if
-		// DmtData has a BOOLEAN value
-		prop.setElement(value.getString(), index, service, nodeUri);
-	}
-
+		// TODO element is set in Boolean array/vector if the DmtData has STRING "true"/"false" in it, should be error
+		// TODO likewise, element may be set in non-Boolean array/vector even if DmtData has a BOOLEAN value
+		prop.setElement(value.toString(), index, service, nodeUri);
+    }
+    
+    public void setDefaultNodeValue(String nodeUri) throws DmtException {
+        throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH, 
+                "The specified node has no default value.");
+    }
+    
 	public void setNodeType(String nodeUri, String type) throws DmtException {
 		throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
 				"Cannot set type property of configuration nodes.");
@@ -333,6 +332,11 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 				"Cannot set type property of configuration nodes.");
 	}
 
+    public void createLeafNode(String nodeUri) throws DmtException {
+        throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
+                "The specified node has no default value.");
+    }   
+
 	public void createLeafNode(String nodeUri, DmtData value)
 			throws DmtException {
 		String[] path = prepareUri(nodeUri);
@@ -357,7 +361,7 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 							+ path[1]
 							+ "' specifies simple configuration data, it cannot have subnodes.");
 		if (path.length == 3) {
-			if (value.getFormat() != DmtDataType.STRING)
+			if (value.getFormat() != DmtData.FORMAT_STRING)
 				throw new DmtException(nodeUri,
 						DmtException.FORMAT_NOT_SUPPORTED,
 						"The specified leaf node must contain string data.");
@@ -435,10 +439,15 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 		if (i < size)
 			throw new DmtException(nodeUri, DmtException.NODE_ALREADY_EXISTS,
 					"The specified index is already set.");
-		// TODO element is added to Boolean array/vector if the DmtData has
-		// STRING "true"/"false" in it, should be error
-		prop.addElement(value.getString(), service, nodeUri);
+		// TODO element is added to Boolean array/vector if the DmtData has STRING "true"/"false" in it, should be error
+		prop.addElement(value.toString(), service, nodeUri);
 	}
+
+    public void createLeafNode(String nodeUri, DmtData value, String mimeType)
+            throws DmtException {
+        // TODO check mime type?
+        createLeafNode(nodeUri, value);
+    }
 
 	public void copy(String nodeUri, String newNodeUri, boolean recursive)
 			throws DmtException {
@@ -660,11 +669,11 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 	private static Object getSimpleData(DmtData value, String nodeUri)
 			throws DmtException {
 		switch (value.getFormat()) {
-			case DmtDataType.STRING :
+			case DmtData.FORMAT_STRING :
 				return value.getString();
-			case DmtDataType.BOOLEAN :
+			case DmtData.FORMAT_BOOLEAN :
 				return new Boolean(value.getBoolean());
-			case DmtDataType.BINARY :
+			case DmtData.FORMAT_BINARY :
 				return value.getBinary();
 			default :
 				throw new DmtException(nodeUri,
@@ -724,10 +733,8 @@ class Service {
 		while (i.hasNext()) {
 			Service service = (Service) i.next();
 			pid = service.getPid();
-			// TODO maybe check that service exists (for stored services) or
-			// that it does not exist (for new ones)
-			// (currently it is created again if it was deleted and overwritten
-			// if it was created)
+			// TODO maybe check that service exists (for stored services) or that it does not exist (for new ones)
+			// (currently it is created again if it was deleted and overwritten if it was created)
 			// TODO (how) should the location be set?
 			try {
 				Configuration conf = configAdmin.getConfiguration(pid, null);
@@ -741,8 +748,8 @@ class Service {
 					if (intermediate)
 						service.resetService(incompleteProperties);
 					else
-						i.remove(); // TODO is it OK to forget all partially set
-									// properties when the session is closed?
+                        // TODO is it OK to forget all partially set properties when the session is closed?
+						i.remove(); 
 				}
 			}
 			catch (IOException e) {
@@ -880,8 +887,7 @@ class Service {
 
 	Service(String pid, boolean stored) {
 		this.pid = pid;
-		this.stored = stored; // true if this service is backed by the
-							  // Configuration Admin
+		this.stored = stored; // true if this service is backed by the Configuration Admin
 		tempProperties = new CMDictionary();
 		deletedPropertyNames = new Vector();
 	}
@@ -937,8 +943,7 @@ class Service {
 	}
 
 	String[] listPropertyNames(String nodeUri) throws DmtException {
-		// TODO can the configuration key contain characters that are not
-		// allowed in DMT nodes names?
+		// TODO can the configuration key contain characters that are not allowed in DMT nodes names?
 		CMDictionary properties = getStoredProperties(false, nodeUri);
 		addTempProperties(properties, false);
 		return (String[]) properties.keySet().toArray(new String[] {});
@@ -967,8 +972,7 @@ class Service {
 
 	void deleteProperty(Property property, String nodeUri) throws DmtException {
 		String key = property.getKey();
-		// cannot be a deleted property, because service.getProperty would not
-		// return it
+		// cannot be a deleted property, because service.getProperty would not return it
 		if (!property.isStored()) // TODO this is NOT GOOD!
 			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
 					"Cannot delete a property that was created/modified in the same session.");
@@ -1026,34 +1030,35 @@ class Service {
 
 class Property {
 	// TODO remove assertions (IllegalStateException)
-	private static final int	SIMPLE					= 1;	// has
-																  // corresponding
-																  // OMA DM type
-	private static final int	COMPLEX_EMPTY			= 2;	// '<key>'
-																 // interior
-																 // node created
-	private static final int	COMPLEX_HAS_TYPE		= 3;	// '<key>/type'
-																// node set
-	private static final int	COMPLEX_HAS_CARDINALITY	= 4;	// '<key>/cardinality'
-																   // node set
-																   // (implies
-																   // HAS_TYPE)
-	private static final int	COMPLEX_HAS_VALUE		= 5;	// '<key>/value'
-																 // node set
-																 // (implies
-																 // HAS_CARDINALITY)
+
+    // has corresponding OMA DM type
+	private static final int SIMPLE                  = 1;
+    
+    // '<key>' interior node created
+	private static final int COMPLEX_EMPTY           = 2;
+    
+    // '<key>/type' node set
+	private static final int COMPLEX_HAS_TYPE        = 3;
+
+    // '<key>/cardinality' node set (implies HAS_TYPE)
+	private static final int COMPLEX_HAS_CARDINALITY = 4;
+    
+    // '<key>/value' node set (implies HAS_CARDINALITY)
+	private static final int COMPLEX_HAS_VALUE       = 5;
+    
 	// SCALAR: simple: String, Boolean or byte[]; complex: Byte, Short, Integer,
 	// Long, Float, Double, Character
-	private static final int	SCALAR					= 1;
-	private static final int	VECTOR					= 2;
-	private static final int	ARRAY					= 3;
-	String						key;
-	Object						value;
-	boolean						stored;
-	int							category;
-	int							cardinality;
-	int							size;
-	Class						base;
+	private static final int SCALAR					= 1;
+	private static final int VECTOR					= 2;
+	private static final int ARRAY					= 3;
+    
+    String  key;
+    Object  value;
+    boolean stored;
+    int     category;
+    int     cardinality;
+    int     size;
+    Class   base;
 
 	Property(String key, Object value, boolean stored) {
 		this.key = key;
@@ -1143,8 +1148,7 @@ class Property {
 		return hasCardinality() && cardinality == SCALAR;
 	}
 
-	// TODO consider throwing the NODE_NOT_FOUND exception here instead of at
-	// the caller
+	// TODO consider throwing the NODE_NOT_FOUND exception here instead of at the caller
 	int getIndex(String index) {
 		if (!isCompleteNonScalar())
 			throw new IllegalStateException(
@@ -1189,16 +1193,15 @@ class Property {
 		if (base == null)
 			return -1; // zero length stored vector
 		if (isCompleteComplexScalar())
-			return DmtDataType.STRING;
+			return DmtData.FORMAT_STRING;
 		if (isSimple() || isCompleteNonScalar()) {
 			if (base == Boolean.class)
-				return DmtDataType.BOOLEAN;
+				return DmtData.FORMAT_BOOLEAN;
 			if (base == byte[].class)
-				return DmtDataType.BINARY;
-			return DmtDataType.STRING;
+				return DmtData.FORMAT_BINARY;
+			return DmtData.FORMAT_STRING;
 		}
-		return -1; // COMPLEX_HAS_TYPE or COMPLEX_HAS_CARDINALITY (not reached
-				   // at the moment)
+		return -1; // COMPLEX_HAS_TYPE or COMPLEX_HAS_CARDINALITY (not reached at the moment)
 	}
 
 	int getSize() {
@@ -1277,8 +1280,7 @@ class Property {
 	}
 
 	// returns an error string, or null for no error.
-	// TODO find a better solution for this (DmtException not nice because it
-	// needs the nodeUri)
+	// TODO find a better solution for this (DmtException not nice because it needs the nodeUri)
 	void setCardinality(String cardinalityStr, String nodeUri)
 			throws DmtException {
 		if (category != COMPLEX_HAS_TYPE)
@@ -1322,9 +1324,8 @@ class Property {
 		Service.commitIfNeeded();
 	}
 
-	void createValueNode(String data, String nodeUri) throws DmtException { // create
-																			// leaf
-																			// node
+	// create leaf node
+	void createValueNode(String data, String nodeUri) throws DmtException { 
 		if (category != COMPLEX_HAS_CARDINALITY || cardinality != SCALAR)
 			throw new IllegalStateException(
 					"Cannot call 'createValueNode(data)' if cardinality is non-scalar "
@@ -1348,9 +1349,8 @@ class Property {
 			// cardinality == VECTOR
 			((Vector) value).set(index, element);
 		stored = false;
-		parent.addProperty(this, true, nodeUri); // add this property to the
-												 // non-stored list (also
-												 // contains commit)
+		// add this property to the non-stored list (also contains commit)
+		parent.addProperty(this, true, nodeUri);
 	}
 
 	// add a new data node to an array/vector
@@ -1360,8 +1360,7 @@ class Property {
 			throw new IllegalStateException(
 					"Cannot call 'addElement()' for scalar properties.");
 		Object element;
-		// TODO what should be done if base type is unknown? (element is added
-		// as string at the moment)
+		// TODO what should be done if base type is unknown? (element is added as string at the moment)
 		if (base == null) { // zero-element vector
 			element = data;
 			base = String.class;
@@ -1384,9 +1383,8 @@ class Property {
 			((Vector) value).add(element);
 		size++;
 		stored = false;
-		parent.addProperty(this, true, nodeUri); // add this property to the
-												 // non-stored list (also
-												 // contains commit)
+        // add this property to the non-stored list (also contains commit)
+		parent.addProperty(this, true, nodeUri);
 	}
 
 	void deleteElement(Service parent, String nodeUri) throws DmtException {
@@ -1412,9 +1410,8 @@ class Property {
 		}
 		size--;
 		stored = false;
-		parent.addProperty(this, true, nodeUri); // add this property to the
-												 // non-stored list (also
-												 // contains commit)
+        // add this property to the non-stored list (also contains commit)
+		parent.addProperty(this, true, nodeUri);
 	}
 
 	void setValue(String data, Service parent, String nodeUri)
@@ -1425,9 +1422,8 @@ class Property {
 		// base is not null, because this is a scalar property
 		value = createInstance(base, data, nodeUri);
 		stored = false;
-		parent.addProperty(this, true, nodeUri); // add this property to the
-												 // non-stored list (also
-												 // contains commit)
+        // add this property to the non-stored list (also contains commit)
+        parent.addProperty(this, true, nodeUri);
 	}
 
 	private static Object createInstance(Class type, String data, String nodeUri)
