@@ -26,13 +26,13 @@ import org.osgi.service.monitor.KPI;
 import org.osgi.service.monitor.Monitorable;
 import org.osgi.service.monitor.UpdateListener;
 import java.awt.Color;
+import java.awt.Frame;
+import java.awt.Label;
 import java.io.*;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Timer;
 import java.util.TimerTask;
-import javax.swing.JLabel;
-import javax.swing.WindowConstants;
 
 public class TestApplication 
         extends MEGApplication 
@@ -168,9 +168,9 @@ public class TestApplication
         return name.equals(id) || (SERVICE_PID + '/' + name).equals(id);
     }
     
-    private class Gui extends javax.swing.JFrame {
+    private class Gui extends Frame {
     	
-    	private final   JLabel    label;
+    	private final   Label     label;
     	private 	    boolean   running = true;
 		private 		Timer	  timer;
 		private 		TimerTask task;
@@ -180,10 +180,10 @@ public class TestApplication
 			
     		setSize(200, 80);
             setTitle("Test application");
-			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+			//setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			
-			label = new JLabel("parameter: " + testParameter);
-			getContentPane().add(label);
+			label = new Label("parameter: " + testParameter);
+			add(label);
 			
 			setVisible(true);
     	}
