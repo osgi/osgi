@@ -18,6 +18,8 @@
 package integrationtests;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.AccessControlContext;
@@ -325,6 +327,44 @@ public class TestTrees extends TestCase {
 		// since we deleted it, conditions should be empty
 		Enumeration cpis = conditionalPermissionAdmin.getConditionalPermissionInfos();
 		assertFalse(cpis.hasMoreElements());
+	}
+	
+	/**
+	 * we set integration bundle 1 to have all permissions, via the dmt tree.
+	 * Then try to do something in its name.
+	 * TODO currently this test fails, since the framework doesn't seem to implement signer conditions
+	 */
+	public void testConditionalPermissionAdminThrough() throws Exception {
+		ConditionInfo SIGNER_SARAH =  new ConditionInfo(BundleSignerCondition.class.getName(),new String[] {"C=HU, O=ConstructionOy, OU=Informatical Infrastructure Management, CN=Sarah Bar"});
+		PermissionInfo ADMINPERMISSION = new PermissionInfo(AdminPermission.class.getName(),"*","*");
+		
+		startFramework(true);
+
+		Class cl = integrationTestBundle.loadClass("integrationtests.bundle1.Test");
+		Method doAction = cl.getDeclaredMethod("doAction",new Class[]{PrivilegedExceptionAction.class});
+		PrivilegedExceptionAction adminAction = (PrivilegedExceptionAction) new PrivilegedExceptionAction() {
+			public Object run() throws Exception {
+				System.getSecurityManager().checkPermission(new AdminPermission());
+				return null;
+			}
+		};
+		
+		// since we haven't given permissions yet, this should fail
+		try {
+			doAction.invoke(null,new Object[]{adminAction});
+			fail();
+		} catch (InvocationTargetException e) {
+			if (!(e.getCause() instanceof AccessControlException)) throw e;
+		}
+		
+		DmtSession session = dmtAdmin.getSession(ConditionalPermissionAdminPlugin.dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
+		session.createInteriorNode("1");
+		session.setNodeValue("1/ConditionInfo",new DmtData(SIGNER_SARAH.getEncoded()));
+		session.setNodeValue("1/PermissionInfo",new DmtData(ADMINPERMISSION.getEncoded()));
+		session.close();
+		
+		// now this should work;
+		doAction.invoke(null,new Object[]{adminAction});
 	}
 	
 }
