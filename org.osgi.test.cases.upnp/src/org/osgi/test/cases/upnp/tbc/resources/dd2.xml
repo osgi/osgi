@@ -1,0 +1,10 @@
+  <device>
+    <deviceType>urn:prosyst-com:device:Test:1</deviceType>
+    <friendlyName>Test Device</friendlyName>
+    <manufacturer>ProSyst</manufacturer>
+    <manufacturerURL>http://www.prosyst.com</manufacturerURL>
+    <modelDescription>UPnP Test Device For OSGI</modelDescription>
+    <modelName>Test</modelName>
+    <modelNumber>123rty</modelNumber>
+    <modelURL>http://www.prosyst.com</modelURL>
+    <serialNumber>qwe456</serialNumber>

@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-Name: tbc
+Bundle-Description: Tests Universal Plug and Play Device Architecture. The following elements are t
+ ested:
+ <pre>
+ <pre>
+Bundle-Vendor: ProSyst Software AG
+Bundle-Version: 1.0
+Bundle-DocURL: http://www.prosyst.com
+Bundle-ContactAddress: p_kosseff@prosyst.bg
+Bundle-Category: osgi,test
+Bundle-Activator: org.osgi.test.cases.upnp.tbc.UPnPControl
+Import-Package: org.osgi.framework,
+ org.osgi.test.service,
+ org.osgi.service.upnp,
+ org.osgi.service.http,
+ javax.servlet, 
+ javax.servlet.http
+Export: org.osgi.test.cases.upnp.tbc
+Comment: org.osgi.test.cases.upnp.tbc
+

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+  <specVersion>
+    <major>1</major>
+    <minor>0</minor>
+  </specVersion>
+  <URLBase></URLBase>
+  <device>
+    <deviceType>urn:prosyst-com:device:Test:1</deviceType>
+    <friendlyName>Test Device</friendlyName>
+    <manufacturer>ProSyst</manufacturer>
+    <manufacturerURL>http://www.prosyst.com</manufacturerURL>
+    <modelDescription>UPnP Test Device For OSGI</modelDescription>
+    <modelName>Test</modelName>
+    <modelNumber>123rty</modelNumber>
+    <modelURL>http://www.prosyst.com</modelURL>
+    <serialNumber>qwe456</serialNumber>
+    <UDN>uuid:prosyst-com:root::upnp:rootdevice</UDN>
+    <UPC>9876543210</UPC>
+   <serviceList>
+     <service>
+       <serviceType>urn:prosyst-com:service:control:1</serviceType>
+       <serviceId>urn:prosyst-com:serviceId:ControlService</serviceId>
+       <SCPDURL>http://127.0.0.1/UPnPTest/conserv.xml</SCPDURL>
+       <controlURL>/control?dsi=2c</controlURL>
+       <eventSubURL>/event?dsi=2c</eventSubURL>
+     </service>
+     <service>
+       <serviceType>urn:prosyst-com:service:event:1</serviceType>
+       <serviceId>urn:prosyst-com:serviceId:EventService</serviceId>
+       <SCPDURL>http://127.0.0.1/UPnPTest/evserv.xml</SCPDURL>
+       <controlURL>/control?dsi=2e</controlURL>
+       <eventSubURL>/event?dsi=2e</eventSubURL>
+     </service>
+   </serviceList>
+   <presentationURL></presentationURL>
+  </device>
+</root>
