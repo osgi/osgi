@@ -26,7 +26,9 @@ public class ServerTest implements RemoteReceiver {
 	RMServer	rms	= null;
 
 	public static void main(String[] args) throws IOException {
-		int port = Integer.parseInt(args[0]);
+        int port = 7777;
+        if(args.length > 0)
+            port = Integer.parseInt(args[0]);
 		ServerTest st = new ServerTest(port);
 	}
 
