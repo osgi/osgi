@@ -2,7 +2,6 @@ package org.osgi.meg.demo.desktop;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
-import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Label;
@@ -11,6 +10,8 @@ import java.awt.Panel;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
@@ -57,6 +58,13 @@ public class SimpleDesktop extends Frame implements BundleActivator, ActionListe
         
         // it doesn't exist on CDC (Erin 9500)
         //setExtendedState(MAXIMIZED_BOTH);
+        
+        addWindowListener(new WindowAdapter() {
+            	public void windowClosing(WindowEvent e) {
+            	    setVisible(false);
+            	    dispose();
+            	}
+            });
         
         pNorth = new Panel();
         add(pNorth, BorderLayout.NORTH);
@@ -203,6 +211,9 @@ public class SimpleDesktop extends Frame implements BundleActivator, ActionListe
         String command = event.getActionCommand();
         try {
 	        if (INSTALL.equals(command)) {
+	            if (0 != pSouth.getComponentCount())
+	                return;
+	            
 	            final Label l = new Label("URL:");
 	            l.setAlignment(Label.RIGHT);
 	            l.setBounds(0, 0, 20, 20);
@@ -231,6 +242,7 @@ public class SimpleDesktop extends Frame implements BundleActivator, ActionListe
 		    				}
 	                    }
 	                    pSouth.removeAll();
+	                    validate();
 	                }};
 	
 	            bOK.setBounds(230, 0, 100, 20);	            
