@@ -15,7 +15,7 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package org.osgi.meg.demo.remote;
+package org.osgi.meg.demo.remote.gui;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -32,6 +32,8 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+
+import org.osgi.meg.demo.remote.*;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
