@@ -15,6 +15,7 @@ import java.io.*;
 import java.net.*;
 import java.security.*;
 import java.util.*;
+
 import org.osgi.framework.*;
 
 /**
@@ -1276,6 +1277,14 @@ class BundleImpl implements Bundle, Comparable {
 	 * @see org.osgi.framework.Bundle#getEntry(java.lang.String)
 	 */
 	public URL getEntry(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.osgi.framework.Bundle#getResources(java.lang.String)
+	 */
+	public Enumeration getResources(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
