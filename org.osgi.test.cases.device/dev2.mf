@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Vendor: ProSyst
+Bundle-Version: 1.0.0
+Bundle-Activator: org.osgi.test.cases.device.dev2.StadnaloneDriverTestDevice
+Bundle-DocUrl: http://www.prosyst.bg
+Bundle-Name: test.cases.device.dev2
+Bundle-Description: basic device implementation
+Import-Package:  org.osgi.framework
+
+
+
+

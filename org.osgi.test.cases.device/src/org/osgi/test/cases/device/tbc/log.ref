@@ -1,0 +1,58 @@
+Test bundle control started Ok.
+[standalone driver test] installing and starting device bundle 1 (standart device from the device detection test)
+[standalone driver test] Registering device that implements Device and there is a driver for it
+[standalone driver test] installing and starting device bundle 2 (standalone test device)
+[standalone driver test] installing driver one - it should attatch to device 2 (standalone test device)
+[sadriver] attaching to standalone device
+[standalone driver test] device attachment OK
+[standalone driver test] installing and starting basic driver bundle - it should attach to device 1
+[device detection driver] starting bundle
+[device detection driver] registering service
+[standalone driver test] device attachment OK
+[standalone driver test] registering a locator service
+[standalone driver test] uninstalling driver 2. This should invoke the findDrivers method for the standalone device
+[empty driver locator] find drivers invoked for the correct device - OK!
+[standalone driver test] findDrivers call OK
+[standalone driver test] removing locator
+[standalone driver test] installing driver 2. It should attach to device 2 again
+[sadriver] attaching to standalone device
+[standalone driver test] device attachment OK
+[standalone driver test] finished
+[basic test] registering services
+[basic test] installing bundle! Test mode = 0
+[basic device] Registering device that implements Device and there is a driver for it
+[device detection driver] starting bundle
+[device detection driver] registering service
+[basic test] device detection OK
+[basic test] installing bundle! Test mode = 1
+[basic device] Registering device that doesn't implement Device and there is a driver for it
+[device detection driver] starting bundle
+[device detection driver] registering service
+[basic test] device detection OK
+[basic test] installing bundle! Test mode = 2
+[basic device] Registering device that implement Device and there is NO driver for it
+[device detection driver] starting bundle
+[device detection driver] registering service
+[basic test] device detection OK
+[basic test] noDriverFound called OK
+[basic test] installing bundle! Test mode = 3
+[basic device] Registering device that doesn't implement Device and there is NO driver for it
+[device detection driver] starting bundle
+[device detection driver] registering service
+[basic test] device detection OK
+[basic test] noDriverFound called OK
+[basic test] installing bundle! Test mode = 4
+[basic device] Registering device that implements Device but does not set DEVICE_CATEGORY property
+[device detection driver] starting bundle
+[device detection driver] registering service
+[basic test] device detection OK
+[driver loading test] registering locators and selector
+[driver loading test] installing device bundle
+[basic device] Registering a device for general use
+[driver loading test] device attachment OK
+[default selection test] installing device bundle
+[basic device] Registering a device for general use
+[default selection test] device attachment OK
+[redirection test] installing device bundle
+[basic device] Registering a device for general use
+[redirection test] device attachment OK
