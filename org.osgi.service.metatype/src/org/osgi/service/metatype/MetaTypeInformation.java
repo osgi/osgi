@@ -33,30 +33,29 @@ import org.osgi.framework.Bundle;
  * meta type information for a specific bundle.
  * 
  * @version $Revision$
+ * @since 1.1
  */
 public interface MetaTypeInformation extends MetaTypeProvider {
 	/**
 	 * Return the PIDs (for ManagedServices) for which ObjectClassDefinition
 	 * information is available.
-	 * ### how dynamic is this? I.e. what happens when a bundle register/unregisters
-	 * ### a Managed Service?
 	 * 
 	 * @return Array of PIDs.
 	 */
-	String[] getPids();
+	public String[] getPids();
 
 	/**
-	 * Return the Factory PIDs (for ManagedServices) for which
+	 * Return the Factory PIDs (for ManagedServiceFactories) for which
 	 * ObjectClassDefinition information is available.
 	 * 
 	 * @return Array of Factory PIDs.
 	 */
-	String[] getFactoryPids();
+	public String[] getFactoryPids();
 
 	/**
-	 * Return the bundle for which this object provides metatype information.
+	 * Return the bundle for which this object provides meta type information.
 	 * 
-	 * @return Bundle for which this object provides metatype information.
+	 * @return Bundle for which this object provides meta type information.
 	 */
-	Bundle getBundle();
+	public Bundle getBundle();
 }

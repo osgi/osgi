@@ -31,27 +31,32 @@ import org.osgi.framework.Bundle;
 /**
  * The MetaType Service can be used to obtain meta type information for a
  * bundle. The MetaType Service will examine the specified bundle for meta type
- * documents and to create the returned <code>MetaTypeInformation</code> object.
+ * documents to create the returned <code>MetaTypeInformation</code> object.
  * 
  * <p>
- * If the bundle does not contain any meta type documents, then the MetaType
- * Service will query whether the bundle has registered any
- * <code>ManagedService</code> or <code>ManagedServiceFactory</code> services which
- * implement <code>MetaTypeProvider</code>. If so, then the MetaType Service will
- * return a <code>MetaTypeInformation</code> object which wrappers these
- * <code>MetaTypeProvider</code> objects. Thus the MetaType Service can be used to
- * retrieve meta type information for bundles which contain a meta type resource
- * or which provide their own <code>MetaTypeProvider</code> objects.
+ * If the specified bundle does not contain any meta type documents, then a
+ * <code>MetaTypeInformation</code> object will be returned that wrappers any
+ * <code>ManagedService</code> or <code>ManagedServiceFactory</code>
+ * services registered by the specified bundle that implement
+ * <code>MetaTypeProvider</code>. Thus the MetaType Service can be used to
+ * retrieve meta type information for bundles which contain a meta type
+ * documents or which provide their own <code>MetaTypeProvider</code> objects.
  * 
  * @version $Revision$
+ * @since 1.1
  */
 public interface MetaTypeService {
 	/**
 	 * Return the MetaType information for the specified bundle.
 	 * 
 	 * @param bundle The bundle for which meta type information is requested.
-	 * @return MetaTypeInformation object for the specified bundle.
-	 * ### will this always return an object? Or can it return null. I assume it is always?
+	 * @return A MetaTypeInformation object for the specified bundle.
 	 */
-	MetaTypeInformation getMetaTypeInformation(Bundle bundle);
+	public MetaTypeInformation getMetaTypeInformation(Bundle bundle);
+
+	/**
+	 * Location of meta type documents. The MetaType Service will process each
+	 * entry in the meta type documents directory.
+	 */
+	public final static String	METATYPE_DOCUMENTS_LOCATION	= "OSGI-INF/metatype";
 }
