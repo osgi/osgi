@@ -55,10 +55,12 @@ public class DmtPrincipalPermission extends BasicPermission {
 
     /**
      * Creates a new <code>DmtPrincipalPermission</code> object using the
-     * 'canonic' two argument constructor.
-     *
+     * 'canonic' two argument constructor. In this version this class does not
+     * define any actions, the second argument of this constructor must be "*" 
+     * so that later this class can be extended in a backward compatible way.
      * @param target Name of the principal
-     * @param actions ignored
+     * @param actions No actions defined, must be "*". It is ignored, clients 
+     * may use the single argument constructor.
      */
     public DmtPrincipalPermission(String target, String actions) {
         this(target);
