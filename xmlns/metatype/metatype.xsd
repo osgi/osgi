@@ -32,7 +32,8 @@
                 <attribute name="cardinality" type="integer" use="optional" default="0"/>
                 <attribute name="min" type="string" use="optional"/>
                 <attribute name="max" type="string" use="optional"/>
-                <attribute name="default" type="string" use="optional"/>                
+                <attribute name="default" type="string" use="optional"/>
+		    <attribute name="required" type="boolean" use="optional" default="true"/>                
         </complexType>
          
         <complexType name="Object">
