@@ -135,6 +135,7 @@
 	     Compile the sources. 
 	-->
 	<target name="compile" depends="init" if="project.sourcepath">
+		<echo>"${project.sourcepath}"</echo>
 		<javac fork="yes"
 		       executable="${javac}"
 		       srcdir="${project.sourcepath}"

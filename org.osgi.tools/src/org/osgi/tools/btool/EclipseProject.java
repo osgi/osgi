@@ -66,6 +66,9 @@ public class EclipseProject {
 	 * @return
 	 */
 	String toPath(Collection c) {
+		if ( c==null || c.isEmpty() )
+			return null;
+		
 		StringBuffer sb = new StringBuffer();
 		String del = "";
 		HashSet set = new HashSet();
