@@ -17,7 +17,6 @@
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.useradmin"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.wireadmin"/>
 	<classpathentry exported="true" kind="lib" path="/cnf/jar/servlet.jar"/>
-	<classpathentry kind="src" path="/ee.foundation"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.util.measurement"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.util.position"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.util.tracker"/>
