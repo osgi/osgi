@@ -44,6 +44,8 @@ import java.util.NoSuchElementException;
  * @version $Revision$
  */
 public class DmtPrincipalPermission extends BasicPermission {
+	// TODO add static final serialVersionUID
+
     /**
      * Creates a new <code>DmtPrincipalPermission</code> object with its name
      * set to "DmtPrincipalPermission".
@@ -110,6 +112,8 @@ public class DmtPrincipalPermission extends BasicPermission {
  */
 final class DmtPrincipalPermissionCollection extends PermissionCollection
 {
+	// TODO add static final serialVersionUID
+
     /**
      * True if collection is non-empty.
      *

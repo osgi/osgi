@@ -56,6 +56,7 @@ import java.security.PermissionCollection;
  * permission.
  */
 public class DmtPermission extends Permission {
+	// TODO add static final serialVersionUID
 
     /**
      * Creates a new DmtPermission object for the specified DMT URI with the
