@@ -44,7 +44,7 @@ import java.util.Iterator;
  * has to report the exceptions of all failures.
  * <p>
  * Getter methods are provided to retrieve the values of the additional
- * paramters, and the <code>printStackTrace</code> methods are extended to
+ * parameters, and the <code>printStackTrace</code> methods are extended to
  * print the stack trace of all causing throwables as well.
  */
 public class DmtException extends Exception {
@@ -53,6 +53,7 @@ public class DmtException extends Exception {
     private int       code    = 0;
     private String    message = null;
     private Vector    causes  = null;
+    private boolean   fatal   = false;
 
    /**
      * The requested target node was not found. No indication is given as to
@@ -171,7 +172,10 @@ public class DmtException extends Exception {
      * This error is caused by one of the following situations:
      * <li> An updating method within an atomic session can not be executed
      * because the underlying plugin does not support atomic transactions.
-     * <li> //todo
+     * <li> A commit operation at the end of an atomic session failed because 
+     * of lack of two phase commit in the underlying plugins. An example: plugin
+     * A has committed successfully but plugin B failed, so the whole session 
+     * must fail, but A can not undo the commit
      * This error code does not correspond to any OMA DM response status code.
      */
     public static final int TRANSACTION_ERROR     = 6;
@@ -225,6 +229,25 @@ public class DmtException extends Exception {
         this(uri, code, message);
         this.causes = (Vector) causes.clone();
     }
+    
+    /**
+     * Create an instance of the exception, specifying the list of cause
+     * exceptions and whether the exception is a fatal one. This constructor
+     * is meant to be used by plugins wishing to indicate that a serious error
+     * occurred which should invalidate the ongoing atomic session.
+     * @param uri The node on which the failed DMT operation was issued
+     * @param code The error code of the failure
+     * @param message Message associated with the exception. Can be null.
+     * @param causes The list of originating exceptions
+     * @param fatal Whether the exception is fatal, that is it triggers the 
+     * automatic rollback of an ongoing atomic session. 
+     */
+    public DmtException(String uri, int code, String message,
+                        Vector causes, boolean fatal) {
+        this(uri, code, message, causes);
+        this.fatal = fatal;
+    }
+    
 
     /**
      * Get the node on which the failed DMT operation was issued. Some
@@ -278,6 +301,14 @@ public class DmtException extends Exception {
     public Vector getCauses() {
         return causes;
     }
+    
+    /**
+     * Check whether this exception is fatal in the session, meaning that it 
+     * triggers an automatic rollback of atomic sessions.
+     */
+    public boolean isFatal() {
+        return fatal;
+    }
 
     /**
      * Prints the exception and its backtrace to the specified print stream. Any
@@ -312,6 +343,7 @@ public class DmtException extends Exception {
     }
 
     private String getCodeText(int code) {
+        // todo sync codes
         switch(code) {
         case NODE_NOT_FOUND:        return "NODE_NOT_FOUND";
         case COMMAND_NOT_ALLOWED:   return "COMMAND_NOT_ALLOWED";
