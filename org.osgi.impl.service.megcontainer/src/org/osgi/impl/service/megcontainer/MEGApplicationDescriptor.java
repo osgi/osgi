@@ -62,10 +62,15 @@ public class MEGApplicationDescriptor implements ApplicationDescriptor {
 	}
 
 	public String getUniqueID() {
-		String uniqueID = getContainerID() + "-" + getCategory() + "-"
-				+ getName() + "-" + getVersion() + "-"
-				+ props.getProperty("bundle_id");
+		// TODO: pkr: simplified the name so it is easier to manipulate
+		String uniqueID = getContainerID() 
+				//+ "-" + getCategory()
+				+ "-" + getName() 
+				+ "-" + getVersion() 
+				//+ "-" + props.getProperty("bundle_id")
+				;
 		uniqueID = uniqueID.replace(',', '_');
+		uniqueID = uniqueID.replace(' ', '_');
 		return uniqueID;
 	}
 
