@@ -49,6 +49,8 @@ public class BTool extends Task {
 	private File		workspaceDir;
 	private File		projectDir;
 	String				prebuild		= "";
+	long				modified;
+	boolean				archiveChanged = false;
 
 	/**
 	 * Try out the Deliver program. Syntax: Please note that the classpath must
@@ -64,6 +66,8 @@ public class BTool extends Task {
 				setProperties();
 				return;
 			}
+			File f = new File(zipname);
+			modified = f.lastModified();
 			trace("Zip name " + zipname);
 			getManifest(); // Read manifest
 			getPermissions();
@@ -83,33 +87,41 @@ public class BTool extends Task {
 			if (properties.size() > 0)
 				addContents(new PropertyResource(this, "osgi.properties",
 						properties));
-			openZip();
-			int n = 0;
-			for (Iterator i = contents.values().iterator(); i.hasNext();) {
-				Resource r = (Resource) i.next();
-				try {
-					InputStream in = r.getInputStream();
-					if (in != null) {
-						addToZip(r.getPath(), r.getInputStream(), r.getExtra());
-						n++;
+			trace("Date of archive: " + modified);
+			if ( archiveChanged ) {
+				openZip();
+				int n = 0;
+				for (Iterator i = contents.values().iterator(); i.hasNext();) {
+					Resource r = (Resource) i.next();
+					if (r.lastModified() > modified)
+						System.out.println("New " + r + "(" + r.lastModified()
+								+ ")");
+					try {
+						InputStream in = r.getInputStream();
+						if (in != null) {
+							addToZip(r.getPath(), r.getInputStream(), r.getExtra());
+							n++;
+						}
+					}
+					catch (Exception e1) {
+						System.err.println("Could not read stream " + r);
+						e1.printStackTrace();
 					}
 				}
-				catch (Exception e1) {
-					System.err.println("Could not read stream " + r);
-					e1.printStackTrace();
+				if (n == 0)
+					errors.add("No files in ZIP");
+				else {
+					closeZip();
+					doManifest();
+					if (analyse) {
+						if (manifestSource != null)
+							doAnalysis();
+						else
+							warnings.add("No manifest to analyse"); 
+					}
 				}
-			}
-			if (n == 0)
-				errors.add("No files in ZIP");
-			else {
-				closeZip();
-				doManifest();
-				if (analyse) {
-					if (manifestSource != null)
-						doAnalysis();
-					else
-						warnings.add("No manifest to analyse");
-				}
+			} else {
+				System.out.println("Archive not changed");
 			}
 			showErrors();
 		}
@@ -192,6 +204,11 @@ public class BTool extends Task {
 			return;
 		}
 		manifestSource = f.getAbsolutePath();
+		if ( f.lastModified() > modified ) {
+			trace("Newer manifest");
+			archiveChanged = true;
+		}
+		
 		boolean showmanifest = this.showmanifest;
 		this.showmanifest = false;
 		ManifestResource mf = new ManifestResource(this, manifestSource, false);
@@ -420,6 +437,10 @@ public class BTool extends Task {
 	void addContents(Resource p) {
 		if (p == null)
 			return;
+		if (p.lastModified() > modified) {
+			trace("New resource " + p);
+			archiveChanged = true;
+		}
 		if (!contents.containsKey(p.getPath()))
 			contents.put(p.getPath(), p);
 		else
@@ -722,14 +743,12 @@ public class BTool extends Task {
 			}
 			else
 				s = project;
-			
 			Resource r;
-			
-			if ( preprocess )
-				r = new FileResource(this, outname, new File(s.getFile(),
-					file), preprocess);
+			if (preprocess)
+				r = new FileResource(this, outname,
+						new File(s.getFile(), file), preprocess);
 			else {
-				r = new Resource(this,s,outname);
+				r = new Resource(this, s, outname);
 				r.setSourcePath(file);
 			}
 			addContents(r);
