@@ -26,7 +26,7 @@
 package org.osgi.service.dmt;
 
 import java.util.Iterator;
-import java.util.Hashtable;
+import java.util.TreeMap;
 import java.util.Vector;
 import java.util.Arrays;
 import java.util.Map;
@@ -34,14 +34,14 @@ import java.util.Map;
 // TODO write equals() and hashCode() if needed
 
 /**
- * The DmtAcl class represents structured access to DMT ACLs. Under OMA DM
- * the ACLs are defined as strings with an internal syntax.
+ * DmtAcl is an immutable class representing structured access to DMT ACLs.
+ * Under OMA DM the ACLs are defined as strings with an internal syntax.
  * <p>
- * The methods of this class taking a principal as parameter accept
- * remote server IDs (as passed to <code>DmtAdmin.getTree</code>),
- * as well as &quot;<code>*</code>&quot; indicating any principal.
+ * The methods of this class taking a principal as parameter accept remote
+ * server IDs (as passed to <code>DmtAdmin.getSession</code>), as well as
+ * &quot;<code>*</code>&quot; indicating any principal.
  */
-public class DmtAcl {
+public class DmtAcl implements Cloneable {
 
     //----- Public constants -----//
 
@@ -75,7 +75,14 @@ public class DmtAcl {
      */
     public static final int EXEC = 16;
 
-
+    /**
+     * Principals holding this permission can issue any command on the node
+     * having this ACL. This permission is the logical OR of ADD, DELETE, EXEC,
+     * GET and REPLACE permissions.
+     */
+    public static final int ALL_PERMISSION =
+        ADD | DELETE | EXEC | GET | REPLACE;
+    
     //----- Private constants -----//
 
     private static final    int[] PERMISSION_CODES =
@@ -83,23 +90,20 @@ public class DmtAcl {
     private static final String[] PERMISSION_NAMES =
                      new String[] { "Add", "Delete", "Exec", "Get", "Replace" };
 
-    private static final int ALL_PERMISSION =
-        ADD | DELETE | EXEC | GET | REPLACE;
-
     private static final String ALL_PRINCIPALS = "*";
 
 
     //----- Private fields -----//
 
-    private Hashtable principalPermissions;
+    private TreeMap principalPermissions;
     private int globalPermissions;
 
 
     //----- Constructors -----//
 
     /**
-     * Create an instance of the ACL that represents an empty list of
-     * principals with no permissions.
+     * Create an instance of the ACL that represents an empty list of principals
+     * with no permissions.
      */
     public DmtAcl()
     {
@@ -107,86 +111,147 @@ public class DmtAcl {
     }
 
     /**
-     * Create an instance of the ACL from its canonic string
-     * representation.
-     * @param acl The string representation of the ACL as defined in
-     * OMA DM.  If <code>null</code> then it represents an empty list
-     * of principals with no permissions.
-     * @throws IllegalArgumentException if acl is not a valid OMA DM
-     * ACL string
+     * Create an instance of the ACL from its canonic string representation.
+     * 
+     * @param acl The string representation of the ACL as defined in OMA DM. If
+     *        <code>null</code> then it represents an empty list of principals
+     *        with no permissions.
+     * @throws IllegalArgumentException if acl is not a valid OMA DM ACL string
      */
     public DmtAcl(String acl)
     {
         parseAcl(acl);
     }
-
+    
     /**
-     * Creates an instance of the ACL that represents the same
-     * permissions as the parameter ACL object.
-     * @throws IllegalArgumentException if the given ACL object is not
-     * consistent (e.g. some principals do not have all the global
-     * permissions), or if the parameter changes during the call
+     * Creates an instance with specifying the list of principals and the
+     * permissions they hold. The two arrays run in parallel, that is
+     * <code>principals[i]</code> will hold <code>permissions[i]</code> in
+     * the ACL.
+     * <p>
+     * A principal name may not appear multiple times in the 'principals'
+     * argument. If the &quot;*&quot; principal appears in the array, the
+     * corresponding permissions will be granted to all principals (regardless
+     * of whether they appear in the array or not).
+     * 
+     * @param principals The array of principals
+     * @param permissions The array of permissions
+     * @throws IllegalArgumentException if the length of the two arrays are not
+     *         the same or any array element is invalid
      */
-    public DmtAcl(DmtAcl acl)
-    {
-        principalPermissions = new Hashtable();
-        globalPermissions = acl.getPermissions(ALL_PRINCIPALS);
-
-        Iterator i = acl.getPrincipals().iterator();
-        while(i.hasNext()) {
-            String principal = (String) i.next();
-            int perm = acl.getPermissions(principal);
-            if((perm & globalPermissions) != globalPermissions)
-                throw new IllegalArgumentException("Invalid parameter ACL, " +
-                    "all principals must have all global permissions.");
-            if(perm != 0)
-                principalPermissions.put(principal, new Integer(perm));
+    public DmtAcl(String[] principals, int[] permissions) {
+        // TODO maybe disallow principal-specific permissions to be stricter than the global permissions
+        if(principals.length != permissions.length)
+            throw new IllegalArgumentException(
+                    "The lengths of the principal and permission arrays are not the same.");
+        
+        clearPermissions();
+        
+        for (int i = 0; i < principals.length; i++) {
+            // allow one * in 'principals' array, remove after loop
+            if(!ALL_PRINCIPALS.equals(principals[i]))
+                checkPrincipal(principals[i]);
+            checkPermissions(permissions[i]);
+        
+            Integer permInt = new Integer(permissions[i]);
+            Object old = principalPermissions.put(principals[i], permInt);                
+            if(old != null)
+                throw new IllegalArgumentException("Principal '" + 
+                        principals[i] + 
+                        "' appears multiple times in the principal array.");
         }
+        
+        // set the global permissions if there was a * in the array
+        Object globalPermObj = principalPermissions.remove(ALL_PRINCIPALS);
+        if(globalPermObj != null)
+            globalPermissions = ((Integer) globalPermObj).intValue();
     }
-
 
     //----- Public methods -----//
-
+   
     /**
-     * Add a specific permission to a given principal. The already
-     * existing permissions of the principal are not affected.
-     * @param principal The entity to which permission should be
-     * granted.
-     * @param permissions The permissions to be given. The parameter
-     * can be a logical <code>or</code> of more permission constants
-     * defined in this class.
+     * Creates a copy of this ACL object.
+     * 
+     * @return a DmtAcl instance descibing the same permissions as this instance
      */
-    public synchronized void addPermission(String principal, int permissions)
-    {
-        checkPermissions(permissions);
-
-        int oldPermissions = getPermissions(principal);
-        setPermission(principal, oldPermissions | permissions);
+    public Object clone() {
+        DmtAcl cloned = null;
+        try {
+            cloned = (DmtAcl) super.clone();
+        } catch(CloneNotSupportedException e) {
+            // never happens because this class is Cloneable
+            throw new UnsupportedOperationException();
+        }
+        
+        // make a shallow copy of the permission table, the keys (String) and
+        // values (Integer) are immutable anyway
+        cloned.principalPermissions = (TreeMap) principalPermissions.clone();
+        
+        return cloned;
     }
 
     /**
-     * Revoke a specific permission from a given principal. Other
-     * permissions of the principal are not affected.
-     * @param principal The entity from which a permission should be
-     * revoked.
-     * @param permissions The permissions to be revoked. The parameter
-     * can be a logical <code>or</code> of more permission constants
-     * defined in this class.
+     * Create a new DmtAcl instance by adding a specific permission to a given
+     * principal. The already existing permissions of the principal are not
+     * affected.
+     * 
+     * @param principal The entity to which permissions should be granted, or
+     *        &quot;*&quot; to grant permissions to all principals.
+     * @param permissions The permissions to be given. The parameter can be a
+     *        logical <code>or</code> of more permission constants defined in
+     *        this class.
+     * @return a new DmtAcl instance
+     * @throws IllegalArgumentException if <code>principal</code> is not a
+     *         valid principal name or if <code>permissions</code> is not a
+     *         valid combination of the permission constants defined in this
+     *         class
      */
-    public synchronized void deletePermission(String principal, int permissions)
+    public synchronized DmtAcl addPermission(String principal, int permissions)
     {
         checkPermissions(permissions);
 
         int oldPermissions = getPermissions(principal);
-        setPermission(principal, oldPermissions & ~permissions);
+        return setPermission(principal, oldPermissions | permissions);
+    }
+
+    /**
+     * Create a new DmtAcl instance by revoking a specific permission from a
+     * given principal. Other permissions of the principal are not affected.
+     * <p>
+     * Note, that it is not valid to revoke a permission from a specific
+     * principal if that permission is granted globally to all principals.
+     * 
+     * @param principal The entity from which permissions should be revoked, or
+     *        &quot;*&quot; to revoke permissions from all principals.
+     * @param permissions The permissions to be revoked. The parameter can be a
+     *        logical <code>or</code> of more permission constants defined in
+     *        this class.
+     * @return a new DmtAcl instance
+     * @throws IllegalArgumentException if <code>principal</code> is not a
+     *         valid principal name, if <code>permissions</code> is not a
+     *         valid combination of the permission constants defined in this
+     *         class, or if a globally granted permission would have been
+     *         revoked from a specific principal
+     */
+    public synchronized DmtAcl deletePermission(String principal, int permissions)
+    {
+        checkPermissions(permissions);
+
+        int oldPermissions = getPermissions(principal);
+        return setPermission(principal, oldPermissions & ~permissions);
     }
 
     /**
      * Get the permissions associated to a given principal.
-     * @param principal The entity whose permissions to query
-     * @return The permissions which the given principal has. The
-     * returned <code>int</code> is the logical <code>or</code> of the
-     * permission constants defined in this class.
+     * 
+     * @param principal The entity whose permissions to query, or &quot;*&quot;
+     *        to query the permissions that are granted globally, to all
+     *        principals
+     * @return The permissions which the given principal has. The returned
+     *         <code>int</code> is the logical <code>or</code> of the
+     *         permission constants defined in this class.
+     * @throws IllegalArgumentException if <code>principal</code> is not a
+     *         valid principal name     
      */
     public synchronized int getPermissions(String principal)
     {
@@ -203,12 +268,16 @@ public class DmtAcl {
     }
 
     /**
-     * Check whether a given permission is given to a certain
-     * principal.
-     * @param principal The entity to check
+     * Check whether the given permissions are granted to a certain principal.
+     * 
+     * @param principal The entity to check, or &quot;*&quot; to check whether
+     *        the given permissions are granted globally, to all principals
      * @param permissions The permission to check
-     * @return <code>true</code> if the principal holds the given
-     * permission
+     * @return <code>true</code> if the principal holds the given permission
+     * @throws IllegalArgumentException if <code>principal</code> is not a
+     *         valid principal name or if <code>permissions</code> is not a
+     *         valid combination of the permission constants defined in this
+     *         class
      */
     public synchronized boolean isPermitted(String principal, int permissions)
     {
@@ -219,48 +288,52 @@ public class DmtAcl {
     }
 
     /**
-     * Set the list of permissions a given principal has. All
-     * permissions the principal had will be overwritten.
-     * @param principal The entity to which permission should be
-     * granted.
-     * @param permissions The set of permissions to be given. The
-     * parameter can be a logical <code>or</code> of the permission
-     * constants defined in this class.
+     * Create a new DmtAcl instance by setting the list of permissions a given
+     * principal has. All permissions the principal had will be overwritten.
+     * <p>
+     * Note, that when changing the permissions of a specific principal, it is
+     * not allowed to specify a set of permissions stricter than the global set
+     * of permissions (that apply to all principals).
+     * 
+     * @param principal The entity to which permissions should be granted, or
+     *        &quot;*&quot; to grant permissions globally, to all principals.
+     * @param permissions The set of permissions to be given. The parameter can
+     *        be a logical <code>or</code> of the permission constants defined
+     *        in this class.
+     * @return a new DmtAcl instance
+     * @throws IllegalArgumentException if <code>principal</code> is not a
+     *         valid principal name, if <code>permissions</code> is not a
+     *         valid combination of the permission constants defined in this
+     *         class, or if a globally granted permission would have been
+     *         revoked from a specific principal
      */
-    public synchronized void setPermission(String principal, int permissions)
+    public synchronized DmtAcl setPermission(String principal, int permissions)
     {
         checkPermissions(permissions);
-
-        if(ALL_PRINCIPALS.equals(principal)) {
-            deleteFromAll(globalPermissions & ~permissions);
-            globalPermissions = permissions;
-        }
-        else {
-            checkPrincipal(principal);
-
-            int deletedGlobalPerm = globalPermissions & ~permissions;
-            if(deletedGlobalPerm != 0)
-                throw new IllegalArgumentException(
-                    "Cannot revoke globally set permissions (" +
-                    writeCommands(deletedGlobalPerm) +
-                    ") from a specific principal (" + principal + ").");
-
-            setPrincipalPermission(principal, permissions);
-        }
+        
+        DmtAcl newPermission = (DmtAcl) clone();
+        newPermission.changePermission(principal, permissions);
+        return newPermission;
     }
 
     /**
-     * Get the list of principals who have any kind of permissions on
-     * this node.
-     * @return The set of principals having permissions on this node.
+     * Get the list of principals who have any kind of permissions on this node.
+     * The list only includes those principals that have been explicitly
+     * assigned permissions, globally set permissions naturally apply to all
+     * other principals as well.
+     * 
+     * @return The array of principals having permissions on this node.
      */
-    public Vector getPrincipals()
+    public String[] getPrincipals()
     {
-        return new Vector(principalPermissions.keySet());
+        return (String[])(principalPermissions.keySet().toArray(new String[0]));
     }
 
     /**
-     * Give the canonic string representation of this ACL.
+     * Give the canonic string representation of this ACL. The operations are in
+     * the following order: {Add, Delete, Exec, Get, Replace}, principal names
+     * are sorted alphabetically.
+     * 
      * @return The string representation as defined in OMA DM.
      */
     public synchronized String toString()
@@ -282,6 +355,7 @@ public class DmtAcl {
         if((command & globalPermissions) > 0)
             aclEntry = ALL_PRINCIPALS;
         else {
+            // TreeMap guarantees alphabetical ordering of keys during traversal
             Iterator i = principalPermissions.entrySet().iterator();
             while(i.hasNext()) {
                 Map.Entry entry = (Map.Entry) i.next();
@@ -297,6 +371,38 @@ public class DmtAcl {
         return appendEntry(acl, '&', writeCommands(command) + '=' + aclEntry);
     }
 
+    /**
+     * Set the list of permissions a given principal has. All permissions the
+     * principal had will be overwritten.
+     * <p>
+     * Assumes that the permissions parameter has been checked. All
+     * modifications of a DmtAcl instance (add, delete, set) are done through
+     * this method.
+     * 
+     * @param principal The entity to which permission should be granted.
+     * @param permissions The set of permissions to be given. The parameter can
+     *        be a logical <code>or</code> of the permission constants defined
+     *        in this class.
+     */
+    private void changePermission(String principal, int permissions) {
+        if(ALL_PRINCIPALS.equals(principal)) {
+            deleteFromAll(globalPermissions & ~permissions);
+            globalPermissions = permissions;
+        }
+        else {
+            checkPrincipal(principal);
+            
+            int deletedGlobalPerm = globalPermissions & ~permissions;
+            if(deletedGlobalPerm != 0)
+                throw new IllegalArgumentException(
+                        "Cannot revoke globally set permissions (" +
+                        writeCommands(deletedGlobalPerm) +
+                        ") from a specific principal (" + principal + ").");
+            
+            setPrincipalPermission(principal, permissions);
+        }
+    }
+    
     private void deleteFromAll(int perm)
     {
         Iterator i = principalPermissions.entrySet().iterator();
@@ -317,7 +423,7 @@ public class DmtAcl {
 
     private void clearPermissions()
     {
-        principalPermissions = new Hashtable();
+        principalPermissions = new TreeMap();
         globalPermissions = 0;
     }
 
