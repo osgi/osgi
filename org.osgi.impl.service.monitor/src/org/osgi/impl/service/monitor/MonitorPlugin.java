@@ -160,46 +160,12 @@ public class MonitorPlugin implements DmtDataPlugin
         throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED, "Title property not supported.");
     }
 
-    // TODO merge this method with setNodeValue() (maybe pass data=null)
     public void setDefaultNodeValue(String nodeUri) throws DmtException {
-        String[] path = prepareUri(nodeUri);
-
-        if(path.length < 5) // TODO replace this with the canReplace check in DmtAdmin based on the meta-data
-            throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
-                                   "Cannot change node data at the specified position.");
-
-        StatusVarWrapper var = getStatusVar(path[0], path[1], nodeUri);
-        // path[2].equals("Server")
-        Server server = var.getServer(path[3], nodeUri);
-
-        if(path.length == 5) {
-            if(path[4].equals("ServerID"))
-                throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
-                        "The ServerID node has no default value.");
-
-            // path[4].equals("Enabled")
-            server.setEnabled(new DmtData(false), nodeUri);
-
-            return;
-        }
-
-        if(path.length == 6) {
-            // path[4].equals("Reporting")
-
-            if(path[5].equals("Type"))
-                server.setType(new DmtData(Server.DEFAULT_TYPE), nodeUri);
-            else // path[5].equals("Value")
-                server.setValue(new DmtData(0), nodeUri);
-
-            return;
-        }
-
-        // path.length == 7, path[4].equals("TrapRef"), path[6].equals("TrapRefID")
-
-        throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
-                "The TrapRefId node has no default value.");
+        setNodeValue(nodeUri, null);
     }
     
+    // data == null means that the default value must be set. This is only used
+    // internally, DmtAdmin throws an exception if the user passes null data.
     public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
         String[] path = prepareUri(nodeUri);
 
@@ -212,27 +178,44 @@ public class MonitorPlugin implements DmtDataPlugin
         Server server = var.getServer(path[3], nodeUri);
 
         if(path.length == 5) {
-            if(path[4].equals("ServerID"))
-                server.setServerId(data, nodeUri);
-            else // path[4].equals("Enabled")
-                server.setEnabled(data, nodeUri);
+            if(path[4].equals("ServerID")) {
+                if(data == null)
+                    throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
+                            "The ServerID node has no default value.");
 
+                server.setServerId(data, nodeUri);
+            } else {// path[4].equals("Enabled")
+                if(data == null)
+                    data = new DmtData(false);
+                
+                server.setEnabled(data, nodeUri);
+            }
+                
             return;
         }
 
         if(path.length == 6) {
             // path[4].equals("Reporting")
 
-            if(path[5].equals("Type"))
+            if(path[5].equals("Type")) {
+                if(data == null)
+                    data = new DmtData(Server.DEFAULT_TYPE);
                 server.setType(data, nodeUri);
-            else // path[5].equals("Value")
+            } else { // path[5].equals("Value")
+                if(data == null)
+                    data = new DmtData(Server.DEFAULT_SCHEDULE);
                 server.setValue(data, nodeUri);
+            }
 
             return;
         }
 
         // path.length == 7, path[4].equals("TrapRef"), path[6].equals("TrapRefID")
 
+        if(data == null)
+            throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
+                    "The TrapRefId node has no default value.");
+        
         server.setTrapRefId(path[5], data, nodeUri);
     }
 
