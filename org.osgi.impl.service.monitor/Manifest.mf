@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-Name: MonitorAdmin
+Bundle-Vendor: Nokia
+Bundle-Version: 1.0
+Bundle-Activator: $(p).MonitorAdminActivator
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
