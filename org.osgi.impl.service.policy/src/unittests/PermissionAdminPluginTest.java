@@ -92,4 +92,32 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 			fail();
 		} catch (DmtException e){}
 	}
+	
+	public void testCreateAlreadyExistingDefault() throws Exception {
+		permAdmin.setDefaultPermissions(new PermissionInfo[] {ADMINPERMISSION});
+		newSession();
+		try {
+			dmtSession.createInteriorNode(ROOT+"/Default");
+			fail();
+		} catch (DmtException e){};
+	}
+	
+	public void testCreateDefault() throws Exception {
+		newSession();
+		dmtSession.createInteriorNode(ROOT+"/Default");
+		dmtSession.setNodeValue(ROOT+"/Default/PermissionInfo",new DmtData(ADMINPERMISSION.getEncoded()));
+		dmtSession.close();
+		PermissionInfo[] permissionInfo = permAdmin.getDefaultPermissions();
+		assertEquals(1,permissionInfo.length);
+	}
+
+	public void testRemoveDefault() throws Exception {
+		permAdmin.setDefaultPermissions(new PermissionInfo[] {ADMINPERMISSION});
+		newSession();
+		dmtSession.deleteNode(ROOT+"/Default");
+		dmtSession.close();
+		PermissionInfo[] permissionInfo = permAdmin.getDefaultPermissions();
+		assertNull(permissionInfo);
+		
+	}
 }

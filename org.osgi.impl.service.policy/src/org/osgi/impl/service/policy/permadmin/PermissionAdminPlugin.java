@@ -20,6 +20,7 @@ package org.osgi.impl.service.policy.permadmin;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import org.osgi.impl.service.policy.util.HashCalculator;
@@ -40,13 +41,32 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  */
 public class PermissionAdminPlugin implements DmtDataPlugIn {
 	private final PermissionAdmin	permissionAdmin;
+	private final HashCalculator	hashCalculator;
+	
+	/*
+	 * ------------------------------------- 
+	 */
+	private final static DmtMetaNode	rootMetaNode = new RootMetaNode();
+	private final static DmtMetaNode	permissionInfoMetaNode = new PermissionInfoMetaNode();
+	private final static DmtMetaNode defaultMetaNode = new DefaultMetaNode();
+	private final static Comparator permissionInfoComparator = new Comparator() {
+		public int compare(Object o1, Object o2) {
+			PermissionInfo p1 = (PermissionInfo) o1;
+			PermissionInfo p2 = (PermissionInfo) o2;
+			return p1.toString().compareTo(p2.toString());
+		}};
 
 	public static final String dataRootURI = "./OSGi/Policies/Java/Bundle";
 	public static final String PERMISSIONINFO = "PermissionInfo";
 	public static final String LOCATION = "Location";
 	public static final String	DEFAULT	= "Default";
 
-	private static final class Entry {
+	/** internal representation of the tree */
+	HashMap	entries;
+	boolean dirty;
+
+
+	private final class Entry {
 		final boolean isDefault;
 		String location;
 		PermissionInfo[] permissionInfo; // sorted!
@@ -56,7 +76,7 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 			this.location = location;
 			
 			this.permissionInfo = (PermissionInfo[]) permissionInfo.clone();
-			Arrays.sort(this.permissionInfo);
+			Arrays.sort(this.permissionInfo,permissionInfoComparator);
 		}
 
 		/**
@@ -83,17 +103,24 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 			// isNodeUri should prevent this
 			throw new IllegalStateException();
 		}
+
+		public void setNodeValue(String nodename, DmtData data) throws IllegalArgumentException {
+			dirty = true;
+			if (nodename.equals(PERMISSIONINFO)) {
+				String[] ss = Splitter.split(data.getString(),'\n',0);
+				PermissionInfo[] pis = new PermissionInfo[ss.length]; 
+				for(int i=0;i<ss.length;i++) {
+					pis[i] = new PermissionInfo(ss[i]);
+				}
+				
+				// we do the sorting on this, instead of the original strings, since these
+				// are canonical
+				Arrays.sort(pis,permissionInfoComparator);
+				this.permissionInfo = pis;
+			}
+			
+		}
 	};
-
-	/* internal state variables, that will be dumped back into the permission admin
-	 * at commit
-	 */
-	private HashMap	entries;
-
-	private HashCalculator	hashCalculator;
-	private DmtMetaNode	rootMetaNode = new RootMetaNode();
-	private DmtMetaNode	permissionInfoMetaNode = new PermissionInfoMetaNode();
-	private DmtMetaNode defaultMetaNode = new DefaultMetaNode();
 
 	
 	/**
@@ -111,6 +138,7 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 			throws DmtException {
 		String[] path = getPath(subtreeUri); // this is also a check if it starts with the right subpath
 		loadFromPermissionAdmin();
+		dirty = false;
 	}
 
 	/**
@@ -136,7 +164,7 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 			throws DmtException {
 		String[] path = getPath(nodeUri);
 		if (path.length==0) {
-			return rootMetaNode = new RootMetaNode();
+			return rootMetaNode;
 		}
 		if (path.length==1) {
 			return defaultMetaNode;
@@ -177,15 +205,18 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		// TODO Auto-generated method stub
 	}
 
-	/**
-	 * @param nodeUri
-	 * @param data
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.Dmt#setNodeValue(java.lang.String, org.osgi.service.dmt.DmtData)
-	 */
 	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
-		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
+		String[] path = getPath(nodeUri);
+		if (path.length!=2) {
+			// this cannot happen, isNodeUri and MetaData info should prevent this
+			throw new IllegalStateException();
+		}
+		Entry e = (Entry) entries.get(path[0]);
+		try {
+			e.setNodeValue(path[1],data);
+		} catch (IllegalArgumentException iae) {
+			throw new DmtException(nodeUri,DmtException.INVALID_DATA,"cannot parse permission",iae);
+		}
 	}
 
 	/**
@@ -199,24 +230,25 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		// TODO Auto-generated method stub
 	}
 
-	/**
-	 * @param nodeUri
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.Dmt#deleteNode(java.lang.String)
-	 */
 	public void deleteNode(String nodeUri) throws DmtException {
-		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
+		String[] path = getPath(nodeUri);
+		if (path.length!=1) {
+			// should not get here, metanode info should prevent this
+			throw new IllegalStateException();
+		}
+		entries.remove(path[0]); // isNodeUri already checked this
+		dirty = true;
 	}
 
-	/**
-	 * @param nodeUri
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.Dmt#createInteriorNode(java.lang.String)
-	 */
 	public void createInteriorNode(String nodeUri) throws DmtException {
+		String path[] = getPath(nodeUri);
+		if (path.length!=1) throw new IllegalStateException();
+		if (path[0].equals(DEFAULT)) {
+			entries.put(DEFAULT,new Entry(true,null,new PermissionInfo[]{}));
+			dirty = true;
+			return;
+		}
 		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
 	}
 
 	/**
@@ -266,13 +298,17 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,"no renaming is allowed");
 	}
 
-	/**
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.DmtReadOnly#close()
-	 */
 	public void close() throws DmtException {
-		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
+		if (!dirty) return;
+		// first, the default
+		Entry defaulte = (Entry) entries.get(DEFAULT);
+		if (defaulte == null) {
+			permissionAdmin.setDefaultPermissions(null);
+		} else {
+			permissionAdmin.setDefaultPermissions(defaulte.permissionInfo);
+		}
+		
+		// TODO the others
 	}
 
 	public boolean isNodeUri(String nodeUri) {
