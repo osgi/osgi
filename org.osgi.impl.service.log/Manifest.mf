@@ -8,7 +8,7 @@ Bundle-Copyright: (C) Copyright IBM Corporation 2000-2002.
 Bundle-Vendor: OSGi
 Bundle-Version: 1.2
 Bundle-Category: osgi
-Export-Package: org.osgi.service.log; specification-version=1.2
+$(EXPORT-PACKAGE)
 Import-Package: org.osgi.framework; specification-version=1.0,
  org.osgi.service.log; specification-version=1.0
 Export-Service: org.osgi.service.log.LogService,
