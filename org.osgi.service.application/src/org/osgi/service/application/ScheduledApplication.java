@@ -1,39 +1,94 @@
-/*
- * $Header$
- *
- * Copyright (c) OSGi Alliance (2004, 2005). All Rights Reserved.
- * 
- * Implementation of certain elements of the OSGi Specification may be subject
- * to third party intellectual property rights, including without limitation,
- * patent rights (such a third party may or may not be a member of the OSGi
- * Alliance). The OSGi Alliance is not responsible and shall not be held
- * responsible in any manner for identifying or failing to identify any or all
- * such third party intellectual property rights.
- * 
- * This document and the information contained herein are provided on an "AS IS"
- * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
- * HEREIN WILL NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF
- * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE
- * OSGI ALLIANCE BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF
- * USE OF DATA, INTERRUPTION OF BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR
- * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
- * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
- * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
- * All Company, brand and product names may be trademarks that are the sole
- * property of their respective owners. All rights reserved.
- */
 package org.osgi.service.application;
 
-import java.util.*;
-import org.osgi.framework.*;
+import java.util.Map;
 
+import org.osgi.framework.ServiceReference;
+
+/**
+ * It is allowed to schedule an application based on a specific event.
+ * ScheduledApplication service keeps the scheduling information. When the
+ * specified event is fired a new instance must be launched. Note that launching
+ * operation may fail because e.g. the application is locked or the application
+ * is a singleton and already has an instance.
+ * 
+ * @modelguid {625F9BD1-19D5-4EFA-A000-AE8FE1B5593A}
+ */
 public interface ScheduledApplication {
-		public ServiceReference getApplicationDescriptor();
-		public Map getArguments();
-		public String getTopic();
-		public String getEventFilter();
-    public boolean isRecurring();
-    public void remove();
+
+	/**
+	 * Queries the topic of the triggering event. The topic may contain a
+	 * trailing asterisk as wildcard.
+	 * 
+	 * @return the topic of the triggering event
+	 * 
+	 * @throws IllegalStateException
+	 *             if the scheduled application service is unregistered
+	 * 
+	 * @modelguid {A505D4C7-198B-4D7F-BB35-B72F70B97561}
+	 */
+	public String getTopic();
+
+	/**
+	 * Queries the event filter for the triggering event.
+	 * 
+	 * @return the event filter for triggering event
+	 * 
+	 * @throws IllegalStateException
+	 *             if the scheduled application service is unregistered
+	 * 
+	 * @modelguid {A505D4C7-198B-4D7F-BB35-B72F70B97561}
+	 */
+	public String getEventFilter();
+
+	/**
+	 * Queries if the scheduling is recurring.
+	 * 
+	 * @return true if the scheduling is recurring, otherwise returns false
+	 * 
+	 * @throws IllegalStateException
+	 *             if the scheduled application service is unregistered
+	 * 
+	 * @modelguid {A505D4C7-198B-4D7F-BB35-B72F70B97561}
+	 */
+	public boolean isRecurring();
+
+	/**
+	 * Retrieves the ApplicationDescriptor which represents the application and
+	 * necessary for launching.
+	 * 
+	 * @return the service reference to the application descriptor that
+	 *         represents the scheduled application
+	 * 
+	 * @throws IllegalStateException
+	 *             if the scheduled application service is unregistered
+	 * 
+	 * @modelguid {55C3C652-E899-48F2-BDBE-6F75EBB6518F}
+	 */
+	public ServiceReference getApplicationDescriptor();
+
+	/**
+	 * Queries the startup arguments specified when the application was
+	 * scheduled. The method returns a copy of the arguments, it is not possible
+	 * to modify the arguments after scheduling.
+	 * 
+	 * @return the startup arguments of the scheduled application. It may be
+	 *         null if null argument was specified.
+	 * 
+	 * @throws IllegalStateException
+	 *             if the scheduled application service is unregistered
+	 */
+	public Map getArguments();
+
+	/**
+	 * Cancels this schedule of the application.
+	 * 
+	 * @throws SecurityException
+	 *             if the caller doesn't have "schedule"
+	 *             ApplicationAdminPermission for the scheduled application.
+	 * @throws IllegalStateException
+	 *             if the scheduled application service is unregistered
+	 * 
+	 * @modelguid {5EA8CD87-9BA8-47A3-86A9-F2CBDFD24D2A}
+	 */
+	public void remove();
 }

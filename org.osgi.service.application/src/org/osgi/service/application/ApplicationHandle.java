@@ -1,50 +1,115 @@
-/*
- * $Header$
- *
- * Copyright (c) OSGi Alliance (2004, 2005). All Rights Reserved.
- * 
- * Implementation of certain elements of the OSGi Specification may be subject
- * to third party intellectual property rights, including without limitation,
- * patent rights (such a third party may or may not be a member of the OSGi
- * Alliance). The OSGi Alliance is not responsible and shall not be held
- * responsible in any manner for identifying or failing to identify any or all
- * such third party intellectual property rights.
- * 
- * This document and the information contained herein are provided on an "AS IS"
- * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
- * HEREIN WILL NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF
- * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE
- * OSGI ALLIANCE BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF
- * USE OF DATA, INTERRUPTION OF BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR
- * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
- * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
- * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
- * All Company, brand and product names may be trademarks that are the sole
- * property of their respective owners. All rights reserved.
- */
-
 package org.osgi.service.application;
 
-import java.security.AccessController;
+import org.osgi.framework.ServiceReference;
 
-import org.osgi.framework.*;
-
+/**
+ * ApplicationHandle is an OSGi service interface which represents an instance
+ * of an application. It provides the functionality to query and manipulate the
+ * lifecycle state of the represented application instance. It defines constants
+ * for the lifecycle states.
+ * 
+ * @modelguid {0967B96E-F06C-4EA1-96E7-3263670F4F49}
+ */
 public abstract class ApplicationHandle {
-	
-    public final static int RUNNING = 0;
-    public final static int STOPPING = 1;
 
-    public abstract int getApplicationState() throws Exception;
-    public abstract String getInstanceID();    
-    public abstract ServiceReference getApplicationDescriptor();
-    protected abstract void destroySpecific() throws Exception;
-    
-    public final void destroy() throws Exception {
-  		AccessController.checkPermission(new ApplicationAdminPermission( getInstanceID(), 
-  				ApplicationAdminPermission.MANIPULATE));
-  		
-    	destroySpecific();
-    }    
+	/**
+	 * The application instance is stopping. This is the state of a stopping
+	 * application instance.
+	 * 
+	 * @modelguid {541E1C88-4DAD-47B1-AAB5-A523BF9AD01E}
+	 */
+	public final static int STOPPING = 0;
+
+	/**
+	 * The application instance is running. This is the initial state of a newly
+	 * created application instance.
+	 * 
+	 * @modelguid {8EBD44E3-883B-4515-8EEA-8469F6F16408}
+	 */
+	public final static int RUNNING = 1;
+
+	/**
+	 * Get the state of the application instance.
+	 * 
+	 * @return the state of the application.
+	 * 
+	 * @throws IllegalStateException
+	 *             if the application handle is unregistered
+	 * 
+	 * @modelguid {8C7D95E9-A8E2-40F1-9BFD-C55A5B80148F}
+	 */
+	public abstract int getState();
+
+	/**
+	 * Returns the unique identifier of this instance. This value is also
+	 * available as a service property of this application handle's service.pid.
+	 * 
+	 * @throws IllegalStateException
+	 *             if the application handle is unregistered
+	 * 
+	 * @return the unique identifier of the instance
+	 */
+	public abstract String getInstanceID();
+
+	/**
+	 * Retrieves the application descriptor which represents the application of
+	 * this application instance. It should not be null.
+	 * 
+	 * @return the service reference of the registered application descriptor
+	 *         which represents the application of this application instance,
+	 *         should not be null
+	 * 
+	 * @throws IllegalStateException
+	 *             if the application handle is unregistered
+	 * 
+	 * @modelguid {A8CFA5DA-8F7E-49B7-BA5A-42EDDA6D6B59}
+	 */
+	public abstract ServiceReference getApplicationDescriptor();
+
+	/**
+	 * The application instance's lifecycle state can be influenced by this
+	 * method. It lets the application instance to perform operations to stop
+	 * the application safely, e.g. saving its state to a permanent storage.
+	 * <p>
+	 * The method must check if the lifecycle transition is valid; a STOPPING
+	 * application cannot be stopped. If it is invalid then the method must
+	 * exit. Otherwise the lifecycle state of the application instance must be
+	 * set to STOPPING. Then the destroySpecific() method must be called to
+	 * perform any application model specific steps for safe stopping of the
+	 * represented application instance.
+	 * <p>
+	 * At the end the ApplicationHandle must be unregistered. This method should
+	 * free all the resources related to this ApplicationHandle.
+	 * <p>
+	 * When this method is completed the application instance has already made
+	 * its operations for safe stopping, the ApplicationHandle has been
+	 * unregistered and its related resources has been freed. Further calls on
+	 * this application should not be made because they may have unexpected
+	 * results.
+	 * 
+	 * @throws SecurityException
+	 *             if the caller doesn't have "manipulate"
+	 *             ApplicationAdminPermission for the corresponding application.
+	 * 
+	 * @throws Exception
+	 *             is thrown if an exception or an error occurred during the
+	 *             method execution.
+	 * @throws IllegalStateException
+	 *             if the application handle is unregistered
+	 * 
+	 * @modelguid {CEAB58E4-91B8-4E7A-AEEB-9C14C812E607}
+	 */
+	public final void destroy() throws Exception {
+
+	}
+
+	/**
+	 * Called by the destroy() method to perform application model specific
+	 * steps to stop and destroy an application instance safely.
+	 * 
+	 * @throws Exception
+	 *             is thrown if an exception or an error occurred during the
+	 *             method execution.
+	 */
+	protected abstract void destroySpecific() throws Exception;
 }
