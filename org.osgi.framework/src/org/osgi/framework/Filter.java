@@ -51,6 +51,7 @@ import java.util.Dictionary;
  * @since 1.1
  */
 public interface Filter {
+	//### Case sensitivity description for other methods
 	/**
 	 * Filter using a service's properties.
 	 * <p>
