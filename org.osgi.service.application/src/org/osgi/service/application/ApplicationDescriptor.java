@@ -75,7 +75,9 @@ public abstract class ApplicationDescriptor {
 				for (int k = 0; k != appHandles.length; k++) {
 					ApplicationHandle handle = (ApplicationHandle) bc
 							.getService(appHandles[k]);
-					ApplicationDescriptor appDesc = handle.getAppDescriptor();
+					ServiceReference appDescRef = handle.getAppDescriptor();
+					ApplicationDescriptor appDesc = (ApplicationDescriptor)bc.getService( appDescRef );
+					bc.ungetService( appDescRef );
 					bc.ungetService(appHandles[k]);
 					if (appDesc == this)
 						throw new Exception("Singleton Exception!");

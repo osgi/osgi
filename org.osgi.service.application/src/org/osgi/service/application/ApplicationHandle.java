@@ -26,6 +26,7 @@
 
 package org.osgi.service.application;
 
+import org.osgi.framework.*;
 
 /** @modelguid {0967B96E-F06C-4EA1-96E7-3263670F4F49} */
 public interface ApplicationHandle {
@@ -74,7 +75,7 @@ public interface ApplicationHandle {
     public int getAppStatus();
     
 	/** @modelguid {A8CFA5DA-8F7E-49B7-BA5A-42EDDA6D6B59} */
-    public ApplicationDescriptor getAppDescriptor();
+    public ServiceReference getAppDescriptor();
     
 	/** @modelguid {CEAB58E4-91B8-4E7A-AEEB-9C14C812E607} */
     public void destroyApplication() throws Exception;

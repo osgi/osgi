@@ -45,7 +45,7 @@ class Dependencies {
 }
 
 class MEGBundleDescriptor {
-	public ApplicationDescriptor[]	applications;
+	public ApplicationDescriptor[] applications;
 	public ServiceRegistration[]	serviceRegistrations;
 	public EventSubscribe[]			eventSubscribes;
 	public Dependencies[]			dependencies;
@@ -735,5 +735,18 @@ public class MegletContainer implements BundleListener,
 			}
 		}
 		return false;
+	}
+	
+	ServiceReference getReference( MegletDescriptor appDesc ) {
+		MEGBundleDescriptor desc = (MEGBundleDescriptor) bundleHash
+			.get(new Long( appDesc.getBundleId() ) );
+    if (desc == null)
+	    return null;
+		
+    for( int i=0; i != desc.applications.length; i++ )
+      if( appDesc == desc.applications[ i ] )
+      	return desc.serviceRegistrations[ i ].getReference();
+      	
+		return null;
 	}
 }
