@@ -83,8 +83,8 @@ public class DeploymentAdmin implements PackageHandler, BundleActivator {
 			Bundle b = context.installBundle(location, stream);
 			// TODO is it needed?
 			b.start();
-			((MEGContainer) trackerMegCont.getService()).installApplication(b
-					.getBundleId());
+			//((MEGContainer) trackerMegCont.getService()).installApplication(b
+			//		.getBundleId());
 		}
 		catch (BundleException e) {
 			throw new PackageHandlerException(e.getMessage());
