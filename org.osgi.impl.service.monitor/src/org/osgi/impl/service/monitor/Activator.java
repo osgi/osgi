@@ -68,7 +68,7 @@ public class Activator implements BundleActivator
 
                     // Ignore pid == null case, no data to remove in plugin
                     if(pid != null)
-                        KpiWrapper.removeMonitorable(pid);
+                        StatusVarWrapper.removeMonitorable(pid);
 
                     super.removedService(reference, object);
                 }

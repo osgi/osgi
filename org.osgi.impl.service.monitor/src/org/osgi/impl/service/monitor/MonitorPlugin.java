@@ -60,7 +60,7 @@ public class MonitorPlugin implements DmtDataPlugin
             return new MonitorMetaNodeImpl("Root node for a Monitorable service.", false, false, true, false);
         }
 
-        KpiWrapper kpi = getKpi(path[0], path[1], nodeUri);
+        StatusVarWrapper var = getStatusVar(path[0], path[1], nodeUri);
 
         if(path.length == 2)
             return new MonitorMetaNodeImpl("Root node for a Performance Indicator.", false, false, true, false);
@@ -87,7 +87,7 @@ public class MonitorPlugin implements DmtDataPlugin
             return new MonitorMetaNodeImpl("Root node for server monitoring requests.", false, true, false, false);
         }
 
-        Server server = kpi.getServer(path[3], nodeUri);
+        Server server = var.getServer(path[3], nodeUri);
 
         if(path.length == 4)
             return new MonitorMetaNodeImpl("Root node of a server monitoring request.", true, false, true, false);
@@ -168,9 +168,9 @@ public class MonitorPlugin implements DmtDataPlugin
             throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
                                    "Cannot change node data at the specified position.");
 
-        KpiWrapper kpi = getKpi(path[0], path[1], nodeUri);
+        StatusVarWrapper var = getStatusVar(path[0], path[1], nodeUri);
         // path[2].equals("Server")
-        Server server = kpi.getServer(path[3], nodeUri);
+        Server server = var.getServer(path[3], nodeUri);
 
         if(path.length == 5) {
             if(path[4].equals("ServerID"))
@@ -207,9 +207,9 @@ public class MonitorPlugin implements DmtDataPlugin
             throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
                                    "Cannot change node data at the specified position.");
 
-        KpiWrapper kpi = getKpi(path[0], path[1], nodeUri);
+        StatusVarWrapper var = getStatusVar(path[0], path[1], nodeUri);
         // path[2].equals("Server")
-        Server server = kpi.getServer(path[3], nodeUri);
+        Server server = var.getServer(path[3], nodeUri);
 
         if(path.length == 5) {
             if(path[4].equals("ServerID"))
@@ -246,16 +246,16 @@ public class MonitorPlugin implements DmtDataPlugin
 
         // path has at least four elements because DmtAdmin only calls this for deletable nodes
 
-        KpiWrapper kpi = getKpi(path[0], path[1], nodeUri);
+        StatusVarWrapper var = getStatusVar(path[0], path[1], nodeUri);
 
         // path[2].equals("Server")
 
         if(path.length == 4) {
-            kpi.removeServer(path[3], nodeUri);
+            var.removeServer(path[3], nodeUri);
             return;
         }
 
-        Server server = kpi.getServer(path[3], nodeUri);
+        Server server = var.getServer(path[3], nodeUri);
 
         // path.length == 6, path[4].equals("TrapRef") because only this is deletable
 
@@ -270,16 +270,16 @@ public class MonitorPlugin implements DmtDataPlugin
             throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
                                    "Cannot add nodes at the specified position.");
 
-        KpiWrapper kpi = getKpi(path[0], path[1], nodeUri);
+        StatusVarWrapper var = getStatusVar(path[0], path[1], nodeUri);
 
         // path[2].equals("Server") because parent must be an interior node
 
         if(path.length == 4) {
-            kpi.addServer(path[3], nodeUri);
+            var.addServer(path[3], nodeUri);
             return;
         }
 
-        Server server = kpi.getServer(path[3], nodeUri);
+        Server server = var.getServer(path[3], nodeUri);
 
         // TODO replace this with the canAdd check in DmtAdmin based on the meta-data
         if(path.length == 5 || !path[4].equals("TrapRef"))
@@ -316,7 +316,7 @@ public class MonitorPlugin implements DmtDataPlugin
             throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
                                    "Cannot add nodes at the specified position.");
 
-        KpiWrapper kpi = getKpi(path[0], path[1], nodeUri);
+        StatusVarWrapper var = getStatusVar(path[0], path[1], nodeUri);
 
         // path[2].equals("Server") because parent must be an interior node
 
@@ -324,7 +324,7 @@ public class MonitorPlugin implements DmtDataPlugin
             throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
                                    "Cannot add leaf node at the specified position.");
 
-        Server server = kpi.getServer(path[3], nodeUri);
+        Server server = var.getServer(path[3], nodeUri);
         
         // TODO replace this with the canAdd check in DmtAdmin based on the meta-data
         if(path.length == 5 || !path[4].equals("TrapRef"))
@@ -367,7 +367,7 @@ public class MonitorPlugin implements DmtDataPlugin
     }
 
     public boolean isNodeUri(String nodeUri) {
-        // TODO check path components for invalid characters (monitorable ID, KPI ID)
+        // TODO check path components for invalid characters (monitorable ID, status variable ID)
 
         String[] path = prepareUri(nodeUri);
 
@@ -383,9 +383,9 @@ public class MonitorPlugin implements DmtDataPlugin
             }
         }
 
-        KpiWrapper kpi;
+        StatusVarWrapper var;
         try {
-            kpi = getKpi(path[0], path[1], nodeUri);
+            var = getStatusVar(path[0], path[1], nodeUri);
         } catch(DmtException e) {
             return false;
         }
@@ -402,7 +402,7 @@ public class MonitorPlugin implements DmtDataPlugin
 
         Server server;
         try {
-            server = kpi.getServer(path[3], nodeUri);
+            server = var.getServer(path[3], nodeUri);
         } catch(DmtException e) {
             return false;
         }
@@ -446,14 +446,14 @@ public class MonitorPlugin implements DmtDataPlugin
             return false;
         }
 
-        KpiWrapper kpi = getKpi(path[0], path[1], nodeUri);
+        StatusVarWrapper var = getStatusVar(path[0], path[1], nodeUri);
         if(path.length == 2)
             return false;
         
         if(path.length == 3)
             return !path[2].equals("Server");
 
-        Server server = kpi.getServer(path[3], nodeUri);
+        Server server = var.getServer(path[3], nodeUri);
         if(path.length == 4)
             return false;
         
@@ -477,26 +477,26 @@ public class MonitorPlugin implements DmtDataPlugin
 
         // path has at least three elements because the first leaf node is three levels deep
 
-        KpiWrapper kpi = getKpi(path[0], path[1], nodeUri);
+        StatusVarWrapper var = getStatusVar(path[0], path[1], nodeUri);
 
         if(path.length == 3) {
-            StatusVariable kpiValue = kpi.getKpi();
+            StatusVariable realVar = var.getStatusVariable();
 
             // TODO this should be a "unique registered identifier" according to the spec (e.g. reverse domain name)
             if(path[2].equals("TrapID"))
                 return new DmtData(path[0] + '/' + path[1]);
 
             if(path[2].equals("CM"))
-                return new DmtData(cmName(kpiValue.getCollectionMethod()));
+                return new DmtData(cmName(realVar.getCollectionMethod()));
 
             // path[2].equals("Results")
 
-            return new DmtData(MonitorAdminImpl.createXml(kpiValue), true);
+            return new DmtData(MonitorAdminImpl.createXml(realVar), true);
         }
 
         // path.length > 4, path[2].equals("Server")
 
-        Server server = kpi.getServer(path[3], nodeUri);
+        Server server = var.getServer(path[3], nodeUri);
 
         if(path.length == 5) {
             if(path[4].equals("ServerID"))
@@ -569,7 +569,7 @@ public class MonitorPlugin implements DmtDataPlugin
             }
         }
 
-        KpiWrapper kpi = getKpi(path[0], path[1], nodeUri);
+        StatusVarWrapper var = getStatusVar(path[0], path[1], nodeUri);
 
         if(path.length == 2)
             return new String[] { "TrapID", "Server", "CM", "Results" };        
@@ -577,9 +577,9 @@ public class MonitorPlugin implements DmtDataPlugin
         // path[2].equals("Server")
 
         if(path.length == 3)
-            return kpi.getServerNames();
+            return var.getServerNames();
 
-        Server server = kpi.getServer(path[3], nodeUri);
+        Server server = var.getServer(path[3], nodeUri);
 
         if(path.length == 4)
             return new String[] { "ServerID", "Enabled", "Reporting", "TrapRef" };
@@ -611,23 +611,23 @@ public class MonitorPlugin implements DmtDataPlugin
         }
     }
 
-    private KpiWrapper getKpi(String monId, String id, String nodeUri)
-            throws DmtException {
+    private StatusVarWrapper getStatusVar(String monId, String id,
+            String nodeUri) throws DmtException {
 
-        StatusVariable kpi;
+        StatusVariable var;
         try {
             // TODO handle SecurityException?
-            kpi = monitorAdmin.getStatusVariable(monId + "/" + id);
+            var = monitorAdmin.getStatusVariable(monId + "/" + id);
         } catch(IllegalArgumentException e) {
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, 
-                                   "No KPI with the given name provided by the Monitorable.", e);
+                                   "No Status Variable with the given name provided by the Monitorable.", e);
         }
 
-        if(kpi == null)
+        if(var == null)
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, 
-                                   "No KPI with the given name provided by the Monitorable.");
+                                   "No Status Variable with the given name provided by the Monitorable.");
 
-        return new KpiWrapper(monId + '/' + id, kpi, monitorAdmin);
+        return new StatusVarWrapper(monId + '/' + id, var, monitorAdmin);
     }
 
     private static String[] prepareUri(String nodeUri) {
@@ -652,12 +652,14 @@ public class MonitorPlugin implements DmtDataPlugin
         case StatusVariable.CM_SI:    return "SI";
         }
 
-        throw new IllegalArgumentException("Unknown collection method constant '" + cm + "' in KPI.");
+        throw new IllegalArgumentException(
+                "Unknown collection method constant '" + cm +
+                "' in Status Variable.");
     }
 }
 
 // TODO do not store monitorAdmin refs everywhere
-class KpiWrapper {
+class StatusVarWrapper {
     private static Hashtable serverLists = new Hashtable();
 
     static void removeMonitorable(String pid) {
@@ -677,14 +679,14 @@ class KpiWrapper {
 
 
     private String path;
-    private StatusVariable kpi;
+    private StatusVariable var;
     private MonitorAdminImpl monitorAdmin;
 
     private Hashtable servers;
 
-    KpiWrapper(String path, StatusVariable kpi, MonitorAdminImpl monitorAdmin) {
+    StatusVarWrapper(String path, StatusVariable var, MonitorAdminImpl monitorAdmin) {
         this.path = path;
-        this.kpi = kpi;
+        this.var = var;
         this.monitorAdmin = monitorAdmin;
 
         servers = (Hashtable) serverLists.get(path);
@@ -694,8 +696,8 @@ class KpiWrapper {
         }
     }
 
-    StatusVariable getKpi() {
-        return kpi;
+    StatusVariable getStatusVariable() {
+        return var;
     }
 
     String[] getServerNames() {
@@ -890,13 +892,13 @@ class Server {
 
         // this is not very efficient...
         String[] trapRefIds = (String[]) trapRef.values().toArray(new String[0]);
-        String[] kpiNames = new String[trapRefIds.length + 1];
+        String[] varNames = new String[trapRefIds.length + 1];
         
-        kpiNames[0] = path;
+        varNames[0] = path;
         for (int i = 0; i < trapRefIds.length; i++)
-			kpiNames[i+1] = trapRefIds[i];
+			varNames[i+1] = trapRefIds[i];
                 
-        job = monitorAdmin.startJob(serverId, kpiNames, schedule, count, false);
+        job = monitorAdmin.startJob(serverId, varNames, schedule, count, false);
     }
 
     private void stopJob() {
