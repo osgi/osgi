@@ -35,7 +35,7 @@ public class Analysis {
 	public void execute() throws Exception {
 		ZipFile zip = new ZipFile(new File(zipfile));
 		ZipEntry entry = zip.getEntry("META-INF/MANIFEST.MF");
-		manifest = new Manifest(zip.getInputStream(entry));
+		manifest = new Manifest(btool, zip.getInputStream(entry));
 		checkActivator();
 		checkSymbolicName();
 		checkBundleManifest();

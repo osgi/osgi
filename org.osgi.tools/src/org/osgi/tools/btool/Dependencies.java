@@ -378,7 +378,7 @@ public class Dependencies {
 			// of the package. Ugly, but hey, its a mess.
 			InputStream min = source.getEntry("META-INF/MANIFEST.MF");
 			if (min != null) {
-				Manifest manifest = new Manifest(min);
+				Manifest manifest = new Manifest(btool,min);
 				Package p = find(name.replace('/', '.'), manifest.getExports());
 				if (p != null) {
 					version = p.version;

@@ -51,6 +51,7 @@ public class BTool extends Task {
 	String				prebuild		= "";
 	long				modified;
 	boolean				archiveChanged	= false;
+	String				signers;
 
 	/**
 	 * Try out the Deliver program. Syntax: Please note that the classpath must
@@ -86,42 +87,19 @@ public class BTool extends Task {
 			addContentPackages(planned);
 			expands(); // Expands contents of another jar
 			includes(); // Add contents of another jar
-			if (ipa != null) {
-				File buildProperties = new File(projectDir, "build.properties");
-				if (buildProperties.lastModified() > modified)
-					archiveChanged = true;
-				ipa.execute();
-			}
-			if (properties.size() > 0)
-				addContents(new PropertyResource(this, "osgi.properties",
-						properties));
+			doIpa();
+			doProperties();
+
 			trace("Date of archive: " + modified);
 			if (archiveChanged) {
 				openZip();
-				int n = 0;
-				for (Iterator i = contents.values().iterator(); i.hasNext();) {
-					Resource r = (Resource) i.next();
-					if (r.lastModified() > modified)
-						System.out.println("New " + r + "(" + r.lastModified()
-								+ ")");
-					try {
-						InputStream in = r.getInputStream();
-						if (in != null) {
-							addToZip(r.getPath(), r.getInputStream(), r
-									.getExtra());
-							n++;
-						}
-					}
-					catch (Exception e1) {
-						System.err.println("Could not read stream " + r);
-						e1.printStackTrace();
-					}
-				}
+				doMetaInf();
+				int n = doContents();
+				closeZip();
+
 				if (n == 0)
 					errors.add("No files in ZIP");
 				else {
-					closeZip();
-					doManifest();
 					if (analyse) {
 						if (manifestSource != null)
 							doAnalysis();
@@ -168,6 +146,42 @@ public class BTool extends Task {
 
 		zipfile.delete();
 		throw new BuildException("Errors found");
+	}
+
+	private int doContents() {
+		int n = 0;
+		for (Iterator i = contents.values().iterator(); i.hasNext();) {
+			Resource r = (Resource) i.next();
+			if (r.lastModified() > modified)
+				System.out.println("New " + r + "(" + r.lastModified() + ")");
+			try {
+				InputStream in = r.getInputStream();
+				if (in != null) {
+					addToZip(r.getPath(), r.getInputStream(), r.getExtra());
+					n++;
+				}
+			}
+			catch (Exception e1) {
+				System.err.println("Could not read stream " + r);
+				e1.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	private void doProperties() {
+		if (properties.size() > 0)
+			addContents(new PropertyResource(this, "osgi.properties",
+					properties));
+	}
+
+	private void doIpa() throws Exception {
+		if (ipa != null) {
+			File buildProperties = new File(projectDir, "build.properties");
+			if (buildProperties.lastModified() > modified)
+				archiveChanged = true;
+			ipa.execute();
+		}
 	}
 
 	/**
@@ -227,7 +241,7 @@ public class BTool extends Task {
 		boolean showmanifest = this.showmanifest;
 		this.showmanifest = false;
 		ManifestResource mf = new ManifestResource(this, manifestSource, false);
-		manifest = new Manifest(mf.getInputStream());
+		manifest = new Manifest(this,mf.getInputStream());
 		this.showmanifest = showmanifest;
 	}
 
@@ -588,78 +602,21 @@ public class BTool extends Task {
 	 * The temporary file is then deleted.
 	 * 
 	 */
-	void doManifest() {
+	void doMetaInf() {
 		if (manifestSource == null)
 			return;
 		try {
-			ManifestResource mf = new ManifestResource(this, manifestSource,
-					true);
-			InputStream in = mf.getInputStream();
-			BufferedReader br;
-			br = new BufferedReader(new InputStreamReader(in, "UTF8"));
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			PrintWriter pw;
-			pw = new PrintWriter(new OutputStreamWriter(out, "UTF8"));
-			if (showmanifest)
-				trace("------- BEGIN ---------");
-			String line = br.readLine();
-			while (line != null) {
-				if (showmanifest)
-					trace(line);
-				pw.print(line);
-				pw.print("\r\n");
-				line = br.readLine();
-			}
-			pw.print("\r\n");
-			printChecksums(pw, checksums);
-			pw.close();
-			out.close();
-			if (showmanifest)
-				trace("------- END ---------");
-			ByteArrayInputStream bin = new ByteArrayInputStream(out
-					.toByteArray());
-			byte buffer[] = readAll(bin, 0);
-			bin.close();
-			// Create a temporary file, with a unique file name
-			Random rand1 = new Random();
-			String zName = new String(rand1.nextInt(1000) + ".tmp");
-			File temp = File.createTempFile("OSGi", "BTOOL");
-			while (temp.exists()) {
-				zName = new String(rand1.nextInt(1000) + ".tmp");
-				temp = new File(zName);
-			}
-			// Change name of file _zipname
-			File zipN = new File(zName);
-			File zipFile = new File(zipname);
-			zipFile.renameTo(zipN);
-			// Create a new zip output stream
-			FileOutputStream zout = new FileOutputStream(zipname);
-			trace("Creating " + zipname);
-			ZipOutputStream _zipOut = new ZipOutputStream(zout);
-			ZipEntry ze = new ZipEntry("META-INF/MANIFEST.MF");
-			ze.setSize(buffer.length);
-			CRC32 checksum = new CRC32();
-			checksum.update(buffer);
-			ze.setCrc(checksum.getValue());
-			_zipOut.putNextEntry(ze);
-			_zipOut.write(buffer, 0, buffer.length);
-			// Open the input zip file,
-			FileInputStream zin = new FileInputStream(zName);
-			ZipInputStream _zipIn = new ZipInputStream(zin);
-			while ((ze = _zipIn.getNextEntry()) != null) {
-				ZipEntry zu = new ZipEntry(ze);
-				_zipOut.putNextEntry(zu);
-				byte[] databuf = new byte[1024];
-				for (int size = 0; (size = _zipIn.read(databuf, 0, 1024)) > 0;) {
-					_zipOut.write(databuf, 0, size);
-				}
-				_zipOut.closeEntry();
-				_zipIn.closeEntry();
-			}
-			_zipIn.close();
-			_zipOut.close();
-			// Remove temporary file
-			zipN.delete();
+			ManifestResource mf = new ManifestResource(this, manifestSource, true);
+			addToZip("META-INF/MANIFEST.MF", mf.getInputStream() );
+
+//			if ( signers != null ) {
+//				StringTokenizer st = new StringTokenizer(signers,",");
+//				int n = 1;
+//				while ( st.hasMoreTokens() ) {
+//					String 	signer = st.nextToken();
+//					sign(""+n++, signer);
+//				}
+//			}
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -667,19 +624,16 @@ public class BTool extends Task {
 		}
 	}
 
+
 	/**
-	 * Print the checksums
-	 */
-	void printChecksums(PrintWriter pw, Hashtable checksums) {
-		if (checksums == null)
-			return;
-		for (Enumeration e = checksums.elements(); e.hasMoreElements();) {
-			Object o = e.nextElement();
-			if (showmanifest)
-				System.out.print(o);
-			pw.print(o);
-		}
+	 * @param signer
+	private void sign(String baseName, String signer) {
+		SignerResource r = new SignerResource(this,signer) ;
+		addToZip("META-INF/" + baseName + ".dsa", r.getInputStream() );
+		addToZip("META-INF/" + baseName + ".SF", getSFFile());
+		
 	}
+	 */
 
 	void expands() throws IOException {
 		if (expands == null)
@@ -719,7 +673,7 @@ public class BTool extends Task {
 						Source source = (Source) s.next();
 						trace("Source for package " + source.getFile());
 						PackageResource pr = new PackageResource(this, source,
-								pack );
+								pack);
 						pr.setType(export ? PackageResource.EXPORT
 								: PackageResource.PRIVATE);
 						if (export)

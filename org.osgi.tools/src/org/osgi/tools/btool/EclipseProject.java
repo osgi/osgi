@@ -203,6 +203,9 @@ public class EclipseProject {
 					if ("output".equals(kind))
 						doOutput(path);
 					else
+						if ("con".equals(kind))
+							/*ignore*/;
+						else
 						System.out.println("Unknown kind: " + kind);
 		}
 	}

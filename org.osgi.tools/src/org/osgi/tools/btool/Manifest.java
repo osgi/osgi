@@ -13,8 +13,10 @@ public class Manifest extends Hashtable {
 	Native				_native[];
 	Vector				_duplicates		= new Vector();
 	final static String	wordparts		= "~!@#$%^&*_:/?><.-+";
-
-	public Manifest(InputStream in) throws IOException {
+	BTool				model;
+	
+	public Manifest(BTool model, InputStream in) throws IOException {
+		this.model = model;
 		try {
 			parse(new InputStreamReader(in, "UTF8"));
 		}
@@ -107,7 +109,10 @@ public class Manifest extends Hashtable {
 	}
 
 	void error(String msg) throws IOException {
-		throw new IOException("Reading manifest: " + msg);
+		if ( model != null )
+			model.warnings.add("Reading manifest: " + msg);
+		else
+			System.err.println("Reading manifest: " + msg );
 	}
 
 	StreamTokenizer getStreamTokenizer(String line) {
@@ -192,6 +197,9 @@ public class Manifest extends Hashtable {
 								if (pair[0].equalsIgnoreCase("language"))
 									spec.language = pair[1];
 								else
+									if (pair[0].equalsIgnoreCase("selection-filter"))
+										spec.filter = pair[1];
+									else
 									error("Unknown attribute for native code : "
 											+ pair[0] + "=" + pair[1]);
 			} while (st.ttype == ';');
@@ -259,6 +267,7 @@ public class Manifest extends Hashtable {
 }
 
 class Native {
+	String	filter;
 	int		index	= -1;
 	String	paths[];
 	String	osname;

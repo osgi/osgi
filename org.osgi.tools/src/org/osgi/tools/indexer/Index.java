@@ -84,7 +84,7 @@ public class Index {
 					continue;
 				}
 				
-				Manifest			m  = new Manifest( zip.getInputStream(entry) );
+				Manifest			m  = new Manifest( null, zip.getInputStream(entry) );
 				Hashtable   		properties = new Hashtable();
 				String name = (String) m.get( "Bundle-Name" );
 				if ( name == null )

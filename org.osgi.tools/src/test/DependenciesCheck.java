@@ -10,7 +10,7 @@ public class DependenciesCheck extends TestCase {
 	}
 
 	public void testDependencies() throws IOException {
-		Manifest manifest = new Manifest(getClass().getResourceAsStream(
+		Manifest manifest = new Manifest(null,getClass().getResourceAsStream(
 				"test.mf"));
 		Source s = new ZipSource(new File("test/test.jar"));
 		Map v = new TreeMap();
