@@ -282,6 +282,6 @@ public abstract class ApplicationDescriptor {
 		ServiceReference schedule(Map args, String topic, String filter,
 				boolean recurs);
 
-		void launch(Map arguments);
+		void launch(Map arguments) throws Exception;
 	}
 }
