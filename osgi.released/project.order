@@ -1,8 +1,0 @@
-ee.minimum
-ee.foundation
-osgi
-org.osgi.impl.framework
-osgi.internal
-osgi.refimpl
-osgi.test
-org.osgi.test.tool
