@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-Name: ${p}.tbc
 Bundle-SymbolicName: ${p}.tbc
-Bundle-Activator: $(p).tbc.TestControl
+Bundle-Activator: $(p).tbc.DeclarativeServicesControl
 Bundle-Version: 4
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
 CVS-Header: $Header$
