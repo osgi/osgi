@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
@@ -26,7 +27,7 @@ public class Db implements BundleActivator {
      * structural information about the table and actual content
      * (rows) of the table.  
      */
-    private static class Table {
+    private static class Table implements Serializable {
         private FieldDef[] fieldDefs;
         private Vector     rows = new Vector();
         
@@ -125,6 +126,12 @@ public class Db implements BundleActivator {
             e.printStackTrace();
         }
         
+        semaphore.release(session);
+    }
+    
+    public synchronized void reset(Object session) {
+        semaphore.capture(session);
+        database = new Hashtable(); 
         semaphore.release(session);
     }
     

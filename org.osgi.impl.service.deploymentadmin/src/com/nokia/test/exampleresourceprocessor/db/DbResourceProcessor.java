@@ -2,10 +2,19 @@ package com.nokia.test.exampleresourceprocessor.db;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.Collections;
 import java.util.Dictionary;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.Vector;
 
 import org.osgi.framework.BundleActivator;
@@ -17,14 +26,17 @@ import org.osgi.service.deploymentadmin.ResourceProcessor;
 import com.nokia.test.db.Db;
 import com.nokia.test.db.FieldDef;
 
-public class DbResourceProcessor implements ResourceProcessor, BundleActivator {
+public class DbResourceProcessor implements ResourceProcessor, BundleActivator, Serializable {
     
+    // refrence to the database service
     private transient Db				db;
     
+    // current Deployment Package and operation
     private transient DeploymentPackage actDp;
+    private transient int 				actOp;
     
     // It contains the following hierarchy (dp is the key).
-    // A side effect is a line of the .dbscript resource.
+    // A side effect is a created table.
     //
     // dp_1 ----+---- res_1 ----+---- sideEff_1
     //          |               +---- sideEff_2
@@ -39,35 +51,63 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator {
     //          +---- res_3 ----+---- sideEff_1
     //                          +---- sideEff_9
     private Hashtable		  	dps = new Hashtable();
-    private transient Hashtable actSideEffs;
-    private Object 			    dbSession;
     
-    private void putSideEffect(String resName, String sideEff) {
-        Vector v = (Vector) actSideEffs.get(resName);
-        if (null == v) { 
-            v = new Vector();
-            actSideEffs.put(resName, v);
+    private transient Object                dbSession;
+    private transient ByteArrayOutputStream copy;
+    
+    /*
+     * Side effect means table creation in case of this Resource Processor
+     */
+    private void putSideEffect(String resName, String tableName) {
+        Hashtable ht = (Hashtable) dps.get(actDp);
+        if (null == ht) {
+            ht = new Hashtable();
+            dps.put(actDp, ht);
         }
-        v.add(sideEff);
+        
+        Set s = (Set) ht.get(resName);
+        if (null == s) { 
+            s = new HashSet();
+            ht.put(resName, s);
+        }
+        s.add(tableName);
     }
-
+    
     public void begin(DeploymentPackage dp, int operation) {
         this.actDp = dp;
-        actSideEffs = new Hashtable();
+        this.actOp = operation;
         dbSession = db.begin();
+        
+        copy = new ByteArrayOutputStream();
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(copy);
+            oos.writeObject(dps);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void complete(boolean commit) {
         if (commit) {
             db.commit(dbSession);
-            if (null != actDp)
-                dps.put(actDp, actSideEffs);
-        }
-        else 
+        } else {
             db.rollback(dbSession);
+            
+            try {
+                ObjectInputStream ois = new ObjectInputStream(
+                        new ByteArrayInputStream(copy.toByteArray()));
+                dps = (Hashtable) ois.readObject();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public void process(String name, InputStream stream) throws Exception {
+    public void process(String resName, InputStream stream) throws Exception {
+        deleteTables(resName);
+        
         BufferedReader br = new BufferedReader(new InputStreamReader(stream));
         String line = br.readLine();
         while (null != line) {
@@ -76,13 +116,12 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator {
                 String tableName = parts[1]; 
                 FieldDef[] fieldDefs = getFieldDefs(parts);
                 db.createTable(dbSession, tableName, fieldDefs);
-                putSideEffect(name, line);
+                putSideEffect(resName, tableName);
             } else if (line.startsWith("INSERT")) {
                 String[] parts = Splitter.split(line, ' ', 0);
                 String tableName = parts[1];
                 Object[] row = getRow(db.getFieldDefs(dbSession, tableName), parts[2]);
                 db.insertRow(dbSession, tableName, row);
-                putSideEffect(name, line);
             } else if (line.startsWith("DELETE")) {
                 String[] parts = Splitter.split(line, ' ', 0);
                 String tableName = parts[1];
@@ -98,9 +137,22 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator {
                     default :
                         break;
                 }
-                putSideEffect(name, line);
             }
             line = br.readLine();
+        }
+    }
+
+    private void deleteTables(String resName) {
+        Hashtable sideEffs = (Hashtable) dps.get(actDp);
+        if (null == sideEffs)
+            return;
+        Set sideEffsForRes = (Set) sideEffs.get(resName);
+        if (null == sideEffsForRes)
+            return;
+        for (Iterator iter = sideEffsForRes.iterator(); iter.hasNext();) {
+            String tableName = (String) iter.next();
+            db.dropTable(dbSession, tableName);
+            iter.remove();
         }
     }
 
@@ -137,10 +189,14 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator {
         return (FieldDef[]) ret.toArray(new FieldDef[] {});
     }
 
-    public void dropped(String name) throws Exception {
+    public void dropped(String resName) throws Exception {
         Hashtable ht = (Hashtable) dps.get(actDp);
-        Vector effects = (Vector) ht.get(name);
-        // TODO delete effects
+        Set effects = (Set) ht.get(resName);
+        for (Iterator iter = effects.iterator(); iter.hasNext();) {
+            String tableName = (String) iter.next();
+            db.dropTable(dbSession, tableName);
+        }
+        ht.remove(resName);
     }
 
     public void dropped() {

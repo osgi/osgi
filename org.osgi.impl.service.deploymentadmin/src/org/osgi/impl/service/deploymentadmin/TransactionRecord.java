@@ -21,7 +21,7 @@ public class TransactionRecord {
         }
         return "[----------------------------------------------------\n" +
         		"code: " + Transaction.transactionCodes[code] + "\n" +
-        		"objs: \n" + sb.toString() + 
+        		"objs: " + sb.toString() + 
         		"----------------------------------------------------]";
     }
 
@@ -38,7 +38,7 @@ public class TransactionRecord {
         StringBuffer ret = new StringBuffer();
         for (Iterator iter = v.iterator(); iter.hasNext();) {
             String element = (String) iter.next();
-            ret.append("      " + element + "\n");
+            ret.append(element);
         }
         return ret.toString();
     }
