@@ -61,7 +61,7 @@ public class ClientActivator implements BundleActivator
             Hashtable config = new Hashtable();
             config.put("service.pid", SERVICE_PID);
             config.put("my.Integer", new Integer(42));
-            // TODO try this property instead of topic when event manager works properly
+            // TODO try this property instead of filter when event manager works properly
 //            config.put("topic", new String[] {
 //                    "org.osgi.service.monitor.MonitorEvent",
 //                    "org.osgi.service.dmt.DmtEvent.*"
