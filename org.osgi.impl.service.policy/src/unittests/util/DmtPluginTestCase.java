@@ -51,7 +51,7 @@ import org.osgi.service.event.EventAdmin;
  * 
  * @version $Revision$
  */
-public class DmtPluginTestCase extends TestCase {
+public abstract class DmtPluginTestCase extends TestCase {
 	public DmtAdminActivator dmtAdminActivator;
 	public BundleContext dmtBundleContext;
 	public ServiceListener	dmtRemoteAlertSenderServiceListener;
