@@ -289,12 +289,27 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	public String[] getChildNodeNames(String nodeUri) throws DmtException {
-		checkSession();
+        checkSession();
         final String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_INTERIOR);
-		checkNodePermission(uri, DmtAcl.GET);
-        // TODO remove null entries from the returned array (if it is non-null)
-		return getDataPlugin(uri).getChildNodeNames(uri);
-	}
+        checkNodePermission(uri, DmtAcl.GET);
+        String[] pluginChildNodes = getDataPlugin(uri).getChildNodeNames(uri);
+        
+        // remove null entries from the returned array (if it is non-null)
+        if (pluginChildNodes == null)
+            return null;
+        List processedChildNodes = new Vector();
+        
+        for (int i = 0; i < pluginChildNodes.length; i++) {
+            if (pluginChildNodes[i] != null)
+                processedChildNodes.add(pluginChildNodes[i]);
+        }
+        
+        if (processedChildNodes.size() == 0)
+            return null;
+        
+        return (String[]) processedChildNodes
+                .toArray(new String[processedChildNodes.size()]);
+    }
 
 	// GET property op
 	public String getNodeTitle(String nodeUri) throws DmtException {
@@ -655,7 +670,7 @@ public class DmtSessionImpl implements DmtSession {
 
 	private void assignNewNodePermissions(String uri, String parent)
 			throws DmtException {
-		// DMTND 7.7.1.3: if parent does not have Replace permissions, give Add,
+		// DMTND 7.7.1.3: if parent does not have Replace permissions, give Add, 
 		// Delete and Replace permissions to child
 		// TODO spec doesn't say that Get/Exec permission should be given, but
 		// this would be logical if parent has them
@@ -831,19 +846,19 @@ public class DmtSessionImpl implements DmtSession {
 
 	private static boolean hasAclPermission(String uri, String name, int actions)
 			throws DmtException {
-		DmtAcl acl;
-		synchronized (acls) {
-			acl = (DmtAcl) acls.get(uri);
-			// must finish whithout NullPointerException, because root ACL must
-			// not be empty
-			while (acl == null || isEmptyAcl(acl)) {
-				uri = Utils.parentUri(uri);
-				acl = (DmtAcl) acls.get(uri);
-			}
-		}
+        DmtAcl acl;
+        synchronized (acls) {
+            acl = (DmtAcl) acls.get(uri);
+            // must finish whithout NullPointerException, because root ACL must
+            // not be empty
+            while (acl == null || isEmptyAcl(acl)) {
+                uri = Utils.parentUri(uri);
+                acl = (DmtAcl) acls.get(uri);
+            }
+        }
 		return acl.isPermitted(name, actions);
-	}
-
+    }
+    
 	private static boolean isEmptyAcl(DmtAcl acl) {
 		return acl.getPermissions("*") == 0 && acl.getPrincipals().size() == 0;
 	}
