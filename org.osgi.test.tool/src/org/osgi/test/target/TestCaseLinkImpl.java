@@ -23,7 +23,7 @@ public class TestCaseLinkImpl
 {
 	String  				name;
 	Bundle  				bundle;
-	Queue   				queue = new Queue();
+	org.osgi.test.shared.Queue   				queue = new org.osgi.test.shared.Queue();
 	TargetLink  			director;
 	
 

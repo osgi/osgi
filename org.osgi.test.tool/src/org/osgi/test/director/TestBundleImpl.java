@@ -29,7 +29,7 @@ class TestBundleImpl
 	
 	Run 						run;   				// Link to director
 	String  					name;  				// Name of bundle
-	Queue   					queue = new Queue(); // for send
+	org.osgi.test.shared.Queue   					queue = new org.osgi.test.shared.Queue(); // for send
 	boolean 					installed = true;  	// When installed
 	boolean 					finished;  			// When finished
 	int 						errors = 0;			// # of errors
