@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bundle-Activator: ${p}.TestCase
+Bundle-Activator: ${p}.EventTestCase
 Bundle-Name: ${p}
 Bundle-SymbolicName: ${p}
 Bundle-Version: 4
