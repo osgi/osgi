@@ -45,7 +45,6 @@
 			excludeImportProperty="excludeImport.${item.jarFile}" 
 			includeExportProperty="includeExport.${item.jarFile}" 
 			ignoreVersions="true" />
-		<move file="${item.jarFile}" todir="${workspace}/bundles"/>
 	</target>
 
 	<target name="compile" unless="eclipse.running">
