@@ -53,6 +53,7 @@ public class PowerManager implements SystemPowerStateListener {
 	 */
 	public void systemPowerStateChange(PowerStateEvent event) throws PowerException {
 		// TODO Auto-generated method stub
+		System.out.println("[Power Manager] Recieved system power change from " + event.getPreviousState() + "to" + event.getNewState());
 		if (!broadcastPowerStateToDevice(event))
 			throw (new PowerException(PowerException.KEEP_CURRENT_STATE));
 	}
