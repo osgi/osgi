@@ -376,20 +376,8 @@ public class MEGContainerImpl implements MEGContainer, BundleListener,
 			if ( in == null )
 				return null;
 			
-			String xml = "";
-			
-			// TODO pkr: This is a very invalid use of available!!
-			// as well as strange not to parse the stream
-			// directly? i.e. applicationXML.parseReader( new InputStreamReader(in));
-			
-			while (in.available() > 0) {
-				byte[] b = new byte[in.available()];
-				in.read(b);
-				xml = xml + new String(b);
-			}
-			in.close();
 			XMLElement applicationXML = new XMLElement();
-			applicationXML.parseString(xml, 0);
+			applicationXML.parseFromReader( new InputStreamReader( in ));
 			if (!applicationXML.getTagName().equals("descriptor"))
 				throw new Exception(
 						"One descriptor must be present in the applications.xml file!");
