@@ -6,7 +6,7 @@
 		>
 			<jvmarg line="-Dorg.osgi.service.http.port=81"/>
 			<jvmarg line="-Xverify:none"/>
-			<jvmarg line="-Dorg.osgi.framework.system.packages=javax.xml.parsers,javax.xml.transform,javax.xml.transform.stream,org.xml.sax,org.xml.sax.helpers,javax.crypto,javax.crypto.spec"/>
+			<jvmarg line="-Dosgi.framework.systempackages=javax.xml.parsers,javax.xml.transform,javax.xml.transform.stream,org.xml.sax,org.xml.sax.helpers,javax.crypto,javax.crypto.spec"/>
 			
 			<arg line="-console"/>
 			<arg line="init"/>
@@ -25,7 +25,7 @@
 		>
 			<jvmarg line="-Dorg.osgi.service.http.port=81"/>
 			<jvmarg line="-Xverify:none"/>
-			<jvmarg line="-Dorg.osgi.framework.system.packages=javax.xml.parsers,javax.xml.transform,javax.xml.transform.stream,org.xml.sax,org.xml.sax.helpers,javax.crypto,javax.crypto.spec"/>
+			<jvmarg line="-Dosgi.framework.systempackages=javax.xml.parsers,javax.xml.transform,javax.xml.transform.stream,org.xml.sax,org.xml.sax.helpers,javax.crypto,javax.crypto.spec"/>
 			
 			<arg line="-console"/>
 			<arg line="init"/>

@@ -12,7 +12,7 @@
 			<jvmarg line="-Dmail.host=localhost"/>
 			<jvmarg line="-Dorg.osgi.service.http.port=8080"/>
 			 
-			<jvmarg line="-Dorg.osgi.framework.system.packages=javax.xml.parsers;specification-version=1.1,javax.xml.transform,javax.xml.transform.stream,org.xml.sax;specification-version=2.0,org.xml.sax.helpers;specification-version=2.0,javax.crypto,javax.crypto.spec,javax.swing,javax.swing.border,javax.swing.text"/>
+			<jvmarg line="-Dosgi.framework.systempackages=javax.xml.parsers;specification-version=1.1,javax.xml.transform,javax.xml.transform.stream,org.xml.sax;specification-version=2.0,org.xml.sax.helpers;specification-version=2.0,javax.crypto,javax.crypto.spec,javax.swing,javax.swing.border,javax.swing.text"/>
 			
 			<arg line="-console"/>
 			<arg line="init"/>
