@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Bundle-Name: ${p}.tb1
 Bundle-SymbolicName: ${p}.tb1
 Bundle-Version: 4
-Bundle-Activator: $(p).tb1.Activator
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
+Service-Component: org/osgi/test/cases/component/tb1/impl/serviceprovider.xml
 
 
 
