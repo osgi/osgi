@@ -319,9 +319,10 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
                 System.out.println("NULL"); 
                 break;
             case DmtDataType.XML: 
-                System.out.print("XML "); // display as STRING in next branch
+                System.out.print("XML STRING: '" + value.getXml() + "'");
+                break;
             case DmtDataType.STRING: 
-                System.out.println("STRING (mime=" + value.getMimeType() + "): '" + value.getString() + "'");
+                System.out.println("STRING: '" + value.getString() + "'");
                 break;
             case DmtDataType.BOOLEAN:
                 System.out.println("BOOLEAN: " + value.getBoolean());
@@ -330,7 +331,7 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
                 System.out.println("INTEGER: " + value.getInt());
                 break;
             case DmtDataType.BINARY:
-                System.out.println("BINARY (mime=" + value.getMimeType() + "): '" + new String(value.getBinary()) + "'");
+                System.out.println("BINARY: '" + new String(value.getBinary()) + "'");
                 break;
             default:
                 System.out.println("<unknown data format identifier '" + format + "'>");
