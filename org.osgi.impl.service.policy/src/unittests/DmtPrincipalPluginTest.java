@@ -20,8 +20,10 @@ package unittests;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import org.osgi.framework.AdminPermission;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
 import org.osgi.impl.service.policy.dmtprincipal.DmtPrincipalPlugin;
+import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -38,6 +40,7 @@ public class DmtPrincipalPluginTest extends DmtPluginTestCase implements DmtPrin
 	public static final String PRINCIPAL1_HASH = "zDcCo9K+A67rtQI3TQEDg6_LEIw";
 	public static final String PRINCIPAL2 = "principal2";
 	public static final String PRINCIPAL2_HASH = "aIUZn8KSmU04HKUyaecKhd0jWsY";
+	public static final PermissionInfo ADMINPERMISSION = new PermissionInfo(AdminPermission.class.getName(),"*","*");
 	
 	/**
 	 * the plugin currently tested
@@ -96,7 +99,16 @@ public class DmtPrincipalPluginTest extends DmtPluginTestCase implements DmtPrin
 		Arrays.sort(children);
 		assertEquals(PRINCIPAL2_HASH,children[0]);
 		assertEquals(PRINCIPAL1_HASH,children[1]);
-		
-		
+	}
+	
+	public void testCreateNew() throws Exception {
+		newAtomicSession();
+		dmtSession.createInteriorNode("1");
+		dmtSession.setNodeValue("1/Principal",new DmtData(PRINCIPAL1));
+		dmtSession.setNodeValue("1/PermissionInfo",new DmtData(ADMINPERMISSION.getEncoded()));
+		dmtSession.close();
+		PermissionInfo[] pi = (PermissionInfo[]) principalPermissions.get(PRINCIPAL1);
+		assertEquals(1,pi.length);
+		assertEquals(ADMINPERMISSION,pi[0]);
 	}
 }

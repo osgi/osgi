@@ -19,6 +19,8 @@
 package org.osgi.impl.service.policy.dmtprincipal;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
+import org.osgi.impl.service.policy.PermissionInfoMetaNode;
 import org.osgi.impl.service.policy.RootMetaNode;
 import org.osgi.impl.service.policy.util.HashCalculator;
 import org.osgi.impl.service.policy.util.Splitter;
@@ -57,7 +60,17 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 	 * The hashes are the first level node names of the tree.
 	 */
 	private Map currentState;
-	
+
+	/**
+	 * utility for ordering permissioninfos lexicographically
+	 */
+	private final static Comparator permissionInfoComparator = new Comparator() {
+		public int compare(Object o1, Object o2) {
+			PermissionInfo p1 = (PermissionInfo) o1;
+			PermissionInfo p2 = (PermissionInfo) o2;
+			return p1.toString().compareTo(p2.toString());
+		}};
+
 	/**
 	 * Info about a principal and its associated permissions.
 	 */
@@ -67,6 +80,24 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 		public PrincipalPermission(String principal,PermissionInfo[] permissionInfo) {
 			this.principal = principal;
 			this.permissionInfo = permissionInfo;
+		}
+
+		public void setNodeValue(String nodename, String value) throws IllegalArgumentException {
+			if (PRINCIPAL.equals(nodename)) {
+				principal = value;
+				return;
+			}
+			if (PERMISSIONINFO.equals(nodename)) {
+				String[] values = Splitter.split(value,'\n',0);
+				PermissionInfo[] pi = new PermissionInfo[values.length];
+				for(int i=0;i<values.length;i++) {
+					pi[i] = new PermissionInfo(values[i]); // throws IllegalArgumentException
+				}
+				Arrays.sort(pi,permissionInfoComparator);
+				permissionInfo = pi;
+				return;
+			}
+			throw new IllegalStateException("nodename="+nodename); // cannot get here 
 		}
 	}
 
@@ -81,6 +112,8 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 	public static final String dataRootURI = "./OSGi/Policies/Java/DmtPrincipal";
 	
 	private static final DmtMetaNode rootMetaNode = new RootMetaNode("tree representing DMT Principal permissions");
+	private static final DmtMetaNode principalMetaNode = new PrincipalMetaNode();
+	private static final DmtMetaNode permissionInfoMetaNode = new PermissionInfoMetaNode();
 	private final HashCalculator hashCalculator;
 
 	public DmtPrincipalPlugin(DmtPrincipalPermissionAdmin dmtPrincipalPermissionAdmin) throws NoSuchAlgorithmException {
@@ -110,10 +143,18 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 			throws DmtException {
 		String[] path = getPath(nodeUri);
 		if (path.length==0) return rootMetaNode;
+		if (path.length==1) {
+			// TODO
+			throw new IllegalStateException();
+		}
+		if (path.length==2) {
+			if (PRINCIPAL.equals(path[1])) return principalMetaNode;
+			if (PERMISSIONINFO.equals(path[1])) return permissionInfoMetaNode;
+		}
 
-		// TODO the rest
+		// cannot get here
 		throw new IllegalStateException();
-	}
+}
 
 	public boolean supportsAtomic() {
 		return true;
@@ -128,7 +169,11 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 	}
 
 	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
+		String path[] = getPath(nodeUri);
+		if (path.length!=2) throw new IllegalStateException(); // this cannot happen
+		PrincipalPermission p = (PrincipalPermission) currentState.get(path[0]);
+		p.setNodeValue(path[1],data.getString());
+		dirty = true;
 	}
 
 	public void setNodeType(String nodeUri, String type) throws DmtException {
@@ -140,7 +185,10 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 	}
 
 	public void createInteriorNode(String nodeUri) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
+		String path[] = getPath(nodeUri);
+		if (path.length!=1) throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,"");
+		currentState.put(path[0],new PrincipalPermission("",null));
+		dirty = true;
 	}
 
 	public void createInteriorNode(String nodeUri, String type)
@@ -163,7 +211,22 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 	}
 
 	public void close() throws DmtException {
-		throw new DmtException("",DmtException.FEATURE_NOT_SUPPORTED,"");
+		if (!dirty) return;
+		
+		// TODO check for consistency
+		
+		// create a map as dmt admin likes it
+		Map systemState = new HashMap();
+		for (Iterator iter = currentState.values().iterator(); iter.hasNext();) {
+			PrincipalPermission element = (PrincipalPermission) iter.next();
+			systemState.put(element.principal,element.permissionInfo);
+		}
+		
+		dmtPrincipalPermissionAdmin.setPrincipalPermissions(systemState);
+		
+		// do some cleanup
+		dirty = false;
+		currentState = null;
 	}
 
 	public boolean isNodeUri(String nodeUri) {
@@ -175,7 +238,7 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 		if (path.length==1) return true;
 		if (path.length>2) return false;
 		if (path[1].equals(PRINCIPAL)) return true;
-		if (path[2].equals(PERMISSIONINFO)) return true;
+		if (path[1].equals(PERMISSIONINFO)) return true;
 		return false;
 	}
 
