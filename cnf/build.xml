@@ -1,28 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 	The is main OSGi build file. It is included from projects
-	as is. 
+	as is.
+	
+	It is described in http://membercvs.osgi.org/docs/build.html 
 -->
 <project name="master" default="none">
+
+	<!-- 
+		PUBLISH
+		
+		The main target. It will build the jar file(s) and publish them.
+		
+	   	Set the build properties. These are derived from
+	   	the project, the user directory and the workspace directory
+	   	the earlies wins, so the project has the highest priority). 
+	   	Properties may extend on the next line if they end with a '\'
+	   
+	    bin.includes        jars/files copied to ${released.dir} if set
+	    					Example:
+	    						bin.includes = myjar.jar
+	    						
+	    jars.compile.order  list of comma separated JAR files. As the name
+	                        implies, ant will build the jars in that order
+	                        Example:
+	                        	jar.compile.order= embedded.jar, myjar.jar
+	    
+	    for each mentioned jar file in the jars.compile.order
+	    property, the following option may be used in the
+	    form <option>.<jarfile>
+	    
+	    expand.<jarfile>    List of comma separated package names,
+	                        like org.osgi.service.example, javax.microedition, ...
+	                        The package name maybe placed between square
+	                        brackets, this means that the package is
+	                        placed in the export list of the bundle which 
+	                        is placed in the manifest if $(EXPORT-PACKAGE) 
+	                        is present. E.g. [org.osgi.example] will be
+	                        in the export list, otherwise it is assumed to be
+	                        private. Pakage name that end in a .* will be
+	                        recursively expanded. The packages are coming
+	                        from the project classpath as specified in
+	                        the Eclipse .classpath file.
+	                        
+	                        Example:
+	                          expand.myjar.jar = [org.osgi.service.cm], com.foo.*
+	                        
+	    include.<jarfile>   A comma separated list of file names that must be
+	                        be included in the jar. The default name of the file
+	                        in the jar will be the file name without the directory
+	                        name. This can be overridden by using a = sign in the
+	                        name. I.e. tbc.jar=tc1/tbc/org.osgi.tc1.jar
+	                        Example:
+	                        	include.myjar.jar=embedded.jar,  \
+	                        	  ifc.jar=../cnf/jar/ifc.jar               
+	                        	  
+	  Miscellaneous properties that can be overridden are:
+	  
+		verbose				Printout lots of info of the build
+	  	javac				The Java compiler path
+		javac.debug 		Debug files
+		javac.source		source compatibility
+		javac.target		Target class file compatibility
+		btool.analyse       Analyse the manifest values
+		btool.showmanifest 	Display the manifest during the build
+		btool.noversion    	Ignore versions of import/export
+		
+	-->
+	<target name="publish" depends="init,dependencies,compile,jars,release">
+	</target>
+
 	<!-- 
 	     INIT
 	     The target is a dependent of all other targets.
 	     It's purpose is to set up the environment only once
 	     and avoid it being repeatedly done for each antcall.
 	-->
+
 	<target name="init" unless="initialized">
 		<dirname property="project" file="${ant.file}" />
 		<dirname property="workspace" file="${project}" />
 		<basename property="project.name" file="${project}" />
 		<property environment="env" />
 
-		<!-- Task defs, removed the recursive search for performance
-		     reasons 
-		-->
-		<taskdef resource="org/osgi/tools/btool/taskdef.properties"
-		         classpath="${workspace}/cnf/jar/btool.jar" />
-		<taskdef resource="net/sf/antcontrib/antcontrib.properties"
-		         classpath="${workspace}/cnf/ant-contrib/ant-contrib-0.6.jar" />
+		<taskdef resource="org/osgi/tools/btool/taskdef.properties" classpath="${workspace}/cnf/jar/btool.jar" />
+		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${workspace}/cnf/ant-contrib/ant-contrib-0.6.jar" />
 
 		<!-- Include properies files in the following order:
 				Project properties
@@ -33,30 +95,26 @@
 		<property file="${env.HOME}/osgi.properties" />
 		<property file="${workspace}/cnf/build.properties" />
 
+		<property name="prebuild" value="" />
 		<!-- get the classpath and build info from eclipse -->
-		<btool eclipse="${project}" />
+		<btool eclipse="${project}" prebuild="${prebuild}" />
+
 		<property name="project.bootclasspath" value="" />
+		<property name="p" value="${project.name}" />
+		<property name="bin.includes" value="${project.name}.jar" />
 
 		<!-- mark init has been run -->
 		<property name="initialized" value="set" />
-	</target>
+		<echo>Project ${project.name}</echo>
 
-	<!-- 
-		PUBLISH
-		The main target. It will build the jar file(s) and publish them.
-	-->
-	<target name="publish" depends="init,dependencies,compile,jars">
 	</target>
 
 	<!-- 
 		DEPENDENCIES
 		Build project dependencies.
 	-->
-	<target name="dependencies" depends="init">
-		<echo>Publish ${project.name}</echo>
-		<subant target="publish"
-		        inheritAll="false"
-		        buildpath="${project.buildpath}">
+	<target name="dependencies" depends="init"  if="project.buildpath">
+		<subant target="publish" inheritAll="false" buildpath="${project.buildpath}">
 			<property name="release.dir" value="${project}" />
 		</subant>
 	</target>
@@ -66,23 +124,7 @@
 	     Compile the sources. 
 	-->
 	<target name="compile" depends="init" if="project.sourcepath">
-		<echo>Compile ${project.sourcepath} 
-		${project.bootclasspath}
-		${project.classpath}</echo>
-
-		<javac fork="yes"
-		       executable="${javac}"
-		       srcdir="${project.sourcepath}"
-		       destdir="${project.bindir}"
-		       classpath="${project.classpath}"
-		       bootclasspath="${project.bootclasspath}"
-		       deprecation="true"
-		       listfiles="true"
-		       target="${javac.target}"
-		       source="${javac.source}"
-		       debug="${javac.debug}"
-		       includeAntRuntime="no"
-		       verbose="${verbose}" />
+		<javac fork="yes" executable="${javac}" srcdir="${project.sourcepath}" destdir="${project.bindir}" classpath="${project.classpath}" bootclasspath="${project.bootclasspath}" deprecation="true" listfiles="true" target="${javac.target}" source="${javac.source}" debug="${javac.debug}" includeAntRuntime="no" verbose="${verbose}" />
 	</target>
 
 	<!-- 
@@ -96,17 +138,7 @@
 		</delete>
 
 		<!-- For each jar file, build it -->
-		<foreach list="${jars.compile.order}"
-		         delimiter=" ,"
-		         target="-jar"
-		         param="item.jarFile"
-		         inheritAll="true" />
-		<!-- Release each JAR file -->
-		<foreach list="${bin.includes}"
-		         delimiter=" ,"
-		         target="-release"
-		         param="item.jarFile"
-		         inheritAll="true" />
+		<foreach list="${jars.compile.order}" delimiter=" ," target="-jar" param="item.jarFile" inheritAll="true" />
 	</target>
 
 	<!--
@@ -126,54 +158,36 @@
 	                         of package names. If the package name
 	                         is enclosed in square brackets, it is
 	                         assumed to be exported
-	     contentFoldersProperty List of source folders
 	     ipaProperty         Property name for ipa parameters. ipa
 	                         is the file used in initial provisioning
 	     ignoreVersions      Do not use version on automatic import/export
 	-->
-	<target name="-jar" depends="init">
+	<target name="-jar">
 		<echo>JAR ${item.jarFile}</echo>
-		<btool jar="${project}/${item.jarFile}"
-		       eclipse="${project}"
-		       analyse="${btool.analyse}"
-		       showmanifest="${btool.showmanifest}"
-		       sources="${btool.sources}"
-		       includeProperty="include.${item.jarFile}"
-		       expandProperty="expand.${item.jarFile}"
-		       contentFoldersProperty="source.${item.jarFile}"
-		       excludeImportProperty="excludeImport.${item.jarFile}"
-		       includeExportProperty="includeExport.${item.jarFile}"
-		       ipaProperty="ipa.${item.jarFile}"
-		       verbose="${verbose}"
-		       ignoreVersions="${btool.noversion}" />
+		<btool jar="${project}/${item.jarFile}" eclipse="${project}" analyse="${btool.analyse}" showmanifest="${btool.showmanifest}" includeProperty="include.${item.jarFile}" expandProperty="expand.${item.jarFile}" contentFoldersProperty="source.${item.jarFile}" excludeImportProperty="excludeImport.${item.jarFile}" includeExportProperty="includeExport.${item.jarFile}" ipaProperty="ipa.${item.jarFile}" verbose="${verbose}" ignoreVersions="${btool.noversion}" />
 	</target>
 
 	<!--
 	    RELEASE
 	    Copy the JAR file to the osgi.released directory.
 	-->
-	<target name="-release" depends="init" if="release.dir">
-		<copy overwrite="true"
-		      todir="${release.dir}"
-		      verbose="${verbose}"
-		      file="${item.jarFile}" />
+	<target name="release" if="release.dir">
+		<copy overwrite="true" todir="${release.dir}" verbose="${verbose}">
+			<fileset dir="${project}" includes="${bin.includes}" />
+		</copy>
 	</target>
 
 	<!--
 	     CLEAN
 	-->
-	<target name="clean" depends="init,localclean">
-		<subant target="clean"
-		        inheritAll="false"
-		        buildpath="${project.buildpath}">
-		</subant>
+	<target name="clean" depends="init,localclean" if="project.buildpath">		
+		<subant target="clean" inheritAll="false" buildpath="${project.buildpath}"/>
 	</target>
 
 	<target name="localclean" depends="init">
 		<delete quiet="true" includeEmptyDirs="true" verbose="${verbose}">
 			<fileset dir="${project.bindir}" includes="**/*.bak **/*.class" />
-			<fileset dir="${project}"
-			         includes="**/*.bak **/~* ${jars.compile.order}" />
+			<fileset dir="${project}" includes="**/*.bak **/~*  *.jar" />
 		</delete>
 	</target>
 
@@ -181,16 +195,22 @@
 	     ECHO
 	-->
 	<target name="echo" depends="init">
-		<echo>BIN:   ${project.bindir}</echo>
-		<echo>SRCE:  ${project.sourcepath}</echo>
-		<echo>BOOT:  ${project.bootclasspath}</echo>
-		<echo>CP:    ${project.classpath}</echo>
-		<echo>NAME:  ${project.name}</echo>
-		<echo>VERS:  ${project.version}</echo>
-		<echo>CAT:   ${project.category}</echo>
-		<echo>DEP:   ${project.buildpath}</echo>
-		<echo>VRB:   ${verbose}</echo>
-		<echo>JAVAC: ${javac}</echo>
+		<echo>verbose:                ${verbose}</echo>
+		<echo>project.bindir:         ${project.bindir}</echo>
+		<echo>project.sourcepath:     ${project.sourcepath}</echo>
+		<echo>project.bootclasspath:  ${project.bootclasspath}</echo>
+		<echo>project.classpath:      ${project.classpath}</echo>
+		<echo>project.name:           ${project.name}</echo>
+		<echo>project.version:        ${project.version}</echo>
+		<echo>project.buildpath:      ${project.buildpath}</echo>
+		<echo>javac:                  ${javac}</echo>
+		<echo>p:                      ${p}</echo>
+		<echo>btool.analyse:          ${btool.analyse}</echo>
+		<echo>btool.showmanifest:     ${btool.showmanifest}</echo>
+		<echo>btool.noversion:     	  ${btool.noversion}</echo>
+		<echo>jars.compile.order:     ${jars.compile.order}</echo>
+		<echo>bin.includes:           ${bin.includes}</echo>
+		<echo>prebuild:               ${prebuild}</echo>
 	</target>
 
 	<!--

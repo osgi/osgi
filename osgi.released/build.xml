@@ -1,41 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-	This build file can be used to build the entire OSGi build.
--->
-<project name="released" default="publish">
-
-	<dirname property="project" file="${ant.file}" />
-	<dirname property="workspace" file="${project}" />
-	<basename property="project.name" file="${project}" />
-	<property environment="env" />
-
 	<!--
-		Read list of project to build in a specific order,
+		This build file can be used to build the entire OSGi build.
 	-->
-	<loadfile property="projects" srcFile="project.order" />
+	<project name="released" default="publish">
 
-	<!--
-		Build the projects in order.
-	-->
-	<target name="publish">
-		<subant target="publish" inheritAll="false">
-			<filelist dir="${workspace}" files="${projects}" />
-			<property name="release.dir" value="${project}" />
-		</subant>
-	</target>
+		<import file="../cnf/build.xml"/>
 
-	<!--
-		Clean the projects.
-	-->
-	<target name="clean" depends="localclean">
-		<subant target="clean" inheritAll="false">
-			<filelist dir="${workspace}" files="${projects}" />
-		</subant>
-	</target>
-
-	<target name="localclean">
-		<delete quiet="true" includeEmptyDirs="true" verbose="${verbose}">
-			<fileset dir="${project}" includes="**/*.bak **/~* *.jar" />
-		</delete>
-	</target>
-</project>
+	</project>
