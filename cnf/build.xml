@@ -145,9 +145,6 @@
 	-->
 	<target name="jars" depends="init" if="jars.compile.order">
 		<echo>JARs ${jars.compile.order}</echo>
-		<delete verbose="${verbose}">
-			<fileset dir="${project}" includes="${jars.compile.order}" />
-		</delete>
 
 		<!-- For each jar file, build it -->
 		<foreach list="${jars.compile.order}" delimiter=" ," target="-jar" param="item.jarFile" inheritAll="true" />
@@ -184,7 +181,7 @@
 	    Copy the JAR file to the osgi.released directory.
 	-->
 	<target name="release" depends="init" if="release.dir">
-		<copy overwrite="true" todir="${release.dir}" verbose="${verbose}">
+		<copy todir="${release.dir}" verbose="${verbose}" preservelastmodified="true">
 			<fileset dir="${project}" includes="${bin.includes}" />
 		</copy>
 	</target>
