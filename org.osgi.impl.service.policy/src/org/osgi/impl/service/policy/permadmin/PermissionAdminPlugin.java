@@ -186,13 +186,8 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		// TODO Auto-generated method stub
 	}
 
-	/**
-	 * @return
-	 * @see org.osgi.service.dmt.DmtDataPlugIn#supportsAtomic()
-	 */
 	public boolean supportsAtomic() {
-		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
+		return true;
 	}
 
 	public void rollback() throws DmtException {
@@ -201,15 +196,8 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		dirty = false;
 	}
 
-	/**
-	 * @param nodeUri
-	 * @param title
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.Dmt#setNodeTitle(java.lang.String, java.lang.String)
-	 */
 	public void setNodeTitle(String nodeUri, String title) throws DmtException {
-		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
+		throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,"");
 	}
 
 	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
@@ -226,15 +214,8 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		}
 	}
 
-	/**
-	 * @param nodeUri
-	 * @param type
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.Dmt#setNodeType(java.lang.String, java.lang.String)
-	 */
 	public void setNodeType(String nodeUri, String type) throws DmtException {
-		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
+		throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,"");
 	}
 
 	public void deleteNode(String nodeUri) throws DmtException {
@@ -255,59 +236,35 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 			dirty = true;
 			return;
 		}
+		// TODO: other nodes
 		throw new IllegalStateException("not implemented");
 	}
 
-	/**
-	 * @param nodeUri
-	 * @param type
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.Dmt#createInteriorNode(java.lang.String, java.lang.String)
-	 */
 	public void createInteriorNode(String nodeUri, String type)
 			throws DmtException {
-		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
+		throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,"");
 	}
 
-	/**
-	 * @param nodeUri
-	 * @param value
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.Dmt#createLeafNode(java.lang.String, org.osgi.service.dmt.DmtData)
-	 */
 	public void createLeafNode(String nodeUri, DmtData value)
 			throws DmtException {
-		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
+		throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,"");
 	}
 
-	/**
-	 * @param nodeUri
-	 * @param newNodeUri
-	 * @param recursive
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.Dmt#clone(java.lang.String, java.lang.String, boolean)
-	 */
 	public void clone(String nodeUri, String newNodeUri, boolean recursive)
 			throws DmtException {
-		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
+		throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,"no cloning is allowed");
 	}
 
-	/**
-	 * @param nodeUri
-	 * @param newName
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.Dmt#renameNode(java.lang.String, java.lang.String)
-	 */
 	public void renameNode(String nodeUri, String newName) throws DmtException {
 		throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,"no renaming is allowed");
 	}
 
 	public void close() throws DmtException {
 		if (!dirty) return;
-		// first, the default
+
+		// TODO: check if current tree is consistent
+		
+		// the default
 		Entry defaulte = (Entry) entries.get(DEFAULT);
 		if (defaulte == null) {
 			permissionAdmin.setDefaultPermissions(null);
@@ -349,59 +306,24 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		return e.getNodeValue(path[1]);
 	}
 
-	/**
-	 * @param nodeUri
-	 * @return
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.DmtReadOnly#getNodeTitle(java.lang.String)
-	 */
 	public String getNodeTitle(String nodeUri) throws DmtException {
-		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
+		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"not supported");
 	}
 
-	/**
-	 * @param nodeUri
-	 * @return
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.DmtReadOnly#getNodeType(java.lang.String)
-	 */
 	public String getNodeType(String nodeUri) throws DmtException {
-		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
+		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"not supported");
 	}
 
-	/**
-	 * @param nodeUri
-	 * @return
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.DmtReadOnly#getNodeVersion(java.lang.String)
-	 */
 	public int getNodeVersion(String nodeUri) throws DmtException {
-		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
+		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"not supported");
 	}
 
-	/**
-	 * @param nodeUri
-	 * @return
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.DmtReadOnly#getNodeTimestamp(java.lang.String)
-	 */
 	public Date getNodeTimestamp(String nodeUri) throws DmtException {
-		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
+		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"not supported");
 	}
 
-	/**
-	 * @param nodeUri
-	 * @return
-	 * @throws org.osgi.service.dmt.DmtException
-	 * @see org.osgi.service.dmt.DmtReadOnly#getNodeSize(java.lang.String)
-	 */
 	public int getNodeSize(String nodeUri) throws DmtException {
-		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
+		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"not supported");
 	}
 
 	public String[] getChildNodeNames(String nodeUri) throws DmtException {
