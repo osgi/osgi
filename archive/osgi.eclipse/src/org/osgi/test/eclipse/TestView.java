@@ -320,8 +320,10 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 						for (int i = 0; i < locations.length; i++) {
 							URL url = new URL("file:" + locations[i]);
 							InputStream in = url.openStream();
+							
 							if ( in != null )
 							try {
+								ByteArrayOutputStream bout = new ByteArrayOutputStream();
 								target.install(url.getFile() + "~keep~", in );
 							}
 							finally {
