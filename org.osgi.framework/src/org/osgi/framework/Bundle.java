@@ -250,7 +250,7 @@ public abstract interface Bundle {
 	 * @exception java.lang.IllegalStateException If this bundle has been
 	 *            uninstalled or this bundle tries to change its own state.
 	 * @exception java.lang.SecurityException If the caller does not have the
-	 *            appropriate <code>AdminPermission</code>, and the Java Runtime
+	 *            appropriate <code>AdminPermission[bundle, EXECUTE]</code>, and the Java Runtime
 	 *            Environment supports permissions.
 	 */
 	public abstract void start() throws BundleException;
@@ -317,7 +317,7 @@ public abstract interface Bundle {
 	 * @exception java.lang.IllegalStateException If this bundle has been
 	 *            uninstalled or this bundle tries to change its own state.
 	 * @exception java.lang.SecurityException If the caller does not have the
-	 *            appropriate <code>AdminPermission</code>, and the Java Runtime
+	 *            appropriate <code>AdminPermission[bundle, EXECUTE]</code>, and the Java Runtime
 	 *            Environment supports permissions.
 	 */
 	public abstract void stop() throws BundleException;
@@ -406,7 +406,7 @@ public abstract interface Bundle {
 	 * @exception java.lang.IllegalStateException If this bundle has been
 	 *            uninstalled or this bundle tries to change its own state.
 	 * @exception java.lang.SecurityException If the caller does not have the
-	 *            appropriate <code>AdminPermission</code>, and the Java Runtime
+	 *            appropriate <code>AdminPermission[bundle, LIFECYCLE]</code>, and the Java Runtime
 	 *            Environment supports permissions.
 	 * @see #stop()
 	 * @see #start()
@@ -430,7 +430,7 @@ public abstract interface Bundle {
 	 * @exception java.lang.IllegalStateException If this bundle has been
 	 *            uninstalled or this bundle tries to change its own state.
 	 * @exception java.lang.SecurityException If the caller does not have the
-	 *            appropriate <code>AdminPermission</code>, and the Java Runtime
+	 *            appropriate <code>AdminPermission[bundle, LIFECYCLE]</code>, and the Java Runtime
 	 *            Environment supports permissions.
 	 * @see #update()
 	 */
@@ -492,7 +492,7 @@ public abstract interface Bundle {
 	 * @exception java.lang.IllegalStateException If this bundle has been
 	 *            uninstalled or this bundle tries to change its own state.
 	 * @exception java.lang.SecurityException If the caller does not have the
-	 *            appropriate <code>AdminPermission</code>, and the Java Runtime
+	 *            appropriate <code>AdminPermission[bundle, LIFECYCLE]</code>, and the Java Runtime
 	 *            Environment supports permissions.
 	 * @see #stop()
 	 */
@@ -532,7 +532,7 @@ public abstract interface Bundle {
 	 *         headers and values.
 	 * 
 	 * @exception java.lang.SecurityException If the caller does not have the
-	 *            <code>AdminPermission</code>, and the Java Runtime Environment
+	 *            <code>AdminPermission[bundle, METADATA]</code>, and the Java Runtime Environment
 	 *            supports permissions.
 	 * 
 	 * @see Constants#BUNDLE_LOCALIZATION
@@ -575,7 +575,7 @@ public abstract interface Bundle {
 	 * 
 	 * @return The string representation of this bundle's location identifier.
 	 * @exception java.lang.SecurityException If the caller does not have the
-	 *            appropriate <code>AdminPermission</code>, and the Java Runtime
+	 *            appropriate <code>AdminPermission[bundle, METADATA]</code>, and the Java Runtime
 	 *            Environment supports permissions.
 	 */
 	public abstract String getLocation();
@@ -675,7 +675,7 @@ public abstract interface Bundle {
 	 *        the format of a resource name.
 	 * @return a URL to the named resource, or <code>null</code> if the resource
 	 *         could not be found or if this bundle is a fragment bundle or if
-	 *         the caller does not have the <code>AdminPermission</code>, and the
+	 *         the caller does not have the <code>AdminPermission[bundle, RESOURCE]</code>, and the
 	 *         Java Runtime Environment supports permissions.
 	 * 
 	 * @since 1.1
@@ -710,7 +710,7 @@ public abstract interface Bundle {
 	 *         headers and values.
 	 * 
 	 * @exception java.lang.SecurityException If the caller does not have the
-	 *            <code>AdminPermission</code>, and the Java Runtime Environment
+	 *            <code>AdminPermission[bundle, METADATA]</code>, and the Java Runtime Environment
 	 *            supports permissions.
 	 * 
 	 * @see #getHeaders()
@@ -762,7 +762,7 @@ public abstract interface Bundle {
 	 * @return The Class object for the requested class.
 	 * @exception java.lang.ClassNotFoundException If no such class can be found
 	 *            or if this bundle is a fragment bundle or if the caller does
-	 *            not have the <code>AdminPermission</code>, and the Java Runtime
+	 *            not have the <code>AdminPermission[bundle, CLASS]</code>, and the Java Runtime
 	 *            Environment supports permissions.
 	 * @exception java.lang.IllegalStateException If this bundle has been
 	 *            uninstalled.
@@ -789,7 +789,7 @@ public abstract interface Bundle {
 	 * @return an Enumeration of URLs to the named resources, or <code>null</code>
 	 *         if the resource could not be found or if this bundle is a
 	 *         fragment bundle or if the caller does not have the
-	 *         <code>AdminPermission</code>, and the Java Runtime Environment
+	 *         <code>AdminPermission[bundle, RESOURCE]</code>, and the Java Runtime Environment
 	 *         supports permissions.
 	 * 
 	 * @since 1.3
@@ -799,28 +799,27 @@ public abstract interface Bundle {
 	public Enumeration getResources(String name);
 
 	/**
-	 * Returns enumeration of all the paths to entries within the bundle whose
-	 * longest sub-path matches the supplied path argument. The bundle's
-	 * classloader is not used to search for entries. Only the contents of the
-	 * bundle is searched. A specified path of &quot;/&quot; indicates the root
-	 * of the bundle.
+	 * Returns an Enumeration of all the paths (<code>String</code) objects) to 
+	 * entries within the bundle whose longest sub-path matches the supplied path 
+     * argument. The bundle's classloader is not used to search for entries. Only 
+     * the contents of the bundle is searched.  A specified path of &quot;/&quot; 
+     * indicates the root of the bundle.
 	 * 
 	 * <p>
 	 * Returned paths indicating subdirectory paths end with a &quot;/&quot;.
-	 * The returned paths are all relative to the root of the bundle and have a
-	 * leading &quot;/&quot;.
+	 * The returned paths are all relative to the root of the bundle.
 	 * 
 	 * <p>
 	 * This method returns <code>null</code> if no entries could be found that
 	 * match the specified path or if the caller does not have
-	 * <code>AdminPermission</code> and the Java Runtime Environment supports
-	 * permissions.
+	 * <code>AdminPermission[bundle, RESOURCE]</code> permission and the Java 
+     * Runtime Environment supports permissions.
 	 * 
-	 * @param path the path name to get the entry path names for.
-	 * @return An Enumeration of the entry paths (<code>String</code> objects###)that are contained in the
-	 *         specified path or <code>null</code> if the resource could not be
-	 *         found or if the caller does not have the <code>AdminPermission</code>,
-	 *         and the Java Runtime Environment supports permissions.
+	 * @param entryPath the path name to get the entry path for.
+	 * @return An Enumeration of the entry paths (<code>String</code> objects) 
+     *         or <code>null</code> if an entry could not be found or if the 
+     *         caller does not have the <code>AdminPermission[bundle, RESOURCE]</code> 
+     *         permission and the Java Runtime Environment supports permissions.
 	 * @exception java.lang.IllegalStateException If this bundle has been
 	 *            uninstalled.
 	 * @since 1.3
@@ -836,7 +835,7 @@ public abstract interface Bundle {
 	 * <p>
 	 * This method returns a URL to the specified entry, or <code>null</code> if
 	 * the entry could not be found or if the caller does not have the
-	 * <code>AdminPermission</code> and the Java Runtime Environment supports
+	 * <code>AdminPermission[bundle, RESOURCE]</code> and the Java Runtime Environment supports
 	 * permissions.
 	 * 
 	 * @param name The name of the entry. See
@@ -844,7 +843,7 @@ public abstract interface Bundle {
 	 *        the format of a resource name.
 	 * @return A URL to the specified entry, or <code>null</code> if the entry
 	 *         could not be found or if the caller does not have the
-	 *         <code>AdminPermission</code> and the Java Runtime Environment
+	 *         <code>AdminPermission[bundle, RESOURCE]</code> and the Java Runtime Environment
 	 *         supports permissions.
 	 * 
 	 * @exception java.lang.IllegalStateException If this bundle has been
