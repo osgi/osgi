@@ -155,4 +155,8 @@ public abstract class AbstractPolicyPlugin implements DmtDataPlugin {
 	}
 
 
+	public void commit() throws DmtException {
+		// TODO implement it when sematic wars are over
+		throw new DmtException("",DmtException.FEATURE_NOT_SUPPORTED,"commit not supported");
+	}
 }

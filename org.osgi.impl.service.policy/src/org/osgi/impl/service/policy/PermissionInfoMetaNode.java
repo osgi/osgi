@@ -39,14 +39,12 @@ public final class PermissionInfoMetaNode implements DmtMetaNode {
 	public int getMaxOccurrence() {	return 1; }
 	public boolean isZeroOccurrenceAllowed() { return false; }
 	public DmtData getDefault() { return null; }
-	public boolean hasMax() { return false; }
-	public boolean hasMin() { return false; }
-	public int getMax() { return 0; }
-	public int getMin() { return 0;	}
+	public int getMax() { return Integer.MAX_VALUE; }
+	public int getMin() { return Integer.MIN_VALUE;	}
 	public DmtData[] getValidValues() { return null; }
 	public int getFormat() { return DmtDataType.STRING; }
-	public String getRegExp() {	return null; }
+	public String getPattern() {	return null; }
 	public String[] getMimeTypes() { return null; }
 	public String[] getValidNames() { return PERMISSIONINFO_ARRAY; }
-	public String getNameRegExp() { return null; }
+	public String getNamePattern() { return null; }
 }
