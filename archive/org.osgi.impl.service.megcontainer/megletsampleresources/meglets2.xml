@@ -4,7 +4,7 @@
       <name value = "MEG Test Application" />
       <icon value = "/TestIcon.gif" sizex="8" sizey="8" />
     </locale>
-    <locale name = "hu">
+    <locale name = "hu" default="true">
       <name value = "MEG Teszt progi" />
       <icon value = "/TestIcon.gif" />
     </locale>

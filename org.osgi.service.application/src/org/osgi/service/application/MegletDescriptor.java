@@ -44,9 +44,10 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 	private String			pid;
 	private Bundle			bundle;
 	private MegletContainer	megletContainer;
+	private String      defaultLanguage;
 
 	public MegletDescriptor(BundleContext bc, Properties props, Map names,
-			Map icons, String startClass, Bundle bundle, MegletContainer mc ) throws Exception {
+			Map icons, String defaultLang, String startClass, Bundle bundle, MegletContainer mc ) throws Exception {
 		this.bc = bc;
 		this.props = new Properties();
 		this.props.putAll(props);
@@ -60,6 +61,9 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 				|| !props.containsKey( APPLICATION_PID )
 				|| !props.containsKey( APPLICATION_VERSION ))
 			throw new Exception("Invalid MEG container input!");
+		if( !names.containsKey( defaultLang ) )
+			throw new Exception("Invalid default language!");
+		this.defaultLanguage = defaultLang;
 		pid = props.getProperty( APPLICATION_PID );
 	}
 
@@ -85,7 +89,6 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 	}
 
 	public Map getProperties(String locale) {
-		String defaultLanguage = (Locale.getDefault()).getLanguage();
 		Hashtable properties = new Hashtable();
 		String localizedName = (String) names.get(locale);
 		if (localizedName == null) {
