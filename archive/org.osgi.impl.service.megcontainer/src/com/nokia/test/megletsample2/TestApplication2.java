@@ -88,6 +88,11 @@ public class TestApplication2 extends Meglet implements EventHandler
     }
     else if( event.getTopic().equals( "com/nokia/megtest/RegisteredEvent" ) )
       writeResult( "EVENT REGISTERED" );
+    else if( event.getTopic().equals( "com/nokia/megtest/RequestStop" ) )
+    {
+      writeResult( "STOP INITIATED" );
+      requestStop();
+    }
   }
 
   private void writeResult( String result )

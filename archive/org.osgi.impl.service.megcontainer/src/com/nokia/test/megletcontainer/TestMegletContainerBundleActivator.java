@@ -262,6 +262,11 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
     else
       System.out.println( "Lifecycle change by specific events              PASSED" );
 
+    if( !testCase_requestStop() )
+      System.out.println( "Checking the stop request                        FAILED" );
+    else
+      System.out.println( "Checking the stop request                        PASSED" );
+
     if( !testCase_eventListening() )
       System.out.println( "Listening to specific events                     FAILED" );
     else
@@ -1019,6 +1024,48 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
       if( !checkEvent( "stopped", appName ) )
         throw new Exception( "Didn't received the stopped event!" );
 
+      return true;
+    }catch( Exception e )
+    {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
+  boolean testCase_requestStop()
+  {
+    try{
+      ApplicationDescriptor appDesc = appDescs[ 0 ];
+
+      if( !testCase_launchApplication() )
+        return false;
+
+      sendEvent( new Event( "com/nokia/megtest/RequestStop", null ), false );
+      if( !checkResultFile( "STOP INITIATED" ) )
+        throw new Exception( "Result of the listener event is not STOP INITIATED!" );
+      
+      int tries = 0;
+      
+      while( appHandle.getAppStatus() != ApplicationHandle.NONEXISTENT )
+      {
+      	try {
+          Thread.sleep( 100 );    
+        }catch( InterruptedException e ) {}
+        
+        if( tries++ == 50 )
+          return false;
+      }
+      
+      appHandle = lookupAppHandle( appDesc );
+      if( appHandle != null )
+        throw new Exception( "Application didn't terminate!" );
+      
+      String appName = (String)appDesc.getProperties("").get( ApplicationDescriptor.APPLICATION_NAME );
+      if( !checkEvent( "stopping", appName ) )
+        throw new Exception( "Didn't received the stopping event!" );
+      if( !checkEvent( "stopped", appName ) )
+        throw new Exception( "Didn't received the stopped event!" );
+      
       return true;
     }catch( Exception e )
     {
