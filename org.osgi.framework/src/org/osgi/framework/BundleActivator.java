@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) OSGi Alliance (2000, 2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -51,6 +51,7 @@ package org.osgi.framework;
  * The specified <code>BundleActivator</code> class must have a public constructor
  * that takes no parameters so that a <code>BundleActivator</code> object can be
  * created by <code>Class.newInstance()</code>.
+ * ### Do we want a caveat here for fragment bundles?
  * 
  * @version $Revision$
  */
@@ -79,8 +80,8 @@ public abstract interface BundleActivator {
 	 * bundle-specific activities necessary to stop the bundle. In general, this
 	 * method should undo the work that the <code>BundleActivator.start</code>
 	 * method started. There should be no active threads that were started by
-	 * this bundle when this bundle returns. A stopped bundle should be stopped
-	 * and should not call any Framework objects.
+	 * this bundle when this bundle returns. A stopped bundle must
+	 * not call any Framework objects.
 	 * 
 	 * <p>
 	 * This method must complete and return to its caller in a timely manner.
