@@ -17,8 +17,6 @@ package org.osgi.impl.service.event;
 import org.eclipse.osgi.framework.eventmgr.*;
 import org.osgi.framework.*;
 import org.osgi.service.event.*;
-import org.osgi.service.log.LogEntry;
-import org.osgi.service.log.LogService;
 
 /**
  * Implementation of org.osgi.service.event.EventAdmin. EventAdminImpl uses
@@ -31,7 +29,7 @@ public class EventAdminImpl implements EventAdmin {
 	 * Dispatch events only when the receiver bundle is ACTIVE, and the receiver
 	 * service is registered.
 	 */
-	protected class EventAdminDispatcher implements EventDispatcher {
+	private class EventAdminDispatcher implements EventDispatcher {
 		/**
 		 * 
 		 * Dispatches Event to EventHandlers
@@ -46,34 +44,34 @@ public class EventAdminImpl implements EventAdmin {
 		public void dispatchEvent(Object eventListener, Object listenerObject,
 				int eventAction, Object eventObject) {
 			ServiceReference ref = null;
+			ref = (ServiceReference) eventListener;
+			Bundle bundle = ref.getBundle();
+			if ((bundle == null) || (bundle.getState() != Bundle.ACTIVE)) {
+				// the receiver service or bundle being not active, no need
+				// to dispatch
+				return;
+			}
+			Object serviceObject = bc.getService(ref);
+			if ((serviceObject == null)
+					|| (!(serviceObject instanceof EventHandler))) {
+				// the service being unregistered or invalid, no need to
+				// dispatch
+				return;
+			}
 			try {
-				ref = (ServiceReference) eventListener;
-				Bundle bundle = ref.getBundle();
-				if ((bundle == null) || (bundle.getState() != Bundle.ACTIVE)) {
-					// the receiver service or bundle being not active, no need
-					// to dispatch
-					return;
-				}
-				Object serviceObject = bc.getService(ref);
-				if ((serviceObject == null)
-						|| (!(serviceObject instanceof EventHandler))) {
-					// the service being unregistered or invalid, no need to
-					// dispatch
-					return;
-				}
 				((EventHandler) serviceObject).handleEvent((Event) eventObject);
 			}
 			catch (Throwable t) {
 				// log/handle any Throwable thrown by the listener
-				logProxy.log(ref, LogService.LOG_ERROR,
-						"Exception thrown while dispatching event", t);
+				printError("Exception thrown while dispatching an Event to an EventHandler);");
+				printError(" 	Event = " + eventObject);
+				printError("  	EventHandler = " + serviceObject, t);
 			}
 		}
 	}
 
 	private BundleContext		bc;
 	private EventManager		eventManager;
-	private LogProxy			logProxy;
 	private static final char	TOPIC_SEPARATOR	= '/';
 
 	/**
@@ -84,8 +82,6 @@ public class EventAdminImpl implements EventAdmin {
 	protected EventAdminImpl(BundleContext bc) {
 		super();
 		this.bc = bc;
-		logProxy = new LogProxy(bc);
-		logProxy.open();
 		eventManager = new EventManager(
 				"EventAdmin Async Event Dispatcher Thread");
 	}
@@ -99,10 +95,6 @@ public class EventAdminImpl implements EventAdmin {
 			eventManager = null;
 		}
 		bc = null;
-		if (logProxy != null) {
-			logProxy.close();
-			logProxy = null;
-		}
 	}
 
 	/**
@@ -131,51 +123,50 @@ public class EventAdminImpl implements EventAdmin {
 	 *        for asyncronous delivery.
 	 */
 	protected void dispatchEvent(Event event, boolean isAsync) {
-		logProxy.setUseLogService(true);
-		if (event == null) {
-			logProxy.log(LogService.LOG_DEBUG,
-					"Null event is passed to EventAdmin. Ignored.");
-			return;
+		try {
+			if (eventManager == null) {
+				// EventAdmin is stopped
+				return;
+			}
+			if (event == null) {
+				printError("Null event is passed to EventAdmin. Ignored.");
+				return;
+			}
+			if (!isCallerPermittedTopicPermission(event.getTopic())) {
+				printError("Caller bundle doesn't have TopicPermission for topic="
+						+ event.getTopic());
+				return;
+			}
+			ServiceReference[] refsForEventHandler = getAllEventHandlers();
+			if (refsForEventHandler == null) {
+				//No EventHandler exists. Do nothing.
+				return;
+			}
+			EventListeners listeners = retrieveMatchedAndPermittedListeners(
+					event, refsForEventHandler);
+			if (listeners == null) {
+				//No permitted EventHandler exists. Do nothing.
+				return;
+			}
+			// Create the listener queue for this event delivery
+			ListenerQueue listenerQueue = new ListenerQueue(eventManager);
+			// Add the listeners to the queue and associate them with the event
+			// dispatcher
+			listenerQueue.queueListeners(listeners, new EventAdminDispatcher());
+			// Deliver the event to the listeners.
+			if (isAsync) {
+				listenerQueue.dispatchEventAsynchronous(0, event);
+			}
+			else {
+				listenerQueue.dispatchEventSynchronous(0, event);
+			}
+			// Remove the listener from the listener list
+			listeners.removeAllListeners();
 		}
-		if (event.getTopic().equals(LogEntry.class.getName())) {
-			// Avoid using LogService for logging during dealing with LogEntry
-			// event.
-			// Otherwise, endless event loops will occur.
-			logProxy.setUseLogService(false);
+		catch (Throwable t) {
+			printError("Exception thrown while dispatching an event, event = "
+					+ event, t);
 		}
-		if (!isCallerPermittedTopicPermission(event.getTopic())) {
-			logProxy.log(LogService.LOG_DEBUG,
-					"Caller bundle doesn't have TopicPermission for topic="
-							+ event.getTopic());
-			return;
-		}
-		ServiceReference[] refsForEventHandler = getAllEventHandlers();
-		if (refsForEventHandler == null) {
-			//No EventHandler exists. Do nothing.
-			return;
-		}
-		EventListeners listeners = retrieveMatchedAndPermittedListeners(event,
-				refsForEventHandler);
-		if (listeners == null) {
-			logProxy.log(LogService.LOG_DEBUG,
-					"No permitted EventHandler exists for topic = "
-							+ event.getTopic());
-			return;
-		}
-		// Create the listener queue for this event delivery
-		ListenerQueue listenerQueue = new ListenerQueue(eventManager);
-		// Add the listeners to the queue and associate them with the event
-		// dispatcher
-		listenerQueue.queueListeners(listeners, new EventAdminDispatcher());
-		// Deliver the event to the listeners.
-		if (isAsync) {
-			listenerQueue.dispatchEventAsynchronous(0, event);
-		}
-		else {
-			listenerQueue.dispatchEventSynchronous(0, event);
-		}
-		// Remove the listener from the listener list
-		listeners.removeAllListeners();
 	}
 
 	/**
@@ -246,9 +237,9 @@ public class EventAdminImpl implements EventAdmin {
 	/**
 	 * Checks if a topic filter string matches the target topic string.
 	 * 
-	 * @param topicProperty A topic filter like "company.product.*"
+	 * @param topicProperty A topic filter like "company/product/*"
 	 * @param topic Target topic to be checked against like
-	 *        "company.product.topicA"
+	 *        "company/product/topicA"
 	 * @return true if topicProperty matches topic, false if otherwise.
 	 */
 	protected boolean topicPropertyIncludes(String topicProperty, String topic) {
@@ -265,25 +256,23 @@ public class EventAdminImpl implements EventAdmin {
 		if (index2 == -1)
 			return false;
 		if (index == 0) {
-			logProxy
-					.log(LogService.LOG_DEBUG, "topicProperty '"
-							+ topicProperty + "'starts with '"
-							+ TOPIC_SEPARATOR + "'.");
+			printError("topicProperty '" + topicProperty + "'starts with '"
+					+ TOPIC_SEPARATOR + "'. Ignored.");
 			return false;
 		}
 		if (index2 == 0) {
-			logProxy.log(LogService.LOG_DEBUG, "topic '" + topic
-					+ "'starts with '" + TOPIC_SEPARATOR + "'.");
+			printError("topic '" + topic + "'starts with '" + TOPIC_SEPARATOR
+					+ "'. Ignored.");
 			return false;
 		}
 		if (index == topicProperty.length() - 1) {
-			logProxy.log(LogService.LOG_DEBUG, "topicProperty '"
-					+ topicProperty + "'ends with '" + TOPIC_SEPARATOR + "'.");
+			printError("topicProperty '" + topicProperty + "'ends with '"
+					+ TOPIC_SEPARATOR + "'. Ignored.");
 			return false;
 		}
 		if (index2 == topic.length() - 1) {
-			logProxy.log(LogService.LOG_DEBUG, "topic '" + topic
-					+ "'ends with '" + TOPIC_SEPARATOR + "'.");
+			printError("topic '" + topic + "'ends with '" + TOPIC_SEPARATOR
+					+ "'. Ignored.");
 			return false;
 		}
 		String str = topicProperty.substring(0, index);
@@ -310,12 +299,16 @@ public class EventAdminImpl implements EventAdmin {
 	 */
 	protected boolean isEventMatchingListener(Event event, ServiceReference ref) {
 		String eventTopic = event.getTopic();
-		String listenerTopics[] = (String[]) ref
-				.getProperty(EventConstants.EVENT_TOPIC);
-		if (listenerTopics == null) {
-			/* means "*" , no need to investigate further */
+		Object o = ref.getProperty(EventConstants.EVENT_TOPIC);
+		if (o == null) {
+			// means "*" , no need to investigate further
 			return true;
 		}
+		if (!(o instanceof String[])) {
+			// EVENT_TOPIC property must be String[], ignored.
+			return false;
+		}
+		String listenerTopics[] = (String[]) o;
 		boolean found = false;
 		for (int i = 0; i < listenerTopics.length; i++) {
 			if (topicPropertyIncludes(listenerTopics[i], eventTopic)) {
@@ -326,22 +319,21 @@ public class EventAdminImpl implements EventAdmin {
 		if (!found) {
 			return false;
 		}
-		String filterString = (String) ref
-				.getProperty(EventConstants.EVENT_FILTER);
-		if (filterString == null) {
+		Object o2 = ref.getProperty(EventConstants.EVENT_FILTER);
+		if ((o2 == null) || (!(o2 instanceof String))) {
 			// means no need to investigate further
 			return true;
 		}
+		String filterString = (String) o2;
 		try {
 			Filter filter = bc.createFilter(filterString);
 			return (event.matches(filter));
 		}
 		catch (InvalidSyntaxException e) {
-			logProxy.log(LogService.LOG_DEBUG,
-					"exception occurred in BundleContext.createfilter(\""
-							+ filterString + "\".", e);
+			printError("exception thrown in BundleContext.createfilter(\""
+					+ filterString + "\". Ignored.", e);
+			return false;
 		}
-		return false;
 	}
 
 	/**
@@ -363,5 +355,17 @@ public class EventAdminImpl implements EventAdmin {
 			// getServiceReferences() call
 		}
 		return references;
+	}
+
+	private void printError(String msg, Throwable t) {
+		System.out.println("EventAdmin: " + msg);
+		if (t != null) {
+			System.out.println("EventAdmin: exception = " + t);
+			t.printStackTrace(System.out);
+		}
+	}
+
+	private void printError(String msg) {
+		printError(msg, null);
 	}
 }
