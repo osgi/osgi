@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="ee.minimum" default="publish"> 
-	<property name="project.name" value="ee.minimum"/>
+<project name="project" default="publish"> 
 	<import file="../cnf/build.xml"/>
 </project>

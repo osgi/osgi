@@ -1,4 +1,4 @@
-<project name="org.osgi.impl.service.device.basicdriverlocator" default="publish">
-	<property name="project.name" value="org.osgi.impl.service.upnp"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="project" default="publish"> 
 	<import file="../cnf/build.xml"/>
 </project>

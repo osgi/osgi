@@ -1,4 +1,4 @@
-<project name="project" default="publish">
-	<property name="project.name" value="org.osgi.test.cases.div"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="project" default="publish"> 
 	<import file="../cnf/build.xml"/>
 </project>
