@@ -72,6 +72,7 @@
 	<property name="p" value= "${project.name}"/>
 	
 	<!-- get the classpath and build info from eclipse -->
+	<echo>Project xx ${project}</echo>
 	<btool eclipse="${project}" />
 
 	<property name="javac" value="${env.JAVA_HOME}/bin/javac"/>
@@ -117,18 +118,19 @@
 	</target>
 		
 	<target name="subcompile">
-		<echo>Compiling ${item.dir}</echo>
+		<echo>Compiling ${item.dir} proj ${project}</echo>
 		
 		<ant dir="${item.dir}" target="compile" 
-			inheritall="false">
+			inheritAll="false">
 		</ant>
+		<echo>Done subcompile</echo>
 	</target>
 
 	<target name="subbuild">
 		<echo>Building ${item.dir}</echo>
 		
 		<ant dir="${item.dir}" target="local-jars" 
-			inheritall="false">
+			inheritAll="false">
 			<property name="release.dir" value="${project}"/>
 		</ant>
 	</target>
@@ -245,7 +247,7 @@
 	     is true, we assume someone else has done the 
 	     compiling for us.
 	-->
-	<target name="compile" if="project.sourcepath">
+	<target name="compile" if="project.sourcepath" depends="echo">
 		<echo>Compile ${project.sourcepath}</echo>
 		<property name="project.bootclasspath" value=""/>
 		
@@ -260,6 +262,8 @@
 			target="${javac.target}" 
 			source="${javac.source}" 
 			verbose="${verbose}"
+			includeAntRuntime="no"
+			includeJavaRuntime="no"
 		/>
 	</target>
 
