@@ -1,0 +1,7 @@
+<project default="test1">
+
+	<target name="test1">
+		<taskdef resource="taskdef.properties" classpath="../../btool2.jar" />
+		<expand propertyFile="test1.properties"/>
+	</target>
+</project>
