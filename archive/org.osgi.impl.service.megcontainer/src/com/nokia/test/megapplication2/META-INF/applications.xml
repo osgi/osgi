@@ -1,0 +1,28 @@
+<descriptor>
+  <application>
+    <class value = "com.nokia.osgi.megtest.megapplication2.TestApplication2"/>
+    <locale name = "en">
+      <name value = "MEG Test Application" />
+      <icon value = "/TestIcon.gif" sizex="8" sizey="8" />
+    </locale>
+    <locale name = "hu">
+      <name value = "MEG Teszt progi" />
+      <icon value = "/TestIcon.gif" />
+    </locale>
+    <version value = "0.1" />
+    <vendor  value = "Nokia" />
+    <singleton value = "false" />
+    <autostart value = "true" />
+    <subscribe event="com.nokia.megtest.StartEvent" action="start"/>
+    <subscribe event="com.nokia.megtest.StopEvent" action="stop"/>
+    <subscribe event="com.nokia.megtest.SuspendEvent" action="suspend"/>
+    <subscribe event="com.nokia.megtest.ResumeEvent" action="resume"/>
+    <subscribe event="com.nokia.megtest.ListenerEvent" action="listener"/>
+    <subscribe event="com.nokia.megtest.EchoEvent" action="listener"/>
+    <subscribe event="com.nokia.megtest.LogEvent" action="listener"/>
+    <subscribe event="com.nokia.megtest.SubscribeEvent" action="listener"/>
+    <required_services value="org.osgi.impl.service.scheduler.Scheduler, org.osgi.service.event.EventChannel"/>
+    <required_logical_resource value="org.osgi.service.application"/>
+    <required_logical_resource value="org.osgi.service.event"/>
+  </application>
+</descriptor>
