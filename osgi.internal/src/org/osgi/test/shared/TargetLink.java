@@ -50,6 +50,7 @@ public class TargetLink extends Link {
 	 */
 	public void install(String name, InputStream in) throws IOException {
 		byte[] buffer = collect(in, 0);
+		in.close();
 		request(INSTALL, new Object[] {name, buffer});
 	}
 
@@ -226,6 +227,7 @@ public class TargetLink extends Link {
 		else
 			result = collect(in, offset + size);
 		System.arraycopy(buffer, 0, result, offset, size);
+		in.close();
 		return result;
 	}
 
