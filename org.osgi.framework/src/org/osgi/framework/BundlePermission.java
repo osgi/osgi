@@ -55,6 +55,11 @@ public final class BundlePermission extends BasicPermission
 {
 
     /**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 3257846601685873716L;
+
+	/**
      * The action string <tt>provideBundle</tt>.
      */
     public final static String PROVIDE = "provide";
@@ -447,6 +452,11 @@ final class BundlePermissionCollection extends PermissionCollection
 {
 
     /**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 3258407326846433079L;
+
+	/**
      * Table of permissions.
      *
      * @serial
