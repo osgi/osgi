@@ -49,23 +49,23 @@ public class Activator implements BundleActivator {
 		
 		// Register hip Control Unit
 		p.put(ControlUnitConstants.TYPE, "hip");
-		p.put(ControlUnitConstants.ID, "hip");
+		p.put(ControlUnitConstants.ID, "hip.id");
 		regHip = context.registerService(ManagedControlUnit.class.getName(), new HipModule(), p);
 		
 		// Register hip.gyro Control Unit
 		p.clear();
 		p.put(ControlUnitConstants.TYPE, "hip.gyro");
-		p.put(ControlUnitConstants.ID, "hip.gyro");
+		p.put(ControlUnitConstants.ID, "hip.gyro.id");
 		p.put(ControlUnitConstants.PARENT_TYPE, "hip");
-		p.put(ControlUnitConstants.PARENT_ID, "hip");
+		p.put(ControlUnitConstants.PARENT_ID, "hip.id");
 		regGyro = context.registerService(ManagedControlUnit.class.getName(), new HipGyro(), p);
 		
 		// Register hip.tacho Control Unit 
 		p.clear();
 		p.put(ControlUnitConstants.TYPE, "hip.tacho");
-		p.put(ControlUnitConstants.ID, "hip.tacho");
+		p.put(ControlUnitConstants.ID, "hip.tacho.id");
 		p.put(ControlUnitConstants.PARENT_TYPE, "hip");
-		p.put(ControlUnitConstants.PARENT_ID, "hip");
+		p.put(ControlUnitConstants.PARENT_ID, "hip.id");
 		regTacho = context.registerService(ManagedControlUnit.class.getName(), new HipTacho(), p);
 	}
 	

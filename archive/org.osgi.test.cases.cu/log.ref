@@ -1,21 +1,21 @@
 #before each run
 [begin=testControlUnitConstants]
-osg.control.id: "osg.control.id"
-osg.control.type: "osg.control.type"
-osg.control.version: "osg.control.version"
-osg.control.parent.id: "osg.control.parent.id"
-osg.control.parent.type: "osg.control.parent.type"
-osg.control.event.auto_receive: "osg.control.event.auto_receive"
-osg.control.event.filter: "osg.control.event.filter"
-osg.control.event.sync: "osg.control.event.sync"
-osg.control.var.id: "osg.control.var.id"
-osg.control.var.list_sv: "osg.control.var.list_sv"
+org.osgi.control.id: "org.osgi.control.id"
+org.osgi.control.type: "org.osgi.control.type"
+org.osgi.control.version: "org.osgi.control.version"
+org.osgi.control.parent.id: "org.osgi.control.parent.id"
+org.osgi.control.parent.type: "org.osgi.control.parent.type"
+org.osgi.control.event.auto_receive: "org.osgi.control.event.auto_receive"
+org.osgi.control.event.filter: "org.osgi.control.event.filter"
+org.osgi.control.event.sync: "org.osgi.control.event.sync"
+org.osgi.control.var.id: "org.osgi.control.var.id"
+org.osgi.control.var.list: "org.osgi.control.var.list"
 [end=testControlUnitConstants]
 
-Log: [begin=testCreationOfCUs]
+[begin=testCreationOfCUs]
 #Creation with all arguments set to null java.lang.NullPointerException
 #Creation with an unknown CU java.lang.IllegalArgumentException
-#Creation with a ManagedControlUnit java.lang.IllegalArgumentException
+#Creation with a ManagedControlUnit org.osgi.service.cu.admin.ControlUnitAdminException
 #Creation from a CUFactory with other arguments set to null java.lang.IllegalArgumentException
 #Creation from a CUFactory with an unknown method java.lang.IllegalArgumentException
 #Creation from a CUFactory with some arguments java.lang.IllegalArgumentException
@@ -32,6 +32,7 @@ Destruction of CU: type = door, id = door.1
 
 [begin=testFindCUs]
 #Find CUs with all arguments set to null:  java.lang.NullPointerException
+Find CUs with a wrong find method: 
 [end=testFindCUs]
 
 [begin=testListCUs]
@@ -40,11 +41,12 @@ hip.gyro
 hip
 door
 hip.tacho
+hip.position
 window
 #List of Parent CUs with all arguments set to null:  java.lang.NullPointerException
 List Parent CUs of a Managed CU without parents:
 List Parent CUs of a Managed CU with parents:
-hip
+hip.id
 List Parent CUs of a CUFactory without parents:
 List Parent CUs of a CUFactory with parents:
 #List Parent Types with arguments set to null:  java.lang.NullPointerException
@@ -58,7 +60,7 @@ door
 #List SubCUs of a Managed CU with arguments set to null:  java.lang.NullPointerException
 List SubCUs of a Managed CU without children:
 List SubCUs of a Managed CU with children:
-hip.gyro
+hip.gyro.id
 List SubCUs of a CUFactory without children:
 List SubCUs of a CUFactory with children:
 #List Sub Types with arguments set to null:  java.lang.NullPointerException
@@ -73,7 +75,7 @@ window
 #Retrieve a CU with arguments set to null:  java.lang.NullPointerException
 Retrieve a CU with type unknown, id unknown:
 Retrieve a CU with type known, id unknown:
-Retrieve a CU with type = hip, id = hip:
+Retrieve a CU with type = hip, id = hip.id:
 CU found
 Retrieve a CU with type = door, id = door.4:
 CU found
@@ -86,20 +88,20 @@ Retrieve Type Version of a CU with type = hip: null
 #Invoke an action with all arguments set to null:  java.lang.NullPointerException
 #Invoke an unknown action:  java.lang.IllegalArgumentException
 Invoke an action without arguments: 1.0 V
-#Invoke an action with wrong arguments:  java.lang.IllegalArgumentException
+#Invoke an action with wrong arguments:  org.osgi.service.cu.ControlUnitException
 Invoke an action with arguments: OK
 [end=testInvokeAction]
 
 [begin=testQueryStateVariable]
 #Query a state variable with all arguments set to null:  java.lang.NullPointerException
-#Query an unknown state variable:  java.lang.IllegalArgumentException
+#Query an unknown state variable:  org.osgi.service.cu.ControlUnitException
 Query a state variable: 1
 [end=testQueryStateVariable]
 
 [begin=testControlUnit]
 Access a ControlUnit
 type = hip.tacho
-id = hip.tacho
+id = hip.tacho.id
 Invoke an action : false
 Query a state variable value: 1
 [end=testControlUnit]
@@ -120,9 +122,17 @@ Query a state variable value: 1
 <NoFilterListener> EventType=1, CUType=window, Id=window.2
 <NoFilterListener> EventType=1, CUType=window, Id=window.3
 <NoFilterListener> EventType=1, CUType=window, Id=window.4
+<NoFilterListener> EventType=4, CUType=door, Id=null
+<NoFilterListener> EventType=4, CUType=window, Id=null
+<NoFilterListener> EventType=3, CUType=door, Id=null
+<NoFilterListener> EventType=3, CUType=window, Id=null
 [end=testCUListeners]
 
 [begin=testHierarchyListeners]
+Change properties to attach hip.position to its parent hip
+Change properties to detach hip.position from its parent hip
+<NoFilterListener> EventType=1, CUType=hip.position, CUId=hip.position.id, parentType=hip, parentId=hip.id
+<EventFilterListener> EventType=1, CUType=hip.position, CUId=hip.position.id, parentType=hip, parentId=hip.id
 [end=testHierarchyListeners]
 
 #after each run

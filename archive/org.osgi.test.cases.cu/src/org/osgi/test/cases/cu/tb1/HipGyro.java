@@ -47,7 +47,7 @@ import org.osgi.util.measurement.*;
  * @version $Revision$
  */
 public class HipGyro implements ManagedControlUnit {
-	private String id = "hip.gyro";
+	private String id = "hip.gyro.id";
 	private String type = "hip.gyro";
 	private Measurement ZRO;
 	private Measurement tiltAngle;

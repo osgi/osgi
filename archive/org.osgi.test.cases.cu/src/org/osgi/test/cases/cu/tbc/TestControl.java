@@ -26,11 +26,14 @@
  */
 package org.osgi.test.cases.cu.tbc;
 
+import java.util.Hashtable;
+
 import org.osgi.framework.*;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 import org.osgi.util.measurement.Measurement;
 import org.osgi.util.measurement.Unit;
 import org.osgi.service.cu.admin.*;
+import org.osgi.service.cu.admin.spi.ManagedControlUnit;
 import org.osgi.service.cu.*;
 
 
@@ -50,6 +53,7 @@ public class TestControl extends DefaultTestBundleControl {
 	private ControlUnitAdmin admin;
 	private Bundle tb1;
 	private Bundle tb2;
+	private ServiceRegistration reg;
 	
 	/**
 	 * List of test methods used in this test case.
@@ -103,7 +107,7 @@ public class TestControl extends DefaultTestBundleControl {
 	  	log("org.osgi.control.event.filter", ControlUnitConstants.EVENT_FILTER);
 	  	log("org.osgi.control.event.sync", ControlUnitConstants.EVENT_SYNC);
 	  	log("org.osgi.control.var.id", ControlUnitConstants.STATE_VARIABLE_ID);
-	  	log("org.osgi.control.var.list_sv", ControlUnitConstants.STATE_VARIABLES_LIST);
+	  	log("org.osgi.control.var.list", ControlUnitConstants.STATE_VARIABLES_LIST);
 	}
 	
 	/**
@@ -284,10 +288,10 @@ public class TestControl extends DefaultTestBundleControl {
 			assertException("List of Parent CUs with all arguments set to null: ", e.getClass(), e);
 		}
 		log("List Parent CUs of a Managed CU without parents:");
-		types = admin.getParentControlUnits("hip", "hip", "");
+		types = admin.getParentControlUnits("hip", "hip.id", "");
 		if (types != null) listStringArray(types);
 		log("List Parent CUs of a Managed CU with parents:");
-		types = admin.getParentControlUnits("hip.gyro", "hip.gyro", "hip");
+		types = admin.getParentControlUnits("hip.gyro", "hip.gyro.id", "hip");
 		if (types != null) listStringArray(types);
 		log("List Parent CUs of a CUFactory without parents:");
 		types = admin.getParentControlUnits("door", "door.1", "");
@@ -327,10 +331,10 @@ public class TestControl extends DefaultTestBundleControl {
 			assertException("List SubCUs of a Managed CU with arguments set to null: ", e.getClass(), e);
 		}
 		log("List SubCUs of a Managed CU without children:");
-		types = admin.getSubControlUnits("hip.gyro", "hip.gyro", "hip");
+		types = admin.getSubControlUnits("hip.gyro", "hip.gyro.id", "hip");
 		if (types != null) listStringArray(types);
 		log("List SubCUs of a Managed CU with children:");
-		types = admin.getSubControlUnits("hip", "hip", "hip.gyro");
+		types = admin.getSubControlUnits("hip", "hip.id", "hip.gyro");
 		if (types != null) listStringArray(types);
 		log("List SubCUs of a CUFactory without children:");
 		types = admin.getSubControlUnits("window", "window.1", "door");
@@ -376,8 +380,8 @@ public class TestControl extends DefaultTestBundleControl {
 		log("Retrieve a CU with type known, id unknown:");
 		cu = admin.getControlUnit("hip", "test");
 		if (cu!= null) log ("CU found");
-		log("Retrieve a CU with type = hip, id = hip:");
-		cu = admin.getControlUnit("hip", "hip");
+		log("Retrieve a CU with type = hip, id = hip.id:");
+		cu = admin.getControlUnit("hip", "hip.id");
 		if (cu!= null) log ("CU found");
 		log("Retrieve a CU with type = door, id = door.4:");
 		cu = admin.getControlUnit("door", "door.4");
@@ -413,7 +417,7 @@ public class TestControl extends DefaultTestBundleControl {
 		
 		// Invkoke an unknown action
 		try {
-			admin.invokeAction("hip.gyro", "hip.gyro", "test", null);
+			admin.invokeAction("hip.gyro", "hip.gyro.id", "test", null);
 		}
 		catch (Exception e) {
 			assertException("Invoke an unknown action: ", e.getClass(), e);
@@ -422,7 +426,7 @@ public class TestControl extends DefaultTestBundleControl {
 		// Invoke an action without arguments
 		try {
 			Measurement res;
-			res = (Measurement)admin.invokeAction("hip.gyro", "hip.gyro", "hip.gyro.getZRO", null);
+			res = (Measurement)admin.invokeAction("hip.gyro", "hip.gyro.id", "hip.gyro.getZRO", null);
 			log ("Invoke an action without arguments: " + res);
 		}
 		catch (Exception e) {
@@ -432,7 +436,7 @@ public class TestControl extends DefaultTestBundleControl {
 		// Invoke an action with wrong arguments
 		try {
 			Object[] args1 = {new Byte("1"), new Byte("3")};
-			admin.invokeAction("hip.gyro", "hip.gyro", "hip.gyro.calibrate", args1);
+			admin.invokeAction("hip.gyro", "hip.gyro.id", "hip.gyro.calibrate", args1);
 		}
 		catch (Exception e) {
 			assertException("Invoke an action with wrong arguments: ", e.getClass(), e);
@@ -441,7 +445,7 @@ public class TestControl extends DefaultTestBundleControl {
 		// Invoke an action with some arguments
 		try {
 			Object[] args2 = {new Measurement(1, Unit.V), new Measurement(3, Unit.rad)};
-			admin.invokeAction("hip.gyro", "hip.gyro", "hip.gyro.calibrate", args2);
+			admin.invokeAction("hip.gyro", "hip.gyro.id", "hip.gyro.calibrate", args2);
 			log ("Invoke an action with arguments: OK");
 		}
 		catch (Exception e) {
@@ -463,7 +467,7 @@ public class TestControl extends DefaultTestBundleControl {
 		
 		// Query a state of an unknown variable
 		try {
-			admin.queryStateVariable("hip.gyro", "hip.gyro", "test");
+			admin.queryStateVariable("hip.gyro", "hip.gyro.id", "test");
 		}
 		catch (Exception e) {
 			assertException("Query an unknown state variable: ", e.getClass(), e);
@@ -472,7 +476,7 @@ public class TestControl extends DefaultTestBundleControl {
 		// Query a state variable
 		try {
 			Object res;
-			res = admin.queryStateVariable("hip.gyro", "hip.gyro", "hip.gyro.rawOutput");
+			res = admin.queryStateVariable("hip.gyro", "hip.gyro.id", "hip.gyro.rawOutput");
 			log("Query a state variable: " + res);
 		}
 		catch (Exception e) {
@@ -488,7 +492,7 @@ public class TestControl extends DefaultTestBundleControl {
 		
 		// Test access of a control unit
 		log("Access a ControlUnit");
-		cu = admin.getControlUnit("hip.tacho", "hip.tacho");
+		cu = admin.getControlUnit("hip.tacho", "hip.tacho.id");
 		
 		if (cu != null) {
 			log("type = " + cu.getType());
@@ -585,6 +589,15 @@ public class TestControl extends DefaultTestBundleControl {
 			e.printStackTrace();
 		}
 		
+		try {
+			if (tb2 != null)
+				uninstallBundle(tb2);
+			installBundle("tb2.jar");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		// Uninstall bundle to avoid interference with other test methods
 		try {
 			if (tb4 != null)
@@ -610,6 +623,28 @@ public class TestControl extends DefaultTestBundleControl {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		if (reg != null) {
+			Hashtable props = new Hashtable();
+			
+			// Change Properties to add the link to HipModule
+			log("Change properties to attach hip.position to its parent hip");
+			props.clear();
+			props.put(ControlUnitConstants.TYPE, "hip.position");
+			props.put(ControlUnitConstants.ID, "hip.position.id");
+			props.put(ControlUnitConstants.PARENT_TYPE, "hip");
+			props.put(ControlUnitConstants.PARENT_ID, "hip.id");
+			reg.setProperties(props);
+		
+			// Change Properties to remove link to HipModule
+			log("Change properties to detach hip.position from its parent hip");
+			props.clear();
+			props.put(ControlUnitConstants.TYPE, "hip.position");
+			props.put(ControlUnitConstants.ID, "hip.position.id");
+			reg.setProperties(props);
+		
+			reg.unregister();
+		}
 	}
 
 	/**
@@ -622,6 +657,13 @@ public class TestControl extends DefaultTestBundleControl {
 	 */
 	public void prepare() {
 		log("#before each run");
+		
+		// Register a new CU child of HipModule
+		Hashtable props = new Hashtable();
+		props.put(ControlUnitConstants.TYPE, "hip.position");
+		props.put(ControlUnitConstants.ID, "hip.position.id");
+		
+		reg = getContext().registerService(ManagedControlUnit.class.getName(), new HipPosition(), props);
 		
 		try {
 			tb1 = installBundle("tb1.jar");
