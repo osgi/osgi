@@ -31,10 +31,6 @@ import org.osgi.service.event.EventAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.util.tracker.ServiceTracker;
 
-// TODO cleanup service registrations properly in case of error
-// TODO check that the service is not registered already?
-// TODO when stop() is called, notify the impl. to release all refs to other services
-// (these should be done in all activators!)
 public class DmtAdminActivator implements BundleActivator {
     static final String DMT_PERMISSION_ADMIN_SERVICE_PID = 
         "org.osgi.impl.service.dmt.permissions";
@@ -67,8 +63,9 @@ public class DmtAdminActivator implements BundleActivator {
             
 			DmtPluginDispatcher dispatcher = new DmtPluginDispatcher(bc);
 			//tracker = new ServiceTracker(bc, DmtDataPlugin.class.getName(), dispatcher);
-			String filter = "(|(objectClass=org.osgi.service.dmt.DmtDataPlugin)"
-					+ "(objectClass=org.osgi.service.dmt.DmtExecPlugin))";
+			String filter = "(|(objectClass=org.osgi.service.dmt.DmtDataPlugin)" +
+					          "(objectClass=org.osgi.service.dmt.DmtExecPlugin)" +
+                              "(objectClass=org.osgi.service.dmt.DmtReadOnlyDataPlugin))";
 			pluginTracker = new ServiceTracker(bc, bc.createFilter(filter),
 					dispatcher);
 			pluginTracker.open();
