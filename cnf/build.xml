@@ -189,11 +189,11 @@
 	<!--
 	     CLEAN
 	-->
-	<target name="clean" depends="init,localclean" if="project.buildpath">
+	<target name="globalclean" depends="init,clean" if="project.buildpath">
 		<subant target="clean" inheritAll="false" buildpath="${project.buildpath}" />
 	</target>
 
-	<target name="localclean" depends="init">
+	<target name="clean" depends="init">
 		<delete quiet="true" includeEmptyDirs="true" verbose="${verbose}">
 			<fileset dir="${project.bindir}" includes="**/*.bak **/*.class" />
 			<fileset dir="${project}" includes="**/*.bak **/~* *.jar" />
