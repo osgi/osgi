@@ -145,6 +145,13 @@ public class TestMegletContainerBundleActivator extends Object implements
 		}
 	}
 
+	public ApplicationDescriptor getAppDesc( ApplicationHandle appHnd ) {
+		ServiceReference appDescRef = appHnd.getAppDescriptor();
+		ApplicationDescriptor appDesc = (ApplicationDescriptor)bc.getService( appDescRef );
+		bc.ungetService( appDescRef );
+		return appDesc;
+	}
+	
 	public void bundleChanged(BundleEvent e) {
 		if (e.getBundle().getBundleId() == bc.getBundle().getBundleId()
 				&& e.getType() == BundleEvent.STARTED) {
@@ -617,7 +624,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 					"(service.pid=" + appDesc.getApplicationPID() + ")");
 			if (appList == null || appList.length == 0)
 				throw new Exception("No registered application handle found!");
-			if (appHandle.getAppDescriptor() != appDesc)
+			if (getAppDesc( appHandle ) != appDesc)
 				throw new Exception(
 						"The application descriptor differs from the found one!");
 			if (appHandle.getAppStatus() != ApplicationHandle.RUNNING)
@@ -636,7 +643,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			appHandle.suspendApplication();
 			if (!checkResultFile("SUSPEND:StorageTestString"))
 				throw new Exception("Result of the suspend is not SUSPEND!");
-			String appName = (String) appHandle.getAppDescriptor()
+			String appName = (String) getAppDesc( appHandle )
 					.getProperties("").get(
 							ApplicationDescriptor.APPLICATION_NAME);
 			if (!checkEvent("suspending", appName))
@@ -659,7 +666,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			if (!checkResultFile("RESUME:StorageTestString"))
 				throw new Exception(
 						"Result of the resume is not RESUME:StorageTestString!");
-			String appName = (String) appHandle.getAppDescriptor()
+			String appName = (String) getAppDesc( appHandle )
 					.getProperties("").get(
 							ApplicationDescriptor.APPLICATION_NAME);
 			if (!checkEvent("resuming", appName))
@@ -682,7 +689,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			if (!checkResultFile("STOP"))
 				throw new Exception("Result of the stop is not STOP!");
 
-			String appName = (String) appHandle.getAppDescriptor()
+			String appName = (String) getAppDesc( appHandle )
 					.getProperties("").get(
 							ApplicationDescriptor.APPLICATION_NAME);
 			if (!checkEvent("stopping", appName))
@@ -693,7 +700,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
 					"(service.pid="
-							+ appHandle.getAppDescriptor().getApplicationPID()
+							+ getAppDesc( appHandle ).getApplicationPID()
 							+ ")");
 			if (appList != null && appList.length != 0) {
 				for (int i = 0; i != appList.length; i++) {
@@ -842,7 +849,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception(
 						"Application didn't autostart. The appHandle is missing!");
 			appHandle = (ApplicationHandle) bc.getService(appList[0]);
-			if (appHandle.getAppDescriptor() != appDesc)
+			if (getAppDesc( appHandle ) != appDesc)
 				throw new Exception(
 						"The autostarted apphandle differs from the expected one!");
 			if (appHandle.getAppStatus() != ApplicationHandle.RUNNING)
@@ -882,7 +889,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
 					"(service.pid="
-							+ appHandle.getAppDescriptor().getApplicationPID()
+							+ getAppDesc( appHandle ).getApplicationPID()
 							+ ")");
 			if (appList != null && appList.length != 0) {
 				for (int i = 0; i != appList.length; i++) {
@@ -939,7 +946,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 		for (int i = 0; i != references.length; i++) {
 			ApplicationHandle handle = (ApplicationHandle) bc
 					.getService(references[i]);
-			ApplicationDescriptor desc = handle.getAppDescriptor();
+			ApplicationDescriptor desc = getAppDesc( handle );
 			bc.ungetService(references[i]);
 			if (appDesc == desc)
 				return handle;
@@ -1066,7 +1073,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
 					"(service.pid="
-							+ appHandle.getAppDescriptor().getApplicationPID()
+							+ getAppDesc( appHandle ).getApplicationPID()
 							+ ")");
 			if (appList != null && appList.length != 0) {
 				for (int i = 0; i != appList.length; i++) {

@@ -31,7 +31,7 @@ public class MegletHandle implements ApplicationHandle {
 	private int					status;
 	private Meglet				meglet;
 	private MegletContainer		megletContainer;
-	private MegletDescriptor	appDesc;
+	private ServiceReference	appDescRef;
 	private ServiceRegistration	serviceReg;
 	private BundleContext		bc;
 	private Long				appHndServiceID;
@@ -39,10 +39,14 @@ public class MegletHandle implements ApplicationHandle {
 	private File				suspendedFileName	= null;
 	private static Long			counter				= new Long(0);
 	private Map					resumeArgs			= null;
+	private String      pid;
 
 	public MegletHandle(MegletContainer megletContainer, Meglet meglet,
-			MegletDescriptor desc, BundleContext bc) throws Exception {
-		appDesc = desc;
+			MegletDescriptor appDesc, BundleContext bc) throws Exception {
+		
+		appDescRef = megletContainer.getReference( appDesc );		
+		pid = appDesc.getApplicationPID();
+		
 		status = ApplicationHandle.NONEXISTENT;
 		this.megletContainer = megletContainer;
 		this.bc = bc;
@@ -60,6 +64,9 @@ public class MegletHandle implements ApplicationHandle {
 		this.status = status;
 
 		Hashtable props = new Hashtable();
+		
+		ApplicationDescriptor appDesc = (ApplicationDescriptor)bc.getService( appDescRef );
+		
 		props.put("name", (String) appDesc.getProperties("").get(
 				ApplicationDescriptor.APPLICATION_NAME));
 		if (appHndServiceID != null)
@@ -99,6 +106,7 @@ public class MegletHandle implements ApplicationHandle {
 		}
 
 		sendEvent(new Event(topic, props), false);
+		bc.ungetService( appDescRef );
 	}
 
 	boolean sendEvent(Event event, boolean asynchron) {
@@ -122,13 +130,13 @@ public class MegletHandle implements ApplicationHandle {
 		return false;
 	}
 
-	public ApplicationDescriptor getAppDescriptor() {
-		return appDesc;
+	public ServiceReference getAppDescriptor() {
+		return appDescRef;
 	}
 
 	public ServiceReference startHandle(Map args) throws Exception {
-		AccessController.checkPermission(new ApplicationAdminPermission(appDesc
-				.getApplicationPID(), ApplicationAdminPermission.LAUNCH));
+		AccessController.checkPermission(new ApplicationAdminPermission(pid, 
+				                             ApplicationAdminPermission.LAUNCH));
 
 		if (args == null)
 			resumeArgs = null;
@@ -151,8 +159,8 @@ public class MegletHandle implements ApplicationHandle {
 
 	public void destroyApplication() throws Exception {
 
-		AccessController.checkPermission(new ApplicationAdminPermission(appDesc
-				.getApplicationPID(), ApplicationAdminPermission.MANIPULATE));
+		AccessController.checkPermission(new ApplicationAdminPermission(pid, 
+				ApplicationAdminPermission.MANIPULATE));
 
 		if (status == ApplicationHandle.NONEXISTENT
 				|| status == ApplicationHandle.STOPPING)
@@ -168,8 +176,8 @@ public class MegletHandle implements ApplicationHandle {
 
 	public void suspendApplication() throws Exception {
 
-		AccessController.checkPermission(new ApplicationAdminPermission(appDesc
-				.getApplicationPID(), ApplicationAdminPermission.MANIPULATE));
+		AccessController.checkPermission(new ApplicationAdminPermission(pid, 
+				ApplicationAdminPermission.MANIPULATE));
 
 		if (status != ApplicationHandle.RUNNING)
 			throw new Exception("Invalid State");
@@ -199,16 +207,18 @@ public class MegletHandle implements ApplicationHandle {
 
 	public void resumeApplication() throws Exception {
 
-		AccessController.checkPermission(new ApplicationAdminPermission(appDesc
-				.getApplicationPID(), ApplicationAdminPermission.MANIPULATE));
+		AccessController.checkPermission(new ApplicationAdminPermission(pid, 
+				ApplicationAdminPermission.MANIPULATE));
 
 		if (status != ApplicationHandle.SUSPENDED)
 			throw new Exception("Invalid State");
 
 		setStatus(ApplicationHandle.RESUMING);
 
+		MegletDescriptor appDesc = (MegletDescriptor)bc.getService( appDescRef );
 		meglet = megletContainer.createMegletInstance(appDesc, true);
 		appDesc.initMeglet(meglet, this);
+		bc.ungetService( appDescRef );
 
 		InputStream is = new FileInputStream(suspendedFileName);
 		meglet.startApplication(resumeArgs, is);
@@ -220,7 +230,7 @@ public class MegletHandle implements ApplicationHandle {
 	void registerAppHandle() throws Exception {
 		//registering the ApplicationHandle
 		Hashtable props = new Hashtable();
-		props.put(Constants.SERVICE_PID, appDesc.getApplicationPID());
+		props.put(Constants.SERVICE_PID, pid);
 		serviceReg = bc.registerService(
 				"org.osgi.service.application.ApplicationHandle", this, props);
 		appHndServiceID = (Long) serviceReg.getReference().getProperty(
@@ -228,7 +238,7 @@ public class MegletHandle implements ApplicationHandle {
 		ServiceReference[] appDescRefs = bc.getServiceReferences(
 				"org.osgi.service.application.ApplicationDescriptor", "("
 						+ Constants.SERVICE_PID + "="
-						+ appDesc.getApplicationPID() + ")");
+						+ pid + ")");
 		if (appDescRefs != null && appDescRefs.length != 0)
 			appDescServiceID = (Long) appDescRefs[0]
 					.getProperty(Constants.SERVICE_ID);
