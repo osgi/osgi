@@ -86,7 +86,7 @@
 		<dirname property="workspace" file="${project}" />
 		<basename property="project.name" file="${project}" />
 		<property environment="env" />
-
+		
 		<taskdef resource="org/osgi/tools/btool/taskdef.properties" classpath="${workspace}/cnf/jar/btool.jar" />
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${workspace}/cnf/ant-contrib/ant-contrib-0.6.jar" />
 
