@@ -24,6 +24,7 @@ import org.osgi.framework.ServicePermission;
 import org.osgi.impl.service.policy.condpermadmin.ConditionalPermissionAdminPlugin;
 import org.osgi.service.condpermadmin.BundleLocationCondition;
 import org.osgi.service.condpermadmin.ConditionInfo;
+import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtMetaNode;
@@ -169,5 +170,34 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 		dmtSession.setNodeValue("1/ConditionInfo",new DmtData(CP1_COND_STR));
 		dmtSession.close();
 		assertTrue(condPermAdmin.contains(cp1));
+	}
+	
+	public void testAddAndDelete() throws Exception {
+		// we add one, and delete an other one
+		DummyConditionalPermissionAdmin.PI cp1 = condPermAdmin.new PI(CP1_COND,CP1_PERM);
+		ConditionalPermissionInfo rfc = condPermAdmin.addConditionalPermissionInfo(RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
+		assertFalse(condPermAdmin.contains(cp1));
+		assertTrue(condPermAdmin.contains(rfc));
+		newAtomicSession();
+		dmtSession.createInteriorNode("1");
+		dmtSession.setNodeValue("1/PermissionInfo",new DmtData(CP1_PERM_STR));
+		dmtSession.setNodeValue("1/ConditionInfo",new DmtData(CP1_COND_STR));
+		dmtSession.deleteNode(RFC_EXAMPLE_HASH);
+		dmtSession.close();
+		assertTrue(condPermAdmin.contains(cp1));
+		assertFalse(condPermAdmin.contains(rfc));
+	}
+	
+	public void deleteOneFromTwo() throws Exception {
+		// have two conditionalpermissions, delete one of them
+		ConditionalPermissionInfo cp1 = condPermAdmin.addConditionalPermissionInfo(CP1_COND,CP1_PERM);
+		ConditionalPermissionInfo rfc = condPermAdmin.addConditionalPermissionInfo(RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
+		assertTrue(condPermAdmin.contains(cp1));
+		assertTrue(condPermAdmin.contains(rfc));
+		newAtomicSession();
+		dmtSession.deleteNode(RFC_EXAMPLE_HASH);
+		dmtSession.close();
+		assertTrue(condPermAdmin.contains(cp1));
+		assertFalse(condPermAdmin.contains(rfc));
 	}
 }
