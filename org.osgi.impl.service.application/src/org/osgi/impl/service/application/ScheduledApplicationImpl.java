@@ -22,7 +22,6 @@ import java.util.*;
 
 import org.osgi.framework.*;
 import org.osgi.service.application.*;
-import org.osgi.service.application.Scheduler;
 import org.osgi.service.log.LogService;
 
 /**
@@ -40,7 +39,7 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 
 	private ServiceRegistration	serviceReg;
 
-	public ScheduledApplicationImpl(Scheduler scheduler, BundleContext bc,
+	public ScheduledApplicationImpl(SchedulerImpl scheduler, BundleContext bc,
 			String pid, Map args, String topic, String eventFilter, boolean recurring ) {
 		this.scheduler = (SchedulerImpl)scheduler;
 		this.bc = bc;
@@ -54,7 +53,7 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 		this.recurring = recurring;
 	}
 
-	void validate(Scheduler scheduler, BundleContext bc)
+	void validate(SchedulerImpl scheduler, BundleContext bc)
 			throws Exception {
 		this.bc = bc;
 		this.scheduler = (SchedulerImpl)scheduler;

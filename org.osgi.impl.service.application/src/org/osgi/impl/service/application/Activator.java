@@ -18,14 +18,13 @@
 package org.osgi.impl.service.application;
 
 import org.osgi.framework.*;
-import org.osgi.impl.service.application.SchedulerImpl;
-
 /**
+ *
  * The Bundle Activator of the MEG container
  */
 public class Activator extends Object implements
 		BundleActivator {
-	private BundleContext		bc;
+	static BundleContext		bc;
 	private ServiceRegistration	schedulerService;
 	private SchedulerImpl		scheduler;
 
@@ -34,7 +33,7 @@ public class Activator extends Object implements
 	}
 
 	public void start(BundleContext bc) throws Exception {
-		this.bc = bc;
+		Activator.bc = bc;
 		scheduler = new SchedulerImpl(bc);
 		schedulerService = bc.registerService(
 				"org.osgi.service.application.Scheduler", scheduler,
@@ -46,7 +45,7 @@ public class Activator extends Object implements
 		//unregistering the service
 		scheduler.stop();
 		schedulerService.unregister();
-		this.bc = null;
+		Activator.bc = null;
 		System.out.println("Scheduler service stopped successfully!");
 	}
 }

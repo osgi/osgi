@@ -18,15 +18,15 @@
 package org.osgi.impl.service.application;
 
 import java.io.*;
+import java.security.AccessController;
 import java.util.*;
-import java.security.*;
+
 import org.osgi.framework.*;
 import org.osgi.service.application.*;
 import org.osgi.service.event.*;
 import org.osgi.service.log.LogService;
-import org.osgi.service.application.Scheduler;
 
-public class SchedulerImpl implements Scheduler, Runnable, EventHandler {
+public class SchedulerImpl implements Runnable, EventHandler {
 	private BundleContext	bc;
 	private Vector							scheduledApps;
 	private boolean							stopped;
