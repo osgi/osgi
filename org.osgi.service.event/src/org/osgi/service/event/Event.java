@@ -48,12 +48,12 @@ public class Event {
 	/**
 	 * The topic of this event.
 	 */
-	private final String	topic;
+	String	topic;
 	/**
 	 * The properties carried by this event. Keys are strings and values are
 	 * objects
 	 */
-	private final Hashtable	properties;
+	Hashtable	properties;
 
 	/**
 	 * Constructs an event.
