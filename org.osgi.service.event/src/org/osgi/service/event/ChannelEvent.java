@@ -24,17 +24,23 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
+
 package org.osgi.service.event;
 
 import java.util.*;
+
 import org.osgi.framework.Filter;
 
 /**
- * Contains information regarding an event.
- * <p>
+ * A channel event.
  * 
- * <i>NOTE: Although sub-classes are not precluded, the operations defined by
- * this class MUST NOT be overridden. </i>
+ * <p>
+ * <tt>ChannelEvent</tt> objects are delivered to a <tt>ChannelListener</tt>
+ * services which subsrcibe to the topic of the channel event.
+ * 
+ * <p>
+ * <i>NOTE: Although it is permitted to subclass <tt>ChannelEvent</tt>, the
+ * operations defined by this class MUST NOT be overridden. </i>
  * 
  * @version $Revision$
  */
@@ -47,33 +53,28 @@ public class ChannelEvent {
 	 * The properties carried by this event. Keys are strings and values are
 	 * objects
 	 */
-	private Hashtable		properties;
+	private final Hashtable	properties;
 
 	/**
 	 * Constructs an event.
 	 * 
 	 * @param topic The topic of the event.
-	 * @param properties The event's properties (may be null).
+	 * @param properties The event's properties (may be <code>null</code>).
 	 * 
-	 * @throws IllegalArgumentException If topic is not a valid topic name, or
-	 *         if properties contains case-variants of the same key.
+	 * @throws IllegalArgumentException If topic is not a valid topic name.
 	 */
 	public ChannelEvent(String topic, Dictionary properties) {
-		// TODO: Verify that topic is well-formed
 		this.topic = topic;
+		validateTopicName();
 		this.properties = new Hashtable();
 		if (properties != null) {
 			for (Enumeration e = properties.keys(); e.hasMoreElements();) {
 				String key = (String) e.nextElement();
 				Object value = properties.get(key);
-				if (this.properties.put(key, value) != null) {
-					throw new IllegalArgumentException(
-							"Dictionary contains case-variants of the same key; key = "
-									+ key);
-				}
+				this.properties.put(key, value);
 			}
 		}
-		this.properties.put("topic", topic);
+		this.properties.put(EventConstants.EVENT_TOPIC, topic);
 	}
 
 	/**
@@ -81,9 +82,7 @@ public class ChannelEvent {
 	 * 
 	 * @param name the name of the property to retrieve
 	 * 
-	 * @return The value of the property, or null if not found.
-	 * 
-	 * @throws NullPointerException If name is null.
+	 * @return The value of the property, or <code>null</code> if not found.
 	 */
 	public final Object getProperty(String name) {
 		return properties.get(name);
@@ -119,45 +118,96 @@ public class ChannelEvent {
 	 * 
 	 * @return true If this event's properties match the filter, false
 	 *         otherwise.
-	 * 
-	 * @throws NullPointerException If filter is null.
 	 */
 	public final boolean matches(Filter filter) {
 		return filter.matchCase(properties);
 	}
 
 	/**
-	 * Tests this object for equality with another object.
+	 * Compares this <code>ChannelEvent</code> object to another object.
 	 * 
-	 * @param obj The other object to test against.
+	 * <p>
+	 * A channel event is considered to be <b>equal to </b> another channel
+	 * event if the topic is equal and the properties are equal.
 	 * 
-	 * @return true If this object is equivalent to obj.
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
+	 * @param object The <code>ChannelEvent</code> object to be compared.
+	 * @return <code>true</code> if <code>object</code> is a
+	 *         <code>ChannelEvent</code> and is equal to this object;
+	 *         <code>false</code> otherwise.
 	 */
-	public boolean equals(Object obj) {
-		if ((obj != null) && (obj.getClass() == this.getClass())) {
-			ChannelEvent evt = (ChannelEvent) obj;
-			return topic.equals(evt.topic) && properties.equals(evt.properties);
+	public boolean equals(Object object) {
+		if (object == this) { // quicktest
+			return true;
 		}
-		return false;
+
+		if (!(object instanceof ChannelEvent)) {
+			return false;
+		}
+
+		ChannelEvent event = (ChannelEvent) object;
+		return topic.equals(event.topic) && properties.equals(event.properties);
 	}
 
 	/**
-	 * Returns a hash code for this object.
+	 * Returns a hash code value for the object.
 	 * 
-	 * @see java.lang.Object#hashCode()
+	 * @return An integer which is a hash code value for this object.
 	 */
 	public int hashCode() {
 		return topic.hashCode() ^ properties.hashCode();
 	}
 
 	/**
-	 * Returns the string representation of this object.
+	 * Returns the string representation of this channel event.
 	 * 
-	 * @see java.lang.Object#toString()
+	 * @return The string representation of this channel event.
 	 */
 	public String toString() {
-		return getClass().getName() + "[topic=" + topic + "]";
+		return getClass().getName() + " [topic=" + topic + "]"; //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
+	private static final String	SEPARATOR	= "."; //$NON-NLS-1$
+
+	/**
+	 * Called by the constructor to validate the topic name.
+	 * 
+	 * @throws IllegalArgumentException If the topic name is invalid.
+	 */
+	private void validateTopicName() {
+		try {
+			StringTokenizer st = new StringTokenizer(topic, SEPARATOR, true);
+			validateToken(st.nextToken());
+
+			while (st.hasMoreTokens()) {
+				st.nextToken(); // consume delimiter
+				validateToken(st.nextToken());
+			}
+		}
+		catch (NoSuchElementException e) {
+			throw new IllegalArgumentException("invalid topic"); //$NON-NLS-1$
+		}
+	}
+
+	private static final String	alphaGrammar	= "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; //$NON-NLS-1$
+	private static final String	tokenGrammar	= alphaGrammar + "0123456789_"; //$NON-NLS-1$
+
+	/**
+	 * Validate a token.
+	 * 
+	 * @throws IllegalArgumentException If the token is invalid.
+	 */
+	private void validateToken(String token) {
+		int length = token.length();
+		if (length < 1) {
+			throw new IllegalArgumentException("invalid topic"); //$NON-NLS-1$
+		}
+		if (alphaGrammar.indexOf(token.charAt(0)) == -1) { //$NON-NLS-1$
+			throw new IllegalArgumentException("invalid topic"); //$NON-NLS-1$
+		}
+		for (int i = 1; i < length; i++) {
+			if (tokenGrammar.indexOf(token.charAt(i)) == -1) { //$NON-NLS-1$
+				throw new IllegalArgumentException("invalid topic"); //$NON-NLS-1$
+			}
+		}
 	}
 }

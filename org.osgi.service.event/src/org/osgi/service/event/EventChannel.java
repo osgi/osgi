@@ -24,30 +24,39 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
+
 package org.osgi.service.event;
 
 /**
- * 
- * TODO Add Javadoc comment for this type.
+ * The Event Channel service. Bundles wishing to publish events must obtain the
+ * Event Channel service and call one of the event delivery methods.
  * 
  * @version $Revision$
  */
 public interface EventChannel {
 	/**
-	 * Initiates an asynchronous event delivery.
+	 * Initiate asynchronous delivery of a channel event. This method returns to
+	 * the caller before delivery of the channel event is completed.
 	 * 
-	 * @param event The event to send to any interested listeners.
+	 * @param event The channel event to send to all listeners which subscribe
+	 *        to the topic of the event.
 	 * 
-	 * @throws NullPointerException If event is null.
+	 * @exception SecurityException If the caller does not have
+	 *            <tt>TopicPermission[topic,PUBLISH]</tt> for the topic
+	 *            specified in the channel event.
 	 */
 	void postEvent(ChannelEvent event);
 
 	/**
-	 * Initiates a synchronous event delivery.
+	 * Initiate synchronous delivery of a channel event. This method does not
+	 * return to the caller until delivery of the channel event is completed.
 	 * 
-	 * @param event The event to send to any interested listeners.
+	 * @param event The channel event to send to all listeners which subscribe
+	 *        to the topic of the event.
 	 * 
-	 * @throws NullPointerException If event is null.
+	 * @exception SecurityException If the caller does not have
+	 *            <tt>TopicPermission[topic,PUBLISH]</tt> for the topic
+	 *            specified in the channel event.
 	 */
 	void sendEvent(ChannelEvent event);
 }

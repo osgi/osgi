@@ -24,6 +24,7 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
+
 package org.osgi.service.event;
 
 import java.io.IOException;
@@ -40,9 +41,7 @@ import java.util.Hashtable;
  * For example:
  * 
  * <pre>
- * <tt>
- * org.osgi.service.foo.ACTION
- * </tt>
+ * <tt>org.osgi.service.foo.ACTION</tt>
  * </pre>
  * 
  * <p>
@@ -56,11 +55,11 @@ public final class TopicPermission extends BasicPermission {
 	/**
 	 * The action string <tt>publish</tt>.
 	 */
-	public final static String	PUBLISH				= "publish";
+	public final static String	PUBLISH				= "publish"; //$NON-NLS-1$
 	/**
 	 * The action string <tt>subscribe</tt>.
 	 */
-	public final static String	SUBSCRIBE			= "subscribe";
+	public final static String	SUBSCRIBE			= "subscribe"; //$NON-NLS-1$
 	private final static int	ACTION_PUBLISH		= 0x00000001;
 	private final static int	ACTION_SUBSCRIBE	= 0x00000002;
 	private final static int	ACTION_ALL			= ACTION_PUBLISH
@@ -124,7 +123,7 @@ public final class TopicPermission extends BasicPermission {
 	 */
 	private void init(int mask) {
 		if ((mask == ACTION_NONE) || ((mask & ACTION_ALL) != mask)) {
-			throw new IllegalArgumentException("invalid action string");
+			throw new IllegalArgumentException("invalid action string"); //$NON-NLS-1$
 		}
 		action_mask = mask;
 	}
@@ -179,7 +178,7 @@ public final class TopicPermission extends BasicPermission {
 				}
 				else {
 					// parse error
-					throw new IllegalArgumentException("invalid permission: "
+					throw new IllegalArgumentException("invalid permission: " //$NON-NLS-1$
 							+ actions);
 				}
 			// make sure we didn't just match the tail of a word
@@ -198,7 +197,7 @@ public final class TopicPermission extends BasicPermission {
 						break;
 					default :
 						throw new IllegalArgumentException(
-								"invalid permission: " + actions);
+								"invalid permission: " + actions); //$NON-NLS-1$
 				}
 				i--;
 			}
@@ -206,7 +205,7 @@ public final class TopicPermission extends BasicPermission {
 			i -= matchlen;
 		}
 		if (seencomma) {
-			throw new IllegalArgumentException("invalid permission: " + actions);
+			throw new IllegalArgumentException("invalid permission: " + actions); //$NON-NLS-1$
 		}
 		return (mask);
 	}
@@ -395,11 +394,11 @@ final class TopicPermissionCollection extends PermissionCollection {
 	 */
 	public void add(Permission permission) {
 		if (!(permission instanceof TopicPermission))
-			throw new IllegalArgumentException("invalid permission: "
+			throw new IllegalArgumentException("invalid permission: " //$NON-NLS-1$
 					+ permission);
 		if (isReadOnly())
-			throw new SecurityException("attempt to add a Permission to a "
-					+ "readonly PermissionCollection");
+			throw new SecurityException("attempt to add a Permission to a " //$NON-NLS-1$
+					+ "readonly PermissionCollection"); //$NON-NLS-1$
 		TopicPermission pp = (TopicPermission) permission;
 		String name = pp.getName();
 		TopicPermission existing = (TopicPermission) permissions.get(name);
@@ -415,7 +414,7 @@ final class TopicPermissionCollection extends PermissionCollection {
 			permissions.put(name, permission);
 		}
 		if (!all_allowed) {
-			if (name.equals("*"))
+			if (name.equals("*")) //$NON-NLS-1$
 				all_allowed = true;
 		}
 	}
@@ -439,7 +438,7 @@ final class TopicPermissionCollection extends PermissionCollection {
 		int effective = 0;
 		// short circuit if the "*" Permission was added
 		if (all_allowed) {
-			x = (TopicPermission) permissions.get("*");
+			x = (TopicPermission) permissions.get("*"); //$NON-NLS-1$
 			if (x != null) {
 				effective |= x.getMask();
 				if ((effective & desired) == desired)
@@ -460,8 +459,8 @@ final class TopicPermissionCollection extends PermissionCollection {
 		// work our way up the tree...
 		int last, offset;
 		offset = name.length() - 1;
-		while ((last = name.lastIndexOf(".", offset)) != -1) {
-			name = name.substring(0, last + 1) + "*";
+		while ((last = name.lastIndexOf(".", offset)) != -1) { //$NON-NLS-1$
+			name = name.substring(0, last + 1) + "*"; //$NON-NLS-1$
 			x = (TopicPermission) permissions.get(name);
 			if (x != null) {
 				effective |= x.getMask();

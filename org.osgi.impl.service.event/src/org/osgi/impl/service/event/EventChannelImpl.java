@@ -80,13 +80,12 @@ public class EventChannelImpl implements EventChannel, FrameworkListener,
 		if (references == null)
 			return;
 		for (int i = 0; i != references.length; i++) {
-			String topic = (String) references[i].getProperty("topic");
-			String filterString = (String) references[i].getProperty("filter");
+			//TODO the topic property is defined to return a String array!
+			String topic = (String) references[i].getProperty(EventConstants.EVENT_TOPIC);
+			String filterString = (String) references[i].getProperty(EventConstants.EVENT_FILTER);
 			try {
 				if (topic != null) {
-					Filter topicFilter = bc.createFilter("(topic=" + topic
-							+ ")");
-					if (!event.matches(topicFilter))
+					if (!topic.equals(event.getTopic()))
 						continue;
 				}
 				if (filterString != null) {

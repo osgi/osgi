@@ -24,10 +24,46 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
+
 package org.osgi.service.event;
 
 /**
- * TODO Add Javadoc comment for this type.
+ * Listener for Channel Events.
+ * 
+ * <p>
+ * <tt>ChannelListener</tt> objects are registered with the Framework service
+ * registry and are notified with a <tt>ChannelEvent</tt> object when a
+ * channel event is broadcast.
+ * <p>
+ * <tt>ChannelListener</tt> objects can inspect the received
+ * <tt>ChannelEvent</tt> object to determine its topic and properties.
+ * 
+ * <p>
+ * <tt>ChannelListener</tt> objects should be registered with a service
+ * property {@link EventConstants#EVENT_TOPIC} whose value is the list of
+ * topics in which the channel listener is interesed.
+ * <p>
+ * For example:
+ * 
+ * <pre>
+ * String[] topics = new String[] {&quot;org.osgi.topic&quot;, &quot;com.isv.*&quot;};
+ * Hashtable ht = new Hashtable();
+ * ht.put(EVENT_TOPIC, topics);
+ * context.registerService(ChannelListener.class.getName(), this, ht);
+ * </pre>
+ * 
+ * If a <tt>ChannelListener</tt> object is registered without a service
+ * property {@link EventConstants#EVENT_TOPIC}, then the
+ * <tt>ChannelListener</tt> will receive channel events of all topics.
+ * 
+ * <p>
+ * Security Considerations. Bundles wishing to monitor <tt>ChannelEvent</tt>
+ * objects will require <tt>ServicePermission[ChannelListener,REGISTER]</tt>
+ * to register a <tt>ChannelListener</tt> service. The bundle must also have
+ * <tt>TopicPermission[topic,SUBSCRIBE]</tt> for the topic specified in the
+ * channel event in order to receive the event.
+ * 
+ * @see ChannelEvent
  * 
  * @version $Revision$
  */
