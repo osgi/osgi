@@ -61,7 +61,7 @@ import java.util.Enumeration;
  * <p>A bundle should only execute code when its state is one of
  * <tt>STARTING</tt>, <tt>ACTIVE</tt>, or <tt>STOPPING</tt>.
  * An <tt>UNINSTALLED</tt> bundle can not be set to another state; it
- * is a zombie and can only be reached because invalid references are kept somewhere.
+ * is a zombie and can only be reached because references are kept somewhere.
  *
  * <p>The Framework is the only entity that is allowed to
  * create <tt>Bundle</tt> objects, and these objects are only valid
@@ -75,9 +75,9 @@ public abstract interface Bundle
 	 * This bundle is uninstalled and may not be used.
 	 *
 	 * <p>The <tt>UNINSTALLED</tt> state is only visible after a bundle
-     * is uninstalled; the bundle is in an unusable state
-     * and all references to the <tt>Bundle</tt> object should be released
-     * immediately.
+	 * is uninstalled; the bundle is in an unusable state but
+	 * references to the <tt>Bundle</tt> object may still be available
+     * and used for introspection.
 	 * <p>The value of <tt>UNINSTALLED</tt> is 0x00000001.
 	 */
     public static final int UNINSTALLED = 0x00000001;
@@ -633,7 +633,7 @@ public abstract interface Bundle
      *
      * @see #getHeaders()
      * @see Constants#BUNDLE_LOCALIZATION
-	 * @since 1.3 
+	 * @since 1.3
    	 */
    	public Dictionary getHeaders(String localeString);
 
@@ -648,7 +648,7 @@ public abstract interface Bundle
      * <p>This method will continue to return this bundle's symbolic name
      * while this bundle is in the <tt>UNINSTALLED</tt> state.
 	 * @return The symbolic name of this bundle.
-	 * @since 1.3 
+	 * @since 1.3
 	 */
 	public String getSymbolicName();
 
@@ -674,7 +674,7 @@ public abstract interface Bundle
 	 * if the caller does not have the <tt>AdminPermission</tt>, and the Java
 	 * Runtime Environment supports permissions.
 	 * @exception java.lang.IllegalStateException If this bundle has been uninstalled.
-	 * @since 1.3 
+	 * @since 1.3
 	 */
 	public Class loadClass(String name) throws ClassNotFoundException;
 
@@ -697,7 +697,7 @@ public abstract interface Bundle
 	 * @return An Enumeration of the entry paths that are contained in the
 	 * 		specified path.
 	 * @exception java.lang.IllegalStateException If this bundle has been uninstalled.
-	 * @since 1.3 
+	 * @since 1.3
 	 */
 	public Enumeration getEntryPaths(String path);
 
@@ -719,7 +719,7 @@ public abstract interface Bundle
 	 * the <tt>AdminPermission</tt> and the Java Runtime Environment supports permissions.
 	 *
 	 * @exception java.lang.IllegalStateException If this bundle has been uninstalled.
-	 * @since 1.3 
+	 * @since 1.3
 	 */
 	public URL getEntry(String name);
 }
