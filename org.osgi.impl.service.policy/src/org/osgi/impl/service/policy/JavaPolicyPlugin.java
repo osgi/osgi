@@ -22,8 +22,10 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
+import org.osgi.impl.service.policy.condpermadmin.ConditionalPermissionAdminPlugin;
 import org.osgi.impl.service.policy.dmtprincipal.DmtPrincipalPlugin;
 import org.osgi.impl.service.policy.permadmin.PermissionAdminPlugin;
+import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 
@@ -49,6 +51,15 @@ public final class JavaPolicyPlugin implements BundleActivator {
 			props.put("dataRootURIs",DmtPrincipalPlugin.dataRootURI);
 			context.registerService(DmtDataPlugin.class.getName(),dmtPrincipalPlugin,props);
 		
+		}
+		
+		ServiceReference conditionalPermissionAdminReference =
+			context.getServiceReference(ConditionalPermissionAdmin.class.getName());
+		if (conditionalPermissionAdminReference!=null) {
+			ConditionalPermissionAdminPlugin conditionalPermissionAdminPlugin = new ConditionalPermissionAdminPlugin((ConditionalPermissionAdmin) context.getService(conditionalPermissionAdminReference));
+			Hashtable props = new Hashtable();
+			props.put("dataRootURIs",ConditionalPermissionAdminPlugin.dataRootURI);
+			context.registerService(DmtDataPlugin.class.getName(),conditionalPermissionAdminPlugin,props);
 		}
 	}
 
