@@ -188,7 +188,7 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 		assertFalse(condPermAdmin.contains(rfc));
 	}
 	
-	public void deleteOneFromTwo() throws Exception {
+	public void testDeleteOneFromTwo() throws Exception {
 		// have two conditionalpermissions, delete one of them
 		ConditionalPermissionInfo cp1 = condPermAdmin.addConditionalPermissionInfo(CP1_COND,CP1_PERM);
 		ConditionalPermissionInfo rfc = condPermAdmin.addConditionalPermissionInfo(RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
@@ -198,6 +198,19 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 		dmtSession.deleteNode(RFC_EXAMPLE_HASH);
 		dmtSession.close();
 		assertTrue(condPermAdmin.contains(cp1));
+		assertFalse(condPermAdmin.contains(rfc));
+	}
+
+	public void modifyPermissionInfo() throws Exception {
+		// replace the permission infos in the RFC example with something else
+		ConditionalPermissionInfo expected_target = condPermAdmin.new PI(RFC_EXAMPLE_COND,CP1_PERM);
+		ConditionalPermissionInfo rfc = condPermAdmin.addConditionalPermissionInfo(RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
+		assertFalse(condPermAdmin.contains(expected_target));
+		assertTrue(condPermAdmin.contains(rfc));
+		newAtomicSession();
+		dmtSession.setNodeValue(RFC_EXAMPLE_HASH+"/PermissionInfo",new DmtData(CP1_PERM_STR));
+		dmtSession.close();
+		assertTrue(condPermAdmin.contains(expected_target));
 		assertFalse(condPermAdmin.contains(rfc));
 	}
 }
