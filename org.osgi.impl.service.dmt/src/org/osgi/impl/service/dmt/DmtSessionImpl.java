@@ -608,18 +608,16 @@ public class DmtSessionImpl implements DmtSession {
 		// ensure that the plugin is not returned for use in another thread
 		// before its open() has successfully finished
 		synchronized (plugin) {
-			if (dataPlugins.add(plugin)) {
-				if (plugin instanceof DmtDataPlugin)
-					((DmtDataPlugin) plugin).open(subtreeUri, lockMode, this);
-				else
-					if (plugin instanceof DmtReadOnlyDataPlugin)
-						((DmtReadOnlyDataPlugin) plugin).open(subtreeUri, this);
-					else
-						// never happens
-						throw new IllegalStateException(
-								"Invalid data plugin class given by dispatcher.");
-			}
-		}
+            if (dataPlugins.add(plugin)) {
+                if (plugin instanceof DmtDataPlugin)
+                    ((DmtDataPlugin) plugin).open(subtreeUri, lockMode, this);
+                else if (plugin instanceof DmtReadOnlyDataPlugin)
+                    ((DmtReadOnlyDataPlugin) plugin).open(subtreeUri, this);
+                else // never happens
+                    throw new IllegalStateException(
+                            "Invalid data plugin class given by dispatcher.");
+            }
+        }
 		return plugin;
 	}
 
