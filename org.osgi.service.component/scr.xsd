@@ -12,24 +12,29 @@
 		</sequence>
 		<attribute name="autoenable" type="boolean" default="true" use="optional"></attribute>
 		<attribute name="name" type="string" use="required"></attribute>
-		<attribute name="properties" type="string" use="optional"></attribute>
+		<attribute name="localization" type="string" use="optional"></attribute>
+		<attribute name="factory" type="string" use="optional"></attribute>
 	</complexType>
 
-	<complexType name="implementationType" >
+	<complexType name="implementationType">
 		<attribute name="class" type="string" use="required"></attribute>
 	</complexType>
 
 	<complexType name="propertyType">
-		<attribute name="name" type="string" use="required"></attribute>
-		<attribute name="value" type="string" use="required"></attribute>
-		<attribute name="type" use="optional" default="String" type="scr:eightJavaTypes"></attribute>
+		<simpleContent>
+			<extension base="string">
+				<attribute name="name" type="string" use="required"></attribute>
+				<attribute name="value" type="string" use="optional"></attribute>
+				<attribute name="type" use="optional" default="String" type="scr:javaTypes"></attribute>
+			</extension>
+		</simpleContent>
 	</complexType>
 
 	<complexType name="serviceType">
 		<sequence>
 			<element name="provide" minOccurs="1" maxOccurs="unbounded" type="scr:provideType"></element>
 		</sequence>
-		<attribute name="factory" type="boolean" default="false" use="optional"></attribute>
+		<attribute name="servicefactory" type="boolean" default="false" use="optional"></attribute>
 	</complexType>
 
 	<complexType name="referenceType">
@@ -46,7 +51,7 @@
 		<attribute name="interface" type="string" use="required"></attribute>
 	</complexType>
 
-	<simpleType name="eightJavaTypes">
+	<simpleType name="javaTypes">
 		<restriction base="string">
 			<enumeration value="String"></enumeration>
 			<enumeration value="Long"></enumeration>

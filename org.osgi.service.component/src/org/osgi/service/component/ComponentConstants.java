@@ -1,6 +1,6 @@
 /*
  * $Header$
- *
+ * 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
@@ -28,24 +28,41 @@
 package org.osgi.service.component;
 
 /**
- * A ComponentInstance encapsulates an instance of a component.
- * ComponentInstances are created whenever an instance of a component is
- * created.
+ * Defines standard names for Service Component constants.
  * 
  * @version $Revision$
  */
-public interface ComponentInstance {
-	/**
-	 * Dispose of this component instance. The instance will be deactivated. If
-	 * the instance has already been deactivated, this method does nothing.
-	 */
-	public void dispose();
+public interface ComponentConstants {
 
 	/**
-	 * Returns the component instance. The instance has been activated.
-	 * 
-	 * @return The component instance or <tt>null</tt> if the instance has
-	 *         been deactivated.
+	 * Manifest header (named &quot;Service-Component&quot;) identifying the XML
+	 * resources within the bundle containing the bundle's Service Component
+	 * descriptions.
+	 * <p>
+	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
+	 * object returned by the <tt>Bundle.getHeaders</tt> method.
 	 */
-	public Object getInstance();
+	public static final String SERVICE_COMPONENT = "Service-Component";
+
+	/**
+	 * A service registration property for a Service Component. It contains the
+	 * names of the Service Component. The type of this property must be
+	 * <tt>String</tt>.
+	 */
+	public final static String COMPONENT_NAME = "component.name";
+
+	/**
+	 * A service registration property for the ComponentFactory for a Service
+	 * Component. It contains the names of the ComponentFactory. The type of
+	 * this property must be <tt>String</tt>.
+	 */
+	public final static String COMPONENT_FACTORY = "component.factory";
+
+	/**
+	 * A suffix for a service registration property for a reference target. It
+	 * contains the filter to select the target services for a reference. The
+	 * type of this property must be <tt>String</tt>.
+	 */
+	public final static String REFERENCE_TARGET_SUFFIX = ".target";
+
 }
