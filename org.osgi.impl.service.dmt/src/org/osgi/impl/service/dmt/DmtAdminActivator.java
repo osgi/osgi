@@ -17,7 +17,9 @@
  */
 package org.osgi.impl.service.dmt;
 
+import java.security.AllPermission;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.osgi.framework.*;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
@@ -26,6 +28,7 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.event.EventAdmin;
+import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.util.tracker.ServiceTracker;
 
 // TODO cleanup service registrations properly in case of error
@@ -92,6 +95,13 @@ public class DmtAdminActivator implements BundleActivator {
             properties.put("service.pid", PERMISSION_ADMIN_SERVICE_PID);
             permissionReg = bc.registerService(services, 
                     dmtPermissionAdmin, properties);
+            
+            // adding default (all) permissions for remote principal "admin"
+            Map permissions = dmtPermissionAdmin.getPrincipalPermissions();
+            permissions.put("admin", new PermissionInfo[] {
+                    new PermissionInfo(AllPermission.class.getName(), "", "")
+            });
+            dmtPermissionAdmin.setPrincipalPermissions(permissions);
 		} catch (Exception e) {
 			System.out.println("Exception:" + e.getMessage());
 			throw new BundleException("Failure in start() method.", e);
