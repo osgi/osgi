@@ -320,9 +320,15 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 						for (int i = 0; i < locations.length; i++) {
 							URL url = new URL("file:" + locations[i]);
 							InputStream in = url.openStream();
-							target.install(url.getFile() + "~keep~", url
-									.openStream());
-							in.close();
+							if ( in != null )
+							try {
+								target.install(url.getFile() + "~keep~", in );
+							}
+							finally {
+								in.close();								
+							}
+							else 
+								error("No such file " + locations[i], null );
 						}
 						target.close();
 					}
