@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- $Header$ -->		
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.osgi.org/xmlns/scr/v1.0.0" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
 	<annotation>
-		<documentation>$Header$</documentation>		
 		<documentation xml:lang="en">
 This is the XML Schema for component descriptions used by the Service Component Runtime (SCR).
 Component description documents may be embedded in other XML documents. The SCR will

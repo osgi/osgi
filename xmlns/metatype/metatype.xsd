@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- $Header$ -->		
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.osgi.org/xmlns/metatype/v1.0.0" xmlns:mts="http://www.osgi.org/xmlns/metatype/v1.0.0">
 	<annotation>
-		<documentation>$Header$</documentation>		
 		<documentation xml:lang="en">
 This is the XML Schema for metatyping configuration information for Configuration Admin.
 		</documentation>
