@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-Name: DeploymentAdmin
+Bundle-SymbolicName: ${p}
+Bundle-Version: 1.0
+Bundle-Vendor: Nokia
+Bundle-Activator: $(p).DeploymentPlugin
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
