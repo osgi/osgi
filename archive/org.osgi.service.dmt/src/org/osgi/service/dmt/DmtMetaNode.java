@@ -33,41 +33,27 @@ package org.osgi.service.dmt;
  * <p> The interface has two types of functions to describe type of nodes
  * in the DMT. One is used to retrieve standard OMA DM metadata, such as
  * access mode, cardinality, default etc. Another is used for meta data
- * extensions defined by OSGi MEG, such as valid values, referential
- * integrity (RI), regular expressions and such.
+ * extensions defined by OSGi MEG, such as valid values and regular expressions.
  */
 public interface DmtMetaNode {
 
-    /**
-     * Check whether the DELETE operation is valid for this node
-     * @return <code>true</code> if the operation is valid for this node
-     */
-    boolean   canDelete();
+    public int CMD_ADD     = 0;
+    public int CMD_DELETE  = 1;
+    public int CMD_EXECUTE = 2;
+    public int CMD_REPLACE = 3;
+    public int CMD_GET     = 4;
 
+    public int PERMANENT   = 0;
+    public int DYNAMIC     = 1;
+    
     /**
-     * Check whether the ADD operation is valid for this node
-     * @return <code>true</code> if the operation is valid for this node
+     * Check whether the given operation is valid for this node.
+     * @param operation One of the <code>DmtMetaNode.CMD_...</code> constants.
+     * @return <code>false</code> if the operation is not valid for this node 
+     * or the operation code is not one of the allowed constants.
      */
-    boolean   canAdd();
-
-    /**
-     * Check whether the GET operation is valid for this node
-     * @return <code>true</code> if the operation is valid for this node
-     */
-    boolean   canGet();
-
-    /**
-     * Check whether the REPLACE operation is valid for this node
-     * @return <code>true</code> if the operation is valid for this node
-     */
-    boolean   canReplace();
-
-    /**
-     * Check whether the EXECUTE operation is valid for this node
-     * @return <code>true</code> if the operation is valid for this node
-     */
-    boolean   canExecute();
-
+    boolean   can(int operation);
+    
     /**
      * Check whether the node is a leaf node or an internal one
      * @return <code>true</code> if the node is a leaf node
@@ -75,13 +61,16 @@ public interface DmtMetaNode {
     boolean   isLeaf();
 
     /**
-     * Check whether the node is a permanent one. Note that a permanent node
+     * Return the scope of the node. Valid values are 
+     * <code>DmtMetaNode.PERMANENT</code> and <code>DmtMetaNode.DYNAMIC</code>.
+     * Note that a permanent node
      * is not the same as a node where the DELETE operation is not allowed.
      * Permanent nodes never can be deleted, whereas a non-deletable node can
      * disappear in a recursive DELETE operation issued on one of its parents.
-     * @return <code>true</code> if the node is permanent
+     * @return <code>DmtMetaNode.PERMANENT</code> or 
+     * <code>DmtMetaNode.DYNAMIC</code>
      */
-    boolean   isPermanent();
+    int     getScope();
 
     /**
      * Get the explanation string associated with this node
@@ -90,8 +79,12 @@ public interface DmtMetaNode {
     String    getDescription();
 
     /**
-     * Get the number of maximum occurrence of this type of nodes on the same
-     * level in the DMT.
+     * Get the number of maximum occurrences of this type of nodes on the same
+     * level in the DMT. Returns <code>Integer.MAX_VALUE</code> if there is no
+     * upper limit. Note that if the occurrence is greater than 1 then
+     * this node can not have siblings with different metadata. That is, if 
+     * different type of nodes coexist on the same level, their occurrence can 
+     * not be greater than 1. 
      * @return The maximum allowed occurrence of this node type
      */
     int       getMaxOccurrence();
@@ -145,10 +138,20 @@ public interface DmtMetaNode {
      * not defined
      */
     DmtData[] getValidValues();
+    
+    /**
+     * Return an array of Strings if valid names are defined for
+     * the node, or <code>null</code> otherwise
+     * @return the valid values for this node name, or <code>null</code> if
+     * not defined
+     */
+    String[] getValidNames();
 
     /**
      * Get the node's format, expressed in terms of type
-     * constants defined in <code>DmtDataType</code>. Note that the 'format'
+     * constants defined in <code>DmtData</code>. If there are multiple formats
+     * allowed for the node then the format constants ar OR-ed.
+     * Note that the 'format'
      * term is a legacy from OMA DM, it is more customary to think of this as
      * 'type'.
      * @return The format of the node.
@@ -156,21 +159,31 @@ public interface DmtMetaNode {
     int       getFormat();
 
     /**
-     * Get the regular expression associated with this node if any. This method
-     * makes sense only in the case of <code>chr</code> nodes.
+     * Get the regular expression associated with the value of this node if any. 
+     * This method makes sense only in the case of <code>chr</code> nodes.
      * @return The regular expression associated with this node or
      * <code>null</code> if not defined, or if the node is not of type
      * <code>chr</code>.
      */
     String    getRegExp();
+    
+    /**
+     * Get the regular expression associated with the name of this node if any. 
+     * @return The regular expression associated with the name of this node or
+     * <code>null</code> if not defined.
+     */
+    String    getNameRegExp();
 
     /**
      * Get the list of MIME types this node can hold.
      * @return The list of allowed MIME types for this node or
-     * <code>null</code> if not defined.
+     * <code>null</code> if not defined. If there is a default value defined 
+     * for this node then the associated MIME type (if any) must be the first
+     * element of the list.
      */
     String[]  getMimeTypes();
 
+    
     /**
      * Get the URI of a node whose children's names are the only valid
      * values for the current node. For example, let's assume that we have
@@ -182,7 +195,7 @@ public interface DmtMetaNode {
      * the latter
      * @return The URI of the referred node or <code>null</code> if not defined.
      */
-    String    getReferredURI();
+    //String    getReferredURI();
 
     /**
      * Get the URI of all nodes referring to this node. It returns the list of
@@ -191,7 +204,7 @@ public interface DmtMetaNode {
      * @return The URI list of nodes reffering to this node, or
      * <code>null</code> if not defined.
      */
-    String[]  getDependentURIs();
+    //String[]  getDependentURIs();
 
     /**
      * Get the URI of all nodes referring to this node. It returns the list
@@ -200,5 +213,5 @@ public interface DmtMetaNode {
      * @return The URI list of nodes reffering to this node, or
      * <code>null</code> if not defined.
      */
-    String[]  getChildURIs();
+    //String[]  getChildURIs();
 }

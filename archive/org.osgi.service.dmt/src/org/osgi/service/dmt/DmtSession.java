@@ -31,10 +31,13 @@ package org.osgi.service.dmt;
  * interface. The session is associated with a root node which limits the
  * subtree in which the operations can be executed within this session. Most of
  * the operations take a node URI as parameter, it can be either an absolute
- * URI (starting with &quot;./&quot;) or a URI relative to the root node of the session.
+ * URI (starting with &quot;./&quot;) or a URI relative to the root node of the 
+ * session.
  * If the URI specified does not correspond to a legitimate node in the tree
  * an exception is thrown. The only exception is the isNodeUri() method which
  * returns false in case of an invalid URI.
+ * <p> Each method of the DmtSession can throw InvalidStateException in case the
+ * session is invalidated because of timeout. 
  */
 public interface DmtSession extends Dmt {
     /**
@@ -58,6 +61,8 @@ public interface DmtSession extends Dmt {
     /**
      * Gives the type of lock the session currently has.
      * @return One of the <code>LOCK_TYPE_...</code> constants.
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     int getLockType();
 
@@ -67,6 +72,8 @@ public interface DmtSession extends Dmt {
      * in this case <code>null</code> is returned.
      * @return the identifier of the remote server that initiated the
      * session, or <code>null</code> for local sessions
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     String getPrincipal();
 
@@ -74,6 +81,8 @@ public interface DmtSession extends Dmt {
      * The unique identifier of the session. The ID is generated automatically,
      * and it is guaranteed to be unique on a machine.
      * @return the session identification number
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     int getSessionId();
 
@@ -96,6 +105,8 @@ public interface DmtSession extends Dmt {
      * <li> <code>COMMAND_FAILED</code> if no DmtExecPlugin is associated with
      * the node
      * <li> <code>DATA_STORE_FAILURE</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     void execute(String nodeUri, String data) throws DmtException;
 
@@ -111,6 +122,8 @@ public interface DmtSession extends Dmt {
      * <li> <code>OTHER_ERROR</code> if the URI is not within the current
      * session's subtree
      * <li> <code>COMMAND_NOT_ALLOWED</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     boolean isLeafNode(String nodeUri) throws DmtException;
 
@@ -127,6 +140,8 @@ public interface DmtSession extends Dmt {
      * session's subtree
      * <li> <code>COMMAND_NOT_ALLOWED</code>
      * <li> <code>DATA_STORE_FAILURE</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     DmtAcl getNodeAcl(String nodeUri) throws DmtException;
 
@@ -143,6 +158,8 @@ public interface DmtSession extends Dmt {
      * session's subtree
      * <li> <code>COMMAND_NOT_ALLOWED</code>
      * <li> <code>DATA_STORE_FAILURE</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     void setNodeAcl(String nodeUri, DmtAcl acl) throws DmtException;
 
@@ -151,6 +168,8 @@ public interface DmtSession extends Dmt {
      * if the session was created without specifying a root, which means that
      * the target of this session is the whole DMT.
      * @return the root URI
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     String getRootUri();
 }

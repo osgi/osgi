@@ -34,159 +34,41 @@ import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
 /**
- * Indicates the callers authority to create DMT sessions in the name of a
- * remote management server. Only protocol adapters communicating with
- * management servers should be granted this permission.
+ * Indicates the callers authority to create DMT sessions in the name
+ * of a remote management server. Only protocol adapters communicating
+ * with management servers should be granted this permission.
  * <p>
- * <code>DmtPrincipalPermission</code> has no actions or target. The name of
- * the permission is fixed to &quot;DmtPrincipalPermission&quot; for all instances.
+ * <code>DmtPrincipalPermission</code> has a target string which
+ * controls the name of the principal on whose behalf the protocol
+ * adapter can act. A wildcard is allowed in the target as defined by
+ * <code>BasicPermission</code>, for example a &quot;*&quot; means the
+ * adapter can create a session in the name of any principal.
  *
  * @version $Revision$
  */
 public class DmtPrincipalPermission extends BasicPermission {
-	// TODO add static final serialVersionUID
+    // TODO add static final serialVersionUID
 
     /**
      * Creates a new <code>DmtPrincipalPermission</code> object with its name
-     * set to &quot;DmtPrincipalPermission&quot;.
+     * set to the target string
+     * @param target Name of the principal
      */
-    public DmtPrincipalPermission() {
-        super("DmtPrincipalPermission");
+    public DmtPrincipalPermission(String target) {
+        super(target);
     }
 
     /**
      * Creates a new <code>DmtPrincipalPermission</code> object using the
      * 'canonic' two argument constructor.
      *
-     * @param name ignored; always set to &quot;DmtPrincipalPermission&quot;
+     * @param target Name of the principal
      * @param actions ignored
      */
-    public DmtPrincipalPermission(String name, String actions) {
-        this();
+    public DmtPrincipalPermission(String target, String actions) {
+        this(target);
     }
 
-    /**
-     * Determines if the specified permission is implied by this permission.
-     * <p>
-     * This method returns <code>true</code> if the specified permission is an
-     * instance of <code>DmtPrincipalPermission</code>.
-     *
-     * @param p the permission to be checked
-     *
-     * @return <code>true</code> if the given permission is an instance of
-     *         this class; <code>false</code> otherwise.
-     */
-    public boolean implies(Permission p) {
-        return (p instanceof DmtPrincipalPermission);
-    }
-
-    /**
-     * Determines the equality of two <code>DmtPrincipalPermission</code>
-     * objects.
-     * <p>
-     * Two <code>DmtPrincipalPermission</code> objects are always equal.
-     *
-     * @param obj the object being compared for equality with this object
-     * @return <code>true</code> if <code>obj</code> is a
-     *         <code>DmtPrincipalPermission</code>; <code>false</code>
-     *         otherwise.
-     */
-    public boolean equals(Object obj) {
-        return (obj instanceof DmtPrincipalPermission);
-    }
-
-    /**
-     * Returns a new <code>PermissionCollection</code> object suitable for
-     * storing <code>DmtPrincipalPermission</code>s.
-     *
-     * @return a new <code>PermissionCollection</code> object
-     */
-    public PermissionCollection newPermissionCollection() {
-        return new DmtPrincipalPermissionCollection();
-    }
+    // All methods are good for us as implemented by BasicPermission.
 }
 
-/**
- * Stores a collection of <code>DmtPrincipalPermission</code>s. Because all
- * instances of <code>DmtPrincipalPermission</code> are equal, this collection
- * only stores whether any permissions have been added or not.
- */
-final class DmtPrincipalPermissionCollection extends PermissionCollection
-{
-    /**
-     * True if collection is non-empty.
-     *
-     * @serial
-     */
-    private boolean hasElement;
-
-    /**
-     * Creates an empty <code>DmtPrincipalPermission</code> object.
-     */
-    public DmtPrincipalPermissionCollection() {
-        hasElement = false;
-    }
-
-    /**
-     * Adds the specified permission to the
-     * <code>DmtPrincipalPermissionCollection</code>. Only instances of
-     * <code>DmtPrincipalPermission</code> can be added to this collection.
-     *
-     * @param permission the <code>Permission</code> object to add
-     * @exception IllegalArgumentException if the permission is not a
-     *            <code>DmtPrincipalPermission</code>
-     * @exception SecurityException if this permission collection has been
-     *            marked read-only
-     */
-
-    public void add(Permission permission) {
-        if (!(permission instanceof DmtPrincipalPermission))
-            throw new IllegalArgumentException("Invalid permission: " +
-                                               permission);
-
-        if (isReadOnly())
-            throw new SecurityException("Attempt to add a Permission to a " +
-                                        "read-only PermissionCollection.");
-
-        hasElement = true;
-    }
-
-    /**
-     * Determines if the specified set of permissions implies the permissions
-     * expressed in the parameter <code>permission</code>.
-     *
-     * @param p the <code>Permission</code> object to compare
-     * @return <code>true</code> if permission is a proper subset of a
-     *         permission in the set; <code>false</code> otherwise
-     */
-
-    public boolean implies(Permission p) {
-        return(hasElement && (p instanceof DmtPrincipalPermission));
-    }
-
-    /**
-     * Returns an enumeration of the permissions is this permission collection.
-     *
-     * @return an enumeration containing exactly one
-     *         <code>DmtPrincipalPermission</code> object if any permissions
-     *         have been added to this collection, or an empty enumeration
-     *         otherwise
-     */
-    public Enumeration elements() {
-        return new Enumeration() {
-            private boolean more = hasElement;
-
-            public boolean hasMoreElements() {
-                return more;
-            }
-
-            public Object nextElement()    {
-                if (!more)
-                    throw new NoSuchElementException();
-
-                more = false;
-                return new DmtPrincipalPermission();
-            }
-        };
-    }
-}

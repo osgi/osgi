@@ -58,6 +58,8 @@ public interface DmtReadOnly {
      * @throws DmtException with the following possible error codes
      * <li> <code>COMMAND_FAILED</code> if an underlying plugin failed to close
      * <li> <code>DATA_STORE_FAILURE</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     void close() throws DmtException;
 
@@ -65,6 +67,8 @@ public interface DmtReadOnly {
      * Check whether the specified URI corresponds to a valid node in the DMT.
      * @param nodeUri the URI to check
      * @return true if the given node exists in the DMT
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     boolean isNodeUri(String nodeUri);
 
@@ -82,7 +86,10 @@ public interface DmtReadOnly {
      * <li> <code>COMMAND_FAILED</code>
      * <li> <code>COMMAND_NOT_ALLOWED</code> if the specified node is not a leaf
      * node
-     * <li> <code>DATA_STORE_FAILURE</code>*/
+     * <li> <code>DATA_STORE_FAILURE</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
+     */
     DmtData getNodeValue(String nodeUri) throws DmtException;
 
     /**
@@ -100,6 +107,8 @@ public interface DmtReadOnly {
      * <li> <code>COMMAND_NOT_ALLOWED</code>
      * <li> <code>FEATURE_NOT_SUPPORTED</code>
      * <li> <code>DATA_STORE_FAILURE</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     String getNodeTitle(String nodeUri) throws DmtException;
 
@@ -120,13 +129,16 @@ public interface DmtReadOnly {
      * <li> <code>COMMAND_NOT_ALLOWED</code>
      * <li> <code>FEATURE_NOT_SUPPORTED</code>
      * <li> <code>DATA_STORE_FAILURE</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     String getNodeType(String nodeUri) throws DmtException;
 
     /**
      * Get the version of a node. The version can not be set, it is calculated
      * automatically by the device. It is incremented each time the value of
-     * the node is changed.
+     * a leaf node is changed. The version property is undefined for interior 
+     * nodes.
      * @param nodeUri The URI of the node
      * @return The version of the node
      * @throws DmtException with the following possible error codes
@@ -140,6 +152,8 @@ public interface DmtReadOnly {
      * <li> <code>COMMAND_NOT_ALLOWED</code>
      * <li> <code>FEATURE_NOT_SUPPORTED</code>
      * <li> <code>DATA_STORE_FAILURE</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     int getNodeVersion(String nodeUri) throws DmtException;
 
@@ -158,6 +172,8 @@ public interface DmtReadOnly {
      * <li> <code>COMMAND_NOT_ALLOWED</code>
      * <li> <code>FEATURE_NOT_SUPPORTED</code>
      * <li> <code>DATA_STORE_FAILURE</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     Date getNodeTimestamp(String nodeUri) throws DmtException;
 
@@ -179,6 +195,8 @@ public interface DmtReadOnly {
      * <li> <code>COMMAND_NOT_ALLOWED</code>
      * <li> <code>FEATURE_NOT_SUPPORTED</code>
      * <li> <code>DATA_STORE_FAILURE</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     int     getNodeSize(String nodeUri) throws DmtException;
 
@@ -202,6 +220,8 @@ public interface DmtReadOnly {
      * <li> <code>COMMAND_FAILED</code>
      * <li> <code>COMMAND_NOT_ALLOWED</code>
      * <li> <code>DATA_STORE_FAILURE</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     String[] getChildNodeNames(String nodeUri) throws DmtException;
 
@@ -238,6 +258,8 @@ public interface DmtReadOnly {
      * <li> <code>COMMAND_NOT_ALLOWED</code>
      * <li> <code>FEATURE_NOT_SUPPORTED</code>
      * <li> <code>DATA_STORE_FAILURE</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     DmtMetaNode getMetaNode(String nodeUri) throws DmtException;
 
