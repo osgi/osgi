@@ -1,5 +1,5 @@
 <descriptor>
-  <application>
+  <application pid="Meglet-Sample-Nr-2-Version-1.0">
     <class value = "com.nokia.test.megletsample2.TestApplication2"/>
     <locale name = "en">
       <name value = "MEG Test Application" />

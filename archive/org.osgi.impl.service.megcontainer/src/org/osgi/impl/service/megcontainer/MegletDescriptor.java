@@ -49,13 +49,10 @@ public class MegletDescriptor extends ApplicationDescriptor {
 		this.megletContainer = mc;
 		if (names.size() == 0 || icons.size() == 0
 				|| !props.containsKey("application.bundle.id")
+				|| !props.containsKey( APPLICATION_PID )
 				|| !props.containsKey( APPLICATION_VERSION ))
 			throw new Exception("Invalid MEG container input!");
-		pid = "MEG"
-				+ "-" + (String)props.get( APPLICATION_NAME )
-				+ "-" + (String)props.get( APPLICATION_VERSION );
-		pid = pid.replace(',', '_');
-		pid = pid.replace(' ', '_');
+		pid = props.getProperty( APPLICATION_PID );
 	}
 
 	public long getBundleId() {
