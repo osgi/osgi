@@ -9,7 +9,7 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-init&#13;&#10;-istart ../../osgi.released/osgi.jar&#13;&#10;-istart ../osgi.refimpl.jar&#13;&#10;-istart ../org.osgi.tools.console.jar&#13;&#10;-istart ../osgi.target.jar&#13;&#10;-launch"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="osgi.test"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dorg.osgi.framework.system.packages=javax.xml.parsers,javax.xml.transform,javax.xml.transform.stream,org.xml.sax,org.xml.sax.helpers,javax.crypto,javax.crypto.spec&#13;&#10;-Dorg.osgi.test.watchdog=120&#13;&#10;-Djava.security.manager&#13;&#10;-Djava.security.policy=policy&#13;&#10;-Dmail.host=localhost&#13;&#10;-Dorg.osgi.service.http.port=8080&#13;&#10;-classpath ../org.osgi.impl.framework.jar"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dorg.osgi.framework.system.packages=javax.xml.parsers,javax.xml.transform,javax.xml.transform.stream,org.xml.sax,org.xml.sax.helpers,javax.crypto,javax.crypto.spec,javax.swing,javax.swing.border,javax.swing.text&#13;&#10;-Dorg.osgi.test.watchdog=120&#13;&#10;-Djava.security.manager&#13;&#10;-Djava.security.policy=policy&#13;&#10;-Dmail.host=localhost&#13;&#10;-Dorg.osgi.service.http.port=8080&#13;&#10;-classpath ../org.osgi.impl.framework.jar"/>
 <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
 <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
 <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
