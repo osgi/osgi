@@ -516,12 +516,12 @@ public abstract interface Bundle {
 	 * they are present in the Manifest file:
 	 * 
 	 * <pre>
-	 *     Bundle-Name
-	 *     Bundle-Vendor
-	 *     Bundle-Version
-	 *     Bundle-Description
-	 *     Bundle-DocURL
-	 *     Bundle-ContactAddress
+	 *      Bundle-Name
+	 *      Bundle-Vendor
+	 *      Bundle-Version
+	 *      Bundle-Description
+	 *      Bundle-DocURL
+	 *      Bundle-ContactAddress
 	 * </pre>
 	 * 
 	 * <p>
@@ -848,4 +848,17 @@ public abstract interface Bundle {
 	 * @since 1.3
 	 */
 	public URL getEntry(String name);
+
+	/**
+	 * Returns the time when this bundle was last modified. A bundle is
+	 * considered to be modified when it is installed, updated or uninstalled.
+	 * 
+	 * <p>
+	 * The time value is the number of milliseconds since January 1, 1970,
+	 * 00:00:00 GMT.
+	 * 
+	 * @return The time when this bundle was last modified.
+	 * @since 1.3
+	 */
+	public long getLastModified();
 }

@@ -549,4 +549,12 @@ public class BundleHost extends AbstractBundle {
 		BundleDescription description = proxy.getBundleDescription();
 		description.setUserObject(null);
 	}
+	/**
+	 * @return
+	 * @see org.osgi.framework.Bundle#getLastModified()
+	 */
+	public long getLastModified() {
+		// TODO Auto-generated method stub
+		return System.currentTimeMillis();
+	}
 }

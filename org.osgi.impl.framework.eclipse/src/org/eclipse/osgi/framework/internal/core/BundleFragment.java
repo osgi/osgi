@@ -395,4 +395,12 @@ public class BundleFragment extends AbstractBundle {
 		// Fragments cannot have a BundleContext.
 		return null;
 	}
+	/**
+	 * @return
+	 * @see org.osgi.framework.Bundle#getLastModified()
+	 */
+	public long getLastModified() {
+		// TODO Auto-generated method stub
+		return System.currentTimeMillis();
+	}
 }
