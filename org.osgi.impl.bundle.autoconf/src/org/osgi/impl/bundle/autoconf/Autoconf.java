@@ -27,6 +27,7 @@
 package org.osgi.impl.bundle.autoconf;
 
 import java.io.InputStream;
+import java.util.Hashtable;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.osgi.framework.BundleActivator;
@@ -45,7 +46,9 @@ public class Autoconf implements BundleActivator,ResourceProcessor {
 				"(&(parser.namespaceAware=true)(parser.validating=true))");
 		if (refs==null) { throw new Exception("Cannot get a validating parser"); }
 		saxp = (SAXParser) context.getService(refs[0]);
-		context.registerService(ResourceProcessor.class.getName(),this,null);
+		Hashtable d = new Hashtable();
+		d.put("processor","AutoconfProcessor"); // TODO this is just an "example" in rfc88 5.2.5
+		context.registerService(ResourceProcessor.class.getName(),this,d);
 	}
 
 	public void stop(BundleContext context) throws Exception {
