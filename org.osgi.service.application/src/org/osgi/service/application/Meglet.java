@@ -102,7 +102,7 @@ public abstract class Meglet implements EventHandler {
 				topic[ k ] = (String) listenedTopics.get(k);
 
 			Hashtable props = new Hashtable();
-			props.put("topic", topic );
+			props.put( EventConstants.EVENT_TOPIC, topic );
 			if ( serviceListenerRegistration == null )
 				serviceListenerRegistration = bc.registerService(
 					EventHandler.class.getName(), this, props);
