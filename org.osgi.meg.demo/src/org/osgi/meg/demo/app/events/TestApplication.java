@@ -81,6 +81,7 @@ public class TestApplication
 	public void stopApplication() throws Exception {
 		writeResult("STOP");
 		gui.stopAnim();
+		gui.setVisible(false);
 		
 		reg.unregister();
         context.ungetServiceObject(updateListener);
