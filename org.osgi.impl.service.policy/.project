@@ -4,14 +4,10 @@
 	<comment></comment>
 	<projects>
 		<project>cnf</project>
-		<project>org.osgi.impl.framework.eclipse</project>
-		<project>org.osgi.impl.service.cm</project>
 		<project>org.osgi.impl.service.dmt</project>
-		<project>org.osgi.impl.service.event</project>
-		<project>org.osgi.impl.service.log</project>
 		<project>org.osgi.service.condpermadmin</project>
-		<project>org.osgi.service.deploymentadmin</project>
 		<project>org.osgi.service.dmt</project>
+		<project>org.osgi.service.permissionadmin</project>
 		<project>org.osgi.tools</project>
 	</projects>
 	<buildSpec>
