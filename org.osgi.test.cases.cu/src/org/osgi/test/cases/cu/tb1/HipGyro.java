@@ -125,29 +125,29 @@ public class HipGyro implements ManagedControlUnit {
 				ZROValid = true;
 				return null;
 			}
-			else throw (new ControlUnitException(ControlUnitException.NO_SUCH_ACTION_ERROR));
+			else throw (new ControlUnitException(ControlUnitException.ILLEGAL_ACTION_ARGUMENTS_ERROR));
 		}
 		
 		// Measurement getZRO();
 		else if (actionId == "hip.gyro.getZRO") {
 			if (arguments != null)
-				throw (new IllegalArgumentException());
+				throw (new ControlUnitException(ControlUnitException.ILLEGAL_ACTION_ARGUMENTS_ERROR));
 			return ZRO;
 		}
 		
 		// Measurement getTiltAngle;
 		else if (actionId == "hip.gyro.getTitleAngle") {
 			if (arguments != null)
-				throw (new IllegalArgumentException());	
+				throw (new ControlUnitException(ControlUnitException.ILLEGAL_ACTION_ARGUMENTS_ERROR));	
 			return tiltAngle;
 		}
 
 		// boolean isZROValid();
 		else if (actionId == "hip.gyro.isZROValid") {
 			if (arguments != null)
-				throw (new IllegalArgumentException());	
+				throw (new ControlUnitException(ControlUnitException.ILLEGAL_ACTION_ARGUMENTS_ERROR));	
 			return (new Boolean(ZROValid));
 		}
-		else throw (new IllegalArgumentException());
+		else throw (new ControlUnitException(ControlUnitException.NO_SUCH_ACTION_ERROR));
 	}
 }

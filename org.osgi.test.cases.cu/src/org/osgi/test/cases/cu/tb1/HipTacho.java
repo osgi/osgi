@@ -125,16 +125,16 @@ public class HipTacho implements ManagedControlUnit {
 		//byte getDpp()
 		else if (actionId == "hip.tacho.getDpp") {
 			if (arguments != null)
-				throw (new IllegalArgumentException());
+				throw (new ControlUnitException(ControlUnitException.ILLEGAL_ACTION_ARGUMENTS_ERROR));
 			return (new Byte(dpp));
 		}
 		
 		//boolean isDppValid()
 		else if (actionId == "hip.tacho.isDppValid") {
 			if (arguments != null)
-				throw (new IllegalArgumentException());	
+				throw (new ControlUnitException(ControlUnitException.ILLEGAL_ACTION_ARGUMENTS_ERROR));	
 			return (new Boolean(dppValid));
 		}
-		else throw (new IllegalArgumentException());
+		else throw (new ControlUnitException(ControlUnitException.NO_SUCH_ACTION_ERROR));
 	}
 }
