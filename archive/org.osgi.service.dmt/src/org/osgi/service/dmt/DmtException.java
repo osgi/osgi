@@ -32,6 +32,7 @@ import java.util.*;
  * Checked exception received when a DMT operation fails.
  */
 public class DmtException extends Exception {
+	// TODO add static final serialVersionUID
 	private String			uri						= null;
 	private int				code					= 0;
 	private String			message					= null;

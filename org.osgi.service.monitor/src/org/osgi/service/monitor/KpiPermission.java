@@ -11,6 +11,8 @@ import java.util.StringTokenizer;
  * separated by commas.
  */
 public class KpiPermission extends Permission {
+	// TODO add static final serialVersionUID
+
     private static final int READ     = 0x1;
     private static final int RESET    = 0x2;
     private static final int PUBLISH  = 0x4;
