@@ -27,10 +27,18 @@
 
 package org.osgi.test.cases.event.tbc;
 
+import org.osgi.service.event.Event;
+
 /**
  * Dummy service to check exporter
  * 
  * @version $Revision$
  */
 public interface TBCService {
+  
+  public void setTopics(String[] topics);
+  
+  public String[] getTopics();
+    
+  public Event getLastReceivedEvent();
 }

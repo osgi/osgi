@@ -25,7 +25,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.event.tb1;
+package org.osgi.test.cases.event.tb2;
 
 import java.util.Hashtable;
 
@@ -33,6 +33,9 @@ import org.osgi.framework.*;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
+import org.osgi.service.event.TopicPermission;
+import org.osgi.service.permissionadmin.PermissionAdmin;
+import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.event.tbc.TBCService;
 
 /**
@@ -49,7 +52,7 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
   
 	public void start(BundleContext context) throws Exception {
     this.context = context;
-		context.registerService(TBCService.class.getName(), this, null);
+    context.registerService(TBCService.class.getName(), this, null);
     //serviceReg = context.registerService(EventHandler.class.getName(), this, null);
 	}
   
