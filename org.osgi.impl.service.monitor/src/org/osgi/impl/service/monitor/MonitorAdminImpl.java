@@ -19,24 +19,13 @@ package org.osgi.impl.service.monitor;
 
 import java.lang.reflect.Array;
 import java.text.MessageFormat;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Vector;
-import java.util.Iterator;
+import java.util.*;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
-
-import org.osgi.service.dmt.DmtAlertSender;
-import org.osgi.service.dmt.DmtAlertItem;
-import org.osgi.service.dmt.DmtException;
-
-import org.osgi.service.event.EventChannel;
-import org.osgi.service.event.ChannelEvent;
-
+import org.osgi.framework.*;
+import org.osgi.service.dmt.*;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
 import org.osgi.service.monitor.*;
-
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -71,11 +60,11 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
 
     private BundleContext bc;
     private ServiceTracker tracker;
-    private EventChannel eventChannel;
+    private EventAdmin eventChannel;
     private DmtAlertSender alertSender;
     private Vector jobs;
 
-    public MonitorAdminImpl(BundleContext bc, ServiceTracker tracker, EventChannel eventChannel, DmtAlertSender alertSender) {
+    public MonitorAdminImpl(BundleContext bc, ServiceTracker tracker, EventAdmin eventChannel, DmtAlertSender alertSender) {
         this.bc = bc;
         this.tracker = tracker;
         this.eventChannel = eventChannel;
@@ -164,7 +153,7 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
         properties.put("kpi.name", kpi.getID());
         if(initiators != null)
             properties.put("listener.id", initiators);
-        ChannelEvent event = new ChannelEvent(MONITOR_EVENT_TOPIC, properties);
+        Event event = new Event(MONITOR_EVENT_TOPIC, properties);
         eventChannel.postEvent(event);
     }
 

@@ -19,14 +19,14 @@ import java.util.Hashtable;
 
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.event.ChannelEvent;
-import org.osgi.service.event.EventChannel;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
 
 /**
  * @version $Revision$
  */
 public class ServiceEventAdapter extends EventAdapter {
-	// constants for ChannelEvent topic substring
+	// constants for Event topic substring
 	public static final String	UNREGISTERING	= "UNREGISTERING";
 	public static final String	MODIFIED		= "MODIFIED";
 	public static final String	REGISTERED		= "REGISTERED";
@@ -36,7 +36,7 @@ public class ServiceEventAdapter extends EventAdapter {
 	/**
 	 * @param channel
 	 */
-	public ServiceEventAdapter(ServiceEvent event, EventChannel channel) {
+	public ServiceEventAdapter(ServiceEvent event, EventAdmin channel) {
 		super(channel);
 		this.event = event;
 	}
@@ -50,7 +50,7 @@ public class ServiceEventAdapter extends EventAdapter {
 	 * @return
 	 * @see org.osgi.impl.service.event.mapper.EventAdapter#convert()
 	 */
-	public ChannelEvent convert() {
+	public Event convert() {
 		String typename = null;
 		switch (event.getType()) {
 			case ServiceEvent.REGISTERED :
@@ -78,7 +78,7 @@ public class ServiceEventAdapter extends EventAdapter {
 		putServiceReferenceProperties(properties, ref);
 
 		properties.put(Constants.EVENT, event);
-		ChannelEvent ce = new ChannelEvent(topic, properties);
+		Event ce = new Event(topic, properties);
 		return ce;
 	}
 }

@@ -18,29 +18,11 @@
 package org.osgi.impl.service.dmt;
 
 import java.io.UnsupportedEncodingException;
+import java.util.*;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
-
-import org.osgi.service.dmt.Dmt;
-import org.osgi.service.dmt.DmtAcl;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtDataPlugin;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtExecPlugin;
-import org.osgi.service.dmt.DmtMetaNode;
-import org.osgi.service.dmt.DmtReadOnly;
-import org.osgi.service.dmt.DmtReadOnlyDataPlugin;
-import org.osgi.service.dmt.DmtSession;
-
-import org.osgi.service.event.ChannelEvent;
-import org.osgi.service.event.EventChannel;
+import org.osgi.service.dmt.*;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
 
 // TODO permissions: check java permissions, set permissions based on policy plugin, etc.
 // TODO optimize node handling (e.g. retrieve plugin from dispatcher only once per API call), maybe with new URI class
@@ -65,7 +47,7 @@ public class DmtSessionImpl implements DmtSession {
 	private static final int    SHOULD_BE_INTERIOR = 3; // implies SHOULD_EXIST
     
     private DmtPluginDispatcher dispatcher;
-    private EventChannel        eventChannel;
+    private EventAdmin        eventChannel;
 
     private String              principal;
     private String              subtreeUri;
@@ -77,7 +59,7 @@ public class DmtSessionImpl implements DmtSession {
     private boolean             open;
 
 	public DmtSessionImpl(String principal, String subtreeUri, int lockMode,
-			              EventChannel eventChannel, 
+			              EventAdmin eventChannel, 
                           DmtPluginDispatcher dispatcher) throws DmtException {
         
 		checkNodeUri(subtreeUri);
@@ -494,7 +476,7 @@ public class DmtSessionImpl implements DmtSession {
         Hashtable properties = new Hashtable();
         properties.put("session.id", new Integer(sessionId));
         properties.put("nodes", nodes);
-        ChannelEvent event = new ChannelEvent(topic, properties);
+        Event event = new Event(topic, properties);
         eventChannel.postEvent(event);
     }
     

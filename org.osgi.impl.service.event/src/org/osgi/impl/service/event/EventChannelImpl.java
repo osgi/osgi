@@ -22,21 +22,21 @@ import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogService;
 
 /**
- * Implementation of org.osgi.service.event.EventChannel. EventChannelImpl uses
+ * Implementation of org.osgi.service.event.EventAdmin. EventChannelImpl uses
  * LogProxy and org.eclipse.osgi.framework.eventmgr.EventManager. It is assumeed
  * org.eclipse.osgi.framework.eventmgr package is exported by some bundle.
  */
-public class EventChannelImpl implements EventChannel {
+public class EventChannelImpl implements EventAdmin {
 
 	/**
 	 * Class ChannelEventDispatcher is used to dispatch events to
-	 * ChannelListeners. Dispatch events only when the receiver bundle is
+	 * EventHandlers. Dispatch events only when the receiver bundle is
 	 * ACTIVE, and the receiver service is registered.
 	 */
 	protected class ChannelEventDispatcher implements EventDispatcher {
 		/**
 		 * 
-		 * Dispatches ChannelEvent to ChannelListerners
+		 * Dispatches Event to ChannelListerners
 		 * 
 		 * @param eventListener
 		 * @param listenerObject
@@ -59,14 +59,14 @@ public class EventChannelImpl implements EventChannel {
 				}
 				Object serviceObject = bc.getService(ref);
 				if ((serviceObject == null)
-						|| (!(serviceObject instanceof ChannelListener))) {
+						|| (!(serviceObject instanceof EventHandler))) {
 					// the service being unregistered or invalid, no need to
 					// dispatch
 					return;
 				}
 
-				((ChannelListener) serviceObject)
-						.channelEvent((ChannelEvent) eventObject);
+				((EventHandler) serviceObject)
+						.handleEvent((Event) eventObject);
 			}
 			catch (Throwable t) {
 				// log/handle any Throwable thrown by the listener
@@ -91,11 +91,11 @@ public class EventChannelImpl implements EventChannel {
 		logProxy = new LogProxy(bc);
 		logProxy.open();
 		eventManager = new EventManager(
-				"EventChannel Async Event Dispatcher Thread");
+				"EventAdmin Async Event Dispatcher Thread");
 	}
 
 	/**
-	 * This method should be called when stopping EventChannel service
+	 * This method should be called when stopping EventAdmin service
 	 */
 	void stop() {
 		if (eventManager != null) {
@@ -111,34 +111,34 @@ public class EventChannelImpl implements EventChannel {
 
 	/**
 	 * @param event
-	 * @see org.osgi.service.event.EventChannel#postEvent(org.osgi.service.event.ChannelEvent)
+	 * @see org.osgi.service.event.EventAdmin#postEvent(org.osgi.service.event.Event)
 	 */
-	public void postEvent(ChannelEvent event) {
+	public void postEvent(Event event) {
 		dispatchEvent(event, true);
 	}
 
 	/**
 	 * @param event
-	 * @see org.osgi.service.event.EventChannel#sendEvent(org.osgi.service.event.ChannelEvent)
+	 * @see org.osgi.service.event.EventAdmin#sendEvent(org.osgi.service.event.Event)
 	 */
-	public void sendEvent(ChannelEvent event) {
+	public void sendEvent(Event event) {
 		dispatchEvent(event, false);
 	}
 
 	/**
 	 * Internal main method for sendEvent() and postEvent(). Dispatching an
-	 * event to ChannelListener. All exceptions are logged except when dealing
+	 * event to EventHandler. All exceptions are logged except when dealing
 	 * with LogEntry.
 	 * 
 	 * @param event to be delivered
 	 * @param isAsync must be set to true for syncronous event delivery, false
 	 *        for asyncronous delivery.
 	 */
-	protected void dispatchEvent(ChannelEvent event, boolean isAsync) {
+	protected void dispatchEvent(Event event, boolean isAsync) {
 		logProxy.setUseLogService(true);
 		if (event == null) {
 			logProxy.log(LogService.LOG_DEBUG,
-					"Null event is passed to EventChannel. Ignored.");
+					"Null event is passed to EventAdmin. Ignored.");
 			return;
 		}
 
@@ -156,18 +156,18 @@ public class EventChannelImpl implements EventChannel {
 			return;
 		}
 
-		ServiceReference[] refsForChannelListener = getAllChannelListener();
-		if (refsForChannelListener == null) {
-			// No ChannelListener exists. Do nothing.
+		ServiceReference[] refsForEventHandler = getAllEventHandler();
+		if (refsForEventHandler == null) {
+			// No EventHandler exists. Do nothing.
 			return;
 		}
 
 		EventListeners listeners = retrieveMatchedAndPermittedListeners(event,
-				refsForChannelListener);
+				refsForEventHandler);
 
 		if (listeners == null) {
 			logProxy.log(LogService.LOG_DEBUG,
-					"No permitted ChannelListener exists for topic = "
+					"No permitted EventHandler exists for topic = "
 							+ event.getTopic());
 			return;
 		}
@@ -179,7 +179,7 @@ public class EventChannelImpl implements EventChannel {
 		// dispatcher
 		listenerQueue.queueListeners(listeners, new ChannelEventDispatcher());
 
-		// Deliver the event to the listeners.
+		// Deliver the event to the listeners. 
 		if (isAsync) {
 			listenerQueue.dispatchEventAsynchronous(0, event);
 		}
@@ -192,18 +192,18 @@ public class EventChannelImpl implements EventChannel {
 	}
 
 	/**
-	 * Filtering ChannelListeners, represented by the param references, to
+	 * Filtering EventHandlers, represented by the param references, to
 	 * listners that have the same topic as the event.getTopic(), and whose
 	 * Filter property match the event when the property "Filter" is set. This
 	 * method also filters out listners that do not have appropriate
 	 * TopicPermission. Results are wrapped and put into EventListeners.
 	 * 
-	 * @param event This object is used to filter ChannelListeners
+	 * @param event This object is used to filter EventHandlers
 	 * @param references ChannelListneres to be filtered
-	 * @return EventListeners which contains filtered ChannelListeners.
+	 * @return EventListeners which contains filtered EventHandlers.
 	 */
 	protected EventListeners retrieveMatchedAndPermittedListeners(
-			ChannelEvent event, ServiceReference[] references) {
+			Event event, ServiceReference[] references) {
 		EventListeners listeners = null;
 		for (int i = 0; i < references.length; i++) {
 			ServiceReference ref = references[i];
@@ -218,11 +218,11 @@ public class EventChannelImpl implements EventChannel {
 	}
 
 	/**
-	 * Checks if the ChannelListener represented by the parameter ref has right
+	 * Checks if the EventHandler represented by the parameter ref has right
 	 * SUBSCRIBE TopicPermission.
 	 * 
 	 * @param ref This object represents ServiceReference which implement
-	 *        ChannelListener
+	 *        EventHandler
 	 * @param topic This string represents TopicPermission.
 	 * @return
 	 */
@@ -314,15 +314,15 @@ public class EventChannelImpl implements EventChannel {
 	}
 
 	/**
-	 * Checks if a ChannelListener's SUBSCRIBE topics contains the target
+	 * Checks if a EventHandler's SUBSCRIBE topics contains the target
 	 * event's topic. Also checks if the listener's EVENT_FILTER matches the
 	 * event if the filter property of the listener is set.
 	 * 
 	 * @param event The event to be checked against
-	 * @param ref This ServiceReference represents ChannelListener to be checked
+	 * @param ref This ServiceReference represents EventHandler to be checked
 	 * @return true if the listener matches the event
 	 */
-	protected boolean isEventMatchingListener(ChannelEvent event,
+	protected boolean isEventMatchingListener(Event event,
 			ServiceReference ref) {
 		String eventTopic = event.getTopic();
 		String listenerTopics[] = (String[]) ref
@@ -367,17 +367,17 @@ public class EventChannelImpl implements EventChannel {
 	}
 
 	/**
-	 * Returns all the ChannelListener's ServiceReferences that are currently
+	 * Returns all the EventHandler's ServiceReferences that are currently
 	 * registered.
 	 * 
-	 * @return all the ChannelListener's ServiceReferences that are currently
+	 * @return all the EventHandler's ServiceReferences that are currently
 	 *         registered.
 	 */
-	protected ServiceReference[] getAllChannelListener() {
+	protected ServiceReference[] getAllEventHandler() {
 		ServiceReference[] references = null;
 		try {
 			// find all the channelListners
-			references = bc.getServiceReferences(ChannelListener.class
+			references = bc.getServiceReferences(EventHandler.class
 					.getName(), null);
 		}
 		catch (InvalidSyntaxException e) {

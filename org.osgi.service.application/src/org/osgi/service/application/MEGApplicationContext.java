@@ -25,7 +25,7 @@
  */
 package org.osgi.service.application;
 
-import org.osgi.service.event.EventChannel;
+import org.osgi.service.event.EventAdmin;
 
 public interface MEGApplicationContext extends ApplicationContext {
 	public Object getServiceObject(String className, String filter)
@@ -36,7 +36,7 @@ public interface MEGApplicationContext extends ApplicationContext {
 
 	public boolean ungetServiceObject(Object serviceObject);
 
-	public EventChannel getEventChannel();
+	public EventAdmin getEventAdmin();
 
 	public ApplicationManager getApplicationManager();
 }

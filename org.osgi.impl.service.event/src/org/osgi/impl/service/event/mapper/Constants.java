@@ -20,7 +20,7 @@ package org.osgi.impl.service.event.mapper;
  */
 public interface Constants {
 
-	// constants for ChannelEvent properties
+	// constants for Event properties
 	public static final String	BUNDLE				= "bundle";
 	public static final String	BUNDLE_ID			= "bundle.id";
 	public static final String	BUNDLE_SYMBOLICNAME	= "bundle.symbolicName";

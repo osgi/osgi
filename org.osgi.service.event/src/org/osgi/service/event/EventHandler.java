@@ -41,7 +41,7 @@ package org.osgi.service.event;
  * <p>
  * <code>EventHandler</code> objects should be registered with a service
  * property {@link EventConstants#EVENT_TOPIC} whose value is the list of
- * topics in which the channel listener is interesed.
+ * topics in which the event handler is interesed.
  * <p>
  * For example:
  * 
@@ -54,14 +54,14 @@ package org.osgi.service.event;
  * 
  * If an <code>EventHandler</code> object is registered without a service
  * property {@link EventConstants#EVENT_TOPIC}, then the
- * <code>EventHandler</code> will receive channel events of all topics.
+ * <code>EventHandler</code> will receive events of all topics.
  * 
  * <p>
  * Security Considerations. Bundles wishing to monitor <code>Event</code>
  * objects will require <code>ServicePermission[EventHandler,REGISTER]</code>
  * to register an <code>EventHandler</code> service. The bundle must also have
  * <code>TopicPermission[topic,SUBSCRIBE]</code> for the topic specified in the
- * channel event in order to receive the event.
+ * event in order to receive the event.
  * 
  * @see Event
  * 
@@ -73,5 +73,5 @@ public interface EventHandler {
 	 * 
 	 * @param event The event that occurred.
 	 */
-	void channelEvent(Event event);
+	void handleEvent(Event event);
 }

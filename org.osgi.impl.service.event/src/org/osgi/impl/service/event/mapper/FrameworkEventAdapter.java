@@ -19,14 +19,14 @@ import java.util.Hashtable;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkEvent;
-import org.osgi.service.event.ChannelEvent;
-import org.osgi.service.event.EventChannel;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
 
 /**
  * @version $Revision$
  */
 public class FrameworkEventAdapter extends EventAdapter {
-	// constants for ChannelEvent topic substring
+	// constants for Event topic substring
 	public static final String	STARTLEVEL_CHANGED	= "STARTLEVEL_CHANGED";
 	public static final String	STARTED				= "STARTED";
 	public static final String	PACKAGES_REFRESHED	= "PACKAGES_REFRESHED";
@@ -38,7 +38,7 @@ public class FrameworkEventAdapter extends EventAdapter {
 	 * @param event
 	 * @param channel
 	 */
-	public FrameworkEventAdapter(FrameworkEvent event, EventChannel channel) {
+	public FrameworkEventAdapter(FrameworkEvent event, EventAdmin channel) {
 		super(channel);
 		this.event = event;
 	}
@@ -47,7 +47,7 @@ public class FrameworkEventAdapter extends EventAdapter {
 	 * @return
 	 * @see org.osgi.impl.service.event.mapper.EventAdapter#convert()
 	 */
-	public ChannelEvent convert() {
+	public Event convert() {
 		String typename = null;
 		switch (event.getType()) {
 			case FrameworkEvent.ERROR :
@@ -80,7 +80,7 @@ public class FrameworkEventAdapter extends EventAdapter {
 			putExceptionProperties(properties, t);
 		}
 		properties.put(Constants.EVENT, event);
-		ChannelEvent ce = new ChannelEvent(topic, properties);
+		Event ce = new Event(topic, properties);
 		return ce;
 	}
 }

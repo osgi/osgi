@@ -17,17 +17,15 @@
  */
 package org.osgi.impl.service.dmt;
 
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.event.EventChannel;
+import org.osgi.service.dmt.*;
+import org.osgi.service.event.EventAdmin;
 
 public class DmtAdminImpl implements DmtAdmin {
 	private DmtPluginDispatcher	dispatcher;
-	private EventChannel eventChannel;
+	private EventAdmin eventChannel;
 
 	public DmtAdminImpl(DmtPluginDispatcher dispatcher,
-			              EventChannel eventChannel) {
+			              EventAdmin eventChannel) {
 		this.dispatcher = dispatcher;
         this.eventChannel = eventChannel;
 	}

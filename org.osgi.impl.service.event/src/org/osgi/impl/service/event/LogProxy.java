@@ -22,7 +22,7 @@ import org.osgi.util.tracker.ServiceTracker;
 
 class LogProxy extends ServiceTracker implements LogService {
 
-	private final String			header			= "EventChannel_LogProxy: ";
+	private final String			header			= "EventAdmin_LogProxy: ";
 	private final BundleContext		bc;
 	private boolean					useLogService	= true;
 	private static final boolean	DEBUG			= true;

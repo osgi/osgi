@@ -51,7 +51,7 @@ public class Activator extends Object implements
 		Hashtable serviceListenerProps = new Hashtable();
 		serviceListenerProps.put(EventConstants.EVENT_TOPIC, "*");
 		serviceListener = bc.registerService(
-				"org.osgi.service.event.ChannelListener", megContainerImpl,
+				"org.osgi.service.event.EventHandler", megContainerImpl,
 				serviceListenerProps);
 		System.out.println("MEG container started successfully!");
 	}

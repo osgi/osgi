@@ -36,7 +36,7 @@ import org.osgi.framework.Filter;
  * 
  * <p>
  * <code>Event</code> objects are delivered to <code>EventHandler</code>
- * services which subsrcibe to the topic of the channel event.
+ * services which subsrcibe to the topic of the event.
  * 
  * <p>
  * <i>NOTE: Although it is permitted to subclass <code>Event</code>, the
@@ -127,7 +127,7 @@ public class Event {
 	 * Compares this <code>Event</code> object to another object.
 	 * 
 	 * <p>
-	 * A channel event is considered to be <b>equal to </b> another channel
+	 * An event is considered to be <b>equal to </b> another
 	 * event if the topic is equal and the properties are equal.
 	 * 
 	 * @param object The <code>Event</code> object to be compared.
@@ -158,9 +158,9 @@ public class Event {
 	}
 
 	/**
-	 * Returns the string representation of this channel event.
+	 * Returns the string representation of this event.
 	 * 
-	 * @return The string representation of this channel event.
+	 * @return The string representation of this event.
 	 */
 	public String toString() {
 		return getClass().getName() + " [topic=" + topic + "]"; //$NON-NLS-1$ //$NON-NLS-2$

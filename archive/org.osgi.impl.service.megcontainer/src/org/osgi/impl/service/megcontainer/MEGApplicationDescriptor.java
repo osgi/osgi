@@ -56,8 +56,8 @@ public class MEGApplicationDescriptor implements ApplicationDescriptor {
 		String defaultName = (String) names.get(language);
 		if (defaultName != null)
 			return defaultName;
-		Enumeration enum = names.keys();
-		String firstKey = (String) enum.nextElement();
+		Enumeration enumeration = names.keys();
+		String firstKey = (String) enumeration.nextElement();
 		return (String) names.get(firstKey);
 	}
 
@@ -94,8 +94,8 @@ public class MEGApplicationDescriptor implements ApplicationDescriptor {
 		Hashtable properties = new Hashtable();
 		String localizedName = (String) names.get(locale);
 		if (localizedName == null) {
-			Enumeration enum = names.keys();
-			String firstKey = (String) enum.nextElement();
+			Enumeration enumeration = names.keys();
+			String firstKey = (String) enumeration.nextElement();
 			localizedName = (String) names.get(firstKey);
 		}
 		properties.put("localized_name", localizedName);

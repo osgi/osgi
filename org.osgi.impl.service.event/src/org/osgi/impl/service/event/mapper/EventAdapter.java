@@ -19,28 +19,28 @@ import java.util.Hashtable;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.event.ChannelEvent;
-import org.osgi.service.event.EventChannel;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
 
 /**
  * @version $Revision$
  */
 public abstract class EventAdapter {
 
-	final EventChannel	channel;
+	final EventAdmin	channel;
 
 	/**
 	 * @param event
 	 * @param channel
 	 */
-	public EventAdapter(EventChannel channel) {
+	public EventAdapter(EventAdmin channel) {
 		this.channel = channel;
 	}
 
 	/**
 	 * @return
 	 */
-	public abstract ChannelEvent convert();
+	public abstract Event convert();
 
 	/**
 	 * subclasses should override this method if it want to use sendEvent()

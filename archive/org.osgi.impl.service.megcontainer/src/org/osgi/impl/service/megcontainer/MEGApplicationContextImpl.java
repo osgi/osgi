@@ -20,7 +20,7 @@ package org.osgi.impl.service.megcontainer;
 import java.util.*;
 import org.osgi.framework.*;
 import org.osgi.service.application.*;
-import org.osgi.service.event.EventChannel;
+import org.osgi.service.event.EventAdmin;
 
 /**
  * The application context class for MEG apps
@@ -111,7 +111,7 @@ public class MEGApplicationContextImpl implements MEGApplicationContext,
 		return false;
 	}
 
-	public EventChannel getEventChannel() {
+	public EventAdmin getEventAdmin() {
 		/*
 		 * TODO TODO TODO TODO TODO --- WAIT A CONSISTENT API --- TODO TODO TODO
 		 * TODO TODO

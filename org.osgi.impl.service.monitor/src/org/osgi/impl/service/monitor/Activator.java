@@ -19,26 +19,16 @@ package org.osgi.impl.service.monitor;
 
 import java.util.Hashtable;
 
-import org.osgi.framework.ServiceRegistration;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-
-import org.osgi.service.dmt.DmtDataPlugin;
+import org.osgi.framework.*;
 import org.osgi.service.dmt.DmtAlertSender;
-
-import org.osgi.service.event.EventChannel;
-
-import org.osgi.service.monitor.Monitorable;
-import org.osgi.service.monitor.MonitorAdmin;
-import org.osgi.service.monitor.UpdateListener;
-
+import org.osgi.service.dmt.DmtDataPlugin;
+import org.osgi.service.event.EventAdmin;
+import org.osgi.service.monitor.*;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * Activator class for the bundle containing the Monitor Admin and
- * Monitor Plugin.  Retrieves required services (EventChannel and
+ * Monitor Plugin.  Retrieves required services (EventAdmin and
  * DmtAlertSender), starts tracking of Monitorable services, and
  * registers provided services (MonitorAdmin, UpdateListener and
  * DmtDataPlugin).
@@ -56,10 +46,10 @@ public class Activator implements BundleActivator
     public void start(BundleContext bc) throws BundleException {
         System.out.println("Monitor Admin and Plugin activation...");
 
-        eventChannelRef = bc.getServiceReference(EventChannel.class.getName());
+        eventChannelRef = bc.getServiceReference(EventAdmin.class.getName());
         if(eventChannelRef == null)
             throw new BundleException("Cannot find Event Channel service.");
-        EventChannel eventChannel = (EventChannel) bc.getService(eventChannelRef);
+        EventAdmin eventChannel = (EventAdmin) bc.getService(eventChannelRef);
         if(eventChannel == null)
             throw new BundleException("Event Channel service no longer registered.");
 

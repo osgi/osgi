@@ -18,13 +18,15 @@
 package org.osgi.impl.service.dmt;
 
 import java.util.Hashtable;
+
 import org.osgi.framework.*;
-import org.osgi.impl.service.dmt.api.RemoteAlertSender;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
+import org.osgi.impl.service.dmt.api.RemoteAlertSender;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
-import org.osgi.service.dmt.*;
-import org.osgi.service.event.EventChannel;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtAlertSender;
+import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
 // TODO cleanup service registrations properly in case of error
@@ -46,11 +48,11 @@ public class DmtAdminActivator implements BundleActivator {
 	public void start(BundleContext bc) throws BundleException {
 		try {
             eventChannelRef = 
-                bc.getServiceReference(EventChannel.class.getName());
+                bc.getServiceReference(EventAdmin.class.getName());
             if(eventChannelRef == null)
                 throw new BundleException("Cannot find Event Channel service.");
-            EventChannel eventChannel = 
-                (EventChannel) bc.getService(eventChannelRef);
+            EventAdmin eventChannel = 
+                (EventAdmin) bc.getService(eventChannelRef);
             if(eventChannel == null)
                 throw new BundleException("Event Channel service no longer registered.");
             

@@ -19,7 +19,7 @@
 package org.osgi.impl.service.event;
 
 import org.osgi.framework.*;
-import org.osgi.service.event.EventChannel;
+import org.osgi.service.event.EventAdmin;
 
 /**
  * The Bundle Activator class of the Event Manager service
@@ -35,22 +35,22 @@ public class Activator implements BundleActivator {
 
 	public void start(BundleContext bc) throws Exception {
 		this.bc = bc;
-		// check if EventChannel is regiserted
+		// check if EventAdmin is regiserted
 		ServiceReference reference = bc
-				.getServiceReference("org.osgi.service.event.EventChannel");
+				.getServiceReference("org.osgi.service.event.EventAdmin");
 		if (reference != null)
-			throw new BundleException("EventChannel service already started!");
+			throw new BundleException("EventAdmin service already started!");
 		eventChannelImpl = new EventChannelImpl(bc);
-		// registering the EventChannel service
-		eventChannelServiceReg = bc.registerService(EventChannel.class
+		// registering the EventAdmin service
+		eventChannelServiceReg = bc.registerService(EventAdmin.class
 				.getName(), eventChannelImpl, null);
-		System.out.println("EventChannel started successfully!");
+		System.out.println("EventAdmin started successfully!");
 	}
 
 	public void stop(BundleContext bc) throws Exception {
 		eventChannelImpl.stop();
 		eventChannelServiceReg.unregister();
 		this.bc = null;
-		System.out.println("EventChannel stopped successfully!");
+		System.out.println("EventAdmin stopped successfully!");
 	}
 }

@@ -43,7 +43,7 @@ public interface EventAdmin {
 	 * 
 	 * @exception SecurityException If the caller does not have
 	 *            <code>TopicPermission[topic,PUBLISH]</code> for the topic
-	 *            specified in the channel event.
+	 *            specified in the event.
 	 */
 	void postEvent(Event event);
 
@@ -56,7 +56,7 @@ public interface EventAdmin {
 	 * 
 	 * @exception SecurityException If the caller does not have
 	 *            <code>TopicPermission[topic,PUBLISH]</code> for the topic
-	 *            specified in the channel event.
+	 *            specified in the event.
 	 */
 	void sendEvent(Event event);
 }

@@ -19,14 +19,14 @@ import java.util.Hashtable;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
-import org.osgi.service.event.ChannelEvent;
-import org.osgi.service.event.EventChannel;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
 
 /**
  * @version $Revision$
  */
 public class BundleEventAdapter extends EventAdapter {
-	// constants for ChannelEvent topic substring
+	// constants for Event topic substring
 	public static final String	INSTALLED	= "INSTALLED";
 	public static final String	STOPPED		= "STOPPED";
 	public static final String	STARTED		= "STARTED";
@@ -40,7 +40,7 @@ public class BundleEventAdapter extends EventAdapter {
 	/**
 	 * @param channel
 	 */
-	public BundleEventAdapter(BundleEvent event, EventChannel channel) {
+	public BundleEventAdapter(BundleEvent event, EventAdmin channel) {
 		super(channel);
 		this.event = event;
 	}
@@ -49,7 +49,7 @@ public class BundleEventAdapter extends EventAdapter {
 	 * @return
 	 * @see org.osgi.impl.service.event.mapper.EventAdapter#convert()
 	 */
-	public ChannelEvent convert() {
+	public Event convert() {
 		String typename = null;
 		switch (event.getType()) {
 			case BundleEvent.INSTALLED :
@@ -89,7 +89,7 @@ public class BundleEventAdapter extends EventAdapter {
 			putBundleProperties(properties, bundle);
 		}
 		properties.put(Constants.EVENT, event);
-		ChannelEvent ce = new ChannelEvent(topic, properties);
+		Event ce = new Event(topic, properties);
 		return ce;
 	}
 }

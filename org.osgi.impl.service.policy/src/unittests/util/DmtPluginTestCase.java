@@ -42,8 +42,8 @@ import org.osgi.service.cm.ManagedService;
 import org.osgi.service.dmt.DmtAlertSender;
 import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.event.ChannelEvent;
-import org.osgi.service.event.EventChannel;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
 
 /**
  *

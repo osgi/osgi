@@ -16,13 +16,13 @@
 package org.osgi.impl.service.event.mapper;
 
 import org.osgi.framework.*;
-import org.osgi.service.event.EventChannel;
+import org.osgi.service.event.EventAdmin;
 import org.osgi.service.log.*;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * Main class for redeliver special events like FrameworkEvents via
- * EventChannel.
+ * EventAdmin.
  * 
  * 
  * @version $Revision$
@@ -36,7 +36,7 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 	private final static boolean	DEBUG	= true;
 
 	public EventRedeliverer(BundleContext bc) {
-		channelTracker = new ServiceTracker(bc, EventChannel.class.getName(),
+		channelTracker = new ServiceTracker(bc, EventAdmin.class.getName(),
 				null);
 		channelTracker.open();
 		logTracker = new LogReaderServiceTracker(bc, this);
@@ -62,8 +62,8 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 		reader = null;
 	}
 
-	private EventChannel getChannel() {
-		return (EventChannel) channelTracker.getService();
+	private EventAdmin getChannel() {
+		return (EventAdmin) channelTracker.getService();
 	}
 
 	/**
@@ -71,19 +71,19 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 	 * @see org.osgi.framework.FrameworkListener#frameworkEvent(org.osgi.framework.FrameworkEvent)
 	 */
 	public void frameworkEvent(FrameworkEvent event) {
-		EventChannel channel = getChannel();
+		EventAdmin channel = getChannel();
 		if (channel != null) {
 			(new FrameworkEventAdapter(event, channel)).redeliver();
 		}
 		else {
-			printNoEventChannelError();
+			printNoEventAdminError();
 		}
 	}
 
-	private void printNoEventChannelError() {
+	private void printNoEventAdminError() {
 		if (DEBUG) {
 			System.out.println(this.getClass().getName()
-					+ ": Cannot find the EventChannel.");
+					+ ": Cannot find the EventAdmin.");
 		}
 	}
 
@@ -92,12 +92,12 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 	 * @see org.osgi.framework.BundleListener#bundleChanged(org.osgi.framework.BundleEvent)
 	 */
 	public void bundleChanged(BundleEvent event) {
-		EventChannel channel = getChannel();
+		EventAdmin channel = getChannel();
 		if (channel != null) {
 			(new BundleEventAdapter(event, channel)).redeliver();
 		}
 		else {
-			printNoEventChannelError();
+			printNoEventAdminError();
 		}
 	}
 
@@ -106,12 +106,12 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 	 * @see org.osgi.framework.ServiceListener#serviceChanged(org.osgi.framework.ServiceEvent)
 	 */
 	public void serviceChanged(ServiceEvent event) {
-		EventChannel channel = getChannel();
+		EventAdmin channel = getChannel();
 		if (channel != null) {
 			(new ServiceEventAdapter(event, channel)).redeliver();
 		}
 		else {
-			printNoEventChannelError();
+			printNoEventAdminError();
 		}
 	}
 
@@ -120,12 +120,12 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 	 * @see org.osgi.service.log.LogListener#logged(org.osgi.service.log.LogEntry)
 	 */
 	public void logged(LogEntry entry) {
-		EventChannel channel = getChannel();
+		EventAdmin channel = getChannel();
 		if (channel != null) {
 			(new LogEntryAdapter(entry, channel)).redeliver();
 		}
 		else {
-			printNoEventChannelError();
+			printNoEventAdminError();
 		}
 	}
 
