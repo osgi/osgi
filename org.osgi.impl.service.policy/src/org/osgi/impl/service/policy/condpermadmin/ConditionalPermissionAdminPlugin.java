@@ -19,11 +19,15 @@
 package org.osgi.impl.service.policy.condpermadmin;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.osgi.impl.service.policy.PermissionInfoMetaNode;
@@ -48,6 +52,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  */
 public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 	
+	
 	private static final String	PERMISSIONINFO	= "PermissionInfo";
 	private static final String CONDITIONINFO = "ConditionInfo";
 
@@ -65,6 +70,11 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 	 * a map of String->ConditionalPermission, where the key is the hash as seen in the tree
 	 */
 	private Map conditionalPermissions;
+	
+	/**
+	 * true, if something is changed, and needs to be written back to the system
+	 */
+	private boolean dirty;
 	
 	/**
 	 * metanode given back when asked about ./OSGi/Policies/Java/ConditionalPermission
@@ -98,6 +108,13 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 			this.permissionInfo = permissionInfo;
 		}
 
+		public ConditionalPermission() {
+			conditionInfo = new ConditionInfo[0];
+			permissionInfo = new PermissionInfo[0];
+			
+			
+		}
+
 		public DmtData getNodeValue(String nodeName) {
 			// note: nodeName is already checked here
 			if (nodeName.equals(PERMISSIONINFO)) {
@@ -115,6 +132,50 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 				}
 				return new DmtData(sb.toString());
 			}
+		}
+		
+		
+		public boolean equals(Object obj) {
+			if (obj==this) return true;
+			ConditionalPermission o = (ConditionalPermission)obj;
+			return equals(o.permissionInfo,o.conditionInfo);
+		}
+		
+		public boolean equals(PermissionInfo pi[],ConditionInfo ci[]) {
+			if (conditionInfo.length!=ci.length) return false;
+			if (permissionInfo.length!=pi.length) return false;
+			for(int i=0;i<permissionInfo.length;i++) {
+				if (!permissionInfo[i].equals(pi[i])) return false;
+			}
+			for(int i=0;i<conditionInfo.length;i++) {
+				if (!conditionInfo[i].equals(ci[i])) return false;
+			}
+			return true;
+			
+		}
+		
+		
+		public int hashCode() {
+			return 0; // TODO
+		}
+
+		public void setNodeValue(String nodeName, DmtData data) {
+			if (nodeName.equals(PERMISSIONINFO)) {
+				String[] strs = Splitter.split(data.getString(),'\n',0);
+				PermissionInfo[] pis = new PermissionInfo[strs.length];
+				for(int i=0;i<pis.length;i++) {
+					pis[i] = new PermissionInfo(strs[i]);
+				}
+				permissionInfo = pis;
+			} else {
+				String[] strs = Splitter.split(data.getString(),'\n',0);
+				ConditionInfo[] cis = new ConditionInfo[strs.length];
+				for(int i=0;i<cis.length;i++) {
+					cis[i] = new ConditionInfo(strs[i]);
+				}
+				conditionInfo = cis;
+			}
+			
 		}
 	}
 
@@ -139,7 +200,6 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 			ConditionInfo c2 = (ConditionInfo) o2;
 			return c1.getEncoded().compareTo(c2.getEncoded());
 		}
-		
 	};
 	
 	private final HashCalculator hashCalculator;
@@ -153,7 +213,7 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 			throws DmtException {
 		// copy everything from the conditional permission admin, populate our tree
 		conditionalPermissions = new HashMap();
-		for(Enumeration enum = condPermAdmin.getCollections(); enum.hasMoreElements();) {
+		for(Enumeration enum = condPermAdmin.getConditionalPermissionInfos(); enum.hasMoreElements();) {
 			ConditionalPermissionInfo e = (ConditionalPermissionInfo)enum.nextElement();
 
 			// calculate hash
@@ -178,6 +238,7 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 			conditionalPermissions.put(hash,
 					new ConditionalPermission(e.getConditionInfos(),e.getPermissionInfos()));
 		}
+		dirty = false;
 	}
 
 	public DmtMetaNode getMetaNode(String nodeUri)
@@ -210,7 +271,10 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 	}
 
 	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
+		String path[] = getPath(nodeUri);
+		ConditionalPermission cp = (ConditionalPermission) conditionalPermissions.get(path[0]);
+		cp.setNodeValue(path[1],data);
+		dirty = true;
 	}
 
 	public void setNodeType(String nodeUri, String type) throws DmtException {
@@ -218,11 +282,21 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 	}
 
 	public void deleteNode(String nodeUri) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
+		String path[] = getPath(nodeUri);
+		if (path.length!=1) {
+			throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,"");
+		}
+		conditionalPermissions.remove(path[0]);
+		dirty = true;
 	}
 
 	public void createInteriorNode(String nodeUri) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
+		String[] path = getPath(nodeUri);
+		if (path.length!=1) {
+			throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,"");
+		}
+		conditionalPermissions.put(path[0],new ConditionalPermission());
+		dirty = true;
 	}
 
 	public void createInteriorNode(String nodeUri, String type)
@@ -245,7 +319,37 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 	}
 
 	public void close() throws DmtException {
-		throw new DmtException("",DmtException.FEATURE_NOT_SUPPORTED,"");
+		if (!dirty) return; // the easy way :-)
+		
+		// TODO check for consistency
+		
+		// find out which to delete, which to add
+		Enumeration originals = condPermAdmin.getConditionalPermissionInfos();
+		Collection toAdd = conditionalPermissions.values();
+		List toDelete = new ArrayList();
+		while(originals.hasMoreElements()) {
+			ConditionalPermissionInfo cpi = (ConditionalPermissionInfo) originals.nextElement();
+			ConditionalPermission cp = new ConditionalPermission(cpi.getConditionInfos(),cpi.getPermissionInfos());
+
+			if (toAdd.contains(cp)) {
+				// it is already in the system, don't do anything with it
+				toAdd.remove(cp);
+			} else {
+				// this needs to be removed from the system
+				toDelete.add(cpi);
+			}
+		}
+		for (Iterator iter = toAdd.iterator(); iter.hasNext();) {
+			ConditionalPermission cp = (ConditionalPermission) iter.next();
+			condPermAdmin.addConditionalPermissionInfo(cp.conditionInfo,cp.permissionInfo);
+		}
+		for (Iterator iter = toDelete.iterator(); iter.hasNext();) {
+			ConditionalPermissionInfo cpi = (ConditionalPermissionInfo) iter.next();
+			cpi.delete();
+		}
+
+		// do some cleanup
+		conditionalPermissions = null;
 	}
 
 	public boolean isNodeUri(String nodeUri) {

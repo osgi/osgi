@@ -18,6 +18,7 @@
 package unittests;
 
 import java.util.Arrays;
+import org.osgi.framework.AdminPermission;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.impl.service.policy.condpermadmin.ConditionalPermissionAdminPlugin;
@@ -29,6 +30,7 @@ import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.util.gsm.IMEICondition;
 import unittests.util.DmtPluginTestCase;
 
 /**
@@ -73,10 +75,25 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 	/*
 	 * This is the example written in the policy RFC.
 	 */
-	public static final String RFC_EXAMPLEHASH = "WovYXjHL_EgRTOVWHgipOk82tt8";
-	public static final ConditionInfo[] RFC_EXAMPLECOND = new ConditionInfo[] {LOC1CONDITION};
-	public static final PermissionInfo[] RFC_EXAMPLEPERM = new PermissionInfo[] {HTTPREGISTERPERMISSION,OSGIIMPORTPERMISSION};
+	public static final String RFC_EXAMPLE_HASH = "WovYXjHL_EgRTOVWHgipOk82tt8";
+	public static final ConditionInfo[] RFC_EXAMPLE_COND = new ConditionInfo[] {LOC1CONDITION};
+	public static final String RFC_EXAMPLE_COND_STR = RFC_EXAMPLE_COND[0].getEncoded()+"\n";
+	public static final PermissionInfo[] RFC_EXAMPLE_PERM = new PermissionInfo[] {HTTPREGISTERPERMISSION,OSGIIMPORTPERMISSION};
+	public static final String RFC_EXAMPLE_PERM_STR = RFC_EXAMPLE_PERM[0].getEncoded()+"\n"+RFC_EXAMPLE_PERM[1].getEncoded()+"\n";
 
+	/*
+	 * this is an other conditional permission to be used
+	 */
+	public static final String CP1_HASH = "foo";
+	public static final ConditionInfo[] CP1_COND = new ConditionInfo[] { 
+			new ConditionInfo(BundleLocationCondition.class.getName(),new String[]{"http://location1"}),
+			new ConditionInfo(IMEICondition.class.getName(),new String[]{"128471624213421"})
+	};
+	public static final String CP1_COND_STR = CP1_COND[0].getEncoded()+"\n"+CP1_COND[1].getEncoded()+"\n";
+	public static final PermissionInfo[] CP1_PERM = new PermissionInfo[] {
+			new PermissionInfo(AdminPermission.class.getName(),"*","*")};
+	public static final String CP1_PERM_STR = CP1_PERM[0].getEncoded();
+	
 	
 	public void setUp() throws Exception {
 		super.setUp();
@@ -114,24 +131,43 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 	}
 	
 	public void testRFCHashExample() throws Exception {
-		condPermAdmin.addCollection(RFC_EXAMPLECOND,RFC_EXAMPLEPERM);
+		condPermAdmin.addConditionalPermissionInfo(RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
 		newSession();
-		DmtData pis = dmtSession.getNodeValue(RFC_EXAMPLEHASH+"/PermissionInfo");
-		assertEquals(RFC_EXAMPLEPERM[0].getEncoded()+"\n"+RFC_EXAMPLEPERM[1].getEncoded()+"\n",pis.getString());
-		DmtData cis = dmtSession.getNodeValue(RFC_EXAMPLEHASH+"/ConditionInfo");
-		assertEquals(RFC_EXAMPLECOND[0].getEncoded()+"\n",cis.getString());
+		DmtData pis = dmtSession.getNodeValue(RFC_EXAMPLE_HASH+"/PermissionInfo");
+		assertEquals(RFC_EXAMPLE_PERM_STR,pis.getString());
+		DmtData cis = dmtSession.getNodeValue(RFC_EXAMPLE_HASH+"/ConditionInfo");
+		assertEquals(RFC_EXAMPLE_COND_STR,cis.getString());
 	}
 	
 	public void testListings() throws Exception {
-		condPermAdmin.addCollection(RFC_EXAMPLECOND,RFC_EXAMPLEPERM);
+		condPermAdmin.addConditionalPermissionInfo(RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
 		newSession();
 		String ch[] = dmtSession.getChildNodeNames(ROOT);
 		assertEquals(1,ch.length);
-		assertEquals(RFC_EXAMPLEHASH,ch[0]);
-		ch = dmtSession.getChildNodeNames(RFC_EXAMPLEHASH);
+		assertEquals(RFC_EXAMPLE_HASH,ch[0]);
+		ch = dmtSession.getChildNodeNames(RFC_EXAMPLE_HASH);
 		Arrays.sort(ch);
 		assertEquals(2,ch.length);
 		assertEquals("ConditionInfo",ch[0]);
 		assertEquals("PermissionInfo",ch[1]);
+	}
+
+	public void testDelete() throws Exception {
+		condPermAdmin.addConditionalPermissionInfo(RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
+		newAtomicSession();
+		dmtSession.deleteNode(RFC_EXAMPLE_HASH);
+		dmtSession.close();
+		assertEquals(0,condPermAdmin.size());
+	}
+	
+	public void testAdd() throws Exception {
+		DummyConditionalPermissionAdmin.PI cp1 = condPermAdmin.new PI(CP1_COND,CP1_PERM);
+		assertFalse(condPermAdmin.contains(cp1));
+		newAtomicSession();
+		dmtSession.createInteriorNode("1");
+		dmtSession.setNodeValue("1/PermissionInfo",new DmtData(CP1_PERM_STR));
+		dmtSession.setNodeValue("1/ConditionInfo",new DmtData(CP1_COND_STR));
+		dmtSession.close();
+		assertTrue(condPermAdmin.contains(cp1));
 	}
 }
