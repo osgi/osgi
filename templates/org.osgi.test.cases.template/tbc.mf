@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.template.tbc
+Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
+Bundle-Description: Template control bundle
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 4.0
+Bundle-DocUrl: http://membercvs.osgi.org/testcases/4/test.cases.template
+Bundle-ContactAddress: speccomments@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Activator: $(p).tbc.TemplateControl
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+

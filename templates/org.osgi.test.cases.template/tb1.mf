@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.template.tb1
+Bundle-Description: Registers a simple service to check its exporter
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 4.0
+Bundle-DocUrl: http://membercvs.osgi.org/testcases/4/test.cases.template
+Bundle-ContactAddress: speccomments@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Activator: $(p).tb1.TB1Activator
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+
+
