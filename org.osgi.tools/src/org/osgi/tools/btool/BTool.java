@@ -801,10 +801,10 @@ public class BTool extends Task {
 			String cp = eclipse.getClasspath();
 			String bp = eclipse.getBootclasspath();
 			if ( bp != null && bp.length() > 0 )
-				cp = cp + "," + bp;
+				cp = cp + EclipseProject.PATHSEP + bp;
 			
 			StringTokenizer st = new StringTokenizer(cp,
-					",");
+					EclipseProject.PATHSEP);
 			while (st.hasMoreElements()) {
 				String file = st.nextToken().trim();
 				File f = new File(file);

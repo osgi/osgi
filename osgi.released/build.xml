@@ -1,44 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+	This build file can be used to build the entire OSGi build.
+-->
 <project name="released" default="publish">
-	
+
 	<dirname property="project" file="${ant.file}" />
 	<dirname property="workspace" file="${project}" />
 	<basename property="project.name" file="${project}" />
-	<property environment="env"/>
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${workspace}/cnf/ant-contrib/ant-contrib-0.6.jar"/>
+	<property environment="env" />
 
-	<property name="projects" value="
-		ee.minimum,
-		ee.foundation,
-		osgi,
-		org.osgi.impl.framework,
-		osgi.internal,
-		osgi.refimpl,
-		osgi.test,
-		org.osgi.test.tool"/>
-	
+	<!--
+		Read list of project to build in a specific order,
+	-->
+	<loadfile property="projects" srcFile="project.order" />
+
+	<!--
+		Build the projects in order.
+	-->
 	<target name="publish">
-		<foreach delimiter=" 
-			," list="${projects}" target="publish_item" param="item"/>
-	</target>
-		
-	<target name="publish_item">
-		<ant dir="${workspace}/${item}" inheritAll="false">
+		<subant target="publish" inheritAll="false">
+			<filelist dir="${workspace}" files="${projects}" />
 			<property name="release.dir" value="${project}" />
-		</ant>
+		</subant>
 	</target>
 
-	<target name="clean">
-		<delete failonerror="false">
+	<!--
+		Clean the projects.
+	-->
+	<target name="clean" depends="localclean">
+		<subant target="clean" inheritAll="false">
+			<filelist dir="${workspace}" files="${projects}" />
+		</subant>
+	</target>
+
+	<target name="localclean">
+		<delete quiet="true" includeEmptyDirs="true" verbose="${verbose}">
 			<fileset dir="${project}" includes="**/*.bak **/~* *.jar" />
-			<fileset dir="${workspace}/cnf/cache" includes="${project.name}" />
 		</delete>
-
-		<foreach delimiter=" 
-			," list="${projects}" target="clean_item" param="item"/>
-	</target>
-		
-	<target name="clean_item">
-		<ant dir="${workspace}/${item}" inheritall="false" target="clean"/>
 	</target>
 </project>

@@ -20,8 +20,8 @@ public class FileResource extends Resource {
 		
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		BufferedReader br = new BufferedReader(
-				new InputStreamReader(new FileInputStream(file)));
-		PrintWriter pw = new PrintWriter(new OutputStreamWriter(out));
+				new InputStreamReader(new FileInputStream(file),"UTF8"));
+		PrintWriter pw = new PrintWriter(new OutputStreamWriter(out,"UTF8"));
 		parse(br, pw, 500);
 		pw.print("\r\n");
 		pw.close();

@@ -33,7 +33,7 @@ public class EclipseProject {
 	protected File			file;
 	protected Locator		locator;
 	Vector					sourceFolders	= new Vector();
-	final String			PATHSEP			= ",";
+	static final String		PATHSEP			= File.pathSeparator; // This must be path separator for ant script path processing (subant)
 	private StringBuffer	sourcepath		= new StringBuffer(1024);
 	private StringBuffer	classpath		= new StringBuffer(1024);
 	private StringBuffer	bootclasspath	= new StringBuffer(1024);
@@ -391,7 +391,7 @@ public class EclipseProject {
 				visited.add(ep);
 				File dir = ep.eclipseProject;
 				sb.append(del);
-				del = ",";
+				del = PATHSEP;
 				sb.append(dir.getAbsolutePath());
 			}
 		}

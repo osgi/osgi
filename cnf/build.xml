@@ -3,130 +3,110 @@
 	The is main OSGi build file. It is included from projects
 	as is. 
 -->
-
-<project name="package" default="none">
-
-	<dirname property="project" file="${ant.file}" />
-	<dirname property="workspace" file="${project}" />
-	<basename property="project.name" file="${project}" />
-	<property environment="env"/>
-	
-	<!-- Task defs, removed the recursive search for performance
-	     reasons 
-	-->
-	<taskdef name="btool" classname="org.osgi.tools.btool.BTool" 
-		classpath="${workspace}/cnf/jar/btool.jar" />
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${workspace}/cnf/ant-contrib/ant-contrib-0.6.jar"/>
-	
+<project name="master" default="none">
 	<!-- 
-	   Set the build properties. Later properties with the
-	   same name are ignored so the order is VERY important.
-	   We follow the build.properties conventions. This means
-	   that the following properties should be set:
-	   
-	    bin.includes        jars/files copied to osgi.released
-	    jars.compile.order  list of comma separated JAR files. As the name
-	                        implies, ant will build the jars in that order
-	    
-	    for each mentioned jar file in the jars.compile.order
-	    property, the following option may be used in the
-	    form <option>.<jarfile>
-	    
-	    expand.<jarfile>    List of comma separated package names,
-	                        like org.osgi.service.example, javax.microedition, ...
-	                        The package name maybe placed between square
-	                        brackets, this means that the package is
-	                        placed in the export list of the bundle which 
-	                        is placed in the manifest if $(EXPORT-PACKAGE) 
-	                        is present. E.g. [org.osgi.example] will be
-	                        in the export list, otherwise it is assumed to be
-	                        private. Pakage name that end in a .* will be
-	                        recursively expanded. The packages are coming
-	                        from the project classpath as specified in
-	                        the Eclipse .classpath file.
-	                        
-	    include.<jarfile>   A comma separated list of file names that must be
-	                        be included in the jar. The default name of the file
-	                        in the jar will be the file name without the directory
-	                        name. This can be overridden by using a = sign in the
-	                        name. I.e. tbc.jar=tc1/tbc/org.osgi.tc1.jar
-	                        
-	    source.<jarfile>    A comma separated list of directories. The contents
-	                        of these directories are included (not recursively).
-	                        If the path of the directory starts with an eclipse
-	                        source directory, this prefix is removed and the
-	                        remainder is used for the jar entry name. Otherwise the
-	                        jar entry is the full path. This property is supported 
-	                        because the Eclipse build.properties editor supports
-	                        it. However, expand seems easier to use.
-	                
-	 -->
-	<property file="${project}/build.properties" />		
-	<property file="${env.HOME}/osgi.properties" />
-	<property file="${workspace}/cnf/build.properties" />
-	
-	<property name="p" value= "${project.name}"/>
-	<property name="javac" value="javac"/>
-	<btool eclipse="${project}" />
-	
-	<property name="bin.includes" value="${project.name}.jar"/>
-	
-	<!-- 
-	     PUBLISH
-	     The main target. It will build the jar file(s) and publish the 
-	     files in bin.includes to osgi.released project.
-	     
-	     The publish will not run if none of the files is changed. This
-	     target does NOT check projects it dependends on!
+	     INIT
+	     The target is a dependent of all other targets.
+	     It's purpose is to set up the environment only once
+	     and avoid it being repeatedly done for each antcall.
 	-->
-	<target name="publish" > 
-		<echo>Publish ${p}</echo>		
-		<!-- Build project dependencies -->
-		<foreach delimiter=" ," list="${project.buildpath}" 
-			target="publish.item"  param="item.dir"/>
+	<target name="init" unless="initialized">
+		<dirname property="project" file="${ant.file}" />
+		<dirname property="workspace" file="${project}" />
+		<basename property="project.name" file="${project}" />
+		<property environment="env" />
 
-		<antcall target="local"/>
+		<!-- Task defs, removed the recursive search for performance
+		     reasons 
+		-->
+		<taskdef resource="org/osgi/tools/btool/taskdef.properties"
+		         classpath="${workspace}/cnf/jar/btool.jar" />
+		<taskdef resource="net/sf/antcontrib/antcontrib.properties"
+		         classpath="${workspace}/cnf/ant-contrib/ant-contrib-0.6.jar" />
+
+		<!-- Include properies files in the following order:
+				Project properties
+				User properties
+				Default properties
+		-->
+		<property file="${project}/build.properties" />
+		<property file="${env.HOME}/osgi.properties" />
+		<property file="${workspace}/cnf/build.properties" />
+
+		<!-- get the classpath and build info from eclipse -->
+		<btool eclipse="${project}" />
+		<property name="project.bootclasspath" value="" />
+
+		<!-- mark init has been run -->
+		<property name="initialized" value="set" />
 	</target>
 
-	<target name="publish.item">
-		<echo>Building ${item.dir}</echo>
-		
-		<ant dir="${item.dir}" target="publish" 
-			inheritAll="false">
-			<property name="release.dir" value="${project}"/>
-		</ant>
+	<!-- 
+		PUBLISH
+		The main target. It will build the jar file(s) and publish them.
+	-->
+	<target name="publish" depends="init,dependencies,compile,jars">
 	</target>
-	
-	<target name="local" depends="compile,jars">
-	</target>
-	
-	<target name="jars" if="jars.compile.order">
-		<echo>JARs ${jars.compile.order}</echo>
-			<delete>
-				<fileset dir="${project}" includes="${jars.compile.order}" />
-			</delete>
-			
-			<!-- For each jar file, build it -->
-			<foreach list="${jars.compile.order}" 
-				delimiter=" ," 
-				target="jar" 
-				param="item.jarFile" 
-				inheritAll="true"/>
-			
-			<!-- Release each JAR file -->
-			<foreach list="${bin.includes}" 
-				delimiter=" ," 
-				target="release" 
-				param="item.jarFile" 
-				inheritAll="true"/>
+
+	<!-- 
+		DEPENDENCIES
+		Build project dependencies.
+	-->
+	<target name="dependencies" depends="init">
+		<echo>Publish ${project.name}</echo>
+		<subant target="publish"
+		        inheritAll="false"
+		        buildpath="${project.buildpath}">
+			<property name="release.dir" value="${project}" />
+		</subant>
 	</target>
 
 	<!--
-	    RELEASE
-	    Copy the JAR file to the osgi.released directory.
+	     COMPILE
+	     Compile the sources. 
 	-->
-	<target name="release" if="release.dir">
-		<copy overwrite="true" todir="${release.dir}" verbose="${verbose}" file="${item.jarFile}" />
+	<target name="compile" depends="init" if="project.sourcepath">
+		<echo>Compile ${project.sourcepath} 
+		${project.bootclasspath}
+		${project.classpath}</echo>
+
+		<javac fork="yes"
+		       executable="${javac}"
+		       srcdir="${project.sourcepath}"
+		       destdir="${project.bindir}"
+		       classpath="${project.classpath}"
+		       bootclasspath="${project.bootclasspath}"
+		       deprecation="true"
+		       listfiles="true"
+		       target="${javac.target}"
+		       source="${javac.source}"
+		       debug="${javac.debug}"
+		       includeAntRuntime="no"
+		       verbose="${verbose}" />
+	</target>
+
+	<!-- 
+		JARS
+		Iterate of the jars to build.
+	-->
+	<target name="jars" depends="init" if="jars.compile.order">
+		<echo>JARs ${jars.compile.order}</echo>
+		<delete verbose="${verbose}">
+			<fileset dir="${project}" includes="${jars.compile.order}" />
+		</delete>
+
+		<!-- For each jar file, build it -->
+		<foreach list="${jars.compile.order}"
+		         delimiter=" ,"
+		         target="-jar"
+		         param="item.jarFile"
+		         inheritAll="true" />
+		<!-- Release each JAR file -->
+		<foreach list="${bin.includes}"
+		         delimiter=" ,"
+		         target="-release"
+		         param="item.jarFile"
+		         inheritAll="true" />
 	</target>
 
 	<!--
@@ -151,86 +131,73 @@
 	                         is the file used in initial provisioning
 	     ignoreVersions      Do not use version on automatic import/export
 	-->
-	<target name="jar">
+	<target name="-jar" depends="init">
 		<echo>JAR ${item.jarFile}</echo>
-		<btool jar="${project}/${item.jarFile}" 
-			eclipse="${project}" 
-			analyse="${btool.analyse}" 
-			showmanifest="${btool.showmanifest}" 
-			sources="${btool.sources}" 
-			includeProperty="include.${item.jarFile}" 
-			expandProperty="expand.${item.jarFile}" 
-			contentFoldersProperty="source.${item.jarFile}" 
-			excludeImportProperty="excludeImport.${item.jarFile}" 
-			includeExportProperty="includeExport.${item.jarFile}" 
-			ipaProperty="ipa.${item.jarFile}" 
-			verbose="${verbose}"
-			ignoreVersions="${btool.noversion}" />
-		
+		<btool jar="${project}/${item.jarFile}"
+		       eclipse="${project}"
+		       analyse="${btool.analyse}"
+		       showmanifest="${btool.showmanifest}"
+		       sources="${btool.sources}"
+		       includeProperty="include.${item.jarFile}"
+		       expandProperty="expand.${item.jarFile}"
+		       contentFoldersProperty="source.${item.jarFile}"
+		       excludeImportProperty="excludeImport.${item.jarFile}"
+		       includeExportProperty="includeExport.${item.jarFile}"
+		       ipaProperty="ipa.${item.jarFile}"
+		       verbose="${verbose}"
+		       ignoreVersions="${btool.noversion}" />
 	</target>
-
 
 	<!--
-	     COMPILE
-	     Compile the sources. If the eclipse.running flag
-	     is true, we assume someone else has done the 
-	     compiling for us.
+	    RELEASE
+	    Copy the JAR file to the osgi.released directory.
 	-->
-	<target name="compile" if="project.sourcepath" >
-		<echo>Compile ${project.sourcepath} 
-		${project.bootclasspath}
-		${project.classpath}</echo>
-		<property name="project.bootclasspath" value=""/>
-		
-		<javac fork="yes" 
-			executable="${javac}" 
-			srcdir="${project.sourcepath}" 
-			destdir="${project.bindir}" 
-			classpath="${project.classpath}" 
-			bootclasspath="${project.bootclasspath}" 
-			deprecation="true" 
-			listfiles="true" 
-			target="${javac.target}" 
-			source="${javac.source}" 
-			debug="${javac.debug}" 
-			includeAntRuntime="no"
-		/>
+	<target name="-release" depends="init" if="release.dir">
+		<copy overwrite="true"
+		      todir="${release.dir}"
+		      verbose="${verbose}"
+		      file="${item.jarFile}" />
 	</target>
 
-	
 	<!--
 	     CLEAN
 	-->
-	<target name="clean" depends="localclean">
-		<foreach delimiter="," list="${project.buildpath}" target="clean.item" param="item.dir"/>
+	<target name="clean" depends="init,localclean">
+		<subant target="clean"
+		        inheritAll="false"
+		        buildpath="${project.buildpath}">
+		</subant>
 	</target>
 
-	<target name="localclean">
-		<delete failonerror="false" verbose="${verbose}">
+	<target name="localclean" depends="init">
+		<delete quiet="true" includeEmptyDirs="true" verbose="${verbose}">
 			<fileset dir="${project.bindir}" includes="**/*.bak **/*.class" />
-			<fileset dir="${project}" includes="**/*.bak **/~* ${jars.compile.order}" />
-			<fileset dir="${workspace}/cnf/cache" includes="${project.name}" />
+			<fileset dir="${project}"
+			         includes="**/*.bak **/~* ${jars.compile.order}" />
 		</delete>
 	</target>
 
-	<target name="clean.item">
-		<ant dir="${item.dir}" target="clean" inheritall="false"/>		
+	<!--
+	     ECHO
+	-->
+	<target name="echo" depends="init">
+		<echo>BIN:   ${project.bindir}</echo>
+		<echo>SRCE:  ${project.sourcepath}</echo>
+		<echo>BOOT:  ${project.bootclasspath}</echo>
+		<echo>CP:    ${project.classpath}</echo>
+		<echo>NAME:  ${project.name}</echo>
+		<echo>VERS:  ${project.version}</echo>
+		<echo>CAT:   ${project.category}</echo>
+		<echo>DEP:   ${project.buildpath}</echo>
+		<echo>VRB:   ${verbose}</echo>
+		<echo>JAVAC: ${javac}</echo>
 	</target>
 
-
-	<target name="echo">
-		<echo>BIN:  ${project.bindir}</echo>
-		<echo>SRCE: ${project.sourcepath}</echo>
-		<echo>BOOT: ${project.bootclasspath}</echo>
-		<echo>CP:   ${project.classpath}</echo>
-		<echo>NAME: ${project.name}</echo>
-		<echo>VERS: ${project.version}</echo>
-		<echo>CAT:  ${project.category}</echo>
-		<echo>DEP:  ${project.buildpath}</echo>
-		<echo>VRB:  ${verbose}</echo>
-	</target>
-
+	<!--
+	     Default Target
+	-->
 	<target name="none">
-		<echo>NONE</echo>
+		<fail message="This ant script should never be directly called." />
 	</target>
+
 </project>

@@ -1,22 +1,27 @@
+.PHONY: clean localclean $(CLEAN) all echo
 
-JARS = ee.minimum.jar ee.foundation.jar osgi.jar osgi.internal.jar osgi.refimpl.jar osgi.test.jar
+PROJECTS = $(shell cat project.order)
 
-DIRS = $(JARS:%.jar=../%)
+JARS = $(addsuffix .jar,$(PROJECTS))
+CLEAN = $(JARS:%.jar=%.clean)
+ANT = ../cnf/ant/bin/ant
 
 all: $(JARS)
 
 
 echo:
-	echo $(DIRS)
+	@echo $(PROJECTS)
 
 
 %.jar :  
-	cd ../`basename $@ .jar`; ant -Drelease.dir=../osgi.released
+	cd ../$(basename $@); $(ANT) -Drelease.dir=../osgi.released
 
 
-clean: $(JARS:%.jar=%.clean)
-	-rm $(JARS)
+clean: localclean $(CLEAN)
+
+localclean:
+	-rm -f $(JARS)
 
 %.clean :
-	cd ../`basename $@ .clean`; ant clean
+	cd ../$(basename $@); $(ANT) clean
 
