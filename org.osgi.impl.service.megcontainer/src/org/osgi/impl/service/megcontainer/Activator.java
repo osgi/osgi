@@ -17,8 +17,11 @@
  */
 package org.osgi.impl.service.megcontainer;
 
-import java.util.*;
+import java.util.Dictionary;
+import java.util.Hashtable;
+
 import org.osgi.framework.*;
+import org.osgi.service.event.EventConstants;
 
 /**
  * The Bundle Activator of the MEG container
@@ -46,7 +49,7 @@ public class Activator extends Object implements
 				"org.osgi.service.application.ApplicationContainer",
 				megContainerImpl, properties);
 		Hashtable serviceListenerProps = new Hashtable();
-		serviceListenerProps.put("topic", "*");
+		serviceListenerProps.put(EventConstants.EVENT_TOPIC, "*");
 		serviceListener = bc.registerService(
 				"org.osgi.service.event.ChannelListener", megContainerImpl,
 				serviceListenerProps);

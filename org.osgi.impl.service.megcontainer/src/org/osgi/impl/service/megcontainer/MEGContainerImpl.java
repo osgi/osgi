@@ -21,7 +21,9 @@ import java.io.*;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.*;
+
 import nanoxml.XMLElement;
+
 import org.osgi.framework.*;
 import org.osgi.service.application.*;
 import org.osgi.service.event.*;
@@ -179,7 +181,7 @@ public class MEGContainerImpl implements MEGContainer, BundleListener,
 				if (desc.eventSubscribes[i].eventAction[j] == EventSubscribe.LISTENER) {
 					/* TODO  */
 					Hashtable props = new Hashtable();
-					props.put("topic", desc.eventSubscribes[i].eventTopic[j]);
+					props.put(EventConstants.EVENT_TOPIC, desc.eventSubscribes[i].eventTopic[j]);
 					bc.registerService(ChannelListener.class.getName(), app,
 							props);
 				}
@@ -583,7 +585,7 @@ public class MEGContainerImpl implements MEGContainer, BundleListener,
 							&& bundleDesc.eventSubscribes[i].eventTopic != null)
 						for (int j = 0; j != bundleDesc.eventSubscribes[i].eventTopic.length; j++) {
 							Filter topicFilter = bc
-									.createFilter("(topic="
+									.createFilter("("+EventConstants.EVENT_TOPIC+"="
 											+ bundleDesc.eventSubscribes[i].eventTopic[j]
 											+ ")");
 							if (event.matches(topicFilter)) {
