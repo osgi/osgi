@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-	<!--
-		This build file can be used to build the entire OSGi build.
-	-->
-	<project name="released" default="publish">
-
-		<import file="../cnf/build.xml"/>
-
-	</project>
+<project name="released" default="publish">
+	<import file="../cnf/build.xml" />
+</project>
