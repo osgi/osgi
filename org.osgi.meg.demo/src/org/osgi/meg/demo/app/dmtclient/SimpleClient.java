@@ -17,12 +17,20 @@
  */
 package org.osgi.meg.demo.app.dmtclient;
 
+//import java.io.File;
 import java.util.*;
+//import javax.xml.parsers.DocumentBuilder;
+//import javax.xml.parsers.DocumentBuilderFactory;
+//import javax.xml.parsers.SAXParser;
+//import javax.xml.parsers.SAXParserFactory;
 import org.osgi.framework.*;
 import org.osgi.service.cm.*;
 import org.osgi.service.dmt.*;
 import org.osgi.service.event.*;
 import org.osgi.service.monitor.*;
+//import org.w3c.dom.Document;
+//import org.xml.sax.helpers.DefaultHandler;
+//import org.xml.sax.Attributes;
 
 public class SimpleClient implements ManagedService, Monitorable, EventHandler
 {
@@ -62,6 +70,50 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
         String pid = ClientActivator.SERVICE_PID;
 
         try {
+            /*
+
+            ServiceReference refs[] = bc.getServiceReferences( SAXParserFactory.class.getName(), 
+                    "(&(parser.namespaceAware=true)(parser.validating=false))" ); 
+
+            if(refs == null)
+                throw new Exception("Cannot find SaxParserFactory service.");
+
+            SAXParserFactory saxParserFactory = (SAXParserFactory) bc.getService(refs[0]);
+            if(saxParserFactory == null)
+                throw new Exception("No matching SAXParserFactory service found.");
+                        
+            SAXParser saxParser = saxParserFactory.newSAXParser();
+            saxParser.parse(new File("/tmp/proba.xml"), new DefaultHandler() {
+                public void characters(char[] chars, int start, int len) {
+                    System.out.print("chars: ");
+                    System.out.println(chars);
+                }
+                public void startElement(String uri, String localName, 
+                                         String qName, Attributes attributes) {
+                    System.out.println("startElement(" + uri + ", ...)" );
+                }
+            });
+            */
+
+            /*
+            ServiceReference domRef = bc.getServiceReference(DocumentBuilderFactory.class.getName());
+            if(domRef == null)
+                throw new Exception("Cannot find DocumentBuilderFactory service.");
+            
+            DocumentBuilderFactory domBuilderFactory = (DocumentBuilderFactory) bc.getService(domRef);
+            if(domBuilderFactory == null)
+                throw new Exception("DocumentBuilderFactory service no longer registered.");
+            
+            //domBuilderFactory.setValidating(false);
+            DocumentBuilder domBuilder = domBuilderFactory.newDocumentBuilder();
+            
+            Document dom = domBuilder.parse(new File("/tmp/proba.xml"));
+            
+            System.out.println("Root tag in XML: " + dom.getDocumentElement().getTagName());
+            
+            bc.ungetService(domRef);
+            */
+            
             /*
             Filter filter = bc.createFilter("(a=b)");
 
@@ -397,9 +449,9 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
     public void handleEvent(Event event) {
         String topic = event.getTopic();
 
-        if(topic.equals("org.osgi.service.monitor.MonitorEvent"))
+        if(topic.equals("org/osgi/service/monitor/MonitorEvent"))
             monitorEvent(event);
-        else if(topic.startsWith("org.osgi.service.dmt.DmtEvent."))
+        else if(topic.startsWith("org/osgi/service/dmt/DmtEvent/"))
             dmtEvent(event);
         else
             System.out.println("Unexpected event received on topic '" + topic + "'.");
