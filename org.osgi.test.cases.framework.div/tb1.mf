@@ -26,6 +26,6 @@ continue: 1
  2
                            3
  4
-unicode-test: �?Þ
+unicode-test: ÐÞ
 5-: numeric first char
 
