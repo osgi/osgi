@@ -1,5 +1,6 @@
 package org.osgi.test.eclipse;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.http.HttpServiceController;
@@ -13,7 +14,8 @@ public class Activator extends AbstractUIPlugin {
 	static Director					director	= new Director();
 	static BundleContext			context;
 	static HttpServiceController	http		= new HttpServiceController();
-
+	static ILog						log;
+	
 	/**
 	 * The constructor.
 	 */
@@ -27,9 +29,10 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		try {
 			Activator.context = context;
+			log = getLog();
 			super.start(context);
 			handler = director.initialize(context);
-			http.start(context);
+			http.start(context);			
 		}
 		catch (Throwable e) {
 			e.printStackTrace();

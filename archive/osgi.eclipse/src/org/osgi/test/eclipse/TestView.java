@@ -259,6 +259,9 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 	}
 
 	static void error(final String msg, final Throwable throwable) {
+		if ( throwable != null )
+			Activator.log.log(new Status(Status.ERROR,"osgi.eclipse",Status.OK, msg, throwable ));
+		
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				if (throwable != null) {
