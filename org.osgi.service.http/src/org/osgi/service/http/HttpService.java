@@ -148,7 +148,7 @@ public abstract interface HttpService {
 	 * servlet will not be called in this case since the bundle may be stopped.
 	 * {@link #unregister}must be explicitly called to cause the
 	 * <tt>destroy</tt> method of the servlet to be called. This can be done
-	 * in the {@link org.osgi.framework.BundleActivator#stop}method of the
+	 * in the <code>BundleActivator.stop</code> method of the
 	 * bundle registering the servlet.
 	 * 
 	 * @param alias name in the URI name-space of the registration to unregister

@@ -33,6 +33,7 @@ package org.osgi.service.prefs;
  * @version $Revision$
  */
 public class BackingStoreException extends Exception {
+    static final long serialVersionUID = -1415637364122829574L;
 	/**
 	 * Nested exception.
 	 */
@@ -47,6 +48,7 @@ public class BackingStoreException extends Exception {
 	public BackingStoreException(String s) {
 		super(s);
 	}
+	
 	/**
 	 * Constructs a <tt>BackingStoreException</tt> with the specified detail
 	 * message.
@@ -59,6 +61,7 @@ public class BackingStoreException extends Exception {
 		super(s);
 		this.cause = cause;
 	}
+	
 	/**
 	 * Returns the cause of this exception or <tt>null</tt> if no cause was
 	 * specified when this exception was created.

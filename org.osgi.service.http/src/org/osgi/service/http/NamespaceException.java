@@ -1,7 +1,7 @@
 /*
  * $Header$
  *
- * Copyright (c) OSGi Alliance (2000).
+ * Copyright (c) OSGi Alliance (2000, 2004).
  * All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
@@ -35,10 +35,11 @@ package org.osgi.service.http;
  * @version $Revision$
  */
 public class NamespaceException extends Exception {
+    static final long serialVersionUID = 7235606031147877747L;
 	/**
-	 * Nested exception
+	 * Nested exception.
 	 */
-	private transient Throwable	exception;
+	private Throwable	cause;
 
 	/**
 	 * Construct a <tt>NamespaceException</tt> object with a detail message.
@@ -47,28 +48,56 @@ public class NamespaceException extends Exception {
 	 */
 	public NamespaceException(String message) {
 		super(message);
-		exception = null;
+		cause = null;
 	}
 
 	/**
 	 * Construct a <tt>NamespaceException</tt> object with a detail message
 	 * and a nested exception.
 	 * 
-	 * @param message the detail message
-	 * @param exception the nested exception
+	 * @param message The detail message.
+	 * @param cause The nested exception.
 	 */
-	public NamespaceException(String message, Throwable exception) {
+	public NamespaceException(String message, Throwable cause) {
 		super(message);
-		this.exception = exception;
+		this.cause = cause;
 	}
 
 	/**
 	 * Returns the nested exception.
+	 *
+     * <p>This method predates the general purpose exception chaining mechanism.
+     * The {@link #getCause()} method is now the preferred means of
+     * obtaining this information.
 	 * 
 	 * @return the nested exception or <code>null</code> if there is no nested
 	 *         exception.
 	 */
 	public Throwable getException() {
-		return (exception);
+		return cause;
+	}
+
+	/**
+	 * Returns the cause of this exception or <tt>null</tt> if no
+	 * cause was specified when this exception was created.
+	 *
+	 * @return  The cause of this exception or <tt>null</tt> if no
+	 * cause was specified.
+	 * @since 1.2 
+	 */
+	public Throwable getCause() {
+	    return cause;
+	}
+
+	/**
+	 * The cause of this exception can only be set when constructed.
+	 *
+	 * @throws java.lang.IllegalStateException
+	 * This method will always throw an <tt>IllegalStateException</tt>
+	 * since the cause of this exception can only be set when constructed.
+	 * @since 1.2 
+	 */
+	public Throwable initCause(Throwable cause) {
+		throw new IllegalStateException();
 	}
 }
