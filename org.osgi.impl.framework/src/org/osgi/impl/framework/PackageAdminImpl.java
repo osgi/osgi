@@ -242,12 +242,18 @@ public class PackageAdminImpl implements PackageAdmin {
 		return false;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.osgi.service.packageadmin.PackageAdmin#getProvidingBundles(java.lang.String)
+	/* (non-Javadoc)
+	 * @see org.osgi.service.packageadmin.PackageAdmin#getAllExportedPackages(java.lang.String)
 	 */
-	public ProvidingBundle[] getProvidingBundles(String symbolicName) {
+	public ExportedPackage[] getAllExportedPackages(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.osgi.service.packageadmin.PackageAdmin#getRequiredBundles(java.lang.String)
+	 */
+	public RequiredBundle[] getRequiredBundles(String symbolicName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -291,5 +297,13 @@ public class PackageAdminImpl implements PackageAdmin {
 	public int getBundleType(Bundle bundle) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.osgi.service.packageadmin.PackageAdmin#getBundle(java.lang.Class)
+	 */
+	public Bundle getBundle(Class clazz) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
