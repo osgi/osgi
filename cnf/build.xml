@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 	The is main OSGi build file. It is included from projects
-	as is. The project file should only set the project.name
-	property to the project name.
+	as is. 
 -->
 
 <project name="package" default="none">
-
 
 	<!-- Where are we properties, ant seems to be not so good
 	     with relative directories -->
@@ -25,7 +22,7 @@
 	
 	<!-- 
 	   Set the build properties. Later properties with the
-	   same name are ignore so the order is VERY important.
+	   same name are ignored so the order is VERY important.
 	   We follow the build.properties conventions. This means
 	   that the following properties should be set:
 	   
@@ -69,6 +66,7 @@
 	<property file="${project}/build.properties" />		
 	<property file="${env.HOME}/osgi.properties" />
 	<property file="${workspace}/cnf/build.properties" />
+	<property name="JAVA_HOME" value="${env.JAVA_HOME}"/>
 	<property name="p" value= "${project.name}"/>
 	
 	<!-- get the classpath and build info from eclipse -->
@@ -76,8 +74,8 @@
 	<btool eclipse="${project}" />
 
 	<property name="bin.includes" value="${project.name}.jar"/>
-	<property name="javac" value="${env.JAVA_HOME}/bin/javac"/>
-	<property name="java" value="${env.JAVA_HOME}/bin/java"/>
+	<property name="javac" value="${JAVA_HOME}/bin/javac"/>
+	<property name="java" value="${JAVA_HOME}/bin/java"/>
 
 	<!-- 
 	     PUBLISH
@@ -92,12 +90,12 @@
 		
 		<!-- Build project dependencies -->
 		<foreach delimiter=" ," list="${project.buildpath}" 
-			target="sub"  param="item.dir"/>
+			target="publish.item"  param="item.dir"/>
 
 		<antcall target="local"/>
 	</target>
 
-	<target name="sub">
+	<target name="publish.item">
 		<echo>Building ${item.dir}</echo>
 		
 		<ant dir="${item.dir}" target="publish" 
@@ -212,7 +210,7 @@
 	</target>
 	
 	<target name="dependent">
-		<ant dir="${item.dir}" antfile="${item.dir}/build.xml" target="publish" inheritall="false"/>
+		<ant dir="${item.dir}" target="publish" inheritall="false"/>
 	</target>
 
 
@@ -227,7 +225,7 @@
 		<property name="project.bootclasspath" value=""/>
 		
 		<javac fork="yes" 
-			executable="javac" 
+			executable="${javac}" 
 			srcdir="${project.sourcepath}" 
 			destdir="${project.bindir}" 
 			classpath="${project.classpath}" 
@@ -236,9 +234,9 @@
 			listfiles="true" 
 			target="${javac.target}" 
 			source="${javac.source}" 
+			debug="${javac.debug}" 
 			verbose="${verbose}"
 			includeAntRuntime="no"
-			includeJavaRuntime="no"
 		/>
 	</target>
 
@@ -246,17 +244,20 @@
 	<!--
 	     CLEAN
 	-->
-	<target name="clean">
-		<delete failonerror="false">
+	<target name="clean" depends="localclean">
+		<foreach delimiter="," list="${project.buildpath}" target="clean.item" param="item.dir"/>
+	</target>
+
+	<target name="localclean">
+		<delete failonerror="false" verbose="${verbose}">
 			<fileset dir="${project.bindir}" includes="**/*.bak **/*.class" />
 			<fileset dir="${project}" includes="**/*.bak **/~* ${jars.compile.order}" />
 			<fileset dir="${workspace}/cnf/cache" includes="${project.name}" />
 		</delete>
-		<foreach delimiter="," list="${project.buildpath}" target="clean.item" param="item.dir"/>
 	</target>
 
 	<target name="clean.item">
-		<ant dir="${item.dir}" antfile="${item.dir}/build.xml" target="clean" inheritall="false"/>		
+		<ant dir="${item.dir}" target="clean" inheritall="false"/>		
 	</target>
 
 
