@@ -446,7 +446,7 @@ public class MegletContainerImpl implements BundleListener, MegletContainer,
       domFactory.setValidating( validating );
 			bc.ungetService( domParserReference );
 			if( domParser == null ) {
-				log(bc, LogService.LOG_ERROR, "Cannot create SAX parser!", null );
+				log(bc, LogService.LOG_ERROR, "Cannot create DOM parser!", null );
 				return null;
 			}
 
