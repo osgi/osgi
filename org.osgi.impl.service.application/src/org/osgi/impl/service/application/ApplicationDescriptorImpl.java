@@ -39,14 +39,8 @@ public class ApplicationDescriptorImpl implements Delegate {
 	private ApplicationDescriptor descriptor;
 	private boolean								locked;
 	private static Properties			locks;
-	private BundleContext         bc;
 	private Scheduler             scheduler;
-	
-	public ApplicationDescriptorImpl( BundleContext bc, Scheduler scheduler ) {
-		this.bc = bc;
-		locks = null;
-	}
-	
+		
 	public synchronized void setApplicationDescriptor(ApplicationDescriptor d) {
 		descriptor = d;
 	}
@@ -57,7 +51,7 @@ public class ApplicationDescriptorImpl implements Delegate {
 
 	synchronized boolean doLock(boolean query, boolean newState) {
 		try {
-			File f = bc.getDataFile("locks");
+			File f = Activator.bc.getDataFile("locks");
 			if ( locks == null ) {
 				locks = new Properties();
 				if ( f.exists() )
@@ -105,14 +99,14 @@ public class ApplicationDescriptorImpl implements Delegate {
 	 			throw new Exception("Cannot launch the application!");
 			String isSingleton = (String)props.get("application.singleton");
 			if (isSingleton == null || isSingleton.equalsIgnoreCase("true")) {
-				ServiceReference[] appHandles = bc.getServiceReferences(
+				ServiceReference[] appHandles = Activator.bc.getServiceReferences(
 						"org.osgi.service.application.ApplicationHandle", null);
 				if (appHandles != null)
 					for (int k = 0; k != appHandles.length; k++) {
-						ApplicationHandle handle = (ApplicationHandle) bc
+						ApplicationHandle handle = (ApplicationHandle) Activator.bc
 								.getService(appHandles[k]);
 						ApplicationDescriptor appDesc = handle.getApplicationDescriptor();
-						bc.ungetService(appHandles[k]);
+						Activator.bc.ungetService(appHandles[k]);
 						if ( appDesc == descriptor )
 							throw new Exception("Singleton Exception!");
 					}
