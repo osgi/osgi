@@ -28,8 +28,8 @@ public class Activator extends AbstractUIPlugin {
 		try {
 			Activator.context = context;
 			super.start(context);
-			http.start(context);
 			handler = director.initialize(context);
+			http.start(context);
 		}
 		catch (Throwable e) {
 			e.printStackTrace();
