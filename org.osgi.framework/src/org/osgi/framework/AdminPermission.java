@@ -35,6 +35,7 @@ import java.util.NoSuchElementException;
  * Indicates the caller's authority to perform lifecycle operations on or to get
  * sensitive information about a bundle.
  * <p>
+ * ### needs to be updated for RFC 73!
  * <tt>AdminPermission</tt> has no actions or target.
  * <p>
  * The <tt>hashCode()</tt> method of <tt>AdminPermission</tt> is inherited
