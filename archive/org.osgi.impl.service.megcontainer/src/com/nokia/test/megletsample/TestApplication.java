@@ -31,14 +31,14 @@ public class TestApplication extends Meglet
     super();    
   }
   
-  protected void start( Map args ) throws Exception
+  protected void start( Map args, InputStream stateStorage ) throws Exception
   {
     if( args != null )
       fileName = (String)args.get( "TestResult" );  
     writeResult( "START" );
   }
 
-  protected void stop() throws Exception
+  protected void stop( OutputStream stateStorage ) throws Exception
   {
     writeResult( "STOP" );
   }
