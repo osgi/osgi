@@ -49,8 +49,7 @@ public class RootPlugin implements DmtReadOnlyDataPlugin {
 	public DmtMetaNode getMetaNode(String nodeUri)
 			throws DmtException {
 		findNode(nodeUri); // check that the node exists
-		return new DmtMetaNodeImpl(); // TODO return different info for
-									  // different nodes
+		return new DmtMetaNodeImpl(); // TODO return different info for different nodes
 	}
 
 	//----- DmtReadOnly methods -----//
@@ -67,6 +66,11 @@ public class RootPlugin implements DmtReadOnlyDataPlugin {
 			return false;
 		}
 	}
+    
+    public boolean isLeafNode(String nodeUri) throws DmtException {
+        findNode(nodeUri); // check that the node exists
+        return false; // currently all nodes are internal
+    }
 
 	public DmtData getNodeValue(String nodeUri) throws DmtException {
 		// should never be called because all nodes are internal

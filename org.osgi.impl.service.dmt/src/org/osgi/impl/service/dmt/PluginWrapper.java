@@ -447,6 +447,23 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         return ret.booleanValue();
     }
 
+    public boolean isLeafNode(final String uri) throws DmtException {
+        if (securityContext == null)                        // local caller
+            return dmtReadOnly.isLeafNode(uri);
+        
+        try {                                               // remote caller
+            Boolean isLeaf = (Boolean) AccessController.doPrivileged(
+                    new PrivilegedExceptionAction() {
+                        public Object run() throws DmtException {
+                            return new Boolean(dmtReadOnly.isLeafNode(uri));
+                        }
+                    }, securityContext);
+            return isLeaf.booleanValue();
+        } catch (PrivilegedActionException e) {
+            throw (DmtException) e.getException();
+        }
+    }
+    
     public DmtData getNodeValue(final String uri) throws DmtException {
         if (securityContext == null)                        // local caller
             return dmtReadOnly.getNodeValue(uri);

@@ -510,6 +510,62 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 		return (prop.getIndex(path[3]) >= 0); // ./OSGi/cfg/<service_pid>/<key>/value/<index>
 	}
 
+    public boolean isLeafNode(String nodeUri) throws DmtException {
+        String[] path = prepareUri(nodeUri);
+        if (path.length == 0) // ./OSGi/cfg
+            return false;
+
+        Service service = Service.getService(path[0], nodeUri);
+        if (path.length == 1) // ./OSGi/cfg/<service_pid>
+            return false;
+
+        Property prop = service.getProperty(path[1], nodeUri);
+        if (path.length == 2) // ./OSGi/cfg/<service_pid>/<key>
+            return prop.isSimple();
+        
+        if (prop.isSimple())
+            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+                    "The given key '" + path[1] + 
+                    "' specifies simple configuration data, it has no subnodes.");
+        
+        if (path.length == 3) { // ./OSGi/cfg/<service_pid>/<key>/(type|cardinality|value)
+            if (path[2].equals("type")) {
+                if (!prop.hasType())
+                    throw new DmtException(nodeUri,
+                            DmtException.NODE_NOT_FOUND,
+                            "The type has not been set for the specified configuration item.");
+                return true;
+            }
+            if (path[2].equals("cardinality")) {
+                if (!prop.hasCardinality())
+                    throw new DmtException(nodeUri,
+                            DmtException.NODE_NOT_FOUND,
+                            "The cardinality has not been set for the specified configuration item.");
+                return true;
+            }
+            // path[2].equals("value")
+            if (prop.isCompleteComplexScalar())
+                return true;
+            if (prop.isCompleteNonScalar())
+                return false;
+            
+            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+                    "'value' node not set for the specified configuration item.");
+        }
+        
+        // path.length == 4
+        if (!prop.isCompleteNonScalar())
+            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+                    "The given key '" + path[1] +
+                     "' specifies scalar data or 'value' node not set.");
+        int index = prop.getIndex(path[3]);
+        if (index < 0)
+            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+                    "Value index out of range.");
+
+        return true; 
+    }
+
 	public DmtData getNodeValue(String nodeUri) throws DmtException {
 		String[] path = prepareUri(nodeUri);
 		// path has at least two components because DmtAdmin only calls this

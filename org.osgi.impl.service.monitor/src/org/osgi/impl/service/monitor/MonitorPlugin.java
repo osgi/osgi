@@ -444,6 +444,42 @@ public class MonitorPlugin implements DmtDataPlugin
         return false;
     }
 
+    public boolean isLeafNode(String nodeUri) throws DmtException {
+        String[] path = prepareUri(nodeUri);
+        
+        if(path.length == 0)
+            return false;
+        
+        Monitorable monitorable = getMonitorable(path[0], nodeUri);
+        if(path.length == 1)
+            return false;
+
+        KpiWrapper kpi = getKpi(monitorable, path[0], path[1], nodeUri);
+        if(path.length == 2)
+            return false;
+        
+        if(path.length == 3)
+            return !path[2].equals("Server");
+
+        Server server = kpi.getServer(path[3], nodeUri);
+        if(path.length == 4)
+            return false;
+        
+        if(path.length == 5)
+            return path[4].equals("ServerID") || path[4].equals("Enabled");
+        
+        if(path.length == 6 && path[4].equals("Reporting"))
+            return true;
+            
+        // path[4].equals("TrapRef")
+        server.getTrapRefId(path[5], nodeUri);
+
+        // path[6] is a leaf, path[5] is interior
+        return path.length == 7;
+        
+            
+    }
+    
     public DmtData getNodeValue(String nodeUri) throws DmtException {
         String[] path = prepareUri(nodeUri);
 
