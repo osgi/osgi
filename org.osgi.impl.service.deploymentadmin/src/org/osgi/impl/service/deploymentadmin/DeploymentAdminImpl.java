@@ -148,7 +148,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator, Ru
 	    if (null == actDp)
 	        return false;
 	    else  {
-	        actDp.cancel(); 
+	        transaction.cancel(); 
 	        return true;
 	    }
 	}
@@ -166,7 +166,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator, Ru
     }
 
 	public synchronized DeploymentPackage[] listDeploymentPackages() {
-	    checkPermission("", DeploymentAdminPermission.ACTION_LIST_DPS);
+	    // TODO checkPermission("", DeploymentAdminPermission.ACTION_LIST_DPS);
 		return (DeploymentPackage[]) dps.toArray(new DeploymentPackage[0]);
 	}
 	

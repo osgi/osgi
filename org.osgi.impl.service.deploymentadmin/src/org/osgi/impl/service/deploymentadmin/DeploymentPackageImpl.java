@@ -323,29 +323,13 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         this.admin = deploymentAdmin;
     }
 
-    /*private void transactionStart() {
-        transaction = new Transaction(this, logger);
-    }*/
-    
-    /*private void transactionCommit() {
-        transaction.commit();
-    }*/
-    
-    /*private void transactionRollback() {
-        transaction.rollback();
-    }*/
-
-    private void transactionStep(int tranCode, Object[] params) {
-        transaction.addRecord(new TransactionRecord(tranCode, params));
-    }
-    
     private void processResource(ServiceReference procRef, String resName,
             int operation) throws Exception 
     {
         ResourceProcessor proc = (ResourceProcessor)
         		tracker.getService(procRef);
-        transactionStep(Transaction.PROCESSOR, new Object[] {proc, this,
-                new Integer(operation)});
+        transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, 
+                new Object[] {proc, this, new Integer(operation)}));
         proc.process(resName, stream);
     }
     
@@ -354,8 +338,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             String resFilter = (String) iter.next();
             ResourceProcessor proc = (ResourceProcessor) tracker.
             		getService(findProcessor(resFilter, filters));
-            transactionStep(Transaction.PROCESSOR, new Object[] {proc, this,
-                    new Integer(ResourceProcessor.UPDATE)});
+            transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, 
+                    new Object[] {proc, this, new Integer(ResourceProcessor.UPDATE)}));
             proc.dropped(resFilter);
             removeFilter(resFilter);
         }
@@ -393,51 +377,43 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     public void install() throws Exception {
         newBundles = new HashSet();
         
-        //transactionStart();
         extractFilters(manifest.getMainAttributes().getValue(
         		"DeploymentPackage-Processing"));
-        try {
-            WrappedJarInputStream.Entry entry = stream.nextEntry();
-            while (null != entry) {
-                if (entry.isBundle()) {
-                    BundleEntry bentry = getBundleEntry(entry.getJarEntry());
-                    // TODO chech whether there is a bundle with the same name and version
-                    // in the framework
-                    // TODO chech whethet there is a bundle with the same name in the DP
-                    Bundle b = installBundle(bentry, stream);
-                    if (isCustomizerBundle(bentry))
-                        startBundle(b);
-                } else if (entry.isResource()){
-                    String resName = entry.getName();
-                    ServiceReference procRef = findProcessor(resName, filters);
-                    if (null != procRef) {
-                        processResource(procRef, resName, ResourceProcessor.INSTALL);
-                        addResource(resName);
-                    }
-                    else {
-                        // it is catched by the catch clause
-                        throw new Exception("There is no resource processor for " +
-                        		"resource " + resName);
-                    }
-                } else {
-                    // TODO error
-                }
-                entry = stream.nextEntry();;
-            }
-            startBundles();
-        } catch (Exception e) {
-            //transactionRollback();
-            throw e;
-        }
 
-        //transactionCommit();
+    	WrappedJarInputStream.Entry entry = stream.nextEntry();
+        while (null != entry) {
+            if (entry.isBundle()) {
+                BundleEntry bentry = getBundleEntry(entry.getJarEntry());
+                // TODO chech whether there is a bundle with the same name and version
+                // in the framework
+                // TODO chech whethet there is a bundle with the same name in the DP
+                Bundle b = installBundle(bentry, stream);
+                if (isCustomizerBundle(bentry))
+                    startBundle(b);
+            } else if (entry.isResource()){
+                String resName = entry.getName();
+                ServiceReference procRef = findProcessor(resName, filters);
+                if (null != procRef) {
+                    processResource(procRef, resName, ResourceProcessor.INSTALL);
+                    addResource(resName);
+                }
+                else {
+                    // it is catched by the catch clause
+                    throw new Exception("There is no resource processor for " +
+                    		"resource " + resName);
+                }
+            } else {
+                // TODO error
+            }
+            entry = stream.nextEntry();;
+        }
+        startBundles();
     }
 
     // TODO throw exceptions
     public void uninstall() {
         //checkPermission(getName(), DeploymentAdminPermission.ACTION_UNINSTALL_DP);
         
-        //transactionStart();
         try {
             stopNonCustomizerBundles();
             for (Iterator iter = resources.iterator(); iter.hasNext();) {
@@ -457,11 +433,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             uninstallBundles(bundles);
         } catch (Exception e) {
             logger.log(e);
-            //transactionRollback();
             // TODO throw e;
         }
 
-        //transactionCommit();
         // TODO eliminate this
         admin.onUninstallDp(this);
     }
@@ -473,8 +447,6 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         newBundles = new HashSet();
         updatedBundles = new HashSet();
        
-        //transactionStart();
-        
         Hashtable oldFilters = new Hashtable(filters);
         extractFilters(manifest.getMainAttributes().getValue(
         		"DeploymentPackage-Processing"));
@@ -535,10 +507,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             DeploymentPackageVerifier.verify(this);
             startBundles();
         } catch (Exception e) {
-            //transactionRollback();
             throw e;
         }
-        //transactionCommit();
     }
 
     private ServiceReference findProcessor(String resName, Hashtable filters) {
@@ -616,8 +586,4 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 	    sm.checkPermission(perm);
 	}
 
-    public void cancel() {
-        // TODO Auto-generated method stub
-    }
-   
 }

@@ -41,6 +41,7 @@ public class Transaction {
     private HashSet               processors;
     private Logger                logger;
     private DeploymentPackageImpl dp;
+    private boolean 			  cancelled;
     
     // Transaction is singleton
     private static Transaction instance = null;
@@ -57,14 +58,18 @@ public class Transaction {
         this.dp = dp;
         steps = new Vector();
         processors = new HashSet();
+        cancelled = false;
         logger.log(Logger.LOG_INFO, "Transaction started");
     }
 
-    public synchronized void addRecord(TransactionRecord record) {
+    public synchronized boolean addRecord(TransactionRecord record) {
+        if (cancelled)
+            throw new RuntimeException("Deployment operation cancelled");
+        
         if (PROCESSOR == record.code) {
             ResourceProcessor proc = (ResourceProcessor) record.objs[0];
             if (processors.contains(proc)) {
-                return;
+                return true;
             }
             else {
                 DeploymentPackage dp = (DeploymentPackage) record.objs[1];
@@ -75,6 +80,7 @@ public class Transaction {
         }
         steps.add(record);
         logger.log(Logger.LOG_INFO, "Transaction record added:\n" + record);
+        return true;
     }
     
     public synchronized void commit() {
@@ -180,6 +186,10 @@ public class Transaction {
         } catch (PrivilegedActionException e) {
             throw (BundleException) e.getException();
         }
+    }
+
+    public synchronized void cancel() {
+        cancelled = true;
     }
 
 }

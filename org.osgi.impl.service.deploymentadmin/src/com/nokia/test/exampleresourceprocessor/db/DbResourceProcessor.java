@@ -20,6 +20,7 @@ import java.util.Vector;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.deploymentadmin.Logger;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 
@@ -138,6 +139,15 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
                     default :
                         break;
                 }
+            } else if (line.startsWith("SLEEP")) {
+                String[] parts = Splitter.split(line, ' ', 0);
+                long time = Integer.parseInt(parts[1]);
+                try {
+                    System.out.println("SLEEP " + time + "ms");
+                    Thread.sleep(time);
+                }
+                catch (InterruptedException e) {
+                }
             }
             line = br.readLine();
         }
@@ -228,7 +238,7 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
         Set s = (Set) ht.get(resName);
         return s;
     }
-
+    
     // FOR TEST ONLY
     /*private static Db db = new Db();
     public static void main(String[] args) throws Exception {

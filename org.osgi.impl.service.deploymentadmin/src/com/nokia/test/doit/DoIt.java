@@ -24,6 +24,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
@@ -204,8 +205,7 @@ public class DoIt implements BundleActivator {
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         Db db = (Db) context.getService(ref);
         
-        InputStream is = null;
-        is = new FileInputStream(HOME + "db_test_01.dp");
+        InputStream is = new FileInputStream(HOME + "db_test_01.dp");
 		da.installDeploymentPackage(is);
 		
 		try {Thread.sleep(1000);} catch (Exception e) {}
@@ -268,32 +268,19 @@ public class DoIt implements BundleActivator {
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         Db db = (Db) context.getService(ref);
         
-        InputStream is = null;
-        try {
-	        is = new FileInputStream(HOME + "db_test_02.dp");
-			da.installDeploymentPackage(is);
-			
-			try {Thread.sleep(1000);} catch (Exception e) {}
-			
-			String[] tables = db.tableNames(null);
-			for (int i = 0; i < tables.length; i++) {
-			    System.out.println("TABLE: " + tables[i]);
-			    db.printTableHeader(null, tables[i], System.out);
-				db.printTableContent(null, tables[i], System.out);
-				System.out.println();                
-            }
-        } finally {
-            if (null != is)
-                try {
-                    is.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+        InputStream is = new FileInputStream(HOME + "db_test_02.dp");
+		da.installDeploymentPackage(is);
+		
+		try {Thread.sleep(1000);} catch (Exception e) {}
+		
+		String[] tables = db.tableNames(null);
+		for (int i = 0; i < tables.length; i++) {
+		    System.out.println("TABLE: " + tables[i]);
+		    db.printTableHeader(null, tables[i], System.out);
+			db.printTableContent(null, tables[i], System.out);
+			System.out.println();                
         }
-        
-        try {Thread.sleep(1000);} catch (Exception e) {}
-        
+      
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
             throw new Exception("Table 'player' is missing");
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
@@ -303,27 +290,17 @@ public class DoIt implements BundleActivator {
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("tmp"))
             throw new Exception("Table 'tmp' is missing");
 
-        try {
-	        is = new FileInputStream(HOME + "db_test_02_update_01.dp");
-			da.installDeploymentPackage(is);
-			
-			try {Thread.sleep(1000);} catch (Exception e) {}
-			
-			String[] tables = db.tableNames(null);
-			for (int i = 0; i < tables.length; i++) {
-			    System.out.println("TABLE: " + tables[i]);
-			    db.printTableHeader(null, tables[i], System.out);
-				db.printTableContent(null, tables[i], System.out);
-				System.out.println();                
-            }
-        } finally {
-            if (null != is)
-                try {
-                    is.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+        is = new FileInputStream(HOME + "db_test_02_update_01.dp");
+		da.installDeploymentPackage(is);
+		
+		try {Thread.sleep(1000);} catch (Exception e) {}
+		
+		tables = db.tableNames(null);
+		for (int i = 0; i < tables.length; i++) {
+		    System.out.println("TABLE: " + tables[i]);
+		    db.printTableHeader(null, tables[i], System.out);
+			db.printTableContent(null, tables[i], System.out);
+			System.out.println();                
         }
         
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
@@ -343,31 +320,18 @@ public class DoIt implements BundleActivator {
         Db db = (Db) context.getService(ref);
         DeploymentPackage dp = null;
         
-        InputStream is = null;
-        try {
-	        is = new FileInputStream(HOME + "db_test_03.dp");
-			dp = da.installDeploymentPackage(is);
-			
-			try {Thread.sleep(1000);} catch (Exception e) {}
-			
-			String[] tables = db.tableNames(null);
-			for (int i = 0; i < tables.length; i++) {
-			    System.out.println("TABLE: " + tables[i]);
-			    db.printTableHeader(null, tables[i], System.out);
-				db.printTableContent(null, tables[i], System.out);
-				System.out.println();                
-            }
-        } finally {
-            if (null != is)
-                try {
-                    is.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+        InputStream is = new FileInputStream(HOME + "db_test_03.dp");
+		dp = da.installDeploymentPackage(is);
+		
+		try {Thread.sleep(1000);} catch (Exception e) {}
+		
+		String[] tables = db.tableNames(null);
+		for (int i = 0; i < tables.length; i++) {
+		    System.out.println("TABLE: " + tables[i]);
+		    db.printTableHeader(null, tables[i], System.out);
+			db.printTableContent(null, tables[i], System.out);
+			System.out.println();                
         }
-        
-        try {Thread.sleep(1000);} catch (Exception e) {}
         
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
             throw new Exception("Table 'player' is missing");
@@ -401,56 +365,21 @@ public class DoIt implements BundleActivator {
         Db db = (Db) context.getService(ref);
         DeploymentPackage dp = null;
         
-        InputStream is = null;
-        try {
-	        is = new FileInputStream(HOME + "db_test_04.dp");
-			dp = da.installDeploymentPackage(is);
-			
-			try {Thread.sleep(1000);} catch (Exception e) {}
-			
-			String[] tables = db.tableNames(null);
-			for (int i = 0; i < tables.length; i++) {
-			    System.out.println("TABLE: " + tables[i]);
-			    db.printTableHeader(null, tables[i], System.out);
-				db.printTableContent(null, tables[i], System.out);
-				System.out.println();                
-            }
-        } finally {
-            if (null != is)
-                try {
-                    is.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+        InputStream is = new FileInputStream(HOME + "db_test_04.dp");
+		dp = da.installDeploymentPackage(is);
+		
+		try {Thread.sleep(3000);} catch (Exception e) {}
+       
+		da.cancel();
+		
+		try {Thread.sleep(3000);} catch (Exception e) {}
+		
+		DeploymentPackage[] dps = da.listDeploymentPackages();
+		for (int i = 0; i < dps.length; i++) {
+            if (dps[i].getName().equals("db_test_04"))
+                throw new Exception("Operation has not been cancelled");
         }
-        
-        try {Thread.sleep(1000);} catch (Exception e) {}
-        
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
-            throw new Exception("Table 'player' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
-            throw new Exception("Table 'game' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("score"))
-            throw new Exception("Table 'score' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("tmp"))
-            throw new Exception("Table 'tmp' is missing");
-        
-        ServiceReference[] refs = context.getServiceReferences(
-                ResourceProcessor.class.getName(), "(id=db_test_04)");
-        ResourceProcessor rp = (ResourceProcessor) context.getService(refs[0]);
-        Set s = ((DbResourceProcessor) rp).getResources(dp, "db_test_01_t.dbscript");
-        if (null == s || !s.contains("tmp"))
-            throw new Exception("RP with id 'db_test_04' HASN'T receive the " +
-            		"'db_test_01_t.dbscript' resource");
-        refs = context.getServiceReferences(
-                ResourceProcessor.class.getName(), "(id=default_id)");
-        rp = (ResourceProcessor) context.getService(refs[0]);
-        s = ((DbResourceProcessor) rp).getResources(dp, "db_test_01_t.dbscript");
-        if (null != s && s.contains("tmp"))
-            throw new Exception("RP with id 'default_id' HAS receive the " +
-            		"'db_test_01_t.dbscript' resource");
-        
+		
         db.reset(null);
     }
     

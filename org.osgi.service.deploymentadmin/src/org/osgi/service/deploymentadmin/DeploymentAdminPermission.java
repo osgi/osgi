@@ -29,6 +29,8 @@ package org.osgi.service.deploymentadmin;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 /**
  * DeploymentAdminPermission controls access to MEG management framework functions. 
@@ -41,16 +43,16 @@ import java.security.PermissionCollection;
  * the framework's install/update/uninstall methods. <p>
  * The permission uses a &lt;filter&gt; string formatted similarly to the filter in RFC 73. 
  * The DeploymentAdminPermission filter does not use the id and location filters. 
- * The signer filter is matched against the signer of the deployment package, and 
- * the name filter is matched against the DeploymentPackage-Name header.
+ * The "signer" filter is matched against the signer chain of the deployment package, and 
+ * the "name" filter is matched against the DeploymentPackage-Name header.
  * <blockquote> 
- * DeploymentAdminPermission( "&lt;filter&gt;","listDeploymentPackages" )
+ * DeploymentAdminPermission( "&lt;filter&gt;","list" )
  * </blockquote>
  * A holder of this permission can access the inventory information of the deployment 
  * packages selected by the &lt;filter&gt; string. The filter selects the deployment packages 
  * on which the holder of the permission can acquire detailed inventory information.
  * <blockquote>
- * DeploymentAdminPermission( "&lt;filter&gt;","installDeploymentPackage" )
+ * DeploymentAdminPermission( "&lt;filter&gt;","install" )
  * </blockquote>
  * A holder of this permission can install/upgrade deployment packages if the deployment 
  * package satisfies the &lt;filter&gt; string.
@@ -59,36 +61,100 @@ import java.security.PermissionCollection;
  * </blockquote>
  * A holder of this permission can uninstall deployment packages if the deployment 
  * package satisfies the &lt;filter&gt; string.
+ * <blockquote>
+ * DeploymentAdminPermission( "&lt;filter&gt;","uninstallForceful" )
+ * </blockquote>
+ * A holder of this permission can forecfully uninstall deployment packages if the deployment 
+ * package satisfies the  string.
+ * <blockquote>
+ * DeploymentAdminPermission( "&lt;filter&gt;","cancel" )
+ * </blockquote>
+ * A holder of this permission can cancel an active deployment action. This action being 
+ * cancelled could correspond to the install, update or uninstall of a deployment package  
+ * satisfies the  string. <p>
+ * Wildcards can be used both in the name and the signer (see RFC-95) filers.<p>
+ * ??? WILDCARDS IN THE NAME FILTER ???<p>
+ * only "name:* signer:CN=Super Man, O=ACME, C=US" OR<p>
+ * * only at the end: "name:easy* signer:CN=Super Man, O=ACME, C=US" OR<p>
+ * "name:eas?game* signer:CN=Super Man, O=ACME, C=US"<p>
+ * or do we use the LDAP syntax:<p>
+ * "&(name=eas?game\*)(signer=CN=Super Man, O=ACME, C=US)" 
  */
 public class DeploymentAdminPermission extends Permission {
 
-    public static final String ACTION_INSTALL_DP = "installDeploymentPackage";
-    public static final String ACTION_LIST_DPS   = "listDeploymentPackages";
-    public static final String ACTION_UNINSTALL  = "uninstall";
-    public static final String ACTION_INVENTORY  = "inventory";
-    
-    private String actions;
-    
+    public static final String ACTION_INSTALL_DP    = "installDeploymentPackage";
+    public static final String ACTION_UNINSTALL_DP  = "uninstallDeploymentPackage";
+    public static final String ACTION_LIST_DPS      = "listDeploymentPackages";
+    public static final String ACTION_INVENTORY     = "inventory";
+    private static final Vector ACTIONS = new Vector();
     static {
-        System.out.println("88888888888888888888888888888888888888888888888");
-        System.out.println("888888888888888888       8888888888888888888888");
-        System.out.println("8888888888888888 88888888  88888888888888888888");
-        System.out.println("888888888888888 888 888 888 8888888888888888888");
-        System.out.println("888888888888888 88888888888 8888888888888888888");
-        System.out.println("888888888888888 888 888 88 88888888888888888888");
-        System.out.println("88888888888888888         888888888888888888888");
-        System.out.println("88888888888888888888888888888888888888888888888");
+        ACTIONS.add(ACTION_INSTALL_DP.toLowerCase());
+        ACTIONS.add(ACTION_UNINSTALL_DP.toLowerCase());
+        ACTIONS.add(ACTION_LIST_DPS.toLowerCase());
+        ACTIONS.add(ACTION_INVENTORY.toLowerCase());
     }
+    
+    private String namePart;
+    private String signerPart;
+    private Vector actionsVector;
     
     /**
      * Creates a new DeploymentAdminPermission for the given target and action.
      * @param target Target string.
-     * @param action Action string.
+     * @param actions Action string.
      */
-    public DeploymentAdminPermission(String target, String action) {
-        super(target);
-        System.out.println(">>>***>>> <INIT>");
-        this.actions = action;
+    public DeploymentAdminPermission(String name, String actions) {
+        super(name);
+        namePart = namePart(name);
+        signerPart = signerPart(name);
+        actionsVector = actionsVector(actions);
+        check();
+    }
+    
+    private String namePart(String name) {
+        if (0 == name.length())
+            return "";
+        int i = name.indexOf("name:");
+        if (-1 == i)
+            return "";
+        String s = name.substring("name:".length()).trim();
+        i = s.indexOf("signer:");
+        if (-1 == i)
+            return s.trim();
+        else
+            return s.substring(0, i).trim();
+    }
+
+    private String signerPart(String name) {
+        int i = name.indexOf("signer:");
+        if (-1 == i)
+            return "";
+        return name.substring(i + "signer:".length()).trim();
+    }
+
+    private static Vector actionsVector(DeploymentAdminPermission perm) {
+        return actionsVector(perm.getActions());
+    }
+
+    private static Vector actionsVector(String actions) {
+        Vector v = new Vector();
+        StringTokenizer t = new StringTokenizer(actions.toUpperCase(), ",");
+        while (t.hasMoreTokens()) {
+            String action = t.nextToken().trim();
+            v.add(action.toLowerCase());
+        }
+        return v;
+    }
+
+    private void check() {
+        if (!ACTIONS.containsAll(actionsVector))
+            throw new IllegalArgumentException("Illegal action");
+        if ( "".equals(namePart) && "".equals(signerPart) &&
+             (actionsVector.contains(ACTION_INSTALL_DP) || actionsVector.contains(ACTION_UNINSTALL_DP)) )
+            	throw new IllegalArgumentException("Bad name part");
+        if ( (!"".equals(namePart) || !"".equals(signerPart)) &&
+                (actionsVector.contains(ACTION_LIST_DPS) || actionsVector.contains(ACTION_INVENTORY)) )
+            	throw new IllegalArgumentException("Bad name part");
     }
 
     /**
@@ -99,16 +165,12 @@ public class DeploymentAdminPermission extends Permission {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object obj) {
-        System.out.println(">>>***>>> implies equals 1");
         if (!(obj instanceof DeploymentAdminPermission))
             return false;
-        System.out.println(">>>***>>> implies equals 2");
         DeploymentAdminPermission other = (DeploymentAdminPermission) obj;
-        System.out.println(">>>***>>> implies equals 3");
-        System.out.println(getName() + "\t" + other.getName());
-        System.out.println(getActions() + "\t" + other.getActions());
-        return getName().equals(other.getName()) && 
-               getActions().equals(other.getActions());
+        return namePart.equals(namePart(other.getName())) &&
+        	   signerPart.equals(signerPart(other.getName())) &&
+        	   actionsVector.equals(actionsVector(other.getActions()));
     }
 
     /**
@@ -117,7 +179,7 @@ public class DeploymentAdminPermission extends Permission {
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
-        return (getName() + getActions()).hashCode();
+        return (namePart + signerPart + actionsVector).hashCode();
     }
 
     /**
@@ -127,7 +189,12 @@ public class DeploymentAdminPermission extends Permission {
      * @see java.security.Permission#getActions()
      */
     public String getActions() {
-        return actions;
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < actionsVector.size(); i++) {
+            String action = (String) actionsVector.get(i);
+            sb.append(action + (i == actionsVector.size() -1 ? "" : ", "));
+        }
+        return sb.toString();
     }
 
     /**
@@ -138,8 +205,29 @@ public class DeploymentAdminPermission extends Permission {
      * @see java.security.Permission#implies(java.security.Permission)
      */
     public boolean implies(Permission permission) {
-        System.out.println(">>>***>>> implies called");
-        return equals(permission);
+        if (!(permission instanceof DeploymentAdminPermission))
+            return false;
+        DeploymentAdminPermission other = (DeploymentAdminPermission) permission;
+        
+        return impliesPackagePart(namePart, namePart(other.getName())) &&
+               impliessignerPart(signerPart, signerPart(other.getName())) &&
+               actionsVector.containsAll(actionsVector(other.getActions()));
+    }
+    
+    private boolean impliesPackagePart(String p1, String p2) {
+        if (p1.equals(p2))
+            return true;
+        if ("*".equals(p1))
+            return true;
+        return false;
+    }
+    
+    private boolean impliessignerPart(String s1, String s2) {
+        if (s1.equals(s2))
+            return true;
+        if ("*".equals(s1))
+            return true;
+        return false;
     }
 
     /**
@@ -151,4 +239,10 @@ public class DeploymentAdminPermission extends Permission {
     public PermissionCollection newPermissionCollection() {
         return super.newPermissionCollection();
     }
+    
+    public String toString() {
+        return "name: \"" + namePart(getName()) + "\" signer: \"" +
+        		signerPart(getName()) + "\"";
+    }
+    
 }

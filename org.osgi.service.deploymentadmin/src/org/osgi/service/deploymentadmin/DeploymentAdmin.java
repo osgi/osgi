@@ -60,4 +60,6 @@ public interface DeploymentAdmin {
    * @return The location of the bundle generated from the paramaters.
    */
   String location(String symbName, String version);
+  
+  boolean cancel();
 }
