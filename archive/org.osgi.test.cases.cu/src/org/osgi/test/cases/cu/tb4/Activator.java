@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) The OSGi Alliance (2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -25,56 +25,56 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.cu.tb1;
+package org.osgi.test.cases.cu.tb4;
 
 import java.util.Hashtable;
 
 import org.osgi.framework.*;
 import org.osgi.service.cu.*;
-import org.osgi.service.cu.admin.spi.ManagedControlUnit;
+import org.osgi.service.cu.admin.*;
+import org.osgi.test.service.TestLogger;
 
 /**
- * Bundle that registers 3 different Control Units used by the test control.
- * These CUs simulate a positioning module with gyroscope and tachometer data. 
- * The hip CU has two children (hip.gyro, hip.tacho)
+ * Bundle that registers a listener of control unit changes without filter
+ * and a listener of control unit changes with a filter that contains all possible
+ * properties.
+ * 
  * @version $Revision$
  */
 public class Activator implements BundleActivator {
-	private ServiceRegistration regHip;
-	private ServiceRegistration regGyro;
-	private ServiceRegistration regTacho;
-	
+	private ServiceRegistration regList1;
+	private ServiceRegistration regList2;
+	private ServiceReference logRef;
+	private static TestLogger logger;
+
 	public void start(BundleContext context) throws Exception {
+        logRef = context.getServiceReference(TestLogger.class.getName());
+        if (logRef != null)
+            logger = (TestLogger) context.getService(logRef);
+        
+        // Register a ControlUnitListener without filter
 		Hashtable p = new Hashtable();
-		
-		// Register hip Control Unit
-		p.put(ControlUnitConstants.TYPE, "hip");
-		p.put(ControlUnitConstants.ID, "hip");
-		regHip = context.registerService(ManagedControlUnit.class.getName(), new HipModule(), p);
-		
-		// Register hip.gyro Control Unit
+		p.put(ControlUnitConstants.EVENT_SYNC, "");
+		regList1 = context.registerService(ControlUnitListener.class.getName(), new NoFilterListener(), p);
+
+		// Register a COntrolUnitListener with a filter that includes all possible properties
 		p.clear();
-		p.put(ControlUnitConstants.TYPE, "hip.gyro");
-		p.put(ControlUnitConstants.ID, "hip.gyro");
-		p.put(ControlUnitConstants.PARENT_TYPE, "hip");
-		p.put(ControlUnitConstants.PARENT_ID, "hip");
-		regGyro = context.registerService(ManagedControlUnit.class.getName(), new HipGyro(), p);
-		
-		// Register hip.tacho Control Unit 
-		p.clear();
-		p.put(ControlUnitConstants.TYPE, "hip.tacho");
-		p.put(ControlUnitConstants.ID, "hip.tacho");
-		p.put(ControlUnitConstants.PARENT_TYPE, "hip");
-		p.put(ControlUnitConstants.PARENT_ID, "hip");
-		regTacho = context.registerService(ManagedControlUnit.class.getName(), new HipTacho(), p);
+		p.put(ControlUnitConstants.EVENT_SYNC, "");		
+		p.put(ControlUnitConstants.EVENT_FILTER, "(&(osg.control.event.type=1)(osg.control.id=window.1)(osg.control.type=window))");
+		regList2 = context.registerService(ControlUnitListener.class.getName(), new EventFilterListener(), p);
 	}
 	
 	public void stop(BundleContext context) throws Exception {
-		if (regHip != null)
-			regHip.unregister();
-		if (regGyro != null)
-			regGyro.unregister();
-		if (regTacho!= null)
-			regTacho.unregister();
+		if (regList1 != null)
+			regList1.unregister();
+		if (regList2 != null)
+			regList2.unregister();
+		if (logRef != null)
+			context.ungetService(logRef);
+	}
+	
+	public static void log(String msg) {
+		if (logger != null)
+			logger.log(msg);
 	}
 }
