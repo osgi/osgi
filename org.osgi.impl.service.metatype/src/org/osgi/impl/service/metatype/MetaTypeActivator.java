@@ -22,6 +22,7 @@ import java.util.Hashtable;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.osgi.framework.*;
+import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -63,6 +64,8 @@ public class MetaTypeActivator implements BundleActivator,
 		this._context = context;
 		_parserTracker = new ServiceTracker(context, saxFactoryClazz, this);
 		_parserTracker.open();
+		ServiceReference ref = context.getServiceReference(PackageAdmin.class.getName());
+		FragmentUtils.packageAdmin = ref == null ? null : (PackageAdmin) context.getService(ref);
 		Logging.debug("====== Meta Type Service starting ! =====");
 	}
 
@@ -76,6 +79,7 @@ public class MetaTypeActivator implements BundleActivator,
 		Logging.debug("====== Meta Type Service stoping ! =====");
 		_parserTracker.close();
 		_parserTracker = null;
+		FragmentUtils.packageAdmin = null;
 		context = null;
 	}
 

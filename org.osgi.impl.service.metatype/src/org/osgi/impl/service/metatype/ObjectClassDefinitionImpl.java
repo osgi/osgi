@@ -200,9 +200,9 @@ public class ObjectClassDefinitionImpl extends LocalizationElement implements Ob
 	public InputStream getIcon(int sizeHint) throws IOException {
 
 		Bundle b = _icon.getIconBundle();
-		java.net.URL u = b.getResource(getLocalized(_icon.getIconName()));
-		if (u != null) {
-			return u.openStream();
+		URL[] urls = FragmentUtils.findEntries(b, getLocalized(_icon.getIconName()));
+		if (urls != null && urls.length > 0) {
+			return urls[0].openStream();
 		}
 		else {
 			return null;
@@ -269,7 +269,10 @@ public class ObjectClassDefinitionImpl extends LocalizationElement implements Ob
 			resourceUrl = (URL) AccessController
 					.doPrivileged(new PrivilegedExceptionAction() {
 						public Object run() throws IOException {
-							return bundle.getResource(localeFile);
+							URL[] urls = FragmentUtils.findEntries(bundle, localeFile);
+							if (urls != null && urls.length > 0)
+								return urls[0];
+							return null;
 						}
 					});
 		}

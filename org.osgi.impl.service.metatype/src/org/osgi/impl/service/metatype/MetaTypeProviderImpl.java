@@ -93,52 +93,53 @@ public class MetaTypeProviderImpl implements MetaTypeProvider {
 
 		boolean isThereMetaHere = false;
 
-		Enumeration allFileKeys = bundle.getEntryPaths(METADATA_FOLDER);
+		Enumeration allFileKeys = FragmentUtils.findEntryPaths(bundle, METADATA_FOLDER);
+		if (allFileKeys == null)
+			return isThereMetaHere;
+
 		while (allFileKeys.hasMoreElements()) {
-
 			boolean _isMetaDataFile;
-
 			String fileName = (String) allFileKeys.nextElement();
 
 			if (fileName.toUpperCase().endsWith(META_FILE_EXT)) {
-
-				_isMetaDataFile = true; // Assume all XML files are what we want
-				// by default.
 				Vector allOCDsInFile = null;
+				java.net.URL[] urls = FragmentUtils.findEntries(bundle, fileName);
 
-				java.net.URL u = bundle.getEntry(fileName);
-
-				if (u != null) {
-					try {
-						DataParser parser = new DataParser(bundle, u,
-								parserFactory);
-						allOCDsInFile = parser.doParse();
-						if (allOCDsInFile == null) {
+				if (urls != null) {
+					for (int i = 0; i < urls.length; i++) {
+						try {
+							// Assume all XML files are what we want by default.
+							_isMetaDataFile = true;
+							DataParser parser = new DataParser(bundle, urls[i],
+									parserFactory);
+							allOCDsInFile = parser.doParse();
+							if (allOCDsInFile == null) {
+								_isMetaDataFile = false;
+							}
+						}
+						catch (Exception e) {
+							// Ok, looks like it is not what we want.
 							_isMetaDataFile = false;
 						}
-					}
-					catch (Exception e) {
-						// Ok, looks like it is not what we want.
-						_isMetaDataFile = false;
-					}
 
-					if ((_isMetaDataFile) && (allOCDsInFile != null)) {
-						// We got some OCDs now.
-						for (int i = 0; i < allOCDsInFile.size(); i++) {
-							ObjectClassDefinitionImpl ocd = (ObjectClassDefinitionImpl) allOCDsInFile
-									.elementAt(i);
+						if ((_isMetaDataFile) && (allOCDsInFile != null)) {
+							// We got some OCDs now.
+							for (int j = 0; j < allOCDsInFile.size(); j++) {
+								ObjectClassDefinitionImpl ocd = (ObjectClassDefinitionImpl) allOCDsInFile
+										.elementAt(j);
 
-							if (ocd.getType() == ObjectClassDefinitionImpl.PID) {
-								isThereMetaHere = true;
-								_allPidOCDs.put(ocd.getID(), ocd);
-							}
-							else {
-								isThereMetaHere = true;
-								_allFPidOCDs.put(ocd.getID(), ocd);
-							}
-						} // End of for
+								if (ocd.getType() == ObjectClassDefinitionImpl.PID) {
+									isThereMetaHere = true;
+									_allPidOCDs.put(ocd.getID(), ocd);
+								}
+								else {
+									isThereMetaHere = true;
+									_allFPidOCDs.put(ocd.getID(), ocd);
+								}
+							} // End of for
+						}
 					}
-				} // End of if(u!=null)
+				} // End of if(urls!=null)
 			}
 		} // End of while
 
@@ -212,11 +213,11 @@ public class MetaTypeProviderImpl implements MetaTypeProvider {
 				baseDir = localizationFile.substring(0, iSlash);
 			}
 			baseFileName = localizationFile + RESOURCE_FILE_CONN;
-			Enumeration resources = this._bundle.getEntryPaths(baseDir);
+			Enumeration resources = FragmentUtils.findEntryPaths(this._bundle, baseDir);
 			if (resources != null) {
 				while(resources.hasMoreElements()) {
 					String resource = (String) resources.nextElement();
-					if (resource.startsWith(baseFileName) && resource.endsWith(RESOURCE_FILE_EXT))
+					if (resource.startsWith(baseFileName) && resource.toUpperCase().endsWith(RESOURCE_FILE_EXT))
 						locales.add(resource.substring(baseFileName.length(), resource.length() - RESOURCE_FILE_EXT.length()));
 				}
 			}
