@@ -82,6 +82,14 @@ public class Dependencies {
 							+ entry);
 			}
 		}
+		//
+		// Special case for Bundle Activator, it is also
+		// a reference that might point outside our bundle
+		String act = manifest.getActivator();
+		if ( act != null ) {
+		    String packageName = base(act.replace('.','/')+ ".class");
+		    referred.add(packageName);
+		}
 		referred.removeAll(contained);
 	}
 
@@ -249,7 +257,7 @@ public class Dependencies {
 	 * Answer the base part of the resource name, e.g. parent.
 	 *  
 	 */
-	String base(String name) {
+	static String base(String name) {
 
 		int index = name.lastIndexOf('/');
 		if (index > 0)
@@ -428,5 +436,14 @@ public class Dependencies {
 		System.arraycopy(temp, 0, result, offset, size);
 		return result;
 	}
+
+    /**
+     * @return
+     */
+    public Set getImported() {
+        Set result = new HashSet(referred);
+        result.removeAll(contained);
+        return result;
+    }
 
 }

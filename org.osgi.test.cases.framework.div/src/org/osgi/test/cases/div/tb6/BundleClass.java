@@ -7,14 +7,13 @@
 
 package org.osgi.test.cases.div.tb6;
 
-import org.osgi.framework.*;
 
 /**
    @author Ericsson Radio Systems AB
 */
 public class BundleClass
 {	
-	void BundleClass ()
+	public BundleClass ()
 	{
 		System.out.println("Bundle class created");
 	}

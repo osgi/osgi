@@ -24,6 +24,10 @@ public class ManifestResource extends FileResource {
 			Collection exports = btool.getExports();
 			return printImExport("Export-Package", exports );
 		}
+		if ( key.equals("PRIVATE-PACKAGE")) {
+			Collection privates = btool.getPrivates();
+			return printImExport("Private-Package", privates );
+		}
 		if ( key.equals("FILE-SECTION")) {
 			StringBuffer sb = new StringBuffer();
 			for (Iterator i=btool.contents.values().iterator(); i.hasNext(); ) {

@@ -8,17 +8,12 @@
 package org.osgi.test.cases.div.tbc;
 
 import java.io.*;
-import java.util.*;
-import java.net.*;
 import java.lang.reflect.*;
+import java.util.*;
 
 import org.osgi.framework.*;
-
-import org.osgi.test.service.*;
-
 import org.osgi.test.cases.div.tb6.*;
-	
-import java.security.*;
+import org.osgi.test.service.*;
 
 
 /**

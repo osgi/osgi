@@ -57,6 +57,7 @@
 			contentFoldersProperty="source.${item.jarFile}" 
 			excludeImportProperty="excludeImport.${item.jarFile}" 
 			includeExportProperty="includeExport.${item.jarFile}" 
+			ipaProperty="ipa.${item.jarFile}" 
 			ignoreVersions="true" />
 	</target>
 

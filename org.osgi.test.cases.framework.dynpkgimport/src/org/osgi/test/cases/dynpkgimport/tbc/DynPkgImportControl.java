@@ -26,15 +26,9 @@
 
 package org.osgi.test.cases.dynpkgimport.tbc;
 
+import org.osgi.framework.*;
+import org.osgi.service.packageadmin.*;
 import org.osgi.test.cases.util.*;
-
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkEvent;
-import org.osgi.framework.FrameworkListener;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.packageadmin.PackageAdmin;
 
 public class DynPkgImportControl extends DefaultTestBundleControl implements FrameworkListener
 {

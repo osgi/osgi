@@ -30,10 +30,9 @@ package org.osgi.test.cases.cm.tbc;
 
 //import java.math.*;
 import java.util.*;
+
 import org.osgi.framework.*;
 import org.osgi.service.cm.*;
-import org.osgi.service.log.*;
-import org.osgi.service.prefs.*;
 import org.osgi.test.cases.util.*;
 
 public class CMControl extends DefaultTestBundleControl {

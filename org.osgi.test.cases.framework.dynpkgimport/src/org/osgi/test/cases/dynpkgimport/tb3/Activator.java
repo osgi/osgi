@@ -26,17 +26,11 @@
 
 package org.osgi.test.cases.dynpkgimport.tb3;
 
-import java.util.Dictionary;
-import java.util.Hashtable;
+import java.util.*;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
-
-import org.osgi.test.service.TestLogger;
-
-import org.osgi.test.cases.dynpkgimport.tbc.TestService;
-import org.osgi.test.cases.dynpkgimport.tlx.TestLib;
+import org.osgi.framework.*;
+import org.osgi.test.cases.dynpkgimport.tbc.*;
+import org.osgi.test.cases.dynpkgimport.tlx.*;
 
 
 public class Activator implements BundleActivator, TestService

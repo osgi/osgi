@@ -7,16 +7,16 @@ Bundle-Version: $(version)
 Bundle-Activator: org.osgi.test.cases.div.tb2.NativeCode
 Comment: Windows NT should be WindowsNT, Linux processor must be x386
 Bundle-NativeCode: $(package)/linux_x86/libNative.so; osname=Linux; processor=x86,
- $(package)/qnx_x86/libNative.so; osname=QNX; processor=x86,
- $(package)/qnx_ppc/libNative.so; osname=QNX; processor=PowerPC,
- $(package)/qnx_armle/libNative.so; osname=QNX; processor=ARM,
- $(package)/windows_x86/Native.dll; osname=WindowsNT; processor=x86,
- $(package)/windows_x86/Native.dll; osname=Windows95; processor=x86,
- $(package)/windows_x86/Native.dll; osname=Windows98; processor=x86,
- $(package)/windows_x86/Native.dll; osname=WindowsXP; processor=x86,
- $(package)/windows_x86/Native.dll; osname=Windows2000; processor=x86,
- $(package)/solaris_sparc/libNative.so; osname=Solaris; processor=sparc,
- $(package)/solaris_sparc/libNative.so; osname=SunOS; processor=sparc
+ org/osgi/test/cases/div/tb2/qnx_x86/libNative.so; osname=QNX; processor=x86,
+ org/osgi/test/cases/div/tb2/qnx_ppc/libNative.so; osname=QNX; processor=PowerPC,
+ org/osgi/test/cases/div/tb2/qnx_armle/libNative.so; osname=QNX; processor=ARM,
+ org/osgi/test/cases/div/tb2/windows_x86/Native.dll; osname=WindowsNT; processor=x86,
+ org/osgi/test/cases/div/tb2/windows_x86/Native.dll; osname=Windows95; processor=x86,
+ org/osgi/test/cases/div/tb2/windows_x86/Native.dll; osname=Windows98; processor=x86,
+ org/osgi/test/cases/div/tb2/windows_x86/Native.dll; osname=WindowsXP; processor=x86,
+ org/osgi/test/cases/div/tb2/windows_x86/Native.dll; osname=Windows2000; processor=x86,
+ org/osgi/test/cases/div/tb2/solaris_sparc/libNative.so; osname=Solaris; processor=sparc,
+ org/osgi/test/cases/div/tb2/solaris_sparc/libNative.so; osname=SunOS; processor=sparc
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 

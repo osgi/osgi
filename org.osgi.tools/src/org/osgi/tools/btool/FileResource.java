@@ -106,6 +106,11 @@ public class FileResource extends Resource {
 		value = System.getProperty(key);
 		if (value != null)
 			return value;
+		
+		value = btool.getProject().getProperty(key);
+		if (value != null)
+			return value;
+		
 		File file = new File(key);
 		if (file.exists()) {
 			StringBuffer sb = new StringBuffer();

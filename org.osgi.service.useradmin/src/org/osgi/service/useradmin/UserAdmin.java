@@ -28,8 +28,7 @@
 
 package org.osgi.service.useradmin;
 
-import org.osgi.framework.InvalidSyntaxException;
-import java.util.Dictionary;
+import org.osgi.framework.*;
 
 /**
  * This interface is used to manage a database of named <tt>Role</tt> objects, which can

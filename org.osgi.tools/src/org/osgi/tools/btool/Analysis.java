@@ -37,16 +37,27 @@ public class Analysis {
         checkActivator();
     }
 
-    private void checkActivator() {
+    private void checkActivator() throws IOException {
         String activator = manifest.getValue("Bundle-Activator");
         if ( activator == null )
             return;
         
         activator = activator.replace('.','/') + ".class";
         Resource activatorResource = (Resource) btool.contents.get(activator);
-        if ( activatorResource == null ) {
-            btool.errors.add("Activator not found " + activator );
+        if ( activatorResource != null )
+            return;
+        
+        // The activator might come from the import
+        String pack = Dependencies.base(activator);
+        Dependencies deps = btool.initDependencies();
+        
+        if ( deps.getImported().contains(pack)) {
+            System.out.println( "Check act " + pack + " " + deps.referred );
+            btool.warnings.add("Activator from import " + activator );
+        	return;
         }
+        
+        btool.errors.add("Activator not found " + activator );
     }
 
     

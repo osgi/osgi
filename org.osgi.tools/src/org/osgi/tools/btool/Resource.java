@@ -9,6 +9,7 @@ public class Resource implements Comparable {
 	String path;
 	BTool	btool;
 	String	sourcePath;
+	byte[]	extra;
 	
 	public Resource(BTool btool, Source source, String path) {
 		this.path = path;
@@ -39,6 +40,10 @@ public class Resource implements Comparable {
 	}
 
 	InputStream getInputStream() throws IOException {
+	    Source source = this.source;
+	    if ( source == null ) {
+	        source = btool.project;
+	    }
 		if ( sourcePath != null )
 			return source.getEntry(sourcePath);
 		return source.getEntry(path);
@@ -50,7 +55,21 @@ public class Resource implements Comparable {
 
 	
 	
-	public String toString() { return "R:" + getPath(); }
+	public String toString() { 
+	    StringBuffer	sb = new StringBuffer();
+	    if ( source != null )
+	        sb.append(source.getFile().getName());
+	    else 
+	        sb.append("<>");
+	    sb.append(":");
+	    sb.append( getPath() );
+	    if ( sourcePath != null ) {
+	        sb.append("[");
+	        sb.append(sourcePath);
+	        sb.append("]");
+	    }
+	    return sb.toString();
+	}
 
 	/**
 	 * Calculate the checksum
@@ -85,4 +104,14 @@ public class Resource implements Comparable {
 	public void setSourcePath(String sourcePath) {
 		this.sourcePath = sourcePath;
 	}
+
+    /**
+     * @return
+     */
+    public byte [] getExtra() {
+        return extra;
+    }
+    public void setExtra(byte[]extra) {
+        this.extra = extra;
+    }
 }

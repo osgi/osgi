@@ -46,6 +46,8 @@ public class BTool extends Task {
     List             excludeImport  = null;
     List             includeExport  = null;
     boolean          ignoreVersions;
+    String           permissions;
+    IPA              ipa;
 
     /**
      * Try out the Deliver program. Syntax: Please note that the classpath must
@@ -65,24 +67,9 @@ public class BTool extends Task {
                 return;
             }
 
-            if (manifestSource == null)
-                manifestSource = zipname.replaceFirst("\\.jar$", ".mf");
+            getManifest(); // Read manifest
 
-            File f = new File(manifestSource);
-            if (!f.exists())
-                f = new File("Manifest.mf");
-
-            if (!f.exists())
-                f = new File("META-INF/MANIFEST.MF");
-
-            if (!f.exists())
-                throw new IllegalArgumentException("manifest: no such file "
-                        + manifestSource);
-
-            manifestSource = f.getAbsolutePath();
-            ManifestResource mf = new ManifestResource(this, manifestSource,
-                    false);
-            manifest = new Manifest(mf.getInputStream());
+            getPermissions();
 
             setClasspath(); // Create search path
             setSourceFolders(); // Read the list of folders that are included
@@ -97,6 +84,8 @@ public class BTool extends Task {
             addContentPackages(planned);
             expands(); // Expands contents of another jar
             includes(); // Add contents of another jar
+            if (ipa != null)
+                ipa.execute();
 
             if (properties.size() > 0)
                 addContents(new PropertyResource(this, "osgi.properties",
@@ -106,16 +95,21 @@ public class BTool extends Task {
 
             for (Iterator i = contents.values().iterator(); i.hasNext();) {
                 Resource r = (Resource) i.next();
-                InputStream in = r.getInputStream();
-                if (in != null) {
-                    addToZip(r.getPath(), r.getInputStream(), null);
+                try {
+                    InputStream in = r.getInputStream();
+                    if (in != null) {
+                        addToZip(r.getPath(), r.getInputStream(), r.getExtra());
+                    }
+                } catch (Exception e1) {
+                    System.err.println("Could not read stream " + r);
+                    e1.printStackTrace();
                 }
             }
             closeZip();
             doManifest();
-            if ( analyse )
+            if (analyse && manifestSource != null)
                 doAnalysis();
-            
+
             showErrors();
         } catch (Throwable e) {
             e.printStackTrace();
@@ -124,7 +118,60 @@ public class BTool extends Task {
     }
 
     /**
-     * 
+     *  
+     */
+    private void getPermissions() {
+        if (permissions == null)
+            permissions = zipname.replaceFirst("\\.jar$", ".perm");
+
+        File f = new File(permissions);
+        if (!f.exists())
+            f = new File("permissions.perm");
+
+        if (f.exists()) {
+            Resource perms = new PermissionResource(this, f);
+            addContents(perms);
+        }
+    }
+
+    private void getManifest() throws IOException {
+        // In certain cases we do not want to fallback
+        // to the default manifest. So we allow the properties
+        // to have a value specifying that there is no
+        // manifest for certain file names.
+        String regex = getProject().getProperty("nomanifest");
+        if (regex != null && zipname.matches(regex.trim())) {
+            System.out.println("Ignoring manifest for " + zipname);
+            return;
+        }
+
+        if (manifestSource == null)
+            manifestSource = zipname.replaceFirst("\\.jar$", ".mf");
+
+        File f = new File(manifestSource);
+        if (!f.exists())
+            f = new File("Manifest.mf");
+
+        if (!f.exists())
+            f = new File("META-INF/MANIFEST.MF");
+
+        if (!f.exists()) {
+            warnings.add("No manifest used for " + zipname);
+            manifestSource = null;
+            return;
+        }
+
+        manifestSource = f.getAbsolutePath();
+
+        boolean showmanifest = this.showmanifest;
+        this.showmanifest = false;
+        ManifestResource mf = new ManifestResource(this, manifestSource, false);
+        manifest = new Manifest(mf.getInputStream());
+        this.showmanifest = showmanifest;
+    }
+
+    /**
+     *  
      */
     private void doAnalysis() throws Exception {
         initDependencies();
@@ -295,9 +342,9 @@ public class BTool extends Task {
     /**
      * @param p
      */
-    private void addContents(Resource p) {
+    void addContents(Resource p) {
         if (!contents.containsKey(p.getPath()))
-            contents.put(p.getPath(),p);
+            contents.put(p.getPath(), p);
         else
             trace("Already in jar: " + p.getPath());
     }
@@ -409,7 +456,6 @@ public class BTool extends Task {
      * Set manifest file name.
      */
     public void setManifest(String file) throws IOException {
-
         manifestSource = file;
     }
 
@@ -425,6 +471,9 @@ public class BTool extends Task {
      *  
      */
     void doManifest() {
+        if (manifestSource == null)
+            return;
+
         try {
             ManifestResource mf = new ManifestResource(this, manifestSource,
                     true);
@@ -813,19 +862,16 @@ public class BTool extends Task {
 
     public void setExcludeImportProperty(String key) {
         excludeImport = makeListFromProperty(key);
-        System.out.println("Exclude exports " + excludeImport);
     }
 
     public void setIncludeExportProperty(String key) {
         includeExport = makeListFromProperty(key);
-        System.out.println("Include exports " + includeExport);
     }
 
     List makeListFromProperty(String key) {
         Vector v = new Vector();
         String list = getProject().getProperty(key);
         if (list == null) {
-            System.out.println("No Such property " + key);
             return null;
         }
         StringTokenizer st = new StringTokenizer(list, ", ");
@@ -875,6 +921,23 @@ public class BTool extends Task {
     }
 
     /**
+     * @return @throws
+     *         IOException
+     */
+    public Collection getPrivates() throws IOException {
+        initDependencies();
+        Collection contained = dependencies.getContained();
+
+        SortedSet set = new TreeSet();
+        for (Iterator i = contained.iterator(); i.hasNext();) {
+            Package pr = (Package) i.next();
+            if (!exports.containsKey(pr.getPath()))
+                set.add(pr);
+        }
+        return set;
+    }
+
+    /**
      * @return Returns the ignoreVersions.
      */
     boolean isIgnoreVersions() {
@@ -895,5 +958,19 @@ public class BTool extends Task {
      */
     public void setAuto(boolean auto) {
         this.auto = auto;
+    }
+    /**
+     * @param permissions
+     *            The permissions to set.
+     */
+    public void setPermissions(String permissions) {
+        this.permissions = permissions;
+    }
+
+    public void setIpaProperty(String ipaProperty) {
+        String ipas = getProject().getProperty(ipaProperty);
+        if (ipas != null) {
+            ipa = new IPA(this, ipas);
+        }
     }
 }
