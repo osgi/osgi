@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.registry.tb1
+Bundle-Description: Test Bundle Service Tracker
+Bundle-Vendor: Ericsson Radio Systems AB
+Bundle-Version: $(version)
+Bundle-DocURL: http://www.ericsson.com
+Bundle-ContactAddress: info@ericsson.com
+Bundle-Activator: $(p).tb1.TB1Activator
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+
+
