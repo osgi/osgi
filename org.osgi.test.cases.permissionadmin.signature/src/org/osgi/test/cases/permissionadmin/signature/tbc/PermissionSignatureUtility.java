@@ -14,23 +14,27 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 public class PermissionSignatureUtility {
 	
 	// AdminPermission actions
-	static final String METADATA 	= "metadata";
-	static final String RESOURCE 	= "resource";	
-	static final String CLASS 		= "Class";
-	static final String LIFECYCLE 	= "lifecycle";
-	static final String EXECUTE 	= "execute";
-	static final String LISTENER 	= "listener";
-	static final String PERMISSION 	= "permission";
-	static final String RESOLVE 	= "resolve";
-	static final String SLART_LEVEL = "startlevel";
-	
+	static final String METADATA 	= AdminPermission.METADATA;
+	static final String RESOURCE 	= AdminPermission.RESOURCE;	
+	static final String CLASS 		= AdminPermission.CLASS;
+	static final String LIFECYCLE 	= AdminPermission.LIFECYCLE;
+	static final String EXECUTE 	= AdminPermission.EXECUTE;
+	static final String LISTENER 	= AdminPermission.LISTENER;
+	static final String PERMISSION 	= AdminPermission.PERMISSION;
+	static final String RESOLVE 	= AdminPermission.RESOLVE;
+	static final String SLART_LEVEL = AdminPermission.STARTLEVEL;
+
+	static final String EXTENSION_LIFECYCLE = AdminPermission.EXTENSIONLIFECYCLE;
+
+
 	// Signature keys
 	static final String ID 		 = "id";
 	static final String LOCATION = "location";	
 	static final String NAME 	 = "name";
 	static final String SIGNER   = "signer";
+	static final String DN_S	 = "DNs";
 	
-	static final String[] AttributeTypeX_500 = {"CN", "L", "ST", "O", "OU", "C", "STREET", "DC", "UID"}; 
+	//static final String[] AttributeTypeX_500 = {"CN", "L", "ST", "O", "OU", "C", "STREET", "DC", "UID"}; 
 	
 	static final String CONFIG_FPID = "permission.config.test.fpid";
 	static final String	CONFIG_PROPERTY = "config.property";
@@ -479,36 +483,127 @@ public class PermissionSignatureUtility {
 		Vector permissions = new Vector();
 		
 		// TO DO -> AdminPermission(id, action) ???
-		PermissionInfo info = new PermissionInfo(AdminPermission.class.getName(),
-				 								 String.valueOf(bundleId), action);
-		permissions.addElement(info);
-		info = new PermissionInfo(AdminPermission.class.getName(),
-												 ID + "=" + bundleId, action);
-		permissions.addElement(info);
-		permissions.addAll(createWildcardPermissionInfo(AdminPermission.class, 
-														LOCATION, action, location));
-		permissions.addAll(createWildcardPermissionInfo(AdminPermission.class, 
-														NAME, action, symbolicName));		
+		if (bundleId != -1) {
+			PermissionInfo info = new PermissionInfo(AdminPermission.class.getName(),
+													 String.valueOf(bundleId), action);
+			permissions.addElement(info);
+			info = new PermissionInfo(AdminPermission.class.getName(),
+									  ID + "=" + bundleId, action);
+			permissions.addElement(info);
+		}
+		
+		if (location != null) {
+			permissions.addAll(createWildcardPermissionInfo(AdminPermission.class, 
+															LOCATION, action, location));
+		}
+		
+		if (symbolicName != null) {
+			permissions.addAll(createWildcardPermissionInfo(AdminPermission.class, 
+															NAME, action, symbolicName));
+		}
+		
 		permissions.addAll(getSignerFilter(action));
 				
 		return permissions;
 	}
 	
 	Vector getSignerFilter(String action) {
+		Vector dns = createWildcardDNs(SignatureResource.getString(DN_S));
 		Vector infos = new Vector();
 		String filter = SIGNER + "=";
 		String key;
 		PermissionInfo info;
-		for (int i = 0; i < AttributeTypeX_500.length; ++i) {
-			key = AttributeTypeX_500[i];
-			filter = filter + key + "=" + SignatureResource.getString(SIGNER + "." + key);
+		for (int i = 0; i < dns.size(); ++i) {
 			info = new PermissionInfo(AdminPermission.class.getName(),
-					   filter, action);
+					   SIGNER + "=" + dns.elementAt(i), action);
 			infos.addElement(info);
-			filter = filter + ", ";
 		}
 		
 		return infos;
 	}
+	
+	
+	
+	Vector createWildcardDNs(String value) {
+		Vector result = new Vector();
+		String semicolon = ";";
+		String asterisk = "*";
+		
+		int lastIndex = 0;
+		int semicolonIndex = value.indexOf(semicolon);
+		String element;
+		String rdns;
+		String prefix;
+		String suffix;
+		while (semicolonIndex != -1) {
+			prefix = value.substring(0, lastIndex);
+			element = value.substring(lastIndex, semicolonIndex);
+			suffix = value.substring(semicolonIndex);
+			
+			//result.addElement(prefix + asterisk + suffix);
+			result.addAll(addVector(createWildcardRDNs(element), prefix, suffix));
+			
+			lastIndex = semicolonIndex + 1;
+			semicolonIndex = value.indexOf(semicolon, lastIndex);
+		}
+		
+		if (lastIndex > 0) {
+			prefix = value.substring(0, lastIndex);
+			element = value.substring(lastIndex);
+			
+			//result.addElement(prefix + asterisk);
+			result.addAll(addVector(createWildcardRDNs(element), prefix, ""));
+		} else {
+			result.addAll(createWildcardRDNs(value));
+		}
+		
+		return result;
+	}
+	
+	private Vector addVector(Vector vec, String prefix, String suffix) {
+		Vector result = new Vector();
+		for (int i = 0; i < vec.size(); ++i) {
+			result.addElement(prefix + (String)vec.elementAt(i) + suffix);
+		}
+		
+		return result;
+	}
+	
+	
+	private Vector createWildcardRDNs(String value) {
+		Vector result = new Vector();
+		String comma = ",";
+		//String semicolon = ";";
+		String equal = "=";
+		String space = " ";
+		String asterisk = "*";
+		
+		int lastIndex = 0;
+		int commaIndex = value.indexOf(comma, lastIndex); 
+		int equalIndex = value.indexOf(equal, lastIndex);
+		
+		while (commaIndex != -1) {
+			result.addElement(asterisk + value.substring(commaIndex));
+			if ((equalIndex != -1) && (equalIndex < commaIndex)) {
+				result.addElement(value.substring(0, equalIndex + 1) + asterisk + 
+								  value.substring(commaIndex));
+			}
+			lastIndex = commaIndex + 1;
+			commaIndex = value.indexOf(comma, lastIndex); 
+			equalIndex = value.indexOf(equal, lastIndex);
+		}
+		
+		if (lastIndex > 0) {
+			result.addElement(asterisk);
+		}
+		if (equalIndex > 0) {
+			result.addElement(value.substring(0, equalIndex + 1) + asterisk);
+		}
+
+		
+		return result;
+	}
+	
+	
 	
 }

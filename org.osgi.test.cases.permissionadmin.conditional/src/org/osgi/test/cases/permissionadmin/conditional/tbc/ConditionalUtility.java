@@ -1,9 +1,13 @@
 
 package org.osgi.test.cases.permissionadmin.conditional.tbc;
 
+
 import java.lang.reflect.Constructor;
 import java.security.Permission;
 import java.util.Vector;
+
+import org.osgi.framework.AdminPermission;
+import org.osgi.framework.Bundle;
 
 import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
@@ -17,8 +21,11 @@ public class ConditionalUtility {
 
 	private ConditionalTestControl 		testControl;
 	private ConditionalTBCService  		tbc;
+	private ConditionalPermTBCService	permTBC;
 	private PermissionAdmin		   		pAdmin;
 	private ConditionalPermissionAdmin 	cpAdmin;
+	private Bundle						testBundle;
+	private boolean						hasPermissionsPerm;
 	
 	static String REQUIRED 					= "RequiredPermission";
 	static String CP_PERMISSION 			= "CPAdminPermission";
@@ -36,11 +43,18 @@ public class ConditionalUtility {
 	static String BUNDLE_VERSION 			= "Bundle-Version";
 
 	public ConditionalUtility(ConditionalTestControl testControl, ConditionalTBCService  tbc, 
-							  PermissionAdmin pAdmin, ConditionalPermissionAdmin cpAdmin) {
+							  PermissionAdmin pAdmin, ConditionalPermissionAdmin cpAdmin, 
+							  ConditionalPermTBCService	permTBC) {
 		this.testControl = testControl;
 		this.tbc = tbc;
 		this.pAdmin = pAdmin;
 		this.cpAdmin = cpAdmin;
+		this.permTBC = permTBC;
+	}
+	
+	public void setTestBunde(Bundle bundle, boolean hasPermissionsPerm) {
+		this.testBundle = bundle;
+		this.hasPermissionsPerm = hasPermissionsPerm;
 	}
 	
 	
@@ -70,21 +84,30 @@ public class ConditionalUtility {
 		}
 	}
 
-	void allowed(String message, Permission permission) {
+	void allowed(String message, AdminPermission permission) {
 		try {
-			tbc.checkPermission(permission);
+			checkPermission(permission);
 			testControl.pass(message);
 		} catch (Throwable e) {
 			testControl.fail(message + " but " + e.getClass().getName() + " was thrown");
 		}
 	}
 	
-	void notAllowed(String message, Permission permission, Class wanted) {
+	void notAllowed(String message, AdminPermission permission, Class wanted) {
 		try {
-			tbc.checkPermission(permission);
+			checkPermission(permission);
 			testControl.failException(message, wanted);
 		} catch (Throwable e) {
 			testControl.assertException(message, wanted, e);
+		}
+	}
+	
+	private void checkPermission(AdminPermission permission) throws Throwable {
+		Permission p = getPermission(permission, testBundle);
+		if (hasPermissionsPerm) {
+			permTBC.checkPermission(p);
+		} else {
+			tbc.checkPermission(p);
 		}
 	}
 	
@@ -142,13 +165,13 @@ public class ConditionalUtility {
 		return result;
 	}
 	
-	Permission getPermission(String resourceName) throws Exception {
+	AdminPermission getPermission(String resourceName) throws Exception {
 		PermissionInfo pi = new PermissionInfo(ConditionResource.getString(resourceName)); 
 
 		return getPermission(pi);
 	}
 	
-	Permission getPermission(PermissionInfo pi) throws Exception {
+	AdminPermission getPermission(PermissionInfo pi) throws Exception {
 		String actions = pi.getActions();
 		String name = pi.getName();
 		String type = pi.getType();
@@ -156,7 +179,7 @@ public class ConditionalUtility {
 		Class pClass = Class.forName(type);
 		Constructor constructor = pClass.getConstructor(new Class[]{
 				String.class, String.class});
-		Permission permission = (Permission)constructor.newInstance(
+		AdminPermission permission = (AdminPermission)constructor.newInstance(
 				new Object[] {name, actions});
 
 		return permission;
@@ -174,7 +197,7 @@ public class ConditionalUtility {
 		return cpAdmin.addConditionalPermissionInfo(cInfos, new PermissionInfo[]{pInfo});
 	}
 	
-	void testPermissions(ConditionInfo[] conditions, Permission permission, Permission[] allowedPermission, Permission[] notAllowedPermission) {
+	void testPermissions(ConditionInfo[] conditions, Permission permission, AdminPermission[] allowedPermission, AdminPermission[] notAllowedPermission) {
 		ConditionalPermissionInfo cpInfo = setPermissionsByCPermissionAdmin(conditions, permission);
 		for (int i = 0; i < allowedPermission.length; ++i) {
 			allowed(cpInfo.toString(), allowedPermission[i]);
@@ -238,7 +261,7 @@ public class ConditionalUtility {
 	private Vector createWildcardRDNs(String value) {
 		Vector result = new Vector();
 		String comma = ",";
-		String semicolon = ";";
+		//String semicolon = ";";
 		String equal = "=";
 		String space = " ";
 		String asterisk = "*";
@@ -267,6 +290,12 @@ public class ConditionalUtility {
 
 		
 		return result;
+	}
+	
+	
+
+	private Permission getPermission(AdminPermission permission, Bundle bundle) {
+		return new AdminPermission(bundle, permission.getActions());
 	}
 	
 	

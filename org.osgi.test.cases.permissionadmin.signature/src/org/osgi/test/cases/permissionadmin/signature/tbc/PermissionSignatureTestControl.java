@@ -71,7 +71,14 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	private String							entryName;
 	private String							entryPath;
 	private String 							className;
+	private String							extensionEntryName;
+	private String							extensionEntryPath;
+	private String 							extensionClassName;
+	
+	
 	private int								startLevel = 1;
+	
+	private String 							extensionBundleName;
 	
 	static String[]	methods	= new String[] {"test_Permission", 
 			"test_AdminPermission_metadata", "test_AdminPermission_resource", 
@@ -79,7 +86,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			"test_AdminPermission", 
 			"test_AdminPermission_listener", "test_AdminPermission_permission", 
 			"test_AdminPermission_resolve", "test_AdminPermission_startlevel", 
-			"test_AdminPermission_lifecycle", 
+			"test_AdminPermission_lifecycle", "test_AdminPermission_extensionLifecycle",
 			"test_ConfigurationPermission_get", "test_ConfigurationPermission_set"};
 
 	
@@ -99,6 +106,13 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 		entryName = SignatureResource.getString("entry.name");
 		entryPath =	SignatureResource.getString("entry.path");
 		className = SignatureResource.getString("load.class");
+		
+		extensionEntryName = SignatureResource.getString("extension.entry.name");
+		extensionEntryPath =	SignatureResource.getString("extension.entry.path");
+		extensionClassName = SignatureResource.getString("extension.load.class");
+		
+		
+		extensionBundleName = SignatureResource.getString("extensionBundle.name");
 		
 		tbc = (PermissionSignatureTBCService)getRegistry().getService(PermissionSignatureTBCService.class);
 		permissionAdmin = (PermissionAdmin)getRegistry().getService(PermissionAdmin.class);
@@ -154,10 +168,10 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 		utility.not_allowed_Bundle_stop(message, testSignatureBundle);
 		utility.not_allowed_Bundle_start(message, testSignatureBundle);
 		utility.not_allowed_Bundle_update(message, testSignatureBundle);
-		utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getSignatureInputStream());
+		utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
 		utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-		utility.not_allowed_BundleContext_installBundle(message, signatureBundleLocation);
-		utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getSignatureInputStream());
+		utility.not_allowed_BundleContext_installBundle(message, getInstallBundleLocation(signatureBundleName));
+		utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getInputStream(signatureBundleName));
 		utility.not_allowed_BundleContext_addBundleListener(message);
 		utility.not_allowed_BundleContext_removeBundleListener(message);
 		utility.not_allowed_PackageAdmin_refreshPackages(message, null);
@@ -191,11 +205,11 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 		utility.allowed_Bundle_stop(message, testSignatureBundle);
 		utility.allowed_Bundle_start(message, testSignatureBundle);
 		utility.allowed_Bundle_update(message, testSignatureBundle);
-		utility.allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getSignatureInputStream());
+		utility.allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
 		
-		Bundle b = (Bundle)utility.allowed_BundleContext_installBundle(message, signatureBundleLocation);
+		Bundle b = (Bundle)utility.allowed_BundleContext_installBundle(message, getInstallBundleLocation(signatureBundleName));
 		utility.allowed_Bundle_uninstall(message, b);
-		 b = (Bundle)utility.allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getSignatureInputStream());
+		 b = (Bundle)utility.allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getInputStream(signatureBundleName));
 		utility.allowed_Bundle_uninstall(message, b);
 		utility.allowed_BundleContext_addBundleListener(message);
 		utility.allowed_BundleContext_removeBundleListener(message);
@@ -262,10 +276,10 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			utility.not_allowed_Bundle_stop(message, testSignatureBundle);
 			utility.not_allowed_Bundle_start(message, testSignatureBundle);
 			utility.not_allowed_Bundle_update(message, testSignatureBundle);
-			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getSignatureInputStream());
+			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
 			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-			utility.not_allowed_BundleContext_installBundle(message, signatureBundleLocation);
-			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getSignatureInputStream());
+			utility.not_allowed_BundleContext_installBundle(message, getInstallBundleLocation(signatureBundleName));
+			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getInputStream(signatureBundleName));
 			utility.not_allowed_BundleContext_addBundleListener(message);
 			utility.not_allowed_BundleContext_removeBundleListener(message);
 			utility.not_allowed_PackageAdmin_refreshPackages(message, null);
@@ -315,10 +329,10 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			utility.not_allowed_Bundle_stop(message, testSignatureBundle);
 			utility.not_allowed_Bundle_start(message, testSignatureBundle);
 			utility.not_allowed_Bundle_update(message, testSignatureBundle);
-			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getSignatureInputStream());
+			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
 			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-			utility.not_allowed_BundleContext_installBundle(message, signatureBundleLocation);
-			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getSignatureInputStream());
+			utility.not_allowed_BundleContext_installBundle(message, getInstallBundleLocation(signatureBundleName));
+			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getInputStream(signatureBundleName));
 			utility.not_allowed_BundleContext_addBundleListener(message);
 			utility.not_allowed_BundleContext_removeBundleListener(message);
 			utility.not_allowed_PackageAdmin_refreshPackages(message, null);
@@ -368,10 +382,10 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			utility.not_allowed_Bundle_stop(message, testSignatureBundle);
 			utility.not_allowed_Bundle_start(message, testSignatureBundle);
 			utility.not_allowed_Bundle_update(message, testSignatureBundle);
-			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getSignatureInputStream());
+			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
 			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-			utility.not_allowed_BundleContext_installBundle(message, signatureBundleLocation);
-			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getSignatureInputStream());
+			utility.not_allowed_BundleContext_installBundle(message, getInstallBundleLocation(signatureBundleName));
+			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getInputStream(signatureBundleName));
 			utility.not_allowed_BundleContext_addBundleListener(message);
 			utility.not_allowed_BundleContext_removeBundleListener(message);
 			utility.not_allowed_PackageAdmin_refreshPackages(message, null);
@@ -410,11 +424,11 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			printPermissions(testBundleLocation);
 			
 			
-			Bundle b = (Bundle)utility.allowed_BundleContext_installBundle(message, signatureBundleLocation);
+			Bundle b = (Bundle)utility.allowed_BundleContext_installBundle(message, getInstallBundleLocation(signatureBundleName));
 			utility.allowed_Bundle_update(message,b);
-			utility.allowed_Bundle_update_by_InputStream(message, b, getSignatureInputStream());
+			utility.allowed_Bundle_update_by_InputStream(message, b, getInputStream(signatureBundleName));
 			utility.allowed_Bundle_uninstall(message, b);
-			b = (Bundle)utility.allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getSignatureInputStream());
+			b = (Bundle)utility.allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getInputStream(signatureBundleName));
 			utility.allowed_Bundle_uninstall(message, b);
 
 			utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
@@ -442,6 +456,74 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	
 	}
 	
+	
+	/**
+	 * Tests AdminPermission with an action parameter - lifecycle. 
+	 * Checks if a bundle with AdminPrmission - lifecycle can execute:
+	 *  - BundleContext.installBundle
+	 *  - Bundle.update
+	 *  - Bundle.uninstall
+	 * and can not execute anything else that requires other AdminPermission.
+	 * 
+	 * The bundle is specified either by bundle id or by filter string.
+	 */
+	public void test_AdminPermission_extensionLifecycle() throws Throwable {
+		String message = "";
+		String extensionBundleLocation = getInstallBundleLocation(extensionBundleName);
+		
+		Vector permissions = utility.getPInfosForAdminPermisssion(
+				PermissionSignatureUtility.EXTENSION_LIFECYCLE,
+				-1, // extension bundle is not yet installed  
+				extensionBundleLocation,  // ?
+				null);	
+
+		
+		PermissionInfo info; 
+		for (int i = 0; i < permissions.size(); ++i) {
+			info = (PermissionInfo)permissions.elementAt(i);
+
+			permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[]{info});
+			printPermissions(testBundleLocation);
+			
+			
+			Bundle extensionBundle = (Bundle)utility.allowed_BundleContext_installBundle(message, extensionBundleLocation);
+			utility.allowed_Bundle_update(message, extensionBundle);
+			utility.allowed_Bundle_update_by_InputStream(message, extensionBundle, getInputStream(extensionBundleName));
+			utility.allowed_Bundle_uninstall(message, extensionBundle);
+			extensionBundle = (Bundle)utility.allowed_BundleContext_installBundle_by_InputStream(message, extensionBundleLocation, getInputStream(extensionBundleName));
+			
+
+			utility.not_allowed_Bundle_getHeaders(message, extensionBundle);
+			utility.not_allowed_Bundle_getHeaders_byLocation(message, extensionBundle);
+			utility.not_allowed_Bundle_getLocation(message, extensionBundle);
+			
+			utility.not_allowed_Bundle_getResource(message, extensionBundle, resourceName);
+			utility.not_allowed_Bundle_getResources(message, extensionBundle, resourcesName);
+			utility.not_allowed_Bundle_getEntry(message, extensionBundle, extensionEntryName);
+			utility.not_allowed_Bundle_getEntryPaths(message, extensionBundle, extensionEntryPath);
+			
+			utility.not_allowed_StartLevel_setBundleStartLevel(message, extensionBundle, startLevel);
+			utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
+			utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, startLevel);
+			
+			utility.not_allowed_Bundle_loadClass(message, extensionBundle, extensionClassName);
+			
+			utility.not_allowed_Bundle_stop(message, extensionBundle);
+			utility.not_allowed_Bundle_start(message, extensionBundle);
+			utility.not_allowed_BundleContext_addBundleListener(message);
+			utility.not_allowed_BundleContext_removeBundleListener(message);
+			utility.not_allowed_PackageAdmin_refreshPackages(message, null);
+			utility.not_allowed_PackageAdmin_resolveBundles(message, null);
+			utility.not_allowed_PermissionAdmin_setPermissions(message, extensionBundleLocation, 
+					new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
+			utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
+
+			
+			utility.allowed_Bundle_uninstall(message, extensionBundle);
+		}
+	
+	}
+
 	
 	/**
 	 * Tests AdminPermission with an action parameter - execute. 
@@ -484,10 +566,10 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, startLevel);
 			utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
 			utility.not_allowed_Bundle_update(message, testSignatureBundle);
-			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getSignatureInputStream());
+			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
 			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-			utility.not_allowed_BundleContext_installBundle(message, signatureBundleLocation);
-			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getSignatureInputStream());
+			utility.not_allowed_BundleContext_installBundle(message, getInstallBundleLocation(signatureBundleName));
+			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getInputStream(signatureBundleName));
 			utility.not_allowed_BundleContext_addBundleListener(message);
 			utility.not_allowed_BundleContext_removeBundleListener(message);
 			utility.not_allowed_PackageAdmin_refreshPackages(message, null);
@@ -541,10 +623,10 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			utility.not_allowed_Bundle_stop(message, testSignatureBundle);
 			utility.not_allowed_Bundle_start(message, testSignatureBundle);
 			utility.not_allowed_Bundle_update(message, testSignatureBundle);
-			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getSignatureInputStream());
+			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
 			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-			utility.not_allowed_BundleContext_installBundle(message, signatureBundleLocation);
-			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getSignatureInputStream());
+			utility.not_allowed_BundleContext_installBundle(message, getInstallBundleLocation(signatureBundleName));
+			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getInputStream(signatureBundleName));
 			utility.not_allowed_PackageAdmin_refreshPackages(message, null);
 			utility.not_allowed_PackageAdmin_resolveBundles(message, null);
 			utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
@@ -607,10 +689,10 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			utility.not_allowed_Bundle_stop(message, testSignatureBundle);
 			utility.not_allowed_Bundle_start(message, testSignatureBundle);
 			utility.not_allowed_Bundle_update(message, testSignatureBundle);
-			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getSignatureInputStream());
+			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
 			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-			utility.not_allowed_BundleContext_installBundle(message, signatureBundleLocation);
-			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getSignatureInputStream());
+			utility.not_allowed_BundleContext_installBundle(message, getInstallBundleLocation(signatureBundleName));
+			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getInputStream(signatureBundleName));
 			utility.not_allowed_PackageAdmin_refreshPackages(message, null);
 			utility.not_allowed_PackageAdmin_resolveBundles(message, null);
 		}
@@ -667,10 +749,10 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			utility.not_allowed_Bundle_stop(message, testSignatureBundle);
 			utility.not_allowed_Bundle_start(message, testSignatureBundle);
 			utility.not_allowed_Bundle_update(message, testSignatureBundle);
-			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getSignatureInputStream());
+			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
 			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-			utility.not_allowed_BundleContext_installBundle(message, signatureBundleLocation);
-			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getSignatureInputStream());
+			utility.not_allowed_BundleContext_installBundle(message, getInstallBundleLocation(signatureBundleName));
+			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getInputStream(signatureBundleName));
 			utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
 					new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
 			utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
@@ -727,10 +809,10 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			utility.not_allowed_Bundle_stop(message, testSignatureBundle);
 			utility.not_allowed_Bundle_start(message, testSignatureBundle);
 			utility.not_allowed_Bundle_update(message, testSignatureBundle);
-			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getSignatureInputStream());
+			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
 			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-			utility.not_allowed_BundleContext_installBundle(message, signatureBundleLocation);
-			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getSignatureInputStream());
+			utility.not_allowed_BundleContext_installBundle(message, getInstallBundleLocation(signatureBundleName));
+			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getInputStream(signatureBundleName));
 			utility.not_allowed_PackageAdmin_refreshPackages(message, null);
 			utility.not_allowed_PackageAdmin_resolveBundles(message, null);
 			utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
@@ -907,9 +989,8 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 		//}
 	}
 	
-	private InputStream getSignatureInputStream() throws Exception {
-		if (signatureBundleLocation == null) return null;
-		return (new URL(signatureBundleLocation)).openStream();
+	private InputStream getInputStream(String bundleName) throws Exception {
+		return (new URL(getInstallBundleLocation(bundleName))).openStream();
 	}
 	
 	private void printPermissions(String bundleLocation) {
@@ -920,5 +1001,9 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 		}
 	}
 	
+	
+	private String getInstallBundleLocation(String bundleName) {
+		return getWebServer() + bundleName;
+	}
 	
 }
