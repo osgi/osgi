@@ -61,7 +61,7 @@ public interface PermissionSignatureTBCService {
 	
 // TO DO - java.lang.SecurityException or null ?!?
 	public URL callBundle_getResource(Bundle bundle, String name);
-	public Enumeration callBundle_getResources(Bundle bundle, String name);
+	public Enumeration callBundle_getResources(Bundle bundle, String name) throws IOException;
 	public URL callBundle_getEntry(Bundle bundle, String name);
 	public Enumeration callBundle_getEntryPaths(Bundle bundle, String path);
 	

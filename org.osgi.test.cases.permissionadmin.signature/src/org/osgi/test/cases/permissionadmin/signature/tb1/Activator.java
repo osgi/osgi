@@ -112,7 +112,7 @@ public class Activator implements BundleActivator, PermissionSignatureTBCService
 		return bundle.getResource(name);
 	}
 		
-	public Enumeration callBundle_getResources(Bundle bundle, String name) {
+	public Enumeration callBundle_getResources(Bundle bundle, String name) throws IOException {
 		return bundle.getResources(name);
 	}
 	
