@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) OSGi Alliance (2000, 2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -100,6 +100,26 @@ public class BundleEvent extends EventObject {
 	public final static int	UNINSTALLED			= 0x00000010;
 
 	/**
+	 * The bundle has been resolved.
+	 * <p>
+	 * The value of <code>RESOLVED</code> is 0x00000020.
+	 * 
+	 * @see Bundle#RESOLVED
+	 * @since 1.3
+	 */
+	public final static int	RESOLVED	= 0x00000020;
+
+	/**
+	 * The bundle has been unresolved.
+	 * <p>
+	 * The value of <code>UNRESOLVED</code> is 0x00000040.
+	 * 
+	 * @see Bundle#INSTALLED
+	 * @since 1.3
+	 */
+	public final static int	UNRESOLVED	= 0x00000040;
+
+	/**
 	 * Creates a bundle event of the specified type.
 	 * 
 	 * @param type The event type.
@@ -116,7 +136,7 @@ public class BundleEvent extends EventObject {
 	 * Returns the bundle which had a lifecycle change. This bundle is the
 	 * source of the event.
 	 * 
-	 * @return A bundle that had a change occur in its lifecycle.
+	 * @return The bundle that had a change occur in its lifecycle.
 	 */
 	public Bundle getBundle() {
 		return bundle;
@@ -140,24 +160,4 @@ public class BundleEvent extends EventObject {
 	public int getType() {
 		return type;
 	}
-
-	/**
-	 * The bundle has been resolved.
-	 * <p>
-	 * The value of <code>RESOLVED</code> is 0x00000020.
-	 * 
-	 * @see Bundle#RESOLVED
-	 * @since 1.3
-	 */
-	public final static int	RESOLVED	= 0x00000020;
-
-	/**
-	 * The bundle has been unresolved.
-	 * <p>
-	 * The value of <code>UNRESOLVED</code> is 0x00000040.
-	 * 
-	 * @see Bundle#INSTALLED
-	 * @since 1.3
-	 */
-	public final static int	UNRESOLVED	= 0x00000040;
 }
