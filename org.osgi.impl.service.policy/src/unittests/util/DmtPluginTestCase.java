@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Dictionary;
+import java.util.Hashtable;
 import junit.framework.TestCase;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -58,6 +59,8 @@ public class DmtPluginTestCase extends TestCase {
 	public DmtAdmin dmtFactory;
 	public DmtPrincipalPermissionAdmin dmtPrincipalPermissionAdmin;
 	public DummyConfigurationAdmin	configurationAdmin;
+    static final String DMT_PERMISSION_ADMIN_SERVICE_PID = 
+        "org.osgi.impl.service.dmt.permissions";
 	
 	public class DummyContext implements BundleContext {
 		public ServiceReference getServiceReference(String clazz) {
@@ -146,12 +149,37 @@ public class DmtPluginTestCase extends TestCase {
 		public File getDataFile(String filename) {throw new IllegalStateException();}
 		public ServiceReference[] getAllServiceReferences(String clazz, String filter) throws InvalidSyntaxException {throw new IllegalStateException();}
 	};
-	
+
+	public class DummyConfiguration implements Configuration {
+		public final String pid;
+		public Hashtable data = new Hashtable();
+		public DummyConfiguration(String pid) {
+			this.pid = pid;
+		}
+		public void update(Dictionary properties) throws IOException {
+			data = new Hashtable();
+			data.putAll((Hashtable)properties);
+		}
+
+		public String getPid() { throw new IllegalStateException(); }
+		public Dictionary getProperties() { throw new IllegalStateException(); }
+		public void delete() throws IOException { throw new IllegalStateException(); }
+		public String getFactoryPid() { throw new IllegalStateException(); }
+		public void update() throws IOException { throw new IllegalStateException(); }
+		public void setBundleLocation(String bundleLocation) { throw new IllegalStateException(); }
+		public String getBundleLocation() { throw new IllegalStateException(); }
+	}
+
 	public class DummyConfigurationAdmin implements ConfigurationAdmin {
+		public DummyConfiguration dmtPrincipalData = new DummyConfiguration(DMT_PERMISSION_ADMIN_SERVICE_PID);
+		public Configuration getConfiguration(String pid) throws IOException { 
+			if (pid.equals(DMT_PERMISSION_ADMIN_SERVICE_PID)) { return dmtPrincipalData; }	
+			throw new IllegalStateException();
+		}
+
 		public Configuration createFactoryConfiguration(String factoryPid) throws IOException { throw new IllegalStateException(); }
 		public Configuration createFactoryConfiguration(String factoryPid, String location) throws IOException { throw new IllegalStateException();		}
 		public Configuration getConfiguration(String pid, String location) throws IOException { throw new IllegalStateException();}
-		public Configuration getConfiguration(String pid) throws IOException { throw new IllegalStateException(); }
 		public Configuration[] listConfigurations(String filter) throws IOException, InvalidSyntaxException { throw new IllegalStateException();}
 	}
 	
