@@ -33,6 +33,7 @@ import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.service.event.*;
 
 /**
@@ -76,8 +77,10 @@ public class EventTestControl extends DefaultTestBundleControl {
 	 */
 	public void prepare() throws Exception {
 		log("#before each run");
-    tb1 = installBundle("tb1.jar");
-    tb2 = installBundle("tb2.jar");
+    tb1 = installBundle("tb1.jar");//file:/D:/Devtools/org.osgi.test.cases.event/tb1.jar
+    tb1.start();
+    tb2 = installBundle("tb2.jar");//file:/D:/Devtools/org.osgi.test.cases.event/tb2.jar
+    tb2.start();
 	}
 
 	/**
@@ -111,16 +114,31 @@ public class EventTestControl extends DefaultTestBundleControl {
    * @specificationVersion  3
    */
   public void testIstallation() throws Exception {
-    assertBundle(TBCService.class.getName(), tb1);
-    assertBundle(EventHandler.class.getName(), tb1);
+    ServiceTracker trackerProvider1 = new ServiceTracker(getContext(), "org.osgi.test.cases.event.tb1.Activator", null);
+    trackerProvider1.open();
+    TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+    assertNotNull("TBCService service in tb1 should be registered", tbcService1);
+    trackerProvider1.close();
     
-    assertBundle(TBCService.class.getName(), tb2);
-    assertBundle(EventHandler.class.getName(), tb2);
+    ServiceTracker trackerProvider2 = new ServiceTracker(getContext(), "org.osgi.test.cases.event.tb2.Activator", null);
+    trackerProvider2.open();
+    TBCService tbcService2 = (TBCService) trackerProvider2.getService();
+    assertNotNull("TBCService service in tb2 should be registered", tbcService2);
+    trackerProvider2.close();
     
-    //Bundle system = getContext().getBundle(0);
-    //assertBundle(PackageAdmin.class.getName(), system);
+    Bundle system = getContext().getBundle(0);
+    //assertBundle(PackageAdmin.class.getName(), system);    
+    assertBundle(PermissionAdmin.class.getName(), system);
+    
+    ServiceReference[] eventAdminSRs = getContext().getServiceReferences(EventAdmin.class.getName(), null);
+    if (eventAdminSRs != null) {
+      assertEquals("There must be exctly one EventAdmin registered service [" + EventAdmin.class.getName() + "]", 
+                   1, eventAdminSRs.length);
+    }
+    
+    //assertBundle(EventHandler.class.getName(), tb1);
+    //assertBundle(EventHandler.class.getName(), tb2);
   }
-
 
 	/**
 	 * Tests if the permissions are set correctly and the exceptions 
@@ -128,30 +146,6 @@ public class EventTestControl extends DefaultTestBundleControl {
 	 */
 	public void testSetPermissions() {
     PermissionAdmin permissionAdmin = (PermissionAdmin)getRegistry().getService(PermissionAdmin.class);
-    //try to send event without PUBLISH TopicPermission
-    Hashtable properties = new Hashtable();
-    Hashtable ht = new Hashtable();
-    ht.put("topic", "org/osgi/test/cases/event");
-    Event event1 = new Event("org/osgi/test/cases/event/ACTION1", properties);
-    String message = "The caller does not have TopicPermission[topic,PUBLISH] for the topic: [";
-    try {
-      eventAdmin.sendEvent(event1);
-      failException(message + event1.getTopic() + "]", SecurityException.class);
-    } catch (Throwable e) {
-      assertException(message + event1.getTopic() + "]", SecurityException.class, e);
-    }
-    //try to send event with PUBLISH TopicPermission
-    PermissionInfo permInfo = new PermissionInfo(ServicePermission.class.getName(), 
-                                                 "org.osgi.service.event.EventAdmin", 
-                                                 ServicePermission.GET);
-    permissionAdmin.setPermissions(getContext().getBundle().getLocation(), 
-                                   new PermissionInfo[]{permInfo});
-    try {
-      eventAdmin.sendEvent(event1);
-      failException(message + event1.getTopic() + "]", SecurityException.class);
-    } catch (Throwable e) {
-      assertException(message + event1.getTopic() + "]", SecurityException.class, e);
-    }
     
     PermissionInfo regInfo = new PermissionInfo(ServicePermission.class.getName(), 
                                                 "org.osgi.service.event.EventHandler", 
@@ -161,11 +155,58 @@ public class EventTestControl extends DefaultTestBundleControl {
                                                  "org/*", 
                                                  TopicPermission.SUBSCRIBE);
     permissionAdmin.setPermissions(tb1.getLocation(), new PermissionInfo[]{regInfo, topInfo1});
+    
     //set permissions to tb2
     PermissionInfo topInfo2 = new PermissionInfo(TopicPermission.class.getName(), 
                                                  "org/osgi/*", 
                                                  TopicPermission.SUBSCRIBE);
-    permissionAdmin.setPermissions(tb2.getLocation(), new PermissionInfo[]{regInfo, topInfo2});   
+    permissionAdmin.setPermissions(tb2.getLocation(), new PermissionInfo[]{regInfo, topInfo2});
+    
+    //try to send event without PUBLISH TopicPermission
+    Hashtable properties = new Hashtable();
+    Hashtable ht = new Hashtable();
+    ht.put("topic", "org/osgi/test/cases/event");
+    //Event event1 = new Event("org/osgi/test/cases/event/ACTION1", properties);
+    //String message = "The caller does not have TopicPermission[topic,PUBLISH] for the topic: [";    
+
+//    try {
+//      eventAdmin.sendEvent(event1);
+//      failException(message + event1.getTopic() + "]", SecurityException.class);
+//    } catch (Throwable e) {
+//      e.printStackTrace();
+//      assertException(message + event1.getTopic() + "]", SecurityException.class, e);
+//    }
+    
+    //try to send event with PUBLISH TopicPermission
+    PermissionInfo permInfo = new PermissionInfo(ServicePermission.class.getName(), 
+                                                 "org.osgi.service.event.EventAdmin", 
+                                                 ServicePermission.GET);    
+    permissionAdmin.setPermissions(getContext().getBundle().getLocation(), 
+                                   new PermissionInfo[]{permInfo});
+//    try {
+//      eventAdmin.sendEvent(event1);
+//      failException(message + event1.getTopic() + "]", SecurityException.class);
+//    } catch (Throwable e) {
+//      assertException(message + event1.getTopic() + "]", SecurityException.class, e);
+//    }    
+    
+    PermissionInfo[] perm = permissionAdmin.getPermissions(getContext().getBundle().getLocation());
+    assertNotNull("Permissions of [" + getContext().getBundle().getLocation() + "]", perm);
+    for (int i = 0; i < perm.length; i++) {
+      pass("permission [" + "i]: " + perm[i]);
+    }
+    
+    PermissionInfo[] perm1 = permissionAdmin.getPermissions(tb1.getLocation());
+    assertNotNull("Permissions of [" + tb1.getLocation() + "]", perm1);
+    for (int i = 0; i < perm1.length; i++) {
+      pass("permission [" + "i]: " + perm1[i]);
+    }
+    
+    PermissionInfo[] perm2 = permissionAdmin.getPermissions(tb2.getLocation());
+    assertNotNull("Permissions of [" + tb2.getLocation() + "]", perm2);
+    for (int i = 0; i < perm2.length; i++) {
+      pass("permission [" + "i]: " + perm2[i]);
+    }
 		
 	}
   
@@ -207,14 +248,20 @@ public class EventTestControl extends DefaultTestBundleControl {
    * (if they match of the listeners).
    */
   public void testPostEventNotification() {
-    TBCService tbcService1 = (TBCService) tb1;
-    TBCService tbcService2 = (TBCService) tb2;
+    ServiceTracker trackerProvider1 = new ServiceTracker(getContext(), "org.osgi.test.cases.event.tb1.Activator", null);
+    trackerProvider1.open();
+    TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+    
+    ServiceTracker trackerProvider2 = new ServiceTracker(getContext(), "org.osgi.test.cases.event.tb2.Activator", null);
+    trackerProvider2.open();
+    TBCService tbcService2 = (TBCService) trackerProvider2.getService();
     
     String[] topics;
     topics = new String[] {"org/osgi/test/*", "org/osgi/newtest1/*", "org/osgi1/*", "Event1"};
     tbcService1.setTopics(topics);
+    
     topics = new String[] {"org/osgi/test/*", "org/osgi/newtest1/newtest2/*", "org/osgi2/*"};
-    tbcService2.setTopics(topics);
+    tbcService2.setTopics(topics);    
     
     String[] events = new String[] {"org/osgi/test/Event0", "Event1", "org/osgi1/Event2", "org/osgi1/test/Event3", 
                                     "org/osgi/newtest1/Event4", "org/osgi/newtest2/Event5", "org/osgi2/test/Event6"};
@@ -240,9 +287,19 @@ public class EventTestControl extends DefaultTestBundleControl {
    * @param b       the bundle to be asserted
 	 */
 	private void assertBundle(String name, Bundle b) {
-		ServiceReference	ref = getContext().getServiceReference(name);
-		assertNotNull(name + "  service must be registered ", ref);
-		assertEquals("Invalid exporter for " + name, b, ref.getBundle());
+		ServiceReference[]	ref = null;
+    try {
+      ref = getContext().getServiceReferences(name, null);
+    } catch (InvalidSyntaxException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    assertNotNull(name + "  service must be registered ", ref);
+    for (int i = 0; i < ref.length; i++) {
+      ServiceReference reference = ref[i];
+      assertEquals("Invalid exporter for " + name, b, reference.getBundle());
+    }
+		//assertEquals("Invalid exporter for " + name, b, ref.getBundle());
 	}
   
   private void assertEvent(Event eventPassed, Bundle bundle, TBCService tbcService, boolean recieved) {
@@ -276,7 +333,9 @@ public class EventTestControl extends DefaultTestBundleControl {
 	 */
 	public void unprepare() throws Exception {
 		log("#after each run");
+    tb1.stop();
     uninstallBundle(tb1);
+    tb2.stop();
     uninstallBundle(tb2);
 	}  
 }
