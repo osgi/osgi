@@ -35,6 +35,21 @@ public class Analysis {
 		ZipEntry entry = zip.getEntry("META-INF/MANIFEST.MF");
 		manifest = new Manifest(zip.getInputStream(entry));
 		checkActivator();
+		checkSymbolicName();
+	}
+
+	private void checkSymbolicName() {
+		String name = manifest.getValue("Bundle-SymbolicName");
+		if ( name == null ) 
+			btool.warnings.add("Bundle-SymbolicName not set");
+		else if ( name!=null && !name.matches("[a-zA-Z_0-9]+(\\.[a-zA-Z_0-9]+)+") )
+			btool.warnings.add("Bundle-SymbolicName not a revere domain name: " + name );
+		
+		String version = manifest.getValue("Bundle-Version");
+		if ( version == null )
+			btool.warnings.add("No version set");
+		else if ( ! version.matches("[0-9]+(\\.[0-9]+(\\.[0-9]+(\\.[0-9_a-zA-Z]+)?)?)?"))
+			btool.warnings.add("Version not in right format: " + version );			
 	}
 
 	private void checkActivator() throws IOException {
