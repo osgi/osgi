@@ -34,7 +34,7 @@ public class RshHandler extends AbstractURLStreamHandlerService implements
 		st = new ServiceTracker(bc, ProvisioningService.class.getName(), null);
 		st.open();
 		Hashtable dict = new Hashtable();
-		dict.put(URLConstants.URL_HANDLER_PROTOCOL, "rsh");
+		dict.put(URLConstants.URL_HANDLER_PROTOCOL, new String[] {"rsh"});
 		bc.registerService("org.osgi.service.url.URLStreamHandlerService",
 				this, dict);
 	}
