@@ -36,7 +36,17 @@ import java.util.StringTokenizer;
  * Version identifier for bundles and packages.
  * 
  * <p>
- * Version instances are immutable.
+ * Version identifiers have four components.
+ * <ol>
+ * <li>Major version. A non-negative integer.</li>
+ * <li>Minor version. A non-negative integer.</li>
+ * <li>Micro version. A non-negative integer.</li>
+ * <li>Qualifier. A text string. See {@link #parseVersion(String) parseVersion}
+ * for the format of the qualifier string.</li>
+ * </ol>
+ * 
+ * <p>
+ * <code>Version</code> instances are immutable.
  * 
  * @version $Revision$
  * @since 1.3
@@ -50,7 +60,7 @@ public class Version implements Comparable {
 	private final String		qualifier;
 
 	/* cached result of toString */
-	private String				string;
+	private transient String	string;
 
 	private static final String	SEPARATOR		= ".";					//$NON-NLS-1$
 
@@ -58,10 +68,13 @@ public class Version implements Comparable {
 	 * The empty version "0.0.0". Equivalent to calling
 	 * <code>new Version(0,0,0)</code>.
 	 */
-	public static Version		emptyVersion	= new Version(0, 0, 0);
+	public static final Version	emptyVersion	= new Version(0, 0, 0);
 
 	/**
-	 * Creates a version identifier from its components.
+	 * Creates a version identifier from the specified numerical components.
+	 * 
+	 * <p>
+	 * The qualifier is set to the empty string.
 	 * 
 	 * @param major Major component of the version identifier.
 	 * @param minor Minor component of the version identifier.
@@ -74,12 +87,14 @@ public class Version implements Comparable {
 	}
 
 	/**
-	 * Creates a version identifier from its components.
+	 * Creates a version identifier from the specifed components.
 	 * 
 	 * @param major Major component of the version identifier.
 	 * @param minor Minor component of the version identifier.
 	 * @param micro Micro component of the version identifier.
-	 * @param qualifier Qualifier component of the version identifier.
+	 * @param qualifier Qualifier component of the version identifier. If
+	 *                   <code>null</code> is specified, then the qualifier will be set
+	 *                   to the empty string.
 	 * @throws IllegalArgumentException If the numerical components are negative
 	 *                   or the qualifier string is invalid.
 	 */
@@ -114,10 +129,24 @@ public class Version implements Comparable {
 	/**
 	 * Parses a version identifier from the specified string.
 	 * 
+	 * <p>
+	 * Here is the grammar for version strings.
+	 * 
+	 * <pre>
+	 *          version ::= major('.'minor('.'micro('.'qualifier)?)?)?
+	 *         
+	 *          major ::= digit+
+	 *          minor ::= digit+
+	 *          micro ::= digit+
+	 *          qualifier ::= (alpha|digit|'_'|'-')+
+	 *          digit ::= [0..9]
+	 *          alpha ::= [a..zA..Z]
+	 * </pre>
+	 * 
 	 * @param version String representation of the version identifier.
 	 * @return A <code>Version</code> object representing the version
-	 *                 identifier. If <code>version</code> is
-	 *                 <code>null</code> or the empty string then {@link #emptyVersion} will be returned.
+	 *                 identifier. If <code>version</code> is <code>null</code> or
+	 *                 the empty string then {@link #emptyVersion}will be returned.
 	 * @throws IllegalArgumentException If <code>version</code> is improperly
 	 *                   formatted.
 	 */
@@ -200,6 +229,11 @@ public class Version implements Comparable {
 	/**
 	 * Returns the string representation of this version identifier.
 	 * 
+	 * <p>
+	 * The format of the version string will be <code>major.minor.micro</code>
+	 * if qualifier is the empty string or
+	 * <code>major.minor.micro.qualifier</code> otherwise.
+	 * 
 	 * @return The string representation of this version identifier.
 	 */
 	public String toString() {
@@ -227,11 +261,15 @@ public class Version implements Comparable {
 	/**
 	 * Compares this <code>Version</code> object to another object.
 	 * 
-	 * @param object The object to compare against this <code>Version</code>
-	 *                   object.
-	 * @return <code>true</code> if the object is a <code>Version</code>
-	 *                 object and has the same major, minor, micro and qualifier to this
-	 *                 object; <code>false</code> otherwise.
+	 * <p>
+	 * A version is considered to be <b>equal to </b> another version if the
+	 * major, minor and micro components are equal and the qualifier component
+	 * is equal (using <code>String.equals</code>).
+	 * 
+	 * @param object The <code>Version</code> object to be compared.
+	 * @return <code>true</code> if <code>object</code> is a
+	 *                 <code>Version</code> and is equal to this object;
+	 *                 <code>false</code> otherwise.
 	 */
 	public boolean equals(Object object) {
 		if (object == this) { // quicktest
@@ -248,17 +286,28 @@ public class Version implements Comparable {
 	}
 
 	/**
-	 * Compares this <code>Version</code> object with the specified
-	 * <code>Version</code> object for order. Returns a negative integer,
-	 * zero, or a positive integer if this object is less than, equal to, or
-	 * greater than the specified <code>Version</code> object.
+	 * Compares this <code>Version</code> object to another object.
+	 * 
 	 * <p>
+	 * A version is considered to be <b>less than </b> another version if its
+	 * major component is less than the other version's major component, or the
+	 * major components are equal and its minor component is less than the other
+	 * version's minor component, or the major and minor components are equal
+	 * and its micro component is less than the other version's micro component,
+	 * or the major, minor and micro components are equal and it's qualifier
+	 * component is less than the other version's qualifier component (using
+	 * <code>String.compareTo</code>).
+	 * 
+	 * <p>
+	 * A version is considered to be <b>equal to </b> another version if the
+	 * major, minor and micro components are equal and the qualifier component
+	 * is equal (using <code>String.compareTo</code>).
 	 * 
 	 * @param object The <code>Version</code> object to be compared.
-	 * @return A negative integer, zero, or a positive integer as this object is
+	 * @return A negative integer, zero, or a positive integer if this object is
 	 *                 less than, equal to, or greater than the specified
 	 *                 <code>Version</code> object.
-	 * @throws ClassCastException If the specified object's type is not
+	 * @throws ClassCastException If the specified object is not a
 	 *                   <code>Version</code>.
 	 */
 	public int compareTo(Object object) {
