@@ -26,10 +26,7 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 	boolean		retrievable				= true;
 	boolean		replaceable				= true;
 	boolean		executable				= false;
-	boolean		leaf;											// there is
-																	// no
-																	// meaningful
-																	// default
+	boolean		leaf; // there is no meaningful default
 	boolean		permanent				= true;
 	String		description				= null;
 	int			maxOccurrence			= 1;

@@ -24,7 +24,7 @@ import org.osgi.service.monitor.*;
 import org.osgi.util.tracker.ServiceTracker;
 
 
-public class MonitorPlugin implements DmtDataPlugIn
+public class MonitorPlugin implements DmtDataPlugin
 {
     private BundleContext bc;
     private ServiceTracker tracker;
@@ -41,7 +41,7 @@ public class MonitorPlugin implements DmtDataPlugIn
     }
 
 
-    //----- DmtDataPlugIn methods -----//
+    //----- DmtDataPlugin methods -----//
 
     public void open(int lockMode, DmtSession session) throws DmtException {
         this.session = session;
@@ -51,7 +51,7 @@ public class MonitorPlugin implements DmtDataPlugIn
         open(lockMode, session);
     }
 
-    public DmtMetaNode getMetaNode(String nodeUri, DmtMetaNode generic) throws DmtException {
+    public DmtMetaNode getMetaNode(String nodeUri) throws DmtException {
         String[] path = prepareUri(nodeUri);
 
         if(path.length == 0)
@@ -303,7 +303,7 @@ public class MonitorPlugin implements DmtDataPlugIn
                                "Cannot add TrapRefID nodes manually.");
     }
 
-    public void clone(String nodeUri, String newNodeUri, boolean recursive) throws DmtException {
+    public void copy(String nodeUri, String newNodeUri, boolean recursive) throws DmtException {
         // TODO allow cloning a monitoring job?
     }
 
@@ -730,7 +730,7 @@ class Server {
                                    "Server ID leaf must have string format.");
 
         if(data.getString() == null)
-            throw new DmtException(nodeUri, DmtException.INVALID_DATA, "Server ID string must be non-null.");
+            throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH, "Server ID string must be non-null.");
 
         serverId = data.getString();
     }
@@ -756,7 +756,7 @@ class Server {
 
         String newType = data.getString();
         if(newType == null || !(newType.equals("TM") || newType.equals("EV")))
-            throw new DmtException(nodeUri, DmtException.INVALID_DATA, "Type string must 'TM' or 'EV'.");
+            throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH, "Type string must 'TM' or 'EV'.");
 
         type = newType;
     }
@@ -769,7 +769,7 @@ class Server {
         int newInt = data.getInt();
 
         if(newInt < 0)
-            throw new DmtException(nodeUri, DmtException.INVALID_DATA, 
+            throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH, 
                                    "Reporting schedule value parameter must be non-negative.");
 
         value = data.getInt();

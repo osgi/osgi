@@ -25,7 +25,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
-import org.osgi.service.dmt.DmtDataPlugIn;
+import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.dmt.DmtAlertSender;
 
 import org.osgi.service.event.EventChannel;
@@ -41,7 +41,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * Monitor Plugin.  Retrieves required services (EventChannel and
  * DmtAlertSender), starts tracking of Monitorable services, and
  * registers provided services (MonitorAdmin, UpdateListener and
- * DmtDataPlugIn).
+ * DmtDataPlugin).
  */
 public class Activator implements BundleActivator
 {
@@ -96,7 +96,7 @@ public class Activator implements BundleActivator
         MonitorPlugin monitorPlugin = new MonitorPlugin(bc, monitorableTracker, monitorAdmin);
         Hashtable properties = new Hashtable();
         properties.put("dataRootURIs", new String[] { PLUGIN_ROOT });
-        monitorPluginReg = bc.registerService(DmtDataPlugIn.class.getName(), monitorPlugin, properties);
+        monitorPluginReg = bc.registerService(DmtDataPlugin.class.getName(), monitorPlugin, properties);
 
         System.out.println("Monitor Admin and Plugin activation successful.");
     }

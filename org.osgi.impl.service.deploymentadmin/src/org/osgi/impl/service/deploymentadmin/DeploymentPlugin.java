@@ -23,7 +23,7 @@ import org.osgi.framework.*;
 import org.osgi.impl.service.deploymentadmin.api.PackageHandlerException;
 import org.osgi.service.dmt.*;
 
-public class DeploymentPlugin implements BundleActivator, DmtExecPlugIn {
+public class DeploymentPlugin implements BundleActivator, DmtExecPlugin {
 	// DMT node the Deployment Plugin registers itself to as exec DMT plugin
 	private final static String	DMT_NODE	= "./OSGi/deploy/install";
 	private DeploymentEngine	deploymentEngine;
@@ -33,7 +33,7 @@ public class DeploymentPlugin implements BundleActivator, DmtExecPlugIn {
 		// registers the data and exec DMT plugin
 		Dictionary dict = new Hashtable();
 		dict.put("execRootURIs", new String[] {DMT_NODE});
-		String[] ifs = new String[] {DmtExecPlugIn.class.getName()};
+		String[] ifs = new String[] {DmtExecPlugin.class.getName()};
 		// unregistered by the OSGi framework
 		context.registerService(ifs, this, dict);
 	}

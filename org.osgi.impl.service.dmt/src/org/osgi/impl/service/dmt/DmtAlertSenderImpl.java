@@ -39,8 +39,7 @@ public class DmtAlertSenderImpl implements DmtAlertSender,
 		if (serverId != null)
 			sendAlert(serverId, String.valueOf(session.getSessionId()), code,
 					items);
-		// TODO throw exception or silently ignore the alert in case of local
-		// sessions?
+		// TODO throw exception or silently ignore the alert in case of local sessions?
 	}
 
 	public void sendAlert(String serverId, int code, DmtAlertItem[] items)

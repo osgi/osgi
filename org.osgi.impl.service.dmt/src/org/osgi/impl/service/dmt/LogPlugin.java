@@ -22,7 +22,7 @@ import org.osgi.framework.*;
 import org.osgi.service.dmt.*;
 import org.osgi.service.log.*;
 
-public class LogPlugin implements DmtDataPlugIn, DmtExecPlugIn {
+public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 	private BundleContext		bc;
 	private LogService			logservice;
 	private LogReaderService	logreaderservice;
@@ -43,7 +43,7 @@ public class LogPlugin implements DmtDataPlugIn, DmtExecPlugIn {
 		requests = new Hashtable();
 	}
 
-	//----- DmtDataPlugIn methods -----//
+	//----- DmtDataPlugin methods -----//
 	public void open(int lockMode, DmtSession session) throws DmtException {
 		// TODO lockmode
 		// session info not needed, it will come in the exec()
@@ -54,7 +54,7 @@ public class LogPlugin implements DmtDataPlugIn, DmtExecPlugIn {
 		open(lockMode, session);
 	}
 
-	public DmtMetaNode getMetaNode(String nodeUri, DmtMetaNode generic)
+	public DmtMetaNode getMetaNode(String nodeUri)
 			throws DmtException {
 		// TODO, it is just a quick hack
 		String[] path = prepareUri(nodeUri);
@@ -199,7 +199,7 @@ public class LogPlugin implements DmtDataPlugIn, DmtExecPlugIn {
 								"No such node allowed");
 	}
 
-	public void clone(String nodeUri, String newNodeUri, boolean recursive)
+	public void copy(String nodeUri, String newNodeUri, boolean recursive)
 			throws DmtException {
 		// TODO allow cloning
 	}
@@ -350,7 +350,7 @@ public class LogPlugin implements DmtDataPlugIn, DmtExecPlugIn {
 				"The specified URI points to a leaf node.");
 	}
 
-	//  ----- DmtDataPlugIn methods -----//
+	//  ----- DmtDataPlugin methods -----//
 	public void execute(DmtSession session, String nodeUri, String data)
 			throws DmtException {
 		String[] path = prepareUri(nodeUri);

@@ -18,30 +18,30 @@
 package org.osgi.impl.service.dmt;
 
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtFactory;
+import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.event.EventChannel;
 
-public class DmtFactoryImpl implements DmtFactory {
-	private DmtPlugInDispatcher	dispatcher;
+public class DmtAdminImpl implements DmtAdmin {
+	private DmtPluginDispatcher	dispatcher;
 	private EventChannel eventChannel;
 
-	public DmtFactoryImpl(DmtPlugInDispatcher dispatcher,
+	public DmtAdminImpl(DmtPluginDispatcher dispatcher,
 			              EventChannel eventChannel) {
 		this.dispatcher = dispatcher;
         this.eventChannel = eventChannel;
 	}
 
-	public DmtSession getTree(String principal) throws DmtException {
-		return getTree(principal, ".", DmtSession.LOCK_TYPE_AUTOMATIC);
+	public DmtSession getSession(String subtreeUri) throws DmtException {
+		return getSession(null, subtreeUri, DmtSession.LOCK_TYPE_EXCLUSIVE);
 	}
 
-	public DmtSession getTree(String principal, String subtreeUri)
+	public DmtSession getSession(String subtreeUri, int lockMode)
 			throws DmtException {
-		return getTree(principal, subtreeUri, DmtSession.LOCK_TYPE_AUTOMATIC);
+		return getSession(null, subtreeUri, lockMode);
 	}
 
-	public DmtSession getTree(String principal, String subtreeUri, int lockMode)
+	public DmtSession getSession(String principal, String subtreeUri, int lockMode)
 			throws DmtException {
 		return new DmtSessionImpl(principal, subtreeUri, lockMode, 
                                   eventChannel, dispatcher);

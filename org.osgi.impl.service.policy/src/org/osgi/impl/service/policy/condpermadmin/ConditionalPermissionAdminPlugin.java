@@ -21,7 +21,7 @@ package org.osgi.impl.service.policy.condpermadmin;
 import java.util.Date;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtDataPlugIn;
+import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtSession;
@@ -32,7 +32,7 @@ import org.osgi.service.dmt.DmtSession;
  * 
  * @version $Revision$
  */
-public class ConditionalPermissionAdminPlugin implements DmtDataPlugIn {
+public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 	
 	private final ConditionalPermissionAdmin	condPermAdmin;
 
@@ -47,7 +47,7 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugIn {
 		throw new DmtException(subtreeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
-	public DmtMetaNode getMetaNode(String nodeUri, DmtMetaNode generic)
+	public DmtMetaNode getMetaNode(String nodeUri)
 			throws DmtException {
 		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
@@ -90,7 +90,7 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugIn {
 		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
-	public void clone(String nodeUri, String newNodeUri, boolean recursive)
+	public void copy(String nodeUri, String newNodeUri, boolean recursive)
 			throws DmtException {
 		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}

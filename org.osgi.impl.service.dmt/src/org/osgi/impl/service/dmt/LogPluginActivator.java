@@ -58,8 +58,8 @@ public class LogPluginActivator implements BundleActivator {
 		Hashtable props = new Hashtable();
 		props.put("dataRootURIs", new String[] {PLUGIN_ROOT});
 		props.put("execRootURIs", new String[] {PLUGIN_ROOT});
-		String[] ifs = new String[] {DmtDataPlugIn.class.getName(),
-				DmtExecPlugIn.class.getName()};
+		String[] ifs = new String[] {DmtDataPlugin.class.getName(),
+				DmtExecPlugin.class.getName()};
 		servReg = bc.registerService(ifs, logPlugin, props);
 	}
 

@@ -26,52 +26,24 @@
 package org.osgi.service.dmt;
 
 /**
- * A collection of constants describing the possible formats of a DMT node.
+ * An implementation of this interface takes the responsibility over a
+ * non-modifiable subtree of the DMT. In an OSGi environment such
+ * implementations should be registered at the OSGi service registry
+ * specifying the list of root node URIs in a String array in the
+ * <code>dataRootURIs</code> registration parameter.
  */
-public interface DmtDataType {
+public interface DmtReadOnlyDataPlugin extends DmtReadOnly {
 
     /**
-     * The node holds an integer value. Note that this does not correspond to
-     * the Java <code>int</code> type, OMA DM integers are unsigned.
+     * This method is called to signal the start of a transaction when the
+     * first reference is made within a DmtSession to a node which is
+     * handled by this plugin. Although a read only plugin need not be
+     * concerned about transactionality, knowing the session from which it
+     * is accessed can be useful for example in the case of sending alerts.
+     * @param subtreeUri The subtree which is locked in the current session
+     * @param session The session from which this plugin instance is accessed
+     * @throws DmtException
      */
-    static final int INTEGER = 1;
-
-    /**
-     * The node holds an OMA DM <code>chr</code> value.
-     */
-    static final int STRING  = 2;
-
-    /**
-     * The node holds an OMA DM <code>bool</code> value.
-     */
-    static final int BOOLEAN = 3;
-
-    /**
-     * The node holds an OMA DM <code>binary</code> value. The value of the
-     * node corresponds to the Java <code>byte[]</code> type.
-     */
-    static final int BINARY  = 4;
-
-    /**
-     * The node holds an OMA DM <code>xml</code> value.
-     */
-    static final int XML     = 5;
-
-    /**
-     * The node holds an OMA DM <code>null</code> value. This corresponds to
-     * the Java <code>null</code> type.
-     */
-    static final int NULL    = 6;
-
-    /**
-     * The node is an internal node.
-     */
-    static final int NODE    = 7;
-
-    /**
-     * The format of the node is not specified by meta data. It can take one of
-     * several formats run time.
-     */
-    static final int UNSPECIFIED = 8;
-
+    void open(String subtreeUri, DmtSession session) throws DmtException;
+    //TODO specify exceptions
 }

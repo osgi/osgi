@@ -30,7 +30,7 @@ import java.util.TreeSet;
 import org.osgi.impl.service.policy.util.HashCalculator;
 import org.osgi.impl.service.policy.util.Splitter;
 import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtDataPlugIn;
+import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtSession;
@@ -43,7 +43,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  * 
  * @version $Revision$
  */
-public class PermissionAdminPlugin implements DmtDataPlugIn {
+public class PermissionAdminPlugin implements DmtDataPlugin {
 	private final PermissionAdmin	permissionAdmin;
 	private final HashCalculator	hashCalculator;
 	
@@ -182,7 +182,7 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		if (permissionInfo!=null) entries.put(DEFAULT,new Entry(true,null,permissionInfo));
 	}
 
-	public DmtMetaNode getMetaNode(String nodeUri, DmtMetaNode generic)
+	public DmtMetaNode getMetaNode(String nodeUri)
 			throws DmtException {
 		String[] path = getPath(nodeUri);
 		if (path.length==0) {
@@ -223,7 +223,7 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		try {
 			e.setNodeValue(path[1],data);
 		} catch (IllegalArgumentException iae) {
-			throw new DmtException(nodeUri,DmtException.INVALID_DATA,"cannot parse permission",iae);
+			throw new DmtException(nodeUri,DmtException.METADATA_MISMATCH,"cannot parse permission",iae);
 		}
 	}
 
@@ -263,9 +263,9 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,"");
 	}
 
-	public void clone(String nodeUri, String newNodeUri, boolean recursive)
+	public void copy(String nodeUri, String newNodeUri, boolean recursive)
 			throws DmtException {
-		throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,"no cloning is allowed");
+		throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,"no copying is allowed");
 	}
 
 	public void renameNode(String nodeUri, String newName) throws DmtException {
@@ -281,7 +281,7 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 			Entry e = (Entry) iter.next();
 			if (e.isDefault) continue;
 			if ((e.location==null)||(e.location.equals(""))) {
-				throw new DmtException(dataRootURI,DmtException.INVALID_DATA,"location is empty");
+				throw new DmtException(dataRootURI,DmtException.METADATA_MISMATCH,"location is empty");
 			}
 		}
 		

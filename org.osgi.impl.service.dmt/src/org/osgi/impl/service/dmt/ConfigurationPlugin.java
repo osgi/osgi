@@ -26,45 +26,41 @@ import org.osgi.service.dmt.*;
 
 // TODO set mime type for all returned DmtData objects?
 // TODO handle all keys case insensitively
-// TODO handle temporary deletion/addition of intermediate entries in
-// array/vector
+// TODO handle temporary deletion/addition of intermediate entries in array/vector
 // TODO vector can store mixed types in Configuration Admin
-// TODO take away canReplace for 'type', 'cardinality', and maybe 'value'
-// interior node
-// TODO put valid complex type information in a separate class (and maybe valid
-// cardinality info as well)
+// TODO take away canReplace for 'type', 'cardinality', and maybe 'value' interior node
+// TODO put valid complex type information in a separate class (and maybe valid cardinality info as well)
 // TODO synchronization
 // TODO put Service and Property into separate java files
 // TODO maybe put configuration plugin into separate package
 // Nasty things can happen (?) if the ConfigurationAdmin service returns data
 // types not in the spec.
-public class ConfigurationPlugin implements DmtDataPlugIn {
-	// Strings that are valid values of the 'cardinality' leaf node
-	private static final String[]	validCardinalityStrings	= new String[] {
-			"scalar", "array", "vector"						};
-	// Same as validCardinalityStrings, but each string is encapsulated in a
-	// DmtData.
-	// Used in the 'valid values' field of the meta-node.
-	private static final DmtData[]	validCardinalityData;
-	// Array of type classes that can be used as complex data, in arrays and in
-	// vectors
-	// Primitive type classes must come immediately after their wrapper classes.
-	private static final Class[]	validComplexTypeClasses	= new Class[] {
-			String.class, Byte.class, Boolean.class, Boolean.TYPE,
-			Character.class, Character.TYPE, Short.class, Short.TYPE,
-			Integer.class, Integer.TYPE, Long.class, Long.TYPE, Float.class,
-			Float.TYPE, Double.class, Double.TYPE			};
-	// Same as validComplexTypeClasses, but contains the names of the classes,
-	// without the package name.
-	// Used for checking the type string when a new complex configuration
-	// property is created through the plugin.
-	private static final String[]	validComplexTypeStrings;
-	// Same as validComplexTypeStrings, but each string is encapsulated in a
-	// DmtData, and a "null"
-	// string is added for zero-length vectors. Used in the 'valid values' field
-	// of the meta-node.
-	private static final DmtData[]	validComplexTypeData;
-	static {
+public class ConfigurationPlugin implements DmtDataPlugin {
+    // Strings that are valid values of the 'cardinality' leaf node
+    private static final String[] validCardinalityStrings = new String[] {
+            "scalar", "array", "vector" };
+    
+    // Same as validCardinalityStrings, but each string is encapsulated in a DmtData.
+    // Used in the 'valid values' field of the meta-node.
+    private static final DmtData[]	validCardinalityData;
+    
+    // Array of type classes that can be used as complex data, in arrays and in vectors
+    // Primitive type classes must come immediately after their wrapper classes.
+    private static final Class[] validComplexTypeClasses = new Class[] {
+            String.class, Byte.class, Boolean.class, Boolean.TYPE,
+            Character.class, Character.TYPE, Short.class, Short.TYPE,
+            Integer.class, Integer.TYPE, Long.class, Long.TYPE, Float.class,
+            Float.TYPE, Double.class, Double.TYPE };
+    
+    // Same as validComplexTypeClasses, but contains the names of the classes, without the package name.
+    // Used for checking the type string when a new complex configuration property is created through the plugin.
+    private static final String[] validComplexTypeStrings;
+    
+    // Same as validComplexTypeStrings, but each string is encapsulated in a DmtData, and a "null"
+    // string is added for zero-length vectors. Used in the 'valid values' field of the meta-node.
+    private static final DmtData[] validComplexTypeData;
+    
+    static {
 		validComplexTypeStrings = new String[validComplexTypeClasses.length];
 		validComplexTypeData = new DmtData[validComplexTypeClasses.length + 1];
 		for (int i = 0; i < validComplexTypeClasses.length; i++) {
@@ -73,8 +69,7 @@ public class ConfigurationPlugin implements DmtDataPlugIn {
 					.substring(fqn.lastIndexOf('.') + 1);
 			validComplexTypeData[i] = new DmtData(validComplexTypeStrings[i]);
 		}
-		validComplexTypeData[validComplexTypeClasses.length] = new DmtData(
-				"null");
+		validComplexTypeData[validComplexTypeClasses.length] = new DmtData("null");
 		Arrays.sort(validCardinalityStrings);
 		validCardinalityData = new DmtData[validCardinalityStrings.length];
 		for (int i = 0; i < validCardinalityStrings.length; i++)
@@ -85,11 +80,10 @@ public class ConfigurationPlugin implements DmtDataPlugIn {
 		Service.init(bc, configAdmin);
 	}
 
-	//----- DmtDataPlugIn methods -----//
+	//----- DmtDataPlugin methods -----//
 	public void open(int lockMode, DmtSession session) throws DmtException {
 		// TODO support transactions
-		// DmtSession not needed because this plugin does not need to indicate
-		// alerts
+		// DmtSession not needed because this plugin does not need to indicate alerts
 		Service.setLockMode(lockMode);
 	}
 
@@ -98,7 +92,7 @@ public class ConfigurationPlugin implements DmtDataPlugIn {
 		open(lockMode, session);
 	}
 
-	public DmtMetaNode getMetaNode(String nodeUri, DmtMetaNode generic)
+	public DmtMetaNode getMetaNode(String nodeUri)
 			throws DmtException {
 		String[] path = prepareUri(nodeUri);
 		if (path.length == 0) // ./OSGi/cfg
@@ -375,7 +369,7 @@ public class ConfigurationPlugin implements DmtDataPlugIn {
 							"The 'type' node already exists for the specified configuration property.");
 				int i = Arrays.asList(validComplexTypeStrings).indexOf(data);
 				if (i < 0)
-					throw new DmtException(nodeUri, DmtException.INVALID_DATA,
+					throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
 							"Type not supported.");
 				prop.setType(validComplexTypeClasses[i]);
 			}
@@ -393,7 +387,7 @@ public class ConfigurationPlugin implements DmtDataPlugIn {
 										+ "already exists for the specified configuration property.");
 					if (Arrays.binarySearch(validCardinalityStrings, data) < 0)
 						throw new DmtException(nodeUri,
-								DmtException.INVALID_DATA,
+								DmtException.METADATA_MISMATCH,
 								"Unknown cardinality string.");
 					prop.setCardinality(data, nodeUri);
 				}
@@ -446,7 +440,7 @@ public class ConfigurationPlugin implements DmtDataPlugIn {
 		prop.addElement(value.getString(), service, nodeUri);
 	}
 
-	public void clone(String nodeUri, String newNodeUri, boolean recursive)
+	public void copy(String nodeUri, String newNodeUri, boolean recursive)
 			throws DmtException {
 		// TODO allow cloning pid, key and index nodes (on the same level)
 	}
@@ -695,10 +689,7 @@ class Service {
 
 	static void setLockMode(int lm) {
 		// this should not happen if DmtAdmin works correctly
-		// automatic lock mode is not checked, because we don't know when it
-		// becomes exclusive
-		if (lockMode == DmtSession.LOCK_TYPE_EXCLUSIVE
-				|| lockMode == DmtSession.LOCK_TYPE_ATOMIC)
+		if (lockMode != DmtSession.LOCK_TYPE_SHARED)
 			throw new IllegalStateException(
 					"Plugin cannot be opened while in a non-shared transaction.");
 		lockMode = lm;
@@ -779,8 +770,6 @@ class Service {
 			case DmtSession.LOCK_TYPE_SHARED :
 				throw new IllegalStateException(
 						"Write operation requested in a shared session.");
-			case DmtSession.LOCK_TYPE_AUTOMATIC :
-				lockMode = DmtSession.LOCK_TYPE_EXCLUSIVE;
 			case DmtSession.LOCK_TYPE_EXCLUSIVE :
 				commit(true);
 				break;
@@ -1308,16 +1297,13 @@ class Property {
 					throw new IllegalStateException(
 							"Invalid cardinality string.");
 		if (cardinality != ARRAY && base.isPrimitive())
-			throw new DmtException(nodeUri, DmtException.INVALID_DATA,
+			throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
 					"Property has a primitive base type, so cardinality must be 'array'.");
 		if (cardinality == SCALAR
 				&& (base == String.class || base == Boolean.class))
-			throw new DmtException(
-					nodeUri,
-					DmtException.INVALID_DATA,
-					base.getName()
-							+ " type is represented as "
-							+ "simple configuration data, cannot be created as complex scalar data.");
+			throw new DmtException(nodeUri,	DmtException.METADATA_MISMATCH,
+					base.getName() + " type is represented as "
+					+ "simple configuration data, cannot be created as complex scalar data.");
 		category = COMPLEX_HAS_CARDINALITY;
 	}
 
@@ -1460,7 +1446,7 @@ class Property {
 			return constructor.newInstance(new Object[] {data});
 		}
 		catch (InvocationTargetException e) {
-			throw new DmtException(nodeUri, DmtException.INVALID_DATA,
+			throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
 					"Cannot create value object " + "of type '"
 							+ type.getName()
 							+ "' from the specifed value string.", e);

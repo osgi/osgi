@@ -22,7 +22,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.policy.permadmin.PermissionAdminPlugin;
-import org.osgi.service.dmt.DmtDataPlugIn;
+import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 
 
@@ -37,7 +37,7 @@ public final class JavaPolicyPlugin implements BundleActivator {
 			PermissionAdminPlugin permissionAdminPlugin = new PermissionAdminPlugin((PermissionAdmin) context.getService(permissionAdminReference));
 			Hashtable props = new Hashtable();
 			props.put("dataRootURIs",PermissionAdminPlugin.dataRootURI);
-			context.registerService(DmtDataPlugIn.class.getName(),permissionAdminPlugin,props);
+			context.registerService(DmtDataPlugin.class.getName(),permissionAdminPlugin,props);
 		}
 	}
 

@@ -38,7 +38,7 @@ public class Model extends ServiceTracker implements Runnable, ChannelListener {
 	private boolean			running;
 	private Hashtable		events	= new Hashtable();
 	// TODO eliminate this
-	private DmtExecPlugIn	execPlugin;
+	private DmtExecPlugin	execPlugin;
 
 	Model(BundleContext context, Desktop desktop) throws Exception {
 		// track the Application Manager
@@ -97,9 +97,9 @@ public class Model extends ServiceTracker implements Runnable, ChannelListener {
 		});
 		trackAppDescr.open();
 		// TODO eliminate this
-		ServiceReference sref = context.getServiceReference(DmtExecPlugIn.class
+		ServiceReference sref = context.getServiceReference(DmtExecPlugin.class
 				.getName());
-		execPlugin = (DmtExecPlugIn) context.getService(sref);
+		execPlugin = (DmtExecPlugin) context.getService(sref);
 		// register ChannelListener
 		Hashtable config = new Hashtable();
 		config.put("topic", "*");

@@ -31,41 +31,40 @@ import java.security.PermissionCollection;
 // TODO implement methods
 
 /**
- * DmtPermission controls access to management objects in the Device Management
- * Tree (DMT). It is intended to control local access to the DMT. DMTPermission
- * target string identifies the management object URI and the action field lists
- * the OMA DM commands that are permitted on the management object. Example:
- * 
+ * DmtPermission controls access to management objects in the Device
+ * Management Tree (DMT). It is intended to control local access to
+ * the DMT. DMTPermission target string identifies the management
+ * object URI and the action field lists the OMA DM commands that are
+ * permitted on the management object. Example:
+ *
  * <pre>
  * DMTPermission(&quot;./OSGi/bundles&quot;, &quot;Add,Replace,Get&quot;);
  * </pre>
- * 
- * This means that owner of this permission can execute Add, Replace and Get
- * commands on the ./OSGi/bundles management object. It is possible to use
- * wildcards in both the target and the actions field. Wildcard in the target
- * field means that the owner of the permission can access children nodes of the
- * target node. Example
- * 
+ *
+ * This means that owner of this permission can execute Add, Replace
+ * and Get commands on the ./OSGi/bundles management object. It is
+ * possible to use wildcards in both the target and the actions
+ * field. Wildcard in the target field means that the owner of the
+ * permission can access children nodes of the target node. Example
+ *
  * <pre>
  * DMTPermission(&quot;./OSGi/bundles/*&quot;, &quot;Get&quot;);
  * </pre>
- * 
- * This means that owner of this permission has Get access on every child node
- * of ./OSGi/bundles. If wildcard is present in the actions field, all legal OMA
- * DM commands are allowed on the designated nodes(s) by the owner of the
- * permission.
+ *
+ * This means that owner of this permission has Get access on every
+ * child node of ./OSGi/bundles. If wildcard is present in the actions
+ * field, all legal OMA DM commands are allowed on the designated
+ * nodes(s) by the owner of the permission.
  */
 public class DmtPermission extends Permission {
 	// TODO add static final serialVersionUID
 
     /**
-     * Creates a new DmtPermission object for the specified DMT URI with the
-     * specified actions.
-     * 
-     * @param dmturi
-     *            URI of the management object (or subtree).
-     * @param actions
-     *            OMA DM actions allowed.
+     * Creates a new DmtPermission object for the specified DMT URI
+     * with the specified actions.
+     *
+     * @param dmturi URI of the management object (or subtree).
+     * @param actions OMA DM actions allowed.
      */
     public DmtPermission(String dmturi, String actions) {
         // TODO
@@ -73,9 +72,10 @@ public class DmtPermission extends Permission {
     }
 
     /**
-     * Checks two DMTPermission objects for equality. Two DMTPermissions are
-     * equal if they have the same target and action strings.
-     * 
+     * Checks two DMTPermission objects for equality. Two
+     * DMTPermissions are equal if they have the same target and
+     * action strings.
+     *
      * @return true if the two objects are equal.
      */
     public boolean equals(Object obj) {
@@ -85,7 +85,7 @@ public class DmtPermission extends Permission {
 
     /**
      * Returns the String representation of the action list.
-     * 
+     *
      * @return Action list for this permission object.
      */
     public String getActions() {
@@ -94,11 +94,11 @@ public class DmtPermission extends Permission {
     }
 
     /**
-     * Returns hash code for this permission object. If two DMTPermission
-     * objects are equal according to the equals method, then calling the
-     * hashCode method on each of the two DMTPermission objects must produce the
-     * same integer result.
-     * 
+     * Returns hash code for this permission object. If two
+     * DMTPermission objects are equal according to the equals method,
+     * then calling the hashCode method on each of the two
+     * DMTPermission objects must produce the same integer result.
+     *
      * @return hash code for this permission object.
      */
     public int hashCode() {
@@ -107,12 +107,12 @@ public class DmtPermission extends Permission {
     }
 
     /**
-     * Checks if this DMTPermission object "implies" the specified permission.
-     * 
-     * @param p
-     *            Permission to check.
+     * Checks if this DMTPermission object &quot;implies&quot; the
+     * specified permission.
+     *
+     * @param p Permission to check.
      * @return true if this DMTPermission object implies the specified
-     *         permission.
+     * permission.
      */
     public boolean implies(Permission p) {
         // TODO
@@ -120,9 +120,9 @@ public class DmtPermission extends Permission {
     }
 
     /**
-     * Returns a new PermissionCollection object for storing DMTPermission
-     * objects.
-     * 
+     * Returns a new PermissionCollection object for storing
+     * DMTPermission objects.
+     *
      * @return the new PermissionCollection.
      */
     public PermissionCollection newPermissionCollection() {

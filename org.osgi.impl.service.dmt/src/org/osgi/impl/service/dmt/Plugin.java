@@ -29,11 +29,11 @@ class Plugin {
 	public Plugin(Object plugin, String[] roots, String[] execs) {
 		if (roots.length > 0 && !isDataPlugin(plugin))
 			throw new IllegalArgumentException(
-					"The plugin must implement DmtDataPlugIn or DmtReadOnlyDataPlugIn "
+					"The plugin must implement DmtDataPlugin or DmtReadOnlyDataPlugin "
 							+ "if data roots are specified.");
-		if (execs.length > 0 && !(plugin instanceof DmtExecPlugIn))
+		if (execs.length > 0 && !(plugin instanceof DmtExecPlugin))
 			throw new IllegalArgumentException(
-					"The plugin must implement DmtExecPlugIn if exec nodes are specified");
+					"The plugin must implement DmtExecPlugin if exec nodes are specified");
 		this.plugin = plugin;
 		this.roots = Utils.normalizeAbsoluteUris(roots);
 		this.execs = Utils.normalizeAbsoluteUris(execs);
@@ -43,19 +43,19 @@ class Plugin {
 		if (!isDataPlugin(plugin))
 			throw new IllegalStateException(
 					"Plugin object is not a data plugin.");
-		return (DmtDataPlugIn) plugin;
+		return (DmtDataPlugin) plugin;
 	}
 
 	private boolean isDataPlugin(Object plugin) {
-		return (plugin instanceof DmtDataPlugIn)
-				|| (plugin instanceof DmtReadOnlyDataPlugIn);
+		return (plugin instanceof DmtDataPlugin)
+				|| (plugin instanceof DmtReadOnlyDataPlugin);
 	}
 
-	public DmtExecPlugIn getExecPlugin() {
-		if (!(plugin instanceof DmtExecPlugIn))
+	public DmtExecPlugin getExecPlugin() {
+		if (!(plugin instanceof DmtExecPlugin))
 			throw new IllegalStateException(
 					"Plugin object is not an exec plugin.");
-		return (DmtExecPlugIn) plugin;
+		return (DmtExecPlugin) plugin;
 	}
 
 	// TODO both data and exec URIs now indicate subtrees, common code should be

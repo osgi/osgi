@@ -22,12 +22,12 @@ import org.osgi.framework.*;
 import org.osgi.service.dmt.*;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
-public class DmtPlugInDispatcher implements ServiceTrackerCustomizer {
+public class DmtPluginDispatcher implements ServiceTrackerCustomizer {
 	private BundleContext			bc;
 	private ArrayList				plugins;
-	private DmtReadOnlyDataPlugIn	dataRoot;
+	private DmtReadOnlyDataPlugin	dataRoot;
 
-	public DmtPlugInDispatcher(BundleContext bc) {
+	public DmtPluginDispatcher(BundleContext bc) {
 		this.bc = bc;
 		plugins = new ArrayList();
 		// TODO maybe get the root plugin as a service (but this needs a new
@@ -81,7 +81,7 @@ public class DmtPlugInDispatcher implements ServiceTrackerCustomizer {
 		return dataRoot;
 	}
 
-	public DmtExecPlugIn getExecPlugin(String nodeUri) {
+	public DmtExecPlugin getExecPlugin(String nodeUri) {
 		Iterator i = plugins.iterator();
 		while (i.hasNext()) {
 			Plugin plugin = (Plugin) i.next();

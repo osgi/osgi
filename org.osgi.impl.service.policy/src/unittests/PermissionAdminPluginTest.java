@@ -66,12 +66,12 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 	}
 
 	public void newSession() throws DmtException {
-		dmtSession = dmtFactory.getTree(null,ROOT);
+		dmtSession = dmtFactory.getSession(ROOT);
 		assertNotNull(dmtSession);
 	}
 
 	public void newAtomicSession() throws DmtException {
-		dmtSession = dmtFactory.getTree(null,ROOT,DmtSession.LOCK_TYPE_ATOMIC);
+		dmtSession = dmtFactory.getSession(ROOT,DmtSession.LOCK_TYPE_ATOMIC);
 		assertNotNull(dmtSession);
 	}
 	

@@ -20,7 +20,7 @@ package org.osgi.impl.service.dmt;
 import java.util.Hashtable;
 import org.osgi.framework.*;
 import org.osgi.service.cm.ConfigurationAdmin;
-import org.osgi.service.dmt.DmtDataPlugIn;
+import org.osgi.service.dmt.DmtDataPlugin;
 
 public class ConfigurationPluginActivator implements BundleActivator {
 	private ServiceRegistration	servReg;
@@ -43,7 +43,7 @@ public class ConfigurationPluginActivator implements BundleActivator {
 		Hashtable properties = new Hashtable();
 		properties.put("dataRootURIs", new String[] {PLUGIN_ROOT});
 		//registering the service
-		servReg = bc.registerService(DmtDataPlugIn.class.getName(),
+		servReg = bc.registerService(DmtDataPlugin.class.getName(),
 				configPlugin, properties);
 		System.out
 				.println("Configuration plugin activation finished successfully.");

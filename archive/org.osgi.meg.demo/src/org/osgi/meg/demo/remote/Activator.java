@@ -21,7 +21,7 @@ import java.io.*;
 import java.util.Dictionary;
 import org.osgi.framework.*;
 import org.osgi.impl.service.dmt.api.RemoteAlertSender;
-import org.osgi.service.dmt.DmtFactory;
+import org.osgi.service.dmt.DmtAdmin;
 
 public class Activator implements BundleActivator {
 	
@@ -43,8 +43,8 @@ public class Activator implements BundleActivator {
 			pingTime = Integer.parseInt((String) headers.get("Ping-time"));
 		
 		try {
-			serviceRef = bc.getServiceReference(DmtFactory.class.getName());
-			DmtFactory factory = (DmtFactory) bc.getService(serviceRef);
+			serviceRef = bc.getServiceReference(DmtAdmin.class.getName());
+			DmtAdmin factory = (DmtAdmin) bc.getService(serviceRef);
 
 			if (null == host) {
 				System.out

@@ -26,8 +26,8 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * DMT plugin for the Application Manager
  */
-public class ApplicationPlugin implements BundleActivator, DmtDataPlugIn,
-		DmtExecPlugIn {
+public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
+		DmtExecPlugin {
 	// URI constants
 	static final String		URI_ROOT_APP		= "./OSGi/applications";
 	static final String		URI_ROOT_APPINST	= "./OSGi/application_instances";
@@ -41,8 +41,8 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugIn,
 		Dictionary dict = new Hashtable();
 		dict.put("dataRootURIs", new String[] {URI_ROOT_APP, URI_ROOT_APPINST});
 		dict.put("execRootURIs", new String[] {URI_ROOT_APP, URI_ROOT_APPINST});
-		String[] ifs = new String[] {DmtDataPlugIn.class.getName(),
-				DmtExecPlugIn.class.getName()};
+		String[] ifs = new String[] {DmtDataPlugin.class.getName(),
+				DmtExecPlugin.class.getName()};
 		// unregistered by the OSGi framework
 		context.registerService(ifs, this, dict);
 		// start track ApplicationManager
@@ -80,7 +80,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugIn,
 		// TODO Auto-generated method stub
 	}
 
-	public DmtMetaNode getMetaNode(String nodeUri, DmtMetaNode generic)
+	public DmtMetaNode getMetaNode(String nodeUri)
 			throws DmtException {
 		String[] sarr = Splitter.split(nodeUri, '/', 0);
 		if (3 == sarr.length)
@@ -472,7 +472,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugIn,
 		}
 	}
 
-	public void clone(String nodeUri, String newNodeUri, boolean recursive)
+	public void copy(String nodeUri, String newNodeUri, boolean recursive)
 			throws DmtException {
 		// TODO Auto-generated method stub
 	}

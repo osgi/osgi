@@ -21,7 +21,7 @@ import java.util.Date;
 import org.osgi.service.dmt.*;
 
 // TODO implement leaf nodes as well if needed
-public class RootPlugin implements DmtReadOnlyDataPlugIn {
+public class RootPlugin implements DmtReadOnlyDataPlugin {
 	// TODO find the missing parts of the "main" tree
 	private static Node	root	= new Node(".", new Node[] {new Node("OSGi",
 										new Node[] {
@@ -33,7 +33,7 @@ public class RootPlugin implements DmtReadOnlyDataPlugIn {
 			new Node("log", null), new Node("mon", null),
 			new Node("deploy", null)	})});
 
-	//----- DmtReadOnlyDataPlugIn methods -----//
+	//----- DmtReadOnlyDataPlugin methods -----//
 	public void open(DmtSession session) throws DmtException {
 	}
 
@@ -42,7 +42,7 @@ public class RootPlugin implements DmtReadOnlyDataPlugIn {
 		open(session);
 	}
 
-	public DmtMetaNode getMetaNode(String nodeUri, DmtMetaNode generic)
+	public DmtMetaNode getMetaNode(String nodeUri)
 			throws DmtException {
 		findNode(nodeUri); // check that the node exists
 		return new DmtMetaNodeImpl(); // TODO return different info for
@@ -139,7 +139,7 @@ public class RootPlugin implements DmtReadOnlyDataPlugIn {
 	 * DmtException { throw new DmtException(nodeUri,
 	 * DmtException.COMMAND_NOT_ALLOWED, "Cannot create nodes."); }
 	 * 
-	 * public void clone(String nodeUri, String newNodeUri) throws DmtException {
+	 * public void copy(String nodeUri, String newNodeUri) throws DmtException {
 	 * throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, "Cannot
 	 * create nodes."); }
 	 * 

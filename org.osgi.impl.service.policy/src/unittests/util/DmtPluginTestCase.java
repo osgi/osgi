@@ -35,8 +35,8 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.dmt.DmtAdminActivator;
 import org.osgi.impl.service.dmt.api.RemoteAlertSender;
 import org.osgi.service.dmt.DmtAlertSender;
-import org.osgi.service.dmt.DmtDataPlugIn;
-import org.osgi.service.dmt.DmtFactory;
+import org.osgi.service.dmt.DmtDataPlugin;
+import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.event.ChannelEvent;
 import org.osgi.service.event.EventChannel;
 
@@ -51,7 +51,7 @@ public class DmtPluginTestCase extends TestCase {
 	public BundleContext dmtBundleContext;
 	public ServiceListener	dmtRemoteAlertSenderServiceListener;
 	public ServiceListener newServiceTracker;
-	public DmtFactory dmtFactory;
+	public DmtAdmin dmtFactory;
 	public DmtAlertSender dmtAlertSender;
 	
 	public class DummyContext implements BundleContext {
@@ -102,8 +102,8 @@ public class DmtPluginTestCase extends TestCase {
 		}
 
 		public ServiceRegistration registerService(String clazz, Object service, Dictionary properties) {
-			if (DmtFactory.class.getName().equals(clazz)) {
-				dmtFactory = (DmtFactory) service;
+			if (DmtAdmin.class.getName().equals(clazz)) {
+				dmtFactory = (DmtAdmin) service;
 				return null;
 			}
 			if (DmtAlertSender.class.getName().equals(clazz)) {
@@ -165,7 +165,7 @@ public class DmtPluginTestCase extends TestCase {
 		public boolean match(ServiceReference reference) {
 			if (reference instanceof DummyServiceReference) {
 				DummyServiceReference dummyRef = (DummyServiceReference)reference;
-				if (dummyRef.serviceObject instanceof DmtDataPlugIn) {
+				if (dummyRef.serviceObject instanceof DmtDataPlugin) {
 					return true;
 				}
 			}
@@ -189,7 +189,7 @@ public class DmtPluginTestCase extends TestCase {
 		dmtBundleContext = null;
 	}
 	
-	public void addDataPlugin(String URI,DmtDataPlugIn plugin) {
+	public void addDataPlugin(String URI,DmtDataPlugin plugin) {
 		DummyServiceReference ref = new DummyServiceReference(plugin);
 		ref.dataRootURIs = new String[] {URI};
 		ServiceEvent e = new ServiceEvent(ServiceEvent.REGISTERED,ref);

@@ -53,7 +53,7 @@ class Utils {
 		char[] chars = nodeName.toCharArray();
         int i = 0;
 		while(i < chars.length) {
-            /* escaped characters not allowed currently */
+            /* escaped characters not allowed at the moment */
 //			if (chars[i] == '%') { // escaped character (in '% hex hex' form)
 //				if (i + 2 >= chars.length)
 //					return false; // no room for the hexadecimal digits

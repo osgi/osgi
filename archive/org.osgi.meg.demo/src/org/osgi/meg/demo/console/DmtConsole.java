@@ -44,7 +44,7 @@ public class DmtConsole implements BundleActivator, CommandProvider {
 	static String spaces = "                                                                                             ";
 
 	public void start(BundleContext context) throws Exception {
-		dmtTracker = new ServiceTracker(context, DmtFactory.class.getName(),
+		dmtTracker = new ServiceTracker(context, DmtAdmin.class.getName(),
 				null);
 		dmtTracker.open();
 		context.registerService(CommandProvider.class.getName(), this, null);
@@ -132,10 +132,10 @@ public class DmtConsole implements BundleActivator, CommandProvider {
 
 		public String toString() {
 			try {
-				DmtFactory dmt = (DmtFactory) dmtTracker.getService();
+				DmtAdmin dmt = (DmtAdmin) dmtTracker.getService();
 				if (dmt == null)
-					throw new RuntimeException("No DmtFactory service present");
-				DmtSession session = dmt.getTree(null);
+					throw new RuntimeException("No DmtAdmin service present");
+				DmtSession session = dmt.getSession(".");
 				ByteArrayOutputStream bout = new ByteArrayOutputStream();
 				PrintWriter pw = new PrintWriter(new OutputStreamWriter(bout,
 						"UTF-8"));
