@@ -118,8 +118,9 @@ public interface Configuration {
 	 * registered, its updated method must be called asynchronously. Else, this
 	 * callback is delayed until aforementioned registration occurs.
 	 * 
-	 * Also intiates a call to any <code>ConfigurationListener</code> s
-	 * asynchronously to provide notification of this update.
+	 * <p>
+	 * Also intiates an asynchronous call to all <code>ConfigurationListener</code>s
+	 * with a <code>ConfigurationEvent.CM_UPDATED</code> event.
 	 * 
 	 * @param properties the new set of properties for this configuration
 	 * @throws IOException if update cannot be made persistent
@@ -140,8 +141,9 @@ public interface Configuration {
 	 * argument. A <code>ManagedServiceFactory</code> object is notified by a
 	 * call to its <code>deleted</code> method.
 	 * 
-	 * Also intiates a call to any <code>ConfigurationListener</code> s
-	 * asynchronously to provide notification of this delete.
+	 * <p>
+	 * Also intiates an asynchronous call to all <code>ConfigurationListener</code>s
+	 * with a <code>ConfigurationEvent.CM_DELETED</code> event.
 	 * 
 	 * @throws IOException If delete fails
 	 * @throws IllegalStateException if this configuration has been deleted
