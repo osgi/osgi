@@ -703,6 +703,12 @@ public class BTool extends Task {
 		while (st.hasMoreElements()) {
 			String file = st.nextToken().trim();
 			String outname = null;
+			boolean preprocess = false;
+			
+			if ( file.startsWith("[") && file.endsWith("]")) {
+				preprocess = true;
+				file = file.substring(1,file.length()-1).trim();
+			}
 			int n = file.indexOf('=');
 			if (n > 0) {
 				outname = file.substring(0, n).trim();
@@ -718,8 +724,9 @@ public class BTool extends Task {
 			}
 			else
 				s = project;
-			Resource r = new Resource(this, s, outname);
-			r.setSourcePath(file);
+			
+			Resource r = new FileResource(this, outname, new File(s.getFile(),file), preprocess );
+			
 			addContents(r);
 		}
 	}
