@@ -31,7 +31,7 @@ public final class PrincipalPermissionMetaNode implements DmtMetaNode {
 	public boolean isLeaf() { return false;	}
 	public int getScope() { return DYNAMIC; }
 	public String getDescription() { return "permissions for a principal"; }
-	public int getMaxOccurrence() {	return Integer.MAX_VALUE; } // TODO this may change
+	public int getMaxOccurrence() {	return Integer.MAX_VALUE; }
 	public boolean isZeroOccurrenceAllowed() { return true; }
 	public DmtData getDefault() { return null; }
 	public boolean hasMax() { return false; }
