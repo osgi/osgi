@@ -106,8 +106,7 @@ public interface ConnectorService {
 	 * @throws javax.microedition.io.ConnectionNotFoundException If the
 	 *         connection cannot be found.
 	 * @throws IOException If some other kind of I/O error occurs.
-	 * @see "javax.microedition.io.Connector.open(String name, int mode, boolean
-	 *      timeouts)"
+	 * @see "<code>javax.microedition.io.Connector.open</code>"
 	 */
 	public Connection open(String name, int mode, boolean timeouts)
 			throws IOException;
