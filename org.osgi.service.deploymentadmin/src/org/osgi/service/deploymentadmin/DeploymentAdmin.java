@@ -27,11 +27,51 @@
 
 package org.osgi.service.deploymentadmin;
 
+import org.osgi.framework.*;
+import java.io.InputStream;
+
 /**
- *
- * TODO Add Javadoc comment for this type.
- * 
- * @version $Revision$
- */
-public interface DeploymentAdmin { 
+  * This is the interface of Deployment Admin service. <i>Service ID to register
+  * the service?</i>
+  */
+public interface DeploymentAdmin {
+
+/**
+  * Installs a deployment package an input stream. If a version of that deployment package
+  * is already installed and the versions are different, the installed version is updated
+  * with this new version even if it is older. If the two versions are the same, then this 
+  * method simply returns without any action.
+  * @param in The input stream which where the deployment package can be read.
+  * @return A DeploymentPackage object representing the newly installed/updated deployment 
+  *         package or null in case of error.
+  */
+  DeploymentPackage installDeploymentPackage (InputStream in);
+/**
+  * Lists the deployment packages currently installed on the platform. 
+  * MEGMgmtPermission( "","listDeploymentPackages" ) is needed to access this method.
+  * @return Array of DeploymentPackage objects representing all the installed deployment packages.
+  */
+  DeploymentPackage[] listDeploymentPackages ();
+/**
+  * Registers a resource processor.  When registered, the processor is available for 
+  * processing resources in any deployment package.  This method should not be used for 
+  * registering resource processors that are delivered within a deployment package and are 
+  * only applicable to that particular deployment package.<br>
+  * <br>
+  * MEGMgmtPermission( "","resourceProcessor" ) is needed to access this method.
+  * @param proc A resource processor to register
+  */
+  void registerResourceProcessor (ResourceProcessor proc);
+/**
+  * Unregisters a given resource processor.<br><br>
+  * MEGMgmtPermission( "","resourceProcessor" ) is needed to access this method. 
+  * @param proc A resource processor to unregister
+  */
+  void unregisterResourceProcessor (ResourceProcessor proc );
+/**
+  * Lists the resource processors currently in the service registry.<br>
+  * <br>MEGMgmtPermission( "","resourceProcessor" ) is needed to access this method.
+  * @return An array of ResourceProcessors.
+  */
+  ResourceProcessor[] listProcessors ();
 }
