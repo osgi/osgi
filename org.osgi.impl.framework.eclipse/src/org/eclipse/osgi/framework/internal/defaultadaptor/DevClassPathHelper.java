@@ -19,7 +19,7 @@ import java.util.*;
 public class DevClassPathHelper {
 	static protected boolean inDevelopmentMode = false;
 	static protected String[] devDefaultClasspath;
-	static protected Properties devProperties = null;
+	static protected Dictionary devProperties = null;
 
 	static {
 		// Check the osgi.dev property to see if dev classpath entries have been defined.
@@ -30,23 +30,33 @@ public class DevClassPathHelper {
 				URL location = new URL(osgiDev);
 				devProperties = load(location);
 				if (devProperties != null)
-					devDefaultClasspath = getArrayFromList(devProperties.getProperty("*")); //$NON-NLS-1$
+					devDefaultClasspath = getArrayFromList((String) devProperties.get("*")); //$NON-NLS-1$
 			} catch (MalformedURLException e) {
 				devDefaultClasspath = getArrayFromList(osgiDev);
 			}
 		}
 	}
 
-	public static String[] getDevClassPath(String id) {
+	private static String[] getDevClassPath(String id, Dictionary properties, String[] defaultClasspath) {
 		String[] result = null;
-		if (id != null && devProperties != null) {
-			String entry = devProperties.getProperty(id);
+		if (id != null && properties != null) {
+			String entry = (String) properties.get(id);
 			if (entry != null)
 				result = getArrayFromList(entry);
 		}
 		if (result == null)
-			result = devDefaultClasspath;
+			result = defaultClasspath;
 		return result;
+	}
+
+	public static String[] getDevClassPath(String id, Dictionary properties) {
+		if (properties == null)
+			return getDevClassPath(id, devProperties, devDefaultClasspath);
+		return getDevClassPath(id, properties, getArrayFromList((String) properties.get("*"))); //$NON-NLS-1$
+	}
+
+	public static String[] getDevClassPath(String id) {
+		return getDevClassPath(id, null);
 	}
 
 	/**

@@ -14,13 +14,6 @@ import java.util.Map;
 
 public interface ExportPackageDescription extends BaseDescription {
 	/**
-	 * Returns the export package group for this package.
-	 * @return the export pacakge group for this package
-	 * @deprecated use {@link ExportPackageDescription#getUses}
-	 */
-	public String getGrouping();
-	
-	/**
 	 * Returns the list of package names which this export uses.
 	 * @return the list of package names which this export uses.
 	 */

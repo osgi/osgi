@@ -26,8 +26,8 @@ public class Constants implements org.osgi.framework.Constants {
 	/** Framework vendor */
 	public static final String OSGI_FRAMEWORK_VENDOR = "Eclipse"; //$NON-NLS-1$
 
-	/** SystemBundle manifest name */
-	public static final String OSGI_SYSTEMBUNDLE_MANIFEST = "/META-INF/SYSTEMBUNDLE.MF"; //$NON-NLS-1$
+	/** Eclipse-SystemBundle header */
+	public static final String ECLIPSE_SYSTEMBUNDLE = "Eclipse-SystemBundle"; //$NON-NLS-1$
 
 	/** Bundle manifest name */
 	public static final String OSGI_BUNDLE_MANIFEST = "META-INF/MANIFEST.MF"; //$NON-NLS-1$

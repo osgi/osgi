@@ -297,7 +297,7 @@ public class ManifestElement {
 					throw new BundleException(NLS.bind(Msg.MANIFEST_INVALID_HEADER_EXCEPTION, header, value));
 				}
 				c = tokenizer.getChar();
-				if (c == ';') /* more */{
+				if (c == ';' || c == '\0') /* more */{
 					headerValues.add(next);
 					headerValue.append(";").append(next); //$NON-NLS-1$
 					if (Debug.DEBUG && Debug.DEBUG_MANIFEST) {

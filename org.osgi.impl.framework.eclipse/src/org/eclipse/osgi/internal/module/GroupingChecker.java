@@ -12,7 +12,6 @@ package org.eclipse.osgi.internal.module;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class GroupingChecker {
 	HashMap constraints = new HashMap();
@@ -32,8 +31,11 @@ public class GroupingChecker {
 		if (list == null) {
 			constraints.put(constrained, newConstraints);
 		} else {
-			for (int i = 0; i < newConstraints.size(); i++)
-				list.add(newConstraints.get(i));
+			for (int i = 0; i < newConstraints.size(); i++) {
+				ResolverExport exp = (ResolverExport) newConstraints.get(i);
+				if (!list.contains(exp))
+					list.add(newConstraints.get(i));
+			}
 		}
 	}
 
@@ -61,6 +63,8 @@ public class GroupingChecker {
 			if (list != null) {
 				for (int j = 0; j < list.size(); j++) {
 					ResolverExport re = (ResolverExport) list.get(j);
+					if (re.isDropped())
+						continue;
 					if (re.getExporter().isResolvable() && exp.getName().equals(re.getName()) && !imp.isOnRootPath(re.getExporter()) && !imp.isOnRootPathSplit(imp.getMatchingExport().getExporter(), re.getExporter()))
 						return wire;
 				}
@@ -70,6 +74,8 @@ public class GroupingChecker {
 			if (list != null) {
 				for (int j = 0; j < list.size(); j++) {
 					ResolverExport re = (ResolverExport) list.get(j);
+					if (re.isDropped())
+						continue;
 					if (re.getExporter().isResolvable() && wire.getName().equals(re.getName()) && !imports[i].isOnRootPath(re.getExporter()) && !imp.isOnRootPathSplit(imp.getMatchingExport().getExporter(), re.getExporter()))
 						return wire;
 					// Check against requires
@@ -158,141 +164,86 @@ public class GroupingChecker {
 		return true;
 	}
 
+	// Add basic 'uses' constraints
 	void addInitialGroupingConstraints(ResolverBundle[] bundles) {
 		for (int i = 0; i < bundles.length; i++) {
-			HashMap groups = new HashMap();
 			ResolverExport[] exports = bundles[i].getExportPackages();
 			for (int j = 0; j < exports.length; j++) {
-				if (!exports[j].getExportPackageDescription().isRoot())
+				String[] uses = exports[j].getUses();
+				if (uses == null)
 					continue;
-				String group = exports[j].getGrouping();
-				ArrayList list = (ArrayList) groups.get(group);
-				if (list == null) {
-					list = new ArrayList();
-					groups.put(group, list);
+				for (int k = 0; k < uses.length; k++) {
+					ResolverExport exp = bundles[i].getExport(uses[k]);
+					if (exp == null)
+						continue;
+					addConstraint(exports[j], exp);
+					addTransitiveGroupingConstraints(exports[j], exp);
 				}
-				list.add(exports[j]);
-			}
-			Iterator it = groups.values().iterator();
-			while (it.hasNext()) {
-				ArrayList list = (ArrayList) it.next();
-				if (list.size() > 1)
-					for (int j = 0; j < list.size(); j++)
-						addConstraints((ResolverExport) list.get(j), list);
 			}
 		}
 	}
 
-	void addPropagationAndReExportConstraints(ResolverBundle bundle) {
-		// Add propagation constraints
-		ResolverImport[] imports = bundle.getImportPackages();
-		ResolverExport[] exports = bundle.getExportPackages();
-		for (int i = 0; i < imports.length; i++) {
-			String[] propagates = imports[i].getImportPackageSpecification().getPropagate();
-			if (propagates == null)
+	// Add constraints from other exports (due to 'uses' being transitive)
+	private void addTransitiveGroupingConstraints(ResolverExport export, ResolverExport constraint) {
+		if (export == constraint)
+			return;
+		String[] uses = constraint.getUses();
+		if (uses == null)
+			return;
+		for (int i = 0; i < uses.length; i++) {
+			ResolverExport exp = export.getExporter().getExport(uses[i]);
+			if (exp == null || exp == constraint)
 				continue;
-			for (int j = 0; j < propagates.length; j++) {
-				for (int k = 0; k < exports.length; k++) {
-					String grouping = exports[k].getGrouping();
-					if (propagates[j].equals(grouping)) {
-						addConstraint(exports[k], imports[i].getMatchingExport());
-						addConstraint(exports[k], exports[k]); // making sure the export is included in the constraints
-					}
-				}
-			}
+			// Check if the constraint has already been added so
+			// we don't recurse infinitely
+			ArrayList list = (ArrayList) constraints.get(export);
+			if (list.contains(exp))
+				continue;
+			addConstraint(export, exp);
+			addTransitiveGroupingConstraints(export, exp);
 		}
-		// Add re-export constraints
+	}
+
+	// Add root constraints to re-exports
+	void addReExportConstraints(ResolverBundle bundle) {
+		ResolverExport[] exports = bundle.getExportPackages();
 		for (int i = 0; i < exports.length; i++) {
-			String grouping = exports[i].getGrouping();
-			if (grouping != null && !exports[i].getName().equals(grouping)) {
-				for (int j = 0; j < exports.length; j++) {
-					if (grouping.equals(exports[j].getGrouping())) {
-						// we add the constraint both ways.  This allows us to 
-						// optimize the default case where grouping == package name.
-						// if two packages use one package name as a group then the constraint
-						// will get added to both packages.
-						// if only one package uses its name as a group then no constraints will
-						// get added unless one of the imports uses the same name.
-						addConstraint(exports[j], exports[i]);
-						addConstraint(exports[i], exports[j]);
-					}
-					if (!exports[j].getExportPackageDescription().isRoot())
-						addConstraint(exports[i], exports[j].getRoot());
-				}
-			}
 			if (exports[i].getExportPackageDescription().isRoot())
 				continue;
-			ResolverImport imp = bundle.getImport(exports[i]);
-			if (imp == null) {
-				// Reexport must come from a require
-				addReprovideConstraints(exports[i]);
-			} else {
-				// Reexport is from an import
-				addReExportChainConstraints(exports[i], imp.getMatchingExport());
-			}
-		}
-		// Fix up root exports with constraints from re-exports
-		for (int i = 0; i < exports.length; i++) {
-			if (!exports[i].getExportPackageDescription().isRoot())
+			ResolverExport root = exports[i].getRoot();
+			if (root == null)
 				continue;
-			String grouping = exports[i].getGrouping();
-			if (grouping != null) {
-				for (int j = 0; j < exports.length; j++) {
-					if (exports[j].getExportPackageDescription().isRoot())
-						continue;
-					if (grouping.equals(exports[j].getGrouping())) {
-						ArrayList list = (ArrayList) constraints.get(exports[j]);
-						for (int k = 0; k < list.size(); k++) {
-							addConstraint(exports[i], (ResolverExport) list.get(k));
-						}
-					}
-				}
-			}
+			ArrayList list = (ArrayList) constraints.get(root);
+			if (list == null)
+				continue;
+			addConstraints(exports[i], list);
 		}
 	}
 
-	private void addReExportChainConstraints(ResolverExport reexport, ResolverExport next) {
-		if (next == null)
-			return;
-		// Add constraints from this bundle
-		ResolverExport[] grouped = next.getExporter().getGroupedExports(next.getGrouping());
-		for (int i = 0; i < grouped.length; i++) {
-			addConstraint(reexport, grouped[i]);
-		}
-		// Recurse if chain continues
-		if (!next.getExportPackageDescription().isRoot()) {
-			ResolverImport imp = next.getExporter().getImport(next);
-			if (imp == null || imp.getMatchingExport() == null)
-				return;
-			addReExportChainConstraints(reexport, imp.getMatchingExport());
-
-			// Add grouped propagates
-			String[] groups = imp.getImportPackageSpecification().getPropagate();
-			if (groups == null)
-				return;
-			ResolverExport[] exports = imp.getBundle().getExportPackages();
-			for (int i = 0; i < exports.length; i++) {
-				if (exports[i] == next)
+	// Add constraints to exports that 'use' imports
+	void addImportConstraints(ResolverBundle bundle) {
+		ResolverExport[] exports = bundle.getExportPackages();
+		for (int i = 0; i < exports.length; i++) {
+			String[] uses = exports[i].getUses();
+			if (uses == null)
+				continue;
+			for (int j = 0; j < uses.length; j++) {
+				ResolverImport imp = bundle.getImport(uses[j]);
+				if (imp == null)
 					continue;
-				for (int j = 0; j < groups.length; j++) {
-					if (exports[i].getGrouping().equals(groups[j])) {
-						addConstraint(reexport, exports[i]);
-						if (!exports[i].getExportPackageDescription().isRoot()) {
-							ResolverImport imp2 = exports[i].getExporter().getImport(exports[i]);
-							if (imp2 == null || imp2.getMatchingExport() == null)
-								continue;
-							addReExportChainConstraints(reexport, imp2.getMatchingExport());
-						}
-					}
-				}
+				ResolverExport root = imp.getRoot();
+				if (root == null)
+					continue;
+				addConstraint(exports[i], root);
 			}
 		}
 	}
 
+	// Add constraints to re-rexports (via a require)
 	void addRequireConstraints(ResolverExport[] exports, ResolverBundle bundle) {
 		BundleConstraint[] requires = bundle.getRequires();
 		for (int i = 0; i < exports.length; i++) {
-			if (exports[i].getExportPackageDescription().isRoot() && !exports[i].isReprovide())
+			if (exports[i].getExportPackageDescription().isRoot())
 				continue;
 			for (int j = 0; j < requires.length; j++) {
 				if (requires[j].getMatchingBundle() == null || exports[i].getExporter() == requires[j].getMatchingBundle())
@@ -312,8 +263,8 @@ public class GroupingChecker {
 		}
 	}
 
+	// Add constraints for reprovided exports
 	void addReprovideConstraints(ResolverExport re) {
-		// Add constraints for reprovided exports
 		BundleConstraint[] requires = re.getExporter().getRequires();
 		for (int i = 0; i < requires.length; i++) {
 			if (requires[i].getMatchingBundle() == null)
@@ -331,5 +282,4 @@ public class GroupingChecker {
 			}
 		}
 	}
-
 }

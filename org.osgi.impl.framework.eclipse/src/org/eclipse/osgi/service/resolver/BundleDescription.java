@@ -181,4 +181,17 @@ public interface BundleDescription extends BaseDescription{
 	 * @return the platfomr filter in the form of an LDAP filter
 	 */
 	public String getPlatformFilter();
+
+	/**
+	 * Returns true if this bundle allows fragments to attach
+	 * @return true if this bundle allows fragments to attach
+	 */
+	public boolean attachFragments();
+
+	/**
+	 * Returns true if this bundle allows fragments to attach dynamically
+	 * after it has been resolved.
+	 * @return true if this bundle allows fragments to attach dynamically
+	 */
+	public boolean dynamicFragments();
 }

@@ -532,22 +532,10 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 
 		for (int i = 0; i < installedBundles.length; i++) {
 			AbstractBundle bundle = installedBundles[i];
-
-			try {
-				if (Debug.DEBUG && Debug.DEBUG_STARTLEVEL) {
-					Debug.println("SLL: Trying to load bundle " + bundle); //$NON-NLS-1$
-				}
-
-				bundle.load();
-
-			} catch (BundleException be) {
-				if (Debug.DEBUG && Debug.DEBUG_STARTLEVEL) {
-					Debug.println("SLL: Bundle load exception: " + be.getMessage()); //$NON-NLS-1$
-					Debug.printStackTrace(be.getNestedException());
-				}
-
-				framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, be);
+			if (Debug.DEBUG && Debug.DEBUG_STARTLEVEL) {
+				Debug.println("SLL: Trying to load bundle " + bundle); //$NON-NLS-1$
 			}
+			bundle.load();
 		}
 	}
 
@@ -693,12 +681,7 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 				if (Debug.DEBUG && Debug.DEBUG_STARTLEVEL) {
 					Debug.println("SLL: Trying to unload bundle " + bundle); //$NON-NLS-1$
 				}
-
-				try {
-					bundle.refresh();
-				} catch (BundleException e) {
-					// do nothing.
-				}
+				bundle.refresh();
 			}
 		}
 	}

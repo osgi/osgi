@@ -166,6 +166,8 @@ class StateWriter {
 		out.writeBoolean(bundle.isResolved());
 		out.writeBoolean(bundle.isSingleton());
 		out.writeBoolean(bundle.hasDynamicImports());
+		out.writeBoolean(bundle.attachFragments());
+		out.writeBoolean(bundle.dynamicFragments());
 		writeHostSpec((HostSpecificationImpl) bundle.getHost(), out, force);
 
 		List dependencies = ((BundleDescriptionImpl) bundle).getBundleDependencies();
@@ -241,8 +243,6 @@ class StateWriter {
 		if (writePrefix(exportPackageDesc, out))
 			return;
 		writeBaseDescription(exportPackageDesc, out);
-		// TODO remove this!!
-		writeStringOrNull(exportPackageDesc.getBasicGrouping(), out);
 		writeStringOrNull(exportPackageDesc.getInclude(), out);
 		writeStringOrNull(exportPackageDesc.getExclude(), out);
 		out.writeBoolean(exportPackageDesc.isRoot());
@@ -297,15 +297,6 @@ class StateWriter {
 		writeStringOrNull(importPackageSpec.getBundleSymbolicName(), out);
 		writeVersionRange(importPackageSpec.getBundleVersionRange(), out);
 		out.writeInt(importPackageSpec.getResolution());
-
-		String[] propagate = importPackageSpec.getPropagate();
-		if (propagate == null) {
-			out.writeInt(0);
-		} else {
-			out.writeInt(propagate.length);
-			for (int i = 0; i < propagate.length; i++)
-				writeStringOrNull(propagate[i], out);
-		}
 
 		Map attributes = importPackageSpec.getAttributes();
 		if (attributes == null) {

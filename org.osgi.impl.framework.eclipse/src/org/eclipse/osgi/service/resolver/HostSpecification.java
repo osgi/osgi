@@ -20,4 +20,10 @@ public interface HostSpecification extends VersionConstraint {
 	 * @return the list of host BundleDescriptions that satisfy this HostSpecification
 	 */
 	public BundleDescription[] getHosts();
+
+	/**
+	 * Returns if this HostSpecification is allowed to have multiple hosts
+	 * @return true if this HostSpecification is allowed to have multiple hosts
+	 */
+	public boolean isMultiHost();
 }

@@ -125,8 +125,6 @@ public interface StateObjectFactory {
 	 * @param versionRange the package versionRange (may be <code>null</code>).
 	 * @param bundleSymbolicName the Bundle-SymbolicName of the bundle that must export the package (may be <code>null</code>)
 	 * @param bundleVersionRange the bundle versionRange (may be <code>null</code>).
-	 * @param propagate specifies the package groups that the package should be propagated with.  A 
-	 * <code>null</code> value specifies that package is not propagated.
 	 * @param resolution specifies the resolution type of the imported package.  
 	 * Valid values are {@link ImportPackageSpecification#RESOLUTION_DYNAMIC}, 
 	 * {@link ImportPackageSpecification#RESOLUTION_OPTIONAL}, 
@@ -135,7 +133,7 @@ public interface StateObjectFactory {
 	 * @param importer the importing bundle
 	 * @return the created package specification
 	 */
-	public ImportPackageSpecification createImportPackageSpecification(String packageName, VersionRange versionRange, String bundleSymbolicName, VersionRange bundleVersionRange, String[] propagate, int resolution, Map attributes, BundleDescription importer);
+	public ImportPackageSpecification createImportPackageSpecification(String packageName, VersionRange versionRange, String bundleSymbolicName, VersionRange bundleVersionRange, int resolution, Map attributes, BundleDescription importer);
 
 	/**
 	 * Creates an import package specification that is a copy of the given import package

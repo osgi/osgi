@@ -23,8 +23,6 @@ import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
  * This class manages the Permissions for a given code source. It tracks the
  * permissions that have yet to be satisfied as well as conditions that are
  * already satisfied.
- * 
- * @version $Revision$
  */
 public class ConditionalPermissions extends PermissionCollection {
 	private static final long serialVersionUID = 3907215965749000496L;

@@ -21,12 +21,7 @@ import org.osgi.framework.Version;
  * This class builds bundle description objects from manifests
  */
 class StateBuilder {
-	static String[] DEFINED_MATCHING_ATTRS = {
-			Constants.BUNDLE_SYMBOLICNAME_ATTRIBUTE,
-			Constants.BUNDLE_VERSION_ATTRIBUTE,
-			Constants.PACKAGE_SPECIFICATION_VERSION,
-			Constants.VERSION_ATTRIBUTE
-	};
+	static String[] DEFINED_MATCHING_ATTRS = {Constants.BUNDLE_SYMBOLICNAME_ATTRIBUTE, Constants.BUNDLE_VERSION_ATTRIBUTE, Constants.PACKAGE_SPECIFICATION_VERSION, Constants.VERSION_ATTRIBUTE};
 
 	static BundleDescription createBundleDescription(Dictionary manifest, String location) throws BundleException {
 		BundleDescriptionImpl result = new BundleDescriptionImpl();
@@ -44,6 +39,16 @@ class StateBuilder {
 				if (singleton == null) // TODO this is for backward compatibility; need to check manifest version < 2 to allow this after everyone has converted to new syntax
 					singleton = symbolicNameElements[0].getAttribute(Constants.SINGLETON_DIRECTIVE);
 				result.setStateBit(BundleDescriptionImpl.SINGLETON, "true".equals(singleton)); //$NON-NLS-1$
+				String fragmentAttachment = symbolicNameElements[0].getDirective(Constants.FRAGMENT_ATTACHMENT_DIRECTIVE);
+				if (fragmentAttachment != null) {
+					if (fragmentAttachment.equals(Constants.FRAGMENT_ATTACHMENT_RESOLVETIME)) {
+						result.setStateBit(BundleDescriptionImpl.ATTACH_FRAGMENTS, true);
+						result.setStateBit(BundleDescriptionImpl.DYNAMIC_FRAGMENTS, false);
+					} else if (fragmentAttachment.equals(Constants.FRAGMENT_ATTACHMENT_NEVER)) {
+						result.setStateBit(BundleDescriptionImpl.ATTACH_FRAGMENTS, false);
+						result.setStateBit(BundleDescriptionImpl.DYNAMIC_FRAGMENTS, false);
+					}
+				}
 			}
 		}
 		// retrieve other headers
@@ -110,14 +115,13 @@ class StateBuilder {
 				result.setResolution(ImportPackageSpecification.RESOLUTION_STATIC);
 				allImports.add(result);
 			}
-		}
-		else {
-			allImports = new ArrayList(imported == null ? 0 :imported.length);
+		} else {
+			allImports = new ArrayList(imported == null ? 0 : imported.length);
 		}
 
 		// add dynamics first so they will get overriden by static imports if
 		// the same package is dyanamically imported and statically imported.
-		if (dynamicImported != null) 
+		if (dynamicImported != null)
 			for (int i = 0; i < dynamicImported.length; i++)
 				addImportPackages(dynamicImported[i], allImports, manifestVersion, true);
 		if (imported != null)
@@ -132,8 +136,8 @@ class StateBuilder {
 			// do not allow for multiple imports of same package of manifest version < 2
 			if (manifestVersion < 2) {
 				Iterator iter = allImports.iterator();
-				while(iter.hasNext())
-					if (importNames[i].equals(((ImportPackageSpecification)iter.next()).getName()))
+				while (iter.hasNext())
+					if (importNames[i].equals(((ImportPackageSpecification) iter.next()).getName()))
 						iter.remove();
 			}
 
@@ -143,13 +147,11 @@ class StateBuilder {
 			result.setVersionRange(getVersionRange(manifestVersion < 2 ? importPackage.getAttribute(Constants.PACKAGE_SPECIFICATION_VERSION) : importPackage.getAttribute(Constants.VERSION_ATTRIBUTE)));
 			result.setBundleSymbolicName(importPackage.getAttribute(Constants.BUNDLE_SYMBOLICNAME_ATTRIBUTE));
 			result.setBundleVersionRange(getVersionRange(importPackage.getAttribute(Constants.BUNDLE_VERSION_ATTRIBUTE)));
-			result.setAttributes(getAttributes(importPackage,DEFINED_MATCHING_ATTRS));
+			result.setAttributes(getAttributes(importPackage, DEFINED_MATCHING_ATTRS));
 
 			if (dynamic) {
 				result.setResolution(ImportPackageSpecification.RESOLUTION_DYNAMIC);
-			}
-			else {
-				result.setPropagate(ManifestElement.getArrayFromList(importPackage.getDirective(Constants.GROUPING_DIRECTIVE)));
+			} else {
 				result.setResolution(getResolution(importPackage.getDirective(Constants.RESOLUTION_DIRECTIVE)));
 			}
 
@@ -165,7 +167,7 @@ class StateBuilder {
 	}
 
 	private static ExportPackageDescription[] createExportPackages(BundleDescriptionImpl bundle, ManifestElement[] exported, ManifestElement[] reexported, ManifestElement[] provides, ArrayList providedExports, int manifestVersion) throws BundleException {
-		int numExports = (exported == null ? 0 : exported.length) + (reexported == null ? 0 : reexported.length) + (provides == null ? 0 : provides.length); 
+		int numExports = (exported == null ? 0 : exported.length) + (reexported == null ? 0 : reexported.length) + (provides == null ? 0 : provides.length);
 		if (numExports == 0)
 			return null;
 		ArrayList allExports = new ArrayList(numExports);
@@ -189,17 +191,12 @@ class StateBuilder {
 			if (versionString != null)
 				result.setVersion(Version.parseVersion(versionString));
 
-			// alway setting the grouping here even for manifestVersion==1 because if it is null
-			// the result will return a grouping equal to the package name which is unique and will
-			// give the same behavior as OSGi R3.
-			// TODO remove grouping !!!
-			result.setGrouping(exportPackage.getDirective(Constants.GROUPING_DIRECTIVE));
-			result.setUses(exportPackage.getDirectives(Constants.USES_DIRECTIVE));
+			result.setUses(ManifestElement.getArrayFromList(exportPackage.getDirective(Constants.USES_DIRECTIVE)));
 
 			// set the rest of the attributes
 			result.setInclude(exportPackage.getDirective(Constants.INCLUDE_DIRECTIVE));
 			result.setExclude(exportPackage.getDirective(Constants.EXCLUDE_DIRECTIVE));
-			result.setAttributes(getAttributes(exportPackage,DEFINED_MATCHING_ATTRS));
+			result.setAttributes(getAttributes(exportPackage, DEFINED_MATCHING_ATTRS));
 			result.setMandatory(ManifestElement.getArrayFromList(exportPackage.getDirective(Constants.MANDATORY_DIRECTIVE)));
 			result.setRoot(!reexported);
 			allExports.add(result);
@@ -254,6 +251,7 @@ class StateBuilder {
 		HostSpecificationImpl result = new HostSpecificationImpl();
 		result.setName(spec.getValue());
 		result.setVersionRange(getVersionRange(spec.getAttribute(Constants.BUNDLE_VERSION_ATTRIBUTE)));
+		result.setIsMultiHost("true".equals(spec.getDirective("multiple-hosts"))); //$NON-NLS-1$
 		return result;
 	}
 

@@ -217,11 +217,14 @@ public class ServiceReferenceImpl implements ServiceReference, Comparable {
 
 	public boolean isAssignableTo(Bundle bundle, String className) {
 		AbstractBundle consumer = (AbstractBundle) bundle;
+		// always return false for fragments
 		if (consumer.isFragment())
 			return false;
 		BundleHost producer = (BundleHost) registration.bundle;
+		// 1) if the registrant == consumer always return true
 		if (consumer == producer)
 			return true;
+		// 2) get the package name from the specified className
 		String pkgName = BundleLoader.getPackageName(className);
 		if (pkgName.startsWith("java.")) //$NON-NLS-1$
 			return true;
@@ -231,10 +234,24 @@ public class ServiceReferenceImpl implements ServiceReference, Comparable {
 		BundleLoader consumerBL = consumer.getBundleLoader();
 		if (consumerBL == null)
 			return false;
-		PackageSource producerSource = producerBL.getPackageSource(pkgName);
+		// 3) for the specified bundle, find the wiring for the package.  If no wiring is found return true
 		PackageSource consumerSource = consumerBL.getPackageSource(pkgName);
-		if (producerSource == null || consumerSource == null)
+		if (consumerSource == null)
 			return true;
+		// 4) For the registrant bundle, find the wiring for the package.
+		PackageSource producerSource = producerBL.getPackageSource(pkgName);
+		if (producerSource == null) {
+			// 5) If no wiring is found for the registrant bundle then find the wiring for the classloader of the service object.  If no wiring is found return false.
+			AbstractBundle serviceBundle = (AbstractBundle) registration.framework.packageAdmin.getBundle(registration.service.getClass());
+			producerBL = serviceBundle.getBundleLoader();
+			if (producerBL == null)
+				return false;
+			producerSource = producerBL.getPackageSource(pkgName);
+			if (producerSource == null)
+				return false;
+			return true;
+		}
+		// 6) If the two wirings found are equal then return true; otherwise return false.
 		return producerSource.hasCommonSource(consumerSource);
 	}
 }

@@ -18,17 +18,10 @@ import org.osgi.framework.Constants;
 
 public class ImportPackageSpecificationImpl extends VersionConstraintImpl implements ImportPackageSpecification {
 	private static final String ALL_PACKAGES = "*"; //$NON-NLS-1$
-	// TODO remove this!!
-	private String[] propagate;
 	private int resolution = ImportPackageSpecification.RESOLUTION_STATIC; // the default is static
 	private String symbolicName;
 	private VersionRange bundleVersionRange;
 	private Map attributes;
-
-	// TODO remove this!!
-	public String[] getPropagate() {
-		return propagate;
-	}
 
 	public int getResolution() {
 		return resolution;
@@ -120,11 +113,6 @@ public class ImportPackageSpecificationImpl extends VersionConstraintImpl implem
 			}
 		}
 		return true;
-	}
-
-	// TODO remove this!!
-	protected void setPropagate(String[] propagate) {
-		this.propagate = propagate;
 	}
 
 	protected void setBundleSymbolicName(String symbolicName) {

@@ -64,10 +64,9 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	 *            Framework this bundle is running in
 	 */
 	protected static AbstractBundle createBundle(BundleData bundledata, Framework framework) throws BundleException {
-		if (bundledata.isFragment())
+		if ((bundledata.getType() & BundleData.TYPE_FRAGMENT) > 0)
 			return new BundleFragment(bundledata, framework);
-		else
-			return new BundleHost(bundledata, framework);
+		return new BundleHost(bundledata, framework);
 	}
 
 	/**
@@ -79,7 +78,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	 * @param framework
 	 *            Framework this bundle is running in
 	 */
-	protected AbstractBundle(BundleData bundledata, Framework framework) throws BundleException {
+	protected AbstractBundle(BundleData bundledata, Framework framework) {
 		state = INSTALLED;
 		stateChanging = null;
 		this.bundledata = bundledata;
@@ -89,10 +88,8 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 
 	/**
 	 * Load the bundle.
-	 * 
-	 * @exception org.osgi.framework.BundleException
 	 */
-	protected abstract void load() throws BundleException;
+	protected abstract void load();
 
 	/**
 	 * Reload from a new bundle. This method must be called while holding the
@@ -102,21 +99,16 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	 *            Dummy Bundle which contains new data.
 	 * @return true if an exported package is "in use". i.e. it has been
 	 *         imported by a bundle
-	 * @exception org.osgi.framework.BundleException
 	 */
-	protected abstract boolean reload(AbstractBundle newBundle) throws BundleException;
+	protected abstract boolean reload(AbstractBundle newBundle);
 
 	/**
 	 * Refresh the bundle. This is called by Framework.refreshPackages. This
 	 * method must be called while holding the bundles lock.
 	 * this.loader.unimportPackages must have already been called before
 	 * calling this method!
-	 * 
-	 * @exception org.osgi.framework.BundleException
-	 *                if an exported package is "in use". i.e. it has been
-	 *                imported by a bundle
 	 */
-	protected abstract void refresh() throws BundleException;
+	protected abstract void refresh();
 
 	/**
 	 * Unload the bundle. This method must be called while holding the bundles
@@ -591,6 +583,9 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 			Debug.println("update location " + bundledata.getLocation()); //$NON-NLS-1$
 		}
 		framework.checkAdminPermission(this, AdminPermission.LIFECYCLE);
+		if ((bundledata.getType() & (BundleData.TYPE_BOOTCLASSPATH_EXTENSION | BundleData.TYPE_FRAMEWORK_EXTENSION)) != 0)
+			// need special permission to update extensions
+			framework.checkAdminPermission(this, AdminPermission.EXTENSIONLIFECYCLE);
 		checkValid();
 		beginStateChange();
 		try {
@@ -636,6 +631,9 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 			Debug.println("   from: " + in); //$NON-NLS-1$
 		}
 		framework.checkAdminPermission(this, AdminPermission.LIFECYCLE);
+		if ((bundledata.getType() & (BundleData.TYPE_BOOTCLASSPATH_EXTENSION | BundleData.TYPE_FRAMEWORK_EXTENSION)) != 0)
+			// need special permission to update extensions
+			framework.checkAdminPermission(this, AdminPermission.EXTENSIONLIFECYCLE);
 		checkValid();
 		beginStateChange();
 		try {
@@ -714,19 +712,23 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 			}
 			// indicate we have loaded from the new version of the bundle
 			reloaded = true;
-			if (System.getSecurityManager() != null && (bundledata.getType() & (BundleData.TYPE_BOOTCLASSPATH_EXTENSION | BundleData.TYPE_FRAMEWORK_EXTENSION)) != 0) {
-				// must check for AllPermission before allow a bundle extension to be installed
-				hasPermission(new AllPermission());
-			}
-			try {
-				AccessController.doPrivileged(new PrivilegedExceptionAction() {
-					public Object run() throws Exception {
-						framework.checkAdminPermission(newBundle, AdminPermission.LIFECYCLE);
-						return null;
-					}
-				}, callerContext);
-			} catch (PrivilegedActionException e) {
-				throw e.getException();
+			if (System.getSecurityManager() != null) {
+				final boolean extension = (bundledata.getType() & (BundleData.TYPE_BOOTCLASSPATH_EXTENSION | BundleData.TYPE_FRAMEWORK_EXTENSION)) != 0;
+				// must check for AllPermission before allow a bundle extension to be updated
+				if (extension)
+					hasPermission(new AllPermission());
+				try {
+					AccessController.doPrivileged(new PrivilegedExceptionAction() {
+						public Object run() throws Exception {
+							framework.checkAdminPermission(newBundle, AdminPermission.LIFECYCLE);
+							if (extension) // need special permission to update extension bundles
+								framework.checkAdminPermission(newBundle, AdminPermission.EXTENSIONLIFECYCLE);
+							return null;
+						}
+					}, callerContext);
+				} catch (PrivilegedActionException e) {
+					throw e.getException();
+				}
 			}
 			// send out unresolved events outside synch block (defect #80610)
 			if (st == RESOLVED)
@@ -808,6 +810,9 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 			Debug.println("uninstall location: " + bundledata.getLocation()); //$NON-NLS-1$
 		}
 		framework.checkAdminPermission(this, AdminPermission.LIFECYCLE);
+		if ((bundledata.getType() & (BundleData.TYPE_BOOTCLASSPATH_EXTENSION | BundleData.TYPE_FRAMEWORK_EXTENSION)) != 0)
+			// need special permission to uninstall extensions
+			framework.checkAdminPermission(this, AdminPermission.EXTENSIONLIFECYCLE);
 		checkValid();
 		beginStateChange();
 		try {

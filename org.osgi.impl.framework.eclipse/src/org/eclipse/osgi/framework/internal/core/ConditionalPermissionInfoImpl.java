@@ -27,8 +27,6 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  * This is a runtime embodiment of the data stored in ConditionalPermissionInfo.
  * It has methods to facilitate the management of Conditions and Permissions at
  * runtime.
- * 
- * @version $Revision$
  */
 public class ConditionalPermissionInfoImpl implements ConditionalPermissionInfo, Serializable {
 	private static final long serialVersionUID = 3258130245704825139L;

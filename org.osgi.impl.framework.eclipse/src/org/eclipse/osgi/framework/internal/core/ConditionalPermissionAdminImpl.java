@@ -25,8 +25,6 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 /**
  *
  * Implements ConditionalPermissionAdmin.
- * 
- * @version $Revision$
  */
 public class ConditionalPermissionAdminImpl implements ConditionalPermissionAdmin {
 	/**
@@ -45,7 +43,7 @@ public class ConditionalPermissionAdminImpl implements ConditionalPermissionAdmi
 		this.framework = framework;
 		this.storage = permissionStorage;
 		try {
-			condPerms = (Vector) permissionStorage.deserializeConditionalPermissionInfos();
+			condPerms = permissionStorage.deserializeConditionalPermissionInfos();
 		} catch (IOException e) {
 			framework.publishFrameworkEvent(FrameworkEvent.ERROR, framework.systemBundle, e);
 			condPerms = new Vector();

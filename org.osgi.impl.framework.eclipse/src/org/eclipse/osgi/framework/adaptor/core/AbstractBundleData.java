@@ -443,10 +443,6 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 		this.dynamicImports = dynamicImports;
 	}
 
-	public boolean isFragment() {
-		return (type & TYPE_FRAGMENT) > 0;
-	}
-
 	public int getType() {
 		return type;
 	}
@@ -457,12 +453,13 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 
 	///////////////////// End Manifest Value Accessor Methods  /////////////////////
 
-	public String[] getBundleSigners() {
+	public boolean matchDNChain(String pattern) {
 		if (System.getSecurityManager() == null)
-			return null;
+			return false;
+
 		if (getBaseBundleFile() instanceof SignedBundle)
-			return ((SignedBundle) getBaseBundleFile()).getSigningCertificateChains();
-		return null;
+			return ((SignedBundle) getBaseBundleFile()).matchDNChain(pattern);
+		return false;
 	}
 
 	/**

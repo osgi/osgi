@@ -414,7 +414,8 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 				ResolverImpl.log(bundle + " NOT RESOLVED"); //$NON-NLS-1$
 		}
 		if (!failed && fullyWired) {
-			groupingChecker.addPropagationAndReExportConstraints(bundle);
+			groupingChecker.addReExportConstraints(bundle);
+			groupingChecker.addImportConstraints(bundle);
 			groupingChecker.addRequireConstraints(bundle.getExportPackages(), bundle);
 		}
 		// Check cyclic dependencies
@@ -544,10 +545,13 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 						if (exp.getExportPackageDescription().isRoot() && !export.getExportPackageDescription().isRoot())
 							continue; // TODO hack to prevent imports from getting wired to re-exports if we offer a root export
 						resolverExports.remove(exp); // Import wins, remove export
+						exp.setDropped(true);
 					}
 					if (((originalState == ResolverBundle.UNRESOLVED || !export.getExportPackageDescription().isRoot()) && !resolveBundle(export.getExporter())) || !resolverExports.contains(export)) {
-						if (exp != null)
+						if (exp != null) {
 							resolverExports.put(exp);
+							exp.setDropped(false);
+						}
 						imp.setMatchingExport(null);
 						continue; // Bundle hasn't resolved || export has not been selected and is unavailable
 					}
@@ -864,7 +868,7 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			resolverImports[j].setName(null);
 		}
 		if (!found) {
-			ResolverImport newImport = new ResolverImport(rb, state.getFactory().createImportPackageSpecification(requestedPackage, null, null, null, null, ImportPackageSpecification.RESOLUTION_DYNAMIC, null, importingBundle));
+			ResolverImport newImport = new ResolverImport(rb, state.getFactory().createImportPackageSpecification(requestedPackage, null, null, null, ImportPackageSpecification.RESOLUTION_DYNAMIC, null, importingBundle));
 			boolean resolved = resolveImport(newImport, true);
 			while (resolved && !checkDynamicGrouping(newImport))
 				resolved = resolveImport(newImport, true);
@@ -878,34 +882,12 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 
 	// Checks that dynamic import 'imp' does not break grouping dependencies with the existing wirings
 	private boolean checkDynamicGrouping(ResolverImport imp) {
-		ResolverBundle rb = imp.getBundle();
-		ResolverImport[] imports = rb.getImportPackages();
-
-		for (int i = 0; i < imports.length; i++) {
-			// Don't compare grouping with itself or with unwired imports
-			if (imports[i] == imp || imports[i].getMatchingExport() == null) {
-				continue;
-			}
-			// Don't compare grouping if the exports are from the same bundle
-			if (imp.getMatchingExport().getExporter() == imports[i].getMatchingExport().getExporter()) {
-				continue;
-			}
-
-			ResolverExport[] exports = imports[i].getMatchingExport().getExporter().getExportPackages();
-			String importGrouping = imports[i].getMatchingExport().getGrouping();
-
-			for (int j = 0; j < exports.length; j++) {
-				String exportName = exports[j].getName();
-				String exportGrouping = exports[j].getGrouping();
-
-				if (exportName.equals(imp.getName()) && importGrouping.equals(exportGrouping)) {
-					imp.addUnresolvableWiring(imp.getMatchingExport().getExporter());
-					imp.setMatchingExport(null);
-					if (DEBUG_GROUPING)
-						ResolverImpl.log("  Dynamic grouping failed: " + imp.getName()); //$NON-NLS-1$
-					return false;
-				}
-			}
+		if (groupingChecker.isConsistent(imp, imp.getMatchingExport()) != null) {
+			imp.addUnresolvableWiring(imp.getMatchingExport().getExporter());
+			imp.setMatchingExport(null);
+			if (DEBUG_GROUPING)
+				ResolverImpl.log("  Dynamic grouping failed: " + imp.getName()); //$NON-NLS-1$
+			return false;
 		}
 		return true;
 	}

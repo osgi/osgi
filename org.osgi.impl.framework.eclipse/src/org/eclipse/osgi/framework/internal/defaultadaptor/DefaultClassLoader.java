@@ -193,16 +193,10 @@ public class DefaultClassLoader extends AbstractClassLoader {
 				}
 			}
 		}
-		if (!name.startsWith("java.")) { //$NON-NLS-1$
-			// First check the parent classloader for system classes.
-			ClassLoader parent = getParentPrivileged();
-			if (parent != null)
-				try {
-					return parent.loadClass(name);
-				} catch (ClassNotFoundException e) {
-					// Do nothing. continue to delegate.
-				}
-		}
+		// Finally check the parent classloader for system classes.
+		ClassLoader parent = getParentPrivileged();
+		if (parent != null)
+			return parent.loadClass(name);
 		throw new ClassNotFoundException(name);
 	}
 
@@ -336,6 +330,10 @@ public class DefaultClassLoader extends AbstractClassLoader {
 				}
 			}
 		}
+		// Finally check the parent classloader for system resources.
+		ClassLoader parent = getParentPrivileged();
+		if (parent != null)
+			return parent.getResource(name);
 		return null;
 	}
 

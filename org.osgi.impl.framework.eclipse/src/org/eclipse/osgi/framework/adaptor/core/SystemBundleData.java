@@ -14,6 +14,7 @@ package org.eclipse.osgi.framework.adaptor.core;
 import java.io.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Enumeration;
 import org.eclipse.osgi.framework.adaptor.BundleClassLoader;
 import org.eclipse.osgi.framework.adaptor.BundleProtectionDomain;
@@ -42,7 +43,7 @@ public class SystemBundleData extends AbstractBundleData {
 			// TODO assumes the location is a file URL
 			return new File(frameworkLocation.substring(5));
 		frameworkLocation = System.getProperty("user.dir"); //$NON-NLS-1$
-		if (frameworkLocation != null) 
+		if (frameworkLocation != null)
 			return new File(frameworkLocation);
 		return null;
 	}
@@ -52,20 +53,23 @@ public class SystemBundleData extends AbstractBundleData {
 
 		if (osgiBase != null && osgiBase.exists()) {
 			try {
-				in = baseBundleFile.getEntry(Constants.OSGI_BUNDLE_MANIFEST).getInputStream();
+				BundleEntry entry = baseBundleFile.getEntry(Constants.OSGI_BUNDLE_MANIFEST);
+				if (entry != null)
+					in = entry.getInputStream();
 			} catch (IOException e) {
 				// do nothing here.  in == null
 			}
 		}
 
-		// If we cannot find the Manifest file then use the old SYSTEMBUNDLE.MF file.
+		// If we cannot find the Manifest file from the baseBundleFile then
+		// search for the manifest as a classloader resource
 		// This allows an adaptor to package the SYSTEMBUNDLE.MF file in a jar.
 		if (in == null) {
-			in = getClass().getResourceAsStream(Constants.OSGI_SYSTEMBUNDLE_MANIFEST);
+			in = getManifestAsResource();
 		}
 		if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 			if (in == null) {
-				Debug.println("Unable to find system bundle manifest " + Constants.OSGI_SYSTEMBUNDLE_MANIFEST); //$NON-NLS-1$
+				Debug.println("Unable to find system bundle manifest " + Constants.OSGI_BUNDLE_MANIFEST); //$NON-NLS-1$
 			}
 		}
 
@@ -93,6 +97,28 @@ public class SystemBundleData extends AbstractBundleData {
 		if (providePackages != null)
 			appendManifestValue(systemManifest, Constants.PROVIDE_PACKAGE, providePackages);
 		return systemManifest;
+	}
+
+	private InputStream getManifestAsResource() {
+		ClassLoader cl = getClass().getClassLoader();
+		try {
+			// get all manifests in your classloader delegation
+			Enumeration manifests = cl != null ? cl.getResources(Constants.OSGI_BUNDLE_MANIFEST) : ClassLoader.getSystemResources(Constants.OSGI_BUNDLE_MANIFEST);
+			while (manifests.hasMoreElements()) {
+				URL url = (URL) manifests.nextElement();
+				try {
+					// check each manifest until we find one with the Eclipse-SystemBundle: true header
+					Headers headers = Headers.parseManifest(url.openStream());
+					if ("true".equals(headers.get(Constants.ECLIPSE_SYSTEMBUNDLE))) //$NON-NLS-1$
+						return url.openStream();
+				} catch (BundleException e) {
+					// ignore and continue to next URL
+				}
+			}
+		} catch (IOException e) {
+			// ignore and return null
+		}
+		return null;
 	}
 
 	private void appendManifestValue(Headers systemManifest, String header, String append) {

@@ -120,27 +120,14 @@ public class ResolverBundle implements VersionSupplier {
 		return null;
 	}
 
-	/*
-	 // Return the ResolverExport object for a given ExportPackageDescription
-	 ResolverExport getExport(ExportPackageDescription exp) {
-	 ResolverExport[] exports = getExportPackages();
-	 for(int i=0; i<exports.length; i++) {
-	 if(exp.getName().equals(exports[i].getName())) {
-	 return exports[i];
-	 }
-	 }
-	 return null;
-	 }*/
-
-	ResolverExport[] getGroupedExports(String group) {
-		ArrayList result = new ArrayList();
+	ResolverExport getExport(String name) {
 		ResolverExport[] exports = getExportPackages();
 		for (int i = 0; i < exports.length; i++) {
-			if (group.equals(exports[i].getGrouping())) {
-				result.add(exports[i]);
+			if (name.equals(exports[i].getName())) {
+				return exports[i];
 			}
 		}
-		return (ResolverExport[]) result.toArray(new ResolverExport[result.size()]);
+		return null;
 	}
 
 	// Iterate thru the imports making sure they are wired
@@ -381,6 +368,10 @@ public class ResolverBundle implements VersionSupplier {
 	ResolverExport[] attachFragment(ResolverBundle fragment, boolean addExports) {
 		if (isFragment())
 			return new ResolverExport[0]; // cannot attach to fragments;
+		if (!bundle.attachFragments() || (isResolved() && !bundle.dynamicFragments()))
+			return new ResolverExport[0]; // host is restricting attachment
+		if (fragment.getHost().getMatchingBundles() != null && !((HostSpecification) fragment.getHost().getVersionConstraint()).isMultiHost())
+			return new ResolverExport[0]; // fragment is restricting attachment
 
 		ImportPackageSpecification[] newImports = fragment.getBundle().getImportPackages();
 		BundleSpecification[] newRequires = fragment.getBundle().getRequiredBundles();
@@ -430,7 +421,7 @@ public class ResolverBundle implements VersionSupplier {
 	private void setNewFragmentExports(boolean newFragmentExports) {
 		this.newFragmentExports = newFragmentExports;
 	}
-	
+
 	boolean isNewFragmentExports() {
 		return newFragmentExports;
 	}

@@ -43,9 +43,8 @@ public class BundleHost extends AbstractBundle {
 
 	/**
 	 * Load the bundle.
-	 * @exception org.osgi.framework.BundleException
 	 */
-	protected void load() throws BundleException {
+	protected void load() {
 		if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 			if ((state & (INSTALLED)) == 0) {
 				Debug.println("Bundle.load called when state != INSTALLED: " + this); //$NON-NLS-1$
@@ -74,9 +73,8 @@ public class BundleHost extends AbstractBundle {
 	 *
 	 * @param newBundle Dummy Bundle which contains new data.
 	 * @return  true if an exported package is "in use". i.e. it has been imported by a bundle
-	 * @exception org.osgi.framework.BundleException
 	 */
-	protected boolean reload(AbstractBundle newBundle) throws BundleException {
+	protected boolean reload(AbstractBundle newBundle) {
 		if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 			if ((state & (INSTALLED | RESOLVED)) == 0) {
 				Debug.println("Bundle.reload called when state != INSTALLED | RESOLVED: " + this); //$NON-NLS-1$
@@ -119,10 +117,8 @@ public class BundleHost extends AbstractBundle {
 	/**
 	 * Refresh the bundle. This is called by Framework.refreshPackages.
 	 * This method must be called while holding the bundles lock.
-	 *
-	 * @exception org.osgi.framework.BundleException if an exported package is "in use". i.e. it has been imported by a bundle
 	 */
-	protected void refresh() throws BundleException {
+	protected void refresh() {
 		if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 			if ((state & (UNINSTALLED | INSTALLED | RESOLVED)) == 0) {
 				Debug.println("Bundle.reload called when state != UNINSTALLED | INSTALLED | RESOLVED: " + this); //$NON-NLS-1$
@@ -497,6 +493,11 @@ public class BundleHost extends AbstractBundle {
 	protected void attachFragment(BundleFragment fragment) throws BundleException {
 		// do not force the creation of the bundle loader here
 		BundleLoader loader = getLoaderProxy().getBasicBundleLoader();
+		// If the Host ClassLoader exists then we must attach
+		// the fragment to the ClassLoader.
+		if (loader != null)
+			loader.attachFragment(fragment);
+
 		if (fragments == null) {
 			fragments = new BundleFragment[] {fragment};
 		} else {
@@ -523,13 +524,6 @@ public class BundleHost extends AbstractBundle {
 				newFragments[newFragments.length - 1] = fragment;
 			fragments = newFragments;
 		}
-
-		// If the Host ClassLoader exists then we must attach
-		// the fragment to the ClassLoader.
-		if (loader != null) {
-			loader.attachFragment(fragment);
-		}
-
 	}
 
 	protected BundleLoader getBundleLoader() {

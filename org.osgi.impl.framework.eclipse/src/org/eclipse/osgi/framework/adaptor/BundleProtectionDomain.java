@@ -19,8 +19,6 @@ import java.security.ProtectionDomain;
  * 
  * This is a specialized ProtectionDomain that also has information about the
  * signers and the hash of the bundle.
- * 
- * @version $Revision$
  */
 public abstract class BundleProtectionDomain extends ProtectionDomain {
 
@@ -57,8 +55,6 @@ public abstract class BundleProtectionDomain extends ProtectionDomain {
 	 *         loadFiles has not yet been called. An empty array is returned if
 	 *         the files are not signed or none of the signatures could be
 	 *         validated.
-	 * 
-	 * @version $Revision$
 	 */
 	public abstract String[] getSigners();
 

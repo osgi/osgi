@@ -19,8 +19,6 @@ import org.eclipse.osgi.framework.adaptor.BundleProtectionDomain;
  *
  * This class tracks the signature information for a bundle in addition to
  * managing bundle permissions.
- * 
- * @version $Revision$
  */
 public class BundleProtectionDomainImpl extends BundleProtectionDomain {
 	AbstractBundle bundle;

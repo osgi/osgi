@@ -27,19 +27,6 @@ import org.osgi.framework.BundleException;
  * 
  */
 public class DefaultBundleData extends AbstractBundleData {
-
-	public void setManifest(String manifest) {
-		java.util.Hashtable dic = new java.util.Hashtable();
-		java.util.StringTokenizer st = new java.util.StringTokenizer(manifest, ":\n");
-
-		while (st.hasMoreTokens()) {
-			String key = st.nextToken().trim();
-			String value = st.nextToken().trim();
-			dic.put(key, value);
-		}
-		this.manifest = dic;
-	}
-
 	/**
 	 * Read data from an existing directory.
 	 * This constructor is used by getInstalledBundles.

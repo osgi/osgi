@@ -20,7 +20,6 @@ import org.eclipse.osgi.framework.adaptor.*;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.service.resolver.*;
 import org.eclipse.osgi.util.ManifestElement;
-import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.*;
 
 /**
@@ -138,7 +137,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 			int[] reexported = new int[required.length];
 			int reexportIndex = 0;
 			for (int i = 0; i < required.length; i++) {
-				requiredBundles[i] = (BundleLoaderProxy) getLoaderProxy(required[i]);
+				requiredBundles[i] = getLoaderProxy(required[i]);
 				if (reExportSet.contains(required[i].getSymbolicName()))
 					reexported[reexportIndex++] = i;							
 			}
@@ -172,27 +171,6 @@ public class BundleLoader implements ClassLoaderDelegate {
 		for (int i = 0; i < fragments.length; i++)
 			if (fragments[i].isResolved() && fragments[i].hasDynamicImports())
 				addDynamicImportPackage(fragments[i].getImportPackages());
-	}
-
-	protected void initializeFragment(AbstractBundle fragment) throws BundleException {
-		BundleDescription description = fragment.getBundleDescription();
-		// if the fragment dynamically imports a package not already 
-		// dynamically imported throw an exception.
-		try {
-			ImportPackageSpecification[] imports = description.getImportPackages();
-			if (imports != null && imports.length > 0) {
-				for (int i = 0; i < imports.length; i++) {
-					if (imports[i].getResolution() != ImportPackageSpecification.RESOLUTION_DYNAMIC)
-						continue;
-					String name = imports[i].getName();
-					if (!isDynamicallyImported(name))
-						throw new BundleException(NLS.bind(Msg.BUNDLE_FRAGMENT_IMPORT_CONFLICT, new Object[] {fragment.getLocation(), imports[i], bundle.getLocation()})); //$NON-NLS-1$
-				}
-			}
-		} catch (BundleException e) {
-			bundle.framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, e);
-		}
-
 	}
 
 	private void addImportedPackages(ExportPackageDescription[] packages) {
@@ -233,16 +211,16 @@ public class BundleLoader implements ClassLoaderDelegate {
 	 * get the loader proxy for a bundle description
 	 */
 	BundleLoaderProxy getLoaderProxy(BundleDescription source) {
-		BundleLoaderProxy proxy = (BundleLoaderProxy) source.getUserObject();
-		if (proxy == null) {
+		BundleLoaderProxy sourceProxy = (BundleLoaderProxy) source.getUserObject();
+		if (sourceProxy == null) {
 			// may need to force the proxy to be created
 			long exportingID = source.getBundleId();
 			BundleHost exportingBundle = (BundleHost) bundle.framework.getBundle(exportingID);
 			if (exportingBundle == null)
 				return null;
-			proxy = exportingBundle.getLoaderProxy();
+			sourceProxy = exportingBundle.getLoaderProxy();
 		}
-		return proxy;
+		return sourceProxy;
 	}
 
 	/*
@@ -484,12 +462,12 @@ public class BundleLoader implements ClassLoaderDelegate {
 		// Create the classloader as previleged code if security manager is present.
 		if (System.getSecurityManager() == null)
 			return createBCL(pd, cp);
-		else
-			return (BundleClassLoader) AccessController.doPrivileged(new PrivilegedAction() {
-				public Object run() {
-					return createBCL(pd, cp);
-				}
-			});
+
+		return (BundleClassLoader) AccessController.doPrivileged(new PrivilegedAction() {
+			public Object run() {
+				return createBCL(pd, cp);
+			}
+		});
 
 	}
 	
@@ -919,30 +897,11 @@ public class BundleLoader implements ClassLoaderDelegate {
 	}
 
 	protected void attachFragment(BundleFragment fragment) throws BundleException {
-		initializeFragment(fragment);
 		if (classloader == null)
 			return;
-
-		try {
-			String[] classpath = fragment.getBundleData().getClassPath();
-			if (classpath != null)
-				classloader.attachFragment(fragment.getBundleData(), fragment.domain, classpath);
-			else
-				bundle.framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, new BundleException(Msg.BUNDLE_NO_CLASSPATH_MATCH)); //$NON-NLS-1$
-		} catch (BundleException e) {
-			bundle.framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, e);
-		}
-
-	}
-
-	protected FilterImpl createFilter(String filterString) throws InvalidSyntaxException {
-		if (filterString == null)
-			return null;
-		int length = filterString.length();
-		if (length <= 2) {
-			throw new InvalidSyntaxException(Msg.FILTER_INVALID, filterString); //$NON-NLS-1$
-		}
-		return new FilterImpl(filterString);
+		String[] classpath = fragment.getBundleData().getClassPath();
+		if (classpath != null)
+			classloader.attachFragment(fragment.getBundleData(), fragment.domain, classpath);
 	}
 
 	PackageSource getPackageSource(String pkgname) {
@@ -960,5 +919,4 @@ public class BundleLoader implements ClassLoaderDelegate {
 			return requireSource;
 		return createMultiSource(pkgname, new PackageSource[] {requireSource, localSource});
 	}
-
 }

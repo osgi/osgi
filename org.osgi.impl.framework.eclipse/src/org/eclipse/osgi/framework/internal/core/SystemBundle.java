@@ -51,7 +51,7 @@ public class SystemBundle extends BundleHost {
 	 * This methods overrides the Bundle method and does nothing.
 	 *
 	 */
-	protected void load() throws BundleException {
+	protected void load() {
 		SecurityManager sm = System.getSecurityManager();
 
 		if (sm != null) {
@@ -66,7 +66,7 @@ public class SystemBundle extends BundleHost {
 	 * @param newBundle
 	 * @return false
 	 */
-	protected boolean reload(AbstractBundle newBundle) throws BundleException {
+	protected boolean reload(AbstractBundle newBundle) {
 		return (false);
 	}
 
@@ -75,7 +75,7 @@ public class SystemBundle extends BundleHost {
 	 * This methods overrides the Bundle method and does nothing.
 	 *
 	 */
-	protected void refresh() throws BundleException {
+	protected void refresh() {
 		// do nothing
 	}
 
@@ -139,7 +139,7 @@ public class SystemBundle extends BundleHost {
 	 * This methods overrides the Bundle method and does nothing.
 	 *
 	 */
-	public void start() throws BundleException {
+	public void start() {
 		framework.checkAdminPermission(this, AdminPermission.EXECUTE);
 	}
 
@@ -148,7 +148,7 @@ public class SystemBundle extends BundleHost {
 	 * This method launches the framework.
 	 *
 	 */
-	protected void resume() throws BundleException {
+	protected void resume() {
 		/* initialize the startlevel service */
 		framework.startLevelManager.initialize();
 
@@ -161,7 +161,7 @@ public class SystemBundle extends BundleHost {
 	 * This method spawns a thread which will call framework.shutdown.
 	 *
 	 */
-	public void stop() throws BundleException {
+	public void stop() {
 		framework.checkAdminPermission(this, AdminPermission.EXECUTE);
 
 		if (state == ACTIVE) {
@@ -185,7 +185,7 @@ public class SystemBundle extends BundleHost {
 	 * This method shuts down the framework.
 	 *
 	 */
-	protected void suspend() throws BundleException {
+	protected void suspend() {
 
 		framework.startLevelManager.shutdown();
 		framework.startLevelManager.cleanup();
@@ -208,7 +208,7 @@ public class SystemBundle extends BundleHost {
 	 * followed by framework.launch.
 	 *
 	 */
-	public void update() throws BundleException {
+	public void update() {
 		framework.checkAdminPermission(this, AdminPermission.LIFECYCLE);
 
 		if (state == ACTIVE) {
@@ -230,12 +230,13 @@ public class SystemBundle extends BundleHost {
 	 *
 	 * @param in The InputStream from which to read the new bundle.
 	 */
-	public void update(InputStream in) throws BundleException {
+	public void update(InputStream in) {
 		update();
 
 		try {
 			in.close();
 		} catch (IOException e) {
+			// do nothing
 		}
 	}
 

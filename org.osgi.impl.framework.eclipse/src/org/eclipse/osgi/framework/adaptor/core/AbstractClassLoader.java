@@ -11,7 +11,6 @@
 
 package org.eclipse.osgi.framework.adaptor.core;
 
-import java.io.IOException;
 import java.net.URL;
 import java.security.*;
 import java.util.Enumeration;
@@ -24,6 +23,9 @@ import org.eclipse.osgi.framework.debug.Debug;
  * class lookups to a parent classloader and the to a ClassLoaderDelegate.
  */
 public abstract class AbstractClassLoader extends ClassLoader implements BundleClassLoader {
+
+	public static final String JAVA_CLASS = "java."; //$NON-NLS-1$
+	public static final String JAVA_RESOURCE = "java/"; //$NON-NLS-1$
 
 	/**
 	 * The delegate used to get classes and resources from.  The delegate
@@ -77,18 +79,15 @@ public abstract class AbstractClassLoader extends ClassLoader implements BundleC
 			throw new ClassNotFoundException(name);
 
 		if (Debug.DEBUG && Debug.DEBUG_LOADER)
-			Debug.println("BundleClassLoader[" + delegate + "].loadClass(" + name + ")");  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
+			Debug.println("BundleClassLoader[" + delegate + "].loadClass(" + name + ")"); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
 
 		try {
-			if (name.startsWith("java.")) { //$NON-NLS-1$
+			if (name.startsWith(JAVA_CLASS)) {
 				// First check the parent classloader for system classes.
 				ClassLoader parent = getParentPrivileged();
 				if (parent != null)
-					try {
-						return parent.loadClass(name);
-					} catch (ClassNotFoundException e) {
-						// Do nothing. continue to delegate.
-					}
+					// we want to throw ClassNotFoundExceptions if a java.* class cannot be loaded from the parent.
+					return parent.loadClass(name);
 			}
 			// Just ask the delegate.  This could result in findLocalClass(name) being called.
 			Class clazz = delegate.findClass(name);
@@ -143,18 +142,20 @@ public abstract class AbstractClassLoader extends ClassLoader implements BundleC
 
 		try {
 			URL url = null;
-			// First check the parent classloader for system resources.
-			ClassLoader parent = getParentPrivileged();
-			if (parent != null)
-				url = parent.getResource(name);
-			if (url != null) {
-				return (url);
+			if (name.startsWith(JAVA_RESOURCE)) {
+				// First check the parent classloader for system resources, if it is a java resource.
+				ClassLoader parent = getParentPrivileged();
+				if (parent != null)
+					// we never delegate java resource requests past the parent
+					return parent.getResource(name);
 			}
+			if (url != null)
+				return (url);
 			url = delegate.findResource(name);
-			if (url != null) {
+			if (url != null)
 				return (url);
-			}
 		} catch (ImportResourceNotFoundException e) {
+			// do nothing; null is returned
 		}
 
 		if (Debug.DEBUG && Debug.DEBUG_LOADER) {
@@ -178,7 +179,11 @@ public abstract class AbstractClassLoader extends ClassLoader implements BundleC
 	 * @param name The resource path to find.
 	 * @return An Enumeration of all resources found or null if the resource.
 	 */
-	protected Enumeration findResources(String name) throws IOException {
+	protected Enumeration findResources(String name) {
+		if (name.startsWith(JAVA_RESOURCE))
+			// if this is a java resource then we already searched the parent in getResources.
+			// return null because we do not want to delegate java resource requests
+			return null;
 		try {
 			return (delegate.findResources(name));
 		} catch (Exception e) {
@@ -222,6 +227,7 @@ public abstract class AbstractClassLoader extends ClassLoader implements BundleC
 	}
 
 	abstract public Object findLocalObject(String path);
+
 	abstract public Enumeration findLocalObjects(String path);
 
 	public ClassLoaderDelegate getDelegate() {

@@ -373,18 +373,10 @@ public class Framework implements EventDispatcher, EventPublisher {
 		/* mark framework as started */
 		active = true;
 		/* Resume systembundle */
-		try {
-			if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
-				Debug.println("Trying to launch framework"); //$NON-NLS-1$
-			}
-			systemBundle.resume();
-		} catch (BundleException be) {
-			if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
-				Debug.println("Framework launch exception: " + be.getMessage()); //$NON-NLS-1$
-				Debug.printStackTrace(be.getNestedException());
-			}
-			publishFrameworkEvent(FrameworkEvent.ERROR, systemBundle, be);
+		if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
+			Debug.println("Trying to launch framework"); //$NON-NLS-1$
 		}
+		systemBundle.resume();
 	}
 
 	/**
@@ -414,18 +406,10 @@ public class Framework implements EventDispatcher, EventPublisher {
 			publishFrameworkEvent(FrameworkEvent.ERROR, systemBundle, t);
 		}
 		/* Suspend systembundle */
-		try {
-			if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
-				Debug.println("Trying to shutdown Framework"); //$NON-NLS-1$
-			}
-			systemBundle.suspend();
-		} catch (BundleException be) {
-			if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
-				Debug.println("Framework shutdown exception: " + be.getMessage()); //$NON-NLS-1$
-				Debug.printStackTrace(be.getNestedException());
-			}
-			publishFrameworkEvent(FrameworkEvent.ERROR, systemBundle, be);
+		if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
+			Debug.println("Trying to shutdown Framework"); //$NON-NLS-1$
 		}
+		systemBundle.suspend();
 		try {
 			adaptor.compactStorage();
 		} catch (IOException e) {
@@ -722,19 +706,23 @@ public class Framework implements EventDispatcher, EventPublisher {
 					bundledata.installNativeCode(nativepaths);
 				}
 				bundle.load();
-				if (System.getSecurityManager() != null && (bundledata.getType() & (BundleData.TYPE_BOOTCLASSPATH_EXTENSION | BundleData.TYPE_FRAMEWORK_EXTENSION)) != 0) {
+				if (System.getSecurityManager() != null) {
+					final boolean extension = (bundledata.getType() & (BundleData.TYPE_BOOTCLASSPATH_EXTENSION | BundleData.TYPE_FRAMEWORK_EXTENSION)) != 0;
 					// must check for AllPermission before allow a bundle extension to be installed
-					bundle.hasPermission(new AllPermission());
-				}
-				try {
-					AccessController.doPrivileged(new PrivilegedExceptionAction() {
-						public Object run() throws Exception {
-							checkAdminPermission(bundle, AdminPermission.LIFECYCLE);
-							return null;
-						}
-					}, callerContext);
-				} catch (PrivilegedActionException e) {
-					throw e.getException();
+					if (extension)
+						bundle.hasPermission(new AllPermission());
+					try {
+						AccessController.doPrivileged(new PrivilegedExceptionAction() {
+							public Object run() throws Exception {
+								checkAdminPermission(bundle, AdminPermission.LIFECYCLE);
+								if (extension) // need special permission to install extension bundles
+									checkAdminPermission(bundle, AdminPermission.EXTENSIONLIFECYCLE);
+								return null;
+							}
+						}, callerContext);
+					} catch (PrivilegedActionException e) {
+						throw e.getException();
+					}
 				}
 				storage.commit(false);
 			} catch (Throwable error) {

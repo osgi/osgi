@@ -36,9 +36,8 @@ public class BundleFragment extends AbstractBundle {
 
 	/**
 	 * Load the bundle.
-	 * @exception org.osgi.framework.BundleException
 	 */
-	protected void load() throws BundleException {
+	protected void load() {
 		if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 			if ((state & (INSTALLED)) == 0) {
 				Debug.println("Bundle.load called when state != INSTALLED: " + this); //$NON-NLS-1$
@@ -52,12 +51,6 @@ public class BundleFragment extends AbstractBundle {
 			if (sm != null) {
 				domain = framework.permissionAdmin.createProtectionDomain(this);
 			}
-
-			try {
-				bundledata.open(); /* make sure the BundleData is open */
-			} catch (IOException e) {
-				throw new BundleException(Msg.BUNDLE_READ_EXCEPTION, e); //$NON-NLS-1$
-			}
 		}
 	}
 
@@ -67,9 +60,8 @@ public class BundleFragment extends AbstractBundle {
 	 *
 	 * @param newBundle Dummy Bundle which contains new data.
 	 * @return  true if an exported package is "in use". i.e. it has been imported by a bundle
-	 * @exception org.osgi.framework.BundleException
 	 */
-	protected boolean reload(AbstractBundle newBundle) throws BundleException {
+	protected boolean reload(AbstractBundle newBundle) {
 		if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 			if ((state & (INSTALLED | RESOLVED)) == 0) {
 				Debug.println("Bundle.reload called when state != INSTALLED | RESOLVED: " + this); //$NON-NLS-1$
@@ -116,10 +108,8 @@ public class BundleFragment extends AbstractBundle {
 	 * This method must be called while holding the bundles lock.
 	 * this.loader.unimportPackages must have already been called before calling
 	 * this method!
-	 *
-	 * @exception org.osgi.framework.BundleException if an exported package is "in use". i.e. it has been imported by a bundle
 	 */
-	protected void refresh() throws BundleException {
+	protected void refresh() {
 		if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 			if ((state & (UNINSTALLED | INSTALLED | RESOLVED)) == 0) {
 				Debug.println("Bundle.refresh called when state != UNINSTALLED | INSTALLED | RESOLVED: " + this); //$NON-NLS-1$
@@ -302,13 +292,13 @@ public class BundleFragment extends AbstractBundle {
 	 * @param value the BundleHost to add to the set of host bundles
 	 */
 	protected boolean addHost(BundleLoaderProxy host) {
-		if (host != null) {
-			try {
-				((BundleHost) host.getBundleHost()).attachFragment(this);
-			} catch (BundleException be) {
-				framework.publishFrameworkEvent(FrameworkEvent.ERROR, host.getBundleHost(), be);
-				return false;
-			}
+		if (host == null) 
+			return false;
+		try {
+			((BundleHost) host.getBundleHost()).attachFragment(this);
+		} catch (BundleException be) {
+			framework.publishFrameworkEvent(FrameworkEvent.ERROR, host.getBundleHost(), be);
+			return false;
 		}
 		if (hosts == null) {
 			hosts = new BundleLoaderProxy[] {host};

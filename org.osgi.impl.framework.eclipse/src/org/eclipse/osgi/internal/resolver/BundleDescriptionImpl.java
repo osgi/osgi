@@ -19,14 +19,17 @@ import org.eclipse.osgi.framework.internal.core.KeyedElement;
 import org.eclipse.osgi.service.resolver.*;
 
 public class BundleDescriptionImpl extends BaseDescriptionImpl implements BundleDescription, KeyedElement {
-	static final byte RESOLVED			= 0x01;
-	static final byte SINGLETON			= 0x02;
-	static final byte REMOVAL_PENDING	= 0x04;
-	static final byte FULLY_LOADED		= 0x08;
-	static final byte LAZY_LOADED		= 0x10;
-	static final byte HAS_DYNAMICIMPORT = 0x20;
+	static final int RESOLVED			= 0x01;
+	static final int SINGLETON			= 0x02;
+	static final int REMOVAL_PENDING	= 0x04;
+	static final int FULLY_LOADED		= 0x08;
+	static final int LAZY_LOADED		= 0x10;
+	static final int HAS_DYNAMICIMPORT	= 0x20;
+	static final int ATTACH_FRAGMENTS	= 0x40;
+	static final int DYNAMIC_FRAGMENTS	= 0x80;
 
-	private byte stateBits = FULLY_LOADED; // set the fully loaded by default
+	// set to fully loaded and allow dynamic fragments by default
+	private int stateBits = FULLY_LOADED | ATTACH_FRAGMENTS | DYNAMIC_FRAGMENTS;
 
 	private long bundleId = -1;
 	private HostSpecification host;	//null if the bundle is not a fragment
@@ -116,6 +119,14 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		return (stateBits & HAS_DYNAMICIMPORT) != 0;
 	}
 
+	public boolean attachFragments() {
+		return (stateBits & ATTACH_FRAGMENTS) != 0;
+	}
+
+	public boolean dynamicFragments() {
+		return (stateBits & DYNAMIC_FRAGMENTS) != 0;
+	}
+
 	public ExportPackageDescription[] getSelectedExports() {
 		fullyLoad();
 		if (lazyData.selectedExports == null)
@@ -190,11 +201,11 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 			}
 	}
 
-	protected byte getStateBits() {
+	protected int getStateBits() {
 		return stateBits;
 	}
 
-	protected void setStateBit(byte stateBit, boolean on) {
+	protected void setStateBit(int stateBit, boolean on) {
 		if (on)
 			stateBits |= stateBit;
 		else

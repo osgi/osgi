@@ -16,6 +16,7 @@ import org.eclipse.osgi.service.resolver.*;
 public class HostSpecificationImpl extends VersionConstraintImpl implements HostSpecification {
 
 	private BundleDescription[] hosts;
+	private boolean multihost = false;
 
 	public boolean isSatisfiedBy(BaseDescription supplier) {
 		if (!(supplier instanceof BundleDescription))
@@ -39,7 +40,7 @@ public class HostSpecificationImpl extends VersionConstraintImpl implements Host
 	/*
 	 * The resolve algorithm will call this method to set the hosts.
 	 */
-	protected void setHosts(BundleDescription[] hosts) {
+	void setHosts(BundleDescription[] hosts) {
 		this.hosts = hosts;
 	}
 
@@ -53,4 +54,11 @@ public class HostSpecificationImpl extends VersionConstraintImpl implements Host
 		return hosts[0];
 	}
 
+	public boolean isMultiHost() {
+		return multihost;
+	}
+
+	void setIsMultiHost(boolean multihost) {
+		this.multihost = multihost;
+	}
 }

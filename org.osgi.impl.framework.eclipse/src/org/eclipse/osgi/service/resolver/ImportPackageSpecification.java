@@ -22,13 +22,6 @@ public interface ImportPackageSpecification extends VersionConstraint {
 	public static final int RESOLUTION_DYNAMIC  = 0x04;
 
 	/**
-	 * @return
-	 * @deprecated no replacement
-	 */
-	// TODO remove this
-	public String[] getPropagate();
-
-	/**
 	 * Returns the resolution type for this import package.  Valid values are
 	 * {@link ImportPackageSpecification#RESOLUTION_STATIC}, 
 	 * {@link ImportPackageSpecification#RESOLUTION_OPTIONAL}, and

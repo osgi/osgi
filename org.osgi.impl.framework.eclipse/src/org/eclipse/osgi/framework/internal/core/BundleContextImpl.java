@@ -1323,8 +1323,8 @@ public class BundleContextImpl implements BundleContext, EventDispatcher {
 			return true;
 		String[] clazzes = reference.getClasses();
 		for (int i = 0; i < clazzes.length; i++)
-			if (reference.isAssignableTo(bundle, clazzes[i]))
-				return true;
-		return false;
+			if (!reference.isAssignableTo(bundle, clazzes[i]))
+				return false;
+		return true;
 	}
 }
