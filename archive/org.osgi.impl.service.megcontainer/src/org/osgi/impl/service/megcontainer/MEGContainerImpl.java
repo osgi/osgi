@@ -1,3 +1,20 @@
+/*
+ * ============================================================================
+ * (c) Copyright 2004 Nokia
+ * This material, including documentation and any related computer programs,
+ * is protected by copyright controlled by Nokia and its licensors. 
+ * All rights are reserved.
+ * 
+ * These materials have been contributed  to the Open Services Gateway 
+ * Initiative (OSGi)as "MEMBER LICENSED MATERIALS" as defined in, and subject 
+ * to the terms of, the OSGi Member Agreement specifically including, but not 
+ * limited to, the license rights and warranty disclaimers as set forth in 
+ * Sections 3.2 and 12.1 thereof, and the applicable Statement of Work. 
+ * All company, brand and product names contained within this document may be 
+ * trademarks that are the sole property of the respective owners.  
+ * The above notice must be included on all copies of this document.
+ * ============================================================================
+ */
 package org.osgi.impl.service.megcontainer;
 
 import java.io.*;
@@ -32,6 +49,9 @@ class MEGBundleDescriptor {
 	public Dependencies[]			dependencies;
 	public long						bundleID;
 }
+/**
+ * The realization of the MEG container
+ */
 
 public class MEGContainerImpl implements MEGContainer, BundleListener,
 		ChannelListener {
@@ -140,7 +160,7 @@ public class MEGContainerImpl implements MEGContainer, BundleListener,
 				&& desc.eventSubscribes[i].eventTopic != null) {
 			for (int j = 0; j != desc.eventSubscribes[i].eventTopic.length; j++)
 				if (desc.eventSubscribes[i].eventAction[j] == EventSubscribe.LISTENER) {
-					/* TODO */
+					/* TODO TODO TODO TODO TODO */
 					Hashtable props = new Hashtable();
 					props.put("topic", desc.eventSubscribes[i].eventTopic[j]);
 					bc.registerService(ChannelListener.class.getName(), app,
@@ -448,8 +468,12 @@ public class MEGContainerImpl implements MEGContainer, BundleListener,
 										sizeX = "8";
 									if (sizeY == null || sizeY.length() == 0)
 										sizeY = "8";
+									String iconPath = childNode
+											.getProperty("value");
+									URL iconUrl = bc.getBundle(bundleID)
+											.getResource(iconPath);
 									icons.put(lang + "_" + sizeX + "x" + sizeY,
-											childNode.getProperty("value"));
+											iconUrl.toString());
 								}
 							}
 						}
