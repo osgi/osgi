@@ -29,5 +29,6 @@
 	<classpathentry kind="src" path="/org.osgi.service.application"/>
 	<classpathentry kind="src" path="/org.osgi.meglet"/>
 	<classpathentry kind="src" path="/org.osgi.service.monitor"/>
+	<classpathentry kind="src" path="/org.osgi.meg"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

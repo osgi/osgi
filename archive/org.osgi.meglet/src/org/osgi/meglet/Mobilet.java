@@ -70,4 +70,13 @@ public class Mobilet implements Application {
 	protected void requestStop() {
 		context.disableComponent(null);
 	}
+
+	/**
+	 * @throws Exception
+	 * @see org.osgi.service.application.Application#startApplication()
+	 */
+	public void startApplication() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }

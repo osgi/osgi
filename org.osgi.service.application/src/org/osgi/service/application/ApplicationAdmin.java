@@ -1,7 +1,8 @@
 package org.osgi.service.application;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.*;
+import org.osgi.framework.BundleException;
 
 /** @modelguid {B6B44DD8-374F-4796-AC9A-1220A68C585A} */
 public interface ApplicationAdmin {
