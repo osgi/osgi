@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) OSGi Alliance (2000, 2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -32,7 +32,7 @@ import java.util.Dictionary;
  * An RFC 1960-based Filter.
  * <p>
  * <code>Filter</code> objects can be created by calling
- * {@link BundleContext#createFilter}with the chosen filter string.
+ * {@link BundleContext#createFilter} with the chosen filter string.
  * <p>
  * A <code>Filter</code> object can be used numerous times to determine if the
  * match argument matches the filter string that was used to create the
