@@ -305,6 +305,11 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		return e.getNodeValue(path[1]);
 	}
 
+	public boolean isLeafNode(String nodeUri) throws DmtException {
+		String[] path = getPath(nodeUri);
+		return path.length==2;
+	}
+
 	public void setDefaultNodeValue(String nodeUri) throws DmtException {
 		String path[] = getPath(nodeUri);
 	}

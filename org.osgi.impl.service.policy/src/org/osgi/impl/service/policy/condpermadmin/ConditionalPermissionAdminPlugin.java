@@ -323,6 +323,11 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 		return cp.getNodeValue(path[1]);
 	}
 
+	public boolean isLeafNode(String nodeUri) throws DmtException {
+		String[] path = getPath(nodeUri);
+		return path.length==2;
+	}
+
 	public void setDefaultNodeValue(String nodeUri) throws DmtException {
 		// TODO Auto-generated method stub
 	}
@@ -337,6 +342,7 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 			return new String[] { PERMISSIONINFO, CONDITIONINFO };
 		}
 	}
+
 
 
 }
