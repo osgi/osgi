@@ -65,6 +65,7 @@ public class RegistryControl
     }
     
     public void prepare() throws Exception {
+    	tb2 = installBundle( "tb2.jar" );
         tb2.start();
         _otherRef   = getContext().getServiceReference( BundleContext.class.getName() );
         _other      = (BundleContext) getContext().getService( _otherRef );
