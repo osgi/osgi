@@ -1288,4 +1288,12 @@ class BundleImpl implements Bundle, Comparable {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	/**
+	 * @return
+	 * @see org.osgi.framework.Bundle#getLastModified()
+	 */
+	public long getLastModified() {
+		// TODO Auto-generated method stub
+		return System.currentTimeMillis();
+	}
 }
