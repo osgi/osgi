@@ -53,8 +53,7 @@ public class ConfigurationEventAdapter extends EventAdapter {
 				typename = CM_DELETED;
 				break;
 			default :
-				throw new RuntimeException("Invalid ConfigurationEvent type ("
-						+ event.getType() + ")");
+				return null;
 		}
 		String topic = HEADER + Constants.TOPIC_SEPARATOR + typename;
 		Hashtable properties = new Hashtable();

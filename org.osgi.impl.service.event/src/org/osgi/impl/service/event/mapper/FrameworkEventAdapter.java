@@ -57,8 +57,7 @@ public class FrameworkEventAdapter extends EventAdapter {
 				typename = STARTLEVEL_CHANGED;
 				break;
 			default :
-				throw new RuntimeException("Invalid FrameworkEvent type ("
-						+ event.getType() + ")");
+				return null;
 		}
 		String topic = HEADER + Constants.TOPIC_SEPARATOR + typename;
 		Hashtable properties = new Hashtable();

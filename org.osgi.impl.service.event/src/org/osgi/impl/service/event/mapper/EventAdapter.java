@@ -39,12 +39,19 @@ public abstract class EventAdapter {
 	 */
 	public abstract Event convert();
 
+	public void redeliver() {
+		Event converted = convert();
+		if (converted != null) {
+			redeliverInternal(converted);
+		}
+	}
+
 	/**
-	 * subclasses should override this method if it want to use sendEvent()
+	 * subclasses should override this method if it wants to use sendEvent()
 	 * instead.
 	 */
-	public void redeliver() {
-		eventAdmin.postEvent(convert());
+	protected void redeliverInternal(Event converted) {
+		eventAdmin.postEvent(converted);
 	}
 
 	public void putBundleProperties(Hashtable properties, Bundle bundle) {
@@ -73,13 +80,14 @@ public abstract class EventAdapter {
 		properties.put(Constants.SERVICE, ref);
 		properties.put(Constants.SERVICE_ID, ref
 				.getProperty(org.osgi.framework.Constants.SERVICE_ID));
-		String PID = (String) ref
-				.getProperty(org.osgi.framework.Constants.SERVICE_PID);
-		if (PID != null) {
-			properties.put(Constants.SERVICE_PID, PID);
+		Object o = ref.getProperty(org.osgi.framework.Constants.SERVICE_PID);
+		if ((o != null) && (o instanceof String)) {
+			properties.put(Constants.SERVICE_PID, (String) o);
 		}
-		properties.put(Constants.SERVICE_OBJECTCLASS, ref
-				.getProperty(org.osgi.framework.Constants.OBJECTCLASS));
+		Object o2 = ref.getProperty(org.osgi.framework.Constants.OBJECTCLASS);
+		if ((o2 != null) && (o2 instanceof String[])) {
+			properties.put(Constants.SERVICE_OBJECTCLASS, (String[]) o2);
+		}
 	}
 
 	/*

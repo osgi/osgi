@@ -61,7 +61,8 @@ public class LogEntryAdapter extends EventAdapter {
 		}
 		properties.put(LOG_ENTRY, entry);
 		properties.put(LOG_LEVEL, new Integer(entry.getLevel()));
-		properties.put(MESSAGE, entry.getMessage());
+		if (entry.getMessage() != null)
+			properties.put(MESSAGE, entry.getMessage());
 		properties.put(TIMESTAMP, new Long(entry.getTime()));
 		Event converted = new Event(topic, properties);
 		return converted;

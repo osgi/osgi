@@ -69,10 +69,7 @@ public class BundleEventAdapter extends EventAdapter {
 				typename = UNRESOLVED;
 				break;
 			default :
-				//### Should this really throw an exception?
-				//###  normally unknown events are ignored
-				throw new RuntimeException("Invalid BundleEvent type ("
-						+ event.getType() + ")");
+				return null;
 		}
 		String topic = HEADER + Constants.TOPIC_SEPARATOR + typename;
 		Hashtable properties = new Hashtable();

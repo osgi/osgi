@@ -130,15 +130,23 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 					+ UPnPService.ID + "=*)))");
 		}
 		catch (InvalidSyntaxException e) {
+			System.out
+					.println("Exception thrown while trying to create Filter. "
+							+ e);
+			e.printStackTrace(System.out);
 		}
-		ht2.put(UPnPEventListener.UPNP_FILTER, filter);
-		upnpEventListenerReg = bc.registerService(UPnPEventListener.class
-				.getName(), this, ht2);
+		if (filter != null) {
+			ht2.put(UPnPEventListener.UPNP_FILTER, filter);
+			upnpEventListenerReg = bc.registerService(UPnPEventListener.class
+					.getName(), this, ht2);
+		}
 		userAdminListenerReg = bc.registerService(UserAdminListener.class
 				.getName(), this, null);
 	}
 
 	private EventAdmin getEventAdmin() {
+		if (eventAdminTracker == null)
+			return null;
 		return (EventAdmin) eventAdminTracker.getService();
 	}
 
@@ -228,7 +236,7 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 	 */
 	public void logReaderServiceRemoved(ServiceReference reference,
 			Object service) {
-		if (reader == service) {
+		if ((reader != null) && reader.equals(service)) {
 			reader = null;
 		}
 		// ungetService() will be called after returning to

@@ -37,8 +37,8 @@ public class ServiceEventAdapter extends EventAdapter {
 	}
 
 	// override super's method to force syncronous event delivery
-	public void redeliver() {
-		eventAdmin.sendEvent(convert());
+	protected void redeliverInternal(Event converted) {
+		eventAdmin.sendEvent(converted);
 	}
 
 	/**
@@ -58,8 +58,7 @@ public class ServiceEventAdapter extends EventAdapter {
 				typename = UNREGISTERING;
 				break;
 			default :
-				throw new RuntimeException("Invalid ServiceEvent type ("
-						+ event.getType() + ")");
+				return null;
 		}
 		String topic = HEADER + Constants.TOPIC_SEPARATOR + typename;
 		Hashtable properties = new Hashtable();

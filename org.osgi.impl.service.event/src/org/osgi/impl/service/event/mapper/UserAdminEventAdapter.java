@@ -58,8 +58,7 @@ public class UserAdminEventAdapter extends EventAdapter {
 				typename = ROLE_REMOVED;
 				break;
 			default :
-				throw new RuntimeException("Invalid WireAdminEvent type ("
-						+ event.getType() + ")");
+				return null;
 		}
 		String topic = TOPIC + Constants.TOPIC_SEPARATOR + typename;
 		Hashtable properties = new Hashtable();

@@ -80,8 +80,7 @@ public class WireAdminEventAdapter extends EventAdapter {
 				typename = CONSUMER_EXCEPTION;
 				break;
 			default :
-				throw new RuntimeException("Invalid WireAdminEvent type ("
-						+ event.getType() + ")");
+				return null;
 		}
 		String topic = TOPIC + Constants.TOPIC_SEPARATOR + typename;
 		Hashtable properties = new Hashtable();
@@ -98,11 +97,11 @@ public class WireAdminEventAdapter extends EventAdapter {
 		Wire wire = event.getWire();
 		if (wire != null) {
 			properties.put(WIRE, wire);
-			if (wire.getFlavors()!= null) {
-				properties.put(WIRE_FLAVORS, classes2strings(wire.getFlavors()));
+			if (wire.getFlavors() != null) {
+				properties
+						.put(WIRE_FLAVORS, classes2strings(wire.getFlavors()));
 			}
-																			  
-			if (wire.getScope()!=null)	{										
+			if (wire.getScope() != null) {
 				properties.put(WIRE_SCOPE, wire.getScope());
 			}
 			properties.put(WIRE_CONNECTED_P, new Boolean(wire.isConnected()));
