@@ -45,8 +45,15 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 // TODO at rollback, do not call rollback() method for (non-transactional) plugins that were only read
 // TODO store for each opened plugin whether it has been accessed (i.e. whether commit/rollback calls should be propagated to it)
 public class DmtSessionImpl implements DmtSession {
+    
+    private static final int    SHOULD_NOT_EXIST   = 0;
+	private static final int    SHOULD_EXIST       = 1;
+	private static final int    SHOULD_BE_LEAF     = 2; // implies SHOULD_EXIST
+	private static final int    SHOULD_BE_INTERIOR = 3; // implies SHOULD_EXIST
+    
 	private static final Class[] PERMISSION_CONSTRUCTOR_SIG = 
         new Class[] { String.class, String.class };
+
     private static Hashtable	acls;
     
 	static {
@@ -54,25 +61,19 @@ public class DmtSessionImpl implements DmtSession {
 		acls.put(".", new DmtAcl("Add=*&Get=*&Replace=*"));
 	}
 	
-    private static final int    SHOULD_NOT_EXIST   = 0;
-	private static final int    SHOULD_EXIST       = 1;
-	private static final int    SHOULD_BE_LEAF     = 2; // implies SHOULD_EXIST
-	private static final int    SHOULD_BE_INTERIOR = 3; // implies SHOULD_EXIST
-    
-    private DmtPluginDispatcher dispatcher;
-    private EventAdmin          eventChannel;
+    private final AccessControlContext securityContext;
+    private final DmtPluginDispatcher  dispatcher;
+    private final EventAdmin           eventChannel;
 
-    private String     principal;
-    private String     subtreeUri;
-    private int        sessionId;
+    private final String principal;
+    private final String subtreeUri;
+    private final int    lockMode;
+    private final int    sessionId;
     
-    private int        lockMode;
-	private Set        dataPlugins;
-    private EventList  eventList;
-    private int        state;
+    private EventList eventList;
+	private Set       dataPlugins;
+    private int       state;
     
-    private AccessControlContext securityContext;
-
 	public DmtSessionImpl(String principal, String subtreeUri, int lockMode,
 			              PermissionInfo[] permissions, EventAdmin eventChannel, 
                           DmtPluginDispatcher dispatcher) throws DmtException {
@@ -95,7 +96,8 @@ public class DmtSessionImpl implements DmtSession {
                         "Unable to create Protection Domain for remote server.", 
                         e);
             }
-        }
+        } else
+            securityContext = null;
         
         if(lockMode == LOCK_TYPE_ATOMIC)
         	eventList = new EventList();
@@ -111,7 +113,7 @@ public class DmtSessionImpl implements DmtSession {
     
     /* These methods can be called even after the session has been closed. */
     
-    public int getState() {
+    public synchronized int getState() {
         return state;
     }
     
@@ -133,7 +135,7 @@ public class DmtSessionImpl implements DmtSession {
     
     /* These methods are only meaningful in the context of an open session. */
 
-	public void close() throws DmtException {
+	public synchronized void close() throws DmtException {
         checkSession();
         state = STATE_CLOSED;
 
@@ -166,7 +168,8 @@ public class DmtSessionImpl implements DmtSession {
     
     // TODO what happens with DmtDataPlugins that do not support transactions?
     // TODO what state should be entered after a commit?
-    public void commit() throws DmtException {
+    // TODO prevent other methods from being called while this finishes?
+    public synchronized void commit() throws DmtException {
         checkSession();
         if (lockMode != LOCK_TYPE_ATOMIC)
             throw new IllegalStateException(
@@ -194,8 +197,8 @@ public class DmtSessionImpl implements DmtSession {
     // FIXME rollback no longer closes/invalidates a plugin, do a separate close if needed
     // TODO what happens with DmtDataPlugins that do not support transactions?
     // TODO what state should be entered after a rollback?
-    // TODO prevent other methods from being called while this finishes?  (same for commit)
-	public void rollback() throws DmtException {
+    // TODO prevent other methods from being called while this finishes?
+	public synchronized void rollback() throws DmtException {
 		checkSession();
 //		state = STATE_ROLLED_BACK;
 		if (lockMode != LOCK_TYPE_ATOMIC)
@@ -224,7 +227,8 @@ public class DmtSessionImpl implements DmtSession {
 		eventList.clear();
     }
 
-	public void execute(String nodeUri, final String data) throws DmtException {
+	public synchronized void execute(String nodeUri, final String data) 
+	        throws DmtException {
         checkSession();
 		// allow executing non-existent nodes so that an exec plugin is not
 		// forced to be a data plugin as well
@@ -250,20 +254,23 @@ public class DmtSessionImpl implements DmtSession {
         }
 	}
 
-	public boolean isNodeUri(String nodeUri) {
+	public synchronized boolean isNodeUri(String nodeUri) {
         checkSession();
-		// TODO check perms (only runtime SecurityException has to be thrown)
-		// requires "get" DmtPermission for local clients, and is not allowed
-		// remotely (no SyncML command anyway)
-		try {
-			makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
+        
+        try {
+            String uri = makeAbsoluteUri(nodeUri);
+            // requires DmtPermission with GET action, shouldn't be called remotely
+            checkLocalPermission(uri, writeAclCommands(DmtAcl.GET));
+            checkNode(uri, SHOULD_EXIST);
 		} catch (DmtException e) {
 			return false; // invalid node URI or error opening plugin
 		}
+        
 		return true;
 	}
 
-	public boolean isLeafNode(String nodeUri) throws DmtException {
+	// TODO get isLeaf directly from plugin instead of metadata 
+	public synchronized boolean isLeafNode(String nodeUri) throws DmtException {
         checkSession();
 		String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
 		checkNodePermission(uri, DmtAcl.GET);
@@ -271,7 +278,7 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	// GET property op
-	public DmtAcl getNodeAcl(String nodeUri) throws DmtException {
+	public synchronized DmtAcl getNodeAcl(String nodeUri) throws DmtException {
         checkSession();
         String uri = makeAbsoluteUri(nodeUri);
 		//String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
@@ -281,7 +288,8 @@ public class DmtSessionImpl implements DmtSession {
 	}
     
     // GET property op
-    public DmtAcl getEffectiveNodeAcl(String nodeUri) throws DmtException {
+    public synchronized DmtAcl getEffectiveNodeAcl(String nodeUri)
+            throws DmtException {
         checkSession();
         String uri = makeAbsoluteUri(nodeUri);
         checkNodePermission(uri, DmtAcl.GET);
@@ -289,7 +297,8 @@ public class DmtSessionImpl implements DmtSession {
     }
 
 	// REPLACE property op
-	public void setNodeAcl(String nodeUri, DmtAcl acl) throws DmtException {
+	public synchronized void setNodeAcl(String nodeUri, DmtAcl acl) 
+            throws DmtException {
 		checkSession();
         if (acl == null)
 			throw new IllegalArgumentException(
@@ -316,21 +325,24 @@ public class DmtSessionImpl implements DmtSession {
         enqueueEvent(EventList.REPLACE, nodeUri);
 	}
 
-	public DmtMetaNode getMetaNode(String nodeUri) throws DmtException {
-		checkSession();
+	public synchronized DmtMetaNode getMetaNode(String nodeUri)
+            throws DmtException {
+        checkSession();
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
-		checkNodePermission(uri, DmtAcl.GET);
-		return getMetaNodeNoCheck(uri);
-	}
+        checkNodePermission(uri, DmtAcl.GET);
+        return getMetaNodeNoCheck(uri);
+    }
 
-	public DmtData getNodeValue(String nodeUri) throws DmtException {
-		checkSession();
+	public synchronized DmtData getNodeValue(String nodeUri)
+            throws DmtException {
+        checkSession();
         final String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_LEAF);
-		checkNodePermission(uri, DmtAcl.GET);
+        checkNodePermission(uri, DmtAcl.GET);
         return getDataPlugin(uri).getNodeValue(uri);
-	}
+    }
 
-	public String[] getChildNodeNames(String nodeUri) throws DmtException {
+	public synchronized String[] getChildNodeNames(String nodeUri) 
+            throws DmtException {
         checkSession();
         final String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_INTERIOR);
         checkNodePermission(uri, DmtAcl.GET);
@@ -354,31 +366,32 @@ public class DmtSessionImpl implements DmtSession {
     }
 
 	// GET property op
-	public String getNodeTitle(String nodeUri) throws DmtException {
-		checkSession();
+    public synchronized String getNodeTitle(String nodeUri) throws DmtException {
+        checkSession();
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
-		checkNodePermission(uri, DmtAcl.GET);
-		return getDataPlugin(uri).getNodeTitle(uri);
-	}
+        checkNodePermission(uri, DmtAcl.GET);
+        return getDataPlugin(uri).getNodeTitle(uri);
+    }
 
 	// GET property op
-	public int getNodeVersion(String nodeUri) throws DmtException {
-		checkSession();
+    public synchronized int getNodeVersion(String nodeUri) throws DmtException {
+        checkSession();
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
-		checkNodePermission(uri, DmtAcl.GET);
-		return getDataPlugin(uri).getNodeVersion(uri);
-	}
+        checkNodePermission(uri, DmtAcl.GET);
+        return getDataPlugin(uri).getNodeVersion(uri);
+    }
 
 	// GET property op
-	public Date getNodeTimestamp(String nodeUri) throws DmtException {
-		checkSession();
+    public synchronized Date getNodeTimestamp(String nodeUri)
+            throws DmtException {
+        checkSession();
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
-		checkNodePermission(uri, DmtAcl.GET);
-		return getDataPlugin(uri).getNodeTimestamp(uri);
-	}
+        checkNodePermission(uri, DmtAcl.GET);
+        return getDataPlugin(uri).getNodeTimestamp(uri);
+    }
 
 	// GET property op
-	public int getNodeSize(String nodeUri) throws DmtException {
+	public synchronized int getNodeSize(String nodeUri) throws DmtException {
 		checkSession();
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_LEAF);
 		checkNodePermission(uri, DmtAcl.GET);
@@ -386,37 +399,40 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	// GET property op
-	public String getNodeType(String nodeUri) throws DmtException {
-		checkSession();
+    public synchronized String getNodeType(String nodeUri) throws DmtException {
+        checkSession();
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
-		checkNodePermission(uri, DmtAcl.GET);
-		return getDataPlugin(uri).getNodeType(uri);
-	}
+        checkNodePermission(uri, DmtAcl.GET);
+        return getDataPlugin(uri).getNodeType(uri);
+    }
 
 	// REPLACE property op
-	public void setNodeTitle(String nodeUri, String title) throws DmtException {
-		checkSession();
+    public synchronized void setNodeTitle(String nodeUri, String title)
+            throws DmtException {
+        checkSession();
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
-		checkNodePermission(uri, DmtAcl.REPLACE);
-		try {
-			if (title.getBytes("UTF-8").length > 255)
-				throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
-						"Length of Title property exceeds 255 bytes (UTF-8).");
-		} catch (UnsupportedEncodingException e) {
-			// never happens
-		}
-		getWritableDataPlugin(uri).setNodeTitle(uri, title);
+        checkNodePermission(uri, DmtAcl.REPLACE);
+        try {
+            if (title.getBytes("UTF-8").length > 255)
+                throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
+                        "Length of Title property exceeds 255 bytes (UTF-8).");
+        } catch (UnsupportedEncodingException e) {
+            // never happens
+        }
+        getWritableDataPlugin(uri).setNodeTitle(uri, title);
         enqueueEvent(EventList.REPLACE, nodeUri);
-	}
+    }
 
-	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
+	public synchronized void setNodeValue(String nodeUri, DmtData data)
+            throws DmtException {
         if (data == null)
-			throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, 
-					"'null' value given for DmtData argument.");
+            throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
+                    "'null' value given for DmtData argument.");
         commonSetNodeValue(nodeUri, data);
-	}
+    }
     
-    public void setDefaultNodeValue(String nodeUri) throws DmtException {
+    public synchronized void setDefaultNodeValue(String nodeUri)
+            throws DmtException {
         commonSetNodeValue(nodeUri, null);
     }
     
@@ -433,23 +449,23 @@ public class DmtSessionImpl implements DmtSession {
     }
     
 	// SyncML DMTND 7.5 (p16) Type: only the Get command is applicable!
-	public void setNodeType(String nodeUri, String type) throws DmtException {
-		checkSession();
-        if(type == null)
-            throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, 
+    public synchronized void setNodeType(String nodeUri, String type)
+            throws DmtException {
+        checkSession();
+        if (type == null)
+            throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
                     "'null' value given for node type.");
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
-		checkNodePermission(uri, DmtAcl.REPLACE);
-		getWritableDataPlugin(uri).setNodeType(uri, type);
+        checkNodePermission(uri, DmtAcl.REPLACE);
+        getWritableDataPlugin(uri).setNodeType(uri, type);
         enqueueEvent(EventList.REPLACE, nodeUri);
-	}
+    }
 
-	public void deleteNode(String nodeUri) throws DmtException {
+	public synchronized void deleteNode(String nodeUri) throws DmtException {
 		checkSession();
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
 		checkNodePermission(uri, DmtAcl.DELETE);
-		// TODO if there is no meta information, should we assume that the node
-		// can be deleted or not?
+		// TODO if there is no meta information, should we assume that the node can be deleted or not?
 		DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
 		if (metaNode != null) {
 			if (metaNode.getScope() == DmtMetaNode.PERMANENT)
@@ -464,12 +480,13 @@ public class DmtSessionImpl implements DmtSession {
         enqueueEvent(EventList.DELETE, nodeUri);
 	}
 
-	public void createInteriorNode(String nodeUri) throws DmtException {
+	public synchronized void createInteriorNode(String nodeUri)
+            throws DmtException {
         checkSession();
-	    commonCreateInteriorNode(nodeUri, null);
-	}
+        commonCreateInteriorNode(nodeUri, null);
+    }
 
-	public void createInteriorNode(String nodeUri, String type)
+	public synchronized void createInteriorNode(String nodeUri, String type)
 			throws DmtException {
         checkSession();
 	    if(type == null)
@@ -492,12 +509,12 @@ public class DmtSessionImpl implements DmtSession {
         enqueueEvent(EventList.ADD, nodeUri);
     }
 
-    public void createLeafNode(String nodeUri) throws DmtException {
+    public synchronized void createLeafNode(String nodeUri) throws DmtException {
         checkSession();
         commonCreateLeafNode(nodeUri, null, null);
     }
     
-    public void createLeafNode(String nodeUri, DmtData value)
+    public synchronized void createLeafNode(String nodeUri, DmtData value)
 			throws DmtException {
         checkSession();
         if (value == null)
@@ -506,8 +523,8 @@ public class DmtSessionImpl implements DmtSession {
         commonCreateLeafNode(nodeUri, value, null);
 	}
     
-    public void createLeafNode(String nodeUri, DmtData value, String mimeType)
-            throws DmtException {
+    public synchronized void createLeafNode(String nodeUri, DmtData value, 
+            String mimeType) throws DmtException {
         checkSession();
         if (value == null)
             throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, 
@@ -517,7 +534,6 @@ public class DmtSessionImpl implements DmtSession {
             throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
                     "'null' value given for mime-type argument.");
         commonCreateLeafNode(nodeUri, value, mimeType);
-        
     }
     
     private void commonCreateLeafNode(String nodeUri, DmtData value,
@@ -540,10 +556,11 @@ public class DmtSessionImpl implements DmtSession {
 
     // TODO send events (when it becomes clear what to send)
 	// TODO support non-recursive copy mode, if semantics are clarified
+    // TODO do not copy ACLs (?)
 	// Tree may be left in an inconsistent state if there is an error when only
 	// part of the tree has been cloned (?)
-	public void copy(String nodeUri, String newNodeUri, boolean recursive)
-			throws DmtException {
+	public synchronized void copy(String nodeUri, String newNodeUri, 
+            boolean recursive) throws DmtException {
 		checkSession();
         if (!recursive)
 			throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
@@ -573,7 +590,8 @@ public class DmtSessionImpl implements DmtSession {
 		}
 	}
 
-	public void renameNode(String nodeUri, String newName) throws DmtException {
+	public synchronized void renameNode(String nodeUri, String newName) 
+            throws DmtException {
 		checkSession();
         if (!Utils.isValidNodeName(newName))
 			throw new DmtException(newName, DmtException.OTHER_ERROR,
@@ -683,8 +701,6 @@ public class DmtSessionImpl implements DmtSession {
     }
     
 	private DmtMetaNode getMetaNodeNoCheck(String uri) throws DmtException {
-		// TODO is there any generic (engine-level) metadata that should be
-		// given to the plugins?
 		Object plugin = getDataPlugin(uri);
 		if (plugin instanceof DmtDataPlugin)
 			return ((DmtDataPlugin) plugin).getMetaNode(uri);
@@ -858,24 +874,36 @@ public class DmtSessionImpl implements DmtSession {
 	// privileges are missing
 	private static void checkNodeOrParentPermission(String name, String uri,
 			int actions, boolean checkParent) throws DmtException {
-		// TODO add information about current operation in the error string
+
+        String actionString = writeAclCommands(actions);
+        String parentUri = null;
+        if(checkParent)
+            parentUri = Utils.parentUri(uri);
+        
+        // TODO add information about current operation in the error string
 		if (name != null) { // TODO synchronize on 'acls'?
 			if (!(hasAclPermission(uri, name, actions) || checkParent
-					&& hasAclPermission(Utils.parentUri(uri), name, actions)))
+					&& hasAclPermission(parentUri, name, actions)))
 				throw new DmtException(uri, DmtException.PERMISSION_DENIED,
 						"Principal '" + name
 								+ "' does not have the required permissions ("
-								+ writeAclCommands(actions) + ") on the node "
+								+ actionString + ") on the node "
 								+ (checkParent ? "or its parent " : "")
 								+ "to perform this operation.");
 		}
 		else { // TODO maybe do this even if ACL check was done?
-			// TODO check DmtPermissions
+            checkLocalPermission(uri, actionString);
+            if(checkParent)
+                checkLocalPermission(parentUri, actionString);
 		}
 	}
-
+    
     private static boolean hasAclPermission(String uri, String name, int actions) {
         return getEffectiveNodeAclNoCheck(uri).isPermitted(name, actions);
+    }
+
+    private static void checkLocalPermission(String uri, String actions) {
+        System.getSecurityManager().checkPermission(new DmtPermission(uri, actions));
     }
 
 	// TODO the action names should be retrieved from the DmtAcl class somehow
