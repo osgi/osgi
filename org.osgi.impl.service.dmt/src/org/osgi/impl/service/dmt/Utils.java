@@ -18,10 +18,57 @@
 package org.osgi.impl.service.dmt;
 
 class Utils {
+    // TODO do not allow ":" in the first segment of a node URI (?)
+    // TODO allow escaped (%HH) characters in URIs?  (--> segments must be passed separately to plugins)
+    /* 
+     * Permitted characters in a segment of a relative URI (RFC 2396):
+     * - letters and digits: a-z, A-Z, 0-9
+     * - mark symbols: "-", "_", ".", "!", "~", "*", "'", "(", ")"
+     * - escaped characters: '% hex hex' where 'hex' is 0-9, a-f, A-F
+     * - other symbols: ";", "@", "&", "=", "+", "$", ","
+     * Additionally, ":" is allowed in all but the first segment of a URI 
+     */
+    private static final String URI_SYMBOLS = ";:@&=+$,-_.!~*'()";
+    private static final String URI_DIGITS = "0123456789";
+    private static final String URI_LETTERS = 
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+//    private static final String URI_HEX_DIGITS = URI_DIGITS + "abcdefABCDEF";
+
+    private static boolean isValidChar(char c) {
+    	return 
+            URI_SYMBOLS.indexOf(c) != -1 ||
+            URI_LETTERS.indexOf(c) != -1 ||
+            URI_DIGITS.indexOf(c)  != -1;
+    }
+    
+//    private static boolean isValidHexDigit(char c) {
+//    	return URI_HEX_DIGITS.indexOf(c) != -1;
+//    }
+    
 	static boolean isValidNodeName(String nodeName) {
-		return nodeName != null && !nodeName.equals("..")
-				&& nodeName.indexOf('/') == -1;
-		// TODO further syntax checks based on URI RFC 2396
+        if(nodeName == null || nodeName.length() == 0 || nodeName.equals(".."))
+            return false;
+        
+		char[] chars = nodeName.toCharArray();
+        int i = 0;
+		while(i < chars.length) {
+            /* escaped characters not allowed currently */
+//			if (chars[i] == '%') { // escaped character (in '% hex hex' form)
+//				if (i + 2 >= chars.length)
+//					return false; // no room for the hexadecimal digits
+//				if (!isValidHexDigit(chars[i+1]) || !isValidHexDigit(chars[i+2]))
+//					return false; // invalid character in escaped ch. sequence
+//				i += 2;
+//			}
+//            else
+            if(!isValidChar(chars[i]))
+            	return false;
+            
+            i++;
+		}
+        
+        return true;
 	}
 
 	static boolean isValidUri(String uri) {
