@@ -36,7 +36,7 @@ public class ServerTest implements RemoteReceiver {
 		System.out.println("=============================");
 		System.out.println("= Management Server started =");
 		System.out.println("=============================\r\n,");
-		rms = new RMServer(port, SOCKET_TIMEOUT);
+		rms = new RMServer(port);
 		rms.setReceiver(this);
 		Consol c = new Consol();
 		c.start();
@@ -67,5 +67,14 @@ public class ServerTest implements RemoteReceiver {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	/**
+	 * @param b
+	 * @see org.osgi.meg.demo.remote.RemoteReceiver#setConnected(boolean)
+	 */
+	public void setConnected(boolean b) {
+		// TODO Auto-generated method stub
+		
 	}
 }

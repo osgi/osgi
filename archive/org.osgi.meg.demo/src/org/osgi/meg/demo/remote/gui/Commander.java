@@ -17,10 +17,6 @@
  */
 package org.osgi.meg.demo.remote.gui;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
-
 import org.osgi.meg.demo.remote.*;
 
 public class Commander implements RemoteReceiver {
@@ -34,16 +30,6 @@ public class Commander implements RemoteReceiver {
         this.gui = gui;
     }
 
-    public void destroy() {
-    	try {
-            command("close");
-		} catch (CommanderException e) {
-            System.err.println("Error occured during Commander.destroy():");
-			e.printStackTrace();
-		}
-        rms.stop();
-    }
-    
     public synchronized String command(String cmd) throws CommanderException {
     	rms.setCommand(cmd);
         try {
@@ -64,21 +50,7 @@ public class Commander implements RemoteReceiver {
 	public void onAlert(String alert) {
         if (null == alert)
             return;
-        StringBuffer sb = new StringBuffer();
-        BufferedReader reader = new BufferedReader(new StringReader(alert));
-        try {
-			String line = reader.readLine();
-            while (null != line) {
-                // TODO
-                if (line.length() > 200)
-                    line = line.substring(0, 29) + "...";
-                sb.append(line + "\n");
-                line = reader.readLine();
-            }
-		} catch (IOException e) {
-			// TODO
-		} 
-		gui.alert(sb.toString());
+		gui.alert(alert);
 	}
 
 	public void onResult(String result) {
@@ -87,5 +59,9 @@ public class Commander implements RemoteReceiver {
         	notify();
         }
     }
+
+	public void setConnected(boolean b) {
+		gui.setConnected(b);
+	}
 
 }

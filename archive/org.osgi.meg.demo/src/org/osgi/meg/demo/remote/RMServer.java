@@ -20,19 +20,41 @@ package org.osgi.meg.demo.remote;
 import java.io.*;
 import java.net.*;
 
-public class RMServer {
-	private String			command		= null;
-	private RemoteReceiver	receiver	= null;
-	private ServerThread	st;
+public class RMServer extends Thread {
+	
+	private static final int SOCKET_TIMEOUT = 5000;
+	
+	private String			command;
+	private RemoteReceiver	receiver;
+	private int 			port;
+	private ServerSocket	serverSocket;
+	private Socket			clientSocket;
+	private PrintWriter		out;
+	private BufferedReader	in;
 	private boolean			running;
+	private boolean			connected;
 
-	public RMServer(int port, int timeout) {
-		st = new ServerThread(this, port, timeout);
-		st.start();
+	public RMServer(int port) {
+		super("RMServer");
+		this.port = port;
+		start();
 	}
 
-	public synchronized void stop() {
-		running = false;
+	public synchronized boolean isRunning() {
+		return running;
+	}
+	
+	public synchronized void setRunning(boolean b) {
+		running = b;
+	}
+
+	public synchronized boolean isConnected() {
+		return connected;
+	}
+	
+	private synchronized void setConnected(boolean b) {
+		receiver.setConnected(b);
+		connected = b;
 	}
 
 	public void setCommand(String cmd) {
@@ -43,79 +65,114 @@ public class RMServer {
 		this.receiver = ar;
 	}
 
-	private class ServerThread extends Thread {
-		private RMServer		parent			= null;
-		private ServerSocket	serverSocket	= null;
-		private Socket			clientSocket	= null;
-		private PrintWriter		out				= null;
-		private BufferedReader	in				= null;
-
-		public ServerThread(RMServer parent, int port, int timeout) {
-			super("RMServer");
-			this.parent = parent;
+	public void run() {
+		setRunning(true);
+		
+		while (isRunning()) {
+			System.out.println("Waiting for connection request...");
 			try {
 				serverSocket = new ServerSocket(port);
+				serverSocket.setSoTimeout(SOCKET_TIMEOUT);
 				clientSocket = serverSocket.accept();
-				clientSocket.setSoTimeout(timeout);
-				out = new PrintWriter(clientSocket.getOutputStream(), true);
-				in = new BufferedReader(new InputStreamReader(clientSocket
-						.getInputStream()));
-			}
-			catch (IOException e) {
-				System.out.println("ServerThread init failed" + e.getMessage());
+			} catch (SocketTimeoutException e) {
+				try {
+					serverSocket.close();
+				}
+				catch (IOException ioe) {
+					ioe.printStackTrace();
+				}
+				continue;
+			} catch (IOException e) {
 				e.printStackTrace();
-				System.exit(1);
+				setRunning(false);
+				continue;
 			}
-		}
+			
+			try {
+				clientSocket.setSoTimeout(SOCKET_TIMEOUT);
+				out = new PrintWriter(clientSocket.getOutputStream(), true);
+				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				setConnected(true);
+				System.out.println("Client has connected");
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				if (null != out)
+					out.close();
+				if (null != in) {
+					try {
+						in.close();
+						clientSocket.close();
+					}
+					catch (IOException ioe) {
+						ioe.printStackTrace();
+					}
+				}
+				setRunning(false);
+				continue;
+			}
 
-		public void run() {
 			String input = null;
 			String result = null;
 			String output = null;
-			running = true;
 			try {
-				while (running && !(input = in.readLine()).equals("bye")) {
+				while (isRunning() && isConnected()) {
+					input = in.readLine();
+					if (input.equals("bye")) {
+						in.close();
+						out.close();
+						setConnected(false);
+						continue;
+					}
 					if (input.startsWith("alert:")) {
 						result = readBlock();
-						parent.receiver.onAlert(result);
+						receiver.onAlert(result);
 						out.println("alert_ok");
 						continue;
 					}
 					if (input.startsWith("ping")) {
-						if (parent.command != null) {
-							out.println("cmd:" + parent.command);
-							parent.command = null;
+						if (command != null) {
+							out.println("cmd:" + command);
+							command = null;
 						}
 						else {
 							out.println("ping_ok");
 						}
 						continue;
 					}
-					else
-						if (input.startsWith("result:")) {
-							input = readBlock();
-							parent.receiver.onResult(input);
-							out.println("result_ok");
-							continue;
-						}
-				} // while
-				out.close();
-				in.close();
-				clientSocket.close();
-				serverSocket.close();
-			} // try
-			catch (IOException e) {
-				e.printStackTrace();
+					if (input.startsWith("result:")) {
+						input = readBlock();
+						receiver.onResult(input);
+						out.println("result_ok");
+						continue;
+					}
+				} // while (running && connected)
+			} catch (IOException e) {
+			} finally {
+				try {
+					setConnected(false);
+					if (null != in)
+						in.close();
+					if (null != out)
+						out.close();
+					if (null != clientSocket)
+						clientSocket.close();
+					serverSocket.close();
+					System.out.println("Client has disconnected");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-		} // run
+		} // while (running)
+	} 
 
-		private String readBlock() throws IOException {
-			String input = "";
-			String ret = "";
-			while (!(input = in.readLine()).equals("block_end")) {
-				ret = ret + input + "\r\n";
-			}
-			return ret;
+	private String readBlock() throws IOException {
+		String input = "";
+		String ret = "";
+		while (!(input = in.readLine()).equals("block_end")) {
+			ret = ret + input + "\r\n";
 		}
-	} // sthread
+		return ret;
+	}
+
 }

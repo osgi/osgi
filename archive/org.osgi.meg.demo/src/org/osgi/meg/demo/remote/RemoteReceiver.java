@@ -18,7 +18,11 @@
 package org.osgi.meg.demo.remote;
 
 public interface RemoteReceiver {
+	
 	void onAlert(String alert);
 
 	void onResult(String result);
+
+	void setConnected(boolean b);
+	
 }
