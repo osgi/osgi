@@ -5,8 +5,5 @@ Bundle-Vendor: Ericsson
 Bundle-Version: $(version)
 Bundle-Activator: $(p).tb3.TB3Activator
 $(IMPORT-PACKAGE)
-
 $(EXPORT-PACKAGE)
-
-
 

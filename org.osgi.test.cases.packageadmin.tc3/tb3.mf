@@ -7,4 +7,3 @@ Bundle-Activator: $(p).tb3.TB3Activator
 Import-Package: org.osgi.framework, org.osgi.test.cases.packageadmin.tc3.tb1
 Export-Package: org.osgi.test.cases.packageadmin.tc3.tb3, 
   org.osgi.test.cases.packageadmin.tc3.tb1 ; specification-version=1.0.2
-

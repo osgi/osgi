@@ -6,4 +6,3 @@ Bundle-Version: $(version)
 Bundle-Activator: $(p).tb4.TB4Activator
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
-
