@@ -31,8 +31,10 @@ import java.io.*;
 import java.security.*;
 import org.osgi.framework.*;
 
+
 /**
- * This class realizes the Application Handle
+ * This service represents a Meglet instance. It is a specialization of the
+ * application handle and provides features specific to the Meglet model.
  */
 public final class MegletHandle extends ApplicationHandle {
 	private int									status;
@@ -45,10 +47,15 @@ public final class MegletHandle extends ApplicationHandle {
 	private static Long					counter						= new Long(0);
 	private Map									resumeArgs				= null;
 	private String      				pid;
-
 	private final static int 		NONEXISTENT = -1;
-	public  final static int 		SUSPENDED = 2;
 	
+	/**
+	 * The Meglet instance is suspended.
+	 * 
+	 * @modelguid {8EBD44E3-883B-4515-8EEA-8469F6F16408}
+	 */
+	public  final static int 		SUSPENDED = 2;
+
 	public MegletHandle(MegletContainer megletContainer, Meglet meglet,
 			MegletDescriptor appDesc, BundleContext bc) throws Exception {
 		
@@ -61,16 +68,43 @@ public final class MegletHandle extends ApplicationHandle {
 		this.meglet = meglet;
 	}
 
+	/**
+	 * Returns the state of the Meglet instance specific to the Meglet model.
+	 * 
+	 * @throws IllegalStateException
+	 *             if the Meglet handle is unregistered
+	 * 
+	 * @return the state of the Meglet instance
+	 */
 	public int getState() throws Exception {
 		if( status == MegletHandle.NONEXISTENT )
 			throw new Exception( "Invalid state!" );
 		return status;
-	}
-	
+	}	
+
+	/**
+	 * Returns the instance id of the Meglet instance. Must be unique on the
+	 * device.
+	 * 
+	 * @throws IllegalStateException
+	 *             if the Meglet handle is unregistered
+	 * 
+	 * @return the instance id of the Meglet instance
+	 */
 	public String getInstanceID() {
 		return pid;
 	}
 
+	/**
+	 * Returns service reference to the application descriptor of the Meglet to
+	 * which this Meglet instance belongs to.
+	 * 
+	 * @return the application descriptor of the Meglet to which this Meglet
+	 *         instance belongs to
+	 * 
+	 * @throws IllegalStateException
+	 *             if the Meglet handle is unregistered
+	 */
 	public ServiceReference getApplicationDescriptor() {
 		return appDescRef;
 	}
@@ -98,6 +132,11 @@ public final class MegletHandle extends ApplicationHandle {
 			throw new Exception("Invalid meglet handle!");		
 	}
 
+	/**
+	 * Destroys a Meglet according to the Meglet model. It calls the associated
+	 * Meglet instance's stop() method with null parameter.
+	 *  
+	 */
 	protected void destroySpecific() throws Exception {
 		if (status == MegletHandle.NONEXISTENT
 				|| status == ApplicationHandle.STOPPING)
@@ -111,6 +150,19 @@ public final class MegletHandle extends ApplicationHandle {
 		unregisterAppHandle();
 	}
 
+	/**
+	 * Suspends the Melet instance. It calls the associated Meglet instance's
+	 * stop() method and passes a non-null output stream as a parameter. It must
+	 * preserve the contents of the output stream written by the Meglet instance
+	 * even across device restarts. The same content must be provided to a
+	 * resuming Meglet instance.
+	 * 
+	 * @throws SecurityException
+	 *             if the caller doesn't have "manipulate"
+	 *             ApplicationAdminPermission for the corresponding application.
+	 * @throws IllegalStateException
+	 *             if the Meglet handle is unregistered
+	 */
 	public void suspend() throws Exception {
 
 		AccessController.checkPermission(new ApplicationAdminPermission(pid, 
@@ -140,6 +192,19 @@ public final class MegletHandle extends ApplicationHandle {
 			throw new Exception("Invalid meglet handle!");
 	}
 
+	/**
+	 * Resumes the Meglet instance. It calls the associated Meglet instance's
+	 * start() method and passes a non-null input stream as a parameter. It must
+	 * have the same contents that was saved by the suspending Meglet instance.
+	 * The same startup arguments must also be passed to the resuming Meglet
+	 * instance that was passed to the first starting instance.
+	 * 
+	 * @throws SecurityException
+	 *             if the caller doesn't have "manipulate"
+	 *             ApplicationAdminPermission for the corresponding application.
+	 * @throws IllegalStateException
+	 *             if the Meglet handle is unregistered
+	 */
 	public void resume() throws Exception {
 
 		AccessController.checkPermission(new ApplicationAdminPermission(pid, 
