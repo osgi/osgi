@@ -340,19 +340,22 @@ public class CMControl extends DefaultTestBundleControl {
 		//props.put("BigDecimalkey", new BigDecimal(9872.7643));
 		props.put("CharacterKey", new Character('N'));
 		props.put("BooleanKey", new Boolean(true));
+		
 		Vector v = new Vector();
 		v.addElement("stringvalue");
-		v.addElement(new Integer(12));
-		v.addElement(new Long(-29));
-		v.addElement(new Float(921.14));
-		v.addElement(new Double(1827.234));
-		v.addElement(new Byte((byte) 127));
-		v.addElement(new Short((short) 1));
+		//### is now invalid ....
+		//v.addElement(new Integer(12));
+		//v.addElement(new Long(-29));
+		//v.addElement(new Float(921.14));
+		//v.addElement(new Double(1827.234));
+		//v.addElement(new Byte((byte) 127));
+		//v.addElement(new Short((short) 1));
 		//v.addElement(new BigInteger("123"));
 		//v.addElement(new BigDecimal(9872.7643));
-		v.addElement(new Character('N'));
-		v.addElement(new Boolean(true));
-		v.addElement(new String[] {"firststring", "secondstring"});
+		//v.addElement(new Character('N'));
+		//v.addElement(new Boolean(true));
+		//v.addElement(new String[] {"firststring", "secondstring"});
+		//### end invalid
 		props.put("vectorkey", v);
 		props.put("StringArray", new String[] {"string1", "string2"});
 		props.put("IntegerArray",
@@ -379,10 +382,14 @@ public class CMControl extends DefaultTestBundleControl {
 				new Character('O')});
 		props.put("BooleanArray", new Boolean[] {new Boolean(true),
 				new Boolean(false)});
+		
 		Vector v1 = new Vector();
 		v1.addElement(new Vector());
-		v1.addElement("Anystring");
-		props.put("VectorArray", new Vector[] {v1, new Vector()});
+		v1.addElement("Anystring");			
+
+		//### invalid
+		//props.put("VectorArray", new Vector[] {v1, new Vector()});
+		
 		props.put("CAPITALkey", "CAPITALvalue");
 		conf.update(props);
 		/* Register a managed service and get the properties */
