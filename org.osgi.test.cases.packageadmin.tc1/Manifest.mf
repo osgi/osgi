@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.packageadmin.tc1
+Bundle-Copyright: Copyright (c) The Open Services Gateway Initiative (2000, 2002). All Rights Reserved.
+Bundle-Description: Tests exporting packages and re-exporting packages. <BR>
+ Testing the methods in PackageAdmin<BR>
+ Tests that PackageAdmin is exported by the System Bundle.<BR>
+ Tests what happens when an exported package is being removed.<BR>
+Bundle-Vendor: OSGi
+Bundle-Version: 3.0
+Bundle-Activator: $(p).TC1
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+
+
+
