@@ -1,7 +1,7 @@
 /*
  * $Header$
  *
- * Copyright (c) OSGi Alliance (2000-2001).
+ * Copyright (c) OSGi Alliance (2000, 2004).
  * All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
