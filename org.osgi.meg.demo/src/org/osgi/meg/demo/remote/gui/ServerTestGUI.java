@@ -18,6 +18,7 @@
 package org.osgi.meg.demo.remote.gui;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -42,8 +43,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 
 public class ServerTestGUI extends javax.swing.JFrame implements ActionListener, TreeSelectionListener {
@@ -51,6 +54,7 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
     private RMServer 		 rms; 
     private Commander        commander;
     private TreeNodeImpl     rootNode;
+    private ScriptRunner 	 runner; 
     private boolean          opened = false;
     
     private JTabbedPane      jTabbedPane;
@@ -74,6 +78,7 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
     private JLabel           jLabelProps;
     private JTextArea        jTextAreaAlert;
     private JTextArea        jTextAreaCommandLog;
+    private JComboBox 	 	 jComboBoxScripts; 
 	
     // action commands
     private String OPEN            = "Open";
@@ -109,6 +114,12 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
         commander = new Commander(rms, this);
         rms.setReceiver(commander);
         rootNode = new TreeNodeImpl(root, null, commander);
+        try {
+			runner = new ScriptRunner(commander);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 
         initGUI();
         refreshToolBar();
@@ -277,6 +288,13 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
                         jButtonSetValue.setActionCommand(SETVALUE);
                         jButtonSetValue.addActionListener(this);
                     }
+                    {
+                    	JLabel jLabelScripts = new JLabel("  Scripts: ");
+                        jComboBoxScripts = new JComboBox(runner.getscriptFiles());
+                        jComboBoxScripts.addActionListener(this);
+                        jToolBar.add(jLabelScripts);
+                        jToolBar.add(jComboBoxScripts);
+                    }
                 }
                 /*{
                     treeModel = new DefaultTreeModel(rootNode);
@@ -321,6 +339,25 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		if (jComboBoxScripts.equals(e.getSource())) {
+			JComboBox cb = (JComboBox)e.getSource();
+	        String s = (String) cb.getSelectedItem();
+	        try {
+	        	jTextAreaCommandLog.append("Runs script: " + s + "-------------------\n");
+	        	jTextAreaCommandLog.append("Result:\n");
+				String result = runner.runScript(s);
+				jTextAreaCommandLog.append(result);
+			}
+			catch (CommanderException ex) {
+				// TODO
+				ex.printStackTrace();
+			}
+			catch (IOException ex) {
+				// TODO
+				ex.printStackTrace();
+			}
+		}
+		
         if (OPEN.equals(e.getActionCommand())) {
             // TODO close
             command("open " + rootNode.uri() + " server");
@@ -499,12 +536,12 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
     
     private void command(String cmd) {
         try {
-            jTextAreaCommandLog.append("> " + cmd + "\n");
+            jTextAreaCommandLog.append(cmd + "\n");
             String result = commander.command(cmd);
-            jTextAreaCommandLog.append("< " + result + "\n");
+            jTextAreaCommandLog.append(result + "\n");
 		} catch (CommanderException e) {
             JOptionPane.showMessageDialog(this, e.getCode(), "Error", JOptionPane.ERROR_MESSAGE);
-            jTextAreaCommandLog.append("< EXCEPTION code: " + e.getCode() + " trace:\n" + e.getTrace());
+            jTextAreaCommandLog.append("EXCEPTION code: " + e.getCode() + " trace:\n" + e.getTrace());
 		}
     }
 

@@ -1,0 +1,13 @@
+setNodeAcl . Add=*&Exec=*&Get=*&Delete=*&Replace=*
+x ./OSGi/deploy/install file://localhost/eclipse/workspaceMEG/org.osgi.meg.demo/tm.txt
+gc ./OSGi/applications
+<$toArray$> / apps
+ci ./OSGi/applications/<$apps[0]$>/launch/1
+cl ./OSGi/applications/<$apps[0]$>/launch/1/player chr:Ivan
+x ./OSGi/applications/<$apps[0]$>/launch/1 ""
+gc ./OSGi/application_instances
+<$toArray$> / instances
+x ./OSGi/application_instances/<$instances[0]$> SUSPEND
+ci ./OSGi/log/a
+cl ./OSGi/log/a/maxrecords int:7
+x ./OSGi/log/a ""
