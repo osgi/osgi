@@ -1,4 +1,3 @@
-<project name="project" default="publish">
-	<property name="project.name" value="org.osgi.impl.bundle.rsh"/>
+<project name="osgi-spec" default="publish">
 	<import file="../cnf/build.xml"/>
 </project>
