@@ -5,6 +5,7 @@
  
  * 
  * (C) Copyright 1996-2001 Sun Microsystems, Inc. 
+ * Copyright (c) IBM Corporation (2004)
  * 
  * This source code is licensed to OSGi as MEMBER LICENSED MATERIALS 
  * under the terms of Section 3.2 of the OSGi MEMBER AGREEMENT.
@@ -64,7 +65,7 @@ public class PreferencesServiceImpl implements PreferencesService {
 		if (systemPreferences == null) {
 			File file = new File(prefsRootDir, "system.prefs");
 			File tmpFile = new File(prefsRootDir, "system.tmp");
-			systemPreferences = new SimpleRootPref(file, tmpFile);
+			systemPreferences = new SimpleRootPref(file, tmpFile, this, null);
 		}
 		return systemPreferences;
 	}
@@ -75,10 +76,19 @@ public class PreferencesServiceImpl implements PreferencesService {
 		if (userPreferences == null) {
 			File file = new File(usersRootDir, user + ".prefs");
 			File tmpFile = new File(usersRootDir, user + ".tmp");
-			userPreferences = new SimpleRootPref(file, tmpFile);
+			userPreferences = new SimpleRootPref(file, tmpFile, this, user);
 			userPreferencesTable.put(user, userPreferences);
 		}
 		return userPreferences;
+	}
+	
+	synchronized void removeRootNode(String user) {	// RFC 60
+		if (user == null) {
+			systemPreferences = null;
+		}
+		else {
+			userPreferencesTable.remove(user);
+		}
 	}
 
 	public synchronized String[] getUsers() {

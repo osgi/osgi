@@ -5,6 +5,7 @@
  
  * 
  * (C) Copyright 1996-2001 Sun Microsystems, Inc. 
+ * Copyright (c) IBM Corporation (2004)
  * 
  * This source code is licensed to OSGi as MEMBER LICENSED MATERIALS 
  * under the terms of Section 3.2 of the OSGi MEMBER AGREEMENT.
@@ -705,8 +706,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * {@link Preferences#removeNode()}.
 	 * 
 	 * <p>
-	 * This implementation checks to see that this node is the root; if so, it
-	 * throws an appropriate exception. Then, it locks this node's parent, and
+	 * This implementation locks this node's parent, and
 	 * calls a recursive helper method that traverses the subtree rooted at this
 	 * node. The recursive call locks the node on which it was called and calls
 	 * itself on each of its children in turn. The it removes the node using
@@ -718,9 +718,8 @@ public abstract class AbstractPreferences implements Preferences {
 	 *         been removed with the {@link #removeNode()}method.
 	 */
 	public void removeNode() throws BackingStoreException {
-		if (this == root)
-			throw new RuntimeException("Can't remove the root!");
-		synchronized (parent.lock) {
+		Object parentLock = (this == root) ? lock : parent.lock;	// RFC 60
+		synchronized (parentLock) {
 			remove2();
 		}
 	}
