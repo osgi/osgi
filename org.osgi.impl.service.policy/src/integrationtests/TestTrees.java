@@ -30,6 +30,7 @@ import java.security.Permissions;
 import java.security.Policy;
 import java.security.PrivilegedExceptionAction;
 import java.security.ProtectionDomain;
+import java.util.Enumeration;
 import junit.framework.TestCase;
 import org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager;
 import org.eclipse.osgi.framework.internal.core.OSGi;
@@ -290,12 +291,26 @@ public class TestTrees extends TestCase {
 		assertEquals(permissions[0],pi);
 	}
 
-	public void testConditionalPermissionAdmin() throws Exception {
+	public void testConditionalPermissionAdminBasic() throws Exception {
 		startFramework(true);
+		ConditionInfo cond1 =  new ConditionInfo(BundleSignerCondition.class.getName(),new String[] {"foo"});
+		PermissionInfo perm1 = new PermissionInfo(AdminPermission.class.getName(),"*","*");
 		conditionalPermissionAdmin.addConditionalPermissionInfo(
-				new ConditionInfo[] { new ConditionInfo(BundleSignerCondition.class.getName(),new String[] {"foo"})},
-				new PermissionInfo[] { new PermissionInfo(AdminPermission.class.getName(),"*","*") }
+				new ConditionInfo[] { cond1 },
+				new PermissionInfo[] { perm1  }
 				);
 		
+		DmtSession session = dmtAdmin.getSession(ConditionalPermissionAdminPlugin.dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
+		String conditionInfo = session.getNodeValue("agMBUbnzy5WqVgToBXT8737tvCk/ConditionInfo").getString();
+		assertEquals(cond1.getEncoded()+"\n",conditionInfo);
+		String permissionInfo = session.getNodeValue("agMBUbnzy5WqVgToBXT8737tvCk/PermissionInfo").getString();
+		assertEquals(perm1.getEncoded()+"\n",permissionInfo);
+
+		session.deleteNode("agMBUbnzy5WqVgToBXT8737tvCk");
+		session.close();
+		
+		// since we deleted it, conditions should be empty
+		Enumeration cpis = conditionalPermissionAdmin.getConditionalPermissionInfos();
+		assertFalse(cpis.hasMoreElements());
 	}
 }
