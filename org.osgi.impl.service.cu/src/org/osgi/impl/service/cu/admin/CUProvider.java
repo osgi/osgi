@@ -237,7 +237,7 @@ class CUProvider implements Provider {
   /* (non-Javadoc)
    * @see org.osgi.service.cu.spi.ControlUnitFactory#getParents(java.lang.String, java.lang.String)
    */
-  public String[] getParents(String childID, String parentType) {
+  public String[] getParents(String childID, String parentType) throws ControlUnitAdminException {
     CUData cuData = (CUData)unitsTable.get(childID);
     
     if (cuData == null) { 

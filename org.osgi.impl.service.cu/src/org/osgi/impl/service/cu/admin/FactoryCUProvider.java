@@ -26,6 +26,7 @@
  */
 package org.osgi.impl.service.cu.admin;
 
+import org.osgi.service.cu.admin.ControlUnitAdminException;
 import org.osgi.service.cu.admin.spi.CUAdminCallback;
 import org.osgi.service.cu.admin.spi.ControlUnitFactory;
 import org.osgi.service.cu.ControlUnit;
@@ -127,7 +128,7 @@ class FactoryCUProvider implements Provider {
   /* (non-Javadoc)
    * @see org.osgi.service.cu.spi.ControlUnitFactory#getParents(java.lang.String, java.lang.String)
    */
-  public String[] getParents(String childID, String parentType) {
+  public String[] getParents(String childID, String parentType) throws ControlUnitAdminException {
     return factory.getParents(childID, parentType);
   }
   

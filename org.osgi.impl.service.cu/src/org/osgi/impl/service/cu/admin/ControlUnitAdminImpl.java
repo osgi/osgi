@@ -187,7 +187,7 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
   /* (non-Javadoc)
    * @see org.osgi.service.cu.ControlUnitAdmin#getControlUnitTypeVersion(java.lang.String)
    */
-  public String getControlUnitTypeVersion(String cuType) {
+  public String getControlUnitTypeVersion(String cuType) throws ControlUnitAdminException {
     checkArgument(cuType, "control unit type");
     
     Provider provider = (Provider)providers.get(cuType);
@@ -316,7 +316,7 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
   /* (non-Javadoc)
    * @see org.osgi.service.cu.ControlUnitAdmin#getParentControlUnits(java.lang.String, java.lang.String, java.lang.String)
    */
-  public String[] getParentControlUnits(String subCUType, String subCUID, String parentType) {
+  public String[] getParentControlUnits(String subCUType, String subCUID, String parentType) throws ControlUnitAdminException {
     checkArgument(subCUType, "child's control unit type");
     checkArgument(subCUID, "child's control unit ID");
     checkArgument(parentType, "parents' control units type");
