@@ -41,6 +41,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 	private final static int				APPLICATION_SUSPEND = 2;
 	private final static int				APPLICATION_RESUME = 3;
 	private final static int				APPLICATION_STOPPING = 4;
+	private final static int        APPLICATION_STOPPED = 5;
 	
 	public TestMegletContainerBundleActivator() {
 		super();
@@ -127,9 +128,13 @@ public class TestMegletContainerBundleActivator extends Object implements
 						requiredTopic = "org/osgi/framework/ServiceEvent/MODIFIED";
 						requiredState = new Integer( ApplicationHandle.STOPPING );
 						break;
+					case APPLICATION_STOPPED:
+						requiredTopic = "org/osgi/framework/ServiceEvent/UNREGISTERING";
+						requiredState = new Integer( ApplicationHandle.STOPPING );
+						break;
 				}
 				
-				if( event.getTopic().equals( requiredTopic ) ) {
+				if( event.getTopic().equals( requiredTopic ) ) {					
 					ServiceReference serviceRef = ((ServiceEvent)event.
 							 														getProperty( "event" )).getServiceReference();					
 
@@ -774,8 +779,8 @@ public class TestMegletContainerBundleActivator extends Object implements
 
 			if( !waitStateChangeEvent( APPLICATION_STOPPING, pid ) )
 				throw new Exception("Didn't receive the stopping event!");
-/* TODO			if (!checkEvent("stopped", appName))
-				throw new Exception("Didn't received the stopped event!");*/
+			if( !waitStateChangeEvent( APPLICATION_STOPPED, pid ) )
+				throw new Exception("Didn't receive the stopped event!");
 
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
