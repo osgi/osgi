@@ -39,7 +39,6 @@ import org.osgi.impl.service.dmt.api.RemoteAlertSender;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
-import org.osgi.service.dmt.DmtAlertSender;
 import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.event.Event;
@@ -57,7 +56,6 @@ public class DmtPluginTestCase extends TestCase {
 	public ServiceListener	dmtRemoteAlertSenderServiceListener;
 	public ServiceListener newServiceTracker;
 	public DmtAdmin dmtFactory;
-	public DmtAlertSender dmtAlertSender;
 	public DmtPrincipalPermissionAdmin dmtPrincipalPermissionAdmin;
 	public DummyConfigurationAdmin	configurationAdmin;
 	
@@ -114,10 +112,6 @@ public class DmtPluginTestCase extends TestCase {
 		public ServiceRegistration registerService(String clazz, Object service, Dictionary properties) {
 			if (DmtAdmin.class.getName().equals(clazz)) {
 				dmtFactory = (DmtAdmin) service;
-				return null;
-			}
-			if (DmtAlertSender.class.getName().equals(clazz)) {
-				dmtAlertSender = (DmtAlertSender) service;
 				return null;
 			}
 			if (DmtPrincipalPermissionAdmin.class.getName().equals(clazz)) {
@@ -214,7 +208,6 @@ public class DmtPluginTestCase extends TestCase {
 	}
 	
 	public void tearDown() throws Exception {
-		dmtAlertSender = null;
 		dmtFactory = null;
 		configurationAdmin = null;
 		dmtRemoteAlertSenderServiceListener = null;
