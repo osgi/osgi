@@ -28,6 +28,7 @@ import org.eclipse.osgi.framework.internal.core.OSGi;
 import org.eclipse.osgi.framework.internal.defaultadaptor.DefaultAdaptor;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.policy.condpermadmin.ConditionalPermissionAdminPlugin;
 import org.osgi.impl.service.policy.dmtprincipal.DmtPrincipalPlugin;
@@ -37,20 +38,26 @@ import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 public class TestTrees extends TestCase {
-
+	public static final String	ORG_OSGI_IMPL_SERVICE_POLICY_JAR	= "file:../org.osgi.impl.service.policy.jar";
+	public static final String	ORG_OSGI_IMPL_SERVICE_DMT_JAR	= "file:../org.osgi.impl.service.dmt.jar";
+	public static final String	ORG_OSGI_IMPL_SERVICE_LOG_JAR	= "file:../org.osgi.impl.service.log.jar";
+	public static final String	ORG_OSGI_IMPL_SERVICE_CM_JAR	= "file:../org.osgi.impl.service.cm.jar";
+	public static final String	ORG_OSGI_IMPL_SERVICE_EVENT_MAPPER_JAR	= "file:../org.osgi.impl.service.event.mapper.jar";
+	public static final String	ORG_OSGI_IMPL_SERVICE_EVENT_JAR	= "file:../org.osgi.impl.service.event.jar";
 
 	
 	public FrameworkSecurityManager	secMan;
 	public DefaultAdaptor adaptor;
-	private BundleContext	systemBundleContext;
-	private Bundle	osgiAPIsBundle;
-	private Bundle	eventBundle;
-	private Bundle	eventMapperBundle;
-	private Bundle	configManagerBundle;
-	private Bundle	logBundle;
-	private Bundle	dmtBundle;
-	private Bundle	policyBundle;
-	private OSGi	framework;
+	public BundleContext	systemBundleContext;
+	public Bundle	osgiAPIsBundle;
+	public Bundle	eventBundle;
+	public Bundle	eventMapperBundle;
+	public Bundle	configManagerBundle;
+	public Bundle	logBundle;
+	public Bundle	dmtBundle;
+	public Bundle	policyBundle;
+	public OSGi	framework;
+	public PermissionAdmin	permissionAdmin;
 	
 	/**
 	 * This policy implementation gives AllPermission to all code sources.
@@ -68,6 +75,12 @@ public class TestTrees extends TestCase {
 		
 	}
 
+	public void setBundleAsAdministrator(String location) throws Exception {
+		permissionAdmin.setPermissions(location,new PermissionInfo[] {
+				new PermissionInfo(AllPermission.class.getName(),"*","*")});
+		
+	}
+	
 	public void startFramework() throws Exception {
 		Policy.setPolicy(new VeryGenerousPolicy());
 		secMan = new FrameworkSecurityManager();
@@ -78,20 +91,31 @@ public class TestTrees extends TestCase {
 		systemBundleContext = framework.getBundleContext();
 		
 		ServiceReference permissionAdminRef = systemBundleContext.getServiceReference(PermissionAdmin.class.getName());
-		PermissionAdmin permissionAdmin = (PermissionAdmin) systemBundleContext.getService(permissionAdminRef);
-		//permissionAdmin.setDefaultPermissions(new PermissionInfo[] { });
+		permissionAdmin = (PermissionAdmin) systemBundleContext.getService(permissionAdminRef);
+
+		// Warning! Don't do this on a real system!
+		permissionAdmin.setDefaultPermissions(new PermissionInfo[] { 
+				new PermissionInfo(PackagePermission.class.getName(),"*","IMPORT")
+				});
 		
-		eventBundle = systemBundleContext.installBundle("file:../org.osgi.impl.service.event.jar");
+		
+		setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_EVENT_JAR);
+		eventBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_EVENT_JAR);
 		eventBundle.start();
-		eventMapperBundle = systemBundleContext.installBundle("file:../org.osgi.impl.service.event.mapper.jar");
+		setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_EVENT_MAPPER_JAR);
+		eventMapperBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_EVENT_MAPPER_JAR);
 		eventMapperBundle.start();
-		configManagerBundle = systemBundleContext.installBundle("file:../org.osgi.impl.service.cm.jar");
+		setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_CM_JAR);
+		configManagerBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_CM_JAR);
 		configManagerBundle.start();
-		logBundle = systemBundleContext.installBundle("file:../org.osgi.impl.service.log.jar");
+		setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_LOG_JAR);
+		logBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_LOG_JAR);
 		logBundle.start();
-		dmtBundle = systemBundleContext.installBundle("file:../org.osgi.impl.service.dmt.jar");
+		setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_DMT_JAR);
+		dmtBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_DMT_JAR);
 		dmtBundle.start();
-		policyBundle = systemBundleContext.installBundle("file:../org.osgi.impl.service.policy.jar");
+		setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_POLICY_JAR);
+		policyBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_POLICY_JAR);
 		policyBundle.start();
 	}
 
@@ -110,6 +134,7 @@ public class TestTrees extends TestCase {
 		dmtBundle = null;
 		policyBundle = null;
 		framework = null;
+		permissionAdmin = null;
 	}
 	
 	public void testAllStartsUp() throws Exception {
