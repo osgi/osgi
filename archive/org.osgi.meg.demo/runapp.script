@@ -1,0 +1,19 @@
+# initial steps
+#################################
+
+setNodeAcl . Add=*&Exec=*&Get=*&Delete=*&Replace=*
+
+# launch an application
+#################################
+
+# get installed applications
+gc ./OSGi/applications
+
+# put the result into a String array called "apps", the separator is '/'
+# e.g. the result of the previous command is: app1/app2/app3 then the command
+# puts the "app1", "app2" and "app3" Strings into the array
+<$toArray$> / apps
+
+ci ./OSGi/applications/<$apps[0]$>/launch/1
+cl ./OSGi/applications/<$apps[0]$>/launch/1/player chr:Joe
+x ./OSGi/applications/<$apps[0]$>/launch/1 ""
