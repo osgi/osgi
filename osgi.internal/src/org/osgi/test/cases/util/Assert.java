@@ -68,10 +68,10 @@ public abstract class Assert {
             return;
         }
 
-        Enumeration enum = expected.keys();
-        while (enum.hasMoreElements())
+        Enumeration e = expected.keys();
+        while (e.hasMoreElements())
         {
-            Object key = enum.nextElement();
+            Object key = e.nextElement();
             Object expectedValue = expected.get(key);
             Object actualValue = actual.get(key);
 

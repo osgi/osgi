@@ -444,9 +444,9 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 				return null;
 			}
 			ServiceReference references[] = new ServiceReference[length];
-			Enumeration enum = tracked.keys();
+			Enumeration keys = tracked.keys();
 			for (int i = 0; i < length; i++) {
-				references[i] = (ServiceReference) enum.nextElement();
+				references[i] = (ServiceReference) keys.nextElement();
 			}
 			return references;
 		}
