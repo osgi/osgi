@@ -34,8 +34,6 @@ import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
-// TODO permissions: check java permissions, set permissions based on policy plugin, etc.
-// TODO optimize node handling (e.g. retrieve plugin from dispatcher only once per API call), maybe with new URI class
 // TODO lock mode handling: (1) no other session can run parallelly with a writer session (2) rollback functionality
 // TODO send all kinds of events (RENAMED and COPIED too), everything should be sent when session is closed (?)
 // TODO check scope (permanent/dynamic) meta-data for each operation
@@ -44,6 +42,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 // TODO throw exception when a non-transactional plugin is first written in an atomic session
 // TODO at rollback, do not call rollback() method for (non-transactional) plugins that were only read
 // TODO store for each opened plugin whether it has been accessed (i.e. whether commit/rollback calls should be propagated to it)
+// OPTIMIZE node handling (e.g. retrieve plugin from dispatcher only once per API call), maybe with new URI class
 public class DmtSessionImpl implements DmtSession {
     
     private static final int    SHOULD_NOT_EXIST   = 0;
