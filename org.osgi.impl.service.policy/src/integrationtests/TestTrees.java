@@ -304,13 +304,13 @@ public class TestTrees extends TestCase {
 
 	public void testConditionalPermissionAdminBasic() throws Exception {
 		startFramework(true);
-		ConditionInfo cond1 =  new ConditionInfo(BundleSignerCondition.class.getName(),new String[] {"C=HU, O=ConstructionOy, OU=Informatical Infrastructure Management, CN=Sarah Bar"});
+		ConditionInfo cond1 =  new ConditionInfo(BundleSignerCondition.class.getName(),new String[] {"*"});
 		PermissionInfo perm1 = new PermissionInfo(AdminPermission.class.getName(),"*","*");
 		conditionalPermissionAdmin.addConditionalPermissionInfo(
 				new ConditionInfo[] { cond1 },
 				new PermissionInfo[] { perm1  }
 				);
-		String nameHash = "DDlMyaitpUSRlzbRfwxz3_ruXTc";
+		String nameHash = "pOWUUF7ZBzn2HHOc26VuZdn3RWI";
 		
 		DmtSession session = dmtAdmin.getSession(ConditionalPermissionAdminPlugin.dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
 
@@ -335,7 +335,7 @@ public class TestTrees extends TestCase {
 	 * TODO currently this test fails, since the framework doesn't seem to implement signer conditions
 	 */
 	public void testConditionalPermissionAdminThrough() throws Exception {
-		ConditionInfo SIGNER_SARAH =  new ConditionInfo(BundleSignerCondition.class.getName(),new String[] {"C=HU, O=ConstructionOy, OU=Informatical Infrastructure Management, CN=Sarah Bar"});
+		ConditionInfo SIGNER_SARAH =  new ConditionInfo(BundleSignerCondition.class.getName(),new String[] {"CN=Sarah Bar, OU=Informatical Infrastructure Management, O=ConstructionOy, C=HU; CN=People, OU=Informatical Infrastructure Maintenance, O=ConstructionOy, L=Budapest, C=HU; CN=Root1, OU=FAKEDONTUSE, O=CASoft, L=Budapest, C=HU"});
 		PermissionInfo ADMINPERMISSION = new PermissionInfo(AdminPermission.class.getName(),"*","*");
 		
 		startFramework(true);
