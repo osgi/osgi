@@ -12,7 +12,6 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
-
 package org.osgi.impl.service.event.mapper;
 
 import org.osgi.framework.ServiceReference;

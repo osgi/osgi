@@ -29,6 +29,7 @@ group-load: \
   org.osgi.impl.bundle.saxon.jar,
   org.osgi.impl.bundle.rsh.jar,
   org.osgi.impl.service.event.jar,
+  org.osgi.impl.service.event.mapper.jar,
   org.osgi.impl.service.dmt.jar,
   org.osgi.impl.service.application.jar,
   org.osgi.impl.service.deploymentadmin.jar,

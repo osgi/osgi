@@ -22,12 +22,12 @@ import org.osgi.framework.*;
 import org.osgi.service.event.EventAdmin;
 
 /**
- * The Bundle Activator class of the Event Manager service
+ * The Bundle Activator class of the Event Admin service
  */
 public class Activator implements BundleActivator {
 	private BundleContext		bc;
-	private ServiceRegistration	eventChannelServiceReg;
-	private EventChannelImpl	eventChannelImpl;
+	private ServiceRegistration	eventAdminServiceReg;
+	private EventAdminImpl		eventAdminImpl;
 
 	public Activator() {
 		super();
@@ -36,20 +36,20 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext bc) throws Exception {
 		this.bc = bc;
 		// check if EventAdmin is regiserted
-		ServiceReference reference = bc
-				.getServiceReference("org.osgi.service.event.EventAdmin");
+		ServiceReference reference = bc.getServiceReference(EventAdmin.class
+				.getName());
 		if (reference != null)
 			throw new BundleException("EventAdmin service already started!");
-		eventChannelImpl = new EventChannelImpl(bc);
-		// registering the EventAdmin service
-		eventChannelServiceReg = bc.registerService(EventAdmin.class
-				.getName(), eventChannelImpl, null);
+		eventAdminImpl = new EventAdminImpl(bc);
+		//registering the EventAdmin service
+		eventAdminServiceReg = bc.registerService(EventAdmin.class.getName(),
+				eventAdminImpl, null);
 		System.out.println("EventAdmin started successfully!");
 	}
 
 	public void stop(BundleContext bc) throws Exception {
-		eventChannelImpl.stop();
-		eventChannelServiceReg.unregister();
+		eventAdminImpl.stop();
+		eventAdminServiceReg.unregister();
 		this.bc = null;
 		System.out.println("EventAdmin stopped successfully!");
 	}

@@ -12,11 +12,9 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
-
 package org.osgi.impl.service.event.mapper;
 
 import java.util.Hashtable;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.service.event.Event;
@@ -27,19 +25,15 @@ import org.osgi.service.event.EventAdmin;
  */
 public class FrameworkEventAdapter extends EventAdapter {
 	// constants for Event topic substring
+	public static final String	HEADER				= "org/osgi/framework/FrameworkEvent";
 	public static final String	STARTLEVEL_CHANGED	= "STARTLEVEL_CHANGED";
 	public static final String	STARTED				= "STARTED";
 	public static final String	PACKAGES_REFRESHED	= "PACKAGES_REFRESHED";
 	public static final String	ERROR				= "ERROR";
-
 	protected FrameworkEvent	event;
 
-	/**
-	 * @param event
-	 * @param channel
-	 */
-	public FrameworkEventAdapter(FrameworkEvent event, EventAdmin channel) {
-		super(channel);
+	public FrameworkEventAdapter(FrameworkEvent event, EventAdmin eventAdmin) {
+		super(eventAdmin);
 		this.event = event;
 	}
 
@@ -66,8 +60,7 @@ public class FrameworkEventAdapter extends EventAdapter {
 				throw new RuntimeException("Invalid FrameworkEvent type ("
 						+ event.getType() + ")");
 		}
-		String topic = FrameworkEvent.class.getName() + "." + typename;
-
+		String topic = HEADER + Constants.TOPIC_SEPARATOR + typename;
 		Hashtable properties = new Hashtable();
 		Bundle bundle = event.getBundle();
 		if (bundle == null) {
@@ -80,7 +73,7 @@ public class FrameworkEventAdapter extends EventAdapter {
 			putExceptionProperties(properties, t);
 		}
 		properties.put(Constants.EVENT, event);
-		Event ce = new Event(topic, properties);
-		return ce;
+		Event converted = new Event(topic, properties);
+		return converted;
 	}
 }

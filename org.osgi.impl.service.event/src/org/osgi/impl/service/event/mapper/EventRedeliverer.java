@@ -12,33 +12,93 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
-
 package org.osgi.impl.service.event.mapper;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
 import org.osgi.framework.*;
+import org.osgi.service.cm.ConfigurationEvent;
+import org.osgi.service.cm.ConfigurationListener;
 import org.osgi.service.event.EventAdmin;
-import org.osgi.service.log.*;
+import org.osgi.service.log.LogEntry;
+import org.osgi.service.log.LogListener;
+import org.osgi.service.log.LogReaderService;
+import org.osgi.service.upnp.UPnPDevice;
+import org.osgi.service.upnp.UPnPEventListener;
+import org.osgi.service.upnp.UPnPService;
+import org.osgi.service.useradmin.UserAdminEvent;
+import org.osgi.service.useradmin.UserAdminListener;
+import org.osgi.service.wireadmin.WireAdminEvent;
+import org.osgi.service.wireadmin.WireAdminListener;
+import org.osgi.service.wireadmin.WireConstants;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * Main class for redeliver special events like FrameworkEvents via
- * EventAdmin.
+ * Main class for redeliver special events like FrameworkEvents via EventAdmin.
  * 
  * 
  * @version $Revision$
  */
 public class EventRedeliverer implements FrameworkListener, BundleListener,
-		ServiceListener, LogListener, LogReaderServiceListener {
-
-	private ServiceTracker			channelTracker;
+		ServiceListener, LogListener, LogReaderServiceListener,
+		ConfigurationListener, WireAdminListener, UPnPEventListener,
+		UserAdminListener {
+	private ServiceTracker			eventAdminTracker;
 	private LogReaderServiceTracker	logTracker;
 	private LogReaderService		reader;
-	private final static boolean	DEBUG	= true;
+	private final static boolean	DEBUG	= false;
+	private BundleContext			bc;
+	private ServiceRegistration		configurationListenerReg;
+	private ServiceRegistration		wireAdminListenerReg;
+	private ServiceRegistration		upnpEventListenerReg;
+	private ServiceRegistration		userAdminListenerReg;
 
 	public EventRedeliverer(BundleContext bc) {
-		channelTracker = new ServiceTracker(bc, EventAdmin.class.getName(),
+		this.bc = bc;
+	}
+
+	public void close() {
+		if (logTracker != null) {
+			logTracker.close();
+			logTracker = null;
+		}
+		if (eventAdminTracker != null) {
+			eventAdminTracker.close();
+			eventAdminTracker = null;
+		}
+		if (reader != null) {
+			reader.removeLogListener(this);
+		}
+		reader = null;
+		bc.removeFrameworkListener(this);
+		bc.removeBundleListener(this);
+		bc.removeServiceListener(this);
+		if (configurationListenerReg != null) {
+			configurationListenerReg.unregister();
+			configurationListenerReg = null;
+		}
+		if (wireAdminListenerReg != null) {
+			wireAdminListenerReg.unregister();
+			wireAdminListenerReg = null;
+		}
+		if (upnpEventListenerReg != null) {
+			upnpEventListenerReg.unregister();
+			upnpEventListenerReg = null;
+		}
+		if (userAdminListenerReg != null) {
+			userAdminListenerReg.unregister();
+			userAdminListenerReg = null;
+		}
+	}
+
+	/**
+	 * prepare any service trackers and register event listeners which are
+	 * necessary to obtain events to be mapped
+	 */
+	public void open() {
+		eventAdminTracker = new ServiceTracker(bc, EventAdmin.class.getName(),
 				null);
-		channelTracker.open();
+		eventAdminTracker.open();
 		logTracker = new LogReaderServiceTracker(bc, this);
 		logTracker.open();
 		bc.addFrameworkListener(this);
@@ -48,22 +108,38 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 		if (reader != null) {
 			reader.addLogListener(this);
 		}
+		configurationListenerReg = bc.registerService(
+				ConfigurationListener.class.getName(), this, null);
+		Hashtable ht = new Hashtable();
+		// create an event mask to receive the all types of WireAdminEvent
+		Integer mask = new Integer(WireAdminEvent.WIRE_CONNECTED
+				| WireAdminEvent.WIRE_CREATED | WireAdminEvent.WIRE_DELETED
+				| WireAdminEvent.WIRE_DISCONNECTED | WireAdminEvent.WIRE_TRACE
+				| WireAdminEvent.WIRE_UPDATED
+				| WireAdminEvent.CONSUMER_EXCEPTION
+				| WireAdminEvent.PRODUCER_EXCEPTION);
+		ht.put(WireConstants.WIREADMIN_EVENTS, mask);
+		wireAdminListenerReg = bc.registerService(WireAdminListener.class
+				.getName(), this, ht);
+		Hashtable ht2 = new Hashtable();
+		// create a Filter object to receive all the UPnP events
+		Filter filter = null;
+		try {
+			filter = bc.createFilter("(|(|(" + UPnPDevice.TYPE + "=*)("
+					+ UPnPDevice.ID + "=*))(|(" + UPnPService.TYPE + "=*)("
+					+ UPnPService.ID + "=*)))");
+		}
+		catch (InvalidSyntaxException e) {
+		}
+		ht2.put(UPnPEventListener.UPNP_FILTER, filter);
+		upnpEventListenerReg = bc.registerService(UPnPEventListener.class
+				.getName(), this, ht2);
+		userAdminListenerReg = bc.registerService(UserAdminListener.class
+				.getName(), this, null);
 	}
 
-	public void close() {
-		if (logTracker != null) {
-			logTracker.close();
-			logTracker = null;
-		}
-		if (channelTracker != null) {
-			channelTracker.close();
-			channelTracker = null;
-		}
-		reader = null;
-	}
-
-	private EventAdmin getChannel() {
-		return (EventAdmin) channelTracker.getService();
+	private EventAdmin getEventAdmin() {
+		return (EventAdmin) eventAdminTracker.getService();
 	}
 
 	/**
@@ -71,9 +147,9 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 	 * @see org.osgi.framework.FrameworkListener#frameworkEvent(org.osgi.framework.FrameworkEvent)
 	 */
 	public void frameworkEvent(FrameworkEvent event) {
-		EventAdmin channel = getChannel();
-		if (channel != null) {
-			(new FrameworkEventAdapter(event, channel)).redeliver();
+		EventAdmin eventAdmin = getEventAdmin();
+		if (eventAdmin != null) {
+			(new FrameworkEventAdapter(event, eventAdmin)).redeliver();
 		}
 		else {
 			printNoEventAdminError();
@@ -92,9 +168,9 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 	 * @see org.osgi.framework.BundleListener#bundleChanged(org.osgi.framework.BundleEvent)
 	 */
 	public void bundleChanged(BundleEvent event) {
-		EventAdmin channel = getChannel();
-		if (channel != null) {
-			(new BundleEventAdapter(event, channel)).redeliver();
+		EventAdmin eventAdmin = getEventAdmin();
+		if (eventAdmin != null) {
+			(new BundleEventAdapter(event, eventAdmin)).redeliver();
 		}
 		else {
 			printNoEventAdminError();
@@ -106,9 +182,9 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 	 * @see org.osgi.framework.ServiceListener#serviceChanged(org.osgi.framework.ServiceEvent)
 	 */
 	public void serviceChanged(ServiceEvent event) {
-		EventAdmin channel = getChannel();
-		if (channel != null) {
-			(new ServiceEventAdapter(event, channel)).redeliver();
+		EventAdmin eventAdmin = getEventAdmin();
+		if (eventAdmin != null) {
+			(new ServiceEventAdapter(event, eventAdmin)).redeliver();
 		}
 		else {
 			printNoEventAdminError();
@@ -120,9 +196,9 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 	 * @see org.osgi.service.log.LogListener#logged(org.osgi.service.log.LogEntry)
 	 */
 	public void logged(LogEntry entry) {
-		EventAdmin channel = getChannel();
-		if (channel != null) {
-			(new LogEntryAdapter(entry, channel)).redeliver();
+		EventAdmin eventAdmin = getEventAdmin();
+		if (eventAdmin != null) {
+			(new LogEntryAdapter(entry, eventAdmin)).redeliver();
 		}
 		else {
 			printNoEventAdminError();
@@ -157,5 +233,66 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 		}
 		// ungetService() will be called after returning to
 		// LogReaderServiceTracker's removedService() method.
+	}
+
+	/**
+	 * @param event
+	 * @see org.osgi.service.cm.ConfigurationListener#configurationEvent(org.osgi.service.cm.ConfigurationEvent)
+	 */
+	public void configurationEvent(ConfigurationEvent event) {
+		EventAdmin eventAdmin = getEventAdmin();
+		if (eventAdmin != null) {
+			(new ConfigurationEventAdapter(event, eventAdmin)).redeliver();
+		}
+		else {
+			printNoEventAdminError();
+		}
+	}
+
+	/**
+	 * @param event
+	 * @see org.osgi.service.wireadmin.WireAdminListener#wireAdminEvent(org.osgi.service.wireadmin.WireAdminEvent)
+	 */
+	public void wireAdminEvent(WireAdminEvent event) {
+		EventAdmin eventAdmin = getEventAdmin();
+		if (eventAdmin != null) {
+			(new WireAdminEventAdapter(event, eventAdmin)).redeliver();
+		}
+		else {
+			printNoEventAdminError();
+		}
+	}
+
+	/**
+	 * @param deviceId
+	 * @param serviceId
+	 * @param events
+	 * @see org.osgi.service.upnp.UPnPEventListener#notifyUPnPEvent(java.lang.String,
+	 *      java.lang.String, java.util.Dictionary)
+	 */
+	public void notifyUPnPEvent(String deviceId, String serviceId,
+			Dictionary events) {
+		EventAdmin eventAdmin = getEventAdmin();
+		if (eventAdmin != null) {
+			(new UPnPEventAdapter(deviceId, serviceId, events, eventAdmin))
+					.redeliver();
+		}
+		else {
+			printNoEventAdminError();
+		}
+	}
+
+	/**
+	 * @param event
+	 * @see org.osgi.service.useradmin.UserAdminListener#roleChanged(org.osgi.service.useradmin.UserAdminEvent)
+	 */
+	public void roleChanged(UserAdminEvent event) {
+		EventAdmin eventAdmin = getEventAdmin();
+		if (eventAdmin != null) {
+			(new UserAdminEventAdapter(event, eventAdmin)).redeliver();
+		}
+		else {
+			printNoEventAdminError();
+		}
 	}
 }

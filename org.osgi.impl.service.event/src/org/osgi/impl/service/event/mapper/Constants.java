@@ -12,15 +12,14 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
-
 package org.osgi.impl.service.event.mapper;
 
 /**
  * @version $Revision$
  */
 public interface Constants {
-
-	// constants for Event properties
+	// constants for Event common properties; event specific properties are
+	// defined in the corresponding event adapter.
 	public static final String	BUNDLE				= "bundle";
 	public static final String	BUNDLE_ID			= "bundle.id";
 	public static final String	BUNDLE_SYMBOLICNAME	= "bundle.symbolicName";
@@ -29,9 +28,10 @@ public interface Constants {
 	public static final String	EXCEPTION_CLASS		= "exception.class";
 	public static final String	EXCEPTION_MESSAGE	= "exception.message";
 	public static final String	MESSAGE				= "message";
-	public static final String	OBJECTCLASS			= "objectClass";
+	public static final String	SERVICE				= "service";
 	public static final String	SERVICE_ID			= "service.id";
+	public static final String	SERVICE_OBJECTCLASS	= "service.objectClass";
 	public static final String	SERVICE_PID			= "service.pid";
 	public static final String	TIMESTAMP			= "timestamp";
-
+	public static final char	TOPIC_SEPARATOR		= '/';
 }

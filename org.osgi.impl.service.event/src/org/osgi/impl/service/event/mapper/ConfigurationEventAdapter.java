@@ -15,30 +15,28 @@
 package org.osgi.impl.service.event.mapper;
 
 import java.util.Hashtable;
-import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.cm.ConfigurationEvent;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 
 /**
  * @version $Revision$
  */
-public class ServiceEventAdapter extends EventAdapter {
+public class ConfigurationEventAdapter extends EventAdapter {
 	// constants for Event topic substring
-	public static final String	HEADER			= "org/osgi/framework/ServiceEvent";
-	public static final String	UNREGISTERING	= "UNREGISTERING";
-	public static final String	MODIFIED		= "MODIFIED";
-	public static final String	REGISTERED		= "REGISTERED";
-	private ServiceEvent		event;
+	public static final String	HEADER			= "org/osgi/service/cm/ConfigurationEvent";
+	public static final String	CM_UPDATED		= "CM_UPDATED";
+	public static final String	CM_DELETED		= "CM_DELETED";
+	// constants for Event properties
+	public static final String	CM_FACTORY_PID	= "cm.factoryPid";
+	public static final String	CM_PID			= "cm.pid";
+	private ConfigurationEvent	event;
 
-	public ServiceEventAdapter(ServiceEvent event, EventAdmin eventAdmin) {
+	public ConfigurationEventAdapter(ConfigurationEvent event,
+			EventAdmin eventAdmin) {
 		super(eventAdmin);
 		this.event = event;
-	}
-
-	// override super's method to force syncronous event delivery
-	public void redeliver() {
-		eventAdmin.sendEvent(convert());
 	}
 
 	/**
@@ -48,28 +46,30 @@ public class ServiceEventAdapter extends EventAdapter {
 	public Event convert() {
 		String typename = null;
 		switch (event.getType()) {
-			case ServiceEvent.REGISTERED :
-				typename = REGISTERED;
+			case ConfigurationEvent.CM_UPDATED :
+				typename = CM_UPDATED;
 				break;
-			case ServiceEvent.MODIFIED :
-				typename = MODIFIED;
-				break;
-			case ServiceEvent.UNREGISTERING :
-				typename = UNREGISTERING;
+			case ConfigurationEvent.CM_DELETED :
+				typename = CM_DELETED;
 				break;
 			default :
-				throw new RuntimeException("Invalid ServiceEvent type ("
+				throw new RuntimeException("Invalid ConfigurationEvent type ("
 						+ event.getType() + ")");
 		}
 		String topic = HEADER + Constants.TOPIC_SEPARATOR + typename;
 		Hashtable properties = new Hashtable();
-		ServiceReference ref = event.getServiceReference();
+		ServiceReference ref = event.getReference();
 		if (ref == null) {
 			throw new RuntimeException(
 					"ServiceEvent.getServiceReference() is null");
 		}
+		properties.put(CM_PID, event.getPid());
+		if (event.getFactoryPid() != null) {
+			properties.put(CM_FACTORY_PID, event.getFactoryPid());
+		}
 		putServiceReferenceProperties(properties, ref);
-		properties.put(Constants.EVENT, event);
+		// assert objectClass includes
+		// "org.osgi.service.cm.ConfigurationAdmin"
 		Event converted = new Event(topic, properties);
 		return converted;
 	}

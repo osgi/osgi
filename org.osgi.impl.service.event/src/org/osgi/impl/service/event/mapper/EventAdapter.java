@@ -12,11 +12,9 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
-
 package org.osgi.impl.service.event.mapper;
 
 import java.util.Hashtable;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.Event;
@@ -26,15 +24,14 @@ import org.osgi.service.event.EventAdmin;
  * @version $Revision$
  */
 public abstract class EventAdapter {
-
-	final EventAdmin	channel;
+	final EventAdmin	eventAdmin;
 
 	/**
 	 * @param event
-	 * @param channel
+	 * @param eventAdmin
 	 */
-	public EventAdapter(EventAdmin channel) {
-		this.channel = channel;
+	public EventAdapter(EventAdmin eventAdmin) {
+		this.eventAdmin = eventAdmin;
 	}
 
 	/**
@@ -47,7 +44,7 @@ public abstract class EventAdapter {
 	 * instead.
 	 */
 	public void redeliver() {
-		channel.postEvent(convert());
+		eventAdmin.postEvent(convert());
 	}
 
 	public void putBundleProperties(Hashtable properties, Bundle bundle) {
@@ -73,6 +70,7 @@ public abstract class EventAdapter {
 	public void putServiceReferenceProperties(Hashtable properties,
 			ServiceReference ref) {
 		// assertion ref != null
+		properties.put(Constants.SERVICE, ref);
 		properties.put(Constants.SERVICE_ID, ref
 				.getProperty(org.osgi.framework.Constants.SERVICE_ID));
 		String PID = (String) ref
@@ -80,8 +78,20 @@ public abstract class EventAdapter {
 		if (PID != null) {
 			properties.put(Constants.SERVICE_PID, PID);
 		}
-		properties.put(Constants.OBJECTCLASS, ref
+		properties.put(Constants.SERVICE_OBJECTCLASS, ref
 				.getProperty(org.osgi.framework.Constants.OBJECTCLASS));
 	}
 
+	/*
+	 * Utility function for converting classes into strings
+	 */
+	public String[] classes2strings(Class classes[]) {
+		if ((classes == null) || (classes.length == 0))
+			return null;
+		String[] strings = new String[classes.length];
+		for (int i = 0; i < classes.length; i++) {
+			strings[i] = classes[i].getName();
+		}
+		return strings;
+	}
 }

@@ -12,7 +12,6 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
-
 package org.osgi.impl.service.event.mapper;
 
 import org.osgi.framework.BundleContext;
@@ -24,7 +23,6 @@ import org.osgi.util.tracker.ServiceTracker;
  * @version $Revision$
  */
 public class LogReaderServiceTracker extends ServiceTracker {
-
 	private final LogReaderServiceListener	listener;
 
 	public LogReaderServiceTracker(BundleContext context,
@@ -39,7 +37,7 @@ public class LogReaderServiceTracker extends ServiceTracker {
 
 	public void removedService(ServiceReference reference, Object service) {
 		listener.logReaderServiceModified(reference, service);
-		super.removedService(reference, service); // this method calls
-													// ungetService()
+		super.removedService(reference, service);
+		//this method calls ungetService()
 	}
 }

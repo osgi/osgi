@@ -12,11 +12,9 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
-
 package org.osgi.impl.service.event.mapper;
 
 import java.util.Hashtable;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.service.event.Event;
@@ -27,6 +25,7 @@ import org.osgi.service.event.EventAdmin;
  */
 public class BundleEventAdapter extends EventAdapter {
 	// constants for Event topic substring
+	public static final String	HEADER		= "org/osgi/framework/BundleEvent";
 	public static final String	INSTALLED	= "INSTALLED";
 	public static final String	STOPPED		= "STOPPED";
 	public static final String	STARTED		= "STARTED";
@@ -34,14 +33,10 @@ public class BundleEventAdapter extends EventAdapter {
 	public static final String	UNINSTALLED	= "UNINSTALLED";
 	public static final String	RESOLVED	= "RESOLVED";
 	public static final String	UNRESOLVED	= "UNRESOLVED";
-
 	private BundleEvent			event;
 
-	/**
-	 * @param channel
-	 */
-	public BundleEventAdapter(BundleEvent event, EventAdmin channel) {
-		super(channel);
+	public BundleEventAdapter(BundleEvent event, EventAdmin eventAdmin) {
+		super(eventAdmin);
 		this.event = event;
 	}
 
@@ -73,13 +68,11 @@ public class BundleEventAdapter extends EventAdapter {
 			case BundleEvent.UNRESOLVED :
 				typename = UNRESOLVED;
 				break;
-
 			default :
 				throw new RuntimeException("Invalid BundleEvent type ("
 						+ event.getType() + ")");
 		}
-		String topic = BundleEvent.class.getName() + "." + typename;
-
+		String topic = HEADER + Constants.TOPIC_SEPARATOR + typename;
 		Hashtable properties = new Hashtable();
 		Bundle bundle = event.getBundle();
 		if (bundle == null) {
@@ -89,7 +82,7 @@ public class BundleEventAdapter extends EventAdapter {
 			putBundleProperties(properties, bundle);
 		}
 		properties.put(Constants.EVENT, event);
-		Event ce = new Event(topic, properties);
-		return ce;
+		Event converted = new Event(topic, properties);
+		return converted;
 	}
 }
