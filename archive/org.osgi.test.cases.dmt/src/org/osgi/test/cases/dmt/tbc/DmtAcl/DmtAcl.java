@@ -29,24 +29,27 @@
  * Date          Author(s)
  * CR            Headline
  * ============  ==============================================================
- * Jan 31, 2005  AndrÃ© Assad
+ * Jan 31, 2005  André Assad
  * 1             Implement MEG TCK
  * ============  ==============================================================
- * Feb 11, 2005  AndrÃ© Assad
+ * Feb 11, 2005  André Assad
  * 1             Updates after formal inspection (BTC_MEG_TCK_CODE-INSPR-001)
+ * ============  ==============================================================
+ * Mar 04, 2005  André Assad
+ * 23            Update test cases according to changes in the DmtAcl API
  * ============  ==============================================================
  */
 
 package org.osgi.test.cases.dmt.tbc.DmtAcl;
 
-import java.util.Vector;
 
 import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 
 /**
  * @author Andre Assad
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtAcl#DmtAcl, getPrincipals, getPermissions
+ * @methodUnderTest org.osgi.service.dmt.DmtAcl#DmtAcl, getPrincipals,
+ *                  getPermissions
  * @generalDescription This Class Validates the implementation of
  *                     <code>DmtAcl<code> costructor, according to MEG reference
  *                     documentation (rfc0085).
@@ -71,6 +74,9 @@ public class DmtAcl {
 		testDmtAcl007();
 		testDmtAcl008();
 		testDmtAcl009();
+		testDmtAcl010();
+		testDmtAcl011();
+		testDmtAcl012();
 	}
 
 	/**
@@ -93,9 +99,8 @@ public class DmtAcl {
 
 			boolean found = false;
 			tbc.log("#Asserting principal value");
-			for (int i = 0; i < dmtAcl.getPrincipals().size() && !found; i++) {
-				String _principal = (String) dmtAcl.getPrincipals()
-						.elementAt(i);
+			for (int i = 0; i < dmtAcl.getPrincipals().length && !found; i++) {
+				String _principal = (String) dmtAcl.getPrincipals()[i];
 				found = (_principal != null && _principal.equals(principal)) ? true
 						: false;
 			}
@@ -112,22 +117,19 @@ public class DmtAcl {
 	 *                  properties.
 	 */
 	public void testDmtAcl002() {
-		String principal = "www.cesar.org.br";
-		org.osgi.service.dmt.DmtAcl acl = new org.osgi.service.dmt.DmtAcl();
-		acl.addPermission(principal, org.osgi.service.dmt.DmtAcl.GET);
+		String[] principal = { "www.cesar.org.br" };
+		int[] perm = { org.osgi.service.dmt.DmtAcl.GET };
 		org.osgi.service.dmt.DmtAcl newDmtAcl = null;
 		try {
-			newDmtAcl = new org.osgi.service.dmt.DmtAcl(acl);
-
+			newDmtAcl = new org.osgi.service.dmt.DmtAcl(principal, perm);
 			tbc.assertEquals("Asserting Permissions",
 					org.osgi.service.dmt.DmtAcl.GET, newDmtAcl
-							.getPermissions(principal));
+							.getPermissions(principal[0]));
 
 			boolean found = false;
 			tbc.log("#Asserting principal value");
-			for (int i = 0; i < newDmtAcl.getPrincipals().size() && !found; i++) {
-				String _principal = (String) newDmtAcl.getPrincipals()
-						.elementAt(i);
+			for (int i = 0; i < newDmtAcl.getPrincipals().length && !found; i++) {
+				String _principal = (String) newDmtAcl.getPrincipals()[i];
 				found = (_principal != null && _principal.equals(principal)) ? true
 						: false;
 			}
@@ -145,10 +147,10 @@ public class DmtAcl {
 	 */
 	public void testDmtAcl003() {
 		org.osgi.service.dmt.DmtAcl dmtAcl = new org.osgi.service.dmt.DmtAcl();
-		Vector principals = dmtAcl.getPrincipals();
+		String[] principals = dmtAcl.getPrincipals();
 
 		tbc.assertNotNull("Principals are not null", principals);
-		tbc.assertTrue("Asserting empty principals", principals.isEmpty());
+		tbc.assertTrue("Asserting empty principals", (principals.length <= 0));
 	}
 
 	/**
@@ -164,20 +166,8 @@ public class DmtAcl {
 					.log("#Checking DmtAcl(java.lang.String acl) IllegalArgumentException");
 			org.osgi.service.dmt.DmtAcl dmtAcl = new org.osgi.service.dmt.DmtAcl(
 					aclStr);
-			tbc.failException("No Exception thrown", IllegalArgumentException.class);
-		} catch (IllegalArgumentException e) {
-			tbc.pass("Exception correctly thrown");
-		}
-		/*
-		 * Asserting IllegalArgumentException when principals do not have all
-		 * the global permissions.
-		 */
-		org.osgi.service.dmt.DmtAcl dmtAcl = new org.osgi.service.dmt.DmtAcl();
-		try {
-			tbc.log("#Checking DmtAcl(DmtAcl acl) IllegalArgumentException");
-			org.osgi.service.dmt.DmtAcl newDmtAcl = new org.osgi.service.dmt.DmtAcl(
-					dmtAcl);
-			tbc.failException("No Exception thrown", IllegalArgumentException.class);
+			tbc.failException("No Exception thrown",
+					IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("Exception correctly thrown");
 		}
@@ -194,15 +184,17 @@ public class DmtAcl {
 	 * says it should be allowed for DmtAcl(java.lang.String acl) constructor.
 	 */
 	public void testDmtAcl005() {
-		/*
-		 * org.osgi.service.dmt.DmtAcl dmtAcl = null; try { // dmtAcl = new
-		 * org.osgi.service.dmt.DmtAcl(null); } catch (IllegalArgumentException
-		 * e) { tbc.fail("Exception should not have beenthrown."); } Vector
-		 * principals = dmtAcl.getPrincipals();
-		 * 
-		 * tbc.assertNotNull("Principals are not null", principals);
-		 * tbc.assertTrue("Asserting empty principals", principals.isEmpty());
-		 */
+		  org.osgi.service.dmt.DmtAcl dmtAcl = null;
+		try { 
+			dmtAcl = new org.osgi.service.dmt.DmtAcl(null);
+		} catch (IllegalArgumentException e) {
+			tbc.fail("Exception should not have beenthrown.");
+		}
+		String[] principals = dmtAcl.getPrincipals();
+
+		tbc.assertNotNull("Principals are not null", principals);
+		tbc.assertTrue("Asserting empty principals", (principals.length<=0));
+		 
 	}
 
 	/**
@@ -226,9 +218,8 @@ public class DmtAcl {
 							.getPermissions(principal[1]));
 
 			int found = 0;
-			for (int i = 0; i < dmtAcl.getPrincipals().size()
-					&& found < principal.length; i++) {
-				String pr = (String) dmtAcl.getPrincipals().elementAt(i);
+			for (int i = 0; i < dmtAcl.getPrincipals().length && found < principal.length; i++) {
+				String pr = (String) dmtAcl.getPrincipals()[i];
 				for (int j = 0; j < principal.length; j++) {
 					if (pr.equals(principal[j])) {
 						found++;
@@ -256,7 +247,10 @@ public class DmtAcl {
 		try {
 			int perm = dmtAcl.getPermissions(principal);
 			// should not reach
-			tbc.failException("No Exception thrown when an invalid permission code is passed on the ACL string", IllegalArgumentException.class);
+			tbc
+					.failException(
+							"No Exception thrown when an invalid permission code is passed on the ACL string",
+							IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("Correctly caught IllegalArgumentException");
 		}
@@ -276,12 +270,15 @@ public class DmtAcl {
 		try {
 			int perm = dmtAcl.getPermissions(principal);
 			// should not reach
-			tbc.failException("No Exception thrown when a null principal is passed on the ACL string", IllegalArgumentException.class);
+			tbc
+					.failException(
+							"No Exception thrown when a null principal is passed on the ACL string",
+							IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.fail("Correctly caught IllegalArgumentException");
 		}
 	}
-	
+
 	/**
 	 * @testID testDmtAcl009
 	 * @testDescription Asserts that an IllegalArgumentException is thrown
@@ -289,16 +286,74 @@ public class DmtAcl {
 	 *                  invalid principal.
 	 */
 	public void testDmtAcl009() {
-		String principal = "%INVALID*_PRINCIPAL_NÃ‚ME";
+		String principal = "%INVALID*_PRINCIPAL_NÂME";
 		org.osgi.service.dmt.DmtAcl dmtAcl = null;
 		dmtAcl = new org.osgi.service.dmt.DmtAcl("Add=" + principal
 				+ "&Delete=" + principal + "&Get=*");
 		try {
 			int perm = dmtAcl.getPermissions(principal);
 			// should not reach
-			tbc.failException("No Exception thrown when an invalid principal name is passed on the ACL string", IllegalArgumentException.class);
+			tbc
+					.failException(
+							"No Exception thrown when an invalid principal name is passed on the ACL string",
+							IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.fail("Correctly caught IllegalArgumentException");
+		}
+	}
+
+	/**
+	 * @testID testDmtAcl010
+	 * @testDescription Test if an IllegalArgumentException is thrown when the
+	 *                  DmtAcl constructors receives two arrays with different
+	 *                  lenghts.
+	 */
+	public void testDmtAcl010() {
+		String[] principal = { "www.cesar.org.br", "www.cin.ufpe.br" };
+		int[] perm = { org.osgi.service.dmt.DmtAcl.GET
+				| org.osgi.service.dmt.DmtAcl.DELETE };
+		org.osgi.service.dmt.DmtAcl newDmtAcl = null;
+		try {
+			newDmtAcl = new org.osgi.service.dmt.DmtAcl(principal, perm);
+			tbc.failException("#", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass("Correctly caught IllegalArgumentException.");
+		}
+	}
+
+	/**
+	 * @testID testDmtAcl011
+	 * @testDescription Test if an IllegalArgumentException is thrown when the
+	 *                  DmtAcl constructors receives an invalid permission array
+	 *                  element.
+	 */
+	public void testDmtAcl011() {
+		String[] principal = { "www.cesar.org.br", "www.cin.ufpe.br" };
+		int[] perm = { org.osgi.service.dmt.DmtAcl.GET | 99 };
+		org.osgi.service.dmt.DmtAcl newDmtAcl = null;
+		try {
+			newDmtAcl = new org.osgi.service.dmt.DmtAcl(principal, perm);
+			tbc.failException("#", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass("Correctly caught IllegalArgumentException.");
+		}
+	}
+	
+	/**
+	 * @testID testDmtAcl012
+	 * @testDescription Test if an IllegalArgumentException is thrown when the
+	 *                  DmtAcl constructors receives an invalid principal array
+	 *                  element.
+	 */
+	public void testDmtAcl012() {
+		String[] principal = { "www.cesar.org.br", "%INVALID*_PRINCIPAL_NÂME" };
+		int[] perm = { org.osgi.service.dmt.DmtAcl.GET, org.osgi.service.dmt.DmtAcl.EXEC};
+		org.osgi.service.dmt.DmtAcl newDmtAcl = null;
+		try {
+			newDmtAcl = new org.osgi.service.dmt.DmtAcl(principal, perm);
+			tbc.failException("#", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass("Correctly caught IllegalArgumentException.");
 		}
 	}
 }
