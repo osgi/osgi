@@ -29,49 +29,49 @@ package org.osgi.service.event;
 
 /**
  * 
- * Defines standard names for <code>ChannelListener</code> properties.
+ * Defines standard names for <code>EventHandler</code> properties.
  * 
  * @version $Revision$
  */
 public interface EventConstants {
 
 	/**
-	 * Service Registration property (named <code>event.topic</code>) specifying
-	 * the <code>ChannelEvent</code> topics of interest to a Channel Listener
+	 * Service registration property (named <code>event.topic</code>) specifying
+	 * the <code>Event</code> topics of interest to a Event Handler
 	 * service.
 	 * <p>
-	 * Channel listeners SHOULD be registered with this property. The value of
-	 * the property is an array of strings that describe which topics in which
-	 * the listener is interested. An asterisk (&quot;*&quot;) may be used as a
-	 * trailing wildcard. Channel listeners which do not have a value for this
+	 * Event handlers SHOULD be registered with this property. The value of
+	 * the property is an array of strings that describe the topics in which
+	 * the handler is interested. An asterisk (&quot;*&quot;) may be used as a
+	 * trailing wildcard. Event handlers which do not have a value for this
 	 * propery are treated as though they had specified this property with the
-	 * value &quot;*&quot;. More precisely, the value of each entry in the
+	 * value { &quot;*&quot; }. More precisely, the value of each entry in the
 	 * array must conform to the following grammar:
 	 * 
 	 * <pre>
-	 *     topic-description := &quot;*&quot; | topic &quot;.*&quot; | topic
-	 *     topic := token ( &quot;.&quot; token )*
+	 *     topic-description := &quot;*&quot; | topic ( &quot;/*&quot; )?
+	 *     topic := token ( &quot;/&quot; token )*
 	 * </pre>
 	 * 
-	 * @see ChannelEvent
+	 * @see Event
 	 */
 	public static final String	EVENT_TOPIC		= "event.topics";
 
 	/**
 	 * Service Registration property (named <code>event.filter</code>) specifying
-	 * a filter to further select <code>ChannelEvent</code> s of interest to a
-	 * Channel Listener service.
+	 * a filter to further select <code>Event</code> s of interest to a
+	 * Event Handler service.
 	 * <p>
-	 * Channel listeners MAY be registered with this property. The value of this
+	 * Event handlers MAY be registered with this property. The value of this
 	 * property is a string containing an LDAP-style filter specification. Any
-	 * of the channel event's properties may be used in the filter expression.
-	 * Each channel listener is notified for any channel event which belongs to
-	 * the topics in which the listener has expressed an interest. If the
-	 * channel listener is also registered with this service property, then the
-	 * properties of the channel event must also match the filter for the
-	 * channel event to be delivered to the channel listener.
+	 * of the event's properties may be used in the filter expression.
+	 * Each event handler is notified for any event which belongs to
+	 * the topics in which the handler has expressed an interest. If the
+	 * event handler is also registered with this service property, then the
+	 * properties of the event must also match the filter for the
+	 * event to be delivered to the event handler.
 	 * 
-	 * @see ChannelEvent
+	 * @see Event
 	 * @see org.osgi.framework.Filter
 	 */
 	public static final String	EVENT_FILTER	= "event.filter";

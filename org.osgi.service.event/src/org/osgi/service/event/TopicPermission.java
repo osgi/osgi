@@ -36,12 +36,12 @@ import java.util.Hashtable;
  * A bundle's authority to publish or subscribe to event on a topic.
  * 
  * <p>
- * A topic is a dot-separated string that defines a topic.
+ * A topic is a slash-separated string that defines a topic.
  * <p>
  * For example:
  * 
  * <pre>
- * <code>org.osgi.service.foo.ACTION</code>
+ * <code>org/osgi/service/foo/FooEvent/ACTION</code>
  * </pre>
  * 
  * <p>
@@ -50,7 +50,7 @@ import java.util.Hashtable;
  * 
  * @version $Revision$
  */
-public final class TopicPermission extends BasicPermission {
+public final class TopicPermission extends Permission {
     static final long serialVersionUID = -5855563886961618300L;
 	/**
 	 * The action string <code>publish</code>.
@@ -79,14 +79,14 @@ public final class TopicPermission extends BasicPermission {
 
 	/**
 	 * Defines the authority to publich and/or subscribe to a topic within the
-	 * EventChannel service.
+	 * EventAdmin service.
 	 * <p>
 	 * The name is specified as a dot-separated string. Wildcards may be used.
 	 * For example:
 	 * 
 	 * <pre>
-	 *   org.osgi.service.foo.ACTION
-	 *   com.isv.*
+	 *   org/osgi/service/fooFooEvent/ACTION
+	 *   com/isv/*
 	 *   *
 	 * </pre>
 	 * 
@@ -106,7 +106,7 @@ public final class TopicPermission extends BasicPermission {
 	}
 
 	/**
-	 * Topic private constructor used by TopicPermissionCollection.
+	 * Package private constructor used by TopicPermissionCollection.
 	 * 
 	 * @param name class name
 	 * @param mask action mask
@@ -221,10 +221,10 @@ public final class TopicPermission extends BasicPermission {
 	 * <p>
 	 * 
 	 * <pre>
-	 *   x.y.*,&quot;publish&quot; -&gt; x.y.z,&quot;publish&quot; is true
-	 *   *,&quot;subscribe&quot; -&gt; x.y,&quot;subscribe&quot;   is true
-	 *   *,&quot;publish&quot; -&gt; x.y,&quot;subscribe&quot;     is false
-	 *   x.y,&quot;publish&quot; -&gt; x.y.z,&quot;publish&quot;   is false
+	 *   x/y/*,&quot;publish&quot; -&gt; x/y/z,&quot;publish&quot; is true
+	 *   *,&quot;subscribe&quot; -&gt; x/y,&quot;subscribe&quot;   is true
+	 *   *,&quot;publish&quot; -&gt; x/y,&quot;subscribe&quot;     is false
+	 *   x/y,&quot;publish&quot; -&gt; x/y/z,&quot;publish&quot;   is false
 	 * </pre>
 	 * 
 	 * @param p The target permission to interrogate.
@@ -234,8 +234,8 @@ public final class TopicPermission extends BasicPermission {
 	public boolean implies(Permission p) {
 		if (p instanceof TopicPermission) {
 			TopicPermission target = (TopicPermission) p;
-			return (((action_mask & target.action_mask) == target.action_mask) && super
-					.implies(p));
+            // TODO: Check that the names match
+			return ((action_mask & target.action_mask) == target.action_mask);
 		}
 		return (false);
 	}
