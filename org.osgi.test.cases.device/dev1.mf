@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bundle-Vendor: OSGi
+Bundle-Vendor: OSGi Alliance
 Bundle-Version: 1.2.1
 Bundle-Activator: org.osgi.test.cases.device.dev1.BasicDevice
 Bundle-DocUrl: http://www.prosyst.bg

@@ -3,7 +3,7 @@ Bundle-Name: test.cases.permission.contextsharer
 Bundle-Description: Tests the Permission Admin service
 Bundle-Version: 3.0
 Bundle-Activator: org.osgi.test.cases.permission.contextsharer.ContextSharerImpl
-Bundle-Vendor: OSGi
+Bundle-Vendor: OSGi Alliance
 Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test

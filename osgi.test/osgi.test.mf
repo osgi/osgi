@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-Name: osgi.test
 Bundle-Activator: org.osgi.tools.group.Group
 Bundle-Description: OSGi Service Platform Release 3, All Test Cases loader
-Bundle-Copyright: Copyright (c) The OSGi Alliance (2000, 2002). All Rights Reserved.
+Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
 CVS-Header: $Header: /cvshome/build/osgi.test/Manifest.mf,v 1.2 2004/10/01 17:08:59 hargrave Exp $
-Bundle-Vendor: OSGi
+Bundle-Vendor: OSGi Alliance
 Bundle-Version: 3.0
 Bundle-Category: osgi,test
 Bundle-DocUrl: http://www.osgi.org/

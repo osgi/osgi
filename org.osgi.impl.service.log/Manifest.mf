@@ -5,7 +5,7 @@ Bundle-Description: OSGi Log Service Reference Implementation by IBM Corporation
 Bundle-Copyright: (C) Copyright IBM Corporation 2000-2002.
  This source code is licensed to OSGi as MEMBER LICENSED MATERIALS
  under the terms of Section 3.2 of the OSGi MEMBER AGREEMENT.
-Bundle-Vendor: OSGi
+Bundle-Vendor: OSGi Alliance
 Bundle-Version: 1.2
 Bundle-Category: osgi
 $(EXPORT-PACKAGE)

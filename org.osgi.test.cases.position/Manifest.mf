@@ -3,7 +3,7 @@ Bundle-Name: test.cases.position
 Bundle-Description: Tests the Permission Admin service
 Bundle-Version: 3.0
 Bundle-Activator: $(p).PositionTestCase
-Bundle-Vendor: OSGi
+Bundle-Vendor: OSGi Alliance
 Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test

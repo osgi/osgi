@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Name: test.cases.filter
-Bundle-Copyright: Copyright (c) The OSGi Alliance (2000, 2002). All Rights Reserved.
+Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
 Bundle-Description: Tests filter operations. The following elements are tested:
  <pre>
   testBasicFilter 				basic filter operations<br>
@@ -19,7 +19,7 @@ Bundle-Description: Tests filter operations. The following elements are tested:
   testNullFilter  				Using no filter<br>
   testInvalidSyntax   			Invalid syntax detection<br>
  <pre>
-Bundle-Vendor: OSGi
+Bundle-Vendor: OSGi Alliance
 Bundle-TestReference: org.osgi.framework.Filter;specification-version=1.1
 Bundle-Version: 3.0
 Bundle-DocUrl: http://membercvs.osgi.org/test/3
