@@ -524,22 +524,22 @@ public class MeasurementControl extends DefaultTestBundleControl {
 	 * Test the string constuctor of the Measurement class
 	 */
 	public void testMeasurementFromString() throws Exception {
-		assertEquals("1 kg:0", new Measurement(1, 0, Unit.kg), new Measurement(
-				"1 kg:0"));
-		assertEquals("1 kg", new Measurement(1, 0, Unit.kg), new Measurement(
-				"1 kg"));
-		assertEquals("3.5e10 kg:0", new Measurement(3.5e10, 0, Unit.kg),
-				new Measurement("3.5e10 kg:0"));
-		assertEquals("3.5e10 kg:3.5e10", new Measurement(3.5e10, 0, Unit.kg),
-				new Measurement("3.5e10 kg 0"));
-		assertEquals("3.5e10 kg:3.5e10", new Measurement(3.5e10, 3.5e10,
-				Unit.kg), new Measurement("3.5e10 kg:3.5e10"));
-		assertEquals("3.5e10 kg 3.5e10", new Measurement(3.5e10, 3.5e10,
-				Unit.kg), new Measurement("3.5e10 kg 3.5e10"));
-		assertEquals("3.5e10 Hz 3.5e10", new Measurement(3.5e10, 3.5e10,
-				Unit.Hz), new Measurement("3.5e10 Hz 3.5e10"));
-		assertEquals("3.5e10 1/s 3.5e10", new Measurement(3.5e10, 3.5e10,
-				Unit.Hz), new Measurement("3.5e10 1/s 3.5e10"));
+		assertEquals("1:kg:0", new Measurement(1, 0, Unit.kg), new Measurement(
+				"1:kg:0"));
+		assertEquals("1:kg", new Measurement(1, 0, Unit.kg), new Measurement(
+				"1:kg"));
+		assertEquals("3.5e10:kg:0", new Measurement(3.5e10, 0, Unit.kg),
+				new Measurement("3.5e10:kg:0"));
+		assertEquals("3.5e10:kg:3.5e10", new Measurement(3.5e10, 0, Unit.kg),
+				new Measurement("3.5e10:kg:0"));
+		assertEquals("3.5e10:kg:3.5e10", new Measurement(3.5e10, 3.5e10,
+				Unit.kg), new Measurement("3.5e10:kg:3.5e10"));
+		assertEquals("3.5e10:kg:3.5e10", new Measurement(3.5e10, 3.5e10,
+				Unit.kg), new Measurement("3.5e10:kg:3.5e10"));
+		assertEquals("3.5e10:Hz:3.5e10", new Measurement(3.5e10, 3.5e10,
+				Unit.Hz), new Measurement("3.5e10:Hz:3.5e10"));
+		assertEquals("3.5e10:1/s:3.5e10", new Measurement(3.5e10, 3.5e10,
+				Unit.Hz), new Measurement("3.5e10:1/s:3.5e10"));
 	}
 
 	/**
