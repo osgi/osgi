@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.osgi.org/xmlns/scr/v1.0.0" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
 
-	<element name="component" type="scr:componentType"></element>
+	<element name="component" type="scr:Tcomponent"></element>
 
-	<complexType name="componentType">
+	<complexType name="Tcomponent">
 		<sequence>
-			<element name="implementation" minOccurs="1" maxOccurs="1" type="scr:implementationType"></element>
-			<element name="property" minOccurs="0" maxOccurs="unbounded" type="scr:propertyType"></element>
-			<element name="service" minOccurs="0" maxOccurs="1" type="scr:serviceType"></element>
-			<element name="reference" minOccurs="0" maxOccurs="unbounded" type="scr:referenceType"></element>
+			<element name="implementation" minOccurs="1" maxOccurs="1" type="scr:Timplementation"></element>
+			<element name="property" minOccurs="0" maxOccurs="unbounded" type="scr:Tproperty"></element>
+			<element name="service" minOccurs="0" maxOccurs="1" type="scr:Tservice"></element>
+			<element name="reference" minOccurs="0" maxOccurs="unbounded" type="scr:Treference"></element>
 		</sequence>
 		<attribute name="autoenable" type="boolean" default="true" use="optional"></attribute>
 		<attribute name="name" type="string" use="required"></attribute>
@@ -16,42 +16,42 @@
 		<attribute name="factory" type="string" default="false" use="optional"></attribute>
 	</complexType>
 
-	<complexType name="implementationType">
+	<complexType name="Timplementation">
 		<attribute name="class" type="string" use="required"></attribute>
 	</complexType>
 
-	<complexType name="propertyType">
+	<complexType name="Tproperty">
 		<simpleContent>
-			<extension base="string">
+			<extension base="scr:TlocalizableString">
 				<attribute name="name" type="string" use="required"></attribute>
-				<attribute name="value" type="string" use="optional"></attribute>
-				<attribute name="type" use="optional" default="String" type="scr:javaTypes"></attribute>
+				<attribute name="value" type="scr:TlocalizableString" use="optional"></attribute>
+				<attribute name="type" use="optional" default="String" type="scr:TjavaTypes"></attribute>
 			</extension>
 		</simpleContent>
 	</complexType>
 
-	<complexType name="serviceType">
+	<complexType name="Tservice">
 		<sequence>
-			<element name="provide" minOccurs="1" maxOccurs="unbounded" type="scr:provideType"></element>
+			<element name="provide" minOccurs="1" maxOccurs="unbounded" type="scr:Tprovide"></element>
 		</sequence>
 		<attribute name="servicefactory" type="boolean" default="false" use="optional"></attribute>
 	</complexType>
 
-	<complexType name="referenceType">
+	<complexType name="Treference">
 		<attribute name="name" type="NMTOKEN" use="required"></attribute>
 		<attribute name="interface" type="string" use="required"></attribute>
-		<attribute name="cardinality" default="1..1" use="optional" type="scr:cardinalityType"></attribute>
-		<attribute name="policy" use="optional" default="static" type="scr:policyType"></attribute>
+		<attribute name="cardinality" default="1..1" use="optional" type="scr:Tcardinality"></attribute>
+		<attribute name="policy" use="optional" default="static" type="scr:Tpolicy"></attribute>
 		<attribute name="target" type="string" use="optional"></attribute>
 		<attribute name="bind" type="string" use="optional"></attribute>
 		<attribute name="unbind" type="string" use="optional"></attribute>
 	</complexType>
 
-	<complexType name="provideType">
+	<complexType name="Tprovide">
 		<attribute name="interface" type="string" use="required"></attribute>
 	</complexType>
 
-	<simpleType name="javaTypes">
+	<simpleType name="TjavaTypes">
 		<restriction base="string">
 			<enumeration value="String"></enumeration>
 			<enumeration value="Long"></enumeration>
@@ -65,7 +65,7 @@
 		</restriction>
 	</simpleType>
 
-	<simpleType name="cardinalityType">
+	<simpleType name="Tcardinality">
 		<restriction base="string">
 			<enumeration value="0..1"></enumeration>
 			<enumeration value="0..n"></enumeration>
@@ -74,11 +74,15 @@
 		</restriction>
 	</simpleType>
 
-	<simpleType name="policyType">
+	<simpleType name="Tpolicy">
 		<restriction base="string">
 			<enumeration value="static"></enumeration>
 			<enumeration value="dynamic"></enumeration>
 		</restriction>
+	</simpleType>
+
+	<simpleType name="TlocalizableString">
+		<restriction base="string"></restriction>
 	</simpleType>
 
 </schema>
