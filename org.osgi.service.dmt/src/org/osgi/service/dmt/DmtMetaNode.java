@@ -34,6 +34,9 @@ package org.osgi.service.dmt;
  * in the DMT. One is used to retrieve standard OMA DM metadata, such as
  * access mode, cardinality, default etc. Another is used for meta data
  * extensions defined by OSGi MEG, such as valid values and regular expressions.
+ * <p> Most of the methods of this class return <code>null</code> if a certain
+ * piece of meta information is not defined for the node or providing this
+ * information is not supported. Methods of this class do not throw exceptions.
  */
 public interface DmtMetaNode {
 
@@ -101,33 +104,19 @@ public interface DmtMetaNode {
      */
     DmtData   getDefault();
 
-    /**
-     * Check whether the node's value has a maximum value associated with it
-     * @return <code>true</code> if the node's value has a maximum value,
-     * <code>false</code> if not or the node's format can not allow having a
-     * maximum
-     */
-    boolean   hasMax();
-
-    /**
-     * Check whether the node's value has a minimum value associated with it
-     * @return <code>true</code> if the node's value has a minimum value,
-     * <code>false</code> if not or the node's format can not allow having a
-     * minimum
-     */
-    boolean   hasMin();
-
-    /**
-     * Get the maximum allowed value associated with this node.
-     * @return The allowed maximum. If the node's <code>hasMax()</code> returns
-     * <code>false</code> then <code>Integer.MIN_VALUE</code> is returned.
+     /**
+     * Get the maximum allowed value associated with an integer node.
+     * @return The allowed maximum. If there is no upper limit defined or the
+     * node's format is not integer then
+     * <code>Integer.MAX_VALUE</code> is returned.
      */
     int       getMax();
 
     /**
-     * Get the minimum allowed value associated with this node.
-     * @return The allowed minimum. If the node's <code>hasMin()</code> returns
-     * <code>false</code> then <code>Integer.MAX_VALUE</code> is returned.
+     * Get the minimum allowed value associated with an integer node.
+     * @return The allowed minimum. If there is no lower limit defined or the
+     * node's format is not integer then
+     * <code>Integer.MIN_VALUE</code> is returned.
      */
     int       getMin();
 
@@ -141,7 +130,8 @@ public interface DmtMetaNode {
     
     /**
      * Return an array of Strings if valid names are defined for
-     * the node, or <code>null</code> otherwise
+     * the node, or <code>null</code> if no valid name list is defined 
+     * or if this piece of meta info is not supported
      * @return the valid values for this node name, or <code>null</code> if
      * not defined
      */
@@ -165,14 +155,14 @@ public interface DmtMetaNode {
      * <code>null</code> if not defined, or if the node is not of type
      * <code>chr</code>.
      */
-    String    getRegExp();
+    String    getPattern();
     
     /**
      * Get the regular expression associated with the name of this node if any. 
      * @return The regular expression associated with the name of this node or
      * <code>null</code> if not defined.
      */
-    String    getNameRegExp();
+    String    getNamePattern();
 
     /**
      * Get the list of MIME types this node can hold.
@@ -182,36 +172,4 @@ public interface DmtMetaNode {
      * element of the list.
      */
     String[]  getMimeTypes();
-
-    
-    /**
-     * Get the URI of a node whose children's names are the only valid
-     * values for the current node. For example, let's assume that we have
-     * a node defining the connectivity profile for the browser
-     * application: <code>./DevDetail/Ext/Browser/Conn</code>.
-     * The node is a leaf, containing the name of one of the profiles
-     * defined under <code>./DevDetail/Ext/DataProfiles</code>.
-     * If invoked on the former, this method method will return the URI of
-     * the latter
-     * @return The URI of the referred node or <code>null</code> if not defined.
-     */
-    //String    getReferredURI();
-
-    /**
-     * Get the URI of all nodes referring to this node. It returns the list of
-     * URIs for leaf nodes whose value is changed when the current node is
-     * renamed, or set to <code>null</code> if the current node is deleted.
-     * @return The URI list of nodes reffering to this node, or
-     * <code>null</code> if not defined.
-     */
-    //String[]  getDependentURIs();
-
-    /**
-     * Get the URI of all nodes referring to this node. It returns the list
-     * of leaf  nodes which, if they have value equal to the name of the
-     * current node, will prevent any renaming or deletion of this node.
-     * @return The URI list of nodes reffering to this node, or
-     * <code>null</code> if not defined.
-     */
-    //String[]  getChildURIs();
 }
