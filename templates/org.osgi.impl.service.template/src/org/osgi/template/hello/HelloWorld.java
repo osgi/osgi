@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -24,35 +24,34 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.template.hello;
 
-import org.osgi.framework.*;
 import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 /**
- *
+ * 
  * TODO Add Javadoc comment for this type.
  * 
  * @version $Revision$
  */
 public class HelloWorld implements BundleActivator {
 	/**
-	 * @param arg0
+	 * @param context
 	 * @throws java.lang.Exception
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
-	public void start(BundleContext arg0) throws Exception {
+	public void start(BundleContext context) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("Hello World");
 	}
 
 	/**
-	 * @param arg0
+	 * @param context
 	 * @throws java.lang.Exception
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
-	public void stop(BundleContext arg0) throws Exception {
+	public void stop(BundleContext context) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("Goodbye World");
 	}
