@@ -17,4 +17,8 @@
 	      	package="unittests.metadata">
 		</xjc>
 	</target>
+	<target name="compile" depends="generate-binding,master.compile"/>
+	<target name="clean" depends="master.clean">
+		<delete dir="${project}/src/unittests/metadata" verbose="$verbose" quiet="true"/>
+	</target>
 </project>
