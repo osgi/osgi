@@ -104,8 +104,8 @@ public interface HierarchyListener {
    * @param controlUnitType the type of the unit for which the event is fired
    * @param controlUnitID the ID of the unit for which the event is fired
    * @param parentControlUnitType the parent unit's type, where the change
-   *          occured
-   * @param parentControlUnitID the parent unit's ID, where the change occured
+   *          occurred
+   * @param parentControlUnitID the parent unit's ID, where the change occurred
    */
   public void hierarchyChanged(int eventType, String controlUnitType,
                                String controlUnitID, String parentControlUnitType,

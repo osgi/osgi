@@ -84,12 +84,9 @@ public interface ControlUnitAdminListener {
   /**
    * This constant is used as first parameter in
    * {@link #controlUnitEvent controlUnitEvent} method to indicate that a new
-   * control unit type is available, i.e. a control unit or control unit 
-   *  
-   * {@link org.osgi.service.cu.ControlUnit} or 
-   * {@link org.osgi.service.cu.admin.spi.ManagedControlUnit} of a type not 
-   * available before in the framework was registered or 
-   * <BR>
+   * control unit type is available, i.e. a control unit of a type 
+   * (or a control unit factory providing units of a type) not 
+   * available before in the framework was registered.<BR>
    * 
    * When the event is of this type the
    * parameter of {@link #controlUnitEvent controlUnitEvent} method specifying a
@@ -103,7 +100,9 @@ public interface ControlUnitAdminListener {
   /**
    * This constant is used as first parameter in
    * {@link #controlUnitEvent controlUnitEvent} method to indicate that control
-   * units of the given type are no more available. When the event is of this
+   * units of the given type are no more available, i.e. the last control unit
+   * of this type (or the factory providing units of this type) was 
+   * unregistered from the framework. When the event is of this
    * type the parameter of {@link #controlUnitEvent controlUnitEvent} method
    * specifying a control unit id is <code>null</code>.
    * <p>

@@ -41,8 +41,15 @@ import org.osgi.service.cu.ControlUnitException;
 public interface ControlUnitAdmin {
 
   /**
-   * Actions defined in the metadata of the control unit, which starts with this
-   * prefix may be used for explicit creation of new control units.
+   * Actions defined in the metadata of the control unit, 
+   * which action ID starts with this prefix may be used for explicit creation 
+   * of new control units. <BR>
+   * 
+   * These actions are called constructors and their action ID must be 
+   * supplied as argument to the  
+   * {@link #createControlUnit(String, String, Object) ControlUnitAdmin.createControlUnit} or 
+   * {@link org.osgi.service.cu.admin.spi.ControlUnitFactory#createControlUnit(String, Object) ControlUnitFactory.createControlUnit} methods.
+   * A control unit type may have arbitrary number of constructors.
    * <p>
    * 
    * The value of this constant is "$create."
@@ -50,8 +57,21 @@ public interface ControlUnitAdmin {
   public static final String CONSTRUCTOR_PREFIX = "$create.";
 
   /**
-   * Specifies the ID of the actions defined in the metadata of the control
-   * unit, which is used for explicit removal of existing control units.
+   * An action with ID equal to the value of this constant and taking a single 
+   * argument of type <code>String</code> should be
+   * defined in the metadata of a control unit to specify that the 
+   * corresponding type of control units can be explicitly removed. <BR>
+   *  
+   * This action is called destructor. It takes as single argument the 
+   * ID of control unit to be destroyed and its responsibility is to remove 
+   * the control unit from the framework and free the resources used by it. A 
+   * control unit type may have one or zero destructors.<BR>
+   * 
+   * The destructor may be invoked through the 
+   * {@link #destroyControlUnit(String, String) ControlUnitAdmin.destroyControlUnit} or 
+   * {@link org.osgi.service.cu.admin.spi.ControlUnitFactory#destroyControlUnit(String) ControlUnitFactory.destroyControlUnit}
+   * methods. <BR>
+   * 
    * <p>
    * 
    * The value of this constant is "$destroy"
@@ -172,7 +192,7 @@ public interface ControlUnitAdmin {
    * @param parentControlUnitID the id of the parent Control Unit.
    * @param childControlUnitType the type of the child Control Units.
    * 
-   * @return An array of child control units units or null if there are 
+   * @return An array of child control units or null if there are 
    * no child control units found for this parent type and id.
    * @throws NullPointerException if the childControlUnitType is <code>null</code>.
    */
