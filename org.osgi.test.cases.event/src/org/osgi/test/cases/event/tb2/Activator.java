@@ -49,6 +49,7 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
   private BundleContext context;
   private Event lastEvent = null;
   private ServiceRegistration serviceReg;
+  private String[] topics;
   
 	public void start(BundleContext context) throws Exception {
     this.context = context;
@@ -64,6 +65,7 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
 	}
   
   public void setTopics(String[] topics) {
+    this.topics = topics;
     Hashtable ht = new Hashtable();
     ht.put(EventConstants.EVENT_TOPIC, topics);
     if (serviceReg == null) {
@@ -74,8 +76,6 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
   }
   
   public String[] getTopics() {
-    ServiceReference serviceRef = context.getServiceReference(EventHandler.class.getName());
-    String[] topics = (String[]) serviceRef.getProperty(EventConstants.EVENT_TOPIC);
     return topics;
   }
   

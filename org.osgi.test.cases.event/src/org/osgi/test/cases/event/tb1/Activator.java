@@ -47,6 +47,7 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
   private BundleContext context;
   private Event lastEvent = null;
   private ServiceRegistration serviceReg;
+  private String[] topics;
   
 	public void start(BundleContext context) throws Exception {
     this.context = context;
@@ -62,28 +63,17 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
 	}
   
   public void setTopics(String[] topics) {
+    this.topics = topics;
     Hashtable ht = new Hashtable();
     ht.put(EventConstants.EVENT_TOPIC, topics);
-//    ht.put("didi", "DIDI");
-//    System.out.println("topics class = " + topics.getClass());//didi
-//    System.out.println("topics toString = " + topics);//didi
     if (serviceReg == null) {
       serviceReg = context.registerService(EventHandler.class.getName(), this, ht);
-      //getTopics();
     } else {
       serviceReg.setProperties(ht);
     }
   }
   
   public String[] getTopics() {
-    ServiceReference serviceRef = context.getServiceReference(EventHandler.class.getName());
-    Object obj = serviceRef.getProperty(EventConstants.EVENT_TOPIC);
-//    System.out.println("obj class = " + obj.getClass());//didi
-//    System.out.println("obj toString = " + obj);//didi
-//    Object obj1 = serviceRef.getProperty("didi");
-//    System.out.println("obj1 class = " + obj1.getClass());//didi
-//    System.out.println("obj1 toString = " + obj1);//didi
-    String[] topics = (String[]) serviceRef.getProperty(EventConstants.EVENT_TOPIC);
     return topics;
   }
   
