@@ -23,7 +23,7 @@ import java.util.*;
 import org.osgi.framework.*;
 import org.osgi.service.application.*;
 import org.osgi.service.event.*;
-import org.osgi.meglet.MegletHandle;
+import  org.osgi.impl.service.megcontainer.*;
 
 public class TestMegletContainerBundleActivator extends Object implements
 		BundleActivator, BundleListener, EventHandler, Runnable {
@@ -118,7 +118,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 						break;
 					case APPLICATION_SUSPEND:
 						requiredTopic = "org/osgi/framework/ServiceEvent/MODIFIED";
-						requiredState = new Integer(MegletHandle.SUSPENDED );
+						requiredState = new Integer(MegletHandleImpl.SUSPENDED );
 						break;
 					case APPLICATION_RESUME:
 						requiredTopic = "org/osgi/framework/ServiceEvent/MODIFIED";
@@ -134,7 +134,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 						break;
 					case APPLICATION_STOPPED_AFTER_SUSPEND:
 						requiredTopic = "org/osgi/framework/ServiceEvent/UNREGISTERING";
-						requiredState = new Integer( MegletHandle.SUSPENDED );
+						requiredState = new Integer( MegletHandleImpl.SUSPENDED );
 						break;
 				}
 				
@@ -186,9 +186,11 @@ public class TestMegletContainerBundleActivator extends Object implements
 	}
 	
 	public ApplicationDescriptor getAppDesc( ApplicationHandle appHnd ) {
-		ServiceReference appDescRef = appHnd.getApplicationDescriptor();
-		ApplicationDescriptor appDesc = (ApplicationDescriptor)bc.getService( appDescRef );
-		bc.ungetService( appDescRef );
+		//ServiceReference appDescRef = appHnd.getApplicationDescriptor();
+		//ApplicationDescriptor appDesc = (ApplicationDescriptor)bc.getService( appDescRef );
+		ApplicationDescriptor appDesc = appHnd.getApplicationDescriptor();
+		//bc.ungetService( appDescRef );
+		//TODO we would not do the service reference for these
 		return appDesc;
 	}
 	
@@ -700,12 +702,12 @@ public class TestMegletContainerBundleActivator extends Object implements
 
 	boolean testCase_suspendApplication() {
 		try {
-			((MegletHandle)appHandle).suspend();
+			((MegletHandleImpl)appHandle).suspend();
 			if (!checkResultFile("SUSPEND:StorageTestString"))
 				throw new Exception("Result of the suspend is not SUSPEND!");
 			if( !waitStateChangeEvent( APPLICATION_SUSPEND, appDescs[ 0 ].getPID() ) )
 				throw new Exception("Didn't receive the suspend event!");
-			if (appHandle.getState() != MegletHandle.SUSPENDED)
+			if (appHandle.getState() != MegletHandleImpl.SUSPENDED)
 				throw new Exception("The status didn't change to suspended!");
 			return true;
 		}
@@ -717,7 +719,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 
 	boolean testCase_resumeApplication() {
 		try {
-			((MegletHandle)appHandle).resume();
+			((MegletHandleImpl)appHandle).resume();
 			if (!checkResultFile("RESUME:StorageTestString"))
 				throw new Exception(
 						"Result of the resume is not RESUME:StorageTestString!");
@@ -1021,7 +1023,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			sendEvent(new Event("com/nokia/megtest/SuspendEvent", null), false);
 			handle = lookupAppHandle(appDesc);
 			if (handle == null
-					|| handle.getState() != MegletHandle.SUSPENDED)
+					|| handle.getState() != MegletHandleImpl.SUSPENDED)
 				throw new Exception("Application didn't go to SUSPENDED state!");
 			if( !waitStateChangeEvent( APPLICATION_SUSPEND, appDescs[ 0 ].getPID() ) )
 				throw new Exception("Didn't receive the suspend event!");
@@ -1091,7 +1093,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			sendEvent(new Event("com/nokia/megtest/RequestSuspend", null),
 					false);
 			int tries = 0;
-			while (appHandle.getState() != MegletHandle.SUSPENDED) {
+			while (appHandle.getState() != MegletHandleImpl.SUSPENDED) {
 				try {
 					Thread.sleep(100);
 				}
