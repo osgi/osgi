@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-Name: MEGContainer
+Bundle-Vendor: Nokia
+Bundle-Version: 1.0
+Bundle-ClassPath: .,nanoxml.jar
+Bundle-Activator: $(p).MEGContainerBundleActivator
+DynamicImport-Package: *
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
