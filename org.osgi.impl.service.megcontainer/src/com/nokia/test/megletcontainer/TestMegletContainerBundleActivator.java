@@ -42,6 +42,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 	private final static int				APPLICATION_RESUME = 3;
 	private final static int				APPLICATION_STOPPING = 4;
 	private final static int        APPLICATION_STOPPED = 5;
+	private final static int				APPLICATION_STOPPED_AFTER_SUSPEND = 6;
 	
 	public TestMegletContainerBundleActivator() {
 		super();
@@ -132,6 +133,10 @@ public class TestMegletContainerBundleActivator extends Object implements
 						requiredTopic = "org/osgi/framework/ServiceEvent/UNREGISTERING";
 						requiredState = new Integer( ApplicationHandle.STOPPING );
 						break;
+					case APPLICATION_STOPPED_AFTER_SUSPEND:
+						requiredTopic = "org/osgi/framework/ServiceEvent/UNREGISTERING";
+						requiredState = new Integer( MegletHandle.SUSPENDED );
+						break;
 				}
 				
 				if( event.getTopic().equals( requiredTopic ) ) {					
@@ -166,68 +171,6 @@ public class TestMegletContainerBundleActivator extends Object implements
 		}		
 	}
 	
-	boolean checkEvent(String name, String appName) {
-		/* TODO TODO TODO TODO TODO */
-		return true;
-		/*
-		try {
-			Event event;
-			do {
-				event = getEvent();
-			} while (!event.getTopic().startsWith("org/osgi/application/"));
-			
-			if (!event.getTopic().equals("org/osgi/application/" + name))
-				throw new Exception("Received: " + event.getTopic()
-						+ "    Expected:org/osgi/application/" + name);
-			if (!name.equals("starting")) {
-				String[] names = event.getPropertyNames();
-				for (int i = 0; i != names.length; i++) {
-					Object prop = event.getProperty(names[i]);
-					if (names[i].equals("topic")) {
-						if (!prop.equals("org/osgi/application/" + name))
-							throw new Exception("Invalid topic: "
-									+ (String) prop);
-					}
-					else if (names[i].equals("application_descriptor.id")) {
-						Long srv_id = (Long) prop;
-						ServiceReference[] appDescRefs = bc
-								.getServiceReferences(
-										"org.osgi.service.application.ApplicationDescriptor",
-										"(" + Constants.SERVICE_ID + "="
-												+ srv_id + ")");
-						if (appDescRefs == null || appDescRefs.length == 0)
-							throw new Exception("ApplicationDescriptor ("
-									+ srv_id + ") not found!");
-					}
-					else if (names[i].equals("application_instance.id")) {
-						if (!name.equals("stopping") && !name.equals("stopped")) {
-							Long srv_id = (Long) prop;
-							ServiceReference[] appHndRefs = bc
-									.getServiceReferences(
-											"org.osgi.service.application.ApplicationHandle",
-											"(" + Constants.SERVICE_ID + "="
-													+ srv_id + ")");
-							if (appHndRefs == null || appHndRefs.length == 0)
-								throw new Exception("No apphnd!");
-						}
-					}
-					else if (names[i].equals("name")) {
-						if (!prop.equals(appName))
-							throw new Exception("Invalid appName: "
-									+ (String) prop);
-					}
-					else if (!names[i].equals(EventConstants.EVENT_TOPIC))
-						throw new Exception("Invalid property: " + names[i]);
-				}
-			}
-			return true;
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}*/
-	}
-
 	public ApplicationDescriptor getAppDesc( ApplicationHandle appHnd ) {
 		ServiceReference appDescRef = appHnd.getApplicationDescriptor();
 		ApplicationDescriptor appDesc = (ApplicationDescriptor)bc.getService( appDescRef );
@@ -945,12 +888,8 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception(
 						"The autostarted application's status is not running!");
 			bc.ungetService(appList[0]);
-			String appName = (String) appDesc.getProperties("").get(
-					ApplicationDescriptor.APPLICATION_NAME);
-			if (!checkEvent("starting", appName))
-				throw new Exception("Didn't received the starting event!");
-			if (!checkEvent("started", appName))
-				throw new Exception("Didn't received the started event!");
+			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getApplicationPID() ))
+				throw new Exception("Didn't receive the start event!");
 			return true;
 		}
 		catch (Exception e) {
@@ -969,12 +908,10 @@ public class TestMegletContainerBundleActivator extends Object implements
 				return false;
 			appHandle = oldHandle;
 			appHandle.destroy();
-			String appName = (String) appDesc.getProperties("").get(
-					ApplicationDescriptor.APPLICATION_NAME);
-			if (!checkEvent("stopping", appName))
-				throw new Exception("Didn't received the stopping event!");
-			if (!checkEvent("stopped", appName))
-				throw new Exception("Didn't received the stopped event!");
+			if( !waitStateChangeEvent( APPLICATION_STOPPING, appDesc.getApplicationPID() ) )
+				throw new Exception("Didn't receive the stopping event!");
+			if( !waitStateChangeEvent( APPLICATION_STOPPED, appDesc.getApplicationPID() ) )
+				throw new Exception("Didn't receive the stopped event!");
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
 					"(application.pid="
@@ -1059,38 +996,30 @@ public class TestMegletContainerBundleActivator extends Object implements
 					|| handle.getApplicationState() != ApplicationHandle.RUNNING)
 				throw new Exception(
 						"Application didn't start for the start event!");
-			String appName = (String) appDesc.getProperties("").get(
-					ApplicationDescriptor.APPLICATION_NAME);
-			if (!checkEvent("starting", appName))
-				throw new Exception("Didn't received the starting event!");
-			if (!checkEvent("started", appName))
-				throw new Exception("Didn't received the started event!");
+			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getApplicationPID() ))
+				throw new Exception("Didn't receive the start event!");
 			sendEvent(new Event("com/nokia/megtest/SuspendEvent", null), false);
 			handle = lookupAppHandle(appDesc);
 			if (handle == null
 					|| handle.getApplicationState() != MegletHandle.SUSPENDED)
 				throw new Exception("Application didn't go to SUSPENDED state!");
-			if (!checkEvent("suspending", appName))
-				throw new Exception("Didn't received the suspending event!");
-			if (!checkEvent("suspended", appName))
-				throw new Exception("Didn't received the suspended event!");
+			if( !waitStateChangeEvent( APPLICATION_SUSPEND, appDescs[ 0 ].getApplicationPID() ) )
+				throw new Exception("Didn't receive the suspend event!");
 			sendEvent(new Event("com/nokia/megtest/ResumeEvent", null), false);
 			handle = lookupAppHandle(appDesc);
 			if (handle == null
 					|| handle.getApplicationState() != ApplicationHandle.RUNNING)
 				throw new Exception("Application didn't go to RUNNING state!");
-			if (!checkEvent("resuming", appName))
-				throw new Exception("Didn't received the resuming event!");
-			if (!checkEvent("resumed", appName))
-				throw new Exception("Didn't received the resumed event!");
+			if (!waitStateChangeEvent( APPLICATION_RESUME, appDescs[ 0 ].getApplicationPID() ) )
+				throw new Exception("Didn't resumed the application correctly!");
 			sendEvent(new Event("com/nokia/megtest/StopEvent", null), false);
 			handle = lookupAppHandle(appDesc);
 			if (handle != null)
 				throw new Exception("Application didn't terminate!");
-			if (!checkEvent("stopping", appName))
-				throw new Exception("Didn't received the stopping event!");
-			if (!checkEvent("stopped", appName))
-				throw new Exception("Didn't received the stopped event!");
+			if( !waitStateChangeEvent( APPLICATION_STOPPING, appDesc.getApplicationPID() ) )
+				throw new Exception("Didn't receive the stopping event!");
+			if( !waitStateChangeEvent( APPLICATION_STOPPED, appDesc.getApplicationPID() ) )
+				throw new Exception("Didn't receive the stopped event!");
 			return true;
 		}
 		catch (Exception e) {
@@ -1122,12 +1051,10 @@ public class TestMegletContainerBundleActivator extends Object implements
 			appHandle = lookupAppHandle(appDesc);
 			if (appHandle != null)
 				throw new Exception("Application didn't terminate!");
-			String appName = (String) appDesc.getProperties("").get(
-					ApplicationDescriptor.APPLICATION_NAME);
-			if (!checkEvent("stopping", appName))
-				throw new Exception("Didn't received the stopping event!");
-			if (!checkEvent("stopped", appName))
-				throw new Exception("Didn't received the stopped event!");
+			if( !waitStateChangeEvent( APPLICATION_STOPPING, appDesc.getApplicationPID() ) )
+				throw new Exception("Didn't receive the stopping event!");
+			if( !waitStateChangeEvent( APPLICATION_STOPPED, appDesc.getApplicationPID() ) )
+				throw new Exception("Didn't receive the stopped event!");
 			return true;
 		}
 		catch (Exception e) {
@@ -1154,17 +1081,13 @@ public class TestMegletContainerBundleActivator extends Object implements
 			}
 			if (!checkResultFile("SUSPEND:StorageTestString"))
 				throw new Exception("Result of the stop is not STOP!");
-			String appName = (String) appDesc.getProperties("").get(
-					ApplicationDescriptor.APPLICATION_NAME);
-			if (!checkEvent("suspending", appName))
-				throw new Exception("Didn't received the stopping event!");
-			if (!checkEvent("suspended", appName))
-				throw new Exception("Didn't received the stopped event!");
+			if( !waitStateChangeEvent( APPLICATION_SUSPEND, appDescs[ 0 ].getApplicationPID() ) )
+				throw new Exception("Didn't receive the suspend event!");
 
 			appHandle.destroy();
 			
-			if (!checkEvent("stopped", appName))
-				throw new Exception("Didn't received the stopped event!");
+			if( !waitStateChangeEvent( APPLICATION_STOPPED_AFTER_SUSPEND, appDescs[ 0 ].getApplicationPID() ) )
+				throw new Exception("Didn't receive the stopped event!");
 
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
@@ -1314,12 +1237,8 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Application wasn't scheduled!");
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the schedule is not START!");
-			String appName = (String) appDesc.getProperties("").get(
-					ApplicationDescriptor.APPLICATION_NAME);
-			if (!checkEvent("starting", appName))
-				throw new Exception("Didn't received the starting event!");
-			if (!checkEvent("started", appName))
-				throw new Exception("Didn't received the started event!");
+			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getApplicationPID() ))
+				throw new Exception("Didn't receive the start event!");
 			if (!testCase_stopApplication())
 				return false;
 			return true;
@@ -1348,12 +1267,8 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Application wasn't scheduled!");
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the schedule is not START!");
-			String appName = (String) appDesc.getProperties("").get(
-					ApplicationDescriptor.APPLICATION_NAME);
-			if (!checkEvent("starting", appName))
-				throw new Exception("Didn't received the starting event!");
-			if (!checkEvent("started", appName))
-				throw new Exception("Didn't received the started event!");
+			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getApplicationPID() ))
+				throw new Exception("Didn't receive the start event!");
 			if (!testCase_stopApplication())
 				return false;
 			Thread.sleep(2000);
@@ -1363,10 +1278,8 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Application wasn't scheduled!");
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the schedule is not START!");
-			if (!checkEvent("starting", appName))
-				throw new Exception("Didn't received the starting event!");
-			if (!checkEvent("started", appName))
-				throw new Exception("Didn't received the started event!");
+			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getApplicationPID() ))
+				throw new Exception("Didn't receive the start event!");
 			if (!testCase_stopApplication())
 				return false;
 			return true;
@@ -1396,12 +1309,8 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Application wasn't scheduled!");
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the schedule is not START!");
-			String appName = (String) appDesc.getProperties("").get(
-					ApplicationDescriptor.APPLICATION_NAME);
-			if (!checkEvent("starting", appName))
-				throw new Exception("Didn't received the starting event!");
-			if (!checkEvent("started", appName))
-				throw new Exception("Didn't received the started event!");
+			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getApplicationPID() ))
+				throw new Exception("Didn't receive the start event!");
 			if (!testCase_stopApplication())
 				return false;
 			return true;
@@ -1457,12 +1366,8 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Application wasn't scheduled!");
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the schedule is not START!");
-			String appName = (String) appDesc.getProperties("").get(
-					ApplicationDescriptor.APPLICATION_NAME);
-			if (!checkEvent("starting", appName))
-				throw new Exception("Didn't received the starting event!");
-			if (!checkEvent("started", appName))
-				throw new Exception("Didn't received the started event!");
+			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getApplicationPID() ))
+				throw new Exception("Didn't receive the start event!");
 			if (!testCase_stopApplication())
 				return false;
 			
@@ -1481,10 +1386,8 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Application wasn't scheduled!");
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the schedule is not START!");
-			if (!checkEvent("starting", appName))
-				throw new Exception("Didn't received the starting event!");
-			if (!checkEvent("started", appName))
-				throw new Exception("Didn't received the started event!");
+			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getApplicationPID() ))
+				throw new Exception("Didn't receive the start event!");
 			if (!testCase_stopApplication())
 				return false;
 
@@ -1496,10 +1399,8 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Application wasn't scheduled!");
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the schedule is not START!");
-			if (!checkEvent("starting", appName))
-				throw new Exception("Didn't received the starting event!");
-			if (!checkEvent("started", appName))
-				throw new Exception("Didn't received the started event!");
+			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getApplicationPID() ))
+				throw new Exception("Didn't receive the start event!");
 			if (!testCase_stopApplication())
 				return false;
 			
@@ -1544,12 +1445,8 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Application wasn't scheduled!");
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the schedule is not START!");
-			String appName = (String) appDesc.getProperties("").get(
-					ApplicationDescriptor.APPLICATION_NAME);
-			if (!checkEvent("starting", appName))
-				throw new Exception("Didn't received the starting event!");
-			if (!checkEvent("started", appName))
-				throw new Exception("Didn't received the started event!");
+			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getApplicationPID() ))
+				throw new Exception("Didn't receive the start event!");
 			if (!testCase_stopApplication())
 				return false;
 			return true;
