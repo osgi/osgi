@@ -34,7 +34,7 @@
  * Jan 26, 2005  Leonardo Barros
  * 1             Implement TCK
  * ============  ==============================================================
- * Feb 14, 2005  Luiz Felipe Guimar„es
+ * Feb 14, 2005  Luiz Felipe Guimar√£es
  * 1             Updates after formal inspection (BTC_MEG_TCK_CODE-INSPR-002)
  * ============  ==============================================================
  */

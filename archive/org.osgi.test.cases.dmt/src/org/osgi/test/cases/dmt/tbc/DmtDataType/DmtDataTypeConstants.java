@@ -33,7 +33,7 @@
  * Jan 26, 2005  Andre Assad
  * 1             Implement MEG TCK
  * ============  ==============================================================
- * Feb 11, 2005  Luiz Felipe Guimar„es
+ * Feb 11, 2005  Luiz Felipe Guimar√£es
  * 1             Updates after formal inspection (BTC_MEG_TCK_CODE-INSPR-002)
  * ============  ==============================================================
  */
@@ -44,7 +44,7 @@ import org.osgi.service.dmt.DmtDataType;
 import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 
 /**
- * @author AndrÈ Assad
+ * @author Andr√© Assad
  * 
  * @classUnderTest org.osgi.service.DmtDataType
  * @generalDescription This class contains all the tests for DmtDataType

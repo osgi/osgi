@@ -93,7 +93,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 
 	public static final String INVALID_URI = "./OSGi/log/#@~z";
 
-	public static final String INVALID_LEAFNAME = "%&ã#&$#";
+	public static final String INVALID_LEAFNAME = "%&Ã£#&$#";
 
 	public static final String LONG_NAME = "sdsdqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfgzcvddddddsd";
 
