@@ -31,6 +31,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import org.osgi.service.cu.ControlUnit;
+import org.osgi.service.cu.ControlUnitException;
+import org.osgi.service.cu.admin.ControlUnitAdminException;
 import org.osgi.service.cu.admin.spi.CUAdminCallback;
 import org.osgi.service.cu.admin.spi.ManagedControlUnit;
 
@@ -245,8 +247,8 @@ class CUProvider implements Provider {
   /* (non-Javadoc)
    * @see org.osgi.service.cu.spi.ControlUnitFactory#findControlUnits(java.lang.String, java.lang.Object)
    */
-  public String[] findControlUnits(String finderID, Object arguments) throws Exception {
-    throw new IllegalArgumentException("No factory for this control unit type found!");
+  public String[] findControlUnits(String finderID, Object arguments) throws ControlUnitException {
+    throw new ControlUnitAdminException(ControlUnitAdminException.SEARCHING_NOT_SUPPORTED_ERROR);
   }
     
   /* (non-Javadoc)
@@ -277,11 +279,11 @@ class CUProvider implements Provider {
   /* (non-Javadoc)
    * @see org.osgi.service.cu.spi.ControlUnitFactory#queryStateVariable(java.lang.String, java.lang.String)
    */
-  public Object queryStateVariable(String cuID, String varID) throws Exception {
+  public Object queryStateVariable(String cuID, String varID) throws ControlUnitException {
     ControlUnit cu = getControlUnit(cuID);
     
     if (cu == null) { 
-      throw new IllegalArgumentException("ControlUnit with id '" + cuID + "' not found!");
+      throw new ControlUnitAdminException(ControlUnitAdminException.NO_SUCH_CONTROL_UNIT_ERROR);
     }
     
     return cu.queryStateVariable(varID);
@@ -290,11 +292,11 @@ class CUProvider implements Provider {
   /* (non-Javadoc)
    * @see org.osgi.service.cu.spi.ControlUnitFactory#invokeAction(java.lang.String, java.lang.String, java.lang.Object)
    */
-  public Object invokeAction(String cuID, String actionID, Object arguments) throws Exception {
+  public Object invokeAction(String cuID, String actionID, Object arguments) throws ControlUnitException {
     ControlUnit cu = getControlUnit(cuID);
     
     if (cu == null) { 
-      throw new IllegalArgumentException("ControlUnit with id '" + cuID + "' not found!");
+      throw new ControlUnitAdminException(ControlUnitAdminException.NO_SUCH_CONTROL_UNIT_ERROR);
     }
     
     return cu.invokeAction(actionID, arguments);
@@ -303,15 +305,15 @@ class CUProvider implements Provider {
   /* (non-Javadoc)
    * @see org.osgi.service.cu.spi.ControlUnitFactory#createControlUnit(java.lang.String, java.lang.Object)
    */
-  public String createControlUnit(String constructorID, Object arguments) throws Exception {
-    throw new IllegalArgumentException("No factory for this control unit type found!");
+  public String createControlUnit(String constructorID, Object arguments) throws ControlUnitException {
+    throw new ControlUnitAdminException(ControlUnitAdminException.CREATION_NOT_SUPPORTED_ERROR);
   }
   
   /* (non-Javadoc)
    * @see org.osgi.service.cu.spi.ControlUnitFactory#destroyControlUnit(java.lang.String)
    */
-  public void destroyControlUnit(String controlUnitID) throws Exception {
-     throw new IllegalArgumentException("No factory for this control unit type found!");
+  public void destroyControlUnit(String controlUnitID) throws ControlUnitException {
+    throw new ControlUnitAdminException(ControlUnitAdminException.DESTRUCTION_NOT_SUPPORTED_ERROR);
   }
   
   //******* End. CUProvider methods implementation *******//

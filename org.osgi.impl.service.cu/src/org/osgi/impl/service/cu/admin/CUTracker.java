@@ -32,7 +32,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cu.ControlUnit;
 import org.osgi.service.cu.ControlUnitConstants;
-import org.osgi.service.cu.admin.ControlUnitListener;
+import org.osgi.service.cu.admin.ControlUnitAdminListener;
 import org.osgi.service.cu.admin.HierarchyListener;
 import org.osgi.service.cu.admin.spi.ManagedControlUnit;
 
@@ -112,10 +112,10 @@ class CUTracker extends ManagedObjectsTracker {
     } //synchronized
             
     if (isRegistering) {
-      cuAdminCallback.controlUnitEvent( ControlUnitListener.CONTROL_UNIT_ADDED, type, cuID);
+      cuAdminCallback.controlUnitEvent( ControlUnitAdminListener.CONTROL_UNIT_ADDED, type, cuID);
           
       if (isFirstUnit) {
-        cuAdminCallback.controlUnitEvent( ControlUnitListener.CONTROL_UNIT_TYPE_APPEARED, type, null);
+        cuAdminCallback.controlUnitEvent( ControlUnitAdminListener.CONTROL_UNIT_TYPE_APPEARED, type, null);
       }
     }
     
@@ -187,10 +187,10 @@ class CUTracker extends ManagedObjectsTracker {
     } // synchronized
       
     if (isUnregistering) {
-      cuAdminCallback.controlUnitEvent( ControlUnitListener.CONTROL_UNIT_REMOVED, type, cuID);  
+      cuAdminCallback.controlUnitEvent( ControlUnitAdminListener.CONTROL_UNIT_REMOVED, type, cuID);  
         
       if (isLastUnit) {
-        cuAdminCallback.controlUnitEvent(ControlUnitListener.CONTROL_UNIT_TYPE_DISAPPEARED, type, null);
+        cuAdminCallback.controlUnitEvent(ControlUnitAdminListener.CONTROL_UNIT_TYPE_DISAPPEARED, type, null);
       }
     }      
   }

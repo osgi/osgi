@@ -31,7 +31,7 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cu.ControlUnitConstants;
-import org.osgi.service.cu.admin.ControlUnitListener;
+import org.osgi.service.cu.admin.ControlUnitAdminListener;
 import org.osgi.service.cu.admin.spi.ControlUnitFactory;
 
 /**
@@ -89,7 +89,7 @@ class FactoryTracker extends ManagedObjectsTracker {
     }
     
     if (isRegistering) {
-      cuAdminCallback.controlUnitEvent(ControlUnitListener.CONTROL_UNIT_TYPE_APPEARED, 
+      cuAdminCallback.controlUnitEvent(ControlUnitAdminListener.CONTROL_UNIT_TYPE_APPEARED, 
         type, null);
     }
     
@@ -116,7 +116,7 @@ class FactoryTracker extends ManagedObjectsTracker {
     }
     
     if (isUnregistering) {
-      cuAdminCallback.controlUnitEvent(ControlUnitListener.CONTROL_UNIT_TYPE_DISAPPEARED, 
+      cuAdminCallback.controlUnitEvent(ControlUnitAdminListener.CONTROL_UNIT_TYPE_DISAPPEARED, 
           type, null);
     }
   }

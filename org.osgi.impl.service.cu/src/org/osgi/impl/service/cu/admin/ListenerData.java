@@ -34,7 +34,7 @@ import org.osgi.framework.Filter;
 /**
  * This class is used to hold all the data needed for given listener - 
  * {@link org.osgi.service.cu.HierarchyListener}, 
- * {@link org.osgi.service.cu.ControlUnitListener} or
+ * {@link org.osgi.service.cu.ControlUnitAdminListener} or
  * {@link org.osgi.service.cu.StateVariableListener}.
  * 
  * @version $Revision$

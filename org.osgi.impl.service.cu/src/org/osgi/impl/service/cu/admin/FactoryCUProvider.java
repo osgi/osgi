@@ -29,6 +29,7 @@ package org.osgi.impl.service.cu.admin;
 import org.osgi.service.cu.admin.spi.CUAdminCallback;
 import org.osgi.service.cu.admin.spi.ControlUnitFactory;
 import org.osgi.service.cu.ControlUnit;
+import org.osgi.service.cu.ControlUnitException;
 
 /**
  * A {@link org.osgi.impl.service.cu.admin.Provider} for control units
@@ -119,7 +120,7 @@ class FactoryCUProvider implements Provider {
   /* (non-Javadoc)
    * @see org.osgi.service.cu.spi.ControlUnitFactory#findControlUnits(java.lang.String, java.lang.Object)
    */
-  public String[] findControlUnits(String finderID, Object arguments) throws Exception {
+  public String[] findControlUnits(String finderID, Object arguments) throws ControlUnitException {
     return factory.findControlUnits(finderID, arguments);
   }
   
@@ -133,28 +134,28 @@ class FactoryCUProvider implements Provider {
   /* (non-Javadoc)
    * @see org.osgi.service.cu.spi.ControlUnitFactory#queryStateVariable(java.lang.String, java.lang.String)
    */
-  public Object queryStateVariable(String cuID, String varID) throws Exception {
+  public Object queryStateVariable(String cuID, String varID) throws ControlUnitException {
     return factory.queryStateVariable(cuID, varID);
   }
   
   /* (non-Javadoc)
    * @see org.osgi.service.cu.spi.ControlUnitFactory#invokeAction(java.lang.String, java.lang.String, java.lang.Object)
    */
-  public Object invokeAction(String cuID, String actionID, Object arguments) throws Exception {
+  public Object invokeAction(String cuID, String actionID, Object arguments) throws ControlUnitException {
     return factory.invokeAction(cuID, actionID, arguments);
   }
   
   /* (non-Javadoc)
    * @see org.osgi.service.cu.spi.ControlUnitFactory#createControlUnit(java.lang.String, java.lang.Object)
    */
-  public String createControlUnit(String constructorID, Object arguments) throws Exception {
+  public String createControlUnit(String constructorID, Object arguments) throws ControlUnitException {
     return factory.createControlUnit(constructorID, arguments);
   }
   
   /* (non-Javadoc)
    * @see org.osgi.service.cu.spi.ControlUnitFactory#destroyControlUnit(java.lang.String)
    */
-  public void destroyControlUnit(String cuID) throws Exception {
+  public void destroyControlUnit(String cuID) throws ControlUnitException {
     factory.destroyControlUnit(cuID);
   }
   

@@ -59,7 +59,7 @@ class EventData {
    * Create a control unit event.
    * 
    * @param eventType one of the event types from 
-   * {@link org.osgi.service.cu.ControlUnitListener ControlUnitListener}.
+   * {@link org.osgi.service.cu.ControlUnitAdminListener ControlUnitListener}.
    * 
    * @param cuType type of the control unit for which the event is
    * @param cuID id of the control unit for which the event is

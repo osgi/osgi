@@ -29,13 +29,13 @@ package org.osgi.impl.service.cu.admin;
 import java.util.Vector;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.service.cu.admin.ControlUnitListener;
+import org.osgi.service.cu.admin.ControlUnitAdminListener;
 
 
 /**
  * This class is used for tracking and notifying about control unit events 
  * the registered in the framework 
- * {@link org.osgi.service.cu.ControlUnitListener ControlUnitListener}s.
+ * {@link org.osgi.service.cu.ControlUnitAdminListener ControlUnitListener}s.
  * 
  * @version $Revision$
  */
@@ -47,13 +47,13 @@ class CUListenersTracker extends ListenersTracker {
    * @param bc {@link BundleContext BundleContext} of the ControlUnitAdmin bundle
    */
   CUListenersTracker(BundleContext bc) {
-    super(bc, ControlUnitListener.class);
+    super(bc, ControlUnitAdminListener.class);
   }
   
   /**
    * Notify listeners which registered for synchronous delivery of events.
    * 
-   * @param eventType one of the events from {@link ControlUnitListener}
+   * @param eventType one of the events from {@link ControlUnitAdminListener}
    * @param cuType type of the control unit for which this event is
    * @param cuID ID of the control unit for which this event is
    */
@@ -82,7 +82,7 @@ class CUListenersTracker extends ListenersTracker {
         ListenerData curData = (ListenerData)listenersData.elementAt(i);
         
         if ( curData.isMatching(eventData.getEventData()) ) {
-          ControlUnitListener cuListener = (ControlUnitListener)curData.listener;
+          ControlUnitAdminListener cuListener = (ControlUnitAdminListener)curData.listener;
         
           try {
             cuListener.controlUnitEvent( eventData.getEventType(), eventData.getCUType(), 

@@ -33,8 +33,9 @@ import java.util.Vector;
 import org.osgi.framework.BundleContext;
 
 import org.osgi.service.cu.ControlUnit;
+import org.osgi.service.cu.ControlUnitException;
 import org.osgi.service.cu.admin.ControlUnitAdmin;
-import org.osgi.service.cu.admin.ControlUnitListener;
+import org.osgi.service.cu.admin.ControlUnitAdminListener;
 import org.osgi.service.cu.admin.spi.CUAdminCallback;
 import org.osgi.service.cu.admin.spi.ControlUnitFactory;
 
@@ -113,7 +114,6 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
    * @see org.osgi.service.cu.ControlUnitListener#controlUnitEvent(int, java.lang.String, java.lang.String)
    */
   public void controlUnitEvent(int eventType, String cuType, String cuID) {
-    try {
     chekIsValidCUEventType(eventType);
     checkArgument(cuType, "control unit type");
     
@@ -126,12 +126,9 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
     
     cuListenersTracker.notifySyncListeners(eventType, cuType, cuID);
     
-    if (eventType == ControlUnitListener.CONTROL_UNIT_ADDED) {
+    if (eventType == ControlUnitAdminListener.CONTROL_UNIT_ADDED) {
       svListenersTracker.controlUnitAdded(cuType, cuID);
     } 
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    }
   }
   
   /* (non-Javadoc)
@@ -156,7 +153,6 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
     checkArgument(cuID, "child control unit id");
     checkArgument(parentType, "parent control unit type");
     checkArgument(parentID, "parent control unit id");
-    
     
     notifyAsyncListenersThread.addHierachyEvent(eventType, cuType, cuID, parentType, parentID);
     
@@ -205,7 +201,7 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
   /* (non-Javadoc)
    * @see org.osgi.service.cu.ControlUnitAdmin#findControlUnits(java.lang.String, java.lang.String, java.lang.Object)
    */
-  public String[] findControlUnits(String cuType, String finderID, Object arguments) throws Exception {
+  public String[] findControlUnits(String cuType, String finderID, Object arguments) throws ControlUnitException {
     checkArgument(cuType, "control unit type");
     
     ControlUnitFactory provider = (ControlUnitFactory)providers.get(cuType);
@@ -236,7 +232,7 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
   /* (non-Javadoc)
    * @see org.osgi.service.cu.ControlUnitAdmin#createControlUnit(java.lang.String, java.lang.String, java.lang.Object)
    */
-  public String createControlUnit(String cuType, String constructorID, Object arguments) throws Exception {
+  public String createControlUnit(String cuType, String constructorID, Object arguments) throws ControlUnitException {
     checkArgument(cuType, "control unit type");
     
     ControlUnitFactory provider = (ControlUnitFactory)providers.get(cuType);
@@ -251,7 +247,7 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
   /* (non-Javadoc)
    * @see org.osgi.service.cu.ControlUnitAdmin#destroyControlUnit(java.lang.String, java.lang.String)
    */
-  public void destroyControlUnit(String cuType, String cuID) throws Exception {
+  public void destroyControlUnit(String cuType, String cuID) throws ControlUnitException {
     checkArgument(cuType, "control unit type");
     checkArgument(cuID, "control unit ID");
     
@@ -332,7 +328,7 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
   /* (non-Javadoc)
    * @see org.osgi.service.cu.ControlUnitAdmin#queryStateVariable(java.lang.String, java.lang.String, java.lang.String)
    */
-  public Object queryStateVariable(String cuType, String cuID, String varID) throws Exception {
+  public Object queryStateVariable(String cuType, String cuID, String varID) throws ControlUnitException {
     checkArgument(cuType, "control unit type");
     checkArgument(cuID, "control unit ID");
     checkArgument(varID, "state variable ID");
@@ -350,7 +346,7 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
   /* (non-Javadoc)
    * @see org.osgi.service.cu.ControlUnitAdmin#invokeAction(java.lang.String, java.lang.String, java.lang.String, java.lang.Object)
    */
-  public Object invokeAction(String cuType, String cuID, String actionID, Object arguments) throws Exception {
+  public Object invokeAction(String cuType, String cuID, String actionID, Object arguments) throws ControlUnitException {
     checkArgument(cuType, "control unit type");
     checkArgument(cuID, "control unit ID");
     checkArgument(actionID, "action ID");
