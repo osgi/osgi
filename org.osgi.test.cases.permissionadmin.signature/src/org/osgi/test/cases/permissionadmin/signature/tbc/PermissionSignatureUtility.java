@@ -14,6 +14,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 public class PermissionSignatureUtility {
 	
 	// AdminPermission actions
+/*	
 	static final String METADATA 	= AdminPermission.METADATA;
 	static final String RESOURCE 	= AdminPermission.RESOURCE;	
 	static final String CLASS 		= AdminPermission.CLASS;
@@ -25,8 +26,21 @@ public class PermissionSignatureUtility {
 	static final String SLART_LEVEL = AdminPermission.STARTLEVEL;
 
 	static final String EXTENSION_LIFECYCLE = AdminPermission.EXTENSIONLIFECYCLE;
+*/
+	
+	static final String METADATA 	= "metadata";
+	static final String RESOURCE 	= "resource";	
+	static final String CLASS 		= "class";
+	static final String LIFECYCLE 	= "lifecycle";
+	static final String EXECUTE 	= "execute";
+	static final String LISTENER 	= "listener";
+	static final String PERMISSION 	= "permission";
+	static final String RESOLVE 	= "resolve";
+	static final String SLART_LEVEL = "startlevel";
 
+	static final String EXTENSION_LIFECYCLE = "extensionLifecycle";
 
+	
 	// Signature keys
 	static final String ID 		 = "id";
 	static final String LOCATION = "location";	
