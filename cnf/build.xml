@@ -75,18 +75,9 @@
 	<echo>Project xx ${project}</echo>
 	<btool eclipse="${project}" />
 
+	<property name="bin.includes" value="${project.name}.jar"/>
 	<property name="javac" value="${env.JAVA_HOME}/bin/javac"/>
 	<property name="java" value="${env.JAVA_HOME}/bin/java"/>
-
-	<!-- 
-	   The build property may be absent. In that case 
-	   we default to a project that creates a jar file with the
-	   project name with the contents of a package of the
-	   project name. I.e.
-	      org.osgi.example = project name
-	      then the jar is org.osgi.example.jar with the
-	      package of org.osgi.example 
-	-->
 
 	<!-- 
 	     PUBLISH
@@ -99,43 +90,27 @@
 	<target name="publish" depends="check" > 
 		<echo>Publish ${project} | ${p}</echo>
 		
-		<!-- Compile project dependencies -->
-		<foreach delimiter=" ," list="${project.buildpath}" 
-			target="subcompile"  param="item.dir"/>
-
 		<!-- Build project dependencies -->
 		<foreach delimiter=" ," list="${project.buildpath}" 
-			target="subbuild"  param="item.dir"/>
+			target="sub"  param="item.dir"/>
 
 		<antcall target="local"/>
 	</target>
 
-	<target name="local">
-		<!-- Compile our own classes -->
-		<antcall target="compile"/>		
-		<!-- Build any jar files if necessary -->
-		<antcall target="local-jars"/>
-	</target>
-		
-	<target name="subcompile">
-		<echo>Compiling ${item.dir} proj ${project}</echo>
-		
-		<ant dir="${item.dir}" target="compile" 
-			inheritAll="false">
-		</ant>
-		<echo>Done subcompile</echo>
-	</target>
-
-	<target name="subbuild">
+	<target name="sub">
 		<echo>Building ${item.dir}</echo>
 		
-		<ant dir="${item.dir}" target="local-jars" 
+		<ant dir="${item.dir}" target="publish" 
 			inheritAll="false">
 			<property name="release.dir" value="${project}"/>
 		</ant>
 	</target>
+	
+	<target name="local" depends="compile,jars">
+	</target>
+		
 
-	<target name="local-jars" if="jars.compile.order">
+	<target name="jars" if="jars.compile.order">
 		<echo>JARs ${jars.compile.order}</echo>
 			<delete>
 				<fileset dir="${project}" includes="${jars.compile.order}" />
@@ -247,7 +222,7 @@
 	     is true, we assume someone else has done the 
 	     compiling for us.
 	-->
-	<target name="compile" if="project.sourcepath" depends="echo">
+	<target name="compile" if="project.sourcepath" >
 		<echo>Compile ${project.sourcepath}</echo>
 		<property name="project.bootclasspath" value=""/>
 		

@@ -266,7 +266,7 @@ public class EclipseProject {
 					 */
 					if (root || exported) {
 						if (path.startsWith("/")) { // relative to workspace
-							File libFile = new File(workspace, path);
+							File libFile = new File(workspace, path.substring(1));
 							if (libFile.exists()) {
 								path = libFile.getAbsolutePath();
 							}

@@ -1,5 +1,5 @@
 #! /bin/sh
-
+export ANT_OPTS="-Xmx512m -XX:MaxPermSize=128m"
 #   Copyright 2001-2004 The Apache Software Foundation
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -159,6 +159,7 @@ if $cygwin; then
 fi
 
 if [ -n "$CYGHOME" ]; then
+  echo $ANT_OPTS;
   if [ -n "$JIKESPATH" ]; then
     exec "$JAVACMD" $ANT_OPTS -classpath "$LOCALCLASSPATH" -Dant.home="${ANT_HOME}" -Djikes.class.path="$JIKESPATH" -Dcygwin.user.home="$CYGHOME" org.apache.tools.ant.launch.Launcher $ANT_ARGS -lib "$CLASSPATH" "$@"
   else

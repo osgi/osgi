@@ -32,7 +32,8 @@
 	<classpathentry kind="src" path="/org.osgi.test.cases.wireadmin"/>
 	<classpathentry kind="src" path="/org.osgi.test.cases.xml"/>
 	<classpathentry kind="src" path="/org.osgi.test.tool"/>
-	<classpathentry kind="src" path="/osgi"/>
 	<classpathentry kind="src" path="/org.osgi.tools"/>
+	<classpathentry kind="src" path="/org.osgi.test.cases"/>
+	<classpathentry kind="lib" path="/osgi.released/osgi.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

@@ -5,5 +5,4 @@ Bundle-Version: $(version)
 Bundle-Activator: $(p).tb3.CustomXMLParserActivator
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
-
-
+$(FILE-SECTION)
