@@ -245,7 +245,7 @@ public class PackageAdminImpl implements PackageAdmin {
 	/* (non-Javadoc)
 	 * @see org.osgi.service.packageadmin.PackageAdmin#getAllExportedPackages(java.lang.String)
 	 */
-	public ExportedPackage[] getAllExportedPackages(String name) {
+	public ExportedPackage[] getExportedPackages(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
