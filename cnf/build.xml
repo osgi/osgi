@@ -71,6 +71,7 @@
 		<!-- all target is a synonym for publish target -->
 	</target>
 	<target name="publish" depends="init,dependencies,compile,jars,release">
+		<echo>Exit project ${project.name}</echo>
 	</target>
 
 	<!-- 
@@ -108,7 +109,7 @@
 
 		<!-- mark init has been run -->
 		<property name="initialized" value="set" />
-		<echo>Project ${project.name}</echo>
+		<echo>Enter project ${project.name}</echo>
 
 	</target>
 
