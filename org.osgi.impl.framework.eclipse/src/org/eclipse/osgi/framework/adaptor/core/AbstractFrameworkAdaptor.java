@@ -1063,7 +1063,13 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 				}
 
 				data.setLastModified(System.currentTimeMillis());
-				stateManager.getSystemState().removeBundle(data.getBundleID());
+				//
+				// When you install/remove bundles when not launched
+				// this gives error (it made init impossible before starting
+				// the installed bundles
+				// pkr
+				if ( stateManager != null )
+					stateManager.getSystemState().removeBundle(data.getBundleID());
 			}
 
 			/**
