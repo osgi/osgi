@@ -19,12 +19,11 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ComponentElement extends DefaultHandler {
-	protected ParserHandler			root;
-	protected ParserHandler			parent;
-	protected ComponentDescription	component;
+	protected ParserHandler root;
+	protected ParserHandler parent;
+	protected ComponentDescription component;
 
-	public ComponentElement(ParserHandler root, Attributes attributes)
-			throws SAXException {
+	public ComponentElement(ParserHandler root, Attributes attributes) throws SAXException {
 		this.root = root;
 		this.parent = root;
 		component = new ComponentDescription(root.bundle);
@@ -47,8 +46,7 @@ public class ComponentElement extends DefaultHandler {
 				continue;
 			}
 
-			throw new SAXException("unrecognized component element attribute: "
-					+ key);
+			throw new SAXException("unrecognized component element attribute: " + key);
 		}
 
 		if (component.getName() == null) {
@@ -60,8 +58,7 @@ public class ComponentElement extends DefaultHandler {
 		return component;
 	}
 
-	public void startElement(String uri, String localName, String qName,
-			Attributes attributes) throws SAXException {
+	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		if (localName.equals(ParserConstants.IMPLEMENTATION_ELEMENT)) {
 			root.setHandler(new ImplementationElement(root, this, attributes));
 			return;
@@ -87,12 +84,10 @@ public class ComponentElement extends DefaultHandler {
 			return;
 		}
 
-		throw new SAXException("unrecognized element of component: "
-				+ localName);
+		throw new SAXException("unrecognized element of component: " + localName);
 	}
 
-	public void characters(char[] ch, int start, int length)
-			throws SAXException {
+	public void characters(char[] ch, int start, int length) throws SAXException {
 		int end = start + length;
 		for (int i = start; i < end; i++) {
 			if (!Character.isWhitespace(ch[i])) {
@@ -101,8 +96,7 @@ public class ComponentElement extends DefaultHandler {
 		}
 	}
 
-	public void endElement(String uri, String localName, String qName)
-			throws SAXException {
+	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if (component.getImplementation() == null) {
 			throw new SAXException("no implementation element");
 		}

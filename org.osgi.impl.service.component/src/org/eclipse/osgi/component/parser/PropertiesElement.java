@@ -10,7 +10,7 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
- 
+
 package org.eclipse.osgi.component.parser;
 
 import org.eclipse.osgi.component.model.ComponentDescription;
@@ -20,16 +20,14 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class PropertiesElement extends DefaultHandler {
-	protected ParserHandler					root;
-	protected ComponentElement				parent;
-	protected PropertyResourceDescription	properties;
+	protected ParserHandler root;
+	protected ComponentElement parent;
+	protected PropertyResourceDescription properties;
 
-	public PropertiesElement(ParserHandler root, ComponentElement parent,
-			Attributes attributes) throws SAXException {
+	public PropertiesElement(ParserHandler root, ComponentElement parent, Attributes attributes) throws SAXException {
 		this.root = root;
 		this.parent = parent;
-		properties = new PropertyResourceDescription(parent
-				.getComponentDescription());
+		properties = new PropertyResourceDescription(parent.getComponentDescription());
 
 		int size = attributes.getLength();
 		for (int i = 0; i < size; i++) {
@@ -41,8 +39,7 @@ public class PropertiesElement extends DefaultHandler {
 				continue;
 			}
 
-			throw new SAXException(
-					"unrecognized properties element attribute: " + key);
+			throw new SAXException("unrecognized properties element attribute: " + key);
 		}
 
 		if (properties.getEntry() == null) {
@@ -50,13 +47,11 @@ public class PropertiesElement extends DefaultHandler {
 		}
 	}
 
-	public void startElement(String uri, String localName, String qName,
-			Attributes attributes) throws SAXException {
+	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		throw new SAXException("properties does not support nested elements");
 	}
 
-	public void characters(char[] ch, int start, int length)
-			throws SAXException {
+	public void characters(char[] ch, int start, int length) throws SAXException {
 		int end = start + length;
 		for (int i = start; i < end; i++) {
 			if (!Character.isWhitespace(ch[i])) {
@@ -65,8 +60,7 @@ public class PropertiesElement extends DefaultHandler {
 		}
 	}
 
-	public void endElement(String uri, String localName, String qName)
-			throws SAXException {
+	public void endElement(String uri, String localName, String qName) throws SAXException {
 		ComponentDescription component = parent.getComponentDescription();
 		component.addProperty(properties);
 		root.setHandler(parent);

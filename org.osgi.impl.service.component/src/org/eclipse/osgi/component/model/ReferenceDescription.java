@@ -13,6 +13,8 @@
 
 package org.eclipse.osgi.component.model;
 
+import java.util.ArrayList;
+
 /**
  *
  * TODO Add Javadoc comment for this type.
@@ -29,11 +31,14 @@ public class ReferenceDescription {
 	protected String bind;
 	protected String unbind;
 	
+	//Service Objects that binded to this reference
+	protected ArrayList serviceObjects = new ArrayList();
+
 	public ReferenceDescription(ComponentDescription parent) {
 		this.parent = parent;
 		cardinality = "1..1";
 		policy = "static";
-		
+
 	}
 
 	/**
@@ -42,18 +47,21 @@ public class ReferenceDescription {
 	public String getBind() {
 		return bind;
 	}
+
 	/**
 	 * @param bind The bind to set.
 	 */
 	public void setBind(String bind) {
 		this.bind = bind;
 	}
+
 	/**
 	 * @return Returns the cardinality.
 	 */
 	public String getCardinality() {
 		return cardinality;
 	}
+
 	/**
 	 * @param cardinality The cardinality to set.
 	 */
@@ -61,36 +69,42 @@ public class ReferenceDescription {
 		// TODO validate
 		this.cardinality = cardinality;
 	}
+
 	/**
 	 * @return Returns the interfacename.
 	 */
 	public String getInterfacename() {
 		return interfacename;
 	}
+
 	/**
 	 * @param interfacename The interfacename to set.
 	 */
 	public void setInterfacename(String interfacename) {
 		this.interfacename = interfacename;
 	}
+
 	/**
 	 * @return Returns the name.
 	 */
 	public String getName() {
 		return name;
 	}
+
 	/**
 	 * @param name The name to set.
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	/**
 	 * @return Returns the policy.
 	 */
 	public String getPolicy() {
 		return policy;
 	}
+
 	/**
 	 * @param policy The policy to set.
 	 */
@@ -98,12 +112,14 @@ public class ReferenceDescription {
 		// TODO validate
 		this.policy = policy;
 	}
+
 	/**
 	 * @return Returns the target.
 	 */
 	public String getTarget() {
 		return target;
 	}
+
 	/**
 	 * @param target The target to set.
 	 */
@@ -111,21 +127,41 @@ public class ReferenceDescription {
 		// TODO validate
 		this.target = target;
 	}
+
 	/**
 	 * @return Returns the unbind.
 	 */
 	public String getUnbind() {
 		return unbind;
 	}
+
 	/**
 	 * @param unbind The unbind to set.
 	 */
 	public void setUnbind(String unbind) {
 		this.unbind = unbind;
 	}
-	
-	public ComponentDescription getComponentDescription()
-	{
+
+	public ComponentDescription getComponentDescription() {
 		return parent;
+	}
+	
+	public void addServiceObject(Object object)
+	{
+		serviceObjects.add(object);
+	}
+	
+	public Object[] getServiceObjects()
+	{
+		if(serviceObjects.size() == 0)
+		{
+			return null;
+		}
+		return serviceObjects.toArray();
+	}
+	
+	public boolean containsServiceObject(Object serviceObject)
+	{
+	   return serviceObjects.contains(serviceObject);	
 	}
 }

@@ -11,7 +11,6 @@
  * trademarks that are the sole property of the respective owners.
  */
 
-
 package org.eclipse.osgi.component.workqueue;
 
 /**

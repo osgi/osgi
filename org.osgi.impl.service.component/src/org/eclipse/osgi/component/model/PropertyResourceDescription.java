@@ -10,7 +10,6 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
- 
 
 package org.eclipse.osgi.component.model;
 
@@ -21,13 +20,12 @@ package org.eclipse.osgi.component.model;
  * @version $Revision$
  */
 public class PropertyResourceDescription extends PropertyDescription {
-	
+
 	protected String entry;
-	
+
 	public PropertyResourceDescription(ComponentDescription parent) {
 		super(parent);
 	}
-
 
 	/**
 	 * @param name
@@ -45,6 +43,7 @@ public class PropertyResourceDescription extends PropertyDescription {
 	public String getEntry() {
 		return entry;
 	}
+
 	/**
 	 * @param entry The entry to set.
 	 */

@@ -10,7 +10,7 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
- 
+
 package org.eclipse.osgi.component.parser;
 
 import org.eclipse.osgi.component.model.ComponentDescription;
@@ -20,16 +20,14 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ServiceElement extends DefaultHandler {
-	protected ParserHandler				root;
-	protected ComponentElement			parent;
-	protected ServiceDescription	service;
+	protected ParserHandler root;
+	protected ComponentElement parent;
+	protected ServiceDescription service;
 
-	public ServiceElement(ParserHandler root, ComponentElement parent,
-			Attributes attributes) throws SAXException {
+	public ServiceElement(ParserHandler root, ComponentElement parent, Attributes attributes) throws SAXException {
 		this.root = root;
 		this.parent = parent;
-		service = new ServiceDescription(parent
-				.getComponentDescription());
+		service = new ServiceDescription(parent.getComponentDescription());
 
 		int size = attributes.getLength();
 		for (int i = 0; i < size; i++) {
@@ -41,28 +39,24 @@ public class ServiceElement extends DefaultHandler {
 				continue;
 			}
 
-			throw new SAXException(
-					"unrecognized service element attribute: " + key);
+			throw new SAXException("unrecognized service element attribute: " + key);
 		}
 	}
-	
+
 	public ServiceDescription getServiceDescription() {
 		return service;
 	}
 
-	public void startElement(String uri, String localName, String qName,
-			Attributes attributes) throws SAXException {
+	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		if (localName.equals(ParserConstants.PROVIDE_ELEMENT)) {
 			root.setHandler(new ProvideElement(root, this, attributes));
 			return;
 		}
 
-		throw new SAXException("unrecognized element of service: "
-				+ localName);
+		throw new SAXException("unrecognized element of service: " + localName);
 	}
 
-	public void characters(char[] ch, int start, int length)
-			throws SAXException {
+	public void characters(char[] ch, int start, int length) throws SAXException {
 		int end = start + length;
 		for (int i = start; i < end; i++) {
 			if (!Character.isWhitespace(ch[i])) {
@@ -71,13 +65,12 @@ public class ServiceElement extends DefaultHandler {
 		}
 	}
 
-	public void endElement(String uri, String localName, String qName)
-			throws SAXException {
+	public void endElement(String uri, String localName, String qName) throws SAXException {
 		ComponentDescription component = parent.getComponentDescription();
 		if (component.getService() != null) {
 			throw new SAXException("more than one service element");
 		}
-		
+
 		if (service.getProvides().length == 0) {
 			throw new SAXException("no provide elements specified");
 		}

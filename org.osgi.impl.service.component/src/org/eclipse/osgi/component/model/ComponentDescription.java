@@ -29,9 +29,10 @@ public class ComponentDescription {
 	protected boolean autoenable;
 	protected boolean enabled;
 	protected boolean eligible;
+	protected boolean reactivate;
 	protected boolean valid;
 	protected String factory;
-	
+
 	protected ImplementationDescription implementation;
 	protected ArrayList properties;
 	protected ServiceDescription service;
@@ -43,63 +44,74 @@ public class ComponentDescription {
 	public ComponentDescription(Bundle bundle) {
 		this.bundle = bundle;
 		autoenable = true;
+		reactivate = false;
 		properties = new ArrayList();
 		references = new ArrayList();
 	}
+
 	/**
 	 * @return Returns the autoenable.
 	 */
 	public boolean isAutoenable() {
 		return autoenable;
 	}
+
 	/**
 	 * @param autoenable The autoenable to set.
 	 */
 	public void setAutoenable(boolean autoenable) {
 		this.autoenable = autoenable;
 	}
+
 	/**
 	 * @return Returns the bundle.
 	 */
 	public Bundle getBundle() {
 		return bundle;
 	}
+
 	/**
 	 * @return Returns the factory.
 	 */
 	public String getFactory() {
 		return factory;
 	}
+
 	/**
 	 * @param factory The factory to set.
 	 */
 	public void setFactory(String factory) {
 		this.factory = factory;
 	}
+
 	/**
 	 * @return Returns the implementation.
 	 */
 	public ImplementationDescription getImplementation() {
 		return implementation;
 	}
+
 	/**
 	 * @param implementation The implementation to set.
 	 */
 	public void setImplementation(ImplementationDescription implementation) {
 		this.implementation = implementation;
 	}
+
 	/**
 	 * @return Returns the name.
 	 */
 	public String getName() {
 		return name;
 	}
+
 	/**
 	 * @param name The name to set.
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	/**
 	 * @return Returns the properties.
 	 */
@@ -109,24 +121,28 @@ public class ComponentDescription {
 		properties.toArray(result);
 		return result;
 	}
+
 	/**
 	 * @param property The properties to set.
 	 */
 	public void addProperty(PropertyDescription property) {
 		properties.add(property);
 	}
+
 	/**
 	 * @return Returns the service.
 	 */
 	public ServiceDescription getService() {
 		return service;
 	}
+
 	/**
 	 * @param service The service to set.
 	 */
 	public void setService(ServiceDescription service) {
 		this.service = service;
 	}
+
 	/**
 	 * @return Returns the references.
 	 */
@@ -136,52 +152,68 @@ public class ComponentDescription {
 		references.toArray(result);
 		return result;
 	}
+
 	/**
 	 * @param reference The references to set.
 	 */
 	public void addReference(ReferenceDescription reference) {
 		references.add(reference);
 	}
-	
+
 	/**
 	 * @return Returns true if enabled
 	 */
 	public boolean isEnabled() {
 		return enabled;
 	}
-	
+
 	/**
 	 * @param enable set the value
 	 */
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-	
+
 	/**
 	 * @return Returns true if eligible
 	 */
 	synchronized public boolean isEligible() {
 		return eligible;
 	}
-	
+
 	/**
 	 * @param eligible set the value
 	 */
 	synchronized public void setEligible(boolean eligible) {
 		this.eligible = eligible;
 	}
-	
+
 	/**
 	 * @return Returns true if valid
 	 */
 	public boolean isValid() {
 		return valid;
 	}
-	
+
 	/**
 	 * @param valid - set the value
 	 */
 	public void setValid(boolean valid) {
 		this.valid = valid;
 	}
+
+	/**
+	 * @param reactivate
+	 */
+	public void setReactivate(boolean reactivate) {
+		this.reactivate = reactivate;
+	}
+
+	/**
+	 * @return Returns true if needed to be reactivated
+	 */
+	public boolean isReactivate() {
+		return reactivate;
+	}
+
 }

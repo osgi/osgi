@@ -12,17 +12,14 @@
  */
 package org.eclipse.osgi.component.instance;
 
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import org.eclipse.osgi.impl.service.component.*;
+import java.util.*;
+import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.component.model.*;
-import org.eclipse.osgi.component.*;
-import org.osgi.service.component.*;
+import org.eclipse.osgi.impl.service.component.ComponentContextImpl;
+import org.eclipse.osgi.impl.service.component.ComponentInstanceImpl;
 import org.osgi.framework.*;
-
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.ComponentInstance;
 
 /**
  * This class provides the following function
@@ -34,25 +31,24 @@ import org.osgi.framework.*;
 public class BuildDispose {
 
 	/* set this to true to compile in debug messages */
-	static final boolean		DEBUG	= false;
-	
-	protected ComponentDescription componentDescription;
-	protected ComponentContext componentContext;
+	static final boolean DEBUG = false;
+
 	protected InvokeMethod invoke;
+
 	protected BundleContext bundleContext;
-	
-	// Map CD+P:instances (1:n)
+
+	/** Map CD+P:instances (1:n) */
 	protected Hashtable instanceMap;
-	
-	// Map CD+P:componentContext(1:1)
+
+	/** Map CD+P:componentContext(1:1) */
 	protected Hashtable contextMap;
-		
-	// Map CD+P:service registrations
-	protected Hashtable registrations;
-	
-	//Main SCR class
+
+	/** next free component id. */ 
+	protected long componentid;
+
+	/** Main SCR class */
 	protected Main main;
-	
+
 	/**
 	 * BuildDispose - Build or Dispose of the Instance
 	 * 
@@ -60,14 +56,13 @@ public class BuildDispose {
 	 * @param registrations - map of ComponentDescriptionProps to service registrations
 	 */
 
-	public BuildDispose(Main main, Hashtable registrations){
+	public BuildDispose(Main main, Hashtable registrations) {
 		instanceMap = new Hashtable();
 		contextMap = new Hashtable();
 		invoke = new InvokeMethod();
-		this.registrations = registrations;
 		this.main = main;
 	}
-	
+
 	/**
 	 * dispose cleanup the SCR is shutting down
 	 */
@@ -75,10 +70,9 @@ public class BuildDispose {
 		instanceMap = null;
 		contextMap = null;
 		invoke = null;
-		registrations = null;
 		main = null;
 	}
-	
+
 	/**
 	 * build the ComponentInstance
 	 * 
@@ -89,127 +83,99 @@ public class BuildDispose {
 	 * 
 	 * @return ComponentInstance
 	 */
-	public ComponentInstance build(BundleContext bundleContext,ComponentDescriptionProp component, Object instance,Dictionary properties) throws Exception {
-		
+	public ComponentInstance build(BundleContext bundleContext, Bundle usingBundle, ComponentDescriptionProp component, Object instance, Dictionary properties) throws Exception {
+
 		ArrayList instances = new ArrayList();
-		componentDescription = component.getComponentDescription();
+		ComponentDescription componentDescription = component.getComponentDescription();
 		this.bundleContext = bundleContext;
-		
-		if(instance == null)
-			instance = createInstance(componentDescription);
-		
-		ComponentInstance componentInstance = instantiate(instance,properties);
-		
-		bind(instance);
-		
-		activate(component, componentInstance);
+
+		if (instance == null)
+			instance = main.resolver.instanceProcess.getInstance(componentDescription);
+
+		ComponentInstance componentInstance = instantiate(instance, properties);
+
+		bind(componentDescription, instance);
+
+		activate(component, usingBundle, componentInstance);
 
 		instances.add(componentInstance);
-		instanceMap.put(component,instances);
+		instanceMap.put(component, instances);
 
 		return componentInstance;
 	}
-	
+
 	/** dispose of the Component Instance
 	 * 
-	 * @param bundleContext
 	 * @param component Component Description plus properties
 	 */
-	public void dispose(BundleContext bundleContext, ComponentDescriptionProp component){
-		
+	public void disposeComponent(ComponentDescriptionProp component) {
+
+		ComponentDescription componentDescription = component.getComponentDescription();
 		ComponentInstance componentInstance;
 		Object instance;
-		
 		// get all instances for this component
-		ArrayList instances = (ArrayList)instanceMap.get(component);
-		
-		if(instances != null){
+		ArrayList instances = (ArrayList) instanceMap.get(component);
+		if (instances != null) {
 			Iterator it = instances.iterator();
-			while(it.hasNext()){
-				
-				componentInstance = (ComponentInstance)it.next();
+			while (it.hasNext()) {
+				componentInstance = (ComponentInstance) it.next();
 				instance = componentInstance.getInstance();
-		
-				deactivate(instance);
-		
-				unbind(instance);
-		
+				deactivate(component, instance);
+				unbind(componentDescription, instance);
 				instance = null;
 				componentInstance = null;
 			}
 		}
 		instanceMap.remove(component);
 	}
-	
+
 	/**
 	 * Create the new Instance
 	 * 
+	 * @param componentDescription
 	 * @return Object instance
 	 */
 	public Object createInstance(ComponentDescription componentDescription) throws Exception {
-		
 		Object instance = null;
-			
 		String classname = componentDescription.getImplementation().getClassname();
 		try {
-			instance =  (Object) ((componentDescription.getBundle()).loadClass(classname)).newInstance();
-		}catch(Exception e){
-			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(),e);
+			instance = ((componentDescription.getBundle()).loadClass(classname)).newInstance();
+		} catch (Exception e) {
+			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(), e);
 			throw e; //rethrow so we can eventually tell the resolver that this CD is bad
 		}
-
 		return instance;
 	}
-	
-	/**Register Services
-	 * 
-	 * @param bundleContext
-	 * @param componentDescriptionProp
-	 * 
-	 */
-	public void registerServices(BundleContext bundleContext,ComponentDescriptionProp componentDescriptionProp){
-		ArrayList serviceRegistrations = new ArrayList();
-		
-		RegisterComponentService registerService = new RegisterComponentService(this);
-		serviceRegistrations = registerService.registerServices(bundleContext, componentDescriptionProp);
-		registrations.put(componentDescriptionProp,serviceRegistrations);
-	}
-	
+
 	/**
 	 * instantiate - create the ComponentInstance
 	 *
 	 * @param instance 
+	 * @param properties
 	 */
-	public ComponentInstance instantiate(Object instance,Dictionary properties){
-				
-		return new ComponentInstanceImpl(instance,properties);
+	public ComponentInstance instantiate(Object instance, Dictionary properties) {
+		return new ComponentInstanceImpl(instance, properties);
 	}
-	
+
 	/**
 	 * Call the bind method for each of the Referenced Services in this Service Component
 	 *
+	 * @param componentDescription
 	 * @param instance 
 	 */
-	public void bind(Object instance) throws Exception{
-		
-		ReferenceDescription[] referenceDescriptions = null;
-		
+	public void bind(ComponentDescription componentDescription, Object instance) throws Exception {
 		//Get all the required service Reference Descriptions for this Service Component
-		referenceDescriptions = componentDescription.getReferences();
-			
+		ReferenceDescription[] referenceDescriptions = componentDescription.getReferences();
 		//call the Bind method if the Reference Description includes one
-		if( referenceDescriptions.length > 0 ){
-			int i=0;
-			while ( i < referenceDescriptions.length ) {
-				if(referenceDescriptions[i].getBind() != null){
-					bindReference(referenceDescriptions[i],instance);
+		if (referenceDescriptions.length > 0) {
+			for (int i = 0; i < referenceDescriptions.length; i++) {
+				if (referenceDescriptions[i].getBind() != null) {
+					bindReference(referenceDescriptions[i], instance);
 				}
-				i++;
 			}
-			
-		} 
+		}
 	}
-	
+
 	/** 
 	 * Call the bind method for this referenceDescription
 	 * 
@@ -217,74 +183,73 @@ public class BuildDispose {
 	 * @param instance 
 	 * 
 	 */
-	public void bindReference(ReferenceDescription referenceDescription, Object instance) throws Exception{
-		
+	public void bindReference(ReferenceDescription referenceDescription, Object instance) throws Exception {
 		ServiceReference[] serviceReferences = null;
-		int i,j;
-				
 		//if there is a published service, then get the ServiceObject and call bind
-		try {	
+		try {
 			//get All Registered services using this target filter
-
-			//TODO target not working
-			//serviceReferences = bundleContext.getServiceReferences(referenceDescription.getInterfacename(),referenceDescription.getTarget());
-			serviceReferences = bundleContext.getServiceReferences(referenceDescription.getInterfacename(),null);
-		} catch (Exception e){
-			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(),e);
+			serviceReferences = bundleContext.getServiceReferences(referenceDescription.getInterfacename(), referenceDescription.getTarget());
+		} catch (Exception e) {
+			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, referenceDescription.getComponentDescription().getBundle(), e);
 			throw e;//rethrow exception so resolver is eventually notified that this CDP is bad
 		}
-		
+
 		if (serviceReferences != null) {
-			if((referenceDescription.getCardinality().equals("1..1")) || (referenceDescription.getCardinality().equals("0..1"))){
-								
-				Object serviceObject = (Object)bundleContext.getService(serviceReferences[0]);
-				if(referenceDescription.getBind() != null){
-					try {
-						invoke.bindComponent(referenceDescription.getBind(), instance, serviceObject);
-					}catch(Exception e){
-						main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(),e);
-						throw e;//rethrow exception so resolver is eventually notified that this CDP is bad
-					}
-				}				
+			//we only want to bind one service
+			if ((referenceDescription.getCardinality().equals("1..1")) || (referenceDescription.getCardinality().equals("0..1"))) {
+				bindServiceToReference(referenceDescription, serviceReferences[0], instance);
+				//here we can bind more than one service, if availible
 			} else if ((referenceDescription.getCardinality().equals("1..n")) || (referenceDescription.getCardinality().equals("0..n"))) {
-				for(j = 0; j<serviceReferences.length; j++){
-					if(referenceDescription.getBind() != null){
-						try {
-							invoke.bindComponent(referenceDescription.getBind(),instance, bundleContext.getService(serviceReferences[j]));
-						}catch(Exception e){
-							main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(),e);
-							throw e;//rethrow exception so resolver is eventually notified that this CDP is bad
-						}
-					}
+				for (int j = 0; j < serviceReferences.length; j++) {
+					bindServiceToReference(referenceDescription, serviceReferences[j], instance);
 				}
 			}
-		}	
-		
+		} else {
+			bindServiceToReference(referenceDescription, null, instance);
+		}
+
+	}
+
+	//helper method for bindReference
+	private void bindServiceToReference(ReferenceDescription referenceDescription, ServiceReference serviceReference, Object instance) throws Exception {
+		Object serviceObject = null;
+		if (serviceReference != null) {
+			serviceObject = bundleContext.getService(serviceReference);
+		} else if (referenceDescription.getComponentDescription().isEligible()) {
+			serviceObject = main.resolver.instanceProcess.getInstanceWithInterface(referenceDescription.getInterfacename());
+		}
+		if ((serviceObject != null) && (!referenceDescription.containsServiceObject(serviceObject))) //make sure we have not already binded this object
+		{
+			if (referenceDescription.getBind() != null) {
+				try {
+					invoke.bindComponent(referenceDescription.getBind(), instance, serviceObject);
+					//if this suceeds, add the service object to the reference description
+					referenceDescription.addServiceObject(serviceObject);
+				} catch (Exception e) {
+					main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, referenceDescription.getComponentDescription().getBundle(), e);
+					throw e;//rethrow exception so resolver is eventually notified that this CDP is bad
+				}
+			}
+		}
 	}
 
 	/**
 	 * Call the unbind method for each of the Referenced Services in this Serivce Component
 	 *
+	 * @param componentDescription
 	 * @param instance 
 	 */
-	public void unbind(Object instance) {
-		
-		ReferenceDescription[] referenceDescriptions = null;
-		
+	public void unbind(ComponentDescription componentDescription, Object instance) {
 		//Get all the required service reference descriptions for this Service Component
-		referenceDescriptions = componentDescription.getReferences();
-			
+		ReferenceDescription[] referenceDescriptions = componentDescription.getReferences();
 		//call the unBind method if the Reference Description includes one
-		if( referenceDescriptions.length > 0 ){
-			int i=0;
-			while ( i < referenceDescriptions.length ) {
-				if(referenceDescriptions[i].getUnbind() != null){
-					unbindReference(referenceDescriptions[i],instance);
+		if (referenceDescriptions.length > 0) {
+			for (int i = 0; i < referenceDescriptions.length; i++) {
+				if (referenceDescriptions[i].getUnbind() != null) {
+					unbindReference(referenceDescriptions[i], instance);
 				}
-				i++;
 			}
-			
-		} 
+		}
 	}
 
 	/** 
@@ -293,97 +258,103 @@ public class BuildDispose {
 	 * @param referenceDescription
 	 * @param instance 
 	 */
-	public void unbindReference(ReferenceDescription referenceDescription, Object instance){
-		
-		ServiceReference[] serviceReferences = null;
-								
-		String interfaceName = referenceDescription.getInterfacename();
-		String target = referenceDescription.getTarget();
-		
-		//if there is a published service, then call unbind
-		try {	
-			
-			//get All Registered services using this target filter
-			serviceReferences = bundleContext.getServiceReferences(interfaceName,referenceDescription.getTarget());
-		} catch (Exception e){
-			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(),e);
-		}
-		
-		if (serviceReferences != null) {
-			if((referenceDescription.getCardinality().equals("1..1")) || (referenceDescription.getCardinality().equals("0..1"))){
-								
-				Object serviceObject = (Object)bundleContext.getService(serviceReferences[0]);
-				if(referenceDescription.getUnbind() != null)
-					try {
-						invoke.unbindComponent(referenceDescription.getUnbind(), instance, serviceObject);
-					}catch(Exception e){
-						main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(),e);
-					}
-								
-			} else if ((referenceDescription.getCardinality().equals("1..n")) || (referenceDescription.getCardinality().equals("0..n"))) {
-				for(int j = 0; j<serviceReferences.length; j++){
-					if(referenceDescription.getUnbind() != null)
-						try {
-							invoke.unbindComponent(referenceDescription.getUnbind(),instance, bundleContext.getService(serviceReferences[j]));
-						}catch(Exception e){
-							main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(),e);
-						}
-					
-				}
+	public void unbindReference(ReferenceDescription referenceDescription, Object instance) {
+		Object[] serviceObjects = referenceDescription.getServiceObjects();
+		if (serviceObjects != null) {
+			for (int j = 0; j < serviceObjects.length; j++) {
+				unbindServiceFromReference(referenceDescription, instance, serviceObjects[j]);
 			}
-		}	
-		
+		}
 	}
-	
+
+	/** 
+	 * Call the unbind method for this Reference Description
+	 * 
+	 * @param referenceDescription
+	 * @param instance 
+	 * @param seviceObject
+	 */
+	public void unbindDynamicReference(ReferenceDescription referenceDescription, Object instance, Object serviceObject) throws Exception {
+
+		unbindServiceFromReference(referenceDescription, instance, serviceObject);
+
+		//check if we need to rebind
+		if ((referenceDescription.getCardinality().equals("1..1")) || (referenceDescription.getCardinality().equals("0..n")) || (referenceDescription.getCardinality().equals("1..n"))) {
+			bind(referenceDescription.getComponentDescription(), instance);
+		}
+	}
+
+	//unbindReference helper method
+	private void unbindServiceFromReference(ReferenceDescription referenceDescription, Object instance, Object serviceObject) {
+		if (referenceDescription.getUnbind() != null)
+			try {
+				invoke.unbindComponent(referenceDescription.getUnbind(), instance, serviceObject);
+			} catch (Exception e) {
+				main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, referenceDescription.getComponentDescription().getBundle(), e);
+			}
+	}
+
 	/**
 	 * Invoke the Serivce Component activate method
 	 *
 	 * @param component - ComponentDescriptionProperty object
+	 * @param usingBundle - 
 	 * @param componentInstance - 
 	 */
-	public void activate(ComponentDescriptionProp component, ComponentInstance componentInstance) throws Exception{
-				
-		//Create ComponentContext
-		componentContext = createComponentContext(component, componentInstance);
-			
+	public void activate(ComponentDescriptionProp component, Bundle usingBundle, ComponentInstance componentInstance) throws Exception {
+
+		ComponentContext componentContext = createComponentContext(component, usingBundle, componentInstance);
 		//call the activate method on the Service Component
 		try {
-			invoke.activateComponent(componentInstance.getInstance(),componentContext);
-		}catch(Exception e){
-			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(),e);
+			invoke.activateComponent(componentInstance.getInstance(), componentContext);
+		} catch (Exception e) {
+			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, component.getComponentDescription().getBundle(), e);
 			throw e;//rethrow exception so resolver is eventually notified that this CDP is bad
 		}
-	
 	}
-	
+
 	/**
 	 * Invoke the Service Component deactivate method
 	 *
+	 * @param component - ComponentDescriptionProperty object
 	 * @param instance 
 	 */
-	public void deactivate(Object instance) {
-		try {
-			invoke.deactivateComponent(instance, componentContext);
-		}catch(Exception e){
-			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(),e);
-		}
+	public void deactivate(ComponentDescriptionProp component, Object instance) {
 
+		try {
+			invoke.deactivateComponent(instance, getComponentContext(component));
+		} catch (Exception e) {
+			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, component.getComponentDescription().getBundle(), e);
+		}
 	}
-		
-	
+
 	/**
-	 * createComponentContext
+	 * Create and return the ComponentContext 
 	 * 
 	 * @param component
+	 * @param usingBundle
 	 * @param componentInstance
-	 * 
-	 * @return ComponentContext
+	 * @return
 	 */
-	public ComponentContext createComponentContext(ComponentDescriptionProp component, ComponentInstance componentInstance){
-		ComponentContext context = new ComponentContextImpl(main, bundleContext, component, componentInstance);
-		contextMap.put(component,context);
+	private ComponentContext createComponentContext(ComponentDescriptionProp component, Bundle usingBundle, ComponentInstance componentInstance) {
+		ComponentContext context = new ComponentContextImpl(main, bundleContext, usingBundle, component, componentInstance);
+		contextMap.put(component, context);
 		return context;
 	}
 
-	
+	private ComponentContext getComponentContext(ComponentDescriptionProp component) {
+		return (ComponentContext) contextMap.get(component);
+	}
+
+	/**
+	 * Method to return the next available component id. 
+	 * 
+	 * @return next component id.
+	 */
+	protected long getNextComponentId() {
+		long id = componentid;
+		componentid++;
+		return (id);
+	}
+
 }

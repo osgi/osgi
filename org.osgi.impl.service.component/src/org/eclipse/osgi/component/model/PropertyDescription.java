@@ -10,7 +10,7 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
- 
+
 package org.eclipse.osgi.component.model;
 
 /**

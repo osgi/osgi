@@ -10,7 +10,6 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
- 
 
 package org.eclipse.osgi.component.model;
 
@@ -27,13 +26,13 @@ import org.osgi.framework.Bundle;
  * @version $Revision$
  */
 public class ComponentDescriptionCache {
-	
+
 	/**
 	 * Parser object to use if the bundle's information is not in the cache
 	 * or is stale.
 	 */
 	protected Parser parser;
-	
+
 	/**
 	 * Create the cache object.
 	 * 
@@ -53,7 +52,7 @@ public class ComponentDescriptionCache {
 		// The cache is not yet implement, so we always parse the XML.
 		return parser.getComponentDescriptions(bundle);
 	}
-	
+
 	public void dispose() {
 		parser.dispose();
 	}

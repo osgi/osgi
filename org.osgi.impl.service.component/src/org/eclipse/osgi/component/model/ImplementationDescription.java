@@ -33,6 +33,7 @@ public class ImplementationDescription {
 	public String getClassname() {
 		return classname;
 	}
+
 	/**
 	 * @param classname The classname to set.
 	 */

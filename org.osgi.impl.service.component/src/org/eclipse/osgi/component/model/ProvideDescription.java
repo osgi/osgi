@@ -10,7 +10,7 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
- 
+
 package org.eclipse.osgi.component.model;
 
 /**
@@ -22,7 +22,7 @@ package org.eclipse.osgi.component.model;
 public class ProvideDescription {
 	protected ServiceDescription parent;
 	protected String interfacename;
-	
+
 	public ProvideDescription(ServiceDescription parent) {
 		this.parent = parent;
 	}
@@ -33,6 +33,7 @@ public class ProvideDescription {
 	public String getInterfacename() {
 		return interfacename;
 	}
+
 	/**
 	 * @param interfacename The interfacename to set.
 	 */

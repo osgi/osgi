@@ -36,21 +36,14 @@ public class FrameworkHook extends AbstractReflector {
 	 */
 	public BundleContext getBundleContext(final Bundle bundle) {
 		if (System.getSecurityManager() == null) {
-			return (BundleContext) invokeMethod(bundle, "getContext", null,
-					null);
+			return (BundleContext) invokeMethod(bundle, "getContext", null, null);
 		}
-		else {
-			return (BundleContext) AccessController
-					.doPrivileged(new PrivilegedAction() {
-						public Object run() {
-							return invokeMethod(bundle, "getContext", null,
-									null);
-						}
-					});
-		}
+		return (BundleContext) AccessController.doPrivileged(new PrivilegedAction() {
+			public Object run() {
+				return invokeMethod(bundle, "getContext", null, null);
+			}
+		});
 	}
-	
-	
 
 	/**
 	 * Publish a FrameworkEvent with the specified parameters.
@@ -59,32 +52,24 @@ public class FrameworkHook extends AbstractReflector {
 	 * @param bundle Affected bundle.
 	 * @param throwable Related exception or null.
 	 */
-	public void publishFrameworkEvent(final int type, final Bundle bundle,
-			final Throwable throwable) {
+	public void publishFrameworkEvent(final int type, final Bundle bundle, final Throwable throwable) {
 		if (System.getSecurityManager() == null) {
-			invokeMethod(getFieldValue(bundle, "framework"),
-					"publishFrameworkEvent", publishFrameworkEventParams,
-					new Object[] {new Integer(type), bundle, throwable});
-		}else {
+			invokeMethod(getFieldValue(bundle, "framework"), "publishFrameworkEvent", publishFrameworkEventParams, new Object[] {new Integer(type), bundle, throwable});
+		} else {
 			AccessController.doPrivileged(new PrivilegedAction() {
-				public Object run() 
-					{
-					return invokeMethod(getFieldValue(bundle, "framework"),
-							"publishFrameworkEvent",
-							publishFrameworkEventParams, new Object[] {
-									new Integer(type), bundle, throwable});
-					}
-				});
+				public Object run() {
+					return invokeMethod(getFieldValue(bundle, "framework"), "publishFrameworkEvent", publishFrameworkEventParams, new Object[] {new Integer(type), bundle, throwable});
+				}
+			});
 		}
 	}
 
 	/**
 	 * Parameters for publishFrameworkEvent method.
 	 */
-	private static final Class[]	publishFrameworkEventParams;
+	private static final Class[] publishFrameworkEventParams;
 	static {
-		publishFrameworkEventParams = new Class[] {Integer.TYPE, Bundle.class,
-			Throwable.class};
+		publishFrameworkEventParams = new Class[] {Integer.TYPE, Bundle.class, Throwable.class};
 	}
 
 	/**
@@ -95,9 +80,7 @@ public class FrameworkHook extends AbstractReflector {
 	 * @param e Exception which indicates the reflection logic is confused.
 	 */
 	protected void reflectionException(Exception e) {
-		throw new IllegalStateException(
-				"FrameworkHook does not recognize the framework implementation: "
-						+ e.getMessage());
+		throw new IllegalStateException("FrameworkHook does not recognize the framework implementation: " + e.getMessage());
 	}
 
 }

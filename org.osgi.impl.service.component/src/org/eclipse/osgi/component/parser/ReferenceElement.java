@@ -10,7 +10,7 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
- 
+
 package org.eclipse.osgi.component.parser;
 
 import org.eclipse.osgi.component.model.ComponentDescription;
@@ -20,12 +20,11 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ReferenceElement extends DefaultHandler {
-	protected ParserHandler			root;
-	protected ComponentElement		parent;
-	protected ReferenceDescription	reference;
+	protected ParserHandler root;
+	protected ComponentElement parent;
+	protected ReferenceDescription reference;
 
-	public ReferenceElement(ParserHandler root, ComponentElement parent,
-			Attributes attributes) throws SAXException {
+	public ReferenceElement(ParserHandler root, ComponentElement parent, Attributes attributes) throws SAXException {
 		this.root = root;
 		this.parent = parent;
 		reference = new ReferenceDescription(parent.getComponentDescription());
@@ -70,8 +69,7 @@ public class ReferenceElement extends DefaultHandler {
 				continue;
 			}
 
-			throw new SAXException("unrecognized reference element attribute: "
-					+ key);
+			throw new SAXException("unrecognized reference element attribute: " + key);
 		}
 
 		if (reference.getName() == null) {
@@ -82,13 +80,11 @@ public class ReferenceElement extends DefaultHandler {
 		}
 	}
 
-	public void startElement(String uri, String localName, String qName,
-			Attributes attributes) throws SAXException {
+	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		throw new SAXException("reference does not support nested elements");
 	}
 
-	public void characters(char[] ch, int start, int length)
-			throws SAXException {
+	public void characters(char[] ch, int start, int length) throws SAXException {
 		int end = start + length;
 		for (int i = start; i < end; i++) {
 			if (!Character.isWhitespace(ch[i])) {
@@ -97,8 +93,7 @@ public class ReferenceElement extends DefaultHandler {
 		}
 	}
 
-	public void endElement(String uri, String localName, String qName)
-			throws SAXException {
+	public void endElement(String uri, String localName, String qName) throws SAXException {
 		ComponentDescription component = parent.getComponentDescription();
 		component.addReference(reference);
 		root.setHandler(parent);

@@ -60,35 +60,44 @@ import org.eclipse.osgi.component.model.*;
  * @version $Revision$
  */
 public class ComponentContextImpl implements ComponentContext {
-	
+
 	/** The BundleContext this component is associated with */
 	protected BundleContext bundleContext;
-	
+
 	/* ComponentInstance instance */
 	ComponentInstance componentInstance;
-	
+
 	/* ComponentDescription */
 	ComponentDescription componentDescription;
-	
+
 	/* ComponentDescription plus Properties */
 	ComponentDescriptionProp componentDescriptionProp;
-	
+
 	Main main;
+
+	Bundle usingBundle;
 	
+	ServiceReference serviceReference;
 
 	/**
 	 * Construct a ComponentContext object
 	 *
 	 * @param bundle The ComponentDescriptionProp we are wrapping.
 	 */
-	public ComponentContextImpl(Main main, BundleContext bundleContext, ComponentDescriptionProp component, ComponentInstance ci ) {
+	public ComponentContextImpl(Main main, BundleContext bundleContext, Bundle usingBundle, ComponentDescriptionProp component, ComponentInstance ci) {
 		this.componentDescriptionProp = component;
 		this.componentDescription = component.getComponentDescription();
 		this.componentInstance = ci;
 		this.bundleContext = bundleContext;
+		this.usingBundle = usingBundle;
 		this.main = main;
+		
+		//ServiceReference will be null if no services are offered
+		ServiceRegistration serviceRegistration= (ServiceRegistration)main.resolver.instanceProcess.registrations.get(component);
+		if (serviceRegistration != null) {
+			this.serviceReference = serviceRegistration.getReference();
+		}
 	}
-
 
 	/**
 	 * Returns the component properties for this ComponentContext.
@@ -96,22 +105,20 @@ public class ComponentContextImpl implements ComponentContext {
 	 * @return The properties for this ComponentContext. The properties are read
 	 *         only and cannot be modified.
 	 */
-	public Dictionary getProperties(){
-		
-		Dictionary props = ((ComponentInstanceImpl)componentInstance).getProperties();
-				
-		if (props != null){
+	public Dictionary getProperties() {
+
+		Dictionary props = ((ComponentInstanceImpl) componentInstance).getProperties();
+
+		if (props != null) {
 			Dictionary properties = componentDescriptionProp.getProperties();
 			Enumeration keys = props.keys();
 			while (keys.hasMoreElements()) {
 				Object key = keys.nextElement();
-				properties.put(key,props.get(key));
+				properties.put(key, props.get(key));
 			}
 			return properties;
-		
-		} else {
-			return componentDescriptionProp.getProperties();
 		}
+		return componentDescriptionProp.getProperties();
 	}
 
 	/**
@@ -125,22 +132,38 @@ public class ComponentContextImpl implements ComponentContext {
 	 * @throws ComponentException If the Service Component Runtime catches an
 	 *         exception while activating the target service.
 	 */
-	public Object locateService(String name)throws ComponentException {
-		
+	public Object locateService(String name) throws ComponentException {
+
+		Object obj = null;
 		ReferenceDescription[] references = componentDescription.getReferences();
-		
-		for (int i = 0; i<references.length; i++) {
-			
+
+		for (int i = 0; i < references.length; i++) {
+
 			String referenceName = references[i].getName();
-			
+
 			//find the Reference Description with the specified name
-			if(referenceName.equals(name)){
-				
+			if (referenceName.equals(name)) {
+
 				//get the interface name
 				String interfaceName = references[i].getInterfacename();
-				
-				//return the service object
-				return bundleContext.getService(bundleContext.getServiceReference(interfaceName));
+
+				//get the Service Reference
+				ServiceReference ref = bundleContext.getServiceReference(interfaceName);
+
+				// if the instance has not yet been created i.e. not registered - but it is eligible -  
+				// get the instance and return it
+				if ((ref == null) && (references[i].getComponentDescription().isEligible())) {
+					// create and return the service object
+					try {
+						obj = main.resolver.instanceProcess.getInstanceWithInterface(interfaceName);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					obj = bundleContext.getService(bundleContext.getServiceReference(interfaceName));
+				}
+
+				return obj;
 			}
 		}
 		return null;
@@ -158,34 +181,33 @@ public class ComponentContextImpl implements ComponentContext {
 	 *         exception while activating a target service.
 	 */
 	public Object[] locateServices(String name) throws ComponentException {
-		
+
 		ReferenceDescription[] references = componentDescription.getReferences();
-		
-		for (int i = 0; i<references.length; i++) {
-			
+
+		for (int i = 0; i < references.length; i++) {
+
 			String referenceName = references[i].getName();
-			
-					
-			if(referenceName.equals(name)){
-				
+
+			if (referenceName.equals(name)) {
+
 				//get the interface name and target 
 				String interfaceName = references[i].getInterfacename();
 				String target = references[i].getTarget();
-								
+
 				ServiceReference[] serviceReferences = null;
 				try {
-					serviceReferences = bundleContext.getServiceReferences(interfaceName,target);
-				}catch (Exception e){
-					throw new ComponentException(e.getMessage()); 
+					serviceReferences = bundleContext.getServiceReferences(interfaceName, target);
+				} catch (Exception e) {
+					throw new ComponentException(e.getMessage());
 				}
-								
+
 				ArrayList serviceObjects = new ArrayList();
-				
+
 				//Get the service object
-				for (int j=0; j<serviceReferences.length; j++){
+				for (int j = 0; j < serviceReferences.length; j++) {
 					serviceObjects.add(bundleContext.getService(serviceReferences[j]));
 				}
-				
+
 				return serviceObjects.toArray();
 			}
 		}
@@ -197,7 +219,7 @@ public class ComponentContextImpl implements ComponentContext {
 	 * 
 	 * @return The BundleContext of the bundle containing this component.
 	 */
-	public BundleContext getBundleContext(){
+	public BundleContext getBundleContext() {
 		return bundleContext;
 	}
 
@@ -216,31 +238,21 @@ public class ComponentContextImpl implements ComponentContext {
 	 * 
 	 * @return The bundle using this component as a service or <code>null</code>.
 	 */
-	
-	public Bundle getUsingBundle(){
-		//TODO
-		Bundle bundle = null;
-		if (( componentDescription.getService() == null ) || (!componentDescription.getService().isServicefactory())){
+
+	public Bundle getUsingBundle() {
+
+		if ((componentDescription.getService() == null) || (!componentDescription.getService().isServicefactory())) {
 			return null;
-		} //else {
-			//CD+P:instances
-			//CD+P:registrations
-			//ArrayList serviceRegistrations = main.resolver.getRegistrations(CDP);
-			// ServiceRegistration.getServiceReference()
-			//ServiceReference ref;
-			//Bundle [] bundles = ref.getUsingBundles();
-		//}
-		return bundle;
-			
+		}
+		return usingBundle;
 	}
-		
 
 	/**
 	 * Returns the ComponentInstance object for this component.
 	 * 
 	 * @return The ComponentInstance object for this component.
 	 */
-	public ComponentInstance getComponentInstance(){
+	public ComponentInstance getComponentInstance() {
 		return componentInstance;
 	}
 
@@ -251,7 +263,7 @@ public class ComponentContextImpl implements ComponentContext {
 	 * @param name The name of a component or <code>null</code> to indicate all
 	 *        components in the bundle.
 	 */
-	public void enableComponent(String name){
+	public void enableComponent(String name) {
 		main.enableComponent(name, bundleContext.getBundle());
 	}
 
@@ -261,17 +273,24 @@ public class ComponentContextImpl implements ComponentContext {
 	 * 
 	 * @param name The name of a component.
 	 */
-	public void disableComponent(String name){
-		main.disableComponent(name,bundleContext.getBundle());
+	public void disableComponent(String name) {
+		main.disableComponent(name, bundleContext.getBundle());
 	}
-	
-	
+
 	/**
-	 * @return
-	 * @see org.osgi.service.component.ComponentContext#getServiceReference()
+	 * If this component is registered as a service using the
+	 * <code>service</code> element, then this method returns the service
+	 * reference of the service provided by this component.
+	 * <p>
+	 * This method will return <code>null</code> if this component is not
+	 * registered as a service.
+	 * 
+	 * @return The <code>ServiceReference</code> object for this component or
+	 *         <code>null</code> if this component is not registered as a
+	 *         service.
 	 */
-	public ServiceReference getServiceReference() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+	public ServiceReference getServiceReference(){
+		return this.serviceReference;
 	}
+
 }

@@ -10,7 +10,7 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
- 
+
 package org.eclipse.osgi.component.model;
 
 /**
@@ -20,15 +20,14 @@ package org.eclipse.osgi.component.model;
  * @version $Revision$
  */
 public class PropertyValueDescription extends PropertyDescription {
-	
+
 	protected String name;
 	protected String type;
 	protected Object value;
-	
+
 	public PropertyValueDescription(ComponentDescription parent) {
 		super(parent);
 	}
-
 
 	/**
 	 * @param name
@@ -46,30 +45,35 @@ public class PropertyValueDescription extends PropertyDescription {
 	public String getName() {
 		return name;
 	}
+
 	/**
 	 * @param name The name to set.
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	/**
 	 * @return Returns the type.
 	 */
 	public String getType() {
 		return type == null ? "String" : type;
 	}
+
 	/**
 	 * @param type The type to set.
 	 */
 	public void setType(String type) {
 		this.type = type;
 	}
+
 	/**
 	 * @return Returns the value.
 	 */
 	public Object getValue() {
 		return value;
 	}
+
 	/**
 	 * @param value The value to set.
 	 */

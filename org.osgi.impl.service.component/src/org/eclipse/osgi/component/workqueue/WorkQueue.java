@@ -11,7 +11,6 @@
  * trademarks that are the sole property of the respective owners.
  */
 
-
 package org.eclipse.osgi.component.workqueue;
 
 import org.eclipse.osgi.component.Main;
@@ -22,7 +21,7 @@ import org.osgi.framework.FrameworkEvent;
  */
 
 public class WorkQueue extends Thread {
-	public static final boolean	DEBUG	= false;
+	public static final boolean DEBUG = false;
 	public Main main;
 
 	/**
@@ -32,13 +31,13 @@ public class WorkQueue extends Thread {
 	 */
 	private class Queued {
 		/** dispatcher of this item */
-		final WorkDispatcher	dispatcher;
+		final WorkDispatcher dispatcher;
 		/** action for this item */
-		final int				action;
+		final int action;
 		/** object for this item */
-		final Object			object;
+		final Object object;
 		/** next item in work queue */
-		Queued					next;
+		Queued next;
 
 		/**
 		 * Constructor for work queue item
@@ -53,26 +52,25 @@ public class WorkQueue extends Thread {
 			object = o;
 			next = null;
 		}
-		
+
 		void dispatch() {
 			try {
 				/*
 				 * Call the WorkDispatcher to dispatch the work.
 				 */
 				dispatcher.dispatchWork(action, object);
-			}
-			catch (Throwable t) {
+			} catch (Throwable t) {
 				main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, main.context.getBundle(), t);
 			}
 		}
 	}
 
 	/** item at the head of the work queue */
-	private Queued				head;
+	private Queued head;
 	/** item at the tail of the work queue */
-	private Queued				tail;
+	private Queued tail;
 	/** if false the thread must terminate */
-	private volatile boolean	running;
+	private volatile boolean running;
 
 	/**
 	 * Constructor for the work queue thread.
@@ -108,14 +106,12 @@ public class WorkQueue extends Thread {
 
 				item.dispatch();
 			}
-		}
-		catch (RuntimeException e) {
+		} catch (RuntimeException e) {
 			if (DEBUG) {
 				e.printStackTrace(System.err);
 			}
 			throw e;
-		}
-		catch (Error e) {
+		} catch (Error e) {
 			if (DEBUG) {
 				e.printStackTrace(System.err);
 			}
@@ -142,8 +138,7 @@ public class WorkQueue extends Thread {
 		{
 			head = item;
 			tail = item;
-		}
-		else /* else add to end of queue */
+		} else /* else add to end of queue */
 		{
 			tail.next = item;
 			tail = item;
@@ -164,8 +159,7 @@ public class WorkQueue extends Thread {
 		while (running && (head == null)) {
 			try {
 				wait();
-			}
-			catch (InterruptedException e) {
+			} catch (InterruptedException e) {
 			}
 		}
 

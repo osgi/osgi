@@ -10,16 +10,17 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
- 
+
 package org.eclipse.osgi.impl.service.component;
 
 import java.util.Dictionary;
-
-import org.osgi.framework.*;
-import org.osgi.service.component.*;
-import org.eclipse.osgi.component.model.*;
-import org.eclipse.osgi.component.instance.*;
-
+import org.eclipse.osgi.component.instance.InstanceProcess;
+import org.eclipse.osgi.component.model.ComponentDescription;
+import org.eclipse.osgi.component.model.ComponentDescriptionProp;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.component.ComponentFactory;
+import org.osgi.service.component.ComponentInstance;
 
 /**
  * When a component is declared with the <code>factory</code> attribute on it's
@@ -30,17 +31,17 @@ import org.eclipse.osgi.component.instance.*;
  * @version $Revision$
  */
 public class ComponentFactoryImpl implements ComponentFactory {
-	
+
 	/* set this to true to compile in debug messages */
-	static final boolean		DEBUG	= true;
-	
+	static final boolean DEBUG = true;
+
 	ComponentDescriptionProp componentDescriptionProp;
 	ComponentDescription componentDescription;
 	ServiceRegistration serviceRegistration;
 	BundleContext bundleContext;
-	BuildDispose instanceBuild;
+	InstanceProcess instanceProcess;
 	boolean registerService = false;
-			
+
 	/**
 	 * ComponentFactoryImpl
 	 * 
@@ -48,17 +49,16 @@ public class ComponentFactoryImpl implements ComponentFactory {
 	 * @param componentDescriptionProp the ComponentDescription Object with Properties
 	 * @param buildDispose 
 	 */
-	public ComponentFactoryImpl(BundleContext bundleContext, ComponentDescriptionProp component, BuildDispose buildDispose){
+	public ComponentFactoryImpl(BundleContext bundleContext, ComponentDescriptionProp component, InstanceProcess instanceProcess) {
 		this.componentDescriptionProp = component;
 		this.componentDescription = component.getComponentDescription();
 		this.bundleContext = bundleContext;
-		this.instanceBuild = buildDispose;
-		
-		if(componentDescription.getService() != null)
+		this.instanceProcess = instanceProcess;
+
+		if (componentDescription.getService() != null)
 			registerService = true;
 	}
-	
-	
+
 	/**
 	 * Create a new instance of the component. Additional properties may be
 	 * provided for the component instance.
@@ -67,19 +67,19 @@ public class ComponentFactoryImpl implements ComponentFactory {
 	 * @return A ComponentInstance object encapsulating the component instance.
 	 *         The returned component instance has been activated.
 	 */
-	public ComponentInstance newInstance(Dictionary properties){
-		
+	public ComponentInstance newInstance(Dictionary properties) {
+
 		ComponentInstance instance = null;
 		try {
-			instanceBuild.build(bundleContext, componentDescriptionProp, null, properties);
-		
+			instanceProcess.buildDispose.build(bundleContext, null, componentDescriptionProp, null, properties);
+
 			if (registerService)
-				instanceBuild.registerServices(bundleContext,  componentDescriptionProp);
+				instanceProcess.registerServices(bundleContext, componentDescriptionProp);
 		} catch (Exception e) {
 			//TODO what to do here?  we need to add throws to the interface
 			System.err.println("Could not create instance of " + componentDescription + " with properties " + properties);
 		}
-						
-		return (ComponentInstance)instance;
+
+		return instance;
 	}
 }

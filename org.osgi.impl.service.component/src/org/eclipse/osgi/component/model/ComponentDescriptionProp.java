@@ -38,27 +38,25 @@ import org.eclipse.osgi.component.resolver.*;
  * @version $Revision$
  */
 public class ComponentDescriptionProp {
-	
+
 	/* set this to true to compile in debug messages */
-	static final boolean				DEBUG	= false;
+	static final boolean DEBUG = false;
 
 	protected ComponentDescription componentDescription;
 	protected ComponentProperties componentProperties;
 	protected Hashtable properties;
 
-	
 	/**
 	 * @param bundle The bundle to set.
 	 */
-	public ComponentDescriptionProp(ComponentDescription cd, Dictionary configProperties) 
-		throws IOException {
-		
+	public ComponentDescriptionProp(ComponentDescription cd, Dictionary configProperties) throws IOException {
+
 		this.componentDescription = cd;
 		properties = new Hashtable();
 		initProperties(configProperties);
 
 	}
-	
+
 	/** 
 	 * Initialize Properties for this Component 
 	 * 
@@ -68,83 +66,81 @@ public class ComponentDescriptionProp {
 	 * @return Dictionary properties
 	 */
 	public void initProperties(Dictionary configProperties) throws IOException {
-		
+
 		// ComponentDescription Default Properties
-		PropertyDescription [] propertyDescriptions = componentDescription.getProperties();
-		for (int i=0; i<propertyDescriptions.length; i++){
-			if(propertyDescriptions[i] instanceof PropertyValueDescription) {
-				PropertyValueDescription propvalue = (PropertyValueDescription)propertyDescriptions[i];
-				properties.put(propvalue.getName(),propvalue.getValue());
+		PropertyDescription[] propertyDescriptions = componentDescription.getProperties();
+		for (int i = 0; i < propertyDescriptions.length; i++) {
+			if (propertyDescriptions[i] instanceof PropertyValueDescription) {
+				PropertyValueDescription propvalue = (PropertyValueDescription) propertyDescriptions[i];
+				properties.put(propvalue.getName(), propvalue.getValue());
 			} else {
-				addEntryProperties(((PropertyResourceDescription)propertyDescriptions[i]).getEntry());
-			} 
-		}
-		
-		// properties from Configuration Admin
-		if (configProperties != null){
-			Enumeration keys = configProperties.keys();
-			while(keys.hasMoreElements()){
-				properties.put(keys.nextElement(),configProperties.get(keys.nextElement()));
+				addEntryProperties(((PropertyResourceDescription) propertyDescriptions[i]).getEntry());
 			}
-		} 
-		
+		}
+
+		// properties from Configuration Admin
+		if (configProperties != null) {
+			Enumeration keys = configProperties.keys();
+			while (keys.hasMoreElements()) {
+				String key = (String) keys.nextElement();
+				properties.put(key, configProperties.get(key));
+			}
+		}
+
 	}
 
-	 /**
+	/**
 	 * Get the Service Component properties from a properties entry file 
 	 * 
 	 * @param propertyEntryName - the name of the properties file
 	 */
-	private void addEntryProperties(String propertyEntryName) throws 
-		IOException {
-		
+	private void addEntryProperties(String propertyEntryName) throws IOException {
+
 		URL url = null;
 		Properties props = new Properties();
-		
+
 		Bundle bundle = componentDescription.getBundle();
 		url = bundle.getEntry(propertyEntryName);
 		if (url == null) {
-			throw new ComponentException("Properties entry file "+propertyEntryName+" cannot be found");
+			throw new ComponentException("Properties entry file " + propertyEntryName + " cannot be found");
 		}
-				
-			InputStream in = null;
-			File file = new File(propertyEntryName);
-			
-			if (file.exists()){
-				in = new FileInputStream(file);
-			}
-			if (in == null){
-				in = getClass().getResourceAsStream(propertyEntryName);
-			}
-			if (in == null) {
-				in = url.openStream();
-			}
-			if (in != null){
-				
-				props.load(new BufferedInputStream(in));
-				in.close();
-			}
-			else {
-				if(DEBUG)
-					System.out.println("Unable to find properties file "+propertyEntryName); 
-			}
+
+		InputStream in = null;
+		File file = new File(propertyEntryName);
+
+		if (file.exists()) {
+			in = new FileInputStream(file);
+		}
+		if (in == null) {
+			in = getClass().getResourceAsStream(propertyEntryName);
+		}
+		if (in == null) {
+			in = url.openStream();
+		}
+		if (in != null) {
+
+			props.load(new BufferedInputStream(in));
+			in.close();
+		} else {
+			if (DEBUG)
+				System.out.println("Unable to find properties file " + propertyEntryName);
+		}
 
 		//Get the properties value from the file and store them in the properties object
-		if ( props !=null ){
+		if (props != null) {
 			Enumeration keys = props.propertyNames();
-			while (keys.hasMoreElements()){
-				String key = (String)keys.nextElement();
+			while (keys.hasMoreElements()) {
+				String key = (String) keys.nextElement();
 				String[] result = new String[1];
-				result[0] = (String)props.get(key);
-				properties.put( key , result );
+				result[0] = (String) props.get(key);
+				properties.put(key, result);
 			}
 		}
-		
-		return;
-		
-	}	
 
-	
+		return;
+
+	}
+
 	/** 
 	 * getProperties
 	 * 
@@ -153,7 +149,7 @@ public class ComponentDescriptionProp {
 	public Dictionary getProperties() {
 		return properties;
 	}
-	
+
 	/** 
 	 * getComponentDescription
 	 * 
@@ -162,5 +158,5 @@ public class ComponentDescriptionProp {
 	public ComponentDescription getComponentDescription() {
 		return componentDescription;
 	}
-	
+
 }

@@ -10,7 +10,7 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
- 
+
 package org.eclipse.osgi.component.parser;
 
 import java.util.ArrayList;
@@ -23,17 +23,15 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class PropertyElement extends DefaultHandler {
-	protected ParserHandler				root;
-	protected ComponentElement			parent;
-	protected PropertyValueDescription	property;
-	protected ArrayList					values;
+	protected ParserHandler root;
+	protected ComponentElement parent;
+	protected PropertyValueDescription property;
+	protected ArrayList values;
 
-	public PropertyElement(ParserHandler root, ComponentElement parent,
-			Attributes attributes) throws SAXException {
+	public PropertyElement(ParserHandler root, ComponentElement parent, Attributes attributes) throws SAXException {
 		this.root = root;
 		this.parent = parent;
-		property = new PropertyValueDescription(parent
-				.getComponentDescription());
+		property = new PropertyValueDescription(parent.getComponentDescription());
 		values = new ArrayList();
 
 		int size = attributes.getLength();
@@ -56,8 +54,7 @@ public class PropertyElement extends DefaultHandler {
 				continue;
 			}
 
-			throw new SAXException(
-					"unrecognized properties element attribute: " + key);
+			throw new SAXException("unrecognized properties element attribute: " + key);
 		}
 
 		if (property.getName() == null) {
@@ -65,13 +62,11 @@ public class PropertyElement extends DefaultHandler {
 		}
 	}
 
-	public void startElement(String uri, String localName, String qName,
-			Attributes attributes) throws SAXException {
+	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		throw new SAXException("property does not support nested elements");
 	}
 
-	public void characters(char[] ch, int start, int length)
-			throws SAXException {
+	public void characters(char[] ch, int start, int length) throws SAXException {
 		int end = start + length;
 		int cursor = start;
 		while (cursor < end) {
@@ -83,7 +78,7 @@ public class PropertyElement extends DefaultHandler {
 		}
 		charLine(ch, start, cursor - start);
 	}
-	
+
 	private void charLine(char[] ch, int start, int length) {
 		if (length > 0) {
 			String line = new String(ch, start, length).trim();
@@ -93,12 +88,11 @@ public class PropertyElement extends DefaultHandler {
 		}
 	}
 
-	public void endElement(String uri, String localName, String qName)
-			throws SAXException {
-		
+	public void endElement(String uri, String localName, String qName) throws SAXException {
+
 		//if characters were specified 
 		int size = values.size();
-		if (size > 0){
+		if (size > 0) {
 			//if String then store as String[]
 			if (property.getType().equals("String")) {
 				String[] result = new String[size];
@@ -106,99 +100,98 @@ public class PropertyElement extends DefaultHandler {
 				property.setValue(result);
 			} else if (property.getType().equals("Integer")) {
 				int[] result = new int[size];
-				if(values != null){
+				if (values != null) {
 					Iterator it = values.iterator();
-					int i=0;
-					while(it.hasNext()){
-						Integer value = new Integer((String)it.next());
+					int i = 0;
+					while (it.hasNext()) {
+						Integer value = new Integer((String) it.next());
 						result[i++] = value.intValue();
 					}
 					property.setValue(result);
 				}
-			} else if( property.getType().equals("Long") ) {
+			} else if (property.getType().equals("Long")) {
 				long[] result = new long[size];
-				if(values != null) {
+				if (values != null) {
 					Iterator it = values.iterator();
-					int i=0;
-					while(it.hasNext()){
-						Long value = new Long((String)it.next());
+					int i = 0;
+					while (it.hasNext()) {
+						Long value = new Long((String) it.next());
 						result[i++] = value.longValue();
 					}
 					property.setValue(result);
 				}
-			} else if( property.getType().equals("Double") ) {
+			} else if (property.getType().equals("Double")) {
 				double[] result = new double[size];
-				if(values != null) {
+				if (values != null) {
 					Iterator it = values.iterator();
-					int i=0;
-					while(it.hasNext()){
-						Double value = new Double((String)it.next());
+					int i = 0;
+					while (it.hasNext()) {
+						Double value = new Double((String) it.next());
 						result[i++] = value.doubleValue();
 					}
 					property.setValue(result);
 				}
-			} else if( property.getType().equals("Float") ) {
+			} else if (property.getType().equals("Float")) {
 				float[] result = new float[size];
-				if(values != null) {
+				if (values != null) {
 					Iterator it = values.iterator();
-					int i=0;
-					while(it.hasNext()){
-						Float value = new Float((String)it.next());
+					int i = 0;
+					while (it.hasNext()) {
+						Float value = new Float((String) it.next());
 						result[i++] = value.floatValue();
 					}
 					property.setValue(result);
 				}
-			} else if( property.getType().equals("Byte") ) {
+			} else if (property.getType().equals("Byte")) {
 				byte[] result = new byte[size];
-				if(values != null) {
+				if (values != null) {
 					Iterator it = values.iterator();
-					int i=0;
-					while(it.hasNext()){
-						Byte value = new Byte((String)it.next());
+					int i = 0;
+					while (it.hasNext()) {
+						Byte value = new Byte((String) it.next());
 						result[i++] = value.byteValue();
 					}
 					property.setValue(result);
 				}
-			} else if( property.getType().equals("Char") ) {
+			} else if (property.getType().equals("Char")) {
 				char[] result = new char[size];
-				if(values != null) {
+				if (values != null) {
 					Iterator it = values.iterator();
-					int i=0;
-					while(it.hasNext()){
-						char[] value = ((String)it.next()).toCharArray();
+					int i = 0;
+					while (it.hasNext()) {
+						char[] value = ((String) it.next()).toCharArray();
 						result[i++] = value[0];
 					}
 					property.setValue(result);
 				}
-			} else if( property.getType().equals("Boolean") ) {
+			} else if (property.getType().equals("Boolean")) {
 				boolean[] result = new boolean[size];
-				if(values != null) {
+				if (values != null) {
 					Iterator it = values.iterator();
-					int i=0;
-					while(it.hasNext()){
-						Boolean value = new Boolean((String)it.next());
+					int i = 0;
+					while (it.hasNext()) {
+						Boolean value = new Boolean((String) it.next());
 						result[i++] = value.booleanValue();
 					}
 					property.setValue(result);
 				}
-			} else if( property.getType().equals("Short") ) {
+			} else if (property.getType().equals("Short")) {
 				short[] result = new short[size];
-				if(values != null) {
+				if (values != null) {
 					Iterator it = values.iterator();
-					int i=0;
-					while(it.hasNext()){
-						Short value = new Short((String)it.next());
+					int i = 0;
+					while (it.hasNext()) {
+						Short value = new Short((String) it.next());
 						result[i++] = value.shortValue();
 					}
 					property.setValue(result);
 				}
 			}
-			
-		} 
-			
+
+		}
+
 		ComponentDescription component = parent.getComponentDescription();
 		component.addProperty(property);
 		root.setHandler(parent);
 	}
 }
-

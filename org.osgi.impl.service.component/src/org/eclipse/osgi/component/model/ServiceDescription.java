@@ -10,7 +10,7 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
- 
+
 package org.eclipse.osgi.component.model;
 
 import java.util.ArrayList;
@@ -31,12 +31,14 @@ public class ServiceDescription {
 		servicefactory = false;
 		provides = new ArrayList();
 	}
+
 	/**
 	 * @param servicefactory The servicefactory to set.
 	 */
 	public void setServicefactory(boolean servicefactory) {
 		this.servicefactory = servicefactory;
 	}
+
 	/**
 	 * @return Returns the servicefactory.
 	 */
@@ -47,6 +49,7 @@ public class ServiceDescription {
 	public void addProvide(ProvideDescription provide) {
 		provides.add(provide);
 	}
+
 	/**
 	 * @return Returns the provides.
 	 */

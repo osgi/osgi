@@ -34,10 +34,10 @@ import org.osgi.util.tracker.ServiceTracker;
  * @version $Revision$
  */
 public class Parser {
-	protected Main					main;
+	protected Main main;
 
 	/* ServiceTracker for parser */
-	private ServiceTracker			parserTracker;
+	private ServiceTracker parserTracker;
 
 	/**
 	 * Create and open a ServiceTracker which will track registered XML parsers
@@ -46,8 +46,7 @@ public class Parser {
 	 */
 	public Parser(Main main) {
 		this.main = main;
-		parserTracker = new ServiceTracker(main.context, ParserConstants.SAX_FACTORY_CLASS,
-				null);
+		parserTracker = new ServiceTracker(main.context, ParserConstants.SAX_FACTORY_CLASS, null);
 		parserTracker.open();
 	}
 
@@ -61,8 +60,7 @@ public class Parser {
 		ArrayList result = new ArrayList(length);
 
 		for (int i = 0; i < length; i++) {
-			ArrayList components = parseComponentDescription(bundle,
-					xml[i].getValue());
+			ArrayList components = parseComponentDescription(bundle, xml[i].getValue());
 			result.addAll(components);
 		}
 
@@ -78,14 +76,12 @@ public class Parser {
 	public ManifestElement[] parseManifestHeader(Bundle bundle) {
 
 		Dictionary headers = bundle.getHeaders();
-		String files = (String)headers.get(ComponentConstants.SERVICE_COMPONENT);
-		
+		String files = (String) headers.get(ComponentConstants.SERVICE_COMPONENT);
+
 		try {
-			return ManifestElement.parseHeader(
-					ComponentConstants.SERVICE_COMPONENT, files);
-		}
-		catch (BundleException e) {
-			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle,e);
+			return ManifestElement.parseHeader(ComponentConstants.SERVICE_COMPONENT, files);
+		} catch (BundleException e) {
+			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, e);
 			return new ManifestElement[0];
 		}
 	}
@@ -100,20 +96,18 @@ public class Parser {
 		try {
 			URL url = bundle.getEntry(xml);
 			if (url == null) {
-				throw new BundleException("resource not found: "+xml);
+				throw new BundleException("resource not found: " + xml);
 			}
 
 			InputStream is = url.openStream();
-			SAXParserFactory parserFactory = (SAXParserFactory) parserTracker
-					.getService();
+			SAXParserFactory parserFactory = (SAXParserFactory) parserTracker.getService();
 			parserFactory.setNamespaceAware(true);
 			SAXParser saxParser = parserFactory.newSAXParser();
 			saxParser.parse(is, new ParserHandler(bundle, result));
+		} catch (Exception e) {
+			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, e);
 		}
-		catch (Exception e) {
-			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle,e);
-		}
-		
+
 		return result;
 	}
 }

@@ -20,16 +20,14 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ImplementationElement extends DefaultHandler {
-	protected ParserHandler				root;
-	protected ComponentElement			parent;
-	protected ImplementationDescription	implementation;
+	protected ParserHandler root;
+	protected ComponentElement parent;
+	protected ImplementationDescription implementation;
 
-	public ImplementationElement(ParserHandler root, ComponentElement parent,
-			Attributes attributes) throws SAXException {
+	public ImplementationElement(ParserHandler root, ComponentElement parent, Attributes attributes) throws SAXException {
 		this.root = root;
 		this.parent = parent;
-		implementation = new ImplementationDescription(parent
-				.getComponentDescription());
+		implementation = new ImplementationDescription(parent.getComponentDescription());
 
 		int size = attributes.getLength();
 		for (int i = 0; i < size; i++) {
@@ -41,8 +39,7 @@ public class ImplementationElement extends DefaultHandler {
 				continue;
 			}
 
-			throw new SAXException(
-					"unrecognized implementation element attribute: " + key);
+			throw new SAXException("unrecognized implementation element attribute: " + key);
 		}
 
 		if (implementation.getClassname() == null) {
@@ -50,14 +47,11 @@ public class ImplementationElement extends DefaultHandler {
 		}
 	}
 
-	public void startElement(String uri, String localName, String qName,
-			Attributes attributes) throws SAXException {
-		throw new SAXException(
-				"implementation does not support nested elements");
+	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+		throw new SAXException("implementation does not support nested elements");
 	}
 
-	public void characters(char[] ch, int start, int length)
-			throws SAXException {
+	public void characters(char[] ch, int start, int length) throws SAXException {
 		int end = start + length;
 		for (int i = start; i < end; i++) {
 			if (!Character.isWhitespace(ch[i])) {
@@ -66,8 +60,7 @@ public class ImplementationElement extends DefaultHandler {
 		}
 	}
 
-	public void endElement(String uri, String localName, String qName)
-			throws SAXException {
+	public void endElement(String uri, String localName, String qName) throws SAXException {
 		ComponentDescription component = parent.getComponentDescription();
 		if (component.getImplementation() != null) {
 			throw new SAXException("more than one implementation element");

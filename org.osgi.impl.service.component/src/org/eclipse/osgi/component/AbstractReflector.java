@@ -31,25 +31,21 @@ public abstract class AbstractReflector {
 	 * @param args The arguments for the method call.
 	 * @return The return value of the method.
 	 */
-	protected Object invokeMethod(Object object, String methodName,
-			Class[] params, Object[] args) {
+	protected Object invokeMethod(Object object, String methodName, Class[] params, Object[] args) {
 		Class clazz;
 		if (object instanceof Class) {
 			clazz = (Class) object;
 			object = null;
-		}
-		else {
+		} else {
 			clazz = object.getClass();
 		}
 
 		Method method = getMethod(clazz, methodName, params);
 		try {
 			return method.invoke(object, args);
-		}
-		catch (IllegalAccessException e) {
+		} catch (IllegalAccessException e) {
 			reflectionException(e);
-		}
-		catch (InvocationTargetException e) {
+		} catch (InvocationTargetException e) {
 			reflectionException(e);
 		}
 
@@ -72,8 +68,7 @@ public abstract class AbstractReflector {
 				// enable us to access the method if not public
 				method.setAccessible(true);
 				return method;
-			}
-			catch (NoSuchMethodException e) {
+			} catch (NoSuchMethodException e) {
 				exception = e;
 				continue;
 			}
@@ -95,16 +90,14 @@ public abstract class AbstractReflector {
 		if (object instanceof Class) {
 			clazz = (Class) object;
 			object = null;
-		}
-		else {
+		} else {
 			clazz = object.getClass();
 		}
 
 		Field field = getField(clazz, fieldName);
 		try {
 			return field.get(object);
-		}
-		catch (IllegalAccessException e) {
+		} catch (IllegalAccessException e) {
 			reflectionException(e);
 		}
 
@@ -126,8 +119,7 @@ public abstract class AbstractReflector {
 				// enable us to access the field if not public
 				field.setAccessible(true);
 				return field;
-			}
-			catch (NoSuchFieldException e) {
+			} catch (NoSuchFieldException e) {
 				exception = e;
 				continue;
 			}

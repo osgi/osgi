@@ -13,235 +13,284 @@
  
 package org.eclipse.osgi.component.instance;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
-
+import java.util.*;
 import org.eclipse.osgi.component.Main;
-import org.eclipse.osgi.component.model.ComponentDescription;
-import org.eclipse.osgi.component.model.ComponentDescriptionProp;
+import org.eclipse.osgi.component.model.*;
 import org.eclipse.osgi.component.resolver.ComponentProperties;
 import org.eclipse.osgi.component.workqueue.WorkDispatcher;
 import org.eclipse.osgi.component.workqueue.WorkQueue;
 import org.eclipse.osgi.impl.service.component.ComponentFactoryImpl;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkEvent;
-import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.*;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.component.*;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentFactory;
 
-
 /**
- * @author Administrator
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * The InstanceProcess is resposible for building ServiceComponents and 
+ * disposing of ServiceComponents. This includes bind, unbind, activate, deactivate.
+ * 
  */
-public class InstanceProcess implements WorkDispatcher{
-	
-	/* set this to true to compile in debug messages */
-	static final boolean				DEBUG	= false;
-	
-	/** SCR bundle context */
-	protected BundleContext 			scrBundleContext;
-	
-	/** Main class */
-	protected Main 						main;
+public class InstanceProcess implements WorkDispatcher {
 
-	/** map CDP:serviceRegistrations [1:n] */
-	protected Hashtable 				registrations;
-	
+	/* set this to true to compile in debug messages */
+	static final boolean DEBUG = false;
+
+	static final String COMPONENT_FACTORY_CLASS = "org.osgi.service.component.ComponentFactory";
+
+	/**
+	 * Service Component instances need to be built.
+	 */
+	public static final int BUILT = 1;
+
+	/**
+	 * Service Component instances need to be disposed.
+	 */
+	public static final int DISPOSED = 2;
+
+	/** SCR bundle context */
+	protected BundleContext scrBundleContext;
+
+	/** Main class */
+	protected Main main;
+
+	/** map CDP:serviceRegistration [1:1] */
+	public Hashtable registrations;
+
 	/** map CDP:factory */
-	protected Hashtable					factories;
-	
-	/** Register Service class */
-	protected RegisterComponentService 			registerService;
-	
-	/** Register ServiceFactory class */
-	protected RegisterComponentServiceFactory 	registerServiceFactory;
-	
+	protected Hashtable factories;
+
+	/** map CD:instance */
+	protected Hashtable instances;
+
 	/** ConfigurationAdmin instance */
-	protected ConfigurationAdmin 		configurationAdmin;
+	protected ConfigurationAdmin configurationAdmin;
 
 	/** Properties for this Component from the Configuration Admin */
-	protected ComponentProperties 		componentProperties = null;
-	
+	protected ComponentProperties componentProperties = null;
+
 	/* Actually does the work of building and disposing of instances */
-	private BuildDispose 				buildDispose;
+	public BuildDispose buildDispose;
 
 	private WorkQueue workQueue;
-	
+
 	/** 
 	 * Handle Instance processing building and disposing.  
 	 * 
 	 * @param main - the Main class of the SCR
 	 */
-	public InstanceProcess(Main main){
-		
+	public InstanceProcess(Main main) {
+
 		this.main = main;
-		
+
 		//for now use Main's workqueue
 		workQueue = main.workQueue;
 
 		scrBundleContext = main.context;
-			
+
 		registrations = new Hashtable();
-		
+
 		factories = new Hashtable();
-				
+
+		instances = new Hashtable();
+
 		buildDispose = new BuildDispose(main, registrations);
-		
+
 		componentProperties = new ComponentProperties(main);
+
 	}
-	
+
 	/**
 	 * dispose cleanup the SCR is shutting down
 	 */
 	public void dispose() {
 
 		buildDispose.dispose();
-		
+
 		main = null;
 		registrations = null;
 		factories = null;
+		instances = null;
 		componentProperties = null;
 	}
-		
+
 	/**
 	 * Build the Service Component Instances, includes activating and binding
 	 * 
 	 * @param componentDescriptionProps - an ArrayList of all instances to build.
 	 */
-	
+
 	public void buildInstances(ArrayList componentDescriptionProps) {
-				
-		ArrayList serviceRegistrations = new ArrayList();
+
 		ComponentDescriptionProp componentDescriptionProp;
 		ComponentDescription componentDescription;
 		String factoryPid = null;
-				
+		Object obj = null;
+
+		//first create instance for each CDP
+		//The advance creation of the instance allows us to deal with conflict
+		//resolution i.e. provide an instance when locateService is called
+		//even if registerService has not been completed.
 		// loop through CD+P list of enabled
-		if(componentDescriptionProps != null){
+		if (componentDescriptionProps != null) {
 			Iterator it = componentDescriptionProps.iterator();
-			while(it.hasNext()){
-				componentDescriptionProp = (ComponentDescriptionProp)it.next();
+			while (it.hasNext()) {
+				componentDescriptionProp = (ComponentDescriptionProp) it.next();
+				componentDescription = componentDescriptionProp.getComponentDescription();
+				try {
+					obj = buildDispose.createInstance(componentDescription);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if (obj != null) {
+					instances.put(componentDescription, obj);
+				}
+
+			}
+		}
+
+		// loop through CD+P list of enabled
+		if (componentDescriptionProps != null) {
+			Iterator it = componentDescriptionProps.iterator();
+			while (it.hasNext()) {
+				componentDescriptionProp = (ComponentDescriptionProp) it.next();
 				componentDescription = componentDescriptionProp.getComponentDescription();
 				BundleContext bundleContext = main.framework.getBundleContext(componentDescription.getBundle());
-				
+
 				//if Service not provided - create instance immediately
-				if (componentDescription.getService()== null){
+				if (componentDescription.getService() == null) {
 					try {
-						buildDispose.build(bundleContext, componentDescriptionProp, null, null);
+						buildDispose.build(bundleContext, null, componentDescriptionProp, null, null);
 					} catch (Exception e) {
-						main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(),e);
+						main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(), e);
 					}
 				} else {
 
 					// ComponentFactory
-					if (componentDescription.getFactory() != null){
-						
+					if (componentDescription.getFactory() != null) {
+
 						//check if MSF
 						configurationAdmin = componentProperties.getConfigurationAdmin();
-						
+
 						try {
 							Configuration config = configurationAdmin.getConfiguration(componentDescription.getName());
 							if (config != null)
 								factoryPid = config.getFactoryPid();
 						} catch (Exception e) {
-							main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(),e);
+							main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(), e);
 						}
-						
+
 						//if MSF throw exception - can't be ComponentFactory add MSF
 						if (factoryPid != null) {
 							throw new org.osgi.service.component.ComponentException("ManagedServiceFactory and ConfigurationFactory are incompatible");
-						} else {
-							ComponentFactory factory = new ComponentFactoryImpl(bundleContext, componentDescriptionProp, buildDispose );
-							registerComponentFactory(bundleContext, componentDescriptionProp, factory);
-							factory.newInstance(null);
 						}
-				
-					// ServiceFactory
-					} else if (componentDescription.getService().isServicefactory()){
-						registerServiceFactory = new RegisterComponentServiceFactory(buildDispose);
-						serviceRegistrations = registerServiceFactory.registerServices(bundleContext, componentDescriptionProp);
-						registrations.put(componentDescriptionProp,serviceRegistrations);
-								
-					// No ServiceFactory
+						ComponentFactory factory = new ComponentFactoryImpl(bundleContext, componentDescriptionProp, this);
+						registerComponentFactory(bundleContext, componentDescriptionProp, factory);
+						factory.newInstance(null);
+
+						// ServiceFactory
+					} else if (componentDescription.getService().isServicefactory()) {
+						registrations.put(
+								componentDescriptionProp, 
+								RegisterComponentService.registerService(this,bundleContext, componentDescriptionProp,true)
+								);
+
+						// No ServiceFactory
 					} else {
-						registerService = new RegisterComponentService(buildDispose);
-						serviceRegistrations = registerService.registerServices(bundleContext, componentDescriptionProp);
-						registrations.put(componentDescriptionProp,serviceRegistrations);
+						registrations.put(
+								componentDescriptionProp,
+								RegisterComponentService.registerService(this,bundleContext, componentDescriptionProp, false)
+								);
 					}
 				}
 			}//end while(more componentDescriptionProps)
 		}//end if (componentDescriptionProps != null)
 	}
-	
-	
-	
+
 	/**
 	 * 
 	 * Dispose of Component Instances, includes unregistering services and removing instances.
 	 *
 	 * @param componentDescriptionProps - list of ComponentDescriptions plus Property objects to be disposed
 	 */
-	
+
 	public void disposeInstances(ArrayList componentDescriptionProps) {
-		
-		BundleContext bundleContext;
+
 		ComponentDescriptionProp componentDescriptionProp;
 		ComponentDescription componentDescription;
-		
 		//	loop through CD+P list to be disposed
-		if(componentDescriptionProps != null){
+		if (componentDescriptionProps != null) {
 			Iterator it = componentDescriptionProps.iterator();
-			while(it.hasNext()){
-				componentDescriptionProp = (ComponentDescriptionProp)it.next();
+			while (it.hasNext()) {
+				componentDescriptionProp = (ComponentDescriptionProp) it.next();
 				componentDescription = componentDescriptionProp.getComponentDescription();
-				
-				//get BundleContext of the target bundle
-				bundleContext = main.framework.getBundleContext(componentDescription.getBundle());
-				String factoryPid = null;
-		
+
 				//if no Services provided - dispose of instance immediately
-				if (componentDescription.getService()== null){
-					buildDispose.dispose(bundleContext, componentDescriptionProp);
-	
+				if (componentDescription.getService() == null) {
+					buildDispose.disposeComponent(componentDescriptionProp);
 				} else {
-			
 					// if ComponentFactory or if just Services
-					if (componentDescription.getFactory() != null){
-						buildDispose.dispose(bundleContext, componentDescriptionProp);
-						ServiceRegistration reg = (ServiceRegistration)factories.get(componentDescriptionProp);
+					if (componentDescription.getFactory() != null) {
+						buildDispose.disposeComponent(componentDescriptionProp);
+						ServiceRegistration reg = (ServiceRegistration) factories.get(componentDescriptionProp);
 						reg.unregister();
-						
 					}
-					
 					//unregister all services
-					ArrayList serviceRegistrations = (ArrayList)registrations.get(componentDescriptionProp);
-					Iterator iter = serviceRegistrations.iterator();
-					while(iter.hasNext()){
-						ServiceRegistration serviceRegistration = (ServiceRegistration)iter.next();
-						try{
-							serviceRegistration.unregister();
-						} catch (IllegalStateException e) {
-							//Service is already unregistered
-							//do nothing
-						}
+					ServiceRegistration serviceRegistration = (ServiceRegistration) registrations.get(componentDescriptionProp);
+					try {
+						serviceRegistration.unregister();
+					} catch (IllegalStateException e) {
+						//Service is already unregistered
+						//do nothing
 					}
+
 					//remove from service registrations list
 					registrations.remove(componentDescriptionProp);
-				
 				}
 			}
 		}
-		//TODO when dispose is complete, call back to resolver with list of disposed components
-		//disableComponents(CD+Ps);
-
+		//when dispose is complete, call back to resolver with list of disposed components
+		workQueue.enqueueWork(this, DISPOSED, componentDescriptionProps);
 	}
-	
+
+	public Object getInstanceWithInterface(String interfaceName) {
+		for (int i = 0; i < instances.size(); i++) {
+			Enumeration keys = instances.keys();
+			while (keys.hasMoreElements()) {
+				ComponentDescription cd = (ComponentDescription) keys.nextElement();
+				ProvideDescription[] provides = cd.getService().getProvides();
+				for (int j = 0; j < provides.length; j++) {
+					if (interfaceName.equals(provides[j].getInterfacename())) {
+						return (instances.get(cd));
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	public Object getInstance(ComponentDescription componentDescription) {
+		Object obj = instances.get(componentDescription);
+		if (obj != null)
+			instances.remove(componentDescription);
+		return obj;
+	}
+
+	/**Register Services
+	 * 
+	 * @param bundleContext
+	 * @param componentDescriptionProp
+	 * 
+	 */
+
+	public void registerServices(BundleContext bundleContext, ComponentDescriptionProp componentDescriptionProp) {
+		registrations.put(
+				componentDescriptionProp, 
+				RegisterComponentService.registerService(this,bundleContext, componentDescriptionProp,false)
+				);
+	}
+
 	/**
 	 * Register the Component Factory
 	 * 
@@ -249,15 +298,14 @@ public class InstanceProcess implements WorkDispatcher{
 	 * @param componentDescriptionProp
 	 * @param factory
 	 */
-	public void registerComponentFactory(BundleContext context, ComponentDescriptionProp componentDescriptionProp, ComponentFactory factory){
-		
+	public void registerComponentFactory(BundleContext context, ComponentDescriptionProp componentDescriptionProp, ComponentFactory factory) {
 		ComponentDescription componentDescription = componentDescriptionProp.getComponentDescription();
 		// if the factory attribute is set on the component element then register a component factory service
 		// for the Service Component on behalf of the Service Component.
 		Hashtable properties = new Hashtable(2);
 		properties.put(ComponentConstants.COMPONENT_NAME, componentDescription.getName());
 		properties.put(ComponentConstants.COMPONENT_FACTORY, componentDescription.getFactory());
-		ServiceRegistration serviceRegistration = context.registerService("org.osgi.service.component.ComponentFactory", factory ,properties );
+		ServiceRegistration serviceRegistration = context.registerService(COMPONENT_FACTORY_CLASS, factory, properties);
 		factories.put(componentDescriptionProp, serviceRegistration);
 	}
 
@@ -265,16 +313,75 @@ public class InstanceProcess implements WorkDispatcher{
 	 * @see org.eclipse.osgi.component.workqueue.WorkDispatcher#dispatchWork(int, java.lang.Object)
 	 */
 	public void dispatchWork(int workAction, Object workObject) {
-		ComponentDescriptionProp componentDescriptionProp = (ComponentDescriptionProp) workObject;
+		//ComponentDescriptionProp componentDescriptionProp = (ComponentDescriptionProp) workObject;
+		ArrayList componentDescriptionProps = (ArrayList) workObject;
 		switch (workAction) {
-//			case BUILD_FAILED :
-//				main.resolver.markFailedInstance(componentDescriptionProp);
-//				break;
-//			case DISPOSED :
-//				main.resolver.disposedComponents(componentDescriptionProps);
-//				break;
+			//			case BUILD_FAILED :
+			//				main.resolver.markFailedInstance(componentDescriptionProp);
+			//				break;
+			case DISPOSED :
+				main.resolver.disposedComponents(componentDescriptionProps);
+				break;
+			case BUILT :
+				main.resolver.builtComponents(componentDescriptionProps);
+				break;
+		}
+	}
+
+	public void dynamicBind(Hashtable serviceTable) {
+		Enumeration e = serviceTable.keys();
+		while (e.hasMoreElements()) {
+			ReferenceDescription rd = (ReferenceDescription) e.nextElement();
+			ComponentDescriptionProp cdp = (ComponentDescriptionProp) serviceTable.get(rd);
+			ArrayList instances = (ArrayList) buildDispose.instanceMap.get(cdp);
+			Iterator it = instances.iterator();
+			while (it.hasNext()) {
+				ComponentInstance compInstance = (ComponentInstance) it.next();
+				Object instance = compInstance.getInstance();
+				if (instance != null) {
+					try {
+						buildDispose.bindReference(rd, instance);
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
+			}
 		}
 	}
 	
-	
+	/**
+	 * Called by dispatcher ( Resolver) when work available on queue
+	 * 
+	 * @param serviceTable Map of ReferenceDescription:subtable
+	 * 			Subtable Maps cdp:service object
+	 *  
+	 */
+	public void dynamicUnBind(Hashtable serviceTable) {
+		//for each element in the table 
+		Enumeration e = serviceTable.keys();
+		while (e.hasMoreElements()) {
+			ReferenceDescription rd = (ReferenceDescription) e.nextElement();
+			Hashtable serviceSubTable =  (Hashtable) serviceTable.get(rd);
+			Enumeration sub = serviceSubTable.keys();
+			while (sub.hasMoreElements()) {
+				ComponentDescriptionProp cdp = (ComponentDescriptionProp) sub.nextElement();
+				Object serviceObject = serviceSubTable.get(cdp);
+				//get the list of instances created
+				ArrayList instances = (ArrayList) buildDispose.instanceMap.get(cdp);
+				Iterator it = instances.iterator();
+				while (it.hasNext()) {
+					ComponentInstance compInstance = (ComponentInstance) it.next();
+					Object instance = compInstance.getInstance();
+					if (instance != null) {
+						try {
+							buildDispose.unbindDynamicReference(rd, instance, serviceObject);
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+				}
+			}
+		}
+	}
+
 }

@@ -16,8 +16,6 @@ package org.eclipse.osgi.impl.service.component;
 import java.util.Dictionary;
 import org.osgi.service.component.*;
 
-
-
 /**
  * A ComponentInstance encapsulates an instance of a component.
  * ComponentInstances are created whenever an instance of a component is
@@ -29,43 +27,41 @@ public class ComponentInstanceImpl implements ComponentInstance {
 
 	Object instance;
 	Dictionary properties = null;
-	
+
 	/** ComponentInstanceImpl
 	 * 
 	 * @param Object instance
 	 * 
 	 */
-	public ComponentInstanceImpl(Object instance,Dictionary properties){
+	public ComponentInstanceImpl(Object instance, Dictionary properties) {
 		this.instance = instance;
 		this.properties = properties;
-		
-		
+
 	}
-	
+
 	/**
 	 * Dispose of this component instance. The instance will be deactivated. If
 	 * the instance has already been deactivated, this method does nothing.
 	 */
-	public void dispose(){
+	public void dispose() {
 		instance = null;
 		properties = null;
 	}
-	
-	
+
 	/**
 	 * Returns the component instance. The instance has been activated.
 	 * 
 	 * @return The component instance or <code>null</code> if the instance has
 	 *         been deactivated.
 	 */
-	public Object getInstance(){
+	public Object getInstance() {
 		return instance;
 	}
-	
+
 	/*
 	 * returns the instance properties
 	 */
-	protected Dictionary getProperties(){
+	protected Dictionary getProperties() {
 		return properties;
 	}
 }
