@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-Name: osgi
+Bundle-Description: OSGi Service Platform Release 3 Interfaces and Classes for use in compiling bundles.
+Bundle-Copyright: Copyright (c) The OSGi Alliance (2000, 2002). All Rights Reserved.
+Bundle-Vendor: OSGi
+Bundle-Version: 3.0
+Bundle-Category: osgi
+Bundle-DocUrl: http://www.osgi.org/
+$(EXPORT-PACKAGE)
+CVS-Header: $Header$
+$(PRIVATE-PACKAGE)
