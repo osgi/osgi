@@ -28,8 +28,8 @@ public class WireAdminProcessor implements ResourceProcessor {
 
 	public void complete(boolean commit) {
 		delete(commit ? toBeDeletedWires : createdWires);
-		toBeDeletedWires = new Vector();
-		createdWires = new Vector();
+		toBeDeletedWires.clear();
+		createdWires.clear();
 	}
 
 	public void process(String name, InputStream in) throws Exception {
