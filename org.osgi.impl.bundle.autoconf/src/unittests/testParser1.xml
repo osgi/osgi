@@ -6,9 +6,9 @@
 		<Icon resource="ic1" size="1234"/>
 	</OCD>
 	<Designate pid="foo" optional="true">
-		<Object type="bar">
-			<Attribute name="attr1" content="cont1"/>
-			<Attribute name="attr2" content="cont2"/>
+		<Object ocdref="bar">
+			<Attribute adref="attr1" content="cont1"/>
+			<Attribute adref="attr2" content="cont2"/>
 		</Object>
 	</Designate>
 </metatype:MetaData>

@@ -56,13 +56,13 @@ public class ParserTest extends TestCase {
 		assertEquals(true,d.optional);
 		assertEquals(1,d.objects.length);
 		MetaData.Object o = d.objects[0];
-		assertEquals("bar",o.type);
+		assertEquals("bar",o.ocdref);
 		assertEquals(2,o.attributes.length);
 		MetaData.Attribute a = o.attributes[0];
-		assertEquals("attr1",a.name);
+		assertEquals("attr1",a.adref);
 		assertEquals("cont1",a.content);
 		a = o.attributes[1];
-		assertEquals("attr2",a.name);
+		assertEquals("attr2",a.adref);
 		assertEquals("cont2",a.content);
 		assertEquals(1,md.ocds.length);
 		MetaData.OCD ocd = md.ocds[0];

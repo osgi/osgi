@@ -55,6 +55,7 @@ public class MetaData  {
 
     public Designate[] designates;
     public OCD[] ocds;
+    public String localization;
     
     public static class Designate {
     	public String pid;
@@ -62,15 +63,16 @@ public class MetaData  {
     	public String bundle;
     	public boolean optional;
     	public Object[] objects;
+		public boolean	merge;
     };
     
     public static class Object {
-    	public String type;
+    	public String ocdref;
     	public Attribute[] attributes;
     }
     
     public static class Attribute {
-    	public String name,content;
+    	public String adref,content;
     }
 
     public static class OCD {
@@ -154,6 +156,7 @@ public class MetaData  {
 					state = METADATA;
 					break;
 				case METADATA:
+					localization = attr.getValue("localization");
 					if ("OCD".equals(localName)) {
 						state = OCD;
 						currentOCD = new OCD();
@@ -170,6 +173,7 @@ public class MetaData  {
 						currentDesignate.factory = getBool(attr,"factory",false);
 						currentDesignate.bundle = attr.getValue("bundle");
 						currentDesignate.optional = getBool(attr,"optional",false);
+						currentDesignate.merge = getBool(attr,"merge",false);
 						objectsA.clear();
 						designateA.add(currentDesignate);
 					} else {
@@ -181,13 +185,13 @@ public class MetaData  {
 					currentObject = new Object();
 					attributesA.clear();
 					objectsA.add(currentObject);
-					currentObject.type = attr.getValue("type");
+					currentObject.ocdref = attr.getValue("ocdref");
 					break;
 				case OBJECT:
 					// attributes
 					state = ATTRIBUTE;
 					Attribute a = new Attribute();
-					a.name = attr.getValue("name");
+					a.adref = attr.getValue("adref");
 					a.content = attr.getValue("content");
 					attributesA.add(a);
 					break;
