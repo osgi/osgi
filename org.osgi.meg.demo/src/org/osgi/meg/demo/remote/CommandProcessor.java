@@ -83,9 +83,9 @@ public class CommandProcessor {
 			}
 			else if (cmd.equals("getchildnodenames") || cmd.equals("gc")) {
 				String[] names = session.getChildNodeNames(uri);
-				for (int i = 0; i < names.length; i++) {
-					ret = ret + names[i] + "/";
-				}
+                if(names != null)
+                    for (int i = 0; i < names.length; i++)
+                        ret = ret + names[i] + "/";
 			}
 			else if (cmd.equals("setnodetitle") || cmd.equals("st")) {
 				session.setNodeTitle(uri, args[2]);
