@@ -47,20 +47,20 @@ public class ClientAdaptor implements RemoteAlertSender {
 		return true;
 	}
 
-	public void sendAlert(String serverid, String sessionid, int code,
-			DmtAlertItem[] items) throws Exception {
-		String msg = "Code:" + code + "\r\n";
-		String s = ",\n";
-		if (items != null) {
-			for (int i = 0; i < items.length; i++) {
-				msg += "Item# " + i + ":" + "Source:" + items[i].getSource()
-						+ s + "Data:" + items[i].getData() + s + "Markup:"
-						+ items[i].getMark() + s + "Type:" + items[i].getType()
-						+ s + "Format:" + items[i].getFormat() + "\r\n";
-			}
-		}
-		this.message = msg;
-	}
+	public void sendAlert(String serverid, int code, DmtAlertItem[] items)
+            throws Exception {
+        String msg = "Code:" + code + "\r\n";
+        String s = ",\n";
+        if (items != null) {
+            for (int i = 0; i < items.length; i++) {
+                msg += "Item# " + i + ":" + "Source:" + items[i].getSource()
+                        + s + "Data:" + items[i].getData() + s + "Type:"
+                        + items[i].getType() + s + "Format:"
+                        + items[i].getFormat() + "\r\n";
+            }
+        }
+        this.message = msg;
+    }
 
 	private class CommandThread extends Thread {
 
