@@ -1,0 +1,15 @@
+<descriptor>
+  <application>
+    <class value = "com.nokia.osgi.megtest.megapplication.TestApplication"/>
+    <locale name = "en">
+      <name value = "MEG Test Application" />
+      <icon value = "/TestIcon.gif" />
+    </locale>
+    <locale name = "hu">
+      <name value = "MEG Teszt progi" />
+      <icon value = "/TestIcon.gif" />
+    </locale>
+    <version value = "0.1" />
+    <vendor  value = "Nokia" />
+  </application>
+</descriptor>
