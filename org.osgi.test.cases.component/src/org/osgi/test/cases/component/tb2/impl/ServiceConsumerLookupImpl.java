@@ -1,7 +1,5 @@
 /*
- * $Header:
- * /cvshome/build/org.osgi.test.cases.component/src/org/osgi/test/cases/component/tb2/impl/ServiceConsumerLookupImpl.java,
- * v 1.1 2005/01/28 14:57:53 i_karabashev Exp $
+ * $Header$
  * 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 

@@ -1,7 +1,5 @@
 /*
- * $Header:
- * /cvshome/build/org.osgi.test.cases.component/src/org/osgi/test/cases/component/tb1/TestService.java,
- * v 1.1 2005/01/28 16:53:17 i_karabashev Exp $
+ * $Header$
  * 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 

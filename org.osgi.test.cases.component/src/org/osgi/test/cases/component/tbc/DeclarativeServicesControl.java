@@ -1,7 +1,5 @@
 /*
- * $Header:
- * /cvshome/build/org.osgi.test.cases.component/src/org/osgi/test/cases/component/tbc/DeclarativeServicesControl.java,
- * v 1.1 2005/01/28 14:58:21 i_karabashev Exp $
+ * $Header$
  * 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
