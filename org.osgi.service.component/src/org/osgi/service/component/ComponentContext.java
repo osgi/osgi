@@ -62,7 +62,7 @@ import org.osgi.framework.BundleContext;
  * methods so that they do not appear as public methods on the component's
  * provided service object. The methods will be located by looking through the
  * component's implementation class hierarchy for the first declaration of the
- * method. If the method is declared protected or public, the method will
+ * method. If the method is declared protected or public, the method will be
  * called.
  * 
  * @version $Revision$
