@@ -20,6 +20,7 @@ package unittests;
 import org.osgi.framework.AdminPermission;
 import org.osgi.impl.service.policy.permadmin.PermissionAdminPlugin;
 import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -36,6 +37,7 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 	public DummyPermissionAdmin	permAdmin;
 	public PermissionAdminPlugin	plugin;
 	public static final PermissionInfo ADMINPERMISSION = new PermissionInfo(AdminPermission.class.getName(),"","");
+	private DmtSession	dmtSession;
 
 	public void setUp() throws Exception {
 		super.setUp();
@@ -47,23 +49,29 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 	public void tearDown() throws Exception {
 		permAdmin = null;
 		plugin = null;
+		dmtSession=null;
 		super.tearDown();
 	}
 
+	public void newSession() throws DmtException {
+		dmtSession = dmtFactory.getTree(null,ROOT);
+		assertNotNull(dmtSession);
+	}
+
 	public void testRegister() throws Exception {
-		DmtSession dmtSession = dmtFactory.getTree(null,ROOT);
+		newSession();
 		DmtMetaNode mn = dmtSession.getMetaNode(ROOT);
 	}
 	
 	public void testEmptyTree() throws Exception {
-		DmtSession dmtSession = dmtFactory.getTree(null,ROOT);
+		newSession();
 		String[] childNames = dmtSession.getChildNodeNames(ROOT);
 		assertEquals(0,childNames.length);
 	}
 
 	public void testEmptyDefault() throws Exception {
 		permAdmin.setDefaultPermissions(new PermissionInfo[] {});
-		DmtSession dmtSession = dmtFactory.getTree(null,ROOT);
+		newSession();
 		String[] childNames = dmtSession.getChildNodeNames(ROOT);
 		assertEquals(1,childNames.length);
 		assertEquals("Default",childNames[0]);
@@ -71,8 +79,17 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 
 	public void testSimpleDefault() throws Exception {
 		permAdmin.setDefaultPermissions(new PermissionInfo[] {ADMINPERMISSION});
-		DmtSession dmtSession = dmtFactory.getTree(null,ROOT);
+		newSession();
 		DmtData pinfo = dmtSession.getNodeValue(ROOT+"/Default/PermissionInfo");
 		assertEquals(ADMINPERMISSION.getEncoded()+"\n",pinfo.getString());
+	}
+	
+	public void testRenameDefault() throws Exception {
+		permAdmin.setDefaultPermissions(new PermissionInfo[] {ADMINPERMISSION});
+		newSession();
+		try {
+			dmtSession.renameNode(ROOT+"/Default","Foo");
+			fail();
+		} catch (DmtException e){}
 	}
 }

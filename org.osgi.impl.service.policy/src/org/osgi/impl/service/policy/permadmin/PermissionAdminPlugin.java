@@ -22,7 +22,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.SortedSet;
 import org.osgi.impl.service.policy.util.HashCalculator;
 import org.osgi.impl.service.policy.util.Splitter;
 import org.osgi.service.dmt.DmtData;
@@ -94,6 +93,7 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 	private HashCalculator	hashCalculator;
 	private DmtMetaNode	rootMetaNode = new RootMetaNode();
 	private DmtMetaNode	permissionInfoMetaNode = new PermissionInfoMetaNode();
+	private DmtMetaNode defaultMetaNode = new DefaultMetaNode();
 
 	
 	/**
@@ -139,8 +139,7 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 			return rootMetaNode = new RootMetaNode();
 		}
 		if (path.length==1) {
-			// TODO
-			throw new IllegalStateException("not implemented");
+			return defaultMetaNode;
 		}
 		if (path.length==2) {
 			if (path[1].equals(PERMISSIONINFO)) return permissionInfoMetaNode;
@@ -264,8 +263,7 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 	 * @see org.osgi.service.dmt.Dmt#renameNode(java.lang.String, java.lang.String)
 	 */
 	public void renameNode(String nodeUri, String newName) throws DmtException {
-		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
+		throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,"no renaming is allowed");
 	}
 
 	/**
