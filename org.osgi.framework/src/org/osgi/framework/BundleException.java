@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) OSGi Alliance (2000, 2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -33,8 +33,8 @@ package org.osgi.framework;
  * 
  * <p>
  * <code>BundleException</code> object is created by the Framework to denote an
- * exception condition in the lifecycle of a bundle. <code>BundleException</code>
- * s should not be created by bundle developers.
+ * exception condition in the lifecycle of a bundle. <code>BundleException</code>s
+ * should not be created by bundle developers.
  * 
  * <p>
  * This exception is updated to conform to the general purpose exception
@@ -76,7 +76,7 @@ public class BundleException extends Exception {
 	 * 
 	 * <p>
 	 * This method predates the general purpose exception chaining mechanism.
-	 * The {@link #getCause()}method is now the preferred means of obtaining
+	 * The {@link #getCause()} method is now the preferred means of obtaining
 	 * this information.
 	 * 
 	 * @return The nested exception; <code>null</code> if there is no nested
