@@ -111,6 +111,15 @@ class CUData {
   }
   
   /**
+   * Checks if the corresponding {@link ControlUnit} has a parent.
+   * 
+   * @return true if the control unit has parent, false - otherwise
+   */
+  final boolean hasParent() {
+    return parentType != null && parentID != null;
+  }
+  
+  /**
    * Checks if the two given <code>Strings</code> are both <code>null</null> 
    * or equal.
    * 

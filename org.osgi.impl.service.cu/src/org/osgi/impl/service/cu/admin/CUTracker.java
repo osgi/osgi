@@ -76,6 +76,8 @@ class CUTracker extends ManagedObjectsTracker {
     
     String cuID = null;
     boolean isFirstUnit = false;
+    String parentType = null;
+    String parentID = null;
     synchronized (providers) {
       Object curProvider = providers.get(type);
       
@@ -107,8 +109,9 @@ class CUTracker extends ManagedObjectsTracker {
       
       isFirstUnit = !cuProvider.hasUnits();
       
-      cuProvider.addControlUnit(cuID, cu, 
-        getParentType(reference), getParentID(reference), typeVersion);      
+      parentType = getParentType(reference);
+      parentID = getParentID(reference);
+      cuProvider.addControlUnit(cuID, cu, parentType, parentID, typeVersion);      
     } //synchronized
             
     if (isRegistering) {
@@ -116,6 +119,11 @@ class CUTracker extends ManagedObjectsTracker {
           
       if (isFirstUnit) {
         cuAdminCallback.controlUnitEvent( ControlUnitAdminListener.CONTROL_UNIT_TYPE_ADDED, type, null);
+      }
+      
+      if (parentType != null && parentID != null) {
+        cuAdminCallback.hierarchyChanged(HierarchyListener.ATTACHED, type, cuID, 
+          parentType, parentID);
       }
     }
     
@@ -166,6 +174,7 @@ class CUTracker extends ManagedObjectsTracker {
   protected void onReleasingManagedObject(ServiceReference reference, String type, boolean isUnregistering) {
     String cuID = null;
     boolean isLastUnit = false;
+    CUData cuData = null;
     synchronized (providers) {
       Object curProvider = providers.get(type);
       
@@ -178,7 +187,7 @@ class CUTracker extends ManagedObjectsTracker {
       bc.ungetService(reference);
       
       cuID = getID(reference);
-      cuProvider.removeControlUnit(cuID);
+      cuData = cuProvider.removeControlUnit(cuID);
       
       isLastUnit = !cuProvider.hasUnits();
       if (isLastUnit) {
@@ -191,6 +200,11 @@ class CUTracker extends ManagedObjectsTracker {
         
       if (isLastUnit) {
         cuAdminCallback.controlUnitEvent(ControlUnitAdminListener.CONTROL_UNIT_TYPE_REMOVED, type, null);
+      }
+      
+      if (cuData.hasParent()) {
+        cuAdminCallback.hierarchyChanged(HierarchyListener.DETACHED, type, cuID, 
+          cuData.getParentType(), cuData.getParentID());
       }
     }      
   }

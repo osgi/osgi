@@ -100,13 +100,16 @@ class CUProvider implements Provider {
    * framework.
    * 
    * @param cuID id of the control unit to be removed
+   * @return data of the removed control unit
    */
-  void removeControlUnit(String cuID) {
+  CUData removeControlUnit(String cuID) {
     CUData cuData = (CUData)unitsTable.remove(cuID);
     
     ControlUnit cu = cuData.getControlUnit();
     
     setControlUnitCallback(cu, null);
+    
+    return cuData;
   }
   
   /**
