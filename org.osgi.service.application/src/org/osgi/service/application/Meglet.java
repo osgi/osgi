@@ -72,6 +72,22 @@ public abstract class Meglet implements EventHandler {
     st.start();
 	}
 
+  protected final void requestSuspend() {
+    class SuspenderThread extends Thread {
+      public void run() {
+        
+        try {
+          appHandle.suspendApplication();
+        }catch( Exception e ) {
+          e.printStackTrace();
+        }          
+      }
+    };
+    
+    SuspenderThread st = new SuspenderThread();
+    st.start();
+  }
+
 	protected final EventAdmin getEventAdmin() {
 		if( eventAdmin != null )
 			return eventAdmin;
