@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import org.osgi.service.metatype.AttributeDefinition;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -357,8 +356,7 @@ public class MetaData  {
 		
 	}
 	
-    public MetaData(SAXParserFactory spf,InputSource is) throws ParserConfigurationException, IOException, SAXException {
-		SAXParser sp = spf.newSAXParser();
+    public MetaData(SAXParser sp,InputSource is) throws ParserConfigurationException, IOException, SAXException {
 		sp.setProperty(JAXP_SCHEMA_LANGUAGE,W3C_XML_SCHEMA);
 		sp.setProperty(JAXP_SCHEMA_SOURCE,MetaData.class.getResource("autoconf.xsd").getFile());
 		XMLReader xr = sp.getXMLReader();

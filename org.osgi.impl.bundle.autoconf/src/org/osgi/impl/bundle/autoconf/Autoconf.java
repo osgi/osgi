@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) OSGi Alliance (2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -24,65 +24,53 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.impl.bundle.autoconf;
 
 import java.io.InputStream;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 
-/**
- *
- * TODO Add Javadoc comment for this type.
- * 
- * @version $Revision$
- */
-public class Autoconf implements ResourceProcessor {
+public class Autoconf implements BundleActivator,ResourceProcessor {
+	BundleContext context;
+	SAXParser saxp;
 
-	/**
-	 * @param rp
-	 * @param operation
-	 * @see org.osgi.service.deploymentadmin.ResourceProcessor#begin(org.osgi.service.deploymentadmin.DeploymentPackage, int)
-	 */
+	public void start(BundleContext context) throws Exception {
+		this.context = context;
+		ServiceReference[] refs = context.getServiceReferences(SAXParserFactory.class.getName(),
+				"(&(parser.namespaceAware=true)(parser.validating=true))");
+		if (refs==null) { throw new Exception("Cannot get a validating parser"); }
+		saxp = (SAXParser) context.getService(refs[0]);
+		context.registerService(ResourceProcessor.class.getName(),this,null);
+	}
+
+	public void stop(BundleContext context) throws Exception {
+	}
+
 	public void begin(DeploymentPackage rp, int operation) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	/**
-	 * @param commit
-	 * @see org.osgi.service.deploymentadmin.ResourceProcessor#complete(boolean)
-	 */
 	public void complete(boolean commit) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	/**
-	 * @param name
-	 * @param stream
-	 * @throws Exception
-	 * @see org.osgi.service.deploymentadmin.ResourceProcessor#process(java.lang.String, java.io.InputStream)
-	 */
 	public void process(String name, InputStream stream) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
-	/**
-	 * @param name
-	 * @throws Exception
-	 * @see org.osgi.service.deploymentadmin.ResourceProcessor#dropped(java.lang.String)
-	 */
 	public void dropped(String name) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
-	/**
-	 * 
-	 * @see org.osgi.service.deploymentadmin.ResourceProcessor#dropped()
-	 */
 	public void dropped() {
 		// TODO Auto-generated method stub
 		

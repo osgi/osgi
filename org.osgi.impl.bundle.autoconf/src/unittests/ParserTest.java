@@ -49,7 +49,7 @@ public class ParserTest extends TestCase {
 		SAXParserFactory spf = SAXParserFactory.newInstance();
 		spf.setNamespaceAware(true);
 		spf.setValidating(true);
-		MetaData md = new MetaData(spf,getInputSource("testParser1.xml"));
+		MetaData md = new MetaData(spf.newSAXParser(),getInputSource("testParser1.xml"));
 		assertEquals(1,md.designates.length);
 		MetaData.Designate d = md.designates[0];
 		assertEquals("foo",d.pid);
