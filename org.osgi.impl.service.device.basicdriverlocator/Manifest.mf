@@ -11,8 +11,9 @@ Import-Package: org.osgi.framework;specification-version=1.1,
  		org.osgi.service.log;specification-version=1.1,
  		org.osgi.util.tracker;specification-version=1.1,
  		org.osgi.service.device; specification-version=1.1
-Import-Service: org.osgi.service.log.LogService
-Export-Service: org.osgi.service.device.DriverLocator
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
 
 
 
