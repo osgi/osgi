@@ -72,6 +72,19 @@ public class MEGContainerImpl implements MEGContainer, BundleListener,
 		for (int i = 0; i != bundleIDs.size(); i++)
 			registerBundle(Long.parseLong((String) bundleIDs.get(i)), false);
 		bc.addBundleListener(this);
+		Bundle [] bundles = bc.getBundles();
+		
+		// TODO: pkr: Added this code so that bundles that were installed
+		// while we were gone are also recognized. Note that we 
+		// still do not handle update right. Update might not be
+		// an issue if we never update, but always install a new
+		// versions ...
+		for ( int i=0; i<bundles.length; i++ ) {
+			String id = bundles[i].getBundleId()+"";
+			if ( ! bundleIDs.contains(id) && bundles[i].getBundleId()!=0) {
+				checkAndRegister(bundles[i]);
+			}
+		}
 	}
 
 	public ApplicationDescriptor[] installApplication(InputStream inputStream)
@@ -151,6 +164,7 @@ public class MEGContainerImpl implements MEGContainer, BundleListener,
 				appContext.getLaunchArgs());
 		String megclass = ((MEGApplicationDescriptor) (appHandle
 				.getAppDescriptor())).getStartClass();
+
 		Class applicationClass = Class.forName(megclass);
 		Constructor constructor = applicationClass
 				.getConstructor(new Class[] {MEGApplicationContext.class});
@@ -160,7 +174,7 @@ public class MEGContainerImpl implements MEGContainer, BundleListener,
 				&& desc.eventSubscribes[i].eventTopic != null) {
 			for (int j = 0; j != desc.eventSubscribes[i].eventTopic.length; j++)
 				if (desc.eventSubscribes[i].eventAction[j] == EventSubscribe.LISTENER) {
-					/* TODO TODO TODO TODO TODO */
+					/* TODO  */
 					Hashtable props = new Hashtable();
 					props.put("topic", desc.eventSubscribes[i].eventTopic[j]);
 					bc.registerService(ChannelListener.class.getName(), app,
@@ -284,9 +298,29 @@ public class MEGContainerImpl implements MEGContainer, BundleListener,
 					registerApplicationDescriptors(bundleID);
 					break;
 			}
+		} else {
+			// TODO: Spec deviation
+			// Added the following lines to automatically detect
+			// application bundles. It is my understanding that we
+			// should discover newly installed bundles.
+			if ( event.getType() == BundleEvent.INSTALLED )
+				checkAndRegister( event.getBundle() );
 		}
 	}
 
+	
+	void checkAndRegister(Bundle b) {
+		try {
+			URL url = b.getResource("META-INF/applications.xml");
+			if ( url != null )
+				installApplication(b.getBundleId());
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	private Vector loadVector(String fileName) {
 		Vector resultVector = new Vector();
 		try {
@@ -337,7 +371,17 @@ public class MEGContainerImpl implements MEGContainer, BundleListener,
 			URL url = bc.getBundle(bundleID).getResource(
 					"META-INF/applications.xml");
 			InputStream in = url.openStream();
+			
+			//pkr: added null check
+			if ( in == null )
+				return null;
+			
 			String xml = "";
+			
+			// TODO pkr: This is a very invalid use of available!!
+			// as well as strange not to parse the stream
+			// directly? i.e. applicationXML.parseReader( new InputStreamReader(in));
+			
 			while (in.available() > 0) {
 				byte[] b = new byte[in.available()];
 				in.read(b);
@@ -505,7 +549,7 @@ public class MEGContainerImpl implements MEGContainer, BundleListener,
 									.get(m);
 						eventVector.add(subscribe);
 						appVector.add(new MEGApplicationDescriptor(bc, props,
-								names, icons, startClass));
+								names, icons, startClass, bc.getBundle(bundleID)));
 						dependencyVector.add(deps);
 					}
 				}
