@@ -363,7 +363,7 @@ public final class PackagePermission extends BasicPermission
     }
 
     /**
-     * WriteObject is called to save the state of the <tt>ServicePermission</tt>
+     * WriteObject is called to save the state of this permission
      * object to a stream. The actions are serialized, and the superclass
      * takes care of the name.
      */
@@ -379,7 +379,7 @@ public final class PackagePermission extends BasicPermission
     }
 
     /**
-     * readObject is called to restore the state of the ServicePermission from
+     * readObject is called to restore the state of this permission from
      * a stream.
      */
     private synchronized void readObject(java.io.ObjectInputStream s)
