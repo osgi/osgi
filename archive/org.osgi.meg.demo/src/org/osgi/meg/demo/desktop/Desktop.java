@@ -40,7 +40,7 @@ public class Desktop extends javax.swing.JFrame implements ActionListener {
 	private static final String	SCHEDULEEVENT	= "Schedule Event";
 	private static final String	SCHEDULEDATE	= "Schedule Date";
 	// non swing elements
-	private Activator	controller;
+	private Activator			controller;
 	private Model				model;
 	private Hashtable			instApps;
 	private Hashtable			runApps;
@@ -63,14 +63,9 @@ public class Desktop extends javax.swing.JFrame implements ActionListener {
 	private JLabel				jLabel1;
 	private ButtonGroup			runAppGroup;
 	// icons for the buttons representing installed and running applications
-	private ImageIcon			iconSuspended;						// suspended
-																	   // applications
-	private ImageIcon			iconRunning;						// running
-																	 // applications
-	private ImageIcon			iconNoIcon;						// installed
-																	// applications
-																	// have no
-																	// icon
+	private ImageIcon			iconSuspended;						// suspended applications
+	private ImageIcon			iconRunning;						// running applications
+	private ImageIcon			iconNoIcon;						// installed applications have no icon
 
 	public Desktop(Activator controller) {
 		super();
@@ -90,9 +85,9 @@ public class Desktop extends javax.swing.JFrame implements ActionListener {
 	void initGUI() {
 		try {
 			iconSuspended = new ImageIcon(getClass().getResource(
-					"suspended.gif"));
-			iconRunning = new ImageIcon(getClass().getResource("running.gif"));
-			iconNoIcon = new ImageIcon(getClass().getResource("noicon.gif"));
+					"/suspended.gif"));
+			iconRunning = new ImageIcon(getClass().getResource("/running.gif"));
+			iconNoIcon = new ImageIcon(getClass().getResource("/noicon.gif"));
 			GridBagLayout flayout = new GridBagLayout();
 			this.setSize(800, 500);
 			this.getContentPane().setLayout(flayout);
@@ -186,7 +181,7 @@ public class Desktop extends javax.swing.JFrame implements ActionListener {
 					jButtonResume.setActionCommand(RESUME);
 				}
 				jPanelLeftApps = new JPanel();
-				GridLayout jPanelLeftAppsLayout = new GridLayout(10, 1);
+				GridLayout jPanelLeftAppsLayout = new GridLayout(8, 1);
 				jPanelLeftAppsLayout.setRows(10);
 				this.getContentPane().add(
 						jPanelLeftApps,
@@ -252,30 +247,47 @@ public class Desktop extends javax.swing.JFrame implements ActionListener {
 		}
 	}
 
-	public void addInstApp(ApplicationDescriptor descr, String AppName,
+	public void addInstApp(ApplicationDescriptor descr, String appName,
 			byte[] imageData) {
-		JToggleButton button = new JToggleButton(AppName + " ("
-				+ descr.getContainerID() + ")");
+		//JToggleButton button = new JToggleButton(appName + " (" + 
+		//    descr.getContainerID() + ")");
+		ImageIcon icon = null;
 		if (null == imageData)
-			button.setIcon(iconNoIcon);
+			icon = iconNoIcon;
 		else {
-			ImageIcon icon = new ImageIcon(imageData);
-			button.setIcon(icon);
+			icon = new ImageIcon(imageData);
 		}
-		String toolTipText = "category: " + descr.getCategory() + " \n"
-				+ "container id: " + descr.getContainerID() + " \n"
-				+ "unique id: " + descr.getUniqueID() + " \n" + "version: "
-				+ descr.getVersion();
-		button.setToolTipText(toolTipText);
+		//button.setIcon(icon);
+		//String toolTipText = "category: " + descr.getCategory() + " \n" +
+		//                     "container id: " + descr.getContainerID() + " \n" +
+		//                     "unique id: " + descr.getUniqueID() + " \n" +
+		//                     "version: " + descr.getVersion();
+		//button.setToolTipText(toolTipText);
+		//instAppGroup.add(button);
+		//jPanelLeftApps.add(button);
+		/*----------------------------------------------------*/
+		AppPanel appPanel = new AppPanel(appName, icon);
+		JToggleButton button = appPanel.getButtonApp();
 		instAppGroup.add(button);
-		jPanelLeftApps.add(button);
+		jPanelLeftApps.add(appPanel);
+		instApps.put(descr, appPanel);
+		/*----------------------------------------------------*/
 		jPanelLeftApps.validate();
-		instApps.put(descr, button);
+		//instApps.put(descr, button);
+	}
+
+	void refreshInstApps() {
+		for (Enumeration en = instApps.keys(); en.hasMoreElements();) {
+			ApplicationDescriptor key = (ApplicationDescriptor) en
+					.nextElement();
+			AppPanel appPanel = (AppPanel) instApps.get(key);
+			appPanel.refreshSchedule();
+		}
 	}
 
 	public void removeInstApp(ApplicationDescriptor descr) {
-		JToggleButton button = (JToggleButton) instApps.get(descr);
-		jPanelLeftApps.remove(button);
+		AppPanel appPanel = (AppPanel) instApps.get(descr);
+		jPanelLeftApps.remove(appPanel);
 		jPanelLeftApps.validate();
 		jPanelLeftApps.repaint();
 		instApps.remove(descr);
@@ -306,8 +318,8 @@ public class Desktop extends javax.swing.JFrame implements ActionListener {
 		for (Enumeration en = instApps.keys(); en.hasMoreElements();) {
 			ApplicationDescriptor key = (ApplicationDescriptor) en
 					.nextElement();
-			JToggleButton button = (JToggleButton) instApps.get(key);
-			if (button.isSelected())
+			AppPanel appPanel = (AppPanel) instApps.get(key);
+			if (appPanel.getButtonApp().isSelected())
 				return key;
 		}
 		return null;
@@ -394,6 +406,7 @@ public class Desktop extends javax.swing.JFrame implements ActionListener {
 				if (null == dbd.getDate())
 					return;
 				controller.scheduleOnDate(dbd.getDate(), descr);
+				((AppPanel) instApps.get(descr)).addScheduleDate(dbd.getDate());
 				return;
 			}
 		}
