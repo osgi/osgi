@@ -19,7 +19,6 @@ package unittests;
 
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.TreeSet;
 import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
@@ -32,12 +31,10 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  * 
  * @version $Revision$
  */
-public class DummyConditionalPermissionAdmin implements
-		ConditionalPermissionAdmin {
-
-	private Set PIs = new TreeSet();
-	
-	private class PI implements ConditionalPermissionInfo {
+public class DummyConditionalPermissionAdmin extends TreeSet implements
+		ConditionalPermissionAdmin
+{
+	public class PI implements ConditionalPermissionInfo, Comparable {
 		ConditionInfo[] conditionInfo;
 		PermissionInfo[] permissionInfo;
 
@@ -46,7 +43,7 @@ public class DummyConditionalPermissionAdmin implements
 			this.permissionInfo = permissionInfo;
 		}
 		public void delete() {
-			PIs.remove(this);
+			remove(this);
 		}
 		public ConditionInfo[] getConditionInfos() {
 			return conditionInfo;
@@ -54,17 +51,34 @@ public class DummyConditionalPermissionAdmin implements
 		public PermissionInfo[] getPermissionInfos() {
 			return permissionInfo;
 		}
+		public int compareTo(Object o) {
+			PI other = (PI) o;
+			return toString().compareTo(other.toString());
+		}
+		
+		public String toString() {
+			StringBuffer sb = new StringBuffer();
+			for(int i=0;i<conditionInfo.length;i++) {
+				sb.append(conditionInfo[i].getEncoded());
+				sb.append('\n');
+			}
+			for(int i=0;i<permissionInfo.length;i++) {
+				sb.append(permissionInfo[i].getEncoded());
+				sb.append('\n');
+			}
+			return sb.toString();
+		}
 	}
 	
 	public ConditionalPermissionInfo addCollection(ConditionInfo[] conds,
 			PermissionInfo[] perms) {
 		PI pi = new PI(conds,perms);
-		PIs.add(pi);
+		add(pi);
 		return pi;
 	}
 
 	public Enumeration getCollections() {
-		final Iterator iter = PIs.iterator();
+		final Iterator iter = iterator();
 		
 		return new Enumeration() {
 			public boolean hasMoreElements() {
@@ -75,4 +89,5 @@ public class DummyConditionalPermissionAdmin implements
 				return iter.next();
 			} };
 	}
+
 }
