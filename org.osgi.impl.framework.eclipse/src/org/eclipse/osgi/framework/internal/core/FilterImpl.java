@@ -123,6 +123,8 @@ import org.osgi.framework.InvalidSyntaxException;
  */
 
 public class FilterImpl implements Filter /* since Framework 1.1 */{
+	/* public methods in org.osgi.framework.Filter */
+
 	/**
 	 * Constructs a {@link FilterImpl} object. This filter object may be used
 	 * to match a {@link ServiceReferenceImpl} or a Dictionary.
@@ -169,7 +171,7 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 
 		return match0(dictionary);
 	}
-	
+
 	/**
 	 * Filter with case sensitivity using a <tt>Dictionary</tt> object. The
 	 * Filter is executed using the <tt>Dictionary</tt> object's keys and
@@ -566,12 +568,8 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 		if (value1 instanceof Comparable) {
 			return compare_Comparable(operation, (Comparable) value1, value2);
 		}
-
-		if (Debug.DEBUG && Debug.DEBUG_FILTER) {
-			Debug.println("Type not supported"); //$NON-NLS-1$
-		}
-
-		return false;
+		
+		return compare_Unknown(operation, value1, value2);	// RFC 59
 	}
 
 	protected boolean compare_Vector(int operation, Vector vector, Object value2) {
@@ -1162,12 +1160,14 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 
 		return false;
 	}
+	
+	protected static final Class[] constructorType = new Class [] {String.class};
 
 	protected boolean compare_Comparable(int operation, Comparable value1, Object value2) {
 		Constructor constructor;
 
 		try {
-			constructor = value1.getClass().getConstructor(new Class[] {value2.getClass()});
+			constructor = value1.getClass().getConstructor(constructorType);
 		} 
 		catch (NoSuchMethodException e) {
 			return false;
@@ -1223,6 +1223,72 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 				}
 		}
 
+		return false;
+	}
+
+	protected boolean compare_Unknown(int operation, Object value1, Object value2) { //RFC 59
+		Constructor constructor;
+	
+		try {
+			constructor = value1.getClass().getConstructor(constructorType);
+		} 
+		catch (NoSuchMethodException e) {
+			if (Debug.DEBUG && Debug.DEBUG_FILTER) {
+				Debug.println("Type not supported"); //$NON-NLS-1$
+			}
+			return false;
+		}
+		try {
+			value2 = constructor.newInstance(new Object[] {((String) value2).trim()});
+		}
+		catch (IllegalAccessException e) {
+			return false;
+		}
+		catch (InvocationTargetException e) {
+			return false;
+		}
+		catch (InstantiationException e) {
+			return false;
+		}
+	
+		switch (operation) {
+			case SUBSTRING :
+				{
+					if (Debug.DEBUG && Debug.DEBUG_FILTER) {
+						Debug.println("SUBSTRING(" + value1 + "," + value2 + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					}
+					return false;
+				}
+			case EQUAL :
+				{
+					if (Debug.DEBUG && Debug.DEBUG_FILTER) {
+						Debug.println("EQUAL(" + value1 + "," + value2 + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					}
+					return value1.equals(value2);
+				}
+			case APPROX :
+				{
+					if (Debug.DEBUG && Debug.DEBUG_FILTER) {
+						Debug.println("APPROX(" + value1 + "," + value2 + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					}
+					return value1.equals(value2);
+				}
+			case GREATER :
+				{
+					if (Debug.DEBUG && Debug.DEBUG_FILTER) {
+						Debug.println("GREATER(" + value1 + "," + value2 + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					}
+					return value1.equals(value2);
+				}
+			case LESS :
+				{
+					if (Debug.DEBUG && Debug.DEBUG_FILTER) {
+						Debug.println("LESS(" + value1 + "," + value2 + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					}
+					return value1.equals(value2);
+				}
+		}
+	
 		return false;
 	}
 
