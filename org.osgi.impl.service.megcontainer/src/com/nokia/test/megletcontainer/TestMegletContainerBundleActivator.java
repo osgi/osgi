@@ -310,9 +310,11 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
       megBundle = bc.installBundle( resourceURL.toString(), resourceURL.openStream() );
       megBundle.start();
 
-      try {
-        Thread.sleep( 500 );
-      }catch( InterruptedException e ) {}
+      do{        
+        try {        
+          Thread.sleep( 500 );
+        }catch( InterruptedException e ) {}
+      }while( megBundle.getState() != Bundle.ACTIVE );
 
       installedBundleID = megBundle.getBundleId();
 
@@ -627,7 +629,7 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
   {
     try{
       appHandle.suspendApplication();
-      if( !checkResultFile( "SUSPEND" ) )
+      if( !checkResultFile( "SUSPEND:StorageTestString" ) )
         throw new Exception( "Result of the suspend is not SUSPEND!" );
 
       String appName = (String)appHandle.getAppDescriptor().getProperties("").get( ApplicationDescriptor.APPLICATION_NAME );
@@ -651,8 +653,8 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
   {
     try{
       appHandle.resumeApplication();
-      if( !checkResultFile( "RESUME" ) )
-        throw new Exception( "Result of the resume is not RESUME!" );
+      if( !checkResultFile( "RESUME:StorageTestString" ) )
+        throw new Exception( "Result of the resume is not RESUME:StorageTestString!" );
 
       String appName = (String)appHandle.getAppDescriptor().getProperties("").get( ApplicationDescriptor.APPLICATION_NAME );
 

@@ -109,9 +109,13 @@ public class MegletContainer implements BundleListener,
 		checkAutoStart( bundleID, true );
 		return appDescs;
 	}
-
-	public Meglet createMegletInstance( MegletDescriptor appDesc ) throws Exception {
-		if( !checkSingletonity( appDesc ) )
+    
+  public Meglet createMegletInstance( MegletDescriptor appDesc ) throws Exception {
+    return createMegletInstance( appDesc, false );   
+  }
+	
+  public Meglet createMegletInstance( MegletDescriptor appDesc, boolean resume ) throws Exception {
+		if( !checkSingletonity( appDesc, resume ) )
 			throw new Exception("Singleton Exception!");
 
 		MEGBundleDescriptor desc = getBundleDescriptor(
@@ -198,7 +202,7 @@ public class MegletContainer implements BundleListener,
 		}
 	}
 
-	private boolean checkSingletonity( ApplicationDescriptor appDesc ) {
+	private boolean checkSingletonity( ApplicationDescriptor appDesc, boolean resume ) {
 		if( !((MegletDescriptor)appDesc).isSingleton() )
 			return true;
 
@@ -206,7 +210,17 @@ public class MegletContainer implements BundleListener,
 			ServiceReference []appList =
 					bc.getServiceReferences( "org.osgi.service.application.ApplicationHandle",
 									"(" + Constants.SERVICE_PID + "="+ appDesc.getApplicationPID() + ")" );
-			return appList == null || appList.length == 0;
+			if( appList == null || appList.length == 0 )
+        return true;
+      if( !resume )
+        return false;
+      
+      ApplicationHandle appHandle = (ApplicationHandle)bc.getService( appList[ 0 ] );      
+      boolean result = appHandle.getAppStatus() == ApplicationHandle.SUSPENDED ||
+                       appHandle.getAppStatus() == ApplicationHandle.RESUMING;      
+      bc.ungetService( appList[ 0 ] );
+      
+      return result;
 		}
 		catch (Exception e) {
 			log(bc, LogService.LOG_ERROR,
@@ -217,7 +231,7 @@ public class MegletContainer implements BundleListener,
 
 	public boolean isLaunchable( ApplicationDescriptor appDesc ) {
 		try {
-			if( !checkSingletonity( appDesc ) )
+			if( !checkSingletonity( appDesc, false ) )
 				return false;
 			if( appDesc.isLocked() )
 				return false;
