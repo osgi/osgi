@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.osgi.org/xmlns/scr/v1.0.0" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
+
+	<element name="component" type="scr:componentType"></element>
+
+	<complexType name="componentType">
+		<sequence>
+			<element name="implementation" minOccurs="1" maxOccurs="1" type="scr:implementationType"></element>
+			<element name="property" minOccurs="0" maxOccurs="unbounded" type="scr:propertyType"></element>
+			<element name="service" minOccurs="0" maxOccurs="1" type="scr:serviceType"></element>
+			<element name="reference" minOccurs="0" maxOccurs="unbounded" type="scr:referenceType"></element>
+		</sequence>
+		<attribute name="autoenable" type="boolean" default="true" use="optional"></attribute>
+		<attribute name="name" type="string" use="required"></attribute>
+		<attribute name="properties" type="string" use="optional"></attribute>
+	</complexType>
+
+	<complexType name="implementationType" >
+		<attribute name="class" type="string" use="required"></attribute>
+	</complexType>
+
+	<complexType name="propertyType">
+		<attribute name="name" type="string" use="required"></attribute>
+		<attribute name="value" type="string" use="required"></attribute>
+		<attribute name="type" use="optional" default="String" type="scr:eightJavaTypes"></attribute>
+	</complexType>
+
+	<complexType name="serviceType">
+		<sequence>
+			<element name="provide" minOccurs="1" maxOccurs="unbounded" type="scr:provideType"></element>
+		</sequence>
+		<attribute name="factory" type="boolean" default="false" use="optional"></attribute>
+	</complexType>
+
+	<complexType name="referenceType">
+		<attribute name="name" type="NMTOKEN" use="required"></attribute>
+		<attribute name="interface" type="string" use="required"></attribute>
+		<attribute name="cardinality" default="1..1" use="optional" type="scr:cardinalityType"></attribute>
+		<attribute name="policy" use="optional" default="static" type="scr:policyType"></attribute>
+		<attribute name="target" type="string" use="optional"></attribute>
+		<attribute name="bind" type="string" use="optional"></attribute>
+		<attribute name="unbind" type="string" use="optional"></attribute>
+	</complexType>
+
+	<complexType name="provideType">
+		<attribute name="interface" type="string" use="required"></attribute>
+	</complexType>
+
+	<simpleType name="eightJavaTypes">
+		<restriction base="string">
+			<enumeration value="String"></enumeration>
+			<enumeration value="Long"></enumeration>
+			<enumeration value="Double"></enumeration>
+			<enumeration value="Float"></enumeration>
+			<enumeration value="Integer"></enumeration>
+			<enumeration value="Byte"></enumeration>
+			<enumeration value="Char"></enumeration>
+			<enumeration value="Boolean"></enumeration>
+			<enumeration value="Short"></enumeration>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="cardinalityType">
+		<restriction base="string">
+			<enumeration value="0..1"></enumeration>
+			<enumeration value="0..n"></enumeration>
+			<enumeration value="1..1"></enumeration>
+			<enumeration value="1..n"></enumeration>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="policyType">
+		<restriction base="string">
+			<enumeration value="static"></enumeration>
+			<enumeration value="dynamic"></enumeration>
+		</restriction>
+	</simpleType>
+
+</schema>
