@@ -37,9 +37,9 @@ import java.util.Enumeration;
  * An installed bundle in the Framework.
  * 
  * <p>
- * A <code>Bundle</code> object is the access point to define the lifecycle
- * of an installed bundle. Each bundle installed in the OSGi environment must
- * have an associated <code>Bundle</code> object.
+ * A <code>Bundle</code> object is the access point to define the lifecycle of
+ * an installed bundle. Each bundle installed in the OSGi environment must have
+ * an associated <code>Bundle</code> object.
  * 
  * <p>
  * A bundle must have a unique identity, a <code>long</code>, chosen by the
@@ -116,17 +116,17 @@ public abstract interface Bundle {
 	 * <li>The bundle's class path from its {@link Constants#BUNDLE_CLASSPATH}
 	 * Manifest header.
 	 * <li>The bundle's package dependencies from its
-	 * {@link Constants#EXPORT_PACKAGE} and {@link Constants#IMPORT_PACKAGE}
+	 * {@link Constants#EXPORT_PACKAGE}and {@link Constants#IMPORT_PACKAGE}
 	 * Manifest headers.
 	 * <li>The bundle's required bundle dependencies from its
-	 * {@link Constants#REQUIRE_BUNDLE} Manifest header.
+	 * {@link Constants#REQUIRE_BUNDLE}Manifest header.
 	 * <li>A fragment bundle's host dependency from its
-	 * {@link Constants#FRAGMENT_HOST} Manifest header.
+	 * {@link Constants#FRAGMENT_HOST}Manifest header.
 	 * </ul>
 	 * <p>
 	 * Note that the bundle is not active yet. A bundle must be put in the
 	 * <code>RESOLVED</code> state before it can be started. The Framework may
-	 * attempt to resolve a bundle at any time.
+	 * attempt to resolve a bundle at any time. 
 	 * ### Does there need to be a caveat here for fragments, which can not be started?
 	 * <p>
 	 * The value of <code>RESOLVED</code> is 0x00000004.
@@ -139,7 +139,7 @@ public abstract interface Bundle {
 	 * <p>
 	 * A bundle is in the <code>STARTING</code> state when the {@link #start}
 	 * method is active. A bundle must be in this state when the bundle's
-	 * {@link BundleActivator#start} is called. If this method completes without
+	 * {@link BundleActivator#start}is called. If this method completes without
 	 * exception, then the bundle has successfully started and must move to the
 	 * <code>ACTIVE</code> state.
 	 * <p>
@@ -153,7 +153,7 @@ public abstract interface Bundle {
 	 * <p>
 	 * A bundle is in the <code>STOPPING</code> state when the {@link #stop}
 	 * method is active. A bundle must be in this state when the bundle's
-	 * {@link BundleActivator#stop} method is called. When this method completes
+	 * {@link BundleActivator#stop}method is called. When this method completes
 	 * the bundle is stopped and must move to the <code>RESOLVED</code> state.
 	 * <p>
 	 * The value of <code>STOPPING</code> is 0x00000010.
@@ -186,7 +186,8 @@ public abstract interface Bundle {
 	/**
 	 * Starts this bundle.
 	 * 
-	 * <p>If the Framework implements the optional Start Level service and the
+	 * <p>
+	 * If the Framework implements the optional Start Level service and the
 	 * current start level is less than this bundle's start level, then the
 	 * Framework must persistently mark this bundle as started and delay the
 	 * starting of this bundle until the Framework's current start level becomes
@@ -230,7 +231,7 @@ public abstract interface Bundle {
 	 * 
 	 * <li>This bundle's state is set to <code>ACTIVE</code>.
 	 * 
-	 * <li>A bundle event of type {@link BundleEvent#STARTED} is broadcast.
+	 * <li>A bundle event of type {@link BundleEvent#STARTED}is broadcast.
 	 * </ol>
 	 * 
 	 * <b>Preconditions </b>
@@ -247,16 +248,16 @@ public abstract interface Bundle {
 	 * </ul>
 	 * <b>Postconditions, when an exception is thrown </b>
 	 * <ul>
-	 * <li>Depending on when the exception occurred, bundle
-	 * persistent state is marked as active.
+	 * <li>Depending on when the exception occurred, bundle persistent state is
+	 * marked as active.
 	 * <li><code>getState()</code> not in {<code>STARTING</code>}, {
 	 * <code>ACTIVE</code>}.
 	 * </ul>
 	 * 
-	 * @exception BundleException If this bundle could not be started. This could
-	 *            be because a code dependency could not be resolved or the
-	 *            specified <code>BundleActivator</code> could not be loaded
-	 *            or threw an exception.
+	 * @exception BundleException If this bundle could not be started. This
+	 *            could be because a code dependency could not be resolved or
+	 *            the specified <code>BundleActivator</code> could not be
+	 *            loaded or threw an exception.
 	 * @exception java.lang.IllegalStateException If this bundle has been
 	 *            uninstalled or this bundle tries to change its own state.
 	 * @exception java.lang.SecurityException If the caller does not have the
@@ -288,11 +289,11 @@ public abstract interface Bundle {
 	 * 
 	 * <li>This bundle's state is set to <code>STOPPING</code>.
 	 * 
-	 * <li>The {@link BundleActivator#stop} method of this bundle's
+	 * <li>The {@link BundleActivator#stop}method of this bundle's
 	 * <code>BundleActivator</code>, if one is specified, is called. If that
-	 * method throws an exception, this method must continue to stop this bundle. A
-	 * <code>BundleException</code> must be thrown after completion of the
-	 * remaining steps.
+	 * method throws an exception, this method must continue to stop this
+	 * bundle. A <code>BundleException</code> must be thrown after completion
+	 * of the remaining steps.
 	 * 
 	 * <li>Any services registered by this bundle must be unregistered.
 	 * <li>Any services used by this bundle must be released.
@@ -304,7 +305,7 @@ public abstract interface Bundle {
 	 * 
 	 * <li>This bundle's state is set to <code>RESOLVED</code>.
 	 * 
-	 * <li>A bundle event of type {@link BundleEvent#STOPPED} is broadcast.
+	 * <li>A bundle event of type {@link BundleEvent#STOPPED}is broadcast.
 	 * </ol>
 	 * 
 	 * <b>Preconditions </b>
@@ -361,7 +362,7 @@ public abstract interface Bundle {
 	 * 
 	 * <li>The download location of the new version of this bundle is
 	 * determined from either the bundle's
-	 * {@link Constants#BUNDLE_UPDATELOCATION} Manifest header (if available) or
+	 * {@link Constants#BUNDLE_UPDATELOCATION}Manifest header (if available) or
 	 * the bundle's original location.
 	 * 
 	 * <li>The location is interpreted in an implementation dependent manner,
@@ -383,12 +384,12 @@ public abstract interface Bundle {
 	 * <li>This bundle's state is set to <code>INSTALLED</code>.
 	 * 
 	 * <li>If the new version of this bundle was successfully installed, a
-	 * bundle event of type {@link BundleEvent#UPDATED} is broadcast.
+	 * bundle event of type {@link BundleEvent#UPDATED}is broadcast.
 	 * 
 	 * <li>If this bundle's state was originally <code>ACTIVE</code>, the
 	 * updated bundle is started as described in the <code>Bundle.start</code>
 	 * method. If <code>Bundle.start</code> throws an exception, a Framework
-	 * event of type {@link FrameworkEvent#ERROR} is broadcast containing the
+	 * event of type {@link FrameworkEvent#ERROR}is broadcast containing the
 	 * exception.
 	 * </ol>
 	 * 
@@ -469,11 +470,11 @@ public abstract interface Bundle {
 	 * <code>STARTING</code> or <code>STOPPING</code>, this bundle is
 	 * stopped as described in the <code>Bundle.stop</code> method. If
 	 * <code>Bundle.stop</code> throws an exception, a Framework event of type
-	 * {@link FrameworkEvent#ERROR} is broadcast containing the exception.
+	 * {@link FrameworkEvent#ERROR}is broadcast containing the exception.
 	 * 
 	 * <li>This bundle's state is set to <code>UNINSTALLED</code>.
 	 * 
-	 * <li>A bundle event of type {@link BundleEvent#UNINSTALLED} is broadcast.
+	 * <li>A bundle event of type {@link BundleEvent#UNINSTALLED}is broadcast.
 	 * 
 	 * <li>This bundle and any persistent storage area provided for this bundle
 	 * by the Framework are removed.
@@ -524,12 +525,12 @@ public abstract interface Bundle {
 	 * they are present in the Manifest file:
 	 * 
 	 * <pre>
-	 *      Bundle-Name
-	 *      Bundle-Vendor
-	 *      Bundle-Version
-	 *      Bundle-Description
-	 *      Bundle-DocURL
-	 *      Bundle-ContactAddress
+	 *        Bundle-Name
+	 *        Bundle-Vendor
+	 *        Bundle-Version
+	 *        Bundle-Description
+	 *        Bundle-DocURL
+	 *        Bundle-ContactAddress
 	 * </pre>
 	 * 
 	 * <p>
@@ -576,8 +577,8 @@ public abstract interface Bundle {
 	 * <p>
 	 * The bundle location identifier is the location passed to
 	 * <code>BundleContext.installBundle</code> when a bundle is installed.
-	 * The bundle location identifier does not change while the
-	 * bundle remains installed, even if the bundle is updated.
+	 * The bundle location identifier does not change while the bundle remains
+	 * installed, even if the bundle is updated.
 	 * 
 	 * <p>
 	 * This method must continue to return this bundle's location identifier
@@ -723,6 +724,12 @@ public abstract interface Bundle {
 	 * header values must only be available in the raw and default locale
 	 * values.
 	 * 
+	 * @param locale The locale name into which the header values are to
+	 *        be localized. If the specified locale is <code>null</code> then
+	 *        the locale returned by <code>java.util.Locale.getDefault</code>
+	 *        is used. If the specified locale is the empty string, this method
+	 *        will return the raw (unlocalized) manifest headers including any
+	 *        leading &quot;%&quot;.
 	 * @return A <code>Dictionary</code> object containing this bundle's
 	 *         Manifest headers and values.
 	 * 
@@ -734,7 +741,7 @@ public abstract interface Bundle {
 	 * @see Constants#BUNDLE_LOCALIZATION
 	 * @since 1.3
 	 */
-	public Dictionary getHeaders(String localeString);
+	public Dictionary getHeaders(String locale);
 
 	/**
 	 * Returns the symbolic name of this bundle as specified by its
@@ -766,7 +773,7 @@ public abstract interface Bundle {
 	 * 
 	 * <p>
 	 * If the bundle cannot be resolved, a Framework event of type
-	 * {@link FrameworkEvent#ERROR} is broadcast containing a
+	 * {@link FrameworkEvent#ERROR}is broadcast containing a
 	 * <code>BundleException</code> with details of the reason the bundle
 	 * could not be resolved. This method must then throw a
 	 * <code>ClassNotFoundException</code>.
@@ -888,7 +895,7 @@ public abstract interface Bundle {
 	 * classloader is not used to search for entries. Only the contents of the
 	 * bundle and its attatched fragments are searched for the specified
 	 * entries.
-	 *
+	 * 
 	 * <p>
 	 * If this bundle's state is <code>INSTALLED</code>, this method must
 	 * attempt to resolve the bundle before attempting to find entries.
@@ -913,7 +920,7 @@ public abstract interface Bundle {
 	 * <li>List all XML files in the OSGI-INF directory and below</li>
 	 * 
 	 * <pre>
-	 * Enumeration e = b.findEntries(&quot;OSGI-INF&quot;, &quot;*.xml&quot;, true);
+	 * Enumeration	e	= b.findEntries(&quot;OSGI-INF&quot;, &quot;*.xml&quot;, true);
 	 * </pre>
 	 * 
 	 * <li>Find a specific localization file</li>
@@ -938,8 +945,8 @@ public abstract interface Bundle {
 	 * @param recurse If <code>true</code>, recurse into subdirectories.
 	 *        Otherwise only return entries from the given directory.
 	 * @return An enumeration of URL objects for each matching entry. The URLs
-	 *         are sorted such that entries from this bundle are returned
-	 *         first followed by the entries from attached fragments in ascending
+	 *         are sorted such that entries from this bundle are returned first
+	 *         followed by the entries from attached fragments in ascending
 	 *         bundle id order. If this bundle is a fragment, then only matching
 	 *         entries in this fragment are returned.
 	 * @since 1.3
