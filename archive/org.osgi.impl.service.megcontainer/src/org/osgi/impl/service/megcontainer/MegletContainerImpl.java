@@ -34,7 +34,7 @@ class EventSubscribe {
 	public final static int	STOP			= 2;
 	public final static int	SUSPEND		= 3;
 	public final static int	RESUME		= 4;
-	public final static int	LISTENER	= 5;
+	public final static int	HANDLE		= 5;
 	public String[]			eventTopic;
 	public int[]			eventAction;
 }
@@ -137,7 +137,7 @@ public class MegletContainerImpl implements BundleListener,
 		if (desc.eventSubscribes[i] != null
 				&& desc.eventSubscribes[i].eventTopic != null)
 			for (int j = 0; j != desc.eventSubscribes[i].eventTopic.length; j++)
-				if (desc.eventSubscribes[i].eventAction[j] == EventSubscribe.LISTENER)
+				if (desc.eventSubscribes[i].eventAction[j] == EventSubscribe.HANDLE)
 					registerListenerMethod.invoke( app, new Object [] {
 							desc.eventSubscribes[i].eventTopic[j]} );
 
@@ -567,8 +567,8 @@ public class MegletContainerImpl implements BundleListener,
 									action = EventSubscribe.SUSPEND;
 								else if (actionString.equals("resume"))
 									action = EventSubscribe.RESUME;
-								else if (actionString.equals("listener"))
-									action = EventSubscribe.LISTENER;
+								else if (actionString.equals("handle"))
+									action = EventSubscribe.HANDLE;
 								else
 									throw new Exception( "Invalid Action" );
 
