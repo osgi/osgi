@@ -71,7 +71,10 @@ public class DmtAdminActivator implements BundleActivator {
 					dispatcher);
 			pluginTracker.open();
 			// creating the services
-			DmtAdminImpl dmtAdmin = new DmtAdminImpl(dispatcher, eventChannel);
+            DmtPrincipalPermissionAdmin dmtPermissionAdmin =
+                new DmtPrincipalPermissionAdminImpl(ca);
+			DmtAdminImpl dmtAdmin = 
+                new DmtAdminImpl(dmtPermissionAdmin, dispatcher, eventChannel);
 			DmtAlertSenderImpl dmtAlertSender = new DmtAlertSenderImpl(bc);
 			remoteAdapterTracker = new ServiceTracker(bc,
 					RemoteAlertSender.class.getName(), dmtAlertSender);
@@ -88,7 +91,7 @@ public class DmtAdminActivator implements BundleActivator {
             Hashtable properties = new Hashtable();
             properties.put("service.pid", PERMISSION_ADMIN_SERVICE_PID);
             permissionReg = bc.registerService(services, 
-                    new DmtPrincipalPermissionAdminImpl(ca), properties);
+                    dmtPermissionAdmin, properties);
 		} catch (Exception e) {
 			System.out.println("Exception:" + e.getMessage());
 			throw new BundleException("Failure in start() method.", e);
