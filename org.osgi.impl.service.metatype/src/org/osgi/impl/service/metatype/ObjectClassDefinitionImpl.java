@@ -202,8 +202,7 @@ public class ObjectClassDefinitionImpl extends LocalizationElement implements Ob
 			return null;
 		}
 		Bundle b = _icon.getIconBundle();
-		URL[] urls = FragmentUtils.findEntries(b,
-				MetaTypeProviderImpl.METADATA_FOLDER + getLocalized(_icon.getIconName()));
+		URL[] urls = FragmentUtils.findEntries(b, getLocalized(_icon.getIconName()));
 		if (urls != null && urls.length > 0) {
 			return urls[0].openStream();
 		}
