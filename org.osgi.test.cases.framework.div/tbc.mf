@@ -8,8 +8,5 @@ Bundle-ContactAddress: info@ericsson.com
 Bundle-ClassPath: .,extraclass/tb6.jar
 Bundle-Activator: org.osgi.test.cases.framework.div.tbc.Activator
 $(PRIVATE-PACKAGE)
-Import-Package: org.osgi.framework,
- org.osgi.test.service
-
-
+$(IMPORT-PACKAGE)
 

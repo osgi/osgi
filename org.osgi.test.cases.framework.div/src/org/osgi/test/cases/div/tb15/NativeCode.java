@@ -25,40 +25,28 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.div.tb12;
+package org.osgi.test.cases.div.tb15;
 
 import org.osgi.framework.*;
 
 /**
- * Bundle for the NativeCode optional clause test. This bundle has an optional
- * clause present to make sure it will be loaded even if no other native code
+ * Bundle for the NativeCode optional clause test. This bundle has no optional
+ * clause present so the bundle should NOT be loaded if no other native code
  * clause matches. The clauses were built to intentionally NOT match in order to
- * check if the bundle is loaded.
+ * check if the bundle is not loaded.
  * 
  * @author Jorge Mascena
  */
 public class NativeCode implements BundleActivator {
 	/**
-	 * Starts the bundle. Excercises the native code. The
-	 * <CODE>org.osgi.test.cases.div.tb2.NativeCode.test()</CODE> call
-	 * should throw a BundleException since no native code clause should match.
+	 * Starts the bundle. Excercises the native code. The bundle should not be
+	 * loaded since no native code clause matches and no optional clause is
+	 * present.
 	 *  
 	 * @param bc the context where the bundle is executed.
 	 */
 	public void start(BundleContext bc) throws BundleException {
-		boolean clauseMatches;
-		try {
-			org.osgi.test.cases.div.tb2.NativeCode.test();
-			// if started ok, then there was a match
-			clauseMatches = true;
-		}
-		catch (BundleException e) {
-			clauseMatches = false;
-		}
-		if(clauseMatches) {
-			// there should be no match
-			throw new BundleException("No native code clause should match");
-		}
+		throw new BundleException("Bundle should not be loaded");
 	}
 
 	/**
