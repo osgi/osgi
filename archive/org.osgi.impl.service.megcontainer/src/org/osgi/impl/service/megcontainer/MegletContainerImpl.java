@@ -25,7 +25,6 @@ import java.util.*;
 import javax.xml.parsers.*;
 
 import org.osgi.framework.*;
-import org.osgi.meglet.Meglet;
 import org.osgi.service.application.*;
 import org.osgi.service.event.*;
 import org.osgi.service.log.LogService;
@@ -60,7 +59,7 @@ class MEGBundleDescriptor {
  * The realization of the MEG container
  */
 
-public class MegletContainerImpl implements BundleListener,
+public class MegletContainerImpl implements BundleListener, MegletContainer,
 		EventHandler {
 	private BundleContext	bc;
 	private Vector			bundleIDs;
