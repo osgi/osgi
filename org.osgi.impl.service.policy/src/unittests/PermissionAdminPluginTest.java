@@ -17,12 +17,10 @@
  */
 package unittests;
 
-import java.util.HashMap;
-import java.util.Set;
+import org.osgi.framework.AdminPermission;
 import org.osgi.impl.service.policy.permadmin.PermissionAdminPlugin;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import unittests.util.DmtPluginTestCase;
 
@@ -36,31 +34,8 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 	public static final String ROOT = PermissionAdminPlugin.dataRootURI; 
 	public DummyPermissionAdmin	permAdmin;
 	public PermissionAdminPlugin	plugin;
+	public static final PermissionInfo ADMINPERMISSION = new PermissionInfo(AdminPermission.class.getName(),"","");
 
-	public class DummyPermissionAdmin implements PermissionAdmin {
-		PermissionInfo[] defaultPermissions;
-		HashMap permissionTable = new HashMap();
-		public PermissionInfo[] getPermissions(String location) {
-			return (PermissionInfo[]) permissionTable.get(location);
-		}
-		public void setPermissions(String location, PermissionInfo[] permissions) {
-			permissionTable.put(location,permissions);
-		}
-		public String[] getLocations() {
-			Set keys = permissionTable.keySet();
-			String[] locations = new String[keys.size()];
-			keys.toArray(locations);
-			return locations;
-		}
-		
-		public PermissionInfo[] getDefaultPermissions() {
-			return defaultPermissions;
-		}
-		public void setDefaultPermissions(PermissionInfo[] permissions) {
-			defaultPermissions = permissions;
-		}
-	}
-	
 	public void setUp() throws Exception {
 		super.setUp();
 		permAdmin = new DummyPermissionAdmin();
