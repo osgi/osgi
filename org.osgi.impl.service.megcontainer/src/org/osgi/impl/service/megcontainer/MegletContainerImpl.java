@@ -353,7 +353,7 @@ public class MegletContainerImpl implements BundleListener,
 
 	void checkAndRegister(Bundle b) {
 		try {
-			URL url = b.getResource("META-INF/applications.xml");
+			URL url = b.getResource("META-INF/meglets.xml");
 			if ( url != null )
 				installApplication(b.getBundleId());
 		}
@@ -449,7 +449,7 @@ public class MegletContainerImpl implements BundleListener,
 			}
 
 			URL url = bc.getBundle(bundleID).getResource(
-					"META-INF/applications.xml");
+					"META-INF/meglets.xml");
 			InputStream in = url.openStream();
 
 			//pkr: added null check
@@ -461,7 +461,7 @@ public class MegletContainerImpl implements BundleListener,
 
 			NodeList listNodeList = doc.getElementsByTagName( "descriptor" );
 			if( listNodeList.getLength() != 1 )
-				throw new Exception( "One descriptor must be present in the applications.xml file!" );
+				throw new Exception( "One descriptor must be present in the meglets.xml file!" );
 
 			Node listNode = listNodeList.item( 0 );
 			Node applicationNode = listNode.getFirstChild();
