@@ -3,7 +3,7 @@
  *
  * author: Ivan Zahoranszky
  */
-package org.osgi.impl.service.policy;
+package org.osgi.impl.service.policy.util;
 
 import java.util.Vector;
 
