@@ -118,6 +118,8 @@ public interface Configuration {
 	 * registered, its updated method must be called asynchronously. Else, this
 	 * callback is delayed until aforementioned registration occurs.
 	 * 
+	 * Also intiates a call to any <tt>ConfigurationListener</tt>s asynchronously.
+	 * 
 	 * @param properties the new set of properties for this configuration
 	 * @throws IOException if update cannot be made persistent
 	 * @throws IllegalArgumentException if the <tt>Dictionary</tt> object
@@ -136,6 +138,8 @@ public interface Configuration {
 	 * <tt>updated</tt> method with a <tt>null</tt> properties argument. A
 	 * <tt>ManagedServiceFactory</tt> object is notified by a call to its
 	 * <tt>deleted</tt> method.
+	 * 
+	 * Also intiates a call to any <tt>ConfigurationListener</tt>s asynchronously.
 	 * 
 	 * @throws IOException If delete fails
 	 * @throws IllegalStateException if this configuration has been deleted
@@ -156,6 +160,8 @@ public interface Configuration {
 	 * 
 	 * Initiate the <tt>updated</tt> callback to the Managed Service or
 	 * Managed Service Factory with the current properties asynchronously.
+	 * 
+	 * Also intiates a call to any <tt>ConfigurationListener</tt>s asynchronously.
 	 * 
 	 * <p>
 	 * This is the only way for a bundle that uses a Configuration Plugin
