@@ -15,7 +15,7 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package org.osgi.impl.service.policy.permadmin;
+package org.osgi.impl.service.policy;
 
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtMetaNode;
