@@ -24,6 +24,4 @@ Bundle-ContactAddress: speccomments@mail.osgi.org
 CVS-Header: $Header$
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
-
-
-
+$(PRIVATE-PACKAGE)
