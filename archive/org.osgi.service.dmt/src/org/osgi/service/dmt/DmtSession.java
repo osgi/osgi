@@ -56,8 +56,7 @@ public interface DmtSession extends Dmt {
     static final int LOCK_TYPE_ATOMIC    = 2;
 
     /**
-     * Gives the type of lock the session currently has, which might be
-     * different from the type it was created with.
+     * Gives the type of lock the session currently has.
      * @return One of the <code>LOCK_TYPE_...</code> constants.
      */
     int getLockType();
