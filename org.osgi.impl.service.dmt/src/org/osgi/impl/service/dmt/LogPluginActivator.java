@@ -26,7 +26,7 @@ public class LogPluginActivator implements BundleActivator {
 	private ServiceRegistration	servReg;
 	private ServiceReference	logRef;
 	private ServiceReference	logReaderRef;
-	private ServiceReference	alertRef;
+	private ServiceReference	adminRef;
 	private LogPlugin			logPlugin;
 	static final String			PLUGIN_ROOT	= "./OSGi/log";
 
@@ -45,16 +45,16 @@ public class LogPluginActivator implements BundleActivator {
 		LogReaderService lrs = (LogReaderService) bc.getService(logReaderRef);
 		if (lrs == null)
 			throw new BundleException("Log Service no longer registered.");
-		alertRef = bc.getServiceReference(DmtAlertSender.class.getName());
-		if (alertRef == null)
-			throw new BundleException("Cannot find Alert Service.");
-		DmtAlertSender das = (DmtAlertSender) bc.getService(alertRef);
-		if (das == null)
-			throw new BundleException("Alert Service no longer registered.");
+		adminRef = bc.getServiceReference(DmtAdmin.class.getName());
+		if (adminRef == null)
+			throw new BundleException("Cannot find Dmt Admin Service.");
+		DmtAdmin da = (DmtAdmin) bc.getService(adminRef);
+		if (da == null)
+			throw new BundleException("Dmt Admin Service no longer registered.");
 		//creating the service
 		//TODO make the plugin and activator the same so that we don't need
 		// to pass all these
-		logPlugin = new LogPlugin(bc, ls, lrs, das);
+		logPlugin = new LogPlugin(bc, ls, lrs, da);
 		Hashtable props = new Hashtable();
 		props.put("dataRootURIs", new String[] {PLUGIN_ROOT});
 		props.put("execRootURIs", new String[] {PLUGIN_ROOT});
@@ -69,6 +69,6 @@ public class LogPluginActivator implements BundleActivator {
 		//releasing the used services
 		bc.ungetService(logRef);
 		bc.ungetService(logReaderRef);
-		bc.ungetService(alertRef);
+		bc.ungetService(adminRef);
 	}
 }

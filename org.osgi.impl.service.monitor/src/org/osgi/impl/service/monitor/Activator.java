@@ -20,7 +20,7 @@ package org.osgi.impl.service.monitor;
 import java.util.Hashtable;
 
 import org.osgi.framework.*;
-import org.osgi.service.dmt.DmtAlertSender;
+import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.monitor.*;
@@ -41,7 +41,7 @@ public class Activator implements BundleActivator
     ServiceRegistration monitorAdminReg;
     ServiceRegistration monitorPluginReg;
     ServiceReference eventChannelRef;
-    ServiceReference alertSenderRef;
+    ServiceReference dmtAdminRef;
 
     public void start(BundleContext bc) throws BundleException {
         System.out.println("Monitor Admin and Plugin activation...");
@@ -53,12 +53,12 @@ public class Activator implements BundleActivator
         if(eventChannel == null)
             throw new BundleException("Event Channel service no longer registered.");
 
-        alertSenderRef = bc.getServiceReference(DmtAlertSender.class.getName());
-        if(alertSenderRef == null)
-            throw new BundleException("Cannot find DMT Alert Sender service.");
-        DmtAlertSender alertSender = (DmtAlertSender) bc.getService(alertSenderRef);
+        dmtAdminRef = bc.getServiceReference(DmtAdmin.class.getName());
+        if(dmtAdminRef == null)
+            throw new BundleException("Cannot find Dmt Admin service.");
+        DmtAdmin alertSender = (DmtAdmin) bc.getService(dmtAdminRef);
         if(alertSender == null)
-            throw new BundleException("DMT Alert Sender service no longer registered.");
+            throw new BundleException("Dmt Admin service no longer registered.");
 
         // create a tracker for Monitorable services that notifies the plugin if a monitorable is unregistered
         monitorableTracker = 
@@ -95,7 +95,7 @@ public class Activator implements BundleActivator
         monitorableTracker.close();
         monitorPluginReg.unregister();
         monitorAdminReg.unregister();
-        bc.ungetService(alertSenderRef);
+        bc.ungetService(dmtAdminRef);
         bc.ungetService(eventChannelRef);
     }
 }

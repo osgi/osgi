@@ -61,10 +61,10 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
     private BundleContext bc;
     private ServiceTracker tracker;
     private EventAdmin eventChannel;
-    private DmtAlertSender alertSender;
+    private DmtAdmin alertSender;
     private Vector jobs;
 
-    public MonitorAdminImpl(BundleContext bc, ServiceTracker tracker, EventAdmin eventChannel, DmtAlertSender alertSender) {
+    public MonitorAdminImpl(BundleContext bc, ServiceTracker tracker, EventAdmin eventChannel, DmtAdmin alertSender) {
         this.bc = bc;
         this.tracker = tracker;
         this.eventChannel = eventChannel;
@@ -165,7 +165,7 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
 			KPI kpi = (KPI) iterator.next();
 			items[i] = new DmtAlertItem(Activator.PLUGIN_ROOT + "/" + kpi.getPath(),
 					                    "x-oma-trap:" + kpi.getPath(),
-										"xml", null, createXml(kpi));
+										"xml", createXml(kpi));
         }
 
         try {
