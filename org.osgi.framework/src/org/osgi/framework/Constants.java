@@ -524,11 +524,6 @@ public interface Constants {
 	 * @since 1.3
 	 */
 	public final static String	SINGLETON_DIRECTIVE						= "singleton";
-	/**
-	 * @deprecated use {@link Constants#SINGLETON_DIRECTIVE}
-	 */
-	// TODO remove when framework RI is updated to use the directive constant.
-	public final static String	SINGLETON_ATTRIBUTE						= "singleton";
 
 	/**
 	 * Manifest header directive (named &quot;fragment-attachment&quot;)
@@ -835,12 +830,6 @@ public interface Constants {
 	 * @since 1.3
 	 */
 	public final static String	USES_DIRECTIVE						= "uses";
-
-	/**
-	 * @deprecated use {@link Constants#USES_DIRECTIVE}
-	 */
-	// TODO remove when framework RI is updated to the "uses" directive.
-	public final static String	GROUPING_DIRECTIVE						= "grouping";
 
 	/**
 	 * Manifest header directive (named &quot;include&quot;) identifying a list
