@@ -41,19 +41,18 @@ public interface RemoteAlertSender {
 	boolean acceptServerId(String serverId);
 
 	/**
-	 * Sends an alert to a given server. If the sender can supply session
-	 * related information it can do so, however it is protocol specific whether
-	 * it is needed or not, or whether it carries any meaningful information to
-	 * the adapter at all.
-	 * 
-	 * @param serverId The ID of the server where the alert should be sent
-	 * @param sessionId The session identification. Might be null.
-	 * @param code Alert code. Can be 0 if not needed.
-	 * @param items The data of the alert items carried in this alert
-	 * @throws Exception Thrown when the alert can not be sent to the server. No
-	 *         separate Exception class is created, it will be wrapped to a
-	 *         DmtException in the Dmt Admin.
-	 */
-	void sendAlert(String serverId, String sessionId, int code,
-			DmtAlertItem[] items) throws Exception;
+     * Sends an alert to a given server. If the sender can supply session
+     * related information it can do so, however it is protocol specific whether
+     * it is needed or not, or whether it carries any meaningful information to
+     * the adapter at all.
+     * 
+     * @param serverId The ID of the server where the alert should be sent
+     * @param code Alert code. Can be 0 if not needed.
+     * @param items The data of the alert items carried in this alert
+     * @throws Exception Thrown when the alert can not be sent to the server. No
+     *         separate Exception class is created, it will be wrapped to a
+     *         DmtException in the Dmt Admin.
+     */
+    void sendAlert(String serverId, int code, DmtAlertItem[] items)
+            throws Exception;
 }
