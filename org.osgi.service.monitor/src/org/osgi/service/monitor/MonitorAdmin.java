@@ -65,11 +65,11 @@ public interface MonitorAdmin {
             throws IllegalArgumentException;
 
     /**
-     * Returns the names of the Monitorable services that are currently registered.
-     * The returned array contains the names in alphabetical order. For security
-     * reasons this method should be used instead of querying the monitorable
-     * services from the service registry. The Monitorable instances are not
-     * accessible through the MonitorAdmin.
+     * Returns the names of the Monitorable services that are currently
+     * registered. The returned array contains the names in alphabetical order.
+     * For security reasons this method should be used instead of querying the
+     * monitorable services from the service registry. The Monitorable instances
+     * are not accessible through the MonitorAdmin.
      * 
      * @return the array of Monitorable names or <code>null</code> if none are
      *         registered
@@ -88,7 +88,8 @@ public interface MonitorAdmin {
      * The entity which queries the StatusVariable list needs to hold
      * <code>MonitorPermission</code> with the <code>read</code> action
      * present. The target field of the permission must match all the
-     * StatusVariables published by the Monitorable.
+     * StatusVariables published by the Monitorable, e.g. it may be
+     * <code>[Monitorable_ID]/*</code>.
      * 
      * @param monitorableId
      *            The identifier of a Monitorable instance
@@ -134,7 +135,18 @@ public interface MonitorAdmin {
      * MonitorAdmin is notified about a StatusVariable being updated it sends an
      * event unless this feature is switched off. Note that events within a
      * monitoring job can not be switched off. It is not required that the event
-     * sending state of the StatusVariables are persistently stored.
+     * sending state of the StatusVariables are persistently stored. When a 
+     * StatusVariable is registered it's event sending state is ON by default.
+     * <p>
+     * Usage of the "*" wildcard is allowed in the path argument of this method
+     * as a convenience feature. The semantics of the wildcard is that it stands
+     * for any matching StatusVariable at the time of the method call, it does
+     * not effect the event sending status of StatusVariables which are not yet
+     * registered. As an example, when the
+     * <code>switchEvents("MyMonitorable/*", false)</code> method is executed,
+     * event sending from all StatusVariables of the MyMonitorable service are
+     * switched off. However, if the MyMonitorable service starts to publish a
+     * new StatusVariable later, it's event sending status is on by default.
      * 
      * @param path
      *            The identifier of the StatusVariable(s) in
@@ -218,7 +230,7 @@ public interface MonitorAdmin {
      * @return the successfully started job object
      * @throws IllegalArgumentException
      *             if the list of StatusVariable names contains a non-existing
-     *             StatusVariable or the initiator, schedule or count parameters 
+     *             StatusVariable or the initiator, schedule or count parameters
      *             are invalid
      * @throws SecurityException
      *             if the caller does not hold <code>MonitorPermission</code>
@@ -235,8 +247,9 @@ public interface MonitorAdmin {
      * Monitoring events will be sent when the StatusVariables of this job are
      * updated. All specified StatusVariables must exist when the job is
      * started, and all must support update notifications. The initiator string
-     * is used in the <code>mon.listener.id</code> field of all events triggered
-     * by the job, to allow filtering the events based on the initiator.
+     * is used in the <code>mon.listener.id</code> field of all events
+     * triggered by the job, to allow filtering the events based on the
+     * initiator.
      * <p>
      * The entity which initiates a Monitoring Job needs to hold
      * <code>MonitorPermission</code> for all the specified target
