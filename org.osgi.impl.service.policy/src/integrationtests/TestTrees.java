@@ -42,6 +42,8 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.policy.condpermadmin.ConditionalPermissionAdminPlugin;
 import org.osgi.impl.service.policy.dmtprincipal.DmtPrincipalPlugin;
 import org.osgi.impl.service.policy.permadmin.PermissionAdminPlugin;
+import org.osgi.service.condpermadmin.BundleSignerCondition;
+import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtData;
@@ -239,6 +241,7 @@ public class TestTrees extends TestCase {
 		
 		// this is a call with allpermission
 		session.getChildNodeNames(PermissionAdminPlugin.dataRootURI);
+//		session.getChildNodeNames(""); TODO
 
 		// this is a call with read permission
 		Permissions permissions = new Permissions();
@@ -287,4 +290,12 @@ public class TestTrees extends TestCase {
 		assertEquals(permissions[0],pi);
 	}
 
+	public void testConditionalPermissionAdmin() throws Exception {
+		startFramework(true);
+		conditionalPermissionAdmin.addConditionalPermissionInfo(
+				new ConditionInfo[] { new ConditionInfo(BundleSignerCondition.class.getName(),new String[] {"foo"})},
+				new PermissionInfo[] { new PermissionInfo(AdminPermission.class.getName(),"*","*") }
+				);
+		
+	}
 }
