@@ -825,4 +825,13 @@ public class WireAdminImpl implements ServiceListener, WireAdmin,
 			}
 		}
 	}
+
+	public void updateProducer(Producer producer, WireImpl source, String pid ) {
+		dispatcher.addProducerUpdate(producer,source, getProducerWires(pid));
+	}
+
+	public void updateConsumer(Consumer consumer, WireImpl wire, String pid ) {
+		dispatcher.addConsumerUpdate(consumer,null, getConsumerWires(pid));
+	}
+
 }

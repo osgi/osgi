@@ -238,7 +238,8 @@ public class WireImpl implements Wire, WireConstants {
 			// disconnected
 			return;
 		}
-		if (isCorrectType(value.getClass())) {
+		// Was 		if (isCorrectType(value.getClass())) {
+		if (isCorrectType(value)) {
 			if (filter != null) {
 				if (lastValue == null) {
 					lastValue = value;
@@ -316,54 +317,21 @@ public class WireImpl implements Wire, WireConstants {
 		}
 		return false;
 	}
+	static Wire[] EMPTY = new Wire[0];
+	public void delete() {	
+		parent.wireDisconnected(this);
+		parent.removeWire(this);
+		parent.updateProducer(getProducer(), this, producerPID);
+		parent.updateConsumer(getConsumer(), this, consumerPID);
 
-	public void delete() {
-		if (getProducer() != null) {
-			Wire[] old = parent.getProducerWires(this.producerPID);
-			Wire[] newWire;
-			if (old == null) {
-				newWire = null;
-			}
-			else {
-				newWire = new Wire[old.length - 1];
-				int j = 0;
-				for (int i = 0; i < old.length; i++) {
-					if (!(old[i].equals(this))) {
-						newWire[j] = old[i];
-						j++;
-					}
-				}
-			}
-			parent.getUpdateDispatcher().addProducerUpdate(getProducer(), this,
-					newWire);
-		}
-		if (getConsumer() != null) {
-			Wire[] old = parent.getConsumerWires(this.consumerPID);
-			Wire[] newWire;
-			if (old == null) {
-				newWire = null;
-			}
-			else {
-				newWire = new Wire[old.length - 1];
-				int j = 0;
-				for (int i = 0; i < old.length; i++) {
-					if (!(old[i].equals(this))) {
-						newWire[j] = old[i];
-						j++;
-					}
-				}
-			}
-			parent.getUpdateDispatcher().addConsumerUpdate(getConsumer(), this,
-					null);
-		}
 		if (producerReference != null) {
 			context.ungetService(producerReference);
+			producerReference = null;
 		}
 		if (consumerReference != null) {
 			context.ungetService(consumerReference);
+			consumerReference = null;
 		}
-		producerReference = null;
-		consumerReference = null;
 		flavors = null;
 		lastValue = null;
 		context = null;
