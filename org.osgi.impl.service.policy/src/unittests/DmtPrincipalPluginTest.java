@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import org.osgi.framework.AdminPermission;
+import org.osgi.framework.PackagePermission;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
 import org.osgi.impl.service.policy.dmtprincipal.DmtPrincipalPlugin;
 import org.osgi.service.dmt.DmtData;
@@ -41,6 +42,7 @@ public class DmtPrincipalPluginTest extends DmtPluginTestCase implements DmtPrin
 	public static final String PRINCIPAL2 = "principal2";
 	public static final String PRINCIPAL2_HASH = "aIUZn8KSmU04HKUyaecKhd0jWsY";
 	public static final PermissionInfo ADMINPERMISSION = new PermissionInfo(AdminPermission.class.getName(),"*","*");
+	public static final PermissionInfo IMPORTPERMISSION = new PermissionInfo(PackagePermission.class.getName(),"org.osgi.framework","IMPORT");
 	
 	/**
 	 * the plugin currently tested
@@ -170,5 +172,35 @@ public class DmtPrincipalPluginTest extends DmtPluginTestCase implements DmtPrin
 			dmtSession.createLeafNode("1/Foo",new DmtData("Bar"));
 			fail();
 		} catch (DmtException e) {}
+	}
+	
+	public void testMultiplePermissionsSet() throws Exception {
+		newAtomicSession();
+		dmtSession.createInteriorNode("1");
+		dmtSession.setNodeValue("1/Principal",new DmtData(PRINCIPAL1));
+		dmtSession.setNodeValue("1/PermissionInfo",
+				new DmtData(ADMINPERMISSION.getEncoded()+"\n"+IMPORTPERMISSION.getEncoded()+"\n"));
+		dmtSession.close();
+		PermissionInfo pi[] = (PermissionInfo[]) principalPermissions.get(PRINCIPAL1);
+		assertEquals(2,pi.length);
+		assertEquals(ADMINPERMISSION,pi[0]);
+		assertEquals(IMPORTPERMISSION,pi[1]);
+	}
+	
+	public void testGetValue() throws Exception {
+		principalPermissions.put(PRINCIPAL1,new PermissionInfo[0]);
+		principalPermissions.put(PRINCIPAL2,new PermissionInfo[]{ADMINPERMISSION});
+		newSession();
+		assertEquals(PRINCIPAL1,dmtSession.getNodeValue(PRINCIPAL1_HASH+"/Principal").getString());
+		assertEquals("",dmtSession.getNodeValue(PRINCIPAL1_HASH+"/PermissionInfo").getString());
+		assertEquals(PRINCIPAL2,dmtSession.getNodeValue(PRINCIPAL2_HASH+"/Principal").getString());
+		assertEquals(ADMINPERMISSION.getEncoded()+"\n",dmtSession.getNodeValue(PRINCIPAL2_HASH+"/PermissionInfo").getString());
+	}
+	
+	public void testMultiplePermissionGet() throws Exception {
+		principalPermissions.put(PRINCIPAL1,new PermissionInfo[]{ADMINPERMISSION,IMPORTPERMISSION});
+		newAtomicSession();
+		String str = dmtSession.getNodeValue(PRINCIPAL1_HASH+"/PermissionInfo").getString();
+		assertEquals(ADMINPERMISSION.getEncoded()+"\n"+IMPORTPERMISSION.getEncoded()+"\n",str);
 	}
 }

@@ -99,6 +99,19 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 			}
 			throw new IllegalStateException("nodename="+nodename); // cannot get here 
 		}
+
+		public DmtData getNodeValue(String nodename) {
+			if (nodename.equals(PRINCIPAL)) return new DmtData(principal);
+			if (nodename.equals(PERMISSIONINFO)) {
+				StringBuffer sb = new StringBuffer();
+				for(int i=0;i<permissionInfo.length;i++) {
+					sb.append(permissionInfo[i].getEncoded());
+					sb.append('\n');
+				}
+				return new DmtData(sb.toString());
+			}
+			throw new IllegalStateException("nodename="+nodename);
+		}
 	}
 
 	/**
@@ -247,7 +260,12 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 	}
 
 	public DmtData getNodeValue(String nodeUri) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
+		String[] path = getPath(nodeUri);
+
+		// isNodeUri and metadata should check all this
+		if (path.length!=2) throw new IllegalStateException(nodeUri);
+		PrincipalPermission pp = (PrincipalPermission) currentState.get(path[0]);
+		return pp.getNodeValue(path[1]);
 	}
 
 	public String getNodeTitle(String nodeUri) throws DmtException {
