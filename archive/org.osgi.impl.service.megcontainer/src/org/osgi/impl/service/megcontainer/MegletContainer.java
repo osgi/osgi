@@ -420,7 +420,10 @@ public class MegletContainer implements BundleListener,
 			}
 			DocumentBuilderFactory domFactory = (DocumentBuilderFactory) bc
 				.getService( domParserReference );
+      boolean validating = domFactory.isValidating();
+      domFactory.setValidating( false );
 			DocumentBuilder domParser = domFactory.newDocumentBuilder();
+      domFactory.setValidating( validating );
 			bc.ungetService( domParserReference );
 			if( domParser == null ) {
 				log(bc, LogService.LOG_ERROR, "Cannot create SAX parser!", null );
