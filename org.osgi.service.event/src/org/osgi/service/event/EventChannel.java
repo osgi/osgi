@@ -26,20 +26,33 @@
  */
 package org.osgi.service.event;
 
+
+
 /**
- * 
+ *
  * TODO Add Javadoc comment for this type.
- * 
+ *
  * @version $Revision$
  */
 public interface EventChannel {
+
 	/**
-	 * @param event
+     * Initiates an asynchronous event delivery.
+     *
+     * @param event the event to send to any interested listeners
+     *
+     * @throws NullPointerException if event is null
 	 */
 	void postEvent(ChannelEvent event);
 
+
+
 	/**
-	 * @param event
+     * Initiates a synchronous event delivery.
+     *
+     * @param event the event to send to any interested listeners
+     *
+     * @throws NullPointerException if event is null
 	 */
 	void sendEvent(ChannelEvent event);
 }

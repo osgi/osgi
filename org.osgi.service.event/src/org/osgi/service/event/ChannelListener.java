@@ -27,14 +27,16 @@
 package org.osgi.service.event;
 
 /**
- * 
  * TODO Add Javadoc comment for this type.
  * 
  * @version $Revision$
  */
 public interface ChannelListener {
+
 	/**
-	 * @param event
+     * Called by the {@link ChannelEvent event channel} to notify the listener of an event.
+     *
+     * @param event the event that occurred
 	 */
 	void channelEvent(ChannelEvent event);
 }
