@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
 Bundle-Name: AppEvents
 Bundle-SymbolicName: ${p}.app.events
+Bundle-Activator: ${p}.app.events.Activator
 Application-Category: APPTYPE_TEST
 Application-Name: My Cool Application
 Application-Version: 0.1
