@@ -32,7 +32,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Hashtable;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -57,9 +62,11 @@ import org.osgi.service.deploymentadmin.ResourceProcessor;
 import org.osgi.service.metatype.MetaTypeInformation;
 import org.osgi.service.metatype.MetaTypeService;
 import org.xml.sax.SAXException;
+import unittests.metadata.AD;
 import unittests.metadata.Attribute;
 import unittests.metadata.Designate;
 import unittests.metadata.MetaData;
+import unittests.metadata.OCD;
 import unittests.metadata.Object;
 import unittests.metadata.ObjectFactory;
 
@@ -149,10 +156,43 @@ public class BundleTest extends TestCase {
 		public boolean isAssignableTo(Bundle bundle, String className) { throw new IllegalStateException(); }
 	};
 
+	public final class DummyConfiguration implements Configuration {
+		public Hashtable properties = new Hashtable();
+		public final String pid;
+		public String location=null;
+
+		public DummyConfiguration(String pid) {
+			this.pid = pid;
+		}
+
+		public void update(Dictionary properties) throws IOException {
+			this.properties = new Hashtable();
+			this.properties.putAll((Hashtable)properties);
+		}
+
+		public String getPid() { throw new IllegalStateException(); }
+		public Dictionary getProperties() { throw new IllegalStateException(); }
+		public void delete() throws IOException { throw new IllegalStateException(); }
+		public String getFactoryPid() { throw new IllegalStateException(); }
+		public void update() throws IOException { throw new IllegalStateException(); }
+		public void setBundleLocation(String bundleLocation) { throw new IllegalStateException(); }
+		public String getBundleLocation() { throw new IllegalStateException(); }
+	}
+
 	public final class DummyConfigurationAdmin implements ConfigurationAdmin {
+		public HashMap configurations = new HashMap();
+		public Configuration getConfiguration(String pid, String location) throws IOException {
+			DummyConfiguration conf = (DummyConfiguration) configurations.get(pid);
+			if (conf==null) {
+				conf = new DummyConfiguration(pid);
+				conf.location = location;
+				configurations.put(pid,conf);
+			}
+			return conf;
+		}
+
 		public Configuration createFactoryConfiguration(String factoryPid) throws IOException { throw new IllegalStateException(); }
 		public Configuration createFactoryConfiguration(String factoryPid, String location) throws IOException { throw new IllegalStateException(); }
-		public Configuration getConfiguration(String pid, String location) throws IOException { throw new IllegalStateException(); }
 		public Configuration getConfiguration(String pid) throws IOException { throw new IllegalStateException(); }
 		public Configuration[] listConfigurations(String filter) throws IOException, InvalidSyntaxException { throw new IllegalStateException(); }
 	}
@@ -168,17 +208,55 @@ public class BundleTest extends TestCase {
 	}
 	
 	public final class DummyDeploymentPackage implements DeploymentPackage {
+		public ArrayList bundles = new ArrayList();
+		public Bundle[] listBundles() {
+			Bundle[] b = new Bundle[bundles.size()];
+			return (Bundle[]) bundles.toArray(b);
+		}
 		public long getId() { throw new IllegalStateException(); }
 		public String getName() { throw new IllegalStateException(); }
 		public String getVersion() { throw new IllegalStateException(); }
 		public void uninstall() { throw new IllegalStateException(); }
-		public Bundle[] listBundles() { throw new IllegalStateException(); }
 		public boolean isNew(Bundle b) { throw new IllegalStateException(); }
 		public boolean isUpdated(Bundle b) { throw new IllegalStateException(); }
 		public boolean isPendingRemoval(Bundle b) { throw new IllegalStateException(); }
 		public File getDataFile(Bundle bundle) { throw new IllegalStateException(); }
 	}
 
+	public class DummyBundle implements Bundle {
+		Hashtable headers = new Hashtable();
+		final String location;
+		
+		public DummyBundle(String symbolicName,String version) {
+			headers.put("Bundle-SymbolicName",symbolicName);
+			headers.put("Bundle-Version",version);
+			location = "bundle://"+symbolicName+"-"+version;
+		}
+
+		public String getLocation() { return location; }
+
+		public Dictionary getHeaders(String localeString) { return headers; }
+		public Dictionary getHeaders() { return headers; }
+
+		public int getState() { throw new IllegalStateException(); }
+		public void start() throws BundleException { throw new IllegalStateException(); }
+		public void stop() throws BundleException { throw new IllegalStateException(); }
+		public void update() throws BundleException { throw new IllegalStateException(); }
+		public void update(InputStream in) throws BundleException { throw new IllegalStateException(); }
+		public void uninstall() throws BundleException { throw new IllegalStateException(); }
+		public long getBundleId() { throw new IllegalStateException(); }
+		public ServiceReference[] getRegisteredServices() { throw new IllegalStateException(); }
+		public ServiceReference[] getServicesInUse() { throw new IllegalStateException(); }
+		public boolean hasPermission(java.lang.Object permission) { throw new IllegalStateException(); }
+		public URL getResource(String name) { throw new IllegalStateException(); }
+		public String getSymbolicName() { throw new IllegalStateException(); }
+		public Class loadClass(String name) throws ClassNotFoundException { throw new IllegalStateException(); }
+		public Enumeration getResources(String name) { throw new IllegalStateException(); }
+		public Enumeration getEntryPaths(String path) { throw new IllegalStateException(); }
+		public URL getEntry(String name) { throw new IllegalStateException(); }
+		public long getLastModified() { throw new IllegalStateException(); }
+	}
+	
 	public static String location(String symbname,String version) {
 		return "bundle://"+symbname+"-"+version;
 	}
@@ -218,7 +296,8 @@ public class BundleTest extends TestCase {
 	public void testNothing() throws Exception {}
 	
 	public void testBasic() throws Exception {
-		DeploymentPackage dp = new DummyDeploymentPackage();
+		DummyDeploymentPackage dp = new DummyDeploymentPackage();
+		dp.bundles.add(new DummyBundle("foo","1.1"));
 		resourceProcessor.begin(dp,ResourceProcessor.INSTALL);
 
 		MetaData md = of.createMetaData();
@@ -231,12 +310,28 @@ public class BundleTest extends TestCase {
 		d.setObject(o);
 		o.setOcdref("ocd1");
 		Attribute attr = of.createAttribute();
-		attr.setAdref("adr1");
+		attr.setAdref("ad1");
 		attr.setContent("data");
 		o.getAttribute().add(attr);
+		
+		OCD ocd = of.createOCD();
+		ocd.setId("ocd1");
+		ocd.setName("ocdName1");
+		
+		AD ad = of.createAD();
+		ad.setId("ad1");
+		ad.setCardinality(0);
+		ad.setType("String");
+		
+		ocd.getAD().add(ad);
+
+		md.getOCD().add(ocd);
 		
 		resourceProcessor.process("foo/autoconf.xml",getStream(md));
 
 		resourceProcessor.complete(true);
+		
+		DummyConfiguration conf = (DummyConfiguration) configurationAdmin.configurations.get("pid1");
+		assertEquals("data",conf.properties.get("ad1"));
 	}
 }
