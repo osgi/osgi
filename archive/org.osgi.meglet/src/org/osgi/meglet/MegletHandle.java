@@ -26,10 +26,6 @@
  */
 package org.osgi.meglet;
 
-import java.util.*;
-import java.io.*;
-import java.security.*;
-import org.osgi.framework.*;
 import org.osgi.service.application.*;
 
 
@@ -37,119 +33,14 @@ import org.osgi.service.application.*;
  * This service represents a Meglet instance. It is a specialization of the
  * application handle and provides features specific to the Meglet model.
  */
-public final class MegletHandle extends ApplicationHandle {
-	private int									status;
-	private Meglet							meglet;
-	private MegletContainer			megletContainer;
-	private ServiceReference		appDescRef;
-	private ServiceRegistration	serviceReg;
-	private BundleContext				bc;
-	private File								suspendedFileName	= null;
-	private static Long					counter						= new Long(0);
-	private Map									resumeArgs				= null;
-	private String      				pid;
-	private final static int 		NONEXISTENT = -1;
-	
+public abstract class MegletHandle extends ApplicationHandle {
+
 	/**
 	 * The Meglet instance is suspended.
 	 * 
 	 * @modelguid {8EBD44E3-883B-4515-8EEA-8469F6F16408}
 	 */
 	public  final static int 		SUSPENDED = 2;
-
-	public MegletHandle(MegletContainer megletContainer, Meglet meglet,
-			MegletDescriptor appDesc, BundleContext bc) throws Exception {
-		
-		appDescRef = megletContainer.getReference( appDesc );		
-		pid = appDesc.getPID();
-		
-		status = MegletHandle.NONEXISTENT;
-		this.megletContainer = megletContainer;
-		this.bc = bc;
-		this.meglet = meglet;
-	}
-
-	/**
-	 * Returns the state of the Meglet instance specific to the Meglet model.
-	 * 
-	 * @throws IllegalStateException
-	 *             if the Meglet handle is unregistered
-	 * 
-	 * @return the state of the Meglet instance
-	 */
-	public int getState() throws Exception {
-		if( status == MegletHandle.NONEXISTENT )
-			throw new Exception( "Invalid state!" );
-		return status;
-	}	
-
-	/**
-	 * Returns the instance id of the Meglet instance. Must be unique on the
-	 * device.
-	 * 
-	 * @throws IllegalStateException
-	 *             if the Meglet handle is unregistered
-	 * 
-	 * @return the instance id of the Meglet instance
-	 */
-	public String getInstanceID() {
-		return pid;
-	}
-
-	/**
-	 * Returns service reference to the application descriptor of the Meglet to
-	 * which this Meglet instance belongs to.
-	 * 
-	 * @return the application descriptor of the Meglet to which this Meglet
-	 *         instance belongs to
-	 * 
-	 * @throws IllegalStateException
-	 *             if the Meglet handle is unregistered
-	 */
-	public ServiceReference getApplicationDescriptor() {
-		return appDescRef;
-	}
-
-	public ServiceReference startHandle(Map args) throws Exception {
-		AccessController.checkPermission(new ApplicationAdminPermission(pid, 
-				                             ApplicationAdminPermission.LAUNCH));
-
-		if (args == null)
-			resumeArgs = null;
-		else
-			resumeArgs = new Hashtable(args);
-
-		if (status != MegletHandle.NONEXISTENT)
-			throw new Exception("Invalid State");
-
-		if (meglet != null) {
-			meglet.startApplication(args, null);
-			registerAppHandle();
-			setStatus(ApplicationHandle.RUNNING);
-
-			return serviceReg.getReference();
-		}
-		else
-			throw new Exception("Invalid meglet handle!");		
-	}
-
-	/**
-	 * Destroys a Meglet according to the Meglet model. It calls the associated
-	 * Meglet instance's stop() method with null parameter.
-	 *  
-	 */
-	protected void destroySpecific() throws Exception {
-		if (status == MegletHandle.NONEXISTENT
-				|| status == ApplicationHandle.STOPPING)
-			throw new Exception("Invalid State");
-		if (meglet != null) {
-			setStatus(ApplicationHandle.STOPPING);
-			meglet.stopApplication(null);
-			meglet = null;
-		}
-		setStatus(MegletHandle.NONEXISTENT);
-		unregisterAppHandle();
-	}
 
 	/**
 	 * Suspends the Melet instance. It calls the associated Meglet instance's
@@ -164,34 +55,7 @@ public final class MegletHandle extends ApplicationHandle {
 	 * @throws IllegalStateException
 	 *             if the Meglet handle is unregistered
 	 */
-	public void suspend() throws Exception {
-
-		AccessController.checkPermission(new ApplicationAdminPermission(pid, 
-				ApplicationAdminPermission.MANIPULATE));
-
-		if (status != ApplicationHandle.RUNNING)
-			throw new Exception("Invalid State");
-		if (meglet != null) {
-			synchronized (counter) {
-				counter = new Long(counter.longValue() + 1);
-				suspendedFileName = bc.getDataFile("SuspendedState-"
-						+ counter.toString());
-			}
-
-			if (suspendedFileName.exists())
-				suspendedFileName.delete();
-
-			OutputStream os = new FileOutputStream(suspendedFileName);
-			meglet.stopApplication(os);
-			os.close();
-
-			meglet = null;
-
-			setStatus(MegletHandle.SUSPENDED);
-		}
-		else
-			throw new Exception("Invalid meglet handle!");
-	}
+	public abstract void suspend() throws Exception;
 
 	/**
 	 * Resumes the Meglet instance. It calls the associated Meglet instance's
@@ -206,51 +70,5 @@ public final class MegletHandle extends ApplicationHandle {
 	 * @throws IllegalStateException
 	 *             if the Meglet handle is unregistered
 	 */
-	public void resume() throws Exception {
-
-		AccessController.checkPermission(new ApplicationAdminPermission(pid, 
-				ApplicationAdminPermission.MANIPULATE));
-
-		if (status != MegletHandle.SUSPENDED)
-			throw new Exception("Invalid State");
-
-		MegletDescriptor appDesc = (MegletDescriptor)bc.getService( appDescRef );
-		meglet = megletContainer.createMegletInstance(appDesc, true);
-		appDesc.initMeglet(meglet, this);
-		bc.ungetService( appDescRef );
-
-		InputStream is = new FileInputStream(suspendedFileName);
-		meglet.startApplication(resumeArgs, is);
-		is.close();
-
-		setStatus(ApplicationHandle.RUNNING);
-	}
-
-	private void setStatus(int status) {
-		this.status = status;
-
-		if( status != NONEXISTENT )
-			serviceReg.setProperties( properties() );
-	}
-
-	private Hashtable properties() {
-		Hashtable props = new Hashtable();
-		props.put( "application.pid", pid );
-		props.put( "application.state", new Integer( status ) );
-		props.put( "descriptor.pid", appDescRef.getProperty( Constants.SERVICE_PID ) );		
-		return props;
-	}
-	
-	private void registerAppHandle() throws Exception {
-		serviceReg = bc.registerService(
-				"org.osgi.service.application.ApplicationHandle", this, properties() );
-	}
-
-	private void unregisterAppHandle() {
-		if (serviceReg != null) {
-			//unregistering the ApplicationHandle
-			serviceReg.unregister();
-			serviceReg = null;
-		}
-	}
+	public abstract void resume() throws Exception;
 }
