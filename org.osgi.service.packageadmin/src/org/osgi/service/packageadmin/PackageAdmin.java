@@ -236,12 +236,15 @@ public interface PackageAdmin {
 	 * If the specified bundle is a fragment then <code>null</code> is returned.
 	 * If no fragments are attached to the specified bundle then <code>null</code>
 	 * is returned.
-	 * ### what do you get when the bundle is not resolved?
+	 * <p>
+	 * This method does not attempt to resolve the specified bundle.  If the 
+	 * specified bundle is not resolved then <code>null</code> is returned. 
 	 * 
 	 * @param bundle The bundle whose attached fragment bundles are to be
 	 *        returned.
 	 * @return An array of fragment bundles or <code>null</code> if the bundle
-	 *         does not have any attached fragment bundles.
+	 *         does not have any attached fragment bundles or the bundle is not
+	 *         resolved.
 	 * @since 1.2
 	 */
 	public Bundle[] getFragments(Bundle bundle);
