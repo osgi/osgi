@@ -20,7 +20,6 @@ package org.osgi.impl.service.monitor;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtData;
 
-// TODO remove Referential Integrity members and getters
 // TODO check whether getValidNames must return non-null for fixed-name nodes
 public class MonitorMetaNodeImpl implements DmtMetaNode
 {
@@ -39,22 +38,14 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
     boolean   zeroOccurrenceAllowed = false;
 
     DmtData   defaultData           = null;
-    boolean   hasMaximum            = false;
-    boolean   hasMinimum            = false;
     int       max                   = Integer.MAX_VALUE;
     int       min                   = Integer.MIN_VALUE;
     String[]  validNames            = null;
     DmtData[] validValues           = null;
     int       format                = DmtData.FORMAT_NULL;
-    String    nameRegExp            = null;    
-    String    regExp                = null;
+    String    namePattern            = null;    
+    String    pattern                = null;
     String[]  mimeTypes             = null;
-
-    /*
-    String    referredURI           = null;
-    String[]  dependentURIs         = null;
-    String[]  childURIs             = null;
-    */
 
     // Leaf node in MonitorPlugin
     public MonitorMetaNodeImpl(String description, boolean replaceable, 
@@ -128,16 +119,6 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
         return defaultData;
     }
 
-    public boolean hasMax()
-    {
-        return hasMaximum;
-    }
-
-    public boolean hasMin()
-    {
-        return hasMinimum;
-    }
-
     public int getMax()
     {
         return max;
@@ -162,36 +143,19 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
         return format;
     }
 
-    public String getNameRegExp() {
-        return nameRegExp;
+    public String getNamePattern() {
+        return namePattern;
     }
     
-    public String getRegExp()
+    public String getPattern()
     {
-        return regExp;
+        return pattern;
     }
 
     public String [] getMimeTypes()
     {
         return mimeTypes;
     }
-
-    /*
-    public String getReferredURI()
-    {
-        return referredURI;
-    }
-
-    public String [] getDependentURIs()
-    {
-        return dependentURIs;
-    }
-
-    public String [] getChildURIs()
-    {
-        return childURIs;
-    }
-    */
 
     private void setCommon(String description, boolean allowInfinte)
     {

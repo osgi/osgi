@@ -19,7 +19,6 @@ package org.osgi.impl.service.dmt;
 
 import org.osgi.service.dmt.*;
 
-// TODO remove Referential Integrity members and getters
 // TODO fill in the validNames attribute properly
 // TODO consider using the nameRegExp attribute
 public class DmtMetaNodeImpl implements DmtMetaNode {
@@ -35,23 +34,15 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 	int			maxOccurrence			= 1;
 	boolean		zeroOccurrenceAllowed	= false;
 	DmtData		defaultData				= null;
-	boolean		hasMaximum				= false;
-	boolean		hasMinimum				= false;
 	int			max						= Integer.MAX_VALUE;
 	int			min						= Integer.MIN_VALUE;
 	String[]	validNames				= null;
 	DmtData[]	validValues				= null;
 	int			format					= DmtDataType.NULL;
-	String		nameRegExp              = null;
-	String		regExp					= null;
+	String		namePattern             = null;
+	String		valuePattern			= null;
 	String[]	mimeTypes				= null;
     
-    /*
-	String		referredURI				= null;
-	String[]	dependentURIs			= null;
-	String[]	childURIs				= null;
-    */
-
 	// Interior node with default properties
 	public DmtMetaNodeImpl() {
 		leaf = false;
@@ -115,14 +106,6 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 		return defaultData;
 	}
 
-	public boolean hasMax() {
-		return hasMaximum;
-	}
-
-	public boolean hasMin() {
-		return hasMinimum;
-	}
-
 	public int getMax() {
 		return max;
 	}
@@ -142,31 +125,17 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 		return format;
 	}
 
-    public String getNameRegExp() {
-        return nameRegExp;
+    public String getNamePattern() {
+        return namePattern;
     }
     
-	public String getRegExp() {
-		return regExp;
+	public String getPattern() {
+		return valuePattern;
 	}
 
 	public String[] getMimeTypes() {
 		return mimeTypes;
 	}
-
-	/*
-	public String getReferredURI() {
-		return referredURI;
-	}
-
-	public String[] getDependentURIs() {
-		return dependentURIs;
-	}
-
-	public String[] getChildURIs() {
-		return childURIs;
-	}
-	*/
 
 	private void setCommon(String description, boolean allowInfinte) {
 		this.description = description;
