@@ -34,8 +34,15 @@ package org.osgi.service.cm;
  * @version $Revision$
  */
 public class ConfigurationException extends Exception {
-	String	property;
-	String	reason;
+    static final long serialVersionUID = -1690090413441769377L;
+    
+	private String	property;
+	private String	reason;
+
+	/**
+	 * Nested exception.
+	 */
+	private Throwable	cause;
 
 	/**
 	 * Create a <tt>ConfigurationException</tt> object.
@@ -48,6 +55,23 @@ public class ConfigurationException extends Exception {
 		super(property + " : " + reason);
 		this.property = property;
 		this.reason = reason;
+		this.cause = null;
+	}
+
+	/**
+	 * Create a <tt>ConfigurationException</tt> object.
+	 * 
+	 * @param property name of the property that caused the problem,
+	 *        <tt>null</tt> if no specific property was the cause
+	 * @param reason reason for failure
+     * @param cause The cause of this exception.
+     * @since 1.2
+	 */
+	public ConfigurationException(String property, String reason, Throwable cause) {
+		super(property + " : " + reason);
+		this.property = property;
+		this.reason = reason;
+		this.cause = cause;
 	}
 
 	/**
@@ -67,5 +91,29 @@ public class ConfigurationException extends Exception {
 	 */
 	public String getReason() {
 		return reason;
+	}
+
+	/**
+	 * Returns the cause of this exception or <tt>null</tt> if no
+	 * cause was specified when this exception was created.
+	 *
+	 * @return  The cause of this exception or <tt>null</tt> if no
+	 * cause was specified.
+	 * @since 1.2 
+	 */
+	public Throwable getCause() {
+	    return cause;
+	}
+
+	/**
+	 * The cause of this exception can only be set when constructed.
+	 *
+	 * @throws java.lang.IllegalStateException
+	 * This method will always throw an <tt>IllegalStateException</tt>
+	 * since the cause of this exception can only be set when constructed.
+	 * @since 1.2
+	 */
+	public Throwable initCause(Throwable cause) {
+		throw new IllegalStateException();
 	}
 }

@@ -52,6 +52,7 @@ import java.util.Hashtable;
  * @version $Revision$
  */
 public final class TopicPermission extends BasicPermission {
+    static final long serialVersionUID = -5855563886961618300L;
 	/**
 	 * The action string <tt>publish</tt>.
 	 */
@@ -357,6 +358,7 @@ public final class TopicPermission extends BasicPermission {
  * @see java.security.PermissionCollection
  */
 final class TopicPermissionCollection extends PermissionCollection {
+	   static final long serialVersionUID = -614647783533924048L;
 	/**
 	 * Table of permissions.
 	 * 
