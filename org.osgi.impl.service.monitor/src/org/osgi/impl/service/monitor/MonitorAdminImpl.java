@@ -17,6 +17,8 @@
  */
 package org.osgi.impl.service.monitor;
 
+import java.lang.reflect.Array;
+import java.text.MessageFormat;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
@@ -61,6 +63,11 @@ import org.osgi.util.tracker.ServiceTracker;
 public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
     private static final String MONITOR_EVENT_TOPIC = "org.osgi.service.monitor.MonitorEvent";
     private static final int MONITORING_ALERT_CODE = 1226;
+    
+    private static final MessageFormat kpiTag = 
+        new MessageFormat("<kpi type=\"{0}\" cardinality=\"{1}\">\n{2}</kpi>");
+    private static final MessageFormat valueTag =
+        new MessageFormat("    <value>{0}</value>\n");
 
     private BundleContext bc;
     private ServiceTracker tracker;
@@ -167,7 +174,9 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
         Iterator iterator = kpis.iterator();
         for(int i = 0; iterator.hasNext(); i++) {
 			KPI kpi = (KPI) iterator.next();
-			items[i] = createAlertItem(kpi);
+			items[i] = new DmtAlertItem(Activator.PLUGIN_ROOT + "/" + kpi.getPath(),
+					                    "x-oma-trap:" + kpi.getPath(),
+										"xml", null, createXml(kpi));
         }
 
         try {
@@ -178,21 +187,52 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
             e.printStackTrace(System.out);
         }
     }
-    
-    private DmtAlertItem createAlertItem(KPI kpi) {
-        String data = null;
 
-        switch(kpi.getType()) {
-        case KPI.TYPE_STRING:  data = kpi.getString();       break;
-        case KPI.TYPE_INTEGER: data = "" + kpi.getInteger(); break;
-        case KPI.TYPE_FLOAT:   data = "" + kpi.getFloat();   break;
-        case KPI.TYPE_OBJECT:  data = "" + kpi.getObject();  break;
+    static String createXml(KPI kpi) {
+        int type = kpi.getType();
+        switch(type) {
+        case KPI.TYPE_STRING:  return createScalarXml("string",  kpi.getString());
+        case KPI.TYPE_INTEGER: return createScalarXml("integer", Integer.toString(kpi.getInteger()));
+        case KPI.TYPE_FLOAT:   return createScalarXml("float", Float.toString(kpi.getFloat()));
+        case KPI.TYPE_OBJECT:  return createObjectXml(kpi.getObject());
         }
+        
+        throw new IllegalArgumentException("Unknown KPI type '" + type + "'.");
+    }
 
-        return new DmtAlertItem(Activator.PLUGIN_ROOT + "/" + kpi.getPath(),
-        		                "x-oma-trap:" + kpi.getPath(),
-                                "chr", // TODO send result in XML format
-                                null, data);
+    private static String createObjectXml(Object data) {
+        if(data.getClass().isArray())
+            return createArrayXml(data);
+        else if(data instanceof Vector) {
+            Vector vector = (Vector) data;
+            Object[] array;
+            if(vector.size() == 0)
+                array = new String[] {};
+            else
+                array = (Object[])
+                    Array.newInstance(vector.firstElement().getClass(),
+                                      vector.size());
+            return createArrayXml(vector.toArray(array));
+        }
+        else
+            return createScalarXml(data.getClass().getName().toLowerCase(), 
+                                   data.toString());
+    }
+
+    private static String createArrayXml(Object array) {
+        String type = array.getClass().getComponentType().getName().toLowerCase();
+
+        StringBuffer sb = new StringBuffer();
+        for(int i = 0; i < Array.getLength(array); i++)
+            sb.append(valueTag.format(new Object[] { Array.get(array, i).toString() }));
+        
+        return kpiTag.format(new Object[] { type, "array", sb.toString() });
+    }
+
+    private static String createScalarXml(String type, String data) {
+        String result = kpiTag.format(new Object[] { type, "scalar", 
+                                      valueTag.format(new Object[] { data })});
+        return result;
     }
 
     synchronized MonitoringJob startJob(String initiator, String[] kpiNames, int schedule, int count, boolean local)
@@ -214,10 +254,12 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
             throw new IllegalArgumentException("Count parameter cannot be 0 in case of changed-based monitoring.");
 
         // Check that all paths point to valid KPIs
-        // TODO make this more efficient: collect KPIs from the same Monitorable, iterate through registered Ms only once
+        // OPTIMIZE collect KPIs from the same Monitorable, iterate through registered Ms only once
         for(int i = 0; i < kpiNames.length; i++)
             trustedGetKpi(kpiNames[i]);
 
+        // TODO remove duplicates from the list of KPI names
+        
         MonitoringJobImpl job = new MonitoringJobImpl(this, initiator, kpiNames, schedule, count, local);
 
         jobs.add(job);
@@ -282,24 +324,45 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
     	if(id == null)
             throw new IllegalArgumentException("Monitorable ID argument is null.");
         
-        // TODO check ID for filter-illegal characters
+        String escId = escapeFilterValue(id);
+
         ServiceReference[] refs;
         try {
-            refs = bc.getServiceReferences(Monitorable.class.getName(), "(service.pid=" + id + ")");
+            refs = bc.getServiceReferences(Monitorable.class.getName(), "(service.pid=" + escId + ")");
         } catch(InvalidSyntaxException e) {
-            // should not be reached if the above TODO is done
-            throw new IllegalArgumentException("Invalid characters in Monitorable ID '" + id + 
+            // should never be reached
+            throw new IllegalArgumentException("Invalid characters in Monitorable ID '" + escId + 
                                                "': ." + e.getMessage());
         }
 
         if(refs == null)
             throw new IllegalArgumentException("Monitorable id '" + id + "' not found (no matching service registered).");
 
-        // TODO is it allowed to give the tracker a reference that was not given by it?
         Monitorable monitorable = (Monitorable) tracker.getService(refs[0]);
         if(monitorable == null)
             throw new IllegalArgumentException("Monitorable id '" + id + "' not found (monitorable no longer registered.");
 
         return monitorable;
+    }
+    
+    /**
+     * Escapes characters that are not allowed literally in the value part of a
+     * filter string. These characters are "*", "(" and ")", and the escape
+     * character is "\" as specified by RFC 1960.
+     * 
+     * @param value a string to be used as a value in an LDAP-style filter
+     *        string
+     * @return the string <code>value</code> with the special characters
+     *         escaped.
+     */
+    static String escapeFilterValue(String value) {
+        StringBuffer sb = new StringBuffer(value);
+        int i = 0;
+        while(i < sb.length()) {
+            if("*()".indexOf(sb.charAt(i)) != -1)
+                sb.insert(i++, "\\");
+            i++;
+        }
+        return sb.toString();
     }
 }

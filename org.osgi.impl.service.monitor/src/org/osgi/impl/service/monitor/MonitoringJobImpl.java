@@ -36,7 +36,12 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
     private boolean local;
     private boolean running;
 
-    private int[] callCounters; // for change-based jobs, to count events
+    // The subset of kpiNames that is monitored.  This differs from kpiNames
+    // only in case of remote monitoring jobs with trap references.
+    private String[] monitoredKpiNames;
+    
+    // For change-based jobs, to count events for each monitored KPI.
+    private int[] callCounters;
 
     MonitoringJobImpl(MonitorAdminImpl monitorAdmin, String initiator, 
                       String[] kpiNames, long schedule, int reportCount, 
@@ -50,11 +55,16 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
         this.reportCount = reportCount;
 
         this.local = local;
+        
+        if(local || kpiNames.length == 1)
+        	monitoredKpiNames = kpiNames;
+        else // the first KPI is to be monitored, the rest are only references
+            monitoredKpiNames = new String[] { kpiNames[0] };
 
         running = true;
 
         if(isChangeBased()) {
-            callCounters = new int[kpiNames.length];
+            callCounters = new int[monitoredKpiNames.length];
             Arrays.fill(callCounters, 0);
         } else                  // timer based
             (new Thread(this)).start();
@@ -64,10 +74,14 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
         return schedule == 0;
     }
 
-    // returns true if kpiName is handled by this job AND
+    // returns true if kpiName is monitored by this job AND
     // this method has been called 'reportCount' times for this kpi
     boolean isNthCall(String kpiName) {
-        int i = Arrays.asList(kpiNames).indexOf(kpiName);
+        if(!isChangeBased())
+            throw new IllegalStateException(
+                    "isNthCall() can only be called for change-based jobs.");
+        
+        int i = Arrays.asList(monitoredKpiNames).indexOf(kpiName);
         if(i < 0)
             return false;
 
@@ -110,10 +124,6 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
 
         while(running) {
             monitorAdmin.scheduledUpdate(kpiNames, this);
-            /*
-            for(int i = 0; i < kpiNames.length; i++)
-                monitorAdmin.scheduledUpdate(kpiNames[i], this);
-            */
             if(reportCount > 0) {
                 reportCount--;
                 if(reportCount == 0)

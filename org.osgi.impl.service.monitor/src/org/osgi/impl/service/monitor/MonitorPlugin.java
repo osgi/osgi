@@ -17,8 +17,6 @@
  */
 package org.osgi.impl.service.monitor;
 
-import java.lang.reflect.Array;
-import java.text.MessageFormat;
 import java.util.*;
 import org.osgi.framework.*;
 import org.osgi.service.dmt.*;
@@ -28,11 +26,6 @@ import org.osgi.util.tracker.ServiceTracker;
 
 public class MonitorPlugin implements DmtDataPlugIn
 {
-    private static final MessageFormat kpiTag = 
-        new MessageFormat("<kpi type=\"{0}\" cardinality=\"{1}\">\n{2}</kpi>");
-    private static final MessageFormat valueTag =
-        new MessageFormat("    <value>{0}</value>\n");
-
     private BundleContext bc;
     private ServiceTracker tracker;
     private MonitorAdminImpl monitorAdmin;
@@ -416,16 +409,7 @@ public class MonitorPlugin implements DmtDataPlugIn
 
             // path[2].equals("Results")
 
-            int type = kpiValue.getType();
-            switch(type) {
-            case KPI.TYPE_STRING:  return createScalarResult("string",  kpiValue.getString());
-            case KPI.TYPE_INTEGER: return createScalarResult("integer", Integer.toString(kpiValue.getInteger()));
-            case KPI.TYPE_FLOAT:   return createScalarResult("float",   Float.toString(kpiValue.getFloat()));
-            case KPI.TYPE_OBJECT:  return createObjectResult(kpiValue);
-            default:
-                throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED, 
-                                       "Unknown KPI type '" + type + "'.");
-            }
+            return new DmtData(MonitorAdminImpl.createXml(kpiValue), true);
         }
 
         // path.length > 4, path[2].equals("Server")
@@ -545,7 +529,7 @@ public class MonitorPlugin implements DmtDataPlugIn
         try {
             refs = bc.getServiceReferences(Monitorable.class.getName(), "(service.pid=" + id + ")");
         } catch(InvalidSyntaxException e) {
-            // should not be reached if the above TODO is done
+            // should not be reached if the above todo is done
             throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Invalid characters in Monitorable ID.");
         }
 
@@ -579,46 +563,6 @@ public class MonitorPlugin implements DmtDataPlugIn
         return new KpiWrapper(monId + '/' + id, kpi, monitorAdmin);
     }
 
-    private DmtData createObjectResult(KPI kpi) {
-        System.out.println("createObjectResult " + kpi);
-        Object data = kpi.getObject();
-        if(data.getClass().isArray())
-            return createArrayResult(data);
-        else if(data instanceof Vector) {
-            Vector vector = (Vector) data;
-            Object[] array;
-            if(vector.size() == 0)
-                array = new String[] {};
-            else
-                array = (Object[]) 
-                    Array.newInstance(vector.firstElement().getClass(),
-                                      vector.size());
-            return createArrayResult(vector.toArray(array));
-        }
-        else
-            return createScalarResult(data.getClass().getName().toLowerCase(), 
-                                      data.toString());
-    }
-
-    private DmtData createArrayResult(Object array) {
-        System.out.println("createArrayResult " + array);
-        String type = array.getClass().getComponentType().getName().toLowerCase();
-
-        StringBuffer sb = new StringBuffer();
-        for(int i = 0; i < Array.getLength(array); i++)
-            sb.append(valueTag.format(new Object[] { Array.get(array, i).toString() }));
-        
-        return new DmtData(kpiTag.format(new Object[] { type, "array", sb.toString() }));
-    }
-
-    private DmtData createScalarResult(String type, String data) {
-        System.out.println("createScalarResult " + type + " " + data);
-        String result = kpiTag.format(new Object[] { type, "scalar", 
-                                      valueTag.format(new Object[] { data })});
-        System.out.println("result: " + result);
-        return new DmtData(result, true);
-    }
-    
     private static String[] prepareUri(String nodeUri) {
         // assuming that nodeUri starts with the monitoring root node
         int rootLen = Activator.PLUGIN_ROOT.length();
@@ -798,6 +742,7 @@ class Server {
 
         enabled = data.getBoolean();
 
+        // TODO do something with start/stop exceptions
         if(enabled)
             startJob();
         else
@@ -845,6 +790,7 @@ class Server {
 
     // TODO allow separate creation of TrapRef/<X>/TrapRefID nodes?
     void addTrapRef(String name, String nodeUri) throws DmtException {
+        // TODO node name is not a good default, ref has to contain a / anyway
     	if(trapRef.put(name, name) != null)
     		throw new DmtException(nodeUri, DmtException.NODE_ALREADY_EXISTS,
                                    "A trap reference with the given ID already exists.");
@@ -872,8 +818,15 @@ class Server {
         else
             count = 0;
 
-        job = monitorAdmin.startJob(serverId, new String[] { path } , schedule, count, false);
-
+        // this is not very efficient...
+        String[] trapRefIds = (String[]) trapRef.values().toArray(new String[0]);
+        String[] kpiNames = new String[trapRefIds.length + 1];
+        
+        kpiNames[0] = path;
+        for (int i = 0; i < trapRefIds.length; i++)
+			kpiNames[i+1] = trapRefIds[i];
+                
+        job = monitorAdmin.startJob(serverId, kpiNames, schedule, count, false);
     }
 
     private void stopJob() {
