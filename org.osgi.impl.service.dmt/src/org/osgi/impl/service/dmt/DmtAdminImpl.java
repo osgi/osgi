@@ -17,15 +17,21 @@
  */
 package org.osgi.impl.service.dmt;
 
+import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
 import org.osgi.service.dmt.*;
 import org.osgi.service.event.EventAdmin;
+import org.osgi.service.permissionadmin.PermissionInfo;
 
 public class DmtAdminImpl implements DmtAdmin {
+    private DmtPrincipalPermissionAdmin dmtPermissionAdmin;
 	private DmtPluginDispatcher	dispatcher;
 	private EventAdmin eventChannel;
 
-	public DmtAdminImpl(DmtPluginDispatcher dispatcher,
-			              EventAdmin eventChannel) {
+    // OPTIMIZE maybe make some context object to store these references
+	public DmtAdminImpl(DmtPrincipalPermissionAdmin dmtPermissionAdmin, 
+                        DmtPluginDispatcher dispatcher, 
+                        EventAdmin eventChannel) {
+        this.dmtPermissionAdmin = dmtPermissionAdmin;
 		this.dispatcher = dispatcher;
         this.eventChannel = eventChannel;
 	}
@@ -41,7 +47,12 @@ public class DmtAdminImpl implements DmtAdmin {
 
 	public DmtSession getSession(String principal, String subtreeUri, int lockMode)
 			throws DmtException {
+        PermissionInfo[] permissions = null;
+        if(principal != null)
+            permissions = (PermissionInfo[]) 
+                dmtPermissionAdmin.getPrincipalPermissions().get(principal);
+        
 		return new DmtSessionImpl(principal, subtreeUri, lockMode, 
-                                  eventChannel, dispatcher);
+                                  permissions, eventChannel, dispatcher);
 	}
 }
