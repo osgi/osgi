@@ -319,10 +319,15 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Attr
 			return Msg.formatter.getString(NULL_IS_INVALID);
 		}
 
-		if ((_dataType != STRING)
-				&& (_minValue == null) && (_maxValue == null)) {
-			// No validation present
-			return null;
+		if (_dataType != STRING) {
+			if ((_minValue == null) && (_maxValue == null))
+				// No validation present
+				return null;
+		}
+		else {
+			if (_values.size() < 1)
+				// No validation present
+				return null;
 		}
 
 		if (_cardinality != 0) {
@@ -366,11 +371,7 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Attr
 
 		switch (_dataType) {
 			case STRING :
-				// TODO Julian Chen - What is the validation rule for String ?
-				//if (value.compareTo((String) _minValue) < 0
-				//		|| value.compareTo((String) _maxValue) > 0) {
-				//	rangeError = true;
-				//}
+				rangeError = !_values.contains(value);
 				break;
 			case LONG :
 				Long longVal = new Long(value);
