@@ -99,28 +99,28 @@ public class ControlUnitAdminException extends ControlUnitException {
   
   /**
    * Constructs a new undetermined error control unit exception with the given 
-   * application exception. <BR>
+   * nested exception. <BR>
    * 
-   * The error code of the constructed exception will be {@link #UNDETERMINED_APPLICATION_ERROR}.
-   * The application exception may be retrieved by the {@link #getApplicationException()} method.
+   * The error code of the constructed exception will be {@link #UNDETERMINED_ERROR}.
+   * The nested exception may be retrieved by the {@link #getNestedException()} method.
    * 
-   * @param exception the actual application exception
+   * @param exception the nested exception
    */
-  public ControlUnitAdminException(Exception exception) {
+  public ControlUnitAdminException(Throwable exception) {
     this(null, exception);
   }
   
   /**
-   * Constructs a new undetermined application error exception with the given message 
+   * Constructs a new undetermined error exception with the given message 
    * and exception. <BR>
    * 
-   * The error code of the constructed exception will be {@link #UNDETERMINED_APPLICATION_ERROR}.
-   * The application exception may be retrieved by the {@link #getApplicationException()} method. 
+   * The error code of the constructed exception will be {@link #UNDETERMINED_ERROR}.
+   * The nested exception may be retrieved by the {@link #getNestedException()} method. 
    * 
    * @param message detail message
-   * @param exception the actual application exception
+   * @param exception the nested exception
    */
-  public ControlUnitAdminException(String message, Exception exception) {
+  public ControlUnitAdminException(String message, Throwable exception) {
     super(message, exception);
   }
   
@@ -133,8 +133,8 @@ public class ControlUnitAdminException extends ControlUnitException {
     buffer.append("ControlUnitException[");
     buffer.append(" error = ").append(errorCode);
     switch (errorCode) {
-      case UNDETERMINED_APPLICATION_ERROR:
-        buffer.append("UNDETERMINED_APPLICATION_ERROR");
+      case UNDETERMINED_ERROR:
+        buffer.append("UNDETERMINED_ERROR");
         break;
       case NO_SUCH_ACTION_ERROR:
         buffer.append("NO_SUCH_ACTION_ERROR");
@@ -170,9 +170,9 @@ public class ControlUnitAdminException extends ControlUnitException {
     if( msg != null ) {
       buffer.append(",message = ").append(msg);
     }
-    Exception applicationException = getApplicationException();
-    if (applicationException != null) {
-      buffer.append(",applicationException = ").append(applicationException);
+    Throwable nestedException = getNestedException();
+    if (nestedException != null) {
+      buffer.append(",nestedException = ").append(nestedException);
     }
     buffer.append("]");
     return buffer.toString();

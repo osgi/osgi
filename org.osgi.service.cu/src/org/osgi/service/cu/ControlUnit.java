@@ -86,7 +86,7 @@ public interface ControlUnit {
    * @return The value of the variable
    * @throws ControlUnitException if the state variable's value cannot be
    * retrieved for some reason. {@link ControlUnitException#getErrorCode()}
-   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
    * @throws NullPointerException if the stateVariableID is <code>null</code>. 
    */
@@ -107,7 +107,7 @@ public interface ControlUnit {
    *         not return value.
    * @throws ControlUnitException if error prevents the execution of the action.
    * {@link ControlUnitException#getErrorCode()}
-   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
    * @throws NullPointerException if the actionID is <code>null</code>.
    */

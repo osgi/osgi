@@ -161,7 +161,7 @@ public interface ControlUnitAdmin {
    * @return An array of <code>ControlUnit<code> identifiers
    * @throws ControlUnitException if the search operation cannot be performed due to an error.
    * {@link ControlUnitException#getErrorCode()}
-   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
    * @throws NullPointerException if the controlUnitType or finderID is <code>null</code>.
    */
@@ -252,7 +252,7 @@ public interface ControlUnitAdmin {
    * @return The ID of the newly created control unit
    * @throws ControlUnitException if the control unit cannot be created for some
    * reason. {@link ControlUnitException#getErrorCode()}
-   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
    * @throws NullPointerException if the controlUnitType or constructorID is <code>null</code>.
    */
@@ -270,7 +270,7 @@ public interface ControlUnitAdmin {
    * @param controlUnitID - controlUnitId control unit id.
    * @throws ControlUnitException if the control unit cannot be destroyed for some
    * reason. {@link ControlUnitException#getErrorCode()}
-   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
    * @throws NullPointerException if the controlUnitType or controlUnitID is <code>null</code>.
    */
@@ -297,7 +297,7 @@ public interface ControlUnitAdmin {
    * @return The value of the variable
    * @throws ControlUnitException if the state variable's value cannot be
    * retrieved for some reason. {@link ControlUnitException#getErrorCode()}
-   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
    * @throws NullPointerException if the controlUnitType, controlUnitID or stateVariableID is <code>null</code>.
    */
@@ -318,7 +318,7 @@ public interface ControlUnitAdmin {
    *         not return value.
    * @throws ControlUnitException if an error prevents the execution of the action.
    * {@link ControlUnitException#getErrorCode()}
-   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
    * @throws NullPointerException if the controlUnitType, controlUnitID or actionID is <code>null</code>.
    */

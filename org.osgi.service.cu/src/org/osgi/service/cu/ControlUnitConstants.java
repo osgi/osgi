@@ -140,8 +140,8 @@ public interface ControlUnitConstants {
    * a string array containing the IDs of all other control unit's state
    * variables. <br>
    * 
-   * The value of this constant is <code>"org.osgi.control.var.list_sv"</code>.
+   * The value of this constant is <code>"org.osgi.control.var.list"</code>.
    */
-  public static final String STATE_VARIABLES_LIST = "org.osgi.control.var.list_sv";
+  public static final String STATE_VARIABLES_LIST = "org.osgi.control.var.list";
 
 }

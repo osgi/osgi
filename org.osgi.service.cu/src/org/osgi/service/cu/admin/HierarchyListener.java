@@ -83,9 +83,9 @@ public interface HierarchyListener {
    * This callback method is invoked from the <code>ControlUnitAdmin</code> in
    * order to notify the registered listeners for a new hierarchy event. <BR>
    * 
-   * Hierarchy events are sent only when registered unit changes its position
-   * in the control units' hierarchy, not when a control unit is 
-   * registered/unregistered. <BR>
+   * Hierarchy events are sent when registered unit changes its position
+   * in the control units' hierarchy or when a new control unit, which 
+   * has a parent specified, is registered/unregistered. <BR>
    * 
    * {@link org.osgi.service.cu.ControlUnit ControlUnits} and 
    * {@link org.osgi.service.cu.admin.spi.ManagedControlUnit ManagedControlUnits} 

@@ -154,7 +154,7 @@ public interface ControlUnitFactory {
    *
    * @throws ControlUnitException if the search operation cannot be performed due to an error.
    * {@link ControlUnitException#getErrorCode()}
-   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
    */
   public String[] findControlUnits(String finderID, Object arguments) throws ControlUnitException;
@@ -180,7 +180,7 @@ public interface ControlUnitFactory {
    * 
    * @throws ControlUnitException if the state variable's value cannot be
    * retrieved for some reason. {@link ControlUnitException#getErrorCode()}
-   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
    * @return The value of the variable
    */
@@ -198,7 +198,7 @@ public interface ControlUnitFactory {
    * 
    * @throws ControlUnitException if an error prevents the execution of the action.
    * {@link ControlUnitException#getErrorCode()}
-   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
    * 
    * @return The output argument(s) or <code>null</code> if the action does
@@ -226,7 +226,7 @@ public interface ControlUnitFactory {
    *
    * @throws ControlUnitException if the control unit cannot be created for some
    * reason. {@link ControlUnitException#getErrorCode()}
-   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
    * 
    * @return the id of the newly created control unit.
@@ -245,7 +245,7 @@ public interface ControlUnitFactory {
    * @param controlUnitID control unit id.
    * @throws ControlUnitException if the control unit cannot be destroyed for some
    * reason. {@link ControlUnitException#getErrorCode()}
-   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * and {@link ControlUnitException#getNestedException()} methods can be used 
    * to determine the actual cause.
    */
   public void destroyControlUnit(String controlUnitID) throws ControlUnitException;
