@@ -361,9 +361,21 @@ public class SimpleClient implements ManagedService, Monitorable, ChannelListene
     public void channelEvent(ChannelEvent event) {
         String topic = event.getTopic();
 
-        if(!topic.equals("org.osgi.service.monitor.MonitorEvent"))
+        if(topic.equals("org.osgi.service.monitor.MonitorEvent"))
+            monitorEvent(event);
+        else if(topic.startsWith("org.osgi.service.dmt.DmtEvent."))
+            dmtEvent(event);
+        else
             System.out.println("Unexpected event received on topic '" + topic + "'.");
+    }
 
+	private void dmtEvent(ChannelEvent event) {
+        System.out.println("DMT event for session '" + event.getProperty("session.id") + 
+                           "' received on topic '" + event.getProperty("topic") +
+                           "' for nodes '" + Arrays.asList((String[])event.getProperty("nodes")) + "'.");
+	}
+
+	private void monitorEvent(ChannelEvent event) {
         String path = event.getProperty("monitorable.pid") + "/" + event.getProperty("kpi.name");
         Object listeners = event.getProperty("listener.id");
 
