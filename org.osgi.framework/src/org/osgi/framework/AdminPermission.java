@@ -161,25 +161,32 @@ public final class AdminPermission extends Permission
      */
     public final static String STARTLEVEL = "startlevel"; //$NON-NLS-1$
 
-    private final static int ACTION_CLASS		= 0x00000001;
-    private final static int ACTION_EXECUTE		= 0x00000002;
-    private final static int ACTION_LIFECYCLE	= 0x00000004;
-    private final static int ACTION_LISTENER	= 0x00000008;
-    private final static int ACTION_METADATA    = 0x00000010;
-    private final static int ACTION_PERMISSION	= 0x00000020;
-    private final static int ACTION_RESOLVE		= 0x00000040;
-    private final static int ACTION_RESOURCE    = 0x00000080;
-    private final static int ACTION_STARTLEVEL	= 0x00000100;
+    /**
+     * The action string <tt>extensionLifecycle</tt> (Value is "extensionLifecycle").
+     */
+    public final static String EXTENSIONLIFECYCLE = "extensionLifecycle"; //$NON-NLS-1$
+
+    private final static int ACTION_CLASS				= 0x00000001;
+    private final static int ACTION_EXECUTE				= 0x00000002;
+    private final static int ACTION_LIFECYCLE			= 0x00000004;
+    private final static int ACTION_LISTENER			= 0x00000008;
+    private final static int ACTION_METADATA			= 0x00000010;
+    private final static int ACTION_PERMISSION			= 0x00000020;
+    private final static int ACTION_RESOLVE				= 0x00000040;
+    private final static int ACTION_RESOURCE			= 0x00000080;
+    private final static int ACTION_STARTLEVEL			= 0x00000100;
+	private final static int ACTION_EXTENSIONLIFECYCLE	= 0x00000200;
     private final static int ACTION_ALL = 
-		ACTION_CLASS 		|
-		ACTION_EXECUTE 		|
-		ACTION_LIFECYCLE 	|
-		ACTION_LISTENER 	|
-    	ACTION_METADATA 	|
-		ACTION_PERMISSION	|
-		ACTION_RESOLVE 		|
-		ACTION_RESOURCE 	|
-		ACTION_STARTLEVEL;
+		ACTION_CLASS 				|
+		ACTION_EXECUTE 				|
+		ACTION_LIFECYCLE 			|
+		ACTION_LISTENER 			|
+    	ACTION_METADATA 			|
+		ACTION_PERMISSION			|
+		ACTION_RESOLVE 				|
+		ACTION_RESOURCE 			|
+		ACTION_STARTLEVEL			|
+		ACTION_EXTENSIONLIFECYCLE;
     private final static int ACTION_NONE = 0;
 
     /**
@@ -393,7 +400,30 @@ public final class AdminPermission extends Permission
 				matchlen = 7;
 				mask |= ACTION_EXECUTE;
 				
-			} else if (i >= 8 && 
+			} else if (i >= 17 && 
+					(a[i-17] == 'e' || a[i-17] == 'E') &&
+					(a[i-16] == 'x' || a[i-16] == 'X') &&
+					(a[i-15] == 't' || a[i-15] == 'T') &&
+					(a[i-14] == 'e' || a[i-14] == 'E') &&
+					(a[i-13] == 'n' || a[i-13] == 'N') &&
+					(a[i-12] == 's' || a[i-12] == 'S') &&
+					(a[i-11] == 'i' || a[i-11] == 'I') &&
+					(a[i-10] == 'o' || a[i-10] == 'O') &&
+					(a[i-9] == 'n' || a[i-9] == 'N') &&
+					(a[i-8] == 'l' || a[i-8] == 'L') &&
+					(a[i-7] == 'i' || a[i-7] == 'I') &&
+					(a[i-6] == 'f' || a[i-6] == 'F') &&
+					(a[i-5] == 'e' || a[i-5] == 'E') &&
+					(a[i-4] == 'c' || a[i-4] == 'C') &&
+					(a[i-3] == 'y' || a[i-3] == 'Y') &&
+					(a[i-2] == 'c' || a[i-2] == 'C') &&
+					(a[i-1] == 'l' || a[i-1] == 'L') &&
+					  (a[i] == 'e' ||   a[i] == 'E'))
+    		{
+    			matchlen = 18;
+    			mask |= ACTION_EXTENSIONLIFECYCLE;
+
+    		} else if (i >= 8 && 
 					(a[i-8] == 'l' || a[i-8] == 'L') &&
 					(a[i-7] == 'i' || a[i-7] == 'I') &&
 					(a[i-6] == 'f' || a[i-6] == 'F') &&
@@ -707,7 +737,12 @@ public final class AdminPermission extends Permission
 					sb.append(STARTLEVEL);
 					sb.append(',');
 				}
-	
+
+				if ((action_mask & ACTION_EXTENSIONLIFECYCLE) == ACTION_EXTENSIONLIFECYCLE) {
+					sb.append(EXTENSIONLIFECYCLE);
+					sb.append(',');
+				}
+
 				//remove trailing comma
 				if (sb.length() > 0) {
 					sb.deleteCharAt(sb.length()-1);
