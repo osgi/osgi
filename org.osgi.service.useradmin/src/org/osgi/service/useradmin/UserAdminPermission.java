@@ -481,7 +481,7 @@ public final class UserAdminPermission extends BasicPermission {
 	 * 
 	 * @return The <tt>PermissionInfo</tt> encoded string for this
 	 *         <tt>UserAdminPermission</tt> object.
-	 * @see org.osgi.service.permissionadmin.PermissionInfo#getEncoded
+	 * @see "<code>org.osgi.service.permissionadmin.PermissionInfo.getEncoded</code>"
 	 */
 	public String toString() {
 		if (description == null) {
@@ -507,6 +507,7 @@ public final class UserAdminPermission extends BasicPermission {
  */
 
 final class UserAdminPermissionCollection extends PermissionCollection {
+    static final long serialVersionUID = -7222111885230120581L;
 	/**
 	 * Table of permissions.
 	 * 
