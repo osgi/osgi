@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-Name: org.osgi.test.cases.dynpkgimport.tlx
+Bundle-Description: Dynamic package import test lib x
+Bundle-Vendor: Open Services Gateway initiative
+Bundle-Version: $(version)
+Bundle-Category: lib
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)

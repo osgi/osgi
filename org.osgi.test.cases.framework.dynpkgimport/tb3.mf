@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-Name: org.osgi.test.cases.dynpkgimport.tb3
+Bundle-Description: Dynamic package import test bundle 3
+Bundle-Vendor: Open Services Gateway initiative
+Bundle-Version: $(version)
+Bundle-Activator: org.osgi.test.cases.dynpkgimport.tb3.Activator
+$(EXPORT-PACKAGE)
+Import-Package: org.osgi.framework,
+ org.osgi.test.cases.dynpkgimport.tbc
+DynamicImport-Package: org.osgi.test.cases.dynpkgimport.tlx
