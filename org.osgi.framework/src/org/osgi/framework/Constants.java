@@ -461,7 +461,55 @@ public interface Constants
 	 * @since 1.3 
 	 */
 	public final static String SINGLETON_ATTRIBUTE = "singleton";
-	
+
+	/**
+	 * Manifest header attribute (named &quot;fragment-attachment&quot;)
+	 * identifying if and when a fragment may attach to a host bundle.
+	 * The default value is <tt>&quot;open&quot;</tt>.
+	 *
+	 * <p>The attribute value is encoded in the Bundle-SymbolicName
+	 * manifest header like:
+	 * <pre>
+	 * Bundle-SymbolicName: com.acme.module.test; fragment-attachment="restricted"
+	 * </pre>
+	 * @see Constants#FRAGMENT_ATTACHMENT_OPEN
+	 * @see Constants#FRAGMENT_ATTACHMENT_CLOSED
+	 * @since 1.3 
+	 */
+	public final static String FRAGMENT_ATTACHMENT_ATTRIBUTE = "fragment-attachment";
+
+	/**
+	 * Manifest header attribute value (named &quot;open&quot;)
+	 * identifying an open fragment attachment type.  An open fragment
+	 * attachment type indicates that fragments are allowed to 
+	 * attach to the host bundle.
+	 *
+     * <p>The attribute value is encoded in the 
+     * Bundle-SymbolicName manifest header like:
+	 * <pre>
+	 * Bundle-SymbolicName: com.acme.module.test; fragment-attachment="open"
+	 * </pre>
+	 * @see Constants#FRAGMENT_ATTACHMENT_ATTRIBUTE
+	 * @since 1.3 
+	 */
+	public final static String FRAGMENT_ATTACHMENT_OPEN = "open";
+
+	/**
+	 * Manifest header attribute value (named &quot;closed&quot;)
+	 * identifying a closed fragment attachment type.  A closed fragment
+	 * attachment type indicates that no fragments are allowed to 
+	 * attach to the host bundle at any time.
+	 *
+     * <p>The attribute value is encoded in the 
+     * Bundle-SymbolicName manifest header like:
+	 * <pre>
+	 * Bundle-SymbolicName: com.acme.module.test; fragment-attachment="closed"
+	 * </pre>
+	 * @see Constants#FRAGMENT_ATTACHMENT_ATTRIBUTE
+	 * @since 1.3 
+	 */
+	public final static String FRAGMENT_ATTACHMENT_CLOSED = "closed";
+
 	/**
 	 * Manifest header (named &quot;Bundle-Localization&quot;)
 	 * identifying the base name of the bundle's localization file.
@@ -473,22 +521,11 @@ public interface Constants
 	
 	/**
 	 * Default value for the Bundle-Localization manifest header.
-	 *
+	 * 
 	 * @see #BUNDLE_LOCALIZATION
 	 * @since 1.3 
 	 */
 	public final static String BUNDLE_LOCALIZATION_DEFAULT_BASENAME = "META-INF/bundle";
-
-	/**
-	 * Manifest header (named &quot;Provide-Package&quot;)
-	 * identifying the packages name
-	 * provided to other bundles which require the bundle.
-	 *
-	 * <p>The attribute value may be retrieved from the
-	 * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-	 * @since 1.3 
-	 */
-	public final static String PROVIDE_PACKAGE = "Provide-Package";
 
 	/**
 	 * Manifest header (named &quot;Require-Bundle&quot;)
@@ -523,61 +560,8 @@ public interface Constants
 	public static final String BUNDLE_VERSION_ATTRIBUTE = "bundle-version";
 
 	/**
-	 * Manifest header attribute (named &quot;reprovide&quot;)
-	 * for Require-Bundle
-	 * identifying that any packages that are provided
-	 * by the required bundle must be reprovided by the requiring bundle.
-	 * The default value is <tt>false</tt>.
-	 * <p>
-	 * The attribute value is encoded in the Require-Bundle manifest
-	 * header like:
-	 * <pre>
-	 * Require-Bundle: com.acme.module.test; reprovide="true"
-	 * </pre>
-	 * @since 1.3 
-	 */
-	public final static String REPROVIDE_ATTRIBUTE = "reprovide";
-
-	/**
-	 * Manifest header attribute (named &quot;optional&quot;)
-	 * for Require-Bundle
-	 * identifying that a required bundle is optional and that
-	 * the requiring bundle can be resolved if there is no
-	 * suitable required bundle.
-	 * The default value is <tt>false</tt>.
-	 *
-	 * <p>The attribute value is encoded in the Require-Bundle manifest
-	 * header like:
-	 * <pre>
-	 * Require-Bundle: com.acme.module.test; optional="true"
-	 * </pre>
-	 * @since 1.3 
-	 */
-	public final static String OPTIONAL_ATTRIBUTE = "optional";
-
-	/**
-	 * Manifest header attribute (named &quot;require-packages&quot;)
-	 * for Require-Bundle
-	 * specifying the subset of packages that are accessible from
-	 * the required bundle.  If the require-packages parameter
-	 * is not specified then all packages provided by the required bundle
-	 * are accessible.  The value of this parameter must be a quoted
-	 * string.  The syntax of the quoted string value is the same as
-	 * that of the Provide-Package manifest header value.
-	 *
-	 * <p> The attribute value is encoded in the Require-Bundle
-	 * manifest header like:
-	 * <pre>
-	 * Require-Bundle: org.osgi.test;
-	 *  require-packages="org.osgi.test.pkg1,org.osgi.test.pkg2"
-	 * </pre>
-	 * @since 1.3 
-	 */
-	public final static String REQUIRE_PACKAGES_ATTRIBUTE = "require-packages";
-
-	/**
 	 * Manifest header (named &quot;Fragment-Host&quot;)
-	 * identifying the symbolic name
+	 * identifying the symbolic name 
 	 * of another bundle for which that the bundle is a fragment.
 	 *
 	 * <p>The attribute value may be retrieved from the
@@ -587,25 +571,25 @@ public interface Constants
 	public final static String FRAGMENT_HOST = "Fragment-Host";
 
 	/**
-	 * Manifest header attribute (named &quot;multiple-hosts&quot;)
+	 * Manifest header directive (named &quot;multiple-hosts&quot;)
 	 * identifying if the fragment should attach to each bundle
 	 * selected by the Fragment-Host manifest header.
 	 * The default value is <tt>false</tt>.
 	 *
-	 * <p>The attribute value is encoded in the Fragment-Host
+	 * <p>The directive value is encoded in the Fragment-Host
 	 * manifest header like:
 	 * <pre>
 	 * Fragment-Host: com.acme.module.test; multiple-hosts="false"
 	 * </pre>
 	 * @since 1.3 
 	 */
-	public final static String MULTIPLE_HOSTS_ATTRIBUTE = "multiple-hosts";
+	public final static String MULTIPLE_HOSTS_DIRECTIVE = "multiple-hosts";
 
 	/**
 	 * Manifest header attribute (named &quot;selection-filter&quot;) is used for
 	 * selection by filtering based upon system properties.
-	 *
-	 * <p>The attribute value is encoded in
+	 * 
+	 * <p>The attribute value is encoded in 
 	 * manifest headers like:
 	 * <pre>
 	 * Bundle-NativeCode: libgtk.so; selection-filter="(ws=gtk)"; ...
@@ -616,15 +600,216 @@ public interface Constants
 	public final static String SELECTION_FILTER_ATTRIBUTE = "selection-filter";
 
 	/**
-     * Framework environment property (named &quot;org.osgi.framework.hidepackages&quot;)
-     * identifying packages to be made inaccessible in the bundle's parent classloader. 
-     * 
-     * The value of this property must conform to the syntax of the 
-     * Provide-Package manifest header value.
-     * 
-     * <p>The value of this property may be retrieved by calling the
-     * <tt>BundleContext.getProperty</tt> method.
+	 * Manifest header (named &quot;Bundle-ManifestVersion&quot;)
+	 * identifying the bundle manifest version.  A bundle manifest may 
+	 * express the version of the syntax in which it is written by specifying 
+	 * a bundle manifest version. Bundles exploiting OSGi R4, or later, 
+	 * syntax must specify a bundle manifest version.
+	 * <p>
+	 * The bundle manifest version defined by OSGi R4 or, more specifically, 
+	 * by V1.3 of the OSGi Framework Specification is "2".
+	 *
+	 * <p>The attribute value may be retrieved from the
+	 * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
 	 * @since 1.3 
-     */
-    public static final String FRAMEWORK_HIDEPACKAGES = "org.osgi.framework.hidepackages";
-}
+	 */
+	public final static String BUNDLE_MANIFESTVERSION = "Bundle-ManifestVersion"; 
+
+	/**
+	 * Manifest header attribute (named &quot;version&quot;)
+	 * identifying the version of a package specified in the
+	 * Export-Package or Import-Package manifest header.
+	 *
+     * <p>The attribute value is encoded in the Export-Package or
+	 * Import-Package manifest header like:
+	 * <pre>
+	 * Import-Package: org.osgi.framework; version="1.1"
+	 * </pre>
+	 * @since 1.3 
+	 */
+	public final static String VERSION_ATTRIBUTE = "version";
+
+	/**
+	 * Manifest header attribute (named &quot;bundle-symbolic-name&quot;)
+	 * identifying the symbolic name of a bundle which exports a package specified 
+	 * in the Import-Package manifest header.
+	 *
+     * <p>The attribute value is encoded in the Import-Package manifest header like:
+	 * <pre>
+	 * Import-Package: org.osgi.framework; bundle-symbolic-name="com.acme.module.test"
+	 * </pre>
+	 * @since 1.3 
+	 */
+	public final static String BUNDLE_SYMBOLICNAME_ATTRIBUTE = "bundle-symbolic-name";
+
+	/**
+	 * Manifest header directive (named &quot;resolution&quot;)
+	 * identifying the resolution type in the Import-Package or Require-Bundle manifest header.
+	 *
+     * <p>The directive value is encoded in the Import-Package or 
+     * Require-Bundle manifest header like:
+	 * <pre>
+	 * Import-Package: org.osgi.framework; resolution:="optional"
+	 * Require-Bundle: com.acme.module.test; resolution:="optional"
+	 * </pre>
+	 * @see Constants#RESOLUTION_MANDATORY
+	 * @see Constants#RESOLUTION_OPTIONAL
+	 * @since 1.3 
+	 */
+	public final static String RESOLUTION_DIRECTIVE = "resolution";
+
+	/**
+	 * Manifest header directive value (named &quot;mandatory&quot;)
+	 * identifying a mandatory resolution type.  A mandatory resolution
+	 * type indicates that the import package or require bundle must be 
+	 * resolved when the bundle is resolved. If such an import or require 
+	 * bundle cannot be resolved, the module fails to resolve.
+	 *
+     * <p>The directive value is encoded in the Import-Package or 
+     * Require-Bundle manifest header like:
+	 * <pre>
+	 * Import-Package: org.osgi.framework; resolution:="manditory"
+	 * Require-Bundle: com.acme.module.test; resolution:="manditory"
+	 * </pre>
+	 * @see Constants#RESOLUTION_DIRECTIVE
+	 * @since 1.3 
+	 */
+	public final static String RESOLUTION_MANDATORY = "mandatory";
+
+	/**
+	 * Manifest header directive value (named &quot;optional&quot;)
+	 * identifying an optional resolution type.  An optional resolution
+	 * type indicates that the import or require bundle is optional 
+	 * and the bundle may be resolved without the import or require bundle 
+	 * being resolved. If the import or require bundle is not resolved when 
+	 * the bundle is resolved, the import or require bundle may not be 
+	 * resolved before the bundle is refreshed.
+	 *
+     * <p>The directive value is encoded in the Import-Package or 
+     * Require-Bundle manifest header like:
+	 * <pre>
+	 * Import-Package: org.osgi.framework; resolution:="optional"
+	 * Require-Bundle: com.acme.module.test; resolution:="optional"
+	 * </pre>
+	 * @see Constants#RESOLUTION_DIRECTIVE
+	 * @since 1.3 
+	 */
+	public final static String RESOLUTION_OPTIONAL = "optional";
+
+	/**
+	 * Manifest header directive (named &quot;grouping&quot;)
+	 * identifying the package grouping specified in the Import-Package 
+	 * or Export-Package manifest header.
+	 *
+     * <p>The directive value is encoded in the Import-Package or Export-Package 
+     * manifest header like:
+	 * <pre>
+	 * Export-Package: org.osgi.framework; grouping:="coregroup"
+	 * </pre>
+	 * @since 1.3 
+	 */
+	public final static String GROUPING_DIRECTIVE = "grouping";
+
+	/**
+	 * Manifest header directive (named &quot;include&quot;)
+	 * identifying a list of classes and/or resources of the specified package 
+	 * which must be allowed to be exported in the Export-Package manifest header.
+	 *
+     * <p>The directive value is encoded in the Export-Package 
+     * manifest header like:
+	 * <pre>
+	 * Export-Package: org.osgi.framework; include:="MyStuff*"
+	 * </pre>
+	 * @since 1.3 
+	 */
+	public final static String INCLUDE_DIRECTIVE = "include";
+
+	/**
+	 * Manifest header directive (named &quot;exclude&quot;)
+	 * identifying a list of classes and/or resources of the specified package 
+	 * which must not be allowed to be exported in the Export-Package manifest header.
+	 *
+     * <p>The directive value is encoded in the Export-Package 
+     * manifest header like:
+	 * <pre>
+	 * Export-Package: org.osgi.framework; exclude:="MyStuff*"
+	 * </pre>
+	 * @since 1.3 
+	 */
+	public final static String EXCLUDE_DIRECTIVE = "exclude";
+
+	/**
+	 * Manifest header directive (named &quot;mandatory&quot;)
+	 * identifying names of matching attributes which must be specified 
+	 * by matching Import-Package statements in the Export-Package manifest header.
+	 *
+     * <p>The directive value is encoded in the Export-Package 
+     * manifest header like:
+	 * <pre>
+	 * Export-Package: org.osgi.framework; mandatory:="bundle-symbolic-name"
+	 * </pre>
+	 * @since 1.3 
+	 */
+	public final static String MANDATORY_DIRECTIVE = "mandatory";
+
+	/**
+	 * Manifest header directive (named &quot;visibility&quot;)
+	 * identifying the visibility of a reqiured bundle in the Require-Bundle
+	 * manifest header.
+	 *
+     * <p>The directive value is encoded in the Require-Bundle 
+     * manifest header like:
+	 * <pre>
+	 * Require-Bundle: com.acme.module.test; visibility:="reexport"
+	 * </pre>
+	 * @see Constants#VISIBILITY_PRIVATE
+	 * @see Constants#VISIBILITY_REEXPORT
+	 * @since 1.3 
+	 */
+	public final static String VISIBILITY_DIRECTIVE = "visibility";
+
+	/**
+	 * Manifest header directive value (named &quot;private&quot;)
+	 * identifying a private visibility type.  A private visibility 
+	 * type indicates that any packages that are exported by the 
+	 * required bundle are not made visible on the export signature 
+	 * of the requiring bundle.
+	 *
+     * <p>The directive value is encoded in the 
+     * Require-Bundle manifest header like:
+	 * <pre>
+	 * Require-Bundle: com.acme.module.test; visibility:="private"
+	 * </pre>
+	 * @see Constants#VISIBILITY_DIRECTIVE
+	 * @since 1.3 
+	 */
+	public final static String VISIBILITY_PRIVATE = "private";
+
+	/**
+	 * Manifest header directive value (named &quot;reexport&quot;)
+	 * identifying a reexport visibility type.  A reexport visibility 
+	 * type indicates any packages that are exported by the required bundle 
+	 * are re-exported by the requiring bundle. Any arbitrary arbitrary 
+	 * matching attributes with which they were exported by the required 
+	 * bundle are deleted.
+	 *
+     * <p>The directive value is encoded in the 
+     * Require-Bundle manifest header like:
+	 * <pre>
+	 * Require-Bundle: com.acme.module.test; visibility:="reexport"
+	 * </pre>
+	 * @see Constants#VISIBILITY_DIRECTIVE
+	 * @since 1.3 
+	 */
+	public final static String VISIBILITY_REEXPORT = "reexport";
+
+	/**
+	 * Manifest header (named &quot;Reexport-Package&quot;)
+	 * identifying the names of the packages
+	 * that the bundle offers to the Framework for reexport.
+	 *
+	 * <p>The attribute value may be retrieved from the
+	 * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * @since 1.3 
+	 */
+	public final static String REEXPORT_PACKAGE = "Reexport-Package";}

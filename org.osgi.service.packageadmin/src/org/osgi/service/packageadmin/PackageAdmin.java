@@ -76,18 +76,20 @@ public interface PackageAdmin {
 	public ExportedPackage[] getExportedPackages(Bundle bundle);
 
 	/**
-	 * Gets the <tt>ExportedPackage</tt> object with the specified package
-	 * name. All exported packages will be checked for the specified name. In an
-	 * environment where the exhaustive list of packages on the system classpath
-	 * is not known in advance, this method attempts to see if the named package
-	 * is on the system classpath. This means that this method may discover an
-	 * <tt>ExportedPackage</tt> object that was not present in the list
-	 * returned by a prior call to <tt>getExportedPackages()</tt>.
+     * Gets the <tt>ExportedPackage</tt> object with the specified package name.  All exported
+     * packages will be checked for the specified name.  The exported package with the 
+     * highest version will be returned.
+     * <p>
+     * In an environment where the exhaustive list of packages on the system 
+     * classpath is not known in advance, this method attempts to see if the named 
+     * package is on the system classpath.
+     * This means that this method may discover an <tt>ExportedPackage</tt> object that was
+     * not present in the list returned by a prior call to <tt>getExportedPackages()</tt>.
 	 * 
 	 * @param name The name of the exported package to be returned.
 	 * 
 	 * @return The exported package with the specified name, or <tt>null</tt>
-	 *         if no expored package with that name exists.
+	 *         if no exported packages with that name exists.
 	 */
 	public ExportedPackage getExportedPackage(String name);
 
@@ -156,6 +158,24 @@ public interface PackageAdmin {
 	 */
 	public void refreshPackages(Bundle[] bundles);
 
+    /**
+     * Gets all the <tt>ExportedPackage</tt> objects with the specified package name.  
+     * All exported packages will be checked for the specified name.
+     * <p>
+     * In an environment where the exhaustive list of packages on the system 
+     * classpath is not known in advance, this method attempts to see if the named 
+     * package is on the system classpath.
+     * This means that this method may discover an <tt>ExportedPackage</tt> object that was
+     * not present in the list returned by a prior call to <tt>getExportedPackages()</tt>.
+     *
+     * @param name The name of the exported packages to be returned.
+     *
+     * @return An array of the exported packages with the specified name, or <tt>null</tt>
+     *         if no exported packages with that name exists.
+     * @since 1.2
+     */
+    public ExportedPackage[] getAllExportedPackages(String name);
+
 	/**
 	 * Resolve the specified bundles. The Framework must attempt to resolve the
 	 * specified bundles that are unresolved. Additional bundles that are not
@@ -176,19 +196,19 @@ public interface PackageAdmin {
 	 */
 	public boolean resolveBundles(Bundle[] bundles);
 
-	/**
-	 * Returns an array of ProvidingBundles for each resolved bundle with the
-	 * specified symbolic name. If the symbolic name argument is <tt>null</tt>
-	 * then all resolved bundles with symbolic names are returned.
-	 * 
-	 * @param symbolicName The symbolic name of the desired bundles or
-	 *        <tt>null</tt> for all bundles with symbolic names.
-	 * @return An array of ProvidingBundles with the specified symbolic name or
-	 *         <tt>null</tt> if no resolved bundles exist with that symbolic
-	 *         name.
-	 * @since 1.2
-	 */
-	public ProvidingBundle[] getProvidingBundles(String symbolicName);
+    /**
+     * Returns an array of RequiredBundles with the specified symbolic name.
+     * If the symbolic name argument is <tt>null</tt> then
+     * all RequiredBundles are returned.
+
+     * @param symbolicName The symbolic name of the RequiredBundle 
+     *        or <tt>null</tt> for all RequiredBundles in the Framework.
+     * @return An array of RequiredBundles with the specified symbolic
+     *         name or <tt>null</tt> if no RequiredBundles exist with that
+     *         symbolic name.
+     * @since 1.2
+     */
+    public RequiredBundle[] getRequiredBundles(String symbolicName);
 
 	/**
 	 * Returns the bundles with the specified symbolic name within the specified
@@ -235,6 +255,18 @@ public interface PackageAdmin {
 	 * @since 1.2
 	 */
 	public Bundle[] getHosts(Bundle bundle);
+
+    /**
+     * Returns the bundle for which the specified class is loaded from.  The 
+     * classloader of the bundle returned must have been used to load the 
+     * specified class.  If the class was not loaded by a bundle classloader
+     * then <code>null</code> is returned.
+     * @param clazz the class object to get a bundle for
+     * @return the bundle from which the specified class is loaded or
+     * <code>null</code> if the class was not loaded by a bundle classloader
+     * @since 1.2
+     */
+    public Bundle getBundle(Class clazz);
 
 	/**
 	 * The bundle is a fragment bundle.

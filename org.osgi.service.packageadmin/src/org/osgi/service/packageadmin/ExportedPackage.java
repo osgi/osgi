@@ -70,10 +70,10 @@ public interface ExportedPackage {
 	 * Returns the resolved bundles that are currently importing the package
 	 * associated with this <tt>ExportedPackage</tt> object.
 	 * 
-	 * <p>
-	 * The returned array always includes the bundle returned by
-	 * {@link #getExportingBundle}since an exporter always implicitly imports
-	 * its exported packages.
+     * <p> 
+     * Bundles which require the exporting bundle associated with this
+     * <tt>ExportedPackage</tt> object are considered to be importing bundles
+     * and are included in the returned array. See {@link RequiredBundle#getRequiringBundles()}
 	 * 
 	 * @return The array of resolved bundles currently importing the package
 	 *         associated with this <tt>ExportedPackage</tt> object, or

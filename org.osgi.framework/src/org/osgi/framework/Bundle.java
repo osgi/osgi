@@ -654,8 +654,8 @@ public abstract interface Bundle
 
 	/**
 	 *
-	 * Loads the specified class using this bundle’s classloader.
-	 *
+	 * Loads the specified class using this bundle's classloader.
+	 * 
 	 * <p>If this bundle's state is <tt>INSTALLED</tt>, this method will attempt to
 	 * resolve the bundle before attempting to load the class.
 	 *
@@ -678,6 +678,26 @@ public abstract interface Bundle
 	 */
 	public Class loadClass(String name) throws ClassNotFoundException;
 
+    /**
+     * Find the specified resources in this bundle.
+     *
+     * This bundle's class loader is called to search for the named resource.
+     * If this bundle's state is <tt>INSTALLED</tt>, then only this bundle will
+     * be searched for the specified resource. Imported packages cannot be searched
+     * when a bundle has not been resolved.
+     *
+     * @param name The name of the resource.
+     * See <tt>java.lang.ClassLoader.getResources</tt> for a description of
+     * the format of a resource name.
+     * @return an Enumeration of URLs to the named resources, or <tt>null</tt> if 
+     * the resource could not be found or if the caller does not have
+     * the <tt>AdminPermission</tt>, and the Java Runtime Environment supports permissions.
+     *
+     * @since 1.3 
+     * @exception java.lang.IllegalStateException If this bundle has been uninstalled.
+     */
+    public Enumeration getResources(String name);
+
 	/**
 	 * Returns enumeration of all the paths to entries within the
 	 * bundle whose longest sub-path matches the supplied path argument.
@@ -689,13 +709,15 @@ public abstract interface Bundle
 	 * The returned paths are all relative to the root of the bundle and
 	 * have a leading &quot;/&quot;.
 	 *
-	 * <p>This method returns an empty enumeration if no entries could be
+	 * <p>This method returns <code>null</code> if no entries could be
 	 * found that match the specified path or if the caller does not have
 	 * <tt>AdminPermission</tt> and the Java Runtime Environment supports permissions.
 	 *
 	 * @param path the path name to get the entry path names for.
 	 * @return An Enumeration of the entry paths that are contained in the
-	 * 		specified path.
+	 * specified path or <tt>null</tt> if the resource could not be found 
+	 * or if the caller does not have the <tt>AdminPermission</tt>, and the 
+	 * Java Runtime Environment supports permissions.
 	 * @exception java.lang.IllegalStateException If this bundle has been uninstalled.
 	 * @since 1.3
 	 */
