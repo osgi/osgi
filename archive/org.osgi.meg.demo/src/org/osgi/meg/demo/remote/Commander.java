@@ -21,9 +21,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 
-import org.osgi.service.dmt.DmtException;
-
-
 public class Commander implements RemoteReceiver {
     
     private RMServer      rms;
@@ -52,7 +49,7 @@ public class Commander implements RemoteReceiver {
 		} catch (InterruptedException e) {
             return "error: " + e.getMessage();
 		}
-        String exStr = DmtException.class.getName() + ": ";
+        String exStr = "org.osgi.service.dmt.DmtException: ";
         if (result.startsWith(exStr)) {
             int exStrL = exStr.length();
             int index = result.indexOf(':', exStrL);
