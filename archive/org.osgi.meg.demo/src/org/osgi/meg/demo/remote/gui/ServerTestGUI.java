@@ -47,6 +47,7 @@ import org.osgi.meg.demo.remote.RMServer;
 
 public class ServerTestGUI extends javax.swing.JFrame implements ActionListener, TreeSelectionListener {
     
+    private static final String ADMIN_PRINCIPAL = "admin";
     private RMServer 		 rms; 
     private Commander        commander;
     private TreeNodeImpl     rootNode;
@@ -177,7 +178,7 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
     }
     
     private void open() throws CommanderException {
-        commander.command("open " + rootNode.uri() + " server");
+        commander.command("open " + rootNode.uri() + " " + ADMIN_PRINCIPAL);
 		
         treeModel = new DefaultTreeModel(rootNode);
         jTree = new JTree(treeModel);
@@ -350,7 +351,7 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
 		
         if (OPEN.equals(e.getActionCommand())) {
             // TODO close
-            command("open " + rootNode.uri() + " server");
+            command("open " + rootNode.uri() + " " + ADMIN_PRINCIPAL);
             treeModel.reload();
             jTree.setVisible(true);
             opened = true;
@@ -420,7 +421,8 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
             if (null == name)
                 return;
             String value = JOptionPane.showInputDialog(this, "Node value " +
-                "(type can be 'int', 'chr', 'boolean'):", "type:data_as_string");
+                "(type can be 'int', 'chr', 'boolean', 'xml', 'bin', 'null'):", 
+                "type:data_as_string");
             if (null == value)
                 return;
             command("cl " + tn.uri() + "/" + name + " " + value);
@@ -444,7 +446,8 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
             if (null == tn)
                 return;
             String value = JOptionPane.showInputDialog(this, "Node value " +
-                "(type can be 'int', 'chr', 'boolean'):", "type:data_as_string");
+                "(type can be 'int', 'chr', 'boolean', 'xml', 'bin', 'null'):", 
+                "type:data_as_string");
             if (null == value)
                 return;
             command("setNodeValue " + tn.uri() + " " + value);
@@ -474,6 +477,9 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
 		}
         try {
         	nodeAcl = tn.getNodeAcl();
+            if(nodeAcl.startsWith("<unset>"))
+                nodeAcl = tn.getEffectiveNodeAcl() +
+                    " <font color=\"#009900\">(inherited)</font>";
         } catch (CommanderException e) {
             nodeAcl = "Error: " + e.getCode();
         }
