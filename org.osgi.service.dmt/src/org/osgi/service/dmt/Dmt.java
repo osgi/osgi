@@ -41,6 +41,8 @@ public interface Dmt extends DmtReadOnly {
      * succeed
      * <li> <code>FEATURE_NOT_SUPPORTED</code> in case the session was not
      * created using the <code>LOCK_TYPE_ATOMIC</code> lock type.
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     void rollback() throws DmtException;
 
@@ -61,6 +63,9 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>COMMAND_NOT_ALLOWED</code>
      * <li> <code>METADATA_MISMATCH</code>
      * <li> <code>DATA_STORE_FAILURE</code>
+     * <li> <code>TRANSACTION_ERROR</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     void setNodeTitle(String nodeUri, String title) throws DmtException;
 
@@ -68,14 +73,14 @@ public interface Dmt extends DmtReadOnly {
      * Set the value of a leaf node.
      * @param nodeUri The URI of the node
      * @param data The data to be set. The format of the node is contained in
-     * the DmtData. If <code>null</code> is given, the node will have the OMA
-     * <code>null</code> format.
+     * the DmtData. Nodes of <code>null</code> format can be set by using
+     * <code>DmtData.NULL_VALUE</code> as second argument.
      * @throws DmtException with the following possible error codes
      * <li> <code>NODE_NOT_FOUND</code>
      * <li> <code>URI_TOO_LONG</code>
      * <li> <code>INVALID_URI</code>
      * <li> <code>PERMISSION_DENIED</code>
-     * <li> <code>COMMAND_FAILED</code>
+     * <li> <code>COMMAND_FAILED</code> if the data is null
      * <li> <code>OTHER_ERROR</code> if the URI is not within the current
      * session's subtree
      * <li> <code>COMMAND_NOT_ALLOWED</code> if the specified node is not a leaf
@@ -83,9 +88,34 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>METADATA_MISMATCH</code>
      * <li> <code>DATA_STORE_FAILURE</code>
      * <li> <code>FORMAT_NOT_SUPPORTED</code>
+     * <li> <code>TRANSACTION_ERROR</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     void setNodeValue(String nodeUri, DmtData data) throws DmtException;
 
+    /**
+     * Set the value of a leaf node to it's default as defined by the node's
+     * meta data. The method throws exception if there is no default defined.
+     * @param nodeUri The URI of the node
+     * @throws DmtException with the following possible error codes
+     * <li> <code>NODE_NOT_FOUND</code>
+     * <li> <code>URI_TOO_LONG</code>
+     * <li> <code>INVALID_URI</code>
+     * <li> <code>PERMISSION_DENIED</code>
+     * <li> <code>COMMAND_FAILED</code> 
+     * <li> <code>OTHER_ERROR</code> if the URI is not within the current
+     * session's subtree
+     * <li> <code>COMMAND_NOT_ALLOWED</code> if the specified node is not a leaf
+     * node
+     * <li> <code>METADATA_MISMATCH</code>
+     * <li> <code>DATA_STORE_FAILURE</code>
+     * <li> <code>TRANSACTION_ERROR</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
+     */
+    void setDefaultNodeValue(String nodeUri) throws DmtException;
+    
     /**
      * Set the type of a node. The type of leaf node is the MIME type of the
      * data it contains. The type of interior node is an URL pointing to a DDF
@@ -100,11 +130,14 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>OTHER_ERROR</code> if the URI is not within the current
      * session's subtree
      * <li> <code>FEATURE_NOT_SUPPORTED</code>
-     * <li> <code>COMMAND_FAILED</code> if the type string is invalid
+     * <li> <code>COMMAND_FAILED</code> if the type string is null or invalid
      * <li> <code>COMMAND_NOT_ALLOWED</code>
      * <li> <code>METADATA_MISMATCH</code>
      * <li> <code>DATA_STORE_FAILURE</code>
      * <li> <code>FORMAT_NOT_SUPPORTED</code>
+     * <li> <code>TRANSACTION_ERROR</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     void setNodeType(String nodeUri, String type) throws DmtException;
 
@@ -123,6 +156,9 @@ public interface Dmt extends DmtReadOnly {
      * non-deletable
      * <li> <code>METADATA_MISMATCH</code>
      * <li> <code>DATA_STORE_FAILURE</code>
+     * <li> <code>TRANSACTION_ERROR</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     void deleteNode(String nodeUri) throws DmtException;
 
@@ -138,6 +174,9 @@ public interface Dmt extends DmtReadOnly {
      * session's subtree
      * <li> <code>METADATA_MISMATCH</code>
      * <li> <code>DATA_STORE_FAILURE</code>
+     * <li> <code>TRANSACTION_ERROR</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     void createInteriorNode(String nodeUri) throws DmtException;
 
@@ -156,18 +195,19 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>COMMAND_FAILED</code> if the type string is invalid
      * <li> <code>METADATA_MISMATCH</code>
      * <li> <code>DATA_STORE_FAILURE</code>
+     * <li> <code>TRANSACTION_ERROR</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     void createInteriorNode(String nodeUri, String type) throws DmtException;
 
     /**
-     * Create a leaf node with a given value. The default constructor for
-     * DmtData is used to create nodes with default values. If a node does
-     * not have a default value, this method using such a DmtData object will
+     * Create a leaf node with default value. If a node does
+     * not have a default value defined by it's meta data, this method will
      * throw a DmtException with error code <code>METADATA_MISMATCH</code>.
-     * If null is passed as the second parameter of the method, a node with
-     * <code>null</code> format will be created.
+     * The MIME type of the default node should also be specified by the meta
+     * data.
      * @param nodeUri The URI of the node
-     * @param value The value to be given to the new node or <code>null</code>.
      * @throws DmtException with the following possible error codes
      * <li> <code>NODE_ALREADY_EXISTS</code>
      * <li> <code>URI_TOO_LONG</code>
@@ -178,9 +218,64 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>COMMAND_NOT_ALLOWED</code>
      * <li> <code>METADATA_MISMATCH</code>
      * <li> <code>DATA_STORE_FAILURE</code>
+     * <li> <code>TRANSACTION_ERROR</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
+     */
+    void createLeafNode(String nodeUri) throws DmtException;
+
+    /**
+     * Create a leaf node with a given value. The node's MIME type is not 
+     * explicitely specified, it will be derived from the meta data associated 
+     * with this node. The meta data defining the possible type (if any) 
+     * should allow only one MIME type, otherwise
+     * this method will fail with <code>METADATA_MISMATCH</code>.
+     * Nodes of <code>null</code> format can be created by using
+     * <code>DmtData.NULL_VALUE</code> as second argument.  
+     * @param nodeUri The URI of the node
+     * @param value The value to be given to the new node, can not be null
+     * @throws DmtException with the following possible error codes
+     * <li> <code>NODE_ALREADY_EXISTS</code>
+     * <li> <code>URI_TOO_LONG</code>
+     * <li> <code>INVALID_URI</code>
+     * <li> <code>PERMISSION_DENIED</code>
+     * <li> <code>OTHER_ERROR</code> if the URI is not within the current
+     * session's subtree
+     * <li> <code>COMMAND_FAILED</code> if the data is null
+     * <li> <code>COMMAND_NOT_ALLOWED</code>
+     * <li> <code>METADATA_MISMATCH</code>
+     * <li> <code>DATA_STORE_FAILURE</code>
      * <li> <code>FORMAT_NOT_SUPPORTED</code>
+     * <li> <code>TRANSACTION_ERROR</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     void createLeafNode(String nodeUri, DmtData value) throws DmtException;
+
+    /**
+     * Create a leaf node with a given value and MIME type. 
+     * @param nodeUri The URI of the node
+     * @param value The value to be given to the new node, can not be null
+     * @param mimetype The MIME type to be given to the new node. It can be 
+     * null. 
+     * @throws DmtException with the following possible error codes
+     * <li> <code>NODE_ALREADY_EXISTS</code>
+     * <li> <code>URI_TOO_LONG</code>
+     * <li> <code>INVALID_URI</code>
+     * <li> <code>PERMISSION_DENIED</code>
+     * <li> <code>OTHER_ERROR</code> if the URI is not within the current
+     * session's subtree
+     * <li> <code>COMMAND_NOT_ALLOWED</code>
+     * <li> <code>COMMAND_FAILED</code> if the data is null
+     * <li> <code>METADATA_MISMATCH</code>
+     * <li> <code>DATA_STORE_FAILURE</code>
+     * <li> <code>FORMAT_NOT_SUPPORTED</code>
+     * <li> <code>TRANSACTION_ERROR</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
+     */
+    void createLeafNode(String nodeUri, DmtData value, String mimetype) 
+                    throws DmtException;
 
     /**
      * Create a deep copy of a node. All properties and values will be copied.
@@ -202,6 +297,9 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>METADATA_MISMATCH</code>
      * <li> <code>DATA_STORE_FAILURE</code>
      * <li> <code>FORMAT_NOT_SUPPORTED</code>
+     * <li> <code>TRANSACTION_ERROR</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     void copy(String nodeUri, String newNodeUri, boolean recursive)
         throws DmtException;
@@ -224,6 +322,9 @@ public interface Dmt extends DmtReadOnly {
      * <li> <code>COMMAND_NOT_ALLOWED</code>
      * <li> <code>METADATA_MISMATCH</code>
      * <li> <code>DATA_STORE_FAILURE</code>
+     * <li> <code>TRANSACTION_ERROR</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed or rolled back.
      */
     void renameNode(String nodeUri, String newName) throws DmtException;
 }
