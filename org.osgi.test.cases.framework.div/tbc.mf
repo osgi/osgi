@@ -6,7 +6,8 @@ Bundle-Version: $(version)
 Bundle-DocURL: http://www.ericsson.com
 Bundle-ContactAddress: info@ericsson.com
 Bundle-ClassPath: .,extraclass/tb6.jar
-Bundle-Activator: org.osgi.test.div.tbc.Activator
+Bundle-Activator: org.osgi.test.cases.div.tbc.Activator
+$(PRIVATE-PACKAGE)
 Import-Package: org.osgi.framework,
  org.osgi.test.service
 
