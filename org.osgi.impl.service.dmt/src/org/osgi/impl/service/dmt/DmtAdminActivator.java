@@ -17,9 +17,12 @@
  */
 package org.osgi.impl.service.dmt;
 
+import java.util.Hashtable;
 import org.osgi.framework.*;
 import org.osgi.impl.service.dmt.api.RemoteAlertSender;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
+import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.cm.ManagedService;
 import org.osgi.service.dmt.*;
 import org.osgi.service.event.EventChannel;
 import org.osgi.util.tracker.ServiceTracker;
@@ -29,12 +32,16 @@ import org.osgi.util.tracker.ServiceTracker;
 // TODO when stop() is called, notify the impl. to release all refs to other services
 // (these should be done in all activators!)
 public class DmtAdminActivator implements BundleActivator {
-	private ServiceRegistration	sessionReg;
+    static final String PERMISSION_ADMIN_SERVICE_PID = 
+        "org.osgi.impl.service.dmt.permissions";
+
+    private ServiceRegistration	sessionReg;
 	private ServiceRegistration	alertReg;
     private ServiceRegistration permissionReg;
     private ServiceReference    eventChannelRef;
-    private ServiceTracker		remoteAdapterTracker;
-	private ServiceTracker		pluginTracker;
+    private ServiceReference    configRef;
+    private ServiceTracker      remoteAdapterTracker;
+	private ServiceTracker      pluginTracker;
 
 	public void start(BundleContext bc) throws BundleException {
 		try {
@@ -46,6 +53,13 @@ public class DmtAdminActivator implements BundleActivator {
                 (EventChannel) bc.getService(eventChannelRef);
             if(eventChannel == null)
                 throw new BundleException("Event Channel service no longer registered.");
+            
+            configRef = bc.getServiceReference(ConfigurationAdmin.class.getName());
+            if(configRef == null)
+                throw new Exception("Cannot find ConfigurationAdmin service.");
+            ConfigurationAdmin ca = (ConfigurationAdmin) bc.getService(configRef);
+            if(ca == null)
+                throw new Exception("ConfigurationAdmin service no longer registered.");
             
 			DmtPluginDispatcher dispatcher = new DmtPluginDispatcher(bc);
 			//tracker = new ServiceTracker(bc, DmtDataPlugin.class.getName(), dispatcher);
@@ -65,9 +79,14 @@ public class DmtAdminActivator implements BundleActivator {
 					dmtAdmin, null);
 			alertReg = bc.registerService(DmtAlertSender.class.getName(),
 					dmtAlertSender, null);
-            permissionReg = 
-                bc.registerService(DmtPrincipalPermissionAdmin.class.getName(),
-                    new DmtPrincipalPermissionAdminImpl(), null);
+            String[] services = new String[] {
+                    DmtPrincipalPermissionAdmin.class.getName(),
+                    ManagedService.class.getName()
+            };
+            Hashtable properties = new Hashtable();
+            properties.put("service.pid", PERMISSION_ADMIN_SERVICE_PID);
+            permissionReg = bc.registerService(services, 
+                    new DmtPrincipalPermissionAdminImpl(ca), properties);
 		} catch (Exception e) {
 			System.out.println("Exception:" + e.getMessage());
 			throw new BundleException("Failure in start() method.", e);
@@ -75,6 +94,9 @@ public class DmtAdminActivator implements BundleActivator {
 	}
 
 	public void stop(BundleContext bc) throws BundleException {
+        // releasing referenced services
+        bc.ungetService(eventChannelRef);
+        bc.ungetService(configRef);
 		// stopping service trackers
 		pluginTracker.close();
 		remoteAdapterTracker.close();

@@ -18,27 +18,104 @@
 
 package org.osgi.impl.service.dmt;
 
+import java.io.IOException;
+import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
+import org.osgi.framework.AdminPermission;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.cm.ConfigurationException;
+import org.osgi.service.cm.ManagedService;
+import org.osgi.service.permissionadmin.PermissionInfo;
 
-public class DmtPrincipalPermissionAdminImpl implements DmtPrincipalPermissionAdmin {
-    private Hashtable permissions;
+// known problem: if a principal is called "service.pid" it will be ignored
+public class DmtPrincipalPermissionAdminImpl 
+        implements DmtPrincipalPermissionAdmin, ManagedService {
     
-    public DmtPrincipalPermissionAdminImpl() {
+    private Hashtable permissions;
+    private ConfigurationAdmin configAdmin;
+    
+    public DmtPrincipalPermissionAdminImpl(ConfigurationAdmin configAdmin) {
+        this.configAdmin = configAdmin;
+        
+        // persisted permission table will be set by the Configuration Admin
         permissions = new Hashtable();
-        // TODO initialize permission table from persistent permission store
     }
 
-    public Map getPrincipalPermissions() {
-        // TODO check that caller has admin permissions
+    public synchronized Map getPrincipalPermissions() {
+        System.getSecurityManager().checkPermission(new AdminPermission());
         return (Map) permissions.clone();
     }
 
-    public void setPrincipalPermissions(Map permissions) {
-        // TODO check that caller has admin permissions
-        // TODO check that the given table contains valid permission data
-        // TODO persist changes
+    public synchronized void setPrincipalPermissions(Map permissions)
+        throws IOException, IllegalArgumentException
+    {
+        System.getSecurityManager().checkPermission(new AdminPermission());
+
+        // store permissions immediately, this will be overwritten by itself
+        // when the (asynchronous) update arrives from the config. admin
         this.permissions = new Hashtable(permissions);
+        
+        Configuration config = 
+            configAdmin.getConfiguration(DmtAdminActivator.PERMISSION_ADMIN_SERVICE_PID);
+        
+        Hashtable properties = new Hashtable();
+        Iterator i = permissions.entrySet().iterator();
+        while (i.hasNext()) {
+            Map.Entry entry = (Map.Entry) i.next();
+            
+            String principal;
+            PermissionInfo[] permInfos;
+            try {
+                principal = (String) entry.getKey();
+                permInfos = (PermissionInfo[]) entry.getValue();
+            } catch(ClassCastException e) {
+                throw new IllegalArgumentException("Invalid data type in permission map.");
+            }
+            
+            String[] permStrings = new String[permInfos.length];
+            for (int j = 0; j < permInfos.length; j++)
+                permStrings[j] = permInfos[j].getEncoded();
+
+            properties.put(principal, permStrings);
+        }
+        config.update(properties);
+    }
+
+    public synchronized void updated(Dictionary properties)
+            throws ConfigurationException {
+        if (properties == null) {
+            permissions = new Hashtable();
+            return;
+        }
+        Hashtable newPermissions = new Hashtable();
+        Enumeration keys = properties.keys();
+        while (keys.hasMoreElements()) {
+            String principal = (String) keys.nextElement();
+
+            String[] permStrings;
+            try {
+                permStrings = (String[]) properties.get(principal);
+            } catch (ClassCastException e) {
+                throw new ConfigurationException(principal,
+                        "Invalid permission specification, value must be an array of Strings.");
+            }
+            
+            PermissionInfo[] permInfos = new PermissionInfo[permStrings.length];
+            for (int i = 0; i < permStrings.length; i++) {
+                try {
+                    permInfos[i] = new PermissionInfo(permStrings[i]);
+                } catch (IllegalArgumentException e) {
+                    throw new ConfigurationException(principal,
+                            "Invalid permission string: " + e.getMessage());
+                }
+            }
+            newPermissions.put(principal, permInfos);
+        }
+        permissions = newPermissions;
     }
 }

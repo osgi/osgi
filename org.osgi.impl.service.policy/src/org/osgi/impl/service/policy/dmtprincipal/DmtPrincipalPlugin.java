@@ -18,6 +18,7 @@
 
 package org.osgi.impl.service.policy.dmtprincipal;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -248,8 +249,12 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 			principals.add(principal);
 			systemState.put(principal,element.permissionInfo);
 		}
-		
-		dmtPrincipalPermissionAdmin.setPrincipalPermissions(systemState);
+		try {
+		    dmtPrincipalPermissionAdmin.setPrincipalPermissions(systemState);
+        } catch(IOException e) {
+            throw new DmtException(dataRootURI, DmtException.DATA_STORE_FAILURE,
+                                   "error persisting permissions", e);
+        }
 		
 		// do some cleanup
 		dirty = false;

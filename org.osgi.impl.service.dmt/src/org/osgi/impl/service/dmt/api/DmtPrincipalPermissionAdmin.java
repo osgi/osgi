@@ -17,9 +17,34 @@
  */
 package org.osgi.impl.service.dmt.api;
 
+import java.io.IOException;
 import java.util.Map;
 
 public interface DmtPrincipalPermissionAdmin {
+    /**
+     * Returns the mapping of principal names to Java permissions. The
+     * permissions of a principal are represented as an array of PermissionInfo
+     * objects. 
+     * <p>
+     * The returned map may be modified without affecting the stored
+     * permissions.
+     * 
+     * @return a <code>Map</code> containing principal names and the
+     *         permissions associated with them
+     */
     Map  getPrincipalPermissions();
-    void setPrincipalPermissions(Map permissions);
+    
+    /**
+     * Replaces the current permission table with the argument. The given map
+     * must contain <code>String</code> keys and <code>PermissionInfo[]</code>
+     * values, otherwise an exception is thrown.
+     * 
+     * @param permissions the new set of principals and their permissions
+     * @throws IllegalArgumentException if a key in the given <code>Map</code>
+     *         is not a <code>String</code> or a value is not an array of
+     *         <code>PermissionInfo</code> objects
+     * @throws IOException if there is an error updating the persistent
+     *         permission store
+     */
+    void setPrincipalPermissions(Map permissions) throws IOException;
 }
