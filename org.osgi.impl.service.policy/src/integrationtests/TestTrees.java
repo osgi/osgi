@@ -17,6 +17,9 @@
  */
 package integrationtests;
 
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.net.URLConnection;
 import java.security.AllPermission;
 import java.security.CodeSource;
 import java.security.PermissionCollection;
@@ -33,7 +36,11 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.policy.condpermadmin.ConditionalPermissionAdminPlugin;
 import org.osgi.impl.service.policy.dmtprincipal.DmtPrincipalPlugin;
 import org.osgi.impl.service.policy.permadmin.PermissionAdminPlugin;
+import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtDataPlugin;
+import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
@@ -45,6 +52,8 @@ public class TestTrees extends TestCase {
 	public static final String	ORG_OSGI_IMPL_SERVICE_EVENT_MAPPER_JAR	= "file:../org.osgi.impl.service.event.mapper.jar";
 	public static final String	ORG_OSGI_IMPL_SERVICE_EVENT_JAR	= "file:../org.osgi.impl.service.event.jar";
 
+	public static final String PRINCIPAL1 = "principal1";
+	public static final String PRINCIPAL1_HASH = "zDcCo9K+A67rtQI3TQEDg6_LEIw";
 	
 	public FrameworkSecurityManager	secMan;
 	public DefaultAdaptor adaptor;
@@ -58,6 +67,8 @@ public class TestTrees extends TestCase {
 	public Bundle	policyBundle;
 	public OSGi	framework;
 	public PermissionAdmin	permissionAdmin;
+	public ConditionalPermissionAdmin	conditionalPermissionAdmin;
+	public DmtAdmin	dmtAdmin;
 	
 	/**
 	 * This policy implementation gives AllPermission to all code sources.
@@ -81,46 +92,58 @@ public class TestTrees extends TestCase {
 		
 	}
 	
-	public void startFramework() throws Exception {
+	public void startFramework(boolean fresh) throws Exception {
 		Policy.setPolicy(new VeryGenerousPolicy());
 		secMan = new FrameworkSecurityManager();
 		System.setSecurityManager(secMan);
-		adaptor = new DefaultAdaptor(new String[] { "reset" });
+		adaptor = new DefaultAdaptor(fresh?new String[] { "reset" }:null);
 		framework = new OSGi(adaptor);
 		framework.launch();
 		systemBundleContext = framework.getBundleContext();
 		
-		ServiceReference permissionAdminRef = systemBundleContext.getServiceReference(PermissionAdmin.class.getName());
-		permissionAdmin = (PermissionAdmin) systemBundleContext.getService(permissionAdminRef);
+		ServiceReference sr = systemBundleContext.getServiceReference(PermissionAdmin.class.getName());
+		permissionAdmin = (PermissionAdmin) systemBundleContext.getService(sr);
+		
+		sr = systemBundleContext.getServiceReference(ConditionalPermissionAdmin.class.getName());
+		conditionalPermissionAdmin = (ConditionalPermissionAdmin) systemBundleContext.getService(sr);
 
-		// Warning! Don't do this on a real system!
-		permissionAdmin.setDefaultPermissions(new PermissionInfo[] { 
-				new PermissionInfo(PackagePermission.class.getName(),"*","IMPORT")
-				});
-		
-		
-		setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_EVENT_JAR);
+		if (fresh) {
+			// Warning! Don't do this on a real system!
+			permissionAdmin.setDefaultPermissions(new PermissionInfo[] { 
+					new PermissionInfo(PackagePermission.class.getName(),"*","IMPORT")
+					});
+			
+			
+			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_EVENT_JAR);
+			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_EVENT_MAPPER_JAR);
+			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_CM_JAR);
+			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_LOG_JAR);
+			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_DMT_JAR);
+			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_POLICY_JAR);
+		} 
+
 		eventBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_EVENT_JAR);
-		eventBundle.start();
-		setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_EVENT_MAPPER_JAR);
 		eventMapperBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_EVENT_MAPPER_JAR);
-		eventMapperBundle.start();
-		setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_CM_JAR);
 		configManagerBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_CM_JAR);
-		configManagerBundle.start();
-		setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_LOG_JAR);
 		logBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_LOG_JAR);
-		logBundle.start();
-		setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_DMT_JAR);
 		dmtBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_DMT_JAR);
-		dmtBundle.start();
-		setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_POLICY_JAR);
 		policyBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_POLICY_JAR);
+
+		eventBundle.start();
+		eventMapperBundle.start();
+		configManagerBundle.start();
+		logBundle.start();
+		dmtBundle.start();
 		policyBundle.start();
+		
+		sr = systemBundleContext.getServiceReference(DmtAdmin.class.getName());
+		dmtAdmin = (DmtAdmin)systemBundleContext.getService(sr);
+		
 	}
 
 	public void stopFramework() throws Exception {
-		framework.shutdown();
+		if (framework!=null && framework.isActive()) framework.shutdown();
+		framework = null;
 		System.setSecurityManager(null);
 		Policy.setPolicy(null);
 		secMan = null;
@@ -133,12 +156,28 @@ public class TestTrees extends TestCase {
 		logBundle = null;
 		dmtBundle = null;
 		policyBundle = null;
-		framework = null;
 		permissionAdmin = null;
+		conditionalPermissionAdmin = null;
+		dmtAdmin = null;
+
+		// the framework needs to set these to its own implementation
+		// And they can only be set once, so we need to
+		// re-set them if we want to run a new framework instance.
+		Field urlFactory = URL.class.getDeclaredField("factory");
+		urlFactory.setAccessible(true);
+		urlFactory.set(null,null);
+		
+		Field urlConnectionFactory = URLConnection.class.getDeclaredField("factory");
+		urlConnectionFactory.setAccessible(true);
+		urlConnectionFactory.set(null,null);
+	}
+	
+	public void tearDown() throws Exception {
+		stopFramework();
 	}
 	
 	public void testAllStartsUp() throws Exception {
-		startFramework();
+		startFramework(true);
 
 		// check if all three policy trees are registered
 		ServiceReference[] sr;
@@ -149,5 +188,40 @@ public class TestTrees extends TestCase {
 		sr = systemBundleContext.getServiceReferences(DmtDataPlugin.class.getName(),"(dataRootURIs="+DmtPrincipalPlugin.dataRootURI+")");
 		assertNotNull(sr[0]);
 		stopFramework();
+	}
+	
+	public void testDmtPrincipals() throws Exception {
+		startFramework(true);
+
+		// "principal1" gets the right to read the principal tree
+		DmtSession session = dmtAdmin.getSession(DmtPrincipalPlugin.dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
+		session.createInteriorNode("1");
+		session.setNodeValue("1/Principal",new DmtData(PRINCIPAL1));
+		session.setNodeValue("1/PermissionInfo",new DmtData("(org.osgi.service.dmt.DmtPermission \""+DmtPrincipalPlugin.dataRootURI+"\" \"Get\")"));
+		session.close();
+
+		//stopFramework();
+		// TODO: dmt admin doesn't save the principal permissions to backstorage yet
+		//startFramework(false);
+
+		// check if it is there
+		session = dmtAdmin.getSession(DmtPrincipalPlugin.dataRootURI);
+		DmtData value = session.getNodeValue(PRINCIPAL1_HASH+"/Principal");
+		assertEquals(PRINCIPAL1,value.getString());
+		session.close();
+				
+		// try to read from the principal tree as "principal1"
+		session = dmtAdmin.getSession(PRINCIPAL1,DmtPrincipalPlugin.dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
+		value = session.getNodeValue(PRINCIPAL1_HASH+"/Principal");
+		assertEquals(PRINCIPAL1,value.getString());
+		session.close();
+
+		// try to read from the principal tree as "principal2", which does not have any rights
+		// TODO: as I understand it, this should fail. check with dmt impl
+		session = dmtAdmin.getSession("principal2",DmtPrincipalPlugin.dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
+		value = session.getNodeValue(PRINCIPAL1_HASH+"/Principal");
+		assertEquals(PRINCIPAL1,value.getString());
+		session.close();
+	
 	}
 }
