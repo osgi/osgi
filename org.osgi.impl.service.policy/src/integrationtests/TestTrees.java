@@ -30,6 +30,7 @@ import java.security.Permissions;
 import java.security.Policy;
 import java.security.PrivilegedExceptionAction;
 import java.security.ProtectionDomain;
+import java.security.Security;
 import java.util.Enumeration;
 import junit.framework.TestCase;
 import org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager;
@@ -62,6 +63,7 @@ public class TestTrees extends TestCase {
 	public static final String	ORG_OSGI_IMPL_SERVICE_CM_JAR	= "file:../../org.osgi.impl.service.cm/org.osgi.impl.service.cm.jar";
 	public static final String	ORG_OSGI_IMPL_SERVICE_EVENT_MAPPER_JAR	= "file:../../org.osgi.impl.service.event/org.osgi.impl.service.event.mapper.jar";
 	public static final String	ORG_OSGI_IMPL_SERVICE_EVENT_JAR	= "file:../../org.osgi.impl.service.event/org.osgi.impl.service.event.jar";
+	public static final String	INTEGRATIONTESTS_BUNDLE1_JAR = "file:../integrationtests.bundle1.jar";
 
 	public static final String PRINCIPAL1 = "principal1";
 	public static final String PRINCIPAL1_HASH = "zDcCo9K+A67rtQI3TQEDg6_LEIw";
@@ -76,6 +78,7 @@ public class TestTrees extends TestCase {
 	public Bundle	logBundle;
 	public Bundle	dmtBundle;
 	public Bundle	policyBundle;
+	public Bundle	integrationTestBundle;
 	public OSGi	framework;
 	public PermissionAdmin	permissionAdmin;
 	public ConditionalPermissionAdmin	conditionalPermissionAdmin;
@@ -105,6 +108,10 @@ public class TestTrees extends TestCase {
 	
 	public void startFramework(boolean fresh) throws Exception {
 		Policy.setPolicy(new VeryGenerousPolicy());
+		
+		// replace policy file ${user.home}/.java.policy with our own
+		Security.setProperty("policy.url.2","file:policy");
+		
 		secMan = new FrameworkSecurityManager();
 		System.setSecurityManager(secMan);
 		adaptor = new DefaultAdaptor(fresh?new String[] { "reset" }:null);
@@ -139,6 +146,7 @@ public class TestTrees extends TestCase {
 		logBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_LOG_JAR);
 		dmtBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_DMT_JAR);
 		policyBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_POLICY_JAR);
+		integrationTestBundle = systemBundleContext.installBundle(INTEGRATIONTESTS_BUNDLE1_JAR);
 
 		eventBundle.start();
 		eventMapperBundle.start();
@@ -167,6 +175,7 @@ public class TestTrees extends TestCase {
 		logBundle = null;
 		dmtBundle = null;
 		policyBundle = null;
+		integrationTestBundle = null;
 		permissionAdmin = null;
 		conditionalPermissionAdmin = null;
 		dmtAdmin = null;
@@ -293,24 +302,29 @@ public class TestTrees extends TestCase {
 
 	public void testConditionalPermissionAdminBasic() throws Exception {
 		startFramework(true);
-		ConditionInfo cond1 =  new ConditionInfo(BundleSignerCondition.class.getName(),new String[] {"foo"});
+		ConditionInfo cond1 =  new ConditionInfo(BundleSignerCondition.class.getName(),new String[] {"C=HU, O=ConstructionOy, OU=Informatical Infrastructure Management, CN=Sarah Bar"});
 		PermissionInfo perm1 = new PermissionInfo(AdminPermission.class.getName(),"*","*");
 		conditionalPermissionAdmin.addConditionalPermissionInfo(
 				new ConditionInfo[] { cond1 },
 				new PermissionInfo[] { perm1  }
 				);
+		String nameHash = "DDlMyaitpUSRlzbRfwxz3_ruXTc";
 		
 		DmtSession session = dmtAdmin.getSession(ConditionalPermissionAdminPlugin.dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
-		String conditionInfo = session.getNodeValue("agMBUbnzy5WqVgToBXT8737tvCk/ConditionInfo").getString();
+
+		String names[] = session.getChildNodeNames(ConditionalPermissionAdminPlugin.dataRootURI);
+		
+		String conditionInfo = session.getNodeValue(nameHash+"/ConditionInfo").getString();
 		assertEquals(cond1.getEncoded()+"\n",conditionInfo);
-		String permissionInfo = session.getNodeValue("agMBUbnzy5WqVgToBXT8737tvCk/PermissionInfo").getString();
+		String permissionInfo = session.getNodeValue(nameHash+"/PermissionInfo").getString();
 		assertEquals(perm1.getEncoded()+"\n",permissionInfo);
 
-		session.deleteNode("agMBUbnzy5WqVgToBXT8737tvCk");
+		session.deleteNode(nameHash);
 		session.close();
 		
 		// since we deleted it, conditions should be empty
 		Enumeration cpis = conditionalPermissionAdmin.getConditionalPermissionInfos();
 		assertFalse(cpis.hasMoreElements());
 	}
+	
 }
