@@ -403,6 +403,36 @@ public interface Constants {
 	 */
 	public static final String	FRAMEWORK_EXECUTIONENVIRONMENT			= "org.osgi.framework.executionenvironment";
 
+	/**
+	 * Framework environment property (named
+	 * &quot;org.osgi.supports.framework.extension&quot;) identifying
+	 * whether the Framework supports framework extension bundles.
+	 * If the value of this property is <code>true</code>, then the Framework
+	 * supports framework extension bundles.
+	 * The default value is <code>false</code>.
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * <code>BundleContext.getProperty</code> method.
+	 * 
+	 * @since 1.3
+	 */
+	public static final String	SUPPORTS_FRAMEWORK_EXTENSION			= "org.osgi.supports.framework.extension";
+
+	/**
+	 * Framework environment property (named
+	 * &quot;org.osgi.supports.bootclasspath.extension&quot;) identifying
+	 * whether the Framework supports bootclasspath extension bundles.
+	 * If the value of this property is <code>true</code>, then the Framework
+	 * supports bootclasspath extension bundles.
+	 * The default value is <code>false</code>.
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * <code>BundleContext.getProperty</code> method.
+	 * 
+	 * @since 1.3
+	 */
+	public static final String	SUPPORTS_BOOTCLASSPATH_EXTENSION		= "org.osgi.supports.bootclasspath.extension";
+
 	/*
 	 * Service properties.
 	 */
