@@ -1,11 +1,11 @@
 <descriptor xmlns="http://www.osgi.org/xmlns/app/v1.0.0" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
   <application>
-    <locale name = "en">
-      <name value = "MEG Test Application" />
-      <icon value = "/TestIcon.gif" />
-    </locale>
     <locale name = "hu">
       <name value = "MEG Teszt progi" />
+      <icon value = "/TestIcon.gif" />
+    </locale>
+    <locale name = "en">
+      <name value = "MEG Test Application" />
       <icon value = "/TestIcon.gif" />
     </locale>
     <version value = "0.1" />

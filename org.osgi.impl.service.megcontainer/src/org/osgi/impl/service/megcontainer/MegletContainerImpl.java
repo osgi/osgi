@@ -476,6 +476,7 @@ public class MegletContainerImpl implements BundleListener,
 					Properties props = new Properties();
 					Hashtable names = new Hashtable();
 					Hashtable icons = new Hashtable();
+					String defaultLanguage = null;
 					String startClass = null;
 					String uniqueID = null;
 					props.setProperty("application.bundle.id", Long.toString(bundleID));
@@ -576,6 +577,11 @@ public class MegletContainerImpl implements BundleListener,
 							}
 							if( node.getNodeName().equals( "locale" ) ) {
 								String lang = getAttributeValue( node, "name" );
+								
+								String dflt = getAttributeValue( node, "default" );
+								if( dflt != null && dflt.equalsIgnoreCase( "true" ) )
+									defaultLanguage = lang;
+								
 								NodeList childNodes = node.getChildNodes();
 
 								for(int j=0; j < childNodes.getLength(); j++ ) {
@@ -610,6 +616,16 @@ public class MegletContainerImpl implements BundleListener,
 										.removeFirst()).intValue();
 							}
 						}
+						
+						if( names.size() == 0 )
+							throw new Exception( "No locale information given for the Meglet!" );						
+						if( defaultLanguage == null ) {
+							Enumeration enum = names.keys();
+							if( enum.hasMoreElements() ) {
+								defaultLanguage = (String)enum.nextElement();
+							}
+						}
+						
 						Dependencies deps = new Dependencies();
 						int m;
 						deps.requiredServices = new String[requiredServices
@@ -624,7 +640,7 @@ public class MegletContainerImpl implements BundleListener,
 									.get(m);
 						eventVector.add(subscribe);
 						appVector.add(new MegletDescriptor(bc, props,
-								names, icons, startClass, bc.getBundle(bundleID), this));
+								names, icons, defaultLanguage, startClass, bc.getBundle(bundleID), this));
 						dependencyVector.add(deps);
 					}
 				}
