@@ -26,7 +26,11 @@ public class FilterControl extends DefaultTestBundleControl {
 			"test_framework_filter_m3", "test_framework_filter_m4",
 			"test_framework_filter_m5", "test_framework_filter_m6",
 			"test_framework_filter_m9", "test_framework_filter_m10",
-			"test_framework_filter_s1",			};
+			"test_framework_filter_s1",	 "test_framework_filter_s2",	
+			"test_framework_filter_s3",	 "test_framework_filter_s4",	
+			"test_framework_filter_s5",	 "test_framework_filter_s6",	
+			"test_framework_filter_s7",	 "test_framework_filter_s8",	
+			"test_framework_filter_s9"	};
 
 	public String[] getMethods() {
 		return methods;
@@ -133,6 +137,99 @@ public class FilterControl extends DefaultTestBundleControl {
 				"Testing approximate equality (white space)");
 	}
 
+	/**
+	 * Filter by an object that implements java.lang.Comparable
+	 *  
+	 */
+	public void test_framework_filter_s2() throws Exception {
+		// Always finds the service object when filtering by ObjectA
+		testFilter("(ObjectA=0)",
+				"Testing object that implements java.lang.Comparable");
+	}
+
+	/**
+	 * Testing = operator with an object that does not implement
+	 * <code>java.lang.Comparable</code> but has a special constructor. 
+	 * 
+	 */
+	public void test_framework_filter_s3() throws Exception {
+		testFilter("(ObjectB=4)",
+				"Testing = operator with object that does not implement java.lang.Comparable");
+	}
+
+	/**
+	 * Testing <= operator with an object that does not implement
+	 * <code>java.lang.Comparable</code> but has a special constructor.
+	 * 
+	 */
+	public void test_framework_filter_s4() throws Exception {
+		testFilter("(ObjectB<=4)",
+				"Testing <= operator with object that does not implement java.lang.Comparable");
+	}
+
+	/**
+	 * Testing >= operator with an object that does not implement
+	 * <code>java.lang.Comparable</code> but has a special constructor.
+	 * 
+	 */
+	public void test_framework_filter_s5() throws Exception {
+		testFilter("(ObjectB>=4)",
+				"Testing >= operator with object that does not implement java.lang.Comparable");
+	}
+
+	/**
+	 * Testing ~= operator with an object that does not implement
+	 * <code>java.lang.Comparable</code> but has a special constructor.
+	 * 
+	 */
+	public void test_framework_filter_s6() throws Exception {
+		testFilter("(ObjectB~=4)",
+				"Testing ~= operator with object that does not implement java.lang.Comparable");
+	}
+
+	/**
+	 * Testing < operator with an object that does not implement
+	 * <code>java.lang.Comparable</code> but has a special constructor.
+	 * 
+	 */
+	public void test_framework_filter_s7() throws Exception {
+		String msg;
+		msg = "Testing < operator with object that does not implement java.lang.Comparable";
+		try {
+			testFilter("(ObjectB<4)", msg);
+		}
+		catch (InvalidSyntaxException ise) {
+			log(msg + ": Exception thrown, Ok.");
+		}
+	}
+
+	/**
+	 * Testing > operator with an object that does not implement
+	 * <code>java.lang.Comparable</code> but has a special constructor.
+	 * 
+	 */
+	public void test_framework_filter_s8() throws Exception {
+		String msg;
+		msg = "Testing > operator with object that does not implement java.lang.Comparable";
+		try {
+			testFilter("(ObjectB>4)", msg);
+		}
+		catch (InvalidSyntaxException ise) {
+			log(msg + ": Exception thrown, Ok.");
+		}
+	}
+
+	/**
+	 * Testing with an object that neither implements
+	 * <code>java.lang.Comparable</code> nor has a special constructor.
+	 * 
+	 */
+	public void test_framework_filter_s9() throws Exception {
+		testFilter(
+				"(ObjectC=4)",
+				"Testing object that does not have a public constructor with a single java.lang.String argument");
+	}
+	
 	/**
 	 * Help function used to sort and log an array of service references.
 	 */

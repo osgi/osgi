@@ -34,6 +34,9 @@ public class InstallServices implements BundleActivator {
 	ServiceC			_sc3;
 	Properties			_sc3Props;
 	ServiceRegistration	_src3;
+	ServiceD			_sd1;
+	Properties			_sd1Props;
+	ServiceRegistration	_srd1;
 
 	/**
 	 * Installs several services later filtered by the tbc
@@ -120,6 +123,24 @@ public class InstallServices implements BundleActivator {
 		_sc3Props.put("Short", new Short("3"));
 		_src3 = bc
 				.registerService(TestService.class.getName(), _sc3, _sc3Props);
+		
+		// Install test service ServiceD with several properties used
+		// for testing several filters
+		_sd1 = new ServiceD();
+		_sd1Props = new Properties();
+		_sd1Props.put("name", "ServiceD");
+		_sd1Props.put("version", new Float(2.5));
+		_sd1Props.put("compatible", new Float(1.0));
+		_sd1Props.put("description", "Service D");
+		_sd1Props.put("Integer", new Integer(4));
+		_sd1Props.put("Long", new Long(4));
+		_sd1Props.put("Byte", new Byte("4"));
+		_sd1Props.put("Short", new Short("4"));
+		_sd1Props.put("ObjectA", new ObjectA("4"));
+		_sd1Props.put("ObjectB", new ObjectB("4"));
+		_sd1Props.put("ObjectC", new ObjectC());
+		_srd1 = bc
+				.registerService(TestService.class.getName(), _sd1, _sd1Props);
 	}
 
 	/**
@@ -133,6 +154,7 @@ public class InstallServices implements BundleActivator {
 			_src1.unregister();
 			_src2.unregister();
 			_src3.unregister();
+			_srd1.unregister();
 		}
 		catch (IllegalStateException e) { /* Ignore */
 		}
@@ -148,5 +170,7 @@ public class InstallServices implements BundleActivator {
 		_sc2 = null;
 		_src3 = null;
 		_sc3 = null;
+		_srd1 = null;
+		_sd1 = null;
 	}
 }
