@@ -1,4 +1,4 @@
-package org.osgi.impl.service.deploymentadmin;
+package com.nokia.test.exampleresourceprocessor;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,56 +21,92 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 
+/**
+ * ExampleResourceProcessor implements a simple ResourceProcessor for testing and 
+ * demo purposes. <p>
+ * Prints the content of the managed textual resource files on the standard output. 
+ * Resource files that have a resource name begining with "bye" are stored persistently 
+ * and printed at uninstall.
+ */
 public class ExampleResourceProcessor implements ResourceProcessor, BundleActivator,
 		Serializable {
 
+    // the id of the RP (this string is printed before 
+    // each tranBuffer lines)
     private transient String            id;
+    
     private transient DeploymentPackage	actDp;
 	private transient int 				actOperation;
+
+	// in case of commit it is printed otherwise ignored
 	private transient StringBuffer	    tranBuffer;
+	
     private transient BundleContext 	context;
-    private transient HashSet			willBeRemoved;
-    private transient HashSet			willBeAdded;
+    
+    // in case of commit these resource names are stored
+    private transient HashSet			toRemove;
+    // in case of commit these resource names are removed
+    private transient HashSet			toAdd;
+    
+    // in case of rollback these saved resource files are deleted
+    private transient HashSet			storedFiles;
+    
+    // managed DPs
     private Hashtable			        dps = new Hashtable();
     
 	public void begin(DeploymentPackage dp, int operation) {
 		this.actDp = dp;
 		this.actOperation = operation;
 		tranBuffer = new StringBuffer();
-		willBeAdded = new HashSet();
-	    willBeRemoved = new HashSet();
+		toAdd = new HashSet();
+	    toRemove = new HashSet();
+	    storedFiles = new HashSet();
 	}
 
 	public void complete(boolean commit) {
 		if (commit) {
-			System.out.println(tranBuffer.toString());
+			System.out.println(tranBuffer);
 			
-			HashSet set = (HashSet) dps.get(actDp.getName());
+			// update registry of managed resources 
+			HashSet set = (HashSet) dps.get(actDp);
 			if (null == set) {
 			    set = new HashSet();
-			    dps.put(actDp.getName(), set);
+			    dps.put(actDp, set);
 			}
-			set.removeAll(willBeRemoved);
-			if (actOperation == ResourceProcessor.UPDATE)
-			    System.out.println(id + " drops resources: " + willBeRemoved);
-			set.addAll(willBeAdded);
-			if (ResourceProcessor.UNINSTALL == actOperation) {
-			    for (Iterator iter = willBeRemoved.iterator(); iter.hasNext();) {
-                    String file = (String) iter.next();
-                    File f = context.getDataFile(file);
-    			    if (null != f)
-    			        f.delete();                    
-                }
-			    
-			    dps.remove(actDp.getName());
-			}
+			set.removeAll(toRemove);
+			set.addAll(toAdd);
+
+			// delete dropped files
+			for (Iterator iter = toRemove.iterator(); iter.hasNext();) {
+                String resName = (String) iter.next();
+                if (!resName.startsWith("bye"))
+                    continue;
+                File f = context.getDataFile(getFileNameToResource(resName));
+			    if (null != f)
+			        f.delete();
+            }
+			
+			// DP is not managed by the RP any more
+			if (ResourceProcessor.UNINSTALL == actOperation)
+			    dps.remove(actDp);
 			
 			save();
 		} else {
-			// there is nothing to do
+			for (Iterator iter = storedFiles.iterator(); iter.hasNext();) {
+                File f = (File) iter.next();
+                f.delete();
+                
+                File old = new File(f.getName() + "_old");
+                if (old.exists())
+                    old.renameTo(f);
+            }
 		}
+		
 		tranBuffer = null;
 		actDp = null;
+		toAdd = null;
+	    toRemove = null;
+	    storedFiles = null;
 	}
 
     private void save() {
@@ -92,13 +128,23 @@ public class ExampleResourceProcessor implements ResourceProcessor, BundleActiva
             }
         }
     }
+    
+    private String getFileNameToResource(String resName) {
+        return actDp.getName() + actDp.getVersion() + resName;
+    }
 
     public void process(String name, InputStream stream) throws Exception {
 	    if (actOperation == ResourceProcessor.INSTALL ||
-	        actOperation == ResourceProcessor.UPDATE) {
+	        actOperation == ResourceProcessor.UPDATE) 
+	    {
             if (name.startsWith("bye")) {
-                // TODO transactionality
-                File f = context.getDataFile(name);
+    	        if (actOperation == ResourceProcessor.UPDATE) {
+    	            File f = context.getDataFile(getFileNameToResource(name));
+    	            if (f.exists()) {
+    	                f.renameTo(new File(getFileNameToResource(name) + "_old"));
+    	            }
+    	        }
+    	        File f = context.getDataFile(getFileNameToResource(name));
                 PrintWriter out = new PrintWriter(new FileWriter(f));
                 BufferedReader in = new BufferedReader(new InputStreamReader(stream));
                 String line = in.readLine();
@@ -107,7 +153,8 @@ public class ExampleResourceProcessor implements ResourceProcessor, BundleActiva
                     line = in.readLine();
                 }
                 out.close();
-            } else if (name.startsWith("hello")) {
+                storedFiles.add(f);
+            } else {
 	            BufferedReader r = new BufferedReader(new InputStreamReader(stream));
 	    		if (null == r)
 	    			return;
@@ -117,12 +164,10 @@ public class ExampleResourceProcessor implements ResourceProcessor, BundleActiva
 	    			line = r.readLine();
 	    		}
             }
-            willBeAdded.add(name);
+            toAdd.add(name);
         } else if (actOperation == ResourceProcessor.UNINSTALL) {
-            if (name.startsWith("hello")) {
-                // there is nothing to do
-            } else if (name.startsWith("bye")) {
-	            File f = context.getDataFile(name);
+            if (name.startsWith("bye")) {
+	            File f = context.getDataFile(getFileNameToResource(name));
 	            BufferedReader in = new BufferedReader(new FileReader(f));
 	            String line = in.readLine();
 	            while (null != line) {
@@ -130,13 +175,15 @@ public class ExampleResourceProcessor implements ResourceProcessor, BundleActiva
 	                line = in.readLine();
 	            }
 	            in.close();
+            } else { 
+                // there is nothing to do
             }
-            willBeRemoved.add(name);
+            toRemove.add(name);
         }
 	}
 
 	public void dropped(String name) throws Exception {
-		willBeRemoved.add(name);
+		toRemove.add(name);
 	}
 
 	public void dropped() {

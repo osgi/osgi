@@ -1,6 +1,7 @@
-package org.osgi.impl.service.deploymentadmin;
+package com.nokia.test.doit;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,10 +14,9 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 
-public class TryIt implements BundleActivator {
+public class DoIt implements BundleActivator {
     
-    private static final String HOME = "C:/eclipse/workspaceMEG/" +
-    		"org.osgi.impl.service.deploymentadmin/";
+    private static final String HOME = "../../org.osgi.impl.service.deploymentadmin/res/";
     
     private DeploymentAdmin da;
     private BundleContext   context;
@@ -75,28 +75,28 @@ public class TryIt implements BundleActivator {
             int error = 0;
             
             if (ret = test_simple_01_01()) ++ok; else ++error;
-            System.out.println("--test_simple_01_01------------------------ " + (ret ? "ok" : "ERROR"));
+            System.out.println("** test_simple_01_01 *********************** " + (ret ? "ok" : "ERROR"));
             
             if (ret = test_simple_01_02()) ++ok; else ++error;
-            System.out.println("--test_simple_01_02------------------------ " + (ret ? "ok" : "ERROR"));
+            System.out.println("** test_simple_01_02 *********************** " + (ret ? "ok" : "ERROR"));
             
             if (ret = test_simple_01_03()) ++ok; else ++error;
-            System.out.println("--test_simple_01_03------------------------ " + (ret ? "ok" : "ERROR"));
+            System.out.println("** test_simple_01_03 *********************** " + (ret ? "ok" : "ERROR"));
             
             if (ret = test_simple_01_04()) ++ok; else ++error;
-            System.out.println("--test_simple_01_04------------------------ " + (ret ? "ok" : "ERROR"));
+            System.out.println("** test_simple_01_04 *********************** " + (ret ? "ok" : "ERROR"));
             
             if (ret = test_customizer_01_01()) ++ok; else ++error;
-            System.out.println("--test_customizer_01_01-------------------- " + (ret ? "ok" : "ERROR"));
+            System.out.println("** test_customizer_01_01 ******************* " + (ret ? "ok" : "ERROR"));
             
             if (ret = test_drop_bundles_01()) ++ok; else ++error;
-            System.out.println("--test_drop_bundles_01--------------------- " + (ret ? "ok" : "ERROR"));
+            System.out.println("** test_drop_bundles_01 ******************** " + (ret ? "ok" : "ERROR"));
             
             if (ret = test_drop_bundles_and_resources_01()) ++ok; else ++error;
-            System.out.println("--test_drop_bundles_and_resources_01------- " + (ret ? "ok" : "ERROR"));
+            System.out.println("** test_drop_bundles_and_resources_01 ****** " + (ret ? "ok" : "ERROR"));
             
             if (ret = test_bundlefilter_01()) ++ok; else ++error;
-            System.out.println("--test_bundlefilter_01--------------------- " + (ret ? "ok" : "ERROR"));
+            System.out.println("** test_bundlefilter_01 ******************** " + (ret ? "ok" : "ERROR"));
             
             System.out.println("\n================================");
             System.out.println("RESULT: OK = " + ok + " ERROR = " + error);

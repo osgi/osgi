@@ -477,6 +477,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                     		"resource " + resName);
                 }
             }
+            dropResources(resources);
             uninstallBundles(bundles);
         } catch (Exception e) {
             logger.log(e);
@@ -513,9 +514,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                     if (bundles.contains(bentry)) {
                         updateBundle(bentry, stream);
                     } else {
-                        // TODO chech whethet there is a bundle with the same name and version
+                        // TODO chech whether there is a bundle with the same name and version
                         // in the framework
-                        // TODO chech whethet there is a bundle with the same name in the DP
+                        // TODO chech whether there is a bundle with the same name in the DP
                         installBundle(bentry, stream);
                     }
                     bundlesNotToUninstall.add(bentry);

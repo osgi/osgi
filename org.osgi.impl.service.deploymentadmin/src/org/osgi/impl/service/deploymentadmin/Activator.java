@@ -37,22 +37,22 @@ import org.osgi.framework.*;
  * @version $Revision$
  */
 public class Activator implements BundleActivator {
-	DeploymentPlugin			deploymentPlugin = new DeploymentPlugin();
-	URLProtocolPlugin			urlProtocolPlugin = new URLProtocolPlugin();
-	DeploymentAdminImpl			deploymentAdmin = new DeploymentAdminImpl();
-	ApplicationContainerPackageHandler applicationContainerPackageHandler = new ApplicationContainerPackageHandler();
-	
+	//DeploymentPlugin			deploymentPlugin = new DeploymentPlugin();
+	//URLProtocolPlugin			urlProtocolPlugin = new URLProtocolPlugin();
+	//ApplicationContainerPackageHandler applicationContainerPackageHandler = new ApplicationContainerPackageHandler();
+    DeploymentAdminImpl			deploymentAdmin = new DeploymentAdminImpl();
+    
 	public void start(BundleContext context) throws Exception {
 		deploymentAdmin.start(context);
-		urlProtocolPlugin.start(context);
-		deploymentPlugin.start(context);
-		applicationContainerPackageHandler.start(context);
+		//urlProtocolPlugin.start(context);
+		//deploymentPlugin.start(context);
+		//applicationContainerPackageHandler.start(context);
 	}
 	public void stop(BundleContext context) throws Exception {
-		applicationContainerPackageHandler.start(context);
-		deploymentPlugin.start(context);
-		urlProtocolPlugin.start(context);
-		deploymentAdmin.start(context);
+		//applicationContainerPackageHandler.start(context);
+		//deploymentPlugin.start(context);
+		//urlProtocolPlugin.start(context);
+		//deploymentAdmin.start(context);
 	}
 	
 }
