@@ -159,11 +159,15 @@ class CUTracker extends ManagedObjectsTracker {
         
         cuProvider.changeParent(cuID, newParentType, newParentID);
         
-        cuAdminCallback.hierarchyChanged(HierarchyListener.DETACHED, type, cuID, 
-          oldParentType, oldParentID);
+        if (oldParentType != null && oldParentID != null) {
+          cuAdminCallback.hierarchyChanged(HierarchyListener.DETACHED, type, cuID, 
+            oldParentType, oldParentID);
+        }
           
-        cuAdminCallback.hierarchyChanged(HierarchyListener.ATTACHED, type, cuID, 
-          newParentType, newParentID);
+        if (newParentType != null && newParentID != null) {
+          cuAdminCallback.hierarchyChanged(HierarchyListener.ATTACHED, type, cuID,
+            newParentType, newParentID);
+        }
       }
     }
   }

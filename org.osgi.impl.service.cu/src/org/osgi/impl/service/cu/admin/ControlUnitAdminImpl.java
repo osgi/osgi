@@ -35,6 +35,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.cu.ControlUnit;
 import org.osgi.service.cu.ControlUnitException;
 import org.osgi.service.cu.admin.ControlUnitAdmin;
+import org.osgi.service.cu.admin.ControlUnitAdminException;
 import org.osgi.service.cu.admin.ControlUnitAdminListener;
 import org.osgi.service.cu.admin.spi.CUAdminCallback;
 import org.osgi.service.cu.admin.spi.ControlUnitFactory;
@@ -192,7 +193,7 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
     Provider provider = (Provider)providers.get(cuType);
     
     if (provider == null) {
-      throw new IllegalArgumentException("There is no type '" + cuType + "' exported in the framework!");
+      throw new ControlUnitAdminException(ControlUnitAdminException.NO_SUCH_CONTROL_UNIT_TYPE_ERROR);
     }
     
     return provider.getTypeVersion();
@@ -238,7 +239,7 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
     ControlUnitFactory provider = (ControlUnitFactory)providers.get(cuType);
     
     if (provider == null) {
-      throw new IllegalArgumentException("No factory for control unit type '" + cuType + "' found!");
+      throw new ControlUnitAdminException(ControlUnitAdminException.NO_SUCH_CONTROL_UNIT_TYPE_ERROR);
     }
      
     return provider.createControlUnit(constructorID, arguments);
@@ -254,7 +255,7 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
     ControlUnitFactory provider = (ControlUnitFactory)providers.get(cuType);
     
     if (provider == null) {
-      throw new IllegalArgumentException("No factory for control unit type '" + cuType + "' found!");
+      throw new ControlUnitAdminException(ControlUnitAdminException.NO_SUCH_CONTROL_UNIT_TYPE_ERROR);
     }
     
     provider.destroyControlUnit(cuID);
@@ -336,8 +337,7 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
     ControlUnitFactory provider = (ControlUnitFactory)providers.get(cuType);
     
     if (provider == null) {
-      throw new IllegalArgumentException("No control unit '" + cuType + "' of type '" + 
-        cuID + "' found!");
+      throw new ControlUnitAdminException(ControlUnitAdminException.NO_SUCH_CONTROL_UNIT_ERROR);
     }
     
     return provider.queryStateVariable(cuID, varID);
@@ -354,8 +354,7 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
     ControlUnitFactory provider = (ControlUnitFactory)providers.get(cuType);
     
     if (provider == null) {
-      throw new IllegalArgumentException("No control unit '" + cuID + "' of type '" + 
-        cuType + "' found!");
+      throw new ControlUnitAdminException(ControlUnitAdminException.NO_SUCH_CONTROL_UNIT_ERROR);
     }
     
     return provider.invokeAction(cuID, actionID, arguments);

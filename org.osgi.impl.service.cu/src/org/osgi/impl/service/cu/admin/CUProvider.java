@@ -241,7 +241,7 @@ class CUProvider implements Provider {
     CUData cuData = (CUData)unitsTable.get(childID);
     
     if (cuData == null) { 
-      throw new IllegalArgumentException("ControlUnit with id '" + childID + "' not found!");
+      throw new ControlUnitAdminException(ControlUnitAdminException.NO_SUCH_CONTROL_UNIT_ERROR);
     }
     
     return cuData.getParentID() != null ? new String[] { cuData.getParentID() } : null;
