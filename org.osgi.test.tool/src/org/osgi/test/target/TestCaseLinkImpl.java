@@ -75,10 +75,11 @@ public class TestCaseLinkImpl implements TestCaseLink {
 	}
 
 	void close() {
-		System.out.println("Closing " + bundle.getBundleId() + " "
-				+ bundle.getLocation());
 		queue.releaseAll();
+		if ( bundle.getLocation().indexOf("~keep~")<0)
 		try {
+			System.out.println("Closing " + bundle.getBundleId() + " "
+					+ bundle.getLocation());
 			bundle.uninstall();
 		}
 		catch (Exception e) {
