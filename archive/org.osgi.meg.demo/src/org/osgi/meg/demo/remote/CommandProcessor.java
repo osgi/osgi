@@ -66,7 +66,7 @@ public class CommandProcessor {
 			}
 			else if (cmd.equals("getnodevalue") || cmd.equals("gv")) {
 				DmtData data = session.getNodeValue(uri);
-				ret = data.getString();
+				ret = data.toString();
 			}
 			else if (cmd.equals("getnodetitle") || cmd.equals("gt")) {
 				ret = session.getNodeTitle(uri);
@@ -155,13 +155,21 @@ public class CommandProcessor {
 		if (type.equals("int")) {
 			value = new DmtData(Integer.parseInt(data));
 		}
-		else if (type.equals("chr")) {
-			value = new DmtData(data);
-		}
 		else if (type.equals("boolean")) {
 			value = new DmtData((new Boolean(data)).booleanValue());
 		}
-		// TODO xml, bin, null
+		else if (type.equals("chr")) {
+			value = new DmtData(data);
+		}
+        else if (type.equals("xml")) {
+            value = new DmtData(data, true);
+        }
+        else if (type.equals("bin")) {
+            value = new DmtData(data.getBytes());
+        }
+        else if (type.equals("null")) {
+            value = DmtData.NULL_VALUE;
+        }
 		return value;
 	}
 
