@@ -47,13 +47,15 @@ public class UserPromptCondition implements Condition {
 	 * @param defaultLevel the default permission level. If it is an empty string, then there is
 	 * 		no default.
 	 * @param catalogName the message catalog base name
-	 * @param key the key that identifies the prompt string in the message catalog
+	 * @param message textual description of the condition, to be displayed to the user. If
+	 * 		it starts with a '%' sign, then the message is looked up from the catalog specified
+	 * 		by the catalogName parameter. The key is the rest of the string after the '%' sign.
 	 */
 	public UserPromptCondition(Bundle bundle,
 					String levels,
 					String defaultLevel, 
 					String catalogName, 
-					String key) 
+					String message) 
 	{
 	}
 
