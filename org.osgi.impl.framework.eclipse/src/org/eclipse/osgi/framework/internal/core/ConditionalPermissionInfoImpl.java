@@ -181,7 +181,7 @@ public class ConditionalPermissionInfoImpl implements ConditionalPermissionInfo,
 	}
 	
 	static ConditionalPermissionAdminImpl condAdmin;
-	static void setConditionalPermissionAdminImpl(ConditionalPermissionAdminImpl condAmin) {
+	static void setConditionalPermissionAdminImpl(ConditionalPermissionAdminImpl condAdmin) {
 		ConditionalPermissionInfoImpl.condAdmin = condAdmin;
 	}
 }
