@@ -26,21 +26,35 @@ import java.util.*;
 public class TestApplication2 extends Meglet implements EventHandler
 {
   String fileName = null;
+  String storedString = null;
 
   public TestApplication2()
   {
     super();
   }
 
-  protected void start( Map args ) throws Exception
+  protected void start( Map args, InputStream stateStorage ) throws Exception
   {
     if( args != null )
       fileName = (String)args.get( "TestResult" );
-    writeResult( "START" );
+    
+    if( stateStorage != null ) {
+      ObjectInputStream ois = new ObjectInputStream( stateStorage );
+      storedString = (String)ois.readObject();
+    }   
+    
+    if( storedString == null )
+      writeResult( "START" );
+    else
+      writeResult( "RESUMED:" + storedString );
   }
 
-  protected void stop() throws Exception
+  protected void stop( OutputStream stateStorage ) throws Exception
   {
+    if( stateStorage != null ) {
+      ObjectOutputStream ois = new ObjectOutputStream( stateStorage );
+      ois.writeObject( storedString );
+    }   
     writeResult( "STOP" );
   }
 
