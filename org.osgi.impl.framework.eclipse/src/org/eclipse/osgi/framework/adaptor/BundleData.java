@@ -17,9 +17,8 @@ import java.net.URL;
 import java.security.ProtectionDomain;
 import java.util.Dictionary;
 import java.util.Enumeration;
-import org.eclipse.osgi.service.resolver.Version;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleException;
+
+import org.osgi.framework.*;
 
 /**
  * The <code>BundleData</code> represents a single bundle that is persistently 

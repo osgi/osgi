@@ -11,9 +11,9 @@
 package org.eclipse.osgi.internal.module;
 
 import java.util.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import org.eclipse.osgi.service.resolver.*;
+import org.osgi.framework.Version;
 
 
 public class ResolverBundle implements VersionSupplier {

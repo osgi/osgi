@@ -10,7 +10,7 @@
  *******************************************************************************/
 package org.eclipse.osgi.service.resolver;
 
-import org.osgi.framework.BundleException;
+import org.osgi.framework.*;
 
 /**
  * The state of a system as reported by a resolver. This includes all bundles

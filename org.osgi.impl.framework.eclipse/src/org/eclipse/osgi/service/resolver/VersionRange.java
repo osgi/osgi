@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.osgi.service.resolver;
 
+import org.osgi.framework.Version;
+
 public class VersionRange {
 	public static final VersionRange emptyRange = new VersionRange(null);
 
@@ -17,6 +19,7 @@ public class VersionRange {
 	private boolean includeMin; 
 	private Version maxVersion;
 	private boolean includeMax;
+	private static Version versionMax = new Version(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
 
 	/**
 	 * Constructs a VersionRange with the specified minVersion and maxVersion.
@@ -39,7 +42,7 @@ public class VersionRange {
 		if (versionRange == null || versionRange.length() == 0) {
 			minVersion = Version.emptyVersion;
 			includeMin = true;
-			maxVersion = Version.maxVersion;
+			maxVersion = versionMax;
 			includeMax = true;
 			return;
 		}
@@ -59,7 +62,7 @@ public class VersionRange {
 		} else {
 			minVersion = new Version(versionRange);
 			includeMin = true;
-			maxVersion = Version.maxVersion;
+			maxVersion = versionMax;
 			includeMax = true;
 		}
 	}
@@ -114,7 +117,7 @@ public class VersionRange {
 			return true;
 		if (version == null)
 			return false;
-		Version maxRequired = getMaximum() == null ? Version.maxVersion : getMaximum();
+		Version maxRequired = getMaximum() == null ? versionMax : getMaximum();
 		int minCheck = includeMin ? 0 : 1;
 		int maxCheck = includeMax ? 0 : -1;
 		return version.compareTo(minRequired) >= minCheck && version.compareTo(maxRequired) <= maxCheck;
@@ -143,7 +146,7 @@ public class VersionRange {
 	public String toString() {
 		if (minVersion == null)
 			return Version.emptyVersion.toString();
-		if (Version.maxVersion.equals(maxVersion))
+		if (versionMax.equals(maxVersion))
 			return minVersion.toString();
 		StringBuffer result = new StringBuffer();
 		if (minVersion != null)

@@ -12,11 +12,10 @@ package org.eclipse.osgi.framework.internal.core;
 
 import java.util.Enumeration;
 import java.util.Vector;
-import org.eclipse.osgi.service.resolver.Version;
+
 import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.*;
 import org.osgi.framework.Constants;
-import org.osgi.framework.InvalidSyntaxException;
 
 /**
  * This class represents a description of native code.

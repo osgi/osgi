@@ -11,11 +11,10 @@
 package org.eclipse.osgi.internal.resolver;
 
 import java.io.*;
-import java.io.DataInputStream;
-import java.io.IOException;
 import java.util.*;
 
 import org.eclipse.osgi.service.resolver.*;
+import org.osgi.framework.Version;
 
 class StateReader {
 

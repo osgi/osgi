@@ -10,7 +10,8 @@
  *******************************************************************************/
 package org.eclipse.osgi.internal.resolver;
 
-import org.eclipse.osgi.service.resolver.*;
+import org.eclipse.osgi.service.resolver.BaseDescription;
+import org.osgi.framework.Version;
 
 public class BaseDescriptionImpl implements BaseDescription {
 	private String name;

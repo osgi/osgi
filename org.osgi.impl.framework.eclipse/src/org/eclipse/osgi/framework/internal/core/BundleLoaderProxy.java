@@ -11,9 +11,9 @@
 package org.eclipse.osgi.framework.internal.core;
 
 import java.util.ArrayList;
-import org.eclipse.osgi.service.resolver.*;
+
+import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.osgi.framework.*;
-import org.osgi.framework.Bundle;
 import org.osgi.service.packageadmin.RequiredBundle;
 
 /*
@@ -165,8 +165,8 @@ public class BundleLoaderProxy implements KeyedElement, RequiredBundle {
 		return symbolicName;
 	}
 
-	public String getVersion() {
-		return description.getVersion().toString();
+	public Version getVersion() {
+		return description.getVersion();
 	}
 
 	public boolean isRemovalPending() {

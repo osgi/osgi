@@ -15,6 +15,7 @@ import java.util.Dictionary;
 import java.util.Map;
 
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Version;
 
 /**
  * A factory for states and their component objects.  

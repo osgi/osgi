@@ -13,10 +13,9 @@ package org.eclipse.osgi.internal.resolver;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.*;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.osgi.service.resolver.*;
+import org.osgi.framework.Version;
 
 class StateWriter {
 
@@ -263,10 +262,10 @@ class StateWriter {
 			return;
 		}
 		out.writeByte(OBJECT);
-		out.writeInt(version.getMajorComponent());
-		out.writeInt(version.getMinorComponent());
-		out.writeInt(version.getMicroComponent());
-		writeQualifier(version.getQualifierComponent(), out);
+		out.writeInt(version.getMajor());
+		out.writeInt(version.getMinor());
+		out.writeInt(version.getMicro());
+		writeQualifier(version.getQualifier(), out);
 	}
 
 	private void writeVersionRange(VersionRange versionRange, DataOutputStream out) throws IOException {

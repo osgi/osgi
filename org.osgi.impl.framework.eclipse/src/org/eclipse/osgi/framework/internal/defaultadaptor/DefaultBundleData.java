@@ -13,11 +13,12 @@ package org.eclipse.osgi.framework.internal.defaultadaptor;
 
 import java.io.File;
 import java.io.IOException;
+
 import org.eclipse.osgi.framework.adaptor.core.*;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.internal.core.Constants;
-import org.eclipse.osgi.service.resolver.Version;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Version;
 
 /**
  * The <code>BundleData</code> represents a single bundle that is persistently 

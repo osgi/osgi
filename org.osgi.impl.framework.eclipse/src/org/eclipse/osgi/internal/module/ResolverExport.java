@@ -10,7 +10,9 @@
  *******************************************************************************/
 package org.eclipse.osgi.internal.module;
 
-import org.eclipse.osgi.service.resolver.*;
+import org.eclipse.osgi.service.resolver.BundleDescription;
+import org.eclipse.osgi.service.resolver.ExportPackageDescription;
+import org.osgi.framework.Version;
 
 
 public class ResolverExport implements VersionSupplier {

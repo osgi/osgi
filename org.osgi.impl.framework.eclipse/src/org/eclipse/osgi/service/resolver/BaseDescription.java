@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.osgi.service.resolver;
 
+import org.osgi.framework.Version;
+
 public interface BaseDescription {
 	public String getName();
 	public Version getVersion();

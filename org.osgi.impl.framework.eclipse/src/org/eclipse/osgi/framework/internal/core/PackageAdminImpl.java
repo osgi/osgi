@@ -14,16 +14,14 @@ package org.eclipse.osgi.framework.internal.core;
 import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.*;
 import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.eclipse.osgi.framework.adaptor.BundleClassLoader;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.util.SecureAction;
 import org.eclipse.osgi.service.resolver.*;
-import org.eclipse.osgi.service.resolver.BundleDescription;
-import org.eclipse.osgi.service.resolver.VersionRange;
 import org.osgi.framework.*;
-import org.osgi.framework.Bundle;
 import org.osgi.service.packageadmin.*;
 
 /**

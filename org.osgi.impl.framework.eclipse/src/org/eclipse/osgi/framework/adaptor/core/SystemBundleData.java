@@ -12,17 +12,16 @@
 package org.eclipse.osgi.framework.adaptor.core;
 
 import java.io.*;
-import java.io.File;
-import java.io.IOException;
 import java.security.ProtectionDomain;
 import java.util.Enumeration;
+
 import org.eclipse.osgi.framework.adaptor.BundleClassLoader;
 import org.eclipse.osgi.framework.adaptor.ClassLoaderDelegate;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.internal.core.Constants;
 import org.eclipse.osgi.framework.util.Headers;
-import org.eclipse.osgi.service.resolver.Version;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Version;
 
 public class SystemBundleData extends AbstractBundleData {
 	public static final String OSGI_FRAMEWORK = "osgi.framework"; //$NON-NLS-1$

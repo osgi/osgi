@@ -11,12 +11,12 @@
 package org.eclipse.osgi.internal.resolver;
 
 import java.util.*;
-import java.util.ArrayList;
-import java.util.Dictionary;
+
 import org.eclipse.osgi.framework.internal.core.Constants;
 import org.eclipse.osgi.service.resolver.*;
 import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Version;
 
 /**
  * This class builds bundle description objects from manifests

@@ -12,6 +12,7 @@ package org.eclipse.osgi.internal.resolver;
 
 import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Version;
 
 public class ReadOnlyState implements State {
 	private State target;

@@ -12,7 +12,8 @@
 package org.eclipse.osgi.framework.internal.core;
 
 import java.util.*;
-import org.eclipse.osgi.service.resolver.Version;
+
+import org.osgi.framework.Version;
 
 /**
  * The BundleRepository holds all installed Bundle object for the

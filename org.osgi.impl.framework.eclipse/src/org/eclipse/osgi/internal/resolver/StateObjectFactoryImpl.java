@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Version;
 
 public class StateObjectFactoryImpl implements StateObjectFactory {
 

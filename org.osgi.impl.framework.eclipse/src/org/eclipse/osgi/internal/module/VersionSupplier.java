@@ -11,7 +11,7 @@
 package org.eclipse.osgi.internal.module;
 
 import org.eclipse.osgi.service.resolver.BundleDescription;
-import org.eclipse.osgi.service.resolver.Version;
+import org.osgi.framework.Version;
 
 public interface VersionSupplier {
 	public Version getVersion();

@@ -11,11 +11,13 @@
 package org.eclipse.osgi.internal.resolver;
 
 import java.util.*;
+
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.debug.DebugOptions;
 import org.eclipse.osgi.framework.internal.core.KeyedElement;
 import org.eclipse.osgi.framework.internal.core.KeyedHashSet;
 import org.eclipse.osgi.service.resolver.*;
+import org.osgi.framework.Version;
 
 public abstract class StateImpl implements State {
 	transient private Resolver resolver;
