@@ -119,5 +119,5 @@ public interface Monitorable {
      * @throws IllegalArgumentException if the path points to a non existing
      *         StatusVariable
      */
-    public String getDescription(String id);
+    public String getDescription(String id) throws IllegalArgumentException;
 }
