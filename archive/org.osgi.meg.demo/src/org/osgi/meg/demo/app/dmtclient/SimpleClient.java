@@ -24,11 +24,13 @@ import java.util.*;
 //import javax.xml.parsers.SAXParser;
 //import javax.xml.parsers.SAXParserFactory;
 import org.osgi.framework.*;
+//import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
 import org.osgi.service.cm.*;
 import org.osgi.service.dmt.*;
 import org.osgi.service.event.*;
 import org.osgi.service.monitor.*;
 //import org.w3c.dom.Document;
+//import org.osgi.service.permissionadmin.PermissionInfo;
 //import org.xml.sax.helpers.DefaultHandler;
 //import org.xml.sax.Attributes;
 
@@ -70,8 +72,8 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
         String pid = ClientActivator.SERVICE_PID;
 
         try {
-            /*
 
+            /*
             ServiceReference refs[] = bc.getServiceReferences( SAXParserFactory.class.getName(), 
                     "(&(parser.namespaceAware=true)(parser.validating=false))" ); 
 
@@ -176,6 +178,31 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
             */
             config.update(properties);
 
+            /*
+            config = ca.getConfiguration("org.osgi.impl.service.dmt.permissions", null);
+            properties = new Hashtable();
+            properties.put("server", new String[] { 
+                    new PermissionInfo(AdminPermission.class.getName(), "", "").getEncoded() 
+            });
+            config.update(properties);
+      
+            ServiceReference pRef = bc.getServiceReference("org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin");
+            if(pRef == null)
+                throw new Exception("Cannot find DmtPrincipalPermissionAdmin service.");
+
+            DmtPrincipalPermissionAdmin p = (DmtPrincipalPermissionAdmin) bc.getService(pRef);
+            if(p == null)
+                throw new Exception("DmtPrincipalPermissionAdmin service no longer registered.");
+            
+            properties = new Hashtable();
+            properties.put("server", new PermissionInfo[] { 
+                    new PermissionInfo(AdminPermission.class.getName(), "", "")
+            });
+            p.setPrincipalPermissions(properties);
+            
+            bc.ungetService(pRef);
+            */
+            
             DmtSession session = factory.getSession(".");
             System.out.println("Retrieved session, id=" + session.getSessionId() +
                                ", lock type=" + session.getLockType() +
@@ -315,22 +342,22 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
         try {
             int format = value.getFormat();
             switch(format) {
-            case DmtDataType.NULL:   
+            case DmtData.FORMAT_NULL:   
                 System.out.println("NULL"); 
                 break;
-            case DmtDataType.XML: 
+            case DmtData.FORMAT_XML: 
                 System.out.print("XML STRING: '" + value.getXml() + "'");
                 break;
-            case DmtDataType.STRING: 
+            case DmtData.FORMAT_STRING: 
                 System.out.println("STRING: '" + value.getString() + "'");
                 break;
-            case DmtDataType.BOOLEAN:
+            case DmtData.FORMAT_BOOLEAN:
                 System.out.println("BOOLEAN: " + value.getBoolean());
                 break;
-            case DmtDataType.INTEGER:
+            case DmtData.FORMAT_INTEGER:
                 System.out.println("INTEGER: " + value.getInt());
                 break;
-            case DmtDataType.BINARY:
+            case DmtData.FORMAT_BINARY:
                 System.out.println("BINARY: '" + new String(value.getBinary()) + "'");
                 break;
             default:
