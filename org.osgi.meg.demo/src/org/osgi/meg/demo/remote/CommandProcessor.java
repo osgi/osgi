@@ -130,6 +130,10 @@ public class CommandProcessor {
 				DmtAcl acl = session.getNodeAcl(uri);
 				ret = acl == null ? "<unset>" : acl.toString();
 			}
+			else if (cmd.equals("geteffectivenodeacl") || cmd.equals("gea")) {
+				DmtAcl acl = session.getEffectiveNodeAcl(uri);
+				ret = acl.toString();
+			}
 			else if (cmd.equals("getmetanode") || cmd.equals("gm")) {
 				DmtMetaNode mn = session.getMetaNode(uri);
 				ret = mn.toString(); // TODO does it have a good tostring?
@@ -234,6 +238,8 @@ public class CommandProcessor {
 		sb.append("setNodeAcl        sa    uri acl_as_string      ");
 		sb.append("\n");
 		sb.append("getNodeAcl        ga    uri             acl    ");
+		sb.append("\n");
+		sb.append("getEffectiveNodeAcl gea uri             effective acl");
 		sb.append("\n");
 		sb.append("getMetaNode       gm    uri             metainfo");
 		sb.append("\n");
