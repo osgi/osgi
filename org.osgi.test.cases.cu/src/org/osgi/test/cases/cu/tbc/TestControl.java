@@ -43,8 +43,6 @@ import org.osgi.service.cu.*;
  * execution of the run. This description is usuall quite minimal because the
  * main description is in the TemplateTestCase.</remove>
  * 
- * TODO Add Javadoc comment for this.
- * 
  * @version $Revision$
  */
 
@@ -127,7 +125,7 @@ public class TestControl extends DefaultTestBundleControl {
 		try {
 			admin.createControlUnit("test", null, null);
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Creation with an unknown CU", e.getClass(), e);
 		}
 		
@@ -135,7 +133,7 @@ public class TestControl extends DefaultTestBundleControl {
 		try {
 			admin.createControlUnit("hip", null, null);
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Creation with a ManagedControlUnit", e.getClass(), e);
 		}
 		
@@ -143,7 +141,7 @@ public class TestControl extends DefaultTestBundleControl {
 		try {
 			admin.createControlUnit("door", null, null);
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Creation from a CUFactory with other arguments set to null", e.getClass(), e);
 		}
 		
@@ -151,24 +149,24 @@ public class TestControl extends DefaultTestBundleControl {
 		try {
 			admin.createControlUnit("door", "create.test", null);
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Creation from a CUFactory with an unknown method", e.getClass(), e);
 		}
 		
 		// Test creation with a ManagedControlUnit service
 		try {
-			admin.createControlUnit("door", "door.create", new Short("1"));
+			admin.createControlUnit("door", "$create.door", new Short("1"));
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Creation from a CUFactory with some arguments", e.getClass(), e);
 		}
 		
 		// Test creation with a ManagedControlUnit service
 		try {
-			admin.createControlUnit("door", "door.create", null);
+			admin.createControlUnit("door", "$create.door", null);
 			log("Creation from CUFactory, type = door, id = door.1");
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Creation from a CUFactory with some arguments", e.getClass(), e);
 		}
 	}
@@ -182,7 +180,7 @@ public class TestControl extends DefaultTestBundleControl {
 		try {
 			admin.destroyControlUnit(null, null);
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Destruction with all arguments set to null", e.getClass(), e);
 		}
 		
@@ -190,7 +188,7 @@ public class TestControl extends DefaultTestBundleControl {
 		try {
 			admin.destroyControlUnit("test", null);
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Destruction of an unknown CU", e.getClass(), e);
 		}
 		
@@ -198,7 +196,7 @@ public class TestControl extends DefaultTestBundleControl {
 		try {
 			admin.destroyControlUnit("hip", null);
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Destruction of a ManagedControlUnit", e.getClass(), e);
 		}
 		
@@ -206,7 +204,7 @@ public class TestControl extends DefaultTestBundleControl {
 		try {
 			admin.destroyControlUnit("door", null);
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Destruction from a CUFactory: type = door, id set to null", e.getClass(), e);
 		}
 		
@@ -214,7 +212,7 @@ public class TestControl extends DefaultTestBundleControl {
 		try {
 			admin.destroyControlUnit("door", "door.x");
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Destruction from a CUFactory: type = door, id = door.x", e.getClass(), e);
 		}
 		
@@ -223,7 +221,7 @@ public class TestControl extends DefaultTestBundleControl {
 			admin.destroyControlUnit("door", "door.1");
 			log("Destruction of CU: type = door, id = door.1");
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Destruction of CU: type = door, id = door.1", e.getClass(), e);
 		}		
 	}
@@ -240,7 +238,7 @@ public class TestControl extends DefaultTestBundleControl {
 			log("Find control units with all arguments set to null: ");
 			if (types != null) listStringArray(types);
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Find CUs with all arguments set to null: ", e.getClass(), e);
 		}
 		
@@ -250,12 +248,19 @@ public class TestControl extends DefaultTestBundleControl {
 			log("Find CUs with a wrong find method: ");
 			if (types != null) listStringArray(types);
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Find CUs with a wrong find method: ", e.getClass(), e);
 		}
 		
-		// TODO
 		// Search of CUs with known find method
+		try {
+			types = admin.findControlUnits("door", "$find.all", null);
+			log("Find CUs with a correct find method: ");
+			if (types != null) listStringArray(types);
+		}
+		catch (ControlUnitException e) {
+			assertException("Find CUs with a correct find method: ", e.getClass(), e);
+		}
 	}
 	
 	/**
@@ -267,11 +272,11 @@ public class TestControl extends DefaultTestBundleControl {
 		// Creation of all CUs for test
 		try {
 		for (int i=0; i<4; i++)
-			admin.createControlUnit("door", "door.create", null);
+			admin.createControlUnit("door", "$create.door", null);
 		for (int i=0; i<4; i++)
-			admin.createControlUnit("window", "window.create", null);
+			admin.createControlUnit("window", "$create.window", null);
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			e.printStackTrace();
 		}
 		
@@ -283,22 +288,47 @@ public class TestControl extends DefaultTestBundleControl {
 		// List Parent CUs of a CU
 		try {
 			types = admin.getParentControlUnits(null, null, null);
+			if (types != null) listStringArray(types);
 		}
-		catch (NullPointerException e) {
+		catch (Exception e) {
 			assertException("List of Parent CUs with all arguments set to null: ", e.getClass(), e);
 		}
-		log("List Parent CUs of a Managed CU without parents:");
-		types = admin.getParentControlUnits("hip", "hip.id", "");
-		if (types != null) listStringArray(types);
-		log("List Parent CUs of a Managed CU with parents:");
-		types = admin.getParentControlUnits("hip.gyro", "hip.gyro.id", "hip");
-		if (types != null) listStringArray(types);
-		log("List Parent CUs of a CUFactory without parents:");
-		types = admin.getParentControlUnits("door", "door.1", "");
-		if (types != null) listStringArray(types);
-		log("List Parent CUs of a CUFactory with parents:");
-		types = admin.getParentControlUnits("window", "window.1", "door");
-		if (types != null) listStringArray(types);
+		
+		try {
+			log("List Parent CUs of a Managed CU without parents:");
+			types = admin.getParentControlUnits("hip", "hip.id", "");
+			if (types != null) listStringArray(types);
+		}
+		catch (ControlUnitAdminException e) {
+			assertException("List Parent CUs of a Managed CU without parents: ", e.getClass(), e);
+		}
+		
+		try {
+			log("List Parent CUs of a Managed CU with parents:");
+			types = admin.getParentControlUnits("hip.gyro", "hip.gyro.id", "hip");
+			if (types != null) listStringArray(types);
+		}
+		catch (ControlUnitAdminException e) {
+			assertException("List Parent CUs of a Managed CU with parents: ", e.getClass(), e);
+		}
+		
+		try {
+			log("List Parent CUs of a CUFactory without parents:");
+			types = admin.getParentControlUnits("door", "door.1", "");
+			if (types != null) listStringArray(types);
+		}
+		catch (ControlUnitAdminException e) {
+			assertException("List Parent CUs of a CUFactory without parents: ", e.getClass(), e);
+		}
+		
+		try {
+			log("List Parent CUs of a CUFactory with parents:");
+			types = admin.getParentControlUnits("window", "window.1", "door");
+			if (types != null) listStringArray(types);
+		}
+		catch (ControlUnitAdminException e) {
+			assertException("List Parent CUs of a CUFactory with parents: ", e.getClass(), e);
+		}
 		
 		// List Parent Types of a CU Type
 		try {
@@ -371,36 +401,68 @@ public class TestControl extends DefaultTestBundleControl {
 		try {
 			cu = admin.getControlUnit(null, null);
 		}
-		catch (NullPointerException e) {
+		catch (Exception e) {
 			assertException("Retrieve a CU with arguments set to null: ", e.getClass(), e);
 		}
-		log("Retrieve a CU with type unknown, id unknown:");
-		cu = admin.getControlUnit("test", "test");
-		if (cu!= null) log ("CU found");
-		log("Retrieve a CU with type known, id unknown:");
-		cu = admin.getControlUnit("hip", "test");
-		if (cu!= null) log ("CU found");
-		log("Retrieve a CU with type = hip, id = hip.id:");
-		cu = admin.getControlUnit("hip", "hip.id");
-		if (cu!= null) log ("CU found");
-		log("Retrieve a CU with type = door, id = door.4:");
-		cu = admin.getControlUnit("door", "door.4");
-		if (cu!= null) log ("CU found");
+
+		try {
+			log("Retrieve a CU with type unknown, id unknown:");
+			cu = admin.getControlUnit("test", "test");
+			if (cu!= null) log ("CU found");
+		}
+		catch (ControlUnitAdminException e) {
+			assertException("Retrieve a CU with type unknown, id unknown: ", e.getClass(), e);
+		}
+
+		try {
+			log("Retrieve a CU with type known, id unknown:");
+			cu = admin.getControlUnit("hip", "test");
+			if (cu!= null) log ("CU found");
+		}
+		catch (ControlUnitAdminException e) {
+			assertException("Retrieve a CU with type known, id unknown: ", e.getClass(), e);
+		}
+		
+		try {
+			log("Retrieve a CU with type = hip, id = hip.id:");
+			cu = admin.getControlUnit("hip", "hip.id");
+			if (cu!= null) log ("CU found");
+		}
+		catch (ControlUnitAdminException e) {
+			assertException("Retrieve a CU with type = hip, id = hip.id: ", e.getClass(), e);
+		}
+		
+		try {
+			log("Retrieve a CU with type = door, id = door.4:");
+			cu = admin.getControlUnit("door", "door.4");
+			if (cu!= null) log ("CU found");
+		}
+		catch (ControlUnitAdminException e) {
+			assertException("Retrieve a CU with type = door, id = door.4: ", e.getClass(), e);
+		}
 		
 		// Retrieve Type Version of a CU Type
 		try {
 			admin.getControlUnitTypeVersion(null);
 		}
-		catch (NullPointerException e) {
+		catch (Exception e) {
 			assertException("Retrieve Type Version of a CU with type = null: ", e.getClass(), e);
 		}
+		
 		try {
 			admin.getControlUnitTypeVersion("test");
 		}
-		catch (IllegalArgumentException e) {
+		catch (ControlUnitAdminException e) {
 			assertException("Retrieve Type Version of a CU with type unknown: ", e.getClass(), e);
 		}
-		log("Retrieve Type Version of a CU with type = hip: " + admin.getControlUnitTypeVersion("hip"));
+
+		try {
+			log("Retrieve Type Version of a CU with type = hip: ");
+			log(admin.getControlUnitTypeVersion("hip"));
+		}
+		catch (ControlUnitAdminException e) {
+			assertException("Retrieve Type Version of a CU with type = hip: ", e.getClass(), e);
+		}		
 	}
 	
 	/**
@@ -411,7 +473,7 @@ public class TestControl extends DefaultTestBundleControl {
 		try {
 			admin.invokeAction(null, null, null, null);
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Invoke an action with all arguments set to null: ", e.getClass(), e);
 		}
 		
@@ -419,7 +481,7 @@ public class TestControl extends DefaultTestBundleControl {
 		try {
 			admin.invokeAction("hip.gyro", "hip.gyro.id", "test", null);
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Invoke an unknown action: ", e.getClass(), e);
 		}
 		
@@ -429,7 +491,7 @@ public class TestControl extends DefaultTestBundleControl {
 			res = (Measurement)admin.invokeAction("hip.gyro", "hip.gyro.id", "hip.gyro.getZRO", null);
 			log ("Invoke an action without arguments: " + res);
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Invoke an action without arguments: ", e.getClass(), e);
 		}
 		
@@ -438,7 +500,7 @@ public class TestControl extends DefaultTestBundleControl {
 			Object[] args1 = {new Byte("1"), new Byte("3")};
 			admin.invokeAction("hip.gyro", "hip.gyro.id", "hip.gyro.calibrate", args1);
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Invoke an action with wrong arguments: ", e.getClass(), e);
 		}
 		
@@ -448,7 +510,7 @@ public class TestControl extends DefaultTestBundleControl {
 			admin.invokeAction("hip.gyro", "hip.gyro.id", "hip.gyro.calibrate", args2);
 			log ("Invoke an action with arguments: OK");
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Invoke an action with arguments: ", e.getClass(), e);
 		}
 	}
@@ -461,7 +523,7 @@ public class TestControl extends DefaultTestBundleControl {
 		try {
 			admin.queryStateVariable(null, null, null);
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Query a state variable with all arguments set to null: ", e.getClass(), e);
 		}
 		
@@ -469,7 +531,7 @@ public class TestControl extends DefaultTestBundleControl {
 		try {
 			admin.queryStateVariable("hip.gyro", "hip.gyro.id", "test");
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Query an unknown state variable: ", e.getClass(), e);
 		}
 		
@@ -479,7 +541,7 @@ public class TestControl extends DefaultTestBundleControl {
 			res = admin.queryStateVariable("hip.gyro", "hip.gyro.id", "hip.gyro.rawOutput");
 			log("Query a state variable: " + res);
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			assertException("Query a state variable: ", e.getClass(), e);
 		}		
 	}
@@ -488,11 +550,16 @@ public class TestControl extends DefaultTestBundleControl {
 	 * Tests access to control units
 	 */
 	public void testControlUnit() {
-		ControlUnit cu;
+		ControlUnit cu = null;
 		
 		// Test access of a control unit
 		log("Access a ControlUnit");
-		cu = admin.getControlUnit("hip.tacho", "hip.tacho.id");
+		try {
+			cu = admin.getControlUnit("hip.tacho", "hip.tacho.id");
+		}
+		catch (ControlUnitAdminException e) {
+			e.printStackTrace();
+		}
 		
 		if (cu != null) {
 			log("type = " + cu.getType());
@@ -502,7 +569,7 @@ public class TestControl extends DefaultTestBundleControl {
 				res = cu.invokeAction("hip.tacho.isDppValid", null);
 				log("Invoke an action : " + res);
 			}
-			catch (Exception e) {
+			catch (ControlUnitException e) {
 				assertException("Invoke an action: ", e.getClass(), e);
 			} 
 			
@@ -511,7 +578,7 @@ public class TestControl extends DefaultTestBundleControl {
 				res = cu.queryStateVariable("hip.tacho.rawOutput");
 				log("Query a state variable value: " + res);
 			}
-			catch (Exception e) {
+			catch (ControlUnitException e) {
 				assertException("Query a state variable value: ", e.getClass(), e);
 			} 
 		}
@@ -531,23 +598,34 @@ public class TestControl extends DefaultTestBundleControl {
 		}
 		
 		// Tests the notification of state changes of a door
-		ControlUnit cu = admin.getControlUnit("door", "door.4");
+		ControlUnit cu = null;
+		try {
+			cu = admin.getControlUnit("door", "door.4");
+		}
+		catch (ControlUnitAdminException e) {
+			e.printStackTrace();
+		}
 		if (cu != null) {
 			try {
 				cu.invokeAction("door.open", null);
 			}
-			catch (Exception e) {
+			catch (ControlUnitException e) {
 				assertException("Invoke an action: ", e.getClass(), e);
 			} 
 		}		
 		
 		// Tests the notification of state changes of a window
-		cu = admin.getControlUnit("window", "window.1");
+		try {
+			cu = admin.getControlUnit("window", "window.1");
+		}
+		catch (ControlUnitAdminException e) {
+			e.printStackTrace();
+		}
 		if (cu != null) {
 			try {
 				cu.invokeAction("window.open", null);
 			}
-			catch (Exception e) {
+			catch (ControlUnitException e) {
 				assertException("Invoke an action: ", e.getClass(), e);
 			} 
 		}	
@@ -583,9 +661,9 @@ public class TestControl extends DefaultTestBundleControl {
 			admin.destroyControlUnit("window","window.3");
 			admin.destroyControlUnit("window","window.4");
 			for (int i=0; i<4; i++)
-				admin.createControlUnit("window", "window.create", null);
+				admin.createControlUnit("window", "$create.window", null);
 		}
-		catch (Exception e) {
+		catch (ControlUnitException e) {
 			e.printStackTrace();
 		}
 		
