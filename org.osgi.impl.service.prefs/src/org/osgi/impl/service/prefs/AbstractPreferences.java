@@ -500,7 +500,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 *         associated value does not exist or cannot be interpreted as a
 	 *         byte array.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
-	 *         removed with the {@link #removeNde()}method.
+	 *         removed with the {@link #removeNode()}method.
 	 */
 	public byte[] getByteArray(String key, byte[] def) {
 		byte[] result = def;
@@ -817,7 +817,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * The removal of a node needn't become persistent until the <tt>flush</tt>
 	 * method is invoked on an ancestor of this node.
 	 */
-	protected abstract void removeSpi();
+	protected abstract void removeSpi() throws BackingStoreException;
 
 	/**
 	 * Returns all of the keys that have an associated value in this preference

@@ -26,17 +26,12 @@ import org.osgi.service.prefs.BackingStoreException;
 class SimpleRootPref extends SimplePreferences {
 	private final File	preferencesFile;
 	private final File	tmpFile;
-	private final PreferencesServiceImpl service;	// RFC 60
-	private final String user;						// RFC 60
 	private boolean	modified	= false;
 
-	public SimpleRootPref(final File preferencesFile, File tmpFile, PreferencesServiceImpl service, String user) {
+	public SimpleRootPref(final File preferencesFile, File tmpFile) {
 		super(null, "");
 		this.preferencesFile = preferencesFile;
 		this.tmpFile = tmpFile;
-		this.service = service;		// RFC 60
-		this.user = user;			// RFC 60
-		
 		//j2security
 		AccessController.doPrivileged(new PrivilegedAction() {
 			public Object run() {
@@ -54,6 +49,9 @@ class SimpleRootPref extends SimplePreferences {
 	// and then rename it.
 	public void flush() throws BackingStoreException {
 		synchronized (lock) {
+			if (isRemoved()) {	// RFC 60
+				throw new IllegalStateException("Node has been removed.");
+			}
 			if (modified) {
 				modified = false;
 				//j2security
@@ -63,24 +61,17 @@ class SimpleRootPref extends SimplePreferences {
 								public Object run()
 										throws BackingStoreException {
 									//endblock
-									if (isRemoved()) {	
-										service.removeRootNode(user);	// RFC 60
-										tmpFile.delete();				// RFC 60
-										preferencesFile.delete();		// RFC 60
-									}
-									else {
-										tmpFile.delete();
-										TextFileSupport.write(tmpFile,
-												SimpleRootPref.this);
-										if (!tmpFile.renameTo(preferencesFile)) {
-											// can't rename to existing file on
-											// Windows
-											preferencesFile.delete();
-											if (!tmpFile
-													.renameTo(preferencesFile)) {
-												throw new BackingStoreException(
-														"rename " + "failed");
-											}
+									tmpFile.delete();
+									TextFileSupport.write(tmpFile,
+											SimpleRootPref.this);
+									if (!tmpFile.renameTo(preferencesFile)) {
+										// can't rename to existing file on
+										// Windows
+										preferencesFile.delete();
+										if (!tmpFile
+												.renameTo(preferencesFile)) {
+											throw new BackingStoreException(
+													"rename " + "failed");
 										}
 									}
 									//j2security
@@ -92,11 +83,6 @@ class SimpleRootPref extends SimplePreferences {
 					throw (BackingStoreException) pae.getException();
 				}
 				//endblock
-			}
-			else {
-				if (isRemoved()) {	// RFC 60
-					throw new IllegalStateException("Node has been removed.");
-				}
 			}
 		}
 	}
@@ -119,8 +105,27 @@ class SimpleRootPref extends SimplePreferences {
 
 	/*
 	 * RFC 60 Override SimplePreferences since we have no parent. 
+	 * Delete the backing store.
 	 */
-	protected void removeSpi() {
+	protected void removeSpi() throws BackingStoreException{
+		//j2security
+		try {
+			AccessController
+					.doPrivileged(new PrivilegedExceptionAction() {
+						public Object run()
+								throws BackingStoreException {
+							//endblock
+							tmpFile.delete();
+							preferencesFile.delete();
+							//j2security
+							return null;
+						}
+					});
+		}
+		catch (PrivilegedActionException pae) {
+			throw (BackingStoreException) pae.getException();
+		}
+		//endblock
 		setModified();
 	}
 }

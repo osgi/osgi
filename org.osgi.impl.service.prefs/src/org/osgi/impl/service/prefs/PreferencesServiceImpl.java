@@ -26,7 +26,7 @@ public class PreferencesServiceImpl implements PreferencesService {
 	private static final int	INIT_HASHTABLE_SIZE		= 3;
 	private File				prefsRootDir;
 	private File				usersRootDir;
-	private Preferences			systemPreferences		= null;
+	private AbstractPreferences			systemPreferences		= null;
 	private Hashtable			userPreferencesTable	= null;
 
 	PreferencesServiceImpl(BundleContext bundleContext, long bundleId) {
@@ -62,35 +62,26 @@ public class PreferencesServiceImpl implements PreferencesService {
 	}
 
 	public synchronized Preferences getSystemPreferences() {
-		if (systemPreferences == null) {
+		if ((systemPreferences == null) || (systemPreferences.isRemoved())) {
 			File file = new File(prefsRootDir, "system.prefs");
 			File tmpFile = new File(prefsRootDir, "system.tmp");
-			systemPreferences = new SimpleRootPref(file, tmpFile, this, null);
+			systemPreferences = new SimpleRootPref(file, tmpFile);
 		}
 		return systemPreferences;
 	}
 
 	public synchronized Preferences getUserPreferences(String user) {
-		Preferences userPreferences = (Preferences) userPreferencesTable
+		AbstractPreferences userPreferences = (AbstractPreferences) userPreferencesTable
 				.get(user);
-		if (userPreferences == null) {
+		if ((userPreferences == null) || (userPreferences.isRemoved())) {
 			File file = new File(usersRootDir, user + ".prefs");
 			File tmpFile = new File(usersRootDir, user + ".tmp");
-			userPreferences = new SimpleRootPref(file, tmpFile, this, user);
+			userPreferences = new SimpleRootPref(file, tmpFile);
 			userPreferencesTable.put(user, userPreferences);
 		}
 		return userPreferences;
 	}
 	
-	synchronized void removeRootNode(String user) {	// RFC 60
-		if (user == null) {
-			systemPreferences = null;
-		}
-		else {
-			userPreferencesTable.remove(user);
-		}
-	}
-
 	public synchronized String[] getUsers() {
 		Enumeration enum = userPreferencesTable.keys();
 		String[] result = new String[userPreferencesTable.size()];

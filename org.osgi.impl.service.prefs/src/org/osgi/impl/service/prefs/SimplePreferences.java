@@ -5,6 +5,7 @@
  
  * 
  * (C) Copyright 1996-2001 Sun Microsystems, Inc. 
+ * Copyright (c) IBM Corporation (2004)
  * 
  * This source code is licensed to OSGi as MEMBER LICENSED MATERIALS 
  * under the terms of Section 3.2 of the OSGi MEMBER AGREEMENT.
@@ -93,7 +94,7 @@ class SimplePreferences extends AbstractPreferences {
 		return result;
 	}
 
-	protected void removeSpi() {
+	protected void removeSpi() throws BackingStoreException{
 		((SimplePreferences) parent()).kids.remove(name());
 		setModified();
 	}
