@@ -41,6 +41,7 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class DmtConsole implements BundleActivator, CommandProvider {
 	ServiceTracker	dmtTracker;
+	static String spaces = "                                                                                             ";
 
 	public void start(BundleContext context) throws Exception {
 		dmtTracker = new ServiceTracker(context, DmtFactory.class.getName(),
@@ -54,7 +55,7 @@ public class DmtConsole implements BundleActivator, CommandProvider {
 
 	public String getHelp() {
 		return "DMT CONSOLE\r\n" + "dmtcd <uri>\r\n"
-				+ "list dmt [-r] [-s] uri\r\n" + "show dmt <uri>\r\n";
+				+ "list dmt [-recursive] [-show] uri\r\n";
 	}
 
 	public Object toString(Object o) {
@@ -89,22 +90,26 @@ public class DmtConsole implements BundleActivator, CommandProvider {
 	public Object _listdmt(CommandInterpreter intp) throws DmtException {
 		boolean recursive = false;
 		boolean show = false;
+		boolean extensive = false;
 		String arg = intp.nextArgument();
 		while (arg != null) {
 			if (arg.startsWith("-r"))
 				recursive = true;
 			else
-				if (arg.startsWith("-s"))
-					show = true;
-				else {
-					if (arg.startsWith("-"))
-						throw new RuntimeException("Invalid option " + arg);
-					else
-						break;
-				}
+				if (arg.startsWith("-x"))
+					extensive = true;
+				else
+					if (arg.startsWith("-s"))
+						show = true;
+					else {
+						if (arg.startsWith("-"))
+							throw new RuntimeException("Invalid option " + arg);
+						else
+							break;
+					}
 			arg = intp.nextArgument();
 		}
-		return new Node(intp, arg, intp.getUser(), show, recursive);
+		return new Node(intp, arg, intp.getUser(), show, recursive, extensive);
 	}
 
 	class Node {
@@ -113,14 +118,16 @@ public class DmtConsole implements BundleActivator, CommandProvider {
 		CommandInterpreter	intp;
 		String				uri;
 		String				principal;
+		boolean				extensive;
 
 		Node(CommandInterpreter intp, String uri, String principal,
-				boolean show, boolean recursive) {
+				boolean show, boolean recursive, boolean extensive) {
 			this.intp = intp;
 			this.uri = calcURI(intp, uri);
 			this.show = show;
 			this.recursive = recursive;
 			this.principal = principal;
+			this.extensive = extensive;
 		}
 
 		public String toString() {
@@ -138,6 +145,7 @@ public class DmtConsole implements BundleActivator, CommandProvider {
 				catch (Exception e) {
 					pw.println("Exception in printing this node " + uri + " "
 							+ e);
+					e.printStackTrace();
 				}
 				pw.close();
 				return new String(bout.toByteArray(), "UTF-8");
@@ -151,19 +159,20 @@ public class DmtConsole implements BundleActivator, CommandProvider {
 
 		void toString(PrintWriter pw, DmtSession session, String uri, int level)
 				throws DmtException {
-			String indent = "                                                 "
+			String indent = spaces
 					.substring(0, level);
-			String title;
+			String title = null;
 			try {
-				title = session.getNodeTitle(uri);
+				title = getLast(uri) + " : " + session.getNodeTitle(uri);
 			}
 			catch (Exception e) {
-				title = uri;
+				title = getLast(uri);
 			}
-			pw.println(indent + title);
-			indent = indent + " -";
-			if (show) {
-				// TODO: Spec should not allow errors for optional attributes but require a well known default value
+			if (show && extensive) {
+				pw.println(indent + title);
+				indent = indent + " -";
+				// TODO: Spec should not allow errors for optional attributes
+				// but require a well known default value
 				pw.println(indent + "ACL                 : "
 						+ session.getNodeAcl(uri));
 				try {
@@ -171,8 +180,6 @@ public class DmtConsole implements BundleActivator, CommandProvider {
 							+ session.getNodeTimestamp(uri));
 				}
 				catch (DmtException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
 				}
 				if (session.isLeafNode(uri)) {
 					try {
@@ -180,34 +187,42 @@ public class DmtConsole implements BundleActivator, CommandProvider {
 								+ session.getNodeVersion(uri));
 					}
 					catch (DmtException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
 					}
 					try {
 						pw.println(indent + "Size                : "
 								+ session.getNodeSize(uri));
 					}
 					catch (DmtException e3) {
-						// TODO Auto-generated catch block
-						e3.printStackTrace();
 					}
 					try {
 						pw.println(indent + "Type                : "
 								+ session.getNodeType(uri));
 					}
 					catch (DmtException e4) {
-						// TODO Auto-generated catch block
-						e4.printStackTrace();
 					}
 					try {
 						pw.println(indent + "Value               : "
 								+ session.getNodeValue(uri));
 					}
 					catch (DmtException e5) {
-						// TODO Auto-generated catch block
-						e5.printStackTrace();
 					}
 				}
+			}
+			else {
+				String header = indent + title;
+				pw.print(header);
+				
+				if ( session.isLeafNode(uri)) {
+					String value = "<no value>";
+					try {
+						value = session.getNodeValue(uri).toString();
+					}
+					catch (DmtException e5) {
+					}
+					
+					pw.println( spaces.substring(0,Math.max(0,60-header.length())) + " = " + value);
+				} else
+					pw.println();
 			}
 			if (recursive && !session.isLeafNode(uri)) {
 				String[] children = session.getChildNodeNames(uri);
@@ -216,5 +231,12 @@ public class DmtConsole implements BundleActivator, CommandProvider {
 				}
 			}
 		}
+	}
+
+	String getLast(String uri) {
+		int n = uri.lastIndexOf("/");
+		if (n < 0)
+			return uri;
+		return uri.substring(n + 1);
 	}
 }

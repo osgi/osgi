@@ -294,14 +294,14 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugIn,
 									return new DmtData((String) sref
 											.getProperty(key));
 								else {
-									String prop = (String) sref
+									Object prop = sref
 											.getProperty(key);
 									if (null == prop)
 										throw new DmtException(nodeUri,
 												DmtException.NODE_NOT_FOUND,
 												"Node (" + nodeUri
 														+ ") not found.");
-									return new DmtData(prop);
+									return new DmtData(prop+""); // TODO: pkr this must be object!
 								}
 		}
 		if (5 == sarr.length && "application_instances".equals(sarr[2])) {
