@@ -166,5 +166,14 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 		assertEquals(LOCATION2_HASH,children[2]);
 	}
 	
-	
+	public void testCreatePermission() throws Exception {
+		newAtomicSession();
+		dmtSession.createInteriorNode("1");
+		dmtSession.setNodeValue("1/Location",new DmtData(LOCATION1));
+		dmtSession.setNodeValue("1/PermissionInfo",new DmtData(ADMINPERMISSION.getEncoded()));
+		dmtSession.close();
+		PermissionInfo pi[] = permAdmin.getPermissions(LOCATION1);
+		assertEquals(1,pi.length);
+		assertEquals(ADMINPERMISSION,pi[0]);
+	}
 }

@@ -20,9 +20,13 @@ package org.osgi.impl.service.policy.permadmin;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 import org.osgi.impl.service.policy.util.HashCalculator;
 import org.osgi.impl.service.policy.util.Splitter;
 import org.osgi.service.dmt.DmtData;
@@ -48,7 +52,8 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 	 */
 	private final static DmtMetaNode	rootMetaNode = new RootMetaNode();
 	private final static DmtMetaNode	permissionInfoMetaNode = new PermissionInfoMetaNode();
-	private final static DmtMetaNode defaultMetaNode = new DefaultMetaNode();
+	private final static DmtMetaNode 	defaultMetaNode = new DefaultMetaNode();
+	private final static DmtMetaNode	locationMetaNode = new LocationMetaNode();
 	private final static Comparator permissionInfoComparator = new Comparator() {
 		public int compare(Object o1, Object o2) {
 			PermissionInfo p1 = (PermissionInfo) o1;
@@ -126,8 +131,15 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 				// are canonical
 				Arrays.sort(pis,permissionInfoComparator);
 				this.permissionInfo = pis;
+				return;
 			}
-			
+			if (nodename.equals(LOCATION)) {
+				this.location = data.getString();
+				return;
+			}
+
+			// isNodeUri should prevent this
+			throw new IllegalStateException();
 		}
 	};
 
@@ -181,6 +193,7 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		}
 		if (path.length==2) {
 			if (path[1].equals(PERMISSIONINFO)) return permissionInfoMetaNode;
+			if (path[1].equals(LOCATION)) return locationMetaNode;
 		}
 		throw new IllegalStateException("not implemented");
 		// TODO Auto-generated method stub
@@ -236,8 +249,8 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 			dirty = true;
 			return;
 		}
-		// TODO: other nodes
-		throw new IllegalStateException("not implemented");
+
+		entries.put(path[0],new Entry(false,null,new PermissionInfo[0]));
 	}
 
 	public void createInteriorNode(String nodeUri, String type)
@@ -272,7 +285,24 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 			permissionAdmin.setDefaultPermissions(defaulte.permissionInfo);
 		}
 		
-		// TODO the others
+		// the location -> permissionInfo data
+		// FIRST, put everything into the permissionadmin,
+		// SECOND delete those locations from the permissionadmin, that are not in our
+		// table.
+		Set locationSet = new TreeSet();
+		Collection coll = entries.values();
+		for (Iterator iter = coll.iterator(); iter.hasNext();) {
+			Entry entry = (Entry) iter.next();
+			if (entry.isDefault) continue;
+			locationSet.add(entry.location);
+			permissionAdmin.setPermissions(entry.location,entry.permissionInfo);
+		}
+		String[] locations = permissionAdmin.getLocations();
+		for(int i=0;i<locations.length;i++) {
+			if (!locationSet.contains(locations[i])) {
+				permissionAdmin.setPermissions(locations[i],null);
+			}
+		}
 
 		// some cleanup
 		entries = null;
