@@ -52,7 +52,11 @@ import java.security.PermissionCollection;
  * </pre>
  *
  * This means that owner of this permission has Get access on every
- * child node of ./OSGi/bundles. If wildcard is present in the actions
+ * child node of ./OSGi/bundles. The asterix does not necessarily have
+ * to follow a '/' character. For example the 
+ * <code>&quot;./OSGi/a*&quot;/<code> target matches the 
+ * <code>./OSGi/applications</code> subtree.
+ * <p>If wildcard is present in the actions
  * field, all legal OMA DM commands are allowed on the designated
  * nodes(s) by the owner of the permission.
  */
