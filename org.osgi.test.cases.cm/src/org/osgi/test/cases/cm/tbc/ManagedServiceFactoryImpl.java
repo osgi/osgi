@@ -25,7 +25,6 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.test.cases.cm.tbc;
 
 import java.util.*;
@@ -33,72 +32,62 @@ import org.osgi.service.cm.*;
 import org.osgi.test.cases.util.*;
 
 public class ManagedServiceFactoryImpl implements ManagedServiceFactory {
+	String		name;
+	String		propertyName;
+	Hashtable	services	= new Hashtable();
+	Semaphore	semaphore;
 
-    String name;
-    String propertyName;
-    Hashtable services = new Hashtable();
-    Semaphore semaphore;
+	public ManagedServiceFactoryImpl(String name, String propertyName,
+			Semaphore semaphore) {
+		this.name = name;
+		this.propertyName = propertyName;
+		this.semaphore = semaphore;
+	}
 
-    public ManagedServiceFactoryImpl(String name, String propertyName, Semaphore semaphore) {
-        this.name = name;
-        this.propertyName = propertyName;
-        this.semaphore = semaphore;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getName() {
-        return name;
-    }
-    
-    public void updated(String pid, Dictionary properties) throws ConfigurationException {
-try {
-        System.out.println("+++ updating " + pid);
+	public void updated(String pid, Dictionary properties)
+			throws ConfigurationException {
+		try {
+			System.out.println("+++ updating " + pid);
+			String data = "somedata";
+			/*
+			 * String data = (String) properties.get(propertyName);
+			 * 
+			 * if(data == null) { throw new ConfigurationException(propertyName,
+			 * "not found in the properties"); }
+			 */
+			/* Try to get the service */
+			SomeService theService = (SomeService) services.get(pid);
+			/* If the service did not exist... */
+			if (theService == null) {
+				theService = new SomeService();
+				services.put(pid, theService);
+			}
+			theService.setConfigData(data);
+			semaphore.signal();
+		}
+		catch (Throwable e) {
+			e.printStackTrace();
+		}
+		System.out.println("--- done updating " + pid);
+	}
 
-        String data = "somedata";
-/*
-        String data = (String) properties.get(propertyName);
+	public void deleted(java.lang.String pid) {
+		services.remove(pid);
+	}
 
-        if(data == null) {
-            throw new ConfigurationException(propertyName,
-                "not found in the properties");
-        }
-*/
-        /* Try to get the service */
-        SomeService theService = (SomeService) services.get(pid);
-        
-        /* If the service did not exist... */
-        if(theService == null) {
-            theService = new SomeService();
-            services.put(pid, theService);
-        }
-        
-        theService.setConfigData(data);        
-        
-        semaphore.signal();
-}
-catch(Throwable e) {
-    e.printStackTrace();
-}
+	public int getNumberOfServices() {
+		return services.size();
+	}
 
-        System.out.println("--- done updating " + pid);
-    }
-    
-    
-    public void deleted(java.lang.String pid) {
-        services.remove(pid);
-    }
-    
-    public int getNumberOfServices() {
-        return services.size();
-    }
+	class SomeService {
+		String	configData;
 
-
-    class SomeService {
-        String configData;
-        
-        public void setConfigData(String configData) {
-            this.configData = configData;
-        }
-    }
-    
-
+		public void setConfigData(String configData) {
+			this.configData = configData;
+		}
+	}
 }

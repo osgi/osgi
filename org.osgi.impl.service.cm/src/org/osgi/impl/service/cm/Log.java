@@ -25,141 +25,129 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
- package org.osgi.impl.service.cm; 
+package org.osgi.impl.service.cm;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceListener;
-import org.osgi.framework.ServiceEvent;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.InvalidSyntaxException;
-
+import org.osgi.framework.*;
 import org.osgi.service.log.LogService;
 
 /**
  * Utility class for forwarding log messages to log service and console.
- *
+ * 
  * @author OSGi Alliance
  * @version $Revision$
  */
 public class Log implements ServiceListener {
-  
-  private final static String INFO       = "INFO"; 
-  private final static String DEBUG      = "DEBUG"; 
-  private final static String WARN       = "WARNING"; 
-  private final static String ERROR      = "ERROR";
-  
-  private final static String PROP_DEBUG   = "cm.debug";
-  private final static String PROP_CONSOLE = "cm.console";
+	private final static String		INFO			= "INFO";
+	private final static String		DEBUG			= "DEBUG";
+	private final static String		WARN			= "WARNING";
+	private final static String		ERROR			= "ERROR";
+	private final static String		PROP_DEBUG		= "cm.debug";
+	private final static String		PROP_CONSOLE	= "cm.console";
+	private static BundleContext	bc;
+	private static ServiceReference	sRef;
+	private static LogService		logService;
+	private static long				bundleId;
+	private static boolean			printOnConsole;
+	private static boolean			debug;
 
-  private static BundleContext bc;
-  private static ServiceReference sRef;
-  private static LogService logService;
-  private static long bundleId;
-  private static boolean printOnConsole;
-  private static boolean debug;
-    
+	/**
+	 * Constructs a Log, trying to get Log Service.
+	 * 
+	 * @param bc necessary to get Log Service from and to listen for Service
+	 *        Events.
+	 */
+	public Log(BundleContext bc) {
+		Log.bc = bc;
+		bundleId = bc.getBundle().getBundleId();
+		printOnConsole = Boolean.getBoolean(PROP_CONSOLE);
+		debug = Boolean.getBoolean(PROP_DEBUG);
+		sRef = bc.getServiceReference(LogService.class.getName());
+		if (sRef != null) {
+			logService = (LogService) bc.getService(sRef);
+		}
+		try {
+			bc.addServiceListener(this, "(objectClass="
+					+ LogService.class.getName() + ")");
+		}
+		catch (InvalidSyntaxException ise) {
+			/* do nothing syntax is valid */
+		}
+	}
 
-  /**
-   * Constructs a Log, trying to get Log Service.
-   *
-   * @param   bc  necessary to get Log Service from 
-   *              and to listen for Service Events.
-   */
-  public Log(BundleContext bc) {
-    this.bc = bc;
-    bundleId = bc.getBundle().getBundleId();
-    printOnConsole = Boolean.getBoolean(PROP_CONSOLE);
-    debug = Boolean.getBoolean(PROP_DEBUG);    
-    sRef = bc.getServiceReference(LogService.class.getName());
-    if (sRef != null)  {
-      logService = (LogService) bc.getService(sRef);
-    }
-    try {
-      bc.addServiceListener(this, "(objectClass=" + LogService.class.getName() + ")");
-    } catch (InvalidSyntaxException ise) {
-      /*do nothing syntax is valid*/
-    }
-  }
-  
-  
+	/**
+	 * Method is invoked by the framework, when a service changes its state.
+	 * When Log Service's state changes it is got or ungot - depending on the
+	 * state.
+	 * 
+	 * @param sEvnt ServiceEvent to examine.
+	 */
+	public void serviceChanged(ServiceEvent sEvnt) {
+		int type = sEvnt.getType();
+		if (type == ServiceEvent.REGISTERED && logService == null) {
+			sRef = sEvnt.getServiceReference();
+			logService = (LogService) bc.getService(sRef);
+		}
+		if (type == ServiceEvent.UNREGISTERING
+				&& sEvnt.getServiceReference().equals(sRef)) {
+			bc.ungetService(sRef);
+			logService = null;
+		}
+	}
 
-  /**
-   * Method is invoked by the framework, when a service changes its state.
-   * When Log Service's state changes it is got or ungot - depending on the state.
-   *
-   * @param   sEvnt  ServiceEvent to examine.
-   */
-  public void serviceChanged(ServiceEvent sEvnt) {
-    int type = sEvnt.getType();
-    if (type == ServiceEvent.REGISTERED && logService == null) {
-      sRef = sEvnt.getServiceReference();
-      logService = (LogService) bc.getService(sRef);
-    } 
-    if (type == ServiceEvent.UNREGISTERING && sEvnt.getServiceReference().equals(sRef)) {
-      bc.ungetService(sRef);
-      logService = null;
-    }
-  }
-  
+	/**
+	 * Logs a message to LogService - if available, otherwise message is printed
+	 * on console.
+	 * 
+	 * @param level LogEntry's severity level.
+	 * @param msg description of logged event.
+	 */
+	protected static void log(int level, String msg) {
+		log(level, msg, null);
+	}
 
-  /**
-   * Logs a message to LogService - if available, 
-   * otherwise message is printed on console.
-   *
-   * @param   level  LogEntry's severity level.
-   * @param   msg  description of logged event.
-   */
-  protected static void log(int level, String msg) {
-    log(level, msg, null);
-  }
-  
+	/**
+	 * Forwards a message and exception to LogService, when it is available. If
+	 * LogService is gone messages are printed on console.
+	 * 
+	 * @param level severity of log entry.
+	 * @param msg message to be logged.
+	 * @param exc Throwable object, related with the log event.
+	 */
+	protected static synchronized void log(int level, String msg, Throwable exc) {
+		if (logService == null || printOnConsole) {
+			String strLevel = null;
+			if (level == LogService.LOG_ERROR) {
+				strLevel = ERROR;
+			}
+			if (level == LogService.LOG_WARNING) {
+				strLevel = WARN;
+			}
+			if (level == LogService.LOG_DEBUG) {
+				strLevel = DEBUG;
+			}
+			if (level == LogService.LOG_INFO) {
+				strLevel = INFO;
+			}
+			System.out.println(strLevel + " from " + bundleId);
+			System.out.println(msg);
+			if (exc != null) {
+				exc.printStackTrace();
+			}
+		}
+		if (logService != null) {
+			logService.log(level, msg, exc);
+		}
+	}
 
-  /**
-   * Forwards a message and exception to LogService, when it is available.
-   * If LogService is gone messages are printed on console.
-   *
-   * @param   level  severity of log entry.
-   * @param   msg  message to be logged.
-   * @param   exc  Throwable object, related with the log event. 
-   */
-  protected static synchronized void log(int level, String msg, Throwable exc)  {
-    if (logService == null || printOnConsole) {
-      String strLevel = null;
-      if (level == LogService.LOG_ERROR) {
-        strLevel = ERROR;
-      } 
-      if (level == LogService.LOG_WARNING) {
-        strLevel = WARN;
-      }
-      if (level == LogService.LOG_DEBUG) {
-        strLevel = DEBUG;
-      }
-      
-      if (level == LogService.LOG_INFO) {
-        strLevel = INFO;
-      }    
-
-      System.out.println(strLevel + " from " + bundleId);
-      System.out.println(msg);
-      if (exc != null) {
-        exc.printStackTrace();
-      }
-    }  
-    if (logService != null) {
-      logService.log(level, msg, exc);
-    }    
-  }
-  
-
-  /**
-   * Closes the Log object, by releasing all resources: 
-   * ungets LogService, removes ServiceListener.
-   */
-  protected void close() {
-    if (logService != null) {
-      bc.ungetService(sRef);
-      logService = null;
-    }
-    bc.removeServiceListener(this);
-  }
+	/**
+	 * Closes the Log object, by releasing all resources: ungets LogService,
+	 * removes ServiceListener.
+	 */
+	protected void close() {
+		if (logService != null) {
+			bc.ungetService(sRef);
+			logService = null;
+		}
+		bc.removeServiceListener(this);
+	}
 }

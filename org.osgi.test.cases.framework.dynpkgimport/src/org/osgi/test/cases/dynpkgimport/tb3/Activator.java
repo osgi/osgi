@@ -23,39 +23,31 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.test.cases.dynpkgimport.tb3;
 
 import java.util.*;
-
 import org.osgi.framework.*;
 import org.osgi.test.cases.dynpkgimport.tbc.*;
 import org.osgi.test.cases.dynpkgimport.tlx.*;
 
+public class Activator implements BundleActivator, TestService {
+	ServiceRegistration	testServiceReg	= null;
 
-public class Activator implements BundleActivator, TestService
-{
-  ServiceRegistration testServiceReg = null;
+	public void start(BundleContext bc) {
+		Dictionary props = new Hashtable();
+		testServiceReg = bc.registerService(TestService.class.getName(), this,
+				props);
+	}
 
-  public void start(BundleContext bc) 
-  {
-    Dictionary props = new Hashtable();
-    testServiceReg = bc.registerService(TestService.class.getName(), this, props);
-  }
+	public void stop(BundleContext bc) {
+		testServiceReg.unregister();
+		testServiceReg = null;
+	}
 
-  public void stop(BundleContext bc)
-  {
-    testServiceReg.unregister();
-    testServiceReg = null;
-  }
-
-
-  public void test1() throws Exception
-  {
-    TestLib tl = new TestLib();
-    if (!tl.version().equals("tlx")) {
-      throw new Exception("TestLib version != tlx");
-    }
-  }
-
+	public void test1() throws Exception {
+		TestLib tl = new TestLib();
+		if (!tl.version().equals("tlx")) {
+			throw new Exception("TestLib version != tlx");
+		}
+	}
 }

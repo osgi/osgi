@@ -24,17 +24,15 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.service.component;
 
 import java.util.Dictionary;
 
 /**
- * When a component is declared with the <tt>factory</tt>
- * attribute on it's <tt>component</tt> element, the Service Component Runtime
- * will register a ComponentFactory service to allow instances of the component
- * to be created rather than automatically create component instances as
- * necessary.
+ * When a component is declared with the <tt>factory</tt> attribute on it's
+ * <tt>component</tt> element, the Service Component Runtime will register a
+ * ComponentFactory service to allow instances of the component to be created
+ * rather than automatically create component instances as necessary.
  * 
  * @version $Revision$
  */

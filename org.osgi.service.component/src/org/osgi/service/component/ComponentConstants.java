@@ -24,7 +24,6 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.service.component;
 
 /**
@@ -33,7 +32,6 @@ package org.osgi.service.component;
  * @version $Revision$
  */
 public interface ComponentConstants {
-
 	/**
 	 * Manifest header (named &quot;Service-Component&quot;) identifying the XML
 	 * resources within the bundle containing the bundle's Service Component
@@ -42,27 +40,23 @@ public interface ComponentConstants {
 	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
 	 * object returned by the <tt>Bundle.getHeaders</tt> method.
 	 */
-	public static final String SERVICE_COMPONENT = "Service-Component";
-
+	public static final String	SERVICE_COMPONENT		= "Service-Component";
 	/**
 	 * A service registration property for a Service Component. It contains the
 	 * name of the Service Component. The type of this property must be
 	 * <tt>String</tt>.
 	 */
-	public final static String COMPONENT_NAME = "component.name";
-
+	public final static String	COMPONENT_NAME			= "component.name";
 	/**
 	 * A service registration property for a Service Component Factory. It
 	 * contains the value of the <tt>factory</tt> attribute. The type of this
 	 * property must be <tt>String</tt>.
 	 */
-	public final static String COMPONENT_FACTORY = "component.factory";
-
+	public final static String	COMPONENT_FACTORY		= "component.factory";
 	/**
 	 * A suffix for a service registration property for a reference target. It
 	 * contains the filter to select the target services for a reference. The
 	 * type of this property must be <tt>String</tt>.
 	 */
-	public final static String REFERENCE_TARGET_SUFFIX = ".target";
-
+	public final static String	REFERENCE_TARGET_SUFFIX	= ".target";
 }

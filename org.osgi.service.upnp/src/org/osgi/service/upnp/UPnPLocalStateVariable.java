@@ -25,24 +25,22 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
-
 /**
  * To keep the current values getting from subscribed UPnPDevices. 
  * 
  * The actual values of the UPnPStateVaraible are passed as Java object type. 
  **/
-
 package org.osgi.service.upnp;
 
 public interface UPnPLocalStateVariable extends UPnPStateVariable {
-	
-   /**
-   * This method will keep the current values of UPnPStateVariables of UPnPDevice  
-   * whenever UPnPStateVariable's value is changed , this method must be called. 
-   *
-   * @return <tt>Object</tt> current value of UPnPStateVariable.
-   *  if the current value is initialized with the default value defined UPnP service description.
-   */
+	/**
+	 * This method will keep the current values of UPnPStateVariables of
+	 * UPnPDevice whenever UPnPStateVariable's value is changed , this method
+	 * must be called.
+	 * 
+	 * @return <tt>Object</tt> current value of UPnPStateVariable. if the
+	 *         current value is initialized with the default value defined UPnP
+	 *         service description.
+	 */
 	public Object getCurrentValue();
 }

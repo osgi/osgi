@@ -25,7 +25,6 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.test.cases.cm.tbc;
 
 import java.util.*;
@@ -33,22 +32,19 @@ import org.osgi.service.cm.*;
 import org.osgi.test.cases.util.*;
 
 public class ManagedServiceImpl implements ManagedService {
+	Dictionary	properties;
+	Semaphore	semaphore;
 
-    Dictionary properties;
-    Semaphore semaphore;
+	public ManagedServiceImpl(Semaphore semaphore) {
+		this.semaphore = semaphore;
+	}
 
-    public ManagedServiceImpl(Semaphore semaphore) {
-        this.semaphore = semaphore;
-    }
+	public Dictionary getProperties() {
+		return properties;
+	}
 
-    public Dictionary getProperties() {
-        return properties;
-    }
-    
-
-    public void updated(Dictionary properties) {
-        this.properties = properties;
-        semaphore.signal();
-    }
+	public void updated(Dictionary properties) {
+		this.properties = properties;
+		semaphore.signal();
+	}
 }
-

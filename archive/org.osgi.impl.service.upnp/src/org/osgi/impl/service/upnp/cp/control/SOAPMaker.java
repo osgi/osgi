@@ -3,10 +3,13 @@ package org.osgi.impl.service.upnp.cp.control;
 import java.util.*;
 
 public class SOAPMaker implements SOAPConstants {
-	private Object controlLock = new Object ();
+	private Object	controlLock	= new Object();
 
-	// This method will take the parameters and then create a SOAP message for the Control request.
-	public String createControlRequest(String method, String path, String hostport, String serviceType, String actionName, Dictionary arguments) {
+	// This method will take the parameters and then create a SOAP message for
+	// the Control request.
+	public String createControlRequest(String method, String path,
+			String hostport, String serviceType, String actionName,
+			Dictionary arguments) {
 		synchronized (controlLock) {
 			StringBuffer soapBuf = new StringBuffer();
 			String soap;
@@ -14,11 +17,14 @@ public class SOAPMaker implements SOAPConstants {
 			soapBuf.append(rn);
 			soapBuf.append(startBody);
 			soapBuf.append(rn);
-			soapBuf.append("<u:" + actionName + " xmlns:u=" + saUrn + serviceType + "\">");
+			soapBuf.append("<u:" + actionName + " xmlns:u=" + saUrn
+					+ serviceType + "\">");
 			soapBuf.append(rn);
 			for (Enumeration e = arguments.keys(); e.hasMoreElements();) {
 				String argName = (String) e.nextElement();
-				soapBuf.append("<" + argName + ">" + (Object) arguments.get(argName) + "</" + argName + ">");
+				soapBuf.append("<" + argName + ">"
+						+ (Object) arguments.get(argName) + "</" + argName
+						+ ">");
 				soapBuf.append(rn);
 			}
 			soapBuf.append("</u:" + actionName + ">");
@@ -26,13 +32,13 @@ public class SOAPMaker implements SOAPConstants {
 			soapBuf.append(stopBody);
 			soapBuf.append(rn);
 			soapBuf.append(stopEnvelop);
-			soapBuf.append(rn);			
+			soapBuf.append(rn);
 			soap = soapBuf.toString();
-
 			StringBuffer controlBuf = new StringBuffer();
 			if (method.equals(SOAPConstants.post)) {
 				controlBuf.append(post);
-			} else {
+			}
+			else {
 				controlBuf.append(mpost);
 			}
 			controlBuf.append(path);
@@ -53,10 +59,10 @@ public class SOAPMaker implements SOAPConstants {
 			}
 			controlBuf.append(soapAction);
 			controlBuf.append(saUrn);
-			controlBuf.append(serviceType + "#" + actionName +"\"");
+			controlBuf.append(serviceType + "#" + actionName + "\"");
 			controlBuf.append(rn);
 			controlBuf.append(rn);
-			controlBuf.append(soapBuf);				
+			controlBuf.append(soapBuf);
 			return controlBuf.toString();
 		}
 	}

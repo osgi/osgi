@@ -23,10 +23,8 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.test.cases.dynpkgimport.tbc;
 
-public interface TestService
-{
-  void test1() throws Exception;
+public interface TestService {
+	void test1() throws Exception;
 }

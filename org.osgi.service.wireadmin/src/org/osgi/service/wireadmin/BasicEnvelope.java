@@ -28,20 +28,22 @@
 package org.osgi.service.wireadmin;
 
 /**
- * <tt>BasicEnvelope</tt> is an implementation of the {@link Envelope} interface
- *
+ * <tt>BasicEnvelope</tt> is an implementation of the {@link Envelope}
+ * interface
+ * 
  * @version $Revision$
  */
 public class BasicEnvelope implements Envelope {
-	Object 			value;
-	Object 			identification;
-	String 			scope;
+	Object	value;
+	Object	identification;
+	String	scope;
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param value Content of this envelope, may be <tt>null</tt>.
-	 * @param identifying Identifying object for this <tt>Envelope</tt> object, must not be <tt>null</tt>
+	 * @param identifying Identifying object for this <tt>Envelope</tt>
+	 *        object, must not be <tt>null</tt>
 	 * @param scope Scope name for this object, must not be <tt>null</tt>
 	 * @see Envelope
 	 */
@@ -50,8 +52,7 @@ public class BasicEnvelope implements Envelope {
 		this.identification = identification;
 		this.scope = scope;
 	}
-	
-		
+
 	/**
 	 * @see org.osgi.service.wireadmin.Envelope#getValue()
 	 */
@@ -72,6 +73,4 @@ public class BasicEnvelope implements Envelope {
 	public String getScope() {
 		return scope;
 	}
-
-
 }

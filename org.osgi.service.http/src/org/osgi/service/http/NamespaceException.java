@@ -25,56 +25,50 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.service.http;
 
 /**
- * A NamespaceException is thrown to indicate an error with the caller's
- * request to register a servlet or resources into the URI namespace of the
- * Http Service. This exception indicates that the requested alias already
- * is in use.
- *
+ * A NamespaceException is thrown to indicate an error with the caller's request
+ * to register a servlet or resources into the URI namespace of the Http
+ * Service. This exception indicates that the requested alias already is in use.
+ * 
  * @version $Revision$
  */
-public class NamespaceException extends Exception
-{
-    /**
-     * Nested exception
-     */
-    private transient Throwable exception;
+public class NamespaceException extends Exception {
+	/**
+	 * Nested exception
+	 */
+	private transient Throwable	exception;
 
-    /**
-     * Construct a <tt>NamespaceException</tt> object with a detail message.
-     *
-     * @param message the detail message
-     */
-    public NamespaceException(String message)
-    {
-        super(message);
-        exception = null;
-    }
+	/**
+	 * Construct a <tt>NamespaceException</tt> object with a detail message.
+	 * 
+	 * @param message the detail message
+	 */
+	public NamespaceException(String message) {
+		super(message);
+		exception = null;
+	}
 
-    /**
-     * Construct a <tt>NamespaceException</tt> object with a detail message and a nested
-     * exception.
-     *
-     * @param message the detail message
-     * @param exception the nested exception
-     */
-    public NamespaceException(String message, Throwable exception)
-    {
-        super(message);
-        this.exception = exception;
-    }
+	/**
+	 * Construct a <tt>NamespaceException</tt> object with a detail message
+	 * and a nested exception.
+	 * 
+	 * @param message the detail message
+	 * @param exception the nested exception
+	 */
+	public NamespaceException(String message, Throwable exception) {
+		super(message);
+		this.exception = exception;
+	}
 
-    /**
-     * Returns the nested exception.
-     *
-     * @return the nested exception or <code>null</code> if there
-     * is no nested exception.
-     */
-    public Throwable getException()
-    {
-        return(exception);
-    }
+	/**
+	 * Returns the nested exception.
+	 * 
+	 * @return the nested exception or <code>null</code> if there is no nested
+	 *         exception.
+	 */
+	public Throwable getException() {
+		return (exception);
+	}
 }

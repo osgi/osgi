@@ -24,7 +24,6 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.service.metatype;
 
 import org.osgi.framework.Bundle;
@@ -32,12 +31,11 @@ import org.osgi.framework.Bundle;
 /**
  * The MetaType Service can be used to obtain meta type information for a
  * bundle. The MetaType Service will examine the specified bundle for meta type
- * documents and to create the returned MetaTypeInformation object. 
+ * documents and to create the returned MetaTypeInformation object.
  * 
  * @version $Revision$
  */
 public interface MetaTypeService {
-
 	/**
 	 * Return the MetaType information for the specified bundle.
 	 * 

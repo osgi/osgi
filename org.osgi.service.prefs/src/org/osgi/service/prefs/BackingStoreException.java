@@ -10,24 +10,22 @@
  * under the terms of Section 3.2 of the OSGi MEMBER AGREEMENT.
  *
  */
-
 package org.osgi.service.prefs;
 
 /**
- * Thrown to indicate that a preferences operation could not complete because
- * of a failure in the backing store, or a failure to contact the backing
- * store.
- *
+ * Thrown to indicate that a preferences operation could not complete because of
+ * a failure in the backing store, or a failure to contact the backing store.
+ * 
  * @version $Revision$
  */
-
 public class BackingStoreException extends Exception {
-    /**
-     * Constructs a <tt>BackingStoreException</tt> with the specified detail message.
-     *
-     * @param s the detail message.
-     */
-    public BackingStoreException(String s) {
-        super(s);
-    }
+	/**
+	 * Constructs a <tt>BackingStoreException</tt> with the specified detail
+	 * message.
+	 * 
+	 * @param s the detail message.
+	 */
+	public BackingStoreException(String s) {
+		super(s);
+	}
 }

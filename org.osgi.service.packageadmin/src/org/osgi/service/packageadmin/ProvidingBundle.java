@@ -31,59 +31,63 @@ package org.osgi.service.packageadmin;
 import org.osgi.framework.Bundle;
 
 /**
- * A providing bundle.  
+ * A providing bundle.
  * 
- * Instances implementing this interface are created by the Package 
- * Admin service.
+ * Instances implementing this interface are created by the Package Admin
+ * service.
  * 
- * <p>The information about a <tt>ProvidingBundle</tt> provided by this object is 
- * valid only until the next time <tt>PackageAdmin.refreshPackages()</tt> called.   
- * If a <tt>ProvidingBundle</tt> object becomes stale (that is, the bundle it 
- * references has been updated or removed as a result of calling 
- * <tt>PackageAdmin.refreshPackages()</tt>), its <tt>getSymbolicName()</tt> and 
- * <tt>getVersion()</tt> continue to return their old values, 
- * <tt>isRemovalPending()</tt> returns true, and <tt>getBundle()</tt> 
- * and <tt>getRequiringBundles()</tt> return <tt>null</tt>.
- * @since 1.2 
+ * <p>
+ * The information about a <tt>ProvidingBundle</tt> provided by this object is
+ * valid only until the next time <tt>PackageAdmin.refreshPackages()</tt>
+ * called. If a <tt>ProvidingBundle</tt> object becomes stale (that is, the
+ * bundle it references has been updated or removed as a result of calling
+ * <tt>PackageAdmin.refreshPackages()</tt>), its <tt>getSymbolicName()</tt>
+ * and <tt>getVersion()</tt> continue to return their old values,
+ * <tt>isRemovalPending()</tt> returns true, and <tt>getBundle()</tt> and
+ * <tt>getRequiringBundles()</tt> return <tt>null</tt>.
+ * 
+ * @since 1.2
  */
 public interface ProvidingBundle {
 	/**
 	 * Returns the providing bundle.
-	 *
-	 * @return The providing bundle, or <tt>null</tt> if this <tt>ProvidingBundle</tt>
-	 *         object has become stale.
+	 * 
+	 * @return The providing bundle, or <tt>null</tt> if this
+	 *         <tt>ProvidingBundle</tt> object has become stale.
 	 */
 	public Bundle getBundle();
 
 	/**
-	 * Returns the resolved bundles that are currently require the providing bundle.
-	 *
-	 * @return An array of resolved bundles currently requiring the providing bundle,
-	 * or <tt>null</tt> if this <tt>ProvidingBundle</tt> object has become stale.
+	 * Returns the resolved bundles that are currently require the providing
+	 * bundle.
+	 * 
+	 * @return An array of resolved bundles currently requiring the providing
+	 *         bundle, or <tt>null</tt> if this <tt>ProvidingBundle</tt>
+	 *         object has become stale.
 	 */
 	public Bundle[] getRequiringBundles();
 
 	/**
-	 * Returns the symbolic name of the providing bundle. 
-	 *
+	 * Returns the symbolic name of the providing bundle.
+	 * 
 	 * @return The symbolic name of the providing bundle.
 	 */
 	public String getSymbolicName();
 
 	/**
 	 * Returns the version of the providing bundle.
-	 *
+	 * 
 	 * @return The version of the providing bundle.
 	 */
 	public String getVersion();
 
 	/**
-	 * Returns <tt>true</tt> if the providing bundle
-	 * has been updated or uninstalled.
-	 *
-	 * @return <tt>true</tt> if the providing bundle
-	 * has been updated or uninstalled, or if the
-	 * <tt>ProvidingBundle</tt> object has become stale; <tt>false</tt> otherwise.
+	 * Returns <tt>true</tt> if the providing bundle has been updated or
+	 * uninstalled.
+	 * 
+	 * @return <tt>true</tt> if the providing bundle has been updated or
+	 *         uninstalled, or if the <tt>ProvidingBundle</tt> object has
+	 *         become stale; <tt>false</tt> otherwise.
 	 */
 	public boolean isRemovalPending();
 }

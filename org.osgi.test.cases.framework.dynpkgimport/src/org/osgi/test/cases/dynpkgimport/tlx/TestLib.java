@@ -23,17 +23,13 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.test.cases.dynpkgimport.tlx;
 
-public class TestLib
-{
-  public TestLib()
-  {
-  }
+public class TestLib {
+	public TestLib() {
+	}
 
-  public String version() 
-  {
-    return "tlx";
-  }
+	public String version() {
+		return "tlx";
+	}
 }

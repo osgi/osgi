@@ -25,114 +25,106 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.service.upnp;
-
 
 import java.util.Dictionary;
 
 /**
  * A UPnP action.
- *
- * Each UPnP service contains zero or more actions. Each action
- * may have zero or more UPnP state variables as arguments.
- *
- **/
-
+ * 
+ * Each UPnP service contains zero or more actions. Each action may have zero or
+ * more UPnP state variables as arguments.
+ *  
+ */
 public interface UPnPAction {
+	/**
+	 * Returns the action name.
+	 * 
+	 * The action name corresponds to the <tt>name</tt> field in the
+	 * <tt>actionList</tt> of the service description.
+	 * <ul>
+	 * <li>For standard actions defined by a UPnP Forum working committee,
+	 * action names must not begin with <tt>X_ </tt> nor <tt> A_</tt>.</li>
+	 * <li>For non-standard actions specified by a UPnP vendor and added to a
+	 * standard service, action names must begin with <tt>X_</tt>.</li>
+	 * </ul>
+	 * 
+	 * @return Name of action, must not contain a hyphen character or a hash
+	 *         character
+	 */
+	String getName();
 
-  /**
-   * Returns the action name.
-   *
-   * The action name corresponds to the <tt>name</tt> field
-   * in the <tt>actionList</tt> of the service description.
-   * <ul>
-   *    <li>For standard actions defined by a UPnP Forum working committee,
-   *        action names must not begin with <tt>X_ </tt>nor<tt> A_</tt>.</li>
-   *    <li>For non-standard actions specified
-   *        by a UPnP vendor and added to a standard service,
-   *        action names must begin with <tt>X_</tt>. </li>
-   * </ul>
-   * @return Name of action, must not contain a hyphen character
-   *         or a hash character
-   **/
+	/**
+	 * Returns the name of the designated return argument.
+	 * <p>
+	 * One of the output arguments can be flagged as a designated return
+	 * argument.
+	 * 
+	 * @return The name of the designated return argument or <tt>null</tt> if
+	 *         none is marked.
+	 */
+	String getReturnArgumentName();
 
-  String getName();
+	/**
+	 * Lists all input arguments for this action.
+	 * <p>
+	 * Each action may have zero or more input arguments.
+	 * 
+	 * @return Array of input argument names or <tt>null</tt> if no input
+	 *         arguments.
+	 * 
+	 * @see UPnPStateVariable
+	 */
+	String[] getInputArgumentNames();
 
-  /**
-   * Returns the name of the designated return argument.
-   * <p>
-   * One of the output arguments can be flagged as a
-   * designated return argument.
-   *
-   * @return The name of the designated return argument or <tt>null</tt> if none is marked.
-   **/
+	/**
+	 * List all output arguments for this action.
+	 * 
+	 * @return Array of output argument names or <tt>null</tt> if there are no
+	 *         output arguments.
+	 * 
+	 * @see UPnPStateVariable
+	 */
+	String[] getOutputArgumentNames();
 
-  String getReturnArgumentName();
+	/**
+	 * Finds the state variable associated with an argument name.
+	 * 
+	 * Helps to resolve the association of state variables with argument names
+	 * in UPnP actions.
+	 * 
+	 * @param argumentName The name of the UPnP action argument.
+	 * @return State variable associated with the named argument or
+	 *         <tt>null</tt> if there is no such argument.
+	 * 
+	 * @see UPnPStateVariable
+	 */
+	UPnPStateVariable getStateVariable(String argumentName);
 
-  /**
-   * Lists all input arguments for this action.
-   * <p>
-   * Each action may have zero or more input arguments.
-   *
-   * @return Array of input argument names or <tt>null</tt>
-   * if no input arguments.
-   *
-   * @see UPnPStateVariable
-   **/
-
-  String[] getInputArgumentNames();
-
-  /**
-   * List all output arguments for this action.
-   *
-   * @return Array of output argument names or <tt>null</tt>
-   * if there are no output arguments.
-   *
-   * @see UPnPStateVariable
-   **/
-
-  String[] getOutputArgumentNames();
-
-  /**
-   * Finds the state variable associated with an argument name.
-   *
-   * Helps to resolve the association of state variables
-   * with argument names in UPnP actions.
-   *
-   * @param argumentName The name of the UPnP action argument.
-   * @return State variable associated with the named argument or
-   * <tt>null</tt> if there is no such argument.
-   *
-   * @see UPnPStateVariable
-   **/
-  UPnPStateVariable getStateVariable(String argumentName);
-
-  /**
-   * Invokes the action.
-   *
-   * The input and output arguments are both passed as <tt>Dictionary</tt> objects.
-   * Each entry in the <tt>Dictionary</tt> object has a <tt>String</tt> object as key representing
-   * the argument name and the value is the argument itself. The class
-   * of an argument value must be assignable from the class of the associated
-   * UPnP state variable.
-   *
-   * The input argument <tt>Dictionary</tt> object must contain exactly those
-   * arguments listed by <tt>getInputArguments</tt> method. The output
-   * argument <tt>Dictionary</tt> object will contain exactly those arguments listed
-   * by <tt>getOutputArguments</code> method.
-   *
-   * @param args A <tt>Dictionary</tt> of arguments. Must contain the correct set and
-   * type of arguments for this action. May be <tt>null</tt> if no
-   * input arguments exist.
-   *
-   * @return A <tt>Dictionary</tt> with the output arguments.
-   *         <tt>null</tt> if the action has no output arguments.
-   *
-   * @throws Exception The execution fails for some reason.
-   *
-   * @see UPnPStateVariable
-   **/
-
-  Dictionary invoke(Dictionary args) throws Exception, UPnPException;
+	/**
+	 * Invokes the action.
+	 * 
+	 * The input and output arguments are both passed as <tt>Dictionary</tt>
+	 * objects. Each entry in the <tt>Dictionary</tt> object has a
+	 * <tt>String</tt> object as key representing the argument name and the
+	 * value is the argument itself. The class of an argument value must be
+	 * assignable from the class of the associated UPnP state variable.
+	 * 
+	 * The input argument <tt>Dictionary</tt> object must contain exactly
+	 * those arguments listed by <tt>getInputArguments</tt> method. The output
+	 * argument <tt>Dictionary</tt> object will contain exactly those
+	 * arguments listed by <tt>getOutputArguments</code> method.
+	 *
+	 * @param args A <tt>Dictionary</tt> of arguments. Must contain the correct set and
+	 * type of arguments for this action. May be <tt>null</tt> if no
+	 * input arguments exist.
+	 *
+	 * @return A <tt>Dictionary</tt> with the output arguments.
+	 *         <tt>null</tt> if the action has no output arguments.
+	 *
+	 * @throws Exception The execution fails for some reason.
+	 *
+	 * @see UPnPStateVariable
+	 */
+	Dictionary invoke(Dictionary args) throws Exception, UPnPException;
 }

@@ -25,46 +25,47 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.service.cm;
 
-
 /**
- * An <tt>Exception</tt> class to inform the Configuration Admin service of problems with configuration
- * data.
- *
+ * An <tt>Exception</tt> class to inform the Configuration Admin service of
+ * problems with configuration data.
+ * 
  * @version $Revision$
-*/
+ */
 public class ConfigurationException extends Exception {
-    String          property;
-    String          reason;
+	String	property;
+	String	reason;
 
-    /**
-     * Create a <tt>ConfigurationException</tt> object.
-     *
-     * @param property name of the property that caused the problem, <tt>null</tt> if no specific property was the cause
-     * @param reason reason for failure
-    */
-    public ConfigurationException( String property, String reason ) {
-        super( property + " : " + reason );
-        this.property = property;
-        this.reason = reason;
-    }
+	/**
+	 * Create a <tt>ConfigurationException</tt> object.
+	 * 
+	 * @param property name of the property that caused the problem,
+	 *        <tt>null</tt> if no specific property was the cause
+	 * @param reason reason for failure
+	 */
+	public ConfigurationException(String property, String reason) {
+		super(property + " : " + reason);
+		this.property = property;
+		this.reason = reason;
+	}
 
-    /**
-     * Return the property name that caused the failure or null.
-     *
-     * @return name of property or null if no specific property caused the problem
-    */
-    public String getProperty() { return property; }
+	/**
+	 * Return the property name that caused the failure or null.
+	 * 
+	 * @return name of property or null if no specific property caused the
+	 *         problem
+	 */
+	public String getProperty() {
+		return property;
+	}
 
-    /**
-     * Return the reason for this exception.
-     *
-      * @return reason of the failure
-    */
-    public String getReason() { return reason; }
-
+	/**
+	 * Return the reason for this exception.
+	 * 
+	 * @return reason of the failure
+	 */
+	public String getReason() {
+		return reason;
+	}
 }
-
-

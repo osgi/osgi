@@ -27,17 +27,15 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.test.cases.classpath.tbc;
 
 import org.osgi.framework.*;
 import org.osgi.test.cases.classpath.tbc.exp.*;
 import org.osgi.test.cases.util.*;
-
 import java.net.*;
 
 public class ClassPathControl extends DefaultTestBundleControl {
-	static String[]	methods	= new String[]{"testImportUninstalledCode",
+	static String[]	methods	= new String[] {"testImportUninstalledCode",
 			"testExport", "testReinstall", "testImportGone"};
 
 	public String[] getMethods() {
@@ -45,7 +43,6 @@ public class ClassPathControl extends DefaultTestBundleControl {
 	}
 
 	/** *** Test methods **** */
-
 	/**
 	 * Tries to import a package that has not been installed.
 	 */
@@ -56,31 +53,29 @@ public class ClassPathControl extends DefaultTestBundleControl {
 		System.out.println("Web req " + s);
 		try {
 			URL url = new URL(s);
-			System.out.println( "Length " + url.openConnection().getContentLength());
-			
+			System.out.println("Length "
+					+ url.openConnection().getContentLength());
 			tb = getContext().installBundle(s);
 			if (tb.getState() == Bundle.INSTALLED)
 				res = "State is INSTALLED.";
 			else
 				res = "State is not INSTALLED, but " + tb.getState();
-
 			log("Installed a bundle importing uninstalled code", res);
-
 			try {
 				tb.start();
 				res = "No exception thrown, Error!";
 				tb.stop();
-			} catch (BundleException be) {
+			}
+			catch (BundleException be) {
 				res = "Exception thrown, Ok.";
 			}
-
 			log("Started a bundle importing uninstalled code", res);
-
 			tb.uninstall();
-		} catch (BundleException e) {
+		}
+		catch (BundleException e) {
 			e.getNestedException().printStackTrace();
-
-		} catch (Exception ee) {
+		}
+		catch (Exception ee) {
 			ee.printStackTrace();
 		}
 	}
@@ -92,22 +87,19 @@ public class ClassPathControl extends DefaultTestBundleControl {
 		Bundle tb;
 		Exported ex = new Exported();
 		String res;
-
 		tb = getContext().installBundle(getWebServer() + "tb2.jar");
-
 		try {
 			tb.start();
 			res = "Code was exported, Ok.";
 			tb.stop();
-		} catch (BundleException be) {
+		}
+		catch (BundleException be) {
 			if (tb.getState() == Bundle.INSTALLED)
 				res = "Export failed!";
 			else
 				res = "BundleException thrown, Error!";
 		}
-
 		log("Testing export of a package", res);
-
 		tb.uninstall();
 	}
 
@@ -118,21 +110,18 @@ public class ClassPathControl extends DefaultTestBundleControl {
 		Bundle tb1, tb2;
 		org.osgi.test.cases.classpath.tbc.exp.Exported ex;
 		String res;
-
 		ex = new org.osgi.test.cases.classpath.tbc.exp.Exported();
-
 		tb1 = getContext().installBundle(getWebServer() + "tb3.jar");
 		tb2 = getContext().installBundle(getWebServer() + "tb3.jar");
-
 		if (tb1 == tb2) {
 			res = "They are the same, Ok.";
 			tb1.uninstall();
-		} else {
+		}
+		else {
 			res = "They are not the same, Error!";
 			tb1.uninstall();
 			tb2.uninstall();
 		}
-
 		log("Testing reinstallation of same bundle", res);
 	}
 
@@ -142,25 +131,20 @@ public class ClassPathControl extends DefaultTestBundleControl {
 	public void testImportGone() throws Exception {
 		Bundle tba, tbb;
 		String res;
-
 		tba = getContext().installBundle(getWebServer() + "tb4a.jar");
 		tba.start();
 		log("Testing removal of export package",
 				"Installed and started exporting bundle.");
-
 		tbb = getContext().installBundle(getWebServer() + "tb4b.jar");
 		tbb.start();
 		log("Testing removal of export package",
 				"Installed and started importing bundle.");
-
 		log("Testing removal of export package", "Exporting state: "
 				+ BundleState.stateName(tba.getState()) + ". Importing state: "
 				+ BundleState.stateName(tbb.getState()) + ".");
-
 		tba.stop();
 		tba.uninstall();
 		log("Testing removal of export package", "Exporting bundle stopped.");
-
 		/*
 		 * This test is not defined because the spec allows a package to stay
 		 * resident even if it's imports are uninstalled. Unfortunately, this is

@@ -33,23 +33,22 @@ import org.osgi.service.io.ConnectionFactory;
 /**
  * A simple class that represents an entry in the hashtable where different
  * scheme providers are stored.
- *
- * @author    OSGi Alliance
- * @version   $Revision$
+ * 
+ * @author OSGi Alliance
+ * @version $Revision$
  */
-
 class IOHolder {
-  ConnectionFactory provider;
-  ServiceReference ref;
-  int ranking;
+	ConnectionFactory	provider;
+	ServiceReference	ref;
+	int					ranking;
 
-  IOHolder(ServiceReference ref, ConnectionFactory provider, int ranking) {
-    this.provider = provider;
-    this.ref = ref;
-    this.ranking = ranking;
-  }
+	IOHolder(ServiceReference ref, ConnectionFactory provider, int ranking) {
+		this.provider = provider;
+		this.ref = ref;
+		this.ranking = ranking;
+	}
 
-  boolean refEquals(ServiceReference ref) {
-    return this.ref.equals(ref);
-  }
+	boolean refEquals(ServiceReference ref) {
+		return this.ref.equals(ref);
+	}
 }

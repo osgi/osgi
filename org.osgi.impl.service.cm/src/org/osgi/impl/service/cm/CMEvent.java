@@ -31,48 +31,43 @@ import java.util.Dictionary;
 import org.osgi.framework.ServiceReference;
 
 /**
- * Event objects are passed from ConfigurationImpl to CMEventManager,
- * when a configuration is updated or deleted, in order to
- * inform target services (MaanagedService(Factories)).
+ * Event objects are passed from ConfigurationImpl to CMEventManager, when a
+ * configuration is updated or deleted, in order to inform target services
+ * (MaanagedService(Factories)).
  * 
- * CMEvent class encapsulates info for such an event: 
- *   ConfigurationImpl, which has been updated or deleted; 
- *   properties with which the Configuration has been updated 
- *     (as there may be a sequential update with different props); 
- *   and type of event - deletion or update.
- *
+ * CMEvent class encapsulates info for such an event: ConfigurationImpl, which
+ * has been updated or deleted; properties with which the Configuration has been
+ * updated (as there may be a sequential update with different props); and type
+ * of event - deletion or update.
+ * 
  * @author OSGi Alliance
  * @version $Revision$
  */
 public class CMEvent {
-  /** constant for an update event */
-  protected final static byte UPDATED = 0;
-  
-  /** constant for a delete event */
-  protected final static byte DELETED = 1;
-  
-  /** Object been updated/deleted */
-  protected ConfigurationImpl config;
-  
-  /** Props with which the update has been done*/
-  protected Dictionary props;
-  
-  /** Type of event: 0 for update and 1 for deletion */
-  protected byte event;
-  
-  protected ServiceReference sRef;
+	/** constant for an update event */
+	protected final static byte	UPDATED	= 0;
+	/** constant for a delete event */
+	protected final static byte	DELETED	= 1;
+	/** Object been updated/deleted */
+	protected ConfigurationImpl	config;
+	/** Props with which the update has been done */
+	protected Dictionary		props;
+	/** Type of event: 0 for update and 1 for deletion */
+	protected byte				event;
+	protected ServiceReference	sRef;
 
-  /**
-   * Constructs a new CMEvent.
-   *
-   * @param   config  Configuration that has been updated or deleted
-   * @param   props  Props with which the update has been done
-   * @param   event  Type of event: 0 for update and 1 for deletion
-   */
-  public CMEvent(ConfigurationImpl config, Dictionary props, byte event, ServiceReference sRef) {
-    this.config = config;
-    this.props = props;
-    this.event = event;
-    this.sRef  = sRef;
-  }
+	/**
+	 * Constructs a new CMEvent.
+	 * 
+	 * @param config Configuration that has been updated or deleted
+	 * @param props Props with which the update has been done
+	 * @param event Type of event: 0 for update and 1 for deletion
+	 */
+	public CMEvent(ConfigurationImpl config, Dictionary props, byte event,
+			ServiceReference sRef) {
+		this.config = config;
+		this.props = props;
+		this.event = event;
+		this.sRef = sRef;
+	}
 }

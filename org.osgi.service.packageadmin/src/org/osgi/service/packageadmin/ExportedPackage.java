@@ -31,70 +31,76 @@ import org.osgi.framework.Bundle;
 
 /**
  * An exported package.
- *
- * Instances implementing this interface are created by the
- * Package Admin service.
- *
- * <p>The information about an exported package provided by
- * this object is valid only until the next time
- * <tt>PackageAdmin.refreshPackages()</tt> is
- * called.
- * If an <tt>ExportedPackage</tt> object becomes stale (that is, the package it references
- * has been updated or removed as a result of calling
- * <tt>PackageAdmin.refreshPackages()</tt>),
- * its <tt>getName()</tt> and <tt>getSpecificationVersion()</tt> continue to return their
- * old values, <tt>isRemovalPending()</tt> returns <tt>true</tt>, and <tt>getExportingBundle()</tt>
- * and <tt>getImportingBundles()</tt> return <tt>null</tt>.
- *
+ * 
+ * Instances implementing this interface are created by the Package Admin
+ * service.
+ * 
+ * <p>
+ * The information about an exported package provided by this object is valid
+ * only until the next time <tt>PackageAdmin.refreshPackages()</tt> is called.
+ * If an <tt>ExportedPackage</tt> object becomes stale (that is, the package
+ * it references has been updated or removed as a result of calling
+ * <tt>PackageAdmin.refreshPackages()</tt>), its <tt>getName()</tt> and
+ * <tt>getSpecificationVersion()</tt> continue to return their old values,
+ * <tt>isRemovalPending()</tt> returns <tt>true</tt>, and
+ * <tt>getExportingBundle()</tt> and <tt>getImportingBundles()</tt> return
+ * <tt>null</tt>.
+ * 
  * @version $Revision$
  */
 public interface ExportedPackage {
+	/**
+	 * Returns the name of the package associated with this
+	 * <tt>ExportedPackage</tt> object.
+	 * 
+	 * @return The name of this <tt>ExportedPackage</tt> object.
+	 */
+	public String getName();
 
-    /**
-     * Returns the name of the package associated with this <tt>ExportedPackage</tt> object.
-     *
-     * @return The name of this <tt>ExportedPackage</tt> object.
-     */
-    public String getName();
+	/**
+	 * Returns the bundle exporting the package associated with this
+	 * <tt>ExportedPackage</tt> object.
+	 * 
+	 * @return The exporting bundle, or <tt>null</tt> if this
+	 *         <tt>ExportedPackage</tt> object has become stale.
+	 */
+	public Bundle getExportingBundle();
 
-    /**
-     * Returns the bundle exporting the package associated with this <tt>ExportedPackage</tt> object.
-     *
-     * @return The exporting bundle, or <tt>null</tt> if this <tt>ExportedPackage</tt> object
-     *         has become stale.
-     */
-    public Bundle getExportingBundle();
+	/**
+	 * Returns the resolved bundles that are currently importing the package
+	 * associated with this <tt>ExportedPackage</tt> object.
+	 * 
+	 * <p>
+	 * The returned array always includes the bundle returned by
+	 * {@link #getExportingBundle}since an exporter always implicitly imports
+	 * its exported packages.
+	 * 
+	 * @return The array of resolved bundles currently importing the package
+	 *         associated with this <tt>ExportedPackage</tt> object, or
+	 *         <tt>null</tt> if this <tt>ExportedPackage</tt> object has
+	 *         become stale.
+	 */
+	public Bundle[] getImportingBundles();
 
-    /**
-     * Returns the resolved bundles that are currently importing the package
-     * associated with this <tt>ExportedPackage</tt> object.
-     *
-     * <p> The returned array always includes the bundle returned by
-     * {@link #getExportingBundle}since an exporter always implicitly
-     * imports its exported packages.
-     *
-     * @return The array of resolved bundles currently importing the package
-     * associated with this <tt>ExportedPackage</tt> object, or <tt>null</tt> if this <tt>ExportedPackage</tt>
-     * object has become stale.
-     */
-    public Bundle[] getImportingBundles();
+	/**
+	 * Returns the specification version of this <tt>ExportedPackage</tt>, as
+	 * specified in the exporting bundle's manifest file.
+	 * 
+	 * @return The specification version of this <tt>ExportedPackage</tt>
+	 *         object, or <tt>null</tt> if no version information is
+	 *         available.
+	 */
+	public String getSpecificationVersion();
 
-    /**
-     * Returns the specification version of this <tt>ExportedPackage</tt>, as
-     * specified in the exporting bundle's manifest file.
-     *
-     * @return The specification version of this <tt>ExportedPackage</tt> object, or
-     *         <tt>null</tt> if no version information is available.
-     */
-    public String getSpecificationVersion();
-
-    /**
-     * Returns <tt>true</tt> if the package associated with this <tt>ExportedPackage</tt> object has been
-     * exported by a bundle that has been updated or uninstalled.
-     *
-     * @return <tt>true</tt> if the associated package is being
-     * exported by a bundle that has been updated or uninstalled, or if this
-     * <tt>ExportedPackage</tt> object has become stale; <tt>false</tt> otherwise.
-     */
-    public boolean isRemovalPending();
+	/**
+	 * Returns <tt>true</tt> if the package associated with this
+	 * <tt>ExportedPackage</tt> object has been exported by a bundle that has
+	 * been updated or uninstalled.
+	 * 
+	 * @return <tt>true</tt> if the associated package is being exported by a
+	 *         bundle that has been updated or uninstalled, or if this
+	 *         <tt>ExportedPackage</tt> object has become stale;
+	 *         <tt>false</tt> otherwise.
+	 */
+	public boolean isRemovalPending();
 }

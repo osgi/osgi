@@ -9,122 +9,105 @@
  * 2000, for use in accordance with Section 2.2 of the BY-LAWS of the
  * OSGi MEMBER AGREEMENT.
  */
-
 package org.osgi.impl.service.device.manager;
 
-import org.osgi.framework.*;
-import org.osgi.service.log.*;
-import org.osgi.util.tracker.*;
-
-import java.io.*;
-import java.util.*;
+import org.osgi.framework.BundleContext;
+import org.osgi.service.log.LogService;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * Log helper class.
- *
+ * 
  * @author $Author$
  * @version $Revision$
- * 
+ *  
  */
-
 public class Log {
-    final static String logClass = LogService.class.getName();
+	final static String		logClass	= LogService.class.getName();
+	static BundleContext	bc			= null;
+	static ServiceTracker	st			= null;
 
-    static BundleContext  bc = null;
-    static ServiceTracker st = null;
-
-    /**
-     * Create new logger.
-     */
-
-    static void start (BundleContext ctxt) {
-	if (bc != null)    // already initialized
-	    return;
-	bc=ctxt;
-	try {
-	    st=new ServiceTracker (bc, logClass, null);
-	    st.open();
-	} catch (Exception e) {
-	    st=null;
-	} 
-	
-	if (st == null) 
-	    warn ("Could not instantiate ServiceTracker for Log Service");
-    }
-    
-    
-
-    /**
-     * Unget the log service.
-     */
-
-    synchronized static void close() {
-	debug ("closing debug");
-	if (st != null) {
-	    st.close();
-	    st=null;
+	/**
+	 * Create new logger.
+	 */
+	static void start(BundleContext ctxt) {
+		if (bc != null) // already initialized
+			return;
+		bc = ctxt;
+		try {
+			st = new ServiceTracker(bc, logClass, null);
+			st.open();
+		}
+		catch (Exception e) {
+			st = null;
+		}
+		if (st == null)
+			warn("Could not instantiate ServiceTracker for Log Service");
 	}
-	bc=null;
-    }
-    
-    /**
-     * Log a message to the log if possible, otherwise to System.err.
-     *
-     * @param msg Log message
-     * @param level Severity level
-     * @param tag Descriptive label for System.err
-     */
 
-    synchronized static void doLog(String msg, int level, String tag) {
-	Object[] lss = null;
-	
-	if (st != null) 
-	    lss = st.getServices();
+	/**
+	 * Unget the log service.
+	 */
+	synchronized static void close() {
+		debug("closing debug");
+		if (st != null) {
+			st.close();
+			st = null;
+		}
+		bc = null;
+	}
 
-	if (lss != null)
-	    for (int i=0; i<lss.length; i++)
-		((LogService)lss[i]).log(level,msg);
-	else 
-	    System.err.println(tag+msg);
-    }
-    
-    /**
-     * Log a debug level message
-     *
-     * @param msg Log message
-     */
-    
-    static void debug(String msg) {
-	doLog(msg, LogService.LOG_DEBUG, "debug: ");
-    }
-    
-    /**
-     * Log an information level message
-     *
-     * @param msg Log message
-     */
+	/**
+	 * Log a message to the log if possible, otherwise to System.err.
+	 * 
+	 * @param msg Log message
+	 * @param level Severity level
+	 * @param tag Descriptive label for System.err
+	 */
+	synchronized static void doLog(String msg, int level, String tag) {
+		Object[] lss = null;
+		if (st != null)
+			lss = st.getServices();
+		if (lss != null)
+			for (int i = 0; i < lss.length; i++)
+				((LogService) lss[i]).log(level, msg);
+		else
+			System.err.println(tag + msg);
+	}
 
-    static void info(String msg) {
-	doLog(msg, LogService.LOG_INFO, "info: ");
-    }
-    
-    /**
-     * Log a warning level message
-     *
-     * @param msg Log message
-     */
-    
-    static void warn(String msg) {
-	doLog(msg, LogService.LOG_WARNING, "warning: ");
-    }
-    
-    /**
-     * Log an error level message
-     *
-     * @param msg Log message
-     */
-    
-    static void error(String msg, Exception e) {
-	doLog(msg+": "+e, LogService.LOG_ERROR, "error: ");
-    }
+	/**
+	 * Log a debug level message
+	 * 
+	 * @param msg Log message
+	 */
+	static void debug(String msg) {
+		doLog(msg, LogService.LOG_DEBUG, "debug: ");
+	}
+
+	/**
+	 * Log an information level message
+	 * 
+	 * @param msg Log message
+	 */
+	static void info(String msg) {
+		doLog(msg, LogService.LOG_INFO, "info: ");
+	}
+
+	/**
+	 * Log a warning level message
+	 * 
+	 * @param msg Log message
+	 */
+	static void warn(String msg) {
+		doLog(msg, LogService.LOG_WARNING, "warning: ");
+	}
+
+	/**
+	 * Log an error level message
+	 * 
+	 * @param msg Log message
+	 */
+	static void error(String msg, Exception e) {
+		doLog(msg + ": " + e, LogService.LOG_ERROR, "error: ");
+	}
 }

@@ -23,39 +23,31 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.test.cases.dynpkgimport.tb2;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
-
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-
 import org.osgi.test.cases.dynpkgimport.tbc.TestService;
 import org.osgi.test.cases.dynpkgimport.tlx.TestLib;
 
+public class Activator implements BundleActivator, TestService {
+	ServiceRegistration	testServiceReg	= null;
 
-public class Activator implements BundleActivator, TestService
-{
-  ServiceRegistration testServiceReg = null;
+	public void start(BundleContext bc) {
+		Dictionary props = new Hashtable();
+		testServiceReg = bc.registerService(TestService.class.getName(), this,
+				props);
+	}
 
-  public void start(BundleContext bc) 
-  {
-    Dictionary props = new Hashtable();
-    testServiceReg = bc.registerService(TestService.class.getName(), this, props);
-  }
+	public void stop(BundleContext bc) {
+		testServiceReg.unregister();
+		testServiceReg = null;
+	}
 
-  public void stop(BundleContext bc)
-  {
-    testServiceReg.unregister();
-    testServiceReg = null;
-  }
-
-  public void test1()
-  {
-    TestLib t = new TestLib();
-  }
-
+	public void test1() {
+		TestLib t = new TestLib();
+	}
 }

@@ -24,7 +24,6 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.service.component;
 
 /**
@@ -33,11 +32,10 @@ package org.osgi.service.component;
  * @version $Revision$
  */
 public class ComponentException extends RuntimeException {
-
 	/**
 	 * Nested exception.
 	 */
-	private Throwable cause;
+	private Throwable	cause;
 
 	/**
 	 * Construct a new ComponentException with the specified message and cause.

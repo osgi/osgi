@@ -28,122 +28,120 @@
 package org.osgi.impl.service.cm;
 
 import java.util.Vector;
-import java.util.Dictionary;
-
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-
-import org.osgi.service.cm.ManagedService;
-import org.osgi.service.cm.ManagedServiceFactory;
-
+import org.osgi.service.cm.*;
 
 /**
- * Manager of update and delete events, forwarded by ConfigurationImpl 
- * to the corresponding ManagedService(Factories). As those 
- * events are asynchronous, a separate thread is engaged for their 
- * execution.
- *
+ * Manager of update and delete events, forwarded by ConfigurationImpl to the
+ * corresponding ManagedService(Factories). As those events are asynchronous, a
+ * separate thread is engaged for their execution.
+ * 
  * @author OSGi Alliance
  * @version $Revision$
  */
 public class CMEventManager extends Thread {
-  private static Vector eventQueue;
-  private static Object synch;
-  private boolean running;
-  private static boolean isWaiting;
-  private BundleContext bc;
+	private static Vector	eventQueue;
+	private static Object	synch;
+	private boolean			running;
+	private static boolean	isWaiting;
+	private BundleContext	bc;
 
-  /**
-   * Constructs the CMEventManager.
-   */
-  public CMEventManager(BundleContext bc) {
-    super("CMEvent Manager");
-    this.bc = bc;
-    eventQueue = new Vector();
-    synch = new Object();
-    running = true;
-    isWaiting = false;
-  }
-  
+	/**
+	 * Constructs the CMEventManager.
+	 */
+	public CMEventManager(BundleContext bc) {
+		super("CMEvent Manager");
+		this.bc = bc;
+		eventQueue = new Vector();
+		synch = new Object();
+		running = true;
+		isWaiting = false;
+	}
 
-  /**
-   * While the event queue has elements - they are processed, i.e. 
-   * ManagedService(Factories) are informed for the event.
-   * 
-   * When queue empties monitoring object is put in wait state.
-   */
-  public void run() {
-    CMEvent event;
-    while (running) {
-      synchronized (synch) {
-        if (eventQueue.size() == 0 && running) {
-          /* 
-            if there are no events at the moment - wait until notified 
-          */
-          try {
-            isWaiting = true;
-            synch.wait();
-            isWaiting = false;
-          } catch (InterruptedException e) {
-            Log.log(1, "[CM]InterruptedException in EventManager.", e);
-          }
-        }
-      }      
-      while (eventQueue.size() > 0) {
-        event = (CMEvent) eventQueue.elementAt(0);
-        try {
-          if (event.config != null && event.config.fPid != null) {
-            ManagedServiceFactory msf = (ManagedServiceFactory) 
-              bc.getService(event.sRef);
-            if (msf != null) {
-              if (event.event == event.UPDATED) {                
-                msf.updated(event.config.pid, event.props);
-              } else {
-                msf.deleted(event.config.pid);
-              }
-            }
-          } else {
-            ManagedService ms = (ManagedService) bc.getService(event.sRef);
-            if (ms != null) {
-              ms.updated(event.props);
-            }
-          }
-          bc.ungetService(event.sRef);
-        } catch (Throwable e) {
-          if (event.config != null) {
-            Log.log(1,"[CM]Error while calling back ManagedService[Factory]. Configuration's pid is " + event.config.pid, e);
-          }
-        }
-        eventQueue.removeElementAt(0);
-      }
-    }
-  }
-  
+	/**
+	 * While the event queue has elements - they are processed, i.e.
+	 * ManagedService(Factories) are informed for the event.
+	 * 
+	 * When queue empties monitoring object is put in wait state.
+	 */
+	public void run() {
+		CMEvent event;
+		while (running) {
+			synchronized (synch) {
+				if (eventQueue.size() == 0 && running) {
+					/*
+					 * if there are no events at the moment - wait until
+					 * notified
+					 */
+					try {
+						isWaiting = true;
+						synch.wait();
+						isWaiting = false;
+					}
+					catch (InterruptedException e) {
+						Log.log(1, "[CM]InterruptedException in EventManager.",
+								e);
+					}
+				}
+			}
+			while (eventQueue.size() > 0) {
+				event = (CMEvent) eventQueue.elementAt(0);
+				try {
+					if (event.config != null && event.config.fPid != null) {
+						ManagedServiceFactory msf = (ManagedServiceFactory) bc
+								.getService(event.sRef);
+						if (msf != null) {
+							if (event.event == CMEvent.UPDATED) {
+								msf.updated(event.config.pid, event.props);
+							}
+							else {
+								msf.deleted(event.config.pid);
+							}
+						}
+					}
+					else {
+						ManagedService ms = (ManagedService) bc
+								.getService(event.sRef);
+						if (ms != null) {
+							ms.updated(event.props);
+						}
+					}
+					bc.ungetService(event.sRef);
+				}
+				catch (Throwable e) {
+					if (event.config != null) {
+						Log.log(1,
+								"[CM]Error while calling back ManagedService[Factory]. Configuration's pid is "
+										+ event.config.pid, e);
+					}
+				}
+				eventQueue.removeElementAt(0);
+			}
+		}
+	}
 
-  /**
-   * Add an event to the queue. The event will be forwarded
-   * to target service as soon as possible.
-   *
-   * @param   upEv  event, holding info for update/deletion of a configuration.
-   */
-  protected static void addEvent(CMEvent upEv) {
-    eventQueue.addElement(upEv);
-    synchronized (synch) {
-      if (isWaiting) {
-        synch.notify();
-      }
-    }
-  }
-  
+	/**
+	 * Add an event to the queue. The event will be forwarded to target service
+	 * as soon as possible.
+	 * 
+	 * @param upEv event, holding info for update/deletion of a configuration.
+	 */
+	protected static void addEvent(CMEvent upEv) {
+		eventQueue.addElement(upEv);
+		synchronized (synch) {
+			if (isWaiting) {
+				synch.notify();
+			}
+		}
+	}
 
-  /**
-   * Stops this thread, making it getting
-   * out of method run.
-   */
-  public void stopIt() {
-    synchronized (synch) {
-      running = false;
-      synch.notify();
-    }
-  }
+	/**
+	 * Stops this thread, making it getting out of method run.
+	 */
+	public void stopIt() {
+		synchronized (synch) {
+			running = false;
+			synch.notify();
+		}
+	}
 }

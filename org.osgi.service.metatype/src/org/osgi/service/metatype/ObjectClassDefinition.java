@@ -24,7 +24,6 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.service.metatype;
 
 import java.io.IOException;
@@ -36,30 +35,27 @@ import java.io.InputStream;
  * @version $Revision$
  */
 public interface ObjectClassDefinition {
-
 	/**
 	 * Argument for <tt>getAttributeDefinitions(int)</tt>.
 	 * <p>
 	 * <tt>REQUIRED</tt> indicates that only the required definitions are
 	 * returned. The value is 1.
 	 */
-	final int REQUIRED = 1;
-
+	final int	REQUIRED	= 1;
 	/**
 	 * Argument for <tt>getAttributeDefinitions(int)</tt>.
 	 * <p>
 	 * <tt>OPTIONAL</tt> indicates that only the optional definitions are
 	 * returned. The value is 2.
 	 */
-	final int OPTIONAL = 2;
-
+	final int	OPTIONAL	= 2;
 	/**
 	 * Argument for <tt>getAttributeDefinitions(int)</tt>.
 	 * <p>
 	 * <tt>ALL</tt> indicates that all the definitions are returned. The value
 	 * is -1.
 	 */
-	final int ALL = 0xFFFFFFFF;
+	final int	ALL			= 0xFFFFFFFF;
 
 	/**
 	 * Return the name of this object class.
@@ -131,4 +127,3 @@ public interface ObjectClassDefinition {
 	 */
 	InputStream getIcon(int size) throws IOException;
 }
-

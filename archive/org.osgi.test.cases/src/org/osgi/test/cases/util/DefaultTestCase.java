@@ -25,7 +25,6 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.test.cases.util;
 
 import java.io.*;
@@ -37,285 +36,285 @@ import javax.servlet.http.*;
 import org.osgi.service.http.*;
 
 /**
-A TestCase testing various classpath issues.
-
-@author Ericsson Radio Systems AB
+ * A TestCase testing various classpath issues.
+ * 
+ * @author Ericsson Radio Systems AB
  */
+public class DefaultTestCase implements TestCase, HttpContext, BundleActivator {
+	BundleContext	context;
+	HttpService		http;
+	boolean			cont;
+	TestBundle		testbundle;
+	TestRun			run;
+	int				errors;
+	long			timeout;
+	String			name;
+	String			desc;
 
-public class DefaultTestCase
-	implements
-		TestCase,
-		HttpContext,
-		BundleActivator
-{
-	BundleContext   		context;
-	HttpService 			http;
-	boolean 				cont;
-	TestBundle  			testbundle;
-	TestRun 				run;
-	int 					errors;
-	long					timeout;
-    String                  name;
-    String                  desc;
-	
 	/**
-	Creates and registers the TestCase object. Also makes the jar files in
-	the bundle available for http access.
+	 * Creates and registers the TestCase object. Also makes the jar files in
+	 * the bundle available for http access.
 	 */
 	public void start(BundleContext context) {
-		this.context = context; 	
-
-        /* There is a risk that getName() and getDescrption() are called
-		after the bundle is stopped and in that case they will fail,
-		so the name and desc are cached when the TestCase is started */
-        cacheName();
-        cacheDescription();
-
+		this.context = context;
+		/*
+		 * There is a risk that getName() and getDescrption() are called after
+		 * the bundle is stopped and in that case they will fail, so the name
+		 * and desc are cached when the TestCase is started
+		 */
+		cacheName();
+		cacheDescription();
 		context.registerService(TestCase.class.getName(), this, null);
 	}
 
 	/**
-	Deletes and unregisters the TestCase object. Also unregisters the http
-	resources.
+	 * Deletes and unregisters the TestCase object. Also unregisters the http
+	 * resources.
 	 */
-	public void stop(BundleContext bc) {}
-	public void abort() { cont = false; }
-	public String getIconName() { return null; }
+	public void stop(BundleContext bc) {
+	}
+
+	public void abort() {
+		cont = false;
+	}
+
+	public String getIconName() {
+		return null;
+	}
 
 	/**
-	Runs the TestCase by installing a TestBundleControl bundle on the
-	target framework. This bundle will perform the various tests and
-	log the results.
-	
-	@see org.osgi.test.cases.classpath.tbc.TestBundleControl
+	 * Runs the TestCase by installing a TestBundleControl bundle on the target
+	 * framework. This bundle will perform the various tests and log the
+	 * results.
+	 * 
+	 * @see org.osgi.test.cases.classpath.tbc.TestBundleControl
 	 */
 	public int test(TestRun run) {
 		System.out.println("Running test case " + getName());
 		this.run = run;
 		errors = 0;
 		cont = true;
-		timeout = Integer.parseInt( System.getProperty( "org.osgi.test.testcase.timeout", "60000" ));
-		
+		timeout = Integer.parseInt(System.getProperty(
+				"org.osgi.test.testcase.timeout", "60000"));
 		try {
 			init();
 			registerHttpResources();
 			testbundle = createTestBundle();
-
 			sendStart();
-		
-			while(cont) {
-				String progress = (String)testbundle.receive(timeout);
-
+			while (cont) {
+				String progress = (String) testbundle.receive(timeout);
 				// The remote bundle will send number strings to report
 				// progress and the string "ready" when it's done.
 				//
 				if (progress == null) {
-					run.reportMessage("Receive from TestBundleControl timed out or canceled.");
+					run
+							.reportMessage("Receive from TestBundleControl timed out or canceled.");
 					errors++;
 					cont = false;
 					progress = "timeout";
 				}
-
-				/* If something in the preparations didn't go well (like
-				a service missing), indicate that the test case didn't
-				run. */
+				/*
+				 * If something in the preparations didn't go well (like a
+				 * service missing), indicate that the test case didn't run.
+				 */
 				if (progress.equals("norun")) {
-				    run.reportMessage("Some service was missing");
-				    errors = -1;
-				    cont = false;
-                }
-
-				if (progress.equals("ready")) {
-				    cont = false;
+					run.reportMessage("Some service was missing");
+					errors = -1;
+					cont = false;
 				}
-					
-                if(cont) {
-    				try {
-    					int percent = Integer.parseInt(progress);
-    					run.reportProgress(percent);
-    				}
-    				catch( Exception e ) {
-    					run.reportMessage( "Error at " + progress + "%, " + e );
-    				}
-    			}
+				if (progress.equals("ready")) {
+					cont = false;
+				}
+				if (cont) {
+					try {
+						int percent = Integer.parseInt(progress);
+						run.reportProgress(percent);
+					}
+					catch (Exception e) {
+						run.reportMessage("Error at " + progress + "%, " + e);
+					}
+				}
 			}
-			if(errors >= 0) {
-			    errors += testbundle.getCompareErrors();
+			if (errors >= 0) {
+				errors += testbundle.getCompareErrors();
 			}
 			testbundle.uninstall();
 		}
 		catch (Throwable e) {
-			try { run.reportMessage("Unexpected exception in running testcase: " + e ); } catch( IOException ioe ) {}
+			try {
+				run.reportMessage("Unexpected exception in running testcase: "
+						+ e);
+			}
+			catch (IOException ioe) {
+			}
 			e.printStackTrace();
 			errors++;
 		}
 		finally {
 			run = null;
 			testbundle = null;
-			if ( http!=null) {
+			if (http != null) {
 				System.out.println("Unregistering " + getName());
-				http.unregister("/" + getName() );
+				http.unregister("/" + getName());
 			}
-			try { deinit(); } catch(Exception e) {}
+			try {
+				deinit();
+			}
+			catch (Exception e) {
+			}
 		}
-
 		return errors;
 	}
 
-	protected void init() throws Exception {}
-	protected void deinit()  throws Exception {}
-	
+	protected void init() throws Exception {
+	}
+
+	protected void deinit() throws Exception {
+	}
+
 	protected int guessHttpPort() {
 		String port = context.getProperty("org.osgi.service.http.port");
-		if ( port == null )
-		   port = System.getProperty( "org.osgi.service.http.port" );
+		if (port == null)
+			port = System.getProperty("org.osgi.service.http.port");
 		if (port != null) {
 			return Integer.parseInt(port);
 		}
-		
 		ServerSocket socket;
-		int			 attempts[] = new int[] { 80, 8080, 8081, 8000,9000 };
-		
-		for ( int i=0; i<attempts.length; i++ )
-		try {
-			socket = new ServerSocket(attempts[i]);
-			socket.close();
-			socket = null;
-		}
-		catch (IOException ioe) {
-			return attempts[i];
-		}
+		int attempts[] = new int[] {80, 8080, 8081, 8000, 9000};
+		for (int i = 0; i < attempts.length; i++)
+			try {
+				socket = new ServerSocket(attempts[i]);
+				socket.close();
+				socket = null;
+			}
+			catch (IOException ioe) {
+				return attempts[i];
+			}
 		return 0;
 	}
 
 	void registerHttpResources() throws IOException, NamespaceException {
-		ServiceReference httpRef = context.getServiceReference( HttpService.class.getName() );
-		if ( httpRef == null )
-			throw new IOException( "No HTTP server found in registry" );
-		
+		ServiceReference httpRef = context
+				.getServiceReference(HttpService.class.getName());
+		if (httpRef == null)
+			throw new IOException("No HTTP server found in registry");
 		http = (HttpService) context.getService(httpRef);
-		if ( http == null )
-			throw new IOException( "Could not obtain HTTP Service from reference" );
-		
-		http.registerResources("/" + getName(), "/www", this );
+		if (http == null)
+			throw new IOException(
+					"Could not obtain HTTP Service from reference");
+		http.registerResources("/" + getName(), "/www", this);
 	}
-	
-	
+
 	protected TestBundle createTestBundle() throws IOException {
 		String name = getName() + "_TBC";
-		String tbc="", log="";
-		InputStream jar = getClass().getResourceAsStream(tbc=get( "Test-TBC", "/tbc.jar" ));
-		InputStream ref = getClass().getResourceAsStream(log=get( "Test-Log", "/log.ref" ));
-		if ( jar == null )
-			System.out.println( "No such jar file " + tbc );
-		if ( ref == null )
-			System.out.println( "No such reference file " + log );
-			
-		TestBundle testbundle = getRun().createTestBundle( name, jar, ref );
-		if ( testbundle == null )
-			throw new IOException( "Cannot createTestBundle " + name );
-			
+		String tbc = "", log = "";
+		InputStream jar = getClass().getResourceAsStream(
+				tbc = get("Test-TBC", "/tbc.jar"));
+		InputStream ref = getClass().getResourceAsStream(
+				log = get("Test-Log", "/log.ref"));
+		if (jar == null)
+			System.out.println("No such jar file " + tbc);
+		if (ref == null)
+			System.out.println("No such reference file " + log);
+		TestBundle testbundle = getRun().createTestBundle(name, jar, ref);
+		if (testbundle == null)
+			throw new IOException("Cannot createTestBundle " + name);
 		return testbundle;
 	}
-	
-	String get( String name, String deflt ) {	
+
+	String get(String name, String deflt) {
 		String result = (String) context.getBundle().getHeaders().get(name);
-		if ( result != null )
+		if (result != null)
 			return result;
 		else
-			return deflt; 
+			return deflt;
 	}
-	
+
 	protected TestRun getRun() {
 		return run;
 	}
-	
 
 	protected void sendStart() throws IOException {
-		String host = System.getProperty( "org.osgi.service.http.host" );
+		String host = System.getProperty("org.osgi.service.http.host");
 		byte address[] = null;
-		if ( host == null )
+		if (host == null)
 			address = InetAddress.getLocalHost().getAddress();
 		else
-			address = InetAddress.getByName( host ).getAddress();
-			
+			address = InetAddress.getByName(host).getAddress();
 		StringBuffer sb = new StringBuffer();
-		String del="";
-		sb.append( "http://" );
-		for ( int i=0; i<address.length; i++ ) {
-			sb.append( del );
-			sb.append( 0xFF & address[i] );
+		String del = "";
+		sb.append("http://");
+		for (int i = 0; i < address.length; i++) {
+			sb.append(del);
+			sb.append(0xFF & address[i]);
 			del = ".";
 		}
 		int port = guessHttpPort();
-		if ( port != 80 )  {
-			sb.append( ":" );
-			sb.append( port );
+		if (port != 80) {
+			sb.append(":");
+			sb.append(port);
 		}
-		sb.append( "/" );
-		sb.append( getName() );
-		sb.append( "/" );
-		
-		System.out.println( "HTTP server is: " + sb.toString() );
-		testbundle.send( sb.toString() );
+		sb.append("/");
+		sb.append(getName());
+		sb.append("/");
+		System.out.println("HTTP server is: " + sb.toString());
+		testbundle.send(sb.toString());
 	}
 
 	public boolean handleSecurity(HttpServletRequest request,
-								  HttpServletResponse response) throws IOException {
+			HttpServletResponse response) throws IOException {
 		return true;
 	}
-	
+
 	public URL getResource(String name) {
 		URL url = null;
-		System.out.println("Asking for " + name );
-		
+		System.out.println("Asking for " + name);
 		try {
 			url = getClass().getResource(name);
-			if ( url == null )
-				url = getClass().getResource("/"+name);
-			
-			if ( url == null && name.startsWith("/www") ) {
+			if (url == null)
+				url = getClass().getResource("/" + name);
+			if (url == null && name.startsWith("/www")) {
 				name = name.substring(4);
-				System.out.println("name " + name );
+				System.out.println("name " + name);
 				url = getClass().getResource(name);
 			}
-			System.out.println("Asking for " + name + " getting " + url );
+			System.out.println("Asking for " + name + " getting " + url);
 			return url;
 		}
-		catch( Exception e ) {
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	public String getMimeType(String name) {
 		return null;
 	}
-	
-    public String getDescription() { 
-        return desc;
-    }
-    
-    public String getName() { 
-        return name;
-    }
-    
-    private void cacheName() {
-        Dictionary headers = context.getBundle().getHeaders();
-        name = (String) headers.get(Constants.BUNDLE_NAME);
-        String prefix = "org.osgi.test.cases.";
-        
-        /* Remove the package name */
-        if(name.startsWith(prefix)) {
-            name = name.substring(prefix.length());
-        }
-    }
-    
-    private void cacheDescription() {
-        Dictionary headers = context.getBundle().getHeaders();
-        desc = (String) headers.get(Constants.BUNDLE_DESCRIPTION);
-    }
-    
-	
-	protected BundleContext getBundleContext() { return context; }
+
+	public String getDescription() {
+		return desc;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	private void cacheName() {
+		Dictionary headers = context.getBundle().getHeaders();
+		name = (String) headers.get(Constants.BUNDLE_NAME);
+		String prefix = "org.osgi.test.cases.";
+		/* Remove the package name */
+		if (name.startsWith(prefix)) {
+			name = name.substring(prefix.length());
+		}
+	}
+
+	private void cacheDescription() {
+		Dictionary headers = context.getBundle().getHeaders();
+		desc = (String) headers.get(Constants.BUNDLE_DESCRIPTION);
+	}
+
+	protected BundleContext getBundleContext() {
+		return context;
+	}
 }

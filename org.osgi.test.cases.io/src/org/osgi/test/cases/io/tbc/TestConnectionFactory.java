@@ -25,58 +25,52 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.test.cases.io.tbc;
 
-
 import org.osgi.service.io.ConnectionFactory;
-
 import javax.microedition.io.Connection;
 import javax.microedition.io.InputConnection;
 import javax.microedition.io.OutputConnection;
 import java.io.*;
 
 public class TestConnectionFactory implements ConnectionFactory {
-  String uri;
-  int mode = -1;
-  boolean timeouts;
+	String	uri;
+	int		mode	= -1;
+	boolean	timeouts;
 
-  public Connection createConnection(String name, int mode, boolean timeouts) throws IOException {
-    this.uri = name;
-    this.mode = mode;
-    this.timeouts = timeouts;
+	public Connection createConnection(String name, int mode, boolean timeouts)
+			throws IOException {
+		this.uri = name;
+		this.mode = mode;
+		this.timeouts = timeouts;
+		return new TestConnection();
+	}
 
-    return new TestConnection();
-  }
+	void clean() {
+		uri = null;
+		mode = -1;
+		timeouts = false;
+	}
 
-  void clean() {
-    uri = null;
-    mode = -1;
-    timeouts = false;
-  }
+	static class TestConnection implements Connection, InputConnection,
+			OutputConnection {
+		public void close() throws IOException {
+		}
 
+		public DataInputStream openDataInputStream() throws IOException {
+			return new DataInputStream(new ByteArrayInputStream(new byte[] {}));
+		}
 
-  static class TestConnection implements Connection, InputConnection,
-      OutputConnection {
+		public InputStream openInputStream() throws IOException {
+			return new ByteArrayInputStream(new byte[] {});
+		}
 
-    public void close() throws IOException {
-    }
+		public DataOutputStream openDataOutputStream() throws IOException {
+			return new DataOutputStream(new ByteArrayOutputStream());
+		}
 
-    public DataInputStream openDataInputStream() throws IOException {
-      return new DataInputStream(new ByteArrayInputStream(new byte[]{}));
-    }
-
-    public InputStream openInputStream() throws IOException {
-      return new ByteArrayInputStream(new byte[]{});
-    }
-
-    public DataOutputStream openDataOutputStream() throws IOException {
-      return new DataOutputStream(new ByteArrayOutputStream());
-    }
-
-    public OutputStream openOutputStream() throws IOException {
-      return new ByteArrayOutputStream();
-    }
-
-  }
+		public OutputStream openOutputStream() throws IOException {
+			return new ByteArrayOutputStream();
+		}
+	}
 }

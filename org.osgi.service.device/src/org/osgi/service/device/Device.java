@@ -25,48 +25,48 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.service.device;
 
 /**
- * <p>Interface for identifying device services.
- *
- * <p>A service must implement this interface or use the
- * {@link Constants#DEVICE_CATEGORY} registration property
- * to indicate that it is a device. Any services
- * implementing this interface or registered with the <tt>DEVICE_CATEGORY</tt>
- * property will be discovered by the device manager.
- *
- * <p>Device services implementing this interface give the device manager
- * the opportunity to indicate to the device that no drivers were found
- * that could (further) refine it.
- * In this case, the device manager calls the {@link #noDriverFound} method on
- * the <tt>Device</tt> object.
- *
- * <p>Specialized device implementations will extend this interface by adding
+ * <p>
+ * Interface for identifying device services.
+ * 
+ * <p>
+ * A service must implement this interface or use the
+ * {@link Constants#DEVICE_CATEGORY}registration property to indicate that it
+ * is a device. Any services implementing this interface or registered with the
+ * <tt>DEVICE_CATEGORY</tt> property will be discovered by the device manager.
+ * 
+ * <p>
+ * Device services implementing this interface give the device manager the
+ * opportunity to indicate to the device that no drivers were found that could
+ * (further) refine it. In this case, the device manager calls the
+ * {@link #noDriverFound}method on the <tt>Device</tt> object.
+ * 
+ * <p>
+ * Specialized device implementations will extend this interface by adding
  * methods appropriate to their device category to it.
- *
+ * 
  * @version $Revision$
  * @see Driver
  */
+public abstract interface Device {
+	/**
+	 * Return value from {@link Driver#match}indicating that the driver cannot
+	 * refine the device presented to it by the device manager.
+	 * 
+	 * The value is zero.
+	 */
+	public static final int	MATCH_NONE	= 0;
 
-public abstract interface Device
-{
-    /**
-     * Return value from {@link Driver#match} indicating that the
-     * driver cannot refine the device presented to it by the device manager.
-	 *
-     * The value is zero.
-     */
-    public static final int MATCH_NONE = 0;
-
-    /**
-     * Indicates to this <tt>Device</tt> object that the device manager has failed to attach
-     * any drivers to it.
-     *
-     * <p> If this <tt>Device</tt> object can be configured differently, the driver
-     * that registered this <tt>Device</tt> object may unregister it and register a different
-     * Device service instead.
-     */
-    public abstract void noDriverFound();
+	/**
+	 * Indicates to this <tt>Device</tt> object that the device manager has
+	 * failed to attach any drivers to it.
+	 * 
+	 * <p>
+	 * If this <tt>Device</tt> object can be configured differently, the
+	 * driver that registered this <tt>Device</tt> object may unregister it
+	 * and register a different Device service instead.
+	 */
+	public abstract void noDriverFound();
 }

@@ -24,7 +24,6 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.service.metatype;
 
 /**
@@ -37,7 +36,6 @@ package org.osgi.service.metatype;
  * @version $Revision$
  */
 public interface AttributeDefinition {
-
 	/**
 	 * The <tt>STRING</tt> (1) type.
 	 * 
@@ -46,8 +44,7 @@ public interface AttributeDefinition {
 	 * <tt>Vector</tt> with <tt>String</tt> or <tt>String[]</tt> objects,
 	 * depending on the <tt>getCardinality()</tt> value.
 	 */
-	final int STRING = 1;
-
+	final int	STRING		= 1;
 	/**
 	 * The <tt>LONG</tt> (2) type.
 	 * 
@@ -55,8 +52,7 @@ public interface AttributeDefinition {
 	 * <tt>Vector</tt> with <tt>Long</tt> or <tt>long[]</tt> objects,
 	 * depending on the <tt>getCardinality()</tt> value.
 	 */
-	final int LONG = 2;
-
+	final int	LONG		= 2;
 	/**
 	 * The <tt>INTEGER</tt> (3) type.
 	 * 
@@ -64,8 +60,7 @@ public interface AttributeDefinition {
 	 * <tt>Vector</tt> with <tt>Integer</tt> or <tt>int[]</tt> objects,
 	 * depending on the <tt>getCardinality()</tt> value.
 	 */
-	final int INTEGER = 3;
-
+	final int	INTEGER		= 3;
 	/**
 	 * The <tt>SHORT</tt> (4) type.
 	 * 
@@ -73,8 +68,7 @@ public interface AttributeDefinition {
 	 * <tt>Vector</tt> with <tt>Short</tt> or <tt>short[]</tt> objects,
 	 * depending on the <tt>getCardinality()</tt> value.
 	 */
-	final int SHORT = 4;
-
+	final int	SHORT		= 4;
 	/**
 	 * The <tt>CHARACTER</tt> (5) type.
 	 * 
@@ -82,8 +76,7 @@ public interface AttributeDefinition {
 	 * <tt>Vector</tt> with <tt>Character</tt> or <tt>char[]</tt> objects,
 	 * depending on the <tt>getCardinality()</tt> value.
 	 */
-	final int CHARACTER = 5;
-
+	final int	CHARACTER	= 5;
 	/**
 	 * The <tt>BYTE</tt> (6) type.
 	 * 
@@ -91,8 +84,7 @@ public interface AttributeDefinition {
 	 * <tt>Vector</tt> with <tt>Byte</tt> or <tt>byte[]</tt> objects,
 	 * depending on the <tt>getCardinality()</tt> value.
 	 */
-	final int BYTE = 6;
-
+	final int	BYTE		= 6;
 	/**
 	 * The <tt>DOUBLE</tt> (7) type.
 	 * 
@@ -100,8 +92,7 @@ public interface AttributeDefinition {
 	 * <tt>Vector</tt> with <tt>Double</tt> or <tt>double[]</tt> objects,
 	 * depending on the <tt>getCardinality()</tt> value.
 	 */
-	final int DOUBLE = 7;
-
+	final int	DOUBLE		= 7;
 	/**
 	 * The <tt>FLOAT</tt> (8) type.
 	 * 
@@ -109,8 +100,7 @@ public interface AttributeDefinition {
 	 * <tt>Vector</tt> with <tt>Float</tt> or <tt>float[]</tt> objects,
 	 * depending on the <tt>getCardinality()</tt> value.
 	 */
-	final int FLOAT = 8;
-
+	final int	FLOAT		= 8;
 	/**
 	 * The <tt>BIGINTEGER</tt> (9) type.
 	 * 
@@ -120,8 +110,7 @@ public interface AttributeDefinition {
 	 * 
 	 * @deprecated Since 1.1
 	 */
-	final int BIGINTEGER = 9;
-
+	final int	BIGINTEGER	= 9;
 	/**
 	 * The <tt>BIGDECIMAL</tt> (10) type.
 	 * 
@@ -131,8 +120,7 @@ public interface AttributeDefinition {
 	 * 
 	 * @deprecated Since 1.1
 	 */
-	final int BIGDECIMAL = 10;
-
+	final int	BIGDECIMAL	= 10;
 	/**
 	 * The <tt>BOOLEAN</tt> (11) type.
 	 * 
@@ -140,7 +128,7 @@ public interface AttributeDefinition {
 	 * <tt>Vector</tt> with <tt>Boolean</tt> or <tt>boolean[]</tt> objects
 	 * depending on <tt>getCardinality()</tt>.
 	 */
-	final int BOOLEAN = 11;
+	final int	BOOLEAN		= 11;
 
 	/**
 	 * Get the name of the attribute. This name may be localized.
@@ -186,11 +174,13 @@ public interface AttributeDefinition {
 	 * <tt>Vector</tt> objects. The return value is defined as follows:
 	 * 
 	 * <pre>
-	 *   x = Integer.MIN_VALUE    no limit, but use Vector
-	 *   x &lt; 0                    -x = max occurrences, store in Vector
-	 *   x &gt; 0                     x = max occurrences, store in array []
-	 *   x = Integer.MAX_VALUE    no limit, but use array []
-	 *   x = 0                     1 occurrence required
+	 * 
+	 *    x = Integer.MIN_VALUE    no limit, but use Vector
+	 *    x &lt; 0                    -x = max occurrences, store in Vector
+	 *    x &gt; 0                     x = max occurrences, store in array []
+	 *    x = Integer.MAX_VALUE    no limit, but use array []
+	 *    x = 0                     1 occurrence required
+	 *  
 	 * </pre>
 	 */
 	int getCardinality();
@@ -265,9 +255,13 @@ public interface AttributeDefinition {
 	 * return three different values:
 	 * 
 	 * <pre>
-	 * <tt>null</tt>                  no validation present
-	 * &quot;&quot;                   no problems detected
-	 * &quot;...&quot;                A localized description of why the value is wrong
+	 * <tt>
+	 * null
+	 * </tt>
+	 *                   no validation present
+	 *  &quot;&quot;                   no problems detected
+	 *  &quot;...&quot;                A localized description of why the value is wrong
+	 *  
 	 * </pre>
 	 * 
 	 * @param value The value before turning it into the basic data type
@@ -290,7 +284,5 @@ public interface AttributeDefinition {
 	 * 
 	 * @return Return a default value or <tt>null</tt> if no default exists.
 	 */
-
 	String[] getDefaultValue();
 }
-

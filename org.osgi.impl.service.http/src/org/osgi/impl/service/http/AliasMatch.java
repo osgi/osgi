@@ -9,30 +9,26 @@
  * 2000, for use in accordance with Section 2.2 of the BY-LAWS of the
  * OSGi MEMBER AGREEMENT.
  */
-
 package org.osgi.impl.service.http;
 
 import java.net.URL;
 
-//  ********************     AliasMatch     ********************
+//  ******************** AliasMatch ********************
 /**
- ** A very simple container class that groups an AliasRegistration
- ** together with an InputStream matching a resource.
- ** Used to reduce the number of calls to getResource().
- ** 
- ** @author  Gatespace AB (osgiref@gatespace.com)
- ** @version $Revision$
- ** @see     AliasRegistration
+ * * A very simple container class that groups an AliasRegistration * together
+ * with an InputStream matching a resource. * Used to reduce the number of calls
+ * to getResource(). * *
+ * 
+ * @author Gatespace AB (osgiref@gatespace.com) *
+ * @version $Revision$ *
+ * @see AliasRegistration
  */
-
-
 public final class AliasMatch {
-  AliasRegistration aliasReg;
-  URL url;
-  
-  public AliasMatch(AliasRegistration aliasReg, URL url) {
-    this.aliasReg = aliasReg;
-    this.url = url;
-  }
-  
+	AliasRegistration	aliasReg;
+	URL					url;
+
+	public AliasMatch(AliasRegistration aliasReg, URL url) {
+		this.aliasReg = aliasReg;
+		this.url = url;
+	}
 }

@@ -4,21 +4,23 @@ import java.text.DateFormat;
 import java.util.*;
 
 // This class creates a SOAP message to send to the contol device via HTTP.
-
 public class SOAPMaker implements SOAPConstants {
-	// This is the object whose lock will be used to synchronize the createQuery method.	 
-	private Object queryLock = new Object ();
-	// This is the object whose lock will be used to synchronize the createControl method.
-	private Object controlLock = new Object ();
+	// This is the object whose lock will be used to synchronize the createQuery
+	// method.
+	private Object	queryLock	= new Object();
+	// This is the object whose lock will be used to synchronize the
+	// createControl method.
+	private Object	controlLock	= new Object();
 
 	// Default contructor
 	public SOAPMaker() {
-
 	}
 
-	// This method will take the parameters and then create a SOAP message for the
+	// This method will take the parameters and then create a SOAP message for
+	// the
 	// Control response when the control request is successful.
-	public String createControlResponseOK( String actionName, String serviceType, java.util.Dictionary arguments) {
+	public String createControlResponseOK(String actionName,
+			String serviceType, java.util.Dictionary arguments) {
 		synchronized (controlLock) {
 			StringBuffer soapBuf = new StringBuffer();
 			String soap;
@@ -26,13 +28,15 @@ public class SOAPMaker implements SOAPConstants {
 			soapBuf.append(rn);
 			soapBuf.append(startBody);
 			soapBuf.append(rn);
-			soapBuf.append("<u:" + actionName + response + " xmlns:u=" + saUrn + "urn:schemas-upnp-org:service:" +serviceType + "\">");
+			soapBuf.append("<u:" + actionName + response + " xmlns:u=" + saUrn
+					+ "urn:schemas-upnp-org:service:" + serviceType + "\">");
 			soapBuf.append(rn);
-
 			if (arguments != null) {
 				for (Enumeration e = arguments.keys(); e.hasMoreElements();) {
 					String argName = (String) e.nextElement();
-					soapBuf.append("<" + argName + ">" + (String) arguments.get(argName) + "</" + argName + ">");
+					soapBuf.append("<" + argName + ">"
+							+ (String) arguments.get(argName) + "</" + argName
+							+ ">");
 					soapBuf.append(rn);
 				}
 			}
@@ -42,7 +46,6 @@ public class SOAPMaker implements SOAPConstants {
 			soapBuf.append(rn);
 			soapBuf.append(stopEnvelop);
 			soap = soapBuf.toString();
-
 			StringBuffer controlBuf = new StringBuffer();
 			controlBuf.append(http + OK_200);
 			controlBuf.append(rn);
@@ -52,7 +55,8 @@ public class SOAPMaker implements SOAPConstants {
 			controlBuf.append(contentType);
 			controlBuf.append(rn);
 			controlBuf.append(date);
-			controlBuf.append(DateFormat.getDateTimeInstance().format(new Date(System.currentTimeMillis())));
+			controlBuf.append(DateFormat.getDateTimeInstance().format(
+					new Date(System.currentTimeMillis())));
 			controlBuf.append(rn);
 			controlBuf.append(ext);
 			controlBuf.append(rn);
@@ -62,13 +66,13 @@ public class SOAPMaker implements SOAPConstants {
 			controlBuf.append(productVersion);
 			controlBuf.append(rn);
 			controlBuf.append(rn);
-
 			controlBuf.append(soap);
 			return controlBuf.toString();
 		}
 	}
 
-	// This method will take the error code and then create a SOAP message for the
+	// This method will take the error code and then create a SOAP message for
+	// the
 	// Control response when the control request encounters some error.
 	public String createResponseError(String errorCode) {
 		synchronized (controlLock) {
@@ -106,7 +110,6 @@ public class SOAPMaker implements SOAPConstants {
 			soapBuf.append(rn);
 			soapBuf.append(stopEnvelop);
 			soap = soapBuf.toString();
-
 			StringBuffer controlBuf = new StringBuffer();
 			controlBuf.append(http + ERROR_500);
 			controlBuf.append(rn);
@@ -116,7 +119,8 @@ public class SOAPMaker implements SOAPConstants {
 			controlBuf.append(contentType);
 			controlBuf.append(rn);
 			controlBuf.append(date);
-			controlBuf.append(DateFormat.getDateTimeInstance().format(new Date(System.currentTimeMillis())));
+			controlBuf.append(DateFormat.getDateTimeInstance().format(
+					new Date(System.currentTimeMillis())));
 			controlBuf.append(rn);
 			controlBuf.append(ext);
 			controlBuf.append(rn);
@@ -126,13 +130,13 @@ public class SOAPMaker implements SOAPConstants {
 			controlBuf.append(productVersion);
 			controlBuf.append(rn);
 			controlBuf.append(rn);
-
 			controlBuf.append(soap);
 			return controlBuf.toString();
 		}
 	}
 
-	// This method will take the parameters and then create a SOAP message for the
+	// This method will take the parameters and then create a SOAP message for
+	// the
 	// Query response when the control request is successful.
 	public String createQueryResponse(String value) {
 		synchronized (queryLock) {
@@ -142,7 +146,8 @@ public class SOAPMaker implements SOAPConstants {
 			soapBuf.append(rn);
 			soapBuf.append(startBody);
 			soapBuf.append(rn);
-			soapBuf.append("<" + queryStateVar + response + " xmlns:u=\"urn:schemas-upnp-org:control-1-0\">");
+			soapBuf.append("<" + queryStateVar + response
+					+ " xmlns:u=\"urn:schemas-upnp-org:control-1-0\">");
 			soapBuf.append(rn);
 			soapBuf.append("<" + result + ">" + value + "</" + result + ">");
 			soapBuf.append(rn);
@@ -152,7 +157,6 @@ public class SOAPMaker implements SOAPConstants {
 			soapBuf.append(rn);
 			soapBuf.append(stopEnvelop);
 			soap = soapBuf.toString();
-
 			StringBuffer controlBuf = new StringBuffer();
 			controlBuf.append(http + OK_200);
 			controlBuf.append(rn);
@@ -162,7 +166,8 @@ public class SOAPMaker implements SOAPConstants {
 			controlBuf.append(contentType);
 			controlBuf.append(rn);
 			controlBuf.append(date);
-			controlBuf.append(DateFormat.getDateTimeInstance().format(new Date(System.currentTimeMillis())));
+			controlBuf.append(DateFormat.getDateTimeInstance().format(
+					new Date(System.currentTimeMillis())));
 			controlBuf.append(rn);
 			controlBuf.append(ext);
 			controlBuf.append(rn);
@@ -172,7 +177,6 @@ public class SOAPMaker implements SOAPConstants {
 			controlBuf.append(productVersion);
 			controlBuf.append(rn);
 			controlBuf.append(rn);
-
 			controlBuf.append(soap);
 			return controlBuf.toString();
 		}

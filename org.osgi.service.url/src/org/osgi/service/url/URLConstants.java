@@ -17,30 +17,29 @@
  * The above notice must be included on all copies of this document that are
  * made.
  */
-
 package org.osgi.service.url;
 
 /**
- * Defines standard names for property keys associated
- * with {@link URLStreamHandlerService} and
- * <tt>java.net.ContentHandler</tt> services.
- *
- * <p>The values associated with these keys are of type <tt>java.lang.String[]</tt>,
+ * Defines standard names for property keys associated with
+ * {@link URLStreamHandlerService}and <tt>java.net.ContentHandler</tt>
+ * services.
+ * 
+ * <p>
+ * The values associated with these keys are of type <tt>java.lang.String[]</tt>,
  * unless otherwise indicated.
- *
+ * 
  * @version $Revision$
  */
-public interface URLConstants
-{
-    /**
-     * Service property naming the protocols serviced by a URLStreamHandlerService.
-     * The property's value is an array of protocol names.
-     */
-    public static final String URL_HANDLER_PROTOCOL = "url.handler.protocol";
-
-    /**
-     * Service property naming the MIME types serviced by a java.net.ContentHandler.
-     * The property's value is an array of MIME types.
-     */
-    public static final String URL_CONTENT_MIMETYPE = "url.content.mimetype";
+public interface URLConstants {
+	/**
+	 * Service property naming the protocols serviced by a
+	 * URLStreamHandlerService. The property's value is an array of protocol
+	 * names.
+	 */
+	public static final String	URL_HANDLER_PROTOCOL	= "url.handler.protocol";
+	/**
+	 * Service property naming the MIME types serviced by a
+	 * java.net.ContentHandler. The property's value is an array of MIME types.
+	 */
+	public static final String	URL_CONTENT_MIMETYPE	= "url.content.mimetype";
 }

@@ -4,12 +4,10 @@
  * This source code is owned by Ericsson Radio Systems AB, and is being distributed to OSGi 
  * MEMBERS as MEMBER LICENSED MATERIALS under the terms of section 3.2 of the OSGi MEMBER AGREEMENT. 
  */
-
 package org.osgi.test.cases.filter.tb1;
 
 /**
-   Implements the dummy marker service TestService.
-*/
-public class ServiceC implements TestService
-{
+ * Implements the dummy marker service TestService.
+ */
+public class ServiceC implements TestService {
 }

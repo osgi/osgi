@@ -24,11 +24,9 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.service.component;
 
 import java.util.Dictionary;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
@@ -59,7 +57,6 @@ import org.osgi.framework.BundleContext;
  * 
  * @version $Revision$
  */
-
 public interface ComponentContext {
 	/**
 	 * Returns the component properties for this ComponentContext.
@@ -104,15 +101,15 @@ public interface ComponentContext {
 
 	/**
 	 * If the component is registered as a service using the
-	 * <tt>servicefactory=&quot;true&quot;</tt> attribute, then this method returns
-	 * the bundle using the service provided by this component.
+	 * <tt>servicefactory=&quot;true&quot;</tt> attribute, then this method
+	 * returns the bundle using the service provided by this component.
 	 * <p>
 	 * This method will return <tt>null</tt> if the component is either:
 	 * <ul>
 	 * <li>Not a service, then no bundle can be using it as a service.
 	 * <li>Is a service but did not specify the
-	 * <tt>servicefactory=&quot;true&quot;</tt> attribute, then all bundles will use
-	 * this component.
+	 * <tt>servicefactory=&quot;true&quot;</tt> attribute, then all bundles
+	 * will use this component.
 	 * </ul>
 	 * 
 	 * @return The bundle using this component as a service or <tt>null</tt>.

@@ -30,41 +30,38 @@ package org.osgi.impl.service.io;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-
 import org.osgi.service.io.*;
 
 /**
- * Activator class - it is addressed by the framework, when the connector
- * bundle needs to be started or stopped.
- *
- * @author    OSGi Alliance
- * @version   $Revision$
+ * Activator class - it is addressed by the framework, when the connector bundle
+ * needs to be started or stopped.
+ * 
+ * @author OSGi Alliance
+ * @version $Revision$
  */
 public class Activator implements BundleActivator {
+	private ServiceRegistration		reg;
+	private ConnectorServiceImpl	connector;
 
-  private ServiceRegistration reg;
-  private ConnectorServiceImpl connector;
+	/**
+	 * Invoked when the connector bundle is started. A <tt>ConnectorService</tt>
+	 * is registered.
+	 * 
+	 * @param bc context of this bundle
+	 */
+	public void start(BundleContext bc) {
+		connector = new ConnectorServiceImpl(bc);
+		reg = bc.registerService(ConnectorService.class.getName(), connector,
+				null);
+	}
 
-
-  /**
-   * Invoked when the connector bundle is started. A <tt>ConnectorService</tt>
-   * is registered.
-   *
-   * @param bc  context of this bundle
-   */
-  public void start(BundleContext bc) {
-    connector = new ConnectorServiceImpl(bc);
-    reg = bc.registerService(ConnectorService.class.getName(), connector, null);    
-  }
-
-
-  /**
-   * Invoked when a connector bundle is stopped.
-   *
-   * @param bc  the context of this bundle
-   */
-  public void stop(BundleContext bc) {
-    reg.unregister();
-    connector.close();
-  }
+	/**
+	 * Invoked when a connector bundle is stopped.
+	 * 
+	 * @param bc the context of this bundle
+	 */
+	public void stop(BundleContext bc) {
+		reg.unregister();
+		connector.close();
+	}
 }
