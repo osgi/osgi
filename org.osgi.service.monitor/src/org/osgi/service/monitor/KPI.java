@@ -475,11 +475,11 @@ public class KPI {
     }
 
     private void checkScalarType(Class c) throws IllegalArgumentException {
-        if (!c.equals(String.class) && !c.equals(Long.class)
-                && !c.equals(Integer.class) && !c.equals(Short.class)
-                && !c.equals(Character.class) && !c.equals(Byte.class)
-                && !c.equals(Double.class) && !c.equals(Float.class)
-                && !c.equals(Boolean.class))
+        if (!c.isPrimitive() && !c.equals(String.class) 
+                && !c.equals(Long.class) && !c.equals(Integer.class) 
+                && !c.equals(Short.class) && !c.equals(Character.class) 
+                && !c.equals(Byte.class)  && !c.equals(Double.class) 
+                && !c.equals(Float.class) && !c.equals(Boolean.class))
             throw new IllegalArgumentException(
                     "Unsupported data type in Object KPI constructor.");
     }
