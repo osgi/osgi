@@ -20,11 +20,16 @@ package integrationtests;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.AccessControlContext;
+import java.security.AccessControlException;
+import java.security.AccessController;
 import java.security.AllPermission;
 import java.security.CodeSource;
 import java.security.PermissionCollection;
 import java.security.Permissions;
 import java.security.Policy;
+import java.security.PrivilegedExceptionAction;
+import java.security.ProtectionDomain;
 import junit.framework.TestCase;
 import org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager;
 import org.eclipse.osgi.framework.internal.core.OSGi;
@@ -40,6 +45,8 @@ import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtDataPlugin;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtPermission;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -223,5 +230,40 @@ public class TestTrees extends TestCase {
 		assertEquals(PRINCIPAL1,value.getString());
 		session.close();
 	
+	}
+	
+	public void testAccessControl() throws Exception {
+		startFramework(true);
+		final DmtSession session = dmtAdmin.getSession(PermissionAdminPlugin.dataRootURI);
+		
+		// this is a call with allpermission
+		session.getChildNodeNames(PermissionAdminPlugin.dataRootURI);
+
+		// this is a call with read permission
+		Permissions permissions = new Permissions();
+		permissions.add(new DmtPermission(PermissionAdminPlugin.dataRootURI,"Get"));
+		AccessController.doPrivileged(new PrivilegedExceptionAction() {
+			public Object run() throws DmtException {
+				session.getChildNodeNames(PermissionAdminPlugin.dataRootURI);
+				return null;
+			}
+		
+		},
+		new AccessControlContext(new ProtectionDomain[] {new ProtectionDomain(null,permissions)}));
+
+		// and here, no permissions
+		permissions = new Permissions();
+		try {
+			AccessController.doPrivileged(new PrivilegedExceptionAction() {
+				public Object run() throws DmtException {
+					session.getChildNodeNames(PermissionAdminPlugin.dataRootURI);
+					return null;
+				}
+			
+			},
+			new AccessControlContext(new ProtectionDomain[] {new ProtectionDomain(null,permissions)}));
+			fail();
+		} catch (AccessControlException e) {}
+		
 	}
 }
