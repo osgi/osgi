@@ -4,5 +4,7 @@
 	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
 	<classpathentry sourcepath="/osgi.released/ee.minimum.jar" kind="lib" path="/osgi.released/ee.minimum.jar"/>
 	<classpathentry sourcepath="/org.osgi.test.cases/src" kind="lib" path="/osgi.released/osgi.internal.jar"/>
+	<classpathentry kind="lib" path="/cnf/jar/saxon.jar"/>
+	<classpathentry kind="lib" path="/cnf/jar/junit.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
