@@ -19,8 +19,9 @@ package org.osgi.impl.service.monitor;
 
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtDataType;
 
+// TODO remove Referential Integrity members and getters
+// TODO check whether getValidNames must return non-null for fixed-name nodes
 public class MonitorMetaNodeImpl implements DmtMetaNode
 {
     boolean   deletable             = false;
@@ -30,7 +31,7 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
     boolean   executable            = false;
 
     boolean   leaf;             // there is no meaningful default
-    boolean   permanent             = true;
+    int       scope                 = PERMANENT;
 
     String    description           = null;
 
@@ -42,14 +43,18 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
     boolean   hasMinimum            = false;
     int       max                   = Integer.MAX_VALUE;
     int       min                   = Integer.MIN_VALUE;
+    String[]  validNames            = null;
     DmtData[] validValues           = null;
-    int       format                = DmtDataType.NULL;
+    int       format                = DmtData.FORMAT_NULL;
+    String    nameRegExp            = null;    
     String    regExp                = null;
     String[]  mimeTypes             = null;
 
+    /*
     String    referredURI           = null;
     String[]  dependentURIs         = null;
     String[]  childURIs             = null;
+    */
 
     // Leaf node in MonitorPlugin
     public MonitorMetaNodeImpl(String description, boolean replaceable, 
@@ -57,7 +62,7 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
                                DmtData[] validValues, int format)
     {
         leaf = true;
-        permanent = false;
+        scope = DYNAMIC;
 
         this.replaceable = replaceable;
         this.defaultData = defaultData;
@@ -73,38 +78,24 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
                                boolean isPermanent)
     {
         leaf = false;
-        format = DmtDataType.NODE;
+        format = DmtData.FORMAT_NODE;
 
-        permanent = isPermanent;
+        scope = isPermanent ? PERMANENT : DYNAMIC;
         this.deletable = deletable;
         this.extendable = extendable;
 
         setCommon(description, allowInfinte);        
     }
 
-    public boolean canDelete()
-    {
-        return deletable;
-    }
-
-    public boolean canAdd()
-    {
-        return extendable;
-    }
-
-    public boolean canGet()
-    {
-        return retrievable;
-    }
-
-    public boolean canReplace()
-    {
-        return replaceable;
-    }
-
-    public boolean canExecute()
-    {
-        return executable;
+    public boolean can(int operation) {
+        switch(operation) {
+        case CMD_DELETE:  return deletable;
+        case CMD_ADD:     return extendable;
+        case CMD_GET:     return retrievable;
+        case CMD_REPLACE: return replaceable;
+        case CMD_EXECUTE: return executable;
+        }
+        return false;
     }
 
     public boolean isLeaf()
@@ -112,9 +103,9 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
         return leaf;
     }
 
-    public boolean isPermanent()
+    public int getScope()
     {
-        return permanent;
+        return scope;
     }
 
     public String getDescription()
@@ -157,6 +148,10 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
         return min;
     }
 
+    public String[] getValidNames() {
+        return validNames;
+    }
+    
     public DmtData[] getValidValues()
     {
         return validValues;
@@ -167,6 +162,10 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
         return format;
     }
 
+    public String getNameRegExp() {
+        return nameRegExp;
+    }
+    
     public String getRegExp()
     {
         return regExp;
@@ -177,6 +176,7 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
         return mimeTypes;
     }
 
+    /*
     public String getReferredURI()
     {
         return referredURI;
@@ -191,7 +191,7 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
     {
         return childURIs;
     }
-
+    */
 
     private void setCommon(String description, boolean allowInfinte)
     {
