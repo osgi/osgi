@@ -1,98 +1,253 @@
 package org.osgi.service.dmt;
 
-/** @modelguid {92C02305-6E6D-4A28-AB2B-9506DC0FBB74} */
+import java.util.Arrays;
+
+/**
+ * A data structure representing a leaf node's value. Creating instances of 
+ * DmtData can happen in two ways, either with specifying a MIME type or 
+ * without. 
+ * <p> When creating an instance without explicitly specifying a MIME type,
+ * MIME type information will be derived from either the old value of the
+ * node (if the DmtData is used to update an already existing node's value), 
+ * or from the meta data associated with this node (in case the DmtData is 
+ * used in a <code>Dmt.createLeafNode()</code> method). In the latter case the 
+ * meta data should allow only one MIME type, otherwise 
+ * <code>Dmt.createLeafNode()</code> will fail.
+ * <p> Similarly, if a constructor does not specify the value of the new
+ * DmtData instance, its setting is also deferred till the invocation of 
+ * either <code>Dmt.setNode()</code> or <code>Dmt.createLeafNode()</code> method. 
+ * If the corresponding meta node has a default value, it is set, otherwise 
+ * a <code>DmtException</code> is thrown.
+ */
 public class DmtData {
-	/** @modelguid {05CD0F17-6725-43A6-BD61-DF1C927BED12} */
-	String	mimeType;
-	/** @modelguid {859226BD-AD91-4813-9D09-066EC5E7CAE9} */
-	Object	value;
+    private String str;
+    private int integer;
+    private boolean bool;
+    private byte[] bytes;
 
-	/** @modelguid {88AD2F3D-8DA4-49E5-ABD8-195FAF900053} */
-	public DmtData() {
-	}
+    private int    format;
+    private String mimeType = null;
 
-	/** @modelguid {3770C89D-FC04-404F-8B20-5419FA9B9969} */
-	public DmtData(String str) {
-		value = str;
-	}
+    /**
+     * Create a DmtData instance of <code>null</code> format.
+     */
+    public DmtData() {
+        format = DmtDataType.NULL;
+    }
 
-	/** @modelguid {AD50C4B0-2AA2-49FB-8A96-5EBD78811957} */
-	public DmtData(int integer) {
-		value = new Integer(integer);
-	}
+    /**
+     * Create a DmtData instance of <code>chr</code> format and set its value.
+     * @param str The string value to set
+     */
+    public DmtData(String str) {
+        format = DmtDataType.STRING;
+        this.str = str;
+        // TODO set mime type
+    }
 
-	/** @modelguid {846F9B60-83EE-451E-9B92-FA4EAE1EEF14} */
-	public DmtData(boolean bool) {
-		value = new Boolean(bool);
-	}
+    /**
+     * Create a DmtData instance of <code>xml</code> format and set its value.
+     * @param str The string or xml value to set
+     * @param xml If <code>true</code> then a node of <code>xml</code> is 
+     * created otherwise this constructor behaves the same as 
+     * <code>DmtData(String)</code>.
+     */
+    public DmtData(String str, boolean xml) {
+        this(str);
+        if(xml) {
+            format = DmtDataType.XML;
+            // TODO set mime type
+        }
+    }
+    
+    /**
+     * Create a DmtData instance of <code>int</code> format and set its
+     * value.
+     * @param integer The integer value to set
+     */
+    public DmtData(int integer) {
+        format = DmtDataType.INTEGER;
+        this.integer = integer;
+    }
 
-	/** @modelguid {E64774DA-FAD1-4869-A9BD-518E8B54F634} */
-	public DmtData(byte[] bin) {
-		value = bin;
-	}
+    /**
+     * Create a DmtData instance of <code>bool</code> format and set its 
+     * value.
+     * @param The boolean value to set
+     */
+    public DmtData(boolean bool) {
+        format = DmtDataType.BOOLEAN;
+        this.bool = bool;
+    }
 
-	// TODO: duplicated constructor
-	//	public DmtData(String mimeType) {
-	//		this.mimeType = mimeType;
-	//	}
-	/** @modelguid {0194878E-5F6A-4DBD-B625-8D5E0FDCF073} */
-	public DmtData(String str, String mimeType) {
-	}
+    /**
+     * Create a DmtData instance of <code>bin</code> format and set its
+     * value.
+     * @param The byte array to set
+     */
+    public DmtData(byte[] bytes) {
+        format = DmtDataType.BINARY;
+        this.bytes = bytes;
+        // TODO set mime type?
+    }
 
-	/** @modelguid {038A2573-5ED0-4CC8-AB2A-EF07292EC212} */
-	public DmtData(int integer, String mimeType) {
-	}
+    /**
+     * Create a DmtData instance of <code>chr</code> format and set its value 
+     * while also setting its MIME type.
+     * @param str The string value to set
+     * @param mimeType The MIME type to set
+     */
+    public DmtData(String str, String mimeType) {
+        this(str);
+        this.mimeType = mimeType;
+    }
 
-	/** @modelguid {AE1A7428-05E1-479F-B27E-FDCF7D3B2859} */
-	public DmtData(boolean bool, String mimeType) {
-	}
+    /**
+     * Create a DmtData instance of <code>xml</code> format and set its value
+     * and also its MIME type.
+     * @param str The string or xml value to set
+     * @param xml If <code>true</code> then a node of <code>xml</code> is 
+     * created otherwise this constructor behaves the same as 
+     * <code>DmtData(String,String)</code>.
+     * @param mimeType The MIME type to set.
+     */
+    public DmtData(String str, boolean xml, String mimeType) {
+        this(str, xml);
+        this.mimeType = mimeType;
+    }
+    
+    /**
+     * Create a DmtData instance of <code>bool</code> format and set its
+     * value and also its MIME type.
+     * @param bytes The byte array to set
+     * @param mimeType The MIME type to set
+     */
+    public DmtData(byte[] bytes, String mimeType) {
+        this(bytes);
+        this.mimeType = mimeType;
+    }
 
-	/** @modelguid {775EECF0-E313-47CD-A9D9-77126DC4E66E} */
-	public DmtData(byte[] bin, String mimeType) {
-	}
+    
+    // TODO follow format when it is specified
+    /**
+     * Gets the string representation of the DmtNode. This method works for all
+     * formats. [TODO specify for all formats. what does it mean if binary]
+     * @return The string value of the DmtData
+     */
+    public String getString() {
+        switch(format) {
+        case DmtDataType.STRING:
+        case DmtDataType.XML:     return str;
+        case DmtDataType.INTEGER: return String.valueOf(integer);
+        case DmtDataType.BOOLEAN: return String.valueOf(bool);
+        case DmtDataType.BINARY:  return new String(bytes);
+        case DmtDataType.NULL:    return null;
+        }
 
-	/** @modelguid {D9CFDDD4-22B0-4450-A83F-C71C8BD87D13} */
-	public String getString() {
-		return "" + value;
-	}
+        return null; // never reached
+    }
 
-	/** @modelguid {485CEA14-2465-4548-A018-1A550C771F6D} */
-	public boolean getBoolean() throws DmtException {
-		return ((Boolean) value).booleanValue();
-	}
+    /**
+     * Gets the value of a node with boolean format 
+     * @return The boolean value
+     * @throws DmtException if the format of the node is not boolean
+     */
+    public boolean getBoolean() throws DmtException {
+        if(format == DmtDataType.BOOLEAN)
+            return bool;
 
-	/** @modelguid {EBC8DAA7-E054-4727-BE79-AB359DE33274} */
-	public int getInt() throws DmtException {
-		return ((Integer) value).intValue();
-	}
+        throw new IllegalStateException("DmtData value is not boolean.");
+    }
 
-	/** @modelguid {A5654327-0DB4-4382-85E4-6A61E2D789AF} */
-	public byte[] getBinary() {
-		return (byte[]) value;
-	}
+    /**
+     * Gets the value of a node with integer format 
+     * @return The integer value
+     * @throws DmtException if the format of the node is not boolean
+     */
+    public int getInt() throws DmtException {
+        if(format == DmtDataType.INTEGER)
+            return integer;
 
-	/** @modelguid {CED559B0-7879-4BFD-82CD-B2C1A1711713} */
-	public int getFormat() {
-		if (value == null)
-			return -1;
-		else
-			if (value instanceof String)
-				return DmtDataType.STRING;
-			else
-				if (value instanceof Integer)
-					return DmtDataType.INTEGER;
-				else
-					if (value instanceof Boolean)
-						return DmtDataType.BOOLEAN;
-					else
-						if (value instanceof byte[])
-							return DmtDataType.BINARY;
-						else
-							return -1;
-	}
+        throw new IllegalStateException("DmtData value is not integer.");
+    }
 
-	/** @modelguid {2212745D-7603-42AD-B553-789F5879A4C6} */
-	public String getMimeType() {
-		return mimeType;
-	}
+    /**
+     * Gets the value of a node with binary format 
+     * @return The binary value
+     * @throws DmtException if the format of the node is not binary
+     */
+    public byte[] getBinary() {
+        if(format != DmtDataType.BINARY)
+            return null; // TODO throw exception / return binary representation?
+
+        byte[] bytesCopy = new byte[bytes.length];
+        for(int i = 0; i < bytes.length; i++)
+            bytesCopy[i] = bytes[i];
+
+        return bytesCopy;
+       
+    }
+
+    /**
+     * Get the node's format, expressed in terms of type 
+     * constants defined in <code>DmtDataType</code>. Note that the 'format'
+     * term is a legacy from OMA DM, it is more customary to think of this as
+     * 'type'. 
+     * @return The format of the node.
+     */
+    public int getFormat() {
+        return format;
+    }
+
+    /**
+     * Get the current MIME type of the node. 
+     * @return The MIME type string
+     */
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public boolean equals(Object obj) {
+        if(!(obj instanceof DmtData))
+            return false;
+
+        DmtData other = (DmtData) obj;
+        
+        if(format != other.format)
+            return false;
+
+        if(mimeType == null ? other.mimeType != null : 
+                              !mimeType.equals(other.mimeType))
+            return false;
+        
+        switch(format) {
+        case DmtDataType.STRING:
+        case DmtDataType.XML:     return str == null ? other.str == null : 
+                                                       str.equals(other.str);
+        case DmtDataType.INTEGER: return integer == other.integer;
+        case DmtDataType.BOOLEAN: return bool == other.bool;
+        case DmtDataType.BINARY:  return Arrays.equals(bytes, other.bytes);
+        case DmtDataType.NULL:    return true;
+        }
+
+        return false;           // never reached
+    }
+
+    public int hashCode() {
+        int hash = 0;
+
+        if(mimeType != null)
+            hash += mimeType.hashCode();
+
+        switch(format) {
+        case DmtDataType.STRING:
+        case DmtDataType.XML:     return hash + str.hashCode();
+        case DmtDataType.INTEGER: return hash + new Integer(integer).hashCode();
+        case DmtDataType.BOOLEAN: return hash + new Boolean(bool).hashCode();
+        case DmtDataType.BINARY:  return hash + new String(bytes).hashCode();
+        case DmtDataType.NULL:    return hash;
+        }
+
+        return 0;               // never reached
+    }
 }
