@@ -25,21 +25,15 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.template.tb1;
+package org.osgi.test.cases.template;
 
-import org.osgi.framework.*;
-import org.osgi.test.cases.template.tbc.TBCService;
+import org.osgi.test.cases.util.DefaultTestCase;
 
 /**
- * A bundle that registers a service with the marker interface
- * TBCService so it can be checked the exporter is correct.
  *
+ * This class may remain empty
+ * 
  * @version $Revision$
  */
-public class TB1Activator implements BundleActivator, TBCService {
-	public void start(BundleContext context) throws Exception {
-		context.registerService(TBCService.class.getName(),this,null);
-	}
-	public void stop(BundleContext context) throws Exception {
-	}
+public class TestCase extends DefaultTestCase {
 }

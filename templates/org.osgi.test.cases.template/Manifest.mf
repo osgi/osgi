@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
-Bundle-Name: test.cases.template
-Bundle-SymbolicName: test.cases.template
+Bundle-Activator: ${p}.TemplateTestCase
+Bundle-Name: ${p}
+Bundle-SymbolicName: ${p}
 Bundle-Version: 0.0.0
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000-2005). All Rights Reserved.
 Bundle-Description: This is a template description. It should contain 
@@ -10,7 +11,6 @@ Bundle-Vendor: OSGi Alliance
 Bundle-DocUrl: http://www.osgi.org/testcases/4/test.cases.template
 Bundle-ContactAddress: speccomments@mail.osgi.org
 Bundle-Category: osgi,test
-Bundle-Activator: $(p).TemplateTestCase
 CVS-Header: $Header$
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)

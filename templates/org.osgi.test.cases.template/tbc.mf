@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
-Bundle-Name: test.cases.template.tbc
+Bundle-Name: ${p}.tbc
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
-Bundle-Description: Template control bundle
+Bundle-Description: ${p} Template control bundle
 Bundle-Vendor: OSGi Alliance
 Bundle-Version: 4.0
-Bundle-DocUrl: http://membercvs.osgi.org/testcases/4/test.cases.template
+Bundle-DocUrl: http://membercvs.osgi.org/testcases/4/${p}
 Bundle-ContactAddress: speccomments@mail.osgi.org
 Bundle-Category: osgi,test
 Bundle-Activator: $(p).tbc.TemplateControl

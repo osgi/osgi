@@ -40,7 +40,7 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
  * 
  * @version $Revision$
  */
-public class TemplateControl extends DefaultTestBundleControl {
+public class TestControl extends DefaultTestBundleControl {
 	
 	/**
 	 * <remove>Prepare for each run. It is important that a test run is properly
