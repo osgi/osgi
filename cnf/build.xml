@@ -1,56 +1,172 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	The is main OSGi build file. It is included from projects
+	as is. The project file should only set the project.name
+	property to the project name.
+-->
+
 <project name="package" default="none">
 
-	  
+
+	<!-- Where are we properties, ant seems to be not so good
+	     with relative directories -->
 	<dirname property="project" file="${ant.file}" />
 	<dirname property="workspace" file="${project}" />
-		
+
+	<!-- Task defs, removed the recursive search for performance
+	     reasons 
+	-->
 	<taskdef name="btool" classname="org.osgi.tools.btool.BTool" 
 		classpath="../osgi.released/btool.jar" />
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="../cnf/ant-contrib/ant-contrib-0.6.jar"/>
 	
-	
+	<!-- 
+	   Set the build properties. Later properties with the
+	   same name are ignore so the order is VERY important.
+	   We follow the build.properties conventions. This means
+	   that the following properties should be set:
+	   
+	    bin.includes        jars/files copied to osgi.released
+	    jars.compile.order  list of comma separated JAR files. As the name
+	                        implies, ant will build the jars in that order
+	    
+	    for each mentioned jar file in the jars.compile.order
+	    property, the following option may be used in the
+	    form <option>.<jarfile>
+	    
+	    expand.<jarfile>    List of comma separated package names,
+	                        like org.osgi.service.example, javax.microedition, ...
+	                        The package name maybe placed between square
+	                        brackets, this means that the package is
+	                        placed in the export list of the bundle which 
+	                        is placed in the manifest if $(EXPORT-PACKAGE) 
+	                        is present. E.g. [org.osgi.example] will be
+	                        in the export list, otherwise it is assumed to be
+	                        private. Pakage name that end in a .* will be
+	                        recursively expanded. The packages are coming
+	                        from the project classpath as specified in
+	                        the Eclipse .classpath file.
+	                        
+	    include.<jarfile>   A comma separated list of file names that must be
+	                        be included in the jar. The default name of the file
+	                        in the jar will be the file name without the directory
+	                        name. This can be overridden by using a = sign in the
+	                        name. I.e. tbc.jar=tc1/tbc/org.osgi.tc1.jar
+	                        
+	    source.<jarfile>    A comma separated list of directories. The contents
+	                        of these directories are included (not recursively).
+	                        If the path of the directory starts with an eclipse
+	                        source directory, this prefix is removed and the
+	                        remainder is used for the jar entry name. Otherwise the
+	                        jar entry is the full path. This property is supported 
+	                        because the Eclipse build.properties editor supports
+	                        it. However, expand seems easier to use.
+	                
+	 -->
 	<property file="${project}/build.properties" />		
 	<property file="${env.HOME}/osgi.properties" />
 	<property file="${workspace}/cnf/build.properties" />
+	
+	<!-- get the classpath and build info from eclipse -->
 	<btool eclipse="${project}" />
 
 
-	<!-- Defaults, these value will be valid if the build.properties file is not present -->
+	<!-- 
+	   The build property may be absent. In that case 
+	   we default to a project that creates a jar file with the
+	   project name with the contents of a package of the
+	   project name. I.e.
+	      org.osgi.example = project name
+	      then the jar is org.osgi.example.jar with the
+	      package of org.osgi.example 
+	-->
 	<property name="bin.includes" value= "${project.name}.jar"/>
 	<property name="jars.compile.order" value= "${project.name}.jar"/>
 	<property name="expand.${project.name}.jar" value= "${project.name}"/>
-	
 	<property name="p" value= "${project.name}"/>
 
 
+	<!-- 
+	     PUBLISH
+	     The main target. It will build the jar file(s) and publish the 
+	     files in bin.includes to osg.released project.
+	     
+	     The publish will not run if none of the files is changed. This
+	     target does NOT check projects it dependends on!
+	-->
 	<target name="publish" depends="check" unless="jar.ok">
-		<antcall target="compile"/>
 		<delete>
 			<fileset dir="${project}" includes="${jars.compile.order}" />
 		</delete>
-		<foreach list="${jars.compile.order}" delimiter=" ," target="buildJar" param="item.jarFile" inheritAll="true"/>
-		<foreach list="${bin.includes}" delimiter=" ," target="release" param="item.jarFile" inheritAll="true"/>
+		<antcall target="compile"/>
+		
+		<!-- For each jar file, build it -->
+		<foreach list="${jars.compile.order}" 
+			delimiter=" ," 
+			target="buildJar" 
+			param="item.jarFile" 
+			inheritAll="true"/>
+		
+		<!-- Release each JAR file -->
+		<foreach list="${bin.includes}" 
+			delimiter=" ," 
+			target="release" 
+			param="item.jarFile" 
+			inheritAll="true"/>
 	</target>
-	
+
+	<!--
+	    RELEASE
+	    Copy the JAR file to the osgi.released directory.
+	-->
 	<target name="release">
 		<copy overwrite="true" todir="../osgi.released" file="${item.jarFile}" />
 	</target>
 	
+	<!--
+	    CHECK
+	    See if we have any dependents changed since the last time we did 
+	    this build. We keep a flag in the cnf/cache directory
+	    to check this dependency. We check the "src" directory for
+	    dependents as well as the manifests and build files.
+	-->
 	<target name="check">
-		<uptodate property="jar.ok" targetfile="../cnf/${project.name}">
+		<uptodate property="jar.ok" targetfile="${workspace}/cnf/cache/${project.name}">
 			<srcfiles dir="src" includes="**/*" />
-			<srcfiles dir="../cnf" includes="build.xml" />
-			<srcfiles dir="../cnf" includes="build.properties" />
+			<srcfiles dir="${workspace}/cnf" includes="build.xml" />
+			<srcfiles dir="${workspace}/cnf" includes="build.properties" />
 			<srcfiles dir="." includes="*.mf" />
 			<srcfiles dir="." includes="build.properties" />
 			<srcfiles dir="." includes="build.xml" />
 		</uptodate>
-		<touch file="../cnf/cache/${project.name}" />
+		<touch file="${workspace}/cnf/cache/${project.name}" />
 	</target>
 		
 
-	<target name="buildJar">
+	<!--
+	     JAR
+	     Build the jar file with btool. Due to ants fantastic lack of
+	     variable handling, we have to refer to giving btool property names
+	     so it can do the expansion of properties itself ...
+	     
+	     eclipse             project directory
+	     analyse             Analyse the manifest
+	     showmanifest        List the manifest on the console
+	     silent              Suppress messages
+	     includeProperty     name of the property that is a 
+	                         list of include files (may rename with 
+	                         an = in the name)
+	     expandProperty      name of the property that is a list
+	                         of package names. If the package name
+	                         is enclosed in square brackets, it is
+	                         assumed to be exported
+	     contentFoldersProperty List of source folders
+	     ipaProperty         Property name for ipa parameters. ipa
+	                         is the file used in initial provisioning
+	     ignoreVersions      Do not use version on automatic import/export
+	-->
+	<target name="jar">
 		<btool jar="${project}/${item.jarFile}" 
 			eclipse="${project}" 
 			analyse="${btool.analyse}" 
@@ -66,6 +182,14 @@
 			ignoreVersions="${btool.noversion}" />
 	</target>
 	
+	<!--
+	     BEFORE
+	     This target should be called if the project depends on
+	     other projects that need to be build before. It will
+	     use btool to get a list of projects that this project
+	     depends on via the Eclipse .classpath file. Each of these
+	     projects will be build before this is published.
+	-->
 	<target name="before">
 		<foreach delimiter="," list="${project.buildpath}" target="dependent" param="item.dir"/>
 		<antcall target="publish" inheritall="false"/>
@@ -76,17 +200,40 @@
 	</target>
 
 
+	<!--
+	     COMPILE
+	     Compile the sources. If the eclipse.running flag
+	     is true, we assume someone else has done the 
+	     compiling for us.
+	-->
 	<target name="compile" unless="eclipse.running">
-		<javac fork="yes" executable="${JAVA_HOME}/bin/javac" srcdir="${project.sourcepath}" destdir="${project.bindir}" classpath="${project.classpath}" bootclasspath="${project.bootclasspath}" deprecation="true" listfiles="true" target="${javac.target}" source="${javac.source}" />
+		<javac fork="yes" 
+			executable="${JAVA_HOME}/bin/javac" 
+			srcdir="${project.sourcepath}" 
+			destdir="${project.bindir}" 
+			classpath="${project.classpath}" 
+			bootclasspath="${project.bootclasspath}" 
+			deprecation="true" 
+			listfiles="true" 
+			target="${javac.target}" 
+			source="${javac.source}" />
 	</target>
 
+	
+	<!--
+	     CLEAN
+	-->
 	<target name="clean">
 		<delete>
 			<fileset dir="${project.bindir}" includes="**/*.bak **/*.class" />
 			<fileset dir="${project}" includes="**/*.bak **/~* ${jars.compile.order}" />
 		</delete>
+		<foreach delimiter="," list="${project.buildpath}" target="clean.item" param="item.dir"/>
 	</target>
 
+	<target name="clean.item">
+		<ant dir="${item.dir}" antfile="${item.dir}/build.xml" target="clean" inheritall="false"/>		
+	</target>
 
 
 	<target name="echo">
@@ -97,6 +244,7 @@
 		<echo>NAME: ${project.name}</echo>
 		<echo>VERS: ${project.version}</echo>
 		<echo>CAT:  ${project.category}</echo>
+		<echo>DEP:  ${project.buildpath}</echo>
 	</target>
 
 	<target name="none">
