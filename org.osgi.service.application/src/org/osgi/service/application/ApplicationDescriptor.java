@@ -36,14 +36,15 @@ public abstract class ApplicationDescriptor {
 
 	public final static String APPLICATION_AUTOSTART   = "application.autostart";
 	public final static String APPLICATION_ICON        = "application.icon";
+	public final static String APPLICATION_LAUNCHABLE  = "application.launchable";
+	public final static String APPLICATION_LOCKED      = "application.locked";
 	public final static String APPLICATION_NAME        = "application.name";
 	public final static String APPLICATION_PID         = "service.pid";
 	public final static String APPLICATION_SINGLETON   = "application.singleton";
 	public final static String APPLICATION_VENDOR      = "application.vendor";
 	public final static String APPLICATION_VERSION     = "application.version";
 	public final static String APPLICATION_VISIBLE     = "application.visible";
-	public final static String APPLICATION_LOCKED      = "application.locked";
-
+	
 	private static Vector lockedApplications = null;
 	private static Object synchronizer = new Object();
 
@@ -82,6 +83,8 @@ public abstract class ApplicationDescriptor {
 		}
 		return launchSpecific( args );
 	}
+
+	protected abstract ServiceReference launchSpecific( Map args ) throws Exception;
 
 	public final boolean isLocked() {
 		String pid = getApplicationPID();
@@ -132,6 +135,27 @@ public abstract class ApplicationDescriptor {
 		if( save )
 			saveVector( lockedApplications, "LockedApplications" );
 	}
+
+	protected abstract BundleContext getBundleContext();
+
+	public ScheduledApplication schedule( Map arguments, Date date, boolean launchOnOverdue )
+																		throws Exception {
+		ServiceReference serviceRef = getBundleContext()
+				.getServiceReference("org.osgi.service.application.Scheduler");
+		if (serviceRef == null)
+			throw new Exception( "Scheduler service not found!" );
+
+		Scheduler scheduler = (Scheduler) getBundleContext().getService(serviceRef);
+		if (scheduler == null)
+			throw new Exception( "Scheduler service not found!" );
+
+		try {
+			return scheduler.addScheduledApplication(this, arguments, date, launchOnOverdue);
+		}finally {
+			getBundleContext().ungetService(serviceRef);
+		}
+	}
+	
 	private Vector loadVector(String fileName) {
 		synchronized( synchronizer ) {
 			Vector resultVector = new Vector();
@@ -204,27 +228,5 @@ public abstract class ApplicationDescriptor {
 			}
 		}
 		return false;
-	}
-
-	protected abstract ServiceReference launchSpecific( Map args ) throws Exception;
-
-	protected abstract BundleContext getBundleContext();
-
-	public ScheduledApplication schedule( Map arguments, Date date, boolean launchOnOverdue )
-																		throws Exception {
-		ServiceReference serviceRef = getBundleContext()
-				.getServiceReference("org.osgi.service.application.Scheduler");
-		if (serviceRef == null)
-			throw new Exception( "Scheduler service not found!" );
-
-		Scheduler scheduler = (Scheduler) getBundleContext().getService(serviceRef);
-		if (scheduler == null)
-			throw new Exception( "Scheduler service not found!" );
-
-		try {
-			return scheduler.addScheduledApplication(this, arguments, date, launchOnOverdue);
-		}finally {
-			getBundleContext().ungetService(serviceRef);
-		}
 	}
 }
