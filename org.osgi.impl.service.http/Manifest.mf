@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-Name: impl.service.http
+Bundle-Description: The OSGi HTTP service Reference Implementation by Gatespace AB.
+Bundle-Vendor: OSGi
+Bundle-Version: 1.1
+Bundle-DocURL: http://www.gatespace.com
+Bundle-ContactAddress: info@gatespace.com
+Bundle-Activator: org.osgi.impl.service.http.HttpServiceController
+Export-Package: org.osgi.service.http;specification-version=1.1
+Import-Package: org.osgi.framework;specification-version=1.1,org.osgi.service.log;specification-version=1.0,javax.servlet;specification-version=2.1,javax.servlet.http;specification-version=2.1
+Export-Service: org.osgi.service.http.HttpService
+Import-Service: org.osgi.service.log.LogService
+CVS-Header: $Header$
+
+
+
