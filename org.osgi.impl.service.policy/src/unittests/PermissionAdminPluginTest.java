@@ -47,7 +47,7 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 	public PermissionAdminPlugin	plugin;
 	public static final PermissionInfo ADMINPERMISSION = new PermissionInfo(AdminPermission.class.getName(),"","");
 	public static final PermissionInfo IMPORTFRAMEWORKPERMISSION 
-		= new PermissionInfo(PackagePermission.class.getName(),"org.osgi.framework","IMPRT");
+		= new PermissionInfo(PackagePermission.class.getName(),"org.osgi.framework","IMPORT");
 
 	private DmtSession	dmtSession;
 
