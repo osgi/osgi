@@ -41,10 +41,15 @@ package org.osgi.framework;
 
 public class InvalidSyntaxException extends Exception
 {
+    static final long serialVersionUID = -4295194420816491875L;
     /**
      * The invalid filter string.
      */
-    private transient String filter;
+    private String filter;
+	/**
+	 * Nested exception.
+	 */
+	private Throwable	cause;
 
     /**
      * Creates an exception of type <tt>InvalidSyntaxException</tt>.
@@ -59,6 +64,25 @@ public class InvalidSyntaxException extends Exception
     {
         super(msg);
         this.filter = filter;
+        this.cause = null;
+    }
+
+    /**
+     * Creates an exception of type <tt>InvalidSyntaxException</tt>.
+     *
+     * <p>This method creates an <tt>InvalidSyntaxException</tt> object with
+     * the specified message and the filter string which generated the exception.
+     *
+     * @param msg The message.
+     * @param filter The invalid filter string.
+     * @param cause The cause of this exception.
+	 * @since 1.3 
+     */
+    public InvalidSyntaxException(String msg, String filter, Throwable cause)
+    {
+        super(msg);
+        this.filter = filter;
+        this.cause = cause;
     }
 
     /**
@@ -70,8 +94,32 @@ public class InvalidSyntaxException extends Exception
      */
     public String getFilter()
     {
-        return(filter);
+        return filter;
     }
+
+	/**
+	 * Returns the cause of this exception or <tt>null</tt> if no
+	 * cause was specified when this exception was created.
+	 *
+	 * @return  The cause of this exception or <tt>null</tt> if no
+	 * cause was specified.
+	 * @since 1.3 
+	 */
+	public Throwable getCause() {
+	    return cause;
+	}
+
+	/**
+	 * The cause of this exception can only be set when constructed.
+	 *
+	 * @throws java.lang.IllegalStateException
+	 * This method will always throw an <tt>IllegalStateException</tt>
+	 * since the cause of this exception can only be set when constructed.
+	 * @since 1.3 
+	 */
+	public Throwable initCause(Throwable cause) {
+		throw new IllegalStateException();
+	}
 }
 
 

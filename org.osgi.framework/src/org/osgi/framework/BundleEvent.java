@@ -43,15 +43,16 @@ import java.util.EventObject;
 
 public class BundleEvent extends EventObject
 {
+    static final long serialVersionUID = 4080640865971756012L;
     /**
      * Bundle that had a change occur in its lifecycle.
      */
-    private transient Bundle bundle;
+    private Bundle bundle;
 
     /**
      * Type of bundle lifecycle change.
      */
-    private transient int type;
+    private int type;
 
     /**
      * The bundle has been installed.

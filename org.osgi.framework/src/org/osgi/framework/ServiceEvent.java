@@ -45,15 +45,16 @@ import java.util.EventObject;
 
 public class ServiceEvent extends EventObject
 {
+    static final long serialVersionUID = 8792901483909409299L;
     /**
      * Reference to the service that had a change occur in its lifecycle.
      */
-    private transient ServiceReference reference;
+    private ServiceReference reference;
 
     /**
      * Type of service lifecycle change.
      */
-    private transient int type;
+    private int type;
 
     /**
      * This service has been registered.

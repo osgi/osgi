@@ -52,7 +52,7 @@ import java.security.PermissionCollection;
 
 public final class PackagePermission extends BasicPermission
 {
-
+    static final long serialVersionUID = -5107705877071099135L;
     /**
      * The action string <tt>export</tt>.
      */
@@ -401,7 +401,7 @@ public final class PackagePermission extends BasicPermission
 
 final class PackagePermissionCollection extends PermissionCollection
 {
-
+    static final long serialVersionUID = -3350758995234427603L;
     /**
      * Table of permissions.
      *

@@ -48,6 +48,7 @@ import java.security.PermissionCollection;
 
 public final class AdminPermission extends BasicPermission
 {
+    static final long serialVersionUID = 207051004521261705L;
     /**
      * Creates a new <tt>AdminPermission</tt> object with its name set to
      * "AdminPermission".
@@ -116,6 +117,7 @@ public final class AdminPermission extends BasicPermission
  */
 final class AdminPermissionCollection extends PermissionCollection
 {
+    static final long serialVersionUID = 3226083842806530691L;
     /**
      * True if collection is non-empty.
      *

@@ -52,7 +52,7 @@ import java.security.PermissionCollection;
 
 final public class ServicePermission extends BasicPermission
 {
-
+    static final long serialVersionUID = -7662148639076511574L;
     /**
      * The action string <tt>get</tt> (Value is "get").
      */
@@ -382,7 +382,7 @@ final public class ServicePermission extends BasicPermission
 
 final class ServicePermissionCollection extends PermissionCollection
 {
-
+    static final long serialVersionUID = 662615640374640621L;
     /**
      * Table of permissions.
      *

@@ -43,20 +43,21 @@ import java.util.EventObject;
 
 public class FrameworkEvent extends EventObject
 {
+    static final long serialVersionUID = 207051004521261705L;
     /**
      * Bundle related to the event.
      */
-    private transient Bundle bundle;
+    private Bundle bundle;
 
     /**
      * Exception related to the event.
      */
-    private transient Throwable throwable;
+    private Throwable throwable;
 
     /**
      * Type of event.
      */
-    private transient int type;
+    private int type;
 
     /**
      * The Framework has started.
@@ -66,7 +67,7 @@ public class FrameworkEvent extends EventObject
      * and the Framework has reached the intitial start level.
      *
      * <p>The value of <tt>STARTED</tt> is 0x00000001.
-     * @see org.osgi.service.startlevel.StartLevel
+     * @see "<code>StartLevel</code>"
      */
     public final static int STARTED = 0x00000001;
 
@@ -88,7 +89,7 @@ public class FrameworkEvent extends EventObject
      *
      * <p>The value of <tt>PACKAGES_REFRESHED</tt> is 0x00000004.
      * @since 1.2
-     * @see org.osgi.service.packageadmin.PackageAdmin#refreshPackages
+     * @see "<code>PackageAdmin.refreshPackages</code>"
      */
     public final static int PACKAGES_REFRESHED = 0x00000004;
 
@@ -101,7 +102,7 @@ public class FrameworkEvent extends EventObject
      *
      * <p>The value of <tt>STARTLEVEL_CHANGED</tt> is 0x00000008.
      * @since 1.2
-     * @see org.osgi.service.startlevel.StartLevel
+     * @see "<code>StartLevel</code>"
      */
     public final static int STARTLEVEL_CHANGED = 0x00000008;
 
