@@ -19,7 +19,11 @@
 package org.osgi.impl.service.policy.dmtprincipal;
 
 import java.io.IOException;
+import java.security.AccessController;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -119,7 +123,22 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 	private static final DmtMetaNode principalMetaNode = new PrincipalMetaNode();
 	private static final DmtMetaNode permissionInfoMetaNode = new PermissionInfoMetaNode();
 	private static final DmtMetaNode principalPermissionMetaNode = new PrincipalPermissionMetaNode();
-	
+
+	private final PrivilegedAction getPrincipalPermissions = new PrivilegedAction(){
+		public Object run() {
+			return dmtPrincipalPermissionAdmin.getPrincipalPermissions();
+		}
+	};
+
+	private final class SetPrincipalPermissions implements PrivilegedExceptionAction {
+		public Map systemState;
+		public Object run() throws IOException {
+			dmtPrincipalPermissionAdmin.setPrincipalPermissions(systemState);
+			return null;
+		}
+	};
+	private final SetPrincipalPermissions setPrincipalPermissions = new SetPrincipalPermissions();
+
 	public DmtPrincipalPlugin(DmtPrincipalPermissionAdmin dmtPrincipalPermissionAdmin) throws NoSuchAlgorithmException {
 		this.dmtPrincipalPermissionAdmin = dmtPrincipalPermissionAdmin;
 		this.currentState = null; // open() fills it
@@ -130,7 +149,10 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 			throws DmtException {
 		super.open(subtreeUri,lockMode,session);
 		currentState = new HashMap();
-		Map systemState = dmtPrincipalPermissionAdmin.getPrincipalPermissions();
+
+		// Note that the security check is already done in the DMT Admin, when it
+		// called us - whoever can read/write this subtree, has full access
+		Map systemState = (Map) AccessController.doPrivileged(getPrincipalPermissions);
 
 		// copy the permission structure to our tree structure
 		for (Iterator iter = systemState.entrySet().iterator(); iter.hasNext();) {
@@ -205,11 +227,13 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 			systemState.put(principal,element.permissionInfo);
 		}
 		try {
-		    dmtPrincipalPermissionAdmin.setPrincipalPermissions(systemState);
-        } catch(IOException e) {
-            throw new DmtException(dataRootURI, DmtException.DATA_STORE_FAILURE,
-                                   "error persisting permissions", e);
+			setPrincipalPermissions.systemState = systemState;
+		    AccessController.doPrivileged(setPrincipalPermissions);
         }
+		catch (PrivilegedActionException e) {
+            throw new DmtException(dataRootURI, DmtException.DATA_STORE_FAILURE,
+                    "error persisting permissions", e);
+		}
 		
 		// do some cleanup
 		currentState = null;
