@@ -1,0 +1,331 @@
+package org.osgi.test.eclipse;
+
+import java.io.*;
+import java.net.*;
+import java.net.Socket;
+import java.util.*;
+import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.*;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.part.ViewPart;
+import org.osgi.framework.*;
+import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.test.director.Handler;
+import org.osgi.test.script.Tag;
+import org.osgi.test.service.*;
+import org.osgi.test.shared.*;
+
+public class TestView extends ViewPart implements IStructuredContentProvider,
+		IApplet, IRun {
+	Table				table;
+	TableViewer			viewer;
+	boolean				disposed;
+	Handler				handler;
+	PackageAdmin		packageAdmin;
+	RemoteService		current;
+	Thread				testthread;
+	TestCase			testcase	= null;
+	Tag					result		= null;
+	IProgressMonitor	progress;
+	int					lastWork	= 0;
+	Label				status;
+	
+	public TestView() {
+		packageAdmin = (PackageAdmin) getService(PackageAdmin.class);
+		handler = Activator.handler;
+		try {
+			handler.setApplet(this);
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void dispose() {
+		disposed = true;
+	}
+
+	/**
+	 * This is a callback that will allow us to create the viewer and initialize
+	 * it.
+	 */
+	public void createPartControl(Composite parent) {
+		table = new Table(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL
+				| SWT.FULL_SELECTION);
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
+		TableColumn column = new TableColumn(table, SWT.NONE, 0);
+		column.setText("Method");
+		column.setWidth(100);
+		column.setAlignment(SWT.LEFT);
+		column = new TableColumn(table, SWT.NONE, 1);
+		column.setText("Log");
+		column.setWidth(1000);
+		column.setAlignment(SWT.LEFT);
+		viewer = new TableViewer(table);
+		viewer.setLabelProvider(new LogLabelProvider());
+		viewer.setContentProvider(this);
+		viewer.setInput(new ArrayList());
+	}
+
+	/**
+	 * Passing the focus request to the viewer's control.
+	 */
+	public void setFocus() {
+		viewer.getControl().setFocus();
+	}
+
+	/**
+	 * @return
+	 */
+	private Shell getShell() {
+		return viewer.getControl().getShell();
+	}
+
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+	}
+
+	public void setMessage(String message) {
+	}
+
+
+	public void setError(String message) {
+		TestResult tr = new TestResult(message);
+		add(tr);
+	}
+
+	public void setProgress(int percentage) {
+		IProgressMonitor progress = this.progress;
+		if (progress != null) {
+			progress.worked(percentage - lastWork);
+			lastWork = percentage;
+		}
+	}
+
+	public void setResult(TestCase tc, int errors) {
+		//add(new TestResult("r:" + tc.getName() + " Errors: " + errors));
+	}
+
+	public void setTargetProperties(Dictionary properties) {
+		// TODO Auto-generated method stub
+	}
+
+	public void finished() {
+	}
+
+	public void bundlesChanged() {
+	}
+
+	public void targetsChanged() {
+	}
+
+	public void casesChanged() {
+		// TODO Auto-generated method stub
+	}
+
+	public void alive(String msg) {
+		//add(new TestResult("a:" + msg));
+	}
+
+	public void step(String msg) {
+		TestResult tr = new TestResult(msg);
+		add(tr);
+	}
+
+	void add(final TestResult result) {
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				viewer.add(result);
+			}
+		});
+	}
+
+	/**
+	 *  
+	 */
+	public void clear() {
+		viewer.setInput(new ArrayList());
+		viewer.refresh();
+	}
+
+	public void test(String locations[]) {
+		try {
+			if (handler.getRun() != null) {
+				handler.stopRun();
+				return;
+			}
+			current = getTarget();
+			if (current == null)
+				return;
+			if (locations == null || locations.length == 0)
+				return;
+			final int options = IHandler.OPTION_FOREVER
+					| IHandler.OPTION_LOGGING;
+			Collection existing = new Vector(handler.getTestCases().values());
+			final Set bundles = new HashSet();
+			for (int i = 0; i < locations.length; i++) {
+				Bundle b = activate(locations[i]);
+				if (b != null)
+					bundles.add(b);
+			}
+			packageAdmin.refreshPackages(null);
+			final Collection running = new Vector(handler.getTestCases()
+					.values());
+			running.removeAll(existing);
+			if (running.size() == 0)
+				error("No New Test cases installed", null);
+			clear();
+			Job testthread = new Job("Test Job") {
+				public IStatus run(IProgressMonitor monitor) {
+					progress = monitor;
+					monitor.beginTask("Test run", 100);
+					try {
+						handler.startRun(current.getHost(), current.getPort(),
+								options);
+						for (Iterator i = running.iterator(); i.hasNext();) {
+							if (monitor.isCanceled())
+								return Status.CANCEL_STATUS;
+							testcase = (TestCase) i.next();
+							result = handler.getRun().doTestCase(testcase);
+							if (monitor.isCanceled())
+								return Status.CANCEL_STATUS;
+							Thread.sleep(3000);
+						}
+					}
+					catch (InterruptedException ee) {
+						error("interrupted", ee);
+					}
+					catch (Exception e) {
+						error("Exception in testcase " + testcase.getName(), e);
+					}
+					String lastRun = handler.stopRun();
+					for (Iterator i = bundles.iterator(); i.hasNext();) {
+						try {
+							Bundle b = (Bundle) i.next();
+							b.uninstall();
+						}
+						catch (BundleException e) {
+							// Ignore ...
+						}
+					}
+					packageAdmin.refreshPackages(null);
+					return Status.OK_STATUS;
+				}
+			};
+			testthread.setUser(true);
+			testthread.schedule();
+		}
+		catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+
+	RemoteService getTarget() {
+		Vector targets = handler.getTargets();
+		if (targets.isEmpty()) {
+			error("No targets were found", null);
+			return null;
+		}
+		RemoteService current = (RemoteService) targets.elementAt(0);
+		if (targets.size() == 1)
+			return current;
+		String[] names = new String[targets.size() + 1];
+		for (int i = 0; i < targets.size(); i++) {
+			RemoteService rs = (RemoteService) targets.elementAt(i);
+			names[i] = rs.getHost();
+		}
+		names[targets.size()] = "Cancel";
+		Shell shell = new Shell();
+		MessageDialog md = new MessageDialog(shell, "Choose a target", null,
+				"There are multiple targets, pick one",
+				MessageDialog.INFORMATION, names, 0);
+		int n = md.open();
+		if (n < targets.size())
+			return (RemoteService) targets.elementAt(0);
+		else
+			return null;
+	}
+
+	Object getService(Class c) {
+		ServiceReference ref = Activator.getContext().getServiceReference(
+				c.getName());
+		if (ref == null)
+			return null;
+		return Activator.getContext().getService(ref);
+	}
+
+	static void error(String msg, Throwable throwable) {
+		if ( throwable != null ) {
+			MessageDialog.openError(new Shell(),"OSGi Test Harness Error",  msg + ": " + throwable.getMessage());
+			if (throwable != null)
+				throwable.printStackTrace();
+		} else {
+			MessageDialog.openWarning(new Shell(),"OSGi Test Harness Warning",msg);			
+		}
+	}
+
+	Bundle activate(String location) {
+		try {
+			Bundle b = Activator.getContext().installBundle("file:" + location);
+			if (b.getState() != Bundle.ACTIVE)
+				b.start();
+			else
+				b.update();
+			return b;
+		}
+		catch (BundleException e) {
+			Throwable nested = e.getNestedException();
+			if (nested != null)
+				error("Bundle install failed for " + location, nested);
+			else
+				error("Bundle install failed for " + location, e);
+		}
+		return null;
+	}
+
+	/**
+	 * @param inputElement
+	 * @return
+	 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
+	 */
+	public Object[] getElements(Object inputElement) {
+		return ((Collection) inputElement).toArray();
+	}
+	
+	void install( String locations[] ) throws UnknownHostException, IOException, Exception {
+		RemoteService remote = getTarget();
+		if ( remote != null ) {
+			TargetLink	target = new TargetLink(this);
+			target.open(new Socket(remote.getHost(), remote.getPort()));
+			for ( int i=0; i<locations.length; i++ ) {
+				URL url = new URL("file:"+locations[i]);
+				target.install(url.getFile()+"~keep~", url.openStream() );
+			}
+			target.close();
+		}
+	}
+
+	public void linkClosed() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void push(String bundle, Object msg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void sendLog(String bundle, Log log) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void stopped(String bundle) {
+		// TODO Auto-generated method stub
+		
+	}
+}
