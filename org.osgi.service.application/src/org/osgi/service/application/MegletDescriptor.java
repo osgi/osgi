@@ -131,7 +131,7 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 		setupMethod.invoke( meglet, new Object [] { handle, bc } );
 	}
 
-  public ServiceReference launchSpecific( Map args ) throws Exception {
+  protected ServiceReference launchSpecific( Map args ) throws Exception {
 		Meglet meglet = megletContainer.createMegletInstance( this, false );
 		MegletHandle appHandle = new MegletHandle( megletContainer, meglet, this, bc);
 		if (meglet == null)

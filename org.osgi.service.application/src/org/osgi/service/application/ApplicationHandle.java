@@ -26,6 +26,8 @@
 
 package org.osgi.service.application;
 
+import java.security.AccessController;
+
 import org.osgi.framework.*;
 
 public abstract class ApplicationHandle {
@@ -36,9 +38,12 @@ public abstract class ApplicationHandle {
     public abstract int getApplicationState() throws Exception;
     public abstract String getInstanceID();    
     public abstract ServiceReference getApplicationDescriptor();
-    public abstract void destroySpecific() throws Exception;
+    protected abstract void destroySpecific() throws Exception;
     
     public final void destroy() throws Exception {
+  		AccessController.checkPermission(new ApplicationAdminPermission( getInstanceID(), 
+  				ApplicationAdminPermission.MANIPULATE));
+  		
     	destroySpecific();
     }    
 }

@@ -89,11 +89,7 @@ public final class MegletHandle extends ApplicationHandle {
 			throw new Exception("Invalid meglet handle!");		
 	}
 
-	public void destroySpecific() throws Exception {
-
-		AccessController.checkPermission(new ApplicationAdminPermission(pid, 
-				ApplicationAdminPermission.MANIPULATE));
-
+	protected void destroySpecific() throws Exception {
 		if (status == MegletHandle.NONEXISTENT
 				|| status == ApplicationHandle.STOPPING)
 			throw new Exception("Invalid State");
