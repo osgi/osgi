@@ -36,6 +36,9 @@
  * Feb 14, 2005  Alexandre Santos
  * 1             Updates after formal inspection (BTC_MEG_TCK_CODE-INSPR-002)
  * ===========  ==============================================================
+ * Mar 04, 2005  Alexandre Santos
+ * 23            Updates due to changes in the DmtAcl API
+ * ===========  ==============================================================
  */
 
 package org.osgi.test.cases.dmt.tbc;
@@ -93,7 +96,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 
 	public static final String INVALID_URI = "./OSGi/log/#@~z";
 
-	public static final String INVALID_LEAFNAME = "%&Ã£#&$#";
+	public static final String INVALID_LEAFNAME = "%&ã#&$#";
 
 	public static final String LONG_NAME = "sdsdqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfghjklzxcvbnqwertyuiopasdfgzcvddddddsd";
 
@@ -102,10 +105,14 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	public static final String XMLSTR = "<?xml version=\"1.0\"?><data><name>data name</name><value>data value</value></data>";
 
 	public static final String PRINCIPAL = "www.cesar.org.br";
+	
+	public static final String PRINCIPAL_2 = "www.cin.ufpe.br";
 
 	public static final String MIMETYPE = "text/html";
 	
 	public static final int INVALID_LOCKMODE = 3;
+	
+	public static final String MESSAGE = "Default message";
 
 	private DmtSession session;
 
@@ -407,8 +414,10 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	public DmtSession getSession(String nodeURI) {
 		if (nodeURI != null) {
 			try {
-				if (session != null)
+				if (session != null) {
+					session.commit();
 					session.close();
+				}
 				session = getFactory().getSession(nodeURI);
 			} catch (DmtException e) {
 				log("TestControl: Fail to get the session");
@@ -431,8 +440,10 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	public DmtSession getSession(String nodeURI, int lockMode) {
 		if (nodeURI != null) {
 			try {
-				if (session != null)
+				if (session != null) {
+					session.commit();
 					session.close();
+				}
 				session = getFactory().getSession(nodeURI, lockMode);
 			} catch (DmtException e) {
 				log("TestControl: Fail to get the session");
@@ -455,8 +466,10 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	public DmtSession getSession(String principal, String nodeURI, int lockMode) {
 		if (nodeURI != null) {
 			try {
-				if (session != null)
+				if (session != null) {
+					session.commit();
 					session.close();
+				}
 				session = getFactory().getSession(principal, nodeURI, lockMode);
 			} catch (DmtException e) {
 				log("TestControl: Fail to get the session");
