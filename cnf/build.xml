@@ -141,6 +141,7 @@
 			<srcfiles dir="." includes="build.properties" />
 			<srcfiles dir="." includes="build.xml" />
 		</uptodate>
+		<mkdir dir="${workspace}/cnf/cache"/>
 		<touch file="${workspace}/cnf/cache/${project.name}" />
 	</target>
 		
