@@ -2,8 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="/cnf/jar/saxon.jar"/>
-	<classpathentry kind="src" path="/ee.minimum"/>
-	<classpathentry kind="src" path="/org.osgi.util.xml"/>
-	<classpathentry kind="src" path="/osgi"/>
+	<classpathentry kind="lib" path="/osgi.released/ee.minimum.jar"/>
+	<classpathentry kind="lib" path="/osgi.released/osgi.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

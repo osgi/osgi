@@ -10,4 +10,4 @@ Bundle-Name: impl.framework
 Bundle-Version: 1.2
 Bundle-Description: OSGi Framework reference implementation by Gatespace AB
 CVS-Header: $Header$
-
+$(PRIVATE-PACKAGE)
