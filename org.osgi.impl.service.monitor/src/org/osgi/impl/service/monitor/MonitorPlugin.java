@@ -23,7 +23,7 @@ import org.osgi.service.dmt.*;
 import org.osgi.service.monitor.*;
 import org.osgi.util.tracker.ServiceTracker;
 
-
+// TODO check whether fatal flag should be set in any exceptions
 public class MonitorPlugin implements DmtDataPlugin
 {
     private BundleContext bc;
@@ -150,6 +150,10 @@ public class MonitorPlugin implements DmtDataPlugin
 
     //----- Dmt methods -----//
 
+    public void commit() throws DmtException {
+        // this should never be called if supportsAtomic is false        
+    }
+    
     public void rollback() throws DmtException {
         // this should never be called if supportsAtomic is false
     }
