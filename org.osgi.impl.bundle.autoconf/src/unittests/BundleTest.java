@@ -27,10 +27,14 @@
 
 package unittests;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Dictionary;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import junit.framework.TestCase;
@@ -53,6 +57,11 @@ import org.osgi.service.deploymentadmin.ResourceProcessor;
 import org.osgi.service.metatype.MetaTypeInformation;
 import org.osgi.service.metatype.MetaTypeService;
 import org.xml.sax.SAXException;
+import unittests.metadata.Attribute;
+import unittests.metadata.Designate;
+import unittests.metadata.MetaData;
+import unittests.metadata.Object;
+import unittests.metadata.ObjectFactory;
 
 public class BundleTest extends TestCase {
 	public DummyBundleContext bundleContext;
@@ -61,6 +70,8 @@ public class BundleTest extends TestCase {
 	public DummyConfigurationAdmin configurationAdmin;
 	public DummyMetaTypeService metaTypeService;
 	public DummyDeploymentAdmin deploymentAdmin;
+	JAXBContext jaxbContext;
+	ObjectFactory of;
 	
 	public final class DummyBundleContext implements BundleContext {
 		public ServiceReference[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
@@ -68,7 +79,7 @@ public class BundleTest extends TestCase {
 					new DummyServiceReference(clazz)
 			};
 		}
-		public Object getService(ServiceReference reference) {
+		public java.lang.Object getService(ServiceReference reference) {
 			String clazz = ((DummyServiceReference)reference).serviceClass;
 			if (clazz.equals(SAXParserFactory.class.getName())) {
 				SAXParserFactory sp = SAXParserFactory.newInstance();
@@ -96,7 +107,7 @@ public class BundleTest extends TestCase {
 			throw new IllegalStateException();
 		}
 
-		public ServiceRegistration registerService(String clazz, Object service, Dictionary properties) {
+		public ServiceRegistration registerService(String clazz, java.lang.Object service, Dictionary properties) {
 			if (clazz.equals(ResourceProcessor.class.getName())) {
 				resourceProcessor = (ResourceProcessor) service;
 				return null;
@@ -121,7 +132,7 @@ public class BundleTest extends TestCase {
 		public void removeBundleListener(BundleListener listener) { throw new IllegalStateException(); }
 		public void addFrameworkListener(FrameworkListener listener) { throw new IllegalStateException(); }
 		public void removeFrameworkListener(FrameworkListener listener) { throw new IllegalStateException(); }
-		public ServiceRegistration registerService(String[] clazzes, Object service, Dictionary properties) { throw new IllegalStateException(); }
+		public ServiceRegistration registerService(String[] clazzes, java.lang.Object service, Dictionary properties) { throw new IllegalStateException(); }
 		public ServiceReference[] getAllServiceReferences(String clazz, String filter) throws InvalidSyntaxException { throw new IllegalStateException(); }
 		public boolean ungetService(ServiceReference reference) { throw new IllegalStateException(); }
 		public File getDataFile(String filename) { throw new IllegalStateException();	}
@@ -131,7 +142,7 @@ public class BundleTest extends TestCase {
 	public final class DummyServiceReference implements ServiceReference {
 		public final String serviceClass;
 		public DummyServiceReference(String serviceClass) { this.serviceClass = serviceClass; }
-		public Object getProperty(String key) { throw new IllegalStateException(); }
+		public java.lang.Object getProperty(String key) { throw new IllegalStateException(); }
 		public String[] getPropertyKeys() { throw new IllegalStateException(); }
 		public Bundle getBundle() { throw new IllegalStateException(); }
 		public Bundle[] getUsingBundles() { throw new IllegalStateException(); }
@@ -171,8 +182,18 @@ public class BundleTest extends TestCase {
 	public static String location(String symbname,String version) {
 		return "bundle://"+symbname+"-"+version;
 	}
+	
+	public InputStream getStream(MetaData md) throws JAXBException {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		jaxbContext.createMarshaller().marshal(md,bos);
+		byte[] data = bos.toByteArray();
+		return new ByteArrayInputStream(data);
+	}
+
 	protected void setUp() throws Exception {
 		super.setUp();
+		of = new ObjectFactory();
+		jaxbContext = JAXBContext.newInstance("unittests.metadata");
 		resourceProcessor = null;
 		bundleContext = new DummyBundleContext();
 		metaTypeService = new DummyMetaTypeService();
@@ -199,6 +220,23 @@ public class BundleTest extends TestCase {
 	public void testBasic() throws Exception {
 		DeploymentPackage dp = new DummyDeploymentPackage();
 		resourceProcessor.begin(dp,ResourceProcessor.INSTALL);
+
+		MetaData md = of.createMetaData();
+		Designate d = of.createDesignate();
+		md.getDesignate().add(d);
+		d.setFactory(false);
+		d.setBundle("foo-1.1");
+		d.setPid("pid1");
+		Object o = of.createObject();
+		d.setObject(o);
+		o.setOcdref("ocd1");
+		Attribute attr = of.createAttribute();
+		attr.setAdref("adr1");
+		attr.setContent("data");
+		o.getAttribute().add(attr);
+		
+		resourceProcessor.process("foo/autoconf.xml",getStream(md));
+
 		resourceProcessor.complete(true);
 	}
 }

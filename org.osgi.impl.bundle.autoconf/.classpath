@@ -8,5 +8,12 @@
 	<classpathentry sourcepath="/org.osgi.test.cases/src" kind="lib" path="/osgi.released/osgi.internal.jar"/>
 	<classpathentry kind="lib" path="/cnf/jar/saxon.jar"/>
 	<classpathentry kind="lib" path="/cnf/jar/junit.jar"/>
+	<classpathentry kind="lib" path="jaxme/jaxme2.jar"/>
+	<classpathentry kind="lib" path="jaxme/jaxme2-rt.jar"/>
+	<classpathentry sourcepath="/home/pnagy/ws-jaxme-0.3.1/lib/jaxmeapi-src.zip" kind="lib" path="jaxme/jaxmeapi.jar"/>
+	<classpathentry kind="lib" path="jaxme/jaxmejs.jar"/>
+	<classpathentry kind="lib" path="jaxme/jaxmepm.jar"/>
+	<classpathentry kind="lib" path="jaxme/jaxmexs.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" 
-	targetNamespace="http://www.osgi.org/xmlns/metatype/v1.0.0" 
-	xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+	targetNamespace="http://www.osgi.org/xmlns/metatype/v1.0.0"
+	xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0"
+	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb">
 	
         <complexType name="MetaData">
+				<annotation>
+					<appinfo>
+						<jaxb:class name="MetaDataT"/>
+					</appinfo>
+				</annotation>
                 <sequence>
                         <element name="OCD" type="metatype:OCD" minOccurs="0" maxOccurs="unbounded"/>
                         <element name="Designate" type="metatype:Designate" minOccurs="1" 																									maxOccurs="unbounded"/>
@@ -29,7 +35,7 @@
                 <attribute name="description" type="string" use="optional"/>
                 <attribute name="id" type="string" use="required"/>
                 <attribute name="type" type="metatype:Scalar" use="required"/>
-                <attribute name="cardinality" type="integer" use="optional" default="0"/>
+                <attribute name="cardinality" type="int" use="optional" default="0"/>
                 <attribute name="min" type="string" use="optional"/>
                 <attribute name="max" type="string" use="optional"/>
                 <attribute name="default" type="string" use="optional"/>                
@@ -79,7 +85,7 @@
         
         <complexType name="Icon">
                 <attribute name="resource" type="string" use="required"/>
-                <attribute name="size" type="positiveInteger" use="required"/>
+                <attribute name="size" type="int" use="required"/>
         </complexType>
         
         <element name="MetaData" type="metatype:MetaData"/>
