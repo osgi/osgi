@@ -21,21 +21,18 @@ import java.util.*;
 import org.osgi.framework.*;
 import org.osgi.service.dmt.*;
 import org.osgi.service.monitor.*;
-import org.osgi.util.tracker.ServiceTracker;
 
 // TODO check whether fatal flag should be set in any exceptions
 public class MonitorPlugin implements DmtDataPlugin
 {
     private BundleContext bc;
-    private ServiceTracker tracker;
     private MonitorAdminImpl monitorAdmin;
 
     private DmtSession session;
     
 
-    public MonitorPlugin(BundleContext bc, ServiceTracker tracker, MonitorAdminImpl monitorAdmin) {
+    public MonitorPlugin(BundleContext bc, MonitorAdminImpl monitorAdmin) {
         this.bc = bc;
-        this.tracker = tracker;
         this.monitorAdmin = monitorAdmin;
 
         session = null;
@@ -58,12 +55,12 @@ public class MonitorPlugin implements DmtDataPlugin
         if(path.length == 0)
             return new MonitorMetaNodeImpl("Root node of the monitoring subtree.", false, false, false, true);
 
-        Monitorable monitorable = getMonitorable(path[0], nodeUri);
-
-        if(path.length == 1)
+        if(path.length == 1) {
+            checkMonitorable(path[0], nodeUri);
             return new MonitorMetaNodeImpl("Root node for a Monitorable service.", false, false, true, false);
+        }
 
-        KpiWrapper kpi = getKpi(monitorable, path[0], path[1], nodeUri);
+        KpiWrapper kpi = getKpi(path[0], path[1], nodeUri);
 
         if(path.length == 2)
             return new MonitorMetaNodeImpl("Root node for a Performance Indicator.", false, false, true, false);
@@ -171,8 +168,7 @@ public class MonitorPlugin implements DmtDataPlugin
             throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
                                    "Cannot change node data at the specified position.");
 
-        Monitorable monitorable = getMonitorable(path[0], nodeUri);
-        KpiWrapper kpi = getKpi(monitorable, path[0], path[1], nodeUri);
+        KpiWrapper kpi = getKpi(path[0], path[1], nodeUri);
         // path[2].equals("Server")
         Server server = kpi.getServer(path[3], nodeUri);
 
@@ -211,8 +207,7 @@ public class MonitorPlugin implements DmtDataPlugin
             throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
                                    "Cannot change node data at the specified position.");
 
-        Monitorable monitorable = getMonitorable(path[0], nodeUri);
-        KpiWrapper kpi = getKpi(monitorable, path[0], path[1], nodeUri);
+        KpiWrapper kpi = getKpi(path[0], path[1], nodeUri);
         // path[2].equals("Server")
         Server server = kpi.getServer(path[3], nodeUri);
 
@@ -251,8 +246,7 @@ public class MonitorPlugin implements DmtDataPlugin
 
         // path has at least four elements because DmtAdmin only calls this for deletable nodes
 
-        Monitorable monitorable = getMonitorable(path[0], nodeUri);
-        KpiWrapper kpi = getKpi(monitorable, path[0], path[1], nodeUri);
+        KpiWrapper kpi = getKpi(path[0], path[1], nodeUri);
 
         // path[2].equals("Server")
 
@@ -276,8 +270,7 @@ public class MonitorPlugin implements DmtDataPlugin
             throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
                                    "Cannot add nodes at the specified position.");
 
-        Monitorable monitorable = getMonitorable(path[0], nodeUri);
-        KpiWrapper kpi = getKpi(monitorable, path[0], path[1], nodeUri);
+        KpiWrapper kpi = getKpi(path[0], path[1], nodeUri);
 
         // path[2].equals("Server") because parent must be an interior node
 
@@ -323,8 +316,7 @@ public class MonitorPlugin implements DmtDataPlugin
             throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
                                    "Cannot add nodes at the specified position.");
 
-        Monitorable monitorable = getMonitorable(path[0], nodeUri);
-        KpiWrapper kpi = getKpi(monitorable, path[0], path[1], nodeUri);
+        KpiWrapper kpi = getKpi(path[0], path[1], nodeUri);
 
         // path[2].equals("Server") because parent must be an interior node
 
@@ -382,19 +374,18 @@ public class MonitorPlugin implements DmtDataPlugin
         if(path.length == 0)
             return true;
 
-        Monitorable monitorable;
-        try {
-            monitorable = getMonitorable(path[0], nodeUri);
-        } catch(DmtException e) {
-            return false;
+        if(path.length == 1) {
+            try {
+                checkMonitorable(path[0], nodeUri);
+                return true;
+            } catch(DmtException e) {
+                return false;
+            }
         }
-
-        if(path.length == 1)
-            return true;
 
         KpiWrapper kpi;
         try {
-            kpi = getKpi(monitorable, path[0], path[1], nodeUri);
+            kpi = getKpi(path[0], path[1], nodeUri);
         } catch(DmtException e) {
             return false;
         }
@@ -450,11 +441,12 @@ public class MonitorPlugin implements DmtDataPlugin
         if(path.length == 0)
             return false;
         
-        Monitorable monitorable = getMonitorable(path[0], nodeUri);
-        if(path.length == 1)
+        if(path.length == 1) {
+            checkMonitorable(path[0], nodeUri);
             return false;
+        }
 
-        KpiWrapper kpi = getKpi(monitorable, path[0], path[1], nodeUri);
+        KpiWrapper kpi = getKpi(path[0], path[1], nodeUri);
         if(path.length == 2)
             return false;
         
@@ -485,12 +477,10 @@ public class MonitorPlugin implements DmtDataPlugin
 
         // path has at least three elements because the first leaf node is three levels deep
 
-        Monitorable monitorable = getMonitorable(path[0], nodeUri);
-
-        KpiWrapper kpi = getKpi(monitorable, path[0], path[1], nodeUri);
+        KpiWrapper kpi = getKpi(path[0], path[1], nodeUri);
 
         if(path.length == 3) {
-            KPI kpiValue = kpi.getKpi();
+            StatusVariable kpiValue = kpi.getKpi();
 
             // TODO this should be a "unique registered identifier" according to the spec (e.g. reverse domain name)
             if(path[2].equals("TrapID"))
@@ -561,28 +551,25 @@ public class MonitorPlugin implements DmtDataPlugin
         String[] path = prepareUri(nodeUri);
 
         if(path.length == 0) {
-            ServiceReference[] monitorables = tracker.getServiceReferences();
-
-            if(monitorables == null)
-                return new String[] {};
-
-            String[] children = new String[monitorables.length];
-            for(int i = 0; i < monitorables.length; i++) {
-                children[i] = (String) monitorables[i].getProperty("service.pid");
-                if(children[i] == null) // TODO change this, maybe ignore service
-                    throw new IllegalStateException("No service.pid property of Monitorable service.");
-            }
-
-            return children;
+            // TODO should Monitorable names be checked for invalid characters?
+            // TODO return empty array or null for no children?
+            // TODO handle SecurityException?
+            return monitorAdmin.getMonitorableNames();
         }
 
-        Monitorable monitorable = getMonitorable(path[0], nodeUri);
+        if(path.length == 1) {
+            // TODO should Status Variable names be checked for invalid characters?
+            // TODO return empty array or null for no children?
+            // TODO handle SecurityException?
+            try {
+                return monitorAdmin.getStatusVariableNames(path[0]);
+            } catch(IllegalArgumentException e) {
+                throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, 
+                        "No Monitorable registered with the given ID.", e);
+            }
+        }
 
-        if(path.length == 1)
-            // TODO KPI names should be checked for invalid characters (?)
-            return monitorable.getKpiNames();
-
-        KpiWrapper kpi = getKpi(monitorable, path[0], path[1], nodeUri);
+        KpiWrapper kpi = getKpi(path[0], path[1], nodeUri);
 
         if(path.length == 2)
             return new String[] { "TrapID", "Server", "CM", "Results" };        
@@ -614,35 +601,23 @@ public class MonitorPlugin implements DmtDataPlugin
 
 
     //----- Private utility methods -----//
-
-    private Monitorable getMonitorable(String id, String nodeUri) throws DmtException {
-        // TODO check ID for filter-illegal characters (it should already be checked for DMT-illegal chars by isNodeUri)
-        ServiceReference[] refs;
+    
+    private void checkMonitorable(String id, String nodeUri) throws DmtException {
         try {
-            refs = bc.getServiceReferences(Monitorable.class.getName(), "(service.pid=" + id + ")");
-        } catch(InvalidSyntaxException e) {
-            // should not be reached if the above todo is done
-            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Invalid characters in Monitorable ID.");
+            monitorAdmin.checkMonitorable(id);
+        } catch(IllegalArgumentException e) {
+            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+                    e.getMessage());
         }
-
-        if(refs == null)
-            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "No Monitorable registered with the given ID.");
-
-        // TODO is it allowed to give the tracker a reference that was not given by it?
-        Monitorable monitorable = (Monitorable) tracker.getService(refs[0]);
-        if(monitorable == null)
-            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, 
-                                   "The Monitorable with the given ID is no longer registered.");
-
-        return monitorable;
     }
 
-    private KpiWrapper getKpi(Monitorable monitorable, String monId, 
-                                     String id, String nodeUri) throws DmtException {
+    private KpiWrapper getKpi(String monId, String id, String nodeUri)
+            throws DmtException {
 
-        KPI kpi;
+        StatusVariable kpi;
         try {
-            kpi = monitorable.getKpi(id);
+            // TODO handle SecurityException?
+            kpi = monitorAdmin.getStatusVariable(monId + "/" + id);
         } catch(IllegalArgumentException e) {
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, 
                                    "No KPI with the given name provided by the Monitorable.", e);
@@ -671,10 +646,10 @@ public class MonitorPlugin implements DmtDataPlugin
 
     private static String cmName(int cm) {
         switch(cm) {
-        case KPI.CM_CC:    return "CC";
-        case KPI.CM_DER:   return "DER";
-        case KPI.CM_GAUGE: return "GAUGE";
-        case KPI.CM_SI:    return "SI";
+        case StatusVariable.CM_CC:    return "CC";
+        case StatusVariable.CM_DER:   return "DER";
+        case StatusVariable.CM_GAUGE: return "GAUGE";
+        case StatusVariable.CM_SI:    return "SI";
         }
 
         throw new IllegalArgumentException("Unknown collection method constant '" + cm + "' in KPI.");
@@ -702,12 +677,12 @@ class KpiWrapper {
 
 
     private String path;
-    private KPI kpi;
+    private StatusVariable kpi;
     private MonitorAdminImpl monitorAdmin;
 
     private Hashtable servers;
 
-    KpiWrapper(String path, KPI kpi, MonitorAdminImpl monitorAdmin) {
+    KpiWrapper(String path, StatusVariable kpi, MonitorAdminImpl monitorAdmin) {
         this.path = path;
         this.kpi = kpi;
         this.monitorAdmin = monitorAdmin;
@@ -719,7 +694,7 @@ class KpiWrapper {
         }
     }
 
-    KPI getKpi() {
+    StatusVariable getKpi() {
         return kpi;
     }
 
@@ -823,8 +798,9 @@ class Server {
             throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED, 
                                    "Server ID leaf must have string format.");
 
-        if(data.getString() == null)
-            throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH, "Server ID string must be non-null.");
+        String id = data.getString();
+        if(id == null || id.length() == 0)
+            throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH, "Server ID string must not be null or empty.");
 
         serverId = data.getString();
     }
@@ -866,7 +842,7 @@ class Server {
             throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH, 
                                    "Reporting schedule value parameter must be non-negative.");
 
-        value = data.getInt();
+        value = newInt;
     }
 
     void setTrapRefId(String name, DmtData data, String nodeUri) throws DmtException {
