@@ -12,11 +12,11 @@
  */
 package org.osgi.tools.btool;
 
-import java.io.*;
+import java.io.File;
 import java.util.*;
-import javax.xml.parsers.*;
 import org.xml.sax.*;
-import org.xml.sax.helpers.*;
+import org.xml.sax.helpers.DefaultHandler;
+import com.icl.saxon.aelfred.SAXParserImpl;
 
 /**
  * Class to read an eclipse .classpath file
@@ -114,8 +114,7 @@ public class EclipseProject {
 			if (DEBUG) {
 				System.out.println("file=" + file.getAbsolutePath());
 			}
-			SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-			SAXParser saxParser = parserFactory.newSAXParser();
+			SAXParserImpl saxParser = new SAXParserImpl();
 			saxParser.parse(file, new Handler());
 		}
 		catch (Throwable e) {

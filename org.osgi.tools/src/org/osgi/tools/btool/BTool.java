@@ -142,7 +142,6 @@ public class BTool extends Task {
 		projectDir = null;
 		if (errors.isEmpty())
 			return;
-		
 		throw new BuildException("Errors found");
 	}
 
@@ -167,9 +166,14 @@ public class BTool extends Task {
 		// to have a value specifying that there is no
 		// manifest for certain file names.
 		String regex = getProject().getProperty("nomanifest");
-		if (regex != null && zipname.matches(regex.trim())) {
-			trace("Ignoring manifest for " + zipname);
-			return;
+		if (regex != null) {
+			StringTokenizer st = new StringTokenizer(regex, " ");
+			for (int i = 0; i < st.countTokens(); i++) {
+				if (zipname.endsWith(st.nextToken())) {
+					trace("Ignoring manifest for " + zipname);
+					return;
+				}
+			}
 		}
 		if (manifestSource == null)
 			manifestSource = zipname.replaceFirst("\\.jar$", ".mf");
@@ -188,7 +192,8 @@ public class BTool extends Task {
 		this.showmanifest = false;
 		ManifestResource mf = new ManifestResource(this, manifestSource, false);
 		manifest = new Manifest(mf.getInputStream());
-		System.out.println("New manifest, activator " + manifest.getActivator());
+		System.out
+				.println("New manifest, activator " + manifest.getActivator());
 		this.showmanifest = showmanifest;
 	}
 
@@ -706,14 +711,14 @@ public class BTool extends Task {
 			if (path.length() > 0)
 				path = path + "/";
 			Collection c = source.getResources(path);
-			if ( c != null ) {
+			if (c != null) {
 				for (Iterator i = c.iterator(); i.hasNext();) {
 					String name = path + i.next();
 					addRecursive(source, name, export);
 				}
 			}
 			else
-				trace("Not resources found for " + path );
+				trace("Not resources found for " + path);
 		}
 		else {
 			trace("File " + path);
