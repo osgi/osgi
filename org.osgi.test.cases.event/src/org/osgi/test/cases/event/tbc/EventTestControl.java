@@ -376,15 +376,21 @@ public class EventTestControl extends DefaultTestBundleControl {
   
   private void addPermissions(PermissionAdmin permissionAdmin, Bundle bundle, PermissionInfo[] toAdd) {
     PermissionInfo[] oldPerm = permissionAdmin.getPermissions(bundle.getLocation());
+    PermissionInfo[] defPerm = permissionAdmin.getDefaultPermissions();
     int oldLen = 0;
+    int defLen = 0;
     if (oldPerm != null) oldLen = oldPerm.length;
-    PermissionInfo[] newPerm = new PermissionInfo[oldLen + toAdd.length];
+    if (defPerm != null) defLen = defPerm.length;
+    PermissionInfo[] newPerm = new PermissionInfo[oldLen + defLen + toAdd.length];
     int i = 0;
     for (; i < oldLen; i++) {
       newPerm[i] = oldPerm[i];      
     }
-    for (int j = 0; j < toAdd.length; j++, i++) {
-      newPerm[i] = toAdd[j];      
+    for (i = 0; i < defLen; ++i) {
+      newPerm[oldLen + i] = defPerm[i];
+    }
+    for (int j = 0; j < toAdd.length; j++) {
+      newPerm[oldLen + defLen + j] = toAdd[j];      
     }
     permissionAdmin.setPermissions(bundle.getLocation(), newPerm);
   }
