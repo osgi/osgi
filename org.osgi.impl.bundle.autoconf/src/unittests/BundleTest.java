@@ -256,6 +256,7 @@ public class BundleTest extends TestCase {
 		public Enumeration getEntryPaths(String path) { throw new IllegalStateException(); }
 		public URL getEntry(String name) { throw new IllegalStateException(); }
 		public long getLastModified() { throw new IllegalStateException(); }
+		public Enumeration findEntries(String path, String filePattern, boolean recurse){ throw new IllegalStateException(); }  
 	}
 	
 	public static String location(String symbname,String version) {
