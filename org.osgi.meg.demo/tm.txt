@@ -1,3 +1,3 @@
 bundle
-file://localhost/eclipse/workspaceMEG/org.osgi.meg.demo/app.events.jar
+file:../../org.osgi.meg.demo/app.events.jar
 location=org.osgi.meg.app.events
