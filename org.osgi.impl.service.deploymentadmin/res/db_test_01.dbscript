@@ -1,0 +1,29 @@
+# creates a table
+# the name of the table is player
+# the field of the table are "id" (Integer) and "name" (String)
+# the key field is the 0. (id)
+###########################################################################
+TABLE player (id Integer, name String) KEY 0
+
+# inserts records into the "player" table
+###########################################################################
+INSERT player 1/Joe
+INSERT player 2/Peter
+INSERT player 3/Ivan
+
+TABLE game (id Integer, name String) KEY 0
+
+INSERT game 1/chess
+INSERT game 2/poker
+
+TABLE score (no Integer, player Integer, game Integer, score Integer) KEY 0
+
+INSERT score 1/1/1/1050
+INSERT score 2/2/1/2000
+INSERT score 3/3/1/5000
+INSERT score 4/3/2/200
+
+# deletes a record from the "score" table where the value of the key 
+# field is 4
+###########################################################################
+DELETE score 4

@@ -14,6 +14,8 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 
+import com.nokia.test.db.Db;
+
 public class DoIt implements BundleActivator {
     
     private static final String HOME = "../../org.osgi.impl.service.deploymentadmin/res/";
@@ -101,8 +103,47 @@ public class DoIt implements BundleActivator {
             System.out.println("\n================================");
             System.out.println("RESULT: OK = " + ok + " ERROR = " + error);
             System.out.println("================================");
+        } else if ("tdb".equalsIgnoreCase(line)) {
+            boolean ret;
+            int ok = 0;
+            int error = 0;
+            
+            if (ret = db_test_01()) ++ok; else ++error;
+            System.out.println("** db_test_01 ****************************** " + (ret ? "ok" : "ERROR"));
+            
+            System.out.println("\n================================");
+            System.out.println("RESULT: OK = " + ok + " ERROR = " + error);
+            System.out.println("================================");
         }
         
+    }
+
+    private boolean db_test_01() {
+        ServiceReference ref = context.getServiceReference(Db.class.getName());
+        Db db = (Db) context.getService(ref);
+        
+        FileInputStream is = null;
+        try {
+            // install
+            
+	        is = new FileInputStream(HOME + "db_test_01.dp");
+			da.installDeploymentPackage(is);
+			
+			System.out.println(Arrays.asList(db.findRow(null, "player", new Integer(2))));
+			
+			return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (null != is)
+                try {
+                    is.close();
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+        }
     }
 
     private boolean test_bundlefilter_01() {

@@ -3,7 +3,7 @@
  *
  * author: Ivan Zahoranszky
  */
-package com.nokia.test.exampleresourceprocessor;
+package com.nokia.test.exampleresourceprocessor.db;
 
 import java.util.Vector;
 
