@@ -26,103 +26,247 @@
 package org.osgi.service.monitor;
 
 /**
- * A MonitorAdmin implementation handles KPI query requests and measurement job
- * control requests.
+ * A MonitorAdmin implementation handles StatusVariable query requests and
+ * measurement job control requests.
  * <p>
- * Note that an alternative but not recommended way of obtaining KPIs is by
- * querying the list of Monitorable services from the service registry and then
- * querying the list of KPI names from the Monitorable services. This way all
- * services which publish KPIs will be returned regardless of whether they do or
- * do not hold the necessary <code>KpiPermission</code> for publishing KPIs.
- * By using the MonitorAdmin to obtain the Monitorables it is guaranteed that
- * only those services will be accessed who are authorized to publish KPIs. It
- * is the responsibility of the MonitorAdmin implementation to check the
- * required permissions and show only those services which pass this check.
+ * Note that an alternative but not recommended way of obtaining StatusVariables
+ * is that applications having the required ServicePermissions can query the
+ * list of Monitorable services from the service registry and then query the
+ * list of StatusVariable names from the Monitorable services. This way all
+ * services which publish StatusVariables will be returned regardless of whether
+ * they do or do not hold the necessary <code>MonitorPermission</code> for
+ * publishing StatusVariables. By using the MonitorAdmin to obtain the
+ * StatusVariables it is guaranteed that only those Monitorable services will be
+ * accessed who are authorized to publish StatusVariables. It is the
+ * responsibility of the MonitorAdmin implementation to check the required
+ * permissions and show only those services which pass this check.
  */
 public interface MonitorAdmin {
 
     /**
-	 * Returns all the Monitorable services that are currently registered. For
-	 * security reasons this method should be used instead of querying the
-	 * monitorable services from the service registry.
-	 * 
-	 * @return the array of Monitorables or <code>null</code> if none are
-	 *         registered
-	 */
-    public Monitorable[] getMonitorables();
-
-    /**
-	 * Returns the Monitorable service addressed by its PID. For security
-	 * reasons this method should be used instead of querying the monitorable
-	 * services from the service registry.
-	 * 
-	 * @param id the persistent identity of the monitorable service
-	 * @return the Monitorable object
-	 * @throws IllegalArgumentException if the ID is invalid or points to a non
-	 *         existing monitorable service
-	 */
-    public Monitorable getMonitorable(String id)
+     * Returns a StatusVariable addressed by its ID in
+     * [Monitorable_ID]/[StatusVariable_ID] format. The entity which queries a
+     * StatusVariable needs to hold <code>MonitorPermission</code> for the
+     * given target with the <code>read</code> action present.
+     * 
+     * @param path
+     *            the full path of the StatusVariable in
+     *            [Monitorable_ID]/[StatusVariable_ID] format
+     * @return the StatusVariable object
+     * @throws IllegalArgumentException
+     *             if the path is invalid or points to a non-existing
+     *             StatusVariable
+     * @throws SecurityException
+     *             if the caller does not hold a <code>MonitorPermission</code>
+     *             for the StatusVariable specified by <code>path</code> with
+     *             the <code>read</code> action present
+     */
+    public StatusVariable getStatusVariable(String path)
             throws IllegalArgumentException;
 
     /**
-	 * Returns a KPI addressed by its ID in [Monitorable_ID]/[KPI_ID] format.
-	 * This is a convenience feature for the cases when the full path of the KPI
-	 * is known.
-	 * <p>
-	 * The entity which queries a KPI needs to hold <code>KpiPermission</code>
-	 * for the given target with the <code>read</code> action present.
-	 * 
-	 * @param path the full path of the KPI in [Monitorable_ID]/[KPI_ID] format
-	 * @return the KPI object
-	 * @throws IllegalArgumentException if the path is invalid or points to a
-	 *         non-existing KPI
-	 * @throws SecurityException if the caller does not hold a
-	 *         <code>KpiPermission</code> for the KPI specified by
-	 *         <code>path</code> with the <code>read</code> action present
-	 */
-    public KPI getKPI(String path) throws IllegalArgumentException;
+     * Returns the names of the Monitorable services that are currently registered.
+     * The returned array contains the names in alphabetical order. For security
+     * reasons this method should be used instead of querying the monitorable
+     * services from the service registry. The Monitorable instances are not
+     * accessible through the MonitorAdmin.
+     * 
+     * @return the array of Monitorable names or <code>null</code> if none are
+     *         registered
+     * @throws SecurityException
+     *             if the caller does not hold a <code>MonitorPermission</code>
+     *             with the <code>discover</code> action present. The target
+     *             field must be "&#42;/*".
+     */
+    public String[] getMonitorableNames();
 
     /**
-	 * Starts a Monitoring Job with the parameters provided. All specified KPIs
-	 * must exist when the job is started. The initiator string is used in the
-	 * <code>listener.id</code> field of all events triggered by the job, to
-	 * allow filtering the events based on the initiator.
-	 * <p>
-	 * The entity which initiates a Monitoring Job needs to hold
-	 * <code>KpiPermission</code> for all the specified target KPIs with the
-	 * <code>startjob</code> action present. In case of time based jobs, if
-	 * the permission's action string specifies a minimal sampling interval then
-	 * the <code>schedule</code> parameter should be at least as great as the
-	 * value in the action string.
-	 * 
-	 * @param initiator the identifier of the entity that initiated the job
-	 * @param kpis List of KPIs to be monitored. The KPI names must be given in
-	 *        [Monitorable_PID]/[KPI_ID] format.
-	 * @param schedule The time in seconds between two measurements. The value 0
-	 *        means that instant notification on KPI updates is requested. For
-	 *        values greater than 0 the first measurement will be taken when the
-	 *        timer expires for the first time, not when this method is called.
-	 * @param count For time based monitoring jobs, this should be the number of
-	 *        measurements to be taken, or 0 if the measurement must run
-	 *        infinitely. For change based monitoring (if schedule is 0), this
-	 *        must be a positive interger specifying the number of changes that
-	 *        must happen before a new notification is sent.
-	 * @return the successfully started job object
-	 * @throws IllegalArgumentException if the list of KPI names contains a
-	 *         non-existing KPI or the schedule or count parameters are invalid
-	 * @throws SecurityException if the caller does not hold
-	 *         <code>KpiPermission</code> for all the specified KPIs, with the
-	 *         <code>startjob</code> action present, or if the permission does
-	 *         not allow starting the job with the given frequency
-	 */
-    public MonitoringJob startJob(String initiator, String[] kpis,
-                                  int schedule, int count)
-        throws IllegalArgumentException;
+     * Returns all the StatusVariable objects published by a Monitorable
+     * instance. The StatusVariables will hold the values taken at the time of
+     * this method call. The array contains the elements in no particular order.
+     * <p>
+     * The entity which queries the StatusVariable list needs to hold
+     * <code>MonitorPermission</code> with the <code>read</code> action
+     * present. The target field of the permission must match all the
+     * StatusVariables published by the Monitorable.
+     * 
+     * @param monitorableId
+     *            The identifier of a Monitorable instance
+     * @return the StatusVariable objects published by the specified Monitorable
+     * @throws SecurityException
+     *             if the caller does not hold <code>MonitorPermission</code>
+     *             with the <code>read</code> action or if there is any
+     *             StatusVariable published by the Monitorable which is not
+     *             allowed to be read as per the target field of the permission
+     * @throws IllegalArgumentException
+     *             if the monitorableId is invalid or points to a non-existing
+     *             Monitorable
+     */
+    public StatusVariable[] getStatusVariables(String monitorableId);
 
     /**
-	 * Returns the list of currently running Monitoring Jobs.
-	 * 
-	 * @return the list of running jobs
-	 */
+     * Returns the list of StatusVariable names published by a Monitorable
+     * instance. The array contains the elements in alphabetical order.
+     * <p>
+     * The entity which queries the StatusVariable list needs to hold
+     * <code>MonitorPermission</code> with the <code>discover</code> action
+     * present. The target field of the permission must match the identifier of
+     * the Monitorable service.
+     * 
+     * @param monitorableId
+     *            The identifier of a Monitorable instance
+     * @return the names of the StatusVariable objects published by the
+     *         specified Monitorable
+     * @throws SecurityException
+     *             if the caller does not hold <code>MonitorPermission</code>
+     *             with the <code>discover</code> action or if there is any
+     *             StatusVariable published by the Monitorable which is not
+     *             allowed to be discovered as per the target field of the
+     *             permission
+     * @throws IllegalArgumentException
+     *             if the monitorableId is invalid or points to a non-existing
+     *             Monitorable
+     */
+    public String[] getStatusVariableNames(String monitorableId);
+
+    /**
+     * Switches event sending on or off for certain StatusVariable(s). When the
+     * MonitorAdmin is notified about a StatusVariable being updated it sends an
+     * event unless this feature is switched off. Note that events within a
+     * monitoring job can not be switched off. It is not required that the event
+     * sending state of the StatusVariables are persistently stored.
+     * 
+     * @param path
+     *            The identifier of the StatusVariable(s) in
+     *            [Monitorable_id]/[StatusVariable_id] format. The "*" wildcard
+     *            is allowed in both path fragments.
+     * @param on
+     *            If <code>false</code> then event sending is switched off, if
+     *            <code>true</code> then it is switched on.
+     * @throws SecurityException
+     *             if the caller does not hold <code>MonitorPermission</code>
+     *             with the <code>switchevents</code> action or if there is
+     *             any StatusVariable in the path field for which it is not
+     *             allowed to switch event sending on or off as per the target
+     *             field of the permission
+     * @throws IllegalArgumentException
+     *             if the path is invalid or points to a non-existing
+     *             StatusVariable
+     */
+    public void switchEvents(String path, boolean on);
+
+    /**
+     * Issues a request to reset a given StatusVariable. Depending on the
+     * semantics of the StatusVariable this call may or may not succeed: it
+     * makes sense to reset a counter to its starting value, but e.g. a
+     * StatusVariable of type String might not have a meaningful default value.
+     * Note that for numeric StatusVariables the starting value may not
+     * necessarily be 0. Resetting a StatusVariable triggers a monitor event.
+     * <p>
+     * The entity that wants to reset the StatusVariable needs to hold
+     * <code>MonitorPermission</code> with the <code>reset</code> action
+     * present. The target field of the permission must match the StatusVariable
+     * name to be reset.
+     * 
+     * @param path
+     *            the identifier of the StatusVariable in
+     *            [Monitorable_id]/[StatusVariable_id] format.
+     * @return <code>true</code> if the Monitorable could successfully reset
+     *         the given StatusVariable, <code>false</code> otherwise
+     * @throws IllegalArgumentException
+     *             if the path is invalid or points to a non existing
+     *             StatusVariable
+     * @throws SecurityException
+     *             if the caller does not hold <code>MonitorPermission</code>
+     *             with the <code>reset</code> action or if the specified
+     *             StatusVariable is not allowed to be reset as per the target
+     *             field of the permission
+     */
+    public boolean resetStatusVariable(String path)
+            throws IllegalArgumentException;
+
+    /**
+     * Starts a time based Monitoring Job with the parameters provided.
+     * Monitoring events will be sent according to the specified schedule. All
+     * specified StatusVariables must exist when the job is started. The
+     * initiator string is used in the <code>mon.listener.id</code> field of
+     * all events triggered by the job, to allow filtering the events based on
+     * the initiator.
+     * <p>
+     * The entity which initiates a Monitoring Job needs to hold
+     * <code>MonitorPermission</code> for all the specified target
+     * StatusVariables with the <code>startjob</code> action present. If the
+     * permission's action string specifies a minimal sampling interval then the
+     * <code>schedule</code> parameter should be at least as great as the
+     * value in the action string.
+     * 
+     * @param initiator
+     *            the identifier of the entity that initiated the job
+     * @param StatusVariables
+     *            List of StatusVariables to be monitored. The StatusVariable
+     *            names must be given in [Monitorable_PID]/[StatusVariable_ID]
+     *            format.
+     * @param schedule
+     *            The time in seconds between two measurements. It must be
+     *            greater than 0. The first measurement will be taken when the
+     *            timer expires for the first time, not when this method is
+     *            called.
+     * @param count
+     *            The number of measurements to be taken, or 0 if the
+     *            measurement must run infinitely.
+     * @return the successfully started job object
+     * @throws IllegalArgumentException
+     *             if the list of StatusVariable names contains a non-existing
+     *             StatusVariable or the schedule or count parameters are
+     *             invalid
+     * @throws SecurityException
+     *             if the caller does not hold <code>MonitorPermission</code>
+     *             for all the specified StatusVariables, with the
+     *             <code>startjob</code> action present, or if the permission
+     *             does not allow starting the job with the given frequency
+     */
+    public MonitoringJob startScheduledJob(String initiator,
+            String[] StatusVariables, int schedule, int count)
+            throws IllegalArgumentException;
+
+    /**
+     * Starts a change based Monitoring Job with the parameters provided.
+     * Monitoring events will be sent when the StatusVariables of this job are
+     * updated. All specified StatusVariables must exist when the job is
+     * started. The initiator string is used in the <code>mon.listener.id</code>
+     * field of all events triggered by the job, to allow filtering the events
+     * based on the initiator.
+     * <p>
+     * The entity which initiates a Monitoring Job needs to hold
+     * <code>MonitorPermission</code> for all the specified target
+     * StatusVariables with the <code>startjob</code> action present.
+     * 
+     * @param initiator
+     *            the identifier of the entity that initiated the job
+     * @param StatusVariables
+     *            List of StatusVariables to be monitored. The StatusVariable
+     *            names must be given in [Monitorable_PID]/[StatusVariable_ID]
+     *            format.
+     * @param count
+     *            A positive integer specifying the number of changes that must
+     *            happen to a StatusVariable before a new notification is sent.
+     * @return the successfully started job object
+     * @throws IllegalArgumentException
+     *             if the list of StatusVariable names contains a non-existing
+     *             StatusVariable or one that does not support notifications, or
+     *             if the count parameter is invalid
+     * @throws SecurityException
+     *             if the caller does not hold <code>MonitorPermission</code>
+     *             for all the specified StatusVariables, with the
+     *             <code>startjob</code> action present
+     */
+    public MonitoringJob startJob(String initiator, String[] StatusVariables,
+            int count) throws IllegalArgumentException;
+
+    /**
+     * Returns the list of currently running Monitoring Jobs.
+     * 
+     * @return the list of running jobs
+     */
     public MonitoringJob[] getRunningJobs();
 }
