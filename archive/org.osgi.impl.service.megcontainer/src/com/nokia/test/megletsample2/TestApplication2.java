@@ -70,9 +70,9 @@ public class TestApplication2 extends Meglet implements EventHandler {
 		else if (event.getTopic().equals("com/nokia/megtest/SubscribeEvent")) {
 			String task = (String) event.getProperty("task");
 			if (task.equals("subscribe"))
-				registerForEvents("com/nokia/megtest/RegisteredEvent");
+				registerForEvents("com/nokia/megtest/RegisteredEvent", null );
 			if (task.equals("unsubscribe"))
-				unregisterForEvents("com/nokia/megtest/RegisteredEvent");
+				unregisterForEvents("com/nokia/megtest/RegisteredEvent", null );
 			writeResult("EVENT SUBSCRIBED");
 		}
 		else if (event.getTopic().equals("com/nokia/megtest/RegisteredEvent"))
@@ -86,6 +86,7 @@ public class TestApplication2 extends Meglet implements EventHandler {
 			requestSuspend();
 		}
 	}
+	
 	private void writeResult(String result) {
 		try {
 			if (fileName == null)
@@ -96,5 +97,24 @@ public class TestApplication2 extends Meglet implements EventHandler {
 			stream.close();
 		}
 		catch (IOException e) {}
+	}
+
+
+	/**
+	 * 
+	 * @see org.osgi.service.component.ComponentInstance#dispose()
+	 */
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * @return
+	 * @see org.osgi.service.component.ComponentInstance#getInstance()
+	 */
+	public Object getInstance() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
