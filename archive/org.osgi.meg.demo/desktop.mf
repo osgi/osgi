@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bundle-Activator: ${p}.desktop.Activator
+Bundle-Activator: ${p}.desktop.SimpleDesktop
 Bundle-SymbolicName: ${p}.desktop
 Bundle-Version: 1.0.0
 $(IMPORT-PACKAGE)
