@@ -19,8 +19,6 @@ package org.osgi.impl.service.deploymentadmin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -111,6 +109,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
             processBundles(wjis);
             processResources(wjis);
             // TODO startBundles();
+        } catch (CancelException e) {
+            throw e;
         } catch (Exception e) {
             transaction.rollback();
             throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR, 
@@ -245,7 +245,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     }
 
     public void cancel() {
-        // TODO
+        transaction.cancel();
     }
     
 }

@@ -65,7 +65,7 @@ public class Transaction {
 
     public synchronized boolean addRecord(TransactionRecord record) {
         if (cancelled)
-            throw new RuntimeException("Deployment operation cancelled");
+            throw new CancelException();
         
         if (PROCESSOR == record.code) {
             ResourceProcessor proc = (ResourceProcessor) record.objs[0];

@@ -51,6 +51,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     // persisted fields
     private Set     dps = new HashSet();		// deployment packages
     private Integer nextDpId = new Integer(0);  // id of the next DP
+    private boolean cancelled;
     
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
@@ -105,6 +106,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     {
         WrappedJarInputStream jis;
         DeploymentPackageImpl srcDp = null;
+        cancelled = false;
         
         // create source DP
         try {
@@ -118,7 +120,12 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         checkPermission("name: "  + srcDp.getName(), 
                 DeploymentAdminPermission.ACTION_INSTALL);
         session = createSession(srcDp);
-        session.go(jis);
+        try {
+            session.go(jis);
+        } catch (CancelException e) {
+            return null;
+        }
+        
         if (session.getDeploymentAction() == DeploymentSession.INSTALL)
             dps.add(srcDp);
         else if (session.getDeploymentAction() == DeploymentSession.UNINSTALL)
@@ -172,7 +179,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	    if (null == session)
 	        return false;
 	    else  {
-	        session.cancel(); 
+	        session.cancel();
+	        cancelled = true;
 	        return true;
 	    }
 	}

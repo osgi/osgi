@@ -334,14 +334,20 @@ public class DoIt implements BundleActivator {
         Db db = (Db) context.getService(ref);
         DeploymentPackage dp = null;
         
+        // creates a thread that calls the cancel() methods
+        Thread cancelThread = new Thread(new Runnable() {
+            public void run() {
+        		try {Thread.sleep(3000);} catch (Exception e) {}
+        	    da.cancel();                
+            }
+        });
+        cancelThread.start();
+        
         InputStream is = new FileInputStream(HOME + "db_test_04.dp");
 		dp = da.installDeploymentPackage(is);
 		
-		try {Thread.sleep(3000);} catch (Exception e) {}
-       
-		da.cancel();
-		
-		try {Thread.sleep(3000);} catch (Exception e) {}
+		if (null != dp)
+		    throw new Exception("Operation has not been cancelled");
 		
 		DeploymentPackage[] dps = da.listDeploymentPackages();
 		for (int i = 0; i < dps.length; i++) {
@@ -353,7 +359,7 @@ public class DoIt implements BundleActivator {
     }
     
     // FOR TEST ONLY
-    public static void main(String[] args) throws IOException {
+    /*public static void main(String[] args) throws IOException {
         FileInputStream is = null;
         try {
 	        is = new FileInputStream("/eclipse/workspaceMEG/org.osgi.impl.service.deploymentadmin/res/db_test_02_update_01.dp");
@@ -374,6 +380,6 @@ public class DoIt implements BundleActivator {
                     ex.printStackTrace();
                 }
         }
-    }
+    }*/
     
 }
