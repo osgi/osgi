@@ -61,7 +61,8 @@ public final class MegletHandleImpl extends MegletHandle {
 
 	public MegletHandleImpl(MegletContainer megletContainer, Meglet meglet,
 			MegletDescriptor appDesc, BundleContext bc) throws Exception {
-		
+		super("TODOPID", appDesc);
+		//TODO
 		appDescRef = megletContainer.getReference( appDesc );		
 		pid = appDesc.getPID();
 		
@@ -79,38 +80,13 @@ public final class MegletHandleImpl extends MegletHandle {
 	 * 
 	 * @return the state of the Meglet instance
 	 */
-	public int getState() throws Exception {
+	public int getState() {
 		if( status == MegletHandleImpl.NONEXISTENT )
-			throw new Exception( "Invalid state!" );
+			throw new RuntimeException( "Invalid state!" );
 		return status;
 	}	
 
-	/**
-	 * Returns the instance id of the Meglet instance. Must be unique on the
-	 * device.
-	 * 
-	 * @throws IllegalStateException
-	 *             if the Meglet handle is unregistered
-	 * 
-	 * @return the instance id of the Meglet instance
-	 */
-	public String getInstanceID() {
-		return pid;
-	}
 
-	/**
-	 * Returns service reference to the application descriptor of the Meglet to
-	 * which this Meglet instance belongs to.
-	 * 
-	 * @return the application descriptor of the Meglet to which this Meglet
-	 *         instance belongs to
-	 * 
-	 * @throws IllegalStateException
-	 *             if the Meglet handle is unregistered
-	 */
-	public ServiceReference getApplicationDescriptor() {
-		return appDescRef;
-	}
 
 	public ServiceReference startHandle(Map args) throws Exception {
 		AccessController.checkPermission(new ApplicationAdminPermission(pid, 

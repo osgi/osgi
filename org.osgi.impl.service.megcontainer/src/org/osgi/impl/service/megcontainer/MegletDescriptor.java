@@ -66,6 +66,8 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 
 	public MegletDescriptor(BundleContext bc, Properties props, Map names,
 			Map icons, String defaultLang, String startClass, Bundle bundle, MegletContainer mc ) throws Exception {
+		super("TODOPID");
+		//TODO
 		this.bc = bc;
 		this.props = new Properties();
 		this.props.putAll(props);
@@ -109,17 +111,6 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 		return startClass;
 	}
 
-	/**
-	 * Returns the unique identifier of the represented Meglet.
-	 * 
-	 * @return the unique identifier of the represented Meglet
-	 * 
-	 * @throws IllegalStateException
-	 *             if the Meglet descriptor is unregistered
-	 */
-	public String getPID() {
-		return new String( pid );
-	}
 
 
 	/**
@@ -172,7 +163,7 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 		try {
 			launchable = megletContainer.isLaunchable( this );
 		}catch (Exception e) {
-			log( LogService.LOG_ERROR,
+			MegletContainer.log( bc, LogService.LOG_ERROR,
 				"Exception occurred at searching the Meglet container reference!", e);
 		}
 		properties.put("application.locked", (new Boolean(isLocked())).toString());
