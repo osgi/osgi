@@ -13,7 +13,7 @@
 		<attribute name="autoenable" type="boolean" default="true" use="optional"></attribute>
 		<attribute name="name" type="string" use="required"></attribute>
 		<attribute name="localization" type="string" use="optional"></attribute>
-		<attribute name="factory" type="string" use="optional"></attribute>
+		<attribute name="factory" type="string" default="false" use="optional"></attribute>
 	</complexType>
 
 	<complexType name="implementationType">

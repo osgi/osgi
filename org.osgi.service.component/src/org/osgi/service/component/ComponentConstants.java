@@ -52,13 +52,6 @@ public interface ComponentConstants {
 	public final static String COMPONENT_NAME = "component.name";
 
 	/**
-	 * A service registration property for the ComponentFactory for a Service
-	 * Component. It contains the names of the ComponentFactory. The type of
-	 * this property must be <tt>String</tt>.
-	 */
-	public final static String COMPONENT_FACTORY = "component.factory";
-
-	/**
 	 * A suffix for a service registration property for a reference target. It
 	 * contains the filter to select the target services for a reference. The
 	 * type of this property must be <tt>String</tt>.
