@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -14,6 +14,7 @@ package org.eclipse.osgi.framework.internal.core;
 import java.security.*;
 import java.util.*;
 import org.eclipse.osgi.framework.debug.Debug;
+import org.osgi.framework.Bundle;
 
 /**
  * A heterogeneous collection of permissions for a bundle.
@@ -178,11 +179,13 @@ final class BundlePermissions extends BundlePermissionCollection {
 				PermissionCollection collection = null;
 				Class clazz;
 
+				// TODO need to evaluate if this still applies with multiple versions of a package
 				// We really need to resolve the permission
 				// by loading it only from the proper classloader,
 				// i.e. the system classloader or and exporting bundle's
 				// classloader. Otherwise there is a security hole.
-				clazz = packageAdmin.loadServiceClass(name, null);
+				// clazz = packageAdmin.loadServiceClass(name, null);
+				clazz = permission.getClass();
 				if (clazz == null) {
 					return null;
 				}
@@ -254,10 +257,10 @@ final class BundlePermissions extends BundlePermissionCollection {
 	/**
 	 * The Permission collection will unresolve the permissions in these packages.
 	 *
-	 * @param unresolvedPackages A list of the package which have been unresolved
+	 * @param refreshedBundles A list of the bundles which have been refreshed
 	 * as a result of a packageRefresh
 	 */
-	void unresolvePermissions(Hashtable unresolvedPackages) {
+	void unresolvePermissions(AbstractBundle[] refreshedBundles) {
 		synchronized (collections) {
 			int size = collections.size();
 
@@ -270,20 +273,17 @@ final class BundlePermissions extends BundlePermissionCollection {
 
 			for (int i = 0; i < size; i++) {
 				Class clazz = clazzes[i];
-
-				String name = clazz.getName();
-
-				int index = name.lastIndexOf('.'); /* find last period in class name */
-
-				if (index > 0) {
-					if (unresolvedPackages.get(name.substring(0, index)) != null) {
+				Bundle bundle = packageAdmin.getBundle(clazz);
+				if (bundle == null)
+					continue;
+				for (int j = 0; j < refreshedBundles.length; j++)
+					if (refreshedBundles[j] == bundle) {
 						if (Debug.DEBUG && Debug.DEBUG_SECURITY) {
-							Debug.println("  Unresolving permission class " + name); //$NON-NLS-1$
+							Debug.println("  Unresolving permission class " + clazz.getName()); //$NON-NLS-1$
 						}
-
 						collections.remove(clazz);
+						continue;
 					}
-				}
 			}
 		}
 	}

@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -13,6 +13,7 @@ package org.eclipse.osgi.framework.util;
 
 import java.io.IOException;
 import java.security.*;
+import java.util.Vector;
 import org.eclipse.osgi.framework.adaptor.PermissionStorage;
 
 /**
@@ -23,10 +24,13 @@ public class SecurePermissionStorage implements PermissionStorage, PrivilegedExc
 	private PermissionStorage storage;
 	private String location;
 	private String[] data;
+	private Vector v;
 	private int action;
 	private static final int GET = 1;
 	private static final int SET = 2;
 	private static final int LOCATION = 3;
+	private static final int DESERIALIZE = 4;
+	private static final int SERIALIZE = 5;
 
 	public SecurePermissionStorage(PermissionStorage storage) {
 		this.storage = storage;
@@ -41,6 +45,11 @@ public class SecurePermissionStorage implements PermissionStorage, PrivilegedExc
 				return null;
 			case LOCATION :
 				return storage.getLocations();
+			case SERIALIZE :
+				storage.serializeConditionalPermissionInfos(v);
+				return null;
+			case DESERIALIZE :
+				return storage.deserializeConditionalPermissionInfos();
 		}
 
 		throw new UnsupportedOperationException();
@@ -74,6 +83,26 @@ public class SecurePermissionStorage implements PermissionStorage, PrivilegedExc
 
 		try {
 			AccessController.doPrivileged(this);
+		} catch (PrivilegedActionException e) {
+			throw (IOException) e.getException();
+		}
+	}
+
+	public void serializeConditionalPermissionInfos(Vector v) throws IOException {
+		this.action = SERIALIZE;
+		this.v = v;
+		try {
+			AccessController.doPrivileged(this);
+		} catch (PrivilegedActionException e) {
+			throw (IOException) e.getException();
+		}
+
+	}
+
+	public Vector deserializeConditionalPermissionInfos() throws IOException {
+		this.action = DESERIALIZE;
+		try {
+			return (Vector) AccessController.doPrivileged(this);
 		} catch (PrivilegedActionException e) {
 			throw (IOException) e.getException();
 		}

@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -15,9 +15,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.security.Permission;
-import java.util.Hashtable;
+import java.security.ProtectionDomain;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.util.SecureAction;
+import org.osgi.framework.AdminPermission;
 import org.osgi.framework.BundleException;
 
 /**
@@ -27,6 +28,8 @@ import org.osgi.framework.BundleException;
  */
 
 public class SystemBundle extends BundleHost {
+
+	ProtectionDomain systemDomain;
 
 	/**
 	 * Private SystemBundle object constructor.
@@ -38,6 +41,7 @@ public class SystemBundle extends BundleHost {
 	 */
 	protected SystemBundle(Framework framework) throws BundleException {
 		super(framework.adaptor.createSystemBundleData(), framework); // startlevel=0 means framework stopped
+		Constants.setInternalSymbolicName(bundledata.getSymbolicName());
 		state = STARTING;
 		context = createContext();
 	}
@@ -51,7 +55,7 @@ public class SystemBundle extends BundleHost {
 		SecurityManager sm = System.getSecurityManager();
 
 		if (sm != null) {
-			domain = getClass().getProtectionDomain();
+			systemDomain = getClass().getProtectionDomain();
 		}
 	}
 
@@ -72,6 +76,7 @@ public class SystemBundle extends BundleHost {
 	 *
 	 */
 	protected void refresh() throws BundleException {
+		// do nothing
 	}
 
 	/**
@@ -107,7 +112,7 @@ public class SystemBundle extends BundleHost {
 	 */
 	protected Class loadClass(String name, boolean checkPermission) throws ClassNotFoundException {
 		if (checkPermission) {
-			framework.checkAdminPermission();
+			framework.checkAdminPermission(this, AdminPermission.CLASS);
 			checkValid();
 		}
 		return (Class.forName(name));
@@ -135,7 +140,7 @@ public class SystemBundle extends BundleHost {
 	 *
 	 */
 	public void start() throws BundleException {
-		framework.checkAdminPermission();
+		framework.checkAdminPermission(this, AdminPermission.EXECUTE);
 	}
 
 	/**
@@ -157,7 +162,7 @@ public class SystemBundle extends BundleHost {
 	 *
 	 */
 	public void stop() throws BundleException {
-		framework.checkAdminPermission();
+		framework.checkAdminPermission(this, AdminPermission.EXECUTE);
 
 		if (state == ACTIVE) {
 			Thread shutdown = SecureAction.createThread(new Runnable() {
@@ -193,6 +198,10 @@ public class SystemBundle extends BundleHost {
 		}
 	}
 
+	protected void suspend(boolean lock) {
+		// do nothing
+	}
+
 	/**
 	 * Update this bundle.
 	 * This method spawns a thread which will call framework.shutdown
@@ -200,7 +209,7 @@ public class SystemBundle extends BundleHost {
 	 *
 	 */
 	public void update() throws BundleException {
-		framework.checkAdminPermission();
+		framework.checkAdminPermission(this, AdminPermission.LIFECYCLE);
 
 		if (state == ACTIVE) {
 			Thread restart = SecureAction.createThread(new Runnable() {
@@ -236,9 +245,9 @@ public class SystemBundle extends BundleHost {
 	 *
 	 */
 	public void uninstall() throws BundleException {
-		framework.checkAdminPermission();
+		framework.checkAdminPermission(this, AdminPermission.LIFECYCLE);
 
-		throw new BundleException(Msg.formatter.getString("BUNDLE_SYSTEMBUNDLE_UNINSTALL_EXCEPTION")); //$NON-NLS-1$
+		throw new BundleException(Msg.BUNDLE_SYSTEMBUNDLE_UNINSTALL_EXCEPTION); //$NON-NLS-1$
 	}
 
 	/**
@@ -250,9 +259,9 @@ public class SystemBundle extends BundleHost {
 	 * @return <code>true</code>
 	 */
 	public boolean hasPermission(Object permission) {
-		if (domain != null) {
+		if (systemDomain != null) {
 			if (permission instanceof Permission) {
-				return domain.implies((Permission) permission);
+				return systemDomain.implies((Permission) permission);
 			}
 
 			return false;
@@ -264,48 +273,15 @@ public class SystemBundle extends BundleHost {
 	/**
 	 * No work to do for the SystemBundle.
 	 *
-	 * @param unresolvedPackages A list of the package which have been unresolved
-	 * as a result of a packageRefresh
+	 * @param refreshedBundles
+	 *            A list of bundles which have been refreshed as a result
+	 *            of a packageRefresh
 	 */
-	protected void unresolvePermissions(Hashtable unresolvedPackages) {
+	protected void unresolvePermissions(AbstractBundle[] refreshedBundles) {
+		// Do nothing
 	}
 
-	/**
-	 * System Bundle can never have fragments.
-	 */
-	public org.osgi.framework.Bundle[] getFragments() {
-		return null;
-	}
-
-	/*
-	 * The System Bundle always has permission to do anything;
-	 * override the check*Permission methods to always return true.
-	 */
-	protected boolean checkExportPackagePermission(String pkgName) {
-		return true;
-	}
-
-	protected boolean checkFragmentBundlePermission(String symbolicName) {
-		return true;
-	}
-
-	protected boolean checkFragmentHostPermission(String symbolicName) {
-		return true;
-	}
-
-	protected boolean checkImportPackagePermission(String pkgName) {
-		return true;
-	}
-
-	protected boolean checkPermissions() {
-		return true;
-	}
-
-	protected boolean checkProvideBundlePermission(String symbolicName) {
-		return true;
-	}
-
-	protected boolean checkRequireBundlePermission(String symbolicName) {
-		return true;
+	public String getSymbolicName() {
+		return Constants.OSGI_SYSTEM_BUNDLE;
 	}
 }

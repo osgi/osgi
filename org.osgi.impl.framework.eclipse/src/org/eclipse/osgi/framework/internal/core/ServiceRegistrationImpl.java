@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -31,7 +31,7 @@ import org.osgi.framework.*;
  * bundle wants to keep its service registered, it should keep the
  * ServiceRegistration object referenced.
  */
-
+//TODO That's kind of big
 public class ServiceRegistrationImpl implements ServiceRegistration {
 	/** Reference to this registration. */
 	protected ServiceReferenceImpl reference;
@@ -134,7 +134,7 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 		synchronized (registrationLock) {
 			if (service == null) /* in the process of unregisterING */
 			{
-				throw new IllegalStateException(Msg.formatter.getString("SERVICE_ALREADY_UNREGISTERED_EXCEPTION")); //$NON-NLS-1$
+				throw new IllegalStateException(Msg.SERVICE_ALREADY_UNREGISTERED_EXCEPTION); //$NON-NLS-1$
 			}
 
 			/* remove this object from the service registry */
@@ -201,7 +201,7 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 		 * but makes more sense.
 		 */
 		if (reference == null) {
-			throw new IllegalStateException(Msg.formatter.getString("SERVICE_ALREADY_UNREGISTERED_EXCEPTION")); //$NON-NLS-1$
+			throw new IllegalStateException(Msg.SERVICE_ALREADY_UNREGISTERED_EXCEPTION); //$NON-NLS-1$
 		}
 
 		return (reference);
@@ -233,7 +233,7 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 		synchronized (registrationLock) {
 			if (service == null) /* in the process of unregistering */
 			{
-				throw new IllegalStateException(Msg.formatter.getString("SERVICE_ALREADY_UNREGISTERED_EXCEPTION")); //$NON-NLS-1$
+				throw new IllegalStateException(Msg.SERVICE_ALREADY_UNREGISTERED_EXCEPTION); //$NON-NLS-1$
 			}
 
 			this.properties = createProperties(props);

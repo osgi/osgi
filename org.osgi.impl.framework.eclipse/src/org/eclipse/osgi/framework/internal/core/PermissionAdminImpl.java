@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -12,11 +12,17 @@
 package org.eclipse.osgi.framework.internal.core;
 
 import java.io.*;
-import java.security.*;
+import java.net.URL;
+import java.security.Permission;
+import java.security.ProtectionDomain;
 import java.util.Vector;
+import org.eclipse.osgi.framework.adaptor.BundleProtectionDomain;
 import org.eclipse.osgi.framework.adaptor.PermissionStorage;
 import org.eclipse.osgi.framework.debug.Debug;
+import org.osgi.framework.AdminPermission;
 import org.osgi.framework.FrameworkEvent;
+import org.osgi.service.condpermadmin.Condition;
+import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
@@ -122,7 +128,7 @@ public class PermissionAdminImpl implements PermissionAdmin {
 		}
 
 		defaultAssignedPermissions = new BundleCombinedPermissions(null);
-		defaultAssignedPermissions.setAssignedPermissions(createDefaultAssignedPermissions(getDefaultPermissions()));
+		defaultAssignedPermissions.setAssignedPermissions(createDefaultAssignedPermissions(getDefaultPermissions()), true);
 	}
 
 	/**
@@ -177,7 +183,7 @@ public class PermissionAdminImpl implements PermissionAdmin {
 	 * <tt>AdminPermission</tt>.
 	 */
 	public void setPermissions(String location, PermissionInfo[] permissions) {
-		framework.checkAdminPermission();
+		framework.checkAdminPermission(framework.systemBundle, AdminPermission.PERMISSION);
 
 		if (location == null) {
 			throw new NullPointerException();
@@ -215,9 +221,9 @@ public class PermissionAdminImpl implements PermissionAdmin {
 				BundleCombinedPermissions combined = (BundleCombinedPermissions) domain.getPermissions();
 
 				if (permissions == null) {
-					combined.setAssignedPermissions(defaultAssignedPermissions);
+					combined.setAssignedPermissions(defaultAssignedPermissions, true);
 				} else {
-					combined.setAssignedPermissions(createPermissions(permissions, bundle));
+					combined.setAssignedPermissions(createPermissions(permissions, bundle), false);
 				}
 			}
 		}
@@ -290,7 +296,7 @@ public class PermissionAdminImpl implements PermissionAdmin {
 	 * <tt>AdminPermission</tt>.
 	 */
 	public void setDefaultPermissions(PermissionInfo[] permissions) {
-		framework.checkAdminPermission();
+		framework.checkAdminPermission(framework.systemBundle, AdminPermission.PERMISSION);
 
 		PermissionStorage storage = new org.eclipse.osgi.framework.util.SecurePermissionStorage(this.storage);
 
@@ -315,7 +321,7 @@ public class PermissionAdminImpl implements PermissionAdmin {
 			return;
 		}
 
-		defaultAssignedPermissions.setAssignedPermissions(createDefaultAssignedPermissions(permissions));
+		defaultAssignedPermissions.setAssignedPermissions(createDefaultAssignedPermissions(permissions), true);
 	}
 
 	/**
@@ -370,16 +376,50 @@ public class PermissionAdminImpl implements PermissionAdmin {
 	 * @return BundleCombinedPermission object with the bundle's
 	 * dynamic permissions.
 	 */
-	protected PermissionCollection createPermissionCollection(AbstractBundle bundle) {
+	protected BundleProtectionDomain createProtectionDomain(AbstractBundle bundle) {
 		BundlePermissionCollection implied = getImpliedPermissions(bundle);
 
 		BundleCombinedPermissions combined = new BundleCombinedPermissions(implied);
 
 		BundlePermissionCollection assigned = getAssignedPermissions(bundle);
 
-		combined.setAssignedPermissions(assigned);
+		combined.setAssignedPermissions(assigned, assigned == defaultAssignedPermissions);
 
-		return combined;
+		combined.setConditionalPermissions(new ConditionalPermissions(bundle, framework.condPermAdmin));
+
+		/* now process the permissions.perm file, if it exists, and build the
+		 * restrictedPermissions using it. */
+		URL u = bundle.getEntry("META-INF/permissions.perm"); //$NON-NLS-1$
+		if (u != null) {
+			try {
+				DataInputStream dis = new DataInputStream(u.openStream());
+				String line;
+				Vector piList = new Vector();
+				while ((line = dis.readLine()) != null) {
+					line = line.trim();
+					if (line.startsWith("#") || line.startsWith("//") || line.length() == 0)  //$NON-NLS-1$//$NON-NLS-2$
+						continue;
+					try {
+						PermissionInfo pi = new PermissionInfo(line);
+						piList.add(pi);
+					} catch (Exception e) {
+						// Right now we just eat any exception that happens when
+						// parsing the PermissionInfo
+						framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, e);
+					}
+				}
+				ConditionalPermissionInfoImpl cpiArray[] = new ConditionalPermissionInfoImpl[1];
+				cpiArray[0] = new ConditionalPermissionInfoImpl(new ConditionInfo[0], (PermissionInfo[]) piList.toArray(new PermissionInfo[0]));
+				ConditionalPermissionSet cps = new ConditionalPermissionSet(cpiArray, new Condition[0]);
+				combined.setRestrictedPermissions(cps);
+			} catch (IOException e) {
+				// TODO What do we do here? The fact that we got the URL indicates that
+				// the file exists, but now we can't read it for some reason...
+				framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, e);
+			}
+		}
+
+		return new BundleProtectionDomainImpl(bundle, combined);
 	}
 
 	/**

@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -35,7 +35,7 @@ public class StateObjectFactoryImpl implements StateObjectFactory {
 		bundle.setHost(host);
 		bundle.setImportPackages(imports);
 		bundle.setExportPackages(exports);
-		bundle.setSingleton(singleton);
+		bundle.setStateBit(BundleDescriptionImpl.SINGLETON, singleton);
 		return bundle;
 	}
 
@@ -62,11 +62,11 @@ public class StateObjectFactoryImpl implements StateObjectFactory {
 		bundle.setImportPackages(newImports);
 		if (original.getHost() != null)
 			bundle.setHost(createHostSpecification(original.getHost()));
-		bundle.setSingleton(original.isSingleton());
+		bundle.setStateBit(BundleDescriptionImpl.SINGLETON, original.isSingleton());
 		return bundle;
 	}
 
-	public BundleSpecification createBundleSpecification(String requiredSymbolicName, VersionRange requiredVersionRange,boolean export, boolean optional) {
+	public BundleSpecification createBundleSpecification(String requiredSymbolicName, VersionRange requiredVersionRange, boolean export, boolean optional) {
 		BundleSpecificationImpl bundleSpec = new BundleSpecificationImpl();
 		bundleSpec.setName(requiredSymbolicName);
 		bundleSpec.setVersionRange(requiredVersionRange);
@@ -98,7 +98,7 @@ public class StateObjectFactoryImpl implements StateObjectFactory {
 		return hostSpec;
 	}
 
-	public ImportPackageSpecification createImportPackageSpecification(String packageName, VersionRange versionRange, String bundleSymbolicName, VersionRange bundleVersionRange, String[] propagate, int resolution, Map attributes) {
+	public ImportPackageSpecification createImportPackageSpecification(String packageName, VersionRange versionRange, String bundleSymbolicName, VersionRange bundleVersionRange, String[] propagate, int resolution, Map attributes, BundleDescription importer) {
 		ImportPackageSpecificationImpl packageSpec = new ImportPackageSpecificationImpl();
 		packageSpec.setName(packageName);
 		packageSpec.setVersionRange(versionRange);
@@ -107,6 +107,7 @@ public class StateObjectFactoryImpl implements StateObjectFactory {
 		packageSpec.setPropagate(propagate);
 		packageSpec.setResolution(resolution);
 		packageSpec.setAttributes(attributes);
+		packageSpec.setBundle(importer);
 		return packageSpec;
 	}
 
@@ -122,19 +123,15 @@ public class StateObjectFactoryImpl implements StateObjectFactory {
 		return packageSpec;
 	}
 
-	public ExportPackageDescription createExportPackageDescription(String packageName, Version version, String grouping, String include, String exclude, Map attributes, String[] mandatory, boolean root) {
-		return createExportPackageDescription(packageName, version, grouping, include, exclude, attributes, mandatory, root, null);
-	}
-
 	public ExportPackageDescription createExportPackageDescription(ExportPackageDescription original) {
-		return createExportPackageDescription(original.getName(), original.getVersion(), original.getGrouping(), original.getInclude(), original.getExclude(), original.getAttributes(), original.getMandatory(), original.isRoot(), null);
+		return createExportPackageDescription(original.getName(), original.getVersion(), original.getUses(), original.getInclude(), original.getExclude(), original.getAttributes(), original.getMandatory(), original.isRoot(), null);
 	}
 
-	public ExportPackageDescription createExportPackageDescription(String packageName, Version version, String grouping, String include, String exclude, Map attributes, String[] mandatory, boolean root, BundleDescription exporter) {
+	public ExportPackageDescription createExportPackageDescription(String packageName, Version version, String[] uses, String include, String exclude, Map attributes, String[] mandatory, boolean root, BundleDescription exporter) {
 		ExportPackageDescriptionImpl exportPackage = new ExportPackageDescriptionImpl();
 		exportPackage.setName(packageName);
 		exportPackage.setVersion(version);
-		exportPackage.setGrouping(grouping);
+		exportPackage.setUses(uses);
 		exportPackage.setInclude(include);
 		exportPackage.setExclude(exclude);
 		exportPackage.setAttributes(attributes);
@@ -170,8 +167,8 @@ public class StateObjectFactoryImpl implements StateObjectFactory {
 		return state;
 	}
 
-	public SystemState readSystemState(File stateLocation, boolean lazyLoad, long expectedTimeStamp) throws IOException {
-		StateReader reader = new StateReader(stateLocation, lazyLoad);
+	public SystemState readSystemState(File stateFile, File lazyFile, boolean lazyLoad, long expectedTimeStamp) throws IOException {
+		StateReader reader = new StateReader(stateFile, lazyFile, lazyLoad);
 		SystemState restoredState = new SystemState();
 		restoredState.setReader(reader);
 		restoredState.setFactory(this);
@@ -181,32 +178,59 @@ public class StateObjectFactoryImpl implements StateObjectFactory {
 	}
 
 	public State readState(InputStream stream) throws IOException {
-		return internalReadState(internalCreateState(), new DataInputStream(stream), -1);
+		return internalReadStateDeprecated(internalCreateState(), new DataInputStream(stream), -1);
 	}
 
 	public State readState(DataInputStream stream) throws IOException {
-		return internalReadState(internalCreateState(), stream, -1);
+		return internalReadStateDeprecated(internalCreateState(), stream, -1);
 	}
 
-	private State internalReadState(StateImpl toRestore, DataInputStream stream, long expectedTimestamp) throws IOException {
+	public State readState(File stateDirectory) throws IOException {
+		return internalReadState(internalCreateState(), stateDirectory, -1);
+	}
+
+	private State internalReadStateDeprecated(StateImpl toRestore, DataInputStream stream, long expectedTimestamp) throws IOException {
 		StateReader reader = new StateReader();
-		if (!reader.loadState(toRestore, stream, expectedTimestamp))
+		if (!reader.loadStateDeprecated(toRestore, stream, expectedTimestamp))
+			return null;
+		return toRestore;
+	}
+
+	private State internalReadState(StateImpl toRestore, File stateDirectory, long expectedTimestamp) throws IOException {
+		File stateFile = new File(stateDirectory, StateReader.STATE_FILE);
+		File lazyFile = new File(stateDirectory, StateReader.LAZY_FILE);
+		StateReader reader = new StateReader(stateFile, lazyFile, false);
+		if (!reader.loadState(toRestore, expectedTimestamp))
 			return null;
 		return toRestore;
 	}
 
 	public void writeState(State state, DataOutputStream stream) throws IOException {
-		internalWriteState(state, stream);
+		internalWriteStateDeprecated(state, stream);
+	}
+
+	public void writeState(State state, File stateDirectory) throws IOException {
+		if (stateDirectory == null)
+			throw new IOException();
+		StateWriter writer = new StateWriter();
+		File stateFile = new File(stateDirectory, StateReader.STATE_FILE);
+		File lazyFile = new File(stateDirectory, StateReader.LAZY_FILE);
+		writer.saveState((StateImpl) state, stateFile, lazyFile);
 	}
 
 	public void writeState(State state, OutputStream stream) throws IOException {
-		internalWriteState(state, new DataOutputStream(stream));
+		internalWriteStateDeprecated(state, new DataOutputStream(stream));
 	}
 
-	public void internalWriteState(State state, DataOutputStream stream) throws IOException {
+	public void writeState(State state, File stateFile, File lazyFile) throws IOException {
+		StateWriter writer = new StateWriter();
+		writer.saveState((StateImpl) state, stateFile, lazyFile);
+	}
+
+	public void internalWriteStateDeprecated(State state, DataOutputStream stream) throws IOException {
 		if (state.getFactory() != this)
 			throw new IllegalArgumentException();
 		StateWriter writer = new StateWriter();
-		writer.saveState((StateImpl) state, stream);
+		writer.saveStateDeprecated((StateImpl) state, stream);
 	}
 }

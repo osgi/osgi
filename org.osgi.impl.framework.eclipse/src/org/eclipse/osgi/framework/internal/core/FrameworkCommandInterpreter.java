@@ -1,9 +1,9 @@
 /*******************************************************************************
  * Copyright (c) 2003, 2004 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -17,6 +17,7 @@ import java.net.URL;
 import java.util.*;
 import org.eclipse.osgi.framework.console.CommandInterpreter;
 import org.eclipse.osgi.framework.console.CommandProvider;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * This class knows how to parse and execute the command line arguments to the FrameworkConsole.
@@ -190,7 +191,7 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 	 */
 	private void setMaximumLinesToScroll(int lines) {
 		if (lines < 0) {
-			throw new IllegalArgumentException(ConsoleMsg.formatter.getString("CONSOLE_LINES_TO_SCROLL_NEGATIVE_ERROR")); //$NON-NLS-1$
+			throw new IllegalArgumentException(ConsoleMsg.CONSOLE_LINES_TO_SCROLL_NEGATIVE_ERROR); //$NON-NLS-1$
 		}
 
 		maxLineCount = lines;
@@ -254,7 +255,7 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 					Throwable nested = (Throwable) method.invoke(t, null);
 
 					if ((nested != null) && (nested != t)) {
-						out.println(ConsoleMsg.formatter.getString("CONSOLE_NESTED_EXCEPTION")); //$NON-NLS-1$
+						out.println(ConsoleMsg.CONSOLE_NESTED_EXCEPTION); 
 						printStackTrace(nested);
 					}
 				} catch (IllegalAccessException e) {
@@ -342,10 +343,10 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 					}
 				}
 			} catch (Exception e) {
-				System.err.println(ConsoleMsg.formatter.getString("CONSOLE_ERROR_READING_RESOURCE", resource)); //$NON-NLS-1$
+				System.err.println(NLS.bind(ConsoleMsg.CONSOLE_ERROR_READING_RESOURCE, resource));
 			}
 		} else {
-			println(ConsoleMsg.formatter.getString("CONSOLE_RESOURCE_NOT_IN_BUNDLE", resource, bundle.toString())); //$NON-NLS-1$
+			println(NLS.bind(ConsoleMsg.CONSOLE_RESOURCE_NOT_IN_BUNDLE, resource, bundle.toString())); //$NON-NLS-1$
 		}
 	}
 
@@ -358,7 +359,7 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 		int max = getMaximumLinesToScroll();
 		if (max > 0) {
 			if (currentLineCount >= max) {
-				out.print(ConsoleMsg.formatter.getString("CONSOLE_MORE")); //$NON-NLS-1$
+				out.print(ConsoleMsg.CONSOLE_MORE); 
 				out.flush();
 				con.getInput(); // wait for user entry
 				resetLineCount(); //Reset the line counter for the 'more' prompt
@@ -373,16 +374,16 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 	public String getHelp() {
 		StringBuffer help = new StringBuffer(256);
 		help.append(newline);
-		help.append(ConsoleMsg.formatter.getString("CONSOLE_HELP_CONTROLLING_CONSOLE_HEADING")); //$NON-NLS-1$
+		help.append(ConsoleMsg.CONSOLE_HELP_CONTROLLING_CONSOLE_HEADING); 
 		help.append(newline);
 		help.append(tab);
 		help.append("more - "); //$NON-NLS-1$
-		help.append(ConsoleMsg.formatter.getString("CONSOLE_HELP_MORE")); //$NON-NLS-1$
+		help.append(ConsoleMsg.CONSOLE_HELP_MORE); 
 		if (con.getUseSocketStream()) {
 			help.append(newline);
 			help.append(tab);
 			help.append("disconnect - "); //$NON-NLS-1$
-			help.append(ConsoleMsg.formatter.getString("CONSOLE_HELP_DISCONNECT")); //$NON-NLS-1$
+			help.append(ConsoleMsg.CONSOLE_HELP_DISCONNECT); 
 		}
 		return help.toString();
 	}
@@ -392,8 +393,8 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 	 *
 	 */
 	public void _more() throws Exception {
-		if (confirm(ConsoleMsg.formatter.getString("CONSOLE_CONFIRM_MORE"), true)) { //$NON-NLS-1$
-			int lines = prompt(newline + ConsoleMsg.formatter.getString("CONSOLE_MORE_ENTER_LINES"), 24); //$NON-NLS-1$
+		if (confirm(ConsoleMsg.CONSOLE_CONFIRM_MORE, true)) { 
+			int lines = prompt(newline + ConsoleMsg.CONSOLE_MORE_ENTER_LINES, 24);
 			setMaximumLinesToScroll(lines);
 		} else {
 			setMaximumLinesToScroll(0);
@@ -401,7 +402,7 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 	}
 
 	private void _disconnect() throws Exception {
-		if (confirm(ConsoleMsg.formatter.getString("CONSOLE_CONFIRM_DISCONNECT"), true)) { //$NON-NLS-1$
+		if (confirm(ConsoleMsg.CONSOLE_CONFIRM_DISCONNECT, true)) {
 			con.disconnect();
 		}
 	}
@@ -419,13 +420,13 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 			if (string.length() > 0) {
 				print(string);
 			} else {
-				print(ConsoleMsg.formatter.getString("CONSOLE_CONFIRM")); //$NON-NLS-1$
+				print(ConsoleMsg.CONSOLE_CONFIRM);
 			}
-			print(" (" + ConsoleMsg.formatter.getString("CONSOLE_CONFIRM_VALUES")); //$NON-NLS-1$ //$NON-NLS-2$
+			print(" (" + ConsoleMsg.CONSOLE_CONFIRM_VALUES); //$NON-NLS-1$
 			if (defaultAnswer) {
-				print(ConsoleMsg.formatter.getString("CONSOLE_Y") + ") ");  //$NON-NLS-1$//$NON-NLS-2$
+				print(ConsoleMsg.CONSOLE_Y + ") ");  //$NON-NLS-1$
 			} else {
-				print(ConsoleMsg.formatter.getString("CONSOLE_N") + ") "); //$NON-NLS-1$ //$NON-NLS-2$
+				print(ConsoleMsg.CONSOLE_N + ") "); //$NON-NLS-1$
 			}
 		}
 		String input = con.getInput();
@@ -433,7 +434,7 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 		if (input.length() == 0) {
 			return defaultAnswer;
 		}
-		return input.toLowerCase().charAt(0) == ConsoleMsg.formatter.getString("CONSOLE_Y").charAt(0); //$NON-NLS-1$
+		return input.toLowerCase().charAt(0) == ConsoleMsg.CONSOLE_Y.charAt(0);
 	}
 
 	/**
@@ -451,7 +452,7 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 				StringBuffer buf = new StringBuffer(256);
 				buf.append(string);
 				buf.append(" "); //$NON-NLS-1$
-				buf.append(ConsoleMsg.formatter.getString("CONSOLE_PROMPT_DEFAULT")); //$NON-NLS-1$
+				buf.append(ConsoleMsg.CONSOLE_PROMPT_DEFAULT);
 				buf.append("="); //$NON-NLS-1$
 				buf.append(defaultAnswer);
 				buf.append(") "); //$NON-NLS-1$
@@ -489,9 +490,9 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 				}
 			} catch (NumberFormatException e) {
 			}
-			println(ConsoleMsg.formatter.getString("CONSOLE_INVALID_INPUT")); //$NON-NLS-1$
+			println(ConsoleMsg.CONSOLE_INVALID_INPUT); 
 		}
-		println(ConsoleMsg.formatter.getString("CONSOLE_TOO_MUCH_INVALID_INPUT")); //$NON-NLS-1$
+		println(ConsoleMsg.CONSOLE_TOO_MUCH_INVALID_INPUT);
 		return defaultAnswer;
 	}
 }

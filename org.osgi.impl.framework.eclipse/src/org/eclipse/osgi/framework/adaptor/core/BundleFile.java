@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -21,6 +21,8 @@ import org.eclipse.osgi.framework.adaptor.BundleData;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.internal.core.Constants;
 import org.eclipse.osgi.framework.internal.protocol.bundleresource.Handler;
+import org.eclipse.osgi.util.NLS;
+import org.osgi.framework.FrameworkEvent;
 
 /**
  * The BundleFile API is used by Adaptors to read resources out of an 
@@ -31,6 +33,14 @@ abstract public class BundleFile {
 	 * The File object for this BundleFile.
 	 */
 	protected File basefile;
+
+	/**
+	 * Default constructor
+	 *
+	 */
+	public BundleFile() {
+		// do nothing
+	}
 
 	/**
 	 * BundleFile constructor
@@ -116,14 +126,8 @@ abstract public class BundleFile {
 			return null;
 
 		try {
-			StringBuffer url = new StringBuffer(Constants.OSGI_RESOURCE_URL_PROTOCOL);
-			url.append("://").append(hostBundleID); //$NON-NLS-1$
-			if (index > 0)
-				url.append(':').append(index);
-			if (path.length() == 0 || path.charAt(0) != '/')
-				url.append('/');
-			url.append(path);
-			return new URL(null, url.toString(), new Handler(bundleEntry));
+			//use the constant string for the protocol to prevent duplication
+			return new URL(Constants.OSGI_RESOURCE_URL_PROTOCOL, Long.toString(hostBundleID), index, path, new Handler(bundleEntry));
 		} catch (MalformedURLException e) {
 			return null;
 		}
@@ -135,22 +139,54 @@ abstract public class BundleFile {
 	public static class ZipBundleFile extends BundleFile {
 		protected BundleData bundledata;
 		protected ZipFile zipFile;
-		protected boolean closed = false;
+		protected boolean closed = true;
 
 		public ZipBundleFile(File basefile, BundleData bundledata) throws IOException {
 			super(basefile);
+			if (!basefile.exists())
+				throw new IOException(NLS.bind(AdaptorMsg.ADAPTER_FILEEXIST_EXCEPTION, basefile));
 			this.bundledata = bundledata;
 			this.closed = true;
-			open();
 		}
 
-		protected ZipEntry getZipEntry(String path) {
+		protected boolean checkedOpen() {
+			try {
+				return getZipFile() != null;
+			} catch (IOException e) {
+				AbstractBundleData abstractData = (AbstractBundleData) bundledata;
+				abstractData.getAdaptor().getEventPublisher().publishFrameworkEvent(FrameworkEvent.ERROR, abstractData.getBundle(), e);
+				return false;
+			}
+		}
+
+		protected ZipFile basicOpen() throws IOException {
+			return new ZipFile(this.basefile);
+		}
+
+		protected ZipFile getZipFile() throws IOException {
+			if (closed) {
+				zipFile = basicOpen();
+				closed = false;
+			}
+			return zipFile;
+		}
+
+		private ZipEntry getZipEntry(String path) {
 			if (path.length() > 0 && path.charAt(0) == '/')
 				path = path.substring(1);
-			return zipFile.getEntry(path);
+			ZipEntry entry = zipFile.getEntry(path);
+			if (entry != null && entry.getSize() == 0 && !entry.isDirectory()) {
+				// work around the directory bug see bug 83542
+				ZipEntry dirEntry = zipFile.getEntry(path + '/');
+				if (dirEntry != null)
+					entry = dirEntry;
+			}
+			return entry;
 		}
 
 		protected File extractDirectory(String dirName) {
+			if (!checkedOpen())
+				return null;
 			Enumeration entries = zipFile.entries();
 			while (entries.hasMoreElements()) {
 				String entryPath = ((ZipEntry) entries.nextElement()).getName();
@@ -160,14 +196,14 @@ abstract public class BundleFile {
 			return getExtractFile(dirName);
 		}
 
-		protected File getExtractFile(String entryName) {
+		private File getExtractFile(String entryName) {
 			if (!(bundledata instanceof AbstractBundleData)) {
 				return null;
 			}
 			File bundleGenerationDir = ((AbstractBundleData) bundledata).createGenerationDir();
 			/* if the generation dir exists, then we have place to cache */
 			if (bundleGenerationDir != null && bundleGenerationDir.exists()) {
-				String path = ".cp"; /* put all these entries in this subdir */ //$NON-NLS-1$
+				String path = ".cp"; /* put all these entries in this subdir *///$NON-NLS-1$
 				String name = entryName.replace('/', File.separatorChar);
 				if ((name.length() > 1) && (name.charAt(0) == File.separatorChar)) /* if name has a leading slash */{
 					path = path.concat(name);
@@ -180,6 +216,8 @@ abstract public class BundleFile {
 		}
 
 		public File getFile(String entry) {
+			if (!checkedOpen())
+				return null;
 			ZipEntry zipEntry = getZipEntry(entry);
 			if (zipEntry == null) {
 				return null;
@@ -200,7 +238,7 @@ abstract public class BundleFile {
 								if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 									Debug.println("Unable to create directory: " + nested.getPath()); //$NON-NLS-1$
 								}
-								throw new IOException(AdaptorMsg.formatter.getString("ADAPTOR_DIRECTORY_CREATE_EXCEPTION", nested.getAbsolutePath())); //$NON-NLS-1$
+								throw new IOException(NLS.bind(AdaptorMsg.ADAPTOR_DIRECTORY_CREATE_EXCEPTION, nested.getAbsolutePath()));
 							}
 							extractDirectory(zipEntry.getName());
 						} else {
@@ -217,7 +255,7 @@ abstract public class BundleFile {
 								if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 									Debug.println("Unable to create directory: " + dir.getPath()); //$NON-NLS-1$
 								}
-								throw new IOException(AdaptorMsg.formatter.getString("ADAPTOR_DIRECTORY_CREATE_EXCEPTION", dir.getAbsolutePath())); //$NON-NLS-1$
+								throw new IOException(NLS.bind(AdaptorMsg.ADAPTOR_DIRECTORY_CREATE_EXCEPTION, dir.getAbsolutePath()));
 							}
 							/* copy the entry to the cache */
 							AbstractFrameworkAdaptor.readFile(in, nested);
@@ -235,6 +273,8 @@ abstract public class BundleFile {
 		}
 
 		public boolean containsDir(String dir) {
+			if (!checkedOpen())
+				return false;
 			if (dir == null)
 				return false;
 
@@ -264,6 +304,8 @@ abstract public class BundleFile {
 		}
 
 		public BundleEntry getEntry(String path) {
+			if (!checkedOpen())
+				return null;
 			ZipEntry zipEntry = getZipEntry(path);
 			if (zipEntry == null) {
 				if (path.length() == 0 || path.charAt(path.length() - 1) == '/') {
@@ -274,11 +316,13 @@ abstract public class BundleFile {
 				return null;
 			}
 
-			return new BundleEntry.ZipBundleEntry(zipFile, zipEntry, this);
+			return new BundleEntry.ZipBundleEntry(zipEntry, this);
 
 		}
 
 		public Enumeration getEntryPaths(String path) {
+			if (!checkedOpen())
+				return null;
 			if (path == null) {
 				throw new NullPointerException();
 			}
@@ -320,12 +364,8 @@ abstract public class BundleFile {
 			}
 		}
 
-		public void open() throws IOException {
-			if (closed) {
-				zipFile = new ZipFile(this.basefile);
-
-				closed = false;
-			}
+		public void open() {
+			//do nothing
 		}
 
 	}
@@ -338,7 +378,7 @@ abstract public class BundleFile {
 		public DirBundleFile(File basefile) throws IOException {
 			super(basefile);
 			if (!basefile.exists() || !basefile.isDirectory()) {
-				throw new IOException(AdaptorMsg.formatter.getString("ADAPTOR_DIRECTORY_EXCEPTION", basefile)); //$NON-NLS-1$
+				throw new IOException(NLS.bind(AdaptorMsg.ADAPTOR_DIRECTORY_EXCEPTION, basefile));
 			}
 		}
 
@@ -398,23 +438,22 @@ abstract public class BundleFile {
 					}
 
 				};
-			} else {
-				return new Enumeration() {
-					int cur = 0;
-
-					public boolean hasMoreElements() {
-						return cur < 1;
-					}
-
-					public Object nextElement() {
-						if (cur == 0) {
-							cur = 1;
-							return path;
-						} else
-							throw new NoSuchElementException();
-					}
-				};
 			}
+			return new Enumeration() {
+				int cur = 0;
+
+				public boolean hasMoreElements() {
+					return cur < 1;
+				}
+
+				public Object nextElement() {
+					if (cur == 0) {
+						cur = 1;
+						return path;
+					}
+					throw new NoSuchElementException();
+				}
+			};
 		}
 
 		public void close() {
@@ -485,7 +524,7 @@ abstract public class BundleFile {
 			// do nothing
 		}
 	}
-	
+
 	public File getBaseFile() {
 		return basefile;
 	}

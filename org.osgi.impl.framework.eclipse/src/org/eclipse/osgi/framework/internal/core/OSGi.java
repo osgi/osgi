@@ -1,9 +1,9 @@
 /*******************************************************************************
  * Copyright (c) 2003, 2004 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -96,12 +96,12 @@ public class OSGi {
 	 */
 	protected void displayBanner() {
 		System.out.println();
-		System.out.print(Msg.formatter.getString("ECLIPSE_OSGI_NAME")); //$NON-NLS-1$
+		System.out.print(Msg.ECLIPSE_OSGI_NAME); //$NON-NLS-1$
 		System.out.print(" "); //$NON-NLS-1$
-		System.out.println(Msg.formatter.getString("ECLIPSE_OSGI_VERSION")); //$NON-NLS-1$
+		System.out.println(Msg.ECLIPSE_OSGI_VERSION); //$NON-NLS-1$
 		System.out.println();
-		System.out.println(Msg.formatter.getString("OSGI_VERSION")); //$NON-NLS-1$
+		System.out.println(Msg.OSGI_VERSION); //$NON-NLS-1$
 		System.out.println();
-		System.out.println(Msg.formatter.getString("ECLIPSE_COPYRIGHT")); //$NON-NLS-1$
+		System.out.println(Msg.ECLIPSE_COPYRIGHT); //$NON-NLS-1$
 	}
 }

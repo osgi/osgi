@@ -1,14 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package org.eclipse.osgi.service.resolver;
+
+import java.util.Dictionary;
 
 import org.osgi.framework.*;
 import org.osgi.framework.BundleException;
@@ -314,4 +316,23 @@ public interface State {
 	 */
 	public ExportPackageDescription linkDynamicImport(BundleDescription importingBundle, String requestedPackage);
 
+	/**
+	 * Sets the platform properties of the state.  The platform properties
+	 * are used to match platform filters that are specified in Eclipse-PlatformFilter
+	 * bundle manifest header.  The following propreties are supported by the
+	 * state: <p>
+	 * osgi.nl - the platform language setting<br>
+	 * osgi.os - the platform operating system<br>
+	 * osgi.arch - the platform architecture<br>
+	 * osgi.ws - the platform windowing system<br>
+	 * <p>
+	 * The values used for the supported properties can be <tt>String</tt> type
+	 * to specify a single value for the property or they can by <tt>String[]</tt>
+	 * to specify a list of values for the property. 
+	 * @param platformProperties the platform properties of the state
+	 * @return false if the platformProperties specified do not change any of the
+	 * supported properties already set.  If any of the supported property values 
+	 * are changed as a result of calling this method then true is returnd
+	 */
+	public boolean setPlatformProperties(Dictionary platformProperties);
 }

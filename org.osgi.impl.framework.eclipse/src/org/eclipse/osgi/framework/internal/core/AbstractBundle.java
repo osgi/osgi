@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003,2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -16,12 +16,11 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.*;
 import java.util.*;
-import org.eclipse.osgi.framework.adaptor.BundleData;
-import org.eclipse.osgi.framework.adaptor.BundleOperation;
+import org.eclipse.osgi.framework.adaptor.*;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.service.resolver.*;
+import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.*;
-import org.osgi.framework.Version;
 
 /**
  * This object is given out to bundles and wraps the internal Bundle object. It
@@ -40,7 +39,9 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	/** Internal object used for state change synchronization */
 	protected Object statechangeLock = new Object();
 	/** ProtectionDomain for the bundle */
-	protected ProtectionDomain domain;
+	protected BundleProtectionDomain domain;
+	/* Single object for permission checks */
+	BundleResourcePermission resourcePermission;
 
 	/**
 	 * This String captures the dependencies that could not be resolved
@@ -155,7 +156,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 				if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 					Debug.printStackTrace(t);
 				}
-				throw new BundleException(Msg.formatter.getString("BUNDLE_INVALID_ACTIVATOR_EXCEPTION", activatorClassName, bundledata.getSymbolicName()), t); //$NON-NLS-1$
+				throw new BundleException(NLS.bind(Msg.BUNDLE_INVALID_ACTIVATOR_EXCEPTION, activatorClassName, bundledata.getSymbolicName()), t);
 			}
 		}
 		return (null);
@@ -266,7 +267,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	 *                permissions.
 	 */
 	public void start() throws BundleException {
-		framework.checkAdminPermission();
+		framework.checkAdminPermission(this, AdminPermission.EXECUTE);
 		checkValid();
 		beginStateChange();
 		try {
@@ -410,7 +411,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	 *                permissions.
 	 */
 	public void stop() throws BundleException {
-		framework.checkAdminPermission();
+		framework.checkAdminPermission(this, AdminPermission.EXECUTE);
 		checkValid();
 		beginStateChange();
 		try {
@@ -589,10 +590,12 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 		if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 			Debug.println("update location " + bundledata.getLocation()); //$NON-NLS-1$
 		}
-		framework.checkAdminPermission();
+		framework.checkAdminPermission(this, AdminPermission.LIFECYCLE);
 		checkValid();
 		beginStateChange();
 		try {
+			final AccessControlContext callerContext = AccessController.getContext();
+			//note AdminPermission is checked again after updated bundle is loaded
 			updateWorker(new PrivilegedExceptionAction() {
 				public Object run() throws BundleException {
 					/* compute the update location */
@@ -606,7 +609,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 					/* Map the identity to a URLConnection */
 					URLConnection source = framework.adaptor.mapLocationToURLConnection(updateLocation);
 					/* call the worker */
-					updateWorkerPrivileged(source);
+					updateWorkerPrivileged(source, callerContext);
 					return null;
 				}
 			});
@@ -632,16 +635,18 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 			Debug.println("update location " + bundledata.getLocation()); //$NON-NLS-1$
 			Debug.println("   from: " + in); //$NON-NLS-1$
 		}
-		framework.checkAdminPermission();
+		framework.checkAdminPermission(this, AdminPermission.LIFECYCLE);
 		checkValid();
 		beginStateChange();
 		try {
+			final AccessControlContext callerContext = AccessController.getContext();
+			//note AdminPermission is checked again after updated bundle is loaded
 			updateWorker(new PrivilegedExceptionAction() {
 				public Object run() throws BundleException {
 					/* Map the InputStream to a URLConnection */
 					URLConnection source = new BundleSource(in);
 					/* call the worker */
-					updateWorkerPrivileged(source);
+					updateWorkerPrivileged(source, callerContext);
 					return null;
 				}
 			});
@@ -655,7 +660,6 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	 */
 	protected void updateWorker(PrivilegedExceptionAction action) throws BundleException {
 		boolean bundleActive = false;
-		AbstractBundle host = null;
 		if (!isFragment())
 			bundleActive = (state == ACTIVE);
 		if (bundleActive) {
@@ -672,6 +676,8 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 			AccessController.doPrivileged(action);
 			framework.publishBundleEvent(BundleEvent.UPDATED, this);
 		} catch (PrivilegedActionException pae) {
+			if (pae.getException() instanceof RuntimeException)
+				throw (RuntimeException) pae.getException();
 			throw (BundleException) pae.getException();
 		} finally {
 			if (bundleActive) {
@@ -687,7 +693,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	/**
 	 * Update worker. Assumes the caller has the state change lock.
 	 */
-	protected void updateWorkerPrivileged(URLConnection source) throws BundleException {
+	protected void updateWorkerPrivileged(URLConnection source, AccessControlContext callerContext) throws BundleException {
 		AbstractBundle oldBundle = AbstractBundle.createBundle(bundledata, framework);
 		boolean reloaded = false;
 		BundleOperation storage = framework.adaptor.updateBundle(this.bundledata, source);
@@ -695,14 +701,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 		try {
 			BundleData newBundleData = storage.begin();
 			// Must call framework createBundle to check execution environment.
-			AbstractBundle newBundle = framework.createBundle(newBundleData);
-			// Check for a bundle already installed with the same symbolicName
-			// and version.
-			String symbolicName = newBundle.getSymbolicName();
-			AbstractBundle installedBundle = symbolicName == null ? null : framework.getBundleBySymbolicName(symbolicName, newBundle.getVersion().toString());
-			if (installedBundle != null && installedBundle != this) {
-				throw new BundleException(Msg.formatter.getString("BUNDLE_INSTALL_SAME_UNIQUEID", new Object[] {installedBundle.getSymbolicName(), installedBundle.getVersion(), installedBundle.getLocation()})); //$NON-NLS-1$
-			}
+			final AbstractBundle newBundle = framework.createAndVerifyBundle(newBundleData);
 			String[] nativepaths = framework.selectNativeCode(newBundle);
 			if (nativepaths != null) {
 				bundledata.installNativeCode(nativepaths);
@@ -713,15 +712,27 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 				exporting = reload(newBundle);
 				manifestLocalization = null;
 			}
+			// indicate we have loaded from the new version of the bundle
+			reloaded = true;
+			if (System.getSecurityManager() != null && (bundledata.getType() & (BundleData.TYPE_BOOTCLASSPATH_EXTENSION | BundleData.TYPE_FRAMEWORK_EXTENSION)) != 0) {
+				// must check for AllPermission before allow a bundle extension to be installed
+				hasPermission(new AllPermission());
+			}
+			try {
+				AccessController.doPrivileged(new PrivilegedExceptionAction() {
+					public Object run() throws Exception {
+						framework.checkAdminPermission(newBundle, AdminPermission.LIFECYCLE);
+						return null;
+					}
+				}, callerContext);
+			} catch (PrivilegedActionException e) {
+				throw e.getException();
+			}
 			// send out unresolved events outside synch block (defect #80610)
 			if (st == RESOLVED)
 				framework.publishBundleEvent(BundleEvent.UNRESOLVED, this);
-			reloaded = true; /*
-			 * indicate we have loaded from the new version of
-			 * the bundle
-			 */
 			storage.commit(exporting);
-		} catch (BundleException e) {
+		} catch (Throwable t) {
 			try {
 				storage.undo();
 				if (reloaded) /*
@@ -736,7 +747,11 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 				/* if we fail to revert then we are in big trouble */
 				framework.publishFrameworkEvent(FrameworkEvent.ERROR, this, ee);
 			}
-			throw e;
+			if (t instanceof RuntimeException)
+				throw (RuntimeException) t;
+			if (t instanceof BundleException)
+				throw (BundleException) t;
+			throw new BundleException(t.getMessage(), t);
 		}
 	}
 
@@ -792,7 +807,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 		if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 			Debug.println("uninstall location: " + bundledata.getLocation()); //$NON-NLS-1$
 		}
-		framework.checkAdminPermission();
+		framework.checkAdminPermission(this, AdminPermission.LIFECYCLE);
 		checkValid();
 		beginStateChange();
 		try {
@@ -836,7 +851,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 				}
 			}
 			throw (BundleException) pae.getException();
-		} 
+		}
 		framework.publishBundleEvent(BundleEvent.UNINSTALLED, this);
 	}
 
@@ -960,7 +975,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	 *                and the Java Runtime Environment supports permissions.
 	 */
 	public Dictionary getHeaders(String localeString) {
-		framework.checkAdminPermission();
+		framework.checkAdminPermission(this, AdminPermission.METADATA);
 		try {
 			initializeManifestLocalization();
 		} catch (BundleException e) {
@@ -1015,7 +1030,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	 *                permissions.
 	 */
 	public String getLocation() {
-		framework.checkAdminPermission();
+		framework.checkAdminPermission(this, AdminPermission.METADATA);
 		return (bundledata.getLocation());
 	}
 
@@ -1041,6 +1056,21 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 		checkValid();
 		if (domain != null) {
 			if (permission instanceof Permission) {
+				SecurityManager sm = System.getSecurityManager();
+				if (sm instanceof FrameworkSecurityManager) {
+					/*
+					 * If the FrameworkSecurityManager is active, we need to do checks the "right" way.
+					 * We can exploit our knowledge that the security context of FrameworkSecurityManager
+					 * is an AccessControlContext to invoke it properly with the ProtectionDomain.
+					 */
+					AccessControlContext acc = new AccessControlContext(new ProtectionDomain[] {domain});
+					try {
+						sm.checkPermission((Permission) permission, acc);
+						return true;
+					} catch (Exception e) {
+						return false;
+					}
+				}
 				return domain.implies((Permission) permission);
 			}
 			return false;
@@ -1076,7 +1106,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 					return;
 				}
 				if (doubleFault || (stateChanging == Thread.currentThread())) {
-					throw new BundleException(Msg.formatter.getString("BUNDLE_STATE_CHANGE_EXCEPTION", getLocation(), stateChanging.getName())); //$NON-NLS-1$
+					throw new BundleException(NLS.bind(Msg.BUNDLE_STATE_CHANGE_EXCEPTION, getLocation(), stateChanging.getName()));
 				}
 				try {
 					if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
@@ -1159,7 +1189,16 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	 */
 	protected void checkValid() {
 		if (state == UNINSTALLED) {
-			throw new IllegalStateException(Msg.formatter.getString("BUNDLE_UNINSTALLED_EXCEPTION", getLocation())); //$NON-NLS-1$
+			throw new IllegalStateException(NLS.bind(Msg.BUNDLE_UNINSTALLED_EXCEPTION, getLocation()));
+		}
+	}
+
+	protected void checkResourcePermission() {
+		SecurityManager sm = System.getSecurityManager();
+		if (sm != null) {
+			if (resourcePermission == null)
+				resourcePermission = new BundleResourcePermission(getBundleId());
+			sm.checkPermission(resourcePermission);
 		}
 	}
 
@@ -1168,24 +1207,24 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	 * 
 	 * @return bundle's ProtectionDomain.
 	 */
-	protected ProtectionDomain getProtectionDomain() {
+	protected BundleProtectionDomain getProtectionDomain() {
 		return domain;
 	}
 
 	/**
 	 * The bundle must unresolve the permissions in these packages.
 	 * 
-	 * @param unresolvedPackages
-	 *            A list of the package which have been unresolved as a result
+	 * @param refreshedBundles
+	 *            A list of bundles which have been refreshed as a result
 	 *            of a packageRefresh
 	 */
-	protected void unresolvePermissions(Hashtable unresolvedPackages) {
+	protected void unresolvePermissions(AbstractBundle[] refreshedBundles) {
 		if (domain != null) {
 			BundlePermissionCollection collection = (BundlePermissionCollection) domain.getPermissions();
 			if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 				Debug.println("Unresolving permissions in bundle " + this); //$NON-NLS-1$
 			}
-			collection.unresolvePermissions(unresolvedPackages);
+			collection.unresolvePermissions(refreshedBundles);
 		}
 	}
 
@@ -1219,7 +1258,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	 */
 	public Enumeration getEntryPaths(final String path) {
 		try {
-			framework.checkAdminPermission();
+			framework.checkAdminPermission(this, AdminPermission.RESOURCE);
 		} catch (SecurityException e) {
 			return null;
 		}
@@ -1245,7 +1284,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	 */
 	public URL getEntry(String fileName) {
 		try {
-			framework.checkAdminPermission();
+			framework.checkAdminPermission(this, AdminPermission.RESOURCE);
 		} catch (SecurityException e) {
 			return null;
 		}
@@ -1318,7 +1357,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	abstract protected BundleContextImpl getContext();
 
 	protected String getResolutionFailureMessage() {
-		String defaultMessage = Msg.formatter.getString("BUNDLE_UNRESOLVED_EXCEPTION"); //$NON-NLS-1$
+		String defaultMessage = Msg.BUNDLE_UNRESOLVED_EXCEPTION;
 		// don't spend time if debug info is not needed
 		if (!Debug.DEBUG) {
 			return defaultMessage;
@@ -1333,25 +1372,25 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 		// just a sanity check - this would be an inconsistency between the
 		// framework and the state
 		if (bundleDescription.isResolved()) {
-			throw new IllegalStateException(Msg.formatter.getString("BUNDLE_UNRESOLVED_STATE_CONFLICT")); //$NON-NLS-1$
+			throw new IllegalStateException(Msg.BUNDLE_UNRESOLVED_STATE_CONFLICT); 
 		}
 		VersionConstraint[] unsatisfied = framework.adaptor.getPlatformAdmin().getStateHelper().getUnsatisfiedConstraints(bundleDescription);
 		if (unsatisfied.length == 0) {
-			return Msg.formatter.getString("BUNDLE_UNRESOLVED_NOT_CHOSEN_EXCEPTION"); //$NON-NLS-1$
+			return Msg.BUNDLE_UNRESOLVED_NOT_CHOSEN_EXCEPTION;
 		}
 		StringBuffer missing = new StringBuffer();
 		for (int i = 0; i < unsatisfied.length; i++) {
 			if (unsatisfied[i] instanceof ImportPackageSpecification) {
-				missing.append(Msg.formatter.getString("BUNDLE_UNRESOLVED_PACKAGE", toString(unsatisfied[i]))); //$NON-NLS-1$
+				missing.append(NLS.bind(Msg.BUNDLE_UNRESOLVED_PACKAGE, toString(unsatisfied[i])));
 			} else if (unsatisfied[i] instanceof HostSpecification) {
-				missing.append(Msg.formatter.getString("BUNDLE_UNRESOLVED_HOST", toString(unsatisfied[i]))); //$NON-NLS-1$
+				missing.append(NLS.bind(Msg.BUNDLE_UNRESOLVED_HOST, toString(unsatisfied[i]))); 
 			} else {
-				missing.append(Msg.formatter.getString("BUNDLE_UNRESOLVED_BUNDLE", toString(unsatisfied[i]))); //$NON-NLS-1$
+				missing.append(NLS.bind(Msg.BUNDLE_UNRESOLVED_BUNDLE, toString(unsatisfied[i]))); 
 			}
 			missing.append(',');
 		}
 		missing.deleteCharAt(missing.length() - 1);
-		return Msg.formatter.getString("BUNDLE_UNRESOLVED_UNSATISFIED_CONSTRAINT_EXCEPTION", missing.toString()); //$NON-NLS-1$
+		return NLS.bind(Msg.BUNDLE_UNRESOLVED_UNSATISFIED_CONSTRAINT_EXCEPTION, missing.toString()); 
 	}
 
 	private String toString(VersionConstraint constraint) {

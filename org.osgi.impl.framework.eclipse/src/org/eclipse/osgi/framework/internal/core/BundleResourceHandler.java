@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -15,9 +15,8 @@ import java.io.IOException;
 import java.net.*;
 import org.eclipse.osgi.framework.adaptor.BundleClassLoader;
 import org.eclipse.osgi.framework.adaptor.core.*;
-import org.eclipse.osgi.framework.internal.core.AbstractBundle;
-import org.osgi.framework.AdminPermission;
-import org.osgi.framework.BundleContext;
+import org.eclipse.osgi.util.NLS;
+import org.osgi.framework.*;
 
 /**
  * URLStreamHandler the bundleentry and bundleresource protocols.
@@ -27,9 +26,6 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 	public static final String SECURITY_AUTHORIZED = "SECURITY_AUTHORIZED"; //$NON-NLS-1$
 	protected static BundleContext context;
 	protected BundleEntry bundleEntry;
-
-	/** Single object for permission checks */
-	protected AdminPermission adminPermission;
 
 	/**
 	 * Constructor for a bundle protocol resource URLStreamHandler.
@@ -46,10 +42,7 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 	 * Parse reference URL. 
 	 */
 	protected void parseURL(URL url, String str, int start, int end) {
-		// Check the permission of the caller to see if they
-		// are allowed access to the resource.
-		checkAdminPermission();
-		if (end < start) 
+		if (end < start)
 			return;
 		if (url.getPath() != null)
 			// A call to a URL constructor has been made that uses an authorized URL as its context.
@@ -111,6 +104,10 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 		if (path.endsWith("/..") && path.length() > 3) //$NON-NLS-1$
 			path = path.substring(0, path.length() - 2);
 
+		// Check the permission of the caller to see if they
+		// are allowed access to the resource.
+		checkAdminPermission(context.getBundle(Long.parseLong(bundleId)));
+
 		// Setting the authority portion of the URL to SECURITY_ATHORIZED
 		// ensures that this URL was created by using this parseURL
 		// method.  The openConnection method will only open URLs
@@ -129,31 +126,31 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 	 * @exception	IOException 	thrown if an IO error occurs during connection establishment
 	 */
 	protected URLConnection openConnection(URL url) throws IOException {
+		if (bundleEntry != null) // if the bundleEntry is not null then return quick
+			return (new BundleURLConnection(url, bundleEntry));
+
+		String bidString = url.getHost();
+		if (bidString == null) {
+			throw new IOException(NLS.bind(AdaptorMsg.URL_NO_BUNDLE_ID, url.toExternalForm())); //$NON-NLS-1$
+		}
+		AbstractBundle bundle = null;
+		long bundleID;
+		try {
+			bundleID = Long.parseLong(bidString);
+		} catch (NumberFormatException nfe) {
+			throw new MalformedURLException(NLS.bind(AdaptorMsg.URL_INVALID_BUNDLE_ID, bidString)); //$NON-NLS-1$
+		}
+		bundle = (AbstractBundle) context.getBundle(bundleID);
 		// check to make sure that this URL was created using the
 		// parseURL method.  This ensures the security check was done
 		// at URL construction.
 		if (!url.getAuthority().equals(SECURITY_AUTHORIZED)) {
 			// No admin security check was made better check now.
-			checkAdminPermission();
-		}
-
-		if (bundleEntry != null)
-			return (new BundleURLConnection(url, bundleEntry));
-
-		String bidString = url.getHost();
-		if (bidString == null) {
-			throw new IOException(AdaptorMsg.formatter.getString("URL_NO_BUNDLE_ID", url.toExternalForm())); //$NON-NLS-1$
-		}
-		AbstractBundle bundle = null;
-		try {
-			Long bundleID = new Long(bidString);
-			bundle = (AbstractBundle) context.getBundle(bundleID.longValue());
-		} catch (NumberFormatException nfe) {
-			throw new MalformedURLException(AdaptorMsg.formatter.getString("URL_INVALID_BUNDLE_ID", bidString)); //$NON-NLS-1$
+			checkAdminPermission(bundle);
 		}
 
 		if (bundle == null) {
-			throw new IOException(AdaptorMsg.formatter.getString("URL_NO_BUNDLE_FOUND", url.toExternalForm())); //$NON-NLS-1$
+			throw new IOException(NLS.bind(AdaptorMsg.URL_NO_BUNDLE_FOUND, url.toExternalForm())); //$NON-NLS-1$
 		}
 		return (new BundleURLConnection(url, findBundleEntry(url, bundle)));
 	}
@@ -259,15 +256,11 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 		return true;
 	}
 
-	protected void checkAdminPermission() {
+	protected void checkAdminPermission(Bundle bundle) {
 		SecurityManager sm = System.getSecurityManager();
 
 		if (sm != null) {
-			if (adminPermission == null) {
-				adminPermission = new AdminPermission();
-			}
-
-			sm.checkPermission(adminPermission);
+			sm.checkPermission(new AdminPermission(bundle, AdminPermission.RESOURCE));
 		}
 	}
 

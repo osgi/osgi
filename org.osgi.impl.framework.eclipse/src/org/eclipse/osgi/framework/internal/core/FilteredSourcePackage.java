@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2004 IBM Corporation and others.
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -28,20 +28,20 @@ public class FilteredSourcePackage extends SingleSourcePackage {
 			this.excludes = ManifestElement.getArrayFromList(excludes);
 	}
 
-	public URL getResource(String name, String pkgName, boolean providePkg) {
+	public URL getResource(String name, String pkgName) {
 		if (isFiltered(name, pkgName))
 			return null;
-		return super.getResource(name, pkgName, providePkg);
+		return super.getResource(name, pkgName);
 	}
-	public Enumeration getResources(String name, String pkgName, boolean providePkg) throws IOException {
+	public Enumeration getResources(String name, String pkgName) throws IOException {
 		if (isFiltered(name, pkgName))
 			return null;
-		return super.getResources(name, pkgName, providePkg);
+		return super.getResources(name, pkgName);
 	}
-	public Class loadClass(String name, String pkgName, boolean providePkg) {
+	public Class loadClass(String name, String pkgName) {
 		if (isFiltered(name, pkgName))
 			return null;
-		return super.loadClass(name, pkgName, providePkg);
+		return super.loadClass(name, pkgName);
 	}
 
 	private boolean isFiltered(String name, String pkgName) {

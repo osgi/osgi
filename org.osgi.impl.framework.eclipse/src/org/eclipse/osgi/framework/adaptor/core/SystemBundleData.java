@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -14,9 +14,9 @@ package org.eclipse.osgi.framework.adaptor.core;
 import java.io.*;
 import java.io.File;
 import java.io.IOException;
-import java.security.ProtectionDomain;
 import java.util.Enumeration;
 import org.eclipse.osgi.framework.adaptor.BundleClassLoader;
+import org.eclipse.osgi.framework.adaptor.BundleProtectionDomain;
 import org.eclipse.osgi.framework.adaptor.ClassLoaderDelegate;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.internal.core.Constants;
@@ -30,8 +30,8 @@ public class SystemBundleData extends AbstractBundleData {
 	public SystemBundleData(AbstractFrameworkAdaptor adaptor) throws BundleException {
 		super(adaptor, 0);
 		File osgiBase = getOsgiBase();
-		manifest = createManifest(osgiBase);
 		createBundleFile(osgiBase);
+		manifest = createManifest(osgiBase);
 		setMetaData();
 		setLastModified(System.currentTimeMillis()); // just set the lastModified to the current time
 	}
@@ -52,8 +52,8 @@ public class SystemBundleData extends AbstractBundleData {
 
 		if (osgiBase != null && osgiBase.exists()) {
 			try {
-				in = new FileInputStream(new File(osgiBase, Constants.OSGI_BUNDLE_MANIFEST));
-			} catch (FileNotFoundException e) {
+				in = baseBundleFile.getEntry(Constants.OSGI_BUNDLE_MANIFEST).getInputStream();
+			} catch (IOException e) {
 				// do nothing here.  in == null
 			}
 		}
@@ -70,11 +70,15 @@ public class SystemBundleData extends AbstractBundleData {
 		}
 
 		if (in == null)
-			throw new BundleException(AdaptorMsg.formatter.getString("SYSTEMBUNDLE_MISSING_MANIFEST")); //$NON-NLS-1$
-
+			throw new BundleException(AdaptorMsg.SYSTEMBUNDLE_MISSING_MANIFEST);
 		Headers systemManifest = Headers.parseManifest(in);
 		// check the OSGi system package property
-		String systemExportProp = System.getProperty(Constants.OSGI_SYSTEMPACKAGES);
+		// first check the OSGi R4 spec'ed property
+		String systemExportProp = System.getProperty(Constants.OSGI_FRAMEWORK_SYSTEM_PACKAGES);
+		if (systemExportProp != null)
+			appendManifestValue(systemManifest, Constants.EXPORT_PACKAGE, systemExportProp);
+		// now check the original pre OSGi R4 property
+		systemExportProp = System.getProperty(Constants.OSGI_SYSTEMPACKAGES);
 		if (systemExportProp != null)
 			appendManifestValue(systemManifest, Constants.EXPORT_PACKAGE, systemExportProp);
 		// now get any extra packages and services that the adaptor wants
@@ -123,10 +127,12 @@ public class SystemBundleData extends AbstractBundleData {
 					return null;
 				}
 
-				public void close() throws IOException {
+				public void close() {
+					// do nothing
 				}
 
-				public void open() throws IOException {
+				public void open() {
+					// do nothing
 				}
 
 				public boolean containsDir(String dir) {
@@ -137,7 +143,7 @@ public class SystemBundleData extends AbstractBundleData {
 
 	private void setMetaData() {
 		setActivator((String) manifest.get(Constants.BUNDLE_ACTIVATOR));
-		setClassPath((String) manifest.get(Constants.BUNDLE_CLASSPATH));
+		setClassPathString((String) manifest.get(Constants.BUNDLE_CLASSPATH));
 		setDynamicImports((String) manifest.get(Constants.DYNAMICIMPORT_PACKAGE));
 		setExecutionEnvironment((String) manifest.get(Constants.BUNDLE_REQUIREDEXECUTIONENVIRONMENT));
 		setLocation(Constants.SYSTEM_BUNDLE_LOCATION);
@@ -147,7 +153,7 @@ public class SystemBundleData extends AbstractBundleData {
 			setVersion(Version.parseVersion(sVersion));
 	}
 
-	public BundleClassLoader createClassLoader(ClassLoaderDelegate delegate, ProtectionDomain domain, String[] bundleclasspath) {
+	public BundleClassLoader createClassLoader(ClassLoaderDelegate delegate, BundleProtectionDomain domain, String[] bundleclasspath) {
 		return null;
 	}
 
@@ -160,6 +166,7 @@ public class SystemBundleData extends AbstractBundleData {
 	}
 
 	public void installNativeCode(String[] nativepaths) throws BundleException {
+		// do nothing
 	}
 
 	public File getDataFile(String path) {
@@ -174,12 +181,19 @@ public class SystemBundleData extends AbstractBundleData {
 		return 0;
 	}
 
-	public void close() throws IOException {
+	public void close() {
+		// do nothing
 	}
 
-	public void open() throws IOException {
+	public void open() {
+		// do nothing
 	}
 
-	public void save() throws IOException {
+	public void save() {
+		// do nothing
+	}
+
+	public String[] getBundleSigners() {
+		return null; // system bundle cannot be signed
 	}
 }

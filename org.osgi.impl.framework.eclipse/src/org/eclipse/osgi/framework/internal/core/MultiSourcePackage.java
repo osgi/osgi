@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -26,30 +26,30 @@ public class MultiSourcePackage extends PackageSource {
 		return suppliers;
 	}
 
-	public Class loadClass(String name, String pkgName, boolean providePkg) {
+	public Class loadClass(String name, String pkgName) {
 		Class result = null;
 		for (int i = 0; i < suppliers.length; i++) {
-			result = suppliers[i].loadClass(name, pkgName, providePkg);
+			result = suppliers[i].loadClass(name, pkgName);
 			if (result != null)
 				return result;
 		}
 		return result;
 	}
 
-	public URL getResource(String name, String pkgName, boolean providePkg) {
+	public URL getResource(String name, String pkgName) {
 		URL result = null;
 		for (int i = 0; i < suppliers.length; i++) {
-			result = suppliers[i].getResource(name, pkgName, providePkg);
+			result = suppliers[i].getResource(name, pkgName);
 			if (result != null)
 				return result;
 		}
 		return result;
 	}
 
-	public Enumeration getResources(String name, String pkgName, boolean providePkg) throws IOException {
+	public Enumeration getResources(String name, String pkgName) throws IOException {
 		Enumeration result = null;
 		for (int i = 0; i < suppliers.length; i++) {
-			result = suppliers[i].getResources(name, pkgName, providePkg);
+			result = suppliers[i].getResources(name, pkgName);
 			if (result != null)
 				return result;
 		}

@@ -1,17 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package org.eclipse.osgi.internal.resolver;
 
-import java.io.*;
-
+import java.io.File;
+import java.io.IOException;
 import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -31,53 +31,52 @@ public class StateManager implements PlatformAdmin, Runnable {
 	private long lastTimeStamp;
 	private BundleInstaller installer;
 	private boolean cachedState = false;
-	private File stateLocation;
+	private File stateFile;
+	private File lazyFile;
 	private long expectedTimeStamp;
+	private BundleContext context;
 
-	public StateManager(File stateLocation) {
+	public StateManager(File stateFile, File lazyFile, BundleContext context) {
 		// a negative timestamp means no timestamp checking
-		this(stateLocation, -1);
+		this(stateFile, lazyFile, context, -1);
 	}
 
-	public StateManager(File stateLocation, long expectedTimeStamp) {
-		this.stateLocation = stateLocation;
+	public StateManager(File stateFile, File lazyFile, BundleContext context, long expectedTimeStamp) {
+		this.stateFile = stateFile;
+		this.lazyFile = lazyFile;
+		this.context = context;
 		this.expectedTimeStamp = expectedTimeStamp;
 		factory = new StateObjectFactoryImpl();
 	}
 
-	public void shutdown(File stateLocation) throws IOException {
+	public void shutdown(File stateFile, File lazyFile) throws IOException {
 		BundleDescription[] removalPendings = systemState.getRemovalPendings();
 		if (removalPendings.length > 0)
 			systemState.resolve(removalPendings);
-		writeState(stateLocation);
-		//systemState should not be set to null as when the framework
-		//is restarted from a shutdown state, the systemState variable will
-		//not be reset, resulting in a null pointer exception
-		//systemState = null;
+		writeState(stateFile, lazyFile);
 	}
 
-	private void readSystemState(BundleContext context, File stateLocation, long expectedTimeStamp) {
-		if (!stateLocation.isFile())
+	private void readSystemState(File stateFile, File lazyFile, long expectedTimeStamp) {
+		if (stateFile == null || !stateFile.isFile())
 			return;
 		if (DEBUG_READER)
 			readStartupTime = System.currentTimeMillis();
 		try {
 			boolean lazyLoad = !Boolean.valueOf(System.getProperty(PROP_NO_LAZY_LOADING)).booleanValue();
-			systemState = factory.readSystemState(stateLocation, lazyLoad, expectedTimeStamp);
+			systemState = factory.readSystemState(stateFile, lazyFile, lazyLoad, expectedTimeStamp);
 			// problems in the cache (corrupted/stale), don't create a state object
 			if (systemState == null)
 				return;
-			initializeSystemState(context);
+			initializeSystemState();
 			cachedState = true;
 			try {
 				expireTime = Long.parseLong(System.getProperty(PROP_LAZY_UNLOADING_TIME, Long.toString(expireTime)));
-			}
-			catch (NumberFormatException nfe) {
+			} catch (NumberFormatException nfe) {
 				// default to not expire
 				expireTime = 0;
 			}
 			if (lazyLoad && expireTime > 0) {
-				Thread t = new Thread(this,"State Data Manager"); //$NON-NLS-1$
+				Thread t = new Thread(this, "State Data Manager"); //$NON-NLS-1$
 				t.setDaemon(true);
 				t.start();
 			}
@@ -90,38 +89,42 @@ public class StateManager implements PlatformAdmin, Runnable {
 		}
 	}
 
-	private void writeState(File stateLocation) throws IOException {
+	private void writeState(File stateFile, File lazyFile) throws IOException {
 		if (systemState == null)
 			return;
 		if (cachedState && lastTimeStamp == systemState.getTimeStamp())
 			return;
 		systemState.fullyLoad(); // make sure we are fully loaded before saving
-		factory.writeState(systemState, new BufferedOutputStream(new FileOutputStream(stateLocation)));
+		factory.writeState(systemState, stateFile, lazyFile);
 	}
 
-	private void initializeSystemState(BundleContext context) {
-		if (System.getSecurityManager() == null)
-			context = null; // this disables security checks in the resolver
-		systemState.setResolver(getResolver(context));
+	private void initializeSystemState() {
+		systemState.setResolver(getResolver(System.getSecurityManager() != null));
+		if (systemState.setPlatformProperties(System.getProperties()))
+			systemState.resolve(false); // cause a full resolve; some platform properties have changed
 		lastTimeStamp = systemState.getTimeStamp();
 	}
 
-	public synchronized StateImpl createSystemState(BundleContext context) {
+	public synchronized StateImpl createSystemState() {
 		if (systemState == null) {
 			systemState = factory.createSystemState();
-			initializeSystemState(context);
+			initializeSystemState();
 		}
 		return systemState;
 	}
 
-	public synchronized StateImpl readSystemState(BundleContext context) {
+	public synchronized StateImpl readSystemState() {
 		if (systemState == null)
-			readSystemState(context, stateLocation, expectedTimeStamp);
+			readSystemState(stateFile, lazyFile, expectedTimeStamp);
 		return systemState;
 	}
 
 	public StateImpl getSystemState() {
 		return systemState;
+	}
+
+	public long getCachedTimeStamp() {
+		return lastTimeStamp;
 	}
 
 	public State getState(boolean mutable) {
@@ -143,7 +146,7 @@ public class StateManager implements PlatformAdmin, Runnable {
 		if (!(state instanceof UserState))
 			throw new IllegalArgumentException("Wrong state implementation"); //$NON-NLS-1$		
 		if (state.getTimeStamp() != systemState.getTimeStamp())
-			throw new BundleException(StateMsg.formatter.getString("COMMIT_INVALID_TIMESTAMP")); //$NON-NLS-1$		
+			throw new BundleException(StateMsg.COMMIT_INVALID_TIMESTAMP); 		
 		StateDelta delta = state.compare(systemState);
 		BundleDelta[] changes = delta.getChanges();
 		for (int i = 0; i < changes.length; i++)
@@ -159,11 +162,11 @@ public class StateManager implements PlatformAdmin, Runnable {
 	}
 
 	public Resolver getResolver() {
-		return getResolver(null);
+		return getResolver(false);
 	}
 
-	private Resolver getResolver(BundleContext context) {
-		return new org.eclipse.osgi.internal.module.ResolverImpl(context);
+	private Resolver getResolver(boolean checkPermissions) {
+		return new org.eclipse.osgi.internal.module.ResolverImpl(context, checkPermissions);
 	}
 
 	public StateHelper getStateHelper() {

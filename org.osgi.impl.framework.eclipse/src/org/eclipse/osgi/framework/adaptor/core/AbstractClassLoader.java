@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -80,15 +80,16 @@ public abstract class AbstractClassLoader extends ClassLoader implements BundleC
 			Debug.println("BundleClassLoader[" + delegate + "].loadClass(" + name + ")");  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
 
 		try {
-			// First check the parent classloader for system classes.
-			ClassLoader parent = getParentPrivileged();
-			if (parent != null)
-				try {
-					return parent.loadClass(name);
-				} catch (ClassNotFoundException e) {
-					// Do nothing. continue to delegate.
-				}
-
+			if (name.startsWith("java.")) { //$NON-NLS-1$
+				// First check the parent classloader for system classes.
+				ClassLoader parent = getParentPrivileged();
+				if (parent != null)
+					try {
+						return parent.loadClass(name);
+					} catch (ClassNotFoundException e) {
+						// Do nothing. continue to delegate.
+					}
+			}
 			// Just ask the delegate.  This could result in findLocalClass(name) being called.
 			Class clazz = delegate.findClass(name);
 			// resolve the class if asked to.

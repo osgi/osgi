@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -17,6 +17,7 @@ import java.util.Dictionary;
 import java.util.Vector;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.util.Headers;
+import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 
@@ -732,20 +733,20 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 							if (substr == null) /* * */{
 								String substr2 = substrings[i + 1];
 
-								if (substr2 == null) /* ** */{
+								if (substr2 == null) /* ** */
 									continue; /* ignore first star */
-								} else /* *xxx */{
-									if (Debug.DEBUG && Debug.DEBUG_FILTER) {
-										Debug.println("indexOf(\"" + substr2 + "\"," + pos + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-									}
-									int index = string.indexOf(substr2, pos);
-									if (index == -1) {
-										return false;
-									}
-
-									i++;
-									pos = index + substr2.length();
+								/* *xxx */
+								if (Debug.DEBUG && Debug.DEBUG_FILTER) {
+									Debug.println("indexOf(\"" + substr2 + "\"," + pos + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 								}
+								int index = string.indexOf(substr2, pos);
+								if (index == -1) {
+									return false;
+								}
+
+								pos = index + substr2.length();
+								if (i + 2 < size) // if there are more substrings, increment over the string we just matched; otherwise need to do the last substr check
+									i++;
 							} else /* xxx */{
 								int len = substr.length();
 
@@ -1344,11 +1345,11 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 			try {
 				parse_filter(parent);
 			} catch (ArrayIndexOutOfBoundsException e) {
-				throw new InvalidSyntaxException(Msg.formatter.getString("FILTER_TERMINATED_ABRUBTLY"), filterstring); //$NON-NLS-1$
+				throw new InvalidSyntaxException(Msg.FILTER_TERMINATED_ABRUBTLY, filterstring); //$NON-NLS-1$
 			}
 
 			if (pos != filter.length) {
-				throw new InvalidSyntaxException(Msg.formatter.getString("FILTER_TRAILING_CHARACTERS", pos), filterstring); //$NON-NLS-1$
+				throw new InvalidSyntaxException(NLS.bind(Msg.FILTER_TRAILING_CHARACTERS, String.valueOf(pos)), filterstring); //$NON-NLS-1$
 			}
 		}
 
@@ -1356,7 +1357,7 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 			skipWhiteSpace();
 
 			if (filter[pos] != '(') {
-				throw new InvalidSyntaxException(Msg.formatter.getString("FILTER_MISSING_LEFTPAREN", pos), filterstring); //$NON-NLS-1$
+				throw new InvalidSyntaxException(NLS.bind(Msg.FILTER_MISSING_LEFTPAREN, String.valueOf(pos)), filterstring); //$NON-NLS-1$
 			}
 
 			pos++;
@@ -1366,7 +1367,7 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 			skipWhiteSpace();
 
 			if (filter[pos] != ')') {
-				throw new InvalidSyntaxException(Msg.formatter.getString("FILTER_MISSING_RIGHTPAREN", pos), filterstring); //$NON-NLS-1$
+				throw new InvalidSyntaxException(NLS.bind(Msg.FILTER_MISSING_RIGHTPAREN, String.valueOf(pos)), filterstring); //$NON-NLS-1$
 			}
 
 			pos++;
@@ -1410,7 +1411,7 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 			skipWhiteSpace();
 
 			if (filter[pos] != '(') {
-				throw new InvalidSyntaxException(Msg.formatter.getString("FILTER_MISSING_LEFTPAREN", pos), filterstring); //$NON-NLS-1$
+				throw new InvalidSyntaxException(NLS.bind(Msg.FILTER_MISSING_LEFTPAREN, String.valueOf(pos)), filterstring); //$NON-NLS-1$
 			}
 
 			Vector operands = new Vector(10, 10);
@@ -1434,7 +1435,7 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 			skipWhiteSpace();
 
 			if (filter[pos] != '(') {
-				throw new InvalidSyntaxException(Msg.formatter.getString("FILTER_MISSING_LEFTPAREN", pos), filterstring); //$NON-NLS-1$
+				throw new InvalidSyntaxException(NLS.bind(Msg.FILTER_MISSING_LEFTPAREN, String.valueOf(pos)), filterstring); //$NON-NLS-1$
 			}
 
 			Vector operands = new Vector(10, 10);
@@ -1458,7 +1459,7 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 			skipWhiteSpace();
 
 			if (filter[pos] != '(') {
-				throw new InvalidSyntaxException(Msg.formatter.getString("FILTER_MISSING_LEFTPAREN", pos), filterstring); //$NON-NLS-1$
+				throw new InvalidSyntaxException(NLS.bind(Msg.FILTER_MISSING_LEFTPAREN, String.valueOf(pos)), filterstring); //$NON-NLS-1$
 			}
 
 			FilterImpl child = new FilterImpl();
@@ -1526,7 +1527,7 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 					}
 			}
 
-			throw new InvalidSyntaxException(Msg.formatter.getString("FILTER_INVALID_OPERATOR", pos), filterstring); //$NON-NLS-1$
+			throw new InvalidSyntaxException(NLS.bind(Msg.FILTER_INVALID_OPERATOR, String.valueOf(pos)), filterstring); //$NON-NLS-1$
 		}
 
 		protected String parse_attr() throws InvalidSyntaxException {
@@ -1550,7 +1551,7 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 			int length = end - begin;
 
 			if (length == 0) {
-				throw new InvalidSyntaxException(Msg.formatter.getString("FILTER_MISSING_ATTR", pos), filterstring); //$NON-NLS-1$
+				throw new InvalidSyntaxException(NLS.bind(Msg.FILTER_MISSING_ATTR, String.valueOf(pos)), filterstring); //$NON-NLS-1$
 			}
 
 			return new String(filter, begin, length);
@@ -1570,7 +1571,7 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 
 					case '(' :
 						{
-							throw new InvalidSyntaxException(Msg.formatter.getString("FILTER_INVALID_VALUE", pos), filterstring); //$NON-NLS-1$
+							throw new InvalidSyntaxException(NLS.bind(Msg.FILTER_INVALID_VALUE, String.valueOf(pos)), filterstring); //$NON-NLS-1$
 						}
 
 					case '\\' :
@@ -1590,7 +1591,7 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 			}
 
 			if (sb.length() == 0) {
-				throw new InvalidSyntaxException(Msg.formatter.getString("FILTER_MISSING_VALUE", pos), filterstring); //$NON-NLS-1$
+				throw new InvalidSyntaxException(NLS.bind(Msg.FILTER_MISSING_VALUE, String.valueOf(pos)), filterstring); //$NON-NLS-1$
 			}
 
 			return sb.toString();
@@ -1616,7 +1617,7 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 
 					case '(' :
 						{
-							throw new InvalidSyntaxException(Msg.formatter.getString("FILTER_INVALID_VALUE", pos), filterstring); //$NON-NLS-1$
+							throw new InvalidSyntaxException(NLS.bind(Msg.FILTER_INVALID_VALUE, String.valueOf(pos)), filterstring); //$NON-NLS-1$
 						}
 
 					case '*' :
@@ -1652,7 +1653,7 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 			int size = operands.size();
 
 			if (size == 0) {
-				throw new InvalidSyntaxException(Msg.formatter.getString("FILTER_MISSING_VALUE", pos), filterstring); //$NON-NLS-1$
+				throw new InvalidSyntaxException(NLS.bind(Msg.FILTER_MISSING_VALUE, String.valueOf(pos)), filterstring); //$NON-NLS-1$
 			}
 
 			if (size == 1) {

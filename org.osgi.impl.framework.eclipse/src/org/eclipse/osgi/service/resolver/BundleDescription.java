@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -54,6 +54,12 @@ public interface BundleDescription extends BaseDescription{
 	public ImportPackageSpecification[] getImportPackages();
 
 	/**
+	 * Returns true if this bundle has one or more dynamically imported packages.
+	 * @return true if this bundle has one or more dynamically imported packages.
+	 */
+	public boolean hasDynamicImports();
+
+	/**
 	 * Returns all the exported packages from this bundle that have been selected by
 	 * the resolver.  The returned list will include the ExportPackageDescriptions
 	 * returned by {@link #getExportPackages()} that have been selected by the resolver and
@@ -61,6 +67,7 @@ public interface BundleDescription extends BaseDescription{
 	 * @return the selected list of packages that this bundle exports.  If the bundle is
 	 * unresolved or has no shared packages then an empty array is returned.
 	 */
+	//TODO should this be name getResolvedExports()
 	public ExportPackageDescription[] getSelectedExports();
 
 	/**
@@ -82,7 +89,7 @@ public interface BundleDescription extends BaseDescription{
 	/**
 	 * Returns true if this bundle is resolved in its host state.
 	 * 
-	 * @return
+	 * @return true if this bundle is resolved in its host state.
 	 */
 	public boolean isResolved();
 
@@ -105,7 +112,7 @@ public interface BundleDescription extends BaseDescription{
 	 * Returns the host for this bundle. null is returned if this bundle is not
 	 * a fragment.
 	 * 
-	 * @return
+	 * @return the host for this bundle.
 	 */
 	public HostSpecification getHost();
 
@@ -159,7 +166,7 @@ public interface BundleDescription extends BaseDescription{
 	public Object getUserObject();
 
 	/**
-	 *  Associates a user-provided object to this bundle description, or
+	 * Associates a user-provided object to this bundle description, or
 	 * removes an existing association, if <code>null</code> is provided. The 
 	 * provided object is not interpreted in any ways by this bundle 
 	 * description.
@@ -168,4 +175,10 @@ public interface BundleDescription extends BaseDescription{
 	 * <code>null</code>
 	 */
 	public void setUserObject(Object userObject);
+
+	/**
+	 * Returns the platform filter in the form of an LDAP filter
+	 * @return the platfomr filter in the form of an LDAP filter
+	 */
+	public String getPlatformFilter();
 }

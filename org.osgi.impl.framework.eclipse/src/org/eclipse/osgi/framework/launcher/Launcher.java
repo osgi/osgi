@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -17,6 +17,7 @@ import org.eclipse.osgi.framework.adaptor.FrameworkAdaptor;
 import org.eclipse.osgi.framework.internal.core.Msg;
 import org.eclipse.osgi.framework.internal.core.OSGi;
 import org.eclipse.osgi.framework.util.Tokenizer;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * <p>This class provides an entry point for launching the OSGi framework.
@@ -126,7 +127,7 @@ public class Launcher {
 		try {
 			adaptor = doAdaptor();
 		} catch (Exception e) {
-			System.out.println(Msg.formatter.getString("LAUNCHER_ADAPTOR_ERROR")); //$NON-NLS-1$
+			System.out.println(Msg.LAUNCHER_ADAPTOR_ERROR); //$NON-NLS-1$
 			e.printStackTrace();
 			return;
 		}
@@ -341,7 +342,7 @@ public class Launcher {
 			Thread t = new Thread(((Runnable) osgiconsole), OSGI_CONSOLE_COMPONENT_NAME);
 			t.start();
 		} catch (NumberFormatException nfe) {
-			System.err.println(Msg.formatter.getString("LAUNCHER_INVALID_PORT", consolePort)); //$NON-NLS-1$
+			System.err.println(NLS.bind(Msg.LAUNCHER_INVALID_PORT, consolePort)); //$NON-NLS-1$
 		} catch (Exception ex) {
 			informAboutMissingComponent(OSGI_CONSOLE_COMPONENT_NAME, OSGI_CONSOLE_COMPONENT);
 		}
@@ -356,8 +357,8 @@ public class Launcher {
 	 */
 	void informAboutMissingComponent(String component, String jar) {
 		System.out.println();
-		System.out.print(Msg.formatter.getString("LAUNCHER_COMPONENT_MISSING", component)); //$NON-NLS-1$
-		System.out.println(Msg.formatter.getString("LAUNCHER_COMPONENT_JAR", jar)); //$NON-NLS-1$
+		System.out.print(NLS.bind(Msg.LAUNCHER_COMPONENT_MISSING, component)); //$NON-NLS-1$
+		System.out.println(NLS.bind(Msg.LAUNCHER_COMPONENT_JAR, jar)); //$NON-NLS-1$
 		System.out.println();
 	}
 }

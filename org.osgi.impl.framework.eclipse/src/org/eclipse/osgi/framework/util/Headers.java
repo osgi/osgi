@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -12,8 +12,10 @@
 package org.eclipse.osgi.framework.util;
 
 import java.io.*;
-import java.util.*;
+import java.util.Dictionary;
+import java.util.Enumeration;
 import org.eclipse.osgi.framework.internal.core.Msg;
+import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.BundleException;
 
 /**
@@ -27,15 +29,9 @@ import org.osgi.framework.BundleException;
  * </ul>
  */
 public class Headers extends Dictionary {
-	/**
-	 * Dictionary of keys: Lower case key => Case preserved key.
-	 */
-	protected Dictionary headers;
-
-	/**
-	 * Dictionary of values: Case preserved key => value.
-	 */
-	protected Dictionary values;
+	Object[] headers;
+	Object[] values;
+	int size = 0;
 
 	/**
 	 * Create an empty Headers dictionary.
@@ -44,9 +40,8 @@ public class Headers extends Dictionary {
 	 */
 	public Headers(int initialCapacity) {
 		super();
-
-		headers = new Hashtable(initialCapacity);
-		values = new Hashtable(initialCapacity);
+		headers = new Object[initialCapacity];
+		values = new Object[initialCapacity];
 	}
 
 	/**
@@ -57,25 +52,12 @@ public class Headers extends Dictionary {
 	 * in the dictionary parameter.
 	 */
 	public Headers(Dictionary values) {
-		super();
-
-		headers = new Hashtable(values.size());
-		this.values = values;
-
-		/* initialize headers dictionary */
+		this(values.size());
+		/* initialize the headers and values */
 		Enumeration keys = values.keys();
-
 		while (keys.hasMoreElements()) {
 			Object key = keys.nextElement();
-
-			if (key instanceof String) {
-				String header = ((String) key).toLowerCase();
-
-				if (headers.put(header, key) != null) /* if case-variant already present */
-				{
-					throw new IllegalArgumentException(Msg.formatter.getString("HEADER_DUPLICATE_KEY_EXCEPTION", header)); //$NON-NLS-1$
-				}
-			}
+			set(key, values.get(key));
 		}
 	}
 
@@ -83,14 +65,57 @@ public class Headers extends Dictionary {
 	 * Case-preserved keys.
 	 */
 	public synchronized Enumeration keys() {
-		return (values.keys());
+		return new ArrayEnumeration(headers, size);
 	}
 
 	/**
 	 * Values.
 	 */
 	public synchronized Enumeration elements() {
-		return (values.elements());
+		return new ArrayEnumeration(values, size);
+	}
+
+	private int getIndex(Object key) {
+		boolean stringKey = key instanceof String;
+		for (int i = 0; i < size; i++) {
+			if (headers[i].equals(key))
+				return i;
+			if (stringKey && (headers[i] instanceof String) && ((String) headers[i]).equalsIgnoreCase((String) key))
+				return i;
+		}
+		return -1;
+	}
+
+	private Object remove(int remove) {
+		Object removed = values[remove];
+		for (int i = remove; i < size; i++) {
+			if (i == headers.length - 1) {
+				headers[i] = null;
+				values[i] = null;
+			}
+			else {
+				headers[i] = headers[i + 1];
+				values[i] = values[i + 1];
+			}
+		}
+		if (remove < size)
+			size--;
+		return removed;
+	}
+
+	private void add(Object header, Object value) {
+		if (size == headers.length) {
+			// grow the arrays
+			Object[] newHeaders = new Object[headers.length + 10];
+			Object[] newValues = new Object[values.length + 10];
+			System.arraycopy(headers, 0, newHeaders, 0, headers.length);
+			System.arraycopy(values, 0, newValues, 0, values.length);
+			headers = newHeaders;
+			values = newValues;
+		}
+		headers[size] = header;
+		values[size] = value;
+		size++;
 	}
 
 	/**
@@ -99,17 +124,10 @@ public class Headers extends Dictionary {
 	 * @param key name.
 	 */
 	public synchronized Object get(Object key) {
-		Object value = values.get(key);
-
-		if ((value == null) && (key instanceof String)) {
-			Object keyLower = headers.get(((String) key).toLowerCase());
-
-			if (keyLower != null) {
-				value = values.get(keyLower);
-			}
-		}
-
-		return (value);
+		int i = -1;
+		if ((i = getIndex(key)) != -1)
+			return values[i];
+		return null;
 	}
 
 	/**
@@ -124,42 +142,20 @@ public class Headers extends Dictionary {
 	 * already present.
 	 */
 	public synchronized Object set(Object key, Object value) {
-		String header = (key instanceof String) ? ((String) key).toLowerCase() : null;
-
+		if (key instanceof String)
+			key = ((String)key).intern();
+		int i = getIndex(key);
 		if (value == null) /* remove */
 		{
-			if (header != null) /* String key */
-			{
-				key = headers.remove(header);
-
-				if (key != null) /* is String key in hashtable? */
-				{
-					value = values.remove(key);
-				}
-			} else /* non-String key */
-			{
-				value = values.remove(key);
-			}
-
-			return (value);
+			if (i != -1)
+				return remove(i);
 		} else /* put */
 		{
-			if (header != null) /* String key */
-			{
-				Object oldKey = headers.put(header, key);
-
-				if ((oldKey != null) && !header.equals(oldKey)) /* if case-variant already present */
-				{
-					headers.put(header, oldKey); /* put old case-variant back */
-
-					throw new IllegalArgumentException(Msg.formatter.getString("HEADER_DUPLICATE_KEY_EXCEPTION", header)); //$NON-NLS-1$
-				}
-
-			}
-
-			return (values.put(key, value));
+			if (i != -1) /* duplicate key */
+				throw new IllegalArgumentException(NLS.bind(Msg.HEADER_DUPLICATE_KEY_EXCEPTION, key));
+			add(key, value);
 		}
-
+		return null;
 	}
 
 	/**
@@ -168,7 +164,7 @@ public class Headers extends Dictionary {
 	 * @return  the number of keys in this dictionary.
 	 */
 	public synchronized int size() {
-		return (values.size());
+		return size;
 	}
 
 	/**
@@ -180,7 +176,7 @@ public class Headers extends Dictionary {
 	 *          <code>false</code> otherwise.
 	 */
 	public synchronized boolean isEmpty() {
-		return (values.isEmpty());
+		return size == 0;
 	}
 
 	/**
@@ -244,7 +240,7 @@ public class Headers extends Dictionary {
 				{
 					if (firstLine) /* if no previous line */
 					{
-						throw new BundleException(Msg.formatter.getString("MANIFEST_INVALID_SPACE", line)); //$NON-NLS-1$
+						throw new BundleException(NLS.bind(Msg.MANIFEST_INVALID_SPACE, line));
 					}
 					value.append(line.substring(1));
 					continue;
@@ -259,7 +255,7 @@ public class Headers extends Dictionary {
 				int colon = line.indexOf(':');
 				if (colon == -1) /* no colon */
 				{
-					throw new BundleException(Msg.formatter.getString("MANIFEST_INVALID_LINE_NOCOLON", line)); //$NON-NLS-1$
+					throw new BundleException(NLS.bind(Msg.MANIFEST_INVALID_LINE_NOCOLON, line));
 				}
 				header = line.substring(0, colon).trim();
 				value.append(line.substring(colon + 1));
@@ -267,12 +263,31 @@ public class Headers extends Dictionary {
 			}
 			return headers;
 		} catch (IOException e) {
-			throw new BundleException(Msg.formatter.getString("MANIFEST_IOEXCEPTION"), e); //$NON-NLS-1$
+			throw new BundleException(Msg.MANIFEST_IOEXCEPTION, e);
 		} finally {
 			try {
 				in.close();
 			} catch (IOException ee) {
 			}
 		}
+	}
+
+	class ArrayEnumeration implements Enumeration {
+		private Object[] array;
+		int cur = 0;
+
+		public ArrayEnumeration(Object[] array, int size) {
+			this.array = new Object[size];
+			System.arraycopy(array, 0, this.array, 0, this.array.length);
+		}
+
+		public boolean hasMoreElements() {
+			return cur < array.length;
+		}
+
+		public Object nextElement() {
+			return array[cur++];
+		}
+		
 	}
 }

@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -13,14 +13,12 @@ package org.eclipse.osgi.framework.internal.core;
 
 import java.io.IOException;
 import java.net.URL;
-import java.security.PermissionCollection;
-import java.security.ProtectionDomain;
 import java.util.Enumeration;
 import org.eclipse.osgi.framework.adaptor.BundleData;
 import org.eclipse.osgi.framework.adaptor.BundleWatcher;
 import org.eclipse.osgi.framework.debug.Debug;
-import org.eclipse.osgi.framework.util.SecureAction;
 import org.eclipse.osgi.service.resolver.BundleDescription;
+import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.*;
 
 public class BundleHost extends AbstractBundle {
@@ -63,9 +61,7 @@ public class BundleHost extends AbstractBundle {
 			SecurityManager sm = System.getSecurityManager();
 
 			if (sm != null) {
-				PermissionCollection collection = framework.permissionAdmin.createPermissionCollection(this);
-
-				domain = new ProtectionDomain(null, collection);
+				domain = framework.permissionAdmin.createProtectionDomain(this);
 			}
 
 		}
@@ -114,6 +110,9 @@ public class BundleHost extends AbstractBundle {
 		}
 		this.bundledata = newBundle.bundledata;
 		this.bundledata.setBundle(this);
+		// create a new domain for the bundle because its signers/symbolic-name may have changed
+		if (framework.isActive() && System.getSecurityManager() != null)
+			domain = framework.permissionAdmin.createProtectionDomain(this);
 		return (exporting);
 	}
 
@@ -182,11 +181,9 @@ public class BundleHost extends AbstractBundle {
 		return (exporting);
 	}
 
-	private BundleLoader checkLoader(boolean checkPermission) {
+	private BundleLoader checkLoader() {
 		checkValid();
-		if (checkPermission) {
-			framework.checkAdminPermission();
-		}
+
 		// check to see if the bundle is resolved
 		if (!isResolved()) {
 			if (!framework.packageAdmin.resolveBundles(new Bundle[] {this})) {
@@ -220,9 +217,16 @@ public class BundleHost extends AbstractBundle {
 	 * @exception  java.lang.ClassNotFoundException  if the class definition was not found.
 	 */
 	protected Class loadClass(String name, boolean checkPermission) throws ClassNotFoundException {
-		BundleLoader loader = checkLoader(checkPermission);
+		if (checkPermission) {
+			try {
+				framework.checkAdminPermission(this, AdminPermission.CLASS);
+			} catch (SecurityException e) {
+				throw new ClassNotFoundException();
+			}
+		}
+		BundleLoader loader = checkLoader();
 		if (loader == null)
-			throw new ClassNotFoundException(Msg.formatter.getString("BUNDLE_CNFE_NOT_RESOLVED", getLocation(), name)); //$NON-NLS-1$
+			throw new ClassNotFoundException(NLS.bind(Msg.BUNDLE_CNFE_NOT_RESOLVED, getLocation(), name)); //$NON-NLS-1$
 		return (loader.loadClass(name));
 	}
 
@@ -244,21 +248,39 @@ public class BundleHost extends AbstractBundle {
 	 * @exception java.lang.IllegalStateException If this bundle has been uninstalled.
 	 */
 	public URL getResource(String name) {
-		BundleLoader loader = checkLoader(true);
+		BundleLoader loader = null;
+		try {
+			checkResourcePermission();
+		} catch (SecurityException e) {
+			try {
+				framework.checkAdminPermission(this, AdminPermission.RESOURCE);
+			} catch (SecurityException ee) {
+				return null;
+			}
+		}
+		loader = checkLoader();
 		if (loader == null)
 			return null;
 		return (loader.getResource(name));
 	}
 
 	public Enumeration getResources(String name) {
-		BundleLoader loader = checkLoader(true);
+		BundleLoader loader = null;
+		try {
+			checkResourcePermission();
+		} catch (SecurityException e) {
+			try {
+				framework.checkAdminPermission(this, AdminPermission.RESOURCE);
+			} catch (SecurityException ee) {
+				return null;
+			}
+		}
+		loader = checkLoader();
 		if (loader == null)
 			return null;
-
 		try {
 			return loader.getResources(name);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			return null;
 		}
 	}
@@ -269,7 +291,7 @@ public class BundleHost extends AbstractBundle {
 	 * @param persistent if true persistently record the bundle was started.
 	 */
 	protected void startWorker(boolean persistent) throws BundleException {
-		long start  = 0;
+		long start = 0;
 		if (framework.active) {
 			if ((state & (STARTING | ACTIVE)) != 0) {
 				return;
@@ -327,11 +349,11 @@ public class BundleHost extends AbstractBundle {
 					if (state == UNINSTALLED) {
 						context.close();
 						context = null;
-						throw new BundleException(Msg.formatter.getString("BUNDLE_UNINSTALLED_EXCEPTION", getLocation())); //$NON-NLS-1$
+						throw new BundleException(NLS.bind(Msg.BUNDLE_UNINSTALLED_EXCEPTION, getLocation())); //$NON-NLS-1$
 					}
 				}
 			} finally {
-				if (Debug.DEBUG && state==ACTIVE) {
+				if (Debug.DEBUG && state == ACTIVE) {
 					if (Debug.MONITOR_ACTIVATION) {
 						BundleWatcher bundleStats = framework.adaptor.getBundleWatcher();
 						if (bundleStats != null)
@@ -490,7 +512,7 @@ public class BundleHost extends AbstractBundle {
 					// then we cannot attach a fragment into the middle
 					// of the fragment chain.
 					if (loader != null) {
-						throw new BundleException(Msg.formatter.getString("BUNDLE_LOADER_ATTACHMENT_ERROR", fragments[i].getSymbolicName(), getSymbolicName())); //$NON-NLS-1$
+						throw new BundleException(NLS.bind(Msg.BUNDLE_LOADER_ATTACHMENT_ERROR, fragments[i].getSymbolicName(), getSymbolicName())); //$NON-NLS-1$
 					}
 					newFragments[i] = fragment;
 					inserted = true;
@@ -498,14 +520,14 @@ public class BundleHost extends AbstractBundle {
 				newFragments[inserted ? i + 1 : i] = fragments[i];
 			}
 			if (!inserted)
-				newFragments[newFragments.length-1] = fragment;
+				newFragments[newFragments.length - 1] = fragment;
 			fragments = newFragments;
 		}
 
 		// If the Host ClassLoader exists then we must attach
 		// the fragment to the ClassLoader.
 		if (loader != null) {
-			loader.attachFragment(fragment, SecureAction.getProperties());
+			loader.attachFragment(fragment);
 		}
 
 	}

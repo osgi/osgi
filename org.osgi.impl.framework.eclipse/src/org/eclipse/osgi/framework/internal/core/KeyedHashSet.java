@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2004 IBM Corporation and others.
+ * Copyright (c) 2000, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -65,11 +65,9 @@ public class KeyedHashSet {
 				return true;
 			}
 			if (elements[i].compare(element)) {
-				if (replace) {
+				if (replace)
 					elements[i] = element;
-					return true;
-				} else
-					return false;
+				return replace;
 			}
 		}
 
@@ -84,11 +82,9 @@ public class KeyedHashSet {
 				return true;
 			}
 			if (elements[i].compare(element)) {
-				if (replace) {
+				if (replace)
 					elements[i] = element;
-					return true;
-				} else
-					return false;
+				return replace;
 			}
 		}
 
@@ -97,9 +93,9 @@ public class KeyedHashSet {
 		return add(element);
 	}
 
-	public void addAll(KeyedElement[] elements) {
-		for (int i = 0; i < elements.length; i++)
-			add(elements[i]);
+	public void addAll(KeyedElement[] toAdd) {
+		for (int i = 0; i < toAdd.length; i++)
+			add(toAdd[i]);
 	}
 
 	public boolean contains(KeyedElement element) {
@@ -311,9 +307,9 @@ public class KeyedHashSet {
 		return Math.abs(key.hashCode()) % elements.length;
 	}
 
-	public void removeAll(KeyedElement[] elements) {
-		for (int i = 0; i < elements.length; i++)
-			remove(elements[i]);
+	public void removeAll(KeyedElement[] toRemove) {
+		for (int i = 0; i < toRemove.length; i++)
+			remove(toRemove[i]);
 	}
 
 	private boolean shouldGrow() {

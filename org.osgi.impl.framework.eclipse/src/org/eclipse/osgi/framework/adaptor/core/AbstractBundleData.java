@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -15,18 +15,15 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.ProtectionDomain;
 import java.util.*;
-import org.eclipse.osgi.framework.adaptor.BundleData;
-import org.eclipse.osgi.framework.adaptor.ClassLoaderDelegate;
+import org.eclipse.osgi.framework.adaptor.*;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.internal.core.Constants;
 import org.eclipse.osgi.framework.internal.protocol.bundleentry.Handler;
 import org.eclipse.osgi.framework.util.Headers;
 import org.eclipse.osgi.util.ManifestElement;
+import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.*;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleException;
 
 /**
  * An abstract BundleData class that has default implementations that most
@@ -95,7 +92,7 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 	private String classpath;
 	private String executionEnvironment;
 	private String dynamicImports;
-	private boolean fragment = false;
+	private int type;
 
 	///////////////////// End values from Manifest       /////////////////////
 
@@ -121,12 +118,12 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 				if (manifest == null) {
 					URL url = getEntry(Constants.OSGI_BUNDLE_MANIFEST);
 					if (url == null) {
-						throw new BundleException(AdaptorMsg.formatter.getString("MANIFEST_NOT_FOUND_EXCEPTION", Constants.OSGI_BUNDLE_MANIFEST, getLocation())); //$NON-NLS-1$
+						throw new BundleException(NLS.bind(AdaptorMsg.MANIFEST_NOT_FOUND_EXCEPTION, Constants.OSGI_BUNDLE_MANIFEST, getLocation()));
 					}
 					try {
 						manifest = Headers.parseManifest(url.openStream());
 					} catch (IOException e) {
-						throw new BundleException(AdaptorMsg.formatter.getString("MANIFEST_NOT_FOUND_EXCEPTION", Constants.OSGI_BUNDLE_MANIFEST, getLocation()), e); //$NON-NLS-1$
+						throw new BundleException(NLS.bind(AdaptorMsg.MANIFEST_NOT_FOUND_EXCEPTION, Constants.OSGI_BUNDLE_MANIFEST, getLocation()), e);
 					}
 				}
 			}
@@ -175,7 +172,8 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 			return null;
 		}
 		try {
-			return new URL(null, getBundleEntryURL(id, path), new Handler(entry));
+			//use the constant string for the protocol to prevent duplication
+			return new URL(Constants.OSGI_ENTRY_URL_PROTOCOL, Long.toString(id), 0, path, new Handler(entry));
 		} catch (MalformedURLException e) {
 			return null;
 		}
@@ -211,22 +209,12 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 	 * classloader.  This is specified by the Bundle-ClassPath manifest entry.
 	 * @return The new ClassLoader for the BundleData.
 	 */
-	public org.eclipse.osgi.framework.adaptor.BundleClassLoader createClassLoader(ClassLoaderDelegate delegate, ProtectionDomain domain, String[] bundleclasspath) {
+	public org.eclipse.osgi.framework.adaptor.BundleClassLoader createClassLoader(ClassLoaderDelegate delegate, BundleProtectionDomain domain, String[] bundleclasspath) {
 		return getAdaptor().getElementFactory().createClassLoader(delegate, domain, bundleclasspath, this);
 	}
 
 	public AbstractFrameworkAdaptor getAdaptor() {
 		return adaptor;
-	}
-
-	public static String getBundleEntryURL(long id, String path) {
-		StringBuffer url = new StringBuffer(Constants.OSGI_ENTRY_URL_PROTOCOL);
-		url.append("://").append(id); //$NON-NLS-1$
-		if (path.length() == 0 || path.charAt(0) != '/') {
-			url.append('/');
-		}
-		url.append(path);
-		return url.toString();
 	}
 
 	/* 
@@ -243,6 +231,27 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 			// here is not the place to validate a manifest			
 		}
 		return null;
+	}
+
+	static String[] getClassPath(ManifestElement[] classpath) {
+		if (classpath == null) {
+			if (Debug.DEBUG && Debug.DEBUG_LOADER)
+				Debug.println("  no classpath"); //$NON-NLS-1$
+			/* create default BundleClassPath */
+			return new String[] {"."}; //$NON-NLS-1$
+		}
+
+		ArrayList result = new ArrayList(classpath.length);
+		for (int i = 0; i < classpath.length; i++) {
+			if (Debug.DEBUG && Debug.DEBUG_LOADER)
+				Debug.println("  found classpath entry " + classpath[i].getValueComponents()); //$NON-NLS-1$
+			String[] paths = classpath[i].getValueComponents();
+			for (int j = 0; j < paths.length; j++) {
+				result.add(paths[j]);
+			}
+		}
+
+		return (String[]) result.toArray(new String[result.size()]);
 	}
 
 	///////////////////// Begin Meta Data Accessor Methods ////////////////////
@@ -354,14 +363,25 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 		getManifest();
 
 		if (manifest == null) {
-			throw new IOException(AdaptorMsg.formatter.getString("ADAPTOR_ERROR_GETTING_MANIFEST", getLocation())); //$NON-NLS-1$
+			throw new IOException(NLS.bind(AdaptorMsg.ADAPTOR_ERROR_GETTING_MANIFEST, getLocation())); //$NON-NLS-1$
 		}
 		setVersion(Version.parseVersion((String) manifest.get(Constants.BUNDLE_VERSION)));
 		setSymbolicName(AbstractBundleData.parseSymbolicName(manifest));
-		setClassPath((String) manifest.get(Constants.BUNDLE_CLASSPATH));
+		setClassPathString((String) manifest.get(Constants.BUNDLE_CLASSPATH));
 		setActivator((String) manifest.get(Constants.BUNDLE_ACTIVATOR));
 		String host = (String) manifest.get(Constants.FRAGMENT_HOST);
-		setFragment(host != null);
+		if (host != null) {
+			int bundleType = TYPE_FRAGMENT;
+			ManifestElement[] hostElement = ManifestElement.parseHeader(Constants.FRAGMENT_HOST, host);
+			if (Constants.getInternalSymbolicName().equals(hostElement[0].getValue()) || Constants.OSGI_SYSTEM_BUNDLE.equals(hostElement[0].getValue())) {
+				String extensionType = hostElement[0].getDirective("extension"); //$NON-NLS-1$
+				if (extensionType == null || extensionType.equals("framework")) //$NON-NLS-1$
+					bundleType |= TYPE_FRAMEWORK_EXTENSION;
+				else
+					bundleType |= TYPE_BOOTCLASSPATH_EXTENSION;
+			}
+			setType(bundleType);
+		}
 		setExecutionEnvironment((String) manifest.get(Constants.BUNDLE_REQUIREDEXECUTIONENVIRONMENT));
 		setDynamicImports((String) manifest.get(Constants.DYNAMICIMPORT_PACKAGE));
 	}
@@ -394,11 +414,16 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 		this.activator = activator;
 	}
 
-	public String getClassPath() {
+	public String[] getClassPath() throws BundleException {
+		ManifestElement[] classpathElements = ManifestElement.parseHeader(Constants.BUNDLE_CLASSPATH, classpath);
+		return getClassPath(classpathElements);
+	}
+
+	public String getClassPathString() {
 		return classpath;
 	}
 
-	public void setClassPath(String classpath) {
+	public void setClassPathString(String classpath) {
 		this.classpath = classpath;
 	}
 
@@ -419,14 +444,26 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 	}
 
 	public boolean isFragment() {
-		return fragment;
+		return (type & TYPE_FRAGMENT) > 0;
 	}
 
-	public void setFragment(boolean fragment) {
-		this.fragment = fragment;
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 
 	///////////////////// End Manifest Value Accessor Methods  /////////////////////
+
+	public String[] getBundleSigners() {
+		if (System.getSecurityManager() == null)
+			return null;
+		if (getBaseBundleFile() instanceof SignedBundle)
+			return ((SignedBundle) getBaseBundleFile()).getSigningCertificateChains();
+		return null;
+	}
 
 	/**
 	 * Return a copy of this object with the
@@ -472,7 +509,7 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 			return (next);
 		}
 
-		throw new IOException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION")); //$NON-NLS-1$
+		throw new IOException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION);
 	}
 
 	public void initializeNewBundle() throws IOException, BundleException {
@@ -482,7 +519,7 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 	}
 
 	protected BundleFile createBaseBundleFile() throws IOException {
-		baseBundleFile = getAdaptor().createBundleFile(getBaseFile(), this);
+		baseBundleFile = getAdaptor().createBaseBundleFile(getBaseFile(), this);
 		return baseBundleFile;
 	}
 
@@ -494,6 +531,17 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 	 */
 	protected File getBaseFile() {
 		return isReference() ? new File(getFileName()) : new File(createGenerationDir(), getFileName());
+	}
+
+	protected File[] getClasspathFiles(String[] classpaths) {
+		File[] results = new File[classpaths.length];
+		for (int i = 0; i < classpaths.length; i++) {
+			if (".".equals(classpaths[i]))
+				results[i] = getBaseFile();
+			else
+				results[i] = getBaseBundleFile().getFile(classpaths[i]);
+		}
+		return results;
 	}
 
 	protected void setDataDir(File dirData) {
@@ -612,7 +660,7 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 		if (getDataDir() == null) {
 			File dataRoot = adaptor.getDataRootDir();
 			if (dataRoot == null)
-				throw new IllegalStateException(AdaptorMsg.formatter.getString("ADAPTOR_DATA_AREA_NOT_SET")); //$NON-NLS-1$
+				throw new IllegalStateException(AdaptorMsg.ADAPTOR_DATA_AREA_NOT_SET);
 			setDataDir(new File(dataRoot, id + "/" + AbstractFrameworkAdaptor.DATA_DIR_NAME)); //$NON-NLS-1$
 		}
 		if (!getDataDir().exists() && !getDataDir().mkdirs()) {
@@ -638,7 +686,7 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 			// extract the native code
 			File nativeFile = baseBundleFile.getFile(nativepaths[i]);
 			if (nativeFile == null) {
-				throw new BundleException(AdaptorMsg.formatter.getString("BUNDLE_NATIVECODE_EXCEPTION", nativepaths[i])); //$NON-NLS-1$
+				throw new BundleException(NLS.bind(AdaptorMsg.BUNDLE_NATIVECODE_EXCEPTION, nativepaths[i]));
 			}
 			sb.append(nativepaths[i]);
 			if (i < nativepaths.length - 1) {

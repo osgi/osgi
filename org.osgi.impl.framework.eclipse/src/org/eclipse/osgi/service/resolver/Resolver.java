@@ -1,14 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package org.eclipse.osgi.service.resolver;
+
+import java.util.Dictionary;
 
 public interface Resolver {
 
@@ -28,13 +30,14 @@ public interface Resolver {
 	 * Note the given state is destructively modified to reflect the results of
 	 * resolution.
 	 * </p>
+	 * @param discard the list of bundles to discard the resolve status and 
+	 * reresolve.  A <tt>null</tt> value indicates that all currently unresolved
+	 * bundles in the state should be resolved.
+	 * @param platformProperties the platform properties used to match platform filters
+	 * against.  A <tt>null</tt> value indicates that the system properties should
+	 * be used to match against
 	 */
-	public void resolve();
-
-	/**
-	 * 
-	 */
-	public void resolve(BundleDescription[] discard);
+	public void resolve(BundleDescription[] discard, Dictionary platformProperties);
 
 	/**
 	 * Flushes this resolver of any stored/cached data it may be keeping to

@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -216,6 +216,25 @@ public class ServiceReferenceImpl implements ServiceReference, Comparable {
 	}
 
 	public boolean isAssignableTo(Bundle bundle, String className) {
-		throw new UnsupportedOperationException();
+		AbstractBundle consumer = (AbstractBundle) bundle;
+		if (consumer.isFragment())
+			return false;
+		BundleHost producer = (BundleHost) registration.bundle;
+		if (consumer == producer)
+			return true;
+		String pkgName = BundleLoader.getPackageName(className);
+		if (pkgName.startsWith("java.")) //$NON-NLS-1$
+			return true;
+		BundleLoader producerBL = producer.getBundleLoader();
+		if (producerBL == null)
+			return false;
+		BundleLoader consumerBL = consumer.getBundleLoader();
+		if (consumerBL == null)
+			return false;
+		PackageSource producerSource = producerBL.getPackageSource(pkgName);
+		PackageSource consumerSource = consumerBL.getPackageSource(pkgName);
+		if (producerSource == null || consumerSource == null)
+			return true;
+		return producerSource.hasCommonSource(consumerSource);
 	}
 }

@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -15,7 +15,6 @@ import java.util.Vector;
 import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.*;
 import org.osgi.framework.Constants;
-import org.osgi.framework.InvalidSyntaxException;
 
 /**
  * This class represents a description of native code.
@@ -361,7 +360,7 @@ public class BundleNativeCode {
 		try {
 			filter = new FilterImpl(filterString);
 		} catch (InvalidSyntaxException e) {
-			BundleException be = new BundleException(Msg.formatter.getString("BUNDLE_NATIVECODE_INVALID_FILTER"), e); //$NON-NLS-1$
+			BundleException be = new BundleException(Msg.BUNDLE_NATIVECODE_INVALID_FILTER, e); //$NON-NLS-1$
 			bundle.framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, be);
 			return false;
 		}

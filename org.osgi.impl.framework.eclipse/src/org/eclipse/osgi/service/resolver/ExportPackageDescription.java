@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -16,8 +16,15 @@ public interface ExportPackageDescription extends BaseDescription {
 	/**
 	 * Returns the export package group for this package.
 	 * @return the export pacakge group for this package
+	 * @deprecated use {@link ExportPackageDescription#getUses}
 	 */
 	public String getGrouping();
+	
+	/**
+	 * Returns the list of package names which this export uses.
+	 * @return the list of package names which this export uses.
+	 */
+	public String[] getUses();
 
 	/**
 	 * Returns the list of classes and resources that are included in the export package

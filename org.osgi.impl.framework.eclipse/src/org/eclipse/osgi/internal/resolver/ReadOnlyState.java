@@ -1,14 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package org.eclipse.osgi.internal.resolver;
+
+import java.util.Dictionary;
 
 import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.BundleException;
@@ -122,6 +124,10 @@ public class ReadOnlyState implements State {
 	}
 
 	public void setResolver(Resolver value) {
+		throw new UnsupportedOperationException();
+	}
+
+	public boolean setPlatformProperties(Dictionary platformProperties) {
 		throw new UnsupportedOperationException();
 	}
 

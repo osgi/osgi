@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -30,21 +30,15 @@ public class SingleSourcePackage extends PackageSource {
 		return id + " -> " + supplier; //$NON-NLS-1$
 	}
 
-	public Class loadClass(String name, String pkgName, boolean providePkg) {
-		if (providePkg)
-			return supplier.getBundleLoader().requireClass(name, pkgName);
+	public Class loadClass(String name, String pkgName) {
 		return supplier.getBundleLoader().findLocalClass(name);
 	}
 
-	public URL getResource(String name, String pkgName, boolean providePkg) {
-		if (providePkg)
-			return supplier.getBundleLoader().requireResource(name, pkgName);
+	public URL getResource(String name, String pkgName) {
 		return supplier.getBundleLoader().findLocalResource(name);
 	}
 
-	public Enumeration getResources(String name, String pkgName, boolean providePkg) throws IOException {
-		if (providePkg)
-			return supplier.getBundleLoader().requireResources(name, pkgName);
+	public Enumeration getResources(String name, String pkgName) throws IOException {
 		return supplier.getBundleLoader().findLocalResources(name);
 	}
 }

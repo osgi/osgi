@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -17,9 +17,12 @@ import org.osgi.framework.*;
 public class FilteredServiceListener implements ServiceListener {
 	/** Filter for listener. */
 	protected FilterImpl filter;
-
 	/** Real listener. */
 	protected ServiceListener listener;
+	// The bundle context
+	protected BundleContextImpl context;
+	// is this an AllServiceListener
+	protected boolean allservices = false;
 
 	/**
 	 * Constructor.
@@ -28,9 +31,12 @@ public class FilteredServiceListener implements ServiceListener {
 	 * @param listener real listener.
 	 * @exception InvalidSyntaxException if the filter is invalid.
 	 */
-	protected FilteredServiceListener(String filterstring, ServiceListener listener) throws InvalidSyntaxException {
-		filter = new FilterImpl(filterstring);
+	protected FilteredServiceListener(String filterstring, ServiceListener listener, BundleContextImpl context) throws InvalidSyntaxException {
+		if (filterstring != null)
+			filter = new FilterImpl(filterstring);
 		this.listener = listener;
+		this.context = context;
+		this.allservices = (listener instanceof AllServiceListener);
 	}
 
 	/**
@@ -40,6 +46,15 @@ public class FilteredServiceListener implements ServiceListener {
 	 * @param event The ServiceEvent.
 	 */
 	public void serviceChanged(ServiceEvent event) {
+		if (!context.hasListenServicePermission(event))
+			return;
+
+		//TODO Merge this condition and the one in the bottom
+		if (filter == null) {
+			if (allservices || context.isAssignableTo((ServiceReferenceImpl) event.getServiceReference()))
+				listener.serviceChanged(event);
+			return;
+		}
 		ServiceReferenceImpl reference = (ServiceReferenceImpl) event.getServiceReference();
 
 		if (Debug.DEBUG && Debug.DEBUG_EVENTS) {
@@ -47,7 +62,7 @@ public class FilteredServiceListener implements ServiceListener {
 			Debug.println("filterServiceEvent(" + listenerName + ", \"" + filter + "\", " + reference.registration.properties + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		}
 
-		if (filter.match(reference)) {
+		if (filter.match(reference) && (allservices || context.isAssignableTo((ServiceReferenceImpl) event.getServiceReference()))) {
 			if (Debug.DEBUG && Debug.DEBUG_EVENTS) {
 				String listenerName = listener.getClass().getName() + "@" + Integer.toHexString(listener.hashCode()); //$NON-NLS-1$
 				Debug.println("dispatchFilteredServiceEvent(" + listenerName + ")"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -63,7 +78,7 @@ public class FilteredServiceListener implements ServiceListener {
 	 * @return The filter string used by this listener.
 	 */
 	public String toString() {
-		return (filter.toString());
+		return filter == null ? listener.toString() : filter.toString();
 	}
 
 }

@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -12,10 +12,11 @@
 package org.eclipse.osgi.framework.adaptor.core;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
-import java.util.Properties;
 import org.eclipse.osgi.framework.adaptor.*;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.internal.core.BundleResourceHandler;
@@ -24,6 +25,8 @@ import org.eclipse.osgi.framework.log.FrameworkLog;
 import org.eclipse.osgi.framework.util.Headers;
 import org.eclipse.osgi.internal.resolver.StateManager;
 import org.eclipse.osgi.service.resolver.*;
+import org.eclipse.osgi.util.ManifestElement;
+import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.*;
 
 /**
@@ -32,13 +35,21 @@ import org.osgi.framework.*;
  */
 public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	public static final String PROP_PARENT_CLASSLOADER = "osgi.parentClassloader"; //$NON-NLS-1$
+	public static final String PROP_FRAMEWORK_EXTENSIONS = "osgi.framework.extensions"; //$NON-NLS-1$
+	public static final String PROP_SIGNINGSUPPORT = "osgi.bundlesigning.support"; //$NON-NLS-1$
 	public static final String PARENT_CLASSLOADER_APP = "app"; //$NON-NLS-1$
 	public static final String PARENT_CLASSLOADER_EXT = "ext"; //$NON-NLS-1$
 	public static final String PARENT_CLASSLOADER_BOOT = "boot"; //$NON-NLS-1$
 	public static final String PARENT_CLASSLOADER_FWK = "fwk"; //$NON-NLS-1$
 
+	public static final byte EXTENSION_INITIALIZE = 0x01;
+	public static final byte EXTENSION_INSTALLED = 0x02;
+	public static final byte EXTENSION_UNINSTALLED = 0x04;
+	public static final byte EXTENSION_UPDATED = 0x08;
+
 	/** Name of the Adaptor manifest file */
 	protected final String ADAPTOR_MANIFEST = "ADAPTOR.MF"; //$NON-NLS-1$
+	protected final String DEFAULT_SIGNEDBUNDLE_SUPPORT = "org.eclipse.osgi.framework.pkcs7verify.SignedBundleImpl"; //$NON-NLS-1$
 
 	/**
 	 * The EventPublisher for the FrameworkAdaptor
@@ -80,7 +91,6 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	 * from the boot strap classloader.
 	 */
 	protected static ClassLoader bundleClassLoaderParent;
-	private AbstractBundleData data;
 	/**
 	 * next available bundle id 
 	 */
@@ -95,8 +105,6 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	protected File bundleStoreRootDir;
 
 	protected AdaptorElementFactory elementFactory;
-
-	public static final String METADATA_ADAPTOR_NEXTID = "METADATA_ADAPTOR_NEXTID";
 
 	static {
 		// check property for specified parent
@@ -115,6 +123,13 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		if (bundleClassLoaderParent == null)
 			bundleClassLoaderParent = new ParentClassLoader();
 	}
+
+	protected Method addURLMethod = findaddURLMethod(AbstractFrameworkAdaptor.class.getClassLoader().getClass());
+
+	protected String[] configuredExtensions;
+
+	protected boolean supportSignedBundles = true;
+	protected Class signedBundleSupport = null;
 
 	/**
 	 * Constructor for DefaultAdaptor.  This constructor parses the arguments passed
@@ -205,7 +220,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		try {
 			return (new URL(location).openConnection());
 		} catch (IOException e) {
-			throw new BundleException(AdaptorMsg.formatter.getString("ADAPTOR_URL_CREATE_EXCEPTION", location), e); //$NON-NLS-1$
+			throw new BundleException(NLS.bind(AdaptorMsg.ADAPTOR_URL_CREATE_EXCEPTION, location), e); 
 		}
 	}
 
@@ -311,16 +326,12 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		return null;
 	}
 
-	public void setBundleData(AbstractBundleData data) {
-		this.data = data;
-	}
-
 	/**
 	 * The FrameworkLog for the adaptor 
 	 */
 	protected FrameworkLog frameworkLog;
 
-	public static final String BUNDLE_STORE = "osgi.bundlestore";
+	public static final String BUNDLE_STORE = "osgi.bundlestore"; //$NON-NLS-1$
 
 	/**
 	 * This method locates and reads the osgi.properties file.
@@ -370,7 +381,6 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		}
 	}
 
-	//protected abstract long getNextBundleId();
 	/**
 	 * Return the next valid, unused bundle id.
 	 *
@@ -390,7 +400,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 			return (id);
 		}
 
-		throw new IOException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION")); //$NON-NLS-1$
+		throw new IOException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION);
 	}
 
 	protected void initDataRootDir() {
@@ -430,7 +440,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	 *
 	 */
 	abstract protected FrameworkLog createFrameworkLog();
-	
+
 	public BundleData createSystemBundleData() throws BundleException {
 		return new SystemBundleData(this);
 	}
@@ -506,8 +516,95 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		}
 	}
 
+	private static Method findaddURLMethod(Class clazz) {
+		if (clazz == null)
+			return null; // ends the recursion when getSuperClass returns null
+		try {
+			Method result = clazz.getDeclaredMethod("addURL", new Class[] {URL.class}); //$NON-NLS-1$ 
+			result.setAccessible(true);
+			return result;
+		} catch (NoSuchMethodException e) {
+			// do nothing look in super class below
+		} catch (SecurityException e) {
+			// if we do not have the permissions then we will not find the method
+		}
+		return findaddURLMethod(clazz.getSuperclass());
+	}
+
 	public ClassLoader getBundleClassLoaderParent() {
 		return bundleClassLoaderParent;
+	}
+
+	protected void processExtension(BundleData bundleData, byte type) throws BundleException {
+		if ((bundleData.getType() & BundleData.TYPE_FRAMEWORK_EXTENSION) != 0)
+			processFrameworkExtension(bundleData, type);
+		else if ((bundleData.getType() & BundleData.TYPE_BOOTCLASSPATH_EXTENSION) != 0)
+			processBootExtension(bundleData, type);
+	}
+
+	protected void processFrameworkExtension(BundleData bundleData, byte type) throws BundleException {
+		if (addURLMethod == null)
+			throw new BundleException("Framework extensions are not supported.", new UnsupportedOperationException()); //$NON-NLS-1$
+		if ((type & (EXTENSION_UNINSTALLED | EXTENSION_UPDATED)) != 0)
+			// if uninstalled or updated then do nothing framework must be restarted.
+			return;
+
+		// first make sure this BundleData is not on the pre-configured osgi.framework.extensions list
+		String[] extensions = getConfiguredExtensions();
+		for (int i = 0; i < extensions.length; i++)
+			if (extensions[i].equals(bundleData.getSymbolicName()))
+				return;
+		File[] files = getExtensionFiles(bundleData);
+		if (files == null)
+			return;
+		for (int i = 0; i < files.length; i++) {
+			if (files[i] == null)
+				continue;
+			Throwable exceptionLog = null;
+			try {
+				addURLMethod.invoke(getClass().getClassLoader(), new Object[] {files[i].toURL()});
+			} catch (InvocationTargetException e) {
+				exceptionLog = e.getTargetException();
+			} catch (Throwable t) {
+				exceptionLog = t;
+			} finally {
+				if (exceptionLog != null)
+					eventPublisher.publishFrameworkEvent(FrameworkEvent.ERROR, ((AbstractBundleData) bundleData).getBundle(), exceptionLog);
+			}
+		}
+	}
+
+	protected String[] getConfiguredExtensions() {
+		if (configuredExtensions != null)
+			return configuredExtensions;
+		String prop = System.getProperty(PROP_FRAMEWORK_EXTENSIONS);
+		if (prop == null || prop.trim().length() == 0)
+			configuredExtensions = new String[0];
+		else
+			configuredExtensions = ManifestElement.getArrayFromList(prop);
+		return configuredExtensions;
+	}
+
+	protected void processBootExtension(BundleData bundleData, byte type) throws BundleException {
+		throw new BundleException("Boot classpath extensions are not supported.", new UnsupportedOperationException()); //$NON-NLS-1$
+	}
+
+	protected File[] getExtensionFiles(BundleData bundleData) {
+		File[] files = null;
+		try {
+			String[] paths = bundleData.getClassPath();
+			// TODO need to be smarter about dev path here
+			if (System.getProperty("osgi.dev") != null) { //$NON-NLS-1$
+				String[] origPaths = paths;
+				paths = new String[origPaths.length + 1];
+				System.arraycopy(origPaths, 0, paths, 0, origPaths.length);
+				paths[paths.length - 1] = "bin"; //$NON-NLS-1$
+			}
+			files = ((AbstractBundleData) bundleData).getClasspathFiles(paths);
+		} catch (BundleException e) {
+			eventPublisher.publishFrameworkEvent(FrameworkEvent.ERROR, ((AbstractBundleData) bundleData).getBundle(), e);
+		}
+		return files;
 	}
 
 	public void handleRuntimeError(Throwable error) {
@@ -532,11 +629,31 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	 * @throws IOException if an error occurred creating the BundleFile object.
 	 */
 	public BundleFile createBundleFile(File basefile, BundleData bundledata) throws IOException {
-		if (basefile.isDirectory()) {
+		if (basefile.isDirectory())
 			return new BundleFile.DirBundleFile(basefile);
-		} else {
-			return new BundleFile.ZipBundleFile(basefile, bundledata);
+		return new BundleFile.ZipBundleFile(basefile, bundledata);
+	}
+
+	public BundleFile createBaseBundleFile(File basefile, BundleData bundledata) throws IOException {
+		BundleFile base = createBundleFile(basefile, bundledata);
+		if (System.getSecurityManager() == null || !supportSignedBundles)
+			return base;
+		try {
+			if (signedBundleSupport == null) {
+				String clazzName = System.getProperty(PROP_SIGNINGSUPPORT, DEFAULT_SIGNEDBUNDLE_SUPPORT);
+				signedBundleSupport = Class.forName(clazzName);
+			}
+			SignedBundle signedBundle = (SignedBundle) signedBundleSupport.newInstance();
+			signedBundle.setBundleFile(base);
+			return signedBundle;
+		} catch (ClassNotFoundException e) {
+			supportSignedBundles = false;
+		} catch (IllegalAccessException e) {
+			supportSignedBundles = false;
+		} catch (InstantiationException e) {
+			supportSignedBundles = false;
 		}
+		return base;
 	}
 
 	/**
@@ -557,8 +674,6 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	 * @return BundleOperation object to be used to complete the install.
 	 */
 	public BundleOperation installBundle(final String location, final URLConnection source) {
-		final AbstractBundleData bundleData = data;
-		data = null;
 		return (new BundleOperation() {
 			private AbstractBundleData data;
 
@@ -583,13 +698,9 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 						try {
 							id = getNextBundleId();
 						} catch (IOException e) {
-							throw new BundleException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION"), e); //$NON-NLS-1$
+							throw new BundleException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION, e);
 						}
-						if (bundleData == null) {
-							data = (AbstractBundleData) getElementFactory().createBundleData(AbstractFrameworkAdaptor.this, id);
-						} else {
-							data = bundleData;
-						}
+						data = getElementFactory().createBundleData(AbstractFrameworkAdaptor.this, id);
 						data.setLastModified(System.currentTimeMillis());
 						data.setLocation(location);
 						data.setStartLevel(getInitialBundleStartLevel());
@@ -598,7 +709,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 							URL reference = ((ReferenceInputStream) in).getReference();
 
 							if (!"file".equals(reference.getProtocol())) { //$NON-NLS-1$
-								throw new BundleException(AdaptorMsg.formatter.getString("ADAPTOR_URL_CREATE_EXCEPTION", reference)); //$NON-NLS-1$
+								throw new BundleException(NLS.bind(AdaptorMsg.ADAPTOR_URL_CREATE_EXCEPTION, reference));
 							}
 
 							data.setReference(true);
@@ -607,7 +718,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 						} else {
 							File genDir = data.createGenerationDir();
 							if (!genDir.exists()) {
-								throw new IOException(AdaptorMsg.formatter.getString("ADAPTOR_DIRECTORY_CREATE_EXCEPTION", genDir.getPath())); //$NON-NLS-1$
+								throw new IOException(NLS.bind(AdaptorMsg.ADAPTOR_DIRECTORY_CREATE_EXCEPTION, genDir.getPath()));
 							}
 
 							String fileName = mapLocationToName(location);
@@ -633,7 +744,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 						}
 					}
 				} catch (IOException ioe) {
-					throw new BundleException(AdaptorMsg.formatter.getString("BUNDLE_READ_EXCEPTION"), ioe); //$NON-NLS-1$
+					throw new BundleException(AdaptorMsg.BUNDLE_READ_EXCEPTION, ioe);
 				}
 
 				return (data);
@@ -675,15 +786,13 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 			}
 
 			public void commit(boolean postpone) throws BundleException {
+				processExtension(data, EXTENSION_INSTALLED);
 				try {
 					data.save();
 				} catch (IOException e) {
-					throw new BundleException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION"), e); //$NON-NLS-1$
+					throw new BundleException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION, e);
 				}
-				if (stateManager != null) {
-					BundleDescription bundleDescription = stateManager.getFactory().createBundleDescription(data.getManifest(), data.getLocation(), data.getBundleID());
-					stateManager.getSystemState().addBundle(bundleDescription);
-				}
+				updateState(data, BundleEvent.INSTALLED);
 			}
 
 		});
@@ -734,7 +843,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	 */
 	protected void shutdownStateManager() {
 		try {
-			stateManager.shutdown(new File(getBundleStoreRootDir(), ".state")); //$NON-NLS-1$
+			stateManager.shutdown(new File(getBundleStoreRootDir(), ".state"), new File(getBundleStoreRootDir(), ".lazy")); //$NON-NLS-1$//$NON-NLS-2$
 		} catch (IOException e) {
 			frameworkLog.log(new FrameworkEvent(FrameworkEvent.ERROR, context.getBundle(), e));
 		} finally {
@@ -787,8 +896,8 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	 * directory containing data directories for installed bundles 
 	 */
 	protected File dataRootDir;
-	public static final String METADATA_ADAPTOR_IBSL = "METADATA_ADAPTOR_IBSL";
-	public static final String DATA_DIR_NAME = "data";
+	public static final String DATA_DIR_NAME = "data";//$NON-NLS-1$
+	protected boolean invalidState = false;
 
 	/**
 	 * Prepare to update a bundle from a URLConnection.
@@ -826,33 +935,33 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 							ReferenceInputStream refIn = (ReferenceInputStream) in;
 							URL reference = (refIn).getReference();
 							if (!"file".equals(reference.getProtocol())) { //$NON-NLS-1$
-								throw new BundleException(AdaptorMsg.formatter.getString("ADAPTOR_URL_CREATE_EXCEPTION", reference)); //$NON-NLS-1$
+								throw new BundleException(NLS.bind(AdaptorMsg.ADAPTOR_URL_CREATE_EXCEPTION, reference));
 							}
 							// check to make sure we are not just trying to update to the same
 							// directory reference.  This would be a no-op.
 							String path = reference.getPath();
 							if (path.equals(data.getFileName())) {
-								throw new BundleException(AdaptorMsg.formatter.getString("ADAPTOR_SAME_REF_UPDATE", reference)); //$NON-NLS-1$
+								throw new BundleException(NLS.bind(AdaptorMsg.ADAPTOR_SAME_REF_UPDATE, reference));
 							}
 							try {
 								newData = data.nextGeneration(reference.getPath());
 							} catch (IOException e) {
-								throw new BundleException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION"), e); //$NON-NLS-1$
+								throw new BundleException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION, e);
 							}
 							File bundleGenerationDir = newData.createGenerationDir();
 							if (!bundleGenerationDir.exists()) {
-								throw new BundleException(AdaptorMsg.formatter.getString("ADAPTOR_DIRECTORY_CREATE_EXCEPTION", bundleGenerationDir.getPath())); //$NON-NLS-1$
+								throw new BundleException(NLS.bind(AdaptorMsg.ADAPTOR_DIRECTORY_CREATE_EXCEPTION, bundleGenerationDir.getPath()));
 							}
 							newData.createBaseBundleFile();
 						} else {
 							try {
 								newData = data.nextGeneration(null);
 							} catch (IOException e) {
-								throw new BundleException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION"), e); //$NON-NLS-1$
+								throw new BundleException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION, e);
 							}
 							File bundleGenerationDir = newData.createGenerationDir();
 							if (!bundleGenerationDir.exists()) {
-								throw new BundleException(AdaptorMsg.formatter.getString("ADAPTOR_DIRECTORY_CREATE_EXCEPTION", bundleGenerationDir.getPath())); //$NON-NLS-1$
+								throw new BundleException(NLS.bind(AdaptorMsg.ADAPTOR_DIRECTORY_CREATE_EXCEPTION, bundleGenerationDir.getPath()));
 							}
 							File outFile = newData.getBaseFile();
 							if ("file".equals(protocol)) { //$NON-NLS-1$
@@ -875,7 +984,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 					}
 					newData.loadFromManifest();
 				} catch (IOException e) {
-					throw new BundleException(AdaptorMsg.formatter.getString("BUNDLE_READ_EXCEPTION"), e); //$NON-NLS-1$
+					throw new BundleException(AdaptorMsg.BUNDLE_READ_EXCEPTION, e);
 				}
 
 				return (newData);
@@ -890,19 +999,15 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 			 */
 
 			public void commit(boolean postpone) throws BundleException {
+				processExtension(data, EXTENSION_UNINSTALLED); // remove the old extension
+				processExtension(newData, EXTENSION_UPDATED); // update to the new one
 				try {
 					newData.setLastModified(System.currentTimeMillis());
 					newData.save();
 				} catch (IOException e) {
-					throw new BundleException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION"), e); //$NON-NLS-1$
+					throw new BundleException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION, e);
 				}
-				long bundleId = newData.getBundleID();
-				if (stateManager != null) {
-					State systemState = stateManager.getSystemState();
-					systemState.removeBundle(bundleId);
-					BundleDescription newDescription = stateManager.getFactory().createBundleDescription(newData.getManifest(), newData.getLocation(), bundleId);
-					systemState.addBundle(newDescription);
-				}
+				updateState(newData, BundleEvent.UPDATED);
 				File originalGenerationDir = data.createGenerationDir();
 
 				if (postpone || !rm(originalGenerationDir)) {
@@ -984,12 +1089,14 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	 * @return the StateManager.
 	 */
 	protected StateManager createStateManager() {
-		File stateLocation = new File(getBundleStoreRootDir(), ".state"); //$NON-NLS-1$
-		stateManager = new StateManager(stateLocation);
-		State systemState = stateManager.readSystemState(context);
-		if (systemState != null)
-			return stateManager;
-		systemState = stateManager.createSystemState(context);
+		stateManager = new StateManager(new File(getBundleStoreRootDir(), ".state"), new File(getBundleStoreRootDir(), ".lazy"), context); //$NON-NLS-1$ //$NON-NLS-2$
+		State systemState = null;
+		if (!invalidState) {
+			systemState = stateManager.readSystemState();
+			if (systemState != null)
+				return stateManager;
+		}
+		systemState = stateManager.createSystemState();
 		Bundle[] installedBundles = context.getBundles();
 		if (installedBundles == null)
 			return stateManager;
@@ -1006,6 +1113,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		}
 		// we need the state resolved
 		systemState.resolve();
+		invalidState = false;
 		return stateManager;
 	}
 
@@ -1067,9 +1175,9 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 					}
 				}
 
+				processExtension(data, EXTENSION_UNINSTALLED);
 				data.setLastModified(System.currentTimeMillis());
-				if (stateManager != null)
-					stateManager.getSystemState().removeBundle(data.getBundleID());
+				updateState(data, BundleEvent.UNINSTALLED);
 			}
 
 			/**
@@ -1161,7 +1269,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 						Debug.println("Exists but not a directory: " + bundleStore.getPath()); //$NON-NLS-1$
 					}
 
-					throw new IOException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION")); //$NON-NLS-1$
+					throw new IOException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION);
 				}
 			}
 		} else {
@@ -1173,7 +1281,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 					Debug.println("Unable to create directory: " + bundleStore.getPath()); //$NON-NLS-1$
 				}
 
-				throw new IOException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION")); //$NON-NLS-1$
+				throw new IOException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION);
 			}
 		}
 
@@ -1277,6 +1385,26 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	protected static class ParentClassLoader extends ClassLoader {
 		protected ParentClassLoader() {
 			super(null);
+		}
+	}
+
+	protected void updateState(BundleData bundleData, int type) throws BundleException {
+		if (stateManager == null) {
+			invalidState = true;
+			return;
+		}
+		State systemState = stateManager.getSystemState();
+		switch (type) {
+			case BundleEvent.UPDATED :
+				systemState.removeBundle(bundleData.getBundleID());
+			// fall through to INSTALLED
+			case BundleEvent.INSTALLED :
+				BundleDescription newDescription = stateManager.getFactory().createBundleDescription(bundleData.getManifest(), bundleData.getLocation(), bundleData.getBundleID());
+				systemState.addBundle(newDescription);
+				break;
+			case BundleEvent.UNINSTALLED :
+				systemState.removeBundle(bundleData.getBundleID());
+				break;
 		}
 	}
 }

@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -23,8 +23,7 @@ public class HostSpecificationImpl extends VersionConstraintImpl implements Host
 		BundleDescription candidate = (BundleDescription) supplier;
 		if (candidate.getHost() != null)
 			return false;
-		if (getName() != null && getName().equals(candidate.getSymbolicName()) &&
-				(getVersionRange() == null || getVersionRange().isIncluded(candidate.getVersion())))
+		if (getName() != null && getName().equals(candidate.getSymbolicName()) && (getVersionRange() == null || getVersionRange().isIncluded(candidate.getVersion())))
 			return true;
 		return false;
 	}
@@ -47,4 +46,11 @@ public class HostSpecificationImpl extends VersionConstraintImpl implements Host
 	public String toString() {
 		return "Fragment-Host: " + getName() + " - version: " + getVersionRange(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+
+	public BaseDescription getSupplier() {
+		if (hosts == null || hosts.length == 0)
+			return null;
+		return hosts[0];
+	}
+
 }

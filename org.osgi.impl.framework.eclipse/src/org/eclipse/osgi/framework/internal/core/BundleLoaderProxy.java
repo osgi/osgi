@@ -1,16 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package org.eclipse.osgi.framework.internal.core;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.*;
 import org.osgi.framework.Bundle;
@@ -25,7 +28,7 @@ import org.osgi.service.packageadmin.RequiredBundle;
  */
 public class BundleLoaderProxy implements RequiredBundle {
 	/* The BundleLoader that this BundleLoaderProxy is managing */
-	private BundleLoader loader;
+	BundleLoader loader;
 	/* The Bundle that this BundleLoaderProxy is for */
 	private BundleHost bundle;
 	/* the BundleDescription for the Bundle */
@@ -36,6 +39,7 @@ public class BundleLoaderProxy implements RequiredBundle {
 	 */
 	private boolean stale = false;
 
+	//TODO Needs a comment, and should not that belong to the Loader
 	private KeyedHashSet pkgSources;
 
 	public BundleLoaderProxy(BundleHost bundle, BundleDescription description) {
@@ -155,8 +159,8 @@ public class BundleLoaderProxy implements RequiredBundle {
 		return description;
 	}
 
-	public SingleSourcePackage getPackageSource(String pkgName) {
-		SingleSourcePackage pkgSource = (SingleSourcePackage) pkgSources.getByKey(pkgName);
+	public PackageSource getPackageSource(String pkgName) {
+		PackageSource pkgSource = (PackageSource) pkgSources.getByKey(pkgName);
 		if (pkgSource == null) {
 			synchronized (pkgSources) {
 				pkgSource = new SingleSourcePackage(pkgName, this);
@@ -170,14 +174,70 @@ public class BundleLoaderProxy implements RequiredBundle {
 		return description.getDependents().length > 0;
 	}
 
-	public SingleSourcePackage createFilteredSource(String pkgName, String includes, String excludes) {
-		SingleSourcePackage pkgSource = (SingleSourcePackage) pkgSources.getByKey(pkgName);
-		if (pkgSource == null) {
-			synchronized (pkgSources) {
-				pkgSource = new FilteredSourcePackage(pkgName, this, includes, excludes);
-				pkgSources.add(pkgSource);
+	// creates a PackageSource from an ExportPackageDescription.  This is called when initializing
+	// a BundleLoader to ensure that proper the proper PackageSource gets created and used for
+	// filtered and reexport packages.  The storeSource flag is used by initialize to indicate
+	// that the source for special case package sources (filtered or re-exported should be stored 
+	// in the cache.  if this flag is set then a normal SinglePackageSource will not be created
+	// (i.e. it will be created lazily)
+	public PackageSource createPackageSource(ExportPackageDescription export, boolean storeSource) {
+		PackageSource pkgSource = null;
+		// check to see if it is a reexport
+		if (!export.isRoot()) {
+			pkgSource = new ReexportPackageSource(export.getName());
+		}
+		else {
+			// check to see if it is a filtered export
+			String includes = export.getInclude();
+			String excludes = export.getExclude();
+			if (includes != null || excludes != null)
+				pkgSource = new FilteredSourcePackage(export.getName(), this, includes, excludes);
+		}
+
+		if (storeSource) {
+			// if the package source is not null then store the source only if it is not already present
+			//TODO Is it normal that the getByKey in the if is not synchronized?
+			if (pkgSource != null && pkgSources.getByKey(export.getName()) == null)
+				synchronized (pkgSources) {
+					pkgSources.add(pkgSource);
+				}
+		}
+		else {
+			// we are not storing the special case sources, but pkgSource == null this means this
+			// is a normal package source; get it and return it.
+			if (pkgSource == null)
+				pkgSource = getPackageSource(export.getName());
+		}
+				
+		return pkgSource;
+	}
+
+
+	class ReexportPackageSource extends PackageSource {
+		public ReexportPackageSource(String id) {
+			super(id);
+		}
+
+		public synchronized SingleSourcePackage[] getSuppliers() {
+			PackageSource source = getBundleLoader().getPackageSource(id);
+			if (source == null)
+				return null;
+			return source.getSuppliers();
+		}
+
+		public Class loadClass(String name, String pkgName) {
+			try {
+				return getBundleLoader().findClass(name);
+			}
+			catch(ClassNotFoundException e) {
+				return null;
 			}
 		}
-		return pkgSource;
+		public URL getResource(String name, String pkgName) {
+			return getBundleLoader().findResource(name);
+		}
+		public Enumeration getResources(String name, String pkgName) throws IOException {
+			return getBundleLoader().findResources(name);
+		}
 	}
 }

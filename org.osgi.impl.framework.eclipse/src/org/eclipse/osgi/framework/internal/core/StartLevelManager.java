@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -12,10 +12,12 @@
 package org.eclipse.osgi.framework.internal.core;
 
 import java.io.IOException;
+import java.security.*;
 import java.util.EventListener;
 import java.util.List;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.eventmgr.*;
+import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.*;
 
 /**
@@ -63,11 +65,11 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 		} else {
 			try {
 				if (Integer.parseInt(value) <= 0) {
-					System.err.println(Msg.formatter.getString("PROPERTIES_INVALID_FW_STARTLEVEL", Constants.DEFAULT_STARTLEVEL)); //$NON-NLS-1$
+					System.err.println(NLS.bind(Msg.PROPERTIES_INVALID_FW_STARTLEVEL, Constants.DEFAULT_STARTLEVEL)); //$NON-NLS-1$
 					value = Constants.DEFAULT_STARTLEVEL;
 				}
 			} catch (NumberFormatException nfe) {
-				System.err.println(Msg.formatter.getString("PROPERTIES_INVALID_FW_STARTLEVEL", Constants.DEFAULT_STARTLEVEL)); //$NON-NLS-1$
+				System.err.println(NLS.bind(Msg.PROPERTIES_INVALID_FW_STARTLEVEL, Constants.DEFAULT_STARTLEVEL)); //$NON-NLS-1$
 				value = Constants.DEFAULT_STARTLEVEL;
 			}
 		}
@@ -134,7 +136,7 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 	 * permissions.
 	 */
 	public void setInitialBundleStartLevel(int startlevel) {
-		framework.checkAdminPermission();
+		framework.checkAdminPermission(framework.systemBundle, AdminPermission.STARTLEVEL);
 		if (startlevel <= 0) {
 			throw new IllegalArgumentException();
 		}
@@ -217,9 +219,9 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 	 */
 	public void setStartLevel(int newSL, org.osgi.framework.Bundle callerBundle) {
 		if (newSL <= 0) {
-			throw new IllegalArgumentException(Msg.formatter.getString("STARTLEVEL_EXCEPTION_INVALID_REQUESTED_STARTLEVEL", "" + newSL)); //$NON-NLS-1$ //$NON-NLS-2$
+			throw new IllegalArgumentException(NLS.bind(Msg.STARTLEVEL_EXCEPTION_INVALID_REQUESTED_STARTLEVEL, "" + newSL)); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		framework.checkAdminPermission();
+		framework.checkAdminPermission(framework.systemBundle, AdminPermission.STARTLEVEL);
 
 		if (Debug.DEBUG && Debug.DEBUG_STARTLEVEL) {
 			Debug.println("StartLevelImpl: setStartLevel: " + newSL + "; callerBundle = " + callerBundle.getBundleId()); //$NON-NLS-1$ //$NON-NLS-2$
@@ -315,7 +317,7 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 	public boolean isBundlePersistentlyStarted(org.osgi.framework.Bundle bundle) {
 
 		if (bundle.getState() == AbstractBundle.UNINSTALLED) {
-			throw new IllegalArgumentException(Msg.formatter.getString("BUNDLE_UNINSTALLED_EXCEPTION")); //$NON-NLS-1$
+			throw new IllegalArgumentException(Msg.BUNDLE_UNINSTALLED_EXCEPTION); //$NON-NLS-1$
 		}
 		AbstractBundle b = (AbstractBundle) bundle;
 		int status = b.getBundleData().getStatus();
@@ -332,7 +334,7 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 	public int getBundleStartLevel(org.osgi.framework.Bundle bundle) {
 
 		if (bundle.getState() == AbstractBundle.UNINSTALLED) {
-			throw new IllegalArgumentException(Msg.formatter.getString("BUNDLE_UNINSTALLED_EXCEPTION")); //$NON-NLS-1$
+			throw new IllegalArgumentException(Msg.BUNDLE_UNINSTALLED_EXCEPTION); //$NON-NLS-1$
 		}
 		return ((AbstractBundle) bundle).getStartLevel();
 	}
@@ -369,11 +371,11 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 
 		String exceptionText = ""; //$NON-NLS-1$
 		if (bundle.getBundleId() == 0) { // system bundle has id=0
-			exceptionText = Msg.formatter.getString("STARTLEVEL_CANT_CHANGE_SYSTEMBUNDLE_STARTLEVEL"); //$NON-NLS-1$
+			exceptionText = Msg.STARTLEVEL_CANT_CHANGE_SYSTEMBUNDLE_STARTLEVEL; //$NON-NLS-1$
 		} else if (bundle.getState() == AbstractBundle.UNINSTALLED) {
-			exceptionText = Msg.formatter.getString("BUNDLE_UNINSTALLED_EXCEPTION"); //$NON-NLS-1$
+			exceptionText = Msg.BUNDLE_UNINSTALLED_EXCEPTION; //$NON-NLS-1$
 		} else if (newSL <= 0) {
-			exceptionText = Msg.formatter.getString("STARTLEVEL_EXCEPTION_INVALID_REQUESTED_STARTLEVEL", "" + newSL); //$NON-NLS-1$ //$NON-NLS-2$
+			exceptionText = NLS.bind(Msg.STARTLEVEL_EXCEPTION_INVALID_REQUESTED_STARTLEVEL, "" + newSL); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		if (exceptionText.length() > 0) {
 			throw new IllegalArgumentException(exceptionText);
@@ -382,11 +384,23 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 		try {
 			// if the bundle's startlevel is not already at the requested startlevel
 			if (newSL != ((org.eclipse.osgi.framework.internal.core.AbstractBundle) bundle).getStartLevel()) {
-				AbstractBundle b = (AbstractBundle) bundle;
+				final AbstractBundle b = (AbstractBundle) bundle;
 				b.getBundleData().setStartLevel(newSL);
-				b.getBundleData().save();
+				try {
+					AccessController.doPrivileged(new PrivilegedExceptionAction() {
+						public Object run() throws Exception {
+							b.getBundleData().save();
+							return null;
+						}
+					});
+				} catch (PrivilegedActionException e) {
+					if (e.getException() instanceof IOException) {
+						throw (IOException) e.getException();
+					}
+					throw (RuntimeException) e.getException();
+				}
 
-				framework.checkAdminPermission();
+				framework.checkAdminPermission(bundle, AdminPermission.EXECUTE);
 
 				// handle starting or stopping the bundle asynchronously
 				issueEvent(new StartLevelEvent(StartLevelEvent.CHANGE_BUNDLE_SL, newSL, (AbstractBundle) bundle));
@@ -437,12 +451,12 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 	public void dispatchEvent(Object listener, Object listenerObject, int eventAction, Object eventObject) {
 		try {
 			switch (eventAction) {
-			case StartLevelEvent.CHANGE_BUNDLE_SL:
-				setBundleSL((StartLevelEvent) eventObject);
-				break;
-			case StartLevelEvent.CHANGE_FW_SL:
-				doSetStartLevel(((StartLevelEvent) eventObject).getNewSL(), ((StartLevelEvent) eventObject).getBundle());
-				break;
+				case StartLevelEvent.CHANGE_BUNDLE_SL :
+					setBundleSL((StartLevelEvent) eventObject);
+					break;
+				case StartLevelEvent.CHANGE_FW_SL :
+					doSetStartLevel(((StartLevelEvent) eventObject).getNewSL(), ((StartLevelEvent) eventObject).getBundle());
+					break;
 			}
 		} catch (Throwable t) {
 			// allow the adaptor to handle this unexpected error

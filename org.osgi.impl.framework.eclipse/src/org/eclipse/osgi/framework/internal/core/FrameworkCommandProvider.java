@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -19,8 +19,9 @@ import java.util.*;
 import org.eclipse.osgi.framework.console.CommandInterpreter;
 import org.eclipse.osgi.framework.console.CommandProvider;
 import org.eclipse.osgi.framework.launcher.Launcher;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.ServiceReference;
+import org.eclipse.osgi.profile.Profile;
+import org.eclipse.osgi.util.NLS;
+import org.osgi.framework.*;
 import org.osgi.service.packageadmin.RequiredBundle;
 
 /**
@@ -30,42 +31,42 @@ import org.osgi.service.packageadmin.RequiredBundle;
  * called first.  Other CommandProviders should register with lower rankings.
  *
  * The commands provided by this class are:
-        ---Controlling the OSGi framework---
-        close - shutdown and exit
-        exit - exit immediately (System.exit)
-        gc - perform a garbage collection
-        init - uninstall all bundles
-        launch - start the Service Management Framework
-        setprop <key>=<value> - set the OSGI property
-        shutdown - shutdown the Service Management Framework
-        ---Controlliing Bundles---
-        install <url> {s[tart]} - install and optionally start bundle from the given URL
-        refresh (<id>|<location>) - refresh the packages of the specified bundles
-        start (<id>|<location>) - start the specified bundle(s)
-        stop (<id>|<location>) - stop the specified bundle(s)
-        uninstall (<id>|<location>) - uninstall the specified bundle(s)
-        update (<id>|<location>|<*>) - update the specified bundle(s)
-        ---Displaying Status---
-        bundle (<id>|<location>) - display details for the specified bundle(s)
-        bundles - display details for all installed bundles
-        headers (<id>|<location>) - print bundle headers
-        packages {<pkgname>|<id>|<location>} - display imported/exported package details
-        props - display System properties
-        services {filter} - display registered service details
-        ss - display installed bundles (short status)
-        status - display installed bundles and registered services
-        threads - display threads and thread groups
-        ---Log Commands---
-        log {(<id>|<location>)} - display log entries
-        ---Extras---
-        exec <command> - execute a command in a separate process and wait
-        fork <command> - execute a command in a separate process
-        ---Controlling StartLevel---
-        sl {(<id>|<location>)} - display the start level for the specified bundle, or for the framework if no bundle specified
-	    setfwsl <start level> - set the framework start level
-	    setbsl <start level> (<id>|<location>) - set the start level for the bundle(s)
-	    setibsl <start level> - set the initial bundle start level
-	    
+ ---Controlling the OSGi framework---
+ close - shutdown and exit
+ exit - exit immediately (System.exit)
+ gc - perform a garbage collection
+ init - uninstall all bundles
+ launch - start the Service Management Framework
+ setprop <key>=<value> - set the OSGI property
+ shutdown - shutdown the Service Management Framework
+ ---Controlliing Bundles---
+ install <url> {s[tart]} - install and optionally start bundle from the given URL
+ refresh (<id>|<location>) - refresh the packages of the specified bundles
+ start (<id>|<location>) - start the specified bundle(s)
+ stop (<id>|<location>) - stop the specified bundle(s)
+ uninstall (<id>|<location>) - uninstall the specified bundle(s)
+ update (<id>|<location>|<*>) - update the specified bundle(s)
+ ---Displaying Status---
+ bundle (<id>|<location>) - display details for the specified bundle(s)
+ bundles - display details for all installed bundles
+ headers (<id>|<location>) - print bundle headers
+ packages {<pkgname>|<id>|<location>} - display imported/exported package details
+ props - display System properties
+ services {filter} - display registered service details
+ ss - display installed bundles (short status)
+ status - display installed bundles and registered services
+ threads - display threads and thread groups
+ ---Log Commands---
+ log {(<id>|<location>)} - display log entries
+ ---Extras---
+ exec <command> - execute a command in a separate process and wait
+ fork <command> - execute a command in a separate process
+ ---Controlling StartLevel---
+ sl {(<id>|<location>)} - display the start level for the specified bundle, or for the framework if no bundle specified
+ setfwsl <start level> - set the framework start level
+ setbsl <start level> (<id>|<location>) - set the start level for the bundle(s)
+ setibsl <start level> - set the initial bundle start level
+ 
  *
  *  There is a method for each command which is named '_'+method.  The methods are
  *  invoked by a CommandInterpreter's execute method.
@@ -100,56 +101,58 @@ public class FrameworkCommandProvider implements CommandProvider {
 	}
 
 	/**
-	    Answer a string (may be as many lines as you like) with help
-	    texts that explain the command.  This getHelp() method uses the 
-	    ConsoleMsg class to obtain the correct NLS data to display to the user.
-	
-	    @return The help string
-	*/
+	 Answer a string (may be as many lines as you like) with help
+	 texts that explain the command.  This getHelp() method uses the 
+	 ConsoleMsg class to obtain the correct NLS data to display to the user.
+	 
+	 @return The help string
+	 */
 	public String getHelp() {
 		StringBuffer help = new StringBuffer(1024);
 		help.append(newline);
-		help.append(ConsoleMsg.formatter.getString("CONSOLE_HELP_VALID_COMMANDS_HEADER")); //$NON-NLS-1$
+		help.append(ConsoleMsg.CONSOLE_HELP_VALID_COMMANDS_HEADER);
 		help.append(newline);
-		addHeader("CONSOLE_HELP_CONTROLLING_FRAMEWORK_HEADER", help); //$NON-NLS-1$
-		addCommand("launch", "CONSOLE_HELP_LAUNCH_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("shutdown", "CONSOLE_HELP_SHUTDOWN_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("close", "CONSOLE_HELP_CLOSE_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("exit", "CONSOLE_HELP_EXIT_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("gc", "CONSOLE_HELP_GC_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("init", "CONSOLE_HELP_INIT_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("setprop", "CONSOLE_HELP_KEYVALUE_ARGUMENT_DESCRIPTION", "CONSOLE_HELP_SETPROP_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addHeader("CONSOLE_HELP_CONTROLLING_BUNDLES_HEADER", help); //$NON-NLS-1$
-		addCommand("install", "CONSOLE_HELP_INSTALL_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("uninstall", "CONSOLE_HELP_UNINSTALL_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("start", "CONSOLE_HELP_START_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("stop", "CONSOLE_HELP_STOP_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("refresh", "CONSOLE_HELP_REFRESH_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("update", "CONSOLE_HELP_UPDATE_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$
-		addHeader("CONSOLE_HELP_DISPLAYING_STATUS_HEADER", help); //$NON-NLS-1$
-		addCommand("status", "CONSOLE_HELP_STATUS_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("ss", "CONSOLE_HELP_SS_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("services", "CONSOLE_HELP_FILTER_ARGUMENT_DESCRIPTION", "CONSOLE_HELP_SERVICES_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addCommand("packages", "CONSOLE_HELP_PACKAGES_ARGUMENT_DESCRIPTION", "CONSOLE_HELP_PACKAGES_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addCommand("bundles", "CONSOLE_HELP_BUNDLES_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("bundle", "CONSOLE_HELP_IDLOCATION_ARGUMENT_DESCRIPTION", "CONSOLE_HELP_BUNDLE_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addCommand("headers", "CONSOLE_HELP_IDLOCATION_ARGUMENT_DESCRIPTION", "CONSOLE_HELP_HEADERS_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addCommand("log", "CONSOLE_HELP_IDLOCATION_ARGUMENT_DESCRIPTION", "CONSOLE_HELP_LOG_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addHeader("CONSOLE_HELP_EXTRAS_HEADER", help); //$NON-NLS-1$
-		addCommand("exec", "CONSOLE_HELP_COMMAND_ARGUMENT_DESCRIPTION", "CONSOLE_HELP_EXEC_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addCommand("fork", "CONSOLE_HELP_COMMAND_ARGUMENT_DESCRIPTION", "CONSOLE_HELP_FORK_COMMAND_DESCRIPTION", help); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addHeader("STARTLEVEL_HELP_HEADING", help); //$NON-NLS-1$
-		addCommand("sl", "CONSOLE_HELP_OPTIONAL_IDLOCATION_ARGUMENT_DESCRIPTION", "STARTLEVEL_HELP_SL", help); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addCommand("setfwsl", "STARTLEVEL_ARGUMENT_DESCRIPTION", "STARTLEVEL_HELP_SETFWSL", help); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addCommand("setbsl", "STARTLEVEL_IDLOCATION_ARGUMENT_DESCRIPTION", "STARTLEVEL_HELP_SETBSL", help); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addCommand("setibsl", "STARTLEVEL_ARGUMENT_DESCRIPTION", "STARTLEVEL_HELP_SETIBSL", help); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addHeader(ConsoleMsg.CONSOLE_HELP_CONTROLLING_FRAMEWORK_HEADER, help);
+		addCommand("launch", ConsoleMsg.CONSOLE_HELP_LAUNCH_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
+		addCommand("shutdown", ConsoleMsg.CONSOLE_HELP_SHUTDOWN_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
+		addCommand("close", ConsoleMsg.CONSOLE_HELP_CLOSE_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
+		addCommand("exit", ConsoleMsg.CONSOLE_HELP_EXIT_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
+		addCommand("gc", ConsoleMsg.CONSOLE_HELP_GC_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
+		addCommand("init", ConsoleMsg.CONSOLE_HELP_INIT_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
+		addCommand("setprop", ConsoleMsg.CONSOLE_HELP_KEYVALUE_ARGUMENT_DESCRIPTION, ConsoleMsg.CONSOLE_HELP_SETPROP_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addHeader(ConsoleMsg.CONSOLE_HELP_CONTROLLING_BUNDLES_HEADER, help); //$NON-NLS-1$
+		addCommand("install", ConsoleMsg.CONSOLE_HELP_INSTALL_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
+		addCommand("uninstall", ConsoleMsg.CONSOLE_HELP_UNINSTALL_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
+		addCommand("start", ConsoleMsg.CONSOLE_HELP_START_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
+		addCommand("stop", ConsoleMsg.CONSOLE_HELP_STOP_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
+		addCommand("refresh", ConsoleMsg.CONSOLE_HELP_REFRESH_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
+		addCommand("update", ConsoleMsg.CONSOLE_HELP_UPDATE_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
+		addHeader(ConsoleMsg.CONSOLE_HELP_DISPLAYING_STATUS_HEADER, help); //$NON-NLS-1$
+		addCommand("status", ConsoleMsg.CONSOLE_HELP_STATUS_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
+		addCommand("ss", ConsoleMsg.CONSOLE_HELP_SS_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
+		addCommand("services", ConsoleMsg.CONSOLE_HELP_FILTER_ARGUMENT_DESCRIPTION, ConsoleMsg.CONSOLE_HELP_SERVICES_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addCommand("packages", ConsoleMsg.CONSOLE_HELP_PACKAGES_ARGUMENT_DESCRIPTION, ConsoleMsg.CONSOLE_HELP_PACKAGES_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addCommand("bundles", ConsoleMsg.CONSOLE_HELP_BUNDLES_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
+		addCommand("bundle", ConsoleMsg.CONSOLE_HELP_IDLOCATION_ARGUMENT_DESCRIPTION, ConsoleMsg.CONSOLE_HELP_BUNDLE_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addCommand("headers", ConsoleMsg.CONSOLE_HELP_IDLOCATION_ARGUMENT_DESCRIPTION, ConsoleMsg.CONSOLE_HELP_HEADERS_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addCommand("log", ConsoleMsg.CONSOLE_HELP_IDLOCATION_ARGUMENT_DESCRIPTION, ConsoleMsg.CONSOLE_HELP_LOG_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addHeader(ConsoleMsg.CONSOLE_HELP_EXTRAS_HEADER, help);
+		addCommand("exec", ConsoleMsg.CONSOLE_HELP_COMMAND_ARGUMENT_DESCRIPTION, ConsoleMsg.CONSOLE_HELP_EXEC_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addCommand("fork", ConsoleMsg.CONSOLE_HELP_COMMAND_ARGUMENT_DESCRIPTION, ConsoleMsg.CONSOLE_HELP_FORK_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addHeader(ConsoleMsg.STARTLEVEL_HELP_HEADING, help);
+		addCommand("sl", ConsoleMsg.CONSOLE_HELP_OPTIONAL_IDLOCATION_ARGUMENT_DESCRIPTION, ConsoleMsg.STARTLEVEL_HELP_SL, help); //$NON-NLS-1$ 
+		addCommand("setfwsl", ConsoleMsg.STARTLEVEL_ARGUMENT_DESCRIPTION, ConsoleMsg.STARTLEVEL_HELP_SETFWSL, help); //$NON-NLS-1$ 
+		addCommand("setbsl", ConsoleMsg.STARTLEVEL_IDLOCATION_ARGUMENT_DESCRIPTION, ConsoleMsg.STARTLEVEL_HELP_SETBSL, help); //$NON-NLS-1$ 
+		addCommand("setibsl", ConsoleMsg.STARTLEVEL_ARGUMENT_DESCRIPTION, ConsoleMsg.STARTLEVEL_HELP_SETIBSL, help); //$NON-NLS-1$ 
+		addHeader(ConsoleMsg.CONSOLE_HELP_PROFILE_HEADING, help);
+		addCommand("profilelog", ConsoleMsg.CONSOLE_HELP_PROFILELOG_DESCRIPTION, help); //$NON-NLS-1$ 	
 		return help.toString();
 	}
 
 	/** Private helper method for getHelp.  Formats the help headers. */
 	private void addHeader(String header, StringBuffer help) {
 		help.append("---"); //$NON-NLS-1$
-		help.append(ConsoleMsg.formatter.getString(header));
+		help.append(header);
 		help.append("---"); //$NON-NLS-1$
 		help.append(newline);
 	}
@@ -159,7 +162,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 		help.append(tab);
 		help.append(command);
 		help.append(" - "); //$NON-NLS-1$
-		help.append(ConsoleMsg.formatter.getString(description));
+		help.append(description);
 		help.append(newline);
 	}
 
@@ -168,9 +171,9 @@ public class FrameworkCommandProvider implements CommandProvider {
 		help.append(tab);
 		help.append(command);
 		help.append(" "); //$NON-NLS-1$
-		help.append(ConsoleMsg.formatter.getString(parameters));
+		help.append(parameters);
 		help.append(" - "); //$NON-NLS-1$
-		help.append(ConsoleMsg.formatter.getString(description));
+		help.append(description);
 		help.append(newline);
 	}
 
@@ -219,7 +222,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 	public void _start(CommandInterpreter intp) throws Exception {
 		String nextArg = intp.nextArgument();
 		if (nextArg == null) {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_BUNDLE_SPECIFIED_ERROR")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_NO_BUNDLE_SPECIFIED_ERROR); //$NON-NLS-1$
 		}
 		while (nextArg != null) {
 			AbstractBundle bundle = getBundleFromToken(intp, nextArg, true);
@@ -247,7 +250,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 	public void _stop(CommandInterpreter intp) throws Exception {
 		String nextArg = intp.nextArgument();
 		if (nextArg == null) {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_BUNDLE_SPECIFIED_ERROR")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_NO_BUNDLE_SPECIFIED_ERROR);
 		}
 		while (nextArg != null) {
 			AbstractBundle bundle = getBundleFromToken(intp, nextArg, true);
@@ -275,10 +278,10 @@ public class FrameworkCommandProvider implements CommandProvider {
 	public void _install(CommandInterpreter intp) throws Exception {
 		String url = intp.nextArgument();
 		if (url == null) {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_NOTHING_TO_INSTALL_ERROR")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_NOTHING_TO_INSTALL_ERROR);
 		} else {
 			AbstractBundle bundle = (AbstractBundle) context.installBundle(url);
-			intp.print(ConsoleMsg.formatter.getString("CONSOLE_BUNDLE_ID_MESSAGE")); //$NON-NLS-1$
+			intp.print(ConsoleMsg.CONSOLE_BUNDLE_ID_MESSAGE);
 			intp.println(new Long(bundle.getBundleId()));
 
 			String nextArg = intp.nextArgument();
@@ -310,7 +313,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 	public void _update(CommandInterpreter intp) throws Exception {
 		String token = intp.nextArgument();
 		if (token == null) {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_BUNDLE_SPECIFIED_ERROR")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_NO_BUNDLE_SPECIFIED_ERROR);
 		}
 		while (token != null) {
 
@@ -332,7 +335,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 						}
 					}
 				} else {
-					intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_INSTALLED_BUNDLES_ERROR")); //$NON-NLS-1$
+					intp.println(ConsoleMsg.CONSOLE_NO_INSTALLED_BUNDLES_ERROR);
 				}
 			} else {
 				AbstractBundle bundle = getBundleFromToken(intp, token, true);
@@ -370,7 +373,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 	public void _uninstall(CommandInterpreter intp) throws Exception {
 		String nextArg = intp.nextArgument();
 		if (nextArg == null) {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_BUNDLE_SPECIFIED_ERROR")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_NO_BUNDLE_SPECIFIED_ERROR);
 		}
 		while (nextArg != null) {
 			AbstractBundle bundle = getBundleFromToken(intp, nextArg, true);
@@ -397,9 +400,9 @@ public class FrameworkCommandProvider implements CommandProvider {
 	 */
 	public void _status(CommandInterpreter intp) throws Exception {
 		if (osgi.isActive()) {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_FRAMEWORK_IS_LAUNCHED_MESSAGE")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_FRAMEWORK_IS_LAUNCHED_MESSAGE);
 		} else {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_FRAMEWORK_IS_SHUTDOWN_MESSAGE")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_FRAMEWORK_IS_SHUTDOWN_MESSAGE);
 		}
 		intp.println();
 
@@ -407,13 +410,13 @@ public class FrameworkCommandProvider implements CommandProvider {
 		int size = bundles.length;
 
 		if (size == 0) {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_INSTALLED_BUNDLES_ERROR")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_NO_INSTALLED_BUNDLES_ERROR);
 			return;
 		}
-		intp.print(ConsoleMsg.formatter.getString("CONSOLE_ID")); //$NON-NLS-1$
+		intp.print(ConsoleMsg.CONSOLE_ID);
 		intp.print(tab);
-		intp.println(ConsoleMsg.formatter.getString("CONSOLE_BUNDLE_LOCATION_MESSAGE")); //$NON-NLS-1$
-		intp.println(ConsoleMsg.formatter.getString("CONSOLE_STATE_BUNDLE_FILE_NAME_HEADER")); //$NON-NLS-1$
+		intp.println(ConsoleMsg.CONSOLE_BUNDLE_LOCATION_MESSAGE);
+		intp.println(ConsoleMsg.CONSOLE_STATE_BUNDLE_FILE_NAME_HEADER);
 		for (int i = 0; i < size; i++) {
 			AbstractBundle bundle = bundles[i];
 			intp.print(new Long(bundle.getBundleId()));
@@ -424,9 +427,9 @@ public class FrameworkCommandProvider implements CommandProvider {
 			intp.println(bundle.bundledata);
 		}
 
-		ServiceReference[] services = (ServiceReference[]) context.getServiceReferences(null, null);
+		ServiceReference[] services = context.getServiceReferences(null, null);
 		if (services != null) {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_REGISTERED_SERVICES_MESSAGE")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_REGISTERED_SERVICES_MESSAGE);
 			size = services.length;
 			for (int i = 0; i < size; i++) {
 				intp.println(services[i]);
@@ -462,7 +465,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 			filter = buf.toString();
 		}
 
-		ServiceReference[] services = (ServiceReference[]) context.getServiceReferences(null, filter);
+		ServiceReference[] services = context.getServiceReferences(null, filter);
 		if (services != null) {
 			int size = services.length;
 			if (size > 0) {
@@ -470,26 +473,26 @@ public class FrameworkCommandProvider implements CommandProvider {
 					ServiceReference service = services[j];
 					intp.println(service);
 					intp.print("  "); //$NON-NLS-1$
-					intp.print(ConsoleMsg.formatter.getString("CONSOLE_REGISTERED_BY_BUNDLE_MESSAGE")); //$NON-NLS-1$
+					intp.print(ConsoleMsg.CONSOLE_REGISTERED_BY_BUNDLE_MESSAGE);
 					intp.print(" "); //$NON-NLS-1$
 					intp.println(service.getBundle());
 					AbstractBundle[] users = (AbstractBundle[]) service.getUsingBundles();
 					if (users != null) {
 						intp.print("  "); //$NON-NLS-1$
-						intp.println(ConsoleMsg.formatter.getString("CONSOLE_BUNDLES_USING_SERVICE_MESSAGE")); //$NON-NLS-1$
+						intp.println(ConsoleMsg.CONSOLE_BUNDLES_USING_SERVICE_MESSAGE);
 						for (int k = 0; k < users.length; k++) {
 							intp.print("    "); //$NON-NLS-1$
 							intp.println(users[k]);
 						}
 					} else {
 						intp.print("  "); //$NON-NLS-1$
-						intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_BUNDLES_USING_SERVICE_MESSAGE")); //$NON-NLS-1$
+						intp.println(ConsoleMsg.CONSOLE_NO_BUNDLES_USING_SERVICE_MESSAGE);
 					}
 				}
 				return;
 			}
 		}
-		intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_REGISTERED_SERVICES_MESSAGE")); //$NON-NLS-1$
+		intp.println(ConsoleMsg.CONSOLE_NO_REGISTERED_SERVICES_MESSAGE); //$NON-NLS-1$
 	}
 
 	/**
@@ -525,14 +528,14 @@ public class FrameworkCommandProvider implements CommandProvider {
 						org.osgi.service.packageadmin.ExportedPackage pkg = packageAdmin.getExportedPackage(token);
 
 						if (pkg != null) {
-							packages = new org.osgi.service.packageadmin.ExportedPackage[] { pkg };
+							packages = new org.osgi.service.packageadmin.ExportedPackage[] {pkg};
 						}
 					} else {
 						packages = packageAdmin.getExportedPackages(bundle);
 					}
 
 					if (packages == null) {
-						intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_EXPORTED_PACKAGES_MESSAGE")); //$NON-NLS-1$
+						intp.println(ConsoleMsg.CONSOLE_NO_EXPORTED_PACKAGES_MESSAGE);
 					} else {
 						for (int i = 0; i < packages.length; i++) {
 							org.osgi.service.packageadmin.ExportedPackage pkg = packages[i];
@@ -541,7 +544,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 							boolean removalPending = pkg.isRemovalPending();
 							if (removalPending) {
 								intp.print("("); //$NON-NLS-1$
-								intp.print(ConsoleMsg.formatter.getString("CONSOLE_REMOVAL_PENDING_MESSAGE")); //$NON-NLS-1$
+								intp.print(ConsoleMsg.CONSOLE_REMOVAL_PENDING_MESSAGE);
 								intp.println(")"); //$NON-NLS-1$
 							}
 
@@ -556,11 +559,11 @@ public class FrameworkCommandProvider implements CommandProvider {
 									intp.print("  "); //$NON-NLS-1$
 									intp.print(importers[j]);
 									intp.print(" "); //$NON-NLS-1$
-									intp.println(ConsoleMsg.formatter.getString("CONSOLE_IMPORTS_MESSAGE")); //$NON-NLS-1$
+									intp.println(ConsoleMsg.CONSOLE_IMPORTS_MESSAGE);
 								}
 							} else {
 								intp.print("<"); //$NON-NLS-1$
-								intp.print(ConsoleMsg.formatter.getString("CONSOLE_STALE_MESSAGE")); //$NON-NLS-1$
+								intp.print(ConsoleMsg.CONSOLE_STALE_MESSAGE);
 								intp.println(">"); //$NON-NLS-1$
 							}
 
@@ -571,7 +574,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 				}
 			}
 		} else {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_EXPORTED_PACKAGES_NO_PACKAGE_ADMIN_MESSAGE")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_NO_EXPORTED_PACKAGES_NO_PACKAGE_ADMIN_MESSAGE);
 		}
 	}
 
@@ -585,7 +588,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 		int size = bundles.length;
 
 		if (size == 0) {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_INSTALLED_BUNDLES_ERROR")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_NO_INSTALLED_BUNDLES_ERROR);
 			return;
 		}
 
@@ -594,43 +597,43 @@ public class FrameworkCommandProvider implements CommandProvider {
 			long id = bundle.getBundleId();
 			intp.println(bundle);
 			intp.print("  "); //$NON-NLS-1$
-			intp.print(ConsoleMsg.formatter.getString("CONSOLE_ID_MESSAGE", String.valueOf(id))); //$NON-NLS-1$
+			intp.print(NLS.bind(ConsoleMsg.CONSOLE_ID_MESSAGE, String.valueOf(id)));
 			intp.print(", "); //$NON-NLS-1$
-			intp.print(ConsoleMsg.formatter.getString("CONSOLE_STATUS_MESSAGE", getStateName(bundle.getState()))); //$NON-NLS-1$
+			intp.print(NLS.bind(ConsoleMsg.CONSOLE_STATUS_MESSAGE, getStateName(bundle.getState())));
 			if (id != 0) {
 				File dataRoot = osgi.framework.getDataFile(bundle, ""); //$NON-NLS-1$
 
 				String root = (dataRoot == null) ? null : dataRoot.getAbsolutePath();
 
-				intp.print(ConsoleMsg.formatter.getString("CONSOLE_DATA_ROOT_MESSAGE", root)); //$NON-NLS-1$
+				intp.print(NLS.bind(ConsoleMsg.CONSOLE_DATA_ROOT_MESSAGE, root));
 			} else {
 				intp.println();
 			}
 
-			ServiceReference[] services = (ServiceReference[]) bundle.getRegisteredServices();
+			ServiceReference[] services = bundle.getRegisteredServices();
 			if (services != null) {
 				intp.print("  "); //$NON-NLS-1$
-				intp.println(ConsoleMsg.formatter.getString("CONSOLE_REGISTERED_SERVICES_MESSAGE")); //$NON-NLS-1$
+				intp.println(ConsoleMsg.CONSOLE_REGISTERED_SERVICES_MESSAGE);
 				for (int j = 0; j < services.length; j++) {
 					intp.print("    "); //$NON-NLS-1$
 					intp.println(services[j]);
 				}
 			} else {
 				intp.print("  "); //$NON-NLS-1$
-				intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_REGISTERED_SERVICES_MESSAGE")); //$NON-NLS-1$
+				intp.println(ConsoleMsg.CONSOLE_NO_REGISTERED_SERVICES_MESSAGE);
 			}
 
-			services = (ServiceReference[]) bundle.getServicesInUse();
+			services = bundle.getServicesInUse();
 			if (services != null) {
 				intp.print("  "); //$NON-NLS-1$
-				intp.println(ConsoleMsg.formatter.getString("CONSOLE_SERVICES_IN_USE_MESSAGE")); //$NON-NLS-1$
+				intp.println(ConsoleMsg.CONSOLE_SERVICES_IN_USE_MESSAGE);
 				for (int j = 0; j < services.length; j++) {
 					intp.print("    "); //$NON-NLS-1$
 					intp.println(services[j]);
 				}
 			} else {
 				intp.print("  "); //$NON-NLS-1$
-				intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_SERVICES_IN_USE_MESSAGE")); //$NON-NLS-1$
+				intp.println(ConsoleMsg.CONSOLE_NO_SERVICES_IN_USE_MESSAGE);
 			}
 		}
 	}
@@ -649,10 +652,10 @@ public class FrameworkCommandProvider implements CommandProvider {
 	 *
 	 *  @param intp A CommandInterpreter object containing the command and it's arguments.
 	 */
-	public void _bundle(CommandInterpreter intp) throws Exception {
+public void _bundle(CommandInterpreter intp) throws Exception {
 		String nextArg = intp.nextArgument();
 		if (nextArg == null) {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_BUNDLE_SPECIFIED_ERROR")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_NO_BUNDLE_SPECIFIED_ERROR);
 		}
 		while (nextArg != null) {
 			AbstractBundle bundle = getBundleFromToken(intp, nextArg, true);
@@ -660,43 +663,43 @@ public class FrameworkCommandProvider implements CommandProvider {
 				long id = bundle.getBundleId();
 				intp.println(bundle);
 				intp.print("  "); //$NON-NLS-1$
-				intp.print(ConsoleMsg.formatter.getString("CONSOLE_ID_MESSAGE", String.valueOf(id))); //$NON-NLS-1$
+				intp.print(NLS.bind(ConsoleMsg.CONSOLE_ID_MESSAGE, String.valueOf(id))); 
 				intp.print(", "); //$NON-NLS-1$
-				intp.print(ConsoleMsg.formatter.getString("CONSOLE_STATUS_MESSAGE", getStateName(bundle.getState()))); //$NON-NLS-1$
+				intp.print(NLS.bind(ConsoleMsg.CONSOLE_STATUS_MESSAGE, getStateName(bundle.getState()))); 
 				if (id != 0) {
 					File dataRoot = osgi.framework.getDataFile(bundle, ""); //$NON-NLS-1$
 
 					String root = (dataRoot == null) ? null : dataRoot.getAbsolutePath();
 
-					intp.print(ConsoleMsg.formatter.getString("CONSOLE_DATA_ROOT_MESSAGE", root)); //$NON-NLS-1$
+					intp.print(NLS.bind(ConsoleMsg.CONSOLE_DATA_ROOT_MESSAGE, root));
 				} else {
 					intp.println();
 				}
 
-				ServiceReference[] services = (ServiceReference[]) bundle.getRegisteredServices();
+				ServiceReference[] services = bundle.getRegisteredServices();
 				if (services != null) {
 					intp.print("  "); //$NON-NLS-1$
-					intp.println(ConsoleMsg.formatter.getString("CONSOLE_REGISTERED_SERVICES_MESSAGE")); //$NON-NLS-1$
+					intp.println(ConsoleMsg.CONSOLE_REGISTERED_SERVICES_MESSAGE); 
 					for (int j = 0; j < services.length; j++) {
 						intp.print("    "); //$NON-NLS-1$
 						intp.println(services[j]);
 					}
 				} else {
 					intp.print("  "); //$NON-NLS-1$
-					intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_REGISTERED_SERVICES_MESSAGE")); //$NON-NLS-1$
+					intp.println(ConsoleMsg.CONSOLE_NO_REGISTERED_SERVICES_MESSAGE); 
 				}
 
-				services = (ServiceReference[]) bundle.getServicesInUse();
+				services = bundle.getServicesInUse();
 				if (services != null) {
 					intp.print("  "); //$NON-NLS-1$
-					intp.println(ConsoleMsg.formatter.getString("CONSOLE_SERVICES_IN_USE_MESSAGE")); //$NON-NLS-1$
+					intp.println(ConsoleMsg.CONSOLE_SERVICES_IN_USE_MESSAGE); 
 					for (int j = 0; j < services.length; j++) {
 						intp.print("    "); //$NON-NLS-1$
 						intp.println(services[j]);
 					}
 				} else {
 					intp.print("  "); //$NON-NLS-1$
-					intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_SERVICES_IN_USE_MESSAGE")); //$NON-NLS-1$
+					intp.println(ConsoleMsg.CONSOLE_NO_SERVICES_IN_USE_MESSAGE); 
 				}
 
 				org.osgi.framework.ServiceReference packageAdminRef = context.getServiceReference("org.osgi.service.packageadmin.PackageAdmin"); //$NON-NLS-1$
@@ -708,9 +711,9 @@ public class FrameworkCommandProvider implements CommandProvider {
 
 							if (exportedpkgs == null) {
 								intp.print("  "); //$NON-NLS-1$
-								intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_EXPORTED_PACKAGES_MESSAGE")); //$NON-NLS-1$
+								intp.println(ConsoleMsg.CONSOLE_NO_EXPORTED_PACKAGES_MESSAGE);
 								intp.print("  "); //$NON-NLS-1$
-								intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_IMPORTED_PACKAGES_MESSAGE")); //$NON-NLS-1$
+								intp.println(ConsoleMsg.CONSOLE_NO_IMPORTED_PACKAGES_MESSAGE);
 							} else {
 								boolean title = true;
 
@@ -720,22 +723,22 @@ public class FrameworkCommandProvider implements CommandProvider {
 									if (exportedpkg.getExportingBundle() == bundle) {
 										if (title) {
 											intp.print("  "); //$NON-NLS-1$
-											intp.println(ConsoleMsg.formatter.getString("CONSOLE_EXPORTED_PACKAGES_MESSAGE")); //$NON-NLS-1$
+											intp.println(ConsoleMsg.CONSOLE_EXPORTED_PACKAGES_MESSAGE);
 											title = false;
 										}
 										intp.print("    "); //$NON-NLS-1$
 										intp.print(exportedpkg);
 										if (exportedpkg.isRemovalPending()) {
-											intp.println(ConsoleMsg.formatter.getString("CONSOLE_EXPORTED_REMOVAL_PENDING_MESSAGE")); //$NON-NLS-1$
+											intp.println(ConsoleMsg.CONSOLE_EXPORTED_REMOVAL_PENDING_MESSAGE);
 										} else {
-											intp.println(ConsoleMsg.formatter.getString("CONSOLE_EXPORTED_MESSAGE")); //$NON-NLS-1$
+											intp.println(ConsoleMsg.CONSOLE_EXPORTED_MESSAGE);
 										}
 									}
 								}
 
 								if (title) {
 									intp.print("  "); //$NON-NLS-1$
-									intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_EXPORTED_PACKAGES_MESSAGE")); //$NON-NLS-1$
+									intp.println(ConsoleMsg.CONSOLE_NO_EXPORTED_PACKAGES_MESSAGE);
 								}
 
 								title = true;
@@ -748,7 +751,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 										if (importers[j] == bundle) {
 											if (title) {
 												intp.print("  "); //$NON-NLS-1$
-												intp.println(ConsoleMsg.formatter.getString("CONSOLE_IMPORTED_PACKAGES_MESSAGE")); //$NON-NLS-1$
+												intp.println(ConsoleMsg.CONSOLE_IMPORTED_PACKAGES_MESSAGE);
 												title = false;
 											}
 											intp.print("    "); //$NON-NLS-1$
@@ -760,7 +763,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 												intp.println(">"); //$NON-NLS-1$
 											} else {
 												intp.print("<"); //$NON-NLS-1$
-												intp.print(ConsoleMsg.formatter.getString("CONSOLE_STALE_MESSAGE")); //$NON-NLS-1$
+												intp.print(ConsoleMsg.CONSOLE_STALE_MESSAGE);
 												intp.println(">"); //$NON-NLS-1$
 											}
 
@@ -771,34 +774,34 @@ public class FrameworkCommandProvider implements CommandProvider {
 
 								if (title) {
 									intp.print("  "); //$NON-NLS-1$
-									intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_IMPORTED_PACKAGES_MESSAGE")); //$NON-NLS-1$
+									intp.println(ConsoleMsg.CONSOLE_NO_IMPORTED_PACKAGES_MESSAGE);
 								}
 
 								intp.print("  "); //$NON-NLS-1$
                     			if ((packageAdmin.getBundleType(bundle) & PackageAdminImpl.BUNDLE_TYPE_FRAGMENT) > 0) {
                     				org.osgi.framework.Bundle[] hosts = packageAdmin.getHosts(bundle);
                     				if (hosts != null) {
-                    					intp.println(ConsoleMsg.formatter.getString("CONSOLE_HOST_MESSAGE")); //$NON-NLS-1$
+                    					intp.println(ConsoleMsg.CONSOLE_HOST_MESSAGE);
                     					for (int i=0; i<hosts.length; i++) {
                     						intp.print("    "); //$NON-NLS-1$
                     						intp.println(hosts[i]);
                     					}
                     				}
                     				else {
-                    					intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_HOST_MESSAGE")); //$NON-NLS-1$
+                    					intp.println(ConsoleMsg.CONSOLE_NO_HOST_MESSAGE);
                     				}
                     			}
                     			else {
                     				org.osgi.framework.Bundle[] fragments = packageAdmin.getFragments(bundle);
                     				if (fragments != null) {
-                    					intp.println(ConsoleMsg.formatter.getString("CONSOLE_FRAGMENT_MESSAGE")); //$NON-NLS-1$
+                    					intp.println(ConsoleMsg.CONSOLE_FRAGMENT_MESSAGE);
                     					for (int i=0; i<fragments.length; i++) {
                     						intp.print("    "); //$NON-NLS-1$
                     						intp.println(fragments[i]);
                     					}
                     				}
                     				else {
-                    					intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_FRAGMENT_MESSAGE")); //$NON-NLS-1$
+                    					intp.println(ConsoleMsg.CONSOLE_NO_FRAGMENT_MESSAGE);
                     				}
                     			}
 
@@ -815,16 +818,16 @@ public class FrameworkCommandProvider implements CommandProvider {
 
 								if (requiredBundle == null) {
 									intp.print("  "); //$NON-NLS-1$
-									intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_NAMED_CLASS_SPACES_MESSAGE")); //$NON-NLS-1$
+									intp.println(ConsoleMsg.CONSOLE_NO_NAMED_CLASS_SPACES_MESSAGE);
 								} else {
 									intp.print("  "); //$NON-NLS-1$
-									intp.println(ConsoleMsg.formatter.getString("CONSOLE_NAMED_CLASS_SPACE_MESSAGE")); //$NON-NLS-1$
+									intp.println(ConsoleMsg.CONSOLE_NAMED_CLASS_SPACE_MESSAGE);
 	                    			intp.print("    "); //$NON-NLS-1$
 	                    			intp.print(requiredBundle);
 	                    			if (requiredBundle.isRemovalPending()) {
-	                    				intp.println(ConsoleMsg.formatter.getString("CONSOLE_REMOVAL_PENDING_MESSAGE")); //$NON-NLS-1$
+	                    				intp.println(ConsoleMsg.CONSOLE_REMOVAL_PENDING_MESSAGE);
 	                    			} else {
-	                    				intp.println(ConsoleMsg.formatter.getString("CONSOLE_PROVIDED_MESSAGE")); //$NON-NLS-1$
+	                    				intp.println(ConsoleMsg.CONSOLE_PROVIDED_MESSAGE);
 	                    			}
 								}
 
@@ -841,7 +844,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 										if (depBundles[j] == bundle) {
 											if (title) {
 												intp.print("  "); //$NON-NLS-1$
-												intp.println(ConsoleMsg.formatter.getString("CONSOLE_REQUIRED_BUNDLES_MESSAGE")); //$NON-NLS-1$
+												intp.println(ConsoleMsg.CONSOLE_REQUIRED_BUNDLES_MESSAGE);
 												title = false;
 											}
 											intp.print("    "); //$NON-NLS-1$
@@ -856,7 +859,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 								}
 								if (title) {
 									intp.print("  "); //$NON-NLS-1$
-									intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_REQUIRED_BUNDLES_MESSAGE")); //$NON-NLS-1$
+									intp.println(ConsoleMsg.CONSOLE_NO_REQUIRED_BUNDLES_MESSAGE);
 								}
 
 							}
@@ -866,7 +869,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 					}
 				} else {
 					intp.print("  "); //$NON-NLS-1$
-					intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_EXPORTED_PACKAGES_NO_PACKAGE_ADMIN_MESSAGE")); //$NON-NLS-1$
+					intp.println(ConsoleMsg.CONSOLE_NO_EXPORTED_PACKAGES_NO_PACKAGE_ADMIN_MESSAGE);
 				}
 
 				SecurityManager sm = System.getSecurityManager();
@@ -879,7 +882,6 @@ public class FrameworkCommandProvider implements CommandProvider {
 			nextArg = intp.nextArgument();
 		}
 	}
-
 	/**
 	 *  Handle the log command's abbreviation.  Invoke _log()
 	 *
@@ -894,7 +896,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 	 *
 	 *  @param intp A CommandInterpreter object containing the command and it's arguments.
 	 */
-	public void _log(CommandInterpreter intp) throws Exception {
+public void _log(CommandInterpreter intp) throws Exception {
 		long logid = -1;
 		String token = intp.nextArgument();
 		if (token != null) {
@@ -935,22 +937,22 @@ public class FrameworkCommandProvider implements CommandProvider {
 								switch (level.intValue()) {
 									case 4 :
 										intp.print(">"); //$NON-NLS-1$
-										intp.print(ConsoleMsg.formatter.getString("CONSOLE_DEBUG_MESSAGE")); //$NON-NLS-1$
+										intp.print(ConsoleMsg.CONSOLE_DEBUG_MESSAGE);
 										intp.print(" "); //$NON-NLS-1$
 										break;
 									case 3 :
 										intp.print(">"); //$NON-NLS-1$
-										intp.print(ConsoleMsg.formatter.getString("CONSOLE_INFO_MESSAGE")); //$NON-NLS-1$
+										intp.print(ConsoleMsg.CONSOLE_INFO_MESSAGE);
 										intp.print(" "); //$NON-NLS-1$
 										break;
 									case 2 :
 										intp.print(">"); //$NON-NLS-1$
-										intp.print(ConsoleMsg.formatter.getString("CONSOLE_WARNING_MESSAGE")); //$NON-NLS-1$
+										intp.print(ConsoleMsg.CONSOLE_WARNING_MESSAGE);
 										intp.print(" "); //$NON-NLS-1$
 										break;
 									case 1 :
 										intp.print(">"); //$NON-NLS-1$
-										intp.print(ConsoleMsg.formatter.getString("CONSOLE_ERROR_MESSAGE")); //$NON-NLS-1$
+										intp.print(ConsoleMsg.CONSOLE_ERROR_MESSAGE);
 										intp.print(" "); //$NON-NLS-1$
 										break;
 									default :
@@ -1004,15 +1006,14 @@ public class FrameworkCommandProvider implements CommandProvider {
 			}
 		}
 
-		intp.println(ConsoleMsg.formatter.getString("CONSOLE_LOGSERVICE_NOT_REGISTERED_MESSAGE")); //$NON-NLS-1$
+		intp.println(ConsoleMsg.CONSOLE_LOGSERVICE_NOT_REGISTERED_MESSAGE);
 	}
-
 	/**
 	 *  Handle the gc command.  Perform a garbage collection.
 	 *
 	 *  @param intp A CommandInterpreter object containing the command and it's arguments.
 	 */
-	public void _gc(CommandInterpreter intp) throws Exception {
+public void _gc(CommandInterpreter intp) throws Exception {
 		long before = Runtime.getRuntime().freeMemory();
 
 		/* Let the finilizer finish its work and remove objects from its queue */
@@ -1022,28 +1023,28 @@ public class FrameworkCommandProvider implements CommandProvider {
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
+			// do nothing
 		}
 
 		long after = Runtime.getRuntime().freeMemory();
-		intp.print(ConsoleMsg.formatter.getString("CONSOLE_TOTAL_MEMORY_MESSAGE")); //$NON-NLS-1$
+		intp.print(ConsoleMsg.CONSOLE_TOTAL_MEMORY_MESSAGE);
 		intp.println(String.valueOf(Runtime.getRuntime().totalMemory()));
-		intp.print(ConsoleMsg.formatter.getString("CONSOLE_FREE_MEMORY_BEFORE_GARBAGE_COLLECTION_MESSAGE")); //$NON-NLS-1$
+		intp.print(ConsoleMsg.CONSOLE_FREE_MEMORY_BEFORE_GARBAGE_COLLECTION_MESSAGE);
 		intp.println(String.valueOf(before));
-		intp.print(ConsoleMsg.formatter.getString("CONSOLE_FREE_MEMORY_AFTER_GARBAGE_COLLECTION_MESSAGE")); //$NON-NLS-1$
+		intp.print(ConsoleMsg.CONSOLE_FREE_MEMORY_AFTER_GARBAGE_COLLECTION_MESSAGE);
 		intp.println(String.valueOf(after));
-		intp.print(ConsoleMsg.formatter.getString("CONSOLE_MEMORY_GAINED_WITH_GARBAGE_COLLECTION_MESSAGE")); //$NON-NLS-1$
+		intp.print(ConsoleMsg.CONSOLE_MEMORY_GAINED_WITH_GARBAGE_COLLECTION_MESSAGE);
 		intp.println(String.valueOf(after - before));
 	}
-
 	/**
 	 *  Handle the init command.  Uninstall all bundles.
 	 *
 	 *  @param intp A CommandInterpreter object containing the command and it's arguments.
 	 */
-	public void _init(CommandInterpreter intp) throws Exception {
+public void _init(CommandInterpreter intp) throws Exception {
 		if (osgi.isActive()) {
 			intp.print(newline);
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_FRAMEWORK_LAUNCHED_PLEASE_SHUTDOWN_MESSAGE")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_FRAMEWORK_LAUNCHED_PLEASE_SHUTDOWN_MESSAGE);
 			return;
 		}
 
@@ -1064,10 +1065,9 @@ public class FrameworkCommandProvider implements CommandProvider {
 				}
 			}
 		} else {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_INSTALLED_BUNDLES_ERROR")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_NO_INSTALLED_BUNDLES_ERROR);
 		}
 	}
-
 	/**
 	 *  Handle the close command.  Shutdown and exit.
 	 *
@@ -1093,7 +1093,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 	 *
 	 *  @param intp A CommandInterpreter object containing the command and it's arguments.
 	 */
-	public void _refresh(CommandInterpreter intp) throws Exception {
+public void _refresh(CommandInterpreter intp) throws Exception {
 		org.osgi.framework.ServiceReference packageAdminRef = context.getServiceReference("org.osgi.service.packageadmin.PackageAdmin"); //$NON-NLS-1$
 		if (packageAdminRef != null) {
 			org.osgi.service.packageadmin.PackageAdmin packageAdmin = (org.osgi.service.packageadmin.PackageAdmin) context.getService(packageAdminRef);
@@ -1117,7 +1117,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 						int size = bundles.size();
 
 						if (size == 0) {
-							intp.println(ConsoleMsg.formatter.getString("CONSOLE_INVALID_BUNDLE_SPECIFICATION_ERROR")); //$NON-NLS-1$
+							intp.println(ConsoleMsg.CONSOLE_INVALID_BUNDLE_SPECIFICATION_ERROR);
 							return;
 						}
 
@@ -1131,47 +1131,44 @@ public class FrameworkCommandProvider implements CommandProvider {
 				}
 			}
 		} else {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_CAN_NOT_REFRESH_NO_PACKAGE_ADMIN_ERROR")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_CAN_NOT_REFRESH_NO_PACKAGE_ADMIN_ERROR);
 		}
 	}
-
 	/**
 	 * Executes the given system command in a separate system process
 	 * and waits for it to finish.
 	 *
 	 * @param intp A CommandInterpreter object containing the command and it's arguments.
 	 */
-	public void _exec(CommandInterpreter intp) throws Exception {
+public void _exec(CommandInterpreter intp) throws Exception {
 		String command = intp.nextArgument();
 		if (command == null) {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_COMMAND_SPECIFIED_ERROR")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_NO_COMMAND_SPECIFIED_ERROR);
 			return;
 		}
 
 		Process p = Runtime.getRuntime().exec(command);
 
-		intp.println(ConsoleMsg.formatter.getString("CONSOLE_STARTED_IN_MESSAGE", command, String.valueOf(p))); //$NON-NLS-1$
+		intp.println(NLS.bind(ConsoleMsg.CONSOLE_STARTED_IN_MESSAGE, command, String.valueOf(p)));
 		int result = p.waitFor();
-		intp.println(ConsoleMsg.formatter.getString("CONSOLE_EXECUTED_RESULT_CODE_MESSAGE", command, String.valueOf(result))); //$NON-NLS-1$
+		intp.println(NLS.bind(ConsoleMsg.CONSOLE_EXECUTED_RESULT_CODE_MESSAGE, command, String.valueOf(result)));
 	}
-
 	/**
 	 * Executes the given system command in a separate system process.  It does
 	 * not wait for a result.
 	 *
 	 * @param intp A CommandInterpreter object containing the command and it's arguments.
 	 */
-	public void _fork(CommandInterpreter intp) throws Exception {
+public void _fork(CommandInterpreter intp) throws Exception {
 		String command = intp.nextArgument();
 		if (command == null) {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_COMMAND_SPECIFIED_ERROR")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_NO_COMMAND_SPECIFIED_ERROR);
 			return;
 		}
 
 		Process p = Runtime.getRuntime().exec(command);
-		intp.println(ConsoleMsg.formatter.getString("CONSOLE_STARTED_IN_MESSAGE", command, String.valueOf(p))); //$NON-NLS-1$
+		intp.println(NLS.bind(ConsoleMsg.CONSOLE_STARTED_IN_MESSAGE, command, String.valueOf(p))); 
 	}
-
 	/**
 	 * Handle the headers command's abbreviation.  Invoke _headers()
 	 *
@@ -1186,21 +1183,20 @@ public class FrameworkCommandProvider implements CommandProvider {
 	 *
 	 * @param intp A CommandInterpreter object containing the command and it's arguments.
 	 */
-	public void _headers(CommandInterpreter intp) throws Exception {
+public void _headers(CommandInterpreter intp) throws Exception {
 
 		String nextArg = intp.nextArgument();
 		if (nextArg == null) {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_BUNDLE_SPECIFIED_ERROR")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_NO_BUNDLE_SPECIFIED_ERROR);
 		}
 		while (nextArg != null) {
 			AbstractBundle bundle = getBundleFromToken(intp, nextArg, true);
 			if (bundle != null) {
-				intp.printDictionary(bundle.getHeaders(), ConsoleMsg.formatter.getString("CONSOLE_BUNDLE_HEADERS_TITLE")); //$NON-NLS-1$
+				intp.printDictionary(bundle.getHeaders(), ConsoleMsg.CONSOLE_BUNDLE_HEADERS_TITLE);
 			}
 			nextArg = intp.nextArgument();
 		}
 	}
-
 	/**
 	 * Handles the props command's abbreviation.  Invokes _props()
 	 *
@@ -1215,10 +1211,9 @@ public class FrameworkCommandProvider implements CommandProvider {
 	 *
 	 * @param intp A CommandInterpreter object containing the command and it's arguments.
 	 */
-	public void _props(CommandInterpreter intp) throws Exception {
-		intp.printDictionary(System.getProperties(), ConsoleMsg.formatter.getString("CONSOLE_SYSTEM_PROPERTIES_TITLE")); //$NON-NLS-1$
+public void _props(CommandInterpreter intp) throws Exception {
+		intp.printDictionary(System.getProperties(), ConsoleMsg.CONSOLE_SYSTEM_PROPERTIES_TITLE);
 	}
-
 	/**
 	 * Handles the setprop command's abbreviation.  Invokes _setprop()
 	 *
@@ -1233,10 +1228,10 @@ public class FrameworkCommandProvider implements CommandProvider {
 	 *
 	 * @param intp A CommandInterpreter object containing the command and it's arguments.
 	 */
-	public void _setprop(CommandInterpreter intp) throws Exception {
+public void _setprop(CommandInterpreter intp) throws Exception {
 		String argument = intp.nextArgument();
 		if (argument == null) {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_PARAMETERS_SPECIFIED_TITLE")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_NO_PARAMETERS_SPECIFIED_TITLE);
 			_props(intp);
 		} else {
 			InputStream in = new ByteArrayInputStream(argument.getBytes());
@@ -1244,7 +1239,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 				Properties sysprops = System.getProperties();
 				Properties newprops = new Properties();
 				newprops.load(in);
-				intp.println(ConsoleMsg.formatter.getString("CONSOLE_SETTING_PROPERTIES_TITLE")); //$NON-NLS-1$
+				intp.println(ConsoleMsg.CONSOLE_SETTING_PROPERTIES_TITLE);
 				Enumeration keys = newprops.propertyNames();
 				while (keys.hasMoreElements()) {
 					String key = (String) keys.nextElement();
@@ -1253,38 +1248,39 @@ public class FrameworkCommandProvider implements CommandProvider {
 					intp.println(tab + key + " = " + value); //$NON-NLS-1$
 				}
 			} catch (IOException e) {
+				// ignore
 			} finally {
 				try {
 					in.close();
 				} catch (IOException e) {
+					// ignore
 				}
 			}
 		}
 	}
-
 	/**
 	 * Prints the short version of the status.
 	 * For the long version use "status".
 	 *
 	 * @param intp A CommandInterpreter object containing the command and it's arguments.
 	 */
-	public void _ss(CommandInterpreter intp) throws Exception {
+public void _ss(CommandInterpreter intp) throws Exception {
 		if (osgi.isActive()) {
 			intp.println();
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_FRAMEWORK_IS_LAUNCHED_MESSAGE")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_FRAMEWORK_IS_LAUNCHED_MESSAGE);
 		} else {
 			intp.println();
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_FRAMEWORK_IS_SHUTDOWN_MESSAGE")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_FRAMEWORK_IS_SHUTDOWN_MESSAGE);
 		}
 
 		AbstractBundle[] bundles = (AbstractBundle[]) context.getBundles();
 		if (bundles.length == 0) {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_INSTALLED_BUNDLES_ERROR")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_NO_INSTALLED_BUNDLES_ERROR);
 		} else {
 			intp.print(newline);
-			intp.print(ConsoleMsg.formatter.getString("CONSOLE_ID")); //$NON-NLS-1$
+			intp.print(ConsoleMsg.CONSOLE_ID);
 			intp.print(tab);
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_STATE_BUNDLE_TITLE")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_STATE_BUNDLE_TITLE);
 			for (int i = 0; i < bundles.length; i++) {
 				AbstractBundle b = bundles[i];
 				String label = b.getSymbolicName();
@@ -1312,7 +1308,6 @@ public class FrameworkCommandProvider implements CommandProvider {
 			}
 		}
 	}
-
 	/**
 	 * Handles the threads command abbreviation.  Invokes _threads().
 	 *
@@ -1329,7 +1324,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 	 * @param intp A CommandInterpreter object containing the command
 	 * and it's arguments.
 	 */
-	public void _threads(CommandInterpreter intp) throws Exception {
+public void _threads(CommandInterpreter intp) throws Exception {
 
 		ThreadGroup[] threadGroups = getThreadGroups();
 		Util.sort(threadGroups);
@@ -1341,7 +1336,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 
 		StringBuffer sb = new StringBuffer(120);
 		intp.println();
-		intp.println(ConsoleMsg.formatter.getString("CONSOLE_THREADGROUP_TITLE")); //$NON-NLS-1$
+		intp.println(ConsoleMsg.CONSOLE_THREADGROUP_TITLE);
 		for (int i = 0; i < threadGroups.length; i++) {
 			tg = threadGroups[i];
 			int all = tg.activeCount(); //tg.allThreadsCount();
@@ -1353,7 +1348,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 			intp.println(sb.toString());
 		}
 		intp.print(newline);
-		intp.println(ConsoleMsg.formatter.getString("CONSOLE_THREADTYPE_TITLE")); //$NON-NLS-1$
+		intp.println(ConsoleMsg.CONSOLE_THREADTYPE_TITLE);
 		for (int j = 0; j < count; j++) {
 			Thread t = threads[j];
 			if (t != null) {
@@ -1363,7 +1358,6 @@ public class FrameworkCommandProvider implements CommandProvider {
 			}
 		}
 	}
-
 	/**
 	 * Handles the sl (startlevel) command. 
 	 *
@@ -1382,10 +1376,10 @@ public class FrameworkCommandProvider implements CommandProvider {
 			}
 			if (bundle == null) { // must want framework startlevel
 				value = slImpl.getStartLevel();
-				intp.println(ConsoleMsg.formatter.getString("STARTLEVEL_FRAMEWORK_ACTIVE_STARTLEVEL", value)); //$NON-NLS-1$
+				intp.println(NLS.bind(ConsoleMsg.STARTLEVEL_FRAMEWORK_ACTIVE_STARTLEVEL, String.valueOf(value))); 
 			} else { // must want bundle startlevel
 				value = slImpl.getBundleStartLevel(bundle);
-				intp.println(ConsoleMsg.formatter.getString("STARTLEVEL_BUNDLE_STARTLEVEL", new Long(bundle.getBundleId()), new Integer(value))); //$NON-NLS-1$
+				intp.println(NLS.bind(ConsoleMsg.STARTLEVEL_BUNDLE_STARTLEVEL, new Long(bundle.getBundleId()), new Integer(value))); 
 			}
 		}
 	}
@@ -1395,20 +1389,20 @@ public class FrameworkCommandProvider implements CommandProvider {
 	 *
 	 * @param intp A CommandInterpreter object containing the command and it's arguments.
 	 */
-	public void _setfwsl(CommandInterpreter intp) throws Exception {
+public void _setfwsl(CommandInterpreter intp) throws Exception {
 		if (isStartLevelSvcPresent(intp)) {
 			int value = 0;
 			String token = intp.nextArgument();
 			if (token == null) {
-				intp.println(ConsoleMsg.formatter.getString("STARTLEVEL_NO_STARTLEVEL_GIVEN")); //$NON-NLS-1$
+				intp.println(ConsoleMsg.STARTLEVEL_NO_STARTLEVEL_GIVEN);
 				value = slImpl.getStartLevel();
-				intp.println(ConsoleMsg.formatter.getString("STARTLEVEL_FRAMEWORK_ACTIVE_STARTLEVEL", value)); //$NON-NLS-1$
+				intp.println(NLS.bind(ConsoleMsg.STARTLEVEL_FRAMEWORK_ACTIVE_STARTLEVEL, String.valueOf(value))); 
 			} else {
 				value = this.getStartLevelFromToken(intp, token);
 				if (value > 0) {
 					try {
 						slImpl.setStartLevel(value);
-						intp.println(ConsoleMsg.formatter.getString("STARTLEVEL_FRAMEWORK_ACTIVE_STARTLEVEL", value)); //$NON-NLS-1$
+						intp.println(NLS.bind(ConsoleMsg.STARTLEVEL_FRAMEWORK_ACTIVE_STARTLEVEL, String.valueOf(value))); 
 					} catch (IllegalArgumentException e) {
 						intp.println(e.getMessage());
 					}
@@ -1416,19 +1410,18 @@ public class FrameworkCommandProvider implements CommandProvider {
 			}
 		}
 	}
-
 	/**
 	 * Handles the setbsl (set bundle startlevel) command. 
 	 *
 	 * @param intp A CommandInterpreter object containing the command and it's arguments.
 	 */
-	public void _setbsl(CommandInterpreter intp) throws Exception {
+public void _setbsl(CommandInterpreter intp) throws Exception {
 		if (isStartLevelSvcPresent(intp)) {
 			String token;
 			AbstractBundle bundle = null;
 			token = intp.nextArgument();
 			if (token == null) {
-				intp.println(ConsoleMsg.formatter.getString("STARTLEVEL_NO_STARTLEVEL_OR_BUNDLE_GIVEN")); //$NON-NLS-1$
+				intp.println(ConsoleMsg.STARTLEVEL_NO_STARTLEVEL_OR_BUNDLE_GIVEN);
 				return;
 			}
 
@@ -1436,7 +1429,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 
 			token = intp.nextArgument();
 			if (token == null) {
-				intp.println(ConsoleMsg.formatter.getString("STARTLEVEL_NO_STARTLEVEL_OR_BUNDLE_GIVEN")); //$NON-NLS-1$
+				intp.println(ConsoleMsg.STARTLEVEL_NO_STARTLEVEL_OR_BUNDLE_GIVEN);
 				return;
 			}
 			while (token != null) {
@@ -1444,7 +1437,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 				if (bundle != null) {
 					try {
 						slImpl.setBundleStartLevel(bundle, newSL);
-						intp.println(ConsoleMsg.formatter.getString("STARTLEVEL_BUNDLE_STARTLEVEL", new Long(bundle.getBundleId()), new Integer(newSL))); //$NON-NLS-1$
+						intp.println(NLS.bind(ConsoleMsg.STARTLEVEL_BUNDLE_STARTLEVEL, new Long(bundle.getBundleId()), new Integer(newSL))); 
 					} catch (IllegalArgumentException e) {
 						intp.println(e.getMessage());
 					}
@@ -1453,26 +1446,25 @@ public class FrameworkCommandProvider implements CommandProvider {
 			}
 		}
 	}
-
 	/**
 	 * Handles the setibsl (set initial bundle startlevel) command. 
 	 *
 	 * @param intp A CommandInterpreter object containing the command and it's arguments.
 	 */
-	public void _setibsl(CommandInterpreter intp) throws Exception {
+public void _setibsl(CommandInterpreter intp) throws Exception {
 		if (isStartLevelSvcPresent(intp)) {
 			int value = 0;
 			String token = intp.nextArgument();
 			if (token == null) {
-				intp.println(ConsoleMsg.formatter.getString("STARTLEVEL_NO_STARTLEVEL_GIVEN")); //$NON-NLS-1$
+				intp.println(ConsoleMsg.STARTLEVEL_NO_STARTLEVEL_GIVEN);
 				value = slImpl.getInitialBundleStartLevel();
-				intp.println(ConsoleMsg.formatter.getString("STARTLEVEL_INITIAL_BUNDLE_STARTLEVEL", value)); //$NON-NLS-1$
+				intp.println(NLS.bind(ConsoleMsg.STARTLEVEL_INITIAL_BUNDLE_STARTLEVEL, String.valueOf(value))); 
 			} else {
 				value = this.getStartLevelFromToken(intp, token);
 				if (value > 0) {
 					try {
 						slImpl.setInitialBundleStartLevel(value);
-						intp.println(ConsoleMsg.formatter.getString("STARTLEVEL_INITIAL_BUNDLE_STARTLEVEL", value)); //$NON-NLS-1$
+						intp.println(NLS.bind(ConsoleMsg.STARTLEVEL_INITIAL_BUNDLE_STARTLEVEL, String.valueOf(value))); 
 					} catch (IllegalArgumentException e) {
 						intp.println(e.getMessage());
 					}
@@ -1480,12 +1472,11 @@ public class FrameworkCommandProvider implements CommandProvider {
 			}
 		}
 	}
-
 	public void _requiredBundles(CommandInterpreter intp) {
 		_classSpaces(intp);
 	}
 
-	public void _classSpaces(CommandInterpreter intp) {
+public void _classSpaces(CommandInterpreter intp) {
 
 		String token = intp.nextArgument();
 
@@ -1499,7 +1490,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 					symBundles = packageAdmin.getRequiredBundles(token);
 
 					if (symBundles == null) {
-						intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_NAMED_CLASS_SPACES_MESSAGE")); //$NON-NLS-1$
+						intp.println(ConsoleMsg.CONSOLE_NO_NAMED_CLASS_SPACES_MESSAGE);
 					} else {
 						for (int i = 0; i < symBundles.length; i++) {
 							org.osgi.service.packageadmin.RequiredBundle symBundle = symBundles[i];
@@ -1508,7 +1499,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 							boolean removalPending = symBundle.isRemovalPending();
 							if (removalPending) {
 								intp.print("("); //$NON-NLS-1$
-								intp.print(ConsoleMsg.formatter.getString("CONSOLE_REMOVAL_PENDING_MESSAGE")); //$NON-NLS-1$
+								intp.print(ConsoleMsg.CONSOLE_REMOVAL_PENDING_MESSAGE);
 								intp.println(")"); //$NON-NLS-1$
 							}
 
@@ -1524,11 +1515,11 @@ public class FrameworkCommandProvider implements CommandProvider {
 										intp.print("  "); //$NON-NLS-1$
 										intp.print(requiring[j]);
 										intp.print(" "); //$NON-NLS-1$
-										intp.println(ConsoleMsg.formatter.getString("CONSOLE_REQUIRES_MESSAGE")); //$NON-NLS-1$
+										intp.println(ConsoleMsg.CONSOLE_REQUIRES_MESSAGE);
 									}
 							} else {
 								intp.print("<"); //$NON-NLS-1$
-								intp.print(ConsoleMsg.formatter.getString("CONSOLE_STALE_MESSAGE")); //$NON-NLS-1$
+								intp.print(ConsoleMsg.CONSOLE_STALE_MESSAGE);
 								intp.println(">"); //$NON-NLS-1$
 							}
 
@@ -1539,17 +1530,23 @@ public class FrameworkCommandProvider implements CommandProvider {
 				}
 			}
 		} else {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_NO_EXPORTED_PACKAGES_NO_PACKAGE_ADMIN_MESSAGE")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_NO_EXPORTED_PACKAGES_NO_PACKAGE_ADMIN_MESSAGE);
 		}
+	}	/**
+	 * Handles the profilelog command. 
+	 *
+	 * @param intp A CommandInterpreter object containing the command and it's arguments.
+	 */
+	public void _profilelog(CommandInterpreter intp) throws Exception {
+		intp.println(Profile.getProfileLog());
 	}
-
 
 	/**
 	 * Checks for the presence of the StartLevel Service.  Outputs a message if it is not present.
 	 * @param intp The CommandInterpreter object to be used to write to the console
 	 * @return true or false if service is present or not
 	 */
-	protected boolean isStartLevelSvcPresent(CommandInterpreter intp) {
+protected boolean isStartLevelSvcPresent(CommandInterpreter intp) {
 		boolean retval = false;
 		org.osgi.framework.ServiceReference slSvcRef = context.getServiceReference("org.osgi.service.startlevel.StartLevel"); //$NON-NLS-1$
 		if (slSvcRef != null) {
@@ -1558,11 +1555,10 @@ public class FrameworkCommandProvider implements CommandProvider {
 				retval = true;
 			}
 		} else {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_CAN_NOT_USE_STARTLEVEL_NO_STARTLEVEL_SVC_ERROR")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_CAN_NOT_USE_STARTLEVEL_NO_STARTLEVEL_SVC_ERROR);
 		}
 		return retval;
 	}
-
 	/**
 	 *  Given a number, retrieve the Bundle object with that id.
 	 *
@@ -1581,32 +1577,31 @@ public class FrameworkCommandProvider implements CommandProvider {
 		}
 
 		if ((bundle == null) && error) {
-			intp.println(ConsoleMsg.formatter.getString("CONSOLE_CANNOT_FIND_BUNDLE_ERROR", token)); //$NON-NLS-1$
+			intp.println(NLS.bind(ConsoleMsg.CONSOLE_CANNOT_FIND_BUNDLE_ERROR, token)); 
 		}
 
 		return (bundle);
 	}
 
 	/**
-		 *  Given a string containing a startlevel value, validate it and convert it to an int
-		 * 
-		*  @param intp A CommandInterpreter object used for printing out error messages
-		*  @param value A string containing a potential startlevel
-		*  @return The start level or an int <0 if it was invalid
-		 */
-	protected int getStartLevelFromToken(CommandInterpreter intp, String value) {
+	 *  Given a string containing a startlevel value, validate it and convert it to an int
+	 * 
+	 *  @param intp A CommandInterpreter object used for printing out error messages
+	 *  @param value A string containing a potential startlevel
+	 *  @return The start level or an int <0 if it was invalid
+	 */
+protected int getStartLevelFromToken(CommandInterpreter intp, String value) {
 		int retval = -1;
 		try {
 			retval = Integer.parseInt(value);
 			if (Integer.parseInt(value) <= 0) {
-				intp.println(ConsoleMsg.formatter.getString("STARTLEVEL_POSITIVE_INTEGER")); //$NON-NLS-1$
+				intp.println(ConsoleMsg.STARTLEVEL_POSITIVE_INTEGER);
 			}
 		} catch (NumberFormatException nfe) {
-			intp.println(ConsoleMsg.formatter.getString("STARTLEVEL_POSITIVE_INTEGER")); //$NON-NLS-1$
+			intp.println(ConsoleMsg.STARTLEVEL_POSITIVE_INTEGER);
 		}
 		return retval;
 	}
-
 	/**
 	 *  Given a state value, return the string describing that state.
 	 *
@@ -1615,23 +1610,23 @@ public class FrameworkCommandProvider implements CommandProvider {
 	 */
 	protected String getStateName(int state) {
 		switch (state) {
-			case AbstractBundle.UNINSTALLED :
-				return (ConsoleMsg.formatter.getString("CONSOLE_UNINSTALLED_MESSAGE")); //$NON-NLS-1$
+			case Bundle.UNINSTALLED :
+				return (ConsoleMsg.CONSOLE_UNINSTALLED_MESSAGE);
 
-			case AbstractBundle.INSTALLED :
-				return (ConsoleMsg.formatter.getString("CONSOLE_INSTALLED_MESSAGE")); //$NON-NLS-1$
+			case Bundle.INSTALLED :
+				return (ConsoleMsg.CONSOLE_INSTALLED_MESSAGE);
 
-			case AbstractBundle.RESOLVED :
-				return (ConsoleMsg.formatter.getString("CONSOLE_RESOLVED_MESSAGE")); //$NON-NLS-1$
+			case Bundle.RESOLVED :
+				return (ConsoleMsg.CONSOLE_RESOLVED_MESSAGE);
 
-			case AbstractBundle.STARTING :
-				return (ConsoleMsg.formatter.getString("CONSOLE_STARTING_MESSAGE")); //$NON-NLS-1$
+			case Bundle.STARTING :
+				return (ConsoleMsg.CONSOLE_STARTING_MESSAGE);
 
-			case AbstractBundle.STOPPING :
-				return (ConsoleMsg.formatter.getString("CONSOLE_STOPPING_MESSAGE")); //$NON-NLS-1$
+			case Bundle.STOPPING :
+				return (ConsoleMsg.CONSOLE_STOPPING_MESSAGE);
 
-			case AbstractBundle.ACTIVE :
-				return (ConsoleMsg.formatter.getString("CONSOLE_ACTIVE_MESSAGE")); //$NON-NLS-1$
+			case Bundle.ACTIVE :
+				return (ConsoleMsg.CONSOLE_ACTIVE_MESSAGE);
 
 			default :
 				return (Integer.toHexString(state));

@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -13,11 +13,10 @@ package org.eclipse.osgi.framework.internal.core;
 
 import java.io.IOException;
 import java.net.URL;
-import java.security.PermissionCollection;
-import java.security.ProtectionDomain;
 import java.util.Enumeration;
 import org.eclipse.osgi.framework.adaptor.BundleData;
 import org.eclipse.osgi.framework.debug.Debug;
+import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.*;
 
 public class BundleFragment extends AbstractBundle {
@@ -51,15 +50,13 @@ public class BundleFragment extends AbstractBundle {
 			SecurityManager sm = System.getSecurityManager();
 
 			if (sm != null) {
-				PermissionCollection collection = framework.permissionAdmin.createPermissionCollection(this);
-
-				domain = new ProtectionDomain(null, collection);
+				domain = framework.permissionAdmin.createProtectionDomain(this);
 			}
 
 			try {
 				bundledata.open(); /* make sure the BundleData is open */
 			} catch (IOException e) {
-				throw new BundleException(Msg.formatter.getString("BUNDLE_READ_EXCEPTION"), e); //$NON-NLS-1$
+				throw new BundleException(Msg.BUNDLE_READ_EXCEPTION, e); //$NON-NLS-1$
 			}
 		}
 	}
@@ -84,11 +81,7 @@ public class BundleFragment extends AbstractBundle {
 		if (framework.isActive()) {
 			if (hosts != null) {
 				if (state == RESOLVED) {
-					for (int i = 0; i < hosts.length; i++) {
-						exporting = hosts[i].inUse();
-						if (exporting)
-							break;
-					}
+					exporting = true; // if we have a host we cannot be removed until the host is refreshed
 					hosts = null;
 					state = INSTALLED;
 				}
@@ -112,6 +105,9 @@ public class BundleFragment extends AbstractBundle {
 
 		this.bundledata = newBundle.bundledata;
 		this.bundledata.setBundle(this);
+		// create a new domain for the bundle because its signers/symbolic-name may have changed
+		if (framework.isActive() && System.getSecurityManager() != null)
+			domain = framework.permissionAdmin.createProtectionDomain(this);
 		return (exporting);
 	}
 
@@ -158,18 +154,14 @@ public class BundleFragment extends AbstractBundle {
 		if (framework.isActive()) {
 			if (hosts != null) {
 				if (state == RESOLVED) {
-					for (int i = 0; i < hosts.length; i++) {
-						exporting = hosts[i].inUse();
-						if (exporting)
-							break;
-					}
+					exporting = true; // if we have a host we cannot be removed until the host is refreshed
 					hosts = null;
 					state = INSTALLED;
 				}
 				domain = null;
 			}
 		}
-		if (!exporting){
+		if (!exporting) {
 			try {
 				this.bundledata.close();
 			} catch (IOException e) { // Do Nothing.
@@ -189,12 +181,16 @@ public class BundleFragment extends AbstractBundle {
 	 */
 	protected Class loadClass(String name, boolean checkPermission) throws ClassNotFoundException {
 		if (checkPermission) {
-			framework.checkAdminPermission();
+			try {
+				framework.checkAdminPermission(this, AdminPermission.CLASS);
+			} catch (SecurityException e) {
+				throw new ClassNotFoundException();
+			}
 			checkValid();
 		}
 		// cannot load a class from a fragment because there is no classloader
 		// associated with fragments.
-		throw new ClassNotFoundException(Msg.formatter.getString("BUNDLE_FRAGMENT_CNFE", name)); //$NON-NLS-1$
+		throw new ClassNotFoundException(NLS.bind(Msg.BUNDLE_FRAGMENT_CNFE, name)); //$NON-NLS-1$
 	}
 
 	/**
@@ -235,40 +231,7 @@ public class BundleFragment extends AbstractBundle {
 	 * @param persistent if true persistently record the bundle was started.
 	 */
 	protected void startWorker(boolean persistent) throws BundleException {
-		if (framework.active) {
-			if ((state & (STARTING | ACTIVE)) != 0) {
-				return;
-			}
-
-			if (state == INSTALLED) {
-				if (!framework.packageAdmin.resolveBundles(new Bundle[] {this})) {
-					throw new BundleException(getResolutionFailureMessage());
-				}
-			}
-
-			if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
-				Debug.println("Bundle: Active sl = " + framework.startLevelManager.getStartLevel() + "; Bundle " + getBundleId() + " sl = " + getStartLevel()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			}
-
-			if (getStartLevel() <= framework.startLevelManager.getStartLevel()) {
-				if (state == UNINSTALLED) {
-					throw new BundleException(Msg.formatter.getString("BUNDLE_UNINSTALLED_EXCEPTION")); //$NON-NLS-1$
-				}
-				if (framework.active) {
-					state = ACTIVE;
-
-					if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
-						Debug.println("->started " + this); //$NON-NLS-1$
-					}
-
-					framework.publishBundleEvent(BundleEvent.STARTED, this);
-				}
-			}
-		}
-
-		if (persistent) {
-			setStatus(Constants.BUNDLE_STARTED, true);
-		}
+		throw new BundleException(NLS.bind(Msg.BUNDLE_FRAGMENT_START, this)); //$NON-NLS-1$
 	}
 
 	/**
@@ -277,23 +240,7 @@ public class BundleFragment extends AbstractBundle {
 	 * @param persistent if true persistently record the bundle was stopped.
 	 */
 	protected void stopWorker(boolean persistent) throws BundleException {
-		if (persistent) {
-			setStatus(Constants.BUNDLE_STARTED, false);
-		}
-
-		if (framework.active) {
-			if ((state & (STOPPING | RESOLVED | INSTALLED)) != 0) {
-				return;
-			}
-
-			state = RESOLVED;
-
-			if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
-				Debug.println("->stopped " + this); //$NON-NLS-1$
-			}
-
-			framework.publishBundleEvent(BundleEvent.STOPPED, this);
-		}
+		throw new BundleException(NLS.bind(Msg.BUNDLE_FRAGMENT_STOP, this)); //$NON-NLS-1$
 	}
 
 	/**
@@ -357,7 +304,7 @@ public class BundleFragment extends AbstractBundle {
 	protected boolean addHost(BundleLoaderProxy host) {
 		if (host != null) {
 			try {
-				((BundleHost)host.getBundleHost()).attachFragment(this);
+				((BundleHost) host.getBundleHost()).attachFragment(this);
 			} catch (BundleException be) {
 				framework.publishFrameworkEvent(FrameworkEvent.ERROR, host.getBundleHost(), be);
 				return false;
@@ -372,8 +319,8 @@ public class BundleFragment extends AbstractBundle {
 				return true; // already a host
 		}
 		BundleLoaderProxy[] newHosts = new BundleLoaderProxy[hosts.length + 1];
-		System.arraycopy(hosts,0,newHosts,0,hosts.length);
-		newHosts[newHosts.length - 1] = host; 
+		System.arraycopy(hosts, 0, newHosts, 0, hosts.length);
+		newHosts[newHosts.length - 1] = host;
 		return true;
 	}
 

@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -13,7 +13,6 @@ package org.eclipse.osgi.service.resolver;
 import java.io.*;
 import java.util.Dictionary;
 import java.util.Map;
-
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Version;
 
@@ -133,9 +132,10 @@ public interface StateObjectFactory {
 	 * {@link ImportPackageSpecification#RESOLUTION_OPTIONAL}, 
 	 * {@link ImportPackageSpecification#RESOLUTION_STATIC}
 	 * @param attributes the arbitrary attributes for the package import (may be <code>null</code>)
+	 * @param importer the importing bundle
 	 * @return the created package specification
 	 */
-	public ImportPackageSpecification createImportPackageSpecification(String packageName, VersionRange versionRange, String bundleSymbolicName, VersionRange bundleVersionRange, String[] propagate, int resolution, Map attributes);
+	public ImportPackageSpecification createImportPackageSpecification(String packageName, VersionRange versionRange, String bundleSymbolicName, VersionRange bundleVersionRange, String[] propagate, int resolution, Map attributes, BundleDescription importer);
 
 	/**
 	 * Creates an import package specification that is a copy of the given import package
@@ -145,47 +145,29 @@ public interface StateObjectFactory {
 	public ImportPackageSpecification createImportPackageSpecification(ImportPackageSpecification original);
 
 	/**
-	 * Creates an export package description from the given parameters.
-	 *  
-	 * @param packageName the package name
-	 * @param version the package version (may be <code>null</code>)
-	 * @param grouping the grouping name for the package (may be <code>null</code>)
-	 * @param include
-	 * @param exclude
-	 * @param attributes the arbitrary attributes for the package import (may be <code>null</code>)
-	 * @param mandatory
-	 * @param root
-	 * @return the created package specification
-	 */
-	public ExportPackageDescription createExportPackageDescription(String packageName, Version version, String grouping, String include, String exclude, Map attributes, String[] mandatory, boolean root);
-
-	/**
 	 * Used by the Resolver to dynamically create ExportPackageDescription objects during the resolution process.
-	 * The Resolver needs to create ExportPackageDescriptions dynamically for the following reasons: <p>
-	 * 1. To create an ExportPackageDescription for a host from a ExportPackageDescription from a fragment.<p>
-	 * 2. To create an ExportPackageDescription that is used as a root for a resolved import that is split.<p>
-	 * 3. To create an ExportPackageDescription that is used to propagate one or more ExportPackageDescriptions.<p>
+	 * The Resolver needs to create ExportPackageDescriptions dynamally for a host when a fragment.
+	 * exports a package<p>
 	 * 
 	 * @param packageName
 	 * @param version
-	 * @param grouping
+	 * @param uses
 	 * @param include
 	 * @param exclude
 	 * @param attributes
 	 * @param mandatory
 	 * @param root
 	 * @param exporter
-	 * @return
+	 * @return the created package
 	 */
-	public ExportPackageDescription createExportPackageDescription(String packageName, Version version, String grouping, String include, String exclude, Map attributes, String[] mandatory, boolean root, BundleDescription exporter);
+	public ExportPackageDescription createExportPackageDescription(String packageName, Version version, String[] uses, String include, String exclude, Map attributes, String[] mandatory, boolean root, BundleDescription exporter);
 
 	/**
 	 * Creates an import package specification that is a copy of the given constraint
 	 * @param original the export package to be copied
-	 * @return the created package specification 
+	 * @return the created package
 	 */
 	public ExportPackageDescription createExportPackageDescription(ExportPackageDescription original);
-	
 
 	/**
 	 * Persists the given state in the given output stream. Closes the stream.
@@ -196,10 +178,11 @@ public interface StateObjectFactory {
 	 * the stream
 	 * @throws IllegalArgumentException if the state provided was not created by 
 	 * this factory
+	 * @deprecated use #writeState(State, File) instead
 	 * @since 3.1
 	 */
 	public void writeState(State state, OutputStream stream) throws IOException;
-	
+
 	/**
 	 * Persists the given state in the given output stream. Closes the stream.
 	 * 
@@ -209,10 +192,22 @@ public interface StateObjectFactory {
 	 * the stream
 	 * @throws IllegalArgumentException if the state provided was not created by 
 	 * this factory
-	 * @deprecated use #writeState(State, OutputStream) instead
+	 * @deprecated use #writeState(State, File) instead
 	 * @see #writeState(State, OutputStream)
 	 */
-	public void writeState(State state, DataOutputStream stream) throws IOException;	
+	public void writeState(State state, DataOutputStream stream) throws IOException;
+
+	/**
+	 * Persists the given state in the given directory.
+	 * 
+	 * @param state the state to be written
+	 * @param stateDirectory the directory where to write the state to
+	 * @throws IOException if an IOException happens while writing the state to 
+	 * the stream
+	 * @throws IllegalArgumentException if the state provided was not created by 
+	 * this factory
+	 */
+	public void writeState(State state, File stateDirectory) throws IOException;
 
 	/**
 	 * Reads a persisted state from the given stream. Closes the stream.
@@ -221,10 +216,11 @@ public interface StateObjectFactory {
 	 * @return the state read
 	 * @throws IOException if an IOException happens while reading the state from 
 	 * the stream
+	 * @deprecated use #readState(File) instead
 	 * @since 3.1
 	 */
 	public State readState(InputStream stream) throws IOException;
-	
+
 	/**
 	 * Reads a persisted state from the given stream. Closes the stream.
 	 * 
@@ -232,9 +228,19 @@ public interface StateObjectFactory {
 	 * @return the state read
 	 * @throws IOException if an IOException happens while reading the state from 
 	 * the stream
-	 * @deprecated use #readState(InputStream) instead
+	 * @deprecated use #readState(File) instead
 	 * @see #readState(InputStream)
 	 */
-	public State readState(DataInputStream stream) throws IOException;	
+	public State readState(DataInputStream stream) throws IOException;
+
+	/**
+	 * Reads a persisted state from the given directory.
+	 * 
+	 * @param stateDirectory the directory where to read the state from
+	 * @return the state read
+	 * @throws IOException if an IOException happens while reading the state from 
+	 * the stream
+	 */
+	public State readState(File stateDirectory) throws IOException;
 
 }

@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2004 IBM Corporation and others.
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -74,6 +74,8 @@ public class GroupingChecker {
 						return wire;
 					// Check against requires
 					for (int k = 0; k < requires.length; k++) {
+						if (requires[k].getMatchingBundle() == null)
+							continue;
 						ResolverExport[] exports = requires[k].getMatchingBundle().getExportPackages();
 						for (int m = 0; m < exports.length; m++) {
 							if (re.getExporter().isResolvable() && exports[m].getName().equals(re.getName()) && !exports[m].isOnRootPath(re.getExporter()))
@@ -96,6 +98,8 @@ public class GroupingChecker {
 		}
 		// Check imports against requires
 		for (int i = 0; i < requires.length; i++) {
+			if (requires[i].getMatchingBundle() == null)
+				continue;
 			ResolverExport[] exports = requires[i].getMatchingBundle().getExportPackages();
 			for (int j = 0; j < exports.length; j++) {
 				ArrayList list = (ArrayList) constraints.get(exports[j]);
@@ -312,6 +316,8 @@ public class GroupingChecker {
 		// Add constraints for reprovided exports
 		BundleConstraint[] requires = re.getExporter().getRequires();
 		for (int i = 0; i < requires.length; i++) {
+			if (requires[i].getMatchingBundle() == null)
+				return;
 			ResolverExport[] requireExports = requires[i].getMatchingBundle().getExportPackages();
 			for (int j = 0; j < requireExports.length; j++) {
 				if (!re.getName().equals(requireExports[j].getName()))

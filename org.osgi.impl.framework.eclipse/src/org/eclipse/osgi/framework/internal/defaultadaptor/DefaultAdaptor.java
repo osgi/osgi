@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -13,6 +13,9 @@ package org.eclipse.osgi.framework.internal.defaultadaptor;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import org.eclipse.osgi.framework.adaptor.BundleData;
 import org.eclipse.osgi.framework.adaptor.core.*;
@@ -44,6 +47,8 @@ import org.osgi.framework.FrameworkEvent;
  * (e.g. startlevel, persistent start state, etc)
  */
 public class DefaultAdaptor extends AbstractFrameworkAdaptor {
+	public static final String METADATA_ADAPTOR_NEXTID = "METADATA_ADAPTOR_NEXTID"; //$NON-NLS-1$
+	public static final String METADATA_ADAPTOR_IBSL = "METADATA_ADAPTOR_IBSL"; //$NON-NLS-1$
 
 	public static final String METADATA_BUNDLE_GEN = "METADATA_BUNDLE_GEN"; //$NON-NLS-1$
 	public static final String METADATA_BUNDLE_LOC = "METADATA_BUNDLE_LOC"; //$NON-NLS-1$
@@ -93,7 +98,7 @@ public class DefaultAdaptor extends AbstractFrameworkAdaptor {
 				if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 					Debug.println("BundleData created: " + data); //$NON-NLS-1$
 				}
-
+				processExtension(data, EXTENSION_INITIALIZE);
 				bundleDatas.add(data);
 			} catch (BundleException e) {
 				if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
@@ -122,7 +127,19 @@ public class DefaultAdaptor extends AbstractFrameworkAdaptor {
 
 	protected void persistInitialBundleStartLevel(int value) throws IOException {
 		fwMetadata.setInt(METADATA_ADAPTOR_IBSL, value);
-		fwMetadata.save();
+		try {
+			AccessController.doPrivileged(new PrivilegedExceptionAction() {
+				public Object run() throws Exception {
+					fwMetadata.save();
+					return null;
+				}
+			});
+		} catch (PrivilegedActionException e) {
+			if (e.getException() instanceof IOException) {
+				throw (IOException)e.getException();
+			}
+			throw (RuntimeException)e.getException();
+		}
 	}
 
 	public AdaptorElementFactory getElementFactory() {
@@ -145,7 +162,7 @@ public class DefaultAdaptor extends AbstractFrameworkAdaptor {
 		data.setLastModified(bundleMetaData.getLong(METADATA_LAST_MODIFIED, 0));
 
 		if (data.getGeneration() == -1 || data.getFileName() == null || data.getLocation() == null) {
-			throw new IOException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION")); //$NON-NLS-1$
+			throw new IOException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION); //$NON-NLS-1$
 		}
 	}
 

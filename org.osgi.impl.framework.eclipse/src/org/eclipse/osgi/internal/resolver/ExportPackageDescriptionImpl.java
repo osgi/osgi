@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -16,22 +16,31 @@ import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.osgi.service.resolver.ExportPackageDescription;
 
 public class ExportPackageDescriptionImpl extends BaseDescriptionImpl implements ExportPackageDescription {
+	// TODO remove this!!
 	private String grouping;
+	private String[] uses;
 	private Map attributes;
 	private BundleDescription exporter;
 	private String exclude;
 	private String include;
 	private String[] mandatory;
 	private boolean root;
+	private int tableIndex;
 
+	// TODO remove this!!
 	public String getGrouping() {
 		if (grouping == null)
 			return getName(); // default is to have a unique grouping using the package name
 		return grouping;
 	}
 
+	// TODO remove this!!
 	protected String getBasicGrouping() {
 		return grouping;
+	}
+
+	public String[] getUses() {
+		return uses;
 	}
 
 	public String getInclude() {
@@ -58,8 +67,13 @@ public class ExportPackageDescriptionImpl extends BaseDescriptionImpl implements
 		return mandatory;
 	}
 
+	// TODO remove this!!
 	protected void setGrouping(String grouping) {
 		this.grouping = grouping;
+	}
+
+	protected void setUses(String[] uses) {
+		this.uses = uses;
 	}
 
 	protected void setInclude(String include) {
@@ -88,5 +102,13 @@ public class ExportPackageDescriptionImpl extends BaseDescriptionImpl implements
 
 	public String toString() {
 		return "Export-Package: " + getName() + "; version=\"" + getVersion() + "\"";  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+	}
+
+	int getTableIndex() {
+		return tableIndex;
+	}
+
+	void setTableIndex(int tableIndex) {
+		this.tableIndex = tableIndex;
 	}
 }

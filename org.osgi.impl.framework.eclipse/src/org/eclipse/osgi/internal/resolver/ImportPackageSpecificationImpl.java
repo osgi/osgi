@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -18,12 +18,14 @@ import org.osgi.framework.Constants;
 
 public class ImportPackageSpecificationImpl extends VersionConstraintImpl implements ImportPackageSpecification {
 	private static final String ALL_PACKAGES = "*"; //$NON-NLS-1$
+	// TODO remove this!!
 	private String[] propagate;
 	private int resolution = ImportPackageSpecification.RESOLUTION_STATIC; // the default is static
 	private String symbolicName;
 	private VersionRange bundleVersionRange;
 	private Map attributes;
 
+	// TODO remove this!!
 	public String[] getPropagate() {
 		return propagate;
 	}
@@ -105,7 +107,7 @@ public class ImportPackageSpecificationImpl extends VersionConstraintImpl implem
 					if (bundleVersionRange == null)
 						return false;
 				}
-				else if (Constants.PACKAGE_SPECIFICATION_VERSION.equals(mandatory[i])) {
+				else if (Constants.PACKAGE_SPECIFICATION_VERSION.equals(mandatory[i]) || Constants.VERSION_ATTRIBUTE.equals(mandatory[i])) {
 					if (getVersionRange() == null)
 						return false;
 				}
@@ -120,6 +122,7 @@ public class ImportPackageSpecificationImpl extends VersionConstraintImpl implem
 		return true;
 	}
 
+	// TODO remove this!!
 	protected void setPropagate(String[] propagate) {
 		this.propagate = propagate;
 	}

@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -14,15 +14,23 @@ package org.eclipse.osgi.framework.adaptor.core;
 import java.io.*;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Vector;
 import org.eclipse.osgi.framework.adaptor.PermissionStorage;
 import org.eclipse.osgi.framework.debug.Debug;
+import org.eclipse.osgi.framework.internal.core.ConditionalPermissionInfoImpl;
 import org.eclipse.osgi.framework.internal.reliablefile.*;
+import org.osgi.service.condpermadmin.ConditionInfo;
+import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
+import org.osgi.service.permissionadmin.PermissionInfo;
 
 /**
  * Class to model permission data storage.
  */
 
 class DefaultPermissionStorage implements PermissionStorage {
+	/** Filename used to store the ConditionalPermissions. This name
+	 * is relative to permissionDir.*/
+	private static final String CONDPERMS = "condPerms"; //$NON-NLS-1$
 	/** Directory into which permission data files are stored. */
 	protected File permissionDir;
 
@@ -52,7 +60,7 @@ class DefaultPermissionStorage implements PermissionStorage {
 				Debug.println("Unable to create directory: " + permissionDir.getPath()); //$NON-NLS-1$
 			}
 
-			throw new IOException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION")); //$NON-NLS-1$
+			throw new IOException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION); //$NON-NLS-1$
 		}
 
 		defaultData = new File(permissionDir, ".default"); //$NON-NLS-1$
@@ -185,6 +193,9 @@ class DefaultPermissionStorage implements PermissionStorage {
 			if (name.endsWith(ReliableFile.tmpExt)) {
 				continue;
 			}
+			if (name.equals(CONDPERMS)) {
+				continue;
+			}
 
 			File file = new File(permissionDir, name);
 
@@ -225,7 +236,7 @@ class DefaultPermissionStorage implements PermissionStorage {
 					break;
 				}
 				default : {
-					throw new IOException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION")); //$NON-NLS-1$
+					throw new IOException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION);
 				}
 			}
 		} finally {
@@ -265,7 +276,7 @@ class DefaultPermissionStorage implements PermissionStorage {
 					return data;
 				}
 				default : {
-					throw new IOException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION")); //$NON-NLS-1$
+					throw new IOException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION); 
 				}
 			}
 		} finally {
@@ -307,5 +318,80 @@ class DefaultPermissionStorage implements PermissionStorage {
 		}
 
 		return file;
+	}
+
+	/**
+	 * Serializes the ConditionalPermissionInfos to CONDPERMS. Serialization is done
+	 * by writing out each ConditionalPermissionInfo as a set of ConditionInfos 
+	 * followed by PermissionInfos followed by a blank line.
+	 * 
+	 * @param v the Vector to be serialized that contains the ConditionalPermissionInfos.
+	 * @throws IOException
+	 * @see org.eclipse.osgi.framework.adaptor.PermissionStorage#serializeConditionalPermissionInfos(Vector)
+	 */
+	public void serializeConditionalPermissionInfos(Vector v) throws IOException {
+		BufferedWriter writer = null;
+		try {
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(permissionDir, CONDPERMS))));
+			Enumeration en = v.elements();
+			while (en.hasMoreElements()) {
+				ConditionalPermissionInfo cpi = (ConditionalPermissionInfo) en.nextElement();
+				ConditionInfo cis[] = cpi.getConditionInfos();
+				PermissionInfo pis[] = cpi.getPermissionInfos();
+				for (int i = 0; i < cis.length; i++) {
+					writer.write(cis[i].getEncoded());
+					writer.newLine();
+				}
+				for (int i = 0; i < pis.length; i++) {
+					writer.write(pis[i].getEncoded());
+					writer.newLine();
+				}
+				writer.newLine();
+			}
+		} finally {
+			if (writer != null)
+				writer.close();
+		}
+	}
+
+	/**
+	 * Deserializes the ConditionalPermissionInfos from CONDPERMS and returns the object.
+	 * 
+	 * @return the deserialized object that was previously passed to serializeCondationalPermissionInfos.
+	 * @throws IOException
+	 * @see org.eclipse.osgi.framework.adaptor.PermissionStorage#deserializeConditionalPermissionInfos()
+	 */
+	public Vector deserializeConditionalPermissionInfos() throws IOException {
+		BufferedReader reader = null;
+		Vector v = new Vector(15);
+		try {
+			reader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(permissionDir, CONDPERMS))));
+			String line;
+			Vector c = new Vector(3);
+			Vector p = new Vector(3);
+			while((line = reader.readLine()) != null) {
+				if (line.length() == 0) {
+					ConditionalPermissionInfoImpl cpi;
+					cpi = new ConditionalPermissionInfoImpl((ConditionInfo[])c.toArray(new ConditionInfo[0]), (PermissionInfo[])p.toArray(new PermissionInfo[0]));
+					v.add(cpi);
+					c.clear();
+					p.clear();
+				} else if (line.startsWith("(")) { //$NON-NLS-1$
+					p.add(new PermissionInfo(line));
+				} else if (line.startsWith("[")) { //$NON-NLS-1$
+					c.add(new ConditionInfo(line));
+				}
+			}
+		} catch (FileNotFoundException e) {
+			// do nothing return empty vector
+		} catch (IOException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new IOException(e.getMessage());
+		} finally {
+			if (reader != null)
+				reader.close();
+		}
+		return v;
 	}
 }

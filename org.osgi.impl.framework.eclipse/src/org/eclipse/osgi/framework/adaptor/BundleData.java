@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -14,7 +14,6 @@ package org.eclipse.osgi.framework.adaptor;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.security.ProtectionDomain;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import org.osgi.framework.*;
@@ -30,6 +29,15 @@ import org.osgi.framework.BundleException;
  * metadata.
  */
 public interface BundleData {
+
+	/** The BundleData is for a fragment bundle */
+	public static final int TYPE_FRAGMENT =					0x00000001;
+	/** The BundleData is for a framework extension bundle */
+	public static final int TYPE_FRAMEWORK_EXTENSION =		0x00000002;
+	/** The BundleData is for a bootclasspath extension bundle */
+	public static final int TYPE_BOOTCLASSPATH_EXTENSION =	0x00000004;
+	
+
 	/**
 	 * Creates the ClassLoader for the BundleData.  The ClassLoader created
 	 * must use the <code>ClassLoaderDelegate</code> to delegate class, resource
@@ -39,12 +47,12 @@ public interface BundleData {
 	 * The <code>ProtectionDomain</code> domain must be used by the Classloader when 
 	 * defining a class.  
 	 * @param delegate The <code>ClassLoaderDelegate</code> to delegate to.
-	 * @param domain The <code>ProtectionDomain</code> to use when defining a class.
+	 * @param domain The <code>BundleProtectionDomain</code> to use when defining a class.
 	 * @param bundleclasspath An array of bundle classpaths to use to create this
 	 * classloader.  This is specified by the Bundle-ClassPath manifest entry.
 	 * @return The new ClassLoader for the BundleData.
 	 */
-	public BundleClassLoader createClassLoader(ClassLoaderDelegate delegate, ProtectionDomain domain, String[] bundleclasspath);
+	public BundleClassLoader createClassLoader(ClassLoaderDelegate delegate, BundleProtectionDomain domain, String[] bundleclasspath);
 
 	/**
 	 * Gets a <code>URL</code> to the bundle entry specified by path.
@@ -201,15 +209,22 @@ public interface BundleData {
 	 * has a Fragment-Host entry.
 	 * @return the value of true if this BundleData represents a fragment bundle;
 	 * false otherwise.
+	 * @deprecated use {@link #getType()}
 	 */
 	public boolean isFragment();
+
+	/**
+	 * Returns the type of bundle this BundleData is for.  
+	 * @return returns the type of bundle this BundleData is for
+	 */
+	public int getType();
 
 	/**
 	 * Returns the Bundle-ClassPath for this BundleData as specified in 
 	 * the bundle manifest file.
 	 * @return the classpath for this BundleData.
 	 */
-	public String getClassPath();
+	public String[] getClassPath() throws BundleException;
 
 	/**
 	 * Returns the Bundle-Activator for this BundleData as specified in 
@@ -231,4 +246,16 @@ public interface BundleData {
 	 * @return the DynamicImport-Packaget for this BundleData.
 	 */
 	public String getDynamicImports();
+
+	/**
+	 * Retrieves the certificate chains that signed this bundle. Only
+	 * validated certificate chains are returned. Each element of the returned
+	 * array will contain a chain of distinguished names (DNs) separated by
+	 * semicolons. The first DN is the signer and the last is the root
+	 * Certificate Authority.
+	 * 
+	 * @return the certificate chains that signed this repository.  If bundle
+	 * signing is not supported or the bundle is not signed then null is returned.
+	 */
+	public String[] getBundleSigners();
 }

@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -88,10 +88,8 @@ public class StreamHandlerFactory implements java.net.URLStreamHandlerFactory {
 		try {
 			clazz = Class.forName(name);
 		}
-
-		//Now we checdk the service registry
-		catch (ClassNotFoundException e) {
-
+		//Now we check the service registry
+		catch (Throwable t) {
 			//first check to see if the handler is in the cache
 			URLStreamHandlerProxy handler = (URLStreamHandlerProxy) proxies.get(protocol);
 			if (handler != null) {
@@ -102,8 +100,9 @@ public class StreamHandlerFactory implements java.net.URLStreamHandlerFactory {
 			org.osgi.framework.ServiceReference[] serviceReferences = handlerTracker.getServiceReferences();
 			if (serviceReferences != null) {
 				for (int i = 0; i < serviceReferences.length; i++) {
-					String[] protocols = (String[]) (serviceReferences[i].getProperty(URLConstants.URL_HANDLER_PROTOCOL));
-					if (protocols != null) {
+					Object prop = serviceReferences[i].getProperty(URLConstants.URL_HANDLER_PROTOCOL);
+					if (prop != null && prop instanceof String[]) {
+						String[] protocols = (String[]) prop;
 						for (int j = 0; j < protocols.length; j++) {
 							if (protocols[j].equals(protocol)) {
 								handler = new URLStreamHandlerProxy(protocol, serviceReferences[i], context);

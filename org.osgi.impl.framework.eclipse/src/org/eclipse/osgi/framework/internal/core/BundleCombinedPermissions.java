@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -22,6 +22,9 @@ final class BundleCombinedPermissions extends BundlePermissionCollection {
 	private static final long serialVersionUID = 4049357526208360496L;
 	private BundlePermissionCollection assigned;
 	private BundlePermissionCollection implied;
+	private ConditionalPermissions conditional;
+	private ConditionalPermissionSet restrictedPermissions;
+	private boolean isDefault;
 
 	/**
 	 * Create a permission combiner class.
@@ -38,24 +41,49 @@ final class BundleCombinedPermissions extends BundlePermissionCollection {
 	 * Assign the administrator defined permissions.
 	 *
 	 * @param assigned The permissions assigned by the administrator.
+	 * @param isDefault If true, the assigned permissions are the default permissions.
 	 */
-	void setAssignedPermissions(BundlePermissionCollection assigned) {
+	void setAssignedPermissions(BundlePermissionCollection assigned, boolean isDefault) {
 		this.assigned = assigned;
+		this.isDefault = isDefault;
+	}
+
+	/**
+	 * Assign the conditional permissions
+	 * 
+	 * @param conditional The conditional permissions assigned by the administrator
+	 */
+	void setConditionalPermissions(ConditionalPermissions conditional) {
+		this.conditional = conditional;
+	}
+
+	void checkConditionalPermissionInfo(ConditionalPermissionInfoImpl cpi) {
+		if (conditional != null) {
+			conditional.checkConditionalPermissionInfo(cpi);
+		}
 	}
 
 	/**
 	 * The Permission collection will unresolve the permissions in these packages.
 	 *
-	 * @param unresolvedPackages A list of the package which have been unresolved
+	 * @param refreshedBundles A list of the bundles which have been refreshed
 	 * as a result of a packageRefresh
 	 */
-	void unresolvePermissions(Hashtable unresolvedPackages) {
+	void unresolvePermissions(AbstractBundle[] refreshedBundles) {
 		if (assigned != null) {
-			assigned.unresolvePermissions(unresolvedPackages);
+			assigned.unresolvePermissions(refreshedBundles);
 		}
 
 		if (implied != null) {
-			implied.unresolvePermissions(unresolvedPackages);
+			implied.unresolvePermissions(refreshedBundles);
+		}
+
+		if (conditional != null) {
+			conditional.unresolvePermissions(refreshedBundles);
+		}
+
+		if (restrictedPermissions != null) {
+			restrictedPermissions.unresolvePermissions(refreshedBundles);
 		}
 	}
 
@@ -145,7 +173,38 @@ final class BundleCombinedPermissions extends BundlePermissionCollection {
 	 *					the permission to check
 	 */
 	public boolean implies(Permission permission) {
-		return ((assigned != null) && assigned.implies(permission)) || ((implied != null) && implied.implies(permission));
+		if ((implied != null) && implied.implies(permission))
+			return true;
+
+		/* We must be allowed by the restricted permissions to have any hope of
+		 * passing the check */
+		if ((restrictedPermissions != null) && !restrictedPermissions.implies(permission)) {
+			return false;
+		}
+
+		/* If we aren't using the default permissions, then the assigned
+		 * permission are the exact permissions the bundle has. */
+		if (!isDefault && (assigned != null) && assigned.implies(permission))
+			return true;
+		if (conditional != null) {
+			boolean conditionalImplies = conditional.implies(permission);
+			if (!conditional.isEmpty()) {
+				return conditionalImplies;
+			}
+		}
+		/* If there aren't any conditional permissions that apply, we use
+		 * the default. */
+		return assigned.implies(permission);
+	}
+
+	/**
+	 * Sets the restricted Permissions of the Bundle. This set of Permissions limit the
+	 * Permissions available to the Bundle.
+	 * 
+	 * @param restrictedPermissions the maximum set of permissions allowed to the Bundle 
+	 * irrespective of the actual permissions assigned to it.
+	 */
+	public void setRestrictedPermissions(ConditionalPermissionSet restrictedPermissions) {
+		this.restrictedPermissions = restrictedPermissions;
 	}
 }
-

@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -11,6 +11,7 @@
 package org.eclipse.osgi.internal.resolver;
 
 import java.util.*;
+
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.debug.DebugOptions;
 import org.eclipse.osgi.framework.internal.core.KeyedElement;
@@ -19,6 +20,8 @@ import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.Version;
 
 public abstract class StateImpl implements State {
+	public static final String[] PROPS = {"osgi.os", "osgi.ws", "osgi.nl", "osgi.arch"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+
 	transient private Resolver resolver;
 	transient private StateDeltaImpl changes;
 	transient private boolean resolving = false;
@@ -29,9 +32,9 @@ public abstract class StateImpl implements State {
 	private StateObjectFactory factory;
 	private KeyedHashSet resolvedBundles = new KeyedHashSet();
 	boolean fullyLoaded = false;
-
 	// only used for lazy loading of BundleDescriptions
 	private StateReader reader;
+	private Dictionary platformProperties = new Hashtable(4); // Dictionary here because of Filter API
 
 	private static long cumulativeTime;
 
@@ -184,7 +187,9 @@ public abstract class StateImpl implements State {
 		// must record the change before setting the resolve state to 
 		// accurately record if a change has happened.
 		getDelta().recordBundleResolved(modifiable, status);
-		modifiable.setResolved(status);
+		// force the new resolution data to stay in memory; we will not read this from disk anymore
+		modifiable.setLazyLoaded(false);
+		modifiable.setStateBit(BundleDescriptionImpl.RESOLVED, status);
 		if (status) {
 			resolveConstraints(modifiable, hosts, selectedExports, resolvedRequires, resolvedImports);
 			resolvedBundles.add(modifiable);
@@ -245,18 +250,18 @@ public abstract class StateImpl implements State {
 			long start = 0;
 			if (StateManager.DEBUG_PLATFORM_ADMIN_RESOLVER)
 				start = System.currentTimeMillis();
-			if (!incremental)
+			if (!incremental) {
+				resolved = false;
+				reResolve = getBundles();
 				flush();
+			}
 			if (resolved && reResolve == null)
 				return new StateDeltaImpl(this);
 			if (removalPendings.size() > 0) {
 				BundleDescription[] removed = (BundleDescription[]) removalPendings.toArray(new BundleDescription[removalPendings.size()]);
 				reResolve = mergeBundles(reResolve, removed);
 			}
-			if (reResolve != null)
-				resolver.resolve(reResolve);
-			else
-				resolver.resolve();
+			resolver.resolve(reResolve, platformProperties);
 			resolved = true;
 
 			StateDelta savedChanges = changes == null ? new StateDeltaImpl(this) : changes;
@@ -343,8 +348,8 @@ public abstract class StateImpl implements State {
 		return bundleDescriptions.add((BundleDescriptionImpl) description);
 	}
 
-	void addResolvedBundle(BundleDescriptionImpl resolved) {
-		resolvedBundles.add(resolved);
+	void addResolvedBundle(BundleDescriptionImpl resolvedBundle) {
+		resolvedBundles.add(resolvedBundle);
 	}
 
 	public ExportPackageDescription[] getExportedPackages() {
@@ -426,6 +431,50 @@ public abstract class StateImpl implements State {
 		resolver.setState(this);
 	}
 
+	public synchronized boolean setPlatformProperties(Dictionary platformProperties) {
+		return setProps(this.platformProperties, platformProperties);
+	}
+
+	Dictionary getPlatformProperties() {
+		return platformProperties;
+	}
+
+	private boolean checkProp(Object origObj, Object newObj) {
+		if ((origObj == null && newObj != null) || (origObj != null && newObj == null))
+			return true;
+		if (origObj == null)
+			return false;
+		if (origObj.getClass() != newObj.getClass())
+			return true;
+		if (origObj instanceof String)
+			return !origObj.equals(newObj);
+		String[] origProps = (String[]) origObj;
+		String[] newProps = (String[]) newObj;
+		if (origProps.length != newProps.length)
+			return true;
+		for (int i = 0; i < origProps.length; i++) {
+			if (!origProps[i].equals(newProps[i]))
+				return true;
+		}
+		return false;
+	}
+
+	private boolean setProps(Dictionary origProps, Dictionary newProps) {
+		boolean changed = false;
+		for(int i = 0; i < PROPS.length; i++) {
+			Object origProp = origProps.get(PROPS[i]);
+			Object newProp = newProps.get(PROPS[i]);
+			if (checkProp(origProp, newProp)) {
+				changed = true;
+				if (newProp == null)
+					origProps.remove(PROPS[i]);
+				else
+					origProps.put(PROPS[i], newProp);
+			}
+		}
+		return changed;
+	}
+
 	BundleDescription[] getRemovalPendings() {
 		return (BundleDescription[]) removalPendings.toArray(new BundleDescription[removalPendings.size()]);
 	}
@@ -449,7 +498,7 @@ public abstract class StateImpl implements State {
 	StateReader getReader() {
 		return reader;
 	}
-	synchronized void fullyLoad() {
+	void fullyLoad() {
 		if (fullyLoaded == true)
 			return;
 		if (reader != null && reader.isLazyLoaded())
@@ -458,10 +507,13 @@ public abstract class StateImpl implements State {
 	}
 
 	
-	synchronized void unloadLazyData(long expireTime) {
+	void unloadLazyData(long expireTime) {
 		long currentTime = System.currentTimeMillis();
 		BundleDescription[] bundles = getBundles();
-		for (int i = 0; i < bundles.length; i++)
-			((BundleDescriptionImpl)bundles[i]).unload(currentTime, expireTime);
+		// make sure no other thread is trying to unload or load
+		synchronized (reader) {
+			for (int i = 0; i < bundles.length; i++)
+				((BundleDescriptionImpl)bundles[i]).unload(currentTime, expireTime);
+		}
 	}
 }

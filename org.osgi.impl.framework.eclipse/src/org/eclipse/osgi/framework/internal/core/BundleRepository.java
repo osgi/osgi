@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -62,16 +62,17 @@ public class BundleRepository {
 	}
 
 	public AbstractBundle[] getBundles(String symbolicName) {
+		if (Constants.getInternalSymbolicName().equals(symbolicName))
+			symbolicName = Constants.OSGI_SYSTEM_BUNDLE;
 		return (AbstractBundle[]) bundlesBySymbolicName.get(symbolicName);
 	}
 
-	public AbstractBundle getBundle(String symbolicName, String version) {
-		AbstractBundle[] bundles = (AbstractBundle[]) bundlesBySymbolicName.get(symbolicName);
+	public AbstractBundle getBundle(String symbolicName, Version version) {
+		AbstractBundle[] bundles = getBundles(symbolicName);
 		if (bundles != null) {
-			Version ver = Version.parseVersion(version);
 			if (bundles.length > 0) {
 				for (int i = 0; i < bundles.length; i++) {
-					if (bundles[i].getVersion().equals(ver)) {
+					if (bundles[i].getVersion().equals(version)) {
 						return bundles[i];
 					}
 				}

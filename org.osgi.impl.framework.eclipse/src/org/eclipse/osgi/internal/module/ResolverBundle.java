@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2004 IBM Corporation and others.
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -38,6 +38,7 @@ public class ResolverBundle implements VersionSupplier {
 	private ArrayList cyclicDependencies = new ArrayList();
 
 	private ResolverImpl resolver;
+	private boolean newFragmentExports;
 
 	ResolverBundle(BundleDescription bundle, ResolverImpl resolver) {
 		this.bundle = bundle;
@@ -381,13 +382,21 @@ public class ResolverBundle implements VersionSupplier {
 		if (isFragment())
 			return new ResolverExport[0]; // cannot attach to fragments;
 
+		ImportPackageSpecification[] newImports = fragment.getBundle().getImportPackages();
+		BundleSpecification[] newRequires = fragment.getBundle().getRequiredBundles();
+		ExportPackageDescription[] newExports = fragment.getBundle().getExportPackages();
+
+		if (isResolved() && (newImports.length > 0 || newRequires.length > 0))
+			return new ResolverExport[0]; // do not allow fragments to require new resources on an already resolved host
+		if (isResolved() && newExports.length > 0)
+			fragment.setNewFragmentExports(true);
+
 		initFragments();
 		if (fragments.contains(fragment))
 			return new ResolverExport[0];
 		fragments.add(fragment);
 		fragment.getHost().addMatchingBundle(this);
 
-		ImportPackageSpecification[] newImports = fragment.getBundle().getImportPackages();
 		if (newImports.length > 0) {
 			ArrayList hostImports = new ArrayList(newImports.length);
 			for (int i = 0; i < newImports.length; i++)
@@ -396,7 +405,6 @@ public class ResolverBundle implements VersionSupplier {
 			fragmentImports.put(fragment.bundleID, hostImports);
 		}
 
-		BundleSpecification[] newRequires = fragment.getBundle().getRequiredBundles();
 		if (newRequires.length > 0) {
 			ArrayList hostRequires = new ArrayList(newRequires.length);
 			for (int i = 0; i < newRequires.length; i++)
@@ -405,19 +413,26 @@ public class ResolverBundle implements VersionSupplier {
 			fragmentRequires.put(fragment.bundleID, hostRequires);
 		}
 
-		ExportPackageDescription[] newExports = fragment.getBundle().getExportPackages();
 		ArrayList hostExports = new ArrayList(newExports.length);
 		if (newExports.length > 0 && addExports) {
 			StateObjectFactory factory = bundle.getContainingState().getFactory();
 			for (int i = 0; i < newExports.length; i++) {
 				if (!isExported(newExports[i].getName())) {
-					ExportPackageDescription hostExport = factory.createExportPackageDescription(newExports[i].getName(), newExports[i].getVersion(), newExports[i].getGrouping(), newExports[i].getInclude(), newExports[i].getExclude(), newExports[i].getAttributes(), newExports[i].getMandatory(), newExports[i].isRoot(), bundle);
+					ExportPackageDescription hostExport = factory.createExportPackageDescription(newExports[i].getName(), newExports[i].getVersion(), newExports[i].getUses(), newExports[i].getInclude(), newExports[i].getExclude(), newExports[i].getAttributes(), newExports[i].getMandatory(), newExports[i].isRoot(), bundle);
 					hostExports.add(new ResolverExport(this, hostExport));
 				}
 			}
 			fragmentExports.put(fragment.bundleID, hostExports);
 		}
 		return (ResolverExport[]) hostExports.toArray(new ResolverExport[hostExports.size()]);
+	}
+
+	private void setNewFragmentExports(boolean newFragmentExports) {
+		this.newFragmentExports = newFragmentExports;
+	}
+	
+	boolean isNewFragmentExports() {
+		return newFragmentExports;
 	}
 
 	ResolverExport[] detachFragment(ResolverBundle fragment) {

@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -13,46 +13,110 @@ package org.eclipse.osgi.internal.resolver;
 import java.io.*;
 import java.lang.ref.WeakReference;
 import java.util.*;
+import org.eclipse.osgi.framework.util.SecureAction;
 import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.Version;
 
 class StateReader {
+	public static final String STATE_FILE = ".state"; //$NON-NLS-1$
+	public static final String LAZY_FILE = ".lazy"; //$NON-NLS-1$
 
 	// objectTable will be a hashmap of objects. The objects will be things
 	// like BundleDescription, ExportPackageDescription, Version etc.. The integer
 	// index value will be used in the cache to allow cross-references in the
 	// cached state.
 	protected Map objectTable = new HashMap();
-	private File cacheFile;
+
+	private File stateFile;
+	private File lazyFile;
+
 	private boolean lazyLoad = true;
-	private int lazyDataOffset;
 	private int numBundles;
 
-	public static final byte STATE_CACHE_VERSION = 10;
+	public static final byte STATE_CACHE_VERSION = 16;
 	public static final byte NULL = 0;
 	public static final byte OBJECT = 1;
 	public static final byte INDEX = 2;
 
-	public StateReader() {
-		this(null, false);
+	public StateReader() //TODO - deprecated
+	{
+		lazyLoad = false;
 	}
 
-	public StateReader(File cacheFile, boolean lazyLoad) {
-		this.cacheFile = cacheFile;
+	public StateReader(File stateDirectory) {
+		if (!stateDirectory.exists())
+			stateDirectory.mkdirs();
+		this.stateFile = new File(stateDirectory, STATE_FILE);
+		this.lazyFile = new File(stateDirectory, LAZY_FILE);
+		this.lazyLoad = false;
+	}
+
+	public StateReader(File stateFile, File lazyFile, boolean lazyLoad) {
+		this.stateFile = stateFile;
+		this.lazyFile = lazyFile;
 		this.lazyLoad = lazyLoad;
 	}
 
-	private int addToObjectTable(Object object, int index) {
-		objectTable.put(new Integer(index),object);
-		// return the index of the object just added (i.e. size - 1)
-		return index;
+	private void addToObjectTable(Object object, int index) {
+		objectTable.put(new Integer(index), object);
 	}
 
 	private Object getFromObjectTable(int index) {
 		return objectTable.get(new Integer(index));
 	}
 
-	private boolean readState(StateImpl state, DataInputStream in, long expectedTimestamp) throws IOException {
+	private boolean readState(StateImpl state, long expectedTimestamp) throws IOException {
+		DataInputStream in = new DataInputStream(new BufferedInputStream(SecureAction.getFileInputStream(stateFile), 65536));
+		DataInputStream lazyIn = null;
+		try {
+			if (in.readByte() != STATE_CACHE_VERSION)
+				return false;
+			byte tag = readTag(in);
+			if (tag != OBJECT)
+				return false;
+			int index = in.readInt();
+			long timestampRead = in.readLong();
+			if (expectedTimestamp >= 0 && timestampRead != expectedTimestamp)
+				return false;
+			addToObjectTable(state, index);
+			Hashtable props = new Hashtable(4);
+			int numProps = in.readInt();
+			for (int i = 0; i < numProps; i++) {
+				Object value = readPlatformProp(in);
+				if (value != null)
+					props.put(StateImpl.PROPS[i], value);
+			}
+			state.setPlatformProperties(props);
+			numBundles = in.readInt();
+			if (numBundles == 0)
+				return true;
+			for (int i = 0; i < numBundles; i++) {
+				BundleDescriptionImpl bundle = readBundleDescription(in);
+				state.basicAddBundle(bundle);
+				if (bundle.isResolved())
+					state.addResolvedBundle(bundle);
+			}
+			state.setTimeStamp(timestampRead);
+			state.setResolved(in.readBoolean());
+			if (lazyLoad)
+				return true;
+			//read in from lazy data file
+			lazyIn = new DataInputStream(new BufferedInputStream(SecureAction.getFileInputStream(lazyFile), 65536));
+			for (int i = 0; i < numBundles; i++)
+				readBundleDescriptionLazyData(lazyIn, 0);
+		} finally {
+			in.close();
+			if (lazyIn != null)
+				try {
+					lazyIn.close();
+				} catch (IOException e) {
+					// ignore
+				}
+		}
+		return true;
+	}
+
+	private boolean readStateDeprecated(StateImpl state, DataInputStream in, long expectedTimestamp) throws IOException {
 		if (in.readByte() != STATE_CACHE_VERSION)
 			return false;
 		byte tag = readTag(in);
@@ -63,6 +127,14 @@ class StateReader {
 		if (expectedTimestamp >= 0 && timestampRead != expectedTimestamp)
 			return false;
 		addToObjectTable(state, index);
+		Hashtable props = new Hashtable(4);
+		int numProps = in.readInt();
+		for (int i = 0; i < numProps; i++) {
+			Object value = readPlatformProp(in);
+			if (value != null)
+				props.put(StateImpl.PROPS[i], value);
+		}
+		state.setPlatformProperties(props);
 		numBundles = in.readInt();
 		if (numBundles == 0)
 			return true;
@@ -74,12 +146,25 @@ class StateReader {
 		}
 		state.setTimeStamp(timestampRead);
 		state.setResolved(in.readBoolean());
-		lazyDataOffset = in.readInt();
+		in.readInt(); // skip past the old offset
 		if (lazyLoad)
 			return true;
 		for (int i = 0; i < numBundles; i++)
-			readBundleDescriptionLazyData(in, null);
+			readBundleDescriptionLazyData(in, 0);
 		return true;
+	}
+
+	private Object readPlatformProp(DataInputStream in) throws IOException {
+		byte type = in.readByte();
+		if (type == NULL)
+			return null;
+		int num = in.readInt();
+		if (num == 1)
+			return readString(in, false);
+		String[] result = new String[num];
+		for (int i = 0; i < result.length; i++)
+			result[i] = readString(in, false);
+		return result;
 	}
 
 	private BundleDescriptionImpl readBundleDescription(DataInputStream in) throws IOException {
@@ -94,8 +179,11 @@ class StateReader {
 
 		result.setBundleId(in.readLong());
 		readBaseDescription(result, in);
-		result.setResolved(in.readBoolean());
-		result.setSingleton(in.readBoolean());
+		result.setLazyDataOffset(in.readInt());
+		result.setLazyDataSize(in.readInt());
+		result.setStateBit(BundleDescriptionImpl.RESOLVED, in.readBoolean());
+		result.setStateBit(BundleDescriptionImpl.SINGLETON, in.readBoolean());
+		result.setStateBit(BundleDescriptionImpl.HAS_DYNAMICIMPORT, in.readBoolean());
 		result.setHost(readHostSpec(in));
 
 		// set the bundle dependencies from imports and requires.
@@ -112,7 +200,7 @@ class StateReader {
 			BundleDescription[] hosts = hostSpec.getHosts();
 			if (hosts != null) {
 				for (int i = 0; i < hosts.length; i++)
-					((BundleDescriptionImpl)hosts[i]).addDependency(result);
+					((BundleDescriptionImpl) hosts[i]).addDependency(result);
 				result.addDependencies(hosts);
 			}
 		}
@@ -121,21 +209,18 @@ class StateReader {
 		return result;
 	}
 
-	private BundleDescriptionImpl readBundleDescriptionLazyData(DataInputStream in, List toLoad) throws IOException {
+	private BundleDescriptionImpl readBundleDescriptionLazyData(DataInputStream in, int skip) throws IOException {
+		if (skip > 0)
+			in.skipBytes(skip);
 		int index = in.readInt();
 		BundleDescriptionImpl result = (BundleDescriptionImpl) getFromObjectTable(index);
-		boolean shouldLoad = toLoad == null ? true : toLoad.remove(result); // always try to remove here
 		if (result.isFullyLoaded()) {
-			in.skipBytes(result.getLazyDataSize());
-			in.readInt();
-			return result;
-		}
-		if (!shouldLoad) {
-			skipBundleDescriptionLazyData(result, in);
+			in.skipBytes(result.getLazyDataSize() - 4); // skip to the end subtract 4 for the int read already
 			return result;
 		}
 
 		result.setLocation(readString(in, false));
+		result.setPlatformFilter(readString(in, false));
 
 		int exportCount = in.readInt();
 		if (exportCount > 0) {
@@ -184,58 +269,10 @@ class StateReader {
 				resolved[i] = readBundleDescription(in);
 			result.setResolvedRequires(resolved);
 		}
-
-		// read the size of the lazy data
-		result.setLazyDataSize(in.readInt());
-
 		result.setFullyLoaded(true); // set fully loaded before setting the dependencies
-
 		// No need to add bundle dependencies for hosts, imports or requires;
 		// This is done by readBundleDescription
 		return result;
-	}
-
-	private void skipBundleDescriptionLazyData(BundleDescriptionImpl result, DataInputStream in) throws IOException {
-		if (result.getLazyDataSize() > 0) {
-			in.skipBytes(result.getLazyDataSize());
-			in.readInt();
-			return;
-		}
-
-		skipString(in); // location
-
-		int exportCount = in.readInt();
-		if (exportCount > 0)
-			for (int i = 0; i < exportCount; i++)
-				skipExportPackageDesc(in);
-
-		int importCount = in.readInt();
-		if (importCount > 0)
-			for (int i = 0; i < importCount; i++)
-				skipImportPackageSpec(in);
-
-		int requiredBundleCount = in.readInt();
-		if (requiredBundleCount > 0)
-			for (int i = 0; i < requiredBundleCount; i++)
-				skipBundleSpec(in);
-
-		int selectedCount = in.readInt();
-		if (selectedCount > 0)
-			for (int i = 0; i < selectedCount; i++)
-				skipExportPackageDesc(in);
-
-		int resolvedCount = in.readInt();
-		if (resolvedCount > 0)
-			for (int i = 0; i < resolvedCount; i++)
-				skipExportPackageDesc(in);
-
-		int resolvedRequiredCount = in.readInt();
-		if (resolvedRequiredCount > 0)
-			for (int i = 0; i < resolvedRequiredCount; i++)
-				readBundleDescription(in); // no need to skip here since it is a cached object
-
-		// read the size of the lazy data
-		result.setLazyDataSize(in.readInt());
 	}
 
 	private BundleSpecificationImpl readBundleSpec(DataInputStream in) throws IOException {
@@ -247,13 +284,6 @@ class StateReader {
 		return result;
 	}
 
-	private void skipBundleSpec(DataInputStream in) throws IOException {
-		skipVersionConstraint(in);
-		readBundleDescription(in); // no need to skip here since it is a cached object
-		in.readBoolean(); // exported
-		in.readBoolean(); // optional
-	}
-
 	private ExportPackageDescriptionImpl readExportPackageDesc(DataInputStream in) throws IOException {
 		byte tag = readTag(in);
 		if (tag == NULL)
@@ -261,7 +291,9 @@ class StateReader {
 		if (tag == INDEX)
 			return (ExportPackageDescriptionImpl) getFromObjectTable(in.readInt());
 		ExportPackageDescriptionImpl exportPackageDesc = new ExportPackageDescriptionImpl();
-		addToObjectTable(exportPackageDesc, in.readInt());
+		int tableIndex = in.readInt();
+		addToObjectTable(exportPackageDesc, tableIndex);
+		exportPackageDesc.setTableIndex(tableIndex);
 		readBaseDescription(exportPackageDesc, in);
 		exportPackageDesc.setGrouping(readString(in, false));
 		exportPackageDesc.setInclude(readString(in, false));
@@ -284,44 +316,19 @@ class StateReader {
 			exportPackageDesc.setMandatory(mandatory);
 		}
 
-		return exportPackageDesc;
-	}
-
-	private void skipExportPackageDesc(DataInputStream in) throws IOException {
-		byte tag = readTag(in);
-		if (tag == NULL)
-			return;
-		if (tag == INDEX) {
-			in.readInt(); // skip the index
-			return;
+		int usesCount = in.readInt();
+		if (usesCount > 0) {
+			String[] uses = new String[usesCount];
+			for (int i = 0; i < usesCount; i++)
+				uses[i] = readString(in, false);
+			exportPackageDesc.setUses(uses);
 		}
-		in.readInt(); // skip the index
-		skipBaseDescription(in);
-		skipString(in); // grouping
-		skipString(in); // includes
-		skipString(in); // excludes
-		in.readBoolean(); // root
-
-		int attrCount = in.readInt();
-		if (attrCount > 0)
-			for (int i = 0; i < attrCount; i++) {
-				skipString(in); // key
-				skipString(in); // value
-			}
-		int mandatoryCount = in.readInt();
-		if (mandatoryCount > 0)
-			for (int i = 0; i < mandatoryCount; i++)
-				skipString(in);
+		return exportPackageDesc;
 	}
 
 	private void readBaseDescription(BaseDescriptionImpl root, DataInputStream in) throws IOException {
 		root.setName(readString(in, false));
 		root.setVersion(readVersion(in));
-	}
-
-	private void skipBaseDescription(DataInputStream in) throws IOException {
-		skipString(in);
-		skipVersion(in);
 	}
 
 	private ImportPackageSpecificationImpl readImportPackageSpec(DataInputStream in) throws IOException {
@@ -350,24 +357,6 @@ class StateReader {
 		return result;
 	}
 
-	private void skipImportPackageSpec(DataInputStream in) throws IOException {
-		skipVersionConstraint(in);
-		skipExportPackageDesc(in);
-		skipString(in); // BSN
-		skipVersionRange(in); // bundle-version
-		in.readInt(); // resolution
-		int propagateCount = in.readInt();
-		if (propagateCount > 0)
-			for (int i = 0; i < propagateCount; i++)
-				skipString(in);
-		int attrCount = in.readInt();
-		if (attrCount > 0)
-			for (int i = 0; i < attrCount; i++) {
-				skipString(in); // key
-				skipString(in); // value
-			}
-	}
-
 	private HostSpecificationImpl readHostSpec(DataInputStream in) throws IOException {
 		byte tag = readTag(in);
 		if (tag == NULL)
@@ -390,11 +379,6 @@ class StateReader {
 		version.setVersionRange(readVersionRange(in));
 	}
 
-	private void skipVersionConstraint(DataInputStream in) throws IOException {
-		skipString(in);
-		skipVersionRange(in);
-	}
-
 	private Version readVersion(DataInputStream in) throws IOException {
 		byte tag = readTag(in);
 		if (tag == NULL)
@@ -407,16 +391,6 @@ class StateReader {
 		return result;
 	}
 
-	private void skipVersion(DataInputStream in) throws IOException {
-		byte tag = readTag(in);
-		if (tag == NULL)
-			return;
-		in.readInt();
-		in.readInt();
-		in.readInt();
-		skipString(in);
-	}
-
 	private VersionRange readVersionRange(DataInputStream in) throws IOException {
 		byte tag = readTag(in);
 		if (tag == NULL)
@@ -424,36 +398,28 @@ class StateReader {
 		return new VersionRange(readVersion(in), in.readBoolean(), readVersion(in), in.readBoolean());
 	}
 
-	private void skipVersionRange(DataInputStream in) throws IOException {
-		byte tag = readTag(in);
-		if (tag == NULL)
-			return;
-		skipVersion(in);
-		in.readBoolean();
-		skipVersion(in);
-		in.readBoolean();
-	}
-
 	/**
 	 * expectedTimestamp is the expected value for the timestamp. or -1, if
 	 * 	no checking should be performed 
 	 */
-	public final boolean loadState(StateImpl state, DataInputStream input, long expectedTimestamp) throws IOException {
+	public final boolean loadStateDeprecated(StateImpl state, DataInputStream input, long expectedTimestamp) throws IOException {
 		try {
-			return readState(state, input, expectedTimestamp);
+			return readStateDeprecated(state, input, expectedTimestamp);
 		} finally {
 			input.close();
 		}
 	}
+
 	/**
 	 * expectedTimestamp is the expected value for the timestamp. or -1, if
 	 * 	no checking should be performed 
 	 */
 	public final boolean loadState(StateImpl state, long expectedTimestamp) throws IOException {
-		return loadState(state, openCacheFile(), expectedTimestamp);
+		return readState(state, expectedTimestamp);
 	}
 
 	private WeakHashMap stringCache = new WeakHashMap();
+
 	private String readString(DataInputStream in, boolean intern) throws IOException {
 		byte type = in.readByte();
 		if (type == NULL)
@@ -468,29 +434,19 @@ class StateReader {
 			String refString = (String) ref.get();
 			if (refString != null)
 				result = refString;
-		}
-		else
+		} else
 			stringCache.put(result, new WeakReference(result));
 		return result;
-	}
-
-	private void skipString(DataInputStream in) throws IOException {
-		byte type = in.readByte();
-		if (type == NULL)
-			return;
-		int utfLength = in.readUnsignedShort();
-		byte bytearr[] = new byte[utfLength];
-		in.readFully(bytearr, 0, utfLength);
 	}
 
 	private byte readTag(DataInputStream in) throws IOException {
 		return in.readByte();
 	}
 
-	private DataInputStream openCacheFile() throws IOException {
-		if (cacheFile == null)
+	private DataInputStream openLazyFile() throws IOException {
+		if (lazyFile == null)
 			throw new IOException(); // TODO error message here!
-		return new DataInputStream(new BufferedInputStream(new FileInputStream(cacheFile), 65536));
+		return new DataInputStream(new BufferedInputStream(SecureAction.getFileInputStream(lazyFile), 65536));
 	}
 
 	boolean isLazyLoaded() {
@@ -500,16 +456,12 @@ class StateReader {
 	synchronized void fullyLoad() {
 		DataInputStream in = null;
 		try {
-			in = openCacheFile();
-			in.skipBytes(lazyDataOffset);
-			in.readInt(); // skip the offset itself
+			in = openLazyFile();
 			for (int i = 0; i < numBundles; i++)
-				readBundleDescriptionLazyData(in, null);
-		}
-		catch (IOException ioe) {
+				readBundleDescriptionLazyData(in, 0);
+		} catch (IOException ioe) {
 			throw new RuntimeException(); // TODO need error message here
-		}
-		finally {
+		} finally {
 			if (in != null)
 				try {
 					in.close();
@@ -522,33 +474,52 @@ class StateReader {
 	synchronized void fullyLoad(BundleDescriptionImpl target) throws IOException {
 		DataInputStream in = null;
 		try {
-			in = openCacheFile();
-			// skip to the lazy data
-			in.skipBytes(lazyDataOffset);
-			in.readInt(); // skip the offset itself
+			in = openLazyFile();
 			// get the set of bundles that must be loaded according to dependencies
 			ArrayList toLoad = new ArrayList();
 			addDependencies(target, toLoad);
+			int skipBytes[] = getSkipBytes(toLoad);
 			// look for the lazy data of the toLoad list
-			for (int i = 0; i < numBundles; i++) {
-				readBundleDescriptionLazyData(in, toLoad);
-				// when the toLoad list is empty we are done
-				if (toLoad.size() == 0)
-					break;			
-			}
-		}
-		finally {
+			for (int i = 0; i < skipBytes.length; i++)
+				readBundleDescriptionLazyData(in, skipBytes[i]);
+		} finally {
 			if (in != null)
 				in.close();
 		}
 	}
 
-	private void addDependencies(BundleDescriptionImpl target,  List toLoad) {
-		if (toLoad.contains(target))
+	private void addDependencies(BundleDescriptionImpl target, List toLoad) {
+		if (toLoad.contains(target) || target.isFullyLoaded())
 			return;
-		toLoad.add(target);
+		Iterator load = toLoad.iterator();
+		int i = 0;
+		while (load.hasNext()) {
+			// insert the target into the list sorted by lazy data offsets
+			BundleDescriptionImpl bundle = (BundleDescriptionImpl) load.next();
+			if (target.getLazyDataOffset() < bundle.getLazyDataOffset())
+				break;
+			i++;
+		}
+		if (i >= toLoad.size())
+			toLoad.add(target);
+		else
+			toLoad.add(i, target);
 		List deps = target.getBundleDependencies();
 		for (Iterator iter = deps.iterator(); iter.hasNext();)
 			addDependencies((BundleDescriptionImpl) iter.next(), toLoad);
+	}
+
+	private int[] getSkipBytes(ArrayList toLoad) {
+		int[] skipBytes = new int[toLoad.size()];
+		for (int i = 0; i < skipBytes.length; i++) {
+			BundleDescriptionImpl current = (BundleDescriptionImpl) toLoad.get(i);
+			if (i == 0) {
+				skipBytes[i] = current.getLazyDataOffset();
+				continue;
+			}
+			BundleDescriptionImpl previous = (BundleDescriptionImpl) toLoad.get(i - 1);
+			skipBytes[i] = current.getLazyDataOffset() - previous.getLazyDataOffset() - previous.getLazyDataSize();
+		}
+		return skipBytes;
 	}
 }

@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2004 IBM Corporation and others.
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -16,6 +16,8 @@ import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.debug.DebugOptions;
 import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
 
 public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver {
 	// Debug fields
@@ -52,13 +54,11 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 	private boolean initialized = false;
 	private PermissionChecker permissionChecker;
 	private GroupingChecker groupingChecker;
+	private BundleContext context;
 
-	public ResolverImpl() {
-		this(null);
-	}
-
-	public ResolverImpl(BundleContext context) {
-		this.permissionChecker = new PermissionChecker(context);
+	public ResolverImpl(BundleContext context, boolean checkPermissions) {
+		this.context = context;
+		this.permissionChecker = new PermissionChecker(context, checkPermissions);
 	}
 
 	protected PermissionChecker getPermissionChecker() {
@@ -78,11 +78,11 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		ArrayList fragmentBundles = new ArrayList();
 		// Add each bundle to the resolver's internal state
 		for (int i = 0; i < bundles.length; i++)
-			initResolverBundle(bundles[i], fragmentBundles);
+			initResolverBundle(bundles[i], fragmentBundles, false);
 		// Add each removal pending bundle to the resolver's internal state
 		BundleDescription[] removedBundles = getRemovalPending();
 		for (int i = 0; i < removedBundles.length; i++)
-			initResolverBundle(removedBundles[i], fragmentBundles);
+			initResolverBundle(removedBundles[i], fragmentBundles, true);
 		// Iterate over the resolved fragments and attach them to their hosts
 		for (Iterator iter = fragmentBundles.iterator(); iter.hasNext();) {
 			ResolverBundle fragment = (ResolverBundle) iter.next();
@@ -99,9 +99,11 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		initialized = true;
 	}
 
-	private void initResolverBundle(BundleDescription bundleDesc, ArrayList fragmentBundles) {
+	private void initResolverBundle(BundleDescription bundleDesc, ArrayList fragmentBundles, boolean pending) {
 		ResolverBundle bundle = new ResolverBundle(bundleDesc, this);
 		bundleMapping.put(bundleDesc, bundle);
+		if (pending)
+			return;
 		resolverBundles.put(bundle);
 		if (bundleDesc.isResolved()) {
 			bundle.setState(ResolverBundle.RESOLVED);
@@ -171,8 +173,10 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		// Check if we wired to a reprovided package (in which case the ResolverExport doesn't exist)
 		if (matchingExport == null && exporter != null) {
 			ResolverExport reprovidedExport = new ResolverExport(exporter, importSupplier);
-			exporter.addExport(reprovidedExport);
-			resolverExports.put(reprovidedExport);
+			if (exporter.getExport(imp) == null) {
+				exporter.addExport(reprovidedExport);
+				resolverExports.put(reprovidedExport);
+			}
 			imp.setMatchingExport(reprovidedExport);
 		}
 		// If we still have a null wire and it's not optional, then we have an error
@@ -181,13 +185,13 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			// TODO log error!!
 		}
 		if (imp.getMatchingExport() != null) {
-			rewireBundle(matchingExport.getExporter());
+			rewireBundle(imp.getMatchingExport().getExporter());
 		}
 	}
 
 	// Checks a bundle to make sure it is valid.  If this method returns false for
 	// a given bundle, then that bundle will not even be considered for resolution
-	private boolean checkBundleManifest(BundleDescription bundle) {
+	private boolean isResolvable(BundleDescription bundle, Dictionary platformProperties) {
 		ImportPackageSpecification[] imports = bundle.getImportPackages();
 		for (int i = 0; i < imports.length; i++) {
 			// Don't allow non-dynamic imports to specify wildcards
@@ -199,22 +203,33 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 					return false;
 			}
 		}
-		return true;
+		String platformFilter = bundle.getPlatformFilter();
+		if (platformFilter == null) {
+			return true;
+		}
+		if (platformProperties == null)
+			return false;
+		try {
+			Filter filter = context.createFilter(platformFilter);
+			return filter.match(platformProperties);
+		} catch (InvalidSyntaxException e) {
+			return false;
+		}
 	}
 
 	// Attach fragment to its host
 	private void attachFragment(ResolverBundle bundle) {
 		if (!bundle.isFragment() || !bundle.isResolvable())
 			return;
-		VersionConstraint hostSpec = bundle.getHost().getVersionConstraint();
-		VersionSupplier[] hosts = resolverBundles.getArray(hostSpec.getName());
+		BundleConstraint hostConstraint = bundle.getHost();
+		VersionSupplier[] hosts = resolverBundles.getArray(hostConstraint.getVersionConstraint().getName());
 		for (int i = 0; i < hosts.length; i++) {
-			if (((ResolverBundle) hosts[i]).isResolvable() && hostSpec.isSatisfiedBy(hosts[i].getBundle()))
+			if (((ResolverBundle) hosts[i]).isResolvable() && hostConstraint.isSatisfiedBy((ResolverBundle) hosts[i]))
 				resolverExports.put(((ResolverBundle) hosts[i]).attachFragment(bundle, true));
 		}
 	}
 
-	public synchronized void resolve(BundleDescription[] reRefresh) {
+	public synchronized void resolve(BundleDescription[] reRefresh, Dictionary platformProperties) {
 		if (DEBUG)
 			ResolverImpl.log("*** BEGIN RESOLUTION ***"); //$NON-NLS-1$
 		if (state == null)
@@ -240,7 +255,7 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		// First check that all the meta-data is valid for each unresolved bundle
 		// This will reset the resolvable flag for each bundle
 		for (int i = 0; i < bundles.length; i++)
-			bundles[i].setResolvable(checkBundleManifest(bundles[i].getBundle()));
+			bundles[i].setResolvable(isResolvable(bundles[i].getBundle(), platformProperties));
 
 		// First attach all fragments to the matching hosts
 		for (int i = 0; i < bundles.length; i++)
@@ -256,6 +271,17 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			// could not be resolved would have been moved back to UNRESOLVED
 			while (resolvingBundles.size() > 0) {
 				ResolverBundle rb = (ResolverBundle) resolvingBundles.get(0);
+				// Check that we haven't wired to any dropped exports
+				ResolverImport[] imports = rb.getImportPackages();
+				boolean needRewire = false;
+				for (int j = 0; j < imports.length; j++) {
+					if (imports[j].getMatchingExport() != null && !resolverExports.contains(imports[j].getMatchingExport())) {
+						imports[j].setMatchingExport(null);
+						needRewire = true;
+					}
+				}
+				if (needRewire)
+					resolveBundle(rb);
 				if (rb.isFullyWired()) {
 					if (DEBUG || DEBUG_CYCLES)
 						ResolverImpl.log("Pushing " + rb + " to RESOLVED"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -280,10 +306,6 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		resolvedBundles = null;
 		if (DEBUG)
 			ResolverImpl.log("*** END RESOLUTION ***"); //$NON-NLS-1$
-	}
-
-	public synchronized void resolve() {
-		resolve(null);
 	}
 
 	private void resolveFragment(ResolverBundle fragment) {
@@ -518,8 +540,11 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 				imp.setMatchingExport(export); // Wire the import to the export
 				if (imp.getBundle() != export.getExporter()) {
 					ResolverExport exp = imp.getBundle().getExport(imp);
-					if (exp != null)
+					if (exp != null) {
+						if (exp.getExportPackageDescription().isRoot() && !export.getExportPackageDescription().isRoot())
+							continue; // TODO hack to prevent imports from getting wired to re-exports if we offer a root export
 						resolverExports.remove(exp); // Import wins, remove export
+					}
 					if (((originalState == ResolverBundle.UNRESOLVED || !export.getExportPackageDescription().isRoot()) && !resolveBundle(export.getExporter())) || !resolverExports.contains(export)) {
 						if (exp != null)
 							resolverExports.put(exp);
@@ -599,10 +624,12 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			if (!((BundleSpecification) requires[i].getVersionConstraint()).isExported())
 				continue; // Skip require if it doesn't reprovide the packages
 			// Check exports to see if we've found the root
+			if (requires[i].getMatchingBundle() == null)
+				continue;
 			ResolverExport[] exports = requires[i].getMatchingBundle().getExportPackages();
 			for (int j = 0; j < exports.length; j++) {
 				if (imp.getName().equals(exports[j].getName())) {
-					ExportPackageDescription epd = state.getFactory().createExportPackageDescription(exports[j].getName(), exports[j].getVersion(), exports[j].getName(), exports[j].getExportPackageDescription().getInclude(), exports[j].getExportPackageDescription().getExclude(), exports[j].getExportPackageDescription().getAttributes(), exports[j].getExportPackageDescription().getMandatory(), false, reexporter.getBundle());
+					ExportPackageDescription epd = state.getFactory().createExportPackageDescription(exports[j].getName(), exports[j].getVersion(), null, exports[j].getExportPackageDescription().getInclude(), exports[j].getExportPackageDescription().getExclude(), exports[j].getExportPackageDescription().getAttributes(), exports[j].getExportPackageDescription().getMandatory(), false, reexporter.getBundle());
 					if (imp.getImportPackageSpecification().isSatisfiedBy(epd)) {
 						// Create reexport and add to bundle and resolverExports
 						if (DEBUG_IMPORTS)
@@ -650,6 +677,12 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			if (imports[i].getMatchingExport() != null && imports[i].getMatchingExport().getName().equals(clash.getName())) {
 				imports[i].addUnresolvableWiring(imports[i].getMatchingExport().getExporter());
 				importer.clearWires();
+				// If the clashing import package was also exported then
+				// we need to put the export back into resolverExports
+				ResolverExport removed = importer.getExport(imports[i]);
+				if (removed != null)
+					resolverExports.put(removed);
+				// Try to re-resolve the bundle
 				if (resolveBundle(importer))
 					return true;
 				else
@@ -761,8 +794,19 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			ResolverBundle[] matchingBundles = rb.getHost().getMatchingBundles();
 			if (matchingBundles != null && matchingBundles.length > 0) {
 				hostBundles = new BundleDescription[matchingBundles.length];
-				for (int i = 0; i < matchingBundles.length; i++)
+				for (int i = 0; i < matchingBundles.length; i++) {
 					hostBundles[i] = matchingBundles[i].getBundle();
+					if (rb.isNewFragmentExports()) {
+						// update the host's set of selected exports
+						ResolverBundle hostRB = (ResolverBundle) bundleMapping.get(hostBundles[i]);
+						ResolverExport[] hostExports = hostRB.getSelectedExports();
+						ArrayList selectedHostExports = new ArrayList(hostExports.length);
+						for (int j = 0; j < hostExports.length; j++)
+							selectedHostExports.add(hostExports[j].getExportPackageDescription());
+						ExportPackageDescription[] hostExportsArray = (ExportPackageDescription[]) selectedHostExports.toArray(new ExportPackageDescription[selectedHostExports.size()]);
+						state.resolveBundle(hostBundles[i], true, null, hostExportsArray, hostBundles[i].getResolvedRequires(), hostBundles[i].getResolvedImports());
+					}
+				}
 			}
 		}
 
@@ -783,6 +827,7 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		ResolverImport[] resolverImports = rb.getImportPackages();
 		// Check through the ResolverImports of this bundle.
 		// If there is a matching one then pass it into resolveImport()
+		boolean found = false;
 		for (int j = 0; j < resolverImports.length; j++) {
 			// Make sure it is a dynamic import
 			if ((resolverImports[j].getImportPackageSpecification().getResolution() & ImportPackageSpecification.RESOLUTION_DYNAMIC) == 0) {
@@ -793,6 +838,7 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			if (importName.equals("*") || //$NON-NLS-1$
 					(importName.endsWith(".*") && requestedPackage.startsWith(importName.substring(0, importName.length() - 2)))) { //$NON-NLS-1$
 				resolverImports[j].setName(requestedPackage);
+				found = true;
 			}
 			// Resolve the import
 			if (requestedPackage.equals(resolverImports[j].getName())) {
@@ -816,6 +862,14 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			}
 			// Reset the import package name
 			resolverImports[j].setName(null);
+		}
+		if (!found) {
+			ResolverImport newImport = new ResolverImport(rb, state.getFactory().createImportPackageSpecification(requestedPackage, null, null, null, null, ImportPackageSpecification.RESOLUTION_DYNAMIC, null, importingBundle));
+			boolean resolved = resolveImport(newImport, true);
+			while (resolved && !checkDynamicGrouping(newImport))
+				resolved = resolveImport(newImport, true);
+			if (resolved)
+				return newImport.getMatchingExport().getExportPackageDescription();
 		}
 		if (DEBUG || DEBUG_IMPORTS)
 			ResolverImpl.log("Failed to resolve dynamic import: " + requestedPackage); //$NON-NLS-1$

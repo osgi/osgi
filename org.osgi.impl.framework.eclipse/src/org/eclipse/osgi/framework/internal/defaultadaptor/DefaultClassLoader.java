@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -18,6 +18,7 @@ import java.util.*;
 import org.eclipse.osgi.framework.adaptor.ClassLoaderDelegate;
 import org.eclipse.osgi.framework.adaptor.core.*;
 import org.eclipse.osgi.framework.debug.Debug;
+import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkEvent;
 
@@ -43,7 +44,7 @@ public class DefaultClassLoader extends AbstractClassLoader {
 	 * The buffer size to use when loading classes.  This value is used 
 	 * only if we cannot determine the size of the class we are loading.
 	 */
-	protected int buffersize = 8 * 1024;
+	protected int buffersize = 8 * 1024; //TODO Could not that be a constant?
 
 	/**
 	 * BundleClassLoader constructor.
@@ -124,6 +125,10 @@ public class DefaultClassLoader extends AbstractClassLoader {
 		fragClasspaths.addElement(fragClasspath);
 	}
 
+	protected String getBundleSymbolicName() {
+		return hostdata.getSymbolicName() + "_" + hostdata.getVersion();
+	}
+
 	/**
 	 * Gets a ClasspathEntry object for the specified ClassPath entry.
 	 * @param cp The ClassPath entry to get the ClasspathEntry for.
@@ -187,6 +192,16 @@ public class DefaultClassLoader extends AbstractClassLoader {
 					}
 				}
 			}
+		}
+		if (!name.startsWith("java.")) { //$NON-NLS-1$
+			// First check the parent classloader for system classes.
+			ClassLoader parent = getParentPrivileged();
+			if (parent != null)
+				try {
+					return parent.loadClass(name);
+				} catch (ClassNotFoundException e) {
+					// Do nothing. continue to delegate.
+				}
 		}
 		throw new ClassNotFoundException(name);
 	}
@@ -462,7 +477,7 @@ public class DefaultClassLoader extends AbstractClassLoader {
 	}
 
 	protected ClasspathEntry[] buildClasspath(String[] classpath, AbstractBundleData bundledata, ProtectionDomain domain) {
-		ArrayList result = new ArrayList(10);
+		ArrayList result = new ArrayList(classpath.length);
 
 		// If not in dev mode then just add the regular classpath entries and return
 		if (!DevClassPathHelper.inDevelopmentMode()) {
@@ -544,7 +559,7 @@ public class DefaultClassLoader extends AbstractClassLoader {
 				in.close();
 			}
 		} catch (IOException e) {
-			BundleException be = new BundleException(AdaptorMsg.formatter.getString("BUNDLE_CLASSPATH_PROPERTIES_ERROR", propLocation), e); //$NON-NLS-1$
+			BundleException be = new BundleException(NLS.bind(AdaptorMsg.BUNDLE_CLASSPATH_PROPERTIES_ERROR, propLocation), e); //$NON-NLS-1$
 			bundledata.getAdaptor().getEventPublisher().publishFrameworkEvent(FrameworkEvent.ERROR, bundledata.getBundle(), be);
 		}
 		return null;
@@ -610,4 +625,5 @@ public class DefaultClassLoader extends AbstractClassLoader {
 			return domain;
 		}
 	}
+
 }

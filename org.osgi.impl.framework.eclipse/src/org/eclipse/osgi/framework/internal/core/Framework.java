@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -21,7 +21,9 @@ import org.eclipse.osgi.framework.eventmgr.*;
 import org.eclipse.osgi.framework.internal.protocol.ContentHandlerFactory;
 import org.eclipse.osgi.framework.internal.protocol.StreamHandlerFactory;
 import org.eclipse.osgi.framework.log.FrameworkLog;
+import org.eclipse.osgi.profile.Profile;
 import org.eclipse.osgi.util.ManifestElement;
+import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.*;
 
 /**
@@ -72,18 +74,20 @@ public class Framework implements EventDispatcher, EventPublisher {
 	/** List of BundleContexts for bundle's FrameworkListeners. */
 	protected EventListeners frameworkEvent;
 	protected static final int FRAMEWORKEVENT = 4;
+	protected static final int BATCHEVENT_BEGIN = Integer.MIN_VALUE + 1;
+	protected static final int BATCHEVENT_END = Integer.MIN_VALUE;
 	/** EventManager for event delivery. */
 	protected EventManager eventManager;
 	/* Reservation object for install synchronization */
 	protected Hashtable installLock;
 	/** System Bundle object */
 	protected SystemBundle systemBundle;
-	/** Single object for permission checks */
-	protected AdminPermission adminPermission;
+
 	/**
 	 * The AliasMapper used to alias OS Names.
 	 */
 	protected static AliasMapper aliasMapper = new AliasMapper();
+	protected ConditionalPermissionAdminImpl condPermAdmin;
 
 	/**
 	 * Constructor for the Framework instance. This method initializes the
@@ -100,6 +104,8 @@ public class Framework implements EventDispatcher, EventPublisher {
 	 *  
 	 */
 	protected void initialize(FrameworkAdaptor adaptor) {
+		if (Profile.PROFILE && Profile.STARTUP)
+			Profile.logEnter("Framework.initialze()", null); //$NON-NLS-1$
 		long start = System.currentTimeMillis();
 		this.adaptor = adaptor;
 		active = false;
@@ -110,6 +116,8 @@ public class Framework implements EventDispatcher, EventPublisher {
 		}
 		/* initialize the adaptor */
 		adaptor.initialize(this);
+		if (Profile.PROFILE && Profile.STARTUP)
+			Profile.logTime("Framework.initialze()", "adapter initialized"); //$NON-NLS-1$//$NON-NLS-2$
 		try {
 			adaptor.initializeStorage();
 			adaptor.compactStorage();
@@ -117,6 +125,8 @@ public class Framework implements EventDispatcher, EventPublisher {
 			e.printStackTrace();
 			throw new RuntimeException(e.getMessage());
 		}
+		if (Profile.PROFILE && Profile.STARTUP)
+			Profile.logTime("Framework.initialze()", "adapter storage initialized"); //$NON-NLS-1$//$NON-NLS-2$
 		/*
 		 * This must be done before calling any of the framework getProperty
 		 * methods.
@@ -132,7 +142,15 @@ public class Framework implements EventDispatcher, EventPublisher {
 				e.printStackTrace();
 				throw new RuntimeException(e.getMessage());
 			}
+			try {
+				condPermAdmin = new ConditionalPermissionAdminImpl(this, adaptor.getPermissionStorage());
+			} catch (IOException e) /* fatal error */{
+				e.printStackTrace();
+				throw new RuntimeException(e.getMessage());
+			}
 		}
+		if (Profile.PROFILE && Profile.STARTUP)
+			Profile.logTime("Framework.initialze()", "done init props & new PermissionAdminImpl"); //$NON-NLS-1$//$NON-NLS-2$
 		startLevelManager = new StartLevelManager(this);
 		/* create the event manager and top level event dispatchers */
 		eventManager = new EventManager("Framework Event Dispatcher"); //$NON-NLS-1$
@@ -140,6 +158,8 @@ public class Framework implements EventDispatcher, EventPublisher {
 		bundleEventSync = new EventListeners();
 		serviceEvent = new EventListeners();
 		frameworkEvent = new EventListeners();
+		if (Profile.PROFILE && Profile.STARTUP)
+			Profile.logTime("Framework.initialze()", "done new EventManager"); //$NON-NLS-1$ //$NON-NLS-2$
 		/* create the service registry */
 		serviceid = 1;
 		serviceRegistry = adaptor.getServiceRegistry();
@@ -149,10 +169,14 @@ public class Framework implements EventDispatcher, EventPublisher {
 		installLock = new Hashtable(10);
 		/* create the system bundle */
 		createSystemBundle();
+		if (Profile.PROFILE && Profile.STARTUP)
+			Profile.logTime("Framework.initialze()", "done createSystemBundle"); //$NON-NLS-1$ //$NON-NLS-2$
 		/* install URLStreamHandlerFactory */
 		URL.setURLStreamHandlerFactory(new StreamHandlerFactory(systemBundle.context, adaptor));
 		/* install ContentHandlerFactory for OSGi URLStreamHandler support */
 		URLConnection.setContentHandlerFactory(new ContentHandlerFactory(systemBundle.context));
+		if (Profile.PROFILE && Profile.STARTUP)
+			Profile.logTime("Framework.initialze()", "done new URLStream/Content HandlerFactory"); //$NON-NLS-1$//$NON-NLS-2$
 		/* create bundle objects for all installed bundles. */
 		BundleData[] bundleDatas = adaptor.getInstalledBundles();
 		bundles = new BundleRepository(bundleDatas == null ? 10 : bundleDatas.length + 1, packageAdmin);
@@ -160,9 +184,8 @@ public class Framework implements EventDispatcher, EventPublisher {
 		bundles.add(systemBundle);
 		if (bundleDatas != null) {
 			for (int i = 0; i < bundleDatas.length; i++) {
-				BundleData bundledata = (BundleData) bundleDatas[i];
 				try {
-					AbstractBundle bundle = AbstractBundle.createBundle(bundledata, this);
+					AbstractBundle bundle = AbstractBundle.createBundle(bundleDatas[i], this);
 					bundles.add(bundle);
 				} catch (BundleException be) {
 					// This is not a fatal error. Publish the framework event.
@@ -172,6 +195,8 @@ public class Framework implements EventDispatcher, EventPublisher {
 		}
 		if (Debug.DEBUG && Debug.DEBUG_GENERAL)
 			System.out.println("Initialize the framework: " + (System.currentTimeMillis() - start)); //$NON-NLS-1$
+		if (Profile.PROFILE && Profile.STARTUP)
+			Profile.logExit("Framework.initialze()");
 	}
 
 	private void createSystemBundle() {
@@ -179,7 +204,7 @@ public class Framework implements EventDispatcher, EventPublisher {
 			systemBundle = new SystemBundle(this);
 		} catch (BundleException e) { // fatal error
 			e.printStackTrace();
-			throw new RuntimeException(Msg.formatter.getString("OSGI_SYSTEMBUNDLE_CREATE_EXCEPTION", e.getMessage())); //$NON-NLS-1$
+			throw new RuntimeException(NLS.bind(Msg.OSGI_SYSTEMBUNDLE_CREATE_EXCEPTION, e.getMessage()));
 		}
 	}
 
@@ -323,6 +348,7 @@ public class Framework implements EventDispatcher, EventPublisher {
 			eventManager = null;
 		}
 		permissionAdmin = null;
+		condPermAdmin = null;
 		packageAdmin = null;
 		adaptor = null;
 	}
@@ -414,7 +440,15 @@ public class Framework implements EventDispatcher, EventPublisher {
 	 * 
 	 * @param bundledata the BundleData of the Bundle to create
 	 */
-	public AbstractBundle createBundle(BundleData bundledata) throws BundleException {
+	AbstractBundle createAndVerifyBundle(BundleData bundledata) throws BundleException {
+		// TODO Verify the manifest... for example that the same package is imported twice 
+		// Check for a bundle already installed with the same symbolic name and version.
+		if (bundledata.getSymbolicName() != null) {
+			AbstractBundle installedBundle = getBundleBySymbolicName(bundledata.getSymbolicName(), bundledata.getVersion());
+			if (installedBundle != null && installedBundle.getBundleId() != bundledata.getBundleID()) {
+				throw new BundleException(NLS.bind(Msg.BUNDLE_INSTALL_SAME_UNIQUEID, new Object[] {installedBundle.getSymbolicName(), installedBundle.getVersion().toString(), installedBundle.getLocation()}));
+			}
+		}
 		verifyExecutionEnvironment(bundledata.getManifest());
 		return AbstractBundle.createBundle(bundledata, this);
 	}
@@ -460,7 +494,7 @@ public class Framework implements EventDispatcher, EventPublisher {
 			}
 			bundleEE.append(bundleRequiredEE[i]);
 		}
-		throw new BundleException(Msg.formatter.getString("BUNDLE_INSTALL_REQUIRED_EE_EXCEPTION", bundleEE.toString())); //$NON-NLS-1$
+		throw new BundleException(NLS.bind(Msg.BUNDLE_INSTALL_REQUIRED_EE_EXCEPTION, bundleEE.toString()));
 	}
 
 	/**
@@ -556,12 +590,13 @@ public class Framework implements EventDispatcher, EventPublisher {
 		if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 			Debug.println("install from location: " + location); //$NON-NLS-1$
 		}
+		final AccessControlContext callerContext = AccessController.getContext();
 		return installWorker(location, new PrivilegedExceptionAction() {
 			public Object run() throws BundleException {
 				/* Map the identity to a URLConnection */
 				URLConnection source = adaptor.mapLocationToURLConnection(location);
 				/* call the worker to install the bundle */
-				return installWorkerPrivileged(location, source);
+				return installWorkerPrivileged(location, source, callerContext);
 			}
 		});
 	}
@@ -585,12 +620,13 @@ public class Framework implements EventDispatcher, EventPublisher {
 		if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 			Debug.println("install from inputstream: " + location + ", " + in); //$NON-NLS-1$ //$NON-NLS-2$
 		}
+		final AccessControlContext callerContext = AccessController.getContext();
 		return installWorker(location, new PrivilegedExceptionAction() {
 			public Object run() throws BundleException {
 				/* Map the InputStream to a URLConnection */
 				URLConnection source = new BundleSource(in);
 				/* call the worker to install the bundle */
-				return installWorkerPrivileged(location, source);
+				return installWorkerPrivileged(location, source, callerContext);
 			}
 		});
 	}
@@ -630,7 +666,7 @@ public class Framework implements EventDispatcher, EventPublisher {
 				 * recursed to install the same bundle!
 				 */
 				if (current.equals(reservation)) {
-					throw new BundleException(Msg.formatter.getString("BUNDLE_INSTALL_RECURSION_EXCEPTION")); //$NON-NLS-1$
+					throw new BundleException(Msg.BUNDLE_INSTALL_RECURSION_EXCEPTION);
 				}
 				try {
 					/* wait for the reservation to be released */
@@ -645,6 +681,8 @@ public class Framework implements EventDispatcher, EventPublisher {
 			publishBundleEvent(BundleEvent.INSTALLED, bundle);
 			return bundle;
 		} catch (PrivilegedActionException e) {
+			if (e.getException() instanceof RuntimeException)
+				throw (RuntimeException) e.getException();
 			throw (BundleException) e.getException();
 		} finally {
 			synchronized (installLock) {
@@ -668,19 +706,12 @@ public class Framework implements EventDispatcher, EventPublisher {
 	 * @exception BundleException
 	 *                If the provided stream cannot be read.
 	 */
-	protected AbstractBundle installWorkerPrivileged(String location, URLConnection source) throws BundleException {
+	protected AbstractBundle installWorkerPrivileged(String location, URLConnection source, AccessControlContext callerContext) throws BundleException {
 		BundleOperation storage = adaptor.installBundle(location, source);
-		AbstractBundle bundle;
+		final AbstractBundle bundle;
 		try {
 			BundleData bundledata = storage.begin();
-			// Check for a bundle already installed with the same UniqueId and version.
-			if (bundledata.getSymbolicName() != null) {
-				AbstractBundle installedBundle = getBundleBySymbolicName(bundledata.getSymbolicName(), bundledata.getVersion().toString());
-				if (installedBundle != null) {
-					throw new BundleException(Msg.formatter.getString("BUNDLE_INSTALL_SAME_UNIQUEID", new Object[] {installedBundle.getSymbolicName(), installedBundle.getVersion().toString(), installedBundle.getLocation()})); //$NON-NLS-1$
-				}
-			}
-			bundle = createBundle(bundledata);
+			bundle = createAndVerifyBundle(bundledata);
 			try {
 				// Select the native code paths for the bundle;
 				// this is not done by the adaptor because this
@@ -691,23 +722,41 @@ public class Framework implements EventDispatcher, EventPublisher {
 					bundledata.installNativeCode(nativepaths);
 				}
 				bundle.load();
+				if (System.getSecurityManager() != null && (bundledata.getType() & (BundleData.TYPE_BOOTCLASSPATH_EXTENSION | BundleData.TYPE_FRAMEWORK_EXTENSION)) != 0) {
+					// must check for AllPermission before allow a bundle extension to be installed
+					bundle.hasPermission(new AllPermission());
+				}
+				try {
+					AccessController.doPrivileged(new PrivilegedExceptionAction() {
+						public Object run() throws Exception {
+							checkAdminPermission(bundle, AdminPermission.LIFECYCLE);
+							return null;
+						}
+					}, callerContext);
+				} catch (PrivilegedActionException e) {
+					throw e.getException();
+				}
 				storage.commit(false);
-			} catch (BundleException be) {
+			} catch (Throwable error) {
 				synchronized (bundles) {
 					bundle.unload();
 				}
 				bundle.close();
-				throw be;
+				throw error;
 			}
 			/* bundle has been successfully installed */
 			bundles.add(bundle);
-		} catch (BundleException e) {
+		} catch (Throwable t) {
 			try {
 				storage.undo();
 			} catch (BundleException ee) {
 				publishFrameworkEvent(FrameworkEvent.ERROR, systemBundle, ee);
 			}
-			throw e;
+			if (t instanceof RuntimeException)
+				throw (RuntimeException) t;
+			if (t instanceof BundleException)
+				throw (BundleException) t;
+			throw new BundleException(t.getMessage(), t);
 		}
 		return bundle;
 	}
@@ -723,7 +772,7 @@ public class Framework implements EventDispatcher, EventPublisher {
 	 * @throws BundleException
 	 *             If there is no suitable clause.
 	 */
-	public String[] selectNativeCode(org.osgi.framework.Bundle bundle) throws BundleException {
+	String[] selectNativeCode(org.osgi.framework.Bundle bundle) throws BundleException {
 		String headerValue = (String) ((AbstractBundle) bundle).getBundleData().getManifest().get(Constants.BUNDLE_NATIVECODE);
 		if (headerValue == null) {
 			return (null);
@@ -867,7 +916,7 @@ public class Framework implements EventDispatcher, EventPublisher {
 	 * @return A {@link AbstractBundle}object, or <code>null</code> if the
 	 *         identifier doesn't match any installed bundle.
 	 */
-	public AbstractBundle getBundleBySymbolicName(String symbolicName, String version) {
+	public AbstractBundle getBundleBySymbolicName(String symbolicName, Version version) {
 		synchronized (bundles) {
 			return bundles.getBundle(symbolicName, version);
 		}
@@ -981,16 +1030,23 @@ public class Framework implements EventDispatcher, EventPublisher {
 		synchronized (bundles) {
 			// this is not optimized; do not think it will get called
 			// that much.
-			List allBundles = bundles.getBundles();
-			int size = allBundles.size();
-			for (int i = 0; i < size; i++) {
-				AbstractBundle bundle = (AbstractBundle) allBundles.get(i);
-				if (location.equals(bundle.getLocation())) {
-					return (bundle);
+			final String finalLocation = location;
+
+			//Bundle.getLocation requires AdminPermission (metadata)
+			return (AbstractBundle) AccessController.doPrivileged(new PrivilegedAction() {
+				public Object run() {
+					List allBundles = bundles.getBundles();
+					int size = allBundles.size();
+					for (int i = 0; i < size; i++) {
+						AbstractBundle bundle = (AbstractBundle) allBundles.get(i);
+						if (finalLocation.equals(bundle.getLocation())) {
+							return (bundle);
+						}
+					}
+					return (null);
 				}
-			}
+			});
 		}
-		return (null);
 	}
 
 	/**
@@ -1063,7 +1119,7 @@ public class Framework implements EventDispatcher, EventPublisher {
 	 *                If <tt>filter</tt> contains an invalid filter string
 	 *                which cannot be parsed.
 	 */
-	protected ServiceReference[] getServiceReferences(String clazz, String filterstring) throws InvalidSyntaxException {
+	protected ServiceReference[] getServiceReferences(String clazz, String filterstring, BundleContextImpl context, boolean allservices) throws InvalidSyntaxException {
 		FilterImpl filter = (filterstring == null) ? null : new FilterImpl(filterstring);
 		ServiceReference[] services = null;
 		if (clazz != null) {
@@ -1078,31 +1134,36 @@ public class Framework implements EventDispatcher, EventPublisher {
 			if (services == null) {
 				return null;
 			}
-			if (clazz == null) {
-				int removed = 0;
-				for (int i = services.length - 1; i >= 0; i--) {
-					ServiceReferenceImpl ref = (ServiceReferenceImpl) services[i];
-					String[] classes = ref.getClasses();
-					try { /* test for permission to the classes */
-						checkGetServicePermission(classes);
-					} catch (SecurityException se) {
-						services[i] = null;
-						removed++;
-					}
-				}
-				if (removed > 0) {
-					ServiceReference[] temp = services;
-					services = new ServiceReference[temp.length - removed];
-					for (int i = temp.length - 1; i >= 0; i--) {
-						if (temp[i] == null)
-							removed--;
-						else
-							services[i - removed] = temp[i];
-					}
+			int removed = 0;
+			for (int i = services.length - 1; i >= 0; i--) {
+				ServiceReferenceImpl ref = (ServiceReferenceImpl) services[i];
+				String[] classes = ref.getClasses();
+				if (allservices || context.isAssignableTo((ServiceReferenceImpl) services[i])) {
+					if (clazz == null)
+						try { /* test for permission to the classes */
+							checkGetServicePermission(classes);
+						} catch (SecurityException se) {
+							services[i] = null;
+							removed++;
+						}
+				} else {
+					services[i] = null;
+					removed++;
 				}
 			}
+			if (removed > 0) {
+				ServiceReference[] temp = services;
+				services = new ServiceReference[temp.length - removed];
+				for (int i = temp.length - 1; i >= 0; i--) {
+					if (temp[i] == null)
+						removed--;
+					else
+						services[i - removed] = temp[i];
+				}
+			}
+
 		}
-		return services;
+		return services == null || services.length == 0 ? null : services;
 	}
 
 	/**
@@ -1137,15 +1198,12 @@ public class Framework implements EventDispatcher, EventPublisher {
 	}
 
 	/**
-	 * Check for AdminPermission.
+	 * Check for specific AdminPermission (RFC 73)
 	 */
-	protected void checkAdminPermission() {
+	protected void checkAdminPermission(Bundle bundle, String action) {
 		SecurityManager sm = System.getSecurityManager();
 		if (sm != null) {
-			if (adminPermission == null) {
-				adminPermission = new AdminPermission();
-			}
-			sm.checkPermission(adminPermission);
+			sm.checkPermission(new AdminPermission(bundle, action));
 		}
 	}
 
@@ -1232,12 +1290,14 @@ public class Framework implements EventDispatcher, EventPublisher {
 	 * @param type
 	 *            FrameworkEvent type.
 	 * @param bundle
-	 *            Affected bundle.
+	 *            Affected bundle or null for system bundle.
 	 * @param throwable
 	 *            Related exception or null.
 	 */
 	public void publishFrameworkEvent(int type, org.osgi.framework.Bundle bundle, Throwable throwable) {
 		if (frameworkEvent != null) {
+			if (bundle == null)
+				bundle = systemBundle;
 			final FrameworkEvent event = new FrameworkEvent(type, bundle, throwable);
 			if (System.getSecurityManager() == null) {
 				publishFrameworkEventPrivileged(event);
@@ -1320,7 +1380,7 @@ public class Framework implements EventDispatcher, EventPublisher {
 			}
 		}
 		/* Collect snapshot of BundleListeners */
-		ListenerQueue listenersAsync = null;;
+		ListenerQueue listenersAsync = null;
 		if (bundleEvent != null) {
 			/* queue to hold set of listeners */
 			listenersAsync = new ListenerQueue(eventManager);
@@ -1444,6 +1504,6 @@ public class Framework implements EventDispatcher, EventPublisher {
 		if (optional) {
 			return null;
 		}
-		throw new BundleException(Msg.formatter.getString("BUNDLE_NATIVECODE_MATCH_EXCEPTION")); //$NON-NLS-1$
+		throw new BundleException(Msg.BUNDLE_NATIVECODE_MATCH_EXCEPTION);
 	}
 }

@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -16,7 +16,7 @@ package org.eclipse.osgi.framework.internal.core;
  * OSGi implementation.
  */
 
-public interface Constants extends org.osgi.framework.Constants {
+public class Constants implements org.osgi.framework.Constants {
 	/** OSGI implementation version - make sure it is 3 digits for ServerConnection.java */
 	public static final String OSGI_IMPL_VERSION = "3.0.0"; //$NON-NLS-1$
 
@@ -105,6 +105,16 @@ public interface Constants extends org.osgi.framework.Constants {
 
 	/** OSGI system package property */
 	public static final String OSGI_SYSTEMPACKAGES = "osgi.framework.systempackages"; //$NON-NLS-1$
+	public static final String OSGI_FRAMEWORK_SYSTEM_PACKAGES = "org.osgi.framework.system.packages"; //$NON-NLS-1$
+
+	public static final String OSGI_SYSTEM_BUNDLE = "system.bundle"; //$NON-NLS-1$
+	private static String INTERNAL_SYSTEM_BUNDLE = "org.eclipse.osgi"; //$NON-NLS-1$
+	public static String getInternalSymbolicName() {
+		return INTERNAL_SYSTEM_BUNDLE;
+	}
+	static void setInternalSymbolicName(String name) {
+		INTERNAL_SYSTEM_BUNDLE = name;
+	}
 
 	/** OSGI implementation version properties key */
 	public static final String OSGI_IMPL_VERSION_KEY = "osgi.framework.version"; //$NON-NLS-1$
@@ -113,6 +123,8 @@ public interface Constants extends org.osgi.framework.Constants {
 
 	/** Properties defaults */
 	public static final String DEFAULT_STARTLEVEL = "1"; //$NON-NLS-1$
+
+	public static final String ECLIPSE_PLATFORMFILTER = "Eclipse-PlatformFilter"; //$NON-NLS-1$
 
 	/**
 	 * Manifest header (named &quot;Provide-Package&quot;)

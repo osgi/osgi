@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -85,8 +85,9 @@ public class ContentHandlerFactory implements java.net.ContentHandlerFactory {
 		org.osgi.framework.ServiceReference[] serviceReferences = contentHandlerTracker.getServiceReferences();
 		if (serviceReferences != null) {
 			for (int i = 0; i < serviceReferences.length; i++) {
-				String[] contentHandler = (String[]) (serviceReferences[i].getProperty(URLConstants.URL_CONTENT_MIMETYPE));
-				if (contentHandler != null) {
+				Object obj = serviceReferences[i].getProperty(URLConstants.URL_CONTENT_MIMETYPE);
+				if (obj != null && obj instanceof String[]) {
+					String[] contentHandler = (String[]) obj;
 					for (int j = 0; j < contentHandler.length; j++) {
 						if (contentHandler[j].equals(contentHandler)) {
 							ContentHandler handler = (ContentHandler) context.getService(serviceReferences[i]);

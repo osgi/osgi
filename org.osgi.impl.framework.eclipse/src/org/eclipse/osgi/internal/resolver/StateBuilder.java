@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -40,13 +40,17 @@ class StateBuilder {
 			ManifestElement[] symbolicNameElements = ManifestElement.parseHeader(Constants.BUNDLE_SYMBOLICNAME, symbolicNameHeader);
 			if (symbolicNameElements.length > 0) {
 				result.setSymbolicName(symbolicNameElements[0].getValue());
-				result.setSingleton("true".equals(symbolicNameElements[0].getAttribute(Constants.SINGLETON_ATTRIBUTE))); //$NON-NLS-1$
+				String singleton = symbolicNameElements[0].getDirective(Constants.SINGLETON_DIRECTIVE);
+				if (singleton == null) // TODO this is for backward compatibility; need to check manifest version < 2 to allow this after everyone has converted to new syntax
+					singleton = symbolicNameElements[0].getAttribute(Constants.SINGLETON_DIRECTIVE);
+				result.setStateBit(BundleDescriptionImpl.SINGLETON, "true".equals(singleton)); //$NON-NLS-1$
 			}
 		}
 		// retrieve other headers
 		String version = (String) manifest.get(Constants.BUNDLE_VERSION);
 		result.setVersion((version != null) ? Version.parseVersion(version) : Version.emptyVersion);
 		result.setLocation(location);
+		result.setPlatformFilter((String) manifest.get(Constants.ECLIPSE_PLATFORMFILTER));
 		ManifestElement[] host = ManifestElement.parseHeader(Constants.FRAGMENT_HOST, (String) manifest.get(Constants.FRAGMENT_HOST));
 		if (host != null)
 			result.setHost(createHostSpecification(host[0]));
@@ -94,11 +98,11 @@ class StateBuilder {
 		ArrayList allImports = null;
 		if (manifestVersion < 2) {
 			// add implicit imports for each exported package if manifest verions is less than 2.
-			if (exported.length == 0 && imported == null)
+			if (exported.length == 0 && imported == null && dynamicImported == null)
 				return null;
 			allImports = new ArrayList(exported.length + (imported == null ? 0 : imported.length));
 			for (int i = 0; i < exported.length; i++) {
-				if (providedExports.contains(exported[i]))
+				if (providedExports.contains(exported[i].getName()))
 					continue;
 				ImportPackageSpecificationImpl result = new ImportPackageSpecificationImpl();
 				result.setName(exported[i].getName());
@@ -188,7 +192,9 @@ class StateBuilder {
 			// alway setting the grouping here even for manifestVersion==1 because if it is null
 			// the result will return a grouping equal to the package name which is unique and will
 			// give the same behavior as OSGi R3.
+			// TODO remove grouping !!!
 			result.setGrouping(exportPackage.getDirective(Constants.GROUPING_DIRECTIVE));
+			result.setUses(exportPackage.getDirectives(Constants.USES_DIRECTIVE));
 
 			// set the rest of the attributes
 			result.setInclude(exportPackage.getDirective(Constants.INCLUDE_DIRECTIVE));
@@ -214,8 +220,8 @@ class StateBuilder {
 				result.setName(provides[i].getValue());
 				result.setRoot(true);
 				allExports.add(result);
-				providedExports.add(result);
 			}
+			providedExports.add(provides[i].getValue());
 		}
 	}
 

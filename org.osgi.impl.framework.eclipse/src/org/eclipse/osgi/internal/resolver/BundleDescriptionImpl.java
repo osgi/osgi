@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v1.0
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/cpl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
@@ -14,25 +14,29 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Iterator;
 
+import org.eclipse.osgi.framework.internal.core.Constants;
 import org.eclipse.osgi.framework.internal.core.KeyedElement;
 import org.eclipse.osgi.service.resolver.*;
 
 public class BundleDescriptionImpl extends BaseDescriptionImpl implements BundleDescription, KeyedElement {
-	private static final byte RESOLVED			= 0x01;
-	private static final byte SINGLETON			= 0x02;
-	private static final byte REMOVAL_PENDING	= 0x04;
-	private static final byte FULLY_LOADED		= 0x08;
-	private static final byte LAZY_LOADED		= 0x10;
+	static final byte RESOLVED			= 0x01;
+	static final byte SINGLETON			= 0x02;
+	static final byte REMOVAL_PENDING	= 0x04;
+	static final byte FULLY_LOADED		= 0x08;
+	static final byte LAZY_LOADED		= 0x10;
+	static final byte HAS_DYNAMICIMPORT = 0x20;
 
 	private byte stateBits = FULLY_LOADED; // set the fully loaded by default
 
 	private long bundleId = -1;
-	private HostSpecification host;
+	private HostSpecification host;	//null if the bundle is not a fragment
 	private StateImpl containingState;
 
 	private Object userObject;
+	private int lazyDataOffset = -1;
 	private int lazyDataSize = -1;
 
+	//TODO These could be arrays
 	private ArrayList dependencies;
 	private ArrayList dependents;
 
@@ -51,26 +55,31 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		return getName();
 	}
 
-	public synchronized String getLocation() {
+	public String getLocation() {
 		fullyLoad();
 		return lazyData.location;
 	}
 
-	public synchronized ImportPackageSpecification[] getImportPackages() {
+	public String getPlatformFilter() {
+		fullyLoad();
+		return lazyData.platformFilter;
+	}
+
+	public ImportPackageSpecification[] getImportPackages() {
 		fullyLoad();
 		if (lazyData.importPackages == null)
 			return new ImportPackageSpecification[0];
 		return lazyData.importPackages;
 	}
 
-	public synchronized BundleSpecification[] getRequiredBundles() {
+	public BundleSpecification[] getRequiredBundles() {
 		fullyLoad();
 		if (lazyData.requiredBundles == null)
 			return new BundleSpecification[0];
 		return lazyData.requiredBundles;
 	}
 
-	public synchronized ExportPackageDescription[] getExportPackages() {
+	public ExportPackageDescription[] getExportPackages() {
 		fullyLoad();
 		if (lazyData.exportPackages == null)
 			return new ExportPackageDescription[0]; 
@@ -103,21 +112,25 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		return (stateBits & REMOVAL_PENDING) != 0;
 	}
 
-	public synchronized ExportPackageDescription[] getSelectedExports() {
+	public boolean hasDynamicImports() {
+		return (stateBits & HAS_DYNAMICIMPORT) != 0;
+	}
+
+	public ExportPackageDescription[] getSelectedExports() {
 		fullyLoad();
 		if (lazyData.selectedExports == null)
 			return new ExportPackageDescription[0];
 		return lazyData.selectedExports;
 	}
 
-	public synchronized BundleDescription[] getResolvedRequires() {
+	public BundleDescription[] getResolvedRequires() {
 		fullyLoad();
 		if (lazyData.resolvedRequires == null)
 			return new BundleDescription[0];
 		return lazyData.resolvedRequires;
 	}
 
-	public synchronized ExportPackageDescription[] getResolvedImports() {
+	public ExportPackageDescription[] getResolvedImports() {
 		fullyLoad();
 		if (lazyData.resolvedImports == null)
 			return new ExportPackageDescription[0];
@@ -132,12 +145,17 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		setName(symbolicName);
 	}
 
-	protected synchronized void setLocation(String location) {
+	protected void setLocation(String location) {
 		checkLazyData();
 		lazyData.location = location;
 	}
 
-	protected synchronized void setExportPackages(ExportPackageDescription[] exportPackages) {
+	protected void setPlatformFilter(String platformFilter) {
+		checkLazyData();
+		lazyData.platformFilter = platformFilter;
+	}
+
+	protected void setExportPackages(ExportPackageDescription[] exportPackages) {
 		checkLazyData();
 		lazyData.exportPackages = exportPackages;
 		if (exportPackages != null) {
@@ -147,29 +165,40 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		}
 	}
 
-	protected synchronized void setImportPackages(ImportPackageSpecification[] importPackages) {
+	protected void setImportPackages(ImportPackageSpecification[] importPackages) {
 		checkLazyData();
 		lazyData.importPackages = importPackages;
 		if (importPackages != null) {
 			for (int i = 0; i < importPackages.length; i++) {
+				if (Constants.OSGI_SYSTEM_BUNDLE.equals(importPackages[i].getBundleSymbolicName()))
+					((ImportPackageSpecificationImpl)importPackages[i]).setBundleSymbolicName(Constants.getInternalSymbolicName());
 				((ImportPackageSpecificationImpl)importPackages[i]).setBundle(this);
+				if ((importPackages[i].getResolution() & ImportPackageSpecification.RESOLUTION_DYNAMIC) != 0)
+					stateBits |= HAS_DYNAMICIMPORT;
 			}
 		}
 	}
 
-	protected synchronized void setRequiredBundles(BundleSpecification[] requiredBundles) {
+	protected void setRequiredBundles(BundleSpecification[] requiredBundles) {
 		checkLazyData();
 		lazyData.requiredBundles = requiredBundles;
 		if (requiredBundles != null)
-			for (int i = 0; i < requiredBundles.length; i++)
+			for (int i = 0; i < requiredBundles.length; i++) {
+				if (Constants.OSGI_SYSTEM_BUNDLE.equals(requiredBundles[i].getName()))
+					((VersionConstraintImpl)requiredBundles[i]).setName(Constants.getInternalSymbolicName());
 				((VersionConstraintImpl) requiredBundles[i]).setBundle(this);
+			}
 	}
 
-	protected void setResolved(boolean resolved) {
-		if (resolved)
-			stateBits |= RESOLVED;
+	protected byte getStateBits() {
+		return stateBits;
+	}
+
+	protected void setStateBit(byte stateBit, boolean on) {
+		if (on)
+			stateBits |= stateBit;
 		else
-			stateBits &= ~RESOLVED;
+			stateBits &= ~stateBit;
 	}
 
 	protected void setContainingState(State value) {
@@ -187,25 +216,22 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 
 	protected void setHost(HostSpecification host) {
 		this.host = host;
-		if (host != null)
+		if (host != null) {
+			if (Constants.OSGI_SYSTEM_BUNDLE.equals(host.getName()))
+				((VersionConstraintImpl)host).setName(Constants.getInternalSymbolicName());
 			((VersionConstraintImpl) host).setBundle(this);
+		}
 	}
 
-	protected void setSingleton(boolean singleton) {
-		if (singleton)
-			stateBits |= SINGLETON;
+	protected void setLazyLoaded(boolean lazyLoad) {
+		fullyLoad();
+		if (lazyLoad)
+			stateBits |= LAZY_LOADED;
 		else
-			stateBits &= ~SINGLETON;
+			stateBits &= ~LAZY_LOADED;
 	}
 
-	protected void setRemovalPending(boolean removalPending) {
-		if (removalPending)
-			stateBits |= REMOVAL_PENDING;
-		else
-			stateBits &= ~REMOVAL_PENDING;
-	}
-
-	protected synchronized void setSelectedExports(ExportPackageDescription[] selectedExports) {
+	protected void setSelectedExports(ExportPackageDescription[] selectedExports) {
 		checkLazyData();
 		lazyData.selectedExports = selectedExports;
 		if (selectedExports != null) {
@@ -215,12 +241,12 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		}
 	}
 
-	protected synchronized void setResolvedImports(ExportPackageDescription[] resolvedImports) {
+	protected void setResolvedImports(ExportPackageDescription[] resolvedImports) {
 		checkLazyData();
 		lazyData.resolvedImports = resolvedImports;
 	}
 
-	protected synchronized void setResolvedRequires(BundleDescription[] resolvedRequires) {
+	protected void setResolvedRequires(BundleDescription[] resolvedRequires) {
 		checkLazyData();
 		lazyData.resolvedRequires = resolvedRequires;
 	}
@@ -260,8 +286,8 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		Iterator iter = dependencies.iterator();
 		while (iter.hasNext()) {
 			((BundleDescriptionImpl)iter.next()).removeDependent(this);
-			iter.remove();
 		}
+		dependencies = null;
 	}
 
 	protected void addDependencies(BaseDescription[] newDependencies) {
@@ -339,8 +365,16 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		}
 	}
 
-	synchronized boolean isFullyLoaded() {
+	boolean isFullyLoaded() {
 		return (stateBits & FULLY_LOADED) != 0;
+	}
+
+	void setLazyDataOffset(int lazyDataOffset) {
+		this.lazyDataOffset = lazyDataOffset;
+	}
+
+	int getLazyDataOffset() {
+		return this.lazyDataOffset;
 	}
 
 	void setLazyDataSize(int lazyDataSize) {
@@ -378,13 +412,18 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		lazyData.resolvedImports = newImports;
 	}
 
-	synchronized void unload(long currentTime, long expireTime) {
+	void unload(long currentTime, long expireTime) {
 		if ((stateBits & LAZY_LOADED) == 0)
 			return;
 		if (!isFullyLoaded() || (currentTime - lazyTimeStamp - expireTime) <= 0)
 			return;
 		setFullyLoaded(false);
+		LazyData tempData = lazyData;
 		lazyData = null;
+		if (tempData == null || tempData.selectedExports == null)
+			return;
+		for (int i = 0; i < tempData.selectedExports.length; i++)
+			containingState.getReader().objectTable.remove(new Integer(((ExportPackageDescriptionImpl)tempData.selectedExports[i]).getTableIndex()));
 	}
 
 	private void checkLazyData() {
@@ -392,8 +431,10 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 			lazyData = new LazyData();
 	}
 
+	//TODO Consider usage of softReferences
 	private final class LazyData {
 		String location;
+		String platformFilter;
 
 		BundleSpecification[] requiredBundles;
 		ExportPackageDescription[] exportPackages;
