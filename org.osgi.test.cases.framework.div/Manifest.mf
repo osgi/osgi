@@ -15,7 +15,7 @@ Bundle-Description: Diverse tests for the OSGi Framework. The
   </pre>
   See for allowed native code constants: http://www.osgi.org/members/Javareview/content/reference.html
 Bundle-Vendor: OSGi
-Bundle-Copyright: Copyright (c) The Open Services Gateway Initiative (2000, 2002). All Rights Reserved.
+Bundle-Copyright: Copyright (c) The OSGi Alliance (2000, 2002). All Rights Reserved.
 Bundle-Activator: org.osgi.test.cases.div.DivTestCase
 Bundle-Version: 3.0
 Bundle-Category: osgi,test

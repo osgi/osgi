@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-Activator: org.osgi.impl.service.wireadmin.WireAdminImpl
 Bundle-Name: impl.service.wireadmin
 Bundle-Description: OSGi WireAdmin Service Reference Implementation by ACUNIA nv.
-Bundle-Copyright: Copyright (c) The Open Services Gateway Initiative (2001). All Rights Reserved.
+Bundle-Copyright: Copyright (c) The OSGi Alliance (2001). All Rights Reserved.
 Bundle-Vendor: OSGi
 Bundle-Version: 1.0
 Bundle-Category: osgi

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Name: test.cases.packageadmin.tc2
-Bundle-Copyright: Copyright (c) The Open Services Gateway Initiative (2000, 2002). All Rights Reserved.
+Bundle-Copyright: Copyright (c) The OSGi Alliance (2000, 2002). All Rights Reserved.
 Bundle-Description: Tests exporting packages, updating. <BR>
  Tests what happens when a bundle is updated and exports another package.<BR>
  Tests Bundle.getResource().<BR>

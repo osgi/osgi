@@ -1,5 +1,5 @@
 /* (C) Copyright 2001 Sun Microsystems, Inc. 
- * (C) Copyright 2001 Open Services Gateway Initiative, Inc. (the OSGi alliance)
+ * (C) Copyright 2001 The OSGi Alliance
  */
 
 /* $Header$ */

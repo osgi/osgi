@@ -1,7 +1,7 @@
 /*
  * $Header$
  *
- * Copyright (c) The Open Services Gateway Initiative (2000, 2002).
+ * Copyright (c) The OSGi Alliance (2000, 2002).
  * All Rights Reserved.
  *
  * Implementation of certain elements of the Open Services Gateway Initiative
@@ -36,7 +36,7 @@ import java.util.EventObject;
  * <p><tt>FrameworkEvent</tt> is the event class used when notifying listeners of general events occuring
  * within the OSGI environment. A type code is used to identify the event type for future extendability.
  *
- * <p>OSGi reserves the right to extend the set of event types.
+ * <p>The OSGi Alliance reserves the right to extend the set of event types.
  *
  * @version $Revision$
  */

@@ -1,7 +1,7 @@
 /*
  * $Header$
  *
- * Copyright (c) The Open Services Gateway Initiative (2000-2001).
+ * Copyright (c) The OSGi Alliance (2000-2001).
  * All Rights Reserved.
  *
  * Implementation of certain elements of the Open Services Gateway Initiative
@@ -36,7 +36,7 @@ import java.util.EventObject;
  * occurs in a bundle's lifecycle. A type code is used to identify the event type
  * for future extendability.
  *
- * <p>OSGi reserves the right to extend the set of types.
+ * <p>The OSGi Alliance reserves the right to extend the set of types.
  *
  * @version $Revision$
  */

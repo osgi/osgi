@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Name: test.casespackageadmin.tc1.tb1
-Bundle-Copyright: Copyright (c) The Open Services Gateway Initiative (2000, 2002). All Rights Reserved.
+Bundle-Copyright: Copyright (c) The OSGi Alliance (2000, 2002). All Rights Reserved.
 Bundle-Description: Exporting packages an re-exporting packages
 Bundle-Vendor: OSGi
 Bundle-Version: 3.0

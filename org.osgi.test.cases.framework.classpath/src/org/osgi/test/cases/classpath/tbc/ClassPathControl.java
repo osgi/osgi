@@ -3,7 +3,7 @@
  * /cvshome/repository/org/osgi/test/cases/classpath/tbc/ClassPathControl.java,v
  * 1.1 2002/01/09 15:15:19 nnilsson Exp $
  * 
- * Copyright (c) The Open Services Gateway Initiative (2000-2001). All Rights
+ * Copyright (c) The OSGi Alliance (2000-2001). All Rights
  * Reserved.
  * 
  * Implementation of certain elements of the Open Services Gateway Initiative

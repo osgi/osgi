@@ -5,7 +5,7 @@ Bundle-Vendor: OSGi
 Bundle-Version: 3.0
 Bundle-Activator: org.osgi.test.target.Target
 Bundle-Category: osgi,test
-Bundle-Copyright: Copyright (c) The Open Services Gateway Initiative (2000, 2002). All Rights Reserved.
+Bundle-Copyright: Copyright (c) The OSGi Alliance (2000, 2002). All Rights Reserved.
 CVS-Header: $Header$
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)

@@ -1,7 +1,7 @@
 /*
  * $Header$
  *
- * Copyright (c) The Open Services Gateway Initiative (2000, 2002).
+ * Copyright (c) The OSGi Alliance (2000, 2002).
  * All Rights Reserved.
  *
  * Implementation of certain elements of the Open Services Gateway Initiative
@@ -175,7 +175,7 @@ public abstract interface BundleContext
 	 *
 	 * <p>This method must always close the <tt>InputStream</tt> object, even if an exception is thrown.
 	 * @param location The location identifier of the bundle to install.
-	 * @param in The <tt>InputStream</tt> object from which this bundle will be read.
+	 * @param input The <tt>InputStream</tt> object from which this bundle will be read.
 	 * @return The <tt>Bundle</tt> object of the installed bundle.
 	 * @exception BundleException If the provided stream cannot be read or the installation failed.
 	 * @exception java.lang.SecurityException If the caller does not have

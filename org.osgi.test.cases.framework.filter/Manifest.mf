@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Name: test.cases.filter
-Bundle-Copyright: Copyright (c) The Open Services Gateway Initiative (2000, 2002). All Rights Reserved.
+Bundle-Copyright: Copyright (c) The OSGi Alliance (2000, 2002). All Rights Reserved.
 Bundle-Description: Tests filter operations. The following elements are tested:
  <pre>
   testBasicFilter 				basic filter operations<br>

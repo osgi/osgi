@@ -3,7 +3,7 @@ Bundle-Name: OSGi Initial Provisioning Bundle
 Bundle-Version: 1.0
 Bundle-Activator: org.osgi.impl.service.provisioning.Provisioning
 Bundle-Category: osgi
-Bundle-Copyright: Copyright (c) The Open Services Gateway Initiative (2002). All Rights Reserved.
+Bundle-Copyright: Copyright (c) The OSGi Alliance (2002). All Rights Reserved.
 Bundle-Description: Provides the Initial Provisioning Service for the framework.
 Bundle-Vendor: Open Services Gateway Initiative
 Import-Package: org.osgi.framework; specification-version=1.2,

@@ -3,7 +3,7 @@
  * /cvshome/repository/org/osgi/test/cases/servicetracker/ServiceTrackerTestCase.java,v
  * 1.1 2002/08/20 00:57:57 nnilsson Exp $
  * 
- * Copyright (c) The Open Services Gateway Initiative (2000-2001). All Rights
+ * Copyright (c) The OSGi Alliance (2000-2001). All Rights
  * Reserved.
  * 
  * Implementation of certain elements of the Open Services Gateway Initiative

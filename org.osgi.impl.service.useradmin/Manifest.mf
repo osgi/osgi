@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-Activator: org.osgi.impl.service.useradmin.Activator
 Bundle-Name: impl.service.useramin
 Bundle-Description: OSGi UserAdmin Service Reference Implementation by Gatespace AB.
-Bundle-Copyright: Copyright (c) The Open Services Gateway Initiative (2002). All Rights Reserved.
+Bundle-Copyright: Copyright (c) The OSGi Alliance (2002). All Rights Reserved.
 Bundle-Vendor: OSGi
 Bundle-Version: 1.0
 Bundle-Category: osgi

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Name: test.cases.io.tbc
-Bundle-Copyright: Copyright (c) The Open Services Gateway Initiative (2000, 2002). All Rights Reserved.
+Bundle-Copyright: Copyright (c) The OSGi Alliance (2000, 2002). All Rights Reserved.
 Bundle-Description: Tests the IO Service
 Bundle-Vendor: OSGi
 Bundle-Version: 3.0

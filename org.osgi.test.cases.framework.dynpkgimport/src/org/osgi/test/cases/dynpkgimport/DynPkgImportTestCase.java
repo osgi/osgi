@@ -1,5 +1,5 @@
 /*
- * Copyright (c) The Open Services Gateway Initiative 2002.
+ * Copyright (c) The OSGi Alliance 2002.
  * All Rights Reserved.
  *
  * Implementation of certain elements of the Open Services Gateway Initiative

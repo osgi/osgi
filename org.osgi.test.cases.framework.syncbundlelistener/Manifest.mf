@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Name: test.cases.syncbundlelistener
-Bundle-Copyright: Copyright (c) The Open Services Gateway Initiative (2000, 2002). All Rights Reserved.
+Bundle-Copyright: Copyright (c) The OSGi Alliance (2000, 2002). All Rights Reserved.
 Bundle-Description: The following tests are executed<br>
   <pre>
    Tests the synchronous bundle listener<br>
