@@ -34,90 +34,90 @@ package org.osgi.service.wireadmin;
  * <p>
  * Service objects registered under the Producer interface are expected to
  * produce values (internally generated or from external sensors). The value can
- * be of different types. When delivering a value to a <tt>Wire</tt> object,
+ * be of different types. When delivering a value to a <code>Wire</code> object,
  * the Producer service should coerce the value to be an instance of one of the
  * types specified by {@link Wire#getFlavors}. The classes are specified in
  * order of preference.
  * 
  * <p>
  * When the data represented by the Producer object changes, this object should
- * send the updated value by calling the <tt>update</tt> method on each of
- * <tt>Wire</tt> objects passed in the most recent call to this object's
- * {@link #consumersConnected}method. These <tt>Wire</tt> objects will pass
- * the value on to the associated <tt>Consumer</tt> service object.
+ * send the updated value by calling the <code>update</code> method on each of
+ * <code>Wire</code> objects passed in the most recent call to this object's
+ * {@link #consumersConnected}method. These <code>Wire</code> objects will pass
+ * the value on to the associated <code>Consumer</code> service object.
  * 
  * <p>
- * The Producer service may use the information in the <tt>Wire</tt> object's
- * properties to schedule the delivery of values to the <tt>Wire</tt> object.
+ * The Producer service may use the information in the <code>Wire</code> object's
+ * properties to schedule the delivery of values to the <code>Wire</code> object.
  * 
  * <p>
- * Producer service objects must register with a <tt>service.pid</tt> and a
+ * Producer service objects must register with a <code>service.pid</code> and a
  * {@link WireConstants#WIREADMIN_PRODUCER_FLAVORS}property. It is recommended
  * that a Producer service object also registers with a
- * <tt>service.description</tt> property. Producer service objects must
+ * <code>service.description</code> property. Producer service objects must
  * register with a {@link WireConstants#WIREADMIN_PRODUCER_FILTERS}property if
  * the Producer service will be performing filtering instead of the
- * <tt>Wire</tt> object.
+ * <code>Wire</code> object.
  * 
  * <p>
  * If an exception is thrown by a Producer object method, a
- * <tt>WireAdminEvent</tt> of type {@link WireAdminEvent#PRODUCER_EXCEPTION}
+ * <code>WireAdminEvent</code> of type {@link WireAdminEvent#PRODUCER_EXCEPTION}
  * is broadcast by the Wire Admin service.
  * 
  * <p>
  * Security Considerations. Data producing bundles will require
- * <tt>ServicePermission[REGISTER,Producer]</tt> to register a Producer
+ * <code>ServicePermission[REGISTER,Producer]</code> to register a Producer
  * service. In general, only the Wire Admin service should have
- * <tt>ServicePermission[GET,Producer]</tt>. Thus only the Wire Admin service
+ * <code>ServicePermission[GET,Producer]</code>. Thus only the Wire Admin service
  * may directly call a Producer service. Care must be taken in the sharing of
- * <tt>Wire</tt> objects with other bundles.
+ * <code>Wire</code> objects with other bundles.
  * <p>
  * Producer services must be registered with scope names when they can send
  * different types of objects (composite) to the Consumer service. The Producer
- * service should have <tt>WirePermission</tt> for each of these scope names.
+ * service should have <code>WirePermission</code> for each of these scope names.
  * 
  * @version $Revision$
  */
 public interface Producer {
 	/**
-	 * Return the current value of this <tt>Producer</tt> object.
+	 * Return the current value of this <code>Producer</code> object.
 	 * 
 	 * <p>
-	 * This method is called by a <tt>Wire</tt> object in response to the
-	 * Consumer service calling the <tt>Wire</tt> object's <tt>poll</tt>
+	 * This method is called by a <code>Wire</code> object in response to the
+	 * Consumer service calling the <code>Wire</code> object's <code>poll</code>
 	 * method. The Producer should coerce the value to be an instance of one of
 	 * the types specified by {@link Wire#getFlavors}. The types are specified
 	 * in order of of preference. The returned value should be as new or newer
 	 * than the last value furnished by this object.
 	 * 
 	 * <p>
-	 * Note: This method may be called by a <tt>Wire</tt> object prior to this
-	 * object being notified that it is connected to that <tt>Wire</tt> object
+	 * Note: This method may be called by a <code>Wire</code> object prior to this
+	 * object being notified that it is connected to that <code>Wire</code> object
 	 * (via the {@link #consumersConnected}method).
 	 * <p>
-	 * If the Producer service returns an <tt>Envelope</tt> object that has an
+	 * If the Producer service returns an <code>Envelope</code> object that has an
 	 * unpermitted scope name, then the Wire object must ignore (or remove) the
 	 * transfer.
 	 * <p>
-	 * If the <tt>Wire</tt> object has a scope set, the return value must be
-	 * an array of <tt>Envelope</tt> objects (<tt>Envelope[]</tt>). The
-	 * <tt>Wire</tt> object must have removed any <tt>Envelope</tt> objects
+	 * If the <code>Wire</code> object has a scope set, the return value must be
+	 * an array of <code>Envelope</code> objects (<code>Envelope[]</code>). The
+	 * <code>Wire</code> object must have removed any <code>Envelope</code> objects
 	 * that have a scope name that is not in the Wire object's scope.
 	 * 
-	 * @param wire The <tt>Wire</tt> object which is polling this service.
-	 * @return The current value of the Producer service or <tt>null</tt> if
+	 * @param wire The <code>Wire</code> object which is polling this service.
+	 * @return The current value of the Producer service or <code>null</code> if
 	 *         the value cannot be coerced into a compatible type. Or an array
-	 *         of <tt>Envelope</tt> objects.
+	 *         of <code>Envelope</code> objects.
 	 */
 	public Object polled(Wire wire);
 
 	/**
-	 * Update the list of <tt>Wire</tt> objects to which this
-	 * <tt>Producer</tt> object is connected.
+	 * Update the list of <code>Wire</code> objects to which this
+	 * <code>Producer</code> object is connected.
 	 * 
 	 * <p>
 	 * This method is called when the Producer service is first registered and
-	 * subsequently whenever a <tt>Wire</tt> associated with this Producer
+	 * subsequently whenever a <code>Wire</code> associated with this Producer
 	 * becomes connected, is modified or becomes disconnected.
 	 * 
 	 * <p>
@@ -126,10 +126,10 @@ public interface Producer {
 	 * will not take place during registration when they execute the
 	 * registration in a synchronized method.
 	 * 
-	 * @param wires An array of the current and complete list of <tt>Wire</tt>
+	 * @param wires An array of the current and complete list of <code>Wire</code>
 	 *        objects to which this Producer service is connected. May be
-	 *        <tt>null</tt> if the Producer is not currently connected to any
-	 *        <tt>Wire</tt> objects.
+	 *        <code>null</code> if the Producer is not currently connected to any
+	 *        <code>Wire</code> objects.
 	 */
 	public void consumersConnected(Wire[] wires);
 }

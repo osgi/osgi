@@ -33,7 +33,7 @@ import org.osgi.util.measurement.*;
  * Position represents a geographic location, based on the WGS84 System (World
  * Geodetic System 1984).
  * <p>
- * The <tt>org.osgi.util.measurement.Measurement</tt> class is used to
+ * The <code>org.osgi.util.measurement.Measurement</code> class is used to
  * represent the values that make up a position.
  * <p>
  * <p>
@@ -43,7 +43,7 @@ import org.osgi.util.measurement.*;
  * Position does not override the implementation of either equals() or
  * hashCode() because it is not clear how missing values should be handled. It
  * is up to the user of a position to determine how best to compare two position
- * objects. A <tt>Position</tt> object is immutable.
+ * objects. A <code>Position</code> object is immutable.
  */
 public class Position {
 	private Measurement	altitude;
@@ -53,17 +53,17 @@ public class Position {
 	private Measurement	track;
 
 	/**
-	 * Contructs a <tt>Position</tt> object with the given values.
+	 * Contructs a <code>Position</code> object with the given values.
 	 * 
-	 * @param lat a <tt>Measurement</tt> object specifying the latitude in
+	 * @param lat a <code>Measurement</code> object specifying the latitude in
 	 *        radians, or null
-	 * @param lon a <tt>Measurement</tt> object specifying the longitude in
+	 * @param lon a <code>Measurement</code> object specifying the longitude in
 	 *        radians, or null
-	 * @param alt a <tt>Measurement</tt> object specifying the altitude in
+	 * @param alt a <code>Measurement</code> object specifying the altitude in
 	 *        meters, or null
-	 * @param speed a <tt>Measurement</tt> object specifying the speed in
+	 * @param speed a <code>Measurement</code> object specifying the speed in
 	 *        meters per second, or null
-	 * @param track a <tt>Measurement</tt> object specifying the track in
+	 * @param track a <code>Measurement</code> object specifying the track in
 	 *        radians, or null
 	 */
 	public Position(Measurement lat, Measurement lon, Measurement alt,
@@ -104,8 +104,8 @@ public class Position {
 	/**
 	 * Returns the altitude of this position in meters.
 	 * 
-	 * @return a <tt>Measurement</tt> object in <tt>Unit.m</tt> representing
-	 *         the altitude in meters above the ellipsoid <tt>null</tt> if the
+	 * @return a <code>Measurement</code> object in <code>Unit.m</code> representing
+	 *         the altitude in meters above the ellipsoid <code>null</code> if the
 	 *         altitude is not known.
 	 */
 	public Measurement getAltitude() {
@@ -115,8 +115,8 @@ public class Position {
 	/**
 	 * Returns the longitude of this position in radians.
 	 * 
-	 * @return a <tt>Measurement</tt> object in <tt>Unit.rad</tt>
-	 *         representing the longitude, or <tt>null</tt> if the longitude
+	 * @return a <code>Measurement</code> object in <code>Unit.rad</code>
+	 *         representing the longitude, or <code>null</code> if the longitude
 	 *         is not known.
 	 */
 	public Measurement getLongitude() {
@@ -126,8 +126,8 @@ public class Position {
 	/**
 	 * Returns the latitude of this position in radians.
 	 * 
-	 * @return a <tt>Measurement</tt> object in <tt>Unit.rad</tt>
-	 *         representing the latitude, or <tt>null</tt> if the latitude is
+	 * @return a <code>Measurement</code> object in <code>Unit.rad</code>
+	 *         representing the latitude, or <code>null</code> if the latitude is
 	 *         not known..
 	 */
 	public Measurement getLatitude() {
@@ -137,8 +137,8 @@ public class Position {
 	/**
 	 * Returns the ground speed of this position in meters per second.
 	 * 
-	 * @return a <tt>Measurement</tt> object in <tt>Unit.m_s</tt>
-	 *         representing the speed, or <tt>null</tt> if the speed is not
+	 * @return a <code>Measurement</code> object in <code>Unit.m_s</code>
+	 *         representing the speed, or <code>null</code> if the speed is not
 	 *         known..
 	 */
 	public Measurement getSpeed() {
@@ -150,8 +150,8 @@ public class Position {
 	 * track is the extrapolation of previous previously measured positions to a
 	 * future position.
 	 * 
-	 * @return a <tt>Measurement</tt> object in <tt>Unit.rad</tt>
-	 *         representing the track, or <tt>null</tt> if the track is not
+	 * @return a <code>Measurement</code> object in <code>Unit.rad</code>
+	 *         representing the track, or <code>null</code> if the track is not
 	 *         known..
 	 */
 	public Measurement getTrack() {

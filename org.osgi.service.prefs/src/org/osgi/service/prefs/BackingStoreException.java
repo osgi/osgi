@@ -40,7 +40,7 @@ public class BackingStoreException extends Exception {
 	private Throwable	cause;
 
 	/**
-	 * Constructs a <tt>BackingStoreException</tt> with the specified detail
+	 * Constructs a <code>BackingStoreException</code> with the specified detail
 	 * message.
 	 * 
 	 * @param s The detail message.
@@ -50,11 +50,11 @@ public class BackingStoreException extends Exception {
 	}
 	
 	/**
-	 * Constructs a <tt>BackingStoreException</tt> with the specified detail
+	 * Constructs a <code>BackingStoreException</code> with the specified detail
 	 * message.
 	 * 
 	 * @param s The detail message.
-	 * @param cause The cause of the exception. May be <tt>null</tt>.
+	 * @param cause The cause of the exception. May be <code>null</code>.
 	 * @since 1.1 
 	 */
 	public BackingStoreException(String s, Throwable cause) {
@@ -63,10 +63,10 @@ public class BackingStoreException extends Exception {
 	}
 	
 	/**
-	 * Returns the cause of this exception or <tt>null</tt> if no cause was
+	 * Returns the cause of this exception or <code>null</code> if no cause was
 	 * specified when this exception was created.
 	 * 
-	 * @return The cause of this exception or <tt>null</tt> if no cause was
+	 * @return The cause of this exception or <code>null</code> if no cause was
 	 *         specified.
 	 * @since 1.1 
 	 */
@@ -78,7 +78,7 @@ public class BackingStoreException extends Exception {
 	 * The cause of this exception can only be set when constructed.
 	 * 
 	 * @throws java.lang.IllegalStateException This method will always throw an
-	 *         <tt>IllegalStateException</tt> since the cause of this
+	 *         <code>IllegalStateException</code> since the cause of this
 	 *         exception can only be set when constructed.
 	 * @since 1.1 
 	 */

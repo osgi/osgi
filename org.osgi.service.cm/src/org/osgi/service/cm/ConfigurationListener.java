@@ -30,29 +30,29 @@ package org.osgi.service.cm;
  * Listener for Configuration Events.
  * 
  * <p>
- * <tt>ConfigurationListener</tt> objects are registered with the Framework
- * service registry and are notified with a <tt>ConfigurationEvent</tt> object
+ * <code>ConfigurationListener</code> objects are registered with the Framework
+ * service registry and are notified with a <code>ConfigurationEvent</code> object
  * when an event is broadcast.
  * <p>
- * <tt>ConfigurationListener</tt> objects can inspect the received
- * <tt>ConfigurationEvent</tt> object to determine its type, the pid of the
- * <tt>Configuration</tt> object with which it is associated, and the
+ * <code>ConfigurationListener</code> objects can inspect the received
+ * <code>ConfigurationEvent</code> object to determine its type, the pid of the
+ * <code>Configuration</code> object with which it is associated, and the
  * Configuration Admin service that broadcasted the event.
  * 
  * <p>
  * Security Considerations. Bundles wishing to monitor configuration events will
- * require <tt>ServicePermission[ConfigurationListener,REGISTER]</tt> to
- * register a <tt>ConfigurationListener</tt> service.
+ * require <code>ServicePermission[ConfigurationListener,REGISTER]</code> to
+ * register a <code>ConfigurationListener</code> service.
  * 
  * @version $Revision$
  * @since 1.2
  */
 public interface ConfigurationListener {
 	/**
-	 * Receives notification of a broadcast <tt>ConfigurationEvent</tt>
+	 * Receives notification of a broadcast <code>ConfigurationEvent</code>
 	 * object.
 	 * 
-	 * @param event The broadcasted <tt>ConfigurationEvent</tt> object.
+	 * @param event The broadcasted <code>ConfigurationEvent</code> object.
 	 */
 	void configurationEvent(ConfigurationEvent event);
 }

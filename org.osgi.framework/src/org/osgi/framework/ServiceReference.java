@@ -33,24 +33,24 @@ import java.util.Dictionary;
  * A reference to a service.
  * 
  * <p>
- * The Framework returns <tt>ServiceReference</tt> objects from the
- * <tt>BundleContext.getServiceReference</tt> and
- * <tt>BundleContext.getServiceReferences</tt> methods.
+ * The Framework returns <code>ServiceReference</code> objects from the
+ * <code>BundleContext.getServiceReference</code> and
+ * <code>BundleContext.getServiceReferences</code> methods.
  * <p>
- * A <tt>ServiceReference</tt> may be shared between bundles and can be used
+ * A <code>ServiceReference</code> may be shared between bundles and can be used
  * to examine the properties of the service and to get the service object.
  * <p>
  * Every service registered in the Framework has a unique
- * <tt>ServiceRegistration</tt> object and may have multiple, distinct
- * <tt>ServiceReference</tt> objects referring to it.
- * <tt>ServiceReference</tt> objects associated with a
- * <tt>ServiceRegistration</tt> object have the same <tt>hashCode</tt> and
- * are considered equal (more specifically, their <tt>equals()</tt> method
- * will return <tt>true</tt> when compared).
+ * <code>ServiceRegistration</code> object and may have multiple, distinct
+ * <code>ServiceReference</code> objects referring to it.
+ * <code>ServiceReference</code> objects associated with a
+ * <code>ServiceRegistration</code> object have the same <code>hashCode</code> and
+ * are considered equal (more specifically, their <code>equals()</code> method
+ * will return <code>true</code> when compared).
  * <p>
  * If the same service object is registered multiple times,
- * <tt>ServiceReference</tt> objects associated with different
- * <tt>ServiceRegistration</tt> objects are not equal.
+ * <code>ServiceReference</code> objects associated with different
+ * <code>ServiceRegistration</code> objects are not equal.
  * 
  * @version $Revision$
  * @see BundleContext#getServiceReference
@@ -61,8 +61,8 @@ import java.util.Dictionary;
 public abstract interface ServiceReference {
 	/**
 	 * Returns the property value to which the specified property key is mapped
-	 * in the properties <tt>Dictionary</tt> object of the service referenced
-	 * by this <tt>ServiceReference</tt> object.
+	 * in the properties <code>Dictionary</code> object of the service referenced
+	 * by this <code>ServiceReference</code> object.
 	 * 
 	 * <p>
 	 * Property keys are case-insensitive.
@@ -70,30 +70,30 @@ public abstract interface ServiceReference {
 	 * <p>
 	 * This method must continue to return property values after the service has
 	 * been unregistered. This is so references to unregistered services (for
-	 * example, <tt>ServiceReference</tt> objects stored in the log) can still
+	 * example, <code>ServiceReference</code> objects stored in the log) can still
 	 * be interrogated.
 	 * 
 	 * @param key The property key.
-	 * @return The property value to which the key is mapped; <tt>null</tt> if
+	 * @return The property value to which the key is mapped; <code>null</code> if
 	 *         there is no property named after the key.
 	 */
 	public abstract Object getProperty(String key);
 
 	/**
-	 * Returns an array of the keys in the properties <tt>Dictionary</tt>
-	 * object of the service referenced by this <tt>ServiceReference</tt>
+	 * Returns an array of the keys in the properties <code>Dictionary</code>
+	 * object of the service referenced by this <code>ServiceReference</code>
 	 * object.
 	 * 
 	 * <p>
 	 * This method will continue to return the keys after the service has been
 	 * unregistered. This is so references to unregistered services (for
-	 * example, <tt>ServiceReference</tt> objects stored in the log) can still
+	 * example, <code>ServiceReference</code> objects stored in the log) can still
 	 * be interrogated.
 	 * 
 	 * <p>
 	 * This method is <i>case-preserving </i>; this means that every key in the
 	 * returned array must have the same case as the corresponding key in the
-	 * properties <tt>Dictionary</tt> that was passed to the
+	 * properties <code>Dictionary</code> that was passed to the
 	 * {@link BundleContext#registerService(String[],Object,Dictionary)}or
 	 * {@link ServiceRegistration#setProperties}methods.
 	 * 
@@ -103,15 +103,15 @@ public abstract interface ServiceReference {
 
 	/**
 	 * Returns the bundle that registered the service referenced by this
-	 * <tt>ServiceReference</tt> object.
+	 * <code>ServiceReference</code> object.
 	 * 
 	 * <p>
-	 * This method will always return <tt>null</tt> when the service has been
+	 * This method will always return <code>null</code> when the service has been
 	 * unregistered. This can be used to determine if the service has been
 	 * unregistered.
 	 * 
 	 * @return The bundle that registered the service referenced by this
-	 *         <tt>ServiceReference</tt> object; <tt>null</tt> if that
+	 *         <code>ServiceReference</code> object; <code>null</code> if that
 	 *         service has already been unregistered.
 	 * @see BundleContext#registerService(String[],Object,Dictionary)
 	 */
@@ -119,12 +119,12 @@ public abstract interface ServiceReference {
 
 	/**
 	 * Returns the bundles that are using the service referenced by this
-	 * <tt>ServiceReference</tt> object. Specifically, this method returns the
+	 * <code>ServiceReference</code> object. Specifically, this method returns the
 	 * bundles whose usage count for that service is greater than zero.
 	 * 
 	 * @return An array of bundles whose usage count for the service referenced
-	 *         by this <tt>ServiceReference</tt> object is greater than zero;
-	 *         <tt>null</tt> if no bundles are currently using that service.
+	 *         by this <code>ServiceReference</code> object is greater than zero;
+	 *         <code>null</code> if no bundles are currently using that service.
 	 * 
 	 * @since 1.1
 	 */

@@ -30,32 +30,32 @@ package org.osgi.service.useradmin;
 import java.util.Dictionary;
 
 /**
- * The base interface for <tt>Role</tt> objects managed by the User Admin
+ * The base interface for <code>Role</code> objects managed by the User Admin
  * service.
  * 
  * <p>
- * This interface exposes the characteristics shared by all <tt>Role</tt>
+ * This interface exposes the characteristics shared by all <code>Role</code>
  * classes: a name, a type, and a set of properties.
  * <p>
- * Properties represent public information about the <tt>Role</tt> object that
+ * Properties represent public information about the <code>Role</code> object that
  * can be read by anyone. Specific {@link UserAdminPermission}objects are
- * required to change a <tt>Role</tt> object's properties.
+ * required to change a <code>Role</code> object's properties.
  * <p>
- * <tt>Role</tt> object properties are <tt>Dictionary</tt> objects. Changes
+ * <code>Role</code> object properties are <code>Dictionary</code> objects. Changes
  * to these objects are propagated to the User Admin service and made
  * persistent.
  * <p>
- * Every User Admin service contains a set of predefined <tt>Role</tt> objects
- * that are always present and cannot be removed. All predefined <tt>Role</tt>
- * objects are of type <tt>ROLE</tt>. This version of the
- * <tt>org.osgi.service.useradmin</tt> package defines a single predefined
+ * Every User Admin service contains a set of predefined <code>Role</code> objects
+ * that are always present and cannot be removed. All predefined <code>Role</code>
+ * objects are of type <code>ROLE</code>. This version of the
+ * <code>org.osgi.service.useradmin</code> package defines a single predefined
  * role named &quot;user.anyone&quot;, which is inherited by any other role.
  * Other predefined roles may be added in the future. Since
- * &quot;user.anyone&quot; is a <tt>Role</tt> object that has properties
+ * &quot;user.anyone&quot; is a <code>Role</code> object that has properties
  * associated with it that can be read and modified. Access to these properties
  * and their use is application specific and is controlled using
- * <tt>UserAdminPermission</tt> in the same way that properties for other
- * <tt>Role</tt> objects are.
+ * <code>UserAdminPermission</code> in the same way that properties for other
+ * <code>Role</code> objects are.
  * 
  * @version $Revision$
  */
@@ -69,21 +69,21 @@ public interface Role {
 	 * The type of a predefined role.
 	 * 
 	 * <p>
-	 * The value of <tt>ROLE</tt> is 0.
+	 * The value of <code>ROLE</code> is 0.
 	 */
 	public static final int		ROLE		= 0;
 	/**
 	 * The type of a {@link User}role.
 	 * 
 	 * <p>
-	 * The value of <tt>USER</tt> is 1.
+	 * The value of <code>USER</code> is 1.
 	 */
 	public static final int		USER		= 1;
 	/**
 	 * The type of a {@link Group}role.
 	 * 
 	 * <p>
-	 * The value of <tt>GROUP</tt> is 2.
+	 * The value of <code>GROUP</code> is 2.
 	 */
 	public static final int		GROUP		= 2;
 
@@ -102,27 +102,27 @@ public interface Role {
 	public int getType();
 
 	/**
-	 * Returns a <tt>Dictionary</tt> of the (public) properties of this
-	 * <tt>Role</tt> object. Any changes to the returned <tt>Dictionary</tt>
-	 * will change the properties of this <tt>Role</tt> object. This will
-	 * cause a <tt>UserAdminEvent</tt> object of type
+	 * Returns a <code>Dictionary</code> of the (public) properties of this
+	 * <code>Role</code> object. Any changes to the returned <code>Dictionary</code>
+	 * will change the properties of this <code>Role</code> object. This will
+	 * cause a <code>UserAdminEvent</code> object of type
 	 * {@link UserAdminEvent#ROLE_CHANGED}to be broadcast to any
-	 * <tt>UserAdminListener</tt> objects.
+	 * <code>UserAdminListener</code> objects.
 	 * 
 	 * <p>
-	 * Only objects of type <tt>String</tt> may be used as property keys, and
-	 * only objects of type <tt>String</tt> or <tt>byte[]</tt> may be used
+	 * Only objects of type <code>String</code> may be used as property keys, and
+	 * only objects of type <code>String</code> or <code>byte[]</code> may be used
 	 * as property values. Any other types will cause an exception of type
-	 * <tt>IllegalArgumentException</tt> to be raised.
+	 * <code>IllegalArgumentException</code> to be raised.
 	 * 
 	 * <p>
 	 * In order to add, change, or remove a property in the returned
-	 * <tt>Dictionary</tt>, a {@link UserAdminPermission}named after the
+	 * <code>Dictionary</code>, a {@link UserAdminPermission}named after the
 	 * property name (or a prefix of it) with action <code>changeProperty</code>
 	 * is required.
 	 * 
-	 * @return <tt>Dictionary</tt> containing the properties of this
-	 *         <tt>Role</tt> object.
+	 * @return <code>Dictionary</code> containing the properties of this
+	 *         <code>Role</code> object.
 	 */
 	public Dictionary getProperties();
 }

@@ -35,9 +35,9 @@ import org.osgi.framework.ServiceReference;
  * Service log entry.
  * 
  * <p>
- * A <tt>LogEntry</tt> object may be acquired from the
- * <tt>LogReaderService.getLog</tt> method or by registering a
- * <tt>LogListener</tt> object.
+ * A <code>LogEntry</code> object may be acquired from the
+ * <code>LogReaderService.getLog</code> method or by registering a
+ * <code>LogListener</code> object.
  * 
  * @version $Revision$
  * @see LogReaderService#getLog
@@ -45,32 +45,32 @@ import org.osgi.framework.ServiceReference;
  */
 public abstract interface LogEntry {
 	/**
-	 * Returns the bundle that created this <tt>LogEntry</tt> object.
+	 * Returns the bundle that created this <code>LogEntry</code> object.
 	 * 
-	 * @return The bundle that created this <tt>LogEntry</tt> object;
-	 *         <tt>null</tt> if no bundle is associated with this
-	 *         <tt>LogEntry</tt> object.
+	 * @return The bundle that created this <code>LogEntry</code> object;
+	 *         <code>null</code> if no bundle is associated with this
+	 *         <code>LogEntry</code> object.
 	 */
 	public abstract Bundle getBundle();
 
 	/**
-	 * Returns the <tt>ServiceReference</tt> object for the service associated
-	 * with this <tt>LogEntry</tt> object.
+	 * Returns the <code>ServiceReference</code> object for the service associated
+	 * with this <code>LogEntry</code> object.
 	 * 
-	 * @return <tt>ServiceReference</tt> object for the service associated
-	 *         with this <tt>LogEntry</tt> object; <tt>null</tt> if no
-	 *         <tt>ServiceReference</tt> object was provided.
+	 * @return <code>ServiceReference</code> object for the service associated
+	 *         with this <code>LogEntry</code> object; <code>null</code> if no
+	 *         <code>ServiceReference</code> object was provided.
 	 */
 	public abstract ServiceReference getServiceReference();
 
 	/**
-	 * Returns the severity level of this <tt>LogEntry</tt> object.
+	 * Returns the severity level of this <code>LogEntry</code> object.
 	 * 
 	 * <p>
-	 * This is one of the severity levels defined by the <tt>LogService</tt>
+	 * This is one of the severity levels defined by the <code>LogService</code>
 	 * interface.
 	 * 
-	 * @return Severity level of this <tt>LogEntry</tt> object.
+	 * @return Severity level of this <code>LogEntry</code> object.
 	 * 
 	 * @see LogService#LOG_ERROR
 	 * @see LogService#LOG_WARNING
@@ -80,16 +80,16 @@ public abstract interface LogEntry {
 	public abstract int getLevel();
 
 	/**
-	 * Returns the human readable message associated with this <tt>LogEntry</tt>
+	 * Returns the human readable message associated with this <code>LogEntry</code>
 	 * object.
 	 * 
-	 * @return <tt>String</tt> containing the message associated with this
-	 *         <tt>LogEntry</tt> object.
+	 * @return <code>String</code> containing the message associated with this
+	 *         <code>LogEntry</code> object.
 	 */
 	public abstract String getMessage();
 
 	/**
-	 * Returns the exception object associated with this <tt>LogEntry</tt>
+	 * Returns the exception object associated with this <code>LogEntry</code>
 	 * object.
 	 * 
 	 * <p>
@@ -101,17 +101,17 @@ public abstract interface LogEntry {
 	 * information as possible from the original exception object such as the
 	 * message and stack trace.
 	 * 
-	 * @return <tt>Throwable</tt> object of the exception associated with this
-	 *         <tt>LogEntry</tt>;<tt>null</tt> if no exception is
-	 *         associated with this <tt>LogEntry</tt> object.
+	 * @return <code>Throwable</code> object of the exception associated with this
+	 *         <code>LogEntry</code>;<code>null</code> if no exception is
+	 *         associated with this <code>LogEntry</code> object.
 	 */
 	public abstract Throwable getException();
 
 	/**
-	 * Returns the value of <tt>currentTimeMillis()</tt> at the time this
-	 * <tt>LogEntry</tt> object was created.
+	 * Returns the value of <code>currentTimeMillis()</code> at the time this
+	 * <code>LogEntry</code> object was created.
 	 * 
-	 * @return The system time in milliseconds when this <tt>LogEntry</tt>
+	 * @return The system time in milliseconds when this <code>LogEntry</code>
 	 *         object was created.
 	 * @see "System.currentTimeMillis()"
 	 */

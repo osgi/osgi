@@ -33,7 +33,7 @@ import java.io.IOException;
 
 /**
  * A Driver Locator service can find and load device driver bundles given a
- * property set. Each driver is represented by a unique <tt>DRIVER_ID</tt>.
+ * property set. Each driver is represented by a unique <code>DRIVER_ID</code>.
  * <p>
  * Driver Locator services provide the mechanism for dynamically downloading new
  * device driver bundles into an OSGi environment. They are supplied by
@@ -45,29 +45,29 @@ import java.io.IOException;
  */
 public abstract interface DriverLocator {
 	/**
-	 * Returns an array of <tt>DRIVER_ID</tt> strings of drivers capable of
+	 * Returns an array of <code>DRIVER_ID</code> strings of drivers capable of
 	 * attaching to a device with the given properties.
 	 * 
 	 * <p>
-	 * The property keys in the specified <tt>Dictionary</tt> objects are
+	 * The property keys in the specified <code>Dictionary</code> objects are
 	 * case-insensitive.
 	 * 
 	 * @param props the properties of the device for which a driver is sought
-	 * @return array of driver <tt>DRIVER_ID</tt> strings of drivers capable
+	 * @return array of driver <code>DRIVER_ID</code> strings of drivers capable
 	 *         of attaching to a Device service with the given properties, or
-	 *         <tt>null</tt> if this Driver Locator service does not know of
+	 *         <code>null</code> if this Driver Locator service does not know of
 	 *         any such drivers
 	 */
 	public abstract String[] findDrivers(Dictionary props);
 
 	/**
-	 * Get an <tt>InputStream</tt> from which the driver bundle providing a
-	 * driver with the giving <tt>DRIVER_ID</tt> can be installed.
+	 * Get an <code>InputStream</code> from which the driver bundle providing a
+	 * driver with the giving <code>DRIVER_ID</code> can be installed.
 	 * 
-	 * @param id the <tt>DRIVER_ID</tt> of the driver that needs to be
+	 * @param id the <code>DRIVER_ID</code> of the driver that needs to be
 	 *        installed.
-	 * @return An <tt>InputStream</tt> object from which the driver bundle can
-	 *         be installed or <tt>null</tt> if the driver with the given ID
+	 * @return An <code>InputStream</code> object from which the driver bundle can
+	 *         be installed or <code>null</code> if the driver with the given ID
 	 *         cannot be located
 	 * @throws java.io.IOException the input stream for the bundle cannot be
 	 *         created

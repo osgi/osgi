@@ -30,20 +30,20 @@ package org.osgi.framework;
 import java.util.EventListener;
 
 /**
- * A <tt>ServiceEvent</tt> listener.
+ * A <code>ServiceEvent</code> listener.
  *
- * <p><tt>ServiceListener</tt> is a listener interface that may be implemented by a bundle
+ * <p><code>ServiceListener</code> is a listener interface that may be implemented by a bundle
  * developer.
- * <p>A <tt>ServiceListener</tt> object is registered with the Framework using the
- * <tt>BundleContext.addServiceListener</tt> method.
- * <tt>ServiceListener</tt> objects are called with a <tt>ServiceEvent</tt> object when
+ * <p>A <code>ServiceListener</code> object is registered with the Framework using the
+ * <code>BundleContext.addServiceListener</code> method.
+ * <code>ServiceListener</code> objects are called with a <code>ServiceEvent</code> object when
  * a service has been registered or modified, or is in the process of unregistering.
  *
- * <p><tt>ServiceEvent</tt> object delivery to <tt>ServiceListener</tt> objects is filtered by the
+ * <p><code>ServiceEvent</code> object delivery to <code>ServiceListener</code> objects is filtered by the
  * filter specified when the listener was registered. If the Java Runtime Environment
  * supports permissions, then additional filtering is done.
- * <tt>ServiceEvent</tt> objects are only delivered to the listener if the bundle which defines
- * the listener object's class has the appropriate <tt>ServicePermission</tt> to get the service
+ * <code>ServiceEvent</code> objects are only delivered to the listener if the bundle which defines
+ * the listener object's class has the appropriate <code>ServicePermission</code> to get the service
  * using at least one of the named classes the service was registered under.
  *
  * @version $Revision$
@@ -56,7 +56,7 @@ public abstract interface ServiceListener extends EventListener
     /**
      * Receives notification that a service has had a lifecycle change.
      *
-     * @param event The <tt>ServiceEvent</tt> object.
+     * @param event The <code>ServiceEvent</code> object.
      */
     public abstract void serviceChanged(ServiceEvent event);
 }

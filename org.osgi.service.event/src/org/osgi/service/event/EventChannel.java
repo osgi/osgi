@@ -42,7 +42,7 @@ public interface EventChannel {
 	 *        to the topic of the event.
 	 * 
 	 * @exception SecurityException If the caller does not have
-	 *            <tt>TopicPermission[topic,PUBLISH]</tt> for the topic
+	 *            <code>TopicPermission[topic,PUBLISH]</code> for the topic
 	 *            specified in the channel event.
 	 */
 	void postEvent(ChannelEvent event);
@@ -55,7 +55,7 @@ public interface EventChannel {
 	 *        to the topic of the event.
 	 * 
 	 * @exception SecurityException If the caller does not have
-	 *            <tt>TopicPermission[topic,PUBLISH]</tt> for the topic
+	 *            <code>TopicPermission[topic,PUBLISH]</code> for the topic
 	 *            specified in the channel event.
 	 */
 	void sendEvent(ChannelEvent event);

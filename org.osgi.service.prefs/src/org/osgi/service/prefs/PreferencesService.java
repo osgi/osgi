@@ -34,10 +34,10 @@ package org.osgi.service.prefs;
  * system preferences, and one for each user.
  * 
  * <p>
- * A <tt>PreferencesService</tt> object is specific to the bundle which
+ * A <code>PreferencesService</code> object is specific to the bundle which
  * obtained it from the service registry. If a bundle wishes to allow another
  * bundle to access its preferences, it should pass its
- * <tt>PreferencesService</tt> object to that bundle.
+ * <code>PreferencesService</code> object to that bundle.
  *  
  */
 public interface PreferencesService {

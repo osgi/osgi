@@ -33,15 +33,15 @@ package org.osgi.service.permissionadmin;
  * <p>
  * This class encapsulates three pieces of information: a Permission <i>type
  * </i> (class name), which must be a subclass of
- * <tt>java.security.Permission</tt>, and the <i>name </i> and <i>actions
+ * <code>java.security.Permission</code>, and the <i>name </i> and <i>actions
  * </i> arguments passed to its constructor.
  * 
  * <p>
- * In order for a permission represented by a <tt>PermissionInfo</tt> to be
+ * In order for a permission represented by a <code>PermissionInfo</code> to be
  * instantiated and considered during a permission check, its Permission class
  * must be available from the system classpath or an exported package. This
  * means that the instantiation of a permission represented by a
- * <tt>PermissionInfo</tt> may be delayed until the package containing its
+ * <code>PermissionInfo</code> may be delayed until the package containing its
  * Permission class has been exported by a bundle.
  * 
  * @version $Revision$
@@ -52,27 +52,27 @@ public class PermissionInfo {
 	private String	actions;
 
 	/**
-	 * Constructs a <tt>PermissionInfo</tt> from the given type, name, and
+	 * Constructs a <code>PermissionInfo</code> from the given type, name, and
 	 * actions.
 	 * 
 	 * @param type The fully qualified class name of the permission represented
-	 *        by this <tt>PermissionInfo</tt>. The class must be a subclass
-	 *        of <tt>java.security.Permission</tt> and must define a
+	 *        by this <code>PermissionInfo</code>. The class must be a subclass
+	 *        of <code>java.security.Permission</code> and must define a
 	 *        2-argument constructor that takes a <i>name </i> string and an
 	 *        <i>actions </i> string.
 	 * 
 	 * @param name The permission name that will be passed as the first argument
-	 *        to the constructor of the <tt>Permission</tt> class identified
-	 *        by <tt>type</tt>.
+	 *        to the constructor of the <code>Permission</code> class identified
+	 *        by <code>type</code>.
 	 * 
 	 * @param actions The permission actions that will be passed as the second
-	 *        argument to the constructor of the <tt>Permission</tt> class
-	 *        identified by <tt>type</tt>.
+	 *        argument to the constructor of the <code>Permission</code> class
+	 *        identified by <code>type</code>.
 	 * 
-	 * @exception java.lang.NullPointerException if <tt>type</tt> is
-	 *            <tt>null</tt>.
-	 * @exception java.lang.IllegalArgumentException if <tt>action</tt> is not
-	 *            <tt>null</tt> and <tt>name</tt> is <tt>null</tt>.
+	 * @exception java.lang.NullPointerException if <code>type</code> is
+	 *            <code>null</code>.
+	 * @exception java.lang.IllegalArgumentException if <code>action</code> is not
+	 *            <code>null</code> and <code>name</code> is <code>null</code>.
 	 */
 	public PermissionInfo(String type, String name, String actions) {
 		this.type = type;
@@ -87,13 +87,13 @@ public class PermissionInfo {
 	}
 
 	/**
-	 * Constructs a <tt>PermissionInfo</tt> object from the given encoded
-	 * <tt>PermissionInfo</tt> string.
+	 * Constructs a <code>PermissionInfo</code> object from the given encoded
+	 * <code>PermissionInfo</code> string.
 	 * 
-	 * @param encodedPermission The encoded <tt>PermissionInfo</tt>.
+	 * @param encodedPermission The encoded <code>PermissionInfo</code>.
 	 * @see #getEncoded
 	 * @exception java.lang.IllegalArgumentException if
-	 *            <tt>encodedPermission</tt> is not properly formatted.
+	 *            <code>encodedPermission</code> is not properly formatted.
 	 */
 	public PermissionInfo(String encodedPermission) {
 		if (encodedPermission == null) {
@@ -166,8 +166,8 @@ public class PermissionInfo {
 	}
 
 	/**
-	 * Returns the string encoding of this <tt>PermissionInfo</tt> in a form
-	 * suitable for restoring this <tt>PermissionInfo</tt>.
+	 * Returns the string encoding of this <code>PermissionInfo</code> in a form
+	 * suitable for restoring this <code>PermissionInfo</code>.
 	 * 
 	 * <p>
 	 * The encoding format is:
@@ -197,16 +197,16 @@ public class PermissionInfo {
 	 * </pre>
 	 * 
 	 * where <i>name </i> and <i>actions </i> are strings that are encoded for
-	 * proper parsing. Specifically, the <tt>"</tt>,<tt>\</tt>, carriage
-	 * return, and linefeed characters are escaped using <tt>\"</tt>,
-	 * <tt>\\</tt>,<tt>\r</tt>, and <tt>\n</tt>, respectively.
+	 * proper parsing. Specifically, the <code>"</code>,<code>\</code>, carriage
+	 * return, and linefeed characters are escaped using <code>\"</code>,
+	 * <code>\\</code>,<code>\r</code>, and <code>\n</code>, respectively.
 	 * 
 	 * <p>
 	 * The encoded string must contain no leading or trailing whitespace
 	 * characters. A single space character must be used between type and "
 	 * <i>name </i>" and between " <i>name </i>" and " <i>actions </i>".
 	 * 
-	 * @return The string encoding of this <tt>PermissionInfo</tt>.
+	 * @return The string encoding of this <code>PermissionInfo</code>.
 	 */
 	public final String getEncoded() {
 		StringBuffer output = new StringBuffer(
@@ -230,11 +230,11 @@ public class PermissionInfo {
 	}
 
 	/**
-	 * Returns the string representation of this <tt>PermissionInfo</tt>. The
-	 * string is created by calling the <tt>getEncoded</tt> method on this
-	 * <tt>PermissionInfo</tt>.
+	 * Returns the string representation of this <code>PermissionInfo</code>. The
+	 * string is created by calling the <code>getEncoded</code> method on this
+	 * <code>PermissionInfo</code>.
 	 * 
-	 * @return The string representation of this <tt>PermissionInfo</tt>.
+	 * @return The string representation of this <code>PermissionInfo</code>.
 	 */
 	public String toString() {
 		return (getEncoded());
@@ -242,10 +242,10 @@ public class PermissionInfo {
 
 	/**
 	 * Returns the fully qualified class name of the permission represented by
-	 * this <tt>PermissionInfo</tt>.
+	 * this <code>PermissionInfo</code>.
 	 * 
 	 * @return The fully qualified class name of the permission represented by
-	 *         this <tt>PermissionInfo</tt>.
+	 *         this <code>PermissionInfo</code>.
 	 */
 	public final String getType() {
 		return (type);
@@ -253,10 +253,10 @@ public class PermissionInfo {
 
 	/**
 	 * Returns the name of the permission represented by this
-	 * <tt>PermissionInfo</tt>.
+	 * <code>PermissionInfo</code>.
 	 * 
 	 * @return The name of the permission represented by this
-	 *         <tt>PermissionInfo</tt>, or <tt>null</tt> if the permission
+	 *         <code>PermissionInfo</code>, or <code>null</code> if the permission
 	 *         does not have a name.
 	 */
 	public final String getName() {
@@ -265,10 +265,10 @@ public class PermissionInfo {
 
 	/**
 	 * Returns the actions of the permission represented by this
-	 * <tt>PermissionInfo</tt>.
+	 * <code>PermissionInfo</code>.
 	 * 
 	 * @return The actions of the permission represented by this
-	 *         <tt>PermissionInfo</tt>, or <tt>null</tt> if the permission
+	 *         <code>PermissionInfo</code>, or <code>null</code> if the permission
 	 *         does not have any actions associated with it.
 	 */
 	public final String getActions() {
@@ -276,16 +276,16 @@ public class PermissionInfo {
 	}
 
 	/**
-	 * Determines the equality of two <tt>PermissionInfo</tt> objects.
+	 * Determines the equality of two <code>PermissionInfo</code> objects.
 	 * 
 	 * This method checks that specified object has the same type, name and
-	 * actions as this <tt>PermissionInfo</tt> object.
+	 * actions as this <code>PermissionInfo</code> object.
 	 * 
 	 * @param obj The object to test for equality with this
-	 *        <tt>PermissionInfo</tt> object.
-	 * @return <tt>true</tt> if <tt>obj</tt> is a <tt>PermissionInfo</tt>,
+	 *        <code>PermissionInfo</code> object.
+	 * @return <code>true</code> if <code>obj</code> is a <code>PermissionInfo</code>,
 	 *         and has the same type, name and actions as this
-	 *         <tt>PermissionInfo</tt> object; <tt>false</tt> otherwise.
+	 *         <code>PermissionInfo</code> object; <code>false</code> otherwise.
 	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {

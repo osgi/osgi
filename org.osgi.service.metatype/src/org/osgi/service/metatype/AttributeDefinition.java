@@ -30,103 +30,103 @@ package org.osgi.service.metatype;
  * An interface to describe an attribute.
  * 
  * <p>
- * An <tt>AttributeDefinition</tt> object defines a description of the data
+ * An <code>AttributeDefinition</code> object defines a description of the data
  * type of a property/attribute.
  * 
  * @version $Revision$
  */
 public interface AttributeDefinition {
 	/**
-	 * The <tt>STRING</tt> (1) type.
+	 * The <code>STRING</code> (1) type.
 	 * 
 	 * <p>
-	 * Attributes of this type should be stored as <tt>String</tt>,
-	 * <tt>Vector</tt> with <tt>String</tt> or <tt>String[]</tt> objects,
-	 * depending on the <tt>getCardinality()</tt> value.
+	 * Attributes of this type should be stored as <code>String</code>,
+	 * <code>Vector</code> with <code>String</code> or <code>String[]</code> objects,
+	 * depending on the <code>getCardinality()</code> value.
 	 */
 	final int	STRING		= 1;
 	/**
-	 * The <tt>LONG</tt> (2) type.
+	 * The <code>LONG</code> (2) type.
 	 * 
-	 * Attributes of this type should be stored as <tt>Long</tt>,
-	 * <tt>Vector</tt> with <tt>Long</tt> or <tt>long[]</tt> objects,
-	 * depending on the <tt>getCardinality()</tt> value.
+	 * Attributes of this type should be stored as <code>Long</code>,
+	 * <code>Vector</code> with <code>Long</code> or <code>long[]</code> objects,
+	 * depending on the <code>getCardinality()</code> value.
 	 */
 	final int	LONG		= 2;
 	/**
-	 * The <tt>INTEGER</tt> (3) type.
+	 * The <code>INTEGER</code> (3) type.
 	 * 
-	 * Attributes of this type should be stored as <tt>Integer</tt>,
-	 * <tt>Vector</tt> with <tt>Integer</tt> or <tt>int[]</tt> objects,
-	 * depending on the <tt>getCardinality()</tt> value.
+	 * Attributes of this type should be stored as <code>Integer</code>,
+	 * <code>Vector</code> with <code>Integer</code> or <code>int[]</code> objects,
+	 * depending on the <code>getCardinality()</code> value.
 	 */
 	final int	INTEGER		= 3;
 	/**
-	 * The <tt>SHORT</tt> (4) type.
+	 * The <code>SHORT</code> (4) type.
 	 * 
-	 * Attributes of this type should be stored as <tt>Short</tt>,
-	 * <tt>Vector</tt> with <tt>Short</tt> or <tt>short[]</tt> objects,
-	 * depending on the <tt>getCardinality()</tt> value.
+	 * Attributes of this type should be stored as <code>Short</code>,
+	 * <code>Vector</code> with <code>Short</code> or <code>short[]</code> objects,
+	 * depending on the <code>getCardinality()</code> value.
 	 */
 	final int	SHORT		= 4;
 	/**
-	 * The <tt>CHARACTER</tt> (5) type.
+	 * The <code>CHARACTER</code> (5) type.
 	 * 
-	 * Attributes of this type should be stored as <tt>Character</tt>,
-	 * <tt>Vector</tt> with <tt>Character</tt> or <tt>char[]</tt> objects,
-	 * depending on the <tt>getCardinality()</tt> value.
+	 * Attributes of this type should be stored as <code>Character</code>,
+	 * <code>Vector</code> with <code>Character</code> or <code>char[]</code> objects,
+	 * depending on the <code>getCardinality()</code> value.
 	 */
 	final int	CHARACTER	= 5;
 	/**
-	 * The <tt>BYTE</tt> (6) type.
+	 * The <code>BYTE</code> (6) type.
 	 * 
-	 * Attributes of this type should be stored as <tt>Byte</tt>,
-	 * <tt>Vector</tt> with <tt>Byte</tt> or <tt>byte[]</tt> objects,
-	 * depending on the <tt>getCardinality()</tt> value.
+	 * Attributes of this type should be stored as <code>Byte</code>,
+	 * <code>Vector</code> with <code>Byte</code> or <code>byte[]</code> objects,
+	 * depending on the <code>getCardinality()</code> value.
 	 */
 	final int	BYTE		= 6;
 	/**
-	 * The <tt>DOUBLE</tt> (7) type.
+	 * The <code>DOUBLE</code> (7) type.
 	 * 
-	 * Attributes of this type should be stored as <tt>Double</tt>,
-	 * <tt>Vector</tt> with <tt>Double</tt> or <tt>double[]</tt> objects,
-	 * depending on the <tt>getCardinality()</tt> value.
+	 * Attributes of this type should be stored as <code>Double</code>,
+	 * <code>Vector</code> with <code>Double</code> or <code>double[]</code> objects,
+	 * depending on the <code>getCardinality()</code> value.
 	 */
 	final int	DOUBLE		= 7;
 	/**
-	 * The <tt>FLOAT</tt> (8) type.
+	 * The <code>FLOAT</code> (8) type.
 	 * 
-	 * Attributes of this type should be stored as <tt>Float</tt>,
-	 * <tt>Vector</tt> with <tt>Float</tt> or <tt>float[]</tt> objects,
-	 * depending on the <tt>getCardinality()</tt> value.
+	 * Attributes of this type should be stored as <code>Float</code>,
+	 * <code>Vector</code> with <code>Float</code> or <code>float[]</code> objects,
+	 * depending on the <code>getCardinality()</code> value.
 	 */
 	final int	FLOAT		= 8;
 	/**
-	 * The <tt>BIGINTEGER</tt> (9) type.
+	 * The <code>BIGINTEGER</code> (9) type.
 	 * 
-	 * Attributes of this type should be stored as <tt>BigInteger</tt>,
-	 * <tt>Vector</tt> with <tt>BigInteger</tt> or <tt>BigInteger[]</tt>
-	 * objects, depending on the <tt>getCardinality()</tt> value.
+	 * Attributes of this type should be stored as <code>BigInteger</code>,
+	 * <code>Vector</code> with <code>BigInteger</code> or <code>BigInteger[]</code>
+	 * objects, depending on the <code>getCardinality()</code> value.
 	 * 
 	 * @deprecated Since 1.1
 	 */
 	final int	BIGINTEGER	= 9;
 	/**
-	 * The <tt>BIGDECIMAL</tt> (10) type.
+	 * The <code>BIGDECIMAL</code> (10) type.
 	 * 
-	 * Attributes of this type should be stored as <tt>BigDecimal</tt>,
-	 * <tt>Vector</tt> with <tt>BigDecimal</tt> or <tt>BigDecimal[]</tt>
-	 * objects depending on <tt>getCardinality()</tt>.
+	 * Attributes of this type should be stored as <code>BigDecimal</code>,
+	 * <code>Vector</code> with <code>BigDecimal</code> or <code>BigDecimal[]</code>
+	 * objects depending on <code>getCardinality()</code>.
 	 * 
 	 * @deprecated Since 1.1
 	 */
 	final int	BIGDECIMAL	= 10;
 	/**
-	 * The <tt>BOOLEAN</tt> (11) type.
+	 * The <code>BOOLEAN</code> (11) type.
 	 * 
-	 * Attributes of this type should be stored as <tt>Boolean</tt>,
-	 * <tt>Vector</tt> with <tt>Boolean</tt> or <tt>boolean[]</tt> objects
-	 * depending on <tt>getCardinality()</tt>.
+	 * Attributes of this type should be stored as <code>Boolean</code>,
+	 * <code>Vector</code> with <code>Boolean</code> or <code>boolean[]</code> objects
+	 * depending on <code>getCardinality()</code>.
 	 */
 	final int	BOOLEAN		= 11;
 
@@ -141,7 +141,7 @@ public interface AttributeDefinition {
 	 * Unique identity for this attribute.
 	 * 
 	 * Attributes share a global namespace in the registry. E.g. an attribute
-	 * <tt>cn</tt> or <tt>commonName</tt> must always be a <tt>String</tt>
+	 * <code>cn</code> or <code>commonName</code> must always be a <code>String</code>
 	 * and the semantics are always a name of some object. They share this
 	 * aspect with LDAP/X.500 attributes. In these standards the OSI Object
 	 * Identifier (OID) is used to uniquely identify an attribute. If such an
@@ -171,7 +171,7 @@ public interface AttributeDefinition {
 	 * Return the cardinality of this attribute.
 	 * 
 	 * The OSGi environment handles multi valued attributes in arrays ([]) or in
-	 * <tt>Vector</tt> objects. The return value is defined as follows:
+	 * <code>Vector</code> objects. The return value is defined as follows:
 	 * 
 	 * <pre>
 	 * 
@@ -190,9 +190,9 @@ public interface AttributeDefinition {
 	 * 
 	 * <p>
 	 * Defined in the following constants which map to the appropriate Java
-	 * type. <tt>STRING</tt>,<tt>LONG</tt>,<tt>INTEGER</tt>,
-	 * <tt>CHAR</tt>,<tt>BYTE</tt>,<tt>DOUBLE</tt>,<tt>FLOAT</tt>,
-	 * <tt>BOOLEAN</tt>.
+	 * type. <code>STRING</code>,<code>LONG</code>,<code>INTEGER</code>,
+	 * <code>CHAR</code>,<code>BYTE</code>,<code>DOUBLE</code>,<code>FLOAT</code>,
+	 * <code>BOOLEAN</code>.
 	 */
 	int getType();
 
@@ -200,23 +200,23 @@ public interface AttributeDefinition {
 	 * Return a list of option values that this attribute can take.
 	 * 
 	 * <p>
-	 * If the function returns <tt>null</tt>, there are no option values
+	 * If the function returns <code>null</code>, there are no option values
 	 * available.
 	 * 
 	 * <p>
 	 * Each value must be acceptable to validate() (return "") and must be a
-	 * <tt>String</tt> object that can be converted to the data type defined
+	 * <code>String</code> object that can be converted to the data type defined
 	 * by getType() for this attribute.
 	 * 
 	 * <p>
-	 * This list must be in the same sequence as <tt>getOptionLabels()</tt>.
-	 * I.e. for each index i in <tt>getOptionValues</tt>, i in
-	 * <tt>getOptionLabels()</tt> should be the label.
+	 * This list must be in the same sequence as <code>getOptionLabels()</code>.
+	 * I.e. for each index i in <code>getOptionValues</code>, i in
+	 * <code>getOptionLabels()</code> should be the label.
 	 * 
 	 * <p>
 	 * For example, if an attribute can have the value male, female, unknown,
 	 * this list can return
-	 * <tt>new String[] { "male", "female", "unknown" }</tt>.
+	 * <code>new String[] { "male", "female", "unknown" }</code>.
 	 * 
 	 * @return A list values
 	 */
@@ -227,37 +227,37 @@ public interface AttributeDefinition {
 	 * 
 	 * <p>
 	 * The purpose of this method is to allow menus with localized labels. It is
-	 * associated with <tt>getOptionValues</tt>. The labels returned here are
+	 * associated with <code>getOptionValues</code>. The labels returned here are
 	 * ordered in the same way as the values in that method.
 	 * 
 	 * <p>
-	 * If the function returns <tt>null</tt>, there are no option labels
+	 * If the function returns <code>null</code>, there are no option labels
 	 * available.
 	 * <p>
-	 * This list must be in the same sequence as the <tt>getOptionValues()</tt>
-	 * method. I.e. for each index i in <tt>getOptionLabels</tt>, i in
-	 * <tt>getOptionValues()</tt> should be the associated value.
+	 * This list must be in the same sequence as the <code>getOptionValues()</code>
+	 * method. I.e. for each index i in <code>getOptionLabels</code>, i in
+	 * <code>getOptionValues()</code> should be the associated value.
 	 * 
 	 * <p>
 	 * For example, if an attribute can have the value male, female, unknown,
 	 * this list can return (for dutch)
-	 * <tt>new String[] { "Man", "Vrouw", "Onbekend" }</tt>.
+	 * <code>new String[] { "Man", "Vrouw", "Onbekend" }</code>.
 	 * 
 	 * @return A list values
 	 */
 	String[] getOptionLabels();
 
 	/**
-	 * Validate an attribute in <tt>String</tt> form.
+	 * Validate an attribute in <code>String</code> form.
 	 * 
 	 * An attribute might be further constrained in value. This method will
 	 * attempt to validate the attribute according to these constraints. It can
 	 * return three different values:
 	 * 
 	 * <pre>
-	 * <tt>
+	 * <code>
 	 * null
-	 * </tt>
+	 * </code>
 	 *                   no validation present
 	 *  &quot;&quot;                   no problems detected
 	 *  &quot;...&quot;                A localized description of why the value is wrong
@@ -265,7 +265,7 @@ public interface AttributeDefinition {
 	 * </pre>
 	 * 
 	 * @param value The value before turning it into the basic data type
-	 * @return <tt>null</tt>, "", or another string
+	 * @return <code>null</code>, "", or another string
 	 */
 	String validate(String value);
 
@@ -273,7 +273,7 @@ public interface AttributeDefinition {
 	 * Return a default for this attribute.
 	 * 
 	 * The object must be of the appropriate type as defined by the cardinality
-	 * and <tt>getType()</tt>. The return type is a list of <tt>String</tt>
+	 * and <code>getType()</code>. The return type is a list of <code>String</code>
 	 * objects that can be converted to the appropriate type. The cardinality of
 	 * the return array must follow the absolute cardinality of this type. E.g.
 	 * if the cardinality = 0, the array must contain 1 element. If the
@@ -282,7 +282,7 @@ public interface AttributeDefinition {
 	 * cardinality, meaning a single value, does not allow arrays or vectors of
 	 * 0 elements.
 	 * 
-	 * @return Return a default value or <tt>null</tt> if no default exists.
+	 * @return Return a default value or <code>null</code> if no default exists.
 	 */
 	String[] getDefaultValue();
 }

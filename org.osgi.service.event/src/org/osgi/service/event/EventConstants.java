@@ -29,15 +29,15 @@ package org.osgi.service.event;
 
 /**
  * 
- * Defines standard names for <tt>ChannelListener</tt> properties.
+ * Defines standard names for <code>ChannelListener</code> properties.
  * 
  * @version $Revision$
  */
 public interface EventConstants {
 
 	/**
-	 * Service Registration property (named <tt>event.topic</tt>) specifying
-	 * the <tt>ChannelEvent</tt> topics of interest to a Channel Listener
+	 * Service Registration property (named <code>event.topic</code>) specifying
+	 * the <code>ChannelEvent</code> topics of interest to a Channel Listener
 	 * service.
 	 * <p>
 	 * Channel listeners SHOULD be registered with this property. The value of
@@ -58,8 +58,8 @@ public interface EventConstants {
 	public static final String	EVENT_TOPIC		= "event.topics";
 
 	/**
-	 * Service Registration property (named <tt>event.filter</tt>) specifying
-	 * a filter to further select <tt>ChannelEvent</tt> s of interest to a
+	 * Service Registration property (named <code>event.filter</code>) specifying
+	 * a filter to further select <code>ChannelEvent</code> s of interest to a
 	 * Channel Listener service.
 	 * <p>
 	 * Channel listeners MAY be registered with this property. The value of this

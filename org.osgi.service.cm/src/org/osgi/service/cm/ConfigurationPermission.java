@@ -35,9 +35,9 @@ import java.util.Hashtable;
 /**
  * Indicates a bundle's authority to set or get a Configuration.
  * <ul>
- * <li>The <tt>ConfigurationPermission.SET</tt> action allows a bundle to
+ * <li>The <code>ConfigurationPermission.SET</code> action allows a bundle to
  * add, update and delete configurations for the specified names.
- * <li>The <tt>ConfigurationPermission.GET</tt> action allows a bundle to
+ * <li>The <code>ConfigurationPermission.GET</code> action allows a bundle to
  * query and read configurations for the specified names.
  * </ul>
  * 
@@ -48,11 +48,11 @@ import java.util.Hashtable;
 final public class ConfigurationPermission extends BasicPermission {
 	 static final long serialVersionUID = 5716868734811965383L;
 	/**
-	 * The action string <tt>get</tt> (Value is "get").
+	 * The action string <code>get</code> (Value is "get").
 	 */
 	public final static String	GET				= "get";
 	/**
-	 * The action string <tt>set</tt> (Value is "set").
+	 * The action string <code>set</code> (Value is "set").
 	 */
 	public final static String	SET				= "set";
 
@@ -93,14 +93,14 @@ final public class ConfigurationPermission extends BasicPermission {
 	 * </pre>
 	 * 
 	 * <p>
-	 * There are two possible actions: <tt>get</tt> and <tt>set</tt>. The
-	 * <tt>set/tt> action allows a bundle
+	 * There are two possible actions: <code>get</code> and <code>set</code>. The
+	 * <code>set/tt> action allows a bundle
 	 * to add, update and delete configurations for  the specified names.
-	 * The <tt>get</tt> action allows a bundle to query and read
+	 * The <code>get</code> action allows a bundle to query and read
 	 * configurations for the specified names.
 	 *
 	 * @param name pid name
-	 * @param actions <tt>get</tt>, <tt>set</tt> (canonical order)
+	 * @param actions <code>get</code>, <code>set</code> (canonical order)
 	 */
 
 	public ConfigurationPermission(String name, String actions) {
@@ -219,12 +219,12 @@ final public class ConfigurationPermission extends BasicPermission {
 	}
 
 	/**
-	 * Determines if a <tt>ConfigurationPermission</tt> object "implies" the
+	 * Determines if a <code>ConfigurationPermission</code> object "implies" the
 	 * specified permission.
 	 * 
 	 * @param p The target permission to check.
-	 * @return <tt>true</tt> if the specified permission is implied by this
-	 *                 object; <tt>false</tt> otherwise.
+	 * @return <code>true</code> if the specified permission is implied by this
+	 *                 object; <code>false</code> otherwise.
 	 */
 
 	public boolean implies(Permission p) {
@@ -240,8 +240,8 @@ final public class ConfigurationPermission extends BasicPermission {
 
 	/**
 	 * Returns the canonical string representation of the actions. Always
-	 * returns present actions in the following order: <tt>get</tt>,
-	 * <tt>set</tt>.
+	 * returns present actions in the following order: <code>get</code>,
+	 * <code>set</code>.
 	 * 
 	 * @return The canonical string representation of the actions.
 	 */
@@ -268,11 +268,11 @@ final public class ConfigurationPermission extends BasicPermission {
 	}
 
 	/**
-	 * Returns a new <tt>PermissionCollection</tt> object for storing
-	 * <tt>ConfigurationPermission<tt> objects.
+	 * Returns a new <code>PermissionCollection</code> object for storing
+	 * <code>ConfigurationPermission<code> objects.
 	 *
-	 * @return A new <tt>PermissionCollection</tt> object suitable for storing
-	 * <tt>ConfigurationPermission</tt> objects.
+	 * @return A new <code>PermissionCollection</code> object suitable for storing
+	 * <code>ConfigurationPermission</code> objects.
 	 */
 	public PermissionCollection newPermissionCollection() {
 		return (new ConfigurationPermissionCollection());
@@ -282,12 +282,12 @@ final public class ConfigurationPermission extends BasicPermission {
 	 * Determines the equalty of two ConfigurationPermission objects.
 	 * 
 	 * Checks that specified object has the same class name and action as this
-	 * <tt>ConfigurationPermission</tt>.
+	 * <code>ConfigurationPermission</code>.
 	 * 
 	 * @param obj The object to test for equality.
-	 * @return true if obj is a <tt>ConfigurationPermission</tt>, and has the
+	 * @return true if obj is a <code>ConfigurationPermission</code>, and has the
 	 *                 same class name and actions as this
-	 *                 <tt>ConfigurationPermission</tt> object; <tt>false</tt>
+	 *                 <code>ConfigurationPermission</code> object; <code>false</code>
 	 *                 otherwise.
 	 */
 	public boolean equals(Object obj) {
@@ -385,7 +385,7 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Adds a permission to the <tt>ConfigurationPermission</tt> objects using
+	 * Adds a permission to the <code>ConfigurationPermission</code> objects using
 	 * the key for the hash as the name.
 	 * 
 	 * @param permission The Permission object to add.
@@ -394,7 +394,7 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 	 *                          ConfigurationPermission object.
 	 * 
 	 * @exception SecurityException If this
-	 *                          <tt>ConfigurationPermissionCollection</tt> object has been
+	 *                          <code>ConfigurationPermissionCollection</code> object has been
 	 *                          marked read-only.
 	 */
 
@@ -432,12 +432,12 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 
 	/**
 	 * Determines if a set of permissions implies the permissions expressed in
-	 * <tt>permission</tt>.
+	 * <code>permission</code>.
 	 * 
 	 * @param permission The Permission object to compare.
 	 * 
-	 * @return <tt>true</tt> if <tt>permission</tt> is a proper subset of a
-	 *                 permission in the set; <tt>false</tt> otherwise.
+	 * @return <code>true</code> if <code>permission</code> is a proper subset of a
+	 *                 permission in the set; <code>false</code> otherwise.
 	 */
 
 	public boolean implies(Permission permission) {
@@ -499,7 +499,7 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Returns an enumeration of all the <tt>ConfigurationPermission</tt>
+	 * Returns an enumeration of all the <code>ConfigurationPermission</code>
 	 * objects in the container.
 	 * 
 	 * @return Enumeration of all the ConfigurationPermission objects.

@@ -30,11 +30,11 @@ package org.osgi.service.useradmin;
 import org.osgi.framework.ServiceReference;
 
 /**
- * <tt>Role</tt> change event.
+ * <code>Role</code> change event.
  * <p>
- * <tt>UserAdminEvent</tt> objects are delivered asynchronously to any
- * <tt>UserAdminListener</tt> objects when a change occurs in any of the
- * <tt>Role</tt> objects managed by a User Admin service.
+ * <code>UserAdminEvent</code> objects are delivered asynchronously to any
+ * <code>UserAdminListener</code> objects when a change occurs in any of the
+ * <code>Role</code> objects managed by a User Admin service.
  * 
  * <p>
  * A type code is used to identify the event. The following event types are
@@ -52,36 +52,36 @@ public class UserAdminEvent {
 	private int					type;
 	private Role				role;
 	/**
-	 * A <tt>Role</tt> object has been created.
+	 * A <code>Role</code> object has been created.
 	 * 
 	 * <p>
-	 * The value of <tt>ROLE_CREATED</tt> is 0x00000001.
+	 * The value of <code>ROLE_CREATED</code> is 0x00000001.
 	 */
 	public static final int		ROLE_CREATED	= 0x00000001;
 	/**
-	 * A <tt>Role</tt> object has been modified.
+	 * A <code>Role</code> object has been modified.
 	 * 
 	 * <p>
-	 * The value of <tt>ROLE_CHANGED</tt> is 0x00000002.
+	 * The value of <code>ROLE_CHANGED</code> is 0x00000002.
 	 */
 	public static final int		ROLE_CHANGED	= 0x00000002;
 	/**
-	 * A <tt>Role</tt> object has been removed.
+	 * A <code>Role</code> object has been removed.
 	 * 
 	 * <p>
-	 * The value of <tt>ROLE_REMOVED</tt> is 0x00000004.
+	 * The value of <code>ROLE_REMOVED</code> is 0x00000004.
 	 */
 	public static final int		ROLE_REMOVED	= 0x00000004;
 
 	/**
-	 * Constructs a <tt>UserAdminEvent</tt> object from the given
-	 * <tt>ServiceReference</tt> object, event type, and <tt>Role</tt>
+	 * Constructs a <code>UserAdminEvent</code> object from the given
+	 * <code>ServiceReference</code> object, event type, and <code>Role</code>
 	 * object.
 	 * 
-	 * @param ref The <tt>ServiceReference</tt> object of the User Admin
+	 * @param ref The <code>ServiceReference</code> object of the User Admin
 	 *        service that generated this event.
 	 * @param type The event type.
-	 * @param role The <tt>Role</tt> object on which this event occurred.
+	 * @param role The <code>Role</code> object on which this event occurred.
 	 */
 	public UserAdminEvent(ServiceReference ref, int type, Role role) {
 		this.ref = ref;
@@ -90,10 +90,10 @@ public class UserAdminEvent {
 	}
 
 	/**
-	 * Gets the <tt>ServiceReference</tt> object of the User Admin service
+	 * Gets the <code>ServiceReference</code> object of the User Admin service
 	 * that generated this event.
 	 * 
-	 * @return The User Admin service's <tt>ServiceReference</tt> object.
+	 * @return The User Admin service's <code>ServiceReference</code> object.
 	 */
 	public ServiceReference getServiceReference() {
 		return ref;
@@ -113,9 +113,9 @@ public class UserAdminEvent {
 	}
 
 	/**
-	 * Gets the <tt>Role</tt> object this event was generated for.
+	 * Gets the <code>Role</code> object this event was generated for.
 	 * 
-	 * @return The <tt>Role</tt> object this event was generated for.
+	 * @return The <code>Role</code> object this event was generated for.
 	 */
 	public Role getRole() {
 		return role;

@@ -35,7 +35,7 @@ package org.osgi.util.measurement;
  * milliseconds since midnight, January 1, 1970 UTC.
  * 
  * <p>
- * A <tt>State</tt> object is immutable so that it may be easily shared.
+ * A <code>State</code> object is immutable so that it may be easily shared.
  * 
  * @version $Revision$
  */
@@ -45,7 +45,7 @@ public class State {
 	final String	name;
 
 	/**
-	 * Create a new <tt>State</tt> object.
+	 * Create a new <code>State</code> object.
 	 * 
 	 * @param value The value of the state.
 	 * @param name The name of the state.
@@ -59,7 +59,7 @@ public class State {
 	}
 
 	/**
-	 * Create a new <tt>State</tt> object with a time of 0.
+	 * Create a new <code>State</code> object with a time of 0.
 	 * 
 	 * @param value The value of the state.
 	 * @param name The name of the state.
@@ -69,18 +69,18 @@ public class State {
 	}
 
 	/**
-	 * Returns the value of this <tt>State</tt>.
+	 * Returns the value of this <code>State</code>.
 	 * 
-	 * @return The value of this <tt>State</tt> object.
+	 * @return The value of this <code>State</code> object.
 	 */
 	public final int getValue() {
 		return value;
 	}
 
 	/**
-	 * Returns the time with which this <tt>State</tt> was created.
+	 * Returns the time with which this <code>State</code> was created.
 	 * 
-	 * @return The time with which this <tt>State</tt> was created. The time
+	 * @return The time with which this <code>State</code> was created. The time
 	 *         is measured in milliseconds since midnight, January 1, 1970 UTC.
 	 */
 	public final long getTime() {
@@ -88,18 +88,18 @@ public class State {
 	}
 
 	/**
-	 * Returns the name of this <tt>State</tt>.
+	 * Returns the name of this <code>State</code>.
 	 * 
-	 * @return The name of this <tt>State</tt> object.
+	 * @return The name of this <code>State</code> object.
 	 */
 	public final String getName() {
 		return name;
 	}
 
 	/**
-	 * Returns a <tt>String</tt> object representing this object.
+	 * Returns a <code>String</code> object representing this object.
 	 * 
-	 * @return a <tt>String</tt> object representing this object.
+	 * @return a <code>String</code> object representing this object.
 	 */
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
@@ -127,11 +127,11 @@ public class State {
 
 	/**
 	 * Return whether the specified object is equal to this object. Two
-	 * <tt>State</tt> objects are equal if they have same value and name.
+	 * <code>State</code> objects are equal if they have same value and name.
 	 * 
 	 * @param obj The object to compare with this object.
-	 * @return <tt>true</tt> if this object is equal to the specified object;
-	 *         <tt>false</tt> otherwise.
+	 * @return <code>true</code> if this object is equal to the specified object;
+	 *         <code>false</code> otherwise.
 	 */
 	public boolean equals(Object obj) {
 		if (this == obj) {

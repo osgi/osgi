@@ -36,12 +36,12 @@ import java.util.NoSuchElementException;
  * sensitive information about a bundle.
  * <p>
  * ### needs to be updated for RFC 73!
- * <tt>AdminPermission</tt> has no actions or target.
+ * <code>AdminPermission</code> has no actions or target.
  * <p>
- * The <tt>hashCode()</tt> method of <tt>AdminPermission</tt> is inherited
- * from <tt>java.security.BasicPermission</tt>. The hash code it returns is
+ * The <code>hashCode()</code> method of <code>AdminPermission</code> is inherited
+ * from <code>java.security.BasicPermission</code>. The hash code it returns is
  * the hash code of the name "AdminPermission", which is always the same for all
- * instances of <tt>AdminPermission</tt>.
+ * instances of <code>AdminPermission</code>.
  * <p>
  * 
  * @version $Revision$
@@ -51,7 +51,7 @@ public final class AdminPermission extends BasicPermission {
 	static final long	serialVersionUID	= 207051004521261705L;
 
 	/**
-	 * Creates a new <tt>AdminPermission</tt> object with its name set to
+	 * Creates a new <code>AdminPermission</code> object with its name set to
 	 * "AdminPermission".
 	 */
 	public AdminPermission() {
@@ -59,8 +59,8 @@ public final class AdminPermission extends BasicPermission {
 	}
 
 	/**
-	 * Creates a new <tt>AdminPermission</tt> object for use by the
-	 * <code>Policy</code> object to instantiate new <tt>Permission</tt>
+	 * Creates a new <code>AdminPermission</code> object for use by the
+	 * <code>Policy</code> object to instantiate new <code>Permission</code>
 	 * objects.
 	 * 
 	 * @param name Ignored; always set to "AdminPermission".
@@ -73,37 +73,37 @@ public final class AdminPermission extends BasicPermission {
 	/**
 	 * Determines if the specified permission is implied by this object.
 	 * <p>
-	 * This method returns <tt>true</tt> if the specified permission is an
-	 * instance of <tt>AdminPermission</tt>.
+	 * This method returns <code>true</code> if the specified permission is an
+	 * instance of <code>AdminPermission</code>.
 	 * 
 	 * @param p The permission to interrogate.
 	 * 
-	 * @return <tt>true</tt> if the permission is an instance of this class;
-	 *         <tt>false</tt> otherwise.
+	 * @return <code>true</code> if the permission is an instance of this class;
+	 *         <code>false</code> otherwise.
 	 */
 	public boolean implies(Permission p) {
 		return (p instanceof AdminPermission);
 	}
 
 	/**
-	 * Determines the equality of two <tt>AdminPermission</tt> objects.
+	 * Determines the equality of two <code>AdminPermission</code> objects.
 	 * <p>
-	 * Two <tt>AdminPermission</tt> objects are always equal.
+	 * Two <code>AdminPermission</code> objects are always equal.
 	 * 
 	 * @param obj The object being compared for equality with this object.
-	 * @return <tt>true</tt> if <tt>obj</tt> is an <tt>AdminPermission</tt>;
-	 *         <tt>false</tt> otherwise.
+	 * @return <code>true</code> if <code>obj</code> is an <code>AdminPermission</code>;
+	 *         <code>false</code> otherwise.
 	 */
 	public boolean equals(Object obj) {
 		return (obj instanceof AdminPermission);
 	}
 
 	/**
-	 * Returns a new <tt>PermissionCollection</tt> object suitable for storing
-	 * <tt>AdminPermission</tt>s.
+	 * Returns a new <code>PermissionCollection</code> object suitable for storing
+	 * <code>AdminPermission</code>s.
 	 * <p>
 	 * 
-	 * @return A new <tt>PermissionCollection</tt> object.
+	 * @return A new <code>PermissionCollection</code> object.
 	 */
 
 	public PermissionCollection newPermissionCollection() {
@@ -112,7 +112,7 @@ public final class AdminPermission extends BasicPermission {
 }
 
 /**
- * Stores a collection of <tt>AdminPermission</tt>s.
+ * Stores a collection of <code>AdminPermission</code>s.
  *  
  */
 
@@ -126,7 +126,7 @@ final class AdminPermissionCollection extends PermissionCollection {
 	private boolean		hasElement;
 
 	/**
-	 * Creates an empty <tt>AdminPermission</tt> object.
+	 * Creates an empty <code>AdminPermission</code> object.
 	 *  
 	 */
 	public AdminPermissionCollection() {
@@ -134,13 +134,13 @@ final class AdminPermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Adds the specified permission to the <tt>AdminPermissionCollection</tt>.
+	 * Adds the specified permission to the <code>AdminPermissionCollection</code>.
 	 * The key for the hash is the interface name of the service.
 	 * 
-	 * @param permission The <tt>Permission</tt> object to add.
+	 * @param permission The <code>Permission</code> object to add.
 	 * 
 	 * @exception IllegalArgumentException If the permission is not an
-	 *            <tt>AdminPermission</tt>.
+	 *            <code>AdminPermission</code>.
 	 * 
 	 * @exception SecurityException If this AdminPermissionCollection object has
 	 *            been marked read-only.
@@ -161,7 +161,7 @@ final class AdminPermissionCollection extends PermissionCollection {
 
 	/**
 	 * Determines if the specified set of permissions implies the permissions
-	 * expressed in the parameter <tt>permission</tt>.
+	 * expressed in the parameter <code>permission</code>.
 	 * 
 	 * @param p The Permission object to compare.
 	 * 
@@ -174,9 +174,9 @@ final class AdminPermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Returns an enumeration of an <tt>AdminPermission</tt> object.
+	 * Returns an enumeration of an <code>AdminPermission</code> object.
 	 * 
-	 * @return Enumeration of an <tt>AdminPermission</tt> object.
+	 * @return Enumeration of an <code>AdminPermission</code> object.
 	 */
 
 	public Enumeration elements() {

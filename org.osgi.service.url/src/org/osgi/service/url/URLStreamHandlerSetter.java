@@ -30,15 +30,15 @@ package org.osgi.service.url;
 import java.net.URL;
 
 /**
- * Interface used by <tt>URLStreamHandlerService</tt> objects to call the
- * <tt>setURL</tt> method on the proxy <tt>URLStreamHandler</tt> object.
+ * Interface used by <code>URLStreamHandlerService</code> objects to call the
+ * <code>setURL</code> method on the proxy <code>URLStreamHandler</code> object.
  * 
  * <p>
  * Objects of this type are passed to the
- * {@link URLStreamHandlerService#parseURL}method. Invoking the <tt>setURL</tt>
- * method on the <tt>URLStreamHandlerSetter</tt> object will invoke the
- * <tt>setURL</tt> method on the proxy <tt>URLStreamHandler</tt> object that
- * is actually registered with <tt>java.net.URL</tt> for the protocol.
+ * {@link URLStreamHandlerService#parseURL}method. Invoking the <code>setURL</code>
+ * method on the <code>URLStreamHandlerSetter</code> object will invoke the
+ * <code>setURL</code> method on the proxy <code>URLStreamHandler</code> object that
+ * is actually registered with <code>java.net.URL</code> for the protocol.
  * 
  * @version $Revision$
  */

@@ -35,7 +35,7 @@ import java.util.Dictionary;
  * <p>
  * A web application bundle which wants to implement the WebApplication methods
  * should either subclass this class or create a class which implements
- * WebApplication and then modify the <tt>implementation</tt> element of the
+ * WebApplication and then modify the <code>implementation</code> element of the
  * service component descriptor to reference that class.
  * 
  * <p>
@@ -63,7 +63,7 @@ public class DefaultWebApplication implements WebApplication {
 	 * <p>
 	 * The default web application provides no ServletContext attibutes.
 	 * 
-	 * @return <tt>null</tt>
+	 * @return <code>null</code>
 	 * @see org.osgi.service.webapplication.WebApplication#getServletContextAttributes()
 	 */
 	public Dictionary getServletContextAttributes() {

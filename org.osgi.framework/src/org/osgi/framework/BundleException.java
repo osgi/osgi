@@ -32,8 +32,8 @@ package org.osgi.framework;
  * occurred.
  * 
  * <p>
- * <tt>BundleException</tt> object is created by the Framework to denote an
- * exception condition in the lifecycle of a bundle. <tt>BundleException</tt>
+ * <code>BundleException</code> object is created by the Framework to denote an
+ * exception condition in the lifecycle of a bundle. <code>BundleException</code>
  * s should not be created by bundle developers.
  * 
  * <p>
@@ -51,7 +51,7 @@ public class BundleException extends Exception {
 	private Throwable	cause;
 
 	/**
-	 * Creates a <tt>BundleException</tt> that wraps another exception.
+	 * Creates a <code>BundleException</code> that wraps another exception.
 	 * 
 	 * @param msg The associated message.
 	 * @param cause The cause of this exception.
@@ -62,7 +62,7 @@ public class BundleException extends Exception {
 	}
 
 	/**
-	 * Creates a <tt>BundleException</tt> object with the specified message.
+	 * Creates a <code>BundleException</code> object with the specified message.
 	 * 
 	 * @param msg The message.
 	 */
@@ -79,7 +79,7 @@ public class BundleException extends Exception {
 	 * The {@link #getCause()}method is now the preferred means of obtaining
 	 * this information.
 	 * 
-	 * @return The nested exception; <tt>null</tt> if there is no nested
+	 * @return The nested exception; <code>null</code> if there is no nested
 	 *         exception.
 	 */
 	public Throwable getNestedException() {
@@ -87,10 +87,10 @@ public class BundleException extends Exception {
 	}
 
 	/**
-	 * Returns the cause of this exception or <tt>null</tt> if no cause was
+	 * Returns the cause of this exception or <code>null</code> if no cause was
 	 * specified when this exception was created.
 	 * 
-	 * @return The cause of this exception or <tt>null</tt> if no cause was
+	 * @return The cause of this exception or <code>null</code> if no cause was
 	 *         specified.
 	 * @since 1.3
 	 */
@@ -102,7 +102,7 @@ public class BundleException extends Exception {
 	 * The cause of this exception can only be set when constructed.
 	 * 
 	 * @throws java.lang.IllegalStateException This method will always throw an
-	 *         <tt>IllegalStateException</tt> since the cause of this
+	 *         <code>IllegalStateException</code> since the cause of this
 	 *         exception can only be set when constructed.
 	 * @since 1.3
 	 */

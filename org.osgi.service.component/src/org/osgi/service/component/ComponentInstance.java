@@ -43,7 +43,7 @@ public interface ComponentInstance {
 	/**
 	 * Returns the component instance. The instance has been activated.
 	 * 
-	 * @return The component instance or <tt>null</tt> if the instance has
+	 * @return The component instance or <code>null</code> if the instance has
 	 *         been deactivated.
 	 */
 	public Object getInstance();

@@ -40,7 +40,7 @@ public interface UPnPIcon {
 	 * Returns the MIME type of the icon.
 	 * 
 	 * This method returns the format in which the icon graphics, read from the
-	 * <tt>InputStream</tt> object obtained by the <tt>getInputStream()</tt>
+	 * <code>InputStream</code> object obtained by the <code>getInputStream()</code>
 	 * method, is encoded.
 	 * <p>
 	 * The format of the returned string is in accordance to RFC2046. A list of
@@ -76,8 +76,8 @@ public interface UPnPIcon {
 	 * Returns the size of the icon in bytes.
 	 * 
 	 * This method returns the number of bytes of the icon available to read
-	 * from the <tt>InputStream</tt> object obtained by the
-	 * <tt>getInputStream()</tt> method. If the actual size can not be
+	 * from the <code>InputStream</code> object obtained by the
+	 * <code>getInputStream()</code> method. If the actual size can not be
 	 * determined, -1 is returned.
 	 * 
 	 * @return The icon size in bytes, or -1 if the size is unknown.
@@ -93,13 +93,13 @@ public interface UPnPIcon {
 	int getDepth();
 
 	/**
-	 * Returns an <tt>InputStream</tt> object for the icon data.
+	 * Returns an <code>InputStream</code> object for the icon data.
 	 * 
-	 * The <tt>InputStream</tt> object provides a way for a client to read the
+	 * The <code>InputStream</code> object provides a way for a client to read the
 	 * actual icon graphics data. The number of bytes available from this
-	 * <tt>InputStream</tt> object can be determined via the
-	 * <tt>getSize()</tt> method. The format of the data encoded can be
-	 * determined by the MIME type availble via the <tt>getMimeType()</tt>
+	 * <code>InputStream</code> object can be determined via the
+	 * <code>getSize()</code> method. The format of the data encoded can be
+	 * determined by the MIME type availble via the <code>getMimeType()</code>
 	 * method.
 	 * 
 	 * @return An InputStream to read the icon graphics data from.

@@ -37,14 +37,14 @@ import org.osgi.framework.Version;
  * service.
  * 
  * <p>
- * The information about a <tt>RequiredBundle</tt> provided by this object is
- * valid only until the next time <tt>PackageAdmin.refreshPackages()</tt>
- * called. If a <tt>RequiredBundle</tt> object becomes stale (that is, the
+ * The information about a <code>RequiredBundle</code> provided by this object is
+ * valid only until the next time <code>PackageAdmin.refreshPackages()</code>
+ * called. If a <code>RequiredBundle</code> object becomes stale (that is, the
  * bundle it references has been updated or removed as a result of calling
- * <tt>PackageAdmin.refreshPackages()</tt>), its <tt>getSymbolicName()</tt>
- * and <tt>getVersion()</tt> continue to return their old values,
- * <tt>isRemovalPending()</tt> returns true, and <tt>getBundle()</tt> and
- * <tt>getRequiringBundles()</tt> return <tt>null</tt>.
+ * <code>PackageAdmin.refreshPackages()</code>), its <code>getSymbolicName()</code>
+ * and <code>getVersion()</code> continue to return their old values,
+ * <code>isRemovalPending()</code> returns true, and <code>getBundle()</code> and
+ * <code>getRequiringBundles()</code> return <code>null</code>.
  * 
  * @since 1.2
  */
@@ -52,19 +52,19 @@ public interface RequiredBundle {
 	/**
 	 * Returns the bundle which defines this RequiredBundle.
 	 * 
-	 * @return The bundle, or <tt>null</tt> if this <tt>RequiredBundle</tt>
+	 * @return The bundle, or <code>null</code> if this <code>RequiredBundle</code>
 	 *         object has become stale.
 	 */
 	public Bundle getBundle();
 
 	/**
 	 * Returns the resolved bundles that currently require this bundle. If this
-	 * <tt>RequiredBundle</tt> object is required and re-exported by another
+	 * <code>RequiredBundle</code> object is required and re-exported by another
 	 * bundle then all the requiring bundles of the re-exporting bundle are
 	 * included in the returned array.
 	 * 
 	 * @return An array of resolved bundles currently requiring this bundle, or
-	 *         <tt>null</tt> if this <tt>RequiredBundle</tt> object has
+	 *         <code>null</code> if this <code>RequiredBundle</code> object has
 	 *         become stale.
 	 */
 	public Bundle[] getRequiringBundles();
@@ -84,11 +84,11 @@ public interface RequiredBundle {
 	public Version getVersion();
 
 	/**
-	 * Returns <tt>true</tt> if the bundle has been updated or uninstalled.
+	 * Returns <code>true</code> if the bundle has been updated or uninstalled.
 	 * 
-	 * @return <tt>true</tt> if the bundle has been updated or uninstalled, or
-	 *         if the <tt>RequiredBundle</tt> object has become stale;
-	 *         <tt>false</tt> otherwise.
+	 * @return <code>true</code> if the bundle has been updated or uninstalled, or
+	 *         if the <code>RequiredBundle</code> object has become stale;
+	 *         <code>false</code> otherwise.
 	 */
 	public boolean isRemovalPending();
 }

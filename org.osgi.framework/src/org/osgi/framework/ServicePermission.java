@@ -35,14 +35,14 @@ import java.util.Hashtable;
 /**
  * Indicates a bundle's authority to register or get a service.
  * <ul>
- * <li>The <tt>ServicePermission.REGISTER</tt> action allows a bundle to
+ * <li>The <code>ServicePermission.REGISTER</code> action allows a bundle to
  * register a service on the specified names.
- * <li>The <tt>ServicePermission.GET</tt> action allows a bundle to detect a
+ * <li>The <code>ServicePermission.GET</code> action allows a bundle to detect a
  * service and get it.
  * </ul>
  * Permission to get a service is required in order to detect events regarding
  * the service. Untrusted bundles should not be able to detect the presence of
- * certain services unless they have the appropriate <tt>ServicePermission</tt>
+ * certain services unless they have the appropriate <code>ServicePermission</code>
  * to get the specific service.
  * 
  * @version $Revision$
@@ -51,11 +51,11 @@ import java.util.Hashtable;
 final public class ServicePermission extends BasicPermission {
 	static final long			serialVersionUID	= -7662148639076511574L;
 	/**
-	 * The action string <tt>get</tt> (Value is "get").
+	 * The action string <code>get</code> (Value is "get").
 	 */
 	public final static String	GET					= "get";
 	/**
-	 * The action string <tt>register</tt> (Value is "register").
+	 * The action string <code>register</code> (Value is "register").
 	 */
 	public final static String	REGISTER			= "register";
 
@@ -99,13 +99,13 @@ final public class ServicePermission extends BasicPermission {
 	 * </pre>
 	 * 
 	 * <p>
-	 * There are two possible actions: <tt>get</tt> and <tt>register</tt>.
-	 * The <tt>get</tt> permission allows the owner of this permission to
-	 * obtain a service with this name. The <tt>register</tt> permission
+	 * There are two possible actions: <code>get</code> and <code>register</code>.
+	 * The <code>get</code> permission allows the owner of this permission to
+	 * obtain a service with this name. The <code>register</code> permission
 	 * allows the bundle to register a service under that name.
 	 * 
 	 * @param name class name
-	 * @param actions <tt>get</tt>,<tt>register</tt> (canonical order)
+	 * @param actions <code>get</code>,<code>register</code> (canonical order)
 	 */
 
 	public ServicePermission(String name, String actions) {
@@ -229,12 +229,12 @@ final public class ServicePermission extends BasicPermission {
 	}
 
 	/**
-	 * Determines if a <tt>ServicePermission</tt> object "implies" the
+	 * Determines if a <code>ServicePermission</code> object "implies" the
 	 * specified permission.
 	 * 
 	 * @param p The target permission to check.
-	 * @return <tt>true</tt> if the specified permission is implied by this
-	 *         object; <tt>false</tt> otherwise.
+	 * @return <code>true</code> if the specified permission is implied by this
+	 *         object; <code>false</code> otherwise.
 	 */
 
 	public boolean implies(Permission p) {
@@ -250,8 +250,8 @@ final public class ServicePermission extends BasicPermission {
 
 	/**
 	 * Returns the canonical string representation of the actions. Always
-	 * returns present actions in the following order: <tt>get</tt>,
-	 * <tt>register</tt>.
+	 * returns present actions in the following order: <code>get</code>,
+	 * <code>register</code>.
 	 * 
 	 * @return The canonical string representation of the actions.
 	 */
@@ -278,11 +278,11 @@ final public class ServicePermission extends BasicPermission {
 	}
 
 	/**
-	 * Returns a new <tt>PermissionCollection</tt> object for storing
-	 * <tt>ServicePermission<tt> objects.
+	 * Returns a new <code>PermissionCollection</code> object for storing
+	 * <code>ServicePermission<code> objects.
 	 *
-	 * @return A new <tt>PermissionCollection</tt> object suitable for storing
-	 * <tt>ServicePermission</tt> objects.
+	 * @return A new <code>PermissionCollection</code> object suitable for storing
+	 * <code>ServicePermission</code> objects.
 	 */
 	public PermissionCollection newPermissionCollection() {
 		return (new ServicePermissionCollection());
@@ -292,12 +292,12 @@ final public class ServicePermission extends BasicPermission {
 	 * Determines the equalty of two ServicePermission objects.
 	 * 
 	 * Checks that specified object has the same class name and action as this
-	 * <tt>ServicePermission</tt>.
+	 * <code>ServicePermission</code>.
 	 * 
 	 * @param obj The object to test for equality.
-	 * @return true if obj is a <tt>ServicePermission</tt>, and has the same
-	 *         class name and actions as this <tt>ServicePermission</tt>
-	 *         object; <tt>false</tt> otherwise.
+	 * @return true if obj is a <code>ServicePermission</code>, and has the same
+	 *         class name and actions as this <code>ServicePermission</code>
+	 *         object; <code>false</code> otherwise.
 	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
@@ -394,7 +394,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Adds a permission to the <tt>ServicePermission</tt> objects using the
+	 * Adds a permission to the <code>ServicePermission</code> objects using the
 	 * key for the hash as the name.
 	 * 
 	 * @param permission The Permission object to add.
@@ -402,7 +402,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 * @exception IllegalArgumentException If the permission is not a
 	 *            ServicePermission object.
 	 * 
-	 * @exception SecurityException If this <tt>ServicePermissionCollection</tt>
+	 * @exception SecurityException If this <code>ServicePermissionCollection</code>
 	 *            object has been marked read-only.
 	 */
 
@@ -439,12 +439,12 @@ final class ServicePermissionCollection extends PermissionCollection {
 
 	/**
 	 * Determines if a set of permissions implies the permissions expressed in
-	 * <tt>permission</tt>.
+	 * <code>permission</code>.
 	 * 
 	 * @param permission The Permission object to compare.
 	 * 
-	 * @return <tt>true</tt> if <tt>permission</tt> is a proper subset of a
-	 *         permission in the set; <tt>false</tt> otherwise.
+	 * @return <code>true</code> if <code>permission</code> is a proper subset of a
+	 *         permission in the set; <code>false</code> otherwise.
 	 */
 
 	public boolean implies(Permission permission) {
@@ -506,7 +506,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Returns an enumeration of all the <tt>ServicePermission</tt> objects in
+	 * Returns an enumeration of all the <code>ServicePermission</code> objects in
 	 * the container.
 	 * 
 	 * @return Enumeration of all the ServicePermission objects.

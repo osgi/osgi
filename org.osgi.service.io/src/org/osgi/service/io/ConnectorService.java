@@ -25,23 +25,23 @@ import javax.microedition.io.*;
 
 /**
  * The Connector Service should be called to create and open
- * <tt>javax.microedition.io.Connection</tt> objects.
+ * <code>javax.microedition.io.Connection</code> objects.
  * 
- * When an <tt>open*</tt> method is called, the implementation of the
+ * When an <code>open*</code> method is called, the implementation of the
  * Connector Service will examine the specified name for a scheme. The Connector
  * Service will then look for a Connection Factory service which is registered
- * with the service property <tt>IO_SCHEME</tt> which matches the scheme. The
- * <tt>createConnection</tt> method of the selected Connection Factory will
- * then be called to create the actual <tt>Connection</tt> object.
+ * with the service property <code>IO_SCHEME</code> which matches the scheme. The
+ * <code>createConnection</code> method of the selected Connection Factory will
+ * then be called to create the actual <code>Connection</code> object.
  * 
  * <p>
  * If more than one Connection Factory service is registered for a particular
  * scheme, the service with the highest ranking (as specified in its
- * <tt>service.ranking</tt> property) is called. If there is a tie in ranking,
+ * <code>service.ranking</code> property) is called. If there is a tie in ranking,
  * the service with the lowest service ID (as specified in its
- * <tt>service.id</tt> property), that is the service that was registered
+ * <code>service.id</code> property), that is the service that was registered
  * first, is called. This is the same algorithm used by
- * <tt>BundleContext.getServiceReference</tt>.
+ * <code>BundleContext.getServiceReference</code>.
  * 
  * @version $Revision$
  */
@@ -66,10 +66,10 @@ public interface ConnectorService {
 	public static final int	READ_WRITE	= Connector.READ_WRITE;
 
 	/**
-	 * Create and open a <tt>Connection</tt> object for the specified name.
+	 * Create and open a <code>Connection</code> object for the specified name.
 	 * 
 	 * @param name The URI for the connection.
-	 * @return A new <tt>javax.microedition.io.Connection</tt> object.
+	 * @return A new <code>javax.microedition.io.Connection</code> object.
 	 * @throws IllegalArgumentException If a parameter is invalid.
 	 * @throws javax.microedition.io.ConnectionNotFoundException If the
 	 *         connection cannot be found.
@@ -79,12 +79,12 @@ public interface ConnectorService {
 	public Connection open(String name) throws IOException;
 
 	/**
-	 * Create and open a <tt>Connection</tt> object for the specified name and
+	 * Create and open a <code>Connection</code> object for the specified name and
 	 * access mode.
 	 * 
 	 * @param name The URI for the connection.
 	 * @param mode The access mode.
-	 * @return A new <tt>javax.microedition.io.Connection</tt> object.
+	 * @return A new <code>javax.microedition.io.Connection</code> object.
 	 * @throws IllegalArgumentException If a parameter is invalid.
 	 * @throws javax.microedition.io.ConnectionNotFoundException If the
 	 *         connection cannot be found.
@@ -94,14 +94,14 @@ public interface ConnectorService {
 	public Connection open(String name, int mode) throws IOException;
 
 	/**
-	 * Create and open a <tt>Connection</tt> object for the specified name,
+	 * Create and open a <code>Connection</code> object for the specified name,
 	 * access mode and timeouts.
 	 * 
 	 * @param name The URI for the connection.
 	 * @param mode The access mode.
 	 * @param timeouts A flag to indicate that the caller wants timeout
 	 *        exceptions.
-	 * @return A new <tt>javax.microedition.io.Connection</tt> object.
+	 * @return A new <code>javax.microedition.io.Connection</code> object.
 	 * @throws IllegalArgumentException If a parameter is invalid.
 	 * @throws javax.microedition.io.ConnectionNotFoundException If the
 	 *         connection cannot be found.
@@ -112,10 +112,10 @@ public interface ConnectorService {
 			throws IOException;
 
 	/**
-	 * Create and open an <tt>InputStream</tt> object for the specified name.
+	 * Create and open an <code>InputStream</code> object for the specified name.
 	 * 
 	 * @param name The URI for the connection.
-	 * @return An <tt>InputStream</tt> object.
+	 * @return An <code>InputStream</code> object.
 	 * @throws IllegalArgumentException If a parameter is invalid.
 	 * @throws javax.microedition.io.ConnectionNotFoundException If the
 	 *         connection cannot be found.
@@ -125,11 +125,11 @@ public interface ConnectorService {
 	public InputStream openInputStream(String name) throws IOException;
 
 	/**
-	 * Create and open a <tt>DataInputStream</tt> object for the specified
+	 * Create and open a <code>DataInputStream</code> object for the specified
 	 * name.
 	 * 
 	 * @param name The URI for the connection.
-	 * @return A <tt>DataInputStream</tt> object.
+	 * @return A <code>DataInputStream</code> object.
 	 * @throws IllegalArgumentException If a parameter is invalid.
 	 * @throws javax.microedition.io.ConnectionNotFoundException If the
 	 *         connection cannot be found.
@@ -139,10 +139,10 @@ public interface ConnectorService {
 	public DataInputStream openDataInputStream(String name) throws IOException;
 
 	/**
-	 * Create and open an <tt>OutputStream</tt> object for the specified name.
+	 * Create and open an <code>OutputStream</code> object for the specified name.
 	 * 
 	 * @param name The URI for the connection.
-	 * @return An <tt>OutputStream</tt> object.
+	 * @return An <code>OutputStream</code> object.
 	 * @throws IllegalArgumentException If a parameter is invalid.
 	 * @throws javax.microedition.io.ConnectionNotFoundException If the
 	 *         connection cannot be found.
@@ -152,11 +152,11 @@ public interface ConnectorService {
 	public OutputStream openOutputStream(String name) throws IOException;
 
 	/**
-	 * Create and open a <tt>DataOutputStream</tt> object for the specified
+	 * Create and open a <code>DataOutputStream</code> object for the specified
 	 * name.
 	 * 
 	 * @param name The URI for the connection.
-	 * @return A <tt>DataOutputStream</tt> object.
+	 * @return A <code>DataOutputStream</code> object.
 	 * @throws IllegalArgumentException If a parameter is invalid.
 	 * @throws javax.microedition.io.ConnectionNotFoundException If the
 	 *         connection cannot be found.

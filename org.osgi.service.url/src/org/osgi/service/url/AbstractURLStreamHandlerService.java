@@ -30,12 +30,12 @@ package org.osgi.service.url;
 import java.net.*;
 
 /**
- * Abstract implementation of the <tt>URLStreamHandlerService</tt> interface.
+ * Abstract implementation of the <code>URLStreamHandlerService</code> interface.
  * All the methods simply invoke the corresponding methods on
- * <tt>java.net.URLStreamHandler</tt> except for <tt>parseURL</tt> and
- * <tt>setURL</tt>, which use the <tt>URLStreamHandlerSetter</tt>
+ * <code>java.net.URLStreamHandler</code> except for <code>parseURL</code> and
+ * <code>setURL</code>, which use the <code>URLStreamHandlerSetter</code>
  * parameter. Subclasses of this abstract class should not need to override the
- * <tt>setURL</tt> and <tt>parseURL(URLStreamHandlerSetter,...)</tt>
+ * <code>setURL</code> and <code>parseURL(URLStreamHandlerSetter,...)</code>
  * methods.
  * 
  * @version $Revision$
@@ -49,18 +49,18 @@ public abstract class AbstractURLStreamHandlerService extends URLStreamHandler
 			throws java.io.IOException;
 
 	/**
-	 * The <tt>URLStreamHandlerSetter</tt> object passed to the parseURL
+	 * The <code>URLStreamHandlerSetter</code> object passed to the parseURL
 	 * method.
 	 */
 	protected URLStreamHandlerSetter	realHandler;
 
 	/**
-	 * Parse a URL using the <tt>URLStreamHandlerSetter</tt> object. This
-	 * method sets the <tt>realHandler</tt> field with the specified
-	 * <tt>URLStreamHandlerSetter</tt> object and then calls
-	 * <tt>parseURL(URL,String,int,int)</tt>.
+	 * Parse a URL using the <code>URLStreamHandlerSetter</code> object. This
+	 * method sets the <code>realHandler</code> field with the specified
+	 * <code>URLStreamHandlerSetter</code> object and then calls
+	 * <code>parseURL(URL,String,int,int)</code>.
 	 * 
-	 * @param realHandler The object on which the <tt>setURL</tt> method must
+	 * @param realHandler The object on which the <code>setURL</code> method must
 	 *        be invoked for the specified URL.
 	 * @see "java.net.URLStreamHandler.parseURL"
 	 */
@@ -71,7 +71,7 @@ public abstract class AbstractURLStreamHandlerService extends URLStreamHandler
 	}
 
 	/**
-	 * This method calls <tt>super.toExternalForm</tt>.
+	 * This method calls <code>super.toExternalForm</code>.
 	 * 
 	 * @see "java.net.URLStreamHandler.toExternalForm"
 	 */
@@ -80,7 +80,7 @@ public abstract class AbstractURLStreamHandlerService extends URLStreamHandler
 	}
 
 	/**
-	 * This method calls <tt>super.equals(URL,URL)</tt>.
+	 * This method calls <code>super.equals(URL,URL)</code>.
 	 * 
 	 * @see "java.net.URLStreamHandler.equals(URL,URL)"
 	 */
@@ -89,7 +89,7 @@ public abstract class AbstractURLStreamHandlerService extends URLStreamHandler
 	}
 
 	/**
-	 * This method calls <tt>super.getDefaultPort</tt>.
+	 * This method calls <code>super.getDefaultPort</code>.
 	 * 
 	 * @see "java.net.URLStreamHandler.getDefaultPort"
 	 */
@@ -98,7 +98,7 @@ public abstract class AbstractURLStreamHandlerService extends URLStreamHandler
 	}
 
 	/**
-	 * This method calls <tt>super.getHostAddress</tt>.
+	 * This method calls <code>super.getHostAddress</code>.
 	 * 
 	 * @see "java.net.URLStreamHandler.getHostAddress"
 	 */
@@ -107,7 +107,7 @@ public abstract class AbstractURLStreamHandlerService extends URLStreamHandler
 	}
 
 	/**
-	 * This method calls <tt>super.hashCode(URL)</tt>.
+	 * This method calls <code>super.hashCode(URL)</code>.
 	 * 
 	 * @see "java.net.URLStreamHandler.hashCode(URL)"
 	 */
@@ -116,7 +116,7 @@ public abstract class AbstractURLStreamHandlerService extends URLStreamHandler
 	}
 
 	/**
-	 * This method calls <tt>super.hostsEqual</tt>.
+	 * This method calls <code>super.hostsEqual</code>.
 	 * 
 	 * @see "java.net.URLStreamHandler.hostsEqual"
 	 */
@@ -125,7 +125,7 @@ public abstract class AbstractURLStreamHandlerService extends URLStreamHandler
 	}
 
 	/**
-	 * This method calls <tt>super.sameFile</tt>.
+	 * This method calls <code>super.sameFile</code>.
 	 * 
 	 * @see "java.net.URLStreamHandler.sameFile"
 	 */
@@ -135,7 +135,7 @@ public abstract class AbstractURLStreamHandlerService extends URLStreamHandler
 
 	/**
 	 * This method calls
-	 * <tt>realHandler.setURL(URL,String,String,int,String,String)</tt>.
+	 * <code>realHandler.setURL(URL,String,String,int,String,String)</code>.
 	 * 
 	 * @see "java.net.URLStreamHandler.setURL(URL,String,String,int,String,String)"
 	 * @deprecated This method is only for compatibility with handlers written
@@ -148,7 +148,7 @@ public abstract class AbstractURLStreamHandlerService extends URLStreamHandler
 
 	/**
 	 * This method calls
-	 * <tt>realHandler.setURL(URL,String,String,int,String,String,String,String)</tt>.
+	 * <code>realHandler.setURL(URL,String,String,int,String,String,String,String)</code>.
 	 * 
 	 * @see "java.net.URLStreamHandler.setURL(URL,String,String,int,String,String,String,String)"
 	 */

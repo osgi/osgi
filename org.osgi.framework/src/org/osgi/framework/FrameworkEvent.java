@@ -33,7 +33,7 @@ import java.util.EventObject;
  * A general Framework event.
  * 
  * <p>
- * <tt>FrameworkEvent</tt> is the event class used when notifying listeners of
+ * <code>FrameworkEvent</code> is the event class used when notifying listeners of
  * general events occuring within the OSGI environment. A type code is used to
  * identify the event type for future extendability.
  * 
@@ -69,7 +69,7 @@ public class FrameworkEvent extends EventObject {
 	 * Framework has reached the intitial start level.
 	 * 
 	 * <p>
-	 * The value of <tt>STARTED</tt> is 0x00000001.
+	 * The value of <code>STARTED</code> is 0x00000001.
 	 * 
 	 * @see "<code>StartLevel</code>"
 	 */
@@ -82,7 +82,7 @@ public class FrameworkEvent extends EventObject {
 	 * There was an error associated with a bundle.
 	 * 
 	 * <p>
-	 * The value of <tt>ERROR</tt> is 0x00000002.
+	 * The value of <code>ERROR</code> is 0x00000002.
 	 */
 	public final static int	ERROR				= 0x00000002;
 
@@ -95,7 +95,7 @@ public class FrameworkEvent extends EventObject {
 	 * PackageAdmin.refreshPackages method.
 	 * 
 	 * <p>
-	 * The value of <tt>PACKAGES_REFRESHED</tt> is 0x00000004.
+	 * The value of <code>PACKAGES_REFRESHED</code> is 0x00000004.
 	 * 
 	 * @since 1.2
 	 * @see "<code>PackageAdmin.refreshPackages</code>"
@@ -111,7 +111,7 @@ public class FrameworkEvent extends EventObject {
 	 * method.
 	 * 
 	 * <p>
-	 * The value of <tt>STARTLEVEL_CHANGED</tt> is 0x00000008.
+	 * The value of <code>STARTLEVEL_CHANGED</code> is 0x00000008.
 	 * 
 	 * @since 1.2
 	 * @see "<code>StartLevel</code>"
@@ -125,7 +125,7 @@ public class FrameworkEvent extends EventObject {
 	 * There was a warning associated with a bundle.
 	 * 
 	 * <p>
-	 * The value of <tt>WARNING</tt> is 0x00000010.
+	 * The value of <code>WARNING</code> is 0x00000010.
 	 * 
 	 * @since 1.3
 	 */
@@ -138,7 +138,7 @@ public class FrameworkEvent extends EventObject {
 	 * There was an informational event associated with a bundle.
 	 * 
 	 * <p>
-	 * The value of <tt>INFO</tt> is 0x00000020.
+	 * The value of <code>INFO</code> is 0x00000020.
 	 * 
 	 * @since 1.3
 	 */
@@ -148,7 +148,7 @@ public class FrameworkEvent extends EventObject {
 	 * Creates a Framework event.
 	 * 
 	 * @param type The event type.
-	 * @param source The event source object. This may not be <tt>null</tt>.
+	 * @param source The event source object. This may not be <code>null</code>.
 	 * @deprecated Since 1.2. This constructor is deprecated in favor of using
 	 *             the other constructor with the System Bundle as the event
 	 *             source.
@@ -166,7 +166,7 @@ public class FrameworkEvent extends EventObject {
 	 * @param type The event type.
 	 * @param bundle The event source.
 	 * @param throwable The related exception. This argument may be
-	 *        <tt>null</tt> if there is no related exception.
+	 *        <code>null</code> if there is no related exception.
 	 */
 	public FrameworkEvent(int type, Bundle bundle, Throwable throwable) {
 		super(bundle);
@@ -178,7 +178,7 @@ public class FrameworkEvent extends EventObject {
 	/**
 	 * Returns the exception related to this event.
 	 * 
-	 * @return The related exception or <tt>null</tt> if none.
+	 * @return The related exception or <code>null</code> if none.
 	 */
 	public Throwable getThrowable() {
 		return throwable;

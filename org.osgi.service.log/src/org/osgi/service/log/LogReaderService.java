@@ -30,16 +30,16 @@ package org.osgi.service.log;
 import java.util.Enumeration;
 
 /**
- * Provides methods to retrieve <tt>LogEntry</tt> objects from the log.
+ * Provides methods to retrieve <code>LogEntry</code> objects from the log.
  * <p>
- * There are two ways to retrieve <tt>LogEntry</tt> objects:
+ * There are two ways to retrieve <code>LogEntry</code> objects:
  * <ul>
- * <li>The primary way to retrieve <tt>LogEntry</tt> objects is to register a
- * <tt>LogListener</tt> object whose <tt>LogListener.logged</tt> method will
+ * <li>The primary way to retrieve <code>LogEntry</code> objects is to register a
+ * <code>LogListener</code> object whose <code>LogListener.logged</code> method will
  * be called for each entry added to the log.
- * <li>To retrieve past <tt>LogEntry</tt> objects, the <tt>getLog</tt>
- * method can be called which will return an <tt>Enumeration</tt> of all
- * <tt>LogEntry</tt> objects in the log.
+ * <li>To retrieve past <code>LogEntry</code> objects, the <code>getLog</code>
+ * method can be called which will return an <code>Enumeration</code> of all
+ * <code>LogEntry</code> objects in the log.
  * 
  * @version $Revision$
  * @see LogEntry
@@ -48,25 +48,25 @@ import java.util.Enumeration;
  */
 public abstract interface LogReaderService {
 	/**
-	 * Subscribes to <tt>LogEntry</tt> objects.
+	 * Subscribes to <code>LogEntry</code> objects.
 	 * 
 	 * <p>
-	 * This method registers a <tt>LogListener</tt> object with the Log Reader
-	 * Service. The <tt>LogListener.logged(LogEntry)</tt> method will be
-	 * called for each <tt>LogEntry</tt> object placed into the log.
+	 * This method registers a <code>LogListener</code> object with the Log Reader
+	 * Service. The <code>LogListener.logged(LogEntry)</code> method will be
+	 * called for each <code>LogEntry</code> object placed into the log.
 	 * 
 	 * <p>
-	 * When a bundle which registers a <tt>LogListener</tt> object is stopped
+	 * When a bundle which registers a <code>LogListener</code> object is stopped
 	 * or otherwise releases the Log Reader Service, the Log Reader Service must
 	 * remove all of the bundle's listeners.
 	 * 
 	 * <p>
 	 * If this Log Reader Service's list of listeners already contains a
-	 * listener <tt>l</tt> such that <tt>(l==listener)</tt>, this method
+	 * listener <code>l</code> such that <code>(l==listener)</code>, this method
 	 * does nothing.
 	 * 
-	 * @param listener A <tt>LogListener</tt> object to register; the
-	 *        <tt>LogListener</tt> object is used to receive <tt>LogEntry</tt>
+	 * @param listener A <code>LogListener</code> object to register; the
+	 *        <code>LogListener</code> object is used to receive <code>LogEntry</code>
 	 *        objects.
 	 * @see LogListener
 	 * @see LogEntry
@@ -75,31 +75,31 @@ public abstract interface LogReaderService {
 	public abstract void addLogListener(LogListener listener);
 
 	/**
-	 * Unsubscribes to <tt>LogEntry</tt> objects.
+	 * Unsubscribes to <code>LogEntry</code> objects.
 	 * 
 	 * <p>
-	 * This method unregisters a <tt>LogListener</tt> object from the Log
+	 * This method unregisters a <code>LogListener</code> object from the Log
 	 * Reader Service.
 	 * 
 	 * <p>
-	 * If <tt>listener</tt> is not contained in this Log Reader Service's list
+	 * If <code>listener</code> is not contained in this Log Reader Service's list
 	 * of listeners, this method does nothing.
 	 * 
-	 * @param listener A <tt>LogListener</tt> object to unregister.
+	 * @param listener A <code>LogListener</code> object to unregister.
 	 * @see LogListener
 	 */
 	public abstract void removeLogListener(LogListener listener);
 
 	/**
-	 * Returns an <tt>Enumeration</tt> of all <tt>LogEntry</tt> objects in
+	 * Returns an <code>Enumeration</code> of all <code>LogEntry</code> objects in
 	 * the log.
 	 * 
 	 * <p>
-	 * Each element of the enumeration is a <tt>LogEntry</tt> object, ordered
+	 * Each element of the enumeration is a <code>LogEntry</code> object, ordered
 	 * with the most recent entry first. Whether the enumeration is of all
-	 * <tt>LogEntry</tt> objects since the Log Service was started or some
+	 * <code>LogEntry</code> objects since the Log Service was started or some
 	 * recent past is implementation-specific. Also implementation-specific is
-	 * whether informational and debug <tt>LogEntry</tt> objects are included
+	 * whether informational and debug <code>LogEntry</code> objects are included
 	 * in the enumeration.
 	 */
 	public abstract Enumeration getLog();

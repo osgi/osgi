@@ -31,7 +31,7 @@ package org.osgi.framework;
  * A Framework exception.
  * 
  * <p>
- * An <tt>InvalidSyntaxException</tt> object indicates that a filter string
+ * An <code>InvalidSyntaxException</code> object indicates that a filter string
  * parameter has an invalid syntax and cannot be parsed.
  * 
  * <p>
@@ -52,10 +52,10 @@ public class InvalidSyntaxException extends Exception {
 	private Throwable	cause;
 
 	/**
-	 * Creates an exception of type <tt>InvalidSyntaxException</tt>.
+	 * Creates an exception of type <code>InvalidSyntaxException</code>.
 	 * 
 	 * <p>
-	 * This method creates an <tt>InvalidSyntaxException</tt> object with the
+	 * This method creates an <code>InvalidSyntaxException</code> object with the
 	 * specified message and the filter string which generated the exception.
 	 * 
 	 * @param msg The message.
@@ -68,10 +68,10 @@ public class InvalidSyntaxException extends Exception {
 	}
 
 	/**
-	 * Creates an exception of type <tt>InvalidSyntaxException</tt>.
+	 * Creates an exception of type <code>InvalidSyntaxException</code>.
 	 * 
 	 * <p>
-	 * This method creates an <tt>InvalidSyntaxException</tt> object with the
+	 * This method creates an <code>InvalidSyntaxException</code> object with the
 	 * specified message and the filter string which generated the exception.
 	 * 
 	 * @param msg The message.
@@ -87,7 +87,7 @@ public class InvalidSyntaxException extends Exception {
 
 	/**
 	 * Returns the filter string that generated the
-	 * <tt>InvalidSyntaxException</tt> object.
+	 * <code>InvalidSyntaxException</code> object.
 	 * 
 	 * @return The invalid filter string.
 	 * @see BundleContext#getServiceReferences
@@ -98,10 +98,10 @@ public class InvalidSyntaxException extends Exception {
 	}
 
 	/**
-	 * Returns the cause of this exception or <tt>null</tt> if no cause was
+	 * Returns the cause of this exception or <code>null</code> if no cause was
 	 * specified when this exception was created.
 	 * 
-	 * @return The cause of this exception or <tt>null</tt> if no cause was
+	 * @return The cause of this exception or <code>null</code> if no cause was
 	 *         specified.
 	 * @since 1.3
 	 */
@@ -113,7 +113,7 @@ public class InvalidSyntaxException extends Exception {
 	 * The cause of this exception can only be set when constructed.
 	 * 
 	 * @throws java.lang.IllegalStateException This method will always throw an
-	 *         <tt>IllegalStateException</tt> since the cause of this
+	 *         <code>IllegalStateException</code> since the cause of this
 	 *         exception can only be set when constructed.
 	 * @since 1.3
 	 */

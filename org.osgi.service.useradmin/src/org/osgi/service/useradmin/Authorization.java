@@ -28,13 +28,13 @@
 package org.osgi.service.useradmin;
 
 /**
- * The <tt>Authorization</tt> interface encapsulates an authorization context
+ * The <code>Authorization</code> interface encapsulates an authorization context
  * on which bundles can base authorization decisions, where appropriate.
  * <p>
  * Bundles associate the privilege to access restricted resources or operations
  * with roles. Before granting access to a restricted resource or operation, a
- * bundle will check if the <tt>Authorization</tt> object passed to it possess
- * the required role, by calling its <tt>hasRole</tt> method.
+ * bundle will check if the <code>Authorization</code> object passed to it possess
+ * the required role, by calling its <code>hasRole</code> method.
  * <p>
  * Authorization contexts are instantiated by calling the
  * {@link UserAdmin#getAuthorization}method.
@@ -42,22 +42,22 @@ package org.osgi.service.useradmin;
  * <p>
  * <i>Trusting Authorization objects </i>
  * <p>
- * There are no restrictions regarding the creation of <tt>Authorization</tt>
- * objects. Hence, a service must only accept <tt>Authorization</tt> objects
+ * There are no restrictions regarding the creation of <code>Authorization</code>
+ * objects. Hence, a service must only accept <code>Authorization</code> objects
  * from bundles that has been authorized to use the service using code based (or
  * Java 2) permissions.
  * 
  * <p>
- * In some cases it is useful to use <tt>ServicePermission</tt> to do the code
+ * In some cases it is useful to use <code>ServicePermission</code> to do the code
  * based access control. A service basing user access control on
- * <tt>Authorization</tt> objects passed to it, will then require that a
- * calling bundle has the <tt>ServicePermission</tt> to get the service in
+ * <code>Authorization</code> objects passed to it, will then require that a
+ * calling bundle has the <code>ServicePermission</code> to get the service in
  * question. This is the most convenient way. The OSGi environment will do the
  * code based permission check when the calling bundle attempts to get the
  * service from the service registry.
  * <p>
  * Example: A servlet using a service on a user's behalf. The bundle with the
- * servlet must be given the <tt>ServicePermission</tt> to get the Http
+ * servlet must be given the <code>ServicePermission</code> to get the Http
  * Service.
  * <p>
  * However, in some cases the code based permission checks need to be more
@@ -67,26 +67,26 @@ package org.osgi.service.useradmin;
  * Example: A servlet using a service on a user's behalf, where some service
  * functionality is open to anyone, and some is restricted by code based
  * permissions. When a restricted method is called (e.g., one handing over an
- * <tt>Authorization</tt> object), the service explicitly checks that the
+ * <code>Authorization</code> object), the service explicitly checks that the
  * calling bundle has permission to make the call.
  * 
  * @version $Revision$
  */
 public interface Authorization {
 	/**
-	 * Gets the name of the {@link User}that this <tt>Authorization</tt>
+	 * Gets the name of the {@link User}that this <code>Authorization</code>
 	 * context was created for.
 	 * 
 	 * @return The name of the {@link User}object that this
-	 *         <tt>Authorization</tt> context was created for, or
-	 *         <tt>null</tt> if no user was specified when this
-	 *         <tt>Authorization</tt> context was created.
+	 *         <code>Authorization</code> context was created for, or
+	 *         <code>null</code> if no user was specified when this
+	 *         <code>Authorization</code> context was created.
 	 */
 	public String getName();
 
 	/**
 	 * Checks if the role with the specified name is implied by this
-	 * <tt>Authorization</tt> context.
+	 * <code>Authorization</code> context.
 	 * <p>
 	 * 
 	 * Bundles must define globally unique role names that are associated with
@@ -96,18 +96,18 @@ public interface Authorization {
 	 * 
 	 * @param name The name of the role to check for.
 	 * 
-	 * @return <tt>true</tt> if this <tt>Authorization</tt> context implies
-	 *         the specified role, otherwise <tt>false</tt>.
+	 * @return <code>true</code> if this <code>Authorization</code> context implies
+	 *         the specified role, otherwise <code>false</code>.
 	 */
 	public boolean hasRole(String name);
 
 	/**
-	 * Gets the names of all roles encapsulated by this <tt>Authorization</tt>
+	 * Gets the names of all roles encapsulated by this <code>Authorization</code>
 	 * context.
 	 * 
 	 * @return The names of all roles encapsulated by this
-	 *         <tt>Authorization</tt> context, or <tt>null</tt> if no roles
-	 *         are in the context. The predefined role <tt>user.anyone</tt>
+	 *         <code>Authorization</code> context, or <code>null</code> if no roles
+	 *         are in the context. The predefined role <code>user.anyone</code>
 	 *         will not be included in this list.
 	 */
 	public String[] getRoles();

@@ -42,7 +42,7 @@ public class NamespaceException extends Exception {
 	private Throwable	cause;
 
 	/**
-	 * Construct a <tt>NamespaceException</tt> object with a detail message.
+	 * Construct a <code>NamespaceException</code> object with a detail message.
 	 * 
 	 * @param message the detail message
 	 */
@@ -52,7 +52,7 @@ public class NamespaceException extends Exception {
 	}
 
 	/**
-	 * Construct a <tt>NamespaceException</tt> object with a detail message
+	 * Construct a <code>NamespaceException</code> object with a detail message
 	 * and a nested exception.
 	 * 
 	 * @param message The detail message.
@@ -78,10 +78,10 @@ public class NamespaceException extends Exception {
 	}
 
 	/**
-	 * Returns the cause of this exception or <tt>null</tt> if no
+	 * Returns the cause of this exception or <code>null</code> if no
 	 * cause was specified when this exception was created.
 	 *
-	 * @return  The cause of this exception or <tt>null</tt> if no
+	 * @return  The cause of this exception or <code>null</code> if no
 	 * cause was specified.
 	 * @since 1.2 
 	 */
@@ -93,7 +93,7 @@ public class NamespaceException extends Exception {
 	 * The cause of this exception can only be set when constructed.
 	 *
 	 * @throws java.lang.IllegalStateException
-	 * This method will always throw an <tt>IllegalStateException</tt>
+	 * This method will always throw an <code>IllegalStateException</code>
 	 * since the cause of this exception can only be set when constructed.
 	 * @since 1.2 
 	 */

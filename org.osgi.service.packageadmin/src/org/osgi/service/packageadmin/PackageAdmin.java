@@ -44,13 +44,13 @@ import org.osgi.framework.Bundle;
  * <p>
  * The information about exported packages returned by this service is valid
  * only until the next time {@link #refreshPackages}is called. If an
- * <tt>ExportedPackage</tt> object becomes stale, (that is, the package it
+ * <code>ExportedPackage</code> object becomes stale, (that is, the package it
  * references has been updated or removed as a result of calling
- * <tt>PackageAdmin.refreshPackages()</tt>), its <tt>getName()</tt> and
- * <tt>getSpecificationVersion()</tt> continue to return their old values,
- * <tt>isRemovalPending()</tt> returns <tt>true</tt>, and
- * <tt>getExportingBundle()</tt> and <tt>getImportingBundles()</tt> return
- * <tt>null</tt>.
+ * <code>PackageAdmin.refreshPackages()</code>), its <code>getName()</code> and
+ * <code>getSpecificationVersion()</code> continue to return their old values,
+ * <code>isRemovalPending()</code> returns <code>true</code>, and
+ * <code>getExportingBundle()</code> and <code>getImportingBundles()</code> return
+ * <code>null</code>.
  * 
  * @version $Revision$
  */
@@ -59,7 +59,7 @@ public interface PackageAdmin {
 	 * Gets the packages exported by the specified bundle.
 	 * 
 	 * @param bundle The bundle whose exported packages are to be returned, or
-	 *        <tt>null</tt> if all the packages currently exported in the
+	 *        <code>null</code> if all the packages currently exported in the
 	 *        Framework are to be returned. If the specified bundle is the
 	 *        system bundle (that is, the bundle with id zero), this method
 	 *        returns all the packages on the system classpath whose name does
@@ -70,25 +70,25 @@ public interface PackageAdmin {
 	 *        contains one or more classes that have been loaded.
 	 * 
 	 * @return The array of packages exported by the specified bundle, or
-	 *         <tt>null</tt> if the specified bundle has not exported any
+	 *         <code>null</code> if the specified bundle has not exported any
 	 *         packages.
 	 */
 	public ExportedPackage[] getExportedPackages(Bundle bundle);
 
 	/**
-	 * Gets the <tt>ExportedPackage</tt> object with the specified package
+	 * Gets the <code>ExportedPackage</code> object with the specified package
 	 * name. All exported packages will be checked for the specified name. The
 	 * exported package with the highest version will be returned.
 	 * <p>
 	 * In an environment where the exhaustive list of packages on the system
 	 * classpath is not known in advance, this method attempts to see if the
 	 * named package is on the system classpath. This means that this method may
-	 * discover an <tt>ExportedPackage</tt> object that was not present in the
-	 * list returned by a prior call to <tt>getExportedPackages()</tt>.
+	 * discover an <code>ExportedPackage</code> object that was not present in the
+	 * list returned by a prior call to <code>getExportedPackages()</code>.
 	 * 
 	 * @param name The name of the exported package to be returned.
 	 * 
-	 * @return The exported package with the specified name, or <tt>null</tt>
+	 * @return The exported package with the specified name, or <code>null</code>
 	 *         if no exported packages with that name exists.
 	 */
 	public ExportedPackage getExportedPackage(String name);
@@ -115,64 +115,64 @@ public interface PackageAdmin {
 	 * imports a package that is currently exported by a bundle in the graph.
 	 * The graph is fully constructed when there is no bundle outside the graph
 	 * that imports a package from a bundle in the graph. The graph may contain
-	 * <tt>UNINSTALLED</tt> bundles that are currently still exporting
+	 * <code>UNINSTALLED</code> bundles that are currently still exporting
 	 * packages.
 	 * 
-	 * <li>Each bundle in the graph that is in the <tt>ACTIVE</tt> state will
-	 * be stopped as described in the <tt>Bundle.stop</tt> method.
+	 * <li>Each bundle in the graph that is in the <code>ACTIVE</code> state will
+	 * be stopped as described in the <code>Bundle.stop</code> method.
 	 * 
-	 * <li>Each bundle in the graph that is in the <tt>RESOLVED</tt> state is
-	 * moved to the <tt>INSTALLED</tt> state. The effect of this step is that
-	 * bundles in the graph are no longer <tt>RESOLVED</tt>.
+	 * <li>Each bundle in the graph that is in the <code>RESOLVED</code> state is
+	 * moved to the <code>INSTALLED</code> state. The effect of this step is that
+	 * bundles in the graph are no longer <code>RESOLVED</code>.
 	 * 
-	 * <li>Each bundle in the graph that is in the <tt>UNINSTALLED</tt> state
+	 * <li>Each bundle in the graph that is in the <code>UNINSTALLED</code> state
 	 * is removed from the graph and is now completely removed from the
 	 * Framework.
 	 * 
-	 * <li>Each bundle in the graph that was in the <tt>ACTIVE</tt> state
-	 * prior to Step 2 is started as described in the <tt>Bundle.start</tt>
+	 * <li>Each bundle in the graph that was in the <code>ACTIVE</code> state
+	 * prior to Step 2 is started as described in the <code>Bundle.start</code>
 	 * method, causing all bundles required for the restart to be resolved. It
 	 * is possible that, as a result of the previous steps, packages that were
 	 * previously exported no longer are. Therefore, some bundles may be
 	 * unresolvable until another bundle offering a compatible package for
 	 * export has been installed in the Framework.
-	 * <li>A framework event of type <tt>FrameworkEvent.PACKAGES_REFRESHED</tt>
+	 * <li>A framework event of type <code>FrameworkEvent.PACKAGES_REFRESHED</code>
 	 * is broadcast.
 	 * </ol>
 	 * 
 	 * <p>
 	 * For any exceptions that are thrown during any of these steps, a
-	 * <tt>FrameworkEvent</tt> of type <tt>ERROR</tt> is broadcast,
+	 * <code>FrameworkEvent</code> of type <code>ERROR</code> is broadcast,
 	 * containing the exception. The source bundle for these events should be
 	 * the specific bundle to which the exception is related. If no specific
 	 * bundle can be associated with the exception then the System Bundle must
 	 * be used as the source bundle for the event.
 	 * 
 	 * @param bundles the bundles whose exported packages are to be updated or
-	 *        removed, or <tt>null</tt> for all previously updated or
+	 *        removed, or <code>null</code> for all previously updated or
 	 *        uninstalled bundles.
 	 * 
 	 * @exception SecurityException if the caller does not have the
-	 *            <tt>AdminPermission</tt> and the Java runtime environment
+	 *            <code>AdminPermission</code> and the Java runtime environment
 	 *            supports permissions.
 	 */
 	public void refreshPackages(Bundle[] bundles);
 
 	/**
-	 * Get the <tt>ExportedPackage</tt> objects with the specified
+	 * Get the <code>ExportedPackage</code> objects with the specified
 	 * package name. All exported packages will be checked for the specified
 	 * name.
 	 * <p>
 	 * In an environment where the exhaustive list of packages on the system
 	 * classpath is not known in advance, this method attempts to see if the
 	 * named package is on the system classpath. This means that this method may
-	 * discover an <tt>ExportedPackage</tt> object that was not present in the
-	 * list returned by a prior call to <tt>getExportedPackages()</tt>.
+	 * discover an <code>ExportedPackage</code> object that was not present in the
+	 * list returned by a prior call to <code>getExportedPackages()</code>.
 	 * 
 	 * @param name The name of the exported packages to be returned.
 	 * 
 	 * @return An array of the exported packages with the specified name, or
-	 *         <tt>null</tt> if no exported packages with that name exists.
+	 *         <code>null</code> if no exported packages with that name exists.
 	 * @since 1.2
 	 */
 	public ExportedPackage[] getExportedPackages(String name);
@@ -185,27 +185,27 @@ public interface PackageAdmin {
 	 * resolve all unresolved bundles installed in the framework.
 	 * 
 	 * <p>
-	 * If <tt>null</tt> is specified then the Framework will attempt to
+	 * If <code>null</code> is specified then the Framework will attempt to
 	 * resolve all unresolved bundles. This method must not cause any bundle to
 	 * be refreshed, stopped, or started. This method will not return until the
 	 * operation has completed.
 	 * 
-	 * @param bundles The bundles to resolve or <tt>null</tt> to resolve all
+	 * @param bundles The bundles to resolve or <code>null</code> to resolve all
 	 *        unresolved bundles installed in the Framework.
-	 * @return <tt>true</tt> if all specified bundles are resolved;
+	 * @return <code>true</code> if all specified bundles are resolved;
 	 * @since 1.2
 	 */
 	public boolean resolveBundles(Bundle[] bundles);
 
 	/**
 	 * Returns an array of RequiredBundles with the specified symbolic name. If
-	 * the symbolic name argument is <tt>null</tt> then all RequiredBundles
+	 * the symbolic name argument is <code>null</code> then all RequiredBundles
 	 * are returned.
 	 * 
 	 * @param symbolicName The symbolic name of the RequiredBundle or
-	 *        <tt>null</tt> for all RequiredBundles in the Framework.
+	 *        <code>null</code> for all RequiredBundles in the Framework.
 	 * @return An array of RequiredBundles with the specified symbolic name or
-	 *         <tt>null</tt> if no RequiredBundles exist with that symbolic
+	 *         <code>null</code> if no RequiredBundles exist with that symbolic
 	 *         name.
 	 * @since 1.2
 	 */
@@ -214,7 +214,7 @@ public interface PackageAdmin {
 	/**
 	 * Returns the bundles with the specified symbolic name within the specified
 	 * version range. If no bundles are installed that have the specified
-	 * symbolic name, then <tt>null</tt> is returned. If a version range is
+	 * symbolic name, then <code>null</code> is returned. If a version range is
 	 * specified, then only the bundles that have the specified symbolic name
 	 * and belong to the specified version range are returned. The returned
 	 * bundles are ordered by version in descending version order so that the
@@ -223,24 +223,24 @@ public interface PackageAdmin {
 	 * @see org.osgi.framework.Constants#BUNDLE_VERSION_ATTRIBUTE
 	 * @param symbolicName The symbolic name of the desired bundles.
 	 * @param versionRange The version range of the desired bundles, or
-	 *        <tt>null</tt> if all versions are desired.
+	 *        <code>null</code> if all versions are desired.
 	 * @return An array of bundles with the specified name belonging to the
 	 *         specified version range ordered in descending version order, or
-	 *         <tt>null</tt> if no bundles are found.
+	 *         <code>null</code> if no bundles are found.
 	 * @since 1.2
 	 */
 	public Bundle[] getBundles(String symbolicName, String versionRange);
 
 	/**
 	 * Returns an array of attached fragment bundles for the specified bundle.
-	 * If the specified bundle is a fragment then <tt>null</tt> is returned.
-	 * If no fragments are attached to the specified bundle then <tt>null</tt>
+	 * If the specified bundle is a fragment then <code>null</code> is returned.
+	 * If no fragments are attached to the specified bundle then <code>null</code>
 	 * is returned.
 	 * ### what do you get when the bundle is not resolved?
 	 * 
 	 * @param bundle The bundle whose attached fragment bundles are to be
 	 *        returned.
-	 * @return An array of fragment bundles or <tt>null</tt> if the bundle
+	 * @return An array of fragment bundles or <code>null</code> if the bundle
 	 *         does not have any attached fragment bundles.
 	 * @since 1.2
 	 */
@@ -248,11 +248,11 @@ public interface PackageAdmin {
 
 	/**
 	 * Returns an array of host bundles to which the specified fragment bundle
-	 * is attached or <tt>null</tt> if the specified bundle is not attached to
+	 * is attached or <code>null</code> if the specified bundle is not attached to
 	 * a host or is not a fragment bundle.
 	 * 
 	 * @param bundle The bundle whose host bundles are to be returned.
-	 * @return An array of host bundles or <tt>null</tt> if the bundle does
+	 * @return An array of host bundles or <code>null</code> if the bundle does
 	 *         not have any host bundles.
 	 * @since 1.2
 	 */
@@ -276,7 +276,7 @@ public interface PackageAdmin {
 	 * The bundle is a fragment bundle.
 	 * 
 	 * <p>
-	 * The value of <tt>BUNDLE_TYPE_FRAGMENT</tt> is 0x00000001.
+	 * The value of <code>BUNDLE_TYPE_FRAGMENT</code> is 0x00000001.
 	 * 
 	 * @since 1.2
 	 */

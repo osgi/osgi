@@ -30,77 +30,77 @@ package org.osgi.service.useradmin;
 import java.util.Dictionary;
 
 /**
- * A <tt>User</tt> role managed by a User Admin service.
+ * A <code>User</code> role managed by a User Admin service.
  * 
  * <p>
  * In this context, the term &quot;user&quot; is not limited to just human
  * beings. Instead, it refers to any entity that may have any number of
  * credentials associated with it that it may use to authenticate itself.
  * <p>
- * In general, <tt>User</tt> objects are associated with a specific User Admin
+ * In general, <code>User</code> objects are associated with a specific User Admin
  * service (namely the one that created them), and cannot be used with other
  * User Admin services.
  * <p>
- * A <tt>User</tt> object may have credentials (and properties, inherited from
+ * A <code>User</code> object may have credentials (and properties, inherited from
  * the {@link Role}class) associated with it. Specific
  * {@link UserAdminPermission}objects are required to read or change a
- * <tt>User</tt> object's credentials.
+ * <code>User</code> object's credentials.
  * <p>
- * Credentials are <tt>Dictionary</tt> objects and have semantics that are
- * similar to the properties in the <tt>Role</tt> class.
+ * Credentials are <code>Dictionary</code> objects and have semantics that are
+ * similar to the properties in the <code>Role</code> class.
  * 
  * @version $Revision$
  */
 public interface User extends Role {
 	/**
-	 * Returns a <tt>Dictionary</tt> of the credentials of this <tt>User</tt>
-	 * object. Any changes to the returned <tt>Dictionary</tt> object will
-	 * change the credentials of this <tt>User</tt> object. This will cause a
-	 * <tt>UserAdminEvent</tt> object of type
+	 * Returns a <code>Dictionary</code> of the credentials of this <code>User</code>
+	 * object. Any changes to the returned <code>Dictionary</code> object will
+	 * change the credentials of this <code>User</code> object. This will cause a
+	 * <code>UserAdminEvent</code> object of type
 	 * {@link UserAdminEvent#ROLE_CHANGED}to be broadcast to any
-	 * <tt>UserAdminListeners</tt> objects.
+	 * <code>UserAdminListeners</code> objects.
 	 * 
 	 * <p>
-	 * Only objects of type <tt>String</tt> may be used as credential keys,
-	 * and only objects of type <tt>String</tt> or of type <tt>byte[]</tt>
+	 * Only objects of type <code>String</code> may be used as credential keys,
+	 * and only objects of type <code>String</code> or of type <code>byte[]</code>
 	 * may be used as credential values. Any other types will cause an exception
-	 * of type <tt>IllegalArgumentException</tt> to be raised.
+	 * of type <code>IllegalArgumentException</code> to be raised.
 	 * 
 	 * <p>
-	 * In order to retrieve a credential from the returned <tt>Dictionary</tt>
+	 * In order to retrieve a credential from the returned <code>Dictionary</code>
 	 * object, a {@link UserAdminPermission}named after the credential name (or
-	 * a prefix of it) with action <tt>getCredential</tt> is required.
+	 * a prefix of it) with action <code>getCredential</code> is required.
 	 * <p>
 	 * In order to add or remove a credential from the returned
-	 * <tt>Dictionary</tt> object, a {@link UserAdminPermission}named after
+	 * <code>Dictionary</code> object, a {@link UserAdminPermission}named after
 	 * the credential name (or a prefix of it) with action
 	 * <code>changeCredential</code> is required.
 	 * 
-	 * @return <tt>Dictionary</tt> object containing the credentials of this
-	 *         <tt>User</tt> object.
+	 * @return <code>Dictionary</code> object containing the credentials of this
+	 *         <code>User</code> object.
 	 */
 	public Dictionary getCredentials();
 
 	/**
-	 * Checks to see if this <tt>User</tt> object has a credential with the
-	 * specified <tt>key</tt> set to the specified <tt>value</tt>.
+	 * Checks to see if this <code>User</code> object has a credential with the
+	 * specified <code>key</code> set to the specified <code>value</code>.
 	 * 
 	 * <p>
-	 * If the specified credential <tt>value</tt> is not of type
-	 * <tt>String</tt> or <tt>byte[]</tt>, it is ignored, that is,
-	 * <tt>false</tt> is returned (as opposed to an
-	 * <tt>IllegalArgumentException</tt> being raised).
+	 * If the specified credential <code>value</code> is not of type
+	 * <code>String</code> or <code>byte[]</code>, it is ignored, that is,
+	 * <code>false</code> is returned (as opposed to an
+	 * <code>IllegalArgumentException</code> being raised).
 	 * 
-	 * @param key The credential <tt>key</tt>.
-	 * @param value The credential <tt>value</tt>.
+	 * @param key The credential <code>key</code>.
+	 * @param value The credential <code>value</code>.
 	 * 
-	 * @return <tt>true</tt> if this user has the specified credential;
-	 *         <tt>false</tt> otherwise.
+	 * @return <code>true</code> if this user has the specified credential;
+	 *         <code>false</code> otherwise.
 	 * 
 	 * @throws SecurityException If a security manager exists and the caller
-	 *         does not have the <tt>UserAdminPermission</tt> named after the
+	 *         does not have the <code>UserAdminPermission</code> named after the
 	 *         credential key (or a prefix of it) with action
-	 *         <tt>getCredential</tt>.
+	 *         <code>getCredential</code>.
 	 */
 	public boolean hasCredential(String key, Object value);
 }

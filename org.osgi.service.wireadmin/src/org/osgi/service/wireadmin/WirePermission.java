@@ -35,28 +35,28 @@ import java.security.BasicPermission;
 import java.security.PermissionCollection;
 
 /**
- * Permission for the scope of a <tt>Wire</tt> object. When a
- * <tt>Envelope</tt> object is used for communication with the <tt>poll</tt>
- * or <tt>update</tt> method, and the scope is set, then the <tt>Wire</tt>
+ * Permission for the scope of a <code>Wire</code> object. When a
+ * <code>Envelope</code> object is used for communication with the <code>poll</code>
+ * or <code>update</code> method, and the scope is set, then the <code>Wire</code>
  * object must verify that the Consumer service has
- * <tt>WirePermission[name,CONSUME]</tt> and the Producer service has
- * <tt>WirePermission[name,PRODUCE]</tt> for all names in the scope.
+ * <code>WirePermission[name,CONSUME]</code> and the Producer service has
+ * <code>WirePermission[name,PRODUCE]</code> for all names in the scope.
  * <p>
  * The names are compared with the normal rules for permission names. This means
  * that they may end with a "*" to indicate wildcards. E.g. Door.* indicates all
  * scope names starting with the string "Door". The last period is required due
- * to the implementations of the <tt>BasicPermission</tt> class.
+ * to the implementations of the <code>BasicPermission</code> class.
  * 
  * @version $Revision$
  */
 final public class WirePermission extends BasicPermission {
     static final long serialVersionUID = -5583709391516569321L;
 	/**
-	 * The action string for the <tt>PRODUCE</tt> action: value is "produce".
+	 * The action string for the <code>PRODUCE</code> action: value is "produce".
 	 */
 	public static final String	PRODUCE			= "produce";
 	/**
-	 * The action string for the <tt>CONSUME</tt> action: value is "consume".
+	 * The action string for the <code>CONSUME</code> action: value is "consume".
 	 */
 	public static final String	CONSUME			= "consume";
 	private final static int	ACTION_PRODUCE	= 0x00000001;
@@ -188,23 +188,23 @@ final public class WirePermission extends BasicPermission {
 	}
 
 	/**
-	 * Checks if this <tt>WirePermission</tt> object <tt>implies</tt> the
+	 * Checks if this <code>WirePermission</code> object <code>implies</code> the
 	 * specified permission.
 	 * <P>
-	 * More specifically, this method returns <tt>true</tt> if:
+	 * More specifically, this method returns <code>true</code> if:
 	 * <p>
 	 * <ul>
-	 * <li><i>p </i> is an instanceof the <tt>WirePermission</tt> class,
+	 * <li><i>p </i> is an instanceof the <code>WirePermission</code> class,
 	 * <li><i>p </i>'s actions are a proper subset of this object's actions,
 	 * and
 	 * <li><i>p </i>'s name is implied by this object's name. For example,
-	 * <tt>java.*</tt> implies <tt>java.home</tt>.
+	 * <code>java.*</code> implies <code>java.home</code>.
 	 * </ul>
 	 * 
 	 * @param p The permission to check against.
 	 * 
-	 * @return <tt>true</tt> if the specified permission is implied by this
-	 *         object; <tt>false</tt> otherwise.
+	 * @return <code>true</code> if the specified permission is implied by this
+	 *         object; <code>false</code> otherwise.
 	 */
 	public boolean implies(Permission p) {
 		if (p instanceof WirePermission) {
@@ -217,8 +217,8 @@ final public class WirePermission extends BasicPermission {
 
 	/**
 	 * Returns the canonical string representation of the actions. Always
-	 * returns present actions in the following order: <tt>produce</tt>,
-	 * <tt>consume</tt>.
+	 * returns present actions in the following order: <code>produce</code>,
+	 * <code>consume</code>.
 	 * 
 	 * @return The canonical string representation of the actions.
 	 */
@@ -241,26 +241,26 @@ final public class WirePermission extends BasicPermission {
 	}
 
 	/**
-	 * Returns a new <tt>PermissionCollection</tt> object for storing
-	 * <tt>WirePermission</tt> objects.
+	 * Returns a new <code>PermissionCollection</code> object for storing
+	 * <code>WirePermission</code> objects.
 	 * 
-	 * @return A new <tt>PermissionCollection</tt> object suitable for storing
-	 *         <tt>WirePermission</tt> objects.
+	 * @return A new <code>PermissionCollection</code> object suitable for storing
+	 *         <code>WirePermission</code> objects.
 	 */
 	public PermissionCollection newPermissionCollection() {
 		return new WirePermissionCollection();
 	}
 
 	/**
-	 * Determines the equalty of two <tt>WirePermission</tt> objects.
+	 * Determines the equalty of two <code>WirePermission</code> objects.
 	 * 
 	 * Checks that specified object has the same name and actions as this
-	 * <tt>WirePermission</tt> object.
+	 * <code>WirePermission</code> object.
 	 * 
 	 * @param obj The object to test for equality.
-	 * @return true if <tt>obj</tt> is a <tt>WirePermission</tt>, and has
-	 *         the same name and actions as this <tt>WirePermission</tt>
-	 *         object; <tt>false</tt> otherwise.
+	 * @return true if <code>obj</code> is a <code>WirePermission</code>, and has
+	 *         the same name and actions as this <code>WirePermission</code>
+	 *         object; <code>false</code> otherwise.
 	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
@@ -293,13 +293,13 @@ final public class WirePermission extends BasicPermission {
 	}
 
 	/**
-	 * Returns a string describing this <tt>WirePermission</tt>. The
+	 * Returns a string describing this <code>WirePermission</code>. The
 	 * convention is to specify the class name, the permission name, and the
 	 * actions in the following format:
 	 * '(org.osgi.service.wireadmin.WirePermission &quot;name&quot;
 	 * &quot;actions&quot;)'.
 	 * 
-	 * @return information about this <tt>Permission</tt> object.
+	 * @return information about this <code>Permission</code> object.
 	 */
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
@@ -339,7 +339,7 @@ final public class WirePermission extends BasicPermission {
 	}
 }
 /**
- * A <tt>WirePermissionCollection</tt> stores a set of <tt>WirePermission</tt>
+ * A <code>WirePermissionCollection</code> stores a set of <code>WirePermission</code>
  * permissions.
  */
 
@@ -407,12 +407,12 @@ final class WirePermissionCollection extends PermissionCollection {
 
 	/**
 	 * Determines if a set of permissions implies the permissions expressed in
-	 * <tt>permission</tt>.
+	 * <code>permission</code>.
 	 * 
 	 * @param permission The Permission object to compare.
 	 * 
-	 * @return <tt>true</tt> if <tt>permission</tt> is a proper subset of a
-	 *         permission in the set; <tt>false</tt> otherwise.
+	 * @return <code>true</code> if <code>permission</code> is a proper subset of a
+	 *         permission in the set; <code>false</code> otherwise.
 	 */
 	public boolean implies(Permission permission) {
 		if (!(permission instanceof WirePermission))

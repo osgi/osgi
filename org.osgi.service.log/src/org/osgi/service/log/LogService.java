@@ -33,8 +33,8 @@ import org.osgi.framework.ServiceReference;
  * Provides methods for bundles to write messages to the log.
  * 
  * <p>
- * <tt>LogService</tt> methods are provided to log messages; optionally with a
- * <tt>ServiceReference</tt> object or an exception.
+ * <code>LogService</code> methods are provided to log messages; optionally with a
+ * <code>ServiceReference</code> object or an exception.
  * 
  * <p>
  * Bundles must log messages in the OSGi environment with a severity level
@@ -85,14 +85,14 @@ public abstract interface LogService {
 	 * Logs a message.
 	 * 
 	 * <p>
-	 * The <tt>ServiceReference</tt> field and the <tt>Throwable</tt> field
-	 * of the <tt>LogEntry</tt> object will be set to <tt>null</tt>.
+	 * The <code>ServiceReference</code> field and the <code>Throwable</code> field
+	 * of the <code>LogEntry</code> object will be set to <code>null</code>.
 	 * 
 	 * @param level The severity of the message. This should be one of the
 	 *        defined log levels but may be any integer that is interpreted in a
 	 *        user defined way.
 	 * @param message Human readable string describing the condition or
-	 *        <tt>null</tt>.
+	 *        <code>null</code>.
 	 * @see #LOG_ERROR
 	 * @see #LOG_WARNING
 	 * @see #LOG_INFO
@@ -104,16 +104,16 @@ public abstract interface LogService {
 	 * Logs a message with an exception.
 	 * 
 	 * <p>
-	 * The <tt>ServiceReference</tt> field of the <tt>LogEntry</tt> object
-	 * will be set to <tt>null</tt>.
+	 * The <code>ServiceReference</code> field of the <code>LogEntry</code> object
+	 * will be set to <code>null</code>.
 	 * 
 	 * @param level The severity of the message. This should be one of the
 	 *        defined log levels but may be any integer that is interpreted in a
 	 *        user defined way.
 	 * @param message The human readable string describing the condition or
-	 *        <tt>null</tt>.
+	 *        <code>null</code>.
 	 * @param exception The exception that reflects the condition or
-	 *        <tt>null</tt>.
+	 *        <code>null</code>.
 	 * @see #LOG_ERROR
 	 * @see #LOG_WARNING
 	 * @see #LOG_INFO
@@ -122,20 +122,20 @@ public abstract interface LogService {
 	public abstract void log(int level, String message, Throwable exception);
 
 	/**
-	 * Logs a message associated with a specific <tt>ServiceReference</tt>
+	 * Logs a message associated with a specific <code>ServiceReference</code>
 	 * object.
 	 * 
 	 * <p>
-	 * The <tt>Throwable</tt> field of the <tt>LogEntry</tt> will be set to
-	 * <tt>null</tt>.
+	 * The <code>Throwable</code> field of the <code>LogEntry</code> will be set to
+	 * <code>null</code>.
 	 * 
-	 * @param sr The <tt>ServiceReference</tt> object of the service that this
-	 *        message is associated with or <tt>null</tt>.
+	 * @param sr The <code>ServiceReference</code> object of the service that this
+	 *        message is associated with or <code>null</code>.
 	 * @param level The severity of the message. This should be one of the
 	 *        defined log levels but may be any integer that is interpreted in a
 	 *        user defined way.
 	 * @param message Human readable string describing the condition or
-	 *        <tt>null</tt>.
+	 *        <code>null</code>.
 	 * @see #LOG_ERROR
 	 * @see #LOG_WARNING
 	 * @see #LOG_INFO
@@ -145,17 +145,17 @@ public abstract interface LogService {
 
 	/**
 	 * Logs a message with an exception associated and a
-	 * <tt>ServiceReference</tt> object.
+	 * <code>ServiceReference</code> object.
 	 * 
-	 * @param sr The <tt>ServiceReference</tt> object of the service that this
+	 * @param sr The <code>ServiceReference</code> object of the service that this
 	 *        message is associated with.
 	 * @param level The severity of the message. This should be one of the
 	 *        defined log levels but may be any integer that is interpreted in a
 	 *        user defined way.
 	 * @param message Human readable string describing the condition or
-	 *        <tt>null</tt>.
+	 *        <code>null</code>.
 	 * @param exception The exception that reflects the condition or
-	 *        <tt>null</tt>.
+	 *        <code>null</code>.
 	 * @see #LOG_ERROR
 	 * @see #LOG_WARNING
 	 * @see #LOG_INFO

@@ -33,37 +33,37 @@ package org.osgi.service.permissionadmin;
  * in the OSGi environment.
  * <p>
  * Access to the Permission Admin service is protected by corresponding
- * <tt>ServicePermission</tt>. In addition <tt>AdminPermission</tt> is
+ * <code>ServicePermission</code>. In addition <code>AdminPermission</code> is
  * required to actually set permissions.
  * 
  * <p>
  * Bundle permissions are managed using a permission table. A bundle's location
  * serves as the key into this permission table. The value of a table entry is
- * the set of permissions (of type <tt>PermissionInfo</tt>) granted to the
+ * the set of permissions (of type <code>PermissionInfo</code>) granted to the
  * bundle named by the given location. A bundle may have an entry in the
  * permission table prior to being installed in the Framework.
  * 
  * <p>
- * The permissions specified in <tt>setDefaultPermissions</tt> are used as the
+ * The permissions specified in <code>setDefaultPermissions</code> are used as the
  * default permissions which are granted to all bundles that do not have an
  * entry in the permission table.
  * 
  * <p>
  * Any changes to a bundle's permissions in the permission table will take
- * effect no later than when bundle's <tt>java.security.ProtectionDomain</tt>
+ * effect no later than when bundle's <code>java.security.ProtectionDomain</code>
  * is next involved in a permission check, and will be made persistent.
  * 
  * <p>
  * Only permission classes on the system classpath or from an exported package
  * are considered during a permission check. Additionally, only permission
- * classes that are subclasses of <tt>java.security.Permission</tt> and define
+ * classes that are subclasses of <code>java.security.Permission</code> and define
  * a 2-argument constructor that takes a <i>name </i> string and an <i>actions
  * </i> string can be used.
  * <p>
  * Permissions implicitly granted by the Framework (for example, a bundle's
  * permission to access its persistent storage area) cannot be changed, and are
- * not reflected in the permissions returned by <tt>getPermissions</tt> and
- * <tt>getDefaultPermissions</tt>.
+ * not reflected in the permissions returned by <code>getPermissions</code> and
+ * <code>getDefaultPermissions</code>.
  * 
  * @version $Revision$
  */
@@ -75,7 +75,7 @@ public interface PermissionAdmin {
 	 *        returned.
 	 * 
 	 * @return The permissions assigned to the bundle with the specified
-	 *         location, or <tt>null</tt> if that bundle has not been assigned
+	 *         location, or <code>null</code> if that bundle has not been assigned
 	 *         any permissions.
 	 */
 	PermissionInfo[] getPermissions(String location);
@@ -86,10 +86,10 @@ public interface PermissionAdmin {
 	 * 
 	 * @param location The location of the bundle that will be assigned the
 	 *        permissions.
-	 * @param permissions The permissions to be assigned, or <tt>null</tt> if
+	 * @param permissions The permissions to be assigned, or <code>null</code> if
 	 *        the specified location is to be removed from the permission table.
 	 * @exception SecurityException if the caller does not have the
-	 *            <tt>AdminPermission</tt>.
+	 *            <code>AdminPermission</code>.
 	 */
 	void setPermissions(String location, PermissionInfo[] permissions);
 
@@ -98,7 +98,7 @@ public interface PermissionAdmin {
 	 * is, bundle locations for which an entry exists in the permission table.
 	 * 
 	 * @return The locations of bundles that have been assigned any permissions,
-	 *         or <tt>null</tt> if the permission table is empty.
+	 *         or <code>null</code> if the permission table is empty.
 	 */
 	String[] getLocations();
 
@@ -109,7 +109,7 @@ public interface PermissionAdmin {
 	 * These are the permissions granted to any bundle that does not have
 	 * permissions assigned to its location.
 	 * 
-	 * @return The default permissions, or <tt>null</tt> if no default
+	 * @return The default permissions, or <code>null</code> if no default
 	 *         permissions are set.
 	 */
 	PermissionInfo[] getDefaultPermissions();
@@ -121,10 +121,10 @@ public interface PermissionAdmin {
 	 * These are the permissions granted to any bundle that does not have
 	 * permissions assigned to its location.
 	 * 
-	 * @param permissions The default permissions, or <tt>null</tt> if the
+	 * @param permissions The default permissions, or <code>null</code> if the
 	 *        default permissions are to be removed from the permission table.
 	 * @exception SecurityException if the caller does not have the
-	 *            <tt>AdminPermission</tt>.
+	 *            <code>AdminPermission</code>.
 	 */
 	void setDefaultPermissions(PermissionInfo[] permissions);
 }

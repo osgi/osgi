@@ -35,11 +35,11 @@ import org.osgi.framework.Filter;
  * A channel event.
  * 
  * <p>
- * <tt>ChannelEvent</tt> objects are delivered to a <tt>ChannelListener</tt>
+ * <code>ChannelEvent</code> objects are delivered to a <code>ChannelListener</code>
  * services which subsrcibe to the topic of the channel event.
  * 
  * <p>
- * <i>NOTE: Although it is permitted to subclass <tt>ChannelEvent</tt>, the
+ * <i>NOTE: Although it is permitted to subclass <code>ChannelEvent</code>, the
  * operations defined by this class MUST NOT be overridden. </i>
  * 
  * @version $Revision$

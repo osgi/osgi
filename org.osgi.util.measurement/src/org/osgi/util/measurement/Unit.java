@@ -38,7 +38,7 @@ import java.util.Hashtable;
  * <p>
  * This class only support exponents for the base SI units in the range -64 to
  * +63. Any operation which produces an exponent outside of this range will
- * result in a <tt>Unit</tt> object with undefined exponents.
+ * result in a <code>Unit</code> object with undefined exponents.
  * 
  * @version $Revision$
  */
@@ -304,10 +304,10 @@ public class Unit {
 	private long				type;
 
 	/**
-	 * Creates a new <tt>Unit</tt> instance.
+	 * Creates a new <code>Unit</code> instance.
 	 * 
-	 * @param name the name of the <tt>Unit</tt>
-	 * @param type the type of the <tt>Unit</tt>
+	 * @param name the name of the <code>Unit</code>
+	 * @param type the type of the <code>Unit</code>
 	 */
 	private Unit(String name, long type) {
 		this.name = name;
@@ -333,14 +333,14 @@ public class Unit {
 	}
 
 	/**
-	 * Checks whether this <tt>Unit</tt> object is equal to the specified
-	 * <tt>Unit</tt> object. The <tt>Unit</tt> objects are considered equal
+	 * Checks whether this <code>Unit</code> object is equal to the specified
+	 * <code>Unit</code> object. The <code>Unit</code> objects are considered equal
 	 * if their exponents are equal.
 	 * 
-	 * @param obj the <tt>Unit</tt> object that should be checked for equality
+	 * @param obj the <code>Unit</code> object that should be checked for equality
 	 * 
-	 * @return true if the specified <tt>Unit</tt> object is equal to this
-	 *         <tt>Unit</tt> object.
+	 * @return true if the specified <code>Unit</code> object is equal to this
+	 *         <code>Unit</code> object.
 	 */
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -362,16 +362,16 @@ public class Unit {
 	}
 
 	/**
-	 * Returns a new <tt>Unit</tt> that is the multiplication of this
-	 * <tt>Unit</tt> and the <tt>Unit</tt> specified
+	 * Returns a new <code>Unit</code> that is the multiplication of this
+	 * <code>Unit</code> and the <code>Unit</code> specified
 	 * 
-	 * @param that the <tt>Unit</tt> that will be multiplied with this
-	 *        <tt>Unit</tt>
+	 * @param that the <code>Unit</code> that will be multiplied with this
+	 *        <code>Unit</code>
 	 * 
-	 * @return a new <tt>Unit</tt> that is the multiplication of this
-	 *         <tt>Unit</tt> and the <tt>Unit</tt> specified
+	 * @return a new <code>Unit</code> that is the multiplication of this
+	 *         <code>Unit</code> and the <code>Unit</code> specified
 	 * 
-	 * @exception RuntimeException if both <tt>Unit</tt> s are special
+	 * @exception RuntimeException if both <code>Unit</code> s are special
 	 * 
 	 * @see Unit#isSpecial
 	 */
@@ -384,15 +384,15 @@ public class Unit {
 	}
 
 	/**
-	 * Returns a new <tt>Unit</tt> that is the division of this <tt>Unit</tt>
-	 * and the <tt>Unit</tt> specified
+	 * Returns a new <code>Unit</code> that is the division of this <code>Unit</code>
+	 * and the <code>Unit</code> specified
 	 * 
-	 * @param that the <tt>Unit</tt> that this <tt>Unit</tt> will be divided
+	 * @param that the <code>Unit</code> that this <code>Unit</code> will be divided
 	 *        with
-	 * @return a new <tt>Unit</tt> that is the division of this <tt>Unit</tt>
-	 *         and the <tt>Unit</tt> specified
+	 * @return a new <code>Unit</code> that is the division of this <code>Unit</code>
+	 *         and the <code>Unit</code> specified
 	 * 
-	 * @exception RuntimeException if both <tt>Unit</tt> s are special
+	 * @exception RuntimeException if both <code>Unit</code> s are special
 	 * 
 	 * @see Unit#isSpecial
 	 */
@@ -408,16 +408,16 @@ public class Unit {
 	}
 
 	/**
-	 * Returns a new <tt>Unit</tt> that is the addition of this <tt>Unit</tt>
-	 * and the <tt>Unit</tt> specified.
+	 * Returns a new <code>Unit</code> that is the addition of this <code>Unit</code>
+	 * and the <code>Unit</code> specified.
 	 * 
-	 * @param that the <tt>Unit</tt> that should be added to this
-	 *        <tt>Unit</tt>
+	 * @param that the <code>Unit</code> that should be added to this
+	 *        <code>Unit</code>
 	 * 
-	 * @return a new <tt>Unit</tt> that is the addition of this <tt>Unit</tt>
-	 *         and the <tt>Unit</tt> specified.
+	 * @return a new <code>Unit</code> that is the addition of this <code>Unit</code>
+	 *         and the <code>Unit</code> specified.
 	 * 
-	 * @exception RuntimeException if the two <tt>Unit</tt> s are not the same
+	 * @exception RuntimeException if the two <code>Unit</code> s are not the same
 	 */
 	Unit add(Unit that) {
 		if (!this.equals(that)) {
@@ -427,16 +427,16 @@ public class Unit {
 	}
 
 	/**
-	 * Returns a new <tt>Unit</tt> that is the subtraction between this
-	 * <tt>Unit</tt> and the <tt>Unit</tt> specified.
+	 * Returns a new <code>Unit</code> that is the subtraction between this
+	 * <code>Unit</code> and the <code>Unit</code> specified.
 	 * 
-	 * @param that the <tt>Unit</tt> that will be subtracted from this
-	 *        <tt>Unit</tt>
-	 * @return a new <tt>Unit</tt> that is the subtraction between this
-	 *         <tt>Unit</tt> and the <tt>Unit</tt> specified.
+	 * @param that the <code>Unit</code> that will be subtracted from this
+	 *        <code>Unit</code>
+	 * @return a new <code>Unit</code> that is the subtraction between this
+	 *         <code>Unit</code> and the <code>Unit</code> specified.
 	 * 
-	 * @throws RuntimeException if the <tt>Unit</tt> specified is not the same
-	 *         as this <tt>Unit</tt>
+	 * @throws RuntimeException if the <code>Unit</code> specified is not the same
+	 *         as this <code>Unit</code>
 	 */
 	Unit sub(Unit that) {
 		if (!this.equals(that)) {
@@ -447,13 +447,13 @@ public class Unit {
 	}
 
 	/**
-	 * Finds a <tt>Unit</tt> based on a type. If the <tt>Unit</tt> is not
+	 * Finds a <code>Unit</code> based on a type. If the <code>Unit</code> is not
 	 * found, it will be created and added to the list of all units under a null
 	 * name.
 	 * 
-	 * @param type the type of the <tt>Unit</tt> to find
+	 * @param type the type of the <code>Unit</code> to find
 	 * 
-	 * @return the <tt>Unit</tt>
+	 * @return the <code>Unit</code>
 	 */
 	static Unit find(long type) {
 		if (base == null) {
@@ -477,9 +477,9 @@ public class Unit {
 	}
 
 	/**
-	 * Returns a <tt>String</tt> object representing the <tt>Unit</tt>
+	 * Returns a <code>String</code> object representing the <code>Unit</code>
 	 * 
-	 * @return A <tt>String</tt> object representing the <tt>Unit</tt>
+	 * @return A <code>String</code> object representing the <code>Unit</code>
 	 */
 	public String toString() {
 		if (name == null) {

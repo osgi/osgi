@@ -39,7 +39,7 @@ import java.security.PermissionCollection;
  * Admin service.
  * 
  * <p>
- * This class represents access to the <tt>Role</tt> objects managed by a User
+ * This class represents access to the <code>Role</code> objects managed by a User
  * Admin service and their properties and credentials (in the case of
  * {@link User}objects).
  * <p>
@@ -51,17 +51,17 @@ import java.security.PermissionCollection;
  * &quot;*protocol&quot; or &quot;a*b&quot; are not valid.
  * 
  * <p>
- * The <tt>UserAdminPermission</tt> with the reserved name &quot;admin&quot;
- * represents the permission required for creating and removing <tt>Role</tt>
+ * The <code>UserAdminPermission</code> with the reserved name &quot;admin&quot;
+ * represents the permission required for creating and removing <code>Role</code>
  * objects in the User Admin service, as well as adding and removing members in
- * a <tt>Group</tt> object. This <tt>UserAdminPermission</tt> does not have
+ * a <code>Group</code> object. This <code>UserAdminPermission</code> does not have
  * any actions associated with it.
  * 
  * <p>
  * The actions to be granted are passed to the constructor in a string
  * containing a list of one or more comma-separated keywords. The possible
- * keywords are: <tt>changeProperty</tt>,<tt>changeCredential</tt>, and
- * <tt>getCredential</tt>. Their meaning is defined as follows:
+ * keywords are: <code>changeProperty</code>,<code>changeCredential</code>, and
+ * <code>getCredential</code>. Their meaning is defined as follows:
  * 
  * <pre>
  * 
@@ -83,7 +83,7 @@ import java.security.PermissionCollection;
  * 
  * <p>
  * Following is a PermissionInfo style policy entry which grants a user
- * administration bundle a number of <tt>UserAdminPermission</tt> object:
+ * administration bundle a number of <code>UserAdminPermission</code> object:
  * 
  * <pre>
  * 
@@ -95,16 +95,16 @@ import java.security.PermissionCollection;
  * 
  * The first permission statement grants the bundle the permission to perform
  * any User Admin service operations of type "admin", that is, create and remove
- * roles and configure <tt>Group</tt> objects.
+ * roles and configure <code>Group</code> objects.
  * 
  * <p>
  * The second permission statement grants the bundle the permission to change
  * any properties as well as get and change any credentials whose names start
- * with <tt>com.foo.</tt>.
+ * with <code>com.foo.</code>.
  * 
  * <p>
  * The third permission statement grants the bundle the permission to change any
- * properties and credentials whose names start with <tt>user.</tt>. This
+ * properties and credentials whose names start with <code>user.</code>. This
  * means that the bundle is allowed to change, but not retrieve any credentials
  * with the given prefix.
  * 
@@ -170,24 +170,24 @@ public final class UserAdminPermission extends BasicPermission {
 	 */
 	private transient int		action_mask					= ACTION_NONE;
 	/*
-	 * Description of this <tt> UserAdminPermission </tt> (returned by <tt>
-	 * toString </tt> )
+	 * Description of this <code> UserAdminPermission </code> (returned by <code>
+	 * toString </code> )
 	 */
 	private transient String	description;
 
 	/**
-	 * Creates a new <tt>UserAdminPermission</tt> with the specified name and
-	 * actions. <tt>name</tt> is either the reserved string &quot;admin&quot;
-	 * or the name of a credential or property, and <tt>actions</tt> contains
+	 * Creates a new <code>UserAdminPermission</code> with the specified name and
+	 * actions. <code>name</code> is either the reserved string &quot;admin&quot;
+	 * or the name of a credential or property, and <code>actions</code> contains
 	 * a comma-separated list of the actions granted on the specified name.
-	 * Valid actions are <tt>changeProperty</tt>,<tt>changeCredential</tt>,
+	 * Valid actions are <code>changeProperty</code>,<code>changeCredential</code>,
 	 * and getCredential.
 	 * 
-	 * @param name the name of this <tt>UserAdminPermission</tt>
+	 * @param name the name of this <code>UserAdminPermission</code>
 	 * @param actions the action string.
 	 * 
-	 * @throws IllegalArgumentException If <tt>name</tt> equals
-	 *         &quot;admin&quot; and <tt>actions</tt> are specified.
+	 * @throws IllegalArgumentException If <code>name</code> equals
+	 *         &quot;admin&quot; and <code>actions</code> are specified.
 	 */
 	public UserAdminPermission(String name, String actions) {
 		this(name, getMask(actions));
@@ -195,7 +195,7 @@ public final class UserAdminPermission extends BasicPermission {
 
 	/**
 	 * Package private constructor used by
-	 * <tt>UserAdminPermissionCollection</tt>.
+	 * <code>UserAdminPermissionCollection</code>.
 	 * 
 	 * @param name class name
 	 * @param mask action mask
@@ -335,13 +335,13 @@ public final class UserAdminPermission extends BasicPermission {
 	}
 
 	/**
-	 * Checks if this <tt>UserAdminPermission</tt> object &quot;implies&quot;
+	 * Checks if this <code>UserAdminPermission</code> object &quot;implies&quot;
 	 * the specified permission.
 	 * <P>
-	 * More specifically, this method returns <tt>true</tt> if:
+	 * More specifically, this method returns <code>true</code> if:
 	 * <p>
 	 * <ul>
-	 * <li><i>p </i> is an instanceof <tt>UserAdminPermission</tt>,
+	 * <li><i>p </i> is an instanceof <code>UserAdminPermission</code>,
 	 * <li><i>p </i>'s actions are a proper subset of this object's actions,
 	 * and
 	 * <li><i>p </i>'s name is implied by this object's name. For example,
@@ -350,8 +350,8 @@ public final class UserAdminPermission extends BasicPermission {
 	 * 
 	 * @param p the permission to check against.
 	 * 
-	 * @return <tt>true</tt> if the specified permission is implied by this
-	 *         object; <tt>false</tt> otherwise.
+	 * @return <code>true</code> if the specified permission is implied by this
+	 *         object; <code>false</code> otherwise.
 	 */
 	public boolean implies(Permission p) {
 		if (p instanceof UserAdminPermission) {
@@ -401,26 +401,26 @@ public final class UserAdminPermission extends BasicPermission {
 	}
 
 	/**
-	 * Returns a new <tt>PermissionCollection</tt> object for storing
-	 * <tt>UserAdminPermission</tt> objects.
+	 * Returns a new <code>PermissionCollection</code> object for storing
+	 * <code>UserAdminPermission</code> objects.
 	 * 
-	 * @return a new <tt>PermissionCollection</tt> object suitable for storing
-	 *         <tt>UserAdminPermission</tt> objects.
+	 * @return a new <code>PermissionCollection</code> object suitable for storing
+	 *         <code>UserAdminPermission</code> objects.
 	 */
 	public PermissionCollection newPermissionCollection() {
 		return (new UserAdminPermissionCollection());
 	}
 
 	/**
-	 * Checks two <tt>UserAdminPermission</tt> objects for equality. Checks
-	 * that <tt>obj</tt> is a <tt>UserAdminPermission</tt>, and has the
+	 * Checks two <code>UserAdminPermission</code> objects for equality. Checks
+	 * that <code>obj</code> is a <code>UserAdminPermission</code>, and has the
 	 * same name and actions as this object.
 	 * 
 	 * @param obj the object to be compared for equality with this object.
 	 * 
-	 * @return <tt>true</tt> if <tt>obj</tt> is a
-	 *         <tt>UserAdminPermission</tt> object, and has the same name and
-	 *         actions as this <tt>UserAdminPermission</tt> object.
+	 * @return <code>true</code> if <code>obj</code> is a
+	 *         <code>UserAdminPermission</code> object, and has the same name and
+	 *         actions as this <code>UserAdminPermission</code> object.
 	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
@@ -437,7 +437,7 @@ public final class UserAdminPermission extends BasicPermission {
 	}
 
 	/**
-	 * Returns the hash code of this <tt>UserAdminPermission</tt> object.
+	 * Returns the hash code of this <code>UserAdminPermission</code> object.
 	 */
 	public int hashCode() {
 		return (getName().hashCode() ^ getActions().hashCode());
@@ -445,7 +445,7 @@ public final class UserAdminPermission extends BasicPermission {
 
 	/**
 	 * Returns the current action mask. Used by the
-	 * <tt>UserAdminPermissionCollection</tt> class.
+	 * <code>UserAdminPermissionCollection</code> class.
 	 * 
 	 * @return the actions mask.
 	 */
@@ -476,11 +476,11 @@ public final class UserAdminPermission extends BasicPermission {
 	}
 
 	/**
-	 * Returns a string describing this <tt>UserAdminPermission</tt> object.
-	 * This string must be in <tt>PermissionInfo</tt> encoded format.
+	 * Returns a string describing this <code>UserAdminPermission</code> object.
+	 * This string must be in <code>PermissionInfo</code> encoded format.
 	 * 
-	 * @return The <tt>PermissionInfo</tt> encoded string for this
-	 *         <tt>UserAdminPermission</tt> object.
+	 * @return The <code>PermissionInfo</code> encoded string for this
+	 *         <code>UserAdminPermission</code> object.
 	 * @see "<code>org.osgi.service.permissionadmin.PermissionInfo.getEncoded</code>"
 	 */
 	public String toString() {
@@ -502,8 +502,8 @@ public final class UserAdminPermission extends BasicPermission {
 	}
 }
 /**
- * A <tt>UserAdminPermissionCollection</tt> stores a set of
- * <tt>UserAdminPermission</tt> permissions.
+ * A <code>UserAdminPermissionCollection</code> stores a set of
+ * <code>UserAdminPermission</code> permissions.
  */
 
 final class UserAdminPermissionCollection extends PermissionCollection {
@@ -522,7 +522,7 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 	private boolean		all_allowed;
 
 	/**
-	 * Creates an empty <tt>UserAdminPermissionCollection</tt> object.
+	 * Creates an empty <code>UserAdminPermissionCollection</code> object.
 	 */
 	public UserAdminPermissionCollection() {
 		permissions = new Hashtable();
@@ -530,14 +530,14 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Adds the given permission to this <tt>UserAdminPermissionCollection</tt>.
+	 * Adds the given permission to this <code>UserAdminPermissionCollection</code>.
 	 * The key for the hash is the name.
 	 * 
-	 * @param permission the <tt>Permission</tt> object to add.
+	 * @param permission the <code>Permission</code> object to add.
 	 * 
 	 * @throws IllegalArgumentException If the given permission is not a
-	 *         <tt>UserAdminPermission</tt>
-	 * @throws SecurityException If this <tt>UserAdminPermissionCollection</tt>
+	 *         <code>UserAdminPermission</code>
+	 * @throws SecurityException If this <code>UserAdminPermissionCollection</code>
 	 *         object has been marked readonly
 	 */
 	public void add(Permission permission) {
@@ -570,13 +570,13 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Checks to see if this <tt>PermissionCollection</tt> implies the given
+	 * Checks to see if this <code>PermissionCollection</code> implies the given
 	 * permission.
 	 * 
-	 * @param permission the <tt>Permission</tt> object to check against
+	 * @param permission the <code>Permission</code> object to check against
 	 * 
 	 * @return true if the given permission is implied by this
-	 *         <tt>PermissionCollection</tt>, false otherwise.
+	 *         <code>PermissionCollection</code>, false otherwise.
 	 */
 	public boolean implies(Permission permission) {
 		if (!(permission instanceof UserAdminPermission)) {
@@ -629,10 +629,10 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Returns an enumeration of all the <tt>UserAdminPermission</tt> objects
+	 * Returns an enumeration of all the <code>UserAdminPermission</code> objects
 	 * in the container.
 	 * 
-	 * @return an enumeration of all the <tt>UserAdminPermission</tt> objects.
+	 * @return an enumeration of all the <code>UserAdminPermission</code> objects.
 	 */
 	public Enumeration elements() {
 		return (permissions.elements());

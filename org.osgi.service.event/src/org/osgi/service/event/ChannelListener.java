@@ -31,15 +31,15 @@ package org.osgi.service.event;
  * Listener for Channel Events.
  * 
  * <p>
- * <tt>ChannelListener</tt> objects are registered with the Framework service
- * registry and are notified with a <tt>ChannelEvent</tt> object when a
+ * <code>ChannelListener</code> objects are registered with the Framework service
+ * registry and are notified with a <code>ChannelEvent</code> object when a
  * channel event is broadcast.
  * <p>
- * <tt>ChannelListener</tt> objects can inspect the received
- * <tt>ChannelEvent</tt> object to determine its topic and properties.
+ * <code>ChannelListener</code> objects can inspect the received
+ * <code>ChannelEvent</code> object to determine its topic and properties.
  * 
  * <p>
- * <tt>ChannelListener</tt> objects should be registered with a service
+ * <code>ChannelListener</code> objects should be registered with a service
  * property {@link EventConstants#EVENT_TOPIC} whose value is the list of
  * topics in which the channel listener is interesed.
  * <p>
@@ -52,15 +52,15 @@ package org.osgi.service.event;
  * context.registerService(ChannelListener.class.getName(), this, ht);
  * </pre>
  * 
- * If a <tt>ChannelListener</tt> object is registered without a service
+ * If a <code>ChannelListener</code> object is registered without a service
  * property {@link EventConstants#EVENT_TOPIC}, then the
- * <tt>ChannelListener</tt> will receive channel events of all topics.
+ * <code>ChannelListener</code> will receive channel events of all topics.
  * 
  * <p>
- * Security Considerations. Bundles wishing to monitor <tt>ChannelEvent</tt>
- * objects will require <tt>ServicePermission[ChannelListener,REGISTER]</tt>
- * to register a <tt>ChannelListener</tt> service. The bundle must also have
- * <tt>TopicPermission[topic,SUBSCRIBE]</tt> for the topic specified in the
+ * Security Considerations. Bundles wishing to monitor <code>ChannelEvent</code>
+ * objects will require <code>ServicePermission[ChannelListener,REGISTER]</code>
+ * to register a <code>ChannelListener</code> service. The bundle must also have
+ * <code>TopicPermission[topic,SUBSCRIBE]</code> for the topic specified in the
  * channel event in order to receive the event.
  * 
  * @see ChannelEvent

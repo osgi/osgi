@@ -31,17 +31,17 @@ import org.osgi.framework.Bundle;
 /**
  * The MetaType Service can be used to obtain meta type information for a
  * bundle. The MetaType Service will examine the specified bundle for meta type
- * documents and to create the returned <tt>MetaTypeInformation</tt> object.
+ * documents and to create the returned <code>MetaTypeInformation</code> object.
  * 
  * <p>
  * If the bundle does not contain any meta type documents, then the MetaType
  * Service will query whether the bundle has registered any
- * <tt>ManagedService</tt> or <tt>ManagedServiceFactory</tt> services which
- * implement <tt>MetaTypeProvider</tt>. If so, then the MetaType Service will
- * return a <tt>MetaTypeInformation</tt> object which wrappers these
- * <tt>MetaTypeProvider</tt> objects. Thus the MetaType Service can be used to
+ * <code>ManagedService</code> or <code>ManagedServiceFactory</code> services which
+ * implement <code>MetaTypeProvider</code>. If so, then the MetaType Service will
+ * return a <code>MetaTypeInformation</code> object which wrappers these
+ * <code>MetaTypeProvider</code> objects. Thus the MetaType Service can be used to
  * retrieve meta type information for bundles which contain a meta type resource
- * or which provide their own <tt>MetaTypeProvider</tt> objects.
+ * or which provide their own <code>MetaTypeProvider</code> objects.
  * 
  * @version $Revision$
  */

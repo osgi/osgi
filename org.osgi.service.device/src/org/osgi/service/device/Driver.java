@@ -30,12 +30,12 @@ package org.osgi.service.device;
 import org.osgi.framework.ServiceReference;
 
 /**
- * A <tt>Driver</tt> service object must be registered by each Driver bundle
+ * A <code>Driver</code> service object must be registered by each Driver bundle
  * wishing to attach to Device services provided by other drivers. For each
  * newly discovered {@link Device}object, the device manager enters a bidding
- * phase. The <tt>Driver</tt> object whose {@link #match}method bids the
- * highest for a particular <tt>Device</tt> object will be instructed by the
- * device manager to attach to the <tt>Device</tt> object.
+ * phase. The <code>Driver</code> object whose {@link #match}method bids the
+ * highest for a particular <code>Device</code> object will be instructed by the
+ * device manager to attach to the <code>Device</code> object.
  * 
  * @version $Revision$
  * @see Device
@@ -53,7 +53,7 @@ public abstract interface Driver {
 	 * <p>
 	 * The return value must be one of the possible match values defined in the
 	 * device category definition for the given Device service, or
-	 * <tt>Device.MATCH_NONE</tt> if the category of the Device service is not
+	 * <code>Device.MATCH_NONE</code> if the category of the Device service is not
 	 * recognized.
 	 * 
 	 * <p>
@@ -71,11 +71,11 @@ public abstract interface Driver {
 	 * The match function is called by the device manager during the matching
 	 * process.
 	 * 
-	 * @param reference the <tt>ServiceReference</tt> object of the device to
+	 * @param reference the <code>ServiceReference</code> object of the device to
 	 *        match
 	 * 
 	 * @return value indicating how well this driver can support the given
-	 *         Device service, or <tt>Device.MATCH_NONE</tt> if it cannot
+	 *         Device service, or <code>Device.MATCH_NONE</code> if it cannot
 	 *         support the Device service at all
 	 * 
 	 * @exception java.lang.Exception if this Driver service cannot examine the
@@ -85,13 +85,13 @@ public abstract interface Driver {
 
 	/**
 	 * Attaches this Driver service to the Device service represented by the
-	 * given <tt>ServiceReference</tt> object.
+	 * given <code>ServiceReference</code> object.
 	 * 
 	 * <p>
-	 * A return value of <tt>null</tt> indicates that this Driver service has
+	 * A return value of <code>null</code> indicates that this Driver service has
 	 * successfully attached to the given Device service. If this Driver service
 	 * is unable to attach to the given Device service, but knows of a more
-	 * suitable Driver service, it must return the <tt>DRIVER_ID</tt> of that
+	 * suitable Driver service, it must return the <code>DRIVER_ID</code> of that
 	 * Driver service. This allows for the implementation of referring drivers
 	 * whose only purpose is to refer to other drivers capable of handling a
 	 * given Device service.
@@ -104,11 +104,11 @@ public abstract interface Driver {
 	 * <p>
 	 * This method is called by the device manager.
 	 * 
-	 * @param reference the <tt>ServiceReference</tt> object of the device to
+	 * @param reference the <code>ServiceReference</code> object of the device to
 	 *        attach to
 	 * 
-	 * @return <tt>null</tt> if this Driver service has successfully attached
-	 *         to the given Device service, or the <tt>DRIVER_ID</tt> of a
+	 * @return <code>null</code> if this Driver service has successfully attached
+	 *         to the given Device service, or the <code>DRIVER_ID</code> of a
 	 *         more suitable driver
 	 * 
 	 * @exception java.lang.Exception if the driver cannot attach to the given

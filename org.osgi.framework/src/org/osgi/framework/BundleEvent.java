@@ -32,7 +32,7 @@ import java.util.EventObject;
 /**
  * A Framework event describing a bundle lifecycle change.
  * <p>
- * <tt>BundleEvent</tt> objects are delivered to <tt>BundleListener</tt>
+ * <code>BundleEvent</code> objects are delivered to <code>BundleListener</code>
  * objects when a change occurs in a bundle's lifecycle. A type code is used to
  * identify the event type for future extendability.
  * 
@@ -57,7 +57,7 @@ public class BundleEvent extends EventObject {
 	/**
 	 * The bundle has been installed.
 	 * <p>
-	 * The value of <tt>INSTALLED</tt> is 0x00000001.
+	 * The value of <code>INSTALLED</code> is 0x00000001.
 	 * 
 	 * @see BundleContext#installBundle(String)
 	 */
@@ -66,7 +66,7 @@ public class BundleEvent extends EventObject {
 	/**
 	 * The bundle has been started.
 	 * <p>
-	 * The value of <tt>STARTED</tt> is 0x00000002.
+	 * The value of <code>STARTED</code> is 0x00000002.
 	 * 
 	 * @see Bundle#start
 	 */
@@ -75,7 +75,7 @@ public class BundleEvent extends EventObject {
 	/**
 	 * The bundle has been stopped.
 	 * <p>
-	 * The value of <tt>STOPPED</tt> is 0x00000004.
+	 * The value of <code>STOPPED</code> is 0x00000004.
 	 * 
 	 * @see Bundle#stop
 	 */
@@ -84,7 +84,7 @@ public class BundleEvent extends EventObject {
 	/**
 	 * The bundle has been updated.
 	 * <p>
-	 * The value of <tt>UPDATED</tt> is 0x00000008.
+	 * The value of <code>UPDATED</code> is 0x00000008.
 	 * 
 	 * @see Bundle#update()
 	 */
@@ -93,7 +93,7 @@ public class BundleEvent extends EventObject {
 	/**
 	 * The bundle has been uninstalled.
 	 * <p>
-	 * The value of <tt>UNINSTALLED</tt> is 0x00000010.
+	 * The value of <code>UNINSTALLED</code> is 0x00000010.
 	 * 
 	 * @see Bundle#uninstall
 	 */
@@ -144,7 +144,7 @@ public class BundleEvent extends EventObject {
 	/**
 	 * The bundle has been resolved.
 	 * <p>
-	 * The value of <tt>RESOLVED</tt> is 0x00000020.
+	 * The value of <code>RESOLVED</code> is 0x00000020.
 	 * 
 	 * @see Bundle#RESOLVED
 	 * @since 1.3
@@ -154,7 +154,7 @@ public class BundleEvent extends EventObject {
 	/**
 	 * The bundle has been unresolved.
 	 * <p>
-	 * The value of <tt>UNRESOLVED</tt> is 0x00000040.
+	 * The value of <code>UNRESOLVED</code> is 0x00000040.
 	 * 
 	 * @see Bundle#INSTALLED
 	 * @since 1.3

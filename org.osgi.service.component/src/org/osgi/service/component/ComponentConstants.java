@@ -37,26 +37,26 @@ public interface ComponentConstants {
 	 * documents within the bundle containing the bundle's Service Component
 	 * descriptions.
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 */
 	public static final String	SERVICE_COMPONENT		= "Service-Component";
 	/**
 	 * A service registration property for a Service Component. It contains the
 	 * name of the Service Component. The type of this property must be
-	 * <tt>String</tt>.
+	 * <code>String</code>.
 	 */
 	public final static String	COMPONENT_NAME			= "component.name";
 	/**
 	 * A service registration property for a Service Component Factory. It
-	 * contains the value of the <tt>factory</tt> attribute. The type of this
-	 * property must be <tt>String</tt>.
+	 * contains the value of the <code>factory</code> attribute. The type of this
+	 * property must be <code>String</code>.
 	 */
 	public final static String	COMPONENT_FACTORY		= "component.factory";
 	/**
 	 * A suffix for a service registration property for a reference target. It
 	 * contains the filter to select the target services for a reference. The
-	 * type of this property must be <tt>String</tt>.
+	 * type of this property must be <code>String</code>.
 	 */
 	public final static String	REFERENCE_TARGET_SUFFIX	= ".target";
 }

@@ -35,7 +35,7 @@ import java.util.Dictionary;
  * and Manifest header attribute keys.
  * 
  * <p>
- * The values associated with these keys are of type <tt>java.lang.String</tt>,
+ * The values associated with these keys are of type <code>java.lang.String</code>,
  * unless otherwise indicated.
  * 
  * @version $Revision$
@@ -56,8 +56,8 @@ public interface Constants {
 	 * Manifest header (named &quot;Bundle-Category&quot;) identifying the
 	 * bundle's category.
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 */
 	public static final String	BUNDLE_CATEGORY							= "Bundle-Category";
 
@@ -67,15 +67,15 @@ public interface Constants {
 	 * bundle's classpath.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 */
 	public static final String	BUNDLE_CLASSPATH						= "Bundle-ClassPath";
 
 	/**
 	 * Manifest header (named &quot;Bundle-Copyright&quot;) identifying the
 	 * bundle's copyright information, which may be retrieved from the
-	 * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt>
+	 * <code>Dictionary</code> object returned by the <code>Bundle.getHeaders</code>
 	 * method.
 	 */
 	public static final String	BUNDLE_COPYRIGHT						= "Bundle-Copyright";
@@ -84,8 +84,8 @@ public interface Constants {
 	 * Manifest header (named &quot;Bundle-Description&quot;) containing a brief
 	 * description of the bundle's functionality.
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 */
 	public static final String	BUNDLE_DESCRIPTION						= "Bundle-Description";
 
@@ -93,8 +93,8 @@ public interface Constants {
 	 * Manifest header (named &quot;Bundle-Name&quot;) identifying the bundle's
 	 * name.
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 */
 	public static final String	BUNDLE_NAME								= "Bundle-Name";
 
@@ -104,8 +104,8 @@ public interface Constants {
 	 * that the bundle is carrying for each of these environments.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 */
 	public static final String	BUNDLE_NATIVECODE						= "Bundle-NativeCode";
 
@@ -115,8 +115,8 @@ public interface Constants {
 	 * to the Framework for export.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 */
 	public static final String	EXPORT_PACKAGE							= "Export-Package";
 
@@ -126,8 +126,8 @@ public interface Constants {
 	 * for informational purposes only).
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 */
 	public static final String	EXPORT_SERVICE							= "Export-Service";
 
@@ -137,8 +137,8 @@ public interface Constants {
 	 * dependent on.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 */
 	public static final String	IMPORT_PACKAGE							= "Import-Package";
 
@@ -148,8 +148,8 @@ public interface Constants {
 	 * execution.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 * 
 	 * @since 1.2
 	 */
@@ -161,8 +161,8 @@ public interface Constants {
 	 * informational purposes only).
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 */
 	public static final String	IMPORT_SERVICE							= "Import-Service";
 
@@ -171,8 +171,8 @@ public interface Constants {
 	 * bundle's vendor.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 */
 	public static final String	BUNDLE_VENDOR							= "Bundle-Vendor";
 
@@ -181,8 +181,8 @@ public interface Constants {
 	 * bundle's version.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 */
 	public static final String	BUNDLE_VERSION							= "Bundle-Version";
 
@@ -192,8 +192,8 @@ public interface Constants {
 	 * bundle may be obtained.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 */
 	public static final String	BUNDLE_DOCURL							= "Bundle-DocURL";
 
@@ -203,8 +203,8 @@ public interface Constants {
 	 * example, an email address.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 */
 	public static final String	BUNDLE_CONTACTADDRESS					= "Bundle-ContactAddress";
 
@@ -214,13 +214,13 @@ public interface Constants {
 	 * 
 	 * <p>
 	 * If present, this header specifies the name of the bundle resource class
-	 * that implements the <tt>BundleActivator</tt> interface and whose
-	 * <tt>start</tt> and <tt>stop</tt> methods are called by the Framework
+	 * that implements the <code>BundleActivator</code> interface and whose
+	 * <code>start</code> and <code>stop</code> methods are called by the Framework
 	 * when the bundle is started and stopped, respectively.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 */
 	public static final String	BUNDLE_ACTIVATOR						= "Bundle-Activator";
 
@@ -230,8 +230,8 @@ public interface Constants {
 	 * update operation.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 */
 	public static final String	BUNDLE_UPDATELOCATION					= "Bundle-UpdateLocation";
 
@@ -315,8 +315,8 @@ public interface Constants {
 	 * implements.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 * 
 	 * @since 1.2
 	 */
@@ -333,7 +333,7 @@ public interface Constants {
 	 * 
 	 * <p>
 	 * The value of this property may be retrieved by calling the
-	 * <tt>BundleContext.getProperty</tt> method.
+	 * <code>BundleContext.getProperty</code> method.
 	 */
 	public static final String	FRAMEWORK_VERSION						= "org.osgi.framework.version";
 
@@ -344,7 +344,7 @@ public interface Constants {
 	 * 
 	 * <p>
 	 * The value of this property may be retrieved by calling the
-	 * <tt>BundleContext.getProperty</tt> method.
+	 * <code>BundleContext.getProperty</code> method.
 	 */
 	public static final String	FRAMEWORK_VENDOR						= "org.osgi.framework.vendor";
 
@@ -355,7 +355,7 @@ public interface Constants {
 	 * 
 	 * <p>
 	 * The value of this property may be retrieved by calling the
-	 * <tt>BundleContext.getProperty</tt> method.
+	 * <code>BundleContext.getProperty</code> method.
 	 */
 	public static final String	FRAMEWORK_LANGUAGE						= "org.osgi.framework.language";
 
@@ -366,7 +366,7 @@ public interface Constants {
 	 * 
 	 * <p>
 	 * The value of this property may be retrieved by calling the
-	 * <tt>BundleContext.getProperty</tt> method.
+	 * <code>BundleContext.getProperty</code> method.
 	 */
 	public static final String	FRAMEWORK_OS_NAME						= "org.osgi.framework.os.name";
 
@@ -377,7 +377,7 @@ public interface Constants {
 	 * 
 	 * <p>
 	 * The value of this property may be retrieved by calling the
-	 * <tt>BundleContext.getProperty</tt> method.
+	 * <code>BundleContext.getProperty</code> method.
 	 */
 	public static final String	FRAMEWORK_OS_VERSION					= "org.osgi.framework.os.version";
 
@@ -387,7 +387,7 @@ public interface Constants {
 	 * host-computer's processor name.
 	 * <p>
 	 * The value of this property may be retrieved by calling the
-	 * <tt>BundleContext.getProperty</tt> method.
+	 * <code>BundleContext.getProperty</code> method.
 	 */
 	public static final String	FRAMEWORK_PROCESSOR						= "org.osgi.framework.processor";
 
@@ -397,7 +397,7 @@ public interface Constants {
 	 * execution environments provided by the Framework.
 	 * <p>
 	 * The value of this property may be retrieved by calling the
-	 * <tt>BundleContext.getProperty</tt> method.
+	 * <code>BundleContext.getProperty</code> method.
 	 * 
 	 * @since 1.2
 	 */
@@ -410,7 +410,7 @@ public interface Constants {
 	/**
 	 * Service property (named &quot;objectClass&quot;) identifying all of the
 	 * class names under which a service was registered in the Framework (of
-	 * type <tt>java.lang.String[]</tt>).
+	 * type <code>java.lang.String[]</code>).
 	 * 
 	 * <p>
 	 * This property is set by the Framework when a service is registered.
@@ -419,7 +419,7 @@ public interface Constants {
 
 	/**
 	 * Service property (named &quot;service.id&quot;) identifying a service's
-	 * registration number (of type <tt>java.lang.Long</tt>).
+	 * registration number (of type <code>java.lang.Long</code>).
 	 * 
 	 * <p>
 	 * The value of this property is assigned by the Framework when a service is
@@ -434,9 +434,9 @@ public interface Constants {
 	 * persistent identifier.
 	 * 
 	 * <p>
-	 * This property may be supplied in the <tt>properties</tt>
-	 * <tt>Dictionary</tt>
-	 * object passed to the <tt>BundleContext.registerService</tt> method.
+	 * This property may be supplied in the <code>properties</code>
+	 * <code>Dictionary</code>
+	 * object passed to the <code>BundleContext.registerService</code> method.
 	 * 
 	 * <p>
 	 * A service's persistent identifier uniquely identifies the service and
@@ -452,28 +452,28 @@ public interface Constants {
 
 	/**
 	 * Service property (named &quot;service.ranking&quot;) identifying a
-	 * service's ranking number (of type <tt>java.lang.Integer</tt>).
+	 * service's ranking number (of type <code>java.lang.Integer</code>).
 	 * 
 	 * <p>
-	 * This property may be supplied in the <tt>properties
-	 * Dictionary</tt>
-	 * object passed to the <tt>BundleContext.registerService</tt> method.
+	 * This property may be supplied in the <code>properties
+	 * Dictionary</code>
+	 * object passed to the <code>BundleContext.registerService</code> method.
 	 * 
 	 * <p>
 	 * The service ranking is used by the Framework to determine the <i>default
 	 * </i> service to be returned from a call to the
 	 * {@link BundleContext#getServiceReference}method: If more than one
-	 * service implements the specified class, the <tt>ServiceReference</tt>
+	 * service implements the specified class, the <code>ServiceReference</code>
 	 * object with the highest ranking is returned.
 	 * 
 	 * <p>
 	 * The default ranking is zero (0). A service with a ranking of
-	 * <tt>Integer.MAX_VALUE</tt> is very likely to be returned as the default
-	 * service, whereas a service with a ranking of <tt>Integer.MIN_VALUE</tt>
+	 * <code>Integer.MAX_VALUE</code> is very likely to be returned as the default
+	 * service, whereas a service with a ranking of <code>Integer.MIN_VALUE</code>
 	 * is very unlikely to be returned.
 	 * 
 	 * <p>
-	 * If the supplied property value is not of type <tt>java.lang.Integer</tt>,
+	 * If the supplied property value is not of type <code>java.lang.Integer</code>,
 	 * it is deemed to have a ranking value of zero.
 	 */
 	public static final String	SERVICE_RANKING							= "service.ranking";
@@ -483,8 +483,8 @@ public interface Constants {
 	 * service's vendor.
 	 * 
 	 * <p>
-	 * This property may be supplied in the properties <tt>Dictionary</tt>
-	 * object passed to the <tt>BundleContext.registerService</tt> method.
+	 * This property may be supplied in the properties <code>Dictionary</code>
+	 * object passed to the <code>BundleContext.registerService</code> method.
 	 */
 	public static final String	SERVICE_VENDOR							= "service.vendor";
 
@@ -493,8 +493,8 @@ public interface Constants {
 	 * service's description.
 	 * 
 	 * <p>
-	 * This property may be supplied in the properties <tt>Dictionary</tt>
-	 * object passed to the <tt>BundleContext.registerService</tt> method.
+	 * This property may be supplied in the properties <code>Dictionary</code>
+	 * object passed to the <code>BundleContext.registerService</code> method.
 	 */
 	public static final String	SERVICE_DESCRIPTION						= "service.description";
 
@@ -502,8 +502,8 @@ public interface Constants {
 	 * Manifest header (named &quot;Bundle-SymbolicName&quot;) identifying the
 	 * bundle's symbolic name.
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 * 
 	 * @since 1.3
 	 */
@@ -511,7 +511,7 @@ public interface Constants {
 
 	/**
 	 * Manifest header attribute (named &quot;singleton&quot;) identifying
-	 * whether a bundle is a singleton. The default value is <tt>false</tt>.
+	 * whether a bundle is a singleton. The default value is <code>false</code>.
 	 * 
 	 * <p>
 	 * The attribute value is encoded in the Bundle-SymbolicName manifest header
@@ -528,7 +528,7 @@ public interface Constants {
 	/**
 	 * Manifest header attribute (named &quot;fragment-attachment&quot;)
 	 * identifying if and when a fragment may attach to a host bundle. The
-	 * default value is <tt>&quot;always&quot;</tt>.
+	 * default value is <code>&quot;always&quot;</code>.
 	 * 
 	 * <p>
 	 * The attribute value is encoded in the Bundle-SymbolicName manifest header
@@ -608,8 +608,8 @@ public interface Constants {
 	 * Manifest header (named &quot;Bundle-Localization&quot;) identifying the
 	 * base name of the bundle's localization file.
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 * 
 	 * @since 1.3
 	 */
@@ -628,8 +628,8 @@ public interface Constants {
 	 * symbolic names of other bundles required by the bundle.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 * 
 	 * @since 1.3
 	 */
@@ -638,7 +638,7 @@ public interface Constants {
 	/**
 	 * Manifest header attribute (named &quot;bundle-version&quot;) identifying
 	 * a range of versions for a bundle specified in the Require-Bundle or
-	 * Fragment-Host manifest headers. The default value is <tt>0.0.0</tt>.
+	 * Fragment-Host manifest headers. The default value is <code>0.0.0</code>.
 	 * 
 	 * <p>
 	 * The attribute value is encoded in the Require-Bundle manifest header
@@ -664,8 +664,8 @@ public interface Constants {
 	 * symbolic name of another bundle for which that the bundle is a fragment.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 * 
 	 * @since 1.3
 	 */
@@ -674,7 +674,7 @@ public interface Constants {
 	/**
 	 * Manifest header directive (named &quot;multiple-hosts&quot;) identifying
 	 * if the fragment should attach to each bundle selected by the
-	 * Fragment-Host manifest header. The default value is <tt>false</tt>.
+	 * Fragment-Host manifest header. The default value is <code>false</code>.
 	 * 
 	 * <p>
 	 * The directive value is encoded in the Fragment-Host manifest header like:
@@ -714,8 +714,8 @@ public interface Constants {
 	 * V1.3 of the OSGi Framework Specification is "2".
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 * 
 	 * @since 1.3
 	 */
@@ -948,8 +948,8 @@ public interface Constants {
 	 * reexport.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <tt>Dictionary</tt>
-	 * object returned by the <tt>Bundle.getHeaders</tt> method.
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 * 
 	 * @since 1.3
 	 */

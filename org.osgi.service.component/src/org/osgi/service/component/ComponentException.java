@@ -42,7 +42,7 @@ public class ComponentException extends RuntimeException {
 	 * Construct a new ComponentException with the specified message and cause.
 	 * 
 	 * @param message The message for the exception.
-	 * @param cause The cause of the exception. May be <tt>null</tt>.
+	 * @param cause The cause of the exception. May be <code>null</code>.
 	 */
 	public ComponentException(String message, Throwable cause) {
 		super(message);
@@ -62,7 +62,7 @@ public class ComponentException extends RuntimeException {
 	/**
 	 * Construct a new ComponentException with the specified cause.
 	 * 
-	 * @param cause The cause of the exception. May be <tt>null</tt>.
+	 * @param cause The cause of the exception. May be <code>null</code>.
 	 */
 	public ComponentException(Throwable cause) {
 		super();
@@ -70,10 +70,10 @@ public class ComponentException extends RuntimeException {
 	}
 
 	/**
-	 * Returns the cause of this exception or <tt>null</tt> if no cause was
+	 * Returns the cause of this exception or <code>null</code> if no cause was
 	 * specified when this exception was created.
 	 * 
-	 * @return The cause of this exception or <tt>null</tt> if no cause was
+	 * @return The cause of this exception or <code>null</code> if no cause was
 	 *         specified.
 	 */
 	public Throwable getCause() {
@@ -84,7 +84,7 @@ public class ComponentException extends RuntimeException {
 	 * The cause of this exception can only be set when constructed.
 	 * 
 	 * @throws java.lang.IllegalStateException This method will always throw an
-	 *         <tt>IllegalStateException</tt> since the cause of this
+	 *         <code>IllegalStateException</code> since the cause of this
 	 *         exception can only be set when constructed.
 	 */
 	public Throwable initCause(Throwable cause) {

@@ -36,23 +36,23 @@ import java.io.InputStream;
  */
 public interface ObjectClassDefinition {
 	/**
-	 * Argument for <tt>getAttributeDefinitions(int)</tt>.
+	 * Argument for <code>getAttributeDefinitions(int)</code>.
 	 * <p>
-	 * <tt>REQUIRED</tt> indicates that only the required definitions are
+	 * <code>REQUIRED</code> indicates that only the required definitions are
 	 * returned. The value is 1.
 	 */
 	final int	REQUIRED	= 1;
 	/**
-	 * Argument for <tt>getAttributeDefinitions(int)</tt>.
+	 * Argument for <code>getAttributeDefinitions(int)</code>.
 	 * <p>
-	 * <tt>OPTIONAL</tt> indicates that only the optional definitions are
+	 * <code>OPTIONAL</code> indicates that only the optional definitions are
 	 * returned. The value is 2.
 	 */
 	final int	OPTIONAL	= 2;
 	/**
-	 * Argument for <tt>getAttributeDefinitions(int)</tt>.
+	 * Argument for <code>getAttributeDefinitions(int)</code>.
 	 * <p>
-	 * <tt>ALL</tt> indicates that all the definitions are returned. The value
+	 * <code>ALL</code> indicates that all the definitions are returned. The value
 	 * is -1.
 	 */
 	final int	ALL			= 0xFFFFFFFF;
@@ -70,7 +70,7 @@ public interface ObjectClassDefinition {
 	 * Return the id of this object class.
 	 * 
 	 * <p>
-	 * <tt>ObjectDefintion</tt> objects share a global namespace in the
+	 * <code>ObjectDefintion</code> objects share a global namespace in the
 	 * registry. They share this aspect with LDAP/X.500 attributes. In these
 	 * standards the OSI Object Identifier (OID) is used to uniquely identify
 	 * object classes. If such an OID exists, (which can be requested at several
@@ -100,21 +100,21 @@ public interface ObjectClassDefinition {
 	 * 
 	 * <p>
 	 * Return a set of attributes. The filter parameter can distinguish between
-	 * <tt>ALL</tt>,<tt>REQUIRED</tt> or the <tt>OPTIONAL</tt>
+	 * <code>ALL</code>,<code>REQUIRED</code> or the <code>OPTIONAL</code>
 	 * attributes.
 	 * 
-	 * @param filter <tt>ALL</tt>,<tt>REQUIRED</tt>,<tt>OPTIONAL</tt>
-	 * @return An array of attribute definitions or <tt>null</tt> if no
+	 * @param filter <code>ALL</code>,<code>REQUIRED</code>,<code>OPTIONAL</code>
+	 * @return An array of attribute definitions or <code>null</code> if no
 	 *         attributes are selected
 	 */
 	AttributeDefinition[] getAttributeDefinitions(int filter);
 
 	/**
-	 * Return an <tt>InputStream</tt> object that can be used to create an
+	 * Return an <code>InputStream</code> object that can be used to create an
 	 * icon from.
 	 * 
 	 * <p>
-	 * Indicate the size and return an <tt>InputStream</tt> object containing
+	 * Indicate the size and return an <code>InputStream</code> object containing
 	 * an icon. The returned icon maybe larger or smaller than the indicated
 	 * size.
 	 * 
@@ -123,7 +123,7 @@ public interface ObjectClassDefinition {
 	 * 
 	 * @param size Requested size of an icon, e.g. a 16x16 pixels icon then size =
 	 *        16
-	 * @return An InputStream representing an icon or <tt>null</tt>
+	 * @return An InputStream representing an icon or <code>null</code>
 	 */
 	InputStream getIcon(int size) throws IOException;
 }

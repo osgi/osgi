@@ -29,11 +29,11 @@ package org.osgi.service.url;
 
 /**
  * Defines standard names for property keys associated with
- * {@link URLStreamHandlerService}and <tt>java.net.ContentHandler</tt>
+ * {@link URLStreamHandlerService}and <code>java.net.ContentHandler</code>
  * services.
  * 
  * <p>
- * The values associated with these keys are of type <tt>java.lang.String[]</tt>,
+ * The values associated with these keys are of type <code>java.lang.String[]</code>,
  * unless otherwise indicated.
  * 
  * @version $Revision$

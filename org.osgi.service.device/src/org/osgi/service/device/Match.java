@@ -30,7 +30,7 @@ package org.osgi.service.device;
 import org.osgi.framework.ServiceReference;
 
 /**
- * Instances of <tt>Match</tt> are used in the {@link DriverSelector#select}
+ * Instances of <code>Match</code> are used in the {@link DriverSelector#select}
  * method to identify Driver services matching a Device service.
  * 
  * @version $Revision$
@@ -41,7 +41,7 @@ public abstract interface Match {
 	/**
 	 * Return the reference to a Driver service.
 	 * 
-	 * @return <tt>ServiceReference</tt> object to a Driver service.
+	 * @return <code>ServiceReference</code> object to a Driver service.
 	 */
 	public abstract ServiceReference getDriver();
 

@@ -80,9 +80,9 @@ public interface ComponentContext {
 	 * Returns the service object for the specified service reference name.
 	 * 
 	 * @param name The name of a service reference as specified in a
-	 *        <tt>reference</tt> element in this component's description.
-	 * @return A service object for the referenced service or <tt>null</tt> if
-	 *         the reference cardinality is <tt>0..1</tt> or <tt>0..n</tt>
+	 *        <code>reference</code> element in this component's description.
+	 * @return A service object for the referenced service or <code>null</code> if
+	 *         the reference cardinality is <code>0..1</code> or <code>0..n</code>
 	 *         and no matching service is available.
 	 * @throws ComponentException If the Service Component Runtime catches an
 	 *         exception while activating the target service.
@@ -93,10 +93,10 @@ public interface ComponentContext {
 	 * Returns the service objects for the specified service reference name.
 	 * 
 	 * @param name The name of a service reference as specified in a
-	 *        <tt>reference</tt> element in this component's description.
+	 *        <code>reference</code> element in this component's description.
 	 * @return An array of service objects for the referenced service or
-	 *         <tt>null</tt> if the reference cardinality is <tt>0..1</tt>
-	 *         or <tt>0..n</tt> and no matching service is available.
+	 *         <code>null</code> if the reference cardinality is <code>0..1</code>
+	 *         or <code>0..n</code> and no matching service is available.
 	 * @throws ComponentException If the Service Component Runtime catches an
 	 *         exception while activating a target service.
 	 */
@@ -111,18 +111,18 @@ public interface ComponentContext {
 
 	/**
 	 * If the component is registered as a service using the
-	 * <tt>servicefactory=&quot;true&quot;</tt> attribute, then this method
+	 * <code>servicefactory=&quot;true&quot;</code> attribute, then this method
 	 * returns the bundle using the service provided by this component.
 	 * <p>
-	 * This method will return <tt>null</tt> if the component is either:
+	 * This method will return <code>null</code> if the component is either:
 	 * <ul>
 	 * <li>Not a service, then no bundle can be using it as a service.
 	 * <li>Is a service but did not specify the
-	 * <tt>servicefactory=&quot;true&quot;</tt> attribute, then all bundles
+	 * <code>servicefactory=&quot;true&quot;</code> attribute, then all bundles
 	 * will use this component.
 	 * </ul>
 	 * 
-	 * @return The bundle using this component as a service or <tt>null</tt>.
+	 * @return The bundle using this component as a service or <code>null</code>.
 	 */
 	public Bundle getUsingBundle();
 
@@ -137,7 +137,7 @@ public interface ComponentContext {
 	 * Enables the specified component name. The specified component name must
 	 * be in the same bundle as this component.
 	 * 
-	 * @param name The name of a component or <tt>null</tt> to indicate all
+	 * @param name The name of a component or <code>null</code> to indicate all
 	 *        components in the bundle.
 	 */
 	public void enableComponent(String name);

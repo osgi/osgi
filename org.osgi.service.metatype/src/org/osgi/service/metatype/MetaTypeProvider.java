@@ -37,16 +37,16 @@ public interface MetaTypeProvider {
 	 * specified locale.
 	 * 
 	 * <p>
-	 * The locale parameter must be a name that consists of <tt>language</tt>[
-	 * "_" <tt>country</tt>[ "_" <tt>variation</tt>] ] as is customary in
-	 * the <tt>Locale</tt> class. This <tt>Locale</tt> class is not used
+	 * The locale parameter must be a name that consists of <code>language</code>[
+	 * "_" <code>country</code>[ "_" <code>variation</code>] ] as is customary in
+	 * the <code>Locale</code> class. This <code>Locale</code> class is not used
 	 * because certain profiles do not contain it.
 	 * 
 	 * @param id The ID of the requested object class. This can be a pid or
 	 *        factory pid returned by getPids or getFactoryPids.
-	 * @param locale The locale of the definition or <tt>null</tt> for default
+	 * @param locale The locale of the definition or <code>null</code> for default
 	 *        locale.
-	 * @return A <tt>ObjectClassDefinition</tt> object.
+	 * @return A <code>ObjectClassDefinition</code> object.
 	 * @throws IllegalArgumentException If the id or locale arguments are not
 	 *         valid
 	 */
@@ -56,9 +56,9 @@ public interface MetaTypeProvider {
 	 * Return a list of available locales.
 	 * 
 	 * The results must be names that consists of language [ _ country [ _
-	 * variation ]] as is customary in the <tt>Locale</tt> class.
+	 * variation ]] as is customary in the <code>Locale</code> class.
 	 * 
-	 * @return An array of locale strings or <tt>null</tt> if there is no
+	 * @return An array of locale strings or <code>null</code> if there is no
 	 *         locale specific localization can be found.
 	 *  
 	 */

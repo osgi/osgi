@@ -28,7 +28,7 @@
 package org.osgi.service.cm;
 
 /**
- * An <tt>Exception</tt> class to inform the Configuration Admin service of
+ * An <code>Exception</code> class to inform the Configuration Admin service of
  * problems with configuration data.
  * 
  * @version $Revision$
@@ -45,10 +45,10 @@ public class ConfigurationException extends Exception {
 	private Throwable	cause;
 
 	/**
-	 * Create a <tt>ConfigurationException</tt> object.
+	 * Create a <code>ConfigurationException</code> object.
 	 * 
 	 * @param property name of the property that caused the problem,
-	 *        <tt>null</tt> if no specific property was the cause
+	 *        <code>null</code> if no specific property was the cause
 	 * @param reason reason for failure
 	 */
 	public ConfigurationException(String property, String reason) {
@@ -59,10 +59,10 @@ public class ConfigurationException extends Exception {
 	}
 
 	/**
-	 * Create a <tt>ConfigurationException</tt> object.
+	 * Create a <code>ConfigurationException</code> object.
 	 * 
 	 * @param property name of the property that caused the problem,
-	 *        <tt>null</tt> if no specific property was the cause
+	 *        <code>null</code> if no specific property was the cause
 	 * @param reason reason for failure
      * @param cause The cause of this exception.
      * @since 1.2
@@ -94,10 +94,10 @@ public class ConfigurationException extends Exception {
 	}
 
 	/**
-	 * Returns the cause of this exception or <tt>null</tt> if no
+	 * Returns the cause of this exception or <code>null</code> if no
 	 * cause was specified when this exception was created.
 	 *
-	 * @return  The cause of this exception or <tt>null</tt> if no
+	 * @return  The cause of this exception or <code>null</code> if no
 	 * cause was specified.
 	 * @since 1.2 
 	 */
@@ -109,7 +109,7 @@ public class ConfigurationException extends Exception {
 	 * The cause of this exception can only be set when constructed.
 	 *
 	 * @throws java.lang.IllegalStateException
-	 * This method will always throw an <tt>IllegalStateException</tt>
+	 * This method will always throw an <code>IllegalStateException</code>
 	 * since the cause of this exception can only be set when constructed.
 	 * @since 1.2
 	 */

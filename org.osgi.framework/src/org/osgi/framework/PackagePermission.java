@@ -42,14 +42,14 @@ import java.util.Hashtable;
  * For example:
  * 
  * <pre>
- * <tt>
+ * <code>
  * org.osgi.service.http
- * </tt>
+ * </code>
  * </pre>
  * 
  * <p>
- * <tt>PackagePermission</tt> has two actions: <tt>EXPORT</tt> and
- * <tt>IMPORT</tt>. The <tt>EXPORT</tt> action implies the <tt>IMPORT</tt>
+ * <code>PackagePermission</code> has two actions: <code>EXPORT</code> and
+ * <code>IMPORT</code>. The <code>EXPORT</code> action implies the <code>IMPORT</code>
  * action.
  * 
  * @version $Revision$
@@ -58,12 +58,12 @@ import java.util.Hashtable;
 public final class PackagePermission extends BasicPermission {
 	static final long			serialVersionUID	= -5107705877071099135L;
 	/**
-	 * The action string <tt>export</tt>.
+	 * The action string <code>export</code>.
 	 */
 	public final static String	EXPORT				= "export";
 
 	/**
-	 * The action string <tt>import</tt>.
+	 * The action string <code>import</code>.
 	 */
 	public final static String	IMPORT				= "import";
 
@@ -105,14 +105,14 @@ public final class PackagePermission extends BasicPermission {
 	 * Package Permissions are granted over all possible versions of a package.
 	 * 
 	 * A bundle that needs to export a package must have the appropriate
-	 * <tt>PackagePermission</tt> for that package; similarly, a bundle that
+	 * <code>PackagePermission</code> for that package; similarly, a bundle that
 	 * needs to import a package must have the appropriate
-	 * <tt>PackagePermssion</tt> for that package.
+	 * <code>PackagePermssion</code> for that package.
 	 * <p>
 	 * Permission is granted for both classes and resources.
 	 * 
 	 * @param name Package name.
-	 * @param actions <tt>EXPORT</tt>,<tt>IMPORT</tt> (canonical order).
+	 * @param actions <code>EXPORT</code>,<code>IMPORT</code> (canonical order).
 	 */
 
 	public PackagePermission(String name, String actions) {
@@ -240,9 +240,9 @@ public final class PackagePermission extends BasicPermission {
 	 * 
 	 * <p>
 	 * This method checks that the package name of the target is implied by the
-	 * package name of this object. The list of <tt>PackagePermission</tt>
+	 * package name of this object. The list of <code>PackagePermission</code>
 	 * actions must either match or allow for the list of the target object to
-	 * imply the target <tt>PackagePermission</tt> action.
+	 * imply the target <code>PackagePermission</code> action.
 	 * <p>
 	 * The permission to export a package implies the permission to import the
 	 * named package.
@@ -255,8 +255,8 @@ public final class PackagePermission extends BasicPermission {
 	 * </pre>
 	 * 
 	 * @param p The target permission to interrogate.
-	 * @return <tt>true</tt> if the specified <tt>PackagePermission</tt>
-	 *         action is implied by this object; <tt>false</tt> otherwise.
+	 * @return <code>true</code> if the specified <code>PackagePermission</code>
+	 *         action is implied by this object; <code>false</code> otherwise.
 	 */
 
 	public boolean implies(Permission p) {
@@ -272,13 +272,13 @@ public final class PackagePermission extends BasicPermission {
 
 	/**
 	 * Returns the canonical string representation of the
-	 * <tt>PackagePermission</tt> actions.
+	 * <code>PackagePermission</code> actions.
 	 * 
 	 * <p>
-	 * Always returns present <tt>PackagePermission</tt> actions in the
-	 * following order: <tt>EXPORT</tt>,<tt>IMPORT</tt>.
+	 * Always returns present <code>PackagePermission</code> actions in the
+	 * following order: <code>EXPORT</code>,<code>IMPORT</code>.
 	 * 
-	 * @return Canonical string representation of the <tt>PackagePermission</tt>
+	 * @return Canonical string representation of the <code>PackagePermission</code>
 	 *         actions.
 	 */
 
@@ -305,27 +305,27 @@ public final class PackagePermission extends BasicPermission {
 	}
 
 	/**
-	 * Returns a new <tt>PermissionCollection</tt> object suitable for storing
-	 * <tt>PackagePermission</tt> objects.
+	 * Returns a new <code>PermissionCollection</code> object suitable for storing
+	 * <code>PackagePermission</code> objects.
 	 * 
-	 * @return A new <tt>PermissionCollection</tt> object.
+	 * @return A new <code>PermissionCollection</code> object.
 	 */
 	public PermissionCollection newPermissionCollection() {
 		return (new PackagePermissionCollection());
 	}
 
 	/**
-	 * Determines the equality of two <tt>PackagePermission</tt> objects.
+	 * Determines the equality of two <code>PackagePermission</code> objects.
 	 * 
 	 * This method checks that specified package has the same package name and
-	 * <tt>PackagePermission</tt> actions as this <tt>PackagePermission</tt>
+	 * <code>PackagePermission</code> actions as this <code>PackagePermission</code>
 	 * object.
 	 * 
 	 * @param obj The object to test for equality with this
-	 *        <tt>PackagePermission</tt> object.
-	 * @return <tt>true</tt> if <tt>obj</tt> is a <tt>PackagePermission</tt>,
+	 *        <code>PackagePermission</code> object.
+	 * @return <code>true</code> if <code>obj</code> is a <code>PackagePermission</code>,
 	 *         and has the same package name and actions as this
-	 *         <tt>PackagePermission</tt> object; <tt>false</tt> otherwise.
+	 *         <code>PackagePermission</code> object; <code>false</code> otherwise.
 	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
@@ -390,7 +390,7 @@ public final class PackagePermission extends BasicPermission {
 }
 
 /**
- * Stores a set of <tt>PackagePermission</tt> permissions.
+ * Stores a set of <code>PackagePermission</code> permissions.
  * 
  * @see java.security.Permission
  * @see java.security.Permissions
@@ -424,15 +424,15 @@ final class PackagePermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Adds a permission to the <tt>PackagePermission</tt> objects. The key
+	 * Adds a permission to the <code>PackagePermission</code> objects. The key
 	 * for the hash is the name.
 	 * 
-	 * @param permission The <tt>PackagePermission</tt> object to add.
+	 * @param permission The <code>PackagePermission</code> object to add.
 	 * 
 	 * @exception IllegalArgumentException If the permission is not a
-	 *            <tt>PackagePermission</tt> instance.
+	 *            <code>PackagePermission</code> instance.
 	 * 
-	 * @exception SecurityException If this <tt>PackagePermissionCollection</tt>
+	 * @exception SecurityException If this <code>PackagePermissionCollection</code>
 	 *            object has been marked read-only.
 	 */
 
@@ -470,13 +470,13 @@ final class PackagePermissionCollection extends PermissionCollection {
 
 	/**
 	 * Determines if the specified permissions implies the permissions expressed
-	 * in <tt>permission</tt>.
+	 * in <code>permission</code>.
 	 * 
 	 * @param permission The Permission object to compare with this
-	 *        <tt>PackagePermission</tt> object.
+	 *        <code>PackagePermission</code> object.
 	 * 
-	 * @return <tt>true</tt> if <tt>permission</tt> is a proper subset of a
-	 *         permission in the set; <tt>false</tt> otherwise.
+	 * @return <code>true</code> if <code>permission</code> is a proper subset of a
+	 *         permission in the set; <code>false</code> otherwise.
 	 */
 
 	public boolean implies(Permission permission) {
@@ -538,10 +538,10 @@ final class PackagePermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Returns an enumeration of all <tt>PackagePermission</tt> objects in the
+	 * Returns an enumeration of all <code>PackagePermission</code> objects in the
 	 * container.
 	 * 
-	 * @return Enumeration of all <tt>PackagePermission</tt> objects.
+	 * @return Enumeration of all <code>PackagePermission</code> objects.
 	 */
 
 	public Enumeration elements() {
