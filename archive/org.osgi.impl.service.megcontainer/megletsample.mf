@@ -4,4 +4,4 @@ Bundle-Vendor: Nokia
 Bundle-Version: 1.0
 Bundle-ClassPath: .
 Import-Package: org.osgi.service.application, org.osgi.service.event
-Export-Package: com.nokia.osgi.megtest.megapplication
+Export-Package: com.nokia.test.megletsample
