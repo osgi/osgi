@@ -28,7 +28,7 @@ package org.osgi.service.application;
 import org.osgi.service.event.*;
 
 /**
- * A MEG Application. a.k.a Meglet
+ * A MEG Application, a.k.a Meglet
  */
 public abstract class MEGApplication implements Application, ChannelListener {
 	private MEGApplicationContext	appContext;
