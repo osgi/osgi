@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-Name: test.director
+Eclipse-Autostart: true
+Bundle-Activator: org.osgi.test.director.Director
+Bundle-Copyright: Copyright (c) The Open Services Gateway Initiative (2000, 2002). All Rights Reserved.
+Bundle-Description: Director for test harness. This is a test harness used to test for compliance
+  verification. The options of this utility are available on http://membercvs.osgi.org/testing.
+  A (possible stale) copy of this can be found at /www/index.html at the local web server when
+  this bundle runs.
+Bundle-Vendor: OSGi
+Bundle-Version: 3.0
+Bundle-Category: osgi,test
+Bundle-ClassPath: .,ifc112.jar
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+CVS-Header: $Header$
+Bundle-SymbolicName: test.director
+Bundle-Version: 4.0
+Bundle-Name: Director
+Bundle-Vendor: OSGi Alliance
+Bundle-Activator: org.osgi.test.director.Director
+

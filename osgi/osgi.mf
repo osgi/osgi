@@ -28,3 +28,4 @@ Export-Package: org.osgi.framework; specification-version=1.2,
  org.osgi.util.position; specification-version=1.0,
  org.osgi.util.xml; specification-version=1.0
 CVS-Header: $Header$
+$(PRIVATE-PACKAGE)

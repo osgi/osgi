@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path=""/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.framework"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.cm"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.device"/>
@@ -23,5 +23,5 @@
 	<classpathentry exported="true" kind="src" path="/org.osgi.util.tracker"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.util.xml"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.startlevel"/>
-	<classpathentry kind="output" path=""/>
+	<classpathentry kind="output" path="src"/>
 </classpath>
