@@ -34,8 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
-// TODO implement methods
-
 /**
  * DmtPermission controls access to management objects in the Device
  * Management Tree (DMT). It is intended to control local access to
