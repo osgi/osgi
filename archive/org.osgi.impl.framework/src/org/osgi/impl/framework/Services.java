@@ -55,6 +55,7 @@ public class Services {
 	 */
 	ServiceRegistration register(BundleImpl bundle, String[] classes,
 			Object service, Dictionary properties) {
+
 		if (service == null) {
 			throw new IllegalArgumentException("Can't register null as service");
 		}
@@ -62,6 +63,8 @@ public class Services {
 		synchronized (this) {
 			// Check if service implements claimed classes and that they exists.
 			ClassLoader cl = service.getClass().getClassLoader();
+			HashSet	 requiredInterfaces = new HashSet();
+			
 			for (int i = 0; i < classes.length; i++) {
 				if (classes[i] == null) {
 					throw new IllegalArgumentException(
@@ -86,20 +89,39 @@ public class Services {
 					AccessController.checkPermission(new ServicePermission(
 							classes[i], ServicePermission.REGISTER));
 				}
-				Class c;
-				try {
-					c = Class.forName(classes[i], true, cl);
-				}
-				catch (ClassNotFoundException e) {
-					throw new IllegalArgumentException("Class does not exist: "
-							+ classes[i]);
-				}
-				if (!(service instanceof ServiceFactory)
-						&& !c.isInstance(service)) {
-					throw new IllegalArgumentException("Object " + service
-							+ " is not an instance of " + classes[i]);
-				}
+				/* Change 2004 Nov. 4 because previous check was not taking
+				 * into account superclasses */
+//				Class c;
+//				try {
+//					c = Class.forName(classes[i], true, cl);
+//				}
+//				catch (ClassNotFoundException e) {
+//					throw new IllegalArgumentException("Class does not exist: "
+//							+ classes[i]);
+//				}
+//				if (!(service instanceof ServiceFactory)
+//						&& !c.isInstance(service)) {
+//					throw new IllegalArgumentException("Object " + service
+//							+ " is not an instance of " + classes[i]);
+//				}
+				requiredInterfaces.add(classes[i]);
+				
 			}
+			
+			if (!(service instanceof ServiceFactory)) {
+				Class target = service.getClass();
+				while ( target != null ) {
+					Class interfaces[] = target.getInterfaces();
+					for ( int i=0; i<interfaces.length; i++ )
+						requiredInterfaces.remove(interfaces[i].getName());
+					target = target.getSuperclass();
+				}
+				if ( !requiredInterfaces.isEmpty())
+				throw new IllegalArgumentException("Object " + service
+						+ " is not an instance of " + requiredInterfaces );
+			}
+			/* End change */
+			
 			res = new ServiceRegistrationImpl(bundle, service,
 					new PropertiesDictionary(properties, classes, null));
 			services.add(res);
@@ -153,6 +175,7 @@ public class Services {
 	synchronized ServiceReference[] get(String clazz, String filter)
 			throws InvalidSyntaxException {
 		Iterator s;
+		
 		if (clazz == null) {
 			s = services.iterator();
 			if (s == null) {
