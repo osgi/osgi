@@ -112,7 +112,9 @@ public class DoorWindowFactory implements ControlUnitFactory {
 	 */
 	public String[] findControlUnits(String finderId, Object arguments)
 			throws ControlUnitException {
-		return null;
+		if (finderId == "$find.all")
+			return listControlUnits();
+		else throw (new ControlUnitException(ControlUnitException.NO_SUCH_ACTION_ERROR));
 	}
 
 	/**
@@ -139,7 +141,7 @@ public class DoorWindowFactory implements ControlUnitFactory {
 
 		if (elt != null)
 			return elt.queryStateVariable(varId);
-		else throw (new IllegalArgumentException());
+		else throw (new ControlUnitException(ControlUnitException.NO_SUCH_STATE_VARIABLE_ERROR));
 	}
 
 	/**
@@ -169,7 +171,7 @@ public class DoorWindowFactory implements ControlUnitFactory {
 	 */
 	public String createControlUnit(String constructorId, Object arguments)
 			throws ControlUnitException {
-		if (((constructorId == "door.create") || (constructorId == "window.create")) && (arguments == null)) {
+		if (((constructorId == "$create.door") || (constructorId == "$create.window")) && (arguments == null)) {
 			if (nbEltCreated < 5) {
 				
 				// Create a new instance of Door and register it
@@ -181,7 +183,7 @@ public class DoorWindowFactory implements ControlUnitFactory {
 				if (adminCallback != null) {
 					adminCallback.controlUnitEvent(ControlUnitAdminListener.CONTROL_UNIT_ADDED, type, name);
 					
-					if (constructorId == "window.create")
+					if (constructorId == "$create.window")
 						adminCallback.hierarchyChanged(HierarchyListener.ATTACHED, type, name, "door", "door.1");
 				}
 			}
