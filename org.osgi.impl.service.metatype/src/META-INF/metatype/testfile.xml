@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.osgi.org/xmlns/metatype/v1.0.0 metatype.xsd "
+	localization = "META-INF/metatype/testfile">
+  <OCD id="ocd1" name="%ocdname" description="%ocddescription">
+  	<AD id="" name="%adname" type="String" cardinality="0" default="default value"
+  	description="%addescription">
+  		<Option label="%label1" value="value 1" />
+  		<Option label="%label2" value="value 2" />
+  	</AD>
+  	<Icon size="16" resource="%iconfile" />
+  </OCD> 
+  <Designate pid="org.osgi.example.somebundle.pid" factory="false">
+  	<Object ocdref="ocd1"/>
+  </Designate>  
+</metatype:MetaData>
+

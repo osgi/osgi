@@ -3,6 +3,7 @@
 	<name>org.osgi.impl.service.metatype</name>
 	<comment></comment>
 	<projects>
+		<project>org.osgi.impl.bundle.saxon</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}.utestbundle
+Bundle-Name: ${p}.utestbundle
+Bundle-Description: OSGi sample meta data bundle.
+Bundle-Copyright: (C) Copyright IBM Corporation 2000-2005.
+ This source code is licensed to OSGi as MEMBER LICENSED MATERIALS
+ under the terms of Section 3.2 of the OSGi MEMBER AGREEMENT.
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 1.0
+Bundle-Category: osgi
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)

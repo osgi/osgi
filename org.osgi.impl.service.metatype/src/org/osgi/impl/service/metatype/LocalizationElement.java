@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) The OSGi Alliance (2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -27,14 +27,45 @@
 
 package org.osgi.impl.service.metatype;
 
-import java.util.*;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
-/**
- * Holds an object.
- *
- * @version $Revision$
- */
-public class O {
-	OCD		ocd;
-	Map		properties = new Hashtable();
+public class LocalizationElement {
+
+	public static final char	KEY_SIGN		= '%';					//$NON-NLS-1$
+	String						_localization	= null;
+	ResourceBundle				_rb;
+
+	/**
+	 * Internal method
+	 */
+	void setResourceBundle(ResourceBundle rb) {
+		this._rb = rb;
+	}
+
+	/**
+	 * Method to get the localized text of inputed String.
+	 */
+	String getString(String key) {
+
+		if (key == null) {
+			// Shall it return null or empty String ?
+			return null; //$NON-NLS-1$
+		}
+
+		if ((key.charAt(0) == KEY_SIGN) && (key.length() > 1)) {
+			if (_rb != null) {
+				try {
+					String transfered = _rb.getString(key.substring(1));
+					if (transfered != null) {
+						return transfered;
+					}
+				}
+				catch (MissingResourceException mre) {
+					// Nothing found, just return the original key.
+				}
+			}
+		}
+		return key;
+	}
 }
