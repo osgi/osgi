@@ -27,33 +27,33 @@
 package org.osgi.service.cu;
 
 /**
- * Control Unit is an object, which provides formal representation of a certain
+ * Control unit is an object, which provides formal representation of a certain
  * resource (device, software or hardware components, etc.) so it can be managed
  * in a uniform way by different applications. <br>
- * The public interface of the Control Unit is represented by a set of valued
+ * The public interface of the control unit is represented by a set of valued
  * attributes called <code>state variables</code> and set of operations called
  * <code>actions</code>.
  * <p>
  * 
- * A Control Unit instance is characterized by its <code>type</code> and
- * <code>id</code>. The type of a Control Unit defines its allowed set of
- * state variables and actions. The id of the Control Unit instance identifies
+ * A control unit instance is characterized by its <code>type</code> and
+ * <code>ID</code>. The type of a control unit defines its allowed set of
+ * state variables and actions. The ID of the control unit instance identifies
  * it uniquely in the scope of its type.
  * <p>
  * 
- * A Control Unit instance can be exported (made available) to the management
+ * A control unit instance can be exported (made available) to the management
  * applications either by registering
  * {@link org.osgi.service.cu.admin.spi.ManagedControlUnit}, which represents
  * single control unit instance or by registering a
  * {@link org.osgi.service.cu.admin.spi.ControlUnitFactory} service, which
- * maintains a set of Control Unit instances of the same type.
+ * maintains a set of control unit instances of the same type.
  * <p>
  * 
- * Control Units may be arranged hierarchically - every control unit instance
+ * Control units may be arranged hierarchically - every control unit instance
  * may have one or more sub control units and one or more parent control units.
- * The implementers of the Control Units must avoid cycles in the Control Unit
- * hierarchy. Organizing Control Units may be convenient for logical grouping of
- * Control Units, but is especially useful for representing more complex
+ * The implementers of the control units must avoid cycles in the control unit
+ * hierarchy. Organizing control units may be convenient for logical grouping of
+ * control units, but is especially useful for representing more complex
  * resources - devices, hardware and software systems, which may be decomposed
  * to a hierarchy of sub-components, achieving arbitrary level of granularity.
  * 
@@ -62,15 +62,15 @@ package org.osgi.service.cu;
 public interface ControlUnit {
 
   /**
-   * Returns id of the control unit, which uniquely identifies it in the scope of
+   * Returns the ID of the control unit, which uniquely identifies it in the scope of
    * its parent.
    * 
-   * @return The id of the control unit
+   * @return The ID of the control unit
    */
   public String getId();
 
   /**
-   * Returns type of the control unit. This type is used to retrieve 
+   * Returns the type of the control unit. This type is used to retrieve 
    * metatype information from the metatype service. 
    * 
    * @return The type of the control unit
@@ -82,7 +82,7 @@ public interface ControlUnit {
    * by a control unit and their types are defined by the metadata of the
    * control unit.
    * 
-   * @param stateVariableID The id of the variable
+   * @param stateVariableID The ID of the variable
    * @return The value of the variable
    * @throws ControlUnitException if the state variable's value cannot be
    * retrieved for some reason. {@link ControlUnitException#getErrorCode()}
@@ -97,10 +97,10 @@ public interface ControlUnit {
    * a control unit and the number and types of the input and output arguments
    * of each action are defined by the metadata of the control unit.
    * 
-   * @param actionID the id of the action
+   * @param actionID the ID of the action
    * @param arguments the input argument(s). If the argument is only one this is
    *          the argument itself. If the arguments are more then one, the value
-   *          must be a <code>Object</code> array and arguments are retrieved 
+   *          must be an <code>Object</code> array and arguments are retrieved 
    *          from that array.
    * 
    * @return The output argument(s) or <code>null</code> if the action does

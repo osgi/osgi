@@ -29,27 +29,27 @@ package org.osgi.service.cu.admin.spi;
 import org.osgi.service.cu.ControlUnit;
 
 /**
- * This interface must be registered as a OSGi service in order to make a single
- * resource manageable through the Control Unit abstraction. <br>
+ * This interface must be registered as an OSGi service in order to make a single
+ * resource manageable through the control unit abstraction. <br>
  * The ManagedControlUnit services should not be used directly by the
- * applications. Instead application accessed them as
+ * applications. Instead applications access them as
  * {@link org.osgi.service.cu.ControlUnit} instances obtained via the
  * {@link org.osgi.service.cu.admin.ControlUnitAdmin} service. The
  * {@link org.osgi.service.cu.admin.ControlUnitAdmin} service is responsible for
  * tracking all <code>ManagedControlUnit</code> services registered in the
  * service registry of the framework and to notify registered
  * {@link org.osgi.service.cu.admin.ControlUnitAdminListener}s when a new
- * <code>ManagedControlUnit</code> appeared or an existing was unregistered.
+ * <code>ManagedControlUnit</code> appears or an existing one is unregistered.
  * 
  * To be properly handled by the Control Unit Admin service the
  * <code>ManagedControlUnit</code> service must be registered with the
  * following required properties:
  * <ul>
  * <li>Property {@link org.osgi.service.cu.ControlUnitConstants#TYPE} with
- * value of type <code>String</code> specifying the type of the Control Unit
+ * value of type <code>String</code> specifying the type of the control unit
  * instance.
  * <li>Property {@link org.osgi.service.cu.ControlUnitConstants#ID} with value
- * of type <code>String</code> specifying the identifier of the Control Unit
+ * of type <code>String</code> specifying the identifier of the control unit
  * instance.
  * </ul>
  * Optionally the registration properties may contain properties
@@ -60,9 +60,9 @@ import org.osgi.service.cu.ControlUnit;
  * <p>
  * 
  * Note that the control units exported through <code>ManagedControlUnit</code>
- * may specify only one control unit as a parent, while Control Units registered
+ * may specify only one control unit as a parent, while control units registered
  * by a {@link org.osgi.service.cu.admin.spi.ControlUnitFactory} may have more
- * then one parents.
+ * than one parent.
  * <p>
  * 
  * <code>ManagedControlUnits</code> may dynamically change their parent by
@@ -80,10 +80,10 @@ import org.osgi.service.cu.ControlUnit;
 public interface ManagedControlUnit extends ControlUnit {
 
   /**
-   * Supplies the Control Unit admin callback interface to the implementation of
+   * Supplies the Control Unit Admin callback interface to the implementation of
    * the <code>ManagedControlUnit</code> service. <br>
    * 
-   * This method is invoked by the Control Unit Admin bundle with a non-
+   * This method is invoked by the Control Unit Admin service with a non-
    * <code>null</code> argument after registration of the
    * <code>ManagedControlUnit</code> service or after startup of the Control
    * Unit Admin for already registered control units.
@@ -91,7 +91,7 @@ public interface ManagedControlUnit extends ControlUnit {
    * 
    * It is supposed that the Managed Control Unit will assign this reference to
    * an instance variable and use it later to notify the Control Unit Admin for
-   * changes in the state variables of the Control Unit.
+   * changes in the state variables of the control unit.
    * <p>
    * 
    * The method is invoked with a <code>null</code> argument during

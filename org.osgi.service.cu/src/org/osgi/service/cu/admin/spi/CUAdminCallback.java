@@ -31,13 +31,15 @@ import org.osgi.service.cu.admin.ControlUnitAdminListener;
 import org.osgi.service.cu.admin.HierarchyListener;
 
 /**
- * Represents the interface of the Control Unit Admin bundle provided to the
+ * Represents the interface of the 
+ * {@link org.osgi.service.cu.admin.ControlUnitAdmin} service provided to the
  * implementations of the {@link org.osgi.service.cu.admin.spi.ManagedControlUnit} and
  * {@link org.osgi.service.cu.admin.spi.ControlUnitFactory}.
- * Managed Control Units and Control Unit Factories use methods of this interface to 
- * notify the Control Unit Admin bundle for changes of the state variables. Control 
- * Unit Factories also use this interface to notify the Control Unit Admin bundle 
- * for appearance and disappearance of Control Unit instances maintained by the factory.
+ * ManagedControlUnit and ControlUnitFactory instances use the methods of 
+ * this interface to notify the <code>ControlUnitAdmin</code> service for changes of 
+ * the state variables. Control unit factories also use this interface 
+ * to notify the <code>ControlUnitAdmin</code> service
+ * for appearance and disappearance of control unit instances maintained by the factory.
  *
  * @see org.osgi.service.cu.admin.spi.ManagedControlUnit#setControlUnitCallback(CUAdminCallback)
  * @see org.osgi.service.cu.admin.spi.ControlUnitFactory#setControlUnitCallback(CUAdminCallback)

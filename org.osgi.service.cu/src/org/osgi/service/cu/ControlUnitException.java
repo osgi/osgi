@@ -32,8 +32,8 @@ import java.io.PrintWriter;
 /**
  * Custom exception thrown from some control unit related methods.<BR>
  * 
- * It has an error code, defining the type of error, which occurred, and an
- * optional nested exception.
+ * It has an error code, defining the type of the error that occurred and 
+ * an optional nested exception.
  * 
  * @version $Revision$
  */
@@ -47,20 +47,20 @@ public class ControlUnitException extends Exception {
   public static final int UNDETERMINED_ERROR = 0;
 
   /**
-   * This error code means that the user has tried to invoke non-existent
-   * action of the unit.
+   * This error code means that the user has tried to invoke 
+   * non-existent action on the control unit.
    */
   public static final int NO_SUCH_ACTION_ERROR = 1;
 
   /**
-   * This error code means, that the user has tried to read the value
+   * This error code means that the user has tried to read the value
    * of non-existent state variable.
    */
   public static final int NO_SUCH_STATE_VARIABLE_ERROR = 2;
 
   /**
-   * This error code means, that the user has supplied an invalid argument
-   * for action invocation.
+   * This error code means that the user has invoked an action with 
+   * an invalid argument.
    */
   public static final int ILLEGAL_ACTION_ARGUMENTS_ERROR = 3;
 
@@ -90,7 +90,7 @@ public class ControlUnitException extends Exception {
   }
 
   /**
-   * Creates a new exception with assigned nested error.<br>
+   * Creates a new exception with the given nested exception.<br>
    * 
    * The error code of the constructed exception will be
    * {@link #UNDETERMINED_ERROR}. The nested exception may be
@@ -156,6 +156,7 @@ public class ControlUnitException extends Exception {
   /**
    * Prints the stack trace of the nested exception too (if there is one)
    * 
+   * @param s PrintWriter to use for output.
    * @see java.lang.Throwable#printStackTrace(java.io.PrintWriter)
    */
   public void printStackTrace(PrintWriter s) {
@@ -172,6 +173,7 @@ public class ControlUnitException extends Exception {
   /**
    * Prints the stack trace of the nested exception too (if there is one)
    * 
+   * @param s PrintStream to use for output
    * @see java.lang.Throwable#printStackTrace(java.io.PrintStream)
    */
   public void printStackTrace(PrintStream s) {
@@ -185,7 +187,12 @@ public class ControlUnitException extends Exception {
     }
   }
 
-    /* (non-Javadoc)
+    /**
+     * Returns a short description of this exception. The description is 
+     * a concatenation of <code>String</code> representation of the error code,
+     * the error message (if there is one) and - if there is a nested exception - 
+     * the result from its <code>toString()</code> method.
+     * 
      * @see java.lang.Object#toString()
      */
     public String toString() {

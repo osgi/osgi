@@ -40,7 +40,7 @@ public interface ControlUnitConstants {
    * uniquely identifies a single control unit within the scope of the current
    * OSGi framework.<br>
    * 
-   * The id is a service registration property. <br>
+   * The ID is a service registration property. <br>
    * 
    * The value of this constant is <code>"org.osgi.control.id"</code>.
    */
@@ -50,7 +50,7 @@ public interface ControlUnitConstants {
    * The <code>TYPE</code> of a control unit specifies its type. There may be
    * many control units of the same type. All control units of one type have a
    * same set of state variable ids and a same set of supported actions
-   * specified by the <code>ObjectClassDefinition</code> with the same id.
+   * specified by the <code>ObjectClassDefinition</code> with the same ID.
    * 
    * The type is a service registration property. <br>
    * 
@@ -71,9 +71,9 @@ public interface ControlUnitConstants {
   public static final String VERSION = "org.osgi.control.version";
 
   /**
-   * Property specifying the id of a parent control unit. <br>
+   * Property specifying the ID of a parent control unit. <br>
    * 
-   * The parent id is a service registration property. <br>
+   * The parent ID is a service registration property. <br>
    * 
    * The value of this constant is <code>"org.osgi.control.parent.id"</code>.
    */
@@ -89,7 +89,7 @@ public interface ControlUnitConstants {
   public static final String PARENT_TYPE = "org.osgi.control.parent.type";
 
   /**
-   * {@link StateVariableListener}s, which wishes to receive upon registration the 
+   * {@link StateVariableListener}s, wishing to receive upon registration the 
    * values of the state variables for which they are listening, should have this
    * property set in their service registration properties (the value of the
    * property doesn't matter). If a listener has registered with such property
@@ -116,7 +116,7 @@ public interface ControlUnitConstants {
    * {@link org.osgi.service.cu.admin.ControlUnitAdminListener}s,
    * {@link org.osgi.service.cu.StateVariableListener}s and
    * {@link org.osgi.service.cu.admin.HierarchyListener}s to specify that 
-   * events will be sent synchronously. <br>
+   * events will be sent to them synchronously. <br>
    * 
    * The value of the property doesn't matter - if it's present events will be
    * delivered synchronously to the corresponding listener. Otherwise events are
@@ -136,9 +136,15 @@ public interface ControlUnitConstants {
   public static final String STATE_VARIABLE_ID = "org.osgi.control.var.id";
 
   /**
-   * Control units must have state variable with this ID, which value should be
-   * a string array containing the IDs of all other control unit's state
-   * variables. <br>
+   * Control units must have state variable with ID equal to this constant, 
+   * which value should be a string array containing the IDs of all other 
+   * control unit's state variables.  
+   * 
+   * <P>
+   * The <code>ControlUnitAdmin</code> uses the state variable with this ID 
+   * when it has to send initial state variables values to 
+   * {@link StateVariableListener}s, which have registered with the 
+   * {@link #EVENT_AUTO_RECEIVE} service registration property.<br>
    * 
    * The value of this constant is <code>"org.osgi.control.var.list"</code>.
    */

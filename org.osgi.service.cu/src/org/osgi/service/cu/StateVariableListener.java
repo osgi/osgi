@@ -28,17 +28,20 @@ package org.osgi.service.cu;
 
 /**
  * StateVariableListeners are registered as OSGi Services. For 
- * {@link org.osgi.service.cu.admin.spi.ManagedControlUnit ManagedControlUnits}
+ * {@link org.osgi.service.cu.admin.spi.ManagedControlUnit}
  * and 
- * {@link org.osgi.service.cu.admin.spi.ControlUnitFactory ControlUnitFactories}
- * whiteboard pattern is used to notify the listeners, i.e. Control Unit Admin is
+ * {@link org.osgi.service.cu.admin.spi.ControlUnitFactory ControlUnitFactory}
+ * instances whiteboard pattern is used to notify the listeners, 
+ * i.e. {@link org.osgi.service.cu.admin.ControlUnitAdmin} is
  * responsible for tracking these services and to deliver them the appropriate
- * events. <code>ManagedControlUnits</code> and <code>ControlUnitFactories</code>
- * notify the Control Unit Admin about state variable changes through the
- * {@link  org.osgi.service.cu.admin.spi.CUAdminCallback} provided to them upon
- * registration in the framework. <BR>
+ * events. <code>ManagedControlUnit</code> and <code>ControlUnitFactory</code>
+ * instances notify the <code>ControlUnitAdmin</code> about state variable changes 
+ * through the {@link  org.osgi.service.cu.admin.spi.CUAdminCallback} 
+ * provided to them upon registration in the framework by the <code>ControlUnitAdmin</code>. 
+ * <BR>
  * 
- * {@link org.osgi.service.cu.ControlUnit ControlUnits} on the other hand have
+ * Simple control units (those implementing only the 
+ * {@link org.osgi.service.cu.ControlUnit} interface) on the other hand have
  * the responsibility to track and notify the listeners on their own.
  * 
  * <p>
@@ -46,27 +49,25 @@ package org.osgi.service.cu;
  * A service registration property may be used as a filter to limit the number
  * of received events and to specify certain control unit and/or state variables
  * to listen for. The key of this property is
- * {@link ControlUnitConstants#EVENT_FILTER} with value of type
- * <code>String</code> representing LDAP filtering expression. The properties,
+ * {@link ControlUnitConstants#EVENT_FILTER} whose value is a
+ * <code>String</code> representing an LDAP filtering expression. The properties,
  * which may be used in the LDAP filter are {@link ControlUnitConstants#TYPE},
  * {@link ControlUnitConstants#ID} and
  * {@link ControlUnitConstants#STATE_VARIABLE_ID}. The listener will be notified
- * only for changes in the value of the state variables whose id and type of the
- * corresponding control unit and id of the state variable satisfies this
- * filter.
+ * only for changes in the values of state variables which satisfy this filter.
  * <p>
  * 
- * If property {@link ControlUnitConstants#EVENT_FILTER} does not present, the
- * listener will receive events for changing of all units state variables.
+ * If property {@link ControlUnitConstants#EVENT_FILTER} is not present, the
+ * listener will receive events for all units state variables changes.
  * <p>
  * 
  * Here are some examples:
  * <ul>
- * <li>To listen for all state variable changes on a certain control construct
- * a filter containing the ID and the TYPE of the selected unit.
+ * <li>To listen for all state variable changes on a certain control unit, construct
+ * a filter containing the ID and the type of the selected unit.
  * <li>To listen for all state variable changes on a group of similar control
- * units give only the TYPE of the units.
- * <li>To listen for a change on specific variable put the state variable id in
+ * units, give only the type of the units.
+ * <li>To listen for a change on specific variable, put the state variable ID in
  * the filter.
  * </ul>
  * <p>
@@ -76,7 +77,7 @@ package org.osgi.service.cu;
  * <p>
  * 
  * A listener that has the property
- * {@link ControlUnitConstants#EVENT_AUTO_RECEIVE} receive automatically the
+ * {@link ControlUnitConstants#EVENT_AUTO_RECEIVE} automatically receives the
  * current values of all registered control units and state variables that match
  * the current filter.
  * 
@@ -88,10 +89,10 @@ public interface StateVariableListener {
    * This is the listener's callback method. It is called when a state variable
    * of a certain control unit is changed.
    * 
-   * @param controlUnitType Control Unit type.
-   * @param controlUnitID id of the Control Unit which variable has changed.
-   * @param stateVariableID id of the changed state variable.
-   * @param value the new value of the state variable.
+   * @param controlUnitType The control unit type.
+   * @param controlUnitID The ID of the control unit whose variable has changed.
+   * @param stateVariableID The ID of the changed state variable.
+   * @param value The new value of the state variable.
    */
   public void stateVariableChanged(String controlUnitType, String controlUnitID,
                                    String stateVariableID, Object value);

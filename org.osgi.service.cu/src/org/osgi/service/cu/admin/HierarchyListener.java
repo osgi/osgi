@@ -29,17 +29,16 @@ package org.osgi.service.cu.admin;
 /**
  * Applications interested in receiving events for changes in the hierarchy of
  * control units (attaching of a control unit to new parent or detaching it from
- * old one) may implement this interface and register as service in the OSGi
+ * old one) may implement this interface and register it as a service in the OSGi
  * registry. Control Unit Admin service is responsible for tracking these
- * services and for delivering the appropriate events to the registered
- * listeners.
+ * services and for delivering the appropriate events to them.
  * <p>
  * 
  * A service registration property may be used as a filter to limit the number
  * of received events and to specify certain control unit and/or event types to
  * listen for. The key of this property is
- * {@link org.osgi.service.cu.ControlUnitConstants#EVENT_FILTER} with value of
- * type <code>String</code> representing LDAP filtering expression.
+ * {@link org.osgi.service.cu.ControlUnitConstants#EVENT_FILTER} whose value is 
+ * a <code>String</code> representing an LDAP filtering expression.
  * <p>
  * 
  * The properties, which may be used in the LDAP filter are:
@@ -83,7 +82,7 @@ public interface HierarchyListener {
    * This callback method is invoked from the <code>ControlUnitAdmin</code> in
    * order to notify the registered listeners for a new hierarchy event. <BR>
    * 
-   * Hierarchy events are sent when registered unit changes its position
+   * Hierarchy events are sent when a registered control unit changes its position
    * in the control units' hierarchy or when a new control unit, which 
    * has a parent specified, is registered/unregistered. <BR>
    * 
@@ -101,11 +100,11 @@ public interface HierarchyListener {
    * 
    * @param eventType the type of the event - either {@link #ATTACHED} or
    *          {@link #DETACHED}.
-   * @param controlUnitType the type of the unit for which the event is fired
-   * @param controlUnitID the ID of the unit for which the event is fired
-   * @param parentControlUnitType the parent unit's type, where the change
+   * @param controlUnitType the type of the control unit for which the event is fired
+   * @param controlUnitID the ID of the control unit for which the event is fired
+   * @param parentControlUnitType the parent control unit's type, where the change
    *          occurred
-   * @param parentControlUnitID the parent unit's ID, where the change occurred
+   * @param parentControlUnitID the parent control unit's ID, where the change occurred
    */
   public void hierarchyChanged(int eventType, String controlUnitType,
                                String controlUnitID, String parentControlUnitType,

@@ -31,8 +31,8 @@ import org.osgi.service.cu.ControlUnitException;
 /**
  * <code>ControlUnitAdminException</code> is a subclass of 
  * {@link org.osgi.service.cu.ControlUnitException}, which
- * provides additional error codes 
- * related with the operating over control units through the 
+ * provides additional codes for errors which may arise when   
+ * operating over control units through the 
  * {@link org.osgi.service.cu.admin.ControlUnitAdmin} and 
  * {@link org.osgi.service.cu.admin.spi.ControlUnitFactory ControlUnitFactories}.
  *   
@@ -55,7 +55,7 @@ public class ControlUnitAdminException extends ControlUnitException {
 
   /**
    * This error code means that the user tried to perform a search, but
-   * the there is not finder method that matches the given finder id.
+   * the there is not finder method that matches the given finder ID.
    */
   public static final int NO_SUCH_FINDER_ERROR = 6;
 
@@ -73,8 +73,8 @@ public class ControlUnitAdminException extends ControlUnitException {
   public static final int DESTRUCTION_NOT_SUPPORTED_ERROR = 8;
 
   /**
-   * This error code means that the user has tried to search for a control unit
-   * but a finder method(s) are not defined.
+   * This error code means that the user has tried to search for a 
+   * control unit but no finder method is defined.
    */
   public static final int SEARCHING_NOT_SUPPORTED_ERROR = 9;
   
@@ -104,7 +104,7 @@ public class ControlUnitAdminException extends ControlUnitException {
   }
   
   /**
-   * Constructs a new undetermined error control unit exception with the given 
+   * Constructs a new control unit exception with the given 
    * nested exception. <BR>
    * 
    * The error code of the constructed exception will be {@link #UNDETERMINED_ERROR}.
@@ -117,7 +117,7 @@ public class ControlUnitAdminException extends ControlUnitException {
   }
   
   /**
-   * Constructs a new undetermined error exception with the given message 
+   * Constructs a control unit exception with the given message 
    * and exception. <BR>
    * 
    * The error code of the constructed exception will be {@link #UNDETERMINED_ERROR}.
