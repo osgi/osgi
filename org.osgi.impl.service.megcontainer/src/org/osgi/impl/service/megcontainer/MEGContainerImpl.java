@@ -56,7 +56,7 @@ class MEGBundleDescriptor {
  */
 
 public class MEGContainerImpl implements MEGContainer, BundleListener,
-		ChannelListener {
+		EventHandler {
 	private BundleContext	bc;
 	private String			containerID;
 	private Vector			bundleIDs;
@@ -182,7 +182,7 @@ public class MEGContainerImpl implements MEGContainer, BundleListener,
 					/* TODO  */
 					Hashtable props = new Hashtable();
 					props.put(EventConstants.EVENT_TOPIC, desc.eventSubscribes[i].eventTopic[j]);
-					bc.registerService(ChannelListener.class.getName(), app,
+					bc.registerService(EventHandler.class.getName(), app,
 							props);
 				}
 		}
@@ -389,9 +389,9 @@ public class MEGContainerImpl implements MEGContainer, BundleListener,
 			LinkedList appVector = new LinkedList();
 			LinkedList eventVector = new LinkedList();
 			LinkedList dependencyVector = new LinkedList();
-			Enumeration enum = applicationXML.enumerateChildren();
-			while (enum.hasMoreElements()) {
-				XMLElement application = (XMLElement) (enum.nextElement());
+			Enumeration enumeration = applicationXML.enumerateChildren();
+			while (enumeration.hasMoreElements()) {
+				XMLElement application = (XMLElement) (enumeration.nextElement());
 				if (application.getTagName().equals("application")) {
 					Properties props = new Properties();
 					Hashtable names = new Hashtable();
@@ -573,7 +573,7 @@ public class MEGContainerImpl implements MEGContainer, BundleListener,
 		}
 	}
 
-	public void channelEvent(ChannelEvent event) {
+	public void handleEvent(Event event) {
 		try {
 			Enumeration megBundles = bundleHash.keys();
 			while (megBundles.hasMoreElements()) {
