@@ -19,7 +19,6 @@ package org.osgi.impl.service.policy;
 
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtMetaNode;
-import org.osgi.service.dmt.DmtDataType;
 
 /**
  *
@@ -42,7 +41,7 @@ public final class PermissionInfoMetaNode implements DmtMetaNode {
 	public int getMax() { return Integer.MAX_VALUE; }
 	public int getMin() { return Integer.MIN_VALUE;	}
 	public DmtData[] getValidValues() { return null; }
-	public int getFormat() { return DmtDataType.STRING; }
+	public int getFormat() { return DmtData.FORMAT_STRING; }
 	public String getPattern() {	return null; }
 	public String[] getMimeTypes() { return null; }
 	public String[] getValidNames() { return PERMISSIONINFO_ARRAY; }
