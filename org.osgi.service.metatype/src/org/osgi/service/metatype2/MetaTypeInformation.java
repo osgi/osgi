@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) The OSGi Alliance (2001, 2004). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -27,14 +27,42 @@
 
 package org.osgi.service.metatype2;
 
+import org.osgi.framework.Bundle;
+
 /**
- * Provides access to metatypes.
+ * A MetaType Information object is created by the MetaTypeService to return
+ * meta type information for a specific bundle.
  * 
  * @version $Revision$
  */
-public interface MetaTypeProvider {
+public interface MetaTypeInformation {
+
 	/**
-	 * Return the definition of this object class for a locale.
+	 * Return the PIDs (for ManagedServices) for which ObjectClassDefinition
+	 * information is available.
+	 * 
+	 * @return Array of PIDs.
+	 */
+	String[] getPids();
+
+	/**
+	 * Return the Factory PIDs (for ManagedServices) for which
+	 * ObjectClassDefinition information is available.
+	 * 
+	 * @return Array of Factory PIDs.
+	 */
+	String[] getFactoryPids();
+
+	/**
+	 * Return the bundle for which this object provides metatype information.
+	 * 
+	 * @return Bundle for which this object provides metatype information.
+	 */
+	Bundle getBundle();
+
+	/**
+	 * Returns an object class definition for the specified id localized to the
+	 * specified locale.
 	 * 
 	 * <p>
 	 * The locale parameter must be a name that consists of <tt>language</tt>[
@@ -42,25 +70,25 @@ public interface MetaTypeProvider {
 	 * the <tt>Locale</tt> class. This <tt>Locale</tt> class is not used
 	 * because certain profiles do not contain it.
 	 * 
-	 * <p>
-	 * The implementation should use the locale parameter to match an
-	 * <tt>ObjectClassDefinition</tt> object. It should follow the customary
-	 * locale search path by removing the latter parts of the name.
-	 * 
-	 * @param pid The PID for which the type is needed or null if there is only
-	 *        1
-	 * @param locale The locale of the definition or null for default locale
-	 * @return the <tt>ObjectClassDefinition</tt> object
+	 * @param id The ID of the requested object class. This can be a pid or
+	 *        factory pid returned by getPids or getFactoryPids.
+	 * @param locale The locale of the definition or <tt>null</tt> for default
+	 *        locale.
+	 * @return A <tt>ObjectClassDefinition</tt> object.
+	 * @throws IllegalArgumentException If the id or locale arguments are not
+	 *         valid
 	 */
-	ObjectClassDefinition getObjectClassDefinition(String pid, String locale);
+	ObjectClassDefinition getObjectClassDefinition(String id, String locale);
 
 	/**
-	 * Return a list of locales available or null if only 1
+	 * Return a list of available locales.
 	 * 
-	 * The return parameter must be a name that consists of language [ _ country [ _
-	 * variation ]] as is customary in the <tt>Locale</tt> class. This Locale
-	 * class is not used because certain profiles do not contain it.
+	 * The results must be names that consists of language [ _ country [ _
+	 * variation ]] as is customary in the <tt>Locale</tt> class.
+	 * 
+	 * @return An array of locale strings or <tt>null</tt> if there is no
+	 *         locale specific localization can be found.
+	 *  
 	 */
 	String[] getLocales();
 }
-

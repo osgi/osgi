@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) The OSGi Alliance (2001, 2004). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -113,12 +113,11 @@ public interface AttributeDefinition {
 	 */
 	final int FLOAT = 8;
 
-	/* Note: BigInteger and BigDecimal are no longer supported
-	 * 	final int BIGINTEGER    = 9;
-	 * 	final int BIGDECIMAL    = 10;
-	 * but we cannot reuse these numbers.
+	/*
+	 * Note: BigInteger and BigDecimal are no longer supported [BIGINTEGER = 9;
+	 * BIGDECIMAL = 10] but we cannot reuse these numbers.
 	 */
-	
+
 	/**
 	 * The <tt>BOOLEAN</tt> (11) type.
 	 * 
@@ -128,16 +127,16 @@ public interface AttributeDefinition {
 	 */
 	final int BOOLEAN = 11;
 
-	// TODO need to finish OCD type.
-	// What about cardinality?
+	// TODO For OCD type: What about cardinality? Option labels/values?
+	// validate? default values?
 	/**
 	 * The <tt>OBJECTCLASSDEFINITION</tt> (12) type.
 	 * 
-	 * Attributes of this type should be stored as <tt>Boolean</tt>,
-	 * <tt>Vector</tt> with <tt>Boolean</tt> or <tt>boolean[]</tt> objects
-	 * depending on <tt>getCardinality()</tt>.
+	 * Attributes of this type are <tt>ObjectClassDefinition</tt>. This
+	 * attribute type is not supported by configurations in ConfigurationAdmin.
 	 */
 	final int OBJECTCLASSDEFINITION = 12;
+
 	/**
 	 * Get the name of the attribute. This name may be localized.
 	 * 
@@ -182,13 +181,11 @@ public interface AttributeDefinition {
 	 * <tt>Vector</tt> objects. The return value is defined as follows:
 	 * 
 	 * <pre>
-	 * 
-	 *  x = Integer.MIN_VALUE    no limit, but use Vector
-	 *  x &lt; 0                    -x = max occurrences, store in Vector
-	 *  x &gt; 0                     x = max occurrences, store in array []
-	 *  x = Integer.MAX_VALUE    no limit, but use array []
-	 *  x = 0                     1 occurrence required
-	 *  
+	 *        x = Integer.MIN_VALUE    no limit, but use Vector
+	 *        x &lt; 0                    -x = max occurrences, store in Vector
+	 *        x &gt; 0                     x = max occurrences, store in array []
+	 *        x = Integer.MAX_VALUE    no limit, but use array [] 
+	 *        x = 0                     1 occurrence required
 	 * </pre>
 	 */
 	int getCardinality();
@@ -199,8 +196,9 @@ public interface AttributeDefinition {
 	 * <p>
 	 * Defined in the following constants which map to the appropriate Java
 	 * type. <tt>STRING</tt>,<tt>LONG</tt>,<tt>INTEGER</tt>,
-	 * <tt>CHAR</tt>,<tt>BYTE</tt>,<tt>DOUBLE</tt>,<tt>FLOAT</tt>,
-	 * <tt>BIGINTEGER</tt>,<tt>BIGDECIMAL</tt>,<tt>BOOLEAN</tt>.
+	 * <tt>SHORT</tt>,<tt>CHARACTER</tt>,<tt>BYTE</tt>,
+	 * <tt>DOUBLE</tt>,<tt>FLOAT</tt>,<tt>BOOLEAN</tt>,
+	 * <tt>OBJECTCLASSDEFINITION</tt>.
 	 */
 	int getType();
 
@@ -263,13 +261,9 @@ public interface AttributeDefinition {
 	 * return three different values:
 	 * 
 	 * <pre>
-	 * <tt>
-	 * null
-	 * </tt>
-	 *                 no validation present
-	 *  &quot;&quot;                   no problems detected
-	 *  &quot;...&quot;                A localized description of why the value is wrong
-	 *  
+	 * null   no validation present
+	 * &quot;&quot;     no problems detected
+	 * &quot;...&quot;  A localized description of why the value is wrong
 	 * </pre>
 	 * 
 	 * @param value The value before turning it into the basic data type
@@ -295,10 +289,21 @@ public interface AttributeDefinition {
 
 	String[] getDefaultValue();
 
-	// TODO complete javadoc
 	/**
-	 * @return
+	 * Returns the properties of this attribute. The properties have case
+	 * sensitive keys and cannot be modifed.
+	 * 
+	 * @return The properties for this attribute.
 	 */
 	Dictionary getProperties();
+
+	/**
+	 * Returns the id of an object class if the type of this attribute is
+	 * OBJECTCLASSDEFINITION.
+	 * 
+	 * @return id of referenced object class or <tt>null</tt> if the type of
+	 *         this attribute is not OBJECTCLASSDEFINITION.
+	 */
+	String getRefID();
 
 }

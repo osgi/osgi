@@ -27,7 +27,6 @@
  */
 
 package org.osgi.service.metatype;
-import java.util.*;
 /**
  * Provides access to metatypes.
  *

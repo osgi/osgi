@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) The OSGi Alliance (2001, 2004). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -62,9 +62,11 @@ public interface ObjectClassDefinition {
 	final int ALL = 0xFFFFFFFF;
 
 	/**
-	 * Return the name of this class.
+	 * Return the name of this object class.
 	 * 
-	 * @return The name of the described class.
+	 * The name may be localized.
+	 * 
+	 * @return The name of this object class.
 	 */
 	String getName();
 
@@ -84,7 +86,7 @@ public interface ObjectClassDefinition {
 	 * existing LDAP schemes which will give the OID for free. Many such schemes
 	 * exist ranging from postal addresses to DHCP parameters.
 	 * 
-	 * @return The id or oid
+	 * @return The id of this object class.
 	 */
 	String getID();
 
@@ -93,12 +95,12 @@ public interface ObjectClassDefinition {
 	 * 
 	 * The description may be localized.
 	 * 
-	 * @return The localized description of the definition.
+	 * @return The description of this object class.
 	 */
 	String getDescription();
 
 	/**
-	 * Return the attribute definitions.
+	 * Return the attribute definitions for this object class.
 	 * 
 	 * <p>
 	 * Return a set of attributes. The filter parameter can distinguish between
@@ -112,6 +114,16 @@ public interface ObjectClassDefinition {
 	AttributeDefinition[] getAttributeDefinitions(int filter);
 
 	/**
+	 * Return the attribute definition for the specified attribute id.
+	 * 
+	 * @param id The ID of the requested attribute.
+	 * @return An AttributeDefinition object for the requested id.
+	 * @throws IllegalArgumentException If no attribute with the specified id
+	 *         exists for this object class.
+	 */
+	AttributeDefinition getAttributeDefinition(String id);
+
+	/**
 	 * Return an <tt>InputStream</tt> object that can be used to create an
 	 * icon from.
 	 * 
@@ -123,17 +135,9 @@ public interface ObjectClassDefinition {
 	 * <p>
 	 * The icon may depend on the localization.
 	 * 
-	 * @param size size of an icon, e.g. a 16x16 pixels icon then size = 16
+	 * @param size Requested size of an icon, e.g. a 16x16 pixels icon then size =
+	 *        16
 	 * @return An InputStream representing an icon or <tt>null</tt>
 	 */
 	InputStream getIcon(int size) throws IOException;
-	
-	// TODO complete javadoc
-	/**
-	 * @param id
-	 * @return
-	 */
-	AttributeDefinition getAttributeDefinition(String id);
-
 }
-

@@ -1,81 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.osgi.org/xmlns/metatype/v2.0.0" xmlns:mt="http://www.osgi.org/xmlns/metatype/v2.0.0">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.osgi.org/xmlns/metatype/v2.0.0" xmlns:mts="http://www.osgi.org/xmlns/metatype/v2.0.0">
 
-	<element name="metatype" type="mt:metatypeType"></element>
+	<element name="metatype" type="mts:Tmetatype"></element>
 
-	<complexType name="metatypeType">
+	<complexType name="Tmetatype">
 		<sequence minOccurs="1" maxOccurs="unbounded">
-			<element name="objectclassdefinition" minOccurs="1" maxOccurs="1" type="mt:ocdType"></element>
-			<element name="attributedefinition" minOccurs="0" maxOccurs="unbounded" type="mt:adType"></element>
+			<element name="objectclass" minOccurs="1" maxOccurs="1" type="mts:Tocd"></element>
+			<element name="attribute" minOccurs="0" maxOccurs="unbounded" type="mts:Tad"></element>
 		</sequence>
 		<attribute name="localization" type="string" use="optional"></attribute>
 	</complexType>
 
-	<attributeGroup name="entityGroup">
-		<attribute name="description" type="mt:localizableString" use="required" />
-		<attribute name="name" type="mt:localizableString" use="required" />
+	<attributeGroup name="Gdefinition">
+		<attribute name="id" type="ID" use="required" />
+		<attribute name="description" type="mts:TlocalizableString" use="required" />
+		<attribute name="name" type="mts:TlocalizableString" use="required" />
 	</attributeGroup>
 
-	<complexType name="ocdType">
+	<complexType name="Tocd">
 		<sequence>
-			<element name="attribute" maxOccurs="unbounded" minOccurs="1" type="mt:arefType"></element>
-			<element name="icon" maxOccurs="1" minOccurs="0" type="mt:iconType"></element>
+			<element name="attributeref" maxOccurs="unbounded" minOccurs="1" type="mts:Taref"></element>
+			<element name="icon" maxOccurs="1" minOccurs="0" type="mts:Ticon"></element>
 		</sequence>
-		<attributeGroup ref="mt:entityGroup"></attributeGroup>
-		<attribute name="pid" type="string" use="required" />
-		<attribute name="type" default="MS" use="optional" type="mt:managedServiceType"></attribute>
+		<attributeGroup ref="mts:Gdefinition"></attributeGroup>
+		<attribute name="type" default="pid" use="optional" type="mts:TocdType"></attribute>
 	</complexType>
 
-	<complexType name="arefType">
-		<attribute name="ref" type="IDREF" use="required" />
+	<complexType name="Taref">
+		<attribute name="refid" type="IDREF" use="required" />
 		<attribute name="required" default="true" type="boolean" use="optional" />
 	</complexType>
 
-	<complexType name="adType">
+	<complexType name="Tad">
 		<sequence>
-			<element name="validate" maxOccurs="1" minOccurs="0" type="mt:validateType"></element>
-			<element name="defaultvalue" maxOccurs="unbounded" minOccurs="0" type="mt:defaultValueType"></element>
+			<element name="validate" maxOccurs="1" minOccurs="0" type="mts:Tvalidate"></element>
+			<element name="defaultvalue" maxOccurs="unbounded" minOccurs="0" type="mts:TdefaultValue"></element>
+			<element name="property" minOccurs="0" maxOccurs="unbounded" type="mts:Tproperty"></element>
 		</sequence>
-		<attributeGroup ref="mt:entityGroup"></attributeGroup>
+		<attributeGroup ref="mts:Gdefinition"></attributeGroup>
 		<attribute name="cardinality" type="integer" use="optional" default="0" />
-		<attribute name="id" type="ID" use="required" />
-		<attribute name="type" use="required" type="mt:javaTypes"></attribute>
+		<attribute name="type" use="required" type="mts:TattrTypes"></attribute>
+		<attribute name="refid" type="IDREF" use="optional" />
 	</complexType>
 
-	<complexType name="iconType">
-		<attribute name="resource" type="mt:localizableString" use="required" />
+	<complexType name="Ticon">
+		<attribute name="resource" type="mts:TlocalizableString" use="required" />
 		<attribute name="size" type="positiveInteger" use="required" />
 	</complexType>
 
-	<simpleType name="managedServiceType">
+	<simpleType name="TocdType">
 		<restriction base="string">
-			<enumeration value="MS" />
-			<enumeration value="MSF" />
+			<enumeration value="pid" />
+			<enumeration value="factorypid" />
+			<enumeration value="attribute" />
 		</restriction>
 	</simpleType>
 
-	<complexType name="defaultValueType">
+	<complexType name="TdefaultValue">
 		<attribute name="value" type="string" use="required" />
 	</complexType>
 
-	<complexType name="validateType">
+	<complexType name="Tvalidate">
 		<choice>
-			<element name="range" type="mt:rangeType" minOccurs="1" maxOccurs="1"></element>
-			<element name="option" maxOccurs="unbounded" minOccurs="1" type="mt:optionType"></element>
+			<element name="range" type="mts:Trange" minOccurs="1" maxOccurs="1"></element>
+			<element name="option" maxOccurs="unbounded" minOccurs="1" type="mts:Toption"></element>
 		</choice>
 	</complexType>
 
-	<complexType name="rangeType">
+	<complexType name="Trange">
 		<attribute name="max" type="string" use="required" />
 		<attribute name="min" type="string" use="required" />
 	</complexType>
 
-	<complexType name="optionType">
-		<attribute name="label" type="mt:localizableString" use="required" />
+	<complexType name="Toption">
+		<attribute name="label" type="mts:TlocalizableString" use="required" />
 		<attribute name="value" type="string" use="required" />
 	</complexType>
 
-	<simpleType name="javaTypes">
+	<simpleType name="TattrTypes">
+		<union memberTypes="mts:TjavaTypes mts:TocdAttr"></union>
+	</simpleType>
+
+	<simpleType name="TocdAttr">
+		<restriction base="string">
+			<enumeration value="objectclass"></enumeration>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="TjavaTypes">
 		<restriction base="string">
 			<enumeration value="String"></enumeration>
 			<enumeration value="Long"></enumeration>
@@ -89,8 +101,18 @@
 		</restriction>
 	</simpleType>
 
-	<simpleType name="localizableString">
+	<simpleType name="TlocalizableString">
 		<restriction base="string"></restriction>
 	</simpleType>
+
+	<complexType name="Tproperty">
+		<simpleContent>
+			<extension base="string">
+				<attribute name="name" type="string" use="required"></attribute>
+				<attribute name="value" type="string" use="optional"></attribute>
+				<attribute name="type" use="optional" default="String" type="mts:TjavaTypes"></attribute>
+			</extension>
+		</simpleContent>
+	</complexType>
 
 </schema>

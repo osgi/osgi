@@ -27,7 +27,8 @@
  */
 
 package org.osgi.service.metatype;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Description for the data type information of an
