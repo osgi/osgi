@@ -33,8 +33,9 @@ import org.osgi.framework.ServiceReference;
  * 
  * <p>
  * <tt>ConfigurationEvent</tt> objects are delivered to all registered
- * <tt>ConfigurationListener</tt> service objects. Events must be delivered in
- * chronological order with respect to each listener.
+ * <tt>ConfigurationListener</tt> service objects. ConfigurationEvents must be
+ * asynchronously delivered in chronological order with respect to each
+ * listener.
  * 
  * <p>
  * A type code is used to identify the type of event. The following event types
@@ -65,8 +66,8 @@ public class ConfigurationEvent {
 	 * This <tt>ConfigurationEvent</tt> type that indicates that a
 	 * <tt>Configuration</tt> object has been updated with new properties.
 	 * 
-	 * An event is broadcast when a call to <tt>Configuration.update</tt>
-	 * successfully changed a configuration.
+	 * An event is asynchronously broadcast when a call to
+	 * <tt>Configuration.update</tt> successfully changed a configuration.
 	 * 
 	 * <p>
 	 * The value of <tt>CM_UPDATED</tt> is 1.
@@ -79,8 +80,8 @@ public class ConfigurationEvent {
 	 * This <tt>ConfigurationEvent</tt> type that indicates that a
 	 * <tt>Configuration</tt> object has been deleted.
 	 * 
-	 * An event is broadcast when a call to <tt>Configuration.delete</tt>
-	 * successfully deletes a configuration.
+	 * An event is asynchronously broadcast when a call to
+	 * <tt>Configuration.delete</tt> successfully deletes a configuration.
 	 * 
 	 * <p>
 	 * The value of <tt>CM_DELETED</tt> is 2.
