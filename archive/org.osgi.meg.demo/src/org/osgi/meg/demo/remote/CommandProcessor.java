@@ -51,196 +51,90 @@ public class CommandProcessor {
 						DmtSession.LOCK_TYPE_ATOMIC);
 				// TODO other lock types
 			}
-			else
-				if (cmd.equals("close")) {
-					session.close();
-					session = null;
+			else if (cmd.equals("close")) {
+				session.close();
+				session = null;
+			}
+			else if (cmd.equals("rollback") || cmd.equals("r")) {
+				session.rollback();
+			}
+			else if (cmd.equals("isnodeuri")) {
+				boolean b = session.isNodeUri(uri);
+				ret = String.valueOf(b);
+			}
+			else if (cmd.equals("getnodevalue") || cmd.equals("gv")) {
+				DmtData data = session.getNodeValue(uri);
+				ret = data.getString();
+			}
+			else if (cmd.equals("getnodetitle") || cmd.equals("gt")) {
+				ret = session.getNodeTitle(uri);
+			}
+			else if (cmd.equals("getnodeversion")) {
+				ret = String.valueOf(session.getNodeVersion(uri));
+			}
+			else if (cmd.equals("getnodetimestamp")) {
+				Date d = session.getNodeTimestamp(uri);
+				ret = d.toString();
+			}
+			else if (cmd.equals("getnodesize")) {
+				ret = String.valueOf(session.getNodeSize(uri));
+			}
+			else if (cmd.equals("getchildnodenames") || cmd.equals("gc")) {
+				String[] names = session.getChildNodeNames(uri);
+				for (int i = 0; i < names.length; i++) {
+					ret = ret + names[i] + "/";
 				}
-				else
-					if (cmd.equals("rollback") || cmd.equals("r")) {
-						session.rollback();
-					}
-					else
-						if (cmd.equals("isnodeuri")) {
-							boolean b = session.isNodeUri(uri);
-							ret = String.valueOf(b);
-						}
-						else
-							if (cmd.equals("getnodevalue") || cmd.equals("gv")) {
-								DmtData data = session.getNodeValue(uri);
-								ret = data.getString();
-							}
-							else
-								if (cmd.equals("getnodetitle")
-										|| cmd.equals("gt")) {
-									ret = session.getNodeTitle(uri);
-								}
-								else
-									if (cmd.equals("getnodeversion")) {
-										ret = String.valueOf(session
-												.getNodeVersion(uri));
-									}
-									else
-										if (cmd.equals("getnodetimestamp")) {
-											Date d = session
-													.getNodeTimestamp(uri);
-											ret = d.toString();
-										}
-										else
-											if (cmd.equals("getnodesize")) {
-												ret = String.valueOf(session
-														.getNodeSize(uri));
-											}
-											else
-												if (cmd
-														.equals("getchildnodenames")
-														|| cmd.equals("gc")) {
-													String[] names = session
-															.getChildNodeNames(uri);
-													for (int i = 0; i < names.length; i++) {
-														ret = ret + names[i]
-																+ "/";
-													}
-												}
-												else
-													if (cmd
-															.equals("setnodetitle")
-															|| cmd.equals("st")) {
-														session.setNodeTitle(
-																uri, args[2]);
-													}
-													else
-														if (cmd
-																.equals("setnodevalue")
-																|| cmd
-																		.equals("sv")) {
-															String typedata = args[2];
-															DmtData value = dmtFromString(typedata);
-															session
-																	.setNodeValue(
-																			uri,
-																			value);
-														}
-														else
-															if (cmd
-																	.equals("setnodetype")
-																	|| cmd
-																			.equals("sty")) {
-																session
-																		.setNodeType(
-																				uri,
-																				args[2]);
-															}
-															else
-																if (cmd
-																		.equals("deletenode")
-																		|| cmd
-																				.equals("d")) {
-																	session
-																			.deleteNode(uri);
-																}
-																else
-																	if (cmd
-																			.equals("createinteriornode")
-																			|| cmd
-																					.equals("ci")) {
-																		session
-																				.createInteriorNode(uri);
-																	}
-																	else
-																		if (cmd
-																				.equals("createleafnode")
-																				|| cmd
-																						.equals("cl")) {
-																			String typedata = args[2];
-																			DmtData value = dmtFromString(typedata);
-																			session
-																					.createLeafNode(
-																							uri,
-																							value);
-																		}
-																		else
-																			if (cmd
-																					.equals("clone")) {
-																				session
-																						.clone(
-																								uri,
-																								args[2],
-																								true);
-																			}
-																			else
-																				if (cmd
-																						.equals("renamenode")
-																						|| cmd
-																								.equals("re")) {
-																					session
-																							.renameNode(
-																									uri,
-																									args[2]);
-																				}
-																				else
-																					if (cmd
-																							.equals("execute")
-																							|| cmd
-																									.equals("x")) {
-																						session
-																								.execute(
-																										uri,
-																										args[2]);
-																					}
-																					else
-																						if (cmd
-																								.equals("isleafnode")
-																								|| cmd
-																										.equals("il")) {
-																							boolean b = session
-																									.isLeafNode(uri);
-																							ret = String
-																									.valueOf(b);
-																						}
-																						else
-																							if (cmd
-																									.equals("setnodeacl")
-																									|| cmd
-																											.equals("sa")) {
-																								DmtAcl acl = new DmtAcl(
-																										args[2]);
-																								session
-																										.setNodeAcl(
-																												uri,
-																												acl);
-																							}
-																							else
-																								if (cmd
-																										.equals("getnodeacl")
-																										|| cmd
-																												.equals("ga")) {
-																									DmtAcl acl = session
-																											.getNodeAcl(uri);
-																									ret = acl == null ? "<unset>"
-																											: acl
-																													.toString();
-																								}
-																								else
-																									if (cmd
-																											.equals("getmetanode")
-																											|| cmd
-																													.equals("gm")) {
-																										DmtMetaNode mn = session
-																												.getMetaNode(uri);
-																										ret = mn
-																												.toString(); // TODO
-																															 // does
-																															 // it
-																															 // have
-																															 // a
-																															 // good
-																															 // tostring?
-																									}
-																									else {
-																										ret = "Command unknown:"
-																												+ cmd;
-																									}
+			}
+			else if (cmd.equals("setnodetitle") || cmd.equals("st")) {
+				session.setNodeTitle(uri, args[2]);
+			}
+			else if (cmd.equals("setnodevalue") || cmd.equals("sv")) {
+				String typedata = args[2];
+				DmtData value = dmtFromString(typedata);
+				session.setNodeValue(uri, value);
+			}
+			else if (cmd.equals("setnodetype") || cmd.equals("sty")) {
+				session.setNodeType(uri, args[2]);
+			}
+			else if (cmd.equals("deletenode") || cmd.equals("d")) {
+				session.deleteNode(uri);
+			}
+			else if (cmd.equals("createinteriornode") || cmd.equals("ci")) {
+				session.createInteriorNode(uri);
+			}
+			else if (cmd.equals("createleafnode") || cmd.equals("cl")) {
+				String typedata = args[2];
+				DmtData value = dmtFromString(typedata);
+				session.createLeafNode(uri, value);
+			}
+			else if (cmd.equals("clone")) {
+				session.clone(uri, args[2], true);
+			}
+			else if (cmd.equals("renamenode") || cmd.equals("re")) {
+				session.renameNode(uri, args[2]);
+			}
+			else if (cmd.equals("execute") || cmd.equals("x")) {
+				session.execute(uri, args[2]);
+			}
+			else if (cmd.equals("isleafnode") || cmd.equals("il")) {
+				boolean b = session.isLeafNode(uri);
+				ret = String.valueOf(b);
+			}
+			else if (cmd.equals("setnodeacl") || cmd.equals("sa")) {
+				DmtAcl acl = new DmtAcl(args[2]);
+				session.setNodeAcl(uri, acl);
+			}
+			else if (cmd.equals("getnodeacl") || cmd.equals("ga")) {
+				DmtAcl acl = session.getNodeAcl(uri);
+				ret = acl == null ? "<unset>" : acl.toString();
+			}
+			else if (cmd.equals("getmetanode") || cmd.equals("gm")) {
+				DmtMetaNode mn = session.getMetaNode(uri);
+				ret = mn.toString(); // TODO does it have a good tostring?
+			}
+			else {
+				ret = "Command unknown:" + cmd;
+			}
 		}
 		catch (DmtException e) {
 			StringWriter stringWriter = new StringWriter();
@@ -259,14 +153,12 @@ public class CommandProcessor {
 		if (type.equals("int")) {
 			value = new DmtData(Integer.parseInt(data));
 		}
-		else
-			if (type.equals("chr")) {
-				value = new DmtData(data);
-			}
-			else
-				if (type.equals("boolean")) {
-					value = new DmtData((new Boolean(data)).booleanValue());
-				}
+		else if (type.equals("chr")) {
+			value = new DmtData(data);
+		}
+		else if (type.equals("boolean")) {
+			value = new DmtData((new Boolean(data)).booleanValue());
+		}
 		// TODO xml, bin, null
 		return value;
 	}
