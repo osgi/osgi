@@ -80,19 +80,26 @@ public class Measurement implements Comparable
 	 * <value> ':' <unit> [ ':' error ]
      * whitespace is not allowed
 	 *
-     * @param value The value of the <tt>Measurement</tt>.
+     * @param encoded The encoded value of the <tt>Measurement</tt>.
+     * @throws IllegalArgumentException If the encoded value cannot be 
+     * properly parsed.
 	 */
-	public Measurement(String string ) throws Exception {
-		StringTokenizer st = new StringTokenizer(string,": ");
-		String v = st.nextToken();
-		String u = st.nextToken();
-		String e = "0";
-		if ( st.hasMoreTokens() )
-			e = st.nextToken();
-		value = Double.parseDouble(v);
-		error = Double.parseDouble(e);
-		unit = Unit.fromString(u);
-		time = 0;
+	public Measurement(String encoded) {
+		try {
+			StringTokenizer st = new StringTokenizer(encoded,":");
+			value = Double.parseDouble(st.nextToken());
+			unit = Unit.fromString(st.nextToken());
+			if (st.hasMoreTokens()) {
+				error = Double.parseDouble(st.nextToken());
+			}
+			else {
+				error = 0.0d;
+			}
+			time = 0l;
+		}
+		catch (NoSuchElementException e) {
+			throw new IllegalArgumentException("Invalid value");
+		}
 	}
 			
 		
@@ -123,7 +130,7 @@ public class Measurement implements Comparable
      */
     public Measurement(double value, double error, Unit unit)
     {
-        this(value, error, unit, 0);
+        this(value, error, unit, 0l);
     }
 
     /**
@@ -136,7 +143,7 @@ public class Measurement implements Comparable
      */
     public Measurement(double value, Unit unit)
     {
-        this(value, 0.0d, unit, 0);
+        this(value, 0.0d, unit, 0l);
     }
 
     /**
@@ -147,7 +154,7 @@ public class Measurement implements Comparable
      */
     public Measurement(double value)
     {
-        this(value, 0.0d, null, 0);
+        this(value, 0.0d, null, 0l);
     }
 
 
