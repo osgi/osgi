@@ -81,7 +81,7 @@ public abstract class DmtPluginTestCase extends TestCase {
 		}
 
 		public Filter createFilter(String filter) throws InvalidSyntaxException {
-			if (filter.equals("(|(objectClass=org.osgi.service.dmt.DmtDataPlugin)(objectClass=org.osgi.service.dmt.DmtExecPlugin))")){
+			if (filter.equals("(|(objectClass=org.osgi.service.dmt.DmtDataPlugin)(objectClass=org.osgi.service.dmt.DmtExecPlugin)(objectClass=org.osgi.service.dmt.DmtReadOnlyDataPlugin))")){
 				return new DummyFilter("plugin");
 			}
 			if (filter.equals("(objectClass=org.osgi.impl.service.dmt.api.RemoteAlertSender)")) {
