@@ -75,7 +75,7 @@ public interface MonitorAdmin {
 	 * @param path the full path of the KPI in [Monitorable_ID]/[KPI_ID] format
 	 * @return the KPI object
 	 * @throws IllegalArgumentException if the path is invalid or points to a
-	 *         non existing KPI
+	 *         non-existing KPI
 	 * @throws SecurityException if the caller does not hold a
 	 *         <code>KpiPermission</code> for the KPI specified by
 	 *         <code>path</code> with the <code>read</code> action present
@@ -83,12 +83,10 @@ public interface MonitorAdmin {
     public KPI getKPI(String path) throws IllegalArgumentException;
 
     /**
-	 * Starts a Monitoring Job with the parameters provided. If the list of KPI
-	 * names contains a non existing KPI or the schedule or count parameters are
-	 * invalid then <code>IllegalArgumentException</code> is thrown. The
-	 * initiator string is used in the <code>listener.id</code> field of all
-	 * events triggered by the job, to allow filtering the events based on the
-	 * initiator.
+	 * Starts a Monitoring Job with the parameters provided. All specified KPIs
+	 * must exist when the job is started. The initiator string is used in the
+	 * <code>listener.id</code> field of all events triggered by the job, to
+	 * allow filtering the events based on the initiator.
 	 * <p>
 	 * The entity which initiates a Monitoring Job needs to hold
 	 * <code>KpiPermission</code> for all the specified target KPIs with the
@@ -110,7 +108,8 @@ public interface MonitorAdmin {
 	 *        must be a positive interger specifying the number of changes that
 	 *        must happen before a new notification is sent.
 	 * @return the successfully started job object
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if the list of KPI names contains a
+	 *         non-existing KPI or the schedule or count parameters are invalid
 	 * @throws SecurityException if the caller does not hold
 	 *         <code>KpiPermission</code> for all the specified KPIs, with the
 	 *         <code>startjob</code> action present, or if the permission does

@@ -33,12 +33,11 @@ package org.osgi.service.monitor;
  * Device Management Tree (DMT).
  * <p>
  * The monitorable service is identified by its PID string which must not
- * contain the Reserved characters described in 2.2 of RFC-2396 small as
- * possible. The PID will be used as a node name in the DMT (URI Generic
- * Syntax). Also the length of the PID should be kept as and certain DMT
- * implementations may have limits on node name length. The length limit is not
- * specified in any standard, it is recommended not to use names longer than 20
- * characters.
+ * contain the Reserved characters described in 2.2 of RFC-2396 (URI Generic
+ * Syntax). Also the length of the PID should be kept as small as possible. The
+ * PID will be used as a node name in the DMT and certain DMT implementations
+ * may have limits on node name length. The length limit is not specified in any
+ * standard, it is recommended not to use names longer than 20 characters.
  * <p>
  * A Monitorable may optionally support sending notifications when the status of
  * its KPIs change.

@@ -39,14 +39,46 @@ import java.util.Vector;
  */
 public class KPI {
     //----- Public constants -----//
+    /**
+     * KPI type identifying integer data.
+     */
     public static final int    TYPE_INTEGER = 0;
+
+    /**
+     * KPI type identifying float data.
+     */
     public static final int    TYPE_FLOAT   = 1;
+
+    /**
+     * KPI type identifying string data.
+     */
     public static final int    TYPE_STRING  = 2;
+    
+    /**
+     * KPI type identifying Object data.
+     */
     public static final int    TYPE_OBJECT  = 3;
     
+    
+    /**
+     * Collection method type identifying 'Cumulative Counter' data collection. 
+     */
     public static final int    CM_CC        = 0;
+
+    /**
+	 * Collection method type identifying 'Discrete Event Registration' data
+	 * collection.
+	 */
     public static final int    CM_DER       = 1;
+    
+    /**
+     * Collection method type identifying 'Gauge' data collection. 
+     */
     public static final int    CM_GAUGE     = 2;
+    
+    /**
+	 * Collection method type identifying 'Status Inspection' data collection.
+	 */
     public static final int    CM_SI        = 3;
     
     //----- Private fields -----//

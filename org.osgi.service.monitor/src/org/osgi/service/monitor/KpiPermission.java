@@ -6,8 +6,8 @@ import java.util.StringTokenizer;
 /**
  * Indicates the callers authority to publish, read or reset KPIs or to start
  * monitoring jobs. The target of the permission is the identifier of the KPI,
- * the action can be <code>read</code>,<code>publish</code>,
- * <code>reset</code>,<code>startjob</code> or the combination of these
+ * the action can be <code>read</code>, <code>publish</code>,
+ * <code>reset</code>, <code>startjob</code> or the combination of these
  * separated by commas.
  */
 public class KpiPermission extends Permission {
@@ -183,17 +183,16 @@ public class KpiPermission extends Permission {
     /**
 	 * Determines if the specified permission is implied by this permission.
 	 * <p>
-	 * This method returns <code>false</code> if
-	 * <li>the specified permission is not a KpiPermission
-	 * <li> or it has a broader set of actions allowed than this one
-	 * <li> or it allows initiating time based monitoring jobs with a lower
-	 * minimal sampling interval
-	 * <li> or the target set of Monitorables is not the same or not a subset
-	 * of the target set of Monitorables of this permission
-	 * <li> or the target set of KPIs is not the same or not a subset of the
-	 * target set of KPIs of this permission.
-	 * <p>
-	 * Otherwise it returns <code>true</code>.
+	 * This method returns <code>false</code> iff any of the following
+	 * conditions are fulfilled for the specified permission:
+	 * <li>it is not a KpiPermission
+	 * <li>it has a broader set of actions allowed than this one
+	 * <li>it allows initiating time based monitoring jobs with a lower minimal
+	 * sampling interval
+	 * <li>the target set of Monitorables is not the same nor a subset of
+	 * the target set of Monitorables of this permission
+	 * <li>the target set of KPIs is not the same nor a subset of the
+	 * target set of KPIs of this permission
 	 * 
 	 * @param p the permission to be checked
 	 * @return <code>true</code> if the given permission is implied by this

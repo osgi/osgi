@@ -63,14 +63,14 @@ public interface MonitoringJob {
     public String getInitiator();
 
     /**
-     * Returns the list of KPI names which is the target of this measurement
-     * job. For time based jobs, the MonitorAdmin will iterate through this list
-     * and query all KPIs when its timer set by the job's frequency rate
-     * expires.
-     * 
-     * @return the target list of the measurement job in
-     *         [Monitorable_ID]/[KPI_ID] format
-     */
+	 * Returns the list of KPI names that are the targets of this measurement
+	 * job. For time based jobs, the MonitorAdmin will iterate through this list
+	 * and query all KPIs when its timer set by the job's frequency rate
+	 * expires.
+	 * 
+	 * @return the target list of the measurement job in
+	 *         [Monitorable_ID]/[KPI_ID] format
+	 */
     public String[] getKpiNames();
 
     /**
@@ -86,16 +86,16 @@ public interface MonitoringJob {
     public long getSchedule();
 
     /**
-     * Returns the number times MonitorAdmin will query the KPIs (for time based
-     * jobs), or the number of changes of a KPI between notifications (for
-     * change based jobs). Time based jobs with non-zero report count will take
-     * getReportCount()*getSchedule() time to finish. Time based jobs with 0
-     * report count and change based jobs do not stop automatically, but all
-     * jobs can be stopped with the stop method.
-     * 
-     * @return the number of measurements to be taken, or the number of changes
-     *         between notifications
-     */
+	 * Returns the number of times MonitorAdmin will query the KPIs (for time
+	 * based jobs), or the number of changes of a KPI between notifications (for
+	 * change based jobs). Time based jobs with non-zero report count will take
+	 * getReportCount()*getSchedule() time to finish. Time based jobs with 0
+	 * report count and change based jobs do not stop automatically, but all
+	 * jobs can be stopped with the stop method.
+	 * 
+	 * @return the number of measurements to be taken, or the number of changes
+	 *         between notifications
+	 */
     public int getReportCount();
 
     /**
