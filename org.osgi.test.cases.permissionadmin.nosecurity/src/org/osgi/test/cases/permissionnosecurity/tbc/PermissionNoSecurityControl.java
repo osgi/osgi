@@ -27,9 +27,8 @@
  */
 package org.osgi.test.cases.permissionnosecurity.tbc;
 
-import org.osgi.framework.*;
-import org.osgi.service.permissionadmin.*;
-import org.osgi.test.cases.util.*;
+import org.osgi.service.permissionadmin.PermissionAdmin;
+import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 public class PermissionNoSecurityControl extends DefaultTestBundleControl {
 	PermissionAdmin	permissionAdmin;
