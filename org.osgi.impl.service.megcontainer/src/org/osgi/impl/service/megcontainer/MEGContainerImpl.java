@@ -95,11 +95,14 @@ public class MEGContainerImpl implements MEGContainer, BundleListener,
 
 	public ApplicationDescriptor[] installApplication(long bundleID)
 			throws IOException, Exception {
+        
+        if( bundleIDs.contains(Long.toString(bundleID)))
+            return null;
+        
 		ApplicationDescriptor[] appDescs = registerBundle(bundleID, true);
-		if (!bundleIDs.contains(Long.toString(bundleID))) {
-			bundleIDs.add(Long.toString(bundleID));
-			saveVector(bundleIDs, "BundleIDs");
-		}
+		bundleIDs.add(Long.toString(bundleID));
+		saveVector(bundleIDs, "BundleIDs");
+		
 		if (appDescs == null)
 			throw new Exception("Not a valid MEG bundle!");
 		for (int i = 0; i != appDescs.length; i++) {
