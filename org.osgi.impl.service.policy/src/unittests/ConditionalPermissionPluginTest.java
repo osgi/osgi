@@ -128,7 +128,7 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 		newSession();
 		DmtMetaNode mn = dmtSession.getMetaNode(ConditionalPermissionAdminPlugin.dataRootURI);
 		assertNotNull(mn);
-		assertEquals(false,mn.canDelete());
+		assertEquals(false,mn.can(DmtMetaNode.CMD_DELETE));
 	}
 	
 	public void testRFCHashExample() throws Exception {

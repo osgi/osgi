@@ -237,6 +237,10 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 		return pp.getNodeValue(path[1]);
 	}
 
+	public void setDefaultNodeValue(String nodeUri) throws DmtException {
+		// TODO Auto-generated method stub
+	}
+
 	public String[] getChildNodeNames(String nodeUri) throws DmtException {
 		String[] path = getPath(nodeUri);
 		// note: nodeUri is already checked
@@ -252,5 +256,6 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 		// since nodeUri is checked, we CANNOT get her
 		throw new IllegalStateException();
 	}
+
 
 }

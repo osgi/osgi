@@ -27,13 +27,9 @@ import org.osgi.service.dmt.DmtMetaNode;
  * @version $Revision$
  */
 public final class PrincipalPermissionMetaNode implements DmtMetaNode {
-	public boolean canDelete() { return true; }
-	public boolean canAdd() { return false; }
-	public boolean canGet() { return false; }
-	public boolean canReplace() { return false; }
-	public boolean canExecute() { return false;	}
+	public boolean can(int operation) { return operation==CMD_DELETE; }
 	public boolean isLeaf() { return false;	}
-	public boolean isPermanent() { return false; }
+	public int getScope() { return DYNAMIC; }
 	public String getDescription() { return "permissions for a principal"; }
 	public int getMaxOccurrence() {	return Integer.MAX_VALUE; } // TODO this may change
 	public boolean isZeroOccurrenceAllowed() { return true; }
@@ -49,4 +45,6 @@ public final class PrincipalPermissionMetaNode implements DmtMetaNode {
 	public String getReferredURI() { return null; }
 	public String[] getDependentURIs() { return null; }
 	public String[] getChildURIs() { return null; }
+	public String[] getValidNames() { return null; }
+	public String getNameRegExp() { return null; }
 }

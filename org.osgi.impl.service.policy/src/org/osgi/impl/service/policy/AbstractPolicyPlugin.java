@@ -146,5 +146,13 @@ public abstract class AbstractPolicyPlugin implements DmtDataPlugin {
 		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
+	public void createLeafNode(String nodeUri) throws DmtException {
+		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
+	}
+
+	public void createLeafNode(String nodeUri, DmtData value, String mimeType) throws DmtException {
+		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
+	}
+
 
 }

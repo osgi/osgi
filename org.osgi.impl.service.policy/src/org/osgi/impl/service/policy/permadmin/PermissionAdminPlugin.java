@@ -57,7 +57,7 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 	private final static Comparator permissionInfoComparator = new PermissionInfoComparator();
 
 	public static final String dataRootURI = "./OSGi/Policies/Java/Bundle";
-	public static final String PERMISSIONINFO = "PermissionInfo";
+	public static final String PERMISSIONINFO = PermissionInfoMetaNode.PERMISSIONINFO;
 	public static final String LOCATION = "Location";
 	public static final String	DEFAULT	= "Default";
 
@@ -104,7 +104,14 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 
 		public void setNodeValue(String nodename, DmtData data) throws IllegalArgumentException {
 			if (nodename.equals(PERMISSIONINFO)) {
-				String[] ss = Splitter.split(data.getString(),'\n',0);
+				String[] ss;
+				try {
+					ss = Splitter.split(data.getString(),'\n',0);
+				}
+				catch (DmtException e) {
+					// this cannot happen, since metadata info should block non-string data
+					throw new IllegalArgumentException(e.getMessage());
+				}
 				PermissionInfo[] pis = new PermissionInfo[ss.length]; 
 				for(int i=0;i<ss.length;i++) {
 					pis[i] = new PermissionInfo(ss[i]);
@@ -117,7 +124,12 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 				return;
 			}
 			if (nodename.equals(LOCATION)) {
-				this.location = data.getString();
+				try {
+					this.location = data.getString();
+				}
+				catch (DmtException e) {
+					throw new IllegalArgumentException(e.getMessage());
+				}
 				return;
 			}
 
@@ -293,6 +305,10 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		return e.getNodeValue(path[1]);
 	}
 
+	public void setDefaultNodeValue(String nodeUri) throws DmtException {
+		String path[] = getPath(nodeUri);
+	}
+
 	public String[] getChildNodeNames(String nodeUri) throws DmtException {
 		String[] path = getPath(nodeUri);
 		if (path.length==0) {
@@ -308,7 +324,7 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 			}
 		}
 		throw new IllegalStateException("not implemented");
-		// TODO Auto-generated method stub
 	}
+
 
 }

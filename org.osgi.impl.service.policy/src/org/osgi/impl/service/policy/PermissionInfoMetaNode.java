@@ -28,13 +28,13 @@ import org.osgi.service.dmt.DmtDataType;
  * @version $Revision$
  */
 public final class PermissionInfoMetaNode implements DmtMetaNode {
-	public boolean canDelete() { return false; }
-	public boolean canAdd() { return false; }
-	public boolean canGet() { return true; }
-	public boolean canReplace() { return false; }
-	public boolean canExecute() { return false;	}
+	public static final String PERMISSIONINFO = "PermissionInfo";
+	public static final String[] PERMISSIONINFO_ARRAY = new String[] { PERMISSIONINFO };
+	public boolean can(int operation) {
+		return operation==CMD_GET;
+	}
 	public boolean isLeaf() { return true;	}
-	public boolean isPermanent() { return false; }
+	public int getScope() { return DYNAMIC; }
 	public String getDescription() { return "Permission Info array"; }
 	public int getMaxOccurrence() {	return 1; }
 	public boolean isZeroOccurrenceAllowed() { return false; }
@@ -47,7 +47,6 @@ public final class PermissionInfoMetaNode implements DmtMetaNode {
 	public int getFormat() { return DmtDataType.STRING; }
 	public String getRegExp() {	return null; }
 	public String[] getMimeTypes() { return null; }
-	public String getReferredURI() { return null; }
-	public String[] getDependentURIs() { return null; }
-	public String[] getChildURIs() { return null; }
+	public String[] getValidNames() { return PERMISSIONINFO_ARRAY; }
+	public String getNameRegExp() { return null; }
 }

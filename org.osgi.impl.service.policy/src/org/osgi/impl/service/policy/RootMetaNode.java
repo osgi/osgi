@@ -31,13 +31,10 @@ public final class RootMetaNode implements DmtMetaNode {
 	public RootMetaNode(String description) {
 		this.description = description;
 	}
-	public boolean canDelete() { return false; }
-	public boolean canAdd() { return false; }
-	public boolean canGet() { return false; }
-	public boolean canReplace() { return false; }
-	public boolean canExecute() { return false;	}
+
+	public boolean can(int operation) { return false; } // ALL of them are false
 	public boolean isLeaf() { return false;	}
-	public boolean isPermanent() { return true; }
+	public int getScope() { return PERMANENT; }
 	public String getDescription() { return description; }
 	public int getMaxOccurrence() {	return 1; }
 	public boolean isZeroOccurrenceAllowed() { return false; }
@@ -50,7 +47,6 @@ public final class RootMetaNode implements DmtMetaNode {
 	public int getFormat() { return 0; }
 	public String getRegExp() {	return null; }
 	public String[] getMimeTypes() { return null; }
-	public String getReferredURI() { return null; }
-	public String[] getDependentURIs() { return null; }
-	public String[] getChildURIs() { return null; }
+	public String[] getValidNames() { return null;	}
+	public String getNameRegExp() {	return null; }
 }

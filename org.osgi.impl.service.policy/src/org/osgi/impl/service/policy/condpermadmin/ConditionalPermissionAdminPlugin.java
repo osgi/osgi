@@ -154,7 +154,7 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 			return 0; // TODO
 		}
 
-		public void setNodeValue(String nodeName, DmtData data) {
+		public void setNodeValue(String nodeName, DmtData data) throws DmtException {
 			if (nodeName.equals(PERMISSIONINFO)) {
 				String[] strs = Splitter.split(data.getString(),'\n',0);
 				PermissionInfo[] pis = new PermissionInfo[strs.length];
@@ -170,7 +170,6 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 				}
 				conditionInfo = cis;
 			}
-			
 		}
 	}
 
@@ -324,6 +323,10 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 		return cp.getNodeValue(path[1]);
 	}
 
+	public void setDefaultNodeValue(String nodeUri) throws DmtException {
+		// TODO Auto-generated method stub
+	}
+
 	public String[] getChildNodeNames(String nodeUri) throws DmtException {
 		String[] path = getPath(nodeUri);
 		if (path.length==0) {
@@ -334,5 +337,6 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 			return new String[] { PERMISSIONINFO, CONDITIONINFO };
 		}
 	}
+
 
 }
