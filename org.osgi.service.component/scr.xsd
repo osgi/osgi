@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.osgi.org/xmlns/scr/v1.0.0" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
 
+	<annotation>
+		<documentation xml:lang="en">
+This is the XML Schema for component descriptions used by the Service Component Runtime (SCR).
+Component description documents may be embedded in other XML documents. The SCR will
+process all XML documents listed in the Service-Component manifest header of a bundle. The document
+may contain a single component element or component elements embedded in a larger document.
+Use of the namespace is optional if the document only contains a single component element. 
+Otherwise the namespace must be used.
+		</documentation>
+	</annotation>
+	
 	<element name="component" type="scr:Tcomponent"></element>
 
 	<complexType name="Tcomponent">
@@ -12,7 +23,7 @@
 		</sequence>
 		<attribute name="autoenable" type="boolean" default="true" use="optional"></attribute>
 		<attribute name="name" type="string" use="required"></attribute>
-		<attribute name="factory" type="string" default="false" use="optional"></attribute>
+		<attribute name="factory" type="string" use="optional"></attribute>
 	</complexType>
 
 	<complexType name="Timplementation">
@@ -21,9 +32,9 @@
 
 	<complexType name="Tproperty">
 		<simpleContent>
-			<extension base="scr:TlocalizableString">
+			<extension base="string">
 				<attribute name="name" type="string" use="required"></attribute>
-				<attribute name="value" type="scr:TlocalizableString" use="optional"></attribute>
+				<attribute name="value" type="string" use="optional"></attribute>
 				<attribute name="type" use="optional" default="String" type="scr:TjavaTypes"></attribute>
 			</extension>
 		</simpleContent>
@@ -78,10 +89,6 @@
 			<enumeration value="static"></enumeration>
 			<enumeration value="dynamic"></enumeration>
 		</restriction>
-	</simpleType>
-
-	<simpleType name="TlocalizableString">
-		<restriction base="string"></restriction>
 	</simpleType>
 
 </schema>
