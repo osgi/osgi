@@ -17,7 +17,8 @@
  */
 package org.osgi.impl.service.monitor;
 
-import java.lang.reflect.Array;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.text.MessageFormat;
 import java.util.*;
 
@@ -28,28 +29,29 @@ import org.osgi.service.event.EventAdmin;
 import org.osgi.service.monitor.*;
 import org.osgi.util.tracker.ServiceTracker;
 
+// TODO add event parameter name constants, if this are used in other parts of the spec
+// TODO remove all remains of Object var type, if there are no objections
 /**
- * Provides the Monitor Admin service.  Monitoring jobs can be
- * manipulated through the MonitorAdmin interface, event update
- * notifications are received through the UpdateListener interface.
+ * Provides the Monitor Admin service. Monitoring jobs can be manipulated
+ * through the MonitorAdmin interface, event update notifications are received
+ * through the MonitorListener interface.
  * <p>
- * The list of active jobs (MonitoringJob objects) is stored in a
- * vector.  Time-based jobs start a timer thread when created, and
- * call the <code>scheduledUpdate</code> method each time the timer
- * expires.  Change-based jobs are checked at each KPI change (when
- * the <code>updated</code> method is called).  When a job stops or is
- * stopped, it calles the <code>jobStopped</code> method to notify the
- * Monitor Admin that the job is no longer active.
+ * The list of active jobs (MonitoringJob objects) is stored in a vector.
+ * Time-based jobs start a timer thread when created, and call the
+ * <code>scheduledUpdate</code> method each time the timer expires.
+ * Change-based jobs are checked at each StatusVariable change (when the
+ * <code>updated</code> method is called). When a job stops or is stopped, it
+ * calles the <code>jobStopped</code> method to notify the Monitor Admin that
+ * the job is no longer active.
  * <p>
- * When the monitoring client has to be notified, the following action
- * is taken depending on whether the job was started locally or
- * remotely.  For local jobs, an event is created and sent to the
- * monitoring topic (with change-induced events only one event is sent
- * for all interested listeners); for remote jobs, an alert is
- * assembled and sent (through the DMT Admin) to the initiator of the
- * job.
+ * When the monitoring client has to be notified, the following action is taken
+ * depending on whether the job was started locally or remotely. For local jobs,
+ * an event is created and sent to the monitoring topic (with change-induced
+ * events only one event is sent for all interested listeners); for remote jobs,
+ * an alert is assembled and sent (through the DMT Admin) to the initiator of
+ * the job.
  */
-public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
+public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
     private static final String MONITOR_EVENT_TOPIC = "org/osgi/service/monitor/MonitorEvent";
     private static final int MONITORING_ALERT_CODE = 1226;
     
@@ -63,70 +65,166 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
     private EventAdmin eventChannel;
     private DmtAdmin alertSender;
     private Vector jobs;
+    
+    private boolean quiet; // no automatic events sent if true
+    private Vector quietVars; // no automatic events for thelisted status vars
 
-    public MonitorAdminImpl(BundleContext bc, ServiceTracker tracker, EventAdmin eventChannel, DmtAdmin alertSender) {
+    MonitorAdminImpl(BundleContext bc, ServiceTracker tracker, 
+            EventAdmin eventChannel, DmtAdmin alertSender) {
         this.bc = bc;
         this.tracker = tracker;
         this.eventChannel = eventChannel;
         this.alertSender = alertSender;
 
         jobs = new Vector();
+        
+        quiet = false;
+        quietVars = new Vector();
     }
 
-    public KPI getKPI(String path) throws IllegalArgumentException {
-        // TODO check caller permissions, check publisher permissions
-
-        return trustedGetKpi(path);
+    public StatusVariable getStatusVariable(String pathStr)
+            throws IllegalArgumentException {
+        // TODO check publisher permissions
+        
+        Path path = Path.getPath(pathStr);
+        checkPermission(pathStr, MonitorPermission.READ);
+        
+        return trustedGetStatusVariable(path);
     }
 
-    public MonitoringJob startJob(String initiator, String[] kpiNames, int schedule, int count) 
-        throws IllegalArgumentException {
-
-        // TODO check caller permissions, check publisher permissions
-
-        return startJob(initiator, kpiNames, schedule, count, true);
+    public String[] getStatusVariableNames(String monitorableId) {
+        // TODO check publisher permissions
+        
+        checkString(monitorableId, "Monitorable ID");
+        checkPermission(monitorableId + "/*", MonitorPermission.DISCOVER);
+        
+        Monitorable monitorable = trustedGetMonitorable(monitorableId);
+        String[] varNames = monitorable.getStatusVariableNames();
+        Arrays.sort(varNames);
+        return varNames;
     }
+    
+    public StatusVariable[] getStatusVariables(String monitorableId) {
+        // TODO check publisher permissions
+        
+        checkString(monitorableId, "Monitorable ID");
+        // TODO check javadoc: "target must match all SVs published by the Mon" 
+        checkPermission(monitorableId + "/*", MonitorPermission.READ);
+        
+        Monitorable monitorable = trustedGetMonitorable(monitorableId);
+        String[] varNames = monitorable.getStatusVariableNames();
+        
+        StatusVariable[] vars = new StatusVariable[varNames.length];
+        for (int i = 0; i < vars.length; i++)
+            vars[i] = monitorable.getStatusVariable(varNames[i]);
 
+        return vars;
+    }
+    
+    public boolean resetStatusVariable(String pathStr)
+            throws IllegalArgumentException {
+        // TODO check publisher permissions
+
+        Path path = Path.getPath(pathStr);
+        checkPermission(pathStr, MonitorPermission.RESET);
+        
+        Monitorable monitorable = trustedGetMonitorable(path.monId);
+        return monitorable.resetStatusVariable(path.varId);
+    }
+    
+    // TODO handle cases other than */* and monId/varId (if needed, rethink javadoc!)
+    public void switchEvents(String pathStr, boolean on) {
+        // TODO check publisher permissions?
+
+        Path path = Path.getPath(pathStr);
+        checkPermission(pathStr, MonitorPermission.SWITCHEVENTS);
+        
+        if(path.monId.equals("*") && path.varId.equals("*")) { // */*
+            if(!on && !quiet)
+                quietVars = new Vector(); // reset quiet var list
+            quiet = !on;
+        }
+        else // monId/varId case assumed (wildcards not handled here yet) 
+            if(!quiet) { // ignore all specific switches while quiet
+                if(on)
+                    quietVars.remove(pathStr);
+                else
+                    if(!quietVars.contains(pathStr))
+                        quietVars.add(pathStr);
+            }
+    }
+    
+    public MonitoringJob startJob(String initiator, String[] varNames, 
+            int count) throws IllegalArgumentException {
+        checkJobStartCommon(initiator, varNames);
+        
+        if(count <= 0)
+            throw new IllegalArgumentException("Invalid report count '" + count + "', value must be positive.");
+
+        return startJob(initiator, varNames, 0, count, true);
+    }
+    
+    public MonitoringJob startScheduledJob(String initiator, String[] varNames, 
+            int schedule, int count) throws IllegalArgumentException {
+        checkJobStartCommon(initiator, varNames);
+
+        if(schedule <= 0)
+            throw new IllegalArgumentException("Invalid schedule '" + schedule + "', value must be positive.");
+
+        if(count < 0)
+            throw new IllegalArgumentException("Invalid report count '" + count + "', value must be non-negative.");
+
+        return startJob(initiator, varNames, schedule, count, true);
+    }
+    
     public synchronized MonitoringJob[] getRunningJobs() {
         return (MonitoringJob[]) jobs.toArray(new MonitoringJob[jobs.size()]);
     }
 
-    public Monitorable[] getMonitorables() {
-        // TODO check caller permissions, check publisher permissions
-    	Vector monitorables = new Vector();
-        ServiceReference[] monitorableRefs = tracker.getServiceReferences();
+    public String[] getMonitorableNames() {
+        // TODO check publisher permissions
+        
+        checkPermission("*/*", MonitorPermission.DISCOVER);
+
+        // get the list of monitorables using our permissions, caller is already checked
+        ServiceReference[] monitorableRefs = (ServiceReference[]) 
+            AccessController.doPrivileged(new PrivilegedAction() {
+                public Object run() {
+                    return tracker.getServiceReferences();
+                }
+            });
 
         if(monitorableRefs == null)
             return null;
         
+    	Vector monitorableNames = new Vector();
         for(int i = 0; i < monitorableRefs.length; i++) {
             // TODO should this check be done here?
             String servicePid = (String) monitorableRefs[i].getProperty("service.pid");
-            Monitorable monitorable = (Monitorable) tracker.getService(monitorableRefs[i]);
-            if(servicePid != null && monitorable != null)
-                monitorables.add(monitorable);
+            if(servicePid != null)
+                monitorableNames.add(servicePid);
         }
         
-        int size = monitorables.size();
-        return size == 0 ? null : 
-            (Monitorable[]) monitorables.toArray(new Monitorable[size]);
+        int size = monitorableNames.size();
+        if(size == 0)
+            return null;
+        
+        String[] names = (String[]) monitorableNames.toArray(new String[size]);
+        Arrays.sort(names);
+        return names;
     }
 
-    public Monitorable getMonitorable(String id) throws IllegalArgumentException {
-        // TODO check caller permissions, check publisher permissions
-        return trustedGetMonitorable(id);
-    }
-
-    public synchronized void updated(KPI kpi) {
-        sendEvent(kpi, null);
+    public synchronized void updated(String monitorableId, StatusVariable var) {
+        sendEvent(monitorableId, var, null);
 
         Vector listeners = new Vector();
         Vector remoteJobs = new Vector();
 
+        String path = monitorableId + "/" + var.getID();
         Iterator i = jobs.iterator();
         while(i.hasNext()) {
             MonitoringJobImpl job = (MonitoringJobImpl) i.next();
-            if(job.isChangeBased() && job.isNthCall(kpi.getPath())) {
+            if(job.isChangeBased() && job.isNthCall(path)) {
                 if(job.isLocal())
                     listeners.add(job.getInitiator());
                 else
@@ -136,37 +234,46 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
 
         int matchNum = listeners.size();
         if(matchNum == 1)
-            sendEvent(kpi, listeners.firstElement());
+            sendEvent(monitorableId, var, listeners.firstElement());
         else if(matchNum > 1)
-            sendEvent(kpi, (String[]) listeners.toArray(new String[matchNum]));
+            sendEvent(monitorableId, var, 
+                    (String[]) listeners.toArray(new String[matchNum]));
 
         Iterator j = remoteJobs.iterator();
         while(j.hasNext()) {
             MonitoringJob job = (MonitoringJob) j.next();
-            sendAlert(getValidKpis(job.getKpiNames()), job.getInitiator());
+            sendAlert(job.getStatusVariableNames(), job.getInitiator());
         }
     }
 
-    private void sendEvent(KPI kpi, Object initiators) {
+    private void sendEvent(String monitorableId, StatusVariable var, 
+            Object initiators) {
+        
         Hashtable properties = new Hashtable();
-        properties.put("monitorable.pid", getId(kpi.getPath()));
-        properties.put("kpi.name", kpi.getID());
+        properties.put("mon.monitorable.pid", monitorableId);
+        properties.put("mon.statusvariable.name", var.getID());
+        properties.put("mon.statusvariable.value", getStatusVariableString(var));
         if(initiators != null)
-            properties.put("listener.id", initiators);
+            properties.put("mon.listener.id", initiators);
         Event event = new Event(MONITOR_EVENT_TOPIC, properties);
         eventChannel.postEvent(event);
     }
 
-    private void sendAlert(List kpis, String initiator) {
-        DmtAlertItem[] items = new DmtAlertItem[kpis.size()];
-        
-        Iterator iterator = kpis.iterator();
-        for(int i = 0; iterator.hasNext(); i++) {
-			KPI kpi = (KPI) iterator.next();
-			items[i] = new DmtAlertItem(Activator.PLUGIN_ROOT + "/" + kpi.getPath(),
-					                    "x-oma-trap:" + kpi.getPath(),
-										"xml", createXml(kpi));
+    private void sendAlert(String[] paths, String initiator) {
+        List itemList = new Vector();
+        for (int i = 0; i < paths.length; i++) {
+            try {
+                StatusVariable var = 
+                    trustedGetStatusVariable(Path.getPathNoCheck(paths[i]));
+                itemList.add(new DmtAlertItem(Activator.PLUGIN_ROOT + "/" + paths[i],
+                        "x-oma-trap:" + paths[i], "xml", createXml(var)));
+            } catch(IllegalArgumentException e) {
+                // Ignore KPIs that are (temporarily) unavailable                
+            }
         }
+        
+        DmtAlertItem[] items = (DmtAlertItem[]) 
+            itemList.toArray(new DmtAlertItem[itemList.size()]);
 
         try {
             alertSender.sendAlert(initiator, MONITORING_ALERT_CODE, items);
@@ -177,18 +284,28 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
         }
     }
 
-    static String createXml(KPI kpi) {
-        int type = kpi.getType();
+    static String createXml(StatusVariable var) {
+        String value = getStatusVariableString(var);
+        
+        int type = var.getType();
         switch(type) {
-        case KPI.TYPE_STRING:  return createScalarXml("string",  kpi.getString());
-        case KPI.TYPE_INTEGER: return createScalarXml("integer", Integer.toString(kpi.getInteger()));
-        case KPI.TYPE_FLOAT:   return createScalarXml("float", Float.toString(kpi.getFloat()));
-        case KPI.TYPE_OBJECT:  return createObjectXml(kpi.getObject());
+        case KPI.TYPE_STRING:  return createScalarXml("string",  value);
+        case KPI.TYPE_INTEGER: return createScalarXml("integer", value);
+        case KPI.TYPE_FLOAT:   return createScalarXml("float", value);
+//        case KPI.TYPE_OBJECT:  return createObjectXml(kpi.getObject());
         }
         
-        throw new IllegalArgumentException("Unknown KPI type '" + type + "'.");
+        throw new IllegalArgumentException("Unknown Status Variable type '" + 
+                                           type + "'.");
     }
 
+    private static String createScalarXml(String type, String data) {
+        String result = kpiTag.format(new Object[] { type, "scalar", 
+                                      valueTag.format(new Object[] { data })});
+        return result;
+    }
+
+    /*
     private static String createObjectXml(Object data) {
         if(data.getClass().isArray())
             return createArrayXml(data);
@@ -217,141 +334,195 @@ public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
         
         return kpiTag.format(new Object[] { type, "array", sb.toString() });
     }
+    */
 
-    private static String createScalarXml(String type, String data) {
-        String result = kpiTag.format(new Object[] { type, "scalar", 
-                                      valueTag.format(new Object[] { data })});
-        return result;
-    }
-
-    synchronized MonitoringJob startJob(String initiator, String[] kpiNames, int schedule, int count, boolean local)
-        throws IllegalArgumentException {
-
-        if(initiator == null || kpiNames.length == 0)
-            throw new IllegalArgumentException("Initiator ID (event listener ID) is null or empty.");
-
-        if(kpiNames == null || kpiNames.length == 0)
-            throw new IllegalArgumentException("KPI name list is null or empty.");
-
-        if(schedule < 0)
-            throw new IllegalArgumentException("Invalid schedule '" + schedule + "', value must be non-negative.");
-
-        if(count < 0)
-            throw new IllegalArgumentException("Invalid report count '" + count + "', value must be non-negative.");
-
-        if(schedule == 0 && count == 0)
-            throw new IllegalArgumentException("Count parameter cannot be 0 in case of changed-based monitoring.");
-
-        // Check that all paths point to valid KPIs
-        // OPTIMIZE collect KPIs from the same Monitorable, iterate through registered Ms only once
-        for(int i = 0; i < kpiNames.length; i++)
-            trustedGetKpi(kpiNames[i]);
-
-        // TODO remove duplicates from the list of KPI names
+    private static String getStatusVariableString(StatusVariable var) {
         
-        MonitoringJobImpl job = new MonitoringJobImpl(this, initiator, kpiNames, schedule, count, local);
+        int type = var.getType(); 
+        switch(type) {
+        case StatusVariable.TYPE_FLOAT:   return Float.toString(var.getFloat());
+        case StatusVariable.TYPE_INTEGER: return Integer.toString(var.getInt());
+        case StatusVariable.TYPE_STRING:  return var.getString();
+        }
+        
+        // never reached
+        throw new IllegalArgumentException("Unknown StatusVariable type '" +
+                                           type + "'.");
+    }
+    
+    synchronized MonitoringJob startJob(String initiator, String[] varNames,
+            int schedule, int count, boolean local) {
+        // TODO check publisher permissions
+        // TODO remove duplicates from the list of KPI names
+        // OPTIMIZE collect KPIs from the same Monitorable, iterate through registered Ms only once
+        
+        String reqPermission = MonitorPermission.STARTJOB;
+        if(schedule != 0) // scheduled job
+            reqPermission += ":" + schedule;
+        
+        for (int i = 0; i < varNames.length; i++) {
+            Path path = Path.getPath(varNames[i]);
+            checkPermission(varNames[i], reqPermission);
+            Monitorable monitorable = trustedGetMonitorable(path.monId);
+
+            // check that the status variable exists
+            monitorable.getStatusVariable(path.varId);
+            
+            if(schedule == 0) // change-based job
+                // check that the status variable supports change notification 
+                if(!monitorable.notifiesOnChange(path.varId))
+                    throw new IllegalArgumentException("Status variable '" + 
+                            varNames[i] + "' does not support notifications.");
+        }
+        
+        MonitoringJobImpl job = new MonitoringJobImpl(this, initiator, varNames, 
+                schedule, count, local);
 
         jobs.add(job);
 
         return job;
     }
-
+    
     synchronized void jobStopped(MonitoringJob job) {
         jobs.remove(job);
     }
 
+    // called by MonitoringJob, paths are assumed to be checked previously
     synchronized void scheduledUpdate(String[] paths, MonitoringJob job) {
         String initiator = job.getInitiator();
-        Vector kpis = getValidKpis(paths);
         
         if(job.isLocal()) {
-        	Iterator i = kpis.iterator();
-            while (i.hasNext())
-				sendEvent((KPI) i.next(), initiator);
+            for (int i = 0; i < paths.length; i++) {
+                try {
+                    Path path = Path.getPathNoCheck(paths[i]);
+                    sendEvent(path.monId, trustedGetStatusVariable(path), 
+                              initiator);
+                } catch(IllegalArgumentException e) {
+                    // Ignore KPIs that are (temporarily) unavailable                    
+                }
+            }
         } else
-            sendAlert(kpis, initiator);
+            sendAlert(paths, initiator);
     }
 
-    private static String getId(String path) {
-        int pos = path.indexOf('/');
+    private StatusVariable trustedGetStatusVariable(Path path) {
+        Monitorable monitorable = trustedGetMonitorable(path.monId);
+        return monitorable.getStatusVariable(path.varId);        
+    }
+
+    /**
+     * Checks whether there exists a Monitorable with the given ID. If there is
+     * no such Monitorable, an exception is thrown. The caller does not need
+     * ServicePermissions for this operation to succeed.
+     * <p>
+     * This is used by the MonitorPlugin where no specific status variable is
+     * needed, only the information that a given Monitorable exists.
+     * 
+     * @param monitorableId the ID of the Monitorable to be retrieved, must be
+     *        non-null and non-empty
+     * @throws IllegalArgumentException if no Monitorable is registered with the
+     *         given ID
+     */
+    void checkMonitorable(String monitorableId) throws IllegalArgumentException {
+        trustedGetMonitorable(monitorableId);
+    }
+
+    /**
+     * Retrieves the Monitorable registered with the specified ID (taken from
+     * the "service.pid" property). The caller does not need ServicePermissions
+     * for this operation to succeed.
+     * 
+     * @param monitorableId the ID of the Monitorable to be retrieved, must be
+     *        non-null and non-empty
+     * @return the Monitorable with the given ID
+     * @throws IllegalArgumentException if no Monitorable is registered with the
+     *         given ID
+     */
+    private Monitorable trustedGetMonitorable(final String monitorableId)
+            throws IllegalArgumentException {
+        return (Monitorable) AccessController.doPrivileged(new PrivilegedAction() {
+            public Object run() {
+                return privilegedGetMonitorable(monitorableId);
+            }
+        });
+    }
+    
+    private Monitorable privilegedGetMonitorable(String monitorableId)
+            throws IllegalArgumentException {
+        ServiceReference[] refs = tracker.getServiceReferences();
+        if(refs == null)
+            throw new IllegalArgumentException("Monitorable id '" + monitorableId +
+                    "' not found (no matching services registered)");
+
+        for (int i = 0; i < refs.length; i++)
+            if(monitorableId.equals(refs[i].getProperty("service.pid"))) {
+                Monitorable monitorable = (Monitorable) tracker.getService(refs[i]);
+                if(monitorable == null)
+                    throw new IllegalArgumentException("Monitorable id '" + monitorableId + 
+                            "' not found (monitorable no longer registered.");
+                return monitorable; 
+            }
+
+        throw new IllegalArgumentException("Monitorable id '" + monitorableId + 
+                "' not found (no matching service registered).");
+    }
+    
+
+    private static void checkJobStartCommon(String initiator, String[] varNames) {
+        checkString(initiator, "Initiator ID");
+        if (varNames == null || varNames.length == 0)
+            throw new IllegalArgumentException(
+                    "Status variable name list is null or empty.");
+    }
+    
+    private static void checkPermission(String target, String action) {
+        SecurityManager sm = System.getSecurityManager();
+        if(sm != null)
+            sm.checkPermission(new MonitorPermission(target, action));
+    }
+
+    private static void checkString(String str, String paramName) {
+        if(str == null || str.length() == 0)
+            throw new IllegalArgumentException(
+                    paramName + " parameter is null or empty.");
+    }
+}
+
+// Utility class to parse and store Status Variable path entries
+class Path {
+    String monId;
+    String varId;
+    
+    private Path(String monId, String varId) {
+        this.monId = monId;
+        this.varId = varId;
+    }
+    
+    static Path getPath(String pathStr) {
+        if(pathStr == null)
+            throw new IllegalArgumentException("Path argument is null.");
+        
+        int pos = pathStr.indexOf('/');
         if(pos < 0)
             throw new IllegalArgumentException(
-                "Path '" + path + "' invalid, should have the form '<Monitorable ID>/<KPI name>'");
-
-        return path.substring(0, pos);
-    }
-
-    // does not check that 'path' contains a '/'; if not, returns 'path' itself
-    private static String getKpiName(String path) {
-        return path.substring(path.indexOf('/') + 1);
-    }
-
-    private Vector getValidKpis(String[] paths) {
-        Vector kpis = new Vector();
-        for (int i = 0; i < paths.length; i++) {
-            try {
-                kpis.add(trustedGetKpi(paths[i]));
-            } catch(IllegalArgumentException e) {
-                // Ignore KPIs that are (temporarily) unavailable
-            }           
-        }
-        return kpis;
-    }
-
-    private KPI trustedGetKpi(String path) throws IllegalArgumentException {
-        if(path == null)
-            throw new IllegalArgumentException("Path argument is null.");
-
-        KPI kpi = trustedGetMonitorable(getId(path)).getKpi(getKpiName(path));
-        if(kpi == null)
-        	throw new IllegalArgumentException("KPI '" + getKpiName(path) + 
-                    "' not found in Monitorable '" + getId(path) + "'.");
-        return kpi;
-    }
-    
-    private Monitorable trustedGetMonitorable(String id) throws IllegalArgumentException {
-    	if(id == null)
-            throw new IllegalArgumentException("Monitorable ID argument is null.");
+                    "Path '" + pathStr + "' invalid, " + 
+            "should have the form '<Monitorable ID>/<KPI name>'");
         
-        String escId = escapeFilterValue(id);
-
-        ServiceReference[] refs;
-        try {
-            refs = bc.getServiceReferences(Monitorable.class.getName(), "(service.pid=" + escId + ")");
-        } catch(InvalidSyntaxException e) {
-            // should never be reached
-            throw new IllegalArgumentException("Invalid characters in Monitorable ID '" + escId + 
-                                               "': ." + e.getMessage());
-        }
-
-        if(refs == null)
-            throw new IllegalArgumentException("Monitorable id '" + id + "' not found (no matching service registered).");
-
-        Monitorable monitorable = (Monitorable) tracker.getService(refs[0]);
-        if(monitorable == null)
-            throw new IllegalArgumentException("Monitorable id '" + id + "' not found (monitorable no longer registered.");
-
-        return monitorable;
+        Path path = new Path(pathStr.substring(0, pos), 
+                pathStr.substring(pos + 1));
+        
+        if(path.monId.length() == 0)
+            throw new IllegalArgumentException("Monitorable ID empty.");
+        if(path.varId.length() == 0)
+            throw new IllegalArgumentException("Status Variable ID empty.");
+        
+        return path;
     }
     
-    /**
-     * Escapes characters that are not allowed literally in the value part of a
-     * filter string. These characters are "*", "(" and ")", and the escape
-     * character is "\" as specified by RFC 1960.
-     * 
-     * @param value a string to be used as a value in an LDAP-style filter
-     *        string
-     * @return the string <code>value</code> with the special characters
-     *         escaped.
-     */
-    static String escapeFilterValue(String value) {
-        StringBuffer sb = new StringBuffer(value);
-        int i = 0;
-        while(i < sb.length()) {
-            if("*()".indexOf(sb.charAt(i)) != -1)
-                sb.insert(i++, "\\");
-            i++;
-        }
-        return sb.toString();
+    static Path getPathNoCheck(String pathStr) {
+        int pos = pathStr.indexOf('/');
+        
+        return new Path(pathStr.substring(0, pos), 
+                pathStr.substring(pos + 1));
     }
 }
