@@ -37,7 +37,7 @@ public class SimpleClient implements ManagedService, Monitorable, ChannelListene
     public SimpleClient(DmtFactory factory, UpdateListener updateListener, BundleContext bc) {
         this.factory = factory;
         this.updateListener = updateListener;
-        this.bc = bc;
+        this.bc = bc;        
     }
 
     /*
@@ -304,40 +304,44 @@ public class SimpleClient implements ManagedService, Monitorable, ChannelListene
 
     public KPI getKpi(String id)
     {
-        if(id.equals("NumOfChanges") || id.equals(ClientActivator.SERVICE_PID + "/NumOfChanges"))
+        if(matchingId(id, "NumOfChanges"))
             return getUpdateKpi();
-
-        if(id.equals("CPULoad") || id.equals(ClientActivator.SERVICE_PID + "/CPULoad"))
+        
+        if(matchingId(id, "CPULoad"))
             return getLoadKpi();
-
+        
+        if(matchingId(id, "Doubles"))
+            return getDoubles();
+        
         throw new IllegalArgumentException("KPI '" + id + "' not found in Monitorable '" + 
                                            ClientActivator.SERVICE_PID + "'.");
     }
  
-    public String[] getKpiNames()
+	public String[] getKpiNames()
     {
-        return new String[] { "NumOfChanges", "CPULoad" };
+        return new String[] { "NumOfChanges", "CPULoad", "Doubles" };
     }
 
     public String[] getKpiPaths()
     {
         return new String[] {
             ClientActivator.SERVICE_PID + "/NumOfChanges",
-            ClientActivator.SERVICE_PID + "/CPULoad"
+            ClientActivator.SERVICE_PID + "/CPULoad",
+            ClientActivator.SERVICE_PID + "/Doubles"
         };
     }
 
     public KPI[] getKpis()
     {
-        return new KPI[] { getUpdateKpi(), getLoadKpi() };
+        return new KPI[] { getUpdateKpi(), getLoadKpi(), getDoubles() };
     }
 
     public boolean notifiesOnChange(String id) 
     {
-        if(id.equals("NumOfChanges") || id.equals(ClientActivator.SERVICE_PID + "/NumOfChanges"))
+        if(matchingId(id, "NumOfChanges"))
             return true;
-
-        if(id.equals("CPULoad") || id.equals(ClientActivator.SERVICE_PID + "/CPULoad"))
+        
+        if(matchingId(id, "CPULoad") || matchingId(id, "Doubles"))
             return false;
 
         throw new IllegalArgumentException("KPI '" + id + "' not found in Monitorable '" + 
@@ -346,16 +350,48 @@ public class SimpleClient implements ManagedService, Monitorable, ChannelListene
 
     public boolean resetKpi(String id)
     {
-        if(id.equals("NumOfChanges") || id.equals(ClientActivator.SERVICE_PID + "/NumOfChanges")) {
+        if(matchingId(id, "NumOfChanges")) {
             setUpdateCount(0);
             return true;
         }
 
-        if(id.equals("CPULoad") || id.equals(ClientActivator.SERVICE_PID + "/CPULoad"))
+        if(matchingId(id, "CPULoad") || matchingId(id, "Doubles"))
             return false;
 
         throw new IllegalArgumentException("KPI '" + id + "' not found in Monitorable '" + 
                                            ClientActivator.SERVICE_PID + "'.");
+    }
+
+    private boolean matchingId(String id, String name) {
+        return id.equals(name)
+                || id.equals(ClientActivator.SERVICE_PID + '/' + name);
+    }
+    
+    private void setUpdateCount(int newUpdateCount)
+    {
+        updateCount = newUpdateCount;
+        updateListener.updated(getUpdateKpi());
+    }
+
+    private static Random random = new Random();
+
+    private KPI getLoadKpi() {
+        return new KPI(ClientActivator.SERVICE_PID, "CPULoad", 
+                       "CPU load percentage indicator (dummy)", KPI.CM_SI,
+                       random.nextInt(101));
+    }
+
+    private KPI getUpdateKpi() {
+        return new KPI(ClientActivator.SERVICE_PID, "NumOfChanges", 
+                       "Number of times the configuration has been updated.", KPI.CM_CC, updateCount);
+    }
+
+    private KPI getDoubles() {
+        double[] doubles = new double[random.nextInt(4)];
+        for(int i = 0; i < doubles.length; i++)
+			doubles[i] = random.nextDouble();
+    	return new KPI(ClientActivator.SERVICE_PID, "Doubles",
+                       "Some pretty doubles!", KPI.CM_SI, doubles);
     }
 
     public void channelEvent(ChannelEvent event) {
@@ -412,24 +448,5 @@ public class SimpleClient implements ManagedService, Monitorable, ChannelListene
             System.out.println("Error retrieving new value of KPI: " + error);
         else
             System.out.println("Value: " + kpi);
-    }
-
-    private void setUpdateCount(int newUpdateCount)
-    {
-        updateCount = newUpdateCount;
-        updateListener.updated(getUpdateKpi());
-    }
-
-    private static Random random = new Random();
-
-    private KPI getLoadKpi() {
-        return new KPI(ClientActivator.SERVICE_PID, "CPULoad", 
-                       "CPU load percentage indicator (dummy)", KPI.CM_SI,
-                       random.nextInt(101));
-    }
-
-    private KPI getUpdateKpi() {
-        return new KPI(ClientActivator.SERVICE_PID, "NumOfChanges", 
-                       "Number of times the configuration has been updated.", KPI.CM_CC, updateCount);
     }
 }
