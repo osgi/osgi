@@ -1,0 +1,128 @@
+#before each run
+[begin=testControlUnitConstants]
+osg.control.id: "osg.control.id"
+osg.control.type: "osg.control.type"
+osg.control.version: "osg.control.version"
+osg.control.parent.id: "osg.control.parent.id"
+osg.control.parent.type: "osg.control.parent.type"
+osg.control.event.auto_receive: "osg.control.event.auto_receive"
+osg.control.event.filter: "osg.control.event.filter"
+osg.control.event.sync: "osg.control.event.sync"
+osg.control.var.id: "osg.control.var.id"
+osg.control.var.list_sv: "osg.control.var.list_sv"
+[end=testControlUnitConstants]
+
+Log: [begin=testCreationOfCUs]
+#Creation with all arguments set to null java.lang.NullPointerException
+#Creation with an unknown CU java.lang.IllegalArgumentException
+#Creation with a ManagedControlUnit java.lang.IllegalArgumentException
+#Creation from a CUFactory with other arguments set to null java.lang.IllegalArgumentException
+#Creation from a CUFactory with an unknown method java.lang.IllegalArgumentException
+#Creation from a CUFactory with some arguments java.lang.IllegalArgumentException
+Creation from CUFactory, type = door, id = door.1
+[end=testCreationOfCUs]
+
+[begin=testDestructionOfCUs]
+#Destruction with all arguments set to null java.lang.NullPointerException
+#Destruction of an unknown CU java.lang.NullPointerException
+#Destruction of a ManagedControlUnit java.lang.NullPointerException
+#Destruction from a CUFactory: type = door, id set to null java.lang.NullPointerException
+Destruction of CU: type = door, id = door.1
+[end=testDestructionOfCUs]
+
+[begin=testFindCUs]
+#Find CUs with all arguments set to null:  java.lang.NullPointerException
+[end=testFindCUs]
+
+[begin=testListCUs]
+List All CU Types:
+hip.gyro
+hip
+door
+hip.tacho
+window
+#List of Parent CUs with all arguments set to null:  java.lang.NullPointerException
+List Parent CUs of a Managed CU without parents:
+List Parent CUs of a Managed CU with parents:
+hip
+List Parent CUs of a CUFactory without parents:
+List Parent CUs of a CUFactory with parents:
+#List Parent Types with arguments set to null:  java.lang.NullPointerException
+List Parent Types with an unknown CU:
+List Parent Types of a Managed CU without parents:
+List Parent Types of a Managed CU with parents:
+hip
+List Parent Types of a FactoryCU without parents:
+List Parent Types of a FactoryCU with parents:
+door
+#List SubCUs of a Managed CU with arguments set to null:  java.lang.NullPointerException
+List SubCUs of a Managed CU without children:
+List SubCUs of a Managed CU with children:
+hip.gyro
+List SubCUs of a CUFactory without children:
+List SubCUs of a CUFactory with children:
+#List Sub Types with arguments set to null:  java.lang.NullPointerException
+List Sub Types with an unknown CU:
+List Sub Types of a Managed CU without children:
+List Sub Types of a Managed CU with children:
+hip.gyro
+hip.tacho
+List Sub Types of a FactoryCU without children:
+List Sub Types of a FactoryCU with children:
+window
+#Retrieve a CU with arguments set to null:  java.lang.NullPointerException
+Retrieve a CU with type unknown, id unknown:
+Retrieve a CU with type known, id unknown:
+Retrieve a CU with type = hip, id = hip:
+CU found
+Retrieve a CU with type = door, id = door.4:
+CU found
+#Retrieve Type Version of a CU with type = null:  java.lang.NullPointerException
+#Retrieve Type Version of a CU with type unknown:  java.lang.IllegalArgumentException
+Retrieve Type Version of a CU with type = hip: null
+[end=testListCUs]
+
+[begin=testInvokeAction]
+#Invoke an action with all arguments set to null:  java.lang.NullPointerException
+#Invoke an unknown action:  java.lang.IllegalArgumentException
+Invoke an action without arguments: 1.0 V
+#Invoke an action with wrong arguments:  java.lang.IllegalArgumentException
+Invoke an action with arguments: OK
+[end=testInvokeAction]
+
+[begin=testQueryStateVariable]
+#Query a state variable with all arguments set to null:  java.lang.NullPointerException
+#Query an unknown state variable:  java.lang.IllegalArgumentException
+Query a state variable: 1
+[end=testQueryStateVariable]
+
+[begin=testControlUnit]
+Access a ControlUnit
+type = hip.tacho
+id = hip.tacho
+Invoke an action : false
+Query a state variable value: 1
+[end=testControlUnit]
+
+[begin=testSVListeners]
+<NoFilterListener> Type = door, Id = door.4, varId = state, value = 2
+<NoFilterListener> Type = window, Id = window.1, varId = state, value = 2
+<EventFilterListener> Type = window, Id = window.1, varId = state, value = 2
+[end=testSVListeners]
+
+[begin=testCUListeners]
+<NoFilterListener> EventType=2, CUType=window, Id=window.1
+<NoFilterListener> EventType=2, CUType=window, Id=window.2
+<NoFilterListener> EventType=2, CUType=window, Id=window.3
+<NoFilterListener> EventType=2, CUType=window, Id=window.4
+<NoFilterListener> EventType=1, CUType=window, Id=window.1
+<EventFilterListener> EventType=1, CUType=window, Id=window.1
+<NoFilterListener> EventType=1, CUType=window, Id=window.2
+<NoFilterListener> EventType=1, CUType=window, Id=window.3
+<NoFilterListener> EventType=1, CUType=window, Id=window.4
+[end=testCUListeners]
+
+[begin=testHierarchyListeners]
+[end=testHierarchyListeners]
+
+#after each run

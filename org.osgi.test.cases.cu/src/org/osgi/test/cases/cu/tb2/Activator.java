@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) The OSGi Alliance (2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -25,56 +25,41 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.cu.tb1;
+package org.osgi.test.cases.cu.tb2;
 
 import java.util.Hashtable;
 
 import org.osgi.framework.*;
 import org.osgi.service.cu.*;
-import org.osgi.service.cu.admin.spi.ManagedControlUnit;
+import org.osgi.service.cu.admin.spi.ControlUnitFactory;
 
 /**
- * Bundle that registers 3 different Control Units used by the test control.
- * These CUs simulate a positioning module with gyroscope and tachometer data. 
- * The hip CU has two children (hip.gyro, hip.tacho)
+ * Bundle that registers two factories of CU. One called door and another one called
+ * window. The window CUFactory has a parent type door CU Factory.
+ *
  * @version $Revision$
  */
 public class Activator implements BundleActivator {
-	private ServiceRegistration regHip;
-	private ServiceRegistration regGyro;
-	private ServiceRegistration regTacho;
+	private ServiceRegistration regDoor;
+	private ServiceRegistration regWindow;
 	
 	public void start(BundleContext context) throws Exception {
+		// regsiter door CUFactory
 		Hashtable p = new Hashtable();
+		p.put(ControlUnitConstants.TYPE, "door");
+		regDoor = context.registerService(ControlUnitFactory.class.getName(), new DoorWindowFactory("door"), p);
 		
-		// Register hip Control Unit
-		p.put(ControlUnitConstants.TYPE, "hip");
-		p.put(ControlUnitConstants.ID, "hip");
-		regHip = context.registerService(ManagedControlUnit.class.getName(), new HipModule(), p);
-		
-		// Register hip.gyro Control Unit
+		// register window CUFactory
 		p.clear();
-		p.put(ControlUnitConstants.TYPE, "hip.gyro");
-		p.put(ControlUnitConstants.ID, "hip.gyro");
-		p.put(ControlUnitConstants.PARENT_TYPE, "hip");
-		p.put(ControlUnitConstants.PARENT_ID, "hip");
-		regGyro = context.registerService(ManagedControlUnit.class.getName(), new HipGyro(), p);
-		
-		// Register hip.tacho Control Unit 
-		p.clear();
-		p.put(ControlUnitConstants.TYPE, "hip.tacho");
-		p.put(ControlUnitConstants.ID, "hip.tacho");
-		p.put(ControlUnitConstants.PARENT_TYPE, "hip");
-		p.put(ControlUnitConstants.PARENT_ID, "hip");
-		regTacho = context.registerService(ManagedControlUnit.class.getName(), new HipTacho(), p);
+		p.put(ControlUnitConstants.TYPE, "window");
+		p.put(ControlUnitConstants.PARENT_TYPE, "door");
+		regWindow = context.registerService(ControlUnitFactory.class.getName(), new DoorWindowFactory("window"), p);		
 	}
 	
 	public void stop(BundleContext context) throws Exception {
-		if (regHip != null)
-			regHip.unregister();
-		if (regGyro != null)
-			regGyro.unregister();
-		if (regTacho!= null)
-			regTacho.unregister();
+		if (regDoor != null)
+			regDoor.unregister();
+		if (regWindow != null)
+			regWindow.unregister();
 	}
 }
