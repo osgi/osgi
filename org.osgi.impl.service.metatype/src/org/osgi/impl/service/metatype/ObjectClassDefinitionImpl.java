@@ -50,6 +50,7 @@ public class ObjectClassDefinitionImpl extends LocalizationElement implements Ob
 	 */
 	public ObjectClassDefinitionImpl(String name,
 			String description, String localization) {
+
 		this._name = name;
 		this._description = description;
 		this._localization = localization;
@@ -60,6 +61,7 @@ public class ObjectClassDefinitionImpl extends LocalizationElement implements Ob
 	 */
 	public ObjectClassDefinitionImpl(String name, String id,
 			String description, int type, String localization) {
+
 		this._name = name;
 		this._id = id;
 		this._description = description;
@@ -98,7 +100,7 @@ public class ObjectClassDefinitionImpl extends LocalizationElement implements Ob
 	 * @see org.osgi.service.metatype.ObjectClassDefinition#getName()
 	 */
 	public String getName() {
-		return getString(_name);
+		return getLocalized(_name);
 	}
 
 	/**
@@ -130,7 +132,7 @@ public class ObjectClassDefinitionImpl extends LocalizationElement implements Ob
 	 * @see org.osgi.service.metatype.ObjectClassDefinition#getDescription()
 	 */
 	public String getDescription() {
-		return getString(_description);
+		return getLocalized(_description);
 	}
 
 	/*
@@ -190,45 +192,6 @@ public class ObjectClassDefinitionImpl extends LocalizationElement implements Ob
 		}
 	}
 
-//	/*
-//	 * (non-Javadoc)
-//	 * 
-//	 * @see org.osgi.service.metatype.ObjectClassDefinition#getIcon(int)
-//	 */
-//	public InputStream getIcon(int sizeHint) throws IOException {
-//
-//		int closestSizeDiff = Integer.MAX_VALUE;
-//		int index = -1;
-//		for (int i = 0; i < _icons.size(); i++) {
-//			int size = ((Icon) _icons.elementAt(i)).getIconSize();
-//			if (sizeHint == size) {
-//				index = i;
-//				break;
-//			}
-//			else {
-//				int sizeDiff = (size - sizeHint);
-//				if (sizeDiff < closestSizeDiff) {
-//					closestSizeDiff = sizeDiff;
-//					index = i;
-//				}
-//			}
-//		}
-//		if (index == -1) {
-//			return null; // no icons to choose from
-//		}
-//		else {
-//			Bundle b = ((Icon) _icons.elementAt(index)).getIconBundle();
-//			java.net.URL u = b.getResource(((Icon) _icons.elementAt(index))
-//					.getIconName());
-//			if (u != null) {
-//				return u.openStream();
-//			}
-//			else {
-//				return null;
-//			}
-//		}
-//	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -237,7 +200,7 @@ public class ObjectClassDefinitionImpl extends LocalizationElement implements Ob
 	public InputStream getIcon(int sizeHint) throws IOException {
 
 		Bundle b = _icon.getIconBundle();
-		java.net.URL u = b.getResource(getString(_icon.getIconName()));
+		java.net.URL u = b.getResource(getLocalized(_icon.getIconName()));
 		if (u != null) {
 			return u.openStream();
 		}
@@ -250,7 +213,7 @@ public class ObjectClassDefinitionImpl extends LocalizationElement implements Ob
 	 * Method to set the icon of ObjectClassDefinition.
 	 */
 	public void setIcon(Icon icon) {
-		_icon = icon;
+		this._icon = icon;
 	}
 
 	/**
@@ -267,29 +230,11 @@ public class ObjectClassDefinitionImpl extends LocalizationElement implements Ob
 		this._type = type;
 	}
 
-//	/*
-//	 * Internal Method
-//	 */
-//	void setResourceBundle(ResourceBundle rb) {
-//		this._rb = rb;
-//		Enumeration eReq = _required.elements();
-//		while (eReq.hasMoreElements()) {
-//			AttributeDefinitionImpl ad = (AttributeDefinitionImpl) eReq
-//					.nextElement();
-//			ad.setResourceBundle(rb);
-//		}
-//		Enumeration eOpt = _optional.elements();
-//		while (eOpt.hasMoreElements()) {
-//			AttributeDefinitionImpl ad = (AttributeDefinitionImpl) eOpt
-//					.nextElement();
-//			ad.setResourceBundle(rb);
-//		}
-//	}
-
 	/**
 	 * Method to set the resource bundle for this OCD and all its ADs.
 	 */
 	void setResourceBundle(String assignedLocale, Bundle bundle) {
+
 		if (assignedLocale == null)
 			assignedLocale = Locale.getDefault().toString();
 		_rb = getResourceBundle(assignedLocale, bundle);

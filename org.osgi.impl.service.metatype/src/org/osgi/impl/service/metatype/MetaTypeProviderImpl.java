@@ -4,6 +4,7 @@
  * Copyright (c) IBM Corporation (2005)
  *
  * These materials have been contributed  to the OSGi Alliance as 
+ * "MEMBER LICENSED MATERIALS" as defined in, and subject to the terms of, 
  * the OSGi Member Agreement, specifically including but not limited to, 
  * the license rights and warranty disclaimers as set forth in Sections 3.2 
  * and 12.1 thereof, and the applicable Statement of Work. 
@@ -45,10 +46,6 @@ public class MetaTypeProviderImpl implements MetaTypeProvider {
 	Hashtable					_allFPidOCDs			= new Hashtable(7);
 
 	String []					_locales;
-	// Name it as "possible" because different meta file may has different
-	// localization set.
-	Vector						_allPossibleLocaleList	= new Vector(7);
-
 	boolean						_isThereMeta			= false;
 
 	/**
@@ -64,8 +61,9 @@ public class MetaTypeProviderImpl implements MetaTypeProvider {
 
 		if (!_isThereMeta) {
 			Logging.log(Logging.WARN,
-					"Bundle(" + bundle.getBundleId() + ", "
-					+ bundle.getSymbolicName() + ") has no MetaData file.");
+					Msg.formatter.getString(METADATA_NOT_FOUND,
+							new Long(bundle.getBundleId()),
+							bundle.getSymbolicName()));
 		}
 	}
 
@@ -179,8 +177,10 @@ public class MetaTypeProviderImpl implements MetaTypeProvider {
 	 * @see org.osgi.service.metatype.MetaTypeProvider#getLocales()
 	 */
 	public synchronized String[] getLocales() {
+
 		if (_locales != null)
 			return checkForDefault(_locales);
+
 		Vector localizationFiles = new Vector(7);
 		// get all the localization resources for PIDS
 		Enumeration ocds = _allPidOCDs.elements();
@@ -225,7 +225,11 @@ public class MetaTypeProviderImpl implements MetaTypeProvider {
 		return checkForDefault(_locales);
 	}
 
+	/**
+	 * Internal Method - checkForDefault
+	 */
 	private String[] checkForDefault(String[] locales) {
+
 		if (locales == null || locales.length == 0 || (locales.length == 1 && Locale.getDefault().toString().equals(locales[0])))
 			return null;
 		return locales;

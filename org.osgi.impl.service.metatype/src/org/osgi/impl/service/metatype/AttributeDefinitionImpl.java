@@ -28,22 +28,27 @@ import org.osgi.service.metatype.AttributeDefinition;
  */
 public class AttributeDefinitionImpl extends LocalizationElement implements AttributeDefinition, Cloneable {
 
-	public static final String	EXCEPTION_MESSAGE	= "EXCEPTION_MESSAGE";	//$NON-NLS-1$
-	public static final String	VALUE_NOT_IN_SET	= "VALUE_NOT_IN_SET";	//$NON-NLS-1$
-	public static final String	NULL_IS_INVALID		= "NULL_IS_INVALID";	//$NON-NLS-1$
-	public static final String	VALUE_OUT_OF_RANGE	= "VALUE_OUT_OF_RANGE"; //$NON-NLS-1$
-	public static final String	TOO_MANY_VALUES		= "TOO_MANY_VALUES";	//$NON-NLS-1$
-
+	public static final String	EXCEPTION_MESSAGE		= "EXCEPTION_MESSAGE";		//$NON-NLS-1$
+	public static final String	NULL_IS_INVALID			= "NULL_IS_INVALID";		//$NON-NLS-1$
+	public static final String	VALUE_OUT_OF_RANGE		= "VALUE_OUT_OF_RANGE"; 	//$NON-NLS-1$
+	public static final String	TOO_MANY_VALUES			= "TOO_MANY_VALUES";		//$NON-NLS-1$
+	public static final String	NULL_OPTIONS			= "NULL_OPTIONS";			//$NON-NLS-1$
+	public static final String	INCONSISTENT_OPTIONS	= "INCONSISTENT_OPTIONS";	//$NON-NLS-1$	
+	public static final String	INVALID_OPTIONS			= "INVALID_OPTIONS";		//$NON-NLS-1$
+//	public static final String	NULL_DEFAULTS			= "NULL_DEFAULTS";			//$NON-NLS-1$
+//	public static final String	INVALID_DEFAULTS		= "INVALID_DEFAULTS";		//$NON-NLS-1$
+	
 	String						_name;
 	String						_id;
 	String						_description;
-	int							_cardinality		= 0;	//by schema default
+	int							_cardinality		= 0;
 	int							_dataType;
 	Object						_minValue			= null;
 	Object						_maxValue			= null;
-	boolean						_isRequired			= true;	//by schema default
+	boolean						_isRequired			= true;
 
 	String []					_defaults			= null;
+	Vector						_dfts_vector		= new Vector(7);
 	Vector						_values				= new Vector(7);
 	Vector						_labels				= new Vector(7);
 
@@ -73,11 +78,14 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Attr
 		AttributeDefinitionImpl ad = new AttributeDefinitionImpl(_id, _name,
 				_description, _dataType, _cardinality, _minValue, _maxValue,
 				_isRequired, _localization);
-		if (this._defaults != null) {
-			ad.setDefaultValue((String[]) this._defaults.clone());
+
+		if (_defaults != null) {
+			ad.setDefaultValue((String[]) _defaults.clone(), false);
 		}
-		ad.setOptionValues((Vector) this._values.clone());
-		ad.setOptionLabels((Vector) this._labels.clone());
+		if ((_labels != null) && (_values != null)) {
+			ad.setOption((Vector) _labels.clone(),
+					(Vector) _values.clone(), false);
+		}
 
 		return ad;
 	}
@@ -88,7 +96,7 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Attr
 	 * @see org.osgi.service.metatype.AttributeDefinition#getName()
 	 */
 	public String getName() {
-		return getString(_name);
+		return getLocalized(_name);
 	}
 
 	/**
@@ -120,7 +128,7 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Attr
 	 * @see org.osgi.service.metatype.AttributeDefinition#getDescription()
 	 */
 	public String getDescription() {
-		return getString(_description);
+		return getLocalized(_description);
 	}
 
 	/**
@@ -188,35 +196,14 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Attr
 		}
 
 		String[] returnedLabels = new String[_labels.size()];
-		if (_rb != null) {
-			Enumeration labelKeys = _labels.elements();
-			int i = 0;
-			while (labelKeys.hasMoreElements()) {
-				String labelKey = (String) labelKeys.nextElement();
-				returnedLabels[i] = getString(labelKey);
-				i++;
-			}
+		Enumeration labelKeys = _labels.elements();
+		int i = 0;
+		while (labelKeys.hasMoreElements()) {
+			String labelKey = (String) labelKeys.nextElement();
+			returnedLabels[i] = getLocalized(labelKey);
+			i++;
 		}
-		else {
-			// No available resource bundle, just return the raw data. 
-			_labels.toArray(returnedLabels);
-		}
-
 		return returnedLabels;
-	}
-
-	/**
-	 * Method to set the Option labels of AttributeDefinition.
-	 */
-	void setOptionLabels(Vector labels) {
-		this._labels = labels;
-	}
-
-	/**
-	 * Method to add one new Option label to AttributeDefinition.
-	 */
-	void addLabel(String label) {
-		_labels.addElement(label);
 	}
 
 	/*
@@ -231,35 +218,51 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Attr
 		}
 
 		String[] returnedValues = new String[_values.size()];
-		if (_rb != null) {
-			Enumeration valueKeys = _values.elements();
-			int i = 0;
-			while (valueKeys.hasMoreElements()) {
-				String valueKey = (String) valueKeys.nextElement();
-				returnedValues[i] = getString(valueKey);
-				i++;
-			}
+		Enumeration valueKeys = _values.elements();
+		int i = 0;
+		while (valueKeys.hasMoreElements()) {
+			String valueKey = (String) valueKeys.nextElement();
+			returnedValues[i] = getLocalized(valueKey);
+			i++;
 		}
-		else {
-			// No available resource bundle, just return the raw data. 
-			_values.toArray(returnedValues);
-		}
-
 		return returnedValues;
 	}
 
 	/**
 	 * Method to set the Option values of AttributeDefinition.
 	 */
-	void setOptionValues(Vector values) {
-		this._values = values;
-	}
+	void setOption(Vector labels, Vector values, boolean needValidation) {
 
-	/**
-	 * Method to add one new Option value to AttributeDefinition.
-	 */
-	void addValue(String value) {
-		_values.addElement(value);
+		if ((labels==null) || (values==null)) {
+			Logging.log(Logging.ERROR, this,
+					"setOption(Vector, Vector, boolean)", //$NON-NLS-1$
+					Msg.formatter.getString(NULL_OPTIONS));
+			return;
+		}
+
+		if (labels.size() != values.size()) {
+			Logging.log(Logging.ERROR, this,
+					"setOption(Vector, Vector, boolean)", //$NON-NLS-1$
+					Msg.formatter.getString(INCONSISTENT_OPTIONS));
+			return;
+		}
+
+		_labels = labels;
+		_values = values;
+
+		if (needValidation) {
+			for (int index=0; index<_labels.size(); index++) {
+				String reason = validate((String) _values.get(index));
+				if ((reason != null) && reason.length()>0) {
+					Logging.log(Logging.WARN,
+							Msg.formatter.getString(INVALID_OPTIONS,
+									(String) _values.get(index), reason));
+					_labels.remove(index);
+					_values.remove(index);
+					index--; // Because this one has been removed.
+				}
+			}
+		}
 	}
 
 	/*
@@ -275,23 +278,20 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Attr
 	 * Method to set the default value of AttributeDefinition.
 	 * The given parameter is a comma delimited list needed to be parsed.
 	 */
-	void setDefaultValue(String defaults_str) {
+	void setDefaultValue(String defaults_str, boolean needValidation) {
 
 		ValueTokenizer vt = new ValueTokenizer(defaults_str);
-		_defaults = vt.getValuesAsArray();
-		if ((_defaults != null)
-				&& (_defaults.length > Math.abs(_cardinality))) {
-			Logging.log(Logging.ERROR, this, "setDefaultValue(String)",
-					Msg.formatter.getString(TOO_MANY_VALUES));
-		}
+		setDefaultValue(vt.getValuesAsArray(), needValidation);
 	}
 
 	/**
 	 * Method to set the default value of AttributeDefinition.
 	 * The given parameter is a String array of multi values.
 	 */
-	void setDefaultValue(String[] defaults) {
+	void setDefaultValue(String[] defaults, boolean needValidation) {
+
 		_defaults = defaults;
+		// Do we also need to validate defaults ?
 	}
 
 	/**
@@ -319,7 +319,8 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Attr
 			return Msg.formatter.getString(NULL_IS_INVALID);
 		}
 
-		if ((_minValue != null) && (_maxValue != null)) {
+		if ((_dataType != STRING)
+				&& (_minValue == null) && (_maxValue == null)) {
 			// No validation present
 			return null;
 		}
@@ -344,14 +345,15 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Attr
 			// No problems detected
 			return ""; //$NON-NLS-1$
 		}
-
-		// Only when cardinality is '0', it comes here.
-		try {
-			return validateRange(value);
-		}
-		catch (Throwable t) {
-			return Msg.formatter.getString(EXCEPTION_MESSAGE, t.getClass()
-					.getName(), t.getMessage());
+		else {
+			// Only when cardinality is '0', it comes here.
+			try {
+				return validateRange(value);
+			}
+			catch (Throwable t) {
+				return Msg.formatter.getString(EXCEPTION_MESSAGE, t.getClass()
+						.getName(), t.getMessage());
+			}
 		}
 	}
 
@@ -364,10 +366,11 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Attr
 
 		switch (_dataType) {
 			case STRING :
-				if (value.compareTo((String) _minValue) < 0
-						|| value.compareTo((String) _maxValue) > 0) {
-					rangeError = true;
-				}
+				// TODO Julian Chen - What is the validation rule for String ?
+				//if (value.compareTo((String) _minValue) < 0
+				//		|| value.compareTo((String) _maxValue) > 0) {
+				//	rangeError = true;
+				//}
 				break;
 			case LONG :
 				Long longVal = new Long(value);

@@ -39,11 +39,7 @@ public class Msg {
 	// Attempt to load the message bundle.
 	static {
 		formatter = new MessageFormat(
-				"com.ibm.osg.service.metatypeimpl.nls.ExternalMessages", java.util.Locale.getDefault(), new MsgObject().getClass()); //$NON-NLS-1$
+				"org.osgi.impl.service.metatype.nls.ExternalMessages", //$NON-NLS-1$
+				java.util.Locale.getDefault());
 	}
-}
-
-/* Need a simple class to pass the MassageFormat constructor */
-class MsgObject {
-
 }

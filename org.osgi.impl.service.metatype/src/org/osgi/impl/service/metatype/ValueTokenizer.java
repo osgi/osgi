@@ -45,7 +45,7 @@ public class ValueTokenizer {
 					else {
 						// CONTROL char should not occur in last char.
 						Logging.log(Logging.ERROR, this,
-								"ValueTokenizer(String)",
+								"ValueTokenizer(String)", //$NON-NLS-1$
 								Msg.formatter.getString(
 										"TOKENIZER_GOT_INVALID_DATA"));
 						// It's an invalid char, but since it's the last one,
