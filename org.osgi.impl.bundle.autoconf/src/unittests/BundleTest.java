@@ -28,6 +28,7 @@
 package unittests;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Dictionary;
 import javax.xml.parsers.ParserConfigurationException;
@@ -44,13 +45,19 @@ import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.bundle.autoconf.Autoconf;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.metatype.MetaTypeInformation;
+import org.osgi.service.metatype.MetaTypeService;
 import org.xml.sax.SAXException;
 
 public class BundleTest extends TestCase {
 	public DummyBundleContext bundleContext;
 	public Autoconf activator;
 	public ResourceProcessor resourceProcessor;
+	public DummyConfigurationAdmin configurationAdmin;
+	public DummyMetaTypeService metaTypeService;
 	
 	public final class DummyBundleContext implements BundleContext {
 		public ServiceReference[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
@@ -59,19 +66,28 @@ public class BundleTest extends TestCase {
 			};
 		}
 		public Object getService(ServiceReference reference) {
-			// only one service is required here
-			SAXParserFactory sp = SAXParserFactory.newInstance();
-			sp.setNamespaceAware(true);
-			sp.setValidating(true);
-			try {
-				return sp.newSAXParser();
+			String clazz = ((DummyServiceReference)reference).serviceClass;
+			if (clazz.equals(SAXParserFactory.class.getName())) {
+				SAXParserFactory sp = SAXParserFactory.newInstance();
+				sp.setNamespaceAware(true);
+				sp.setValidating(true);
+				try {
+					return sp.newSAXParser();
+				}
+				catch (ParserConfigurationException e) {
+					throw new IllegalStateException();
+				}
+				catch (SAXException e) {
+					throw new IllegalStateException();
+				}
 			}
-			catch (ParserConfigurationException e) {
-				throw new IllegalStateException();
+			if (clazz.equals(ConfigurationAdmin.class.getName())) {
+				return configurationAdmin;
 			}
-			catch (SAXException e) {
-				throw new IllegalStateException();
+			if (clazz.equals(MetaTypeService.class.getName())) {
+				return metaTypeService;
 			}
+			throw new IllegalStateException();
 		}
 
 		public ServiceRegistration registerService(String clazz, Object service, Dictionary properties) {
@@ -82,6 +98,9 @@ public class BundleTest extends TestCase {
 			throw new IllegalStateException(); 
 		}
 
+		public ServiceReference getServiceReference(String clazz) {
+			return new DummyServiceReference(clazz);
+		}
 		
 		public String getProperty(String key) {	throw new IllegalStateException(); }
 		public Bundle getBundle() { throw new IllegalStateException(); }
@@ -98,7 +117,6 @@ public class BundleTest extends TestCase {
 		public void removeFrameworkListener(FrameworkListener listener) { throw new IllegalStateException(); }
 		public ServiceRegistration registerService(String[] clazzes, Object service, Dictionary properties) { throw new IllegalStateException(); }
 		public ServiceReference[] getAllServiceReferences(String clazz, String filter) throws InvalidSyntaxException { throw new IllegalStateException(); }
-		public ServiceReference getServiceReference(String clazz) { throw new IllegalStateException(); }
 		public boolean ungetService(ServiceReference reference) { throw new IllegalStateException(); }
 		public File getDataFile(String filename) { throw new IllegalStateException();	}
 		public Filter createFilter(String filter) throws InvalidSyntaxException { throw new IllegalStateException(); }
@@ -114,10 +132,24 @@ public class BundleTest extends TestCase {
 		public boolean isAssignableTo(Bundle bundle, String className) { throw new IllegalStateException(); }
 	};
 
+	public final class DummyConfigurationAdmin implements ConfigurationAdmin {
+		public Configuration createFactoryConfiguration(String factoryPid) throws IOException { throw new IllegalStateException(); }
+		public Configuration createFactoryConfiguration(String factoryPid, String location) throws IOException { throw new IllegalStateException(); }
+		public Configuration getConfiguration(String pid, String location) throws IOException { throw new IllegalStateException(); }
+		public Configuration getConfiguration(String pid) throws IOException { throw new IllegalStateException(); }
+		public Configuration[] listConfigurations(String filter) throws IOException, InvalidSyntaxException { throw new IllegalStateException(); }
+	}
+
+	public final class DummyMetaTypeService implements MetaTypeService {
+		public MetaTypeInformation getMetaTypeInformation(Bundle bundle) { throw new IllegalStateException(); }
+	}
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		resourceProcessor = null;
 		bundleContext = new DummyBundleContext();
+		metaTypeService = new DummyMetaTypeService();
+		configurationAdmin = new DummyConfigurationAdmin();
 		activator = new Autoconf();
 		activator.start(bundleContext);
 		
@@ -128,6 +160,8 @@ public class BundleTest extends TestCase {
 		activator.stop(bundleContext);
 		activator = null;
 		bundleContext = null;
+		configurationAdmin = null;
+		metaTypeService = null;
 		super.tearDown();
 	}
 

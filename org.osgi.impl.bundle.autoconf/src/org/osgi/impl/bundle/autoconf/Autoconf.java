@@ -33,19 +33,37 @@ import javax.xml.parsers.SAXParserFactory;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.metatype.MetaTypeService;
+import org.xml.sax.InputSource;
 
 public class Autoconf implements BundleActivator,ResourceProcessor {
 	BundleContext context;
+	ConfigurationAdmin configurationAdmin;
+	MetaTypeService metaTypeService;
 	SAXParser saxp;
+	int operation;
+	DeploymentPackage deploymentPackage;
 
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
-		ServiceReference[] refs = context.getServiceReferences(SAXParserFactory.class.getName(),
+		ServiceReference[] refs;
+		
+		refs = context.getServiceReferences(SAXParserFactory.class.getName(),
 				"(&(parser.namespaceAware=true)(parser.validating=true))");
 		if (refs==null) { throw new Exception("Cannot get a validating parser"); }
 		saxp = (SAXParser) context.getService(refs[0]);
+		
+		ServiceReference ref = context.getServiceReference(ConfigurationAdmin.class.getName());
+		if (ref==null) { throw new Exception("cannot get Configuration Admin"); }
+		configurationAdmin = (ConfigurationAdmin) context.getService(ref);
+
+		ref = context.getServiceReference(MetaTypeService.class.getName());
+		if (ref==null) { throw new Exception("cannot get Meta Type Service"); }
+		metaTypeService = (MetaTypeService) context.getService(ref);
+
 		Hashtable d = new Hashtable();
 		d.put("processor","AutoconfProcessor"); // TODO this is just an "example" in rfc88 5.2.5
 		context.registerService(ResourceProcessor.class.getName(),this,d);
@@ -55,27 +73,29 @@ public class Autoconf implements BundleActivator,ResourceProcessor {
 	}
 
 	public void begin(DeploymentPackage rp, int operation) {
-		// TODO Auto-generated method stub
-		
+		this.operation = operation;
+		deploymentPackage = rp;
 	}
 
 	public void complete(boolean commit) {
-		// TODO Auto-generated method stub
-		
+		throw new IllegalStateException("not implemented yet");
 	}
 
 	public void process(String name, InputStream stream) throws Exception {
-		// TODO Auto-generated method stub
+		InputSource is = new InputSource(stream);
+		is.setPublicId(name);
+		MetaData m = new MetaData(saxp,is);
 		
+		// TODO check for consistency
 	}
 
 	public void dropped(String name) throws Exception {
+		throw new IllegalStateException("not implemented yet");
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void dropped() {
+		throw new IllegalStateException("not implemented yet");
 		// TODO Auto-generated method stub
-		
 	}
 }
