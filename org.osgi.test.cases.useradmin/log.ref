@@ -1,0 +1,141 @@
+[method name="testCreateRole"]
+Created: "foo-user"
+Created: "null"
+Created: "foo-group"
+Created: "java.lang.IllegalArgumentException"
+[/method]
+
+[method name="testRemoveRole"]
+Removed: "true"
+Removed: "false"
+[/method]
+
+[method name="testGetRole"]
+getRole: "foo1"
+getRole: "foo2"
+getRole: "foo3"
+getRole: "foo4"
+getRole: "null"
+getRole: "user.anyone"
+[/method]
+
+[method name="testGetRoles"]
+Roles: "3 roles: { role1, role2, role3 }"
+Roles: "4 roles: { role1, role2, role3, user.anyone }"
+[/method]
+
+[method name="testGetUser"]
+getUser: "null"
+getUser: "user1"
+getUser: "null"
+[/method]
+
+[method name="testRoleGetType"]
+Role.USER: "1"
+Role.GROUP: "2"
+Role.ROLE: "0"
+getType: "1"
+getType: "2"
+[/method]
+
+[method name="testRoleChangeProperties"]
+changed property: "testValue"
+[/method]
+
+[method name="testRolePutProperties"]
+putProperties: "ok"
+putProperties: "java.lang.IllegalArgumentException"
+putProperties: "ok"
+[/method]
+
+[method name="testRoleGetName"]
+getName: "r1"
+[/method]
+
+[method name="testUserChangeCredentials"]
+getCredentials: "testValue"
+[/method]
+
+[method name="testUserPutCredentials"]
+putCredentials: "ok"
+putCredentials: "java.lang.IllegalArgumentException"
+putCredentials: "ok"
+[/method]
+
+[method name="testUserHasCredential"]
+hasCredential: "true"
+hasCredential: "false"
+hasCredential: "true"
+[/method]
+
+[method name="testGroupAddMember"]
+adding member: "true"
+adding existing member: "false"
+[/method]
+
+[method name="testGroupAddRequiredMembers"]
+adding member: "true"
+adding existing member: "false"
+[/method]
+
+[method name="testGroupGetMembers"]
+getMembers: "No roles"
+getMembers: "2 roles: { user1, user2 }"
+[/method]
+
+[method name="testGroupGetRequiredMembers"]
+getRequiredMembers: "No roles"
+getRequiredMembers: "2 roles: { user1, user2 }"
+[/method]
+
+[method name="testGroupRemoveMember"]
+members after remove: "1 roles: { user1 }"
+[/method]
+
+[method name="testUserAnyone"]
+hasRole foorole: "true"
+user.anyone found: "false"
+[/method]
+
+[method name="testBasicRequired"]
+hasRole testrole: "true"
+hasRole testrole: "true"
+hasRole testrole: "false"
+[/method]
+
+[method name="testRequiredAuth"]
+hasRole testrole: "false"
+[/method]
+
+[method name="testUserAnyoneBasic"]
+hasRole testrole: "true"
+hasRole testrole: "true"
+hasRole testrole: "false"
+hasRole testrole: "false"
+[/method]
+
+[method name="testUserAnyoneRequired"]
+hasRole testrole: "true"
+hasRole testrole: "false"
+hasRole testrole: "false"
+hasRole testrole: "true"
+[/method]
+
+[method name="testAnonymousUser"]
+anonymous user: "null"
+hasRole anygroup: "false"
+hasRole anygroup: "true"
+hasRole requiredgroup: "false"
+hasRole user.anyone: "true"
+[/method]
+
+[method name="testGroupInGroup"]
+hasRole group1: "false"
+[/method]
+
+[method name="testUserAdminEvents"]
+waiting: "createRoleEvent"
+received event: "ROLE_CREATED for user1"
+received event: "ROLE_CHANGED for user1"
+received event: "ROLE_REMOVED for user1"
+[/method]

@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.useradmin
+Bundle-Description: Tests User Admin extension
+Bundle-Category: osgi,test
+Bundle-Activator: org.osgi.test.cases.useradmin.UserAdminTestCase
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+
