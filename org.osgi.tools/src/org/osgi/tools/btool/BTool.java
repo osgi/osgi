@@ -268,29 +268,24 @@ public class BTool extends Task {
 			String classpath = eclipse.getClasspath();
 			if (classpath != null) {
 				verify("classpath", classpath);
-				addProperty(infoPrefix + ".classpath", classpath.replace(',',
-						File.pathSeparatorChar));
+				addProperty(infoPrefix + ".classpath", classpath);
 			}
 			String bootclasspath = eclipse.getBootclasspath();
 			if (bootclasspath != null) {
 				verify("bootclasspath", bootclasspath);
-				addProperty(infoPrefix + ".bootclasspath", bootclasspath
-						.replace(',', File.pathSeparatorChar));
+				addProperty(infoPrefix + ".bootclasspath", bootclasspath);
 			}
 			String sourcePath = eclipse.getSourcepath();
 			if (sourcePath != null) {
-				addProperty(infoPrefix + ".sourcepath", sourcePath.replace(',',
-						File.pathSeparatorChar));
+				addProperty(infoPrefix + ".sourcepath", sourcePath);
 			}
 			String bindir = eclipse.getBindir();
 			if (bindir != null) {
-				addProperty(infoPrefix + ".bindir", bindir.replace(',',
-						File.pathSeparatorChar));
+				addProperty(infoPrefix + ".bindir", bindir);
 			}
-			else
-				addProperty(infoPrefix + ".bindir", sourcePath.replace(',',
-						File.pathSeparatorChar));
-			
+			else {
+				addProperty(infoPrefix + ".bindir", sourcePath);
+			}
 			
 			/**
 			 * The prebuild is an attribute that is prepended to the
@@ -304,22 +299,20 @@ public class BTool extends Task {
 			while ( st.hasMoreTokens()) {
 				sb.append(del);
 				sb.append(new File(workspaceDir, st.nextToken()).getAbsoluteFile());
-				del = File.pathSeparator;
+				del = EclipseProject.PATHSEP;
 			}
 			if ( buildpath != null && buildpath.length()>0 ) {
 				sb.append(del);
 				sb.append(buildpath);
 			}
-			//TODO: Would like to have this property not existing if
-			// nothing is set, but ant seems to inherit it in some
-			// way
-			//if ( sb.length() > 0 )
+			if ( sb.length() > 0 ) {
 				addProperty(infoPrefix + ".buildpath", sb.toString());
+			}	
 		}
 	}
 	
 	void verify(String type, String paths) throws BuildException {
-//		StringTokenizer st = new StringTokenizer(paths," ,");
+//		StringTokenizer st = new StringTokenizer(paths,EclipseProject.PATHSEP);
 //		while (st.hasMoreTokens()) {
 //			String s = st.nextToken();
 //			File	f = new File( s );
@@ -939,7 +932,7 @@ public class BTool extends Task {
 
 	protected void addProperty(String n, String v) {
 		if (v != null)
-			getProject().setInheritedProperty(n, v);
+			getProject().setProperty(n, v);
 	}
 
 	/**

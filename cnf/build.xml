@@ -67,6 +67,9 @@
 		btool.noversion    	Ignore versions of import/export
 		
 	-->
+	<target name="all" depends="publish">
+		<!-- all target is a synonym for publish target -->
+	</target>
 	<target name="publish" depends="init,dependencies,compile,jars,release">
 	</target>
 
@@ -113,7 +116,7 @@
 		DEPENDENCIES
 		Build project dependencies.
 	-->
-	<target name="dependencies" depends="init"  if="project.buildpath">
+	<target name="dependencies" depends="init" if="project.buildpath">
 		<subant target="publish" inheritAll="false" buildpath="${project.buildpath}">
 			<property name="release.dir" value="${project}" />
 		</subant>
@@ -124,7 +127,19 @@
 	     Compile the sources. 
 	-->
 	<target name="compile" depends="init" if="project.sourcepath">
-		<javac fork="yes" executable="${javac}" srcdir="${project.sourcepath}" destdir="${project.bindir}" classpath="${project.classpath}" bootclasspath="${project.bootclasspath}" deprecation="true" listfiles="true" target="${javac.target}" source="${javac.source}" debug="${javac.debug}" includeAntRuntime="no" verbose="${verbose}" />
+		<javac fork="yes"
+		       executable="${javac}"
+		       srcdir="${project.sourcepath}"
+		       destdir="${project.bindir}"
+		       classpath="${project.classpath}"
+		       bootclasspath="${project.bootclasspath}"
+		       deprecation="true"
+		       listfiles="true"
+		       target="${javac.target}"
+		       source="${javac.source}"
+		       debug="${javac.debug}"
+		       includeAntRuntime="no"
+		       verbose="${verbose}" />
 	</target>
 
 	<!-- 
@@ -164,14 +179,25 @@
 	-->
 	<target name="-jar">
 		<echo>JAR ${item.jarFile}</echo>
-		<btool jar="${project}/${item.jarFile}" eclipse="${project}" analyse="${btool.analyse}" showmanifest="${btool.showmanifest}" includeProperty="include.${item.jarFile}" expandProperty="expand.${item.jarFile}" contentFoldersProperty="source.${item.jarFile}" excludeImportProperty="excludeImport.${item.jarFile}" includeExportProperty="includeExport.${item.jarFile}" ipaProperty="ipa.${item.jarFile}" verbose="${verbose}" ignoreVersions="${btool.noversion}" />
+		<btool jar="${project}/${item.jarFile}"
+		       eclipse="${project}"
+		       analyse="${btool.analyse}"
+		       showmanifest="${btool.showmanifest}"
+		       includeProperty="include.${item.jarFile}"
+		       expandProperty="expand.${item.jarFile}"
+		       contentFoldersProperty="source.${item.jarFile}"
+		       excludeImportProperty="excludeImport.${item.jarFile}"
+		       includeExportProperty="includeExport.${item.jarFile}"
+		       ipaProperty="ipa.${item.jarFile}"
+		       verbose="${verbose}"
+		       ignoreVersions="${btool.noversion}" />
 	</target>
 
 	<!--
 	    RELEASE
 	    Copy the JAR file to the osgi.released directory.
 	-->
-	<target name="release" if="release.dir">
+	<target name="release" depends="init" if="release.dir">
 		<copy overwrite="true" todir="${release.dir}" verbose="${verbose}">
 			<fileset dir="${project}" includes="${bin.includes}" />
 		</copy>
@@ -180,14 +206,14 @@
 	<!--
 	     CLEAN
 	-->
-	<target name="clean" depends="init,localclean" if="project.buildpath">		
-		<subant target="clean" inheritAll="false" buildpath="${project.buildpath}"/>
+	<target name="clean" depends="init,localclean" if="project.buildpath">
+		<subant target="clean" inheritAll="false" buildpath="${project.buildpath}" />
 	</target>
 
 	<target name="localclean" depends="init">
 		<delete quiet="true" includeEmptyDirs="true" verbose="${verbose}">
 			<fileset dir="${project.bindir}" includes="**/*.bak **/*.class" />
-			<fileset dir="${project}" includes="**/*.bak **/~*  *.jar" />
+			<fileset dir="${project}" includes="**/*.bak **/~* *.jar" />
 		</delete>
 	</target>
 
