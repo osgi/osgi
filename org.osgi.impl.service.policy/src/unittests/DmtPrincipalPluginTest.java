@@ -121,4 +121,54 @@ public class DmtPrincipalPluginTest extends DmtPluginTestCase implements DmtPrin
 		assertNull(principalPermissions.get(PRINCIPAL1));
 		assertNotNull(principalPermissions.get(PRINCIPAL2));
 	}
+	
+	public void testDeleteSub() throws Exception {
+		// you cannot delete the Principal and PermissionInfo nodes
+		principalPermissions.put(PRINCIPAL1,new PermissionInfo[]{});
+		newAtomicSession();
+		try {
+			dmtSession.deleteNode(PRINCIPAL1_HASH+"/Principal");
+			fail();
+		} catch (DmtException e) {}
+		try {
+			dmtSession.deleteNode(PRINCIPAL1_HASH+"/PermissionInfo");
+			fail();
+		} catch (DmtException e) {}
+	}
+
+	public void testPermissionChange() throws Exception {
+		principalPermissions.put(PRINCIPAL1,new PermissionInfo[]{});
+		newAtomicSession();
+		dmtSession.setNodeValue(PRINCIPAL1_HASH+"/PermissionInfo",new DmtData(ADMINPERMISSION.getEncoded()));
+		dmtSession.close();
+		PermissionInfo[] pi = (PermissionInfo[]) principalPermissions.get(PRINCIPAL1);
+		assertNotNull(pi);
+		assertEquals(1,pi.length);
+		assertEquals(ADMINPERMISSION,pi[0]);
+	}
+	
+	public void testCreateLeafNodes() throws Exception {
+		// you cannot create any leaf nodes at all. There's no such thing in first level,
+		// they get automatically created on the second level.
+		newAtomicSession();
+		
+		try {
+			dmtSession.createLeafNode("Foo",new DmtData("Bar"));
+			fail();
+		} catch (DmtException e) {}
+		
+		dmtSession.createInteriorNode("1");
+		
+		// already exists
+		try {
+			dmtSession.createLeafNode("1/PermissionInfo",new DmtData(ADMINPERMISSION.getEncoded()));
+			fail();
+		} catch (DmtException e) {}
+		
+		// cannot create anything else, either
+		try {
+			dmtSession.createLeafNode("1/Foo",new DmtData("Bar"));
+			fail();
+		} catch (DmtException e) {}
+	}
 }
