@@ -25,7 +25,6 @@ import org.osgi.impl.service.dmt.api.RemoteAlertSender;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtAlertSender;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -37,7 +36,7 @@ public class DmtAdminActivator implements BundleActivator {
     static final String PERMISSION_ADMIN_SERVICE_PID = 
         "org.osgi.impl.service.dmt.permissions";
 
-    private ServiceRegistration	sessionReg;
+    private ServiceRegistration	adminReg;
 	private ServiceRegistration	alertReg;
     private ServiceRegistration permissionReg;
     private ServiceReference    eventChannelRef;
@@ -70,20 +69,21 @@ public class DmtAdminActivator implements BundleActivator {
 			pluginTracker = new ServiceTracker(bc, bc.createFilter(filter),
 					dispatcher);
 			pluginTracker.open();
+            
+            remoteAdapterTracker = new ServiceTracker(bc,
+                    RemoteAlertSender.class.getName(), null);
+            remoteAdapterTracker.open();
+            
 			// creating the services
             DmtPrincipalPermissionAdmin dmtPermissionAdmin =
                 new DmtPrincipalPermissionAdminImpl(ca);
 			DmtAdminImpl dmtAdmin = 
-                new DmtAdminImpl(dmtPermissionAdmin, dispatcher, eventChannel);
-			DmtAlertSenderImpl dmtAlertSender = new DmtAlertSenderImpl(bc);
-			remoteAdapterTracker = new ServiceTracker(bc,
-					RemoteAlertSender.class.getName(), dmtAlertSender);
-			remoteAdapterTracker.open();
-			// registering the services
-			sessionReg = bc.registerService(DmtAdmin.class.getName(),
+                new DmtAdminImpl(dmtPermissionAdmin,
+                    dispatcher, eventChannel, remoteAdapterTracker);
+			
+            // registering the services
+			adminReg = bc.registerService(DmtAdmin.class.getName(),
 					dmtAdmin, null);
-			alertReg = bc.registerService(DmtAlertSender.class.getName(),
-					dmtAlertSender, null);
             String[] services = new String[] {
                     DmtPrincipalPermissionAdmin.class.getName(),
                     ManagedService.class.getName()
@@ -106,7 +106,7 @@ public class DmtAdminActivator implements BundleActivator {
 		pluginTracker.close();
 		remoteAdapterTracker.close();
 		// unregistering the service
-		sessionReg.unregister();
+		adminReg.unregister();
 		alertReg.unregister();
         permissionReg.unregister();
 	}
