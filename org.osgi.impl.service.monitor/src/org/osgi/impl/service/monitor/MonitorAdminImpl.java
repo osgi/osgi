@@ -50,7 +50,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * job.
  */
 public class MonitorAdminImpl implements MonitorAdmin, UpdateListener {
-    private static final String MONITOR_EVENT_TOPIC = "org.osgi.service.monitor.MonitorEvent";
+    private static final String MONITOR_EVENT_TOPIC = "org/osgi/service/monitor/MonitorEvent";
     private static final int MONITORING_ALERT_CODE = 1226;
     
     private static final MessageFormat kpiTag = 

@@ -49,7 +49,7 @@ public class Activator extends Object implements
 				"org.osgi.service.application.ApplicationContainer",
 				megContainerImpl, properties);
 		Hashtable serviceListenerProps = new Hashtable();
-		serviceListenerProps.put(EventConstants.EVENT_TOPIC, "*");
+		serviceListenerProps.put(EventConstants.EVENT_TOPIC, new String[] {"*"});
 		serviceListener = bc.registerService(
 				"org.osgi.service.event.EventHandler", megContainerImpl,
 				serviceListenerProps);
