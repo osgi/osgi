@@ -3,6 +3,8 @@
 	<name>org.osgi.impl.service.application</name>
 	<comment></comment>
 	<projects>
+		<project>org.osgi.impl.service.dmt</project>
+		<project>org.osgi.service.application</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
