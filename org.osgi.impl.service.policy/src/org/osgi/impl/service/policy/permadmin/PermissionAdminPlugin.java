@@ -1,6 +1,6 @@
 /*
  * ============================================================================
- * (c) Copyright 2004 Nokia
+ * (c) Copyright 2005 Nokia
  * This material, including documentation and any related computer programs,
  * is protected by copyright controlled by Nokia and its licensors. 
  * All rights are reserved.
@@ -15,7 +15,6 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-
 package org.osgi.impl.service.policy.permadmin;
 
 import java.security.NoSuchAlgorithmException;
