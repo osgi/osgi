@@ -39,26 +39,26 @@ import java.security.PermissionCollection;
  * For example, installing a deployment package requires DeploymentAdminPermission 
  * to access the installDeploymentPackage method and AdminPermission to access 
  * the framework's install/update/uninstall methods. <p>
- * The permission uses a <filter> string formatted similarly to the filter in RFC 73. 
+ * The permission uses a &lt;filter&gt; string formatted similarly to the filter in RFC 73. 
  * The DeploymentAdminPermission filter does not use the id and location filters. 
  * The signer filter is matched against the signer of the deployment package, and 
  * the name filter is matched against the DeploymentPackage-Name header.
  * <blockquote> 
- * DeploymentAdminPermission( "<filter>","listDeploymentPackages" )
+ * DeploymentAdminPermission( "&lt;filter&gt;","listDeploymentPackages" )
  * </blockquote>
  * A holder of this permission can access the inventory information of the deployment 
- * packages selected by the <filter> string. The filter selects the deployment packages 
+ * packages selected by the &lt;filter&gt; string. The filter selects the deployment packages 
  * on which the holder of the permission can acquire detailed inventory information.
  * <blockquote>
- * DeploymentAdminPermission( "<filter>","installDeploymentPackage" )
+ * DeploymentAdminPermission( "&lt;filter&gt;","installDeploymentPackage" )
  * </blockquote>
  * A holder of this permission can install/upgrade deployment packages if the deployment 
- * package satisfies the <filter> string.
+ * package satisfies the &lt;filter&gt; string.
  * <blockquote>
- * DeploymentAdminPermission( "<filter>","uninstall" )
+ * DeploymentAdminPermission( "&lt;filter&gt;","uninstall" )
  * </blockquote>
  * A holder of this permission can uninstall deployment packages if the deployment 
- * package satisfies the <filter> string.
+ * package satisfies the &lt;filter&gt; string.
  */
 public class DeploymentAdminPermission extends Permission {
 
