@@ -33,7 +33,8 @@ package org.osgi.service.dmt;
  * subtree in which the operations can be executed within this session. Most of
  * the operations take a node URI as parameter, it can be either an absolute
  * URI (starting with &quot;./&quot;) or a URI relative to the root node of the 
- * session.
+ * session. The empty string as relative URI means the root URI of the session
+ * it was opened with.
  * If the URI specified does not correspond to a legitimate node in the tree
  * an exception is thrown. The only exception is the isNodeUri() method which
  * returns false in case of an invalid URI.
@@ -115,7 +116,8 @@ public interface DmtSession extends Dmt {
      * data string is described by the managed object definition.
      * Can be <code>null</code>.
      * @throws DmtException with the following possible error codes
-     * <li> <code>NODE_NOT_FOUND</code>
+     * <li> <code>NODE_NOT_FOUND</code> if the node does not exist and the 
+     * plugin does not allow executing unexisting nodes
      * <li> <code>URI_TOO_LONG</code>
      * <li> <code>INVALID_URI</code>
      * <li> <code>PERMISSION_DENIED</code>
@@ -175,7 +177,9 @@ public interface DmtSession extends Dmt {
     /**
      * Set the Access Control List associated with a given node.
      * @param nodeUri the URI of the node
-     * @param acl the Access Control List to be set on the node
+     * @param acl the Access Control List to be set on the node. It can be
+     * <code>null</code> meaning that the ACL of the node is deleted, in which
+     * case the node will inherit the ACL from its parent node.
      * @throws DmtException with the following possible error codes
      * <li> <code>NODE_NOT_FOUND</code>
      * <li> <code>URI_TOO_LONG</code>
