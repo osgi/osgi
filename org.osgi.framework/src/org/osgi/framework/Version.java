@@ -99,62 +99,29 @@ public class Version implements Comparable {
 	 *                   or the qualifier string is invalid.
 	 */
 	public Version(int major, int minor, int micro, String qualifier) {
-		if (major < 0) {
-			throw new IllegalArgumentException("negative major"); //$NON-NLS-1$
-		}
-		if (minor < 0) {
-			throw new IllegalArgumentException("negative minor"); //$NON-NLS-1$
-		}
-		if (micro < 0) {
-			throw new IllegalArgumentException("negative micro"); //$NON-NLS-1$
-		}
 		if (qualifier == null) {
 			qualifier = ""; //$NON-NLS-1$
-		}
-		else {
-			int length = qualifier.length();
-			for (int i = 0; i < length; i++) {
-				if ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-".indexOf(qualifier.charAt(i)) == -1) { //$NON-NLS-1$
-					throw new IllegalArgumentException("invalid qualifier"); //$NON-NLS-1$
-				}
-			}
 		}
 
 		this.major = major;
 		this.minor = minor;
 		this.micro = micro;
 		this.qualifier = qualifier;
+		validate();
 	}
 
 	/**
-	 * Parses a version identifier from the specified string.
+	 * Created a version identifier from the specified string.
 	 * 
 	 * <p>
-	 * Here is the grammar for version strings.
-	 * 
-	 * <pre>
-	 *          version ::= major('.'minor('.'micro('.'qualifier)?)?)?
-	 *         
-	 *          major ::= digit+
-	 *          minor ::= digit+
-	 *          micro ::= digit+
-	 *          qualifier ::= (alpha|digit|'_'|'-')+
-	 *          digit ::= [0..9]
-	 *          alpha ::= [a..zA..Z]
-	 * </pre>
+	 * See {@link #parseVersion(String) parseVersion} for the format of the
+	 * version string.
 	 * 
 	 * @param version String representation of the version identifier.
-	 * @return A <code>Version</code> object representing the version
-	 *                 identifier. If <code>version</code> is <code>null</code> or
-	 *                 the empty string then {@link #emptyVersion}will be returned.
 	 * @throws IllegalArgumentException If <code>version</code> is improperly
 	 *                   formatted.
 	 */
-	public static Version parseVersion(String version) {
-		if ((version == null) || (version.length() == 0)) {
-			return emptyVersion;
-		}
-
+	public Version(String version) {
 		int major = 0;
 		int minor = 0;
 		int micro = 0;
@@ -187,7 +154,67 @@ public class Version implements Comparable {
 			throw new IllegalArgumentException("invalid format"); //$NON-NLS-1$
 		}
 
-		return new Version(major, minor, micro, qualifier);
+		this.major = major;
+		this.minor = minor;
+		this.micro = micro;
+		this.qualifier = qualifier;
+		validate();
+	}
+
+	/**
+	 * Called by the Version constructors to validate the version components.
+	 * 
+	 * @throws IllegalArgumentException If the numerical components are negative
+	 *                   or the qualifier string is invalid.
+	 */
+	private void validate() {
+		if (major < 0) {
+			throw new IllegalArgumentException("negative major"); //$NON-NLS-1$
+		}
+		if (minor < 0) {
+			throw new IllegalArgumentException("negative minor"); //$NON-NLS-1$
+		}
+		if (micro < 0) {
+			throw new IllegalArgumentException("negative micro"); //$NON-NLS-1$
+		}
+		int length = qualifier.length();
+		for (int i = 0; i < length; i++) {
+			if ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-".indexOf(qualifier.charAt(i)) == -1) { //$NON-NLS-1$
+				throw new IllegalArgumentException("invalid qualifier"); //$NON-NLS-1$
+			}
+		}
+	}
+
+	/**
+	 * Parses a version identifier from the specified string.
+	 * 
+	 * <p>
+	 * Here is the grammar for version strings.
+	 * 
+	 * <pre>
+	 *           version ::= major('.'minor('.'micro('.'qualifier)?)?)?
+	 *          
+	 *           major ::= digit+
+	 *           minor ::= digit+
+	 *           micro ::= digit+
+	 *           qualifier ::= (alpha|digit|'_'|'-')+
+	 *           digit ::= [0..9]
+	 *           alpha ::= [a..zA..Z]
+	 * </pre>
+	 * 
+	 * @param version String representation of the version identifier.
+	 * @return A <code>Version</code> object representing the version
+	 *                 identifier. If <code>version</code> is <code>null</code> or
+	 *                 the empty string then {@link #emptyVersion}will be returned.
+	 * @throws IllegalArgumentException If <code>version</code> is improperly
+	 *                   formatted.
+	 */
+	public static Version parseVersion(String version) {
+		if ((version == null) || (version.length() == 0)) {
+			return emptyVersion;
+		}
+
+		return new Version(version);
 	}
 
 	/**
