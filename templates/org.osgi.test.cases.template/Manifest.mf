@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
-Bundle-Activator: ${p}.TemplateTestCase
+Bundle-Activator: ${p}.TestCase
 Bundle-Name: ${p}
 Bundle-SymbolicName: ${p}
-Bundle-Version: 0.0.0
+Bundle-Version: 4
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000-2005). All Rights Reserved.
 Bundle-Description: This is a template description. It should contain 
   general information about the test case. The test tool allows this text to be
