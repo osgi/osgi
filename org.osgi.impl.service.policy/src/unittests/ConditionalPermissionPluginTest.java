@@ -213,4 +213,13 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 		assertTrue(condPermAdmin.contains(expected_target));
 		assertFalse(condPermAdmin.contains(rfc));
 	}
+	
+	public void testRollBack() throws Exception {
+		ConditionalPermissionInfo rfc = condPermAdmin.addConditionalPermissionInfo(RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
+		assertTrue(condPermAdmin.contains(rfc));
+		newAtomicSession();
+		dmtSession.deleteNode(RFC_EXAMPLE_HASH);
+		dmtSession.rollback();
+		assertTrue(condPermAdmin.contains(rfc));
+	}
 }

@@ -263,7 +263,8 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 	}
 
 	public void rollback() throws DmtException {
-		throw new DmtException(dataRootURI,DmtException.FEATURE_NOT_SUPPORTED,"");
+		// nothing to do, simply don't write back stuff to the system
+		conditionalPermissions = null;
 	}
 
 	public void setNodeTitle(String nodeUri, String title) throws DmtException {
