@@ -761,8 +761,7 @@ public abstract interface BundleContext {
 	/**
 	 * Creates a <code>Filter</code> object. This <code>Filter</code> object may be
 	 * used to match a <code>ServiceReference</code> object or a
-	 * <code>Dictionary</code> object. See {@link Filter}for a description of the
-	 * filter string syntax.
+	 * <code>Dictionary</code> object. 
 	 * 
 	 * <p>
 	 * If the filter cannot be parsed, an {@link InvalidSyntaxException}will be
@@ -775,6 +774,7 @@ public abstract interface BundleContext {
 	 * @exception NullPointerException If <code>filter</code> is null.
 	 * 
 	 * @since 1.1
+	 * @see "Framework specification for a description of the filter string syntax."
 	 */
 	public abstract Filter createFilter(String filter)
 			throws InvalidSyntaxException;

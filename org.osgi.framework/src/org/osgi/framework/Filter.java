@@ -49,6 +49,7 @@ import java.util.Dictionary;
  * 
  * @version $Revision$
  * @since 1.1
+ * @see "Framework specification for a description of the filter string syntax."
  */
 public interface Filter {
 	/**
