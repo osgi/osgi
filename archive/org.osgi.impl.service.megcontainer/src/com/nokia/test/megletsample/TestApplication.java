@@ -25,6 +25,7 @@ import java.util.*;
 public class TestApplication extends Meglet
 {
   String fileName = null;
+  String storedString = null;
 
   public TestApplication()
   {
@@ -34,23 +35,30 @@ public class TestApplication extends Meglet
   protected void start( Map args, InputStream stateStorage ) throws Exception
   {
     if( args != null )
-      fileName = (String)args.get( "TestResult" );  
-    writeResult( "START" );
+      fileName = (String)args.get( "TestResult" );
+    
+    if( stateStorage != null ) {
+      ObjectInputStream ois = new ObjectInputStream( stateStorage );
+      storedString = (String)ois.readObject();
+    }   
+    
+    if( storedString == null )
+      writeResult( "START" );
+    else
+      writeResult( "RESUME:" + storedString );
   }
 
   protected void stop( OutputStream stateStorage ) throws Exception
   {
-    writeResult( "STOP" );
-  }
-
-  public void suspendApplication() throws Exception
-  {
-    writeResult( "SUSPEND" );
-  }
-
-  public void resumeApplication() throws Exception
-  {
-    writeResult( "RESUME" );
+    if( stateStorage != null ) {
+      storedString = "StorageTestString";      
+      ObjectOutputStream ois = new ObjectOutputStream( stateStorage );
+      ois.writeObject( storedString );
+      
+      writeResult( "SUSPEND:" + storedString );
+    }   
+    else
+      writeResult( "STOP" );
   }
   
   public void handleEvent(Event event)

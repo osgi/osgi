@@ -18,6 +18,7 @@
 package org.osgi.impl.service.megcontainer;
 
 import java.util.*;
+import java.io.*;
 import java.security.*;
 import org.osgi.framework.*;
 import org.osgi.service.application.*;
@@ -27,18 +28,24 @@ import org.osgi.service.event.*;
  * This class realizes the Application Handle
  */
 public class MegletHandle implements ApplicationHandle {
-	private int						status;
-	private ApplicationDescriptor	appDesc;
-	private Meglet					meglet;
-	private ServiceRegistration		serviceReg;
-	private BundleContext			bc;
-	private Long					appHndServiceID;
-	private Long					appDescServiceID;
+	private int						      status;
+	private Meglet					    meglet;
+  private MegletContainer     megletContainer;
+  private MegletDescriptor    appDesc;
+	private ServiceRegistration	serviceReg;
+	private BundleContext	   		bc;
+	private Long					      appHndServiceID;
+	private Long					      appDescServiceID;
+  private File                suspendedFileName = null;
+  private static Long         counter = new Long( 0 );
+  private Map                 resumeArgs = null;
 
-	public MegletHandle(Meglet meglet, ApplicationDescriptor desc, BundleContext bc)
+	public MegletHandle(MegletContainer megletContainer, Meglet meglet, 
+                      MegletDescriptor desc, BundleContext bc)
 			throws Exception {
 		appDesc = desc;
 		status = ApplicationHandle.NONEXISTENT;
+    this.megletContainer = megletContainer;
 		this.bc = bc;
 		this.meglet = meglet;
 		appHndServiceID = appDescServiceID = null;
@@ -121,11 +128,16 @@ public class MegletHandle implements ApplicationHandle {
 		AccessController.checkPermission( new ApplicationAdminPermission(
 			appDesc.getApplicationPID(), ApplicationAdminPermission.LAUNCH ) );
 
-        if (status != ApplicationHandle.NONEXISTENT )
+    if( args == null )
+      resumeArgs = null;
+    else
+      resumeArgs = new Hashtable( args );
+        
+    if (status != ApplicationHandle.NONEXISTENT )
 			throw new Exception("Invalid State");
 
 		if (meglet != null) {
-			meglet.startApplication( args );
+			meglet.startApplication( args, null );
 			setStatus ( ApplicationHandle.RUNNING );
 			registerAppHandle();
 		}
@@ -143,12 +155,10 @@ public class MegletHandle implements ApplicationHandle {
 			throw new Exception("Invalid State");
 		if (meglet != null) {
 			setStatus ( ApplicationHandle.STOPPING );
-			meglet.stopApplication();
+			meglet.stopApplication( null );
 			setStatus ( ApplicationHandle.NONEXISTENT );
 			unregisterAppHandle();
 		}
-		else
-			throw new Exception("Invalid meglet handle!");
 	}
 
 	public void suspendApplication() throws Exception {
@@ -160,7 +170,21 @@ public class MegletHandle implements ApplicationHandle {
 			throw new Exception("Invalid State");
 		if (meglet != null) {
 			setStatus ( ApplicationHandle.SUSPENDING );
-			meglet.suspendApplication();
+
+      synchronized( counter ) {
+        counter = new Long( counter.longValue() + 1 );
+        suspendedFileName = bc.getDataFile( "SuspendedState-" + counter.toString() );
+      }
+      
+      if( suspendedFileName.exists() )
+        suspendedFileName.delete();
+      
+      OutputStream os = new FileOutputStream( suspendedFileName );      
+			meglet.stopApplication( os );            
+      os.close();
+      
+      meglet = null;
+      
 			setStatus ( ApplicationHandle.SUSPENDED );
 		}
 		else
@@ -174,13 +198,17 @@ public class MegletHandle implements ApplicationHandle {
 
 		if (status != ApplicationHandle.SUSPENDED)
 			throw new Exception("Invalid State");
-		if (meglet != null) {
-			setStatus ( ApplicationHandle.RESUMING );
-			meglet.resumeApplication();
-			setStatus ( ApplicationHandle.RUNNING );
-		}
-		else
-			throw new Exception("Invalid meglet handle!");
+
+    setStatus ( ApplicationHandle.RESUMING );
+      
+    meglet = megletContainer.createMegletInstance( appDesc, true );
+    appDesc.initMeglet( meglet, this );
+
+    InputStream is = new FileInputStream( suspendedFileName );      
+    meglet.startApplication( resumeArgs, is );            
+    is.close();
+
+    setStatus ( ApplicationHandle.RUNNING );
 	}
 
 	void registerAppHandle() throws Exception {

@@ -46,26 +46,20 @@ public class TestApplication2 extends Meglet implements EventHandler
     if( storedString == null )
       writeResult( "START" );
     else
-      writeResult( "RESUMED:" + storedString );
+      writeResult( "RESUME:" + storedString );
   }
 
   protected void stop( OutputStream stateStorage ) throws Exception
   {
     if( stateStorage != null ) {
+      storedString = "StorageTestString";      
       ObjectOutputStream ois = new ObjectOutputStream( stateStorage );
       ois.writeObject( storedString );
+      
+      writeResult( "SUSPEND:" + storedString );
     }   
-    writeResult( "STOP" );
-  }
-
-  public void suspendApplication() throws Exception
-  {
-    writeResult( "SUSPEND" );
-  }
-
-  public void resumeApplication() throws Exception
-  {
-    writeResult( "RESUME" );
+    else
+      writeResult( "STOP" );
   }
 
   public void handleEvent(Event event)

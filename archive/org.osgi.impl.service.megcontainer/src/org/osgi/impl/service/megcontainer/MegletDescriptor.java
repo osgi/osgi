@@ -18,6 +18,7 @@
 package org.osgi.impl.service.megcontainer;
 
 import java.util.*;
+import java.io.*;
 import org.osgi.framework.*;
 import org.osgi.service.application.*;
 import java.lang.reflect.*;
@@ -126,7 +127,7 @@ public class MegletDescriptor extends ApplicationDescriptor {
 		return properties;
 	}
 
-	private void initMeglet( Meglet meglet, MegletHandle handle ) throws Exception {
+	void initMeglet( Meglet meglet, MegletHandle handle ) throws Exception {
 		Class megletClass = Meglet.class;
 		Method setupMethod = megletClass.getDeclaredMethod( "init", new Class [] {
 										ApplicationHandle.class, BundleContext.class } );
@@ -134,9 +135,9 @@ public class MegletDescriptor extends ApplicationDescriptor {
 		setupMethod.invoke( meglet, new Object [] { handle, bc } );
 	}
 
-	public ApplicationHandle createHandle( Map args ) throws Exception {
+  public ApplicationHandle createHandle( Map args ) throws Exception {
 		Meglet meglet = megletContainer.createMegletInstance( this );
-		MegletHandle appHandle = new MegletHandle( meglet, this, bc);
+		MegletHandle appHandle = new MegletHandle( megletContainer, meglet, this, bc);
 		if (meglet == null)
 			throw new Exception("Cannot create meglet instance!");
 
