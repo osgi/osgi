@@ -24,49 +24,30 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
+package org.osgi.service.cu.diag;
 
-package org.osgi.service.cu;
-
+import org.osgi.service.cu.ControlUnit;
+import org.osgi.service.cu.ControlUnitException;
 
 /**
- * Indicates the return status of a selt-test performed over a Device by calling method checkStatus(). 
- * The status value can be: STATUS_OK or STATUS_FAILED.
- * In case of STATUS_FAILED, the getError() method returns the error that occured.
- *  
+ * Describes a device in terms of actions that can be invoked on the device and
+ * variable that can retrieved from a device.
+ * 
  * @version $Revision$
-  */
-public interface Status 
+ */
+public interface DiagnosableControlUnit extends ControlUnit
 {
+	   
    /**
- 	* Indicates that the method was successfully performed. 
- 	*/
-   	public static int STATUS_OK = 1;
-   	
-   /**
- 	* Indicates that the method was not successfully performed. 
- 	*/
-   	public static int STATUS_FAILED = 2;
-   
-   /**
-    * Returns the method status after invocation. The status can be one of the
-    * following values: STATUS_OK or STATUS_FAILED.
+    * Performs a complete diagnostic on the device. It is up to the device to decide
+    * what are the actions that must be performed to check if the device is correctly running.
+    * The result is given by the status.
     * 
-    * @return The method status after invocation
+    * @return The status of the method
+    * @throws ControlUnitException if error prevents the execution of the action.
+    * {@link ControlUnitException#getErrorCode()}
+    * and {@link ControlUnitException#getNestedException()} methods can be used 
+    * to determine the actual cause.
    	*/
-   	public byte getStatus();
-   
-   /**
-    * Returns the error code if the status is STATUS_FAILED.
-    * 
-    * @return The error code if the status is STATUS_FAILED, -1 if there is no error code.
-   	*/
-   	public int getError();
-   
-   /**
-    * Returns the additional information on the status. The error message
-    * can contain the actionID that was not successful.
-    * 
-    * @return The error message or null if there is no message.
-   	*/
-   	public String getMessage();
+   	public Status checkStatus() throws ControlUnitException;
 }
