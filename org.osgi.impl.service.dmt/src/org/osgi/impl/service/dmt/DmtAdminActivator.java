@@ -36,7 +36,7 @@ import org.osgi.util.tracker.ServiceTracker;
 // TODO when stop() is called, notify the impl. to release all refs to other services
 // (these should be done in all activators!)
 public class DmtAdminActivator implements BundleActivator {
-    static final String PERMISSION_ADMIN_SERVICE_PID = 
+    static final String DMT_PERMISSION_ADMIN_SERVICE_PID = 
         "org.osgi.impl.service.dmt.permissions";
 
     private ServiceRegistration	adminReg;
@@ -92,7 +92,7 @@ public class DmtAdminActivator implements BundleActivator {
                     ManagedService.class.getName()
             };
             Hashtable properties = new Hashtable();
-            properties.put("service.pid", PERMISSION_ADMIN_SERVICE_PID);
+            properties.put("service.pid", DMT_PERMISSION_ADMIN_SERVICE_PID);
             permissionReg = bc.registerService(services, 
                     dmtPermissionAdmin, properties);
             

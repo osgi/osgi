@@ -62,7 +62,7 @@ public class DmtPrincipalPermissionAdminImpl
         this.permissions = new Hashtable(permissions);
         
         Configuration config = 
-            configAdmin.getConfiguration(DmtAdminActivator.PERMISSION_ADMIN_SERVICE_PID);
+            configAdmin.getConfiguration(DmtAdminActivator.DMT_PERMISSION_ADMIN_SERVICE_PID);
         
         Hashtable properties = new Hashtable();
         Iterator i = permissions.entrySet().iterator();
