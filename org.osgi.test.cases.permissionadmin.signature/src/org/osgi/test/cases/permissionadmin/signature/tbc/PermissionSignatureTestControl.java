@@ -114,7 +114,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 		printPermissions(testBundleLocation);
 		String message = "";
 		
-		//Each bundle must be given AdminPermission(<bundle id>, “resource”) so that it can access it’s own resources. 
+		//Each bundle must be given AdminPermission(<bundle id>, ï¿½resourceï¿½) so that it can access itï¿½s own resources. 
 		// TO DO - podhodqsti resource
 		String resource = "/META-INF/MANIFEST.MF";
 		utility.allowed_Bundle_getResource(message, testBundle, resource);
@@ -150,7 +150,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	}	
 
 	/**
-	 * Tests AdminPermission with a name of “*” and action of “*”. 
+	 * Tests AdminPermission with a name of ï¿½*ï¿½ and action of ï¿½*ï¿½. 
 	 * Checks if a bundle with AllPermission can execute all methods requiring AdminPermission.
 	 */
 	public void test_AdminPermission() throws Throwable {
