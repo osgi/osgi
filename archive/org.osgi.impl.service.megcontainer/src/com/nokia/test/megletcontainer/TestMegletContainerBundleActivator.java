@@ -129,7 +129,7 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
               "org.osgi.service.application.ApplicationDescriptor", "(" +
               Constants.SERVICE_ID + "=" + srv_id + ")" );
             if( appDescRefs == null || appDescRefs.length == 0 )
-              throw new Exception( "No appdesc!" );
+              throw new Exception( "ApplicationDescriptor (" + srv_id + ") not found!" );
           }
           else if( names[i].equals("application_instance.id") )
           {
