@@ -86,7 +86,7 @@ public class ServiceAgent implements ServiceListener, BundleListener {
 						}
 					});
 			synchronized (ServiceAgent.storage) {
-				Enumeration e = storage.configs.elements();
+				Enumeration e = ConfigurationStorage.configs.elements();
 				ConfigurationImpl c;
 				while (e.hasMoreElements()) {
 					c = (ConfigurationImpl) e.nextElement();
@@ -121,7 +121,7 @@ public class ServiceAgent implements ServiceListener, BundleListener {
 	 * @param sEv holds ServiceEvent data.
 	 */
 	public void serviceChanged(ServiceEvent sEv) {
-		if (sEv.getType() == sEv.REGISTERED) {
+		if (sEv.getType() == ServiceEvent.REGISTERED) {
 			ServiceReference sRef = sEv.getServiceReference();
 			String[] oClasses = (String[]) sRef
 					.getProperty(Constants.OBJECTCLASS);
@@ -241,7 +241,7 @@ public class ServiceAgent implements ServiceListener, BundleListener {
 		if (pid == null)
 			return;
 		if (isMS) {
-			ConfigurationImpl config = (ConfigurationImpl) storage.configs
+			ConfigurationImpl config = (ConfigurationImpl) ConfigurationStorage.configs
 					.get(pid);
 			if (config != null && checkLocation(config, sRef.getBundle(), true)) {
 				try {
@@ -259,7 +259,7 @@ public class ServiceAgent implements ServiceListener, BundleListener {
 		}
 		else {
 			synchronized (storage) {
-				Vector factoryConfigs = (Vector) storage.configsF.get(pid);
+				Vector factoryConfigs = (Vector) ConfigurationStorage.configsF.get(pid);
 				if (factoryConfigs != null) {
 					Enumeration e = factoryConfigs.elements();
 					ConfigurationImpl config;
