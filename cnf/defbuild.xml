@@ -1,3 +1,0 @@
-<project name="defbuild" default="build_recursive">
-	<import file="../cnf/build.xml"/>
-</project>

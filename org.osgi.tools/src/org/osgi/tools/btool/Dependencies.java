@@ -35,6 +35,7 @@ public class Dependencies {
 		this.classpath = classpath;
 		this.includeExport = includeExport;
 		this.excludeImport = excludeImport;
+		this.btool=btool;
 		for (Iterator i = resources.values().iterator(); i.hasNext();) {
 			Resource r = (Resource) i.next();
 			dot.put(r.getPath(), r);

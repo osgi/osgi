@@ -85,7 +85,7 @@
 	     The publish will not run if none of the files is changed. This
 	     target does NOT check projects it dependends on!
 	-->
-	<target name="publish" depends="check" > 
+	<target name="publish" > 
 		<echo>Publish ${project} | ${p}</echo>
 		
 		<!-- Build project dependencies -->

@@ -26,21 +26,21 @@ import com.icl.saxon.aelfred.SAXParserImpl;
  */
 public class EclipseProject {
 	private final boolean	DEBUG			= false;
-	protected Hashtable				properties;
-	protected File					eclipseProject;
-	protected boolean				root;
-	protected File					workspace;
-	protected File					file;
-	protected Locator				locator;
-	Vector							sourceFolders	= new Vector();
-	final String				PATHSEP			= ",";
-	private StringBuffer			sourcepath		= new StringBuffer(1024);
-	private StringBuffer			classpath		= new StringBuffer(1024);
-	private StringBuffer			bootclasspath	= new StringBuffer(1024);
-	private String					buildpath		= null;
-	private String					bindir;
-	List							before			= new Vector();
-	int								level;
+	protected Hashtable		properties;
+	protected File			eclipseProject;
+	protected boolean		root;
+	protected File			workspace;
+	protected File			file;
+	protected Locator		locator;
+	Vector					sourceFolders	= new Vector();
+	final String			PATHSEP			= ",";
+	private StringBuffer	sourcepath		= new StringBuffer(1024);
+	private StringBuffer	classpath		= new StringBuffer(1024);
+	private StringBuffer	bootclasspath	= new StringBuffer(1024);
+	private String			buildpath		= null;
+	private String			bindir;
+	List					before			= new Vector();
+	int						level;
 
 	public EclipseProject(File eclipseProject, boolean root) {
 		this.eclipseProject = eclipseProject;
@@ -78,12 +78,21 @@ public class EclipseProject {
 	}
 
 	protected void addClasspath(String path) {
-		if (classpath.length() > 0) {
-			classpath.append(PATHSEP);
+		if ( isBoot(path))
+			addBootclasspath(path);
+		else {
+			if (classpath.length() > 0) {
+				classpath.append(PATHSEP);
+			}
+			classpath.append(path);
 		}
-		classpath.append(path);
 	}
 
+	boolean isBoot( String path ) {
+		File	file = new File(path);
+		return file.getName().startsWith("ee.");
+	}
+	
 	protected void addBootclasspath(String path) {
 		if (bootclasspath.length() > 0) {
 			bootclasspath.append(PATHSEP);
@@ -265,12 +274,15 @@ public class EclipseProject {
 					 */
 					if (root || exported) {
 						if (path.startsWith("/")) { // relative to workspace
-							File libFile = new File(workspace, path.substring(1));
+							File libFile = new File(workspace, path
+									.substring(1));
 							if (libFile.exists()) {
 								path = libFile.getAbsolutePath();
 							}
 							else
-								System.err.println("Non existent lib in classpath: " + path );
+								System.err
+										.println("Non existent lib in classpath: "
+												+ path);
 						}
 						else {
 							File libFile = new File(eclipseProject, path);
@@ -278,7 +290,9 @@ public class EclipseProject {
 								path = libFile.getAbsolutePath();
 							}
 							else
-								System.err.println("Non existent lib in classpath: " + path );
+								System.err
+										.println("Non existent lib in classpath: "
+												+ path);
 						}
 						addClasspath(path);
 					}

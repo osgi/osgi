@@ -151,6 +151,10 @@ public class BTool extends Task {
 	private void getPermissions() {
 		if (permissions == null)
 			permissions = replaceExt(zipname, ".jar", ".perm");
+		
+		if ( permissions == null )
+			return;
+		
 		File f = new File(permissions);
 		if (!f.exists())
 			f = new File("permissions.perm");
@@ -179,6 +183,7 @@ public class BTool extends Task {
 		if (manifestSource == null) {
 			manifestSource = replaceExt(zipname,".jar", ".mf" );
 		}
+	
 		File f = new File(manifestSource);
 		if (!f.exists())
 			f = new File(projectDir, "Manifest.mf");
@@ -201,8 +206,10 @@ public class BTool extends Task {
 
 	private String replaceExt(String name, String extFrom, String extTo) {
 		int n = name.lastIndexOf(extFrom);
-		if ( n < 0 )
+		if ( n < 0 ) {
+			trace("Cannot find extension: " + name + " " + extFrom );
 			return null;
+		}
 		
 		return name.substring(0,n) + extTo;
 	}
@@ -774,7 +781,12 @@ public class BTool extends Task {
 	 */
 	void setClasspath() throws Exception {
 		if (eclipse != null) {
-			StringTokenizer st = new StringTokenizer(eclipse.getClasspath(),
+			String cp = eclipse.getClasspath();
+			String bp = eclipse.getBootclasspath();
+			if ( bp != null && bp.length() > 0 )
+				cp = cp + "," + bp;
+			
+			StringTokenizer st = new StringTokenizer(cp,
 					",");
 			while (st.hasMoreElements()) {
 				String file = st.nextToken().trim();
