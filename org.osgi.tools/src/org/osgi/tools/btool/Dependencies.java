@@ -79,7 +79,7 @@ public class Dependencies {
 					}
 				}
 				else
-					System.out.println("No such bundle-classpath entry "
+					btool.errors.addElement("No such bundle-classpath entry "
 							+ entry);
 			}
 		}
