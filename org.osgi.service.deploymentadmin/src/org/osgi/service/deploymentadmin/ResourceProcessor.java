@@ -27,6 +27,8 @@
 
 package org.osgi.service.deploymentadmin;
 
+import java.io.InputStream;
+
 /**
   * ResourceProcessor interface is implemented by processors handling resource files
   * in deployment packages. The ResourcePackage interfaces are exported as OSGi services.
@@ -70,9 +72,10 @@ public interface ResourceProcessor {
   * Called when a resource is encountered in the deployment package for which this resource 
   * processor is registered.  
   * @param name The name of the resource relative to the deployment package root directory. 
+  * @param stream The stream for the resource. In case of uninstall it is null.
   * @throws Exception if the resource cannot be processed.
   */
-  void process(String name) throws Exception;
+  void process(String name, InputStream stream) throws Exception;
 /**
   * Called when a resource, associated with a particular resource processor, had belonged to 
   * an earlier version of a deployment package but is not present in the current version of 

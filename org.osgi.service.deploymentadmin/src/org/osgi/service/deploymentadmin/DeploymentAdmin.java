@@ -51,26 +51,13 @@ public interface DeploymentAdmin {
   * @return Array of DeploymentPackage objects representing all the installed deployment packages.
   */
   DeploymentPackage[] listDeploymentPackages ();
-/**
-  * Registers a resource processor.  When registered, the processor is available for 
-  * processing resources in any deployment package.  This method should not be used for 
-  * registering resource processors that are delivered within a deployment package and are 
-  * only applicable to that particular deployment package.<br>
-  * <br>
-  * MEGMgmtPermission( "","resourceProcessor" ) is needed to access this method.
-  * @param proc A resource processor to register
-  */
-  void registerResourceProcessor (ResourceProcessor proc);
-/**
-  * Unregisters a given resource processor.<br><br>
-  * MEGMgmtPermission( "","resourceProcessor" ) is needed to access this method. 
-  * @param proc A resource processor to unregister
-  */
-  void unregisterResourceProcessor (ResourceProcessor proc );
-/**
-  * Lists the resource processors currently in the service registry.<br>
-  * <br>MEGMgmtPermission( "","resourceProcessor" ) is needed to access this method.
-  * @return An array of ResourceProcessors.
-  */
-  ResourceProcessor[] listProcessors ();
+  /**
+   * Gives back the location string generated from the bundle symbolic name and version.
+   * The deployment admin has to use this location string when installs an OSGi bundle 
+   * with the given symbolic name and version.
+   * @param symbName The symbolic name of the bundle.
+   * @param version The version of the bundle.
+   * @return The location of the bundle generated from the paramaters.
+   */
+  String location(String symbName, String version);
 }

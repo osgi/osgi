@@ -27,7 +27,6 @@
 
 package org.osgi.service.deploymentadmin;
 
-import java.io.InputStream;
 import org.osgi.framework.Bundle;
 import java.io.File;
 
@@ -97,26 +96,6 @@ public interface DeploymentPackage {
   * @throws ###WhatException Throws an exception if called outside an operation on this deployment package.
   */
   boolean isPendingRemoval(Bundle b);
-/**
-  * This method allows a resource processor to get access to resources within a deployment 
-  * package as an object.  This method may only be called by resource processors from within 
-  * their process() method, which only occurs during install and update operations on the 
-  * deployment package.
-  * @param path name of the resource file to read.
-  * @return The resource file in Object format.
-  * @throws ###WhatException Throws an exception if called outside an operation on this deployment package.
-  */
-  Object getResource (String path);
-/**
-  * This method allows a resource processor to get access to resources within a deployment 
-  * package as an input stream.  This method may only be called by resource processors from 
-  * within their process() method, which only occurs during install and update operations on 
-  * the deployment package.
-  * @param path name of the resource file to read.
-  * @return The resource file in stream format.
-  * @throws ###WhatException Throws an exception if called outside an operation on this deployment package.
-  */
-  InputStream getResourceAsStream(String path);
 /**
   * Returns the private data area descriptor area of the specified bundle, which must be a 
   * part of the deployment package.  
