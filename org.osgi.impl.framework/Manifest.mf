@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Main-Class: org.osgi.impl.framework.Main
+Specification-Title: "OSGi Framework API"
+Specification-Version: 1.2
+Specification-Vendor: "Open Service Gateway initiative"
+Implementation-Title: "org.osgi.framework"
+Implementation-Version: 1.2
+Implementation-Vendor: "Gatespace AB"
+Bundle-Name: impl.framework
+Bundle-Version: 1.2
+Bundle-Description: OSGi Framework reference implementation by Gatespace AB
+CVS-Header: $Header$
+
