@@ -135,7 +135,7 @@ public class MegletDescriptor extends ApplicationDescriptor {
 		setupMethod.invoke( meglet, new Object [] { handle, bc } );
 	}
 
-  public ApplicationHandle createHandle( Map args ) throws Exception {
+  public ServiceReference launchSpecific( Map args ) throws Exception {
 		Meglet meglet = megletContainer.createMegletInstance( this );
 		MegletHandle appHandle = new MegletHandle( megletContainer, meglet, this, bc);
 		if (meglet == null)
@@ -143,7 +143,6 @@ public class MegletDescriptor extends ApplicationDescriptor {
 
 		initMeglet( meglet, appHandle );
 
-		appHandle.startHandle( args );
-		return (ApplicationHandle) appHandle;
+		return appHandle.startHandle( args );
 	}
 }

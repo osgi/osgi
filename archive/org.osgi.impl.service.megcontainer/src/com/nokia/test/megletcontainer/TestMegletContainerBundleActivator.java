@@ -598,7 +598,9 @@ public class TestMegletContainerBundleActivator extends Object implements
 			if (args == null)
 				throw new Exception("Cannot create the arguments of launch!");
 			boolean launchable = isLaunchable(appDesc);
-			appHandle = appDesc.launchApplication(args);
+			ServiceReference appHandleRef = appDesc.launch(args);
+			appHandle = (ApplicationHandle)bc.getService( appHandleRef );
+			bc.ungetService( appHandleRef );
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the launch is not START!");
 			if (!launchable)
@@ -1302,7 +1304,9 @@ public class TestMegletContainerBundleActivator extends Object implements
 			boolean launchable = isLaunchable(appDesc);
 			boolean started = false;
 			try {
-				appHandle = appDesc.launchApplication(new Hashtable());
+				ServiceReference appHandleRef = appDesc.launch(new Hashtable());
+				appHandle = (ApplicationHandle)bc.getService( appHandleRef );
+				bc.ungetService( appHandleRef );
 				started = true;
 			}
 			catch (Exception e) {}
@@ -1353,7 +1357,9 @@ public class TestMegletContainerBundleActivator extends Object implements
 			boolean launchable = isLaunchable(appDesc);
 			boolean started = false;
 			try {
-				appHandle = appDesc.launchApplication(new Hashtable());
+				ServiceReference appHandleRef = appDesc.launch(new Hashtable());
+				appHandle = (ApplicationHandle)bc.getService( appHandleRef );
+				bc.ungetService( appHandleRef );
 				started = true;
 			}
 			catch (Exception e) {}

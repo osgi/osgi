@@ -51,7 +51,7 @@ public abstract class ApplicationDescriptor {
 
 	public abstract Map getProperties (String locale);
 
-	public final ApplicationHandle launchApplication( Map args )
+	public final ServiceReference launch( Map args )
 			throws SingletonException, Exception {
 
 		AccessController.checkPermission( new ApplicationAdminPermission(
@@ -80,7 +80,7 @@ public abstract class ApplicationDescriptor {
 						throw new Exception("Singleton Exception!");
 				}
 		}
-		return createHandle( args );
+		return launchSpecific( args );
 	}
 
 	public final boolean isLocked() {
@@ -206,7 +206,7 @@ public abstract class ApplicationDescriptor {
 		return false;
 	}
 
-	protected abstract ApplicationHandle createHandle( Map args ) throws Exception;
+	protected abstract ServiceReference launchSpecific( Map args ) throws Exception;
 
 	protected abstract BundleContext getBundleContext();
 
