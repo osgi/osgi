@@ -1,0 +1,45 @@
+Test bundle control started Ok.
+Testing normal install: TestBundle 1 installed, state Ok.
+Testing normal start: TestBundle 1 started, state ACTIVE.
+Testing normal stop: TestBundle 1 stopped, state RESOLVED.
+Testing normal uninstall: TestBundle 1 uninstalled, state UNINSTALLED.
+Testing start with exception: Installed Ok.
+Testing start with exception: Exception thrown, state is RESOLVED.
+Testing stop with exception: Installed Ok.
+Testing stop with exception: Started Ok.
+Testing stop with exception: Exception thrown, state is RESOLVED.
+Testing stop with exception: Uninstalled Ok.
+Testing unavailable URL: Exception thrown, Ok.
+Testing broken inputstream: Exception thrown, Ok.
+Get install event  correct event INSTALLED(1) Ok
+Testing ServiceEvents: Service EventTest is REGISTERED.
+Get started event  correct event STARTED(2) Ok
+Testing ServiceEvents: Service EventTest is UNREGISTERING.
+Get stopped event  correct event STOPPED(4) Ok
+Get uninstalled event  correct event UNINSTALLED(16) Ok
+Checking addServiceListener() with a matching filter: ServiceListener called, Ok.
+Checking addServiceListener() with a non matching filter: ServiceListener not called, Ok.
+Testing multiple name service registration: Service registered, Ok.
+Testing to register a service not instanceof all classes: Exception thrown, Ok.
+Test update, get installed   correct event INSTALLED(1) Ok
+Test update, get started   correct event STARTED(2) Ok
+Test update expect stopped before update  correct event STOPPED(4) Ok
+Test update, now get updated   correct event UPDATED(8) Ok
+Test update, start again  correct event STARTED(2) Ok
+Checking BundleId after update: BundleId same, Ok.
+Test update get stopped  correct event STOPPED(4) Ok
+Test update, get uninstalled   correct event UNINSTALLED(16) Ok
+Testing failed rollback: Exception thrown, Ok.
+Checking state after rollback: State is ACTIVE, Ok.
+Testing to use a stopped BundleContext: BundleContext was not usable, Ok.
+Testing getLocation: Location is the same, Ok.
+Got security exception in stop(), as expected or no security manager present OK
+Got security exception in update(), as expected or no security manager present OK
+Got security exception in start(), as expected or no security manager present OK
+Got security exception in uninstall(), as expected or no security manager present OK
+Got security exception in getHeaders(), as expected or no security manager present OK
+Got security exception in getLocation(), as expected or no security manager present OK
+Were able to register service BundleActivator OK
+Got security exception when regestering service without permission or no security manager present OK
+Unable to get service reference to a service to which we lacked permission or no security manager present OK
+Got security exception when getting service without having permission or no security manager present OK

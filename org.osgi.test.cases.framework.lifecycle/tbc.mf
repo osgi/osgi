@@ -1,0 +1,34 @@
+Manifest-Version: 1.0
+
+Bundle-Name: test.cases.lifecycle.tbc
+
+Bundle-Description: Installs and runs the other test bundles one by one.
+
+Bundle-Vendor: Ericsson Radio Systems AB
+
+Bundle-Version: 1.0
+
+Bundle-DocURL: http://www.ericsson.com
+
+Bundle-ContactAddress: info@ericsson.com
+
+Bundle-Activator: org.osgi.test.cases.lifecycle.tbc.BundleActivatorI
+
+Import-Package:  org.osgi.test.service
+
+Export-Package: org.osgi.test.cases.logproxy,
+
+ org.osgi.test.cases.lifecycle.servicereferencegetter,
+
+ org.osgi.test.cases.lifecycle.tbc,
+
+ org.osgi.framework,
+
+ org.osgi.service.permissionadmin
+
+
+
+
+
+
+
