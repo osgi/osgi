@@ -45,6 +45,7 @@ package org.osgi.service.cm;
  * register a <tt>ConfigurationListener</tt> service.
  * 
  * @version $Revision$
+ * @since 1.2
  */
 public interface ConfigurationListener {
 	/**
