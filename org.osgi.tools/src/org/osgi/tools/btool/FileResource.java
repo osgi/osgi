@@ -59,21 +59,21 @@ public class FileResource extends Resource {
 		}
 	}
 
-	String process(String line) throws IOException {
+	String process(String line, String prefix, String suffix ) throws IOException {
 		int start = 0;
 		while (true) {
-			start = line.indexOf("$(", start);
+			start = line.indexOf(prefix, start);
 			if (start < 0) {
 				line = line.replace('\\', ' ');
 				return line;
 			}
 			if (start == 0 || line.charAt(start - 1) != '\\') {
-				int end = line.indexOf(")", start + 2);
+				int end = line.indexOf(suffix, start + 2);
 				if (end > start) {
 					String key = line.substring(start + 2, end);
 					String value = replace(key);
 					if (value == null) {
-						value = "Not-found: " + key;
+						value = prefix + key + suffix;
 					}
 					line = line.substring(0, start) + value
 							+ line.substring(end + 1);
@@ -82,6 +82,11 @@ public class FileResource extends Resource {
 			else
 				start++;
 		}
+	}
+	
+	String process(String line) throws IOException {
+		String a = process(line,"$(",")");
+		return process(a,"${","}");
 	}
 
 	protected String replace(String key) throws IOException {
