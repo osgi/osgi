@@ -1,12 +1,13 @@
-/* (C) Copyright 2001 Sun Microsystems, Inc. 
- * (C) Copyright 2001 OSGi Alliance
+/*
+ * $Header$
+ *
+ * (C) Copyright 2001 Sun Microsystems, Inc.
+ * Copyright (c) OSGi Alliance (2001, 2004). All Rights Reserved.
  */
-
-/* $Header$ */
 
 package java.lang;
 public class OutOfMemoryError extends java.lang.VirtualMachineError {
-    public OutOfMemoryError() { }
-    public OutOfMemoryError(java.lang.String var0) { }
+	public OutOfMemoryError() { }
+	public OutOfMemoryError(java.lang.String var0) { }
 }
 

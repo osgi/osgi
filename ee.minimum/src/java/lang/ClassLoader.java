@@ -1,31 +1,32 @@
-/* (C) Copyright 2001 Sun Microsystems, Inc. 
- * (C) Copyright 2001 OSGi Alliance
+/*
+ * $Header$
+ *
+ * (C) Copyright 2001 Sun Microsystems, Inc.
+ * Copyright (c) OSGi Alliance (2001, 2004). All Rights Reserved.
  */
-
-/* $Header$ */
 
 package java.lang;
 public abstract class ClassLoader {
-    protected ClassLoader() { }
-    protected ClassLoader(java.lang.ClassLoader var0) { }
-    protected final java.lang.Class defineClass(java.lang.String var0, byte[] var1, int var2, int var3) throws java.lang.ClassFormatError { return null; }
-    protected final java.lang.Class defineClass(java.lang.String var0, byte[] var1, int var2, int var3, java.security.ProtectionDomain var4) throws java.lang.ClassFormatError { return null; }
-    protected java.lang.Class findClass(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
-    protected final java.lang.Class findLoadedClass(java.lang.String var0) { return null; }
-    protected final java.lang.Class findSystemClass(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
-    public final java.lang.ClassLoader getParent() { return null; }
-    public java.net.URL getResource(java.lang.String var0) { return null; }
-    public final java.util.Enumeration getResources(java.lang.String var0) throws java.io.IOException { return null; }
-    public java.io.InputStream getResourceAsStream(java.lang.String var0) { return null; }
-    public static java.lang.ClassLoader getSystemClassLoader() { return null; }
-    public static java.net.URL getSystemResource(java.lang.String var0) { return null; }
-    public static java.util.Enumeration getSystemResources(java.lang.String var0) throws java.io.IOException { return null; }
-    public static java.io.InputStream getSystemResourceAsStream(java.lang.String var0) { return null; }
-    public java.lang.Class loadClass(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
-    protected java.lang.Class loadClass(java.lang.String var0, boolean var1) throws java.lang.ClassNotFoundException { return null; }
-    protected final void resolveClass(java.lang.Class var0) { }
-    protected java.net.URL findResource(java.lang.String var0) { return null; }
-    protected java.util.Enumeration findResources(java.lang.String var0) throws java.io.IOException { return null; }
-    protected java.lang.String findLibrary(java.lang.String var0) { return null; }
+	protected ClassLoader() { }
+	protected ClassLoader(java.lang.ClassLoader var0) { }
+	protected final java.lang.Class defineClass(java.lang.String var0, byte[] var1, int var2, int var3) throws java.lang.ClassFormatError { return null; }
+	protected final java.lang.Class defineClass(java.lang.String var0, byte[] var1, int var2, int var3, java.security.ProtectionDomain var4) throws java.lang.ClassFormatError { return null; }
+	protected java.lang.Class findClass(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
+	protected final java.lang.Class findLoadedClass(java.lang.String var0) { return null; }
+	protected final java.lang.Class findSystemClass(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
+	public final java.lang.ClassLoader getParent() { return null; }
+	public java.net.URL getResource(java.lang.String var0) { return null; }
+	public final java.util.Enumeration getResources(java.lang.String var0) throws java.io.IOException { return null; }
+	public java.io.InputStream getResourceAsStream(java.lang.String var0) { return null; }
+	public static java.lang.ClassLoader getSystemClassLoader() { return null; }
+	public static java.net.URL getSystemResource(java.lang.String var0) { return null; }
+	public static java.util.Enumeration getSystemResources(java.lang.String var0) throws java.io.IOException { return null; }
+	public static java.io.InputStream getSystemResourceAsStream(java.lang.String var0) { return null; }
+	public java.lang.Class loadClass(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
+	protected java.lang.Class loadClass(java.lang.String var0, boolean var1) throws java.lang.ClassNotFoundException { return null; }
+	protected final void resolveClass(java.lang.Class var0) { }
+	protected java.net.URL findResource(java.lang.String var0) { return null; }
+	protected java.util.Enumeration findResources(java.lang.String var0) throws java.io.IOException { return null; }
+	protected java.lang.String findLibrary(java.lang.String var0) { return null; }
 }
 

@@ -1,12 +1,13 @@
-/* (C) Copyright 2001 Sun Microsystems, Inc. 
- * (C) Copyright 2001 OSGi Alliance
+/*
+ * $Header$
+ *
+ * (C) Copyright 2001 Sun Microsystems, Inc.
+ * Copyright (c) OSGi Alliance (2001, 2004). All Rights Reserved.
  */
-
-/* $Header$ */
 
 package java.io;
 public abstract interface Externalizable extends java.io.Serializable {
-    public abstract void readExternal(java.io.ObjectInput var0) throws java.io.IOException, java.lang.ClassNotFoundException;
-    public abstract void writeExternal(java.io.ObjectOutput var0) throws java.io.IOException;
+	public abstract void readExternal(java.io.ObjectInput var0) throws java.io.IOException, java.lang.ClassNotFoundException;
+	public abstract void writeExternal(java.io.ObjectOutput var0) throws java.io.IOException;
 }
 

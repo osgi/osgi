@@ -1,11 +1,12 @@
-/* (C) Copyright 2001 Sun Microsystems, Inc. 
- * (C) Copyright 2001 OSGi Alliance
+/*
+ * $Header$
+ *
+ * (C) Copyright 2001 Sun Microsystems, Inc.
+ * Copyright (c) OSGi Alliance (2001, 2004). All Rights Reserved.
  */
-
-/* $Header$ */
 
 package java.io;
 public abstract interface FilenameFilter {
-    public abstract boolean accept(java.io.File var0, java.lang.String var1);
+	public abstract boolean accept(java.io.File var0, java.lang.String var1);
 }
 

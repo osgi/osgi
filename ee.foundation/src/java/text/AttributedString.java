@@ -1,13 +1,13 @@
-/* (C) Copyright 2001 Sun Microsystems, Inc. 
- * (C) Copyright 2001 OSGi Alliance
+/*
+ * $Header$
+ *
+ * (C) Copyright 2001 Sun Microsystems, Inc.
+ * Copyright (c) OSGi Alliance (2001, 2004). All Rights Reserved.
  */
-
-/* $Header$ */
 
 package java.text;
 public class AttributedString {
 	public AttributedString(java.text.AttributedCharacterIterator var0) { }
-	private AttributedString(java.text.AttributedCharacterIterator var0, int var1, int var2, java.util.Set var3) { }
 	public AttributedString(java.text.AttributedCharacterIterator var0, int var1, int var2) { }
 	public AttributedString(java.text.AttributedCharacterIterator var0, int var1, int var2, java.text.AttributedCharacterIterator.Attribute[] var3) { }
 	public AttributedString(java.lang.String var0) { }

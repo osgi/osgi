@@ -1,13 +1,14 @@
-/* (C) Copyright 2001 Sun Microsystems, Inc. 
- * (C) Copyright 2001 OSGi Alliance
+/*
+ * $Header$
+ *
+ * (C) Copyright 2001 Sun Microsystems, Inc.
+ * Copyright (c) OSGi Alliance (2001, 2004). All Rights Reserved.
  */
-
-/* $Header$ */
 
 package java.security.spec;
 public abstract class EncodedKeySpec implements java.security.spec.KeySpec {
-    public EncodedKeySpec(byte[] var0) { }
-    public byte[] getEncoded() { return null; }
-    public abstract java.lang.String getFormat();
+	public EncodedKeySpec(byte[] var0) { }
+	public byte[] getEncoded() { return null; }
+	public abstract java.lang.String getFormat();
 }
 

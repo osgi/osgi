@@ -1,12 +1,13 @@
-/* (C) Copyright 2001 Sun Microsystems, Inc. 
- * (C) Copyright 2001 OSGi Alliance
+/*
+ * $Header$
+ *
+ * (C) Copyright 2001 Sun Microsystems, Inc.
+ * Copyright (c) OSGi Alliance (2001, 2004). All Rights Reserved.
  */
-
-/* $Header$ */
 
 package java.lang;
 public class UnknownError extends java.lang.VirtualMachineError {
-    public UnknownError() { }
-    public UnknownError(java.lang.String var0) { }
+	public UnknownError() { }
+	public UnknownError(java.lang.String var0) { }
 }
 

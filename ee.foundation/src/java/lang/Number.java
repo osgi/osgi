@@ -1,17 +1,18 @@
-/* (C) Copyright 2001 Sun Microsystems, Inc. 
- * (C) Copyright 2001 OSGi Alliance
+/*
+ * $Header$
+ *
+ * (C) Copyright 2001 Sun Microsystems, Inc.
+ * Copyright (c) OSGi Alliance (2001, 2004). All Rights Reserved.
  */
-
-/* $Header$ */
 
 package java.lang;
 public abstract class Number implements java.io.Serializable {
-    public Number() { }
-    public byte byteValue() { return 0; }
-    public abstract double doubleValue();
-    public abstract float floatValue();
-    public abstract int intValue();
-    public abstract long longValue();
-    public short shortValue() { return 0; }
+	public Number() { }
+	public byte byteValue() { return 0; }
+	public abstract double doubleValue();
+	public abstract float floatValue();
+	public abstract int intValue();
+	public abstract long longValue();
+	public short shortValue() { return 0; }
 }
 
