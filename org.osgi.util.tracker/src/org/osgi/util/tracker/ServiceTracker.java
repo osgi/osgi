@@ -54,7 +54,7 @@ import org.osgi.framework.*;
  */
 public class ServiceTracker implements ServiceTrackerCustomizer {
 	/* set this to true to compile in debug messages */
-	static final boolean					DEBUG				= false;
+	static final boolean					DEBUG			= false;
 	/**
 	 * Bundle context this <code>ServiceTracker</code> object is tracking
 	 * against.
@@ -96,7 +96,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * by close and incremented by modified. This field is volatile since it is
 	 * accessed by multiple threads.
 	 */
-	private volatile int					trackingCount		= -1;
+	private volatile int					trackingCount	= -1;
 	/**
 	 * Cached ServiceReference for getServiceReference. This field is volatile
 	 * since it is accessed by multiple threads.
@@ -107,14 +107,6 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * accessed by multiple threads.
 	 */
 	private volatile Object					cachedService;
-
-	/**
-	 * If <code>true</code>, then this ServiceTracker must track all services not just those
-	 * visible to the classloader of the bundle context's bundle. The default
-	 * value is <code>false</code>.
-	 * 
-	 */
-	private boolean							allServiceTracker	= false;
 
 	/**
 	 * Create a <code>ServiceTracker</code> object on the specified
@@ -232,36 +224,62 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * services.
 	 * 
 	 * <p>
-	 * Services which match the search criteria specified when this
-	 * <code>ServiceTracker</code> object was created are now tracked by this
-	 * <code>ServiceTracker</code> object.
+	 * This method calls <code>open(false)</code>.
 	 * 
 	 * @throws java.lang.IllegalStateException if the <code>BundleContext</code>
 	 *         object with which this <code>ServiceTracker</code> object was
 	 *         created is no longer valid.
+	 * @see #open(boolean)
 	 */
-	public synchronized void open() {
+	public void open() {
+		open(false);
+	}
+
+	/**
+	 * Open this <code>ServiceTracker</code> object and begin tracking
+	 * services.
+	 * 
+	 * <p>
+	 * Services which match the search criteria specified when this
+	 * <code>ServiceTracker</code> object was created are now tracked by this
+	 * <code>ServiceTracker</code> object.
+	 * 
+	 * @param trackAllServices If <code>true</code>, then this
+	 *        <code>ServiceTracker</code> will track all matching services
+	 *        regardless of class loader accessibility. If <code>false</code>,
+	 *        then this <code>ServiceTracker</code> will only track matching
+	 *        services which are class loader accessibile to the bundle whose
+	 *        <code>BundleContext</code> is used by this
+	 *        <code>ServiceTracker</code>.
+	 * @throws java.lang.IllegalStateException if the <code>BundleContext</code>
+	 *         object with which this <code>ServiceTracker</code> object was
+	 *         created is no longer valid.
+	 * @since 1.3
+	 */
+	public synchronized void open(boolean trackAllServices) {
 		if (tracked != null) {
 			return;
 		}
 		if (DEBUG) {
 			System.out.println("ServiceTracker.open: " + filter); //$NON-NLS-1$
 		}
-		tracked = isAllServiceTracker() ? new AllTracked() : new Tracked();
+		tracked = trackAllServices ? new AllTracked() : new Tracked();
 		trackingCount = 0;
 		ServiceReference[] references;
 		synchronized (tracked) {
 			try {
 				context.addServiceListener(tracked, listenerFilter);
 				if (listenerFilter == null) { // user supplied filter
-					references = getInitialReferences(null, filter.toString());
+					references = getInitialReferences(trackAllServices, null,
+							filter.toString());
 				}
 				else { // constructor supplied filter
 					if (trackClass == null) {
 						references = new ServiceReference[] {trackReference};
 					}
 					else {
-						references = getInitialReferences(trackClass, null);
+						references = getInitialReferences(trackAllServices,
+								trackClass, null);
 					}
 				}
 			}
@@ -287,15 +305,17 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * Returns the list of initial <code>ServiceReference</code> objects that
 	 * will be tracked by this <code>ServiceTracker</code> object.
 	 * 
+	 * @param trackAllServices If true, use getAllServiceReferences.
 	 * @param trackClass the class name with which the service was registered,
 	 *        or null for all services.
 	 * @param filterString the filter criteria or null for all services.
 	 * @return the list of initial <code>ServiceReference</code> objects.
 	 * @throws InvalidSyntaxException if the filter uses an invalid syntax.
 	 */
-	private ServiceReference[] getInitialReferences(String trackClass,
-			String filterString) throws InvalidSyntaxException {
-		if (isAllServiceTracker()) {
+	private ServiceReference[] getInitialReferences(boolean trackAllServices,
+			String trackClass, String filterString)
+			throws InvalidSyntaxException {
+		if (trackAllServices) {
 			return context.getAllServiceReferences(trackClass, filterString);
 		}
 		else {
@@ -339,56 +359,6 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 						.println("ServiceTracker.close[cached cleared]: " + filter); //$NON-NLS-1$
 			}
 		}
-	}
-
-	/**
-	 * Set the behavior of the <code>ServiceTracker</code> with regard to
-	 * tracking services whose class names are not accessible from the class
-	 * loader of the bundle whose <code>BundleContext</code> is used by this
-	 * <code>ServiceTracker</code>.
-	 * 
-	 * @param all If <code>true</code>, then this <code>ServiceTracker</code>
-	 *        will track all matching services regardless of class loader
-	 *        accessibility. If <code>false</code>, then this
-	 *        <code>ServiceTracker</code> will only track matching services
-	 *        which are class loader accessibile to the bundle whose
-	 *        <code>BundleContext</code> is used by this
-	 *        <code>ServiceTracker</code>.
-	 * @throws IllegalStateException If this method is called while this
-	 *         <code>ServiceTracker</code> is open. This method can only be
-	 *         called when this <code>ServiceTracker</code> is not open.
-	 * @since 1.3
-	 */
-	public void setAllServiceTracker(boolean all) {
-		if (tracked != null) {
-			throw new IllegalStateException(
-					"cannot be set while tracker is open"); //$NON-NLS-1$
-		}
-
-		this.allServiceTracker = all;
-	}
-
-	/**
-	 * Returns whether this <code>ServiceTracker</code> will track all
-	 * matching services even if the class names of a matching service are not
-	 * accessible from the class loader of the bundle whose
-	 * <code>BundleContext</code> is used by this <code>ServiceTracker</code>.
-	 * 
-	 * <p>
-	 * The default value is <code>false</code>.
-	 * 
-	 * @return Returns <code>true</code> if this <code>ServiceTracker</code>
-	 *         will track all matching services regardless of class loader
-	 *         accessibility. Returns <code>false</code> if this
-	 *         <code>ServiceTracker</code> will only track matching services
-	 *         which are class loader accessibile to the bundle whose
-	 *         <code>BundleContext</code> is used by this
-	 *         <code>ServiceTracker</code>.
-	 * @see #setAllServiceTracker(boolean)
-	 * @since 1.3
-	 */
-	public boolean isAllServiceTracker() {
-		return allServiceTracker;
 	}
 
 	/**
