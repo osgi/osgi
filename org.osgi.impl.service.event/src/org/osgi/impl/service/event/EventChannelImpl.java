@@ -1,243 +1,389 @@
 /*
- * ============================================================================
- * (c) Copyright 2004 Nokia
- * This material, including documentation and any related computer programs,
- * is protected by copyright controlled by Nokia and its licensors. 
- * All rights are reserved.
- * 
- * These materials have been contributed  to the Open Services Gateway 
- * Initiative (OSGi)as "MEMBER LICENSED MATERIALS" as defined in, and subject 
- * to the terms of, the OSGi Member Agreement specifically including, but not 
- * limited to, the license rights and warranty disclaimers as set forth in 
- * Sections 3.2 and 12.1 thereof, and the applicable Statement of Work. 
+ * $Header$
+ *
+ * Copyright (c) IBM Corporation (2005)
+ *
+ * These materials have been contributed  to the OSGi Alliance as 
+ * "MEMBER LICENSED MATERIALS" as defined in, and subject to the terms of, 
+ * the OSGi Member Agreement, specifically including but not limited to, 
+ * the license rights and warranty disclaimers as set forth in Sections 3.2 
+ * and 12.1 thereof, and the applicable Statement of Work. 
+ *
  * All company, brand and product names contained within this document may be 
- * trademarks that are the sole property of the respective owners.  
- * The above notice must be included on all copies of this document.
- * ============================================================================
+ * trademarks that are the sole property of the respective owners.
  */
+
 package org.osgi.impl.service.event;
 
-import java.util.*;
+import org.eclipse.osgi.framework.eventmgr.*;
 import org.osgi.framework.*;
 import org.osgi.service.event.*;
+import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogService;
 
-class AsynchronQueueItem {
-	private ChannelEvent		event;
-	private ServiceReference[]	references;
-
-	public AsynchronQueueItem(ChannelEvent event, ServiceReference[] references) {
-		this.event = event;
-		this.references = references;
-	}
-
-	public ChannelEvent getEvent() {
-		return event;
-	}
-
-	public ServiceReference[] getServiceReferences() {
-		return references;
-	}
-}
 /**
- * The realization of the EventChannel class
+ * Implementation of org.osgi.service.event.EventChannel. EventChannelImpl uses
+ * LogProxy and org.eclipse.osgi.framework.eventmgr.EventManager. It is assumeed
+ * org.eclipse.osgi.framework.eventmgr package is exported by some bundle.
  */
+public class EventChannelImpl implements EventChannel {
 
-public class EventChannelImpl implements EventChannel, FrameworkListener,
-		BundleListener, ServiceListener, Runnable {
+	/**
+	 * Class ChannelEventDispatcher is used to dispatch events to
+	 * ChannelListeners. Dispatch events only when the receiver bundle is
+	 * ACTIVE, and the receiver service is registered.
+	 */
+	protected class ChannelEventDispatcher implements EventDispatcher {
+		/**
+		 * 
+		 * Dispatches ChannelEvent to ChannelListerners
+		 * 
+		 * @param eventListener
+		 * @param listenerObject
+		 * @param eventAction
+		 * @param eventObject
+		 * @see org.eclipse.osgi.framework.eventmgr.EventDispatcher#dispatchEvent(java.lang.Object,
+		 *      java.lang.Object, int, java.lang.Object)
+		 */
+		public void dispatchEvent(Object eventListener, Object listenerObject,
+				int eventAction, Object eventObject) {
+			ServiceReference ref = null;
+			try {
+				ref = (ServiceReference) eventListener;
+
+				Bundle bundle = ref.getBundle();
+				if ((bundle == null) || (bundle.getState() != Bundle.ACTIVE)) {
+					// the receiver service or bundle being not active, no need
+					// to dispatch
+					return;
+				}
+				Object serviceObject = bc.getService(ref);
+				if ((serviceObject == null)
+						|| (!(serviceObject instanceof ChannelListener))) {
+					// the service being unregistered or invalid, no need to
+					// dispatch
+					return;
+				}
+
+				((ChannelListener) serviceObject)
+						.channelEvent((ChannelEvent) eventObject);
+			}
+			catch (Throwable t) {
+				// log/handle any Throwable thrown by the listener
+				logProxy.log(ref, LogService.LOG_ERROR,
+						"Exception thrown while dispatching event", t);
+			}
+		}
+	}
+
 	private BundleContext	bc;
-	private LinkedList		asynchronEventQueue;
-	private boolean			stopped;
-	private Thread			asynchronThread;
-	public final String		FRAMEWORK_EVENT	= "Framework Event";
-	public final String		BUNDLE_EVENT	= "Bundle Event";
-	public final String		SERVICE_EVENT	= "Service Event";
+	private EventManager	eventManager;
+	private LogProxy		logProxy;
 
-	public EventChannelImpl(BundleContext bc) {
+	/**
+	 * Constructer for EventChannelImpl.
+	 * 
+	 * @param bc BundleContext
+	 */
+	protected EventChannelImpl(BundleContext bc) {
+		super();
 		this.bc = bc;
-		this.bc.addFrameworkListener(this);
-		this.bc.addBundleListener(this);
-		this.bc.addServiceListener(this);
-		asynchronEventQueue = new LinkedList();
-		asynchronThread = new Thread(this);
-		asynchronThread.start();
-		stopped = false;
+		logProxy = new LogProxy(bc);
+		logProxy.open();
+		eventManager = new EventManager(
+				"EventChannel Async Event Dispatcher Thread");
 	}
 
-	public void sendEvent(ChannelEvent event) {
-		try {
-			ServiceReference[] references = bc.getServiceReferences(
-					"org.osgi.service.event.ChannelListener", null);
-			sendEvent(event, references);
+	/**
+	 * This method should be called when stopping EventChannel service
+	 */
+	void stop() {
+		if (eventManager != null) {
+			eventManager.close();
+			eventManager = null;
 		}
-		catch (Exception e) {
-			log(LogService.LOG_ERROR,
-					"Exception occurred at sending the event!", e);
-		}
-	}
-
-	public void sendEvent(ChannelEvent event, ServiceReference[] references) {
-		if (references == null)
-			return;
-		for (int i = 0; i != references.length; i++) {
-			//TODO the topic property is defined to return a String array!
-			String topic = (String) references[i].getProperty(EventConstants.EVENT_TOPIC);
-			String filterString = (String) references[i].getProperty(EventConstants.EVENT_FILTER);
-			try {
-				if (topic != null) {
-					if (!topic.equals(event.getTopic()))
-						continue;
-				}
-				if (filterString != null) {
-					Filter filter = bc.createFilter(filterString);
-					if (!event.matches(filter))
-						continue;
-				}
-				Bundle bundle = references[i].getBundle();
-				if (bundle != null && bundle.getState() == Bundle.ACTIVE) {
-					ChannelListener listener = (ChannelListener) bc
-							.getService(references[i]);
-					listener.channelEvent(event);
-					bc.ungetService(references[i]);
-				}
-			}
-			catch (InvalidSyntaxException e) {
-				continue;
-			}
-			catch (Exception e) {
-				log(LogService.LOG_ERROR,
-						"Exception occurred at sending the event!", e);
-			}
-		}
-	}
-
-	public synchronized void postEvent(ChannelEvent event) {
-		try {
-			if (event != null) {
-				ServiceReference[] references = bc.getServiceReferences(
-						"org.osgi.service.event.ChannelListener", null);
-				asynchronEventQueue.addLast(new AsynchronQueueItem(event,
-						references));
-			}
-			notify();
-		}
-		catch (Exception e) {
-			log(LogService.LOG_ERROR,
-					"Exception occurred at sending the event!", e);
-		}
-	}
-
-	public synchronized Object getEvent() throws InterruptedException {
-		while (asynchronEventQueue.isEmpty()) {
-			if (stopped)
-				return null;
-			wait();
-		}
-		return asynchronEventQueue.removeFirst();
-	}
-
-	public void frameworkEvent(FrameworkEvent event) {
-		Hashtable props = new Hashtable();
-		props.put("bundle.id", new Long(event.getBundle().getBundleId()));
-		props.put("bundle.location", event.getBundle().getLocation());
-		//  -------------- OSGI R4, OSGI R4, OSGI R4, OSGI R4, OSGI R4, OSGI R4
-		// --------------------------
-		//  props.put( "bundle.symbolicName", );
-		//  -------------- OSGI R4, OSGI R4, OSGI R4, OSGI R4, OSGI R4, OSGI R4
-		// --------------------------
-		props.put("bundle.object", event.getBundle());
-		if (event.getThrowable() != null) {
-			props.put("exception.class", event.getThrowable().getClass()
-					.getName());
-			props.put("exception.message", event.getThrowable().getMessage());
-			props.put("exception.object", event.getThrowable());
-		}
-		props.put("event.object", event);
-		try {
-			ChannelEvent channelEvent = new ChannelEvent(FRAMEWORK_EVENT, props);
-			sendEvent(channelEvent);
-		}
-		catch (Exception e) {
-		}
-	}
-
-	public void bundleChanged(BundleEvent event) {
-		Hashtable props = new Hashtable();
-		props.put("bundle.id", new Long(event.getBundle().getBundleId()));
-		props.put("bundle.location", event.getBundle().getLocation());
-		//  -------------- OSGI R4, OSGI R4, OSGI R4, OSGI R4, OSGI R4, OSGI R4
-		// --------------------------
-		//  props.put( "bundle.symbolicName", );
-		//  -------------- OSGI R4, OSGI R4, OSGI R4, OSGI R4, OSGI R4, OSGI R4
-		// --------------------------
-		props.put("bundle.object", event.getBundle());
-		props.put("event.object", event);
-		try {
-			ChannelEvent channelEvent = new ChannelEvent(BUNDLE_EVENT, props);
-			sendEvent(channelEvent);
-		}
-		catch (Exception e) {
-		}
-	}
-
-	public void serviceChanged(ServiceEvent event) {
-		Hashtable props = new Hashtable();
-		//  -------------- OSGI R4, OSGI R4, OSGI R4, OSGI R4, OSGI R4, OSGI R4
-		// --------------------------
-		//  props.put( "service.id", ) );
-		//  props.put( "service.pid", ) );
-		//  props.put( "object.class", ) );
-		//  -------------- OSGI R4, OSGI R4, OSGI R4, OSGI R4, OSGI R4, OSGI R4
-		// --------------------------
-		props.put("event.object", event);
-		try {
-			ChannelEvent channelEvent = new ChannelEvent(SERVICE_EVENT, props);
-			sendEvent(channelEvent);
-		}
-		catch (Exception e) {
-		}
-	}
-
-	public void run() {
-		while (!stopped) {
-			try {
-				AsynchronQueueItem item = (AsynchronQueueItem) getEvent();
-				if (item != null)
-					sendEvent(item.getEvent(), item.getServiceReferences());
-			}
-			catch (InterruptedException e) {
-			}
-		}
-	}
-
-	public void stop() {
-		stopped = true;
-		postEvent(null);
-		try {
-			asynchronThread.join();
-		}
-		catch (InterruptedException e) {
-		};
 		bc = null;
+		if (logProxy != null) {
+			logProxy.close();
+			logProxy = null;
+		}
 	}
 
-	protected boolean log(int severity, String message, Throwable throwable) {
-		ServiceReference serviceRef = bc
-				.getServiceReference("org.osgi.service.log.LogService");
-		if (serviceRef != null) {
-			LogService logService = (LogService) bc.getService(serviceRef);
-			if (logService != null) {
-				try {
-					logService.log(severity, message, throwable);
-					return true;
-				}
-				finally {
-					bc.ungetService(serviceRef);
-				}
+	/**
+	 * @param event
+	 * @see org.osgi.service.event.EventChannel#postEvent(org.osgi.service.event.ChannelEvent)
+	 */
+	public void postEvent(ChannelEvent event) {
+		dispatchEvent(event, true);
+	}
+
+	/**
+	 * @param event
+	 * @see org.osgi.service.event.EventChannel#sendEvent(org.osgi.service.event.ChannelEvent)
+	 */
+	public void sendEvent(ChannelEvent event) {
+		dispatchEvent(event, false);
+	}
+
+	/**
+	 * Internal main method for sendEvent() and postEvent(). Dispatching an
+	 * event to ChannelListener. All exceptions are logged except when dealing
+	 * with LogEntry.
+	 * 
+	 * @param event to be delivered
+	 * @param isAsync must be set to true for syncronous event delivery, false
+	 *        for asyncronous delivery.
+	 */
+	protected void dispatchEvent(ChannelEvent event, boolean isAsync) {
+		logProxy.setUseLogService(true);
+		if (event == null) {
+			logProxy.log(LogService.LOG_DEBUG,
+					"Null event is passed to EventChannel. Ignored.");
+			return;
+		}
+
+		if (event.getTopic().equals(LogEntry.class.getName())) {
+			// Avoid using LogService for logging during dealing with LogEntry
+			// event.
+			// Otherwise, endless event loops will occur.
+			logProxy.setUseLogService(false);
+		}
+
+		if (!isCallerPermittedTopicPermission(event.getTopic())) {
+			logProxy.log(LogService.LOG_DEBUG,
+					"Caller bundle doesn't have TopicPermission for topic="
+							+ event.getTopic());
+			return;
+		}
+
+		ServiceReference[] refsForChannelListener = getAllChannelListener();
+		if (refsForChannelListener == null) {
+			// No ChannelListener exists. Do nothing.
+			return;
+		}
+
+		EventListeners listeners = retrieveMatchedAndPermittedListeners(event,
+				refsForChannelListener);
+
+		if (listeners == null) {
+			logProxy.log(LogService.LOG_DEBUG,
+					"No permitted ChannelListener exists for topic = "
+							+ event.getTopic());
+			return;
+		}
+
+		// Create the listener queue for this event delivery
+		ListenerQueue listenerQueue = new ListenerQueue(eventManager);
+
+		// Add the listeners to the queue and associate them with the event
+		// dispatcher
+		listenerQueue.queueListeners(listeners, new ChannelEventDispatcher());
+
+		// Deliver the event to the listeners.
+		if (isAsync) {
+			listenerQueue.dispatchEventAsynchronous(0, event);
+		}
+		else {
+			listenerQueue.dispatchEventSynchronous(0, event);
+		}
+
+		// Remove the listener from the listener list
+		listeners.removeAllListeners();
+	}
+
+	/**
+	 * Filtering ChannelListeners, represented by the param references, to
+	 * listners that have the same topic as the event.getTopic(), and whose
+	 * Filter property match the event when the property "Filter" is set. This
+	 * method also filters out listners that do not have appropriate
+	 * TopicPermission. Results are wrapped and put into EventListeners.
+	 * 
+	 * @param event This object is used to filter ChannelListeners
+	 * @param references ChannelListneres to be filtered
+	 * @return EventListeners which contains filtered ChannelListeners.
+	 */
+	protected EventListeners retrieveMatchedAndPermittedListeners(
+			ChannelEvent event, ServiceReference[] references) {
+		EventListeners listeners = null;
+		for (int i = 0; i < references.length; i++) {
+			ServiceReference ref = references[i];
+			if (isEventMatchingListener(event, ref)
+					&& isListenerPermittedTopicPermission(ref, event.getTopic())) {
+				if (listeners == null)
+					listeners = new EventListeners();
+				listeners.addListener(ref, null);
 			}
 		}
-		System.out.println("Serverity:" + severity + " Message:" + message
-				+ " Throwable:" + throwable);
+		return listeners;
+	}
+
+	/**
+	 * Checks if the ChannelListener represented by the parameter ref has right
+	 * SUBSCRIBE TopicPermission.
+	 * 
+	 * @param ref This object represents ServiceReference which implement
+	 *        ChannelListener
+	 * @param topic This string represents TopicPermission.
+	 * @return
+	 */
+	protected boolean isListenerPermittedTopicPermission(ServiceReference ref,
+			String topic) {
+		Bundle bundle = ref.getBundle();
+		return bundle.hasPermission(new TopicPermission(topic,
+				TopicPermission.SUBSCRIBE));
+	}
+
+	/**
+	 * Checks if the caller bundle has right PUBLISH TopicPermision.
+	 * 
+	 * @param topic
+	 * @return true if it has the right permission, false otherwise.
+	 */
+	protected boolean isCallerPermittedTopicPermission(String topic) {
+		SecurityManager sm = System.getSecurityManager();
+		if (topic == null)
+			return false;
+		if (sm != null) {
+			TopicPermission topicPermission = new TopicPermission(topic,
+					TopicPermission.PUBLISH);
+			try {
+				sm.checkPermission(topicPermission);
+			}
+			catch (SecurityException e) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Checks if a topic filter string matches the target topic string.
+	 * 
+	 * @param topicProperty A topic filter like "company.product.*"
+	 * @param topic Target topic to be checked against like
+	 *        "company.product.topicA"
+	 * @return true if topicProperty matches topic, false if otherwise.
+	 */
+	protected boolean topicPropertyIncludes(String topicProperty, String topic) {
+		if (topicProperty.startsWith("*")) {
+			return true;
+		}
+		if (topicProperty.equals(topic)) {
+			return true;
+		}
+		int index = topicProperty.indexOf('.');
+		int index2 = topic.indexOf('.');
+		if (index == -1)
+			return false;
+		if (index2 == -1)
+			return false;
+		if (index == 0) {
+			logProxy.log(LogService.LOG_DEBUG, "topicProperty '"
+					+ topicProperty + "'starts with '.'.");
+			return false;
+		}
+		if (index2 == 0) {
+			logProxy.log(LogService.LOG_DEBUG, "topic '" + topic
+					+ "'starts with '.'.");
+			return false;
+		}
+		if (index == topicProperty.length() - 1) {
+			logProxy.log(LogService.LOG_DEBUG, "topicProperty '"
+					+ topicProperty + "'ends with '.'.");
+			return false;
+		}
+		if (index2 == topic.length() - 1) {
+			logProxy.log(LogService.LOG_DEBUG, "topic '" + topic
+					+ "'ends with '.'.");
+			return false;
+		}
+
+		String str = topicProperty.substring(0, index);
+		String str2 = topic.substring(0, index2);
+		if (str.equals(str2)) { // if first names of topic category match
+			String str3 = topicProperty.substring(index + 1);
+			String str4 = topic.substring(index2 + 1);
+			return topicPropertyIncludes(str3, str4); // recursive call to
+														// test the rest of the
+														// names
+
+		}
+		else {
+			return false;
+		}
+	}
+
+	/**
+	 * Checks if a ChannelListener's SUBSCRIBE topics contains the target
+	 * event's topic. Also checks if the listener's EVENT_FILTER matches the
+	 * event if the filter property of the listener is set.
+	 * 
+	 * @param event The event to be checked against
+	 * @param ref This ServiceReference represents ChannelListener to be checked
+	 * @return true if the listener matches the event
+	 */
+	protected boolean isEventMatchingListener(ChannelEvent event,
+			ServiceReference ref) {
+		String eventTopic = event.getTopic();
+		String listenerTopics[] = (String[]) ref
+				.getProperty(EventConstants.EVENT_TOPIC);
+
+		if (listenerTopics == null) {
+			/* means "*" , no need to investigate further */
+			return true;
+		}
+
+		boolean found = false;
+		for (int i = 0; i < listenerTopics.length; i++) {
+			if (topicPropertyIncludes(listenerTopics[i], eventTopic)) {
+				found = true;
+				break;
+			}
+		}
+
+		if (!found) {
+			return false;
+		}
+
+		String filterString = (String) ref
+				.getProperty(EventConstants.EVENT_FILTER);
+
+		if (filterString == null) {
+			// means no need to investigate further
+			return true;
+		}
+
+		try {
+			Filter filter = bc.createFilter(filterString);
+			return (event.matches(filter));
+		}
+		catch (InvalidSyntaxException e) {
+			logProxy.log(LogService.LOG_DEBUG,
+					"exception occurred in BundleContext.createfilter(\""
+							+ filterString + "\".", e);
+		}
+
 		return false;
+	}
+
+	/**
+	 * Returns all the ChannelListener's ServiceReferences that are currently
+	 * registered.
+	 * 
+	 * @return all the ChannelListener's ServiceReferences that are currently
+	 *         registered.
+	 */
+	protected ServiceReference[] getAllChannelListener() {
+		ServiceReference[] references = null;
+		try {
+			// find all the channelListners
+			references = bc.getServiceReferences(ChannelListener.class
+					.getName(), null);
+		}
+		catch (InvalidSyntaxException e) {
+			// exception never be thrown, since filter is null in
+			// getServiceReferences() call
+		}
+		return references;
 	}
 }

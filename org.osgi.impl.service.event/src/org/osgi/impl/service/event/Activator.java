@@ -1,5 +1,6 @@
 /*
  * ============================================================================
+ *  Copyright (c) IBM Corporation (2005)
  * (c) Copyright 2004 Nokia
  * This material, including documentation and any related computer programs,
  * is protected by copyright controlled by Nokia and its licensors. 
@@ -18,12 +19,12 @@
 package org.osgi.impl.service.event;
 
 import org.osgi.framework.*;
+import org.osgi.service.event.EventChannel;
 
 /**
  * The Bundle Activator class of the Event Manager service
  */
-public class Activator extends Object implements
-		BundleActivator {
+public class Activator implements BundleActivator {
 	private BundleContext		bc;
 	private ServiceRegistration	eventChannelServiceReg;
 	private EventChannelImpl	eventChannelImpl;
@@ -34,14 +35,15 @@ public class Activator extends Object implements
 
 	public void start(BundleContext bc) throws Exception {
 		this.bc = bc;
+		// check if EventChannel is regiserted
 		ServiceReference reference = bc
 				.getServiceReference("org.osgi.service.event.EventChannel");
 		if (reference != null)
 			throw new BundleException("EventChannel service already started!");
 		eventChannelImpl = new EventChannelImpl(bc);
-		//registering the EventChannel service
-		eventChannelServiceReg = bc.registerService(
-				"org.osgi.service.event.EventChannel", eventChannelImpl, null);
+		// registering the EventChannel service
+		eventChannelServiceReg = bc.registerService(EventChannel.class
+				.getName(), eventChannelImpl, null);
 		System.out.println("EventChannel started successfully!");
 	}
 
