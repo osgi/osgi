@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="package" default="none">
+
+	<dirname property="project" file="${ant.file}" />
+	<dirname property="workspace" file="${project}" />
+
+	<taskdef name="btool" classname="org.osgi.tools.btool.BTool" classpath="../cnf/jar/btool.jar" />
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<dirset dir="../cnf/ant-contrib" />
+			<fileset dir="../cnf/ant-contrib" includes="**/*.jar" />
+		</classpath>
+	</taskdef>
+
+	<property file="${project}/build.properties" />
+	<property file="${env.HOME}/osgi.properties" />
+	<property file="${workspace}/osgi-cnf/build.properties" />
+	<btool eclipse="${project}" />
+
+	<target name="release" depends="publish" if="bin.includes">
+		<copy todir="${workspace}/osgi-release" overwrite="true">
+			<fileset dir="${project}">
+				<include name="${bin.includes}" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="publish" depends="compile">
+		<foreach list="${jars.compile.order}" delimiter=" ," target="buildJar" param="item.jarFile" inheritAll="true">
+		</foreach>
+	</target>
+
+
+	<target name="buildJar">
+		<echo>${cwd}/${item.jarFile}</echo>
+		<btool jar="${project}/${item.jarFile}" eclipse="${project}" analyse="${btool.analyse}" showmanifest="true" sources="${btool.sources}" silent="${btool.silent}" includeProperty="include.${item.jarFile}" expandProperty="expand.${item.jarFile}" contentFoldersProperty="source.${item.jarFile}" excludeImportProperty="excludeImport.${item.jarFile}" includeExportProperty="includeExport.${item.jarFile}" ignoreVersions="true" />
+	</target>
+
+	<target name="compile" unless="eclipse.running">
+		<echo>${eclipse.running}</echo>
+		<echo>Classpath ${project.classpath} </echo>
+		<echo>Sourcepath ${project.sourcepath} </echo>
+		<echo>Bootpath ${project.bootclasspath} </echo>
+		<javac fork="no" executable="${JAVA_HOME}/bin/javac" srcdir="${project.sourcepath}" destdir="${project.bindir}" classpath="${project.classpath}" bootclasspath="${project.bootclasspath}" deprecation="true" listfiles="true" target="${javac.target}" source="${javac.source}" />
+	</target>
+
+	<target name="clean">
+		<delete>
+			<fileset dir="${project.bindir}" includes="**/*.bak **/*.class" />
+			<fileset dir="${project}" includes="**/*.bak **/~* ${jars.compile.order}" />
+		</delete>
+	</target>
+
+
+
+	<target name="echo">
+		<echo>BIN:  ${project.bindir}</echo>
+		<echo>SRCE: ${project.sourcepath}</echo>
+		<echo>BOOT: ${project.bootclasspath}</echo>
+		<echo>CP:   ${project.classpath}</echo>
+		<echo>NAME: ${project.name}</echo>
+		<echo>VERS: ${project.version}</echo>
+		<echo>CAT:  ${project.category}</echo>
+	</target>
+
+	<target name="none">
+		<echo>NONE</echo>
+	</target>
+</project>
