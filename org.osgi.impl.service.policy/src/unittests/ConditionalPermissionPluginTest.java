@@ -17,6 +17,7 @@
  */
 package unittests;
 
+import java.util.Arrays;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.impl.service.policy.condpermadmin.ConditionalPermissionAdminPlugin;
@@ -121,12 +122,16 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 		assertEquals(RFC_EXAMPLECOND[0].getEncoded()+"\n",cis.getString());
 	}
 	
-	public void testRootListing() throws Exception {
+	public void testListings() throws Exception {
 		condPermAdmin.addCollection(RFC_EXAMPLECOND,RFC_EXAMPLEPERM);
 		newSession();
 		String ch[] = dmtSession.getChildNodeNames(ROOT);
 		assertEquals(1,ch.length);
 		assertEquals(RFC_EXAMPLEHASH,ch[0]);
-		
+		ch = dmtSession.getChildNodeNames(RFC_EXAMPLEHASH);
+		Arrays.sort(ch);
+		assertEquals(2,ch.length);
+		assertEquals("ConditionInfo",ch[0]);
+		assertEquals("PermissionInfo",ch[1]);
 	}
 }

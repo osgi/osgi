@@ -82,6 +82,11 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 	private static final DmtMetaNode conditionInfoMetaNode = new ConditionInfoMetaNode();
 
 	/**
+	 * metanode given back when asked about ./OSGi/Policies/Java/ConditionalPermission/[...]
+	 */
+	private static final DmtMetaNode conditionalPermissionMetaNode = new ConditionalPermissionMetaNode();
+
+	/**
 	 * internal representation of a conditional permission
 	 */
 	private static class ConditionalPermission {
@@ -183,8 +188,7 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 			return rootMetaNode;
 		}
 		if (path.length==1) {
-			// TODO
-			throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
+			return conditionalPermissionMetaNode;
 		}
 		if (path[1].equals(PERMISSIONINFO)) {
 			return permissionInfoMetaNode;
