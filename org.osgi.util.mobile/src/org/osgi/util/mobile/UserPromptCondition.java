@@ -69,9 +69,9 @@ public class UserPromptCondition implements Condition {
 	 *
 	 * @param bundle the bundle to ask about
 	 * @param levels the possible permission levels. This is a comma-separated list that can contain
-	 * 		following strings: ONESHOT SESSION BLANKET.
-	 * @param defaultLevel the default permission level. If it is an empty string, then there is
-	 * 		no default.
+	 * 		following strings: ONESHOT SESSION BLANKET. The order is not important.
+	 * @param defaultLevel the default permission level, one chosen from the levels parameter. I
+	 * 		f it is an empty string, then there is no default.
 	 * @param catalogName the message catalog base name
 	 * @param message textual description of the condition, to be displayed to the user. If
 	 * 		it starts with a '%' sign, then the message is looked up from the catalog specified
