@@ -23,10 +23,16 @@ import java.net.*;
 public class RMServer {
 	private String			command		= null;
 	private RemoteReceiver	receiver	= null;
+	private ServerThread	st;
+	private boolean			running;
 
-	public RMServer(int port) {
-		ServerThread st = new ServerThread(this, port);
+	public RMServer(int port, int timeout) {
+		st = new ServerThread(this, port, timeout);
 		st.start();
+	}
+
+	public synchronized void stop() {
+		running = false;
 	}
 
 	public void setCommand(String cmd) {
@@ -44,12 +50,13 @@ public class RMServer {
 		private PrintWriter		out				= null;
 		private BufferedReader	in				= null;
 
-		public ServerThread(RMServer parent, int port) {
+		public ServerThread(RMServer parent, int port, int timeout) {
 			super("RMServer");
 			this.parent = parent;
 			try {
 				serverSocket = new ServerSocket(port);
 				clientSocket = serverSocket.accept();
+				clientSocket.setSoTimeout(timeout);
 				out = new PrintWriter(clientSocket.getOutputStream(), true);
 				in = new BufferedReader(new InputStreamReader(clientSocket
 						.getInputStream()));
@@ -65,8 +72,9 @@ public class RMServer {
 			String input = null;
 			String result = null;
 			String output = null;
+			running = true;
 			try {
-				while (!(input = in.readLine()).equals("bye")) {
+				while (running && !(input = in.readLine()).equals("bye")) {
 					if (input.startsWith("alert:")) {
 						result = readBlock();
 						parent.receiver.onAlert(result);

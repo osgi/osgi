@@ -46,7 +46,7 @@ public class ClientAdaptor implements RemoteAlertSender {
 	public void sendAlert(String serverid, String sessionid, int code,
 			DmtAlertItem[] items) throws Exception {
 		String msg = "Code:" + code + "\r\n";
-		String s = ",";
+		String s = ",\n";
 		if (items != null) {
 			for (int i = 0; i < items.length; i++) {
 				msg += "Item# " + i + ":" + "Source:" + items[i].getSource()
@@ -90,7 +90,7 @@ public class ClientAdaptor implements RemoteAlertSender {
 			try {
 				while (parent.goon) {
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(10);
 					}
 					catch (InterruptedException e) {
 					}
@@ -108,6 +108,10 @@ public class ClientAdaptor implements RemoteAlertSender {
 					}
 					out.println("ping");
 					result = in.readLine();
+					if (null == result) {
+						parent.goon = false;
+						continue;
+					}
 					if (result.equals("ping_ok"))
 						continue;
 					if (result.startsWith("cmd:")) {
@@ -133,14 +137,39 @@ public class ClientAdaptor implements RemoteAlertSender {
 		} // run
 	} // commandthread
 }
-/*
- * Admin RMServer ClientAdaptor App
- * --------------------------------------------- | | ping | | | | <---------- | | | |
- * ping_ok | | | | ---------> | | | | ... | | | <cmd> | | | | ----> | ping | | | |
- * <---------- | | | | cmd: <text> | | | | ---------> | | | | Result: | | | |
- * <---------- | | | | <text lines> | | | | <---------- | | | | block_end | | | |
- * <---------- | | | | result_ok | | | | ---------> | | |on_result | | | <---- | | | | |
- * ... | | | | | <alert>| | | Alert: | <---- | | | <---------- | | | | <text
- * lines> | | | | <---------- | | | | block_end | | | | <---------- | | | |
- * alert_ok | | | | ---------> | | |on_alert | | | <---- | | | | | ... | |
+/*       Admin  RMServer        ClientAdaptor App
+ * ---------------------------------------------
+ *        |       |     ping         |       |
+ *        |       |  <----------     |       |
+ *        |       |     ping_ok      |       |
+ *        |       |   --------->     |       |
+ *        |       |       ...        |       |
+ *        | <cmd> |                  |       |
+ *        | ----> |     ping         |       |
+ *        |       |  <----------     |       |
+ *        |       |     cmd: <text>  |       |
+ *        |       |   --------->     |       |
+ *        |       |     Result:      |       |
+ *        |       |  <----------     |       |
+ *        |       |     <text lines> |       |
+ *        |       |  <----------     |       |
+ *        |       |     block_end    |       |
+ *        |       |  <----------     |       |
+ *        |       |     result_ok    |       |
+ *        |       |   --------->     |       |
+ *        |on_result                 |       |
+ *        | <---- |                  |       |
+ *        |       |       ...        |       |
+ *        |       |                  |<alert>|
+ *        |       |     Alert:       | <---- |
+ *        |       |  <----------     |       |
+ *        |       |     <text lines> |       |
+ *        |       |  <----------     |       |
+ *        |       |     block_end    |       |
+ *        |       |  <----------     |       |
+ *        |       |     alert_ok     |       |
+ *        |       |   --------->     |       |
+ *        |on_alert                  |       |
+ *        | <---- |                  |       |
+ *        |       |       ...        |       |
  */

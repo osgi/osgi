@@ -242,7 +242,7 @@ public class CommandProcessor {
 																												+ cmd;
 																									}
 		}
-		catch (Exception e) {
+		catch (DmtException e) {
 			StringWriter stringWriter = new StringWriter();
 			e.printStackTrace(new PrintWriter(stringWriter));
 			return stringWriter.toString();
