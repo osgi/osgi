@@ -128,7 +128,7 @@ public class RMServer extends Thread {
 					}
 					if (input.startsWith("ping")) {
 						if (command != null) {
-							out.println("cmd:" + command);
+                            out.println("cmd:" + command);
 							command = null;
 						}
 						else {
@@ -169,7 +169,7 @@ public class RMServer extends Thread {
 		String input = "";
 		String ret = "";
 		while (!(input = in.readLine()).equals("block_end")) {
-			ret = ret + input + "\r\n";
+			ret = ret + input + "\n";
 		}
 		return ret;
 	}
