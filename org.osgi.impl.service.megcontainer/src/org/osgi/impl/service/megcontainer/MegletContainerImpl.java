@@ -30,8 +30,8 @@ import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.log.LogService;
 
 class EventSubscribe {
-	public final static int	START		= 1;
-	public final static int	STOP		= 2;
+	public final static int	START			= 1;
+	public final static int	STOP			= 2;
 	public final static int	SUSPEND		= 3;
 	public final static int	RESUME		= 4;
 	public final static int	LISTENER	= 5;
@@ -57,15 +57,15 @@ class MEGBundleDescriptor {
  * The realization of the MEG container
  */
 
-public class MegletContainer implements BundleListener,
-		EventHandler {
+public class MegletContainerImpl implements BundleListener,
+		EventHandler, MegletContainer {
 	private BundleContext	bc;
 	private Vector			bundleIDs;
 	private Hashtable		bundleHash;
 	private int				height;
 	private int				width;
 
-	public MegletContainer( BundleContext bc ) throws Exception {
+	public MegletContainerImpl( BundleContext bc ) throws Exception {
 		this.bc = bc;
 		bundleHash = new Hashtable();
 		bundleIDs = loadVector("BundleIDs");
@@ -110,10 +110,6 @@ public class MegletContainer implements BundleListener,
 		return appDescs;
 	}
     
-  public Meglet createMegletInstance( MegletDescriptor appDesc ) throws Exception {
-    return createMegletInstance( appDesc, false );   
-  }
-	
   public Meglet createMegletInstance( MegletDescriptor appDesc, boolean resume ) throws Exception {
 		if( !checkSingletonity( appDesc, resume ) )
 			throw new Exception("Singleton Exception!");
@@ -209,15 +205,14 @@ public class MegletContainer implements BundleListener,
 		try {
 			ServiceReference []appList =
 					bc.getServiceReferences( "org.osgi.service.application.ApplicationHandle",
-									"(" + Constants.SERVICE_PID + "="+ appDesc.getApplicationPID() + ")" );
+									"(application.pid="+ appDesc.getApplicationPID() + ")" );
 			if( appList == null || appList.length == 0 )
         return true;
       if( !resume )
         return false;
       
       ApplicationHandle appHandle = (ApplicationHandle)bc.getService( appList[ 0 ] );      
-      boolean result = appHandle.getAppStatus() == ApplicationHandle.SUSPENDED ||
-                       appHandle.getAppStatus() == ApplicationHandle.RESUMING;      
+      boolean result = appHandle.getApplicationState() == MegletHandle.SUSPENDED;      
       bc.ungetService( appList[ 0 ] );
       
       return result;
@@ -229,7 +224,7 @@ public class MegletContainer implements BundleListener,
 		}
 	}
 
-	public boolean isLaunchable( ApplicationDescriptor appDesc ) {
+	public boolean isLaunchable( MegletDescriptor appDesc ) {
 		try {
 			if( !checkSingletonity( appDesc, false ) )
 				return false;
@@ -680,7 +675,7 @@ public class MegletContainer implements BundleListener,
 										ServiceReference[] references = bc
 												.getServiceReferences(
 														"org.osgi.service.application.ApplicationHandle",
-														"(" + Constants.SERVICE_PID + "="
+														"(application.pid="
 																+ bundleDesc.applications[i]
 																		.getApplicationPID()
 																+ ")");
@@ -688,17 +683,17 @@ public class MegletContainer implements BundleListener,
 												|| references.length == 0)
 											break;
 										for (int k = 0; k != references.length; k++) {
-											ApplicationHandle handle = (ApplicationHandle) bc
+											MegletHandle handle = (MegletHandle) bc
 													.getService(references[k]);
 											switch (bundleDesc.eventSubscribes[i].eventAction[j]) {
 												case EventSubscribe.STOP :
-													handle.destroyApplication();
+													handle.destroy();
 													break;
 												case EventSubscribe.SUSPEND :
-													handle.suspendApplication();
+													handle.suspend();
 													break;
 												case EventSubscribe.RESUME :
-													handle.resumeApplication();
+													handle.resume();
 													break;
 											}
 											bc.ungetService(references[k]);
@@ -737,7 +732,7 @@ public class MegletContainer implements BundleListener,
 		return false;
 	}
 	
-	ServiceReference getReference( MegletDescriptor appDesc ) {
+	public ServiceReference getReference( MegletDescriptor appDesc ) {
 		MEGBundleDescriptor desc = (MEGBundleDescriptor) bundleHash
 			.get(new Long( appDesc.getBundleId() ) );
     if (desc == null)
