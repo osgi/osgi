@@ -31,6 +31,7 @@ public class MonitorPlugin implements DmtDataPlugin
     private MonitorAdminImpl monitorAdmin;
 
     private DmtSession session;
+    
 
     public MonitorPlugin(BundleContext bc, ServiceTracker tracker, MonitorAdminImpl monitorAdmin) {
         this.bc = bc;
@@ -70,19 +71,19 @@ public class MonitorPlugin implements DmtDataPlugin
         if(path.length == 3) {
             if(path[2].equals("TrapID"))
                 return new MonitorMetaNodeImpl("Full name of the Performance Indicator.", 
-                                               false, false, null, null, DmtDataType.STRING);
+                                               false, false, null, null, DmtData.FORMAT_STRING);
 
             if(path[2].equals("CM")) {
                 DmtData[] validValues = 
                     new DmtData[] { new DmtData("CC"), new DmtData("DER"), 
                                     new DmtData("GAUGE"), new DmtData("SI") };
                 return new MonitorMetaNodeImpl("Collection method of data in the Performance Indicator.",
-                                               false, false, null, validValues, DmtDataType.STRING);
+                                               false, false, null, validValues, DmtData.FORMAT_STRING);
             }
 
             if(path[2].equals("Results"))
                 return new MonitorMetaNodeImpl("Current value of the Performance Indicator.",
-                                               false, false, null, null, DmtDataType.XML);
+                                               false, false, null, null, DmtData.FORMAT_XML);
 
             // path[2].equals("Server")
 
@@ -97,11 +98,11 @@ public class MonitorPlugin implements DmtDataPlugin
         if(path.length == 5) {
             if(path[4].equals("ServerID"))
                 return new MonitorMetaNodeImpl("Identifier of the DM server that should receive the requested " +
-                                               "monitoring data.", true, false, null, null, DmtDataType.STRING);
+                                               "monitoring data.", true, false, null, null, DmtData.FORMAT_STRING);
 
             if(path[4].equals("Enabled"))
                 return new MonitorMetaNodeImpl("A switch to start and stop monitoring.", 
-                                               true, false, null, null, DmtDataType.BOOLEAN);
+                                               true, false, new DmtData(Server.DEFAULT_ENABLED), null, DmtData.FORMAT_BOOLEAN);
 
             if(path[4].equals("Reporting"))
                 return new MonitorMetaNodeImpl("Root node for request scheduling parameters.", 
@@ -116,17 +117,17 @@ public class MonitorPlugin implements DmtDataPlugin
         if(path.length == 6) {
             if(path[4].equals("Reporting")) {
                 if(path[5].equals("Type")) {
-                    DmtData defaultData = new DmtData("TM");
+                    DmtData defaultData = new DmtData(Server.DEFAULT_TYPE);
                     DmtData[] validValues = new DmtData[] { defaultData, new DmtData("EV") };
                     return new MonitorMetaNodeImpl("Indicates if the data reporting is time or event based.",
-                                                   true, false, defaultData, validValues, DmtDataType.STRING);
+                                                   true, false, defaultData, validValues, DmtData.FORMAT_STRING);
                 }
 
                 // path[5].equals("Value")
 
                 return new MonitorMetaNodeImpl("Time or occurrence number parameter of the request (depending on " +
                                                "the type).", true, false, new DmtData(Server.DEFAULT_SCHEDULE), null, 
-                                               DmtDataType.INTEGER);
+                                               DmtData.FORMAT_INTEGER);
             }
 
             // path[4].equals("TrapRef")
@@ -139,7 +140,7 @@ public class MonitorPlugin implements DmtDataPlugin
 
         // path.length == 7
         return new MonitorMetaNodeImpl("A reference to other monitoring data.", 
-                                       true, false, null, null, DmtDataType.STRING);
+                                       true, false, null, null, DmtData.FORMAT_STRING);
     }
 
     public boolean supportsAtomic() {
@@ -158,6 +159,47 @@ public class MonitorPlugin implements DmtDataPlugin
         throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED, "Title property not supported.");
     }
 
+    // TODO merge this method with setNodeValue() (maybe pass data=null)
+    public void setDefaultNodeValue(String nodeUri) throws DmtException {
+        String[] path = prepareUri(nodeUri);
+
+        if(path.length < 5) // TODO replace this with the canReplace check in DmtAdmin based on the meta-data
+            throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
+                                   "Cannot change node data at the specified position.");
+
+        Monitorable monitorable = getMonitorable(path[0], nodeUri);
+        KpiWrapper kpi = getKpi(monitorable, path[0], path[1], nodeUri);
+        // path[2].equals("Server")
+        Server server = kpi.getServer(path[3], nodeUri);
+
+        if(path.length == 5) {
+            if(path[4].equals("ServerID"))
+                throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
+                        "The ServerID node has no default value.");
+
+            // path[4].equals("Enabled")
+            server.setEnabled(new DmtData(false), nodeUri);
+
+            return;
+        }
+
+        if(path.length == 6) {
+            // path[4].equals("Reporting")
+
+            if(path[5].equals("Type"))
+                server.setType(new DmtData(Server.DEFAULT_TYPE), nodeUri);
+            else // path[5].equals("Value")
+                server.setValue(new DmtData(0), nodeUri);
+
+            return;
+        }
+
+        // path.length == 7, path[4].equals("TrapRef"), path[6].equals("TrapRefID")
+
+        throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
+                "The TrapRefId node has no default value.");
+    }
+    
     public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
         String[] path = prepareUri(nodeUri);
 
@@ -265,7 +307,12 @@ public class MonitorPlugin implements DmtDataPlugin
                                "Cannot set type property of monitoring nodes.");
     }
 
+    public void createLeafNode(String nodeUri) throws DmtException {
+        createLeafNode(nodeUri, null); // no leaf can be created, will throw exception
+    }
+
     public void createLeafNode(String nodeUri, DmtData value) throws DmtException {
+        // No leaf node can be created by the caller in the current implementation 
         String[] path = prepareUri(nodeUri);
 
         if(path.length < 4) // TODO replace this with the canAdd check in DmtAdmin based on the meta-data
@@ -301,6 +348,11 @@ public class MonitorPlugin implements DmtDataPlugin
         // TODO allow adding TrapRefID leaf nodes?  Currently automatically created with parent.
         throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
                                "Cannot add TrapRefID nodes manually.");
+    }
+
+    public void createLeafNode(String nodeUri, DmtData value, String mimeType)
+            throws DmtException {
+        createLeafNode(nodeUri, value); // no leaf node can be created, will throw exception
     }
 
     public void copy(String nodeUri, String newNodeUri, boolean recursive) throws DmtException {
@@ -665,6 +717,8 @@ class KpiWrapper {
 
 
 class Server {
+    static final boolean DEFAULT_ENABLED = false;
+    static final String DEFAULT_TYPE = "TM";
     static final int DEFAULT_SCHEDULE = 60;
 
     private String nodeName;
@@ -688,7 +742,7 @@ class Server {
 
         serverId = nodeName;
         enabled = false;
-        type = "TM";
+        type = DEFAULT_TYPE;
         value = DEFAULT_SCHEDULE;
         trapRef = new Hashtable();
     }
@@ -725,7 +779,7 @@ class Server {
     }
 
     void setServerId(DmtData data, String nodeUri) throws DmtException {
-        if(data.getFormat() != DmtDataType.STRING)
+        if(data.getFormat() != DmtData.FORMAT_STRING)
             throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED, 
                                    "Server ID leaf must have string format.");
 
@@ -736,7 +790,7 @@ class Server {
     }
 
     void setEnabled(DmtData data, String nodeUri) throws DmtException {
-        if(data.getFormat() != DmtDataType.BOOLEAN)
+        if(data.getFormat() != DmtData.FORMAT_BOOLEAN)
             throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED, 
                                    "Enabled leaf must have boolean format.");
 
@@ -750,7 +804,7 @@ class Server {
     }
 
     void setType(DmtData data, String nodeUri) throws DmtException {
-        if(data.getFormat() != DmtDataType.STRING)
+        if(data.getFormat() != DmtData.FORMAT_STRING)
             throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED, 
                                    "Reporting type leaf must have string format.");
 
@@ -762,7 +816,7 @@ class Server {
     }
 
     void setValue(DmtData data, String nodeUri) throws DmtException {
-        if(data.getFormat() != DmtDataType.INTEGER)
+        if(data.getFormat() != DmtData.FORMAT_INTEGER)
             throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED, 
                                    "Reporting schedule value leaf must have integer format.");
 
@@ -780,7 +834,7 @@ class Server {
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
                                    "The trap reference with the specified ID does not exist.");
         
-        if(data.getFormat() != DmtDataType.STRING)
+        if(data.getFormat() != DmtData.FORMAT_STRING)
             throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED,
                                    "Trap reference leaf must have string format.");
         
