@@ -370,7 +370,8 @@ public class DoIt implements BundleActivator {
 		
 		try {Thread.sleep(3000);} catch (Exception e) {}
        
-		da.cancel();
+		// TODO not in interface yet, remove later ### pkr
+		//da.cancel();
 		
 		try {Thread.sleep(3000);} catch (Exception e) {}
 		
