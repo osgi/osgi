@@ -6,8 +6,12 @@
  */
 package org.osgi.tools.btool;
 
-import java.io.*;
-import java.util.zip.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /**
  * @author Peter Kriens
@@ -59,6 +63,28 @@ public class Analysis {
         
         btool.errors.add("Activator not found " + activator );
     }
+    
+    void report() throws IOException {
+    	System.out.println("-------------------------------------------------------");
+    	prt("Imports         : ", btool.getImports() );
+    	prt("Exports         : ", btool.getExports() );
+    	prt("Private         : ", btool.getPrivates() );
+    	prt("Activator       : ",  manifest.getValue("Bundle-Activator") );
+    	System.out.println("-------------------------------------------------------");
+    }
+
+	private void prt(String string, String value) {
+		System.out.print(string);
+		System.out.println(value);
+	}
+
+	private void prt(String string, Collection imports) {
+		for ( Iterator i=imports.iterator(); i.hasNext(); ) {
+			System.out.print(string);
+			System.out.println(i.next());
+			string = "                  ";
+		}
+	}
 
     
 }
