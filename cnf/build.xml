@@ -98,15 +98,14 @@
 		-->
 
 		<echo>project ${project.name}</echo>
-		<loadproperties description="expand properties ALSO in keys!" 
-			srcfile="${project}/build.properties">
+		<loadproperties description="expand properties ALSO in keys!" srcfile="${project}/build.properties">
 			<filterchain>
-		          <expandproperties/>
+				<expandproperties />
 			</filterchain>
 		</loadproperties>
 
-		<property file="${env.HOME}/osgi.properties"/>
-		<property file="${workspace}/cnf/build.properties"/>
+		<property file="${env.HOME}/osgi.properties" />
+		<property file="${workspace}/cnf/build.properties" />
 
 		<property name="prebuild" value="" />
 		<!-- get the classpath and build info from eclipse -->
@@ -136,7 +135,19 @@
 	     Compile the sources. 
 	-->
 	<target name="compile" depends="init" if="project.sourcepath">
-		<javac fork="yes" executable="${javac}" srcdir="${project.sourcepath}" destdir="${project.bindir}" classpath="${project.classpath}" bootclasspath="${project.bootclasspath}" deprecation="true" listfiles="true" target="${javac.target}" source="${javac.source}" debug="${javac.debug}" includeAntRuntime="no" verbose="${verbose}" />
+		<javac fork="yes"
+		       executable="${javac}"
+		       srcdir="${project.sourcepath}"
+		       destdir="${project.bindir}"
+		       classpath="${project.classpath}"
+		       bootclasspath="${project.bootclasspath}"
+		       deprecation="true"
+		       listfiles="true"
+		       target="${javac.target}"
+		       source="${javac.source}"
+		       debug="${javac.debug}"
+		       includeAntRuntime="no"
+		       verbose="${verbose}" />
 	</target>
 
 	<!-- 
@@ -173,7 +184,20 @@
 	-->
 	<target name="-jar">
 		<echo>JAR ${item.jarFile}</echo>
-		<btool jar="${project}/${item.jarFile}" failok="${btool.failok}" eclipse="${project}" analyse="${btool.analyse}" showmanifest="${btool.showmanifest}" includeProperty="include.${item.jarFile}" expandProperty="expand.${item.jarFile}" contentFoldersProperty="source.${item.jarFile}" excludeImportProperty="excludeImport.${item.jarFile}" includeExportProperty="includeExport.${item.jarFile}" ipaProperty="ipa.${item.jarFile}" verbose="${verbose}" sources="${btool.sources}" ignoreVersions="${btool.noversion}" />
+		<btool jar="${project}/${item.jarFile}"
+		       failok="${btool.failok}"
+		       eclipse="${project}"
+		       analyse="${btool.analyse}"
+		       showmanifest="${btool.showmanifest}"
+		       includeProperty="include.${item.jarFile}"
+		       expandProperty="expand.${item.jarFile}"
+		       contentFoldersProperty="source.${item.jarFile}"
+		       excludeImportProperty="excludeImport.${item.jarFile}"
+		       includeExportProperty="includeExport.${item.jarFile}"
+		       ipaProperty="ipa.${item.jarFile}"
+		       verbose="${verbose}"
+		       sources="${btool.sources}"
+		       ignoreVersions="${btool.noversion}" />
 	</target>
 
 	<!--
@@ -189,8 +213,8 @@
 	<!--
 	     CLEAN
 	-->
-	<target name="globalclean" depends="init,clean" if="project.buildpath">
-		<subant target="clean" inheritAll="false" buildpath="${project.buildpath}" />
+	<target name="deepclean" depends="init,clean" if="project.buildpath">
+		<subant target="deepclean" inheritAll="false" buildpath="${project.buildpath}" />
 	</target>
 
 	<target name="clean" depends="init">
