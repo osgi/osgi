@@ -593,13 +593,14 @@ public abstract interface Bundle
 	 * This bundle's class loader is called to search for the named resource.
 	 * If this bundle's state is <tt>INSTALLED</tt>, then only this bundle will
 	 * be searched for the specified resource. Imported packages cannot be searched
-	 * when a bundle has not been resolved.
+	 * when a bundle has not been resolved.  If this bundle is a fragment bundle 
+	 * then <tt>null</tt> is returned.
 	 *
 	 * @param name The name of the resource.
 	 * See <tt>java.lang.ClassLoader.getResource</tt> for a description of
 	 * the format of a resource name.
 	 * @return a URL to the named resource, or <tt>null</tt> if the resource could
-	 * not be found or if the caller does not have
+	 * not be found or if this bundle is a fragment bundle or if the caller does not have
 	 * the <tt>AdminPermission</tt>, and the Java Runtime Environment supports permissions.
 	 *
 	 * @since 1.1
@@ -665,14 +666,17 @@ public abstract interface Bundle
 	 * details of the reason the bundle could not be resolved.
 	 * This method must then throw a <tt>ClassNotFoundException</tt>.
 	 *
+	 * <p>If the bundle is a fragment bundle then this method
+	 * must throw a <tt>ClassNotFoundException</tt>.
+	 *
      * <p>If this bundle's state is <tt>UNINSTALLED</tt>, then an
      * <tt>IllegalStateException</tt> is thrown.
      *
 	 * @param name The name of the class to load.
 	 * @return The Class object for the requested class.
 	 * @exception java.lang.ClassNotFoundException If no such class can be found or
-	 * if the caller does not have the <tt>AdminPermission</tt>, and the Java
-	 * Runtime Environment supports permissions.
+	 * if this bundle is a fragment bundle or if the caller does not have the 
+	 * <tt>AdminPermission</tt>, and the Java Runtime Environment supports permissions.
 	 * @exception java.lang.IllegalStateException If this bundle has been uninstalled.
 	 * @since 1.3
 	 */
@@ -684,14 +688,16 @@ public abstract interface Bundle
      * This bundle's class loader is called to search for the named resource.
      * If this bundle's state is <tt>INSTALLED</tt>, then only this bundle will
      * be searched for the specified resource. Imported packages cannot be searched
-     * when a bundle has not been resolved.
+     * when a bundle has not been resolved.  If this bundle is a fragment bundle 
+	 * then <tt>null</tt> is returned.
      *
      * @param name The name of the resource.
      * See <tt>java.lang.ClassLoader.getResources</tt> for a description of
      * the format of a resource name.
      * @return an Enumeration of URLs to the named resources, or <tt>null</tt> if 
-     * the resource could not be found or if the caller does not have
-     * the <tt>AdminPermission</tt>, and the Java Runtime Environment supports permissions.
+     * the resource could not be found or if this bundle is a fragment bundle or if 
+     * the caller does not have the <tt>AdminPermission</tt>, and the Java Runtime 
+     * Environment supports permissions.
      *
      * @since 1.3 
      * @exception java.lang.IllegalStateException If this bundle has been uninstalled.
