@@ -29,7 +29,7 @@ package org.osgi.impl.service.megcontainer;
 import java.util.*;
 import java.io.*;
 import java.lang.reflect.Method;
-import java.security.*;
+//import java.security.*;
 import org.osgi.framework.*;
 import org.osgi.meglet.*;
 import org.osgi.service.application.*;
@@ -89,8 +89,8 @@ public final class MegletHandleImpl extends MegletHandle {
 
 
 	public ServiceReference startHandle(Map args) throws Exception {
-		AccessController.checkPermission(new ApplicationAdminPermission(pid, 
-				                             ApplicationAdminPermission.LAUNCH));
+//		AccessController.checkPermission(new ApplicationAdminPermission(pid,  /* TODO */ 
+//				                             ApplicationAdminPermission.LAUNCH));
 
 		if (args == null)
 			resumeArgs = null;
@@ -144,8 +144,8 @@ public final class MegletHandleImpl extends MegletHandle {
 	 */
 	public void suspend() throws Exception {
 
-		AccessController.checkPermission(new ApplicationAdminPermission(pid, 
-				ApplicationAdminPermission.MANIPULATE));
+//		AccessController.checkPermission(new ApplicationAdminPermission(pid,  /* TODO */ 
+//				ApplicationAdminPermission.MANIPULATE));
 
 		if (status != ApplicationHandle.RUNNING)
 			throw new Exception("Invalid State");
@@ -186,8 +186,8 @@ public final class MegletHandleImpl extends MegletHandle {
 	 */
 	public void resume() throws Exception {
 
-		AccessController.checkPermission(new ApplicationAdminPermission(pid, 
-				ApplicationAdminPermission.MANIPULATE));
+//		AccessController.checkPermission(new ApplicationAdminPermission(pid,   /* TODO */
+//				ApplicationAdminPermission.MANIPULATE));
 
 		if (status != MegletHandleImpl.SUSPENDED)
 			throw new Exception("Invalid State");
