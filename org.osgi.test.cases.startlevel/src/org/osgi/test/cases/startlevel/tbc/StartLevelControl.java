@@ -306,7 +306,12 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
   {
     switch (event.getType()) {
     case FrameworkEvent.ERROR:
-      log("got framework event " + event.getType() + ": " + event.getThrowable().getClass().getName());
+    	if ( event.getThrowable() != null ) {
+    		log("got framework event " + event.getType() + ": " + event.getThrowable().getClass().getName());
+    		event.getThrowable().printStackTrace();
+    	} else {
+    		log("got framework event " + event.getType()  );
+    	}
       break;
     case FrameworkEvent.STARTLEVEL_CHANGED:
       if (logStartLevelChanged)
