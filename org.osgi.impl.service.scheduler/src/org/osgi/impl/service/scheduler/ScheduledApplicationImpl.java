@@ -61,7 +61,7 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 	}
 	
 	String getPid() {
-		return new String( pid );
+		return pid;
 	}
 
 	public Map getArguments() {
@@ -71,11 +71,11 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 	}
 
 	public String getTopic() {
-		return new String( topic );
+		return topic;
 	}
 
 	public String getEventFilter() {
-		return new String( eventFilter );
+		return eventFilter;
 	}
 
 	public boolean isRecurring() {

@@ -154,8 +154,7 @@ public class SchedulerImpl implements Scheduler, Runnable, EventHandler {
 						&& e.matches(bc.createFilter("("
 								+ EventConstants.EVENT_TOPIC + "="
 								+ schedApp.getTopic() + ")")))
-					if ((schedApp.getEventFilter() != null)
-							&& e.matches(bc.createFilter(schedApp
+					if ((schedApp.getEventFilter() == null) || e.matches(bc.createFilter(schedApp
 									.getEventFilter()))) {
 						ServiceReference ref = schedApp
 								.getApplicationDescriptor();
