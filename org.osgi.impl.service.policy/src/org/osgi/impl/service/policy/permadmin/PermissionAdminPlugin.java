@@ -385,6 +385,11 @@ public class PermissionAdminPlugin implements DmtDataPlugin {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * checks if we are allowed to write (eg. in atomic mode), and flips the dirty bit
+	 * @param nodeUri
+	 * @throws DmtException
+	 */
 	private void switchToWriteMode(String nodeUri) throws DmtException {
 		if (!atomic) throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,
 				"modifying tree is only allowed in atomic sessions");
