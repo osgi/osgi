@@ -22,5 +22,12 @@
 	<classpathentry exported="true" kind="src" path="/org.osgi.util.xml"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.startlevel"/>
 	<classpathentry kind="src" path="/org.osgi.service.component"/>
+	<classpathentry kind="src" path="/org.osgi.service.dmt"/>
+	<classpathentry kind="src" path="/org.osgi.service.event"/>
+	<classpathentry kind="src" path="/org.osgi.service.deployment"/>
+	<classpathentry kind="src" path="/org.osgi.service.condpermadmin"/>
+	<classpathentry kind="src" path="/org.osgi.service.application"/>
+	<classpathentry kind="src" path="/org.osgi.meglet"/>
+	<classpathentry kind="src" path="/org.osgi.service.monitor"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
