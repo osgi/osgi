@@ -45,11 +45,7 @@ public class Director implements BundleActivator {
 	 * start a script or a UI or both.
 	 */
 	public void start(BundleContext context) throws Exception {
-		this.context = context;
-		handler = new Handler(context); // Controller
-		discovery = new Discovery(context); // Our mini JINI
-		commands = new TestCommands(handler, context); // Interface for
-		// script/console
+		initialize(context);
 		String ui = getProperty("org.osgi.test.ui", null);
 		String script = getProperty("org.osgi.test.batch.script", null);
 		if (script != null) {
@@ -76,6 +72,15 @@ public class Director implements BundleActivator {
 				System.out.println("No applet in JAR file");
 				t.printStackTrace();
 			}
+	}
+
+	public Handler initialize(BundleContext context) throws Exception {
+		this.context = context;
+		handler = new Handler(context); // Controller
+		discovery = new Discovery(context); // Our mini JINI
+		commands = new TestCommands(handler, context); // Interface for
+		// script/console
+		return handler;
 	}
 
 	/**
