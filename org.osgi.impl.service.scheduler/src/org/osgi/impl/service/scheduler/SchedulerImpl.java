@@ -122,7 +122,7 @@ public class SchedulerImpl implements Scheduler, Runnable {
 
                         if( diffTime < 60000 || schedApp.launchOnOverdue() ) { /* after 1 min, it's overdue */
                             try {
-                                schedApp.getApplicationDescriptor().launchApplication(
+                                schedApp.getApplicationDescriptor().launch(
                                         schedApp.getArguments());
                             }
                             catch (Exception e) {

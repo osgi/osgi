@@ -126,7 +126,7 @@ public class MegletHandle implements ApplicationHandle {
 		return appDesc;
 	}
 
-	public void startHandle(Map args) throws Exception {
+	public ServiceReference startHandle(Map args) throws Exception {
 		AccessController.checkPermission(new ApplicationAdminPermission(appDesc
 				.getApplicationPID(), ApplicationAdminPermission.LAUNCH));
 
@@ -142,9 +142,11 @@ public class MegletHandle implements ApplicationHandle {
 			meglet.startApplication(args, null);
 			setStatus(ApplicationHandle.RUNNING);
 			registerAppHandle();
+
+			return serviceReg.getReference();
 		}
 		else
-			throw new Exception("Invalid meglet handle!");
+			throw new Exception("Invalid meglet handle!");		
 	}
 
 	public void destroyApplication() throws Exception {

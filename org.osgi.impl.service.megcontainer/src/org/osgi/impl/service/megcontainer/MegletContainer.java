@@ -270,7 +270,7 @@ public class MegletContainer implements BundleListener,
 			ApplicationDescriptor appDescs[] = desc.applications;
 			for (int i = 0; i != appDescs.length; i++) {
 				if (appDescs[i].getProperties("en").get("application.autostart").equals("true")) {
-					appDescs[i].launchApplication( null );
+					appDescs[i].launch( null );
 				}
 			}
 			desc.autoStartRequired = false;
@@ -665,7 +665,7 @@ public class MegletContainer implements BundleListener,
 							if (event.matches(topicFilter)) {
 								switch (bundleDesc.eventSubscribes[i].eventAction[j]) {
 									case EventSubscribe.START :
-										bundleDesc.applications[i].launchApplication(null);
+										bundleDesc.applications[i].launch(null);
 										break;
 									case EventSubscribe.STOP :
 									case EventSubscribe.SUSPEND :
