@@ -99,9 +99,6 @@ public class TestApplication
 		gui.startAnim();
 	}
 
-	public void channelEvent(ChannelEvent event) {
-	}
-
 	public void writeResult(String result) {
 		try {
 			if (fileName == null)
@@ -224,6 +221,11 @@ public class TestApplication
     		validate();
     	}
 
+    }
+
+    public void handleEvent(Event event) {
+        // TODO
+        
     }
     
 }
