@@ -101,4 +101,29 @@ public interface DmtAdmin {
      */
     DmtSession getSession(String principal, String subtreeUri, int lockMode)
         throws DmtException;
+    
+    /**
+     * Sends an alert to a named principal. If OMA DM is used as a management
+     * protocol the principal name is server ID that corresponds to a DMT node 
+     * value in <code>./SyncML/DMAcc/x/ServerId</code>. It is the DmtAdmin's
+     * responsibility to route the alert to the given principal.
+     * @param principal The principal name which is the recepient of this alert.
+     * In remotely initiated session it corresponds to a remote server ID, which
+     * can be obtained using the session's <code>getPrincipal</code> call. 
+     * <p>It can be
+     * <code>null</code> when the client does not know the principal name. Even 
+     * in this case the
+     * routing might be possible if the DmtAdmin is connected to only one
+     * protocol adapter which is connected to only one remote server.
+     * @param code Alert code. Can be 0 if not needed.
+     * @param items The data of the alert items carried in this alert.
+     * Can be <code>null</code> if not needed.
+     * @throws DmtException with the following possible error codes
+     * <li> <code>ALERT_NOT_ROUTED</code> when the alert can not be routed to
+     * the server
+     * <li> <code>REMOTE_ERROR</code> in case of communication problems between
+     * the device and the server
+     */
+    void sendAlert(String principal, int code, DmtAlertItem[] items)
+        throws DmtException;
 }
