@@ -21,8 +21,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
-import org.osgi.service.metatype.MetaTypeProvider;
-import org.osgi.service.metatype.ObjectClassDefinition;
+import org.osgi.service.metatype.*;
 
 /**
  * Implementation of MetaTypeProvider
@@ -36,7 +35,6 @@ public class MetaTypeProviderImpl implements MetaTypeProvider {
 	public static final String	OCD_ID_NOT_FOUND		= "OCD_ID_NOT_FOUND";		//$NON-NLS-1$
 	public static final String	ASK_INVALID_LOCALE		= "ASK_INVALID_LOCALE";		//$NON-NLS-1$
 
-	public static final String	METADATA_FOLDER			= "/META-INF/metatype/";	//$NON-NLS-1$
 	public static final String	META_FILE_EXT			= ".XML";					//$NON-NLS-1$
 	public static final String	RESOURCE_FILE_CONN		= "_";						//$NON-NLS-1$
 	public static final String	RESOURCE_FILE_EXT		= ".properties";			//$NON-NLS-1$
@@ -95,7 +93,7 @@ public class MetaTypeProviderImpl implements MetaTypeProvider {
 
 		boolean isThereMetaHere = false;
 
-		Enumeration allFileKeys = FragmentUtils.findEntryPaths(bundle, METADATA_FOLDER);
+		Enumeration allFileKeys = FragmentUtils.findEntryPaths(bundle, MetaTypeService.METATYPE_DOCUMENTS_LOCATION);
 		if (allFileKeys == null)
 			return isThereMetaHere;
 
@@ -103,46 +101,43 @@ public class MetaTypeProviderImpl implements MetaTypeProvider {
 			boolean _isMetaDataFile;
 			String fileName = (String) allFileKeys.nextElement();
 
-			if (fileName.toUpperCase().endsWith(META_FILE_EXT)) {
-
-				Vector allOCDsInFile = null;
-				java.net.URL[] urls = FragmentUtils.findEntries(bundle, fileName);
-				if (urls != null) {
-					for (int i = 0; i < urls.length; i++) {
-						try {
-							// Assume all XML files are what we want by default.
-							_isMetaDataFile = true;
-							DataParser parser = new DataParser(bundle, urls[i],
-									parserFactory);
-							allOCDsInFile = parser.doParse();
-							if (allOCDsInFile == null) {
-								_isMetaDataFile = false;
-							}
-						}
-						catch (Exception e) {
-							// Ok, looks like it is not what we want.
+			Vector allOCDsInFile = null;
+			java.net.URL[] urls = FragmentUtils.findEntries(bundle, fileName);
+			if (urls != null) {
+				for (int i = 0; i < urls.length; i++) {
+					try {
+						// Assume all XML files are what we want by default.
+						_isMetaDataFile = true;
+						DataParser parser = new DataParser(bundle, urls[i],
+								parserFactory);
+						allOCDsInFile = parser.doParse();
+						if (allOCDsInFile == null) {
 							_isMetaDataFile = false;
 						}
-
-						if ((_isMetaDataFile) && (allOCDsInFile != null)) {
-							// We got some OCDs now.
-							for (int j = 0; j < allOCDsInFile.size(); j++) {
-								ObjectClassDefinitionImpl ocd = (ObjectClassDefinitionImpl) allOCDsInFile
-										.elementAt(j);
-
-								if (ocd.getType() == ObjectClassDefinitionImpl.PID) {
-									isThereMetaHere = true;
-									_allPidOCDs.put(ocd.getID(), ocd);
-								}
-								else {
-									isThereMetaHere = true;
-									_allFPidOCDs.put(ocd.getID(), ocd);
-								}
-							} // End of for
-						}
 					}
-				} // End of if(urls!=null)
-			}
+					catch (Exception e) {
+						// Ok, looks like it is not what we want.
+						_isMetaDataFile = false;
+					}
+
+					if ((_isMetaDataFile) && (allOCDsInFile != null)) {
+						// We got some OCDs now.
+						for (int j = 0; j < allOCDsInFile.size(); j++) {
+							ObjectClassDefinitionImpl ocd = (ObjectClassDefinitionImpl) allOCDsInFile
+									.elementAt(j);
+
+							if (ocd.getType() == ObjectClassDefinitionImpl.PID) {
+								isThereMetaHere = true;
+								_allPidOCDs.put(ocd.getID(), ocd);
+							}
+							else {
+								isThereMetaHere = true;
+								_allFPidOCDs.put(ocd.getID(), ocd);
+							}
+						} // End of for
+					}
+				}
+			} // End of if(urls!=null)
 		} // End of while
 
 		return isThereMetaHere;
