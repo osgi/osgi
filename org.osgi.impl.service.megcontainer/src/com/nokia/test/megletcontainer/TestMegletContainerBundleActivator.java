@@ -86,8 +86,8 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
       Event event;
       do {
          event = getEvent();
-      }while( !event.getTopic().startsWith( "org.osgi.application." ) &&
-              !event.getTopic().startsWith( "com.nokia.megtest." ));
+      }while( !event.getTopic().startsWith( "org/osgi/application/" ) &&
+              !event.getTopic().startsWith( "com/nokia/megtest/" ));
 
       if( !event.getTopic().equals( name ) )
         throw new Exception( "Received: "+event.getTopic()+"    Expected:" + name );
@@ -105,10 +105,10 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
       Event event;
       do {
          event = getEvent();
-      }while( !event.getTopic().startsWith( "org.osgi.application." ) );
+      }while( !event.getTopic().startsWith( "org/osgi/application/" ) );
 
-      if( !event.getTopic().equals( "org.osgi.application." + name ) )
-        throw new Exception( "Received: "+event.getTopic()+"    Expected:org.osgi.application." + name );
+      if( !event.getTopic().equals( "org/osgi/application/" + name ) )
+        throw new Exception( "Received: "+event.getTopic()+"    Expected:org/osgi/application/" + name );
 
       if( !name.equals( "starting" ) )
       {
@@ -119,7 +119,7 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
 
           if( names[i].equals("topic") )
           {
-            if( !prop.equals( "org.osgi.application." + name ) )
+            if( !prop.equals( "org/osgi/application/" + name ) )
               throw new Exception( "Invalid topic: " + (String)prop );
           }
           else if( names[i].equals("application_descriptor.id") )
@@ -148,7 +148,7 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
             if( !prop.equals( appName ) )
               throw new Exception( "Invalid appName: " + (String)prop );
           }
-          else
+          else if( !names[i].equals( EventConstants.EVENT_TOPIC ) )
             throw new Exception( "Invalid property: " + names[ i ] );
         }
       }
@@ -974,7 +974,7 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
       if( lookupAppHandle( appDesc ) != null )
         throw new Exception( "There's a running instance of the appDesc!" );
 
-      sendEvent( new Event( "com.nokia.megtest.StartEvent", null ), false );
+      sendEvent( new Event( "com/nokia/megtest/StartEvent", null ), false );
 
       ApplicationHandle handle = lookupAppHandle( appDesc );
       if( handle == null || handle.getAppStatus() != ApplicationHandle.RUNNING )
@@ -987,7 +987,7 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
       if( !checkEvent( "started", appName ) )
         throw new Exception( "Didn't received the started event!" );
 
-      sendEvent( new Event( "com.nokia.megtest.SuspendEvent", null ), false );
+      sendEvent( new Event( "com/nokia/megtest/SuspendEvent", null ), false );
       handle = lookupAppHandle( appDesc );
       if( handle == null || handle.getAppStatus() != ApplicationHandle.SUSPENDED )
         throw new Exception( "Application didn't go to SUSPENDED state!" );
@@ -997,7 +997,7 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
       if( !checkEvent( "suspended", appName ) )
         throw new Exception( "Didn't received the suspended event!" );
 
-      sendEvent( new Event( "com.nokia.megtest.ResumeEvent", null ), false );
+      sendEvent( new Event( "com/nokia/megtest/ResumeEvent", null ), false );
       handle = lookupAppHandle( appDesc );
       if( handle == null || handle.getAppStatus() != ApplicationHandle.RUNNING )
         throw new Exception( "Application didn't go to RUNNING state!" );
@@ -1007,7 +1007,7 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
       if( !checkEvent( "resumed", appName ) )
         throw new Exception( "Didn't received the resumed event!" );
 
-      sendEvent( new Event( "com.nokia.megtest.StopEvent", null ), false );
+      sendEvent( new Event( "com/nokia/megtest/StopEvent", null ), false );
       handle = lookupAppHandle( appDesc );
       if( handle != null )
         throw new Exception( "Application didn't terminate!" );
@@ -1030,7 +1030,7 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
     try{
       if( !testCase_launchApplication() )
         return false;
-      sendEvent( new Event( "com.nokia.megtest.ListenerEvent", null ), false );
+      sendEvent( new Event( "com/nokia/megtest/ListenerEvent", null ), false );
       if( !checkResultFile( "EVENT LISTENED" ) )
         throw new Exception( "Result of the listener event is not EVENT LISTENED!" );
       if( !testCase_stopApplication() )
@@ -1048,16 +1048,16 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
     try{
       if( !testCase_launchApplication() )
         return false;
-      sendEvent( new Event( "com.nokia.megtest.EchoEvent", null ), false );
+      sendEvent( new Event( "com/nokia/megtest/EchoEvent", null ), false );
       if( !checkResultFile( "EVENT ECHOED" ) )
         throw new Exception( "Result of the listener event is not EVENT ECHOED!" );
 
-      if( !checkEvent( "com.nokia.megtest.EchoEvent" ) )
+      if( !checkEvent( "com/nokia/megtest/EchoEvent" ) )
         return false;
-      if( !checkEvent( "com.nokia.megtest.EchoReplyEvent" ) )
+      if( !checkEvent( "com/nokia/megtest/EchoReplyEvent" ) )
         return false;
 
-      sendEvent( new Event( "com.nokia.megtest.LogEvent", null ), false );
+      sendEvent( new Event( "com/nokia/megtest/LogEvent", null ), false );
       if( !checkResultFile( "EVENT LOGGED" ) )
         throw new Exception( "Result of the listener event is not EVENT LOGGED!" );
 
@@ -1078,27 +1078,27 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
       if( !testCase_launchApplication() )
         return false;
 
-      sendEvent( new Event( "com.nokia.megtest.RegisteredEvent", null ), false );
+      sendEvent( new Event( "com/nokia/megtest/RegisteredEvent", null ), false );
       if( !checkResultFile( "" ) )
         throw new Exception( "Result of the listener event is not empty which is invalid!" );
 
       Hashtable props = new Hashtable();
       props.put( "task", "subscribe" );
 
-      sendEvent( new Event( "com.nokia.megtest.SubscribeEvent", props ), false );
+      sendEvent( new Event( "com/nokia/megtest/SubscribeEvent", props ), false );
       if( !checkResultFile( "EVENT SUBSCRIBED" ) )
         throw new Exception( "Cannot subscribe for an event!" );
 
-      sendEvent( new Event( "com.nokia.megtest.RegisteredEvent", null ), false );
+      sendEvent( new Event( "com/nokia/megtest/RegisteredEvent", null ), false );
       if( !checkResultFile( "EVENT REGISTERED" ) )
         throw new Exception( "Subscibe was unsuccessful!" );
 
       props.put( "task", "unsubscribe" );
-      sendEvent( new Event( "com.nokia.megtest.SubscribeEvent", props ), false );
+      sendEvent( new Event( "com/nokia/megtest/SubscribeEvent", props ), false );
       if( !checkResultFile( "EVENT SUBSCRIBED" ) )
         throw new Exception( "Cannot unsubscribe from an event!" );
 
-      sendEvent( new Event( "com.nokia.megtest.RegisteredEvent", null ), false );
+      sendEvent( new Event( "com/nokia/megtest/RegisteredEvent", null ), false );
       if( !checkResultFile( "" ) )
         throw new Exception( "Unsubscribe was unsuccessful!" );
 

@@ -61,7 +61,7 @@ public class MegletHandle implements ApplicationHandle {
 		if( appDescServiceID != null )
 			props.put( "application_descriptor.id", new Long( appDescServiceID.longValue() ) );
 
-		String topic = "org.osgi.application.";
+		String topic = "org/osgi/application/";
 
 		switch( status ) {
 		case ApplicationHandle.RUNNING:

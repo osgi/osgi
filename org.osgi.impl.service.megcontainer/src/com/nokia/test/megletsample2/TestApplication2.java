@@ -56,29 +56,29 @@ public class TestApplication2 extends Meglet implements EventHandler
 
   public void handleEvent(Event event)
   {
-    if( event.getTopic().equals( "com.nokia.megtest.ListenerEvent" ) )
+    if( event.getTopic().equals( "com/nokia/megtest/ListenerEvent" ) )
       writeResult( "EVENT LISTENED" );
-    else if( event.getTopic().equals( "com.nokia.megtest.EchoEvent" ) )
+    else if( event.getTopic().equals( "com/nokia/megtest/EchoEvent" ) )
     {
-      getEventAdmin().postEvent( new Event( "com.nokia.megtest.EchoReplyEvent", null ) );
+      getEventAdmin().postEvent( new Event( "com/nokia/megtest/EchoReplyEvent", null ) );
       writeResult( "EVENT ECHOED" );
     }
-    else if( event.getTopic().equals( "com.nokia.megtest.LogEvent" ) )
+    else if( event.getTopic().equals( "com/nokia/megtest/LogEvent" ) )
     {
       getLogService().log( LogService.LOG_INFO, "Test message logged!" );
       writeResult( "EVENT LOGGED" );
     }
-    else if( event.getTopic().equals( "com.nokia.megtest.SubscribeEvent" ) )
+    else if( event.getTopic().equals( "com/nokia/megtest/SubscribeEvent" ) )
     {
       String task = (String)event.getProperty( "task" );
 
       if( task.equals( "subscribe" ) )
-        registerForEvents( "com.nokia.megtest.RegisteredEvent" );
+        registerForEvents( "com/nokia/megtest/RegisteredEvent" );
       if( task.equals( "unsubscribe" ) )
-        unregisterForEvents( "com.nokia.megtest.RegisteredEvent" );
+        unregisterForEvents( "com/nokia/megtest/RegisteredEvent" );
       writeResult( "EVENT SUBSCRIBED" );
     }
-    else if( event.getTopic().equals( "com.nokia.megtest.RegisteredEvent" ) )
+    else if( event.getTopic().equals( "com/nokia/megtest/RegisteredEvent" ) )
       writeResult( "EVENT REGISTERED" );
   }
 
