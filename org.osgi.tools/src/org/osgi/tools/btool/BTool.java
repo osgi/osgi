@@ -48,6 +48,7 @@ public class BTool extends Task {
 	IPA					ipa;
 	private File		workspaceDir;
 	private File		projectDir;
+	String				prebuild = "";
 
 	/**
 	 * Try out the Deliver program. Syntax: Please note that the classpath must
@@ -199,8 +200,6 @@ public class BTool extends Task {
 		this.showmanifest = false;
 		ManifestResource mf = new ManifestResource(this, manifestSource, false);
 		manifest = new Manifest(mf.getInputStream());
-		System.out
-				.println("New manifest, activator " + manifest.getActivator());
 		this.showmanifest = showmanifest;
 	}
 
@@ -292,11 +291,30 @@ public class BTool extends Task {
 				addProperty(infoPrefix + ".bindir", sourcePath.replace(',',
 						File.pathSeparatorChar));
 			
+			
+			/**
+			 * The prebuild is an attribute that is prepended to the
+			 * dependency path derived from the Eclipse project
+			 */
 			String buildpath = eclipse.getBuildPath();
-			if ( buildpath != null ) {
-				verify("buildpath", buildpath);
-				addProperty(infoPrefix + ".buildpath", eclipse.getBuildPath());
+			StringBuffer		sb = new StringBuffer();
+			String del = "";
+			
+			StringTokenizer st = new StringTokenizer(prebuild," ," );
+			while ( st.hasMoreTokens()) {
+				sb.append(del);
+				sb.append(new File(workspaceDir, st.nextToken()).getAbsoluteFile());
+				del = File.pathSeparator;
 			}
+			if ( buildpath != null && buildpath.length()>0 ) {
+				sb.append(del);
+				sb.append(buildpath);
+			}
+			//TODO: Would like to have this property not existing if
+			// nothing is set, but ant seems to inherit it in some
+			// way
+			//if ( sb.length() > 0 )
+				addProperty(infoPrefix + ".buildpath", sb.toString());
 		}
 	}
 	
@@ -1047,5 +1065,11 @@ public class BTool extends Task {
 		if (ipas != null) {
 			ipa = new IPA(this, ipas);
 		}
+	}
+	/**
+	 * @param prebuild The prebuild to set.
+	 */
+	public void setPrebuild(String prebuild) {
+		this.prebuild = prebuild;
 	}
 }

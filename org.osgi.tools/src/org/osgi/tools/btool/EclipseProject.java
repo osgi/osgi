@@ -33,7 +33,17 @@ public class EclipseProject {
 	protected File			file;
 	protected Locator		locator;
 	Vector					sourceFolders	= new Vector();
-	static final String		PATHSEP			= File.pathSeparator; // This must be path separator for ant script path processing (subant)
+	static final String		PATHSEP			= File.pathSeparator;		// This
+																			   // must
+																			   // be
+																			   // path
+																			   // separator
+																			   // for
+																			   // ant
+																			   // script
+																			   // path
+																			   // processing
+																			   // (subant)
 	private StringBuffer	sourcepath		= new StringBuffer(1024);
 	private StringBuffer	classpath		= new StringBuffer(1024);
 	private StringBuffer	bootclasspath	= new StringBuffer(1024);
@@ -41,6 +51,7 @@ public class EclipseProject {
 	private String			bindir;
 	List					before			= new Vector();
 	int						level;
+	private Hashtable		dependingOn = new Hashtable();
 
 	public EclipseProject(File eclipseProject, boolean root) {
 		this.eclipseProject = eclipseProject;
@@ -78,7 +89,7 @@ public class EclipseProject {
 	}
 
 	protected void addClasspath(String path) {
-		if ( isBoot(path))
+		if (isBoot(path))
 			addBootclasspath(path);
 		else {
 			if (classpath.length() > 0) {
@@ -88,14 +99,13 @@ public class EclipseProject {
 		}
 	}
 
-	boolean isBoot( String path ) {
-		if ( path == null )
+	boolean isBoot(String path) {
+		if (path == null)
 			return false;
-		
-		File	file = new File(path);
+		File file = new File(path);
 		return file.getName().startsWith("ee.");
 	}
-	
+
 	protected void addBootclasspath(String path) {
 		if (bootclasspath.length() > 0) {
 			bootclasspath.append(PATHSEP);
@@ -242,8 +252,16 @@ public class EclipseProject {
 						File otherEclipseProject = new File(workspace, path);
 						EclipseProject cp;
 						try {
-							cp = new EclipseProject(otherEclipseProject, false);
-							cp.level = level + 1;
+							cp = (EclipseProject) dependingOn
+									.get(otherEclipseProject);
+							if (cp == null) {
+								cp = new EclipseProject(otherEclipseProject,
+										false);
+								dependingOn.put(otherEclipseProject, cp);
+							} else {
+							}
+							if (cp.level <= level)
+								cp.level = level + 1;
 							before.add(cp);
 							cp.execute(properties);
 							addClasspath(cp.getClasspath());
@@ -301,23 +319,23 @@ public class EclipseProject {
 						 * var is a dir or jar/zip file the first component of
 						 * which is a variable name.
 						 */
-//						if (root || exported) {
-//							int index = path.indexOf('/');
-//							String variable = (index < 0) ? path : path
-//									.substring(0, index);
-//							String value = (String) properties.get(variable);
-//							if (value != null) {
-//								value = variable;
-//							}
-//							if (value == null) {
-//								throw new SAXParseException(
-//										"Undefined property \"" + value + "\"",
-//										locator);
-//							}
-//							String result = (index < 0) ? value : (value + path
-//									.substring(index + 1));
-//							addClasspath(result);
-//						}
+						//						if (root || exported) {
+						//							int index = path.indexOf('/');
+						//							String variable = (index < 0) ? path : path
+						//									.substring(0, index);
+						//							String value = (String) properties.get(variable);
+						//							if (value != null) {
+						//								value = variable;
+						//							}
+						//							if (value == null) {
+						//								throw new SAXParseException(
+						//										"Undefined property \"" + value + "\"",
+						//										locator);
+						//							}
+						//							String result = (index < 0) ? value : (value + path
+						//									.substring(index + 1));
+						//							addClasspath(result);
+						//						}
 					}
 					else
 						if ("output".equals(kind)) {
