@@ -17,11 +17,12 @@
  */
 package unittests;
 
+import java.util.Arrays;
 import org.osgi.framework.AdminPermission;
+import org.osgi.framework.PackagePermission;
 import org.osgi.impl.service.policy.permadmin.PermissionAdminPlugin;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtFactory;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -34,10 +35,20 @@ import unittests.util.DmtPluginTestCase;
  * @version $Revision$
  */
 public class PermissionAdminPluginTest extends DmtPluginTestCase {
-	public static final String ROOT = PermissionAdminPlugin.dataRootURI; 
+	public static final String ROOT = PermissionAdminPlugin.dataRootURI;
+
+	public static final String LOCATION1 = "http://location1";
+	public static final String LOCATION1_HASH = "W+7i9Qa7tsvxf7Z9COBtdKgvKhM";
+
+	public static final String LOCATION2 = "http://location2";
+	public static final String LOCATION2_HASH = "xQrRNwWiEbyK3UXtpqgTb36LdZk";
+
 	public DummyPermissionAdmin	permAdmin;
 	public PermissionAdminPlugin	plugin;
 	public static final PermissionInfo ADMINPERMISSION = new PermissionInfo(AdminPermission.class.getName(),"","");
+	public static final PermissionInfo IMPORTFRAMEWORKPERMISSION 
+		= new PermissionInfo(PackagePermission.class.getName(),"org.osgi.framework","IMPRT");
+
 	private DmtSession	dmtSession;
 
 	public void setUp() throws Exception {
@@ -134,4 +145,26 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 		PermissionInfo[] permissionInfo = permAdmin.getDefaultPermissions();
 		assertEquals(1,permissionInfo.length);
 	}
+	
+	public void testBasicPermissionRead() throws Exception {
+		permAdmin.setPermissions(LOCATION1, new PermissionInfo[] {ADMINPERMISSION});
+		newSession();
+		String pis = dmtSession.getNodeValue(ROOT+"/"+LOCATION1_HASH+"/PermissionInfo").getString();
+		assertEquals(ADMINPERMISSION.getEncoded()+"\n",pis);
+	}
+	
+	public void testRootTreeChildren() throws Exception {
+		permAdmin.setDefaultPermissions(new PermissionInfo[] {ADMINPERMISSION});
+		permAdmin.setPermissions(LOCATION1, new PermissionInfo[] {ADMINPERMISSION});
+		permAdmin.setPermissions(LOCATION2, new PermissionInfo[] {ADMINPERMISSION});
+		newSession();
+		String[] children = dmtSession.getChildNodeNames(ROOT);
+		Arrays.sort(children);
+		assertEquals(3,children.length);
+		assertEquals("Default",children[0]);
+		assertEquals(LOCATION1_HASH,children[1]);
+		assertEquals(LOCATION2_HASH,children[2]);
+	}
+	
+	
 }
