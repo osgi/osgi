@@ -29,124 +29,110 @@ package org.osgi.service.event;
 import java.util.*;
 import org.osgi.framework.Filter;
 
-
-
 /**
- * Contains information regarding an event.<p>
- *
- * <i>NOTE: Although sub-classes are not precluded, the operations defined by this class MUST NOT be overridden.</i>
- *
+ * Contains information regarding an event.
+ * <p>
+ * 
+ * <i>NOTE: Although sub-classes are not precluded, the operations defined by
+ * this class MUST NOT be overridden. </i>
+ * 
  * @version $Revision$
  */
 public class ChannelEvent {
-
 	/**
 	 * The topic of this event.
 	 */
-	private final String topic;
-
+	private final String	topic;
 	/**
-	 * The properties carried by this event. Keys are strings and values are objects
+	 * The properties carried by this event. Keys are strings and values are
+	 * objects
 	 */
-	private Hashtable properties;
-
-
+	private Hashtable		properties;
 
 	/**
-     * Constructs an event.
-     *
-     * @param topic the topic of the event
-     * @param properties the event's properties (may be null)
-     *
-     * @throws IllegalArgumentException if topic is not a valid topic name, or if properties contains case-variants of the same key
+	 * Constructs an event.
+	 * 
+	 * @param topic The topic of the event.
+	 * @param properties The event's properties (may be null).
+	 * 
+	 * @throws IllegalArgumentException If topic is not a valid topic name, or
+	 *         if properties contains case-variants of the same key.
 	 */
 	public ChannelEvent(String topic, Dictionary properties) {
-        // TODO: Verify that topic is well-formed
+		// TODO: Verify that topic is well-formed
 		this.topic = topic;
-
 		this.properties = new Hashtable();
-
 		if (properties != null) {
-            for (Enumeration e = properties.keys(); e.hasMoreElements(); ) {
-                String key   = (String) e.nextElement();
-                Object value = properties.get(key);
-
-                if (this.properties.put(key, value) != null) {
-                    throw new IllegalArgumentException("Dictionary contains case-variants of the same key; key = " + key);
-                }
-            }
-        }
-
-        this.properties.put("topic", topic);
+			for (Enumeration e = properties.keys(); e.hasMoreElements();) {
+				String key = (String) e.nextElement();
+				Object value = properties.get(key);
+				if (this.properties.put(key, value) != null) {
+					throw new IllegalArgumentException(
+							"Dictionary contains case-variants of the same key; key = "
+									+ key);
+				}
+			}
+		}
+		this.properties.put("topic", topic);
 	}
 
-
-
 	/**
-     * Retrieves a property.
-     *
-     * @param name the name of the property to retrieve
-     *
-     * @return the value of the property, or null if not found
-     *
-     * @throws NullPointerException if name is null
+	 * Retrieves a property.
+	 * 
+	 * @param name the name of the property to retrieve
+	 * 
+	 * @return The value of the property, or null if not found.
+	 * 
+	 * @throws NullPointerException If name is null.
 	 */
 	public final Object getProperty(String name) {
 		return properties.get(name);
 	}
 
-
-
 	/**
-     * Returns a list of this event's property names
-     *
-     * @return a non-empty array with one element per property
+	 * Returns a list of this event's property names.
+	 * 
+	 * @return A non-empty array with one element per property.
 	 */
 	public final String[] getPropertyNames() {
 		String[] names = new String[properties.size()];
-
 		Enumeration keys = properties.keys();
-        for (int i = 0; keys.hasMoreElements(); i++) {
+		for (int i = 0; keys.hasMoreElements(); i++) {
 			names[i] = (String) keys.nextElement();
-        }
-
+		}
 		return names;
 	}
 
-
-
 	/**
-     * Returns the topic of this event.
+	 * Returns the topic of this event.
+	 * 
+	 * @return The topic of this event.
 	 */
 	public final String getTopic() {
 		return topic;
 	}
 
-
-
 	/**
-     * Tests this event's properties against the given filter.
-     *
-     * @param filter the filter to test
-     *
-     * @return true if this event's properties match the filter, false otherwise
-     *
-     * @throws NullPointerException if filter is null
+	 * Tests this event's properties against the given filter.
+	 * 
+	 * @param filter The filter to test.
+	 * 
+	 * @return true If this event's properties match the filter, false
+	 *         otherwise.
+	 * 
+	 * @throws NullPointerException If filter is null.
 	 */
 	public final boolean matches(Filter filter) {
-        // TODO: Case-insensitivity
-		return filter.match(properties);
+		return filter.matchCase(properties);
 	}
 
-
-
 	/**
-     * Tests this object for equality with another object.
-     *
-	 * @param obj the other object to test against
-     *
-	 * @return true if this object is equivalent to obj
-     *
+	 * Tests this object for equality with another object.
+	 * 
+	 * @param obj The other object to test against.
+	 * 
+	 * @return true If this object is equivalent to obj.
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	public boolean equals(Object obj) {
@@ -154,26 +140,21 @@ public class ChannelEvent {
 			ChannelEvent evt = (ChannelEvent) obj;
 			return topic.equals(evt.topic) && properties.equals(evt.properties);
 		}
-
 		return false;
 	}
 
-
-
 	/**
 	 * Returns a hash code for this object.
-     *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	public int hashCode() {
 		return topic.hashCode() ^ properties.hashCode();
 	}
 
-
-
 	/**
 	 * Returns the string representation of this object.
-     *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {

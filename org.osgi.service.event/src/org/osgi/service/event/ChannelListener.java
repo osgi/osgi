@@ -32,11 +32,10 @@ package org.osgi.service.event;
  * @version $Revision$
  */
 public interface ChannelListener {
-
 	/**
-     * Called by the {@link ChannelEvent event channel} to notify the listener of an event.
-     *
-     * @param event the event that occurred
+	 * Called by the {@link EventChannel} to notify the listener of an event.
+	 * 
+	 * @param event The event that occurred.
 	 */
 	void channelEvent(ChannelEvent event);
 }
