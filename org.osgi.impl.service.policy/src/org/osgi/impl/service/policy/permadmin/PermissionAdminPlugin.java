@@ -19,8 +19,10 @@
 package org.osgi.impl.service.policy.permadmin;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.SortedSet;
 import org.osgi.impl.service.policy.util.HashCalculator;
 import org.osgi.impl.service.policy.util.Splitter;
 import org.osgi.service.dmt.DmtData;
@@ -46,9 +48,17 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 	public static final String	DEFAULT	= "Default";
 
 	private static final class Entry {
-		boolean isDefault = false;
+		final boolean isDefault;
 		String location;
-		PermissionInfo[] permissionInfo;
+		PermissionInfo[] permissionInfo; // sorted!
+
+		public Entry(boolean isDefault,String location,PermissionInfo[] permissionInfo) {
+			this.isDefault = isDefault;
+			this.location = location;
+			
+			this.permissionInfo = (PermissionInfo[]) permissionInfo.clone();
+			Arrays.sort(this.permissionInfo);
+		}
 
 		/**
 		 * @param nodename the name of the node inside the entry to be checked 
@@ -61,7 +71,14 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 		}
 
 		public DmtData getNodeValue(String nodename) {
-			if (PERMISSIONINFO.equals(nodename)) return new DmtData(permissionInfo[0].getEncoded()+"\n");
+			if (PERMISSIONINFO.equals(nodename)) {
+				StringBuffer sb = new StringBuffer();
+				for(int i=0;i<permissionInfo.length;i++) {
+					sb.append(permissionInfo[i].getEncoded());
+					sb.append("\n");
+				}
+				return new DmtData(sb.toString());
+			}
 			if (LOCATION.equals(nodename)) return new DmtData(location);
 
 			// isNodeUri should prevent this
@@ -101,18 +118,18 @@ public class PermissionAdminPlugin implements DmtDataPlugIn {
 	 */
 	private void loadFromPermissionAdmin() {
 		String[] locations = permissionAdmin.getLocations();
+		PermissionInfo[] permissionInfo;
+		String location;
 		if (locations==null) locations=new String[0];
 		entries = new HashMap();
 		for(int i=0;i<locations.length;i++) {
-			Entry e = new Entry();
-			e.location = locations[i];
-			e.permissionInfo = permissionAdmin.getPermissions(e.location);
+			location = locations[i];
+			permissionInfo = permissionAdmin.getPermissions(location);
+			Entry e = new Entry(false,location,permissionInfo);
 			entries.put(hashCalculator.getHash(e.location),e);
 		}
-		Entry e = new Entry();
-		e.isDefault = true;
-		e.permissionInfo = permissionAdmin.getDefaultPermissions();
-		if (e.permissionInfo!=null) entries.put(DEFAULT,e);
+		permissionInfo = permissionAdmin.getDefaultPermissions();
+		if (permissionInfo!=null) entries.put(DEFAULT,new Entry(true,null,permissionInfo));
 	}
 
 	public DmtMetaNode getMetaNode(String nodeUri, DmtMetaNode generic)
