@@ -13,7 +13,8 @@
 	     with relative directories -->
 	<dirname property="project" file="${ant.file}" />
 	<dirname property="workspace" file="${project}" />
-
+	<echo>${project} to  ${release.dir}</echo>
+		
 	<!-- Task defs, removed the recursive search for performance
 	     reasons 
 	-->
@@ -95,7 +96,7 @@
 	     The publish will not run if none of the files is changed. This
 	     target does NOT check projects it dependends on!
 	-->
-	<target name="publish" depends="check" unless="jar.ok">
+	<target name="publish" depends="check" > <!-- unless="jar.ok" -->
 		<delete>
 			<fileset dir="${project}" includes="${jars.compile.order}" />
 		</delete>
@@ -120,8 +121,8 @@
 	    RELEASE
 	    Copy the JAR file to the osgi.released directory.
 	-->
-	<target name="release">
-		<copy overwrite="true" todir="../osgi.released" file="${item.jarFile}" />
+	<target name="release" if="release.dir">
+		<copy overwrite="true" todir="${release.dir}" file="${item.jarFile}" />
 	</target>
 	
 	<!--
@@ -227,6 +228,7 @@
 		<delete>
 			<fileset dir="${project.bindir}" includes="**/*.bak **/*.class" />
 			<fileset dir="${project}" includes="**/*.bak **/~* ${jars.compile.order}" />
+			<fileset dir="${workspace}/cnf/cache" includes="${project.name}" />
 		</delete>
 		<foreach delimiter="," list="${project.buildpath}" target="clean.item" param="item.dir"/>
 	</target>

@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/osgi.released/osgi.jar"/>
-	<classpathentry kind="lib" path="/osgi.released/osgi-target.jar"/>
 	<classpathentry kind="lib" path="/cnf/jar/servlet.jar"/>
+	<classpathentry kind="lib" path="/osgi.released/osgi-internal.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

@@ -22,5 +22,6 @@
 	<classpathentry exported="true" kind="src" path="/org.osgi.util.tracker"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.util.xml"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.startlevel"/>
+	<classpathentry kind="src" path="/ee.minimum"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

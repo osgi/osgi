@@ -1,3 +1,4 @@
-<project name="osgi-test-tool" default="publish">
+<project name="osgi" default="publish">
+	<property name="project.name" value="osgi"/>
 	<import file="../cnf/build.xml"/>
 </project>

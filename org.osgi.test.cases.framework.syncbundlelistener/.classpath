@@ -4,6 +4,6 @@
 	<classpathentry kind="src" path="/org.osgi.test.cases.logproxy"/>
 	<classpathentry kind="lib" path="/osgi.released/ee.minimum.jar"/>
 	<classpathentry kind="lib" path="/osgi.released/osgi.jar"/>
-	<classpathentry kind="lib" path="/osgi.released/osgi-target.jar"/>
+	<classpathentry kind="lib" path="/osgi.internal/osgi-internal.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

@@ -5,6 +5,6 @@
 	<classpathentry kind="lib" path="/cnf/jar/servlet.jar"/>
 	<classpathentry kind="var" path="JRE_LIB"/>
 	<classpathentry kind="lib" path="/osgi.released/osgi.jar"/>
-	<classpathentry kind="lib" path="/osgi.released/osgi-console.jar"/>
+	<classpathentry kind="lib" path="/osgi.released/osgi-internal.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
