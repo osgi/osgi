@@ -210,7 +210,7 @@ public class BundleNativeCode {
 			if (osversion == null) {
 				osversion = new Attribute();
 			}
-			osversion.addElement(new Version(value));
+			osversion.addElement(Version.parseVersion(value));
 			return;
 		}
 		if (key.equals(Constants.SELECTION_FILTER_ATTRIBUTE)) {

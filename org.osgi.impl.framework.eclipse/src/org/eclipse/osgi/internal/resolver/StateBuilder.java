@@ -46,7 +46,7 @@ class StateBuilder {
 		}
 		// retrieve other headers
 		String version = (String) manifest.get(Constants.BUNDLE_VERSION);
-		result.setVersion((version != null) ? new Version(version) : Version.emptyVersion);
+		result.setVersion(Version.parseVersion(version));
 		result.setLocation(location);
 		ManifestElement[] host = ManifestElement.parseHeader(Constants.FRAGMENT_HOST, (String) manifest.get(Constants.FRAGMENT_HOST));
 		if (host != null)
@@ -187,7 +187,7 @@ class StateBuilder {
 			result.setName(exportNames[i]);
 			String versionString = manifestVersion < 2 ? exportPackage.getAttribute(Constants.PACKAGE_SPECIFICATION_VERSION) : exportPackage.getAttribute(Constants.VERSION_ATTRIBUTE);
 			if (versionString != null)
-				result.setVersion(new Version(versionString));
+				result.setVersion(Version.parseVersion(versionString));
 
 			// alway setting the grouping here even for manifestVersion==1 because if it is null
 			// the result will return a grouping equal to the package name which is unique and will

@@ -29,7 +29,8 @@
 
 package org.osgi.framework;
 
-import java.util.*;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 /**
  * Version identifier for bundles and packages.
@@ -41,7 +42,7 @@ import java.util.*;
  * @since 1.3
  */
 
-public final class Version implements Comparable {
+public class Version implements Comparable {
 
 	private final int			major;
 	private final int			minor;
@@ -55,7 +56,7 @@ public final class Version implements Comparable {
 
 	/**
 	 * The empty version "0.0.0". Equivalent to calling
-	 * <tt>new Version(0,0,0)</tt>.
+	 * <code>new Version(0,0,0)</code>.
 	 */
 	public static Version		emptyVersion	= new Version(0, 0, 0);
 
@@ -95,21 +96,36 @@ public final class Version implements Comparable {
 		if (qualifier == null) {
 			qualifier = ""; //$NON-NLS-1$
 		}
+		else {
+			int length = qualifier.length();
+			for (int i = 0; i < length; i++) {
+				if ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-".indexOf(qualifier.charAt(i)) == -1) { //$NON-NLS-1$
+					throw new IllegalArgumentException("invalid qualifier"); //$NON-NLS-1$
+				}
+			}
+		}
 
 		this.major = major;
 		this.minor = minor;
 		this.micro = micro;
-		this.qualifier = validateQualifier(qualifier);
+		this.qualifier = qualifier;
 	}
 
 	/**
-	 * Creates a version identifier from the given string.
+	 * Parses a version identifier from the specified string.
 	 * 
 	 * @param version String representation of the version identifier.
-	 * @throws IllegalArgumentException If the version string is improperly
+	 * @return A <code>Version</code> object representing the version
+	 *                 identifier. If <code>version</code> is
+	 *                 <code>null</code> or the empty string then {@link #emptyVersion} will be returned.
+	 * @throws IllegalArgumentException If <code>version</code> is improperly
 	 *                   formatted.
 	 */
-	public Version(String version) {
+	public static Version parseVersion(String version) {
+		if ((version == null) || (version.length() == 0)) {
+			return emptyVersion;
+		}
+
 		int major = 0;
 		int minor = 0;
 		int micro = 0;
@@ -117,19 +133,19 @@ public final class Version implements Comparable {
 
 		try {
 			StringTokenizer st = new StringTokenizer(version, SEPARATOR, true);
-			major = validateNumber(st.nextToken());
+			major = Integer.parseInt(st.nextToken());
 
 			if (st.hasMoreTokens()) {
 				st.nextToken(); // consume delimiter
-				minor = validateNumber(st.nextToken());
+				minor = Integer.parseInt(st.nextToken());
 
 				if (st.hasMoreTokens()) {
 					st.nextToken(); // consume delimiter
-					micro = validateNumber(st.nextToken());
+					micro = Integer.parseInt(st.nextToken());
 
 					if (st.hasMoreTokens()) {
 						st.nextToken(); // consume delimiter
-						qualifier = validateQualifier(st.nextToken());
+						qualifier = st.nextToken();
 
 						if (st.hasMoreTokens()) {
 							throw new IllegalArgumentException("invalid format"); //$NON-NLS-1$
@@ -142,29 +158,7 @@ public final class Version implements Comparable {
 			throw new IllegalArgumentException("invalid format"); //$NON-NLS-1$
 		}
 
-		this.major = major;
-		this.minor = minor;
-		this.micro = micro;
-		this.qualifier = qualifier;
-	}
-
-	private static int validateNumber(String number) {
-		int num = Integer.parseInt(number);
-		if (num < 0) {
-			throw new IllegalArgumentException("invalid format"); //$NON-NLS-1$
-		}
-		return num;
-	}
-
-	private static String validateQualifier(String qualifier) {
-		int length = qualifier.length();
-		for (int i = 0; i < length; i++) {
-			char c = qualifier.charAt(i);
-			if (!(Character.isLetter(c) || Character.isDigit(c) || (c == '_') || (c == '-'))) {
-				throw new IllegalArgumentException("invalid qualifier"); //$NON-NLS-1$
-			}
-		}
-		return qualifier;
+		return new Version(major, minor, micro, qualifier);
 	}
 
 	/**
@@ -211,7 +205,7 @@ public final class Version implements Comparable {
 	public String toString() {
 		if (string == null) {
 			String base = major + SEPARATOR + minor + SEPARATOR + micro;
-			if (qualifier.equals("")) { //$NON-NLS-1$
+			if (qualifier.length() == 0) { //$NON-NLS-1$
 				string = base;
 			}
 			else {
@@ -231,16 +225,16 @@ public final class Version implements Comparable {
 	}
 
 	/**
-	 * Compares this <tt>Version</tt> object to another object.
+	 * Compares this <code>Version</code> object to another object.
 	 * 
-	 * @param object The object to compare against this <tt>Version</tt>
+	 * @param object The object to compare against this <code>Version</code>
 	 *                   object.
-	 * @return <tt>true</tt> if the object is a <tt>Version</tt> object and
-	 *                 has the same major, minor, micro and qualifier to this object;
-	 *                 <tt>false</tt> otherwise.
+	 * @return <code>true</code> if the object is a <code>Version</code>
+	 *                 object and has the same major, minor, micro and qualifier to this
+	 *                 object; <code>false</code> otherwise.
 	 */
 	public boolean equals(Object object) {
-		if (object == this) { //quicktest
+		if (object == this) { // quicktest
 			return true;
 		}
 
@@ -254,21 +248,21 @@ public final class Version implements Comparable {
 	}
 
 	/**
-	 * Compares this <tt>Version</tt> object with the specified
-	 * <tt>Version</tt> object for order. Returns a negative integer, zero, or
-	 * a positive integer if this object is less than, equal to, or greater than
-	 * the specified <tt>Version</tt> object.
+	 * Compares this <code>Version</code> object with the specified
+	 * <code>Version</code> object for order. Returns a negative integer,
+	 * zero, or a positive integer if this object is less than, equal to, or
+	 * greater than the specified <code>Version</code> object.
 	 * <p>
 	 * 
-	 * @param object The <tt>Version</tt> object to be compared.
+	 * @param object The <code>Version</code> object to be compared.
 	 * @return A negative integer, zero, or a positive integer as this object is
 	 *                 less than, equal to, or greater than the specified
-	 *                 <tt>Version</tt> object.
+	 *                 <code>Version</code> object.
 	 * @throws ClassCastException If the specified object's type is not
-	 *                   <tt>Version</tt>.
+	 *                   <code>Version</code>.
 	 */
 	public int compareTo(Object object) {
-		if (object == this) { //quicktest
+		if (object == this) { // quicktest
 			return 0;
 		}
 

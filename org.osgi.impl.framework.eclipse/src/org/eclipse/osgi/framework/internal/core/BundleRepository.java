@@ -69,7 +69,7 @@ public class BundleRepository {
 	public AbstractBundle getBundle(String symbolicName, String version) {
 		AbstractBundle[] bundles = (AbstractBundle[]) bundlesBySymbolicName.get(symbolicName);
 		if (bundles != null) {
-			Version ver = new Version(version);
+			Version ver = Version.parseVersion(version);
 			if (bundles.length > 0) {
 				for (int i = 0; i < bundles.length; i++) {
 					if (bundles[i].getVersion().equals(ver)) {

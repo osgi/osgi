@@ -222,7 +222,7 @@ public class DefaultBundleData extends AbstractBundleData implements Cloneable {
 		if (manifest == null) {
 			throw new IOException(AdaptorMsg.formatter.getString("ADAPTOR_ERROR_GETTING_MANIFEST", getLocation())); //$NON-NLS-1$
 		}
-		setVersion(new Version((String) manifest.get(Constants.BUNDLE_VERSION)));
+		setVersion(Version.parseVersion((String) manifest.get(Constants.BUNDLE_VERSION)));
 		setSymbolicName(AbstractBundleData.parseSymbolicName(manifest));
 		setClassPath((String) manifest.get(Constants.BUNDLE_CLASSPATH));
 		setActivator((String) manifest.get(Constants.BUNDLE_ACTIVATOR));

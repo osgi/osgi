@@ -55,12 +55,12 @@ public class VersionRange {
 			if (last != ']' && last != ')')
 				throw new IllegalArgumentException();
 
-			minVersion = new Version(versionRange.substring(1, comma));
+			minVersion = Version.parseVersion(versionRange.substring(1, comma));
 			includeMin = versionRange.charAt(0) == '[';
-			maxVersion = new Version(versionRange.substring(comma + 1, versionRange.length() - 1));
+			maxVersion = Version.parseVersion(versionRange.substring(comma + 1, versionRange.length() - 1));
 			includeMax = last == ']';
 		} else {
-			minVersion = new Version(versionRange);
+			minVersion = Version.parseVersion(versionRange);
 			includeMin = true;
 			maxVersion = versionMax;
 			includeMax = true;

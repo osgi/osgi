@@ -143,7 +143,7 @@ public class SystemBundleData extends AbstractBundleData {
 		setSymbolicName(AbstractBundleData.parseSymbolicName(manifest));
 		String sVersion = (String) manifest.get(Constants.BUNDLE_VERSION);
 		if (sVersion != null)
-			setVersion(new Version(sVersion));
+			setVersion(Version.parseVersion(sVersion));
 	}
 
 	public BundleClassLoader createClassLoader(ClassLoaderDelegate delegate, ProtectionDomain domain, String[] bundleclasspath) {

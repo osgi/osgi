@@ -774,7 +774,7 @@ public class Framework implements EventDispatcher, EventPublisher {
 		/* Pass 2: perform osversion matching */
 		Version osversion;
 		try {
-			osversion = new Version(getProperty(Constants.FRAMEWORK_OS_VERSION));
+			osversion = Version.parseVersion(getProperty(Constants.FRAMEWORK_OS_VERSION));
 		} catch (Exception e) {
 			osversion = Version.emptyVersion;
 		}

@@ -103,8 +103,8 @@ public class PackageAdminImpl implements PackageAdmin {
 				}
 				else {
 					// TODO not efficient but this is not called very often
-					Version curVersion = new Version(result.getSpecificationVersion());
-					Version newVersion = new Version(allExports[i].getSpecificationVersion());
+					Version curVersion = Version.parseVersion(result.getSpecificationVersion());
+					Version newVersion = Version.parseVersion(allExports[i].getSpecificationVersion());
 					if (newVersion.compareTo(curVersion) >= 0)
 						result = allExports[i];
 				}
