@@ -26,6 +26,7 @@ group-load: \
   org.osgi.impl.service.upnp.cp.jar,
   org.osgi.impl.service.useradmin.jar,
   org.osgi.impl.service.wireadmin.jar,
+  org.osgi.impl.bundle.jaxp.jar,
   org.osgi.impl.bundle.saxon.jar,
   org.osgi.impl.bundle.rsh.jar,
   org.osgi.impl.service.event.jar,
