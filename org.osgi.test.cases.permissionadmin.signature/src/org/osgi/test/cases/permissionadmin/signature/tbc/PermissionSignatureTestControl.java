@@ -31,6 +31,7 @@ import org.osgi.framework.*;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
+
 import org.osgi.service.cm.ConfigurationPermission;
 
 import org.osgi.test.cases.util.DefaultTestBundleControl;
@@ -42,8 +43,6 @@ import java.net.URL;
 
 import java.util.Vector;
 import java.util.Hashtable;
-
-
 
 /**
  * Contains the test methods of the permission signature test case.
@@ -74,6 +73,21 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	private String 							className;
 	private int								startLevel = 1;
 	
+	static String[]	methods	= new String[] {"test_Permission", 
+			"test_AdminPermission_metadata", "test_AdminPermission_resource", 
+			"test_AdminPermission_execute", "test_AdminPermission_Class", 
+			"test_AdminPermission", 
+			"test_AdminPermission_listener", "test_AdminPermission_permission", 
+			"test_AdminPermission_resolve", "test_AdminPermission_startlevel", 
+			"test_AdminPermission_lifecycle", 
+			"test_ConfigurationPermission_get", "test_ConfigurationPermission_set"};
+
+	
+	
+	public String[] getMethods() {
+		return methods;
+	}	
+	
 	
 	public void prepare() throws Exception {
 		testBundle = installBundle("tb1.jar");
@@ -93,6 +107,9 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 		
 		defaultPermissions = permissionAdmin.getPermissions(testBundleLocation);
 
+		//Certificate[] c = PermissionSignatureUtility.getCertificate("D:\\test\\tb2_signed.jar");
+
+		
 	}
 
 	/**
@@ -103,6 +120,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	 */
 	public void setState() throws Exception {
 		permissionAdmin.setPermissions(testBundleLocation, null);
+		//uninstallTestSignatureBundle();
 		installTestSignatureBundle();
 	}
 
@@ -114,7 +132,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 		printPermissions(testBundleLocation);
 		String message = "";
 		
-		//Each bundle must be given AdminPermission(<bundle id>, �resource�) so that it can access it�s own resources. 
+		//Each bundle must be given AdminPermission(<bundle id>, "resource") so that it can access it's own resources. 
 		// TO DO - podhodqsti resource
 		String resource = "/META-INF/MANIFEST.MF";
 		utility.allowed_Bundle_getResource(message, testBundle, resource);
@@ -174,9 +192,11 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 		utility.allowed_Bundle_start(message, testSignatureBundle);
 		utility.allowed_Bundle_update(message, testSignatureBundle);
 		utility.allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getSignatureInputStream());
-		utility.allowed_Bundle_uninstall(message, testSignatureBundle);
-		utility.allowed_BundleContext_installBundle(message, signatureBundleLocation);
-		utility.allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getSignatureInputStream());
+		
+		Bundle b = (Bundle)utility.allowed_BundleContext_installBundle(message, signatureBundleLocation);
+		utility.allowed_Bundle_uninstall(message, b);
+		 b = (Bundle)utility.allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getSignatureInputStream());
+		utility.allowed_Bundle_uninstall(message, b);
 		utility.allowed_BundleContext_addBundleListener(message);
 		utility.allowed_BundleContext_removeBundleListener(message);
 		utility.allowed_PackageAdmin_refreshPackages(message, null);
@@ -198,6 +218,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 		utility.not_allowed_Configuration_setBundleLocation(message, PermissionSignatureUtility.CONFIG_FPID);
 		
 	}
+	
 	
 	
 	/**
@@ -388,15 +409,14 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[]{info});
 			printPermissions(testBundleLocation);
 			
-			utility.allowed_Bundle_update(message, testSignatureBundle);
-			utility.allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getSignatureInputStream());
-			utility.allowed_Bundle_uninstall(message, testSignatureBundle);
-			utility.allowed_BundleContext_installBundle(message, signatureBundleLocation);
-			utility.allowed_Bundle_uninstall(message, testSignatureBundle);
-			utility.allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getSignatureInputStream());
-			uninstallTestSignatureBundle();
-			installTestSignatureBundle();
 			
+			Bundle b = (Bundle)utility.allowed_BundleContext_installBundle(message, signatureBundleLocation);
+			utility.allowed_Bundle_update(message,b);
+			utility.allowed_Bundle_update_by_InputStream(message, b, getSignatureInputStream());
+			utility.allowed_Bundle_uninstall(message, b);
+			b = (Bundle)utility.allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getSignatureInputStream());
+			utility.allowed_Bundle_uninstall(message, b);
+
 			utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
 			utility.not_allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
 			utility.not_allowed_Bundle_getLocation(message, testSignatureBundle);
@@ -421,6 +441,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 		}
 	
 	}
+	
 	
 	/**
 	 * Tests AdminPermission with an action parameter - execute. 
@@ -543,7 +564,56 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	 * 
 	 * The bundle is specified either by bundle id or by filter string.
 	 */
-	public void test_AdminPermission_permission() {
+	public void test_AdminPermission_permission() throws Throwable {
+		String message = "";
+		Vector permissions = utility.getPInfosForAdminPermisssion(
+				PermissionSignatureUtility.PERMISSION,
+				0, 
+				testSignatureBundle.getLocation(), 
+				testSignatureBundle.getSymbolicName());	
+
+		
+		PermissionInfo info; 
+		for (int i = 0; i < permissions.size(); ++i) {
+			info = (PermissionInfo)permissions.elementAt(i);
+
+			permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[]{info});
+			printPermissions(testBundleLocation);
+	
+			
+			if (i < 2) {
+				utility.allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
+					new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
+				utility.allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
+			} else {
+				utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
+						new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
+				utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
+			}
+			
+			utility.not_allowed_BundleContext_addBundleListener(message);
+			utility.not_allowed_BundleContext_removeBundleListener(message);
+			utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
+			utility.not_allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
+			utility.not_allowed_Bundle_getLocation(message, testSignatureBundle);
+			utility.not_allowed_Bundle_getResource(message, testSignatureBundle, resourceName);
+			utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
+			utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
+			utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
+			utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
+			utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
+			utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, startLevel);
+			utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
+			utility.not_allowed_Bundle_stop(message, testSignatureBundle);
+			utility.not_allowed_Bundle_start(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getSignatureInputStream());
+			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
+			utility.not_allowed_BundleContext_installBundle(message, signatureBundleLocation);
+			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getSignatureInputStream());
+			utility.not_allowed_PackageAdmin_refreshPackages(message, null);
+			utility.not_allowed_PackageAdmin_resolveBundles(message, null);
+		}
 	}
 	
 	
@@ -556,7 +626,56 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	 * 
 	 * The bundle is specified either by bundle id or by filter string.
 	 */
-	public void test_AdminPermission_resolve() {
+	public void test_AdminPermission_resolve() throws Throwable {
+		String message = "";
+		Vector permissions = utility.getPInfosForAdminPermisssion(
+				PermissionSignatureUtility.RESOLVE,
+				0, 
+				testSignatureBundle.getLocation(), 
+				testSignatureBundle.getSymbolicName());	
+
+		
+		PermissionInfo info; 
+		for (int i = 0; i < permissions.size(); ++i) {
+			info = (PermissionInfo)permissions.elementAt(i);
+
+			permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[]{info});
+			printPermissions(testBundleLocation);
+	
+			
+			if (i < 2) {
+				utility.allowed_PackageAdmin_refreshPackages(message, null);
+				utility.allowed_PackageAdmin_resolveBundles(message, null);
+			} else {
+				utility.not_allowed_PackageAdmin_refreshPackages(message, null);
+				utility.not_allowed_PackageAdmin_resolveBundles(message, null);
+			}
+			
+			utility.not_allowed_BundleContext_addBundleListener(message);
+			utility.not_allowed_BundleContext_removeBundleListener(message);
+			utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
+			utility.not_allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
+			utility.not_allowed_Bundle_getLocation(message, testSignatureBundle);
+			utility.not_allowed_Bundle_getResource(message, testSignatureBundle, resourceName);
+			utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
+			utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
+			utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
+			utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
+			utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
+			utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, startLevel);
+			utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
+			utility.not_allowed_Bundle_stop(message, testSignatureBundle);
+			utility.not_allowed_Bundle_start(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getSignatureInputStream());
+			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
+			utility.not_allowed_BundleContext_installBundle(message, signatureBundleLocation);
+			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getSignatureInputStream());
+			utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
+					new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
+			utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
+		
+		}
 	
 	}
 	
@@ -569,8 +688,56 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	 * 
 	 * The bundle is specified either by bundle id or by filter string.
 	 */
-	public void test_AdminPermission_startlevel() {
+	public void test_AdminPermission_startlevel() throws Throwable {
+		String message = "";
+		Vector permissions = utility.getPInfosForAdminPermisssion(
+				PermissionSignatureUtility.SLART_LEVEL,
+				0, 
+				testSignatureBundle.getLocation(), 
+				testSignatureBundle.getSymbolicName());	
+
+		
+		PermissionInfo info; 
+		for (int i = 0; i < permissions.size(); ++i) {
+			info = (PermissionInfo)permissions.elementAt(i);
+
+			permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[]{info});
+			printPermissions(testBundleLocation);
 	
+			
+			if (i < 2) {
+				utility.allowed_StartLevel_setStartLevel(message, startLevel);
+				utility.allowed_StartLevel_setInitialBundleStartLevel(message, startLevel);
+			} else {
+				utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
+				utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, startLevel);
+			}
+			
+			utility.not_allowed_BundleContext_addBundleListener(message);
+			utility.not_allowed_BundleContext_removeBundleListener(message);
+			utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
+			utility.not_allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
+			utility.not_allowed_Bundle_getLocation(message, testSignatureBundle);
+			utility.not_allowed_Bundle_getResource(message, testSignatureBundle, resourceName);
+			utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
+			utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
+			utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
+			utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
+			utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
+			utility.not_allowed_Bundle_stop(message, testSignatureBundle);
+			utility.not_allowed_Bundle_start(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getSignatureInputStream());
+			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
+			utility.not_allowed_BundleContext_installBundle(message, signatureBundleLocation);
+			utility.not_allowed_BundleContext_installBundle_by_InputStream(message, signatureBundleLocation, getSignatureInputStream());
+			utility.not_allowed_PackageAdmin_refreshPackages(message, null);
+			utility.not_allowed_PackageAdmin_resolveBundles(message, null);
+			utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
+					new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
+			utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
+		
+		}
 	}
 	
 	
@@ -713,15 +880,15 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 		}
 	}	
 
-	boolean allowed_call(String message, String methodName,  Class[] paramClasses, Object[] paramObjects) {
+	Object allowed_call(String message, String methodName,  Class[] paramClasses, Object[] paramObjects) {
 		try {
 			MethodCall method = new MethodCall(methodName, paramClasses, paramObjects);
-			method.invoke(tbc);
+			Object result = method.invoke(tbc);
 			pass(message);
-			return true;
+			return result;
 		} catch (Throwable e) {
 			fail(message + " but " + e.getClass().getName() + " was thrown");
-			return false;
+			return null;
 		}
 	}
 	

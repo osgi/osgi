@@ -11,7 +11,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 
-
 public class PermissionSignatureUtility {
 	
 	// AdminPermission actions
@@ -50,7 +49,7 @@ public class PermissionSignatureUtility {
 
 	
 	//	 returns true if 'method' succeed
-	public boolean allowed_Bundle_getHeaders(String message, Bundle bundle) throws Exception {
+	public Object allowed_Bundle_getHeaders(String message, Bundle bundle) throws Exception {
 		return control.allowed_call("call Bundle.getHeaders() " + message, "callBundle_getHeaders",
 				new Class[]{Bundle.class}, new Object[]{bundle});
 	}
@@ -63,7 +62,7 @@ public class PermissionSignatureUtility {
 	}
 
 	
-	public boolean allowed_Bundle_getHeaders_byLocation(String message, Bundle bundle) throws Exception {
+	public Object allowed_Bundle_getHeaders_byLocation(String message, Bundle bundle) throws Exception {
 		return control.allowed_call("call Bundle.getHeaders(String) " + message, "callBundle_getHeaders",
 				new Class[]{Bundle.class, String.class}, new Object[]{bundle, null});
 	}
@@ -73,7 +72,7 @@ public class PermissionSignatureUtility {
 				new Class[]{Bundle.class, String.class}, new Object[]{bundle, null}, SecurityException.class);
 	}
 	
-	public boolean allowed_Bundle_getLocation(String message, Bundle bundle) throws Exception {
+	public Object allowed_Bundle_getLocation(String message, Bundle bundle) throws Exception {
 		return control.allowed_call("call Bundle.getLocation() " + message, "callBundle_getLocation",
 				new Class[]{Bundle.class}, new Object[]{bundle});
 	}
@@ -131,7 +130,7 @@ public class PermissionSignatureUtility {
 				new Class[]{Bundle.class, String.class}, new Object[]{bundle, name});
 	}
 	
-	public boolean allowed_Bundle_loadClass(String message, Bundle bundle, String name) throws Exception {
+	public Object allowed_Bundle_loadClass(String message, Bundle bundle, String name) throws Exception {
 		return control.allowed_call("call Bundle.loadClass(String) " + message, "callBundle_loadClass", 
 				new Class[]{Bundle.class, String.class}, new Object[]{bundle, name});
 	}
@@ -141,7 +140,7 @@ public class PermissionSignatureUtility {
 				new Class[]{Bundle.class, String.class}, new Object[]{bundle, name}, java.lang.ClassNotFoundException.class);
 	}
 	
-	public boolean allowed_Bundle_stop(String message, Bundle bundle) throws Exception {
+	public Object allowed_Bundle_stop(String message, Bundle bundle) throws Exception {
 		return control.allowed_call("call Bundle.stop() " + message, "callBundle_stop", 
 				new Class[]{Bundle.class}, new Object[]{bundle});
 	}
@@ -151,7 +150,7 @@ public class PermissionSignatureUtility {
 				new Class[]{Bundle.class}, new Object[]{bundle}, SecurityException.class);
 	}
 
-	public boolean allowed_Bundle_uninstall(String message, Bundle bundle) throws Exception {
+	public Object allowed_Bundle_uninstall(String message, Bundle bundle) throws Exception {
 		return control.allowed_call("call Bundle.uninstall() " + message, "callBundle_uninstall", 
 				new Class[]{Bundle.class}, new Object[]{bundle});
 	}
@@ -161,7 +160,7 @@ public class PermissionSignatureUtility {
 				new Class[]{Bundle.class}, new Object[]{bundle}, SecurityException.class);
 	}
 
-	public boolean allowed_Bundle_update(String message, Bundle bundle) throws Exception {
+	public Object allowed_Bundle_update(String message, Bundle bundle) throws Exception {
 		return control.allowed_call("call Bundle.update() " + message, "callBundle_update", 
 				new Class[]{Bundle.class}, new Object[]{bundle});
 	}
@@ -171,7 +170,7 @@ public class PermissionSignatureUtility {
 				new Class[]{Bundle.class}, new Object[]{bundle}, SecurityException.class);
 	}
 
-	public boolean allowed_Bundle_update_by_InputStream(String message, Bundle bundle, InputStream is) throws Exception {
+	public Object allowed_Bundle_update_by_InputStream(String message, Bundle bundle, InputStream is) throws Exception {
 		return control.allowed_call("call Bundle.update(InputStream) " + message, "callBundle_update", 
 				new Class[]{Bundle.class, InputStream.class}, new Object[]{bundle, is});
 	}
@@ -181,7 +180,7 @@ public class PermissionSignatureUtility {
 				new Class[]{Bundle.class, InputStream.class}, new Object[]{bundle, is}, SecurityException.class);
 	}
 
-	public boolean allowed_Bundle_start(String message, Bundle bundle) throws Exception {
+	public Object allowed_Bundle_start(String message, Bundle bundle) throws Exception {
 		return control.allowed_call("call Bundle.start() " + message, "callBundle_start", 
 				new Class[]{Bundle.class}, new Object[]{bundle});
 	}
@@ -192,7 +191,7 @@ public class PermissionSignatureUtility {
 	}
 	
 	
-	public boolean allowed_BundleContext_installBundle(String message, String location) throws Exception {
+	public Object allowed_BundleContext_installBundle(String message, String location) throws Exception {
 		return control.allowed_call("call BundleContext.installBundle(String) " + message,  
 				"callBundleContext_installBundle", new Class[]{BundleContext.class, String.class}, 
 				new Object[]{context, location});
@@ -205,7 +204,7 @@ public class PermissionSignatureUtility {
 				new Object[]{context, location}, SecurityException.class);
 	}
 
-	public boolean allowed_BundleContext_installBundle_by_InputStream(String message, String location, InputStream is) throws Exception {
+	public Object allowed_BundleContext_installBundle_by_InputStream(String message, String location, InputStream is) throws Exception {
 		return control.allowed_call("call BundleContext.installBundle(String, InputStream) " + message,  
 				"callBundleContext_installBundle", new Class[]{BundleContext.class, String.class, InputStream.class}, 
 				new Object[]{context, location, is});
@@ -218,7 +217,7 @@ public class PermissionSignatureUtility {
 				new Object[]{context, location, is}, SecurityException.class);
 	}
 	
-	public boolean allowed_BundleContext_addBundleListener(String message) throws Exception {
+	public Object allowed_BundleContext_addBundleListener(String message) throws Exception {
 		return control.allowed_call("call BundleContext.addBundleListener(SynchronousBundleListener) " + message,  
 				"callBundleContext_addBundleListener", new Class[]{BundleContext.class}, 
 				new Object[]{context});
@@ -231,7 +230,7 @@ public class PermissionSignatureUtility {
 				new Object[]{context}, SecurityException.class);
 	}
 
-	public boolean allowed_BundleContext_removeBundleListener(String message) throws Exception {
+	public Object allowed_BundleContext_removeBundleListener(String message) throws Exception {
 		return control.allowed_call("call BundleContext.removeBundleListener(SynchronousBundleListener) " + message,  
 				"callBundleContext_removeBundleListener", new Class[]{BundleContext.class}, 
 				new Object[]{context});
@@ -244,7 +243,7 @@ public class PermissionSignatureUtility {
 				new Object[]{context}, SecurityException.class);
 	}
 
-	public boolean allowed_StartLevel_setBundleStartLevel(String message, Bundle bundle, int startlevel) throws Exception {
+	public Object allowed_StartLevel_setBundleStartLevel(String message, Bundle bundle, int startlevel) throws Exception {
 		return control.allowed_call("call StartLevel.setBundleStartLevel(Bundle, int) " + message,  
 				"callStartLevel_setBundleStartLevel", new Class[]{Bundle.class, Integer.class}, 
 				new Object[]{bundle, new Integer(startlevel)});
@@ -257,7 +256,7 @@ public class PermissionSignatureUtility {
 				new Object[]{bundle, new Integer(startlevel)}, SecurityException.class);
 	}
 	
-	public boolean allowed_StartLevel_setStartLevel(String message, int startlevel) throws Exception {
+	public Object allowed_StartLevel_setStartLevel(String message, int startlevel) throws Exception {
 		return control.allowed_call("call StartLevel.setStartLevel(int) " + message,  
 				"callStartLevel_setStartLevel", new Class[]{Integer.class}, 
 				new Object[]{new Integer(startlevel)});
@@ -270,7 +269,7 @@ public class PermissionSignatureUtility {
 				new Object[]{new Integer(startlevel)}, SecurityException.class);
 	}
 
-	public boolean allowed_StartLevel_setInitialBundleStartLevel(String message, int startlevel) throws Exception {
+	public Object allowed_StartLevel_setInitialBundleStartLevel(String message, int startlevel) throws Exception {
 		return control.allowed_call("call StartLevel.setInitialBundleStartLevel(int) " + message,  
 				"callStartLevel_setInitialBundleStartLevel", new Class[]{Integer.class}, 
 				new Object[]{new Integer(startlevel)});
@@ -284,7 +283,7 @@ public class PermissionSignatureUtility {
 	}
 
 
-	public boolean allowed_PermissionAdmin_setPermissions(String message, String location, PermissionInfo[] permissions) throws Exception {
+	public Object allowed_PermissionAdmin_setPermissions(String message, String location, PermissionInfo[] permissions) throws Exception {
 		return control.allowed_call("call PermissionAdmin.setPermissions(String, PermissionInfo[]) " + message,  
 				"callPermissionAdmin_setPermissions", new Class[]{String.class, PermissionInfo[].class}, 
 				new Object[]{location, permissions});
@@ -297,7 +296,7 @@ public class PermissionSignatureUtility {
 				new Object[]{location, permissions}, SecurityException.class);
 	}
 
-	public boolean allowed_PermissionAdmin_setDefaultPermissions(String message, PermissionInfo[] permissions) throws Exception {
+	public Object allowed_PermissionAdmin_setDefaultPermissions(String message, PermissionInfo[] permissions) throws Exception {
 		return control.allowed_call("call PermissionAdmin.setDefaultPermissions(PermissionInfo[]) " + message,  
 				"callPermissionAdmin_setDefaultPermissions", new Class[]{PermissionInfo[].class}, 
 				new Object[]{permissions});
@@ -310,7 +309,7 @@ public class PermissionSignatureUtility {
 				new Object[]{permissions}, SecurityException.class);
 	}
 
-	public boolean allowed_PackageAdmin_refreshPackages(String message, Bundle[] bundles) throws Exception {
+	public Object allowed_PackageAdmin_refreshPackages(String message, Bundle[] bundles) throws Exception {
 		return control.allowed_call("call PackageAdmin.refreshPackages(Bundle[]) " + message,  
 				"callPackageAdmin_refreshPackages", new Class[]{Bundle[].class}, 
 				new Object[]{bundles});
@@ -323,7 +322,7 @@ public class PermissionSignatureUtility {
 				new Object[]{bundles}, SecurityException.class);
 	}
 
-	public boolean allowed_PackageAdmin_resolveBundles(String message, Bundle[] bundles) throws Exception {
+	public Object allowed_PackageAdmin_resolveBundles(String message, Bundle[] bundles) throws Exception {
 		return control.allowed_call("call PackageAdmin.resolveBundles(Bundle[]) " + message,  
 				"callPackageAdmin_resolveBundles", new Class[]{Bundle[].class}, 
 				new Object[]{bundles});
@@ -336,7 +335,7 @@ public class PermissionSignatureUtility {
 				new Object[]{bundles}, SecurityException.class);
 	}
 	
-	public boolean allowed_ConfigurationAdmin_getConfiguration(String message, String pid) throws Exception {
+	public Object allowed_ConfigurationAdmin_getConfiguration(String message, String pid) throws Exception {
 		return control.allowed_call("call ConfigurationAdmin.getConfiguration(String) " + message,  
 				"callConfigurationAdmin_getConfiguration", new Class[]{String.class}, 
 				new Object[]{pid});
@@ -348,7 +347,7 @@ public class PermissionSignatureUtility {
 				new Object[]{pid}, SecurityException.class);
 	}
 
-	public boolean allowed_ConfigurationAdmin_getConfiguration(String message, String pid, String location) throws Exception {
+	public Object allowed_ConfigurationAdmin_getConfiguration(String message, String pid, String location) throws Exception {
 		return control.allowed_call("call ConfigurationAdmin.getConfiguration(String, String) " + message,  
 				"callConfigurationAdmin_getConfiguration", new Class[]{String.class, String.class}, 
 				new Object[]{pid, location});
@@ -361,7 +360,7 @@ public class PermissionSignatureUtility {
 	}
 
 	// TO DO SecurityException ???
-	public boolean allowed_ConfigurationAdmin_listConfigurations(String message, String filter) throws Exception {
+	public Object allowed_ConfigurationAdmin_listConfigurations(String message, String filter) throws Exception {
 		return control.allowed_call("call ConfigurationAdmin.listConfigurations(String) " + message,  
 				"callConfigurationAdmin_listConfigurations", new Class[]{String.class}, 
 				new Object[]{filter});
@@ -374,7 +373,7 @@ public class PermissionSignatureUtility {
 				new Object[]{filter}, SecurityException.class);
 	}
 
-	public boolean allowed_ConfigurationAdmin_createFactoryConfiguration(String message, String factoryPid) throws Exception {
+	public Object allowed_ConfigurationAdmin_createFactoryConfiguration(String message, String factoryPid) throws Exception {
 		return control.allowed_call("call ConfigurationAdmin.createFactoryConfiguration(String) " + message,  
 				"callConfigurationAdmin_createFactoryConfiguration", new Class[]{String.class}, 
 				new Object[]{factoryPid});
@@ -386,7 +385,7 @@ public class PermissionSignatureUtility {
 				new Object[]{factoryPid}, SecurityException.class);
 	}
 
-	public boolean allowed_ConfigurationAdmin_createFactoryConfiguration(String message, String factoryPid, String location) throws Exception {
+	public Object allowed_ConfigurationAdmin_createFactoryConfiguration(String message, String factoryPid, String location) throws Exception {
 		return control.allowed_call("call ConfigurationAdmin.createFactoryConfiguration(String, String) " + message,  
 				"callConfigurationAdmin_createFactoryConfiguration", new Class[]{String.class, String.class}, 
 				new Object[]{factoryPid, location});
@@ -398,7 +397,7 @@ public class PermissionSignatureUtility {
 				new Object[]{factoryPid, location}, SecurityException.class);
 	}
 
-	public boolean allowed_Configuration_delete(String message, String pid) throws Exception {
+	public Object allowed_Configuration_delete(String message, String pid) throws Exception {
 		return control.allowed_call("call Configuration.delete() " + message,  
 				"callConfiguration_delete", new Class[]{String.class}, 
 				new Object[]{pid});
@@ -411,7 +410,7 @@ public class PermissionSignatureUtility {
 	}
 
 	
-	public boolean allowed_Configuration_update(String message, String pid) throws Exception {
+	public Object allowed_Configuration_update(String message, String pid) throws Exception {
 		return control.allowed_call("call Configuration.update() " + message,  
 				"callConfiguration_update", new Class[]{String.class}, 
 				new Object[]{pid});
@@ -423,7 +422,7 @@ public class PermissionSignatureUtility {
 				new Object[]{pid}, SecurityException.class);
 	}
 
-	public boolean allowed_Configuration_update(String message, String pid, Dictionary properties) throws Exception {
+	public Object allowed_Configuration_update(String message, String pid, Dictionary properties) throws Exception {
 		return control.allowed_call("call Configuration.update(Dictionary) " + message,  
 				"callConfiguration_update", new Class[]{String.class, Dictionary.class}, 
 				new Object[]{pid, properties});
@@ -435,7 +434,7 @@ public class PermissionSignatureUtility {
 				new Object[]{pid, properties}, SecurityException.class);
 	}
 
-	public boolean allowed_Configuration_setBundleLocation(String message, String pid) throws Exception {
+	public Object allowed_Configuration_setBundleLocation(String message, String pid) throws Exception {
 		return control.allowed_call("call Configuration.setBundleLocation(String) " + message,  
 				"callConfiguration_setBundleLocation", new Class[]{String.class}, 
 				new Object[]{pid});
@@ -474,11 +473,16 @@ public class PermissionSignatureUtility {
 		return infos;
 	}
 
-// TO DO -> add AdminPermission(id, action)		
+// !!! AdminPermission(id, action) must be the first element in the Vector		
 // name -> id, location, Name, signer
 	Vector getPInfosForAdminPermisssion(String action, long bundleId, String location, String symbolicName) {
 		Vector permissions = new Vector();
+		
+		// TO DO -> AdminPermission(id, action) ???
 		PermissionInfo info = new PermissionInfo(AdminPermission.class.getName(),
+				 								 String.valueOf(bundleId), action);
+		permissions.addElement(info);
+		info = new PermissionInfo(AdminPermission.class.getName(),
 												 ID + "=" + bundleId, action);
 		permissions.addElement(info);
 		permissions.addAll(createWildcardPermissionInfo(AdminPermission.class, 
@@ -507,5 +511,4 @@ public class PermissionSignatureUtility {
 		return infos;
 	}
 	
-
 }
