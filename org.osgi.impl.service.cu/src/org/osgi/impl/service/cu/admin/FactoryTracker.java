@@ -89,7 +89,7 @@ class FactoryTracker extends ManagedObjectsTracker {
     }
     
     if (isRegistering) {
-      cuAdminCallback.controlUnitEvent(ControlUnitAdminListener.CONTROL_UNIT_TYPE_APPEARED, 
+      cuAdminCallback.controlUnitEvent(ControlUnitAdminListener.CONTROL_UNIT_TYPE_ADDED, 
         type, null);
     }
     
@@ -116,7 +116,7 @@ class FactoryTracker extends ManagedObjectsTracker {
     }
     
     if (isUnregistering) {
-      cuAdminCallback.controlUnitEvent(ControlUnitAdminListener.CONTROL_UNIT_TYPE_DISAPPEARED, 
+      cuAdminCallback.controlUnitEvent(ControlUnitAdminListener.CONTROL_UNIT_TYPE_REMOVED, 
           type, null);
     }
   }

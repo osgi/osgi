@@ -115,7 +115,7 @@ class CUTracker extends ManagedObjectsTracker {
       cuAdminCallback.controlUnitEvent( ControlUnitAdminListener.CONTROL_UNIT_ADDED, type, cuID);
           
       if (isFirstUnit) {
-        cuAdminCallback.controlUnitEvent( ControlUnitAdminListener.CONTROL_UNIT_TYPE_APPEARED, type, null);
+        cuAdminCallback.controlUnitEvent( ControlUnitAdminListener.CONTROL_UNIT_TYPE_ADDED, type, null);
       }
     }
     
@@ -190,7 +190,7 @@ class CUTracker extends ManagedObjectsTracker {
       cuAdminCallback.controlUnitEvent( ControlUnitAdminListener.CONTROL_UNIT_REMOVED, type, cuID);  
         
       if (isLastUnit) {
-        cuAdminCallback.controlUnitEvent(ControlUnitAdminListener.CONTROL_UNIT_TYPE_DISAPPEARED, type, null);
+        cuAdminCallback.controlUnitEvent(ControlUnitAdminListener.CONTROL_UNIT_TYPE_REMOVED, type, null);
       }
     }      
   }

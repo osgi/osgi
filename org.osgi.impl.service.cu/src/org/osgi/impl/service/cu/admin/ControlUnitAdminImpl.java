@@ -117,8 +117,8 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
     chekIsValidCUEventType(eventType);
     checkArgument(cuType, "control unit type");
     
-    if (cuID == null && eventType != CONTROL_UNIT_TYPE_APPEARED
-      && eventType != CONTROL_UNIT_TYPE_DISAPPEARED) {
+    if (cuID == null && eventType != CONTROL_UNIT_TYPE_ADDED
+      && eventType != CONTROL_UNIT_TYPE_REMOVED) {
       throw new NullPointerException("No control unit ID specified!");
     }
     
@@ -372,7 +372,7 @@ class ControlUnitAdminImpl implements ControlUnitAdmin, CUAdminCallback {
   
   private static final void chekIsValidCUEventType(int eventType) {
     if (eventType != CONTROL_UNIT_ADDED && eventType != CONTROL_UNIT_REMOVED &&
-      eventType != CONTROL_UNIT_TYPE_APPEARED && eventType != CONTROL_UNIT_TYPE_DISAPPEARED) {
+      eventType != CONTROL_UNIT_TYPE_ADDED && eventType != CONTROL_UNIT_TYPE_REMOVED) {
       throw new IllegalArgumentException("Invalid control unit event type : " + eventType + "!");
     }
   }
