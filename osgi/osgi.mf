@@ -1,31 +1,10 @@
 Manifest-Version: 1.0
 Bundle-Name: osgi
-Bundle-Description: OSGi Service Platform Release 3 Interfaces and Classes for use in compiling bundles.
-Bundle-Copyright: Copyright (c) The OSGi Alliance (2000, 2002). All Rights Reserved.
-Bundle-Vendor: OSGi
-Bundle-Version: 3.0
+Bundle-Description: OSGi Service Platform Release 4 Interfaces and Classes for use in compiling bundles.
+Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2004). All Rights Reserved.
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 4.0
 Bundle-Category: osgi
 Bundle-DocUrl: http://www.osgi.org/
-Export-Package: org.osgi.framework; specification-version=1.2,
- org.osgi.service.log; specification-version=1.2,
- org.osgi.service.http; specification-version=1.1,
- org.osgi.service.device; specification-version=1.1,
- org.osgi.service.cm; specification-version=1.1,
- org.osgi.service.metatype; specification-version=1.0,
- org.osgi.service.packageadmin; specification-version=1.1,
- org.osgi.service.permissionadmin; specification-version=1.1,
- org.osgi.service.prefs; specification-version=1.0,
- org.osgi.service.useradmin; specification-version=1.0,
- org.osgi.util.tracker; specification-version=1.2,
- org.osgi.service.io; specification-version=1.0,
- org.osgi.service.jini; specification-version=1.0,
- org.osgi.service.provisioning; specification-version=1.0,
- org.osgi.service.startlevel; specification-version=1.0,
- org.osgi.service.upnp; specification-version=1.0,
- org.osgi.service.url; specification-version=1.0,
- org.osgi.service.wireadmin; specification-version=1.0,
- org.osgi.util.measurement; specification-version=1.0,
- org.osgi.util.position; specification-version=1.0,
- org.osgi.util.xml; specification-version=1.0
+$(EXPORT-PACKAGE)
 CVS-Header: $Header$
-$(PRIVATE-PACKAGE)
