@@ -35,7 +35,7 @@ package org.osgi.framework;
  * <p>An <tt>AllServiceListener</tt> object is registered with the Framework using the
  * <tt>BundleContext.addServiceListener</tt> method.
  * <tt>AllServiceListener</tt> objects are called with a <tt>ServiceEvent</tt> object when
- * a service has been registered or modified, or is in the process of unregistering.
+ * a service is registered, modified, or is in the process of unregistering.
  *
  * <p><tt>ServiceEvent</tt> object delivery to <tt>AllServiceListener</tt> objects is filtered by the
  * filter specified when the listener was registered. If the Java Runtime Environment
@@ -46,8 +46,11 @@ package org.osgi.framework;
  * 
  * <p>
  * Unlike normal <tt>ServiceListener</tt> objects,
- * <tt>AllServiceListener</tt> objects have all ServiceEvent objects delivered regardless of the
- * package scope of the listening bundle.
+ * <tt>AllServiceListener</tt> objects receive all ServiceEvent objects regardless of the
+ * whether the package source of the listening bundle is equal to the package source of
+ * the bundle that registered the service. This means that the listener may not be able to
+ * cast the service object to any of its corresponding service interfaces if the service
+ * object is retrieved.
  * 
  * @version $Revision$
  * @see ServiceEvent

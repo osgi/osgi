@@ -37,7 +37,7 @@ import java.util.EventListener;
  * <p>A <code>ServiceListener</code> object is registered with the Framework using the
  * <code>BundleContext.addServiceListener</code> method.
  * <code>ServiceListener</code> objects are called with a <code>ServiceEvent</code> object when
- * a service has been registered or modified, or is in the process of unregistering.
+ * a service is registered, modified, or is in the process of unregistering.
  *
  * <p><code>ServiceEvent</code> object delivery to <code>ServiceListener</code> objects is filtered by the
  * filter specified when the listener was registered. If the Java Runtime Environment
@@ -46,6 +46,10 @@ import java.util.EventListener;
  * the listener object's class has the appropriate <code>ServicePermission</code> to get the service
  * using at least one of the named classes the service was registered under.
  *
+ * <p><code>ServiceEvent</code> object delivery to <code>ServiceListener</code> objects is
+ * further filtered according to package sources as defined in
+ * {@link ServiceReference#isAssignableTo(Bundle, String)}.
+ * 
  * @version $Revision$
  * @see ServiceEvent
  * @see ServicePermission
