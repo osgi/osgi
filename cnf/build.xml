@@ -88,7 +88,7 @@
 		<property name="p" value="${project.name}" />
 		<property environment="env" />
 
-		<taskdef resource="org/osgi/tools/btool/taskdef.properties" classpath="${workspace}/cnf/jar/btool.jar" />
+		<taskdef resource="org/osgi/tools/build/ant/taskdef.properties" classpath="${workspace}/cnf/jar/btool.jar" />
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${workspace}/cnf/ant-contrib/ant-contrib-0.6.jar" />
 
 		<!-- Include properies files in the following order:
@@ -96,17 +96,14 @@
 				User properties
 				Default properties
 		-->
+		
+		
 
-		<property file="${workspace}/cnf/global.properties" />
-		<loadproperties description="expand properties ALSO in keys!" srcfile="${project}/build.properties">
-			<filterchain>
-				<expandproperties />
-			</filterchain>
-		</loadproperties>
-
-		<property file="${env.HOME}/osgi.properties" />
-		<property file="${workspace}/cnf/build.properties" />
-
+		<expand propertyFile="${workspace}/cnf/global.properties"/>
+		<expand propertyFile="${project}/build.properties"/>
+		<expand propertyFile="${env.HOME}/osgi.properties"/>
+		<expand propertyFile="${workspace}/cnf/build.properties"/>
+		
 		<property name="prebuild" value="" />
 		<!-- get the classpath and build info from eclipse -->
 		<btool eclipse="${project}" prebuild="${prebuild}" />
