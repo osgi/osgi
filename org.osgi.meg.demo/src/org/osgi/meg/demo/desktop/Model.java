@@ -30,7 +30,7 @@ import org.osgi.util.tracker.*;
 /**
  * Model part of the MVC pattern.
  */
-public class Model extends ServiceTracker implements Runnable, ChannelListener {
+public class Model extends ServiceTracker implements Runnable, EventHandler {
 	private Desktop			desktop;
 	private BundleContext	context;
 	private ServiceTracker	trackAppHandle;
@@ -103,7 +103,7 @@ public class Model extends ServiceTracker implements Runnable, ChannelListener {
 		// register ChannelListener
 		Hashtable config = new Hashtable();
 		config.put("topic", "*");
-		context.registerService(ChannelListener.class.getName(), this, config);
+		context.registerService(EventHandler.class.getName(), this, config);
 		initRefreshInstApps();
 	}
 
@@ -270,7 +270,7 @@ public class Model extends ServiceTracker implements Runnable, ChannelListener {
 		return sb.toString();
 	}
 
-	public void channelEvent(ChannelEvent event) {
+	public void handleEvent(Event event) {
 		// TODO
 		if (!"Bundle Event".equals(event.getTopic()))
 			return;

@@ -97,7 +97,7 @@ public class TestApplication
 		gui.startAnim();
 	}
 
-	public void channelEvent(ChannelEvent event) {
+	public void handleEvent(Event event) {
 	}
 
 	public void writeResult(String result) {
