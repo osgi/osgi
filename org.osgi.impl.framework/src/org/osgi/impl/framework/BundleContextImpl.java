@@ -339,4 +339,9 @@ public class BundleContextImpl implements BundleContext {
 					"This bundle context is no longer valid");
 		}
 	}
+
+	public ServiceReference[] getAllServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
+		// this is a stub
+		throw new UnsupportedOperationException();
+	}
 }
