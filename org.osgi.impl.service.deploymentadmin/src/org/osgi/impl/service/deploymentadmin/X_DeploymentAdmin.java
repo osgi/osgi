@@ -22,8 +22,6 @@ import java.util.*;
 import java.util.jar.JarEntry;
 import org.osgi.framework.*;
 import org.osgi.impl.service.deploymentadmin.api.*;
-import org.osgi.impl.service.megcontainer.MEGContainer;
-import org.osgi.service.application.ApplicationContainer;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class X_DeploymentAdmin implements PackageHandler, BundleActivator {
@@ -40,11 +38,11 @@ public class X_DeploymentAdmin implements PackageHandler, BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
 		// it uses the MEG Container to notify about bundle installation
-		Filter filter = context.createFilter("(&(" + Constants.OBJECTCLASS
+		/*Filter filter = context.createFilter("(&(" + Constants.OBJECTCLASS
 				+ "=" + ApplicationContainer.class.getName() + ")("
 				+ PackageHandler.PACKAGETYPE + "=" + CONTAINER_MEG + "))");
 		trackerMegCont = new ServiceTracker(context, filter, null);
-		trackerMegCont.open();
+		trackerMegCont.open();*/
 		// registers itself as a PackageHandler
 		Dictionary dict = new Hashtable();
 		dict.put(PackageHandler.PACKAGETYPE, PACKAGETYPE_BUNDLE + ","
@@ -110,8 +108,8 @@ public class X_DeploymentAdmin implements PackageHandler, BundleActivator {
 						Bundle b = context.installBundle(entry.getName(), bis);
 						// TODO is it needed?
 						b.start();
-						((MEGContainer) trackerMegCont.getService())
-								.installApplication(b.getBundleId());
+						/*((MEGContainer) trackerMegCont.getService())
+								.installApplication(b.getBundleId());*/
 					}
 					catch (BundleException e) {
 						throw new PackageHandlerException(e.getMessage());

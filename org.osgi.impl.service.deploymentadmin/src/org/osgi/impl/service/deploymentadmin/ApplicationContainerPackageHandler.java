@@ -21,8 +21,6 @@ import java.io.InputStream;
 import java.util.*;
 import org.osgi.framework.*;
 import org.osgi.impl.service.deploymentadmin.api.*;
-import org.osgi.service.application.ApplicationContainer;
-import org.osgi.util.tracker.ServiceTracker;
 
 public class ApplicationContainerPackageHandler implements BundleActivator,
 		PackageHandler {
@@ -30,7 +28,7 @@ public class ApplicationContainerPackageHandler implements BundleActivator,
 	private static final String	PACKAGETYPE_BASIC	= "basic";
 	private static final String	CONTAINERTYPE_BASIC	= "BasicContainer";
 
-	static class Tracker extends ServiceTracker {
+	/*static class Tracker extends ServiceTracker {
 		public Tracker(BundleContext context) {
 			super(context, ApplicationContainer.class.getName(), null);
 		}
@@ -49,15 +47,15 @@ public class ApplicationContainerPackageHandler implements BundleActivator,
 			}
 			return ret;
 		}
-	}
+	}*/
 
 	private BundleContext	context;
-	private Tracker			tracker;
+	//private Tracker			tracker;
 
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
-		tracker = new Tracker(context);
-		tracker.open();
+		//tracker = new Tracker(context);
+		//tracker.open();
 		Dictionary dict = new Hashtable();
 		dict.put(PackageHandler.PACKAGETYPE, PACKAGETYPE_BASIC);
 		// unregistered by the OSGi framework
@@ -65,20 +63,20 @@ public class ApplicationContainerPackageHandler implements BundleActivator,
 	}
 
 	public void stop(BundleContext context) throws Exception {
-		tracker.close();
+		//tracker.close();
 	}
 
 	public void install(InputStream stream, String packageType, Map data)
 			throws PackageHandlerException {
 		if (PACKAGETYPE_BASIC.equals(packageType)) {
-			ApplicationContainer cont = tracker
-					.getContainer(CONTAINERTYPE_BASIC);
-			try {
-				cont.installApplication(stream);
-			}
-			catch (Exception e) {
-				throw new PackageHandlerException(e.getMessage());
-			}
+			//ApplicationContainer cont = tracker
+			//		.getContainer(CONTAINERTYPE_BASIC);
+			//try {
+			//	cont.installApplication(stream);
+			//}
+			//catch (Exception e) {
+			//	throw new PackageHandlerException(e.getMessage());
+			//}
 		}
 		else {
 			throw new PackageHandlerException("Package type " + packageType
