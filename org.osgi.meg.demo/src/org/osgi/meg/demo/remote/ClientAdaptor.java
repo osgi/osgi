@@ -31,7 +31,7 @@ public class ClientAdaptor implements RemoteAlertSender {
 	private CommandProcessor	cp		 = null;
 	private int					pingTime;
 
-	public ClientAdaptor(DmtFactory fact, String host, int port, int pingTime) throws Exception {
+	public ClientAdaptor(DmtAdmin fact, String host, int port, int pingTime) throws Exception {
 		this.pingTime = pingTime;
 		CommandThread ct = new CommandThread(host, port);
 		cp = new CommandProcessor(fact);

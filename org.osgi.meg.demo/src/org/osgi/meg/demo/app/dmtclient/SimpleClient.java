@@ -28,13 +28,13 @@ public class SimpleClient implements ManagedService, Monitorable, ChannelListene
 {
     private BundleContext bc;
 
-    private DmtFactory factory;
+    private DmtAdmin factory;
 
     private UpdateListener updateListener;
 
     private int updateCount = 0;
 
-    public SimpleClient(DmtFactory factory, UpdateListener updateListener, BundleContext bc) {
+    public SimpleClient(DmtAdmin factory, UpdateListener updateListener, BundleContext bc) {
         this.factory = factory;
         this.updateListener = updateListener;
         this.bc = bc;        
@@ -124,7 +124,7 @@ public class SimpleClient implements ManagedService, Monitorable, ChannelListene
             */
             config.update(properties);
 
-            DmtSession session = factory.getTree(null);
+            DmtSession session = factory.getSession(".");
             System.out.println("Retrieved session, id=" + session.getSessionId() +
                                ", lock type=" + session.getLockType() +
                                ", principal=" + session.getPrincipal() +
@@ -152,7 +152,7 @@ public class SimpleClient implements ManagedService, Monitorable, ChannelListene
             //printTree();
 
             /*
-            session = factory.getTree(null, "OSGi/log/");
+            session = factory.getSession("OSGi/log/");
             System.out.println("Retrieved session, id=" + session.getSessionId() +
                                ", lock type=" + session.getLockType() +
                                ", principal=" + session.getPrincipal() +
@@ -192,7 +192,7 @@ public class SimpleClient implements ManagedService, Monitorable, ChannelListene
     {
         DmtSession session;
         try {
-            session = factory.getTree(null, ".", DmtSession.LOCK_TYPE_SHARED);
+            session = factory.getSession(".", DmtSession.LOCK_TYPE_SHARED);
         } catch(DmtException e) {
             System.out.println("Error retrieving DM tree:");
             e.printStackTrace(System.out);

@@ -21,13 +21,13 @@ import java.io.*;
 import java.util.*;
 import org.osgi.service.dmt.*;
 
-// TODO support non-recursive clone operation if necessary
+// TODO support non-recursive copy operation if necessary
 public class CommandProcessor {
 	
-	private DmtFactory	fact	= null;
+	private DmtAdmin	fact	= null;
 	private DmtSession	session	= null;
 
-	public CommandProcessor(DmtFactory fact) {
+	public CommandProcessor(DmtAdmin fact) {
 		this.fact = fact;
 	}
 
@@ -49,7 +49,7 @@ public class CommandProcessor {
 		}
 		try {
 			if (cmd.equals("open")) {
-				session = fact.getTree(args[2], uri,
+				session = fact.getSession(args[2], uri,
 						DmtSession.LOCK_TYPE_ATOMIC);
 				// TODO other lock types
 			}
@@ -109,8 +109,8 @@ public class CommandProcessor {
 				DmtData value = dmtFromString(typedata);
 				session.createLeafNode(uri, value);
 			}
-			else if (cmd.equals("clone")) {
-				session.clone(uri, args[2], true);
+			else if (cmd.equals("copy")) {
+				session.copy(uri, args[2], true);
 			}
 			else if (cmd.equals("renamenode") || cmd.equals("re")) {
 				session.renameNode(uri, args[2]);
@@ -215,7 +215,7 @@ public class CommandProcessor {
 		sb.append("\n");
 		sb.append("createLeaf        cl    uri type:data (as above)");
 		sb.append("\n");
-		sb.append("clone                   uri new_uri            ");
+		sb.append("copy                   uri new_uri            ");
 		sb.append("\n");
 		sb.append("renameNode        re    uri new_name           ");
 		sb.append("\n");

@@ -46,8 +46,8 @@ public class ClientActivator implements BundleActivator
         this.bc = bc;
 
         try {
-            factoryRef = getServiceReference(DmtFactory.class);
-            DmtFactory factory = (DmtFactory) getService(factoryRef, DmtFactory.class);
+            factoryRef = getServiceReference(DmtAdmin.class);
+            DmtAdmin factory = (DmtAdmin) getService(factoryRef, DmtAdmin.class);
 
             updateRef = getServiceReference(UpdateListener.class);
             UpdateListener updateListener = (UpdateListener) getService(updateRef, UpdateListener.class);
