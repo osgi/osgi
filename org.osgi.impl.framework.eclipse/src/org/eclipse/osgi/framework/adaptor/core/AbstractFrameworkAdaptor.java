@@ -680,8 +680,10 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 				} catch (IOException e) {
 					throw new BundleException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION"), e); //$NON-NLS-1$
 				}
-				BundleDescription bundleDescription = stateManager.getFactory().createBundleDescription(data.getManifest(), data.getLocation(), data.getBundleID());
-				stateManager.getSystemState().addBundle(bundleDescription);
+				if (stateManager != null) {
+					BundleDescription bundleDescription = stateManager.getFactory().createBundleDescription(data.getManifest(), data.getLocation(), data.getBundleID());
+					stateManager.getSystemState().addBundle(bundleDescription);
+				}
 			}
 
 		});
@@ -735,6 +737,8 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 			stateManager.shutdown(new File(getBundleStoreRootDir(), ".state")); //$NON-NLS-1$
 		} catch (IOException e) {
 			frameworkLog.log(new FrameworkEvent(FrameworkEvent.ERROR, context.getBundle(), e));
+		} finally {
+			stateManager = null;
 		}
 	}
 
@@ -893,11 +897,12 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 					throw new BundleException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION"), e); //$NON-NLS-1$
 				}
 				long bundleId = newData.getBundleID();
-				State systemState = stateManager.getSystemState();
-				systemState.removeBundle(bundleId);
-				BundleDescription newDescription = stateManager.getFactory().createBundleDescription(newData.getManifest(), newData.getLocation(), bundleId);
-				systemState.addBundle(newDescription);
-
+				if (stateManager != null) {
+					State systemState = stateManager.getSystemState();
+					systemState.removeBundle(bundleId);
+					BundleDescription newDescription = stateManager.getFactory().createBundleDescription(newData.getManifest(), newData.getLocation(), bundleId);
+					systemState.addBundle(newDescription);
+				}
 				File originalGenerationDir = data.createGenerationDir();
 
 				if (postpone || !rm(originalGenerationDir)) {
@@ -1063,12 +1068,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 				}
 
 				data.setLastModified(System.currentTimeMillis());
-				//
-				// When you install/remove bundles when not launched
-				// this gives error (it made init impossible before starting
-				// the installed bundles
-				// pkr
-				if ( stateManager != null )
+				if (stateManager != null)
 					stateManager.getSystemState().removeBundle(data.getBundleID());
 			}
 
