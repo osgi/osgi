@@ -47,7 +47,7 @@ public final class JavaPolicyPlugin implements BundleActivator {
 			DmtPrincipalPlugin dmtPrincipalPlugin = new DmtPrincipalPlugin((DmtPrincipalPermissionAdmin) context.getService(dmtPrincipalPermissionAdminReference));
 			Hashtable props = new Hashtable();
 			props.put("dataRootURIs",DmtPrincipalPlugin.dataRootURI);
-			context.registerService(DmtPrincipalPlugin.class.getName(),dmtPrincipalPlugin,props);
+			context.registerService(DmtDataPlugin.class.getName(),dmtPrincipalPlugin,props);
 		
 		}
 	}
