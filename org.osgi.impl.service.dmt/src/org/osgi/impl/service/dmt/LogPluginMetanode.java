@@ -80,7 +80,7 @@ public class LogPluginMetanode implements DmtMetaNode {
 
 	public int getMaxOccurrence() {
 		// TODO Auto-generated method stub
-		return 0;
+		return 1;
 	}
 
 	public boolean isZeroOccurrenceAllowed() {
@@ -93,24 +93,14 @@ public class LogPluginMetanode implements DmtMetaNode {
 		return null;
 	}
 
-	public boolean hasMax() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean hasMin() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	public int getMax() {
 		// TODO Auto-generated method stub
-		return 0;
+		return Integer.MAX_VALUE;
 	}
 
 	public int getMin() {
 		// TODO Auto-generated method stub
-		return 0;
+		return Integer.MIN_VALUE;
 	}
 
     public String[] getValidNames() {
@@ -128,12 +118,12 @@ public class LogPluginMetanode implements DmtMetaNode {
 		return 0;
 	}
 
-    public String getNameRegExp() {
+    public String getNamePattern() {
         // TODO Auto-generated method stub
         return null;
     }
     
-	public String getRegExp() {
+	public String getPattern() {
 		// TODO Auto-generated method stub
 		return null;
 	}
