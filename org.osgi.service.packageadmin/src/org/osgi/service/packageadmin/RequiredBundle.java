@@ -29,6 +29,7 @@
 package org.osgi.service.packageadmin;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.Version;
 
 /**
  * A required bundle.  
@@ -78,7 +79,7 @@ public interface RequiredBundle {
 	 *
 	 * @return The version of the bundle.
 	 */
-	public String getVersion();
+	public Version getVersion();
 
 	/**
 	 * Returns <tt>true</tt> if the bundle
