@@ -4,9 +4,11 @@ import java.io.*;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.*;
+
 import org.osgi.framework.*;
 import org.osgi.service.log.*;
 import org.osgi.service.packageadmin.*;
+import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.tools.command.*;
 
 /**
@@ -252,6 +254,9 @@ public class Basic implements CommandProvider {
 
 	public Bundle getBundle(CommandInterpreter intp) {
 		String bundle = intp.nextArgument();
+		if ( bundle == null )
+			return null;
+		
 		Object var = intp.getVariable(bundle);
 		if (var != null && var instanceof String)
 			bundle = (String) var;
@@ -337,6 +342,17 @@ public class Basic implements CommandProvider {
 		PackageAdmin pa = (PackageAdmin) _context.getService(ref);
 		if (pa == null)
 			throw new RuntimeException("No Package Admin available");
+		return pa;
+	}
+	
+	PermissionAdmin getPermissionAdmin() {
+		ServiceReference ref = _context.getServiceReference(PermissionAdmin.class
+				.getName());
+		if (ref == null)
+			throw new RuntimeException("No Permission Admin available");
+		PermissionAdmin pa = (PermissionAdmin) _context.getService(ref);
+		if (pa == null)
+			throw new RuntimeException("No Permission Admin available");
 		return pa;
 	}
 
@@ -789,5 +805,28 @@ public class Basic implements CommandProvider {
 
 	char nibble(int c) {
 		return (char) (c < 10 ? c + '0' : c - 10 + 'A');
+	}
+	
+	
+	
+	public Object _permissions(CommandInterpreter intp) throws Exception {
+		PermissionAdmin	admin = getPermissionAdmin();
+		Bundle b= getBundle(intp);
+		if ( b != null ) {
+			return admin.getPermissions(b.getLocation());
+		}
+		else  {
+			Vector	v = new Vector();
+			String [] locations = admin.getLocations();
+			for ( int i=0; locations!=null && i <locations.length; i++ ) {
+				v.add( admin.getPermissions(locations[i]));
+			}
+			return v;
+		}
+	}
+	
+	public Object _defaultpermissions(CommandInterpreter intp) throws Exception {
+		PermissionAdmin	admin = getPermissionAdmin();
+		return admin.getDefaultPermissions();
 	}
 }
