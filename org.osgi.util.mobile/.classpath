@@ -4,5 +4,6 @@
 	<classpathentry sourcepath="/osgi.released/ee.foundation.jar" kind="lib" path="/osgi.released/ee.foundation.jar"/>
 	<classpathentry kind="src" path="/org.osgi.service.condpermadmin"/>
 	<classpathentry kind="src" path="/org.osgi.framework"/>
+	<classpathentry kind="lib" path="/cnf/jar/junit.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
