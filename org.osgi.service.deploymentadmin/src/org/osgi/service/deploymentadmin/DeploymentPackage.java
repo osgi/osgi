@@ -72,7 +72,7 @@ public interface DeploymentPackage {
   * update operation was attempted.
   * @param b Bundle to query.
   * @return True if the bundle is newly installed by this deployment package, other False.
-  * @throws Throws an exception if called outside an operation on this deployment package.
+  * @throws ###WhatException Throws an exception if called outside an operation on this deployment package.
   */
   boolean isNew(Bundle b);
 /**
@@ -83,7 +83,7 @@ public interface DeploymentPackage {
   * previous version before the update operation was attempted.  
   * @param b Bundle to query.
   * @return True if the bundle is updated by this deployment package, otherwise False.
-  * @throws Throws an exception if called outside an operation on this deployment package.
+  * @throws ###WhatException Throws an exception if called outside an operation on this deployment package.
   */
   boolean isUpdated(Bundle b);
 /**
@@ -94,7 +94,7 @@ public interface DeploymentPackage {
   * uninstalled.  
   * @param b Bundle to query.
   * @return True if the bundle is updated by this deployment package, otherwise False.
-  * @throws Throws an exception if called outside an operation on this deployment package.
+  * @throws ###WhatException Throws an exception if called outside an operation on this deployment package.
   */
   boolean isPendingRemoval(Bundle b);
 /**
@@ -104,7 +104,7 @@ public interface DeploymentPackage {
   * deployment package.
   * @param path name of the resource file to read.
   * @return The resource file in Object format.
-  * @throws Throws an exception if called outside an operation on this deployment package.
+  * @throws ###WhatException Throws an exception if called outside an operation on this deployment package.
   */
   Object getResource (String path);
 /**
@@ -114,7 +114,7 @@ public interface DeploymentPackage {
   * the deployment package.
   * @param path name of the resource file to read.
   * @return The resource file in stream format.
-  * @throws Throws an exception if called outside an operation on this deployment package.
+  * @throws ###WhatException Throws an exception if called outside an operation on this deployment package.
   */
   InputStream getResourceAsStream(String path);
 /**
