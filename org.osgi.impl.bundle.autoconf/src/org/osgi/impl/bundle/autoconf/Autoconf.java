@@ -27,6 +27,7 @@
 
 package org.osgi.impl.bundle.autoconf;
 
+import java.io.InputStream;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 
@@ -37,6 +38,7 @@ import org.osgi.service.deploymentadmin.ResourceProcessor;
  * @version $Revision$
  */
 public class Autoconf implements ResourceProcessor {
+
 	/**
 	 * @param rp
 	 * @param operation
@@ -44,6 +46,7 @@ public class Autoconf implements ResourceProcessor {
 	 */
 	public void begin(DeploymentPackage rp, int operation) {
 		// TODO Auto-generated method stub
+		
 	}
 
 	/**
@@ -52,24 +55,28 @@ public class Autoconf implements ResourceProcessor {
 	 */
 	public void complete(boolean commit) {
 		// TODO Auto-generated method stub
+		
 	}
 
 	/**
 	 * @param name
-	 * @throws java.lang.Exception
-	 * @see org.osgi.service.deploymentadmin.ResourceProcessor#process(java.lang.String)
+	 * @param stream
+	 * @throws Exception
+	 * @see org.osgi.service.deploymentadmin.ResourceProcessor#process(java.lang.String, java.io.InputStream)
 	 */
-	public void process(String name) throws Exception {
+	public void process(String name, InputStream stream) throws Exception {
 		// TODO Auto-generated method stub
+		
 	}
 
 	/**
 	 * @param name
-	 * @throws java.lang.Exception
+	 * @throws Exception
 	 * @see org.osgi.service.deploymentadmin.ResourceProcessor#dropped(java.lang.String)
 	 */
 	public void dropped(String name) throws Exception {
 		// TODO Auto-generated method stub
+		
 	}
 
 	/**
@@ -78,5 +85,6 @@ public class Autoconf implements ResourceProcessor {
 	 */
 	public void dropped() {
 		// TODO Auto-generated method stub
+		
 	}
 }
