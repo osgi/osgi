@@ -78,12 +78,12 @@ public class Activator implements BundleActivator
         MonitorAdminImpl monitorAdmin = new MonitorAdminImpl(bc, monitorableTracker, eventChannel, alertSender);
         String[] services = new String[] {
             MonitorAdmin.class.getName(),
-            UpdateListener.class.getName()
+            MonitorListener.class.getName()
         };
         monitorAdminReg = bc.registerService(services, monitorAdmin, null);
 
 
-        MonitorPlugin monitorPlugin = new MonitorPlugin(bc, monitorableTracker, monitorAdmin);
+        MonitorPlugin monitorPlugin = new MonitorPlugin(bc, monitorAdmin);
         Hashtable properties = new Hashtable();
         properties.put("dataRootURIs", new String[] { PLUGIN_ROOT });
         monitorPluginReg = bc.registerService(DmtDataPlugin.class.getName(), monitorPlugin, properties);
