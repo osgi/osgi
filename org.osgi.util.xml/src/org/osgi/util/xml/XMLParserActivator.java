@@ -4,9 +4,9 @@
  * Copyright (c) 2002 - IBM Corporation
  * All Rights Reserved.
  * 	
- * These materials have been contributed to the Open Services Gateway
- * Initiative (OSGi) as "MEMBER LICENSED MATERIALS" as defined in, and
- * subject to the terms of, the OSGi Member Agreement by and between OSGi and
+ * These materials have been contributed to the OSGi Alliance
+ * as "MEMBER LICENSED MATERIALS" as defined in, and
+ * subject to the terms of, the OSGi Member Agreement by and between the OSGi Alliance and
  * IBM, specifically including but not limited to, the license
  * rights and warranty disclaimers as set forth in Sections 3.2 and 12.1
  * thereof.
@@ -168,7 +168,7 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 
 	}
 	/**
-	 * <p>This method has nothing to do as all open service registrations will
+	 * <p>This method has nothing to do as all active service registrations will
 	 * automatically get unregistered when the bundle stops.
 	 *
 	 * @param context The execution context of the bundle being stopped.

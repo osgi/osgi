@@ -1,7 +1,7 @@
 /*
  * $Header$
  *
- * Open Services Gateway Initiative (OSGi) Confidential.
+
  *
  * (c) Copyright 2002 Atinav Inc.
  *

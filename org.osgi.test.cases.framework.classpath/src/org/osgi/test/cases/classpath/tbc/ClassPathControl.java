@@ -3,13 +3,13 @@
  * /cvshome/repository/org/osgi/test/cases/classpath/tbc/ClassPathControl.java,v
  * 1.1 2002/01/09 15:15:19 nnilsson Exp $
  * 
- * Copyright (c) The OSGi Alliance (2000-2001). All Rights
+ * Copyright (c) OSGi Alliance (2000-2001). All Rights
  * Reserved.
  * 
- * Implementation of certain elements of the Open Services Gateway Initiative
- * (OSGI) Specification may be subject to third party intellectual property
+ * Implementation of certain elements of the OSGi
+ * Specification may be subject to third party intellectual property
  * rights, including without limitation, patent rights (such a third party may
- * or may not be a member of OSGi). OSGi is not responsible and shall not be
+ * or may not be a member of the OSGi Alliance). The OSGi Alliance is not responsible and shall not be
  * held responsible in any manner for identifying or failing to identify any or
  * all such third party intellectual property rights.
  * 

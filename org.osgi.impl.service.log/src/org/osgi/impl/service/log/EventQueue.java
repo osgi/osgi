@@ -3,7 +3,7 @@
  *
  * OSGi Log Service Reference Implementation.
  *
- * Open Services Gateway Initiative (OSGi) Confidential.
+
  *
  * (C) Copyright IBM Corporation 2000-2001.
  *

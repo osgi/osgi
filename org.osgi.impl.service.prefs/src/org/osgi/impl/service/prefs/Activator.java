@@ -2,7 +2,7 @@
  * @(#)Activator.java	1.5 01/07/18
  * $Header$
  *
- * Open Services Gateway Initiative (OSGi) Confidential. 
+ 
  * 
  * (C) Copyright 1996-2001 Sun Microsystems, Inc. 
  * 

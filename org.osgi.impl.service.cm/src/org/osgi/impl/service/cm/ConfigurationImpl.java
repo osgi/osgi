@@ -1,10 +1,10 @@
 /*
  * $Header$
  *
- * Copyright (c) The OSGi Alliance (2000, 2001).
+ * Copyright (c) OSGi Alliance (2000, 2001).
  * All Rights Reserved.
  *
- * Implementation of certain elements of the Open Services Gateway Initiative (OSGI)
+ * Implementation of certain elements of the OSGi (OSGI)
  * Specification may be subject to third party intellectual property rights,
  * including without limitation, patent rights (such a third party may or may
  * not be a member of OSGi). OSGi is not responsible and shall not be held
@@ -50,7 +50,7 @@ import org.osgi.framework.Constants;
  * ConfigurationImpl implements a configuration, holds its properties, 
  * manages load and save to persistent storage.
  *
- * @author Open Services Gateway Initiative
+ * @author OSGi Alliance
  * @version $Revision$
  */
 public class ConfigurationImpl 

@@ -2,7 +2,7 @@
  * @(#)PreferencesService.java  1.4 01/07/18
  * $Header$
  *
- * Open Services Gateway Initiative (OSGi) Confidential. 
+ 
  * 
  * (C) Copyright 1996-2001 Sun Microsystems, Inc. 
  * 

@@ -3,7 +3,7 @@
  *
  * OSGi Log Service Reference Implementation.
  *
- * Open Services Gateway Initiative (OSGi) Confidential.
+
  *
  * (C) Copyright IBM Corporation 2000-2001.
  *
@@ -107,7 +107,7 @@ public class Log implements BundleActivator,
 
         Hashtable properties = new Hashtable(7);
 
-        properties.put(Constants.SERVICE_VENDOR, "Open Services Gateway Initiative");
+        properties.put(Constants.SERVICE_VENDOR, "OSGi Alliance");
         properties.put(Constants.SERVICE_DESCRIPTION, "OSGi Log Service 1.1 Reference Implementation");
         properties.put(Constants.SERVICE_PID, bundleId + ".org.osgi.impl.service.log.LogService");
 
@@ -133,7 +133,7 @@ public class Log implements BundleActivator,
 
         properties = new Hashtable(7);
 
-        properties.put(Constants.SERVICE_VENDOR, "Open Services Gateway Initiative");
+        properties.put(Constants.SERVICE_VENDOR, "OSGi Alliance");
         properties.put(Constants.SERVICE_DESCRIPTION, "OSGi Log Service 1.1 Reference Implementation");
         properties.put(Constants.SERVICE_PID, bundleId + ".org.osgi.impl.service.log.LogReaderService");
 

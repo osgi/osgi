@@ -1,10 +1,10 @@
 /*
  * $Header$
  *
- * Copyright (c) The OSGi Alliance (2000, 2001).
+ * Copyright (c) OSGi Alliance (2000, 2001).
  * All Rights Reserved.
  *
- * Implementation of certain elements of the Open Services Gateway Initiative (OSGI)
+ * Implementation of certain elements of the OSGi (OSGI)
  * Specification may be subject to third party intellectual property rights,
  * including without limitation, patent rights (such a third party may or may
  * not be a member of OSGi). OSGi is not responsible and shall not be held
@@ -37,7 +37,7 @@ import org.osgi.service.io.*;
  * Activator class - it is addressed by the framework, when the connector
  * bundle needs to be started or stopped.
  *
- * @author    Open Services Gateway Initiative
+ * @author    OSGi Alliance
  * @version   $Revision$
  */
 public class Activator implements BundleActivator {
