@@ -34,12 +34,53 @@ package org.osgi.service.prefs;
  */
 public class BackingStoreException extends Exception {
 	/**
+	 * Nested exception.
+	 */
+	private Throwable	cause;
+
+	/**
 	 * Constructs a <tt>BackingStoreException</tt> with the specified detail
 	 * message.
 	 * 
-	 * @param s the detail message.
+	 * @param s The detail message.
 	 */
 	public BackingStoreException(String s) {
 		super(s);
 	}
+	/**
+	 * Constructs a <tt>BackingStoreException</tt> with the specified detail
+	 * message.
+	 * 
+	 * @param s The detail message.
+	 * @param cause The cause of the exception. May be <tt>null</tt>.
+	 * @since 1.1 
+	 */
+	public BackingStoreException(String s, Throwable cause) {
+		super(s);
+		this.cause = cause;
+	}
+	/**
+	 * Returns the cause of this exception or <tt>null</tt> if no cause was
+	 * specified when this exception was created.
+	 * 
+	 * @return The cause of this exception or <tt>null</tt> if no cause was
+	 *         specified.
+	 * @since 1.1 
+	 */
+	public Throwable getCause() {
+		return cause;
+	}
+
+	/**
+	 * The cause of this exception can only be set when constructed.
+	 * 
+	 * @throws java.lang.IllegalStateException This method will always throw an
+	 *         <tt>IllegalStateException</tt> since the cause of this
+	 *         exception can only be set when constructed.
+	 * @since 1.1 
+	 */
+	public Throwable initCause(Throwable cause) {
+		throw new IllegalStateException();
+	}
+
 }
