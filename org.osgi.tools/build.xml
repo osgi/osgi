@@ -1,3 +1,17 @@
 <project name="osgi-test-tool" default="publish">
-	<import file="../osgi-cnf/build.xml"/>
+
+	<dirname property="project" file="${ant.file}" />
+	<dirname property="workspace" file="${project}" />
+	<taskdef name="btool" classname="org.osgi.tools.btool.BTool" classpath="src" />
+	
+	<target name="publish">
+			<btool jar="../cnf/jar/btool.jar" 
+				manifest="btool.mf" 
+				eclipse="${project}" 
+				analyse="${btool.analyse}" 
+				showmanifest="true" 
+				expand="org.osgi.tools.btool" />
+	</target>
+
+
 </project>

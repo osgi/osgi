@@ -99,7 +99,13 @@ public class EclipseProject {
 			}
 			workspace = eclipseProject.getParentFile();
 			file = new File(eclipseProject, ".classpath");
-
+			if ( ! file.exists() ) {
+				if (DEBUG) {
+					System.out.println("No classpath for " + eclipseProject.getPath() );
+				}
+				return;
+			}
+			
 			if (DEBUG) {
 				System.out.println("file=" + file.getAbsolutePath());
 			}

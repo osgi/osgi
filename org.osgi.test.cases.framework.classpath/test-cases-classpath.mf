@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.classpath
+Bundle-Description: $(bundledesc)
+Bundle-Version: $(bundleversion)
+Bundle-Activator: org.osgi.test.cases.classpath.ClassPathTestCase
+Bundle-Vendor: OSGi
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: $(copyright)
+Comment: Created by $(DELIVER) at $(DATE)
+CVS-Header: $Header: /cvshome/repository/cnf/DefaultManifest.mf,v 1.3 2002/10/24 12:01:21 pkriens Exp $
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+

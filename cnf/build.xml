@@ -14,7 +14,7 @@
 
 	<property file="${project}/build.properties" />
 	<property file="${env.HOME}/osgi.properties" />
-	<property file="${workspace}/osgi-cnf/build.properties" />
+	<property file="${workspace}/cnf/build.properties" />
 	<btool eclipse="${project}" />
 
 	<target name="release" depends="publish" if="bin.includes">
@@ -33,7 +33,19 @@
 
 	<target name="buildJar">
 		<echo>${cwd}/${item.jarFile}</echo>
-		<btool jar="${project}/${item.jarFile}" eclipse="${project}" analyse="${btool.analyse}" showmanifest="true" sources="${btool.sources}" silent="${btool.silent}" includeProperty="include.${item.jarFile}" expandProperty="expand.${item.jarFile}" contentFoldersProperty="source.${item.jarFile}" excludeImportProperty="excludeImport.${item.jarFile}" includeExportProperty="includeExport.${item.jarFile}" ignoreVersions="true" />
+		<btool jar="${item.jarFile}" 
+			eclipse="${project}" 
+			analyse="${btool.analyse}" 
+			showmanifest="true" 
+			sources="${btool.sources}" 
+			silent="${btool.silent}" 
+			includeProperty="include.${item.jarFile}" 
+			expandProperty="expand.${item.jarFile}" 
+			contentFoldersProperty="source.${item.jarFile}" 
+			excludeImportProperty="excludeImport.${item.jarFile}" 
+			includeExportProperty="includeExport.${item.jarFile}" 
+			ignoreVersions="true" />
+		<move file="${item.jarFile}" todir="${workspace}/bundles"/>
 	</target>
 
 	<target name="compile" unless="eclipse.running">
