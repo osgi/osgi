@@ -25,7 +25,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.service.metatype2;
+package org.osgi.service.metatype;
 
 import org.osgi.framework.Bundle;
 

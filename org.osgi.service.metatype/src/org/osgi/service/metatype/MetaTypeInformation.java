@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) The OSGi Alliance (2001, 2004). All Rights Reserved.
+ * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -25,7 +25,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.service.metatype2;
+package org.osgi.service.metatype;
 
 import org.osgi.framework.Bundle;
 
@@ -35,7 +35,7 @@ import org.osgi.framework.Bundle;
  * 
  * @version $Revision$
  */
-public interface MetaTypeInformation {
+public interface MetaTypeInformation extends MetaTypeProvider {
 
 	/**
 	 * Return the PIDs (for ManagedServices) for which ObjectClassDefinition
@@ -59,36 +59,4 @@ public interface MetaTypeInformation {
 	 * @return Bundle for which this object provides metatype information.
 	 */
 	Bundle getBundle();
-
-	/**
-	 * Returns an object class definition for the specified id localized to the
-	 * specified locale.
-	 * 
-	 * <p>
-	 * The locale parameter must be a name that consists of <tt>language</tt>[
-	 * "_" <tt>country</tt>[ "_" <tt>variation</tt>] ] as is customary in
-	 * the <tt>Locale</tt> class. This <tt>Locale</tt> class is not used
-	 * because certain profiles do not contain it.
-	 * 
-	 * @param id The ID of the requested object class. This can be a pid or
-	 *        factory pid returned by getPids or getFactoryPids.
-	 * @param locale The locale of the definition or <tt>null</tt> for default
-	 *        locale.
-	 * @return A <tt>ObjectClassDefinition</tt> object.
-	 * @throws IllegalArgumentException If the id or locale arguments are not
-	 *         valid
-	 */
-	ObjectClassDefinition getObjectClassDefinition(String id, String locale);
-
-	/**
-	 * Return a list of available locales.
-	 * 
-	 * The results must be names that consists of language [ _ country [ _
-	 * variation ]] as is customary in the <tt>Locale</tt> class.
-	 * 
-	 * @return An array of locale strings or <tt>null</tt> if there is no
-	 *         locale specific localization can be found.
-	 *  
-	 */
-	String[] getLocales();
 }

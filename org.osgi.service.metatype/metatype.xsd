@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.osgi.org/xmlns/metatype/v2.0.0" xmlns:mts="http://www.osgi.org/xmlns/metatype/v2.0.0">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.osgi.org/xmlns/metatype/v1.0.0" xmlns:mts="http://www.osgi.org/xmlns/metatype/v1.0.0">
 
 	<element name="metatype" type="mts:Tmetatype"></element>
 
@@ -35,7 +35,6 @@
 		<sequence>
 			<element name="validate" maxOccurs="1" minOccurs="0" type="mts:Tvalidate"></element>
 			<element name="defaultvalue" maxOccurs="unbounded" minOccurs="0" type="mts:TdefaultValue"></element>
-			<element name="property" minOccurs="0" maxOccurs="unbounded" type="mts:Tproperty"></element>
 		</sequence>
 		<attributeGroup ref="mts:Gdefinition"></attributeGroup>
 		<attribute name="cardinality" type="integer" use="optional" default="0" />
@@ -52,7 +51,6 @@
 		<restriction base="string">
 			<enumeration value="pid" />
 			<enumeration value="factorypid" />
-			<enumeration value="attribute" />
 		</restriction>
 	</simpleType>
 
@@ -78,13 +76,7 @@
 	</complexType>
 
 	<simpleType name="TattrTypes">
-		<union memberTypes="mts:TjavaTypes mts:TocdAttr"></union>
-	</simpleType>
-
-	<simpleType name="TocdAttr">
-		<restriction base="string">
-			<enumeration value="objectclass"></enumeration>
-		</restriction>
+		<union memberTypes="mts:TjavaTypes"></union>
 	</simpleType>
 
 	<simpleType name="TjavaTypes">
@@ -104,15 +96,5 @@
 	<simpleType name="TlocalizableString">
 		<restriction base="string"></restriction>
 	</simpleType>
-
-	<complexType name="Tproperty">
-		<simpleContent>
-			<extension base="string">
-				<attribute name="name" type="string" use="required"></attribute>
-				<attribute name="value" type="string" use="optional"></attribute>
-				<attribute name="type" use="optional" default="String" type="mts:TjavaTypes"></attribute>
-			</extension>
-		</simpleContent>
-	</complexType>
 
 </schema>
