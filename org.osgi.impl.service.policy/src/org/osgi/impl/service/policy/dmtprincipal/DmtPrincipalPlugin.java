@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.Map.Entry;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
 import org.osgi.impl.service.policy.PermissionInfoMetaNode;
@@ -230,13 +231,22 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 	public void close() throws DmtException {
 		if (!dirty) return;
 		
-		// TODO check for consistency
+		// used for consistency check...
+		Set principals = new TreeSet();
 		
 		// create a map as dmt admin likes it
 		Map systemState = new HashMap();
 		for (Iterator iter = currentState.values().iterator(); iter.hasNext();) {
 			PrincipalPermission element = (PrincipalPermission) iter.next();
-			systemState.put(element.principal,element.permissionInfo);
+			String principal = element.principal;
+			if ((principal==null)||(principal.equals(""))) {
+				throw new DmtException(dataRootURI,DmtException.OTHER_ERROR,"empty principal");
+			}
+			if (principals.contains(principal)) {
+				throw new DmtException(dataRootURI,DmtException.OTHER_ERROR,"principal name "+principal+" occurs twice");
+			}
+			principals.add(principal);
+			systemState.put(principal,element.permissionInfo);
 		}
 		
 		dmtPrincipalPermissionAdmin.setPrincipalPermissions(systemState);

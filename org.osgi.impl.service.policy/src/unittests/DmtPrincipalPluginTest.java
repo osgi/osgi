@@ -203,4 +203,25 @@ public class DmtPrincipalPluginTest extends DmtPluginTestCase implements DmtPrin
 		String str = dmtSession.getNodeValue(PRINCIPAL1_HASH+"/PermissionInfo").getString();
 		assertEquals(ADMINPERMISSION.getEncoded()+"\n"+IMPORTPERMISSION.getEncoded()+"\n",str);
 	}
+
+	public void testEmptyPrincipal() throws Exception {
+		newAtomicSession();
+		dmtSession.createInteriorNode("1");
+		try {
+			dmtSession.close();
+			fail();
+		} catch (DmtException e) {}
+	}
+
+	public void testMultiplePrincipals() throws Exception {
+		newAtomicSession();
+		dmtSession.createInteriorNode("1");
+		dmtSession.setNodeValue("1/Principal",new DmtData(PRINCIPAL1));
+		dmtSession.createInteriorNode("2");
+		dmtSession.setNodeValue("2/Principal",new DmtData(PRINCIPAL1));
+		try {
+			dmtSession.close();
+			fail();
+		} catch (DmtException e) {}
+	}
 }
