@@ -18,7 +18,6 @@
 package org.osgi.impl.service.megcontainer;
 
 import java.util.*;
-import java.io.*;
 import org.osgi.framework.*;
 import org.osgi.service.application.*;
 import java.lang.reflect.*;
