@@ -30,9 +30,11 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
+import org.osgi.impl.service.policy.AbstractPolicyPlugin;
 import org.osgi.impl.service.policy.PermissionInfoMetaNode;
 import org.osgi.impl.service.policy.RootMetaNode;
 import org.osgi.impl.service.policy.util.HashCalculator;
+import org.osgi.impl.service.policy.util.PermissionInfoComparator;
 import org.osgi.impl.service.policy.util.Splitter;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtDataPlugin;
@@ -47,7 +49,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  * 
  * @version $Revision$
  */
-public class DmtPrincipalPlugin implements DmtDataPlugin {
+public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 	
 	private static final String	PERMISSIONINFO	= "PermissionInfo";
 	private static final String	PRINCIPAL	= "Principal";
@@ -66,12 +68,7 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 	/**
 	 * utility for ordering permissioninfos lexicographically
 	 */
-	private final static Comparator permissionInfoComparator = new Comparator() {
-		public int compare(Object o1, Object o2) {
-			PermissionInfo p1 = (PermissionInfo) o1;
-			PermissionInfo p2 = (PermissionInfo) o2;
-			return p1.toString().compareTo(p2.toString());
-		}};
+	private final static Comparator permissionInfoComparator = new PermissionInfoComparator();
 
 	/**
 	 * Info about a principal and its associated permissions.
@@ -117,11 +114,6 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 	}
 
 	/**
-	 * true, if changes are made from the system state
-	 */
-	private boolean dirty;
-
-	/**
 	 * The point where this plugin should go in the DMT.
 	 */
 	public static final String dataRootURI = "./OSGi/Policies/Java/DmtPrincipal";
@@ -131,16 +123,15 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 	private static final DmtMetaNode permissionInfoMetaNode = new PermissionInfoMetaNode();
 	private static final DmtMetaNode principalPermissionMetaNode = new PrincipalPermissionMetaNode();
 	
-	private final HashCalculator hashCalculator;
-
 	public DmtPrincipalPlugin(DmtPrincipalPermissionAdmin dmtPrincipalPermissionAdmin) throws NoSuchAlgorithmException {
 		this.dmtPrincipalPermissionAdmin = dmtPrincipalPermissionAdmin;
 		this.currentState = null; // open() fills it
-		hashCalculator = new HashCalculator();
+		ROOT = dataRootURI;
 	}
 
 	public void open(String subtreeUri, int lockMode, DmtSession session)
 			throws DmtException {
+		super.open(subtreeUri,lockMode,session);
 		currentState = new HashMap();
 		Map systemState = dmtPrincipalPermissionAdmin.getPrincipalPermissions();
 
@@ -152,8 +143,6 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 			pi = (PermissionInfo[]) pi.clone();
 			currentState.put(hashCalculator.getHash(p),new PrincipalPermission(p,pi));
 		}
-		
-		dirty = false;
 	}
 
 	public DmtMetaNode getMetaNode(String nodeUri)
@@ -170,67 +159,36 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 
 		// cannot get here
 		throw new IllegalStateException();
-}
-
-	public boolean supportsAtomic() {
-		return true;
 	}
 
 	public void rollback() throws DmtException {
 		throw new DmtException(dataRootURI,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
-	public void setNodeTitle(String nodeUri, String title) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
-	}
-
 	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
 		String path[] = getPath(nodeUri);
+		switchToWriteMode(nodeUri);
 		if (path.length!=2) throw new IllegalStateException(); // this cannot happen
 		PrincipalPermission p = (PrincipalPermission) currentState.get(path[0]);
 		p.setNodeValue(path[1],data.getString());
-		dirty = true;
-	}
-
-	public void setNodeType(String nodeUri, String type) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
 	public void deleteNode(String nodeUri) throws DmtException {
 		String[] path = getPath(nodeUri);
+		switchToWriteMode(nodeUri);
 		if (path.length!=1) throw new IllegalStateException(); // should not get here
 		currentState.remove(path[0]);
-		dirty = true;
 	}
 
 	public void createInteriorNode(String nodeUri) throws DmtException {
 		String path[] = getPath(nodeUri);
+		switchToWriteMode(nodeUri);
 		if (path.length!=1) throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,"");
 		currentState.put(path[0],new PrincipalPermission("",null));
-		dirty = true;
-	}
-
-	public void createInteriorNode(String nodeUri, String type)
-			throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
-	}
-
-	public void createLeafNode(String nodeUri, DmtData value)
-			throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
-	}
-
-	public void copy(String nodeUri, String newNodeUri, boolean recursive)
-			throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
-	}
-
-	public void renameNode(String nodeUri, String newName) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
 	public void close() throws DmtException {
-		if (!dirty) return;
+		if (!isDirty()) return;
 		
 		// used for consistency check...
 		Set principals = new TreeSet();
@@ -257,7 +215,6 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
         }
 		
 		// do some cleanup
-		dirty = false;
 		currentState = null;
 	}
 
@@ -283,26 +240,6 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 		return pp.getNodeValue(path[1]);
 	}
 
-	public String getNodeTitle(String nodeUri) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
-	}
-
-	public String getNodeType(String nodeUri) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
-	}
-
-	public int getNodeVersion(String nodeUri) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
-	}
-
-	public Date getNodeTimestamp(String nodeUri) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
-	}
-
-	public int getNodeSize(String nodeUri) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
-	}
-
 	public String[] getChildNodeNames(String nodeUri) throws DmtException {
 		String[] path = getPath(nodeUri);
 		// note: nodeUri is already checked
@@ -317,18 +254,6 @@ public class DmtPrincipalPlugin implements DmtDataPlugin {
 		
 		// since nodeUri is checked, we CANNOT get her
 		throw new IllegalStateException();
-	}
-
-	/**
-	 * return the path elements, from our base
-	 * @param nodeUri
-	 * @return an array of nodenames
-	 */
-	private String[] getPath(String nodeUri) {
-		if (!nodeUri.startsWith(dataRootURI)) 
-			throw new IllegalStateException("Dmt should not give me URIs that are not mine");
-		if (nodeUri.length()==dataRootURI.length()) return new String[] {};
-		return Splitter.split(nodeUri.substring(dataRootURI.length()+1),'/',0);
 	}
 
 }
