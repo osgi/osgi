@@ -66,8 +66,8 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 
 	public MegletDescriptor(BundleContext bc, Properties props, Map names,
 			Map icons, String defaultLang, String startClass, Bundle bundle, MegletContainer mc ) throws Exception {
-		super("TODOPID");
-		//TODO
+		super( props.getProperty( APPLICATION_PID ) );
+
 		this.bc = bc;
 		this.props = new Properties();
 		this.props.putAll(props);
