@@ -104,7 +104,7 @@
 		<!-- For each jar file, build it -->
 		<foreach list="${jars.compile.order}" 
 			delimiter=" ," 
-			target="buildJar" 
+			target="jar" 
 			param="item.jarFile" 
 			inheritAll="true"/>
 		
