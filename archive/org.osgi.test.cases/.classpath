@@ -4,5 +4,6 @@
 	<classpathentry kind="src" path="/ee.minimum"/>
 	<classpathentry kind="src" path="/osgi"/>
 	<classpathentry kind="src" path="/org.osgi.test.tool"/>
+	<classpathentry kind="lib" path="/osgi.released/osgi-internal.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

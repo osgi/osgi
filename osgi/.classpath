@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.framework"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.cm"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.device"/>
