@@ -34,7 +34,7 @@ public class Framework
     /**
      * Specification version for this framework.
      */
-    static final String SPECIFICATION_VERSION = "1.2";
+    static final String SPECIFICATION_VERSION = "1.3";
 
     /**
      * AdminPermission used for permission check.

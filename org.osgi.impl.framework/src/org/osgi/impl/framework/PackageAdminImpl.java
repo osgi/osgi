@@ -43,7 +43,7 @@ import org.osgi.service.packageadmin.*;
 public class PackageAdminImpl implements PackageAdmin
 {
 
-    final static String SPECIFICATION_VERSION = "1.1";
+    final static String SPECIFICATION_VERSION = "1.2";
 
     private Framework framework;
 
