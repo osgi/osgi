@@ -18,13 +18,24 @@
 
 package org.osgi.impl.service.policy.condpermadmin;
 
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import org.osgi.impl.service.policy.util.HashCalculator;
+import org.osgi.impl.service.policy.util.Splitter;
+import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
+import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.permissionadmin.PermissionInfo;
 
 /**
  *
@@ -34,17 +45,93 @@ import org.osgi.service.dmt.DmtSession;
  */
 public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 	
+	/**
+	 * the conditional permission admin to communicate with
+	 */
 	private final ConditionalPermissionAdmin	condPermAdmin;
 
+	/**
+	 * the official root position in the management tree
+	 */
 	public static final String dataRootURI = "./OSGi/Policies/Java/ConditionalPermission";
 
-	public ConditionalPermissionAdminPlugin(ConditionalPermissionAdmin condPermAdmin) {
+	/**
+	 * a map of String->ConditionalPermission, where the key is the hash as seen in the tree
+	 */
+	private Map conditionalPermissions;
+	
+	/**
+	 * internal representation of a conditional permission
+	 */
+	private static class ConditionalPermission {
+		public ConditionInfo[] conditionInfo;
+		public PermissionInfo[] permissionInfo;
+		
+		public ConditionalPermission(ConditionInfo[] conditionInfo,PermissionInfo permissionInfo[]) {
+			this.conditionInfo = conditionInfo;
+			this.permissionInfo = permissionInfo;
+		}
+	}
+
+	/**
+	 * utility for ordering PermissionInfos lexicographically by their encoded string representations
+	 */
+	private static final Comparator permissionInfoComparator = new Comparator() {
+		public int compare(Object o1, Object o2) {
+			PermissionInfo p1 = (PermissionInfo) o1;
+			PermissionInfo p2 = (PermissionInfo) o2;
+			return p1.getEncoded().compareTo(p2.getEncoded());
+		}
+		
+	};
+	
+	/**
+	 * utility for ordering ConditionInfos lexicographically by their encoded string representations
+	 */
+	private static final Comparator conditionInfoComparator = new Comparator() {
+		public int compare(Object o1, Object o2) {
+			ConditionInfo c1 = (ConditionInfo) o1;
+			ConditionInfo c2 = (ConditionInfo) o2;
+			return c1.getEncoded().compareTo(c2.getEncoded());
+		}
+		
+	};
+	
+	private final HashCalculator hashCalculator;
+	
+	public ConditionalPermissionAdminPlugin(ConditionalPermissionAdmin condPermAdmin) throws NoSuchAlgorithmException {
 		this.condPermAdmin = condPermAdmin;
+		hashCalculator = new HashCalculator();
 	}
 
 	public void open(String subtreeUri, int lockMode, DmtSession session)
 			throws DmtException {
-		throw new DmtException(subtreeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
+		// copy everything from the conditional permission admin, populate our tree
+		conditionalPermissions = new HashMap();
+		for(Enumeration enum = condPermAdmin.getCollections(); enum.hasMoreElements();) {
+			ConditionalPermissionInfo e = (ConditionalPermissionInfo)enum.nextElement();
+
+			// calculate hash
+			ConditionInfo[] conditionInfo = (ConditionInfo[]) e.getConditionInfos().clone();
+			PermissionInfo[] permissionInfo = (PermissionInfo[]) e.getPermissionInfos().clone();
+			Arrays.sort(conditionInfo,conditionInfoComparator);
+			Arrays.sort(permissionInfo,permissionInfoComparator);
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < conditionInfo.length; i++) {
+				ConditionInfo info = conditionInfo[i];
+				sb.append(info.getEncoded());
+				sb.append('\n');
+			}
+			for (int i = 0; i < permissionInfo.length; i++) {
+				PermissionInfo info = permissionInfo[i];
+				sb.append(info.getEncoded());
+				sb.append('\n');
+			}
+			
+			// add to tree
+			conditionalPermissions.put(hashCalculator.getHash(sb.toString()),
+					new ConditionalPermission(e.getConditionInfos(),e.getPermissionInfos()));
+		}
 	}
 
 	public DmtMetaNode getMetaNode(String nodeUri)
@@ -104,6 +191,8 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 	}
 
 	public boolean isNodeUri(String nodeUri) {
+		String[] path = getPath(nodeUri);
+		if (path.length==0) return true;
 		return false;
 	}
 
@@ -134,4 +223,17 @@ public class ConditionalPermissionAdminPlugin implements DmtDataPlugin {
 	public String[] getChildNodeNames(String nodeUri) throws DmtException {
 		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
+
+	/**
+	 * return the path elements, from our base
+	 * @param nodeUri
+	 * @return an array of nodenames
+	 */
+	private String[] getPath(String nodeUri) {
+		if (!nodeUri.startsWith(dataRootURI)) 
+			throw new IllegalStateException("Dmt should not give me URIs that are not mine");
+		if (nodeUri.length()==dataRootURI.length()) return new String[] {};
+		return Splitter.split(nodeUri.substring(dataRootURI.length()+1),'/',0);
+	}
+
 }
