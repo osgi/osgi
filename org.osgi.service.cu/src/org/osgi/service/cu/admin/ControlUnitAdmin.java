@@ -27,6 +27,7 @@
 package org.osgi.service.cu.admin;
 
 import org.osgi.service.cu.ControlUnit;
+import org.osgi.service.cu.ControlUnitException;
 
 /**
  * Represents the facade of the Control Unit Admin layer. This interface is
@@ -68,11 +69,11 @@ public interface ControlUnitAdmin {
 
   /**
    * This service registration property may be used by
-   * {@link ControlUnitListener}s and {@link HierarchyListener}s as attribute
+   * {@link ControlUnitAdminListener}s and {@link HierarchyListener}s as attribute
    * in their filter definition to narrow the type of events they wish to
    * receive. It's value must be a string representation of one of the possible
    * values for the <code>eventType</code> parameter of
-   * {@link ControlUnitListener#controlUnitEvent}for
+   * {@link ControlUnitAdminListener#controlUnitEvent}for
    * <code>ControlUnitListeners</code> or
    * {@link HierarchyListener#hierarchyChanged}for
    * <code>HierarchyListeners</code>. If the filter doesn't restrict the
@@ -129,35 +130,34 @@ public interface ControlUnitAdmin {
    * If there are no control units that satisfy the finder condition the method returns
    * <code>null</code>.
    * 
-   * @param  cuType  the type restriction of the control units list that is searched. 
-   * @param  finderId  the id of the finder method. Must start with <code>"$find."<code>.
+   * @param  controlUnitType  the type restriction of the control units list that is searched. 
+   * @param  finderID  the id of the finder method. Must start with <code>"$find."<code>.
    * @param  arguments  the <code>finder</code> argument(s). If the argument is only 
    *         one this is the argument itself. If the arguments are more then one, the 
    *         value must be a <code>Object[]</code> and arguments are retrieved from 
    *         that array.
    *
    * @return array of <code>ControlUnit<code> identifiers.
-   *
-   * @throws java.lang.Exception if an error occurs while searching control units.
-   * @throws java.lang.IllegalArgumentException if this factory does not have finder 
-   *         with the supplied Id or the arguments number and/or types do not match the 
-   *         finder arguments.
+   * @throws ControlUnitException if the search operation can not be performed due to an error.
+   * {@link ControlUnitException#getErrorCode()}
+   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * to determine the actual cause.
    */
-  public String[] findControlUnits(String cuType, String finderId, Object arguments)
-      throws Exception;
+  public String[] findControlUnits(String controlUnitType, String finderID, Object arguments)
+      throws ControlUnitException;
 
   /**
    * Returns the Control Unit of a specified type and with a specified id.
    * 
    * @param controlUnitType the type of the Control Unit
-   * @param controlUnitId the id of the Control Unit
+   * @param controlUnitID the id of the Control Unit
    * 
    * @return <code>ControlUnit</code> identified by the specified
    *         <code>(controlUnitType, controlUnitId)</code> pair or
    *         <code>null</code> if there is not such control unit exported in
    *         the framework.
    */
-  public ControlUnit getControlUnit(String controlUnitType, String controlUnitId);
+  public ControlUnit getControlUnit(String controlUnitType, String controlUnitID);
 
   /**
    * Returns ids of children of a control unit specified by a given type and id.
@@ -165,23 +165,23 @@ public interface ControlUnitAdmin {
    * parentCUId == null this method returns unit of the given subCUType which
    * have no parent.
    * 
-   * @param parentCUType the type of the parent Control Unit.
-   * @param parentCUId the id of the parent Control Unit.
-   * @param subCUType the type of the child Control Units.
+   * @param parentControlUnitType the type of the parent Control Unit.
+   * @param parentControlUnitID the id of the parent Control Unit.
+   * @param childControlUnitType the type of the child Control Units.
    * 
    * @return an array of child control units.
    */
-  public String[] getSubControlUnits(String parentCUType, String parentCUId,
-                                     String subCUType);
+  public String[] getSubControlUnits(String parentControlUnitType, String parentControlUnitID,
+                                     String childControlUnitType);
 
   /**
    * Returns types of the exported control units that may be parents of control
    * units with a given type.
    * 
    * @return parent types or null if the given control unit may have no parents
-   * @param subCUType child unit type
+   * @param childControlUnitType child unit type
    */
-  public String[] getParentControlUnitTypes(String subCUType);
+  public String[] getParentControlUnitTypes(String childControlUnitType);
 
   /**
    * Returns ids of the exported control units of given type that are parents of
@@ -189,12 +189,12 @@ public interface ControlUnitAdmin {
    * 
    * @return parent types or null if the given control unit has no parents of
    *         the given type
-   * @param subCUType child unit type
-   * @param subCUId child unit id
-   * @param parentType parent units type
+   * @param childControlUnitType child unit type
+   * @param childControlUnitID child unit id
+   * @param parentControlUnitType parent units type
    */
-  public String[] getParentControlUnits(String subCUType, String subCUId,
-                                        String parentType);
+  public String[] getParentControlUnits(String childControlUnitType, String childControlUnitID,
+                                        String parentControlUnitType);
 
   /**
    * Explicitly creates control unit instance of a specified type using a
@@ -216,20 +216,19 @@ public interface ControlUnitAdmin {
    * <code>ManagedControlUnit<code> services.
    * 
    * @param  controlUnitType - the type of the Control Unit.
-   * @param  constructorId  the id of the constructors. Must start with <code>"$create."<code>.
+   * @param  constructorID  the id of the constructors. Must start with <code>"$create."<code>.
    * @param  arguments - the 'constructors' argument(s). If the argument is only 
    *         one this is the argument itself. If the arguments are more then one, the 
    *         value must be a <code>Object[]</code> and arguments are retrieved from that array.
    *
    * @return the id of the newly created control unit.
-   *
-   * @throws java.lang.Exception if an error occurs while creating Control Unit.
-   * @throws java.lang.IllegalArgumentException if this factory does not have constructor 
-   *         with the supplied Id or the arguments number and/or types do not match the 
-   *         constructor arguments.
+   * @throws ControlUnitException if the control unit can not be created for some
+   * reason. {@link ControlUnitException#getErrorCode()}
+   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * to determine the actual cause.
    */
-  public String createControlUnit(String controlUnitType, String constructorId,
-                                  Object arguments) throws Exception;
+  public String createControlUnit(String controlUnitType, String constructorID,
+                                  Object arguments) throws ControlUnitException;
 
   /**
    * Explicitly removes control unit instance with a given type and id. Some
@@ -239,15 +238,14 @@ public interface ControlUnitAdmin {
    * metadata by presence of an action with id <code>"$destroy"</code>.
    * 
    * @param controlUnitType - the type of the Control Unit.
-   * @param controlUnitId - controlUnitId control unit id.
-   * 
-   * @throws java.lang.Exception if an error occurs while destroying of the
-   *           Control Unit.
-   * @throws java.lang.IllegalArgumentException if this factory does not support
-   *           explicit destroy of the control units.
+   * @param controlUnitID - controlUnitId control unit id.
+   * @throws ControlUnitException if the control unit can not be destroyed for some
+   * reason. {@link ControlUnitException#getErrorCode()}
+   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * to determine the actual cause.
    */
-  public void destroyControlUnit(String controlUnitType, String controlUnitId)
-      throws Exception;
+  public void destroyControlUnit(String controlUnitType, String controlUnitID)
+      throws ControlUnitException;
 
   /**
    * Returns types of the exported control units that may be children of a
@@ -262,25 +260,24 @@ public interface ControlUnitAdmin {
    * Queries a control unit with a given type and id for the value of a given
    * state variable.
    * 
-   * @param cuType the type of the control unit
-   * @param cuId the id of the control unit
-   * @param varId the id of the variable
-   * @throws Exception if the state variable cannot be retrieved for some
-   *           reason.
-   * @throws java.lang.IllegalArgumentException if this control unit does not
-   *           have a state variable with the given id
-   * 
+   * @param controlUnitType the type of the control unit
+   * @param controlUnitId the id of the control unit
+   * @param stateVariableID the id of the variable
+   * @throws ControlUnitException if the state variable's value can not be
+   * retrieved for some reason. {@link ControlUnitException#getErrorCode()}
+   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * to determine the actual cause.
    * @return value of the variable
    */
-  public Object queryStateVariable(String cuType, String cuId, String varId)
-      throws Exception;
+  public Object queryStateVariable(String controlUnitType, String controlUnitId, String stateVariableID)
+      throws ControlUnitException;
 
   /**
    * Executes a given action over a control unit with a given id.
    * 
-   * @param cuType the type of the control unit
-   * @param cuId the id of the control unit
-   * @param actionId the id of the action
+   * @param controlUnitType the type of the control unit
+   * @param controlUnitID the id of the control unit
+   * @param actionID the id of the action
    * @param arguments the input argument(s). If the argument is only one this is
    *          the argument itself. If the arguments are more then one, the value
    *          must be a <code>Object[]</code> and arguments are retrieved from
@@ -288,12 +285,11 @@ public interface ControlUnitAdmin {
    * 
    * @return the output argument(s) or <code>null</code> if the action does
    *         not return value.
-   * 
-   * @throws java.lang.Exception if an error occurs while executing action.
-   * @throws java.lang.IllegalArgumentException if the Control Unit does not
-   *           have action with the supplied Id or the arguments number and/or
-   *           types do not match the action arguments.
+   * @throws ControlUnitException if an error prevents the execution of the action.
+   * {@link ControlUnitException#getErrorCode()}
+   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * to determine the actual cause.
    */
-  public Object invokeAction(String cuType, String cuId, String actionId, Object arguments)
-      throws Exception;
+  public Object invokeAction(String controlUnitType, String controlUnitID, String actionID, Object arguments)
+      throws ControlUnitException;
 }

@@ -79,11 +79,11 @@ public interface StateVariableListener {
    * of a certain control unit is changed.
    * 
    * @param controlUnitType Control Unit type.
-   * @param controlUnitId id of the Control Unit which variable has changed.
-   * @param varId id of the changed state variable.
+   * @param controlUnitID id of the Control Unit which variable has changed.
+   * @param stateVariableID id of the changed state variable.
    * @param value the new value of the state variable.
    */
-  public void stateVariableChanged(String controlUnitType, String controlUnitId,
-                                   String varId, Object value);
+  public void stateVariableChanged(String controlUnitType, String controlUnitID,
+                                   String stateVariableID, Object value);
 
 }

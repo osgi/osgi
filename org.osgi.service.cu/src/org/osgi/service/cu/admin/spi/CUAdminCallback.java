@@ -27,7 +27,7 @@
 package org.osgi.service.cu.admin.spi;
 
 import org.osgi.service.cu.StateVariableListener;
-import org.osgi.service.cu.admin.ControlUnitListener;
+import org.osgi.service.cu.admin.ControlUnitAdminListener;
 import org.osgi.service.cu.admin.HierarchyListener;
 
 /**
@@ -43,5 +43,5 @@ import org.osgi.service.cu.admin.HierarchyListener;
  * @see org.osgi.service.cu.admin.spi.ControlUnitFactory#setControlUnitCallback(CUAdminCallback)
  * @version $Revision$
  */
-public interface CUAdminCallback extends ControlUnitListener, StateVariableListener, HierarchyListener {
+public interface CUAdminCallback extends ControlUnitAdminListener, StateVariableListener, HierarchyListener {
 }

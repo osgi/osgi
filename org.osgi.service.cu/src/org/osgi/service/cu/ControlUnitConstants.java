@@ -104,7 +104,7 @@ public interface ControlUnitConstants {
 
   /**
    * This service registration property may be used by the
-   * {@link org.osgi.service.cu.admin.ControlUnitListener}s,
+   * {@link org.osgi.service.cu.admin.ControlUnitAdminListener}s,
    * {@link org.osgi.service.cu.StateVariableListener}s and
    * {@link org.osgi.service.cu.admin.HierarchyListener}s to specify the events
    * they are interested in. <br>
@@ -115,7 +115,7 @@ public interface ControlUnitConstants {
 
   /**
    * This service registration property may be used by the
-   * {@link org.osgi.service.cu.admin.ControlUnitListener}s,
+   * {@link org.osgi.service.cu.admin.ControlUnitAdminListener}s,
    * {@link org.osgi.service.cu.StateVariableListener}s and
    * {@link org.osgi.service.cu.admin.HierarchyListener}s to specify they whish
    * to be receive events synchronosly. <br>

@@ -80,7 +80,7 @@ public interface HierarchyListener {
    */
   public static final int ATTACHED = 2;
 
-  public void hierarchyChanged(int eventType, String cuType, String cuID,
-                               String parentType, String parentID);
+  public void hierarchyChanged(int eventType, String controlUnitType, String controlUnitID,
+                               String parentControlUnitType, String parentControlUnitID);
 
 }

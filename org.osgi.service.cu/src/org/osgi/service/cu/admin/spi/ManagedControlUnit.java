@@ -38,7 +38,7 @@ import org.osgi.service.cu.ControlUnit;
  * {@link org.osgi.service.cu.admin.ControlUnitAdmin} service is responsible for
  * tracking all <code>ManagedControlUnit</code> services registered in the
  * service registry of the framework and to notify registered
- * {@link org.osgi.service.cu.admin.ControlUnitListener}s when a new
+ * {@link org.osgi.service.cu.admin.ControlUnitAdminListener}s when a new
  * <code>ManagedControlUnit</code> appeared or an existing was unregistered.
  * 
  * To be properly handled by the Control Unit Admin service the

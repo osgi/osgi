@@ -81,21 +81,21 @@ public interface ControlUnit {
    * by a control unit and their types are defined by the metadata of the
    * control unit.
    * 
-   * @param varId the id of the variable
+   * @param stateVariableID the id of the variable
    * @return value of the variable
-   * @throws Exception if the state variable cannot be retrieved for some
-   *           reason.
-   * @throws java.lang.IllegalArgumentException if this control unit does not
-   *           have a state variable with the given id
+   * @throws ControlUnitException if the state variable's value can not be
+   * retrieved for some reason. {@link ControlUnitException#getErrorCode()}
+   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * to determine the actual cause.
    */
-  public Object queryStateVariable(String varId) throws Exception;
+  public Object queryStateVariable(String stateVariableID) throws ControlUnitException;
 
   /**
    * Executes the specified action over this control unit. Actions supported by
    * a control unit and the number and types of the input and output arguments
    * of each action are defined by the metadata of the control unit.
    * 
-   * @param actionId the id of the action
+   * @param actionID the id of the action
    * @param arguments the input argument(s). If the argument is only one this is
    *          the argument itself. If the arguments are more then one, the value
    *          must be a <code>Object[]</code> and arguments are retrieved from
@@ -103,11 +103,10 @@ public interface ControlUnit {
    * 
    * @return the output argument(s) or <code>null</code> if the action does
    *         not return value.
-   * 
-   * @throws java.lang.Exception if an error occurs while executing action.
-   * @throws java.lang.IllegalArgumentException if this control unit does not
-   *           have action with the supplied Id or the arguments number and/or
-   *           types do not match the action arguments.
+   * @throws ControlUnitException if error prevents the execution of the action.
+   * {@link ControlUnitException#getErrorCode()}
+   * and {@link ControlUnitException#getApplicationException()} methods can be used 
+   * to determine the actual cause.
    */
-  public Object invokeAction(String actionId, Object arguments) throws Exception;
+  public Object invokeAction(String actionID, Object arguments) throws ControlUnitException;
 }
