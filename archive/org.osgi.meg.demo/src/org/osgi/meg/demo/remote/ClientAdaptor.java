@@ -49,14 +49,14 @@ public class ClientAdaptor implements RemoteAlertSender {
 
 	public void sendAlert(String serverid, int code, DmtAlertItem[] items)
             throws Exception {
-        String msg = "Code:" + code + "\r\n";
+        String msg = "Code:" + code + "\n";
         String s = ",\n";
         if (items != null) {
             for (int i = 0; i < items.length; i++) {
                 msg += "Item# " + i + ":" + "Source:" + items[i].getSource()
                         + s + "Data:" + items[i].getData() + s + "Type:"
                         + items[i].getType() + s + "Format:"
-                        + items[i].getFormat() + "\r\n";
+                        + items[i].getFormat() + "\n";
             }
         }
         this.message = msg;
