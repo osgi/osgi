@@ -30,10 +30,10 @@ public class EclipseProject {
 	protected File			eclipseProject;
 	protected boolean		root;
 	protected File			workspace;
-	protected File	` ø		file;
+	protected File			file;
 	protected Locator		locator;
 	Vector					sourceFolders	= new Vector();
-	final String			PEP			= ",";
+	final String			PATHSEP			= ",";
 	private StringBuffer	sourcepath		= new StringBuffer(1024);
 	private StringBuffer	classpath		= new StringBuffer(1024);
 	private StringBuffer	bootclasspath	= new StringBuffer(1024);

@@ -54,7 +54,6 @@ public class BTool extends Task {
 	 * include Deliver AND all the paths to be searched.
 	 */
 	public void execute() throws BuildException {
-		System.out.println("BTOOL " + eclipse );
 		try {
 			if (eclipse == null)
 				throw new IllegalArgumentException(
