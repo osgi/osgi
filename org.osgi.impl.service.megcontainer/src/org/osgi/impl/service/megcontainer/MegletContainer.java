@@ -645,7 +645,7 @@ public class MegletContainer implements BundleListener,
 							&& bundleDesc.eventSubscribes[i].eventTopic != null)
 						for (int j = 0; j != bundleDesc.eventSubscribes[i].eventTopic.length; j++) {
 							Filter topicFilter = bc
-									.createFilter("(topic="
+									.createFilter("(" + EventConstants.EVENT_TOPIC + "="
 											+ bundleDesc.eventSubscribes[i].eventTopic[j]
 											+ ")");
 							if (event.matches(topicFilter)) {
