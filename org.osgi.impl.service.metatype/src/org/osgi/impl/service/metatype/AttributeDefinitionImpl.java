@@ -31,12 +31,11 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Attr
 	public static final String	EXCEPTION_MESSAGE		= "EXCEPTION_MESSAGE";		//$NON-NLS-1$
 	public static final String	NULL_IS_INVALID			= "NULL_IS_INVALID";		//$NON-NLS-1$
 	public static final String	VALUE_OUT_OF_RANGE		= "VALUE_OUT_OF_RANGE"; 	//$NON-NLS-1$
+	public static final String	VALUE_OUT_OF_OPTION		= "VALUE_OUT_OF_OPTION"; 	//$NON-NLS-1$
 	public static final String	TOO_MANY_VALUES			= "TOO_MANY_VALUES";		//$NON-NLS-1$
 	public static final String	NULL_OPTIONS			= "NULL_OPTIONS";			//$NON-NLS-1$
 	public static final String	INCONSISTENT_OPTIONS	= "INCONSISTENT_OPTIONS";	//$NON-NLS-1$	
 	public static final String	INVALID_OPTIONS			= "INVALID_OPTIONS";		//$NON-NLS-1$
-//	public static final String	NULL_DEFAULTS			= "NULL_DEFAULTS";			//$NON-NLS-1$
-//	public static final String	INVALID_DEFAULTS		= "INVALID_DEFAULTS";		//$NON-NLS-1$
 	
 	String						_name;
 	String						_id;
@@ -291,7 +290,7 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Attr
 	void setDefaultValue(String[] defaults, boolean needValidation) {
 
 		_defaults = defaults;
-		// Do we also need to validate defaults ?
+		// Do we also need to make sure if defaults are validated?
 	}
 
 	/**
@@ -318,47 +317,54 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Attr
 		if (value == null) {
 			return Msg.formatter.getString(NULL_IS_INVALID);
 		}
-
-		if (_dataType != STRING) {
-			if ((_minValue == null) && (_maxValue == null))
+		if ((_minValue == null) && (_maxValue == null)) {
+			if (_dataType != STRING) {
 				// No validation present
 				return null;
-		}
-		else {
-			if (_values.size() < 1)
-				// No validation present
-				return null;
-		}
-
-		if (_cardinality != 0) {
-			ValueTokenizer vt = new ValueTokenizer(value);
-			Vector value_vector = vt.getValuesAsVector();
-
-			if (value_vector.size() > Math.abs(_cardinality)) {
-				return Msg.formatter.getString(TOO_MANY_VALUES, value,
-						new Integer(Math.abs(_cardinality)));
 			}
-			for (int i=0; i< value_vector.size(); i++) {
-				String return_msg = validateRange(
-						(String) value_vector.get(i));
-				if (!"".equals(return_msg)) { //$NON-NLS-1$
-					// Returned String states why the value is invalid.
-					return return_msg;
+			else {
+				if (_values.size() < 1)
+					// No validation present
+					return null;
+			}
+		}
+
+		// Addtional validation for STRING.
+		if (_dataType == STRING
+				&& _values.size() > 0
+				&& !_values.contains(value)) {
+			return Msg.formatter.getString(VALUE_OUT_OF_OPTION, value);
+		}
+
+		try {
+			if (_cardinality != 0) {
+				ValueTokenizer vt = new ValueTokenizer(value);
+				Vector value_vector = vt.getValuesAsVector();
+
+				if (value_vector.size() > Math.abs(_cardinality)) {
+					return Msg.formatter.getString(TOO_MANY_VALUES, value,
+							new Integer(Math.abs(_cardinality)));
 				}
+				for (int i=0; i< value_vector.size(); i++) {
+					String return_msg = validateRange(
+							(String) value_vector.get(i));
+					if (!"".equals(return_msg)) { //$NON-NLS-1$
+						// Returned String states why the value is invalid.
+						return return_msg;
+					}
+				}
+				// No problems detected
+				return ""; //$NON-NLS-1$
 			}
-
-			// No problems detected
-			return ""; //$NON-NLS-1$
+			else {
+				// Only when cardinality is '0', it comes here.
+					String return_msg = validateRange(value);
+					return return_msg;
+			}
 		}
-		else {
-			// Only when cardinality is '0', it comes here.
-			try {
-				return validateRange(value);
-			}
-			catch (Throwable t) {
-				return Msg.formatter.getString(EXCEPTION_MESSAGE, t.getClass()
-						.getName(), t.getMessage());
-			}
+		catch (Throwable t) {
+			return Msg.formatter.getString(EXCEPTION_MESSAGE, t.getClass()
+					.getName(), t.getMessage());
 		}
 	}
 
@@ -371,56 +377,96 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Attr
 
 		switch (_dataType) {
 			case STRING :
-				rangeError = !_values.contains(value);
+				if ((_minValue != null) && (_maxValue != null)) {
+					if (value.length() > ((Integer) _maxValue).intValue()
+							|| value.length() < ((Integer) _minValue).intValue()) {
+						rangeError = true;
+					}
+				}
 				break;
 			case LONG :
 				Long longVal = new Long(value);
-				if (longVal.compareTo((Long) _minValue) < 0
-						|| longVal.compareTo((Long) _maxValue) > 0) {
+				if (_minValue != null
+						&& longVal.compareTo((Long) _minValue) < 0) {
 					rangeError = true;
 				}
+				else
+					if (_maxValue != null
+							&& longVal.compareTo((Long) _maxValue) > 0) {
+						rangeError = true;
+					}
 				break;
 			case INTEGER :
 				Integer intVal = new Integer(value);
-				if (intVal.compareTo((Integer) _minValue) < 0
-						|| intVal.compareTo((Integer) _maxValue) > 0) {
+				if (_minValue != null
+						&& intVal.compareTo((Integer) _minValue) < 0) {
 					rangeError = true;
 				}
+				else
+					if (_maxValue != null
+							&& intVal.compareTo((Integer) _maxValue) > 0) {
+						rangeError = true;
+					}
 				break;
 			case SHORT :
 				Short shortVal = new Short(value);
-				if (shortVal.compareTo((Short) _minValue) < 0
-						|| shortVal.compareTo((Short) _maxValue) > 0) {
+				if (_minValue != null
+						&& shortVal.compareTo((Short) _minValue) < 0) {
 					rangeError = true;
 				}
+				else
+					if (_maxValue != null
+							&& shortVal.compareTo((Short) _maxValue) > 0) {
+						rangeError = true;
+					}
 				break;
 			case CHARACTER :
 				Character charVal = new Character(value.charAt(0));
-				if (charVal.compareTo((Character) _minValue) < 0
-						|| charVal.compareTo((Character) _maxValue) > 0) {
+				if (_minValue != null
+						&& charVal.compareTo((Character) _minValue) < 0) {
 					rangeError = true;
 				}
+				else
+					if (_maxValue != null
+							&& charVal.compareTo((Character) _maxValue) > 0) {
+						rangeError = true;
+					}
 				break;
 			case BYTE :
 				Byte byteVal = new Byte(value);
-				if (byteVal.compareTo((Byte) _minValue) < 0
-						|| byteVal.compareTo((Byte) _maxValue) > 0) {
+				if (_minValue != null
+						&& byteVal.compareTo((Byte) _minValue) < 0) {
 					rangeError = true;
 				}
+				else
+					if (_maxValue != null
+							&& byteVal.compareTo((Byte) _maxValue) > 0) {
+						rangeError = true;
+					}
 				break;
 			case DOUBLE :
 				Double doubleVal = new Double(value);
-				if (doubleVal.compareTo((Double) _minValue) < 0
-						|| doubleVal.compareTo((Double) _maxValue) > 0) {
+				if (_minValue != null
+						&& doubleVal.compareTo((Double) _minValue) < 0) {
 					rangeError = true;
 				}
+				else
+					if (_maxValue != null
+							&& doubleVal.compareTo((Double) _maxValue) > 0) {
+						rangeError = true;
+					}
 				break;
 			case FLOAT :
 				Float floatVal = new Float(value);
-				if (floatVal.compareTo((Float) _minValue) < 0
-						|| floatVal.compareTo((Float) _maxValue) > 0) {
+				if (_minValue != null
+						&& floatVal.compareTo((Float) _minValue) < 0) {
 					rangeError = true;
 				}
+				else
+					if (_maxValue != null
+							&& floatVal.compareTo((Float) _maxValue) > 0) {
+						rangeError = true;
+					}
 				break;
 			case BIGINTEGER :
 				try {
@@ -429,10 +475,15 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Attr
 							.getConstructor(new Class[] {String.class});
 					Comparable bigIntObject = (Comparable) bigIntConstructor
 							.newInstance(new Object[] {value});
-					if (bigIntObject.compareTo(_minValue) < 0
-							|| bigIntObject.compareTo(_maxValue) > 0) {
+					if (_minValue != null
+							&& bigIntObject.compareTo(_minValue) < 0) {
 						rangeError = true;
 					}
+					else
+						if (_maxValue != null
+								&& bigIntObject.compareTo(_maxValue) > 0) {
+							rangeError = true;
+						}
 				}
 				catch (ClassNotFoundException e) {
 					e.printStackTrace();
@@ -471,10 +522,15 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Attr
 							.getConstructor(new Class[] {String.class});
 					Comparable bigDecimalObject = (Comparable) bigDecimalConstructor
 							.newInstance(new Object[] {value});
-					if (bigDecimalObject.compareTo(_minValue) < 0
-							|| bigDecimalObject.compareTo(_maxValue) > 0) {
+					if (_minValue != null
+							&& bigDecimalObject.compareTo(_minValue) < 0) {
 						rangeError = true;
 					}
+					else
+						if (_maxValue != null
+								&& bigDecimalObject.compareTo(_maxValue) > 0) {
+							rangeError = true;
+						}
 				}
 				catch (ClassNotFoundException e) {
 					e.printStackTrace();
@@ -506,7 +562,7 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Attr
 				}
 				break;
 			case BOOLEAN :
-			// shouldn't ever get boolean - this is a set validation
+			// shouldn't ever get boolean - this is a range validation
 			default :
 				return null;
 		}

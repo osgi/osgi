@@ -141,7 +141,7 @@ public class DataParser {
 	}
 
 	/*
-	 * Convert String in expected data type.
+	 * Convert String for expected data type.
 	 */
 	private static Object convert(String value, int type) {
 
@@ -151,7 +151,8 @@ public class DataParser {
 
 		switch (type) {
 			case AttributeDefinition.STRING :
-				return new String(value);
+				// Both the min and max of STRING are Integers.
+				return new Integer(value);
 			case AttributeDefinition.LONG :
 				return new Long(value);
 			case AttributeDefinition.INTEGER :
