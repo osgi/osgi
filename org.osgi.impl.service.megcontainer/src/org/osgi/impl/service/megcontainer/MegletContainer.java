@@ -132,7 +132,7 @@ public class MegletContainer implements BundleListener, EventHandler {
 		Meglet app = (Meglet) constructor.newInstance( new Object[0] );
 
 		Method registerListenerMethod = Meglet.class.getDeclaredMethod( "registerForEvents",
-										new Class [] { String.class } );
+										new Class [] { String.class, String.class } );
 		registerListenerMethod.setAccessible( true );
 
 		Vector eventTopic = new Vector();
@@ -141,7 +141,7 @@ public class MegletContainer implements BundleListener, EventHandler {
 			for (int j = 0; j != desc.eventSubscribes[i].eventTopic.length; j++)
 				if (desc.eventSubscribes[i].eventAction[j] == EventSubscribe.HANDLE)
 					registerListenerMethod.invoke( app, new Object [] {
-							desc.eventSubscribes[i].eventTopic[j]} );
+							desc.eventSubscribes[i].eventTopic[j], null } );
 
 		return app;
 	}
