@@ -16,6 +16,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.*;
 import java.util.*;
+
 import org.eclipse.osgi.framework.adaptor.*;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.service.resolver.*;
@@ -1452,5 +1453,16 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 
 	public Thread getStateChanging() {
 		return stateChanging;
+	}
+	/**
+	 * @param path
+	 * @param filePattern
+	 * @param recurse
+	 * @return
+	 * @see org.osgi.framework.Bundle#findEntries(java.lang.String, java.lang.String, boolean)
+	 */
+	public Enumeration findEntries(String path, String filePattern,
+			boolean recurse) {
+		throw new UnsupportedOperationException("This is unimplemented. Waiting for implementation from Eclipse");
 	}
 }
