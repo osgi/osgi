@@ -59,7 +59,9 @@ public class MonitorPermission extends Permission {
      * permission's target field must be <code>&#42;/*</code>. To allow
      * listing the StatusVariables of only a specific Monitorable, the target
      * field must be <code>[M_PID]/*</code> where <code>M_PID</code> matches
-     * the PID of the Monitorable service.
+     * the PID of the Monitorable service. In the latter case <code>M_PID</code>
+     * can end with <code>*</code>, to allow listing the StatusVariables of
+     * all matching Monitorables.
      */
     public static final String DISCOVER = "discover";
 
@@ -135,7 +137,7 @@ public class MonitorPermission extends Permission {
         monId = statusVariable.substring(0, prefixMonId ? sep - 1 : sep);
         varId = statusVariable.substring(sep + 1, prefixVarId ? len - 1 : len);
 
-        if(prefixMonId && !varId.equals("*"))
+        if(prefixMonId && !varId.equals(""))
             throw new IllegalArgumentException(
                     "Invalid StatusVariable path: wildcard in monitorable ID " +
                     "must be followed by '*' as StatusVariable name.");
@@ -148,20 +150,22 @@ public class MonitorPermission extends Permission {
             String action = st.nextToken();
             if (action.equalsIgnoreCase(READ)) {
                 mask |= READ_FLAG;
-                if(prefixMonId || prefixVarId)
-                    mask |= DISCOVER_FLAG;
+                if(varId.equals("")) // implies prefixVarId 
+                    mask |= DISCOVER_FLAG; // (target is */*, mon*/* or monId/*)
             } else if (action.equalsIgnoreCase(RESET)) {
                 mask |= RESET_FLAG;
             } else if (action.equalsIgnoreCase(PUBLISH)) {
                 mask |= PUBLISH_FLAG;
             } else if (action.equalsIgnoreCase(DISCOVER)) {
-                if(!prefixMonId && !prefixVarId)
+                if(!varId.equals("")) // implies prefixVarId
                     throw new IllegalArgumentException(
-                            "Invalid target for 'discover' action, target should contain a wildcard.");
+                            "Invalid target for 'discover' action, " + 
+                            "StatusVariable name in target must be '*'.");
                 mask |= DISCOVER_FLAG;
             } else if (action.equalsIgnoreCase(SWITCHEVENTS)) {
                 mask |= SWITCHEVENTS_FLAG;                
             } else if (action.toLowerCase().startsWith(STARTJOB)) {
+                // TODO which param counts if there are multiple startjob actions?
                 minJobInterval = 0;
 
                 int slen = STARTJOB.length();
