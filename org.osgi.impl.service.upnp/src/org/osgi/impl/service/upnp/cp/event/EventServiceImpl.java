@@ -1,10 +1,8 @@
 package org.osgi.impl.service.upnp.cp.event;
 
-import java.net.*;
-import java.io.*;
 import java.util.*;
-import org.osgi.impl.service.upnp.cp.util.*;
 import org.osgi.impl.service.upnp.cp.description.*;
+import org.osgi.impl.service.upnp.cp.util.*;
 
 public class EventServiceImpl implements EventService {
 	static  Hashtable subscriberList = null;
@@ -86,52 +84,52 @@ public class EventServiceImpl implements EventService {
 
    	// This method checks if the headers values are wrong. If it is wrong returns the error message.
 	String checkHeaders(Hashtable headerInfo) {
-		String sid = (String)headerInfo.get(gc.GENA_SID);
+		String sid = (String)headerInfo.get(GenaConstants.GENA_SID);
 		if(sid == null || subscriberList.get(sid) == null) {
-			return gc.GENA_ERROR1;	
+			return GenaConstants.GENA_ERROR1;	
 		}	
-		String nt = (String)headerInfo.get(gc.GENA_NT) ;
-		String nts = (String)headerInfo.get(gc.GENA_NTS);
+		String nt = (String)headerInfo.get(GenaConstants.GENA_NT) ;
+		String nts = (String)headerInfo.get(GenaConstants.GENA_NTS);
 		if(nt==null || nts== null ) {
-				return gc.GENA_ERROR2;
+				return GenaConstants.GENA_ERROR2;
 		}
-		if(! nt.equals(gc.GENA_EVENT) || !nts.equals(gc.GENA_PROP)) {
-			return gc.GENA_ERROR1;
+		if(! nt.equals(GenaConstants.GENA_EVENT) || !nts.equals(GenaConstants.GENA_PROP)) {
+			return GenaConstants.GENA_ERROR1;
 		}
-		return gc.GENA_SUCESS;
+		return GenaConstants.GENA_SUCESS;
 	}
 
    	//  This method checks for the sequence value from the headers.
 	String checkSequence(Hashtable headers , Subscription subscription) {
-			String seq = (String)headers.get(gc.GENA_SEQ);
+			String seq = (String)headers.get(GenaConstants.GENA_SEQ);
 			int newSequence;
 			if(seq == null) {
-				return gc.GENA_ERROR1;	
+				return GenaConstants.GENA_ERROR1;	
 			}
 			try {
 				newSequence = Integer.parseInt(seq);
 			}catch(NumberFormatException e) {
 				initial_seq_too_big = true;
-				return gc.GENA_ERROR2;
+				return GenaConstants.GENA_ERROR2;
 			}	
 			
 			if(subscription.getInitialEvent()) {
 				if(newSequence != 0) {
 					initial_seq_not_zero = true;
-					return gc.GENA_ERROR2;
+					return GenaConstants.GENA_ERROR2;
 				}
 			 subscription.setEventkey(newSequence);
 			 subscription.setInitialEvent(false);
-			 return gc.GENA_SUCESS;
+			 return GenaConstants.GENA_SUCESS;
 			}
 			if((newSequence-1) != subscription.getEventkey()) {
 				initial_seq_no_increment = true;
-				return gc.GENA_ERROR2;
+				return GenaConstants.GENA_ERROR2;
 			}else {
 				subscription.setEventkey(newSequence);
 				subscription.setInitialEvent(false);
 			}	
-			return gc.GENA_SUCESS;
+			return GenaConstants.GENA_SUCESS;
 	}
 	
 	// This method works on the CP side . When the events r being delivered from the CD side, 
@@ -140,27 +138,27 @@ public class EventServiceImpl implements EventService {
    	public String notifyListeners(Hashtable headers) {
    			String result;	
    			result = checkHeaders(headers);
-   		    if(! result.equals(gc.GENA_SUCESS)) {
+   		    if(! result.equals(GenaConstants.GENA_SUCESS)) {
    		    	return result;
    		    }
-   		    String sid = (String)headers.get(gc.GENA_SID);
+   		    String sid = (String)headers.get(GenaConstants.GENA_SID);
 			Subscription sc = (Subscription)subscriberList.get(sid.trim());
 			if(sc == null) {
-				return gc.GENA_ERROR3;
+				return GenaConstants.GENA_ERROR3;
 			}
    			result = checkSequence(headers,sc);
-   			 if(! result.equals(gc.GENA_SUCESS)) {
+   			 if(! result.equals(GenaConstants.GENA_SUCESS)) {
    		    	return result;
    		    }
 			UPnPListener ulr = sc.getListener();
 			
 			String time =  sc.getTimeout();
-			String xml = (String)headers.get(gc.GENA_BODY);			
+			String xml = (String)headers.get(GenaConstants.GENA_BODY);			
 	
 			Hashtable statevariables = getStateVariables(xml);			
 			UPnPEvent e = new UPnPEvent(UPnPEvent.UPNP_NOTIFY, sid,time, statevariables);
 			new NotifyListeners(ulr,e).start();
-			return gc.GENA_RESOK;
+			return GenaConstants.GENA_RESOK;
 			
 	}
 	

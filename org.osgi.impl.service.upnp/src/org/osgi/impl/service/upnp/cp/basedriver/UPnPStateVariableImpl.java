@@ -1,10 +1,8 @@
 package org.osgi.impl.service.upnp.cp.basedriver;
 
-import java.util.Vector;
-import java.util.Enumeration;
-import org.osgi.service.upnp.*;
-import org.osgi.impl.service.upnp.cp.description.*;
-import org.osgi.impl.service.upnp.cp.util.*;
+import java.util.*;
+import org.osgi.impl.service.upnp.cp.description.StateVariable;
+import org.osgi.impl.service.upnp.cp.util.SamsungUPnPStateVariable;
 
 public class UPnPStateVariableImpl implements SamsungUPnPStateVariable{
 	private StateVariable	var;	

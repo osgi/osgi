@@ -1,6 +1,5 @@
 package org.osgi.impl.service.upnp.cp.event;
 
-import org.osgi.impl.service.upnp.cp.util.*;
 
 public class SendUnsubscribe extends GenaSocket implements Runnable {		
 	private Subscription subscription;

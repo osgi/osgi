@@ -1,6 +1,5 @@
 package org.osgi.impl.service.upnp.cd.control;
 
-import java.util.Hashtable;
 
 // This class parses the SOAP message.
  

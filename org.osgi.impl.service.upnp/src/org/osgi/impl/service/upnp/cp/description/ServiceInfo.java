@@ -1,7 +1,5 @@
 package org.osgi.impl.service.upnp.cp.description;
 
-import java.util.Vector;
-import java.util.StringTokenizer;
 
 public class ServiceInfo {
 	private int major;

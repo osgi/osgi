@@ -1,9 +1,7 @@
 package org.osgi.impl.service.upnp.cd.control;
 
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Date;
-import java.text.DateFormat;			//## Is not in minimum!
+import java.text.DateFormat;
+import java.util.*;
 
 // This class creates a SOAP message to send to the contol device via HTTP.
 

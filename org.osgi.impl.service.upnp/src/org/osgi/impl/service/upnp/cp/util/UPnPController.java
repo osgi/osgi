@@ -1,6 +1,5 @@
 package org.osgi.impl.service.upnp.cp.util;
 
-import org.osgi.impl.service.upnp.cp.description.*;
 
 public interface UPnPController{
 	public void addDevice(String uuid, String descurl);	

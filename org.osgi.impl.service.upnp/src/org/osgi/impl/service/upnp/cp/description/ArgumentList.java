@@ -1,28 +1,28 @@
 package org.osgi.impl.service.upnp.cp.description;
 
-public class ArgumentList{
-	private String name;
-	private String direction;
-	private String returnValue;
-	private String relatedStateVariable;
-	
+public class ArgumentList {
+	private String	name;
+	private String	direction;
+	private String	returnValue;
+	private String	relatedStateVariable;
+
 	// This method returns the name of the argument.
-	public String getName(){
+	public String getName() {
 		return name;
 	}
 
 	// This method returns the direction of the argument.
-	public String getDirection(){
+	public String getDirection() {
 		return direction;
 	}
 
 	//
-	public String getReturnValue(){
+	public String getReturnValue() {
 		return returnValue;
 	}
 
 	// This method returns the related state variable of the argument.
-	public String getRelatedStateVariable(){
+	public String getRelatedStateVariable() {
 		return relatedStateVariable;
 	}
 
@@ -32,8 +32,8 @@ public class ArgumentList{
 	}
 
 	//	This method sets the direction for the argument.
- 	public void setDirection(String direct) {
- 		direction = direct;
+	public void setDirection(String direct) {
+		direction = direct;
 	}
 
 	// This method sets the return value for the argument.

@@ -1,9 +1,8 @@
 package org.osgi.impl.service.upnp.cp.event;
 
-import java.util.*;
+import java.io.IOException;
 import java.net.*;
-import java.io.*;
-import org.osgi.framework.*;
+import java.util.Dictionary;
 
 public class GenaServer extends Thread {
 	private boolean done = false;		

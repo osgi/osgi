@@ -1,6 +1,5 @@
 package org.osgi.impl.service.upnp.cp.event;
 
-import java.util.*;
 
 public class SendRenewal extends GenaSocket implements Runnable {
 	private String timeout;

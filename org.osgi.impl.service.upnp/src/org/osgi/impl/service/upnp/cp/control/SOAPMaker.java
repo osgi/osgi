@@ -1,9 +1,6 @@
 package org.osgi.impl.service.upnp.cp.control;
 
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Date;
-import java.text.DateFormat;
+import java.util.*;
 
 public class SOAPMaker implements SOAPConstants {
 	private Object controlLock = new Object ();

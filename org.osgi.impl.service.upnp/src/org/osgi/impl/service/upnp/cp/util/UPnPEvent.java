@@ -1,7 +1,6 @@
 package org.osgi.impl.service.upnp.cp.util;
 
-import java.util.*;
-import org.osgi.impl.service.upnp.cp.util.*;
+import java.util.Hashtable;
 
 // This event class provides a way to to identify the notify messages. 
 // When ever a notification comes, this event class will be fired to all the suscribers.

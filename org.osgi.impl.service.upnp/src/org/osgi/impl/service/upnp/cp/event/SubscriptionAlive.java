@@ -1,8 +1,6 @@
 package org.osgi.impl.service.upnp.cp.event;
 
-import java.util.Hashtable;
 import java.util.Enumeration;
-import java.net.*;
 
 public class SubscriptionAlive extends Thread {
 	private boolean active = true;
@@ -19,14 +17,14 @@ public class SubscriptionAlive extends Thread {
 	public void run() {		
 		while(active) {
 			long curTime = System.currentTimeMillis();
-			Enumeration timeouts = esi.subscriberList.keys();
+			Enumeration timeouts = EventServiceImpl.subscriberList.keys();
 			for(; timeouts.hasMoreElements(); ) {
 				String key = (String)timeouts.nextElement();
-				Subscription sc = (Subscription)esi.subscriberList.get(key);
+				Subscription sc = (Subscription)EventServiceImpl.subscriberList.get(key);
 				if(! sc.getInfinite()) {
 					long val  = (long) sc.getExpirytime();
 					if(curTime - val >= 0) {
-						esi.subscriberList.remove(key);
+						EventServiceImpl.subscriberList.remove(key);
 					}
 				}
 			}

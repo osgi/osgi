@@ -1,76 +1,72 @@
 package org.osgi.impl.service.upnp.cd.ssdp;
 
-import java.lang.Exception;
 import java.io.IOException;
-import java.lang.Thread;
-import java.net.MulticastSocket;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.net.*;
 
 // This class contineously listens on mulicast port and give the received packet to the parser. 
-public class SSDPMulticastListener extends Thread{
-	private		SSDPComponent 		ssdpcomp;
-	private		MulticastSocket 	msock;
-	private 	DatagramPacket  	dpack;
-	private		boolean			flag = true;
-	private		InetAddress 		inet;
-	
+public class SSDPMulticastListener extends Thread {
+	private SSDPComponent	ssdpcomp;
+	private MulticastSocket	msock;
+	private DatagramPacket	dpack;
+	private boolean			flag	= true;
+	private InetAddress		inet;
 
-	// This constructor constructs the SSDPMulticastListener. 
+	// This constructor constructs the SSDPMulticastListener.
 	// It creates ssdp multicast socket and joins into multicast group.
-	SSDPMulticastListener(SSDPComponent comp) throws Exception{
+	SSDPMulticastListener(SSDPComponent comp) throws Exception {
 		ssdpcomp = comp;
-		try{
+		try {
 			msock = new MulticastSocket(SSDPConstants.HOST_PORT);
 			inet = InetAddress.getByName(SSDPConstants.HOST_IP);
 			msock.joinGroup(inet);
-		}catch(IOException e){
+		}
+		catch (IOException e) {
 			throw e;
 		}
 	}
-	
+
 	// This method receives mulcast packets and gives to SSDPParser.
-	public void run(){
-		while(flag){
+	public void run() {
+		while (flag) {
 			String recvData = null;
 			byte data[] = new byte[1025];
-			if(data != null){
-				dpack 		= new DatagramPacket(data, data.length);
+			if (data != null) {
+				dpack = new DatagramPacket(data, data.length);
 			}
-			try{
+			try {
 				msock.receive(dpack);
-			}catch(IOException e){}
-			
-		
-			if(dpack != null){
+			}
+			catch (IOException e) {
+			}
+			if (dpack != null) {
 				recvData = new String(data, 0, dpack.getLength());
 			}
-			try{
+			try {
 				InetAddress address = dpack.getAddress();
 				int port = dpack.getPort();
 				SSDPParser parser = new SSDPParser(ssdpcomp);
-				if(recvData != null){
+				if (recvData != null) {
 					parser.setData(recvData, address, port);
 				}
-				if(ssdpcomp != null){
-					(new Thread(parser)).start();					
+				if (ssdpcomp != null) {
+					(new Thread(parser)).start();
 				}
-			}catch(Exception e){
+			}
+			catch (Exception e) {
 			}
 		}
 	}
 
 	// This method kills the ssdp mulicast listener.
-	void killMulticastListener(){
+	void killMulticastListener() {
 		flag = false;
-		try{
-			msock.leaveGroup(inet);	
+		try {
+			msock.leaveGroup(inet);
 			msock.close();
-		}catch(IOException e){}
+		}
+		catch (IOException e) {
+		}
 		msock = null;
 		dpack = null;
 	}
 }
-

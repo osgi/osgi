@@ -3,42 +3,42 @@ package org.osgi.impl.service.upnp.cp.description;
 import java.util.Vector;
 
 public class StateVariable {
-	private String sendEvents = "yes";
-	private String name;
-	private String dataType;
-	private String defaultValue;
-	private Vector allowedValueList = new Vector();
-	private Number maximum;
-	private Number minimum;
-	private Number step;
+	private String	sendEvents			= "yes";
+	private String	name;
+	private String	dataType;
+	private String	defaultValue;
+	private Vector	allowedValueList	= new Vector();
+	private Number	maximum;
+	private Number	minimum;
+	private Number	step;
 
 	// This method returns the value of the sendEvents.
-	public String getSendEvents(){
+	public String getSendEvents() {
 		return sendEvents;
 	}
 
 	// This method returns the name of the service.
-	public String getName(){
+	public String getName() {
 		return name;
 	}
 
 	// This method returns the data type of the service.
-	public String getDataType(){
+	public String getDataType() {
 		return dataType;
 	}
 
 	// This method returns the default value of the service.
-	public String getDefaultValue(){
+	public String getDefaultValue() {
 		return defaultValue;
 	}
 
 	// This method returns the allowed values of the service.
-	public Vector getAllowedValueList(){
+	public Vector getAllowedValueList() {
 		return allowedValueList;
 	}
 
 	// This method returns the maximum value of the service.
-	public Number getMaximum(){
+	public Number getMaximum() {
 		return maximum;
 	}
 
@@ -68,7 +68,7 @@ public class StateVariable {
 	}
 
 	// This method sets the allowed values of the variable.
-	public void setAllowedValueList(Vector allowedVals) {		
+	public void setAllowedValueList(Vector allowedVals) {
 		allowedValueList = allowedVals;
 	}
 
@@ -78,18 +78,18 @@ public class StateVariable {
 	}
 
 	// This method sets the data type for the variable.
-	public void setDataType(String dType) {		
+	public void setDataType(String dType) {
 		dataType = dType;
 	}
 
 	// This method sets the name for the variable.
-	public void setName(String stateName) {		
+	public void setName(String stateName) {
 		name = stateName;
 	}
 
 	// This method sets the value for the sendEvents attribute.
 	public void sendEvents(String eventsValue) {
 		eventsValue = eventsValue.trim();
-		sendEvents = eventsValue;		
+		sendEvents = eventsValue;
 	}
 }

@@ -1,8 +1,6 @@
 package org.osgi.impl.service.upnp.cp.event;
 
-import java.util.Hashtable;
 import java.util.Enumeration;
-import java.net.*;
 
 public class SubscriptionRenew extends Thread {
 	private boolean active = true;
@@ -19,10 +17,10 @@ public class SubscriptionRenew extends Thread {
 	public void run() {		
 		while(active) {
 			long curTime = System.currentTimeMillis();
-			Enumeration subscriptionIds = esi.subscriberList.keys();
+			Enumeration subscriptionIds = EventServiceImpl.subscriberList.keys();
 			for(; subscriptionIds.hasMoreElements(); ) {
 				String subscriptionId = (String)subscriptionIds.nextElement();
-				Subscription sc = (Subscription)esi.subscriberList.get(subscriptionId);
+				Subscription sc = (Subscription)EventServiceImpl.subscriberList.get(subscriptionId);
 				if(! (sc.getInfinite() || sc.waiting())) {
 					long val  = (long) sc.getExpirytime();
 					if((val - curTime) <= 5000) {

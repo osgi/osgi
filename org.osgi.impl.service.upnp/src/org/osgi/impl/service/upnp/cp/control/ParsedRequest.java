@@ -4,10 +4,10 @@ import java.util.Hashtable;
 import java.util.Dictionary;
 
 public class ParsedRequest {
-	private String serviceType;        			
-	private String actionName;					
-	private Hashtable args = new Hashtable();  
-	private String returnValue;
+	private String		serviceType;
+	private String		actionName;
+	private Hashtable	args	= new Hashtable();
+	private String		returnValue;
 
 	// This method sets the serviceType.
 	public void setServiceType(String serviceType) {
@@ -20,7 +20,7 @@ public class ParsedRequest {
 	}
 
 	// This method sets the given argument name and value.
-	public void setArgument(String argName, String argValue) {		
+	public void setArgument(String argName, String argValue) {
 		args.put(argName, argValue);
 	}
 
@@ -34,9 +34,9 @@ public class ParsedRequest {
 		return actionName;
 	}
 
-	// This method returns all the arguments	 
-	public Dictionary getArguments() {		
-		return (Dictionary)args;
+	// This method returns all the arguments
+	public Dictionary getArguments() {
+		return (Dictionary) args;
 	}
 
 	// This method returns the argument value of the given name
