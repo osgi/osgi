@@ -24,10 +24,10 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.template.hello;
+package org.osgi.impl.service.template;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
+import org.osgi.framework.*;
+import org.osgi.tools.command.CommandProvider;
 
 /**
  * 
@@ -35,14 +35,13 @@ import org.osgi.framework.BundleContext;
  * 
  * @version $Revision$
  */
-public class HelloWorld implements BundleActivator {
+public class Activator implements BundleActivator {
 	/**
 	 * @param context
 	 * @throws java.lang.Exception
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
-		// TODO Auto-generated method stub
 		System.out.println("Hello World");
 	}
 
@@ -52,7 +51,6 @@ public class HelloWorld implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
-		// TODO Auto-generated method stub
 		System.out.println("Goodbye World");
 	}
 }
