@@ -23,9 +23,13 @@ import org.osgi.service.dmt.*;
 // TODO implement leaf nodes as well if needed
 public class RootPlugin implements DmtReadOnlyDataPlugin {
 	// TODO find the missing parts of the "main" tree
-	private static Node	root	= new Node(".", new Node[] {new Node("OSGi",
-										new Node[] {
-			new Node("Policies", new Node[] {new Node("Java", null)}),
+	private static Node	root	= 
+        new Node(".", new Node[] {new Node("OSGi", new Node[] {
+			new Node("Policies", new Node[] {new Node("Java", 
+                    new Node[] { new Node("Bundle", null),
+			                     new Node("DmtPrincipal", null),
+                                 new Node("ConditionalPermission", null)
+            })}),
 			new Node("applications", null),
 			new Node("application_instances", null),
 			new Node("application_containers", null),
