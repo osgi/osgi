@@ -23,7 +23,6 @@
 	<classpathentry kind="src" path="/org.osgi.service.component"/>
 	<classpathentry kind="src" path="/org.osgi.service.dmt"/>
 	<classpathentry kind="src" path="/org.osgi.service.event"/>
-	<classpathentry kind="src" path="/org.osgi.service.deployment"/>
 	<classpathentry kind="src" path="/org.osgi.service.condpermadmin"/>
 	<classpathentry kind="src" path="/org.osgi.service.application"/>
 	<classpathentry kind="src" path="/org.osgi.meglet"/>
