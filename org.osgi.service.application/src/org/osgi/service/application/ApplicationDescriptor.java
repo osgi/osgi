@@ -213,7 +213,7 @@ public abstract class ApplicationDescriptor {
 	public ScheduledApplication schedule( Map arguments, Date date, boolean launchOnOverdue )
 																		throws Exception {
 		ServiceReference serviceRef = getBundleContext()
-				.getServiceReference("org.osgi.impl.service.scheduler.Scheduler");
+				.getServiceReference("org.osgi.service.application.Scheduler");
 		if (serviceRef == null)
 			throw new Exception( "Scheduler service not found!" );
 
