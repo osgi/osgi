@@ -62,6 +62,11 @@ import java.security.PermissionCollection;
  */
 public class DeploymentAdminPermission extends Permission {
 
+    public static final String ACTION_INSTALL_DP = "installDeploymentPackage";
+    public static final String ACTION_LIST_DPS   = "listDeploymentPackages";
+    public static final String ACTION_UNINSTALL  = "uninstall";
+    public static final String ACTION_INVENTORY  = "inventory";
+    
     /**
      * Creates a new DeploymentAdminPermission for the given target and action.
      * @param target Target string.
