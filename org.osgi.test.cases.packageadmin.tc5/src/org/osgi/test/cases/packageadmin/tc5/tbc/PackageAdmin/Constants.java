@@ -1,11 +1,11 @@
 /*
  * $Header$
  * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
- * patent rights (such org.osgi.test.cases.packageadmin.tc5 third party may or may not be org.osgi.test.cases.packageadmin.tc5 member of the OSGi
+ * patent rights (such a third party may or may not be a member of the OSGi
  * Alliance). The OSGi Alliance is not responsible and shall not be held
  * responsible in any manner for identifying or failing to identify any or all
  * such third party intellectual property rights.
@@ -24,42 +24,44 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
+package org.osgi.test.cases.packageadmin.tc5.tbc.PackageAdmin;
 
-package org.osgi.test.cases.packageadmin.tc5.tb1;
-
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
+import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.test.cases.packageadmin.tc5.tbc.TestControl;
 
 /**
- * This class is used to activate a bundle
+ * Test the constants of org.osgi.service.packageadmin.PackageAdmin class.
  * 
+ * @author left
  * @version $Revision$
  */
-public class Activator implements BundleActivator {
+public class Constants {
+
+	private TestControl	control;
 
 	/**
-	 * Creates a new instance of Activator
-	 */
-	public Activator() {
-	}
-
-	/**
-	 * Start the bundle
+	 * Creates a new Constants
 	 * 
-	 * @param context
-	 * @throws Exception if some erro occur
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
+	 * @param _control the bundle control for this test
 	 */
-	public void start(BundleContext context) throws Exception {
+	public Constants(TestControl _control) {
+		control = _control;
 	}
 
 	/**
-	 * Stop the bundle
-	 * 
-	 * @param context
-	 * @throws Exception if some erro occur
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
+	 * Run the tests
 	 */
-	public void stop(BundleContext context) throws Exception {
+	public void run() throws Exception {
+		testConstantValues0001();
 	}
+
+	/**
+	 * Test the constant values
+	 */
+	public void testConstantValues0001() throws Exception {
+		control.assertEquals(
+				"Testing the constant value PackageAdmin.BUNDLE_TYPE_FRAGMENT",
+				0x00000001, PackageAdmin.BUNDLE_TYPE_FRAGMENT);
+	}
+
 }

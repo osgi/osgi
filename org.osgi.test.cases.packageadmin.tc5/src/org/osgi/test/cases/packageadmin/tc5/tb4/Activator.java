@@ -25,20 +25,20 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.packageadmin.tc5.tb1;
+package org.osgi.test.cases.packageadmin.tc5.tb4;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 /**
- * This class is used to activate a bundle
+ * This class is an activator of a test bundle
  * 
  * @version $Revision$
  */
 public class Activator implements BundleActivator {
 
 	/**
-	 * Creates a new instance of Activator
+	 * Creates a new Activator instance
 	 */
 	public Activator() {
 	}

@@ -1,11 +1,11 @@
 /*
  * $Header$
  * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
- * patent rights (such org.osgi.test.cases.packageadmin.tc5 third party may or may not be org.osgi.test.cases.packageadmin.tc5 member of the OSGi
+ * patent rights (such a third party may or may not be a member of the OSGi
  * Alliance). The OSGi Alliance is not responsible and shall not be held
  * responsible in any manner for identifying or failing to identify any or all
  * such third party intellectual property rights.
@@ -27,39 +27,17 @@
 
 package org.osgi.test.cases.packageadmin.tc5.tb1;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-
 /**
- * This class is used to activate a bundle
+ * This class is used in org.osgi.service.packageadmin.PackageAdmin tests.
  * 
  * @version $Revision$
  */
-public class Activator implements BundleActivator {
+public class Dummy {
 
 	/**
-	 * Creates a new instance of Activator
+	 * Creates a new instance of Dummy
 	 */
-	public Activator() {
+	public Dummy() {
 	}
 
-	/**
-	 * Start the bundle
-	 * 
-	 * @param context
-	 * @throws Exception if some erro occur
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
-	 */
-	public void start(BundleContext context) throws Exception {
-	}
-
-	/**
-	 * Stop the bundle
-	 * 
-	 * @param context
-	 * @throws Exception if some erro occur
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
-	 */
-	public void stop(BundleContext context) throws Exception {
-	}
 }
