@@ -66,6 +66,8 @@ public class EclipseProject {
 	 * @return
 	 */
 	private String checkNull(String s) {
+		if ( s== null )
+			return s;
 		return s.length() == 0 ? null : s;
 	}
 
