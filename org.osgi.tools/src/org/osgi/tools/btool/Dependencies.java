@@ -92,7 +92,6 @@ public class Dependencies {
 		// a reference that might point outside our bundle
 		String act = manifest.getActivator();
 		if (act != null) {
-			System.out.println("Found " + act + " -> " + act);
 			String packageName = base(act.replace('.', '/') + ".class");
 			referred.add(packageName);
 		}
