@@ -27,7 +27,6 @@
 
 package org.osgi.service.deploymentadmin;
 
-import org.osgi.framework.*;
 import java.io.InputStream;
 
 /**
