@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-Name: MEGContainer Test
+Bundle-Vendor: Nokia
+Bundle-Version: 1.0
+Bundle-ClassPath: .
+Bundle-Activator: com.nokia.osgi.megtest.service.megletcontainer.TestMegletContainerBundleActivator
+Import-Package: org.osgi.service.application, org.osgi.service.event
