@@ -17,7 +17,6 @@ package org.osgi.impl.service.metatype;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.security.*;
 import java.util.*;
 
 import org.osgi.framework.Bundle;
@@ -199,8 +198,12 @@ public class ObjectClassDefinitionImpl extends LocalizationElement implements Ob
 	 */
 	public InputStream getIcon(int sizeHint) throws IOException {
 
+		if ((_icon == null) || (_icon.getIconSize() != sizeHint)) {
+			return null;
+		}
 		Bundle b = _icon.getIconBundle();
-		URL[] urls = FragmentUtils.findEntries(b, getLocalized(_icon.getIconName()));
+		URL[] urls = FragmentUtils.findEntries(b,
+				MetaTypeProviderImpl.METADATA_FOLDER + getLocalized(_icon.getIconName()));
 		if (urls != null && urls.length > 0) {
 			return urls[0].openStream();
 		}
@@ -259,26 +262,58 @@ public class ObjectClassDefinitionImpl extends LocalizationElement implements Ob
 	 */
 	private ResourceBundle getResourceBundle(String locale, final Bundle bundle) {
 
-		final String localeFile = (_localization == null ? Constants.BUNDLE_LOCALIZATION_DEFAULT_BASENAME
-				: _localization)
+		String resourceBase = (_localization == null ? Constants.BUNDLE_LOCALIZATION_DEFAULT_BASENAME
+				: _localization);
+
+		// There are five searching candidates:
+		// 1. baseName + "_" + language1 + "_" + country1	+ ".properties"
+		// 2. baseName + "_" + language1					+ ".properties"
+		// 3. baseName + "_" + language2 + "_" + country2	+ ".properties"
+		// 4. baseName + "_" + language2					+ ".properties"
+		// 5. baseName										+ ".properties"
+		//
+		// Where "language1_country1" is the requested locale,
+		// and "language2_country2" is the default locale.
+
+		String[] searchCandidates = new String[5];
+		searchCandidates[0] = resourceBase
 				+ MetaTypeProviderImpl.RESOURCE_FILE_CONN
 				+ locale
 				+ MetaTypeInformationImpl.RESOURCE_FILE_EXT;
+
+		searchCandidates[1] = (locale.charAt(2) == '_' //$NON-NLS-1$
+				? resourceBase
+						+ MetaTypeProviderImpl.RESOURCE_FILE_CONN
+						+ locale.substring(0, 2)
+						+ MetaTypeInformationImpl.RESOURCE_FILE_EXT
+				: null);
+
+		searchCandidates[2] = (Locale.getDefault().toString().equalsIgnoreCase(locale)
+				? null
+				: resourceBase
+						+ MetaTypeProviderImpl.RESOURCE_FILE_CONN
+						+ Locale.getDefault().toString()
+						+ MetaTypeInformationImpl.RESOURCE_FILE_EXT);
+
+		searchCandidates[3] = (searchCandidates[2] == null
+				? null
+				: resourceBase
+						+ MetaTypeProviderImpl.RESOURCE_FILE_CONN
+						+ Locale.getDefault().toString().substring(0, 2)
+						+ MetaTypeInformationImpl.RESOURCE_FILE_EXT);
+
+		searchCandidates[4] = resourceBase + MetaTypeInformationImpl.RESOURCE_FILE_EXT;
+
 		URL resourceUrl = null;
-		try {
-			resourceUrl = (URL) AccessController
-					.doPrivileged(new PrivilegedExceptionAction() {
-						public Object run() throws IOException {
-							URL[] urls = FragmentUtils.findEntries(bundle, localeFile);
-							if (urls != null && urls.length > 0)
-								return urls[0];
-							return null;
-						}
-					});
+		URL[] urls = null;
+
+		for (int idx=0; (idx < searchCandidates.length) && (resourceUrl == null); idx++) {
+			urls = (searchCandidates[idx] == null ? null
+					: FragmentUtils.findEntries(bundle, searchCandidates[idx]));
+			if (urls != null && urls.length > 0)
+				resourceUrl = urls[0];
 		}
-		catch (PrivilegedActionException pae) {
-			// Do nothing, since resourceUrl is still null.
-		}
+
 		if (resourceUrl != null) {
 			try {
 				return new PropertyResourceBundle(resourceUrl.openStream());
