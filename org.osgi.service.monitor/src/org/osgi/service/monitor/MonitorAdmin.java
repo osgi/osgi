@@ -119,8 +119,8 @@ public interface MonitorAdmin {
      *         specified Monitorable
      * @throws SecurityException
      *             if the caller does not hold <code>MonitorPermission</code>
-     *             with the <code>discover</code> action or if there is any
-     *             StatusVariable published by the Monitorable which is not
+     *             with the <code>discover</code> action or if the
+     *             StatusVariables published by the given Monitorable are not
      *             allowed to be discovered as per the target field of the
      *             permission
      * @throws IllegalArgumentException
@@ -161,7 +161,8 @@ public interface MonitorAdmin {
      * makes sense to reset a counter to its starting value, but e.g. a
      * StatusVariable of type String might not have a meaningful default value.
      * Note that for numeric StatusVariables the starting value may not
-     * necessarily be 0. Resetting a StatusVariable triggers a monitor event.
+     * necessarily be 0. Resetting a StatusVariable triggers a monitor event if
+     * the StatusVariable supports update notifications.
      * <p>
      * The entity that wants to reset the StatusVariable needs to hold
      * <code>MonitorPermission</code> with the <code>reset</code> action
@@ -202,7 +203,7 @@ public interface MonitorAdmin {
      * 
      * @param initiator
      *            the identifier of the entity that initiated the job
-     * @param StatusVariables
+     * @param statusVariables
      *            List of StatusVariables to be monitored. The StatusVariable
      *            names must be given in [Monitorable_PID]/[StatusVariable_ID]
      *            format.
@@ -217,8 +218,8 @@ public interface MonitorAdmin {
      * @return the successfully started job object
      * @throws IllegalArgumentException
      *             if the list of StatusVariable names contains a non-existing
-     *             StatusVariable or the schedule or count parameters are
-     *             invalid
+     *             StatusVariable or the initiator, schedule or count parameters 
+     *             are invalid
      * @throws SecurityException
      *             if the caller does not hold <code>MonitorPermission</code>
      *             for all the specified StatusVariables, with the
@@ -226,16 +227,16 @@ public interface MonitorAdmin {
      *             does not allow starting the job with the given frequency
      */
     public MonitoringJob startScheduledJob(String initiator,
-            String[] StatusVariables, int schedule, int count)
+            String[] statusVariables, int schedule, int count)
             throws IllegalArgumentException;
 
     /**
      * Starts a change based Monitoring Job with the parameters provided.
      * Monitoring events will be sent when the StatusVariables of this job are
      * updated. All specified StatusVariables must exist when the job is
-     * started. The initiator string is used in the <code>mon.listener.id</code>
-     * field of all events triggered by the job, to allow filtering the events
-     * based on the initiator.
+     * started, and all must support update notifications. The initiator string
+     * is used in the <code>mon.listener.id</code> field of all events triggered
+     * by the job, to allow filtering the events based on the initiator.
      * <p>
      * The entity which initiates a Monitoring Job needs to hold
      * <code>MonitorPermission</code> for all the specified target
@@ -243,7 +244,7 @@ public interface MonitorAdmin {
      * 
      * @param initiator
      *            the identifier of the entity that initiated the job
-     * @param StatusVariables
+     * @param statusVariables
      *            List of StatusVariables to be monitored. The StatusVariable
      *            names must be given in [Monitorable_PID]/[StatusVariable_ID]
      *            format.
@@ -254,13 +255,13 @@ public interface MonitorAdmin {
      * @throws IllegalArgumentException
      *             if the list of StatusVariable names contains a non-existing
      *             StatusVariable or one that does not support notifications, or
-     *             if the count parameter is invalid
+     *             if the initiator or count parameters are invalid
      * @throws SecurityException
      *             if the caller does not hold <code>MonitorPermission</code>
      *             for all the specified StatusVariables, with the
      *             <code>startjob</code> action present
      */
-    public MonitoringJob startJob(String initiator, String[] StatusVariables,
+    public MonitoringJob startJob(String initiator, String[] statusVariables,
             int count) throws IllegalArgumentException;
 
     /**
