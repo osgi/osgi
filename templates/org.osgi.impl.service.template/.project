@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>osgi.template</name>
+	<name>org.osgi.impl.service.template</name>
 	<comment></comment>
 	<projects>
 	</projects>
