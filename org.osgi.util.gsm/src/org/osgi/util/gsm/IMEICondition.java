@@ -34,13 +34,23 @@ import org.osgi.service.condpermadmin.Condition;
  * string value that is matched against the IMEI of the device.
  */
 public class IMEICondition implements Condition {
+	protected static final String imei = System.getProperty("org.osgi.util.gsm.imei");
+	private static final IMEICondition trueCondition = new IMEICondition(true);
+	private static final IMEICondition falseCondition = new IMEICondition(false);
+
+	private final boolean satisfied;
+	
+	// the default constructor is public
+	protected IMEICondition(boolean match) { satisfied = match; }
+
 	/**
 	 * Creates an IMEI object.
 	 * 
 	 * @param bundle ignored
 	 * @param imei The IMEI value of the device.
 	 */
-	public IMEICondition(Bundle bundle, String imei) {
+	public static Condition getInstance(Bundle bundle, String imei) {
+		return imei.equals(IMEICondition.imei)?trueCondition:falseCondition;
 	}
 
 	/**
@@ -50,13 +60,13 @@ public class IMEICondition implements Condition {
 	 * @return true if the IMEI value matches.
 	 */
 	public boolean isSatisfied() {
-		return true;
+		return satisfied;
 	}
 
 	/**
 	 * Checks whether the condition is evaluated.
 	 * 
-	 * @return always true
+	 * @return if the condition status can be evaluated instantly
 	 */
 	public boolean isEvaluated() {
 		return true;
@@ -79,6 +89,10 @@ public class IMEICondition implements Condition {
 	 * @return true if all conditions match
 	 */
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
-		return false;
+		// we don't use context
+		for(int i=0;i<conds.length;i++) {
+			if (!conds[i].isSatisfied()) return false;
+		}
+		return true;
 	}
 }

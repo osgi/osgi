@@ -34,13 +34,23 @@ import org.osgi.service.condpermadmin.Condition;
  * string value that is matched against the IMSI of the subscriber.
  */
 public class IMSICondition implements Condition {
+	protected static final String imsi = System.getProperty("org.osgi.util.gsm.imsi");
+
+	private static final IMSICondition trueCondition = new IMSICondition(true);
+	private static final IMSICondition falseCondition = new IMSICondition(false);
+
+	private final boolean satisfied;
+	
+	protected IMSICondition(boolean match) { satisfied=match; }
+
 	/**
-	 * Creates an IMSI object.
+	 * Creates an IMSI condition object
 	 * 
 	 * @param bundle ignored
 	 * @param imsi The IMSI value of the subscriber.
 	 */
-	public IMSICondition(Bundle bundle, String imsi) {
+	public static Condition getInstance(Bundle bundle, String imsi) {
+		return (imsi.equals(IMSICondition.imsi))?trueCondition:falseCondition;
 	}
 
 	/**
@@ -50,7 +60,7 @@ public class IMSICondition implements Condition {
 	 * @return true if the IMSI value match.
 	 */
 	public boolean isSatisfied() {
-		return true;
+		return satisfied;
 	}
 
 	/**
@@ -79,6 +89,10 @@ public class IMSICondition implements Condition {
 	 * @return true, if they all match
 	 */
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
-		return false;
+		// we don't use context
+		for(int i=0;i<conds.length;i++) {
+			if (!conds[i].isSatisfied()) return false;
+		}
+		return true;
 	}
 }
