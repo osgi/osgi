@@ -1,30 +1,30 @@
 /*
  * $Header$
- *
- * Copyright (c) OSGi Alliance (2001, 2002).
- * All Rights Reserved.
- *
- * Implementation of certain elements of the OSGi
- * Specification may be subject to third party intellectual property
- * rights, including without limitation, patent rights (such a third party may
- * or may not be a member of the OSGi Alliance). The OSGi Alliance is not responsible and shall not be
- * held responsible in any manner for identifying or failing to identify any or
- * all such third party intellectual property rights.
- *
- * This document and the information contained herein are provided on an "AS
- * IS" basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
- * BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL
- * NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR
- * FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE OSGI ALLIANCE BE LIABLE FOR ANY
- * LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF USE OF DATA, INTERRUPTION OF
- * BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR EXEMPLARY, INCIDENTIAL,
- * PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN CONNECTION WITH THIS
- * DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH LOSS OR DAMAGE.
- *
+ * 
+ * Copyright (c) OSGi Alliance (2001, 2004). All Rights Reserved.
+ * 
+ * Implementation of certain elements of the OSGi Specification may be subject
+ * to third party intellectual property rights, including without limitation,
+ * patent rights (such a third party may or may not be a member of the OSGi
+ * Alliance). The OSGi Alliance is not responsible and shall not be held
+ * responsible in any manner for identifying or failing to identify any or all
+ * such third party intellectual property rights.
+ * 
+ * This document and the information contained herein are provided on an "AS IS"
+ * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
+ * HEREIN WILL NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE
+ * OSGI ALLIANCE BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF
+ * USE OF DATA, INTERRUPTION OF BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR
+ * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
+ * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
+ * 
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
+
 package org.osgi.service.packageadmin;
 
 import org.osgi.framework.Bundle;
@@ -76,15 +76,15 @@ public interface PackageAdmin {
 	public ExportedPackage[] getExportedPackages(Bundle bundle);
 
 	/**
-     * Gets the <tt>ExportedPackage</tt> object with the specified package name.  All exported
-     * packages will be checked for the specified name.  The exported package with the 
-     * highest version will be returned.
-     * <p>
-     * In an environment where the exhaustive list of packages on the system 
-     * classpath is not known in advance, this method attempts to see if the named 
-     * package is on the system classpath.
-     * This means that this method may discover an <tt>ExportedPackage</tt> object that was
-     * not present in the list returned by a prior call to <tt>getExportedPackages()</tt>.
+	 * Gets the <tt>ExportedPackage</tt> object with the specified package
+	 * name. All exported packages will be checked for the specified name. The
+	 * exported package with the highest version will be returned.
+	 * <p>
+	 * In an environment where the exhaustive list of packages on the system
+	 * classpath is not known in advance, this method attempts to see if the
+	 * named package is on the system classpath. This means that this method may
+	 * discover an <tt>ExportedPackage</tt> object that was not present in the
+	 * list returned by a prior call to <tt>getExportedPackages()</tt>.
 	 * 
 	 * @param name The name of the exported package to be returned.
 	 * 
@@ -158,23 +158,24 @@ public interface PackageAdmin {
 	 */
 	public void refreshPackages(Bundle[] bundles);
 
-    /**
-     * Gets all the <tt>ExportedPackage</tt> objects with the specified package name.  
-     * All exported packages will be checked for the specified name.
-     * <p>
-     * In an environment where the exhaustive list of packages on the system 
-     * classpath is not known in advance, this method attempts to see if the named 
-     * package is on the system classpath.
-     * This means that this method may discover an <tt>ExportedPackage</tt> object that was
-     * not present in the list returned by a prior call to <tt>getExportedPackages()</tt>.
-     *
-     * @param name The name of the exported packages to be returned.
-     *
-     * @return An array of the exported packages with the specified name, or <tt>null</tt>
-     *         if no exported packages with that name exists.
-     * @since 1.2
-     */
-    public ExportedPackage[] getAllExportedPackages(String name);
+	/**
+	 * Get the <tt>ExportedPackage</tt> objects with the specified
+	 * package name. All exported packages will be checked for the specified
+	 * name.
+	 * <p>
+	 * In an environment where the exhaustive list of packages on the system
+	 * classpath is not known in advance, this method attempts to see if the
+	 * named package is on the system classpath. This means that this method may
+	 * discover an <tt>ExportedPackage</tt> object that was not present in the
+	 * list returned by a prior call to <tt>getExportedPackages()</tt>.
+	 * 
+	 * @param name The name of the exported packages to be returned.
+	 * 
+	 * @return An array of the exported packages with the specified name, or
+	 *         <tt>null</tt> if no exported packages with that name exists.
+	 * @since 1.2
+	 */
+	public ExportedPackage[] getExportedPackages(String name);
 
 	/**
 	 * Resolve the specified bundles. The Framework must attempt to resolve the
@@ -196,19 +197,19 @@ public interface PackageAdmin {
 	 */
 	public boolean resolveBundles(Bundle[] bundles);
 
-    /**
-     * Returns an array of RequiredBundles with the specified symbolic name.
-     * If the symbolic name argument is <tt>null</tt> then
-     * all RequiredBundles are returned.
-
-     * @param symbolicName The symbolic name of the RequiredBundle 
-     *        or <tt>null</tt> for all RequiredBundles in the Framework.
-     * @return An array of RequiredBundles with the specified symbolic
-     *         name or <tt>null</tt> if no RequiredBundles exist with that
-     *         symbolic name.
-     * @since 1.2
-     */
-    public RequiredBundle[] getRequiredBundles(String symbolicName);
+	/**
+	 * Returns an array of RequiredBundles with the specified symbolic name. If
+	 * the symbolic name argument is <tt>null</tt> then all RequiredBundles
+	 * are returned.
+	 * 
+	 * @param symbolicName The symbolic name of the RequiredBundle or
+	 *        <tt>null</tt> for all RequiredBundles in the Framework.
+	 * @return An array of RequiredBundles with the specified symbolic name or
+	 *         <tt>null</tt> if no RequiredBundles exist with that symbolic
+	 *         name.
+	 * @since 1.2
+	 */
+	public RequiredBundle[] getRequiredBundles(String symbolicName);
 
 	/**
 	 * Returns the bundles with the specified symbolic name within the specified
@@ -256,17 +257,19 @@ public interface PackageAdmin {
 	 */
 	public Bundle[] getHosts(Bundle bundle);
 
-    /**
-     * Returns the bundle for which the specified class is loaded from.  The 
-     * classloader of the bundle returned must have been used to load the 
-     * specified class.  If the class was not loaded by a bundle classloader
-     * then <code>null</code> is returned.
-     * @param clazz the class object to get a bundle for
-     * @return the bundle from which the specified class is loaded or
-     * <code>null</code> if the class was not loaded by a bundle classloader
-     * @since 1.2
-     */
-    public Bundle getBundle(Class clazz);
+	/**
+	 * Returns the bundle for which the specified class is loaded from. The
+	 * classloader of the bundle returned must have been used to load the
+	 * specified class. If the class was not loaded by a bundle classloader then
+	 * <code>null</code> is returned.
+	 * 
+	 * @param clazz the class object to get a bundle for
+	 * @return the bundle from which the specified class is loaded or
+	 *         <code>null</code> if the class was not loaded by a bundle
+	 *         classloader
+	 * @since 1.2
+	 */
+	public Bundle getBundle(Class clazz);
 
 	/**
 	 * The bundle is a fragment bundle.

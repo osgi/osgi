@@ -92,7 +92,7 @@ public class PackageAdminImpl implements PackageAdmin {
 	}
 
 	public ExportedPackage getExportedPackage(String name) {
-		ExportedPackage[] allExports = getExportedPackages(null);
+		ExportedPackage[] allExports = getExportedPackages((Bundle)null);
 		if (allExports == null)
 			return null;
 		ExportedPackage result = null;
@@ -113,8 +113,8 @@ public class PackageAdminImpl implements PackageAdmin {
 		return result;
 	}
 
-	public ExportedPackage[] getAllExportedPackages(String name) {
-		ExportedPackage[] allExports = getExportedPackages(null);
+	public ExportedPackage[] getExportedPackages(String name) {
+		ExportedPackage[] allExports = getExportedPackages((Bundle)null);
 		if (allExports == null)
 			return null;
 		ArrayList result = new ArrayList(1); // rare to have more than one

@@ -144,7 +144,7 @@ public class TBC extends Thread {
 			// (null as argument could be tried for framework where only the
 			// framework is being run)
 			try {
-				ExportedPackage[] tpnull = pa.getExportedPackages(null);
+				ExportedPackage[] tpnull = pa.getExportedPackages((Bundle)null);
 			}
 			catch (Exception e) {
 				log("The method getExportedPackages(null) could not handle a null argument."

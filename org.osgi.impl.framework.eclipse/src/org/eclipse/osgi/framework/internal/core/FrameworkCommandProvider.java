@@ -16,11 +16,11 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.security.ProtectionDomain;
 import java.util.*;
+
 import org.eclipse.osgi.framework.console.CommandInterpreter;
 import org.eclipse.osgi.framework.console.CommandProvider;
 import org.eclipse.osgi.framework.launcher.Launcher;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.ServiceReference;
+import org.osgi.framework.*;
 import org.osgi.service.packageadmin.RequiredBundle;
 
 /**
@@ -704,7 +704,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 					org.osgi.service.packageadmin.PackageAdmin packageAdmin = (org.osgi.service.packageadmin.PackageAdmin) context.getService(packageAdminRef);
 					if (packageAdmin != null) {
 						try {
-							org.osgi.service.packageadmin.ExportedPackage exportedpkgs[] = packageAdmin.getExportedPackages(null);
+							org.osgi.service.packageadmin.ExportedPackage exportedpkgs[] = packageAdmin.getExportedPackages((Bundle)null);
 
 							if (exportedpkgs == null) {
 								intp.print("  "); //$NON-NLS-1$
