@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
@@ -15,11 +16,14 @@ import java.util.jar.JarInputStream;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.deploymentadmin.ResourceProcessor;
 
 import com.nokia.test.db.Db;
+import com.nokia.test.exampleresourceprocessor.db.DbResourceProcessor;
 
 public class DoIt implements BundleActivator {
     
@@ -112,9 +116,11 @@ public class DoIt implements BundleActivator {
             int ok = 0;
             int error = 0;
             
-            try {db_test_01(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
-            System.out.println("*******************************************************************");
-            try {db_test_02(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            //try {db_test_01(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            //System.out.println("*******************************************************************");
+            //try {db_test_02(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            //System.out.println("*******************************************************************");
+            try {db_test_03(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
             
             System.out.println("\n=====================================");
@@ -268,6 +274,60 @@ public class DoIt implements BundleActivator {
             throw new Exception("Table 'score' is missing");
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("tmp"))
             throw new Exception("Table 'tmp' is missing");
+        
+        db.reset(null);
+    }
+    
+    private void db_test_03() throws Exception {
+        ServiceReference ref = context.getServiceReference(Db.class.getName());
+        Db db = (Db) context.getService(ref);
+        DeploymentPackage dp = null;
+        
+        InputStream is = null;
+        try {
+	        is = new FileInputStream(HOME + "db_test_03.dp");
+			dp = da.installDeploymentPackage(is);
+			
+			String[] tables = db.tableNames(null);
+			for (int i = 0; i < tables.length; i++) {
+			    System.out.println("TABLE: " + tables[i]);
+			    db.printTableHeader(null, tables[i], System.out);
+				db.printTableContent(null, tables[i], System.out);
+				System.out.println();                
+            }
+        } finally {
+            if (null != is)
+                try {
+                    is.close();
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+        }
+        
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
+            throw new Exception("Table 'player' is missing");
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
+            throw new Exception("Table 'game' is missing");
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("score"))
+            throw new Exception("Table 'score' is missing");
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("tmp"))
+            throw new Exception("Table 'tmp' is missing");
+        
+        ServiceReference[] refs = context.getServiceReferences(
+                ResourceProcessor.class.getName(), "(id=db_test_03)");
+        ResourceProcessor rp = (ResourceProcessor) context.getService(refs[0]);
+        Set s = ((DbResourceProcessor) rp).getResources(dp, "db_test_01_t.dbscript");
+        if (null == s || !s.contains("tmp"))
+            throw new Exception("RP with id 'db_test_03' HASN'T receive the " +
+            		"'db_test_01_t.dbscript' resource");
+        refs = context.getServiceReferences(
+                ResourceProcessor.class.getName(), "(id=default_id)");
+        rp = (ResourceProcessor) context.getService(refs[0]);
+        s = ((DbResourceProcessor) rp).getResources(dp, "db_test_01_t.dbscript");
+        if (null != s && s.contains("tmp"))
+            throw new Exception("RP with id 'default_id' HAS receive the " +
+            		"'db_test_01_t.dbscript' resource");
         
         db.reset(null);
     }

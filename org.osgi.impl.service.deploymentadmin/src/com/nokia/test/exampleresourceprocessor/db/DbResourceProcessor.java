@@ -54,6 +54,7 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
     
     private transient Object                dbSession;
     private transient ByteArrayOutputStream copy;
+    private transient String 				id;
     
     /*
      * Side effect means table creation in case of this Resource Processor
@@ -204,15 +205,26 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
     }
 
     public void start(BundleContext context) throws Exception {
+        String s = (String) context.getBundle().getHeaders().get("id");
+        id = null == s ? "default_id" : s;
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         db = (Db) context.getService(ref);
-        
         Dictionary	d = new Hashtable();
-		d.put("type", "db");        
+		d.put("type", "db");
+		d.put("id", id);
         context.registerService(ResourceProcessor.class.getName(), this, d);
+        System.out.println("DbResourceProcessor started. Id: " + id);
     }
 
     public void stop(BundleContext context) throws Exception {
+        System.out.println("DbResourceProcessor stopped. Id: " + id);
+    }
+    
+    // FOR TEST ONLY
+    public Set getResources(DeploymentPackage dp, String resName) {
+        Hashtable ht = (Hashtable) dps.get(dp);
+        Set s = (Set) ht.get(resName);
+        return s;
     }
 
     // FOR TEST ONLY
