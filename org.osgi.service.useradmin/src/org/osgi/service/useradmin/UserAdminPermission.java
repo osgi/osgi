@@ -1,7 +1,7 @@
 /*
  * $Header$
  *
- * Copyright (c) OSGi Alliance (2001, 2002).
+ * Copyright (c) OSGi Alliance (2001, 2004).
  * All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
@@ -129,6 +129,7 @@ import java.security.PermissionCollection;
  * @version $Revision$
  */
 public final class UserAdminPermission extends BasicPermission {
+    static final long serialVersionUID = -1179971692401603789L;
 	/**
 	 * The permission name &quot;admin&quot;.
 	 */

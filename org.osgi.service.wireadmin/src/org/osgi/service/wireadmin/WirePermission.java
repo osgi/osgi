@@ -1,7 +1,7 @@
 /*
  * $Header$
  *
- * Copyright (c) OSGi Alliance (2002).
+ * Copyright (c) OSGi Alliance (2002, 2004).
  * All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
@@ -50,6 +50,7 @@ import java.security.PermissionCollection;
  * @version $Revision$
  */
 final public class WirePermission extends BasicPermission {
+    static final long serialVersionUID = -5583709391516569321L;
 	/**
 	 * The action string for the <tt>PRODUCE</tt> action: value is "produce".
 	 */
@@ -343,6 +344,7 @@ final public class WirePermission extends BasicPermission {
  */
 
 final class WirePermissionCollection extends PermissionCollection {
+    static final long serialVersionUID = 2617521094909826016L;
 	/**
 	 * Table of permissions.
 	 * 
