@@ -18,11 +18,21 @@
 package org.osgi.impl.service.dmt;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Constructor;
+import java.security.AccessControlContext;
+import java.security.AccessController;
+import java.security.Permission;
+import java.security.PermissionCollection;
+import java.security.Permissions;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.security.ProtectionDomain;
 import java.util.*;
 
 import org.osgi.service.dmt.*;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
+import org.osgi.service.permissionadmin.PermissionInfo;
 
 // TODO permissions: check java permissions, set permissions based on policy plugin, etc.
 // TODO optimize node handling (e.g. retrieve plugin from dispatcher only once per API call), maybe with new URI class
@@ -34,7 +44,9 @@ import org.osgi.service.event.EventAdmin;
 // TODO throw exception when a non-transactional plugin is first written in an atomic session
 // TODO at rollback, do not call rollback() method for (non-transactional) plugins that were only read
 public class DmtSessionImpl implements DmtSession {
-	private static Hashtable	acls;
+	private static final Class[] PERMISSION_CONSTRUCTOR_SIG = 
+        new Class[] { String.class, String.class };
+    private static Hashtable	acls;
     
 	static {
 		acls = new Hashtable();
@@ -47,38 +59,54 @@ public class DmtSessionImpl implements DmtSession {
 	private static final int    SHOULD_BE_INTERIOR = 3; // implies SHOULD_EXIST
     
     private DmtPluginDispatcher dispatcher;
-    private EventAdmin        eventChannel;
+    private EventAdmin          eventChannel;
 
-    private String              principal;
-    private String              subtreeUri;
-    private int                 sessionId;
+    private String     principal;
+    private String     subtreeUri;
+    private int        sessionId;
     
-    private int					lockMode;
-	private Set					dataPlugins;
-    private EventList           eventList;
-    private boolean             open;
+    private int        lockMode;
+	private Set        dataPlugins;
+    private EventList  eventList;
+    private boolean    open;
+    
+    private AccessControlContext securityContext;
 
 	public DmtSessionImpl(String principal, String subtreeUri, int lockMode,
-			              EventAdmin eventChannel, 
+			              PermissionInfo[] permissions, EventAdmin eventChannel, 
                           DmtPluginDispatcher dispatcher) throws DmtException {
         
 		checkNodeUri(subtreeUri);
 		subtreeUri = Utils.normalizeAbsoluteUri(subtreeUri);
-		this.principal = principal;
+		
+        this.principal = principal;
 		this.subtreeUri = subtreeUri;
         this.lockMode = lockMode;
 		this.dispatcher = dispatcher;
         this.eventChannel = eventChannel;
+        
         sessionId = (new Long(System.currentTimeMillis())).hashCode();
 		dataPlugins = Collections.synchronizedSet(new HashSet());
         open = true;
+             
+        if(principal != null) { // remote session
+            System.getSecurityManager().checkPermission(new DmtPrincipalPermission(principal));
+            try {
+                securityContext = getSecurityContext(permissions);
+            } catch(Exception e) {
+                throw new DmtException(subtreeUri, DmtException.COMMAND_FAILED, 
+                        "Unable to create Protection Domain for remote server.", 
+                        e);
+            }
+        }
+        
         if(lockMode == LOCK_TYPE_ATOMIC)
         	eventList = new EventList();
 		// after everything is initialized, check with the plugins whether the
 		// given node really exists
 		checkNode(subtreeUri, SHOULD_EXIST);
 	}
-
+    
     /* These methods can be called even after the session has been closed. */
     // TODO check javadoc that this is the correct behaviour
     
@@ -109,18 +137,16 @@ public class DmtSessionImpl implements DmtSession {
 		synchronized (dataPlugins) {
 			Iterator i = dataPlugins.iterator();
 			while (i.hasNext()) {
-				try {
-					((DmtReadOnly) i.next()).close();
-				}
-				catch (Exception e) {
-					closeExceptions.add(e);
-				}
+                try {
+                    new PluginWrapper(i.next(), securityContext).close();
+                } catch(Exception e) {
+                    closeExceptions.add(e);
+                }
 			}
 			dataPlugins.clear();
 		}
 		if (closeExceptions.size() != 0)
-			// TODO try to include some information to identify the plugins that
-			// threw an exception
+			// TODO try to include some information to identify the plugins that threw an exception
 			throw new DmtException(null, DmtException.COMMAND_FAILED,
 					"Some plugins failed to close.", closeExceptions);
     
@@ -134,6 +160,7 @@ public class DmtSessionImpl implements DmtSession {
         }
 	}
 
+    // TODO what happens with DmtDataPlugins that do not support transactions?
 	public void rollback() throws DmtException {
 		checkSession();
 		open = false;
@@ -146,22 +173,16 @@ public class DmtSessionImpl implements DmtSession {
 		synchronized (dataPlugins) {
 			Iterator i = dataPlugins.iterator();
 			while (i.hasNext()) {
-				Object plugin = i.next();
-				try {
-					if (plugin instanceof DmtDataPlugin)
-						((DmtDataPlugin) plugin).rollback();
-					else
-						((DmtReadOnly) plugin).close();
-				}
-				catch (Exception e) {
-					rollbackExceptions.add(e);
-				}
+                try {
+                    (new PluginWrapper(i.next(), securityContext)).rollback();
+                } catch(Exception e) {
+                    rollbackExceptions.add(e);
+                }
 			}
 			dataPlugins.clear();
 		}
 		if (rollbackExceptions.size() != 0)
-			// TODO try to include some information to identify the plugins that
-			// threw an exception
+			// TODO try to include some information to identify the plugins that threw an exception
 			throw new DmtException(null, DmtException.ROLLBACK_FAILED,
 					"Some plugins failed to roll back or close.",
 					rollbackExceptions);
@@ -169,17 +190,30 @@ public class DmtSessionImpl implements DmtSession {
 		eventList.clear();
     }
 
-	public void execute(String nodeUri, String data) throws DmtException {
+	public void execute(String nodeUri, final String data) throws DmtException {
         checkSession();
 		// allow executing non-existent nodes so that an exec plugin is not
 		// forced to be a data plugin as well
-		String uri = makeAbsoluteUri(nodeUri);
+		final String uri = makeAbsoluteUri(nodeUri);
 		checkNodePermission(uri, DmtAcl.EXEC);
-		DmtExecPlugin plugin = dispatcher.getExecPlugin(uri);
-		if (plugin == null)
+
+        final DmtExecPlugin plugin = dispatcher.getExecPlugin(uri);
+        final DmtSession session = this;
+		
+        if (plugin == null)
 			throw new DmtException(uri, DmtException.OTHER_ERROR,
 					"No exec plugin registered for given node.");
-		plugin.execute(this, uri, data);
+        
+        try {
+            AccessController.doPrivileged(new PrivilegedExceptionAction() {
+                public Object run() throws DmtException {
+                    plugin.execute(session, uri, data);
+                    return null;
+                }
+            }, securityContext);
+        } catch(PrivilegedActionException e) {
+            throw (DmtException) e.getException();
+        }
 	}
 
 	public boolean isNodeUri(String nodeUri) {
@@ -189,8 +223,7 @@ public class DmtSessionImpl implements DmtSession {
 		// remotely (no SyncML command anyway)
 		try {
 			makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
-		}
-		catch (DmtException e) {
+		} catch (DmtException e) {
 			return false; // invalid node URI or error opening plugin
 		}
 		return true;
@@ -250,15 +283,16 @@ public class DmtSessionImpl implements DmtSession {
 
 	public DmtData getNodeValue(String nodeUri) throws DmtException {
 		checkSession();
-        String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_LEAF);
+        final String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_LEAF);
 		checkNodePermission(uri, DmtAcl.GET);
-		return getDataPlugin(uri).getNodeValue(uri);
+        return getDataPlugin(uri).getNodeValue(uri);
 	}
 
 	public String[] getChildNodeNames(String nodeUri) throws DmtException {
 		checkSession();
-        String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_INTERIOR);
+        final String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_INTERIOR);
 		checkNodePermission(uri, DmtAcl.GET);
+        // TODO remove null entries from the returned array (if it is non-null)
 		return getDataPlugin(uri).getChildNodeNames(uri);
 	}
 
@@ -297,7 +331,7 @@ public class DmtSessionImpl implements DmtSession {
 	// GET property op
 	public String getNodeType(String nodeUri) throws DmtException {
 		checkSession();
-        String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_INTERIOR);
+        String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
 		checkNodePermission(uri, DmtAcl.GET);
 		return getDataPlugin(uri).getNodeType(uri);
 	}
@@ -319,20 +353,35 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
-		checkSession();
         if (data == null)
-			throw new IllegalArgumentException(
-					"DmtData argument must be non-null.");
-		String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_LEAF);
-		checkNodePermission(uri, DmtAcl.REPLACE);
-		getWritableDataPlugin(uri).setNodeValue(uri, data);
-        enqueueEvent(EventList.REPLACE, nodeUri);
+			throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, 
+					"'null' value given for DmtData argument.");
+        commonSetNodeValue(nodeUri, data);
 	}
-
+    
+    public void setDefaultNodeValue(String nodeUri) throws DmtException {
+        commonSetNodeValue(nodeUri, null);
+    }
+    
+    private void commonSetNodeValue(String nodeUri, DmtData data)
+            throws DmtException {
+        checkSession();
+        String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_LEAF);
+        checkNodePermission(uri, DmtAcl.REPLACE);
+        if(data == null)
+            getWritableDataPlugin(uri).setDefaultNodeValue(uri);
+        else
+            getWritableDataPlugin(uri).setNodeValue(uri, data);
+        enqueueEvent(EventList.REPLACE, nodeUri);        
+    }
+    
 	// SyncML DMTND 7.5 (p16) Type: only the Get command is applicable!
 	public void setNodeType(String nodeUri, String type) throws DmtException {
 		checkSession();
-        String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_INTERIOR);
+        if(type == null)
+            throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, 
+                    "'null' value given for node type.");
+        String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
 		checkNodePermission(uri, DmtAcl.REPLACE);
 		getWritableDataPlugin(uri).setNodeType(uri, type);
         enqueueEvent(EventList.REPLACE, nodeUri);
@@ -346,10 +395,10 @@ public class DmtSessionImpl implements DmtSession {
 		// can be deleted or not?
 		DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
 		if (metaNode != null) {
-			if (metaNode.isPermanent())
+			if (metaNode.getScope() == DmtMetaNode.PERMANENT)
 				throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
 						"Cannot delete permanent node.");
-			if (!metaNode.canDelete())
+			if (!metaNode.can(DmtMetaNode.CMD_DELETE))
 				throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
 						"Node meta-data does not allow direct deletion of this node.");
 		}
@@ -359,41 +408,78 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	public void createInteriorNode(String nodeUri) throws DmtException {
-		checkSession();
-        String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_NOT_EXIST);
-		String parent = Utils.parentUri(uri);
-		checkNode(parent, SHOULD_BE_INTERIOR);
-		checkNodePermission(parent, DmtAcl.ADD);
-		getWritableDataPlugin(uri).createInteriorNode(uri);
-		assignNewNodePermissions(uri, parent);
-        enqueueEvent(EventList.ADD, nodeUri);
+        checkSession();
+	    commonCreateInteriorNode(nodeUri, null);
 	}
 
 	public void createInteriorNode(String nodeUri, String type)
 			throws DmtException {
-		checkSession();
+        checkSession();
+	    if(type == null)
+            throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, 
+                    "'null' value given for interior node type.");
+        commonCreateInteriorNode(nodeUri, type);
+	}
+    
+    private void commonCreateInteriorNode(String nodeUri, String type)
+            throws DmtException {
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_NOT_EXIST);
-		String parent = Utils.parentUri(uri);
-		checkNode(parent, SHOULD_BE_INTERIOR);
-		checkNodePermission(parent, DmtAcl.ADD);
-		getWritableDataPlugin(uri).createInteriorNode(uri, type);
-		assignNewNodePermissions(uri, parent);
+        String parent = Utils.parentUri(uri);
+        checkNode(parent, SHOULD_BE_INTERIOR);
+        checkNodePermission(parent, DmtAcl.ADD);
+        if(type == null)
+            getWritableDataPlugin(uri).createInteriorNode(uri);
+        else
+            getWritableDataPlugin(uri).createInteriorNode(uri, type);
+        assignNewNodePermissions(uri, parent);
         enqueueEvent(EventList.ADD, nodeUri);
-	}
+    }
 
-	public void createLeafNode(String nodeUri, DmtData value)
+    public void createLeafNode(String nodeUri) throws DmtException {
+        checkSession();
+        commonCreateLeafNode(nodeUri, null, null);
+    }
+    
+    public void createLeafNode(String nodeUri, DmtData value)
 			throws DmtException {
-		checkSession();
+        checkSession();
         if (value == null)
-			throw new IllegalArgumentException(
-					"DmtData argument must be non-null.");
-		String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_NOT_EXIST);
-		String parent = Utils.parentUri(uri);
-		checkNode(parent, SHOULD_BE_INTERIOR);
-		checkNodePermission(parent, DmtAcl.ADD);
-		getWritableDataPlugin(uri).createLeafNode(uri, value);
-        enqueueEvent(EventList.ADD, nodeUri);
+            throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, 
+                    "'null' value given for DmtData argument.");
+        commonCreateLeafNode(nodeUri, value, null);
 	}
+    
+    public void createLeafNode(String nodeUri, DmtData value, String mimeType)
+            throws DmtException {
+        checkSession();
+        if (value == null)
+            throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, 
+                    "'null' value given for DmtData argument.");
+        // TODO mimeType can be null in the spec, do not depend on this to select branch in the commonCLN method 
+        if(mimeType == null)
+            throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
+                    "'null' value given for mime-type argument.");
+        commonCreateLeafNode(nodeUri, value, mimeType);
+        
+    }
+    
+    private void commonCreateLeafNode(String nodeUri, DmtData value,
+            String mimeType) throws DmtException {
+        
+        String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_NOT_EXIST);
+        String parent = Utils.parentUri(uri);
+        checkNode(parent, SHOULD_BE_INTERIOR);
+        checkNodePermission(parent, DmtAcl.ADD);
+        
+        if(value == null)
+            getWritableDataPlugin(uri).createLeafNode(uri);
+        else if(mimeType == null)
+            getWritableDataPlugin(uri).createLeafNode(uri, value);
+        else
+            getWritableDataPlugin(uri).createLeafNode(uri, value, mimeType);
+        
+        enqueueEvent(EventList.ADD, nodeUri);        
+    }
 
     // TODO send events (when it becomes clear what to send)
 	// TODO support non-recursive copy mode, if semantics are clarified
@@ -442,15 +528,50 @@ public class DmtSessionImpl implements DmtSession {
 					"Cannot rename root node.");
 		// TODO if there is no meta information, should we assume that the node is permanent or dynamic?
 		DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
-		if (metaNode != null && metaNode.isPermanent())
+		if (metaNode != null && metaNode.getScope() == DmtMetaNode.PERMANENT)
 			throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
 					"Cannot rename permanent node.");
 		String newUri = Utils.createAbsoluteUri(parent, newName);
 		checkNode(newUri, SHOULD_NOT_EXIST);
 		checkNodePermission(uri, DmtAcl.REPLACE);
 		getWritableDataPlugin(uri).renameNode(uri, newName);
-		copyAclEntries(uri, newUri, true);
+        copyAclEntries(uri, newUri, true);
 	}
+
+    /**
+     * Create an Access Control Context based on the given permissions. The
+     * Permission objects are first created from the PermissionInfo objects,
+     * then added to a permission collection, which is added to a protection
+     * domain with no code source, which is used to create the access control
+     * context. If the <code>null</code> argument is given, an empty access
+     * control context is created.
+     * 
+     * @throws Exception if there is an error creating one of the permission
+     *         objects (can be one of ClassNotFoundException, SecurityException,
+     *         NoSuchMethodException, ClassCastException,
+     *         IllegalArgumentException, InstantiationException,
+     *         IllegalAccessException or InvocationTargetException)
+     */
+    private AccessControlContext getSecurityContext(PermissionInfo[] permissions)
+            throws Exception {
+
+        PermissionCollection permissionCollection = new Permissions();
+        
+        if(permissions != null)
+            for (int i = 0; i < permissions.length; i++) {
+                PermissionInfo info = permissions[i];
+                
+                Class permissionClass = Class.forName(info.getType());
+                Constructor constructor = permissionClass
+                        .getConstructor(PERMISSION_CONSTRUCTOR_SIG);
+                Permission permission = (Permission) constructor.newInstance(
+                        new Object[] {info.getName(), info.getActions()});
+                permissionCollection.add(permission);
+            }
+        
+        return new AccessControlContext(new ProtectionDomain[] {
+                new ProtectionDomain(null, permissionCollection)});
+    }
 
     private void checkSession() {
         if(!open)
@@ -485,10 +606,8 @@ public class DmtSessionImpl implements DmtSession {
 		DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
 		if (metaNode != null)
 			return metaNode.isLeaf();
-		// TODO hack: try to find out the type of node by calling getNodeValue
-		// and getChildNodeNames
-		// TODO specify in the standard the exception the plugin has to throw if
-		// the node type is invalid for the op.
+		// TODO hack: try to find out the type of node by calling getNodeValue and getChildNodeNames
+		// TODO specify in the standard the exception the plugin has to throw if the node type is invalid for the op.
 		return false;
 	}
 
@@ -513,8 +632,7 @@ public class DmtSessionImpl implements DmtSession {
 			createInteriorNode(newUri, getNodeType(uri));
 		// copy ACL
 		setNodeAcl(newUri, getNodeAcl(uri));
-		// copy Title property if it is supported by both source and target
-		// plugins
+		// copy Title property if it is supported by both source and target plugins
 		try {
 			setNodeTitle(newUri, getNodeTitle(uri));
 		}
@@ -524,10 +642,10 @@ public class DmtSessionImpl implements DmtSession {
 						"Error copying node to '" + newUri
 								+ "', cannot copy title.", e);
 		}
-		// Format, Name, Size, TStamp and VerNo properties do not need to be
-		// expicitly copied
+		// Format, Name, Size, TStamp and VerNo properties do not need to be expicitly copied
 		// copy children recursively in case of interior node
 		if (!isLeaf) {
+            // TODO handle case if getChildNodeNames returns null (no children)
 			String[] children = getChildNodeNames(uri);
 			for (int i = 0; i < children.length; i++)
 				copyNoCheck(Utils.createAbsoluteUri(uri, children[i]), Utils
@@ -584,39 +702,37 @@ public class DmtSessionImpl implements DmtSession {
 		return uri;
 	}
 
-	// TODO try to factor out some common code from the get*DataPlugin methods
+	// TODO factor out common code from the get*DataPlugin methods
+    // TODO consider storing wrapped plugins in 'dataPlugins' (lookup?)
 	private DmtReadOnly getDataPlugin(String uri) throws DmtException {
-		DmtReadOnly plugin = (DmtReadOnly) dispatcher.getDataPlugin(uri);
-		// ensure that the plugin is not returned for use in another thread
+		Object plugin = dispatcher.getDataPlugin(uri);
+        PluginWrapper wrappedPlugin = new PluginWrapper(plugin, securityContext);
+
+        // ensure that the plugin is not returned for use in another thread
 		// before its open() has successfully finished
 		synchronized (plugin) {
-            if (dataPlugins.add(plugin)) {
-                if (plugin instanceof DmtDataPlugin)
-                    ((DmtDataPlugin) plugin).open(subtreeUri, lockMode, this);
-                else if (plugin instanceof DmtReadOnlyDataPlugin)
-                    ((DmtReadOnlyDataPlugin) plugin).open(subtreeUri, this);
-                else // never happens
-                    throw new IllegalStateException(
-                            "Invalid data plugin class given by dispatcher.");
-            }
+            if (dataPlugins.add(plugin)) 
+                // works for normal and read-only plugins as well
+                wrappedPlugin.open(subtreeUri, lockMode, this);
         }
-		return plugin;
+		return wrappedPlugin;
 	}
 
 	private Dmt getWritableDataPlugin(String uri) throws DmtException {
-		Object pluginObj = dispatcher.getDataPlugin(uri);
-		if (!(pluginObj instanceof DmtDataPlugin))
+		Object plugin = dispatcher.getDataPlugin(uri);
+		if (!(plugin instanceof DmtDataPlugin))
 			throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
 					"Cannot perform operation on Read-Only plugin.");
         
-         DmtDataPlugin plugin = (DmtDataPlugin) pluginObj;
-		// ensure that the plugin is not returned for use in another thread
+        PluginWrapper wrappedPlugin = new PluginWrapper(plugin, securityContext);
+
+        // ensure that the plugin is not returned for use in another thread
 		// before its open() has successfully finished
 		synchronized (plugin) {
 			if (dataPlugins.add(plugin))
-				plugin.open(subtreeUri, lockMode, this);
+				wrappedPlugin.open(subtreeUri, lockMode, this);
 		}
-		return plugin;
+		return wrappedPlugin;
 	}
 
 	private void checkNode(String uri, int check) throws DmtException {
