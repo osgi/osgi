@@ -165,7 +165,7 @@ class BundleImpl implements Bundle, Comparable
 		ProtectionDomain pd = null;
 		if (framework.checkPermissions) {
 			PermissionCollection pc = framework.permissions.getPermissionCollection(this);
-			pd = new ProtectionDomain(new CodeSource(bundleURL, null), pc);
+			pd = new ProtectionDomain(new CodeSource(bundleURL, (java.security.cert.Certificate[])null), pc);
 		}
 		protectionDomain = pd;
 		initPackages();
@@ -227,7 +227,7 @@ class BundleImpl implements Bundle, Comparable
 		ProtectionDomain pd = null;
 		if (framework.checkPermissions) {
 			PermissionCollection pc = framework.permissions.getPermissionCollection(this);
-			pd = new ProtectionDomain(new CodeSource(bundleURL, null), pc);
+			pd = new ProtectionDomain(new CodeSource(bundleURL, (java.security.cert.Certificate[])null), pc);
 		}
 		protectionDomain = pd;
 		initPackages();
