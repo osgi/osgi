@@ -9,7 +9,7 @@
  *
  * ${todo} Add Javadoc comment for this type.
  * 
- * @version $$Revision$$
+ * @version $$Revision: 1.1 $$
  */</template><template context="fieldcomment_context" deleted="false" description="Comment for fields" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.fieldcomment" name="fieldcomment">/**
  * Comment for &lt;code&gt;${field}&lt;/code&gt;
  */</template><template context="methodcomment_context" deleted="false" description="Comment for non-overriding methods" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.methodcomment" name="methodcomment">/**
@@ -17,7 +17,7 @@
  */</template><template context="overridecomment_context" deleted="false" description="Comment for overriding methods" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.overridecomment" name="overridecomment">/* (non-Javadoc)
  * ${see_to_overridden}
  */</template><template context="newtype_context" deleted="false" description="Newly created files" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.newtype" name="newtype">/*
- * $$Header$$
+ * $$Header: /cvshome/build/cnf/eclipse/codetemplates.xml,v 1.1 2004/10/02 04:15:54 hargrave Exp $$
  *
  * Copyright (c) The OSGi Alliance (${year}).
  * All Rights Reserved.
