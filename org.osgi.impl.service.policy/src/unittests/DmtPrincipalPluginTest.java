@@ -224,4 +224,13 @@ public class DmtPrincipalPluginTest extends DmtPluginTestCase implements DmtPrin
 			fail();
 		} catch (DmtException e) {}
 	}
+
+	public void testNonAtomicWrite() throws Exception {
+		newSession();
+		try {
+			dmtSession.createInteriorNode("1");
+			fail();
+		} catch (DmtException e) {}
+		
+	}
 }

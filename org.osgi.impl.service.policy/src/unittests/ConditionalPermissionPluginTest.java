@@ -222,4 +222,13 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 		dmtSession.rollback();
 		assertTrue(condPermAdmin.contains(rfc));
 	}
+	
+	public void testNonAtomicWrite() throws Exception {
+		newSession();
+		try {
+			dmtSession.createInteriorNode("1");
+			fail();
+		} catch (DmtException e) {}
+		
+	}
 }
