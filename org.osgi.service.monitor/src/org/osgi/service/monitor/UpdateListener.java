@@ -32,10 +32,10 @@ package org.osgi.service.monitor;
  * Monitor Admin component.
  */
 public interface UpdateListener {
-	/**
-	 * Callback for notification of a KPI change.
-	 * 
-	 * @param kpi the KPI which has changed
-	 */
-	public void updated(KPI kpi);
+    /**
+     * Callback for notification of a KPI change.
+     * 
+     * @param kpi the KPI which has changed
+     */
+    public void updated(KPI kpi);
 }

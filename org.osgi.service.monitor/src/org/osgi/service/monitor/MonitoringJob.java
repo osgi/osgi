@@ -45,65 +45,65 @@ package org.osgi.service.monitor;
  * whether we still receive updates of the KPI changes or not.
  */
 public interface MonitoringJob {
-	/**
-	 * Stops a Monitoring Job. Note that a time based job can also stop
-	 * automatically if the specified number of samples have been taken.
-	 */
-	public void stop();
+    /**
+     * Stops a Monitoring Job. Note that a time based job can also stop
+     * automatically if the specified number of samples have been taken.
+     */
+    public void stop();
 
-	/**
-	 * Returns the identitifier of the principal who initiated the job. This is
-	 * set at the time when startJob() is called at the MonitorAdmin interface.
-	 * This string holds the ServerID if the operation was initiated from a
-	 * remote manager, or an arbitrary ID of the initiator entity in the local
-	 * case (used for addressing notification events).
-	 * 
-	 * @return the ID of the initiator
-	 */
-	public String getInitiator();
+    /**
+     * Returns the identitifier of the principal who initiated the job. This is
+     * set at the time when startJob() is called at the MonitorAdmin interface.
+     * This string holds the ServerID if the operation was initiated from a
+     * remote manager, or an arbitrary ID of the initiator entity in the local
+     * case (used for addressing notification events).
+     * 
+     * @return the ID of the initiator
+     */
+    public String getInitiator();
 
-	/**
-	 * Returns the list of KPI names which is the target of this measurement
-	 * job. For time based jobs, the MonitorAdmin will iterate through this list
-	 * and query all KPIs when its timer set by the job's frequency rate
-	 * expires.
-	 * 
-	 * @return the target list of the measurement job in
-	 *         [Monitorable_ID]/[KPI_ID] format
-	 */
-	public String[] getKpiNames();
+    /**
+     * Returns the list of KPI names which is the target of this measurement
+     * job. For time based jobs, the MonitorAdmin will iterate through this list
+     * and query all KPIs when its timer set by the job's frequency rate
+     * expires.
+     * 
+     * @return the target list of the measurement job in
+     *         [Monitorable_ID]/[KPI_ID] format
+     */
+    public String[] getKpiNames();
 
-	/**
-	 * Returns the delay (in seconds) between two samples. If this call returns
-	 * N (greater than 0) then the MonitorAdmin queries each KPI that belongs to
-	 * this job every N seconds. The value 0 means that instant notification on
-	 * changes is requested (at every nth change of the value, as specified by
-	 * the report count parameter).
-	 * 
-	 * @return the delay (in seconds) between samples, or 0 for change based
-	 *         jobs
-	 */
-	public long getSchedule();
+    /**
+     * Returns the delay (in seconds) between two samples. If this call returns
+     * N (greater than 0) then the MonitorAdmin queries each KPI that belongs to
+     * this job every N seconds. The value 0 means that instant notification on
+     * changes is requested (at every nth change of the value, as specified by
+     * the report count parameter).
+     * 
+     * @return the delay (in seconds) between samples, or 0 for change based
+     *         jobs
+     */
+    public long getSchedule();
 
-	/**
-	 * Returns the number times MonitorAdmin will query the KPIs (for time based
-	 * jobs), or the number of changes of a KPI between notifications (for
-	 * change based jobs). Time based jobs with non-zero report count will take
-	 * getReportCount()*getSchedule() time to finish. Time based jobs with 0
-	 * report count and change based jobs do not stop automatically, but all
-	 * jobs can be stopped with the stop method.
-	 * 
-	 * @return the number of measurements to be taken, or the number of changes
-	 *         between notifications
-	 */
-	public int getReportCount();
+    /**
+     * Returns the number times MonitorAdmin will query the KPIs (for time based
+     * jobs), or the number of changes of a KPI between notifications (for
+     * change based jobs). Time based jobs with non-zero report count will take
+     * getReportCount()*getSchedule() time to finish. Time based jobs with 0
+     * report count and change based jobs do not stop automatically, but all
+     * jobs can be stopped with the stop method.
+     * 
+     * @return the number of measurements to be taken, or the number of changes
+     *         between notifications
+     */
+    public int getReportCount();
 
-	/**
-	 * Returns whether the job was started locally or remotely.
-	 * 
-	 * @return <code>true</code> if the job was started from the local device,
-	 *         <code>false</code> if the job was initiated from a remote
-	 *         management server through the device management tree
-	 */
-	public boolean isLocal();
+    /**
+     * Returns whether the job was started locally or remotely.
+     * 
+     * @return <code>true</code> if the job was started from the local device,
+     *         <code>false</code> if the job was initiated from a remote
+     *         management server through the device management tree
+     */
+    public boolean isLocal();
 }
