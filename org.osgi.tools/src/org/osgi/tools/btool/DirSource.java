@@ -43,4 +43,8 @@ public class DirSource implements Source {
 	public String toString() {
 		return "D: " + base.getName();
 	}
+	
+	public long lastModified(String path) {
+		return new File(base, path).lastModified();
+	}
 }

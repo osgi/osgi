@@ -20,6 +20,13 @@ public class Resource implements Comparable {
 		}
 	}
 
+	public long lastModified() {
+		String path = sourcePath;
+		if (path == null)
+			path = this.path;
+		return getSource().lastModified(path);
+	}
+
 	public String getPath() {
 		return path;
 	}
@@ -41,10 +48,7 @@ public class Resource implements Comparable {
 	}
 
 	InputStream getInputStream() throws IOException {
-		Source source = this.source;
-		if (source == null) {
-			source = btool.project;
-		}
+		Source source = getSource();
 		try {
 			if (sourcePath != null)
 				return source.getEntry(sourcePath);
@@ -126,6 +130,6 @@ public class Resource implements Comparable {
 	 * @return
 	 */
 	public Source getSource() {
-		return source;
+		return source == null ? btool.project : source;
 	}
 }

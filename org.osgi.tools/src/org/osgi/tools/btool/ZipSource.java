@@ -125,4 +125,14 @@ public class ZipSource implements Source {
 	public String toString() {
 		return "Z: " + zip.getName();
 	}
+
+	/**
+	 * We take the container date
+	 * 
+	 * @param resourceName
+	 * @return
+	 */
+	public long lastModified(String resourceName) {
+		return file.lastModified();
+	}
 }

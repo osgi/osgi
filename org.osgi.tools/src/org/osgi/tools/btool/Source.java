@@ -13,4 +13,6 @@ public interface Source {
 	boolean isDirectory(String path);
 
 	File getFile();
+	
+	long lastModified(String resource);
 }
