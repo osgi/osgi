@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates><template context="gettercomment_context" deleted="false" description="Comment for getter method" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.gettercomment" name="gettercomment">/**
+<?xml version="1.0" encoding="UTF-8"?><templates><template context="gettercomment_context" deleted="false" description="Comment for getter method" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.gettercomment" name="gettercomment">/**
  * @return Returns the ${bare_field_name}.
  */</template><template context="settercomment_context" deleted="false" description="Comment for setter method" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.settercomment" name="settercomment">/**
  * @param ${param} The ${bare_field_name} to set.
@@ -9,38 +8,37 @@
  *
  * ${todo} Add Javadoc comment for this type.
  * 
- * @version $$Revision: 1.1 $$
+ * @version $$Revision$$
  */</template><template context="fieldcomment_context" deleted="false" description="Comment for fields" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.fieldcomment" name="fieldcomment">/**
  * Comment for &lt;code&gt;${field}&lt;/code&gt;
  */</template><template context="methodcomment_context" deleted="false" description="Comment for non-overriding methods" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.methodcomment" name="methodcomment">/**
  * ${tags}
- */</template><template context="overridecomment_context" deleted="false" description="Comment for overriding methods" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.overridecomment" name="overridecomment">/* (non-Javadoc)
+ */</template><template context="overridecomment_context" deleted="false" description="Comment for overriding methods" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.overridecomment" name="overridecomment">/**
+ * ${tags}
  * ${see_to_overridden}
  */</template><template context="newtype_context" deleted="false" description="Newly created files" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.newtype" name="newtype">/*
- * $$Header: /cvshome/build/cnf/eclipse/codetemplates.xml,v 1.1 2004/10/02 04:15:54 hargrave Exp $$
- *
- * Copyright (c) The OSGi Alliance (${year}).
- * All Rights Reserved.
- *
- * Implementation of certain elements of the OSGi
- * Specification may be subject to third party intellectual property
- * rights, including without limitation, patent rights (such a third party may
- * or may not be a member of the OSGi Alliance). The OSGi Alliance
- * is not responsible and shall not be
- * held responsible in any manner for identifying or failing to identify any or
- * all such third party intellectual property rights.
- *
- * This document and the information contained herein are provided on an "AS
- * IS" basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
- * BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL
- * NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR
- * FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE OSGI ALLIANCE BE LIABLE FOR ANY
- * LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF USE OF DATA, INTERRUPTION OF
- * BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR EXEMPLARY, INCIDENTIAL,
- * PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN CONNECTION WITH THIS
- * DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH LOSS OR DAMAGE.
- *
+ * $$Header$$
+ * 
+ * Copyright (c) The OSGi Alliance (${year}). All Rights Reserved.
+ * 
+ * Implementation of certain elements of the OSGi Specification may be subject
+ * to third party intellectual property rights, including without limitation,
+ * patent rights (such a third party may or may not be a member of the OSGi
+ * Alliance). The OSGi Alliance is not responsible and shall not be held
+ * responsible in any manner for identifying or failing to identify any or all
+ * such third party intellectual property rights.
+ * 
+ * This document and the information contained herein are provided on an "AS IS"
+ * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
+ * HEREIN WILL NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE
+ * OSGI ALLIANCE BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF
+ * USE OF DATA, INTERRUPTION OF BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR
+ * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
+ * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
+ * 
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
