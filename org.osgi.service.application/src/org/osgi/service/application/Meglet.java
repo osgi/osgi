@@ -44,7 +44,7 @@ public abstract class Meglet implements EventHandler {
 	private LogService logService = null;
 
 	private BundleContext bc = null;
-	private ApplicationHandle appHandle = null;
+	private MegletHandle appHandle = null;
 
 	private ServiceRegistration serviceListenerRegistration = null;
 	private Vector listenedTopics = new Vector();
@@ -61,7 +61,7 @@ public abstract class Meglet implements EventHandler {
       public void run() {
         
         try {
-          appHandle.destroyApplication();
+          appHandle.destroy();
         }catch( Exception e ) {
           e.printStackTrace();
         }          
@@ -77,7 +77,7 @@ public abstract class Meglet implements EventHandler {
       public void run() {
         
         try {
-          appHandle.suspendApplication();
+          appHandle.suspend();
         }catch( Exception e ) {
           e.printStackTrace();
         }          
@@ -176,7 +176,7 @@ public abstract class Meglet implements EventHandler {
 		return null;
 	}
 
-	void init( ApplicationHandle appHandle, BundleContext bc ) {
+	void init( MegletHandle appHandle, BundleContext bc ) {
 		this.bc = bc;
 		this.appHandle = appHandle;
 		changeServiceRegistration();

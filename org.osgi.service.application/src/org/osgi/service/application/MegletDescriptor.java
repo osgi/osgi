@@ -15,18 +15,18 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package org.osgi.impl.service.megcontainer;
+package org.osgi.service.application;
 
 import java.util.*;
 import org.osgi.framework.*;
-import org.osgi.service.application.*;
+
 import java.lang.reflect.*;
 import org.osgi.service.log.LogService;
 
 /**
  * The MEG container's ApplicationDescriptor realization
  */
-public class MegletDescriptor extends ApplicationDescriptor {
+public final class MegletDescriptor extends ApplicationDescriptor {
 	private Properties		props;
 	private Hashtable		names;
 	private Hashtable		icons;
@@ -36,7 +36,7 @@ public class MegletDescriptor extends ApplicationDescriptor {
 	private Bundle			bundle;
 	private MegletContainer	megletContainer;
 
-	MegletDescriptor(BundleContext bc, Properties props, Map names,
+	public MegletDescriptor(BundleContext bc, Properties props, Map names,
 			Map icons, String startClass, Bundle bundle, MegletContainer mc ) throws Exception {
 		this.bc = bc;
 		this.props = new Properties();
@@ -113,7 +113,7 @@ public class MegletDescriptor extends ApplicationDescriptor {
 		try {
 			launchable = megletContainer.isLaunchable( this );
 		}catch (Exception e) {
-			MegletContainer.log(bc, LogService.LOG_ERROR,
+			log( LogService.LOG_ERROR,
 				"Exception occurred at searching the Meglet container reference!", e);
 		}
 		properties.put("application.locked", (new Boolean(isLocked())).toString());
@@ -126,13 +126,13 @@ public class MegletDescriptor extends ApplicationDescriptor {
 	void initMeglet( Meglet meglet, MegletHandle handle ) throws Exception {
 		Class megletClass = Meglet.class;
 		Method setupMethod = megletClass.getDeclaredMethod( "init", new Class [] {
-										ApplicationHandle.class, BundleContext.class } );
+										MegletHandle.class, BundleContext.class } );
 		setupMethod.setAccessible( true );
 		setupMethod.invoke( meglet, new Object [] { handle, bc } );
 	}
 
   public ServiceReference launchSpecific( Map args ) throws Exception {
-		Meglet meglet = megletContainer.createMegletInstance( this );
+		Meglet meglet = megletContainer.createMegletInstance( this, false );
 		MegletHandle appHandle = new MegletHandle( megletContainer, meglet, this, bc);
 		if (meglet == null)
 			throw new Exception("Cannot create meglet instance!");

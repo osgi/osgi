@@ -75,7 +75,7 @@ public abstract class ApplicationDescriptor {
 				for (int k = 0; k != appHandles.length; k++) {
 					ApplicationHandle handle = (ApplicationHandle) bc
 							.getService(appHandles[k]);
-					ServiceReference appDescRef = handle.getAppDescriptor();
+					ServiceReference appDescRef = handle.getApplicationDescriptor();
 					ApplicationDescriptor appDesc = (ApplicationDescriptor)bc.getService( appDescRef );
 					bc.ungetService( appDescRef );
 					bc.ungetService(appHandles[k]);
@@ -212,7 +212,7 @@ public abstract class ApplicationDescriptor {
 		}
 	}
 
-	private boolean log( int severity, String message, Throwable throwable) {
+	protected boolean log( int severity, String message, Throwable throwable) {
 		System.out.println("Serverity:" + severity + " Message:" + message
 				+ " Throwable:" + throwable);
 

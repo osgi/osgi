@@ -27,7 +27,7 @@ public class Activator extends Object implements
 		BundleActivator {
 	private BundleContext		bc;
 	private ServiceRegistration	serviceListener;
-	private MegletContainer		megletContainer;
+	private MegletContainerImpl		megletContainer;
 
 	public Activator() {
 		super();
@@ -35,7 +35,7 @@ public class Activator extends Object implements
 
 	public void start(BundleContext bc) throws Exception {
 		this.bc = bc;
-		megletContainer = new MegletContainer(bc);
+		megletContainer = new MegletContainerImpl(bc);
 		Hashtable serviceListenerProps = new Hashtable();
 		serviceListenerProps.put("topic", new String[] { "*" } );
 		serviceListener = bc.registerService(
