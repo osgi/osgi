@@ -1,6 +1,4 @@
-/*
- * $Header$
- * 
+/* 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
@@ -25,12 +23,26 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.dmt.tbc;
+/*
+ * REVISION HISTORY:
+ * 
+ * Date          Author(s)
+ * CR            Headline
+ * ============  ==============================================================
+ * Feb 16, 2005  Alexandre Santos
+ * 1		     Implement MEG TCK
+ * ============  =================================================================
+ */
+package org.osgi.test.cases.dmt.tbc.DmtSession;
 
 /**
- * Dummy service to check exporter
- * 
- * @version $Revision$
+ * @classUnderTest org.osgi.test.cases.dmt.DmtSession.tbc
+ * @generalDescription This Test Case tests all Close.java methods
+ *                     according to MEG specification (rfc0085)
+ * @author aasj
  */
-public interface TBCService {
+
+public class Close {
+    //TODO TCs must be implemented.
+
 }
