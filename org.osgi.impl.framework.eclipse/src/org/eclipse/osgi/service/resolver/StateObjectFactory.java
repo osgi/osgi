@@ -64,11 +64,26 @@ public interface StateObjectFactory {
 	 * The manifest should contain String keys and String values which correspond to 
 	 * proper OSGi manifest headers and values.
 	 * 
+	 * @param state the state for which the description is being created
 	 * @param manifest a collection of OSGi manifest headers and values
 	 * @param location the URL location of the bundle (may be <code>null</code>)
 	 * @param id the id of the bundle
 	 * @return a bundle description derived from the given information
 	 * @throws BundleException if an error occurs while reading the manifest 
+	 */
+	public BundleDescription createBundleDescription(State state, Dictionary manifest, String location, long id) throws BundleException;
+
+	/**
+	 * Returns a bundle description based on the information in the supplied manifest dictionary.
+	 * The manifest should contain String keys and String values which correspond to 
+	 * proper OSGi manifest headers and values.
+	 * 
+	 * @param manifest a collection of OSGi manifest headers and values
+	 * @param location the URL location of the bundle (may be <code>null</code>)
+	 * @param id the id of the bundle
+	 * @return a bundle description derived from the given information
+	 * @throws BundleException if an error occurs while reading the manifest 
+	 * @deprecated use createBundleDescription(state, manifest, location, id)
 	 */
 	public BundleDescription createBundleDescription(Dictionary manifest, String location, long id) throws BundleException;
 
@@ -125,15 +140,12 @@ public interface StateObjectFactory {
 	 * @param versionRange the package versionRange (may be <code>null</code>).
 	 * @param bundleSymbolicName the Bundle-SymbolicName of the bundle that must export the package (may be <code>null</code>)
 	 * @param bundleVersionRange the bundle versionRange (may be <code>null</code>).
-	 * @param resolution specifies the resolution type of the imported package.  
-	 * Valid values are {@link ImportPackageSpecification#RESOLUTION_DYNAMIC}, 
-	 * {@link ImportPackageSpecification#RESOLUTION_OPTIONAL}, 
-	 * {@link ImportPackageSpecification#RESOLUTION_STATIC}
+	 * @param directives the directives for this package
 	 * @param attributes the arbitrary attributes for the package import (may be <code>null</code>)
 	 * @param importer the importing bundle
 	 * @return the created package specification
 	 */
-	public ImportPackageSpecification createImportPackageSpecification(String packageName, VersionRange versionRange, String bundleSymbolicName, VersionRange bundleVersionRange, int resolution, Map attributes, BundleDescription importer);
+	public ImportPackageSpecification createImportPackageSpecification(String packageName, VersionRange versionRange, String bundleSymbolicName, VersionRange bundleVersionRange, Map directives, Map attributes, BundleDescription importer);
 
 	/**
 	 * Creates an import package specification that is a copy of the given import package
@@ -149,16 +161,13 @@ public interface StateObjectFactory {
 	 * 
 	 * @param packageName
 	 * @param version
-	 * @param uses
-	 * @param include
-	 * @param exclude
+	 * @param directives
 	 * @param attributes
-	 * @param mandatory
 	 * @param root
 	 * @param exporter
 	 * @return the created package
 	 */
-	public ExportPackageDescription createExportPackageDescription(String packageName, Version version, String[] uses, String include, String exclude, Map attributes, String[] mandatory, boolean root, BundleDescription exporter);
+	public ExportPackageDescription createExportPackageDescription(String packageName, Version version, Map directives, Map attributes, boolean root, BundleDescription exporter);
 
 	/**
 	 * Creates an import package specification that is a copy of the given constraint

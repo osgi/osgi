@@ -41,6 +41,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	public static final String PARENT_CLASSLOADER_EXT = "ext"; //$NON-NLS-1$
 	public static final String PARENT_CLASSLOADER_BOOT = "boot"; //$NON-NLS-1$
 	public static final String PARENT_CLASSLOADER_FWK = "fwk"; //$NON-NLS-1$
+	public static final String BUNDLEFILE_NAME = "bundlefile"; //$NON-NLS-1$
 
 	public static final byte EXTENSION_INITIALIZE = 0x01;
 	public static final byte EXTENSION_INSTALLED = 0x02;
@@ -721,7 +722,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 								throw new IOException(NLS.bind(AdaptorMsg.ADAPTOR_DIRECTORY_CREATE_EXCEPTION, genDir.getPath()));
 							}
 
-							String fileName = mapLocationToName(location);
+							String fileName = BUNDLEFILE_NAME;
 							File outFile = new File(genDir, fileName);
 							if ("file".equals(protocol)) { //$NON-NLS-1$
 								File inFile = new File(source.getURL().getPath());
@@ -843,40 +844,13 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	 */
 	protected void shutdownStateManager() {
 		try {
-			stateManager.shutdown(new File(getBundleStoreRootDir(), ".state"), new File(getBundleStoreRootDir(), ".lazy")); //$NON-NLS-1$//$NON-NLS-2$
+			if (canWrite())
+				stateManager.shutdown(new File(getBundleStoreRootDir(), ".state"), new File(getBundleStoreRootDir(), ".lazy")); //$NON-NLS-1$//$NON-NLS-2$
 		} catch (IOException e) {
 			frameworkLog.log(new FrameworkEvent(FrameworkEvent.ERROR, context.getBundle(), e));
 		} finally {
 			stateManager = null;
 		}
-	}
-
-	/**
-	 * Map a location string into a bundle name.
-	 * This methods treats the location string as a URL.
-	 *
-	 * @param location bundle location string.
-	 * @return bundle name.
-	 */
-	public String mapLocationToName(String location) {
-		int end = location.indexOf('?', 0); /* "?" query */
-
-		if (end == -1) {
-			end = location.indexOf('#', 0); /* "#" fragment */
-
-			if (end == -1) {
-				end = location.length();
-			}
-		}
-
-		int begin = location.replace('\\', '/').lastIndexOf('/', end);
-		int colon = location.lastIndexOf(':', end);
-
-		if (colon > begin) {
-			begin = colon;
-		}
-
-		return (location.substring(begin + 1, end));
 	}
 
 	public File getBundleStoreRootDir() {
@@ -1105,7 +1079,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 			Bundle toAdd = installedBundles[i];
 			try {
 				Dictionary manifest = toAdd.getHeaders(""); //$NON-NLS-1$
-				BundleDescription newDescription = factory.createBundleDescription(manifest, toAdd.getLocation(), toAdd.getBundleId());
+				BundleDescription newDescription = factory.createBundleDescription(systemState, manifest, toAdd.getLocation(), toAdd.getBundleId());
 				systemState.addBundle(newDescription);
 			} catch (BundleException be) {
 				// just ignore bundle datas with invalid manifests
@@ -1399,12 +1373,19 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 				systemState.removeBundle(bundleData.getBundleID());
 			// fall through to INSTALLED
 			case BundleEvent.INSTALLED :
-				BundleDescription newDescription = stateManager.getFactory().createBundleDescription(bundleData.getManifest(), bundleData.getLocation(), bundleData.getBundleID());
+				BundleDescription newDescription = stateManager.getFactory().createBundleDescription(systemState, bundleData.getManifest(), bundleData.getLocation(), bundleData.getBundleID());
 				systemState.addBundle(newDescription);
 				break;
 			case BundleEvent.UNINSTALLED :
 				systemState.removeBundle(bundleData.getBundleID());
 				break;
 		}
+	}
+	
+	/**
+	 * Whether the adaptor can make changes to the file system. Default is <code>true</code>.
+	 */
+	public boolean canWrite() {
+		return true;
 	}
 }

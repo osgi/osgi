@@ -10,7 +10,6 @@
  *******************************************************************************/
 package org.eclipse.osgi.framework.internal.core;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 import org.eclipse.osgi.util.ManifestElement;
@@ -19,29 +18,40 @@ public class FilteredSourcePackage extends SingleSourcePackage {
 	private static final char ALL = '*';
 	String[] includes;
 	String[] excludes;
+	String[] friends;
 
-	public FilteredSourcePackage(String name, BundleLoaderProxy supplier, String includes, String excludes) {
-		super(name, supplier);
+	public FilteredSourcePackage(String name, int expid, BundleLoaderProxy supplier, String includes, String excludes, String[] friends) {
+		super(name, expid, supplier);
 		if (includes != null)
 			this.includes = ManifestElement.getArrayFromList(includes);
 		if (excludes != null)
 			this.excludes = ManifestElement.getArrayFromList(excludes);
+		this.friends = friends;
 	}
 
-	public URL getResource(String name, String pkgName) {
-		if (isFiltered(name, pkgName))
-			return null;
-		return super.getResource(name, pkgName);
+	public boolean isFriend(String symbolicName) {
+		if (friends == null)
+			return true;
+		for (int i = 0; i < friends.length; i++)
+			if (friends[i].equals(symbolicName))
+				return true;
+		return false;
 	}
-	public Enumeration getResources(String name, String pkgName) throws IOException {
-		if (isFiltered(name, pkgName))
+
+	public URL getResource(String name) {
+		if (isFiltered(name, getId()))
 			return null;
-		return super.getResources(name, pkgName);
+		return super.getResource(name);
 	}
-	public Class loadClass(String name, String pkgName) {
-		if (isFiltered(name, pkgName))
+	public Enumeration getResources(String name) {
+		if (isFiltered(name, getId()))
 			return null;
-		return super.loadClass(name, pkgName);
+		return super.getResources(name);
+	}
+	public Class loadClass(String name) {
+		if (isFiltered(name, getId()))
+			return null;
+		return super.loadClass(name);
 	}
 
 	private boolean isFiltered(String name, String pkgName) {

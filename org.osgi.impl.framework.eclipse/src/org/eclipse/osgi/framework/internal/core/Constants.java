@@ -26,9 +26,6 @@ public class Constants implements org.osgi.framework.Constants {
 	/** Framework vendor */
 	public static final String OSGI_FRAMEWORK_VENDOR = "Eclipse"; //$NON-NLS-1$
 
-	/** Eclipse-SystemBundle header */
-	public static final String ECLIPSE_SYSTEMBUNDLE = "Eclipse-SystemBundle"; //$NON-NLS-1$
-
 	/** Bundle manifest name */
 	public static final String OSGI_BUNDLE_MANIFEST = "META-INF/MANIFEST.MF"; //$NON-NLS-1$
 
@@ -97,48 +94,64 @@ public class Constants implements org.osgi.framework.Constants {
 	/** Property file locations and default names. */
 	public static final String OSGI_PROPERTIES = "osgi.framework.properties"; //$NON-NLS-1$
 	public static final String DEFAULT_OSGI_PROPERTIES = "osgi.properties"; //$NON-NLS-1$
-	public static final String OSGI_AUTOEXPORTSYSTEMPACKAGES = "osgi.autoExportSystemPackages"; //$NON-NLS-1$
-	public static final String OSGI_CHECKSERVICECLASSSOURCE = "osgi.checkServiceClassSource"; //$NON-NLS-1$
-	public static final String OSGI_RESTRICTSERVICECLASSES = "osgi.restrictServiceClasses"; //$NON-NLS-1$
-
-	/** Properties set by the framework */
 
 	/** OSGI system package property */
-	public static final String OSGI_SYSTEMPACKAGES = "osgi.framework.systempackages"; //$NON-NLS-1$
 	public static final String OSGI_FRAMEWORK_SYSTEM_PACKAGES = "org.osgi.framework.system.packages"; //$NON-NLS-1$
-
 	public static final String OSGI_SYSTEM_BUNDLE = "system.bundle"; //$NON-NLS-1$
 	private static String INTERNAL_SYSTEM_BUNDLE = "org.eclipse.osgi"; //$NON-NLS-1$
+
 	public static String getInternalSymbolicName() {
 		return INTERNAL_SYSTEM_BUNDLE;
 	}
+
 	static void setInternalSymbolicName(String name) {
 		INTERNAL_SYSTEM_BUNDLE = name;
 	}
 
 	/** OSGI implementation version properties key */
 	public static final String OSGI_IMPL_VERSION_KEY = "osgi.framework.version"; //$NON-NLS-1$
+	/** OSGi java profile; used to give a URL to a java profile */
+	public static final String OSGI_JAVA_PROFILE = "osgi.java.profile"; //$NON-NLS-1$
+	/** OSGi strict delegation **/
+	public static final String OSGI_STRICT_DELEGATION = "osgi.strict.delegation"; //$NON-NLS-1$
+	public static final String OSGI_RESOLVER_MODE = "osgi.resolverMode"; //$NON-NLS-1$
+	public static final String STRICT_MODE = "strict"; //$NON-NLS-1$
 
 	public static final String OSGI_FRAMEWORKBEGINNINGSTARTLEVEL = "osgi.framework.beginningstartlevel"; //$NON-NLS-1$
 
 	/** Properties defaults */
 	public static final String DEFAULT_STARTLEVEL = "1"; //$NON-NLS-1$
 
+	/** Eclipse-SystemBundle header */
+	public static final String ECLIPSE_SYSTEMBUNDLE = "Eclipse-SystemBundle"; //$NON-NLS-1$
 	public static final String ECLIPSE_PLATFORMFILTER = "Eclipse-PlatformFilter"; //$NON-NLS-1$
+
+	/**
+	 * Manifest Export-Package directive indicating that the exported package should only 
+	 * be made available when the resolver is not in strict mode.
+	 */
+	public static final String INTERNAL_DIRECTIVE = "x-internal"; //$NON-NLS-1$
+
+	/**
+	 * Manifest Export-Package directive indicating that the exported package should only 
+	 * be made available to friends of the exporting bundle.
+	 */
+	public static final String FRIENDS_DIRECTIVE = "x-friends"; //$NON-NLS-1$
 
 	/**
 	 * Manifest header (named &quot;Provide-Package&quot;)
 	 * identifying the packages name
 	 * provided to other bundles which require the bundle.
 	 *
+	 * <p>
+	 * NOTE: this is only used for backwards compatibility, bundles manifest using
+	 * syntax version 2 will not recognize this header.
+	 *
 	 * <p>The attribute value may be retrieved from the
 	 * <tt>Dictionary</tt> object returned by the <tt>Bundle.getHeaders</tt> method.
-	 * @since 1.3
 	 * @deprecated
 	 */
-	// TODO should remove this!!
-	public final static String PROVIDE_PACKAGE = "Provide-Package";
-
+	public final static String PROVIDE_PACKAGE = "Provide-Package"; //$NON-NLS-1$
 
 	/**
 	 * Manifest header attribute (named &quot;reprovide&quot;)
@@ -152,11 +165,12 @@ public class Constants implements org.osgi.framework.Constants {
 	 * <pre>
 	 * Require-Bundle: com.acme.module.test; reprovide="true"
 	 * </pre>
-	 * @since 1.3 <b>EXPERIMENTAL</b>
+	 * <p>
+	 * NOTE: this is only used for backwards compatibility, bundles manifest using
+	 * syntax version 2 will not recognize this attribute.
 	 * @deprecated
 	 */
-	// TODO should remove this!!
-	public final static String REPROVIDE_ATTRIBUTE = "reprovide";
+	public final static String REPROVIDE_ATTRIBUTE = "reprovide"; //$NON-NLS-1$
 
 	/**
 	 * Manifest header attribute (named &quot;optional&quot;)
@@ -171,11 +185,13 @@ public class Constants implements org.osgi.framework.Constants {
 	 * <pre>
 	 * Require-Bundle: com.acme.module.test; optional="true"
 	 * </pre>
+	 * <p>
+	 * NOTE: this is only used for backwards compatibility, bundles manifest using
+	 * syntax version 2 will not recognize this attribute.
 	 * @since 1.3 <b>EXPERIMENTAL</b>
 	 * @deprecated
 	 */
-	// TODO should remove this!!
-	public final static String OPTIONAL_ATTRIBUTE = "optional";
+	public final static String OPTIONAL_ATTRIBUTE = "optional"; //$NON-NLS-1$
 
 	/**
 	 * Manifest header attribute (named &quot;require-packages&quot;)
@@ -193,11 +209,11 @@ public class Constants implements org.osgi.framework.Constants {
 	 * Require-Bundle: org.osgi.test;
 	 *  require-packages="org.osgi.test.pkg1,org.osgi.test.pkg2"
 	 * </pre>
-	 * @since 1.3 <b>EXPERIMENTAL</b>
+	 * <p>
+	 * NOTE: this is only used for backwards compatibility, bundles manifest using
+	 * syntax version 2 will not recognize this attribute.
 	 * @deprecated
 	 */
-	// TODO should remove this!!
-	public final static String REQUIRE_PACKAGES_ATTRIBUTE = "require-packages";
-
+	public final static String REQUIRE_PACKAGES_ATTRIBUTE = "require-packages"; //$NON-NLS-1$
 
 }

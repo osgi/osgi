@@ -20,7 +20,8 @@ import java.util.Enumeration;
  * be done again.
  */
 public class NullPackageSource extends PackageSource {
-	public NullPackageSource(String name) {
+	static KeyedHashSet sources;
+	private NullPackageSource(String name) {
 		super(name);
 	}
 
@@ -36,15 +37,26 @@ public class NullPackageSource extends PackageSource {
 		return id + " -> null"; //$NON-NLS-1$
 	}
 
-	public Class loadClass(String name, String pkgName) {
+	public Class loadClass(String name) {
 		return null;
 	}
 
-	public URL getResource(String name, String pkgName) {
+	public URL getResource(String name) {
 		return null;
 	}
 
-	public Enumeration getResources(String name, String pkgName) {
+	public Enumeration getResources(String name) {
 		return null;
+	}
+
+	public static synchronized NullPackageSource getNullPackageSource(String name) {
+		if (sources == null)
+			sources = new KeyedHashSet();
+		NullPackageSource result = (NullPackageSource) sources.getByKey(name);
+		if (result != null)
+			return result;
+		result = new NullPackageSource(name);
+		sources.add(result);
+		return result;
 	}
 }

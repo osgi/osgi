@@ -21,25 +21,7 @@ import org.osgi.framework.BundleException;
  * to load a resource that is exported by the System Bundle.
  */
 public class SystemBundleLoader extends BundleLoader {
-
 	ClassLoader classLoader;
-
-	/**
-	 * List of packages that the system bundle exports.
-	 */
-	static protected String[] systemPackages = null;
-
-	protected synchronized static void clearSystemPackages() {
-		systemPackages = null;
-	}
-
-	protected static void setSystemPackages(String[] value) {
-		systemPackages = value;
-	}
-
-	protected static String[] getSystemPackages() {
-		return systemPackages;
-	}
 
 	/**
 	 * @param bundle The system bundle.
@@ -68,7 +50,7 @@ public class SystemBundleLoader extends BundleLoader {
 	/**
 	 * The ClassLoader that loads OSGi framework classes is used to find the class. 
 	 */
-	protected Class findLocalClass(String name) {
+	Class findLocalClass(String name) {
 		Class clazz = null;
 		try {
 			clazz = classLoader.loadClass(name);
@@ -81,33 +63,19 @@ public class SystemBundleLoader extends BundleLoader {
 	/**
 	 * The ClassLoader that loads OSGi framework classes is used to find the resource.
 	 */
-	protected URL findLocalResource(String name) {
+	URL findLocalResource(String name) {
 		return classLoader.getResource(name);
 	}
 
 	/**
 	 * The ClassLoader that loads OSGi framework classes is used to find the resource.
 	 */
-	protected Enumeration findLocalResources(String name) {
+	Enumeration findLocalResources(String name) {
 		try {
 			return classLoader.getResources(name);
 		} catch (IOException e) {
 			return null;
 		}
-	}
-
-	/**
-	 * This is not supported by the System Bundle.
-	 */
-	public Object findObject(String object) {
-		return null;
-	}
-
-	/**
-	 * This is not supported by the System Bundle.
-	 */
-	protected Object findLocalObject(String object) {
-		return null;
 	}
 
 	/**

@@ -497,7 +497,7 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 			} else {
 				if (next.isReference()) {
 					next.setReference(false);
-					next.setFileName(((AbstractFrameworkAdaptor) adaptor).mapLocationToName(getLocation()));
+					next.setFileName(AbstractFrameworkAdaptor.BUNDLEFILE_NAME);
 				}
 			}
 
@@ -619,7 +619,7 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 
 	public File createGenerationDir() {
 		File generationDir = getGenerationDir();
-		if (!generationDir.exists() && !generationDir.mkdirs()) {
+		if (!generationDir.exists() && (!adaptor.canWrite() || !generationDir.mkdirs())) {
 			if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 				Debug.println("Unable to create bundle generation directory: " + generationDir.getPath()); //$NON-NLS-1$
 			}
@@ -660,7 +660,7 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 				throw new IllegalStateException(AdaptorMsg.ADAPTOR_DATA_AREA_NOT_SET);
 			setDataDir(new File(dataRoot, id + "/" + AbstractFrameworkAdaptor.DATA_DIR_NAME)); //$NON-NLS-1$
 		}
-		if (!getDataDir().exists() && !getDataDir().mkdirs()) {
+		if (!getDataDir().exists() && (!adaptor.canWrite() || !getDataDir().mkdirs())) {
 			if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 				Debug.println("Unable to create bundle data directory: " + getDataDir().getPath()); //$NON-NLS-1$
 			}

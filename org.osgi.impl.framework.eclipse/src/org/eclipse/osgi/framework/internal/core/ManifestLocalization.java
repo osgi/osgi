@@ -34,26 +34,19 @@ public class ManifestLocalization {
 
 	protected Dictionary getHeaders(String localeString) {
 		boolean defaultLocale = false;
-		if (localeString == "") { //$NON-NLS-1$
+		if (localeString.length() == 0)
 			return (rawHeaders);
-		}
 		if (localeString.equals(Locale.getDefault().toString())) {
-			if (defaultLocaleHeaders != null) {
+			if (defaultLocaleHeaders != null)
 				return (defaultLocaleHeaders);
-			} else {
-				defaultLocale = true;
-			}
+			defaultLocale = true;
 		}
 		try {
 			bundle.checkValid();
 		} catch (IllegalStateException ex) {
 			return (rawHeaders);
 		}
-		ResourceBundle localeProperties = null;
-		localeProperties = getResourceBundle(localeString);
-		if (localeProperties == null) {
-			return rawHeaders;
-		}
+		ResourceBundle localeProperties = getResourceBundle(localeString);
 		Enumeration e = this.rawHeaders.keys();
 		Headers localeHeaders = new Headers(this.rawHeaders.size());
 		while (e.hasMoreElements()) {
@@ -62,10 +55,9 @@ public class ManifestLocalization {
 			if (value.startsWith("%") && (value.length() > 1)) { //$NON-NLS-1$
 				String propertiesKey = value.substring(1);
 				try {
-					String transValue = (String) localeProperties.getObject(propertiesKey);
-					value = transValue;
+					value = localeProperties == null ? propertiesKey : (String) localeProperties.getObject(propertiesKey);
 				} catch (MissingResourceException ex) {
-					// Do nothing; just use the raw value
+					value = propertiesKey;
 				}
 			}
 			localeHeaders.set(key, value);
@@ -142,7 +134,7 @@ public class ManifestLocalization {
 	private URL findResource(String resource) {
 		AbstractBundle searchBundle = bundle;
 		if (bundle.isResolved()) {
-			if (bundle.isFragment()) {
+			if (bundle.isFragment() && bundle.getHosts() != null) {
 				//if the bundle is a fragment, look in the host first
 				searchBundle = bundle.getHosts()[0].getBundleHost();
 				if (searchBundle.getState() == Bundle.UNINSTALLED)

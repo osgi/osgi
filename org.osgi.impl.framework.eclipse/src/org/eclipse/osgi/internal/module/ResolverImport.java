@@ -12,6 +12,7 @@ package org.eclipse.osgi.internal.module;
 
 import java.util.ArrayList;
 import org.eclipse.osgi.service.resolver.*;
+import org.osgi.framework.Constants;
 
 public class ResolverImport {
 	private ImportPackageSpecification importPackageSpecification;
@@ -164,11 +165,11 @@ public class ResolverImport {
 	}
 
 	boolean isOptional() {
-		return (importPackageSpecification.getResolution() & ImportPackageSpecification.RESOLUTION_OPTIONAL) != 0;
+		return ImportPackageSpecification.RESOLUTION_OPTIONAL.equals(importPackageSpecification.getDirective(Constants.RESOLUTION_DIRECTIVE));
 	}
 
 	boolean isDynamic() {
-		return (importPackageSpecification.getResolution() & ImportPackageSpecification.RESOLUTION_DYNAMIC) != 0;
+		return ImportPackageSpecification.RESOLUTION_DYNAMIC.equals(importPackageSpecification.getDirective(Constants.RESOLUTION_DIRECTIVE));
 	}
 
 	public String toString() {

@@ -11,8 +11,7 @@
 package org.eclipse.osgi.framework.internal.core;
 
 import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.security.*;
 import java.util.*;
 import org.eclipse.osgi.framework.adaptor.*;
@@ -30,6 +29,7 @@ import org.osgi.framework.*;
  * Core OSGi Framework class.
  */
 public class Framework implements EventDispatcher, EventPublisher {
+	public static final boolean STRICT_DELEGATION = Boolean.getBoolean(Constants.OSGI_STRICT_DELEGATION);
 	/** FrameworkAdaptor specific functions. */
 	protected FrameworkAdaptor adaptor;
 	/** Framework properties object.  A reference to the 
@@ -54,7 +54,8 @@ public class Framework implements EventDispatcher, EventPublisher {
 	protected ServiceRegistry serviceRegistry; //TODO This is duplicated from the adaptor, do we really gain ?
 	/** next free service id. */
 	protected long serviceid;
-
+	/** the VM profile (execution environment */
+	private String vmProfile;
 	/*
 	 * The following EventListeners objects keep track of event listeners
 	 * by BundleContext.  Each element is a EventListeners that is the list
@@ -206,6 +207,7 @@ public class Framework implements EventDispatcher, EventPublisher {
 			e.printStackTrace();
 			throw new RuntimeException(NLS.bind(Msg.OSGI_SYSTEMBUNDLE_CREATE_EXCEPTION, e.getMessage()));
 		}
+		setSystemExports();
 	}
 
 	/**
@@ -285,20 +287,98 @@ public class Framework implements EventDispatcher, EventPublisher {
 				}
 			}
 		}
-		value = properties.getProperty(Constants.FRAMEWORK_EXECUTIONENVIRONMENT, ""); //$NON-NLS-1$
+		setExecutionEnvironment();
+	}
+
+	private void setExecutionEnvironment() {
+		String value = properties.getProperty(Constants.FRAMEWORK_EXECUTIONENVIRONMENT, ""); //$NON-NLS-1$
 		String j2meConfig = properties.getProperty(Constants.J2ME_MICROEDITION_CONFIGURATION);
 		String j2meProfile = properties.getProperty(Constants.J2ME_MICROEDITION_PROFILES);
 		StringBuffer ee = new StringBuffer(value);
 		if (j2meConfig != null && j2meConfig.length() > 0 && j2meProfile != null && j2meProfile.length() > 0) {
+			// save the vmProfile based off of the config and profile
+			vmProfile = j2meConfig + '_' + j2meProfile;
 			int ic = value.indexOf(j2meConfig);
+			// append the profile only if it is not already present
 			if (!(ic >= 0) || !(ic + j2meConfig.length() < value.length() && value.charAt(ic + j2meConfig.length()) == '/') || !(value.startsWith(j2meProfile, ic + j2meConfig.length() + 1))) {
 				if (ee.length() > 0) {
-					ee.append(","); //$NON-NLS-1$
+					ee.append(',');
 				}
 				ee.append(j2meConfig).append('/').append(j2meProfile);
 			}
+
+		} else if (value.length() > 0) {
+			// just use the first EE defined as our profile
+			StringTokenizer st = new StringTokenizer(value, ","); //$NON-NLS-1$
+			vmProfile = st.nextToken().replace('/', '_');
+		} else {
+			String javaSpecVersion = properties.getProperty("java.specification.version"); //$NON-NLS-1$
+			// set the profile and EE based off of the java.specification.version
+			// TODO We assume J2SE here.  need to support other profiles J2ME/J2EE ...
+			if (javaSpecVersion != null) {
+				StringTokenizer st = new StringTokenizer(javaSpecVersion, " _-"); //$NON-NLS-1$
+				javaSpecVersion = st.nextToken();
+				vmProfile = "J2SE-" + javaSpecVersion; //$NON-NLS-1$
+				int index = value.indexOf(vmProfile);
+				if (index < 0) {
+					if (ee.length() > 0)
+						ee.append(',');
+					ee.append(vmProfile);
+				}
+			}
 		}
 		properties.put(Constants.FRAMEWORK_EXECUTIONENVIRONMENT, ee.toString());
+	}
+
+	private void setSystemExports() {
+		String systemExports = properties.getProperty(Constants.OSGI_FRAMEWORK_SYSTEM_PACKAGES);
+		if (systemExports != null)
+			return;
+		InputStream in = findVMProfile();
+		if (in == null)
+			return;
+		Properties vmPackages = new Properties();
+		try {
+			vmPackages.load(new BufferedInputStream(in));
+		} catch (IOException e) {
+			// do nothing
+		} finally {
+			try {
+				in.close();
+			} catch (IOException ee) {
+				// do nothing
+			}
+		}
+		systemExports = vmPackages.getProperty(Constants.OSGI_FRAMEWORK_SYSTEM_PACKAGES);
+		if (systemExports != null)
+			properties.put(Constants.OSGI_FRAMEWORK_SYSTEM_PACKAGES, systemExports);
+	}
+
+	private InputStream findVMProfile() {
+		URL url = null;
+		// check for the java profile property for a url
+		String propJavaProfile = System.getProperty(Constants.OSGI_JAVA_PROFILE);
+		if (propJavaProfile != null)
+			try {
+				// we assume a URL
+				url = new URL(propJavaProfile);
+			} catch (MalformedURLException e1) {
+				// TODO consider logging ...
+			}
+		if (url == null && vmProfile != null) {
+			// look for a profile in the system bundle based on the vm profile
+			String javaProfile = vmProfile + ".profile"; //$NON-NLS-1$
+			url = systemBundle.getEntry(javaProfile);
+			if (url == null)
+				url = getClass().getResource(javaProfile);
+		}
+		if (url != null)
+			try {
+				return url.openStream();
+			} catch (IOException e) {
+				// TODO consider logging ...
+			}
+		return null;
 	}
 
 	/**
@@ -476,7 +556,7 @@ public class Framework implements EventDispatcher, EventPublisher {
 			if (i > 0) {
 				bundleEE.append(","); //$NON-NLS-1$
 			}
-			bundleEE.append(bundleRequiredEE[i]);
+			bundleEE.append(bundleRequiredEE[i].getValue());
 		}
 		throw new BundleException(NLS.bind(Msg.BUNDLE_INSTALL_REQUIRED_EE_EXCEPTION, bundleEE.toString()));
 	}
@@ -755,7 +835,7 @@ public class Framework implements EventDispatcher, EventPublisher {
 	 * 
 	 * @param bundle
 	 *            Bundle's manifest
-	 * @return Vector of Strings of the bundle entries to install or <tt>null</tt>
+	 * @return a list of Strings of the bundle entries to install or <tt>null</tt>
 	 *         if there are no native code clauses.
 	 * @throws BundleException
 	 *             If there is no suitable clause.
@@ -766,118 +846,53 @@ public class Framework implements EventDispatcher, EventPublisher {
 			return (null);
 		}
 		ManifestElement[] elements = ManifestElement.parseHeader(Constants.BUNDLE_NATIVECODE, headerValue);
-		BundleNativeCode[] bundleNativeCode = new BundleNativeCode[elements.length];
-		/*
-		 * Pass 1: perform processor/osname/filter matching If there is not a
-		 * match on all three, then the native code clause is not selected.
-		 */
-		String processor = getProperty(Constants.FRAMEWORK_PROCESSOR);
-		String osname = getProperty(Constants.FRAMEWORK_OS_NAME);
+		ArrayList bundleNativeCodes = new ArrayList(elements.length);
 		int length = elements.length;
 		boolean optional = false;
 		if (elements[length - 1].getValue().equals("*")) { //$NON-NLS-1$
 			optional = true;
 			length--;
 		}
-		int[] score = new int[length];
-		int matches = 0;
-		int maxresult = 0;
-		int index = 0;
-		for (int i = 0; i < length; i++) {
-			bundleNativeCode[i] = new BundleNativeCode(elements[i], (AbstractBundle) bundle);
-			int result = bundleNativeCode[i].matchProcessorOSNameFilter(processor, osname);
-			score[i] = result;
-			if (result > 0) {
-				matches++;
-				if (result > maxresult) {
-					maxresult = result;
-					index = i;
-				}
-			}
-		}
-		switch (matches) {
-			case 0 : {
-				return noMatches(optional);
-			}
-			case 1 : {
-				return bundleNativeCode[index].getPaths();
-			}
-			default : {
-				/* continue with next pass */
-				break;
-			}
-		}
-		/* Pass 2: perform osversion matching */
+		String processor = getProperty(Constants.FRAMEWORK_PROCESSOR);
+		String osname = getProperty(Constants.FRAMEWORK_OS_NAME);
 		Version osversion;
 		try {
 			osversion = Version.parseVersion(getProperty(Constants.FRAMEWORK_OS_VERSION));
 		} catch (Exception e) {
 			osversion = Version.emptyVersion;
 		}
-		matches = 0;
-		maxresult = 0;
-		Version[] bestVersion = new Version[elements.length];
-		Version maxVersion = Version.emptyVersion;
-		for (int i = 0; i < elements.length; i++) {
-			if (score[i] > 0) {
-				BundleNativeCode bnc = bundleNativeCode[i];
-				Version result = bnc.matchOSVersion(osversion);
-				bestVersion[i] = result;
-				if (result != null) /* null is no match */{
-					matches++;
-					if (result.compareTo(maxVersion) > 0) {
-						maxVersion = result;
-						index = i;
-					}
-				}
-			}
-		}
-		switch (matches) {
-			case 0 : {
-				return noMatches(optional);
-			}
-			case 1 : {
-				return bundleNativeCode[index].getPaths();
-			}
-			default : {
-				/* discard all but the highest result */
-				for (int i = 0; i < elements.length; i++) {
-					Version result = bestVersion[i];
-					if (result.compareTo(maxVersion) < 0) {
-						score[i] = 0;
-					}
-				}
-				/* continue with next pass */
-				break;
-			}
-		}
-		/* Pass 3: perform language matching */
 		String language = getProperty(Constants.FRAMEWORK_LANGUAGE);
-		matches = 0;
-		maxresult = 0;
-		for (int i = 0; i < elements.length; i++) {
-			int result = score[i];
-			if (result > 0) {
-				BundleNativeCode bnc = bundleNativeCode[i];
-				result = bnc.matchLanguage(language);
-				score[i] = result;
-				if (result > 0) {
-					matches++;
-					if (result > maxresult) {
-						maxresult = result;
-						index = i;
-					}
-				}
-			}
+		for (int i = 0; i < length; i++) {
+			BundleNativeCode bnc = new BundleNativeCode(elements[i], (AbstractBundle) bundle);
+			// Pass 1: perform processor/osname/filter matching
+			// Pass 2: perform osversion matching
+			// Pass 3: perform language matching
+			// If there is not a match on all three, then the native code clause is not selected.
+			if (bnc.matchProcessorOSNameFilter(processor, osname) > 0 && bnc.matchOSVersion(osversion) != null && bnc.matchLanguage(language) > 0)
+				bundleNativeCodes.add(bnc);
 		}
-		switch (matches) {
-			case 0 : {
-				return noMatches(optional);
-			}
-			default : {
-				return bundleNativeCode[index].getPaths();
-			}
+
+		if (bundleNativeCodes.size() == 0)
+			return noMatches(optional);
+		// find the highest ranking one with priority on the osversion then the language
+		Iterator iter = bundleNativeCodes.iterator();
+		BundleNativeCode highestRanking = (BundleNativeCode) iter.next();
+		while (iter.hasNext()) {
+			BundleNativeCode bnc = (BundleNativeCode) iter.next();
+			if (isBncGreaterThan(bnc, highestRanking, osversion, language))
+				highestRanking = bnc;
 		}
+		return highestRanking.getPaths();
+	}
+
+	private boolean isBncGreaterThan(BundleNativeCode candidate, BundleNativeCode highestRanking, Version version, String language) {
+		Version currentHigh = highestRanking.matchOSVersion(version);
+		Version candidateHigh = candidate.matchOSVersion(version);
+		if (currentHigh.compareTo(candidateHigh) < 0)
+			return true;
+		if (highestRanking.matchLanguage(language) < candidate.matchLanguage(language))
+			return true;
+		return false;
 	}
 
 	/**
@@ -1263,9 +1278,13 @@ public class Framework implements EventDispatcher, EventPublisher {
 					System.setSecurityManager(sm);
 					return;
 				} catch (ClassNotFoundException e) {
+					// do nothing
 				} catch (ClassCastException e) {
+					// do nothing
 				} catch (InstantiationException e) {
+					// do nothing
 				} catch (IllegalAccessException e) {
+					// do nothing
 				}
 				throw new NoClassDefFoundError(securityManager);
 			}

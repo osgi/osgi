@@ -548,6 +548,7 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 		if (launchingFW) {
 			/* Start the system bundle */
 			try {
+				framework.systemBundle.state = Bundle.STARTING;
 				framework.systemBundle.context.start();
 			} catch (BundleException be) {
 				if (Debug.DEBUG && Debug.DEBUG_STARTLEVEL) {
@@ -598,11 +599,8 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 
 		if (activeSL == 0) { // stopping the framework
 			/* stop all running bundles */
-
 			suspendAllBundles(bundles);
-
 			unloadAllBundles(bundles);
-
 		} else {
 			// just decrementing the active startlevel - framework is not shutting down
 			// get the list of installed bundles, sorted by startlevel
@@ -662,7 +660,7 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 			framework.publishFrameworkEvent(FrameworkEvent.ERROR, framework.systemBundle, sbe);
 		}
 
-		framework.systemBundle.state = AbstractBundle.STARTING;
+		framework.systemBundle.state = Bundle.RESOLVED;
 	}
 
 	/**
@@ -682,6 +680,12 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 					Debug.println("SLL: Trying to unload bundle " + bundle); //$NON-NLS-1$
 				}
 				bundle.refresh();
+				try {
+					// make sure we close all the bundle data objects
+					bundle.getBundleData().close();
+				} catch (IOException e) {
+					// ignore, we are shutting down anyway
+				}
 			}
 		}
 	}

@@ -59,7 +59,7 @@ public class BundleHost extends AbstractBundle {
 		if (framework.isActive()) {
 			SecurityManager sm = System.getSecurityManager();
 
-			if (sm != null) {
+			if (sm != null && framework.permissionAdmin != null) {
 				domain = framework.permissionAdmin.createProtectionDomain(this);
 			}
 
@@ -109,7 +109,7 @@ public class BundleHost extends AbstractBundle {
 		this.bundledata = newBundle.bundledata;
 		this.bundledata.setBundle(this);
 		// create a new domain for the bundle because its signers/symbolic-name may have changed
-		if (framework.isActive() && System.getSecurityManager() != null)
+		if (framework.isActive() && System.getSecurityManager() != null && framework.permissionAdmin != null)
 			domain = framework.permissionAdmin.createProtectionDomain(this);
 		return (exporting);
 	}
@@ -167,7 +167,8 @@ public class BundleHost extends AbstractBundle {
 				fragments = null;
 				domain = null;
 			}
-		} else {
+		}
+		if (!exporting){
 			try {
 				this.bundledata.close();
 			} catch (IOException e) { // Do Nothing.
@@ -260,7 +261,7 @@ public class BundleHost extends AbstractBundle {
 		return (loader.getResource(name));
 	}
 
-	public Enumeration getResources(String name) {
+	public Enumeration getResources(String name) throws IOException {
 		BundleLoader loader = null;
 		try {
 			checkResourcePermission();
@@ -274,11 +275,7 @@ public class BundleHost extends AbstractBundle {
 		loader = checkLoader();
 		if (loader == null)
 			return null;
-		try {
-			return loader.getResources(name);
-		} catch (IOException e) {
-			return null;
-		}
+		return loader.getResources(name);
 	}
 
 	/**

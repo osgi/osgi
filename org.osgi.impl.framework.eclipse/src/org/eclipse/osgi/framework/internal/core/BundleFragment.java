@@ -48,7 +48,7 @@ public class BundleFragment extends AbstractBundle {
 		if (framework.isActive()) {
 			SecurityManager sm = System.getSecurityManager();
 
-			if (sm != null) {
+			if (sm != null && framework.permissionAdmin != null) {
 				domain = framework.permissionAdmin.createProtectionDomain(this);
 			}
 		}
@@ -98,7 +98,7 @@ public class BundleFragment extends AbstractBundle {
 		this.bundledata = newBundle.bundledata;
 		this.bundledata.setBundle(this);
 		// create a new domain for the bundle because its signers/symbolic-name may have changed
-		if (framework.isActive() && System.getSecurityManager() != null)
+		if (framework.isActive() && System.getSecurityManager() != null && framework.permissionAdmin != null)
 			domain = framework.permissionAdmin.createProtectionDomain(this);
 		return (exporting);
 	}

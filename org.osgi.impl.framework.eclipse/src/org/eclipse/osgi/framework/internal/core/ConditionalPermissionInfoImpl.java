@@ -12,14 +12,11 @@
 package org.eclipse.osgi.framework.internal.core;
 
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.*;
 import java.security.Permission;
 import java.security.PermissionCollection;
 import org.osgi.framework.Bundle;
-import org.osgi.service.condpermadmin.Condition;
-import org.osgi.service.condpermadmin.ConditionInfo;
-import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
+import org.osgi.service.condpermadmin.*;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 /**
@@ -143,23 +140,50 @@ public class ConditionalPermissionInfoImpl implements ConditionalPermissionInfo,
 				/* If the class isn't there, we fail */
 				return null;
 			}
-			Constructor constructor;
+			Constructor constructor = null;
+			Method method = null;
 			int argCount = conds[i].getArgs().length;
 			if (argCount < condClassArray.length) {
-				constructor = clazz.getConstructor(condClassArray[argCount]);
+				try {
+					method = clazz.getMethod("getInstance", condClassArray[argCount]); //$NON-NLS-1$
+					if ((method.getModifiers() & Modifier.STATIC) == 0) {
+						method = null;
+					}
+				} catch (NoSuchMethodException e) {
+					// This is a normal case
+				}
+				if (method == null) {
+					constructor = clazz.getConstructor(condClassArray[argCount]);
+				}
 			} else {
 				Class clazzes[] = new Class[argCount];
 				clazzes[0] = Bundle.class;
 				for (int j = 1; j <= argCount; j++) {
 					clazzes[j] = String.class;
 				}
-				constructor = clazz.getConstructor(clazzes);
+				try {
+					method = clazz.getMethod("getInstance", clazzes); //$NON-NLS-1$
+					if ((method.getModifiers() & Modifier.STATIC) == 0) {
+						method = null;
+					}
+				} catch (NoSuchMethodException e) {
+					// This is a normal case
+				}
+				if (method == null) {
+					constructor = clazz.getConstructor(clazzes);
+				}
 			}
 			String strArgs[] = conds[i].getArgs();
 			Object args[] = new Object[strArgs.length + 1];
 			args[0] = bundle;
 			System.arraycopy(strArgs, 0, args, 1, strArgs.length);
-			conditions[i] = (Condition) constructor.newInstance(args);
+			Condition condition = null;
+			if (method != null) {
+				condition = (Condition) method.invoke(null, args);
+			} else {
+				condition = (Condition) constructor.newInstance(args);
+			}
+			conditions[i] = condition;
 		}
 		return conditions;
 	}
@@ -179,8 +203,9 @@ public class ConditionalPermissionInfoImpl implements ConditionalPermissionInfo,
 		deleted = true;
 		condAdmin.deleteConditionalPermissionInfo(this);
 	}
-	
+
 	static ConditionalPermissionAdminImpl condAdmin;
+
 	static void setConditionalPermissionAdminImpl(ConditionalPermissionAdminImpl condAdmin) {
 		ConditionalPermissionInfoImpl.condAdmin = condAdmin;
 	}

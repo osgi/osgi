@@ -10,15 +10,18 @@
  *******************************************************************************/
 package org.eclipse.osgi.framework.internal.core;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 
 public class SingleSourcePackage extends PackageSource {
 	BundleLoaderProxy supplier;
-
-	public SingleSourcePackage(String id, BundleLoaderProxy supplier) {
+	// this is the index of the ExportPackageDescription 
+	// into the list of exported packages of the supplier
+	// a valid of -1 indicates it is unknown or does not matter
+	protected int expid;
+	public SingleSourcePackage(String id, int expid, BundleLoaderProxy supplier) {
 		super(id);
+		this.expid = expid;
 		this.supplier = supplier;
 	}
 
@@ -30,15 +33,24 @@ public class SingleSourcePackage extends PackageSource {
 		return id + " -> " + supplier; //$NON-NLS-1$
 	}
 
-	public Class loadClass(String name, String pkgName) {
+	public Class loadClass(String name) {
 		return supplier.getBundleLoader().findLocalClass(name);
 	}
 
-	public URL getResource(String name, String pkgName) {
+	public URL getResource(String name) {
 		return supplier.getBundleLoader().findLocalResource(name);
 	}
 
-	public Enumeration getResources(String name, String pkgName) throws IOException {
+	public Enumeration getResources(String name) {
 		return supplier.getBundleLoader().findLocalResources(name);
+	}
+
+	public boolean equals(Object source) {
+		if (this == source)
+			return true;
+		if (!(source instanceof SingleSourcePackage))
+			return false;
+		SingleSourcePackage singleSource = (SingleSourcePackage) source;
+		return supplier == singleSource.supplier && expid == singleSource.expid;
 	}
 }

@@ -153,7 +153,6 @@ public interface State {
 	 */
 	public void resolveConstraint(VersionConstraint constraint, BaseDescription supplier);
 
-
 	/**
 	 * Sets whether or not the given bundle is selected in this state.
 	 * <p>
@@ -325,6 +324,8 @@ public interface State {
 	 * osgi.os - the platform operating system<br>
 	 * osgi.arch - the platform architecture<br>
 	 * osgi.ws - the platform windowing system<br>
+	 * org.osgi.framework.system.packages - the packages exported by the system bundle <br>
+	 * osgi.resolverMode - the resolver mode.  A value of "strict" will set the resolver mode to strict.<br>
 	 * <p>
 	 * The values used for the supported properties can be <tt>String</tt> type
 	 * to specify a single value for the property or they can by <tt>String[]</tt>
@@ -332,7 +333,20 @@ public interface State {
 	 * @param platformProperties the platform properties of the state
 	 * @return false if the platformProperties specified do not change any of the
 	 * supported properties already set.  If any of the supported property values 
-	 * are changed as a result of calling this method then true is returnd
+	 * are changed as a result of calling this method then true is returned.
 	 */
 	public boolean setPlatformProperties(Dictionary platformProperties);
+
+	/**
+	 * Sets the platform properties of the state to a list of platform properties.  
+	 * The platform properties are used to match platform filters that are specified 
+	 * in Eclipse-PlatformFilter bundle manifest header. 
+	 * @see #setPlatformProperties(Dictionary) for a list of supported properties.  
+	 * 
+	 * @param platformProperties a set of platform properties for the state
+	 * @return false if the platformProperties specified do not change any of the
+	 * supported properties already set.  If any of the supported property values 
+	 * are changed as a result of calling this method then true is returned.
+	 */
+	public boolean setPlatformProperties(Dictionary[] platformProperties);
 }

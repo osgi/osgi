@@ -33,7 +33,7 @@ class StateReader {
 	private boolean lazyLoad = true;
 	private int numBundles;
 
-	public static final byte STATE_CACHE_VERSION = 18;
+	public static final byte STATE_CACHE_VERSION = 20;
 	public static final byte NULL = 0;
 	public static final byte OBJECT = 1;
 	public static final byte INDEX = 2;
@@ -79,14 +79,19 @@ class StateReader {
 			if (expectedTimestamp >= 0 && timestampRead != expectedTimestamp)
 				return false;
 			addToObjectTable(state, index);
-			Hashtable props = new Hashtable(4);
-			int numProps = in.readInt();
-			for (int i = 0; i < numProps; i++) {
-				Object value = readPlatformProp(in);
-				if (value != null)
-					props.put(StateImpl.PROPS[i], value);
+			int numSets = in.readInt();
+			Dictionary[] platformProps = new Dictionary[numSets];
+			for (int i = 0; i < numSets; i++) {
+				Hashtable props = new Hashtable(StateImpl.PROPS.length);
+				int numProps = in.readInt();
+				for (int j = 0; j < numProps; j++) {
+					Object value = readPlatformProp(in);
+					if (value != null && j < StateImpl.PROPS.length)
+						props.put(StateImpl.PROPS[j], value);
+				}
+				platformProps[i] = props;
 			}
-			state.setPlatformProperties(props);
+			state.setPlatformProperties(platformProps);
 			numBundles = in.readInt();
 			if (numBundles == 0)
 				return true;
@@ -127,14 +132,19 @@ class StateReader {
 		if (expectedTimestamp >= 0 && timestampRead != expectedTimestamp)
 			return false;
 		addToObjectTable(state, index);
-		Hashtable props = new Hashtable(4);
-		int numProps = in.readInt();
-		for (int i = 0; i < numProps; i++) {
-			Object value = readPlatformProp(in);
-			if (value != null)
-				props.put(StateImpl.PROPS[i], value);
+		int numSets = in.readInt();
+		Dictionary[] platformProps = new Dictionary[numSets];
+		for (int i = 0; i < numSets; i++) {
+			Hashtable props = new Hashtable(StateImpl.PROPS.length);
+			int numProps = in.readInt();
+			for (int j = 0; j < numProps; j++) {
+				Object value = readPlatformProp(in);
+				if (value != null && j < StateImpl.PROPS.length)
+					props.put(StateImpl.PROPS[j], value);
+			}
+			platformProps[i] = props;
 		}
-		state.setPlatformProperties(props);
+		state.setPlatformProperties(platformProps);
 		numBundles = in.readInt();
 		if (numBundles == 0)
 			return true;
@@ -297,34 +307,39 @@ class StateReader {
 		addToObjectTable(exportPackageDesc, tableIndex);
 		exportPackageDesc.setTableIndex(tableIndex);
 		readBaseDescription(exportPackageDesc, in);
-		exportPackageDesc.setInclude(readString(in, false));
-		exportPackageDesc.setExclude(readString(in, false));
 		exportPackageDesc.setRoot(in.readBoolean());
-
-		int attrCount = in.readInt();
-		if (attrCount > 0) {
-			HashMap attributes = new HashMap(attrCount);
-			for (int i = 0; i < attrCount; i++)
-				attributes.put(readString(in, false), readString(in, false));
-			exportPackageDesc.setAttributes(attributes);
-		}
-
-		int mandatoryCount = in.readInt();
-		if (mandatoryCount > 0) {
-			String[] mandatory = new String[mandatoryCount];
-			for (int i = 0; i < mandatoryCount; i++)
-				mandatory[i] = readString(in, false);
-			exportPackageDesc.setMandatory(mandatory);
-		}
-
-		int usesCount = in.readInt();
-		if (usesCount > 0) {
-			String[] uses = new String[usesCount];
-			for (int i = 0; i < usesCount; i++)
-				uses[i] = readString(in, false);
-			exportPackageDesc.setUses(uses);
-		}
+		exportPackageDesc.setAttributes(readMap(in));
+		exportPackageDesc.setDirectives(readMap(in));
 		return exportPackageDesc;
+	}
+
+	private Map readMap(DataInputStream in) throws IOException {
+		int count = in.readInt();
+		if (count == 0)
+			return null;
+		HashMap result = new HashMap(count);
+		for (int i = 0; i < count; i++) {
+			String key = readString(in, false);
+			Object value = null;
+			byte type = in.readByte();
+			if (type == 0)
+				 value = readString(in, false);
+			else
+				if (type ==1)
+					value = readList(in);
+			result.put(key, value);
+		}
+		return result;
+	}
+
+	private String[] readList(DataInputStream in) throws IOException {
+		int count = in.readInt();
+		if (count == 0)
+			return null;
+		String[] result = new String[count];
+		for (int i = 0; i < count; i++)
+			result[i] = readString(in, false);
+		return result;
 	}
 
 	private void readBaseDescription(BaseDescriptionImpl root, DataInputStream in) throws IOException {
@@ -338,15 +353,8 @@ class StateReader {
 		result.setSupplier(readExportPackageDesc(in));
 		result.setBundleSymbolicName(readString(in, false));
 		result.setBundleVersionRange(readVersionRange(in));
-		result.setResolution(in.readInt());
-
-		int attrCount = in.readInt();
-		if (attrCount > 0) {
-			HashMap attributes = new HashMap(attrCount);
-			for (int i = 0; i < attrCount; i++)
-				attributes.put(readString(in, false), readString(in, false));
-			result.setAttributes(attributes);
-		}
+		result.setAttributes(readMap(in));
+		result.setDirectives(readMap(in));
 		return result;
 	}
 

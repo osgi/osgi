@@ -69,4 +69,9 @@ public class BundleDeltaImpl implements BundleDelta {
 			typeStr.deleteCharAt(typeStr.length() - 1);
 		return typeStr.toString();
 	}
+
+	public int compareTo(Object obj) {
+		long idcomp = getBundle().getBundleId() - ((BundleDelta) obj).getBundle().getBundleId();
+		return (idcomp < 0L) ? -1 : ((idcomp > 0L) ? 1 : 0);
+	}
 }

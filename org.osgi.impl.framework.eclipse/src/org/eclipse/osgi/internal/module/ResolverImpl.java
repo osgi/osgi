@@ -15,9 +15,7 @@ import org.eclipse.osgi.framework.adaptor.FrameworkAdaptor;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.debug.DebugOptions;
 import org.eclipse.osgi.service.resolver.*;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.Filter;
-import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.*;
 
 public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver {
 	// Debug fields
@@ -191,11 +189,11 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 
 	// Checks a bundle to make sure it is valid.  If this method returns false for
 	// a given bundle, then that bundle will not even be considered for resolution
-	private boolean isResolvable(BundleDescription bundle, Dictionary platformProperties) {
+	private boolean isResolvable(BundleDescription bundle, Dictionary[] platformProperties) {
 		ImportPackageSpecification[] imports = bundle.getImportPackages();
 		for (int i = 0; i < imports.length; i++) {
 			// Don't allow non-dynamic imports to specify wildcards
-			if (imports[i].getResolution() != ImportPackageSpecification.RESOLUTION_DYNAMIC && imports[i].getName().endsWith("*")) //$NON-NLS-1$
+			if (!ImportPackageSpecification.RESOLUTION_DYNAMIC.equals(imports[i].getDirective(Constants.RESOLUTION_DIRECTIVE)) && imports[i].getName().endsWith("*")) //$NON-NLS-1$
 				return false;
 			// Don't allow multiple imports of the same package
 			for (int j = 0; j < i; j++) {
@@ -211,10 +209,13 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			return false;
 		try {
 			Filter filter = context.createFilter(platformFilter);
-			return filter.match(platformProperties);
+			for (int i = 0; i < platformProperties.length; i++)
+				if (filter.match(platformProperties[i]))
+					return true;
 		} catch (InvalidSyntaxException e) {
 			return false;
 		}
+		return false;
 	}
 
 	// Attach fragment to its host
@@ -229,7 +230,7 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		}
 	}
 
-	public synchronized void resolve(BundleDescription[] reRefresh, Dictionary platformProperties) {
+	public synchronized void resolve(BundleDescription[] reRefresh, Dictionary[] platformProperties) {
 		if (DEBUG)
 			ResolverImpl.log("*** BEGIN RESOLUTION ***"); //$NON-NLS-1$
 		if (state == null)
@@ -633,7 +634,9 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			ResolverExport[] exports = requires[i].getMatchingBundle().getExportPackages();
 			for (int j = 0; j < exports.length; j++) {
 				if (imp.getName().equals(exports[j].getName())) {
-					ExportPackageDescription epd = state.getFactory().createExportPackageDescription(exports[j].getName(), exports[j].getVersion(), null, exports[j].getExportPackageDescription().getInclude(), exports[j].getExportPackageDescription().getExclude(), exports[j].getExportPackageDescription().getAttributes(), exports[j].getExportPackageDescription().getMandatory(), false, reexporter.getBundle());
+					Map directives = exports[j].getExportPackageDescription().getDirectives();
+					directives.remove(Constants.USES_DIRECTIVE);
+					ExportPackageDescription epd = state.getFactory().createExportPackageDescription(exports[j].getName(), exports[j].getVersion(), directives, exports[j].getExportPackageDescription().getAttributes(), false, reexporter.getBundle());
 					if (imp.getImportPackageSpecification().isSatisfiedBy(epd)) {
 						// Create reexport and add to bundle and resolverExports
 						if (DEBUG_IMPORTS)
@@ -802,12 +805,10 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 					hostBundles[i] = matchingBundles[i].getBundle();
 					if (rb.isNewFragmentExports()) {
 						// update the host's set of selected exports
-						ResolverBundle hostRB = (ResolverBundle) bundleMapping.get(hostBundles[i]);
-						ResolverExport[] hostExports = hostRB.getSelectedExports();
-						ArrayList selectedHostExports = new ArrayList(hostExports.length);
+						ResolverExport[] hostExports = matchingBundles[i].getSelectedExports();
+						ExportPackageDescription[] hostExportsArray = new ExportPackageDescription[hostExports.length];
 						for (int j = 0; j < hostExports.length; j++)
-							selectedHostExports.add(hostExports[j].getExportPackageDescription());
-						ExportPackageDescription[] hostExportsArray = (ExportPackageDescription[]) selectedHostExports.toArray(new ExportPackageDescription[selectedHostExports.size()]);
+							hostExportsArray[j] = hostExports[j].getExportPackageDescription();
 						state.resolveBundle(hostBundles[i], true, null, hostExportsArray, hostBundles[i].getResolvedRequires(), hostBundles[i].getResolvedImports());
 					}
 				}
@@ -834,18 +835,17 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		boolean found = false;
 		for (int j = 0; j < resolverImports.length; j++) {
 			// Make sure it is a dynamic import
-			if ((resolverImports[j].getImportPackageSpecification().getResolution() & ImportPackageSpecification.RESOLUTION_DYNAMIC) == 0) {
+			if (!ImportPackageSpecification.RESOLUTION_DYNAMIC.equals(resolverImports[j].getImportPackageSpecification().getDirective(Constants.RESOLUTION_DIRECTIVE)))
 				continue;
-			}
 			String importName = resolverImports[j].getName();
 			// If the import uses a wildcard, then temporarily replace this with the requested package
 			if (importName.equals("*") || //$NON-NLS-1$
 					(importName.endsWith(".*") && requestedPackage.startsWith(importName.substring(0, importName.length() - 2)))) { //$NON-NLS-1$
 				resolverImports[j].setName(requestedPackage);
-				found = true;
 			}
 			// Resolve the import
 			if (requestedPackage.equals(resolverImports[j].getName())) {
+				found = true;
 				boolean resolved = resolveImport(resolverImports[j], true);
 				while (resolved && !checkDynamicGrouping(resolverImports[j])) {
 					resolved = resolveImport(resolverImports[j], true);
@@ -868,7 +868,10 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			resolverImports[j].setName(null);
 		}
 		if (!found) {
-			ResolverImport newImport = new ResolverImport(rb, state.getFactory().createImportPackageSpecification(requestedPackage, null, null, null, ImportPackageSpecification.RESOLUTION_DYNAMIC, null, importingBundle));
+			Map directives = new HashMap(1);
+			directives.put(Constants.RESOLUTION_DIRECTIVE, ImportPackageSpecification.RESOLUTION_DYNAMIC);
+			ImportPackageSpecification packageSpec = state.getFactory().createImportPackageSpecification(requestedPackage, null, null, null, directives, null, importingBundle);
+			ResolverImport newImport = new ResolverImport(rb, packageSpec);
 			boolean resolved = resolveImport(newImport, true);
 			while (resolved && !checkDynamicGrouping(newImport))
 				resolved = resolveImport(newImport, true);

@@ -12,6 +12,7 @@ package org.eclipse.osgi.internal.module;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.osgi.framework.Constants;
 
 public class GroupingChecker {
 	HashMap constraints = new HashMap();
@@ -169,7 +170,7 @@ public class GroupingChecker {
 		for (int i = 0; i < bundles.length; i++) {
 			ResolverExport[] exports = bundles[i].getExportPackages();
 			for (int j = 0; j < exports.length; j++) {
-				String[] uses = exports[j].getUses();
+				String[] uses = (String[]) exports[j].getExportPackageDescription().getDirective(Constants.USES_DIRECTIVE);
 				if (uses == null)
 					continue;
 				for (int k = 0; k < uses.length; k++) {
@@ -187,7 +188,7 @@ public class GroupingChecker {
 	private void addTransitiveGroupingConstraints(ResolverExport export, ResolverExport constraint) {
 		if (export == constraint)
 			return;
-		String[] uses = constraint.getUses();
+		String[] uses = (String[]) constraint.getExportPackageDescription().getDirective(Constants.USES_DIRECTIVE);
 		if (uses == null)
 			return;
 		for (int i = 0; i < uses.length; i++) {
@@ -224,7 +225,7 @@ public class GroupingChecker {
 	void addImportConstraints(ResolverBundle bundle) {
 		ResolverExport[] exports = bundle.getExportPackages();
 		for (int i = 0; i < exports.length; i++) {
-			String[] uses = exports[i].getUses();
+			String[] uses = (String[]) exports[i].getExportPackageDescription().getDirective(Constants.USES_DIRECTIVE);
 			if (uses == null)
 				continue;
 			for (int j = 0; j < uses.length; j++) {

@@ -126,7 +126,7 @@ public class DefaultClassLoader extends AbstractClassLoader {
 	}
 
 	protected String getBundleSymbolicName() {
-		return hostdata.getSymbolicName() + "_" + hostdata.getVersion();
+		return hostdata.getSymbolicName() + "_" + hostdata.getVersion(); //$NON-NLS-1$
 	}
 
 	/**
@@ -164,20 +164,20 @@ public class DefaultClassLoader extends AbstractClassLoader {
 
 		if (bundlefile != null)
 			return createClassPathEntry(bundlefile, domain);
-		else
-			return null;
+		return null;
 	}
 
 	protected synchronized Class findClass(String name) throws ClassNotFoundException {
+		// must call findLoadedClass here even if it was called earlier,
+		// the findLoadedClass and defineClass calls must be atomic
 		Class result = findLoadedClass(name);
 		if (result != null)
 			return result;
 		for (int i = 0; i < classpathEntries.length; i++) {
 			if (classpathEntries[i] != null) {
 				result = findClassImpl(name, classpathEntries[i]);
-				if (result != null) {
+				if (result != null)
 					return result;
-				}
 			}
 		}
 		// look in fragments.
@@ -187,16 +187,11 @@ public class DefaultClassLoader extends AbstractClassLoader {
 				FragmentClasspath fragCP = (FragmentClasspath) fragClasspaths.elementAt(i);
 				for (int j = 0; j < fragCP.classpathEntries.length; j++) {
 					result = findClassImpl(name, fragCP.classpathEntries[j]);
-					if (result != null) {
+					if (result != null)
 						return result;
-					}
 				}
 			}
 		}
-		// Finally check the parent classloader for system classes.
-		ClassLoader parent = getParentPrivileged();
-		if (parent != null)
-			return parent.loadClass(name);
 		throw new ClassNotFoundException(name);
 	}
 
@@ -278,6 +273,7 @@ public class DefaultClassLoader extends AbstractClassLoader {
 			try {
 				in.close();
 			} catch (IOException ee) {
+				// nothing to do here
 			}
 		}
 
@@ -312,9 +308,8 @@ public class DefaultClassLoader extends AbstractClassLoader {
 		for (int i = 0; i < classpathEntries.length; i++) {
 			if (classpathEntries[i] != null) {
 				result = findResourceImpl(name, classpathEntries[i].getBundleFile());
-				if (result != null) {
+				if (result != null)
 					return result;
-				}
 			}
 		}
 		// look in fragments
@@ -324,16 +319,11 @@ public class DefaultClassLoader extends AbstractClassLoader {
 				FragmentClasspath fragCP = (FragmentClasspath) fragClasspaths.elementAt(i);
 				for (int j = 0; j < fragCP.classpathEntries.length; j++) {
 					result = findResourceImpl(name, fragCP.classpathEntries[j].getBundleFile());
-					if (result != null) {
+					if (result != null)
 						return result;
-					}
 				}
 			}
 		}
-		// Finally check the parent classloader for system resources.
-		ClassLoader parent = getParentPrivileged();
-		if (parent != null)
-			return parent.getResource(name);
 		return null;
 	}
 
@@ -447,18 +437,12 @@ public class DefaultClassLoader extends AbstractClassLoader {
 	 * Closes all the BundleFile objects for this BundleClassLoader.
 	 */
 	public void close() {
-		// do not close if we are shutting down
-		if (closed || hostdata.getAdaptor().isStopping())
-			return;
-
 		super.close();
 		if (classpathEntries != null) {
 			for (int i = 0; i < classpathEntries.length; i++) {
 				if (classpathEntries[i] != null) {
 					try {
-						if (classpathEntries[i].getBundleFile() != hostdata.getBaseBundleFile()) {
-							classpathEntries[i].getBundleFile().close();
-						}
+						classpathEntries[i].getBundleFile().close();
 					} catch (IOException e) {
 						hostdata.getAdaptor().getEventPublisher().publishFrameworkEvent(FrameworkEvent.ERROR, hostdata.getBundle(), e);
 					}
@@ -593,9 +577,7 @@ public class DefaultClassLoader extends AbstractClassLoader {
 		protected void close() {
 			for (int i = 0; i < classpathEntries.length; i++) {
 				try {
-					if (classpathEntries[i].getBundleFile() != bundledata.getBaseBundleFile()) {
-						classpathEntries[i].getBundleFile().close();
-					}
+					classpathEntries[i].getBundleFile().close();
 				} catch (IOException e) {
 					bundledata.getAdaptor().getEventPublisher().publishFrameworkEvent(FrameworkEvent.ERROR, bundledata.getBundle(), e);
 				}

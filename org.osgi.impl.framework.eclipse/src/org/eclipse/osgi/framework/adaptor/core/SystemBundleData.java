@@ -12,13 +12,9 @@
 package org.eclipse.osgi.framework.adaptor.core;
 
 import java.io.*;
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
-import org.eclipse.osgi.framework.adaptor.BundleClassLoader;
-import org.eclipse.osgi.framework.adaptor.BundleProtectionDomain;
-import org.eclipse.osgi.framework.adaptor.ClassLoaderDelegate;
+import org.eclipse.osgi.framework.adaptor.*;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.internal.core.Constants;
 import org.eclipse.osgi.framework.util.Headers;
@@ -42,6 +38,13 @@ public class SystemBundleData extends AbstractBundleData {
 		if (frameworkLocation != null)
 			// TODO assumes the location is a file URL
 			return new File(frameworkLocation.substring(5));
+		try {
+			URL url = getClass().getProtectionDomain().getCodeSource().getLocation();
+			// assumes file URL
+			return new File(url.getPath());
+		} catch (Throwable e) {
+			// do nothing
+		}
 		frameworkLocation = System.getProperty("user.dir"); //$NON-NLS-1$
 		if (frameworkLocation != null)
 			return new File(frameworkLocation);
@@ -76,15 +79,6 @@ public class SystemBundleData extends AbstractBundleData {
 		if (in == null)
 			throw new BundleException(AdaptorMsg.SYSTEMBUNDLE_MISSING_MANIFEST);
 		Headers systemManifest = Headers.parseManifest(in);
-		// check the OSGi system package property
-		// first check the OSGi R4 spec'ed property
-		String systemExportProp = System.getProperty(Constants.OSGI_FRAMEWORK_SYSTEM_PACKAGES);
-		if (systemExportProp != null)
-			appendManifestValue(systemManifest, Constants.EXPORT_PACKAGE, systemExportProp);
-		// now check the original pre OSGi R4 property
-		systemExportProp = System.getProperty(Constants.OSGI_SYSTEMPACKAGES);
-		if (systemExportProp != null)
-			appendManifestValue(systemManifest, Constants.EXPORT_PACKAGE, systemExportProp);
 		// now get any extra packages and services that the adaptor wants
 		// to export and merge this into the system bundle's manifest
 		String exportPackages = adaptor.getExportPackages();
@@ -205,14 +199,6 @@ public class SystemBundleData extends AbstractBundleData {
 
 	public int getStatus() {
 		return 0;
-	}
-
-	public void close() {
-		// do nothing
-	}
-
-	public void open() {
-		// do nothing
 	}
 
 	public void save() {

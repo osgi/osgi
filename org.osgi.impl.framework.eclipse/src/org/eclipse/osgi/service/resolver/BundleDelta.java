@@ -14,7 +14,7 @@ package org.eclipse.osgi.service.resolver;
  * BundleDeltas represent the changes related to an individual bundle between two
  * states.
  */
-public interface BundleDelta {
+public interface BundleDelta extends Comparable {
 
 	/**
 	 * Delta type constant (bit mask) indicating that the bundle has been added
@@ -97,4 +97,23 @@ public interface BundleDelta {
 	 * @return the type of change which occured
 	 */
 	public int getType();
+
+	/**
+	 * Answers an integer indicating the relative positions of the receiver and
+	 * the argument in the natural order of elements of the receiver's class.
+	 * <p>
+	 * The natural order of elements is determined by the bundle id of the
+	 * BundleDescription that this bundle delta is for.
+	 * 
+	 * @return int which should be <0 if the receiver should sort before the
+	 *         argument, 0 if the receiver should sort in the same position as
+	 *         the argument, and >0 if the receiver should sort after the
+	 *         argument.
+	 * @param obj
+	 *            another BundleDelta an object to compare the receiver to
+	 * @exception ClassCastException
+	 *                if the argument can not be converted into something
+	 *                comparable with the receiver.
+	 */
+	public int compareTo(Object obj);
 }

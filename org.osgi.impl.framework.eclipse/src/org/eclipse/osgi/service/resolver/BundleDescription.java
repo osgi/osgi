@@ -67,7 +67,6 @@ public interface BundleDescription extends BaseDescription{
 	 * @return the selected list of packages that this bundle exports.  If the bundle is
 	 * unresolved or has no shared packages then an empty array is returned.
 	 */
-	//TODO should this be name getResolvedExports()
 	public ExportPackageDescription[] getSelectedExports();
 
 	/**
@@ -154,6 +153,13 @@ public interface BundleDescription extends BaseDescription{
 	 */
 	public boolean isRemovalPending();
 
+	/**
+	 * Returns all bundles which depend on this bundle.  A bundle depends on
+	 * another bundle if it requires the bundle, imports a package which is 
+	 * exported by the bundle, is a fragment to the bundle or is the host
+	 * of the bundle.
+	 * @return all bundles which depend on this bundle.
+	 */
 	public BundleDescription[] getDependents();
 
 	/**

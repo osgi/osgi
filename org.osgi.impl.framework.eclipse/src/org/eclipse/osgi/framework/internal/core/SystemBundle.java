@@ -18,6 +18,7 @@ import java.security.Permission;
 import java.security.ProtectionDomain;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.util.SecureAction;
+import org.osgi.framework.*;
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.BundleException;
 
@@ -42,7 +43,7 @@ public class SystemBundle extends BundleHost {
 	protected SystemBundle(Framework framework) throws BundleException {
 		super(framework.adaptor.createSystemBundleData(), framework); // startlevel=0 means framework stopped
 		Constants.setInternalSymbolicName(bundledata.getSymbolicName());
-		state = STARTING;
+		state = Bundle.RESOLVED;
 		context = createContext();
 	}
 

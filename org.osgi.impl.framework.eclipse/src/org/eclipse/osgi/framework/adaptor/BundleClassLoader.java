@@ -26,7 +26,7 @@ import java.util.Enumeration;
  * must use a <code>ClassLoaderDelegate</code> to delegate all class, resource
  * and native library lookups.
  * 
- * @see org.eclipse.osgi.framework.adaptor.BundleData#createClassLoader(ClassLoaderDelegate, ProtectionDomain, String[])
+ * @see org.eclipse.osgi.framework.adaptor.BundleData#createClassLoader(ClassLoaderDelegate, BundleProtectionDomain, String[])
  */
 public interface BundleClassLoader /*extends ClassLoader*/{
 
@@ -67,7 +67,7 @@ public interface BundleClassLoader /*extends ClassLoader*/{
 	 * That failing, this method will invoke 
 	 * {@link ClassLoaderDelegate#findResource(String)} to find the resource.   
 	 * @param name the resource path to get.
-	 * @return
+	 * @return a URL for the resource or <code>null</code> if the resource is not found.
 	 */
 	public URL getResource(String name);
 
@@ -76,7 +76,7 @@ public interface BundleClassLoader /*extends ClassLoader*/{
 	 * That failing, this method will invoke 
 	 * {@link ClassLoaderDelegate#findResource(String)} to find the resource.   
 	 * @param name the resource path to get.
-	 * @return
+	 * @return an Enumeration of URL objects for the resource or <code>null</code> if the resource is not found.
 	 */
 	public Enumeration getResources(String name) throws IOException;
 
@@ -85,7 +85,7 @@ public interface BundleClassLoader /*extends ClassLoader*/{
 	 * That failing, this method will invoke 
 	 * {@link ClassLoaderDelegate#findClass(String)} to find the resource.   
 	 * @param name the class name to load.
-	 * @return
+	 * @return the Class.
 	 * @throws ClassNotFoundException
 	 */
 	public Class loadClass(String name) throws ClassNotFoundException;
@@ -120,4 +120,9 @@ public interface BundleClassLoader /*extends ClassLoader*/{
 	 */
 	public ClassLoaderDelegate getDelegate();
 
+	/**
+	 * Returns the parent classloader used by this BundleClassLoader
+	 * @return the parent classloader used by this BundleClassLoader
+	 */
+	public ClassLoader getParent();
 }

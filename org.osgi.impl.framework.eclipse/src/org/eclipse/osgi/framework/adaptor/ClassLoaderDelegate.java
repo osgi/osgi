@@ -35,8 +35,6 @@ public interface ClassLoaderDelegate {
 	 * If no class is found then a ClassNotFoundException is thrown.
 	 * @param classname the class to find. 
 	 * @return the Class.
-	 * @throws ImportClassNotFoundException if trying to import a class from an
-	 * imported package and the class is not found.
 	 * @throws ClassNotFoundException if the class is not found.
 	 */
 	public Class findClass(String classname) throws ClassNotFoundException;
@@ -52,10 +50,8 @@ public interface ClassLoaderDelegate {
 	 * If no resource is found then return null.
 	 * @param resource the resource to load.
 	 * @return the resource or null if resource is not found.
-	 * @throws ImportResourceNotFoundException if trying to import a resource from an
-	 * imported package and the resource is not found.
 	 */
-	public URL findResource(String resource) throws ImportResourceNotFoundException;
+	public URL findResource(String resource);
 
 	/**
 	 * Finds an enumeration of resources for a bundle that may be outside of 
@@ -69,10 +65,8 @@ public interface ClassLoaderDelegate {
 	 * @param resource the resource to find.
 	 * @return the enumeration of resources found or null if the resource
 	 * does not exist.
-	 * @throws ImportResourceNotFoundException if trying to import a resource from an
-	 * imported package and the resource is not found.
 	 */
-	public Enumeration findResources(String resource) throws ImportResourceNotFoundException, IOException;
+	public Enumeration findResources(String resource) throws IOException;
 
 	/**
 	 * Returns the absolute path name of a native library.  The following is

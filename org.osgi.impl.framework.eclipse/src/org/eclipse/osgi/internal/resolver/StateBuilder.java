@@ -23,7 +23,7 @@ import org.osgi.framework.Version;
 class StateBuilder {
 	static String[] DEFINED_MATCHING_ATTRS = {Constants.BUNDLE_SYMBOLICNAME_ATTRIBUTE, Constants.BUNDLE_VERSION_ATTRIBUTE, Constants.PACKAGE_SPECIFICATION_VERSION, Constants.VERSION_ATTRIBUTE};
 
-	static BundleDescription createBundleDescription(Dictionary manifest, String location) throws BundleException {
+	static BundleDescription createBundleDescription(StateImpl state, Dictionary manifest, String location) throws BundleException {
 		BundleDescriptionImpl result = new BundleDescriptionImpl();
 		String manifestVersionHeader = (String) manifest.get(Constants.BUNDLE_MANIFESTVERSION);
 		int manifestVersion = 1;
@@ -62,8 +62,9 @@ class StateBuilder {
 		ManifestElement[] exports = ManifestElement.parseHeader(Constants.EXPORT_PACKAGE, (String) manifest.get(Constants.EXPORT_PACKAGE));
 		ManifestElement[] reexports = ManifestElement.parseHeader(Constants.REEXPORT_PACKAGE, (String) manifest.get(Constants.REEXPORT_PACKAGE));
 		ManifestElement[] provides = ManifestElement.parseHeader(Constants.PROVIDE_PACKAGE, (String) manifest.get(Constants.PROVIDE_PACKAGE)); // TODO this is null for now until the framwork is updated to handle the new re-export semantics
+		boolean strict = state != null && Constants.STRICT_MODE.equals(state.getPlatformProperties()[0].get(Constants.OSGI_RESOLVER_MODE));
 		ArrayList providedExports = new ArrayList(provides == null ? 0 : provides.length);
-		result.setExportPackages(createExportPackages(result, exports, reexports, provides, providedExports, manifestVersion));
+		result.setExportPackages(createExportPackages(exports, reexports, provides, providedExports, manifestVersion, strict));
 		ManifestElement[] imports = ManifestElement.parseHeader(Constants.IMPORT_PACKAGE, (String) manifest.get(Constants.IMPORT_PACKAGE));
 		ManifestElement[] dynamicImports = ManifestElement.parseHeader(Constants.DYNAMICIMPORT_PACKAGE, (String) manifest.get(Constants.DYNAMICIMPORT_PACKAGE));
 		result.setImportPackages(createImportPackages(result.getExportPackages(), providedExports, imports, dynamicImports, manifestVersion));
@@ -112,7 +113,7 @@ class StateBuilder {
 				ImportPackageSpecificationImpl result = new ImportPackageSpecificationImpl();
 				result.setName(exported[i].getName());
 				result.setVersionRange(getVersionRange(exported[i].getVersion().toString()));
-				result.setResolution(ImportPackageSpecification.RESOLUTION_STATIC);
+				result.setDirective(Constants.RESOLUTION_DIRECTIVE, ImportPackageSpecification.RESOLUTION_STATIC);
 				allImports.add(result);
 			}
 		} else {
@@ -150,54 +151,55 @@ class StateBuilder {
 			result.setAttributes(getAttributes(importPackage, DEFINED_MATCHING_ATTRS));
 
 			if (dynamic) {
-				result.setResolution(ImportPackageSpecification.RESOLUTION_DYNAMIC);
+				result.setDirective(Constants.RESOLUTION_DIRECTIVE, ImportPackageSpecification.RESOLUTION_DYNAMIC);
 			} else {
-				result.setResolution(getResolution(importPackage.getDirective(Constants.RESOLUTION_DIRECTIVE)));
+				result.setDirective(Constants.RESOLUTION_DIRECTIVE, getResolution(importPackage.getDirective(Constants.RESOLUTION_DIRECTIVE)));
 			}
 
 			allImports.add(result);
 		}
 	}
 
-	private static int getResolution(String resolution) {
-		int result = ImportPackageSpecification.RESOLUTION_STATIC;
+	private static String getResolution(String resolution) {
+		String result = ImportPackageSpecification.RESOLUTION_STATIC;
 		if (Constants.RESOLUTION_OPTIONAL.equals(resolution))
 			result = ImportPackageSpecification.RESOLUTION_OPTIONAL;
 		return result;
 	}
 
-	private static ExportPackageDescription[] createExportPackages(BundleDescriptionImpl bundle, ManifestElement[] exported, ManifestElement[] reexported, ManifestElement[] provides, ArrayList providedExports, int manifestVersion) throws BundleException {
+	static ExportPackageDescription[] createExportPackages(ManifestElement[] exported, ManifestElement[] reexported, ManifestElement[] provides, ArrayList providedExports, int manifestVersion, boolean strict) throws BundleException {
 		int numExports = (exported == null ? 0 : exported.length) + (reexported == null ? 0 : reexported.length) + (provides == null ? 0 : provides.length);
 		if (numExports == 0)
 			return null;
 		ArrayList allExports = new ArrayList(numExports);
 		if (exported != null)
 			for (int i = 0; i < exported.length; i++)
-				addExportPackages(exported[i], allExports, manifestVersion, false);
+				addExportPackages(exported[i], allExports, manifestVersion, false, strict);
 		if (reexported != null)
 			for (int i = 0; i < reexported.length; i++)
-				addExportPackages(reexported[i], allExports, manifestVersion, true);
+				addExportPackages(reexported[i], allExports, manifestVersion, true, strict);
 		if (provides != null)
 			addProvidePackages(provides, allExports, providedExports);
 		return (ExportPackageDescription[]) allExports.toArray(new ExportPackageDescription[allExports.size()]);
 	}
 
-	private static void addExportPackages(ManifestElement exportPackage, ArrayList allExports, int manifestVersion, boolean reexported) throws BundleException {
+	private static void addExportPackages(ManifestElement exportPackage, ArrayList allExports, int manifestVersion, boolean reexported, boolean strict) throws BundleException {
 		String[] exportNames = exportPackage.getValueComponents();
 		for (int i = 0; i < exportNames.length; i++) {
+			// if we are in strict mode and the package is marked as internal, skip it.
+			if (strict && "true".equals(exportPackage.getDirective(Constants.INTERNAL_DIRECTIVE)))
+				continue;
 			ExportPackageDescriptionImpl result = new ExportPackageDescriptionImpl();
 			result.setName(exportNames[i]);
 			String versionString = manifestVersion < 2 ? exportPackage.getAttribute(Constants.PACKAGE_SPECIFICATION_VERSION) : exportPackage.getAttribute(Constants.VERSION_ATTRIBUTE);
 			if (versionString != null)
 				result.setVersion(Version.parseVersion(versionString));
-
-			result.setUses(ManifestElement.getArrayFromList(exportPackage.getDirective(Constants.USES_DIRECTIVE)));
-
-			// set the rest of the attributes
-			result.setInclude(exportPackage.getDirective(Constants.INCLUDE_DIRECTIVE));
-			result.setExclude(exportPackage.getDirective(Constants.EXCLUDE_DIRECTIVE));
+			result.setDirective(Constants.USES_DIRECTIVE, ManifestElement.getArrayFromList(exportPackage.getDirective(Constants.USES_DIRECTIVE)));
+			result.setDirective(Constants.INCLUDE_DIRECTIVE, exportPackage.getDirective(Constants.INCLUDE_DIRECTIVE));
+			result.setDirective(Constants.EXCLUDE_DIRECTIVE, exportPackage.getDirective(Constants.EXCLUDE_DIRECTIVE));
+			result.setDirective(Constants.FRIENDS_DIRECTIVE, ManifestElement.getArrayFromList(exportPackage.getDirective(Constants.FRIENDS_DIRECTIVE)));
+			result.setDirective(Constants.MANDATORY_DIRECTIVE, ManifestElement.getArrayFromList(exportPackage.getDirective(Constants.MANDATORY_DIRECTIVE)));
 			result.setAttributes(getAttributes(exportPackage, DEFINED_MATCHING_ATTRS));
-			result.setMandatory(ManifestElement.getArrayFromList(exportPackage.getDirective(Constants.MANDATORY_DIRECTIVE)));
 			result.setRoot(!reexported);
 			allExports.add(result);
 		}

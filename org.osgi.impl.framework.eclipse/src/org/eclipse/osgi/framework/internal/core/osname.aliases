@@ -32,4 +32,4 @@ WindowsNT "Windows NT" WinNT Win32       # Microsoft
 WindowsCE "Windows CE" WinCE             # Microsoft
 Windows2000 "Windows 2000" Win2000 Win32 # Microsoft
 WindowsXP "Windows XP" WinXP Win32       # Microsoft
-
+Windows2003 "Windows 2003" Win2003 Win32 # Microsoft

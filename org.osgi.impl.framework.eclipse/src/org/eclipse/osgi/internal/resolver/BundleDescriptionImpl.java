@@ -12,27 +12,25 @@ package org.eclipse.osgi.internal.resolver;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.Iterator;
-
 import org.eclipse.osgi.framework.internal.core.Constants;
 import org.eclipse.osgi.framework.internal.core.KeyedElement;
 import org.eclipse.osgi.service.resolver.*;
 
 public class BundleDescriptionImpl extends BaseDescriptionImpl implements BundleDescription, KeyedElement {
-	static final int RESOLVED			= 0x01;
-	static final int SINGLETON			= 0x02;
-	static final int REMOVAL_PENDING	= 0x04;
-	static final int FULLY_LOADED		= 0x08;
-	static final int LAZY_LOADED		= 0x10;
-	static final int HAS_DYNAMICIMPORT	= 0x20;
-	static final int ATTACH_FRAGMENTS	= 0x40;
-	static final int DYNAMIC_FRAGMENTS	= 0x80;
+	static final int RESOLVED = 0x01;
+	static final int SINGLETON = 0x02;
+	static final int REMOVAL_PENDING = 0x04;
+	static final int FULLY_LOADED = 0x08;
+	static final int LAZY_LOADED = 0x10;
+	static final int HAS_DYNAMICIMPORT = 0x20;
+	static final int ATTACH_FRAGMENTS = 0x40;
+	static final int DYNAMIC_FRAGMENTS = 0x80;
 
 	// set to fully loaded and allow dynamic fragments by default
 	private int stateBits = FULLY_LOADED | ATTACH_FRAGMENTS | DYNAMIC_FRAGMENTS;
 
 	private long bundleId = -1;
-	private HostSpecification host;	//null if the bundle is not a fragment
+	private HostSpecification host; //null if the bundle is not a fragment
 	private StateImpl containingState;
 
 	private Object userObject;
@@ -84,9 +82,26 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 
 	public ExportPackageDescription[] getExportPackages() {
 		fullyLoad();
-		if (lazyData.exportPackages == null)
-			return new ExportPackageDescription[0]; 
-		return lazyData.exportPackages;
+		ExportPackageDescription[] result = lazyData.exportPackages;
+		if (Constants.getInternalSymbolicName().equals(getSymbolicName()))
+			result = mergeSystemExports(result);
+		if (result == null)
+			return new ExportPackageDescription[0];
+		return result;
+	}
+
+	private ExportPackageDescription[] mergeSystemExports(ExportPackageDescription[] existingExports) {
+		if (containingState == null)
+			return existingExports;
+		ExportPackageDescription[] systemExports = containingState.getSystemExports();
+		if (systemExports == null || systemExports.length == 0)
+			return existingExports;
+		for (int i = 0; i < systemExports.length; i++)
+			((ExportPackageDescriptionImpl) systemExports[i]).setExporter(this);
+		ExportPackageDescription[] allExports = new ExportPackageDescription[existingExports.length + systemExports.length];
+		System.arraycopy(existingExports, 0, allExports, 0, existingExports.length);
+		System.arraycopy(systemExports, 0, allExports, existingExports.length, systemExports.length);
+		return allExports;
 	}
 
 	public boolean isResolved() {
@@ -171,7 +186,7 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		lazyData.exportPackages = exportPackages;
 		if (exportPackages != null) {
 			for (int i = 0; i < exportPackages.length; i++) {
-				((ExportPackageDescriptionImpl)exportPackages[i]).setExporter(this);
+				((ExportPackageDescriptionImpl) exportPackages[i]).setExporter(this);
 			}
 		}
 	}
@@ -182,9 +197,9 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		if (importPackages != null) {
 			for (int i = 0; i < importPackages.length; i++) {
 				if (Constants.OSGI_SYSTEM_BUNDLE.equals(importPackages[i].getBundleSymbolicName()))
-					((ImportPackageSpecificationImpl)importPackages[i]).setBundleSymbolicName(Constants.getInternalSymbolicName());
-				((ImportPackageSpecificationImpl)importPackages[i]).setBundle(this);
-				if ((importPackages[i].getResolution() & ImportPackageSpecification.RESOLUTION_DYNAMIC) != 0)
+					((ImportPackageSpecificationImpl) importPackages[i]).setBundleSymbolicName(Constants.getInternalSymbolicName());
+				((ImportPackageSpecificationImpl) importPackages[i]).setBundle(this);
+				if (ImportPackageSpecification.RESOLUTION_DYNAMIC.equals(importPackages[i].getDirective(Constants.RESOLUTION_DIRECTIVE)))
 					stateBits |= HAS_DYNAMICIMPORT;
 			}
 		}
@@ -196,7 +211,7 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		if (requiredBundles != null)
 			for (int i = 0; i < requiredBundles.length; i++) {
 				if (Constants.OSGI_SYSTEM_BUNDLE.equals(requiredBundles[i].getName()))
-					((VersionConstraintImpl)requiredBundles[i]).setName(Constants.getInternalSymbolicName());
+					((VersionConstraintImpl) requiredBundles[i]).setName(Constants.getInternalSymbolicName());
 				((VersionConstraintImpl) requiredBundles[i]).setBundle(this);
 			}
 	}
@@ -219,8 +234,7 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 				stateBits |= LAZY_LOADED;
 			else
 				stateBits &= ~LAZY_LOADED;
-		}
-		else {
+		} else {
 			stateBits &= ~LAZY_LOADED;
 		}
 	}
@@ -229,7 +243,7 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		this.host = host;
 		if (host != null) {
 			if (Constants.OSGI_SYSTEM_BUNDLE.equals(host.getName()))
-				((VersionConstraintImpl)host).setName(Constants.getInternalSymbolicName());
+				((VersionConstraintImpl) host).setName(Constants.getInternalSymbolicName());
 			((VersionConstraintImpl) host).setBundle(this);
 		}
 	}
@@ -247,7 +261,7 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		lazyData.selectedExports = selectedExports;
 		if (selectedExports != null) {
 			for (int i = 0; i < selectedExports.length; i++) {
-				((ExportPackageDescriptionImpl)selectedExports[i]).setExporter(this);
+				((ExportPackageDescriptionImpl) selectedExports[i]).setExporter(this);
 			}
 		}
 	}
@@ -284,19 +298,19 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 	}
 
 	/* TODO Determine if we need more than just Object ID type of hashcode.
-	public int hashCode() {
-		if (getSymbolicName() == null)
-			return (int) (bundleId % Integer.MAX_VALUE);
-		return (int) ((bundleId * (getSymbolicName().hashCode())) % Integer.MAX_VALUE);
-	}
-	*/
+	 public int hashCode() {
+	 if (getSymbolicName() == null)
+	 return (int) (bundleId % Integer.MAX_VALUE);
+	 return (int) ((bundleId * (getSymbolicName().hashCode())) % Integer.MAX_VALUE);
+	 }
+	 */
 
 	protected synchronized void removeDependencies() {
 		if (dependencies == null)
 			return;
 		Iterator iter = dependencies.iterator();
 		while (iter.hasNext()) {
-			((BundleDescriptionImpl)iter.next()).removeDependent(this);
+			((BundleDescriptionImpl) iter.next()).removeDependent(this);
 		}
 		dependencies = null;
 	}
@@ -314,7 +328,7 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 			dependencies = new ArrayList(10);
 		BundleDescriptionImpl bundle;
 		if (dependency instanceof ExportPackageDescription)
-			bundle = (BundleDescriptionImpl) ((ExportPackageDescription)dependency).getExporter();
+			bundle = (BundleDescriptionImpl) ((ExportPackageDescription) dependency).getExporter();
 		else
 			bundle = (BundleDescriptionImpl) dependency;
 		if (!dependencies.contains(bundle)) {
@@ -333,7 +347,7 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		ArrayList required = new ArrayList(dependencies.size());
 		for (Iterator iter = dependencies.iterator(); iter.hasNext();) {
 			Object dep = iter.next();
-			if (dep != this && dep instanceof BundleDescription && ((BundleDescription)dep).getHost() == null)
+			if (dep != this && dep instanceof BundleDescription && ((BundleDescription) dep).getHost() == null)
 				required.add(dep);
 		}
 		return required;
@@ -367,11 +381,10 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 	}
 
 	void setFullyLoaded(boolean fullyLoaded) {
-		if (fullyLoaded){
+		if (fullyLoaded) {
 			stateBits |= FULLY_LOADED;
 			lazyTimeStamp = System.currentTimeMillis();
-		}
-		else {
+		} else {
 			stateBits &= ~FULLY_LOADED;
 		}
 	}
@@ -434,7 +447,7 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		if (tempData == null || tempData.selectedExports == null)
 			return;
 		for (int i = 0; i < tempData.selectedExports.length; i++)
-			containingState.getReader().objectTable.remove(new Integer(((ExportPackageDescriptionImpl)tempData.selectedExports[i]).getTableIndex()));
+			containingState.getReader().objectTable.remove(new Integer(((ExportPackageDescriptionImpl) tempData.selectedExports[i]).getTableIndex()));
 	}
 
 	private void checkLazyData() {
@@ -442,7 +455,6 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 			lazyData = new LazyData();
 	}
 
-	//TODO Consider usage of softReferences
 	private final class LazyData {
 		String location;
 		String platformFilter;

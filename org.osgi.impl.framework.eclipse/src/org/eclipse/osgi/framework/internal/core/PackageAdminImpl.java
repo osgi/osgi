@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
-import java.util.Iterator;
 import org.eclipse.osgi.framework.adaptor.BundleClassLoader;
 import org.eclipse.osgi.framework.adaptor.BundleData;
 import org.eclipse.osgi.framework.debug.Debug;
@@ -225,20 +224,6 @@ public class PackageAdminImpl implements PackageAdmin {
 		}
 	}
 
-	private void insertBundle(AbstractBundle bundle, ArrayList bundleList) {
-		int index = 0;
-		Iterator iter = bundleList.iterator();
-		while (iter.hasNext()) {
-			Object current = iter.next();
-			if (current == bundle)
-				return;
-			if (bundle.compareTo(current) < 0)
-				break;
-			index++;
-		}
-		bundleList.add(index, bundle);
-	}
-
 	private void suspendBundle(AbstractBundle bundle) throws BundleException {
 		if (bundle.isActive() && !bundle.isFragment()) {
 			boolean suspended = framework.suspendBundle(bundle, true);
@@ -270,7 +255,14 @@ public class PackageAdminImpl implements PackageAdmin {
 				throw new BundleException(Msg.OSGI_INTERNAL_ERROR); //$NON-NLS-1$
 			}
 			BundleLoaderProxy proxy = (BundleLoaderProxy) bundle.getUserObject();
-			BundleHost.closeBundleLoader(proxy);
+			if (proxy != null) {
+				BundleHost.closeBundleLoader(proxy);
+				try {
+					proxy.getBundleHost().getBundleData().close();
+				} catch (IOException e) {
+					// ignore
+				}
+			}
 		}
 	}
 
@@ -283,14 +275,16 @@ public class PackageAdminImpl implements PackageAdmin {
 			framework.publishFrameworkEvent(FrameworkEvent.ERROR, framework.systemBundle, be);
 			return null;
 		}
+		boolean resolve = true;
 		if (bundle.isFragment()) {
 			BundleDescription[] hosts = bundleDescription.getHost().getHosts();
 			for (int i = 0; i < hosts.length; i++) {
 				BundleHost host = (BundleHost) framework.getBundle(hosts[0].getBundleId());
-				((BundleFragment) bundle).addHost(host.getLoaderProxy());
+				resolve = ((BundleFragment) bundle).addHost(host.getLoaderProxy());
 			}
 		}
-		bundle.resolve();
+		if (resolve)
+			bundle.resolve();
 		return bundle;
 	}
 
@@ -298,10 +292,8 @@ public class PackageAdminImpl implements PackageAdmin {
 		ArrayList results = new ArrayList(bundleDeltas.length);
 		for (int i = 0; i < bundleDeltas.length; i++) {
 			int type = bundleDeltas[i].getType();
-			if ((type & (BundleDelta.REMOVAL_PENDING | BundleDelta.REMOVAL_COMPLETE)) != 0) {
+			if ((type & (BundleDelta.REMOVAL_PENDING | BundleDelta.REMOVAL_COMPLETE)) != 0)
 				applyRemovalPending(bundleDeltas[i]);
-			}
-
 			if ((type & BundleDelta.RESOLVED) != 0) {
 				AbstractBundle bundle = setResolved(bundleDeltas[i].getBundle());
 				if (bundle != null && bundle.isResolved())
@@ -312,12 +304,13 @@ public class PackageAdminImpl implements PackageAdmin {
 	}
 
 	private AbstractBundle[] processDelta(BundleDelta[] bundleDeltas, boolean refreshPackages) {
+		Util.sort(bundleDeltas, 0, bundleDeltas.length);
 		ArrayList bundlesList = new ArrayList(bundleDeltas.length);
 		// get all the bundles that are going to be refreshed
 		for (int i = 0; i < bundleDeltas.length; i++) {
 			AbstractBundle changedBundle = framework.getBundle(bundleDeltas[i].getBundle().getBundleId());
 			if (changedBundle != null)
-				insertBundle(changedBundle, bundlesList);
+				bundlesList.add(changedBundle);
 		}
 		AbstractBundle[] refresh = (AbstractBundle[]) bundlesList.toArray(new AbstractBundle[bundlesList.size()]);
 		boolean[] previouslyResolved = new boolean[refresh.length];
@@ -518,13 +511,25 @@ public class PackageAdminImpl implements PackageAdmin {
 	}
 
 	protected void setResolvedBundles(SystemBundle systemBundle) {
+		checkSystemBundle(systemBundle);
+		// Now set the actual state of the bundles from the persisted state.
+		State state = framework.adaptor.getState();
+		BundleDescription[] descriptions = state.getBundles();
+		for (int i = 0; i < descriptions.length; i++) {
+			long bundleId = descriptions[i].getBundleId();
+			if (bundleId == 0)
+				continue;
+			setResolved(descriptions[i]);
+		}
+	}
+
+	private void checkSystemBundle(SystemBundle systemBundle) {
 		try {
-			// first check that the system bundle has not changed since
-			// last saved state.
-			BundleDescription newSystemBundle = framework.adaptor.getState().getFactory().createBundleDescription(systemBundle.getHeaders(""), systemBundle.getLocation(), 0); //$NON-NLS-1$
+			// first check that the system bundle has not changed since last saved state.
+			State state = framework.adaptor.getState();
+			BundleDescription newSystemBundle = state.getFactory().createBundleDescription(state, systemBundle.getHeaders(""), systemBundle.getLocation(), 0); //$NON-NLS-1$
 			if (newSystemBundle == null)
 				throw new BundleException(Msg.OSGI_SYSTEMBUNDLE_DESCRIPTION_ERROR); //$NON-NLS-1$
-			State state = framework.adaptor.getState();
 			BundleDescription oldSystemBundle = state.getBundle(0);
 			if (oldSystemBundle != null) {
 				boolean different = false;
@@ -534,8 +539,8 @@ public class PackageAdminImpl implements PackageAdmin {
 				// is up to date in the state.
 				ExportPackageDescription[] oldPackages = oldSystemBundle.getExportPackages();
 				ExportPackageDescription[] newPackages = newSystemBundle.getExportPackages();
-				if (oldPackages.length == newPackages.length) {
-					for (int i = 0; i < oldPackages.length; i++) {
+				if (oldPackages.length >= newPackages.length) {
+					for (int i = 0; i < newPackages.length; i++) {
 						if (oldPackages[i].getName().equals(newPackages[i].getName())) {
 							Object oldVersion = oldPackages[i].getVersion();
 							Object newVersion = newPackages[i].getVersion();
@@ -567,7 +572,6 @@ public class PackageAdminImpl implements PackageAdmin {
 				// force resolution so packages are properly linked
 				state.resolve(false);
 			}
-			SystemBundleLoader.clearSystemPackages();
 			ExportPackageDescription[] packages = newSystemBundle.getExportPackages();
 			if (packages != null) {
 				String[] systemPackages = new String[packages.length];
@@ -580,23 +584,10 @@ public class PackageAdminImpl implements PackageAdmin {
 					}
 					systemPackages[i] = spec.getName();
 				}
-				// remember the system packages.
-				if (System.getProperty(Constants.OSGI_AUTOEXPORTSYSTEMPACKAGES) != null)
-					SystemBundleLoader.setSystemPackages(systemPackages);
 			}
 		} catch (BundleException e) /* fatal error */{
 			e.printStackTrace();
 			throw new RuntimeException(NLS.bind(Msg.OSGI_SYSTEMBUNDLE_CREATE_EXCEPTION, e.getMessage())); //$NON-NLS-1$
-		}
-
-		// Now set the actual state of the bundles from the persisted state.
-		State state = framework.adaptor.getState();
-		BundleDescription[] descriptions = state.getBundles();
-		for (int i = 0; i < descriptions.length; i++) {
-			long bundleId = descriptions[i].getBundleId();
-			if (bundleId == 0)
-				continue;
-			setResolved(descriptions[i]);
 		}
 	}
 }

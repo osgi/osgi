@@ -14,13 +14,16 @@ import java.util.*;
 
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.debug.DebugOptions;
+import org.eclipse.osgi.framework.internal.core.*;
 import org.eclipse.osgi.framework.internal.core.KeyedElement;
 import org.eclipse.osgi.framework.internal.core.KeyedHashSet;
 import org.eclipse.osgi.service.resolver.*;
+import org.eclipse.osgi.util.ManifestElement;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.Version;
 
 public abstract class StateImpl implements State {
-	public static final String[] PROPS = {"osgi.os", "osgi.ws", "osgi.nl", "osgi.arch"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+	public static final String[] PROPS = {"osgi.os", "osgi.ws", "osgi.nl", "osgi.arch", Constants.OSGI_FRAMEWORK_SYSTEM_PACKAGES, Constants.OSGI_RESOLVER_MODE}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ 
 
 	transient private Resolver resolver;
 	transient private StateDeltaImpl changes;
@@ -34,7 +37,8 @@ public abstract class StateImpl implements State {
 	boolean fullyLoaded = false;
 	// only used for lazy loading of BundleDescriptions
 	private StateReader reader;
-	private Dictionary platformProperties = new Hashtable(4); // Dictionary here because of Filter API
+	private Dictionary[] platformProperties = {new Hashtable(PROPS.length)}; // Dictionary here because of Filter API
+	private ExportPackageDescription[] systemExports = new ExportPackageDescription[0];
 
 	private static long cumulativeTime;
 
@@ -66,11 +70,10 @@ public abstract class StateImpl implements State {
 		if (resolver != null) {
 			boolean pending = existing.getDependents().length > 0;
 			resolver.bundleUpdated(newDescription, existing, pending);
-			if (pending){
+			if (pending) {
 				getDelta().recordBundleRemovalPending(existing);
 				removalPendings.add(existing);
-			}
-			else {
+			} else {
 				// an existing bundle has been updated with no dependents it can safely be unresolved now
 				synchronized (this) {
 					try {
@@ -104,15 +107,13 @@ public abstract class StateImpl implements State {
 			if (pending) {
 				getDelta().recordBundleRemovalPending((BundleDescriptionImpl) toRemove);
 				removalPendings.add(toRemove);
-			}
-			else {
+			} else {
 				// a bundle has been removed with no dependents it can safely be unresolved now
 				synchronized (this) {
 					try {
 						resolving = true;
 						resolveBundle(toRemove, false, null, null, null, null);
-					}
-					finally {
+					} finally {
 						resolving = false;
 					}
 				}
@@ -162,7 +163,7 @@ public abstract class StateImpl implements State {
 	public BundleDescription getBundle(String name, Version version) {
 		for (Iterator i = bundleDescriptions.iterator(); i.hasNext();) {
 			BundleDescription current = (BundleDescription) i.next();
-			if (name.equals(current.getSymbolicName()) && current.getVersion().equals(version))
+			if (name.equals(current.getSymbolicName()) && (version == null || current.getVersion().equals(version)))
 				return current;
 		}
 		return null;
@@ -177,7 +178,7 @@ public abstract class StateImpl implements State {
 	}
 
 	public void resolveConstraint(VersionConstraint constraint, BaseDescription supplier) {
-		((VersionConstraintImpl)constraint).setSupplier(supplier);
+		((VersionConstraintImpl) constraint).setSupplier(supplier);
 	}
 
 	public void resolveBundle(BundleDescription bundle, boolean status, BundleDescription[] hosts, ExportPackageDescription[] selectedExports, BundleDescription[] resolvedRequires, ExportPackageDescription[] resolvedImports) {
@@ -193,8 +194,7 @@ public abstract class StateImpl implements State {
 		if (status) {
 			resolveConstraints(modifiable, hosts, selectedExports, resolvedRequires, resolvedImports);
 			resolvedBundles.add(modifiable);
-		}
-		else {
+		} else {
 			// ensures no links are left 
 			unresolveConstraints(modifiable);
 			// remove the bundle from the resolved pool
@@ -215,14 +215,14 @@ public abstract class StateImpl implements State {
 			if (hosts != null) {
 				hostSpec.setHosts(hosts);
 				for (int i = 0; i < hosts.length; i++)
-					((BundleDescriptionImpl)hosts[i]).addDependency(bundle);
+					((BundleDescriptionImpl) hosts[i]).addDependency(bundle);
 			}
 		}
 
 		bundle.setSelectedExports(selectedExports);
 		bundle.setResolvedRequires(resolvedRequires);
 		bundle.setResolvedImports(resolvedImports);
-		
+
 		bundle.addDependencies(hosts);
 		bundle.addDependencies(resolvedRequires);
 		bundle.addDependencies(resolvedImports);
@@ -232,7 +232,6 @@ public abstract class StateImpl implements State {
 		HostSpecificationImpl host = (HostSpecificationImpl) bundle.getHost();
 		if (host != null)
 			host.setHosts(null);
-
 
 		bundle.setSelectedExports(null);
 		bundle.setResolvedImports(null);
@@ -253,12 +252,17 @@ public abstract class StateImpl implements State {
 			if (!incremental) {
 				resolved = false;
 				reResolve = getBundles();
-				flush();
+				// need to get any removal pendings before flushing
+				if (removalPendings.size() > 0) {
+					BundleDescription[] removed = getRemovalPendings();
+					reResolve = mergeBundles(reResolve, removed);
+				}
+				flush(reResolve);
 			}
 			if (resolved && reResolve == null)
 				return new StateDeltaImpl(this);
 			if (removalPendings.size() > 0) {
-				BundleDescription[] removed = (BundleDescription[]) removalPendings.toArray(new BundleDescription[removalPendings.size()]);
+				BundleDescription[] removed = getRemovalPendings();
 				reResolve = mergeBundles(reResolve, removed);
 			}
 			resolver.resolve(reResolve, platformProperties);
@@ -303,12 +307,11 @@ public abstract class StateImpl implements State {
 		return (BundleDescription[]) result.toArray(new BundleDescription[result.size()]);
 	}
 
-	private void flush() {
+	private void flush(BundleDescription[] bundles) {
 		resolver.flush();
 		resolved = false;
 		if (resolvedBundles.isEmpty())
 			return;
-		BundleDescription[] bundles = getResolvedBundles();
 		for (int i = 0; i < bundles.length; i++) {
 			resolveBundle(bundles[i], false, null, null, null, null);
 		}
@@ -379,11 +382,11 @@ public abstract class StateImpl implements State {
 		for (Iterator iter = bundleDescriptions.iterator(); iter.hasNext();) {
 			BundleDescription bundle = (BundleDescription) iter.next();
 			HostSpecification hostSpec = bundle.getHost();
-			
+
 			if (hostSpec != null) {
 				BundleDescription[] hosts = hostSpec.getHosts();
 				if (hosts != null)
-					for(int i = 0; i < hosts.length; i++)
+					for (int i = 0; i < hosts.length; i++)
 						if (hosts[i] == host) {
 							fragments.add(bundle);
 							break;
@@ -404,6 +407,7 @@ public abstract class StateImpl implements State {
 	void setFactory(StateObjectFactory factory) {
 		this.factory = factory;
 	}
+
 	public BundleDescription getBundleByLocation(String location) {
 		for (Iterator i = bundleDescriptions.iterator(); i.hasNext();) {
 			BundleDescription current = (BundleDescription) i.next();
@@ -432,10 +436,26 @@ public abstract class StateImpl implements State {
 	}
 
 	public synchronized boolean setPlatformProperties(Dictionary platformProperties) {
-		return setProps(this.platformProperties, platformProperties);
+		if (this.platformProperties.length != 1)
+			this.platformProperties = new Dictionary[] {new Hashtable(PROPS.length)};
+		return setProps(this.platformProperties[0], platformProperties);
 	}
 
-	Dictionary getPlatformProperties() {
+	public boolean setPlatformProperties(Dictionary[] platformProperties) {
+		if (platformProperties.length == 0)
+			throw new IllegalArgumentException();
+		if (this.platformProperties.length != platformProperties.length) {
+			this.platformProperties = new Dictionary[platformProperties.length];
+			for (int i = 0; i < platformProperties.length; i++)
+				this.platformProperties[i] = new Hashtable(PROPS.length);
+		}
+		boolean result = false;
+		for (int i = 0; i < platformProperties.length; i++)
+			result |= setProps(this.platformProperties[i], platformProperties[0]);
+		return result;
+	}
+
+	Dictionary[] getPlatformProperties() {
 		return platformProperties;
 	}
 
@@ -461,7 +481,7 @@ public abstract class StateImpl implements State {
 
 	private boolean setProps(Dictionary origProps, Dictionary newProps) {
 		boolean changed = false;
-		for(int i = 0; i < PROPS.length; i++) {
+		for (int i = 0; i < PROPS.length; i++) {
 			Object origProp = origProps.get(PROPS[i]);
 			Object newProp = newProps.get(PROPS[i]);
 			if (checkProp(origProp, newProp)) {
@@ -470,6 +490,8 @@ public abstract class StateImpl implements State {
 					origProps.remove(PROPS[i]);
 				else
 					origProps.put(PROPS[i], newProp);
+				if (PROPS[i].equals(Constants.OSGI_FRAMEWORK_SYSTEM_PACKAGES))
+					setSystemExports((String) newProp);
 			}
 		}
 		return changed;
@@ -488,16 +510,18 @@ public abstract class StateImpl implements State {
 		if (result == null)
 			return null;
 		// need to add the result to the list of resolved imports
-		((BundleDescriptionImpl)importingBundle).addDynamicResolvedImport(result);
+		((BundleDescriptionImpl) importingBundle).addDynamicResolvedImport(result);
 		return result;
 	}
 
 	void setReader(StateReader reader) {
 		this.reader = reader;
 	}
+
 	StateReader getReader() {
 		return reader;
 	}
+
 	void fullyLoad() {
 		if (fullyLoaded == true)
 			return;
@@ -506,14 +530,28 @@ public abstract class StateImpl implements State {
 		fullyLoaded = true;
 	}
 
-	
 	void unloadLazyData(long expireTime) {
 		long currentTime = System.currentTimeMillis();
 		BundleDescription[] bundles = getBundles();
 		// make sure no other thread is trying to unload or load
 		synchronized (reader) {
 			for (int i = 0; i < bundles.length; i++)
-				((BundleDescriptionImpl)bundles[i]).unload(currentTime, expireTime);
+				((BundleDescriptionImpl) bundles[i]).unload(currentTime, expireTime);
 		}
+	}
+
+	void setSystemExports(String exportSpec) {
+		try {
+			ManifestElement[] elements = ManifestElement.parseHeader(Constants.EXPORT_PACKAGE, exportSpec);
+			// we can pass false for strict mode here because we never want to mark the system
+			// exports as internal.
+			systemExports = StateBuilder.createExportPackages(elements, null, null, null, 2, false);
+		} catch (BundleException e) {
+			// TODO consider throwing this... 
+		}
+	}
+
+	ExportPackageDescription[] getSystemExports() {
+		return systemExports;
 	}
 }

@@ -720,19 +720,19 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 					if (Debug.DEBUG && Debug.DEBUG_FILTER) {
 						Debug.println("SUBSTRING(" + string + "," + value2 + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					}
-
+		
 					String[] substrings = (String[]) value2;
 					int pos = 0;
-
+		
 					int size = substrings.length;
-
+		
 					for (int i = 0; i < size; i++) {
 						String substr = substrings[i];
-
+		
 						if (i + 1 < size) /* if this is not that last substr */{
 							if (substr == null) /* * */{
 								String substr2 = substrings[i + 1];
-
+		
 								if (substr2 == null) /* ** */
 									continue; /* ignore first star */
 								/* *xxx */
@@ -743,13 +743,13 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 								if (index == -1) {
 									return false;
 								}
-
+		
 								pos = index + substr2.length();
 								if (i + 2 < size) // if there are more substrings, increment over the string we just matched; otherwise need to do the last substr check
 									i++;
 							} else /* xxx */{
 								int len = substr.length();
-
+		
 								if (Debug.DEBUG && Debug.DEBUG_FILTER) {
 									Debug.println("regionMatches(" + pos + ",\"" + substr + "\")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 								}
@@ -766,11 +766,11 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 								if (Debug.DEBUG && Debug.DEBUG_FILTER) {
 									Debug.println("regionMatches(" + pos + "," + substr + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 								}
-								return string.regionMatches(pos, substr, 0, substr.length());
+								return string.endsWith(substr);
 							}
 						}
 					}
-
+		
 					return true;
 				}
 			case EQUAL :

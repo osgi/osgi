@@ -17,18 +17,9 @@ import java.util.Map;
  * bundle manifest and managed by a state and resolver.
  */
 public interface ImportPackageSpecification extends VersionConstraint {
-	public static final int RESOLUTION_STATIC   = 0x01;
-	public static final int RESOLUTION_OPTIONAL = 0x02;
-	public static final int RESOLUTION_DYNAMIC  = 0x04;
-
-	/**
-	 * Returns the resolution type for this import package.  Valid values are
-	 * {@link ImportPackageSpecification#RESOLUTION_STATIC}, 
-	 * {@link ImportPackageSpecification#RESOLUTION_OPTIONAL}, and
-	 * {@link ImportPackageSpecification#RESOLUTION_DYNAMIC}.
-	 * @return the resolution type for this import package.
-	 */
-	public int getResolution();
+	public static final String RESOLUTION_STATIC = "static"; //$NON-NLS-1$
+	public static final String RESOLUTION_OPTIONAL = "optional"; //$NON-NLS-1$
+	public static final String RESOLUTION_DYNAMIC  = "dynamic"; //$NON-NLS-1$
 
 	/**
 	 * Returns the symbolic name of the bundle this import package must be resolved to.
@@ -48,4 +39,16 @@ public interface ImportPackageSpecification extends VersionConstraint {
 	 * @return the arbitrary attributes which this import package may be resolved to.
 	 */
 	public Map getAttributes();
+
+	/**
+	 * Returns the directives that control this import package.
+	 * @return the directives that control this import package.
+	 */
+	public Map getDirectives();
+
+	/**
+	 * Returns the specified directive that control this import package.
+	 * @return the specified directive that control this import package.
+	 */
+	public Object getDirective(String key);
 }

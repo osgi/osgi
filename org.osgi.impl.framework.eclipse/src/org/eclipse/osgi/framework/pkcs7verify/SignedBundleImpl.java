@@ -108,6 +108,7 @@ public class SignedBundleImpl extends SignedBundle {
 			// this is guaranteed to not go past end-of-string and be less
 			// then entryEndOffset.
 			String entryStr = mfStr.substring(entryStartOffset + 1, entryEndOffset);
+			entryStr = stripContinuations(entryStr);
 
 			// entry points to the start of the next 'entry'
 			String entryName = getNameFromMfEntry(entryStr);
@@ -150,6 +151,23 @@ public class SignedBundleImpl extends SignedBundle {
 			// increment the offset to the ending entry...
 			entryStartOffset = entryEndOffset;
 		}
+	}
+
+	private String stripContinuations(String entry) {
+		if (entry.indexOf("\n ") < 0)
+			return entry;
+		StringBuffer buffer = new StringBuffer(entry.length());
+		int cont = entry.indexOf("\n ");
+		int start = 0;
+		while (cont >= 0) {
+			buffer.append(entry.substring(start, cont - 1));
+			start = cont + 2;
+			cont = cont + 2 < entry.length() ? entry.indexOf("\n ", cont + 2) : -1;
+		}
+		// get the last one continuation
+		if (start < entry.length())
+			buffer.append(entry.substring(start));
+		return buffer.toString();
 	}
 
 	private String getNameFromMfEntry(String entryStr) {
@@ -444,6 +462,7 @@ public class SignedBundleImpl extends SignedBundle {
 	 */
 	private boolean checkManifestDigest(byte[] manifestBytes, byte[] sfBytes) {
 		String sf = new String(sfBytes);
+		sf = stripContinuations(sf);
 		boolean foundDigest = false;
 		for (int off = sf.indexOf(digestManifestSearch); off != -1; off = sf.indexOf(digestManifestSearch, off)) {
 			int start = sf.lastIndexOf('\n', off);

@@ -12,6 +12,7 @@ package org.eclipse.osgi.internal.module;
 
 import java.util.*;
 import org.eclipse.osgi.service.resolver.*;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 
 public class ResolverBundle implements VersionSupplier {
@@ -60,7 +61,7 @@ public class ResolverBundle implements VersionSupplier {
 		// Reorder imports so that optionals are at the end so that we wire statics before optionals
 		ArrayList importList = new ArrayList(actualImports.length);
 		for (int i = actualImports.length - 1; i >= 0; i--) {
-			if ((actualImports[i].getResolution() & ImportPackageSpecification.RESOLUTION_OPTIONAL) != 0) {
+			if (ImportPackageSpecification.RESOLUTION_OPTIONAL.equals(actualImports[i].getDirective(Constants.RESOLUTION_DIRECTIVE))) {
 				importList.add(new ResolverImport(this, actualImports[i]));
 			} else {
 				importList.add(0, new ResolverImport(this, actualImports[i]));
@@ -409,7 +410,7 @@ public class ResolverBundle implements VersionSupplier {
 			StateObjectFactory factory = bundle.getContainingState().getFactory();
 			for (int i = 0; i < newExports.length; i++) {
 				if (!isExported(newExports[i].getName())) {
-					ExportPackageDescription hostExport = factory.createExportPackageDescription(newExports[i].getName(), newExports[i].getVersion(), newExports[i].getUses(), newExports[i].getInclude(), newExports[i].getExclude(), newExports[i].getAttributes(), newExports[i].getMandatory(), newExports[i].isRoot(), bundle);
+					ExportPackageDescription hostExport = factory.createExportPackageDescription(newExports[i].getName(), newExports[i].getVersion(), newExports[i].getDirectives(), newExports[i].getAttributes(), newExports[i].isRoot(), bundle);
 					hostExports.add(new ResolverExport(this, hostExport));
 				}
 			}

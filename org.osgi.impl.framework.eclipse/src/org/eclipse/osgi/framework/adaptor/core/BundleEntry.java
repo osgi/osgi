@@ -198,7 +198,7 @@ public abstract class BundleEntry {
 		 * @return size of entry
 		 */
 		public long getSize() {
-			return (file.length());
+			return SecureAction.length(file);
 		}
 
 		/**
@@ -218,7 +218,7 @@ public abstract class BundleEntry {
 		 * @return last modification time.
 		 */
 		public long getTime() {
-			return file.lastModified();
+			return SecureAction.lastModified(file);
 		}
 
 		public URL getLocalURL() {

@@ -46,10 +46,6 @@ public class ResolverExport implements VersionSupplier {
 		return exporter;
 	}
 
-	String[] getUses() {
-		return exportPackageDescription.getUses();
-	}
-
 	ExportPackageDescription getExportPackageDescription() {
 		return exportPackageDescription;
 	}

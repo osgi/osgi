@@ -20,7 +20,11 @@ import org.osgi.framework.Version;
 public class StateObjectFactoryImpl implements StateObjectFactory {
 
 	public BundleDescription createBundleDescription(Dictionary manifest, String location, long id) throws BundleException {
-		BundleDescriptionImpl result = (BundleDescriptionImpl) StateBuilder.createBundleDescription(manifest, location);
+		return createBundleDescription(null, manifest, location, id);
+	}
+
+	public BundleDescription createBundleDescription(State state, Dictionary manifest, String location, long id) throws BundleException {
+		BundleDescriptionImpl result = (BundleDescriptionImpl) StateBuilder.createBundleDescription((StateImpl)state, manifest, location);
 		result.setBundleId(id);
 		return result;
 	}
@@ -98,13 +102,13 @@ public class StateObjectFactoryImpl implements StateObjectFactory {
 		return hostSpec;
 	}
 
-	public ImportPackageSpecification createImportPackageSpecification(String packageName, VersionRange versionRange, String bundleSymbolicName, VersionRange bundleVersionRange, int resolution, Map attributes, BundleDescription importer) {
+	public ImportPackageSpecification createImportPackageSpecification(String packageName, VersionRange versionRange, String bundleSymbolicName, VersionRange bundleVersionRange, Map directives, Map attributes, BundleDescription importer) {
 		ImportPackageSpecificationImpl packageSpec = new ImportPackageSpecificationImpl();
 		packageSpec.setName(packageName);
 		packageSpec.setVersionRange(versionRange);
 		packageSpec.setBundleSymbolicName(bundleSymbolicName);
 		packageSpec.setBundleVersionRange(bundleVersionRange);
-		packageSpec.setResolution(resolution);
+		packageSpec.setDirectives(directives);
 		packageSpec.setAttributes(attributes);
 		packageSpec.setBundle(importer);
 		return packageSpec;
@@ -116,24 +120,21 @@ public class StateObjectFactoryImpl implements StateObjectFactory {
 		packageSpec.setVersionRange(original.getVersionRange());
 		packageSpec.setBundleSymbolicName(original.getBundleSymbolicName());
 		packageSpec.setBundleVersionRange(original.getBundleVersionRange());
-		packageSpec.setResolution(original.getResolution());
+		packageSpec.setDirectives(original.getDirectives());
 		packageSpec.setAttributes(original.getAttributes());
 		return packageSpec;
 	}
 
 	public ExportPackageDescription createExportPackageDescription(ExportPackageDescription original) {
-		return createExportPackageDescription(original.getName(), original.getVersion(), original.getUses(), original.getInclude(), original.getExclude(), original.getAttributes(), original.getMandatory(), original.isRoot(), null);
+		return createExportPackageDescription(original.getName(), original.getVersion(), original.getDirectives(), original.getAttributes(), original.isRoot(), null);
 	}
 
-	public ExportPackageDescription createExportPackageDescription(String packageName, Version version, String[] uses, String include, String exclude, Map attributes, String[] mandatory, boolean root, BundleDescription exporter) {
+	public ExportPackageDescription createExportPackageDescription(String packageName, Version version, Map directives, Map attributes, boolean root, BundleDescription exporter) {
 		ExportPackageDescriptionImpl exportPackage = new ExportPackageDescriptionImpl();
 		exportPackage.setName(packageName);
 		exportPackage.setVersion(version);
-		exportPackage.setUses(uses);
-		exportPackage.setInclude(include);
-		exportPackage.setExclude(exclude);
+		exportPackage.setDirectives(directives);
 		exportPackage.setAttributes(attributes);
-		exportPackage.setMandatory(mandatory);
 		exportPackage.setRoot(root);
 		exportPackage.setExporter(exporter);
 		return exportPackage;

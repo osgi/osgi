@@ -16,7 +16,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.*;
 import java.util.*;
-
 import org.eclipse.osgi.framework.adaptor.*;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.service.resolver.*;
@@ -939,7 +938,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	 *                permissions.
 	 */
 	public Dictionary getHeaders() {
-		return getHeaders(Locale.getDefault().toString());
+		return getHeaders(null);
 	}
 
 	/**
@@ -989,6 +988,8 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 			// return an empty dictinary.
 			return new Hashtable();
 		}
+		if (localeString == null)
+			localeString = Locale.getDefault().toString();
 		return manifestLocalization.getHeaders(localeString);
 	}
 
@@ -1132,6 +1133,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 						}
 					}
 				} catch (InterruptedException e) {
+					//Nothing to do
 				}
 				doubleFault = true;
 			}
@@ -1378,7 +1380,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 		// just a sanity check - this would be an inconsistency between the
 		// framework and the state
 		if (bundleDescription.isResolved()) {
-			throw new IllegalStateException(Msg.BUNDLE_UNRESOLVED_STATE_CONFLICT); 
+			throw new IllegalStateException(Msg.BUNDLE_UNRESOLVED_STATE_CONFLICT);
 		}
 		VersionConstraint[] unsatisfied = framework.adaptor.getPlatformAdmin().getStateHelper().getUnsatisfiedConstraints(bundleDescription);
 		if (unsatisfied.length == 0) {
@@ -1389,14 +1391,14 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 			if (unsatisfied[i] instanceof ImportPackageSpecification) {
 				missing.append(NLS.bind(Msg.BUNDLE_UNRESOLVED_PACKAGE, toString(unsatisfied[i])));
 			} else if (unsatisfied[i] instanceof HostSpecification) {
-				missing.append(NLS.bind(Msg.BUNDLE_UNRESOLVED_HOST, toString(unsatisfied[i]))); 
+				missing.append(NLS.bind(Msg.BUNDLE_UNRESOLVED_HOST, toString(unsatisfied[i])));
 			} else {
-				missing.append(NLS.bind(Msg.BUNDLE_UNRESOLVED_BUNDLE, toString(unsatisfied[i]))); 
+				missing.append(NLS.bind(Msg.BUNDLE_UNRESOLVED_BUNDLE, toString(unsatisfied[i])));
 			}
 			missing.append(',');
 		}
 		missing.deleteCharAt(missing.length() - 1);
-		return NLS.bind(Msg.BUNDLE_UNRESOLVED_UNSATISFIED_CONSTRAINT_EXCEPTION, missing.toString()); 
+		return NLS.bind(Msg.BUNDLE_UNRESOLVED_UNSATISFIED_CONSTRAINT_EXCEPTION, missing.toString());
 	}
 
 	private String toString(VersionConstraint constraint) {
@@ -1447,22 +1449,96 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 		return stateChanging == thread;
 	}
 
-	public Object getStateChangeLock() {
-		return statechangeLock;
-	}
-
 	public Thread getStateChanging() {
 		return stateChanging;
 	}
-	/**
-	 * @param path
-	 * @param filePattern
-	 * @param recurse
-	 * @return
-	 * @see org.osgi.framework.Bundle#findEntries(java.lang.String, java.lang.String, boolean)
-	 */
-	public Enumeration findEntries(String path, String filePattern,
-			boolean recurse) {
-		throw new UnsupportedOperationException("This is unimplemented. Waiting for implementation from Eclipse");
+
+	public Enumeration findEntries(String path, String filePattern, boolean recurse) {
+		try {
+			framework.checkAdminPermission(this, AdminPermission.RESOURCE);
+		} catch (SecurityException e) {
+			return null;
+		}
+		List pathList = new ArrayList();
+		Filter patternFilter = null;
+		Hashtable patternProps = null;
+		if (filePattern != null)
+			try {
+				patternFilter = new FilterImpl("(filename=" + filePattern + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+				patternProps = new Hashtable(2);
+			} catch (InvalidSyntaxException e) {
+				// cannot happen
+			}
+		findLocalEntryPaths(path, patternFilter, patternProps, recurse, pathList);
+		final Bundle[] fragments = getFragments();
+		final int numFragments = fragments == null ? -1 : fragments.length;
+		for (int i = 0; i < numFragments; i++)
+			((AbstractBundle) fragments[i]).findLocalEntryPaths(path, patternFilter, patternProps, recurse, pathList);
+		if (pathList.size() == 0)
+			return null;
+		final String[] pathArray = (String[]) pathList.toArray(new String[pathList.size()]);
+		return new Enumeration() {
+			int curIndex = 0;
+			int curFragment = -1;
+			URL nextElement = null;
+			boolean noMoreElements = false;
+
+			public boolean hasMoreElements() {
+				if (nextElement != null)
+					return true;
+				getNextElement();
+				return nextElement != null;
+			}
+
+			public Object nextElement() {
+				if (!hasMoreElements())
+					throw new NoSuchElementException();
+				URL result;
+				result = nextElement;
+				// force the next element search
+				getNextElement();
+				return result;
+			}
+
+			private void getNextElement() {
+				nextElement = null;
+				if (curIndex >= pathArray.length)
+					return;
+				String curPath = pathArray[curIndex];
+				if (curFragment == -1) {
+					nextElement = getEntry(curPath);
+					curFragment++;
+				}
+				while (nextElement == null && curFragment < numFragments)
+					nextElement = fragments[curFragment++].getEntry(curPath);
+
+				if (numFragments == -1 || curFragment >= numFragments) {
+					curIndex++;
+					curFragment = -1;
+				}
+				// searched all fragments for the current path, move to the next one
+				if (nextElement == null)
+					getNextElement();
+			}
+
+		};
+	}
+
+	protected void findLocalEntryPaths(String path, Filter patternFilter, Hashtable patternProps, boolean recurse, List pathList) {
+		Enumeration entryPaths = getEntryPaths(path);
+		if (entryPaths == null)
+			return;
+		while (entryPaths.hasMoreElements()) {
+			String entry = (String) entryPaths.nextElement();
+			int slashIndex = entry.lastIndexOf('/');
+			String fileName = slashIndex < 0 ? entry : entry.substring(slashIndex + 1);
+			if (patternProps != null)
+				patternProps.put("filename", fileName); //$NON-NLS-1$
+			if (!pathList.contains(entry) && (patternFilter == null || patternFilter.matchCase(patternProps)))
+				pathList.add(entry);
+			if (recurse && !entry.equals(path) && entry.length() > 0 && slashIndex == (entry.length() - 1))
+				findLocalEntryPaths(entry, patternFilter, patternProps, recurse, pathList);
+		}
+		return;
 	}
 }

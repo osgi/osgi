@@ -10,7 +10,6 @@
  *******************************************************************************/
 package org.eclipse.osgi.framework.internal.core;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 
@@ -26,30 +25,30 @@ public class MultiSourcePackage extends PackageSource {
 		return suppliers;
 	}
 
-	public Class loadClass(String name, String pkgName) {
+	public Class loadClass(String name) {
 		Class result = null;
 		for (int i = 0; i < suppliers.length; i++) {
-			result = suppliers[i].loadClass(name, pkgName);
+			result = suppliers[i].loadClass(name);
 			if (result != null)
 				return result;
 		}
 		return result;
 	}
 
-	public URL getResource(String name, String pkgName) {
+	public URL getResource(String name) {
 		URL result = null;
 		for (int i = 0; i < suppliers.length; i++) {
-			result = suppliers[i].getResource(name, pkgName);
+			result = suppliers[i].getResource(name);
 			if (result != null)
 				return result;
 		}
 		return result;
 	}
 
-	public Enumeration getResources(String name, String pkgName) throws IOException {
+	public Enumeration getResources(String name) {
 		Enumeration result = null;
 		for (int i = 0; i < suppliers.length; i++) {
-			result = suppliers[i].getResources(name, pkgName);
+			result = suppliers[i].getResources(name);
 			if (result != null)
 				return result;
 		}

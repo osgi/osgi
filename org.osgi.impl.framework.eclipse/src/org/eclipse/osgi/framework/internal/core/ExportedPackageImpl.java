@@ -28,9 +28,8 @@ public class ExportedPackageImpl implements ExportedPackage {
 		this.exportedPackage = exportedPackage;
 		this.supplier = supplier;
 		Version version = exportedPackage.getVersion();
-		if (version != null) {
+		if (version != null)
 			this.specVersion = version.toString();
-		}
 	}
 
 	public String getName() {
@@ -38,59 +37,31 @@ public class ExportedPackageImpl implements ExportedPackage {
 	}
 
 	public org.osgi.framework.Bundle getExportingBundle() {
-		if (supplier.isStale()) {
+		if (supplier.isStale())
 			return null;
-		}
 		return supplier.getBundleHost();
 	}
 
 	public Bundle[] getImportingBundles() {
-		if (supplier.isStale()) {
+		if (supplier.isStale())
 			return null;
-		}
-
-		BundleDescription[] dependentBundles = supplier.getBundleDescription().getDependents();
-		ArrayList importingBundles = new ArrayList();
-
-		for (int i = 0; i < dependentBundles.length; i++) {
-			if (dependentBundles[i].getHost() != null)
+		AbstractBundle bundle = (AbstractBundle) getExportingBundle();
+		if (bundle == null)
+			return null;
+		AbstractBundle[] bundles = bundle.framework.getAllBundles();
+		ArrayList importers = new ArrayList(10);
+		PackageSource supplierSource = supplier.createPackageSource(exportedPackage, false);
+		for (int i = 0; i < bundles.length; i++) {
+			if (!(bundles[i] instanceof BundleHost))
 				continue;
-			BundleLoaderProxy proxy = supplier.getBundleLoader().getLoaderProxy(dependentBundles[i]);
-			if (proxy == null)
-				continue; // this is probably because the bundle was uninstalled; not an error
-			/* check to make sure this package is really imported or the bundle is required */
-			addImporters(proxy, importingBundles);
+			BundleLoader loader = ((BundleHost) bundles[i]).getBundleLoader();
+			if (loader == null)
+				continue;
+			PackageSource importerSource = loader.getPackageSource(getName());
+			if (supplierSource != null && supplierSource.hasCommonSource(importerSource))
+				importers.add(bundles[i]);
 		}
-
-		AbstractBundle[] result = new AbstractBundle[importingBundles.size()];
-		importingBundles.toArray(result);
-		return result;
-	}
-
-	private void addImporters(BundleLoaderProxy proxy, ArrayList importingBundles) {
-		if (importingBundles.contains(proxy.getBundle()))
-			return;
-		if (isImportedBy(proxy.getBundleLoader())) {
-			importingBundles.add(proxy.getBundle());
-			return;
-		}
-		if (isRequiredBy(proxy.getBundleLoader())) {
-			supplier.addRequirers(proxy.getBundleDescription(), importingBundles);
-		}
-	}
-
-	private boolean isImportedBy(BundleLoader loader) {
-		return loader.importedPackages != null && loader.importedPackages.getByKey(getName()) != null;
-	}
-
-	private boolean isRequiredBy(BundleLoader loader) {
-		BundleLoaderProxy[] requiredBundles = loader.requiredBundles;
-		if (requiredBundles == null)
-			return false;
-		for (int i = 0; i < requiredBundles.length; i++)
-			if (requiredBundles[i] == supplier)
-				return true;
-		return false;
+		return (Bundle[]) importers.toArray(new Bundle[importers.size()]);
 	}
 
 	public String getSpecificationVersion() {
@@ -98,11 +69,7 @@ public class ExportedPackageImpl implements ExportedPackage {
 	}
 
 	public boolean isRemovalPending() {
-		return isRemovalPending(exportedPackage);
-	}
-
-	private boolean isRemovalPending(ExportPackageDescription exportDescription) {
-		BundleDescription exporter = exportDescription.getExporter();
+		BundleDescription exporter = exportedPackage.getExporter();
 		if (exporter != null)
 			return exporter.isRemovalPending();
 		return true;
@@ -115,9 +82,5 @@ public class ExportedPackageImpl implements ExportedPackage {
 			result.append("=\"").append(specVersion).append("\"");  //$NON-NLS-1$//$NON-NLS-2$
 		}
 		return result.toString();
-	}
-
-	BundleLoaderProxy getSuppler() {
-		return supplier;
 	}
 }
