@@ -1,0 +1,54 @@
+[method name="testInitialBundleStartLevel"]
+tb2: started
+tb2: stopped
+[/method]
+
+[method name="testStartOrder"]
+tb1: started
+tb2: started
+tb2: stopped
+tb1: stopped
+tb2: started
+tb1: started
+tb1: stopped
+tb2: stopped
+[/method]
+
+[method name="testSetStartLevel"]
+tb1: started
+tb1: stopped
+[/method]
+
+[method name="testSetBundleStartLevel"]
+tb1: started
+tb1: stopped
+tb1: started
+tb1: stopped
+[/method]
+
+[method name="testPersistentlyStarted"]
+tb1: started
+tb1: stopped
+tb1: started
+tb1: stopped
+[/method]
+
+[method name="testEvents"]
+got framework event 8
+got framework event 8
+[/method]
+
+[method name="testSystemBundle"]
+[/method]
+
+[method name="testExceptionInActivator"]
+got framework event 2: org.osgi.framework.BundleException
+got framework event 2: org.osgi.framework.BundleException
+[/method]
+
+[method name="testActivator"]
+tb3: started
+tb3: stopped
+tb4: started
+tb4: stopped
+[/method]
