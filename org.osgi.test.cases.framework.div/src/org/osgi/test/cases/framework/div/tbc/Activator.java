@@ -30,6 +30,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.framework.div.tb6.BundleClass;
 import org.osgi.test.cases.framework.div.tbc.Bundle.GetEntry;
 import org.osgi.test.cases.framework.div.tbc.Bundle.GetEntryPaths;
+import org.osgi.test.cases.framework.div.tbc.Bundle.GetHeaders;
 import org.osgi.test.cases.framework.div.tbc.Bundle.GetResource;
 import org.osgi.test.cases.framework.div.tbc.Bundle.GetResources;
 import org.osgi.test.cases.framework.div.tbc.Bundle.GetSymbolicName;
@@ -65,17 +66,17 @@ public class Activator extends Thread implements FrameworkListener,
 			"testManifestHeaders", "testMissingManifestHeaders",
 			"testBundleClassPath", "testNativeCode", "testFrameworkListener",
 			"testFileAccess", "testBundleZero", "testEERequirement",
-			"testNativeCodeFilter", 
-			"testBundleGetEntryPath", "testBundleGetEntryPaths",
-			"testBundleGetResources", "testBundleGetResource",
-			"testBundleGetSymbolicName", "testBundleHashCode",
-			"testBundleLoadClass", "testBundleConstantsValues",
-			"testBundleExceptionGetCause", "testBundleExceptionInitCause",
-			"testConstantsValues", "testFrameworkEventConstants",
-			"testVersionConstructors", "testVersionEquals",
-			"testVersionGetMajor", "testVersionGetMinor",
+			"testNativeCodeFilter", "testBundleGetEntryPath",
+			"testBundleGetEntryPaths", "testBundleGetResources",
+			"testBundleGetResource", "testBundleGetSymbolicName",
+			"testBundleHashCode", "testBundleLoadClass",
+			"testBundleConstantsValues", "testBundleExceptionGetCause",
+			"testBundleExceptionInitCause", "testConstantsValues",
+			"testFrameworkEventConstants", "testVersionConstructors",
+			"testVersionEquals", "testVersionGetMajor", "testVersionGetMinor",
 			"testVersionGetMicro", "testVersionCompareTo",
-			"testConstantsValues", "testVersionInstanceOf" };
+			"testConstantsValues", "testVersionInstanceOf",
+			"testBundleGetHeaders"			};
 
 	/**
 	 * start. Gets a reference to the TestCaseLink to communicate with the
@@ -283,7 +284,6 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-
 	/**
 	 * Tests native code selection filter. The bundle should be loaded even if
 	 * no native code clause matches the selection filter.
@@ -299,7 +299,9 @@ public class Activator extends Thread implements FrameworkListener,
 				log("Testing Native code selection filter:", "Started Ok.");
 			}
 			catch (BundleException be) {
-				log("Error: Selection filter should not match any native code clause ", ""+be);
+				log(
+						"Error: Selection filter should not match any native code clause ",
+						"" + be);
 				reportProcessorOS();
 			}
 			tb.uninstall();
@@ -773,9 +775,9 @@ public class Activator extends Thread implements FrameworkListener,
 		catch (Exception ex) {
 			ex.printStackTrace();
 			log(ex.getMessage(), "Fail");
-		}		
+		}
 	}
-	
+
 	void testVersionConstantsValues() {
 		try {
 			new org.osgi.test.cases.framework.div.tbc.Version.Constants(
@@ -784,6 +786,19 @@ public class Activator extends Thread implements FrameworkListener,
 		catch (Exception ex) {
 			ex.printStackTrace();
 			log(ex.getMessage(), "Fail");
+		}
+	}
+
+	/**
+	 * Tests localization of manifest headers.
+	 */
+	void testBundleGetHeaders() {
+		try {
+			(new GetHeaders(_context, _tcHome)).run();
+		}
+		catch (Exception e) {
+			log("Error.", e.getMessage());
+
 		}
 	}
 
