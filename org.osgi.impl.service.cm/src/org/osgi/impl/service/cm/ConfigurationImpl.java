@@ -105,6 +105,9 @@ public class ConfigurationImpl implements Configuration, Serializable {
 			}
 			deleted = true;
 		}
+		// notify ConfigurationListeners of delete
+		CMEventManager.addEvent(new ConfigurationEvent(CMActivator.cmReg.getReference(), 
+				ConfigurationEvent.CM_DELETED, fPid, pid));
 	}
 
 	private void checkIfDeleted() {
@@ -206,6 +209,10 @@ public class ConfigurationImpl implements Configuration, Serializable {
 					"Properties contain incorrect type!");
 		}
 		callBackManagedService(null, properties);
+
+		// notify ConfigurationListeners of update
+		CMEventManager.addEvent(new ConfigurationEvent(CMActivator.cmReg.getReference(), 
+				ConfigurationEvent.CM_UPDATED, fPid, pid));
 	}
 
 	/**

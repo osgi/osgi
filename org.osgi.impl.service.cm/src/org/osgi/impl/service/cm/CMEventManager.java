@@ -28,8 +28,10 @@
 package org.osgi.impl.service.cm;
 
 import java.util.Vector;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.*;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * Manager of update and delete events, forwarded by ConfigurationImpl to the
@@ -45,6 +47,7 @@ public class CMEventManager extends Thread {
 	private boolean			running;
 	private static boolean	isWaiting;
 	private BundleContext	bc;
+	private ServiceTracker listeners;
 
 	/**
 	 * Constructs the CMEventManager.
@@ -56,6 +59,8 @@ public class CMEventManager extends Thread {
 		synch = new Object();
 		running = true;
 		isWaiting = false;
+		listeners = new ServiceTracker(bc, ConfigurationListener.class.getName(), null);
+		listeners.open();
 	}
 
 	/**
@@ -65,7 +70,6 @@ public class CMEventManager extends Thread {
 	 * When queue empties monitoring object is put in wait state.
 	 */
 	public void run() {
-		CMEvent event;
 		while (running) {
 			synchronized (synch) {
 				if (eventQueue.size() == 0 && running) {
@@ -85,34 +89,51 @@ public class CMEventManager extends Thread {
 				}
 			}
 			while (eventQueue.size() > 0) {
-				event = (CMEvent) eventQueue.elementAt(0);
-				try {
-					if (event.config != null && event.config.fPid != null) {
-						ManagedServiceFactory msf = (ManagedServiceFactory) bc
-								.getService(event.sRef);
-						if (msf != null) {
-							if (event.event == CMEvent.UPDATED) {
-								msf.updated(event.config.pid, event.props);
-							}
-							else {
-								msf.deleted(event.config.pid);
-							}
+				Object object = eventQueue.elementAt(0);
+				if (object instanceof ConfigurationEvent) {
+					ConfigurationEvent event = (ConfigurationEvent) object;
+					Object[] services = listeners.getServices();
+					for (int i = 0; i < services.length; i++) {
+						ConfigurationListener listener = (ConfigurationListener) services[i];
+						try {
+							listener.configurationEvent(event);
+						}
+						catch (Throwable e) {
+							Log.log(1,
+									"[CM]Error while calling ConfigurationListener.", e);
 						}
 					}
-					else {
-						ManagedService ms = (ManagedService) bc
-								.getService(event.sRef);
-						if (ms != null) {
-							ms.updated(event.props);
-						}
-					}
-					bc.ungetService(event.sRef);
 				}
-				catch (Throwable e) {
-					if (event.config != null) {
-						Log.log(1,
-								"[CM]Error while calling back ManagedService[Factory]. Configuration's pid is "
-										+ event.config.pid, e);
+				else {
+					CMEvent event = (CMEvent) object;
+					try {
+						if (event.config != null && event.config.fPid != null) {
+							ManagedServiceFactory msf = (ManagedServiceFactory) bc
+									.getService(event.sRef);
+							if (msf != null) {
+								if (event.event == CMEvent.UPDATED) {
+									msf.updated(event.config.pid, event.props);
+								}
+								else {
+									msf.deleted(event.config.pid);
+								}
+							}
+						}
+						else {
+							ManagedService ms = (ManagedService) bc
+									.getService(event.sRef);
+							if (ms != null) {
+								ms.updated(event.props);
+							}
+						}
+						bc.ungetService(event.sRef);
+					}
+					catch (Throwable e) {
+						if (event.config != null) {
+							Log.log(1,
+									"[CM]Error while calling back ManagedService[Factory]. Configuration's pid is "
+											+ event.config.pid, e);
+						}
 					}
 				}
 				eventQueue.removeElementAt(0);
@@ -126,7 +147,7 @@ public class CMEventManager extends Thread {
 	 * 
 	 * @param upEv event, holding info for update/deletion of a configuration.
 	 */
-	protected static void addEvent(CMEvent upEv) {
+	protected static void addEvent(Object upEv) {
 		eventQueue.addElement(upEv);
 		synchronized (synch) {
 			if (isWaiting) {
@@ -139,6 +160,7 @@ public class CMEventManager extends Thread {
 	 * Stops this thread, making it getting out of method run.
 	 */
 	public void stopIt() {
+		listeners.close();
 		synchronized (synch) {
 			running = false;
 			synch.notify();

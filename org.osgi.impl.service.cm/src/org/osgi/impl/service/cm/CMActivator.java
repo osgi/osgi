@@ -54,7 +54,7 @@ public class CMActivator implements BundleActivator, ServiceFactory {
 	private BundleContext			bc;
 	private ConfigurationStorage	storage;
 	private ServiceAgent			sa;
-	private ServiceRegistration		cmReg;
+	static ServiceRegistration		cmReg;
 	private CMEventManager			eventMgr;
 
 	/**
@@ -99,6 +99,7 @@ public class CMActivator implements BundleActivator, ServiceFactory {
 		try {
 			eventMgr.stopIt();
 			cmReg.unregister();
+			cmReg = null;
 			storage.close();
 			sa.close();
 			log.close();
