@@ -30,15 +30,17 @@ public class MEGApplicationDescriptor implements ApplicationDescriptor {
 	private Hashtable		icons;
 	private BundleContext	bc;
 	private String			startClass;
+	private Bundle			bundle;
 
 	MEGApplicationDescriptor(BundleContext bc, Properties props, Map names,
-			Map icons, String startClass) throws Exception {
+			Map icons, String startClass, Bundle bundle ) throws Exception {
 		this.bc = bc;
 		this.props = new Properties();
 		this.props.putAll(props);
 		this.names = new Hashtable(names);
 		this.icons = new Hashtable(icons);
 		this.startClass = startClass;
+		this.bundle = bundle;
 		if (names.size() == 0 || icons.size() == 0
 				|| !props.containsKey("bundle_id")
 				|| !props.containsKey("version"))
