@@ -46,18 +46,19 @@ public class SchedulerImpl implements Scheduler, Runnable {
         schedulerThread.interrupt();
     }
 
-    public synchronized ScheduledApplication addScheduledApplication(
+    public synchronized ServiceReference addScheduledApplication(
             ApplicationDescriptor appDescriptor, Map arguments, Date date, boolean launchOnOverdue ) {
 
         AccessController.checkPermission( new ApplicationAdminPermission(
             appDescriptor.getApplicationPID(), ApplicationAdminPermission.SCHEDULE ) );
 
-        ScheduledApplication app = new ScheduledApplicationImpl(this, bc,
+        ScheduledApplicationImpl app = new ScheduledApplicationImpl(this, bc,
                 appDescriptor, arguments, date, launchOnOverdue);
         scheduledApps.add(app);
         saveScheduledApplications();
         schedulerThread.interrupt();
-        return app;
+        app.register();
+        return app.getReference();
     }
 
     public synchronized void removeScheduledApplication(
@@ -69,6 +70,7 @@ public class SchedulerImpl implements Scheduler, Runnable {
 
         scheduledApps.remove(scheduledApplication);
         saveScheduledApplications();
+        ((ScheduledApplicationImpl)scheduledApplication).unregister();
     }
 
     private synchronized void loadScheduledApplications() {
@@ -85,6 +87,7 @@ public class SchedulerImpl implements Scheduler, Runnable {
                 ScheduledApplicationImpl schedApp = (ScheduledApplicationImpl) it
                         .next();
                 schedApp.validate(this, bc);
+                schedApp.register();
             }
         }
         catch (Exception e) {

@@ -30,12 +30,13 @@ import org.osgi.service.log.LogService;
 public class ScheduledApplicationImpl implements ScheduledApplication,
 		Comparable, Serializable {
 	private ApplicationDescriptor	appDesc;
-	private Date					schedDate;
-	private Hashtable				args;
-	private BundleContext			bc;
-	private String					appUID;
-	private boolean					launchOnOverdue;
-	private SchedulerImpl			scheduler;
+	private Date								schedDate;
+	private Hashtable						args;
+	private BundleContext				bc;
+	private String							appUID;
+	private boolean							launchOnOverdue;
+	private SchedulerImpl				scheduler;
+	private ServiceRegistration	serviceReg;
 
 	public ScheduledApplicationImpl(Scheduler scheduler, BundleContext bc,
 			ApplicationDescriptor appDesc, Map args, Date schedDate, boolean launchOnOverdue ) {
@@ -93,6 +94,18 @@ public class ScheduledApplicationImpl implements ScheduledApplication,
 		return appDesc;
 	}
 
+	void register() {
+		serviceReg = bc.registerService( "org.osgi.service.application.ScheduledApplication", 
+				this, null );
+
+	}
+	
+	void unregister() {
+		if( serviceReg != null )
+		  serviceReg.unregister();
+		serviceReg = null;
+	}
+	
 	public void remove() {
 		try {
 			scheduler.removeScheduledApplication( this );
@@ -133,5 +146,9 @@ public class ScheduledApplicationImpl implements ScheduledApplication,
 		appUID = (String) in.readObject();
 		schedDate = (Date) in.readObject();
 		args = (Hashtable) in.readObject();
+	}
+	
+	ServiceReference getReference() {
+		return serviceReg.getReference();
 	}
 }
