@@ -15,7 +15,7 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package com.nokia.test.megapplication;
+package com.nokia.test.megletsample;
 
 import org.osgi.service.application.*;
 import org.osgi.service.event.*;
