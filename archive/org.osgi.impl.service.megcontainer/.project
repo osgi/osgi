@@ -3,6 +3,7 @@
 	<name>org.osgi.impl.service.megcontainer</name>
 	<comment></comment>
 	<projects>
+		<project>org.osgi.impl.service.application</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
