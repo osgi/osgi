@@ -12,8 +12,6 @@
  */
 package org.osgi.service.prefs;
 
-import java.util.*;
-import java.io.*;
 
 /**
  * A node in a hierarchical collection of preference data.
