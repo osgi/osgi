@@ -15,13 +15,15 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package org.osgi.meg.demo.remote;
+package org.osgi.meg.demo.remote.gui;
 
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.swing.tree.TreeNode;
+
+import org.osgi.meg.demo.remote.*;
 
 public class TreeNodeImpl implements TreeNode {
 

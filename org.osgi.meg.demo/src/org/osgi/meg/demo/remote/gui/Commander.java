@@ -15,11 +15,13 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package org.osgi.meg.demo.remote;
+package org.osgi.meg.demo.remote.gui;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+
+import org.osgi.meg.demo.remote.*;
 
 public class Commander implements RemoteReceiver {
     
