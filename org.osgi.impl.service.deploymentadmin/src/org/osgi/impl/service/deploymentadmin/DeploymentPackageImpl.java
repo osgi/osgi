@@ -20,7 +20,6 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
@@ -35,9 +34,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     private transient DeploymentAdminImpl admin;
     private transient Transaction		  transaction;
 
-    private transient JarInputStream      stream;
-    private transient Manifest			  manifest;
-    private transient boolean 			  isFixPack;
+    private transient WrappedJarInputStream stream;
+    private transient Manifest			    manifest;
+    private transient boolean 			    isFixPack;
 
     private String 			              dpManVer;
     private String 			              dpName;
@@ -237,37 +236,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         String location = admin.location(symbName, version);
         return new BundleEntry(location, symbName, version, -1);
     }
-    
-    private boolean isBundle(JarEntry entry) throws IOException {
-        String symbName = (String) entry.getAttributes().getValue(
-        		"Bundle-SymbolicName");
-        String version = (String) entry.getAttributes().getValue(
-        		"Bundle-Version");
-        return null != symbName && null != version;
-    }
-    
-    private boolean isResource(JarEntry entry) throws IOException {
-        return !isBundle(entry);
-    }
-    
-    private boolean isMissingBundle(JarEntry entry) throws Exception {
-        String str = (String) entry.getAttributes().getValue(
-        		"MissingResource-Bundle");
-        if (null != str && !fixPack())
-            throw new Exception("Only fix-pack is allowed to contian " +
-            		"MissingResource-Bundle manifest header");
-        return null != str;
-    }
-    
-    private boolean isMissingResource(JarEntry entry) throws Exception {
-        String str = (String) entry.getAttributes().getValue(
-				"MissingResource-Resource");
-        if (null != str && !fixPack())
-            throw new Exception("Only fix-pack is allowed to contian " +
-            		"MissingResource-Resource manifest header");
-        return null != str;
-    }
-    
+
     private boolean isCustomizerBundle(BundleEntry bentry) {
         if (bentry.symbName.equals(customizerBundle))
         	return true;
@@ -421,17 +390,17 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         extractFilters(manifest.getMainAttributes().getValue(
         		"DeploymentPackage-Processing"));
         try {
-            JarEntry entry = stream.getNextJarEntry();
+            WrappedJarInputStream.Entry entry = stream.nextEntry();
             while (null != entry) {
-                if (isBundle(entry)) {
-                    BundleEntry bentry = getBundleEntry(entry);
+                if (entry.isBundle()) {
+                    BundleEntry bentry = getBundleEntry(entry.getJarEntry());
                     // TODO chech whether there is a bundle with the same name and version
                     // in the framework
                     // TODO chech whethet there is a bundle with the same name in the DP
                     Bundle b = installBundle(bentry, stream);
                     if (isCustomizerBundle(bentry))
                         startBundle(b);
-                } else if (isResource(entry)){
+                } else if (entry.isResource()){
                     String resName = entry.getName();
                     ServiceReference procRef = findProcessor(resName, filters);
                     if (null != procRef) {
@@ -446,8 +415,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                 } else {
                     // TODO error
                 }
-                stream.closeEntry();
-                entry = stream.getNextJarEntry();
+                entry = stream.nextEntry();;
             }
             startBundles();
         } catch (Exception e) {
@@ -502,15 +470,15 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         
         try {
             stopAllBundles();
-            JarEntry entry = stream.getNextJarEntry();
+            WrappedJarInputStream.Entry entry = stream.nextEntry();
             Set bundlesNotToUninstall = new HashSet();
             Set resourcesNotToDrop = new HashSet();
             while (null != entry) {
-                if (isMissingBundle(entry)) {
-                    BundleEntry bentry = getBundleEntry(entry);
+                if (entry.isMissingBundle()) {
+                    BundleEntry bentry = getBundleEntry(entry.getJarEntry());
                     bundlesNotToUninstall.add(bentry);
-                } else if (isBundle(entry)) {
-                    BundleEntry bentry = getBundleEntry(entry);
+                } else if (entry.isBundle()) {
+                    BundleEntry bentry = getBundleEntry(entry.getJarEntry());
                     if (bundles.contains(bentry)) {
                         updateBundle(bentry, stream);
                     } else {
@@ -520,10 +488,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                         installBundle(bentry, stream);
                     }
                     bundlesNotToUninstall.add(bentry);
-                } else if (isMissingResource(entry)) {
+                } else if (entry.isMissingResource()) {
                     String resName = entry.getName();
                     resourcesNotToDrop.add(resName);
-                } else if (isResource(entry)) {
+                } else if (entry.isResource()) {
                     String resName = entry.getName();
                     ServiceReference procRefOld = findProcessor(resName, oldFilters);
                     ServiceReference procRefNew = findProcessor(resName, filters);
@@ -542,8 +510,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                     // TODO error
                 }
 
-                stream.closeEntry();
-                entry = stream.getNextJarEntry();
+                entry = stream.nextEntry();
             }
             
             Set bundlesToUninstall = new HashSet(bundles);

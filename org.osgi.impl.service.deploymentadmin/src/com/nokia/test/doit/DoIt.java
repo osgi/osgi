@@ -3,9 +3,14 @@ package com.nokia.test.doit;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
@@ -104,37 +109,37 @@ public class DoIt implements BundleActivator {
             System.out.println("RESULT: OK = " + ok + " ERROR = " + error);
             System.out.println("================================");
         } else if ("tdb".equalsIgnoreCase(line)) {
-            boolean ret;
             int ok = 0;
             int error = 0;
             
-            if (ret = db_test_01()) ++ok; else ++error;
-            System.out.println("** db_test_01 ****************************** " + (ret ? "ok" : "ERROR"));
+            try {db_test_01(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
+            try {db_test_02(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
             
-            System.out.println("\n================================");
+            System.out.println("\n=====================================");
             System.out.println("RESULT: OK = " + ok + " ERROR = " + error);
-            System.out.println("================================");
+            System.out.println("=====================================");
         }
         
     }
 
-    private boolean db_test_01() {
+    private void db_test_01() throws Exception {
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         Db db = (Db) context.getService(ref);
         
-        FileInputStream is = null;
+        InputStream is = null;
         try {
-            // install
-            
 	        is = new FileInputStream(HOME + "db_test_01.dp");
 			da.installDeploymentPackage(is);
 			
-			System.out.println(Arrays.asList(db.findRow(null, "player", new Integer(2))));
-			
-			return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+			String[] tables = db.tableNames(null);
+			for (int i = 0; i < tables.length; i++) {
+			    System.out.println("TABLE: " + tables[i]);
+			    db.printTableHeader(null, tables[i], System.out);
+				db.printTableContent(null, tables[i], System.out);
+				System.out.println();                
+            }
         } finally {
             if (null != is)
                 try {
@@ -144,6 +149,127 @@ public class DoIt implements BundleActivator {
                     ex.printStackTrace();
                 }
         }
+        
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
+            throw new Exception("Table 'player' is missing");
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
+            throw new Exception("Table 'game' is missing");
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("score"))
+            throw new Exception("Table 'score' is missing");
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("tmp"))
+            throw new Exception("Table 'tmp' is missing");
+        if (null == db.findRow(null, "player", new Integer(1)))
+            throw new Exception("Row with '1' primary key is missing");
+        if (null == db.findRow(null, "game", new Integer(1)))
+            throw new Exception("Row with '1' primary key is missing");
+        if (null == db.findRow(null, "score", new Integer(1)))
+            throw new Exception("Row with '1' primary key is missing");
+        if (null == db.findRow(null, "tmp", new Integer(1)))
+            throw new Exception("Row with '1' primary key is missing");
+
+        try {
+	        is = new FileInputStream(HOME + "db_test_01_update_01.dp");
+			da.installDeploymentPackage(is);
+			
+			String[] tables = db.tableNames(null);
+			for (int i = 0; i < tables.length; i++) {
+			    System.out.println("TABLE: " + tables[i]);
+			    db.printTableHeader(null, tables[i], System.out);
+				db.printTableContent(null, tables[i], System.out);
+				System.out.println();                
+            }
+        } finally {
+            if (null != is)
+                try {
+                    is.close();
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+        }
+        
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
+            throw new Exception("Table 'player' is missing");
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
+            throw new Exception("Table 'game' is missing");
+        if (-1 != Arrays.asList(db.tableNames(null)).indexOf("score"))
+            throw new Exception("Table 'score' is missing");
+        if (-1 != Arrays.asList(db.tableNames(null)).indexOf("tmp"))
+            throw new Exception("Table 'tmp' is missing");
+        if (!((Object[]) db.findRow(null, "player", new Integer(1)))[1].equals("Joe_Upd"))
+            throw new Exception("Row with '1' primary key is not updated");
+        if (!((Object[]) db.findRow(null, "game", new Integer(1)))[1].equals("chess_Upd"))
+            throw new Exception("Row with '1' primary key is not updated");
+        
+        db.reset(null);
+    }
+
+    private void db_test_02() throws Exception {
+        ServiceReference ref = context.getServiceReference(Db.class.getName());
+        Db db = (Db) context.getService(ref);
+        
+        InputStream is = null;
+        try {
+	        is = new FileInputStream(HOME + "db_test_02.dp");
+			da.installDeploymentPackage(is);
+			
+			String[] tables = db.tableNames(null);
+			for (int i = 0; i < tables.length; i++) {
+			    System.out.println("TABLE: " + tables[i]);
+			    db.printTableHeader(null, tables[i], System.out);
+				db.printTableContent(null, tables[i], System.out);
+				System.out.println();                
+            }
+        } finally {
+            if (null != is)
+                try {
+                    is.close();
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+        }
+        
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
+            throw new Exception("Table 'player' is missing");
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
+            throw new Exception("Table 'game' is missing");
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("score"))
+            throw new Exception("Table 'score' is missing");
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("tmp"))
+            throw new Exception("Table 'tmp' is missing");
+
+        try {
+	        is = new FileInputStream(HOME + "db_test_02_update_01.dp");
+			da.installDeploymentPackage(is);
+			
+			String[] tables = db.tableNames(null);
+			for (int i = 0; i < tables.length; i++) {
+			    System.out.println("TABLE: " + tables[i]);
+			    db.printTableHeader(null, tables[i], System.out);
+				db.printTableContent(null, tables[i], System.out);
+				System.out.println();                
+            }
+        } finally {
+            if (null != is)
+                try {
+                    is.close();
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+        }
+        
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
+            throw new Exception("Table 'player' is missing");
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
+            throw new Exception("Table 'game' is missing");
+        if (-1 != Arrays.asList(db.tableNames(null)).indexOf("score"))
+            throw new Exception("Table 'score' is missing");
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("tmp"))
+            throw new Exception("Table 'tmp' is missing");
+        
+        db.reset(null);
     }
 
     private boolean test_bundlefilter_01() {
@@ -478,6 +604,29 @@ public class DoIt implements BundleActivator {
         }
 
 		return true;
+    }
+    
+    public static void main(String[] args) throws IOException {
+        FileInputStream is = null;
+        try {
+	        is = new FileInputStream("/eclipse/workspaceMEG/org.osgi.impl.service.deploymentadmin/res/db_test_02_update_01.dp");
+	        JarInputStream jis = new JarInputStream(is);
+	        
+	        System.out.println(jis.getManifest().getEntries());
+	        
+	        JarEntry je = jis.getNextJarEntry();
+	        jis.closeEntry();
+	        je = jis.getNextJarEntry();
+	        System.out.println(je);
+        } finally {
+            if (null != is)
+                try {
+                    is.close();
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+        }
     }
     
 }
