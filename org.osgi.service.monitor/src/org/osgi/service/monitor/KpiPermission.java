@@ -59,6 +59,11 @@ public class KpiPermission extends Permission {
     public KpiPermission(String kpi, String actions) {
         super(kpi);
 
+        if(kpi == null)
+            throw new NullPointerException("kpi parameter cannot be null.");
+        if(actions == null)
+            throw new NullPointerException("actions parameter cannot be null.");
+        
         int sep = kpi.indexOf('/');
         int len = kpi.length();
 
@@ -137,6 +142,9 @@ public class KpiPermission extends Permission {
 	 * @return <code>true</code> if the two permissions are equal
 	 */
     public boolean equals(Object o) {
+        if(o == this)
+            return true;
+        
         if(!(o instanceof KpiPermission))
             return false;
 
