@@ -37,12 +37,13 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 // TODO permissions: check java permissions, set permissions based on policy plugin, etc.
 // TODO optimize node handling (e.g. retrieve plugin from dispatcher only once per API call), maybe with new URI class
 // TODO lock mode handling: (1) no other session can run parallelly with a writer session (2) rollback functionality
-// TODO send appropriate events
+// TODO send all kinds of events (RENAMED and COPIED too), everything should be sent when session is closed (?)
 // TODO check scope (permanent/dynamic) meta-data for each operation
 // TODO check access type meta-data for each operation
 // TODO decide what to assume for each operation when the required meta-data is missing
 // TODO throw exception when a non-transactional plugin is first written in an atomic session
 // TODO at rollback, do not call rollback() method for (non-transactional) plugins that were only read
+// TODO store for each opened plugin whether it has been accessed (i.e. whether commit/rollback calls should be propagated to it)
 public class DmtSessionImpl implements DmtSession {
 	private static final Class[] PERMISSION_CONSTRUCTOR_SIG = 
         new Class[] { String.class, String.class };
@@ -68,7 +69,7 @@ public class DmtSessionImpl implements DmtSession {
     private int        lockMode;
 	private Set        dataPlugins;
     private EventList  eventList;
-    private boolean    open;
+    private int        state;
     
     private AccessControlContext securityContext;
 
@@ -85,10 +86,6 @@ public class DmtSessionImpl implements DmtSession {
 		this.dispatcher = dispatcher;
         this.eventChannel = eventChannel;
         
-        sessionId = (new Long(System.currentTimeMillis())).hashCode();
-		dataPlugins = Collections.synchronizedSet(new HashSet());
-        open = true;
-             
         if(principal != null) { // remote session
             System.getSecurityManager().checkPermission(new DmtPrincipalPermission(principal));
             try {
@@ -102,13 +99,21 @@ public class DmtSessionImpl implements DmtSession {
         
         if(lockMode == LOCK_TYPE_ATOMIC)
         	eventList = new EventList();
+        
+        sessionId = (new Long(System.currentTimeMillis())).hashCode();
+        dataPlugins = Collections.synchronizedSet(new HashSet());
+        state = STATE_OPEN;
+        
 		// after everything is initialized, check with the plugins whether the
 		// given node really exists
 		checkNode(subtreeUri, SHOULD_EXIST);
 	}
     
     /* These methods can be called even after the session has been closed. */
-    // TODO check javadoc that this is the correct behaviour
+    
+    public int getState() {
+        return state;
+    }
     
 	public String getPrincipal() {
 		return principal;
@@ -122,16 +127,15 @@ public class DmtSessionImpl implements DmtSession {
 		return subtreeUri;
 	}
     
-    /* These methods are only meaningful in the context of an open session. */
-    
     public int getLockType() {
-        checkSession();
         return lockMode;
     }
+    
+    /* These methods are only meaningful in the context of an open session. */
 
 	public void close() throws DmtException {
         checkSession();
-        open = false;
+        state = STATE_CLOSED;
 
         Vector closeExceptions = new Vector();
 		synchronized (dataPlugins) {
@@ -159,16 +163,46 @@ public class DmtSessionImpl implements DmtSession {
             eventList.clear();
         }
 	}
-
+    
     // TODO what happens with DmtDataPlugins that do not support transactions?
+    // TODO what state should be entered after a commit?
+    public void commit() throws DmtException {
+        checkSession();
+        if (lockMode != LOCK_TYPE_ATOMIC)
+            throw new IllegalStateException(
+                    "Commit can only be requested for atomic transactions.");
+        
+        // TODO save current set of ACLs
+        Vector commitExceptions = new Vector();
+        synchronized (dataPlugins) {
+            Iterator i = dataPlugins.iterator();
+            while (i.hasNext()) {
+                try {
+                    new PluginWrapper(i.next(), securityContext).commit();
+                } catch(Exception e) {
+                    commitExceptions.add(e);
+                }
+            }
+        }
+        if (commitExceptions.size() != 0)
+            // TODO try to include some information to identify the plugins that threw an exception
+            throw new DmtException(null, DmtException.COMMAND_FAILED,
+                    "Some plugins failed to commit.", commitExceptions);
+        
+    }
+    
+    // FIXME rollback no longer closes/invalidates a plugin, do a separate close if needed
+    // TODO what happens with DmtDataPlugins that do not support transactions?
+    // TODO what state should be entered after a rollback?
+    // TODO prevent other methods from being called while this finishes?  (same for commit)
 	public void rollback() throws DmtException {
 		checkSession();
-		open = false;
+//		state = STATE_ROLLED_BACK;
 		if (lockMode != LOCK_TYPE_ATOMIC)
 			throw new IllegalStateException(
 					"Rollback can only be requested for atomic transactions.");
         
-		// TODO revert to copy of ACLs at the start of the session
+		// TODO revert to copy of ACLs at the start of the transaction
 		Vector rollbackExceptions = new Vector();
 		synchronized (dataPlugins) {
 			Iterator i = dataPlugins.iterator();
@@ -179,7 +213,7 @@ public class DmtSessionImpl implements DmtSession {
                     rollbackExceptions.add(e);
                 }
 			}
-			dataPlugins.clear();
+			//dataPlugins.clear();
 		}
 		if (rollbackExceptions.size() != 0)
 			// TODO try to include some information to identify the plugins that threw an exception
@@ -243,8 +277,16 @@ public class DmtSessionImpl implements DmtSession {
 		//String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
 		checkNodePermission(uri, DmtAcl.GET);
 		DmtAcl acl = (DmtAcl) acls.get(uri);
-		return acl == null ? null : new DmtAcl(acl);
+		return acl == null ? null : acl;
 	}
+    
+    // GET property op
+    public DmtAcl getEffectiveNodeAcl(String nodeUri) throws DmtException {
+        checkSession();
+        String uri = makeAbsoluteUri(nodeUri);
+        checkNodePermission(uri, DmtAcl.GET);
+        return getEffectiveNodeAclNoCheck(nodeUri);
+    }
 
 	// REPLACE property op
 	public void setNodeAcl(String nodeUri, DmtAcl acl) throws DmtException {
@@ -505,7 +547,7 @@ public class DmtSessionImpl implements DmtSession {
 		checkSession();
         if (!recursive)
 			throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
-					"Non-recursive cloning currently not supported.");
+					"Non-recursive copying not yet supported.");
 		String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
 		String newUri = makeAbsoluteUriAndCheck(newNodeUri, SHOULD_NOT_EXIST);
 		if (Utils.isAncestor(uri, newUri))
@@ -518,7 +560,7 @@ public class DmtSessionImpl implements DmtSession {
 		if (dispatcher.handledBySameDataPlugin(uri, newUri)) {
 			// TODO check for GET permission on the whole subtree
 			checkNodePermission(uri, DmtAcl.GET);
-			// new parent needs REPLACE permissions if the cloned node is a
+			// new parent needs REPLACE permissions if the copied node is a
 			// leaf, in order to copy the ACL
 			int reqParentPerm = DmtAcl.ADD
 					| (isLeafNodeNoCheck(uri) ? DmtAcl.REPLACE : 0);
@@ -589,9 +631,9 @@ public class DmtSessionImpl implements DmtSession {
     }
 
     private void checkSession() {
-        if(!open)
+        if(state != STATE_OPEN)
             throw new IllegalStateException(
-                    "Session is closed, cannot perform DMT operations.");
+                    "Session is not open, cannot perform DMT operations.");
     }
     
 	private void sendEvent(int type) {
@@ -617,15 +659,29 @@ public class DmtSessionImpl implements DmtSession {
     }
     
     private boolean isLeafNodeNoCheck(String uri) throws DmtException {
-		// TODO what should be done if there is no metaNode information
-		DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
-		if (metaNode != null)
-			return metaNode.isLeaf();
-		// TODO hack: try to find out the type of node by calling getNodeValue and getChildNodeNames
-		// TODO specify in the standard the exception the plugin has to throw if the node type is invalid for the op.
-		return false;
-	}
+        // TODO what should be done if there is no metaNode information
+        DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
+        if (metaNode != null)
+            return metaNode.isLeaf();
+        // TODO hack: try to find out the type of node by calling getNodeValue and getChildNodeNames
+        // TODO specify in the standard the exception the plugin has to throw if the node type is invalid for the op.
+        return false;
+    }
 
+    private static DmtAcl getEffectiveNodeAclNoCheck(String uri) {
+        DmtAcl acl;
+        synchronized (acls) {
+            acl = (DmtAcl) acls.get(uri);
+            // must finish whithout NullPointerException, because root ACL must
+            // not be empty
+            while (acl == null || isEmptyAcl(acl)) {
+                uri = Utils.parentUri(uri);
+                acl = (DmtAcl) acls.get(uri);
+            }
+        }
+        return acl;
+    }
+    
 	private DmtMetaNode getMetaNodeNoCheck(String uri) throws DmtException {
 		// TODO is there any generic (engine-level) metadata that should be
 		// given to the plugins?
@@ -671,9 +727,8 @@ public class DmtSessionImpl implements DmtSession {
 	private void assignNewNodePermissions(String uri, String parent)
 			throws DmtException {
 		// DMTND 7.7.1.3: if parent does not have Replace permissions, give Add, 
-		// Delete and Replace permissions to child
-		// TODO spec doesn't say that Get/Exec permission should be given, but
-		// this would be logical if parent has them
+        // Delete and Replace permissions to child.  (This rule cannot be 
+        // applied to Java permissions, only to ACLs.)
 		try {
 			checkNodePermission(parent, DmtAcl.REPLACE);
 		}
@@ -681,18 +736,11 @@ public class DmtSessionImpl implements DmtSession {
 			if (e.getCode() != DmtException.PERMISSION_DENIED)
 				throw e;
 			if (principal != null) {
-				DmtAcl acl = new DmtAcl();
-				/*
-				 * // TODO if this is needed, get parent permissions only once
-				 * if(hasAclPermission(parent, principal, DmtAcl.GET)) actions |=
-				 * DmtAcl.GET; if(hasAclPermission(parent, principal,
-				 * DmtAcl.EXEC)) actions |= DmtAcl.EXEC;
-				 */
-				acl.setPermission(principal, DmtAcl.ADD | DmtAcl.DELETE
-						| DmtAcl.REPLACE);
-				acls.put(uri, acl);
+                DmtAcl parentAcl = getEffectiveNodeAclNoCheck(parent);
+                DmtAcl newAcl = parentAcl.addPermission(principal, DmtAcl.ADD
+                        | DmtAcl.DELETE | DmtAcl.REPLACE);
+				acls.put(uri, newAcl);
 			}
-			// TODO how can this be applied to the Java permissions?
 		}
 	}
 
@@ -826,6 +874,10 @@ public class DmtSessionImpl implements DmtSession {
 		}
 	}
 
+    private static boolean hasAclPermission(String uri, String name, int actions) {
+        return getEffectiveNodeAclNoCheck(uri).isPermitted(name, actions);
+    }
+
 	// TODO the action names should be retrieved from the DmtAcl class somehow
 	private static String writeAclCommands(int actions) {
 		String commands = null;
@@ -844,23 +896,8 @@ public class DmtSessionImpl implements DmtSession {
 		return base;
 	}
 
-	private static boolean hasAclPermission(String uri, String name, int actions)
-			throws DmtException {
-        DmtAcl acl;
-        synchronized (acls) {
-            acl = (DmtAcl) acls.get(uri);
-            // must finish whithout NullPointerException, because root ACL must
-            // not be empty
-            while (acl == null || isEmptyAcl(acl)) {
-                uri = Utils.parentUri(uri);
-                acl = (DmtAcl) acls.get(uri);
-            }
-        }
-		return acl.isPermitted(name, actions);
-    }
-    
 	private static boolean isEmptyAcl(DmtAcl acl) {
-		return acl.getPermissions("*") == 0 && acl.getPrincipals().size() == 0;
+		return acl.getPermissions("*") == 0 && acl.getPrincipals().length == 0;
 	}
 
 	private static void checkNodeUri(String nodeUri) throws DmtException {
@@ -901,9 +938,9 @@ class EventList {
 
     static String getTopic(int type) {
         switch(type) {
-        case ADD: return "org/osgi/service/dmt/DmtEvent/ADDED";
-        case DELETE: return "org/osgi/service/dmt/DmtEvent/DELETED";
-        case REPLACE: return "org/osgi/service/dmt/DmtEvent/REPLACED";
+        case ADD: return "org/osgi/service/dmt/ADDED";
+        case DELETE: return "org/osgi/service/dmt/DELETED";
+        case REPLACE: return "org/osgi/service/dmt/REPLACED";
         }
         throw new IllegalArgumentException("Unknown event type.");
     }
