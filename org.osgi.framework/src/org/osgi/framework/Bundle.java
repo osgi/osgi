@@ -813,7 +813,7 @@ public abstract interface Bundle {
 	 * permissions.
 	 * 
 	 * @param path the path name to get the entry path names for.
-	 * @return An Enumeration of the entry paths that are contained in the
+	 * @return An Enumeration of the entry paths (<tt>String</tt> objects###)that are contained in the
 	 *         specified path or <tt>null</tt> if the resource could not be
 	 *         found or if the caller does not have the <tt>AdminPermission</tt>,
 	 *         and the Java Runtime Environment supports permissions.
