@@ -1,3 +1,4 @@
 <project name="osgi-spec" default="publish">
-<import file="../cnf/build.xml"/>
+	<property name="project.name" value="org.osgi.impl.bundle.saxon"/>
+	<import file="../cnf/build.xml"/>
 </project>

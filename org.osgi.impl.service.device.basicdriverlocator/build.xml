@@ -1,3 +1,4 @@
-<project name="org.osgi.impl.service.device" default="publish">
-<import file="../cnf/build.xml"/>
+<project name="org.osgi.impl.service.device.basicdriverlocator" default="publish">
+	<property name="project.name" value="org.osgi.impl.service.device.basicdriverlocator"/>
+	<import file="../cnf/build.xml"/>
 </project>

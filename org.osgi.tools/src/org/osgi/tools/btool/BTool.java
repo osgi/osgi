@@ -21,7 +21,7 @@ public class BTool extends Task {
 
 	DirSource			workspace;
 	DirSource			project;
-
+	boolean				auto;
 	ZipOutputStream		zip;
 	boolean				silent			= true;
 	Properties			properties		= new Properties();
@@ -77,11 +77,17 @@ public class BTool extends Task {
 				manifestSource = zipname.replaceFirst("\\.jar$", ".mf");
 
 			File f = new File(manifestSource);
+			if (!f.exists()) 
+			    f = new File("Manifest.mf");
+			    
+			if (!f.exists())
+			    f = new File("META-INF/MANIFEST.MF");
+			
 			if (!f.exists())
 				throw new IllegalArgumentException("manifest: no such file "
 						+ manifestSource);
 
-
+			manifestSource = f.getAbsolutePath();
 			ManifestResource mf = new ManifestResource(this,manifestSource,false);
 			manifest = new Manifest( mf.getInputStream() );
 			
@@ -89,6 +95,12 @@ public class BTool extends Task {
 			
 			setClasspath(); // Create search path
 			setSourceFolders(); // Read the list of folders that are included
+			
+			if ( auto ) {
+			    System.out.println("Adding full bindir to JAR " + eclipse.getBindir() );;
+		        DirSource ds = new DirSource( new File(eclipse.getBindir()));
+		        addRecursive(ds,"");
+			}
 
 			addContentPackages(planned);
 			expands(); // Expands contents of another jar
@@ -247,6 +259,9 @@ public class BTool extends Task {
 			Collection sub = p.getResources();
 			for (Iterator ir = sub.iterator(); ir.hasNext();) {
 				Resource r = (Resource) ir.next();
+				if (r.getPath().endsWith("/CVS"))
+				    continue;
+				
 				if (r.getPath().endsWith(".java")) {
 					trace("Java file: " + r.getPath());
 					if (sources) {
@@ -545,6 +560,9 @@ public class BTool extends Task {
 		if (path.equals("META-INF/MANIFEST.MF"))
 			return;
 
+		if ( path.endsWith("/CVS"))
+		    return;
+		
 		if (source.isDirectory(path)) {
 			trace("Dir " + path);
 			if (!path.equals(""))
@@ -799,4 +817,11 @@ public class BTool extends Task {
 	public void setIgnoreVersions(boolean ignoreVersions) {
 		this.ignoreVersions = ignoreVersions;
 	}
+	
+     /**
+     * @param auto The auto to set.
+     */
+    public void setAuto(boolean auto) {
+        this.auto = auto;
+    }
 }

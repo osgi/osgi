@@ -12,22 +12,32 @@
 		</classpath>
 	</taskdef>
 
-	<property file="${project}/build.properties" />
+	
+	<property file="${project}/build.properties" />	
+	
+	
 	<property file="${env.HOME}/osgi.properties" />
 	<property file="${workspace}/cnf/build.properties" />
 	<btool eclipse="${project}" />
 
-	<target name="release" depends="publish" if="bin.includes">
-		<copy todir="${workspace}/osgi-release" overwrite="true">
-			<fileset dir="${project}">
-				<include name="${bin.includes}" />
-			</fileset>
-		</copy>
-	</target>
 
-	<target name="publish" depends="compile">
+	
+	<target name="publish" depends="many,one"/>
+	
+	<target name="many" depends="compile" if="${jars.compile.order}">
+		<echo>Many ${${jars.compile.order}</echo>
 		<foreach list="${jars.compile.order}" delimiter=" ," target="buildJar" param="item.jarFile" inheritAll="true">
 		</foreach>
+	</target>
+
+	<target name="one" depends="compile" unless="${jars.compile.order}">
+		<echo>One ${project.name}.jar</echo>
+		<btool jar="${project.name}.jar"
+			auto="true"
+			eclipse="${project}" 
+			analyse="${btool.analyse}" 
+			showmanifest="false" 
+			ignoreVersions="true" />
 	</target>
 
 
@@ -48,7 +58,7 @@
 	</target>
 
 	<target name="compile" unless="eclipse.running">
-		<echo>${eclipse.running}</echo>
+		<echo>${eclipse.buildId}</echo>
 		<echo>Classpath ${project.classpath} </echo>
 		<echo>Sourcepath ${project.sourcepath} </echo>
 		<echo>Bootpath ${project.bootclasspath} </echo>
