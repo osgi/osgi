@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="var" path="JRE_LIB"/>
-	<classpathentry kind="lib" path="/osgi.released/osgi.jar"/>
+	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
 	<classpathentry kind="lib" path="/cnf/jar/servlet.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

@@ -32,6 +32,6 @@
 	<classpathentry kind="src" path="/org.osgi.test.cases.xml"/>
 	<classpathentry kind="src" path="/org.osgi.test.tool"/>
 	<classpathentry kind="src" path="/org.osgi.test.cases"/>
-	<classpathentry kind="lib" path="/osgi.released/osgi.internal.jar"/>
+	<classpathentry sourcepath="/osgi.released/osgi.internal.jar" kind="lib" path="/osgi.released/osgi.internal.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

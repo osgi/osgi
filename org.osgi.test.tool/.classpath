@@ -4,8 +4,8 @@
 	<classpathentry kind="lib" path="/cnf/jar/ifc112.jar"/>
 	<classpathentry kind="lib" path="/cnf/jar/servlet.jar"/>
 	<classpathentry kind="var" path="JRE_LIB"/>
-	<classpathentry kind="lib" path="/osgi.released/osgi.jar"/>
-	<classpathentry kind="lib" path="/osgi.released/osgi.internal.jar"/>
+	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
+	<classpathentry sourcepath="/osgi.released/osgi.internal.jar" kind="lib" path="/osgi.released/osgi.internal.jar"/>
 	<classpathentry kind="lib" path="/cnf/jar/saxon.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
