@@ -20,7 +20,7 @@
 	-->
 	<taskdef name="btool" classname="org.osgi.tools.btool.BTool" 
 		classpath="${workspace}/cnf/jar/btool.jar" />
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="../cnf/ant-contrib/ant-contrib-0.6.jar"/>
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${workspace}/cnf/ant-contrib/ant-contrib-0.6.jar"/>
 	
 	<!-- 
 	   Set the build properties. Later properties with the
@@ -91,7 +91,7 @@
 	<!-- 
 	     PUBLISH
 	     The main target. It will build the jar file(s) and publish the 
-	     files in bin.includes to osg.released project.
+	     files in bin.includes to osgi.released project.
 	     
 	     The publish will not run if none of the files is changed. This
 	     target does NOT check projects it dependends on!
