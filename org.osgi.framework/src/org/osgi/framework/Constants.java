@@ -646,12 +646,12 @@ public interface Constants {
 	public final static String	BUNDLE_LOCALIZATION						= "Bundle-Localization";
 
 	/**
-	 * Default value for the Bundle-Localization manifest header.
+	 * Default value for the <code>Bundle-Localization</code> manifest header.
 	 * 
 	 * @see #BUNDLE_LOCALIZATION
 	 * @since 1.3
 	 */
-	public final static String	BUNDLE_LOCALIZATION_DEFAULT_BASENAME	= "META-INF/bundle";
+	public final static String	BUNDLE_LOCALIZATION_DEFAULT_BASENAME	= "OSGI-INF/l10n/bundle";
 
 	/**
 	 * Manifest header (named &quot;Require-Bundle&quot;) identifying the
