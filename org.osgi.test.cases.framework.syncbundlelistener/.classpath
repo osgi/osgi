@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="/ee.minimum"/>
-	<classpathentry kind="src" path="/org.osgi.test.tool"/>
 	<classpathentry kind="src" path="/org.osgi.test.cases.logproxy"/>
+	<classpathentry kind="lib" path="/osgi.released/ee.minimum.jar"/>
+	<classpathentry kind="lib" path="/osgi.released/osgi.jar"/>
+	<classpathentry kind="lib" path="/osgi.released/osgi-target.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
