@@ -36,12 +36,10 @@ import org.osgi.service.condpermadmin.Condition;
 public class IMSICondition implements Condition {
 	protected static final String imsi = System.getProperty("org.osgi.util.gsm.imsi");
 
-	private static final IMSICondition trueCondition = new IMSICondition(true);
-	private static final IMSICondition falseCondition = new IMSICondition(false);
+	private static final IMSICondition trueCondition = new IMSICondition();
+	private static final IMSICondition falseCondition = new IMSICondition();
 
-	private final boolean satisfied;
-	
-	protected IMSICondition(boolean match) { satisfied=match; }
+	private IMSICondition() {}
 
 	/**
 	 * Creates an IMSI condition object
@@ -60,7 +58,7 @@ public class IMSICondition implements Condition {
 	 * @return true if the IMSI value match.
 	 */
 	public boolean isSatisfied() {
-		return satisfied;
+		return (this==trueCondition);
 	}
 
 	/**
