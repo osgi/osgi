@@ -18,9 +18,11 @@
 package org.osgi.meg.demo.remote.gui;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
@@ -40,15 +42,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class ServerTestGUI extends javax.swing.JFrame implements ActionListener, TreeSelectionListener {
     
-    private static final int SOCKET_TIMEOUT = 5000;
-    
+    private RMServer 		 rms; 
     private Commander        commander;
     private TreeNodeImpl     rootNode;
-    private boolean          opened = true;
+    private boolean          opened = false;
     
     private JTabbedPane      jTabbedPane;
     private JTree            jTree;
@@ -57,6 +60,7 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
     private JPanel           jPanelAlert;
     private JPanel           jPanelCommandLog;
     private JScrollPane      jScrollPaneAlert;
+    private JScrollPane 	 jScrollPaneTree; 
     private JButton          jButtonOpen;
     private JButton          jButtonClose;
     private JButton          jButtonSetACL;
@@ -89,31 +93,99 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
         String root = ".";
         if (args.length > 1)
             root = args[1];
+        
 		ServerTestGUI gui = new ServerTestGUI(port, root);
-		gui.setVisible(true);
 	}
 	
     public ServerTestGUI(int port, String root) {
         super();
 
-        RMServer rms = new RMServer(port, SOCKET_TIMEOUT);
+        rms = new RMServer(port);
         commander = new Commander(rms, this);
         rms.setReceiver(commander);
         rootNode = new TreeNodeImpl(root, null, commander);
-        try {
-            commander.command("open " + rootNode.uri() + " server");
-		} catch (CommanderException e) {
-			e.printStackTrace();
-            destroy();
-            rms.stop();
-            System.exit(-1);
-		}
+
         initGUI();
         refreshToolBar();
+        setVisible(true);
+        
+        waitForClient();
+    }
+    
+    private void waitForClient() {
+    	final Timer timer = new Timer();
+    	final JFrame fr = ServerTestGUI.this;
+    	
+    	timer.schedule(new TimerTask() {
+
+			public void run() {
+				JProgressBar bar = new JProgressBar();
+				bar.setIndeterminate(true);
+				bar.setMinimum(0);
+				bar.setMaximum(5);
+				bar.setStringPainted(true);
+				bar.setString("WAITING FOR CLIENT");
+				fr.getContentPane().add(bar, BorderLayout.SOUTH);
+				fr.validate();
+				
+				int value = 0;
+		    	while (!rms.isConnected()) {
+		    		try {Thread.sleep(1000);} catch (InterruptedException e) {}
+		    		//bar.setValue((++value) % (bar.getMaximum() + 1));
+		    	}
+		    	try {
+		    		fr.getContentPane().remove(bar);
+		    		fr.validate();
+		    		bar = null;
+					open();
+					refreshToolBar();
+					timer.cancel();
+				}
+				catch (CommanderException e) {
+					e.printStackTrace();
+		            destroy();
+		            System.exit(-1);
+				}
+			}
+			
+		}, 0);
     }
     
     private void destroy() {
-        commander.destroy();
+    	try {
+			commander.command("close");
+		}
+		catch (CommanderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        rms.setRunning(false);
+    }
+    
+    private void open() throws CommanderException {
+        commander.command("open " + rootNode.uri() + " server");
+		
+        treeModel = new DefaultTreeModel(rootNode);
+        jTree = new JTree(treeModel);
+        jTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        jTree.setShowsRootHandles(true);
+        jTree.addTreeSelectionListener(this);
+        
+        jScrollPaneTree = new JScrollPane(jTree);
+        this.jPanelTree.add(jScrollPaneTree, BorderLayout.CENTER);
+        
+        opened = true;
+    }
+    
+    private void close() {
+    	this.jPanelTree.remove(jScrollPaneTree);
+		
+        treeModel = null;
+        jTree = null;
+        jScrollPaneTree = null;
+    	opened = false;
+    	
+    	refreshToolBar();
     }
 	
 	private void initGUI() {
@@ -201,7 +273,7 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
                         jButtonSetValue.addActionListener(this);
                     }
                 }
-                {
+                /*{
                     treeModel = new DefaultTreeModel(rootNode);
                     jTree = new JTree(treeModel);
                     jTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -210,7 +282,7 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
                     
                     JScrollPane jScrollPaneTree = new JScrollPane(jTree);
                     this.jPanelTree.add(jScrollPaneTree, BorderLayout.CENTER);
-                }
+                }*/
                 {
                 	jLabelProps = new JLabel("<html><b><font color=\"#bb000f\">Properties:</b></html>");
                     this.jPanelTree.add(jLabelProps, BorderLayout.SOUTH);
@@ -403,20 +475,20 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
             jButtonClose.setEnabled(false);
             jButtonRefresh.setEnabled(false);
         }
-        if (null != jTree.getLastSelectedPathComponent()) {
+        if (!opened || null == jTree.getLastSelectedPathComponent()) {
+        	jButtonSetACL.setEnabled(false);
+            jButtonExec.setEnabled(false);
+            jButtonCreateInter.setEnabled(false);
+            jButtonCreateLeaf.setEnabled(false);
+            jButtonDelete.setEnabled(false);
+            jButtonSetValue.setEnabled(false);            
+        } else {
             jButtonSetACL.setEnabled(true);
             jButtonExec.setEnabled(true);
             jButtonCreateInter.setEnabled(true);
             jButtonCreateLeaf.setEnabled(true);
             jButtonDelete.setEnabled(true);
             jButtonSetValue.setEnabled(true);
-        } else {
-            jButtonSetACL.setEnabled(false);
-            jButtonExec.setEnabled(false);
-            jButtonCreateInter.setEnabled(false);
-            jButtonCreateLeaf.setEnabled(false);
-            jButtonDelete.setEnabled(false);
-            jButtonSetValue.setEnabled(false);
         }
     }
     
@@ -430,5 +502,12 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
             jTextAreaCommandLog.append("< EXCEPTION code: " + e.getCode() + " trace:\n" + e.getTrace());
 		}
     }
+
+	public void setConnected(boolean b) {
+		if (false == b) {
+			close();
+			waitForClient();
+		}
+	}
 
 }
