@@ -9,6 +9,5 @@
 	<classpathentry kind="lib" path="/cnf/jar/saxon.jar"/>
 	<classpathentry kind="lib" path="/cnf/jar/nanoxml.jar"/>
 	<classpathentry kind="lib" path="jar/tools.jar"/>
-	<classpathentry kind="lib" path="/cnf/jar/bshcore.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
