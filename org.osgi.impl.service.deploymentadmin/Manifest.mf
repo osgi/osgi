@@ -3,7 +3,7 @@ Bundle-Name: DeploymentAdmin
 Bundle-SymbolicName: ${p}
 Bundle-Version: 1.0
 Bundle-Vendor: Nokia
-Bundle-Activator: $(p).DeploymentPlugin
+Bundle-Activator: $(p).Activator
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
