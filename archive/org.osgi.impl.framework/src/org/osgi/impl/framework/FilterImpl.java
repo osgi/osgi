@@ -61,4 +61,13 @@ public class FilterImpl implements Filter {
 	public int hashCode() {
 		return filter.hashCode();
 	}
+	/**
+	 * @param dictionary
+	 * @return
+	 * @see org.osgi.framework.Filter#matchCase(java.util.Dictionary)
+	 */
+	public boolean matchCase(Dictionary dictionary) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("not implemented for R4");
+	}
 }
