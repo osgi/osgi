@@ -1,6 +1,5 @@
-<descriptor>
-  <application pid="Meglet-Sample-Nr-1-Version-1.0">
-    <class value = "com.nokia.test.megletsample.TestApplication"/>
+<descriptor xmlns="http://www.osgi.org/xmlns/app/v1.0.0" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
+  <application>
     <locale name = "en">
       <name value = "MEG Test Application" />
       <icon value = "/TestIcon.gif" />
@@ -11,5 +10,9 @@
     </locale>
     <version value = "0.1" />
     <vendor  value = "Nokia" />
+    <scr:component name="TestApplication component" 
+       xmlns="" factory="Meglet-Sample-Nr-1-Version-1.0" autoenable="true">
+      <implementation class="com.nokia.test.megletsample.TestApplication"/>    
+    </scr:component>
   </application>
 </descriptor>

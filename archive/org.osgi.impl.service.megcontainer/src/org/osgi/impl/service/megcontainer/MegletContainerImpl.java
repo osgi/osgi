@@ -473,21 +473,16 @@ public class MegletContainerImpl implements BundleListener,
 			while( applicationNode != null ) {
 				if( applicationNode.getNodeType() == Node.ELEMENT_NODE  && applicationNode.getNodeName().equals( "application" ) ) {
 					
-					String uniqueID = getAttributeValue( applicationNode, "pid" );
-					if( uniqueID == null )
-						throw new Exception( "Application PID is missing!" );
-					
 					Properties props = new Properties();
 					Hashtable names = new Hashtable();
 					Hashtable icons = new Hashtable();
 					String startClass = null;
+					String uniqueID = null;
 					props.setProperty("application.bundle.id", Long.toString(bundleID));
 					LinkedList eventTopic = new LinkedList();
 					LinkedList eventAction = new LinkedList();
 					LinkedList requiredServices = new LinkedList();
 					LinkedList requiredPackages = new LinkedList();
-
-					props.put( ApplicationDescriptor.APPLICATION_PID, uniqueID );
 					
 					NodeList nodeList = applicationNode.getChildNodes();
 
@@ -509,8 +504,19 @@ public class MegletContainerImpl implements BundleListener,
 							if( node.getNodeName().equals( "autostart" ) )
 								props.setProperty("application.autostart",
 										getAttributeValue( node, "value" ) );
-							if( node.getNodeName().equals( "class" ) )
-								startClass = getAttributeValue( node, "value" );
+							if( node.getLocalName().equals( "component" ) &&
+									node.getPrefix() != null && node.getPrefix().equals( "scr" )) {
+								uniqueID = getAttributeValue( node, "factory" );
+
+								NodeList childNodes = node.getChildNodes();
+								
+								for(int j=0; j < childNodes.getLength(); j++ ) {
+									Node childNode = childNodes.item( j );
+
+									if( childNode.getNodeName().equals( "implementation" ) )
+										startClass = getAttributeValue( childNode, "class" );
+								}
+							}
 							if( node.getNodeName().equals( "required_services" ) ||
 								node.getNodeName().equals( "required_physical_resource" ) ) {
 								String services = getAttributeValue( node, "value" );
@@ -586,6 +592,11 @@ public class MegletContainerImpl implements BundleListener,
 							}
 						}
 					}
+					
+					if( uniqueID == null )
+						throw new Exception( "Factory attribute of the scr:component node is missing!" );
+					props.put( ApplicationDescriptor.APPLICATION_PID, uniqueID );
+					
 					if (startClass != null) {
 						EventSubscribe subscribe = new EventSubscribe();
 						if (eventTopic.size() != 0) {
