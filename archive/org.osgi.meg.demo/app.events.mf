@@ -7,4 +7,7 @@ Application-Version: 0.1
 Property-SomeProperty: This is a property
 Property-OtherProperty: This is another property
 Property-IntProperty: 123
+${EXPORT-PACKAGE}
+${IMPORT-PACKAGE}
+${PRIVATE-PACKAGE}
 
