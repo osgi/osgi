@@ -510,32 +510,37 @@ public interface Constants {
 	public final static String	BUNDLE_SYMBOLICNAME						= "Bundle-SymbolicName";
 
 	/**
-	 * Manifest header attribute (named &quot;singleton&quot;) identifying
+	 * Manifest header directive (named &quot;singleton&quot;) identifying
 	 * whether a bundle is a singleton. The default value is <code>false</code>.
 	 * 
 	 * <p>
-	 * The attribute value is encoded in the Bundle-SymbolicName manifest header
+	 * The directive value is encoded in the Bundle-SymbolicName manifest header
 	 * like:
 	 * 
 	 * <pre>
-	 *  Bundle-SymbolicName: com.acme.module.test; singleton=true
+	 *  Bundle-SymbolicName: com.acme.module.test; singleton:=true
 	 * </pre>
 	 * 
 	 * @since 1.3
 	 */
+	public final static String	SINGLETON_DIRECTIVE						= "singleton";
+	/**
+	 * @deprecated use {@link Constants#SINGLETON_DIRECTIVE}
+	 */
+	// TODO remove when framework RI is updated to use the directive constant.
 	public final static String	SINGLETON_ATTRIBUTE						= "singleton";
 
 	/**
-	 * Manifest header attribute (named &quot;fragment-attachment&quot;)
+	 * Manifest header directive (named &quot;fragment-attachment&quot;)
 	 * identifying if and when a fragment may attach to a host bundle. The
 	 * default value is <code>&quot;always&quot;</code>.
 	 * 
 	 * <p>
-	 * The attribute value is encoded in the Bundle-SymbolicName manifest header
+	 * The directive value is encoded in the Bundle-SymbolicName manifest header
 	 * like:
 	 * 
 	 * <pre>
-	 *  Bundle-SymbolicName: com.acme.module.test; fragment-attachment=&quot;never&quot;
+	 *  Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;never&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#FRAGMENT_ATTACHMENT_ALWAYS
@@ -543,63 +548,63 @@ public interface Constants {
 	 * @see Constants#FRAGMENT_ATTACHMENT_NEVER
 	 * @since 1.3
 	 */
-	public final static String	FRAGMENT_ATTACHMENT_ATTRIBUTE			= "fragment-attachment";
+	public final static String	FRAGMENT_ATTACHMENT_DIRECTIVE			= "fragment-attachment";
 
 	/**
-	 * Manifest header attribute value (named &quot;always&quot;) identifying a
+	 * Manifest header directive value (named &quot;always&quot;) identifying a
 	 * fragment attachment type of always. A fragment attachment type of always
 	 * indicates that fragments are allowed to attach to the host bundle at any
 	 * time (while the host is resolved or during the process of resolving the
 	 * host bundle).
 	 * 
 	 * <p>
-	 * The attribute value is encoded in the Bundle-SymbolicName manifest header
+	 * The directive value is encoded in the Bundle-SymbolicName manifest header
 	 * like:
 	 * 
 	 * <pre>
 	 *  Bundle-SymbolicName: com.acme.module.test; fragment-attachment=&quot;always&quot;
 	 * </pre>
 	 * 
-	 * @see Constants#FRAGMENT_ATTACHMENT_ATTRIBUTE
+	 * @see Constants#FRAGMENT_ATTACHMENT_DIRECTIVE
 	 * @since 1.3
 	 */
 	public final static String	FRAGMENT_ATTACHMENT_ALWAYS				= "always";
 
 	/**
-	 * Manifest header attribute value (named &quot;resolve-time&quot;)
+	 * Manifest header directive value (named &quot;resolve-time&quot;)
 	 * identifying a fragment attachment type of resolve-time. A fragment
 	 * attachment type of resolve-time indicates that fragments are allowed to
 	 * attach to the host bundle only during the process of resolving the host
 	 * bundle.
 	 * 
 	 * <p>
-	 * The attribute value is encoded in the Bundle-SymbolicName manifest header
+	 * The directive value is encoded in the Bundle-SymbolicName manifest header
 	 * like:
 	 * 
 	 * <pre>
 	 *  Bundle-SymbolicName: com.acme.module.test; fragment-attachment=&quot;resolve-time&quot;
 	 * </pre>
 	 * 
-	 * @see Constants#FRAGMENT_ATTACHMENT_ATTRIBUTE
+	 * @see Constants#FRAGMENT_ATTACHMENT_DIRECTIVE
 	 * @since 1.3
 	 */
 	public final static String	FRAGMENT_ATTACHMENT_RESOLVETIME			= "resolve-time";
 
 	/**
-	 * Manifest header attribute value (named &quot;never&quot;) identifying a
+	 * Manifest header directive value (named &quot;never&quot;) identifying a
 	 * fragment attachment type of never. A fragment attachment type of never
 	 * indicates that no fragments are allowed to attach to the host bundle at
 	 * any time.
 	 * 
 	 * <p>
-	 * The attribute value is encoded in the Bundle-SymbolicName manifest header
+	 * The directive value is encoded in the Bundle-SymbolicName manifest header
 	 * like:
 	 * 
 	 * <pre>
 	 *  Bundle-SymbolicName: com.acme.module.test; fragment-attachment=&quot;never&quot;
 	 * </pre>
 	 * 
-	 * @see Constants#FRAGMENT_ATTACHMENT_ATTRIBUTE
+	 * @see Constants#FRAGMENT_ATTACHMENT_DIRECTIVE
 	 * @since 1.3
 	 */
 	public final static String	FRAGMENT_ATTACHMENT_NEVER				= "never";
@@ -696,7 +701,6 @@ public interface Constants {
 	 * 
 	 * <pre>
 	 *  Bundle-NativeCode: libgtk.so; selection-filter=&quot;(ws=gtk)&quot;; ...
-	 *  Bundle-ClassPath: base.jar, gtk.jar; selection-filter=&quot;(ws=gtk)&quot;, ...
 	 * </pre>
 	 * 
 	 * @since 1.3
