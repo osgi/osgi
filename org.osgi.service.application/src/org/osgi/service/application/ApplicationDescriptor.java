@@ -91,9 +91,6 @@ public abstract class ApplicationDescriptor {
 	public final boolean isLocked() {
 		String pid = getApplicationPID();
 
-		AccessController.checkPermission( new ApplicationAdminPermission( pid,
-				ApplicationAdminPermission.GETLOCK ) );
-
 		if( lockedApplications == null )
 			lockedApplications = loadVector( "LockedApplications" );
 		return lockedApplications.contains( pid );
@@ -103,7 +100,7 @@ public abstract class ApplicationDescriptor {
 		String pid = getApplicationPID();
 
 		AccessController.checkPermission( new ApplicationAdminPermission( pid,
-				ApplicationAdminPermission.SETLOCK ) );
+				ApplicationAdminPermission.LOCK ) );
 
 		if( lockedApplications == null )
 			lockedApplications = loadVector( "LockedApplications" );
@@ -123,7 +120,7 @@ public abstract class ApplicationDescriptor {
 		String pid = getApplicationPID();
 
 		AccessController.checkPermission( new ApplicationAdminPermission( pid,
-				ApplicationAdminPermission.SETLOCK ) );
+				ApplicationAdminPermission.LOCK ) );
 
 		if( lockedApplications == null )
 			lockedApplications = loadVector( "LockedApplications" );

@@ -42,11 +42,7 @@ public class ApplicationAdminPermission extends BasicPermission {
 	/** @modelguid {910201A6-85DF-4998-BF3E-1756958D9962} */
     public static final String MANIPULATE  = "manipulate";
 	/** @modelguid {2ACA0AF5-686F-4944-A8FA-A74F46E3CC7F} */
-    public static final String ENUMERATE   = "enumerate";
-	/** @modelguid {EC19473B-3DA4-4C9D-9F35-5C6DBC47F2BA} */
-    public static final String GETLOCK     = "getlock";
-	/** @modelguid {EC19473B-3DA4-4C9D-9F35-5C6DBC47F2BB} */
-    public static final String SETLOCK     = "setlock";
+    public static final String LOCK     = "setlock";
     
     /** Constructs a ApplicationManagerPermission.
      * @param actions - read and write
