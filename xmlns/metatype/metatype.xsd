@@ -1,500 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-/*
- * $Header$
- * 
- * Copyright (c) OSGi Alliance (2004). All Rights Reserved.
- * 
- * Implementation of certain elements of the OSGi Specification may be subject
- * to third party intellectual property rights, including without limitation,
- * patent rights (such a third party may or may not be a member of the OSGi
- * Alliance). The OSGi Alliance is not responsible and shall not be held
- * responsible in any manner for identifying or failing to identify any or all
- * such third party intellectual property rights.
- * 
- * This document and the information contained herein are provided on an "AS IS"
- * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
- * HEREIN WILL NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF
- * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE
- * OSGI ALLIANCE BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF
- * USE OF DATA, INTERRUPTION OF BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR
- * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
- * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
- * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
- * All Company, brand and product names may be trademarks that are the sole
- * property of their respective owners. All rights reserved.
- */
--->		
 <schema xmlns="http://www.w3.org/2001/XMLSchema" 
-		targetNamespace="http://www.osgi.org/xmlns/metatype/v1.0.0" 
-		xmlns:metainfo="http://www.osgi.org/xmlns/metatype/v1.0.0">
-
-	<complexType name="MetatypeType">
-		<sequence>
-			<element name="ObjectClassDefinition" type="metainfo:ObjectClassDefinitionType" minOccurs="1" maxOccurs="unbounded"></element>
-			<element name="Attribute" type="metainfo:AttributeDefinitionType" minOccurs="1" maxOccurs="unbounded"></element>
-		</sequence>
-		<attribute name="localization" type="string" use="optional"></attribute>
-	</complexType>
+	targetNamespace="http://www.osgi.org/xmlns/metatype/v1.0.0" 
+	xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
 	
-	<complexType name="AutoconfType">
-		<sequence>
-			<element name="ObjectClassDefinition" type="metainfo:OCDType" maxOccurs="unbounded" minOccurs="1"></element>
-			<element name="Attribute" type="metainfo:ADType" minOccurs="1" maxOccurs="unbounded"></element>
-		</sequence>
-	</complexType>
-
-	<!-- This is the "base" type for both 'ObjectClassDefinitionType' and 'OCDType'...  -->
-	 
-	<complexType name="OCDBaseType">
-		<sequence>
-			<element name="AttributeRef" type="metainfo:AttributeRefType" minOccurs="0" maxOccurs="unbounded"></element>
-		</sequence>
-		<attribute name="id" type="string" use="required"></attribute>
-		<attribute name="type" type="metainfo:TOCDType" use="optional" default="pid"></attribute>
-	</complexType>
-
-	<!--  This is used in RFC 62 Metatype XML documents...  -->
-	
-	<complexType name="ObjectClassDefinitionType">
-		<complexContent>
-			<extension base="metainfo:OCDBaseType">
-				<sequence>
-					<element name="Icon" type="metainfo:IconType" minOccurs="0" maxOccurs="1"></element>
-				</sequence>
-				<attribute name="name" type="string" use="required"></attribute>
-				<attribute name="description" type="string" use="required"></attribute>
-			</extension>
-		</complexContent>
-	</complexType>
-	
-	<!-- This is used in RFC 94 AUTOCONF.XML documents...  -->
-	
-	<complexType name="OCDType">
-		<complexContent>
-			<extension base="metainfo:OCDBaseType">
-				<attribute name="bundle" type="string" use="optional"></attribute>
-				<attribute name="optional" type="boolean" use="optional"></attribute>
-			</extension>
-		</complexContent>
-	</complexType>
-
-	<!--  The following is used in both RFC 62 and RFC 94 document... -->
-	
-	<complexType name="AttributeRefType">
-		<attribute name="refid" type="ID" use="required"></attribute>
-		<attribute name="required" type="boolean" use="optional" default="true"></attribute>
-	</complexType>
-
-	<!-- RFC 62 only, see 'ObjectClassDefinitionType'...   -->
-	
-	<complexType name="IconType">
-		<attribute name="resource" type="string" use="required"></attribute>
-		<attribute name="size" type="int" use="required"></attribute>
-	</complexType>
-	
-		<!-- *********************************** -->
-
-		<complexType name="ADBaseType">
-				<attribute name="id" type="string" use="required"></attribute>
-				<attribute name="name" type="string" use="required"></attribute>
-		</complexType>
-		
-		<complexType name="AttributeDefinitionType">
-			<complexContent>
-				<extension base="metainfo:ADBaseType">
-					<choice>
-						<element name="Integer" type="metainfo:IntegerTypeMeta"></element>
-						<element name="String" type="metainfo:StringTypeMeta"></element>
-						<element name="Float" type="metainfo:FloatTypeMeta"></element>
-						<element name="Double" type="metainfo:DoubleTypeMeta"></element>
-						<element name="Byte" type="metainfo:ByteTypeMeta"></element>
-						<element name="Long" type="metainfo:LongTypeMeta"></element>
-						<element name="Char" type="metainfo:CharTypeMeta"></element>
-						<element name="Boolean" type="metainfo:BoolTypeMeta"></element>
-						<element name="Short" type="metainfo:ShortTypeMeta"></element>
-					</choice>
-					<attribute name="description" type="string" use="required"></attribute>
-				</extension>
-			</complexContent>
-		</complexType>
-		
-		<complexType name="ADType">
-			<complexContent>
-				<extension base="metainfo:ADBaseType">
-					<choice>
-						<element name="Integer" type="metainfo:IntegerType"></element>
-						<element name="String" type="metainfo:StringType"></element>
-						<element name="Float" type="metainfo:FloatType"></element>
-						<element name="Double" type="metainfo:DoubleType"></element>
-						<element name="Byte" type="metainfo:ByteType"></element>
-						<element name="Long" type="metainfo:LongType"></element>
-						<element name="Char" type="metainfo:CharType"></element>
-						<element name="Boolean" type="metainfo:BoolType"></element>
-						<element name="Short" type="metainfo:ShortType"></element>
-					</choice>
-				</extension>
-			</complexContent>
-		</complexType>
-
-
-
-		<!-- **************DATATYPES********************* -->
-
-		<complexType name="TypeBaseType">
-			<attribute name="cardinality" type="int" use="required"></attribute>
-		</complexType>
-
-		<!-- ************STRING*********************** -->
-	
-	<complexType name="StringType">
-		<complexContent>
-			<extension base="metainfo:TypeBaseType">
-				<sequence>
-					<element name="Value" type="string" minOccurs="0" maxOccurs="unbounded"></element>
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	<complexType name="StringTypeMeta">
-		<complexContent>
-			<extension base="metainfo:StringType">
-				<sequence>
-					<element name="Validate" type="metainfo:StringValidateType" minOccurs="0" maxOccurs="1"></element>
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	<complexType name="StringValidateType">
-		<choice>
-			<sequence>
-				<element name="Option" type="metainfo:StringOptionType" minOccurs="1" maxOccurs="unbounded"></element>
-			</sequence>
-			<sequence>
-				<element name="Enum" type="string" minOccurs="1" maxOccurs="unbounded"></element>
-			</sequence>
-		</choice>
-	</complexType>
-	<complexType name="StringOptionType">
-		<attribute name="label" type="string" use="required"></attribute>
-		<attribute name="value" type="string" use="required"></attribute>
-	</complexType>
-	
-	<!-- *************INTEGER********************** -->	
-	
-	<complexType name="IntegerType">
-		<complexContent>
-			<extension base="metainfo:TypeBaseType">
-				<sequence>
-					<element name="Value" type="int" minOccurs="0" maxOccurs="unbounded"></element>
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	<complexType name="IntegerTypeMeta">
-		<complexContent>
-			<extension base="metainfo:IntegerType">
-				<sequence>
-					<element name="Validate" type="metainfo:IntegerValidateType" minOccurs="0" maxOccurs="1"></element>
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	<complexType name="IntegerValidateType">
-		<choice>
-			<sequence>
-				<element name="Option" type="metainfo:IntegerOptionType" minOccurs="1" maxOccurs="unbounded"></element>
-			</sequence>
-			<element name="Range" type="metainfo:IntegerRangeType" maxOccurs="1" minOccurs="0"></element>
-		</choice>
-	</complexType>
-	<complexType name="IntegerOptionType">
-		<attribute name="label" type="ID" use="required"></attribute>
-		<attribute name="value" type="int" use="required"></attribute>
-	</complexType>
-	<complexType name="IntegerRangeType">
-		<attribute name="min" type="int" use="required"></attribute>
-		<attribute name="max" type="int" use="required"></attribute>
-	</complexType>
-	
-		<!-- ***************FLOAT******************** -->
-	
-	<complexType name="FloatType">
-		<complexContent>
-			<extension base="metainfo:TypeBaseType">
-				<sequence>
-					<element name="Value" type="float" maxOccurs="unbounded" minOccurs="0"></element>
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	<complexType name="FloatTypeMeta">
-		<complexContent>
-			<extension base="metainfo:FloatType">
-				<sequence>
-					<element name="Validate" type="metainfo:FloatValidateType" minOccurs="0" maxOccurs="1"></element>
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	<complexType name="FloatValidateType">
-		<choice>
-			<sequence>
-				<element name="Option" type="metainfo:FloatOptionType" minOccurs="1" maxOccurs="unbounded"></element>
-			</sequence>
-			<element name="Range" type="metainfo:FloatRangeType" minOccurs="0" maxOccurs="1"></element>
-		</choice>
-	</complexType>
-	<complexType name="FloatOptionType">
-		<attribute name="label" type="ID" use="required"></attribute>
-		<attribute name="value" type="float" use="required"></attribute>
-	</complexType>
-	<complexType name="FloatRangeType">
-		<attribute name="min" type="float" use="required"></attribute>
-		<attribute name="max" type="float" use="required"></attribute>
-	</complexType>
-	
-		<!-- **************LONG********************* -->
-	
-	<complexType name="LongType">
-		<complexContent>
-			<extension base="metainfo:TypeBaseType">
-				<sequence>
-					<element name="Value" type="long" maxOccurs="unbounded" minOccurs="0"></element>
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	<complexType name="LongTypeMeta">
-		<complexContent>
-			<extension base="metainfo:LongType">
-				<sequence>
-					<element name="Validate" type="metainfo:LongValidateType" minOccurs="0" maxOccurs="1"></element>
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	<complexType name="LongValidateType">
-		<choice>
-			<sequence>
-				<element name="Option" type="metainfo:LongOptionType" minOccurs="1" maxOccurs="unbounded"></element>
-			</sequence>
-			<element name="Range" type="metainfo:LongRangeType" minOccurs="0" maxOccurs="1"></element>
-		</choice>
-	</complexType>
-	<complexType name="LongOptionType">
-		<attribute name="label" type="ID" use="required"></attribute>
-		<attribute name="value" type="long" use="required"></attribute>
-	</complexType>
-	<complexType name="LongRangeType">
-		<attribute name="min" type="long" use="required"></attribute>
-		<attribute name="max" type="long" use="required"></attribute>
-	</complexType>
-	
-		<!-- ************DOUBLE*********************** -->
-	
-	<complexType name="DoubleType">
-		<complexContent>
-			<extension base="metainfo:TypeBaseType">
-				<sequence>
-					<element name="Value" type="double" maxOccurs="unbounded" minOccurs="0"></element>
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	<complexType name="DoubleTypeMeta">
-		<complexContent>
-			<extension base="metainfo:DoubleType">
-				<sequence>
-					<element name="Validate" type="metainfo:DoubleValidateType" minOccurs="0" maxOccurs="1"></element>
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	<complexType name="DoubleValidateType">
-		<choice>
-			<sequence>
-				<element name="Option" type="metainfo:DoubleOptionType" minOccurs="1" maxOccurs="unbounded"></element>
-			</sequence>
-			<element name="Range" type="metainfo:DoubleRangeType" minOccurs="0" maxOccurs="1"></element>
-		</choice>
-	</complexType>
-	<complexType name="DoubleOptionType">
-		<attribute name="label" type="ID" use="required"></attribute>
-		<attribute name="value" type="double" use="required"></attribute>
-	</complexType>
-	<complexType name="DoubleRangeType">
-		<attribute name="min" type="double" use="required"></attribute>
-		<attribute name="max" type="double" use="required"></attribute>
-	</complexType>
-	
-		<!-- ****************BYTE******************* -->
-	
-	<complexType name="ByteType">
-		<complexContent>
-			<extension base="metainfo:TypeBaseType">
-				<sequence>
-					<element name="Value" type="byte" maxOccurs="unbounded" minOccurs="0"></element>
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	<complexType name="ByteTypeMeta">
-		<complexContent>
-			<extension base="metainfo:ByteType">
-				<sequence>
-					<element name="Validate" type="metainfo:ByteValidateType" minOccurs="0" maxOccurs="1"></element>
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	<complexType name="ByteValidateType">
-		<choice>
-			<sequence>
-				<element name="Option" type="metainfo:ByteOptionType" minOccurs="1" maxOccurs="unbounded"></element>
-			</sequence>
-			<element name="Range" type="metainfo:ByteRangeType" minOccurs="0" maxOccurs="1"></element>
-		</choice>
-	</complexType>
-	<complexType name="ByteOptionType">
-		<attribute name="label" type="ID" use="required"></attribute>
-		<attribute name="value" type="byte" use="required"></attribute>
-	</complexType>
-	<complexType name="ByteRangeType">
-		<attribute name="min" type="byte" use="required"></attribute>
-		<attribute name="max" type="byte" use="required"></attribute>
-	</complexType>
-	
-		<!-- ***************SHORT******************** -->
-	
-	<complexType name="ShortType">
-		<complexContent>
-			<extension base="metainfo:TypeBaseType">
-				<sequence>
-					<element name="Value" type="short" maxOccurs="unbounded" minOccurs="0"></element>
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	<complexType name="ShortTypeMeta">
-		<complexContent>
-			<extension base="metainfo:ShortType">
-				<sequence>
-					<element name="Validate" type="metainfo:ShortValidateType" minOccurs="0" maxOccurs="1"></element>
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	<complexType name="ShortValidateType">
-		<choice>
-			<sequence>
-				<element name="Option" type="metainfo:ShortOptionType" minOccurs="1" maxOccurs="unbounded"></element>
-			</sequence>
-			<element name="Range" type="metainfo:ShortRangeType" minOccurs="0" maxOccurs="1"></element>
-		</choice>
-	</complexType>
-	<complexType name="ShortOptionType">
-		<attribute name="label" type="ID" use="required"></attribute>
-		<attribute name="value" type="short" use="required"></attribute>
-	</complexType>
-	<complexType name="ShortRangeType">
-		<attribute name="min" type="short" use="required"></attribute>
-		<attribute name="max" type="short" use="required"></attribute>
-	</complexType>
-	
-		<!-- *************BOOLEAN********************** -->
-	
-	<complexType name="BoolType">
-		<complexContent>
-			<extension base="metainfo:TypeBaseType">
-				<sequence>
-					<element name="Value" type="boolean" maxOccurs="unbounded" minOccurs="0"></element>
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	<complexType name="BoolTypeMeta">
-		<complexContent>
-			<extension base="metainfo:BoolType">
-				<sequence>
-					<element name="Validate" type="metainfo:BoolValidateType" minOccurs="0" maxOccurs="1"></element>
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	<complexType name="BoolValidateType">
-		<choice>
-			<sequence>
-				<element name="Option" type="metainfo:BoolOptionType" minOccurs="1" maxOccurs="unbounded"></element>
-			</sequence>
-			<element name="Range" type="metainfo:BoolRangeType" minOccurs="0" maxOccurs="1"></element>
-		</choice>
-	</complexType>
-	<complexType name="BoolOptionType">
-		<attribute name="label" type="ID" use="required"></attribute>
-		<attribute name="value" type="boolean" use="required"></attribute>
-	</complexType>
-	<complexType name="BoolRangeType">
-		<attribute name="min" type="boolean" use="required"></attribute>
-		<attribute name="max" type="boolean" use="required"></attribute>
-	</complexType>
-
-		<!-- ***************CHAR******************** -->
-
-	<simpleType name="CType">
-		<restriction base="string">
-			<pattern value="[#x0000-#xFFFF]"></pattern>
-		</restriction>
-	</simpleType>
-	
-	<complexType name="CharType">
-			<complexContent>
-				<extension base="metainfo:TypeBaseType">
-					<sequence>
-						<element name="Value" type="metainfo:CType" maxOccurs="unbounded" minOccurs="0"></element>
-					</sequence>
-				</extension>
-			</complexContent>
-		</complexType>
-		<complexType name="CharTypeMeta">
-		<complexContent>
-			<extension base="metainfo:CharType">
-				<sequence>
-					<element name="Validate" type="metainfo:CharValidateType" minOccurs="0" maxOccurs="1"></element>
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	<complexType name="CharValidateType">
-		<choice>
-			<sequence>
-				<element name="Option" type="metainfo:CharOptionType" minOccurs="1" maxOccurs="unbounded"></element>
-			</sequence>
-			<element name="Range" type="metainfo:CharRangeType" minOccurs="0" maxOccurs="1"></element>
-		</choice>
-	</complexType>
-	<complexType name="CharOptionType">
-		<attribute name="label" type="ID" use="required"></attribute>
-		<attribute name="value" type="metainfo:CType" use="required"></attribute>
-	</complexType>
-	<complexType name="CharRangeType">
-		<attribute name="min" type="metainfo:CType" use="required"></attribute>
-		<attribute name="max" type="metainfo:CType" use="required"></attribute>
-	</complexType>
-	
-	<simpleType name="TOCDType">
-		<restriction base="string">
-			<enumeration value="pid"></enumeration>
-			<enumeration value="factorypid"></enumeration>
-		</restriction>
-	</simpleType>
-
-	<element name="MetaType" type="metainfo:MetatypeType"></element>
-
-	<element name="AutoConf" type="metainfo:AutoconfType"></element>
-
-
-
+        <complexType name="MetaData">
+                <sequence>
+                        <element name="OCD" type="metatype:OCD" minOccurs="0" maxOccurs="unbounded"/>
+                        <element name="Designate" type="metatype:Designate" minOccurs="1" maxOccurs="unbounded"/>
+                </sequence>
+        </complexType>
+        
+        <complexType name="OCD">
+                <sequence>
+                        <element name="AD" type="metatype:AD" maxOccurs="unbounded"/>
+                        <element name="Icon" type="metatype:Icon" minOccurs="0"/>
+                </sequence>
+                <attribute name="name" type="string" use="required"/>
+                <attribute name="description" type="string" use="optional"/>
+                <attribute name="id" type="string" use="required"/>
+        </complexType>
+        
+        <complexType name="AD">
+                <sequence>
+                        <element name="Option" type="metatype:Toption" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence> 
+                <attribute name="name" type="string" use="optional"/>
+                <attribute name="description" type="string" use="optional"/>
+                <attribute name="id" type="string" use="required"/>
+                <attribute name="type" type="metatype:Scalar" use="required"/>
+                <attribute name="cardinality" type="integer" use="optional" default="0"/>
+                <attribute name="min" type="string" use="optional"/>
+                <attribute name="max" type="string" use="optional"/>
+                <attribute name="default" type="string" use="optional"/>                
+        </complexType>
+         
+        <complexType name="Object">
+                <sequence>
+                        <element name="Attribute" type="metatype:Attribute" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+                <attribute name="type" type="string" use="required"/>
+        </complexType>
+        
+        <complexType name="Attribute">
+                <attribute name="name" type="string"/>
+                <attribute name="content" type="string"/>
+        </complexType>
+        
+        <complexType name="Designate">
+                <sequence>
+                        <element name="Object" type="metatype:Object" minOccurs="0"/>
+                </sequence>
+                <attribute name="pid" type="string" use="required"/>
+                <attribute name="factory" type="boolean" use="optional" default="false"/>
+                <attribute name="bundle" type="string" use="optional"/>
+		    <attribute name="optional" type="boolean" default="false" use="optional"/>
+        </complexType>
+        
+        <simpleType name="Scalar">
+                <restriction base="string">
+                        <enumeration value="String"/>
+                        <enumeration value="Long"/>
+                        <enumeration value="Double"/>
+                        <enumeration value="Float"/>
+                        <enumeration value="Integer"/>
+                        <enumeration value="Byte"/>
+                        <enumeration value="Char"/>
+                        <enumeration value="Boolean"/>
+                        <enumeration value="Short"/>
+                </restriction>
+        </simpleType>
+        
+        <complexType name="Toption">
+                <attribute name="label" type="string" use="required"/>
+                <attribute name="value" type="string" use="required"/>
+        </complexType>
+        
+        <complexType name="Icon">
+                <attribute name="resource" type="string" use="required"/>
+                <attribute name="size" type="positiveInteger" use="required"/>
+        </complexType>
+        
+        <element name="MetaData" type="metatype:MetaData"/>
 </schema>
