@@ -29,9 +29,10 @@ package org.osgi.impl.service.application;
 
 import java.io.*;
 import java.util.*;
+import java.security.*;
 
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.application.ApplicationDescriptor;
+import org.osgi.framework.*;
+import org.osgi.service.application.*;
 import org.osgi.service.application.ApplicationDescriptor.Delegate;
 
 /**
@@ -41,9 +42,10 @@ import org.osgi.service.application.ApplicationDescriptor.Delegate;
  * @version $Revision$
  */
 public class ApplicationDescriptorImpl implements Delegate {
-	ApplicationDescriptor descriptor;
-	boolean		locked;
-	static 		Properties		locks;
+	private ApplicationDescriptor descriptor;
+	private boolean								locked;
+	private static Properties			locks;
+	private BundleContext         bc;
 	
 	/**
 	 * @param d
@@ -115,9 +117,31 @@ public class ApplicationDescriptorImpl implements Delegate {
 	 * @param arguments
 	 * @see org.osgi.service.application.ApplicationDescriptor.Delegate#launch(java.util.Map)
 	 */
-	public void launch(Map arguments) {
-		// TODO Auto-generated method stub
-		// Can safely be ignored ...
+	public void launch(Map arguments) throws Exception {
+		AccessController.checkPermission( new ApplicationAdminPermission(
+				descriptor.getPID(), ApplicationAdminPermission.LAUNCH ) );
+
+			Map props = descriptor.getProperties("en");
+			String isLocked = (String)props.get("application.locked");
+			if (isLocked != null && isLocked.equalsIgnoreCase("true"))
+				throw new Exception("Application is locked, can't launch!");
+			String isLaunchable = (String)props.get("application.launchable");
+	 		if (isLaunchable == null || !isLaunchable.equalsIgnoreCase("true"))
+	 			throw new Exception("Cannot launch the application!");
+			String isSingleton = (String)props.get("application.singleton");
+			if (isSingleton == null || isSingleton.equalsIgnoreCase("true")) {
+				ServiceReference[] appHandles = bc.getServiceReferences(
+						"org.osgi.service.application.ApplicationHandle", null);
+				if (appHandles != null)
+					for (int k = 0; k != appHandles.length; k++) {
+						ApplicationHandle handle = (ApplicationHandle) bc
+								.getService(appHandles[k]);
+						ApplicationDescriptor appDesc = handle.getApplicationDescriptor();
+						bc.ungetService(appHandles[k]);
+						if ( appDesc == descriptor )
+							throw new Exception("Singleton Exception!");
+					}
+			}
 	}
 
 }
