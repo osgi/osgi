@@ -38,14 +38,14 @@ import java.util.Enumeration;
  * 
  * <p>
  * A <code>Bundle</code> object is the access point to define the lifecycle
- * of an installed bundle. Each bundle installed in the OSGi environment will
+ * of an installed bundle. Each bundle installed in the OSGi environment must
  * have an associated <code>Bundle</code> object.
  * 
  * <p>
- * A bundle will have a unique identity, a <code>long</code>, chosen by the
- * Framework. This identity will not change during the lifecycle of a bundle,
+ * A bundle must have a unique identity, a <code>long</code>, chosen by the
+ * Framework. This identity must not change during the lifecycle of a bundle,
  * even when the bundle is updated. Uninstalling and then reinstalling the
- * bundle will create a new unique identity.
+ * bundle must create a new unique identity.
  * 
  * <p>
  * A bundle can be in one of six states:
@@ -138,9 +138,9 @@ public abstract interface Bundle {
 	 * 
 	 * <p>
 	 * A bundle is in the <code>STARTING</code> state when the {@link #start}
-	 * method is active. A bundle will be in this state when the bundle's
+	 * method is active. A bundle must be in this state when the bundle's
 	 * {@link BundleActivator#start} is called. If this method completes without
-	 * exception, then the bundle has successfully started and will move to the
+	 * exception, then the bundle has successfully started and must move to the
 	 * <code>ACTIVE</code> state.
 	 * <p>
 	 * The value of <code>STARTING</code> is 0x00000008.
@@ -152,9 +152,9 @@ public abstract interface Bundle {
 	 * 
 	 * <p>
 	 * A bundle is in the <code>STOPPING</code> state when the {@link #stop}
-	 * method is active. A bundle will be in this state when the bundle's
+	 * method is active. A bundle must be in this state when the bundle's
 	 * {@link BundleActivator#stop} method is called. When this method completes
-	 * the bundle is stopped and will move to the <code>RESOLVED</code> state.
+	 * the bundle is stopped and must move to the <code>RESOLVED</code> state.
 	 * <p>
 	 * The value of <code>STOPPING</code> is 0x00000010.
 	 */
@@ -198,7 +198,7 @@ public abstract interface Bundle {
 	 * <code>IllegalStateException</code> is thrown.
 	 * 
 	 * <li>If this bundle's state is <code>STARTING</code> or
-	 * <code>STOPPING</code> then this method will wait for this bundle to
+	 * <code>STOPPING</code> then this method must wait for this bundle to
 	 * change state before continuing. If this does not occur in a reasonable
 	 * time, a <code>BundleException</code> is thrown to indicate this bundle
 	 * was unable to be started.
@@ -207,7 +207,7 @@ public abstract interface Bundle {
 	 * returns immediately.
 	 * 
 	 * <li>Persistently record that this bundle has been started. When the
-	 * Framework is restarted, this bundle will be automatically started.
+	 * Framework is restarted, this bundle must be automatically started.
 	 * 
 	 * <li>If this bundle's state is not <code>RESOLVED</code>, an attempt
 	 * is made to resolve this bundle's package dependencies. If the Framework
@@ -219,9 +219,9 @@ public abstract interface Bundle {
 	 * <code>BundleActivator</code>, if one is specified, is called. If the
 	 * <code>BundleActivator</code> is invalid or throws an exception, this
 	 * bundle's state is set back to <code>RESOLVED</code>.<br>
-	 * Any services registered by the bundle will be unregistered. <br>
-	 * Any services used by the bundle will be released. <br>
-	 * Any listeners registered by the bundle will be removed. <br>
+	 * Any services registered by the bundle must be unregistered. <br>
+	 * Any services used by the bundle must be released. <br>
+	 * Any listeners registered by the bundle must be removed. <br>
 	 * A <code>BundleException</code> is then thrown.
 	 * 
 	 * <li>If this bundle's state is <code>UNINSTALLED</code>, because the
@@ -275,13 +275,13 @@ public abstract interface Bundle {
 	 * <code>IllegalStateException</code> is thrown.
 	 * 
 	 * <li>If this bundle's state is <code>STARTING</code> or
-	 * <code>STOPPING</code> then this method will wait for this bundle to
+	 * <code>STOPPING</code> then this method must wait for this bundle to
 	 * change state before continuing. If this does not occur in a reasonable
 	 * time, a <code>BundleException</code> is thrown to indicate this bundle
 	 * was unable to be stopped.
 	 * 
 	 * <li>Persistently record that this bundle has been stopped. When the
-	 * Framework is restarted, this bundle will not be automatically started.
+	 * Framework is restarted, this bundle must not be automatically started.
 	 * 
 	 * <li>If this bundle's state is not <code>ACTIVE</code> then this method
 	 * returns immediately.
@@ -289,9 +289,9 @@ public abstract interface Bundle {
 	 * <li>This bundle's state is set to <code>STOPPING</code>.
 	 * 
 	 * <li>The {@link BundleActivator#stop} method of this bundle's
-	 * <code>BundleActivator</code>, if one is specified, is called. If this
-	 * method throws an exception, it will continue to stop this bundle. A
-	 * <code>BundleException</code> will be thrown after completion of the
+	 * <code>BundleActivator</code>, if one is specified, is called. If that
+	 * method throws an exception, this method must continue to stop this bundle. A
+	 * <code>BundleException</code> must be thrown after completion of the
 	 * remaining steps.
 	 * 
 	 * <li>Any services registered by this bundle must be unregistered.
@@ -338,12 +338,12 @@ public abstract interface Bundle {
 	 * Updates this bundle.
 	 * 
 	 * <p>
-	 * If this bundle's state is <code>ACTIVE</code>, it will be stopped
+	 * If this bundle's state is <code>ACTIVE</code>, it must be stopped
 	 * before the update and started after the update successfully completes.
 	 * 
 	 * <p>
 	 * If the bundle being updated has exported any packages, these packages
-	 * will not be updated. Instead, the previous package version will remain
+	 * must not be updated. Instead, the previous package version must remain
 	 * exported until the <code>PackageAdmin.refreshPackages</code> method has
 	 * been has been called or the Framework is relaunched.
 	 * 
@@ -370,14 +370,14 @@ public abstract interface Bundle {
 	 * 
 	 * <li>The new version of this bundle is installed. If the Framework is
 	 * unable to install the new version of this bundle, the original version of
-	 * this bundle will be restored and a <code>BundleException</code> will be
+	 * this bundle must be restored and a <code>BundleException</code> must be
 	 * thrown after completion of the remaining steps.
 	 * 
 	 * <li>If the bundle has declared an Bundle-RequiredExecutionEnvironment
 	 * header, then the listed execution environments must be verified against
 	 * the installed execution environments. If they do not all match, the
-	 * original version of this bundle will be restored and a
-	 * <code>BundleException</code> will be thrown after completion of the
+	 * original version of this bundle must be restored and a
+	 * <code>BundleException</code> must be thrown after completion of the
 	 * remaining steps.
 	 * 
 	 * <li>This bundle's state is set to <code>INSTALLED</code>.
@@ -425,10 +425,10 @@ public abstract interface Bundle {
 	 * 
 	 * <p>
 	 * This method performs all the steps listed in <code>Bundle.update()</code>,
-	 * except the bundle will be read from the supplied <code>InputStream</code>,
+	 * except the bundle must be read from the supplied <code>InputStream</code>,
 	 * rather than a <code>URL</code>.
 	 * <p>
-	 * This method will always close the <code>InputStream</code> when it is
+	 * This method must always close the <code>InputStream</code> when it is
 	 * done, even if an exception is thrown.
 	 * 
 	 * @param in The <code>InputStream</code> from which to read the new
@@ -450,11 +450,11 @@ public abstract interface Bundle {
 	 * <p>
 	 * This method causes the Framework to notify other bundles that this bundle
 	 * is being uninstalled, and then puts this bundle into the
-	 * <code>UNINSTALLED</code> state. The Framework will remove any resources
+	 * <code>UNINSTALLED</code> state. The Framework must remove any resources
 	 * related to this bundle that it is able to remove.
 	 * 
 	 * <p>
-	 * If this bundle has exported any packages, the Framework will continue to
+	 * If this bundle has exported any packages, the Framework must continue to
 	 * make these packages available to their importing bundles until the
 	 * <code>PackageAdmin.refreshPackages</code> method has been called or the
 	 * Framework is relaunched.
@@ -513,10 +513,10 @@ public abstract interface Bundle {
 	 * 
 	 * <p>
 	 * Manifest header names are case-insensitive. The methods of the returned
-	 * <code>Dictionary</code> object will operate on header names in a
+	 * <code>Dictionary</code> object must operate on header names in a
 	 * case-insensitive manner.
 	 * 
-	 * If a Manifest header value starts with &quot;%&quot;, it will be
+	 * If a Manifest header value starts with &quot;%&quot;, it must be
 	 * localized according to the default locale.
 	 * 
 	 * <p>
@@ -533,7 +533,7 @@ public abstract interface Bundle {
 	 * </pre>
 	 * 
 	 * <p>
-	 * This method will continue to return Manifest header information while
+	 * This method must continue to return Manifest header information while
 	 * this bundle is in the <code>UNINSTALLED</code> state.
 	 * 
 	 * @return A <code>Dictionary</code> object containing this bundle's
@@ -563,7 +563,7 @@ public abstract interface Bundle {
 	 * </ul>
 	 * 
 	 * <p>
-	 * This method will continue to return this bundle's unique identifier while
+	 * This method must continue to return this bundle's unique identifier while
 	 * this bundle is in the <code>UNINSTALLED</code> state.
 	 * 
 	 * @return The unique identifier of this bundle.
@@ -580,7 +580,7 @@ public abstract interface Bundle {
 	 * bundle remains installed, even if the bundle is updated.
 	 * 
 	 * <p>
-	 * This method will continue to return this bundle's location identifier
+	 * This method must continue to return this bundle's location identifier
 	 * while this bundle is in the <code>UNINSTALLED</code> state.
 	 * 
 	 * @return The string representation of this bundle's location identifier.
@@ -656,8 +656,8 @@ public abstract interface Bundle {
 	 * 
 	 * <p>
 	 * If the Java Runtime Environment does support permissions, this bundle and
-	 * all its resources including nested JAR files, belong to the same
-	 * <code>java.security.ProtectionDomain</code>; that is, they will share
+	 * all its resources including embedded JAR files, belong to the same
+	 * <code>java.security.ProtectionDomain</code>; that is, they must share
 	 * the same set of permissions.
 	 * 
 	 * @param permission The permission to verify.
@@ -678,7 +678,7 @@ public abstract interface Bundle {
 	 * 
 	 * This bundle's class loader is called to search for the named resource. If
 	 * this bundle's state is <code>INSTALLED</code>, then only this bundle
-	 * will be searched for the specified resource. Imported packages cannot be
+	 * must be searched for the specified resource. Imported packages cannot be
 	 * searched when a bundle has not been resolved. If this bundle is a
 	 * fragment bundle then <code>null</code> is returned.
 	 * 
@@ -706,21 +706,21 @@ public abstract interface Bundle {
 	 * <code>Bundle.getHeaders()</code> except the manifest header values are
 	 * localized to the specified locale.
 	 * 
-	 * If a Manifest header value starts with &quot;%&quot;, it will be
+	 * If a Manifest header value starts with &quot;%&quot;, it must be
 	 * localized according to the specified locale. If the specified locale
-	 * cannot be found, then the header values will be returned using the
+	 * cannot be found, then the header values must be returned using the
 	 * default locale.
 	 * 
 	 * If <code>null</code> is specified as the locale string, the header
-	 * values will be localized using the default locale. If the empty string
-	 * (&quot;&quot;) is specified as the locale string, the header values will
+	 * values must be localized using the default locale. If the empty string
+	 * (&quot;&quot;) is specified as the locale string, the header values must
 	 * not be localized and the raw (unlocalized) header values, including any
-	 * leading &quot;%&quot;, will be returned.
+	 * leading &quot;%&quot;, must be returned.
 	 * 
 	 * <p>
-	 * This method will continue to return Manifest header information while
+	 * This method must continue to return Manifest header information while
 	 * this bundle is in the <code>UNINSTALLED</code> state, however the
-	 * header values will only be available in the raw and default locale
+	 * header values must only be available in the raw and default locale
 	 * values.
 	 * 
 	 * @return A <code>Dictionary</code> object containing this bundle's
@@ -744,7 +744,7 @@ public abstract interface Bundle {
 	 * symbolic name then <code>null</code> is returned.
 	 * 
 	 * <p>
-	 * This method will continue to return this bundle's symbolic name while
+	 * This method must continue to return this bundle's symbolic name while
 	 * this bundle is in the <code>UNINSTALLED</code> state.
 	 * 
 	 * @return The symbolic name of this bundle.
@@ -761,7 +761,7 @@ public abstract interface Bundle {
 	 * <code>ClassNotFoundException</code>.
 	 * 
 	 * <p>
-	 * If this bundle's state is <code>INSTALLED</code>, this method will
+	 * If this bundle's state is <code>INSTALLED</code>, this method must
 	 * attempt to resolve the bundle before attempting to load the class.
 	 * 
 	 * <p>
@@ -792,7 +792,7 @@ public abstract interface Bundle {
 	 * 
 	 * This bundle's class loader is called to search for the named resource. If
 	 * this bundle's state is <code>INSTALLED</code>, then only this bundle
-	 * will be searched for the specified resource. Imported packages cannot be
+	 * must be searched for the specified resource. Imported packages cannot be
 	 * searched when a bundle has not been resolved. If this bundle is a
 	 * fragment bundle then <code>null</code> is returned.
 	 * 
@@ -890,7 +890,7 @@ public abstract interface Bundle {
 	 * entries.
 	 *
 	 * <p>
-	 * If this bundle's state is <code>INSTALLED</code>, this method will
+	 * If this bundle's state is <code>INSTALLED</code>, this method must
 	 * attempt to resolve the bundle before attempting to find entries.
 	 * 
 	 * <p>
