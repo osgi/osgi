@@ -130,23 +130,6 @@ public interface DmtSession extends Dmt {
     void execute(String nodeUri, String data) throws DmtException;
 
     /**
-     * Tells whether a node is a leaf or an interior node of the DMT.
-     * @param nodeUri the URI of the node
-     * @return true if the given node is a leaf node
-     * @throws DmtException with the following possible error codes
-     * <li> <code>NODE_NOT_FOUND</code>
-     * <li> <code>URI_TOO_LONG</code>
-     * <li> <code>INVALID_URI</code>
-     * <li> <code>PERMISSION_DENIED</code>
-     * <li> <code>OTHER_ERROR</code> if the URI is not within the current
-     * session's subtree
-     * <li> <code>COMMAND_NOT_ALLOWED</code>
-     * @throws IllegalStateException if the session is invalidated because of 
-     * timeout, or if the session is already closed.
-     */
-    boolean isLeafNode(String nodeUri) throws DmtException;
-
-    /**
      * Gives the Access Control List associated with a given node. The returned
      * DmtAcl does not take inheritance into account, it gives the ACL 
      * specifically given to the node.

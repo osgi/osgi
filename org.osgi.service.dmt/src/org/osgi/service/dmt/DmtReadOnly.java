@@ -78,6 +78,23 @@ public interface DmtReadOnly {
     boolean isNodeUri(String nodeUri);
 
     /**
+     * Tells whether a node is a leaf or an interior node of the DMT.
+     * @param nodeUri the URI of the node
+     * @return true if the given node is a leaf node
+     * @throws DmtException with the following possible error codes
+     * <li> <code>NODE_NOT_FOUND</code>
+     * <li> <code>URI_TOO_LONG</code>
+     * <li> <code>INVALID_URI</code>
+     * <li> <code>PERMISSION_DENIED</code>
+     * <li> <code>OTHER_ERROR</code> if the URI is not within the current
+     * session's subtree
+     * <li> <code>COMMAND_NOT_ALLOWED</code>
+     * @throws IllegalStateException if the session is invalidated because of 
+     * timeout, or if the session is already closed.
+     */
+    boolean isLeafNode(String nodeUri) throws DmtException;
+
+    /**
      * Get the data contained in a leaf node.
      * @param nodeUri The URI of the node to retrieve
      * @return The data of the leaf node
