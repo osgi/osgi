@@ -1,0 +1,45 @@
+/* (C) Copyright 2001 Sun Microsystems, Inc. 
+ * (C) Copyright 2001 Open Services Gateway Initiative, Inc. (the OSGi alliance)
+ */
+
+/* $Header$ */
+
+package java.text;
+public abstract class NumberFormat extends java.text.Format {
+    public NumberFormat() { }
+    public java.lang.Object clone() { return null; }
+    public boolean equals(java.lang.Object var0) { return false; }
+    public final java.lang.String format(double var0) { return null; }
+    public abstract java.lang.StringBuffer format(double var0, java.lang.StringBuffer var1, java.text.FieldPosition var2);
+    public final java.lang.String format(long var0) { return null; }
+    public abstract java.lang.StringBuffer format(long var0, java.lang.StringBuffer var1, java.text.FieldPosition var2);
+    public final java.lang.StringBuffer format(java.lang.Object var0, java.lang.StringBuffer var1, java.text.FieldPosition var2) { return null; }
+    public static java.util.Locale[] getAvailableLocales() { return null; }
+    public final static java.text.NumberFormat getCurrencyInstance() { return null; }
+    public static java.text.NumberFormat getCurrencyInstance(java.util.Locale var0) { return null; }
+    public final static java.text.NumberFormat getInstance() { return null; }
+    public static java.text.NumberFormat getInstance(java.util.Locale var0) { return null; }
+    public int getMaximumFractionDigits() { return 0; }
+    public int getMaximumIntegerDigits() { return 0; }
+    public int getMinimumFractionDigits() { return 0; }
+    public int getMinimumIntegerDigits() { return 0; }
+    public final static java.text.NumberFormat getNumberInstance() { return null; }
+    public static java.text.NumberFormat getNumberInstance(java.util.Locale var0) { return null; }
+    public final static java.text.NumberFormat getPercentInstance() { return null; }
+    public static java.text.NumberFormat getPercentInstance(java.util.Locale var0) { return null; }
+    public int hashCode() { return 0; }
+    public boolean isGroupingUsed() { return false; }
+    public boolean isParseIntegerOnly() { return false; }
+    public java.lang.Number parse(java.lang.String var0) throws java.text.ParseException { return null; }
+    public abstract java.lang.Number parse(java.lang.String var0, java.text.ParsePosition var1);
+    public final java.lang.Object parseObject(java.lang.String var0, java.text.ParsePosition var1) { return null; }
+    public void setGroupingUsed(boolean var0) { }
+    public void setMaximumFractionDigits(int var0) { }
+    public void setMaximumIntegerDigits(int var0) { }
+    public void setMinimumFractionDigits(int var0) { }
+    public void setMinimumIntegerDigits(int var0) { }
+    public void setParseIntegerOnly(boolean var0) { }
+    public final static int INTEGER_FIELD = 0;
+    public final static int FRACTION_FIELD = 1;
+}
+

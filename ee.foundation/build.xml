@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ee.minimum" default="publish"> 
+	<import file="../cnf/build.xml" optional="false"/>
+</project>

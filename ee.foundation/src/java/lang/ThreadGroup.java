@@ -1,0 +1,33 @@
+/* (C) Copyright 2001 Sun Microsystems, Inc. 
+ * (C) Copyright 2001 Open Services Gateway Initiative, Inc. (the OSGi alliance)
+ */
+
+/* $Header$ */
+
+package java.lang;
+public class ThreadGroup {
+    public ThreadGroup(java.lang.String var0) { }
+    private ThreadGroup(java.lang.String var0, java.lang.ThreadGroup var1) { }
+    public ThreadGroup(java.lang.ThreadGroup var0, java.lang.String var1) { }
+    public int activeCount() { return 0; }
+    public int activeGroupCount() { return 0; }
+    public final void checkAccess() { }
+    public final void destroy() { }
+    public int enumerate(java.lang.Thread[] var0) { return 0; }
+    public int enumerate(java.lang.Thread[] var0, boolean var1) { return 0; }
+    public int enumerate(java.lang.ThreadGroup[] var0) { return 0; }
+    public int enumerate(java.lang.ThreadGroup[] var0, boolean var1) { return 0; }
+    public final int getMaxPriority() { return 0; }
+    public final java.lang.String getName() { return null; }
+    public final java.lang.ThreadGroup getParent() { return null; }
+    public final void interrupt() { }
+    public final boolean isDaemon() { return false; }
+    public boolean isDestroyed() { return false; }
+    public void list() { }
+    public final boolean parentOf(java.lang.ThreadGroup var0) { return false; }
+    public final void setDaemon(boolean var0) { }
+    public final void setMaxPriority(int var0) { }
+    public java.lang.String toString() { return null; }
+    public void uncaughtException(java.lang.Thread var0, java.lang.Throwable var1) { }
+}
+

@@ -1,0 +1,15 @@
+/* (C) Copyright 2001 Sun Microsystems, Inc. 
+ * (C) Copyright 2001 Open Services Gateway Initiative, Inc. (the OSGi alliance)
+ */
+
+/* $Header$ */
+
+package java.security;
+public abstract class Policy {
+    public Policy() { }
+    public static java.security.Policy getPolicy() { return null; }
+    public static void setPolicy(java.security.Policy var0) { }
+    public abstract java.security.PermissionCollection getPermissions(java.security.CodeSource var0);
+    public abstract void refresh();
+}
+

@@ -1,0 +1,12 @@
+/**
+ * Copyright (c) 1999 - 2001 Gatespace AB. All Rights Reserved.
+ * 
+ * Gatespace grants Open Services Gateway Initiative (OSGi) an irrevocable,
+ * perpetual, non-exclusive, worldwide, paid-up right and license to
+ * reproduce, display, perform, prepare and have prepared derivative works
+ * based upon and distribute and sublicense this material and derivative
+ * works thereof as set out in the OSGi MEMBER AGREEMENT as of January 24
+ * 2000, for use in accordance with Section 2.2 of the BY-LAWS of the
+ * OSGi MEMBER AGREEMENT.
+ */
+

@@ -1,0 +1,11 @@
+/* (C) Copyright 2001 Sun Microsystems, Inc. 
+ * (C) Copyright 2001 Open Services Gateway Initiative, Inc. (the OSGi alliance)
+ */
+
+/* $Header$ */
+
+package java.net;
+public abstract interface FileNameMap {
+    public abstract java.lang.String getContentTypeFor(java.lang.String var0);
+}
+

@@ -1,0 +1,36 @@
+/* (C) Copyright 2001 Sun Microsystems, Inc. 
+ * (C) Copyright 2001 Open Services Gateway Initiative, Inc. (the OSGi alliance)
+ */
+
+/* $Header$ */
+
+package java.lang;
+public final class Double extends java.lang.Number implements java.lang.Comparable {
+    public Double(double var0) { }
+    public Double(java.lang.String var0) throws java.lang.NumberFormatException { }
+    public int compareTo(java.lang.Double var0) { return 0; }
+    public int compareTo(java.lang.Object var0) { return 0; }
+    public byte byteValue() { return 0; }
+    public static long doubleToLongBits(double var0) { return 0l; }
+    public double doubleValue() { return 0.0d; }
+    public boolean equals(java.lang.Object var0) { return false; }
+    public float floatValue() { return 0.0f; }
+    public int hashCode() { return 0; }
+    public int intValue() { return 0; }
+    public static boolean isInfinite(double var0) { return false; }
+    public static boolean isNaN(double var0) { return false; }
+    public static double longBitsToDouble(long var0) { return 0.0d; }
+    public long longValue() { return 0l; }
+    public static double parseDouble(java.lang.String var0) throws java.lang.NumberFormatException { return 0.0d; }
+    public short shortValue() { return 0; }
+    public java.lang.String toString() { return null; }
+    public static java.lang.String toString(double var0) { return null; }
+    public static java.lang.Double valueOf(java.lang.String var0) throws java.lang.NumberFormatException { return null; }
+    public final static double MAX_VALUE = 1.7976931348623157E308d;
+    public final static double MIN_VALUE = 4.9E-324d;
+    public final static double NaN = 0.0d / 0.0d;
+    public final static double POSITIVE_INFINITY = 1.0d / 0.0d;
+    public final static double NEGATIVE_INFINITY = -1.0d / 0.0d;
+    public final static java.lang.Class TYPE; static { TYPE = null; }
+}
+

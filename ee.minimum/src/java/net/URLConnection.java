@@ -1,0 +1,57 @@
+/* (C) Copyright 2001 Sun Microsystems, Inc. 
+ * (C) Copyright 2001 Open Services Gateway Initiative, Inc. (the OSGi alliance)
+ */
+
+/* $Header$ */
+
+package java.net;
+public abstract class URLConnection {
+    protected URLConnection(java.net.URL var0) { }
+    public abstract void connect() throws java.io.IOException;
+    public boolean getAllowUserInteraction() { return false; }
+    public java.lang.Object getContent() throws java.io.IOException { return null; }
+    public java.lang.String getContentEncoding() { return null; }
+    public int getContentLength() { return 0; }
+    public java.lang.String getContentType() { return null; }
+    public long getDate() { return 0l; }
+    public static boolean getDefaultAllowUserInteraction() { return false; }
+    public boolean getDefaultUseCaches() { return false; }
+    public boolean getDoInput() { return false; }
+    public boolean getDoOutput() { return false; }
+    public long getExpiration() { return 0l; }
+    public static java.net.FileNameMap getFileNameMap() { return null; }
+    public java.lang.String getHeaderField(int var0) { return null; }
+    public java.lang.String getHeaderField(java.lang.String var0) { return null; }
+    public long getHeaderFieldDate(java.lang.String var0, long var1) { return 0l; }
+    public int getHeaderFieldInt(java.lang.String var0, int var1) { return 0; }
+    public java.lang.String getHeaderFieldKey(int var0) { return null; }
+    public long getIfModifiedSince() { return 0l; }
+    public java.io.InputStream getInputStream() throws java.io.IOException { return null; }
+    public long getLastModified() { return 0l; }
+    public java.io.OutputStream getOutputStream() throws java.io.IOException { return null; }
+    public java.security.Permission getPermission() throws java.io.IOException { return null; }
+    public java.lang.String getRequestProperty(java.lang.String var0) { return null; }
+    public java.net.URL getURL() { return null; }
+    public boolean getUseCaches() { return false; }
+    protected static java.lang.String guessContentTypeFromName(java.lang.String var0) { return null; }
+    public static java.lang.String guessContentTypeFromStream(java.io.InputStream var0) throws java.io.IOException { return null; }
+    public void setAllowUserInteraction(boolean var0) { }
+    public static void setContentHandlerFactory(java.net.ContentHandlerFactory var0) { }
+    public static void setDefaultAllowUserInteraction(boolean var0) { }
+    public void setDefaultUseCaches(boolean var0) { }
+    public void setDoInput(boolean var0) { }
+    public void setDoOutput(boolean var0) { }
+    public static void setFileNameMap(java.net.FileNameMap var0) { }
+    public void setIfModifiedSince(long var0) { }
+    public void setRequestProperty(java.lang.String var0, java.lang.String var1) { }
+    public void setUseCaches(boolean var0) { }
+    public java.lang.String toString() { return null; }
+    protected java.net.URL url;
+    protected long ifModifiedSince;
+    protected boolean useCaches;
+    protected boolean connected;
+    protected boolean doOutput;
+    protected boolean doInput;
+    protected boolean allowUserInteraction;
+}
+

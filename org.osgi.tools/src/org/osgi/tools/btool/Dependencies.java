@@ -1,0 +1,432 @@
+package org.osgi.tools.btool;
+
+import java.io.*;
+import java.util.*;
+import java.util.jar.*;
+import java.util.regex.*;
+
+public class Dependencies {
+	Set			referred	= new HashSet();
+	Set			contained	= new HashSet();
+	Map			dot			= new HashMap();
+	List		includeExport;
+	List		excludeImport;
+
+	Manifest	manifest;
+	Collection	classpath;
+
+	static byte	SkipTable[]	= {0, //  0 non existent
+							-1, //  1 CONSTANT_utf8 UTF 8, handled in
+							// method
+							-1, //  2
+							4, //  3 CONSTANT_Integer
+							4, //  4 CONSTANT_Float
+							8, //  5 CONSTANT_Long (index +=2!)
+							8, //  6 CONSTANT_Double (index +=2!)
+							-1, //  7 CONSTANT_Class
+							2, //  8 CONSTANT_String
+							4, //  9 CONSTANT_FieldRef
+							4, // 10 CONSTANT_MethodRef
+							4, // 11 CONSTANT_InterfaceMethodRef
+							4 // 12 CONSTANT_NameAndType
+							};
+
+	public Dependencies(Collection classpath, Manifest manifest,
+			Collection resources, List excludeImport, List includeExport) {
+		this.manifest = manifest;
+		this.classpath = classpath;
+		this.includeExport = includeExport;
+		this.excludeImport = excludeImport;
+
+		for (Iterator i = resources.iterator(); i.hasNext();) {
+			Resource r = (Resource) i.next();
+			dot.put(r.getPath(), r);
+		}
+	}
+
+	public void calculate() throws IOException {
+		String bundleClasspath = manifest.getValue("bundle-classpath");
+		if (bundleClasspath == null)
+			bundleClasspath = ".";
+
+		StringTokenizer st = new StringTokenizer(bundleClasspath, ",");
+		while (st.hasMoreTokens()) {
+			String entry = st.nextToken();
+
+			if (".".equals(entry)) {
+				for (Iterator i = dot.values().iterator(); i.hasNext();) {
+					Resource r = (Resource) i.next();
+					if (!(r instanceof PackageResource)) {
+						addContained(base(r.getPath()));
+					}
+					if (r.getPath().endsWith(".class")) {
+						InputStream in = r.getInputStream();
+						doStream(in);
+					}
+				}
+			} else {
+				Resource r = (Resource) dot.get(entry);
+				if (r != null) {
+					JarInputStream jarStream = new JarInputStream(r
+							.getInputStream());
+					JarEntry jarEntry = jarStream.getNextJarEntry();
+					while (jarEntry != null) {
+						addContained(base(jarEntry.getName()));
+						if (jarEntry.getName().endsWith(".class")) {
+							doStream(jarStream);
+						}
+						jarEntry = jarStream.getNextJarEntry();
+					}
+				} else
+					System.out.println("No such bundle-classpath entry "
+							+ entry);
+			}
+		}
+		referred.removeAll(contained);
+	}
+
+	/**
+	 * @param inputStream
+	 * @throws IOException
+	 */
+	private void doStream(InputStream inputStream) throws IOException {
+		DataInputStream din = new DataInputStream(inputStream);
+		Collection coll = parseClassFile(din);
+		for (Iterator i = coll.iterator(); i.hasNext();) {
+			String path = (String) i.next();
+			String packageName = base(path);
+			if (!packageName.startsWith("java/"))
+				referred.add(packageName);
+		}
+	}
+
+	/**
+	 * @param name
+	 * @return
+	 */
+	private PackageResource getPackage(String name) {
+		return null;
+	}
+
+	/**
+	 * @param resource
+	 */
+	void addContained(String packagePath) {
+		if (!contained.contains(packagePath))
+			contained.add(packagePath);
+
+	}
+
+	/**
+	 * Parse a class file and find the other classes that are referenced.
+	 * 
+	 * This function is recursively called for each class and all the classes it
+	 * refers to. The format of the class file is described in the "Java Virtual
+	 * Machine Specification".
+	 * 
+	 * Notice that CONSTANT_Long and CONSTANT_Double use TWO (2) positions in
+	 * the constant pool. This took me a couple of hours to figure out.
+	 */
+	Collection parseClassFile(DataInputStream in) throws IOException {
+		Vector classes = new Vector();
+
+		Hashtable pool = new Hashtable();
+		try {
+			int magic = in.readInt();
+			if (magic != 0xCAFEBABE)
+				throw new IOException(
+						"Not a valid class file (no CAFEBABE header)");
+			in.readShort(); // minor version
+			in.readShort(); // major version
+			int count = in.readUnsignedShort();
+			process : for (int i = 1; i < count; i++) {
+				byte tag = in.readByte();
+				switch (tag) {
+					case 0 :
+						break process;
+					case 1 :
+						// CONSTANT_Utf8
+						String name = in.readUTF();
+						pool.put(new Integer(i), name);
+						break;
+					// A Class constant is just a short reference in
+					// the constant pool
+					case 7 :
+						// CONSTANT_Class
+						Integer index = new Integer(in.readShort());
+						classes.add(index);
+						break;
+					// For some insane optimization reason are
+					// the long and the double two entries in the
+					// constant pool. See 4.4.5
+					case 5 :
+					// CONSTANT_Long
+					case 6 :
+						// CONSTANT_Double
+						in.skipBytes(8);
+						i++;
+						break;
+					// We get the skip count for each record type
+					// from the SkipTable. This will also automatically
+					// abort when
+					default :
+						if (tag == 2)
+							throw new IOException("Invalid tag " + tag);
+						in.skipBytes(SkipTable[tag]);
+						break;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		//
+		// Now iterate over all classes we found and
+		// parse those as well. We skip duplicates
+		//
+		Collection set = new HashSet();
+		for (Enumeration e = classes.elements(); e.hasMoreElements();) {
+			Integer n = (Integer) e.nextElement();
+			String next = (String) pool.get(n);
+			if (next != null) {
+				String normalized = normalize(next);
+				if (normalized != null)
+					set.add(normalized);
+			} else
+				throw new IllegalArgumentException("Invalid class, parent=");
+		}
+		return set;
+	}
+
+	/**
+	 * Decode a class name from a class reference.
+	 * 
+	 * Java encodes array information in the name of the class. This means that
+	 * we should get rid of this. The following rules apply:
+	 * 
+	 * <pre>
+	 * 
+	 *  
+	 *   
+	 *    
+	 *     
+	 *      
+	 *       
+	 *        
+	 *               	 [L*               =&gt; remove [L, try again
+	 *               	 [* &amp;&amp; length=2     =&gt; ignore (int,byte,char etc class)
+	 *               	 [*                =&gt; remove [, try again
+	 *               ;                =&gt; remove ;, try again (do not know why)
+	 *               	 A i in skip | &lt;i&gt;* =&gt; ignore
+	 *         
+	 *        
+	 *       
+	 *      
+	 *     
+	 *    
+	 *   
+	 *  
+	 * </pre>
+	 * 
+	 * Notice that we ALWAYS suffix the name with class. E.g. normalize cannot
+	 * be used for normal resource names.
+	 */
+	String normalize(String s) {
+
+		if (s.startsWith("[L"))
+			return normalize(s.substring(2));
+		if (s.startsWith("["))
+			if (s.length() == 2)
+				return null;
+			else
+				return normalize(s.substring(1));
+		if (s.endsWith(";"))
+			return normalize(s.substring(0, s.length() - 1));
+		return s + ".class";
+	}
+
+	/*
+	 * Answer the base part of the resource name, e.g. parent.
+	 *  
+	 */
+	String base(String name) {
+
+		int index = name.lastIndexOf('/');
+		if (index > 0)
+			return name.substring(0, index);
+		else
+			return name;
+	}
+
+	/**
+	 * @return Returns the contained.
+	 * @throws IOException
+	 */
+	public Set getContained() throws IOException {
+		return convertToPackage(contained, includeExport, null);
+	}
+	/**
+	 * @param contained2
+	 * @return @throws
+	 *         IOException
+	 */
+	private Set convertToPackage(Collection names, List includes, List excludes)
+			throws IOException {
+		Set result = new TreeSet();
+		for (Iterator i = names.iterator(); i.hasNext();) {
+			String name = (String) i.next();
+			if (excludes != null && in(excludes, name)) {
+				continue;
+			}
+
+			if (includes == null || in(includes, name)) {
+				Package p = makePackage(name);
+				if (p != null)
+					result.add(p);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * @param excludes
+	 * @param name
+	 * @return
+	 */
+	private boolean in(List list, String name) {
+		name = name.replace('/', '.');
+		for (Iterator i = list.iterator(); i.hasNext();) {
+			String prefix = (String) i.next();
+			if (prefix.endsWith("*")) {
+				if (name.startsWith(prefix.substring(0, prefix.length() - 1)))
+					return true;
+			}
+			if ( name.equals(prefix) )
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @param name
+	 * @return
+	 */
+	static Pattern	versionMatch	= Pattern
+											.compile("version\\s+((\\w|\\.)+)");
+
+	Package makePackage(String name) throws IOException {
+		if ("META-INF".equals(name))
+			return null;
+
+		String version = null;
+		String packname = name.replace('/', '.');
+		String info = name + "/packageinfo";
+		Source source = findResource(info);
+		if (source != null) {
+			InputStream in = source.getEntry(info);
+			byte[] buffer = readAll(in, 0);
+			String s = new String(buffer);
+			Matcher m = versionMatch.matcher(s);
+			if (m.find()) {
+				version = m.group(1);
+			}
+		}
+		//		if ( version == null ){
+		//			version = findVersionInManifest(name, version, source);
+		//		}
+		return new Package(packname, version);
+	}
+
+	/**
+	 * @param name
+	 * @param version
+	 * @param source
+	 * @return
+	 */
+	private String findVersionInManifest(String name, String version,
+			Source source) {
+		try {
+			// Try using he manifest for a good version
+			// of the package. Ugly, but hey, its a mess.
+			InputStream min = source.getEntry("META-INF/MANIFEST.MF");
+			if (min != null) {
+				Manifest manifest = new Manifest(min);
+				Package p = find(name.replace('/', '.'), manifest.getExports());
+				if (p != null) {
+					version = p.version;
+				} else {
+					InputStream jin = source.getEntry("META-INF/MANIFEST.MF");
+					java.util.jar.Manifest jmanifest = new java.util.jar.Manifest(
+							jin);
+					Attributes att = jmanifest.getAttributes(name + "/");
+					if (att != null) {
+						String specversion = att.getValue(new Attributes.Name(
+								"Specification-Version"));
+						if (specversion != null) {
+							specversion = specversion.trim();
+							if (specversion.startsWith("\"")) {
+								specversion = specversion.substring(1,
+										specversion.length() - 1);
+							}
+							version = specversion;
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return version;
+	}
+
+	/**
+	 * @param exports
+	 * @return
+	 */
+	private Package find(String packageName, Package[] exports) {
+		for (int i = 0; i < exports.length; i++) {
+			if (exports[i].name.equals(packageName))
+				return exports[i];
+		}
+		return null;
+	}
+
+	/**
+	 * @param string
+	 * @return @throws
+	 *         IOException
+	 */
+	private Source findResource(String string) throws IOException {
+		for (Iterator i = classpath.iterator(); i.hasNext();) {
+			Source s = (Source) i.next();
+			if (s.contains(string)) {
+				return s;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * @return Returns the referred.
+	 * @throws IOException
+	 */
+	public Set getReferred() throws IOException {
+		return convertToPackage(referred, null, excludeImport);
+	}
+
+	byte[] readAll(InputStream in, int offset) throws IOException {
+		byte temp[] = new byte[4096];
+		byte result[];
+		int size = in.read(temp, 0, temp.length);
+		if (size <= 0)
+			return new byte[offset];
+		//
+		// We have a positive result, copy it
+		// to the right offset.
+		//
+		result = readAll(in, offset + size);
+		System.arraycopy(temp, 0, result, offset, size);
+		return result;
+	}
+
+}

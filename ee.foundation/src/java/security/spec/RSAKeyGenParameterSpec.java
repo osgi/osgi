@@ -1,0 +1,15 @@
+/* (C) Copyright 2001 Sun Microsystems, Inc. 
+ * (C) Copyright 2001 Open Services Gateway Initiative, Inc. (the OSGi alliance)
+ */
+
+/* $Header$ */
+
+package java.security.spec;
+public class RSAKeyGenParameterSpec implements java.security.spec.AlgorithmParameterSpec {
+    public RSAKeyGenParameterSpec(int var0, java.math.BigInteger var1) { }
+    public java.math.BigInteger getPublicExponent() { return null; }
+    public int getKeysize() { return 0; }
+    public final static java.math.BigInteger F0; static { F0 = null; }
+    public final static java.math.BigInteger F4; static { F4 = null; }
+}
+
