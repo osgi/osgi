@@ -52,6 +52,7 @@ public interface DmtAdmin {
      * <li> <code>NODE_NOT_FOUND</code>
      * <li> <code>URI_TOO_LONG</code>
      * <li> <code>INVALID_URI</code>
+     * <li> <code>TIMEOUT</code>
      */
     DmtSession getSession(String subtreeUri) throws DmtException;
 
@@ -69,6 +70,7 @@ public interface DmtAdmin {
      * <li> <code>URI_TOO_LONG</code>
      * <li> <code>INVALID_URI</code>
      * <li> <code>OTHER_ERROR</code> if the lockMode is unknown
+     * <li> <code>TIMEOUT</code>
      */
     DmtSession getSession(String subtreeUri, int lockMode)
         throws DmtException;
@@ -93,6 +95,7 @@ public interface DmtAdmin {
      * <li> <code>URI_TOO_LONG</code>
      * <li> <code>INVALID_URI</code>
      * <li> <code>OTHER_ERROR</code> if the lockMode is unknown
+     * <li> <code>TIMEOUT</code>
      * @throws SecurityException if the caller does not have the required
      * DmtPrincipalPermission
      */

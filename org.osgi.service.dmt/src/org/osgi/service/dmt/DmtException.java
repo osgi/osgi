@@ -166,6 +166,24 @@ public class DmtException extends Exception {
      * This error code does not correspond to any OMA DM response status code.
      */
     public static final int ALERT_NOT_ROUTED      = 5;
+    
+    /**
+     * This error is caused by one of the following situations:
+     * <li> An updating method within an atomic session can not be executed
+     * because the underlying plugin does not support atomic transactions.
+     * <li> //todo
+     * This error code does not correspond to any OMA DM response status code.
+     */
+    public static final int TRANSACTION_ERROR     = 6;
+
+    /**
+     * Creation of a session timed out because of another ongoing session.
+     * This error code does not correspond to any OMA DM response status code.
+     * OMA has several status codes related to timeout, but these are meant to
+     * be used when a request times out, not when a session can not be 
+     * established. 
+     */
+    public static final int TIMEOUT               = 7;
 
     /**
      * Create an instance of the exception.
