@@ -383,7 +383,7 @@ public class EventTestControl extends DefaultTestBundleControl {
     for (; i < oldLen; i++) {
       newPerm[i] = oldPerm[i];      
     }
-    for (int j = 0; j < toAdd.length; j++) {
+    for (int j = 0; j < toAdd.length; j++, i++) {
       newPerm[i] = toAdd[j];      
     }
     permissionAdmin.setPermissions(bundle.getLocation(), newPerm);
