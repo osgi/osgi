@@ -28,10 +28,9 @@
  */
 package org.osgi.test.cases.component.tbc;
 
-//import java.util.Dictionary;
+import java.util.Dictionary;
 
 import org.osgi.framework.*;
-//import org.osgi.test.cases.component.tb2.ServiceConsumerLookup;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -50,26 +49,19 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl {
   private Bundle tb1, tb2, tb3;
   
 	public void prepare() throws Exception {
-//    tb1 = installBundle("tb1.jar");
-//    tb1.start();
-//    tb2 = installBundle("tb2.jar");
-//    tb2.start();
-//    tb3 = installBundle("tb3.jar");
-//    tb3.start();
+    tb1 = installBundle("tb1.jar");
+    tb1.start();
+    tb2 = installBundle("tb2.jar");
+    tb2.start();
+    tb3 = installBundle("tb3.jar");
+    tb3.start();
 	}
 
 	public void setState() {
 	}
 
   /**
-   * <remove>The documentation of the test method is the test method
-   * specification. Normal java tile and html rules apply.</remove>
-   * 
-   * TODO Fill in tags
-   * @specification     <remove>Specification</remove>
-   * @interface       <remove>Related interface, e.g. org.osgi.util.measurement</remove>
-   * @specificationVersion  <remove>Version nr of the specification</remove>
-   * @methods         <remove>Related method(s)</remove>
+   * Tests registering / unregistering of the component bundles and their provided services.
    */
   public void testUnregistered() throws Exception {
     TBCService serviceProvider, serviceConsumerLookup, serviceConsumerEvent;
@@ -80,7 +72,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl {
     ServiceTracker trackerConsumerEvent = new ServiceTracker(getContext(), "org.osgi.test.cases.component.tb3.ServiceConsumerEvent", null);
     trackerConsumerEvent.open();
 
-//    tb1.uninstall();
+    tb1.uninstall();
     serviceProvider = (TBCService) trackerProvider.getService();
     assertNull("ServiceProvider service should not be registered", serviceProvider);
     serviceConsumerLookup = (TBCService) trackerConsumerLookup.getService();
@@ -90,7 +82,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl {
     assertNull("ServiceConsumerEvent service should not be registered", serviceConsumerEvent);
     assertEquals("ServiceConsumerEvent bundle should in resolved state", Bundle.RESOLVED, tb3.getState());
 
-//    tb1 = installBundle("tb1.jar");
+    tb1 = installBundle("tb1.jar");
     serviceProvider = (TBCService) trackerProvider.getService();
     assertNull("ServiceProvider service should not be registered", serviceProvider);
     serviceConsumerLookup = (TBCService) trackerConsumerLookup.getService();
@@ -100,7 +92,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl {
     assertNull("ServiceConsumerEvent service should not be registered", serviceConsumerEvent);
     assertEquals("ServiceConsumerEvent bundle should in resolved state", Bundle.RESOLVED, tb3.getState());
 
-//    tb1.start();
+    tb1.start();
     serviceProvider = (TBCService) trackerProvider.getService();
     assertNotNull("ServiceProvider service should be registered", serviceProvider);
     serviceConsumerLookup = (TBCService) trackerConsumerLookup.getService();
@@ -116,66 +108,68 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl {
   }
 
   /**
-   * TODO
+   * Tests getting of the provided service from the first component bundle directly.
    */
 	public void testGetServiceDirect() {
     ServiceTracker tracker = new ServiceTracker(getContext(), "org.osgi.test.cases.component.tb1.ServiceProvider", null);
     tracker.open();
     TBCService serviceProvider = (TBCService) tracker.getService();
     int i = serviceProvider.getSimpleTestService();
-    assertEquals("The return value is different from the expected", TBCService.PARAM_CONST, i);
+    assertEquals("The return value should be equal to " + TBCService.PARAM_CONST, TBCService.PARAM_CONST, i);
     TestService testService = serviceProvider.getObjectTestService();
-    int param = testService.getParam();
-    assertEquals("The return value is different from the expected", TBCService.PARAM_CONST, param);
+    int param = testService.getParameter();
+    assertEquals("The return value should be equal to " + TBCService.PARAM_CONST, TBCService.PARAM_CONST, param);
     tracker.close();
 	}
 
   /**
-   * TODO
+   * Tests getting of the provided service of the second component bundle through the lookup method.
    */
   public void testGetServiceLookup() {
     ServiceTracker tracker = new ServiceTracker(getContext(), "org.osgi.test.cases.component.tb2.ServiceConsumerLookup", null);
     tracker.open();
     TBCService serviceConsumerLookup = (TBCService) tracker.getService();
     int i = serviceConsumerLookup.getSimpleTestService();
-    assertEquals("The return value is different from the expected", TBCService.PARAM_CONST, i);
+    assertEquals("The return value should be equal to " + TBCService.PARAM_CONST, TBCService.PARAM_CONST, i);
     TestService testService = serviceConsumerLookup.getObjectTestService();
-    int param = testService.getParam();
-    assertEquals("The return value is different from the expected", TBCService.PARAM_CONST, param);
+    int param = testService.getParameter();
+    assertEquals("The return value should be equal to " + TBCService.PARAM_CONST, TBCService.PARAM_CONST, param);
     tracker.close();
   }
 
   /**
-   * TODO
+   * Tests getting of the provided service of the third component bundle through the event method.
    */
   public void testGetServiceEvent() {
     ServiceTracker tracker = new ServiceTracker(getContext(), "org.osgi.test.cases.component.tb3.ServiceConsumerEvent", null);
     tracker.open();
     TBCService serviceConsumerEvent = (TBCService) tracker.getService();
     int i = serviceConsumerEvent.getSimpleTestService();
-    assertEquals("The return value is different from the expected", TBCService.PARAM_CONST, i);
+    assertEquals("The return value should be equal to " + TBCService.PARAM_CONST, TBCService.PARAM_CONST, i);
     TestService testService = serviceConsumerEvent.getObjectTestService();
-    int param = testService.getParam();
-    assertEquals("The return value is different from the expected", TBCService.PARAM_CONST, param);
+    int param = testService.getParameter();
+    assertEquals("The return value should be equal to " + TBCService.PARAM_CONST, TBCService.PARAM_CONST, param);
     tracker.close();
   }
 
   /**
-   * TODO
+   * Tests getting of the component properties from the second component bundle
+   * set through property and properties elements in XML.
    */
   public void testGetProperties() {
-//    ServiceTracker tracker = new ServiceTracker(getContext(), "org.osgi.test.cases.component.tb2.ServiceConsumerLookup", null);
-//    tracker.open();
-//    ServiceConsumerLookup serviceConsumerLookup = (ServiceConsumerLookup) tracker.getService();
-//    Dictionary properties = serviceConsumerLookup.getProperties();
-//    assertEquals("The number of properties should be 2", properties.size(), 2);
-//    assertEquals("Value of test.property.int should be equal to '123'", properties.get("test.property.int"), "123");
-//    String[] array = (String[]) properties.get("test.property.string");
-//    assertEquals("The size of test.property.string array should be 3", array.length, 3);
-//    for (int i = 0; i < 3; i++) {
-//      assertEquals("Element [" + i + "] of test.property.string array should be 'Value " + (i + 1) + "'", array[i], "Value " + (i + 1));
-//    }
-//    tracker.close();
+    ServiceTracker tracker = new ServiceTracker(getContext(), "org.osgi.test.cases.component.tb2.ServiceConsumerLookup", null);
+    tracker.open();
+    TBCService serviceConsumerLookup = (TBCService) tracker.getService();
+    Dictionary properties = serviceConsumerLookup.getProperties();
+    assertNotNull("Properties should not be empty", properties);
+    assertEquals("The size of properties should be 2", properties.size(), 2);
+    assertEquals("Value of test.property.int should be equal to '123'", properties.get("test.property.int"), "123");
+    String[] array = (String[]) properties.get("test.property.string");
+    assertEquals("The size of test.property.string array should be 3", array.length, 3);
+    for (int i = 0; i < 3; i++) {
+      assertEquals("Element [" + i + "] of test.property.string array should be 'Value " + (i + 1) + "'", array[i], "Value " + (i + 1));
+    }
+    tracker.close();
   }
 
   /**
