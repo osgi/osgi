@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-Activator: org.osgi.impl.service.prefs.Activator
+Bundle-Name: impl.service.prefs
+Bundle-Description: OSGi Preferences Service Reference Implementation by Sun Microsystems.
+Bundle-Copyright: Copyright (c) 2000-2002 Sun Microsystems, Inc. All Rights Reserved.
+  This source code is licensed to OSGi as MEMBER LICENSED MATERIALS
+  under the terms of Section 3.2 of the OSGi MEMBER AGREEMENT.
+Bundle-Vendor: Sun Microsystems, Inc.
+Bundle-Version: 1.0
+Bundle-Category: osgi
+Export-Package: org.osgi.service.prefs; specification-version=1.0
+Import-Package: org.osgi.framework; specification-version=1.0
+Export-Service: org.osgi.service.prefs.PreferencesService
+CVS-Header: $Header$
+
