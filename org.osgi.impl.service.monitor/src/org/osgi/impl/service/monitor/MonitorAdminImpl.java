@@ -257,10 +257,12 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
         switch(type) {
         case StatusVariable.TYPE_STRING:
             return createScalarXml("string",  value);
-        case StatusVariable.TYPE_INTEGER: 
-            return createScalarXml("integer", value);
-        case StatusVariable.TYPE_FLOAT:
-            return createScalarXml("float", value);
+        case StatusVariable.TYPE_LONG: 
+            return createScalarXml("long", value);
+        case StatusVariable.TYPE_DOUBLE:
+            return createScalarXml("double", value);
+        case StatusVariable.TYPE_BOOLEAN:
+            return createScalarXml("boolean", value);
 //        case KPI.TYPE_OBJECT:  return createObjectXml(kpi.getObject());
         }
         
@@ -309,8 +311,9 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
         
         int type = var.getType(); 
         switch(type) {
-        case StatusVariable.TYPE_FLOAT:   return Float.toString(var.getFloat());
-        case StatusVariable.TYPE_INTEGER: return Integer.toString(var.getInt());
+        case StatusVariable.TYPE_BOOLEAN: return Boolean.toString(var.getBoolean());
+        case StatusVariable.TYPE_DOUBLE:  return Double.toString(var.getDouble());
+        case StatusVariable.TYPE_LONG:    return Long.toString(var.getLong());
         case StatusVariable.TYPE_STRING:  return var.getString();
         }
         
