@@ -311,6 +311,12 @@ public class TestMegletContainerBundleActivator extends Object implements
 		else
 			System.out
 					.println("Scheduling an applications with AA restart       PASSED");
+		if (!testCase_removeScheduledApplication())
+			System.out
+					.println("Checking scheduled application remove            FAILED");
+		else
+			System.out
+					.println("Checking scheduled application remove            PASSED");
 		if (!testCase_uninstallMegletBundle())
 			System.out
 					.println("Meglet bundle uninstall from Meglet container    FAILED");
@@ -1289,6 +1295,32 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Didn't received the started event!");
 			if (!testCase_stopApplication())
 				return false;
+			return true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean testCase_removeScheduledApplication() {
+		try {
+			ApplicationDescriptor appDesc = appDescs[0];
+			if (lookupAppHandle(appDesc) != null)
+				throw new Exception(
+						"There's a running instance of the appDesc!");
+			Map args = createArgs();
+			if (args == null)
+				throw new Exception("Cannot create the arguments of launch!");
+			ServiceReference serviceRef = appDesc.
+			    schedule(args, new Date(System.currentTimeMillis() + 500), true);
+			ScheduledApplication schedApp = (ScheduledApplication)bc.getService( serviceRef );
+			schedApp.remove();
+			bc.ungetService( serviceRef );
+			Thread.sleep(1000);
+			appHandle = lookupAppHandle(appDesc);
+			if (appHandle != null )
+				throw new Exception("Application was scheduled inspite of removing!");
 			return true;
 		}
 		catch (Exception e) {
