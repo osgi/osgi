@@ -30,25 +30,29 @@ import java.util.Date;
 /**
  * A StatusVariable object represents the value of a status variable taken with
  * a certain collection method at a certain point of time. The type of the
- * StatusVariable can be integer, float or string.
+ * StatusVariable can be long, double, boolean or string.
  */
 public final class StatusVariable {
     //----- Public constants -----//
     /**
-     * StatusVariable type identifying integer data.
+     * StatusVariable type identifying long data.
      */
-    public static final int    TYPE_INTEGER = 0;
+    public static final int    TYPE_LONG   = 0;
 
     /**
-     * StatusVariable type identifying float data.
+     * StatusVariable type identifying double data.
      */
-    public static final int    TYPE_FLOAT   = 1;
+    public static final int    TYPE_DOUBLE = 1;
 
     /**
      * StatusVariable type identifying string data.
      */
-    public static final int    TYPE_STRING  = 2;
+    public static final int    TYPE_STRING = 2;
     
+    /**
+     * StatusVariable type identifying string data.
+     */
+    public static final int    TYPE_BOOLEAN = 3;
     
     /**
      * Collection method type identifying 'Cumulative Counter' data collection. 
@@ -78,19 +82,20 @@ public final class StatusVariable {
     private int     cm;
     private int     type;
     
-    private int     intData;
-    private float   floatData;
+    private long     longData;
+    private double   doubleData;
     private String  stringData;
+    private boolean booleanData;
     
     //----- Constructors -----//
     /**
-     * Constructor for a StatusVariable of integer type.
+     * Constructor for a StatusVariable of long type.
      * 
      * @param monitorableId The identifier of the monitorable service that this
      *        StatusVariable belongs to
      * @param id The identifier of the StatusVariable
      * @param cm Collection method, should be one of the CM_ constants
-     * @param data The integer value of the StatusVariable
+     * @param data The long value of the StatusVariable
      * @throws IllegalArgumentException if any of the ID parameters contains
      *         invalid characters or if <code>cm</code> is not one of the
      *         collection method constants
@@ -98,30 +103,50 @@ public final class StatusVariable {
      *         <code>null</code>
      */
     public StatusVariable(String monitorableId, String id, int cm,
-            int data) {
+            long data) {
         setCommon(monitorableId, id, cm);
-        type = TYPE_INTEGER;
-        intData = data;
+        type = TYPE_LONG;
+        longData = data;
     }
 
     /**
-     * Constructor for a StatusVariable of float type.
+     * Constructor for a StatusVariable of double type.
      * 
      * @param monitorableId The identifier of the monitorable service that this
      *        StatusVariable belongs to
      * @param id The identifier of the StatusVariable
      * @param cm Collection method, should be one of the CM_ constants
-     * @param data The float value of the StatusVariable
+     * @param data The double value of the StatusVariable
      * @throws IllegalArgumentException if any of the ID parameters contains
      *         invalid characters or if <code>cm</code> is not one of the
      *         collection method constants
      * @throws NullPointerException if any of the ID parameters is
      *         <code>null</code>
      */
-    public StatusVariable(String monitorableId, String id, int cm, float data) {
+    public StatusVariable(String monitorableId, String id, int cm, double data) {
         setCommon(monitorableId, id, cm);
-        type = TYPE_FLOAT;
-        floatData = data;
+        type = TYPE_DOUBLE;
+        doubleData = data;
+    }
+
+    /**
+     * Constructor for a StatusVariable of boolean type.
+     * 
+     * @param monitorableId The identifier of the monitorable service that this
+     *        StatusVariable belongs to
+     * @param id The identifier of the StatusVariable
+     * @param cm Collection method, should be one of the CM_ constants
+     * @param data The boolean value of the StatusVariable
+     * @throws IllegalArgumentException if any of the ID parameters contains
+     *         invalid characters or if <code>cm</code> is not one of the
+     *         collection method constants
+     * @throws NullPointerException if any of the ID parameters is
+     *         <code>null</code>
+     */
+    public StatusVariable(String monitorableId, String id, int cm, boolean data) {
+        setCommon(monitorableId, id, cm);
+        type = TYPE_BOOLEAN;
+        booleanData = data;
     }
 
     /**
@@ -194,33 +219,47 @@ public final class StatusVariable {
     }
 
     /**
-     * Returns the StatusVariable value if its type is integer.
+     * Returns the StatusVariable value if its type is long.
      * 
-     * @return the StatusVariable value as an integer
+     * @return the StatusVariable value as an long
      * @throws java.lang.IllegalStateException if the type of this
-     *         StatusVariable is not integer
+     *         StatusVariable is not long
      */
-    public int getInt() throws IllegalStateException {
-        if (type != TYPE_INTEGER)
+    public long getLong() throws IllegalStateException {
+        if (type != TYPE_LONG)
             throw new IllegalStateException(
-                    "This StatusVariable does not contain an integer value.");
-        return intData;
+                    "This StatusVariable does not contain a long value.");
+        return longData;
     }
 
     /**
-     * Returns the StatusVariable value if its type is float.
+     * Returns the StatusVariable value if its type is double.
      * 
-     * @return the StatusVariable value as a float
+     * @return the StatusVariable value as a double
      * @throws java.lang.IllegalStateException if the type of this
-     *         StatusVariable is not float
+     *         StatusVariable is not double
      */
-    public float getFloat() throws IllegalStateException {
-        if (type != TYPE_FLOAT)
+    public double getDouble() throws IllegalStateException {
+        if (type != TYPE_DOUBLE)
             throw new IllegalStateException(
-                    "This StatusVariable does not contain a float value.");
-        return floatData;
+                    "This StatusVariable does not contain a double value.");
+        return doubleData;
     }
 
+    /**
+     * Returns the StatusVariable value if its type is boolean.
+     * 
+     * @return the StatusVariable value as a boolean
+     * @throws java.lang.IllegalStateException if the type of this
+     *         StatusVariable is not double
+     */
+    public boolean getBoolean() throws IllegalStateException {
+        if (type != TYPE_BOOLEAN)
+            throw new IllegalStateException(
+                    "This StatusVariable does not contain a boolean value.");
+        return booleanData;
+    }
+    
     /**
      * Returns the collection method of this StatusVariable. See section 3.3 b)
      * in [ETSI TS 132 403]
@@ -252,12 +291,14 @@ public final class StatusVariable {
             return false;
         
         switch (type) {
-        case TYPE_INTEGER :
-            return intData == other.intData;
-        case TYPE_FLOAT :
-            return floatData == other.floatData;
+        case TYPE_LONG :
+            return longData == other.longData;
+        case TYPE_DOUBLE :
+            return doubleData == other.doubleData;
         case TYPE_STRING :
             return equals(stringData, other.stringData);
+        case TYPE_BOOLEAN :
+            return booleanData == other.booleanData;
         }
         
         return false; // never reached
@@ -272,10 +313,12 @@ public final class StatusVariable {
         int hash = hashCode(path) ^ cm;
 
         switch (type) {
-        case TYPE_INTEGER :
-            return hash ^ hashCode(new Integer(intData));
-        case TYPE_FLOAT :
-            return hash ^ hashCode(new Float(floatData));
+        case TYPE_LONG :
+            return hash ^ hashCode(new Long(longData));
+        case TYPE_DOUBLE :
+            return hash ^ hashCode(new Double(doubleData));
+        case TYPE_BOOLEAN :
+            return hash ^ hashCode(new Boolean(booleanData));
         case TYPE_STRING :
             return hash ^ hashCode(stringData);
         }
@@ -313,12 +356,14 @@ public final class StatusVariable {
         String beg = "StatusVariable(" + path + ", " + cmName + ", "
                 + timeStamp + ", ";
         switch (type) {
-            case TYPE_INTEGER :
-                return beg + "INTEGER, " + intData + ")";
-            case TYPE_FLOAT :
-                return beg + "FLOAT, " + floatData + ")";
+            case TYPE_LONG :
+                return beg + "LONG, " + longData + ")";
+            case TYPE_DOUBLE :
+                return beg + "DOUBLE, " + doubleData + ")";
             case TYPE_STRING :
                 return beg + "STRING, " + stringData + ")";
+            case TYPE_BOOLEAN :
+                return beg + "BOOLEAN, " + booleanData + ")";
         }
         
         return null; // never reached
