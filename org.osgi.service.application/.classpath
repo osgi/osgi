@@ -4,5 +4,6 @@
 	<classpathentry kind="src" path="/org.osgi.framework"/>
 	<classpathentry kind="src" path="/org.osgi.service.event"/>
 	<classpathentry sourcepath="/osgi.released/ee.minimum.jar" kind="lib" path="/osgi.released/ee.minimum.jar"/>
+	<classpathentry kind="src" path="/org.osgi.service.log"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
