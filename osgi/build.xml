@@ -1,0 +1,3 @@
+<project name="osgi-test-tool" default="publish">
+	<import file="../cnf/build.xml"/>
+</project>

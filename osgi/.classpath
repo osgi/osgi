@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.framework"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.cm"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.device"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.http"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.io"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.log"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.metatype"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.packageadmin"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.permissionadmin"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.prefs"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.provisioning"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.upnp"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.url"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.useradmin"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.wireadmin"/>
+	<classpathentry exported="true" kind="lib" path="/cnf/jar/servlet.jar"/>
+	<classpathentry kind="src" path="/ee.foundation"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.util.measurement"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.util.position"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.util.tracker"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.util.xml"/>
+	<classpathentry exported="true" kind="src" path="/org.osgi.service.startlevel"/>
+	<classpathentry kind="output" path=""/>
+</classpath>
