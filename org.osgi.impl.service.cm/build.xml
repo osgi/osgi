@@ -1,0 +1,3 @@
+<project name="org.osgi.impl.service.device" default="publish">
+<import file="../cnf/build.xml"/>
+</project>

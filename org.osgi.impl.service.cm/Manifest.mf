@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Activator: org.osgi.impl.service.cm.CMActivator
+Bundle-Name: impl.service.cm
+Bundle-Description: OSGi Configuration Administration Reference Implementation by ProSyst AG.
+Bundle-Copyright: Copyright (c) The Open Services Gateway Initiative (2002). All Rights Reserved.
+Bundle-Vendor: OSGi
+Bundle-Version: 2.0
+Bundle-Category: osgi
+Export-Package: org.osgi.service.cm; specification-version=1.1
+Import-Package: org.osgi.service.log; specification-version=1.0, org.osgi.framework; specification-version=1.0
+VS-Header: $Header$
+
