@@ -34,7 +34,7 @@ import org.osgi.framework.BundleContext;
  * A ComponentContext interface is used by a Service Component to interact with
  * it execution context including locating services by reference name. In order
  * to be notified when a component is activated and to obtain a
- * ComponentContext, the component’s implementation class must implement a
+ * ComponentContext, the component's implementation class must implement a
  * 
  * <pre>
  * protected void activate(ComponentContext context);
@@ -53,7 +53,7 @@ import org.osgi.framework.BundleContext;
  * <p>
  * These methods will be called by the Service Component Runtime using
  * reflection and may be private methods to avoid being public methods on the
- * component’s provided service object.
+ * component's provided service object.
  * 
  * @version $Revision$
  */

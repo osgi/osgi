@@ -192,8 +192,8 @@ public interface DmtMetaNode {
 	String[] getMimeTypes();
 
 	/**
-	 * Get the URI of a node whose children�s names are the only valid values
-	 * for the current node. For example, let�s assume that we have a node
+	 * Get the URI of a node whose children's names are the only valid values
+	 * for the current node. For example, let us assume that we have a node
 	 * defining the connectivity profile for the browser application:
 	 * <code>./DevDetail/Ext/Browser/Conn</code>. The node is a leaf,
 	 * containing the name of one of the profiles defined under

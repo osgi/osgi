@@ -52,7 +52,7 @@ public interface Monitorable {
 	 * name is the combination of the ID of the Monitorable and the name of the
 	 * KPI in the following format: [Monitorable_ID]/[KPI_name], for example
 	 * MyApp/QueueSize. This name is guaranteed to be unique on the service
-	 * platform and it is used in a MonitoringJob�s list of observed KPIs. The
+	 * platform and it is used in a Monitoring's list of observed KPIs. The
 	 * array contains the elements in no particular order.
 	 * 
 	 * @return the 'fully qualified' name of KPIs published by this object
