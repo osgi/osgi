@@ -169,7 +169,7 @@ public class ApplicationManagerImpl implements ApplicationManager, Runnable {
 	}
 
 	public String[] getSupportedMimeTypes() {
-		/* TODO TODO TODO TODO TODO */
+		/* TODO  */
 		return null;
 	}
 
