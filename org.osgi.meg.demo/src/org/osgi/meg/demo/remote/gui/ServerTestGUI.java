@@ -90,17 +90,22 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
         int port = 7777;
         if (args.length > 0)
         	port = Integer.parseInt(args[0]);
+        
         String root = ".";
         if (args.length > 1)
             root = args[1];
         
-		ServerTestGUI gui = new ServerTestGUI(port, root);
+        int sto = 5000;
+        if (args.length > 2)
+        	sto = Integer.parseInt(args[2]);
+        
+		ServerTestGUI gui = new ServerTestGUI(port, root, sto);
 	}
 	
-    public ServerTestGUI(int port, String root) {
+    public ServerTestGUI(int port, String root, int socketTimeout) {
         super();
 
-        rms = new RMServer(port);
+        rms = new RMServer(port, socketTimeout);
         commander = new Commander(rms, this);
         rms.setReceiver(commander);
         rootNode = new TreeNodeImpl(root, null, commander);

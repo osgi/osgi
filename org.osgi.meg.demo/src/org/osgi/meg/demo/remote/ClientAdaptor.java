@@ -25,11 +25,13 @@ import org.osgi.service.dmt.*;
 /* Description of the protocol at the end of this file */
 // TODO what should be used instead of the System.exit() calls?
 public class ClientAdaptor implements RemoteAlertSender {
-	private boolean				goon	= true;
-	private String				message	= null;
-	private CommandProcessor	cp		= null;
+	private boolean				goon	 = true;
+	private String				message	 = null;
+	private CommandProcessor	cp		 = null;
+	private int					pingTime;
 
-	public ClientAdaptor(DmtFactory fact, String host, int port) {
+	public ClientAdaptor(DmtFactory fact, String host, int port, int pingTime) {
+		this.pingTime = pingTime;
 		CommandThread ct = new CommandThread(this, host, port);
 		cp = new CommandProcessor(fact);
 		ct.start();
@@ -69,9 +71,9 @@ public class ClientAdaptor implements RemoteAlertSender {
 			this.parent = parent;
 			try {
 				s = new Socket(host, port);
+				s.setSoTimeout(10000);
 				out = new PrintWriter(s.getOutputStream(), true);
-				in = new BufferedReader(new InputStreamReader(s
-						.getInputStream()));
+				in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			}
 			catch (UnknownHostException e) {
 				System.err.println("Don't know about host: " + host);
@@ -90,7 +92,7 @@ public class ClientAdaptor implements RemoteAlertSender {
 			try {
 				while (parent.goon) {
 					try {
-						Thread.sleep(10);
+						Thread.sleep(pingTime);
 					}
 					catch (InterruptedException e) {
 					}
@@ -133,6 +135,7 @@ public class ClientAdaptor implements RemoteAlertSender {
 				s.close();
 			} // try
 			catch (IOException e) {
+				e.printStackTrace();
 			}
 		} // run
 	} // commandthread
