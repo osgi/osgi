@@ -26,7 +26,6 @@ public class ApplicationManagerBundleActivator extends Object implements BundleA
 	private BundleContext			bc;
 	private ServiceRegistration		serviceReg;
 	private ApplicationManagerImpl	appManImpl;
-	ApplicationPlugin				applicationPlugin = new ApplicationPlugin();
 	
 	public ApplicationManagerBundleActivator() {
 		super();
@@ -44,11 +43,9 @@ public class ApplicationManagerBundleActivator extends Object implements BundleA
 				"org.osgi.service.application.ApplicationManager", appManImpl,
 				null);
 		System.out.println("ApplicationManager started successfully!");
-		applicationPlugin.start(bc);
 	}
 
 	public void stop(BundleContext bc) throws Exception {
-		applicationPlugin.stop(bc);
 		appManImpl.stop();
 		//unregistering the ApplicationManager service
 		serviceReg.unregister();
