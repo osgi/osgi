@@ -33,9 +33,24 @@ import org.osgi.impl.service.policy.condpermadmin.ConditionalPermissionAdminPlug
 import org.osgi.impl.service.policy.dmtprincipal.DmtPrincipalPlugin;
 import org.osgi.impl.service.policy.permadmin.PermissionAdminPlugin;
 import org.osgi.service.dmt.DmtDataPlugin;
+import org.osgi.service.permissionadmin.PermissionAdmin;
+import org.osgi.service.permissionadmin.PermissionInfo;
 
 public class TestTrees extends TestCase {
 
+
+	
+	public FrameworkSecurityManager	secMan;
+	public DefaultAdaptor adaptor;
+	private BundleContext	systemBundleContext;
+	private Bundle	osgiAPIsBundle;
+	private Bundle	eventBundle;
+	private Bundle	eventMapperBundle;
+	private Bundle	configManagerBundle;
+	private Bundle	logBundle;
+	private Bundle	dmtBundle;
+	private Bundle	policyBundle;
+	private OSGi	framework;
 	
 	/**
 	 * This policy implementation gives AllPermission to all code sources.
@@ -52,36 +67,62 @@ public class TestTrees extends TestCase {
 		}
 		
 	}
-	public void testAllStartsUp() throws Exception {
+
+	public void startFramework() throws Exception {
 		Policy.setPolicy(new VeryGenerousPolicy());
-		SecurityManager secMan = new FrameworkSecurityManager();
+		secMan = new FrameworkSecurityManager();
 		System.setSecurityManager(secMan);
-		DefaultAdaptor adaptor = new DefaultAdaptor(new String[] { "reset" });
-		OSGi osgi = new OSGi(adaptor);
-		osgi.launch();
-		BundleContext bc = osgi.getBundleContext();
-		Bundle osgiBundle = bc.installBundle("file:../../osgi.released/osgi.jar");
-		osgiBundle.start();
-		Bundle event = bc.installBundle("file:../org.osgi.impl.service.event.jar");
-		event.start();
-		Bundle eventMapperBundle = bc.installBundle("file:../org.osgi.impl.service.event.mapper.jar");
+		adaptor = new DefaultAdaptor(new String[] { "reset" });
+		framework = new OSGi(adaptor);
+		framework.launch();
+		systemBundleContext = framework.getBundleContext();
+		
+		ServiceReference permissionAdminRef = systemBundleContext.getServiceReference(PermissionAdmin.class.getName());
+		PermissionAdmin permissionAdmin = (PermissionAdmin) systemBundleContext.getService(permissionAdminRef);
+		//permissionAdmin.setDefaultPermissions(new PermissionInfo[] { });
+		
+		eventBundle = systemBundleContext.installBundle("file:../org.osgi.impl.service.event.jar");
+		eventBundle.start();
+		eventMapperBundle = systemBundleContext.installBundle("file:../org.osgi.impl.service.event.mapper.jar");
 		eventMapperBundle.start();
-		Bundle configManagerBunde = bc.installBundle("file:../org.osgi.impl.service.cm.jar");
-		configManagerBunde.start();
-		Bundle logBundle = bc.installBundle("file:../org.osgi.impl.service.log.jar");
+		configManagerBundle = systemBundleContext.installBundle("file:../org.osgi.impl.service.cm.jar");
+		configManagerBundle.start();
+		logBundle = systemBundleContext.installBundle("file:../org.osgi.impl.service.log.jar");
 		logBundle.start();
-		Bundle dmtBundle = bc.installBundle("file:../org.osgi.impl.service.dmt.jar");
+		dmtBundle = systemBundleContext.installBundle("file:../org.osgi.impl.service.dmt.jar");
 		dmtBundle.start();
-		Bundle policyBundle = bc.installBundle("file:../org.osgi.impl.service.policy.jar");
+		policyBundle = systemBundleContext.installBundle("file:../org.osgi.impl.service.policy.jar");
 		policyBundle.start();
+	}
+
+	public void stopFramework() throws Exception {
+		framework.shutdown();
+		System.setSecurityManager(null);
+		Policy.setPolicy(null);
+		secMan = null;
+		adaptor = null;
+		systemBundleContext = null;
+		osgiAPIsBundle = null;
+		eventBundle = null;
+		eventMapperBundle = null;
+		configManagerBundle = null;
+		logBundle = null;
+		dmtBundle = null;
+		policyBundle = null;
+		framework = null;
+	}
+	
+	public void testAllStartsUp() throws Exception {
+		startFramework();
 
 		// check if all three policy trees are registered
 		ServiceReference[] sr;
-		sr = bc.getServiceReferences(DmtDataPlugin.class.getName(),"(dataRootURIs="+PermissionAdminPlugin.dataRootURI+")");
+		sr = systemBundleContext.getServiceReferences(DmtDataPlugin.class.getName(),"(dataRootURIs="+PermissionAdminPlugin.dataRootURI+")");
 		assertNotNull(sr[0]);
-		sr = bc.getServiceReferences(DmtDataPlugin.class.getName(),"(dataRootURIs="+ConditionalPermissionAdminPlugin.dataRootURI+")");
+		sr = systemBundleContext.getServiceReferences(DmtDataPlugin.class.getName(),"(dataRootURIs="+ConditionalPermissionAdminPlugin.dataRootURI+")");
 		assertNotNull(sr[0]);
-		sr = bc.getServiceReferences(DmtDataPlugin.class.getName(),"(dataRootURIs="+DmtPrincipalPlugin.dataRootURI+")");
+		sr = systemBundleContext.getServiceReferences(DmtDataPlugin.class.getName(),"(dataRootURIs="+DmtPrincipalPlugin.dataRootURI+")");
 		assertNotNull(sr[0]);
+		stopFramework();
 	}
 }
