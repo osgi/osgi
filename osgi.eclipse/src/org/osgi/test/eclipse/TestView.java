@@ -225,29 +225,34 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 	}
 
 	RemoteService getTarget() {
-		Vector targets = handler.getTargets();
+		final Vector targets = handler.getTargets();
 		if (targets.isEmpty()) {
 			error("No targets were found", null);
 			return null;
 		}
-		RemoteService current = (RemoteService) targets.elementAt(0);
-		if (targets.size() == 1)
-			return current;
-		String[] names = new String[targets.size() + 1];
-		for (int i = 0; i < targets.size(); i++) {
-			RemoteService rs = (RemoteService) targets.elementAt(i);
-			names[i] = rs.getHost();
-		}
-		names[targets.size()] = "Cancel";
-		Shell shell = new Shell();
-		MessageDialog md = new MessageDialog(shell, "Choose a target", null,
-				"There are multiple targets, pick one",
-				MessageDialog.INFORMATION, names, 0);
-		int n = md.open();
-		if (n < targets.size())
-			return (RemoteService) targets.elementAt(0);
-		else
-			return null;
+		current = (RemoteService) targets.elementAt(0);
+		if (targets.size() > 1)
+			Display.getDefault().syncExec(new Runnable() {
+				public void run() {
+					String[] names = new String[targets.size() + 1];
+					for (int i = 0; i < targets.size(); i++) {
+						RemoteService rs = (RemoteService) targets.elementAt(i);
+						names[i] = rs.getHost();
+					}
+					names[targets.size()] = "Cancel";
+					Shell shell = new Shell();
+					MessageDialog md = new MessageDialog(shell,
+							"Choose a target", null,
+							"There are multiple targets, pick one",
+							MessageDialog.INFORMATION, names, 0);
+					int n = md.open();
+					if (n < targets.size())
+						current = (RemoteService) targets.elementAt(n);
+					else
+						current = null;
+				}
+			});
+		return current;
 	}
 
 	Object getService(Class c) {
@@ -259,9 +264,9 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 	}
 
 	static void error(final String msg, final Throwable throwable) {
-		if ( throwable != null )
-			Activator.log.log(new Status(Status.ERROR,"osgi.eclipse",Status.OK, msg, throwable ));
-		
+		if (throwable != null)
+			Activator.log.log(new Status(Status.ERROR, "osgi.eclipse",
+					Status.OK, msg, throwable));
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				if (throwable != null) {
@@ -323,17 +328,18 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 						for (int i = 0; i < locations.length; i++) {
 							URL url = new URL("file:" + locations[i]);
 							InputStream in = url.openStream();
-							
-							if ( in != null )
-							try {
-								ByteArrayOutputStream bout = new ByteArrayOutputStream();
-								target.install(url.getFile() + "~keep~", in );
-							}
-							finally {
-								in.close();								
-							}
-							else 
-								error("No such file " + locations[i], null );
+							if (in != null)
+								try {
+									ByteArrayOutputStream bout = new ByteArrayOutputStream();
+									target
+											.install(url.getFile() + "~keep~",
+													in);
+								}
+								finally {
+									in.close();
+								}
+							else
+								error("No such file " + locations[i], null);
 						}
 						target.close();
 					}

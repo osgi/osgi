@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-Name: OSGi-Eclipse
 Bundle-SymbolicName: osgi.eclipse; singleton=true
-Bundle-Version: 1.0.2
+Bundle-Version: 1.0.3
 Bundle-Activator: org.osgi.test.eclipse.Activator
 Bundle-Vendor: OSGi
 Bundle-Localization: plugin
