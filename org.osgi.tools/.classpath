@@ -5,6 +5,6 @@
 	<classpathentry kind="lib" path="/cnf/ant/lib/ant.jar"/>
 	<classpathentry kind="lib" path="/cnf/jar/junit.jar"/>
 	<classpathentry kind="lib" path="/osgi.released/osgi.jar"/>
-	<classpathentry kind="lib" path="/osgi.released/osgi-internal.jar"/>
+	<classpathentry kind="lib" path="/osgi.released/osgi.internal.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

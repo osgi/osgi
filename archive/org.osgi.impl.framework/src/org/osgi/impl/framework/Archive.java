@@ -13,11 +13,8 @@
 package org.osgi.impl.framework;
 
 import java.io.*;
-import java.net.*;
-import java.security.*;
-import java.util.*;
-import java.util.jar.JarFile;
-import java.util.jar.JarEntry;
+import java.net.URL;
+import java.util.jar.*;
 
 /**
  * JAR file handling.
