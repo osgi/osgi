@@ -29,7 +29,7 @@ package org.osgi.impl.service.application;
 
 import java.io.*;
 import java.util.*;
-import java.security.*;
+//import java.security.*; /* TODO */
 
 import org.osgi.framework.*;
 import org.osgi.service.application.*;
@@ -69,7 +69,6 @@ public class ApplicationDescriptorImpl implements Delegate {
 			return newState;
 		} catch( IOException ioe ) {
 			ioe.printStackTrace();
-			// TODO log this
 		}
 		return false;
 	}
@@ -87,8 +86,8 @@ public class ApplicationDescriptorImpl implements Delegate {
 	}
 
 	public void launch(Map arguments) throws Exception {
-		AccessController.checkPermission( new ApplicationAdminPermission(
-				descriptor.getPID(), ApplicationAdminPermission.LAUNCH ) );
+//		AccessController.checkPermission( new ApplicationAdminPermission(  /* TODO */
+//				descriptor.getPID(), ApplicationAdminPermission.LAUNCH ) );
 
 			Map props = descriptor.getProperties("en");
 			String isLocked = (String)props.get("application.locked");
