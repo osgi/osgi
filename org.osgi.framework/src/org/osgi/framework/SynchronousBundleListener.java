@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) OSGi Alliance (2001, 2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -35,15 +35,15 @@ package org.osgi.framework;
  * implemented by a bundle developer.
  * <p>
  * A <code>SynchronousBundleListener</code> object is registered with the
- * Framework using the {@link BundleContext#addBundleListener}method.
+ * Framework using the {@link BundleContext#addBundleListener} method.
  * <code>SynchronousBundleListener</code> objects are called with a
- * <code>BundleEvent</code> object when a bundle has been installed, started,
- * stopped, updated, or uninstalled.
+ * <code>BundleEvent</code> object when a bundle has been installed,
+ * resolved, started, stopped, updated, unresolved, or uninstalled.
  * <p>
  * Unlike normal <code>BundleListener</code> objects,
- * <code>SynchronousBundleListener</code> s are synchronously called during bundle
+ * <code>SynchronousBundleListener</code>s are synchronously called during bundle
  * lifecycle processing. The bundle lifecycle processing will not proceed
- * until all <code>SynchronousBundleListener</code> s have completed.
+ * until all <code>SynchronousBundleListener</code>s have completed.
  * <code>SynchronousBundleListener</code> objects will be called prior to
  * <code>BundleListener</code> objects.
  * <p>

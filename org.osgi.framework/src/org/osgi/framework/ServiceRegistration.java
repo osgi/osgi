@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) OSGi Alliance (2000, 2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -34,8 +34,8 @@ import java.util.Dictionary;
  * 
  * <p>
  * The Framework returns a <code>ServiceRegistration</code> object when a
- * <code>BundleContext.registerService</code> method is successful. The
- * <code>ServiceRegistration</code> object is for the private use of the
+ * <code>BundleContext.registerService</code> method invocation is successful.
+ * The <code>ServiceRegistration</code> object is for the private use of the
  * registering bundle and should not be shared with other bundles.
  * <p>
  * The <code>ServiceRegistration</code> object may be used to update the
@@ -63,7 +63,7 @@ public abstract interface ServiceRegistration {
 	 * Updates the properties associated with a service.
 	 * 
 	 * <p>
-	 * The {@link Constants#OBJECTCLASS}and {@link Constants#SERVICE_ID}keys
+	 * The {@link Constants#OBJECTCLASS} and {@link Constants#SERVICE_ID} keys
 	 * cannot be modified by this method. These values are set by the Framework
 	 * when the service is registered in the OSGi environment.
 	 * 
@@ -71,7 +71,7 @@ public abstract interface ServiceRegistration {
 	 * The following steps are required to modify service properties:
 	 * <ol>
 	 * <li>The service's properties are replaced with the provided properties.
-	 * <li>A service event of type {@link ServiceEvent#MODIFIED}is
+	 * <li>A service event of type {@link ServiceEvent#MODIFIED} is
 	 * synchronously sent.
 	 * </ol>
 	 * 
@@ -100,13 +100,13 @@ public abstract interface ServiceRegistration {
 	 * <li>The service is removed from the Framework service registry so that
 	 * it can no longer be used. <code>ServiceReference</code> objects for the
 	 * service may no longer be used to get a service object for the service.
-	 * <li>A service event of type {@link ServiceEvent#UNREGISTERING}is
+	 * <li>A service event of type {@link ServiceEvent#UNREGISTERING} is
 	 * synchronously sent so that bundles using this service can release their
 	 * use of it.
 	 * <li>For each bundle whose use count for this service is greater than
 	 * zero: <br>
 	 * The bundle's use count for this service is set to zero. <br>
-	 * If the service was registered with a {@link ServiceFactory}object, the
+	 * If the service was registered with a {@link ServiceFactory} object, the
 	 * <code>ServiceFactory.ungetService</code> method is called to release the
 	 * service object for the bundle.
 	 * </ol>

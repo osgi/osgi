@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004,2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -44,7 +44,7 @@ import java.util.StringTokenizer;
  * </ol>
  * 
  * <p>
- * <code>Version</code> instances are immutable.
+ * <code>Version</code> objects are immutable.
  * 
  * @version $Revision$
  * @since 1.3
@@ -323,7 +323,7 @@ public class Version implements Comparable {
 	 * <code>String.compareTo</code>).
 	 * 
 	 * <p>
-	 * A version is considered to be <b>equal to </b> another version if the
+	 * A version is considered to be <b>equal to</b> another version if the
 	 * major, minor and micro components are equal and the qualifier component
 	 * is equal (using <code>String.compareTo</code>).
 	 * 

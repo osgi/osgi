@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) OSGi Alliance (2000, 2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -37,7 +37,7 @@ import java.util.Dictionary;
  * <code>BundleContext.getServiceReference</code> and
  * <code>BundleContext.getServiceReferences</code> methods.
  * <p>
- * A <code>ServiceReference</code> may be shared between bundles and can be
+ * A <code>ServiceReference</code> object may be shared between bundles and can be
  * used to examine the properties of the service and to get the service object.
  * <p>
  * Every service registered in the Framework has a unique
@@ -106,7 +106,7 @@ public abstract interface ServiceReference {
 	 * <code>ServiceReference</code> object.
 	 * 
 	 * <p>
-	 * This method will always return <code>null</code> when the service has
+	 * This method must return <code>null</code> when the service has
 	 * been unregistered. This can be used to determine if the service has been
 	 * unregistered.
 	 * 
@@ -132,7 +132,7 @@ public abstract interface ServiceReference {
 	public abstract Bundle[] getUsingBundles();
 
 	/**
-	 * Tests if the bundle which registered the service referenced by this
+	 * Tests if the bundle that registered the service referenced by this
 	 * <code>ServiceReference</code> and the specified bundle use the same source
 	 * for the package of the specified class name.
 	 * <p>
