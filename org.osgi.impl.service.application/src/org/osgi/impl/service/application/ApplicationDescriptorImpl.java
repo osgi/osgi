@@ -44,6 +44,7 @@ public class ApplicationDescriptorImpl implements Delegate {
 	
 	public ApplicationDescriptorImpl( BundleContext bc, Scheduler scheduler ) {
 		this.bc = bc;
+		locks = null;
 	}
 	
 	public synchronized void setApplicationDescriptor(ApplicationDescriptor d) {
@@ -58,19 +59,14 @@ public class ApplicationDescriptorImpl implements Delegate {
 		try {
 			File f = bc.getDataFile("locks");
 			if ( locks == null ) {
-				Properties locks = new Properties();
 				locks = new Properties();
 				if ( f.exists() )
 					locks.load( new FileInputStream(f));
 			}
 			boolean current = locks.containsKey(descriptor.getPID()); 
-			if ( query )
+			if ( query || newState == current )
 				return current;
 
-			if ( newState == current ) {
-				// TODO funny, somebody sets the state it is already ...
-				return current;
-			}
 			if ( current )
 				locks.remove(descriptor.getPID());
 			else
@@ -122,5 +118,4 @@ public class ApplicationDescriptorImpl implements Delegate {
 					}
 			}
 	}
-
 }
