@@ -340,7 +340,7 @@ public class TestTrees extends TestCase {
 		
 		startFramework(true);
 
-		Class cl = integrationTestBundle.loadClass("integrationtests.bundle1.Test");
+		Class cl = integrationTestBundle.loadClass("org.osgi.impl.service.policy.integrationtests.bundle1.Test");
 		Method doAction = cl.getDeclaredMethod("doAction",new Class[]{PrivilegedExceptionAction.class});
 		PrivilegedExceptionAction adminAction = (PrivilegedExceptionAction) new PrivilegedExceptionAction() {
 			public Object run() throws Exception {
