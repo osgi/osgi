@@ -42,13 +42,14 @@ import java.text.MessageFormat;
  * all elements will be <code>null</code>.
  */
 public class DmtAlertItem {
-	private static final MessageFormat	xmlTag	= new MessageFormat(
-														"<{0}>{1}</{0}>");
-	private String						source;
-	private String						type;
-	private String						format;
-	private String						mark;
-	private String						data;
+	private static final MessageFormat xmlTag = 
+        new MessageFormat("<{0}>{1}</{0}>");
+    
+	private String source;
+	private String type;
+	private String format;
+	private String mark;
+	private String data;
 
 	/**
 	 * Create an instance of the alert item. The constructor takes all possible
