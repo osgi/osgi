@@ -97,7 +97,6 @@
 				Default properties
 		-->
 
-		<echo>project ${project.name}</echo>
 		<loadproperties description="expand properties ALSO in keys!" srcfile="${project}/build.properties">
 			<filterchain>
 				<expandproperties />
