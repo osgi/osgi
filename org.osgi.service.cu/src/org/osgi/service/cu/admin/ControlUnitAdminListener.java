@@ -84,14 +84,21 @@ public interface ControlUnitAdminListener {
   /**
    * This constant is used as first parameter in
    * {@link #controlUnitEvent controlUnitEvent} method to indicate that a new
-   * control unit type is available. When the event is of this type the
+   * control unit type is available, i.e. a control unit or control unit 
+   *  
+   * {@link org.osgi.service.cu.ControlUnit} or 
+   * {@link org.osgi.service.cu.admin.spi.ManagedControlUnit} of a type not 
+   * available before in the framework was registered or 
+   * <BR>
+   * 
+   * When the event is of this type the
    * parameter of {@link #controlUnitEvent controlUnitEvent} method specifying a
    * control unit id is <code>null</code>.
    * <p>
    * 
    * The value of this constant is 3
    */
-  public static final int CONTROL_UNIT_TYPE_APPEARED = 3;
+  public static final int CONTROL_UNIT_TYPE_ADDED = 3;
 
   /**
    * This constant is used as first parameter in
@@ -103,7 +110,7 @@ public interface ControlUnitAdminListener {
    * 
    * The value of this constant is 4
    */
-  public static final int CONTROL_UNIT_TYPE_DISAPPEARED = 4;
+  public static final int CONTROL_UNIT_TYPE_REMOVED = 4;
 
   /**
    * Invoked by the Control Unit admin service when a Control Unit instance has
@@ -111,11 +118,11 @@ public interface ControlUnitAdminListener {
    * 
    * @param eventType one of {@link #CONTROL_UNIT_ADDED},
    *          {@link #CONTROL_UNIT_REMOVED},
-   *          {@link #CONTROL_UNIT_TYPE_APPEARED} or
-   *          {@link #CONTROL_UNIT_TYPE_DISAPPEARED}
+   *          {@link #CONTROL_UNIT_TYPE_ADDED} or
+   *          {@link #CONTROL_UNIT_TYPE_REMOVED}
    * @param controlUnitType the type of the Control Unit instance
-   * @param controUnitID the id of the Control Unit instance
+   * @param controlUnitID the id of the Control Unit instance
    */
-  public void controlUnitEvent(int eventType, String controlUnitType, String controUnitID);
+  public void controlUnitEvent(int eventType, String controlUnitType, String controlUnitID);
 
 }

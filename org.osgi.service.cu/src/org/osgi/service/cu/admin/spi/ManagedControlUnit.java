@@ -29,7 +29,7 @@ package org.osgi.service.cu.admin.spi;
 import org.osgi.service.cu.ControlUnit;
 
 /**
- * This interface may be registered as a OSGi service in order to make a single
+ * This interface must be registered as a OSGi service in order to make a single
  * resource manageable through the Control Unit abstraction. <br>
  * The ManagedControlUnit services should not be used directly by the
  * applications. Instead application accessed them as

@@ -70,7 +70,8 @@ public interface ControlUnit {
   public String getId();
 
   /**
-   * Returns type of the control unit.
+   * Returns type of the control unit. This type is used to retrieve 
+   * metatype information from the metatype service. 
    * 
    * @return The type of the control unit
    */
@@ -87,6 +88,7 @@ public interface ControlUnit {
    * retrieved for some reason. {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getApplicationException()} methods can be used 
    * to determine the actual cause.
+   * @throws NullPointerException if the stateVariableID is <code>null</code>. 
    */
   public Object queryStateVariable(String stateVariableID) throws ControlUnitException;
 
@@ -107,6 +109,7 @@ public interface ControlUnit {
    * {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getApplicationException()} methods can be used 
    * to determine the actual cause.
+   * @throws NullPointerException if the actionID is <code>null</code>.
    */
   public Object invokeAction(String actionID, Object arguments) throws ControlUnitException;
 }

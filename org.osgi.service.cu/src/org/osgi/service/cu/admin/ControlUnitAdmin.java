@@ -81,9 +81,9 @@ public interface ControlUnitAdmin {
    * the control unit-filtering criterion.
    * <p>
    * 
-   * The value of this constant is "osg.control.event.type"
+   * The value of this constant is "org.osgi.control.event.type"
    */
-  public static final String EVENT_TYPE = "osg.control.event.type";
+  public static final String EVENT_TYPE = "org.osgi.control.event.type";
 
   /**
    * Returns all distinct types of control units currently exported in the
@@ -102,6 +102,7 @@ public interface ControlUnitAdmin {
    * @return The type, or <code>null</code>, if the give type has no version
    * @throws java.lang.IllegalArgumentException if there is no such type of
    *           units exported in the framework
+   * @throws NullPointerException if the controlUnitType is <code>null</code>.
    */
   public String getControlUnitTypeVersion(String controlUnitType);
 
@@ -142,6 +143,7 @@ public interface ControlUnitAdmin {
    * {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getApplicationException()} methods can be used 
    * to determine the actual cause.
+   * @throws NullPointerException if the controlUnitType or finderID is <code>null</code>.
    */
   public String[] findControlUnits(String controlUnitType, String finderID, Object arguments)
       throws ControlUnitException;
@@ -156,6 +158,7 @@ public interface ControlUnitAdmin {
    *         <code>(controlUnitType, controlUnitId)</code> pair or
    *         <code>null</code> if there is not such control unit exported in
    *         the framework.
+   * @throws NullPointerException if the controlUnitType or controlUnitID is <code>null</code>.
    */
   public ControlUnit getControlUnit(String controlUnitType, String controlUnitID);
 
@@ -169,7 +172,9 @@ public interface ControlUnitAdmin {
    * @param parentControlUnitID the id of the parent Control Unit.
    * @param childControlUnitType the type of the child Control Units.
    * 
-   * @return An array of child control units
+   * @return An array of child control units units or null if there are 
+   * no child control units found for this parent type and id.
+   * @throws NullPointerException if the childControlUnitType is <code>null</code>.
    */
   public String[] getSubControlUnits(String parentControlUnitType, String parentControlUnitID,
                                      String childControlUnitType);
@@ -180,6 +185,7 @@ public interface ControlUnitAdmin {
    * 
    * @param childControlUnitType child unit type
    * @return The parent types or null if the given control unit may have no parents
+   * @throws NullPointerException if the childControlUnitType is <code>null</code>.
    */
   public String[] getParentControlUnitTypes(String childControlUnitType);
 
@@ -192,6 +198,8 @@ public interface ControlUnitAdmin {
    * @param parentControlUnitType parent units type
    * @return The parent types or null if the given control unit has no parents of
    *         the given type
+   * @throws NullPointerException if the childControlUnitType,
+   *         childControlUnitID or parentControlUnitType is <code>null</code>.
    */
   public String[] getParentControlUnits(String childControlUnitType, String childControlUnitID,
                                         String parentControlUnitType);
@@ -226,6 +234,7 @@ public interface ControlUnitAdmin {
    * reason. {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getApplicationException()} methods can be used 
    * to determine the actual cause.
+   * @throws NullPointerException if the controlUnitType or constructorID is <code>null</code>.
    */
   public String createControlUnit(String controlUnitType, String constructorID,
                                   Object arguments) throws ControlUnitException;
@@ -243,6 +252,7 @@ public interface ControlUnitAdmin {
    * reason. {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getApplicationException()} methods can be used 
    * to determine the actual cause.
+   * @throws NullPointerException if the controlUnitType or controlUnitID is <code>null</code>.
    */
   public void destroyControlUnit(String controlUnitType, String controlUnitID)
       throws ControlUnitException;
@@ -253,6 +263,7 @@ public interface ControlUnitAdmin {
    * 
    * @param parentControlUnitType parent control unit type
    * @return An array of the child control unit types
+   * @throws NullPointerException if the parentControlUnitType is <code>null</code>.
    */
   public String[] getSubControlUnitTypes(String parentControlUnitType);
 
@@ -261,15 +272,16 @@ public interface ControlUnitAdmin {
    * state variable.
    * 
    * @param controlUnitType the type of the control unit
-   * @param controlUnitId the id of the control unit
+   * @param controlUnitID the id of the control unit
    * @param stateVariableID the id of the variable
    * @return The value of the variable
    * @throws ControlUnitException if the state variable's value cannot be
    * retrieved for some reason. {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getApplicationException()} methods can be used 
    * to determine the actual cause.
+   * @throws NullPointerException if the controlUnitType, controlUnitID or stateVariableID is <code>null</code>.
    */
-  public Object queryStateVariable(String controlUnitType, String controlUnitId, String stateVariableID)
+  public Object queryStateVariable(String controlUnitType, String controlUnitID, String stateVariableID)
       throws ControlUnitException;
 
   /**
@@ -288,6 +300,7 @@ public interface ControlUnitAdmin {
    * {@link ControlUnitException#getErrorCode()}
    * and {@link ControlUnitException#getApplicationException()} methods can be used 
    * to determine the actual cause.
+   * @throws NullPointerException if the controlUnitType, controlUnitID or actionID is <code>null</code>.
    */
   public Object invokeAction(String controlUnitType, String controlUnitID, String actionID, Object arguments)
       throws ControlUnitException;

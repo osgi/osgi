@@ -27,10 +27,20 @@
 package org.osgi.service.cu;
 
 /**
- * StateVariableListeners are registered as OSGi Services. The control unit uses
- * whiteboard pattern to notify the listeners, i.e. Control Unit Admin is
+ * StateVariableListeners are registered as OSGi Services. For 
+ * {@link org.osgi.service.cu.admin.spi.ManagedControlUnit ManagedControlUnits}
+ * and 
+ * {@link org.osgi.service.cu.admin.spi.ControlUnitFactory ControlUnitFactories}
+ * whiteboard pattern is used to notify the listeners, i.e. Control Unit Admin is
  * responsible for tracking these services and to deliver them the appropriate
- * events to them.
+ * events. <code>ManagedControlUnits</code> and <code>ControlUnitFactories</code>
+ * notify the Control Unit Admin about state variable changes through the
+ * {@link  org.osgi.service.cu.admin.spi.CUAdminCallback} provided to them upon
+ * registration in the framework. <BR>
+ * 
+ * {@link org.osgi.service.cu.ControlUnit ControlUnits} on the other hand have
+ * the responsibility to track and notify the listeners on their own.
+ * 
  * <p>
  * 
  * A service registration property may be used as a filter to limit the number

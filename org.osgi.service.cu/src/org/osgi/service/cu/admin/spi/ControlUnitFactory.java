@@ -30,7 +30,7 @@ import org.osgi.service.cu.ControlUnit;
 import org.osgi.service.cu.ControlUnitException;
 
 /**
- * This interface may be registered as an OSGi service in order to make more
+ * This interface must be registered as an OSGi service in order to make more
  * then one resources of the same type manageable through the Control Unit
  * abstraction. The ControlUnitFactory services should not be used directly by
  * the applications. Instead application access
@@ -58,7 +58,7 @@ import org.osgi.service.cu.ControlUnitException;
  * <code>ControlUnitFactory</code> service must be registered with property
  * {@link org.osgi.service.cu.ControlUnitConstants#TYPE}with value of type
  * <code>String</code> specifying the type of the Control Unit instances
- * exported by this factory. Optionally the registration properties may contain
+ * provided by this factory. Optionally the registration properties may contain
  * property {@link org.osgi.service.cu.ControlUnitConstants#PARENT_TYPE} with
  * value of type <code>String</code> or <code>String[]</code> specifying the
  * type(s) of parent control units in the control unit hierarchy. Factories which
@@ -109,9 +109,11 @@ public interface ControlUnitFactory {
 
   /**
    * Returns ids of the control unit instances, which are children of a control 
-   * unit with a given type, and id. Supplying <code>null</code> as arguments
-   * to this method results in returning only control units exported by this
-   * factory, which have no parent.
+   * unit with a given type, and id. <BR>
+   * 
+   * Supplying <code>null</code> as arguments
+   * to this method results in returning only those control units provided by this
+   * factory, which have no parent, omitting all other provided units. <BR>
    * 
    * @param parentControlUnitType type of the parent control unit
    * @param parentControlUnitID id of the parent control unit
@@ -121,9 +123,9 @@ public interface ControlUnitFactory {
   public String[] getControlUnits(String parentControlUnitType, String parentControlUnitID);
 
   /**
-   * Returns the ids of all control units currently exported by this factory.
+   * Returns the ids of all control units currently provided by this factory.
    * 
-   * @return The control unit IDs or <code>null</code>, if the factory doesn't exports units.
+   * @return The control unit IDs or <code>null</code>, if the factory does not provide any units.
    */
   public String[] listControlUnits();
 
