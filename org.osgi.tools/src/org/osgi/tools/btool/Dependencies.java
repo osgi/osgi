@@ -352,7 +352,7 @@ public class Dependencies {
 
 	Map getMap(String definition) {
 		Map map = new Hashtable();
-		StringTokenizer st = new StringTokenizer(definition, " ");
+		StringTokenizer st = new StringTokenizer(definition, " \n\r\t");
 		while (st.hasMoreTokens()) {
 			map.put(st.nextToken(), st.nextToken());
 		}
