@@ -25,6 +25,7 @@ import java.util.*;
 import javax.xml.parsers.*;
 
 import org.osgi.framework.*;
+import org.osgi.meglet.*;
 import org.osgi.service.application.*;
 import org.osgi.service.event.*;
 import org.osgi.service.log.LogService;
@@ -460,8 +461,18 @@ public class MegletContainerImpl implements BundleListener, MegletContainer,
 
 			Document doc = domParser.parse( in );
 
-
-			NodeList listNodeList = doc.getElementsByTagName( "descriptor" );
+			NodeList listNodeList = null;
+			
+			try{
+				System.out.println( "Entering...");
+				listNodeList = doc.getElementsByTagName( "descriptor" );
+				System.out.println( "Success...");
+			}catch( Throwable e ) {
+				System.out.println( e );
+				e.printStackTrace();
+			}finally{
+				System.out.println( "Leaving...");
+			}
 			if( listNodeList.getLength() != 1 )
 				throw new Exception( "One descriptor must be present in the meglets.xml file!" );
 

@@ -86,23 +86,6 @@ public class TestApplication2 extends Meglet implements EventHandler {
 			requestSuspend();
 		}
 	}
-
-	/**
-	 * @param string
-	 */
-	private void unregisterForEvents(String string) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	/**
-	 * @param string
-	 */
-	private void registerForEvents(String string) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	private void writeResult(String result) {
 		try {
 			if (fileName == null)
@@ -113,23 +96,5 @@ public class TestApplication2 extends Meglet implements EventHandler {
 			stream.close();
 		}
 		catch (IOException e) {}
-	}
-
-	/**
-	 * 
-	 * @see org.osgi.service.component.ComponentInstance#dispose()
-	 */
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	/**
-	 * @return
-	 * @see org.osgi.service.component.ComponentInstance#getInstance()
-	 */
-	public Object getInstance() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
