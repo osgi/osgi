@@ -1,63 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="/org.osgi.test.cases.classpath"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.cm"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.device"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.div"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.dynpkgimport"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.filter"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.http"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.io"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.lifecycle"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.log"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.logproxy"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.measurement"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.packageadmin.tc1"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.packageadmin.tc2"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.packageadmin.tc3"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.permission"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.permissionnosecurity"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.permissionpermissions"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.position"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.prefs"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.provisioning"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.registry"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.servicetracker"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.startlevel"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.syncbundlelistener"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.upnp"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.url"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.useradmin"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.wireadmin"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases.xml"/>
-	<classpathentry kind="src" path="/org.osgi.test.tool"/>
-	<classpathentry kind="src" path="/org.osgi.test.cases"/>
-	<classpathentry kind="src" path="/org.osgi.impl.framework"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.http"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.log"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.cm"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.device.basicdriverlocator"/>
-	<classpathentry kind="src" path="/org.osgi.impl.bundle.saxon"/>
-	<classpathentry kind="src" path="/org.osgi.impl.bundle.rsh"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.device.manager"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.io"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.prefs"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.provisioning"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.upnp"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.useradmin"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.wireadmin"/>
-	<classpathentry kind="src" path="/osgi"/>
 	<classpathentry kind="lib" path="/cnf/jar/servlet.jar"/>
 	<classpathentry kind="lib" path="/cnf/jar/saxon.jar"/>
-	<classpathentry kind="src" path="/org.osgi.tools"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.application"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.basiccontainer"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.deployment"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.dmt"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.event"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.megcontainer"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.monitor"/>
 	<classpathentry sourcepath="/osgi.released/ee.foundation.jar" kind="lib" path="/osgi.released/ee.foundation.jar"/>
-	<classpathentry sourcepath="/osgi.released/osgi.internal.jar" kind="lib" path="/osgi.released/osgi.internal.jar"/>
+	<classpathentry sourcepath="/org.osgi.test.cases/src" kind="lib" path="/osgi.released/osgi.internal.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

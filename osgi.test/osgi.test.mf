@@ -8,7 +8,6 @@ Bundle-Vendor: OSGi Alliance
 Bundle-Version: 3.0
 Bundle-Category: osgi,test
 Bundle-DocUrl: http://www.osgi.org/
-Bundle-Classpath: .,servlet.jar
 $(IMPORT-PACKAGE)
 group-load:  org.osgi.test.cases.classpath.jar, 
   org.osgi.test.cases.cm.jar, 
