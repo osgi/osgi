@@ -376,13 +376,17 @@ public class Basic implements CommandProvider
 				for ( int i=0; packs != null && i<packs.length; i++ ) {
 					if ( filter == null || packs[i].getName().indexOf(filter) >= 0 ) {
 						sb.append( packs[i].getName() );
-						sb.append( " <- " );
+						if ( packs[i].getSpecificationVersion()!=null ) {
+							sb.append( "-");
+							sb.append( packs[i].getSpecificationVersion() );
+						}
+						sb.append( " exported by " );
 						sb.append( Handler.toString(packs[i].getExportingBundle()) );
 						sb.append( "\r\n" ); // akr added \r
 						Bundle bs[] = packs[i].getImportingBundles();
 						if ( !s ) {
 							for ( int j=0; bs!=null && j<bs.length; j++ ) {
-								sb.append( " -> " );
+								sb.append( " imported by " );
 								sb.append( Handler.toString( bs[j] ) );
 								sb.append( "\r\n" ); // akr added \r
 							}

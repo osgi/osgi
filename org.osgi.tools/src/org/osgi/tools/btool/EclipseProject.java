@@ -271,7 +271,6 @@ public class EclipseProject {
                     int index = path.indexOf('/');
                     String variable = (index < 0) ? path : path.substring(0,
                             index);
-                    System.out.println("properties " + properties);
                     String value = (String) properties.get(variable);
                     if (value == null) {
                         value = variable;

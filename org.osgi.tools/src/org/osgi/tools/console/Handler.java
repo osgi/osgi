@@ -6,6 +6,7 @@ import java.util.*;
 
 import org.osgi.framework.*;
 import org.osgi.service.log.*;
+import org.osgi.service.packageadmin.*;
 import org.osgi.tools.command.*;
 
 
@@ -88,9 +89,20 @@ class Handler
             if ( o instanceof Dictionary )
                 return toString( n, (Dictionary) o );
                 
+            if ( o instanceof ExportedPackage )
+                return toString( n, (ExportedPackage) o );
+                
             return "" + o;
     }
 
+    public static String toString( int n, ExportedPackage ep ) {
+        StringBuffer	sb = new StringBuffer();
+        sb.append(ep.getName());
+        sb.append(spaces(30-ep.getName().length()));
+        sb.append(ep.getSpecificationVersion());
+        return sb.toString();
+    }
+    
 
     public static String toString( int indent, Dictionary d ) {
         int max= 0;

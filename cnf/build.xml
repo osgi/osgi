@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="package" default="none">
 
+	  
 	<dirname property="project" file="${ant.file}" />
 	<dirname property="workspace" file="${project}" />
-
+		
 	<taskdef name="btool" classname="org.osgi.tools.btool.BTool" 
 		classpath="../osgi.released/btool.jar" />
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="../cnf/ant-contrib/ant-contrib-0.6.jar"/>
@@ -21,7 +22,7 @@
 	<property name="expand.${project.name}.jar" value= "${project.name}"/>
 	
 	<property name="p" value= "${project.name}"/>
-	
+
 
 	<target name="publish" depends="check" unless="jar.ok">
 		<antcall target="compile"/>
@@ -33,7 +34,6 @@
 	</target>
 	
 	<target name="release">
-		<echo>Release ${item.jarFile}</echo>
 		<copy overwrite="true" todir="../osgi.released" file="${item.jarFile}" />
 	</target>
 	
@@ -51,10 +51,10 @@
 		
 
 	<target name="buildJar">
-		<btool jar="${item.jarFile}" 
+		<btool jar="${project}/${item.jarFile}" 
 			eclipse="${project}" 
 			analyse="${btool.analyse}" 
-			showmanifest="true" 
+			showmanifest="${btool.showmanifest}" 
 			sources="${btool.sources}" 
 			silent="${btool.silent}" 
 			includeProperty="include.${item.jarFile}" 
@@ -65,9 +65,19 @@
 			ipaProperty="ipa.${item.jarFile}" 
 			ignoreVersions="${btool.noversion}" />
 	</target>
+	
+	<target name="before">
+		<foreach delimiter="," list="${project.buildpath}" target="dependent" param="item.dir"/>
+		<antcall target="publish" inheritall="false"/>
+	</target>
+
+	<target name="dependent">
+		<ant dir="${item.dir}" antfile="${item.dir}/build.xml" target="publish" inheritall="false"/>
+	</target>
+
 
 	<target name="compile" unless="eclipse.running">
-		<javac fork="no" executable="${JAVA_HOME}/bin/javac" srcdir="${project.sourcepath}" destdir="${project.bindir}" classpath="${project.classpath}" bootclasspath="${project.bootclasspath}" deprecation="true" listfiles="true" target="${javac.target}" source="${javac.source}" />
+		<javac fork="yes" executable="${JAVA_HOME}/bin/javac" srcdir="${project.sourcepath}" destdir="${project.bindir}" classpath="${project.classpath}" bootclasspath="${project.bootclasspath}" deprecation="true" listfiles="true" target="${javac.target}" source="${javac.source}" />
 	</target>
 
 	<target name="clean">

@@ -27,8 +27,6 @@ public class DependenciesCheck extends TestCase {
 		
 		Dependencies dep = new Dependencies(null,classpath, manifest,v,null,null);
 		dep.calculate();
-		System.out.println("Referred " + dep.getReferred() );
-		System.out.println("Contained " + dep.getContained() );
 	}
 	
 	void collect( Map v, Source source, String path ) throws IOException {

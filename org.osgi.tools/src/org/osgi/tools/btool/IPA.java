@@ -103,6 +103,7 @@ public class IPA {
         StringTokenizer	st = new StringTokenizer(ipa,",");
         while (st.hasMoreTokens()) {
             String entry = st.nextToken().trim();
+            btool.trace("IPA Entry '" + entry + "'");
             if ( entry.length() > 0 ) {
 	            if ( entry.startsWith("[") && entry.endsWith("]")) {
 	                entry = entry.substring(1,entry.length()-1);
@@ -120,7 +121,7 @@ public class IPA {
 	            }
             }
             else
-                System.err.println("Illegal format in ipa " + ipa );
+                System.err.println("Illegal format in ipa " + ipa + " ("+entry+")" );
         }
     }
 

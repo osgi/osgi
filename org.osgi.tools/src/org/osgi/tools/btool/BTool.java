@@ -48,6 +48,8 @@ public class BTool extends Task {
     boolean          ignoreVersions;
     String           permissions;
     IPA              ipa;
+    private File workspaceDir;
+    private File projectDir;
 
     /**
      * Try out the Deliver program. Syntax: Please note that the classpath must
@@ -119,6 +121,29 @@ public class BTool extends Task {
             e.printStackTrace();
             throw new BuildException(e);
         }
+        
+        contents=null;
+        planned=null;
+        exports=null;
+        mainClasspath  = null;
+        workspace=null;
+        project=null;
+        if ( zip != null )
+            try{zip.close();}catch(Throwable t){};
+        zip=null;
+        properties = null;
+        eclipse=null;
+        referred       = null;
+        checksums = null;
+        directories    = null;
+        manifest=null;
+        manifestResource=null;
+        dependencies=null;
+        ipa=null;
+        workspaceDir=null;
+        projectDir=null;
+        System.gc();
+        System.out.println("Free memory " + Runtime.getRuntime().freeMemory());
     }
 
     /**
@@ -145,7 +170,7 @@ public class BTool extends Task {
         // manifest for certain file names.
         String regex = getProject().getProperty("nomanifest");
         if (regex != null && zipname.matches(regex.trim())) {
-            System.out.println("Ignoring manifest for " + zipname);
+            trace("Ignoring manifest for " + zipname);
             return;
         }
 
@@ -154,10 +179,10 @@ public class BTool extends Task {
 
         File f = new File(manifestSource);
         if (!f.exists())
-            f = new File("Manifest.mf");
+            f = new File( projectDir, "Manifest.mf");
 
         if (!f.exists())
-            f = new File("META-INF/MANIFEST.MF");
+            f = new File(projectDir, "META-INF/MANIFEST.MF");
 
         if (!f.exists()) {
             warnings.add("No manifest used for " + zipname);
@@ -575,7 +600,7 @@ public class BTool extends Task {
             boolean export = pack.startsWith("[") && pack.endsWith("]");
             if (export) {
                 pack = pack.substring(1, pack.length() - 1);
-                System.out.println("export " + pack);
+                trace("export " + pack);
             }
 
             if (pack.endsWith("/*")) {
@@ -636,7 +661,7 @@ public class BTool extends Task {
             String outname = null;
             int n = file.indexOf('=');
             if (n > 0) {
-                outname = file.substring(0, n);
+                outname = file.substring(0, n).trim();
                 file = file.substring(n + 1).trim();
             } else
                 outname = getFileName(file);
@@ -836,6 +861,8 @@ public class BTool extends Task {
 
         this.project = new DirSource(f);
         this.workspace = new DirSource(f.getParentFile());
+        projectDir = f;
+        workspaceDir = f.getParentFile();
         eclipse = new EclipseProject(f, true);
     }
 
@@ -927,7 +954,7 @@ public class BTool extends Task {
         Collection contained = dependencies.getContained();
 
         SortedSet set = new TreeSet();
-        System.out.println("Exported set: " + exports);
+        trace("Exported set: " + exports);
         for (Iterator i = contained.iterator(); i.hasNext();) {
             Package pr = (Package) i.next();
             if (exports.containsKey(pr.getPath()))
