@@ -161,11 +161,12 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 			PermissionAdmin perm = getPermissionAdmin();
 			if (perm != null) {
 				Hashtable ht = new Hashtable();
-				for (int i = 0; i < permissionSnapshot.length; i++)
+				for (int i = 0; permissionSnapshot != null
+						&& i < permissionSnapshot.length; i++)
 					ht.put(permissionSnapshot[i], "");
 				String[] newer = perm.getLocations();
-				for (int i = 0; i < newer.length; i++) {
-					if (now[i].getLocation().indexOf("~keep~") < 0) {
+				for (int i = 0; newer!=null && i < newer.length; i++) {
+					if (now != null && now[i].getLocation().indexOf("~keep~") < 0) {
 						if (ht.get(newer[i]) == null)
 							perm.setPermissions(newer[i], null);
 					}
