@@ -32,25 +32,29 @@ import org.osgi.service.condpermadmin.Condition;
 /**
  * Class representing abstract transfer cost values. Implementation assigns
  * concrete bearers to abstract transfer costs. <br>
- * There is a static setTransferCost() method that sets the current transfer
+ * There is a static setTransferCostLimit() method that sets the current transfer
  * cost limit in a thread local variable. The TransferCost condition will check
- * this, and will fail if the cost is greater. The setTransferCost() and
- * resetTransferCost() methods behave stack-like, putting and removing costs
+ * this, and will fail if the cost is greater. The setTransferCostLimit() and
+ * resetTransferCostLimit() methods behave stack-like, putting and removing costs
  * from a stack. The limit is always the value on the top. This way nested
  * permission checks can be implemented. It is recommended that
- * resetTransferCost() is always put in a finally block, to ensure proper
+ * resetTransferCostLimit() is always put in a finally block, to ensure proper
  * stacking behavior.
  */
 public class TransferCostCondition implements Condition {
 	private static ThreadLocal	context	= new ThreadLocal();
 
+	public static final String LOW = "LOW";
+	public static final String MEDIUM = "MEDIUM";
+	public static final String HIGH = "HIGH";
+	
 	/**
 	 * Creates a TransferCost object. This constructor is intended to be called
 	 * when Permission Admin initializes the object.
 	 * 
 	 * @param bundle ignored
 	 * @param cost The abstract limit cost. Possible values are "LOW","MEDIUM"
-	 *        and "HIGH".
+	 *        and "HIGH". A null string means there are no limits.
 	 */
 	public TransferCostCondition(Bundle bundle, String cost) {
 	}
@@ -63,13 +67,21 @@ public class TransferCostCondition implements Condition {
 	 * 
 	 * @param cost the upper limit of transfer cost
 	 */
-	public static void setTransferCost(int cost) {
+	public static void setTransferCostLimit(String cost) {
 	}
 
 	/**
 	 * Resets the transfer cost to the previous value.
 	 */
-	public static void resetTransferCost() {
+	public static void resetTransferCostLimit() {
+	}
+
+	/**
+	 * Gets the current transfer cost.
+	 * @return the transfer cost value, or null
+	 */
+	protected static String getTransferCostLimit() {
+		return null;
 	}
 
 	/**
