@@ -1,55 +1,60 @@
 /*
- * copyright (c) 2004 Nokia, all rights reserved, COMPANY CONFIDENTAL
- *
- * author: Ivan Zahoranszky
+ * ============================================================================
+ * (c) Copyright 2004 Nokia
+ * This material, including documentation and any related computer programs,
+ * is protected by copyright controlled by Nokia and its licensors. 
+ * All rights are reserved.
+ * 
+ * These materials have been contributed  to the Open Services Gateway 
+ * Initiative (OSGi)as "MEMBER LICENSED MATERIALS" as defined in, and subject 
+ * to the terms of, the OSGi Member Agreement specifically including, but not 
+ * limited to, the license rights and warranty disclaimers as set forth in 
+ * Sections 3.2 and 12.1 thereof, and the applicable Statement of Work. 
+ * All company, brand and product names contained within this document may be 
+ * trademarks that are the sole property of the respective owners.  
+ * The above notice must be included on all copies of this document.
+ * ============================================================================
  */
 package org.osgi.impl.service.application;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtMetaNode;
+import org.osgi.service.dmt.*;
 
-
+/**
+ * DMT meta node for the Application Manager
+ */
 public class ApplicationMetaNode implements DmtMetaNode {
-    
-    static final boolean CANDELETE  = true;
-    static final boolean CANADD     = true;
-    static final boolean CANGET     = true;
-    static final boolean CANREPLACE = true;
-    static final boolean CANEXECUTE = true;
-    static final boolean ISLEAF     = true;
-    
-    protected ApplicationMetaNode(boolean isLeaf,
-                                  boolean canGet) 
-    {
-        this.isLeaf = isLeaf;
-        this.canGet = canGet;
-    }
+	static final boolean	CANDELETE	= true;
+	static final boolean	CANADD		= true;
+	static final boolean	CANGET		= true;
+	static final boolean	CANREPLACE	= true;
+	static final boolean	CANEXECUTE	= true;
+	static final boolean	ISLEAF		= true;
 
-    protected ApplicationMetaNode(boolean canDelete,
-                                  boolean canAdd,
-                                  boolean canGet,
-                                  boolean canReplace,
-                                  boolean canExecute,
-                                  boolean isLeaf) 
-    {
-        this.canDelete = canDelete;
-        this.canAdd = canAdd;
-        this.canGet= canGet;
-        this.canReplace = canReplace;
-        this.canExecute = canExecute;
-        this.isLeaf = isLeaf;
-    }
+	protected ApplicationMetaNode(boolean isLeaf, boolean canGet) {
+		this.isLeaf = isLeaf;
+		this.canGet = canGet;
+	}
 
-    // private fields
-    private boolean canDelete;
-    private boolean canAdd;
-    private boolean canGet;
-    private boolean canReplace;
-    private boolean canExecute;
-    private boolean isLeaf;
+	protected ApplicationMetaNode(boolean canDelete, boolean canAdd,
+			boolean canGet, boolean canReplace, boolean canExecute,
+			boolean isLeaf) {
+		this.canDelete = canDelete;
+		this.canAdd = canAdd;
+		this.canGet = canGet;
+		this.canReplace = canReplace;
+		this.canExecute = canExecute;
+		this.isLeaf = isLeaf;
+	}
 
-    /* ---------------------------------------------------------------------- */
-    
+	// private fields
+	private boolean	canDelete;
+	private boolean	canAdd;
+	private boolean	canGet;
+	private boolean	canReplace;
+	private boolean	canExecute;
+	private boolean	isLeaf;
+
+	/* ---------------------------------------------------------------------- */
 	public boolean canDelete() {
 		return canDelete;
 	}
@@ -71,7 +76,7 @@ public class ApplicationMetaNode implements DmtMetaNode {
 	}
 
 	public boolean isLeaf() {
-        return isLeaf;
+		return isLeaf;
 	}
 
 	public boolean isPermanent() {
@@ -153,5 +158,4 @@ public class ApplicationMetaNode implements DmtMetaNode {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

@@ -1,59 +1,109 @@
+/*
+ * Copyright (c) The Open Services Gateway Initiative (2004).
+ * All Rights Reserved.
+ *
+ * Implementation of certain elements of the Open Services Gateway Initiative
+ * (OSGI) Specification may be subject to third party intellectual property
+ * rights, including without limitation, patent rights (such a third party may
+ * or may not be a member of OSGi). OSGi is not responsible and shall not be
+ * held responsible in any manner for identifying or failing to identify any or
+ * all such third party intellectual property rights.
+ *
+ * This document and the information contained herein are provided on an "AS
+ * IS" basis and OSGI DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL
+ * NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR
+ * FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL OSGI BE LIABLE FOR ANY
+ * LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF USE OF DATA, INTERRUPTION OF
+ * BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR EXEMPLARY, INCIDENTIAL,
+ * PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN CONNECTION WITH THIS
+ * DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH LOSS OR DAMAGE.
+ *
+ * All Company, brand and product names may be trademarks that are the sole
+ * property of their respective owners. All rights reserved.
+ */
 package org.osgi.service.monitor;
 
 /**
- * A Monitoring Job is a scheduled periodic update of a set of KPIs.
- * The job is a data structure that holds a non-empty list of KPI names,
- * an identification of the initiator of the job,
- * the frequency with which a measurement should be taken, and optionally the 
- * number of samples to be taken. The job can be started on the 
- * MonitorAdmin interface. Running the job (querying the KPIs and sending out
- * notifications on updates) is the task of the MonitorAdmin implementation.
+ * A Monitoring Job is a scheduled update of a set of KPIs. The job is a data
+ * structure that holds a non-empty list of KPI names, an identification of the
+ * initiator of the job, and the sampling parameters. There are two kinds of
+ * monitoring jobs: time based and change based. Time based jobs take samples of
+ * all KPIs with a specified frequency. The number of samples to be taken before
+ * the job finishes may be specified. Change based jobs are only interested in
+ * the changes of the monitored KPIs. In this case, the number of changes that
+ * must take place between two notifications can be specified.
+ * <p>
+ * The job can be started on the MonitorAdmin interface. Running the job
+ * (querying the KPIs, listening to changes, and sending out notifications on
+ * updates) is the task of the MonitorAdmin implementation.
+ * <p>
+ * Whether a monitoring job keeps track dynamically of the KPIs it monitors is
+ * not specified. This means that if we monitor a KPI of a Monitorable service
+ * which disappears and later reappears then it is implementation specific
+ * whether we still receive updates of the KPI changes or not.
  */
 public interface MonitoringJob {
-        
-    /**
-     * Stops a Monitoring Job.
-     * In case of successful stopping of a job the MonitorAdmin should 
-     * generate the appropriate event. Note that a job can also stop 
-     * automatically in the case when all the KPIs it is observing go away.
-     */
-    public void stop();
-        
-    /**
-     * Returns the identitifier of the principal who initiated the job. 
-     * This is set at the time when startJob() is called at the MonitorAdmin
-     * interface. This string holds the ServerID if the operation was initiated
-     * from a remote manager, or the bundle ID or UE ID in the local case.
-     * @return the ID of the initiator.
-     */
-    public String getInitiator();
-        
-    /**
-     * Returns the list of KPI names which is the target of this measurement job.
-     * The MonitorAdmin will iterate through this list and query all KPIs when
-     * it's timer set by the job's frequency rate expires.
-     * @return the target list of the measurement job in 
-     * <Monitorable_ID>/<KPI_ID> format
-     */
-    public String[] getKpiNames();
-        
-    /**
-     * Returns the delay (in minutes) between two samples.
-     * If this call returns N then the MonitorAdmin queries each KPI that 
-     * belongs to this job in every N minutes. The value 0 is not allowed.
-     * @return the delay (in minutes) between samples 
-     */
-    public long getSchedule();
-        
-    /**
-     * Returns the number of how many times the MonitorAdmin will query the KPIs.
-     * After the measurement is started it will take 
-     * getReportCount()*getSchedule() time to finish unless it is explicitely
-     * stopped sooner. If the report count is 0 then the measurement will 
-     * not stop automatically, it can be stopped 
-     * only with the stop call.
-     * @return the number of measurements to be taken
-     */
-    public int getReportCount();
-        
+	/**
+	 * Stops a Monitoring Job. Note that a time based job can also stop
+	 * automatically if the specified number of samples have been taken.
+	 */
+	public void stop();
+
+	/**
+	 * Returns the identitifier of the principal who initiated the job. This is
+	 * set at the time when startJob() is called at the MonitorAdmin interface.
+	 * This string holds the ServerID if the operation was initiated from a
+	 * remote manager, or an arbitrary ID of the initiator entity in the local
+	 * case (used for addressing notification events).
+	 * 
+	 * @return the ID of the initiator
+	 */
+	public String getInitiator();
+
+	/**
+	 * Returns the list of KPI names which is the target of this measurement
+	 * job. For time based jobs, the MonitorAdmin will iterate through this list
+	 * and query all KPIs when its timer set by the job's frequency rate
+	 * expires.
+	 * 
+	 * @return the target list of the measurement job in
+	 *         [Monitorable_ID]/[KPI_ID] format
+	 */
+	public String[] getKpiNames();
+
+	/**
+	 * Returns the delay (in seconds) between two samples. If this call returns
+	 * N (greater than 0) then the MonitorAdmin queries each KPI that belongs to
+	 * this job every N seconds. The value 0 means that instant notification on
+	 * changes is requested (at every nth change of the value, as specified by
+	 * the report count parameter).
+	 * 
+	 * @return the delay (in seconds) between samples, or 0 for change based
+	 *         jobs
+	 */
+	public long getSchedule();
+
+	/**
+	 * Returns the number times MonitorAdmin will query the KPIs (for time based
+	 * jobs), or the number of changes of a KPI between notifications (for
+	 * change based jobs). Time based jobs with non-zero report count will take
+	 * getReportCount()*getSchedule() time to finish. Time based jobs with 0
+	 * report count and change based jobs do not stop automatically, but all
+	 * jobs can be stopped with the stop method.
+	 * 
+	 * @return the number of measurements to be taken, or the number of changes
+	 *         between notifications
+	 */
+	public int getReportCount();
+
+	/**
+	 * Returns whether the job was started locally or remotely.
+	 * 
+	 * @return <code>true</code> if the job was started from the local device,
+	 *         <code>false</code> if the job was initiated from a remote
+	 *         management server through the device management tree
+	 */
+	public boolean isLocal();
 }

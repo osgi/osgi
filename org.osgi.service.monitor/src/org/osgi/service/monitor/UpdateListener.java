@@ -23,20 +23,19 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.service.application;
+package org.osgi.service.monitor;
 
-import org.osgi.service.event.EventChannel;
-
-public interface MEGApplicationContext extends ApplicationContext {
-	public Object getServiceObject(String className, String filter)
-			throws Exception;
-
-	public Object getServiceObject(String className, String filter,
-			long millisecs) throws Exception;
-
-	public boolean ungetServiceObject(Object serviceObject);
-
-	public EventChannel getEventChannel();
-
-	public ApplicationManager getApplicationManager();
+/**
+ * The UpdateListener is used by Monitorable services to send notifications when
+ * a KPI value is changed. The UpdateListener should register itself as a
+ * service at the OSGi Service Registry. This interface is implemented by the
+ * Monitor Admin component.
+ */
+public interface UpdateListener {
+	/**
+	 * Callback for notification of a KPI change.
+	 * 
+	 * @param kpi the KPI which has changed
+	 */
+	public void updated(KPI kpi);
 }
