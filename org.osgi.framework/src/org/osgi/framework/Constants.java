@@ -643,7 +643,7 @@ public interface Constants {
 
 	/**
 	 * Manifest header (named &quot;Bundle-Localization&quot;) identifying the
-	 * base name of the bundle's localization file.
+	 * base name of the bundle's localization entries.
 	 * <p>
 	 * The attribute value may be retrieved from the <code>Dictionary</code>
 	 * object returned by the <code>Bundle.getHeaders</code> method.
