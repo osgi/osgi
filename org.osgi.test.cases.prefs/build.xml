@@ -1,0 +1,4 @@
+<project name="project" default="publish">
+	<property name="project.name" value="org.osgi.test.cases.prefs"/>
+	<import file="../cnf/build.xml"/>
+</project>
