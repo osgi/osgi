@@ -23,7 +23,6 @@ import java.util.*;
 import org.osgi.framework.*;
 import org.osgi.service.application.*;
 import org.osgi.service.event.*;
-import  org.osgi.impl.service.megcontainer.*;
 import org.osgi.meglet.MegletHandle;
 
 public class TestMegletContainerBundleActivator extends Object implements
