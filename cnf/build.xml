@@ -18,7 +18,7 @@
 	     reasons 
 	-->
 	<taskdef name="btool" classname="org.osgi.tools.btool.BTool" 
-		classpath="../osgi.released/btool.jar" />
+		classpath="${workspace}/cnf/jar/btool.jar" />
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="../cnf/ant-contrib/ant-contrib-0.6.jar"/>
 	
 	<!-- 
