@@ -11,8 +11,8 @@
 package org.eclipse.osgi.internal.resolver;
 
 import java.io.*;
+import java.lang.ref.WeakReference;
 import java.util.*;
-
 import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.Version;
 
@@ -28,7 +28,7 @@ class StateReader {
 	private int lazyDataOffset;
 	private int numBundles;
 
-	public static final byte STATE_CACHE_VERSION = 8;
+	public static final byte STATE_CACHE_VERSION = 10;
 	public static final byte NULL = 0;
 	public static final byte OBJECT = 1;
 	public static final byte INDEX = 2;
@@ -96,7 +96,6 @@ class StateReader {
 		readBaseDescription(result, in);
 		result.setResolved(in.readBoolean());
 		result.setSingleton(in.readBoolean());
-		result.setLocation(readString(in, false));
 		result.setHost(readHostSpec(in));
 
 		// set the bundle dependencies from imports and requires.
@@ -135,6 +134,8 @@ class StateReader {
 			skipBundleDescriptionLazyData(result, in);
 			return result;
 		}
+
+		result.setLocation(readString(in, false));
 
 		int exportCount = in.readInt();
 		if (exportCount > 0) {
@@ -200,6 +201,9 @@ class StateReader {
 			in.readInt();
 			return;
 		}
+
+		skipString(in); // location
+
 		int exportCount = in.readInt();
 		if (exportCount > 0)
 			for (int i = 0; i < exportCount; i++)
@@ -449,7 +453,7 @@ class StateReader {
 		return loadState(state, openCacheFile(), expectedTimestamp);
 	}
 
-	private HashMap stringCache = new HashMap();
+	private WeakHashMap stringCache = new WeakHashMap();
 	private String readString(DataInputStream in, boolean intern) throws IOException {
 		byte type = in.readByte();
 		if (type == NULL)
@@ -459,10 +463,14 @@ class StateReader {
 			result = in.readUTF().intern();
 		else
 			result = in.readUTF();
-		if (stringCache.get(result) != null)
-			result = (String) stringCache.get(result);
+		WeakReference ref = (WeakReference) stringCache.get(result);
+		if (ref != null) {
+			String refString = (String) ref.get();
+			if (refString != null)
+				result = refString;
+		}
 		else
-			stringCache.put(result, result);
+			stringCache.put(result, new WeakReference(result));
 		return result;
 	}
 
@@ -506,6 +514,7 @@ class StateReader {
 				try {
 					in.close();
 				} catch (IOException e) {
+					// nothing we can do now
 				}
 		}
 	}
@@ -522,7 +531,7 @@ class StateReader {
 			addDependencies(target, toLoad);
 			// look for the lazy data of the toLoad list
 			for (int i = 0; i < numBundles; i++) {
-				BundleDescriptionImpl bundle = readBundleDescriptionLazyData(in, toLoad);
+				readBundleDescriptionLazyData(in, toLoad);
 				// when the toLoad list is empty we are done
 				if (toLoad.size() == 0)
 					break;			

@@ -19,6 +19,7 @@ import java.security.Permission;
  */
 
 final class BundleResourcePermission extends Permission {
+	private static final long serialVersionUID = 3256728376969867573L;
 	private long id;
 
 	BundleResourcePermission(long id) {

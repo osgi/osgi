@@ -43,7 +43,7 @@ public class SystemBundleLoader extends BundleLoader {
 
 	/**
 	 * @param bundle The system bundle.
-	 * @param proxy The BundleLoaderDescription for the system bundle
+	 * @param proxy The BundleLoaderProxy for the system bundle
 	 * @throws BundleException On any error.
 	 */
 	protected SystemBundleLoader(BundleHost bundle, BundleLoaderProxy proxy) throws BundleException {

@@ -21,6 +21,7 @@ import java.util.*;
  *
  */
 final class UnresolvedPermissionCollection extends PermissionCollection {
+	private static final long serialVersionUID = 3618703006602703161L;
 	/** hash of permission class names => Vectors of UnresolvedPermissions for that class */
 	Hashtable permissions = new Hashtable(8);
 

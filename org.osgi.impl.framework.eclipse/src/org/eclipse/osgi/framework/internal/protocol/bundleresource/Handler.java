@@ -14,10 +14,11 @@ package org.eclipse.osgi.framework.internal.protocol.bundleresource;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Enumeration;
+import org.eclipse.osgi.framework.adaptor.core.*;
 import org.eclipse.osgi.framework.adaptor.core.BundleEntry;
-import org.eclipse.osgi.framework.adaptor.core.BundleResourceHandler;
+import org.eclipse.osgi.framework.internal.core.*;
 import org.eclipse.osgi.framework.internal.core.AbstractBundle;
-import org.eclipse.osgi.framework.internal.core.BundleLoader;
 
 /**
  * URLStreamHandler the bundleresource protocol.
@@ -37,14 +38,23 @@ public class Handler extends BundleResourceHandler {
 	}
 
 	protected BundleEntry findBundleEntry(URL url, AbstractBundle bundle) throws IOException {
-		BundleLoader bundleLoader = bundle.getBundleLoader();
-		if (bundleLoader == null)
+		AbstractClassLoader cl = (AbstractClassLoader) getBundleClassLoader(bundle);
+		if (cl== null)
 			throw new FileNotFoundException(url.getPath());
-		BundleEntry entry = (BundleEntry) bundleLoader.findObject(url.getPath());
+		int index = url.getPort();
+		BundleEntry entry = null;
+		if (index == 0) {
+			entry = (BundleEntry) cl.findLocalObject(url.getPath());
+		}
+		else {
+			Enumeration entries = cl.findLocalObjects(url.getPath());
+			if (entries != null)
+				for (int i = 0; entries.hasMoreElements() && i <= index; i++)
+					entry = (BundleEntry) entries.nextElement();
+		}
 		if (entry == null)
 			throw new FileNotFoundException(url.getPath());
 		return entry;
-
 	}
 
 }

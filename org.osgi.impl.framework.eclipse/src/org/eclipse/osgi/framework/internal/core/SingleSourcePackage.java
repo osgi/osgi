@@ -47,10 +47,4 @@ public class SingleSourcePackage extends PackageSource {
 			return supplier.getBundleLoader().requireResources(name, pkgName);
 		return supplier.getBundleLoader().findLocalResources(name);
 	}
-
-	public Object getObject(String name, String pkgName, boolean providePkg) {
-		if (providePkg)
-			return supplier.getBundleLoader().requireObject(name, pkgName);
-		return supplier.getBundleLoader().findLocalObject(name);
-	}
 }

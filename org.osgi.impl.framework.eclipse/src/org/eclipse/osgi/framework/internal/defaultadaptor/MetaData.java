@@ -162,7 +162,11 @@ public class MetaData {
 	 */
 	public void save() throws IOException {
 		FileOutputStream fos = new FileOutputStream(datafile);
-		properties.store(fos, header);
+		try {
+			properties.store(fos, header);
+		} finally {
+			fos.close();
+		}
 	}
 
 	/**
@@ -173,8 +177,11 @@ public class MetaData {
 		properties.clear();
 		if (datafile.exists()) {
 			FileInputStream fis = new FileInputStream(datafile);
-			properties.load(fis);
-			fis.close();
+			try {
+				properties.load(fis);
+			} finally {
+				fis.close();
+			}
 		}
 	}
 

@@ -63,10 +63,10 @@ public class Headers extends Dictionary {
 		this.values = values;
 
 		/* initialize headers dictionary */
-		Enumeration enum = values.keys();
+		Enumeration keys = values.keys();
 
-		while (enum.hasMoreElements()) {
-			Object key = enum.nextElement();
+		while (keys.hasMoreElements()) {
+			Object key = keys.nextElement();
 
 			if (key instanceof String) {
 				String header = ((String) key).toLowerCase();

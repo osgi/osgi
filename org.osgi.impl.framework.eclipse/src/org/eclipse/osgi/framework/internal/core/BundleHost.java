@@ -100,8 +100,6 @@ public class BundleHost extends AbstractBundle {
 				else
 					closeBundleLoader(proxy);
 				state = INSTALLED;
-				// publish UNRESOLVED event here
-				framework.publishBundleEvent(BundleEvent.UNRESOLVED, this);
 				proxy = null;
 				fragments = null;
 			}
@@ -170,8 +168,6 @@ public class BundleHost extends AbstractBundle {
 					closeBundleLoader(proxy);
 
 				state = INSTALLED;
-				// publish UNRESOLVED event here
-				framework.publishBundleEvent(BundleEvent.UNRESOLVED, this);
 				proxy = null;
 				fragments = null;
 				domain = null;
@@ -458,14 +454,11 @@ public class BundleHost extends AbstractBundle {
 		return (context.getServicesInUse());
 	}
 
-	/* (non-Javadoc)
-	 * @see org.osgi.framework.Bundle#getFragments()
-	 */
-	public org.osgi.framework.Bundle[] getFragments() {
+	protected Bundle[] getFragments() {
 		synchronized (framework.bundles) {
 			if (fragments == null)
 				return null;
-			org.osgi.framework.Bundle[] result = new org.osgi.framework.Bundle[fragments.length];
+			Bundle[] result = new Bundle[fragments.length];
 			System.arraycopy(fragments, 0, result, 0, result.length);
 			return result;
 		}
@@ -517,7 +510,7 @@ public class BundleHost extends AbstractBundle {
 
 	}
 
-	public BundleLoader getBundleLoader() {
+	protected BundleLoader getBundleLoader() {
 		return getLoaderProxy().getBundleLoader();
 	}
 
@@ -548,13 +541,5 @@ public class BundleHost extends AbstractBundle {
 		// associated with the proxy in the state
 		BundleDescription description = proxy.getBundleDescription();
 		description.setUserObject(null);
-	}
-	/**
-	 * @return
-	 * @see org.osgi.framework.Bundle#getLastModified()
-	 */
-	public long getLastModified() {
-		// TODO Auto-generated method stub
-		return System.currentTimeMillis();
 	}
 }

@@ -17,7 +17,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 public class PermissionChecker {
-
 	private BundleContext context;
 
 	public PermissionChecker(BundleContext context) {

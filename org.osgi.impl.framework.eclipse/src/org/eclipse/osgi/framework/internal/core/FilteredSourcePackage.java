@@ -28,12 +28,6 @@ public class FilteredSourcePackage extends SingleSourcePackage {
 			this.excludes = ManifestElement.getArrayFromList(excludes);
 	}
 
-	public Object getObject(String name, String pkgName, boolean providePkg) {
-		if (isFiltered(name, pkgName))
-			return null;
-		return super.getObject(name, pkgName, providePkg);
-	}
-
 	public URL getResource(String name, String pkgName, boolean providePkg) {
 		if (isFiltered(name, pkgName))
 			return null;

@@ -22,7 +22,7 @@ import org.eclipse.osgi.service.resolver.*;
 import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.*;
 
-/*
+/**
  * This object is responsible for all classloader delegation for a bundle.
  * It represents the loaded state of the bundle.  BundleLoader objects
  * are created lazily; care should be taken not to force the creation
@@ -61,7 +61,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 	/* cache of PackageSources for packages which this bundle reexports */
 	KeyedHashSet reexportSources;
 
-	/*
+	/**
 	 * Returns the package name from the specified class name.
 	 * The returned package is dot seperated.
 	 *
@@ -78,7 +78,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return DEFAULT_PACKAGE;
 	}
 
-	/*
+	/**
 	 * Returns the package name from the specified resource name.
 	 * The returned package is dot seperated.
 	 *
@@ -97,7 +97,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return DEFAULT_PACKAGE;
 	}
 
-	/*
+	/**
 	 * BundleLoader runtime constructor. This object is created lazily
 	 * when the first request for a resource is made to this bundle.
 	 *
@@ -283,7 +283,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		bundle = null; /* This indicates the BundleLoader is destroyed */
 	}
 
-	/*
+	/**
 	 * This method loads a class from the bundle.  The class is searched for in the
 	 * same manner as it would if it was being loaded from a bundle (i.e. all
 	 * hosts, fragments, import, required bundles and local resources are searched.
@@ -296,7 +296,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return createClassLoader().loadClass(name);
 	}
 
-	/*
+	/**
 	 * This method gets a resource from the bundle.  The resource is searched 
 	 * for in the same manner as it would if it was being loaded from a bundle 
 	 * (i.e. all hosts, fragments, import, required bundles and 
@@ -309,7 +309,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return createClassLoader().getResource(name);
 	}
 
-	/*
+	/**
 	 * This method gets resources from the bundle.  The resource is searched 
 	 * for in the same manner as it would if it was being loaded from a bundle 
 	 * (i.e. all hosts, fragments, import, required bundles and 
@@ -322,7 +322,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return createClassLoader().getResources(name);
 	}
 
-	/*
+	/**
 	 * Handle the lookup where provided classes can also be imported.
 	 * In this case the exporter need to be consulted. 
 	 */
@@ -361,7 +361,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return classloader;
 	}
 
-	/*
+	/**
 	 * Finds a class local to this bundle.  Only the classloader for this bundle is searched.
 	 * @param name The name of the class to find.
 	 * @return The loaded Class or null if the class is not found.
@@ -379,7 +379,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		}
 	}
 
-	/*
+	/**
 	 * Finds the class for a bundle.  This method is used for delegation by the bundle's classloader.
 	 */
 	public Class findClass(String name) throws ClassNotFoundException {
@@ -409,7 +409,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return bundle == null;
 	}
 
-	/*
+	/**
 	 * Finds the resource for a bundle.  This method is used for delegation by the bundle's classloader.
 	 */
 	public URL findResource(String name) {
@@ -438,7 +438,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return resource;
 	}
 
-	/*
+	/**
 	 * Finds the resources for a bundle.  This  method is used for delegation by the bundle's classloader.
 	 */
 	public Enumeration findResources(String name) throws IOException {
@@ -467,7 +467,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return result;
 	}
 
-	/*
+	/**
 	 * Handle the lookup where provided resources can also be imported.
 	 * In this case the exporter need to be consulted. 
 	 */
@@ -484,7 +484,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return result;
 	}
 
-	/*
+	/**
 	 * Finds a resource local to this bundle.  Only the classloader for this bundle is searched.
 	 * @param name The name of the resource to find.
 	 * @return The URL to the resource or null if the resource is not found.
@@ -499,7 +499,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		});
 	}
 
-	/*
+	/**
 	 * Handle the lookup where provided resources can also be imported.
 	 * In this case the exporter need to be consulted. 
 	 */
@@ -516,7 +516,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return result;
 	}
 
-	/*
+	/**
 	 * Returns an Enumeration of URLs representing all the resources with
 	 * the given name. Only the classloader for this bundle is searched.
 	 *
@@ -538,57 +538,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return createClassLoader().findLocalResources(name);
 	}
 
-	/*
-	 * Finds the object for a bundle.  This method is used for delegation by the bundle's classloader.
-	 */
-	public Object findObject(String object) {
-		if (isClosed())
-			return null;
-		if ((object.length() > 1) && (object.charAt(0) == '/')) /* if name has a leading slash */
-			object = object.substring(1); /* remove leading slash before search */
-
-		try {
-			checkResourcePermission();
-		} catch (SecurityException e) {
-			try {
-				bundle.framework.checkAdminPermission();
-			} catch (SecurityException ee) {
-				return null;
-			}
-		}
-		String packageName = getResourcePackageName(object);
-
-		Object result = findImportedObject(object, packageName);
-		if (result == null)
-			result = findRequiredObject(object, packageName);
-		if (result == null)
-			result = findLocalObject(object);
-
-		return result;
-	}
-
-	/*
-	 * Handle the lookup where provided resources can also be imported.
-	 * In this case the exporter need to be consulted. 
-	 */
-	protected Object requireObject(String object, String packageName) {
-		Object result = null;
-		try {
-			result = findImportedObject(object, packageName);
-		} catch (ImportResourceNotFoundException e) {
-			//Capture the exception and return null because we want to continue the lookup.
-			return null;
-		}
-		if (result == null)
-			result = findLocalObject(object);
-		return result;
-	}
-
-	protected Object findLocalObject(String object) {
-		return createClassLoader().findLocalObject(object);
-	}
-
-	/*
+	/**
 	 * Returns the absolute path name of a native library.
 	 *
 	 * @param      name   the library name
@@ -664,7 +614,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return bcl;
 	}
 
-	/*
+	/**
 	 * Return a string representation of this loader.
 	 * @return String
 	 */
@@ -682,7 +632,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		}
 	}
 
-	/*
+	/**
 	 * Get the BundleLoader for the package if it is imported.
 	 * @param pkgname The name of the package to import.
 	 * @return BundleLoader to load from or null if the package is not imported.
@@ -708,7 +658,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return null;
 	}
 
-	/*
+	/**
 	 * Return true if the target package name matches
 	 * a name in the DynamicImport-Package manifest header.
 	 *
@@ -757,7 +707,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return false;
 	}
 
-	/*
+	/**
 	 * Find a class using the imported packages for this bundle.  Only the 
 	 * ImportClassLoader is used for the search. 
 	 * @param name The name of the class to find.
@@ -792,7 +742,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 	}
 
 	protected void addExportedProvidersFor(String packageName, ArrayList result, KeyedHashSet visited) {
-		if (!visited.add(proxy))
+		if (!visited.add(bundle))
 			return;
 
 		// See if we locally provide the package.
@@ -821,7 +771,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 			result.add(local);
 	}
 
-	/*
+	/**
 	 * Gets the PackageSource for the package name specified.  Only
 	 * the required bundles are searched.
 	 * @param packageName The name of the package to find the PackageSource for.
@@ -873,7 +823,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		}
 	}
 
-	/*
+	/**
 	 * Find a class using the required bundles for this bundle.  Only the
 	 * required bundles are used to search for the class.
 	 * @param name The name of the class to find.
@@ -892,7 +842,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return providedPackages == null ? false : providedPackages.contains(name);
 	}
 
-	/*
+	/**
 	 * Find a resource using the imported packages for this bundle.  Only the 
 	 * ImportClassLoader is used for the search. 
 	 * @param name The name of the resource to find.
@@ -917,7 +867,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return null;
 	}
 
-	/*
+	/**
 	 * Find a resource using the required bundles for this bundle.  Only the
 	 * required bundles are used to search.
 	 * @param name The name of the resource to find.
@@ -932,7 +882,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return source.getResource(name, packageName, true);
 	}
 
-	/*
+	/**
 	 * Returns an Enumeration of URLs representing all the resources with
 	 * the given name.
 	 *
@@ -953,7 +903,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return null;
 	}
 
-	/*
+	/**
 	 * Returns an Enumeration of URLs representing all the resources with
 	 * the given name.
 	 * Find the resources using the required bundles for this bundle.  Only the
@@ -975,47 +925,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		return source.getResources(name, packageName, true);
 	}
 
-	/*
-	 * Find an object using the imported packages for this bundle.  Only the 
-	 * ImportClassLoader is used for the search. 
-	 * @param object The name of the object to find.
-	 * @return The Object or null if the object does not belong to a package
-	 * that is imported by the bundle.
-	 * @throws ImportResourceNotFoundException If the object does belong to a package
-	 * that is imported by the bundle but the resource is not found.
-	 */
-	protected Object findImportedObject(String object, String packageName) {
-		if (Debug.DEBUG && Debug.DEBUG_LOADER)
-			Debug.println("ImportClassLoader[" + this + "].findImportedObject(" + object + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-		PackageSource source = getImportPackageSource(packageName);
-		if (source != null) {
-			Object result = source.getObject(object, packageName, false);
-			if (result != null)
-				return result;
-			if (Debug.DEBUG && Debug.DEBUG_LOADER)
-				Debug.println("ImportClassLoader[" + this + "] object " + object + " not found in imported package " + packageName); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			throw new ImportResourceNotFoundException(object);
-		}
-		return null;
-	}
-
-	/*
-	 * Find an object using the required bundles for this bundle.  Only the
-	 * required bundles are used to search.
-	 * @param name The name of the object to find.
-	 * @return The Object or null if the object is not found.
-	 */
-	protected Object findRequiredObject(String name, String packageName) {
-		if (Debug.DEBUG && Debug.DEBUG_LOADER)
-			Debug.println("ImportClassLoader[" + this + "].findRequiredResource(" + name + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		PackageSource source = getProvidersFor(packageName);
-		if (source == null)
-			return null;
-		return source.getObject(name, packageName, true);
-	}
-
-	/*
+	/**
 	 * Adds a list of DynamicImport-Package manifest elements to the dynamic
 	 * import tables of this BundleLoader.  Duplicate packages are checked and
 	 * not added again.  This method is not thread safe.  Callers should ensure
@@ -1082,7 +992,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 			dynamicImportPackages = (String[]) names.toArray(new String[size]);
 	}
 
-	/*
+	/**
 	 * Adds a list of DynamicImport-Package manifest elements to the dynamic
 	 * import tables of this BundleLoader.  Duplicate packages are checked and
 	 * not added again.  This method is not thread safe.  Callers should ensure
@@ -1224,16 +1134,16 @@ public class BundleLoader implements ClassLoaderDelegate {
 			reexportSources = new KeyedHashSet(false);
 		PackageSource result = (PackageSource) reexportSources.getByKey(name);
 		if(result == null) {
-			result = new ReportPackageSource(name);
+			result = new ReexportPackageSource(name);
 			reexportSources.add(result);
 		}
 		return result;
 	}
 
-	private class ReportPackageSource extends SingleSourcePackage {
+	private class ReexportPackageSource extends SingleSourcePackage {
 
-		public ReportPackageSource(String id) {
-			super(id, BundleLoader.this.proxy);
+		public ReexportPackageSource(String id) {
+			super(id, proxy);
 		}
 
 		public Class loadClass(String name, String pkgName, boolean providePkg) {
@@ -1250,9 +1160,5 @@ public class BundleLoader implements ClassLoaderDelegate {
 		public Enumeration getResources(String name, String pkgName, boolean providePkg) throws IOException {
 			return BundleLoader.this.findResources(name);
 		}
-		public Object getObject(String name, String pkgName, boolean providePkg) {
-			return BundleLoader.this.findObject(name);
-		}
-		
 	}
 }

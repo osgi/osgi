@@ -21,6 +21,7 @@ import org.eclipse.osgi.framework.adaptor.BundleOperation;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.*;
+import org.osgi.framework.Version;
 
 /**
  * This object is given out to bundles and wraps the internal Bundle object. It
@@ -609,12 +610,6 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 					return null;
 				}
 			});
-		} catch (BundleException e) {
-			if (!(e.getNestedException() instanceof NothingToUpdateException)) {
-				throw e;
-			}
-			//There is no work to be done with this update.
-			//Quietly return with no error.
 		} finally {
 			completeStateChange();
 		}
@@ -713,10 +708,14 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 				bundledata.installNativeCode(nativepaths);
 			}
 			boolean exporting;
+			int st = getState();
 			synchronized (bundles) {
 				exporting = reload(newBundle);
 				manifestLocalization = null;
 			}
+			// send out unresolved events outside synch block (defect #80610)
+			if (st == RESOLVED)
+				framework.publishBundleEvent(BundleEvent.UNRESOLVED, this);
 			reloaded = true; /*
 			 * indicate we have loaded from the new version of
 			 * the bundle
@@ -853,10 +852,14 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 		try {
 			storage.begin();
 			boolean exporting;
+			int st = getState();
 			synchronized (bundles) {
 				bundles.remove(this); /* remove before calling unload */
 				exporting = unload();
 			}
+			// send out unresolved events outside synch block (defect #80610)
+			if (st == RESOLVED)
+				framework.publishBundleEvent(BundleEvent.UNRESOLVED, this);
 			unloaded = true;
 			storage.commit(exporting);
 			close();
@@ -1186,16 +1189,16 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 		}
 	}
 
-	public org.osgi.framework.Bundle[] getFragments() {
+	protected Bundle[] getFragments() {
 		checkValid();
 		return null;
 	}
 
-	public boolean isFragment() {
+	protected boolean isFragment() {
 		return false;
 	}
 
-	public BundleLoaderProxy[] getHosts() {
+	protected BundleLoaderProxy[] getHosts() {
 		checkValid();
 		return null;
 	}
@@ -1268,6 +1271,10 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 		return bundledata.getSymbolicName();
 	}
 
+	public long getLastModified() {
+		return bundledata.getLastModified();
+	}
+
 	public BundleData getBundleData() {
 		return bundledata;
 	}
@@ -1284,7 +1291,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 		return bundledata.getStartLevel();
 	}
 
-	public abstract BundleLoader getBundleLoader();
+	protected abstract BundleLoader getBundleLoader();
 
 	/**
 	 * Mark this bundle as resolved.

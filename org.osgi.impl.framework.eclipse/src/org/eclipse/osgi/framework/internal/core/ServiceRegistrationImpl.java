@@ -495,10 +495,10 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 
 			if (props != null) {
 				synchronized (props) {
-					Enumeration enum = props.keys();
+					Enumeration keysEnum = props.keys();
 
-					while (enum.hasMoreElements()) {
-						Object key = enum.nextElement();
+					while (keysEnum.hasMoreElements()) {
+						Object key = keysEnum.nextElement();
 
 						if (key instanceof String) {
 							String header = (String) key;
@@ -540,10 +540,10 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 
 			String[] keynames = new String[size];
 
-			Enumeration enum = keys();
+			Enumeration keysEnum = keys();
 
 			for (int i = 0; i < size; i++) {
-				keynames[i] = (String) enum.nextElement();
+				keynames[i] = (String) keysEnum.nextElement();
 			}
 
 			return (keynames);

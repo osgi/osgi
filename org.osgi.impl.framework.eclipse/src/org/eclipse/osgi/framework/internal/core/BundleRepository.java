@@ -12,7 +12,6 @@
 package org.eclipse.osgi.framework.internal.core;
 
 import java.util.*;
-
 import org.osgi.framework.Version;
 
 /**

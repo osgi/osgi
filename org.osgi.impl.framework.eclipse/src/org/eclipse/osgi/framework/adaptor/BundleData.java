@@ -17,8 +17,9 @@ import java.net.URL;
 import java.security.ProtectionDomain;
 import java.util.Dictionary;
 import java.util.Enumeration;
-
 import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 
 /**
  * The <code>BundleData</code> represents a single bundle that is persistently 
@@ -120,6 +121,12 @@ public interface BundleData {
 	 * @return the BundleData location.
 	 */
 	public String getLocation();
+
+	/**
+	 * Get the last time this BundleData was modified.
+	 * @return the last time this BundleData was modified
+	 */
+	public long getLastModified();
 
 	/**
 	 * Close all resources for this BundleData

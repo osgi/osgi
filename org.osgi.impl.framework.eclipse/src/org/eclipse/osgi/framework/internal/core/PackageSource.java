@@ -46,5 +46,4 @@ public abstract class PackageSource implements KeyedElement {
 	public abstract Class loadClass(String name, String pkgName, boolean providePkg);
 	public abstract URL getResource(String name, String pkgName, boolean providePkg);
 	public abstract Enumeration getResources(String name, String pkgName, boolean providePkg) throws IOException;
-	public abstract Object getObject(String name, String pkgName, boolean providePkg);
 }

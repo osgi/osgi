@@ -27,23 +27,17 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 	private byte stateBits = FULLY_LOADED; // set the fully loaded by default
 
 	private long bundleId = -1;
-	private String location;
 	private HostSpecification host;
 	private StateImpl containingState;
-
-	private BundleSpecification[] requiredBundles;
-	private ExportPackageDescription[] exportPackages;
-	private ImportPackageSpecification[] importPackages;
-
-	private ExportPackageDescription[] selectedExports;
-	private BundleDescription[] resolvedRequires;
-	private ExportPackageDescription[] resolvedImports;
 
 	private Object userObject;
 	private int lazyDataSize = -1;
 
 	private ArrayList dependencies;
 	private ArrayList dependents;
+
+	private LazyData lazyData;
+	private long lazyTimeStamp;
 
 	public BundleDescriptionImpl() {
 		// 
@@ -57,29 +51,30 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		return getName();
 	}
 
-	public String getLocation() {
-		return location;
+	public synchronized String getLocation() {
+		fullyLoad();
+		return lazyData.location;
 	}
 
-	public ImportPackageSpecification[] getImportPackages() {
+	public synchronized ImportPackageSpecification[] getImportPackages() {
 		fullyLoad();
-		if (importPackages == null)
+		if (lazyData.importPackages == null)
 			return new ImportPackageSpecification[0];
-		return importPackages;
+		return lazyData.importPackages;
 	}
 
-	public BundleSpecification[] getRequiredBundles() {
+	public synchronized BundleSpecification[] getRequiredBundles() {
 		fullyLoad();
-		if (requiredBundles == null)
+		if (lazyData.requiredBundles == null)
 			return new BundleSpecification[0];
-		return requiredBundles;
+		return lazyData.requiredBundles;
 	}
 
-	public ExportPackageDescription[] getExportPackages() {
+	public synchronized ExportPackageDescription[] getExportPackages() {
 		fullyLoad();
-		if (exportPackages == null)
+		if (lazyData.exportPackages == null)
 			return new ExportPackageDescription[0]; 
-		return exportPackages;
+		return lazyData.exportPackages;
 	}
 
 	public boolean isResolved() {
@@ -93,7 +88,7 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 	public BundleDescription[] getFragments() {
 		if (host != null)
 			return new BundleDescription[0];
-		return ((StateImpl) containingState).getFragments(this);
+		return containingState.getFragments(this);
 	}
 
 	public HostSpecification getHost() {
@@ -108,25 +103,25 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		return (stateBits & REMOVAL_PENDING) != 0;
 	}
 
-	public ExportPackageDescription[] getSelectedExports() {
+	public synchronized ExportPackageDescription[] getSelectedExports() {
 		fullyLoad();
-		if (selectedExports == null)
+		if (lazyData.selectedExports == null)
 			return new ExportPackageDescription[0];
-		return selectedExports;
+		return lazyData.selectedExports;
 	}
 
-	public BundleDescription[] getResolvedRequires() {
+	public synchronized BundleDescription[] getResolvedRequires() {
 		fullyLoad();
-		if (resolvedRequires == null)
+		if (lazyData.resolvedRequires == null)
 			return new BundleDescription[0];
-		return resolvedRequires;
+		return lazyData.resolvedRequires;
 	}
 
-	public ExportPackageDescription[] getResolvedImports() {
+	public synchronized ExportPackageDescription[] getResolvedImports() {
 		fullyLoad();
-		if (resolvedImports == null)
+		if (lazyData.resolvedImports == null)
 			return new ExportPackageDescription[0];
-		return resolvedImports;
+		return lazyData.resolvedImports;
 	}
 
 	protected void setBundleId(long bundleId) {
@@ -137,12 +132,14 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		setName(symbolicName);
 	}
 
-	protected void setLocation(String location) {
-		this.location = location;
+	protected synchronized void setLocation(String location) {
+		checkLazyData();
+		lazyData.location = location;
 	}
 
-	protected void setExportPackages(ExportPackageDescription[] exportPackages) {
-		this.exportPackages = exportPackages;
+	protected synchronized void setExportPackages(ExportPackageDescription[] exportPackages) {
+		checkLazyData();
+		lazyData.exportPackages = exportPackages;
 		if (exportPackages != null) {
 			for (int i = 0; i < exportPackages.length; i++) {
 				((ExportPackageDescriptionImpl)exportPackages[i]).setExporter(this);
@@ -150,8 +147,9 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		}
 	}
 
-	protected void setImportPackages(ImportPackageSpecification[] importPackages) {
-		this.importPackages = importPackages;
+	protected synchronized void setImportPackages(ImportPackageSpecification[] importPackages) {
+		checkLazyData();
+		lazyData.importPackages = importPackages;
 		if (importPackages != null) {
 			for (int i = 0; i < importPackages.length; i++) {
 				((ImportPackageSpecificationImpl)importPackages[i]).setBundle(this);
@@ -159,8 +157,9 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		}
 	}
 
-	protected void setRequiredBundles(BundleSpecification[] requiredBundles) {
-		this.requiredBundles = requiredBundles;
+	protected synchronized void setRequiredBundles(BundleSpecification[] requiredBundles) {
+		checkLazyData();
+		lazyData.requiredBundles = requiredBundles;
 		if (requiredBundles != null)
 			for (int i = 0; i < requiredBundles.length; i++)
 				((VersionConstraintImpl) requiredBundles[i]).setBundle(this);
@@ -206,8 +205,9 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 			stateBits &= ~REMOVAL_PENDING;
 	}
 
-	protected void setSelectedExports(ExportPackageDescription[] selectedExports) {
-		this.selectedExports = selectedExports;
+	protected synchronized void setSelectedExports(ExportPackageDescription[] selectedExports) {
+		checkLazyData();
+		lazyData.selectedExports = selectedExports;
 		if (selectedExports != null) {
 			for (int i = 0; i < selectedExports.length; i++) {
 				((ExportPackageDescriptionImpl)selectedExports[i]).setExporter(this);
@@ -215,12 +215,14 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		}
 	}
 
-	protected void setResolvedImports(ExportPackageDescription[] resolvedImports) {
-		this.resolvedImports = resolvedImports;
+	protected synchronized void setResolvedImports(ExportPackageDescription[] resolvedImports) {
+		checkLazyData();
+		lazyData.resolvedImports = resolvedImports;
 	}
 
-	protected void setResolvedRequires(BundleDescription[] resolvedRequires) {
-		this.resolvedRequires = resolvedRequires;
+	protected synchronized void setResolvedRequires(BundleDescription[] resolvedRequires) {
+		checkLazyData();
+		lazyData.resolvedRequires = resolvedRequires;
 	}
 
 	public String toString() {
@@ -328,13 +330,16 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 	}
 
 	void setFullyLoaded(boolean fullyLoaded) {
-		if (fullyLoaded)
+		if (fullyLoaded){
 			stateBits |= FULLY_LOADED;
-		else
+			lazyTimeStamp = System.currentTimeMillis();
+		}
+		else {
 			stateBits &= ~FULLY_LOADED;
+		}
 	}
 
-	boolean isFullyLoaded() {
+	synchronized boolean isFullyLoaded() {
 		return (stateBits & FULLY_LOADED) != 0;
 	}
 
@@ -349,29 +354,53 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 	private void fullyLoad() {
 		if ((stateBits & LAZY_LOADED) == 0)
 			return;
-		synchronized (this) {
-			if (isFullyLoaded())
-				return;
-			try {
-				containingState.getReader().fullyLoad(this);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if (isFullyLoaded())
+			return;
+		try {
+			containingState.getReader().fullyLoad(this);
+		} catch (IOException e) {
+			throw new RuntimeException(e.getMessage()); // TODO not sure what to do here!!
 		}
 	}
 
-	void addDynamicResolvedImport(ExportPackageDescriptionImpl result) {
+	synchronized void addDynamicResolvedImport(ExportPackageDescriptionImpl result) {
 		// mark the dependency
 		addDependency(result);
 		// add the export to the list of the resolvedImports
-		if (resolvedImports == null) {
-			resolvedImports = new ExportPackageDescription[] {result};
+		checkLazyData();
+		if (lazyData.resolvedImports == null) {
+			lazyData.resolvedImports = new ExportPackageDescription[] {result};
 			return;
 		}
-		ExportPackageDescription[] newImports = new ExportPackageDescription[resolvedImports.length + 1];
-		System.arraycopy(resolvedImports, 0, newImports, 0, resolvedImports.length);
+		ExportPackageDescription[] newImports = new ExportPackageDescription[lazyData.resolvedImports.length + 1];
+		System.arraycopy(lazyData.resolvedImports, 0, newImports, 0, lazyData.resolvedImports.length);
 		newImports[newImports.length - 1] = result;
-		resolvedImports = newImports;
+		lazyData.resolvedImports = newImports;
+	}
+
+	synchronized void unload(long currentTime, long expireTime) {
+		if ((stateBits & LAZY_LOADED) == 0)
+			return;
+		if (!isFullyLoaded() || (currentTime - lazyTimeStamp - expireTime) <= 0)
+			return;
+		setFullyLoaded(false);
+		lazyData = null;
+	}
+
+	private void checkLazyData() {
+		if (lazyData == null)
+			lazyData = new LazyData();
+	}
+
+	private final class LazyData {
+		String location;
+
+		BundleSpecification[] requiredBundles;
+		ExportPackageDescription[] exportPackages;
+		ImportPackageSpecification[] importPackages;
+
+		ExportPackageDescription[] selectedExports;
+		BundleDescription[] resolvedRequires;
+		ExportPackageDescription[] resolvedImports;
 	}
 }

@@ -101,6 +101,16 @@ abstract public class BundleFile {
 	 * @param hostBundleID the host bundle ID
 	 */
 	public URL getResourceURL(String path, long hostBundleID) {
+		return getResourceURL(path, hostBundleID, 0);
+	}
+
+	/**
+	 * Returns a URL to access the contents of the entry specified by the path
+	 * @param path the path to the resource
+	 * @param hostBundleID the host bundle ID
+	 * @param index the resource index
+	 */
+	public URL getResourceURL(String path, long hostBundleID, int index) {
 		BundleEntry bundleEntry = getEntry(path);
 		if (bundleEntry == null)
 			return null;
@@ -108,9 +118,10 @@ abstract public class BundleFile {
 		try {
 			StringBuffer url = new StringBuffer(Constants.OSGI_RESOURCE_URL_PROTOCOL);
 			url.append("://").append(hostBundleID); //$NON-NLS-1$
-			if (path.length() == 0 || path.charAt(0) != '/') {
+			if (index > 0)
+				url.append(':').append(index);
+			if (path.length() == 0 || path.charAt(0) != '/')
 				url.append('/');
-			}
 			url.append(path);
 			return new URL(null, url.toString(), new Handler(bundleEntry));
 		} catch (MalformedURLException e) {
@@ -230,8 +241,11 @@ abstract public class BundleFile {
 			if (dir.length() == 0)
 				return true;
 
-			if (dir.charAt(0) == '/')
-				dir = dir.substring(0);
+			if (dir.charAt(0) == '/') {
+				if (dir.length() == 1)
+					return true;
+				dir = dir.substring(1);
+			}
 
 			if (dir.length() > 0 && dir.charAt(dir.length() - 1) != '/')
 				dir = dir + '/';
@@ -368,11 +382,11 @@ abstract public class BundleFile {
 					int cur = 0;
 
 					public boolean hasMoreElements() {
-						return cur < fileList.length;
+						return fileList != null && cur < fileList.length;
 					}
 
 					public Object nextElement() {
-						if (cur >= fileList.length) {
+						if (!hasMoreElements()) {
 							throw new NoSuchElementException();
 						}
 						java.io.File childFile = new java.io.File(pathFile, fileList[cur]);

@@ -13,7 +13,6 @@ package org.eclipse.osgi.internal.resolver;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.*;
-
 import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.Version;
 
@@ -82,7 +81,6 @@ class StateWriter {
 		writeBaseDescription(bundle, out);
 		out.writeBoolean(bundle.isResolved());
 		out.writeBoolean(bundle.isSingleton());
-		writeStringOrNull(bundle.getLocation(), out);
 		writeHostSpec((HostSpecificationImpl) bundle.getHost(), out);
 
 		List dependencies = ((BundleDescriptionImpl)bundle).getBundleDependencies();
@@ -97,6 +95,8 @@ class StateWriter {
 		out.writeInt(index);
 
 		int dataStart = out.size(); // save the offset of lazy data start
+
+		writeStringOrNull(bundle.getLocation(), out);
 
 		ExportPackageDescription[] exports = bundle.getExportPackages();
 		out.writeInt(exports.length);

@@ -11,7 +11,6 @@
 package org.eclipse.osgi.internal.resolver;
 
 import java.util.*;
-
 import org.eclipse.osgi.framework.internal.core.Constants;
 import org.eclipse.osgi.service.resolver.*;
 import org.eclipse.osgi.util.ManifestElement;
@@ -46,7 +45,7 @@ class StateBuilder {
 		}
 		// retrieve other headers
 		String version = (String) manifest.get(Constants.BUNDLE_VERSION);
-		result.setVersion(Version.parseVersion(version));
+		result.setVersion((version != null) ? Version.parseVersion(version) : Version.emptyVersion);
 		result.setLocation(location);
 		ManifestElement[] host = ManifestElement.parseHeader(Constants.FRAGMENT_HOST, (String) manifest.get(Constants.FRAGMENT_HOST));
 		if (host != null)
@@ -59,9 +58,6 @@ class StateBuilder {
 		ManifestElement[] imports = ManifestElement.parseHeader(Constants.IMPORT_PACKAGE, (String) manifest.get(Constants.IMPORT_PACKAGE));
 		ManifestElement[] dynamicImports = ManifestElement.parseHeader(Constants.DYNAMICIMPORT_PACKAGE, (String) manifest.get(Constants.DYNAMICIMPORT_PACKAGE));
 		result.setImportPackages(createImportPackages(result.getExportPackages(), providedExports, imports, dynamicImports, manifestVersion));
-		// TODO need to remove provides API from state ...
-		//provides = ManifestElement.parseHeader(Constants.PROVIDE_PACKAGE, (String) manifest.get(Constants.PROVIDE_PACKAGE));
-		//result.setProvidedPackages(createProvidedPackages(provides));
 		ManifestElement[] requires = ManifestElement.parseHeader(Constants.REQUIRE_BUNDLE, (String) manifest.get(Constants.REQUIRE_BUNDLE));
 		result.setRequiredBundles(createRequiredBundles(requires));
 		return result;
@@ -80,8 +76,8 @@ class StateBuilder {
 		BundleSpecificationImpl result = new BundleSpecificationImpl();
 		result.setName(spec.getValue());
 		result.setVersionRange(getVersionRange(spec.getAttribute(Constants.BUNDLE_VERSION_ATTRIBUTE)));
-		result.setExported(spec.getAttribute(Constants.REPROVIDE_ATTRIBUTE) != null);
-		result.setOptional(spec.getAttribute(Constants.OPTIONAL_ATTRIBUTE) != null);
+		result.setExported(Constants.VISIBILITY_REEXPORT.equals(spec.getDirective(Constants.VISIBILITY_DIRECTIVE)) || "true".equals(spec.getAttribute(Constants.REPROVIDE_ATTRIBUTE))); //$NON-NLS-1$
+		result.setOptional(Constants.RESOLUTION_OPTIONAL.equals(spec.getDirective(Constants.RESOLUTION_DIRECTIVE)) || "true".equals(spec.getAttribute(Constants.OPTIONAL_ATTRIBUTE))); //$NON-NLS-1$
 		return result;
 	}
 

@@ -9,10 +9,12 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.osgi.framework.adaptor.core;
+package org.eclipse.osgi.framework.internal.core;
 
 import java.io.IOException;
 import java.net.*;
+import org.eclipse.osgi.framework.adaptor.BundleClassLoader;
+import org.eclipse.osgi.framework.adaptor.core.*;
 import org.eclipse.osgi.framework.internal.core.AbstractBundle;
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.BundleContext;
@@ -33,6 +35,7 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 	 * Constructor for a bundle protocol resource URLStreamHandler.
 	 */
 	public BundleResourceHandler() {
+		this(null);
 	}
 
 	public BundleResourceHandler(BundleEntry bundleEntry) {
@@ -49,7 +52,7 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 		if (end < start) 
 			return;
 		if (url.getPath() != null)
-			// A call to a URL constructor has been made that uses an authorized  URL as its context.
+			// A call to a URL constructor has been made that uses an authorized URL as its context.
 			// Null out bundleEntry because it will not be valid for the new path
 			bundleEntry = null;
 		String spec = ""; //$NON-NLS-1$
@@ -59,6 +62,7 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 		//Default is to use path and bundleId from context
 		String path = url.getPath();
 		String bundleId = url.getHost();
+		int resIndex = 0; // must start at 0 index if using a context
 		int pathIdx = 0;
 		if (spec.startsWith("//")) { //$NON-NLS-1$
 			int bundleIdIdx = 2;
@@ -68,7 +72,16 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 				// Use default
 				path = ""; //$NON-NLS-1$
 			}
-			bundleId = spec.substring(bundleIdIdx, pathIdx);
+			int bundleIdEnd = spec.indexOf(':', bundleIdIdx);
+			if (bundleIdEnd > pathIdx || bundleIdEnd == -1)
+				bundleIdEnd = pathIdx;
+			if (bundleIdEnd < pathIdx - 1)
+				try {
+					resIndex = Integer.parseInt(spec.substring(bundleIdEnd + 1, pathIdx));
+				} catch (NumberFormatException e) {
+					// do nothing; results in resIndex == 0
+				}
+			bundleId = spec.substring(bundleIdIdx, bundleIdEnd);
 		}
 		if (pathIdx < end && spec.charAt(pathIdx) == '/')
 			path = spec.substring(pathIdx, end);
@@ -102,7 +115,7 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 		// ensures that this URL was created by using this parseURL
 		// method.  The openConnection method will only open URLs
 		// that have the authority set to this.
-		setURL(url, url.getProtocol(), bundleId, 0, SECURITY_AUTHORIZED, null, path, null, null);
+		setURL(url, url.getProtocol(), bundleId, resIndex, SECURITY_AUTHORIZED, null, path, null, null);
 	}
 
 	/**
@@ -116,7 +129,6 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 	 * @exception	IOException 	thrown if an IO error occurs during connection establishment
 	 */
 	protected URLConnection openConnection(URL url) throws IOException {
-		String authority = url.getAuthority();
 		// check to make sure that this URL was created using the
 		// parseURL method.  This ensures the security check was done
 		// at URL construction.
@@ -125,26 +137,25 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 			checkAdminPermission();
 		}
 
-		if (bundleEntry != null) {
+		if (bundleEntry != null)
 			return (new BundleURLConnection(url, bundleEntry));
-		} else {
-			String bidString = url.getHost();
-			if (bidString == null) {
-				throw new IOException(AdaptorMsg.formatter.getString("URL_NO_BUNDLE_ID", url.toExternalForm())); //$NON-NLS-1$
-			}
-			AbstractBundle bundle = null;
-			try {
-				Long bundleID = new Long(bidString);
-				bundle = (AbstractBundle) context.getBundle(bundleID.longValue());
-			} catch (NumberFormatException nfe) {
-				throw new MalformedURLException(AdaptorMsg.formatter.getString("URL_INVALID_BUNDLE_ID", bidString)); //$NON-NLS-1$
-			}
 
-			if (bundle == null) {
-				throw new IOException(AdaptorMsg.formatter.getString("URL_NO_BUNDLE_FOUND", url.toExternalForm())); //$NON-NLS-1$
-			}
-			return (new BundleURLConnection(url, findBundleEntry(url, bundle)));
+		String bidString = url.getHost();
+		if (bidString == null) {
+			throw new IOException(AdaptorMsg.formatter.getString("URL_NO_BUNDLE_ID", url.toExternalForm())); //$NON-NLS-1$
 		}
+		AbstractBundle bundle = null;
+		try {
+			Long bundleID = new Long(bidString);
+			bundle = (AbstractBundle) context.getBundle(bundleID.longValue());
+		} catch (NumberFormatException nfe) {
+			throw new MalformedURLException(AdaptorMsg.formatter.getString("URL_INVALID_BUNDLE_ID", bidString)); //$NON-NLS-1$
+		}
+
+		if (bundle == null) {
+			throw new IOException(AdaptorMsg.formatter.getString("URL_NO_BUNDLE_FOUND", url.toExternalForm())); //$NON-NLS-1$
+		}
+		return (new BundleURLConnection(url, findBundleEntry(url, bundle)));
 	}
 
 	/**
@@ -153,7 +164,7 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 	 * because getResource uses the bundle classloader and getEntry
 	 * only used the base bundle file.
 	 * @param url The URL to find the BundleEntry for.
-	 * @return
+	 * @return the bundle entry
 	 */
 	abstract protected BundleEntry findBundleEntry(URL url, AbstractBundle bundle) throws IOException;
 
@@ -168,9 +179,11 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 		result.append("://"); //$NON-NLS-1$
 
 		String bundleId = url.getHost();
-		if ((bundleId != null) && (bundleId.length() > 0)) {
+		if ((bundleId != null) && (bundleId.length() > 0))
 			result.append(bundleId);
-		}
+		int index = url.getPort();
+		if (index > 0)
+			result.append(':').append(index);
 
 		String path = url.getPath();
 		if (path != null) {
@@ -218,8 +231,7 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 		String host2 = url2.getHost();
 		if (host1 != null && host2 != null)
 			return host1.equalsIgnoreCase(host2);
-		else
-			return (host1 == null && host2 == null);
+		return (host1 == null && host2 == null);
 	}
 
 	protected boolean sameFile(URL url1, URL url2) {
@@ -229,6 +241,9 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 			return false;
 
 		if (!hostsEqual(url1, url2))
+			return false;
+
+		if (url1.getPort() != url2.getPort())
 			return false;
 
 		String a1 = url1.getAuthority();
@@ -254,5 +269,12 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 
 			sm.checkPermission(adminPermission);
 		}
+	}
+
+	protected static BundleClassLoader getBundleClassLoader(AbstractBundle bundle) {
+		BundleLoader loader = bundle.getBundleLoader();
+		if (loader == null)
+			return null;
+		return loader.createClassLoader();
 	}
 }

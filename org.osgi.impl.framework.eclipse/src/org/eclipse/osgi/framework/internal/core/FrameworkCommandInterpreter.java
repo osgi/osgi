@@ -299,10 +299,10 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 
 		int count = dic.size();
 		String[] keys = new String[count];
-		Enumeration enum = dic.keys();
+		Enumeration keysEnum = dic.keys();
 		int i = 0;
-		while (enum.hasMoreElements()) {
-			keys[i++] = (String) enum.nextElement();
+		while (keysEnum.hasMoreElements()) {
+			keys[i++] = (String) keysEnum.nextElement();
 		}
 		Util.sort(keys);
 

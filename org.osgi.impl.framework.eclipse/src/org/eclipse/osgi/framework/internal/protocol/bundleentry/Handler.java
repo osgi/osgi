@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.net.URL;
 import org.eclipse.osgi.framework.adaptor.core.*;
 import org.eclipse.osgi.framework.internal.core.AbstractBundle;
+import org.eclipse.osgi.framework.internal.core.BundleResourceHandler;
 
 /**
  * URLStreamHandler the bundleentry protocol.

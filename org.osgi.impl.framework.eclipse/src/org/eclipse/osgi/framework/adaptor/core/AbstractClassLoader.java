@@ -220,6 +220,9 @@ public abstract class AbstractClassLoader extends ClassLoader implements BundleC
 		return findClass(classname);
 	}
 
+	abstract public Object findLocalObject(String path);
+	abstract public Enumeration findLocalObjects(String path);
+
 	public ClassLoaderDelegate getDelegate() {
 		return delegate;
 	}

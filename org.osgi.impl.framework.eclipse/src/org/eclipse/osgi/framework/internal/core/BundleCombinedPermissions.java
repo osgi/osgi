@@ -19,6 +19,7 @@ import java.util.*;
  *
  */
 final class BundleCombinedPermissions extends BundlePermissionCollection {
+	private static final long serialVersionUID = 4049357526208360496L;
 	private BundlePermissionCollection assigned;
 	private BundlePermissionCollection implied;
 
@@ -95,8 +96,8 @@ final class BundleCombinedPermissions extends BundlePermissionCollection {
 			 */
 			public boolean hasMoreElements() {
 				while (i < enums.length) {
-					Enumeration enum = enums[i];
-					if ((enum != null) && enum.hasMoreElements()) {
+					Enumeration perms = enums[i];
+					if ((perms != null) && perms.hasMoreElements()) {
 						return true;
 					}
 
@@ -118,9 +119,9 @@ final class BundleCombinedPermissions extends BundlePermissionCollection {
 			public Object nextElement() {
 				while (i < enums.length) {
 					try {
-						Enumeration enum = enums[i];
-						if (enum != null) {
-							return enum.nextElement();
+						Enumeration perms = enums[i];
+						if (perms != null) {
+							return perms.nextElement();
 						}
 					} catch (NoSuchElementException e) {
 					}

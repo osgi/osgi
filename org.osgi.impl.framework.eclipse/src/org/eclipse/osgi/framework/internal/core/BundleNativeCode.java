@@ -12,10 +12,10 @@ package org.eclipse.osgi.framework.internal.core;
 
 import java.util.Enumeration;
 import java.util.Vector;
-
 import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.*;
 import org.osgi.framework.Constants;
+import org.osgi.framework.InvalidSyntaxException;
 
 /**
  * This class represents a description of native code.
@@ -372,6 +372,8 @@ public class BundleNativeCode {
 	 * Extension of Vector for attributes.
 	 */
 	static class Attribute extends Vector {
+		private static final long serialVersionUID = 3257005440914174512L;
+
 		/**
 		 * Attribute constructor.
 		 *  

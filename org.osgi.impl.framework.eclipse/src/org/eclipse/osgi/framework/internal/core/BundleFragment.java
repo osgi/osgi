@@ -90,9 +90,7 @@ public class BundleFragment extends AbstractBundle {
 							break;
 					}
 					hosts = null;
-					// publish UNRESOLVED event here.
 					state = INSTALLED;
-					framework.publishBundleEvent(BundleEvent.UNRESOLVED, this);
 				}
 			}
 		} else {
@@ -166,9 +164,7 @@ public class BundleFragment extends AbstractBundle {
 							break;
 					}
 					hosts = null;
-					// publish UNRESOLVED event here.
 					state = INSTALLED;
-					framework.publishBundleEvent(BundleEvent.UNRESOLVED, this);
 				}
 				domain = null;
 			}
@@ -346,11 +342,11 @@ public class BundleFragment extends AbstractBundle {
 		return null;
 	}
 
-	public BundleLoaderProxy[] getHosts() {
+	protected BundleLoaderProxy[] getHosts() {
 		return hosts;
 	}
 
-	public boolean isFragment() {
+	protected boolean isFragment() {
 		return true;
 	}
 
@@ -381,7 +377,7 @@ public class BundleFragment extends AbstractBundle {
 		return true;
 	}
 
-	public BundleLoader getBundleLoader() {
+	protected BundleLoader getBundleLoader() {
 		// Fragments cannot have a BundleLoader.
 		return null;
 	}
@@ -394,13 +390,5 @@ public class BundleFragment extends AbstractBundle {
 	protected BundleContextImpl getContext() {
 		// Fragments cannot have a BundleContext.
 		return null;
-	}
-	/**
-	 * @return
-	 * @see org.osgi.framework.Bundle#getLastModified()
-	 */
-	public long getLastModified() {
-		// TODO Auto-generated method stub
-		return System.currentTimeMillis();
 	}
 }

@@ -63,14 +63,6 @@ public interface BundleClassLoader /*extends ClassLoader*/{
 	public Class findLocalClass(String classname) throws ClassNotFoundException;
 
 	/**
-	 * Finds a local object in the BundleClassLoader without
-	 * consulting the delegate.
-	 * @param object the object name to fined.
-	 * @return the object found or null if the object does not exist.
-	 */
-	public Object findLocalObject(String object);
-
-	/**
 	 * This method will first search the parent class loader for the resource;
 	 * That failing, this method will invoke 
 	 * {@link ClassLoaderDelegate#findResource(String)} to find the resource.   

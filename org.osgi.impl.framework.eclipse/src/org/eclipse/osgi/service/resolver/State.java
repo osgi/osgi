@@ -11,6 +11,8 @@
 package org.eclipse.osgi.service.resolver;
 
 import org.osgi.framework.*;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.Version;
 
 /**
  * The state of a system as reported by a resolver. This includes all bundles
@@ -60,7 +62,7 @@ public interface State {
 	/**
 	 * Updates an existing bundle description with the given description. 
 	 * 
-	 * @param bundle the bundle description to replace an existing one
+	 * @param newDescription the bundle description to replace an existing one
 	 * @return <code>true</code>, if if the bundle description was updated, 
 	 * 	<code>false</code> otherwise 	
 	 */
@@ -82,9 +84,11 @@ public interface State {
 	public BundleDescription[] getBundles();
 
 	/**
-	 * Returns descriptor for all bundles known to this state.
+	 * Returns the bundle descriptor for the bundle with the given id. 
+	 * <code>null</code> is returned if no such bundle is found in 
+	 * this state. 
 	 * 
-	 * @return the descriptors for all bundles known to this state.
+	 * @return the descriptor for the identified bundle
 	 * @see BundleDescription#getBundleId()
 	 */
 	public BundleDescription getBundle(long id);
@@ -159,7 +163,7 @@ public interface State {
 	 * @param status whether or not the given bundle is resolved, if false the other parameters are ignored
 	 * @param hosts the host for the resolve fragment, can be <code>null</code>
 	 * @param selectedExports the selected exported packages for this resolved bundle, can be <code>null</code>
-	 * @param resolvedBundles the BundleDescriptions that resolve the required bundles for this bundle, can be <code>null</code>
+	 * @param resolvedRequires the BundleDescriptions that resolve the required bundles for this bundle, can be <code>null</code>
 	 * @param resolvedImports the exported packages that resolve the imports for this bundle, can be <code>null</code>
 	 * @throws IllegalStateException if this is not done during a call to <code>resolve</code>
 	 */
@@ -309,4 +313,5 @@ public interface State {
 	 * a value of <code>null</code> is returned if none is available.
 	 */
 	public ExportPackageDescription linkDynamicImport(BundleDescription importingBundle, String requestedPackage);
+
 }

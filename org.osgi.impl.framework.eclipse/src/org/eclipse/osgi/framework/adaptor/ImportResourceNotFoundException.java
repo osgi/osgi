@@ -19,6 +19,8 @@ package org.eclipse.osgi.framework.adaptor;
  *
  */
 public class ImportResourceNotFoundException extends RuntimeException {
+	private static final long serialVersionUID = 3977584697024721712L;
+
 	/**
 	 * Constructor with no detail message
 	 */

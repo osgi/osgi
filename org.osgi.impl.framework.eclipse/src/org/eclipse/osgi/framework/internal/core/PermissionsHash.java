@@ -32,6 +32,7 @@ import java.util.Hashtable;
  *
  */
 class PermissionsHash extends PermissionCollection {
+	private static final long serialVersionUID = 3258408426341284153L;
 	/**
 	 * A hashtable to store the elements of the collection.
 	 */
@@ -90,10 +91,10 @@ class PermissionsHash extends PermissionCollection {
 			return true;
 		}
 
-		Enumeration enum = elements();
+		Enumeration permsEnum = elements();
 
-		while (enum.hasMoreElements()) {
-			if (((Permission) enum.nextElement()).implies(perm)) {
+		while (permsEnum.hasMoreElements()) {
+			if (((Permission) permsEnum.nextElement()).implies(perm)) {
 				return true;
 			}
 		}

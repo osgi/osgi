@@ -9,13 +9,12 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.osgi.framework.internal.defaultadaptor;
+package org.eclipse.osgi.framework.adaptor.core;
 
 import java.io.*;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import org.eclipse.osgi.framework.adaptor.PermissionStorage;
-import org.eclipse.osgi.framework.adaptor.core.AdaptorMsg;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.internal.reliablefile.*;
 
@@ -44,7 +43,7 @@ class DefaultPermissionStorage implements PermissionStorage {
 	 *
 	 * @throws IOException If an error occurs initializing the object.
 	 */
-	protected DefaultPermissionStorage(DefaultAdaptor adaptor) throws IOException {
+	protected DefaultPermissionStorage(AbstractFrameworkAdaptor adaptor) throws IOException {
 		permissionDir = new File(adaptor.getBundleStoreRootDir(), "permdata"); //$NON-NLS-1$
 		permissionFiles = new Hashtable();
 
@@ -80,10 +79,10 @@ class DefaultPermissionStorage implements PermissionStorage {
 
 		String[] locations = new String[size];
 
-		Enumeration enum = permissionFiles.keys();
+		Enumeration keysEnum = permissionFiles.keys();
 
 		for (int i = 0; i < size; i++) {
-			locations[i] = (String) enum.nextElement();
+			locations[i] = (String) keysEnum.nextElement();
 		}
 
 		return locations;
@@ -168,7 +167,8 @@ class DefaultPermissionStorage implements PermissionStorage {
 	 */
 	protected void loadLocations() throws IOException {
 		String list[] = permissionDir.list();
-
+		if (list == null)
+			return;
 		int len = list.length;
 
 		for (int i = 0; i < len; i++) {
@@ -214,21 +214,19 @@ class DefaultPermissionStorage implements PermissionStorage {
 			int version = in.readInt();
 
 			switch (version) {
-				case PERMISSIONDATA_VERSION_1 :
-					{
-						boolean locationPresent = in.readBoolean();
+				case PERMISSIONDATA_VERSION_1 : {
+					boolean locationPresent = in.readBoolean();
 
-						if (locationPresent) {
-							String location = in.readUTF();
+					if (locationPresent) {
+						String location = in.readUTF();
 
-							return location;
-						}
-						break;
+						return location;
 					}
-				default :
-					{
-						throw new IOException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION")); //$NON-NLS-1$
-					}
+					break;
+				}
+				default : {
+					throw new IOException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION")); //$NON-NLS-1$
+				}
 			}
 		} finally {
 			in.close();
@@ -250,27 +248,25 @@ class DefaultPermissionStorage implements PermissionStorage {
 			int version = in.readInt();
 
 			switch (version) {
-				case PERMISSIONDATA_VERSION_1 :
-					{
-						boolean locationPresent = in.readBoolean();
+				case PERMISSIONDATA_VERSION_1 : {
+					boolean locationPresent = in.readBoolean();
 
-						if (locationPresent) {
-							String location = in.readUTF();
-						}
-
-						int size = in.readInt();
-						String[] data = new String[size];
-
-						for (int i = 0; i < size; i++) {
-							data[i] = in.readUTF();
-						}
-
-						return data;
+					if (locationPresent) {
+						String location = in.readUTF();
 					}
-				default :
-					{
-						throw new IOException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION")); //$NON-NLS-1$
+
+					int size = in.readInt();
+					String[] data = new String[size];
+
+					for (int i = 0; i < size; i++) {
+						data[i] = in.readUTF();
 					}
+
+					return data;
+				}
+				default : {
+					throw new IOException(AdaptorMsg.formatter.getString("ADAPTOR_STORAGE_EXCEPTION")); //$NON-NLS-1$
+				}
 			}
 		} finally {
 			in.close();

@@ -16,11 +16,11 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.security.ProtectionDomain;
 import java.util.*;
-
 import org.eclipse.osgi.framework.console.CommandInterpreter;
 import org.eclipse.osgi.framework.console.CommandProvider;
 import org.eclipse.osgi.framework.launcher.Launcher;
-import org.osgi.framework.*;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.RequiredBundle;
 
 /**
@@ -704,7 +704,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 					org.osgi.service.packageadmin.PackageAdmin packageAdmin = (org.osgi.service.packageadmin.PackageAdmin) context.getService(packageAdminRef);
 					if (packageAdmin != null) {
 						try {
-							org.osgi.service.packageadmin.ExportedPackage exportedpkgs[] = packageAdmin.getExportedPackages((Bundle)null);
+							org.osgi.service.packageadmin.ExportedPackage exportedpkgs[] = packageAdmin.getExportedPackages((org.osgi.framework.Bundle)null);
 
 							if (exportedpkgs == null) {
 								intp.print("  "); //$NON-NLS-1$
@@ -1025,6 +1025,8 @@ public class FrameworkCommandProvider implements CommandProvider {
 		}
 
 		long after = Runtime.getRuntime().freeMemory();
+		intp.print(ConsoleMsg.formatter.getString("CONSOLE_TOTAL_MEMORY_MESSAGE")); //$NON-NLS-1$
+		intp.println(String.valueOf(Runtime.getRuntime().totalMemory()));
 		intp.print(ConsoleMsg.formatter.getString("CONSOLE_FREE_MEMORY_BEFORE_GARBAGE_COLLECTION_MESSAGE")); //$NON-NLS-1$
 		intp.println(String.valueOf(before));
 		intp.print(ConsoleMsg.formatter.getString("CONSOLE_FREE_MEMORY_AFTER_GARBAGE_COLLECTION_MESSAGE")); //$NON-NLS-1$
@@ -1282,27 +1284,29 @@ public class FrameworkCommandProvider implements CommandProvider {
 			intp.print(newline);
 			intp.print(ConsoleMsg.formatter.getString("CONSOLE_ID")); //$NON-NLS-1$
 			intp.print(tab);
-			intp.print(ConsoleMsg.formatter.getString("CONSOLE_TYPE")); //$NON-NLS-1$
-			intp.print(tab);
 			intp.println(ConsoleMsg.formatter.getString("CONSOLE_STATE_BUNDLE_TITLE")); //$NON-NLS-1$
 			for (int i = 0; i < bundles.length; i++) {
-				AbstractBundle b = (AbstractBundle) bundles[i];
-				String type = "    "; //$NON-NLS-1$
-				// :TODO need to determine the type?
-				intp.println(b.getBundleId() + "\t" + type + " \t" + getStateName(b.getState()) + b); //$NON-NLS-1$ //$NON-NLS-2$
+				AbstractBundle b = bundles[i];
+				String label = b.getSymbolicName();
+				if (label == null || label.length() == 0)
+					label = b.toString();
+				else
+					label = label + "_" + b.getVersion(); //$NON-NLS-1$
+				intp.println(b.getBundleId() + "\t" + getStateName(b.getState()) + label); //$NON-NLS-1$ 
 				if (b.isFragment()) {
 					BundleLoaderProxy[] hosts = b.getHosts();
 					if (hosts != null)
 						for (int j = 0; j < hosts.length; j++)
-							intp.println("\t\tMaster=" + hosts[j].getBundleHost().getBundleId()); //$NON-NLS-1$
+							intp.println("\t            Master=" + hosts[j].getBundleHost().getBundleId()); //$NON-NLS-1$
 				} else {
-					AbstractBundle fragment;
 					org.osgi.framework.Bundle fragments[] = b.getFragments();
 					if (fragments != null) {
+						intp.print("\t            Fragments="); //$NON-NLS-1$
 						for (int f = 0; f < fragments.length; f++) {
-							fragment = (AbstractBundle) fragments[f];
-							intp.println("\t\tFragment=" + fragment.getBundleId()); //$NON-NLS-1$
+							AbstractBundle fragment = (AbstractBundle) fragments[f];
+							intp.print((f > 0 ? ", " :"") + fragment.getBundleId()); //$NON-NLS-1$ //$NON-NLS-2$
 						}
+						intp.println();
 					}
 				}
 			}

@@ -136,9 +136,9 @@ public class BundleContextImpl implements BundleContext, EventDispatcher {
 
 					usedRefs = new ServiceReference[usedSize];
 
-					Enumeration enum = servicesInUse.keys();
+					Enumeration refsEnum = servicesInUse.keys();
 					for (int i = 0; i < usedSize; i++) {
-						usedRefs[i] = (ServiceReference) enum.nextElement();
+						usedRefs[i] = (ServiceReference) refsEnum.nextElement();
 					}
 				}
 			}
@@ -1094,10 +1094,10 @@ public class BundleContextImpl implements BundleContext, EventDispatcher {
 			ServiceReferenceImpl[] references = new ServiceReferenceImpl[size];
 			int refcount = 0;
 
-			Enumeration enum = servicesInUse.keys();
+			Enumeration refsEnum = servicesInUse.keys();
 
 			for (int i = 0; i < size; i++) {
-				ServiceReferenceImpl reference = (ServiceReferenceImpl) enum.nextElement();
+				ServiceReferenceImpl reference = (ServiceReferenceImpl) refsEnum.nextElement();
 
 				try {
 					framework.checkGetServicePermission(reference.registration.clazzes);

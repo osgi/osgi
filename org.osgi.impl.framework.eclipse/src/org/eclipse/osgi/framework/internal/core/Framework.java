@@ -21,7 +21,6 @@ import org.eclipse.osgi.framework.eventmgr.*;
 import org.eclipse.osgi.framework.internal.protocol.ContentHandlerFactory;
 import org.eclipse.osgi.framework.internal.protocol.StreamHandlerFactory;
 import org.eclipse.osgi.framework.log.FrameworkLog;
-import org.eclipse.osgi.service.resolver.*;
 import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.*;
 
@@ -191,9 +190,9 @@ public class Framework implements EventDispatcher, EventPublisher {
 	 */
 	protected void initializeProperties(Properties adaptorProperties) {
 		properties = System.getProperties();
-		Enumeration enum = adaptorProperties.propertyNames();
-		while (enum.hasMoreElements()) {
-			String key = (String) enum.nextElement();
+		Enumeration enumKeys = adaptorProperties.propertyNames();
+		while (enumKeys.hasMoreElements()) {
+			String key = (String) enumKeys.nextElement();
 			if (properties.getProperty(key) == null) {
 				properties.put(key, adaptorProperties.getProperty(key));
 			}

@@ -11,10 +11,11 @@
 package org.eclipse.osgi.internal.module;
 
 import org.eclipse.osgi.service.resolver.BundleDescription;
-import org.osgi.framework.Version;
 
 public interface VersionSupplier {
-	public Version getVersion();
+	public org.osgi.framework.Version getVersion();
+
 	public String getName();
+
 	public BundleDescription getBundle();
 }

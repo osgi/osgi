@@ -14,15 +14,19 @@ import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.osgi.service.resolver.ExportPackageDescription;
 import org.osgi.framework.Version;
 
-
 public class ResolverExport implements VersionSupplier {
 	private ResolverBundle exporter;
 	private ExportPackageDescription exportPackageDescription;
+	private boolean reprovide = false;
 
-	
 	ResolverExport(ResolverBundle bundle, ExportPackageDescription export) {
 		exporter = bundle;
 		exportPackageDescription = export;
+	}
+
+	ResolverExport(ResolverBundle bundle, ExportPackageDescription export, boolean reprovide) {
+		this(bundle, export);
+		this.reprovide = reprovide;
 	}
 
 	public String getName() {
@@ -48,20 +52,20 @@ public class ResolverExport implements VersionSupplier {
 	ExportPackageDescription getExportPackageDescription() {
 		return exportPackageDescription;
 	}
-	
+
 	ResolverExport getRoot() {
 		ResolverImport ri;
 		ResolverExport re = this;
-		while(re != null && !re.getExportPackageDescription().isRoot()) {
+		while (re != null && !re.getExportPackageDescription().isRoot()) {
 			ResolverBundle reExporter = re.getExporter();
 			ri = reExporter.getImport(re.getName());
-			if(ri != null) {
+			if (ri != null) {
 				re = ri.getMatchingExport();
 				continue;
 			}
 			// If there is no import then we need to try going thru the requires
 			ResolverExport root = getRootRequires(re, reExporter);
-			if(root != re)
+			if (root != re)
 				return root;
 		}
 		return re;
@@ -70,21 +74,47 @@ public class ResolverExport implements VersionSupplier {
 	// Recurse down the requires, until we find the root export
 	private ResolverExport getRootRequires(ResolverExport re, ResolverBundle reExporter) {
 		BundleConstraint[] requires = reExporter.getRequires();
-		for(int i=0; i<requires.length; i++) {
+		for (int i = 0; i < requires.length; i++) {
 			ResolverExport[] exports = requires[i].getMatchingBundle().getExportPackages();
-			for(int j=0; j<exports.length; j++) {
-				if(re.getName().equals(exports[j].getName())) {
+			for (int j = 0; j < exports.length; j++) {
+				if (re.getName().equals(exports[j].getName())) {
 					return exports[j];
 				}
 			}
 			re = getRootRequires(re, requires[i].getMatchingBundle());
-			if(re.getExportPackageDescription().isRoot())
+			if (re.getExportPackageDescription().isRoot())
 				return re;
 		}
 		return re;
 	}
-	
+
+	boolean isOnRootPath(ResolverBundle rb) {
+		ResolverImport ri;
+		ResolverExport re = this;
+		if (re.getExporter() == rb)
+			return true;
+		while (re != null && !re.getExportPackageDescription().isRoot()) {
+			ResolverBundle reExporter = re.getExporter();
+			ri = reExporter.getImport(re.getName());
+			if (ri != null) {
+				re = ri.getMatchingExport();
+				if (re.getExporter() == rb)
+					return true;
+				continue;
+			}
+			re = getRootRequires(re, reExporter);
+			if (re.getExporter() == rb)
+				return true;
+		}
+		return false;
+	}
+
+	boolean isReprovide() {
+		return reprovide;
+	}
+
 	public String toString() {
 		return exportPackageDescription.toString();
 	}
+
 }

@@ -34,7 +34,7 @@ public class BundleConstraint {
 	ResolverBundle getBundle() {
 		return bundle;
 	}
-	
+
 	BundleDescription getActualBundle() {
 		return bundle.getBundle();
 	}
@@ -46,7 +46,7 @@ public class BundleConstraint {
 	boolean isOptional() {
 		if (bundleConstraint instanceof HostSpecification)
 			return false;
-		return ((BundleSpecification)bundleConstraint).isOptional();
+		return ((BundleSpecification) bundleConstraint).isOptional();
 	}
 
 	VersionConstraint getVersionConstraint() {
@@ -62,8 +62,8 @@ public class BundleConstraint {
 			return null;
 		ResolverBundle[] results = new ResolverBundle[matchingBundles.size()];
 		int i = 0;
-		for(Iterator iter = matchingBundles.iterator(); iter.hasNext(); i++) {
-			results[i] = (ResolverBundle)iter.next();
+		for (Iterator iter = matchingBundles.iterator(); iter.hasNext(); i++) {
+			results[i] = (ResolverBundle) iter.next();
 		}
 		return results.length == 0 ? null : results;
 	}
@@ -75,7 +75,7 @@ public class BundleConstraint {
 			matchingBundles.add(rb);
 	}
 
-	void removeMatchingBundle(ResolverBundle rb)  {
+	void removeMatchingBundle(ResolverBundle rb) {
 		if (matchingBundles == null)
 			return;
 		matchingBundles.remove(rb);

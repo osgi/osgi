@@ -14,14 +14,16 @@ package org.eclipse.osgi.framework.internal.core;
 import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.*;
 import java.util.ArrayList;
-import java.util.Iterator;
-
 import org.eclipse.osgi.framework.adaptor.BundleClassLoader;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.util.SecureAction;
 import org.eclipse.osgi.service.resolver.*;
+import org.eclipse.osgi.service.resolver.BundleDescription;
+import org.eclipse.osgi.service.resolver.VersionRange;
 import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
 import org.osgi.service.packageadmin.*;
 
 /**
@@ -156,12 +158,12 @@ public class PackageAdminImpl implements PackageAdmin {
 		return true;
 	}
 
-	private void doResolveBundles(AbstractBundle[] bundles, boolean refreshPackages) {
+	synchronized void doResolveBundles(AbstractBundle[] bundles, boolean refreshPackages) {
 		try {
 			AbstractBundle[] refreshedBundles = null;
+			BundleDescription[] descriptions = null;
 			synchronized (framework.bundles) {
 				int numBundles = bundles == null ? 0 : bundles.length;
-				BundleDescription[] descriptions = null;
 				if (!refreshPackages)
 					// in this case we must make descriptions non-null so we do
 					// not force the removal pendings to be processed when resolving
@@ -186,9 +188,9 @@ public class PackageAdminImpl implements PackageAdmin {
 					}
 					descriptions = (BundleDescription[]) (results.size() == 0 ? null : results.toArray(new BundleDescription[results.size()]));
 				}
-				StateDelta stateDelta = framework.adaptor.getState().resolve(descriptions);
-				refreshedBundles = processDelta(stateDelta.getChanges(), refreshPackages);
 			}
+			StateDelta stateDelta = framework.adaptor.getState().resolve(descriptions);	
+			refreshedBundles = processDelta(stateDelta.getChanges(), refreshPackages);
 			if (refreshPackages)
 				resumeBundles(refreshedBundles);
 		}catch (Throwable t) {
@@ -281,7 +283,6 @@ public class PackageAdminImpl implements PackageAdmin {
 			for (int i = 0; i < hosts.length; i++) {
 				BundleHost host = (BundleHost) framework.getBundle(hosts[0].getBundleId());
 				((BundleFragment) bundle).addHost(host.getLoaderProxy());
-				bundle.resolve();
 			}
 		}
 		bundle.resolve();
@@ -337,8 +338,12 @@ public class PackageAdminImpl implements PackageAdmin {
 					Debug.println("refreshPackages: refresh the bundles"); //$NON-NLS-1$
 				}
 
+				synchronized (framework.bundles) {
+					for (int i = 0; i < refresh.length; i++)
+						refresh[i].refresh();
+				}
+				// send out unresolved events outside synch block (defect #80610)
 				for (int i = 0; i < refresh.length; i++) {
-					refresh[i].refresh();
 					// send out unresolved events
 					if (previouslyResolved[i])
 						framework.publishBundleEvent(BundleEvent.UNRESOLVED, refresh[i]);
@@ -350,7 +355,9 @@ public class PackageAdminImpl implements PackageAdmin {
 				if (Debug.DEBUG && Debug.DEBUG_PACKAGEADMIN) {
 					Debug.println("refreshPackages: applying deltas to bundles"); //$NON-NLS-1$
 				}
-				resolved = applyDeltas(bundleDeltas);
+				synchronized (framework.bundles) {
+					resolved = applyDeltas(bundleDeltas);
+				}
 
 			} finally {
 				/*
@@ -507,7 +514,7 @@ public class PackageAdminImpl implements PackageAdmin {
 		try {
 			// first check that the system bundle has not changed since
 			// last saved state.
-			BundleDescription newSystemBundle = framework.adaptor.getState().getFactory().createBundleDescription(systemBundle.getHeaders(""), null, 0); //$NON-NLS-1$
+			BundleDescription newSystemBundle = framework.adaptor.getState().getFactory().createBundleDescription(systemBundle.getHeaders(""), systemBundle.getLocation(), 0); //$NON-NLS-1$
 			if (newSystemBundle == null)
 				throw new BundleException(Msg.formatter.getString("OSGI_SYSTEMBUNDLE_DESCRIPTION_ERROR")); //$NON-NLS-1$
 			State state = framework.adaptor.getState();

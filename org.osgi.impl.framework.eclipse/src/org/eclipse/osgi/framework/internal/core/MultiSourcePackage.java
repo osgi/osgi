@@ -55,15 +55,4 @@ public class MultiSourcePackage extends PackageSource {
 		}
 		return result;
 	}
-
-	public Object getObject(String name, String pkgName, boolean providePkg) {
-		Object result = null;
-		for (int i = 0; i < suppliers.length; i++) {
-			result = suppliers[i].getObject(name, pkgName, providePkg);
-			if (result != null)
-				return result;
-		}
-		return result;
-	}
-
 }

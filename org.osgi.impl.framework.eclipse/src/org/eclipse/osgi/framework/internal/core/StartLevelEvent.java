@@ -20,7 +20,7 @@ import java.util.EventObject;
  *
  */
 class StartLevelEvent extends EventObject {
-
+	private static final long serialVersionUID = 3258125839085155891L;
 	public final static int CHANGE_BUNDLE_SL = 0x00000000;
 	public final static int CHANGE_FW_SL = 0x00000001;
 

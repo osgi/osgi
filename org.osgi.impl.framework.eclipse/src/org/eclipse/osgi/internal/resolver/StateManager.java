@@ -16,13 +16,15 @@ import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
-public class StateManager implements PlatformAdmin {
+public class StateManager implements PlatformAdmin, Runnable {
 	public static boolean DEBUG = false;
 	public static boolean DEBUG_READER = false;
 	public static boolean DEBUG_PLATFORM_ADMIN = false;
 	public static boolean DEBUG_PLATFORM_ADMIN_RESOLVER = false;
 	public static boolean MONITOR_PLATFORM_ADMIN = false;
 	public static String PROP_NO_LAZY_LOADING = "osgi.noLazyStateLoading"; //$NON-NLS-1$
+	public static String PROP_LAZY_UNLOADING_TIME = "osgi.lazyStateUnloadingTime"; //$NON-NLS-1$
+	private long expireTime = 300000; // default to five minutes
 	private long readStartupTime;
 	private StateImpl systemState;
 	private StateObjectFactoryImpl factory;
@@ -67,6 +69,18 @@ public class StateManager implements PlatformAdmin {
 				return;
 			initializeSystemState(context);
 			cachedState = true;
+			try {
+				expireTime = Long.parseLong(System.getProperty(PROP_LAZY_UNLOADING_TIME, Long.toString(expireTime)));
+			}
+			catch (NumberFormatException nfe) {
+				// default to not expire
+				expireTime = 0;
+			}
+			if (lazyLoad && expireTime > 0) {
+				Thread t = new Thread(this,"State Data Manager"); //$NON-NLS-1$
+				t.setDaemon(true);
+				t.start();
+			}
 		} catch (IOException ioe) {
 			// TODO: how do we log this?
 			ioe.printStackTrace();
@@ -81,6 +95,7 @@ public class StateManager implements PlatformAdmin {
 			return;
 		if (cachedState && lastTimeStamp == systemState.getTimeStamp())
 			return;
+		systemState.fullyLoad(); // make sure we are fully loaded before saving
 		factory.writeState(systemState, new BufferedOutputStream(new FileOutputStream(stateLocation)));
 	}
 
@@ -161,5 +176,17 @@ public class StateManager implements PlatformAdmin {
 
 	public void setInstaller(BundleInstaller installer) {
 		this.installer = installer;
+	}
+
+	public void run() {
+		while (true) {
+			try {
+				Thread.sleep(expireTime);
+			} catch (InterruptedException e) {
+				return;
+			}
+			if (systemState != null && lastTimeStamp == systemState.getTimeStamp())
+				systemState.unloadLazyData(expireTime);
+		}
 	}
 }

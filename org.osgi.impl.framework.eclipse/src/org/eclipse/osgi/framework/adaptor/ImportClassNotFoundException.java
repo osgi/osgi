@@ -19,6 +19,8 @@ package org.eclipse.osgi.framework.adaptor;
  *
  */
 public class ImportClassNotFoundException extends ClassNotFoundException {
+	private static final long serialVersionUID = 3256446884712363064L;
+
 	/**
 	 * Constructor with no detail message
 	 */

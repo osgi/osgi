@@ -317,7 +317,7 @@ public class FrameworkConsole implements Runnable {
 		try {
 			/** The buffered input reader on standard in. */
 			input = ((BufferedReader) in).readLine();
-			System.out.println("<" + input + ">");
+			System.out.println("<" + input + ">");  //$NON-NLS-1$//$NON-NLS-2$
 		} catch (IOException e) {
 			input = ""; //$NON-NLS-1$
 		}

@@ -22,6 +22,7 @@ import org.eclipse.osgi.framework.debug.Debug;
  *
  */
 final class UnresolvedPermission extends Permission {
+	private static final long serialVersionUID = 3546358422783079475L;
 	/**
 	 * The type of permission this will be
 	 */

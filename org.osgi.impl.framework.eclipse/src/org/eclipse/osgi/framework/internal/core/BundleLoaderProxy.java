@@ -11,9 +11,9 @@
 package org.eclipse.osgi.framework.internal.core;
 
 import java.util.ArrayList;
-
-import org.eclipse.osgi.service.resolver.BundleDescription;
+import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
 import org.osgi.service.packageadmin.RequiredBundle;
 
 /*
@@ -23,15 +23,13 @@ import org.osgi.service.packageadmin.RequiredBundle;
  * keeps track of the depedencies between the bundles installed in the 
  * Framework.
  */
-public class BundleLoaderProxy implements KeyedElement, RequiredBundle {
+public class BundleLoaderProxy implements RequiredBundle {
 	/* The BundleLoader that this BundleLoaderProxy is managing */
 	private BundleLoader loader;
 	/* The Bundle that this BundleLoaderProxy is for */
 	private BundleHost bundle;
 	/* the BundleDescription for the Bundle */
 	private BundleDescription description;
-	/* The unique hash key for this KeyedElement */
-	private String key;
 	/*
 	 * Indicates if this BundleLoaderProxy is stale; 
 	 * this is true when the bundle is updated or uninstalled.
@@ -43,7 +41,6 @@ public class BundleLoaderProxy implements KeyedElement, RequiredBundle {
 	public BundleLoaderProxy(BundleHost bundle, BundleDescription description) {
 		this.bundle = bundle;
 		this.description = description;
-		this.key = new StringBuffer(getSymbolicName()).append("_").append(getVersion()).toString(); //$NON-NLS-1$
 		this.pkgSources = new KeyedHashSet(false);
 	}
 
@@ -71,21 +68,6 @@ public class BundleLoaderProxy implements KeyedElement, RequiredBundle {
 
 	public AbstractBundle getBundleHost() {
 		return bundle;
-	}
-
-	public int getKeyHashCode() {
-		return key.hashCode();
-	}
-
-	public boolean compare(KeyedElement other) {
-		if (!(other instanceof BundleLoaderProxy))
-			return false;
-		BundleLoaderProxy otherLoaderProxy = (BundleLoaderProxy) other;
-		return (getSymbolicName().equals(otherLoaderProxy.getSymbolicName()) && getVersion().equals(otherLoaderProxy.getVersion()));
-	}
-
-	public Object getKey() {
-		return key;
 	}
 
 	public void setStale() {
@@ -158,11 +140,7 @@ public class BundleLoaderProxy implements KeyedElement, RequiredBundle {
 	}
 
 	public String getSymbolicName() {
-		String symbolicName = description.getSymbolicName();
-		if (symbolicName == null) {
-			symbolicName = new StringBuffer().append(bundle.getBundleId()).append("NOSYMBOLICNAME").toString(); //$NON-NLS-1$
-		}
-		return symbolicName;
+		return description.getSymbolicName();
 	}
 
 	public Version getVersion() {

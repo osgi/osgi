@@ -326,25 +326,35 @@ public class DefaultClassLoader extends AbstractClassLoader {
 
 	/**
 	 * Looks in the specified BundleFile for the resource.
-	 * @param name The name of the resource to find,.
+	 * @param name The name of the resource to find.
 	 * @param bundlefile The BundleFile to look in.
 	 * @return A URL to the resource or null if the resource does not exist.
 	 */
 	protected URL findResourceImpl(String name, BundleFile bundlefile) {
-		return bundlefile.getResourceURL(name, hostdata.getBundleID());
+		return findResourceImpl(name, bundlefile, 0);
+	}
+
+	/**
+	 * Looks in the specified BundleFile for the resource.
+	 * @param name The name of the resource to find.
+	 * @param bundlefile The BundleFile to look in.
+	 * @param index the index of the resource.
+	 * @return A URL to the resource or null if the resource does not exist.
+	 */
+	protected URL findResourceImpl(String name, BundleFile bundlefile, int index) {
+		return bundlefile.getResourceURL(name, hostdata.getBundleID(), index);
 	}
 
 	/**
 	 * @see org.eclipse.osgi.framework.adaptor.BundleClassLoader#findLocalResources(String)
 	 */
 	public Enumeration findLocalResources(String resource) {
-		Vector resources = new Vector(6);
+		Vector resources = new Vector(6); // use a Vector instead of ArrayList because we need an enumeration
 		for (int i = 0; i < classpathEntries.length; i++) {
 			if (classpathEntries[i] != null) {
-				URL url = findResourceImpl(resource, classpathEntries[i].getBundleFile());
-				if (url != null) {
+				URL url = findResourceImpl(resource, classpathEntries[i].getBundleFile(), resources.size());
+				if (url != null)
 					resources.addElement(url);
-				}
 			}
 		}
 		// look in fragments
@@ -353,16 +363,14 @@ public class DefaultClassLoader extends AbstractClassLoader {
 			for (int i = 0; i < size; i++) {
 				FragmentClasspath fragCP = (FragmentClasspath) fragClasspaths.elementAt(i);
 				for (int j = 0; j < fragCP.classpathEntries.length; j++) {
-					URL url = findResourceImpl(resource, fragCP.classpathEntries[j].getBundleFile());
-					if (url != null) {
+					URL url = findResourceImpl(resource, fragCP.classpathEntries[j].getBundleFile(), resources.size());
+					if (url != null)
 						resources.addElement(url);
-					}
 				}
 			}
 		}
-		if (resources.size() > 0) {
+		if (resources.size() > 0)
 			return resources.elements();
-		}
 		return null;
 	}
 
@@ -389,6 +397,32 @@ public class DefaultClassLoader extends AbstractClassLoader {
 				}
 			}
 		}
+		return null;
+	}
+
+	public Enumeration findLocalObjects(String object) {
+		Vector objects = new Vector(6); // use a Vector instead of ArrayList because we need an enumeration
+		for (int i = 0; i < classpathEntries.length; i++) {
+			if (classpathEntries[i] != null) {
+				Object result = findObjectImpl(object, classpathEntries[i].getBundleFile());
+				if (result != null)
+					objects.addElement(result);
+			}
+		}
+		// look in fragments
+		if (fragClasspaths != null) {
+			int size = fragClasspaths.size();
+			for (int i = 0; i < size; i++) {
+				FragmentClasspath fragCP = (FragmentClasspath) fragClasspaths.elementAt(i);
+				for (int j = 0; j < fragCP.classpathEntries.length; j++) {
+					Object result = findObjectImpl(object, fragCP.classpathEntries[j].getBundleFile());
+					if (result != null)
+						objects.addElement(result);
+				}
+			}
+		}
+		if (objects.size() > 0)
+			return objects.elements();
 		return null;
 	}
 

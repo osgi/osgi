@@ -13,7 +13,6 @@ package org.eclipse.osgi.internal.resolver;
 import java.io.*;
 import java.util.Dictionary;
 import java.util.Map;
-
 import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Version;

@@ -11,7 +11,6 @@
 package org.eclipse.osgi.internal.resolver;
 
 import java.util.*;
-
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.debug.DebugOptions;
 import org.eclipse.osgi.framework.internal.core.KeyedElement;
@@ -456,5 +455,13 @@ public abstract class StateImpl implements State {
 		if (reader != null && reader.isLazyLoaded())
 			reader.fullyLoad();
 		fullyLoaded = true;
+	}
+
+	
+	synchronized void unloadLazyData(long expireTime) {
+		long currentTime = System.currentTimeMillis();
+		BundleDescription[] bundles = getBundles();
+		for (int i = 0; i < bundles.length; i++)
+			((BundleDescriptionImpl)bundles[i]).unload(currentTime, expireTime);
 	}
 }
