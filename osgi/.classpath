@@ -29,5 +29,6 @@
 	<classpathentry exported="true" kind="src" path="/org.osgi.util.mobile"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.deploymentadmin"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.util.gsm"/>
+	<classpathentry kind="src" path="/org.osgi.meglet"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
