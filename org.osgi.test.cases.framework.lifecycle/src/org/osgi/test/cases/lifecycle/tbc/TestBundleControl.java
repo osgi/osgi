@@ -85,10 +85,17 @@ public class TestBundleControl extends Thread implements LogProxy,
 		}
 		catch (InvocationTargetException e) {
 			Throwable targetException = e.getTargetException();
-			if (targetException instanceof BundleException)
-				targetException = ((BundleException) targetException)
-						.getNestedException();
-			targetException.printStackTrace();
+			if ( targetException != null ) {
+				Throwable nested = null;
+				if (targetException instanceof BundleException)
+					nested = ((BundleException) targetException)
+							.getNestedException();
+				if ( nested != null )
+					nested.printStackTrace();
+				else
+					targetException.printStackTrace();
+					
+			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
