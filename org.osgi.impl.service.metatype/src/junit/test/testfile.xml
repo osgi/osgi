@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<md:MetaData xmlns:md="http://www.org.osgi/xmlns/metatype/v1.0.0/md" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.org.osgi/xmlns/metatype/v1.0.0/md
+C:\DOCUME~1\pkriens\MYDOCU~1\mtcore.xsd">
+	<OCD id="0.123.1.2" name="%Person">
+		<AD  id="surName" name="%Surname" type="String" max="24" min="2"/>
+		<AD  id="sex" name="%Sex" type="String">
+			<Option label="%Male" value="male"/>
+			<Option label="%Female" value="female"/>
+			<Option label="%Yes Please" value="yes"/>
+			<Option label="%No, we're British" value="no"/>
+		</AD>
+		<AD id="familyName" name="%Family Name" type="String"/>
+		<AD id="age" name="%Age" type="Integer" min="13" max="120" default="18"/>
+	</OCD>
+	<Designate pid="com.acme.23456789">
+		<Object type="0.123.1.2"/>
+	</Designate>
+</md:MetaData>
