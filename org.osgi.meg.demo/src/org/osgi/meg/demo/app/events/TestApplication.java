@@ -28,6 +28,8 @@ import org.osgi.service.monitor.UpdateListener;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Label;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -97,7 +99,7 @@ public class TestApplication
 		gui.startAnim();
 	}
 
-	public void handleEvent(Event event) {
+	public void channelEvent(ChannelEvent event) {
 	}
 
 	public void writeResult(String result) {
@@ -180,7 +182,12 @@ public class TestApplication
 			
     		setSize(200, 80);
             setTitle("Test application");
-			//setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            addWindowListener(new WindowAdapter(){
+                	public void windowClosed(WindowEvent e) {
+                	    setVisible(false);
+                	    dispose();
+                	}
+                });
 			
 			label = new Label("parameter: " + testParameter);
 			add(label);

@@ -22,6 +22,7 @@ import java.util.Dictionary;
 import org.osgi.framework.*;
 import org.osgi.impl.service.dmt.api.RemoteAlertSender;
 import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtSession;
 
 public class Activator implements BundleActivator {
 	
@@ -45,6 +46,7 @@ public class Activator implements BundleActivator {
 		try {
 			serviceRef = bc.getServiceReference(DmtAdmin.class.getName());
 			DmtAdmin factory = (DmtAdmin) bc.getService(serviceRef);
+			factory.getSession(".", DmtSession.LOCK_TYPE_ATOMIC);
 
 			if (null == host) {
 				System.out
