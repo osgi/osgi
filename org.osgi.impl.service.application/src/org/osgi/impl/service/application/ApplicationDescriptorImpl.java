@@ -39,7 +39,6 @@ public class ApplicationDescriptorImpl implements Delegate {
 	private ApplicationDescriptor descriptor;
 	private boolean								locked;
 	private static Properties			locks;
-	private Scheduler             scheduler;
 	
 	public synchronized void setApplicationDescriptor(ApplicationDescriptor d) {
 		descriptor = d;
@@ -82,7 +81,7 @@ public class ApplicationDescriptorImpl implements Delegate {
 	}
 
 	public ServiceReference schedule(Map args, String topic, String filter, boolean recurs) {
-		return scheduler.addScheduledApplication( descriptor.getPID(), args, topic, filter, recurs );
+		return Activator.scheduler.addScheduledApplication( descriptor.getPID(), args, topic, filter, recurs );
 	}
 
 	public void launch(Map arguments) throws Exception {
