@@ -32,9 +32,13 @@ import org.osgi.framework.*;
 import java.lang.reflect.*;
 import org.osgi.service.log.LogService;
 
+
 /**
- * The MEG container's ApplicationDescriptor realization
+ * Specialization of the application descriptor. Represents a Meglet and
+ * provides generic methods inherited from the application descriptor. It is a
+ * service.
  */
+ 
 public final class MegletDescriptor extends ApplicationDescriptor {
 	private Properties		props;
 	private Hashtable		names;
@@ -45,6 +49,17 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 	private Bundle			bundle;
 	private MegletContainer	megletContainer;
 	private String      defaultLanguage;
+
+	/**
+	 * @param bc
+	 * @param props
+	 * @param names
+	 * @param icons
+	 * @param defaultLanguage
+	 * @param startClass
+	 * @param bundle
+	 * @param impl
+	 */
 
 	public MegletDescriptor(BundleContext bc, Properties props, Map names,
 			Map icons, String defaultLang, String startClass, Bundle bundle, MegletContainer mc ) throws Exception {
@@ -67,23 +82,52 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 		pid = props.getProperty( APPLICATION_PID );
 	}
 
+
+	/**
+	 * @return
+	 */
 	public long getBundleId() {
 		return Long.parseLong( props.getProperty("application.bundle.id") );
 	}
 
+	/**
+	 * @return
+	 */
 	public boolean isSingleton() {
 		String singleton = props.getProperty( APPLICATION_SINGLETON );
 		return singleton == null || singleton.equalsIgnoreCase("true");
 	}
 
+
+	/**
+	 * @return
+	 */
 	public String getStartClass() {
 		return startClass;
 	}
 
+	/**
+	 * Returns the unique identifier of the represented Meglet.
+	 * 
+	 * @return the unique identifier of the represented Meglet
+	 * 
+	 * @throws IllegalStateException
+	 *             if the Meglet descriptor is unregistered
+	 */
 	public String getPID() {
 		return new String( pid );
 	}
 
+
+	/**
+	 * Retrieves the bundle context of the container to which the specialization
+	 * of the application descriptor belongs
+	 * 
+	 * @return the bundle context of the container
+	 * 
+	 * @throws IllegalStateException
+	 *             if the Meglet descriptor is unregistered
+	 */
 	protected BundleContext getBundleContext() {
 		return bc;
 	}
@@ -143,7 +187,23 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 		setupMethod.invoke( meglet, new Object [] { handle, bc } );
 	}
 
-  protected ServiceReference launchSpecific( Map args ) throws Exception {
+
+	/**
+	 * Called by launch() to create and start a new instance in an application
+	 * model specific way. It also creates and registeres the application handle
+	 * to represent the newly created and started instance.
+	 * 
+	 * @param arguments
+	 *            the startup parameters of the new application instance, may be
+	 *            null
+	 * 
+	 * @return the service reference to the application model specific
+	 *         application handle for the newly created and started instance.
+	 * 
+	 * @throws Exception
+	 *             if any problem occures.
+	 */
+	protected ServiceReference launchSpecific( Map args ) throws Exception {
 		Meglet meglet = megletContainer.createMegletInstance( this, false );
 		MegletHandle appHandle = new MegletHandle( megletContainer, meglet, this, bc);
 		if (meglet == null)
