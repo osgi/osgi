@@ -781,6 +781,7 @@ public abstract interface Bundle {
 	 * 
 	 * ### How are split packages treated???
 	 * ### shouldn't we mention that this can create a classloader?
+	 * ### How is the Bundle-Class path treated
 	 * 
 	 * @param name The name of the resource. See
 	 *        <code>java.lang.ClassLoader.getResources</code> for a description of
