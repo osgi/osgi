@@ -265,6 +265,12 @@ public class TestMegletContainerBundleActivator extends Object implements
 		else
 			System.out
 					.println("Save the locking state of the application        PASSED");
+		if (!testCase_resumingAfterLocking())
+			System.out
+					.println("Resuming a Meglet application after locking      FAILED");
+		else
+			System.out
+					.println("Resuming a Meglet application after locking      PASSED");
 		if (!testCase_launchAfterRestart())
 			System.out
 					.println("Launching Meglet app after container restart     FAILED");
@@ -1559,5 +1565,39 @@ public class TestMegletContainerBundleActivator extends Object implements
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	public boolean testCase_resumingAfterLocking() {
+		try {
+			ApplicationDescriptor appDesc = appDescs[0];
+
+			if (!testCase_launchApplication())
+				return false;
+			if (!testCase_suspendApplication())
+				return false;
+			
+			appDesc.lock();
+			if (!appDesc.isLocked())
+				throw new Exception("Lock doesn't work!");
+			if (!appDesc.getProperties("en").get("application.locked").equals(
+					"true"))
+				throw new Exception("Lock property is incorrect!");
+
+			if(!testCase_resumeApplication())
+				return false;
+			
+			appDesc.unLock();
+			if (appDesc.isLocked())
+				throw new Exception("Unlock doesn't work!");
+			if (!appDesc.getProperties("en").get("application.locked").equals(
+					"false"))
+				throw new Exception("Lock property is incorrect!");
+			
+			return testCase_stopApplication();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}		
 	}
 }
