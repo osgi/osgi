@@ -112,4 +112,6 @@ public class PackageResource extends Resource {
 	public int getType() {
 		return type;
 	}
+	
+	public long lastModified() { return 0; }
 }
