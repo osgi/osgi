@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-Activator: org.osgi.impl.bundle.saxon.SaxonActivator
+Bundle-Name: SaxonBundle
+Bundle-Description: OSGi XML Parser Service Reference Implementation by IBM
+Bundle-Copyright: Copyright (c) The Open Services Gateway Initiative (2002). All Rights Reserved.
+Bundle-Vendor: OSGi
+Bundle-Version: 1.0
+Bundle-Category: osgi,xml
+Export-Package: javax.xml.parsers; specification-version=1.1,
+                org.xml.sax; specification-version=2.0,
+                org.xml.sax.helpers; specification-version=2.0,
+                org.xml.sax.ext; specification-version=1.0,
+                org.w3c.dom; specification-version=2.0
+Import-Package: org.osgi.framework
+Bundle-Classpath: .,saxon.jar
+CVS-Header: $Header$
+
