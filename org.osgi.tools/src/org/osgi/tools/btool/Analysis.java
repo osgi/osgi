@@ -10,6 +10,8 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.*;
 
+import org.osgi.framework.Constants;
+
 /**
  * @author Peter Kriens
  * 
@@ -36,6 +38,18 @@ public class Analysis {
 		manifest = new Manifest(zip.getInputStream(entry));
 		checkActivator();
 		checkSymbolicName();
+		checkBundleManifest();
+	}
+
+	/**
+	 * 
+	 */
+	private void checkBundleManifest() {
+		String name = manifest.getValue(Constants.BUNDLE_MANIFESTVERSION);
+		if ( name == null )
+			btool.warnings.add("No Bundle Manifest Version set");
+		
+		
 	}
 
 	private void checkSymbolicName() {
@@ -48,7 +62,7 @@ public class Analysis {
 		String version = manifest.getValue("Bundle-Version");
 		if ( version == null )
 			btool.warnings.add("No version set");
-		else if ( ! version.matches("[0-9]+(\\.[0-9]+(\\.[0-9]+(\\.[0-9_a-zA-Z]+)?)?)?"))
+		else if ( ! version.matches("[0-9]+(\\.[0-9]+(\\.[0-9]+([-\\.][-0-9_a-zA-Z]+)?)?)?"))
 			btool.warnings.add("Version not in right format: " + version );			
 	}
 
