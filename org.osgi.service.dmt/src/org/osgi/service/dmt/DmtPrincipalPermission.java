@@ -28,10 +28,6 @@
 package org.osgi.service.dmt;
 
 import java.security.BasicPermission;
-import java.security.Permission;
-import java.security.PermissionCollection;
-import java.util.Enumeration;
-import java.util.NoSuchElementException;
 
 /**
  * Indicates the callers authority to create DMT sessions in the name
@@ -43,7 +39,6 @@ import java.util.NoSuchElementException;
  * adapter can act. A wildcard is allowed in the target as defined by
  * <code>BasicPermission</code>, for example a &quot;*&quot; means the
  * adapter can create a session in the name of any principal.
- *
  * @version $Revision$
  */
 public class DmtPrincipalPermission extends BasicPermission {
