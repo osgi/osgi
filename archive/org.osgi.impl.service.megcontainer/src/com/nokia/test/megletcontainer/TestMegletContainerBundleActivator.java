@@ -53,7 +53,7 @@ public class TestMegletContainerBundleActivator extends Object implements Bundle
   {
     this.bc = bc;
 
-    serviceReg = bc.registerService("org.osgi.service.event.ChannelListener", this, null);
+    serviceReg = bc.registerService("org.osgi.service.event.EventHandler", this, null);
 
     bc.addBundleListener( this );
   }
