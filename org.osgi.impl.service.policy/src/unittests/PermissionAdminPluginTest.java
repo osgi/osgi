@@ -176,4 +176,23 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 		assertEquals(1,pi.length);
 		assertEquals(ADMINPERMISSION,pi[0]);
 	}
+	
+	public void testRemovePermission() throws Exception {
+		permAdmin.setPermissions(LOCATION1,new PermissionInfo[]{ADMINPERMISSION});
+		newAtomicSession();
+		dmtSession.deleteNode(LOCATION1_HASH);
+		dmtSession.close();
+		PermissionInfo pi[] = permAdmin.getPermissions(LOCATION1);
+		assertNull(pi);
+	}
+
+	public void testChangePermission() throws Exception {
+		permAdmin.setPermissions(LOCATION1,new PermissionInfo[]{ADMINPERMISSION});
+		newAtomicSession();
+		dmtSession.setNodeValue(LOCATION1_HASH+"/PermissionInfo",new DmtData(IMPORTFRAMEWORKPERMISSION.getEncoded()));
+		dmtSession.close();
+		PermissionInfo pi[] = permAdmin.getPermissions(LOCATION1);
+		assertEquals(1,pi.length);
+		assertEquals(IMPORTFRAMEWORKPERMISSION,pi[0]);
+	}
 }
