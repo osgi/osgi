@@ -256,7 +256,7 @@ public interface Dmt extends DmtReadOnly {
      * Create a leaf node with a given value and MIME type. 
      * @param nodeUri The URI of the node
      * @param value The value to be given to the new node, can not be null
-     * @param mimetype The MIME type to be given to the new node. It can be 
+     * @param mimeType The MIME type to be given to the new node. It can be 
      * null. 
      * @throws DmtException with the following possible error codes
      * <li> <code>NODE_ALREADY_EXISTS</code>
@@ -274,7 +274,7 @@ public interface Dmt extends DmtReadOnly {
      * @throws IllegalStateException if the session is invalidated because of 
      * timeout, or if the session is already closed or rolled back.
      */
-    void createLeafNode(String nodeUri, DmtData value, String mimetype) 
+    void createLeafNode(String nodeUri, DmtData value, String mimeType)
                     throws DmtException;
 
     /**
