@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-Name: EventManager
+Bundle-SymbolicName: ${p}
 Bundle-Vendor: Nokia
 Bundle-Version: 1.0
-Bundle-Activator: $(p).EventManagerBundleActivator
+Bundle-Activator: $(p).Activator
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)

@@ -1,5 +1,4 @@
-/* ***** Copied from OSGi R3 RI (org.osgi.impl.service.cm package) *****
- *
+/* 
  * Copyright (c) The Open Services Gateway Initiative (2000, 2001).
  * All Rights Reserved.
  *
@@ -34,7 +33,6 @@ import java.util.*;
  * preservation of case of keys.
  * 
  * @author Open Services Gateway Initiative
- * @version $Revision$
  */
 public class CMDictionary extends Hashtable {
 	private Hashtable	lowerToRealCase;

@@ -1,22 +1,43 @@
+/*
+ * ============================================================================
+ * (c) Copyright 2004 Nokia
+ * This material, including documentation and any related computer programs,
+ * is protected by copyright controlled by Nokia and its licensors. 
+ * All rights are reserved.
+ * 
+ * These materials have been contributed  to the Open Services Gateway 
+ * Initiative (OSGi)as "MEMBER LICENSED MATERIALS" as defined in, and subject 
+ * to the terms of, the OSGi Member Agreement specifically including, but not 
+ * limited to, the license rights and warranty disclaimers as set forth in 
+ * Sections 3.2 and 12.1 thereof, and the applicable Statement of Work. 
+ * All company, brand and product names contained within this document may be 
+ * trademarks that are the sole property of the respective owners.  
+ * The above notice must be included on all copies of this document.
+ * ============================================================================
+ */
 package org.osgi.impl.service.dmt;
 
 import java.io.IOException;
 import java.lang.reflect.*;
 import java.util.*;
-import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.*;
 import org.osgi.service.cm.*;
 import org.osgi.service.dmt.*;
 
 // TODO set mime type for all returned DmtData objects?
 // TODO handle all keys case insensitively
-// TODO handle temporary deletion/addition of intermediate entries in array/vector
+// TODO handle temporary deletion/addition of intermediate entries in
+// array/vector
 // TODO vector can store mixed types in Configuration Admin
-// TODO take away canReplace for 'type', 'cardinality', and maybe 'value' interior node
-// TODO put valid complex type information in a separate class (and maybe valid cardinality info as well)
+// TODO take away canReplace for 'type', 'cardinality', and maybe 'value'
+// interior node
+// TODO put valid complex type information in a separate class (and maybe valid
+// cardinality info as well)
 // TODO synchronization
 // TODO put Service and Property into separate java files
 // TODO maybe put configuration plugin into separate package
-// Nasty things can happen (?) if the ConfigurationAdmin service returns data types not in the spec.
+// Nasty things can happen (?) if the ConfigurationAdmin service returns data
+// types not in the spec.
 public class ConfigurationPlugin implements DmtDataPlugIn {
 	// Strings that are valid values of the 'cardinality' leaf node
 	private static final String[]	validCardinalityStrings	= new String[] {
@@ -59,11 +80,9 @@ public class ConfigurationPlugin implements DmtDataPlugIn {
 		for (int i = 0; i < validCardinalityStrings.length; i++)
 			validCardinalityData[i] = new DmtData(validCardinalityStrings[i]);
 	}
-	private ConfigurationAdmin		configAdmin;
 
-	ConfigurationPlugin(ConfigurationAdmin configAdmin) {
-		this.configAdmin = configAdmin;
-		Service.init(configAdmin);
+	ConfigurationPlugin(BundleContext bc, ConfigurationAdmin configAdmin) {
+		Service.init(bc, configAdmin);
 	}
 
 	//----- DmtDataPlugIn methods -----//
@@ -174,7 +193,7 @@ public class ConfigurationPlugin implements DmtDataPlugIn {
 				"Title property not supported.");
 	}
 
-	public void setNode(String nodeUri, DmtData value) throws DmtException {
+	public void setNodeValue(String nodeUri, DmtData value) throws DmtException {
 		String[] path = prepareUri(nodeUri);
 		// path has at least two components because DmtAdmin only calls this
 		// method for leaf nodes
@@ -226,6 +245,8 @@ public class ConfigurationPlugin implements DmtDataPlugIn {
 					"Value index out of range.");
 		// TODO element is set in Boolean array/vector if the DmtData has STRING
 		// "true"/"false" in it, should be error
+		// TODO likewise, element may be set in non-Boolean array/vector even if
+		// DmtData has a BOOLEAN value
 		prop.setElement(value.getString(), index, service, nodeUri);
 	}
 
@@ -487,7 +508,6 @@ public class ConfigurationPlugin implements DmtDataPlugIn {
 		// path has at least two components because DmtAdmin only calls this
 		// method for leaf nodes
 		Service service = Service.getService(path[0], nodeUri);
-		//Configuration c = getConfigData(path[0], nodeUri);
 		// path[1] is a key name
 		Property prop = service.getProperty(path[1], nodeUri);
 		if (path.length == 2) {
@@ -662,13 +682,15 @@ public class ConfigurationPlugin implements DmtDataPlugIn {
 // TODO cannot delete and create the same object in one session
 
 class Service {
+	static BundleContext		bc			= null;
 	static ConfigurationAdmin	configAdmin	= null;
 	static Hashtable			services	= new Hashtable();
 	static Vector				deletedPids	= new Vector();
 	static int					lockMode	= DmtSession.LOCK_TYPE_SHARED;
 
-	static void init(ConfigurationAdmin ca) {
-		configAdmin = ca;
+	static void init(BundleContext bc, ConfigurationAdmin configAdmin) {
+		Service.bc = bc;
+		Service.configAdmin = configAdmin;
 	}
 
 	static void setLockMode(int lm) {
@@ -690,16 +712,15 @@ class Service {
 		Iterator i = deletedPids.iterator();
 		while (i.hasNext()) {
 			pid = (String) i.next();
-			Configuration[] configs = getConfigurations("(service.pid=" + pid
-					+ ")", root + pid);
-			if (configs == null)
+			Configuration config = getConfig(pid, root + pid);
+			if (config == null)
 				throw new DmtException(
 						root + pid,
 						DmtException.CONCURRENT_ACCESS,
 						"Cannot delete configuration for "
 								+ "given service pid, service no longer exists.");
 			try {
-				configs[0].delete();
+				config.delete();
 			}
 			catch (IOException e) {
 				throw new DmtException(root + pid,
@@ -723,12 +744,8 @@ class Service {
 						root + pid);
 				CMDictionary incompleteProperties = service.addTempProperties(
 						properties, true);
-				/*
-				 * System.out.println("HHHHH: " + properties);
-				 * System.out.println("IIIII: " + incompleteProperties);
-				 */
-				// TODO only update config if there was some change
-				conf.update(properties);
+				if (!properties.equals(conf.getProperties()))
+					conf.update(properties);
 				if (incompleteProperties.size() != 0) {
 					if (intermediate)
 						service.resetService(incompleteProperties);
@@ -778,7 +795,7 @@ class Service {
 			if (deletedPids.contains(pid))
 				throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
 						"There is no configuration data for the given service PID.");
-			getConfigData(pid, nodeUri);
+			getConfigProperties(pid, nodeUri);
 			service = new Service(pid, true);
 			services.put(pid, service);
 			return service;
@@ -801,11 +818,31 @@ class Service {
 		// TODO can the service PID contain characters that are not allowed in
 		// DMT nodes names?
 		// TODO consistency check?
-		Configuration[] configs = getConfigurations(null, nodeUri);
+		Configuration[] configs = null;
+		ServiceReference[] refs = null;
+		try {
+			// TODO what about managed service factories?
+			configs = configAdmin.listConfigurations(null);
+			refs = bc
+					.getServiceReferences(ManagedService.class.getName(), null);
+		}
+		catch (IOException e) {
+			throw new DmtException(nodeUri, DmtException.DATA_STORE_FAILURE,
+					"Error looking up configurations.", e);
+		}
+		catch (InvalidSyntaxException e) {
+			// never happens with null filter
+		}
 		Set children = new HashSet();
 		if (configs != null)
 			for (int i = 0; i < configs.length; i++)
 				children.add(configs[i].getPid());
+		if (refs != null)
+			for (int i = 0; i < refs.length; i++) {
+				String pid = (String) refs[i].getProperty("service.pid");
+				if (pid != null) // ignore services with no service.pid
+					children.add(pid);
+			}
 		Iterator i = services.values().iterator();
 		while (i.hasNext()) {
 			Service service = (Service) i.next();
@@ -827,10 +864,8 @@ class Service {
 		if (service != null && !service.isStored())
 			throw new DmtException(nodeUri, DmtException.NODE_ALREADY_EXISTS,
 					"Cannot create the specified node, service node already created/modified.");
-		// TODO escape filter-special characters in service PID if necessary
-		Configuration[] configs = getConfigurations(
-				"(service.pid=" + pid + ")", nodeUri);
-		if (configs != null)
+		Configuration config = getConfig(pid, nodeUri);
+		if (config != null)
 			throw new DmtException(nodeUri, DmtException.NODE_ALREADY_EXISTS,
 					"Cannot create the specified node.");
 		service = new Service(pid, false);
@@ -879,7 +914,7 @@ class Service {
 			throws DmtException {
 		CMDictionary properties = new CMDictionary();
 		if (stored) {
-			Dictionary dict = getConfigData(pid, nodeUri).getProperties();
+			Dictionary dict = getConfigProperties(pid, nodeUri);
 			Enumeration e = dict.keys();
 			while (e.hasMoreElements()) {
 				String key = (String) e.nextElement();
@@ -959,23 +994,34 @@ class Service {
 		return (Property) properties.get(key);
 	}
 
-	private static Configuration getConfigData(String pid, String nodeUri)
+	private static Dictionary getConfigProperties(String pid, String nodeUri)
 			throws DmtException {
-		// TODO escape filter-special characters in service PID if necessary
-		Configuration[] configs = getConfigurations(
-				"(service.pid=" + pid + ")", nodeUri);
-		if (configs == null)
+		Configuration config = getConfig(pid, nodeUri);
+		if (config == null)
 			throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
-					"There is no configuration data for the given service PID.");
-		// listConfigurations never returns a 0-length array
-		// there must be exactly one Configuration for a specific service PID
-		return configs[0];
+					"There is no configuration data for the given service PID '"
+							+ pid + "'.");
+		Dictionary properties = config.getProperties();
+		if (properties == null) {
+			properties = new CMDictionary();
+			properties.put("service.pid", pid);
+		}
+		return properties;
 	}
 
-	private static Configuration[] getConfigurations(String filter,
-			String nodeUri) throws DmtException {
+	// TODO what about managed service factories?
+	// TODO escape filter-special characters in service PID if necessary
+	private static Configuration getConfig(String pid, String nodeUri)
+			throws DmtException {
+		String filter = "(service.pid=" + pid + ")";
 		try {
-			return configAdmin.listConfigurations(filter);
+			Configuration[] configs = configAdmin.listConfigurations(filter);
+			if (configs != null)
+				return configs[0];
+			ServiceReference[] refs = bc.getServiceReferences(
+					ManagedService.class.getName(), filter);
+			return refs == null ? null : configAdmin
+					.getConfiguration(pid, null);
 		}
 		catch (IOException e) {
 			throw new DmtException(nodeUri, DmtException.DATA_STORE_FAILURE,
@@ -983,7 +1029,8 @@ class Service {
 		}
 		catch (InvalidSyntaxException e) {
 			throw new DmtException(nodeUri, DmtException.OTHER_ERROR,
-					"The specified service PID is syntactically incorrect.", e);
+					"The specified service PID '" + pid
+							+ "' is syntactically incorrect.", e);
 		}
 	}
 }
@@ -1236,8 +1283,8 @@ class Property {
 		if (category != COMPLEX_EMPTY)
 			throw new IllegalStateException(
 					"Cannot call 'setType()' for properties where the type is already set.");
-		category = COMPLEX_HAS_TYPE;
 		this.base = base;
+		category = COMPLEX_HAS_TYPE;
 	}
 
 	// returns an error string, or null for no error.
@@ -1249,7 +1296,6 @@ class Property {
 			throw new IllegalStateException(
 					"Cannot call 'setCardinality()' for properties where type is not set "
 							+ "or cardinality is already set.");
-		category = COMPLEX_HAS_CARDINALITY;
 		if (cardinalityStr.equals("scalar"))
 			cardinality = SCALAR;
 		else
@@ -1272,6 +1318,7 @@ class Property {
 					base.getName()
 							+ " type is represented as "
 							+ "simple configuration data, cannot be created as complex scalar data.");
+		category = COMPLEX_HAS_CARDINALITY;
 	}
 
 	void createValueNode() throws DmtException { // create interior node
@@ -1279,13 +1326,13 @@ class Property {
 			throw new IllegalStateException(
 					"Cannot call 'createNodeValue()' if cardinality is scalar "
 							+ "or if the value node already exists.");
-		category = COMPLEX_HAS_VALUE;
-		size = 0;
 		if (cardinality == ARRAY)
 			value = Array.newInstance(base, 0);
 		else
 			// cardinality == VECTOR
 			value = new Vector();
+		size = 0;
+		category = COMPLEX_HAS_VALUE;
 		Service.commitIfNeeded();
 	}
 
@@ -1296,9 +1343,9 @@ class Property {
 			throw new IllegalStateException(
 					"Cannot call 'createValueNode(data)' if cardinality is non-scalar "
 							+ "or if the value node already exists.");
-		category = COMPLEX_HAS_VALUE;
 		// base is not null, because this is a scalar property
 		value = createInstance(base, data, nodeUri);
+		category = COMPLEX_HAS_VALUE;
 		Service.commitIfNeeded();
 	}
 

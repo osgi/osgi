@@ -1,3 +1,20 @@
+/*
+ * ============================================================================
+ * (c) Copyright 2004 Nokia
+ * This material, including documentation and any related computer programs,
+ * is protected by copyright controlled by Nokia and its licensors. 
+ * All rights are reserved.
+ * 
+ * These materials have been contributed  to the Open Services Gateway 
+ * Initiative (OSGi)as "MEMBER LICENSED MATERIALS" as defined in, and subject 
+ * to the terms of, the OSGi Member Agreement specifically including, but not 
+ * limited to, the license rights and warranty disclaimers as set forth in 
+ * Sections 3.2 and 12.1 thereof, and the applicable Statement of Work. 
+ * All company, brand and product names contained within this document may be 
+ * trademarks that are the sole property of the respective owners.  
+ * The above notice must be included on all copies of this document.
+ * ============================================================================
+ */
 package org.osgi.impl.service.dmt;
 
 import java.util.*;
@@ -82,7 +99,7 @@ public class LogPlugin implements DmtDataPlugIn, DmtExecPlugIn {
 				"Title property not supported.");
 	}
 
-	public void setNode(String nodeUri, DmtData data) throws DmtException {
+	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
 		createLeafNode(nodeUri, data);
 	}
 
@@ -349,7 +366,7 @@ public class LogPlugin implements DmtDataPlugIn, DmtExecPlugIn {
 		Vector records = getResult(lr);
 		String result = formatResult(records);
 		DmtAlertItem[] items = new DmtAlertItem[1];
-		items[0] = new DmtAlertItemImpl(nodeUri, null, null, null, result);
+		items[0] = new DmtAlertItem(nodeUri, null, null, null, result);
 		alertsender.sendAlert(session, 1224, items);
 	}
 
@@ -449,43 +466,5 @@ public class LogPlugin implements DmtDataPlugIn, DmtExecPlugIn {
 		String	exclude		= null;
 		int		maxrecords	= 0;
 		int		maxsize		= 0;
-	}
-
-	//     TODO remove, this is temporary
-	class DmtAlertItemImpl implements DmtAlertItem {
-		String	source;
-		String	type;
-		String	format;
-		String	markup;
-		String	data;
-
-		public DmtAlertItemImpl(String source, String type, String format,
-				String markup, String data) {
-			this.source = source;
-			this.type = type;
-			this.format = format;
-			this.markup = markup;
-			this.data = data;
-		}
-
-		public String getSource() {
-			return source;
-		}
-
-		public String getType() {
-			return type;
-		}
-
-		public String getFormat() {
-			return format;
-		}
-
-		public String getMarkUp() {
-			return markup;
-		}
-
-		public String getData() {
-			return data;
-		}
 	}
 }

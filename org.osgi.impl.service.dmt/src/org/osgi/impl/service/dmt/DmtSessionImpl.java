@@ -1,16 +1,37 @@
+/*
+ * ============================================================================
+ * (c) Copyright 2004 Nokia
+ * This material, including documentation and any related computer programs,
+ * is protected by copyright controlled by Nokia and its licensors. 
+ * All rights are reserved.
+ * 
+ * These materials have been contributed  to the Open Services Gateway 
+ * Initiative (OSGi)as "MEMBER LICENSED MATERIALS" as defined in, and subject 
+ * to the terms of, the OSGi Member Agreement specifically including, but not 
+ * limited to, the license rights and warranty disclaimers as set forth in 
+ * Sections 3.2 and 12.1 thereof, and the applicable Statement of Work. 
+ * All company, brand and product names contained within this document may be 
+ * trademarks that are the sole property of the respective owners.  
+ * The above notice must be included on all copies of this document.
+ * ============================================================================
+ */
 package org.osgi.impl.service.dmt;
 
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 import org.osgi.service.dmt.*;
 
-// TODO permissions: check java permissions, set permissions based on policy plugin, etc.
-// TODO optimize node handling (e.g. retrieve plugin from dispatcher only once per API call), maybe with new URI class
-// TODO lock mode handling: (1) no other session can run parallelly with a writer session  (2) rollback functionality
+// TODO permissions: check java permissions, set permissions based on policy
+// plugin, etc.
+// TODO optimize node handling (e.g. retrieve plugin from dispatcher only once
+// per API call), maybe with new URI class
+// TODO lock mode handling: (1) no other session can run parallelly with a
+// writer session (2) rollback functionality
 // TODO send appropriate events (maybe only when session is closed)
 // TODO check scope (permanent/dynamic) meta-data for each operation
 // TODO check access type meta-data for each operation
-// TODO decide what to assume for each operation when the required meta-data is missing
+// TODO decide what to assume for each operation when the required meta-data is
+// missing
 public class DmtSessionImpl implements DmtSession {
 	private static Hashtable	acls;
 	static {
@@ -24,18 +45,15 @@ public class DmtSessionImpl implements DmtSession {
 	private static int			SHOULD_BE_INTERIOR	= 3;	// implies
 																// SHOULD_EXIST
 	private int					lockMode;
-	private DmtPrincipal		principal;
+	private String				principal;
 	private String				subtreeUri;
 	private Set					dataPlugins;
 	private DmtPlugInDispatcher	dispatcher;
 
-	public DmtSessionImpl(DmtPrincipal principal, String subtreeUri,
-			int lockMode, DmtPlugInDispatcher dispatcher) throws DmtException {
+	public DmtSessionImpl(String principal, String subtreeUri, int lockMode,
+			DmtPlugInDispatcher dispatcher) throws DmtException {
 		checkNodeUri(subtreeUri);
 		subtreeUri = Utils.normalizeAbsoluteUri(subtreeUri);
-		if (principal == null)
-			throw new NullPointerException(
-					"The 'principal' parameter of a session must not be null.");
 		this.lockMode = lockMode;
 		this.principal = principal;
 		this.subtreeUri = subtreeUri;
@@ -50,7 +68,7 @@ public class DmtSessionImpl implements DmtSession {
 		return lockMode;
 	}
 
-	public DmtPrincipal getPrincipal() {
+	public String getPrincipal() {
 		return principal;
 	}
 
@@ -247,13 +265,13 @@ public class DmtSessionImpl implements DmtSession {
 		getWritableDataPlugin(uri).setNodeTitle(uri, title);
 	}
 
-	public void setNode(String nodeUri, DmtData data) throws DmtException {
+	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
 		if (data == null)
 			throw new IllegalArgumentException(
 					"DmtData argument must be non-null.");
 		String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_LEAF);
 		checkNodePermission(uri, DmtAcl.REPLACE);
-		getWritableDataPlugin(uri).setNode(uri, data);
+		getWritableDataPlugin(uri).setNodeValue(uri, data);
 	}
 
 	// SyncML DMTND 7.5 (p16) Type: only the Get command is applicable!
@@ -426,16 +444,23 @@ public class DmtSessionImpl implements DmtSession {
 			throws DmtException {
 		// DMTND 7.7.1.3: if parent does not have Replace permissions, give Add,
 		// Delete and Replace permissions to child
+		// TODO spec doesn't say that Get/Exec permission should be given, but
+		// this would be logical if parent has them
 		try {
 			checkNodePermission(parent, DmtAcl.REPLACE);
 		}
 		catch (DmtException e) {
 			if (e.getCode() != DmtException.PERMISSION_DENIED)
 				throw e;
-			String name = principal.getName();
-			if (name != null) {
+			if (principal != null) {
 				DmtAcl acl = new DmtAcl();
-				acl.setPermission(name, DmtAcl.ADD | DmtAcl.DELETE
+				/*
+				 * // TODO if this is needed, get parent permissions only once
+				 * if(hasAclPermission(parent, principal, DmtAcl.GET)) actions |=
+				 * DmtAcl.GET; if(hasAclPermission(parent, principal,
+				 * DmtAcl.EXEC)) actions |= DmtAcl.EXEC;
+				 */
+				acl.setPermission(principal, DmtAcl.ADD | DmtAcl.DELETE
 						| DmtAcl.REPLACE);
 				acls.put(uri, acl);
 			}
@@ -447,14 +472,14 @@ public class DmtSessionImpl implements DmtSession {
 	// privileges are missing
 	private void checkNodePermission(String uri, int actions)
 			throws DmtException {
-		checkNodeOrParentPermission(principal.getName(), uri, actions, false);
+		checkNodeOrParentPermission(principal, uri, actions, false);
 	}
 
 	// throws SecurityException if principal is local user, and sufficient
 	// privileges are missing
 	private void checkNodeOrParentPermission(String uri, int actions)
 			throws DmtException {
-		checkNodeOrParentPermission(principal.getName(), uri, actions, true);
+		checkNodeOrParentPermission(principal, uri, actions, true);
 	}
 
 	private String makeAbsoluteUriAndCheck(String nodeUri, int check)

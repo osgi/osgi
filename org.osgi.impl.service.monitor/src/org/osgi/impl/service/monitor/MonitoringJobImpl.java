@@ -1,108 +1,130 @@
+/*
+ * ============================================================================
+ * (c) Copyright 2004 Nokia
+ * This material, including documentation and any related computer programs,
+ * is protected by copyright controlled by Nokia and its licensors. 
+ * All rights are reserved.
+ * 
+ * These materials have been contributed  to the Open Services Gateway 
+ * Initiative (OSGi)as "MEMBER LICENSED MATERIALS" as defined in, and subject 
+ * to the terms of, the OSGi Member Agreement specifically including, but not 
+ * limited to, the license rights and warranty disclaimers as set forth in 
+ * Sections 3.2 and 12.1 thereof, and the applicable Statement of Work. 
+ * All company, brand and product names contained within this document may be 
+ * trademarks that are the sole property of the respective owners.  
+ * The above notice must be included on all copies of this document.
+ * ============================================================================
+ */
 package org.osgi.impl.service.monitor;
 
-import java.util.*;
-import org.osgi.service.event.*;
-import org.osgi.service.monitor.*;
+import java.util.Arrays;
 
-public class MonitoringJobImpl extends Thread implements MonitoringJob {
-    private static final String MONITOR_EVENT_TOPIC = "org.osgi.service.monitor.MonitorEvent";
+import org.osgi.service.monitor.MonitoringJob;
 
+/** 
+ * Stores information about a monitoring job.  Can be used to
+ * represent local or remote, and time or change based jobs.
+ */
+public class MonitoringJobImpl implements MonitoringJob, Runnable {
     private MonitorAdminImpl monitorAdmin;
-    private EventChannel eventChannel;
 
     private String initiator;
-    private Hashtable kpis;
+    private String[] kpiNames;
     private int reportCount;
     private long schedule;
 
+    private boolean local;
     private boolean running;
 
-    MonitoringJobImpl(MonitorAdminImpl monitorAdmin, EventChannel eventChannel,
-                      String initiator, Hashtable kpis, long schedule, 
-                      int reportCount) {
+    private int[] callCounters; // for change-based jobs, to count events
 
-        super("MonitoringJob");
+    MonitoringJobImpl(MonitorAdminImpl monitorAdmin, String initiator, 
+                      String[] kpiNames, long schedule, int reportCount, 
+                      boolean local) {
 
         this.monitorAdmin = monitorAdmin;
-        this.eventChannel = eventChannel;
 
         this.initiator = initiator;
-        this.kpis = kpis;
+        this.kpiNames = kpiNames;
         this.schedule = schedule;
         this.reportCount = reportCount;
 
+        this.local = local;
+
         running = true;
+
+        if(isChangeBased()) {
+            callCounters = new int[kpiNames.length];
+            Arrays.fill(callCounters, 0);
+        } else                  // timer based
+            (new Thread(this)).start();
     }
 
-    boolean isRunning() {
-        return running;
+    boolean isChangeBased() {
+        return schedule == 0;
     }
 
-   // Is final in JRE
-//    public synchronized void stop() {
-//        if(running)
-//            running = false;
-//    }
-        
+    // returns true if kpiName is handled by this job AND
+    // this method has been called 'reportCount' times for this kpi
+    boolean isNthCall(String kpiName) {
+        int i = Arrays.asList(kpiNames).indexOf(kpiName);
+        if(i < 0)
+            return false;
+
+        callCounters[i] = (callCounters[i] + 1) % reportCount;
+        return callCounters[i] == 0;
+    }
+
+    public synchronized void stop() {
+        if(running) {
+            monitorAdmin.jobStopped(this);
+            running = false;
+        }
+    }
+
     public String getInitiator() {
         return initiator;
     }
-        
+
     public String[] getKpiNames() {
-        return (String[]) kpis.keySet().toArray(new String [0]);
+        return (String[]) kpiNames.clone();
     }
-        
+
     public long getSchedule() {
         return schedule;
     }
-        
+
     public int getReportCount() {
         return reportCount;
     }
 
+    public boolean isLocal() {
+        return local;
+    }
+
     public void run() {
-        // TODO generate events
-        // TODO what to do with invalid KPI names?
+        if(isChangeBased())
+            throw new IllegalStateException("Cannot run change-based job!");
+
+        sleep();
 
         while(running) {
-            try {
-                sleep(schedule*60000);
-            } catch(InterruptedException e) {
-                if(!running)
-                    break;
-            }
-            
-            Iterator i = kpis.entrySet().iterator();
-            while(i.hasNext()) {
-                Map.Entry entry = (Map.Entry) i.next();
-                if(!updateKpi((String) entry.getKey(), (KPI) entry.getValue()))
-                    i.remove();
-            }
-            
+            for(int i = 0; i < kpiNames.length; i++)
+                monitorAdmin.scheduledUpdate(kpiNames[i], this);
+
             if(reportCount > 0) {
                 reportCount--;
                 if(reportCount == 0)
                     stop();
             }
-        }
 
+            sleep();
+        }
     }
 
-    // returns true if update was successful, false if the key was not found
-    private boolean updateKpi(String path, KPI oldKpi) {
-
-        KPI newKpi = monitorAdmin.trustedGetKpi(path);
-
-        if(newKpi == null || !oldKpi.equals(newKpi)) {
-            Map properties = new Hashtable();
-            properties.put("monitorable.pid", MonitorAdminImpl.getId(path));
-            properties.put("kpi.name", oldKpi.getID());
-            ChannelEvent event = new ChannelEvent(MONITOR_EVENT_TOPIC, properties);
-            eventChannel.postEvent(event);
-        }
-
-        return newKpi != null;
+    private void sleep() {
+        try {
+            Thread.sleep(schedule*1000);
+        } catch(InterruptedException e) {}
     }
 }
-
-
