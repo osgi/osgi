@@ -244,7 +244,7 @@ public interface DmtReadOnly {
      * it from the array.
      * @param nodeUri The URI of the node
      * @return The list of children node names as a string array or
-     * <code>null</code> if the node has no children.
+     * an empty string array if the node has no children.
      * @throws DmtException with the following possible error codes
      * <li> <code>NODE_NOT_FOUND</code>
      * <li> <code>URI_TOO_LONG</code>
@@ -285,7 +285,10 @@ public interface DmtReadOnly {
      * @param nodeUri the URI of the node
      * @return a DmtMetaNode which describes meta data information
      * @throws DmtException with the following possible error codes
-     * <li> <code>NODE_NOT_FOUND</code>
+     * <li> <code>NODE_NOT_FOUND</code>. Note that a node does not have to exist 
+     * for having metadata associated to it. This error is thrown by the plugin
+     * or the Dmt Admin if they can not provide metadata for the given node 
+     * even if it existed.
      * <li> <code>URI_TOO_LONG</code>
      * <li> <code>INVALID_URI</code>
      * <li> <code>PERMISSION_DENIED</code>
