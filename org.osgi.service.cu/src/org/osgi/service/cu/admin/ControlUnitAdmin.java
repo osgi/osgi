@@ -127,7 +127,7 @@ public interface ControlUnitAdmin {
 
   /**
    * Returns the IDs of control units of the specified type, located by the 
-   * finder method specified by it’s ID an according the given finder 
+   * finder method specified by itÂ’s ID an according the given finder 
    * parameters. Supported finder methods are
    * specific to the type of the control unit and are specified in the control
    * unit metadata as a special class of actions with identifier starting with
