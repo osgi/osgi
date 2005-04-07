@@ -19,10 +19,10 @@ package org.osgi.impl.service.deploymentadmin;
 
 public class DAConstants {
 
-    public static final String MISSING              = "Missing";
+    public static final String MISSING              = "DeploymentPackage-Missing";
     public static final String BUNDLE_SYMBOLIC_NAME = "Bundle-SymbolicName";
     public static final String BUNDLE_VERSION       = "Bundle-Version";
-    public static final String RP_PID               = "ResourceProcessorPID";
-    public static final String CUSTOMIZER           = "Customizer";
+    public static final String RP_PID               = "Resource-Processor";
+    public static final String CUSTOMIZER           = "DeploymentPackage-Customizer";
     
 }

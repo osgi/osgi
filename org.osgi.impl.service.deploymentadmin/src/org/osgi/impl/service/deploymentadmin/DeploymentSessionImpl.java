@@ -106,9 +106,12 @@ public class DeploymentSessionImpl implements DeploymentSession {
         transaction = Transaction.createTransaction(this, logger);
         try {
             transaction.start();
+            stopBundles();
             processBundles(wjis);
             processResources(wjis);
-            // TODO startBundles();
+            dropResources();
+            dropBundles();
+            startBundles();
         } catch (CancelException e) {
             throw e;
         } catch (Exception e) {
@@ -118,6 +121,37 @@ public class DeploymentSessionImpl implements DeploymentSession {
         }
         transaction.commit();
         tracker.close();
+    }
+    
+    private void startBundles() throws BundleException {
+        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
+            BundleEntry entry = (BundleEntry) iter.next();
+            Bundle b = context.getBundle(entry.getId());
+            
+            if (!entry.isCustomizer())
+                startBundle(b);
+        }
+    }
+    
+    private void startBundle(Bundle b) throws BundleException {
+        if (b.getState() != Bundle.ACTIVE)
+            b.start();
+        transaction.addRecord(new TransactionRecord(
+                Transaction.STARTBUNDLE, new Object[] {b}));
+    }
+
+    private void stopBundles() throws BundleException {
+        for (Iterator iter = targetDp.getBundleEntries().iterator(); iter.hasNext();) {
+            BundleEntry entry = (BundleEntry) iter.next();
+            Bundle b = context.getBundle(entry.getId());
+            stopBundle(b);
+        }
+    }
+
+    private void stopBundle(Bundle b) throws BundleException {
+        b.stop();
+        transaction.addRecord(new TransactionRecord(
+                Transaction.STOPBUNDLE, new Object[] {b}));
     }
 
     private void processResources(WrappedJarInputStream wjis) throws DeploymentException, IOException {
@@ -131,8 +165,6 @@ public class DeploymentSessionImpl implements DeploymentSession {
             wjis.closeEntry();
             entry = wjis.nextEntry();
         }
-        
-        dropResources();
     }
 
     /*
@@ -148,6 +180,20 @@ public class DeploymentSessionImpl implements DeploymentSession {
             dropResource(re);
         }
     }
+    
+    /*
+     * Drop bundles that don't present in the DP and are not 
+     * marked as missing resources
+     */
+    private void dropBundles() throws BundleException {
+        Set toDrop = new HashSet(targetDp.getBundleEntries());
+        Set tmpSet = new HashSet(srcDp.getBundleEntries());
+        toDrop.removeAll(tmpSet);
+        for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            dropBundle(be);
+        }
+    }
 
     /*
      * Drops a particluar resource
@@ -157,6 +203,21 @@ public class DeploymentSessionImpl implements DeploymentSession {
         transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, 
                 new Object[] {proc}));
         proc.dropped(re.getName());
+    }
+    
+    /*
+     * Drops a particluar bundle
+     */
+    private void dropBundle(BundleEntry be) throws BundleException {
+        Bundle b = context.getBundle(be.getId());
+        if (null == b) {
+            // TODO ???
+            return;
+        }
+        transaction.addRecord(new TransactionRecord(Transaction.UNINSTALLBUNDLE, 
+                new Object[] {b}));
+        
+        // Bundle.uninstall() is called by the transaction instance
     }
 
     private ResourceProcessor findProcessor(String pid) {
@@ -170,7 +231,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
         return null;
     }
     
-    private void processResource(WrappedJarInputStream.Entry entry, JarInputStream jis) throws DeploymentException {
+    private void processResource(WrappedJarInputStream.Entry entry, JarInputStream jis) 
+    		throws DeploymentException 
+    {
         String pid = entry.getAttributes().getValue(DAConstants.RP_PID);
         ResourceProcessor proc = findProcessor(pid);
         transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, 
@@ -178,7 +241,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
         proc.process(entry.getName(), jis);
     }
     
-    private void processBundles(WrappedJarInputStream wjis) throws BundleException, IOException {
+    private void processBundles(WrappedJarInputStream wjis) 
+    		throws BundleException, IOException 
+    {
         WrappedJarInputStream.Entry entry = wjis.nextEntry();
         while (null != entry && entry.isBundle()) 
         {
@@ -192,8 +257,6 @@ public class DeploymentSessionImpl implements DeploymentSession {
             wjis.closeEntry();
             entry = wjis.nextEntry();
         }
-        
-        // TODO dropBundles();
     }
     
     private Bundle processBundle(WrappedJarInputStream.Entry entry, WrappedJarInputStream wjis) 
@@ -208,14 +271,15 @@ public class DeploymentSessionImpl implements DeploymentSession {
         } else {
             ret = installBundle(be, wjis);
         }
+        srcDp.updateBundleEntry(be);
         return ret;
     }
 
     private Bundle installBundle(BundleEntry be, JarInputStream jis)
     		throws BundleException
     {
-		Bundle b = context.installBundle(be.symbName, jis);
-		be.id = new Long(b.getBundleId());
+		Bundle b = context.installBundle(be.getSymbName(), jis);
+		be.setId(b.getBundleId());
 		transaction.addRecord(new TransactionRecord(
 		        Transaction.INSTALLBUNDLE, new Object[] {b}));
 		return b;
@@ -227,23 +291,17 @@ public class DeploymentSessionImpl implements DeploymentSession {
         Bundle[] bundles = context.getBundles();
         for (int i = 0; i < bundles.length; i++) {
             Bundle b = bundles[i];
-            if (b.getLocation().equals(be.symbName)) {
+            if (b.getLocation().equals(be.getSymbName())) {
                 b.update(jis);
                 transaction.addRecord(new TransactionRecord(
                         Transaction.UPDATEBUNDLE, new Object[] {b}));
+                be.setId(b.getBundleId());
                 return b;
             }
         }
         return null;
     }
     
-    private void startBundle(Bundle b) throws BundleException {
-        if (b.getState() != Bundle.ACTIVE)
-            b.start();
-        transaction.addRecord(new TransactionRecord(
-                Transaction.STARTBUNDLE, new Object[] {b}));
-    }
-
     public void cancel() {
         transaction.cancel();
     }

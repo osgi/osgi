@@ -94,7 +94,6 @@ public class Transaction {
 	                    break;
 	                case UNINSTALLBUNDLE :
 	                    ((Bundle) element.objs[0]).uninstall();
-	                    // TODO dp.stopCustomizerBundle();
 	                    break;
 	                case STARTBUNDLE :
 	                    break;

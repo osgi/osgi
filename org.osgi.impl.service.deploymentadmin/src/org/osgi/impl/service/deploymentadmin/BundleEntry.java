@@ -7,18 +7,25 @@ import org.osgi.impl.service.deploymentadmin.WrappedJarInputStream.Entry;
 
 public class BundleEntry implements Serializable {
     
-    public String symbName;
-    public String version;
-    public Long   id;
-    
-    public BundleEntry(String symbName, String version) {
-        this(null, symbName, version, -1);
-    }
-    
-    public BundleEntry(String location, String symbName, String version, long id) {
-        this.symbName = symbName;
-        this.version = version;
-        this.id = new Long(id);
+    private String  symbName;
+    private String  version;
+    private Long    id;
+    private Boolean customizer;
+
+    public BundleEntry(String location, 
+            String symbName, 
+            String version, 
+            boolean customizer, 
+            long id) 
+	{
+		this.symbName = symbName;
+		this.version = version;
+		this.id = new Long(id);
+		this.customizer = new Boolean(customizer);
+	}
+
+    public BundleEntry(String symbName, String version, boolean customizer) {
+        this(null, symbName, version, customizer, -1);
     }
     
     public BundleEntry(BundleEntry other) {
@@ -36,6 +43,7 @@ public class BundleEntry implements Serializable {
     public BundleEntry(Entry entry) {
         symbName = entry.getAttributes().getValue(DAConstants.BUNDLE_SYMBOLIC_NAME);
         version = entry.getAttributes().getValue(DAConstants.BUNDLE_VERSION);
+        customizer = new Boolean(entry.isCustomizerBundle());
     }
 
     public boolean equals(Object obj) {
@@ -55,6 +63,33 @@ public class BundleEntry implements Serializable {
     public String toString() {
         return "[" + symbName + " " + version + "]";
     }
+
+    public boolean isCustomizer() {
+        return customizer.booleanValue();
+    }
     
+    public long getId() {
+        return null == id ? -1 : id.longValue();
+    }
+
+    public void setId(long id) {
+        this.id = new Long(id);
+    }
+
+    public String getSymbName() {
+        return symbName;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setSymbName(String symbName) {
+        this.symbName = symbName;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
 }
 

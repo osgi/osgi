@@ -326,6 +326,9 @@ public class DoIt implements BundleActivator {
             throw new Exception("RP with id 'default_id' HAS receive the " +
             		"'db_test_01_t.dbscript' resource");
         
+        is = new FileInputStream(HOME + "db_test_03_update_01.dp");
+		dp = da.installDeploymentPackage(is);
+        
         db.reset(null);
     }
 

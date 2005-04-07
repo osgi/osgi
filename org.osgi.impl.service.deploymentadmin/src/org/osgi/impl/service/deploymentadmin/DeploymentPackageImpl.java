@@ -130,11 +130,13 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         for (Iterator iter = entries.keySet().iterator(); iter.hasNext();) {
             String resPath = (String) iter.next();
             Attributes attrs = (Attributes) entries.get(resPath);
-            String bSn = (String) attrs.getValue("Bundle-SymbolicName");
-            String bVer = (String) attrs.getValue("Bundle-Version");
+            String bSn = (String) attrs.getValue(DAConstants.BUNDLE_SYMBOLIC_NAME);
+            String bVer = (String) attrs.getValue(DAConstants.BUNDLE_VERSION);
+            String bCustStr = (String) attrs.getValue(DAConstants.CUSTOMIZER);
+            boolean bCust = (bCustStr == null ? false : Boolean.valueOf(bCustStr).booleanValue());
             if (null != bSn && null != bVer) {
                 // bundle
-                BundleEntry be = new BundleEntry(bSn, bVer);
+                BundleEntry be = new BundleEntry(bSn, bVer, bCust);
                 bundleEntries.add(be);
             } else {
                 // resource
@@ -145,6 +147,14 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     
     Vector getBundleEntries() {
         return bundleEntries;
+    }
+    
+    void updateBundleEntry(BundleEntry be) {
+        int index = bundleEntries.indexOf(be);
+        BundleEntry e = (BundleEntry) bundleEntries.get(index);
+        e.setId(be.getId());
+        e.setSymbName(be.getSymbName());
+        e.setVersion(be.getVersion());
     }
     
     Vector getResourceEntries() {
@@ -159,8 +169,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         int i = 0;
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            ret[i][0] = be.symbName;
-            ret[i][1] = be.version;
+            ret[i][0] = be.getSymbName();
+            ret[i][1] = be.getVersion();
             ++i;    
         }
         return ret;
