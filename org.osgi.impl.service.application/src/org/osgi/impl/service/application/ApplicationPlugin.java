@@ -277,6 +277,9 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			else if ( key.equals( "locked" ) )
 				return new DmtData( Boolean.getBoolean(((String) props
 											.get( ApplicationDescriptor.APPLICATION_LOCKED ))));
+			else if ( key.equals( "singleton" ) )
+				return new DmtData( Boolean.getBoolean(((String) props
+											.get( ApplicationDescriptor.APPLICATION_SINGLETON ))));
 			else if ( key.equals( "bundle_id" ) )
 				return new DmtData( (String) props.get( "application.bundle.id" ));
 			else {
