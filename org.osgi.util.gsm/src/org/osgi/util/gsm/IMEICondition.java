@@ -45,7 +45,7 @@ public class IMEICondition implements Condition {
 	protected IMEICondition(boolean match) { satisfied = match; }
 
 	/**
-	 * Creates an IMEI object.
+	 * Creates an IMEICondition object.
 	 * 
 	 * @param bundle ignored
 	 * @param imei The IMEI value of the device.
