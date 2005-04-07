@@ -93,7 +93,7 @@ public class CMEventManager extends Thread {
 				if (object instanceof ConfigurationEvent) {
 					ConfigurationEvent event = (ConfigurationEvent) object;
 					Object[] services = listeners.getServices();
-					for (int i = 0; i < services.length; i++) {
+					for (int i = 0; services!=null && i < services.length; i++) {
 						ConfigurationListener listener = (ConfigurationListener) services[i];
 						try {
 							listener.configurationEvent(event);
