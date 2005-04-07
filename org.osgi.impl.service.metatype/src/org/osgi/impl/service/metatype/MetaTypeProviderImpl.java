@@ -181,10 +181,19 @@ public class MetaTypeProviderImpl implements MetaTypeProvider {
 	 */
 	public boolean isInvalidLocale(String locale) {
 
-		// Just a simple check here.
-		// The locale should be the format of "language" + "_" + "country".
-		return ((locale == null) || ((locale.length()>3) && (locale.charAt(2)=='_'))) //$NON-NLS-1$
-			? false : true;
+		// Just a simple and quick check here.
+		if (locale == null)
+			return false;
+
+		int idx_first  = locale.indexOf(ObjectClassDefinitionImpl.LOCALE_SEP);
+		int idx_second = locale.lastIndexOf(ObjectClassDefinitionImpl.LOCALE_SEP);
+		if (idx_first==-1 && locale.length()==2)
+			// It is format of only language.
+			return false;
+		if ((idx_first==2) && (idx_second==5 || idx_second==2))
+			// It is format of language + "_" + country [ + "_" + variation ].
+			return false;
+		return true;
 	}
 
 	/*
@@ -232,7 +241,7 @@ public class MetaTypeProviderImpl implements MetaTypeProvider {
 			if (resources != null) {
 				while(resources.hasMoreElements()) {
 					String resource = (String) resources.nextElement();
-					if (resource.startsWith(baseFileName) && resource.toUpperCase().endsWith(RESOURCE_FILE_EXT))
+					if (resource.startsWith(baseFileName) && resource.toLowerCase().endsWith(RESOURCE_FILE_EXT))
 						locales.add(resource.substring(baseFileName.length(), resource.length() - RESOURCE_FILE_EXT.length()));
 				}
 			}
