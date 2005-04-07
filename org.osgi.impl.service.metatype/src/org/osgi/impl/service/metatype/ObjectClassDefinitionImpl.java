@@ -35,6 +35,7 @@ public class ObjectClassDefinitionImpl extends LocalizationElement implements Ob
 
 	public static final int		PID				= 0;
 	public static final int		FPID			= 1;
+	public static final char	LOCALE_SEP		= '_';						//$NON-NLS-1$
 
 	String						_name;
 	String						_id;
@@ -237,8 +238,6 @@ public class ObjectClassDefinitionImpl extends LocalizationElement implements Ob
 	 */
 	void setResourceBundle(String assignedLocale, Bundle bundle) {
 
-		if (assignedLocale == null)
-			assignedLocale = Locale.getDefault().toString();
 		_rb = getResourceBundle(assignedLocale, bundle);
 
 		Enumeration allADReqs = _required.elements();
@@ -264,51 +263,94 @@ public class ObjectClassDefinitionImpl extends LocalizationElement implements Ob
 		String resourceBase = (_localization == null ? Constants.BUNDLE_LOCALIZATION_DEFAULT_BASENAME
 				: _localization);
 
-		// There are five searching candidates:
-		// 1. baseName + "_" + language1 + "_" + country1	+ ".properties"
-		// 2. baseName + "_" + language1					+ ".properties"
-		// 3. baseName + "_" + language2 + "_" + country2	+ ".properties"
-		// 4. baseName + "_" + language2					+ ".properties"
-		// 5. baseName										+ ".properties"
+		// There are seven searching candidates possible:
+		// baseName + 
+		//		"_" + language1 + "_" + country1 + "_" + variation1	+ ".properties"
+		// or	"_" + language1 + "_" + country1					+ ".properties"
+		// or	"_" + language1										+ ".properties"
+		// or	"_" + language2 + "_" + country2 + "_" + variation2	+ ".properties"
+		// or	"_" + language2 + "_" + country2					+ ".properties"
+		// or	"_" + language2										+ ".properties"
+		// or	""													+ ".properties"
 		//
-		// Where "language1_country1" is the requested locale,
-		// and "language2_country2" is the default locale.
+		// Where language1[_country1[_variation1]] is the requested locale,
+		// and language2[_country2[_variation2]] is the default locale.
 
-		String[] searchCandidates = new String[5];
-		searchCandidates[0] = resourceBase
-				+ MetaTypeProviderImpl.RESOURCE_FILE_CONN
-				+ locale
-				+ MetaTypeInformationImpl.RESOURCE_FILE_EXT;
+		String[] searchCandidates = new String[7];
 
-		searchCandidates[1] = (locale.charAt(2) == '_' //$NON-NLS-1$
-				? resourceBase
-						+ MetaTypeProviderImpl.RESOURCE_FILE_CONN
-						+ locale.substring(0, 2)
-						+ MetaTypeInformationImpl.RESOURCE_FILE_EXT
-				: null);
+		// Candidates from passed locale:
+		if (locale != null && locale.length() > 0) {
+			int idx1_first = locale.indexOf(LOCALE_SEP);
+			if (idx1_first == -1) {
+				// locale has only language.
+				searchCandidates[2] = MetaTypeProviderImpl.RESOURCE_FILE_CONN
+						+ locale;
+			}
+			else {
+				// locale has at least language and country.
+				searchCandidates[2] = MetaTypeProviderImpl.RESOURCE_FILE_CONN
+						+ locale.substring(0, idx1_first);
+				int idx1_second = locale.indexOf(LOCALE_SEP, idx1_first+1);
+				if (idx1_second == -1) {
+					// locale just has both language and country.
+					searchCandidates[1] = MetaTypeProviderImpl.RESOURCE_FILE_CONN
+							+ locale;
+				}
+				else {
+					// locale has language, country, and variation all.
+					searchCandidates[1] = MetaTypeProviderImpl.RESOURCE_FILE_CONN
+							+ locale.substring(0, idx1_second);
+					searchCandidates[0] = MetaTypeProviderImpl.RESOURCE_FILE_CONN
+							+ locale;
+				}
+			}
+		}
 
-		searchCandidates[2] = (Locale.getDefault().toString().equalsIgnoreCase(locale)
-				? null
-				: resourceBase
-						+ MetaTypeProviderImpl.RESOURCE_FILE_CONN
-						+ Locale.getDefault().toString()
-						+ MetaTypeInformationImpl.RESOURCE_FILE_EXT);
+		// Candidates from Locale.getDefault():
+		String defaultLocale = Locale.getDefault().toString();
+		int idx2_first  = defaultLocale.indexOf(LOCALE_SEP);
+		int idx2_second = defaultLocale.indexOf(LOCALE_SEP, idx2_first+1);
+		if (idx2_second != -1) {
+			// default-locale is format of [language]_[country]_variation.
+			searchCandidates[3] = MetaTypeProviderImpl.RESOURCE_FILE_CONN
+					+ defaultLocale;
+			if (searchCandidates[3].equalsIgnoreCase(searchCandidates[0])) {
+				searchCandidates[3] = null;
+			}
+		}
+		if ((idx2_first != -1) && (idx2_second != idx2_first+1)) {
+			// default-locale is format of [language]_country[_variation].
+			searchCandidates[4] = MetaTypeProviderImpl.RESOURCE_FILE_CONN
+					+ ((idx2_second==-1) ? defaultLocale : defaultLocale.substring(0, idx2_second));
+			if (searchCandidates[4].equalsIgnoreCase(searchCandidates[1])) {
+				searchCandidates[4] = null;
+			}			
+		}
+		if ((idx2_first == -1) && (defaultLocale.length() > 0)) {
+			// default-locale has only language.
+			searchCandidates[5] = MetaTypeProviderImpl.RESOURCE_FILE_CONN
+					+ defaultLocale;
+		}
+		else if (idx2_first > 0) {
+			// default-locale is format of language_[...].
+			searchCandidates[5] = MetaTypeProviderImpl.RESOURCE_FILE_CONN
+					+ defaultLocale.substring(0, idx2_first);
+		}
+		if (searchCandidates[5]!= null
+				&& searchCandidates[5].equalsIgnoreCase(searchCandidates[2])) {
+			searchCandidates[5] = null;
+		}			
 
-		searchCandidates[3] = (searchCandidates[2] == null
-				? null
-				: resourceBase
-						+ MetaTypeProviderImpl.RESOURCE_FILE_CONN
-						+ Locale.getDefault().toString().substring(0, 2)
-						+ MetaTypeInformationImpl.RESOURCE_FILE_EXT);
-
-		searchCandidates[4] = resourceBase + MetaTypeInformationImpl.RESOURCE_FILE_EXT;
+		// The final candidate.
+		searchCandidates[6] = ""; //$NON-NLS-1$
 
 		URL resourceUrl = null;
 		URL[] urls = null;
 
 		for (int idx=0; (idx < searchCandidates.length) && (resourceUrl == null); idx++) {
-			urls = (searchCandidates[idx] == null ? null
-					: FragmentUtils.findEntries(bundle, searchCandidates[idx]));
+			urls = (searchCandidates[idx] == null
+					? null : FragmentUtils.findEntries(bundle,
+							resourceBase + searchCandidates[idx] + MetaTypeInformationImpl.RESOURCE_FILE_EXT));
 			if (urls != null && urls.length > 0)
 				resourceUrl = urls[0];
 		}
@@ -318,8 +360,7 @@ public class ObjectClassDefinitionImpl extends LocalizationElement implements Ob
 				return new PropertyResourceBundle(resourceUrl.openStream());
 			}
 			catch (IOException ioe) {
-				// Exception when creating PropertyResourceBundle
-				// object.
+				// Exception when creating PropertyResourceBundle object.
 			}
 		}
 		return null;
