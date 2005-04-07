@@ -11,17 +11,19 @@ public class ExpandProperties extends Task implements Domain {
 	
 	public void execute() throws BuildException {
 		try {
-			Parser	p = new Parser(this,propertyFile.getAbsolutePath(), Parser.SHOW);
-			InputStream in = p.getInputStream();
-			Properties properties = new Properties();
-			properties.load(in);
-			in.close();
-			Project project = getProject();
-
-			for ( Iterator i=properties.keySet().iterator(); i.hasNext(); ) {
-				String key = (String) i.next();
-				String value = properties.getProperty(key);
-				project.setProperty(key,value);
+			if ( propertyFile.exists() ) {
+				Parser	p = new Parser(this,propertyFile.getAbsolutePath(), Parser.SHOW);
+				InputStream in = p.getInputStream();
+				Properties properties = new Properties();
+				properties.load(in);
+				in.close();
+				Project project = getProject();
+	
+				for ( Iterator i=properties.keySet().iterator(); i.hasNext(); ) {
+					String key = (String) i.next();
+					String value = properties.getProperty(key);
+					project.setProperty(key,value);
+				}
 			}
 		}
 		catch (IOException e) {
