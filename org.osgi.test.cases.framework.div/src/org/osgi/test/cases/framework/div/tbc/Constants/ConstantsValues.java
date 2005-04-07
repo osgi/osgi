@@ -71,10 +71,9 @@ public class ConstantsValues {
 			throw new ConstantsTestException("Testing constants");
 		}
 
-		// TODO: Activate this test
-		//if (!Constants.SINGLETON_ATTRIBUTE.equals("singleton")) {
-		//	throw new ConstantsTestException("Testing constants");
-		//}
+		if (!Constants.SINGLETON_DIRECTIVE.equals("singleton")) {
+			throw new ConstantsTestException("Testing constants");
+		}
 
 		if (!Constants.FRAGMENT_ATTACHMENT_ALWAYS.equals("always")) {
 			throw new ConstantsTestException("Testing constants");
@@ -92,7 +91,7 @@ public class ConstantsValues {
 			throw new ConstantsTestException("Testing constants");
 		}
 
-		if (!Constants.BUNDLE_LOCALIZATION_DEFAULT_BASENAME.equals("")) {
+		if (!Constants.BUNDLE_LOCALIZATION_DEFAULT_BASENAME.equals("OSGI-INF/l10n/bundle")) {
 			throw new ConstantsTestException("Testing constants");
 		}
 
@@ -141,10 +140,9 @@ public class ConstantsValues {
 			throw new ConstantsTestException("Testing constants");
 		}
 
-		// TODO: Activate this test
-		//if (!Constants.GROUPING_DIRECTIVE.equals("grouping")) {
-		//	throw new ConstantsTestException("Testing constants");
-		//}
+		if (!Constants.USES_DIRECTIVE.equals("uses")) {
+			throw new ConstantsTestException("Testing constants");
+		}
 
 		if (!Constants.INCLUDE_DIRECTIVE.equals("include")) {
 			throw new ConstantsTestException("Testing constants");

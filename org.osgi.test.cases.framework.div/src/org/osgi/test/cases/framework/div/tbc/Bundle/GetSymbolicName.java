@@ -74,7 +74,7 @@ public class GetSymbolicName {
 
 		bundle = context.installBundle(tcHome + "tb10.jar");
 
-		if (!bundle.getSymbolicName().equals("test.cases.framework.div.tb10")) {
+		if (!bundle.getSymbolicName().equals("org.osgi.test.cases.framework.div.tb10")) {
 			throw new BundleTestException(
 					"Testing the method getSymbolicName() with a symbolic name in the manifest");
 		}
@@ -108,7 +108,7 @@ public class GetSymbolicName {
 		bundle = context.installBundle(tcHome + "tb10.jar");
 		bundle.uninstall();
 
-		if (!bundle.getSymbolicName().equals("test.cases.framework.div.tb10")) {
+		if (!bundle.getSymbolicName().equals("org.osgi.test.cases.framework.div.tb10")) {
 			throw new BundleTestException(
 					"Testing the method getSymbolicName() after uninstall the bundle (with a symbolic name in the manifest)");
 		}

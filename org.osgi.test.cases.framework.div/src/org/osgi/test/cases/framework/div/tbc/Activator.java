@@ -19,6 +19,7 @@ import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Vector;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -70,18 +71,17 @@ public class Activator extends Thread implements FrameworkListener,
 			"testNativeCodeFilterOptional", "testNativeCodeFilterNoOptional",
 			"testNativeCodeFilterAlias", "testNativeCodeFragment",
 			"testNativeCodeLanguage", "testNativeCodeLanguageSuccess",
-			"testNativeCodeVersion", "testNativeCodeVersionSuccess",			
-			"testBundleGetEntryPath",
+			"testNativeCodeVersion", "testNativeCodeVersionSuccess",
+			"testBundleEventConstants", "testBundleGetEntryPath",
 			"testBundleGetEntryPaths", "testBundleGetResources",
 			"testBundleGetResource", "testBundleGetSymbolicName",
 			"testBundleHashCode", "testBundleLoadClass",
-			"testBundleConstantsValues", "testBundleExceptionGetCause",
-			"testBundleExceptionInitCause", "testConstantsValues",
-			"testFrameworkEventConstants", "testVersionConstructors",
-			"testVersionEquals", "testVersionGetMajor", "testVersionGetMinor",
+			"testBundleExceptionGetCause", "testBundleExceptionInitCause",
+			"testConstantsValues", "testFrameworkEventConstants",
+			"testVersionConstructors", "testVersionEquals",
+			"testVersionGetMajor", "testVersionGetMinor",
 			"testVersionGetMicro", "testVersionCompareTo",
-			"testConstantsValues", "testVersionInstanceOf",
-			"testBundleGetHeaders"			};
+			"testVersionInstanceOf", "testBundleGetHeaders"};
 
 	/**
 	 * start. Gets a reference to the TestCaseLink to communicate with the
@@ -302,10 +302,13 @@ public class Activator extends Thread implements FrameworkListener,
 			try {
 				tb.start();
 				log(".", "");
-				log("Testing Native code selection filter optional:", "Started Ok.");
+				log("Testing Native code selection filter optional:",
+						"Started Ok.");
 			}
 			catch (BundleException be) {
-				log("Error: Selection filter should not match any native code clause ", ""+be);
+				log(
+						"Error: Selection filter should not match any native code clause ",
+						"" + be);
 			}
 			tb.uninstall();
 		}
@@ -318,8 +321,8 @@ public class Activator extends Thread implements FrameworkListener,
 	}
 
 	/**
-	 * Tests native code selection filter. The bundle should NOT be loaded if
-	 * no native code clause matches the selection filter, since there's no
+	 * Tests native code selection filter. The bundle should NOT be loaded if no
+	 * native code clause matches the selection filter, since there's no
 	 * optional clause present (*).
 	 */
 	void testNativeCodeFilterNoOptional() throws Exception {
@@ -332,13 +335,14 @@ public class Activator extends Thread implements FrameworkListener,
 				tb.start();
 			}
 			catch (BundleException be) {
-				log("Error starting bundle ", ""+be);
+				log("Error starting bundle ", "" + be);
 			}
 			tb.uninstall();
 		}
 		catch (BundleException be) {
 			log(".", "");
-			log("Testing Native code selection filter no optional:", "Not loaded Ok.");
+			log("Testing Native code selection filter no optional:",
+					"Not loaded Ok.");
 		}
 		catch (UnsatisfiedLinkError ule) {
 			log("Testing native code with no optional clause:", "" + ule);
@@ -347,9 +351,9 @@ public class Activator extends Thread implements FrameworkListener,
 
 	/**
 	 * Tests native code selection filter. The bundle should only be loaded if
-	 * at least one native code clause matches the selection filter, since there's no
-	 * optional clause present (*). This test also checks if the new osname alias
-	 * (win32) matches properly (OSGi R4).
+	 * at least one native code clause matches the selection filter, since
+	 * there's no optional clause present (*). This test also checks if the new
+	 * osname alias (win32) matches properly (OSGi R4).
 	 */
 	void testNativeCodeFilterAlias() throws Exception {
 		Bundle tb;
@@ -359,10 +363,12 @@ public class Activator extends Thread implements FrameworkListener,
 			try {
 				tb.start();
 				log(".", "");
-				log("Testing Native code selection filter with new osname alias:", "Started Ok.");
+				log(
+						"Testing Native code selection filter with new osname alias:",
+						"Started Ok.");
 			}
 			catch (BundleException be) {
-				log("Error starting bundle with osname alias ", ""+be);
+				log("Error starting bundle with osname alias ", "" + be);
 			}
 			tb.uninstall();
 		}
@@ -376,24 +382,25 @@ public class Activator extends Thread implements FrameworkListener,
 
 	/**
 	 * Changes bundle state to Bundle.RESOLVED
-	 *
+	 * 
 	 * @param bundle bundle
 	 */
-	private void resolveBundle(Bundle bundle){
+	private void resolveBundle(Bundle bundle) {
 		Bundle[] bundles;
 		PackageAdmin packageAdmin;
-		ServiceReference    serviceReference;
+		ServiceReference serviceReference;
 		// Get PackageAdmin service reference
-		serviceReference = _context.getServiceReference(PackageAdmin.class.getName());
+		serviceReference = _context.getServiceReference(PackageAdmin.class
+				.getName());
 		packageAdmin = (PackageAdmin) _context.getService(serviceReference);
 
 		// Resolve the fragment bundle
-		packageAdmin.resolveBundles(new Bundle[] { bundle });
+		packageAdmin.resolveBundles(new Bundle[] {bundle});
 	}
 
 	/**
-	 * Tests native code from a fragment bundle. The native code should be loaded from a
-	 * fragment bundle of the host bundle.
+	 * Tests native code from a fragment bundle. The native code should be
+	 * loaded from a fragment bundle of the host bundle.
 	 */
 	void testNativeCodeFragment() throws Exception {
 		Bundle tb;
@@ -406,16 +413,20 @@ public class Activator extends Thread implements FrameworkListener,
 			try {
 				tb.start();
 				log(".", "");
-				log("Testing Native code from a fragment bundle:", "Started Ok.");
+				log("Testing Native code from a fragment bundle:",
+						"Started Ok.");
 			}
 			catch (BundleException be) {
-				log("Error loading native code from a fragment bundle ", ""+be);
+				log("Error loading native code from a fragment bundle ", ""
+						+ be);
 			}
 			tb.uninstall();
 			tbFragment.uninstall();
 		}
 		catch (BundleException be) {
-			log("Error loading bundle with native code from a fragment bundle ", ""+be);
+			log(
+					"Error loading bundle with native code from a fragment bundle ",
+					"" + be);
 		}
 		catch (UnsatisfiedLinkError ule) {
 			log("Testing native code from a fragment bundle:", "" + ule);
@@ -423,21 +434,22 @@ public class Activator extends Thread implements FrameworkListener,
 	}
 
 	/**
-	 * Tests native code language filter. The bundle should NOT be loaded if
-	 * no native code clause matches the os language, since there's no
-	 * optional clause present (*).
+	 * Tests native code language filter. The bundle should NOT be loaded if no
+	 * native code clause matches the os language, since there's no optional
+	 * clause present (*).
 	 */
 	void testNativeCodeLanguage() throws Exception {
 		Bundle tb;
 		String res;
 		try {
 			tb = _context.installBundle(_tcHome + "tb19.jar");
-			log("Error: Bundle should NOT be loaded:", "language should not match");
+			log("Error: Bundle should NOT be loaded:",
+					"language should not match");
 			try {
 				tb.start();
 			}
 			catch (BundleException be) {
-				log("Error starting native code language bundle ", ""+be);
+				log("Error starting native code language bundle ", "" + be);
 			}
 			tb.uninstall();
 		}
@@ -450,13 +462,12 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-
 	/**
-	 * Tests native code language filter. The bundle should be loaded since
-	 * all valid languages are included in the filter.
+	 * Tests native code language filter. The bundle should be loaded since all
+	 * valid languages are included in the filter.
 	 * 
 	 * @see http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt for valid
-	 * language codes.
+	 *      language codes.
 	 */
 	void testNativeCodeLanguageSuccess() throws Exception {
 		Bundle tb;
@@ -466,15 +477,17 @@ public class Activator extends Thread implements FrameworkListener,
 			try {
 				tb.start();
 				log(".", "");
-				log("Testing Native code successful os language:", "Started Ok.");
+				log("Testing Native code successful os language:",
+						"Started Ok.");
 			}
 			catch (BundleException be) {
-				log("Error starting positive native code language bundle ", ""+be);
+				log("Error starting positive native code language bundle ", ""
+						+ be);
 			}
 			tb.uninstall();
 		}
 		catch (BundleException be) {
-			log("Error loading positive native code language bundle:", ""+be);
+			log("Error loading positive native code language bundle:", "" + be);
 		}
 		catch (UnsatisfiedLinkError ule) {
 			log("Testing positive native code os language:", "" + ule);
@@ -482,8 +495,8 @@ public class Activator extends Thread implements FrameworkListener,
 	}
 
 	/**
-	 * Tests native code os version. The bundle should NOT be loaded if
-	 * no native code clause matches the os version range, since there's no
+	 * Tests native code os version. The bundle should NOT be loaded if no
+	 * native code clause matches the os version range, since there's no
 	 * optional clause present (*).
 	 */
 	void testNativeCodeVersion() throws Exception {
@@ -496,7 +509,7 @@ public class Activator extends Thread implements FrameworkListener,
 				tb.start();
 			}
 			catch (BundleException be) {
-				log("Error starting native code version bundle", ""+be);
+				log("Error starting native code version bundle", "" + be);
 			}
 			tb.uninstall();
 		}
@@ -524,12 +537,13 @@ public class Activator extends Thread implements FrameworkListener,
 				log("Testing Native code successful osversion:", "Started Ok.");
 			}
 			catch (BundleException be) {
-				log("Error starting success native code version bundle", ""+be);
+				log("Error starting success native code version bundle", ""
+						+ be);
 			}
 			tb.uninstall();
 		}
 		catch (BundleException be) {
-			log("Error installing success native code osversion:", ""+be);
+			log("Error installing success native code osversion:", "" + be);
 		}
 		catch (UnsatisfiedLinkError ule) {
 			log("Testing success native code os version:", "" + ule);
@@ -540,7 +554,9 @@ public class Activator extends Thread implements FrameworkListener,
 		String os = _context.getProperty("org.osgi.framework.os.name");
 		String proc = _context.getProperty("org.osgi.framework.processor");
 		log("Current os + processor", "osname=" + os + " processor=" + proc);
-		log("See for allowed constants: http://membercvs.osgi.org/docs/reference.html", null);
+		log(
+				"See for allowed constants: http://membercvs.osgi.org/docs/reference.html",
+				null);
 	}
 
 	/**
@@ -873,9 +889,9 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testBundleConstantsValues() {
+	void testBundleEventConstants() {
 		try {
-			new org.osgi.test.cases.framework.div.tbc.Bundle.ConstantsValues(
+			new org.osgi.test.cases.framework.div.tbc.BundleEvent.Constants(
 					_context, _link, _tcHome).run();
 		}
 		catch (Exception ex) {

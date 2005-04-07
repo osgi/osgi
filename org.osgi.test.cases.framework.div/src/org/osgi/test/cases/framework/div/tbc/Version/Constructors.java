@@ -67,7 +67,6 @@ public class Constructors {
 		testConstructors0004();
 		testConstructors0005();
 		testConstructors0006();
-		testConstructors0007();
 	}
 
 	/**
@@ -112,15 +111,15 @@ public class Constructors {
 	}
 
 	/**
-	 * Test the Version constructor with illegal parameters
+	 * Test the Version constructor with legal parameters
 	 */
 	public void testConstructors0005() throws Exception {
 		Version version;
 
 		try {
-			version = new Version(0, 0, 0, null);
+			version = new Version(null);
 			throw new VersionTestException("Version created with illegal constructors");
-		} catch (IllegalArgumentException ex) {
+		} catch (Exception ex) {
 			// This is an expected exception and may be ignored
 		}
 	}
@@ -129,20 +128,6 @@ public class Constructors {
 	 * Test the Version constructor with legal parameters
 	 */
 	public void testConstructors0006() throws Exception {
-		Version version;
-
-		try {
-			version = new Version(null);
-			throw new VersionTestException("Version created with illegal constructors");
-		} catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-	}
-
-	/**
-	 * Test the Version constructor with legal parameters
-	 */
-	public void testConstructors0007() throws Exception {
 		Version version;
 
 		try {

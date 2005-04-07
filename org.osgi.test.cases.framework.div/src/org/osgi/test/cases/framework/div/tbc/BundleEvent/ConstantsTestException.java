@@ -24,59 +24,31 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.framework.div.tbc.Bundle;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.test.service.TestCaseLink;
+package org.osgi.test.cases.framework.div.tbc.BundleEvent;
 
 /**
  * 
- * This the constants values of org.osgi.framework.Bundle class.
+ * Exception thrown when the constants test fail
  * 
  * @version $Revision$
  */
-public class ConstantsValues {
-
-	private BundleContext	context;
-	private String			tcHome;
-	private TestCaseLink	link;
+public class ConstantsTestException extends Exception {
 
 	/**
-	 * Creates a new ConstantValues
+	 * Creates a new ConstantsTestException
+	 */
+	public ConstantsTestException() {
+		super();
+	}
+
+	/**
+	 * Creates a new ConstantsTestException with the specified message
 	 * 
-	 * @param _context the bundle context
-	 * @param _link the link with test director
-	 * @param _tcHome the test case home
+	 * @param _message the message
 	 */
-	public ConstantsValues(BundleContext _context, TestCaseLink _link,
-			String _tcHome) {
-		context = _context;
-		link = _link;
-		tcHome = _tcHome;
-	}
-
-	/**
-	 * Run the tests
-	 */
-	public void run() throws Exception {
-		testConstantValues0001();
-	}
-
-	/**
-	 * Test the constants values
-	 */
-	public void testConstantValues0001() throws Exception {
-		if (Bundle.RESOLVED != 0x00000020) {
-			throw new BundleTestException(
-					"Testing the constant value Bundle.RESOLVED");
-		}
-
-		// TODO: Activate this test
-		//if (Bundle.UNRESOLVED != 0x00000040) {
-		//	throw new BundleTestException(
-		//			"Testing the constant value Bundle.UNRESOLVED");
-		//}
+	public ConstantsTestException(String _message) {
+		super(_message);
 	}
 
 }

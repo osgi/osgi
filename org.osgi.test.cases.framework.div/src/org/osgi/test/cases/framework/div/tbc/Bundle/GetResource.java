@@ -153,7 +153,7 @@ public class GetResource {
 	public void testGetResource0005() throws Exception {
 		Bundle bundle;
 
-		bundle = context.installBundle(tcHome + "tb11.jar");
+		bundle = context.installBundle(tcHome + "tb10.jar");
 		bundle.uninstall();
 
 		try {
@@ -184,7 +184,7 @@ public class GetResource {
 			bundle
 					.getResource("/org/osgi/test/cases/framework/div/tb10/Foo.class");
 			throw new BundleTestException(
-					"Testing  the method invocation after uninstall the bundle");
+					"Testing the method invocation with unresolved bundle");
 		}
 		catch (IllegalStateException ex) {
 			// This is an expected exception and can be ignored
