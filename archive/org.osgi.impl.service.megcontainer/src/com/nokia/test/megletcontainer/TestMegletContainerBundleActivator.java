@@ -1671,8 +1671,15 @@ public class TestMegletContainerBundleActivator extends Object implements
 					                              "singleton", "bundle_id", "required_services", "launch" };
 			Object values[] = new Object [ names.length ];
 			
-			values[ 0 ] = (String)( appDesc.getProperties( Locale.getDefault().getLanguage() ).
-					 										get( ApplicationDescriptor.APPLICATION_NAME ) );
+			Map props = appDesc.getProperties( Locale.getDefault().getLanguage() );
+			
+			values[ 0 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_NAME ) );
+			values[ 1 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_VERSION ) );
+			values[ 2 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_VENDOR ) );
+			values[ 3 ] = Boolean.valueOf( (String)props.get( ApplicationDescriptor.APPLICATION_AUTOSTART ) );
+			values[ 4 ] = Boolean.valueOf( (String)props.get( ApplicationDescriptor.APPLICATION_LOCKED ) );
+			values[ 5 ] = Boolean.valueOf( (String)props.get( ApplicationDescriptor.APPLICATION_VENDOR ) );
+			values[ 6 ] = (String)( props.get( "application.bundle.id" ) );
 			
 			boolean found[] = new boolean[ names.length ];				
 			for( int i = 0; i != names.length; i++ )
