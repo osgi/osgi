@@ -24,8 +24,9 @@ import org.osgi.framework.*;
  */
 public class Activator extends Object implements
 		BundleActivator {
-	static  Scheduler			scheduler;
-	static  BundleContext bc;
+	static  Scheduler					scheduler;
+	static  BundleContext 		bc;
+	private ApplicationPlugin appPlugin;
 
 	public Activator() {
 		super();
@@ -34,14 +35,23 @@ public class Activator extends Object implements
 	public void start(BundleContext bc) throws Exception {
 		Activator.bc = bc;
 		scheduler = new Scheduler(bc);
+		
+		appPlugin = new ApplicationPlugin();
+		appPlugin.start( bc );
+		
 		System.out.println("Application service started successfully!");
 	}
 
 	public void stop(BundleContext bc) throws Exception {
 		//unregistering the service
+		appPlugin.stop( bc );
+		appPlugin = null;
+		
 		scheduler.stop();
 		scheduler = null;
+		
 		Activator.bc = null;
+		
 		System.out.println("Application service stopped successfully!");
 	}
 }

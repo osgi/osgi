@@ -25,7 +25,7 @@ import org.osgi.service.dmt.*;
 /**
  * DMT plugin for the Application Admin
  */
-public class ApplicationPlugin implements BundleActivator, DmtReadOnlyDataPlugin,
+public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		DmtExecPlugin {
 	// URI constants
 	static final String		URI_ROOT_OSGI			= "./OSGi";
@@ -401,6 +401,16 @@ public class ApplicationPlugin implements BundleActivator, DmtReadOnlyDataPlugin
 					.getMessage(), e);
 		}
 	}
+	
+  public void open(String subtreeUri, int lockMode, DmtSession session) throws DmtException
+	{
+		// TODO Auto-generated method stub
+	}
+
+  public boolean supportsAtomic()
+  {
+  	return false;
+  }
 
 	private String getUidFromUri(String nodeUri) {
 		String uid = null;
@@ -527,4 +537,48 @@ public class ApplicationPlugin implements BundleActivator, DmtReadOnlyDataPlugin
 			return new String[] {};
 		return path;
 	}
+
+	public void rollback() throws DmtException {
+		// TODO Auto-generated method stub		
+	}
+
+	public void commit() throws DmtException {
+		// TODO Auto-generated method stub		
+	}
+
+	public void setNodeTitle(String nodeUri, String title) throws DmtException {
+		// TODO Auto-generated method stub		
+	}
+
+	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
+		// TODO Auto-generated method stub		
+	}
+
+	public void setDefaultNodeValue(String nodeUri) throws DmtException {
+		// TODO Auto-generated method stub		
+	}
+
+	public void setNodeType(String nodeUri, String type) throws DmtException {
+		// TODO Auto-generated method stub		
+	}
+
+	public void deleteNode(String nodeUri) throws DmtException {
+		// TODO Auto-generated method stub		
+	}
+
+	public void createLeafNode(String nodeUri) throws DmtException {
+		// TODO Auto-generated method stub		
+	}
+
+	public void createLeafNode(String nodeUri, DmtData value, String mimeType) throws DmtException {
+		// TODO Auto-generated method stub		
+	}
+
+	public void copy(String nodeUri, String newNodeUri, boolean recursive) throws DmtException {
+		// TODO Auto-generated method stub		
+	}
+
+	public void renameNode(String nodeUri, String newName) throws DmtException {
+		// TODO Auto-generated method stub		
+	}	
 }
