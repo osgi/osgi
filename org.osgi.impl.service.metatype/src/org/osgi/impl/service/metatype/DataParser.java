@@ -695,7 +695,7 @@ public class DataParser {
 					ad_cardinality_val,
 					convert(ad_min_val, _dataType),
 					convert(ad_max_val, _dataType),
-					Boolean.getBoolean(ad_required_val),
+					Boolean.valueOf(ad_required_val).booleanValue(),
 					_dp_localization);
 
 			if (ad_cardinality_val == 0) {
@@ -866,7 +866,7 @@ public class DataParser {
 				_factory_val = false;
 			}
 			else {
-				_factory_val = Boolean.getBoolean(factory_str);
+				_factory_val = Boolean.valueOf(factory_str).booleanValue();
 			}
 
 			_bundle_val = atts.getValue(BUNDLE);
@@ -881,7 +881,7 @@ public class DataParser {
 				_optional_val = false;
 			}
 			else {
-				_optional_val = Boolean.getBoolean(optional_str);
+				_optional_val = Boolean.valueOf(optional_str).booleanValue();
 			}
 
 			String merge_str = atts.getValue(MERGE);
@@ -891,7 +891,7 @@ public class DataParser {
 				_merge_val = false;
 			}
 			else {
-				_merge_val = Boolean.getBoolean(merge_str);
+				_merge_val = Boolean.valueOf(merge_str).booleanValue();
 			}
 		}
 
