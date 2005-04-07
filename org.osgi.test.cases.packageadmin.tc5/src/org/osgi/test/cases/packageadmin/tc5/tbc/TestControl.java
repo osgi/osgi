@@ -31,6 +31,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.packageadmin.tc5.tbc.ExportedPackage.GetImportingBundles;
 import org.osgi.test.cases.packageadmin.tc5.tbc.PackageAdmin.Constants;
+import org.osgi.test.cases.packageadmin.tc5.tbc.PackageAdmin.GetExportedPackages;
 import org.osgi.test.cases.packageadmin.tc5.tbc.PackageAdmin.GetBundle;
 import org.osgi.test.cases.packageadmin.tc5.tbc.PackageAdmin.GetBundleType;
 import org.osgi.test.cases.packageadmin.tc5.tbc.PackageAdmin.GetBundles;
@@ -114,8 +115,8 @@ public class TestControl extends DefaultTestBundleControl {
 	 * @specification org.osgi.framework.packageadmin
 	 * @specificationVersion 4
 	 */
-	public void testGetAllExportedPackages() throws Exception {
-		//new GetAllExportedPackages(this).run(); // TODO: Activate this test
+	public void testGetExportedPackages() throws Exception {
+		new GetExportedPackages(this).run();
 	}
 
 	/**
@@ -253,8 +254,6 @@ public class TestControl extends DefaultTestBundleControl {
 	 * unsetState is never reached.
 	 */
 	public void unsetState() throws Exception {
-		// Refresh the PackageAdmin service to remove packages from uninstalled
-		// bundles
 		refreshPackageAdmin();
 	}
 
