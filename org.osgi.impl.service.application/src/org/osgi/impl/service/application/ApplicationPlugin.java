@@ -28,15 +28,19 @@ import org.osgi.service.dmt.*;
 public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		DmtExecPlugin {
 	// URI constants
-	static final String		URI_ROOT_OSGI			= "./OSGi";
-	static final String		URI_ROOT_APP			= "./OSGi/apps";
-	static final String		URI_ROOT_APPINST	= "./OSGi/app_instances";
-	static final String		PREFIX_APPINST   	= "app_instances";
-	private BundleContext	context;
-	private Hashtable		execIds				= new Hashtable();
+	static final String					URI_ROOT_OSGI			= "./OSGi";
+	static final String					URI_ROOT_APP			= "./OSGi/apps";
+	static final String					URI_ROOT_APPINST	= "./OSGi/app_instances";
+	static final String   			PREFIX_APPS				= "apps";
+	static final String					PREFIX_APPINST   	= "app_instances";
+	
+	private BundleContext				bc;
+	private Hashtable						execIds						= new Hashtable();
+	
+	private ServiceRegistration pluginReg;
 
-	public void start(BundleContext context) throws Exception {
-		this.context = context;
+	public void start(BundleContext bc) throws Exception {
+		this.bc = bc;
 		// registers the data and exec DMT plugin
 		Dictionary dict = new Hashtable();
 		dict.put("dataRootURIs", new String[] {URI_ROOT_APP, URI_ROOT_APPINST});
@@ -44,16 +48,18 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		String[] ifs = new String[] {DmtDataPlugin.class.getName(),
 				DmtExecPlugin.class.getName()};
 		// unregistered by the OSGi framework
-		context.registerService(ifs, this, dict);
+		pluginReg = bc.registerService(ifs, this, dict);
 		// start track ApplicationAdmin
 	}
 
-	public void stop(BundleContext context) throws Exception {
+	public void stop(BundleContext bc) throws Exception {
+		pluginReg.unregister();
+		this.bc = null;
 	}
 
 	private ServiceReference getApplicationDescriptorRef(String uid) {
 		try {
-			ServiceReference[] refs = context.getServiceReferences(
+			ServiceReference[] refs = bc.getServiceReferences(
 					ApplicationDescriptor.class.getName(), "(" + Constants.SERVICE_PID + "=" + uid
 							+ ")");
 			if (null == refs || refs.length < 1)
@@ -74,16 +80,16 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 	public DmtMetaNode getMetaNode( String nodeUri )
 			throws DmtException {
 		
-		String[] sarr = prepareUri( nodeUri );
+		String[] path = prepareUri( nodeUri );
 		
-		if( sarr.length == 0 )
+		if( path.length == 0 )
       throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Can not get metadata");
 		
-		if ( sarr.length == 1 ) /* ./OSGi/apps ./OSGi/app_instances */
+		if ( path.length == 1 ) /* ./OSGi/apps ./OSGi/app_instances */
 			return new ApplicationMetaNode(!ApplicationMetaNode.ISLEAF, ApplicationMetaNode.CANGET);
 		
-		if ( isAppInstUri( sarr ) ) { 
-			if ( sarr.length == 2 ) {       /* ./OSGi/app_instances/<service_pid> */
+		if ( isAppInstUri( path ) ) { 
+			if ( path.length == 2 ) {       /* ./OSGi/app_instances/<service_pid> */
 				return new ApplicationMetaNode(!ApplicationMetaNode.CANDELETE,
 						!ApplicationMetaNode.CANADD,
 						ApplicationMetaNode.CANGET,
@@ -92,34 +98,34 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 						!ApplicationMetaNode.ISLEAF);
 			}
 			else /* ./OSGi/app_instances/<service_pid>/type or state */
-				if ( sarr.length == 3 ) {
+				if ( path.length == 3 ) {
 					return new ApplicationMetaNode(ApplicationMetaNode.ISLEAF,
 							ApplicationMetaNode.CANGET);
 				}
 			throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Can not get metadata");
 		}
 		
-		String uid = sarr[1];
+		String uid = path[1];
 		ServiceReference sref = getApplicationDescriptorRef(uid);
 		if ( sref == null )
 			throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "Node (" + nodeUri + ") not found.");
-		if ( sarr.length == 2 ) /* ./OSGi/apps/<unique_id> */
+		if ( path.length == 2 ) /* ./OSGi/apps/<unique_id> */
 			return new ApplicationMetaNode(!ApplicationMetaNode.ISLEAF, ApplicationMetaNode.CANGET);
-		if ( sarr.length == 3 && sarr[2].equals("launch")) /* ./OSGi/apps/<unique_id>/launch */
+		if ( path.length == 3 && path[2].equals("launch")) /* ./OSGi/apps/<unique_id>/launch */
 			return new ApplicationMetaNode(ApplicationMetaNode.CANDELETE,
 					ApplicationMetaNode.CANADD, ApplicationMetaNode.CANGET,
 					!ApplicationMetaNode.CANREPLACE,
 					!ApplicationMetaNode.CANEXECUTE,
 					!ApplicationMetaNode.ISLEAF);
-		if ( sarr.length == 3 ) /* ./OSGi/apps/<unique_id>/singleton or ... */
+		if ( path.length == 3 ) /* ./OSGi/apps/<unique_id>/singleton or ... */
 			return new ApplicationMetaNode(ApplicationMetaNode.ISLEAF,
 					ApplicationMetaNode.CANGET);
-		if ( sarr.length == 4 && sarr[2].equals("launch") ) /* ./OSGi/apps/<unique_id>/launch/<exec_id> */
+		if ( path.length == 4 && path[2].equals("launch") ) /* ./OSGi/apps/<unique_id>/launch/<exec_id> */
 			return new ApplicationMetaNode(ApplicationMetaNode.CANDELETE,
 					ApplicationMetaNode.CANADD, ApplicationMetaNode.CANGET,
 					!ApplicationMetaNode.CANREPLACE,
 					ApplicationMetaNode.CANEXECUTE, !ApplicationMetaNode.ISLEAF);
-		if ( sarr.length == 5 && sarr[2].equals("launch") ) /* ./OSGi/apps/<unique_id>/launch/<exec_id>/<parameter> */
+		if ( path.length == 5 && path[2].equals("launch") ) /* ./OSGi/apps/<unique_id>/launch/<exec_id>/<parameter> */
 			return new ApplicationMetaNode(ApplicationMetaNode.ISLEAF,
 					ApplicationMetaNode.CANGET);
 		throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "Node ("
@@ -191,7 +197,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			return true;
 		if (4 == sarr.length && "application_instances".equals(sarr[2])) {
 			try {
-				ServiceReference[] hrefs = context.getServiceReferences(
+				ServiceReference[] hrefs = bc.getServiceReferences(
 						ApplicationHandle.class.getName(), null);
 				if (null == hrefs)
 					return false;
@@ -281,7 +287,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		if (5 == sarr.length && "application_instances".equals(sarr[2])) {
 			ServiceReference[] hrefs;
 			try {
-				hrefs = context.getServiceReferences(ApplicationHandle.class
+				hrefs = bc.getServiceReferences(ApplicationHandle.class
 						.getName(), "(service.id=" + sarr[3] + ")");
 			}
 			catch (InvalidSyntaxException e) {
@@ -290,7 +296,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			if (null == hrefs)
 				throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
 						"Node (" + nodeUri + ") not found.");
-			ApplicationHandle handle = (ApplicationHandle) context
+			ApplicationHandle handle = (ApplicationHandle) bc
 					.getService(hrefs[0]);
 			if ("state".equals(sarr[4])) {
 				int state = -1;
@@ -302,7 +308,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			if ("type".equals(sarr[4])) {
 				return new DmtData(handle.getInstanceID());
 			}
-			context.ungetService(hrefs[0]);
+			bc.ungetService(hrefs[0]);
 		}
 		if (7 == sarr.length && !"application_instances".equals(sarr[2])) {
 			String key = new String(sarr[0] + "/" + sarr[1] + "/" + sarr[2]
@@ -345,15 +351,16 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 	}
 
 	public String[] getChildNodeNames(String nodeUri) throws DmtException {
-		String[] sarr = Splitter.split(nodeUri, '/', 0);
+		String[] path = prepareUri( nodeUri );
+
 		try {
-			if (3 == sarr.length && !"application_instances".equals(sarr[2])) {
-				return gatherChildren();
+			if (path.length == 1 && path[0].equals( PREFIX_APPS )) {   /* ./OSGi/apps */
+				return gatherChildren(); 
 			}
-			if (3 == sarr.length && "application_instances".equals(sarr[2])) {
+			if (path.length == 1 && path[0].equals( PREFIX_APPINST ) ) { /* ./OSGi/app_instances */
 				ServiceReference[] hrefs;
 				try {
-					hrefs = context.getServiceReferences(
+					hrefs = bc.getServiceReferences(
 							ApplicationHandle.class.getName(), null);
 				}
 				catch (InvalidSyntaxException e) {
@@ -368,14 +375,14 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 				}
 				return ret;
 			}
-			if (4 == sarr.length && !"application_instances".equals(sarr[2])) {
-				String uid = sarr[3];
+			if ( path.length == 2 && path[0].equals( PREFIX_APPS ) ) { /* ./OSGi/apps/<unique_id> */
+				String uid = path[1];
 				return gatherChildren(nodeUri, uid);
 			}
-			if (4 == sarr.length && "application_instances".equals(sarr[2])) {
-				return new String[] {"state", "type"};
+			if ( path.length == 2 && path[0].equals( PREFIX_APPINST ) ) {
+				return new String[] {"state", "type"};  /* ./OSGi/app_instances/<service.pid> */
 			}
-			if (5 == sarr.length && !"application_instances".equals(sarr[2])) {
+			if ( path.length == 3 && path[0].equals( PREFIX_APPS ) ) {
 				String[] keys = (String[]) execIds.keySet().toArray(
 						new String[0]);
 				String[] ret = new String[keys.length];
@@ -384,10 +391,10 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 							keys[i].length());
 				return ret;
 			}
-			if (6 == sarr.length) {
-				String param = sarr[5];
-				String key = new String(sarr[0] + "/" + sarr[1] + "/" + sarr[2]
-						+ "/" + sarr[3] + "/" + sarr[4] + "/" + sarr[5]);
+			if ( path.length == 4 ) {
+				String param = path[3];
+				String key = new String(path[0] + "/" + path[1] + "/" + path[2]
+						+ "/" + path[3]);
 				return (String[]) ((Hashtable) execIds.get(key)).keySet()
 						.toArray(new String[0]);
 			}
@@ -430,20 +437,24 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 	}
 
 	private String[] gatherChildren() throws Exception {
-		ServiceReference[] refs = context.getServiceReferences(
+		ServiceReference[] refs = bc.getServiceReferences(
 				ApplicationDescriptor.class.getName(), null);
-		if (null == refs)
+		
+		if (refs == null)
 			return new String[0];
+		
 		String[] ret = new String[refs.length];
-		for (int i = 0; i < refs.length; ++i)
-			ret[i] = (String) refs[i].getProperty( Constants.SERVICE_PID );
+		
+		for ( int i = 0; i < refs.length; ++i )
+			ret[ i ] = (String) refs[i].getProperty( Constants.SERVICE_PID );
+		
 		return ret;
 	}
 
 	private String[] gatherChildren(String nodeUri, String uid)
 			throws DmtException {
 		try {
-			ServiceReference[] refs = context.getServiceReferences(
+			ServiceReference[] refs = bc.getServiceReferences(
 					ApplicationDescriptor.class.getName(), "(" + Constants.SERVICE_PID + "=" + uid
 							+ ")");
 			if (null == refs)
@@ -472,18 +483,18 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		String[] sarr = Splitter.split(nodeUri, '/', 0);
 		if ("application_instances".equals(sarr[2])) {
 			try {
-				ServiceReference[] hrefs = context.getServiceReferences(
+				ServiceReference[] hrefs = bc.getServiceReferences(
 						ApplicationHandle.class.getName(), "(service.id="
 								+ sarr[3] + ")");
 				if (null == hrefs)
 					throw new DmtException(nodeUri,
 							DmtException.NODE_NOT_FOUND, "Node (" + nodeUri
 									+ ") not found.");
-				ApplicationHandle handle = (ApplicationHandle) context
+				ApplicationHandle handle = (ApplicationHandle) bc
 						.getService(hrefs[0]);
 				if ("STOP".equalsIgnoreCase(data))
 					handle.destroy();
-				context.ungetService(hrefs[0]);
+				bc.ungetService(hrefs[0]);
 			}
 			catch (Exception e) {
 				throw new RuntimeException("Internal error.");
@@ -506,7 +517,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			if (null == args)
 				throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
 						"Node (" + nodeUri + ") not found.");
-			ApplicationDescriptor descr = (ApplicationDescriptor) context
+			ApplicationDescriptor descr = (ApplicationDescriptor) bc
 					.getService(sref);
 						
 			try {
@@ -516,7 +527,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 				throw new DmtException(nodeUri, DmtException.OTHER_ERROR, e
 						.getMessage());
 			}
-			context.ungetService(sref);
+			bc.ungetService(sref);
 		}
 	}
 
