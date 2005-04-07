@@ -1664,6 +1664,60 @@ public class TestMegletContainerBundleActivator extends Object implements
 			
 			if( !appUID.equals( nodeNames[ 0 ] ) )
 				throw new Exception( "Illegal node name found! (" + nodeNames[ 0 ] + " instead of " + appUID );
+	
+			String[] properties = session.getChildNodeNames( "./OSGi/apps/" + appUID );
+			
+			String names[]  = new String [] { "localizedname", "version", "vendor", "autostart", "locked", 
+					                              "singleton", "bundle_id", "required_services", "launch" };
+			Object values[] = new Object [ names.length ];
+			
+			values[ 0 ] = (String)( appDesc.getProperties( Locale.getDefault().getLanguage() ).
+					 										get( ApplicationDescriptor.APPLICATION_NAME ) );
+			
+			boolean found[] = new boolean[ names.length ];				
+			for( int i = 0; i != names.length; i++ )
+				found [ i ] = false;
+			
+			for( int i = 0; i != properties.length; i++ ) {
+				int j = 0;
+				for(; j != names.length; j++ )
+					if( properties[ i ].equals( names [ j ] ) ) {
+						if( found [ j ] )
+							throw new Exception( "Parameter duplication:" + properties[ i ] + "!" );
+						found[ j ] = true;
+						if( values[ j ] == null )
+							break;
+						
+						DmtData value = session.getNodeValue( "./OSGi/apps/" + appUID + "/" + names[ i ] );
+						
+						switch( value.getFormat() )
+						{
+						case DmtData.FORMAT_BOOLEAN:
+							if( !((Boolean)values[j]).equals( new Boolean( value.getBoolean() ) ) )
+								throw new Exception( "Invalid value of " + names[ j ] + " (" + values [ j ] + ") !" );
+							break;
+						case DmtData.FORMAT_STRING:
+							if( !((String)values[j]).equals( value.getString()  ) )
+								throw new Exception( "Invalid value of " + names[ j ] + " (" + values [ j ] + ") !" );														
+							break;
+						case DmtData.FORMAT_INTEGER:
+							if( !((Integer)values[j]).equals( new Integer( value.getInt() ) ) )
+								throw new Exception( "Invalid value of " + names[ j ] + " (" + values [ j ] + ") !" );
+							break;
+						default:
+							throw new Exception( "Illegal type for " + names [ j ] + "parameter !" );
+						}
+						
+						/* TODO */
+						break;
+					}
+					if( j == properties.length )
+						throw new Exception( "Invalid parameter:" +  properties[ i ] + "!" );
+			}
+
+			for( int i = 0; i != found.length; i++ )
+				if( !found [ i ] )
+					throw new Exception( "The " + names[ i ] + " is missing from the properties!" );
 			
 			session.close();
 			return true;
