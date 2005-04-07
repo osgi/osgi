@@ -24,6 +24,7 @@ import org.osgi.framework.*;
 import org.osgi.service.application.*;
 import org.osgi.service.event.*;
 import org.osgi.meglet.*;
+import org.osgi.service.dmt.*;
 
 public class TestMegletContainerBundleActivator extends Object implements
 		BundleActivator, BundleListener, EventHandler, Runnable {
@@ -38,7 +39,9 @@ public class TestMegletContainerBundleActivator extends Object implements
 	private long										installedBundleID;
 	private ServiceRegistration			serviceReg;
 	private LinkedList							receivedEvents;
-
+	private ServiceReference				dmtFactoryRef;
+	private DmtAdmin 								dmtFactory;
+	
 	private final static int				APPLICATION_START = 1;
 	private final static int				APPLICATION_SUSPEND = 2;
 	private final static int				APPLICATION_RESUME = 3;
@@ -60,6 +63,9 @@ public class TestMegletContainerBundleActivator extends Object implements
 
 	public void stop(BundleContext bc) throws Exception {
 		serviceReg.unregister();
+		
+		if( dmtFactory != null )
+			bc.ungetService( dmtFactoryRef );
 		this.bc = null;
 	}
 
@@ -221,12 +227,26 @@ public class TestMegletContainerBundleActivator extends Object implements
 		else
 			System.out
 					.println("Looking up the scheduler                         PASSED");
+		if (!testCase_lookUpDmtAdmin()) {
+			System.out
+					.println("Looking up the DMT admin                         FAILED");
+			return;
+		}
+		else
+			System.out
+					.println("Looking up the DMT admin                         PASSED");
 		if (!testCase_installMegletBundle())
 			System.out
 					.println("Meglet bundle install onto Meglet container      FAILED");
 		else
 			System.out
 					.println("Meglet bundle install onto Meglet container      PASSED");
+		if (!testCase_appPluginCheckInstalledApps()) 																		/* TODO */
+			System.out 																																/* TODO */
+					.println("AppPlugin: checking the installed application    FAILED"); 	/* TODO */
+		else 																																				/* TODO */
+			System.out 																																/* TODO */
+					.println("AppPlugin: checking the installed application    PASSED"); 	/* TODO */
 		if (!testCase_checkAppDescs())
 			System.out
 					.println("Checking the installed Meglet app descriptors    FAILED");
@@ -377,6 +397,12 @@ public class TestMegletContainerBundleActivator extends Object implements
 		else
 			System.out
 					.println("Checking the filter matching of the scheduler    PASSED");
+		if (!testCase_appPluginCheckInstalledApps())
+			System.out
+					.println("AppPlugin: checking the installed application    FAILED");
+		else
+			System.out
+					.println("AppPlugin: checking the installed application    PASSED");
 		if (!testCase_uninstallMegletBundle())
 			System.out
 					.println("Meglet bundle uninstall from Meglet container    FAILED");
@@ -487,6 +513,24 @@ public class TestMegletContainerBundleActivator extends Object implements
 		}
 	}
 
+	boolean testCase_lookUpDmtAdmin() {
+		try {
+			dmtFactoryRef = bc.getServiceReference( DmtAdmin.class.getName() );
+      if(dmtFactoryRef == null)      
+      	throw new Exception("Can't find the DmtAdmin service!");
+      
+      dmtFactory = (DmtAdmin) bc.getService( dmtFactoryRef );
+      if( dmtFactory == null )
+      	throw new Exception("Can't get the DmtAdmin service!");
+      
+			return true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	boolean testCase_uninstallMegletBundle() {
 		try {
 			megBundle.stop();
@@ -1603,5 +1647,30 @@ public class TestMegletContainerBundleActivator extends Object implements
 			e.printStackTrace();
 			return false;
 		}		
+	}
+	
+	boolean testCase_appPluginCheckInstalledApps()
+	{
+		ApplicationDescriptor appDesc = appDescs[0];
+		String appUID = appDesc.getPID();
+		
+		try {
+			DmtSession session = dmtFactory.getSession("./OSGi/apps");
+			
+			String[] nodeNames = session.getChildNodeNames( "./OSGi/apps" );
+		
+			if( nodeNames.length != 1)
+				throw new Exception( "Too many nodenames are present! Only one meglet is installed!" );
+			
+			if( !appUID.equals( nodeNames[ 0 ] ) )
+				throw new Exception( "Illegal node name found! (" + nodeNames[ 0 ] + " instead of " + appUID );
+			
+			session.close();
+			return true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }
