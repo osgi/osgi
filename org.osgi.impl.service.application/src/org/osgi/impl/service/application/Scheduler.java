@@ -88,7 +88,7 @@ public class Scheduler implements Runnable, EventHandler {
 		serviceReg.setProperties( props );
 	}
 	
-	private String [] getRequiredTopics() {
+	private synchronized String [] getRequiredTopics() {
 		Vector topics = new Vector();
 		
 		Iterator it = scheduledApps.iterator();
@@ -142,13 +142,14 @@ public class Scheduler implements Runnable, EventHandler {
 		}
 	}
 
-	public void handleEvent(Event e) {
+	public synchronized void handleEvent(Event e) {
 		Iterator it = scheduledApps.iterator();
+		Vector removeList = new Vector();
+		
+		try {
 
-		while ( it.hasNext() ) {
-			ScheduledApplication schedApp = (ScheduledApplication) it.next();
-
-			try {
+				while ( it.hasNext() ) {
+					ScheduledApplication schedApp = (ScheduledApplication) it.next();
 
 				if ((schedApp.getTopic() != null)
 						&& e.matches(bc.createFilter("("
@@ -162,17 +163,23 @@ public class Scheduler implements Runnable, EventHandler {
 								.getService(ref);
 						appDesc.launch(schedApp.getArguments());
 						if (!schedApp.isRecurring())
-							removeScheduledApplication( (ScheduledApplicationImpl)schedApp );
+							removeList.add( schedApp );
 						bc.ungetService(ref);
 					}
-			}
-			catch (Exception ex) {
-				log(
-						bc,
-						LogService.LOG_ERROR,
-						"Exception occurred at launching a scheduled application!",
-						ex);
-			}
+				}
+		
+				it = removeList.iterator();
+				while ( it.hasNext() ) {
+					ScheduledApplicationImpl schedApp = (ScheduledApplicationImpl) it.next();
+					removeScheduledApplication( schedApp );
+				}
+		}
+		catch (Exception ex) {
+			log(
+					bc,
+					LogService.LOG_ERROR,
+					"Exception occurred at scheduling an application!",
+					ex);
 		}
 	}
 
