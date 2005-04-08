@@ -163,22 +163,21 @@ public class TestMegletContainerBundleActivator extends Object implements
 					if( !found )
 						continue;
 					
-					if( serviceRef.getProperty( "application.pid" ) != null &&
-							serviceRef.getProperty( "application.pid" ).equals( pid ) &&
+					String descriptorPID = (String)serviceRef.getProperty( "descriptor.pid" );
+					
+					if( descriptorPID != null && descriptorPID.equals( pid ) &&
 							serviceRef.getProperty( "application.state" ) != null &&
 							serviceRef.getProperty( "application.state" ).equals( requiredState ) ) {
-						String descriptorPID = (String)serviceRef.getProperty( "descriptor.pid" );
-						if( descriptorPID != null ) {
-							ServiceReference[] appDescRefs = bc
+						
+						ServiceReference[] appDescRefs = bc
 							.getServiceReferences( "org.osgi.service.application.ApplicationDescriptor",
-									"(" + Constants.SERVICE_PID + "=" + descriptorPID + ")");
-							if (appDescRefs != null && appDescRefs.length != 0 ) {
-								ApplicationDescriptor appDesc = (ApplicationDescriptor)bc.getService( appDescRefs [ 0 ] );
-								String appPID = appDesc.getPID();
-								bc.ungetService( appDescRefs [ 0 ] );
-								if( appPID.equals( pid ) )
-									return true;
-							}
+								"(" + Constants.SERVICE_PID + "=" + descriptorPID + ")");
+						if (appDescRefs != null && appDescRefs.length != 0 ) {
+							ApplicationDescriptor appDesc = (ApplicationDescriptor)bc.getService( appDescRefs [ 0 ] );
+							String appPID = appDesc.getPID();
+							bc.ungetService( appDescRefs [ 0 ] );
+							if( appPID.equals( pid ) )
+								return true;
 						}
 					}
 				}
@@ -241,12 +240,18 @@ public class TestMegletContainerBundleActivator extends Object implements
 		else
 			System.out
 					.println("Meglet bundle install onto Meglet container      PASSED");
-		if (!testCase_appPluginCheckInstalledApps()) 																		/* TODO */
+		if (!testCase_appPluginCheckInstalledApps()) 																/* TODO */
 			System.out 																																/* TODO */
 					.println("AppPlugin: checking the installed application    FAILED"); 	/* TODO */
 		else 																																				/* TODO */
 			System.out 																																/* TODO */
 					.println("AppPlugin: checking the installed application    PASSED"); 	/* TODO */
+		if (!testCase_appPluginCheckRunningApps()) 																	/* TODO */
+			System.out 																																/* TODO */
+					.println("AppPlugin: checking a running application        FAILED"); 	/* TODO */
+		else 																																				/* TODO */
+			System.out 																																/* TODO */
+					.println("AppPlugin: checking a running application        PASSED"); 	/* TODO */
 		if (!testCase_checkAppDescs())
 			System.out
 					.println("Checking the installed Meglet app descriptors    FAILED");
@@ -397,12 +402,12 @@ public class TestMegletContainerBundleActivator extends Object implements
 		else
 			System.out
 					.println("Checking the filter matching of the scheduler    PASSED");
-		if (!testCase_appPluginCheckInstalledApps())
-			System.out
-					.println("AppPlugin: checking the installed application    FAILED");
-		else
-			System.out
-					.println("AppPlugin: checking the installed application    PASSED");
+//		if (!testCase_appPluginCheckInstalledApps())
+//			System.out
+//					.println("AppPlugin: checking the installed application    FAILED");
+//		else
+//			System.out
+//					.println("AppPlugin: checking the installed application    PASSED");
 		if (!testCase_uninstallMegletBundle())
 			System.out
 					.println("Meglet bundle uninstall from Meglet container    FAILED");
@@ -727,7 +732,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Didn't receive the start event!");
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
-					"(application.pid=" + appDesc.getPID() + ")");
+					"(descriptor.pid=" + appDesc.getPID() + ")");
 			if (appList == null || appList.length == 0)
 				throw new Exception("No registered application handle found!");
 			if (getAppDesc( appHandle ) != appDesc)
@@ -942,7 +947,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			ApplicationDescriptor appDesc = appDescs[0];
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
-					"(application.pid=" + appDesc.getPID() + ")");
+					"(descriptor.pid=" + appDesc.getPID() + ")");
 			if (appList == null || appList.length == 0)
 				throw new Exception(
 						"Application didn't autostart. The appHandle is missing!");
@@ -1036,7 +1041,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 				.get("application.bundle.id"));
 		ServiceReference[] references = bc.getServiceReferences(
 				"org.osgi.service.application.ApplicationHandle",
-				"(application.pid=" + appDesc.getPID() + ")");
+				"(descriptor.pid=" + appDesc.getPID() + ")");
 		if (references == null || references.length == 0)
 			return null;
 		for (int i = 0; i != references.length; i++) {
@@ -1715,7 +1720,6 @@ public class TestMegletContainerBundleActivator extends Object implements
 							throw new Exception( "Illegal type for " + names [ j ] + "parameter !" );
 						}
 						
-						/* TODO */
 						break;
 					}
 					if( j == properties.length )
@@ -1727,6 +1731,46 @@ public class TestMegletContainerBundleActivator extends Object implements
 					throw new Exception( "The " + names[ i ] + " is missing from the properties!" );
 			
 			session.close();
+			return true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	boolean testCase_appPluginCheckRunningApps() {
+		ApplicationDescriptor appDesc = appDescs[0];
+		String appUID = appDesc.getPID();
+		
+		try {
+			if( !testCase_launchApplication() )
+				return false;
+			
+			ServiceReference[] references = bc.getServiceReferences(
+					"org.osgi.service.application.ApplicationHandle",
+					"(descriptor.pid=" + appDesc.getPID() + ")");
+			
+			if( references == null || references.length == 0 )
+				throw new Exception( "Service reference not found!" );
+			
+			DmtSession session = dmtFactory.getSession("./OSGi/app_instances");
+
+			String[] nodeNames = session.getChildNodeNames( "./OSGi/app_instances" );
+			
+			if( nodeNames == null || nodeNames.length != 1 )
+				throw new Exception( "Couldn't find the application instance node!" );
+			
+			ApplicationHandle appHandle = lookupAppHandle( appDesc );
+			if( !nodeNames[ 0 ].equals( appHandle.getInstanceID() ) )
+				throw new Exception( "Illegal node name (" + nodeNames[ 0 ] + 
+						                 " instead of " + appHandle.getInstanceID() +")" );
+						
+			session.close();
+
+			if( !testCase_stopApplication() )
+				return false;
+			
 			return true;
 		}
 		catch (Exception e) {

@@ -51,6 +51,7 @@ public final class MegletHandleImpl extends MegletHandle {
 	private Map									resumeArgs				= null;
 	private String      				pid;
 	private final static int 		NONEXISTENT = -1;
+	private static int          instanceCounter;
 	
 	/**
 	 * The Meglet instance is suspended.
@@ -61,7 +62,7 @@ public final class MegletHandleImpl extends MegletHandle {
 
 	public MegletHandleImpl(MegletContainer megletContainer, Meglet meglet,
 			MegletDescriptor appDesc, BundleContext bc) throws Exception {
-		super( appDesc.getPID(), appDesc );
+		super( createNewInstanceID( appDesc.getPID() ), appDesc );
 
 		appDescRef = megletContainer.getReference( appDesc );		
 		pid = appDesc.getPID();
@@ -213,7 +214,7 @@ public final class MegletHandleImpl extends MegletHandle {
 
 	private Hashtable properties() {
 		Hashtable props = new Hashtable();
-		props.put( "application.pid", pid );
+		props.put( "application.pid", getInstanceID() );
 		props.put( "application.state", new Integer( status ) );
 		props.put( "descriptor.pid", appDescRef.getProperty( Constants.SERVICE_PID ) );		
 		return props;
@@ -248,4 +249,8 @@ public final class MegletHandleImpl extends MegletHandle {
 		setupMethod.setAccessible( true );
 		setupMethod.invoke( meglet, new Object [] { stream } );
 	}	
+	
+	static synchronized String createNewInstanceID( String pid ) {
+		return new String( pid + ":" + instanceCounter++ );
+	}
 }
