@@ -14,9 +14,6 @@
  */
 package org.osgi.impl.service.metatype.utest;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import org.osgi.framework.*;
 import org.osgi.service.metatype.*;
 import org.osgi.util.tracker.ServiceTracker;
@@ -65,44 +62,73 @@ public class Activator implements BundleActivator {
 	/*
 	 * 
 	 */
-	public void showMetaData() {
+	private void showMetaData() {
 
 		ServiceTracker tracker = new ServiceTracker(_context,
 				MetaTypeService.class.getName(), null);
 
 		tracker.open();
 		MetaTypeService mts = (MetaTypeService) tracker.getService();
-		if (mts == null)
-			System.out.println("Not MetaTypeService");
+		if (mts == null) {
+			System.out.println("No MetaTypeService");
+			return;
+		}
+		
 		Bundle[] bs = _context.getBundles();
-		if (bs.length > 0) {
+		if (bs != null) {
 			System.out.println("There are total " + bs.length + " bundles.");
-			for (int bIdx = 0; bIdx < bs.length; bIdx++) {
+			System.out.println();
 
+			for (int bIdx = 0; bIdx < bs.length; bIdx++) {
 				MetaTypeInformation mti = mts.getMetaTypeInformation(bs[bIdx]);
-				String[] pids = mti.getPids();
-				String[] factoryPids = mti.getFactoryPids();
-				String[] locales = mti.getLocales();
-				if ((pids.length + factoryPids.length) > 0) {
+				String[] pids  = mti.getPids();
+				String[] fpids = mti.getFactoryPids();
+				if ((pids != null ? pids.length : 0)
+						+ (fpids != null ? fpids.length : 0) > 0) {
 					System.out.println("Bundle(" + bs[bIdx].getBundleId()
 							+ ", " + bs[bIdx].getSymbolicName()
 							+ ") has Meta data.");
+
+					String[] locales = mti.getLocales();
+					if (locales == null || locales.length == 0) {
+						System.out.println("There is no Locale available.");
+					}
+					else {
+						System.out.println("There is " + locales.length
+								+ " Locale(s) available.");
+						for (int lIdx = 0; lIdx < locales.length; lIdx++) {
+							System.out.print("\"" + locales[lIdx] + "\" ");
+						}
+						System.out.println();
+					}
 				}
 
 				for (int pidIdx = 0; pidIdx < pids.length; pidIdx++) {
-					System.out
-							.println("\n\tThis is PID: (" + pids[pidIdx] + ")");
-					ObjectClassDefinition ocd = mti.getObjectClassDefinition(
-							pids[pidIdx], null);
-					showOCD(ocd);
+					try {
+						System.out.println("\tThis is PID: (" + pids[pidIdx] 
+								+ ")");
+						ObjectClassDefinition ocd = mti.getObjectClassDefinition(
+								pids[pidIdx], "en_US");
+						showOCD(ocd);
+					}
+					catch (Exception e) {
+						System.out.println("Exception when getting OCD data.");
+						e.printStackTrace();
+					}
 				}
 
-				for (int fpidIdx = 0; fpidIdx < factoryPids.length; fpidIdx++) {
-					System.out.println("\n\tThis is FPID: ("
-							+ factoryPids[fpidIdx] + ")");
-					ObjectClassDefinition ocd = mti.getObjectClassDefinition(
-							factoryPids[fpidIdx], null);
-					showOCD(ocd);
+				for (int fpidIdx = 0; fpidIdx < fpids.length; fpidIdx++) {
+					try {
+						System.out.println("\tThis is FPID: (" + fpids[fpidIdx]
+								+ ")");
+						ObjectClassDefinition ocd = mti.getObjectClassDefinition(
+								fpids[fpidIdx], "en_US");
+						showOCD(ocd);
+					}
+					catch (Exception e) {
+						System.out.println("Exception when getting OCD data.");
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -114,74 +140,109 @@ public class Activator implements BundleActivator {
 	 */
 	private void showOCD(ObjectClassDefinition ocd) {
 
-		AttributeDefinition[] ADs = ocd
-				.getAttributeDefinitions(ObjectClassDefinition.ALL);
-
-		for (int adIdx = 0; adIdx < ADs.length; adIdx++) {
-			System.out.println("\t\tOCD name: \"" + ocd.getName() + "\"");
-			System.out.println("\t\tOCD id: \"" + ocd.getID() + "\"");
-			System.out.println("\t\tOCD description: \""
-					+ ocd.getDescription() + "\"");
-			try {
-			ocd.getIcon(0);
-			} catch (Exception e) {}
-
-			System.out.println("\t\tAD[" + adIdx + "] name: \""
-					+ ADs[adIdx].getName() + "\"");
-			System.out.println("\t\tAD[" + adIdx + "] id: \""
-					+ ADs[adIdx].getID() + "\"");
-			System.out.println("\t\tAD[" + adIdx + "] type: \""
-					+ getString(ADs[adIdx].getType()) + "\"");
-			System.out.println("\t\tAD[" + adIdx
-					+ "] cardinality: \""
-					+ ADs[adIdx].getCardinality() + "\"");
-			System.out.println("\t\tAD[" + adIdx
-					+ "] description: \""
-					+ ADs[adIdx].getDescription() + "\"");
-
-			String[] defaultValues = ADs[adIdx].getDefaultValue();
-			if (defaultValues != null) {
-				System.out.println("\t\t\tThere are total "
-						+ defaultValues.length
-						+ " default value(s).");
-				for (int dfValIdx = 0; dfValIdx < defaultValues.length; dfValIdx++) {
-					System.out.println("\t\t\t - Default Value["
-							+ dfValIdx + "]: \""
-							+ defaultValues[dfValIdx] + "\"");
-				}
+		System.out.println("\tOCD name: \"" + ocd.getName() + "\"");
+		System.out.println("\tOCD id: \"" + ocd.getID() + "\"");
+		System.out.println("\tOCD description: \""
+				+ ocd.getDescription() + "\"");
+		try {
+			java.io.InputStream is = ocd.getIcon(16);
+			if (is == null) {
+				System.out.println("\tOCD icon: NULL");
 			}
 			else {
-				System.out.println("\t\t\tThere is no default value.");
-			}
-
-			String[] optionLabels = ADs[adIdx].getOptionLabels();
-			if (optionLabels != null) {
-				System.out.println("\t\t\tThere are total "
-						+ optionLabels.length + " option label(s).");
-				for (int optLabIdx = 0; optLabIdx < optionLabels.length; optLabIdx++) {
-					System.out.println("\t\t\t - Option Labels["
-							+ optLabIdx + "]: \""
-							+ optionLabels[optLabIdx] + "\"");
+				byte[] bb = new byte[is.available()];
+				int iconSize = is.read(bb);
+				if (iconSize > 0) {
+					System.out.println("\t\tOCD icon header: ["
+							+ new String(bb).substring(0,
+									iconSize > 10 ? 10 : iconSize) + "]");
 				}
+				else
+					System.out.println("\tOCD icon: Empty");
 			}
-			else {
-				System.out.println("\t\t\tOption Labels is null");
-			}
+		} catch (Exception e) {
+			System.out.println("Exception when getting Icon data.");
+			e.printStackTrace();
+		}
 
-			String[] optionValues = ADs[adIdx].getOptionValues();
-			if (optionValues != null) {
-				System.out.println("\t\t\tThere are total "
-						+ optionValues.length + " option values.");
-				for (int optValIdx = 0; optValIdx < optionValues.length; optValIdx++) {
-					System.out.println("\t\t\t - Option Values["
-							+ optValIdx + "]: \""
-							+ optionValues[optValIdx] + "\"");
-				}
-			}
-			else {
-				System.out.println("\t\t\tOption Values is null");
-			}
+		AttributeDefinition[] ADs =
+			ocd.getAttributeDefinitions(ObjectClassDefinition.REQUIRED);
+
+		System.out.println("\tRequired ADs:");
+		for (int adIdx = ADs.length-1; adIdx >= 0; adIdx--) {
+			// Show in inversed order.
+			showAD(ADs[adIdx], ADs.length-1-adIdx);
 			System.out.println();
+		}
+		System.out.println();
+
+		ADs = ocd.getAttributeDefinitions(ObjectClassDefinition.OPTIONAL);
+		System.out.println("\tOptional ADs:");
+		for (int adIdx = ADs.length-1; adIdx >= 0; adIdx--) {
+			// Show in inversed order.
+			showAD(ADs[adIdx], ADs.length-1-adIdx);
+			System.out.println();
+		}
+		System.out.println();
+	}
+
+	/*
+	 * 
+	 */
+	private void showAD(AttributeDefinition ad, int adIdx) {
+
+		System.out.println("\t\tAD[" + adIdx + "] name: \""
+				+ ad.getName() + "\"");
+		System.out.println("\t\tAD[" + adIdx + "] required: \"true\"");
+		System.out.println("\t\tAD[" + adIdx + "] id: \"" + ad.getID() + "\"");
+		System.out.println("\t\tAD[" + adIdx + "] type: \"" 
+				+ getString(ad.getType()) + "\"");
+		System.out.println("\t\tAD[" + adIdx + "] cardinality: \""
+				+ ad.getCardinality() + "\"");
+		System.out.println("\t\tAD[" + adIdx + "] description: \""
+				+ ad.getDescription() + "\"");
+
+		String[] defaultValues = ad.getDefaultValue();
+		if (defaultValues != null) {
+			System.out.println("\t\t\tThere are total " + defaultValues.length
+					+ " default value(s).");
+			for (int dfValIdx = 0; dfValIdx < defaultValues.length; dfValIdx++) {
+				System.out.println("\t\t\t - Default Value[" + dfValIdx
+						+ "]: \"" + defaultValues[dfValIdx] + "\"");
+			}
+		}
+		else {
+			System.out.println("\t\t\tThere is no default value.");
+		}
+
+		int min = 0;
+		String[] optionLabels = ad.getOptionLabels();
+		if (optionLabels != null) {
+			System.out.println("\t\t\tThere are total " + optionLabels.length
+					+ " option label(s).");
+			min = optionLabels.length;
+		}
+		else {
+			System.out.println("\t\t\tOption Labels is NULL.");
+		}
+
+		String[] optionValues = ad.getOptionValues();
+		if (optionValues != null) {
+			System.out.println("\t\t\tThere are total "	+ optionValues.length
+					+ " option values.");
+
+			if (min > optionValues.length) {
+				min = optionValues.length;
+			}
+		}
+		else {
+			System.out.println("\t\t\tOption Values is NULL.");
+		}
+
+		for (int optIdx = 0; optIdx < min; optIdx++) {
+			System.out.println("\t\t\t - Option[" + optIdx
+					+ "]: Label / Value = \"" + optionLabels[optIdx]
+					+ "\" / \"" + optionValues[optIdx] + "\"");
 		}
 	}
 
