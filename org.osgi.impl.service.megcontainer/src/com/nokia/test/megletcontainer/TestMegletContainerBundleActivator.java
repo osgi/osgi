@@ -1762,9 +1762,12 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception( "Couldn't find the application instance node!" );
 			
 			ApplicationHandle appHandle = lookupAppHandle( appDesc );
+			
+			String instID = appHandle.getInstanceID();
+			
 			if( !nodeNames[ 0 ].equals( appHandle.getInstanceID() ) )
 				throw new Exception( "Illegal node name (" + nodeNames[ 0 ] + 
-						                 " instead of " + appHandle.getInstanceID() +")" );
+						                 " instead of " + instID +")" );
 			
 			String[] childNodes = session.getChildNodeNames( "./OSGi/app_instances/" + appHandle.getInstanceID() );
 			
@@ -1775,7 +1778,32 @@ public class TestMegletContainerBundleActivator extends Object implements
 			
 			if( childList.indexOf( "state" ) == -1 || childList.indexOf( "type" ) == -1 )
 				throw new Exception( "Invalid child nodes of the application instance!" );
-						
+			
+			DmtData typeValue = session.getNodeValue( "./OSGi/app_instances/" + instID + "/type" );
+			if( !appDesc.getPID().equals( typeValue.getString() ) )
+				throw new Exception( "Bad type value (" + typeValue.getString() +"/" + appDesc.getPID() + ")!" );
+
+			DmtData stateValue = session.getNodeValue( "./OSGi/app_instances/" + instID + "/state" );
+			if( stateValue.getInt() != ApplicationHandle.RUNNING )
+				throw new Exception( "Bad state value (" + stateValue.getInt() + " " + 
+						                  ApplicationHandle.RUNNING + ")!" );
+
+			if( ! testCase_suspendApplication() )
+				return false;
+
+			stateValue = session.getNodeValue( "./OSGi/app_instances/" + instID + "/state" );
+			if( stateValue.getInt() != MegletHandle.SUSPENDED )
+				throw new Exception( "Bad state value (" + stateValue.getInt() + " " + 
+          MegletHandle.SUSPENDED + ")!" );
+			
+			if( ! testCase_resumeApplication() )
+				return false;
+
+			stateValue = session.getNodeValue( "./OSGi/app_instances/" + instID + "/state" );
+			if( stateValue.getInt() != ApplicationHandle.RUNNING )
+				throw new Exception( "Bad state value (" + stateValue.getInt() + " " + 
+          ApplicationHandle.RUNNING + ")!" );
+
 			session.close();
 
 			if( !testCase_stopApplication() )
