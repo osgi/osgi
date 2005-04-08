@@ -205,12 +205,11 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			try {
 				ServiceReference[] hrefs = bc.getServiceReferences(
 						ApplicationHandle.class.getName(), null);
-				if (null == hrefs)
+				if (hrefs == null)
 					return false;
 				for (int i = 0; i < hrefs.length; ++i) {
-					long l = Long.parseLong( path[ 1 ]);
-					if (l == ((Long) hrefs[i].getProperty("service.id"))
-							.longValue())
+					if ( path[ 1 ].equals((String) hrefs[i].getProperty("application.pid") ) )
+
 						return true;
 				}
 				return false;
@@ -294,7 +293,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			ServiceReference[] hrefs;
 			try {
 				hrefs = bc.getServiceReferences(ApplicationHandle.class
-						.getName(), "(" + Constants.SERVICE_PID + "=" + path[1] + ")");
+						.getName(), "(application.pid=" + path[1] + ")");
 			}
 			catch (InvalidSyntaxException e) {
 				throw new RuntimeException("Internal error.");
