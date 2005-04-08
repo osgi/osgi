@@ -544,36 +544,39 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		}
 	}
 		
-  public void open(String subtreeUri, int lockMode, DmtSession session) throws DmtException
-	{
-		// TODO Auto-generated method stub
-	}
-
-  public void open(String subtreeUri, DmtSession session)
-			throws DmtException {
-		// TODO Auto-generated method stub
+  public void open(String subtreeUri, int lockMode, DmtSession session) throws DmtException {
 	}
 
 	public void close() throws DmtException {
-		// TODO Auto-generated method stub
 	}
 
 	public String getNodeTitle(String nodeUri) throws DmtException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new DmtException( nodeUri, DmtException.FEATURE_NOT_SUPPORTED,
+				                    "Title property not supported!" ); 
 	}
 
-	public String getNodeType(String nodeUri) throws DmtException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public int getNodeVersion(String nodeUri) throws DmtException {
-		// TODO Auto-generated method stub
-		return 0;
+	public void setNodeTitle(String nodeUri, String title) throws DmtException {
+		throw new DmtException( nodeUri, DmtException.FEATURE_NOT_SUPPORTED,
+														"Title property not supported!" ); 
 	}
 
 	public Date getNodeTimestamp(String nodeUri) throws DmtException {
+		throw new DmtException( nodeUri, DmtException.FEATURE_NOT_SUPPORTED,
+														"Timestamp property not supported!" ); 
+	}
+
+	public void rollback() throws DmtException {
+	}
+
+	public void commit() throws DmtException {
+	}
+	
+	public int getNodeVersion(String nodeUri) throws DmtException {
+		throw new DmtException( nodeUri, DmtException.FEATURE_NOT_SUPPORTED,
+														"Version property not supported!" ); 
+	}
+	
+	public String getNodeType(String nodeUri) throws DmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -581,18 +584,6 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 	public int getNodeSize(String nodeUri) throws DmtException {
 		// TODO Auto-generated method stub
 		return 0;
-	}
-
-	public void rollback() throws DmtException {
-		// TODO Auto-generated method stub		
-	}
-
-	public void commit() throws DmtException {
-		// TODO Auto-generated method stub		
-	}
-
-	public void setNodeTitle(String nodeUri, String title) throws DmtException {
-		// TODO Auto-generated method stub		
 	}
 
 	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
@@ -626,9 +617,4 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 	public void renameNode(String nodeUri, String newName) throws DmtException {
 		// TODO Auto-generated method stub		
 	}	
-
-  public void clone(String nodeUri, String newNodeUri, boolean recursive)
-			throws DmtException {
-		// TODO Auto-generated method stub
-	}
 }
