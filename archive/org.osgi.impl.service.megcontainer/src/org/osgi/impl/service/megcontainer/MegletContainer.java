@@ -207,7 +207,7 @@ public class MegletContainer implements BundleListener, EventHandler {
 		try {
 			ServiceReference []appList =
 					bc.getServiceReferences( "org.osgi.service.application.ApplicationHandle",
-									"(application.pid="+ appDesc.getPID() + ")" );
+									"(descriptor.pid="+ appDesc.getPID() + ")" );
 			if( appList == null || appList.length == 0 )
         return true;
       if( !resume )
@@ -706,7 +706,7 @@ public class MegletContainer implements BundleListener, EventHandler {
 										ServiceReference[] references = bc
 												.getServiceReferences(
 														"org.osgi.service.application.ApplicationHandle",
-														"(application.pid="
+														"(descriptor.pid="
 																+ bundleDesc.applications[i]
 																		.getPID()
 																+ ")");
