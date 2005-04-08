@@ -1765,6 +1765,16 @@ public class TestMegletContainerBundleActivator extends Object implements
 			if( !nodeNames[ 0 ].equals( appHandle.getInstanceID() ) )
 				throw new Exception( "Illegal node name (" + nodeNames[ 0 ] + 
 						                 " instead of " + appHandle.getInstanceID() +")" );
+			
+			String[] childNodes = session.getChildNodeNames( "./OSGi/app_instances/" + appHandle.getInstanceID() );
+			
+			if( childNodes == null || childNodes.length != 2 )
+				throw new Exception( "Invalid child nodes of the application instance!" );
+			
+			List childList = Arrays.asList( childNodes );
+			
+			if( childList.indexOf( "state" ) == -1 || childList.indexOf( "type" ) == -1 )
+				throw new Exception( "Invalid child nodes of the application instance!" );
 						
 			session.close();
 
