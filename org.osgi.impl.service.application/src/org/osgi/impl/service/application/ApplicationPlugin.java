@@ -77,11 +77,6 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		}
 	}
 
-	public void open(String subtreeUri, DmtSession session)
-			throws DmtException {
-		// TODO Auto-generated method stub
-	}
-
 	public DmtMetaNode getMetaNode( String nodeUri )
 			throws DmtException {
 		
@@ -90,23 +85,25 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		if( path.length == 0 )
       throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Can not get metadata");
 		
-		if ( path.length == 1 ) /* ./OSGi/apps ./OSGi/app_instances */
+		/* ./OSGi/apps ./OSGi/app_instances */
+		if ( path.length == 1 ) 
 			return new ApplicationMetaNode(!ApplicationMetaNode.ISLEAF, ApplicationMetaNode.CANGET);
 		
-		if ( isAppInstUri( path ) ) { 
-			if ( path.length == 2 ) {       /* ./OSGi/app_instances/<service_pid> */
+		/* ./OSGi/app_instances/<application_pid> */
+		if ( path.length == 2 && path[ 0 ].equals( PREFIX_APPINST ) ) {       
 				return new ApplicationMetaNode(!ApplicationMetaNode.CANDELETE,
 						!ApplicationMetaNode.CANADD,
 						ApplicationMetaNode.CANGET,
 						!ApplicationMetaNode.CANREPLACE,
 						ApplicationMetaNode.CANEXECUTE,
 						!ApplicationMetaNode.ISLEAF);
-			}
-			else /* ./OSGi/app_instances/<service_pid>/type or state */
-				if ( path.length == 3 ) {
-					return new ApplicationMetaNode(ApplicationMetaNode.ISLEAF,
+		}
+		if ( path.length == 3 && path[ 0 ].equals( PREFIX_APPINST ) ) {
+				return new ApplicationMetaNode(ApplicationMetaNode.ISLEAF,
 							ApplicationMetaNode.CANGET);
-				}
+		}
+		
+		if( !path[ 0 ].equals( PREFIX_APPS ) ) {
 			throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Can not get metadata");
 		}
 		
@@ -140,109 +137,111 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 	public boolean isLeafNode( String nodeUri ) throws DmtException {
 		return getMetaNode( nodeUri ).isLeaf();
 	}
-	
-	/* ------------------------------------------------------------------------------ */
-	/* ------------------------------------------------------------------------------ */
-	/* -------------------------------- UNCHECKED FROM HERE ------------------------- */
-	/* ------------------------------------------------------------------------------ */
-	/* ------------------------------------------------------------------------------ */
-	
+
 	public void createInteriorNode(String nodeUri) throws DmtException {
-		String[] sarr = Splitter.split(nodeUri, '/', 0);
-		if (6 != sarr.length)
+		
+		String[] path = prepareUri( nodeUri );
+
+		/* ./OSGi/apps/<unique_id>/launch/<exec_id> */
+		if ( path.length != 4 || !path[ 0 ].equals( PREFIX_APPS ) || !path[ 2 ].equals("launch") )
 			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
 					"Operation is not allowed.");
-		String uid = sarr[3];
-		ServiceReference sref = getApplicationDescriptorRef(uid);
-		if (null == sref)
-			throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
-					"Node (" + nodeUri + ") not found.");
-		String key = new String(sarr[0] + "/" + sarr[1] + "/" + sarr[2] + "/"
-				+ sarr[3] + "/" + sarr[4] + "/" + sarr[5]);
-		execIds.put(key, new Hashtable());
+		
+		checkUniqueID( nodeUri, path[ 1 ]);
+		
+		execIds.put( path[ 1 ] + "/" + path[ 3 ], new Hashtable());
 	}
 
 	public void createInteriorNode(String nodeUri, String type)
 			throws DmtException {
-		// TODO Auto-generated method stub
+		
+		throw new DmtException( nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
+														"Cannot set type property of application nodes!" );
 	}
 
 	public void createLeafNode(String nodeUri, DmtData value)
 			throws DmtException {
-		String[] sarr = Splitter.split(nodeUri, '/', 0);
-		if (7 != sarr.length)
+		
+		String[] path = prepareUri( nodeUri );
+		
+		/* ./OSGi/apps/<unique_id>/launch/<exec_id>/<parameter> */
+		if ( path.length != 5 || !path[ 0 ].equals( PREFIX_APPS ) || !path[ 2 ].equals("launch")  )
 			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
 					"Operation is not allowed.");
-		String execId = sarr[5];
-		String key = new String(sarr[0] + "/" + sarr[1] + "/" + sarr[2] + "/"
-				+ sarr[3] + "/" + sarr[4] + "/" + sarr[5]);
-		Hashtable ht = (Hashtable) execIds.get(key);
-		if (null == ht)
+		
+		checkUniqueID( nodeUri, path[ 1 ]);
+				
+		String key = path[ 1 ] + "/" + path[ 3 ];
+		Hashtable ht = (Hashtable) execIds.get( key );
+		if (ht == null)
 			throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
-					"Parent node " + execId + " does not exist.");
-		ht.put(sarr[6], value);
-	}
-
-	public void close() throws DmtException {
-		// TODO Auto-generated method stub
+					"Parent node " + path[ 3 ] + " does not exist.");
+		ht.put( path[ 4 ], value );
 	}
 
 	public boolean isNodeUri(String nodeUri) {
-		String[] path = prepareUri( nodeUri );
 		
-		if ( path.length == 1 )  /* ./OSGi/apps   ./OSGi/app_instances */
-			return true;
-		ServiceReference appDescRef = null;
-		if ( path.length >= 2 && path[ 0 ].equals( PREFIX_APPS )) {
-			String uid = path[ 1 ];
-			appDescRef = getApplicationDescriptorRef(uid);
-			if (appDescRef == null)
-				return false;
-		}
-		if ( path.length == 2 && path[ 0 ].equals( PREFIX_APPS ) )
-			return true;
-		if ( path.length == 2 && path[ 0 ].equals( PREFIX_APPINST ) ) {
-			try {
-				ServiceReference[] hrefs = bc.getServiceReferences(
-						ApplicationHandle.class.getName(), null);
-				if (hrefs == null)
+		try {
+		
+			String[] path = prepareUri( nodeUri );
+		
+			if ( path.length == 1 )  /* ./OSGi/apps   ./OSGi/app_instances */
+				return true;
+			ServiceReference appDescRef = null;
+		
+			/* ./OSGi/apps/<unique_id>/... */
+			if ( path.length >= 2 && path[ 0 ].equals( PREFIX_APPS )) {
+				String uid = path[ 1 ];
+				appDescRef = getApplicationDescriptorRef(uid);
+				if (appDescRef == null)
 					return false;
-				for (int i = 0; i < hrefs.length; ++i) {
-					if ( path[ 1 ].equals((String) hrefs[i].getProperty("application.pid") ) )
-
-						return true;
-				}
+			}
+		
+			/* ./OSGi/apps/<unique_id> */
+			if ( path.length == 2 && path[ 0 ].equals( PREFIX_APPS ) )
+				return true;
+		
+			/* ./OSGi/app_instances/<unique_id> */
+			if ( path.length == 2 && path[ 0 ].equals( PREFIX_APPINST ) ) {
+				return checkApplicationPid( path [ 1 ] );
+			}
+		
+			/* ./OSGi/apps/<unique_id>/<property> */
+			if ( path.length == 3 && path[ 0 ].equals( PREFIX_APPS ) ) {
+				String key = path[ 2 ];
+			
+				if( Arrays.asList( propertyNames ).indexOf( key ) != -1 )
+					return true;
+			
+				return Arrays.asList(appDescRef.getPropertyKeys()).indexOf(key) != -1;
+			}
+			/* ./OSGi/app_instances/<application_pid>/<property> */
+			if ( path.length == 3 && path[ 0 ].equals( PREFIX_APPINST ) ) {
+				if ( !checkApplicationPid( path [ 1 ] ) )
+					return false;
+				if ( path[ 2 ].equals( "state" ) || path[ 2 ].equals( "type" ))
+					return true;
 				return false;
 			}
-			catch (InvalidSyntaxException e) {
-				throw new RuntimeException("Internal error.");
+			/* ./OSGi/apps/<unique_id>/launch/<exec_id>/ */
+			if ( path.length == 4 && path[ 0 ].equals( PREFIX_APPS ) && path[ 2 ].equals( "launch" )) {
+				String key = path[ 1 ] + "/" + path[ 3 ];
+			
+				checkUniqueID( nodeUri, path[ 1 ]);			
+				return execIds.get(key) != null;
 			}
-		}
-		if ( path.length == 3 && path[ 0 ].equals( PREFIX_APPS ) ) {
-			String key = path[ 2 ];
+			/* ./OSGi/apps/<unique_id>/launch/<exec_id>/<property> */
+			if ( path.length != 5 && path[ 0 ].equals( PREFIX_APPS ) ) {
+				String key = path[ 1 ] + "/" + path[ 3 ];
 			
-			if( Arrays.asList( propertyNames ).indexOf( key ) != -1 )
-				return true;
-			
-			return Arrays.asList(appDescRef.getPropertyKeys()).indexOf(key) != -1;
-		}
-		if ( path.length == 3 && path[ 0 ].equals( PREFIX_APPINST ) ) {
-			if ( path[ 2 ].equals( "state" ) || path[ 2 ].equals( "type" ))
-				return true;
+				checkUniqueID( nodeUri, path[ 1 ]);			
+				Object data = ((Hashtable) execIds.get(key)).get( path[ 4 ] );
+				return data != null;
+			}
+			return false;
+		}catch( DmtException e ) {
 			return false;
 		}
-		if ( path.length == 4 && path[ 0 ].equals( PREFIX_APPS ) ) {
-			String key = new String( path[0] + "/" + path[1] + "/" + path[2]
-					+ "/" + path[3]);
-			return execIds.get(key) != null;
-		}
-		if ( path.length != 5 && path[ 0 ].equals( PREFIX_APPS ) ) {
-			String key = new String(path[0] + "/" + path[1] + "/" + path[2] + "/" + path[3]);
-			String param = path[ 4 ];
-			Object data = ((Hashtable) execIds.get(key)).get(param);
-			return data != null;
-		}
-		return false;
 	}
 
 	public DmtData getNodeValue(String nodeUri) throws DmtException {
@@ -250,14 +249,16 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		
 		ServiceReference appDescRef = null;
 		
-		if ( path.length >= 2 && path[ 0 ].equals( PREFIX_APPS )) { /* ./OSGi/apps/<unique_id>... */
+		/* ./OSGi/apps/<unique_id>... */
+		if ( path.length >= 2 && path[ 0 ].equals( PREFIX_APPS )) { 
 			String uid = path[ 1 ];
 			appDescRef = getApplicationDescriptorRef(uid);
 			if ( appDescRef == null )
 				throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
 						"Node (" + nodeUri + ") not found.");
 		}
-		if (path.length == 3 && path[ 0 ].equals( PREFIX_APPS ) ) { /* ./OSGi/apps/<unique_id>/<property> */
+		/* ./OSGi/apps/<unique_id>/<property> */
+		if (path.length == 3 && path[ 0 ].equals( PREFIX_APPS ) ) { 
 			String key = path[2];
 			
 			ApplicationDescriptor appDesc = (ApplicationDescriptor)bc.getService( appDescRef );			
@@ -289,6 +290,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 				return new DmtData( (String)prop );
 			}
 		}
+		/* ./OSGi/app_instances/<unique_id>/<property> */
 		if ( path.length == 3 && path[ 0 ].equals( PREFIX_APPINST ) ) {
 			ServiceReference[] hrefs;
 			try {
@@ -319,10 +321,20 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
 					"Node (" + nodeUri + ") not found.");
 		}
-		if ( path.length == 5 && path[ 0 ].equals( PREFIX_APPS ) && path[ 3 ].equals( "launch" ) ) {
-			String key = new String(path[0] + "/" + path[1] + "/" + path[2] + "/" + path[3] );
+		/* ./OSGi/apps/<unique_id>/launch/<exec_id>/<property> */
+		if ( path.length == 5 && path[ 0 ].equals( PREFIX_APPS ) && path[ 2 ].equals( "launch" ) ) {
+			
+			checkUniqueID( nodeUri, path[ 1 ] );
+			
+			String key = path[ 1 ] + "/" + path[ 3 ];
 			String param = path[4];
-			DmtData data = (DmtData) ((Hashtable) execIds.get(key)).get(param);
+			
+			Hashtable ht = (Hashtable) execIds.get(key);
+			if( ht == null )
+				throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+						"Node (" + nodeUri + ") not found.");
+			
+			DmtData data = (DmtData) ht.get( param );
 			if (data == null)
 				throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
 						"Node (" + nodeUri + ") not found.");
@@ -331,6 +343,219 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		}
 		throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "Node ("
 				+ nodeUri + ") not found.");
+	}
+
+	public String[] getChildNodeNames(String nodeUri) throws DmtException {
+		String[] path = prepareUri( nodeUri );
+
+		try {
+			/* ./OSGi/apps */
+			if (path.length == 1 && path[ 0 ].equals( PREFIX_APPS )) {
+				return gatherChildren(); 
+			}
+			/* ./OSGi/app_instances */
+			if (path.length == 1 && path[ 0 ].equals( PREFIX_APPINST ) ) {
+				
+				ServiceReference[] hrefs;
+				try {
+					hrefs = bc.getServiceReferences(
+							ApplicationHandle.class.getName(), null);
+				}
+				catch (InvalidSyntaxException e) {
+					throw new RuntimeException("Internal error.");
+				}
+				
+				if (hrefs == null)
+					return new String[0];
+
+				String[] ret = new String[ hrefs.length ];
+				for (int i = 0; i < hrefs.length; ++i) {
+					ret[i] = (String) hrefs[i].getProperty( "application.pid" );
+				}
+				return ret;
+			}
+			/* ./OSGi/apps/<unique_id> */
+			if ( path.length == 2 && path[0].equals( PREFIX_APPS ) ) {
+				
+				checkUniqueID( nodeUri, path[ 1 ] );
+				
+				String uid = path[1];
+				return propertyNames;
+			}
+			/* ./OSGi/app_instances/<application.pid> */
+			if ( path.length == 2 && path[0].equals( PREFIX_APPINST ) ) {
+				
+				if( !checkApplicationPid( path[ 1 ] ))
+					throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+							"Node (" + nodeUri + ") not found.");
+					
+				return new String[] {"state", "type"};  
+			}
+			/* ./OSGi/apps/<unique_id>/launch */
+			if ( path.length == 3 && path[ 0 ].equals( PREFIX_APPS ) && path[ 2 ].equals( "launch" ) ) {
+				
+				checkUniqueID( nodeUri, path[ 1 ] );
+				
+				String[] keys = (String[]) execIds.keySet().toArray( new String[0] );
+				
+				String[] ret = new String[ keys.length ];
+				for (int i = 0; i < keys.length; ++i)
+					ret[i] = keys[i].substring(keys[i].lastIndexOf("/") + 1,
+							keys[i].length());
+				
+				return ret;
+			}
+			/* ./OSGi/apps/<unique_id>/launch/<exec_id> */
+			if ( path.length == 4 && path[ 0 ].equals( PREFIX_APPS ) && path[ 2 ].equals( "launch" ) ) {
+				
+				checkUniqueID( nodeUri, path[ 1 ] );
+				
+				String param = path[ 3 ];
+				String key = path[ 1 ] + path[3];
+				
+				Hashtable ht = (Hashtable) execIds.get(key);
+				if( ht == null )
+					throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+							"Node (" + nodeUri + ") not found.");
+				
+				return (String[]) ht.keySet().toArray(new String[0]);
+			}
+			else {
+				throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+						"Node (" + nodeUri + ") not found.");
+			}
+		}
+		catch (Exception e) {
+			throw new DmtException(nodeUri, DmtException.OTHER_ERROR, e
+					.getMessage(), e);
+		}
+	}
+
+  public boolean supportsAtomic()
+  {
+  	return false;
+  }
+
+	private String[] gatherChildren() throws Exception {
+		ServiceReference[] refs = bc.getServiceReferences(
+				ApplicationDescriptor.class.getName(), null);
+		
+		if (refs == null)
+			return new String[0];
+		
+		String[] ret = new String[refs.length];
+		
+		for ( int i = 0; i < refs.length; ++i )
+			ret[ i ] = (String) refs[i].getProperty( Constants.SERVICE_PID );
+		
+		return ret;
+	}
+	
+	public void execute(DmtSession session, String nodeUri, String data)
+			throws DmtException {
+
+		String[] path = prepareUri( nodeUri );
+
+		/* ./OSGi/apps/<unique_id> */
+		if( path.length == 2 && path[ 0 ].equals( PREFIX_APPINST )) {
+			
+			try 
+			{
+				ServiceReference[] hrefs = bc.getServiceReferences(
+						ApplicationHandle.class.getName(), "(application.pid=" + path[ 1 ] + ")");
+			
+				if (hrefs == null)
+					throw new DmtException(nodeUri,
+							DmtException.NODE_NOT_FOUND, "Node (" + nodeUri + ") not found.");
+				
+				ApplicationHandle handle = (ApplicationHandle) bc.getService( hrefs[ 0 ] );
+				if ( data.equalsIgnoreCase( "STOP" ))
+					handle.destroy();
+				bc.ungetService( hrefs[ 0 ] );
+			}catch( Exception e ) {
+				throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+						"Execution of " + nodeUri + " is failed.");
+			}
+		}
+		
+		/* ./OSGi/apps/<unique_id>/launch/<exec_id> */
+		if ( path.length != 4 && !path[ 0 ].equals( PREFIX_APPS ))
+			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+					"Execution of " + nodeUri + " is not allowed.");
+		
+		ServiceReference appDescRef = getApplicationDescriptorRef( path[ 1 ] );
+		if (appDescRef == null)
+			throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+					"Node (" + nodeUri + ") not found.");		
+		
+		String key = path[ 1 ] + "/" + path[ 3 ];
+		
+		Hashtable args = (Hashtable) execIds.get(key);
+		if ( args == null )
+			throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+					"Node (" + nodeUri + ") not found.");
+		
+		ApplicationDescriptor appDesc = (ApplicationDescriptor) bc.getService( appDescRef );
+						
+		try {
+			appDesc.launch( args );
+		}
+		catch (Exception e) {
+			throw new DmtException(nodeUri, DmtException.OTHER_ERROR, e.getMessage());
+		}
+		bc.ungetService( appDescRef );
+	}
+
+	private static String[] prepareUri(String nodeUri) {
+		if( !nodeUri.startsWith( URI_ROOT_APP ) && !nodeUri.startsWith( URI_ROOT_APPINST ))
+			return new String[] {};
+		
+		nodeUri = nodeUri.substring( (URI_ROOT_OSGI + "/").length() );
+				
+		// relativeUri will not be null because the DmtAdmin only gives us nodes
+		// in our subtree
+		String[] path = Splitter.split(nodeUri, '/', -1);
+		if (path.length == 1 && path[0].equals(""))
+			return new String[] {};
+		return path;
+	}
+	
+	private void checkUniqueID( String nodeUri, String pid ) throws DmtException {
+		String uid = pid;		
+		ServiceReference appDescRef = getApplicationDescriptorRef( uid );
+		if (appDescRef == null)
+			throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+					"Node (" + nodeUri + ") not found.");		
+	}
+
+	private boolean checkApplicationPid( String pid ) {
+		try {
+			ServiceReference[] hrefs = bc.getServiceReferences(
+					ApplicationHandle.class.getName(), null);
+			if (hrefs == null)
+				return false;
+			for (int i = 0; i < hrefs.length; ++i) {
+				if ( pid.equals((String) hrefs[i].getProperty("application.pid") ) )
+					return true;
+			}
+			return false;
+		}catch( Exception e ) {
+			return false;			
+		}
+	}
+		
+  public void open(String subtreeUri, int lockMode, DmtSession session) throws DmtException
+	{
+		// TODO Auto-generated method stub
+	}
+
+  public void open(String subtreeUri, DmtSession session)
+			throws DmtException {
+		// TODO Auto-generated method stub
+	}
+
+	public void close() throws DmtException {
+		// TODO Auto-generated method stub
 	}
 
 	public String getNodeTitle(String nodeUri) throws DmtException {
@@ -356,185 +581,6 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 	public int getNodeSize(String nodeUri) throws DmtException {
 		// TODO Auto-generated method stub
 		return 0;
-	}
-
-	public String[] getChildNodeNames(String nodeUri) throws DmtException {
-		String[] path = prepareUri( nodeUri );
-
-		try {
-			if (path.length == 1 && path[0].equals( PREFIX_APPS )) {   /* ./OSGi/apps */
-				return gatherChildren(); 
-			}
-			if (path.length == 1 && path[0].equals( PREFIX_APPINST ) ) { /* ./OSGi/app_instances */
-				
-				ServiceReference[] hrefs;
-				try {
-					hrefs = bc.getServiceReferences(
-							ApplicationHandle.class.getName(), null);
-				}
-				catch (InvalidSyntaxException e) {
-					throw new RuntimeException("Internal error.");
-				}
-				
-				if (hrefs == null)
-					return new String[0];
-
-				String[] ret = new String[hrefs.length];
-				for (int i = 0; i < hrefs.length; ++i) {
-					ret[i] = (String) hrefs[i].getProperty( "application.pid" );
-				}
-				return ret;
-			}
-			if ( path.length == 2 && path[0].equals( PREFIX_APPS ) ) { /* ./OSGi/apps/<unique_id> */
-				String uid = path[1];
-				return propertyNames;
-			}
-			if ( path.length == 2 && path[0].equals( PREFIX_APPINST ) ) {
-				return new String[] {"state", "type"};  /* ./OSGi/app_instances/<service.pid> */
-			}
-			if ( path.length == 3 && path[0].equals( PREFIX_APPS ) ) {
-				String[] keys = (String[]) execIds.keySet().toArray(
-						new String[0]);
-				String[] ret = new String[keys.length];
-				for (int i = 0; i < keys.length; ++i)
-					ret[i] = keys[i].substring(keys[i].lastIndexOf("/") + 1,
-							keys[i].length());
-				return ret;
-			}
-			if ( path.length == 4 ) {
-				String param = path[3];
-				String key = new String(path[0] + "/" + path[1] + "/" + path[2]
-						+ "/" + path[3]);
-				return (String[]) ((Hashtable) execIds.get(key)).keySet()
-						.toArray(new String[0]);
-			}
-			else {
-				throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
-						"Node (" + nodeUri + ") not found.");
-			}
-		}
-		catch (Exception e) {
-			throw new DmtException(nodeUri, DmtException.OTHER_ERROR, e
-					.getMessage(), e);
-		}
-	}
-	
-  public void open(String subtreeUri, int lockMode, DmtSession session) throws DmtException
-	{
-		// TODO Auto-generated method stub
-	}
-
-  public boolean supportsAtomic()
-  {
-  	return false;
-  }
-
-	private String getUidFromUri(String nodeUri) {
-		String uid = null;
-		int s = nodeUri.indexOf('/', URI_ROOT_APP.length());
-		if (-1 == s)
-			return uid;
-		int ss = nodeUri.indexOf('/', s + 1);
-		if (-1 == ss) {
-			uid = nodeUri.substring(URI_ROOT_APP.length() + 1);
-			if ("".equals(uid))
-				return null;
-		}
-		else {
-			uid = nodeUri.substring(s + 1, ss);
-		}
-		return uid;
-	}
-
-	private String[] gatherChildren() throws Exception {
-		ServiceReference[] refs = bc.getServiceReferences(
-				ApplicationDescriptor.class.getName(), null);
-		
-		if (refs == null)
-			return new String[0];
-		
-		String[] ret = new String[refs.length];
-		
-		for ( int i = 0; i < refs.length; ++i )
-			ret[ i ] = (String) refs[i].getProperty( Constants.SERVICE_PID );
-		
-		return ret;
-	}
-
-  public void clone(String nodeUri, String newNodeUri, boolean recursive)
-			throws DmtException {
-		// TODO Auto-generated method stub
-	}
-
-	public void execute(DmtSession session, String nodeUri, String data)
-			throws DmtException {
-		String[] sarr = Splitter.split(nodeUri, '/', 0);
-		if ("application_instances".equals(sarr[2])) {
-			try {
-				ServiceReference[] hrefs = bc.getServiceReferences(
-						ApplicationHandle.class.getName(), "(service.id="
-								+ sarr[3] + ")");
-				if (null == hrefs)
-					throw new DmtException(nodeUri,
-							DmtException.NODE_NOT_FOUND, "Node (" + nodeUri
-									+ ") not found.");
-				ApplicationHandle handle = (ApplicationHandle) bc
-						.getService(hrefs[0]);
-				if ("STOP".equalsIgnoreCase(data))
-					handle.destroy();
-				bc.ungetService(hrefs[0]);
-			}
-			catch (Exception e) {
-				throw new RuntimeException("Internal error.");
-			}
-		}
-		if (6 != sarr.length
-				&& !(4 == sarr.length && "application_instances"
-						.equals(sarr[2])))
-			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
-					"Execution of " + nodeUri + " is not allowed.");
-		if (6 == sarr.length) {
-			String uid = sarr[3];
-			ServiceReference sref = getApplicationDescriptorRef(uid);
-			if (null == sref)
-				throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
-						"Node (" + nodeUri + ") not found.");
-			String key = new String(sarr[0] + "/" + sarr[1] + "/" + sarr[2]
-					+ "/" + sarr[3] + "/" + sarr[4] + "/" + sarr[5]);
-			Hashtable args = (Hashtable) execIds.get(key);
-			if (null == args)
-				throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
-						"Node (" + nodeUri + ") not found.");
-			ApplicationDescriptor descr = (ApplicationDescriptor) bc
-					.getService(sref);
-						
-			try {
-				descr.launch( args );
-			}
-			catch (Exception e) {
-				throw new DmtException(nodeUri, DmtException.OTHER_ERROR, e
-						.getMessage());
-			}
-			bc.ungetService(sref);
-		}
-	}
-
-	private boolean isAppInstUri( String[] uri ) {
-		return ( uri.length > 0 && uri[0].equals( PREFIX_APPINST ) );
-	}
-	
-	private static String[] prepareUri(String nodeUri) {
-		if( !nodeUri.startsWith( URI_ROOT_APP ) && !nodeUri.startsWith( URI_ROOT_APPINST ))
-			return new String[] {};
-		
-		nodeUri = nodeUri.substring( (URI_ROOT_OSGI + "/").length() );
-				
-		// relativeUri will not be null because the DmtAdmin only gives us nodes
-		// in our subtree
-		String[] path = Splitter.split(nodeUri, '/', -1);
-		if (path.length == 1 && path[0].equals(""))
-			return new String[] {};
-		return path;
 	}
 
 	public void rollback() throws DmtException {
@@ -580,4 +626,9 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 	public void renameNode(String nodeUri, String newName) throws DmtException {
 		// TODO Auto-generated method stub		
 	}	
+
+  public void clone(String nodeUri, String newNodeUri, boolean recursive)
+			throws DmtException {
+		// TODO Auto-generated method stub
+	}
 }
