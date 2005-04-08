@@ -294,12 +294,12 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			ServiceReference[] hrefs;
 			try {
 				hrefs = bc.getServiceReferences(ApplicationHandle.class
-						.getName(), "(service.id=" + path[1] + ")");
+						.getName(), "(" + Constants.SERVICE_PID + "=" + path[1] + ")");
 			}
 			catch (InvalidSyntaxException e) {
 				throw new RuntimeException("Internal error.");
 			}
-			if (null == hrefs)
+			if (hrefs == null)
 				throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
 						"Node (" + nodeUri + ") not found.");
 			ApplicationHandle handle = (ApplicationHandle) bc
@@ -309,12 +309,16 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 				try {
 					state = handle.getState();
 				}catch( Exception e ) {}
+				bc.ungetService(hrefs[0]);
 				return new DmtData( state );
 			}
 			if (path[2].equals("type")) {
-				return new DmtData(handle.getInstanceID());
+				bc.ungetService(hrefs[0]);
+				return new DmtData(handle.getApplicationDescriptor().getPID());
 			}
-			bc.ungetService(hrefs[0]);
+
+			throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+					"Node (" + nodeUri + ") not found.");
 		}
 		if ( path.length == 5 && path[ 0 ].equals( PREFIX_APPS ) && path[ 3 ].equals( "launch" ) ) {
 			String key = new String(path[0] + "/" + path[1] + "/" + path[2] + "/" + path[3] );
@@ -363,6 +367,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 				return gatherChildren(); 
 			}
 			if (path.length == 1 && path[0].equals( PREFIX_APPINST ) ) { /* ./OSGi/app_instances */
+				
 				ServiceReference[] hrefs;
 				try {
 					hrefs = bc.getServiceReferences(
@@ -371,12 +376,13 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 				catch (InvalidSyntaxException e) {
 					throw new RuntimeException("Internal error.");
 				}
-				if (null == hrefs)
+				
+				if (hrefs == null)
 					return new String[0];
+
 				String[] ret = new String[hrefs.length];
 				for (int i = 0; i < hrefs.length; ++i) {
-					Long l = (Long) hrefs[i].getProperty("service.id");
-					ret[i] = l.toString();
+					ret[i] = (String) hrefs[i].getProperty( "application.pid" );
 				}
 				return ret;
 			}
