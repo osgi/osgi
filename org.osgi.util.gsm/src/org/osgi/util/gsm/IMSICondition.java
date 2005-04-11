@@ -37,18 +37,26 @@ import org.osgi.service.condpermadmin.Condition;
 public class IMSICondition implements Condition {
 	protected static final String imsi = System.getProperty("org.osgi.util.gsm.imsi");
 
-	private static final IMSICondition trueCondition = new IMSICondition();
-	private static final IMSICondition falseCondition = new IMSICondition();
+	private static final IMSICondition trueCondition = new IMSICondition(true);
+	private static final IMSICondition falseCondition = new IMSICondition(false);
+	private final boolean satisfied;
 
-	private IMSICondition() {}
+	private IMSICondition(boolean satisfied) { this.satisfied = satisfied; }
 
 	/**
 	 * Creates an IMSI condition object
 	 * 
 	 * @param bundle ignored
 	 * @param imsi The IMSI value of the subscriber.
+	 * @throws NullPointerException if one of the parameters is null
+	 * @throws IllegalArgumentException if the imsi is not a string of 15 digits
 	 */
 	public static Condition getInstance(Bundle bundle, String imsi) {
+		if (imsi.length()!=15) throw new IllegalArgumentException("not a valid imei: "+imsi);
+		for(int i=0;i<imsi.length();i++) {
+			int c = imsi.charAt(i);
+			if (c<'0'||c>'9') throw new IllegalArgumentException("not a valid imei: "+imsi);
+		}
 		return (imsi.equals(IMSICondition.imsi))?trueCondition:falseCondition;
 	}
 
@@ -59,7 +67,7 @@ public class IMSICondition implements Condition {
 	 * @return true if the IMSI value match.
 	 */
 	public boolean isSatisfied() {
-		return (this==trueCondition);
+		return satisfied;
 	}
 
 	/**

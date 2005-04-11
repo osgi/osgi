@@ -60,6 +60,7 @@ public class TransferCostCondition implements Condition {
 	 * @param bundle ignored
 	 * @param costLimit The abstract limit cost. Possible values are "LOW","MEDIUM"
 	 *        and "HIGH". 
+	 * @throws IllegalArgumentException if the costLimit parameter is not from the possible values
 	 */
 	public static Condition getInstance(Bundle bundle, String costLimit) {
 		if (costLimit.equals("LOW")) return lowCostLimit;
@@ -73,11 +74,12 @@ public class TransferCostCondition implements Condition {
 	 * in this thread will check for this cost, and only those permissions will be
 	 * activated, that have a cost limit higher than this. The caller MUST call
 	 * resetTransferCost(), after the permission checks are done. If this
-	 * function is not called, the default behavior is 'no checks permformed, all tests
-	 * succeed'.
+	 * function is not called, the default behavior is 'no checks permformed, isSatisfied method
+	 * always returns true'.
 	 * 
 	 * @param cost the cost of the current transaction. Only those conditions will evaluate to true,
 	 * 			that are equal or higher than this.
+	 * @throws IllegalArgumentException if the cost parameter is not from the possible values
 	 */
 	public static void setTransferCost(String cost) {
 		if (cost==null) { context.set(null); return; }
@@ -89,7 +91,7 @@ public class TransferCostCondition implements Condition {
 	}
 
 	/**
-	 * Resets the transfer cost. After this, the transfer cost checks always succeed.
+	 * Resets the transfer cost. After this, the transfer cost isSatisfied calls return true.
 	 */
 	public static void resetTransferCost() {
 		context.set(null);
@@ -97,7 +99,7 @@ public class TransferCostCondition implements Condition {
 
 	/**
 	 * Gets the current transfer cost.
-	 * @return the transfer cost value, or null
+	 * @return the transfer cost value, or null if there is none set (like, after calling resetTransferCost())
 	 */
 	protected static String getTransferCost() {
 		return (String) context.get();

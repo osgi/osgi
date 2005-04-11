@@ -48,9 +48,16 @@ public class IMEICondition implements Condition {
 	 * Creates an IMEICondition object.
 	 * 
 	 * @param bundle ignored
-	 * @param imei The IMEI value of the device.
+	 * @param imei The IMEI value of the device. Must be 15 digits, no hypens.
+	 * @throws NullPointerException if one of the parameters is null
+	 * @throws IllegalArgumentException if the imei is not a string of 15 digits
 	 */
 	public static Condition getInstance(Bundle bundle, String imei) {
+		if (imei.length()!=15) throw new IllegalArgumentException("not a valid imei: "+imei);
+		for(int i=0;i<imei.length();i++) {
+			int c = imei.charAt(i);
+			if (c<'0'||c>'9') throw new IllegalArgumentException("not a valid imei: "+imei);
+		}
 		return imei.equals(IMEICondition.imei)?trueCondition:falseCondition;
 	}
 
