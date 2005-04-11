@@ -476,6 +476,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 				if ( data.equalsIgnoreCase( "STOP" ))
 					handle.destroy();
 				bc.ungetService( hrefs[ 0 ] );
+				return;
 			}catch( Exception e ) {
 				throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
 						"Execution of " + nodeUri + " is failed.");
@@ -483,7 +484,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		}
 		
 		/* ./OSGi/apps/<unique_id>/launch/<exec_id> */
-		if ( path.length != 4 && !path[ 0 ].equals( PREFIX_APPS ))
+		if ( path.length != 4 || !path[ 0 ].equals( PREFIX_APPS ))
 			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
 					"Execution of " + nodeUri + " is not allowed.");
 		
