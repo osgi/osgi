@@ -505,7 +505,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			appDesc.launch( args );
 		}
 		catch (Exception e) {
-			throw new DmtException(nodeUri, DmtException.OTHER_ERROR, e.getMessage());
+			throw new DmtException(nodeUri, DmtException.OTHER_ERROR, e.getMessage(), e);
 		}
 		bc.ungetService( appDescRef );
 	}
