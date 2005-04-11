@@ -6,8 +6,8 @@
 		Value 1
 		Value 2
 		Value 3
-	<property>
-	<properties entry="org.osgi.test.cases.component.tb2.impl.serviceconsumerlookup.properties"/>
+	</property>
+	<properties entry="org/osgi/test/cases/component/tb2/impl/serviceconsumerlookup.properties"/>
 
   <service servicefactory="false">
 		<provide interface="org.osgi.test.cases.component.tb2.ServiceConsumerLookup"/>
