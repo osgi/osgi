@@ -510,6 +510,9 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		if( !nodeUri.startsWith( URI_ROOT_APP ) && !nodeUri.startsWith( URI_ROOT_APPINST ))
 			return new String[] {};
 		
+		if( nodeUri.endsWith( "/" ))
+			nodeUri = nodeUri.substring( 0, nodeUri.length() -1 );
+		
 		nodeUri = nodeUri.substring( (URI_ROOT_OSGI + "/").length() );
 				
 		// relativeUri will not be null because the DmtAdmin only gives us nodes
