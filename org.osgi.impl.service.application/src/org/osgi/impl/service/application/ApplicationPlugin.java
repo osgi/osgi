@@ -231,7 +231,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 				return execIds.get(key) != null;
 			}
 			/* ./OSGi/apps/<unique_id>/launch/<exec_id>/<property> */
-			if ( path.length == 5 && path[ 0 ].equals( PREFIX_APPS ) ) {
+			if ( path.length == 5 && path[ 0 ].equals( PREFIX_APPS ) && path[ 2 ].equals( "launch" ) ) {
 				String key = path[ 1 ] + "/" + path[ 3 ];
 			
 				checkUniqueID( nodeUri, path[ 1 ]);
