@@ -231,11 +231,15 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 				return execIds.get(key) != null;
 			}
 			/* ./OSGi/apps/<unique_id>/launch/<exec_id>/<property> */
-			if ( path.length != 5 && path[ 0 ].equals( PREFIX_APPS ) ) {
+			if ( path.length == 5 && path[ 0 ].equals( PREFIX_APPS ) ) {
 				String key = path[ 1 ] + "/" + path[ 3 ];
 			
-				checkUniqueID( nodeUri, path[ 1 ]);			
-				Object data = ((Hashtable) execIds.get(key)).get( path[ 4 ] );
+				checkUniqueID( nodeUri, path[ 1 ]);
+				
+				Hashtable ht = (Hashtable)execIds.get( key );
+				if( ht == null )
+					return false;				
+				Object data = ht.get( path[ 4 ] );
 				return data != null;
 			}
 			return false;
