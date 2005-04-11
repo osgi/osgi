@@ -240,30 +240,12 @@ public class TestMegletContainerBundleActivator extends Object implements
 		else
 			System.out
 					.println("Meglet bundle install onto Meglet container      PASSED");
-		if (!testCase_appPluginCheckInstalledApps()) 																/* TODO */
-			System.out 																																/* TODO */
-					.println("AppPlugin: checking the installed application    FAILED"); 	/* TODO */
-		else 																																				/* TODO */
-			System.out 																																/* TODO */
-					.println("AppPlugin: checking the installed application    PASSED"); 	/* TODO */
-		if (!testCase_appPluginCheckRunningApps()) 																	/* TODO */
-			System.out 																																/* TODO */
-					.println("AppPlugin: checking a running application        FAILED"); 	/* TODO */
-		else 																																				/* TODO */
-			System.out 																																/* TODO */
-					.println("AppPlugin: checking a running application        PASSED"); 	/* TODO */
-		if (!testCase_appPluginCheckApplicationLaunch()) 														/* TODO */
-			System.out 																																/* TODO */
-					.println("AppPlugin: checking the application launching    FAILED"); 	/* TODO */
-		else 																																				/* TODO */
-			System.out 																																/* TODO */
-					.println("AppPlugin: checking the application launching    PASSED"); 	/* TODO */
-		if (!testCase_appPluginCheckApplicationStop()) 															/* TODO */
-			System.out 																																/* TODO */
-					.println("AppPlugin: checking the application stopping     FAILED"); 	/* TODO */
-		else 																																				/* TODO */
-			System.out 																																/* TODO */
-					.println("AppPlugin: checking the application stopping     PASSED"); 	/* TODO */
+		if (!testCase_appPluginCheckInstalledApps()) 																
+			System.out 																																
+					.println("AppPlugin: checking the installed application    FAILED"); 	
+		else 																																				
+			System.out 																																
+					.println("AppPlugin: checking the installed application    PASSED"); 	
 		if (!testCase_checkAppDescs())
 			System.out
 					.println("Checking the installed Meglet app descriptors    FAILED");
@@ -414,12 +396,30 @@ public class TestMegletContainerBundleActivator extends Object implements
 		else
 			System.out
 					.println("Checking the filter matching of the scheduler    PASSED");
-//		if (!testCase_appPluginCheckInstalledApps())
-//			System.out
-//					.println("AppPlugin: checking the installed application    FAILED");
-//		else
-//			System.out
-//					.println("AppPlugin: checking the installed application    PASSED");
+		if (!testCase_appPluginCheckInstalledApps())
+			System.out
+					.println("AppPlugin: checking the installed application    FAILED");
+		else
+			System.out
+					.println("AppPlugin: checking the installed application    PASSED");
+		if (!testCase_appPluginCheckRunningApps()) 																	
+			System.out 																																
+					.println("AppPlugin: checking a running application        FAILED"); 	
+		else 																																				
+			System.out 																																
+					.println("AppPlugin: checking a running application        PASSED"); 	
+		if (!testCase_appPluginCheckApplicationLaunch()) 														
+			System.out 																																
+					.println("AppPlugin: checking the application launching    FAILED"); 	
+		else 																																				
+			System.out 																																
+					.println("AppPlugin: checking the application launching    PASSED"); 	
+		if (!testCase_appPluginCheckApplicationStop()) 															
+			System.out 																																
+					.println("AppPlugin: checking the application stopping     FAILED"); 	
+		else 																																				
+			System.out 																																
+					.println("AppPlugin: checking the application stopping     PASSED"); 	
 		if (!testCase_uninstallMegletBundle())
 			System.out
 					.println("Meglet bundle uninstall from Meglet container    FAILED");
@@ -1695,7 +1695,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			values[ 2 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_VENDOR ) );
 			values[ 3 ] = Boolean.valueOf( (String)props.get( ApplicationDescriptor.APPLICATION_AUTOSTART ) );
 			values[ 4 ] = Boolean.valueOf( (String)props.get( ApplicationDescriptor.APPLICATION_LOCKED ) );
-			values[ 5 ] = Boolean.valueOf( (String)props.get( ApplicationDescriptor.APPLICATION_VENDOR ) );
+			values[ 5 ] = Boolean.valueOf( (String)props.get( ApplicationDescriptor.APPLICATION_SINGLETON ) );
 			values[ 6 ] = (String)( props.get( "application.bundle.id" ) );
 			
 			boolean found[] = new boolean[ names.length ];				
@@ -1717,7 +1717,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 						switch( value.getFormat() )
 						{
 						case DmtData.FORMAT_BOOLEAN:
-							if( !((Boolean)values[j]).equals( new Boolean( value.getBoolean() ) ) )
+							if( ((Boolean)values[j]).booleanValue() != value.getBoolean() )
 								throw new Exception( "Invalid value of " + names[ j ] + " (" + values [ j ] + ") !" );
 							break;
 						case DmtData.FORMAT_STRING:
@@ -1725,7 +1725,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 								throw new Exception( "Invalid value of " + names[ j ] + " (" + values [ j ] + ") !" );														
 							break;
 						case DmtData.FORMAT_INTEGER:
-							if( !((Integer)values[j]).equals( new Integer( value.getInt() ) ) )
+							if( ((Integer)values[j]).intValue() != value.getInt() )
 								throw new Exception( "Invalid value of " + names[ j ] + " (" + values [ j ] + ") !" );
 							break;
 						default:
