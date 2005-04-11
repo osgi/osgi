@@ -258,6 +258,12 @@ public class TestMegletContainerBundleActivator extends Object implements
 		else 																																				/* TODO */
 			System.out 																																/* TODO */
 					.println("AppPlugin: checking the application launching    PASSED"); 	/* TODO */
+		if (!testCase_appPluginCheckApplicationStop()) 															/* TODO */
+			System.out 																																/* TODO */
+					.println("AppPlugin: checking the application stopping     FAILED"); 	/* TODO */
+		else 																																				/* TODO */
+			System.out 																																/* TODO */
+					.println("AppPlugin: checking the application stopping     PASSED"); 	/* TODO */
 		if (!testCase_checkAppDescs())
 			System.out
 					.println("Checking the installed Meglet app descriptors    FAILED");
@@ -1893,6 +1899,67 @@ public class TestMegletContainerBundleActivator extends Object implements
 				return false;
 			
 			return true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	boolean testCase_appPluginCheckApplicationStop() {
+		ApplicationDescriptor appDesc = appDescs[0];
+		String appUID = appDesc.getPID();
+		
+		try {
+			
+			if( !testCase_launchApplication() )
+				return false;
+			
+			DmtSession session = dmtFactory.getSession("./OSGi/app_instances");
+
+			String[] nodeNames = session.getChildNodeNames( "./OSGi/app_instances" );
+			
+			if( nodeNames == null || nodeNames.length != 1 )
+				throw new Exception( "Couldn't find the application instance node!" );
+			
+			String instanceName = nodeNames[ 0 ];			
+			session.execute( "./OSGi/app_instances/" + instanceName, "STOP" );			
+
+			nodeNames = session.getChildNodeNames( "./OSGi/app_instances" );
+			if( nodeNames != null && nodeNames.length != 0 )
+				throw new Exception( "Application didn't stop!" );
+			
+			if (!checkResultFile("STOP"))
+				throw new Exception("Result of the stop is not STOP!");
+
+			if( !waitStateChangeEvent( APPLICATION_STOPPING, appUID ) )
+				throw new Exception("Didn't receive the stopping event!");
+			if( !waitStateChangeEvent( APPLICATION_STOPPED, appUID ) )
+				throw new Exception("Didn't receive the stopped event!");
+
+			ServiceReference[] appList = bc.getServiceReferences(
+					"org.osgi.service.application.ApplicationHandle",
+					"(application.pid="
+							+ getAppDesc( appHandle ).getPID()
+							+ ")");
+			if (appList != null && appList.length != 0) {
+				for (int i = 0; i != appList.length; i++) {
+					ApplicationHandle handle = (ApplicationHandle) bc
+							.getService(appList[i]);
+					bc.ungetService(appList[i]);
+					if (handle == appHandle)
+						throw new Exception(
+								"Application handle doesn't removed after stop!");
+				}
+			}
+
+			try {
+			  appHandle.getState();
+			}catch( Exception e ) 
+			{
+				return true;
+			}
+			throw new Exception("The status didn't change to NONEXISTENT!");			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
