@@ -609,22 +609,42 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		throw new DmtException( nodeUri, DmtException.FEATURE_NOT_SUPPORTED,
 														"Version property not supported!" ); 
 	}
+
+	public void setDefaultNodeValue(String nodeUri) throws DmtException {
+		throw new DmtException( nodeUri, DmtException.METADATA_MISMATCH, 
+		"The specified node has no default value." );		
+	}
+
+	public void createLeafNode(String nodeUri) throws DmtException {
+		throw new DmtException( nodeUri, DmtException.METADATA_MISMATCH, 
+														"The specified node has no default value." );		
+	}
+
+	public int getNodeSize(String nodeUri) throws DmtException {
+		DmtData nodeValue = getNodeValue( nodeUri );
+		
+		switch( nodeValue.getFormat() )
+		{
+		case DmtData.FORMAT_BINARY:
+			return nodeValue.getBinary().length;
+		case DmtData.FORMAT_BOOLEAN:
+			return 1;
+		case DmtData.FORMAT_INTEGER:
+			return 4;
+		case DmtData.FORMAT_STRING:
+		case DmtData.FORMAT_XML:
+			return nodeValue.getString().length();
+		default:
+			return 0;
+		}
+	}
 	
 	public String getNodeType(String nodeUri) throws DmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public int getNodeSize(String nodeUri) throws DmtException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
-		// TODO Auto-generated method stub		
-	}
-
-	public void setDefaultNodeValue(String nodeUri) throws DmtException {
 		// TODO Auto-generated method stub		
 	}
 
@@ -633,10 +653,6 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 	}
 
 	public void deleteNode(String nodeUri) throws DmtException {
-		// TODO Auto-generated method stub		
-	}
-
-	public void createLeafNode(String nodeUri) throws DmtException {
 		// TODO Auto-generated method stub		
 	}
 
