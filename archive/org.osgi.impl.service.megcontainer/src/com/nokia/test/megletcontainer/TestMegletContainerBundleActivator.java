@@ -252,6 +252,12 @@ public class TestMegletContainerBundleActivator extends Object implements
 		else 																																				/* TODO */
 			System.out 																																/* TODO */
 					.println("AppPlugin: checking a running application        PASSED"); 	/* TODO */
+		if (!testCase_appPluginCheckApplicationLaunch()) 														/* TODO */
+			System.out 																																/* TODO */
+					.println("AppPlugin: checking the application launching    FAILED"); 	/* TODO */
+		else 																																				/* TODO */
+			System.out 																																/* TODO */
+					.println("AppPlugin: checking the application launching    PASSED"); 	/* TODO */
 		if (!testCase_checkAppDescs())
 			System.out
 					.println("Checking the installed Meglet app descriptors    FAILED");
@@ -1806,6 +1812,83 @@ public class TestMegletContainerBundleActivator extends Object implements
 
 			session.close();
 
+			if( !testCase_stopApplication() )
+				return false;
+			
+			return true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	boolean testCase_appPluginCheckApplicationLaunch()
+	{
+		ApplicationDescriptor appDesc = appDescs[0];
+		String appUID = appDesc.getPID();
+		
+		try {
+			DmtSession session = dmtFactory.getSession("./OSGi/apps");
+			
+			String[] nodeNames = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch" );
+			if( nodeNames != null && nodeNames.length != 0 )
+				throw new Exception( "Exec-id found without setting it manually!" );
+		
+			session.createInteriorNode( "./OSGi/apps/" + appUID + "/launch/exec_id" );
+			
+			nodeNames = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch" );
+			if( nodeNames == null || nodeNames.length != 1 )
+				throw new Exception( "Interior node wasn't created properly!" );
+			if( !nodeNames[ 0 ].equals("exec_id") )
+				throw new Exception( "The name of the interior node is " + nodeNames [ 0 ] + 
+						                  "instead if exec_id !" );
+			
+			String[] childNodes = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch/exec_id" );
+			if( childNodes != null && childNodes.length != 0 )
+				throw new Exception( "Extra parameters added to the exec_id interior node!" );
+			
+			Map args = createArgs();
+			
+			Iterator it = args.keySet().iterator();
+			while( it.hasNext() )
+			{
+				String prop = (String)it.next();
+				String value = (String)args.get( prop );
+				
+				session.createLeafNode( "./OSGi/apps/" + appUID + "/launch/exec_id/" + prop, 
+						                    new DmtData( value ) );
+				
+				childNodes = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch/exec_id" );
+				if( childNodes == null || childNodes.length == 0 )
+					throw new Exception( "Property wasn't added properly!" );
+				if( Arrays.asList( childNodes ).indexOf( prop ) == -1 )
+					throw new Exception( "Property wasn't added properly!" );
+				
+				DmtData content = session.getNodeValue( "./OSGi/apps/" + appUID + "/launch/exec_id/" + prop );
+				if( !content.getString().equals( value ) )
+					throw new Exception( "Illegal value was set to the property!" );
+			}
+			
+			session.execute( "./OSGi/apps/" + appUID + "/launch/exec_id", null );
+
+			if (!checkResultFile("START"))
+				throw new Exception("Result of the launch is not START!");
+			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getPID() ))
+				throw new Exception("Didn't receive the start event!");
+			ServiceReference[] appList = bc.getServiceReferences(
+					"org.osgi.service.application.ApplicationHandle",
+					"(descriptor.pid=" + appDesc.getPID() + ")");
+			if (appList == null || appList.length == 0)
+				throw new Exception("No registered application handle found!");
+
+			appHandle = (ApplicationHandle) bc.getService(appList[0]);
+			
+			if (appHandle.getState() != ApplicationHandle.RUNNING)
+				throw new Exception("Application didn't started!");
+
+			bc.ungetService( appList[0] );
+			
 			if( !testCase_stopApplication() )
 				return false;
 			
