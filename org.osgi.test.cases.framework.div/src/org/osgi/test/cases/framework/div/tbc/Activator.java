@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.Properties;
 import java.util.Vector;
 
 import org.osgi.framework.Bundle;
@@ -359,6 +360,9 @@ public class Activator extends Thread implements FrameworkListener,
 		Bundle tb;
 		String res;
 		try {
+			Properties props = System.getProperties();
+			props.put("org.osgi.framework.windowing.system", "xyz");
+			System.setProperties(props);
 			tb = _context.installBundle(_tcHome + "tb16.jar");
 			try {
 				tb.start();
