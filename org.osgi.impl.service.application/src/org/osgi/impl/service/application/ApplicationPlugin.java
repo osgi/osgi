@@ -494,12 +494,36 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		
 		String key = path[ 1 ] + "/" + path[ 3 ];
 		
-		Hashtable args = (Hashtable) execIds.get(key);
-		if ( args == null )
+		Hashtable dmtArgs = (Hashtable) execIds.get(key);
+		if ( dmtArgs == null )
 			throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
 					"Node (" + nodeUri + ") not found.");
 		
 		ApplicationDescriptor appDesc = (ApplicationDescriptor) bc.getService( appDescRef );
+		
+		Hashtable args = new Hashtable();
+		
+		Iterator it = dmtArgs.keySet().iterator();
+		while( it.hasNext() ) {
+			Object argKey = it.next();
+			DmtData argValue = (DmtData) dmtArgs.get( argKey );
+			
+			switch( argValue.getFormat() ) {
+				case DmtData.FORMAT_BINARY:
+					args.put( argKey, argValue.getBinary() );
+					break;
+				case DmtData.FORMAT_BOOLEAN:
+					args.put( argKey, new Boolean( argValue.getBoolean() ) );
+					break;
+				case DmtData.FORMAT_INTEGER:
+					args.put( argKey, new Integer( argValue.getInt() ) );
+					break;
+				case DmtData.FORMAT_STRING:
+				case DmtData.FORMAT_XML:
+					args.put( argKey, argValue.getString() );
+					break;
+			}
+		}
 						
 		try {
 			appDesc.launch( args );
