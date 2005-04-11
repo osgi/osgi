@@ -51,12 +51,22 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
   private ServiceRegistration serviceReg;
   private String[] topics;
   
-	public void start(BundleContext context) throws Exception {
+  /**
+   * Register this class as a service. Called when this bundle is started so the 
+   * Framework can perform the bundle-specific activities necessary to start this bundle.
+   * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
+   */
+  public void start(BundleContext context) throws Exception {
     this.context = context;
     context.registerService(this.getClass().getName(), this, null);
 	}
   
-	public void stop(BundleContext context) throws Exception {
+	/**
+   * Unregister this class as an event handler service. Called when this bundle is stopped 
+   * so the Framework can perform the bundle-specific activities necessary to stop the bundle.
+   * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
+   */
+  public void stop(BundleContext context) throws Exception {
     if (serviceReg != null) {
       serviceReg.unregister();
       serviceReg = null;
@@ -64,6 +74,10 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
     this.context = null;
 	}
   
+  /**
+   * Sets the array with event topics in which the event handler is interested.
+   * @see org.osgi.test.cases.event.tbc.TBCService#setTopics(java.lang.String[])
+   */
   public void setTopics(String[] topics) {
     this.topics = topics;
     Hashtable ht = new Hashtable();
@@ -75,6 +89,10 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
     }
   }
   
+  /**
+   * Returns the array with all set event topics in which the event handler is interested.
+   * @see org.osgi.test.cases.event.tbc.TBCService#getTopics()
+   */
   public String[] getTopics() {
     return topics;
   }
@@ -88,6 +106,10 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
     lastEvent = event;
   }
   
+  /**
+   * Returns the last received event and then the last event is set to null.
+   * @see org.osgi.test.cases.event.tbc.TBCService#getLastReceivedEvent()
+   */
   public Event getLastReceivedEvent() {
     Event event = lastEvent;
     lastEvent = null;

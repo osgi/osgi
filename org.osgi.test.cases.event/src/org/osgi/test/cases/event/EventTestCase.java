@@ -36,4 +36,5 @@ import org.osgi.test.cases.util.DefaultTestCase;
  * @version $Revision$
  */
 public class EventTestCase extends DefaultTestCase {
+
 }

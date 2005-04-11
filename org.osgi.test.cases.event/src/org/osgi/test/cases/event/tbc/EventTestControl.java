@@ -29,7 +29,7 @@ package org.osgi.test.cases.event.tbc;
 import java.util.Hashtable;
 
 import org.osgi.framework.*;
-import org.osgi.service.packageadmin.PackageAdmin;
+//import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
@@ -37,12 +37,9 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.service.event.*;
 
 /**
- * <remove>The TemplateControl controls is downloaded in the target and will control the
- * test run. The description of this test cases should contain the overall
- * execution of the run. This description is usuall quite minimal because the
- * main description is in the TemplateTestCase.</remove>
- * 
- * TODO Add Javadoc comment for this.
+ * The <code>EventTestControl</code> is the bundle initially installed and started by 
+ * the EventTestCase when it is started. It performs the various generic event mechanism tests 
+ * and reports back to the EventTestCase.
  * 
  * @version $Revision$
  */
@@ -55,7 +52,8 @@ public class EventTestControl extends DefaultTestBundleControl {
   private static String[] methods = new String[] {"testIstallation", // "TC1"
                                                   "testSetPermissions", // "TC2"
                                                   "testEventConstruction", // "TC3"
-                                                  "testPostEventNotification", // "TC4"
+                                                  "testSendEventNotification", // "TC4"
+                                                  "testPostEventNotification", // "TC5"
                                                   };
 
   /**
@@ -67,32 +65,34 @@ public class EventTestControl extends DefaultTestBundleControl {
   }
   
   /**
-	 * <remove>Prepare for each run. It is important that a test run is properly
-	 * initialized and that each case can run standalone. To save a lot
-	 * of time in debugging, clean up all possible persistent remains
-	 * before the test is run. Clean up is better don in the prepare
-	 * because debugging sessions can easily cause the unprepare never
-	 * to be called.</remove> 
+	 * Prepare for each run. It is important that a test run is properly
+	 * initialized and that each case can run standalone. 
    * @throws Exception
 	 */
 	public void prepare() throws Exception {
 		log("#before each run");
-    tb1 = installBundle("tb1.jar");//file:/D:/Devtools/org.osgi.test.cases.event/tb1.jar
+    tb1 = installBundle("tb1.jar");
     tb1.start();
-    tb2 = installBundle("tb2.jar");//file:/D:/Devtools/org.osgi.test.cases.event/tb2.jar
+    tb2 = installBundle("tb2.jar");
     tb2.start();
 	}
 
 	/**
-	 * <remove>Prepare for each method. It is important that each method can
-	 * be executed independently of each other method. Do not keep
-	 * state between methods, if possible. This method can be used
-	 * to clean up any possible remaining state.</remove> 
+	 * Prepare for each method. Not used for some operations now. 
 	 */
 	public void setState() {
 		log("#before each method");
 	}
   
+  /**
+   * The checkPrerequisites method is called before the prepare method
+   * and before all the testmethods. It checks if EventAdmin service 
+   * is available and report if everything is ok or not.
+   * @see org.osgi.test.cases.util.DefaultTestBundleControl#checkPrerequisites()
+   * 
+   * @return <tt>true</tt> if aEventAdmin service is available, 
+   *         <tt>false</tt> otherwise.
+   */
   public boolean checkPrerequisites() {
     log("#checkPrerequisites");
     eventAdminSR = getContext().getServiceReference(EventAdmin.class.getName());
@@ -103,11 +103,12 @@ public class EventTestControl extends DefaultTestBundleControl {
   }
   
   /**
-   * System bundle exports system services.
-   * 
+   * Tests if org.osgi.test.cases.event.tb1 and org.osgi.test.cases.event.tb2 are 
+   * succesfully installed and if their TBCService serivices are avilable. 
+   * It is checked if there is exactly one EventAdmin registered service.
+   *  
    * Verify that the System bundle exists and exports the
    * system services: PackageAdmin, PermissionAdmin.
-   * @throws Exception
    *
    * @specification     org.osgi.framework
    * @specificationSection    system.bundle
@@ -126,18 +127,14 @@ public class EventTestControl extends DefaultTestBundleControl {
     assertNotNull("TBCService service in tb2 should be registered", tbcService2);
     trackerProvider2.close();
     
-    Bundle system = getContext().getBundle(0);
-    //assertBundle(PackageAdmin.class.getName(), system);    
+    Bundle system = getContext().getBundle(0);   
     assertBundle(PermissionAdmin.class.getName(), system);
     
     ServiceReference[] eventAdminSRs = getContext().getServiceReferences(EventAdmin.class.getName(), null);
     if (eventAdminSRs != null) {
-      assertEquals("There must be exctly one EventAdmin registered service [" + EventAdmin.class.getName() + "]", 
+      assertEquals("There must be exactly one EventAdmin registered service [" + EventAdmin.class.getName() + "]", 
                    1, eventAdminSRs.length);
     }
-    
-    //assertBundle(EventHandler.class.getName(), tb1);
-    //assertBundle(EventHandler.class.getName(), tb2);
   }
 
 	/**
@@ -162,50 +159,88 @@ public class EventTestControl extends DefaultTestBundleControl {
                                                  TopicPermission.SUBSCRIBE);
     addPermissions(permissionAdmin, tb2, new PermissionInfo[]{regInfo, topInfo2});
     
-    //try to send event without PUBLISH TopicPermission
+    //try to send event and PUBLISH TopicPermission
     Hashtable properties = new Hashtable();
     Hashtable ht = new Hashtable();
     ht.put("topic", "org/osgi/test/cases/event");
-    //Event event1 = new Event("org/osgi/test/cases/event/ACTION1", properties);
-    //String message = "The caller does not have TopicPermission[topic,PUBLISH] for the topic: [";
-//    try {
-//      eventAdmin.sendEvent(event1);
-//      failException(message + event1.getTopic() + "]", SecurityException.class);
-//    } catch (Throwable e) {
-//      e.printStackTrace();
-//      assertException(message + event1.getTopic() + "]", SecurityException.class, e);
-//    }
+    Event event1 = new Event("org/osgi/test/cases/event/ACTION1", properties);
+    checkTestingPermissions(event1);
     
-    //try to send event with PUBLISH TopicPermission
     PermissionInfo permInfo = new PermissionInfo(ServicePermission.class.getName(), 
                                                  "org.osgi.service.event.EventAdmin", 
                                                  ServicePermission.GET);    
     addPermissions(permissionAdmin, getContext().getBundle(), new PermissionInfo[]{permInfo});
-//    try {
-//      eventAdmin.sendEvent(event1);
-//      failException(message + event1.getTopic() + "]", SecurityException.class);
-//    } catch (Throwable e) {
-//      assertException(message + event1.getTopic() + "]", SecurityException.class, e);
-//    }
+    
     PermissionInfo[] perm = permissionAdmin.getPermissions(getContext().getBundle().getLocation());
     assertNotNull("Permissions of [" + getContext().getBundle().getLocation() + "]", perm);
     for (int i = 0; i < perm.length; i++) {
-      pass("permission [" + "i]: " + perm[i]);
+      pass("permission [" + i + "]: " + perm[i]);
     }
     
     PermissionInfo[] perm1 = permissionAdmin.getPermissions(tb1.getLocation());
     assertNotNull("Permissions of [" + tb1.getLocation() + "]", perm1);
     for (int i = 0; i < perm1.length; i++) {
-      pass("permission [" + "i]: " + perm1[i]);
+      pass("permission [" + i + "]: " + perm1[i]);
     }
     
     PermissionInfo[] perm2 = permissionAdmin.getPermissions(tb2.getLocation());
     assertNotNull("Permissions of [" + tb2.getLocation() + "]", perm2);
     for (int i = 0; i < perm2.length; i++) {
-      pass("permission [" + "i]: " + perm2[i]);
+      pass("permission [" + i + "]: " + perm2[i]);
     }
 		
 	}
+  
+  /**
+   * Checks if the SecurityException is got if the caller bundle does 
+   * not right <tt>publish</tt> TopicPermision.
+   * 
+   * @param event the event used for testing
+   */
+  private void checkTestingPermissions(Event event) {
+    boolean hasTopicPermission = hasTopicPermissionForEvent(event);
+    String message;
+    if (hasTopicPermission) {
+      message = "The caller has TopicPermission[topic,PUBLISH] for the topic: [";
+    } else {
+      message = "The caller does not have TopicPermission[topic,PUBLISH] for the topic: [";
+    }
+    try {
+      eventAdmin.sendEvent(event);
+      if (hasTopicPermission) {
+        pass(message + event.getTopic() + "] and got no " + SecurityException.class.getName());
+      } else {
+        failException(message + event.getTopic() + "]", SecurityException.class);
+      }
+    } catch (Throwable e) {
+      if (hasTopicPermission) {
+        fail(message + event.getTopic() + "] but got exception [" + e.getClass().getName() + " ]");
+      } else {
+        failException(message + event.getTopic() + "]", SecurityException.class);
+      }
+    }
+  }
+  
+  /**
+   * Checks if the caller bundle has right <tt>publish</tt> TopicPermision.
+   * 
+   * @param event the event to be checked
+   * @return <tt>true</tt> if the caller has the right permission, <tt>false</tt> otherwise.
+   */
+  private boolean hasTopicPermissionForEvent(Event event) {
+    String topic =  event.getTopic();
+    if (topic == null) return false;
+    SecurityManager sMngr = System.getSecurityManager();
+    if (sMngr != null) {
+      TopicPermission topicPermission = new TopicPermission(topic, TopicPermission.PUBLISH);
+      try {
+        sMngr.checkPermission(topicPermission);
+      } catch (SecurityException e) {
+        return false;
+      }
+    }
+    return true;
+  }
   
   /**
    * Tests the event construction and the exceptions 
@@ -240,43 +275,6 @@ public class EventTestControl extends DefaultTestBundleControl {
     }
   }
   
-  /**
-   * Tests the notification for events after posting 
-   * (if they match of the listeners).
-   */
-  public void testPostEventNotification() {
-    ServiceTracker trackerProvider1 = new ServiceTracker(getContext(), "org.osgi.test.cases.event.tb1.Activator", null);
-    trackerProvider1.open();
-    TBCService tbcService1 = (TBCService) trackerProvider1.getService();
-    
-    ServiceTracker trackerProvider2 = new ServiceTracker(getContext(), "org.osgi.test.cases.event.tb2.Activator", null);
-    trackerProvider2.open();
-    TBCService tbcService2 = (TBCService) trackerProvider2.getService();
-    
-    String[] topics;
-    topics = new String[] {"org/osgi/test/*", "org/osgi/newtest1/*", "org/osgi1/*", "Event1"};
-    tbcService1.setTopics(topics);
-    
-    topics = new String[] {"org/osgi/test/*", "org/osgi/newtest1/newtest2/*", "org/osgi2/*"};
-    tbcService2.setTopics(topics);    
-    
-    String[] events = new String[] {"org/osgi/test/Event0", "Event1", "org/osgi1/Event2", "org/osgi1/test/Event3", 
-                                    "org/osgi/newtest1/Event4", "org/osgi/newtest2/Event5", "org/osgi2/test/Event6"};
-    Boolean[] eventsMap1 = new Boolean[] {Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, 
-                                          Boolean.TRUE, Boolean.FALSE, Boolean.FALSE};
-    Boolean[] eventsMap2 = new Boolean[] {Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, 
-                                          Boolean.FALSE, Boolean.FALSE, Boolean.TRUE};
-    
-    Event event;
-    for (int i = 0; i < events.length; i++) {
-      event = new Event(events[i], new Hashtable());
-      eventAdmin.postEvent(event);
-      assertEvent(event, tb1, tbcService1, eventsMap1[i].booleanValue());
-      assertEvent(event, tb2, tbcService2, eventsMap2[i].booleanValue());
-    }
-    trackerProvider1.close();
-    trackerProvider2.close();
-  }
   
   /**
    * Tests the notification for events after sending 
@@ -309,6 +307,43 @@ public class EventTestControl extends DefaultTestBundleControl {
     for (int i = 0; i < events.length; i++) {
       event = new Event(events[i], new Hashtable());
       eventAdmin.sendEvent(event);
+      assertEvent(event, tb1, tbcService1, eventsMap1[i].booleanValue());
+      assertEvent(event, tb2, tbcService2, eventsMap2[i].booleanValue());
+    }
+    trackerProvider1.close();
+    trackerProvider2.close();
+  }
+  
+  /**
+   * Tests the notification for events after posting 
+   * (if they match of the listeners).
+   */
+  public void testPostEventNotification() {
+    ServiceTracker trackerProvider1 = new ServiceTracker(getContext(), "org.osgi.test.cases.event.tb1.Activator", null);
+    trackerProvider1.open();
+    TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+    
+    ServiceTracker trackerProvider2 = new ServiceTracker(getContext(), "org.osgi.test.cases.event.tb2.Activator", null);
+    trackerProvider2.open();
+    TBCService tbcService2 = (TBCService) trackerProvider2.getService();
+    
+    String[] topics;
+    topics = new String[] {"org/osgi/test/*"};
+    tbcService1.setTopics(topics);
+    
+    topics = new String[] {"org/osgi/test/*"};
+    tbcService2.setTopics(topics);    
+    
+    String[] events = new String[] {"org/osgi/test/Event0_wait", "org/osgi/test/Event1"};
+    Boolean[] eventsMap1 = new Boolean[] {Boolean.FALSE, /*not recieved immediately because of Thread sleep*/ 
+                                          Boolean.TRUE};
+    Boolean[] eventsMap2 = new Boolean[] {Boolean.TRUE, /*recieved immediately - no metter of other bundle event handling*/
+                                          Boolean.TRUE};
+    
+    Event event;
+    for (int i = 0; i < events.length; i++) {
+      event = new Event(events[i], new Hashtable());
+      eventAdmin.postEvent(event);
       assertEvent(event, tb1, tbcService1, eventsMap1[i].booleanValue());
       assertEvent(event, tb2, tbcService2, eventsMap2[i].booleanValue());
     }

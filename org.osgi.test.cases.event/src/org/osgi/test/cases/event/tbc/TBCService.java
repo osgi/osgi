@@ -36,9 +36,23 @@ import org.osgi.service.event.Event;
  */
 public interface TBCService {
   
+  /**
+   * Sets the array with event topics in which the event handler is interested.
+   * @param topics the array with event topics
+   */
   public void setTopics(String[] topics);
   
+  /**
+   * Returns the array with all set event topics in which the event handler is interested.
+   * 
+   * @return the array with all set event topics
+   */
   public String[] getTopics();
     
+  /**
+   * Returns the last received event and then the last event is set to null.
+   *
+   * @return last received event
+   */
   public Event getLastReceivedEvent();
 }
