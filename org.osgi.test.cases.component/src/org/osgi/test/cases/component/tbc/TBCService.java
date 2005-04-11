@@ -36,11 +36,7 @@ import java.util.Dictionary;
  */
 public interface TBCService {
 
-  public static final int PARAM_CONST = 123;
-
-  public int getSimpleTestService();
-
-  public TestService getObjectTestService();
+  public TestObject getTestObject();
   
   public Dictionary getProperties();
 }

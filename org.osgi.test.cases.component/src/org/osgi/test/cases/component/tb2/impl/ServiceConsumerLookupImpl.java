@@ -32,7 +32,7 @@ import java.util.Dictionary;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.test.cases.component.tb1.ServiceProvider;
 import org.osgi.test.cases.component.tb2.ServiceConsumerLookup;
-import org.osgi.test.cases.component.tbc.TestService;
+import org.osgi.test.cases.component.tbc.TestObject;
 
 /**
  * @version $Revision$
@@ -56,13 +56,8 @@ public class ServiceConsumerLookupImpl implements ServiceConsumerLookup {
     return context.getProperties();
   }
 
-  public int getSimpleTestService() {
+  public TestObject getTestObject() {
     ServiceProvider serviceProvider = (ServiceProvider) context.locateService("serviceProvider");
-    return serviceProvider.getSimpleTestService();
-  }
-  
-  public TestService getObjectTestService() {
-    ServiceProvider serviceProvider = (ServiceProvider) context.locateService("serviceProvider");
-    return serviceProvider.getObjectTestService();
+    return serviceProvider.getTestObject();
   }
 }
