@@ -30,8 +30,8 @@ public class DmtPluginDispatcher implements ServiceTrackerCustomizer {
 	public DmtPluginDispatcher(BundleContext bc) {
 		this.bc = bc;
 		plugins = new ArrayList();
-		// TODO maybe get the root plugin as a service (but this needs a new
-		// service interface to control permissions)
+		// should get the root plugin as a normal plugin when there are
+        // overlapping plugins
 		dataRoot = new RootPlugin();
 	}
 
@@ -41,28 +41,25 @@ public class DmtPluginDispatcher implements ServiceTrackerCustomizer {
 		if (roots == null || execs == null)
 			return null;
 		if (roots.length == 0 && execs.length == 0) {
-			System.out
-					.println("Plugin is not registered for any nodes, ignoring plugin.");
+			System.out.println("Plugin is not registered for any nodes, ignoring plugin.");
 			return null;
 		}
 		// gets the service and stores the plugin
-		Object pluginService = bc.getService(serviceRef);
-		Plugin plugin = new Plugin(pluginService, roots, execs);
+		Plugin plugin = new Plugin(bc.getService(serviceRef), roots, execs);
 		// TODO the check and the add operation should be performed atomically
 		if (!pluginConflict(plugin, plugins))
 			plugins.add(plugin);
 		else {
-			System.out
-					.println("Plugin manages some nodes already handled by another plugin; ignoring this plugin.");
-			// TODO pluginService should be "ungotten", (or not even gotten
-			// before the conflict is checked)
+			System.out.println("Plugin manages some nodes already handled by another plugin; ignoring this plugin.");
+			// TODO pluginService should be "ungotten", (or not even gotten before the conflict is checked)
 			return null;
 		}
-		return pluginService;
+		return plugin;
 	}
 
 	public void modifiedService(ServiceReference serviceRef, Object plugin) {
-		// TODO! update the plugin list
+		// not updating the plugin list, reg. properties shouldn't be updated
+        // runtime
 	}
 
 	public void removedService(ServiceReference serviceRef, Object plugin) {
@@ -135,8 +132,7 @@ public class DmtPluginDispatcher implements ServiceTrackerCustomizer {
 	}
 
 	private boolean pluginConflict(Plugin plugin, ArrayList plugins) {
-		// TODO! check that the new plugin does not conflict with any of the
-		// previously registered ones.
+		// TODO check that the new plugin does not conflict with any of the previously registered ones.
 		return false;
 	}
 }
