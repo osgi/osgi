@@ -528,6 +528,8 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 						
 		try {
 			appDesc.launch( args );
+			
+			execIds.remove( key );
 		}
 		catch (Exception e) {
 			throw new DmtException(nodeUri, DmtException.OTHER_ERROR, e.getMessage(), e);
