@@ -1894,6 +1894,10 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Application didn't started!");
 
 			bc.ungetService( appList[0] );
+
+			nodeNames = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch" );
+			if( nodeNames != null && nodeNames.length != 0 )
+				throw new Exception( "Exec-id didn't removed after launch!" );
 			
 			if( !testCase_stopApplication() )
 				return false;
