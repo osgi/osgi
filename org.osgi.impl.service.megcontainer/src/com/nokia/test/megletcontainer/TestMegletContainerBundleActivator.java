@@ -587,7 +587,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 										+ " != " + appDesc.getPID()
 										+ ")");
 					if (!appList[i].getProperty("application.name").equals(
-							appDesc.getProperties("").get(
+							appDesc.getProperties( Locale.getDefault().getLanguage()).get(
 									ApplicationDescriptor.APPLICATION_NAME)))
 						throw new Exception(
 								"Illegal application name in the AppDesc ("
