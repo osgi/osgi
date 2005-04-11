@@ -411,7 +411,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 				checkUniqueID( nodeUri, path[ 1 ] );
 				
 				String param = path[ 3 ];
-				String key = path[ 1 ] + path[3];
+				String key = path[ 1 ] + "/" + path[3];
 				
 				Hashtable ht = (Hashtable) execIds.get(key);
 				if( ht == null )
