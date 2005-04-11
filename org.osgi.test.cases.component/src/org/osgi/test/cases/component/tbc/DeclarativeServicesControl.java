@@ -33,18 +33,29 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * <remove>The TemplateControl controls is downloaded in the target and will control the
- * test run. The description of this test cases should contain the overall
- * execution of the run. This description is usuall quite minimal because the
- * main description is in the TemplateTestCase.</remove>
- * 
- * TODO Add Javadoc comment for this.
+ * This is the bundle initially installed and started by the TestCase.
+ * It performs the test methods of the declarative services test case.
  * 
  * @version $Revision$
  */
 public class DeclarativeServicesControl extends DefaultTestBundleControl {
   
   private Bundle tb1, tb2, tb3;
+  private static String[] methods = new String[] {
+	  "testRegistration",     // "TC1"
+	  "testGetServiceDirect", // "TC2"
+	  "testGetServiceLookup", // "TC3"
+	  "testGetServiceEvent",  // "TC4"
+	  "testGetProperties",    // "TC5"
+	  "testFactory",          // "TC6"
+  };
+  
+  /**
+   * Returns a list containing the names of the test methods in the order they should be called.
+   */
+  protected String[] getMethods() {
+    return methods;
+  }
   
 	public void prepare() throws Exception {
     tb1 = installBundle("tb1.jar");
@@ -61,7 +72,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl {
   /**
    * Tests registering / unregistering of the component bundles and their provided services.
    */
-  public void testUnregistered() throws Exception {
+  public void testRegistration() throws Exception {
     TBCService serviceProvider, serviceConsumerLookup, serviceConsumerEvent;
     ServiceTracker trackerProvider = new ServiceTracker(getContext(), "org.osgi.test.cases.component.tb1.ServiceProvider", null);
     trackerProvider.open();
@@ -70,35 +81,31 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl {
     ServiceTracker trackerConsumerEvent = new ServiceTracker(getContext(), "org.osgi.test.cases.component.tb3.ServiceConsumerEvent", null);
     trackerConsumerEvent.open();
 
+    assertEquals("ServiceProvider bundle should be in active state", Bundle.ACTIVE, tb1.getState());
+    serviceProvider = (TBCService) trackerProvider.getService();
+    assertNotNull("ServiceProvider service should be registered", serviceProvider);
+
+    assertEquals("ServiceConsumerLookup bundle should be in active state", Bundle.ACTIVE, tb2.getState());
+    serviceConsumerLookup = (TBCService) trackerConsumerLookup.getService();
+    assertNotNull("ServiceConsumerLookup service should be registered", serviceConsumerLookup);
+
+    assertEquals("ServiceConsumerEvent bundle should be in active state", Bundle.ACTIVE, tb3.getState());
+    serviceConsumerEvent = (TBCService) trackerConsumerEvent.getService();
+    assertNotNull("ServiceConsumerEvent service should be registered", serviceConsumerEvent);
+    
     tb1.uninstall();
     serviceProvider = (TBCService) trackerProvider.getService();
     assertNull("ServiceProvider service should not be registered", serviceProvider);
-    serviceConsumerLookup = (TBCService) trackerConsumerLookup.getService();
-    assertNull("ServiceConsumerLookup service should not be registered", serviceConsumerLookup);
-    assertEquals("ServiceConsumerLookup bundle should be in resolved state", Bundle.RESOLVED, tb2.getState());
-    serviceConsumerEvent = (TBCService) trackerConsumerEvent.getService();
-    assertNull("ServiceConsumerEvent service should not be registered", serviceConsumerEvent);
-    assertEquals("ServiceConsumerEvent bundle should in resolved state", Bundle.RESOLVED, tb3.getState());
 
     tb1 = installBundle("tb1.jar");
+    assertEquals("ServiceProvider bundle should be in resolved state", Bundle.RESOLVED, tb1.getState());
     serviceProvider = (TBCService) trackerProvider.getService();
     assertNull("ServiceProvider service should not be registered", serviceProvider);
-    serviceConsumerLookup = (TBCService) trackerConsumerLookup.getService();
-    assertNull("ServiceConsumerLookup service should not be registered", serviceConsumerLookup);
-    assertEquals("ServiceConsumerLookup bundle should be in resolved state", Bundle.RESOLVED, tb2.getState());
-    serviceConsumerEvent = (TBCService) trackerConsumerEvent.getService();
-    assertNull("ServiceConsumerEvent service should not be registered", serviceConsumerEvent);
-    assertEquals("ServiceConsumerEvent bundle should in resolved state", Bundle.RESOLVED, tb3.getState());
 
     tb1.start();
+    assertEquals("ServiceProvider bundle should be in active state", Bundle.ACTIVE, tb1.getState());
     serviceProvider = (TBCService) trackerProvider.getService();
     assertNotNull("ServiceProvider service should be registered", serviceProvider);
-    serviceConsumerLookup = (TBCService) trackerConsumerLookup.getService();
-    assertNotNull("ServiceConsumerLookup service should be registered", serviceConsumerLookup);
-    assertEquals("ServiceConsumerLookup bundle should be in active state", Bundle.ACTIVE, tb2.getState());
-    serviceConsumerEvent = (TBCService) trackerConsumerEvent.getService();
-    assertNotNull("ServiceConsumerEvent service should be registered", serviceConsumerEvent);
-    assertEquals("ServiceConsumerEvent bundle should in active state", Bundle.ACTIVE, tb3.getState());
 
     trackerProvider.close();
     trackerConsumerLookup.close();
@@ -112,11 +119,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl {
     ServiceTracker tracker = new ServiceTracker(getContext(), "org.osgi.test.cases.component.tb1.ServiceProvider", null);
     tracker.open();
     TBCService serviceProvider = (TBCService) tracker.getService();
-    int i = serviceProvider.getSimpleTestService();
-    assertEquals("The return value should be equal to " + TBCService.PARAM_CONST, TBCService.PARAM_CONST, i);
-    TestService testService = serviceProvider.getObjectTestService();
-    int param = testService.getParameter();
-    assertEquals("The return value should be equal to " + TBCService.PARAM_CONST, TBCService.PARAM_CONST, param);
+    TestObject testObject = serviceProvider.getTestObject();
+    assertEquals("The return value should be an instance of " + TestObject.class.getName(),
+    		TestObject.class.getName(), testObject.getClass().getName());
     tracker.close();
 	}
 
@@ -127,11 +132,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl {
     ServiceTracker tracker = new ServiceTracker(getContext(), "org.osgi.test.cases.component.tb2.ServiceConsumerLookup", null);
     tracker.open();
     TBCService serviceConsumerLookup = (TBCService) tracker.getService();
-    int i = serviceConsumerLookup.getSimpleTestService();
-    assertEquals("The return value should be equal to " + TBCService.PARAM_CONST, TBCService.PARAM_CONST, i);
-    TestService testService = serviceConsumerLookup.getObjectTestService();
-    int param = testService.getParameter();
-    assertEquals("The return value should be equal to " + TBCService.PARAM_CONST, TBCService.PARAM_CONST, param);
+    TestObject testObject = serviceConsumerLookup.getTestObject();
+    assertEquals("The return value should be an instance of " + TestObject.class.getName(),
+    		TestObject.class.getName(), testObject.getClass().getName());
     tracker.close();
   }
 
@@ -142,11 +145,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl {
     ServiceTracker tracker = new ServiceTracker(getContext(), "org.osgi.test.cases.component.tb3.ServiceConsumerEvent", null);
     tracker.open();
     TBCService serviceConsumerEvent = (TBCService) tracker.getService();
-    int i = serviceConsumerEvent.getSimpleTestService();
-    assertEquals("The return value should be equal to " + TBCService.PARAM_CONST, TBCService.PARAM_CONST, i);
-    TestService testService = serviceConsumerEvent.getObjectTestService();
-    int param = testService.getParameter();
-    assertEquals("The return value should be equal to " + TBCService.PARAM_CONST, TBCService.PARAM_CONST, param);
+    TestObject testObject = serviceConsumerEvent.getTestObject();
+    assertEquals("The return value should be an instance of " + TestObject.class.getName(),
+    		TestObject.class.getName(), testObject.getClass().getName());
     tracker.close();
   }
 
@@ -160,7 +161,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl {
     TBCService serviceConsumerLookup = (TBCService) tracker.getService();
     Dictionary properties = serviceConsumerLookup.getProperties();
     assertNotNull("Properties should not be empty", properties);
-    assertEquals("The size of properties should be 2", properties.size(), 2);
+    assertTrue("The size of properties should be at least 2", properties.size() >= 2);
     assertEquals("Value of test.property.int should be equal to '123'", properties.get("test.property.int"), "123");
     String[] array = (String[]) properties.get("test.property.string");
     assertEquals("The size of test.property.string array should be 3", array.length, 3);
@@ -187,6 +188,12 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl {
 	 * Clean up after a run. Notice that during debugging
 	 * many times the unprepare is never reached.
 	 */
-	public void unprepare() {
+	public void unprepare() throws Exception {
+    tb1.stop();
+    uninstallBundle(tb1);
+    tb2.stop();
+    uninstallBundle(tb2);
+    tb3.stop();
+    uninstallBundle(tb3);
 	}
 }

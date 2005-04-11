@@ -30,19 +30,8 @@ package org.osgi.test.cases.component.tbc;
 /**
  * @version $Revision$
  */
-public class TestService {
+public class TestObject {
   
-  private int param;
-  
-  public TestService(int param) {
-    this.param = param;
-  }
-
-  public int getParameter() {
-    return param;
-  }
-
-  public void setParameter(int param) {
-    this.param = param;
+  public TestObject() {
   }
 }
