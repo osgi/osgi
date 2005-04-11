@@ -478,7 +478,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 				bc.ungetService( hrefs[ 0 ] );
 				return;
 			}catch( Exception e ) {
-				throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+				throw new DmtException(nodeUri, DmtException.OTHER_ERROR,
 						"Execution of " + nodeUri + " is failed.");
 			}
 		}
