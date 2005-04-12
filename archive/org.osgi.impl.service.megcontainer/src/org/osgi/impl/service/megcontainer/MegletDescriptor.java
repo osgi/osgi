@@ -52,6 +52,7 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 	private Bundle			bundle;
 	private MegletContainer	megletContainer;
 	private String      defaultLanguage;
+	private boolean     locked;
 
 	/**
 	 * @param bc
@@ -170,7 +171,7 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 			MegletContainer.log( bc, LogService.LOG_ERROR,
 				"Exception occurred at searching the Meglet container reference!", e);
 		}
-		properties.put("application.locked", (new Boolean(isLocked())).toString());
+		properties.put("application.locked", (new Boolean( locked )).toString());
 		properties.put("application.launchable", (new Boolean(launchable)).toString());
 		properties.put("application.type", "MEG");
 		properties.put( APPLICATION_PID, new String( pid ) );
@@ -210,5 +211,17 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 		initMeglet( meglet, appHandle );
 
 		return appHandle.startHandle( args );
+	}
+	
+	protected void lockSpecific() {
+		locked = true;
+	}
+	
+	protected void unlockSpecific() {
+		locked = false;
+	}
+	
+	public boolean isLocked() {
+		return locked;
 	}
 }

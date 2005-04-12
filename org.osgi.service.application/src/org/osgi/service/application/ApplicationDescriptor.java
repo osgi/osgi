@@ -124,6 +124,18 @@ public abstract class ApplicationDescriptor {
 	 *             if the application descriptor is unregistered
 	 */
 	public final Map getProperties(String locale) {
+		Map props = getPropertiesSpecific( locale );
+		
+		boolean isLocked = delegate.isLocked();
+		Boolean wasLocked = Boolean.valueOf( (String)props.remove( APPLICATION_LOCKED ) );
+		if( wasLocked != null && wasLocked.booleanValue() != isLocked ) {
+			if( isLocked )
+				lockSpecific();
+			else
+				unlockSpecific();
+		}			
+		props.put( APPLICATION_LOCKED, new Boolean( isLocked ) );
+		
 		return getPropertiesSpecific( locale );
 	}
 	
@@ -277,6 +289,13 @@ public abstract class ApplicationDescriptor {
 	public final void lock() {
 		delegate.lock();
 	}
+	
+	/**
+	 * This method is used to notify the container implementation that the
+	 * corresponding application has been locked and it should update the
+	 * <code>application.locked</code> service property accordingly.
+	 */
+	protected abstract void lockSpecific();
 
 	/**
 	 * Unsets the lock state of the application.
@@ -290,18 +309,13 @@ public abstract class ApplicationDescriptor {
 	public final void unlock() {
 		delegate.unlock();
 	}
-
+	
 	/**
-	 * Returns a boolean indicating whether the application is locked.
-	 * 
-	 * @throws IllegalStateException if the application descriptor is
-	 *         unregistered
-	 * 
-	 * @modelguid {54F610F8-B6E8-4B44-A973-A39A177452D4}
+	 * This method is used to notify the container implementation that the
+	 * corresponding application has been unlocked and it should update the
+	 * <code>application.locked</code> service property accordingly.
 	 */
-	public final boolean isLocked() {
-		return delegate.isLocked();
-	}
+	protected abstract void unlockSpecific();
 
 	public interface Delegate {
 		void setApplicationDescriptor(ApplicationDescriptor d, String pid );
