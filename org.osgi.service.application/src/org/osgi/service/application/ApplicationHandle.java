@@ -30,7 +30,7 @@ public abstract class ApplicationHandle {
 	 * The application instance is running. This is the initial state of a newly
 	 * created application instance.
 	 */
-//	public final static String RUNNING = "RUNNING"; /* TODO */
+	public final static String RUNNING = "RUNNING";
 
 	String						instanceId;
 	ApplicationDescriptor		descriptor;
@@ -63,37 +63,21 @@ public abstract class ApplicationHandle {
 	}
 
 	/**
-	 * The application instance is stopping. This is the state of a stopping
-	 * application instance.
-	 * 
-	 * @modelguid {541E1C88-4DAD-47B1-AAB5-A523BF9AD01E}
-	 */
-	public final static int	STOPPING	= 0;
-
-	/**
-	 * The application instance is running. This is the initial state of a newly
-	 * created application instance.
-	 * 
-	 * @modelguid {8EBD44E3-883B-4515-8EEA-8469F6F16408}
-	 */
-	public final static int	RUNNING		= 1;
-
-	/**
 	 * Get the state of the application instance.
 	 * 
 	 * @return the state of the application.
 	 * 
-	 * @throws IllegalStateException if the application handle is unregistered
-	 * 
-	 * @modelguid {8C7D95E9-A8E2-40F1-9BFD-C55A5B80148F}
+	 * @throws IllegalStateException
+	 *             if the application handle is unregistered
 	 */
-	public abstract int getState();
+	public abstract String getState();
 
 	/**
 	 * Returns the unique identifier of this instance. This value is also
 	 * available as a service property of this application handle's service.pid.
 	 * 
-	 * @throws IllegalStateException if the application handle is unregistered
+	 * @throws IllegalStateException
+	 *             if the application handle is unregistered
 	 * 
 	 * @return the unique identifier of the instance
 	 */

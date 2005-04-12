@@ -214,7 +214,7 @@ public class MegletContainer implements BundleListener, EventHandler {
         return false;
       
       ApplicationHandle appHandle = (ApplicationHandle)bc.getService( appList[ 0 ] );      
-      boolean result = appHandle.getState() == MegletHandleImpl.SUSPENDED;      
+      boolean result = appHandle.getState().equals( MegletHandle.SUSPENDED );      
       bc.ungetService( appList[ 0 ] );
       
       return result;

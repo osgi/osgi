@@ -310,7 +310,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			ApplicationHandle handle = (ApplicationHandle) bc
 					.getService(hrefs[0]);
 			if (path[2].equals("state")) {
-				int state = -1;
+				String state = "INVALID";
 				try {
 					state = handle.getState();
 				}catch( Exception e ) {}
