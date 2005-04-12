@@ -14,7 +14,7 @@ public class Manifest extends Hashtable {
 	Vector				_duplicates		= new Vector();
 	final static String	wordparts		= "~!@#$%^&*_:/?><.-+";
 	BTool				model;
-	
+
 	public Manifest(BTool model, InputStream in) throws IOException {
 		this.model = model;
 		try {
@@ -109,10 +109,10 @@ public class Manifest extends Hashtable {
 	}
 
 	void error(String msg) throws IOException {
-		if ( model != null )
+		if (model != null)
 			model.warnings.add("Reading manifest: " + msg);
 		else
-			System.err.println("Reading manifest: " + msg );
+			System.err.println("Reading manifest: " + msg);
 	}
 
 	StreamTokenizer getStreamTokenizer(String line) {
@@ -140,16 +140,17 @@ public class Manifest extends Hashtable {
 	}
 
 	Parameter getParameter(StreamTokenizer st) throws IOException {
-		
+
 		Parameter parameter = new Parameter();
 		parameter.key = word(st);
-		if (st.ttype == ':' ) {
+		if (st.ttype == ':') {
 			st.nextToken();
 			parameter.type = Parameter.DIRECTIVE;
-		} else {
+		}
+		else {
 			parameter.type = Parameter.ATTRIBUTE;
 		}
-		
+
 		if (st.ttype == '=') {
 			parameter.value = word(st);
 			while (st.ttype == StreamTokenizer.TT_WORD || st.ttype == '"') {
@@ -157,7 +158,7 @@ public class Manifest extends Hashtable {
 				st.nextToken();
 			}
 		}
-	
+
 		return parameter;
 	}
 
@@ -169,16 +170,16 @@ public class Manifest extends Hashtable {
 			Package p = new Package(parameter.key);
 			while (st.ttype == ';') {
 				parameter = getParameter(st);
-				if (parameter.is("specification-version", Parameter.ATTRIBUTE ))
+				if (parameter.is("specification-version", Parameter.ATTRIBUTE))
 					p.version = parameter.value;
 				else
-					if (parameter.is("version", Parameter.ATTRIBUTE ))
+					if (parameter.is("version", Parameter.ATTRIBUTE))
 						p.version = parameter.value;
 					else
-						if ( parameter.type == Parameter.ATTRIBUTE )
-							p.addParameter( parameter );
+						if (parameter.type == Parameter.ATTRIBUTE)
+							p.addParameter(parameter);
 						else
-							p.addParameter( parameter );
+							p.addParameter(parameter);
 			}
 			v.addElement(p);
 		} while (st.ttype == ',');
@@ -205,16 +206,19 @@ public class Manifest extends Hashtable {
 							spec.osname = parameter.value;
 						else
 							if (parameter.is("osversion", Parameter.ATTRIBUTE))
-								spec.osversion = versionToLong(parameter.value);
+								spec.osversion = parameter.value;
 							else
-								if (parameter.is("language", Parameter.ATTRIBUTE))
+								if (parameter.is("language",
+										Parameter.ATTRIBUTE))
 									spec.language = parameter.value;
 								else
-									if (parameter.is("selection-filter", Parameter.DIRECTIVE))
+									if (parameter.is("selection-filter",
+											Parameter.DIRECTIVE))
 										spec.filter = parameter.value;
 									else
-									model.warning("Unknown parameter for native code : "
-											+ parameter );
+										model
+												.warning("Unknown parameter for native code : "
+														+ parameter);
 			} while (st.ttype == ';');
 			spec.paths = new String[names.size()];
 			names.copyInto(spec.paths);
@@ -233,15 +237,6 @@ public class Manifest extends Hashtable {
 		return result;
 	}
 
-	static long versionToLong(String version) throws IOException {
-		long result = 0;
-		StringTokenizer st = new StringTokenizer(version, ".");
-		while (st.hasMoreTokens()) {
-			result *= 1000;
-			result += Integer.parseInt(st.nextToken());
-		}
-		return result;
-	}
 
 	public Package[] getImports() {
 		return _imports;
@@ -284,55 +279,39 @@ class Native {
 	int		index	= -1;
 	String	paths[];
 	String	osname;
-	long	osversion;
+	String	osversion;
 	String	language;
 	String	processor;
 
-	int getMatch(Native target) {
-		int total = -1;
-		if (osname.equalsIgnoreCase(target.osname)
-				&& osversion <= target.osversion
-				&& processor.equalsIgnoreCase(target.processor)) {
-			total = 0;
-			if (language != null) {
-				total |= 0x1;
-				if (language.equalsIgnoreCase(target.language))
-					total |= 0x2;
-			}
-			if (osversion == target.osversion)
-				total |= 0x4;
-		}
-		return total;
-	}
 }
 
 class Parameter {
-	final static int ATTRIBUTE = 1;
-	final static int DIRECTIVE = 2;
-	final static int SINGLE = 0;
-	
-	int			type;
-	String		key;
-	String		value;
-	
+	final static int	ATTRIBUTE	= 1;
+	final static int	DIRECTIVE	= 2;
+	final static int	SINGLE		= 0;
+
+	int					type;
+	String				key;
+	String				value;
+
 	public String toString() {
-		StringBuffer	sb = new StringBuffer();
+		StringBuffer sb = new StringBuffer();
 		sb.append(key);
-		switch( type ) {
-			case ATTRIBUTE: 
+		switch (type) {
+			case ATTRIBUTE :
 				sb.append("=");
 				break;
-			case DIRECTIVE:
+			case DIRECTIVE :
 				sb.append(":=");
 				break;
-			case SINGLE:
+			case SINGLE :
 				return sb.toString();
 		}
-		sb.append( value );
+		sb.append(value);
 		return sb.toString();
 	}
-	
-	boolean is(String s, int type ) {
+
+	boolean is(String s, int type) {
 		return this.type == type && key.equalsIgnoreCase(s);
 	}
 }
