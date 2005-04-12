@@ -1,6 +1,6 @@
 package org.osgi.service.application;
 
-import org.osgi.framework.*;
+import org.osgi.framework.Constants;
 
 /**
  * ApplicationHandle is an OSGi service interface which represents an instance
@@ -32,24 +32,29 @@ public abstract class ApplicationHandle {
 	 */
 	public final static String RUNNING = "RUNNING";
 
-	String						instanceId;
-	ApplicationDescriptor		descriptor;
-	Delegate	delegate;
-	static Class				implementation;
-	static String				cName;
-	{
-		try {
-			cName = System
-					.getProperty("org.osgi.vendor.application.ApplicationHandle");
-			implementation = Class.forName(cName);
-		}
-		catch (Throwable t) {
-			// Ignore
-		}
-	}
-
+	private final String instanceId;
+	
+	/**
+	 * Application instance identifier is specified by the container when the
+	 * instance is created. The instance identifier must remain static for the 
+	 * lifetime of the instance, it must remain the same even across framework
+	 * restarts for the same application instance. This value must be the same
+	 * as the <code>service.pid</code> service property of this application
+	 * handle.
+	 * 
+	 * The instance identifier should follow the following scheme: 
+	 * &lt;<i>application descriptor PID</i>&gt;.&lt;<i>index</i>&gt;
+	 * where &lt;<i>application descriptor PID</i>&gt; is the PID of the 
+	 * corresponding <code>ApplicationDescriptor</code> and &lt;<i>index</i>&gt;
+	 * is a unique integer index assigned by the application container. 
+	 * Even after destroying the application index the same index value should not
+	 * be reused in a reasonably long timeframe.
+	 * 
+	 * @param instanceId the instance identifier of the represented application
+	 * instance.
+	 */
 	protected ApplicationHandle(String instanceId, ApplicationDescriptor descriptor ) {
-		this.instanceId = instanceId;
+		this.instanceId	= instanceId;
 		this.descriptor = descriptor;
 		try {
 			delegate = (Delegate) implementation.newInstance();
@@ -81,7 +86,9 @@ public abstract class ApplicationHandle {
 	 * 
 	 * @return the unique identifier of the instance
 	 */
-	public final String getInstanceID() { return instanceId; }
+	public final String getInstanceID() {
+		return this.instanceId;
+	}
 
 	/**
 	 * Retrieves the application descriptor which represents the application of
@@ -118,14 +125,15 @@ public abstract class ApplicationHandle {
 	 * this application should not be made because they may have unexpected
 	 * results.
 	 * 
-	 * @throws SecurityException if the caller doesn't have "manipulate"
-	 *         ApplicationAdminPermission for the corresponding application.
+	 * @throws SecurityException
+	 *             if the caller doesn't have "manipulate"
+	 *             ApplicationAdminPermission for the corresponding application.
 	 * 
-	 * @throws Exception is thrown if an exception or an error occurred during
-	 *         the method execution.
-	 * @throws IllegalStateException if the application handle is unregistered
-	 * 
-	 * @modelguid {CEAB58E4-91B8-4E7A-AEEB-9C14C812E607}
+	 * @throws Exception
+	 *             is thrown if an exception or an error occurred during the
+	 *             method execution.
+	 * @throws IllegalStateException
+	 *             if the application handle is unregistered
 	 */
 	public final void destroy() throws Exception {
 		delegate.destroy();
@@ -136,14 +144,31 @@ public abstract class ApplicationHandle {
 	 * Called by the destroy() method to perform application model specific
 	 * steps to stop and destroy an application instance safely.
 	 * 
-	 * @throws Exception is thrown if an exception or an error occurred during
-	 *         the method execution.
+	 * @throws Exception
+	 *             is thrown if an exception or an error occurred during the
+	 *             method execution.
 	 */
 	protected abstract void destroySpecific() throws Exception;
+	
+	ApplicationDescriptor		descriptor;
+	Delegate	delegate;
+	
+	static Class				implementation;
+
+	static String				cName;
+	{
+		try {
+			cName = System
+					.getProperty("org.osgi.vendor.application.ApplicationHandle");
+			implementation = Class.forName(cName);
+		}
+		catch (Throwable t) {
+			// Ignore
+		}
+	}
 
 	public interface Delegate {
 		void setApplicationHandle(ApplicationHandle d, ApplicationDescriptor.Delegate descriptor );
 		void destroy() throws Exception;
 	}
-
 }
