@@ -40,7 +40,7 @@ import org.osgi.service.application.*;
  * application handle and provides features specific to the Meglet model.
  */
 public final class MegletHandleImpl extends MegletHandle {
-	private int									status;
+	private String							status;
 	private Meglet							meglet;
 	private MegletContainer			megletContainer;
 	private ServiceReference		appDescRef;
@@ -50,7 +50,6 @@ public final class MegletHandleImpl extends MegletHandle {
 	private static Long					counter						= new Long(0);
 	private Map									resumeArgs				= null;
 	private String      				pid;
-	private final static int 		NONEXISTENT = -1;
 	private static int          instanceCounter;
 	
 	/**
@@ -58,8 +57,6 @@ public final class MegletHandleImpl extends MegletHandle {
 	 * 
 	 * @modelguid {8EBD44E3-883B-4515-8EEA-8469F6F16408}
 	 */
-	public  final static int 		SUSPENDED = 2;
-
 	public MegletHandleImpl(MegletContainer megletContainer, Meglet meglet,
 			MegletDescriptor appDesc, BundleContext bc) throws Exception {
 		super( createNewInstanceID( appDesc.getPID() ), appDesc );
@@ -67,7 +64,7 @@ public final class MegletHandleImpl extends MegletHandle {
 		appDescRef = megletContainer.getReference( appDesc );		
 		pid = appDesc.getPID();
 		
-		status = MegletHandleImpl.NONEXISTENT;
+		status = null;
 		this.megletContainer = megletContainer;
 		this.bc = bc;
 		this.meglet = meglet;
@@ -81,8 +78,8 @@ public final class MegletHandleImpl extends MegletHandle {
 	 * 
 	 * @return the state of the Meglet instance
 	 */
-	public int getState() {
-		if( status == MegletHandleImpl.NONEXISTENT )
+	public String getState() {
+		if( status == null )
 			throw new RuntimeException( "Invalid state!" );
 		return status;
 	}	
@@ -98,13 +95,13 @@ public final class MegletHandleImpl extends MegletHandle {
 		else
 			resumeArgs = new Hashtable(args);
 
-		if (status != MegletHandleImpl.NONEXISTENT)
+		if (status != null )
 			throw new Exception("Invalid State");
 
 		if (meglet != null) {
 			startApplication( meglet, args, null);
+			setStatus( ApplicationHandle.RUNNING );
 			registerAppHandle();
-			setStatus(ApplicationHandle.RUNNING);
 
 			return serviceReg.getReference();
 		}
@@ -118,15 +115,13 @@ public final class MegletHandleImpl extends MegletHandle {
 	 *  
 	 */
 	protected void destroySpecific() throws Exception {
-		if (status == MegletHandleImpl.NONEXISTENT
-				|| status == ApplicationHandle.STOPPING)
+		if ( status == null )
 			throw new Exception("Invalid State");
-		if (meglet != null) {
-			setStatus(ApplicationHandle.STOPPING);
+		if ( meglet != null ) {
 			stopApplication( meglet, null);
 			meglet = null;
 		}
-		setStatus(MegletHandleImpl.NONEXISTENT);
+		setStatus( null );
 		unregisterAppHandle();
 	}
 
@@ -205,17 +200,17 @@ public final class MegletHandleImpl extends MegletHandle {
 		setStatus(ApplicationHandle.RUNNING);
 	}
 
-	private void setStatus(int status) {
+	private void setStatus( String status ) {
 		this.status = status;
 
-		if( status != NONEXISTENT )
+		if( status != null && serviceReg != null )
 			serviceReg.setProperties( properties() );
 	}
 
 	private Hashtable properties() {
 		Hashtable props = new Hashtable();
 		props.put( ApplicationHandle.APPLICATION_PID, getInstanceID() );
-		props.put( ApplicationHandle.APPLICATION_STATE, new Integer( status ) );
+		props.put( ApplicationHandle.APPLICATION_STATE, status );
 		props.put( ApplicationHandle.APPLICATION_DESCRIPTOR, appDescRef.getProperty( Constants.SERVICE_PID ) );		
 		return props;
 	}

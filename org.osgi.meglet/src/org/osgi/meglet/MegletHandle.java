@@ -14,9 +14,8 @@ public abstract class MegletHandle extends ApplicationHandle {
 	}
 	/**
 	 * The Meglet instance is suspended.
-	 * 
 	 */
-	public final static int SUSPENDED = 2;
+	public final static String SUSPENDED = "SUSPENDED";
 
 	/**
 	 * Suspends the Melet instance. It calls the associated Meglet instance's
