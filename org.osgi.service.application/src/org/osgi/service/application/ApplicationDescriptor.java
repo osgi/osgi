@@ -139,7 +139,29 @@ public abstract class ApplicationDescriptor {
 	 * @throws IllegalStateException
 	 *             if the application descriptor is unregistered
 	 */
-	public abstract Map getProperties(String locale);
+	public final Map getProperties(String locale) {
+		return getPropertiesSpecific( locale );
+	}
+	
+	/**
+	 * Container implementations can provide application model specific
+	 * and/or container implementation specific properties via this 
+	 * method. 
+	 * 
+	 * Localizable properties must be returned localized if the provided
+	 * <code>locale</code> argument is not the empty String. The value
+	 * <code>null</code> indicates to use the default locale, for other
+	 * values the specified locale should be used. 
+	 *
+	 * @param locale the locale to be used for localizing the properties.
+	 * If <code>null</code> the default locale should be used. If it is
+	 * the empty String (<code>""</code>) then raw (non-localized) values
+	 * should be returned.
+	 * 
+	 * @return the application model specific and/or container implementation
+	 * specific properties of this application descriptor. 
+	 */
+	protected abstract Map getPropertiesSpecific(String locale);
 
 	/**
 	 * Launches a new instance of an application. The args parameter specifies
