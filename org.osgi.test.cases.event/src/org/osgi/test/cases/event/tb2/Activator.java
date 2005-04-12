@@ -104,7 +104,6 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
     if (lastEvents == null) {
       lastEvents = new Vector();
     }
-    System.out.println("tbc1" + event.getTopic());//didi
     lastEvents.addElement(event);
   }
   
