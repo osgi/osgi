@@ -299,7 +299,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			ServiceReference[] hrefs;
 			try {
 				hrefs = bc.getServiceReferences(ApplicationHandle.class
-						.getName(), "(application.pid=" + path[1] + ")");
+						.getName(), "(" + ApplicationHandle.APPLICATION_PID + "=" + path[1] + ")");
 			}
 			catch (InvalidSyntaxException e) {
 				throw new RuntimeException("Internal error.");
@@ -374,7 +374,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 
 				String[] ret = new String[ hrefs.length ];
 				for (int i = 0; i < hrefs.length; ++i) {
-					ret[i] = (String) hrefs[i].getProperty( "application.pid" );
+					ret[i] = (String) hrefs[i].getProperty( ApplicationHandle.APPLICATION_PID );
 				}
 				return ret;
 			}
@@ -466,7 +466,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			try 
 			{
 				ServiceReference[] hrefs = bc.getServiceReferences(
-						ApplicationHandle.class.getName(), "(application.pid=" + path[ 1 ] + ")");
+						ApplicationHandle.class.getName(), "(" + ApplicationHandle.APPLICATION_PID + "=" + path[ 1 ] + ")");
 			
 				if (hrefs == null)
 					throw new DmtException(nodeUri,
@@ -569,7 +569,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			if (hrefs == null)
 				return false;
 			for (int i = 0; i < hrefs.length; ++i) {
-				if ( pid.equals((String) hrefs[i].getProperty("application.pid") ) )
+				if ( pid.equals((String) hrefs[i].getProperty( ApplicationHandle.APPLICATION_PID ) ) )
 					return true;
 			}
 			return false;

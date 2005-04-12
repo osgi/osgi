@@ -214,9 +214,9 @@ public final class MegletHandleImpl extends MegletHandle {
 
 	private Hashtable properties() {
 		Hashtable props = new Hashtable();
-		props.put( "application.pid", getInstanceID() );
-		props.put( "application.state", new Integer( status ) );
-		props.put( "descriptor.pid", appDescRef.getProperty( Constants.SERVICE_PID ) );		
+		props.put( ApplicationHandle.APPLICATION_PID, getInstanceID() );
+		props.put( ApplicationHandle.APPLICATION_STATE, new Integer( status ) );
+		props.put( ApplicationHandle.APPLICATION_DESCRIPTOR, appDescRef.getProperty( Constants.SERVICE_PID ) );		
 		return props;
 	}
 	

@@ -1,21 +1,42 @@
 package org.osgi.service.application;
 
+import org.osgi.framework.*;
 
 /**
  * ApplicationHandle is an OSGi service interface which represents an instance
  * of an application. It provides the functionality to query and manipulate the
  * lifecycle state of the represented application instance. It defines constants
  * for the lifecycle states.
- * 
- * @modelguid {0967B96E-F06C-4EA1-96E7-3263670F4F49}
  */
 public abstract class ApplicationHandle {
+
+	/**
+	 * The property key for the unique identifier (PID) of the application
+	 * instance.
+	 */
+	public static final String APPLICATION_PID = Constants.SERVICE_PID;
+	
+	/**
+	 * The property key for the pid of the corresponding application descriptor.
+	 */
+	public final static String APPLICATION_DESCRIPTOR	= "application.descriptor";
+	
+	/**
+	 * The property key for the state of this appliction instance.
+	 */
+	public final static String APPLICATION_STATE		= "application.state";
+
+	/**
+	 * The application instance is running. This is the initial state of a newly
+	 * created application instance.
+	 */
+//	public final static String RUNNING = "RUNNING"; /* TODO */
+
 	String						instanceId;
 	ApplicationDescriptor		descriptor;
 	Delegate	delegate;
 	static Class				implementation;
 	static String				cName;
-
 	{
 		try {
 			cName = System
