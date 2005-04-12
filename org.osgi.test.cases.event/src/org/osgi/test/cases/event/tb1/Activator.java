@@ -28,6 +28,7 @@
 package org.osgi.test.cases.event.tb1;
 
 import java.util.Hashtable;
+import java.util.Vector;
 
 import org.osgi.framework.*;
 import org.osgi.service.event.Event;
@@ -35,7 +36,6 @@ import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
 import org.osgi.test.cases.event.tbc.TBCService;
-import java.lang.Thread;
 
 /**
  * A bundle that registers a service with the marker interface
@@ -46,7 +46,7 @@ import java.lang.Thread;
 public class Activator implements BundleActivator, TBCService, EventHandler {
   
   private BundleContext context;
-  private Event lastEvent = null;
+  private Vector lastEvents = null;
   private ServiceRegistration serviceReg;
   private String[] topics;
   
@@ -102,24 +102,30 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
    * @param event The event that occurred.
    */
   public void handleEvent(Event event) {
-    if (event.getTopic().endsWith("_wait")) {
-      //wait in order to see what happens with event handling in other bundles
-      try {
-        Thread.sleep(5000);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
+    if (lastEvents == null) {
+      lastEvents = new Vector();
     }
-    lastEvent = event;
+    lastEvents.addElement(event);
   }
   
   /**
-   * Returns the last received event and then the last event is set to null.
+   * Returns the last received event and then elements in the vector with last events are removed.
    * @see org.osgi.test.cases.event.tbc.TBCService#getLastReceivedEvent()
    */
   public Event getLastReceivedEvent() {
-    Event event = lastEvent;
-    lastEvent = null;
+    if (lastEvents == null || lastEvents.size() < 1) return null;
+    Event event = (Event) lastEvents.lastElement();
+    lastEvents.removeAllElements();
     return event;
+  }
+  
+  /**
+   * Returns the last received events and then elements in the vector with last events are removed.
+   * @see org.osgi.test.cases.event.tbc.TBCService#getLastReceivedEvents()
+   */
+  public Vector getLastReceivedEvents() {
+    Vector events = (Vector) lastEvents.clone();
+    lastEvents.removeAllElements();
+    return events;
   }
 }

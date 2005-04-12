@@ -27,6 +27,7 @@
 package org.osgi.test.cases.event.tbc;
 
 import java.util.Hashtable;
+import java.util.Vector;
 
 import org.osgi.framework.*;
 //import org.osgi.service.packageadmin.PackageAdmin;
@@ -328,24 +329,51 @@ public class EventTestControl extends DefaultTestBundleControl {
     TBCService tbcService2 = (TBCService) trackerProvider2.getService();
     
     String[] topics;
-    topics = new String[] {"org/osgi/test/*"};
+    topics = new String[] {"test/*"};
     tbcService1.setTopics(topics);
     
-    topics = new String[] {"org/osgi/test/*"};
+    topics = new String[] {"test/*"};
     tbcService2.setTopics(topics);    
     
-    String[] events = new String[] {"org/osgi/test/Event0_wait", "org/osgi/test/Event1"};
-    Boolean[] eventsMap1 = new Boolean[] {Boolean.FALSE, /*not recieved immediately because of Thread sleep*/ 
-                                          Boolean.TRUE};
-    Boolean[] eventsMap2 = new Boolean[] {Boolean.TRUE, /*recieved immediately - no metter of other bundle event handling*/
-                                          Boolean.TRUE};
+    Event[] events = new Event[10];
+    for (int i = 0; i < events.length; i++) {
+      events[i] = new Event("test/Event" + i, new Hashtable()); 
+    }    
+    
+    for (int i = 0; i < events.length; i++) {
+      eventAdmin.postEvent(events[i]);
+    }
+    //wait to ensure that events are recieved asynchronous
+    try { 
+      Thread.sleep(10000); 
+    } catch (InterruptedException e) {
+    }
+    
+    Vector tbc1Events = tbcService1.getLastReceivedEvents();
+    Vector tbc2Events = tbcService2.getLastReceivedEvents();
+    String message = "Events should be recieved in the same order as they are post ";
+    
+    if (tbc1Events == null || tbc1Events.size() == 0) {
+      fail("tbc1: No events recived");
+    }
+    if (tbc2Events == null || tbc2Events.size() == 0) {
+      fail("tbc2: No events recived");
+    }
     
     Event event;
-    for (int i = 0; i < events.length; i++) {
-      event = new Event(events[i], new Hashtable());
-      eventAdmin.postEvent(event);
-      assertEvent(event, tb1, tbcService1, eventsMap1[i].booleanValue());
-      assertEvent(event, tb2, tbcService2, eventsMap2[i].booleanValue());
+    for (int i=0; i < tbc1Events.size(); i++) {
+      event = (Event) tbc1Events.elementAt(i);
+      if (event == null) {
+        fail("tbc1: Event with topic [test/Event" + i + "] not recieved");
+      }
+      assertEquals(message, "test/Event" + i, event.getTopic());
+    }
+    for (int i=0; i < tbc2Events.size(); i++) {
+      event = (Event) tbc2Events.elementAt(i);
+      if (event == null) {
+        fail("tbc2: Event with topic [test/Event" + i + "] not recieved");
+      }
+      assertEquals(message, "test/Event" + i, event.getTopic());
     }
     trackerProvider1.close();
     trackerProvider2.close();

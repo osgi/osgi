@@ -28,14 +28,12 @@
 package org.osgi.test.cases.event.tb2;
 
 import java.util.Hashtable;
+import java.util.Vector;
 
 import org.osgi.framework.*;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
-import org.osgi.service.event.TopicPermission;
-import org.osgi.service.permissionadmin.PermissionAdmin;
-import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.event.tbc.TBCService;
 
 /**
@@ -47,7 +45,7 @@ import org.osgi.test.cases.event.tbc.TBCService;
 public class Activator implements BundleActivator, TBCService, EventHandler {
   
   private BundleContext context;
-  private Event lastEvent = null;
+  private Vector lastEvents = null;
   private ServiceRegistration serviceReg;
   private String[] topics;
   
@@ -103,16 +101,31 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
    * @param event The event that occurred.
    */
   public void handleEvent(Event event) {
-    lastEvent = event;
+    if (lastEvents == null) {
+      lastEvents = new Vector();
+    }
+    System.out.println("tbc1" + event.getTopic());//didi
+    lastEvents.addElement(event);
   }
   
   /**
-   * Returns the last received event and then the last event is set to null.
+   * Returns the last received event and then elements in the vector with last events are removed.
    * @see org.osgi.test.cases.event.tbc.TBCService#getLastReceivedEvent()
    */
   public Event getLastReceivedEvent() {
-    Event event = lastEvent;
-    lastEvent = null;
+    if (lastEvents == null || lastEvents.size() < 1) return null;
+    Event event = (Event) lastEvents.lastElement();
+    lastEvents.removeAllElements();
     return event;
+  }
+  
+  /**
+   * Returns the last received events and then elements in the vector with last events are removed.
+   * @see org.osgi.test.cases.event.tbc.TBCService#getLastReceivedEvents()
+   */
+  public Vector getLastReceivedEvents() {
+    Vector events = (Vector) lastEvents.clone();
+    lastEvents.removeAllElements();
+    return events;
   }
 }

@@ -27,6 +27,8 @@
 
 package org.osgi.test.cases.event.tbc;
 
+import java.util.Vector;
+
 import org.osgi.service.event.Event;
 
 /**
@@ -55,4 +57,10 @@ public interface TBCService {
    * @return last received event
    */
   public Event getLastReceivedEvent();
+  
+  /**
+   * Returns the last received events and then elements in the vector with last events are removed.
+   * @see org.osgi.test.cases.event.tbc.TBCService#getLastReceivedEvents()
+   */
+  public Vector getLastReceivedEvents();
 }
