@@ -2,7 +2,8 @@ package org.osgi.service.application;
 
 import java.io.IOException;
 import java.util.Map;
-import org.osgi.framework.*;
+
+import org.osgi.framework.Constants;
 
 /**
  * An OSGi service that represents an installed application and stores
@@ -210,7 +211,7 @@ public abstract class ApplicationDescriptor {
 	 * @throws IllegalStateException
 	 *             if the application descriptor is unregistered
 	 */
-	public final ServiceReference launch(Map arguments)
+	public final ApplicationHandle launch(Map arguments)
 			throws SingletonException, Exception {
 		delegate.launch(arguments);
 		return launchSpecific(arguments);
@@ -221,16 +222,18 @@ public abstract class ApplicationDescriptor {
 	 * model specific way. It also creates and registeres the application handle
 	 * to represent the newly created and started instance and registeres it.
 	 * 
-	 * @param arguments the startup parameters of the new application instance,
-	 *        may be null
+	 * @param arguments
+	 *            the startup parameters of the new application instance, may be
+	 *            null
 	 * 
-	 * @return the service reference of the registered application model
+	 * @return the registered application model
 	 *         specific application handle for the newly created and started
 	 *         instance.
 	 * 
-	 * @throws Exception if any problem occures.
+	 * @throws Exception
+	 *             if any problem occures.
 	 */
-	protected abstract ServiceReference launchSpecific(Map arguments)
+	protected abstract ApplicationHandle launchSpecific(Map arguments)
 			throws Exception;
 
 	/**
@@ -269,11 +272,10 @@ public abstract class ApplicationDescriptor {
 	 * @throws IllegalStateException
 	 *             if the application descriptor is unregistered
 	 */
-	public ServiceReference schedule(Map arguments, String topic,
+	public final ScheduledApplication schedule(Map arguments, String topic,
 			String eventFilter, boolean recurring) throws IOException {
 		return delegate.schedule(arguments, topic, eventFilter, recurring);
 	}
-
 
 	/**
 	 * Sets the lock state of the application. If an application is locked then
@@ -326,7 +328,7 @@ public abstract class ApplicationDescriptor {
 
 		void unlock();
 
-		ServiceReference schedule(Map args, String topic, String filter,
+		ScheduledApplication schedule(Map args, String topic, String filter,
 				boolean recurs);
 
 		void launch(Map arguments) throws Exception;

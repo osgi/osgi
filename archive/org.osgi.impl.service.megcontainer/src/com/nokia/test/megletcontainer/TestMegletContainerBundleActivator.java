@@ -736,9 +736,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			if (args == null)
 				throw new Exception("Cannot create the arguments of launch!");
 			boolean launchable = isLaunchable(appDesc);
-			ServiceReference appHandleRef = appDesc.launch(args);
-			appHandle = (ApplicationHandle)bc.getService( appHandleRef );
-			bc.ungetService( appHandleRef );
+			appHandle = appDesc.launch(args);
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the launch is not START!");
 			if (!launchable)
@@ -1409,11 +1407,9 @@ public class TestMegletContainerBundleActivator extends Object implements
 			Map args = createArgs();
 			if (args == null)
 				throw new Exception("Cannot create the arguments of launch!");
-			ServiceReference serviceRef = appDesc.
+			ScheduledApplication schedApp = appDesc.
 					schedule(args, "org/osgi/timer", getFilterFromNow( 2 ), false);
-			ScheduledApplication schedApp = (ScheduledApplication)bc.getService( serviceRef );
 			schedApp.remove();
-			bc.ungetService( serviceRef );
 			Thread.sleep(3000);
 			appHandle = lookupAppHandle(appDesc);
 			if (appHandle != null )
@@ -1455,8 +1451,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			if (appHandle != null )
 				throw new Exception("Application was scheduled inspite of non-recurring!");
 
-			ServiceReference serviceRef = appDesc.
-			    schedule(args, "com/nokia/test/ScheduleEvent", null, true);
+			ScheduledApplication schedApp = appDesc.schedule(args, "com/nokia/test/ScheduleEvent", null, true);
 			sendEvent(new Event("com/nokia/test/ScheduleEvent", null), false);
 			
 			appHandle = lookupAppHandle(appDesc);
@@ -1483,9 +1478,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			if (!testCase_stopApplication())
 				return false;
 			
-			ScheduledApplication schedApp = (ScheduledApplication)bc.getService( serviceRef );
 			schedApp.remove();
-			bc.ungetService( serviceRef );
 			return true;
 		}
 		catch (Exception e) {
@@ -1550,9 +1543,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			boolean launchable = isLaunchable(appDesc);
 			boolean started = false;
 			try {
-				ServiceReference appHandleRef = appDesc.launch(new Hashtable());
-				appHandle = (ApplicationHandle)bc.getService( appHandleRef );
-				bc.ungetService( appHandleRef );
+				appHandle = appDesc.launch(new Hashtable());
 				started = true;
 			}catch (Exception e) {}
 			
@@ -1603,9 +1594,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			boolean launchable = isLaunchable(appDesc);
 			boolean started = false;
 			try {
-				ServiceReference appHandleRef = appDesc.launch(new Hashtable());
-				appHandle = (ApplicationHandle)bc.getService( appHandleRef );
-				bc.ungetService( appHandleRef );
+				appHandle = appDesc.launch(new Hashtable());
 				started = true;
 			}
 			catch (Exception e) {}

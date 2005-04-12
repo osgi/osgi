@@ -82,7 +82,7 @@ public class ApplicationDescriptorImpl implements Delegate {
 		doLock(false, false);
 	}
 
-	public ServiceReference schedule(Map args, String topic, String filter, boolean recurs) {
+	public ScheduledApplication schedule(Map args, String topic, String filter, boolean recurs) {
 		String pid = (String)descriptor.getProperties( "" ).get( ApplicationDescriptor.APPLICATION_PID );
 		
 		return Activator.scheduler.addScheduledApplication( pid, args, topic, filter, recurs );

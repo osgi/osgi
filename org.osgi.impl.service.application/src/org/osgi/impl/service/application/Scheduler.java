@@ -52,7 +52,7 @@ public class Scheduler implements Runnable, EventHandler {
 		schedulerThread.interrupt();
 	}
 
-	public synchronized ServiceReference addScheduledApplication(String pid,
+	public synchronized ScheduledApplication addScheduledApplication(String pid,
 			Map arguments, String topic, String eventFilter, boolean recurring) {
 
 //		AccessController.checkPermission(new ApplicationAdminPermission(pid,  /* TODO */
@@ -66,7 +66,7 @@ public class Scheduler implements Runnable, EventHandler {
 		saveScheduledApplications();
 		schedulerThread.interrupt();
 		app.register();
-		return app.getReference();
+		return app;
 	}
 
 	public synchronized void removeScheduledApplication(
