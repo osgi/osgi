@@ -4,15 +4,13 @@ import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
-import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 
@@ -24,8 +22,6 @@ public class Transaction {
     public static final int STARTBUNDLE     = 3;
     public static final int STOPBUNDLE      = 4;
     public static final int PROCESSOR       = 5;
-    public static final int FILTERS         = 6;
-    public static final int RESOURCES       = 7;
     
     static final String[] transactionCodes = {
         "INSTALLBUNDLE",
@@ -33,9 +29,7 @@ public class Transaction {
         "UNINSTALLBUNDLE", 
         "STARTBUNDLE", 
         "STOPBUNDLE", 
-        "PROCESSOR", 
-        "FILTERS",
-        "RESOURCES"
+        "PROCESSOR"
     };
     
     private List                  steps;
@@ -68,7 +62,7 @@ public class Transaction {
             throw new CancelException();
         
         if (PROCESSOR == record.code) {
-            ResourceProcessor proc = (ResourceProcessor) record.objs[0];
+            ResourceProcessor proc = (ResourceProcessor) record.rp;
             if (processors.contains(proc)) {
                 return true;
             }
@@ -82,7 +76,22 @@ public class Transaction {
         return true;
     }
     
-    public synchronized void commit() {
+    public synchronized void commit() throws DeploymentException {
+        // prepare !
+        try {
+	        for (Iterator iter = steps.iterator(); iter.hasNext();) {
+	            TransactionRecord element = (TransactionRecord) iter.next();
+	            if (element.code == PROCESSOR) {
+	                ((ResourceProcessor) element.rp).prepare();
+	                logger.log(Logger.LOG_INFO, "Prepare " + element);
+	            }
+	        }
+        } catch (DeploymentException e) {
+            rollback();
+            throw e;
+        }
+        
+        // commit !
         try {
 	        for (Iterator iter = steps.iterator(); iter.hasNext();) {
 	            TransactionRecord element = (TransactionRecord) iter.next();
@@ -93,19 +102,15 @@ public class Transaction {
 	                case UPDATEBUNDLE :
 	                    break;
 	                case UNINSTALLBUNDLE :
-	                    ((Bundle) element.objs[0]).uninstall();
+	                    element.bundle.uninstall();
 	                    break;
 	                case STARTBUNDLE :
 	                    break;
 	                case STOPBUNDLE :
 	                    break;
 	                case PROCESSOR:
-	                    ResourceProcessor proc = (ResourceProcessor) element.objs[0];
+	                    ResourceProcessor proc = element.rp;
 	                    proc.commit();
-	                    break;
-	                case FILTERS:
-	                    break;
-	                case RESOURCES:
 	                    break;
 	                default :
 	                    break;
@@ -130,35 +135,22 @@ public class Transaction {
 	            logger.log(Logger.LOG_INFO, "Rollback\n" + element);
 	            switch (element.code) {
 	                case INSTALLBUNDLE : {
-	                    uninstallBundle((Bundle) element.objs[0]);
+	                    uninstallBundle(element.bundle);
 	                    break;
 	                } 
 	                case UPDATEBUNDLE :
 	                    break;
 	                case UNINSTALLBUNDLE : {
-	                    Set bundles = (Set) element.objs[1];
-	                    BundleEntry be = (BundleEntry) element.objs[2];
-	                    bundles.add(be);
 	                    break;
 	                } case STARTBUNDLE :
-	                    ((Bundle) element.objs[0]).stop();
+	                    element.bundle.stop();
 	                    break;
 	                case STOPBUNDLE :
-	                    ((Bundle) element.objs[0]).start();
+	                    element.bundle.start();
 	                    break;
 	                case PROCESSOR:
-	                    ResourceProcessor proc = (ResourceProcessor) element.objs[0];
+	                    ResourceProcessor proc = element.rp;
 	                    proc.rollback();
-	                    break;
-	                case FILTERS:
-	                    Hashtable filters = (Hashtable) element.objs[0];
-	                    Hashtable filtersBefore = (Hashtable) element.objs[1];
-	                    filters = filtersBefore;
-	                    break;
-	                case RESOURCES:
-	                    Set resources = (Set) element.objs[0];
-	                    Set resourcesBefore = (Set) element.objs[1];
-	                    resources = resourcesBefore;
 	                    break;
 	                default :
 	                    break;

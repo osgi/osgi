@@ -18,7 +18,16 @@
 package org.osgi.impl.service.deploymentadmin;
 
 public class DAConstants {
+    
+    // debug mode
+    public static final boolean DEBUG               = true;
 
+    // headers in the main section
+    public static final String DP_NAME              = "DeploymentPackage-Name";
+    public static final String DP_VERSION           = "DeploymentPackage-Version";
+    public static final String DP_FIXPACK           = "DeploymentPackage-FixPack";
+    
+    // headers in the name sections
     public static final String MISSING              = "DeploymentPackage-Missing";
     public static final String BUNDLE_SYMBOLIC_NAME = "Bundle-SymbolicName";
     public static final String BUNDLE_VERSION       = "Bundle-Version";

@@ -177,8 +177,6 @@ public class DoIt implements BundleActivator {
         InputStream is = new FileInputStream(HOME + "db_test_01.dp");
 		da.installDeploymentPackage(is);
 		
-		try {Thread.sleep(1000);} catch (Exception e) {}
-		
 		String[] tables = db.tableNames(null);
 		for (int i = 0; i < tables.length; i++) {
 		    System.out.println("TABLE: " + tables[i]);
@@ -206,8 +204,6 @@ public class DoIt implements BundleActivator {
 
         is = new FileInputStream(HOME + "db_test_01_update_01.dp");
 		da.installDeploymentPackage(is);
-		
-		try {Thread.sleep(1000);} catch (Exception e) {}
 		
 		tables = db.tableNames(null);
 		for (int i = 0; i < tables.length; i++) {
@@ -240,8 +236,6 @@ public class DoIt implements BundleActivator {
         InputStream is = new FileInputStream(HOME + "db_test_02.dp");
 		da.installDeploymentPackage(is);
 		
-		try {Thread.sleep(1000);} catch (Exception e) {}
-		
 		String[] tables = db.tableNames(null);
 		for (int i = 0; i < tables.length; i++) {
 		    System.out.println("TABLE: " + tables[i]);
@@ -261,8 +255,6 @@ public class DoIt implements BundleActivator {
 
         is = new FileInputStream(HOME + "db_test_02_update_01.dp");
 		da.installDeploymentPackage(is);
-		
-		try {Thread.sleep(1000);} catch (Exception e) {}
 		
 		tables = db.tableNames(null);
 		for (int i = 0; i < tables.length; i++) {
@@ -291,8 +283,6 @@ public class DoIt implements BundleActivator {
         
         InputStream is = new FileInputStream(HOME + "db_test_03.dp");
 		dp = da.installDeploymentPackage(is);
-		
-		try {Thread.sleep(1000);} catch (Exception e) {}
 		
 		String[] tables = db.tableNames(null);
 		for (int i = 0; i < tables.length; i++) {

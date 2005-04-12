@@ -24,26 +24,29 @@ import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
+import java.util.jar.Manifest;
 
 /**
  * WrappedJarInputStream class wraps the JarInputStream implementation  
  * to override its behaviour according to the needs of the deployment 
- * packages (DPs). See nextEntry(), close() and realClose() methods! 
+ * packages (DPs). See nextEntry() and closeEntry() methods! 
  */
-public class WrappedJarInputStream extends JarInputStream {
+public class WrappedJarInputStream {
     
     /**
      * Extends the JarEntry functionality according to the needs of 
-     * the deployment packages (DPs). It is able to sign bundles, 
+     * the deployment packages (DPs). It is able to recognise bundles, 
      * resources and their missing variations.
      */
-    public class Entry extends JarEntry {
-        private boolean    missing;
-        private Attributes attrs;
+    public static class Entry extends JarEntry {
+        private boolean               missing;
+        private Attributes            attrs;
+        private ByteArrayOutputStream buffer;
 
-        private Entry(JarEntry je) throws IOException {
+        private Entry(JarEntry je, ByteArrayOutputStream buffer) throws IOException {
             super(je);
             attrs = je.getAttributes();
+            this.buffer = buffer;
         }
         
         private Entry(String name, Attributes attrs) {
@@ -54,6 +57,10 @@ public class WrappedJarInputStream extends JarInputStream {
             
             this.attrs = attrs;
             missing = true;
+        }
+        
+        public InputStream getInputStream() throws IOException {
+            return new ByteArrayInputStream(buffer.toByteArray());
         }
         
         public boolean isBundle() {
@@ -81,31 +88,22 @@ public class WrappedJarInputStream extends JarInputStream {
         }
     }
     
-    private Map			   resourceNames;
-    private boolean		   hasToClose = false;
+    private JarInputStream jis;
+    private Map            resourceNames;
     private Entry          actEntry;
-    
-	public WrappedJarInputStream(InputStream is) throws IOException {
-	    this(is, false);
-	}
-
-	public WrappedJarInputStream(InputStream is, boolean verify)
-			throws IOException {
-		super(is, verify);
-		resourceNames = new HashMap(getManifest().getEntries());
+        
+    public WrappedJarInputStream(InputStream is) throws IOException {
+	    this.jis = new JarInputStream(is);
+	    resourceNames = new HashMap(getManifest().getEntries());
 	}
 	
 	/**
 	 * Gives back the next Entry in the dployment package.
-	 * The entry can be:<p> bundle<p> missing bundle<p> resource<p>
-	 * missing resource 
 	 * @return The next Entry or <code>null</code> if there is no 
 	 * more entries.
 	 * @throws IOException
 	 */
     public Entry nextEntry() throws IOException {
-        // if the actual entry has not been closed with CloseEntry()  
-        // we do not move towards
         if (null != actEntry)
             return actEntry;
         
@@ -113,10 +111,7 @@ public class WrappedJarInputStream extends JarInputStream {
         if (null == je) {
             // The stream ended but we may have missing bundles/resources
             Iterator it = resourceNames.keySet().iterator();
-            if (!it.hasNext())
-                // The stream ended and we have no more missing bundles/resources 
-                actEntry = null;
-            else {
+            if (it.hasNext()) {
                 String name = (String) it.next();
                 actEntry = new Entry(name, (Attributes) resourceNames.get(name));
             
@@ -125,9 +120,12 @@ public class WrappedJarInputStream extends JarInputStream {
             }
         }
         else {
+            ByteArrayOutputStream bos = readIntoBuffer();
+            closeEntry();
+
             // We have opened a JarEntries so we have to close it 
             // when nextEntry() is called next time
-            actEntry = new Entry(je);
+            actEntry = new Entry(je, bos);
             
             // remove to ensure that the sequence of Entries ends
             resourceNames.remove(je.getName());
@@ -135,21 +133,32 @@ public class WrappedJarInputStream extends JarInputStream {
         return actEntry;
     }
 
-	public void close() throws IOException {
-		// Does nothing because e.g. OSGi 
-	    // BundleContext.installBundle(String location, InputStream in)
-		// method closes the entire JarInputStream but only the actual 
-	    // JarEntry has to be closed. To really close the stream call 
-	    // the realClose() method.
-	}
-	
-	// See the close() method!
-	void realClose() throws IOException {
-	    close();
-	}
+    private JarEntry getNextJarEntry() throws IOException {
+        return jis.getNextJarEntry();
+    }
+
+    private ByteArrayOutputStream readIntoBuffer() throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            int data = jis.read();
+            while (-1 != data) {
+                bos.write(data);
+                data = jis.read();
+            }
+        } finally {
+            if (null != bos)
+                bos.close();
+        }
+        return bos;
+    }
 	
     public void closeEntry() throws IOException {
-        super.closeEntry();
+        // nextEntry() calls the JarInputStream.closeEntry() method
         actEntry = null;
     }
+
+    public Manifest getManifest() {
+        return jis.getManifest();
+    }
+    
 }

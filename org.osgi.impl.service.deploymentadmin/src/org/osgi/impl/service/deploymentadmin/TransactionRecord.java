@@ -3,25 +3,34 @@ package org.osgi.impl.service.deploymentadmin;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.osgi.framework.Bundle;
+import org.osgi.service.deploymentadmin.ResourceProcessor;
+
 public class TransactionRecord {
     
-    public int      code;
-    public Object[] objs;
-
-    public TransactionRecord(int code, Object[] objs) {
+    public int               code;
+    public ResourceProcessor rp;
+    public Bundle			 bundle;
+    
+    public TransactionRecord(int code, ResourceProcessor rp, Bundle b) {
         this.code = code;
-        this.objs = objs;
+        this.rp = rp;
+        this.bundle = b;
+    }
+    
+    public TransactionRecord(int code, ResourceProcessor rp) {
+        this(code, rp, null);
+    }
+    
+    public TransactionRecord(int code, Bundle b) {
+        this(code, null, b);
     }
     
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < objs.length; i++) {
-            String s = breakLines(objs[i].toString(), 80);
-            sb.append(s + "\n");
-        }
         return "[----------------------------------------------------\n" +
-        		"code: " + Transaction.transactionCodes[code] + "\n" +
-        		"objs: " + sb.toString() + 
+        		"code:               " + Transaction.transactionCodes[code] + "\n" +
+        		"resource processor: " + rp + "\n" +
+        		"bundle:             " + bundle + "\n" +
         		"----------------------------------------------------]";
     }
 

@@ -19,11 +19,11 @@ package org.osgi.impl.service.deploymentadmin;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
-import java.util.jar.JarInputStream;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -136,8 +136,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     private void startBundle(Bundle b) throws BundleException {
         if (b.getState() != Bundle.ACTIVE)
             b.start();
-        transaction.addRecord(new TransactionRecord(
-                Transaction.STARTBUNDLE, new Object[] {b}));
+        transaction.addRecord(new TransactionRecord(Transaction.STARTBUNDLE, b));
     }
 
     private void stopBundles() throws BundleException {
@@ -150,16 +149,21 @@ public class DeploymentSessionImpl implements DeploymentSession {
 
     private void stopBundle(Bundle b) throws BundleException {
         b.stop();
-        transaction.addRecord(new TransactionRecord(
-                Transaction.STOPBUNDLE, new Object[] {b}));
+        transaction.addRecord(new TransactionRecord(Transaction.STOPBUNDLE, b));
     }
 
-    private void processResources(WrappedJarInputStream wjis) throws DeploymentException, IOException {
+    private void processResources(WrappedJarInputStream wjis) 
+    		throws DeploymentException, IOException 
+    {
         WrappedJarInputStream.Entry entry = wjis.nextEntry();
-        while (null != entry && entry.isResource()) 
+        while (null != entry) 
         {
+            if (!entry.isResource())
+                throw new DeploymentException(DeploymentException.CODE_ORDER_ERROR, 
+                        "Bundles have to precede resources in the deployment package");
+            
             if (!entry.isMissing())
-                processResource(entry, wjis);
+                processResource(entry);
             else
                 ; // do nothing
             wjis.closeEntry();
@@ -200,8 +204,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
      */
     private void dropResource(ResourceEntry re) throws DeploymentException {
         ResourceProcessor proc = findProcessor(re.getValue(DAConstants.RP_PID));
-        transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, 
-                new Object[] {proc}));
+        transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, proc));
         proc.dropped(re.getName());
     }
     
@@ -214,8 +217,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
             // TODO ???
             return;
         }
-        transaction.addRecord(new TransactionRecord(Transaction.UNINSTALLBUNDLE, 
-                new Object[] {b}));
+        transaction.addRecord(new TransactionRecord(Transaction.UNINSTALLBUNDLE, b));
         
         // Bundle.uninstall() is called by the transaction instance
     }
@@ -231,14 +233,13 @@ public class DeploymentSessionImpl implements DeploymentSession {
         return null;
     }
     
-    private void processResource(WrappedJarInputStream.Entry entry, JarInputStream jis) 
-    		throws DeploymentException 
+    private void processResource(WrappedJarInputStream.Entry entry) 
+    		throws DeploymentException, IOException 
     {
         String pid = entry.getAttributes().getValue(DAConstants.RP_PID);
         ResourceProcessor proc = findProcessor(pid);
-        transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, 
-                new Object[] {proc}));
-        proc.process(entry.getName(), jis);
+        transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, proc));
+        proc.process(entry.getName(), entry.getInputStream());
     }
     
     private void processBundles(WrappedJarInputStream wjis) 
@@ -248,7 +249,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         while (null != entry && entry.isBundle()) 
         {
             if (!entry.isMissing()) {
-                Bundle b = processBundle(entry, wjis);
+                Bundle b = processBundle(entry);
                 if (entry.isCustomizerBundle())
                     startBundle(b);
             }
@@ -259,42 +260,40 @@ public class DeploymentSessionImpl implements DeploymentSession {
         }
     }
     
-    private Bundle processBundle(WrappedJarInputStream.Entry entry, WrappedJarInputStream wjis) 
-    		throws BundleException 
+    private Bundle processBundle(WrappedJarInputStream.Entry entry) 
+    		throws BundleException, IOException 
     {
         Bundle ret;
         BundleEntry be = new BundleEntry(entry);
         Vector srcEntries = srcDp.getBundleEntries();
         Vector targetEntries = targetDp.getBundleEntries();
         if (targetEntries.contains(be)) {
-            ret = updateBundle(be, wjis);
+            ret = updateBundle(be, entry.getInputStream());
         } else {
-            ret = installBundle(be, wjis);
+            ret = installBundle(be, entry.getInputStream());
         }
         srcDp.updateBundleEntry(be);
         return ret;
     }
 
-    private Bundle installBundle(BundleEntry be, JarInputStream jis)
+    private Bundle installBundle(BundleEntry be, InputStream is)
     		throws BundleException
     {
-		Bundle b = context.installBundle(be.getSymbName(), jis);
+        Bundle b = context.installBundle(be.getSymbName(), is);
 		be.setId(b.getBundleId());
-		transaction.addRecord(new TransactionRecord(
-		        Transaction.INSTALLBUNDLE, new Object[] {b}));
+		transaction.addRecord(new TransactionRecord(Transaction.INSTALLBUNDLE, b));
 		return b;
     }
     
-    private Bundle updateBundle(BundleEntry be, JarInputStream jis)
+    private Bundle updateBundle(BundleEntry be, InputStream is)
 			throws BundleException 
     {
         Bundle[] bundles = context.getBundles();
         for (int i = 0; i < bundles.length; i++) {
             Bundle b = bundles[i];
             if (b.getLocation().equals(be.getSymbName())) {
-                b.update(jis);
-                transaction.addRecord(new TransactionRecord(
-                        Transaction.UPDATEBUNDLE, new Object[] {b}));
+                b.update(is);
+                transaction.addRecord(new TransactionRecord(Transaction.UPDATEBUNDLE, b));
                 be.setId(b.getBundleId());
                 return b;
             }

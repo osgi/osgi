@@ -32,14 +32,12 @@ import java.util.Set;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.DeploymentSession;
-import org.osgi.service.log.LogService;
 
 public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     
@@ -57,20 +55,13 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 		this.context = context;
 		load();
         registration = context.registerService(DeploymentAdmin.class.getName(), this, null);
-        initLogger();
+        logger = new Logger(context);
 	}
 	
 	public void stop(BundleContext context) throws Exception {
 	    registration.unregister();
+	    logger.stop();
 	}
-
-	private void initLogger() {
-        ServiceReference ref = context.getServiceReference(LogService.class.getName());
-        if (null != ref)
-            logger = new Logger((LogService) context.getService(ref));
-        else
-            logger = new Logger();
-    }
 
     private synchronized int nextDpId() {
         int ret = nextDpId.intValue(); 
@@ -104,14 +95,14 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     public DeploymentPackage installDeploymentPackage(InputStream in)
     		throws DeploymentException
     {
-        WrappedJarInputStream jis;
+        WrappedJarInputStream wjis;
         DeploymentPackageImpl srcDp = null;
         cancelled = false;
         
         // create source DP
         try {
-            jis = new WrappedJarInputStream(in);
-            srcDp = new DeploymentPackageImpl(jis.getManifest(), nextDpId());
+            wjis = new WrappedJarInputStream(in);
+            srcDp = new DeploymentPackageImpl(wjis.getManifest(), nextDpId());
         } catch (Exception e) {
             throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
                     e.getMessage(), e);
@@ -121,7 +112,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                 DeploymentAdminPermission.ACTION_INSTALL);
         session = createSession(srcDp);
         try {
-            session.go(jis);
+            session.go(wjis);
         } catch (CancelException e) {
             return null;
         }

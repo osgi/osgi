@@ -17,52 +17,25 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
-import java.security.AccessController;
-import java.security.Permission;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
-import java.util.Dictionary;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 import java.util.jar.Attributes;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.Constants;
-import org.osgi.framework.Filter;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
-import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.DeploymentSession;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
-import org.osgi.service.log.LogService;
-import org.osgi.util.tracker.ServiceTracker;
 
 public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     private transient BundleContext 	  context;
     private transient Logger 		      logger; 
-    //private transient Tracker             tracker;
-    //private transient DeploymentAdminImpl admin;
-    //private transient Transaction		  transaction;
-
-    //private transient WrappedJarInputStream stream;
-    //private transient Manifest			    manifest;
-    //private transient boolean 			    isFixPack;
     
     // TODO create a VersionRange class
     private String  fixPackRange;	
@@ -74,27 +47,19 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     private Vector bundleEntries = new Vector();
     private Vector resourceEntries = new Vector();
     
-    //private Hashtable                     filters = new Hashtable();
-    //private HashSet 					  resources = new HashSet();
-    
-    // these Sets contains BundleEntries
-    //private Set 						  bundles  = new HashSet();
-    //private transient Set				  newBundles;
-    //private transient Set				  updatedBundles;
-    //private transient Set				  pendingBundles;
-    
-    // to create a non-empty DP
-    public DeploymentPackageImpl(Manifest manifest, int id) {
-        dpName = manifest.getMainAttributes().getValue("DeploymentPackage-Name");
-        fixPackRange = manifest.getMainAttributes().getValue("DeploymentPackage-FixPack");
-        dpVersion = manifest.getMainAttributes().getValue("DeploymentPackage-Version");
+    /*
+     * to create a non-empty DP
+     */ 
+    public DeploymentPackageImpl(Manifest manifest, int id) throws DeploymentException {
         this.id = new Integer(id);
         
         processMainSection(manifest);
         processNameSections(manifest);
     }
-    
-    // to create an empty DP
+
+    /*
+     * to create an empty DP
+     */
     public DeploymentPackageImpl() {
     }
     
@@ -116,16 +81,34 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return "{" + getName() + " " + getVersion() + "}";
     }
 
-    private void processMainSection(Manifest manifest) {
+    private void processMainSection(Manifest manifest) throws DeploymentException {
+        dpName = manifest.getMainAttributes().getValue(DAConstants.DP_NAME);
+        fixPackRange = manifest.getMainAttributes().getValue(DAConstants.DP_FIXPACK);
+        dpVersion = manifest.getMainAttributes().getValue(DAConstants.DP_VERSION);
+        
         Attributes attrs = manifest.getMainAttributes();
         for (Iterator iter = attrs.keySet().iterator(); iter.hasNext();) {
             Attributes.Name key = (Attributes.Name) iter.next();
             Object value = attrs.getValue(key);
             mainSection.put(key.toString(), value);
         }
+        
+        checkMainSection();
+    }
+    
+    private void checkMainSection() throws DeploymentException {
+        if (null == dpName)
+            throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER, 
+                    "Missing header: " + DAConstants.DP_NAME);
+     
+        if (null == dpVersion)
+            throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER, 
+                    "Missing header: " + DAConstants.DP_VERSION);
+        
+        // TODO check fixpack range
     }
 
-    private void processNameSections(Manifest manifest) {
+    private void processNameSections(Manifest manifest) throws DeploymentException {
         Map entries = manifest.getEntries();
         for (Iterator iter = entries.keySet().iterator(); iter.hasNext();) {
             String resPath = (String) iter.next();
@@ -133,8 +116,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             String bSn = (String) attrs.getValue(DAConstants.BUNDLE_SYMBOLIC_NAME);
             String bVer = (String) attrs.getValue(DAConstants.BUNDLE_VERSION);
             String bCustStr = (String) attrs.getValue(DAConstants.CUSTOMIZER);
+            boolean isBundle = null != bSn && null != bVer; 
             boolean bCust = (bCustStr == null ? false : Boolean.valueOf(bCustStr).booleanValue());
-            if (null != bSn && null != bVer) {
+            if (isBundle) {
                 // bundle
                 BundleEntry be = new BundleEntry(bSn, bVer, bCust);
                 bundleEntries.add(be);
@@ -142,6 +126,28 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                 // resource
                 resourceEntries.add(new ResourceEntry(resPath, attrs));
             }
+            
+            checkNameSection(resPath, attrs, isBundle);
+        }
+    }
+    
+    private void checkNameSection(String resPath, Attributes attrs, boolean isBundle) 
+    		throws DeploymentException 
+    {
+        if (fixPack()) {
+            String missing = attrs.getValue(DAConstants.MISSING);
+            if (null == missing)
+                throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
+                        "Missing \"" + DAConstants.MISSING + "\" header in \"" +
+                        resPath + "\" section");
+        }
+        
+        if (!isBundle) {
+            String rp = attrs.getValue(DAConstants.RP_PID);
+            if (null == rp)
+                throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
+                        "Missing \"" + DAConstants.RP_PID + "\" header in \"" +
+                        resPath + "\" section");
         }
     }
     
