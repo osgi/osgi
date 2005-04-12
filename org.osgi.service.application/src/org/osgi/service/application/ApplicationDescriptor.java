@@ -2,85 +2,87 @@ package org.osgi.service.application;
 
 import java.io.IOException;
 import java.util.Map;
-
-import org.osgi.framework.ServiceReference;
+import org.osgi.framework.*;
 
 /**
  * An OSGi service that represents an installed application and stores
  * information about it. The application descriptor can be used for instance
  * creation.
- * 
- * @modelguid {8679CDDA-3F17-4CE1-B0B2-2371B5876B1D}
  */
 
 public abstract class ApplicationDescriptor {
-	Delegate	delegate;
-	String							pid;
-
-	static Class					implementation;
-	static String					cName;
-
-	{
-		try {
-			cName = System
-					.getProperty("org.osgi.vendor.application.ApplicationDescriptor");
-			implementation = Class.forName(cName);
-		}
-		catch (Throwable t) {
-			// Ignore
-		}
-	}
 
 	/**
 	 * The property key for the localized name of the application.
 	 */
-	public static final String		APPLICATION_NAME		= "application.name";
+	public static final String APPLICATION_NAME = "application.name";
 
 	/**
 	 * The property key for the localized icon of the application.
 	 */
-	public static final String		APPLICATION_ICON		= "application.icon";
+	public static final String APPLICATION_ICON = "application.icon";
 
 	/**
 	 * The property key for the unique identifier (PID) of the application.
 	 */
-	public static final String		APPLICATION_PID			= "service.pid";
+	public static final String APPLICATION_PID = Constants.SERVICE_PID;
 
 	/**
 	 * The property key for the version of the application.
 	 */
-	public static final String		APPLICATION_VERSION		= "application.version";
+	public static final String APPLICATION_VERSION = "application.version";
 
 	/**
 	 * The property key for the name of the application vendor.
 	 */
-	public static final String		APPLICATION_VENDOR		= "application.vendor";
+	public static final String APPLICATION_VENDOR = "application.vendor";
 
 	/**
 	 * The property key for the singleton property of the application.
 	 */
-	public static final String		APPLICATION_SINGLETON	= "application.singleton";
+	public static final String APPLICATION_SINGLETON = "application.singleton";
 
 	/**
 	 * The property key for the autostart property of the application.
 	 */
-	public static final String		APPLICATION_AUTOSTART	= "application.autostart";
+	public static final String APPLICATION_AUTOSTART = "application.autostart";
 
 	/**
 	 * The property key for the visibility property of the application.
 	 */
-	public static final String		APPLICATION_VISIBLE		= "application.visible";
+	public static final String APPLICATION_VISIBLE = "application.visible";
 
 	/**
 	 * The property key for the launchable property of the application.
 	 */
-	public static final String		APPLICATION_LAUNCHABLE	= "application.launchable";
+	public static final String APPLICATION_LAUNCHABLE = "application.launchable";
 
 	/**
 	 * The property key for the locked property of the application.
 	 */
-	public static final String		APPLICATION_LOCKED		= "application.locked";
+	public static final String APPLICATION_LOCKED = "application.locked";
 
+	/**
+	 * The property key for the localized description of the application.
+	 */
+	public static final String APPLICATION_DESCRIPTION = "application.description";
+
+	/**
+	 * The property key for the localized documentation of the application.
+	 */
+	public static final String APPLICATION_DOCUMENTATION = "application.documentation";
+
+	/**
+	 * The property key for the localized copyright notice of the application.
+	 */
+	public static final String APPLICATION_COPYRIGHT = "application.copyright";
+
+	/**
+	 * The property key for the localized license of the application.
+	 */
+	public static final String APPLICATION_LICENSE = "application.license";
+
+	
 	protected  ApplicationDescriptor(String pid) {
 		this.pid = pid;
 		try {
@@ -117,20 +119,25 @@ public abstract class ApplicationDescriptor {
 	 * Returns the properties of the application descriptor as key-value pairs.
 	 * The return value contains the locale aware and unaware properties as
 	 * well. Some of the properties can be retrieved directly with methods in
-	 * this interface.
+	 * this interface. The returned <code>Map</code> will include the service
+	 * properties of this <code>ApplicationDescriptor</code> as well.
 	 * 
-	 * @param locale the locale string, it may be null, the value null means the
-	 *        default locale.
+	 * This method will call the <code>getPropertiesSpecific</code> method
+	 * to enable the container implementation to insert application model and/or
+	 * container implementation specific properties.
+	 * 
+	 * @param locale
+	 *            the locale string, it may be null, the value null means the
+	 *            default locale. If the provided locale is the empty String 
+	 *            (<code>""</code>)then raw (non-localized) values are returned.
 	 * 
 	 * @return service properties of this application descriptor service,
 	 *         according to the specified locale. If locale is null then the
 	 *         default locale's properties will be returned. (Since service
 	 *         properties are always exist it cannot return null.)
 	 * 
-	 * @throws IllegalStateException if the application descriptor is
-	 *         unregistered
-	 * 
-	 * @modelguid {DA01FC37-C5F5-45F6-ADDA-AA07AD31CDCA}
+	 * @throws IllegalStateException
+	 *             if the application descriptor is unregistered
 	 */
 	public abstract Map getProperties(String locale);
 
@@ -147,26 +154,43 @@ public abstract class ApplicationDescriptor {
 	 * then throw SingletonException.
 	 * <LI>Calls the launchSpecific() method to create and start an application
 	 * instance.
-	 * <LI>Returns the ServiceReference returned by the launchSpecific()
+	 * <LI>Returns the <code>ApplicationHandle</code> returned by the 
+	 * launchSpecific()
 	 * </UL>
 	 * The caller has to have ApplicationAdminPermission(applicationPID,
 	 * "launch") in order to be able to perform this operation.
 	 * 
-	 * @param arguments Arguments for the newly launched application, may be
-	 *        null
+	 * The <code>Map</code> argument of the launch method contains startup 
+	 * arguments for the
+	 * application. The keys used in the Map can be standard or application
+	 * specific. MEG defines the org.osgi.triggeringevent key to be used to
+	 * pass the triggering event to a scheduled application (see [ref]), however
+	 * in the future it is possible that other well-known keys will be defined.
+	 * To avoid unwanted clashes of keys, the following rules should be applied:
+	 * <UL>
+	 *   <LI>The keys starting with the dash (-) character are application
+	 *       specific, no well-known meaning should be associated with them.
+	 *   <LI>Well-known keys should follow the reverse domain name based naming.
+	 *       In particular, the keys standardized in OSGi should start with
+	 *       <code>org.osgi.</code>.
+	 * </UL>
 	 * 
-	 * @return the ServiceReference to registered ApplicationHandle which
-	 *         represents the newly launched application instance
+	 * @param arguments
+	 *            Arguments for the newly launched application, may be null
 	 * 
-	 * @throws SingletonException if the call attempts to launch a second
-	 *         instance of a singleton application
-	 * @throws SecurityException if the caller doesn't have "launch"
-	 *         ApplicationAdminPermission for the application.
-	 * @throws Exception if starting the application(s) failed
-	 * @throws IllegalStateException if the application descriptor is
-	 *         unregistered
+	 * @return the registered ApplicationHandle, which represents the newly 
+	 *         launched application instance
 	 * 
-	 * @modelguid {1E455A11-4289-4E0E-A3D3-B65B291E6FE3}
+	 * @throws SingletonException
+	 *             if the call attempts to launch a second instance of a
+	 *             singleton application
+	 * @throws SecurityException
+	 *             if the caller doesn't have "launch"
+	 *             ApplicationAdminPermission for the application.
+	 * @throws Exception
+	 *             if starting the application(s) failed
+	 * @throws IllegalStateException
+	 *             if the application descriptor is unregistered
 	 */
 	public final ServiceReference launch(Map arguments)
 			throws SingletonException, Exception {
@@ -197,48 +221,52 @@ public abstract class ApplicationDescriptor {
 	 * should be stored in a persistent storage. It has to register the returned
 	 * service.
 	 * 
-	 * @param arguments the startup arguments for the scheduled application, may
-	 *        be null
-	 * @param topic specifies the topic of the triggering event, it may contain
-	 *        a trailing asterisk as wildcard, the empty string is treated as
-	 *        "*", must not be null
-	 * @param eventFilter specifies and LDAP filter to filter on the properties
-	 *        of the triggering event, may be null
-	 * @param recurring if the recurring parameter is false then the application
-	 *        will be launched only once, when the event firstly occurs. If the
-	 *        parameter is true then scheduling will take place for every event
-	 *        occurrence; i.e. it is a recurring schedule
+	 * @param arguments
+	 *            the startup arguments for the scheduled application, may be
+	 *            null
+	 * @param topic
+	 *            specifies the topic of the triggering event, it may contain a
+	 *            trailing asterisk as wildcard, the empty string is treated as
+	 *            "*", must not be null
+	 * @param eventFilter
+	 *            specifies and LDAP filter to filter on the properties of the
+	 *            triggering event, may be null
+	 * @param recurring
+	 *            if the recurring parameter is false then the application will
+	 *            be launched only once, when the event firstly occurs. If the
+	 *            parameter is true then scheduling will take place for every
+	 *            event occurrence; i.e. it is a recurring schedule
 	 * 
-	 * @return the service reference of the registered scheduled application
-	 *         service
+	 * @return the registered scheduled application service
 	 * 
-	 * @throws NullPointerException if the topic is null
-	 * @throws IOException may be thrown if writing the information about the
-	 *         scheduled application requires operation on the permanent storage
-	 *         and I/O problem occurred.
-	 * @throws SecurityException if the caller doesn't have "schedule"
-	 *         ApplicationAdminPermission for the application.
-	 * @throws IllegalStateException if the application descriptor is
-	 *         unregistered
-	 * 
-	 * @modelguid {F91D977E-C639-4802-BA36-2C000BF0DBD9}
+	 * @throws NullPointerException
+	 *             if the topic is <code>null</code>
+	 * @throws IOException
+	 *             may be thrown if writing the information about the scheduled
+	 *             application requires operation on the permanent storage and
+	 *             I/O problem occurred.
+	 * @throws SecurityException
+	 *             if the caller doesn't have "schedule"
+	 *             ApplicationAdminPermission for the application.
+	 * @throws IllegalStateException
+	 *             if the application descriptor is unregistered
 	 */
 	public ServiceReference schedule(Map arguments, String topic,
 			String eventFilter, boolean recurring) throws IOException {
 		return delegate.schedule(arguments, topic, eventFilter, recurring);
 	}
 
+
 	/**
 	 * Sets the lock state of the application. If an application is locked then
 	 * launching a new instance is not possible. It does not affect the already
 	 * launched instances.
 	 * 
-	 * @throws SecurityException if the caller doesn't have "lock"
-	 *         ApplicationAdminPermission for the application.
-	 * @throws IllegalStateException if the application descriptor is
-	 *         unregistered
-	 * 
-	 * @modelguid {A627693E-D67C-45EE-B683-4EA2B93AF982}
+	 * @throws SecurityException
+	 *             if the caller doesn't have "lock" ApplicationAdminPermission
+	 *             for the application.
+	 * @throws IllegalStateException
+	 *             if the application descriptor is unregistered
 	 */
 	public final void lock() {
 		delegate.lock();
@@ -247,12 +275,11 @@ public abstract class ApplicationDescriptor {
 	/**
 	 * Unsets the lock state of the application.
 	 * 
-	 * @throws SecurityException if the caller doesn't have "lock"
-	 *         ApplicationAdminPermission for the application.
-	 * @throws IllegalStateException if the application descriptor is
-	 *         unregistered
-	 * 
-	 * @modelguid {739EAD89-AF58-4C38-9833-B8E86E56C44E}
+	 * @throws SecurityException
+	 *             if the caller doesn't have "lock" ApplicationAdminPermission
+	 *             for the application.
+	 * @throws IllegalStateException
+	 *             if the application descriptor is unregistered
 	 */
 	public final void unlock() {
 		delegate.unlock();
@@ -284,4 +311,22 @@ public abstract class ApplicationDescriptor {
 
 		void launch(Map arguments) throws Exception;
 	}
+
+	Delegate	delegate;
+	String							pid;
+
+	static Class					implementation;
+	static String					cName;
+
+	{
+		try {
+			cName = System
+					.getProperty("org.osgi.vendor.application.ApplicationDescriptor");
+			implementation = Class.forName(cName);
+		}
+		catch (Throwable t) {
+			// Ignore
+		}
+	}
+
 }
