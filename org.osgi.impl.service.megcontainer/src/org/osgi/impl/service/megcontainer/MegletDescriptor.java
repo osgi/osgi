@@ -202,7 +202,7 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 	 * @throws Exception
 	 *             if any problem occures.
 	 */
-	protected ServiceReference launchSpecific( Map args ) throws Exception {
+	protected ApplicationHandle launchSpecific( Map args ) throws Exception {
 		Meglet meglet = megletContainer.createMegletInstance( this, false );
 		MegletHandleImpl appHandle = new MegletHandleImpl( megletContainer, meglet, this, bc);
 		if (meglet == null)
@@ -210,7 +210,8 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 
 		initMeglet( meglet, appHandle );
 
-		return appHandle.startHandle( args );
+		appHandle.startHandle( args );
+		return appHandle;
 	}
 	
 	protected void lockSpecific() {
