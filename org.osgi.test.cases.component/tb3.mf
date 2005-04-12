@@ -5,6 +5,6 @@ Bundle-Version: 4
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
-Service-Component: org/osgi/test/cases/component/tb3/impl/serviceclientevent.xml
+Service-Component: org/osgi/test/cases/component/tb3/impl/serviceconsumerevent.xml
 
 
