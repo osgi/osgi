@@ -83,7 +83,8 @@ public interface ResourceProcessor {
      * This method is called on the Resource Processor immediately before calling the commit 
      * method.  The Resource Processor has to check whether it is able to commit the operations
      * since the last begin method call. If it determines that it is not able to commit the
-     * changes, it has to raise a DeploymentException.
+     * changes, it has to raise a DeploymentException with {@link DeploymentException#CODE_PREPARE} 
+     * exception code (see {@link DeploymentException}).
      * @throws DeploymentException if the resource processor is able to determine it is not able to commit.
      */
     void prepare() throws DeploymentException;        
