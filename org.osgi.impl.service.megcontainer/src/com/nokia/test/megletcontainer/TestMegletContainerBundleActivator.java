@@ -189,6 +189,11 @@ public class TestMegletContainerBundleActivator extends Object implements
 		return (String)appDesc.getProperties( "" ).get( ApplicationDescriptor.APPLICATION_PID );
 	}
 	
+	boolean isLocked( ApplicationDescriptor appDesc ) {
+		return Boolean.valueOf((String)appDesc.getProperties( "" )
+				.get( ApplicationDescriptor.APPLICATION_LOCKED )).booleanValue();		
+	}
+	
 	public ApplicationDescriptor getAppDesc( ApplicationHandle appHnd ) {
 		//ServiceReference appDescRef = appHnd.getApplicationDescriptor();
 		//ApplicationDescriptor appDesc = (ApplicationDescriptor)bc.getService( appDescRef );
@@ -1534,10 +1539,10 @@ public class TestMegletContainerBundleActivator extends Object implements
 	public boolean testCase_lockApplication() {
 		try {
 			ApplicationDescriptor appDesc = appDescs[0];
-			if (appDesc.isLocked())
+			if (isLocked( appDesc ))
 				throw new Exception("Application is locked and cannot launch!");
 			appDesc.lock();
-			if (!appDesc.isLocked())
+			if (!isLocked( appDesc ))
 				throw new Exception("Lock doesn't work!");
 			if (!appDesc.getProperties("en").get("application.locked").equals(
 					"true"))
@@ -1557,7 +1562,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			if (!appDesc.getProperties("en").get("application.locked").equals(
 					"false"))
 				throw new Exception("Lock property is incorrect!");
-			if (appDesc.isLocked())
+			if (isLocked( appDesc ))
 				throw new Exception("Unlock doesn't work!");
 			if (launchable)
 				throw new Exception(
@@ -1575,25 +1580,25 @@ public class TestMegletContainerBundleActivator extends Object implements
 	public boolean testCase_saveLockingState() {
 		try {
 			ApplicationDescriptor appDesc = appDescs[0];
-			if (appDesc.isLocked())
+			if (isLocked( appDesc ))
 				throw new Exception("Application is locked and cannot launch!");
 			if (!restart_MegletContainer(true))
 				return false;
 			appDesc = appDescs[0];
 			if (!testCase_launchApplication())
 				return false;
-			if (appDesc.isLocked())
+			if (isLocked( appDesc ))
 				throw new Exception("Application is locked and cannot launch!");
 			appDesc.lock();
 			if (!appDesc.getProperties("en").get("application.locked").equals(
 					"true"))
 				throw new Exception("Lock property is incorrect!");
-			if (!appDesc.isLocked())
+			if (!isLocked( appDesc ))
 				throw new Exception("Lock doesn't work!");
 			if (!restart_MegletContainer(true))
 				return false;
 			appDesc = appDescs[0];
-			if (!appDesc.isLocked())
+			if (!isLocked( appDesc ))
 				throw new Exception("Lock doesn't work after restart!");
 			boolean launchable = isLaunchable(appDesc);
 			boolean started = false;
@@ -1613,7 +1618,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			if (launchable)
 				throw new Exception(
 						"Application was not launchable but started!");
-			if (appDesc.isLocked())
+			if (isLocked( appDesc ))
 				throw new Exception("Unlock doesn't work!");
 			return true;
 		}
@@ -1633,7 +1638,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 				return false;
 			
 			appDesc.lock();
-			if (!appDesc.isLocked())
+			if (!isLocked( appDesc ))
 				throw new Exception("Lock doesn't work!");
 			if (!appDesc.getProperties("en").get("application.locked").equals(
 					"true"))
@@ -1643,7 +1648,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 				return false;
 			
 			appDesc.unlock();
-			if (appDesc.isLocked())
+			if (isLocked( appDesc ))
 				throw new Exception("Unlock doesn't work!");
 			if (!appDesc.getProperties("en").get("application.locked").equals(
 					"false"))
