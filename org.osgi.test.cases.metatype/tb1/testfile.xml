@@ -11,7 +11,7 @@
 		</AD>
 		<AD id="familyName" name="%FamilyName" type="String" default="" required="true"/>
 		<AD id="age" name="%Age" type="Integer" min="13" max="120" default="18" required="false"/>
-		<Icon resource="%Icon.bmp" size="16"/>
+		<Icon resource="%Icon" size="16"/>
 	</OCD>
 	
 	<OCD id="ocd2" name="%Object" description="%Description">

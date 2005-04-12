@@ -108,10 +108,10 @@ public class TestControl extends DefaultTestBundleControl {
 		mti = mts.getMetaTypeInformation(bundle);
 
 		// Test the method getBundle()
-		assertSame("MetaTypeInformation.getBundle()", mti.getBundle(), bundle);
+		assertSame("MetaTypeInformation.getBundle()", bundle, mti.getBundle());
 
 		// Test the method getPids()
-		assertEquals("MetaTypeInformation.getPids()", mti.getPids().length, 1);
+		assertEquals("MetaTypeInformation.getPids()", 2, mti.getPids().length);
 		assertNotNull(
 				"MetaTypeInformation.getPids()[0] is not null (as expected)",
 				mti.getPids()[0]);
@@ -158,9 +158,9 @@ public class TestControl extends DefaultTestBundleControl {
 
 		// Test the method getLocales()
 		locales = mti.getLocales();
-		assertEquals(".getLocales()", 2, locales.length);
+		assertEquals("MetaTypeProvider.getLocales()", 3, locales.length);
 
-		expectedLocales = new String[] {"du", "du_NL"};
+		expectedLocales = new String[] {"du", "du_NL", "en_US"};
 		assertTrue("MetaTypeProvider.getLocales()", isArrayEquals(
 				expectedLocales, locales));
 	}
@@ -458,5 +458,6 @@ public class TestControl extends DefaultTestBundleControl {
 
 		return result;
 	}
+
 	
 }
