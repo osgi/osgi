@@ -319,7 +319,8 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			}
 			if (path[2].equals("type")) {
 				bc.ungetService(hrefs[0]);
-				return new DmtData(handle.getApplicationDescriptor().getPID());
+				String pid = (String)handle.getApplicationDescriptor().getProperties( "" ).get( ApplicationDescriptor.APPLICATION_PID );
+				return new DmtData( pid );
 			}
 
 			throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,

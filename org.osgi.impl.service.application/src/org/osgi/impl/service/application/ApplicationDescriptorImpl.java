@@ -39,9 +39,11 @@ public class ApplicationDescriptorImpl implements Delegate {
 	private ApplicationDescriptor descriptor;
 	private boolean								locked;
 	private static Properties			locks;
+	private String 								pid;
 	
-	public synchronized void setApplicationDescriptor(ApplicationDescriptor d) {
+	public synchronized void setApplicationDescriptor(ApplicationDescriptor d, String pid ) {
 		descriptor = d;
+		this.pid = pid;
 	}
 
 	public boolean isLocked() {
@@ -56,14 +58,14 @@ public class ApplicationDescriptorImpl implements Delegate {
 				if ( f.exists() )
 					locks.load( new FileInputStream(f));
 			}
-			boolean current = locks.containsKey(descriptor.getPID()); 
+			boolean current = locks.containsKey( pid ); 
 			if ( query || newState == current )
 				return current;
 
 			if ( current )
-				locks.remove(descriptor.getPID());
+				locks.remove( pid );
 			else
-				locks.put(descriptor.getPID(), "locked");
+				locks.put( pid, "locked");
 			locks.save(new FileOutputStream(f), "Saved " + new Date());
 			return newState;
 		} catch( IOException ioe ) {
@@ -81,7 +83,9 @@ public class ApplicationDescriptorImpl implements Delegate {
 	}
 
 	public ServiceReference schedule(Map args, String topic, String filter, boolean recurs) {
-		return Activator.scheduler.addScheduledApplication( descriptor.getPID(), args, topic, filter, recurs );
+		String pid = (String)descriptor.getProperties( "" ).get( ApplicationDescriptor.APPLICATION_PID );
+		
+		return Activator.scheduler.addScheduledApplication( pid, args, topic, filter, recurs );
 	}
 
 	public void launch(Map arguments) throws Exception {

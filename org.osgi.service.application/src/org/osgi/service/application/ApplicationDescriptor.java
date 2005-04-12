@@ -88,31 +88,15 @@ public abstract class ApplicationDescriptor {
 		try {
 			delegate = (Delegate) implementation
 					.newInstance();
-			delegate.setApplicationDescriptor(this);
+			delegate.setApplicationDescriptor( this, pid );
 		}
 		catch (Exception e) {
 			// Too bad ...
+			e.printStackTrace();
 			System.err
 					.println("No implementation available for ApplicationDescriptor, property is: "
 							+ cName);
 		}
-	}
-
-	/**
-	 * Gets the identifier of the represented application. This identifier (PID)
-	 * must be unique on the device, and must not change when the application is
-	 * updated.
-	 * 
-	 * This value is also available as a service property "service.pid" of this
-	 * application descriptor.
-	 * 
-	 * @throws IllegalStateException if the application descriptor is
-	 *         unregistered
-	 * 
-	 * @modelguid {4A78F411-6CF9-45C6-8F6A-44ED8C8F8B7E}
-	 */
-	public final String getPID() {
-		return pid;
 	}
 
 	/**
@@ -320,7 +304,7 @@ public abstract class ApplicationDescriptor {
 	}
 
 	public interface Delegate {
-		void setApplicationDescriptor(ApplicationDescriptor d);
+		void setApplicationDescriptor(ApplicationDescriptor d, String pid );
 
 		boolean isLocked();
 

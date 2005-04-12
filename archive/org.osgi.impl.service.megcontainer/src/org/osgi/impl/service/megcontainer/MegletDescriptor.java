@@ -112,6 +112,9 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 	}
 
 
+	public String getPID() {
+		return pid;
+	}
 
 	/**
 	 * Retrieves the bundle context of the container to which the specialization
@@ -127,6 +130,7 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 	}
 
 	public Map getPropertiesSpecific(String locale) {
+
 		Hashtable properties = new Hashtable();
 		String localizedName = (String) names.get(locale);
 		if (localizedName == null) {

@@ -200,10 +200,10 @@ public class MegletContainer implements BundleListener, EventHandler {
 		}
 	}
 
-	private boolean checkSingletonity( ApplicationDescriptor appDesc, boolean resume ) {
+	private boolean checkSingletonity( MegletDescriptor appDesc, boolean resume ) {
 		if( !((MegletDescriptor)appDesc).isSingleton() )
 			return true;
-
+		
 		try {
 			ServiceReference []appList =
 					bc.getServiceReferences( "org.osgi.service.application.ApplicationHandle",
@@ -304,7 +304,8 @@ public class MegletContainer implements BundleListener, EventHandler {
 			}
 			Dictionary properties = new Hashtable(desc.applications[i]
 					.getProperties((Locale.getDefault()).getLanguage()));
-			properties.put( Constants.SERVICE_PID , desc.applications[i].getPID());
+			
+			properties.put( Constants.SERVICE_PID , ((MegletDescriptor)desc.applications[i]).getPID() );
 			desc.serviceRegistrations[i] = bc.registerService(
 					"org.osgi.service.application.ApplicationDescriptor",
 					desc.applications[i], properties);
@@ -702,14 +703,12 @@ public class MegletContainer implements BundleListener, EventHandler {
 										break;
 									case EventSubscribe.STOP :
 									case EventSubscribe.SUSPEND :
-									case EventSubscribe.RESUME :
+									case EventSubscribe.RESUME :									
 										ServiceReference[] references = bc
 												.getServiceReferences(
 														"org.osgi.service.application.ApplicationHandle",
 														"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "="
-																+ bundleDesc.applications[i]
-																		.getPID()
-																+ ")");
+																+ ((MegletDescriptor)bundleDesc.applications[i]).getPID() + ")");
 										if (references == null
 												|| references.length == 0)
 											break;

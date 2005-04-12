@@ -169,7 +169,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 								"(" + Constants.SERVICE_PID + "=" + descriptorPID + ")");
 						if (appDescRefs != null && appDescRefs.length != 0 ) {
 							ApplicationDescriptor appDesc = (ApplicationDescriptor)bc.getService( appDescRefs [ 0 ] );
-							String appPID = appDesc.getPID();
+							String appPID = getPID( appDesc );
 							bc.ungetService( appDescRefs [ 0 ] );
 							if( appPID.equals( pid ) )
 								return true;
@@ -183,6 +183,10 @@ public class TestMegletContainerBundleActivator extends Object implements
 			e.printStackTrace();
 			return false;
 		}		
+	}
+	
+	String getPID( ApplicationDescriptor appDesc ) {
+		return (String)appDesc.getProperties( "" ).get( ApplicationDescriptor.APPLICATION_PID );
 	}
 	
 	public ApplicationDescriptor getAppDesc( ApplicationHandle appHnd ) {
@@ -459,7 +463,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 				appDescs[i] = (ApplicationDescriptor) bc.getService(appList[i]);
 				bc.ungetService(appList[i]);
 			}
-			installedAppUID = appDescs[0].getPID();
+			installedAppUID = getPID( appDescs[0] );
 			if (appDescs == null || appDescs.length != 1)
 				throw new Exception(
 						"Illegal number of applications were installed!");
@@ -560,7 +564,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 
 	boolean testCase_checkAppDescs() {
 		ApplicationDescriptor appDesc = appDescs[0];
-		String appUID = appDesc.getPID();
+		String appUID = getPID( appDesc );
 		try {
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationDescriptor",
@@ -574,12 +578,12 @@ public class TestMegletContainerBundleActivator extends Object implements
 				if ((ApplicationDescriptor) bc.getService(appList[i]) == appDesc) {
 					registered = true;
 					if (!appList[i].getProperty("service.pid").equals(
-							appDesc.getPID()))
+							getPID( appDesc ) ) )
 						throw new Exception(
 								"Illegal service.pid in the AppDesc ("
 										+ (String) appList[i]
 												.getProperty("service.pid")
-										+ " != " + appDesc.getPID()
+										+ " != " + getPID( appDesc )
 										+ ")");
 					if (!appList[i].getProperty("application.name").equals(
 							appDesc.getProperties( Locale.getDefault().getLanguage()).get(
@@ -735,11 +739,11 @@ public class TestMegletContainerBundleActivator extends Object implements
 			if (!launchable)
 				throw new Exception(
 						"Application started, but originally was not launchable!");
-			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getPID() ))
+			if (!waitStateChangeEvent( APPLICATION_START, getPID( appDesc ) ))
 				throw new Exception("Didn't receive the start event!");
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
-					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + appDesc.getPID() + ")");
+					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + getPID( appDesc ) + ")");
 			if (appList == null || appList.length == 0)
 				throw new Exception("No registered application handle found!");
 			if (getAppDesc( appHandle ) != appDesc)
@@ -761,7 +765,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			((MegletHandle)appHandle).suspend();
 			if (!checkResultFile("SUSPEND:StorageTestString"))
 				throw new Exception("Result of the suspend is not SUSPEND!");
-			if( !waitStateChangeEvent( APPLICATION_SUSPEND, appDescs[ 0 ].getPID() ) )
+			if( !waitStateChangeEvent( APPLICATION_SUSPEND, getPID( appDescs[ 0 ] ) ) )
 				throw new Exception("Didn't receive the suspend event!");
 			if ( !appHandle.getState().equals( MegletHandle.SUSPENDED ) )
 				throw new Exception("The status didn't change to suspended!");
@@ -779,7 +783,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			if (!checkResultFile("RESUME:StorageTestString"))
 				throw new Exception(
 						"Result of the resume is not RESUME:StorageTestString!");
-			if (!waitStateChangeEvent( APPLICATION_RESUME, appDescs[ 0 ].getPID() ) )
+			if (!waitStateChangeEvent( APPLICATION_RESUME, getPID( appDescs[ 0 ] ) ) )
 				throw new Exception("Didn't resumed the application correctly!");
 			if ( !appHandle.getState().equals( ApplicationHandle.RUNNING ) )
 				throw new Exception("The status didn't change to running!");
@@ -793,7 +797,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 
 	boolean testCase_stopApplication() {
 		try {
-			String pid = getAppDesc( appHandle ).getPID();
+			String pid = getPID( getAppDesc( appHandle ) );
 			appHandle.destroy();
 			if (!checkResultFile("STOP"))
 				throw new Exception("Result of the stop is not STOP!");
@@ -804,7 +808,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
 					"(" + ApplicationHandle.APPLICATION_PID + "="
-							+ getAppDesc( appHandle ).getPID()
+							+ getPID( getAppDesc( appHandle ) )
 							+ ")");
 			if (appList != null && appList.length != 0) {
 				for (int i = 0; i != appList.length; i++) {
@@ -952,7 +956,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			ApplicationDescriptor appDesc = appDescs[0];
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
-					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + appDesc.getPID() + ")");
+					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + getPID( appDesc ) + ")");
 			if (appList == null || appList.length == 0)
 				throw new Exception(
 						"Application didn't autostart. The appHandle is missing!");
@@ -964,7 +968,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception(
 						"The autostarted application's status is not running!");
 			bc.ungetService(appList[0]);
-			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getPID() ))
+			if (!waitStateChangeEvent( APPLICATION_START, getPID( appDesc ) ))
 				throw new Exception("Didn't receive the start event!");
 			return true;
 		}
@@ -984,12 +988,12 @@ public class TestMegletContainerBundleActivator extends Object implements
 				return false;
 			appHandle = oldHandle;
 			appHandle.destroy();
-			if( !waitStateChangeEvent( APPLICATION_STOPPED, appDesc.getPID() ) )
+			if( !waitStateChangeEvent( APPLICATION_STOPPED, getPID( appDesc ) ) )
 				throw new Exception("Didn't receive the stopped event!");
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
 					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "="
-							+ getAppDesc( appHandle ).getPID()
+							+ getPID( getAppDesc( appHandle ) )
 							+ ")");
 			if (appList != null && appList.length != 0) {
 				for (int i = 0; i != appList.length; i++) {
@@ -1044,7 +1048,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 				.get("application.bundle.id"));
 		ServiceReference[] references = bc.getServiceReferences(
 				"org.osgi.service.application.ApplicationHandle",
-				"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + appDesc.getPID() + ")");
+				"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + getPID( appDesc ) + ")");
 		if (references == null || references.length == 0)
 			return null;
 		for (int i = 0; i != references.length; i++) {
@@ -1070,27 +1074,27 @@ public class TestMegletContainerBundleActivator extends Object implements
 					|| !handle.getState().equals( ApplicationHandle.RUNNING ) )
 				throw new Exception(
 						"Application didn't start for the start event!");
-			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getPID() ))
+			if (!waitStateChangeEvent( APPLICATION_START, getPID( appDesc ) ))
 				throw new Exception("Didn't receive the start event!");
 			sendEvent(new Event("com/nokia/megtest/SuspendEvent", null), false);
 			handle = lookupAppHandle(appDesc);
 			if (handle == null
 					|| !handle.getState().equals( MegletHandle.SUSPENDED ) )
 				throw new Exception("Application didn't go to SUSPENDED state!");
-			if( !waitStateChangeEvent( APPLICATION_SUSPEND, appDescs[ 0 ].getPID() ) )
+			if( !waitStateChangeEvent( APPLICATION_SUSPEND, getPID( appDescs[ 0 ] ) ) )
 				throw new Exception("Didn't receive the suspend event!");
 			sendEvent(new Event("com/nokia/megtest/ResumeEvent", null), false);
 			handle = lookupAppHandle(appDesc);
 			if (handle == null
 					|| !handle.getState().equals( ApplicationHandle.RUNNING ) )
 				throw new Exception("Application didn't go to RUNNING state!");
-			if (!waitStateChangeEvent( APPLICATION_RESUME, appDescs[ 0 ].getPID() ) )
+			if (!waitStateChangeEvent( APPLICATION_RESUME, getPID( appDescs[ 0 ] ) ) )
 				throw new Exception("Didn't resumed the application correctly!");
 			sendEvent(new Event("com/nokia/megtest/StopEvent", null), false);
 			handle = lookupAppHandle(appDesc);
 			if (handle != null)
 				throw new Exception("Application didn't terminate!");
-			if( !waitStateChangeEvent( APPLICATION_STOPPED, appDesc.getPID() ) )
+			if( !waitStateChangeEvent( APPLICATION_STOPPED, getPID( appDesc ) ) )
 				throw new Exception("Didn't receive the stopped event!");
 			return true;
 		}
@@ -1123,7 +1127,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			appHandle = lookupAppHandle(appDesc);
 			if (appHandle != null)
 				throw new Exception("Application didn't terminate!");
-			if( !waitStateChangeEvent( APPLICATION_STOPPED, appDesc.getPID() ) )
+			if( !waitStateChangeEvent( APPLICATION_STOPPED, getPID( appDesc ) ) )
 				throw new Exception("Didn't receive the stopped event!");
 			return true;
 		}
@@ -1151,18 +1155,18 @@ public class TestMegletContainerBundleActivator extends Object implements
 			}
 			if (!checkResultFile("SUSPEND:StorageTestString"))
 				throw new Exception("Result of the stop is not STOP!");
-			if( !waitStateChangeEvent( APPLICATION_SUSPEND, appDescs[ 0 ].getPID() ) )
+			if( !waitStateChangeEvent( APPLICATION_SUSPEND, getPID( appDescs[ 0 ] ) ) )
 				throw new Exception("Didn't receive the suspend event!");
 
 			appHandle.destroy();
 			
-			if( !waitStateChangeEvent( APPLICATION_STOPPED_AFTER_SUSPEND, appDescs[ 0 ].getPID() ) )
+			if( !waitStateChangeEvent( APPLICATION_STOPPED_AFTER_SUSPEND, getPID( appDescs[ 0 ] ) ) )
 				throw new Exception("Didn't receive the stopped event!");
 
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
 					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "="
-							+ getAppDesc( appHandle ).getPID()
+							+ getPID( getAppDesc( appHandle ) )
 							+ ")");
 			if (appList != null && appList.length != 0) {
 				for (int i = 0; i != appList.length; i++) {
@@ -1307,7 +1311,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Application wasn't scheduled!");
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the schedule is not START!");
-			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getPID() ))
+			if (!waitStateChangeEvent( APPLICATION_START, getPID( appDesc ) ))
 				throw new Exception("Didn't receive the start event!");
 			if (!testCase_stopApplication())
 				return false;
@@ -1337,7 +1341,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Application wasn't scheduled!");
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the schedule is not START!");
-			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getPID() ))
+			if (!waitStateChangeEvent( APPLICATION_START, getPID( appDesc ) ))
 				throw new Exception("Didn't receive the start event!");
 			if (!testCase_stopApplication())
 				return false;
@@ -1348,7 +1352,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Application wasn't scheduled!");
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the schedule is not START!");
-			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getPID() ))
+			if (!waitStateChangeEvent( APPLICATION_START, getPID( appDesc ) ))
 				throw new Exception("Didn't receive the start event!");
 			if (!testCase_stopApplication())
 				return false;
@@ -1379,7 +1383,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Application wasn't scheduled!");
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the schedule is not START!");
-			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getPID() ))
+			if (!waitStateChangeEvent( APPLICATION_START, getPID( appDesc ) ))
 				throw new Exception("Didn't receive the start event!");
 			if (!testCase_stopApplication())
 				return false;
@@ -1436,7 +1440,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Application wasn't scheduled!");
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the schedule is not START!");
-			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getPID() ))
+			if (!waitStateChangeEvent( APPLICATION_START, getPID( appDesc ) ))
 				throw new Exception("Didn't receive the start event!");
 			if (!testCase_stopApplication())
 				return false;
@@ -1456,7 +1460,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Application wasn't scheduled!");
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the schedule is not START!");
-			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getPID() ))
+			if (!waitStateChangeEvent( APPLICATION_START, getPID( appDesc ) ))
 				throw new Exception("Didn't receive the start event!");
 			if (!testCase_stopApplication())
 				return false;
@@ -1469,7 +1473,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Application wasn't scheduled!");
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the schedule is not START!");
-			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getPID() ))
+			if (!waitStateChangeEvent( APPLICATION_START, getPID( appDesc ) ))
 				throw new Exception("Didn't receive the start event!");
 			if (!testCase_stopApplication())
 				return false;
@@ -1515,7 +1519,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Application wasn't scheduled!");
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the schedule is not START!");
-			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getPID() ))
+			if (!waitStateChangeEvent( APPLICATION_START, getPID( appDesc ) ))
 				throw new Exception("Didn't receive the start event!");
 			if (!testCase_stopApplication())
 				return false;
@@ -1656,7 +1660,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 	boolean testCase_appPluginCheckInstalledApps()
 	{
 		ApplicationDescriptor appDesc = appDescs[0];
-		String appUID = appDesc.getPID();
+		String appUID = getPID( appDesc );
 		
 		try {
 			DmtSession session = dmtFactory.getSession("./OSGi/apps");
@@ -1740,7 +1744,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 	
 	boolean testCase_appPluginCheckRunningApps() {
 		ApplicationDescriptor appDesc = appDescs[0];
-		String appUID = appDesc.getPID();
+		String appUID = getPID( appDesc );
 		
 		try {
 			if( !testCase_launchApplication() )
@@ -1748,7 +1752,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			
 			ServiceReference[] references = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
-					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + appDesc.getPID() + ")");
+					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + getPID( appDesc ) + ")");
 			
 			if( references == null || references.length == 0 )
 				throw new Exception( "Service reference not found!" );
@@ -1779,8 +1783,8 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception( "Invalid child nodes of the application instance!" );
 			
 			DmtData typeValue = session.getNodeValue( "./OSGi/app_instances/" + instID + "/type" );
-			if( !appDesc.getPID().equals( typeValue.getString() ) )
-				throw new Exception( "Bad type value (" + typeValue.getString() +"/" + appDesc.getPID() + ")!" );
+			if( !getPID( appDesc ).equals( typeValue.getString() ) )
+				throw new Exception( "Bad type value (" + typeValue.getString() +"/" + getPID( appDesc ) + ")!" );
 
 			DmtData stateValue = session.getNodeValue( "./OSGi/app_instances/" + instID + "/state" );
 			if( !stateValue.getString().equals( ApplicationHandle.RUNNING ) )
@@ -1819,7 +1823,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 	boolean testCase_appPluginCheckApplicationLaunch()
 	{
 		ApplicationDescriptor appDesc = appDescs[0];
-		String appUID = appDesc.getPID();
+		String appUID = getPID( appDesc );
 		
 		try {
 			DmtSession session = dmtFactory.getSession("./OSGi/apps");
@@ -1867,11 +1871,11 @@ public class TestMegletContainerBundleActivator extends Object implements
 
 			if (!checkResultFile("START"))
 				throw new Exception("Result of the launch is not START!");
-			if (!waitStateChangeEvent( APPLICATION_START, appDesc.getPID() ))
+			if (!waitStateChangeEvent( APPLICATION_START, getPID( appDesc ) ))
 				throw new Exception("Didn't receive the start event!");
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
-					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + appDesc.getPID() + ")");
+					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + getPID( appDesc ) + ")");
 			if (appList == null || appList.length == 0)
 				throw new Exception("No registered application handle found!");
 
@@ -1899,7 +1903,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 	
 	boolean testCase_appPluginCheckApplicationStop() {
 		ApplicationDescriptor appDesc = appDescs[0];
-		String appUID = appDesc.getPID();
+		String appUID = getPID( appDesc );
 		
 		try {
 			
@@ -1929,7 +1933,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
 					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "="
-							+ getAppDesc( appHandle ).getPID()
+							+ getPID( getAppDesc( appHandle ) )
 							+ ")");
 			if (appList != null && appList.length != 0) {
 				for (int i = 0; i != appList.length; i++) {

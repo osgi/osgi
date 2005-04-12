@@ -59,10 +59,10 @@ public final class MegletHandleImpl extends MegletHandle {
 	 */
 	public MegletHandleImpl(MegletContainer megletContainer, Meglet meglet,
 			MegletDescriptor appDesc, BundleContext bc) throws Exception {
-		super( createNewInstanceID( appDesc.getPID() ), appDesc );
+		super( createNewInstanceID( (String)appDesc.getProperties( "" ).get( ApplicationDescriptor.APPLICATION_PID ) ), appDesc );
 
 		appDescRef = megletContainer.getReference( appDesc );		
-		pid = appDesc.getPID();
+		pid = (String)appDesc.getProperties( "" ).get( ApplicationDescriptor.APPLICATION_PID );
 		
 		status = null;
 		this.megletContainer = megletContainer;
