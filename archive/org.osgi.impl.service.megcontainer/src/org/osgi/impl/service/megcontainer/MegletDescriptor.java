@@ -126,7 +126,7 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 		return bc;
 	}
 
-	public Map getProperties(String locale) {
+	public Map getPropertiesSpecific(String locale) {
 		Hashtable properties = new Hashtable();
 		String localizedName = (String) names.get(locale);
 		if (localizedName == null) {
