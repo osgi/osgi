@@ -1,0 +1,45 @@
+How to install the ApplicationModel.
+
+Steps after the compilation:
+
+Edit the MANIFEST.MF of osgi.jar:
+=====================================
+
+- insert a 
+
+  DynamicImport-Package: *
+   
+  into the MANIFEST options
+  
+- insert
+   
+  org.osgi.service.application.meglet
+  
+  into the exported packages
+  
+  
+
+Edit the MANIFEST.MF of osgi.refimpl.jar
+============================================
+
+- insert the
+
+  org.osgi.impl.service.application.jar
+  org.osgi.impl.service.megcontainer.jar
+  
+  into the group load section
+  
+Change the Target.launch file to the one in this folder
+
+
+Starting the MegletContainer
+================================
+
+- it starts automatically by calling 'Run'->Target in eclipse
+
+Testing whether it works well:
+=================================-
+
+- "Download to target" the com.nokia.test.megletcontainer.jar file
+
+
