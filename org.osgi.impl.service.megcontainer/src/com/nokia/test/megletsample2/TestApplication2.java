@@ -56,6 +56,7 @@ public class TestApplication2 extends Meglet implements EventHandler {
 	}
 
 	public void handleEvent(Event event) {
+		
 		if (event.getTopic().equals("com/nokia/megtest/ListenerEvent"))
 			writeResult("EVENT LISTENED");
 		else if (event.getTopic().equals("com/nokia/megtest/EchoEvent")) {

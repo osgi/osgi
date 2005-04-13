@@ -25,9 +25,9 @@ import org.osgi.framework.*;
  */
 public class Activator extends Object implements
 		BundleActivator {
-	private BundleContext		bc;
-	private ServiceRegistration	serviceListener;
-	private MegletContainer		megletContainer;
+	private BundleContext								bc;
+	private ServiceRegistration					serviceListener;
+	private MegletContainer							megletContainer;
 
 	public Activator() {
 		super();

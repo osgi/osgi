@@ -27,12 +27,14 @@
 package org.osgi.impl.service.megcontainer;
 
 import java.util.*;
+
 import org.osgi.framework.*;
+
 import java.lang.reflect.*;
 
 import org.osgi.meglet.Meglet;
-import org.osgi.meglet.MegletHandle;
 import org.osgi.service.application.*;
+import org.osgi.service.application.meglet.*;
 import org.osgi.service.log.LogService;
 
 
@@ -42,17 +44,19 @@ import org.osgi.service.log.LogService;
  * service.
  */
  
-public final class MegletDescriptor extends ApplicationDescriptor {
-	private Properties		props;
-	private Hashtable		names;
-	private Hashtable		icons;
-	private BundleContext	bc;
-	private String			startClass;
-	private String			pid;
-	private Bundle			bundle;
-	private MegletContainer	megletContainer;
-	private String      defaultLanguage;
-	private boolean     locked;
+public final class MegletDescriptorImpl implements MegletDescriptor.Delegate {
+	private Properties				props;
+	private Hashtable					names;
+	private Hashtable					icons;
+	private BundleContext			bc;
+	private String						startClass;
+	private String						pid;
+	private Bundle						bundle;
+	private String      			defaultLanguage;
+	private boolean     			locked;
+	private MegletDescriptor  megletDescriptor;
+	private MegletContainer   megletContainer;
+	private static int        instanceCounter;
 
 	/**
 	 * @param bc
@@ -65,27 +69,26 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 	 * @param impl
 	 */
 
-	public MegletDescriptor(BundleContext bc, Properties props, Map names,
-			Map icons, String defaultLang, String startClass, Bundle bundle, MegletContainer mc ) throws Exception {
-		super( props.getProperty( APPLICATION_PID ) );
+ 	public void init( BundleContext bc, Properties props, Map names, Map icons, String defaultLang, String startClass, 
+ 										Bundle bundle, MegletContainer megletContainer ) throws Exception {
 
-		this.bc = bc;
+ 		this.bc = bc;
+ 		this.megletContainer = megletContainer;
 		this.props = new Properties();
 		this.props.putAll(props);
 		this.names = new Hashtable(names);
 		this.icons = new Hashtable(icons);
 		this.startClass = startClass;
 		this.bundle = bundle;
-		this.megletContainer = mc;
 		if (names.size() == 0 || icons.size() == 0
 				|| !props.containsKey("application.bundle.id")
-				|| !props.containsKey( APPLICATION_PID )
-				|| !props.containsKey( APPLICATION_VERSION ))
+				|| !props.containsKey( MegletDescriptor.APPLICATION_PID )
+				|| !props.containsKey( MegletDescriptor.APPLICATION_VERSION ))
 			throw new Exception("Invalid MEG container input!");
 		if( !names.containsKey( defaultLang ) )
 			throw new Exception("Invalid default language!");
 		this.defaultLanguage = defaultLang;
-		pid = props.getProperty( APPLICATION_PID );
+		pid = props.getProperty( MegletDescriptor.APPLICATION_PID );
 	}
 
 
@@ -100,7 +103,7 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 	 * @return
 	 */
 	public boolean isSingleton() {
-		String singleton = props.getProperty( APPLICATION_SINGLETON );
+		String singleton = props.getProperty( MegletDescriptor.APPLICATION_SINGLETON );
 		return singleton == null || singleton.equalsIgnoreCase("true");
 	}
 
@@ -143,27 +146,27 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 			} else
 				locale = defaultLanguage;
 		}
-		properties.put( APPLICATION_NAME, localizedName);
-		properties.put( APPLICATION_ICON, icons.get(locale) );
+		properties.put( MegletDescriptor.APPLICATION_NAME, localizedName);
+		properties.put( MegletDescriptor.APPLICATION_ICON, icons.get(locale) );
 
 		properties.put("application.bundle.id", props.getProperty("application.bundle.id"));
-		properties.put( APPLICATION_VERSION, props.getProperty( APPLICATION_VERSION ));
-		properties.put( APPLICATION_VENDOR, props.getProperty( APPLICATION_VENDOR ));
-		String singleton = props.getProperty( APPLICATION_SINGLETON );
+		properties.put( MegletDescriptor.APPLICATION_VERSION, props.getProperty( MegletDescriptor.APPLICATION_VERSION ));
+		properties.put( MegletDescriptor.APPLICATION_VENDOR, props.getProperty( MegletDescriptor.APPLICATION_VENDOR ));
+		String singleton = props.getProperty( MegletDescriptor.APPLICATION_SINGLETON );
 		if (singleton == null || singleton.equalsIgnoreCase("true"))
-			properties.put( APPLICATION_SINGLETON, "true");
+			properties.put( MegletDescriptor.APPLICATION_SINGLETON, "true");
 		else
-			properties.put( APPLICATION_SINGLETON, "false");
-		String autostart = props.getProperty( APPLICATION_AUTOSTART );
+			properties.put( MegletDescriptor.APPLICATION_SINGLETON, "false");
+		String autostart = props.getProperty( MegletDescriptor.APPLICATION_AUTOSTART );
 		if (autostart != null && autostart.equalsIgnoreCase("true"))
-			properties.put( APPLICATION_AUTOSTART, "true");
+			properties.put( MegletDescriptor.APPLICATION_AUTOSTART, "true");
 		else
-			properties.put( APPLICATION_AUTOSTART, "false");
-		String visible = props.getProperty( APPLICATION_VISIBLE );
+			properties.put( MegletDescriptor.APPLICATION_AUTOSTART, "false");
+		String visible = props.getProperty( MegletDescriptor.APPLICATION_VISIBLE );
 		if (visible != null && visible.equalsIgnoreCase("false"))
-			properties.put( APPLICATION_VISIBLE, "false");
+			properties.put( MegletDescriptor.APPLICATION_VISIBLE, "false");
 		else
-			properties.put( APPLICATION_VISIBLE, "true");
+			properties.put( MegletDescriptor.APPLICATION_VISIBLE, "true");
 		boolean launchable = false;
 		try {
 			launchable = megletContainer.isLaunchable( this );
@@ -174,18 +177,9 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 		properties.put("application.locked", (new Boolean( locked )).toString());
 		properties.put("application.launchable", (new Boolean(launchable)).toString());
 		properties.put("application.type", "MEG");
-		properties.put( APPLICATION_PID, new String( pid ) );
+		properties.put( MegletDescriptor.APPLICATION_PID, new String( pid ) );
 		return properties;
 	}
-
-	void initMeglet( Meglet meglet, MegletHandle handle ) throws Exception {
-		Class megletClass = Meglet.class;
-		Method setupMethod = megletClass.getDeclaredMethod( "init", new Class [] {
-										MegletHandle.class, BundleContext.class } );
-		setupMethod.setAccessible( true );
-		setupMethod.invoke( meglet, new Object [] { handle, bc } );
-	}
-
 
 	/**
 	 * Called by launch() to create and start a new instance in an application
@@ -202,27 +196,68 @@ public final class MegletDescriptor extends ApplicationDescriptor {
 	 * @throws Exception
 	 *             if any problem occures.
 	 */
-	protected ApplicationHandle launchSpecific( Map args ) throws Exception {
+	public ApplicationHandle launchSpecific( Map args ) throws Exception {
 		Meglet meglet = megletContainer.createMegletInstance( this, false );
-		MegletHandleImpl appHandle = new MegletHandleImpl( megletContainer, meglet, this, bc);
 		if (meglet == null)
 			throw new Exception("Cannot create meglet instance!");
-
-		initMeglet( meglet, appHandle );
-
-		appHandle.startHandle( args );
-		return appHandle;
+		
+		return createMegletHandleByReflection( meglet, args ); 
 	}
 	
-	protected void lockSpecific() {
+	public void lockSpecific() {
 		locked = true;
 	}
 	
-	protected void unlockSpecific() {
+	public void unlockSpecific() {
 		locked = false;
 	}
 	
 	public boolean isLocked() {
 		return locked;
+	}
+	
+	public MegletDescriptor getMegletDescriptor() {
+		return megletDescriptor;
+	}
+	
+	static synchronized String createNewInstanceID( String pid ) {
+		return new String( pid + ":" + instanceCounter++ );
+	}
+
+	public MegletHandle createMegletHandleByReflection( Meglet meglet, Map args ) {
+				
+		/* That's because of the idiot abstract classes in the API */
+
+		try {
+			Class megletHandleClass = MegletHandle.class;
+			Constructor constructor = megletHandleClass.getDeclaredConstructor( new Class[] { String.class, MegletDescriptor.class } );
+			constructor.setAccessible( true );
+			MegletHandle megletHandle = (MegletHandle) constructor.newInstance( 
+					new Object[] { createNewInstanceID( pid ), megletDescriptor } );
+			
+			Field delegate = megletHandleClass.getDeclaredField( "delegate" );
+			delegate.setAccessible( true );
+			
+			MegletHandleImpl megHnd = (MegletHandleImpl)delegate.get( megletHandle );
+						
+			Method registerListenerMethod = Meglet.class.getDeclaredMethod( "init",
+					new Class [] { MegletHandle.class, BundleContext.class } );
+			registerListenerMethod.setAccessible( true );
+			registerListenerMethod.invoke( meglet, new Object [] { megletHandle, bc  } );			
+			
+			megHnd.init( bc, megletContainer, meglet );
+			megHnd.startHandle( args );
+			
+			return megletHandle;
+		}catch( Exception e )
+		{
+			MegletContainer.log(bc, LogService.LOG_ERROR,
+					"Exception occurred at creating meglet handle!", e);
+			return null;
+		}		
+	}
+	
+	public void setMegletDescriptor( MegletDescriptor descriptor ) {
+		megletDescriptor = descriptor;
 	}
 }

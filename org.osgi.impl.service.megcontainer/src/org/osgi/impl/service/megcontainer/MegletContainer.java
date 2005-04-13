@@ -25,8 +25,9 @@ import java.util.*;
 import javax.xml.parsers.*;
 
 import org.osgi.framework.*;
-import org.osgi.meglet.*;
+import org.osgi.meglet.Meglet;
 import org.osgi.service.application.*;
+import org.osgi.service.application.meglet.*;
 import org.osgi.service.event.*;
 import org.osgi.service.log.LogService;
 import org.osgi.service.packageadmin.PackageAdmin;
@@ -61,11 +62,11 @@ class MEGBundleDescriptor {
  */
 
 public class MegletContainer implements BundleListener, EventHandler {
-	private BundleContext	bc;
-	private Vector			bundleIDs;
-	private Hashtable		bundleHash;
-	private int				height;
-	private int				width;
+	private BundleContext					bc;
+	private Vector								bundleIDs;
+	private Hashtable							bundleHash;
+	private int										height;
+	private int										width;
 
 	public MegletContainer( BundleContext bc ) throws Exception {
 		this.bc = bc;
@@ -112,13 +113,13 @@ public class MegletContainer implements BundleListener, EventHandler {
 		return appDescs;
 	}
     
-  public Meglet createMegletInstance( MegletDescriptor appDesc, boolean resume ) throws Exception {
+  public Meglet createMegletInstance( MegletDescriptorImpl appDesc, boolean resume ) throws Exception {
 		if( !checkSingletonity( appDesc, resume ) )
 			throw new Exception("Singleton Exception!");
 
 		MEGBundleDescriptor desc = getBundleDescriptor(
-					((MegletDescriptor)appDesc).getBundleId() );
-		int i = getApplicationIndex( desc, appDesc );
+					((MegletDescriptorImpl)appDesc).getBundleId() );
+		int i = getApplicationIndex( desc, appDesc.getMegletDescriptor() );
         
     String depResult = checkDependencies(desc.dependencies[i]);      
 		if ( depResult != null )
@@ -130,7 +131,7 @@ public class MegletContainer implements BundleListener, EventHandler {
 		Class megletClass = Class.forName( appDesc.getStartClass() );
 		Constructor constructor = megletClass.getConstructor( new Class[0] );
 		Meglet app = (Meglet) constructor.newInstance( new Object[0] );
-
+		
 		Method registerListenerMethod = Meglet.class.getDeclaredMethod( "registerForEvents",
 										new Class [] { String.class, String.class } );
 		registerListenerMethod.setAccessible( true );
@@ -200,8 +201,8 @@ public class MegletContainer implements BundleListener, EventHandler {
 		}
 	}
 
-	private boolean checkSingletonity( MegletDescriptor appDesc, boolean resume ) {
-		if( !((MegletDescriptor)appDesc).isSingleton() )
+	private boolean checkSingletonity( MegletDescriptorImpl appDesc, boolean resume ) {
+		if( !((MegletDescriptorImpl)appDesc).isSingleton() )
 			return true;
 		
 		try {
@@ -226,17 +227,17 @@ public class MegletContainer implements BundleListener, EventHandler {
 		}
 	}
 
-	public boolean isLaunchable( MegletDescriptor appDesc ) {
+	public boolean isLaunchable( MegletDescriptorImpl appDesc ) {
 		try {
 			if( !checkSingletonity( appDesc, false ) )
 				return false;
 			if( appDesc.isLocked() )
 				return false;
 			MEGBundleDescriptor desc = getBundleDescriptor(
-								((MegletDescriptor)appDesc).getBundleId() );
+								((MegletDescriptorImpl)appDesc).getBundleId() );
 			if( desc == null )
 				return false;
-			int i = getApplicationIndex( desc, appDesc );
+			int i = getApplicationIndex( desc, appDesc.getMegletDescriptor() );
 			if( i == -1 )
 				return false;
             
@@ -305,7 +306,9 @@ public class MegletContainer implements BundleListener, EventHandler {
 			Dictionary properties = new Hashtable(desc.applications[i]
 					.getProperties((Locale.getDefault()).getLanguage()));
 			
-			properties.put( Constants.SERVICE_PID , ((MegletDescriptor)desc.applications[i]).getPID() );
+			String pid = (String)properties.get( ApplicationDescriptor.APPLICATION_PID );
+			
+			properties.put( Constants.SERVICE_PID, pid );
 			desc.serviceRegistrations[i] = bc.registerService(
 					"org.osgi.service.application.ApplicationDescriptor",
 					desc.applications[i], properties);
@@ -644,8 +647,8 @@ public class MegletContainer implements BundleListener, EventHandler {
 							deps.requiredPackages[m] = (String) requiredPackages
 									.get(m);
 						eventVector.add(subscribe);
-						appVector.add(new MegletDescriptor(bc, props,
-								names, icons, defaultLanguage, startClass, bc.getBundle(bundleID), this));
+						appVector.add( createMegletDescriptorByReflection( props,
+								names, icons, defaultLanguage, startClass, bc.getBundle(bundleID) ));
 						dependencyVector.add(deps);
 					}
 				}
@@ -703,17 +706,21 @@ public class MegletContainer implements BundleListener, EventHandler {
 										break;
 									case EventSubscribe.STOP :
 									case EventSubscribe.SUSPEND :
-									case EventSubscribe.RESUME :									
+									case EventSubscribe.RESUME :				
+										
+										String pid =(String) bundleDesc.applications[i].getProperties("")
+																					 .get( ApplicationDescriptor.APPLICATION_PID );
+										
 										ServiceReference[] references = bc
 												.getServiceReferences(
 														"org.osgi.service.application.ApplicationHandle",
 														"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "="
-																+ ((MegletDescriptor)bundleDesc.applications[i]).getPID() + ")");
+																+ pid + ")");
 										if (references == null
 												|| references.length == 0)
 											break;
 										for (int k = 0; k != references.length; k++) {
-											MegletHandleImpl handle = (MegletHandleImpl) bc
+											MegletHandle handle = (MegletHandle) bc
 													.getService(references[k]);
 											switch (bundleDesc.eventSubscribes[i].eventAction[j]) {
 												case EventSubscribe.STOP :
@@ -762,16 +769,46 @@ public class MegletContainer implements BundleListener, EventHandler {
 		return false;
 	}
 	
-	public ServiceReference getReference( MegletDescriptor appDesc ) {
+	public ServiceReference getReference( MegletDescriptorImpl megDesc ) {
 		MEGBundleDescriptor desc = (MEGBundleDescriptor) bundleHash
-			.get(new Long( appDesc.getBundleId() ) );
+			.get(new Long( megDesc.getBundleId() ) );
     if (desc == null)
 	    return null;
 		
     for( int i=0; i != desc.applications.length; i++ )
-      if( appDesc == desc.applications[ i ] )
+      if( megDesc.getMegletDescriptor() == desc.applications[ i ] )
       	return desc.serviceRegistrations[ i ].getReference();
       	
 		return null;
+	}	
+	
+	public MegletDescriptor createMegletDescriptorByReflection( Properties props, 
+																											Hashtable names, Hashtable icons, 
+																				              String defaultLang, String startClass, Bundle bundle ) {
+				
+		/* That's because of the idiot abstract classes in the API */
+
+		String pid = (String)props.get( ApplicationDescriptor.APPLICATION_PID );
+		
+		try {
+			Class megletDescriptorClass = MegletDescriptor.class;
+			Constructor constructor = megletDescriptorClass.getDeclaredConstructor( new Class[] { String.class } );
+			constructor.setAccessible( true );
+			MegletDescriptor megletDescriptor = (MegletDescriptor) constructor.newInstance( new Object[] { pid } );
+			
+			Field delegate = megletDescriptorClass.getDeclaredField( "delegate" );
+			delegate.setAccessible( true );
+			
+			MegletDescriptorImpl megDesc = (MegletDescriptorImpl)delegate.get( megletDescriptor );
+			
+			megDesc.init( bc, props, names, icons, defaultLang, startClass, bundle, this );
+			
+			return megletDescriptor;
+		}catch( Exception e )
+		{
+			log(bc, LogService.LOG_ERROR,
+					"Exception occurred at creating meglet descriptor!", e);
+			return null;
+		}		
 	}
 }

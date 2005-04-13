@@ -6,6 +6,7 @@ import java.util.*;
 import org.osgi.service.component.*;
 import org.osgi.service.event.*;
 import org.osgi.framework.*;
+import org.osgi.service.application.meglet.*;
 
 import org.osgi.service.log.LogService;
 
