@@ -55,6 +55,7 @@ public interface Monitorable {
      * Returns the list of StatusVariable identifiers published by this
      * Monitorable. A StatusVariable name is unique within the scope of a
      * Monitorable. The array contains the elements in no particular order.
+     * The returned value must not be <code>null</code>. 
      * 
      * @return the name of StatusVariables published by this object
      */
