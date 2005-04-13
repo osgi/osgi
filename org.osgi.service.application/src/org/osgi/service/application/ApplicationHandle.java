@@ -102,7 +102,7 @@ public abstract class ApplicationHandle {
 	 * 
 	 * @modelguid {A8CFA5DA-8F7E-49B7-BA5A-42EDDA6D6B59}
 	 */
-	public final ApplicationDescriptor getApplicationDescriptor() { return descriptor; }
+	protected final ApplicationDescriptor getApplicationDescriptor() { return descriptor; }
 
 	/**
 	 * The application instance's lifecycle state can be influenced by this

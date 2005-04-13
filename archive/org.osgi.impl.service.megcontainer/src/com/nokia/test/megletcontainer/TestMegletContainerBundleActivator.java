@@ -195,12 +195,28 @@ public class TestMegletContainerBundleActivator extends Object implements
 	}
 	
 	public ApplicationDescriptor getAppDesc( ApplicationHandle appHnd ) {
-		//ServiceReference appDescRef = appHnd.getApplicationDescriptor();
-		//ApplicationDescriptor appDesc = (ApplicationDescriptor)bc.getService( appDescRef );
-		ApplicationDescriptor appDesc = appHnd.getApplicationDescriptor();
-		//bc.ungetService( appDescRef );
-		//TODO we would not do the service reference for these
-		return appDesc;
+		try {
+			ServiceReference appHndRefs[] = bc.getServiceReferences( ApplicationHandle.class.getName(), 
+					"(" + ApplicationHandle.APPLICATION_PID + "=" + appHnd.getInstanceID() + ")" );
+		
+			if( appHndRefs == null || appHndRefs.length == 0 )
+				throw new Exception( "Can't find registered ApplicationHandle for appHnd!" );
+		
+			String pid = (String)appHndRefs[ 0 ].getProperty( ApplicationHandle.APPLICATION_DESCRIPTOR );
+
+			ServiceReference appDescRefs[] = bc.getServiceReferences( ApplicationDescriptor.class.getName(), 
+					"(" + ApplicationDescriptor.APPLICATION_PID + "=" + pid + ")" );
+
+			if( appDescRefs == null || appDescRefs.length == 0 )
+				throw new Exception( "Can't find the application descriptor for pid:" + pid + "!" );
+
+			ApplicationDescriptor appDesc = (ApplicationDescriptor)bc.getService( appDescRefs[ 0 ] );
+			bc.ungetService( appDescRefs[ 0 ] );
+			return appDesc;
+		}catch( Exception e ) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public void bundleChanged(BundleEvent e) {
@@ -811,8 +827,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
 					"(" + ApplicationHandle.APPLICATION_PID + "="
-							+ getPID( getAppDesc( appHandle ) )
-							+ ")");
+							+ pid + ")");
 			if (appList != null && appList.length != 0) {
 				for (int i = 0; i != appList.length; i++) {
 					ApplicationHandle handle = (ApplicationHandle) bc
@@ -985,19 +1000,19 @@ public class TestMegletContainerBundleActivator extends Object implements
 		try {
 			ApplicationDescriptor appDesc = appDescs[0];
 			ApplicationHandle oldHandle = appHandle;
+			String pid = getPID( appDesc );
 			if (!testCase_launchApplication())
 				return false;
 			if (!testCase_stopApplication())
 				return false;
 			appHandle = oldHandle;
 			appHandle.destroy();
-			if( !waitStateChangeEvent( APPLICATION_STOPPED, getPID( appDesc ) ) )
+			if( !waitStateChangeEvent( APPLICATION_STOPPED, pid ) )
 				throw new Exception("Didn't receive the stopped event!");
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
 					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "="
-							+ getPID( getAppDesc( appHandle ) )
-							+ ")");
+							+ pid + ")");
 			if (appList != null && appList.length != 0) {
 				for (int i = 0; i != appList.length; i++) {
 					ApplicationHandle handle = (ApplicationHandle) bc
@@ -1143,6 +1158,8 @@ public class TestMegletContainerBundleActivator extends Object implements
 	boolean testCase_requestSuspend() {
 		try {
 			ApplicationDescriptor appDesc = appDescs[0];
+			String pid = getPID( appDesc );
+			
 			if (!testCase_launchApplication())
 				return false;
 			sendEvent(new Event("com/nokia/megtest/RequestSuspend", null),
@@ -1169,8 +1186,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
 					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "="
-							+ getPID( getAppDesc( appHandle ) )
-							+ ")");
+							+ pid + ")");
 			if (appList != null && appList.length != 0) {
 				for (int i = 0; i != appList.length; i++) {
 					ApplicationHandle handle = (ApplicationHandle) bc
@@ -1927,8 +1943,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 			ServiceReference[] appList = bc.getServiceReferences(
 					"org.osgi.service.application.ApplicationHandle",
 					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "="
-							+ getPID( getAppDesc( appHandle ) )
-							+ ")");
+							+ appUID + ")");
 			if (appList != null && appList.length != 0) {
 				for (int i = 0; i != appList.length; i++) {
 					ApplicationHandle handle = (ApplicationHandle) bc

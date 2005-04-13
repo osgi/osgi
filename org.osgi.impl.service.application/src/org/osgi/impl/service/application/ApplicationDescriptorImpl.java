@@ -105,11 +105,8 @@ public class ApplicationDescriptorImpl implements Delegate {
 						"org.osgi.service.application.ApplicationHandle", null);
 				if (appHandles != null)
 					for (int k = 0; k != appHandles.length; k++) {
-						ApplicationHandle handle = (ApplicationHandle) Activator.bc
-								.getService(appHandles[k]);
-						ApplicationDescriptor appDesc = handle.getApplicationDescriptor();
-						Activator.bc.ungetService(appHandles[k]);
-						if ( appDesc == descriptor )
+						if( appHandles[ k ].getProperty( ApplicationDescriptor.APPLICATION_PID )
+							  .equals( pid ) )
 							throw new Exception("Singleton Exception!");
 					}
 			}
