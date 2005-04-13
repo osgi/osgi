@@ -27,19 +27,36 @@
  */
 package org.osgi.test.cases.cm.tbc;
 
-//import java.math.*;
-import java.util.*;
-import org.osgi.framework.*;
-import org.osgi.service.cm.*;
-import org.osgi.test.cases.util.*;
+// import java.math.*;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.cm.ConfigurationEvent;
+import org.osgi.service.cm.ConfigurationListener;
+import org.osgi.service.cm.ConfigurationPlugin;
+import org.osgi.service.cm.ManagedService;
+import org.osgi.service.cm.ManagedServiceFactory;
+import org.osgi.test.cases.cm.common.ConfigurationListenerImpl;
+import org.osgi.test.cases.cm.common.Synchronizer;
+import org.osgi.test.cases.util.AssertionFailedError;
+import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.cases.util.Semaphore;
 
 public class CMControl extends DefaultTestBundleControl {
 	private ConfigurationAdmin	cm;
 	private Hashtable			confProps;
 	/* Two constants that are lacking in the spec */
 	public static final String	SERVICE_FACTORY_PID	= "service.factoryPid";
+	private static final long	SIGNAL_WAITING_TIME	= 2000;
 
-	//public static final String SERVICE_BUNDLE_LOCATION =
+	// public static final String SERVICE_BUNDLE_LOCATION =
 	// "service.bundleLocation";
 	/*
 	 * public String[] getMethods() { return new String[] { "testStuff" }; }
@@ -151,10 +168,10 @@ public class CMControl extends DefaultTestBundleControl {
 		 * Clear the location of the bundle and then get the Configuration
 		 * again. The location should have been set again
 		 */
-		//        conf.setBundleLocation(null);
-		//        assertNull("Location null", conf.getBundleLocation());
-		//        conf = cm.getConfiguration(pid);
-		//        assertEquals("Location set again", getLocation(),
+		// conf.setBundleLocation(null);
+		// assertNull("Location null", conf.getBundleLocation());
+		// conf = cm.getConfiguration(pid);
+		// assertEquals("Location set again", getLocation(),
 		// conf.getBundleLocation());
 		/* Clean up */
 		conf.delete();
@@ -336,26 +353,26 @@ public class CMControl extends DefaultTestBundleControl {
 		props.put("DoubleKey", new Double(1827.234));
 		props.put("ByteKey", new Byte((byte) 127));
 		props.put("ShortKey", new Short((short) 1));
-		//props.put("BigIntegerKey", new BigInteger("123"));
-		//props.put("BigDecimalkey", new BigDecimal(9872.7643));
+		// props.put("BigIntegerKey", new BigInteger("123"));
+		// props.put("BigDecimalkey", new BigDecimal(9872.7643));
 		props.put("CharacterKey", new Character('N'));
 		props.put("BooleanKey", new Boolean(true));
-		
+
 		Vector v = new Vector();
 		v.addElement("stringvalue");
-		//### is now invalid ....
-		//v.addElement(new Integer(12));
-		//v.addElement(new Long(-29));
-		//v.addElement(new Float(921.14));
-		//v.addElement(new Double(1827.234));
-		//v.addElement(new Byte((byte) 127));
-		//v.addElement(new Short((short) 1));
-		//v.addElement(new BigInteger("123"));
-		//v.addElement(new BigDecimal(9872.7643));
-		//v.addElement(new Character('N'));
-		//v.addElement(new Boolean(true));
-		//v.addElement(new String[] {"firststring", "secondstring"});
-		//### end invalid
+		// ### is now invalid ....
+		// v.addElement(new Integer(12));
+		// v.addElement(new Long(-29));
+		// v.addElement(new Float(921.14));
+		// v.addElement(new Double(1827.234));
+		// v.addElement(new Byte((byte) 127));
+		// v.addElement(new Short((short) 1));
+		// v.addElement(new BigInteger("123"));
+		// v.addElement(new BigDecimal(9872.7643));
+		// v.addElement(new Character('N'));
+		// v.addElement(new Boolean(true));
+		// v.addElement(new String[] {"firststring", "secondstring"});
+		// ### end invalid
 		props.put("vectorkey", v);
 		props.put("StringArray", new String[] {"string1", "string2"});
 		props.put("IntegerArray",
@@ -368,28 +385,28 @@ public class CMControl extends DefaultTestBundleControl {
 				new Byte((byte) -2)});
 		props.put("ShortArray", new Short[] {new Short((short) 1),
 				new Short((short) 2)});
-		//props.put("BigIntegerArray", new BigInteger[] {
-		//        new BigInteger("1"), new BigInteger("2")
-		//    }
+		// props.put("BigIntegerArray", new BigInteger[] {
+		// new BigInteger("1"), new BigInteger("2")
+		// }
 		//
-		//);
-		//props.put("BigDecimalArray", new BigDecimal[] {
-		//        new BigDecimal(1.1), new BigDecimal(2.2)
-		//    }
+		// );
+		// props.put("BigDecimalArray", new BigDecimal[] {
+		// new BigDecimal(1.1), new BigDecimal(2.2)
+		// }
 		//
-		//);
+		// );
 		props.put("CharacterArray", new Character[] {new Character('N'),
 				new Character('O')});
 		props.put("BooleanArray", new Boolean[] {new Boolean(true),
 				new Boolean(false)});
-		
+
 		Vector v1 = new Vector();
 		v1.addElement(new Vector());
-		v1.addElement("Anystring");			
+		v1.addElement("Anystring");
 
-		//### invalid
-		//props.put("VectorArray", new Vector[] {v1, new Vector()});
-		
+		// ### invalid
+		// props.put("VectorArray", new Vector[] {v1, new Vector()});
+
 		props.put("CAPITALkey", "CAPITALvalue");
 		conf.update(props);
 		/* Register a managed service and get the properties */
@@ -498,7 +515,375 @@ public class CMControl extends DefaultTestBundleControl {
 		trace("All signals has arrived");
 	}
 
+	/**
+	 * Tests a configuration listener update event notification from a
+	 * configuration service. The event data should match the data that
+	 * originated the event (pid, factorypid...).
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testUpdateConfigEvent() throws Exception {
+		ConfigurationListenerImpl cl = null;
+		String pid = ConfigurationListenerImpl.RFC_0103_PID_PREFIX
+				+ "updateConfigEvent";
+		Synchronizer synchronizer = new Synchronizer();
+		/* Set up the configuration */
+		Configuration conf = cm.getConfiguration(pid);
+		Hashtable props = new Hashtable();
+		props.put("key", "value1");
+		trace("Create and register a new ConfigurationListener");
+		cl = createConfigurationListener(synchronizer);
+		conf.update(props);
+		trace("Wait until the ConfigurationListener has gotten the update");
+		try {
+			assertTrue("Update done", synchronizer
+					.waitForSignal(SIGNAL_WAITING_TIME));
+			assertEquals("Config event pid match", pid, cl.getPid());
+			assertEquals("Config event type match",
+					ConfigurationEvent.CM_UPDATED, cl.getType());
+			assertNull("Config Factory event pid null", cl.getFactoryPid());
+			ConfigurationAdmin admin = (ConfigurationAdmin) getContext()
+					.getService(cl.getReference());
+			assertNotNull("Configuration Admin from event", admin);
+			Configuration config = admin.getConfiguration(cl.getPid());
+			assertNotNull("Configuration from event", config);
+			assertEqualProperties("Properties match", conf.getProperties(),
+					config.getProperties());
+		}
+		finally {
+			getContext().ungetService(cl.getReference());
+			removeConfigurationListener(cl);
+		}
+	}
+
+	/**
+	 * Tests a configuration listener update event notification from a
+	 * configuration service factory. The event data should match the data that
+	 * originated the event (pid, factorypid...).
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testUpdateConfigFactoryEvent() throws Exception {
+		ConfigurationListenerImpl cl = null;
+		String factorypid = ConfigurationListenerImpl.RFC_0103_PID_PREFIX
+				+ "updateFactoryEvent";
+		Synchronizer synchronizer = new Synchronizer();
+		/* Set up the configuration */
+		Configuration conf = cm.createFactoryConfiguration(factorypid);
+		String pid = conf.getPid();
+		Hashtable props = new Hashtable();
+		props.put("key", "value1");
+		trace("Create and register a new ConfigurationListener");
+		cl = createConfigurationListener(synchronizer);
+		conf.update(props);
+		trace("Wait until the ConfigurationListener has gotten"
+				+ "the config factory update");
+		try {
+			assertTrue("Update done", synchronizer
+					.waitForSignal(SIGNAL_WAITING_TIME));
+			assertEquals("Config event pid match", pid, cl.getPid());
+			assertEquals("Config event type match",
+					ConfigurationEvent.CM_UPDATED, cl.getType());
+			assertEquals("Config Factory event pid match", factorypid, cl
+					.getFactoryPid());
+			ConfigurationAdmin admin = (ConfigurationAdmin) getContext()
+					.getService(cl.getReference());
+			assertNotNull("Configuration Admin from event", admin);
+			Configuration config = admin.getConfiguration(cl.getPid());
+			assertNotNull("Configuration from event", config);
+			assertEqualProperties("Properties match", conf.getProperties(),
+					config.getProperties());
+		}
+		finally {
+			getContext().ungetService(cl.getReference());
+			removeConfigurationListener(cl);
+		}
+	}
+
+	/**
+	 * Tests a configuration listener delete event notification from a
+	 * configuration service. The deleted <code>Configuration</code> should be
+	 * empty (<code>ConfigurationAdmin.listConfigurations(null)</code> must
+	 * not contain the deleted <code>Configuration</code>).
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testDeleteConfigEvent() throws Exception {
+		ConfigurationListenerImpl cl = null;
+		String pid = ConfigurationListenerImpl.RFC_0103_PID_PREFIX
+				+ "deleteConfigEvent";
+		Synchronizer synchronizer = new Synchronizer();
+		/* Set up the configuration */
+		Configuration conf = cm.getConfiguration(pid);
+		Hashtable props = new Hashtable();
+		props.put("key", "value1");
+		conf.update(props);
+		trace("Create and register a new ConfigurationListener");
+		cl = createConfigurationListener(synchronizer);
+		conf.delete();
+		trace("Wait until the ConfigurationListener has gotten the delete");
+		try {
+			assertTrue("Update done", synchronizer
+					.waitForSignal(SIGNAL_WAITING_TIME));
+			assertEquals("Config event pid match", pid, cl.getPid());
+			assertEquals("Config event type match",
+					ConfigurationEvent.CM_DELETED, cl.getType());
+			assertNull("Config Factory event pid null", cl.getFactoryPid());
+			ConfigurationAdmin admin = (ConfigurationAdmin) getContext()
+					.getService(cl.getReference());
+			assertNotNull("Configuration Admin from event", admin);
+			Configuration[] configs = admin.listConfigurations(null);
+			assertNull("No configuration in cm", configs);
+		}
+		finally {
+			getContext().ungetService(cl.getReference());
+			removeConfigurationListener(cl);
+		}
+	}
+
+	/**
+	 * Tests a configuration listener delete event notification from a
+	 * configuration service factory. The deleted <code>Configuration</code>
+	 * should be empty (
+	 * <code>ConfigurationAdmin.listConfigurations(null)</code> must not
+	 * contain the deleted <code>Configuration</code>).
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testDeleteConfigFactoryEvent() throws Exception {
+		ConfigurationListenerImpl cl = null;
+		String factorypid = ConfigurationListenerImpl.RFC_0103_PID_PREFIX
+				+ "deleteFactoryEvent";
+		Synchronizer synchronizer = new Synchronizer();
+		/* Set up the configuration */
+		Configuration conf = cm.createFactoryConfiguration(factorypid);
+		String pid = conf.getPid();
+		trace("Create and register a new ConfigurationListener");
+		cl = createConfigurationListener(synchronizer);
+		conf.delete();
+		trace("Wait until the ConfigurationListener has gotten"
+				+ "the config factory delete");
+		try {
+			assertTrue("Update done", synchronizer
+					.waitForSignal(SIGNAL_WAITING_TIME));
+			assertEquals("Config event pid match", pid, cl.getPid());
+			assertEquals("Config event type match",
+					ConfigurationEvent.CM_DELETED, cl.getType());
+			assertEquals("Config Factory event pid match", factorypid, cl
+					.getFactoryPid());
+			ConfigurationAdmin admin = (ConfigurationAdmin) getContext()
+					.getService(cl.getReference());
+			assertNotNull("Configuration Admin from event", admin);
+			Configuration[] configs = admin.listConfigurations(null);
+			assertNull("No configuration in cm", configs);
+		}
+		finally {
+			getContext().ungetService(cl.getReference());
+			removeConfigurationListener(cl);
+		}
+	}
+
+	/**
+	 * Tests a configuration listener permission. The bundle does not have
+	 * <code>ServicePermission[ConfigurationListener,REGISTER]</code> and will
+	 * try to register a <code>ConfigurationListener</code>. An exception
+	 * must be thrown.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testConfigListenerPermission() throws Exception {
+		Bundle tb;
+		tb = getContext().installBundle(getWebServer() + "tb1.jar");
+		String message = "registering config listener without permission";
+		try {
+			tb.start();
+			failException(message, BundleException.class);
+		}
+		catch (Throwable e) {
+			/* Check that we got the correct exception */
+			assertException(message, BundleException.class, e);
+		}
+		finally {
+			tb.uninstall();
+		}
+	}
+
+	/**
+	 * Tests an event from a different bundle. The
+	 * <code>ConfigurationListener</code> should get the event even if it was
+	 * generated from a different bundle.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testConfigEventFromDifferentBundle() throws Exception {
+		Bundle tb = null;
+		String res;
+		ConfigurationListenerImpl cl = null;
+		trace("Create and register a new ConfigurationListener");
+		Synchronizer synchronizer = new Synchronizer();
+		cl = createConfigurationListener(synchronizer, 4);
+		tb = getContext().installBundle(getWebServer() + "tb2.jar");
+		tb.start();
+		trace("Wait until the ConfigurationListener has gotten the update");
+
+		try {
+			assertTrue("Update done", synchronizer
+					.waitForSignal(SIGNAL_WAITING_TIME));
+			assertEquals("Config event pid match",
+					ConfigurationListenerImpl.RFC_0103_PID_PREFIX + "tb2pid",
+					cl.getPid(1));
+			assertEquals("Config event type match",
+					ConfigurationEvent.CM_UPDATED, cl.getType(1));
+			assertNull("Config Factory event pid null", cl.getFactoryPid(1));
+
+			assertTrue("Update done", synchronizer
+					.waitForSignal(SIGNAL_WAITING_TIME));
+			assertEquals("Config event pid match",
+					ConfigurationListenerImpl.RFC_0103_PID_PREFIX + "tb2pid",
+					cl.getPid(2));
+			assertEquals("Config event type match",
+					ConfigurationEvent.CM_DELETED, cl.getType(2));
+			assertNull("Config Factory event pid null", cl.getFactoryPid(2));
+
+			assertTrue("Update done", synchronizer
+					.waitForSignal(SIGNAL_WAITING_TIME));
+			assertEquals("Config event facotory pid match",
+					ConfigurationListenerImpl.RFC_0103_PID_PREFIX
+							+ "tb2factorypid", cl.getFactoryPid(3));
+			assertEquals("Config event type match",
+					ConfigurationEvent.CM_UPDATED, cl.getType(3));
+
+			assertTrue("Update done", synchronizer
+					.waitForSignal(SIGNAL_WAITING_TIME));
+			assertEquals("Config event factory pid match",
+					ConfigurationListenerImpl.RFC_0103_PID_PREFIX
+							+ "tb2factorypid", cl.getFactoryPid(4));
+			assertEquals("Config event type match",
+					ConfigurationEvent.CM_DELETED, cl.getType(4));
+
+		}
+		finally {
+			removeConfigurationListener(cl);
+			tb.uninstall();
+		}
+	}
+
+	/**
+	 * Tests if a configuration plugin is invoked when only a configuration
+	 * listener is registered (no managed service). It should not be invoked.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testConfigurationPluginService() throws Exception {
+		ConfigurationListenerImpl cl = null;
+		NotVisitablePlugin plugin = null;
+		String pid = ConfigurationListenerImpl.RFC_0103_PID_PREFIX
+				+ "configPluginService";
+		/* Set up the configuration */
+		Configuration conf = cm.getConfiguration(pid);
+		Hashtable props = new Hashtable();
+		props.put("key", "value1");
+		Synchronizer synchronizer = new Synchronizer();
+		trace("Create and register a new ConfigurationListener");
+		cl = createConfigurationListener(synchronizer);
+		trace("Create and register a new ConfigurationPlugin");
+		plugin = createConfigurationPlugin();
+		conf.update(props);
+		trace("Wait until the ConfigurationListener has gotten the update");
+		try {
+			assertTrue("Update done", synchronizer
+					.waitForSignal(SIGNAL_WAITING_TIME));
+			assertTrue("ConfigurationPlugin not visited", plugin.notVisited());
+		}
+		finally {
+			removeConfigurationListener(cl);
+			removeConfigurationPlugin(plugin);
+		}
+	}
+
+	/**
+	 * Tests if a configuration plugin is invoked when only a configuration
+	 * listener is registered (managed service factory). It should not be
+	 * invoked.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testConfigurationPluginServiceFactory() throws Exception {
+		ConfigurationListenerImpl cl = null;
+		NotVisitablePlugin plugin = null;
+		String factorypid = ConfigurationListenerImpl.RFC_0103_PID_PREFIX
+				+ "configPluginServiceFatory";
+		/* Set up the configuration */
+		Configuration conf = cm.createFactoryConfiguration(factorypid);
+		Hashtable props = new Hashtable();
+		props.put("key", "value1");
+		Synchronizer synchronizer = new Synchronizer();
+		trace("Create and register a new ConfigurationListener");
+		cl = createConfigurationListener(synchronizer);
+		trace("Create and register a new ConfigurationPlugin");
+		plugin = createConfigurationPlugin();
+		conf.update(props);
+		trace("Wait until the ConfigurationListener has gotten the update");
+		try {
+			assertTrue("Update done", synchronizer
+					.waitForSignal(SIGNAL_WAITING_TIME));
+			assertTrue("ConfigurationPlugin not visited", plugin.notVisited());
+		}
+		finally {
+			removeConfigurationListener(cl);
+			removeConfigurationPlugin(plugin);
+		}
+	}
+
 	/** *** Helper methods **** */
+	/**
+	 * creates and registers a configuration listener that expects just one
+	 * event.
+	 */
+	private ConfigurationListenerImpl createConfigurationListener(
+			Synchronizer synchronizer) throws Exception {
+		return createConfigurationListener(synchronizer, 1);
+	}
+
+	/**
+	 * creates and registers a configuration listener that expects eventCount
+	 * events.
+	 */
+	private ConfigurationListenerImpl createConfigurationListener(
+			Synchronizer synchronizer, int eventCount) throws Exception {
+		ConfigurationListenerImpl listener = new ConfigurationListenerImpl(
+				synchronizer, eventCount);
+		// give time so the framework clears out old event broadcasts
+		Thread.sleep(100);
+		registerService(ConfigurationListener.class.getName(), listener, null);
+		return listener;
+	}
+
+	/**
+	 * creates and registers a configuration plugin.
+	 */
+	private NotVisitablePlugin createConfigurationPlugin() throws Exception {
+		NotVisitablePlugin plugin = new NotVisitablePlugin();
+		registerService(ConfigurationPlugin.class.getName(), plugin, null);
+		return plugin;
+	}
+
+	/**
+	 * unregisters a configuration listener.
+	 */
+	private void removeConfigurationListener(ConfigurationListener cl)
+			throws Exception {
+		unregisterService(cl);
+	}
+
+	/**
+	 * unregisters a configuration plugin.
+	 */
+	private void removeConfigurationPlugin(ConfigurationPlugin plugin)
+			throws Exception {
+		unregisterService(plugin);
+	}
+
 	private ManagedServiceImpl createManagedService(String pid, Semaphore s)
 			throws Exception {
 		ManagedServiceImpl ms = new ManagedServiceImpl(s);
@@ -615,6 +1000,59 @@ public class CMControl extends DefaultTestBundleControl {
 						break;
 					}
 			}
+		}
+	}
+
+	/**
+	 * <code>ConfigurationPlugin</code> implementation to be used in the
+	 * <code>ConfigurationListener</code> test. The plugin should NOT be
+	 * invoked when there's no <code>ManagedService</code> or
+	 * <code>ManagedServiceFactory</code> registered.
+	 */
+	class NotVisitablePlugin implements ConfigurationPlugin {
+		private boolean	visited;
+
+		/**
+		 * Creates a <code>ConfigurationPlugin</code> instance that has not
+		 * been invoked (visited) by a <code>Configuration</code> update
+		 * event.
+		 * 
+		 */
+		public NotVisitablePlugin() {
+			visited = false;
+		}
+
+		/**
+		 * <p>
+		 * Callback method when a <code>Configuration</code> update is being
+		 * delivered to a registered <code>ManagedService</code> or
+		 * <code>ManagedServiceFactory</code> instance.
+		 * </p>
+		 * <p>
+		 * Set plugin to visited (<code>visited = true</code>) when this
+		 * method is invoked. If this happens, the
+		 * <code>ConfigurationListener</code> tests failed.
+		 * </p>
+		 * 
+		 * @param ref the <code>ConfigurationAdmin</code> that generated the
+		 *        update.
+		 * @param props the <code>Dictionary</code> containing the properties
+		 *        of the <code>
+		 * @see org.osgi.service.cm.ConfigurationPlugin#modifyConfiguration(org.osgi.framework.ServiceReference, java.util.Dictionary)
+		 */
+		public void modifyConfiguration(ServiceReference ref, Dictionary props) {
+			visited = true;
+		}
+
+		/**
+		 * Checks if the plugin has not been invoked by a
+		 * <code>Configuration</code> update event.
+		 * 
+		 * @return <code>true</code> if plugin has not been visited (invoked).
+		 *         <code>false</code>, otherwise.
+		 */
+		public boolean notVisited() {
+			return !visited;
 		}
 	}
 }
