@@ -41,6 +41,18 @@ package org.osgi.service.monitor;
  * accessed who are authorized to publish StatusVariables. It is the
  * responsibility of the MonitorAdmin implementation to check the required
  * permissions and show only those services which pass this check.
+ * <p>
+ * The events posted by MonitorAdmin contain the following properties:
+ * <ul>
+ * <li><code>mon.monitorable.pid</code>: The identifier of the Monitorable
+ * <li><code>mon.statusvariable.name</code>: The identifier of the Status 
+ *     Variable within the given Monitorable
+ * <li><code>mon.statusvariable.value</code>: The value of the Status Variable,
+ *     represented as a string
+ * <li><code>mon.listener.id</code>: The identifier of the initiator of the
+ *     monitoring job (only present if the event was generated due to a 
+ *     monitoring job)  
+ * </ul>
  */
 public interface MonitorAdmin {
 
