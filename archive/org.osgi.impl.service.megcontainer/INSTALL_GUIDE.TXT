@@ -1,4 +1,4 @@
-How to install the ApplicationModel.
+How to install the Meglet container.
 
 Steps after the compilation:
 
