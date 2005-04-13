@@ -22,8 +22,8 @@ import java.util.*;
 
 import org.osgi.framework.*;
 import org.osgi.service.application.*;
+import org.osgi.service.application.meglet.*;
 import org.osgi.service.event.*;
-import org.osgi.meglet.*;
 import org.osgi.service.dmt.*;
 
 public class TestMegletContainerBundleActivator extends Object implements
@@ -1121,7 +1121,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 					Thread.sleep(100);
 
 					if (tries++ == 50)
-						return false;
+						throw new Exception( "The application didn't stop!" );
 				}
 			}catch (Exception e) {}
 			

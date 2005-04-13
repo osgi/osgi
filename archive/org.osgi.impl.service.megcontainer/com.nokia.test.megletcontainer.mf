@@ -5,5 +5,5 @@ Bundle-Vendor: Nokia
 Bundle-Version: 1.0
 Bundle-ClassPath: .
 Bundle-Activator: com.nokia.test.megletcontainer.TestMegletContainerBundleActivator
-Import-Package: org.osgi.service.dmt, org.osgi.meglet, org.osgi.service.application, org.osgi.service.event, org.osgi.framework
+Import-Package: org.osgi.service.dmt, org.osgi.meglet, org.osgi.service.application, org.osgi.service.application.meglet, org.osgi.service.event, org.osgi.framework
 Export-Package: com.nokia.test.megletcontainer

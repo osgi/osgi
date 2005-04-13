@@ -31,45 +31,29 @@ import java.io.*;
 import java.lang.reflect.Method;
 //import java.security.*;
 import org.osgi.framework.*;
-import org.osgi.meglet.*;
+import org.osgi.meglet.Meglet;
 import org.osgi.service.application.*;
+import org.osgi.service.application.meglet.*;
 
 
 /**
  * This service represents a Meglet instance. It is a specialization of the
  * application handle and provides features specific to the Meglet model.
  */
-public final class MegletHandleImpl extends MegletHandle {
-	private String							status;
-	private Meglet							meglet;
-	private MegletContainer			megletContainer;
-	private ServiceReference		appDescRef;
-	private ServiceRegistration	serviceReg;
-	private BundleContext				bc;
-	private File								suspendedFileName	= null;
-	private static Long					counter						= new Long(0);
-	private Map									resumeArgs				= null;
-	private String      				pid;
-	private static int          instanceCounter;
+public final class MegletHandleImpl implements MegletHandle.Delegate {
+	private String								status;
+	private Meglet								meglet;
+	private ServiceReference			appDescRef;
+	private ServiceRegistration		serviceReg;
+	private File									suspendedFileName	= null;
+	private Map										resumeArgs				= null;
+	private String      					pid;
+	private MegletHandle 					megletHandle;
+	private MegletDescriptorImpl	megletDelegate;
+	private MegletContainer 			megletContainer;
+	private BundleContext					bc;
+	private static Long						counter						= new Long(0);
 	
-	/**
-	 * The Meglet instance is suspended.
-	 * 
-	 * @modelguid {8EBD44E3-883B-4515-8EEA-8469F6F16408}
-	 */
-	public MegletHandleImpl(MegletContainer megletContainer, Meglet meglet,
-			MegletDescriptor appDesc, BundleContext bc) throws Exception {
-		super( createNewInstanceID( (String)appDesc.getProperties( "" ).get( ApplicationDescriptor.APPLICATION_PID ) ), appDesc );
-
-		appDescRef = megletContainer.getReference( appDesc );		
-		pid = (String)appDesc.getProperties( "" ).get( ApplicationDescriptor.APPLICATION_PID );
-		
-		status = null;
-		this.megletContainer = megletContainer;
-		this.bc = bc;
-		this.meglet = meglet;
-	}
-
 	/**
 	 * Returns the state of the Meglet instance specific to the Meglet model.
 	 * 
@@ -114,7 +98,7 @@ public final class MegletHandleImpl extends MegletHandle {
 	 * Meglet instance's stop() method with null parameter.
 	 *  
 	 */
-	protected void destroySpecific() throws Exception {
+	public void destroySpecific() throws Exception {
 		if ( status == null )
 			throw new Exception("Invalid State");
 		if ( meglet != null ) {
@@ -161,7 +145,7 @@ public final class MegletHandleImpl extends MegletHandle {
 
 			meglet = null;
 
-			setStatus(MegletHandleImpl.SUSPENDED);
+			setStatus( MegletHandle.SUSPENDED );
 		}
 		else
 			throw new Exception("Invalid meglet handle!");
@@ -185,13 +169,10 @@ public final class MegletHandleImpl extends MegletHandle {
 //		AccessController.checkPermission(new ApplicationAdminPermission(pid,   /* TODO */
 //				ApplicationAdminPermission.MANIPULATE));
 
-		if (status != MegletHandleImpl.SUSPENDED)
+		if (status != MegletHandle.SUSPENDED)
 			throw new Exception("Invalid State");
 
-		MegletDescriptor appDesc = (MegletDescriptor)bc.getService( appDescRef );
-		meglet = megletContainer.createMegletInstance(appDesc, true);
-		appDesc.initMeglet(meglet, this);
-		bc.ungetService( appDescRef );
+		meglet = megletContainer.createMegletInstance( megletDelegate, true);
 
 		InputStream is = new FileInputStream(suspendedFileName);
 		startApplication( meglet, resumeArgs, is);
@@ -209,7 +190,7 @@ public final class MegletHandleImpl extends MegletHandle {
 
 	private Hashtable properties() {
 		Hashtable props = new Hashtable();
-		props.put( ApplicationHandle.APPLICATION_PID, getInstanceID() );
+		props.put( ApplicationHandle.APPLICATION_PID, megletHandle.getInstanceID() );
 		props.put( ApplicationHandle.APPLICATION_STATE, status );
 		props.put( ApplicationHandle.APPLICATION_DESCRIPTOR, appDescRef.getProperty( Constants.SERVICE_PID ) );		
 		return props;
@@ -217,7 +198,7 @@ public final class MegletHandleImpl extends MegletHandle {
 	
 	private void registerAppHandle() throws Exception {
 		serviceReg = bc.registerService(
-				"org.osgi.service.application.ApplicationHandle", this, properties() );
+				"org.osgi.service.application.ApplicationHandle", megletHandle, properties() );
 	}
 
 	private void unregisterAppHandle() {
@@ -244,8 +225,25 @@ public final class MegletHandleImpl extends MegletHandle {
 		setupMethod.setAccessible( true );
 		setupMethod.invoke( meglet, new Object [] { stream } );
 	}	
+
+	public void init( BundleContext bc, MegletContainer megletContainer, Meglet meglet ) {
+		this.bc = bc;
+		this.megletContainer = megletContainer;
+		this.meglet = meglet;
+
+		appDescRef = megletContainer.getReference( megletDelegate );
+		pid = (String)appDescRef.getProperty( ApplicationDescriptor.APPLICATION_PID );
+	}
 	
-	static synchronized String createNewInstanceID( String pid ) {
-		return new String( pid + ":" + instanceCounter++ );
+	public void setMegletHandle( MegletHandle handle, MegletDescriptor appDesc,
+															 MegletDescriptor.Delegate delegate ) {
+		megletHandle = handle;
+		
+		megletDelegate = (MegletDescriptorImpl) delegate;
+		status = null;
+	}
+	
+	public MegletHandle getMegletHandle() {
+		return megletHandle;
 	}
 }
