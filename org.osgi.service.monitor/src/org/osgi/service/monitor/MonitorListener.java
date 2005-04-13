@@ -39,6 +39,8 @@ public interface MonitorListener {
      * @param monitorableId the identifier of the Monitorable instance reporting
      *        the change
      * @param statusVariable the StatusVariable that has changed
+     * @throws IllegalArgumentException if the specified monitorable ID is
+     *         invalid (null, empty, or contains illegal characters)
      */
     public void updated(String monitorableId, StatusVariable statusVariable);
 }
