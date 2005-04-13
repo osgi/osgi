@@ -91,9 +91,6 @@ public class ConfigurationListenerImpl implements ConfigurationListener {
 				|| (event.getFactoryPid() != null && event.getFactoryPid()
 						.startsWith(RFC_0103_PID_PREFIX))) {
 			synchronized (this) {
-				System.out.println("EVENT (PID: " + event.getPid()
-						+ " - FACTORY: " + event.getFactoryPid() + " - TYPE: "
-						+ event.getType() + ")");
 				factoryPids[eventCount] = event.getFactoryPid();
 				pids[eventCount] = event.getPid();
 				references[eventCount] = event.getReference();
@@ -101,11 +98,6 @@ public class ConfigurationListenerImpl implements ConfigurationListener {
 				eventCount++;
 				synchronizer.signal();
 			}
-		}
-		else {
-			System.out.println("FILTERED EVENT (PID: " + event.getPid()
-					+ " - FACTORY: " + event.getFactoryPid() + " - TYPE: "
-					+ event.getType() + ")");
 		}
 	}
 
