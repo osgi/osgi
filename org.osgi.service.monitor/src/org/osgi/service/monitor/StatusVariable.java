@@ -53,7 +53,7 @@ public final class StatusVariable {
     /**
      * StatusVariable type identifying string data.
      */
-    public static final int    TYPE_BOOLEAN = 3;
+   public static final int    TYPE_BOOLEAN = 3;
     
     /**
      * Collection method type identifying 'Cumulative Counter' data collection. 
@@ -76,9 +76,14 @@ public final class StatusVariable {
 	 */
     public static final int    CM_SI        = 3;
     
+    //----- Private constants -----//
+    
+    private static final String URI_CHARACTERS =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789" +
+        "-_.!~*'()";   // ";:@&=+$," not allowed by Monitoring RFC 
+        
     //----- Private fields -----//
     private String  id;
-    private String  path;
     private Date    timeStamp;
     private int     cm;
     private int     type;
@@ -92,20 +97,16 @@ public final class StatusVariable {
     /**
      * Constructor for a StatusVariable of long type.
      * 
-     * @param monitorableId The identifier of the monitorable service that this
-     *        StatusVariable belongs to
      * @param id The identifier of the StatusVariable
      * @param cm Collection method, should be one of the CM_ constants
      * @param data The long value of the StatusVariable
-     * @throws IllegalArgumentException if any of the ID parameters contains
-     *         invalid characters or if <code>cm</code> is not one of the
+     * @throws IllegalArgumentException if the id parameter is empty or contains
+     *         invalid characters, or if <code>cm</code> is not one of the
      *         collection method constants
-     * @throws NullPointerException if any of the ID parameters is
-     *         <code>null</code>
+     * @throws NullPointerException if the id parameter is <code>null</code>
      */
-    public StatusVariable(String monitorableId, String id, int cm,
-            long data) {
-        setCommon(monitorableId, id, cm);
+    public StatusVariable(String id, int cm, long data) {
+        setCommon(id, cm);
         type = TYPE_LONG;
         longData = data;
     }
@@ -113,19 +114,16 @@ public final class StatusVariable {
     /**
      * Constructor for a StatusVariable of double type.
      * 
-     * @param monitorableId The identifier of the monitorable service that this
-     *        StatusVariable belongs to
      * @param id The identifier of the StatusVariable
      * @param cm Collection method, should be one of the CM_ constants
      * @param data The double value of the StatusVariable
-     * @throws IllegalArgumentException if any of the ID parameters contains
-     *         invalid characters or if <code>cm</code> is not one of the
+     * @throws IllegalArgumentException if the id parameter is empty or contains
+     *         invalid characters, or if <code>cm</code> is not one of the
      *         collection method constants
-     * @throws NullPointerException if any of the ID parameters is
-     *         <code>null</code>
+     * @throws NullPointerException if the id parameter is <code>null</code>
      */
-    public StatusVariable(String monitorableId, String id, int cm, double data) {
-        setCommon(monitorableId, id, cm);
+    public StatusVariable(String id, int cm, double data) {
+        setCommon(id, cm);
         type = TYPE_DOUBLE;
         doubleData = data;
     }
@@ -133,19 +131,16 @@ public final class StatusVariable {
     /**
      * Constructor for a StatusVariable of boolean type.
      * 
-     * @param monitorableId The identifier of the monitorable service that this
-     *        StatusVariable belongs to
      * @param id The identifier of the StatusVariable
      * @param cm Collection method, should be one of the CM_ constants
      * @param data The boolean value of the StatusVariable
-     * @throws IllegalArgumentException if any of the ID parameters contains
-     *         invalid characters or if <code>cm</code> is not one of the
+     * @throws IllegalArgumentException if the id parameter is empty or contains
+     *         invalid characters, or if <code>cm</code> is not one of the
      *         collection method constants
-     * @throws NullPointerException if any of the ID parameters is
-     *         <code>null</code>
+     * @throws NullPointerException if the id parameter is <code>null</code>
      */
-    public StatusVariable(String monitorableId, String id, int cm, boolean data) {
-        setCommon(monitorableId, id, cm);
+    public StatusVariable(String id, int cm, boolean data) {
+        setCommon(id, cm);
         type = TYPE_BOOLEAN;
         booleanData = data;
     }
@@ -153,20 +148,16 @@ public final class StatusVariable {
     /**
      * Constructor for a StatusVariable of String type.
      * 
-     * @param monitorableId The identifier of the monitorable service that this
-     *        StatusVariable belongs to
      * @param id The identifier of the StatusVariable
      * @param cm Collection method, should be one of the CM_ constants
      * @param data The string value of the StatusVariable
-     * @throws IllegalArgumentException if any of the ID parameters contains
-     *         invalid characters or if <code>cm</code> is not one of the
+     * @throws IllegalArgumentException if the id parameter is empty or contains
+     *         invalid characters, or if <code>cm</code> is not one of the
      *         collection method constants
-     * @throws NullPointerException if any of the ID parameters is
-     *         <code>null</code>
+     * @throws NullPointerException if the id parameter is <code>null</code>
      */
-    public StatusVariable(String monitorableId, String id, int cm,
-            String data) {
-        setCommon(monitorableId, id, cm);
+    public StatusVariable(String id, int cm, String data) {
+        setCommon(id, cm);
         type = TYPE_STRING;
         stringData = data;
     }
@@ -287,19 +278,14 @@ public final class StatusVariable {
         
         StatusVariable other = (StatusVariable) obj;
         
-        if (!equals(path, other.path)
-                || cm != other.cm || type != other.type)
+        if (!equals(id, other.id) || cm != other.cm || type != other.type)
             return false;
         
         switch (type) {
-        case TYPE_LONG :
-            return longData == other.longData;
-        case TYPE_DOUBLE :
-            return doubleData == other.doubleData;
-        case TYPE_STRING :
-            return equals(stringData, other.stringData);
-        case TYPE_BOOLEAN :
-            return booleanData == other.booleanData;
+        case TYPE_LONG:    return longData == other.longData;
+        case TYPE_DOUBLE:  return doubleData == other.doubleData;
+        case TYPE_STRING:  return equals(stringData, other.stringData);
+        case TYPE_BOOLEAN: return booleanData == other.booleanData;
         }
         
         return false; // never reached
@@ -311,17 +297,13 @@ public final class StatusVariable {
      * StatusVariable.
      */
     public int hashCode() {
-        int hash = hashCode(path) ^ cm;
+        int hash = hashCode(id) ^ cm;
 
         switch (type) {
-        case TYPE_LONG :
-            return hash ^ hashCode(new Long(longData));
-        case TYPE_DOUBLE :
-            return hash ^ hashCode(new Double(doubleData));
-        case TYPE_BOOLEAN :
-            return hash ^ hashCode(new Boolean(booleanData));
-        case TYPE_STRING :
-            return hash ^ hashCode(stringData);
+        case TYPE_LONG:    return hash ^ hashCode(new Long(longData));
+        case TYPE_DOUBLE:  return hash ^ hashCode(new Double(doubleData));
+        case TYPE_BOOLEAN: return hash ^ hashCode(new Boolean(booleanData));
+        case TYPE_STRING:  return hash ^ hashCode(stringData);
         }
         
         return 0; // never reached
@@ -340,31 +322,20 @@ public final class StatusVariable {
     public String toString() {
         String cmName = null;
         switch (cm) {
-            case CM_CC :
-                cmName = "CC";
-                break;
-            case CM_DER :
-                cmName = "DER";
-                break;
-            case CM_GAUGE :
-                cmName = "GAUGE";
-                break;
-            case CM_SI :
-                cmName = "SI";
-                break;
+        case CM_CC:    cmName = "CC";    break;
+        case CM_DER:   cmName = "DER";   break;
+        case CM_GAUGE: cmName = "GAUGE"; break;
+        case CM_SI:    cmName = "SI";    break;
         }
         
-        String beg = "StatusVariable(" + path + ", " + cmName + ", "
+        String beg = "StatusVariable(" + id + ", " + cmName + ", "
                 + timeStamp + ", ";
+        
         switch (type) {
-            case TYPE_LONG :
-                return beg + "LONG, " + longData + ")";
-            case TYPE_DOUBLE :
-                return beg + "DOUBLE, " + doubleData + ")";
-            case TYPE_STRING :
-                return beg + "STRING, " + stringData + ")";
-            case TYPE_BOOLEAN :
-                return beg + "BOOLEAN, " + booleanData + ")";
+        case TYPE_LONG:    return beg + "LONG, " + longData + ")";
+        case TYPE_DOUBLE:  return beg + "DOUBLE, " + doubleData + ")";
+        case TYPE_STRING:  return beg + "STRING, " + stringData + ")";
+        case TYPE_BOOLEAN: return beg + "BOOLEAN, " + booleanData + ")";
         }
         
         return null; // never reached
@@ -372,17 +343,15 @@ public final class StatusVariable {
 
     //----- Private methods -----//
     
-    private void setCommon(String monitorableId, String id, int cm)
+    private void setCommon(String id, int cm)
             throws IllegalArgumentException, NullPointerException {
         checkId(id, "StatusVariable ID");
-        checkId(monitorableId, "Monitorable ID");
         
         if (cm != CM_CC && cm != CM_DER && cm != CM_GAUGE && cm != CM_SI)
             throw new IllegalArgumentException(
                     "Unknown data collection method constant '" + cm + "'.");
         
         this.id = id;
-        this.path = monitorableId + '/' + id;
         this.cm = cm;
         timeStamp = new Date();
     }
@@ -391,13 +360,28 @@ public final class StatusVariable {
             throws IllegalArgumentException, NullPointerException {
         if (id == null)
             throw new NullPointerException(idName + " is null.");
+        if(id.length() == 0)
+            throw new IllegalArgumentException(idName + " is empty.");
+        if(id.equals(".."))
+            throw new IllegalArgumentException(idName + " is invalid.");
         
-        // TODO check that ID is a valid URI element (that it does not cause problems in the DM tree)
-        if (id.indexOf('/') != -1)
-            throw new IllegalArgumentException("Invalid character '/' in "
-                    + idName + ".");
+        if(!containsValidChars(id))
+            throw new IllegalArgumentException(idName + 
+                    " contains invalid characters.");
     }
-
+    
+    private boolean containsValidChars(String name) {
+        char[] chars = name.toCharArray();
+        int i = 0;
+        while(i < chars.length) {
+            if(URI_CHARACTERS.indexOf(chars[i]) != -1)
+                return false;
+            i++;
+        }
+        
+        return true;        
+    }
+    
     private boolean equals(Object o1, Object o2) {
         return o1 == null ? o2 == null : o1.equals(o2);
     }
