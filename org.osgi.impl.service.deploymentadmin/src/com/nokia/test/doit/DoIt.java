@@ -162,6 +162,8 @@ public class DoIt implements BundleActivator {
             System.out.println("*******************************************************************");
             try {db_test_04(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
+            try {db_test_05(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
             
             System.out.println("\n=====================================");
             System.out.println("RESULT: OK = " + ok + " ERROR = " + error);
@@ -348,6 +350,36 @@ public class DoIt implements BundleActivator {
                 throw new Exception("Operation has not been cancelled");
         }
 		
+        db.reset(null);
+    }
+    
+    private void db_test_05() throws Exception {
+        ServiceReference ref = context.getServiceReference(Db.class.getName());
+        Db db = (Db) context.getService(ref);
+        DeploymentPackage dp = null;
+        
+        InputStream is = new FileInputStream(HOME + "db_test_05.dp");
+		dp = da.installDeploymentPackage(is);
+		
+		String[] tables = db.tableNames(null);
+		for (int i = 0; i < tables.length; i++) {
+		    System.out.println("TABLE: " + tables[i]);
+		    db.printTableHeader(null, tables[i], System.out);
+			db.printTableContent(null, tables[i], System.out);
+			System.out.println();                
+        }
+        
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
+            throw new Exception("Table 'player' is missing");
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
+            throw new Exception("Table 'game' is missing");
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("score"))
+            throw new Exception("Table 'score' is missing");
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("tmp"))
+            throw new Exception("Table 'tmp' is missing");
+        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("tmp2"))
+            throw new Exception("Table 'tmp2' is missing");
+        
         db.reset(null);
     }
     

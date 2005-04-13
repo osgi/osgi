@@ -18,8 +18,13 @@
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.*;
+import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
@@ -29,7 +34,8 @@ import java.util.jar.Manifest;
 /**
  * WrappedJarInputStream class wraps the JarInputStream implementation  
  * to override its behaviour according to the needs of the deployment 
- * packages (DPs). See nextEntry() and closeEntry() methods! 
+ * packages (DPs). See nextEntry(), closeEntry() and getNextJarEntry() 
+ * methods! 
  */
 public class WrappedJarInputStream {
     
@@ -86,6 +92,49 @@ public class WrappedJarInputStream {
         public Attributes getAttributes() {
             return attrs;
         }
+        
+        /*
+         * Return list of Certificate[]-s. One list element is one 
+         * certificate chain.
+         */
+        private List splitCertificates(Certificate[] certs) {
+            List ret = new LinkedList();
+            
+            if (null == certs || certs.length == 0)
+                return ret;
+            
+            int i = 0;
+            while (i < certs.length) {
+    	        ArrayList e = new ArrayList();
+    	        X509Certificate cPrev = null;
+    	        X509Certificate cAct = (X509Certificate) certs[i];
+    	        while ( cPrev == null || cPrev.getIssuerDN().equals(cAct.getSubjectDN()) ) {
+    	            e.add(cAct);
+    	            cPrev = cAct;
+    	            ++i;
+    	            if (i >= certs.length)
+    	                break;
+    	            cAct = (X509Certificate) certs[i];
+    	        }
+    	        ret.add(e.toArray(new X509Certificate[] {}));
+            }
+            
+            return ret;
+        }
+
+        public Iterator getCertificateChainStringIterator() {
+            List l = splitCertificates(getCertificates());
+            List res = new LinkedList();
+            for (Iterator iter = l.iterator(); iter.hasNext();) {
+                X509Certificate[] cs = (X509Certificate[]) iter.next();
+                StringBuffer sb = new StringBuffer();
+                for (int i = 0; i < cs.length; i++)
+                    sb.append(cs[i].getSubjectDN() + 
+                            (i != cs.length -1 ? "; " : ""));
+                res.add(sb.toString());
+            }
+            return res.iterator();
+        }
     }
     
     private JarInputStream jis;
@@ -133,17 +182,33 @@ public class WrappedJarInputStream {
         return actEntry;
     }
 
+    /*
+     * Skips uninterested JarEntries (directories, .sf files, etc.)
+     */
     private JarEntry getNextJarEntry() throws IOException {
-        return jis.getNextJarEntry();
+        JarEntry je = jis.getNextJarEntry();
+        while (null != je && isUninterested(je))
+            je = jis.getNextJarEntry();
+        
+        return je; 
+    }
+
+    private boolean isUninterested(JarEntry je) {
+        if (je.isDirectory())
+            return true;
+        if (je.getName().toLowerCase().startsWith("meta-inf/"))
+            return true;
+        return false;
     }
 
     private ByteArrayOutputStream readIntoBuffer() throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try {
-            int data = jis.read();
-            while (-1 != data) {
-                bos.write(data);
-                data = jis.read();
+            byte[] data = new byte[0x1000];
+            int i = jis.read(data);
+            while (-1 != i) {
+                bos.write(data, 0, i);
+                i = jis.read(data);
             }
         } finally {
             if (null != bos)
