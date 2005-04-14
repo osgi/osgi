@@ -50,6 +50,7 @@ public final class MegletDescriptorImpl implements MegletDescriptor.Delegate {
 	private Hashtable					icons;
 	private BundleContext			bc;
 	private String						startClass;
+	private String 						componentName;
 	private String						pid;
 	private Bundle						bundle;
 	private String      			defaultLanguage;
@@ -70,7 +71,7 @@ public final class MegletDescriptorImpl implements MegletDescriptor.Delegate {
 	 */
 
  	public void init( BundleContext bc, Properties props, Map names, Map icons, String defaultLang, String startClass, 
- 										Bundle bundle, MegletContainer megletContainer ) throws Exception {
+ 										String componentName, Bundle bundle, MegletContainer megletContainer ) throws Exception {
 
  		this.bc = bc;
  		this.megletContainer = megletContainer;
@@ -116,6 +117,14 @@ public final class MegletDescriptorImpl implements MegletDescriptor.Delegate {
 	}
 
 
+	/**
+	 * @return
+	 */
+	public String getComponentName() {
+		return componentName;
+	}
+
+	
 	public String getPID() {
 		return pid;
 	}
