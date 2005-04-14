@@ -10,8 +10,9 @@
 	<classpathentry kind="src" path="/org.osgi.service.permissionadmin"/>
 	<classpathentry kind="src" path="/org.osgi.service.condpermadmin"/>
 	<classpathentry kind="src" path="/org.osgi.service.http"/>
-	<classpathentry kind="src" path="/org.osgi.util.gsm"/>
 	<classpathentry kind="src" path="/org.osgi.service.cm"/>
 	<classpathentry kind="src" path="/org.osgi.service.event"/>
+	<classpathentry kind="src" path="/org.osgi.util.mobile"/>
+	<classpathentry kind="src" path="/org.osgi.util.gsm"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
