@@ -116,12 +116,15 @@ public class DoIt implements BundleActivator {
         String line = in.readLine();
         
         if ("ins".equalsIgnoreCase(line)) {
-			FileInputStream is = new FileInputStream(HOME + "easygame.dp");
+            System.out.print("dp: ");
+            line = in.readLine();
+			FileInputStream is = new FileInputStream(HOME + line);
 			da.installDeploymentPackage(is);
 			is.close();
         } else if ("dps".equalsIgnoreCase(line)) {
             DeploymentPackage[] dps = da.listDeploymentPackages();
-            System.out.println(Arrays.asList(dps));
+            for (int i = 0; i < dps.length; i++)
+                System.out.println(" " + i + " " + dps[i]);
         } else if ("uni".equalsIgnoreCase(line)) {
             DeploymentPackage[] dps = da.listDeploymentPackages();
             for (int i = 0; i < dps.length; i++)
@@ -130,26 +133,6 @@ public class DoIt implements BundleActivator {
             line = in.readLine();
             DeploymentPackage dp = dps[Integer.parseInt(line)];
             dp.uninstall();
-        } else if ("upd".equalsIgnoreCase(line)) {
-            FileInputStream is = new FileInputStream(HOME + "easygame_update.dp");
-			da.installDeploymentPackage(is);
-			is.close();
-        } else if ("com1".equalsIgnoreCase(line)) {
-            FileInputStream is = new FileInputStream(HOME + "easygame.dp");
-			da.installDeploymentPackage(is);
-			is.close();
-			
-            is = new FileInputStream(HOME + "easygame_update.dp");
-			da.installDeploymentPackage(is);
-			is.close();
-        } else if ("com2".equalsIgnoreCase(line)) {
-            FileInputStream is = new FileInputStream(HOME + "easygame.dp");
-			da.installDeploymentPackage(is);
-			is.close();
-			
-            is = new FileInputStream(HOME + "easygame_update_nr.dp");
-			da.installDeploymentPackage(is);
-			is.close();
         } else if ("tdb".equalsIgnoreCase(line)) {
             int ok = 0;
             int error = 0;

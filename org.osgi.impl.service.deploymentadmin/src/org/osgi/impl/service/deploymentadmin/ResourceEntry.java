@@ -26,10 +26,16 @@ public class ResourceEntry implements Serializable {
 
     private String     name;
     private Hashtable  attrs = new Hashtable();
+    private String	   pid;
 
     public ResourceEntry(String name, Attributes attrs) {
+        this(name, attrs, null);
+    }
+    
+    public ResourceEntry(String name, Attributes attrs, String pid) {
         this.name = name;
         extractAttrs(attrs);
+        this.pid = pid;
     }
     
     public boolean equals(Object o) {
@@ -63,4 +69,11 @@ public class ResourceEntry implements Serializable {
         }
     }
 
+    public String getPid() {
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
+    }
 }

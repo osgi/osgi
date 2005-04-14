@@ -96,7 +96,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
      * @return
      * @see org.osgi.service.deploymentadmin.DeploymentSession#getDataFile(org.osgi.framework.Bundle)
      */
-    public File getDataFile(Bundle arg0) {
+    public File getDataFile(Bundle b) {
         // TODO
         return null;
     }
@@ -107,11 +107,18 @@ public class DeploymentSessionImpl implements DeploymentSession {
         try {
             transaction.start();
             stopBundles();
-            processBundles(wjis);
-            processResources(wjis);
-            dropResources();
+            if (DeploymentSession.UNINSTALL != getDeploymentAction())
+                processBundles(wjis);
+            startCustomizers();
+            if (DeploymentSession.UNINSTALL != getDeploymentAction())
+                processResources(wjis);
+            if (DeploymentSession.UNINSTALL == getDeploymentAction())
+                dropAllResources();
+            else
+                dropResources();
             dropBundles();
-            startBundles();
+            if (DeploymentSession.UNINSTALL != getDeploymentAction())
+                startBundles();
         } catch (CancelException e) {
             throw e;
         } catch (Exception e) {
@@ -124,12 +131,36 @@ public class DeploymentSessionImpl implements DeploymentSession {
     }
     
     private void startBundles() throws BundleException {
-        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
+        DeploymentPackageImpl dp = null;
+        if (DeploymentSession.INSTALL == getDeploymentAction())
+            dp = srcDp;
+        else if (DeploymentSession.UNINSTALL == getDeploymentAction())
+            dp = targetDp;
+        else
+            dp = targetDp;
+        for (Iterator iter = dp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry entry = (BundleEntry) iter.next();
             Bundle b = context.getBundle(entry.getId());
-            
+            if (entry.isCustomizer())
+                continue;
+            startBundle(b);
+        }
+    }
+    
+    private void startCustomizers() throws BundleException {
+        DeploymentPackageImpl dp;
+        if (DeploymentSession.INSTALL == getDeploymentAction())
+            dp = srcDp;
+        else if (DeploymentSession.UPDATE == getDeploymentAction())
+            dp = srcDp;
+        else
+            dp = targetDp;
+        for (Iterator iter = dp.getBundleEntries().iterator(); iter.hasNext();) {
+            BundleEntry entry = (BundleEntry) iter.next();
+            Bundle b = context.getBundle(entry.getId());
             if (!entry.isCustomizer())
-                startBundle(b);
+                continue;
+            startBundle(b);
         }
     }
     
@@ -140,13 +171,16 @@ public class DeploymentSessionImpl implements DeploymentSession {
     }
 
     private void stopBundles() throws BundleException {
+        if (DeploymentSession.INSTALL == getDeploymentAction())
+            return;
+        
         for (Iterator iter = targetDp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry entry = (BundleEntry) iter.next();
             Bundle b = context.getBundle(entry.getId());
             stopBundle(b);
         }
     }
-
+    
     private void stopBundle(Bundle b) throws BundleException {
         b.stop();
         transaction.addRecord(new TransactionRecord(Transaction.STOPBUNDLE, b));
@@ -182,6 +216,24 @@ public class DeploymentSessionImpl implements DeploymentSession {
         for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
             dropResource(re);
+        }
+    }
+    
+    /*
+     * Drop all rsources pf the target DP
+     */
+    private void dropAllResources() throws DeploymentException {
+        Set toDrop = new HashSet(targetDp.getResourceEntries());
+        Set procs = new HashSet();
+        for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
+            ResourceEntry re = (ResourceEntry) iter.next();
+            String pid = re.getValue(DAConstants.RP_PID);
+            ResourceProcessor proc = findProcessor(pid);
+            if (!procs.contains(pid)) {
+                transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, proc));
+                proc.dropAllResources();
+                procs.add(pid);
+            }
         }
     }
     
@@ -240,6 +292,10 @@ public class DeploymentSessionImpl implements DeploymentSession {
         ResourceProcessor proc = findProcessor(pid);
         transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, proc));
         proc.process(entry.getName(), entry.getInputStream());
+        if (DeploymentSession.INSTALL == getDeploymentAction())
+            srcDp.setProcessorPid(pid);
+        else if (DeploymentSession.UPDATE == getDeploymentAction())
+            targetDp.setProcessorPid(pid);    
     }
     
     private void processBundles(WrappedJarInputStream wjis) 
@@ -304,5 +360,5 @@ public class DeploymentSessionImpl implements DeploymentSession {
     public void cancel() {
         transaction.cancel();
     }
-    
+
 }

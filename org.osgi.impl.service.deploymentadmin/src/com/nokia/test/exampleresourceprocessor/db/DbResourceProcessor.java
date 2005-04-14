@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -21,7 +20,6 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
-import org.osgi.impl.service.deploymentadmin.Logger;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.DeploymentSession;
@@ -35,8 +33,38 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
     // refrence to the database service
     private transient Db				db;
     
+    private static class DpRec implements Serializable {
+        public String name;
+        public String ver;
+        
+        public DpRec(String name, String ver) {
+            this.name = name;
+            this.ver = ver;
+        }
+        
+        public boolean equals(Object obj) {
+            if (null == obj)
+                return false;
+            if (!(obj instanceof DpRec))
+                return false;
+            DpRec other = (DpRec) obj;
+            return name.equals(other.name) &&
+                   ver.equals(other.ver);
+        }
+        
+        public int hashCode() {
+            return (name + ver).hashCode();
+        }
+        
+        public String toString() {
+            return name + " " + ver;
+        }
+    }
+    
     // current Deployment Package and operation
-    private transient DeploymentPackage actDp;
+    private transient DpRec             actDp;
+    
+    // current operation install/update/uninstall
     private transient int 				actOp;
     
     // It contains the following hierarchy (dp is the key).
@@ -79,8 +107,16 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
     }
     
     public void begin(DeploymentSession session) {
-        this.actDp = session.getSourceDeploymentPackage();
         this.actOp = session.getDeploymentAction();
+        if (DeploymentSession.INSTALL == actOp)
+            this.actDp = new DpRec(session.getSourceDeploymentPackage().getName(),
+                    session.getSourceDeploymentPackage().getVersion().toString());
+        else if (DeploymentSession.UPDATE == actOp)
+            this.actDp = new DpRec(session.getTargetDeploymentPackage().getName(),
+                    session.getTargetDeploymentPackage().getVersion().toString());
+        else
+            this.actDp = new DpRec(session.getTargetDeploymentPackage().getName(),
+                    session.getTargetDeploymentPackage().getVersion().toString());
         dbSession = db.begin();
         
         copy = new ByteArrayOutputStream();
@@ -204,10 +240,6 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
         ht.remove(resName);
     }
 
-    public void dropped() {
-        // TODO 
-    }
-
     public void start(BundleContext context) throws Exception {
         String s = (String) context.getBundle().getHeaders().get("pid");
         pid = null == s ? "default_pid" : s;
@@ -238,7 +270,19 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
      * @see org.osgi.service.deploymentadmin.ResourceProcessor#dropAllResources()
      */
     public void dropAllResources() throws DeploymentException {
-        // TODO Auto-generated method stub
+        Hashtable ht = (Hashtable) dps.get(actDp);
+        if (null == ht)
+            return;
+        for (Iterator iter = ht.keySet().iterator(); iter.hasNext();) {
+            String resName = (String) iter.next();
+            Set effects = (Set) ht.get(resName);
+            for (Iterator iter2 = effects.iterator(); iter.hasNext();) {
+                String tableName = (String) iter.next();
+                db.dropTable(dbSession, tableName);
+            }
+            iter.remove();
+        }
+        dps.remove(actDp);
     }
 
     /**
@@ -246,7 +290,6 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
      * @see org.osgi.service.deploymentadmin.ResourceProcessor#prepare()
      */
     public void prepare() throws DeploymentException {
-        // TODO Auto-generated method stub
     }
 
     /**

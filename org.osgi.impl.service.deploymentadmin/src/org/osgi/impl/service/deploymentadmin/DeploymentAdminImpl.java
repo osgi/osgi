@@ -77,21 +77,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return ret;
     }
 
-    /*public synchronized void uninstallDeploymentPackage(long id) {
-        //actDp = (DeploymentPackageImpl) getDeploymentPackage(id);
-        if (null == actDp)
-            //TODO DeploymentAdminException has to be propagated to the caller instead
-            throw new RuntimeException("Internal error");
-        transaction.start(actDp);
-        try {
-            actDp.uninstall();
-        } catch (Exception e) {
-            transaction.rollback();
-            return;
-        }
-        transaction.commit();
-    }*/
-    
     public DeploymentPackage installDeploymentPackage(InputStream in)
     		throws DeploymentException
     {
@@ -102,7 +87,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         // create source DP
         try {
             wjis = new WrappedJarInputStream(in);
-            srcDp = new DeploymentPackageImpl(wjis.getManifest(), nextDpId());
+            srcDp = new DeploymentPackageImpl(wjis.getManifest(), nextDpId(), this);
         } catch (Exception e) {
             throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
                     e.getMessage(), e);
@@ -110,7 +95,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         
         checkPermission("name: "  + srcDp.getName(), 
                 DeploymentAdminPermission.ACTION_INSTALL);
-        session = createSession(srcDp);
+        session = createInstallSession(srcDp);
         try {
             session.go(wjis);
         } catch (CancelException e) {
@@ -119,45 +104,57 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         
         if (session.getDeploymentAction() == DeploymentSession.INSTALL)
             dps.add(srcDp);
-        else if (session.getDeploymentAction() == DeploymentSession.UNINSTALL)
-            dps.remove(srcDp);
         else if (session.getDeploymentAction() == DeploymentSession.UPDATE)
             ; // do nothing
         
         return srcDp;
 	}
 
-    private DeploymentSessionImpl createSession(DeploymentPackageImpl srcDp) 
+    private DeploymentSessionImpl createInstallSession(DeploymentPackageImpl dp) 
     		throws DeploymentException 
     {
-        DeploymentSessionImpl ret;
-     
         // find the package among installed packages
-        DeploymentPackageImpl targetDp = null;
-        for (Iterator iter = dps.iterator(); iter.hasNext();) {
-            DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();
-            if (srcDp.equals(dp)) {
-                targetDp = dp;
-                break;
-            }
-        }
+        DeploymentPackageImpl targetDp = findDp(dp);
         
         // not found -> install
         if (null == targetDp) {
+            // creates an empty dp
             targetDp = new DeploymentPackageImpl();
-	        ret = new DeploymentSessionImpl(srcDp, 
+	        return new DeploymentSessionImpl(dp, 
 	                targetDp, DeploymentSession.INSTALL, logger, context);
         }
         // found -> update
         else {
-            ret = new DeploymentSessionImpl(srcDp, targetDp,
+            return new DeploymentSessionImpl(dp, targetDp,
                     DeploymentSession.UPDATE, logger, context);
         }
+    }
+    
+    private DeploymentSessionImpl createUninstallSession(DeploymentPackageImpl dp) 
+			throws DeploymentException 
+	{
+        // creates an empty dp
+        DeploymentPackageImpl srcDp = new DeploymentPackageImpl();
 
-        return ret;
+        // find the package among installed packages
+        DeploymentPackageImpl targetDp = findDp(dp);
+        
+        return new DeploymentSessionImpl(srcDp, 
+                targetDp, DeploymentSession.UNINSTALL, logger, context);
+	}
+
+    private DeploymentPackageImpl findDp(DeploymentPackageImpl srcDp) {
+        for (Iterator iter = dps.iterator(); iter.hasNext();) {
+            DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();
+            if (srcDp.equals(dp))
+                return dp;
+        }
+        return null;
     }
 
     public synchronized DeploymentPackage getDeploymentPackage(long id) {
+        // TODO
+        
         /*for (Iterator iter = dps.iterator(); iter.hasNext();) {
             DeploymentPackageImpl p = (DeploymentPackageImpl) iter.next();
             if (actDp.getId() == id)
@@ -278,5 +275,18 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             return obj;
         }
 	}
+
+    public void uninstall(DeploymentPackageImpl dp) throws DeploymentException {
+        // TODO checkPermission 
+
+        session = createUninstallSession(dp);
+        try {
+            session.go(null);
+        } catch (CancelException e) {
+            return;
+        }
+        
+        dps.remove(dp);
+    }
     
 }

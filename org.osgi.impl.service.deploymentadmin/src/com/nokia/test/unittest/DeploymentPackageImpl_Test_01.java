@@ -19,7 +19,7 @@ public class DeploymentPackageImpl_Test_01 extends TestCase {
     
     public void setUp() throws Exception {
         jis = new JarInputStream(new FileInputStream(HOME + "dp_01.dp"));
-        dp = new DeploymentPackageImpl(jis.getManifest(), 99);
+        dp = new DeploymentPackageImpl(jis.getManifest(), 99, null);
     }
     
     public void tearDown() throws Exception {
