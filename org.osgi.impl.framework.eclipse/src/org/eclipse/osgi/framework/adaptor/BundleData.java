@@ -36,6 +36,8 @@ public interface BundleData {
 	public static final int TYPE_FRAMEWORK_EXTENSION =		0x00000002;
 	/** The BundleData is for a bootclasspath extension bundle */
 	public static final int TYPE_BOOTCLASSPATH_EXTENSION =	0x00000004;
+	/** The BundleData is for a singleton bundle */
+	public static final int TYPE_SINGLETON =				0x00000008;
 	
 
 	/**

@@ -12,6 +12,7 @@ package org.eclipse.osgi.framework.internal.core;
 
 import java.util.Enumeration;
 import java.util.Vector;
+import org.eclipse.osgi.service.resolver.VersionRange;
 import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.*;
 import org.osgi.framework.Constants;
@@ -209,7 +210,7 @@ public class BundleNativeCode {
 			if (osversion == null) {
 				osversion = new Attribute();
 			}
-			osversion.addElement(Version.parseVersion(value));
+			osversion.addElement(new VersionRange(value));
 			return;
 		}
 		if (key.equals(Constants.SELECTION_FILTER_ATTRIBUTE)) {
@@ -311,25 +312,15 @@ public class BundleNativeCode {
 	 * @return version or null if no match.
 	 */
 	public Version matchOSVersion(Version version) {
-		if (this.osversion == null) {
+		if (this.osversion == null)
 			return Version.emptyVersion;
-		}
 		Version result = null;
 		int size = this.osversion.size();
 		for (int i = 0; i < size; i++) {
-			Version ver = (Version) this.osversion.elementAt(i);
-			int compare = ver.compareTo(version);
-			if (compare == 0) /* versions are equal; best possible match */{
-				return ver;
-			}
-			if (compare < 0) /* requested version < current OS version */{
-				if ((result == null) || (ver.compareTo(result) > 0)) {
-					result = ver; /*
-					 * remember the highest version less than
-					 * osversion
-					 */
-				}
-			}
+			// find a matching range and save the highest result
+			VersionRange range = (VersionRange) this.osversion.elementAt(i);
+			if (range.isIncluded(version) && (result == null || (range.getMinimum().compareTo(result) > 0)))
+				result = range.getMinimum();
 		}
 		return result;
 	}

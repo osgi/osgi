@@ -30,6 +30,7 @@ import org.osgi.framework.FrameworkEvent;
  * installed Bundle in the Framework.
  */
 abstract public class BundleFile {
+	static final SecureAction secureAction = new SecureAction();
 	/**
 	 * The File object for this BundleFile.
 	 */
@@ -128,7 +129,7 @@ abstract public class BundleFile {
 
 		try {
 			//use the constant string for the protocol to prevent duplication
-			return SecureAction.getURL(Constants.OSGI_RESOURCE_URL_PROTOCOL, Long.toString(hostBundleID), index, path, new Handler(bundleEntry));
+			return secureAction.getURL(Constants.OSGI_RESOURCE_URL_PROTOCOL, Long.toString(hostBundleID), index, path, new Handler(bundleEntry));
 		} catch (MalformedURLException e) {
 			return null;
 		}
@@ -144,7 +145,7 @@ abstract public class BundleFile {
 
 		public ZipBundleFile(File basefile, BundleData bundledata) throws IOException {
 			super(basefile);
-			if (!SecureAction.exists(basefile))
+			if (!secureAction.exists(basefile))
 				throw new IOException(NLS.bind(AdaptorMsg.ADAPTER_FILEEXIST_EXCEPTION, basefile));
 			this.bundledata = bundledata;
 			this.closed = true;
@@ -161,7 +162,7 @@ abstract public class BundleFile {
 		}
 
 		protected ZipFile basicOpen() throws IOException {
-			return SecureAction.getZipFile(this.basefile);
+			return secureAction.getZipFile(this.basefile);
 		}
 
 		protected ZipFile getZipFile() throws IOException {
@@ -378,14 +379,14 @@ abstract public class BundleFile {
 
 		public DirBundleFile(File basefile) throws IOException {
 			super(basefile);
-			if (!SecureAction.exists(basefile) || !SecureAction.isDirectory(basefile)) {
+			if (!secureAction.exists(basefile) || !secureAction.isDirectory(basefile)) {
 				throw new IOException(NLS.bind(AdaptorMsg.ADAPTOR_DIRECTORY_EXCEPTION, basefile));
 			}
 		}
 
 		public File getFile(String path) {
 			File filePath = new File(this.basefile, path);
-			if (SecureAction.exists(filePath)) {
+			if (secureAction.exists(filePath)) {
 				return filePath;
 			}
 			return null;
@@ -393,7 +394,7 @@ abstract public class BundleFile {
 
 		public BundleEntry getEntry(String path) {
 			File filePath = new File(this.basefile, path);
-			if (!SecureAction.exists(filePath)) {
+			if (!secureAction.exists(filePath)) {
 				return null;
 			}
 			return new BundleEntry.FileBundleEntry(filePath, path);
@@ -401,12 +402,12 @@ abstract public class BundleFile {
 
 		public boolean containsDir(String dir) {
 			File dirPath = new File(this.basefile, dir);
-			return SecureAction.exists(dirPath) && SecureAction.isDirectory(dirPath);
+			return secureAction.exists(dirPath) && secureAction.isDirectory(dirPath);
 		}
 
 		public Enumeration getEntryPaths(final String path) {
 			final java.io.File pathFile = new java.io.File(basefile, path);
-			if (!SecureAction.exists(pathFile))
+			if (!secureAction.exists(pathFile))
 				return new Enumeration() {
 					public boolean hasMoreElements() {
 						return false;
@@ -416,8 +417,8 @@ abstract public class BundleFile {
 						throw new NoSuchElementException();
 					}
 				};
-			if (SecureAction.isDirectory(pathFile)) {
-				final String[] fileList = SecureAction.list(pathFile);
+			if (secureAction.isDirectory(pathFile)) {
+				final String[] fileList = secureAction.list(pathFile);
 				final String dirPath = path.length() == 0 || path.charAt(path.length() - 1) == '/' ? path : path + '/';
 				return new Enumeration() {
 					int cur = 0;
@@ -432,7 +433,7 @@ abstract public class BundleFile {
 						}
 						java.io.File childFile = new java.io.File(pathFile, fileList[cur]);
 						StringBuffer sb = new StringBuffer(dirPath).append(fileList[cur++]);
-						if (SecureAction.isDirectory(childFile)) {
+						if (secureAction.isDirectory(childFile)) {
 							sb.append("/"); //$NON-NLS-1$
 						}
 						return sb.toString();

@@ -28,7 +28,6 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * ContentHandlers being registered and unregistered.
  */
 public class ContentHandlerProxy extends ContentHandler implements ServiceTrackerCustomizer {
-
 	protected ContentHandler realHandler;
 
 	//TODO avoid type-based names
@@ -59,9 +58,8 @@ public class ContentHandlerProxy extends ContentHandler implements ServiceTracke
 
 	private void setNewHandler(ServiceReference reference, int rank) {
 		this.contentHandlerServiceReference = reference;
-		Object property = reference.getProperty(Constants.SERVICE_RANKING);
 		this.ranking = rank;
-		this.realHandler = (ContentHandler) context.getService(reference);
+		this.realHandler = (ContentHandler) StreamHandlerFactory.secureAction.getService(reference, context);
 	}
 
 	/**

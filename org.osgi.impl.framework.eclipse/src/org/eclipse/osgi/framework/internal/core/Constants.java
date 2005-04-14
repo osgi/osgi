@@ -97,6 +97,7 @@ public class Constants implements org.osgi.framework.Constants {
 
 	/** OSGI system package property */
 	public static final String OSGI_FRAMEWORK_SYSTEM_PACKAGES = "org.osgi.framework.system.packages"; //$NON-NLS-1$
+	public static final String OSGI_BOOTDELEGATION = "org.osgi.framework.bootdelegation"; //$NON-NLS-1$
 	public static final String OSGI_SYSTEM_BUNDLE = "system.bundle"; //$NON-NLS-1$
 	private static String INTERNAL_SYSTEM_BUNDLE = "org.eclipse.osgi"; //$NON-NLS-1$
 
@@ -113,7 +114,6 @@ public class Constants implements org.osgi.framework.Constants {
 	/** OSGi java profile; used to give a URL to a java profile */
 	public static final String OSGI_JAVA_PROFILE = "osgi.java.profile"; //$NON-NLS-1$
 	/** OSGi strict delegation **/
-	public static final String OSGI_STRICT_DELEGATION = "osgi.strict.delegation"; //$NON-NLS-1$
 	public static final String OSGI_RESOLVER_MODE = "osgi.resolverMode"; //$NON-NLS-1$
 	public static final String STRICT_MODE = "strict"; //$NON-NLS-1$
 

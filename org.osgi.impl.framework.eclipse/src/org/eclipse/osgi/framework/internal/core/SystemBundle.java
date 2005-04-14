@@ -17,7 +17,6 @@ import java.net.URL;
 import java.security.Permission;
 import java.security.ProtectionDomain;
 import org.eclipse.osgi.framework.debug.Debug;
-import org.eclipse.osgi.framework.util.SecureAction;
 import org.osgi.framework.*;
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.BundleException;
@@ -166,7 +165,7 @@ public class SystemBundle extends BundleHost {
 		framework.checkAdminPermission(this, AdminPermission.EXECUTE);
 
 		if (state == ACTIVE) {
-			Thread shutdown = SecureAction.createThread(new Runnable() {
+			Thread shutdown = framework.secureAction.createThread(new Runnable() {
 				public void run() {
 					try {
 						framework.shutdown();
@@ -213,7 +212,7 @@ public class SystemBundle extends BundleHost {
 		framework.checkAdminPermission(this, AdminPermission.LIFECYCLE);
 
 		if (state == ACTIVE) {
-			Thread restart = SecureAction.createThread(new Runnable() {
+			Thread restart = framework.secureAction.createThread(new Runnable() {
 				public void run() {
 					framework.shutdown();
 

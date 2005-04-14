@@ -19,7 +19,6 @@ import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.internal.core.Constants;
 import org.eclipse.osgi.framework.util.Headers;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.Version;
 
 public class SystemBundleData extends AbstractBundleData {
 	public static final String OSGI_FRAMEWORK = "osgi.framework"; //$NON-NLS-1$
@@ -161,16 +160,9 @@ public class SystemBundleData extends AbstractBundleData {
 			};
 	}
 
-	private void setMetaData() {
-		setActivator((String) manifest.get(Constants.BUNDLE_ACTIVATOR));
-		setClassPathString((String) manifest.get(Constants.BUNDLE_CLASSPATH));
-		setDynamicImports((String) manifest.get(Constants.DYNAMICIMPORT_PACKAGE));
-		setExecutionEnvironment((String) manifest.get(Constants.BUNDLE_REQUIREDEXECUTIONENVIRONMENT));
+	private void setMetaData() throws BundleException {
 		setLocation(Constants.SYSTEM_BUNDLE_LOCATION);
-		setSymbolicName(AbstractBundleData.parseSymbolicName(manifest));
-		String sVersion = (String) manifest.get(Constants.BUNDLE_VERSION);
-		if (sVersion != null)
-			setVersion(Version.parseVersion(sVersion));
+		loadFromManifest();
 	}
 
 	public BundleClassLoader createClassLoader(ClassLoaderDelegate delegate, BundleProtectionDomain domain, String[] bundleclasspath) {

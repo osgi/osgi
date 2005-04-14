@@ -31,6 +31,7 @@ public class ContentHandlerFactory implements java.net.ContentHandlerFactory {
 
 	private static final String contentHandlerClazz = "java.net.ContentHandler"; //$NON-NLS-1$
 	private static final String CONTENT_HANDLER_PKGS= "java.content.handler.pkgs"; //$NON-NLS-1$
+	private static final String DEFAULT_VM_CONTENT_HANDLERS = "sun.net.www.content"; //$NON-NLS-1$
 
 	private Hashtable proxies;
 
@@ -52,6 +53,7 @@ public class ContentHandlerFactory implements java.net.ContentHandlerFactory {
 		//first, we check to see if there exists a built in content handler for
 		//this content type.  we can not overwrite built in ContentHandlers
 		String builtInHandlers = System.getProperty(CONTENT_HANDLER_PKGS);
+		builtInHandlers = builtInHandlers == null ? DEFAULT_VM_CONTENT_HANDLERS : DEFAULT_VM_CONTENT_HANDLERS + '|' + builtInHandlers;
 		Class clazz = null;
 		if (builtInHandlers != null) {
 			//replace '/' with a '.' and all characters not allowed in a java class name
@@ -90,12 +92,10 @@ public class ContentHandlerFactory implements java.net.ContentHandlerFactory {
 					String[] contentHandler = (String[]) obj;
 					for (int j = 0; j < contentHandler.length; j++) {
 						if (contentHandler[j].equals(contentType)) {
-							ContentHandler handler = (ContentHandler) context.getService(serviceReferences[i]);
 							proxy = new ContentHandlerProxy(contentType, serviceReferences[i], context);
-							proxies.put(contentType, handler);
+							proxies.put(contentType, proxy);
 							return (proxy);
 						}
-
 					}
 				}
 			}

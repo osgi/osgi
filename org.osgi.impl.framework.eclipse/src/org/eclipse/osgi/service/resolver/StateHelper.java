@@ -97,4 +97,17 @@ public interface StateHelper {
 	 * @return any cycles found 
 	 */
 	public Object[][] sortBundles(BundleDescription[] toSort);
+
+	/**
+	 * Returns a list of all packages that the specified bundle has access to which are
+	 * exported by other bundles.  This takes into account all constraint specifications
+	 * from the specified bundle (Import-Package, Require-Bundle etc).  A deep dependancy
+	 * search is done for all packages which are available through the required bundles and 
+	 * any bundles which are reexported.  This method also takes into account all directives
+	 * which may be specified on the constraint specifications (e.g. uses, x-friends etc.) 
+	 * @param bundle a bundle to get the list of packages for.
+	 * @return a list of all packages that the specified bundle has access to which are
+	 * exported by other bundles.
+	 */
+	public ExportPackageDescription[] getVisiblePackages(BundleDescription bundle);
 }

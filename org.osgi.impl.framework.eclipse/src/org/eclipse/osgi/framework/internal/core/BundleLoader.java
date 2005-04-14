@@ -20,7 +20,8 @@ import org.eclipse.osgi.framework.adaptor.*;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.service.resolver.*;
 import org.eclipse.osgi.util.ManifestElement;
-import org.osgi.framework.*;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.FrameworkEvent;
 
 /**
  * This object is responsible for all classloader delegation for a bundle.
@@ -31,8 +32,7 @@ import org.osgi.framework.*;
  */
 public class BundleLoader implements ClassLoaderDelegate {
 	public final static String DEFAULT_PACKAGE = "."; //$NON-NLS-1$
-	public final static String JAVA_CLASS = "java."; //$NON-NLS-1$
-	public final static String JAVA_RESOURCE = "java/"; //$NON-NLS-1$
+	public final static String JAVA_PACKAGE = "java."; //$NON-NLS-1$
 
 	/* the proxy */
 	BundleLoaderProxy proxy;
@@ -44,6 +44,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 
 	/* cache of imported packages. Key is packagename, Value is PackageSource */
 	KeyedHashSet importedSources;
+	boolean importsInit = false;
 	/* cache of required package sources. Key is packagename, value is PackageSource */
 	KeyedHashSet requiredSources;
 	/* flag that indicates this bundle has dynamic imports */
@@ -117,9 +118,6 @@ public class BundleLoader implements ClassLoaderDelegate {
 	}
 
 	final void initialize(BundleDescription description) {
-		// init the imported packages list taking the bundle...
-		addImportedPackages(description.getResolvedImports());
-
 		// init the require bundles list.
 		BundleDescription[] required = description.getResolvedRequires();
 		if (required.length > 0) {
@@ -173,17 +171,19 @@ public class BundleLoader implements ClassLoaderDelegate {
 				addDynamicImportPackage(fragments[i].getImportPackages());
 	}
 
-	private void addImportedPackages(ExportPackageDescription[] packages) {
+	private synchronized void addImportedPackages(ExportPackageDescription[] packages) {
+		if (importsInit)
+			return;
 		if (packages != null && packages.length > 0) {
 			if (importedSources == null)
 				importedSources = new KeyedHashSet(packages.length, false);
 			for (int i = 0; i < packages.length; i++) {
 				PackageSource source = createExportPackageSource(packages[i]);
-				if (source == null)
-					return;
-				importedSources.add(source);
+				if (source != null)
+					importedSources.add(source);
 			}
 		}
+		importsInit = true;
 	}
 
 	final PackageSource createExportPackageSource(ExportPackageDescription export) {
@@ -191,7 +191,11 @@ public class BundleLoader implements ClassLoaderDelegate {
 		if (exportProxy == null)
 			// TODO log error!!
 			return null;
-		return exportProxy.createPackageSource(export, false);
+		PackageSource requiredSource = exportProxy.getBundleLoader().findRequiredSource(export.getName());
+		PackageSource exportSource = exportProxy.createPackageSource(export, false);
+		if (requiredSource == null)
+			return exportSource;
+		return createMultiSource(export.getName(), new PackageSource[] {requiredSource, exportSource});
 	}
 
 	private static PackageSource createMultiSource(String packageName, PackageSource[] sources) {
@@ -329,13 +333,14 @@ public class BundleLoader implements ClassLoaderDelegate {
 	Class findClass(String name, boolean checkParent) throws ClassNotFoundException {
 		if (Debug.DEBUG && Debug.DEBUG_LOADER)
 			Debug.println("BundleLoader[" + this + "].loadBundleClass(" + name + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		// First check the parent classloader for system classes.
+		// follow the OSGi delegation model
 		if (checkParent && parent != null) {
-			if (Framework.STRICT_DELEGATION) {
-				if (name.startsWith(JAVA_CLASS))
-					// we want to throw ClassNotFoundExceptions if a java.* class cannot be loaded from the parent.
-					return parent.loadClass(name);
-			} else
+			if (name.startsWith(JAVA_PACKAGE))
+				// 1) if startsWith "java." delegate to parent and terminate search
+				// we want to throw ClassNotFoundExceptions if a java.* class cannot be loaded from the parent.
+				return parent.loadClass(name);
+			else if (isBootDelegationPackage(name))
+				// 2) if part of the bootdelegation list then delegate to parent and continue of failure
 				try {
 					return parent.loadClass(name);
 				} catch (ClassNotFoundException cnfe) {
@@ -347,16 +352,25 @@ public class BundleLoader implements ClassLoaderDelegate {
 			throw new ClassNotFoundException(name);
 		String pkgName = getPackageName(name);
 		Class result = null;
+		// 3) search the imported packages
 		PackageSource source = findImportedSource(pkgName);
 		if (source != null)
+			// 3) found import source terminate search at the source
+			return source.loadClass(name);
+		// 4) search the required bundles
+		source = findRequiredSource(pkgName);
+		if (source != null)
+			// 4) attempt to load from source but continue on failure
 			result = source.loadClass(name);
-		else {
-			source = findRequiredSource(pkgName);
-			if (source != null)
-				result = source.loadClass(name);
-			if (result == null)
-				result = findLocalClass(name);
-		}
+		// 5) search the local bundle
+		if (result == null)
+			result = findLocalClass(name);
+		if (result != null)
+			return result;
+		// 6) attempt to find a dynamic import source
+		source = findDynamicSource(pkgName);
+		if (source != null)
+			result = source.loadClass(name);
 		if (result == null)
 			throw new ClassNotFoundException(name);
 		return result;
@@ -374,13 +388,18 @@ public class BundleLoader implements ClassLoaderDelegate {
 	}
 
 	URL findResource(String name, boolean checkParent) {
+		if ((name.length() > 1) && (name.charAt(0) == '/')) /* if name has a leading slash */
+			name = name.substring(1); /* remove leading slash before search */
+		String pkgName = getResourcePackageName(name);
+		// follow the OSGi delegation model
 		// First check the parent classloader for system resources, if it is a java resource.
 		if (checkParent && parent != null) {
-			if (Framework.STRICT_DELEGATION) {
-				if (name.startsWith(JAVA_RESOURCE))
-					// we never delegate java resource requests past the parent
-					return parent.getResource(name);
-			} else {
+			if (pkgName.startsWith(JAVA_PACKAGE))
+				// 1) if startsWith "java." delegate to parent and terminate search
+				// we never delegate java resource requests past the parent
+				return parent.getResource(name);
+			else if (isBootDelegationPackage(pkgName)) {
+				// 2) if part of the bootdelegation list then delegate to parent and continue of failure
 				URL result = parent.getResource(name);
 				if (result != null)
 					return result;
@@ -388,44 +407,72 @@ public class BundleLoader implements ClassLoaderDelegate {
 		}
 		if (isClosed())
 			return null;
-		if ((name.length() > 1) && (name.charAt(0) == '/')) /* if name has a leading slash */
-			name = name.substring(1); /* remove leading slash before search */
 
-		String pkgName = getResourcePackageName(name);
 		URL result = null;
+		// 3) search the imported packages
 		PackageSource source = findImportedSource(pkgName);
 		if (source != null)
+			// 3) found import source terminate search at the source
+			return source.getResource(name);
+		// 4) search the required bundles
+		source = findRequiredSource(pkgName);
+		if (source != null)
+			// 4) attempt to load from source but continue on failure
 			result = source.getResource(name);
-		else {
-			source = findRequiredSource(pkgName);
-			if (source != null)
-				result = source.getResource(name);
-			if (result == null)
-				result = findLocalResource(name);
-		}
+		// 5) search the local bundle
+		if (result == null)
+			result = findLocalResource(name);
+		if (result != null)
+			return result;
+		// 6) attempt to find a dynamic import source
+		source = findDynamicSource(pkgName);
+		if (source != null)
+			result = source.getResource(name);
 		return result;
+	}
+
+	private boolean isBootDelegationPackage(String name) {
+		if (bundle.framework.bootDelegateAll)
+			return true;
+		if (bundle.framework.bootDelegation == null)
+			return false;
+		for (int i = 0; i < bundle.framework.bootDelegation.length; i++)
+			if (name.startsWith(bundle.framework.bootDelegation[i]))
+				return true;
+		return false;
 	}
 
 	/**
 	 * Finds the resources for a bundle.  This  method is used for delegation by the bundle's classloader.
 	 */
 	public Enumeration findResources(String name) throws IOException {
+		// do not delegate to parent because ClassLoader#getResources already did and it is final!!
 		if (isClosed())
 			return null;
 		if ((name.length() > 1) && (name.charAt(0) == '/')) /* if name has a leading slash */
 			name = name.substring(1); /* remove leading slash before search */
 		String pkgName = getResourcePackageName(name);
 		Enumeration result = null;
+		// start at step 3 because of the comment above about ClassLoader#getResources
+		// 3) search the imported packages
 		PackageSource source = findImportedSource(pkgName);
 		if (source != null)
+			// 3) found import source terminate search at the source
+			return source.getResources(name);
+		// 4) search the required bundles
+		source = findRequiredSource(pkgName);
+		if (source != null)
+			// 4) attempt to load from source but continue on failure
 			result = source.getResources(name);
-		else {
-			source = findRequiredSource(pkgName);
-			if (source != null)
-				result = source.getResources(name);
-			if (result == null)
-				result = findLocalResources(name);
-		}
+		// 5) search the local bundle
+		if (result == null)
+			result = findLocalResources(name);
+		if (result != null)
+			return result;
+		// 6) attempt to find a dynamic import source
+		source = findDynamicSource(pkgName);
+		if (source != null)
+			result = source.getResources(name);
 		return result;
 	}
 
@@ -715,26 +762,33 @@ public class BundleLoader implements ClassLoaderDelegate {
 			classloader.attachFragment(fragment.getBundleData(), fragment.domain, classpath);
 	}
 
+	/*
+	 * Finds a packagesource that is either imported or required from another bundle.
+	 * This will not include an local package source
+	 */
 	private PackageSource findSource(String pkgName) {
 		if (pkgName == null)
 			return null;
 		PackageSource result = findImportedSource(pkgName);
 		if (result != null)
 			return result;
-		return findRequiredSource(pkgName);
+		result = findRequiredSource(pkgName);
+		if (result == null)
+			result = findDynamicSource(pkgName);
+		return result;
 	}
 
 	private PackageSource findImportedSource(String pkgName) {
-		PackageSource source = null;
-		if (importedSources != null) {
-			source = (PackageSource) importedSources.getByKey(pkgName);
-			if (source != null)
-				return source;
-		}
+		if (!importsInit)
+			addImportedPackages(proxy.getBundleDescription().getResolvedImports());
+		return importedSources == null ? null : (PackageSource) importedSources.getByKey(pkgName);
+	}
+
+	private PackageSource findDynamicSource(String pkgName) {
 		if (isDynamicallyImported(pkgName)) {
 			ExportPackageDescription exportPackage = bundle.framework.adaptor.getState().linkDynamicImport(proxy.getBundleDescription(), pkgName);
 			if (exportPackage != null) {
-				source = createExportPackageSource(exportPackage);
+				PackageSource source = createExportPackageSource(exportPackage);
 				importedSources.add(source);
 				return source;
 			}
@@ -779,8 +833,9 @@ public class BundleLoader implements ClassLoaderDelegate {
 	}
 
 	/*
-	 * Gets the package source for the pkgName.  This will return the local package source
-	 * of the bundle exports the package.
+	 * Gets the package source for the pkgName.  This will include the local package source
+	 * if the bundle exports the package.  This is used to compare the PackageSource of a 
+	 * package from two different bundles.
 	 */
 	final PackageSource getPackageSource(String pkgName) {
 		PackageSource result = findSource(pkgName);

@@ -46,6 +46,9 @@ org.eclipse.osgi/debug/packageadmin/timing=false
 org.eclipse.osgi/debug/monitorbundles=false
 org.eclipse.osgi/debug/bundleTime=false
 
+# Debug the loading of message bundles
+org.eclipse.osgi/debug/messageBundles=false
+
 # Eclipse adaptor options
 org.eclipse.osgi/eclipseadaptor/debug = false
 org.eclipse.osgi/eclipseadaptor/debug/location = false

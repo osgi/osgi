@@ -54,12 +54,8 @@ public class URLStreamHandlerProxy extends URLStreamHandler implements ServiceTr
 
 		urlSetter = new URLStreamHandlerSetter(this);
 
-		//set the ranking
-		Object property = reference.getProperty(Constants.SERVICE_RANKING);
-		ranking = (property instanceof Integer) ? ((Integer) property).intValue() : 0;
-
-		this.realHandlerService = (URLStreamHandlerService) context.getService(reference);
-		this.urlStreamServiceReference = reference;
+		//set the handler and ranking
+		setNewHandler(reference, getRank(reference));
 
 		urlStreamHandlerServiceTracker = new ServiceTracker(context, StreamHandlerFactory.URLSTREAMHANDLERCLASS, this);
 		urlStreamHandlerServiceTracker.open();
@@ -68,7 +64,7 @@ public class URLStreamHandlerProxy extends URLStreamHandler implements ServiceTr
 	private void setNewHandler(ServiceReference reference, int rank) {
 		this.urlStreamServiceReference = reference;
 		this.ranking = rank;
-		this.realHandlerService = (URLStreamHandlerService) context.getService(reference);
+		this.realHandlerService = (URLStreamHandlerService) StreamHandlerFactory.secureAction.getService(reference, context);
 	}
 
 	/**
@@ -231,7 +227,8 @@ public class URLStreamHandlerProxy extends URLStreamHandler implements ServiceTr
 	}
 
 	private int getRank(ServiceReference reference) {
-		return ((Integer) reference.getProperty(Constants.SERVICE_RANKING)).intValue();
+		Object property = reference.getProperty(Constants.SERVICE_RANKING);
+		return (property instanceof Integer) ? ((Integer) property).intValue() : 0;
 	}
 
 }

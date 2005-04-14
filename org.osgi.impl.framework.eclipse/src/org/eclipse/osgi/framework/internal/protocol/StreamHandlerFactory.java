@@ -15,6 +15,7 @@ import java.net.URLStreamHandler;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import org.eclipse.osgi.framework.adaptor.FrameworkAdaptor;
+import org.eclipse.osgi.framework.util.SecureAction;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.url.URLConstants;
 import org.osgi.util.tracker.ServiceTracker;
@@ -23,6 +24,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * This class contains the URL stream handler factory for the OSGi framework.
  */
 public class StreamHandlerFactory implements java.net.URLStreamHandlerFactory {
+	static final SecureAction secureAction = new SecureAction();
 	/** BundleContext to system bundle */
 	protected BundleContext context;
 
@@ -34,6 +36,7 @@ public class StreamHandlerFactory implements java.net.URLStreamHandlerFactory {
 	protected static final String URLSTREAMHANDLERCLASS = "org.osgi.service.url.URLStreamHandlerService"; //$NON-NLS-1$
 	protected static final String PROTOCOL_HANDLER_PKGS= "java.protocol.handler.pkgs"; //$NON-NLS-1$
 	protected static final String INTERNAL_PROTOCOL_HANDLER_PKG = "org.eclipse.osgi.framework.internal.protocol."; //$NON-NLS-1$
+	private static final String DEFAULT_VM_PROTOCOL_HANDLERS = "sun.net.www.protocol"; //$NON-NLS-1$
 
 	private Hashtable proxies;
 
@@ -63,6 +66,7 @@ public class StreamHandlerFactory implements java.net.URLStreamHandlerFactory {
 
 		//first check for built in handlers
 		String builtInHandlers = System.getProperty(PROTOCOL_HANDLER_PKGS);
+		builtInHandlers = builtInHandlers == null ? DEFAULT_VM_PROTOCOL_HANDLERS : DEFAULT_VM_PROTOCOL_HANDLERS + '|' + builtInHandlers;
 		Class clazz = null;
 		if (builtInHandlers != null) {
 			StringTokenizer tok = new StringTokenizer(builtInHandlers, "|"); //$NON-NLS-1$

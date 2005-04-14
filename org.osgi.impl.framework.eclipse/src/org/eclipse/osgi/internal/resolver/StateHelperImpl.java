@@ -12,6 +12,7 @@ package org.eclipse.osgi.internal.resolver;
 
 import java.util.*;
 
+import org.eclipse.osgi.framework.internal.core.Constants;
 import org.eclipse.osgi.service.resolver.*;
 
 /**
@@ -145,7 +146,50 @@ public class StateHelperImpl implements StateHelper {
 		references.add(new Object[] {description, reference});
 	}
 
-	public static StateHelper getInstance() {
+	public ExportPackageDescription[] getVisiblePackages(BundleDescription bundle) {
+		ArrayList packageList = new ArrayList(); // list of all ExportPackageDescriptions that are visible
+		ArrayList importList = new ArrayList(); // list of package names which are directly imported
+		// get the list of directly importe packages first.
+		ExportPackageDescription[] resolvedImports = bundle.getResolvedImports();
+		for (int i = 0; i < resolvedImports.length; i++) {
+			packageList.add(resolvedImports[i]);
+			importList.add(resolvedImports[i].getName()); // besure to add to direct import list
+		}
+		// now find all the packages that are visible from required bundles
+		BundleDescription[] requiredBundles = bundle.getResolvedRequires();
+		for (int i = 0; i < requiredBundles.length; i++)
+			getPackages(requiredBundles[i], bundle.getSymbolicName(), importList, packageList, new ArrayList());
+		return (ExportPackageDescription[]) packageList.toArray(new ExportPackageDescription[packageList.size()]);
+	}
+
+	private void getPackages(BundleDescription requiredBundle, String symbolicName, List importList, List packageList, List visited) {
+		if (visited.contains(requiredBundle))
+			return; // prevent duplicate entries and infinate loops incase of cycles
+		visited.add(requiredBundle);
+		// add all the exported packages from the required bundle; take x-friends into account.
+		ExportPackageDescription[] exports = requiredBundle.getSelectedExports();
+		for (int i = 0; i < exports.length; i++)
+			if (isFriend(symbolicName, exports[i]) && !importList.contains(exports[i].getName()))
+				packageList.add(exports[i]);
+		// now look for reexported bundles from the required bundle.
+		BundleSpecification[] requiredBundles = requiredBundle.getRequiredBundles();
+		for (int i = 0; i < requiredBundles.length; i++)
+			if (requiredBundles[i].isExported() && requiredBundles[i].getSupplier() != null)
+				getPackages((BundleDescription) requiredBundles[i].getSupplier(), symbolicName, importList, packageList, visited);
+	}
+
+
+	private boolean isFriend(String consumerBSN, ExportPackageDescription export) {
+		String[] friends = (String[]) export.getDirective(Constants.FRIENDS_DIRECTIVE);
+		if (friends == null)
+			return true; // no x-friends means it is wide open
+		for (int i = 0; i < friends.length; i++)
+			if (friends[i].equals(consumerBSN))
+				return true; // the consumer is a friend
+		return false;
+	}
+
+	static StateHelper getInstance() {
 		return instance;
 	}
 }

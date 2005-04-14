@@ -180,7 +180,6 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		loadProperties();
 		readAdaptorManifest();
 		initBundleStoreRootDir();
-
 		// need to create the FrameworkLog very early
 		frameworkLog = createFrameworkLog();
 	}
@@ -380,6 +379,10 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 				Debug.println("Unable to load osgi.properties: " + e.getMessage()); //$NON-NLS-1$
 			}
 		}
+
+		// need to set some OSGi Framework properties that only the adaptor would know about
+		if (addURLMethod != null)
+			properties.put(Constants.SUPPORTS_FRAMEWORK_EXTENSION, "true"); //$NON-NLS-1$
 	}
 
 	/**

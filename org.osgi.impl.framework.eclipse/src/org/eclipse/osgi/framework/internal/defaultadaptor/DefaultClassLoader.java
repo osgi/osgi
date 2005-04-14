@@ -12,7 +12,9 @@
 package org.eclipse.osgi.framework.internal.defaultadaptor;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.*;
 import java.security.ProtectionDomain;
 import java.util.*;
 import org.eclipse.osgi.framework.adaptor.ClassLoaderDelegate;
@@ -27,6 +29,16 @@ import org.osgi.framework.FrameworkEvent;
  * consolidates all Bundle-ClassPath entries into a single ClassLoader.
  */
 public class DefaultClassLoader extends AbstractClassLoader {
+	/**
+	 * A PermissionCollection for AllPermissions; shared across all ProtectionDomains when security is disabled
+	 */
+	static final PermissionCollection ALLPERMISSIONS;
+	static {
+		AllPermission allPerm = new AllPermission();
+		ALLPERMISSIONS = allPerm.newPermissionCollection();
+		if (ALLPERMISSIONS != null)
+			ALLPERMISSIONS.add(allPerm);
+	}
 	/**
 	 * The BundleData object for this BundleClassLoader
 	 */
@@ -594,7 +606,7 @@ public class DefaultClassLoader extends AbstractClassLoader {
 
 		protected ClasspathEntry(BundleFile bundlefile, ProtectionDomain domain) {
 			this.bundlefile = bundlefile;
-			this.domain = domain;
+			this.domain = createProtectionDomain(domain);
 		}
 
 		public BundleFile getBundleFile() {
@@ -604,6 +616,35 @@ public class DefaultClassLoader extends AbstractClassLoader {
 		public ProtectionDomain getProtectionDomain() {
 			return domain;
 		}
+
+		/*
+		 * Creates a ProtectionDomain using the permissions of the specified baseDomain
+		 */
+		protected ProtectionDomain createProtectionDomain(ProtectionDomain baseDomain) {
+			// create a protection domain which knows about the codesource for this classpath entry (bug 89904)
+			try {
+				// use the permissions supplied by the domain passed in from the framework
+				PermissionCollection permissions;
+				if (baseDomain != null)
+					permissions = baseDomain.getPermissions();
+				else
+					// no domain specified.  Better use a collection that has all permissions
+					// this is done just incase someone sets the security manager later
+					permissions = ALLPERMISSIONS;
+				return new ClasspathDomain(bundlefile.getBaseFile().toURL(), permissions);
+			} catch (MalformedURLException e) {
+				// Failed to create our own domain; just return the baseDomain
+				return baseDomain;
+			}
+		}
 	}
 
+	/*
+	 * Very simple protection domain that uses a URL to create a CodeSource for a ProtectionDomain
+	 */
+	protected class ClasspathDomain extends ProtectionDomain {
+		public ClasspathDomain(URL codeLocation, PermissionCollection permissions) {
+			super(new CodeSource(codeLocation, null), permissions);
+		}
+	}
 }

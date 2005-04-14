@@ -20,6 +20,7 @@ import org.eclipse.osgi.framework.eventmgr.*;
 import org.eclipse.osgi.framework.internal.protocol.ContentHandlerFactory;
 import org.eclipse.osgi.framework.internal.protocol.StreamHandlerFactory;
 import org.eclipse.osgi.framework.log.FrameworkLog;
+import org.eclipse.osgi.framework.util.SecureAction;
 import org.eclipse.osgi.profile.Profile;
 import org.eclipse.osgi.util.ManifestElement;
 import org.eclipse.osgi.util.NLS;
@@ -29,7 +30,6 @@ import org.osgi.framework.*;
  * Core OSGi Framework class.
  */
 public class Framework implements EventDispatcher, EventPublisher {
-	public static final boolean STRICT_DELEGATION = Boolean.getBoolean(Constants.OSGI_STRICT_DELEGATION);
 	/** FrameworkAdaptor specific functions. */
 	protected FrameworkAdaptor adaptor;
 	/** Framework properties object.  A reference to the 
@@ -83,12 +83,15 @@ public class Framework implements EventDispatcher, EventPublisher {
 	protected Hashtable installLock;
 	/** System Bundle object */
 	protected SystemBundle systemBundle;
+	protected String[] bootDelegation;
+	protected boolean bootDelegateAll = false;
 
 	/**
 	 * The AliasMapper used to alias OS Names.
 	 */
 	protected static AliasMapper aliasMapper = new AliasMapper();
 	protected ConditionalPermissionAdminImpl condPermAdmin;
+	SecureAction secureAction = new SecureAction();
 
 	/**
 	 * Constructor for the Framework instance. This method initializes the
@@ -288,6 +291,7 @@ public class Framework implements EventDispatcher, EventPublisher {
 			}
 		}
 		setExecutionEnvironment();
+		setBootDelegation();
 	}
 
 	private void setExecutionEnvironment() {
@@ -328,6 +332,20 @@ public class Framework implements EventDispatcher, EventPublisher {
 			}
 		}
 		properties.put(Constants.FRAMEWORK_EXECUTIONENVIRONMENT, ee.toString());
+	}
+
+
+	private void setBootDelegation() {
+		String bootDelegationProp = properties.getProperty(Constants.OSGI_BOOTDELEGATION);
+		if (bootDelegationProp == null)
+			return;
+		if (bootDelegationProp.trim().length() == 0)
+			bootDelegation = new String[] {""}; //$NON-NLS-1$
+		else
+			bootDelegation = ManifestElement.getArrayFromList(bootDelegationProp);
+		for (int i = 0; i < bootDelegation.length; i++)
+			if (bootDelegation[i].length() == 0)
+				bootDelegateAll = true;
 	}
 
 	private void setSystemExports() {

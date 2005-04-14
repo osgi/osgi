@@ -156,7 +156,7 @@ public class ConditionalPermissionInfoImpl implements ConditionalPermissionInfo,
 					constructor = clazz.getConstructor(condClassArray[argCount]);
 				}
 			} else {
-				Class clazzes[] = new Class[argCount];
+				Class clazzes[] = new Class[argCount + 1];
 				clazzes[0] = Bundle.class;
 				for (int j = 1; j <= argCount; j++) {
 					clazzes[j] = String.class;

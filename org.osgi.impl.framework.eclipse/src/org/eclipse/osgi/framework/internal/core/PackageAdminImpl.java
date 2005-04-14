@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import org.eclipse.osgi.framework.adaptor.BundleClassLoader;
 import org.eclipse.osgi.framework.adaptor.BundleData;
 import org.eclipse.osgi.framework.debug.Debug;
-import org.eclipse.osgi.framework.util.SecureAction;
 import org.eclipse.osgi.service.resolver.*;
 import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.*;
@@ -135,7 +134,7 @@ public class PackageAdminImpl implements PackageAdmin {
 		}
 
 		final AbstractBundle[] bundles = copy;
-		Thread refresh = SecureAction.createThread(new Runnable() {
+		Thread refresh = framework.secureAction.createThread(new Runnable() {
 			public void run() {
 				doResolveBundles(bundles, true);
 			}

@@ -91,15 +91,6 @@ class StateBuilder {
 		return result;
 	}
 
-	private static String[] createProvidedPackages(ManifestElement[] specs) {
-		if (specs == null || specs.length == 0)
-			return null;
-		String[] result = new String[specs.length];
-		for (int i = 0; i < specs.length; i++)
-			result[i] = specs[i].getValue();
-		return result;
-	}
-
 	private static ImportPackageSpecification[] createImportPackages(ExportPackageDescription[] exported, ArrayList providedExports, ManifestElement[] imported, ManifestElement[] dynamicImported, int manifestVersion) throws BundleException {
 		ArrayList allImports = null;
 		if (manifestVersion < 2) {
@@ -145,7 +136,10 @@ class StateBuilder {
 			ImportPackageSpecificationImpl result = new ImportPackageSpecificationImpl();
 			result.setName(importNames[i]);
 			// set common attributes for both dynamic and static imports
-			result.setVersionRange(getVersionRange(manifestVersion < 2 ? importPackage.getAttribute(Constants.PACKAGE_SPECIFICATION_VERSION) : importPackage.getAttribute(Constants.VERSION_ATTRIBUTE)));
+			String versionString = importPackage.getAttribute(Constants.VERSION_ATTRIBUTE);
+			if (versionString == null) // specification-version aliases to version
+				versionString = importPackage.getAttribute(Constants.PACKAGE_SPECIFICATION_VERSION);
+			result.setVersionRange(getVersionRange(versionString));
 			result.setBundleSymbolicName(importPackage.getAttribute(Constants.BUNDLE_SYMBOLICNAME_ATTRIBUTE));
 			result.setBundleVersionRange(getVersionRange(importPackage.getAttribute(Constants.BUNDLE_VERSION_ATTRIBUTE)));
 			result.setAttributes(getAttributes(importPackage, DEFINED_MATCHING_ATTRS));
@@ -191,7 +185,9 @@ class StateBuilder {
 				continue;
 			ExportPackageDescriptionImpl result = new ExportPackageDescriptionImpl();
 			result.setName(exportNames[i]);
-			String versionString = manifestVersion < 2 ? exportPackage.getAttribute(Constants.PACKAGE_SPECIFICATION_VERSION) : exportPackage.getAttribute(Constants.VERSION_ATTRIBUTE);
+			String versionString = exportPackage.getAttribute(Constants.VERSION_ATTRIBUTE);
+			if (versionString == null) // specification-version aliases to version
+				versionString = exportPackage.getAttribute(Constants.PACKAGE_SPECIFICATION_VERSION);
 			if (versionString != null)
 				result.setVersion(Version.parseVersion(versionString));
 			result.setDirective(Constants.USES_DIRECTIVE, ManifestElement.getArrayFromList(exportPackage.getDirective(Constants.USES_DIRECTIVE)));

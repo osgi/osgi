@@ -217,22 +217,6 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 		return adaptor;
 	}
 
-	/* 
-	 * Convenience method that retrieves the simbolic name string from the header.
-	 * Note: clients may want to cache the returned value.
-	 */
-	public static String parseSymbolicName(Dictionary manifest) {
-		String symbolicNameEntry = (String) manifest.get(Constants.BUNDLE_SYMBOLICNAME);
-		if (symbolicNameEntry == null)
-			return null;
-		try {
-			return ManifestElement.parseHeader(Constants.BUNDLE_SYMBOLICNAME, symbolicNameEntry)[0].getValue();
-		} catch (BundleException e) {
-			// here is not the place to validate a manifest			
-		}
-		return null;
-	}
-
 	static String[] getClassPath(ManifestElement[] classpath) {
 		if (classpath == null) {
 			if (Debug.DEBUG && Debug.DEBUG_LOADER)
@@ -359,19 +343,26 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 		this.symbolicName = symbolicName;
 	}
 
-	protected void loadFromManifest() throws IOException, BundleException {
+	protected void loadFromManifest() throws BundleException {
 		getManifest();
-
-		if (manifest == null) {
-			throw new IOException(NLS.bind(AdaptorMsg.ADAPTOR_ERROR_GETTING_MANIFEST, getLocation())); //$NON-NLS-1$
-		}
+		if (manifest == null)
+			throw new BundleException(NLS.bind(AdaptorMsg.ADAPTOR_ERROR_GETTING_MANIFEST, getLocation())); //$NON-NLS-1$
 		setVersion(Version.parseVersion((String) manifest.get(Constants.BUNDLE_VERSION)));
-		setSymbolicName(AbstractBundleData.parseSymbolicName(manifest));
+		ManifestElement[] bsnHeader = ManifestElement.parseHeader(Constants.BUNDLE_SYMBOLICNAME, (String) manifest.get(Constants.BUNDLE_SYMBOLICNAME));
+		int bundleType = 0;
+		if (bsnHeader != null) {
+			setSymbolicName(bsnHeader[0].getValue());
+			String singleton = bsnHeader[0].getDirective(Constants.SINGLETON_DIRECTIVE);
+			if (singleton == null)
+				singleton = bsnHeader[0].getAttribute(Constants.SINGLETON_DIRECTIVE);
+			if ("true".equals(singleton)) //$NON-NLS-1$
+					bundleType |= TYPE_SINGLETON;
+		}
 		setClassPathString((String) manifest.get(Constants.BUNDLE_CLASSPATH));
 		setActivator((String) manifest.get(Constants.BUNDLE_ACTIVATOR));
 		String host = (String) manifest.get(Constants.FRAGMENT_HOST);
 		if (host != null) {
-			int bundleType = TYPE_FRAGMENT;
+			bundleType |= TYPE_FRAGMENT;
 			ManifestElement[] hostElement = ManifestElement.parseHeader(Constants.FRAGMENT_HOST, host);
 			if (Constants.getInternalSymbolicName().equals(hostElement[0].getValue()) || Constants.OSGI_SYSTEM_BUNDLE.equals(hostElement[0].getValue())) {
 				String extensionType = hostElement[0].getDirective("extension"); //$NON-NLS-1$
@@ -380,8 +371,8 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 				else
 					bundleType |= TYPE_BOOTCLASSPATH_EXTENSION;
 			}
-			setType(bundleType);
 		}
+		setType(bundleType);
 		setExecutionEnvironment((String) manifest.get(Constants.BUNDLE_REQUIREDEXECUTIONENVIRONMENT));
 		setDynamicImports((String) manifest.get(Constants.DYNAMICIMPORT_PACKAGE));
 	}

@@ -15,7 +15,6 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.zip.ZipEntry;
-import org.eclipse.osgi.framework.util.SecureAction;
 
 /**
  * A BundleEntry represents one entry of a BundleFile.
@@ -93,7 +92,6 @@ public abstract class BundleEntry {
 
 		/**
 		 * Constructs the BundleEntry using a ZipEntry.
-		 * @param zipFile the ZipFile that this BundleEntry belongs to
 		 * @param bundleFile BundleFile object this entry is a member of
 		 * @param entry ZipEntry object of this entry
 		 */
@@ -189,7 +187,7 @@ public abstract class BundleEntry {
 		 * @exception java.io.IOException
 		 */
 		public InputStream getInputStream() throws IOException {
-			return SecureAction.getFileInputStream(file);
+			return BundleFile.secureAction.getFileInputStream(file);
 		}
 
 		/**
@@ -198,7 +196,7 @@ public abstract class BundleEntry {
 		 * @return size of entry
 		 */
 		public long getSize() {
-			return SecureAction.length(file);
+			return BundleFile.secureAction.length(file);
 		}
 
 		/**
@@ -218,7 +216,7 @@ public abstract class BundleEntry {
 		 * @return last modification time.
 		 */
 		public long getTime() {
-			return SecureAction.lastModified(file);
+			return BundleFile.secureAction.lastModified(file);
 		}
 
 		public URL getLocalURL() {

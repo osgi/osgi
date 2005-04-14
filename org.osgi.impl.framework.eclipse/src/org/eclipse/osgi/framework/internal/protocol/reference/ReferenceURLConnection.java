@@ -32,9 +32,15 @@ public class ReferenceURLConnection extends URLConnection {
 			// There are not solid usecases to the contrary. Yet.
 			// Construct the ref URL carefully so as to preserve UNC paths etc.
 			File file = new File(url.getPath().substring(5));
-			URL ref = file.toURL();
+			URL ref;
+			if (!file.isAbsolute()) {
+				File installPath = getInstallPath();
+				if (installPath != null)
+					file = makeAbsolute(installPath, file);
+			}
+			ref = file.toURL();
 			if (!file.exists())
-				throw new FileNotFoundException();
+				throw new FileNotFoundException(file.toString());
 			reference = ref;
 		}
 	}
@@ -55,4 +61,19 @@ public class ReferenceURLConnection extends URLConnection {
 		return new ReferenceInputStream(reference);
 	}
 
+	private File getInstallPath() throws MalformedURLException {
+		String installURL = System.getProperty("osgi.install.area"); //$NON-NLS-1$
+		if (installURL == null)
+			return null;
+		if (!installURL.startsWith("file:")) //$NON-NLS-1$
+			return null;
+		return new File(new URL(installURL).getPath());
+	}
+
+	private static File makeAbsolute(File base, File relative) {
+		if (relative.isAbsolute())
+			return relative;
+		File absolute = new File(base, relative.getPath());
+		return absolute;
+	}
 }
