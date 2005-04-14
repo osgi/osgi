@@ -80,6 +80,7 @@ public final class MegletDescriptorImpl implements MegletDescriptor.Delegate {
 		this.names = new Hashtable(names);
 		this.icons = new Hashtable(icons);
 		this.startClass = startClass;
+		this.componentName = componentName;
 		this.bundle = bundle;
 		if (names.size() == 0 || icons.size() == 0
 				|| !props.containsKey("application.bundle.id")
