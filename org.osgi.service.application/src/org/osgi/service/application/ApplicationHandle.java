@@ -52,19 +52,17 @@ public abstract class ApplicationHandle {
 	 * 
 	 * @param instanceId the instance identifier of the represented application
 	 * instance.
+	 * 
+	 * @param descriptor the <code>ApplicationDescriptor</code> of the represented
+	 * application instance.
 	 */
 	protected ApplicationHandle(String instanceId, ApplicationDescriptor descriptor ) {
 		this.instanceId	= instanceId;
 		this.descriptor = descriptor;
-		try {
-			delegate = (Delegate) implementation.newInstance();
-			delegate.setApplicationHandle(this,this.descriptor.delegate);
-		} catch( Throwable t ) {
-			// Too bad ...
-			System.err
-					.println("No implementation available for ApplicationHandle, property is: "
-							+ cName);
-		}
+	}
+
+	protected final ApplicationDescriptor getApplicationDescriptor() {
+		return descriptor;
 	}
 
 	/**
@@ -89,20 +87,6 @@ public abstract class ApplicationHandle {
 	public final String getInstanceID() {
 		return this.instanceId;
 	}
-
-	/**
-	 * Retrieves the application descriptor which represents the application of
-	 * this application instance. It should not be null.
-	 * 
-	 * @return the service reference of the registered application descriptor
-	 *         which represents the application of this application instance,
-	 *         should not be null
-	 * 
-	 * @throws IllegalStateException if the application handle is unregistered
-	 * 
-	 * @modelguid {A8CFA5DA-8F7E-49B7-BA5A-42EDDA6D6B59}
-	 */
-	protected final ApplicationDescriptor getApplicationDescriptor() { return descriptor; }
 
 	/**
 	 * The application instance's lifecycle state can be influenced by this
