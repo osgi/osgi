@@ -385,24 +385,6 @@ public class Activator extends Thread implements FrameworkListener,
 	}
 
 	/**
-	 * Changes bundle state to Bundle.RESOLVED
-	 * 
-	 * @param bundle bundle
-	 */
-	private void resolveBundle(Bundle bundle) {
-		Bundle[] bundles;
-		PackageAdmin packageAdmin;
-		ServiceReference serviceReference;
-		// Get PackageAdmin service reference
-		serviceReference = _context.getServiceReference(PackageAdmin.class
-				.getName());
-		packageAdmin = (PackageAdmin) _context.getService(serviceReference);
-
-		// Resolve the fragment bundle
-		packageAdmin.resolveBundles(new Bundle[] {bundle});
-	}
-
-	/**
 	 * Tests native code from a fragment bundle. The native code should be
 	 * loaded from a fragment bundle of the host bundle.
 	 */
@@ -413,7 +395,6 @@ public class Activator extends Thread implements FrameworkListener,
 		try {
 			tb = _context.installBundle(_tcHome + "tb17.jar");
 			tbFragment = _context.installBundle(_tcHome + "tb18.jar");
-			resolveBundle(tbFragment);
 			try {
 				tb.start();
 				log(".", "");
