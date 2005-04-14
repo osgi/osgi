@@ -24,12 +24,31 @@ public abstract class Meglet implements EventHandler, ComponentInstance {
 	private ComponentContext componentContext;
 
 	/**
+	 * The unique identifier of the Meglet handle.
+	 */
+	private String instanceId;
+
+	/**
 	 * Returns the component context assigned to the Meglet instance.
 	 * 
 	 * @return the component context
 	 */
 	protected final ComponentContext getComponentContext() {
 		return componentContext;
+	}
+
+	/**
+	 * Returns the unique identifier of this instance. This value is also
+	 * available as a service property of the corresponding Meglet 
+	 * handle's service.pid.
+	 * 
+	 * @throws IllegalStateException
+	 *             if the Meglet handle is unregistered
+	 * 
+	 * @return the unique identifier of the instance
+	 */
+	protected final String getInstanceID() {
+		return instanceId;
 	}
 
 	/**
@@ -272,6 +291,7 @@ public abstract class Meglet implements EventHandler, ComponentInstance {
 	private void init( MegletHandle appHandle, BundleContext bc ) {
 		this.bc = bc;
 		this.appHandle = appHandle;
+		this.instanceId = appHandle.getInstanceID();
 		changeServiceRegistration();
 	}
 	
