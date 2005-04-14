@@ -26,7 +26,7 @@
     <required_logical_resource value="org.osgi.service.application"/>
     <required_logical_resource value="org.osgi.service.event"/>
     <scr:component name="TestApplication2 component" 
-       xmlns="" factory="Meglet-Sample-Nr-2-Version-1.0" autoenable="true">
+       factory="Meglet-Sample-Nr-2-Version-1.0" autoenable="true">
       <implementation class="com.nokia.test.megletsample2.TestApplication2"/>
     </scr:component>
   </application>
