@@ -31,6 +31,7 @@ import org.osgi.service.application.meglet.*;
 import org.osgi.service.event.*;
 import org.osgi.service.log.LogService;
 import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.service.component.*;
 import org.w3c.dom.*;
 
 class EventSubscribe {
@@ -128,6 +129,11 @@ public class MegletContainer implements BundleListener, EventHandler {
 			throw new Exception("Can't start the application because of failed dependencies!");
     }
 
+		ServiceReference components[] = bc.getServiceReferences( ComponentFactory.class.getName(),
+				null /*"(" + ComponentConstants.COMPONENT_NAME + "=" + appDesc.getComponentName() + ")"*/ );
+		if( components == null || components.length == 0 )
+			/*System.err.println( "SCR component not found!" )*/;
+		
 		Class megletClass = Class.forName( appDesc.getStartClass() );
 		Constructor constructor = megletClass.getConstructor( new Class[0] );
 		Meglet app = (Meglet) constructor.newInstance( new Object[0] );
@@ -486,6 +492,7 @@ public class MegletContainer implements BundleListener, EventHandler {
 					Hashtable icons = new Hashtable();
 					String defaultLanguage = null;
 					String startClass = null;
+					String componentName = null;
 					String uniqueID = null;
 					props.setProperty("application.bundle.id", Long.toString(bundleID));
 					LinkedList eventTopic = new LinkedList();
@@ -517,6 +524,8 @@ public class MegletContainer implements BundleListener, EventHandler {
 									node.getPrefix() != null && node.getPrefix().equals( "scr" )) {
 								uniqueID = getAttributeValue( node, "factory" );
 
+								componentName = getAttributeValue( node, "name" );
+								
 								NodeList childNodes = node.getChildNodes();
 								
 								for(int j=0; j < childNodes.getLength(); j++ ) {
@@ -607,6 +616,8 @@ public class MegletContainer implements BundleListener, EventHandler {
 						}
 					}
 					
+					if( componentName == null )
+						throw new Exception( "Component name of the scr:component node is missing!" );
 					if( uniqueID == null )
 						throw new Exception( "Factory attribute of the scr:component node is missing!" );
 					props.put( ApplicationDescriptor.APPLICATION_PID, uniqueID );
@@ -648,7 +659,7 @@ public class MegletContainer implements BundleListener, EventHandler {
 									.get(m);
 						eventVector.add(subscribe);
 						appVector.add( createMegletDescriptorByReflection( props,
-								names, icons, defaultLanguage, startClass, bc.getBundle(bundleID) ));
+								names, icons, defaultLanguage, startClass, componentName, bc.getBundle(bundleID) ));
 						dependencyVector.add(deps);
 					}
 				}
@@ -784,7 +795,8 @@ public class MegletContainer implements BundleListener, EventHandler {
 	
 	public MegletDescriptor createMegletDescriptorByReflection( Properties props, 
 																											Hashtable names, Hashtable icons, 
-																				              String defaultLang, String startClass, Bundle bundle ) {
+																				              String defaultLang, String startClass, 
+																											String componentName, Bundle bundle ) {
 				
 		/* That's because of the idiot abstract classes in the API */
 
@@ -801,7 +813,7 @@ public class MegletContainer implements BundleListener, EventHandler {
 			
 			MegletDescriptorImpl megDesc = (MegletDescriptorImpl)delegate.get( megletDescriptor );
 			
-			megDesc.init( bc, props, names, icons, defaultLang, startClass, bundle, this );
+			megDesc.init( bc, props, names, icons, defaultLang, startClass, componentName, bundle, this );
 			
 			return megletDescriptor;
 		}catch( Exception e )
