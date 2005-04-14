@@ -1425,6 +1425,10 @@ public class TestMegletContainerBundleActivator extends Object implements
 				throw new Exception("Cannot create the arguments of launch!");
 			ScheduledApplication schedApp = appDesc.
 					schedule(args, "org/osgi/timer", getFilterFromNow( 2 ), false);
+			
+			if( schedApp.getApplicationDescriptor() != appDesc )
+				throw new Exception( "Invalid application descriptor was received!" );
+			
 			schedApp.remove();
 			Thread.sleep(3000);
 			appHandle = lookupAppHandle(appDesc);
