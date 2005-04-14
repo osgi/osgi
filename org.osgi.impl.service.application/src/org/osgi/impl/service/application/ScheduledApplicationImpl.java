@@ -81,13 +81,16 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 		return recurring;
 	}
 
-	public ServiceReference getApplicationDescriptor() {
+	public ApplicationDescriptor getApplicationDescriptor() {
 		try {
 			ServiceReference refs[] = bc.getServiceReferences( 
 					"org.osgi.service.application.ApplicationDescriptor",
 					"(" + ApplicationDescriptor.APPLICATION_PID + "=" + pid +")" );
-			if( refs != null && refs.length != 0 )
-				return refs[ 0 ];
+			if( refs != null && refs.length != 0 ) {
+				ApplicationDescriptor appDesc = (ApplicationDescriptor)bc.getService( refs[ 0 ] );
+				bc.ungetService( refs[ 0 ] );
+				return appDesc;
+			}
 		}catch( InvalidSyntaxException e ) {}
 		return null;
 	}

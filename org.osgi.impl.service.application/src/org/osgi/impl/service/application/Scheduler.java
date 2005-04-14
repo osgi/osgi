@@ -157,14 +157,11 @@ public class Scheduler implements Runnable, EventHandler {
 								+ schedApp.getTopic() + ")")))
 					if ((schedApp.getEventFilter() == null) || e.matches(bc.createFilter(schedApp
 									.getEventFilter()))) {
-						ServiceReference ref = schedApp
+						ApplicationDescriptor appDesc = schedApp
 								.getApplicationDescriptor();
-						ApplicationDescriptor appDesc = (ApplicationDescriptor) bc
-								.getService(ref);
 						appDesc.launch(schedApp.getArguments());
 						if (!schedApp.isRecurring())
 							removeList.add( schedApp );
-						bc.ungetService(ref);
 					}
 				}
 		

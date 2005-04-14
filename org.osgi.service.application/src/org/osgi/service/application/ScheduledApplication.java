@@ -10,8 +10,6 @@ import org.osgi.framework.ServiceReference;
  * specified event is fired a new instance must be launched. Note that launching
  * operation may fail because e.g. the application is locked or the application
  * is a singleton and already has an instance.
- * 
- * @modelguid {625F9BD1-19D5-4EFA-A000-AE8FE1B5593A}
  */
 public interface ScheduledApplication {
 
@@ -23,8 +21,6 @@ public interface ScheduledApplication {
 	 * 
 	 * @throws IllegalStateException
 	 *             if the scheduled application service is unregistered
-	 * 
-	 * @modelguid {A505D4C7-198B-4D7F-BB35-B72F70B97561}
 	 */
 	public String getTopic();
 
@@ -35,8 +31,6 @@ public interface ScheduledApplication {
 	 * 
 	 * @throws IllegalStateException
 	 *             if the scheduled application service is unregistered
-	 * 
-	 * @modelguid {A505D4C7-198B-4D7F-BB35-B72F70B97561}
 	 */
 	public String getEventFilter();
 
@@ -47,8 +41,6 @@ public interface ScheduledApplication {
 	 * 
 	 * @throws IllegalStateException
 	 *             if the scheduled application service is unregistered
-	 * 
-	 * @modelguid {A505D4C7-198B-4D7F-BB35-B72F70B97561}
 	 */
 	public boolean isRecurring();
 
@@ -56,15 +48,13 @@ public interface ScheduledApplication {
 	 * Retrieves the ApplicationDescriptor which represents the application and
 	 * necessary for launching.
 	 * 
-	 * @return the service reference to the application descriptor that
+	 * @return the application descriptor that
 	 *         represents the scheduled application
 	 * 
 	 * @throws IllegalStateException
 	 *             if the scheduled application service is unregistered
-	 * 
-	 * @modelguid {55C3C652-E899-48F2-BDBE-6F75EBB6518F}
 	 */
-	public ServiceReference getApplicationDescriptor();
+	public ApplicationDescriptor getApplicationDescriptor();
 
 	/**
 	 * Queries the startup arguments specified when the application was
@@ -87,8 +77,6 @@ public interface ScheduledApplication {
 	 *             ApplicationAdminPermission for the scheduled application.
 	 * @throws IllegalStateException
 	 *             if the scheduled application service is unregistered
-	 * 
-	 * @modelguid {5EA8CD87-9BA8-47A3-86A9-F2CBDFD24D2A}
 	 */
 	public void remove();
 }
