@@ -293,9 +293,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
         transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, proc));
         proc.process(entry.getName(), entry.getInputStream());
         if (DeploymentSession.INSTALL == getDeploymentAction())
-            srcDp.setProcessorPid(pid);
+            srcDp.setProcessorPid(entry.getName(), pid);
         else if (DeploymentSession.UPDATE == getDeploymentAction())
-            targetDp.setProcessorPid(pid);    
+            targetDp.setProcessorPid(entry.getName(), pid);    
     }
     
     private void processBundles(WrappedJarInputStream wjis) 
