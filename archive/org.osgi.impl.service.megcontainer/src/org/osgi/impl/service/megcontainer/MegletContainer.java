@@ -130,9 +130,9 @@ public class MegletContainer implements BundleListener, EventHandler {
     }
 
 		ServiceReference components[] = bc.getServiceReferences( ComponentFactory.class.getName(),
-				null /*"(" + ComponentConstants.COMPONENT_NAME + "=" + appDesc.getComponentName() + ")"*/ );
+				"(" + ComponentConstants.COMPONENT_NAME + "=" + appDesc.getComponentName() + ")" );
 		if( components == null || components.length == 0 )
-			/*System.err.println( "SCR component not found!" )*/;
+			System.err.println( "SCR component not found!" );
 		
 		Class megletClass = Class.forName( appDesc.getStartClass() );
 		Constructor constructor = megletClass.getConstructor( new Class[0] );
