@@ -446,6 +446,12 @@ public class TestMegletContainerBundleActivator extends Object implements
 		else 																																				
 			System.out 																																
 					.println("AppPlugin: checking the node removal             PASSED"); 	
+		if (!testCase_appPluginLock()) 															
+			System.out 																																
+					.println("AppPlugin: checking the lock changing            FAILED"); 	
+		else 																																				
+			System.out 																																
+					.println("AppPlugin: checking the lock changing            PASSED"); 	
 		if (!testCase_uninstallMegletBundle())
 			System.out
 					.println("Meglet bundle uninstall from Meglet container    FAILED");
@@ -2028,4 +2034,40 @@ public class TestMegletContainerBundleActivator extends Object implements
 			return false;
 		}					
 	}	
+	
+	boolean testCase_appPluginLock() {
+		ApplicationDescriptor appDesc = appDescs[0];
+		String appUID = getPID( appDesc );
+		
+		try {
+			if( isLocked( appDesc ) )
+				throw new Exception( "ApplicationDescriptor is unexpectedly locked!" );
+			
+			DmtSession session = dmtFactory.getSession("./OSGi/apps");
+			DmtData value = session.getNodeValue( "./OSGi/apps/" + appUID + "/locked" );			
+			if( value.getBoolean() )
+				throw new Exception( "Application is unlocked, but AppPlugin reports locked!" );
+			
+			session.setNodeValue( "./OSGi/apps/" + appUID + "/locked", new DmtData( true ) );
+			
+			if( !isLocked( appDesc ) )
+				throw new Exception( "AppPlugin failed to set the application locked!" );
+			value = session.getNodeValue( "./OSGi/apps/" + appUID + "/locked" );			
+			if( !value.getBoolean() )
+				throw new Exception( "Application is locked, but AppPlugin reports unlocked!" );
+			
+			session.setNodeValue( "./OSGi/apps/" + appUID + "/locked", new DmtData( false ) );
+			if( isLocked( appDesc ) )
+				throw new Exception( "AppPlugin failed to set the application unlocked!" );
+			value = session.getNodeValue( "./OSGi/apps/" + appUID + "/locked" );			
+			if( value.getBoolean() )
+				throw new Exception( "Application is unlocked, but AppPlugin reports locked!" );
+			
+			return true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}							
+	}
 }
