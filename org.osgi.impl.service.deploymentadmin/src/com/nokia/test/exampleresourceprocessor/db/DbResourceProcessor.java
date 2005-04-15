@@ -3,6 +3,7 @@ package com.nokia.test.exampleresourceprocessor.db;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -16,6 +17,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -64,8 +66,8 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
     // current Deployment Package and operation
     private transient DpRec             actDp;
     
-    // current operation install/update/uninstall
-    private transient int 				actOp;
+    // current session
+    private transient DeploymentSession session;
     
     // It contains the following hierarchy (dp is the key).
     // A side effect is a created table.
@@ -87,6 +89,8 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
     private transient Object                dbSession;
     private transient ByteArrayOutputStream copy;
     private transient String 				pid;
+    private transient BundleContext			context;
+    private transient File                  bundlePrivateArea;
     
     /*
      * Side effect means table creation in case of this Resource Processor
@@ -107,11 +111,11 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
     }
     
     public void begin(DeploymentSession session) {
-        this.actOp = session.getDeploymentAction();
-        if (DeploymentSession.INSTALL == actOp)
+        this.session = session;
+        if (DeploymentSession.INSTALL == session.getDeploymentAction())
             this.actDp = new DpRec(session.getSourceDeploymentPackage().getName(),
                     session.getSourceDeploymentPackage().getVersion().toString());
-        else if (DeploymentSession.UPDATE == actOp)
+        else if (DeploymentSession.UPDATE == session.getDeploymentAction())
             this.actDp = new DpRec(session.getTargetDeploymentPackage().getName(),
                     session.getTargetDeploymentPackage().getVersion().toString());
         else
@@ -171,6 +175,13 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
 	                }
 	                catch (InterruptedException e) {
 	                }
+	            } else if (line.startsWith("GETDATAFILE")) {
+	                String[] parts = Splitter.split(line, ' ', 0);
+	                String symbName = parts[1];
+	                Bundle b = session.getSourceDeploymentPackage().getBundle(symbName);
+	                File f = session.getDataFile(b);
+	                System.out.println("Bundle (" + b + ") file: " + f);
+	                this.bundlePrivateArea = f;
 	            }
 	            line = br.readLine();
 	        }
@@ -241,6 +252,7 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
     }
 
     public void start(BundleContext context) throws Exception {
+        this.context = context;
         String s = (String) context.getBundle().getHeaders().get("pid");
         pid = null == s ? "default_pid" : s;
         ServiceReference ref = context.getServiceReference(Db.class.getName());
@@ -265,6 +277,11 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
             return null;
         Set s = (Set) ht.get(resName);
         return s;
+    }
+    
+    // FOR TEST ONLY
+    public File getBundlePrivateArea() {
+        return bundlePrivateArea;
     }
 
     /**
@@ -320,7 +337,7 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
      * @see org.osgi.service.deploymentadmin.ResourceProcessor#cancel()
      */
     public void cancel() {
-        // TODO Auto-generated method stub
+        // TODO
     }
     
     // FOR TEST ONLY

@@ -22,16 +22,19 @@ public class DAConstants {
     // debug mode
     public static final boolean DEBUG               = true;
 
-    // headers in the main section
+    // headers in the main section of DPs
     public static final String DP_NAME              = "DeploymentPackage-Name";
     public static final String DP_VERSION           = "DeploymentPackage-Version";
     public static final String DP_FIXPACK           = "DeploymentPackage-FixPack";
     
-    // headers in the name sections
+    // headers in the name sections of DPs
     public static final String MISSING              = "DeploymentPackage-Missing";
     public static final String BUNDLE_SYMBOLIC_NAME = "Bundle-SymbolicName";
     public static final String BUNDLE_VERSION       = "Bundle-Version";
     public static final String RP_PID               = "Resource-Processor";
     public static final String CUSTOMIZER           = "DeploymentPackage-Customizer";
+
+    // private headers of the DA bundle 
+    public static final String FW_BUNDLES_DIR	    = "Framework-Bundles-Dir";
     
 }

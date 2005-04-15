@@ -26,7 +26,6 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -37,7 +36,6 @@ import org.osgi.service.deploymentadmin.ResourceProcessor;
 
 public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
-    private transient BundleContext 	  context;
     private transient DeploymentAdminImpl da;
     
     // TODO create a VersionRange class
@@ -246,7 +244,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getBundle(java.lang.String)
      */
     public Bundle getBundle(String symbName) {
-        Bundle[] bs = context.getBundles();
+        Bundle[] bs = da.getBundleContext().getBundles();
         for (int i = 0; i < bs.length; i++) {
             Bundle b = bs[i];
             if (b.getLocation().equals(symbName))
@@ -265,7 +263,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             ResourceEntry re = (ResourceEntry) iter.next();
             if (re.getName().equals(resName)) {
                 	try {
-                        ServiceReference[] refs = context.getServiceReferences(
+                        ServiceReference[] refs = da.getBundleContext().getServiceReferences(
                                 ResourceProcessor.class.getName(),
                                 "(" + Constants.SERVICE_PID + "=" + re.getPid() + ")");
                         if (null != refs && refs.length != 0)
@@ -292,8 +290,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#uninstallForceful()
      */
     public boolean uninstallForceful() {
-        // TODO
-        return false;
+        return da.uninstallForceful(this);
     }
 
     boolean fixPack() {
@@ -307,10 +304,6 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                 re.setPid(pid);
             }
         }
-    }
-
-    public void setContext(BundleContext context) {
-        this.context = context;
     }
 
     public void setDeploymentAdmin(DeploymentAdminImpl da) {

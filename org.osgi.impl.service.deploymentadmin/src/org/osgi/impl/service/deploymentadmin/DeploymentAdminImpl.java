@@ -252,7 +252,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         protected Object resolveObject(Object obj) throws IOException {
             if (obj instanceof DeploymentPackageImpl) {
                 DeploymentPackageImpl dp = (DeploymentPackageImpl) obj;
-                dp.setContext(context);
                 dp.setDeploymentAdmin(DeploymentAdminImpl.this);
             }
             
@@ -260,7 +259,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
 	}
 
-    public void uninstall(DeploymentPackageImpl dp) throws DeploymentException {
+    void uninstall(DeploymentPackageImpl dp) throws DeploymentException {
         // TODO checkPermission 
 
         session = createUninstallSession(dp);
@@ -271,6 +270,16 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
         
         dps.remove(dp);
+    }
+    
+    boolean uninstallForceful(DeploymentPackageImpl dp) {
+        // TODO        
+        dps.remove(dp);
+        return false;
+    }
+    
+    BundleContext getBundleContext() {
+        return context;
     }
     
 }

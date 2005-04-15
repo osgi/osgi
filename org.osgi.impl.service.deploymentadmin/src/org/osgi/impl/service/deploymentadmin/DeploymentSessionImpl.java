@@ -34,6 +34,7 @@ import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class DeploymentSessionImpl implements DeploymentSession {
@@ -44,15 +45,29 @@ public class DeploymentSessionImpl implements DeploymentSession {
     private Transaction                 transaction;
     private Logger                      logger;
     private BundleContext               context;
-    private Tracker                     tracker;
+    private TrackerRp                   trackRp;
+    private TrackerPerm                 trackPerm;
+    
+    // getDataFile uses this. 
+    private String 						fwBundleDir;
     
     /*
      * Class to track resource processors
      */
-    private class Tracker extends ServiceTracker {
-        public Tracker() {
+    private class TrackerRp extends ServiceTracker {
+        public TrackerRp() {
             super(DeploymentSessionImpl.this.context, 
                     ResourceProcessor.class.getName(), null);
+        }
+    }
+    
+    /*
+     * Class to track policy admin
+     */
+    private class TrackerPerm extends ServiceTracker {
+        public TrackerPerm() {
+            super(DeploymentSessionImpl.this.context, 
+                    PermissionAdmin.class.getName(), null);
         }
     }
 
@@ -64,7 +79,12 @@ public class DeploymentSessionImpl implements DeploymentSession {
         this.action = action;
         this.logger = logger;
         this.context = context;
-        tracker = new Tracker();
+        trackRp = new TrackerRp();
+        trackPerm = new TrackerPerm();
+        
+        fwBundleDir = (String) context.getBundle().getHeaders().
+        	get(DAConstants.FW_BUNDLES_DIR);
+        logger.log(Logger.LOG_INFO, "Framework's bundles dir: " + fwBundleDir);
     }
 
     /**
@@ -97,12 +117,33 @@ public class DeploymentSessionImpl implements DeploymentSession {
      * @see org.osgi.service.deploymentadmin.DeploymentSession#getDataFile(org.osgi.framework.Bundle)
      */
     public File getDataFile(Bundle b) {
-        // TODO
+        DeploymentPackageImpl dp;
+        if (DeploymentSession.INSTALL == getDeploymentAction())
+            dp = srcDp;
+        else if (DeploymentSession.UPDATE == getDeploymentAction())
+            dp = targetDp;
+        else //DeploymentSession.UNINSTALL == getDeploymentAction()
+            dp = targetDp;
+        
+        Vector bes = dp.getBundleEntries();
+        for (Iterator iter = bes.iterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            if (be.getId() == b.getBundleId()) {
+                // TODO
+                PermissionAdmin pa = (PermissionAdmin) trackPerm.getService();
+                
+                String dir = fwBundleDir + "/" + b.getBundleId() + "/data";
+                return new File(dir);
+            }
+        }
+        
+        // TODO SecurityException ???
         return null;
     }
 
     void go(WrappedJarInputStream wjis) throws DeploymentException {
-        tracker.open();
+        trackRp.open();
+        trackPerm.open();
         transaction = Transaction.createTransaction(this, logger);
         try {
             transaction.start();
@@ -127,7 +168,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
                     e.getMessage(), e);
         }
         transaction.commit();
-        tracker.close();
+        trackRp.close();
+        trackPerm.close();
     }
     
     private void startBundles() throws BundleException {
@@ -275,12 +317,12 @@ public class DeploymentSessionImpl implements DeploymentSession {
     }
 
     private ResourceProcessor findProcessor(String pid) {
-        ServiceReference[] refs = tracker.getServiceReferences();
+        ServiceReference[] refs = trackRp.getServiceReferences();
         for (int i = 0; i < refs.length; i++) {
             ServiceReference ref = refs[i];
             String s_pid = (String) ref.getProperty(Constants.SERVICE_PID);
             if (pid.equals(s_pid))
-                return (ResourceProcessor) tracker.getService(ref);
+                return (ResourceProcessor) trackRp.getService(ref);
         }
         return null;
     }

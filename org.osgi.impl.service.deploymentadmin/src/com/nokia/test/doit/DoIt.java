@@ -107,8 +107,8 @@ public class DoIt implements BundleActivator {
         this.context = context;
         //setPermissions();
         
-        ServiceReference ref = context.getServiceReference(DeploymentAdmin.class.getName());
-		da = (DeploymentAdmin) context.getService(ref);
+        ServiceReference refDa = context.getServiceReference(DeploymentAdmin.class.getName());
+		da = (DeploymentAdmin) context.getService(refDa);
 		
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 System.in));
@@ -131,8 +131,22 @@ public class DoIt implements BundleActivator {
                 System.out.println(" " + i + " " + dps[i]);
             System.out.print(" which: ");
             line = in.readLine();
-            DeploymentPackage dp = dps[Integer.parseInt(line)];
-            dp.uninstall();
+            if ("all".equalsIgnoreCase(line)) {
+                for (int i = 0; i < dps.length; i++) {
+                    DeploymentPackage dp = dps[i];
+                    dp.uninstall();
+                }
+            } else {
+                DeploymentPackage dp = dps[Integer.parseInt(line)];
+                dp.uninstall();
+            }
+        } else if ("tables".equalsIgnoreCase(line)) {
+            ServiceReference ref = context.getServiceReference(Db.class.getName());
+            Db db = (Db) context.getService(ref);
+            String[] tables = db.tableNames(null);
+            for (int i = 0; i < tables.length; i++)
+                System.out.println(" " + tables[i]);
+            context.ungetService(refDa);
         } else if ("tdb".equalsIgnoreCase(line)) {
             int ok = 0;
             int error = 0;
@@ -146,6 +160,8 @@ public class DoIt implements BundleActivator {
             try {db_test_04(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
             try {db_test_05(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
+            try {db_test_06(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
             
             System.out.println("\n=====================================");
@@ -366,6 +382,24 @@ public class DoIt implements BundleActivator {
         db.reset(null);
     }
     
+    private void db_test_06() throws Exception {
+        DeploymentPackage dp = null;
+        InputStream is = new FileInputStream(HOME + "db_test_06.dp");
+		dp = da.installDeploymentPackage(is);
+		
+        ServiceReference[] refs = context.getServiceReferences(
+                ResourceProcessor.class.getName(), "(" + Constants.SERVICE_PID + "=default_pid)");
+        ResourceProcessor rp = (ResourceProcessor) context.getService(refs[0]);
+        
+        File f = ((DbResourceProcessor) rp).getBundlePrivateArea();
+        if (null == f)
+            throw new Exception("Private area error: null returned");
+        if (!f.exists())
+            throw new Exception("Private area error: does not exist");
+        File[] fs = f.listFiles();
+        System.out.println(Arrays.asList(fs));
+    }
+
     // FOR TEST ONLY
     /*public static void main(String[] args) throws IOException {
         FileInputStream is = null;
