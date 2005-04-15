@@ -8,22 +8,39 @@ import org.osgi.service.deploymentadmin.ResourceProcessor;
 
 public class TransactionRecord {
     
-    public int               code;
-    public ResourceProcessor rp;
-    public Bundle			 bundle;
+    public int                   code;
+    public ResourceProcessor     rp;
+    public Bundle			     bundle;
+    public BundleEntry           be;
+    public DeploymentPackageImpl dp;
     
-    public TransactionRecord(int code, ResourceProcessor rp, Bundle b) {
+    public TransactionRecord(int code, 
+                             ResourceProcessor rp, 
+                             Bundle b,
+                             BundleEntry be,
+                             DeploymentPackageImpl dp) 
+    {
         this.code = code;
         this.rp = rp;
         this.bundle = b;
+        this.be = be;
+        this.dp = dp;
     }
     
     public TransactionRecord(int code, ResourceProcessor rp) {
-        this(code, rp, null);
+        this(code, rp, null, null, null);
     }
     
     public TransactionRecord(int code, Bundle b) {
-        this(code, null, b);
+        this(code, null, b, null, null);
+    }
+    
+    public TransactionRecord(int code, 
+                             Bundle b, 
+                             BundleEntry be, 
+                             DeploymentPackageImpl dp) 
+    {
+        this(code, null, b, be, dp);
     }
     
     public String toString() {

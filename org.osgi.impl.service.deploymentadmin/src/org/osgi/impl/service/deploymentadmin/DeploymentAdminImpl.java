@@ -97,7 +97,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                 DeploymentAdminPermission.ACTION_INSTALL);
         session = createInstallSession(srcDp);
         try {
-            session.go(wjis);
+            session.installUpdate(wjis);
         } catch (CancelException e) {
             return null;
         }
@@ -264,7 +264,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 
         session = createUninstallSession(dp);
         try {
-            session.go(null);
+            session.uninstall();
         } catch (CancelException e) {
             return;
         }

@@ -141,25 +141,41 @@ public class DeploymentSessionImpl implements DeploymentSession {
         return null;
     }
 
-    void go(WrappedJarInputStream wjis) throws DeploymentException {
+    void installUpdate(WrappedJarInputStream wjis) throws DeploymentException {
         trackRp.open();
         trackPerm.open();
         transaction = Transaction.createTransaction(this, logger);
         try {
             transaction.start();
             stopBundles();
-            if (DeploymentSession.UNINSTALL != getDeploymentAction())
-                processBundles(wjis);
+            processBundles(wjis);
             startCustomizers();
-            if (DeploymentSession.UNINSTALL != getDeploymentAction())
-                processResources(wjis);
-            if (DeploymentSession.UNINSTALL == getDeploymentAction())
-                dropAllResources();
-            else
-                dropResources();
+            processResources(wjis);
+            dropResources();
             dropBundles();
-            if (DeploymentSession.UNINSTALL != getDeploymentAction())
-                startBundles();
+            startBundles();
+        } catch (CancelException e) {
+            throw e;
+        } catch (Exception e) {
+            transaction.rollback();
+            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR, 
+                    e.getMessage(), e);
+        }
+        transaction.commit();
+        trackRp.close();
+        trackPerm.close();
+    }
+    
+    void uninstall() throws DeploymentException {
+        trackRp.open();
+        trackPerm.open();
+        transaction = Transaction.createTransaction(this, logger);
+        try {
+            transaction.start();
+            stopBundles();
+            startCustomizers();
+            dropAllResources();
+            dropBundles();
         } catch (CancelException e) {
             throw e;
         } catch (Exception e) {
@@ -311,7 +327,11 @@ public class DeploymentSessionImpl implements DeploymentSession {
             // TODO ???
             return;
         }
-        transaction.addRecord(new TransactionRecord(Transaction.UNINSTALLBUNDLE, b));
+        transaction.addRecord(new TransactionRecord(
+                Transaction.UNINSTALLBUNDLE, 
+                b,
+                be,
+                targetDp));
         
         // Bundle.uninstall() is called by the transaction instance
     }

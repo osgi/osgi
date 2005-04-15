@@ -103,6 +103,8 @@ public class Transaction {
 	                    break;
 	                case UNINSTALLBUNDLE :
 	                    element.bundle.uninstall();
+	                    element.dp.getBundleEntries().remove(
+	                            element.be);
 	                    break;
 	                case STARTBUNDLE :
 	                    break;
