@@ -540,7 +540,7 @@ public abstract interface Bundle {
 	 * @return A <code>Dictionary</code> object containing this bundle's
 	 *         Manifest headers and values.
 	 * 
-	 * @exception java.lang.SecurityException If the caller does not have the
+	 * @exception java.lang.SecurityException If the caller does not have the appropriate
 	 *            <code>AdminPermission[bundle, METADATA]</code>, and the
 	 *            Java Runtime Environment supports permissions.
 	 * 
@@ -688,7 +688,7 @@ public abstract interface Bundle {
 	 *        of the format of a resource name.
 	 * @return a URL to the named resource, or <code>null</code> if the
 	 *         resource could not be found or if this bundle is a fragment
-	 *         bundle or if the caller does not have the
+	 *         bundle or if the caller does not have the appropriate
 	 *         <code>AdminPermission[bundle, RESOURCE]</code>, and the Java
 	 *         Runtime Environment supports permissions.
 	 * 
@@ -724,16 +724,16 @@ public abstract interface Bundle {
 	 * header values must only be available in the raw and default locale
 	 * values.
 	 * 
-	 * @param locale The locale name into which the header values are to
-	 *        be localized. If the specified locale is <code>null</code> then
-	 *        the locale returned by <code>java.util.Locale.getDefault</code>
-	 *        is used. If the specified locale is the empty string, this method
+	 * @param locale The locale name into which the header values are to be
+	 *        localized. If the specified locale is <code>null</code> then the
+	 *        locale returned by <code>java.util.Locale.getDefault</code> is
+	 *        used. If the specified locale is the empty string, this method
 	 *        will return the raw (unlocalized) manifest headers including any
 	 *        leading &quot;%&quot;.
 	 * @return A <code>Dictionary</code> object containing this bundle's
 	 *         Manifest headers and values.
 	 * 
-	 * @exception java.lang.SecurityException If the caller does not have the
+	 * @exception java.lang.SecurityException If the caller does not have the appropriate
 	 *            <code>AdminPermission[bundle, METADATA]</code>, and the
 	 *            Java Runtime Environment supports permissions.
 	 * 
@@ -786,7 +786,7 @@ public abstract interface Bundle {
 	 * @return The Class object for the requested class.
 	 * @exception java.lang.ClassNotFoundException If no such class can be found
 	 *            or if this bundle is a fragment bundle or if the caller does
-	 *            not have the <code>AdminPermission[bundle, CLASS]</code>,
+	 *            not have the appropriate <code>AdminPermission[bundle, CLASS]</code>,
 	 *            and the Java Runtime Environment supports permissions.
 	 * @exception java.lang.IllegalStateException If this bundle has been
 	 *            uninstalled.
@@ -812,7 +812,7 @@ public abstract interface Bundle {
 	 *        description of the format of a resource name.
 	 * @return an Enumeration of URLs to the named resources, or
 	 *         <code>null</code> if the resource could not be found or if this
-	 *         bundle is a fragment bundle or if the caller does not have the
+	 *         bundle is a fragment bundle or if the caller does not have the appropriate
 	 *         <code>AdminPermission[bundle, RESOURCE]</code>, and the Java
 	 *         Runtime Environment supports permissions.
 	 * 
@@ -836,15 +836,15 @@ public abstract interface Bundle {
 	 * 
 	 * <p>
 	 * This method returns <code>null</code> if no entries could be found that
-	 * match the specified path or if the caller does not have
-	 * <code>AdminPermission[bundle, RESOURCE]</code> permission and the Java 
+	 * match the specified path or if the caller does not have the appropriate
+	 * <code>AdminPermission[bundle, RESOURCE]</code> and the Java 
 	 * Runtime Environment supports permissions.
 	 * 
 	 * @param path the path name to get the entry path for.
 	 * @return An Enumeration of the entry paths (<code>String</code> objects) 
 	 *         or <code>null</code> if an entry could not be found or if the 
-	 *         caller does not have the <code>AdminPermission[bundle, RESOURCE]</code> 
-	 *         permission and the Java Runtime Environment supports permissions.
+	 *         caller does not have the appropriate <code>AdminPermission[bundle, RESOURCE]</code> 
+	 *         and the Java Runtime Environment supports permissions.
 	 * @exception java.lang.IllegalStateException If this bundle has been
 	 *            uninstalled.
 	 * @since 1.3
@@ -859,7 +859,7 @@ public abstract interface Bundle {
 	 * 
 	 * <p>
 	 * This method returns a URL to the specified entry, or <code>null</code>
-	 * if the entry could not be found or if the caller does not have the
+	 * if the entry could not be found or if the caller does not have the appropriate
 	 * <code>AdminPermission[bundle, RESOURCE]</code> and the Java Runtime
 	 * Environment supports permissions.
 	 * 
@@ -867,7 +867,7 @@ public abstract interface Bundle {
 	 *        <code>java.lang.ClassLoader.getResource</code> for a description
 	 *        of the format of a resource name.
 	 * @return A URL to the specified entry, or <code>null</code> if the entry
-	 *         could not be found or if the caller does not have the
+	 *         could not be found or if the caller does not have the appropriate
 	 *         <code>AdminPermission[bundle, RESOURCE]</code> and the Java
 	 *         Runtime Environment supports permissions.
 	 * 
@@ -926,7 +926,9 @@ public abstract interface Bundle {
 	 * <li>Find a specific localization file</li>
 	 * 
 	 * <pre>
-	 * Enumeration e = b.findEntries(&quot;OSGI-INF/l10n&quot;, &quot;bundle_nl_DU.properties&quot;, false);
+	 * Enumeration e = b.findEntries(&quot;OSGI-INF/l10n&quot;, 
+	 * 								 &quot;bundle_nl_DU.properties&quot;, 
+	 * 								 false);
 	 * if (e.hasMoreElements())
 	 * 	return (URL) e.nextElement();
 	 * </pre>
@@ -944,11 +946,15 @@ public abstract interface Bundle {
 	 *        equivalent to &quot;*&quot; and matches all files.
 	 * @param recurse If <code>true</code>, recurse into subdirectories.
 	 *        Otherwise only return entries from the given directory.
-	 * @return An enumeration of URL objects for each matching entry. The URLs
-	 *         are sorted such that entries from this bundle are returned first
-	 *         followed by the entries from attached fragments in ascending
-	 *         bundle id order. If this bundle is a fragment, then only matching
-	 *         entries in this fragment are returned.
+	 * @return An enumeration of URL objects for each matching entry, or
+	 *         <code>null</code> if an entry could not be found or if the
+	 *         caller does not have the appropriate
+	 *         <code>AdminPermission[bundle, RESOURCE]</code>, and the Java
+	 *         Runtime Environment supports permissions. The URLs are sorted
+	 *         such that entries from this bundle are returned first followed by
+	 *         the entries from attached fragments in ascending bundle id order.
+	 *         If this bundle is a fragment, then only matching entries in this
+	 *         fragment are returned.
 	 * @since 1.3
 	 */
 	public Enumeration findEntries(String path, String filePattern,
