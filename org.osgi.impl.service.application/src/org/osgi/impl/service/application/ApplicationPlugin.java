@@ -128,8 +128,11 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 					!ApplicationMetaNode.CANREPLACE,
 					ApplicationMetaNode.CANEXECUTE, !ApplicationMetaNode.ISLEAF);
 		if ( path.length == 5 && path[2].equals("launch") ) /* ./OSGi/apps/<unique_id>/launch/<exec_id>/<parameter> */
-			return new ApplicationMetaNode(ApplicationMetaNode.ISLEAF,
-					ApplicationMetaNode.CANGET);
+			return new ApplicationMetaNode(ApplicationMetaNode.CANDELETE,
+					!ApplicationMetaNode.CANADD, ApplicationMetaNode.CANGET,
+					ApplicationMetaNode.CANREPLACE,
+					!ApplicationMetaNode.CANEXECUTE,
+					ApplicationMetaNode.ISLEAF);
 		throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "Node ("
 				+ nodeUri + ") not found.");
 	}
@@ -639,6 +642,35 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			return 0;
 		}
 	}
+
+	public void deleteNode(String nodeUri) throws DmtException {
+
+		String[] path = prepareUri( nodeUri );
+
+		/* ./OSGi/apps/<unique_id>/launch/<exec_id> */
+		if ( path.length == 4 && path[ 0 ].equals( PREFIX_APPS ) && path[ 2 ].equals( "launch" ) ) {
+			checkUniqueID( nodeUri, path[ 1 ]);
+			
+ 			execIds.remove( path[ 1 ] + "/" + path[ 3 ] );
+			return;
+		}
+		/* ./OSGi/apps/<unique_id>/launch/<exec_id>/<property> */
+		if ( path.length == 5 && path[ 0 ].equals( PREFIX_APPS ) && path[ 2 ].equals( "launch" ) ) {
+		
+			checkUniqueID( nodeUri, path[ 1 ]);
+			
+			Hashtable ht = (Hashtable)execIds.get( path[ 1 ] + "/" + path[ 3 ] );
+			if( ht == null )
+				throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+						"Node (" + nodeUri + ") not found.");				
+
+			ht.remove( path[ 4 ] );
+			return;
+		}
+		
+		throw new DmtException( nodeUri, DmtException.COMMAND_NOT_ALLOWED, "Cannot delete the " + 
+				                    nodeUri + "node!" );
+	}
 	
 	public String getNodeType(String nodeUri) throws DmtException {
 		// TODO Auto-generated method stub
@@ -650,10 +682,6 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 	}
 
 	public void setNodeType(String nodeUri, String type) throws DmtException {
-		// TODO Auto-generated method stub		
-	}
-
-	public void deleteNode(String nodeUri) throws DmtException {
 		// TODO Auto-generated method stub		
 	}
 

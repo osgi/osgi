@@ -440,6 +440,12 @@ public class TestMegletContainerBundleActivator extends Object implements
 		else 																																				
 			System.out 																																
 					.println("AppPlugin: checking the application stopping     PASSED"); 	
+		if (!testCase_appPluginDeleteNode()) 															
+			System.out 																																
+					.println("AppPlugin: checking the node removal             FAILED"); 	
+		else 																																				
+			System.out 																																
+					.println("AppPlugin: checking the node removal             PASSED"); 	
 		if (!testCase_uninstallMegletBundle())
 			System.out
 					.println("Meglet bundle uninstall from Meglet container    FAILED");
@@ -1972,4 +1978,54 @@ public class TestMegletContainerBundleActivator extends Object implements
 			return false;
 		}
 	}
+	
+	boolean testCase_appPluginDeleteNode() {
+		ApplicationDescriptor appDesc = appDescs[0];
+		String appUID = getPID( appDesc );
+		
+		try {
+			DmtSession session = dmtFactory.getSession("./OSGi/apps");
+			
+			String[] nodeNames = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch" );
+			if( nodeNames != null && nodeNames.length != 0 )
+				throw new Exception( "Exec-id found when no one is expected!" );
+		
+			session.createInteriorNode( "./OSGi/apps/" + appUID + "/launch/exec_id" );
+			
+			nodeNames = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch" );
+			if( nodeNames == null || nodeNames.length != 1 )
+				throw new Exception( "Interior node wasn't created properly!" );
+			if( !nodeNames[ 0 ].equals("exec_id") )
+				throw new Exception( "The name of the interior node is " + nodeNames [ 0 ] + 
+						                  "instead if exec_id !" );
+			
+			session.createLeafNode( "./OSGi/apps/" + appUID + "/launch/exec_id/myprop", 
+          new DmtData( "myvalue" ) );
+			
+			String[] childNodes = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch/exec_id" );
+			if( childNodes == null || childNodes.length != 1 )
+				throw new Exception( "Property wasn't added properly!" );
+			
+			if( !childNodes[ 0 ].equals( "myprop" ) )
+				throw new Exception( "Property wasn't added properly!" );
+			
+			session.deleteNode( "./OSGi/apps/" + appUID + "/launch/exec_id/myprop" );
+			
+			childNodes = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch/exec_id" );
+			if( childNodes != null && childNodes.length != 0 )
+				throw new Exception( "Property wasn't deleted properly!" );			
+			
+			session.deleteNode( "./OSGi/apps/" + appUID + "/launch/exec_id" );
+			
+			childNodes = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch" );
+			if( childNodes != null && childNodes.length != 0 )
+				throw new Exception( "Node wasn't deleted properly!" );
+			
+			return true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}					
+	}	
 }
