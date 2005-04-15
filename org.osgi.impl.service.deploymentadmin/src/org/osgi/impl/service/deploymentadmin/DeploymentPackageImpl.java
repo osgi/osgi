@@ -38,7 +38,6 @@ import org.osgi.service.deploymentadmin.ResourceProcessor;
 public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     private transient BundleContext 	  context;
-    private transient Logger 		      logger; 
     private transient DeploymentAdminImpl da;
     
     // TODO create a VersionRange class
@@ -308,6 +307,14 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                 re.setPid(pid);
             }
         }
+    }
+
+    public void setContext(BundleContext context) {
+        this.context = context;
+    }
+
+    public void setDeploymentAdmin(DeploymentAdminImpl da) {
+        this.da = da;
     }
   
 }

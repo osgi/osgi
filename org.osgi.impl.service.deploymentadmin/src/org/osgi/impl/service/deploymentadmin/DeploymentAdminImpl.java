@@ -153,13 +153,11 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     }
 
     public synchronized DeploymentPackage getDeploymentPackage(long id) {
-        // TODO
-        
-        /*for (Iterator iter = dps.iterator(); iter.hasNext();) {
-            DeploymentPackageImpl p = (DeploymentPackageImpl) iter.next();
-            if (actDp.getId() == id)
-                return p;
-        }*/
+        for (Iterator iter = dps.iterator(); iter.hasNext();) {
+            DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();
+            if (dp.getId() == id)
+                return dp;
+        }
         return null;
 	}
 	
@@ -177,18 +175,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	    // TODO checkPermission("", DeploymentAdminPermission.ACTION_LIST_DPS);
 		return (DeploymentPackage[]) dps.toArray(new DeploymentPackage[] {});
 	}
-	
-    /*synchronized void onUninstallDp(DeploymentPackageImpl dp) {
-	    dps.remove(dp);
-	    try {
-            save();
-        }
-        catch (IOException e) {
-            logger.log(Logger.LOG_ERROR, "Error occured during persisting " +
-            		"deployment packages.");
-            logger.log(e);
-        }
-	}*/
 
     /*
      * Saves persistent data.
@@ -266,10 +252,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         protected Object resolveObject(Object obj) throws IOException {
             if (obj instanceof DeploymentPackageImpl) {
                 DeploymentPackageImpl dp = (DeploymentPackageImpl) obj;
-                // TODO
-                //dp.setContext(context);
-                //dp.setDeploymentAdmin(DeploymentAdminImpl.this);
-                //dp.startTracker();
+                dp.setContext(context);
+                dp.setDeploymentAdmin(DeploymentAdminImpl.this);
             }
             
             return obj;
