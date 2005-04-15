@@ -668,17 +668,44 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			return;
 		}
 		
-		throw new DmtException( nodeUri, DmtException.COMMAND_NOT_ALLOWED, "Cannot delete the " + 
-				                    nodeUri + "node!" );
+		throw new DmtException( nodeUri, DmtException.COMMAND_NOT_ALLOWED, "Cannot delete the specified node!" );
+	}
+
+	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
+
+		String[] path = prepareUri( nodeUri );
+
+		/* ./OSGi/apps/<unique_id>/locked */
+		if( path.length == 3 && path[ 2 ].equals( "locked" ) ) {
+			
+			if( data.getFormat() != DmtData.FORMAT_BOOLEAN )
+				throw new DmtException( nodeUri, DmtException.FORMAT_NOT_SUPPORTED, "Only binary is supported here!" );
+			
+			String uid = path [ 1 ];		
+			ServiceReference appDescRef = getApplicationDescriptorRef( uid );
+			if (appDescRef == null)
+				throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+						"Node (" + nodeUri + ") not found.");		
+			
+			ApplicationDescriptor appDesc = (ApplicationDescriptor) bc.getService( appDescRef );
+			
+			if( data.getBoolean() )
+				appDesc.lock();
+			else
+				appDesc.unlock();
+			
+			bc.ungetService( appDescRef );
+			return;
+		}
+		
+		/* TODO */
+		
+		throw new DmtException( nodeUri, DmtException.COMMAND_NOT_ALLOWED, "Cannot change the value of the node!" );
 	}
 	
 	public String getNodeType(String nodeUri) throws DmtException {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
-		// TODO Auto-generated method stub		
 	}
 
 	public void setNodeType(String nodeUri, String type) throws DmtException {
