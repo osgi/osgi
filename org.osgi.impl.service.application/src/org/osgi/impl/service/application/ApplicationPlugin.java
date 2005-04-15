@@ -698,7 +698,19 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			return;
 		}
 		
-		/* TODO */
+		/* ./OSGi/apps/<unique_id>/launch/<exec_id>/<parameter> */
+		if ( path.length == 5 && path[ 0 ].equals( PREFIX_APPS ) && path[ 2 ].equals("launch")  )
+		{
+			checkUniqueID( nodeUri, path[ 1 ]);
+			
+			Hashtable ht = (Hashtable) execIds.get( path[ 1 ] + "/" + path[ 3 ] );
+			if (ht == null)
+				throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
+						"Parent node " + path[ 3 ] + " does not exist.");
+			
+			ht.put( path[ 4 ], data );
+			return;
+		}
 		
 		throw new DmtException( nodeUri, DmtException.COMMAND_NOT_ALLOWED, "Cannot change the value of the node!" );
 	}

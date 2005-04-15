@@ -2012,6 +2012,15 @@ public class TestMegletContainerBundleActivator extends Object implements
 			if( childNodes == null || childNodes.length != 1 )
 				throw new Exception( "Property wasn't added properly!" );
 			
+			DmtData value = session.getNodeValue( "./OSGi/apps/" + appUID + "/launch/exec_id/myprop" );
+			if( !value.getString().equals( "myvalue" ) )
+				throw new Exception( "Invalid node value was received!" );
+			
+			session.setNodeValue( "./OSGi/apps/" + appUID + "/launch/exec_id/myprop", new DmtData( "newvalue" ) );
+			value = session.getNodeValue( "./OSGi/apps/" + appUID + "/launch/exec_id/myprop" );
+			if( !value.getString().equals( "newvalue" ) )
+				throw new Exception( "Node value was not changed!" );
+			
 			if( !childNodes[ 0 ].equals( "myprop" ) )
 				throw new Exception( "Property wasn't added properly!" );
 			
