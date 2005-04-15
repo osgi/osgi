@@ -129,14 +129,26 @@ public class MegletContainer implements BundleListener, EventHandler {
 			throw new Exception("Can't start the application because of failed dependencies!");
     }
 
+		Meglet app;
 		ServiceReference components[] = bc.getServiceReferences( ComponentFactory.class.getName(),
 				"(" + ComponentConstants.COMPONENT_NAME + "=" + appDesc.getComponentName() + ")" );
-		if( components == null || components.length == 0 )
-			System.err.println( "SCR component not found!" );
-		
-		Class megletClass = Class.forName( appDesc.getStartClass() );
-		Constructor constructor = megletClass.getConstructor( new Class[0] );
-		Meglet app = (Meglet) constructor.newInstance( new Object[0] );
+		if( components == null || components.length == 0 ) {
+			System.err.println( "SCR component not found, trying to start without SCR!" );
+			Class megletClass = Class.forName( appDesc.getStartClass() );
+			Constructor constructor = megletClass.getConstructor( new Class[0] );
+			app = (Meglet) constructor.newInstance( new Object[0] );
+		}else {
+/*			Object cd = bc.getService( components[ 0 ] );
+			System.out.println( cd.getClass().getName() );
+			bc.getService( components[ 0 ] );
+			ComponentFactory cf = (ComponentFactory)bc.getService( components[ 0 ] );
+			ComponentInstance ci = cf.newInstance( null );
+			app = (Meglet) ci.getInstance();
+			bc.ungetService( components[ 0 ] );*/
+			Class megletClass = Class.forName( appDesc.getStartClass() );
+			Constructor constructor = megletClass.getConstructor( new Class[0] );
+			app = (Meglet) constructor.newInstance( new Object[0] );
+		}
 		
 		Method registerListenerMethod = Meglet.class.getDeclaredMethod( "registerForEvents",
 										new Class [] { String.class, String.class } );
