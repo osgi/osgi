@@ -393,8 +393,8 @@ public class Activator extends Thread implements FrameworkListener,
 		Bundle tbFragment;
 		String res;
 		try {
-			tb = _context.installBundle(_tcHome + "tb17.jar");
 			tbFragment = _context.installBundle(_tcHome + "tb18.jar");
+			tb = _context.installBundle(_tcHome + "tb17.jar");
 			try {
 				tb.start();
 				log(".", "");
