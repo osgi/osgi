@@ -63,11 +63,9 @@ public class ServiceEventAdapter extends EventAdapter {
 		String topic = HEADER + Constants.TOPIC_SEPARATOR + typename;
 		Hashtable properties = new Hashtable();
 		ServiceReference ref = event.getServiceReference();
-		if (ref == null) {
-			throw new RuntimeException(
-					"ServiceEvent.getServiceReference() is null");
+		if (ref != null) {
+			putServiceReferenceProperties(properties, ref);
 		}
-		putServiceReferenceProperties(properties, ref);
 		properties.put(Constants.EVENT, event);
 		Event converted = new Event(topic, properties);
 		return converted;
