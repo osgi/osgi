@@ -15,14 +15,15 @@
 package org.osgi.impl.service.event.mapper;
 
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LogReaderService;
 
 /**
  * @version $Revision$
  */
 public interface LogReaderServiceListener {
-	public void logReaderServiceModified(ServiceReference reference,
-			Object service);
+	public void logReaderServiceAdding(ServiceReference reference,
+			LogReaderService service);
 
 	public void logReaderServiceRemoved(ServiceReference reference,
-			Object service);
+			LogReaderService service);
 }

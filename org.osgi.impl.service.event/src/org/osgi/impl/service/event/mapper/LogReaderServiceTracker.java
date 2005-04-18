@@ -24,6 +24,7 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class LogReaderServiceTracker extends ServiceTracker {
 	private final LogReaderServiceListener	listener;
+	private ServiceReference				reference;
 
 	public LogReaderServiceTracker(BundleContext context,
 			LogReaderServiceListener listener) {
@@ -31,12 +32,24 @@ public class LogReaderServiceTracker extends ServiceTracker {
 		this.listener = listener;
 	}
 
-	public void modifiedService(ServiceReference reference, Object service) {
-		listener.logReaderServiceModified(reference, service);
+	public Object addingService(ServiceReference reference) {
+		Object object = super.addingService(reference);
+		if ((object != null) && (this.reference == null)
+				&& (object instanceof LogReaderService)) {
+			this.reference = reference;
+			listener.logReaderServiceAdding(reference,
+					(LogReaderService) object);
+		}
+		return object;
 	}
 
 	public void removedService(ServiceReference reference, Object service) {
-		listener.logReaderServiceModified(reference, service);
+		if ((service != null) && (this.reference.equals(reference))
+				&& (service instanceof LogReaderService)) {
+			listener.logReaderServiceRemoved(reference,
+					(LogReaderService) service);
+			this.reference = null;
+		}
 		super.removedService(reference, service);
 		//this method calls ungetService()
 	}

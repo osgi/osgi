@@ -96,22 +96,23 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 	 * necessary to obtain events to be mapped
 	 */
 	public void open() {
+		// open ServiceTracker for EventAdmin
 		eventAdminTracker = new ServiceTracker(bc, EventAdmin.class.getName(),
 				null);
 		eventAdminTracker.open();
+		// open ServiceTracker for LogReaderService
 		logTracker = new LogReaderServiceTracker(bc, this);
 		logTracker.open();
+		// add legacy event listener for framework level event
 		bc.addFrameworkListener(this);
 		bc.addBundleListener(this);
 		bc.addServiceListener(this);
-		reader = (LogReaderService) logTracker.getService();
-		if (reader != null) {
-			reader.addLogListener(this);
-		}
+		// register configurationListener
 		configurationListenerReg = bc.registerService(
 				ConfigurationListener.class.getName(), this, null);
+		// register WireAdminListener
 		Hashtable ht = new Hashtable();
-		// create an event mask to receive the all types of WireAdminEvent
+		// create an event mask to receive all the types of WireAdminEvent
 		Integer mask = new Integer(WireAdminEvent.WIRE_CONNECTED
 				| WireAdminEvent.WIRE_CREATED | WireAdminEvent.WIRE_DELETED
 				| WireAdminEvent.WIRE_DISCONNECTED | WireAdminEvent.WIRE_TRACE
@@ -121,8 +122,9 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 		ht.put(WireConstants.WIREADMIN_EVENTS, mask);
 		wireAdminListenerReg = bc.registerService(WireAdminListener.class
 				.getName(), this, ht);
-		Hashtable ht2 = new Hashtable();
+		// register UPnPEventListener
 		// create a Filter object to receive all the UPnP events
+		Hashtable ht2 = new Hashtable();
 		Filter filter = null;
 		try {
 			filter = bc.createFilter("(|(|(" + UPnPDevice.TYPE + "=*)("
@@ -140,6 +142,7 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 			upnpEventListenerReg = bc.registerService(UPnPEventListener.class
 					.getName(), this, ht2);
 		}
+		// register usrAdminListener
 		userAdminListenerReg = bc.registerService(UserAdminListener.class
 				.getName(), this, null);
 	}
@@ -216,15 +219,15 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 	/**
 	 * @param reference
 	 * @param service
-	 * @see org.osgi.impl.service.event.mapper.LogReaderServiceListener#logReaderServiceModified(org.osgi.framework.ServiceReference,
-	 *      java.lang.Object)
+	 * @see org.osgi.impl.service.event.mapper.LogReaderServiceListener#logReaderServiceAdding(org.osgi.framework.ServiceReference,
+	 *      org.osgi.service.log.LogReaderService)
 	 */
-	public void logReaderServiceModified(ServiceReference reference,
-			Object service) {
+	public void logReaderServiceAdding(ServiceReference reference,
+			LogReaderService service) {
 		if (reader != null) {
 			return;
 		}
-		reader = (LogReaderService) service;
+		reader = service;
 		reader.addLogListener(this);
 	}
 
@@ -232,11 +235,12 @@ public class EventRedeliverer implements FrameworkListener, BundleListener,
 	 * @param reference
 	 * @param service
 	 * @see org.osgi.impl.service.event.mapper.LogReaderServiceListener#logReaderServiceRemoved(org.osgi.framework.ServiceReference,
-	 *      java.lang.Object)
+	 *      org.osgi.service.log.LogReaderService)
 	 */
 	public void logReaderServiceRemoved(ServiceReference reference,
-			Object service) {
+			LogReaderService service) {
 		if ((reader != null) && reader.equals(service)) {
+			reader.removeLogListener(this);
 			reader = null;
 		}
 		// ungetService() will be called after returning to
