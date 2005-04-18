@@ -17,10 +17,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Dictionary;
-
+import java.util.List;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
 import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.*;
@@ -54,13 +53,13 @@ public class Parser {
 		parserTracker.close();
 	}
 
-	public ArrayList getComponentDescriptions(Bundle bundle) {
+	public List getComponentDescriptions(Bundle bundle) {
 		ManifestElement[] xml = parseManifestHeader(bundle);
 		int length = xml.length;
-		ArrayList result = new ArrayList(length);
+		List result = new ArrayList(length);
 
 		for (int i = 0; i < length; i++) {
-			ArrayList components = parseComponentDescription(bundle, xml[i].getValue());
+			List components = parseComponentDescription(bundle, xml[i].getValue());
 			result.addAll(components);
 		}
 
@@ -91,8 +90,8 @@ public class Parser {
 	 * @param bundle Bundle
 	 * @param xml String
 	 */
-	public ArrayList parseComponentDescription(Bundle bundle, String xml) {
-		ArrayList result = new ArrayList();
+	public List parseComponentDescription(Bundle bundle, String xml) {
+		List result = new ArrayList();
 		try {
 			URL url = bundle.getEntry(xml);
 			if (url == null) {

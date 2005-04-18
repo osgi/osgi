@@ -13,13 +13,18 @@
 
 package org.eclipse.osgi.component.resolver;
 
+import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.List;
+
 import org.eclipse.osgi.component.model.ComponentDescription;
 import org.eclipse.osgi.component.model.ReferenceDescription;
-import org.osgi.framework.*;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 
 /**
- *
+ * 
  * Wrapper for a References Description includes eligible state
  * 
  * @version $Revision$
@@ -32,13 +37,13 @@ public class Reference {
 	static final String CARDINALITY_DEFAULT = "1..1";
 	static final String POLICY_DEFAULT = "static";
 	protected ReferenceDescription referenceDescription;
-	protected String interfaceName;
 	protected String target;
 	protected String cardinality;
 	protected String policy;
-	protected String name;
 	protected int cardinalityHigh;
 	protected int cardinalityLow;
+
+	protected List serviceReferences = new ArrayList();
 
 	/**
 	 * Reference object
@@ -47,9 +52,7 @@ public class Reference {
 	 */
 	public Reference(ReferenceDescription referenceDescription, Dictionary properties) {
 		this.referenceDescription = referenceDescription;
-		this.interfaceName = referenceDescription.getInterfacename();
 		this.target = referenceDescription.getTarget();
-		this.name = referenceDescription.getName();
 
 		// RFC 80 section 5.3.1.3:
 		// If [target] is not specified and there is no <reference-name>.target
@@ -58,9 +61,9 @@ public class Reference {
 		// service is
 		// “(objectClass=”+<interface-name>+”)”.
 		if (properties != null)
-			target = (String) properties.get(name + TARGET);
+			target = (String) properties.get(referenceDescription.getName() + TARGET);
 		if (target == null) {
-			target = "(objectClass=" + interfaceName + ")";
+			target = "(objectClass=" + referenceDescription.getInterfacename() + ")";
 		}
 
 		// If it is not specified, then a policy of “static” is used.
@@ -100,7 +103,7 @@ public class Reference {
 		// Get all service references for this target filter
 		try {
 			ServiceReference[] serviceReferences = null;
-			serviceReferences = scrBundleContext.getServiceReferences(interfaceName, target);
+			serviceReferences = scrBundleContext.getServiceReferences(referenceDescription.getInterfacename(), target);
 			// if there is no service published that this Service ComponentReferences
 			if (serviceReferences != null) {
 				return true;
@@ -113,13 +116,8 @@ public class Reference {
 		}
 	}
 
-	/**
-	 * Return the interface name
-	 * 
-	 * @return
-	 */
-	public String getInterfaceName() {
-		return interfaceName;
+	public ReferenceDescription getReferenceDescription() {
+		return referenceDescription;
 	}
 
 	public String getTarget() {
@@ -143,10 +141,10 @@ public class Reference {
 			return false;
 		}
 		String[] serviceName = (String[]) (reference.getProperty("objectClass"));
-		if (!serviceName[0].equals(interfaceName)) {
+		if (!serviceName[0].equals(referenceDescription.getInterfacename())) {
 			return false;
 		}
-		int currentRefCount = referenceDescription.getServiceObjects().length;
+		int currentRefCount = serviceReferences.size();
 		if (currentRefCount < cardinalityHigh) {
 			return true;
 		}
@@ -154,7 +152,7 @@ public class Reference {
 
 	}
 
-	public boolean unBindReference(BundleContext bundleContext, ServiceReference reference) {
+	public boolean unBindReference(ServiceReference serviceReference) {
 
 		// nothing dynamic to do if static
 		if ("static".equals(policy)) {
@@ -162,18 +160,33 @@ public class Reference {
 		}
 
 		//first compare the service name and the interface name
-		String[] serviceName = (String[]) (reference.getProperty("objectClass"));
-		if (!serviceName[0].equals(interfaceName)) {
+		String[] serviceName = (String[]) (serviceReference.getProperty("objectClass"));
+		if (!serviceName[0].equals(referenceDescription.getInterfacename())) {
 			return false;
 		}
 
-		//now check if the Service Object is found in the list of saved ServiceObjects for this reference 
-		Object serviceObject = bundleContext.getService(reference);
-		if (!referenceDescription.containsServiceObject(serviceObject)) {
+		//now check if the ServiceReference is found in the list of saved ServiceReferences for this reference 
+		if (!serviceReferences.contains(serviceReference)) {
 			return false;
 		}
 
 		return true;
 
+	}
+
+	public void addServiceReference(ServiceReference serviceReference) {
+		serviceReferences.add(serviceReference);
+	}
+
+	public void removeServiceReference(ServiceReference serviceReference) {
+		serviceReferences.remove(serviceReference);
+	}
+
+	public List getServiceReferences() {
+		return serviceReferences;
+	}
+
+	public boolean bindedToServiceReference(ServiceReference serviceReference) {
+		return serviceReferences.contains(serviceReferences);
 	}
 }

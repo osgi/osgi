@@ -14,6 +14,7 @@
 package org.eclipse.osgi.component.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.osgi.framework.Bundle;
 
@@ -34,9 +35,9 @@ public class ComponentDescription {
 	protected String factory;
 
 	protected ImplementationDescription implementation;
-	protected ArrayList properties;
+	protected List properties;
 	protected ServiceDescription service;
-	protected ArrayList references;
+	protected List references;
 
 	/**
 	 * @param bundle The bundle to set.

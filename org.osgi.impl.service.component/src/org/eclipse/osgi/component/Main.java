@@ -13,7 +13,6 @@
 
 package org.eclipse.osgi.component;
 
-
 import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -21,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.osgi.component.model.ComponentDescription;
 import org.eclipse.osgi.component.model.ComponentDescriptionCache;
@@ -52,13 +52,11 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	public BundleTracker bundleTracker;
 	public Resolver resolver;
 	public ServiceTracker packageAdminTracker;
-
 	public WorkQueue workQueue;
 
 	protected Hashtable bundleToComponentDescriptions;
 	protected Hashtable bundleToLastModified;
-
-	protected ArrayList enableCDs;
+	protected List enableCDs;
 
 	/**
 	 * Bundle is being added to SCR tracked bundles.
@@ -68,7 +66,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	 * Bundle is being removed from SCR tracked bundles.
 	 */
 	public static final int REMOVE = 2;
-
+	
 	/**
 	 * Start the SCR bundle.
 	 * 
@@ -96,16 +94,18 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	 * @param context BundleContext for SCR implementation.
 	 */
 	public void stop(BundleContext context) {
+		
 		bundleTracker.close();
-		packageAdminTracker.close();
-		workQueue.close();
+		workQueue.closeAndJoin();
 		resolver.dispose();
+		packageAdminTracker.close();
 		cache.dispose();
-		this.context = null;
-		framework = null;
 		cache = null;
+		framework = null;
+		resolver = null;
 		bundleToComponentDescriptions = null;
 		bundleToLastModified = null;
+		this.context = null;
 
 		//	TODO
 		//when SCR is shutting down write/flush database to disk (cache)
@@ -126,7 +126,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	 */
 	public Object addingBundle(Bundle bundle) {
 
-		ArrayList enableComponentDescriptions = new ArrayList();
+		List enableComponentDescriptions = new ArrayList();
 
 		PackageAdmin packageAdmin = (PackageAdmin) packageAdminTracker.getService();
 		if (packageAdmin.getBundleType(bundle) != 0) {
@@ -151,7 +151,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 		if ((!bundleLastModified.equals(bundleOldLastModified)) || (bundleOldLastModified == null)) {
 
 			// get all ComponentDescriptions for this bundle
-			ArrayList componentDescriptions = cache.getComponentDescriptions(bundle);
+			List componentDescriptions = cache.getComponentDescriptions(bundle);
 
 			// update map of bundle to ComponentDescriptions
 			bundleToComponentDescriptions.put(bundleID, componentDescriptions);
@@ -205,12 +205,12 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	 */
 
 	public void removedBundle(Bundle bundle, Object object) {
-
-		ArrayList disableComponentDescriptions = new ArrayList();
+		
+		List disableComponentDescriptions = new ArrayList();
 		Long bundleID = new Long(bundle.getBundleId());
 
 		//get CD's for this bundle
-		ArrayList ComponentDescriptions = (ArrayList) bundleToComponentDescriptions.get(new Long(bundle.getBundleId()));
+		List ComponentDescriptions = (List) bundleToComponentDescriptions.get(new Long(bundle.getBundleId()));
 		if (ComponentDescriptions != null) {
 			Iterator it = ComponentDescriptions.iterator();
 
@@ -246,7 +246,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	 * @param CDs - List of ComponentDescriptions to mark successfully enabled
 	 */
 
-	public void enableComponents(ArrayList CDs) {
+	public void enableComponents(List CDs) {
 
 		if (CDs != null) {
 			Iterator it = CDs.iterator();
@@ -278,10 +278,10 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	public void enableComponent(String name, Bundle bundle) {
 
 		// get all ComponentDescriptions for this bundle
-		ArrayList componentDescriptions = cache.getComponentDescriptions(bundle);
+		List componentDescriptions = cache.getComponentDescriptions(bundle);
 
 		//Create the list of CD's to be enabled
-		ArrayList enableCDs = new ArrayList();
+		List enableCDs = new ArrayList();
 
 		if (componentDescriptions != null) {
 			Iterator it = componentDescriptions.iterator();
@@ -332,7 +332,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	 * @param componentDescriptions - List of ComponentDescriptions to mark disabled
 	 */
 
-	public void disableComponents(ArrayList componentDescriptions) {
+	public void disableComponents(List componentDescriptions) {
 
 		ComponentDescription componentDescription = null;
 		//Long bundleID;
@@ -369,11 +369,11 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 
 	public void disableComponent(String name, Bundle bundle) {
 
-		ArrayList disableComponentDescriptions = new ArrayList();
+		List disableComponentDescriptions = new ArrayList();
 		//Long bundleID = null;
 
 		//	Get the list of CDs for this bundle
-		ArrayList componentDescriptionsList = (ArrayList) bundleToComponentDescriptions.get(new Long(bundle.getBundleId()));
+		List componentDescriptionsList = (List) bundleToComponentDescriptions.get(new Long(bundle.getBundleId()));
 
 		if (componentDescriptionsList != null) {
 			Iterator it = componentDescriptionsList.iterator();
@@ -412,8 +412,8 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	 */
 	public void dispatchWork(int workAction, Object workObject) {
 
-		ArrayList descriptions;
-		descriptions = (ArrayList) workObject;
+		List descriptions;
+		descriptions = (List) workObject;
 		switch (workAction) {
 			case ADD :
 				try {
@@ -424,8 +424,6 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 				}
 				break;
 			case REMOVE :
-				// TODO
-				//descriptions = cache.getComponentDescriptions(bundle);
 				resolver.disableComponents(descriptions);
 				break;
 		}
@@ -459,7 +457,11 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	public void validate(ComponentDescription componentDescription) {
 
 		// if ComponentFactory and ServiceFactory are both specified then mark ComponentDescription as invalid
-		if ((componentDescription.getFactory() != null) && (componentDescription.getService().isServicefactory())) {
+		if (
+				(componentDescription.getFactory() != null) &&
+				(componentDescription.getService() != null) &&
+				(componentDescription.getService().isServicefactory())
+			) {
 			componentDescription.setValid(false);
 			framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(), new Throwable("invalid to specify both ComponentFactory and ServiceFactory"));
 		} else {

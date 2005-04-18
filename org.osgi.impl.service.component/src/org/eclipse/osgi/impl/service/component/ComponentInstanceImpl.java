@@ -14,7 +14,10 @@
 package org.eclipse.osgi.impl.service.component;
 
 import java.util.Dictionary;
-import org.osgi.service.component.*;
+import java.util.Hashtable;
+
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.ComponentInstance;
 
 /**
  * A ComponentInstance encapsulates an instance of a component.
@@ -27,6 +30,9 @@ public class ComponentInstanceImpl implements ComponentInstance {
 
 	Object instance;
 	Dictionary properties = null;
+
+	//ServiceReference:ServiceObject that binded to this reference
+	private Hashtable serviceReferenceToServiceObject = new Hashtable();
 
 	/** ComponentInstanceImpl
 	 * 
@@ -64,4 +70,20 @@ public class ComponentInstanceImpl implements ComponentInstance {
 	protected Dictionary getProperties() {
 		return properties;
 	}
+	
+	public void addServiceReference(ServiceReference serviceReference, Object serviceObject)
+	{
+		serviceReferenceToServiceObject.put(serviceReference,serviceObject);
+	}
+	
+	public void removeServiceReference(ServiceReference serviceReference)
+	{
+		serviceReferenceToServiceObject.remove(serviceReference);
+	}
+	
+	public Object getServiceObject(ServiceReference serviceReference)
+	{
+		return serviceReferenceToServiceObject.get(serviceReference);
+	}
+	
 }

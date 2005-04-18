@@ -14,6 +14,7 @@
 package org.eclipse.osgi.component.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 public class ServiceDescription {
 	protected ComponentDescription parent;
 	protected boolean servicefactory;
-	protected ArrayList provides;
+	protected List provides;
 
 	public ServiceDescription(ComponentDescription parent) {
 		this.parent = parent;

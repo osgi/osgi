@@ -60,6 +60,7 @@ public class WorkQueue extends Thread {
 				 */
 				dispatcher.dispatchWork(action, object);
 			} catch (Throwable t) {
+				t.printStackTrace();
 				main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, main.context.getBundle(), t);
 			}
 		}
@@ -69,8 +70,8 @@ public class WorkQueue extends Thread {
 	private Queued head;
 	/** item at the tail of the work queue */
 	private Queued tail;
-	/** if false the thread must terminate */
-	private volatile boolean running;
+	/** if true the thread should complete it's work and terminate */
+	private volatile boolean stopping;
 
 	/**
 	 * Constructor for the work queue thread.
@@ -80,17 +81,22 @@ public class WorkQueue extends Thread {
 	public WorkQueue(Main main, String threadName) {
 		super(threadName);
 		this.main = main;
-		running = true;
+		stopping = false;
 		head = null;
 		tail = null;
 	}
 
 	/**
-	 * Stop thread.
+	 * Finish all work and stop thread.
 	 */
-	public void close() {
-		running = false;
+	public void closeAndJoin() {
+		stopping = true;
 		interrupt();
+		try {
+			join(); //wait for work to finish
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -156,14 +162,14 @@ public class WorkQueue extends Thread {
 	 *         thread has been requested to stop.
 	 */
 	private synchronized Queued dequeueWork() {
-		while (running && (head == null)) {
+		while ((!stopping) && (head == null)) {
 			try {
 				wait();
 			} catch (InterruptedException e) {
 			}
 		}
 
-		if (!running) { /* if we are stopping */
+		if (stopping && head == null) { /* if we are stopping */
 			return null;
 		}
 

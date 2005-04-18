@@ -14,17 +14,13 @@
 package org.eclipse.osgi.component.resolver;
 
 import java.io.IOException;
-import java.util.Dictionary;
-
+import org.eclipse.osgi.component.Main;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
-
-import org.eclipse.osgi.component.*;
-
 
 /**
  *
@@ -133,7 +129,7 @@ public class ComponentProperties implements ServiceTrackerCustomizer {
 	 * @param service The service object for the removed service.
 	 */
 	public void removedService(ServiceReference reference, Object object) {
-		bundleContext.ungetService(reference);
+		main.context.ungetService(reference);
 	}
 
 }

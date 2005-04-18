@@ -14,8 +14,8 @@
 package org.eclipse.osgi.component.parser;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Iterator;
-
 import org.eclipse.osgi.component.model.ComponentDescription;
 import org.eclipse.osgi.component.model.PropertyValueDescription;
 import org.xml.sax.Attributes;
@@ -26,7 +26,7 @@ public class PropertyElement extends DefaultHandler {
 	protected ParserHandler root;
 	protected ComponentElement parent;
 	protected PropertyValueDescription property;
-	protected ArrayList values;
+	protected List values;
 
 	public PropertyElement(ParserHandler root, ComponentElement parent, Attributes attributes) throws SAXException {
 		this.root = root;

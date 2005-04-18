@@ -11,25 +11,15 @@
  * trademarks that are the sole property of the respective owners.
  */
 
-
 package org.eclipse.osgi.component.model;
 
+import java.io.*;
 import java.net.URL;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.Enumeration;
-import java.util.Properties;
-
-import org.osgi.framework.*;
-import org.osgi.service.component.*;
-
-import org.eclipse.osgi.component.resolver.*;
-
+import java.util.*;
+import org.eclipse.osgi.component.resolver.ComponentProperties;
+import org.osgi.framework.Bundle;
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.ComponentException;
 
 /**
  *
@@ -45,6 +35,11 @@ public class ComponentDescriptionProp {
 	protected ComponentDescription componentDescription;
 	protected ComponentProperties componentProperties;
 	protected Hashtable properties;
+	protected ComponentContext componentContext;
+	
+	protected List referenceCDPs;
+	protected List servicesProvided;
+	protected List references;
 
 	/**
 	 * @param bundle The bundle to set.
@@ -53,6 +48,8 @@ public class ComponentDescriptionProp {
 
 		this.componentDescription = cd;
 		properties = new Hashtable();
+		referenceCDPs = new ArrayList();
+		servicesProvided = new ArrayList();
 		initProperties(configProperties);
 
 	}
@@ -159,4 +156,49 @@ public class ComponentDescriptionProp {
 		return componentDescription;
 	}
 
+	public void setComponentContext(ComponentContext context)
+	{
+		this.componentContext = context;
+	}
+	
+	public ComponentContext getComponentContext()
+	{
+		return componentContext;
+	}
+	
+	public void setReferenceCDP(ComponentDescriptionProp cdp)
+	{
+		if (!referenceCDPs.contains(cdp))
+			referenceCDPs.add(cdp);
+	}
+	
+	public List getReferenceCDPs()
+	{
+		return referenceCDPs == null ? Collections.EMPTY_LIST : referenceCDPs;
+	}
+	
+	public void clearReferenceCDPs()
+	{
+	     referenceCDPs.clear();	
+	}
+	
+	public void setServiceProvided(List services)
+	{
+		this.servicesProvided = services;
+	}
+	
+	public List getServicesPrivided()
+	{
+		return servicesProvided == null ? Collections.EMPTY_LIST : servicesProvided;
+	}
+	
+	public void setReferences(List references)
+	{
+		this.references = references;
+	}
+	
+	public List getReferences()
+	{
+		return references == null ? Collections.EMPTY_LIST : references;
+	}
 }

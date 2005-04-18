@@ -14,7 +14,6 @@
 package org.eclipse.osgi.util.tracker;
 
 import java.util.*;
-
 import org.osgi.framework.*;
 
 /**
@@ -282,7 +281,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 		/**
 		 * List of Bundles in the process of being added.
 		 */
-		private ArrayList adding;
+		private List adding;
 		/**
 		 * true if the tracked object is closed. This field is volatile because
 		 * it is set by one thread and read by another.

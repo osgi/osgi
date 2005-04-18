@@ -13,7 +13,6 @@
 
 package org.eclipse.osgi.component.model;
 
-import java.util.ArrayList;
 
 /**
  *
@@ -31,9 +30,6 @@ public class ReferenceDescription {
 	protected String bind;
 	protected String unbind;
 	
-	//Service Objects that binded to this reference
-	protected ArrayList serviceObjects = new ArrayList();
-
 	public ReferenceDescription(ComponentDescription parent) {
 		this.parent = parent;
 		cardinality = "1..1";
@@ -146,22 +142,4 @@ public class ReferenceDescription {
 		return parent;
 	}
 	
-	public void addServiceObject(Object object)
-	{
-		serviceObjects.add(object);
-	}
-	
-	public Object[] getServiceObjects()
-	{
-		if(serviceObjects.size() == 0)
-		{
-			return null;
-		}
-		return serviceObjects.toArray();
-	}
-	
-	public boolean containsServiceObject(Object serviceObject)
-	{
-	   return serviceObjects.contains(serviceObject);	
-	}
 }

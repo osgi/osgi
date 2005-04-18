@@ -13,24 +13,36 @@
  
 package org.eclipse.osgi.component.instance;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+
 import org.eclipse.osgi.component.Main;
-import org.eclipse.osgi.component.model.*;
+import org.eclipse.osgi.component.model.ComponentDescription;
+import org.eclipse.osgi.component.model.ComponentDescriptionProp;
+import org.eclipse.osgi.component.model.ProvideDescription;
 import org.eclipse.osgi.component.resolver.ComponentProperties;
+import org.eclipse.osgi.component.resolver.Reference;
+import org.eclipse.osgi.component.resolver.Resolver;
 import org.eclipse.osgi.component.workqueue.WorkDispatcher;
 import org.eclipse.osgi.component.workqueue.WorkQueue;
 import org.eclipse.osgi.impl.service.component.ComponentFactoryImpl;
-import org.osgi.framework.*;
+import org.eclipse.osgi.impl.service.component.ComponentInstanceImpl;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
-import org.osgi.service.component.*;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentFactory;
 
 /**
- * The InstanceProcess is resposible for building ServiceComponents and 
- * disposing of ServiceComponents. This includes bind, unbind, activate, deactivate.
- * 
+ * @author Administrator
+ *
+ * TODO To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Style - Code Templates
  */
 public class InstanceProcess implements WorkDispatcher {
 
@@ -49,19 +61,19 @@ public class InstanceProcess implements WorkDispatcher {
 	 */
 	public static final int DISPOSED = 2;
 
+	/** map CDP:serviceRegistration [1:1] */
+	public Hashtable registrations;
+	
 	/** SCR bundle context */
 	protected BundleContext scrBundleContext;
 
-	/** Main class */
+	/** Main SCR class */
 	protected Main main;
-
-	/** map CDP:serviceRegistration [1:1] */
-	public Hashtable registrations;
 
 	/** map CDP:factory */
 	protected Hashtable factories;
 
-	/** map CD:instance */
+	/** map CDP:instance */
 	protected Hashtable instances;
 
 	/** ConfigurationAdmin instance */
@@ -86,42 +98,38 @@ public class InstanceProcess implements WorkDispatcher {
 
 		//for now use Main's workqueue
 		workQueue = main.workQueue;
-
 		scrBundleContext = main.context;
-
 		registrations = new Hashtable();
-
 		factories = new Hashtable();
-
 		instances = new Hashtable();
-
 		buildDispose = new BuildDispose(main, registrations);
-
 		componentProperties = new ComponentProperties(main);
 
 	}
 
 	/**
-	 * dispose cleanup the SCR is shutting down
+	 * dispose cleanup, the SCR is shutting down
 	 */
 	public void dispose() {
 
 		buildDispose.dispose();
-
+		buildDispose = null;
 		main = null;
-		registrations = null;
 		factories = null;
 		instances = null;
+		workQueue = null;
+		registrations = null;
 		componentProperties = null;
+		scrBundleContext = null;
 	}
 
 	/**
 	 * Build the Service Component Instances, includes activating and binding
 	 * 
-	 * @param componentDescriptionProps - an ArrayList of all instances to build.
+	 * @param componentDescriptionProps - a List of all instances to build.
 	 */
 
-	public void buildInstances(ArrayList componentDescriptionProps) {
+	public void buildInstances(List componentDescriptionProps) {
 
 		ComponentDescriptionProp componentDescriptionProp;
 		ComponentDescription componentDescription;
@@ -215,8 +223,8 @@ public class InstanceProcess implements WorkDispatcher {
 	 * @param componentDescriptionProps - list of ComponentDescriptions plus Property objects to be disposed
 	 */
 
-	public void disposeInstances(ArrayList componentDescriptionProps) {
-
+	public void disposeInstances(List componentDescriptionProps) {
+		
 		ComponentDescriptionProp componentDescriptionProp;
 		ComponentDescription componentDescription;
 		//	loop through CD+P list to be disposed
@@ -239,7 +247,8 @@ public class InstanceProcess implements WorkDispatcher {
 					//unregister all services
 					ServiceRegistration serviceRegistration = (ServiceRegistration) registrations.get(componentDescriptionProp);
 					try {
-						serviceRegistration.unregister();
+						if (serviceRegistration != null)
+							serviceRegistration.unregister();
 					} catch (IllegalStateException e) {
 						//Service is already unregistered
 						//do nothing
@@ -250,7 +259,8 @@ public class InstanceProcess implements WorkDispatcher {
 				}
 			}
 		}
-		//when dispose is complete, call back to resolver with list of disposed components
+		
+		// when dispose is complete, call back to resolver with list of disposed components
 		workQueue.enqueueWork(this, DISPOSED, componentDescriptionProps);
 	}
 
@@ -314,7 +324,7 @@ public class InstanceProcess implements WorkDispatcher {
 	 */
 	public void dispatchWork(int workAction, Object workObject) {
 		//ComponentDescriptionProp componentDescriptionProp = (ComponentDescriptionProp) workObject;
-		ArrayList componentDescriptionProps = (ArrayList) workObject;
+		List componentDescriptionProps = (List) workObject;
 		switch (workAction) {
 			//			case BUILD_FAILED :
 			//				main.resolver.markFailedInstance(componentDescriptionProp);
@@ -331,16 +341,15 @@ public class InstanceProcess implements WorkDispatcher {
 	public void dynamicBind(Hashtable serviceTable) {
 		Enumeration e = serviceTable.keys();
 		while (e.hasMoreElements()) {
-			ReferenceDescription rd = (ReferenceDescription) e.nextElement();
-			ComponentDescriptionProp cdp = (ComponentDescriptionProp) serviceTable.get(rd);
-			ArrayList instances = (ArrayList) buildDispose.instanceMap.get(cdp);
+			Reference reference = (Reference) e.nextElement();
+			ComponentDescriptionProp cdp = (ComponentDescriptionProp) serviceTable.get(reference);
+			List instances = (List) buildDispose.instanceMap.get(cdp);
 			Iterator it = instances.iterator();
 			while (it.hasNext()) {
-				ComponentInstance compInstance = (ComponentInstance) it.next();
-				Object instance = compInstance.getInstance();
-				if (instance != null) {
+				ComponentInstanceImpl compInstance = (ComponentInstanceImpl) it.next();
+				if (compInstance != null) {
 					try {
-						buildDispose.bindReference(rd, instance);
+						buildDispose.bindReference(reference, compInstance);
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
@@ -353,35 +362,36 @@ public class InstanceProcess implements WorkDispatcher {
 	 * Called by dispatcher ( Resolver) when work available on queue
 	 * 
 	 * @param serviceTable Map of ReferenceDescription:subtable
-	 * 			Subtable Maps cdp:service object
+	 * 			Subtable Maps cdp:serviceReference
 	 *  
 	 */
-	public void dynamicUnBind(Hashtable serviceTable) {
-		//for each element in the table 
-		Enumeration e = serviceTable.keys();
-		while (e.hasMoreElements()) {
-			ReferenceDescription rd = (ReferenceDescription) e.nextElement();
-			Hashtable serviceSubTable =  (Hashtable) serviceTable.get(rd);
-			Enumeration sub = serviceSubTable.keys();
-			while (sub.hasMoreElements()) {
-				ComponentDescriptionProp cdp = (ComponentDescriptionProp) sub.nextElement();
-				Object serviceObject = serviceSubTable.get(cdp);
-				//get the list of instances created
-				ArrayList instances = (ArrayList) buildDispose.instanceMap.get(cdp);
-				Iterator it = instances.iterator();
-				while (it.hasNext()) {
-					ComponentInstance compInstance = (ComponentInstance) it.next();
-					Object instance = compInstance.getInstance();
-					if (instance != null) {
-						try {
-							buildDispose.unbindDynamicReference(rd, instance, serviceObject);
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						}
+	public void dynamicUnBind(List unbindJobs) {
+		//for each unbind job
+		Iterator itr = unbindJobs.iterator();
+		while (itr.hasNext()) {
+			Resolver.DynamicUnbindJob unbindJob = (Resolver.DynamicUnbindJob) itr.next();
+			Reference reference = unbindJob.reference;
+			ComponentDescriptionProp cdp = unbindJob.component;
+			ServiceReference serviceReference = unbindJob.serviceReference;
+
+			//get the list of instances created
+			List instances = (List) buildDispose.instanceMap.get(cdp);
+			Iterator it = instances.iterator();
+			while (it.hasNext()) {
+				ComponentInstanceImpl compInstance = (ComponentInstanceImpl) it.next();
+				Object instance = compInstance.getInstance();
+				if (instance != null) {
+					try {
+						buildDispose.unbindDynamicReference(cdp,reference, compInstance, serviceReference);
+					} catch (Exception ex) {
+						ex.printStackTrace();
 					}
 				}
 			}
+			
+			//all instances are now unbound
+			reference.removeServiceReference(serviceReference);
 		}
 	}
-
 }
+

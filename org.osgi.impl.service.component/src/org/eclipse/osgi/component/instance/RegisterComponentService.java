@@ -13,14 +13,10 @@
 
 package org.eclipse.osgi.component.instance;
 
-import java.util.Dictionary;
-import java.util.Hashtable;
-import org.eclipse.osgi.component.model.ComponentDescriptionProp;
-import org.eclipse.osgi.component.model.ProvideDescription;
+import java.util.*;
+import org.eclipse.osgi.component.model.*;
 import org.osgi.framework.*;
-import org.osgi.service.component.*;
-
-
+import org.osgi.service.component.ComponentConstants;
 
 /**
  *

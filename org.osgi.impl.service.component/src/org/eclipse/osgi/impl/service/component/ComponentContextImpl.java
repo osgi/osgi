@@ -10,18 +10,14 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
- 
+
 package org.eclipse.osgi.impl.service.component;
 
-import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Enumeration;
-
+import java.util.*;
+import org.eclipse.osgi.component.Main;
+import org.eclipse.osgi.component.model.*;
 import org.osgi.framework.*;
 import org.osgi.service.component.*;
-import org.eclipse.osgi.component.*;
-import org.eclipse.osgi.component.model.*;
-
 
 /**
  * A ComponentContext object is used by a Service Component to interact with it
@@ -201,7 +197,7 @@ public class ComponentContextImpl implements ComponentContext {
 					throw new ComponentException(e.getMessage());
 				}
 
-				ArrayList serviceObjects = new ArrayList();
+				List serviceObjects = new ArrayList();
 
 				//Get the service object
 				for (int j = 0; j < serviceReferences.length; j++) {

@@ -13,8 +13,7 @@
 
 package org.eclipse.osgi.component.parser;
 
-import java.util.ArrayList;
-
+import java.util.List;
 import org.eclipse.osgi.component.model.ComponentDescription;
 import org.osgi.framework.Bundle;
 import org.xml.sax.*;
@@ -33,11 +32,11 @@ public class ParserHandler extends DefaultHandler {
 	static final boolean DEBUG = false;
 
 	protected DefaultHandler handler;
-	protected ArrayList components;
+	protected List components;
 	protected Bundle bundle;
 	protected int depth;
 
-	public ParserHandler(Bundle bundle, ArrayList components) {
+	public ParserHandler(Bundle bundle, List components) {
 		this.bundle = bundle;
 		this.components = components;
 	}

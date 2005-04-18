@@ -20,11 +20,10 @@ import org.eclipse.osgi.component.instance.InstanceProcess;
 import org.eclipse.osgi.component.model.*;
 import org.eclipse.osgi.component.workqueue.WorkDispatcher;
 import org.eclipse.osgi.component.workqueue.WorkQueue;
-import org.osgi.service.component.*;
 import org.osgi.framework.*;
 import org.osgi.service.cm.*;
+import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentException;
-
 
 /**
  * 
@@ -40,6 +39,11 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	static final boolean DEBUG = false;
 
 	/**
+	 * The ConfigurationListener class
+	 */
+	static final String CONFIG_LISTENER_CLASS = "org.osgi.service.cm.ConfigurationListener";
+
+	/**
 	 * Service Component instances need to be built.
 	 */
 	public static final int BUILD = 1;
@@ -50,45 +54,36 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	public static final int DISPOSE = 2;
 
 	/**
-	 * Service Component instances need to be rebinded
+	 * Service Component instances to bind dynamic
 	 */
 	public static final int DYNAMICBIND = 3;
-	
+
 	/**
-	 * Service Component instances need to be rebinded
+	 * Service Component instances to unbind dynamic
 	 */
 	public static final int DYNAMICUNBIND = 4;
 
 	/** Main class for the SCR */
 	public Main main;
 
-	public BundleContext scrBundleContext;
+	public InstanceProcess instanceProcess;
+
+	protected ComponentProperties componentProperties = null;
+
+	/** ServiceComponent Runtime Bundle Context */
+	protected BundleContext scrBundleContext;
 
 	/** ConfigurationAdmin instance */
-	ConfigurationAdmin configurationAdmin;
+	protected ConfigurationAdmin configurationAdmin;
 
 	/* CD:CD+P ( 1:n) */
 	protected Hashtable componentDescriptionToProps;
-
-	/* CD+P:ref ( 1:n) */
-	protected Hashtable componentDescriptionPropToRefs;
-
-	/* CD+P:provides (1:n) */
-	protected Hashtable componentDescriptionPropToProvides;
-
 	/* [CD+P] enabled */
-	protected ArrayList componentDescriptionPropsEnabled;
+	protected List componentDescriptionPropsEnabled;
+
+	protected ServiceRegistration configListener;
 
 	private WorkQueue workQueue;
-
-	public InstanceProcess instanceProcess;
-
-	public ComponentProperties componentProperties = null;
-
-	/** The ConfigurationListener class */
-	public final static String CONFIG_LISTENER_CLASS = "org.osgi.service.cm.ConfigurationListener";
-
-	ServiceRegistration configListener;
 
 	/**
 	 * Resolver constructor
@@ -104,8 +99,6 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 		scrBundleContext = main.context;
 		componentDescriptionPropsEnabled = new ArrayList();
 		componentDescriptionToProps = new Hashtable();
-		componentDescriptionPropToRefs = new Hashtable();
-		componentDescriptionPropToProvides = new Hashtable();
 		instanceProcess = new InstanceProcess(main);
 		componentProperties = new ComponentProperties(main);
 		addServiceListener();
@@ -118,13 +111,11 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	 */
 	public void dispose() {
 
-		main = null;
-		componentDescriptionPropsEnabled = null;
-		componentDescriptionToProps = null;
-		componentDescriptionPropToRefs = null;
-		instanceProcess = null;
 		removeServiceListener();
 		removeConfigurationListener();
+		instanceProcess.dispose();
+		componentDescriptionPropsEnabled = null;
+		componentDescriptionToProps = null;
 	}
 
 	/**
@@ -132,7 +123,7 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	 * 
 	 * @param descriptions -
 	 *            a list of all component descriptions for a single bundle to be
-	 *            enabled Receive ArrayList of enabled CD's from ComponentCache
+	 *            enabled Receive List of enabled CD's from ComponentCache
 	 *            For each CD add to list of enabled create list of CD:CD+P
 	 *            create list of CD+P:ref ( where ref is a Reference Object)
 	 *            resolve CD+P
@@ -142,7 +133,7 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	 *            enabled
 	 * 
 	 */
-	public void enableComponents(ArrayList componentDescriptions) throws IOException {
+	public void enableComponents(List componentDescriptions) throws IOException {
 
 		//ComponentDescriptionProp componentDescriptionProp = null;
 		Configuration config = null;
@@ -208,8 +199,8 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	public void map(ComponentDescription componentDescription, Dictionary properties) throws IOException {
 
 		ComponentDescriptionProp componentDescriptionProp;
-		ArrayList references = new ArrayList();
-		ArrayList componentDescriptionProps = null;
+		List references = new ArrayList();
+		List componentDescriptionProps = null;
 
 		// Create CD+P
 		componentDescriptionProp = new ComponentDescriptionProp(componentDescription, properties);
@@ -222,14 +213,14 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 
 			// else add to current list
 		} else {
-			componentDescriptionProps = (ArrayList) componentDescriptionToProps.get(componentDescription);
+			componentDescriptionProps = (List) componentDescriptionToProps.get(componentDescription);
 			componentDescriptionProps.add(componentDescriptionProp);
 		}
 
 		// add to CD:CD+P map
 		componentDescriptionToProps.put(componentDescription, componentDescriptionProps);
 
-		ArrayList services = new ArrayList();
+		List services = new ArrayList();
 		ServiceDescription serviceDescription = componentDescription.getService();
 		if (serviceDescription != null) {
 			ProvideDescription[] provideDescription = serviceDescription.getProvides();
@@ -237,7 +228,7 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 				services.add(provideDescription[i].getInterfacename());
 			}
 
-			componentDescriptionPropToProvides.put(componentDescriptionProp, services);
+			componentDescriptionProp.setServiceProvided(services);
 		}
 
 		// Get all the required service reference descriptions for this
@@ -256,7 +247,7 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 			}
 
 			// add to componentDescriptionPropToRefMap
-			componentDescriptionPropToRefs.put(componentDescriptionProp, references);
+			componentDescriptionProp.setReferences(references);
 
 		}
 
@@ -276,14 +267,14 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	 * 
 	 * @param componentDescriptions
 	 */
-	public void disableComponents(ArrayList componentDescriptions) {
+	public void disableComponents(List componentDescriptions) {
 
 		ComponentDescriptionProp componentDescriptionProp;
 		ComponentDescription componentDescriptionInput;
 		ComponentDescription componentDescription;
-		ArrayList componentDescriptionProps;
+		List componentDescriptionProps;
 
-		ArrayList removeList = new ArrayList();
+		List removeList = new ArrayList();
 
 		// Received list of CDs to disable
 		if (componentDescriptions != null) {
@@ -302,19 +293,14 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 					if ((componentDescription.getName()).equals(componentDescriptionInput.getName())) {
 
 						// then get the list of CDPs for this CD
-						componentDescriptionProps = (ArrayList) componentDescriptionToProps.get(componentDescription);
+						componentDescriptionProps = (List) componentDescriptionToProps.get(componentDescription);
 						if (componentDescriptionProps != null) {
 							Iterator iter = componentDescriptionProps.iterator();
 							while (iter.hasNext()) {
 
 								componentDescriptionProp = (ComponentDescriptionProp) iter.next();
 								removeList.add(componentDescriptionProp);
-
-								componentDescriptionPropToRefs.remove(componentDescriptionProp);
-
 								componentDescriptionPropsEnabled.remove(componentDescriptionProp);
-
-								componentDescriptionPropToProvides.remove(componentDescriptionProp);
 							}
 						}
 						componentDescriptionToProps.remove(componentDescription);
@@ -339,43 +325,41 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	 */
 	public void getEligible(ServiceEvent event) {
 
-		ArrayList resolvedComponents = resolveEligible();
+		List resolvedComponents = resolveEligible();
 
 		if ((event != null) && (event.getType() == ServiceEvent.REGISTERED)) {
 			Hashtable dynamicBind = selectDynamicBind(resolvedComponents, event.getServiceReference());
 			if (!dynamicBind.isEmpty()) {
 				workQueue.enqueueWork(this, DYNAMICBIND, dynamicBind);
 			}
-		 // check if there are Service Components which  need to dynamically unbind from this unregistering Service
-		 } else if ((event != null) && (event.getType() == ServiceEvent.UNREGISTERING)) {
-		 	//Pass in the set of currently resolved components, check each one - do we need to unbind
-			Hashtable dynamicUnBind = selectDynamicUnBind(resolvedComponents, event.getServiceReference());
+			// check if there are Service Components which  need to dynamically unbind from this unregistering Service
+		} else if ((event != null) && (event.getType() == ServiceEvent.UNREGISTERING)) {
+			//Pass in the set of currently resolved components, check each one - do we need to unbind
+			List dynamicUnBind = selectDynamicUnBind(resolvedComponents, event.getServiceReference());
 			if (!dynamicUnBind.isEmpty()) {
 				workQueue.enqueueWork(this, DYNAMICUNBIND, dynamicUnBind);
 			}
 		}
-		
+
 		// obtain list of newly eligible components to be sent to the work quew
-		ArrayList newlyEligibleComponents = selectNewlyEligible(resolvedComponents);
+		List newlyEligibleComponents = selectNewlyEligible(resolvedComponents);
 		if (!newlyEligibleComponents.isEmpty()) {
 			workQueue.enqueueWork(this, BUILD, newlyEligibleComponents);
 		}
-		ArrayList newlyIneligibleComponents = selectNewlyInEligible(resolvedComponents);
+		List newlyIneligibleComponents = selectNewlyInEligible(resolvedComponents);
 		if (!newlyIneligibleComponents.isEmpty())
 			workQueue.enqueueWork(this, DISPOSE, newlyIneligibleComponents);
 	}
 
-	public ArrayList resolveEligible() {
-		ArrayList enabledCDPs = (ArrayList) componentDescriptionPropsEnabled.clone();
-		Hashtable references = (Hashtable) componentDescriptionPropToRefs.clone();
-		Hashtable providers = (Hashtable) componentDescriptionPropToProvides.clone();
-		Enumeration e = references.keys();
+	public List resolveEligible() {
+		List enabledCDPs = (List) ((ArrayList) componentDescriptionPropsEnabled).clone();
 		boolean runAgain = true;
 		while (runAgain) {
+			Iterator it = enabledCDPs.iterator();
 			runAgain = false;
-			while (e.hasMoreElements()) {
-				ComponentDescriptionProp cdp = (ComponentDescriptionProp) e.nextElement();
-				ArrayList refs = (ArrayList) references.get(cdp);
+			while (it.hasNext() && !runAgain) {
+				ComponentDescriptionProp cdp = (ComponentDescriptionProp) it.next();
+				List refs = cdp.getReferences();
 				Iterator iterator = refs.iterator();
 				while (iterator.hasNext()) {
 					// Loop though all the references (dependencies)for a given
@@ -383,17 +367,29 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 					// re-run the algorithm
 					Reference reference = (Reference) iterator.next();
 					if (reference != null) {
-						if (!resolveReference(cdp.getComponentDescription(), reference, providers)) {
-							providers.remove(cdp);
-							references.remove(cdp);
+						if (!resolveReference(cdp, reference, enabledCDPs)) {
+							cdp.clearReferenceCDPs();
 							enabledCDPs.remove(cdp);
 							runAgain = true;
+							break; //we need to re-run as our lists have changed
 						}
 					}
 				}
 			}
 		}
-		return enabledCDPs;
+		try {
+			List sortedCDPs = sortCDPs(enabledCDPs);
+			return sortedCDPs;
+		} catch (CircularityException ex) {
+			ComponentDescriptionProp circularCDP = ex.getCircularDependency();
+
+			//log the error
+			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, circularCDP.getComponentDescription().getBundle(), ex);
+
+			//remove offending CDP and re-resolve
+			componentDescriptionPropsEnabled.remove(ex.getCircularDependency());
+			return resolveEligible();
+		}
 	}
 
 	/**
@@ -437,10 +433,9 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 
 		// No need to process events that SCR initiated
 		// check for component.id and ignore the event if set
-		if (reference.getProperty(ComponentConstants.COMPONENT_ID) == null) {
-			if (eventType == ServiceEvent.REGISTERED || eventType == ServiceEvent.UNREGISTERING) {
-				getEligible(event);
-			}
+		if ((reference.getProperty(ComponentConstants.COMPONENT_ID) == null) && (eventType == ServiceEvent.REGISTERED) || eventType == ServiceEvent.UNREGISTERING) {
+
+			getEligible(event);
 		}
 
 	}
@@ -454,21 +449,23 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	public void dispatchWork(int workAction, Object workObject) {
 		switch (workAction) {
 			case BUILD :
-				instanceProcess.buildInstances((ArrayList)workObject);
+				instanceProcess.buildInstances((List) workObject);
 				break;
 			case DISPOSE :
-				instanceProcess.disposeInstances((ArrayList)workObject);
+				instanceProcess.disposeInstances((List) workObject);
 				break;
 			case DYNAMICBIND :
 				instanceProcess.dynamicBind((Hashtable) workObject);
+				break;
 			case DYNAMICUNBIND :
-				instanceProcess.dynamicUnBind((Hashtable) workObject);
+				instanceProcess.dynamicUnBind((List) workObject);
+				break;
 		}
 	}
 
-	private ArrayList selectNewlyEligible(ArrayList enabledCDPs) {
+	private List selectNewlyEligible(List enabledCDPs) {
 		// loop through selected CDPs. Keep only the ones that are newly eligible
-		ArrayList eligibleCDPs = new ArrayList();
+		List eligibleCDPs = new ArrayList();
 		Iterator iterator = enabledCDPs.iterator();
 		while (iterator.hasNext()) {
 			ComponentDescriptionProp cdp = (ComponentDescriptionProp) iterator.next();
@@ -481,9 +478,9 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 		return eligibleCDPs;
 	}
 
-	private ArrayList selectNewlyInEligible(ArrayList eligibleCDPs) {
+	private List selectNewlyInEligible(List eligibleCDPs) {
 		//		 loop through selected CDPs. Keep only the ones that are newly ineligible
-		ArrayList inEligibleCDPs = new ArrayList();
+		List inEligibleCDPs = new ArrayList();
 		Iterator iterator = componentDescriptionPropsEnabled.iterator();
 		while (iterator.hasNext()) {
 			ComponentDescriptionProp cdp = (ComponentDescriptionProp) iterator.next();
@@ -497,20 +494,25 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 		return inEligibleCDPs;
 	}
 
-	private boolean resolveReference(ComponentDescription cd, Reference reference, Hashtable providers) {
+	private boolean resolveReference(ComponentDescriptionProp cdp, Reference reference, List enabledCDPs) {
 		//if the cardinality is "0..1" or "0..n" then this refernce is not required
-		if (!reference.isRequiredFor(cd))
+		//TODO - how do we place this refernece in the ordering?
+		if (!reference.isRequiredFor(cdp.getComponentDescription()))
 			return true;
 
 		if (reference.hasLegacyProviders(scrBundleContext))
 			return true; //we found an availible provider in the legacy services
 
-		// loop thru all component providers of services
-		Enumeration p = providers.elements();
-		while (p.hasMoreElements()) {
-			ArrayList values = (ArrayList) p.nextElement();
-			if (values.contains(reference.getInterfaceName()))
+		// loop thru all components to match providers of services
+		Iterator it = enabledCDPs.iterator();
+		while (it.hasNext()) {
+			ComponentDescriptionProp cdpRefLookup = (ComponentDescriptionProp) it.next();
+			List provideList = cdpRefLookup.getServicesPrivided();
+
+			if (provideList.contains(reference.getReferenceDescription().getInterfacename())) {
+				cdp.setReferenceCDP(cdpRefLookup);
 				return true;
+			}
 		}
 
 		return false;
@@ -528,7 +530,7 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	 */
 	public void configurationEvent(ConfigurationEvent event) {
 
-		ArrayList componentDescriptions = new ArrayList();
+		List componentDescriptions = new ArrayList();
 
 		String pid = event.getPid();
 		if (pid == null)
@@ -552,9 +554,9 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	 * 
 	 * @param List of componentDescriptionProps that have been disposed of
 	 */
-	public void disposedComponents(ArrayList componentDescriptionProps) {
+	public void disposedComponents(List componentDescriptionProps) {
 
-		ArrayList componentDescriptions = new ArrayList();
+		List componentDescriptions = new ArrayList();
 		ComponentDescriptionProp componentDescriptionProp = null;
 		ComponentDescription componentDescription = null;
 
@@ -584,7 +586,7 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	 * 
 	 * @param List of componentDescriptionProps that have been built
 	 */
-	public void builtComponents(ArrayList componentDescriptionProps) {
+	public void builtComponents(List componentDescriptionProps) {
 		//TODO does any action need to take place on build complete
 	}
 
@@ -607,26 +609,26 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 
 	}
 
-	private Hashtable selectDynamicBind(ArrayList cdps, ServiceReference serviceReference) {
+	private Hashtable selectDynamicBind(List cdps, ServiceReference serviceReference) {
 		Hashtable bindTable = new Hashtable();
 		Iterator it = cdps.iterator();
 		while (it.hasNext()) {
 			ComponentDescriptionProp cdp = (ComponentDescriptionProp) it.next();
 			//if it is not already eligible it will bind with the static cdps
 			if (cdp.getComponentDescription().isEligible()) {
-				ArrayList references = (ArrayList) componentDescriptionPropToRefs.get(cdp);
+				List references = cdp.getReferences();
 				Iterator it_ = references.iterator();
 				while (it_.hasNext()) {
 					Reference reference = (Reference) it_.next();
 					if (reference.bindNewReference(serviceReference)) {
-						bindTable.put(reference.referenceDescription, cdp);
+						bindTable.put(reference, cdp);
 					}
 				}
 			}
 		}
 		return bindTable;
 	}
-	
+
 	/**
 	 * selectDynamicUnBind
 	 * 		Determine which resolved component description with properties need to unbind from this unregistering service
@@ -635,30 +637,65 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	 * @param serviceReference
 	 * @return
 	 */
-	private Hashtable selectDynamicUnBind(ArrayList cdps, ServiceReference serviceReference) {
-		
-		// ReferenceDescription:subTable
-		Hashtable unbindTable = new Hashtable();
-		// cdp:so
-		Hashtable unbindSubTable = new Hashtable();
+	private List selectDynamicUnBind(List cdps, ServiceReference serviceReference) {
+
+		List unbindJobs = new ArrayList();
+
 		Iterator it = cdps.iterator();
 		while (it.hasNext()) {
 			ComponentDescriptionProp cdp = (ComponentDescriptionProp) it.next();
-			BundleContext bundleContext = main.framework.getBundleContext(cdp.getComponentDescription().getBundle());
-			Object serviceObject = bundleContext.getService(serviceReference);
-			ArrayList references = (ArrayList) componentDescriptionPropToRefs.get(cdp);
+			List references = (List) cdp.getReferences();
 			Iterator it_ = references.iterator();
 			while (it_.hasNext()) {
 				Reference reference = (Reference) it_.next();
 				//Does the cdp require this service, use the Reference object to check
-				if (reference.unBindReference(bundleContext,serviceReference)) {
-					unbindSubTable.put(cdp,serviceObject);
-					unbindTable.put(reference.referenceDescription, unbindSubTable);
+				if (reference.unBindReference(serviceReference)) {
+					DynamicUnbindJob unbindJob = new DynamicUnbindJob();
+					unbindJob.component = cdp;
+					unbindJob.reference = reference;
+					unbindJob.serviceReference = serviceReference;
+					unbindJobs.add(unbindJob);
 				}
 			}
 		}
-		return unbindTable;
+		return unbindJobs;
 	}
 
+	static public class DynamicUnbindJob {
+		public ComponentDescriptionProp component;
+		public Reference reference;
+		public ServiceReference serviceReference;
+	}
 
+	private List sortCDPs(List cdps) throws CircularityException {
+		Iterator it = cdps.iterator();
+		List sortedList = new ArrayList();
+		List circularityCheck;
+		while (it.hasNext()) {
+			ComponentDescriptionProp cdp = (ComponentDescriptionProp) it.next();
+			circularityCheck = new ArrayList();
+			writeCDPDependencies(cdp, sortedList, circularityCheck);
+		}
+		return sortedList;
+	}
+
+	private void writeCDPDependencies(ComponentDescriptionProp cdp, List sortedList, List circularityCheck) throws CircularityException {
+		if (circularityCheck.contains(cdp)) {
+			throw new CircularityException(cdp);
+		}
+		circularityCheck.add(cdp);
+		//the component is already added it and all it's dependencies -egad, how do we unwind?
+		if (sortedList.contains(cdp)) {
+			return;
+		}
+		List referenceCDPs = cdp.getReferenceCDPs();
+		Iterator it = referenceCDPs.iterator();
+		//first, add the CDP's dependencies
+		while (it.hasNext()) {
+			ComponentDescriptionProp referenceCDP = (ComponentDescriptionProp) it.next();
+			writeCDPDependencies(referenceCDP, sortedList, circularityCheck);
+		}
+		//finally write the cdp
+		sortedList.add(cdp);
+	}
 }
