@@ -20,6 +20,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.log.LogEntry;
+import org.osgi.service.log.LogService;
 
 /**
  * @version $Revision$
@@ -45,6 +46,17 @@ public class LogEntryAdapter extends EventAdapter {
 	 */
 	public Event convert() {
 		String topic = TOPIC;
+		int level = entry.getLevel();
+		switch (level) {
+			case LogService.LOG_ERROR:
+			case LogService.LOG_WARNING:
+			case LogService.LOG_INFO:
+			case LogService.LOG_DEBUG:
+				break;
+			default:
+				// other log levels are represented by their decimal value
+				topic += Constants.TOPIC_SEPARATOR + level;
+		}
 		Hashtable properties = new Hashtable();
 		Bundle bundle = entry.getBundle();
 		if (bundle == null) {
