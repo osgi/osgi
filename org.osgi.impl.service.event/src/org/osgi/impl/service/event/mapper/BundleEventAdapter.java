@@ -69,7 +69,8 @@ public class BundleEventAdapter extends EventAdapter {
 				typename = UNRESOLVED;
 				break;
 			default :
-				return null;
+				// unknown events must be send as their decimal value
+				typename = ""+event.getType();
 		}
 		String topic = HEADER + Constants.TOPIC_SEPARATOR + typename;
 		Hashtable properties = new Hashtable();
