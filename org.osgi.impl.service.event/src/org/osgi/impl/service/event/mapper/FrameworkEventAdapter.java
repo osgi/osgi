@@ -62,11 +62,9 @@ public class FrameworkEventAdapter extends EventAdapter {
 		String topic = HEADER + Constants.TOPIC_SEPARATOR + typename;
 		Hashtable properties = new Hashtable();
 		Bundle bundle = event.getBundle();
-		if (bundle == null) {
-			throw new RuntimeException(
-					"FrameworkEvent.getBundle() returns null");
+		if (bundle != null) {
+			putBundleProperties(properties, bundle);
 		}
-		putBundleProperties(properties, bundle);
 		Throwable t = event.getThrowable();
 		if (t != null) {
 			putExceptionProperties(properties, t);
