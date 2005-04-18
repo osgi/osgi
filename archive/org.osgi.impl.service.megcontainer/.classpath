@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="/org.osgi.service.component"/>
 	<classpathentry sourcepath="/osgi.released/ee.foundation.jar" kind="lib" path="/osgi.released/ee.foundation.jar"/>
 	<classpathentry kind="lib" path="/cnf/jar/saxon.jar"/>
 	<classpathentry kind="src" path="/org.osgi.meglet"/>
