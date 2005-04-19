@@ -176,7 +176,7 @@ public class DoIt implements BundleActivator {
         Db db = (Db) context.getService(ref);
         
         InputStream is = new FileInputStream(HOME + "db_test_01.dp");
-		da.installDeploymentPackage(is);
+		DeploymentPackage dp = da.installDeploymentPackage(is);
 		
 		String[] tables = db.tableNames(null);
 		for (int i = 0; i < tables.length; i++) {
@@ -204,7 +204,7 @@ public class DoIt implements BundleActivator {
             throw new Exception("Row with '1' primary key is missing");
 
         is = new FileInputStream(HOME + "db_test_01_update_01.dp");
-		da.installDeploymentPackage(is);
+		dp = da.installDeploymentPackage(is);
 		
 		tables = db.tableNames(null);
 		for (int i = 0; i < tables.length; i++) {
@@ -227,6 +227,7 @@ public class DoIt implements BundleActivator {
         if (!((Object[]) db.findRow(null, "game", new Integer(1)))[1].equals("chess_Upd"))
             throw new Exception("Row with '1' primary key is not updated");
         
+        dp.uninstall();
         db.reset(null);
     }
 
@@ -235,7 +236,7 @@ public class DoIt implements BundleActivator {
         Db db = (Db) context.getService(ref);
         
         InputStream is = new FileInputStream(HOME + "db_test_02.dp");
-		da.installDeploymentPackage(is);
+        DeploymentPackage dp = da.installDeploymentPackage(is);
 		
 		String[] tables = db.tableNames(null);
 		for (int i = 0; i < tables.length; i++) {
@@ -255,7 +256,7 @@ public class DoIt implements BundleActivator {
             throw new Exception("Table 'tmp' is missing");
 
         is = new FileInputStream(HOME + "db_test_02_update_01.dp");
-		da.installDeploymentPackage(is);
+		dp = da.installDeploymentPackage(is);
 		
 		tables = db.tableNames(null);
 		for (int i = 0; i < tables.length; i++) {
@@ -274,6 +275,7 @@ public class DoIt implements BundleActivator {
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("tmp"))
             throw new Exception("Table 'tmp' is missing");
         
+        dp.uninstall();
         db.reset(null);
     }
     
@@ -320,6 +322,7 @@ public class DoIt implements BundleActivator {
         is = new FileInputStream(HOME + "db_test_03_update_01.dp");
 		dp = da.installDeploymentPackage(is);
         
+		dp.uninstall();
         db.reset(null);
     }
 
@@ -379,6 +382,7 @@ public class DoIt implements BundleActivator {
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("tmp2"))
             throw new Exception("Table 'tmp2' is missing");
         
+        dp.uninstall();
         db.reset(null);
     }
     
@@ -398,6 +402,8 @@ public class DoIt implements BundleActivator {
             throw new Exception("Private area error: does not exist");
         File[] fs = f.listFiles();
         System.out.println(Arrays.asList(fs));
+        
+        dp.uninstall();
     }
 
     // FOR TEST ONLY

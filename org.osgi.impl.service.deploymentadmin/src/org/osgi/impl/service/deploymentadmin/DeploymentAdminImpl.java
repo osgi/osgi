@@ -102,16 +102,19 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             return null;
         }
         
-        if (session.getDeploymentAction() == DeploymentSession.INSTALL)
+        if (session.getDeploymentAction() == DeploymentSession.INSTALL)  {
             dps.add(srcDp);
-        else if (session.getDeploymentAction() == DeploymentSession.UPDATE) {
-            DeploymentPackageImpl targetDp = (DeploymentPackageImpl) 
-            		session.getTargetDeploymentPackage(); 
-            targetDp.setVersion(session.getSourceDeploymentPackage().getVersion());
+            return srcDp;
         }
-        
-        return srcDp;
-	}
+        else { // if (session.getDeploymentAction() == DeploymentSession.UPDATE) 
+            DeploymentPackageImpl targetDp = (DeploymentPackageImpl) 
+            		session.getTargetDeploymentPackage();
+            dps.remove(targetDp);
+            targetDp.setVersion(session.getSourceDeploymentPackage().getVersion());
+            dps.add(targetDp);
+            return targetDp;
+        }
+    }
 
     private DeploymentSessionImpl createInstallSession(DeploymentPackageImpl dp) 
     		throws DeploymentException 

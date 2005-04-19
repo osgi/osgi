@@ -67,7 +67,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     private class TrackerPerm extends ServiceTracker {
         public TrackerPerm() {
             super(DeploymentSessionImpl.this.context, 
-                    PermissionAdmin.class.getName(), null);
+                    "org.osgi.service.permissionadmin.PermissionAdmin", null);
         }
     }
 
@@ -129,16 +129,19 @@ public class DeploymentSessionImpl implements DeploymentSession {
         for (Iterator iter = bes.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             if (be.getId() == b.getBundleId()) {
-                // TODO
-                PermissionAdmin pa = (PermissionAdmin) trackPerm.getService();
-                
+                ServiceReference sref = trackPerm.getServiceReference();
+                if (null != sref) {
+                    PermissionAdmin pa = (PermissionAdmin) trackPerm.getService();
+                    // TODO
+                }
+                               
                 String dir = fwBundleDir + "/" + b.getBundleId() + "/data";
                 return new File(dir);
             }
         }
         
-        // TODO SecurityException ???
-        return null;
+        throw new SecurityException("Bundle: " + b + " is not part of the deployment " +
+        		"package: " + dp);
     }
 
     void installUpdate(WrappedJarInputStream wjis) throws DeploymentException {
