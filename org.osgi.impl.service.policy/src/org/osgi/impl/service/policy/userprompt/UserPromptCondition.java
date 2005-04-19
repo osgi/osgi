@@ -20,6 +20,7 @@ package org.osgi.impl.service.policy.userprompt;
 
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.ResourceBundle;
 import org.osgi.framework.Bundle;
 import org.osgi.service.condpermadmin.Condition;
 
@@ -53,8 +54,6 @@ public class UserPromptCondition extends
 		return ""+bundle.getBundleId()+"|"+catalogName+"|"+message;
 	}
 
-	
-	
 	public boolean isEvaluated() {
 		return true;
 	}
@@ -62,7 +61,19 @@ public class UserPromptCondition extends
 		return false;
 	}
 	public boolean isSatisfied() {
-		//System.out.println("isSatisfied called");
+		String localizedMessage;
+		if (message.startsWith("%")) {
+			String messageID = message.substring(1);
+			ResourceBundle resourceBundle = ResourceBundle.getBundle(catalogName);
+			localizedMessage = resourceBundle.getString(messageID);
+			if (localizedMessage==null) { // fall back
+				localizedMessage = messageID;
+			}
+		} else {
+			localizedMessage = message;
+		}
+		
+		System.out.println("question: "+localizedMessage);
 		return true;
 	}
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
@@ -80,5 +91,14 @@ public class UserPromptCondition extends
 		public org.osgi.util.mobile.UserPromptCondition getInstance(Bundle bundle, String levels, String defaultLevel, String catalogName, String message) {
 			return new UserPromptCondition(bundle,levels,defaultLevel,catalogName,message);
 		}
+	}
+
+
+	public static void deregisterMySelf() {
+		org.osgi.util.mobile.UserPromptCondition.setFactory(null);
+	}
+
+	public static void registerMySelf() {
+		org.osgi.util.mobile.UserPromptCondition.setFactory(new Factory());
 	}
 }
