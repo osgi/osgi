@@ -44,4 +44,5 @@ Testing whether it works well:
 
 - "Download to target" the com.nokia.test.megletcontainer.jar file
 
+If all of the testcases ends with 'PASSED', that means, megcontainer is operable.
 
