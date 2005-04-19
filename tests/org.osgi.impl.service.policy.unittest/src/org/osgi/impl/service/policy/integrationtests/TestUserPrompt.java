@@ -34,7 +34,7 @@ import org.osgi.util.mobile.UserPromptCondition;
  */
 public class TestUserPrompt extends IntegratedTest {
 	public static final ConditionInfo ALLOW_SOCKET = new ConditionInfo(UserPromptCondition.class.getName(),
-			new String[] {"BLANKET","","org.osgi.impl.service.policy.integrationtests.userprompt","%MESSAGE_1"});
+			new String[] {"BLANKET","","org.osgi.impl.service.policy.integrationtests.messages.userprompt","%MESSAGE_1"});
 	public static final ConditionInfo INTEGRATIONTESTS_BUNDLE1_LOCATION_CONDITION =
 		new ConditionInfo(BundleLocationCondition.class.getName(),new String[]{INTEGRATIONTESTS_BUNDLE1_JAR});
 	public static final PermissionInfo ALL_PERMISSION = new PermissionInfo(AllPermission.class.getName(),"*","*");
@@ -42,6 +42,7 @@ public class TestUserPrompt extends IntegratedTest {
 
 	public void testBasic() throws Exception {
 		startFramework(true);
+
 		conditionalPermissionAdmin.addConditionalPermissionInfo(
 				new ConditionInfo[]{INTEGRATIONTESTS_BUNDLE1_LOCATION_CONDITION,ALLOW_SOCKET},
 				new PermissionInfo[]{ALL_PERMISSION});
@@ -52,6 +53,10 @@ public class TestUserPrompt extends IntegratedTest {
 			}
 		};
 		bundle1DoAction.invoke(null, new Object[]{adminAction});
-	}
+		
+		stopFramework();
+		startFramework(false);
 
+		bundle1DoAction.invoke(null, new Object[]{adminAction});
+	}
 }
