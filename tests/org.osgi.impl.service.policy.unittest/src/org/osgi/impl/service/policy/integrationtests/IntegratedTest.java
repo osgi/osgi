@@ -54,7 +54,9 @@ public abstract class IntegratedTest extends TestCase {
 	public static final String	ORG_OSGI_IMPL_SERVICE_CM_JAR	= "file:../../org.osgi.impl.service.cm/org.osgi.impl.service.cm.jar";
 	public static final String	ORG_OSGI_IMPL_SERVICE_EVENT_MAPPER_JAR	= "file:../../org.osgi.impl.service.event/org.osgi.impl.service.event.mapper.jar";
 	public static final String	ORG_OSGI_IMPL_SERVICE_EVENT_JAR	= "file:../../org.osgi.impl.service.event/org.osgi.impl.service.event.jar";
+	public static final String	ORG_OSGI_IMPL_SERVICE_POLICY_USERPROMPT_JAR = "file:../../org.osgi.impl.service.policy/org.osgi.impl.service.policy.userprompt.jar";
 	public static final String	INTEGRATIONTESTS_BUNDLE1_JAR = "file:../integrationtests.bundle1.jar";
+	public static final String	INTEGRATIONTESTS_MESSAGES_JAR = "file:../integrationtests.messages.jar";
 
 	public FrameworkSecurityManager	secMan;
 	public DefaultAdaptor adaptor;
@@ -66,7 +68,9 @@ public abstract class IntegratedTest extends TestCase {
 	public Bundle	logBundle;
 	public Bundle	dmtBundle;
 	public Bundle	policyBundle;
+	public Bundle	userPromptBundle;
 	public Bundle	integrationTestBundle;
+	public Bundle	integrationTestMessagesBundle;
 	public OSGi	framework;
 	public PermissionAdmin	permissionAdmin;
 	public ConditionalPermissionAdmin	conditionalPermissionAdmin;
@@ -126,6 +130,13 @@ public abstract class IntegratedTest extends TestCase {
 			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_LOG_JAR);
 			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_DMT_JAR);
 			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_POLICY_JAR);
+			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_POLICY_USERPROMPT_JAR);
+			permissionAdmin.setPermissions(INTEGRATIONTESTS_MESSAGES_JAR,
+					new PermissionInfo[]{
+						new PermissionInfo(PackagePermission.class.getName(),"*","EXPORT")
+					}
+				);
+			
 		} 
 
 		eventBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_EVENT_JAR);
@@ -134,7 +145,9 @@ public abstract class IntegratedTest extends TestCase {
 		logBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_LOG_JAR);
 		dmtBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_DMT_JAR);
 		policyBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_POLICY_JAR);
+		userPromptBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_POLICY_USERPROMPT_JAR);
 		integrationTestBundle = systemBundleContext.installBundle(INTEGRATIONTESTS_BUNDLE1_JAR);
+		integrationTestMessagesBundle = systemBundleContext.installBundle(INTEGRATIONTESTS_MESSAGES_JAR);
 
 		eventBundle.start();
 		eventMapperBundle.start();
@@ -142,6 +155,8 @@ public abstract class IntegratedTest extends TestCase {
 		logBundle.start();
 		dmtBundle.start();
 		policyBundle.start();
+		userPromptBundle.start();
+		integrationTestMessagesBundle.start();
 
 		Class cl = integrationTestBundle.loadClass("org.osgi.impl.service.policy.integrationtests.bundle1.Test");
 		bundle1DoAction = cl.getDeclaredMethod("doAction",new Class[]{PrivilegedExceptionAction.class});
