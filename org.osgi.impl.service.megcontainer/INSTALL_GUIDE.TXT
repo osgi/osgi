@@ -37,7 +37,7 @@ Run the MegletContainerTarget.launch file instead of Target.launch
 Starting the MegletContainer
 ================================
 
-- it starts automatically by calling 'Run'->Target in eclipse
+- it starts automatically by calling 'Run'->MegletContainerTarget in eclipse
 
 Testing whether it works well:
 =================================-
