@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-Name: MonitorAdmin
+Bundle-SymbolicName: ${p}.userprompt
+Bundle-Vendor: Nokia
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.userprompt.Activator
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+DynamicImport-Package: *
