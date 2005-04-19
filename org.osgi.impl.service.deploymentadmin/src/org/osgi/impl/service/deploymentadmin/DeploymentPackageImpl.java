@@ -75,6 +75,15 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                getVersion().equals(other.getVersion());
     }
     
+    boolean equalsIgnoreVersion(Object obj) {
+        if (null == obj)
+            return false;
+        if (!(obj instanceof DeploymentPackage))
+            return false;
+        DeploymentPackage other = (DeploymentPackage) obj;
+        return getName().equals(other.getName());
+    }
+    
     public int hashCode() {
         return (getName() + getVersion()).hashCode();
     }
@@ -308,6 +317,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     public void setDeploymentAdmin(DeploymentAdminImpl da) {
         this.da = da;
+    }
+
+    public void setVersion(Version version) {
+        this.dpVersion = version.toString();
     }
   
 }

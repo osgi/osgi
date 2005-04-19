@@ -104,8 +104,11 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         
         if (session.getDeploymentAction() == DeploymentSession.INSTALL)
             dps.add(srcDp);
-        else if (session.getDeploymentAction() == DeploymentSession.UPDATE)
-            ; // do nothing
+        else if (session.getDeploymentAction() == DeploymentSession.UPDATE) {
+            DeploymentPackageImpl targetDp = (DeploymentPackageImpl) 
+            		session.getTargetDeploymentPackage(); 
+            targetDp.setVersion(session.getSourceDeploymentPackage().getVersion());
+        }
         
         return srcDp;
 	}
@@ -146,7 +149,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private DeploymentPackageImpl findDp(DeploymentPackageImpl srcDp) {
         for (Iterator iter = dps.iterator(); iter.hasNext();) {
             DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();
-            if (srcDp.equals(dp))
+            if (srcDp.equalsIgnoreVersion(dp))
                 return dp;
         }
         return null;

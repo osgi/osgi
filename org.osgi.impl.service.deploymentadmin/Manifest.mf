@@ -4,6 +4,7 @@ Bundle-SymbolicName: ${p}
 Bundle-Version: 1.0
 Bundle-Vendor: Nokia
 Bundle-Activator: $(p).Activator
+Framework-Bundles-Dir: bundles
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
