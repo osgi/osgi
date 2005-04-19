@@ -31,7 +31,7 @@ Edit the MANIFEST.MF of osgi.refimpl.jar
   
 Setting the DOM parser, and startup variables
 ==================================================
-Change the Target.launch file to the one in this folder
+Run the MegletContainerTarget.launch file instead of Target.launch
 
 
 Starting the MegletContainer
