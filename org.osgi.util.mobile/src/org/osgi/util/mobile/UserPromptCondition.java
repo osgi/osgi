@@ -27,6 +27,7 @@
 package org.osgi.util.mobile;
 
 import java.util.Dictionary;
+import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.service.condpermadmin.Condition;
 
@@ -47,20 +48,20 @@ public class UserPromptCondition implements Condition {
 	}
 
 	private static UserPromptConditionFactory factory = null;
-	static {
-		String factoryName = System.getProperty("org.osgi.util.mobile.userpromptcondition.factory");
-		if (factoryName!=null) {
-			try {
-				factory = (UserPromptConditionFactory) Class.forName(factoryName).newInstance();
-			}
-			catch (IllegalAccessException e) {
-			}
-			catch (InstantiationException e) {
-			}
-			catch (ClassNotFoundException e) {
-			}
+	protected static void setFactory(UserPromptConditionFactory factory) {
+		SecurityManager sm = System.getSecurityManager();
+		if (sm!=null) {
+			sm.checkPermission(new AdminPermission("*","*"));
 		}
+		UserPromptCondition.factory = factory;
 	}
+	
+	private final Bundle bundle;
+	private final String levels;
+	private final String defaultLevel;
+	private final String catalogName;
+	private final String message;
+	private UserPromptCondition realUserPromptCondition;
 
 	/**
 	 * Creates an UserPrompt object with the given prompt string and permission
@@ -83,10 +84,53 @@ public class UserPromptCondition implements Condition {
 					String catalogName, 
 					String message) 
 	{
-		if (factory==null) return null;
-		return factory.getInstance(bundle,levels,defaultLevel,catalogName,message);
+		if (factory==null) {
+			// the bundle implementing the UserPromptCondition has not started yet.
+			// Do wrapping magick.
+			return new UserPromptCondition(false,bundle,levels,defaultLevel,catalogName,message);
+		} else {
+			// there is already a factory, no need to do any wrapping magic
+			return factory.getInstance(bundle,levels,defaultLevel,catalogName,message);
+		}
 	}
 
+	/**
+	 * Instances of the UserPromptCondition are simply store the construction parameters
+	 * until a "real" UserPromptCondition is registered in setFactory(). At that point, it
+	 * will delegate all calls there.
+	 * @param unused this parameter is here so that ConditionalPermissionAdmin would not
+	 * 		use this as the constructor instead of the getInstance
+	 * @param bundle
+	 * @param levels
+	 * @param defaultLevel
+	 * @param catalogName
+	 * @param message
+	 */
+	private UserPromptCondition(boolean unused,Bundle bundle,String levels,String defaultLevel,String catalogName,String message) {
+		this.bundle=bundle;
+		this.levels=levels;
+		this.defaultLevel=defaultLevel;
+		this.catalogName=catalogName;
+		this.message=message;
+	}
+	
+	protected UserPromptCondition() {
+		bundle=null;
+		levels=null;
+		defaultLevel=null;
+		catalogName=null;
+		message=null;
+	}
+
+	/**
+	 * Check if a factory is registered, and if yes, create userprompt to delegate calls to.
+	 */
+	private void lookForImplementation() {
+		if ((realUserPromptCondition==null)&&(factory!=null)) {
+			realUserPromptCondition = factory.getInstance(bundle,levels,defaultLevel,catalogName,message);
+		}
+	}
+	
 	/**
 	 * Checks whether the condition is evaluated. Depending on the permission
 	 * level, the function returns the following values.
@@ -104,7 +148,12 @@ public class UserPromptCondition implements Condition {
 	 * @return true if the condition is satisfied.
 	 */
 	public boolean isEvaluated() {
-		return false;
+		lookForImplementation();
+		if (realUserPromptCondition!=null) {
+			return realUserPromptCondition.isEvaluated();
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -117,7 +166,14 @@ public class UserPromptCondition implements Condition {
 	 * </ul>
 	 */
 	public boolean isMutable() {
-		return false;
+		lookForImplementation();
+		if (realUserPromptCondition!=null) {
+			return realUserPromptCondition.isMutable();
+		} else {
+			// since we don't know what the actual status is, we cannot say
+			// "the condition cannot change anymore"
+			return true;
+		}
 	}
 
 	/**
@@ -132,7 +188,13 @@ public class UserPromptCondition implements Condition {
 	 *         case there are multiple permission levels).
 	 */
 	public boolean isSatisfied() {
-		return false;
+		lookForImplementation();
+		if (realUserPromptCondition!=null) {
+			return realUserPromptCondition.isSatisfied();
+		} else {
+			// paranoid security option
+			return false;
+		}
 	}
 
 	/**
@@ -143,9 +205,12 @@ public class UserPromptCondition implements Condition {
 	 * @return true, if all conditions are satisfied
 	 */
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
-		for(int i=0;i<conds.length;i++) {
-			if (!conds[i].isSatisfied()) return false;
+		lookForImplementation();
+		if (realUserPromptCondition!=null) {
+			return realUserPromptCondition.isSatisfied(conds,context);
+		} else {
+			// paranoid security option
+			return false;
 		}
-		return true;
 	}
 }
