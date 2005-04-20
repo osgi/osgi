@@ -93,16 +93,18 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                     e.getMessage(), e);
         }
         
+        // TODO
         checkPermission("name: "  + srcDp.getName(), 
                 DeploymentAdminPermission.ACTION_INSTALL);
-        session = createInstallSession(srcDp);
+        
+        session = createInstallUpdateSession(srcDp);
         try {
             session.installUpdate(wjis);
         } catch (CancelException e) {
             return null;
         }
         
-        if (session.getDeploymentAction() == DeploymentSession.INSTALL)  {
+        if (session.getDeploymentAction() == DeploymentSession.INSTALL) {
             dps.add(srcDp);
             return srcDp;
         }
@@ -116,34 +118,36 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
     }
 
-    private DeploymentSessionImpl createInstallSession(DeploymentPackageImpl dp) 
+    private DeploymentSessionImpl createInstallUpdateSession(DeploymentPackageImpl srcDp) 
     		throws DeploymentException 
     {
         // find the package among installed packages
-        DeploymentPackageImpl targetDp = findDp(dp);
+        DeploymentPackageImpl targetDp = findDp(srcDp);
         
         // not found -> install
         if (null == targetDp) {
             // creates an empty dp
             targetDp = new DeploymentPackageImpl();
-	        return new DeploymentSessionImpl(dp, 
+	        return new DeploymentSessionImpl(srcDp, 
 	                targetDp, DeploymentSession.INSTALL, logger, context);
         }
         // found -> update
         else {
-            return new DeploymentSessionImpl(dp, targetDp,
+            return new DeploymentSessionImpl(srcDp, targetDp,
                     DeploymentSession.UPDATE, logger, context);
         }
     }
     
-    private DeploymentSessionImpl createUninstallSession(DeploymentPackageImpl dp) 
+    private DeploymentSessionImpl createUninstallSession(DeploymentPackageImpl targetDp) 
 			throws DeploymentException 
 	{
         // creates an empty dp
         DeploymentPackageImpl srcDp = new DeploymentPackageImpl();
 
         // find the package among installed packages
-        DeploymentPackageImpl targetDp = findDp(dp);
+        DeploymentPackageImpl dp = findDp(targetDp);
+        if (null == dp)
+            throw new RuntimeException("Internal error");
         
         return new DeploymentSessionImpl(srcDp, 
                 targetDp, DeploymentSession.UNINSTALL, logger, context);
@@ -265,17 +269,17 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
 	}
 
-    void uninstall(DeploymentPackageImpl dp) throws DeploymentException {
+    void uninstall(DeploymentPackageImpl targetDp) throws DeploymentException {
         // TODO checkPermission 
 
-        session = createUninstallSession(dp);
+        session = createUninstallSession(targetDp);
         try {
             session.uninstall();
         } catch (CancelException e) {
             return;
         }
         
-        dps.remove(dp);
+        dps.remove(targetDp);
     }
     
     boolean uninstallForceful(DeploymentPackageImpl dp) {

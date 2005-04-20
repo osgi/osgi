@@ -123,7 +123,11 @@ public class WrappedJarInputStream {
             return ret;
         }
 
-        public Iterator getCertificateChainIterator() {
+        /*
+         * Returns a the list of cerificate chains. One chain is a 
+         * String[].
+         */
+        public List getCertificateChains() {
             List l = splitCertificates(getCertificates());
             List list = new LinkedList();
             for (Iterator iter = l.iterator(); iter.hasNext();) {
@@ -133,7 +137,7 @@ public class WrappedJarInputStream {
                     buffer.add(cs[i].getSubjectDN().toString());
                 list.add(buffer.toArray(new String[] {}));
             }
-            return list.iterator();
+            return list;
         }
     }
     

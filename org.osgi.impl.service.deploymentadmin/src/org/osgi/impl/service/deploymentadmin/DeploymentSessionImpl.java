@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.security.AccessControlContext;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
@@ -31,6 +32,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.DeploymentSession;
@@ -79,7 +81,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     private class TrackerCondPerm extends ServiceTracker {
         public TrackerCondPerm() {
             super(DeploymentSessionImpl.this.context, 
-                    "org.osgi.service.permissionadmin.ConditionalPermissionAdmin", null);
+                    "org.osgi.service.condpermadmin.ConditionalPermissionAdmin", null);
         }
     }
 
@@ -218,7 +220,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
             dp = srcDp;
         else if (DeploymentSession.UNINSTALL == getDeploymentAction())
             dp = targetDp;
-        else
+        else //DeploymentSession.UNINSTALL == getDeploymentAction()
             dp = targetDp;
         for (Iterator iter = dp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry entry = (BundleEntry) iter.next();
@@ -235,7 +237,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
             dp = srcDp;
         else if (DeploymentSession.UPDATE == getDeploymentAction())
             dp = srcDp;
-        else
+        else //DeploymentSession.UNINSTALL == getDeploymentAction()
             dp = targetDp;
         for (Iterator iter = dp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry entry = (BundleEntry) iter.next();
@@ -271,7 +273,16 @@ public class DeploymentSessionImpl implements DeploymentSession {
     private void processResources(WrappedJarInputStream wjis) 
     		throws DeploymentException, IOException 
     {
+        DeploymentPackageImpl dp;
+        if (DeploymentSession.INSTALL == getDeploymentAction())
+            dp = srcDp;
+        else if (DeploymentSession.UPDATE == getDeploymentAction())
+            dp = targetDp;
+        else //DeploymentSession.UNINSTALL == getDeploymentAction()
+            dp = targetDp;
+        
         WrappedJarInputStream.Entry entry = wjis.nextEntry();
+        dp.updateResourceEntry(entry);
         while (null != entry) {
             if (!entry.isResource())
                 throw new DeploymentException(DeploymentException.CODE_ORDER_ERROR, 
@@ -309,7 +320,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
         for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
             String pid = re.getValue(DAConstants.RP_PID);
-            ResourceProcessor proc = findProcessor(pid);
+            WrappedResourceProcessor proc = new WrappedResourceProcessor(
+                    findProcessor(pid), fetchAccessControlContext(re.getCertChains()));
+            //ResourceProcessor proc = findProcessor(pid);
             if (!procs.contains(pid)) {
                 transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, proc));
                 proc.dropAllResources();
@@ -336,7 +349,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
      * Drops a particluar resource
      */
     private void dropResource(ResourceEntry re) throws DeploymentException {
-        ResourceProcessor proc = findProcessor(re.getValue(DAConstants.RP_PID));
+        ResourceProcessor p = findProcessor(re.getValue(DAConstants.RP_PID));
+        WrappedResourceProcessor proc = new WrappedResourceProcessor(
+                p, fetchAccessControlContext(re.getCertChains()));
         transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, proc));
         proc.dropped(re.getName());
     }
@@ -370,11 +385,37 @@ public class DeploymentSessionImpl implements DeploymentSession {
         return null;
     }
     
-    private void processResource(WrappedJarInputStream.Entry entry) 
+    private AccessControlContext fetchAccessControlContext(List certChains) {
+        AccessControlContext ret = null;
+        ServiceReference sref = trackCondPerm.getServiceReference();
+        if (null != sref) {
+            ConditionalPermissionAdmin cpa = (ConditionalPermissionAdmin) 
+            		trackCondPerm.getService(sref);
+            for (Iterator iter = certChains.iterator(); iter.hasNext();) {
+                String[] chain = (String[]) iter.next();
+                ret = cpa.getAccessControlContext(chain);
+                if (null != ret)
+                    return ret;
+            }
+            return ret;
+        } else {
+            return createAccessControlContext();
+        }
+    }
+    
+    private AccessControlContext createAccessControlContext() {
+        // TODO MEG Deployment Admin must construct the AccessControlContext itself, 
+        // using permission information in the DMT
+        return null;
+    }
+
+    private void processResource(final WrappedJarInputStream.Entry entry) 
     		throws DeploymentException, IOException 
     {
         String pid = entry.getAttributes().getValue(DAConstants.RP_PID);
-        ResourceProcessor proc = findProcessor(pid);
+        WrappedResourceProcessor proc = new WrappedResourceProcessor(
+                findProcessor(pid), fetchAccessControlContext(entry.getCertificateChains()));
+        //ResourceProcessor proc = findProcessor(pid);
         transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, proc));
         proc.process(entry.getName(), entry.getInputStream());
         if (DeploymentSession.INSTALL == getDeploymentAction())

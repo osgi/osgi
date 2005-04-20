@@ -4,18 +4,17 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import org.osgi.framework.Bundle;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
 
 public class TransactionRecord {
     
-    public int                   code;
-    public ResourceProcessor     rp;
-    public Bundle			     bundle;
-    public BundleEntry           be;
-    public DeploymentPackageImpl dp;
+    public int                      code;
+    public WrappedResourceProcessor rp;
+    public Bundle			        bundle;
+    public BundleEntry              be;
+    public DeploymentPackageImpl    dp;
     
     public TransactionRecord(int code, 
-                             ResourceProcessor rp, 
+                             WrappedResourceProcessor rp, 
                              Bundle b,
                              BundleEntry be,
                              DeploymentPackageImpl dp) 
@@ -27,7 +26,7 @@ public class TransactionRecord {
         this.dp = dp;
     }
     
-    public TransactionRecord(int code, ResourceProcessor rp) {
+    public TransactionRecord(int code, WrappedResourceProcessor rp) {
         this(code, rp, null, null, null);
     }
     

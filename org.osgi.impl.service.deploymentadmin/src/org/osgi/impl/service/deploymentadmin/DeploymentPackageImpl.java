@@ -30,6 +30,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
+import org.osgi.impl.service.deploymentadmin.WrappedJarInputStream.Entry;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
@@ -135,7 +136,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                 bundleEntries.add(be);
             } else {
                 // resource
-                resourceEntries.add(new ResourceEntry(resPath, attrs, null));
+                resourceEntries.add(new ResourceEntry(resPath, attrs));
             }
             
             checkNameSection(resPath, attrs, isBundle);
@@ -173,6 +174,15 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         e.setSymbName(be.getSymbName());
         e.setVersion(be.getVersion());
     }
+    
+    void updateResourceEntry(Entry entry) {
+        for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
+            ResourceEntry re = (ResourceEntry) iter.next();
+            if (re.getName().equals(entry.getName()))
+                re.updateCertificates(entry);
+        }
+    }
+
     
     Vector getResourceEntries() {
         return resourceEntries;

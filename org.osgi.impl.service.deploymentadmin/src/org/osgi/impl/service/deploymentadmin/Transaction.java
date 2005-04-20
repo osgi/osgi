@@ -12,7 +12,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentSession;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
 
 public class Transaction {
     
@@ -62,13 +61,12 @@ public class Transaction {
             throw new CancelException();
         
         if (PROCESSOR == record.code) {
-            ResourceProcessor proc = (ResourceProcessor) record.rp;
-            if (processors.contains(proc)) {
+            if (processors.contains(record.rp)) {
                 return true;
             }
             else {
-                proc.begin(session);
-                processors.add(proc);
+                record.rp.begin(session);
+                processors.add(record.rp);
             }
         }
         steps.add(record);
@@ -82,7 +80,7 @@ public class Transaction {
 	        for (Iterator iter = steps.iterator(); iter.hasNext();) {
 	            TransactionRecord element = (TransactionRecord) iter.next();
 	            if (element.code == PROCESSOR) {
-	                ((ResourceProcessor) element.rp).prepare();
+	                element.rp.prepare();
 	                logger.log(Logger.LOG_INFO, "Prepare " + element);
 	            }
 	        }
@@ -111,8 +109,7 @@ public class Transaction {
 	                case STOPBUNDLE :
 	                    break;
 	                case PROCESSOR:
-	                    ResourceProcessor proc = element.rp;
-	                    proc.commit();
+	                    element.rp.commit();
 	                    break;
 	                default :
 	                    break;
@@ -151,8 +148,7 @@ public class Transaction {
 	                    element.bundle.start();
 	                    break;
 	                case PROCESSOR:
-	                    ResourceProcessor proc = element.rp;
-	                    proc.rollback();
+	                    element.rp.rollback();
 	                    break;
 	                default :
 	                    break;

@@ -18,27 +18,29 @@
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.Serializable;
-import java.security.cert.Certificate;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.jar.Attributes;
+
+import org.osgi.impl.service.deploymentadmin.WrappedJarInputStream.Entry;
 
 public class ResourceEntry implements Serializable {
 
-    private String        name;
-    private Hashtable     attrs = new Hashtable();
-    private String	      pid;
-    private Certificate[] certs;
+    private String     name;
+    private Hashtable  attrs = new Hashtable();
+    private String	   pid;
+    private List   	   certChains = new LinkedList();
 
-    public ResourceEntry(String name, Attributes attrs, Certificate[] certs) {
-        this(name, attrs, null, certs);
+    public ResourceEntry(String name, Attributes attrs) {
+        this(name, attrs, null);
     }
     
-    public ResourceEntry(String name, Attributes attrs, String pid, Certificate[] certs) {
+    private ResourceEntry(String name, Attributes attrs, String pid) {
         this.name = name;
         extractAttrs(attrs);
         this.pid = pid;
-        this.certs = certs;
     }
     
     public boolean equals(Object o) {
@@ -78,5 +80,13 @@ public class ResourceEntry implements Serializable {
 
     public void setPid(String pid) {
         this.pid = pid;
+    }
+    
+    public List getCertChains() {
+        return certChains;
+    }
+
+    public void updateCertificates(Entry entry) {
+        certChains = entry.getCertificateChains();
     }
 }
