@@ -92,6 +92,10 @@ public abstract class IntegratedTest extends TestCase {
 		
 	}
 
+	public void tearDown() throws Exception {
+		stopFramework();
+	}
+
 	public void setBundleAsAdministrator(String location) throws Exception {
 		permissionAdmin.setPermissions(location,new PermissionInfo[] {
 				new PermissionInfo(AllPermission.class.getName(),"*","*")});
