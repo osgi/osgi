@@ -99,6 +99,7 @@ public abstract class IntegratedTest extends TestCase {
 	}
 
 	public void startFramework(boolean fresh) throws Exception {
+		cleanAllFactories();
 		Policy.setPolicy(new VeryGenerousPolicy());
 		
 		// replace policy file ${user.home}/.java.policy with our own
@@ -183,9 +184,15 @@ public abstract class IntegratedTest extends TestCase {
 		conditionalPermissionAdmin = null;
 		bundle1DoAction = null;
 
-		// the framework needs to set these to its own implementation
-		// And they can only be set once, so we need to
-		// re-set them if we want to run a new framework instance.
+		cleanAllFactories();
+	}
+	
+	/**
+	 * There are some factories that can only be set once. Since in the unit tests,
+	 * we constantly start and stop the framework, and the framework sets these factories,
+	 * we need to clean up.
+	 */
+	public void cleanAllFactories() throws Exception {
 		Field urlFactory = URL.class.getDeclaredField("factory");
 		urlFactory.setAccessible(true);
 		urlFactory.set(null,null);
@@ -193,6 +200,11 @@ public abstract class IntegratedTest extends TestCase {
 		Field urlConnectionFactory = URLConnection.class.getDeclaredField("factory");
 		urlConnectionFactory.setAccessible(true);
 		urlConnectionFactory.set(null,null);
+		
+		Field urlStreamHandlerFactory = URL.class.getDeclaredField("factory");
+		urlStreamHandlerFactory.setAccessible(true);
+		urlStreamHandlerFactory.set(null,null);
+		
 	}
 
 }
