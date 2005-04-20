@@ -59,9 +59,6 @@ public class TestTrees extends IntegratedTest {
 		super.stopFramework();
 	}
 	
-	public void tearDown() throws Exception {
-		stopFramework();
-	}
 	
 	public void testAllStartsUp() throws Exception {
 		startFramework(true);
