@@ -135,7 +135,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                 bundleEntries.add(be);
             } else {
                 // resource
-                resourceEntries.add(new ResourceEntry(resPath, attrs));
+                resourceEntries.add(new ResourceEntry(resPath, attrs, null));
             }
             
             checkNameSection(resPath, attrs, isBundle);

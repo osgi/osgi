@@ -18,24 +18,27 @@
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.Serializable;
+import java.security.cert.Certificate;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.jar.Attributes;
 
 public class ResourceEntry implements Serializable {
 
-    private String     name;
-    private Hashtable  attrs = new Hashtable();
-    private String	   pid;
+    private String        name;
+    private Hashtable     attrs = new Hashtable();
+    private String	      pid;
+    private Certificate[] certs;
 
-    public ResourceEntry(String name, Attributes attrs) {
-        this(name, attrs, null);
+    public ResourceEntry(String name, Attributes attrs, Certificate[] certs) {
+        this(name, attrs, null, certs);
     }
     
-    public ResourceEntry(String name, Attributes attrs, String pid) {
+    public ResourceEntry(String name, Attributes attrs, String pid, Certificate[] certs) {
         this.name = name;
         extractAttrs(attrs);
         this.pid = pid;
+        this.certs = certs;
     }
     
     public boolean equals(Object o) {

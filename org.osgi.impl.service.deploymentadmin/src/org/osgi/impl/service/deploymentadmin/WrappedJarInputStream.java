@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
@@ -122,18 +123,17 @@ public class WrappedJarInputStream {
             return ret;
         }
 
-        public Iterator getCertificateChainStringIterator() {
+        public Iterator getCertificateChainIterator() {
             List l = splitCertificates(getCertificates());
-            List res = new LinkedList();
+            List list = new LinkedList();
             for (Iterator iter = l.iterator(); iter.hasNext();) {
                 X509Certificate[] cs = (X509Certificate[]) iter.next();
-                StringBuffer sb = new StringBuffer();
+                List buffer = new Vector();
                 for (int i = 0; i < cs.length; i++)
-                    sb.append(cs[i].getSubjectDN() + 
-                            (i != cs.length -1 ? "; " : ""));
-                res.add(sb.toString());
+                    buffer.add(cs[i].getSubjectDN().toString());
+                list.add(buffer.toArray(new String[] {}));
             }
-            return res.iterator();
+            return list.iterator();
         }
     }
     

@@ -20,6 +20,7 @@ package org.osgi.impl.service.deploymentadmin;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.AccessControlContext;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -47,6 +48,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     private BundleContext               context;
     private TrackerRp                   trackRp;
     private TrackerPerm                 trackPerm;
+    private TrackerCondPerm             trackCondPerm;
     
     // getDataFile uses this. 
     private String 						fwBundleDir;
@@ -70,6 +72,16 @@ public class DeploymentSessionImpl implements DeploymentSession {
                     "org.osgi.service.permissionadmin.PermissionAdmin", null);
         }
     }
+    
+    /*
+     * Class to track conditiona permission admin
+     */
+    private class TrackerCondPerm extends ServiceTracker {
+        public TrackerCondPerm() {
+            super(DeploymentSessionImpl.this.context, 
+                    "org.osgi.service.permissionadmin.ConditionalPermissionAdmin", null);
+        }
+    }
 
     DeploymentSessionImpl(DeploymentPackageImpl srcDp, DeploymentPackageImpl targetDp, int action,
             Logger logger, BundleContext context) 
@@ -81,6 +93,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         this.context = context;
         trackRp = new TrackerRp();
         trackPerm = new TrackerPerm();
+        trackCondPerm = new TrackerCondPerm();
         
         fwBundleDir = (String) context.getBundle().getHeaders().
         	get(DAConstants.FW_BUNDLES_DIR);
@@ -109,6 +122,18 @@ public class DeploymentSessionImpl implements DeploymentSession {
      */
     public DeploymentPackage getSourceDeploymentPackage() {
         return srcDp;
+    }
+    
+    private void openTrackers() {
+        trackCondPerm.open();
+        trackPerm.open();
+        trackRp.open();
+    }
+    
+    private void closeTrackers() {
+        trackCondPerm.close();
+        trackPerm.close();
+        trackRp.close();
     }
 
     /**
@@ -145,8 +170,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     }
 
     void installUpdate(WrappedJarInputStream wjis) throws DeploymentException {
-        trackRp.open();
-        trackPerm.open();
+        openTrackers();
         transaction = Transaction.createTransaction(this, logger);
         try {
             transaction.start();
@@ -165,13 +189,11 @@ public class DeploymentSessionImpl implements DeploymentSession {
                     e.getMessage(), e);
         }
         transaction.commit();
-        trackRp.close();
-        trackPerm.close();
+        closeTrackers();
     }
     
     void uninstall() throws DeploymentException {
-        trackRp.open();
-        trackPerm.open();
+        openTrackers();
         transaction = Transaction.createTransaction(this, logger);
         try {
             transaction.start();
@@ -187,8 +209,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
                     e.getMessage(), e);
         }
         transaction.commit();
-        trackRp.close();
-        trackPerm.close();
+        closeTrackers();
     }
     
     private void startBundles() throws BundleException {
@@ -251,8 +272,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     		throws DeploymentException, IOException 
     {
         WrappedJarInputStream.Entry entry = wjis.nextEntry();
-        while (null != entry) 
-        {
+        while (null != entry) {
             if (!entry.isResource())
                 throw new DeploymentException(DeploymentException.CODE_ORDER_ERROR, 
                         "Bundles have to precede resources in the deployment package");
@@ -413,7 +433,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
         for (int i = 0; i < bundles.length; i++) {
             Bundle b = bundles[i];
             if (b.getLocation().equals(be.getSymbName())) {
+                // TODO use framework backdoor
                 b.update(is);
+                
                 transaction.addRecord(new TransactionRecord(Transaction.UPDATEBUNDLE, b));
                 be.setId(b.getBundleId());
                 return b;
