@@ -201,10 +201,6 @@ public abstract class IntegratedTest extends TestCase {
 		urlConnectionFactory.setAccessible(true);
 		urlConnectionFactory.set(null,null);
 		
-		Field urlStreamHandlerFactory = URL.class.getDeclaredField("factory");
-		urlStreamHandlerFactory.setAccessible(true);
-		urlStreamHandlerFactory.set(null,null);
-		
 	}
 
 }
