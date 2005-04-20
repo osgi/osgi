@@ -15,7 +15,7 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-console &quot;launch&quot;"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.osgi.impl.framework.eclipse"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dosgi.framework=&quot;file:../&quot; -Djava.security.manager=org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager -Djava.security.policy=osgi.policy -Dosgi.dev=bin"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dosgi.framework=&quot;file:../&quot; -Djava.security.manager=org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager -Djava.security.policy=osgi.policy -Dosgi.dev=bin -Dorg.osgi.framework.bootdelegation=sun.,com.sun."/>
 <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:org.osgi.impl.framework.eclipse/launch}"/>
 <booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="true"/>
 </launchConfiguration>
