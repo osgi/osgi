@@ -1,6 +1,7 @@
 package org.osgi.service.application;
 
 import org.osgi.framework.Constants;
+import org.osgi.service.application.ApplicationDescriptor.Delegate;
 
 /**
  * ApplicationHandle is an OSGi service interface which represents an instance
@@ -59,6 +60,19 @@ public abstract class ApplicationHandle {
 	protected ApplicationHandle(String instanceId, ApplicationDescriptor descriptor ) {
 		this.instanceId	= instanceId;
 		this.descriptor = descriptor;
+
+		try {
+			delegate = (Delegate) implementation
+					.newInstance();
+			delegate.setApplicationHandle( this, descriptor.delegate );
+		}
+		catch (Exception e) {
+			// Too bad ...
+			e.printStackTrace();
+			System.err
+					.println("No implementation available for ApplicationDescriptor, property is: "
+							+ cName);
+		}
 	}
 
 	protected final ApplicationDescriptor getApplicationDescriptor() {
