@@ -194,8 +194,8 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 
 		// copy everything from the conditional permission admin, populate our tree
 		conditionalPermissions = new HashMap();
-		for(Enumeration enum = condPermAdmin.getConditionalPermissionInfos(); enum.hasMoreElements();) {
-			ConditionalPermissionInfo e = (ConditionalPermissionInfo)enum.nextElement();
+		for(Enumeration en = condPermAdmin.getConditionalPermissionInfos(); en.hasMoreElements();) {
+			ConditionalPermissionInfo e = (ConditionalPermissionInfo)en.nextElement();
 
 			// calculate hash
 			ConditionInfo[] conditionInfo = (ConditionInfo[]) e.getConditionInfos().clone();
