@@ -189,6 +189,10 @@ public class UserPromptCondition
 		} else if (answer.equals("nosession")) {
 			status = NOSESSION_STRING;
 			satisfied = false;
+		} else if (answer.equals("yes")) {
+			satisfied = true;
+		} else if (answer.equals("no")) {
+			satisfied = false;
 		} else
 			throw new IllegalStateException("todo");
 		saveToStorage();
