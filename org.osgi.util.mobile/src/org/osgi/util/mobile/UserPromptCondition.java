@@ -62,6 +62,10 @@ public class UserPromptCondition implements Condition {
 	private final String catalogName;
 	private final String message;
 	private UserPromptCondition realUserPromptCondition;
+	protected static UserPromptCondition unWrap(UserPromptCondition c) {
+		if (c.realUserPromptCondition==null) return c;
+		return c.realUserPromptCondition;
+	}
 
 	/**
 	 * Creates an UserPrompt object with the given prompt string and permission
