@@ -92,6 +92,7 @@ public abstract class Meglet implements EventHandler {
 	 *             if any error occures
 	 */
 	public void suspend(OutputStream stateStorage) throws Exception {
+		requestStop(); /* The default behaviour is to stop the application in suspend */
 	}
 
 	/**
