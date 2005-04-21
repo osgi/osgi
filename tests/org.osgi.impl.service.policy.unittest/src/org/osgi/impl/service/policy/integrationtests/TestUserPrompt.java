@@ -18,6 +18,13 @@
 
 package org.osgi.impl.service.policy.integrationtests;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
+import java.security.AccessControlException;
 import java.security.AllPermission;
 import java.security.PrivilegedExceptionAction;
 import org.osgi.framework.AdminPermission;
@@ -33,30 +40,91 @@ import org.osgi.util.mobile.UserPromptCondition;
  * @version $Revision$
  */
 public class TestUserPrompt extends IntegratedTest {
-	public static final ConditionInfo ALLOW_SOCKET = new ConditionInfo(UserPromptCondition.class.getName(),
-			new String[] {"BLANKET","","org.osgi.impl.service.policy.integrationtests.messages.userprompt","%MESSAGE_1"});
+	public static final ConditionInfo ADMINISTRATION_QUESTION = new ConditionInfo(UserPromptCondition.class.getName(),
+			new String[] {"BLANKET","","org.osgi.impl.service.policy.integrationtests.messages.userprompt","%ADMIN_TASK"});
 	public static final ConditionInfo INTEGRATIONTESTS_BUNDLE1_LOCATION_CONDITION =
 		new ConditionInfo(BundleLocationCondition.class.getName(),new String[]{INTEGRATIONTESTS_BUNDLE1_JAR});
 	public static final PermissionInfo ALL_PERMISSION = new PermissionInfo(AllPermission.class.getName(),"*","*");
+	public static final PermissionInfo ADMIN_PERMISSION = new PermissionInfo(AdminPermission.class.getName(),"*","*");
 
-
-	public void testBasic() throws Exception {
+	// this is an extremely inefficient stdin wrapper :)
+	InputStream originalStdin;
+	PrintStream stdinPrinter;
+	ByteArrayOutputStream stdinByteArray;
+	int byteArrayPos;
+	
+	class MyInputStream extends InputStream {
+		public int read() throws IOException {
+			byte [] ba = stdinByteArray.toByteArray();
+			int b;
+			if (ba.length > byteArrayPos) {
+				b = ba[byteArrayPos];
+				byteArrayPos++;
+			} else {
+				b = -1;
+			}
+			return b;
+		}
+		
+	}
+	
+	public void setUp() throws Exception {
+		super.setUp();
+		originalStdin = System.in;
+		byteArrayPos = 0;
+		stdinByteArray = new ByteArrayOutputStream();
+		stdinPrinter = new PrintStream(stdinByteArray,true);
+		System.setIn(new MyInputStream());
+		
+	}
+	
+	public void tearDown() throws Exception {
+		System.setIn(originalStdin);
+		originalStdin = null;
+		super.tearDown();
+	}
+	
+	public void testBasicAlways() throws Exception {
 		startFramework(true);
 
+		stdinPrinter.println("always");
+
 		conditionalPermissionAdmin.addConditionalPermissionInfo(
-				new ConditionInfo[]{INTEGRATIONTESTS_BUNDLE1_LOCATION_CONDITION,ALLOW_SOCKET},
-				new PermissionInfo[]{ALL_PERMISSION});
+				new ConditionInfo[]{INTEGRATIONTESTS_BUNDLE1_LOCATION_CONDITION,ADMINISTRATION_QUESTION},
+				new PermissionInfo[]{ADMIN_PERMISSION});
 		PrivilegedExceptionAction adminAction = (PrivilegedExceptionAction) new PrivilegedExceptionAction() {
 			public Object run() throws Exception {
 				System.getSecurityManager().checkPermission(new AdminPermission());
 				return null;
 			}
 		};
-		bundle1DoAction.invoke(null, new Object[]{adminAction});
 		
-		stopFramework();
-		startFramework(false);
-
+		
 		bundle1DoAction.invoke(null, new Object[]{adminAction});
 	}
+
+	public void testBasicNever() throws Exception {
+		startFramework(true);
+
+		stdinPrinter.println("never");
+
+		conditionalPermissionAdmin.addConditionalPermissionInfo(
+				new ConditionInfo[]{INTEGRATIONTESTS_BUNDLE1_LOCATION_CONDITION,ADMINISTRATION_QUESTION},
+				new PermissionInfo[]{ADMIN_PERMISSION});
+
+		PrivilegedExceptionAction adminAction = (PrivilegedExceptionAction) new PrivilegedExceptionAction() {
+			public Object run() throws Exception {
+				System.getSecurityManager().checkPermission(new AdminPermission());
+				return null;
+			}
+		};
+		
+		try {
+			bundle1DoAction.invoke(null, new Object[]{adminAction});
+			fail();
+		} catch (InvocationTargetException e) {
+			assertTrue(e.getCause() instanceof AccessControlException);
+		}
+	}
+
 }

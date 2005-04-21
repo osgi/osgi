@@ -18,8 +18,13 @@
 
 package org.osgi.impl.service.policy.userprompt;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.List;
 import java.util.ResourceBundle;
 import org.osgi.framework.Bundle;
 import org.osgi.service.condpermadmin.Condition;
@@ -34,14 +39,32 @@ import org.osgi.service.condpermadmin.Condition;
 public class UserPromptCondition extends
 		org.osgi.util.mobile.UserPromptCondition {
 	
+	public static String ONESHOT_STRING = "ONESHOT";
+	public static String SESSION_STRING = "SESSION";
+	public static String BLANKET_STRING = "BLANKET";
+	public static String NEVER_STRING = "NEVER";
+	
+	/**
+	 * All userprompt conditions are stored here, so that there are no duplicates.
+	 * The keys are strings as given by generateUniqueID, the values are the conditions themselves.
+	 */
+	static HashMap conditions;
+	
 	final Bundle bundle;
 	final String catalogName;
 	final String message;
+	final String defaultLevel;
+	final String levels;
+	final boolean oneshotAllowed;
+	final boolean sessionAllowed;
+	final boolean blanketAllowed;
 	
 	/**
-	 * Stores UserPrompts with key as created by generateUniqueID().
+	 * What is the choice the user made last time. Possible values "SESSION", "BLANKET", "NEVER",
+	 * or null, meaning there has been no choice yet. "ONESHOT" is not included, since even
+	 * if the user said yes to it, it has no consequence on subsequent prompts.
 	 */
-	HashMap userPrompts = new HashMap();
+	String status = null;
 	
 	/**
 	 * Create an identifier to use as storage key for a userprompt condition
@@ -55,12 +78,16 @@ public class UserPromptCondition extends
 	}
 
 	public boolean isEvaluated() {
-		return true;
+		return status!=null;
 	}
+	
 	public boolean isMutable() {
-		return false;
+		return status!=null;
+		// Our implementation doesn't have a separate management interface for setting permissions,
+		// so once the user chose for example "blanket", it will always stay that way.
 	}
-	public boolean isSatisfied() {
+
+	private String getLocalizedMessage() {
 		String localizedMessage;
 		if (message.startsWith("%")) {
 			String messageID = message.substring(1);
@@ -72,11 +99,69 @@ public class UserPromptCondition extends
 		} else {
 			localizedMessage = message;
 		}
+		return localizedMessage;
 		
-		System.out.println("question: "+localizedMessage);
-		return true;
 	}
+
+	private List getPossibleAnswers() {
+		ArrayList al = new ArrayList(5);
+		if (blanketAllowed) {
+			al.add("always");
+		}
+		if (sessionAllowed) {
+			al.add("session");
+		}
+		if (oneshotAllowed) {
+			al.add("yes");
+			al.add("no");
+		}
+		al.add("never");
+		return al;
+	}
+	
+	public boolean isSatisfied() {
+		if (status!=null) {
+			if (status.equals(BLANKET_STRING)||status.equals(SESSION_STRING)) return true;
+			if (status.equals(NEVER_STRING)) return false;
+		}
+
+		System.out.println("User Question:");
+		System.out.println(getLocalizedMessage());
+		List possibleAnswers = getPossibleAnswers();
+		System.out.println(possibleAnswers.toString());
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		String answer = null;
+		while (answer==null) {
+			try {
+				answer = reader.readLine();
+			}
+			catch (IOException e) {
+				// TODO do log and whatever
+				e.printStackTrace();
+				return false;
+			}
+			if (possibleAnswers.contains(answer)) break;
+			answer = null;
+		}
+		
+		// so we have an answer
+		if (answer.equals("always")) {
+			status = BLANKET_STRING;
+			return true;
+		}
+		if (answer.equals("session")) {
+			status = SESSION_STRING;
+			return true;
+		}
+		if (answer.equals("never")) {
+			status = NEVER_STRING;
+			return false;
+		}
+		throw new IllegalStateException("todo");
+	}
+	
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
+		System.out.println("multiple isSatisfied called!");
 		return false;
 	}
 
@@ -84,16 +169,62 @@ public class UserPromptCondition extends
 		this.bundle = bundle;
 		this.catalogName = catalogName;
 		this.message = message;
-	}
-
-	
-	public static class Factory implements org.osgi.util.mobile.UserPromptCondition.UserPromptConditionFactory {
-		public org.osgi.util.mobile.UserPromptCondition getInstance(Bundle bundle, String levels, String defaultLevel, String catalogName, String message) {
-			return new UserPromptCondition(bundle,levels,defaultLevel,catalogName,message);
+		this.defaultLevel = defaultLevel;
+		this.levels = levels;
+		
+		if (levels.equals("")) {
+			throw new IllegalArgumentException("Userpromt levels is empty string");
+		}
+		boolean oneshot = false;
+		boolean session = false;
+		boolean blanket = false;
+		String[] alevels = Splitter.split(levels,',',-1);
+		for(int i=0;i<alevels.length;i++) {
+			if (alevels[i].equals(ONESHOT_STRING)) { oneshot = true; }
+			else if (alevels[i].equals(SESSION_STRING)) { session = true; }
+			else if (alevels[i].equals(BLANKET_STRING)) { blanket = true; }
+			else throw new IllegalArgumentException("Unknown userprompt level: "+alevels[i]);
+		}
+		oneshotAllowed = oneshot;
+		sessionAllowed = session;
+		blanketAllowed = blanket;
+				
+		if (!defaultLevel.equals("") &&
+			!defaultLevel.equals(ONESHOT_STRING)&&
+			!defaultLevel.equals(SESSION_STRING)&&
+			!defaultLevel.equals(BLANKET_STRING)) 
+		{
+			throw new IllegalArgumentException("Unknown default userprompt level: "+defaultLevel);
+		}
+		
+		if ((!oneshotAllowed && defaultLevel.equals(ONESHOT_STRING)) ||
+			(!sessionAllowed && defaultLevel.equals(SESSION_STRING)) ||
+			(!blanketAllowed && defaultLevel.equals(BLANKET_STRING))) 
+		{
+			throw new IllegalArgumentException("Default userprompt level is not among possible levels: "+defaultLevel);
 		}
 	}
 
+	public static class Factory implements org.osgi.util.mobile.UserPromptCondition.UserPromptConditionFactory {
+		public org.osgi.util.mobile.UserPromptCondition getInstance(Bundle bundle, String levels, String defaultLevel, String catalogName, String message) {
+			String id = generateUniqueID(bundle,catalogName,message);
+			UserPromptCondition condition = (UserPromptCondition) conditions.get(id);
+			if (condition==null) {
+				condition = new UserPromptCondition(bundle,levels,defaultLevel,catalogName,message);
+				conditions.put(id,condition);
+			}
+			return condition;
+		}
+	}
 
+	public static void loadFromStorage() {
+		conditions = new HashMap();
+	}
+	
+	public static void saveToStorage() {
+		// TODO
+	}
+	
 	public static void deregisterMySelf() {
 		org.osgi.util.mobile.UserPromptCondition.setFactory(null);
 	}
