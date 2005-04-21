@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:component name="org.osgi.test.cases.component.tb4.NamedService"
+      xmlns:x="http://www.osgi.org/xmlns/scr/v1.0.0"
+      factory="org.osgi.test.cases.component.tb4.NamedService">
+    <implementation class="org.osgi.test.cases.component.tb4.impl.NamedServiceFactory" />
+	<service>
+		<provide interface="org.osgi.test.cases.component.tb4.NamedService"/>
+	</service>
+</x:component>

@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb4
+Bundle-SymbolicName: ${p}.tb4
+Bundle-Version: 1
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+Service-Component: org/osgi/test/cases/component/tb4/impl/namedservice.xml
+
+
