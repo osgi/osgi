@@ -75,7 +75,13 @@ public abstract class ApplicationHandle {
 		}
 	}
 
-	protected final ApplicationDescriptor getApplicationDescriptor() {
+	/**
+	 * Retrieves the <coed>ApplicationDescriptor</code> to which this 
+	 * <code>ApplicationHandle</code> belongs. 
+	 * 
+	 * @return The corresponding <code>ApplicationDescriptor</code>
+	 */
+	public final ApplicationDescriptor getApplicationDescriptor() {
 		return descriptor;
 	}
 

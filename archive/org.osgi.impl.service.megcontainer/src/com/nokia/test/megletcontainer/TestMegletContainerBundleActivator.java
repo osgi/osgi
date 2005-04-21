@@ -195,7 +195,8 @@ public class TestMegletContainerBundleActivator extends Object implements
 	}
 	
 	public ApplicationDescriptor getAppDesc( ApplicationHandle appHnd ) {
-		try {
+		return appHnd.getApplicationDescriptor();
+/*		try {
 			ServiceReference appHndRefs[] = bc.getServiceReferences( ApplicationHandle.class.getName(), 
 					"(" + ApplicationHandle.APPLICATION_PID + "=" + appHnd.getInstanceID() + ")" );
 		
@@ -216,7 +217,7 @@ public class TestMegletContainerBundleActivator extends Object implements
 		}catch( Exception e ) {
 			e.printStackTrace();
 			return null;
-		}
+		}*/
 	}
 	
 	public void bundleChanged(BundleEvent e) {
