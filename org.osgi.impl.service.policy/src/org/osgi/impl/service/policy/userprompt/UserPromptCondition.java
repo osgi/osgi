@@ -82,7 +82,7 @@ public class UserPromptCondition extends
 	}
 	
 	public boolean isMutable() {
-		return status!=null;
+		return status==null;
 		// Our implementation doesn't have a separate management interface for setting permissions,
 		// so once the user chose for example "blanket", it will always stay that way.
 	}
@@ -118,7 +118,7 @@ public class UserPromptCondition extends
 		al.add("never");
 		return al;
 	}
-	
+
 	public boolean isSatisfied() {
 		if (status!=null) {
 			if (status.equals(BLANKET_STRING)||status.equals(SESSION_STRING)) return true;
@@ -143,7 +143,17 @@ public class UserPromptCondition extends
 			if (possibleAnswers.contains(answer)) break;
 			answer = null;
 		}
-		
+
+		return setAnswer(answer);
+	}
+	
+	/**
+	 * figures out from a user answer, whether the isSatisfied() method should return
+	 * true or false
+	 * @param answer
+	 * @return
+	 */
+	boolean setAnswer(String answer) {
 		// so we have an answer
 		if (answer.equals("always")) {
 			status = BLANKET_STRING;
@@ -161,8 +171,65 @@ public class UserPromptCondition extends
 	}
 	
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
-		System.out.println("multiple isSatisfied called!");
-		return false;
+		System.out.println("multiple isSatisfied called! "+context);
+
+		String[] questions = new String[conds.length];
+		List[] possibleAnswers = new List[conds.length];
+		String[] answers = new String[conds.length];
+		
+		// first, figure out what to prompt
+		for(int i=0;i<conds.length;i++) {
+			UserPromptCondition cond = (UserPromptCondition) conds[i];
+			if (cond.isEvaluated()) throw new IllegalStateException("This should not be called");
+			questions[i]=cond.getLocalizedMessage();
+			possibleAnswers[i] = cond.getPossibleAnswers();
+		}
+		
+		// then, do the questions
+		System.out.println("User Question (answer with comma-separated list):");
+		for(int i=0;i<conds.length;i++) {
+			System.out.print("("+(i+1)+") ");
+			System.out.print(questions[i]);
+			System.out.print(" ");
+			System.out.println(possibleAnswers[i]);
+		}
+
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		String answer = null;
+		while (answer==null) {
+			try {
+				answer = reader.readLine();
+			}
+			catch (IOException e) {
+				// TODO do log and whatever
+				e.printStackTrace();
+				return false;
+			}
+			answers = Splitter.split(answer,',',-1);
+			if (answers.length!=conds.length) {
+				System.err.println("You must answer all "+conds.length+" questions once, with a comma-separated list, no spaces");
+				answer = null;
+				continue;
+			}
+			for(int i=0;i<answers.length;i++) {
+				if (!possibleAnswers[i].contains(answers[i])) {
+					System.err.println("Answer nr. "+i+" \""+answers[i]+"\" is not valid");
+					answer = null;
+					continue;
+				}
+			}
+			break;
+		}
+		
+		// then evaluate all of them, and return whether all are satisfied
+		boolean all_satisfied = true;
+		for(int i=0;i<conds.length;i++) {
+			UserPromptCondition cond = (UserPromptCondition) conds[i];
+			boolean satisfied = cond.setAnswer(answers[i]);
+			all_satisfied&=satisfied;
+		}
+		
+		return all_satisfied;
 	}
 
 	protected UserPromptCondition(Bundle bundle, String levels, String defaultLevel, String catalogName, String message) {
@@ -173,7 +240,7 @@ public class UserPromptCondition extends
 		this.levels = levels;
 		
 		if (levels.equals("")) {
-			throw new IllegalArgumentException("Userpromt levels is empty string");
+			throw new IllegalArgumentException("Userprompt levels is empty string");
 		}
 		boolean oneshot = false;
 		boolean session = false;
