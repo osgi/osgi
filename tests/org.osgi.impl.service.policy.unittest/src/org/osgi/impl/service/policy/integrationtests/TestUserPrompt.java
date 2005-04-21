@@ -150,4 +150,44 @@ public class TestUserPrompt extends IntegratedTest {
 		
 	}
 
+	public void testNeverMultiple() throws Exception {
+		startFramework(true);
+
+		conditionalPermissionAdmin.addConditionalPermissionInfo(
+				new ConditionInfo[]{INTEGRATIONTESTS_BUNDLE1_LOCATION_CONDITION,ADMINISTRATION_QUESTION},
+				new PermissionInfo[]{ADMIN_PERMISSION});
+
+		PrivilegedExceptionAction adminAction = (PrivilegedExceptionAction) new PrivilegedExceptionAction() {
+			public Object run() throws Exception {
+				System.getSecurityManager().checkPermission(new AdminPermission());
+				return null;
+			}
+		};
+
+		stdinPrinter.println("never");
+		
+		try {
+			bundle1DoAction.invoke(null, new Object[]{adminAction});
+			fail();
+		} catch (InvocationTargetException e) {}
+
+		try {
+			bundle1DoAction.invoke(null, new Object[]{adminAction});
+			fail();
+		} catch (InvocationTargetException e) {}
+
+		stopFramework();
+		startFramework(false);
+
+		try {
+			bundle1DoAction.invoke(null, new Object[]{adminAction});
+			fail();
+		} catch (InvocationTargetException e) {}
+
+		try {
+			bundle1DoAction.invoke(null, new Object[]{adminAction});
+			fail();
+		} catch (InvocationTargetException e) {}
+	}
+
 }
