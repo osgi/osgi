@@ -1,7 +1,6 @@
 package org.osgi.service.application;
 
 import org.osgi.framework.Constants;
-import org.osgi.service.application.ApplicationDescriptor.Delegate;
 
 /**
  * ApplicationHandle is an OSGi service interface which represents an instance
