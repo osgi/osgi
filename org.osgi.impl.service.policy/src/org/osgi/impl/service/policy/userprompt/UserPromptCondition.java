@@ -130,11 +130,10 @@ public class UserPromptCondition
 		}
 		if (sessionAllowed) {
 			al.add("session");
+			al.add("nosession");
 		}
 		if (oneshotAllowed) {
 			al.add("yes");
-		}
-		if (sessionAllowed||oneshotAllowed) {
 			al.add("no");
 		}
 		al.add("never");
@@ -144,7 +143,7 @@ public class UserPromptCondition
 	public boolean isSatisfied() {
 		if (status!=null) {
 			if (status.equals(BLANKET_STRING)||status.equals(SESSION_STRING)) return true;
-			if (status.equals(NEVER_STRING)) return false;
+			if (status.equals(NEVER_STRING)||status.equals(NOSESSION_STRING)) return false;
 		}
 
 		System.out.println("User Question:");
@@ -186,6 +185,9 @@ public class UserPromptCondition
 			satisfied = true;
 		} else if (answer.equals("never")) {
 			status = NEVER_STRING;
+			satisfied = false;
+		} else if (answer.equals("nosession")) {
+			status = NOSESSION_STRING;
 			satisfied = false;
 		} else
 			throw new IllegalStateException("todo");
@@ -348,6 +350,7 @@ public class UserPromptCondition
 		for(Iterator i = conditions.values().iterator();i.hasNext();) {
 			UserPromptCondition cond = (UserPromptCondition) i.next();
 			if (SESSION_STRING.equals(cond.status)) cond.status = null;
+			if (NOSESSION_STRING.equals(cond.status)) cond.status = null;
 		}
 		org.osgi.util.mobile.UserPromptCondition.setFactory(new Factory());
 	}
