@@ -16,7 +16,7 @@ import org.osgi.service.log.LogService;
  * <p>
  * This class provides many convenience methods which cannot be overridden.
  */
-public abstract class Meglet implements EventHandler, ComponentInstance {
+public abstract class Meglet implements EventHandler {
 
 	/**
 	 * Stores the component context received in the activate() method.
@@ -58,32 +58,50 @@ public abstract class Meglet implements EventHandler, ComponentInstance {
 	 * @param args
 	 *            The startup parameters for the application instance as
 	 *            key-value pairs.
-	 * @param stateStorage
-	 *            the input stream from where the application can load its saved
-	 *            inner state. It is null if a brand new instance of the Meglet
-	 *            is started, so no previously saved state exist to be loaded.
-	 *            It is not mandated to close the stream.
 	 * 
 	 * @throws Exception
 	 *             if any error occures
 	 */
-	public void start(Map args, InputStream stateStorage) throws Exception {
+	public void start(Map args) throws Exception {
+	}
+
+	/**
+	 * This method is called by the framework to resume the suspended application
+	 * instance. Must not be called directly.
+	 * 
+	 * @param stateStorage
+	 *            the input stream from where the application can load its saved
+	 *            inner state. It is not mandated to close the stream.
+	 * 
+	 * @throws Exception
+	 *             if any error occures
+	 */
+	public void resume(InputStream stateStorage) throws Exception {
+	}
+
+	/**
+	 * This method is called by the framework to suspend this application instance.
+	 * Must not be called directly. The method must free all the used resources
+	 * and the instance must be stopped.
+	 * 
+	 * @param stateStorage
+	 *            the output stream to where the application can save its inner
+	 *            state. It is not mandated to close the stream.
+	 * 
+	 * @throws Exception
+	 *             if any error occures
+	 */
+	public void suspend(OutputStream stateStorage) throws Exception {
 	}
 
 	/**
 	 * This method is called by the framework to stop this application instance.
 	 * Must not be called directly. The method must free all the used resources.
 	 * 
-	 * @param stateStorage
-	 *            the output stream to where the application can save its inner
-	 *            state. If it is null then the Meglet instance is stopped
-	 *            permanently so saving its inner state is not expected. It is
-	 *            not mandated to close the stream.
-	 * 
 	 * @throws Exception
 	 *             if any error occures
 	 */
-	public void stop(OutputStream stateStorage) throws Exception {
+	public void stop() throws Exception {
 	}
 
 	/**
@@ -296,14 +314,20 @@ public abstract class Meglet implements EventHandler, ComponentInstance {
 	}
 	
 	private final void startApplication( Map args, InputStream stateStorage ) throws Exception {
-		start( args, stateStorage );
+		if( stateStorage == null )
+			start( args );
+		else
+			resume( stateStorage );
 	}
 
 	private final void stopApplication( OutputStream stateStorage ) throws Exception {
 		listenedTopics.clear();
 		changeServiceRegistration();
 
-		stop( stateStorage );
+		if( stateStorage == null )
+			stop();
+		else
+			suspend( stateStorage );
 
 		if( eventAdminServiceRef != null ) {
 			bc.ungetService( eventAdminServiceRef );

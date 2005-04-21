@@ -33,34 +33,37 @@ public class TestApplication extends Meglet
     super();    
   }
   
-  public void start( Map args, InputStream stateStorage ) throws Exception
+  public void start( Map args ) throws Exception
   {
     if( args != null )
       fileName = (String)args.get( "TestResult" );
     
-    if( stateStorage != null ) {
-      ObjectInputStream ois = new ObjectInputStream( stateStorage );
-      storedString = (String)ois.readObject();
-    }   
-    
-    if( storedString == null )
-      writeResult( "START" );
-    else
-      writeResult( "RESUME:" + storedString );
+    writeResult( "START" );
   }
 
-  public void stop( OutputStream stateStorage ) throws Exception
+  public void stop() throws Exception
   {
-    if( stateStorage != null ) {
-      storedString = "StorageTestString";      
-      ObjectOutputStream ois = new ObjectOutputStream( stateStorage );
-      ois.writeObject( storedString );
-      
-      writeResult( "SUSPEND:" + storedString );
-    }   
-    else
-      writeResult( "STOP" );
+    writeResult( "STOP" );
   }
+
+  public void suspend( OutputStream stateStorage ) throws Exception
+	{
+    storedString = "StorageTestString";      
+    ObjectOutputStream ois = new ObjectOutputStream( stateStorage );
+    ois.writeObject( fileName );
+    ois.writeObject( storedString );
+    
+    writeResult( "SUSPEND:" + storedString );	
+	}
+  
+  public void resume( InputStream stateStorage ) throws Exception
+	{
+    ObjectInputStream ois = new ObjectInputStream( stateStorage );
+    fileName = (String)ois.readObject();
+    storedString = (String)ois.readObject();
+    writeResult( "RESUME:" + storedString );  	
+	}
+  
   
   public void handleEvent(Event event)
   {
@@ -77,22 +80,5 @@ public class TestApplication extends Meglet
       stream.write( result.getBytes() );
       stream.close();      
     }catch( IOException e ) {}
-  }
-
-  /**
-   * 
-   * @see org.osgi.service.component.ComponentInstance#dispose()
-   */
-  public void dispose() {
-  	// TODO Auto-generated method stub	
-  }
-
-  /**
-   * @return
-   * @see org.osgi.service.component.ComponentInstance#getInstance()
-   */
-  public Object getInstance() {
-  	// TODO Auto-generated method stub
-  	return null;
   }
 }
