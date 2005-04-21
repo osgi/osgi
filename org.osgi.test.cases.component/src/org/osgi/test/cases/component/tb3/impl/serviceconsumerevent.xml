@@ -14,4 +14,15 @@
 		bind="bindServiceProvider"
 		unbind="unbindServiceProvider"
 	/>
+
+  <reference name="namedService"
+		interface="org.osgi.test.cases.component.tb4.NamedService"
+		cardinality="0..n"
+		policy="dynamic"
+		bind="bindObject"
+		unbind="unbindObject"
+	/>
 </scr:component>
+
+
+

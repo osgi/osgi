@@ -28,6 +28,7 @@
 package org.osgi.test.cases.component.tb3.impl;
 
 import java.util.Dictionary;
+import java.util.Hashtable;
 
 import org.osgi.test.cases.component.tb1.ServiceProvider;
 import org.osgi.test.cases.component.tb3.ServiceConsumerEvent;
@@ -40,14 +41,30 @@ public class ServiceConsumerEventImpl implements ServiceConsumerEvent {
 
   private ServiceProvider serviceProvider;
 
+  private Hashtable properties;
+  int count = 0;
+
   public ServiceConsumerEventImpl() {
+    properties = new Hashtable();
+    properties.put("count", new Integer(count));
   }
 
   protected void bindServiceProvider(ServiceProvider serviceProvider) {
     this.serviceProvider = serviceProvider;
   }
+
   protected void unbindServiceProvider(ServiceProvider serviceProvider) {
     this.serviceProvider = null;
+  }
+
+  public synchronized void bindObject(Object o) {
+    count++;
+    properties.put("count", new Integer(count));
+  }
+
+  public synchronized void unbindObject(Object o) {
+    count--;
+    properties.put("count", new Integer(count));
   }
 
   public TestObject getTestObject() {
@@ -55,6 +72,6 @@ public class ServiceConsumerEventImpl implements ServiceConsumerEvent {
   }
   
   public Dictionary getProperties() {
-    return null;
+    return properties;
   }
 }
