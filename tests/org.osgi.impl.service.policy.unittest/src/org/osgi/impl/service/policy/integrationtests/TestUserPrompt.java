@@ -21,12 +21,11 @@ package org.osgi.impl.service.policy.integrationtests;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
-import java.security.AccessControlException;
 import java.security.AllPermission;
 import java.security.PrivilegedExceptionAction;
+
 import org.osgi.framework.AdminPermission;
 import org.osgi.service.condpermadmin.BundleLocationCondition;
 import org.osgi.service.condpermadmin.ConditionInfo;
@@ -87,8 +86,6 @@ public class TestUserPrompt extends IntegratedTest {
 	public void testBasicAlways() throws Exception {
 		startFramework(true);
 
-		stdinPrinter.println("always");
-
 		conditionalPermissionAdmin.addConditionalPermissionInfo(
 				new ConditionInfo[]{INTEGRATIONTESTS_BUNDLE1_LOCATION_CONDITION,ADMINISTRATION_QUESTION},
 				new PermissionInfo[]{ADMIN_PERMISSION});
@@ -99,6 +96,7 @@ public class TestUserPrompt extends IntegratedTest {
 			}
 		};
 		
+		stdinPrinter.println("always");
 		
 		bundle1DoAction.invoke(null, new Object[]{adminAction});
 	}
@@ -106,8 +104,6 @@ public class TestUserPrompt extends IntegratedTest {
 	public void testBasicNever() throws Exception {
 		startFramework(true);
 
-		stdinPrinter.println("never");
-
 		conditionalPermissionAdmin.addConditionalPermissionInfo(
 				new ConditionInfo[]{INTEGRATIONTESTS_BUNDLE1_LOCATION_CONDITION,ADMINISTRATION_QUESTION},
 				new PermissionInfo[]{ADMIN_PERMISSION});
@@ -118,13 +114,13 @@ public class TestUserPrompt extends IntegratedTest {
 				return null;
 			}
 		};
+
+		stdinPrinter.println("never");
 		
 		try {
 			bundle1DoAction.invoke(null, new Object[]{adminAction});
 			fail();
-		} catch (InvocationTargetException e) {
-			assertTrue(e.getCause() instanceof AccessControlException);
-		}
+		} catch (InvocationTargetException e) {}
 	}
 
 }
