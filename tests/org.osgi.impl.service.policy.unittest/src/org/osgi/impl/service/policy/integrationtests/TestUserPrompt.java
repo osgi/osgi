@@ -214,13 +214,43 @@ public class TestUserPrompt extends IntegratedTest {
 		stopFramework();
 		startFramework(false);
 
-		stdinPrinter.println("never");
+		stdinPrinter.println("nosession");
 		
 		try {
 			bundle1DoAction.invoke(null, new Object[]{adminAction});
 			fail();
 		} catch (InvocationTargetException e) {}
 
+		try {
+			bundle1DoAction.invoke(null, new Object[]{adminAction});
+			fail();
+		} catch (InvocationTargetException e) {}
+
+		stopFramework();
+		startFramework(false);
+
+		stdinPrinter.println("session");
+		
+		bundle1DoAction.invoke(null, new Object[]{adminAction});
+		bundle1DoAction.invoke(null, new Object[]{adminAction});
+
+		stopFramework();
+		startFramework(false);
+
+		stdinPrinter.println("never");
+		
+		try {
+			bundle1DoAction.invoke(null, new Object[]{adminAction});
+			fail();
+		} catch (InvocationTargetException e) {}
+		
+		stopFramework();
+		startFramework(false);
+
+		try {
+			bundle1DoAction.invoke(null, new Object[]{adminAction});
+			fail();
+		} catch (InvocationTargetException e) {}
 	}
 
 
