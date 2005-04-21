@@ -62,6 +62,7 @@ public class UserPromptCondition
 	public static String SESSION_STRING = "SESSION";
 	public static String BLANKET_STRING = "BLANKET";
 	public static String NEVER_STRING = "NEVER";
+	public static String NOSESSION_STRING = "NOSESSION";
 	
 	/**
 	 * All userprompt conditions are stored here, so that there are no duplicates.
@@ -132,6 +133,8 @@ public class UserPromptCondition
 		}
 		if (oneshotAllowed) {
 			al.add("yes");
+		}
+		if (sessionAllowed||oneshotAllowed) {
 			al.add("no");
 		}
 		al.add("never");
@@ -191,8 +194,6 @@ public class UserPromptCondition
 	}
 	
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
-		System.out.println("multiple isSatisfied called! "+context);
-
 		String[] questions = new String[conds.length];
 		List[] possibleAnswers = new List[conds.length];
 		String[] answers = new String[conds.length];

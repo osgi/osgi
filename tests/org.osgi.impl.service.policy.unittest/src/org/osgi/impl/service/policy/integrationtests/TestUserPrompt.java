@@ -41,6 +41,8 @@ import org.osgi.util.mobile.UserPromptCondition;
 public class TestUserPrompt extends IntegratedTest {
 	public static final ConditionInfo ADMINISTRATION_QUESTION = new ConditionInfo(UserPromptCondition.class.getName(),
 			new String[] {"BLANKET","","org.osgi.impl.service.policy.integrationtests.messages.userprompt","%ADMIN_TASK"});
+	public static final ConditionInfo ADMINISTRATION_SESSION_QUESTION = new ConditionInfo(UserPromptCondition.class.getName(),
+			new String[] {"SESSION","","org.osgi.impl.service.policy.integrationtests.messages.userprompt","%ADMIN_TASK"});
 	public static final ConditionInfo INTEGRATIONTESTS_BUNDLE1_LOCATION_CONDITION =
 		new ConditionInfo(BundleLocationCondition.class.getName(),new String[]{INTEGRATIONTESTS_BUNDLE1_JAR});
 	public static final PermissionInfo ALL_PERMISSION = new PermissionInfo(AllPermission.class.getName(),"*","*");
@@ -189,5 +191,37 @@ public class TestUserPrompt extends IntegratedTest {
 			fail();
 		} catch (InvocationTargetException e) {}
 	}
+
+	public void testBasicSession() throws Exception {
+		startFramework(true);
+
+		conditionalPermissionAdmin.addConditionalPermissionInfo(
+				new ConditionInfo[]{INTEGRATIONTESTS_BUNDLE1_LOCATION_CONDITION,ADMINISTRATION_SESSION_QUESTION},
+				new PermissionInfo[]{ADMIN_PERMISSION});
+
+		PrivilegedExceptionAction adminAction = (PrivilegedExceptionAction) new PrivilegedExceptionAction() {
+			public Object run() throws Exception {
+				System.getSecurityManager().checkPermission(new AdminPermission());
+				return null;
+			}
+		};
+
+		stdinPrinter.println("session");
+		
+		bundle1DoAction.invoke(null, new Object[]{adminAction});
+		bundle1DoAction.invoke(null, new Object[]{adminAction});
+
+		stopFramework();
+		startFramework(false);
+
+		stdinPrinter.println("never");
+		
+		try {
+			bundle1DoAction.invoke(null, new Object[]{adminAction});
+			fail();
+		} catch (InvocationTargetException e) {}
+
+	}
+
 
 }
