@@ -19,26 +19,45 @@
 package org.osgi.impl.service.policy.userprompt;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
+
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.service.condpermadmin.Condition;
 
 /**
  *
  * Basic console userprompt implementation.
- * TODO: this is currently just a stub!
  * 
  * @version $Revision$
  */
-public class UserPromptCondition extends
-		org.osgi.util.mobile.UserPromptCondition {
-	
+public class UserPromptCondition 
+		extends org.osgi.util.mobile.UserPromptCondition 
+		implements Serializable
+{
+
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long	serialVersionUID	= 3834593218389226802L;
+
+	private static BundleContext	context;
+
 	public static String ONESHOT_STRING = "ONESHOT";
 	public static String SESSION_STRING = "SESSION";
 	public static String BLANKET_STRING = "BLANKET";
@@ -50,7 +69,7 @@ public class UserPromptCondition extends
 	 */
 	static HashMap conditions;
 	
-	final Bundle bundle;
+	final long bundleID;
 	final String catalogName;
 	final String message;
 	final String defaultLevel;
@@ -155,19 +174,20 @@ public class UserPromptCondition extends
 	 */
 	boolean setAnswer(String answer) {
 		// so we have an answer
+		boolean satisfied;
 		if (answer.equals("always")) {
 			status = BLANKET_STRING;
-			return true;
-		}
-		if (answer.equals("session")) {
+			satisfied = true;
+		} else if (answer.equals("session")) {
 			status = SESSION_STRING;
-			return true;
-		}
-		if (answer.equals("never")) {
+			satisfied = true;
+		} else if (answer.equals("never")) {
 			status = NEVER_STRING;
-			return false;
-		}
-		throw new IllegalStateException("todo");
+			satisfied = false;
+		} else
+			throw new IllegalStateException("todo");
+		saveToStorage();
+		return satisfied;
 	}
 	
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
@@ -179,7 +199,8 @@ public class UserPromptCondition extends
 		
 		// first, figure out what to prompt
 		for(int i=0;i<conds.length;i++) {
-			UserPromptCondition cond = (UserPromptCondition) conds[i];
+			org.osgi.util.mobile.UserPromptCondition ucond = (org.osgi.util.mobile.UserPromptCondition) conds[i];
+			UserPromptCondition cond = (UserPromptCondition) org.osgi.util.mobile.UserPromptCondition.unWrap(ucond);
 			if (cond.isEvaluated()) throw new IllegalStateException("This should not be called");
 			questions[i]=cond.getLocalizedMessage();
 			possibleAnswers[i] = cond.getPossibleAnswers();
@@ -224,7 +245,8 @@ public class UserPromptCondition extends
 		// then evaluate all of them, and return whether all are satisfied
 		boolean all_satisfied = true;
 		for(int i=0;i<conds.length;i++) {
-			UserPromptCondition cond = (UserPromptCondition) conds[i];
+			org.osgi.util.mobile.UserPromptCondition ucond = (org.osgi.util.mobile.UserPromptCondition) conds[i];
+			UserPromptCondition cond = (UserPromptCondition) org.osgi.util.mobile.UserPromptCondition.unWrap(ucond);
 			boolean satisfied = cond.setAnswer(answers[i]);
 			all_satisfied&=satisfied;
 		}
@@ -233,7 +255,7 @@ public class UserPromptCondition extends
 	}
 
 	protected UserPromptCondition(Bundle bundle, String levels, String defaultLevel, String catalogName, String message) {
-		this.bundle = bundle;
+		this.bundleID = bundle.getBundleId();
 		this.catalogName = catalogName;
 		this.message = message;
 		this.defaultLevel = defaultLevel;
@@ -284,19 +306,48 @@ public class UserPromptCondition extends
 		}
 	}
 
-	public static void loadFromStorage() {
-		conditions = new HashMap();
+	public static void setContext(BundleContext context) {
+		UserPromptCondition.context = context;
 	}
 	
 	public static void saveToStorage() {
-		// TODO
+		// TODO: this is a rather unsophisticated method....
+		File stateFile = context.getDataFile("state");
+		try {
+			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(stateFile));
+			oos.writeObject(conditions);
+			oos.close();
+		}
+		catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return;
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return;
+		}
 	}
 	
 	public static void deregisterMySelf() {
 		org.osgi.util.mobile.UserPromptCondition.setFactory(null);
 	}
 
-	public static void registerMySelf() {
+	public static void registerMySelf() throws StreamCorruptedException, IOException, ClassNotFoundException {
+		File stateFile = context.getDataFile("state");
+		try {
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(stateFile));
+			conditions = (HashMap) ois.readObject();
+		} catch (FileNotFoundException e) {
+			conditions = new HashMap();
+		}
+		
+		// this counts as a new session, so we have to delete every "session" permission
+		for(Iterator i = conditions.values().iterator();i.hasNext();) {
+			UserPromptCondition cond = (UserPromptCondition) i.next();
+			if (SESSION_STRING.equals(cond.status)) cond.status = null;
+		}
 		org.osgi.util.mobile.UserPromptCondition.setFactory(new Factory());
 	}
 }
