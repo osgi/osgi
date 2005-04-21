@@ -122,5 +122,32 @@ public class TestUserPrompt extends IntegratedTest {
 			fail();
 		} catch (InvocationTargetException e) {}
 	}
+	
+	public void testAlwaysMultiple() throws Exception {
+		startFramework(true);
+
+		conditionalPermissionAdmin.addConditionalPermissionInfo(
+				new ConditionInfo[]{INTEGRATIONTESTS_BUNDLE1_LOCATION_CONDITION,ADMINISTRATION_QUESTION},
+				new PermissionInfo[]{ADMIN_PERMISSION});
+		PrivilegedExceptionAction adminAction = (PrivilegedExceptionAction) new PrivilegedExceptionAction() {
+			public Object run() throws Exception {
+				System.getSecurityManager().checkPermission(new AdminPermission());
+				return null;
+			}
+		};
+		
+		stdinPrinter.println("always");
+		
+		bundle1DoAction.invoke(null, new Object[]{adminAction});
+		
+		bundle1DoAction.invoke(null, new Object[]{adminAction});
+		
+		stopFramework();
+		startFramework(false);
+
+		// should be stored
+		bundle1DoAction.invoke(null, new Object[]{adminAction});
+		
+	}
 
 }
