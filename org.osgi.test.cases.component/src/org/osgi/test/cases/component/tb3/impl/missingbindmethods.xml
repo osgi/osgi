@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- bad component - defines only bind, but doesn't define unbind -->
+<scr:component name="org.osgi.test.cases.component.tb3.MissingBindMethods"
+	    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
+    <implementation class="org.osgi.test.cases.component.tb3.impl.MissingBindMethodsImpl"/>
+	<service>
+		<provide interface="org.osgi.test.cases.component.tb3.MissingBindMethods"/>
+	</service>
+
+  <reference name="serviceProvider"
+		interface="org.osgi.test.cases.component.tb1.ServiceProvider"
+		cardinality="1..1"
+		policy="static"
+		target="(component.name=org.osgi.test.cases.component.tb1.ServiceProvider)"
+		bind="bindServiceProvider"
+	/>
+</scr:component>
