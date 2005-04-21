@@ -2,8 +2,6 @@ package org.osgi.service.application;
 
 import java.util.Map;
 
-import org.osgi.framework.ServiceReference;
-
 /**
  * It is allowed to schedule an application based on a specific event.
  * ScheduledApplication service keeps the scheduling information. When the
