@@ -18,10 +18,16 @@
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.File;
+import java.io.FilePermission;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.AccessControlContext;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -38,6 +44,7 @@ import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 import org.osgi.service.permissionadmin.PermissionAdmin;
+import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class DeploymentSessionImpl implements DeploymentSession {
@@ -86,7 +93,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     }
 
     DeploymentSessionImpl(DeploymentPackageImpl srcDp, DeploymentPackageImpl targetDp, int action,
-            Logger logger, BundleContext context) 
+            Logger logger, final BundleContext context) 
     {
         this.srcDp = srcDp;
         this.targetDp = targetDp;
@@ -97,9 +104,66 @@ public class DeploymentSessionImpl implements DeploymentSession {
         trackPerm = new TrackerPerm();
         trackCondPerm = new TrackerCondPerm();
         
-        fwBundleDir = (String) context.getBundle().getHeaders().
-        	get(DAConstants.FW_BUNDLES_DIR);
+        AccessController.doPrivileged(new PrivilegedAction() {
+            public Object run() {
+                fwBundleDir = (String) context.getBundle().getHeaders().
+            	get(DAConstants.FW_BUNDLES_DIR);
+                return null;
+            }});
+        
         logger.log(Logger.LOG_INFO, "Framework's bundles dir: " + fwBundleDir);
+    }
+
+    private Hashtable setFilePermissionForCustomizers() {
+        Hashtable oldPerms = new Hashtable();
+        ServiceReference sref = trackPerm.getServiceReference();
+        if (null == sref)
+            return oldPerms;
+        
+        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            if (be.isCustomizer())
+                setFilePermissionForCustomizer(be, oldPerms);
+        }
+        
+        return oldPerms;
+    }
+
+    private void setFilePermissionForCustomizer(BundleEntry beCust, Hashtable oldPerms) {
+        String location = DeploymentAdminImpl.location(beCust.getSymbName(), 
+                beCust.getVersion());
+        PermissionAdmin pa = (PermissionAdmin) trackPerm.getService();
+        
+        PermissionInfo[] old = pa.getPermissions(location);
+        if (null != old)
+            oldPerms.put(location, old);
+        
+        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            String rootDir = fwBundleDir + "/" + be.getId() + "/**";
+            pa.setPermissions(location, new PermissionInfo[] {
+                    new PermissionInfo(FilePermission.class.getName(), rootDir, 
+                            "read, write, execute, delete")});
+        }
+    }
+
+    private void resetFilePermissionForCustomizers(Hashtable oldPerms) {
+        ServiceReference sref = trackPerm.getServiceReference();
+        if (null == sref)
+            return;
+        
+        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            if (be.isCustomizer())
+                resetFilePermissionForCustomizer(be, oldPerms);
+        }
+    }
+
+    private void resetFilePermissionForCustomizer(BundleEntry beCust, Hashtable oldPerms) {
+        String location = DeploymentAdminImpl.location(beCust.getSymbName(), 
+                beCust.getVersion());
+        PermissionAdmin pa = (PermissionAdmin) trackPerm.getService();
+        pa.setPermissions(location, (PermissionInfo[]) oldPerms.get(location));
     }
 
     /**
@@ -156,12 +220,6 @@ public class DeploymentSessionImpl implements DeploymentSession {
         for (Iterator iter = bes.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             if (be.getId() == b.getBundleId()) {
-                ServiceReference sref = trackPerm.getServiceReference();
-                if (null != sref) {
-                    PermissionAdmin pa = (PermissionAdmin) trackPerm.getService();
-                    // TODO
-                }
-                               
                 String dir = fwBundleDir + "/" + b.getBundleId() + "/data";
                 return new File(dir);
             }
@@ -178,7 +236,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
             transaction.start();
             stopBundles();
             processBundles(wjis);
+            Hashtable oldPerms = setFilePermissionForCustomizers();
             startCustomizers();
+            resetFilePermissionForCustomizers(oldPerms);
             processResources(wjis);
             dropResources();
             dropBundles();
@@ -248,9 +308,18 @@ public class DeploymentSessionImpl implements DeploymentSession {
         }
     }
     
-    private void startBundle(Bundle b) throws BundleException {
-        if (b.getState() != Bundle.ACTIVE)
-            b.start();
+    private void startBundle(final Bundle b) throws BundleException {
+        try {
+            AccessController.doPrivileged(new PrivilegedExceptionAction() {
+                public Object run() throws Exception {
+                    if (b.getState() != Bundle.ACTIVE)
+                        b.start();
+                    return null;
+                }});
+        }
+        catch (PrivilegedActionException e) {
+            throw (BundleException) e.getException();
+        }
         transaction.addRecord(new TransactionRecord(Transaction.STARTBUNDLE, b));
     }
 
@@ -265,8 +334,17 @@ public class DeploymentSessionImpl implements DeploymentSession {
         }
     }
     
-    private void stopBundle(Bundle b) throws BundleException {
-        b.stop();
+    private void stopBundle(final Bundle b) throws BundleException {
+    	try {
+            AccessController.doPrivileged(new PrivilegedExceptionAction() {
+                public Object run() throws Exception {
+                    b.stop();
+                    return null;
+                }});
+        }
+        catch (PrivilegedActionException e) {
+            throw (BundleException) e.getException();
+        }
         transaction.addRecord(new TransactionRecord(Transaction.STOPBUNDLE, b));
     }
 
@@ -458,28 +536,53 @@ public class DeploymentSessionImpl implements DeploymentSession {
         return ret;
     }
 
-    private Bundle installBundle(BundleEntry be, InputStream is)
+    private Bundle installBundle(BundleEntry be, final InputStream is)
     		throws BundleException
     {
-        Bundle b = context.installBundle(be.getSymbName(), is);
-		be.setId(b.getBundleId());
+        final String location = DeploymentAdminImpl.location(be.getSymbName(), 
+                be.getVersion());
+        Bundle b;
+        try {
+            b = (Bundle) AccessController.doPrivileged(new PrivilegedExceptionAction() {
+                public Object run() throws Exception {
+                    return context.installBundle(location, is);
+                }});
+        }
+        catch (PrivilegedActionException e) {
+            throw (BundleException) e.getException();
+        }
+        be.setId(b.getBundleId());
 		transaction.addRecord(new TransactionRecord(Transaction.INSTALLBUNDLE, b));
 		return b;
     }
     
-    private Bundle updateBundle(BundleEntry be, InputStream is)
+    private Bundle updateBundle(BundleEntry be, final InputStream is)
 			throws BundleException 
     {
-        Bundle[] bundles = context.getBundles();
+        final String location = DeploymentAdminImpl.location(be.getSymbName(),
+                be.getVersion());
+        final Bundle[] bundles = context.getBundles();
         for (int i = 0; i < bundles.length; i++) {
-            Bundle b = bundles[i];
-            if (b.getLocation().equals(be.getSymbName())) {
-                // TODO use framework backdoor
-                b.update(is);
-                
+            final Bundle b = bundles[i];
+            Boolean found;
+           	try {
+                found = (Boolean) AccessController.doPrivileged(new PrivilegedExceptionAction() {
+                    public Object run() throws BundleException {
+                        if (b.getLocation().equals(location)) {
+                            // TODO use framework backdoor for transactionality
+                            b.update(is);
+                            return new Boolean(true);
+                        }
+                        return new Boolean(false);
+                    }});
+            }
+            catch (PrivilegedActionException e) {
+                throw (BundleException) e.getException();
+            }
+            if (found.booleanValue()) { 
                 transaction.addRecord(new TransactionRecord(Transaction.UPDATEBUNDLE, b));
-                be.setId(b.getBundleId());
-                return b;
+            	be.setId(b.getBundleId());
+            	return b;
             }
         }
         return null;

@@ -25,7 +25,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.security.AccessController;
 import java.security.Permission;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -190,19 +193,28 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
      * Saves persistent data.
      */
     private synchronized void save() throws IOException {
-        File f = context.getDataFile(this.getClass().getName() + ".obj");
+        final File f = context.getDataFile(this.getClass().getName() + ".obj");
         if (null == f) {
             logger.log(Logger.LOG_WARNING, "Platform does not have file system support. " + 
                     "Deployment packages cannot be persisted.");
             return;
         }
         
-        FileOutputStream fos = new FileOutputStream(f);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(nextDpId);
-        oos.writeObject(dps);
-        oos.close();
-        fos.close();
+        try {
+            AccessController.doPrivileged(new PrivilegedExceptionAction() {
+                public Object run() throws IOException {
+                    FileOutputStream fos = new FileOutputStream(f);
+                    ObjectOutputStream oos = new ObjectOutputStream(fos);
+                    oos.writeObject(nextDpId);
+                    oos.writeObject(dps);
+                    oos.close();
+                    fos.close();
+                    return null;
+                }});
+        }
+        catch (PrivilegedActionException e) {
+            throw (IOException) e.getException();
+        }
     }
 
     /*
@@ -290,6 +302,10 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     
     BundleContext getBundleContext() {
         return context;
+    }
+
+    static String location(String symbName, String version) {
+        return symbName;
     }
     
 }

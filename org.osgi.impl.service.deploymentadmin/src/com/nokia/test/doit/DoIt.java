@@ -45,50 +45,56 @@ public class DoIt implements BundleActivator {
     
     private void setPermissions() throws InvalidSyntaxException {
         ServiceReference paRef = context.getServiceReference(PermissionAdmin.class.getName());
+        if (null == paRef)
+            return;
         PermissionAdmin pa = (PermissionAdmin) context.getService(paRef);
         
         ServiceReference ref;
         ref = context.getServiceReference(DeploymentAdmin.class.getName());
         String daLoc = ref.getBundle().getLocation();
         pa.setPermissions(daLoc, new PermissionInfo[] {
-                new PermissionInfo(DeploymentAdminPermission.class.getName(), "name:* signer:*", "installDeploymentPackage, uninstallDeploymentPackage"),
-                new PermissionInfo(DeploymentAdminPermission.class.getName(), "", "listDeploymentPackages, inventory"),
-                new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "READ, WRITE, EXECUTE, DELETE"),
-                new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
-                new PermissionInfo(ServicePermission.class.getName(), "*", "GET"),
-                new PermissionInfo(AdminPermission.class.getName(), "", "")
-                //new PermissionInfo(AllPermission.class.getName(), "", "") // TODO
+                new PermissionInfo(DeploymentAdminPermission.class.getName(), "name:* signer:*", 
+                        "install, uninstall, uninstallForceful, list, cancel"),
+                new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", 
+                        "read, write, execute, delete"),
+                new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
+                new PermissionInfo(ServicePermission.class.getName(), "*", "get, register"),
+                new PermissionInfo(AdminPermission.class.getName(), "*", "*")
         	});
         
         ref = context.getServiceReference(Db.class.getName());
         String dbLoc = ref.getBundle().getLocation();
         pa.setPermissions(dbLoc, new PermissionInfo[] {
-                new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
-                new PermissionInfo(ServicePermission.class.getName(), "*", "REGISTER")
+                new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
+                new PermissionInfo(ServicePermission.class.getName(), "*", "register")
             });
         
         ServiceReference[] refs = context.getServiceReferences(ResourceProcessor.class.getName(),
                 "(type=db)");
         for (int i = 0; i < refs.length; i++) {
-            String loc = refs[i].getBundle().getLocation();
-            pa.setPermissions(loc, new PermissionInfo[] {
-                    new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
+            String rpLoc = refs[i].getBundle().getLocation();
+            pa.setPermissions(rpLoc, new PermissionInfo[] {
+                    new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
                     // to allow RP to read its id from its manifest
-                    new PermissionInfo(AdminPermission.class.getName(), "", ""),
-                    new PermissionInfo(AllPermission.class.getName(), "", "") // TODO
+                    new PermissionInfo(AdminPermission.class.getName(), "*", "metadata"),
+                    // to reach the database service
+                    new PermissionInfo(ServicePermission.class.getName(), "*", "get"),
+                    // to register itsel as a RP service
+                    new PermissionInfo(ServicePermission.class.getName(), "*", "register")
                 });
         }
 
         ref = context.getServiceReference(Db.class.getName());
         String doitLoc = context.getBundle().getLocation();
         pa.setPermissions(doitLoc, new PermissionInfo[] {
-                new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
+                new PermissionInfo(PackagePermission.class.getName(), "*", "import"),
                 // to find the Deployment Admin
-                new PermissionInfo(ServicePermission.class.getName(), "*", "GET"),
+                new PermissionInfo(ServicePermission.class.getName(), "*", "get"),
                 // to load files that are passed to the Deployment Admin
-                new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "READ, WRITE, EXECUTE, DELETE"),
+                new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "read"),
                 // to install deployment packages 
-                new PermissionInfo(DeploymentAdminPermission.class.getName(), "name:*", "installDeploymentPackage"),
+                new PermissionInfo(DeploymentAdminPermission.class.getName(), "name:* signer:*", 
+                        "install"),
                 //new PermissionInfo(DeploymentAdminPermission.class.getName(), "name:db_test_01", "installDeploymentPackage"),
                 //new PermissionInfo(DeploymentAdminPermission.class.getName(), "name:db_test_02", "installDeploymentPackage"),
                 //new PermissionInfo(DeploymentAdminPermission.class.getName(), "name:db_test_03", "installDeploymentPackage"),
@@ -96,7 +102,7 @@ public class DoIt implements BundleActivator {
                 // to be able to set permissions during next run
                 // and because "In addition to DeploymentAdminPermission, the caller 
                 // of Deployment Admin must in addition hold the appropriate AdminPermissions."
-                new PermissionInfo(AdminPermission.class.getName(), "", "") 
+                new PermissionInfo(AdminPermission.class.getName(), "*", "permission") 
             });
     }
 
@@ -105,7 +111,7 @@ public class DoIt implements BundleActivator {
 
     public void start(BundleContext context) throws Exception {
         this.context = context;
-        //setPermissions();
+        setPermissions();
         
         ServiceReference refDa = context.getServiceReference(DeploymentAdmin.class.getName());
 		da = (DeploymentAdmin) context.getService(refDa);

@@ -1,5 +1,6 @@
 package org.osgi.impl.service.deploymentadmin;
 
+import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
@@ -92,7 +93,7 @@ public class Transaction {
         // commit !
         try {
 	        for (Iterator iter = steps.iterator(); iter.hasNext();) {
-	            TransactionRecord element = (TransactionRecord) iter.next();
+	            final TransactionRecord element = (TransactionRecord) iter.next();
 	            logger.log(Logger.LOG_INFO, "Commit\n" + element);
 	            switch (element.code) {
 	                case INSTALLBUNDLE :
@@ -100,7 +101,16 @@ public class Transaction {
 	                case UPDATEBUNDLE :
 	                    break;
 	                case UNINSTALLBUNDLE :
-	                    element.bundle.uninstall();
+	                	try {
+	                        AccessController.doPrivileged(new PrivilegedExceptionAction() {
+	                            public Object run() throws BundleException {
+	                                element.bundle.uninstall();
+	                                return null;
+	                            }});
+	                    }
+	                    catch (PrivilegedActionException e) {
+	                        throw (BundleException) e.getException();
+	                    }
 	                    element.dp.getBundleEntries().remove(
 	                            element.be);
 	                    break;
@@ -109,6 +119,7 @@ public class Transaction {
 	                case STOPBUNDLE :
 	                    break;
 	                case PROCESSOR:
+	                    // TODO security !
 	                    element.rp.commit();
 	                    break;
 	                default :
@@ -130,11 +141,20 @@ public class Transaction {
             }
             
 	        for (int i = steps.size() - 1; i >= 0; --i) {
-	            TransactionRecord element = (TransactionRecord) steps.get(i);
+	            final TransactionRecord element = (TransactionRecord) steps.get(i);
 	            logger.log(Logger.LOG_INFO, "Rollback\n" + element);
 	            switch (element.code) {
 	                case INSTALLBUNDLE : {
-	                    uninstallBundle(element.bundle);
+	                	try {
+	                        AccessController.doPrivileged(new PrivilegedExceptionAction() {
+	                            public Object run() throws BundleException {
+	                                element.bundle.uninstall();
+	                                return null;
+	                            }});
+	                    }
+	                    catch (PrivilegedActionException e) {
+	                        throw (BundleException) e.getException();
+	                    }
 	                    break;
 	                } 
 	                case UPDATEBUNDLE :
@@ -142,12 +162,31 @@ public class Transaction {
 	                case UNINSTALLBUNDLE : {
 	                    break;
 	                } case STARTBUNDLE :
-	                    element.bundle.stop();
+	                	try {
+	                        AccessController.doPrivileged(new PrivilegedExceptionAction() {
+	                            public Object run() throws BundleException {
+	                                element.bundle.stop();
+	                                return null;
+	                            }});
+	                    }
+	                    catch (PrivilegedActionException e) {
+	                        throw (BundleException) e.getException();
+	                    }
 	                    break;
 	                case STOPBUNDLE :
-	                    element.bundle.start();
+	                	try {
+	                        AccessController.doPrivileged(new PrivilegedExceptionAction() {
+	                            public Object run() throws BundleException {
+	                                element.bundle.start();
+	                                return null;
+	                            }});
+	                    }
+	                    catch (PrivilegedActionException e) {
+	                        throw (BundleException) e.getException();
+	                    }
 	                    break;
 	                case PROCESSOR:
+	                    // TODO security !
 	                    element.rp.rollback();
 	                    break;
 	                default :
@@ -159,19 +198,6 @@ public class Transaction {
             logger.log(e);
         }
         logger.log(Logger.LOG_INFO, "Transaction rolled back");
-    }
-
-    private void uninstallBundle(final Bundle bundle) throws BundleException {
-        try {
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws BundleException {
-                    bundle.uninstall();
-                    return null;
-                }
-            });
-        } catch (PrivilegedActionException e) {
-            throw (BundleException) e.getException();
-        }
     }
 
     public synchronized void cancel() {

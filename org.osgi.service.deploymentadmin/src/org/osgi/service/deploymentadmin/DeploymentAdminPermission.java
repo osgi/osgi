@@ -249,12 +249,6 @@ public class DeploymentAdminPermission extends Permission {
     private void check() {
         if (!ACTIONS.containsAll(actionsVector))
             throw new IllegalArgumentException("Illegal action");
-        if ( "".equals(namePart) && "".equals(signerPart) &&
-             (actionsVector.contains(ACTION_INSTALL) || actionsVector.contains(ACTION_UNINSTALL)) )
-            	throw new IllegalArgumentException("Bad name part");
-        if ( (!"".equals(namePart) || !"".equals(signerPart)) &&
-                (actionsVector.contains(ACTION_LIST)) )
-            	throw new IllegalArgumentException("Bad name part");
     }
 
     private boolean impliesPackagePart(String p1, String p2) {

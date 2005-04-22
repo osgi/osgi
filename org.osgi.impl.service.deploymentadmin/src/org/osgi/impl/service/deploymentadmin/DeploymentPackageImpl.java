@@ -17,7 +17,12 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -262,11 +267,17 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * @return
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getBundle(java.lang.String)
      */
-    public Bundle getBundle(String symbName) {
+    public Bundle getBundle(final String symbName) {
         Bundle[] bs = da.getBundleContext().getBundles();
         for (int i = 0; i < bs.length; i++) {
-            Bundle b = bs[i];
-            if (b.getLocation().equals(symbName))
+            final Bundle b = bs[i];
+            String location = (String) AccessController.doPrivileged(new PrivilegedAction() {
+                public Object run() {
+                    return b.getLocation();
+                }});
+            if (null == location)
+                return null;
+            if (location.equals(symbName))
                 return b;
         }
         return null;
