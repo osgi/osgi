@@ -49,6 +49,8 @@ public class TestUserPrompt extends IntegratedTest {
 			new String[] {"ONESHOT,SESSION,BLANKET","","org.osgi.impl.service.policy.integrationtests.messages.userprompt","%ADMIN_TASK"});
 	public static final ConditionInfo INTEGRATIONTESTS_BUNDLE1_LOCATION_CONDITION =
 		new ConditionInfo(BundleLocationCondition.class.getName(),new String[]{INTEGRATIONTESTS_BUNDLE1_JAR});
+	public static final ConditionInfo INTEGRATIONTESTS_BUNDLE2_LOCATION_CONDITION =
+		new ConditionInfo(BundleLocationCondition.class.getName(),new String[]{INTEGRATIONTESTS_BUNDLE2_JAR});
 	public static final PermissionInfo ALL_PERMISSION = new PermissionInfo(AllPermission.class.getName(),"*","*");
 	public static final PermissionInfo ADMIN_PERMISSION = new PermissionInfo(AdminPermission.class.getName(),"*","*");
 
@@ -357,5 +359,55 @@ public class TestUserPrompt extends IntegratedTest {
 		assertStdinEmpty();
 
 	}
-	
+
+	/**
+	 * There can be multiple bundles where userprompt is needed. It is important,
+	 * that the system can collect these, and ask them in one go.
+	 * @throws Exception
+	 */
+	public void testMultipleBundles() throws Exception {
+		startFramework(true);
+
+		conditionalPermissionAdmin.addConditionalPermissionInfo(
+				new ConditionInfo[]{INTEGRATIONTESTS_BUNDLE1_LOCATION_CONDITION,ADMINISTRATION_ALL_QUESTION},
+				new PermissionInfo[]{ADMIN_PERMISSION});
+		conditionalPermissionAdmin.addConditionalPermissionInfo(
+				new ConditionInfo[]{INTEGRATIONTESTS_BUNDLE2_LOCATION_CONDITION,ADMINISTRATION_ALL_QUESTION},
+				new PermissionInfo[]{ADMIN_PERMISSION});
+
+		final PrivilegedExceptionAction adminAction = (PrivilegedExceptionAction) new PrivilegedExceptionAction() {
+			public Object run() throws Exception {
+				System.getSecurityManager().checkPermission(new AdminPermission());
+				return null;
+			}
+		};
+		
+		PrivilegedExceptionAction callThroughAction = new PrivilegedExceptionAction() {
+			public Object run() throws Exception {
+				bundle1DoAction.invoke(null,new Object[]{adminAction});
+				return null;
+			}
+		};
+
+		stdinPrinter.println("yes,yes");
+		bundle2DoAction.invoke(null,new Object[]{callThroughAction});
+		assertStdinEmpty();
+		
+		stdinPrinter.println("yes,no");
+		try {
+			bundle2DoAction.invoke(null,new Object[]{callThroughAction});
+			fail();
+		} catch (InvocationTargetException e) {}
+		assertStdinEmpty();
+
+		stdinPrinter.println("yes,always");
+		bundle2DoAction.invoke(null,new Object[]{callThroughAction});
+		assertStdinEmpty();
+
+		stdinPrinter.println("yes");
+		bundle2DoAction.invoke(null,new Object[]{callThroughAction});
+		assertStdinEmpty();
+
+	}
+
 }
