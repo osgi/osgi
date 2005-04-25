@@ -201,6 +201,7 @@ public class UserPromptCondition
 	
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
 		String[] questions = new String[conds.length];
+		Bundle[] bundles = new Bundle[conds.length];
 		List[] possibleAnswers = new List[conds.length];
 		String[] answers = new String[conds.length];
 		
@@ -210,6 +211,7 @@ public class UserPromptCondition
 			UserPromptCondition cond = (UserPromptCondition) org.osgi.util.mobile.UserPromptCondition.unWrap(ucond);
 			if (cond.isEvaluated()) throw new IllegalStateException("This should not be called");
 			questions[i]=cond.getLocalizedMessage();
+			bundles[i]=UserPromptCondition.context.getBundle(cond.bundleID);
 			possibleAnswers[i] = cond.getPossibleAnswers();
 		}
 		
@@ -217,6 +219,7 @@ public class UserPromptCondition
 		System.out.println("User Question (answer with comma-separated list):");
 		for(int i=0;i<conds.length;i++) {
 			System.out.print("("+(i+1)+") ");
+			System.out.print(bundles[i].getSymbolicName()+": ");
 			System.out.print(questions[i]);
 			System.out.print(" ");
 			System.out.println(possibleAnswers[i]);
