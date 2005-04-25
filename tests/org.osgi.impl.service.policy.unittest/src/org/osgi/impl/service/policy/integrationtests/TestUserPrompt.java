@@ -45,6 +45,8 @@ public class TestUserPrompt extends IntegratedTest {
 			new String[] {"SESSION","","org.osgi.impl.service.policy.integrationtests.messages.userprompt","%ADMIN_TASK"});
 	public static final ConditionInfo ADMINISTRATION_ONESHOT_QUESTION = new ConditionInfo(UserPromptCondition.class.getName(),
 			new String[] {"ONESHOT","","org.osgi.impl.service.policy.integrationtests.messages.userprompt","%ADMIN_TASK"});
+	public static final ConditionInfo ADMINISTRATION_ALL_QUESTION = new ConditionInfo(UserPromptCondition.class.getName(),
+			new String[] {"ONESHOT,SESSION,BLANKET","","org.osgi.impl.service.policy.integrationtests.messages.userprompt","%ADMIN_TASK"});
 	public static final ConditionInfo INTEGRATIONTESTS_BUNDLE1_LOCATION_CONDITION =
 		new ConditionInfo(BundleLocationCondition.class.getName(),new String[]{INTEGRATIONTESTS_BUNDLE1_JAR});
 	public static final PermissionInfo ALL_PERMISSION = new PermissionInfo(AllPermission.class.getName(),"*","*");
@@ -69,6 +71,23 @@ public class TestUserPrompt extends IntegratedTest {
 			return b;
 		}
 		
+	}
+	
+	/**
+	 * checks whether everything is read from stdin stream.
+	 *
+	 */
+	public void assertStdinEmpty() {
+		byte [] ba = stdinByteArray.toByteArray();
+		if (ba.length!=byteArrayPos) {
+			// report what is left unread and die
+			StringBuffer sb = new StringBuffer();
+			for(int i=byteArrayPos;i<ba.length;i++) {
+				sb.append((char)ba[i]);
+			}
+			fail(sb.toString());
+			
+		}
 	}
 	
 	public void setUp() throws Exception {
@@ -120,11 +139,11 @@ public class TestUserPrompt extends IntegratedTest {
 		};
 
 		stdinPrinter.println("never");
-		
 		try {
 			bundle1DoAction.invoke(null, new Object[]{adminAction});
 			fail();
 		} catch (InvocationTargetException e) {}
+		assertStdinEmpty();
 	}
 	
 	public void testAlwaysMultiple() throws Exception {
@@ -141,8 +160,8 @@ public class TestUserPrompt extends IntegratedTest {
 		};
 		
 		stdinPrinter.println("always");
-		
 		bundle1DoAction.invoke(null, new Object[]{adminAction});
+		assertStdinEmpty();
 		
 		bundle1DoAction.invoke(null, new Object[]{adminAction});
 		
@@ -169,11 +188,11 @@ public class TestUserPrompt extends IntegratedTest {
 		};
 
 		stdinPrinter.println("never");
-		
 		try {
 			bundle1DoAction.invoke(null, new Object[]{adminAction});
 			fail();
 		} catch (InvocationTargetException e) {}
+		assertStdinEmpty();
 
 		try {
 			bundle1DoAction.invoke(null, new Object[]{adminAction});
@@ -209,19 +228,19 @@ public class TestUserPrompt extends IntegratedTest {
 		};
 
 		stdinPrinter.println("session");
-		
 		bundle1DoAction.invoke(null, new Object[]{adminAction});
 		bundle1DoAction.invoke(null, new Object[]{adminAction});
+		assertStdinEmpty();
 
 		stopFramework();
 		startFramework(false);
 
 		stdinPrinter.println("nosession");
-		
 		try {
 			bundle1DoAction.invoke(null, new Object[]{adminAction});
 			fail();
 		} catch (InvocationTargetException e) {}
+		assertStdinEmpty();
 
 		try {
 			bundle1DoAction.invoke(null, new Object[]{adminAction});
@@ -232,19 +251,19 @@ public class TestUserPrompt extends IntegratedTest {
 		startFramework(false);
 
 		stdinPrinter.println("session");
-		
 		bundle1DoAction.invoke(null, new Object[]{adminAction});
+		assertStdinEmpty();
 		bundle1DoAction.invoke(null, new Object[]{adminAction});
 
 		stopFramework();
 		startFramework(false);
 
 		stdinPrinter.println("never");
-		
 		try {
 			bundle1DoAction.invoke(null, new Object[]{adminAction});
 			fail();
 		} catch (InvocationTargetException e) {}
+		assertStdinEmpty();
 		
 		stopFramework();
 		startFramework(false);
@@ -270,18 +289,73 @@ public class TestUserPrompt extends IntegratedTest {
 		};
 
 		stdinPrinter.println("yes");
-		
 		bundle1DoAction.invoke(null, new Object[]{adminAction});
+		assertStdinEmpty();
 
 		stdinPrinter.println("no");
-
 		try {
 			bundle1DoAction.invoke(null, new Object[]{adminAction});
 			fail();
 		} catch (InvocationTargetException e) {}
+		assertStdinEmpty();
 
 		stopFramework();
 	}
 
+	public void testMultipleChoices() throws Exception {
+		startFramework(true);
 
+		conditionalPermissionAdmin.addConditionalPermissionInfo(
+				new ConditionInfo[]{INTEGRATIONTESTS_BUNDLE1_LOCATION_CONDITION,ADMINISTRATION_ALL_QUESTION},
+				new PermissionInfo[]{ADMIN_PERMISSION});
+
+		PrivilegedExceptionAction adminAction = (PrivilegedExceptionAction) new PrivilegedExceptionAction() {
+			public Object run() throws Exception {
+				System.getSecurityManager().checkPermission(new AdminPermission());
+				return null;
+			}
+		};
+
+		stdinPrinter.println("yes");
+		bundle1DoAction.invoke(null, new Object[]{adminAction});
+		assertStdinEmpty();
+
+		stdinPrinter.println("no");
+		try {
+			bundle1DoAction.invoke(null, new Object[]{adminAction});
+			fail();
+		} catch (InvocationTargetException e) {}
+		assertStdinEmpty();
+
+		stdinPrinter.println("yes");
+		bundle1DoAction.invoke(null, new Object[]{adminAction});
+		assertStdinEmpty();
+
+		stdinPrinter.println("session");
+		bundle1DoAction.invoke(null, new Object[]{adminAction});
+		assertStdinEmpty();
+		bundle1DoAction.invoke(null, new Object[]{adminAction});
+
+		stopFramework();
+		startFramework(false);
+
+		stdinPrinter.println("no");
+		try {
+			bundle1DoAction.invoke(null, new Object[]{adminAction});
+			fail();
+		} catch (InvocationTargetException e) {}
+		assertStdinEmpty();
+		
+		stdinPrinter.println("yes");
+		bundle1DoAction.invoke(null, new Object[]{adminAction});
+		assertStdinEmpty();
+
+		stdinPrinter.println("always");
+		bundle1DoAction.invoke(null, new Object[]{adminAction});
+		bundle1DoAction.invoke(null, new Object[]{adminAction});
+		bundle1DoAction.invoke(null, new Object[]{adminAction});
+		assertStdinEmpty();
+
+	}
+	
 }
