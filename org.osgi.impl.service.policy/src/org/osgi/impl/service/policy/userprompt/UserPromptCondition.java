@@ -338,6 +338,7 @@ public class UserPromptCondition
 	}
 	
 	public static void deregisterMySelf() {
+		conditions = null;
 		org.osgi.util.mobile.UserPromptCondition.setFactory(null);
 	}
 
