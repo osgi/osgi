@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb7h
+Bundle-SymbolicName: ${p}.tb7h
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Activator: $(p).tb7h.Activator
+Import-Package: org.osgi.framework,testresources;version="2.0"
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+
+

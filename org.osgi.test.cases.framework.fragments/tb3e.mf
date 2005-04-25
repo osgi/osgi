@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb3e
+Bundle-SymbolicName: ${p}.tb3a; fragment-attachment:="never"
+Bundle-Version: 3.0
+Bundle-ManifestVersion: 2
+Bundle-Activator: $(p).tb3e.Activator
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+
+

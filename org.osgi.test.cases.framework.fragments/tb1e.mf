@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb1e
+Bundle-SymbolicName: ${p}.tb1e
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Fragment-Host: ${p}.tb1a
+Import-Package: org.osgi.framework, org.osgi.service.packageadmin
