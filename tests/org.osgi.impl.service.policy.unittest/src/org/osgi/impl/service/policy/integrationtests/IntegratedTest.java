@@ -56,6 +56,7 @@ public abstract class IntegratedTest extends TestCase {
 	public static final String	ORG_OSGI_IMPL_SERVICE_EVENT_JAR	= "file:../../org.osgi.impl.service.event/org.osgi.impl.service.event.jar";
 	public static final String	ORG_OSGI_IMPL_SERVICE_POLICY_USERPROMPT_JAR = "file:../../org.osgi.impl.service.policy/org.osgi.impl.service.policy.userprompt.jar";
 	public static final String	INTEGRATIONTESTS_BUNDLE1_JAR = "file:../integrationtests.bundle1.jar";
+	public static final String	INTEGRATIONTESTS_BUNDLE2_JAR = "file:../integrationtests.bundle2.jar";
 	public static final String	INTEGRATIONTESTS_MESSAGES_JAR = "file:../integrationtests.messages.jar";
 
 	public FrameworkSecurityManager	secMan;
@@ -69,12 +70,14 @@ public abstract class IntegratedTest extends TestCase {
 	public Bundle	dmtBundle;
 	public Bundle	policyBundle;
 	public Bundle	userPromptBundle;
-	public Bundle	integrationTestBundle;
+	public Bundle	integrationTestBundle1;
+	public Bundle	integrationTestBundle2;
 	public Bundle	integrationTestMessagesBundle;
 	public OSGi	framework;
 	public PermissionAdmin	permissionAdmin;
 	public ConditionalPermissionAdmin	conditionalPermissionAdmin;
 	public Method	bundle1DoAction;
+	public Method	bundle2DoAction;
 
 	/**
 	 * This policy implementation gives AllPermission to all code sources.
@@ -151,7 +154,8 @@ public abstract class IntegratedTest extends TestCase {
 		dmtBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_DMT_JAR);
 		policyBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_POLICY_JAR);
 		userPromptBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_POLICY_USERPROMPT_JAR);
-		integrationTestBundle = systemBundleContext.installBundle(INTEGRATIONTESTS_BUNDLE1_JAR);
+		integrationTestBundle1 = systemBundleContext.installBundle(INTEGRATIONTESTS_BUNDLE1_JAR);
+		integrationTestBundle2 = systemBundleContext.installBundle(INTEGRATIONTESTS_BUNDLE2_JAR);
 		integrationTestMessagesBundle = systemBundleContext.installBundle(INTEGRATIONTESTS_MESSAGES_JAR);
 
 		eventBundle.start();
@@ -163,8 +167,11 @@ public abstract class IntegratedTest extends TestCase {
 		userPromptBundle.start();
 		integrationTestMessagesBundle.start();
 
-		Class cl = integrationTestBundle.loadClass("org.osgi.impl.service.policy.integrationtests.bundle1.Test");
+		Class cl = integrationTestBundle1.loadClass("org.osgi.impl.service.policy.integrationtests.bundle1.Test");
 		bundle1DoAction = cl.getDeclaredMethod("doAction",new Class[]{PrivilegedExceptionAction.class});
+
+		cl = integrationTestBundle2.loadClass("org.osgi.impl.service.policy.integrationtests.bundle2.Test");
+		bundle2DoAction = cl.getDeclaredMethod("doAction",new Class[]{PrivilegedExceptionAction.class});
 
 	}
 
@@ -183,7 +190,7 @@ public abstract class IntegratedTest extends TestCase {
 		logBundle = null;
 		dmtBundle = null;
 		policyBundle = null;
-		integrationTestBundle = null;
+		integrationTestBundle1 = null;
 		permissionAdmin = null;
 		conditionalPermissionAdmin = null;
 		bundle1DoAction = null;
