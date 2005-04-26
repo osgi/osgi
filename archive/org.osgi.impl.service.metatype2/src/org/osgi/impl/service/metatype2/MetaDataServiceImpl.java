@@ -49,7 +49,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  */
 class MetaDataServiceImpl implements MetaDataService, ServiceTrackerCustomizer {
 
-  private static final Object NULL_CATEGORY = new Object();
+  private static final Object NULL_KEY = new Object();
   
   private Hashtable categoriesTable;
   private BundleContext bc;
@@ -264,23 +264,28 @@ class MetaDataServiceImpl implements MetaDataService, ServiceTrackerCustomizer {
   }
   
   private Object getCategoryKey(String category) {
-    return category != null ? category : NULL_CATEGORY;  
+    return category != null ? category : NULL_KEY;  
   }
   
   private String[] keysToStringArray(Hashtable table) {
     synchronized (table) {
-      if (table.size() == 0) {
+      int categoriesCount = table.containsKey(NULL_KEY) ? 
+        table.size() - 1 : table.size();
+      
+      if (categoriesCount == 0) {
         return null;
       }
       
-      String[] result = new String [table.size()];
+      String[] result = new String [categoriesCount];
       
       Enumeration keys = table.keys();
       int counter = 0;
       while ( keys.hasMoreElements() ) {
         Object key = keys.nextElement();
         
-        result [counter++] = key == NULL_CATEGORY ? null : key.toString();
+        if (key != NULL_KEY) {
+          result [counter++] = key.toString();
+        }
       }
   
       return result;
