@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry sourcepath="/osgi.released/ee.minimum.jar" kind="lib" path="/osgi.released/ee.minimum.jar"/>
-	<classpathentry kind="src" path="/org.osgi.service.metatype"/>
-	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
-	<classpathentry kind="lib" path="/cnf/jar/saxon.jar"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
+	<classpathentry sourcepath="/osgi.released/ee.minimum.jar" kind="lib" path="/osgi.released/ee.minimum.jar"/>
+	<classpathentry sourcepath="/org.osgi.test.cases/src" kind="lib" path="/osgi.released/osgi.internal.jar"/>
+	<classpathentry kind="src" path="/org.osgi.service.metatype"/>
+	<classpathentry kind="src" path="/org.osgi.service.metatype2"/>
+	<classpathentry kind="src" path="/org.osgi.service.cu"/>
+	<classpathentry kind="lib" path="/cnf/jar/saxon.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
