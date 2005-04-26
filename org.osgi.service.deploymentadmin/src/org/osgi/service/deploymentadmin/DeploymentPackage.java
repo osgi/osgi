@@ -33,7 +33,22 @@ import org.osgi.framework.Version;
 
 /**
   * The DeploymentPackage object represents a deployment package (already installed
-  * or being currently processed).
+  * or being currently processed). A Deployment Package groups resources as a unit 
+  * of management. A deployment package is something that can be installed, updated, 
+  * and uninstalled as a unit. A deployment package is a reified concept, like a bundle, 
+  * in an OSGi Service Platform. It is not known by the OSGi Framework, but it is managed 
+  * by the Deployment Admin service. A deployment package is a stream of resources 
+  * (including bundles) which, once processed, will result in new artifacts being added 
+  * to the OSGi platform.  These new artifacts can include installed Bundles, new 
+  * configuration objects added to the Configuration Admin service, new Wire objects 
+  * added to the Wire Admin service, or changed system properties. All the changes caused 
+  * by the processing of a deployment package are persistently associated with the 
+  * deployment package, so that they can be appropriately cleaned up when the deployment
+  * package is uninstalled. There is a strict “no overlap” rule imposed on deployment packages. 
+  * Two deployment packages are not allowed to create or manipulate the same artifact.  
+  * Obviously, this means that a bundle cannot be in two different DPs. Any violation of 
+  * this “no overlap” rule is considered an error and the install or update of the 
+  * offending deployment package must be aborted.  
   */
 public interface DeploymentPackage {
  
@@ -64,18 +79,27 @@ public interface DeploymentPackage {
     String[][] getBundleSymNameVersionPairs();  
  
     /**
-     * Returns the bundle instance that corresponds to the bundle's name/version pair.
-     * This method will return null for request for bundle/version pairs that are not part 
-     * of this deployment package.
-     * As this instance is transient, this method may return null if the bundle/version pair
+     * Returns the bundle instance that corresponds to the bundle's symbolic name.
+     * This method will return null for request for bundles that are not part 
+     * of this deployment package.<p>
+     * As this instance is transient, this method may return null if the bundle
      * is part of this deployment package, but is not currently defined to the framework.
-     * @return The deployment package instance for a given bundle name/version pair.
+     * @return The <code>Bundle</code> instance for a given bundle symbolic name.
      */
     Bundle getBundle(String bundleSymName);
     
     /**
      * Returns an array of strings representing the resources that are specified in 
-     * the  manifest of this deployment package
+     * the  manifest of this deployment package. A string element of the array is the 
+     * same as the value of the "Name" attribute in the manifest.<p>
+     * E.g. if the "Name" section of the resource (or individual-section as the 
+     * {@see <a href="http://java.sun.com/j2se/1.4.2/docs/guide/jar/jar.html#Manifest%20Specification">Manifest Specification</a>} 
+     * calls it) in the manifest is the following
+     * <blockquote><pre>
+     *     Name: foo/readme.txt
+     *     Resource-Processor: foo.rp
+     * </pre></blockquote>
+     * then the corresponding array element is the "foo/readme.txt" string.
      * @return The string array corresponding to resources
      */
     String[] getResources();   
