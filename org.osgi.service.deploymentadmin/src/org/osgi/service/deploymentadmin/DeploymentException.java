@@ -78,7 +78,7 @@ public class DeploymentException extends Exception {
     
     /**
      * Bundle symbolic name is not the same as defined by the deployment package 
-     * manifes.
+     * manifest.
      */
     public static final int CODE_BUNDLE_NAME_ERROR          = 7;
     
@@ -122,7 +122,8 @@ public class DeploymentException extends Exception {
 
     /**
      * Create an instance of the exception.
-     * @param code    The error code of the failure
+     * @param code    The error code of the failure. Code should be one of the 
+     *                predefined integer values (<code>CODE_X</code>). 
      * @param message Message associated with the exception
      * @param causes  the originating exception
      */
@@ -135,7 +136,8 @@ public class DeploymentException extends Exception {
     /**
      * Create an instance of the exception. Cause exception is implicitly set 
      * to null.
-     * @param code The error code of the failure
+     * @param code The error code of the failure.  Code should be one of the 
+     *             predefined integer values (<code>CODE_X</code>).
      * @param message Message associated with the exception
      */
     public DeploymentException(int code, String message) {
@@ -145,7 +147,8 @@ public class DeploymentException extends Exception {
     /**
      * Create an instance of the exception. Cause exception and message are 
      * implicitly set to null.
-     * @param code The error code of the failure
+     * @param code The error code of the failure. Code should be one of the 
+     *             predefined integer values (<code>CODE_X</code>).
      */
     public DeploymentException(int code) {
         this(code, null, null);
