@@ -1,4 +1,6 @@
 /*
+ * $Header$
+ * 
  * Copyright (c) IBM Corporation (2005)
  *
  * These materials have been contributed  to the OSGi Alliance as 
@@ -332,13 +334,6 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 			if (!dynamicBind.isEmpty()) {
 				workQueue.enqueueWork(this, DYNAMICBIND, dynamicBind);
 			}
-			// check if there are Service Components which  need to dynamically unbind from this unregistering Service
-		} else if ((event != null) && (event.getType() == ServiceEvent.UNREGISTERING)) {
-			//Pass in the set of currently resolved components, check each one - do we need to unbind
-			List dynamicUnBind = selectDynamicUnBind(resolvedComponents, event.getServiceReference());
-			if (!dynamicUnBind.isEmpty()) {
-				workQueue.enqueueWork(this, DYNAMICUNBIND, dynamicUnBind);
-			}
 		}
 
 		// obtain list of newly eligible components to be sent to the work quew
@@ -349,10 +344,19 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 		List newlyIneligibleComponents = selectNewlyInEligible(resolvedComponents);
 		if (!newlyIneligibleComponents.isEmpty())
 			workQueue.enqueueWork(this, DISPOSE, newlyIneligibleComponents);
+		
+		//	 check if there are Service Components which  need to dynamically unbind from this unregistering Service
+		if ((event != null) && (event.getType() == ServiceEvent.UNREGISTERING)) {
+			//Pass in the set of currently resolved components, check each one - do we need to unbind
+			List dynamicUnBind = selectDynamicUnBind(resolvedComponents, event.getServiceReference());
+			if (!dynamicUnBind.isEmpty()) {
+				workQueue.enqueueWork(this, DYNAMICUNBIND, dynamicUnBind);
+			}
+		}
 	}
 
 	public List resolveEligible() {
-		List enabledCDPs = (List) ((ArrayList) componentDescriptionPropsEnabled).clone();
+		List enabledCDPs = (List) ((ArrayList)componentDescriptionPropsEnabled).clone();
 		boolean runAgain = true;
 		while (runAgain) {
 			Iterator it = enabledCDPs.iterator();
@@ -380,12 +384,14 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 		try {
 			List sortedCDPs = sortCDPs(enabledCDPs);
 			return sortedCDPs;
-		} catch (CircularityException ex) {
+		}
+		catch(CircularityException ex)
+		{
 			ComponentDescriptionProp circularCDP = ex.getCircularDependency();
-
+			
 			//log the error
 			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, circularCDP.getComponentDescription().getBundle(), ex);
-
+			
 			//remove offending CDP and re-resolve
 			componentDescriptionPropsEnabled.remove(ex.getCircularDependency());
 			return resolveEligible();
@@ -433,8 +439,12 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 
 		// No need to process events that SCR initiated
 		// check for component.id and ignore the event if set
-		if ((reference.getProperty(ComponentConstants.COMPONENT_ID) == null) && (eventType == ServiceEvent.REGISTERED) || eventType == ServiceEvent.UNREGISTERING) {
-
+		if (
+				(reference.getProperty(ComponentConstants.COMPONENT_ID) == null) &&
+				(eventType == ServiceEvent.REGISTERED) || 
+				eventType == ServiceEvent.UNREGISTERING
+			) {
+			
 			getEligible(event);
 		}
 
@@ -510,8 +520,12 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 			List provideList = cdpRefLookup.getServicesPrivided();
 
 			if (provideList.contains(reference.getReferenceDescription().getInterfacename())) {
-				cdp.setReferenceCDP(cdpRefLookup);
-				return true;
+				//check the target field
+//				if(reference.matchProperties(cdp,scrBundleContext))
+//				{
+					cdp.setReferenceCDP(cdpRefLookup);
+					return true;
+//				}
 			}
 		}
 
@@ -640,11 +654,11 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	private List selectDynamicUnBind(List cdps, ServiceReference serviceReference) {
 
 		List unbindJobs = new ArrayList();
-
+		
 		Iterator it = cdps.iterator();
 		while (it.hasNext()) {
 			ComponentDescriptionProp cdp = (ComponentDescriptionProp) it.next();
-			List references = (List) cdp.getReferences();
+			List references = cdp.getReferences();
 			Iterator it_ = references.iterator();
 			while (it_.hasNext()) {
 				Reference reference = (Reference) it_.next();
@@ -660,14 +674,13 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 		}
 		return unbindJobs;
 	}
-
 	static public class DynamicUnbindJob {
 		public ComponentDescriptionProp component;
 		public Reference reference;
 		public ServiceReference serviceReference;
 	}
 
-	private List sortCDPs(List cdps) throws CircularityException {
+	private List sortCDPs(List cdps) throws CircularityException{
 		Iterator it = cdps.iterator();
 		List sortedList = new ArrayList();
 		List circularityCheck;

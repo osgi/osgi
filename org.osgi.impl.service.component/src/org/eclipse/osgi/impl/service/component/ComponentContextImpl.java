@@ -1,4 +1,6 @@
 /*
+ * $Header$
+ *
  * Copyright (c) IBM Corporation (2005)
  *
  * These materials have been contributed  to the OSGi Alliance as 
@@ -10,7 +12,6 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
-
 package org.eclipse.osgi.impl.service.component;
 
 import java.util.*;
@@ -80,11 +81,11 @@ public class ComponentContextImpl implements ComponentContext {
 	 *
 	 * @param bundle The ComponentDescriptionProp we are wrapping.
 	 */
-	public ComponentContextImpl(Main main, BundleContext bundleContext, Bundle usingBundle, ComponentDescriptionProp component, ComponentInstance ci) {
+	public ComponentContextImpl(Main main, Bundle usingBundle, ComponentDescriptionProp component, ComponentInstance ci) {
 		this.componentDescriptionProp = component;
 		this.componentDescription = component.getComponentDescription();
 		this.componentInstance = ci;
-		this.bundleContext = bundleContext;
+		this.bundleContext = main.framework.getBundleContext(component.getComponentDescription().getBundle());
 		this.usingBundle = usingBundle;
 		this.main = main;
 		
@@ -143,21 +144,7 @@ public class ComponentContextImpl implements ComponentContext {
 				//get the interface name
 				String interfaceName = references[i].getInterfacename();
 
-				//get the Service Reference
-				ServiceReference ref = bundleContext.getServiceReference(interfaceName);
-
-				// if the instance has not yet been created i.e. not registered - but it is eligible -  
-				// get the instance and return it
-				if ((ref == null) && (references[i].getComponentDescription().isEligible())) {
-					// create and return the service object
-					try {
-						obj = main.resolver.instanceProcess.getInstanceWithInterface(interfaceName);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				} else {
-					obj = bundleContext.getService(bundleContext.getServiceReference(interfaceName));
-				}
+				obj = bundleContext.getService(bundleContext.getServiceReference(interfaceName));
 
 				return obj;
 			}

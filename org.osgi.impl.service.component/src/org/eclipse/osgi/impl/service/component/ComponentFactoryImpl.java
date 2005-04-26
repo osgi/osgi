@@ -1,4 +1,6 @@
 /*
+ * $Header$
+ *
  * Copyright (c) IBM Corporation (2005)
  *
  * These materials have been contributed  to the OSGi Alliance as 
@@ -10,7 +12,6 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
-
 package org.eclipse.osgi.impl.service.component;
 
 import java.util.Dictionary;
@@ -71,7 +72,7 @@ public class ComponentFactoryImpl implements ComponentFactory {
 
 		ComponentInstance instance = null;
 		try {
-			instanceProcess.buildDispose.build(bundleContext, null, componentDescriptionProp, null, properties);
+			instance = instanceProcess.buildDispose.build(bundleContext, null, componentDescriptionProp, properties);
 
 			if (registerService)
 				instanceProcess.registerServices(bundleContext, componentDescriptionProp);

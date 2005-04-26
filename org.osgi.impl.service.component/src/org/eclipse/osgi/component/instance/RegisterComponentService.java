@@ -1,4 +1,6 @@
 /*
+ * $Header$
+ * 
  * Copyright (c) IBM Corporation (2005)
  *
  * These materials have been contributed  to the OSGi Alliance as 
@@ -10,13 +12,19 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
-
 package org.eclipse.osgi.component.instance;
 
-import java.util.*;
-import org.eclipse.osgi.component.model.*;
-import org.osgi.framework.*;
+import java.util.Dictionary;
+import java.util.Hashtable;
+
+import org.eclipse.osgi.component.model.ComponentDescriptionProp;
+import org.eclipse.osgi.component.model.ProvideDescription;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceFactory;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentConstants;
+import org.osgi.service.component.ComponentInstance;
 
 /**
  *
@@ -26,7 +34,7 @@ import org.osgi.service.component.ComponentConstants;
  * @version $Revision$
  */
 
-abstract public class RegisterComponentService {
+abstract class RegisterComponentService {
 
 	/* set this to true to compile in debug messages */
 	static final boolean DEBUG = false;
@@ -43,7 +51,7 @@ abstract public class RegisterComponentService {
 	 * @param factory - boolean 
 	 * @return ServiceRegistration
 	 */
-	static public ServiceRegistration registerService(InstanceProcess ip,BundleContext bc, ComponentDescriptionProp cdp, boolean factory) {
+	static ServiceRegistration registerService(InstanceProcess ip,BundleContext bc, ComponentDescriptionProp cdp, boolean factory) {
 
 		final InstanceProcess instanceProcess = ip;
 		final ComponentDescriptionProp component = cdp;
@@ -83,8 +91,8 @@ abstract public class RegisterComponentService {
 						System.out.println("RegisterComponentServiceFactory:getService: registration:" + registration);
 
 					try {
-						instance = instanceProcess.buildDispose.createInstance(component.getComponentDescription());
-						instanceProcess.buildDispose.build(bundleContext, bundle, component, instance, null);
+						ComponentInstance componentInstance = instanceProcess.buildDispose.build(bundleContext, bundle, component, null);
+						instance = componentInstance.getInstance();
 					} catch (Exception e) {
 						//what to do here?
 						System.err.println("Could not create instance of " + component.getComponentDescription());
@@ -114,9 +122,8 @@ abstract public class RegisterComponentService {
 	
 					try {
 						if (instance == null) {
-							//instance = instanceBuild.createInstance(componentDescription);
-							instance = instanceProcess.getInstance(component.getComponentDescription());
-							instanceProcess.buildDispose.build(bundleContext, null, component, instance, null);
+							ComponentInstance componentInstance = instanceProcess.buildDispose.build(bundleContext, null, component, null);
+							instance = componentInstance.getInstance();
 						}
 						useCount++;
 					} catch (Exception e) {

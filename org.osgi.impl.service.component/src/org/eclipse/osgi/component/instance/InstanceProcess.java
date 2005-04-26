@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IBM Corporation (2005)
+ * * Copyright (c) IBM Corporation (2005)
  *
  * These materials have been contributed  to the OSGi Alliance as 
  * "MEMBER LICENSED MATERIALS" as defined in, and subject to the terms of, 
@@ -10,7 +10,7 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
- 
+
 package org.eclipse.osgi.component.instance;
 
 import java.util.Enumeration;
@@ -21,7 +21,6 @@ import java.util.List;
 import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.component.model.ComponentDescription;
 import org.eclipse.osgi.component.model.ComponentDescriptionProp;
-import org.eclipse.osgi.component.model.ProvideDescription;
 import org.eclipse.osgi.component.resolver.ComponentProperties;
 import org.eclipse.osgi.component.resolver.Reference;
 import org.eclipse.osgi.component.resolver.Resolver;
@@ -73,9 +72,6 @@ public class InstanceProcess implements WorkDispatcher {
 	/** map CDP:factory */
 	protected Hashtable factories;
 
-	/** map CDP:instance */
-	protected Hashtable instances;
-
 	/** ConfigurationAdmin instance */
 	protected ConfigurationAdmin configurationAdmin;
 
@@ -101,8 +97,7 @@ public class InstanceProcess implements WorkDispatcher {
 		scrBundleContext = main.context;
 		registrations = new Hashtable();
 		factories = new Hashtable();
-		instances = new Hashtable();
-		buildDispose = new BuildDispose(main, registrations);
+		buildDispose = new BuildDispose(main);
 		componentProperties = new ComponentProperties(main);
 
 	}
@@ -116,7 +111,6 @@ public class InstanceProcess implements WorkDispatcher {
 		buildDispose = null;
 		main = null;
 		factories = null;
-		instances = null;
 		workQueue = null;
 		registrations = null;
 		componentProperties = null;
@@ -134,29 +128,6 @@ public class InstanceProcess implements WorkDispatcher {
 		ComponentDescriptionProp componentDescriptionProp;
 		ComponentDescription componentDescription;
 		String factoryPid = null;
-		Object obj = null;
-
-		//first create instance for each CDP
-		//The advance creation of the instance allows us to deal with conflict
-		//resolution i.e. provide an instance when locateService is called
-		//even if registerService has not been completed.
-		// loop through CD+P list of enabled
-		if (componentDescriptionProps != null) {
-			Iterator it = componentDescriptionProps.iterator();
-			while (it.hasNext()) {
-				componentDescriptionProp = (ComponentDescriptionProp) it.next();
-				componentDescription = componentDescriptionProp.getComponentDescription();
-				try {
-					obj = buildDispose.createInstance(componentDescription);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				if (obj != null) {
-					instances.put(componentDescription, obj);
-				}
-
-			}
-		}
 
 		// loop through CD+P list of enabled
 		if (componentDescriptionProps != null) {
@@ -169,7 +140,7 @@ public class InstanceProcess implements WorkDispatcher {
 				//if Service not provided - create instance immediately
 				if (componentDescription.getService() == null) {
 					try {
-						buildDispose.build(bundleContext, null, componentDescriptionProp, null, null);
+						buildDispose.build(bundleContext, null, componentDescriptionProp, null);
 					} catch (Exception e) {
 						main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(), e);
 					}
@@ -264,29 +235,6 @@ public class InstanceProcess implements WorkDispatcher {
 		workQueue.enqueueWork(this, DISPOSED, componentDescriptionProps);
 	}
 
-	public Object getInstanceWithInterface(String interfaceName) {
-		for (int i = 0; i < instances.size(); i++) {
-			Enumeration keys = instances.keys();
-			while (keys.hasMoreElements()) {
-				ComponentDescription cd = (ComponentDescription) keys.nextElement();
-				ProvideDescription[] provides = cd.getService().getProvides();
-				for (int j = 0; j < provides.length; j++) {
-					if (interfaceName.equals(provides[j].getInterfacename())) {
-						return (instances.get(cd));
-					}
-				}
-			}
-		}
-		return null;
-	}
-
-	public Object getInstance(ComponentDescription componentDescription) {
-		Object obj = instances.get(componentDescription);
-		if (obj != null)
-			instances.remove(componentDescription);
-		return obj;
-	}
-
 	/**Register Services
 	 * 
 	 * @param bundleContext
@@ -308,7 +256,7 @@ public class InstanceProcess implements WorkDispatcher {
 	 * @param componentDescriptionProp
 	 * @param factory
 	 */
-	public void registerComponentFactory(BundleContext context, ComponentDescriptionProp componentDescriptionProp, ComponentFactory factory) {
+	private void registerComponentFactory(BundleContext context, ComponentDescriptionProp componentDescriptionProp, ComponentFactory factory) {
 		ComponentDescription componentDescription = componentDescriptionProp.getComponentDescription();
 		// if the factory attribute is set on the component element then register a component factory service
 		// for the Service Component on behalf of the Service Component.
@@ -349,7 +297,7 @@ public class InstanceProcess implements WorkDispatcher {
 				ComponentInstanceImpl compInstance = (ComponentInstanceImpl) it.next();
 				if (compInstance != null) {
 					try {
-						buildDispose.bindReference(reference, compInstance);
+						buildDispose.bindReference(reference, compInstance,main.framework.getBundleContext(cdp.getComponentDescription().getBundle()));
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}

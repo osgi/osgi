@@ -1,4 +1,6 @@
 /*
+ * $Header$
+ * 
  * Copyright (c) IBM Corporation (2005)
  *
  * These materials have been contributed  to the OSGi Alliance as 
@@ -13,15 +15,9 @@
 
 package org.eclipse.osgi.component.resolver;
 
-import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.List;
-
-import org.eclipse.osgi.component.model.ComponentDescription;
-import org.eclipse.osgi.component.model.ReferenceDescription;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
+import java.util.*;
+import org.eclipse.osgi.component.model.*;
+import org.osgi.framework.*;
 
 /**
  * 
@@ -42,7 +38,7 @@ public class Reference {
 	protected String policy;
 	protected int cardinalityHigh;
 	protected int cardinalityLow;
-
+	
 	protected List serviceReferences = new ArrayList();
 
 	/**
@@ -63,7 +59,7 @@ public class Reference {
 		if (properties != null)
 			target = (String) properties.get(referenceDescription.getName() + TARGET);
 		if (target == null) {
-			target = "(objectClass=" + referenceDescription.getInterfacename() + ")";
+			target = "(objectClass=" + referenceDescription.getInterfacename()+ ")";
 		}
 
 		// If it is not specified, then a policy of “static” is used.
@@ -119,7 +115,6 @@ public class Reference {
 	public ReferenceDescription getReferenceDescription() {
 		return referenceDescription;
 	}
-
 	public String getTarget() {
 		return target;
 	}
@@ -153,7 +148,7 @@ public class Reference {
 	}
 
 	public boolean unBindReference(ServiceReference serviceReference) {
-
+		
 		// nothing dynamic to do if static
 		if ("static".equals(policy)) {
 			return false;
@@ -173,20 +168,39 @@ public class Reference {
 		return true;
 
 	}
-
+	
 	public void addServiceReference(ServiceReference serviceReference) {
 		serviceReferences.add(serviceReference);
 	}
-
+	
 	public void removeServiceReference(ServiceReference serviceReference) {
 		serviceReferences.remove(serviceReference);
 	}
-
+	
 	public List getServiceReferences() {
 		return serviceReferences;
 	}
-
+	
 	public boolean bindedToServiceReference(ServiceReference serviceReference) {
-		return serviceReferences.contains(serviceReferences);
+		return serviceReferences.contains(serviceReference);
 	}
+	
+	public boolean matchProperties(ComponentDescriptionProp cdp,BundleContext context) {
+		if(target == null)
+		{
+			return true;
+		}
+		Dictionary properties = cdp.getProperties();
+		Filter filter;
+		try {
+			filter = context.createFilter(target);
+			return filter.match(properties);
+		} catch (InvalidSyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false; //TODO - is this correct?
+		}
+	}
+
+
 }

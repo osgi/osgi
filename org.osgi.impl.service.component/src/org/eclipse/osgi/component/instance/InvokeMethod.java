@@ -1,4 +1,6 @@
 /*
+ * $Header$
+ * 
  * Copyright (c) IBM Corporation (2005)
  *
  * These materials have been contributed  to the OSGi Alliance as 
@@ -10,14 +12,13 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
- 
+
 package org.eclipse.osgi.component.instance;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import org.osgi.service.component.*;
-
 
 /**
  *
@@ -26,7 +27,8 @@ import org.osgi.service.component.*;
  * 
  * @version $Revision$
  */
-public class InvokeMethod {
+
+class InvokeMethod {
 
 	/* set this to true to compile in debug messages */
 	static final boolean DEBUG = false;
@@ -37,7 +39,7 @@ public class InvokeMethod {
 	 * @param instance The instance of the component 
 	 * @param context The componenet context 
 	 */
-	public void activateComponent(Object instance, ComponentContext context) throws IllegalAccessException, InvocationTargetException {
+	void activateComponent(Object instance, ComponentContext context) throws IllegalAccessException, InvocationTargetException {
 		// Create an array of parameters to pass to the method 
 		// The activate method requires the ComponentContext 
 		Object[] parameterTypes = new Object[] {context};
@@ -50,7 +52,7 @@ public class InvokeMethod {
 	 * @param instance The instance of the component 
 	 * @param context The componenet context 
 	 */
-	public void deactivateComponent(Object instance, ComponentContext context) throws IllegalAccessException, InvocationTargetException {
+	void deactivateComponent(Object instance, ComponentContext context) throws IllegalAccessException, InvocationTargetException {
 		// Create an array of parameters to pass to the method 
 		// The deactivate method requires the ComponentContext 
 		Object[] parameterTypes = new Object[] {context};
@@ -65,7 +67,7 @@ public class InvokeMethod {
 	 * @param serviceObject
 	 */
 
-	public void bindComponent(String bind, Object instance, Object serviceObject) throws IllegalAccessException, InvocationTargetException {
+	void bindComponent(String bind, Object instance, Object serviceObject) throws IllegalAccessException, InvocationTargetException {
 		// Create an array of parameters to pass to the method 
 		Object[] parameterTypes = new Object[] {serviceObject};
 		invokeMethod(bind, instance, parameterTypes);
@@ -79,7 +81,7 @@ public class InvokeMethod {
 	 * @param serviceObject
 	 */
 
-	public void unbindComponent(String unbind, Object instance, Object serviceObject) throws IllegalAccessException, InvocationTargetException {
+	void unbindComponent(String unbind, Object instance, Object serviceObject) throws IllegalAccessException, InvocationTargetException {
 		// Create an array of parameters to pass to the method 
 		Object[] parameterTypes = new Object[] {serviceObject};
 		invokeMethod(unbind, instance, parameterTypes);
@@ -93,7 +95,7 @@ public class InvokeMethod {
 	 * @param parameterTypes - array of parameters to pass to the method
 	 */
 
-	public void invokeMethod(String methodName, Object instance, Object[] parameterTypes) throws IllegalAccessException, InvocationTargetException {
+	private void invokeMethod(String methodName, Object instance, Object[] parameterTypes) throws IllegalAccessException, InvocationTargetException {
 
 		// Get the runtime class of the Service Component object
 		Class c = instance.getClass();
@@ -124,4 +126,3 @@ public class InvokeMethod {
 		return null;
 	}
 }
-
