@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}
+Bundle-Name: ${p}
+Bundle-Activator: ${p}.MetaTypeActivator
+Bundle-Description: OSGi Metatype Service Reference Implementation by IBM Corporation.
+Bundle-Copyright: (C) Copyright IBM Corporation 2000-2005.
+ This source code is licensed to OSGi as MEMBER LICENSED MATERIALS
+ under the terms of Section 3.2 of the OSGi MEMBER AGREEMENT.
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 1.0
+Bundle-Category: osgi
+Export-Service: org.osgi.service.metatype.MetaTypeService
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
