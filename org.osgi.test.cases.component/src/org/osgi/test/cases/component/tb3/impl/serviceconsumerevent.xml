@@ -6,10 +6,9 @@
 		<provide interface="org.osgi.test.cases.component.tb3.ServiceConsumerEvent"/>
 	</service>
 
+	<!-- cardinality by default should be 1..1 and policy - static -->
   <reference name="serviceProvider"
 		interface="org.osgi.test.cases.component.tb1.ServiceProvider"
-		cardinality="1..1"
-		policy="static"
 		target="(component.name=org.osgi.test.cases.component.tb1.ServiceProvider)"
 		bind="bindServiceProvider"
 		unbind="unbindServiceProvider"
