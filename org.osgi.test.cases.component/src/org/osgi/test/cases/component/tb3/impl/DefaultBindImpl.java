@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -27,41 +27,25 @@
 
 package org.osgi.test.cases.component.tb3.impl;
 
-import java.util.Dictionary;
-import java.util.Hashtable;
-
-import org.osgi.test.cases.component.tb3.ServiceConsumerEvent;
-import org.osgi.test.cases.component.tbc.TestObject;
+import org.osgi.test.cases.component.tb1.ServiceProvider;
 
 /**
+ * This class is extended by the service implementation. Its purpose is to
+ * verify that the SCR will also try to lookup the methods from all super
+ * classes if they are not found in top class containing the component
+ * implementation.
+ * 
  * @version $Revision$
  */
-public class ServiceConsumerEventImpl extends DefaultBindImpl implements
-		ServiceConsumerEvent {
+public class DefaultBindImpl {
+	protected ServiceProvider	serviceProvider;
 
-	private Hashtable	properties;
-	int					count	= 0;
-
-	public ServiceConsumerEventImpl() {
-		properties = new Hashtable();
-		properties.put("count", new Integer(count));
+	protected void bindServiceProvider(ServiceProvider serviceProvider) {
+		this.serviceProvider = serviceProvider;
 	}
 
-	public synchronized void bindObject(Object o) {
-		count++;
-		properties.put("count", new Integer(count));
+	protected void unbindServiceProvider(ServiceProvider serviceProvider) {
+		this.serviceProvider = null;
 	}
 
-	public synchronized void unbindObject(Object o) {
-		count--;
-		properties.put("count", new Integer(count));
-	}
-
-	public TestObject getTestObject() {
-		return serviceProvider.getTestObject();
-	}
-
-	public Dictionary getProperties() {
-		return properties;
-	}
 }
