@@ -37,314 +37,472 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * This is the bundle initially installed and started by the TestCase.
- * It performs the test methods of the declarative services test case.
- *
+ * This is the bundle initially installed and started by the TestCase. It
+ * performs the test methods of the declarative services test case.
+ * 
  * @version $Revision$
  */
-public class DeclarativeServicesControl extends DefaultTestBundleControl implements FrameworkListener {
+public class DeclarativeServicesControl extends DefaultTestBundleControl
+		implements FrameworkListener {
 
-  private Bundle tb1, tb2, tb3;
-  
-  private static String[] methods = new String[] {
-    "testRegistration",     // "TC1"
-    "testGetServiceDirect", // "TC2"
-    "testGetServiceLookup", // "TC3"
-    "testGetServiceEvent",  // "TC4"
-    "testGetProperties",    // "TC5"
-    "testComponentFactory", // "TC6"
-    "testBadComponents"     // TC7
-  };
+	private Bundle			tb1, tb2, tb3;
 
-  /**
-   * Returns a list containing the names of the test methods in the order they should be called.
-   */
-  protected String[] getMethods() {
-    return methods;
-  }
+	private static String[]	methods	= new String[] {"testRegistration", // "TC1"
+									"testGetServiceDirect", // "TC2"
+									"testGetServiceLookup", // "TC3"
+									"testGetServiceEvent", // "TC4"
+									"testGetProperties", // "TC5"
+									"testStartStopSCR", // "TC7"
+									"testComponentFactory", // "TC8"
+									"testBadComponents", // TC9
+									"testDynamicBind", // TC10
+									};
 
-  public void prepare() throws Exception {
-    tb1 = installBundle("tb1.jar");
-    tb1.start();
-    Thread.yield();
-    tb2 = installBundle("tb2.jar");
-    tb2.start();
-    Thread.yield();
-    tb3 = installBundle("tb3.jar");
-    tb3.start();
-    Thread.yield();
-  }
+	private ServiceTracker	trackerProvider;
+	private ServiceTracker	trackerConsumerLookup;
+	private ServiceTracker	trackerConsumerEvent;
+	private ServiceTracker	trackerNamedService;
+	private ServiceTracker	trackerNamedServiceFactory;
 
-  public void setState() {
-  }
+	/**
+	 * Returns a list containing the names of the test methods in the order they
+	 * should be called.
+	 * 
+	 * @see org.osgi.test.cases.util.DefaultTestBundleControl#getMethods()
+	 */
+	protected String[] getMethods() {
+		return methods;
+	}
 
-  /**
-   * Tests registering / unregistering of the component bundles and their provided services.
-   *
-   * @throws Exception can be thrown at any time
-   */
-  public void testRegistration() throws Exception {
-    TBCService serviceProvider, serviceConsumerLookup, serviceConsumerEvent;
+	public void prepare() throws Exception {
+		// install test cases
+		tb1 = installBundle("tb1.jar");
+		tb2 = installBundle("tb2.jar");
+		tb3 = installBundle("tb3.jar");
 
-    ServiceTracker trackerProvider = new ServiceTracker(getContext(), "org.osgi.test.cases.component.tb1.ServiceProvider", null);
-    trackerProvider.open();
+		// start them
+		tb1.start();
+		tb2.start();
+		tb3.start();
+		Thread.yield();
 
-    ServiceTracker trackerConsumerLookup = new ServiceTracker(getContext(), "org.osgi.test.cases.component.tb2.ServiceConsumerLookup", null);
-    trackerConsumerLookup.open();
+		// init trackers
+		BundleContext bc = getContext();
 
-    ServiceTracker trackerConsumerEvent = new ServiceTracker(getContext(), "org.osgi.test.cases.component.tb3.ServiceConsumerEvent", null);
-    trackerConsumerEvent.open();
+		trackerProvider = new ServiceTracker(bc,
+				"org.osgi.test.cases.component.tb1.ServiceProvider", null);
+		trackerConsumerLookup = new ServiceTracker(bc,
+				"org.osgi.test.cases.component.tb2.ServiceConsumerLookup", null);
+		trackerConsumerEvent = new ServiceTracker(bc,
+				"org.osgi.test.cases.component.tb3.ServiceConsumerEvent", null);
+		trackerNamedService = new ServiceTracker(bc,
+				"org.osgi.test.cases.component.tb4.NamedService", null);
+		Filter filter = bc.createFilter("(&("
+				+ ComponentConstants.COMPONENT_FACTORY
+				+ "=org.osgi.test.cases.component.tb4.NamedService)("
+				+ Constants.OBJECTCLASS + '='
+				+ ComponentFactory.class.getName() + "))");
+		trackerNamedServiceFactory = new ServiceTracker(bc, filter, null);
 
-    serviceProvider = (TBCService) trackerProvider.getService();
-    assertTrue("ServiceProvider bundle should be in active state", tb1.getState() == Bundle.ACTIVE);
-    assertNotNull("ServiceProvider service should be registered", serviceProvider);
+		// start listening
+		trackerProvider.open();
+		trackerConsumerLookup.open();
+		trackerConsumerEvent.open();
+		trackerNamedService.open();
+		trackerNamedServiceFactory.open();
+	}
 
-    serviceConsumerLookup = (TBCService) trackerConsumerLookup.getService();
-    assertTrue("ServiceConsumerLookup bundle should be in active state", tb2.getState() == Bundle.ACTIVE);
-    assertNotNull("ServiceConsumerLookup service should be registered", serviceConsumerLookup);
+	/**
+	 * Clean up after a run. Notice that during debugging many times the
+	 * unprepare is never reached.
+	 * 
+	 * @throws Exception is the bundles are not installed
+	 * @see org.osgi.test.cases.util.DefaultTestBundleControl#unprepare()
+	 */
+	public void unprepare() throws Exception {
+		uninstallBundle(tb1);
+		uninstallBundle(tb2);
+		uninstallBundle(tb3);
+		Thread.yield();
+		// stop listening
 
-    serviceConsumerEvent = (TBCService) trackerConsumerEvent.getService();
-    assertTrue("ServiceConsumerEvent bundle should be in active state", tb3.getState() == Bundle.ACTIVE);
-    assertNotNull("ServiceConsumerEvent service should be registered", serviceConsumerEvent);
+		trackerProvider.close();
+		trackerConsumerLookup.close();
+		trackerConsumerEvent.close();
+		trackerNamedService.close();
+		trackerNamedServiceFactory.close();
+	}
 
-    tb1.uninstall();
-    serviceProvider = (TBCService) trackerProvider.getService();
-    assertNull("ServiceProvider service should not be registered", serviceProvider);
+	/**
+	 * Tests registering / unregistering of the component bundles and their
+	 * provided services.
+	 * 
+	 * @throws Exception can be thrown at any time
+	 */
+	public void testRegistration() throws Exception {
+		TBCService serviceProvider, serviceConsumerLookup, serviceConsumerEvent;
 
-    tb1 = installBundle("tb1.jar");
-    tb1.stop();
-    Thread.yield();
-    serviceProvider = (TBCService) trackerProvider.getService();
-    assertTrue("ServiceProvider bundle should be in resolved state", tb1.getState() == Bundle.RESOLVED);
-    assertNull("ServiceProvider service should not be registered", serviceProvider);
+		serviceProvider = (TBCService) trackerProvider.getService();
+		assertEquals("ServiceProvider bundle should be in active state",
+				Bundle.ACTIVE, tb1.getState());
+		assertNotNull("ServiceProvider service should be registered",
+				serviceProvider);
 
-    tb1.start();
-    Thread.yield();
-    serviceProvider = (TBCService) trackerProvider.getService();
-    assertTrue("ServiceProvider bundle should be in active state", tb1.getState() == Bundle.ACTIVE);
-    assertNotNull("ServiceProvider service should be registered", serviceProvider);
+		serviceConsumerLookup = (TBCService) trackerConsumerLookup.getService();
+		assertEquals("ServiceConsumerLookup bundle should be in active state",
+				Bundle.ACTIVE, tb2.getState());
+		assertNotNull("ServiceConsumerLookup service should be registered",
+				serviceConsumerLookup);
 
-    trackerProvider.close();
-    trackerConsumerLookup.close();
-    trackerConsumerEvent.close();
-  }
+		serviceConsumerEvent = (TBCService) trackerConsumerEvent.getService();
+		assertEquals("ServiceConsumerEvent bundle should be in active state",
+				Bundle.ACTIVE, tb3.getState());
+		assertNotNull("ServiceConsumerEvent service should be registered",
+				serviceConsumerEvent);
 
-  /**
-   * Tests getting of the provided service from the first component bundle directly.
-   */
-  public void testGetServiceDirect() {
-    ServiceTracker tracker = new ServiceTracker(getContext(), "org.osgi.test.cases.component.tb1.ServiceProvider", null);
-    tracker.open();
-    TBCService serviceProvider = (TBCService) tracker.getService();
-    TestObject testObject = serviceProvider.getTestObject();
-    assertEquals("The return value should be an instance of TestObject", TestObject.class, testObject.getClass());
-    tracker.close();
-  }
+		tb1.uninstall();
+		serviceProvider = (TBCService) trackerProvider.getService();
+		assertNull("ServiceProvider service should not be registered",
+				serviceProvider);
 
-  /**
-   * Tests getting of the provided service of the second component bundle through the lookup method.
-   */
-  public void testGetServiceLookup() {
-    ServiceTracker tracker = new ServiceTracker(getContext(), "org.osgi.test.cases.component.tb2.ServiceConsumerLookup", null);
-    tracker.open();
-    TBCService serviceConsumerLookup = (TBCService) tracker.getService();
-    TestObject testObject = serviceConsumerLookup.getTestObject();
-    assertEquals("The return value should be an instance of TestObject", TestObject.class, testObject.getClass());
-    tracker.close();
-  }
+		tb1 = installBundle("tb1.jar");
+		tb1.stop();
+		Thread.yield();
+		serviceProvider = (TBCService) trackerProvider.getService();
+		assertEquals("ServiceProvider bundle should be in resolved state",
+				Bundle.RESOLVED, tb1.getState());
+		assertNull("ServiceProvider service should not be registered",
+				serviceProvider);
 
-  /**
-   * Tests getting of the provided service of the third component bundle through the event method.
-   */
-  public void testGetServiceEvent() {
-    ServiceTracker tracker = new ServiceTracker(getContext(), "org.osgi.test.cases.component.tb3.ServiceConsumerEvent", null);
-    tracker.open();
-    TBCService serviceConsumerEvent = (TBCService) tracker.getService();
-    TestObject testObject = serviceConsumerEvent.getTestObject();
-    assertEquals("The return value should be an instance of TestObject", TestObject.class, testObject.getClass());
-    tracker.close();
-  }
+		tb1.start();
+		Thread.yield();
+		serviceProvider = (TBCService) trackerProvider.getService();
+		assertEquals("ServiceProvider bundle should be in active state",
+				Bundle.ACTIVE, tb1.getState());
+		assertNotNull("ServiceProvider service should be registered",
+				serviceProvider);
+	}
 
-  /**
-   * Tests getting of the component properties from the second component bundle
-   * set through property and properties elements in XML.
-   */
-  public void testGetProperties() {
-    ServiceTracker tracker = new ServiceTracker(getContext(), "org.osgi.test.cases.component.tb2.ServiceConsumerLookup", null);
-    tracker.open();
-    TBCService serviceConsumerLookup = (TBCService) tracker.getService();
-    Dictionary properties = serviceConsumerLookup.getProperties();
-    assertNotNull("Properties should not be empty", properties);
-    assertTrue("The size of properties should be at least 2", properties.size() >= 2);
-    assertEquals("Value of test.property.int should be equal to '123'", properties.get("test.property.int"), "123");
-    String[] array = (String[]) properties.get("test.property.string");
-    assertEquals("The size of test.property.string array should be 3", array.length, 3);
-    for (int i = 0; i < 3; i++ ) {
-      assertEquals("Element [" + i + "] of test.property.string array should be 'Value " + (i + 1) + "'", array[i], "Value " + (i + 1));
-    }
-    tracker.close();
-  }
+	/**
+	 * Tests getting of the provided service from the first component bundle
+	 * directly.
+	 */
+	public void testGetServiceDirect() {
+		TBCService serviceProvider = (TBCService) trackerProvider.getService();
+		TestObject testObject = serviceProvider.getTestObject();
+		assertEquals("The return value should be an instance of TestObject",
+				TestObject.class, testObject.getClass());
+	}
 
-  /**
-   * This method will check the correct behaviour of component factories
-   * registrations. It will perform the following checks:
-   *
-   * <pre>
-   *
-   *  + install a component factory bundle
-   *   - make sure that the component factory is registered as service
-   *  + create a new component (using a component factory)
-   *   - make sure that the component is registered as service
-   *   - make sure that service is registered with correct properties
-   *   - make sure that the service receives the correct properties in the activate method.
-   *  + stop the component factory bundle
-   *   - make sure that all components created by this factory are also disposed
-   *
-   * </pre>
-   *
-   * @throws Exception
-   */
-  public void testComponentFactory() throws Exception {
-    BundleContext bc = getContext();
+	/**
+	 * Tests getting of the provided service of the second component bundle
+	 * through the lookup method.
+	 */
+	public void testGetServiceLookup() {
+		TBCService serviceConsumerLookup = (TBCService) trackerConsumerLookup
+				.getService();
+		TestObject testObject = serviceConsumerLookup.getTestObject();
+		assertEquals("The return value should be an instance of TestObject",
+				TestObject.class, testObject.getClass());
+	}
 
-    Filter filter = bc.createFilter("(&(" + ComponentConstants.COMPONENT_FACTORY
-                                    + "=org.osgi.test.cases.component.tb4.NamedService)("
-                                    + Constants.OBJECTCLASS + '='
-                                    + ComponentFactory.class.getName() + "))");
-    ServiceTracker componentFactoryTracker = new ServiceTracker(bc, filter, null);
-    ServiceTracker instancesTracker = new ServiceTracker(bc, "org.osgi.test.cases.component.tb4.NamedService", null);
+	/**
+	 * Tests getting of the provided service of the third component bundle
+	 * through the event method.
+	 */
+	public void testGetServiceEvent() {
+		TBCService serviceConsumerEvent = (TBCService) trackerConsumerEvent
+				.getService();
+		TestObject testObject = serviceConsumerEvent.getTestObject();
+		assertEquals("The return value should be an instance of TestObject",
+				TestObject.class, testObject.getClass());
+	}
 
-    Bundle bundle = installBundle("tb4.jar");
-    bundle.start();
-    Thread.yield();
+	/**
+	 * Tests getting of the component properties from the second component
+	 * bundle set through property and properties elements in XML.
+	 */
+	public void testGetProperties() {
+		TBCService serviceConsumerLookup = (TBCService) trackerConsumerLookup
+				.getService();
+		Dictionary properties = serviceConsumerLookup.getProperties();
+		assertNotNull("Properties should not be empty", properties);
+		assertTrue("The size of properties should be at least 2", properties
+				.size() >= 2);
+		assertEquals("Value of test.property.int should be equal to '123'",
+				"123", properties.get("test.property.int"));
+		String[] array = (String[]) properties.get("test.property.string");
+		assertEquals("The size of test.property.string array should be 3", 3,
+				array.length);
+		for (int i = 0; i < 3; i++) {
+			assertEquals("Element [" + i
+					+ "] of test.property.string array should be 'Value "
+					+ (i + 1) + "'", array[i], "Value " + (i + 1));
+		}
+	}
 
-    componentFactoryTracker.open();
-    instancesTracker.open();
-    Hashtable props;
-    try {
-      int oldCount = instancesTracker.getTrackingCount();
-      ComponentFactory factory = (ComponentFactory) componentFactoryTracker.getService();
+	/**
+	 * This method will check the correct behaviour of component factories
+	 * registrations. It will perform the following checks:
+	 * 
+	 * <code> 
+	 * + install a component factory bundle 
+	 *  - make sure that the component factory is registered as service 
+	 * + create a new component (using a component factory) 
+	 *  - make sure that the component is registered as service 
+	 *  - make sure that service is registered with correct properties 
+	 *  - make sure that the service receives the correct properties in the
+	 *    activate method. 
+	 * + stop the component factory bundle 
+	 *  - make sure that all components created by this factory are also disposed
+	 * </code>
+	 * 
+	 * @throws Exception
+	 */
+	public void testComponentFactory() throws Exception {
+		Bundle bundle = installBundle("tb4.jar");
+		bundle.start();
+		Thread.yield();
 
-      // create the first service
-      props = new Hashtable();
-      props.put("name", "hello");
-      factory.newInstance(props);
+		Hashtable props;
+		int oldCount = trackerNamedService.getTrackingCount();
+		ComponentFactory factory = (ComponentFactory) trackerNamedServiceFactory
+				.getService();
 
-      assertEquals("The instances tracking count should be increased by one", oldCount + 1, instancesTracker.getTrackingCount());
-      boolean serviceFound = false;
-      // find the service, the reference must have the properties set correctly
-      ServiceReference refs[] = instancesTracker.getServiceReferences();
-      for (int i = 0; refs != null && i < refs.length; i++) {
-        ServiceReference current = refs[i];
-        String name = (String) current.getProperty("name");
-        if ("hello".equals(name)) {
-          serviceFound = true;
-          Object service = instancesTracker.getService(current);
-          assertEquals("The service must have the same name", "hello", service.toString());
-          break;
-        }
-      }
-      // fail if the service was not found
-      assertTrue("A service should be registered", serviceFound);
+		// create the first service
+		props = new Hashtable();
+		props.put("name", "hello");
+		factory.newInstance(props);
 
-      // create the second service
-      props = new Hashtable();
-      props.put("name", "world");
-      ComponentInstance worldInstance = factory.newInstance(props);
+		assertEquals("The instances tracking count should be increased by one",
+				oldCount + 1, trackerNamedService.getTrackingCount());
+		boolean serviceFound = false;
+		// find the service, the reference must have the properties set
+		// correctly
+		ServiceReference refs[] = trackerNamedService.getServiceReferences();
+		for (int i = 0; refs != null && i < refs.length; i++) {
+			ServiceReference current = refs[i];
+			String name = (String) current.getProperty("name");
+			if ("hello".equals(name)) {
+				serviceFound = true;
+				Object service = trackerNamedService.getService(current);
+				assertEquals("The service must have the same name", "hello",
+						service.toString());
+				break;
+			}
+		}
+		// fail if the service was not found
+		assertTrue("A service should be registered", serviceFound);
 
-      // make sure that the new service is registered
-      assertEquals("The instances tracking count should be increased by two", oldCount + 2, instancesTracker.getTrackingCount());
+		// create the second service
+		props = new Hashtable();
+		props.put("name", "world");
+		ComponentInstance worldInstance = factory.newInstance(props);
 
-      worldInstance.dispose();
-      assertTrue("The service should be unregistered if the instance is disposed", instancesTracker.getServices().length == (oldCount + 1));
+		// make sure that the new service is registered
+		assertEquals("The instances tracking count should be increased by two",
+				oldCount + 2, trackerNamedService.getTrackingCount());
 
-      // stop the bundle in order to check if some services remained registered
-      bundle.stop();
-      Thread.yield();
+		worldInstance.dispose();
+		assertEquals(
+				"The service should be unregistered if the instance is disposed",
+				oldCount + 1, trackerNamedService.getServices().length);
 
-      assertNull("The component factory must be unregistered", componentFactoryTracker.getService());
-      assertNull("All component instances, created by the factory should be unregistered", instancesTracker.getService());
-    } finally {
-      componentFactoryTracker.close();
-      instancesTracker.close();
-    }
-  }
+		// stop the bundle in order to check if some services remained
+		// registered
+		bundle.uninstall();
+		Thread.yield();
 
-  Bundle errorBundle;
+		assertNull("The component factory must be unregistered",
+				trackerNamedServiceFactory.getService());
+		assertNull(
+				"All component instances, created by the factory should be unregistered",
+				trackerNamedService.getService());
+	}
 
-  /**
-   * This method tests the behaviour of the service component runtime against bad component definitions.
-   *
-   * It will perform the following checks:
-   *
-   * <pre>
-   *
-   *  + install bundle with illegal component definition
-   *   verify the following illegal conditions:
-   *   - more that one implementation definition
-   *   - both factory &amp; serviceFactory are specified
-   *   - reference has a bind method but doesn't have unbind and reverse
-   *  + check if framework error is posted
-   *
-   * </pre>
-   *
-   * @throws Exception can be thrown at any time
-   */
-  public void testBadComponents() throws Exception {
-    BundleContext bc = getContext();
+	Bundle	errorBundle;
 
-    tb1.uninstall();
+	/**
+	 * This method tests the behaviour of the service component runtime against
+	 * bad component definitions.
+	 * 
+	 * It will perform the following checks:
+	 * 
+	 * <code>
+	 * + install bundle with illegal component definition
+	 *   verify the following illegal conditions:
+	 *  - more that one implementation definition
+	 *  - both factory &amp; serviceFactory are specified
+	 *  - reference has a bind method but doesn't have unbind and reverse
+	 * + check if framework error is posted
+	 * </code>
+	 * 
+	 * @throws Exception can be thrown at any time
+	 */
+	public void testBadComponents() throws Exception {
+		BundleContext bc = getContext();
 
-    // clear any previously reported 'error' bundles
-    errorBundle = null;
-    bc.addFrameworkListener(this);
+		tb1.uninstall();
 
-    // the bundle contains some illegal definitions
-    tb1 = installBundle("tb1.jar");
-    tb1.start();
-    Thread.yield();
+		// clear any previously reported 'error' bundles
+		errorBundle = null;
+		bc.addFrameworkListener(this);
 
-    bc.removeFrameworkListener(this);
+		// the bundle contains some illegal definitions
+		tb1 = installBundle("tb1.jar");
+		tb1.start();
+		Thread.yield();
 
-    // make sure that SCR reports some errors for tb1
-    assertSame("The Service Component Runtime should post a framework error for tb1", tb1, errorBundle);
+		bc.removeFrameworkListener(this);
 
-    // make sure that the services are not registered
-    ServiceReference ref;
-    ref = bc.getServiceReference("org.osgi.test.cases.component.tb1.BadService1");
-    assertNull("The BadService1 shouldn't be registered because the XML contains two implementation classes", ref);
+		// make sure that SCR reports some errors for tb1
+		assertSame(
+				"The Service Component Runtime should post a framework error for tb1",
+				tb1, errorBundle);
 
-    ref = bc.getServiceReference("org.osgi.test.cases.component.tb1.BadService2");
-    assertNull("The BadService2 shouldn't be registered because component & service factories are incompatible", ref);
+		// make sure that the services are not registered
+		ServiceReference ref;
+		ref = bc
+				.getServiceReference("org.osgi.test.cases.component.tb1.BadService1");
+		assertNull(
+				"The BadService1 shouldn't be registered because the XML contains two implementation classes",
+				ref);
 
-    ref = bc.getServiceReference("org.osgi.test.cases.component.tb3.MissingBindMethods");
-    assertNull("The MissingBindMethods shouldn't be registered because doesn't have both bind & unbind methods", ref);
-  }
+		ref = bc
+				.getServiceReference("org.osgi.test.cases.component.tb1.BadService2");
+		assertNull(
+				"The BadService2 shouldn't be registered because component & service factories are incompatible",
+				ref);
 
-  /**
-   * Clean up after each method. Notice that during debugging many times the unsetState is never reached.
-   */
-  public void unsetState() {
-  }
+		ref = bc
+				.getServiceReference("org.osgi.test.cases.component.tb3.MissingBindMethods");
+		assertNull(
+				"The MissingBindMethods shouldn't be registered because doesn't have both bind & unbind methods",
+				ref);
+	}
 
-  /**
-   * Clean up after a run. Notice that during debugging many times the unprepare is never reached.
-   */
-  public void unprepare() throws Exception {
-    tb1.stop();
-    Thread.yield();
-    uninstallBundle(tb1);
-    tb2.stop();
-    Thread.yield();
-    uninstallBundle(tb2);
-    tb3.stop();
-    Thread.yield();
-    uninstallBundle(tb3);
-  }
+	/**
+	 * Clean up after each method. Notice that during debugging many times the
+	 * unsetState is never reached.
+	 */
+	public void unsetState() {
+	}
 
-  public void frameworkEvent(FrameworkEvent event) {
-    if (event.getType() == FrameworkEvent.ERROR) {
-      errorBundle = event.getBundle();
-    }
-  }
+	/**
+	 * This test check if the SCR will unregister all components when it is
+	 * stopped!
+	 * 
+	 * @throws Exception
+	 */
+	public void testStartStopSCR() throws Exception {
+		Bundle scr = getSCRBundle();
+		if (scr != null) {
+			ServiceReference refs[];
+			BundleContext bc = getContext();
+			String filter = "(" + ComponentConstants.COMPONENT_NAME + "=*)";
+
+			// preserve the count of the registered components
+			// after SRC is started again, the same number of components
+			// must be registered
+			refs = bc.getServiceReferences(null, filter);
+			int count = refs.length;
+
+			scr.stop();
+			Thread.yield();
+
+			refs = bc.getServiceReferences(null, filter);
+			assertNull(
+					"The Service Component Runtime must stop all services if SCR is stopped",
+					refs);
+
+			// make sure that after SCR is being started it will activate
+			// the components which bundles are active
+			scr.start();
+			Thread.yield();
+
+			refs = bc.getServiceReferences(null, filter);
+			assertEquals(
+					"The Service Component Runtime must start all components that are installed prior it",
+					count, refs.length);
+		}
+		else {
+			log("testStartStopSCR test was ignored, please set the property named 'scr.bundle.name'");
+		}
+	}
+
+	private Bundle getSCRBundle() {
+		String bundleName = System.getProperty("scr.bundle.name");
+		if (bundleName != null) {
+			Bundle[] bundles = getContext().getBundles();
+			for (int i = 0; i < bundles.length; i++) {
+				Bundle current = bundles[i];
+				Dictionary headers = current.getHeaders(null);
+				String name = (String) headers.get(Constants.BUNDLE_NAME);
+				if (bundleName.equals(name)) {
+					return current;
+				}
+			}
+		}
+		return null;
+	}
+
+	public void frameworkEvent(FrameworkEvent e) {
+		if (e.getType() == FrameworkEvent.ERROR) {
+			errorBundle = e.getBundle();
+		}
+	}
+
+	// helper for testDynamicBind
+	private int getCount() {
+		TBCService serviceConsumerEvent = (TBCService) trackerConsumerEvent
+				.getService();
+		Dictionary props = serviceConsumerEvent.getProperties();
+		Integer x = (Integer) props.get("count");
+		return x.intValue();
+	}
+
+	// tb3 service has dynamic bind
+	public void testDynamicBind() throws Exception {
+		assertEquals("The number of dynamically bound service should be zero",
+				0, getCount());
+
+		Bundle bundle = installBundle("tb4.jar");
+		bundle.start();
+		Thread.yield();
+
+		assertEquals("No instance created yet, so the bind count must be zero",
+				0, getCount());
+
+		ComponentFactory factory = (ComponentFactory) trackerNamedServiceFactory
+				.getService();
+
+		// create the first service!
+		Hashtable props = new Hashtable();
+		props.put("name", "hello");
+		ComponentInstance instance1 = factory.newInstance(props);
+
+		assertEquals("The should be bound to the first instance", 1, getCount());
+
+		props = new Hashtable();
+		props.put("name", "world");
+		// ComponentInstance instance2 =
+		factory.newInstance(props);
+		assertEquals("The should be bound to the second instance too", 2,
+				getCount());
+
+		instance1.dispose();
+		assertEquals("The should be unbound from the first instance", 1,
+				getCount());
+
+		bundle.uninstall(); // must also dispose the second instance!
+		assertEquals("The should be unbound from the all component instances",
+				0, getCount());
+	}
+
+	// TODO:
+	// 1. verify component enable/disable
+	// 2. verify CM properties - instances should be different after change
+	// 3. test that component factory will register the service (if is provider)
+	// and will not register it if is not provider
+
 }
