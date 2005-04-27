@@ -91,14 +91,31 @@ public class SystemPowerImpl implements SystemPower {
     	PowerStateEvent event;
    	
     	// Check if the caller has the permission to do it
-    	AccessController.checkPermission(new PowerPermission("system"));
+    	// First check "*" then check "system" if the first test fails
+    	try {
+    		AccessController.checkPermission(new PowerPermission("*"));
+    	}
+    	catch (SecurityException se) {
+    		AccessController.checkPermission(new PowerPermission("system"));
+    	}
     	
     	// Check if the power state is a valid one and different from the previous one
     	if ((powerState < SystemPowerState.OFF) ||
 			(powerState > SystemPowerState.FULL_POWER) ||
-			(currentPowerState == powerState))  {
+			(currentPowerState == powerState))
     		throw(new PowerException(PowerException.ILLEGAL_STATE_TRANSITION_REQUEST));
-    	}
+    	
+    	// Check if the transition request is a valid one
+    	// The following transitions are not allowed:
+    	// Off -> Suspend, Sleep
+    	// Suspend -> Sleep, Off
+    	if ((currentPowerState == SystemPowerState.OFF) && 
+    		((powerState == SystemPowerState.SLEEP) || (powerState == SystemPowerState.SUSPEND)))
+    		throw(new PowerException(PowerException.ILLEGAL_STATE_TRANSITION_REQUEST));
+    	    
+    	if ((currentPowerState == SystemPowerState.SUSPEND) && 
+        		((powerState == SystemPowerState.SLEEP) || (powerState == SystemPowerState.OFF)))
+        		throw(new PowerException(PowerException.ILLEGAL_STATE_TRANSITION_REQUEST));
     	
        	// The previousPowerState is the current one
        	previousPowerState = currentPowerState;
