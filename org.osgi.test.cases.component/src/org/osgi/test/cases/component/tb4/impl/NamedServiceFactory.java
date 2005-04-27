@@ -24,22 +24,22 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-
 package org.osgi.test.cases.component.tb4.impl;
 
 import org.osgi.service.component.ComponentContext;
 import org.osgi.test.cases.component.tb4.NamedService;
+
 
 /**
  * @author Valentin Valchev
  * @version $Revision$
  */
 public class NamedServiceFactory implements NamedService {
-  private String name;
+  private String name = "name not init";
   
   public void activate(ComponentContext componentContext) {
     name = (String) componentContext.getProperties().get("name");
-    if (name == null) {
+    if( name == null ) {
       this.name = "name not set";
     }
   }
@@ -54,4 +54,5 @@ public class NamedServiceFactory implements NamedService {
   public String toString() {
     return name;
   }
+
 }
