@@ -339,7 +339,7 @@ public final class BundlePermission extends BasicPermission {
 				sb.append(HOST);
 			}
 
-			if ((action_mask & ACTION_HOST) == ACTION_FRAGMENT) {
+			if ((action_mask & ACTION_FRAGMENT) == ACTION_FRAGMENT) {
 				if (comma)
 					sb.append(',');
 				sb.append(FRAGMENT);
