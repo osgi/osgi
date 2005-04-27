@@ -156,6 +156,8 @@ public abstract interface BundleContext {
 	 * resources minimally consist of a unique identifier and a persistent
 	 * storage area if the platform has file system support. If this step fails,
 	 * a <code>BundleException</code> is thrown.
+	 * ### We need to add some text about signing conditions, 
+	 * ## one of which is the absence of the OSGI-INF/permissions.perm file when it is signed
 	 * 
 	 * <li>If the bundle has declared an Bundle-RequiredExecutionEnvironment
 	 * header, then the listed execution environments must be verified against
