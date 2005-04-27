@@ -266,6 +266,14 @@ public class ResolverBundle implements VersionSupplier {
 		return (BundleConstraint[]) resultList.toArray(new BundleConstraint[resultList.size()]);
 	}
 
+	BundleConstraint getRequire(String name) {
+		BundleConstraint[] requires = getRequires();
+		for (int i = 0; i < requires.length; i++)
+			if (requires[i].getVersionConstraint().getName().equals(name))
+				return requires[i];
+		return null;
+	}
+
 	// Returns true if any cyclic dependencies have been recorded
 	boolean isDependentOnCycle() {
 		return cyclicDependencies.size() > 0;
@@ -343,6 +351,7 @@ public class ResolverBundle implements VersionSupplier {
 	}
 
 	private boolean isImported(String packageName) {
+		ResolverImport[] imports = getImportPackages();
 		for (int i = 0; i < imports.length; i++)
 			if (packageName.equals(imports[i].getName()))
 				return true;
@@ -351,6 +360,7 @@ public class ResolverBundle implements VersionSupplier {
 	}
 
 	private boolean isExported(String packageName) {
+		ResolverExport[] exports = getExportPackages();
 		for (int i = 0; i < exports.length; i++)
 			if (packageName.equals(exports[i].getName()))
 				return true;
@@ -359,6 +369,7 @@ public class ResolverBundle implements VersionSupplier {
 	}
 
 	private boolean isRequired(String bundleName) {
+		BundleConstraint[] requires = getRequires();
 		for (int i = 0; i < requires.length; i++)
 			if (bundleName.equals(requires[i].getVersionConstraint().getName()))
 				return true;
@@ -378,8 +389,8 @@ public class ResolverBundle implements VersionSupplier {
 		BundleSpecification[] newRequires = fragment.getBundle().getRequiredBundles();
 		ExportPackageDescription[] newExports = fragment.getBundle().getExportPackages();
 
-		if (isResolved() && (newImports.length > 0 || newRequires.length > 0))
-			return new ResolverExport[0]; // do not allow fragments to require new resources on an already resolved host
+		if (constraintsConflict(newImports, newRequires))
+			return new ResolverExport[0]; // do not allow fragments with conflicting constraints
 		if (isResolved() && newExports.length > 0)
 			fragment.setNewFragmentExports(true);
 
@@ -407,7 +418,7 @@ public class ResolverBundle implements VersionSupplier {
 
 		ArrayList hostExports = new ArrayList(newExports.length);
 		if (newExports.length > 0 && addExports) {
-			StateObjectFactory factory = bundle.getContainingState().getFactory();
+			StateObjectFactory factory = resolver.getState().getFactory();
 			for (int i = 0; i < newExports.length; i++) {
 				if (!isExported(newExports[i].getName())) {
 					ExportPackageDescription hostExport = factory.createExportPackageDescription(newExports[i].getName(), newExports[i].getVersion(), newExports[i].getDirectives(), newExports[i].getAttributes(), newExports[i].isRoot(), bundle);
@@ -417,6 +428,24 @@ public class ResolverBundle implements VersionSupplier {
 			fragmentExports.put(fragment.bundleID, hostExports);
 		}
 		return (ResolverExport[]) hostExports.toArray(new ResolverExport[hostExports.size()]);
+	}
+
+	private boolean constraintsConflict(ImportPackageSpecification[] newImports, BundleSpecification[] newRequires) {
+		for (int i = 0; i < newImports.length; i++) {
+			ResolverImport importPkg = getImport(newImports[i].getName());
+			if (importPkg == null && isResolved())
+				return true; // do not allow additional constraints when host is already resolved
+			if (importPkg != null && !newImports[i].getVersionRange().equals(importPkg.getImportPackageSpecification().getVersionRange()))
+				return true; // do not allow conflicting constraints from fragment 
+		}
+		for (int i = 0; i < newRequires.length; i++) {
+			BundleConstraint constraint = getRequire(newRequires[i].getName());
+			if (constraint == null && isResolved())
+				return true; // do not allow additional constraints when host is already resolved
+			if (constraint != null && !newRequires[i].getVersionRange().equals(constraint.getVersionConstraint().getVersionRange()))
+				return true; // do not allow conflictin constraints from fragment
+		}
+		return false;
 	}
 
 	private void setNewFragmentExports(boolean newFragmentExports) {

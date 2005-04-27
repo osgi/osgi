@@ -150,32 +150,39 @@ public class DefaultClassLoader extends AbstractClassLoader {
 	 */
 	protected ClasspathEntry getClasspath(String cp, AbstractBundleData bundledata, ProtectionDomain domain) {
 		BundleFile bundlefile = null;
-		File file = bundledata.getBaseBundleFile().getFile(cp);
-		if (file != null && file.exists()) {
-			try {
-				bundlefile = hostdata.getAdaptor().createBundleFile(file, bundledata);
-			} catch (IOException e) {
-				bundledata.getAdaptor().getEventPublisher().publishFrameworkEvent(FrameworkEvent.ERROR, bundledata.getBundle(), e);
-			}
-		} else if (bundledata.getBaseBundleFile().containsDir(cp)) {
-			// the classpath entry is a directory in the bundle jar file.
+		File file;
+		// check for internal library jars
+		if ((file = bundledata.getBaseBundleFile().getFile(cp)) != null)
+			bundlefile = createBundleFile(file, bundledata);
+		// check for intenral library directories in a bundle jar file
+		if (bundlefile == null && bundledata.getBaseBundleFile().containsDir(cp))
 			bundlefile = new BundleFile.NestedDirBundleFile(bundledata.getBaseBundleFile(), cp);
-		}
-
 		// if in dev mode, try using the cp as an absolute path
-		if (bundlefile == null && DevClassPathHelper.inDevelopmentMode()) {
-			file = new File(cp);
-			if (file.exists() && file.isAbsolute())
-				// if the file exists and is absolute then create BundleFile for it.
-				try {
-					bundlefile = hostdata.getAdaptor().createBundleFile(file, bundledata);
-				} catch (IOException e) {
-					bundledata.getAdaptor().getEventPublisher().publishFrameworkEvent(FrameworkEvent.ERROR, bundledata.getBundle(), e);
-				}
-		}
-
+		if (bundlefile == null && DevClassPathHelper.inDevelopmentMode())
+			return getExternalClassPath(cp, bundledata, domain);
 		if (bundlefile != null)
 			return createClassPathEntry(bundlefile, domain);
+		return null;
+	}
+
+	protected ClasspathEntry getExternalClassPath(String cp, AbstractBundleData bundledata, ProtectionDomain domain) {
+		File file = new File(cp);
+		if (!file.isAbsolute())
+			return null;
+		BundleFile bundlefile = createBundleFile(file, bundledata);
+		if (bundlefile != null)
+			return createClassPathEntry(bundlefile, domain);
+		return null;
+	}
+
+	protected BundleFile createBundleFile(File file, AbstractBundleData bundledata) {
+		if (file == null || !file.exists())
+			return null;
+		try {
+			return hostdata.getAdaptor().createBundleFile(file, bundledata);
+		} catch (IOException e) {
+			bundledata.getAdaptor().getEventPublisher().publishFrameworkEvent(FrameworkEvent.ERROR, bundledata.getBundle(), e);
+		}
 		return null;
 	}
 
@@ -472,44 +479,29 @@ public class DefaultClassLoader extends AbstractClassLoader {
 
 	protected ClasspathEntry[] buildClasspath(String[] classpath, AbstractBundleData bundledata, ProtectionDomain domain) {
 		ArrayList result = new ArrayList(classpath.length);
-
-		// If not in dev mode then just add the regular classpath entries and return
-		if (!DevClassPathHelper.inDevelopmentMode()) {
-			for (int i = 0; i < classpath.length; i++)
-				findClassPathEntry(result, classpath[i], bundledata, domain);
-			return (ClasspathEntry[]) result.toArray(new ClasspathEntry[result.size()]);
-		}
-
-		// Otherwise, add the legacy entries for backwards compatibility and
-		// then for each classpath entry add the dev entries as spec'd in the 
-		// corresponding properties file.  If none are spec'd, add the 
-		// classpath entry itself
+		// if in dev mode add the dev entries
 		addDefaultDevEntries(result, bundledata, domain);
-		for (int i = 0; i < classpath.length; i++) {
-			String[] devEntries = getDevEntries(classpath[i], bundledata);
-			if (devEntries != null && devEntries.length > 0) {
-				for (int j = 0; j < devEntries.length; j++)
-					findClassPathEntry(result, devEntries[j], bundledata, domain);
-			} else
-				findClassPathEntry(result, classpath[i], bundledata, domain);
-		}
+		// add the regular classpath entries.
+		for (int i = 0; i < classpath.length; i++)
+			findClassPathEntry(result, classpath[i], bundledata, domain);
 		return (ClasspathEntry[]) result.toArray(new ClasspathEntry[result.size()]);
 	}
 
 	protected void addDefaultDevEntries(ArrayList result, AbstractBundleData bundledata, ProtectionDomain domain) {
-		String[] devClassPath = DevClassPathHelper.getDevClassPath(bundledata.getSymbolicName());
+		String[] devClassPath = !DevClassPathHelper.inDevelopmentMode() ? null : DevClassPathHelper.getDevClassPath(bundledata.getSymbolicName());
 		if (devClassPath == null)
-			return;
+			return; // not in dev mode return
 		for (int i = 0; i < devClassPath.length; i++)
 			findClassPathEntry(result, devClassPath[i], bundledata, domain);
 	}
 
 	protected void findClassPathEntry(ArrayList result, String entry, AbstractBundleData bundledata, ProtectionDomain domain) {
 		if (!addClassPathEntry(result, entry, bundledata, domain)) {
-			//			if (devCP == null) {
-			//				BundleException be = new BundleException(Msg.formatter.getString("BUNDLE_CLASSPATH_ENTRY_NOT_FOUND_EXCEPTION", entry, hostdata.getLocation()));
-			//				bundledata.getAdaptor().getEventPublisher().publishFrameworkEvent(FrameworkEvent.ERROR, bundledata.getBundle(), be);
-			//			}
+			String[] devCP = !DevClassPathHelper.inDevelopmentMode() ? null : DevClassPathHelper.getDevClassPath(bundledata.getSymbolicName());
+			if (devCP == null || devCP.length == 0) {
+				BundleException be = new BundleException(NLS.bind(AdaptorMsg.BUNDLE_CLASSPATH_ENTRY_NOT_FOUND_EXCEPTION, entry, bundledata.getLocation()));
+				bundledata.getAdaptor().getEventPublisher().publishFrameworkEvent(FrameworkEvent.INFO, bundledata.getBundle(), be);
+			}
 		}
 	}
 
@@ -537,26 +529,6 @@ public class DefaultClassLoader extends AbstractClassLoader {
 			}
 		}
 		return false;
-	}
-
-	protected String[] getDevEntries(String classpathEntry, AbstractBundleData bundledata) {
-		File propLocation = bundledata.getBaseBundleFile().getFile(classpathEntry + ".properties"); //$NON-NLS-1$
-		if (propLocation == null)
-			return null;
-		try {
-			InputStream in = new FileInputStream(propLocation);
-			try {
-				Properties devProps = new Properties();
-				devProps.load(in);
-				return DevClassPathHelper.getArrayFromList(devProps.getProperty("bin")); //$NON-NLS-1$
-			} finally {
-				in.close();
-			}
-		} catch (IOException e) {
-			BundleException be = new BundleException(NLS.bind(AdaptorMsg.BUNDLE_CLASSPATH_PROPERTIES_ERROR, propLocation), e); //$NON-NLS-1$
-			bundledata.getAdaptor().getEventPublisher().publishFrameworkEvent(FrameworkEvent.ERROR, bundledata.getBundle(), be);
-		}
-		return null;
 	}
 
 	/**

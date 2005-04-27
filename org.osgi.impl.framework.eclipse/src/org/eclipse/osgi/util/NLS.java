@@ -21,7 +21,9 @@ import org.eclipse.osgi.framework.internal.core.MessageResourceBundle;
  * method calls. 
  * </p>
  * <p>Text appearing within curly braces in the given message, will be interpreted
- * as a numeric index to the corresponding substitution object in the given array.
+ * as a numeric index to the corresponding substitution object in the given array. Calling
+ * the #bind methods with text that does not map to an integer will result in an
+ * {@link IllegalArgumentException}.
  * </p>
  * <p>
  * Text appearing within single quotes is treated as a literal. A single quote is escaped by
@@ -126,9 +128,7 @@ public abstract class NLS {
 					try {
 						number = Integer.parseInt(message.substring(i, index));
 					} catch (NumberFormatException e) {
-						buffer.append("<missing argument>"); //$NON-NLS-1$
-						i = index;
-						break;
+						throw new IllegalArgumentException();
 					}
 					if (number == 0 && argZero != null)
 						buffer.append(argZero);

@@ -311,6 +311,7 @@ public class BundleFragment extends AbstractBundle {
 		BundleLoaderProxy[] newHosts = new BundleLoaderProxy[hosts.length + 1];
 		System.arraycopy(hosts, 0, newHosts, 0, hosts.length);
 		newHosts[newHosts.length - 1] = host;
+		hosts = newHosts;
 		return true;
 	}
 

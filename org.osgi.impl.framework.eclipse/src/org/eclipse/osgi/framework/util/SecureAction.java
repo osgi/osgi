@@ -30,6 +30,7 @@ public class SecureAction {
 		// save the control context to be used.
 		this.controlContext = AccessController.getContext();
 	}
+
 	/**
 	 * Returns a system property.  Same as calling
 	 * System.getProperty(String).
@@ -96,7 +97,9 @@ public class SecureAction {
 				}
 			}, controlContext);
 		} catch (PrivilegedActionException e) {
-			throw (FileNotFoundException) e.getException();
+			if (e.getException() instanceof FileNotFoundException)
+				throw (FileNotFoundException) e.getException();
+			throw (RuntimeException) e.getException();
 		}
 	}
 
@@ -118,7 +121,9 @@ public class SecureAction {
 				}
 			}, controlContext);
 		} catch (PrivilegedActionException e) {
-			throw (FileNotFoundException) e.getException();
+			if (e.getException() instanceof FileNotFoundException)
+				throw (FileNotFoundException) e.getException();
+			throw (RuntimeException) e.getException();
 		}
 	}
 
@@ -182,7 +187,9 @@ public class SecureAction {
 				}
 			}, controlContext);
 		} catch (PrivilegedActionException e) {
-			throw (IOException) e.getException();
+			if (e.getException() instanceof IOException)
+				throw (IOException) e.getException();
+			throw (RuntimeException) e.getException();
 		}
 	}
 
@@ -196,7 +203,9 @@ public class SecureAction {
 				}
 			}, controlContext);
 		} catch (PrivilegedActionException e) {
-			throw (MalformedURLException) e.getException();
+			if (e.getException() instanceof MalformedURLException)
+				throw (MalformedURLException) e.getException();
+			throw (RuntimeException) e.getException();
 		}
 	}
 
@@ -225,5 +234,21 @@ public class SecureAction {
 				return context.getService(reference);
 			}
 		}, controlContext);
+	}
+
+	public Class forName(final String name) throws ClassNotFoundException {
+		if (System.getSecurityManager() == null)
+			return Class.forName(name);
+		try {
+			return (Class) AccessController.doPrivileged(new PrivilegedExceptionAction() {
+				public Object run() throws Exception {
+					return Class.forName(name);
+				}
+			});
+		} catch (PrivilegedActionException e) {
+			if (e.getException() instanceof ClassNotFoundException)
+				throw (ClassNotFoundException) e.getException();
+			throw (RuntimeException) e.getException();
+		}
 	}
 }

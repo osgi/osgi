@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -32,6 +32,8 @@ public class ReliableFileOutputStream extends FilterOutputStream {
 	 * Checksum calculator
 	 */
 	private Checksum crc;
+
+	private boolean outputOpen = false;
 
 	/**
 	 * Constructs a new ReliableFileOutputStream on the File <code>file</code>.  If the
@@ -91,13 +93,14 @@ public class ReliableFileOutputStream extends FilterOutputStream {
 	 * @exception 	java.io.IOException If an error occurs opening the file.
 	 */
 	private ReliableFileOutputStream(ReliableFile reliable, boolean append) throws IOException {
-		super(reliable.getOutputStream(append));
+		super(reliable.getOutputStream(append, ReliableFile.GENERATION_LATEST));
 
 		this.reliable = reliable;
+		outputOpen = true;
 		if (append)
 			crc = reliable.getFileChecksum();
 		else
-			crc = ReliableFile.getChecksumCalculator();
+			crc = reliable.getChecksumCalculator();
 	}
 
 	/**
@@ -109,28 +112,32 @@ public class ReliableFileOutputStream extends FilterOutputStream {
 	 * @exception 	java.io.IOException If an error occurs closing the file.
 	 */
 	public synchronized void close() throws IOException {
-		if (reliable != null) {
-			try {
-				// tag on our signature and checksum
-				out.write(ReliableFile.identifier1);
-				byte crcStr[] = ReliableFile.intToHex((int) crc.getValue()).getBytes();
-				out.write(crcStr);
-				out.write(ReliableFile.identifier2);
+		closeIntermediateFile();
+		reliable.closeOutputFile(crc);
+		// if the previouse closeOutpuFile() throws exception,
+		//  we don't null out reliable to give another opportunity
+		//  to rename the file.
+		reliable = null;
+	}
 
-				try {
-					out.flush();
-					((FileOutputStream) out).getFD().sync();
-				} catch (IOException e) {
-					// just ignore this Exception
-					//Debug
-					e.printStackTrace();
-				}
-				super.close();
-			} finally {
-				reliable.closeOutputFile();
-				reliable = null;
+	public File closeIntermediateFile() throws IOException {
+		if (reliable == null)
+			throw new IOException("ReliableFile stream not open"); //$NON-NLS-1$
+		if (outputOpen) {
+			// tag on our signature and checksum
+			reliable.writeChecksumSignature(out, crc);
+			out.flush();
+			try {
+				((FileOutputStream) out).getFD().sync();
+			} catch (IOException e) {
+				// just ignore this Exception
+				//Debug
+				e.printStackTrace();
 			}
+			out.close();
+			outputOpen = false;
 		}
+		return reliable.getOutputFile();
 	}
 
 	/**
@@ -156,4 +163,17 @@ public class ReliableFileOutputStream extends FilterOutputStream {
 		crc.update((byte) b);
 	}
 
+	public void abort() {
+		if (reliable == null)
+			return;
+		if (outputOpen) {
+			try {
+				out.close();
+			} catch (IOException e) {/*ignore*/
+			}
+			outputOpen = false;
+		}
+		reliable.abortOutputFile();
+		reliable = null;
+	}
 }

@@ -13,13 +13,13 @@ package org.eclipse.osgi.service.resolver;
 import org.osgi.framework.Version;
 
 public class VersionRange {
+	private static final Version versionMax = new Version(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
 	public static final VersionRange emptyRange = new VersionRange(null);
 
 	private Version minVersion;
 	private boolean includeMin; 
 	private Version maxVersion;
 	private boolean includeMax;
-	private static final Version versionMax = new Version(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
 
 	/**
 	 * Constructs a VersionRange with the specified minVersion and maxVersion.
@@ -149,13 +149,11 @@ public class VersionRange {
 		if (VersionRange.versionMax.equals(maxVersion))
 			return minVersion.toString();
 		StringBuffer result = new StringBuffer();
-		if (minVersion != null)
-			result.append(includeMin ? '[' : '(');
+		result.append(includeMin ? '[' : '(');
 		result.append(minVersion);
 		result.append(',');
 		result.append(maxVersion);
-		if (maxVersion != null)
-			result.append(includeMax ? ']' : ')');
+		result.append(includeMax ? ']' : ')');
 		return result.toString();
 	}
 }

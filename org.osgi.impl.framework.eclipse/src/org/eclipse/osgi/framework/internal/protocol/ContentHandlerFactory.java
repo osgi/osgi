@@ -30,7 +30,7 @@ public class ContentHandlerFactory implements java.net.ContentHandlerFactory {
 	private BundleContext context;
 
 	private static final String contentHandlerClazz = "java.net.ContentHandler"; //$NON-NLS-1$
-	private static final String CONTENT_HANDLER_PKGS= "java.content.handler.pkgs"; //$NON-NLS-1$
+	private static final String CONTENT_HANDLER_PKGS = "java.content.handler.pkgs"; //$NON-NLS-1$
 	private static final String DEFAULT_VM_CONTENT_HANDLERS = "sun.net.www.content"; //$NON-NLS-1$
 
 	private Hashtable proxies;
@@ -70,7 +70,7 @@ public class ContentHandlerFactory implements java.net.ContentHandlerFactory {
 				name.append("."); //$NON-NLS-1$
 				name.append(convertedContentType);
 				try {
-					clazz = Class.forName(name.toString());
+					clazz = StreamHandlerFactory.secureAction.forName(name.toString());
 					if (clazz != null) {
 						return (null); //this class exists, it is a built in handler, let the JVM handle it	
 					}

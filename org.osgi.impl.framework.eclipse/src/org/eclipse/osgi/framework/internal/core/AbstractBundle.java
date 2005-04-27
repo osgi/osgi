@@ -1271,13 +1271,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 			return null;
 		}
 		checkValid();
-		if (bundledata == null) {
-			if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
-				Debug.println("Bundle.getResourcePaths(" + path + ") called when bundledata == null: " + this); //$NON-NLS-1$ //$NON-NLS-2$
-				Debug.printStackTrace(new Exception("Stack trace")); //$NON-NLS-1$
-			}
-			return (null);
-		}
+		// TODO this doPrivileged is probably not needed.  The adaptor isolates callers from disk access
 		return (Enumeration) AccessController.doPrivileged(new PrivilegedAction() {
 			public Object run() {
 				return bundledata.getEntryPaths(path);
@@ -1297,16 +1291,10 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 			return null;
 		}
 		checkValid();
-		if (bundledata == null) {
-			if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
-				Debug.println("Bundle.getFile(" + fileName + ") called when bundledata == null: " + this); //$NON-NLS-1$ //$NON-NLS-2$
-				Debug.printStackTrace(new Exception("Stack trace")); //$NON-NLS-1$
-			}
-			return (null);
-		}
 		if (System.getSecurityManager() == null)
 			return bundledata.getEntry(fileName);
 		final String ffileName = fileName;
+		// TODO this doPrivileged is probably not needed.  The adaptor isolates callers from disk access
 		return (URL) AccessController.doPrivileged(new PrivilegedAction() {
 			public Object run() {
 				return bundledata.getEntry(ffileName);
@@ -1459,23 +1447,31 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 		} catch (SecurityException e) {
 			return null;
 		}
+		checkValid();
+		// a list used to store the results of the search
 		List pathList = new ArrayList();
 		Filter patternFilter = null;
 		Hashtable patternProps = null;
 		if (filePattern != null)
 			try {
+				// create a file pattern filter with 'filename' as the key
 				patternFilter = new FilterImpl("(filename=" + filePattern + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+				// create a single hashtable to be shared during the recursive search
 				patternProps = new Hashtable(2);
 			} catch (InvalidSyntaxException e) {
 				// cannot happen
 			}
+		// find the local entries of this bundle
 		findLocalEntryPaths(path, patternFilter, patternProps, recurse, pathList);
+		// if this bundle is a host to fragments then search the fragments
 		final Bundle[] fragments = getFragments();
 		final int numFragments = fragments == null ? -1 : fragments.length;
 		for (int i = 0; i < numFragments; i++)
 			((AbstractBundle) fragments[i]).findLocalEntryPaths(path, patternFilter, patternProps, recurse, pathList);
+		// return null if no entries found
 		if (pathList.size() == 0)
 			return null;
+		// create an enumeration to enumerate the pathList
 		final String[] pathArray = (String[]) pathList.toArray(new String[pathList.size()]);
 		return new Enumeration() {
 			int curIndex = 0;
@@ -1503,15 +1499,18 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 			private void getNextElement() {
 				nextElement = null;
 				if (curIndex >= pathArray.length)
+					// reached the end of the pathArray; no more elements
 					return;
 				String curPath = pathArray[curIndex];
 				if (curFragment == -1) {
+					// need to search ourselves first
 					nextElement = getEntry(curPath);
 					curFragment++;
 				}
+				// if the element is not in the host look in the fragments until we have searched them all
 				while (nextElement == null && curFragment < numFragments)
 					nextElement = fragments[curFragment++].getEntry(curPath);
-
+				// if we have no fragments or we have searched all fragments then advance to the next path 
 				if (numFragments == -1 || curFragment >= numFragments) {
 					curIndex++;
 					curFragment = -1;
@@ -1525,7 +1524,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	}
 
 	protected void findLocalEntryPaths(String path, Filter patternFilter, Hashtable patternProps, boolean recurse, List pathList) {
-		Enumeration entryPaths = getEntryPaths(path);
+		Enumeration entryPaths = bundledata.getEntryPaths(path);
 		if (entryPaths == null)
 			return;
 		while (entryPaths.hasMoreElements()) {
@@ -1533,9 +1532,12 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 			int slashIndex = entry.lastIndexOf('/');
 			String fileName = slashIndex < 0 ? entry : entry.substring(slashIndex + 1);
 			if (patternProps != null)
+				// set the filename to the current entry
 				patternProps.put("filename", fileName); //$NON-NLS-1$
+			// prevent duplicates and match on the patterFilter
 			if (!pathList.contains(entry) && (patternFilter == null || patternFilter.matchCase(patternProps)))
 				pathList.add(entry);
+			// rescurse only into entries that are directories
 			if (recurse && !entry.equals(path) && entry.length() > 0 && slashIndex == (entry.length() - 1))
 				findLocalEntryPaths(entry, patternFilter, patternProps, recurse, pathList);
 		}

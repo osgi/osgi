@@ -14,8 +14,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.*;
+import org.eclipse.osgi.framework.adaptor.FrameworkAdaptor;
 import org.eclipse.osgi.framework.debug.Debug;
+import org.eclipse.osgi.framework.log.FrameworkLogEntry;
 
 /**
  * Class responsible for loading message values from a property file
@@ -37,11 +41,13 @@ public class MessageResourceBundle {
 
 		private final String bundleName;
 		private final Map fields;
+		private final boolean isAccessible;
 
-		public MessagesProperties(Map fieldMap, String bundleName) {
+		public MessagesProperties(Map fieldMap, String bundleName, boolean isAccessible) {
 			super();
 			this.fields = fieldMap;
 			this.bundleName = bundleName;
+			this.isAccessible = isAccessible;
 		}
 
 		/* (non-Javadoc)
@@ -53,40 +59,48 @@ public class MessageResourceBundle {
 			if (fieldObject == ASSIGNED)
 				return null;
 			if (fieldObject == null) {
-				if (DEBUG_MESSAGE_BUNDLES)
-					System.out.println("Unused message: " + key + " in: " + bundleName); //$NON-NLS-1$ //$NON-NLS-2$
+				final String msg = "NLS unused message: " + key + " in: " + bundleName;//$NON-NLS-1$ //$NON-NLS-2$
+				if (Debug.DEBUG_MESSAGE_BUNDLES)
+					System.out.println(msg); 
+				log(SEVERITY_WARNING, msg, null);
 				return null;
 			}
-			Field field = (Field) fieldObject;
+			final Field field = (Field) fieldObject;
 			//can only set value of public static non-final fields
 			if ((field.getModifiers() & MOD_MASK) != MOD_EXPECTED)
 				return null;
-			// Set the value into the field. We should never get an exception here because
-			// we know we have a public static non-final field. If we do get an exception, silently
-			// log it and continue. This means that the field will (most likely) be un-initialized and
-			// will fail later in the code and if so then we will see both the NPE and this error.
 			try {
+				// Check to see if we are allowed to modify the field. If we aren't (for instance 
+				// if the class is not public) then change the accessible attribute of the field
+				// before trying to set the value.
+				if (!isAccessible)
+					makeAccessible(field);
+				// Set the value into the field. We should never get an exception here because
+				// we know we have a public static non-final field. If we do get an exception, silently
+				// log it and continue. This means that the field will (most likely) be un-initialized and
+				// will fail later in the code and if so then we will see both the NPE and this error.
 				field.set(null, value);
 			} catch (Exception e) {
-				// TODO externalize message
-				//IStatus status = new Status(IStatus.ERROR, Platform.PI_RUNTIME, Platform.PLUGIN_ERROR, "Exception setting field value.", e);
-				//InternalPlatform.getDefault().log(status);
-				e.printStackTrace();
+				log(SEVERITY_ERROR, "Exception setting field value.", e); //$NON-NLS-1$
 			}
 			return null;
 		}
 	}
 
+	private static FrameworkAdaptor adaptor;
 	/**
 	 * This object is assigned to the value of a field map to indicate
 	 * that a translated message has already been assigned to that field.
 	 */
 	static final Object ASSIGNED = new Object();
 
-	private static final boolean DEBUG_MESSAGE_BUNDLES = Debug.DEBUG_MESSAGE_BUNDLES;
-
 	private static final String EXTENSION = ".properties"; //$NON-NLS-1$
+
 	private static String[] nlSuffixes;
+
+	static int SEVERITY_ERROR = 0x04;
+
+	static int SEVERITY_WARNING = 0x02;
 
 	/*
 	 * Build an array of property files to search.  The returned array contains
@@ -118,7 +132,24 @@ public class MessageResourceBundle {
 		return variants;
 	}
 
-	private static void computeMissingMessages(String bundleName, Class clazz, Map fieldMap, Field[] fieldArray) {
+	/*
+	 * Change the accessibility of the specified field so we can set its value
+	 * to be the appropriate message string.
+	 */
+	static void makeAccessible(final Field field) {
+		if (System.getSecurityManager() == null) {
+			field.setAccessible(true);
+		} else {
+			AccessController.doPrivileged(new PrivilegedAction() {
+				public Object run() {
+					field.setAccessible(true);
+					return null;
+				}
+			});
+		}
+	}
+
+	private static void computeMissingMessages(String bundleName, Class clazz, Map fieldMap, Field[] fieldArray, boolean isAccessible) {
 		// iterate over the fields in the class to make sure that there aren't any empty ones
 		final int MOD_EXPECTED = Modifier.PUBLIC | Modifier.STATIC;
 		final int MOD_MASK = MOD_EXPECTED | Modifier.FINAL;
@@ -135,16 +166,15 @@ public class MessageResourceBundle {
 				// we know we have a public static non-final field. If we do get an exception, silently
 				// log it and continue. This means that the field will (most likely) be un-initialized and
 				// will fail later in the code and if so then we will see both the NPE and this error.
-				String value = "Missing message: " + field.getName() + " in: " + bundleName; //$NON-NLS-1$ //$NON-NLS-2$
-				if (DEBUG_MESSAGE_BUNDLES)
+				String value = "NLS missing message: " + field.getName() + " in: " + bundleName; //$NON-NLS-1$ //$NON-NLS-2$
+				if (Debug.DEBUG_MESSAGE_BUNDLES)
 					System.out.println(value);
+				log(SEVERITY_WARNING, value, null);
+				if (!isAccessible)
+					makeAccessible(field);
 				field.set(null, value);
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (Exception e) {
+				log(SEVERITY_ERROR, "Error setting the missing message value for: " + field.getName(), e); //$NON-NLS-1$
 			}
 		}
 	}
@@ -156,6 +186,8 @@ public class MessageResourceBundle {
 		long start = System.currentTimeMillis();
 		final Field[] fieldArray = clazz.getDeclaredFields();
 		ClassLoader loader = clazz.getClassLoader();
+
+		boolean isAccessible = (clazz.getModifiers() & Modifier.PUBLIC) != 0;
 
 		//build a map of field names to Field objects
 		final int len = fieldArray.length;
@@ -172,10 +204,10 @@ public class MessageResourceBundle {
 			if (input == null)
 				continue;
 			try {
-				final MessagesProperties properties = new MessagesProperties(fields, bundleName);
+				final MessagesProperties properties = new MessagesProperties(fields, bundleName, isAccessible);
 				properties.load(input);
 			} catch (IOException e) {
-				// TODO log
+				log(SEVERITY_ERROR, "Error loading " + variants[i], e); //$NON-NLS-1$
 			} finally {
 				if (input != null)
 					try {
@@ -185,8 +217,22 @@ public class MessageResourceBundle {
 					}
 			}
 		}
-		computeMissingMessages(bundleName, clazz, fields, fieldArray);
-		if (DEBUG_MESSAGE_BUNDLES)
+		computeMissingMessages(bundleName, clazz, fields, fieldArray, isAccessible);
+		if (Debug.DEBUG_MESSAGE_BUNDLES)
 			System.out.println("Time to load message bundle: " + bundleName + " was " + (System.currentTimeMillis() - start) + "ms."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	}
+
+	static void log(int severity, String msg, Exception e) {
+		if (adaptor != null)
+			adaptor.getFrameworkLog().log(new FrameworkLogEntry(FrameworkAdaptor.FRAMEWORK_SYMBOLICNAME + ' ' + severity + ' ' + 1, msg, 0, e, null));
+		else {
+			System.out.println(msg); //$NON-NLS-1$
+			if (e != null)
+				e.printStackTrace();
+		}
+	}
+
+	static void setAdaptor(FrameworkAdaptor adaptor) {
+		MessageResourceBundle.adaptor = adaptor;
 	}
 }

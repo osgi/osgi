@@ -118,6 +118,8 @@ public class Framework implements EventDispatcher, EventPublisher {
 			Debug.println("SecurityManager: " + System.getSecurityManager()); //$NON-NLS-1$
 			Debug.println("ProtectionDomain of Framework.class: \n" + this.getClass().getProtectionDomain()); //$NON-NLS-1$
 		}
+		// set the adaptor of MessageResourceBundle so it can log warnings/errors
+		MessageResourceBundle.setAdaptor(adaptor);
 		/* initialize the adaptor */
 		adaptor.initialize(this);
 		if (Profile.PROFILE && Profile.STARTUP)

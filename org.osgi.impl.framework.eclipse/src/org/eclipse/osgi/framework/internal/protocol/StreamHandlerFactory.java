@@ -34,7 +34,7 @@ public class StreamHandlerFactory implements java.net.URLStreamHandlerFactory {
 	private ServiceTracker handlerTracker;
 
 	protected static final String URLSTREAMHANDLERCLASS = "org.osgi.service.url.URLStreamHandlerService"; //$NON-NLS-1$
-	protected static final String PROTOCOL_HANDLER_PKGS= "java.protocol.handler.pkgs"; //$NON-NLS-1$
+	protected static final String PROTOCOL_HANDLER_PKGS = "java.protocol.handler.pkgs"; //$NON-NLS-1$
 	protected static final String INTERNAL_PROTOCOL_HANDLER_PKG = "org.eclipse.osgi.framework.internal.protocol."; //$NON-NLS-1$
 	private static final String DEFAULT_VM_PROTOCOL_HANDLERS = "sun.net.www.protocol"; //$NON-NLS-1$
 
@@ -77,7 +77,7 @@ public class StreamHandlerFactory implements java.net.URLStreamHandlerFactory {
 				name.append(protocol);
 				name.append(".Handler"); //$NON-NLS-1$
 				try {
-					clazz = Class.forName(name.toString());
+					clazz = secureAction.forName(name.toString());
 					if (clazz != null) {
 						return (null); //this class exists, it is a built in handler, let the JVM handle it	
 					}

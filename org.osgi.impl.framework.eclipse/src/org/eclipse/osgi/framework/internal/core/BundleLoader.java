@@ -33,6 +33,10 @@ import org.osgi.framework.FrameworkEvent;
 public class BundleLoader implements ClassLoaderDelegate {
 	public final static String DEFAULT_PACKAGE = "."; //$NON-NLS-1$
 	public final static String JAVA_PACKAGE = "java."; //$NON-NLS-1$
+	public final static byte FLAG_IMPORTSINIT = 0x01;
+	public final static byte FLAG_HASDYNAMICIMPORTS = 0x02;
+	public final static byte FLAG_HASDYNAMICEIMPORTALL = 0x04;
+	public final static byte FLAG_CLOSED = 0x08;
 
 	/* the proxy */
 	BundleLoaderProxy proxy;
@@ -44,13 +48,8 @@ public class BundleLoader implements ClassLoaderDelegate {
 
 	/* cache of imported packages. Key is packagename, Value is PackageSource */
 	KeyedHashSet importedSources;
-	boolean importsInit = false;
 	/* cache of required package sources. Key is packagename, value is PackageSource */
 	KeyedHashSet requiredSources;
-	/* flag that indicates this bundle has dynamic imports */
-	boolean hasDynamicImports = false;
-	/* If true, import all packages dynamically. */
-	boolean dynamicImportPackageAll;
 	/* If not null, list of package stems to import dynamically. */
 	String[] dynamicImportPackageStems;
 	/* If not null, list of package names to import dynamically. */
@@ -61,6 +60,8 @@ public class BundleLoader implements ClassLoaderDelegate {
 	BundleLoaderProxy[] requiredBundles;
 	/* List of indexes into the requiredBundles list of reexported bundles */
 	int[] reexportTable;
+	/* loader flags */
+	byte loaderFlags = 0;
 
 	/**
 	 * Returns the package name from the specified class name.
@@ -172,7 +173,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 	}
 
 	private synchronized void addImportedPackages(ExportPackageDescription[] packages) {
-		if (importsInit)
+		if ((loaderFlags & FLAG_IMPORTSINIT) != 0)
 			return;
 		if (packages != null && packages.length > 0) {
 			if (importedSources == null)
@@ -183,7 +184,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 					importedSources.add(source);
 			}
 		}
-		importsInit = true;
+		loaderFlags |= FLAG_IMPORTSINIT;
 	}
 
 	final PackageSource createExportPackageSource(ExportPackageDescription export) {
@@ -232,14 +233,11 @@ public class BundleLoader implements ClassLoaderDelegate {
 	 *
 	 */
 	void close() {
-		if (bundle == null)
+		if ((loaderFlags & FLAG_CLOSED) != 0)
 			return;
-		importedSources = null;
-
 		if (classloader != null)
 			classloader.close();
-		classloader = null;
-		bundle = null; /* This indicates the BundleLoader is destroyed */
+		loaderFlags |= FLAG_CLOSED; /* This indicates the BundleLoader is destroyed */
 	}
 
 	/**
@@ -348,8 +346,6 @@ public class BundleLoader implements ClassLoaderDelegate {
 				}
 		}
 
-		if (isClosed())
-			throw new ClassNotFoundException(name);
 		String pkgName = getPackageName(name);
 		Class result = null;
 		// 3) search the imported packages
@@ -377,7 +373,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 	}
 
 	final boolean isClosed() {
-		return bundle == null;
+		return (loaderFlags & FLAG_CLOSED) != 0;
 	}
 
 	/**
@@ -405,8 +401,6 @@ public class BundleLoader implements ClassLoaderDelegate {
 					return result;
 			}
 		}
-		if (isClosed())
-			return null;
 
 		URL result = null;
 		// 3) search the imported packages
@@ -447,8 +441,6 @@ public class BundleLoader implements ClassLoaderDelegate {
 	 */
 	public Enumeration findResources(String name) throws IOException {
 		// do not delegate to parent because ClassLoader#getResources already did and it is final!!
-		if (isClosed())
-			return null;
 		if ((name.length() > 1) && (name.charAt(0) == '/')) /* if name has a leading slash */
 			name = name.substring(1); /* remove leading slash before search */
 		String pkgName = getResourcePackageName(name);
@@ -503,8 +495,6 @@ public class BundleLoader implements ClassLoaderDelegate {
 	 * @return     the absolute path of the native library or null if not found
 	 */
 	public String findLibrary(final String name) {
-		if (isClosed())
-			return null;
 		if (System.getSecurityManager() == null)
 			return findLocalLibrary(name);
 		return (String) AccessController.doPrivileged(new PrivilegedAction() {
@@ -595,11 +585,11 @@ public class BundleLoader implements ClassLoaderDelegate {
 			return true;
 
 		/* quick shortcut check */
-		if (!hasDynamicImports)
+		if ((loaderFlags & FLAG_HASDYNAMICIMPORTS) == 0)
 			return false;
 
 		/* "*" shortcut */
-		if (dynamicImportPackageAll)
+		if ((loaderFlags & FLAG_HASDYNAMICEIMPORTALL) != 0)
 			return true;
 
 		/* match against specific names */
@@ -673,7 +663,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		if (packages == null)
 			return;
 
-		hasDynamicImports = true;
+		loaderFlags |= FLAG_HASDYNAMICIMPORTS;
 		// make sure importedPackages is not null;
 		if (importedSources == null) {
 			importedSources = new KeyedHashSet(10, false);
@@ -708,7 +698,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 			if (isDynamicallyImported(name))
 				continue;
 			if (name.equals("*")) { /* shortcut *///$NON-NLS-1$
-				dynamicImportPackageAll = true;
+				loaderFlags |= FLAG_HASDYNAMICEIMPORTALL;
 				return;
 			}
 
@@ -744,16 +734,6 @@ public class BundleLoader implements ClassLoaderDelegate {
 			addDynamicImportPackage((String[]) dynamicImports.toArray(new String[dynamicImports.size()]));
 	}
 
-	final void clear() {
-		exportedPackages = null;
-		requiredBundles = null;
-		requiredSources = null;
-		reexportTable = null;
-		importedSources = null;
-		dynamicImportPackages = null;
-		dynamicImportPackageStems = null;
-	}
-
 	final void attachFragment(BundleFragment fragment) throws BundleException {
 		if (classloader == null)
 			return;
@@ -779,7 +759,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 	}
 
 	private PackageSource findImportedSource(String pkgName) {
-		if (!importsInit)
+		if ((loaderFlags & FLAG_IMPORTSINIT) == 0)
 			addImportedPackages(proxy.getBundleDescription().getResolvedImports());
 		return importedSources == null ? null : (PackageSource) importedSources.getByKey(pkgName);
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -52,7 +52,7 @@ public class ReliableFileInputStream extends FilterInputStream {
 	 * @exception 	java.io.IOException If an error occurs opening the file.
 	 */
 	public ReliableFileInputStream(String name) throws IOException {
-		this(ReliableFile.getReliableFile(name));
+		this(ReliableFile.getReliableFile(name), ReliableFile.GENERATION_LATEST, ReliableFile.OPEN_BEST_AVAILABLE);
 	}
 
 	/**
@@ -63,17 +63,33 @@ public class ReliableFileInputStream extends FilterInputStream {
 	 * @exception 	java.io.IOException If an error occurs opening the file.
 	 */
 	public ReliableFileInputStream(File file) throws IOException {
-		this(ReliableFile.getReliableFile(file));
+		this(ReliableFile.getReliableFile(file), ReliableFile.GENERATION_LATEST, ReliableFile.OPEN_BEST_AVAILABLE);
 	}
 
 	/**
-	 * Private constructor used by other constructors.
-	 *
-	 * @param		reliable		the ReliableFile on which to read.
+	 * Constructs a new ReliableFileInputStream on the File <code>file</code>.  If the
+	 * file does not exist, the <code>FileNotFoundException</code> is thrown.
+	 * 
+	 * @param file the File on which to stream reads.
+	 * @param generation a specific generation requested.
+	 * @param openMask mask used to open data.
+	 * are invalid (corrupt, missing, etc).
 	 * @exception 	java.io.IOException If an error occurs opening the file.
 	 */
-	private ReliableFileInputStream(ReliableFile reliable) throws IOException {
-		super(reliable.getInputStream());
+	public ReliableFileInputStream(File file, int generation, int openMask) throws IOException {
+		this(ReliableFile.getReliableFile(file), generation, openMask);
+	}
+
+	/**
+	 * 
+	 * @param reliable The ReliableFile on which to read.
+	 * @param generation a specific generation requested.
+	 * @param openMask mask used to open data. 
+	 * are invalid (corrupt, missing, etc).
+	 * @throws IOException If an error occurs opening the file.
+	 */
+	private ReliableFileInputStream(ReliableFile reliable, int generation, int openMask) throws IOException {
+		super(reliable.getInputStream(generation, openMask));
 
 		this.reliable = reliable;
 		sigSize = reliable.getSignatureSize();
@@ -148,8 +164,7 @@ public class ReliableFileInputStream extends FilterInputStream {
 	public synchronized int available() throws IOException {
 		if (readPos < length) // just in case
 			return (length - readPos);
-		else
-			return 0;
+		return 0;
 	}
 
 	/**
@@ -174,6 +189,7 @@ public class ReliableFileInputStream extends FilterInputStream {
 	 * Override default mark method.
 	 */
 	public void mark(int readlimit) {
+		//ignore
 	}
 
 	/**

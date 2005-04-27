@@ -202,6 +202,8 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	protected abstract void persistNextBundleID(long value) throws IOException;
 
 	public FrameworkLog getFrameworkLog() {
+		if (frameworkLog == null)
+			frameworkLog = createFrameworkLog();
 		return frameworkLog;
 	}
 

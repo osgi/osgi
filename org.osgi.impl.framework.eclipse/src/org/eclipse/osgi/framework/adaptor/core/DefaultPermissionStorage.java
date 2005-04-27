@@ -12,9 +12,7 @@
 package org.eclipse.osgi.framework.adaptor.core;
 
 import java.io.*;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.*;
 import org.eclipse.osgi.framework.adaptor.PermissionStorage;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.internal.core.ConditionalPermissionInfoImpl;
@@ -174,21 +172,13 @@ class DefaultPermissionStorage implements PermissionStorage {
 	 * @throws IOException If an error occurs reading the files.
 	 */
 	protected void loadLocations() throws IOException {
-		String list[] = permissionDir.list();
+		String list[] = ReliableFile.getBaseFiles(permissionDir);
 		if (list == null)
 			return;
 		int len = list.length;
 
 		for (int i = 0; i < len; i++) {
 			String name = list[i];
-
-			if (name.endsWith(ReliableFile.newExt)) {
-				continue;
-			}
-
-			if (name.endsWith(ReliableFile.oldExt)) {
-				continue;
-			}
 
 			if (name.endsWith(ReliableFile.tmpExt)) {
 				continue;
@@ -276,7 +266,7 @@ class DefaultPermissionStorage implements PermissionStorage {
 					return data;
 				}
 				default : {
-					throw new IOException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION); 
+					throw new IOException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION);
 				}
 			}
 		} finally {
@@ -369,10 +359,10 @@ class DefaultPermissionStorage implements PermissionStorage {
 			String line;
 			Vector c = new Vector(3);
 			Vector p = new Vector(3);
-			while((line = reader.readLine()) != null) {
+			while ((line = reader.readLine()) != null) {
 				if (line.length() == 0) {
 					ConditionalPermissionInfoImpl cpi;
-					cpi = new ConditionalPermissionInfoImpl((ConditionInfo[])c.toArray(new ConditionInfo[0]), (PermissionInfo[])p.toArray(new PermissionInfo[0]));
+					cpi = new ConditionalPermissionInfoImpl((ConditionInfo[]) c.toArray(new ConditionInfo[0]), (PermissionInfo[]) p.toArray(new PermissionInfo[0]));
 					v.add(cpi);
 					c.clear();
 					p.clear();

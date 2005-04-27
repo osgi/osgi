@@ -278,7 +278,7 @@ public class PackageAdminImpl implements PackageAdmin {
 		if (bundle.isFragment()) {
 			BundleDescription[] hosts = bundleDescription.getHost().getHosts();
 			for (int i = 0; i < hosts.length; i++) {
-				BundleHost host = (BundleHost) framework.getBundle(hosts[0].getBundleId());
+				BundleHost host = (BundleHost) framework.getBundle(hosts[i].getBundleId());
 				resolve = ((BundleFragment) bundle).addHost(host.getLoaderProxy());
 			}
 		}

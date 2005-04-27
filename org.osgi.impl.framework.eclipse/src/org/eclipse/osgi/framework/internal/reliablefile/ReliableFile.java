@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,8 +12,7 @@
 package org.eclipse.osgi.framework.internal.reliablefile;
 
 import java.io.*;
-import java.util.Hashtable;
-import java.util.Random;
+import java.util.*;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
@@ -23,8 +22,32 @@ import java.util.zip.Checksum;
  *
  */
 public class ReliableFile {
-	protected static final byte identifier1[] = {'.', 'c', 'r', 'c'};
-	protected static final byte identifier2[] = {'.', 'v', '1', '\n'};
+	/**
+	 * Open mask. Obtain the best data stream available. If the primary data 
+	 * contents are invalid (corrupt, missing, etc.), the data for a prior 
+	 * version may be used. 
+	 * An IOException will be thrown if a valid data content can not be
+	 * determined. 
+	 * This is mutually exclusive with <code>OPEN_FAIL_ON_PRIMARY</code>.
+	 */
+	public static final int OPEN_BEST_AVAILABLE = 0;
+	/**
+	 * Open mask. Obtain only the data stream for the primary file where any other 
+	 * version will not be valid. This should be used for data streams that are 
+	 * managed as a group as a prior contents may not match the other group data.
+	 * If the primary data is not invalid, a IOException will be thrown.
+	 * This is mutually exclusive with <code>OPEN_BEST_AVAILABLE</code>.
+	 */
+	public static final int OPEN_FAIL_ON_PRIMARY = 1;
+
+	/**
+	 * Use the last generation of the file
+	 */
+	public static final int GENERATION_LATEST = 0;
+	/**
+	 * Keep intinite backup files
+	 */
+	public static final int GENERATIONS_INFINITE = 0;
 
 	/**
 	 * Extension of tmp file used during writing.
@@ -34,58 +57,71 @@ public class ReliableFile {
 	public static final String tmpExt = ".tmp"; //$NON-NLS-1$
 
 	/**
-	 * Extension of previous generation of the reliable file.
-	 * A reliable file with this extension should
-	 * never be directly used.
+	 * Property to set the maximum size of a file that will be buffered. When calculating a ReliableFile
+	 * checksum, if the file is this size or small, ReliableFile will read the file contents into a 
+	 * <code>BufferedInputStream</code> and reset the buffer to avoid having to read the data from the
+	 * media twice. Since this method require memory for storage, it is limited to this size. The default
+	 * maximum is 128-KBytes.
 	 */
-	public static final String oldExt = ".bak"; //$NON-NLS-1$
-
+	public static final String PROP_MAX_BUFFER = "osgi.reliableFile.maxInputStreamBuffer"; //$NON-NLS-1$
 	/**
-	 * Extension of next generation of the reliable file.
-	 * A reliable file with this extension should
-	 * never be directly used.
+	 * The maximum number of generations to keep as backup files in case last generation 
+	 * file is determined to be invalid.
 	 */
-	public static final String newExt = ".new"; //$NON-NLS-1$
+	public static final String PROP_MAX_GENERATIONS = "osgi.ReliableFile.maxGenerations"; //$NON-NLS-1$
+	/**
+	 * @see org.eclipse.core.runtime.adaptor.BasicLocation#PROP_OSGI_LOCKING
+	 */
+	public static final String PROP_OSGI_LOCKING = "osgi.locking"; //$NON-NLS-1$
 
-	/** List of active ReliableFile objects: File => ReliableFile */
-	private static Hashtable files;
+	protected static final int FILETYPE_UNKNOWN = -1;
+	protected static final int FILETYPE_VALID = 0;
+	protected static final int FILETYPE_CORRUPT = 1;
+	protected static final int FILETYPE_NOSIGNATURE = 2;
+
+	protected static final byte identifier1[] = {'.', 'c', 'r', 'c'};
+	protected static final byte identifier2[] = {'.', 'v', '1', '\n'};
+
+	private static final int BUF_SIZE = 4096;
+	private static int maxInputStreamBuffer = 128 * 1024; //128k
+	private static int defaultMaxGenerations = 2;
+	private static boolean fileSharing = true;
+	//our cache of the last lookuped up generations for a file
+	private static File lastGenerationFile = null;
+	private static int[] lastGenerations = null;
 
 	static {
-		files = new Hashtable(30); /* initialize files */
+		String prop = System.getProperty(PROP_MAX_BUFFER); //$NON-NLS-1$
+		if (prop != null) {
+			try {
+				maxInputStreamBuffer = Integer.parseInt(prop);
+			} catch (NumberFormatException e) {/*ignore*/
+			}
+		}
+		prop = System.getProperty(PROP_MAX_GENERATIONS); //$NON-NLS-1$
+		if (prop != null) {
+			try {
+				defaultMaxGenerations = Integer.parseInt(prop);
+			} catch (NumberFormatException e) {/*ignore*/
+			}
+		}
+		prop = System.getProperty(PROP_OSGI_LOCKING);
+		if (prop != null) {
+			if (prop.equals("none")) { //$NON-NLS-1$
+				fileSharing = false;
+			}
+		}
 	}
 
-	/** File object for original file */
-	private File orgFile;
+	/** File object for original reference file */
+	private File referenceFile;
 
-	/** File object for the temporary output file */
-	private File tmpFile;
+	/** List of checksum file objects: File => specific ReliableFile generation */
+	private static Hashtable cacheFiles = new Hashtable(20);
 
-	/** File object for old data file */
-	private File oldFile;
-
-	/** File object for file containing new data */
-	private File newFile;
-
-	/** true if this object is open for read or write */
-	private boolean locked;
-
-	/** use code of this object. when zero this object must be removed from files */
-	private int use;
-
-	/** ReliableFile version number, unknown until a call to getInputStream() or
-	 getOutputStream() methods */
-	private static final int VERSION_UNKNOWN = 0;
-	private static final int VERSION_PLAINTEXT = 1;
-	private static final int VERSION_2 = 2;
-	private int version;
-
-	/** Checksum of current file, unknown until a call to getInputStream() or
-	 getOutputStream() methods */
-	Checksum appendCrc;
-
-	public static final String MINIMUM_AGING_INTERVAL_KEY = "reliablefile.minimumAgingInterval"; //$NON-NLS-1$
-	private static final int AGING_INTERVAL_DEFAULT = 2000; // 2 seconds
-	private static int agingInterval = -1;
+	private File inputFile = null;
+	private File outputFile = null;
+	private Checksum appendChecksum = null;
 
 	/**
 	 * ReliableFile object factory. This method is called by ReliableFileInputStream
@@ -98,7 +134,7 @@ public class ReliableFile {
 	 * @return A ReliableFile object for the target file.
 	 * @throws IOException If the target file is a directory.
 	 */
-	static ReliableFile getReliableFile(String name) throws IOException {
+	protected static ReliableFile getReliableFile(String name) throws IOException {
 		return getReliableFile(new File(name));
 	}
 
@@ -113,39 +149,11 @@ public class ReliableFile {
 	 * @return A ReliableFile object for the target file.
 	 * @throws IOException If the target file is a directory.
 	 */
-	static ReliableFile getReliableFile(File file) throws IOException {
+	protected static ReliableFile getReliableFile(File file) throws IOException {
 		if (file.isDirectory()) {
 			throw new FileNotFoundException("file is a directory"); //$NON-NLS-1$
 		}
-
-		synchronized (files) {
-			ReliableFile reliable = (ReliableFile) files.get(file);
-
-			if (reliable == null) {
-				reliable = new ReliableFile(file);
-
-				files.put(file, reliable);
-			}
-
-			reliable.use++;
-
-			return reliable;
-		}
-	}
-
-	/**
-	 * Decrement this object's use count. If the use count
-	 * drops to zero, remove this object from the cache.
-	 *
-	 */
-	private void release() {
-		synchronized (files) {
-			use--;
-
-			if (use <= 0) {
-				files.remove(orgFile);
-			}
-		}
+		return new ReliableFile(file);
 	}
 
 	/**
@@ -154,379 +162,286 @@ public class ReliableFile {
 	 * @param file File object for the target file.
 	 */
 	private ReliableFile(File file) {
-		String name = file.getPath();
+		referenceFile = file;
+	}
 
-		orgFile = file;
-		// Added a random number to the filename to avoid any chance of corruption
-		//  if someone should create multiple writes to the same file. -PAL
-		tmpFile = new File(name + "." + new Random().nextInt(0x1000000) + tmpExt); //$NON-NLS-1$
-		oldFile = new File(name + oldExt);
-		newFile = new File(name + newExt);
-		use = 0;
-		locked = false;
-		version = VERSION_UNKNOWN;
-		appendCrc = null;
-
-		if (agingInterval == -1) {
-			agingInterval = AGING_INTERVAL_DEFAULT;
-			String value = System.getProperty(MINIMUM_AGING_INTERVAL_KEY);
-			if (value != null) {
-				try {
-					int i = Integer.parseInt(value);
-					if (i >= 0)
-						agingInterval = i;
-				} catch (NumberFormatException nfe) {
-					System.err.println("Invalid property value for key \"" + MINIMUM_AGING_INTERVAL_KEY + "\"."); //$NON-NLS-1$ //$NON-NLS-2$
+	private static int[] getFileGenerations(File file) {
+		if (!fileSharing && lastGenerationFile != null) {
+			//shortcut maybe, only if filesharing is not supported
+			if (file.equals(lastGenerationFile))
+				return lastGenerations;
+		}
+		int[] generations = null;
+		try {
+			String name = file.getName();
+			String prefix = name + '.'; //$NON-NLS-1$
+			int prefixLen = prefix.length();
+			File parent = new File(file.getParent());
+			String[] files = parent.list();
+			if (files == null)
+				return null;
+			ArrayList list = new ArrayList(defaultMaxGenerations);
+			if (file.exists())
+				list.add(new Integer(0)); //base file exists
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].startsWith(prefix)) {
+					try {
+						int id = Integer.parseInt(files[i].substring(prefixLen));
+						list.add(new Integer(id));
+					} catch (NumberFormatException e) {/*ignore*/
+					}
 				}
+			}
+			if (list.size() == 0)
+				return null;
+			Object[] array = list.toArray();
+			Arrays.sort(array);
+			generations = new int[array.length];
+			for (int i = 0, j = array.length - 1; i < array.length; i++, j--) {
+				generations[i] = ((Integer) array[j]).intValue();
+			}
+			return generations;
+		} finally {
+			if (!fileSharing) {
+				lastGenerationFile = file;
+				lastGenerations = generations;
 			}
 		}
 	}
 
 	/**
-	 * Recovers the target file, if necessary, and returns an InputStream
-	 * object for reading the target file.
+	 * Returns an InputStream object for reading the target file.
 	 *
+	 * @param generation the maximum generation to evaluate
+	 * @param openMask mask used to open data. 
+	 * are invalid (corrupt, missing, etc).
 	 * @return An InputStream object which can be used to read the target file.
 	 * @throws IOException If an error occurs preparing the file.
 	 */
-	synchronized InputStream getInputStream() throws IOException {
-		try {
-			lock();
-		} catch (IOException e) {
-			/* the lock request failed; decrement the use count */
-			release();
-
-			throw e;
+	protected InputStream getInputStream(int generation, int openMask) throws IOException {
+		if (inputFile != null) {
+			throw new IOException("Input stream already open"); //$NON-NLS-1$
 		}
+		int[] generations = getFileGenerations(referenceFile);
+		if (generations == null) {
+			throw new FileNotFoundException("File not found"); //$NON-NLS-1$
+		}
+		String name = referenceFile.getName();
+		File parent = new File(referenceFile.getParent());
 
-		try {
-			BufferedInputStream bis = recoverFile();
+		boolean failOnPrimary = (openMask & OPEN_FAIL_ON_PRIMARY) != 0;
+		if (failOnPrimary && generation == GENERATIONS_INFINITE)
+			generation = generations[0];
 
-			if (bis == null)
-				return new FileInputStream(orgFile.getPath());
+		File textFile = null;
+		InputStream textIS = null;
+		for (int idx = 0; idx < generations.length; idx++) {
+			if (generation != 0) {
+				if (generations[idx] > generation || (failOnPrimary && generations[idx] != generation))
+					continue;
+			}
+			File file;
+			if (generations[idx] != 0)
+				file = new File(parent, name + '.' + generations[idx]); //$NON-NLS-1$
 			else
-				return bis; // don't double read file from storage
-		} catch (IOException e) {
-			unlock();
+				file = referenceFile;
+			InputStream is = null;
+			CacheInfo info;
+			synchronized (cacheFiles) {
+				info = (CacheInfo) cacheFiles.get(file);
+			}
+			long timeStamp = file.lastModified();
+			if (info == null || timeStamp != info.timeStamp) {
+				try {
+					is = new FileInputStream(file);
+					if (is.available() < maxInputStreamBuffer)
+						is = new BufferedInputStream(is);
+					Checksum cksum = getChecksumCalculator();
+					int filetype = getStreamType(is, cksum);
+					info = new CacheInfo(filetype, cksum, timeStamp);
+					synchronized (cacheFiles) {
+						cacheFiles.put(file, info);
+					}
+				} catch (IOException e) {/*ignore*/
+				}
+			}
 
-			release();
+			// if looking for a specific generation only, only look at one
+			//  and return the result.
+			if (failOnPrimary) {
+				if (info != null && info.filetype == FILETYPE_VALID) {
+					inputFile = file;
+					if (is != null)
+						return is;
+					return new FileInputStream(file);
+				}
+				throw new IOException("ReliableFile is corrupt"); //$NON-NLS-1$
+			}
 
-			throw e;
+			// if error, ignore this file & try next
+			if (info == null)
+				continue;
+
+			// we're  not looking for a specific version, so let's pick the best case
+			switch (info.filetype) {
+				case FILETYPE_VALID :
+					inputFile = file;
+					if (is != null)
+						return is;
+					return new FileInputStream(file);
+
+				case FILETYPE_NOSIGNATURE :
+					if (textFile == null) {
+						textFile = file;
+						textIS = is;
+					}
+					break;
+			}
 		}
+
+		// didn't find any valid files, if there are any plain text files
+		//  use it instead
+		if (textFile != null) {
+			inputFile = textFile;
+			if (textIS != null)
+				return textIS;
+			return new FileInputStream(textFile);
+		}
+		throw new IOException("ReliableFile is corrupt"); //$NON-NLS-1$
 	}
 
 	/**
-	 * Close the target file for reading.
-	 *
-	 * @throws IOException If an error occurs closing the file.
-	 */
-	/* This method does not need to be synchronized if it only calls release. */
-	void closeInputFile() throws IOException {
-		unlock();
-		release();
-	}
-
-	/**
-	 * Recovers the target file, if necessary, and returns an OutputStream
-	 * object for writing the target file.
-	 *
+	 * Returns an OutputStream object for writing the target file.
+	 * 
+	 * @param append append new data to an existing file.
+	 * @param appendGeneration specific generation of file to append from.
 	 * @return An OutputStream object which can be used to write the target file.
-	 * @throws IOException If an error occurs preparing the file.
+	 * @throws IOException IOException If an error occurs preparing the file.
 	 */
-	synchronized OutputStream getOutputStream(boolean append) throws IOException {
-		try {
-			lock();
-		} catch (IOException e) {
-			/* the lock request failed; decrement the use count */
-			release();
+	protected OutputStream getOutputStream(boolean append, int appendGeneration) throws IOException {
+		if (outputFile != null)
+			throw new IOException("Output stream is already open"); //$NON_NLS-1$ //$NON-NLS-1$
+		String name = referenceFile.getName();
+		File parent = new File(referenceFile.getParent());
+		File tmpFile = File.createTempFile(name, tmpExt, parent);
 
-			throw e;
+		if (!append) {
+			OutputStream os = new FileOutputStream(tmpFile);
+			outputFile = tmpFile;
+			return os; //$NON-NLS-1$
+		}
+
+		InputStream is;
+		try {
+			is = getInputStream(appendGeneration, OPEN_BEST_AVAILABLE);
+		} catch (FileNotFoundException e) {
+			OutputStream os = new FileOutputStream(tmpFile);
+			outputFile = tmpFile;
+			return os;
 		}
 
 		try {
-			// always recover file - PAL
-			//  this way we will never have a invalid file as a .bak file
-			BufferedInputStream bis = recoverFile();
-			// Don't forget to close the input stream, we won't need it any more
-			if (bis != null)
-				bis.close();
-		} catch (IOException e) {
-			if (append) {
-				unlock();
-
-				release();
-
-				throw e;
+			CacheInfo info = (CacheInfo) cacheFiles.get(inputFile);
+			appendChecksum = info.checksum;
+			OutputStream os = new FileOutputStream(tmpFile);
+			if (info.filetype == FILETYPE_NOSIGNATURE) {
+				cp(is, os, 0);
+			} else {
+				cp(is, os, 16); // don't copy checksum signature
 			}
-			// otherwise, go on
-		}
-
-		try {
-			if (append) {
-				if (orgFile.exists()) {
-					int truncate;
-					if (version == VERSION_2)
-						truncate = 16;
-					else
-						truncate = 0;
-					cp(orgFile, tmpFile, truncate);
-				} else {
-					if (tmpFile.exists())
-						rm(tmpFile);
-				}
-			}
-
-			return new FileOutputStream(tmpFile.getPath(), append);
-		} catch (IOException e) {
-			unlock();
-
-			release();
-
-			throw e;
+			outputFile = tmpFile;
+			return os;
+		} finally {
+			closeInputFile();
 		}
 	}
 
 	/**
 	 * Close the target file for reading.
 	 *
+	 * @param checksum Checksum of the file contenets
 	 * @throws IOException If an error occurs closing the file.
 	 */
-	synchronized void closeOutputFile() throws IOException {
-		try {
-			boolean orgExists = orgFile.exists();
-			boolean newExists = newFile.exists();
+	protected void closeOutputFile(Checksum checksum) throws IOException {
+		if (outputFile == null)
+			throw new IOException("Output stream is not open"); //$NON-NLS-1$
+		int[] generations = getFileGenerations(referenceFile);
+		String name = referenceFile.getName();
+		File parent = new File(referenceFile.getParent());
+		File newFile;
+		if (generations == null)
+			newFile = new File(parent, name + ".1"); //$NON-NLS-1$
+		else
+			newFile = new File(parent, name + '.' + (generations[0] + 1));
 
-			// fix for files being cached too often. On some platforms (seen on Windows XP & QNX),
-			//  the data just written to a file can held in the filesystem cache. If the file is
-			//  written to too often, then both the orgFile and oldFile data contents can be held
-			//  in cache. The problem is that the directory structure can be flushed before the 
-			//  data is flushed (easily recreated on Windows XP) then if power is lost then both the 
-			//  orgFile and oldFile contents are garbage. To reduce the chances of this, we will
-			//  only move an orgFile to oldFile if it is older than N seconds. This will greatly 
-			//  reduce the chances that both copies could be lost in the filesystem cache during a 
-			//  power off/failure. The net result is, when a file is written several times in a short
-			//  time frame, we will move the original orgFile to oldFile, then rewrite orgFile several times
-			//  without changing oldFile. - PAL
-			// This problem is greatly reduced by calling java.io.FileOutputStream.getFD().sync() method
-			//  before the close. Now this time can be shortened considerably. -PAL
-			boolean backupOrg = true;
-			long orgAge = System.currentTimeMillis() - orgFile.lastModified();
-			if ((orgAge >= 0) && (orgAge < agingInterval)) {
-				backupOrg = false;
-			}
-
-			if (newExists) {
-				// shouldn't be possible, but just in case - PAL
-				rm(newFile);
-			}
-
-			mv(tmpFile, newFile);
-
-			if (orgExists) {
-				if (newExists) {
-					rm(orgFile);
-				} else {
-					if (backupOrg) {
-						rm(oldFile);
-						mv(orgFile, oldFile);
-					} else {
-						// orgFile is not old enough, do not replace oldFile.
-						rm(orgFile);
-					}
-				}
-			}
-
-			mv(newFile, orgFile);
-		} finally {
-			unlock();
-
-			release();
-		}
+		mv(outputFile, newFile); // throws IOException if problem
+		outputFile = null;
+		appendChecksum = null;
+		CacheInfo info = new CacheInfo(FILETYPE_VALID, checksum, newFile.lastModified());
+		cacheFiles.put(newFile, info);
+		cleanup(generations, true);
+		lastGenerationFile = null;
+		lastGenerations = null;
 	}
 
 	/**
-	 * This method recovers the reliable file if necessary.
+	 * Abort the current output stream and do not update the reliable file table.
 	 *
-	 * @throws IOException If an error occurs recovering the file.
 	 */
-	private BufferedInputStream recoverFile() throws IOException {
-		boolean orgExists = orgFile.exists();
-		boolean newExists = newFile.exists();
-		boolean oldExists = oldFile.exists();
-		Checksum orgCrc = null;
-		Checksum newCrc = null;
-		Checksum oldCrc = null;
-		int orgVersion = VERSION_2;
-		int oldVersion = VERSION_2;
-		BufferedInputStream orgBis = null;
-		BufferedInputStream newBis = null;
-		BufferedInputStream oldBis = null;
+	protected void abortOutputFile() {
+		if (outputFile == null)
+			return;
+		outputFile.delete();
+		outputFile = null;
+		appendChecksum = null;
+	}
 
-		if (newExists) {
-			newCrc = getChecksumCalculator();
-			// if not valid, it doesn't exist
-			//   ignore if it has a signature, don't use it
-			newBis = new BufferedInputStream(new FileInputStream(newFile));
-			newExists = isValidReliableFile(newBis, newCrc, null);
-			if (!newExists) // if not valid, delete the unusable file
-				rm(newFile);
-		}
-
-		// always create orgCrc, account for case that new,org,old don't exist
-		orgCrc = getChecksumCalculator();
-		if (orgExists) {
-			boolean orgHasSig[] = new boolean[1];
-			orgBis = new BufferedInputStream(new FileInputStream(orgFile));
-			boolean orgValid = isValidReliableFile(orgBis, orgCrc, orgHasSig);
-
-			if (!orgValid) {
-				if (oldExists) {
-					oldCrc = getChecksumCalculator();
-					boolean oldHasSig[] = new boolean[1];
-					oldBis = new BufferedInputStream(new FileInputStream(oldFile));
-					boolean oldValid = isValidReliableFile(oldBis, oldCrc, oldHasSig);
-
-					if (oldValid) {
-						// swap them... old file is good, org file is bad
-						if (tmpFile.exists())
-							rm(tmpFile);
-						if (orgBis != null) {
-							orgBis.close();
-							orgBis = null;
-						}
-						if (oldBis != null) {
-							oldBis.close();
-							oldBis = null;
-						}
-						mv(orgFile, tmpFile);
-						mv(oldFile, orgFile);
-						mv(tmpFile, oldFile);
-						orgVersion = VERSION_2;
-						oldVersion = VERSION_UNKNOWN;
-					} else {
-						// org is bad, old is bad
-						if (!orgHasSig[0] && !oldHasSig[0]) {
-							// org looks like text file, old looks like text file, use orgFile
-							orgVersion = VERSION_PLAINTEXT;
-							oldVersion = VERSION_PLAINTEXT;
-						} else if (orgHasSig[0] && !oldHasSig[0]) {
-							// org is corrupt, old file is text file, use old file
-							// swap them...
-							if (tmpFile.exists())
-								rm(tmpFile);
-							if (orgBis != null) {
-								orgBis.close();
-								orgBis = null;
-							}
-							if (oldBis != null) {
-								oldBis.close();
-								oldBis = null;
-							}
-							mv(orgFile, tmpFile);
-							mv(oldFile, orgFile);
-							mv(tmpFile, oldFile);
-							orgVersion = VERSION_PLAINTEXT;
-							oldVersion = VERSION_UNKNOWN;
-						} else if (orgHasSig[0] && oldHasSig[0]) {
-							// both org,old are corrupt, not good
-							if (!newExists)
-								throw new IOException("ReliableFile is corrupt."); //$NON-NLS-1$ 
-							// else allow new to replace org
-						} else if (!orgHasSig[0] && oldHasSig[0]) {
-							// hmmmm, org look like text file, old is corrupt
-							//  could happen if org is bad, old is plain text, they'd get swapped
-						}
-					}
-				} else {
-					// org is bad, old doesn't exist
-					if (orgHasSig[0]) {
-						if (!newExists) {
-							throw new IOException("ReliableFile is corrupt."); //$NON-NLS-1$
-						}
-						// else newFile is good, restore it
-					} else {
-						// else use orgFile, must be hand made or old version
-						orgVersion = VERSION_PLAINTEXT;
-					}
-				}
-			} else {
-				// else orgFile is good, won't ever use oldFile
-			}
-		} else if (oldExists) {
-			// no orig file, yes old file, check old file
-			oldCrc = getChecksumCalculator();
-			boolean oldHasSig[] = new boolean[1];
-			oldBis = new BufferedInputStream(new FileInputStream(oldFile));
-			boolean oldValid = isValidReliableFile(oldBis, oldCrc, oldHasSig);
-			if (!oldValid) {
-				if (oldHasSig[0]) {
-					// old has signature, but not valid
-					if (!newExists)
-						throw new IOException("ReliableFile is corrupt."); //$NON-NLS-1$
-					// else allow new to become org
-				} else {
-					// else, file appears to be a text file, use it 
-					oldVersion = VERSION_PLAINTEXT;
-				}
-			} else {
-				// else no problem, use oldFile
-			}
-		}
-
-		if (newExists) {
-			if (orgBis != null)
-				orgBis.close();
-			if (oldBis != null)
-				oldBis.close();
-			if (newBis != null) {
-				newBis.close();
-				newBis = null;
-			}
-			if (orgExists) {
-				if (oldExists)
-					rm(oldFile);
-				mv(orgFile, oldFile);
-			}
-			mv(newFile, orgFile);
-			appendCrc = newCrc;
-			version = VERSION_2; // must be a version2 file
-			return newBis;
-		} else {
-			if (oldExists && !orgExists) {
-				if (orgBis != null)
-					orgBis.close();
-				cp(oldFile, orgFile, 0);
-				appendCrc = oldCrc;
-				version = oldVersion;
-				return oldBis;
-			} else {
-				if (oldBis != null)
-					oldBis.close();
-				appendCrc = orgCrc;
-				version = orgVersion;
-				return orgBis;
-			}
-		}
+	protected File getOutputFile() {
+		return outputFile;
 	}
 
 	/**
-	 * Lock the target file.
-	 *
-	 * @throws IOException If the file is already locked.
+	 * Close the target file for reading.
 	 */
-	private void lock() throws IOException {
-		if (locked) {
-			throw new FileNotFoundException("file locked"); //$NON-NLS-1$
-		}
-
-		locked = true;
+	void closeInputFile() {
+		inputFile = null;
 	}
 
-	/**
-	 * Unlock the target file.
-	 */
-	private void unlock() {
-		locked = false;
+	private void cleanup(int[] generations, boolean generationAdded) {
+		if (generations == null)
+			return;
+		String name = referenceFile.getName();
+		File parent = new File(referenceFile.getParent());
+		int generationCount = generations.length;
+		// if a base file is in the list (0 in generations[]), we will 
+		//  never delete these files, so don't count them in the old
+		//  generation count.
+		if (generations[generationCount - 1] == 0)
+			generationCount--;
+		// assume here that the int[] does not include a file just created
+		int rmCount = generationCount - defaultMaxGenerations;
+		if (generationAdded)
+			rmCount++;
+		if (rmCount < 1)
+			return;
+		synchronized (cacheFiles) {
+			// first, see if any of the files not deleted are known to
+			//  be corrupt. If so, be sure to keep not to delete good
+			//  backup files.
+			for (int idx = 0, count = generationCount - rmCount; idx < count; idx++) {
+				File file = new File(parent, name + '.' + generations[idx]);
+				CacheInfo info = (CacheInfo) cacheFiles.get(file);
+				if (info != null) {
+					if (info.filetype == FILETYPE_CORRUPT)
+						rmCount--;
+				}
+			}
+			for (int idx = generationCount - 1; rmCount > 0; idx--, rmCount--) {
+				File rmFile = new File(parent, name + '.' + generations[idx]);
+				rmFile.delete();
+				cacheFiles.remove(rmFile);
+			}
+		}
 	}
 
 	/**
@@ -542,35 +457,27 @@ public class ReliableFile {
 		}
 	}
 
-	private static final int CP_BUF_SIZE = 4096;
-
 	/**
 	 * Copy a file.
 	 *
-	 * @param from The original file.
-	 * @param to The target file.
 	 * @throws IOException If the copy failed.
 	 */
-	private static void cp(File from, File to, int truncateSize) throws IOException {
-		FileInputStream in = null;
-		FileOutputStream out = null;
-
+	private static void cp(InputStream in, OutputStream out, int truncateSize) throws IOException {
 		try {
-			out = new FileOutputStream(to);
-
-			int length = (int) from.length();
+			int length = in.available();
 			if (truncateSize > length)
 				length = 0;
 			else
 				length -= truncateSize;
 			if (length > 0) {
-				if (length > CP_BUF_SIZE) {
-					length = CP_BUF_SIZE;
+				int bufferSize;
+				if (length > BUF_SIZE) {
+					bufferSize = BUF_SIZE;
+				} else {
+					bufferSize = length;
 				}
 
-				in = new FileInputStream(from);
-
-				byte buffer[] = new byte[length];
+				byte buffer[] = new byte[bufferSize];
 				int size = 0;
 				int count;
 				while ((count = in.read(buffer, 0, length)) > 0) {
@@ -579,121 +486,186 @@ public class ReliableFile {
 					out.write(buffer, 0, count);
 					size += count;
 				}
-
+			}
+		} finally {
+			try {
 				in.close();
-				in = null;
+			} catch (IOException e) {/*ignore*/
 			}
-
 			out.close();
-			out = null;
-		} catch (IOException e) {
-			// close open streams
-			if (out != null) {
-				try {
-					out.close();
-				} catch (IOException ee) {
-				}
-			}
-
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException ee) {
-				}
-			}
-
-			throw e;
-		}
-	}
-
-	/**
-	 * Delete a file.
-	 *
-	 * @param file The file to delete.
-	 * @throws IOException If the delete failed.
-	 */
-	private static void rm(File file) throws IOException {
-		if (file.exists() && !file.delete()) {
-			throw new IOException("delete failed"); //$NON-NLS-1$
 		}
 	}
 
 	/**
 	 * Answers a boolean indicating whether or not the specified reliable file
-	 * exists on the underlying file system.
+	 * exists on the underlying file system. This call only returns if a file 
+	 * exists and not if the file contents are valid.
 	 *
 	 * @return <code>true</code> if the specified reliable file exists,
 	 * <code>false</code> otherwise.
 	 */
 	public static boolean exists(File file) {
-		if (file.exists()) /* quick test */
-		{
-			return true;
+		String prefix = file.getName() + '.'; //$NON-NLS-1$
+		File parent = new File(file.getParent());
+		int prefixLen = prefix.length();
+		String[] files = parent.list();
+		if (files == null)
+			return false;
+		for (int i = 0; i < files.length; i++) {
+			if (files[i].startsWith(prefix)) {
+				try {
+					Integer.parseInt(files[i].substring(prefixLen));
+					return true;
+				} catch (NumberFormatException e) {/*ignore*/
+				}
+			}
 		}
-
-		String name = file.getPath();
-
-		return new File(name + oldExt).exists() || new File(name + newExt).exists();
+		return file.exists();
 	}
 
 	/**
-	 * Returns the time that the file denoted by this abstract pathname was last modified
-	 *
-	 * @return time the file was last modified (see java.io.File.lastModified())
+	 * Returns the time that the reliable file was last modified. Only the time 
+	 * of the last file generation is returned.
+	 * @param file the file to determine the time of.
+	 * @return time the file was last modified (see java.io.File.lastModified()).
 	 */
 	public static long lastModified(File file) {
-		String name = file.getPath();
-		File newFile = new File(name + newExt);
-		if (newFile.exists())
-			return newFile.lastModified();
-		if (file.exists())
+		int[] generations = getFileGenerations(file);
+		if (generations == null)
+			return 0L;
+		if (generations[0] == 0)
 			return file.lastModified();
-		File oldFile = new File(name + oldExt);
-		return oldFile.lastModified();
+		String name = file.getName();
+		File parent = new File(file.getParent());
+		File newFile = new File(parent, name + '.' + generations[0]);
+		return newFile.lastModified();
 	}
 
 	/**
-	 * Delete this reliable file on the underlying file system.
+	 * Returns the time that this ReliableFile was last modified. This method is only valid
+	 * after requesting an input stream and the time of the actual input file is returned.
 	 *
-	 * @throws IOException If the delete failed.
+	 * @return time the file was last modified (see java.io.File.lastModified()) or
+	 * 0L if an input stream is not open.
 	 */
-	private synchronized void delete() throws IOException {
-		try {
-			lock();
-		} catch (IOException e) {
-			/* the lock request failed; decrement the use count */
-			release();
-
-			throw e;
+	public long lastModified() {
+		if (inputFile != null) {
+			return inputFile.lastModified();
 		}
-
-		try {
-			rm(oldFile);
-			rm(orgFile);
-			rm(newFile);
-			rm(tmpFile);
-		} finally {
-			unlock();
-
-			release();
-		}
+		return 0L;
 	}
 
 	/**
-	 * Delete the specified reliable file
-	 * on the underlying file system.
+	 * Returns the a version number of a reliable managed file. The version can be expected
+	 * to be unique for each successfule file update.
+	 * 
+	 * @param file the file to determine the version of.
+	 * @return a unique version of this current file. A value of -1 indicates the file does
+	 * not exist or an error occurred.
+	 */
+	public static int lastModifiedVersion(File file) {
+		int[] generations = getFileGenerations(file);
+		if (generations == null)
+			return -1;
+		return generations[0];
+	}
+
+	/**
+	 * Delete the specified reliable file on the underlying file system.
 	 *
 	 * @return <code>true</code> if the specified reliable file was deleted,
 	 * <code>false</code> otherwise.
 	 */
-	public static boolean delete(File file) {
-		try {
-			getReliableFile(file).delete();
-
-			return true;
-		} catch (IOException e) {
+	public static boolean delete(File deleteFile) {
+		int[] generations = getFileGenerations(deleteFile);
+		if (generations == null)
 			return false;
+		String name = deleteFile.getName();
+		File parent = new File(deleteFile.getParent());
+		synchronized (cacheFiles) {
+			for (int idx = 0; idx < generations.length; idx++) {
+				// base files (.0 in generations[]) will never be deleted
+				if (generations[idx] == 0)
+					continue;
+				File file = new File(parent, name + '.' + generations[idx]);
+				if (file.exists()) {
+					file.delete();
+				}
+				cacheFiles.remove(file);
+			}
 		}
+		return true;
+	}
+
+	/**
+	 * Get a list of ReliableFile base names in a given directory. Only files with a valid
+	 * ReliableFile generation are included.
+	 * @param directory the directory to inquire.
+	 * @return an array of ReliableFile names in the directory. 
+	 * @throws IOException if an error occurs.
+	 */
+	public static String[] getBaseFiles(File directory) throws IOException {
+		if (!directory.isDirectory())
+			throw new IOException("Not a valid directory"); //$NON-NLS-1$
+		String files[] = directory.list();
+		HashSet list = new HashSet(files.length / 2);
+		for (int idx = 0; idx < files.length; idx++) {
+			String file = files[idx];
+			int pos = file.lastIndexOf('.');
+			if (pos == -1)
+				continue;
+			String ext = file.substring(pos + 1);
+			int generation = 0;
+			try {
+				generation = Integer.parseInt(ext);
+			} catch (NumberFormatException e) {/*skip*/
+			}
+			if (generation == 0)
+				continue;
+			String base = file.substring(0, pos);
+			list.add(base);
+		}
+		files = new String[list.size()];
+		int idx = 0;
+		for (Iterator iter = list.iterator(); iter.hasNext();) {
+			files[idx++] = (String) iter.next();
+		}
+		return files;
+	}
+
+	/**
+	 * Delete any old excess generations of a given reliable file.
+	 * @param base realible file.
+	 */
+	public static void cleanupGenerations(File base) {
+		ReliableFile rf = new ReliableFile(base);
+		int[] generations = getFileGenerations(base);
+		rf.cleanup(generations, false);
+		lastGenerationFile = null;
+		lastGenerations = null;
+	}
+
+	/**
+	 * Inform ReliableFile that a file has been updated outside of 
+	 * ReliableFile.
+	 * @param file
+	 */
+	public static void fileUpdated(File file) {
+		lastGenerationFile = null;
+		lastGenerations = null;
+	}
+
+	/**
+	 * Append a checksum value to the end of an output stream.
+	 * @param out the output stream.
+	 * @param checksum the checksum value to append to the file.
+	 * @throws IOException if a write error occurs.
+	 */
+	protected void writeChecksumSignature(OutputStream out, Checksum checksum) throws IOException {
+		// tag on our signature and checksum
+		out.write(ReliableFile.identifier1);
+		out.write(intToHex((int) checksum.getValue()));
+		out.write(ReliableFile.identifier2);
 	}
 
 	/**
@@ -707,12 +679,22 @@ public class ReliableFile {
 	 * called.
 	 */
 	protected int getSignatureSize() throws IOException {
-		if (version == VERSION_UNKNOWN)
-			throw new IOException("Version is unknown!"); //$NON-NLS-1$
-		if (version == VERSION_2)
-			return 16;
-		else
-			return 0;
+		if (inputFile != null) {
+			CacheInfo info;
+			synchronized (cacheFiles) {
+				info = (CacheInfo) cacheFiles.get(inputFile);
+			}
+			if (info != null) {
+				switch (info.filetype) {
+					case FILETYPE_VALID :
+					case FILETYPE_CORRUPT :
+						return 16;
+					case FILETYPE_NOSIGNATURE :
+						return 0;
+				}
+			}
+		}
+		throw new IOException("ReliableFile signature size is unknown"); //$NON-NLS-1$
 	}
 
 	/**
@@ -722,13 +704,12 @@ public class ReliableFile {
 	 *
 	 * @return Object implementing Checksum interface initialized to the 
 	 * current file contents.
-	 * @throws IOException if getInputStream() or getOutputStream has not been
-	 * called.
+	 * @throws IOException if getOutputStream for append has not been called.
 	 */
 	protected Checksum getFileChecksum() throws IOException {
-		if (appendCrc == null)
+		if (appendChecksum == null)
 			throw new IOException("Checksum is invalid!"); //$NON-NLS-1$
-		return appendCrc;
+		return appendChecksum;
 	}
 
 	/**
@@ -737,8 +718,8 @@ public class ReliableFile {
 	 * @return Object implementing Checksum interface used to calculate
 	 * a reliable file checksum
 	 */
-	protected static Checksum getChecksumCalculator() {
-		// Using CRC32 because Adler32 isn't in the jclGwp library.
+	protected Checksum getChecksumCalculator() {
+		// Using CRC32 because Adler32 isn't in the eeMinimum library.
 		return new CRC32();
 	}
 
@@ -748,94 +729,93 @@ public class ReliableFile {
 	 * @return <code>true</code> if the file is a valid ReliableFile
 	 * @throws IOException If an error occurs verifying the file.
 	 */
-	protected static boolean isValidReliableFile(BufferedInputStream bis, Checksum crc, boolean containsSignature[]) throws IOException {
-		if (containsSignature != null)
-			containsSignature[0] = false;
-
-		bis.mark(bis.available());
+	private int getStreamType(InputStream is, Checksum crc) throws IOException {
+		boolean markSupported = is.markSupported();
+		if (markSupported)
+			is.mark(is.available());
 		try {
-			int len = bis.available();
+			int len = is.available();
 			if (len < 16) {
 				if (crc != null) {
 					byte data[] = new byte[16];
-					int num = bis.read(data);
+					int num = is.read(data);
 					if (num > 0)
 						crc.update(data, 0, num);
 				}
-				return false;
+				return FILETYPE_NOSIGNATURE;
 			}
 			len -= 16;
 
-			if (crc == null)
-				crc = getChecksumCalculator();
-
 			int pos = 0;
-			byte data[] = new byte[8192];
+			byte data[] = new byte[BUF_SIZE];
 
-			do {
-				if (pos >= len)
-					break;
+			while (pos < len) {
 				int read = data.length;
 				if (pos + read > len)
 					read = len - pos;
 
-				int num = bis.read(data, 0, read);
+				int num = is.read(data, 0, read);
 				if (num == -1) {
 					throw new IOException("Unable to read entire file."); //$NON-NLS-1$
 				}
 
 				crc.update(data, 0, num);
 				pos += num;
-			} while (true);
+			}
 
-			byte sig[] = new byte[16];
-			int num = bis.read(sig);
+			int num = is.read(data); // read last 16-byte signature
 			if (num != 16) {
 				throw new IOException("Unable to read entire file."); //$NON-NLS-1$
 			}
 
-			int i;
-			int j;
+			int i, j;
 			for (i = 0; i < 4; i++)
-				if (identifier1[i] != sig[i]) {
-					crc.update(sig, 0, 16); // update crc w/ sig bytes
-					return false;
+				if (identifier1[i] != data[i]) {
+					crc.update(data, 0, 16); // update crc w/ sig bytes
+					return FILETYPE_NOSIGNATURE;
 				}
-
 			for (i = 0, j = 12; i < 4; i++, j++)
-				if (identifier2[i] != sig[j]) {
-					crc.update(sig, 0, 16); // update crc w/ sig bytes
-					return false;
+				if (identifier2[i] != data[j]) {
+					crc.update(data, 0, 16); // update crc w/ sig bytes
+					return FILETYPE_NOSIGNATURE;
 				}
-
-			if (containsSignature != null)
-				containsSignature[0] = true;
-
-			long crccmp = Long.valueOf(new String(sig, 4, 8), 16).longValue();
+			long crccmp = Long.valueOf(new String(data, 4, 8), 16).longValue();
 			if (crccmp == crc.getValue()) {
-				return true;
-			} else {
-				// do not update CRC
-				return false;
+				return FILETYPE_VALID;
 			}
+			// do not update CRC
+			return FILETYPE_CORRUPT;
 		} finally {
-			bis.reset();
+			if (markSupported)
+				is.reset();
 		}
 	}
 
-	protected static String intToHex(int l) {
+	private static byte[] intToHex(int l) {
 		byte[] buffer = new byte[8];
 		int count = 8;
 
 		do {
 			int ch = (l & 0xf);
 			if (ch > 9)
-				ch = ch - 10 + (int) 'a';
+				ch = ch - 10 + 'a';
 			else
-				ch += (int) '0';
+				ch += '0';
 			buffer[--count] = (byte) ch;
 			l >>= 4;
 		} while (count > 0);
-		return new String(buffer);
+		return buffer;
+	}
+
+	private class CacheInfo {
+		int filetype;
+		Checksum checksum;
+		long timeStamp;
+
+		CacheInfo(int filetype, Checksum checksum, long timeStamp) {
+			this.filetype = filetype;
+			this.checksum = checksum;
+			this.timeStamp = timeStamp;
+		}
 	}
 }

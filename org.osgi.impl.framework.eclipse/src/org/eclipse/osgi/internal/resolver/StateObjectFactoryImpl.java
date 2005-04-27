@@ -67,6 +67,9 @@ public class StateObjectFactoryImpl implements StateObjectFactory {
 		if (original.getHost() != null)
 			bundle.setHost(createHostSpecification(original.getHost()));
 		bundle.setStateBit(BundleDescriptionImpl.SINGLETON, original.isSingleton());
+		bundle.setStateBit(BundleDescriptionImpl.ATTACH_FRAGMENTS, original.attachFragments());
+		bundle.setStateBit(BundleDescriptionImpl.DYNAMIC_FRAGMENTS, original.dynamicFragments());
+		bundle.setStateBit(BundleDescriptionImpl.HAS_DYNAMICIMPORT, original.hasDynamicImports());
 		return bundle;
 	}
 

@@ -545,10 +545,8 @@ public class BundleHost extends AbstractBundle {
 			return;
 		// First close the BundleLoader
 		BundleLoader loader = proxy.getBasicBundleLoader();
-		if (loader != null) {
-			loader.clear();
+		if (loader != null)
 			loader.close();
-		}
 		proxy.setStale();
 		// if proxy is not null then make sure to unset user object
 		// associated with the proxy in the state
