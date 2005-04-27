@@ -18,6 +18,7 @@
 package org.osgi.impl.service.dmt;
 
 import java.util.*;
+import java.io.*;
 import org.osgi.framework.*;
 import org.osgi.service.dmt.*;
 import org.osgi.service.log.*;
@@ -448,7 +449,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 	/*
 	 * Formats the vector of logentries into a string to be sent within an alert
 	 */
-	private String formatResultNew(Vector records) {
+	private String formatResult(Vector records) {
 		String result = "";
 
 		for (int i = 0; i < records.size(); i++) {
@@ -464,14 +465,31 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 			
 			logEncode += createNode( "severity", "int", Integer.toString( e.getLevel() ), null );
 
-			logEncode += createNode( "system", "chr", e.getBundle().toString(), null );
+			String symName = e.getBundle().getSymbolicName();
+			if( symName == null )
+				symName = Long.toString( e.getBundle().getBundleId() );
+			logEncode += createNode( "system", "chr", symName, null );
 
-			logEncode += createNode( "subsystem", "chr", e.getServiceReference().toString(), null );
+			ServiceReference servRef = e.getServiceReference();
+			String refName = "";
+			if( servRef != null ) {
+				String []objects = (String [])servRef.getProperty( Constants.OBJECTCLASS );
+				if( objects != null ) {
+					for( int j = 0; j != objects.length; j++ )
+						refName += ( ( j == 0 ) ? "" : "," ) + objects[ j ];
+				}					
+			}			
+			logEncode += createNode( "subsystem", "chr", refName, null );
 			
 			logEncode += createNode( "message", "chr", e.getMessage(), null );
 			
 			Throwable t = e.getException();
-			String data = t == null ? "" : t.toString();			
+			String data = "";
+			if( t != null ) {
+				StringWriter writer = new StringWriter();
+				t.printStackTrace( new PrintWriter( writer ) );
+				data = writer.toString();
+			}			
 			logEncode += createNode( "data", "chr", data , null );
 			
 			logEncode += createNode( "id", "chr", Integer.toString( i ), null );
@@ -482,27 +500,6 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 		result = createNode( "logresult", "node", null, result );
 		result = "<MgmtTree>" + result + "</MgmtTree>";
 		return result;
-	}
-
-	/*
-	 * Formats the vector of logentries into a string to be sent within an alert
-	 */
-	private String formatResult(Vector records) {
-		String ret = "Records:\r\n";
-		String s = ","; //separator
-		//TODO proper formatting per spec, this is just like toString()
-		//TODO check maxsize and exclude within loop
-		for (int i = 0; i < records.size(); i++) {
-			LogEntry e = (LogEntry) records.elementAt(i);
-			if (e == null)
-				continue; //should not happen
-			ret = ret + "id:" + i + s + "time:" + e.getTime() + s + "severity:"
-					+ e.getLevel() + s + "system:" + e.getBundle() + s
-					+ "subsystem:" + e.getServiceReference() + s + "message:"
-					+ e.getMessage() + s + "data:" + e.getException() + "\r\n";
-		}
-		d("Formatted: " + ret);		
-		return ret;
 	}
 
 	/*
