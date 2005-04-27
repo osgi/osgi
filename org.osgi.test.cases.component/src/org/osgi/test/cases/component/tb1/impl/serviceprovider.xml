@@ -23,6 +23,13 @@
 	</service>
 </scr:component>
 
+<!-- this below should be ignored by the SCR parser -->
+<ignored>
+	<component>
+		<service servicefactory="true" />
+	</component>
+</ignored>
+
 <scr:component name="org.osgi.test.cases.component.tb1.ServiceProvider"
 	autoenable="true"
 	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
