@@ -374,7 +374,7 @@ public final class StatusVariable {
         char[] chars = name.toCharArray();
         int i = 0;
         while(i < chars.length) {
-            if(URI_CHARACTERS.indexOf(chars[i]) != -1)
+            if(URI_CHARACTERS.indexOf(chars[i]) == -1)
                 return false;
             i++;
         }
