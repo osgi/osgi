@@ -11,7 +11,6 @@ Bundle-ContactAddress: speccomments@mail.osgi.org
 Bundle-Category: osgi,test
 CVS-Header: $Header$
 DynamicImport-Package: *
-$(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
 

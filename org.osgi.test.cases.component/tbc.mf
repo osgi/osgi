@@ -6,7 +6,6 @@ Bundle-Version: 4
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
 CVS-Header: $Header$
 DynamicImport-Package: *
-$(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
 
