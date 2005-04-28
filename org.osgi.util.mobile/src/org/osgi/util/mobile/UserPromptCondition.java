@@ -72,15 +72,21 @@ public class UserPromptCondition implements Condition {
 	 * level. The user should be given choice as to what level of permission is
 	 * given. Thus, the lifetime of the permission is controlled by the user.
 	 *
-	 * @param bundle the bundle to ask about
+	 * @param bundle the bundle to ask about.
 	 * @param levels the possible permission levels. This is a comma-separated list that can contain
 	 * 		following strings: ONESHOT SESSION BLANKET. The order is not important.
-	 * @param defaultLevel the default permission level, one chosen from the levels parameter. I
-	 * 		f it is an empty string, then there is no default.
-	 * @param catalogName the message catalog base name
+	 * @param defaultLevel the default permission level, one chosen from the levels parameter. If
+	 * 		it is an empty string, then there is no default.
+	 * @param catalogName the message catalog base name. It will be loaded by a {@link java.util.ResourceBundle},
+	 * 		or equivalent
+	 * 		from an exporting OSGi Bundle. Thus, if the catalogName is "com.provider.messages.userprompt",
+	 * 		then there should be an OSGi Bundle exporting the "com.provider.messages" package, and inside
+	 * 		it files like "userprompt_en_US.properties".
 	 * @param message textual description of the condition, to be displayed to the user. If
 	 * 		it starts with a '%' sign, then the message is looked up from the catalog specified
 	 * 		by the catalogName parameter. The key is the rest of the string after the '%' sign.
+	 * @throws IllegalArgumentException if the parameters are malformed.
+	 * @throws NullPointerException if one of the parameters is <code>null</code>.
 	 */
 	public static Condition getInstance(Bundle bundle,
 					String levels,
@@ -88,6 +94,12 @@ public class UserPromptCondition implements Condition {
 					String catalogName, 
 					String message) 
 	{
+		if (bundle==null) throw new NullPointerException("bundle");
+		if (levels==null) throw new NullPointerException("levels");
+		if (defaultLevel==null) throw new NullPointerException("defaultLevel");
+		if (catalogName==null) throw new NullPointerException("catalogName");
+		if (message==null) throw new NullPointerException("message");
+		
 		if (factory==null) {
 			// the bundle implementing the UserPromptCondition has not started yet.
 			// Do wrapping magick.
@@ -136,20 +148,17 @@ public class UserPromptCondition implements Condition {
 	}
 	
 	/**
-	 * Checks whether the condition is evaluated. Depending on the permission
-	 * level, the function returns the following values.
+	 * Checks if the {@link #isSatisfied()} method can return a result without actually
+	 * prompting the user. This depends on the possible permission levels given in 
+	 * {@link UserPromptCondition#getInstance(Bundle, String, String, String, String)}. 
 	 * <ul>
-	 * <li>ONESHOT - isSatisfied always returns false. The condition
-	 * reevaluated each time it is checked.
-	 * <li>SESSION - isSatisfied returns false until isEvaluated() returns true
-	 * (the user accepts the prompt for this execution of the bundle). Then
-	 * isSatisfied() returns true until the bundle is stopped.
-	 * <li>BLANKET - isSatisfied returns false until isEvaluated() returns true
-	 * (the user accepts the prompt for the lifetime of the bundle). Then
-	 * isSatisfied() returns true until the bundle is uninstalled.
+	 * <li>ONESHOT - isEvaluated always returns false. The user is prompted for question every time.
+	 * <li>SESSION - isEvaluated returns false until the user decides either yes or no for the current session.
+	 * <li>BLANKET - isEvaluated returns false until the user decides either always or never.
+	 * 			After that, it is always true.
 	 * </ul>
 	 * 
-	 * @return true if the condition is satisfied.
+	 * @return True, if no prompt is needed.
 	 */
 	public boolean isEvaluated() {
 		lookForImplementation();
@@ -161,11 +170,11 @@ public class UserPromptCondition implements Condition {
 	}
 
 	/**
-	 * Checks whether the condition may change in the future.
+	 * Checks whether the condition may change during the lifetime of the UserPromptCondition object.
 	 * 
 	 * @return
 	 * <ul>
-	 * <li>false, if it is already evaluated and is a BLANKET condition
+	 * <li>false, if it is a BLANKET condition, and the user already answered to the question.
 	 * <li>true otherwise
 	 * </ul>
 	 */
@@ -181,14 +190,16 @@ public class UserPromptCondition implements Condition {
 	}
 
 	/**
-	 * Checks whether the condition is satisfied. Displays the prompt string to
-	 * the user and returns true if the user presses "accept". Depending on the
+	 * Displays the prompt string to
+	 * the user and returns true if the user accepts. Depending on the
 	 * amount of levels the condition is assigned to, the prompt may have
-	 * multiple "accept" buttons and one of them can be selected by default (see
+	 * multiple accept buttons and one of them can be selected by default (see
 	 * deflevel parameter at UserPrompt constructor). It must be always possible
-	 * to deny the permission (e.g. by a separate "deny" button).
+	 * to deny the permission (e.g. by a separate "deny" button). In case of BLANKET
+	 * and SESSION levels, it is possible that the user has already answered the question,
+	 * in this case there will be no prompting, but immediate return with the previous answer.
 	 * 
-	 * @return true if the user accepts the prompt (or accepts any prompt in
+	 * @return True if the user accepts the prompt (or accepts any prompt in
 	 *         case there are multiple permission levels).
 	 */
 	public boolean isSatisfied() {
@@ -202,11 +213,14 @@ public class UserPromptCondition implements Condition {
 	}
 
 	/**
-	 * Checks an array of UserPrompt conditions
+	 * Checks an array of UserPrompt conditions.
 	 * 
-	 * @param conds the array containing the UserPrompt conditions to evaluate
-	 * @param context storage area for one-shot evaluation
-	 * @return true, if all conditions are satisfied
+	 * @param conds The array containing the UserPrompt conditions to evaluate.
+	 * @param context Storage area for evaluation. The {@link org.osgi.service.condpermadmin.ConditionalPermissionAdmin}
+	 * 		may evaluate a condition several times for one permission check, so this context
+	 * 		will be used to store results of ONESHOT questions. This way asking the same question
+	 * 		twice in a row can be avoided. If context is null, temporary results will not be stored.
+	 * @return True, if all conditions are satisfied.
 	 */
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
 		lookForImplementation();

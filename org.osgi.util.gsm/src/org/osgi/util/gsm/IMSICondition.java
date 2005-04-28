@@ -44,14 +44,16 @@ public class IMSICondition implements Condition {
 	private IMSICondition(boolean satisfied) { this.satisfied = satisfied; }
 
 	/**
-	 * Creates an IMSI condition object
+	 * Creates an IMSI condition object.
 	 * 
-	 * @param bundle ignored
-	 * @param imsi The IMSI value of the subscriber.
-	 * @throws NullPointerException if one of the parameters is null
-	 * @throws IllegalArgumentException if the imsi is not a string of 15 digits
+	 * @param bundle ignored, as the IMSI number is the same for all bundles.
+	 * @param imsi the IMSI value of the subscriber identity.
+	 * @throws NullPointerException if one of the parameters is null.
+	 * @throws IllegalArgumentException if the imsi is not a string of 15 digits.
 	 */
 	public static Condition getInstance(Bundle bundle, String imsi) {
+		if (bundle==null) throw new NullPointerException("bundle");
+		if (imsi==null) throw new NullPointerException("imsi");
 		if (imsi.length()!=15) throw new IllegalArgumentException("not a valid imei: "+imsi);
 		for(int i=0;i<imsi.length();i++) {
 			int c = imsi.charAt(i);
@@ -61,39 +63,40 @@ public class IMSICondition implements Condition {
 	}
 
 	/**
-	 * Checks whether the condition is true. The IMSI of the object instance is
-	 * compared against the IMSI of the device's user.
+	 * Checks whether the condition is true. 
 	 * 
-	 * @return true if the IMSI value match.
+	 * @return True if the IMSI value in this condition is the same as the IMSI of subscriber.
 	 */
 	public boolean isSatisfied() {
 		return satisfied;
 	}
 
 	/**
-	 * Checks whether the condition is evaluated
+	 * Checks whether the condition is evaluated.
 	 * 
-	 * @return always true
+	 * @return True if the {@link #isSatisfied()} method can give results instantly.
 	 */
 	public boolean isEvaluated() {
 		return true;
 	}
 
 	/**
-	 * Checks whether the condition can change
+	 * Checks whether the condition can change. On most systems the IMSI cannot change, since the
+	 * device need to be powered down to change the SIM card.
 	 * 
-	 * @return always false
+	 * @return True, if the IMSI can change (mobile device supports live SIM card swaps, etc.)
 	 */
 	public boolean isMutable() {
 		return false;
 	}
 
 	/**
-	 * Checks whether an array of IMSI conditions match
+	 * Checks whether an array of IMSI conditions match.
 	 * 
-	 * @param conds an array, containing only IMSI conditions
-	 * @param context ignored
-	 * @return true, if they all match
+	 * @param conds an array, containing only IMSI conditions.
+	 * @param context ignored.
+	 * @return True, if they all match.
+	 * @throws NullPointerException if conds is <code>null</code>.
 	 */
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
 		// we don't use context

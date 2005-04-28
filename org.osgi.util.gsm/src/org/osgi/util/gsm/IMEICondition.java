@@ -47,12 +47,16 @@ public class IMEICondition implements Condition {
 	/**
 	 * Creates an IMEICondition object.
 	 * 
-	 * @param bundle ignored
-	 * @param imei The IMEI value of the device. Must be 15 digits, no hypens.
-	 * @throws NullPointerException if one of the parameters is null
-	 * @throws IllegalArgumentException if the imei is not a string of 15 digits
+	 * @param bundle ignored, as the IMEI number is the property of the mobile device,
+	 * 					and thus the same for all bundles.
+	 * @param imei the IMEI value to match the device's IMEI against. Must be 15 digits, no hypens.
+	 * @return An IMEICondition object, that can tell whether its IMEI number matches that of the device.
+	 * @throws NullPointerException if one of the parameters is <code>null</code>.
+	 * @throws IllegalArgumentException if the IMEI is not a string of 15 digits.
 	 */
 	public static Condition getInstance(Bundle bundle, String imei) {
+		if (bundle==null) throw new NullPointerException("bundle");
+		if (imei==null) throw new NullPointerException("imei");
 		if (imei.length()!=15) throw new IllegalArgumentException("not a valid imei: "+imei);
 		for(int i=0;i<imei.length();i++) {
 			int c = imei.charAt(i);
@@ -62,10 +66,9 @@ public class IMEICondition implements Condition {
 	}
 
 	/**
-	 * Checks whether the condition is satisfied. The IMEI of the object
-	 * instance is compared against the IMEI of the device.
+	 * Checks whether IMEI value in the condition and of the device match.
 	 * 
-	 * @return true if the IMEI value matches.
+	 * @return True if the IMEI value in this condition is the same as the IMEI of the device.
 	 */
 	public boolean isSatisfied() {
 		return satisfied;
@@ -74,27 +77,29 @@ public class IMEICondition implements Condition {
 	/**
 	 * Checks whether the condition is evaluated.
 	 * 
-	 * @return if the condition status can be evaluated instantly
+	 * @return True if the {@link #isSatisfied()} method can give results instantly.
 	 */
 	public boolean isEvaluated() {
 		return true;
 	}
 
 	/**
-	 * check whether the condition can change.
+	 * Checks whether the condition can change. As an IMEI number is factory-set in the
+	 * device, this condition is not mutable.
 	 * 
-	 * @return always false
+	 * @return Always false.
 	 */
 	public boolean isMutable() {
 		return false;
 	}
 
 	/**
-	 * Checks for an array of IMEI conditions if they all match this device
+	 * Checks an array of IMEI conditions if they all match this device.
 	 * 
-	 * @param conds an array, containing only IMEI conditions
-	 * @param context ignored
-	 * @return true if all conditions match
+	 * @param conds an array, containing only IMEIConditions.
+	 * @param context ignored.
+	 * @return True if all conditions match.
+	 * @throws NullPointerException if conds is <code>null</code>.
 	 */
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
 		// we don't use context
