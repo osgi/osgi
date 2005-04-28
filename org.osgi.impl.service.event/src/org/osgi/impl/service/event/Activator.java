@@ -19,6 +19,7 @@
 package org.osgi.impl.service.event;
 
 import org.osgi.framework.*;
+import org.osgi.impl.service.event.mapper.EventRedeliverer;
 import org.osgi.service.event.EventAdmin;
 
 /**
@@ -28,6 +29,7 @@ public class Activator implements BundleActivator {
 	private BundleContext		bc;
 	private ServiceRegistration	eventAdminServiceReg;
 	private EventAdminImpl		eventAdminImpl;
+	private EventRedeliverer	redeliverer;
 
 	public Activator() {
 		super();
@@ -44,10 +46,14 @@ public class Activator implements BundleActivator {
 		//registering the EventAdmin service
 		eventAdminServiceReg = bc.registerService(EventAdmin.class.getName(),
 				eventAdminImpl, null);
+		redeliverer = new EventRedeliverer(bc);
+		redeliverer.open();
 		System.out.println("EventAdmin started successfully!");
 	}
 
 	public void stop(BundleContext bc) throws Exception {
+		redeliverer.close();
+		redeliverer = null;
 		eventAdminImpl.stop();
 		eventAdminServiceReg.unregister();
 		this.bc = null;
