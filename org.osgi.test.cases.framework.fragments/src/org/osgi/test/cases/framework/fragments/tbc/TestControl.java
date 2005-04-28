@@ -36,6 +36,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.BundleListener;
+import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.service.packageadmin.PackageAdmin;
@@ -1176,5 +1177,780 @@ public class TestControl extends DefaultTestBundleControl implements
 				+ eventClass.getName() + SEPARATOR + eventType;
 		retVal = events.containsKey(key);
 		return retVal;
+	}
+
+	/**
+	 * Tests a fragment bundle where extension directive is ignored because host
+	 * bundle is not system.bundle
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testBadExtensionBundle() throws Exception {
+		// installing bad extension bundle
+		Bundle tb4 = getContext().installBundle(getWebServer() + "tb4.jar");
+		// installing regular fragment
+		Bundle tb1 = getContext().installBundle(getWebServer() + "tb1.jar");
+		String class1 = "org.osgi.test.cases.framework.fragments.tb1.FooTB1";
+		String class4 = "org.osgi.test.cases.framework.fragments.tb4.FooTB4";
+
+		try {
+			// classloader must be the same
+			assertEquals("loaded by host bundle classloader", tb1.loadClass(
+					class1).getClassLoader(), tb1.loadClass(class4)
+					.getClassLoader());
+		}
+		finally {
+			tb4.uninstall();
+			tb1.uninstall();
+		}
+	}
+
+	/**
+	 * Auxiliar method to get the root (boot) classloader.
+	 * 
+	 * @return the boot classloader.
+	 */
+	private ClassLoader getBootClassLoader() {
+		ClassLoader boot = ClassLoader.getSystemClassLoader();
+		// traverse the tree down to the root element (boot classloader)
+		while (boot.getParent() != null) {
+			boot = boot.getParent();
+		}
+		return boot;
+	}
+
+	/**
+	 * Tests if a boot classpath extension bundle's classpath is appended to the
+	 * boot classpath. Will only perform this test if
+	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testBootClasspathExtensionBundle() throws Exception {
+		String class5 = "org.osgi.test.cases.framework.fragments.tb5.FooTB5";
+		Bundle tb5 = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
+			try {
+				// install extension bundle
+				tb5 = getContext().installBundle(getWebServer() + "tb5.jar");
+				// check if classloader is boot classloader
+				assertEquals("loaded by the boot classloader", tb5.loadClass(
+						class5).getClassLoader(), getBootClassLoader());
+			}
+			catch (BundleException be) {
+				fail("installing boot extension bundle");
+			}
+			finally {
+				if (tb5 != null) {
+					tb5.uninstall();
+				}
+			}
+		}
+		else {
+			String message = "boot extension bundle instalation not supported";
+			try {
+				// tries to install extension bundle
+				tb5 = getContext().installBundle(getWebServer() + "tb5.jar");
+				// instalation should fail
+				failException(message, BundleException.class);
+			}
+			catch (BundleException e) {
+				assertException(message, UnsupportedOperationException.class, e
+						.getNestedException());
+			}
+			finally {
+				if (tb5 != null) {
+					tb5.uninstall();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Tests if a framework extension bundle's classpath is appended to the
+	 * framework classpath. Will only perform this test if
+	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testFrameworkExtensionBundle() throws Exception {
+		String class6 = "org.osgi.test.cases.framework.fragments.tb6.FooTB6";
+		getContext();
+		Bundle tb6 = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
+			try {
+				// install extension bundle
+				tb6 = getContext().installBundle(getWebServer() + "tb6.jar");
+				// check if classloader is framework classloader
+				assertEquals("loaded by the framework classloader",
+						getContext().getClass().getClassLoader().loadClass(
+								class6).getClassLoader(), getContext()
+								.getClass().getClassLoader());
+			}
+			finally {
+				tb6.uninstall();
+			}
+
+		}
+		else {
+			String message = "framework extension bundle instalation should fail";
+			try {
+				// tries to install extension bundle
+				tb6 = getContext().installBundle(getWebServer() + "tb6.jar");
+				// installation should fail
+				failException(message, BundleException.class);
+			}
+			catch (BundleException e) {
+				assertException(message, UnsupportedOperationException.class, e
+						.getNestedException());
+			}
+			finally {
+				if (tb6 != null) {
+					tb6.uninstall();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Tests a framework extension bundle's lifecycle. An installed bundle
+	 * should be in <code>Bundle.INSTALLED</code> state. When it's refreshed,
+	 * it should go to <code>Bundle.RESOLVED</code> state if the framework
+	 * supports dynamically attaching fragments to resolved bundles. When it's
+	 * uninstalled, it should go to <code>Bundle.UNINSTALLED</code> state and
+	 * when it's refreshed again, should not be present in the framework
+	 * anymore. Will only perform this test if
+	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testFrameworkExtensionBundleLifeCycle() throws Exception {
+		Bundle tb6 = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
+			// install extension bundle
+			tb6 = getContext().installBundle(getWebServer() + "tb6.jar");
+			long bundleId = tb6.getBundleId();
+			PackageAdmin pkgAdm = (PackageAdmin) getService(PackageAdmin.class);
+			try {
+				// should be in INSTALLED state
+				assertEquals("bundle installed", tb6.getState(),
+						Bundle.INSTALLED);
+				pkgAdm.refreshPackages(new Bundle[] {tb6});
+				if (tb6.getState() == Bundle.RESOLVED) {
+					trace("framework supports dynamically attaching "
+							+ "fragments to resolved bundles");
+					tb6.update();
+					// should go back to INSTALLED state
+					assertEquals("bundle updated", tb6.getState(),
+							Bundle.INSTALLED);
+				}
+				else {
+					trace("framework doesn't support dynamically attaching "
+							+ "fragments to resolved bundles");
+				}
+				assertNotNull("bundle present", getContext()
+						.getBundle(bundleId));
+				tb6.uninstall();
+				// should be in UNINSTALLED state
+				assertEquals("bundle uninstalled", tb6.getState(),
+						Bundle.UNINSTALLED);
+				pkgAdm.refreshPackages(new Bundle[] {tb6});
+				// should not be present in the framework anynmore
+				assertNull("bundle not present", getContext().getBundle(
+						bundleId));
+			}
+			finally {
+				if (tb6.getState() != Bundle.UNINSTALLED) {
+					tb6.uninstall();
+				}
+				ungetService(pkgAdm);
+			}
+		}
+		else {
+			trace("framework extension bundles not supported");
+		}
+	}
+
+	/**
+	 * Tests a boot classpath extension bundle's lifecycle. An installed bundle
+	 * should be in <code>Bundle.INSTALLED</code> state. When it's refreshed,
+	 * it should go to <code>Bundle.RESOLVED</code> state if the framework
+	 * supports dynamically attaching fragments to resolved bundles. When it's
+	 * uninstalled, it should go to <code>Bundle.UNINSTALLED</code> state and
+	 * when it's refreshed again, should not be present in the framework
+	 * anymore. Will only perform this test if
+	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testBootClasspathExtensionBundleLifeCycle() throws Exception {
+		Bundle tb5 = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
+			// install extension bundle
+			tb5 = getContext().installBundle(getWebServer() + "tb5.jar");
+			long bundleId = tb5.getBundleId();
+			PackageAdmin pkgAdm = (PackageAdmin) getService(PackageAdmin.class);
+			try {
+				// should be in INSTALLED state
+				assertEquals("bundle installed", tb5.getState(),
+						Bundle.INSTALLED);
+				pkgAdm.refreshPackages(new Bundle[] {tb5});
+				if (tb5.getState() == Bundle.RESOLVED) {
+					trace("framework supports dynamically attaching "
+							+ "fragments to resolved bundles");
+					tb5.update();
+					// should go back to INSTALLED state
+					assertEquals("bundle updated", tb5.getState(),
+							Bundle.INSTALLED);
+					assertNotNull("bundle present", getContext().getBundle(
+							bundleId));
+				}
+				else {
+					trace("framework doesn't support dynamically attaching "
+							+ "fragments to resolved bundles");
+				}
+				assertNotNull("bundle present", getContext()
+						.getBundle(bundleId));
+				tb5.uninstall();
+				// should be in UNINSTALLED state
+				assertEquals("bundle uninstalled", tb5.getState(),
+						Bundle.UNINSTALLED);
+				pkgAdm.refreshPackages(new Bundle[] {tb5});
+				// should not be present in the framework anynmore
+				assertNull("bundle not present", getContext().getBundle(
+						bundleId));
+			}
+			finally {
+				if (tb5.getState() != Bundle.UNINSTALLED) {
+					tb5.uninstall();
+				}
+				ungetService(pkgAdm);
+			}
+
+		}
+		else {
+			trace("boot classpath extension bundles not supported");
+		}
+	}
+
+	/**
+	 * Tests if a framework extension bundle is not able to load classes
+	 * directly. Will only perform this test if
+	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testFrameworkExtensionBundleLoadClass() throws Exception {
+		String class6 = "org.osgi.test.cases.framework.fragments.tb6.FooTB6";
+		String message = "extension bundle cannot load classes";
+		Bundle tb6 = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
+			// install extension bundle
+			tb6 = getContext().installBundle(getWebServer() + "tb6.jar");
+			try {
+				tb6.loadClass(class6);
+				// should fail, since extension bundles are not able to load
+				// classes directly
+				failException(message, ClassNotFoundException.class);
+			}
+			catch (Exception e) {
+				assertException(message, ClassNotFoundException.class, e);
+			}
+			finally {
+				tb6.uninstall();
+			}
+
+		}
+		else {
+			trace("framework extension bundles not supported");
+		}
+	}
+
+	/**
+	 * Tests if a boot classpath extension bundle is not able to load classes
+	 * directly. Will only perform this test if
+	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testBootClasspathExtensionBundleLoadClass() throws Exception {
+		String class5 = "org.osgi.test.cases.framework.fragments.tb5.FooTB5";
+		String message = "boot extension bundle cannot load classes";
+		Bundle tb5 = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
+			// install extension bundle
+			tb5 = getContext().installBundle(getWebServer() + "tb5.jar");
+			try {
+				tb5.loadClass(class5);
+				// should fail, since extension bundles are not able to load
+				// classes directly
+				failException(message, ClassNotFoundException.class);
+			}
+			catch (Exception e) {
+				assertException(message, ClassNotFoundException.class, e);
+			}
+			finally {
+				tb5.uninstall();
+			}
+
+		}
+		else {
+			trace("boot classpath extension bundles not supported");
+		}
+	}
+
+	/**
+	 * Tests if an extension bundle is treated as a framework extension by
+	 * default. Will only perform this test if
+	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testFrameworkExtensionDefault() throws Exception {
+		String class7 = "org.osgi.test.cases.framework.fragments.tb7.FooTB7";
+		Bundle tb7 = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
+			tb7 = getContext().installBundle(getWebServer() + "tb7.jar");
+			try {
+				// check if classloader is framework classloader
+				assertEquals("loaded by the framework classloader",
+						getContext().getClass().getClassLoader().loadClass(
+								class7).getClassLoader(), getContext()
+								.getClass().getClassLoader());
+			}
+			finally {
+				tb7.uninstall();
+			}
+
+		}
+		else {
+			trace("framework extension bundles not supported");
+		}
+	}
+
+	/**
+	 * Tests if a framework extension bundle is not able to load native
+	 * libraries. Will only perform this test if
+	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testFrameworkExtensionNativeCode() throws Exception {
+		String message = "extension bundle cannot load native code";
+		Bundle tb8 = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
+			try {
+				tb8 = getContext().installBundle(getWebServer() + "tb8.jar");
+				// should fail, since extension bundles are not able to
+				// declare native code headers
+				failException(message, BundleException.class);
+			}
+			catch (Exception e) {
+				assertException(message, BundleException.class, e);
+			}
+			finally {
+				if (tb8 != null) {
+					tb8.uninstall();
+				}
+			}
+		}
+		else {
+			trace("framework extension bundles not supported");
+		}
+	}
+
+	/**
+	 * Tests if a boot classpath extension bundle is not able to load native
+	 * libraries. Will only perform this test if
+	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testBootClasspathExtensionNativeCode() throws Exception {
+		String message = "extension bundle cannot load native code";
+		Bundle tb13 = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
+			try {
+				tb13 = getContext().installBundle(getWebServer() + "tb13.jar");
+				// should fail, since extension bundles are not able to
+				// declare native code headers
+				failException(message, BundleException.class);
+			}
+			catch (Exception e) {
+				assertException(message, BundleException.class, e);
+			}
+			finally {
+				if (tb13 != null) {
+					tb13.uninstall();
+				}
+			}
+		}
+		else {
+			trace("boot classpath extension bundles not supported");
+		}
+	}
+
+	/**
+	 * Tests if a framework extension bundle is not able to import packages.
+	 * Will only perform this test if <code>SUPPORTS_FRAMEWORK_EXTENSION</code>
+	 * equals <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testFrameworkExtensionImportPackage() throws Exception {
+		String message = "extension bundle cannot import packages";
+		Bundle tb9 = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
+			try {
+				tb9 = getContext().installBundle(getWebServer() + "tb9.jar");
+				// should fail, since extension bundles are not able to
+				// import packages
+				failException(message, BundleException.class);
+			}
+			catch (Exception e) {
+				assertException(message, BundleException.class, e);
+			}
+			finally {
+				if (tb9 != null) {
+					tb9.uninstall();
+				}
+			}
+		}
+		else {
+			trace("framework extension bundles not supported");
+		}
+	}
+
+	/**
+	 * Tests if a boot classpath extension bundle is not able to import
+	 * packages. Will only perform this test if
+	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testBootClasspathExtensionImportPackage() throws Exception {
+		String message = "extension bundle cannot import packages";
+		Bundle tb12 = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
+			try {
+				tb12 = getContext().installBundle(getWebServer() + "tb12.jar");
+				// should fail, since extension bundles are not able to
+				// import packages
+				failException(message, BundleException.class);
+			}
+			catch (Exception e) {
+				assertException(message, BundleException.class, e);
+			}
+			finally {
+				if (tb12 != null) {
+					tb12.uninstall();
+				}
+			}
+		}
+		else {
+			trace("boot classpath extension bundles not supported");
+		}
+	}
+
+	/**
+	 * Tests if a framework extension bundle is not able to require bundles.
+	 * Will only perform this test if <code>SUPPORTS_FRAMEWORK_EXTENSION</code>
+	 * equals <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testFrameworkExtensionRequireBundle() throws Exception {
+		String message = "extension bundle cannot require bundles";
+		Bundle tb10 = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
+			try {
+				tb10 = getContext().installBundle(getWebServer() + "tb10.jar");
+				// should fail, since extension bundles are not able to
+				// require bundles
+				failException(message, BundleException.class);
+			}
+			catch (Exception e) {
+				assertException(message, BundleException.class, e);
+			}
+			finally {
+				if (tb10 != null) {
+					tb10.uninstall();
+				}
+			}
+		}
+		else {
+			trace("framework extension bundles not supported");
+		}
+	}
+
+	/**
+	 * Tests if a boot classpath extension bundle is not able to require
+	 * bundles. Will only perform this test if
+	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testBootClasspathExtensionRequireBundle() throws Exception {
+		String message = "extension bundle cannot require bundles";
+		Bundle tb15 = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
+			try {
+				tb15 = getContext().installBundle(getWebServer() + "tb15.jar");
+				// should fail, since extension bundles are not able to
+				// require bundles
+				failException(message, BundleException.class);
+			}
+			catch (Exception e) {
+				assertException(message, BundleException.class, e);
+			}
+			finally {
+				if (tb15 != null) {
+					tb15.uninstall();
+				}
+			}
+		}
+		else {
+			trace("boot classpath extension bundles not supported");
+		}
+	}
+
+	/**
+	 * Tests if a framework extension bundle has to have
+	 * <code>AllPermission</code> permission to be installed. Will only
+	 * perform this test if <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals
+	 * <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testFrameworkExtensionPermission() throws Exception {
+		String message = "extension bundle does not have"
+				+ "permission to be installed";
+		Bundle tb11 = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
+			try {
+				tb11 = getContext().installBundle(getWebServer() + "tb11.jar");
+				// should fail, since extension bundles have to have
+				// AllPermission to be installed
+				failException(message, BundleException.class);
+			}
+			catch (Exception e) {
+				assertException(message, BundleException.class, e);
+			}
+			finally {
+				if (tb11 != null) {
+					tb11.uninstall();
+				}
+			}
+		}
+		else {
+			trace("framework extension bundles not supported");
+		}
+	}
+
+	/**
+	 * Tests if a bundle has to have at least
+	 * <code>AdminPermission[<bundle>, EXTENSIONLIFECYCLE]</code> permission
+	 * to install a framework extension bundle. Will only perform this test if
+	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testFrameworkExtensionInvokerPermission() throws Exception {
+		String message = "bundle does not have"
+				+ "permission to install extension bundles";
+		Bundle tb16a = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
+			// install regular bundle
+			tb16a = getContext().installBundle(getWebServer() + "tb16a.jar");
+			try {
+				// start regular bundle that tries to install a framework
+				// extension bundle
+				tb16a.start();
+				// installation inside start should fail, since
+				// bundles have to have
+				// AdminPermission[<bundle>, EXTENSIONLIFECYCLE]
+				// to install extension bundles
+				trace("prevented bundle without permission from installing "
+						+ "a framework extension bundle");
+			}
+			catch (BundleException e) {
+				fail("should not be able to install an extension bundle "
+						+ "without permission");
+			}
+			finally {
+				tb16a.uninstall();
+			}
+		}
+		else {
+			trace("framework extension bundles not supported");
+		}
+	}
+
+	/**
+	 * Tests if a bundle has to have at least
+	 * <code>AdminPermission[<bundle>, EXTENSIONLIFECYCLE]</code> permission
+	 * to install a framework extension bundle. Will only perform this test if
+	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testFrameworkExtensionInvokerPermissionOk() throws Exception {
+		String message = "bundle does have"
+				+ "permission to install extension bundles";
+		Bundle tb18 = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
+			// install regular bundle
+			tb18 = getContext().installBundle(getWebServer() + "tb18.jar");
+			try {
+				// start regular bundle that tries to install a framework
+				// extension bundle
+				tb18.start();
+				// installation inside start should not fail, since
+				// bundle has AdminPermission[<bundle>, EXTENSIONLIFECYCLE]
+				trace("bundle with permission installed "
+						+ "a framework extension bundle");
+			}
+			catch (BundleException e) {
+				fail("should be able to install an extension bundle "
+						+ "with permission");
+			}
+			finally {
+				tb18.uninstall();
+			}
+		}
+		else {
+			trace("framework extension bundles not supported");
+		}
+	}
+
+	/**
+	 * Tests if a boot classpath extension bundle has to have
+	 * <code>AllPermission</code> permission to be installed. Will only
+	 * perform this test if <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code>
+	 * equals <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testBootClasspathExtensionPermission() throws Exception {
+		String message = "extension bundle does not have"
+				+ "permission to be installed";
+		Bundle tb14 = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
+			try {
+				tb14 = getContext().installBundle(getWebServer() + "tb14.jar");
+				// should fail, since extension bundles have to have
+				// AllPermission to be installed
+				failException(message, BundleException.class);
+			}
+			catch (Exception e) {
+				assertException(message, BundleException.class, e);
+			}
+			finally {
+				if (tb14 != null) {
+					tb14.uninstall();
+				}
+			}
+		}
+		else {
+			trace("boot classpath extension bundles not supported");
+		}
+	}
+
+	/**
+	 * Tests if a bundle has to have at least
+	 * <code>AdminPermission[<bundle>, EXTENSIONLIFECYCLE]</code> permission
+	 * to install a boot classpath extension bundle. Will only perform this test
+	 * if <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals
+	 * <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testBootClasspathExtensionInvokerPermission() throws Exception {
+		String message = "bundle does not have"
+				+ "permission to install extension bundles";
+		Bundle tb17a = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
+			// install regular bundle
+			tb17a = getContext().installBundle(getWebServer() + "tb17a.jar");
+			try {
+				// start regular bundle that tries to install a framework
+				// extension bundle
+				tb17a.start();
+				// installation inside start should fail, since
+				// bundles have to have
+				// AdminPermission[<bundle>, EXTENSIONLIFECYCLE]
+				// to install extension bundles
+				trace("prevented bundle without permission from installing "
+						+ "a boot classpath extension bundle");
+			}
+			catch (BundleException e) {
+				fail("should not be able to install an extension bundle "
+						+ "without permission");
+			}
+			finally {
+				tb17a.uninstall();
+			}
+		}
+		else {
+			trace("boot classpath extension bundles not supported");
+		}
+	}
+
+	/**
+	 * Tests if a bundle has to have at least
+	 * <code>AdminPermission[<bundle>, EXTENSIONLIFECYCLE]</code> permission
+	 * to install a boot classpath extension bundle. Will only perform this test
+	 * if <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals
+	 * <code>true</code>.
+	 * 
+	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 */
+	public void testBootClasspathExtensionInvokerPermissionOk()
+			throws Exception {
+		String message = "bundle does have"
+				+ "permission to install extension bundles";
+		Bundle tb19 = null;
+		if ("true".equals(getContext().getProperty(
+				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
+			// install regular bundle
+			tb19 = getContext().installBundle(getWebServer() + "tb19.jar");
+			try {
+				// start regular bundle that tries to install a boot classpath
+				// extension bundle
+				tb19.start();
+				// installation inside start should not fail, since
+				// bundle has AdminPermission[<bundle>, EXTENSIONLIFECYCLE]
+				trace("bundle with permission installed "
+						+ "a boot classpath extension bundle");
+			}
+			catch (BundleException e) {
+				fail("should be able to install an extension bundle "
+						+ "with permission");
+			}
+			finally {
+				tb19.uninstall();
+			}
+		}
+		else {
+			trace("boot classpath extension bundles not supported");
+		}
 	}
 }

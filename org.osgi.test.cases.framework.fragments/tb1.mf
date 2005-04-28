@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-Description: This is a regular bundle used
+ in the test that checks if the extension directive
+ is ignored when the host is not system.bundle.
+BundleManifest-Version: 2
+Bundle-Name: ${p}.tb1
+Bundle-SymbolicName: ${p}.tb1
+Bundle-Version: 4
+Bundle-Activator: $(p).tb1.Activator
+Bundle-Classpath: .
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+
+
