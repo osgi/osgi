@@ -29,7 +29,6 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.framework.div.tb6.BundleClass;
 import org.osgi.test.cases.framework.div.tbc.Bundle.GetEntry;
 import org.osgi.test.cases.framework.div.tbc.Bundle.GetEntryPaths;

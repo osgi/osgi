@@ -1,13 +1,14 @@
 Manifest-Version: 1.0
 Bundle-Name: %bundlename
+Bundle-SymbolicName: ${p}.tb9; fragment-attachment="always"
 Bundle-Description: %bundledescription
 Bundle-Vendor: %bundlevendor
-Bundle-Version: 1.0
+Bundle-Version: 2.0
 Bundle-DocURL: %docurl
 Bundle-ContactAddress: %contactinfo
-Bundle-Activator: org.osgi.test.cases.framework.div.tb14.Activator
+Bundle-Activator: org.osgi.test.cases.framework.div.tb9a.Activator
 Bundle-Category: %bundlecategory
 Bundle-Copyright: %bundlecopyright
-Bundle-Localization: localization/bundlemanifest
-Fragment-Host: ${p}.tb9, ${p}.tb9a
-
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
