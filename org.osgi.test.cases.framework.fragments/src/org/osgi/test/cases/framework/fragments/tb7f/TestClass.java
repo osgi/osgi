@@ -27,6 +27,7 @@
 
 package org.osgi.test.cases.framework.fragments.tb7f;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.osgi.framework.Bundle;
@@ -42,39 +43,38 @@ public class TestClass {
 	 * Exceute URL permission related tests.   
 	 * @param bundle
 	 */
-	public void run(Bundle bundle) throws Exception {
+	public void run(Bundle bundle, URL resource) throws Exception {
 		URL url;
 		String spec;
 		// Try creating a URL for a restricted resource using the
 		// constructor URL#URL(String spec)
+		
 		try {
-			spec = "bundleresource://" + bundle.getBundleId()
-					+ "/resources/resource.txt";
+			spec = resource.toExternalForm();
 			url = new URL(spec);
 			url.openStream();
-			throw new Exception("Expecting SecurityException");
+			throw new Exception("Expecting MalformedURLException");
 		}
-		catch (SecurityException e) {
+		catch (MalformedURLException e) {
 			
 		}
 		// Try creating a URL for a restricted resource using the
 		// constructor URL#URL(URL context, String spec)
 		try {
-			URL context = new URL("bundleresource://" + bundle.getBundleId());
-			url = new URL(context, "/resources/resource.txt");
+			URL context = new URL(resource.toExternalForm());
+			url = new URL(context, ".");
 			url.openStream();
-			throw new Exception("Expecting SecurityException");
+			throw new Exception("Expecting MalformedURLException");
 		}
-		catch (SecurityException e) {
+		catch (MalformedURLException e) {
 			
 		}
 		// Try creating a URL for a restricted resource using the
 		// constructor URL#URL(String protocol, String host, int port, String
 		// file)
 		try {
-			url = new URL("bundleresource", String
-					.valueOf(bundle.getBundleId()), -1,
-					"/resources/resource.txt");
+			url = new URL(resource.getProtocol(), resource.getHost(), resource
+					.getPort(), resource.getPath());
 			url.openStream();
 			throw new Exception("Expecting SecurityException");
 		}

@@ -171,10 +171,11 @@ public class TestControl extends DefaultTestBundleControl implements
 			// Check content within resource
 			InputStream ins = url.openStream();
 			try {
-				assertNotNull("Expecting to be able to open stream to resource.",
-						ins);
-	
-				BufferedReader bufr = new BufferedReader(new InputStreamReader(ins));
+				assertNotNull(
+						"Expecting to be able to open stream to resource.", ins);
+
+				BufferedReader bufr = new BufferedReader(new InputStreamReader(
+						ins));
 				String line = bufr.readLine();
 				assertEquals(
 						"Expecting framework to recover resources in ascending bundle id order.",
@@ -237,7 +238,7 @@ public class TestControl extends DefaultTestBundleControl implements
 				assertEquals(
 						"Framework must not allow a fragment to replace any class or resource of a host bundle",
 						"tb1a", line);
-			} 
+			}
 			finally {
 				ins.close();
 			}
@@ -338,7 +339,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	/**
 	 * Tests multiple-hosts parameter with a value of true. The fragment should
 	 * attempt attach to all bundles selected by bundle-version that can be
-	 * resolved. 
+	 * resolved.
 	 * 
 	 * Tests the fragment-attachment directives with the value of ”always”. The
 	 * default value is “always”. always – indicates that fragments are allowed
@@ -648,7 +649,7 @@ public class TestControl extends DefaultTestBundleControl implements
 			ungetService(pa);
 		}
 	}
-	
+
 	/**
 	 * Tests that when an attached fragment bundle is updated, the content of
 	 * the previous fragment remains attached to the host bundle. The new
@@ -789,7 +790,7 @@ public class TestControl extends DefaultTestBundleControl implements
 
 		// Start the host bundle
 		tb7c.start();
-		
+
 		// Install the bundle that uses the package exported by the fragment
 		Bundle tb7h = getContext().installBundle(getWebServer() + "tb7h.jar");
 
@@ -797,15 +798,15 @@ public class TestControl extends DefaultTestBundleControl implements
 			// Verify that fragment bundle is in RESOLVED state
 			assertEquals("Expecting fragment bundle to be in RESOLVED state.",
 					Bundle.RESOLVED, tb7e.getState());
-			
+
 			// Try starting the bundle that uses the package exported by the
 			// fragment
 			try {
 				tb7h.start();
 				fail("Expecting the bundle start to fail because it imports an unknown package.");
 			}
-			catch(BundleException e) {
-				
+			catch (BundleException e) {
+
 			}
 		}
 		finally {
@@ -831,7 +832,7 @@ public class TestControl extends DefaultTestBundleControl implements
 
 		// Install the fragment bundle
 		Bundle tb8d = getContext().installBundle(getWebServer() + "tb8d.jar");
-		
+
 		// Install the host bundle
 		Bundle tb8a = getContext().installBundle(getWebServer() + "tb8a.jar");
 
@@ -868,12 +869,15 @@ public class TestControl extends DefaultTestBundleControl implements
 	 */
 	public void testFragmentBundleDetach() throws Exception {
 		URL url;
+		InputStream ins;
+		BufferedReader bufr;
+		String line;
 
 		// Add BundleListener
 		purgeEvents();
 		getContext().addBundleListener(this);
 
-		// Install fragment bundle
+		// Install fragment bundles
 		Bundle tb1b = getContext().installBundle(getWebServer() + "tb1b.jar");
 		Bundle tb1g = getContext().installBundle(getWebServer() + "tb1g.jar");
 
@@ -882,22 +886,34 @@ public class TestControl extends DefaultTestBundleControl implements
 
 		// Start the host bundle
 		tb1a.start();
+		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
 
 		try {
 			// Verify bundle events were published by the framework
 			Thread.sleep(2000); // wait a while
-			assertTrue("Expecting BundleEvent of type RESOLVED.", hasEventOccurred(
-					tb1b, BundleEvent.class, BundleEvent.RESOLVED));
-			assertTrue("Expecting BundleEvent of type RESOLVED.", hasEventOccurred(
-					tb1g, BundleEvent.class, BundleEvent.RESOLVED));
-			assertTrue("Expecting BundleEvent of type RESOLVED.", hasEventOccurred(
-					tb1a, BundleEvent.class, BundleEvent.RESOLVED));
+			assertTrue("Expecting BundleEvent of type RESOLVED.",
+					hasEventOccurred(tb1b, BundleEvent.class,
+							BundleEvent.RESOLVED));
+			assertTrue("Expecting BundleEvent of type RESOLVED.",
+					hasEventOccurred(tb1g, BundleEvent.class,
+							BundleEvent.RESOLVED));
+			assertTrue("Expecting BundleEvent of type RESOLVED.",
+					hasEventOccurred(tb1a, BundleEvent.class,
+							BundleEvent.RESOLVED));
 
 			// Verify that fragment bundles are in RESOLVED state
 			assertEquals("Expecting fragment bundle to be in RESOLVED state.",
 					Bundle.RESOLVED, tb1b.getState());
 			assertEquals("Expecting fragment bundle to be in RESOLVED state.",
 					Bundle.RESOLVED, tb1g.getState());
+
+			// Verify resource from tb1b is accessible
+			ins = tb1a.getResource("resources/notinhost.txt").openStream();
+			bufr = new BufferedReader(new InputStreamReader(ins));
+			line = bufr.readLine();
+			assertEquals("Expecting resource from tb1b to be accessible.",
+					"tb1b", line);
+			bufr.close();
 
 			// Detach / uninstall fragment bundle tb1b
 			tb1b.uninstall();
@@ -913,9 +929,16 @@ public class TestControl extends DefaultTestBundleControl implements
 					"Expecting fragment bundle to be in UNINSTALLED state.",
 					Bundle.UNINSTALLED, tb1b.getState());
 
+			// Refresh host bundle
+			pa.resolveBundles(new Bundle[] {tb1a});
+
 			// Verify resource from tb1b is not accessible
-			assertEquals("Expecting resource to be inaccessible.", null, tb1a
-					.getResource("resources/notinhost.txt"));
+			ins = tb1a.getResource("resources/notinhost.txt").openStream();
+			bufr = new BufferedReader(new InputStreamReader(ins));
+			line = bufr.readLine();
+			assertEquals("Expecting resource from tb1b to be inaccessible.",
+					"tb1g", line);
+			bufr.close();
 		}
 		finally {
 			tb1a.stop();
@@ -923,6 +946,7 @@ public class TestControl extends DefaultTestBundleControl implements
 			tb1g.uninstall();
 			getContext().removeBundleListener(this);
 			purgeEvents();
+			ungetService(pa);
 		}
 	}
 
@@ -953,7 +977,7 @@ public class TestControl extends DefaultTestBundleControl implements
 					Bundle.RESOLVED, tb1b.getState());
 			Thread.sleep(2000); // wait a while
 			assertTrue("Expecting FrameworkEvent of type INFO.",
-					hasEventOccurred(tb1a, FrameworkEvent.class,
+					hasEventOccurred(tb1b, FrameworkEvent.class,
 							FrameworkEvent.INFO));
 		}
 		finally {
@@ -1049,8 +1073,8 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * The following java.net.URL constructors do not call parseURL to setup a
 	 * URL to use a specific protocol: URL(String protocol, String host, int
 	 * port, String file); URL(String protocol, String host, int port, String
-	 * file, URLStreamHandler handler); URL(String protocol, String host,
-	 * String file)
+	 * file, URLStreamHandler handler); URL(String protocol, String host, String
+	 * file)
 	 * 
 	 * When one of these constructors is called the authority of the constructed
 	 * URL is not set. When the content of one of these URLs that use the bundle
@@ -1072,8 +1096,9 @@ public class TestControl extends DefaultTestBundleControl implements
 			Class classObj = tb7f
 					.loadClass("org.osgi.test.cases.framework.fragments.tb7f.TestClass");
 			Object obj = classObj.newInstance();
-			classObj.getMethod("run", new Class[] {Bundle.class}).invoke(obj,
-					new Object[] {tb7g});
+			URL resourceURL = tb7g.getResource("/resources/resource.txt");
+			classObj.getMethod("run", new Class[] {Bundle.class, URL.class})
+					.invoke(obj, new Object[] {tb7g, resourceURL});
 		}
 		finally {
 			tb7f.stop();
