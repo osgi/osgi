@@ -24,6 +24,7 @@ import org.osgi.service.dmt.*;
 import org.osgi.service.log.*;
 import java.text.*;
 
+// TODO support atomic lock mode (no difference in behaviour)
 public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 	private BundleContext		bc;
 	private LogService			logservice;
@@ -47,7 +48,6 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 
 	//----- DmtDataPlugin methods -----//
 	public void open(int lockMode, DmtSession session) throws DmtException {
-		// TODO lockmode
 		// session info not needed, it will come in the exec()
 	}
 
@@ -61,7 +61,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
         String[] path = prepareUri(nodeUri);
         if (path.length == 0) { // OSGi/log
             return new LogPluginMetanode(!LogPluginMetanode.CANDELETE,
-                    !LogPluginMetanode.CANADD, LogPluginMetanode.CANGET,
+                    LogPluginMetanode.CANADD, LogPluginMetanode.CANGET,
                     !LogPluginMetanode.CANREPLACE,
                     !LogPluginMetanode.CANEXECUTE, !LogPluginMetanode.ISLEAF);
         }
@@ -73,7 +73,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
         }
         else if (path.length == 2) { // OSGi/log/<search_id>/filter
             return new LogPluginMetanode(LogPluginMetanode.CANDELETE,
-                    LogPluginMetanode.CANADD, LogPluginMetanode.CANGET,
+                    !LogPluginMetanode.CANADD, LogPluginMetanode.CANGET,
                     LogPluginMetanode.CANREPLACE,
                     !LogPluginMetanode.CANEXECUTE, LogPluginMetanode.ISLEAF);
         }
@@ -96,7 +96,6 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 	}
 
 	public void setNodeTitle(String nodeUri, String title) throws DmtException {
-		// TODO
 		throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED,
 				"Title property not supported.");
 	}
@@ -205,7 +204,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 
     public void createLeafNode(String nodeUri, DmtData value, String mimeType)
             throws DmtException {
-        // TODO check mime type?
+        // TODO check mime type
         createLeafNode(nodeUri, value);
     }
     
@@ -335,30 +334,27 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
     }
 
 	public String getNodeTitle(String nodeUri) throws DmtException {
-		// TODO
 		throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED,
 				"Title property not supported.");
 	}
 
 	public String getNodeType(String nodeUri) throws DmtException {
-		// TODO!
+		// TODO return node type
 		return null;
 	}
 
 	public int getNodeVersion(String nodeUri) throws DmtException {
-		// TODO
 		throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED,
 				"Version property not supported.");
 	}
 
 	public Date getNodeTimestamp(String nodeUri) throws DmtException {
-		// TODO
 		throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED,
 				"Timestamp property not supported.");
 	}
 
 	public int getNodeSize(String nodeUri) throws DmtException {
-		// TODO!
+		// TODO return node size
 		return 0;
 	}
 
@@ -502,10 +498,10 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 		return result;
 	}
 
+    //TODO use the maxsize and exclude filters also within the loop so that it need not be done separately
 	/*
 	 * calculates the result of a log request. Uses the filter and maxrecords.
-	 * Returns a vector of logentries TODO use the maxsize and exclude filters
-	 * also within the loop so that it need not be done separately
+	 * Returns a vector of logentries 
 	 */
 	private Vector getResult(LogRequest lr) throws DmtException {
 		Vector ret = new Vector();
