@@ -76,7 +76,7 @@ public class TransferCostCondition implements Condition {
 	/**
 	 * Sets a thread-local transfer cost. All {@link #isSatisfied()} method calls
 	 * in this thread will check for this cost, and only those permissions will be
-	 * activated, that have a cost limit higher than this. The caller MUST call
+	 * activated, that have a cost limit higher than the actual cost. The caller MUST call
 	 * {@link #resetTransferCost()}, after the permission checks are done. If this
 	 * function is not called, the default behavior is 'no checks permformed, isSatisfied method
 	 * always returns true'.
