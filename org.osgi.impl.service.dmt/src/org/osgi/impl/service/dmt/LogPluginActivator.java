@@ -52,8 +52,7 @@ public class LogPluginActivator implements BundleActivator {
 		if (da == null)
 			throw new BundleException("Dmt Admin Service no longer registered.");
 		//creating the service
-		//TODO make the plugin and activator the same so that we don't need
-		// to pass all these
+		//TODO make the plugin and activator the same so that we don't need to pass all these
 		logPlugin = new LogPlugin(bc, ls, lrs, da);
 		Hashtable props = new Hashtable();
 		props.put("dataRootURIs", new String[] {PLUGIN_ROOT});
