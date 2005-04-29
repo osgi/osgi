@@ -64,7 +64,7 @@ public class ClientActivator implements BundleActivator
 
             config.put(EventConstants.EVENT_TOPIC, new String[] {
                     "org/osgi/service/monitor/MonitorEvent",
-                    "org/osgi/service/dmt/DmtEvent/*"
+                    "org/osgi/service/dmt/*"
             });
             
             
