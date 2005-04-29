@@ -931,8 +931,9 @@ public class TestControl extends DefaultTestBundleControl implements
 					Bundle.UNINSTALLED, tb1b.getState());
 
 			// Refresh host bundle
-			pa.resolveBundles(new Bundle[] {tb1a});
-
+	        pa.refreshPackages(new Bundle[] {tb1a}); 
+	        Thread.sleep(2000); // wait a while 
+	        
 			// Verify resource from tb1b is not accessible
 			ins = tb1a.getResource("resources/notinhost.txt").openStream();
 			bufr = new BufferedReader(new InputStreamReader(ins));
