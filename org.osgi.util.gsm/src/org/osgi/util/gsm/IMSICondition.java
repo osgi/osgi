@@ -35,6 +35,7 @@ import org.osgi.service.condpermadmin.Condition;
  * string value that is matched against the IMSI of the subscriber.
  */
 public class IMSICondition implements Condition {
+	// this reference implementation only supports one IMSI, that cannot change
 	protected static final String imsi = System.getProperty("org.osgi.util.gsm.imsi");
 
 	private static final IMSICondition trueCondition = new IMSICondition(true);
@@ -77,6 +78,7 @@ public class IMSICondition implements Condition {
 	 * @return True if the {@link #isSatisfied()} method can give results instantly.
 	 */
 	public boolean isEvaluated() {
+		// this reference implementation only supports one IMSI, that cannot change
 		return true;
 	}
 
@@ -87,6 +89,7 @@ public class IMSICondition implements Condition {
 	 * @return True, if the IMSI can change (mobile device supports live SIM card swaps, etc.)
 	 */
 	public boolean isMutable() {
+		// this reference implementation only supports one IMSI, that cannot change
 		return false;
 	}
 
