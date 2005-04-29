@@ -153,7 +153,16 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
             Configuration config = ca.getConfiguration(pid);
             Hashtable properties = new Hashtable();
             properties.put("my.int.array", new int[] { 3, 2, 1 });
+            
             /*
+            Vector v = new Vector();
+            v.add(null);
+            v.add(null);
+            properties.put("my.null.vector", v);
+            
+            v = new Vector();
+            properties.put("my.empty.vector", v);
+
             properties.put("my.bigBoolean", new Boolean(true));
             properties.put("my.byte.array", "bytes".getBytes());
             properties.put("my.Integer", new Integer(42));
@@ -228,6 +237,8 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
             session.close();
             System.out.println("Closed session.");
 
+            //sessionOpenTests();
+            
             //printTree();
 
             /*
@@ -265,6 +276,56 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
             System.out.println("Exception caught in client:");
             e.printStackTrace(System.out);
         }
+    }
+
+    private void sessionOpenTests() {
+        // parallel sessions
+        sessionOpenTest("./OSGi/mon", DmtSession.LOCK_TYPE_EXCLUSIVE,
+                        "./OSGi/cfg", DmtSession.LOCK_TYPE_EXCLUSIVE);
+        
+        sessionOpenTest("./OSGi",     DmtSession.LOCK_TYPE_SHARED,
+                        "./OSGi/cfg", DmtSession.LOCK_TYPE_SHARED);
+
+        // error in session initialization
+        sessionOpenTest("./OSGi/manci", DmtSession.LOCK_TYPE_SHARED,
+                        "./OSGi/cfg",   DmtSession.LOCK_TYPE_EXCLUSIVE);
+        
+        // conflicting sessions
+        sessionOpenTest("./OSGi",     DmtSession.LOCK_TYPE_SHARED,
+                        "./OSGi/cfg", DmtSession.LOCK_TYPE_EXCLUSIVE);
+        
+        System.out.println("-----");
+        SessionThread a = new SessionThread(factory, "./OSGi/mon", DmtSession.LOCK_TYPE_EXCLUSIVE);
+        SessionThread b = new SessionThread(factory, "./OSGi",     DmtSession.LOCK_TYPE_ATOMIC);
+        SessionThread c = new SessionThread(factory, "./OSGi/mon", DmtSession.LOCK_TYPE_SHARED);
+        SessionThread d = new SessionThread(factory, "./OSGi",     DmtSession.LOCK_TYPE_SHARED);
+        
+        a.start();
+        b.start();
+        c.start();
+        d.start();
+        
+        sleep(500);
+        
+        a.halt();
+        b.halt();
+        c.halt();
+        d.halt();
+    }
+
+    private void sessionOpenTest(String root1, int lockMode1, 
+                                 String root2, int lockMode2) {
+        System.out.println("-----");
+        SessionThread a = new SessionThread(factory, root1, lockMode1);
+        SessionThread b = new SessionThread(factory, root2, lockMode2);
+        
+        a.start();
+        b.start();
+        sleep(500);
+        
+        a.halt();
+        b.halt();
+        sleep(500);
     }
 
     private void printTree()
@@ -374,6 +435,60 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
         for(int i = 0; i < indent; i++)
             System.out.print(' ');
     }
+    
+    private void sleep(long l) {
+        try {
+            Thread.sleep(l);
+        } catch (InterruptedException e) {}
+    }
+
+    static class SessionThread extends Thread {
+        private DmtAdmin factory;
+        private String root;
+        private int lockMode;
+        private boolean quit;
+
+        SessionThread(DmtAdmin factory, String root, int lockMode) {
+            this.factory = factory;
+            this.root = root;
+            this.lockMode = lockMode;
+        }
+        
+        public synchronized void run() {
+            String params = "(" + root + ", " + lockMode + ")";
+
+            DmtSession session;
+            try {
+                System.out.println("Opening session " + params);
+                session = factory.getSession(root, lockMode);
+                System.out.println("Opened session " + params);
+            } catch (DmtException e) {
+                e.printStackTrace(System.out);
+                return;
+            }
+
+            quit = false;
+            while(!quit) {
+                try {
+                    wait();
+                    quit = true;
+                } catch (InterruptedException e) {}
+            }
+
+            try {
+                System.out.println("Closing session " + params);
+                session.close();
+                System.out.println("Closed session " + params);
+            } catch (DmtException e) {
+                e.printStackTrace(System.out);
+                return;
+            }
+        }
+
+        public synchronized void halt() {
+            notify();
+        }
+    }
 
     public void updated(Dictionary properties)
     {
@@ -473,16 +588,18 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
 
         if(topic.equals("org/osgi/service/monitor/MonitorEvent"))
             monitorEvent(event);
-        else if(topic.startsWith("org/osgi/service/dmt/DmtEvent/"))
+        else if(topic.startsWith("org/osgi/service/dmt/"))
             dmtEvent(event);
         else
             System.out.println("Unexpected event received on topic '" + topic + "'.");
     }
 
 	private void dmtEvent(Event event) {
+        String[] newNodes = (String[]) event.getProperty("newnodes");
         System.out.println("DMT event for session '" + event.getProperty("session.id") + 
-                           "' received on topic '" + event.getProperty("topic") +
-                           "' for nodes '" + Arrays.asList((String[])event.getProperty("nodes")) + "'.");
+                "' received on topic '" + event.getProperty(EventConstants.EVENT_TOPIC) +
+                "' for nodes '" + Arrays.asList((String[])event.getProperty("nodes")) + "'" +
+                (newNodes == null ? "" : ", new node names are '" + Arrays.asList(newNodes) + "'") + ".");
 	}
 
 	private void monitorEvent(Event event) {
