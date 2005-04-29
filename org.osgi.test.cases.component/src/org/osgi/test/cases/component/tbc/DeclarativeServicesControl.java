@@ -29,7 +29,15 @@ package org.osgi.test.cases.component.tbc;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.Filter;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentFactory;
 import org.osgi.service.component.ComponentInstance;
@@ -45,24 +53,34 @@ import org.osgi.util.tracker.ServiceTracker;
 public class DeclarativeServicesControl extends DefaultTestBundleControl
 		implements FrameworkListener {
 
-	private Bundle			tb1, tb2, tb3;
+	private static final String	PROVIDER_CLASS	= "org.osgi.test.cases.component.tb1.ServiceProvider";
+	private static final String	LOOKUP_CLASS	= "org.osgi.test.cases.component.tb2.ServiceConsumerLookup";
+	private static final String	EVENT_CLASS		= "org.osgi.test.cases.component.tb3.ServiceConsumerEvent";
+	private static final String	NAMED_CLASS		= "org.osgi.test.cases.component.tb4.NamedService";
 
-	private static String[]	methods	= new String[] {"testRegistration", // "TC1"
-									"testGetServiceDirect", // "TC2"
-									"testGetServiceLookup", // "TC3"
-									"testGetServiceEvent", // "TC4"
-									"testGetProperties", // "TC5"
-									"testStartStopSCR", // "TC7"
-									"testComponentFactory", // "TC8"
-									"testBadComponents", // TC9
-									"testDynamicBind", // TC10
-									};
+	private Bundle				tb1, tb2, tb3;
 
-	private ServiceTracker	trackerProvider;
-	private ServiceTracker	trackerConsumerLookup;
-	private ServiceTracker	trackerConsumerEvent;
-	private ServiceTracker	trackerNamedService;
-	private ServiceTracker	trackerNamedServiceFactory;
+	private static String[]		methods			= new String[] {
+			"testRegistration", // "TC1"
+			"testGetServiceDirect", // "TC2"
+			"testGetServiceLookup", // "TC3"
+			"testGetServiceEvent", // "TC4"
+			"testGetProperties", // "TC5"
+			"testStartStopSCR", // "TC6"
+			"testComponentFactory", // "TC7"
+			"testBadComponents", // TC8
+			"testDynamicBind", // TC9
+			"testCMUpdate", // TC10
+			"testManagedServiceFactory",// TC11
+			"testComponentEnableAndDisable", // TC12
+												};
+
+	private ServiceTracker		trackerProvider;
+	private ServiceTracker		trackerConsumerLookup;
+	private ServiceTracker		trackerConsumerEvent;
+	private ServiceTracker		trackerNamedService;
+	private ServiceTracker		trackerNamedServiceFactory;
+	private ServiceTracker		trackerCM;
 
 	/**
 	 * Returns a list containing the names of the test methods in the order they
@@ -89,20 +107,17 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// init trackers
 		BundleContext bc = getContext();
 
-		trackerProvider = new ServiceTracker(bc,
-				"org.osgi.test.cases.component.tb1.ServiceProvider", null);
-		trackerConsumerLookup = new ServiceTracker(bc,
-				"org.osgi.test.cases.component.tb2.ServiceConsumerLookup", null);
-		trackerConsumerEvent = new ServiceTracker(bc,
-				"org.osgi.test.cases.component.tb3.ServiceConsumerEvent", null);
-		trackerNamedService = new ServiceTracker(bc,
-				"org.osgi.test.cases.component.tb4.NamedService", null);
+		trackerProvider = new ServiceTracker(bc, PROVIDER_CLASS, null);
+		trackerConsumerLookup = new ServiceTracker(bc, LOOKUP_CLASS, null);
+		trackerConsumerEvent = new ServiceTracker(bc, EVENT_CLASS, null);
+		trackerNamedService = new ServiceTracker(bc, NAMED_CLASS, null);
 		Filter filter = bc.createFilter("(&("
-				+ ComponentConstants.COMPONENT_FACTORY
-				+ "=org.osgi.test.cases.component.tb4.NamedService)("
-				+ Constants.OBJECTCLASS + '='
+				+ ComponentConstants.COMPONENT_FACTORY + '=' + NAMED_CLASS
+				+ ")(" + Constants.OBJECTCLASS + '='
 				+ ComponentFactory.class.getName() + "))");
 		trackerNamedServiceFactory = new ServiceTracker(bc, filter, null);
+		trackerCM = new ServiceTracker(bc, ConfigurationAdmin.class.getName(),
+				null);
 
 		// start listening
 		trackerProvider.open();
@@ -110,6 +125,17 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		trackerConsumerEvent.open();
 		trackerNamedService.open();
 		trackerNamedServiceFactory.open();
+		trackerCM.open();
+
+		// cleanup the old configurations (if any)
+		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
+		String spec = '(' + Constants.SERVICE_PID + '=' + LOOKUP_CLASS + ')';
+		Configuration[] configs = cm.listConfigurations(spec);
+		if (configs != null) {
+			for (int i = 0; i < configs.length; i++) {
+				configs[i].delete();
+			}
+		}
 	}
 
 	/**
@@ -499,10 +525,106 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				0, getCount());
 	}
 
-	// TODO:
-	// 1. verify component enable/disable
-	// 2. verify CM properties - instances should be different after change
-	// 3. test that component factory will register the service (if is provider)
-	// and will not register it if is not provider
+	public void testCMUpdate() throws Exception {
+		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
+		ServiceReference ref;
+		Object service;
+		String cmprop;
+
+		// verify that the current service is loaded with default values from
+		// the XML file
+		ref = trackerConsumerLookup.getServiceReference();
+		cmprop = (String) ref.getProperty("cmprop");
+		service = trackerConsumerLookup.getService();
+		assertEquals(
+				"The service should be registered from the property defined in the XML file",
+				"setFromXML", cmprop);
+
+		// update the properties
+		Hashtable props = new Hashtable(10);
+		props.put("cmprop", "setFromCM");
+		// the line below will create the configuration if it doesn't exists!
+		// see CM api for details
+		Configuration config = cm.getConfiguration(LOOKUP_CLASS);
+		config.update(props);
+
+		// let SCR to complete it's job
+		Thread.sleep(500);
+
+		// verify that the service is updated
+		assertNotSame("The service shoud be restarted with a new instance",
+				service, trackerConsumerLookup.getService());
+		service = trackerConsumerLookup.getService();
+		// verify that the property is overriden with the CM value
+		ref = trackerConsumerLookup.getServiceReference();
+		cmprop = (String) ref.getProperty("cmprop");
+		assertEquals(
+				"The property 'cmprop' should be overriden with the value from CM",
+				"setFromCM", cmprop);
+		Object otherProp = ref.getProperty("test.property.string");
+		assertNotNull(
+				"The CM update shouldn't delete the other properties defined in XML file",
+				otherProp);
+
+		// make sure that the SCR handles delete events!
+		config.delete();
+		// wait to complete
+		Thread.sleep(500);
+
+		assertNotSame(
+				"After delete the service shoud be restarted with a new instance",
+				service, trackerConsumerLookup.getService());
+		ref = trackerConsumerLookup.getServiceReference();
+		cmprop = (String) ref.getProperty("cmprop");
+		assertEquals(
+				"After delete the service should be registered from the property defined in the XML file",
+				"setFromXML", cmprop);
+	}
+
+	// Notice: "serviceFactory" attribute means "an OSGi Service Factory"
+	// which is quite different from the "Managed Service Factory" which is
+	// CM related.
+	public void testManagedServiceFactory() throws Exception {
+		// check the service is instantiated without properties!
+		int length = trackerConsumerEvent.getServices().length;
+		Object service = trackerConsumerEvent.getService();
+		assertEquals(
+				"The event service should be registered even if no properties are set!",
+				1, length);
+
+		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
+		Configuration config;
+		Hashtable props;
+
+		// create a new configuration
+		config = cm.createFactoryConfiguration(EVENT_CLASS);
+		props = new Hashtable(2);
+		props.put("instance", "1");
+		config.update(props);
+		Thread.sleep(500); // let it finish update
+
+		// verify the result
+		length = trackerConsumerEvent.getServices().length;
+		assertEquals("The service count shouldn't be changed!", 1, length);
+		assertNotSame("The service should be updated with new instance",
+				service, trackerConsumerEvent.getService());
+
+		// create second configuration
+		config = cm.createFactoryConfiguration(EVENT_CLASS);
+		props = new Hashtable(2);
+		props.put("instance", "2");
+		config.update(props);
+		Thread.sleep(500); // let it finish update
+
+		// verify the result
+		length = trackerConsumerEvent.getServices().length;
+		assertEquals("For each configuration should be a service instance", 2,
+				length);
+
+	}
+
+	public void testComponentEnableAndDisable() throws Exception {
+		// TODO: needs to be implemented
+	}
 
 }
