@@ -57,6 +57,9 @@ public class CommandProcessor {
 				session.close();
 				session = null;
 			}
+            else if (cmd.equals("commit") || cmd.equals("c")) {
+                session.commit();
+            }
 			else if (cmd.equals("rollback") || cmd.equals("r")) {
 				session.rollback();
 			}
@@ -198,8 +201,10 @@ public class CommandProcessor {
 		sb.append("\n");
 		sb.append("close                                          ");
 		sb.append("\n");
-		sb.append("rollback          r                            ");
-		sb.append("\n");
+        sb.append("commit            c                            ");
+        sb.append("\n");
+        sb.append("rollback          r                            ");
+        sb.append("\n");
 		sb.append("isNodeUri               uri             true/false");
 		sb.append("\n");
 		sb.append("getNodeValue      gv    uri             value as string");
