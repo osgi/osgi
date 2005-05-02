@@ -15,41 +15,71 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-/*
- * Created on Oct 28, 2004
- *
- * TODO stolen from app model, change if needed
- */
 package org.osgi.impl.service.dmt;
 
 import org.osgi.service.dmt.*;
 
 public class LogPluginMetanode implements DmtMetaNode {
-	static final boolean	CANDELETE	= true;
-	static final boolean	CANADD		= true;
-	static final boolean	CANGET		= true;
-	static final boolean	CANREPLACE	= true;
-	static final boolean	CANEXECUTE	= true;
-	static final boolean	ISLEAF		= true;
+    static final boolean CAN_EXECUTE    = true;
+    static final boolean IS_PERMANENT   = true;
+    static final boolean ALLOW_INFINITE = true; 
 
-	protected LogPluginMetanode(boolean canDelete, boolean canAdd,
-			boolean canGet, boolean canReplace, boolean canExecute,
-			boolean isLeaf) {
-		this.canDelete = canDelete;
-		this.canAdd = canAdd;
-		this.canGet = canGet;
-		this.canReplace = canReplace;
-		this.canExecute = canExecute;
-		this.isLeaf = isLeaf;
-	}
-
+	static final String  LEAF_MIME_TYPE = "text/plain";
+    
 	// private fields
-	private boolean	canDelete;
-	private boolean	canAdd;
-	private boolean	canGet;
-	private boolean	canReplace;
-	private boolean	canExecute;
-	private boolean	isLeaf;
+	private boolean	 canDelete;
+	private boolean	 canAdd;
+	private boolean	 canGet;
+	private boolean	 canReplace;
+	private boolean	 canExecute;
+	private boolean	 isLeaf;
+    
+	private boolean  isPermanent;
+    private String   description;
+    private int      maxOccurrence;
+    private boolean  isZeroOccurrenceAllowed;
+    private int      format;
+    private String[] validNames;
+    private String[] mimeTypes;
+
+    // Meta-node constructor for interior nodes
+    protected LogPluginMetanode(boolean isPermanent, boolean canExecute, 
+                                boolean allowInfinite, String description) {
+        
+        this.canDelete     = !isPermanent;
+        this.canAdd        = true;
+        this.canGet        = true;
+        this.canReplace    = true;
+        this.canExecute    = canExecute;
+        this.isLeaf        = false;
+        
+        this.isPermanent   = isPermanent;
+        this.description   = description;
+        this.maxOccurrence = allowInfinite ? Integer.MAX_VALUE : 1;
+        this.isZeroOccurrenceAllowed = allowInfinite;
+        this.format        = DmtData.FORMAT_NODE;
+        this.validNames    = null;
+        this.mimeTypes     = null;
+    }
+    
+    // Meta-node constructor for leaf nodes
+	protected LogPluginMetanode(int format, String description) {
+        this.canDelete     = true;
+        this.canAdd        = false;
+        this.canGet        = true;
+        this.canReplace    = true;
+        this.canExecute    = false;
+        this.isLeaf        = true;
+        
+        this.isPermanent   = false;
+        this.description   = description;
+        this.maxOccurrence = 1;
+        this.isZeroOccurrenceAllowed = false;
+        this.format        = format;
+        this.validNames    = new String[] { LogPlugin.FILTER, LogPlugin.EXCLUDE,
+                                            LogPlugin.MAXR, LogPlugin.MAXS };
+        this.mimeTypes     = new String[] { LEAF_MIME_TYPE };
+	}
 
 	/* ---------------------------------------------------------------------- */
 
@@ -69,67 +99,56 @@ public class LogPluginMetanode implements DmtMetaNode {
 	}
 
 	public int getScope() {
-        // TODO
-		return DYNAMIC;
+		return isPermanent ? PERMANENT : DYNAMIC;
 	}
 
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return description;
 	}
 
 	public int getMaxOccurrence() {
-		// TODO Auto-generated method stub
-		return 1;
+		return maxOccurrence;
 	}
 
 	public boolean isZeroOccurrenceAllowed() {
-		// TODO Auto-generated method stub
-		return false;
+		return isZeroOccurrenceAllowed;
 	}
 
 	public DmtData getDefault() {
-		// TODO Auto-generated method stub
+        // ENHANCE provide defaults for log search request parameters
 		return null;
 	}
 
 	public int getMax() {
-		// TODO Auto-generated method stub
 		return Integer.MAX_VALUE;
 	}
 
 	public int getMin() {
-		// TODO Auto-generated method stub
 		return Integer.MIN_VALUE;
 	}
 
     public String[] getValidNames() {
-        // TODO Auto-generated method stub
-        return null;
+        return validNames;
     }
     
 	public DmtData[] getValidValues() {
-		// TODO Auto-generated method stub
+        // ENHANCE add valid value list for "exclude" node
 		return null;
 	}
 
 	public int getFormat() {
-		// TODO Auto-generated method stub
-		return 0;
+		return format;
 	}
 
     public String getNamePattern() {
-        // TODO Auto-generated method stub
         return null;
     }
     
 	public String getPattern() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public String[] getMimeTypes() {
-		// TODO Auto-generated method stub
-		return null;
+		return mimeTypes;
 	}
 }
