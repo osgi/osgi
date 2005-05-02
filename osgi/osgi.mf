@@ -8,3 +8,4 @@ Bundle-Category: osgi
 Bundle-DocUrl: http://www.osgi.org/
 $(EXPORT-PACKAGE)
 CVS-Header: $Header$
+DynamicImport-Package: *
