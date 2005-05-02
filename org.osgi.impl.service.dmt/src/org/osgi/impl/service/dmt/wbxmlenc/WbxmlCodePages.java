@@ -149,7 +149,7 @@ public class WbxmlCodePages implements WbxmlConstants
      * @param tokensFileName Name of the files of the tokens.
      * @exception IOException if the .tokens file is not found
      */
-    public WbxmlCodePages (String tokensFileName) throws IOException
+    public WbxmlCodePages (InputStream tokensInputStream) throws IOException
     {
         defaultNameSpaces = new ArrayList();
         stringTable = new ArrayList();
@@ -158,7 +158,7 @@ public class WbxmlCodePages implements WbxmlConstants
         extensionValues = new ArrayList();
         forceString = new ArrayList();
         forceOpaque = new ArrayList();
-        load (tokensFileName);
+        load (tokensInputStream);
 
         tagCodePageNum = 0;
         attrCodePageNum = 0;
@@ -392,28 +392,8 @@ public class WbxmlCodePages implements WbxmlConstants
      * @param filename Name of the .tokens file.
      * @throws IOException in case of IO related errors.
      */
-    private void load (String filename) throws IOException
+    private void load (InputStream fis) throws IOException
     {
-        InputStream fis = null;
-
-        /* searching for the specified file in the working directory */
-        try {
-            fis = new FileInputStream (filename);
-        } catch (IOException e) { }
-
-        /* searching for the specified file in the working directory */
-        if (fis == null) {
-            fis = ClassLoader.getSystemResourceAsStream (filename);
-        }
-
-        /* searching for the specified file in the package of this class */
-        if (fis == null) {
-            filename = getClass().getPackage().getName().replace('.','/') + "/" + filename;
-            fis = ClassLoader.getSystemResourceAsStream (filename);
-        }
-
-        if (fis == null) throw new IOException("File not found: " + filename);
-
         InputStreamReader isr = new InputStreamReader (fis);
         BufferedReader    br  = new BufferedReader    (isr);
         String line = br.readLine();

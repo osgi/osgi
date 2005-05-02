@@ -19,9 +19,12 @@ package org.osgi.impl.service.dmt;
 
 import java.util.*;
 import java.io.*;
+import java.net.URL;
+
 import org.osgi.framework.*;
 import org.osgi.service.dmt.*;
 import org.osgi.service.log.*;
+import org.osgi.impl.service.dmt.wbxmlenc.*;
 import java.text.*;
 
 // TODO support atomic lock mode (no difference in behaviour)
@@ -36,14 +39,30 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 	private final static String	MAXR	= "maxrecords";
 	private final static String	MAXS	= "maxsize";
 	private boolean				debug	= false;
+	private WbxmlCodePages wbxmlCodePages;
 
 	LogPlugin(BundleContext bc, LogService ls, LogReaderService lrs,
-			DmtAdmin da) {
+			DmtAdmin da) throws BundleException {
 		this.bc = bc;
 		this.logservice = ls;
 		this.logreaderservice = lrs;
 		this.alertsender = da;
 		requests = new Hashtable();
+		
+		String resourceName = getClass().getName();
+		int index = resourceName.lastIndexOf( '.' );
+		resourceName = resourceName.substring( 0, index );
+		resourceName = resourceName.replace( '.', '/' ) + "/wbxmlenc/TND-WBXML.tokens";
+		
+		URL resourceURL = bc.getBundle().getResource(resourceName);
+		if (resourceURL == null)
+			throw new BundleException("Can't find " + resourceName + " in the resources!");
+
+		try {
+			wbxmlCodePages = new WbxmlCodePages( resourceURL.openStream() );
+		}catch( Exception e ) {
+			throw new BundleException( e.getMessage(), e );
+		}
 	}
 
 	//----- DmtDataPlugin methods -----//
