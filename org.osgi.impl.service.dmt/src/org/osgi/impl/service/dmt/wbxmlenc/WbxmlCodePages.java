@@ -51,7 +51,7 @@ import java.util.ArrayList;
  * @version     0.06
  * @date        2004/04/26
  */
-class WbxmlCodePages implements WbxmlConstants
+public class WbxmlCodePages implements WbxmlConstants
 {
 
 // -------------------------- CLASS VARIABLES ----------------------------------
