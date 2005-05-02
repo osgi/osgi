@@ -1,9 +1,8 @@
 package org.osgi.service.application;
 
 /**
- * An exception that is raised when a singleton application (i.e. it can have
- * zero or one instance at a time) have one instance and launching a new
- * instance is attempted.
+ * An exception that is raised when an application that can only be 
+ * launched once is attempted to be launched twice.
  */
 public class SingletonException extends Exception {
 	private static final long serialVersionUID = 1L;

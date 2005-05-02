@@ -199,17 +199,19 @@ public abstract class ApplicationDescriptor {
 	 * The <code>Map</code> argument of the launch method contains startup 
 	 * arguments for the
 	 * application. The keys used in the Map can be standard or application
-	 * specific. MEG defines the org.osgi.triggeringevent key to be used to
+	 * specific. MEG defines the
+	 * #### .osgi.triggeringevent (contained funny character)
+	 * key to be used to
 	 * pass the triggering event to a scheduled application (see [ref]), however
 	 * in the future it is possible that other well-known keys will be defined.
 	 * To avoid unwanted clashes of keys, the following rules should be applied:
-	 * <UL>
-	 *   <LI>The keys starting with the dash (-) character are application
-	 *       specific, no well-known meaning should be associated with them.
-	 *   <LI>Well-known keys should follow the reverse domain name based naming.
+	 * <ul>
+	 *   <li>The keys starting with the dash (-) character are application
+	 *       specific, no well-known meaning should be associated with them.</li>
+	 *   <li>Well-known keys should follow the reverse domain name based naming.
 	 *       In particular, the keys standardized in OSGi should start with
-	 *       <code>org.osgi.</code>.
-	 * </UL>
+	 *       <code>org.osgi.</code>.</li>
+	 * </ul>
 	 * 
 	 * @param arguments
 	 *            Arguments for the newly launched application, may be null
