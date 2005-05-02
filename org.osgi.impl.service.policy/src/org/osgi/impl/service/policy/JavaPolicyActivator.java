@@ -28,6 +28,7 @@ import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
 import org.osgi.impl.service.policy.condpermadmin.ConditionalPermissionAdminPlugin;
 import org.osgi.impl.service.policy.dmtprincipal.DmtPrincipalPlugin;
 import org.osgi.impl.service.policy.permadmin.PermissionAdminPlugin;
+import org.osgi.impl.service.policy.userprompt.UserPromptCondition;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.permissionadmin.PermissionAdmin;
@@ -48,6 +49,9 @@ public final class JavaPolicyActivator implements BundleActivator,ServiceTracker
 	BundleContext context = null;
 
 	public void start(BundleContext context) throws Exception {
+		UserPromptCondition.setContext(context);
+		UserPromptCondition.registerMySelf();
+
 		this.context = context;
 		Filter filter = context.createFilter(
 				"(|"+
@@ -61,6 +65,7 @@ public final class JavaPolicyActivator implements BundleActivator,ServiceTracker
 
 	public void stop(BundleContext context) throws Exception {
 		tracker.close();
+		UserPromptCondition.deregisterMySelf();
 	}
 	
 	public Object addingService(ServiceReference reference) {

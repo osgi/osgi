@@ -7,3 +7,4 @@ Bundle-Activator: ${p}.JavaPolicyActivator
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
+DynamicImport-Package: *
