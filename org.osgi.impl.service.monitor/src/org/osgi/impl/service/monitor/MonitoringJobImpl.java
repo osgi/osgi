@@ -29,42 +29,42 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
     private MonitorAdminImpl monitorAdmin;
 
     private String initiator;
-    private String[] varNames;
+    private Path[] varPaths;
     private int reportCount;
     private long schedule;
 
     private boolean local;
     private boolean running;
 
-    // The subset of varNames that is monitored.  This differs from varNames
+    // The subset of varPaths that is monitored.  This differs from varPaths
     // only in case of remote monitoring jobs with trap references.
-    private String[] monitoredVarNames;
+    private Path[] monitoredVarPaths;
     
     // For change-based jobs, to count events for each monitored status var.
     private int[] callCounters;
 
     MonitoringJobImpl(MonitorAdminImpl monitorAdmin, String initiator, 
-                      String[] varNames, long schedule, int reportCount, 
+                      Path[] varPaths, long schedule, int reportCount, 
                       boolean local) {
 
         this.monitorAdmin = monitorAdmin;
 
         this.initiator = initiator;
-        this.varNames = varNames;
+        this.varPaths = varPaths;
         this.schedule = schedule;
         this.reportCount = reportCount;
 
         this.local = local;
         
-        if(local || varNames.length == 1)
-        	monitoredVarNames = varNames;
+        if(local || varPaths.length == 1)
+        	monitoredVarPaths = varPaths;
         else // the first var. is to be monitored, the rest are only references
-            monitoredVarNames = new String[] { varNames[0] };
+            monitoredVarPaths = new Path[] { varPaths[0] };
 
         running = true;
 
         if(isChangeBased()) {
-            callCounters = new int[monitoredVarNames.length];
+            callCounters = new int[monitoredVarPaths.length];
             Arrays.fill(callCounters, 0);
         } else                  // timer based
             (new Thread(this)).start();
@@ -76,17 +76,21 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
 
     // returns true if varName is monitored by this job AND
     // this method has been called 'reportCount' times for this status variable
-    boolean isNthCall(String varName) {
+    boolean isNthCall(Path varName) {
         if(!isChangeBased())
             throw new IllegalStateException(
                     "isNthCall() can only be called for change-based jobs.");
         
-        int i = Arrays.asList(monitoredVarNames).indexOf(varName);
+        int i = Arrays.asList(monitoredVarPaths).indexOf(varName);
         if(i < 0)
             return false;
 
         callCounters[i] = (callCounters[i] + 1) % reportCount;
         return callCounters[i] == 0;
+    }
+    
+    Path[] getStatusVariablePaths() {
+        return varPaths;
     }
 
     public synchronized void stop() {
@@ -101,7 +105,11 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
     }
 
     public String[] getStatusVariableNames() {
-        return (String[]) varNames.clone();
+        String[] names = new String[varPaths.length];
+        for (int i = 0; i < varPaths.length; i++)
+            names[i] = varPaths[i].toString();
+
+        return names;
     }
 
     public long getSchedule() {
@@ -123,7 +131,7 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
         sleep();
 
         while(running) {
-            monitorAdmin.scheduledUpdate(varNames, this);
+            monitorAdmin.scheduledUpdate(varPaths, this);
             if(reportCount > 0) {
                 reportCount--;
                 if(reportCount == 0)
