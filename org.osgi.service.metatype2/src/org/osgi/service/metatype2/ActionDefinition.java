@@ -46,13 +46,12 @@ public interface ActionDefinition extends ExtendedAttributeDefinition {
 	 */
 	public static final int VOID = 13;
 	
-    /**
-	 * Returns the definition of the input arguments of this action.
+  /**
+	 * Returns the definitions of the input arguments of this action
 	 * 
-	 * @return the defintion of the input arguments or null if there is no
-	 * input arguments.
+	 * @return The definitions of the input arguments or null if there is no input arguments.
 	 */
-    ExtendedAttributeDefinition getInputArgumentDefinition();
+    ExtendedAttributeDefinition[] getInputArgumentDefinitions();
 }
 
 
