@@ -20,7 +20,6 @@ package org.osgi.impl.service.monitor;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtData;
 
-// TODO check whether getValidNames must return non-null for fixed-name nodes
 public class MonitorMetaNodeImpl implements DmtMetaNode
 {
     boolean   deletable             = false;
@@ -43,8 +42,8 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
     String[]  validNames            = null;
     DmtData[] validValues           = null;
     int       format                = DmtData.FORMAT_NULL;
-    String    namePattern            = null;    
-    String    pattern                = null;
+    String    namePattern           = null;    
+    String    pattern               = null;
     String[]  mimeTypes             = null;
 
     // Leaf node in MonitorPlugin
