@@ -22,10 +22,12 @@ import org.osgi.framework.*;
 import org.osgi.service.dmt.*;
 import org.osgi.service.monitor.*;
 
-// TODO check whether fatal flag should be set in any exceptions
 public class MonitorPlugin implements DmtDataPlugin
 {
     private BundleContext bc;
+    
+    // maybe this could be made friendly static, to be available from the 
+    // StatusVarWrapper and Server classes without passing it to each instance
     private MonitorAdminImpl monitorAdmin;
 
     private DmtSession session;
@@ -55,12 +57,23 @@ public class MonitorPlugin implements DmtDataPlugin
         if(path.length == 0)
             return new MonitorMetaNodeImpl("Root node of the monitoring subtree.", false, false, false, true);
 
+        try { 
+            Path.checkName(path[0], "Monitorable ID");
+        } catch (IllegalArgumentException e) {
+            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, e.getMessage());
+        }
+        
         if(path.length == 1) {
-            checkMonitorable(path[0], nodeUri);
+            //checkMonitorable(path[0], nodeUri);
             return new MonitorMetaNodeImpl("Root node for a Monitorable service.", false, false, true, false);
         }
 
-        StatusVarWrapper var = getStatusVar(path[0], path[1], nodeUri);
+        try { 
+            Path.checkName(path[1], "Status Variable ID");
+        } catch (IllegalArgumentException e) {
+            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, e.getMessage());
+        }
+        //StatusVarWrapper var = getStatusVar(path[0], path[1], nodeUri);
 
         if(path.length == 2)
             return new MonitorMetaNodeImpl("Root node for a Performance Indicator.", false, false, true, false);
@@ -82,12 +95,19 @@ public class MonitorPlugin implements DmtDataPlugin
                 return new MonitorMetaNodeImpl("Current value of the Performance Indicator.",
                                                false, false, null, null, DmtData.FORMAT_XML);
 
-            // path[2].equals("Server")
-
-            return new MonitorMetaNodeImpl("Root node for server monitoring requests.", false, true, false, false);
+            if(path[2].equals("Server"))
+                return new MonitorMetaNodeImpl("Root node for server monitoring requests.", 
+                                               false, true, false, false);
+            
+            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, 
+                    "No such node defined in the monitoring tree");
         }
 
-        Server server = var.getServer(path[3], nodeUri);
+        if(!path[2].equals("Server"))
+            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+                    "No such node defined in the monitoring tree");
+        
+        //Server server = var.getServer(path[3], nodeUri);
 
         if(path.length == 4)
             return new MonitorMetaNodeImpl("Root node of a server monitoring request.", true, false, true, false);
@@ -105,12 +125,14 @@ public class MonitorPlugin implements DmtDataPlugin
                 return new MonitorMetaNodeImpl("Root node for request scheduling parameters.", 
                                                false, false, false, false);
 
-            // path[4].equals("TrapRef")
+            if(path[4].equals("TrapRef"))
+                return new MonitorMetaNodeImpl("Root node for references to other required monitoring data.",
+                                               false, true, false, false);
 
-            return new MonitorMetaNodeImpl("Root node for references to other required monitoring data.",
-                                           false, true, false, false);
+            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+                    "No such node defined in the monitoring tree");
         }
-
+        
         if(path.length == 6) {
             if(path[4].equals("Reporting")) {
                 if(path[5].equals("Type")) {
@@ -120,24 +142,38 @@ public class MonitorPlugin implements DmtDataPlugin
                                                    true, false, defaultData, validValues, DmtData.FORMAT_STRING);
                 }
 
-                // path[5].equals("Value")
-
-                return new MonitorMetaNodeImpl("Time or occurrence number parameter of the request (depending on " +
-                                               "the type).", true, false, new DmtData(Server.DEFAULT_SCHEDULE), null, 
-                                               DmtData.FORMAT_INTEGER);
+                if(path[5].equals("Value"))
+                    return new MonitorMetaNodeImpl("Time or occurrence number parameter of the " +
+                                                   "request (depending on the type).", true, false, 
+                                                   new DmtData(Server.DEFAULT_SCHEDULE), null, 
+                                                   DmtData.FORMAT_INTEGER);
+                
+                throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+                        "No such node defined in the monitoring tree");
             }
 
-            // path[4].equals("TrapRef")
+            if(path[4].equals("TrapRef"))
+                //server.getTrapRefId(path[5], nodeUri);
+                return new MonitorMetaNodeImpl("Placeholder for a reference to other monitoring data.", 
+                                               true, false, true, false);
 
-            server.getTrapRefId(path[5], nodeUri);
 
-            return new MonitorMetaNodeImpl("Placeholder for a reference to other monitoring data.", 
-                                           true, false, true, false);
+            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+                "No such node defined in the monitoring tree");
+
         }
 
-        // path.length == 7
-        return new MonitorMetaNodeImpl("A reference to other monitoring data.", 
-                                       true, false, null, null, DmtData.FORMAT_STRING);
+        if(!path[4].equals("TrapRef") || !path[6].equals("TrapRefID"))
+            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+                "No such node defined in the monitoring tree");
+
+        if(path.length == 7)
+            return new MonitorMetaNodeImpl("A reference to other monitoring data.", 
+                                           true, false, null, null, DmtData.FORMAT_STRING);
+        
+        // path.length > 7
+        throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+            "No such node defined in the monitoring tree");
     }
 
     public boolean supportsAtomic() {
@@ -156,7 +192,6 @@ public class MonitorPlugin implements DmtDataPlugin
     }
 
     public void setNodeTitle(String nodeUri, String title) throws DmtException {
-        // TODO
         throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED, "Title property not supported.");
     }
 
@@ -169,9 +204,7 @@ public class MonitorPlugin implements DmtDataPlugin
     public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
         String[] path = prepareUri(nodeUri);
 
-        if(path.length < 5) // TODO replace this with the canReplace check in DmtAdmin based on the meta-data
-            throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
-                                   "Cannot change node data at the specified position.");
+        // path.length > 4, because higher leaves don't have REPLACE access type in meta-data
 
         StatusVarWrapper var = getStatusVar(path[0], path[1], nodeUri);
         // path[2].equals("Server")
@@ -242,17 +275,16 @@ public class MonitorPlugin implements DmtDataPlugin
 
         // path.length == 6, path[4].equals("TrapRef") because only this is deletable
 
-        // TODO make TrapRefID node separately deletable if it is separately creatable
+        // ENHANCE make TrapRefID node separately deletable if it is separately creatable
         server.deleteTrapRef(path[5], nodeUri);
     }
 
     public void createInteriorNode(String nodeUri) throws DmtException {
         String[] path = prepareUri(nodeUri);
 
-        if(path.length < 4) // TODO replace this with the canAdd check in DmtAdmin based on the meta-data
-            throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
-                                   "Cannot add nodes at the specified position.");
-
+        // path.length > 3, because the higher interior nodes' parents do not 
+        // have ADD access type in their meta-data
+        
         StatusVarWrapper var = getStatusVar(path[0], path[1], nodeUri);
 
         // path[2].equals("Server") because parent must be an interior node
@@ -264,12 +296,8 @@ public class MonitorPlugin implements DmtDataPlugin
 
         Server server = var.getServer(path[3], nodeUri);
 
-        // TODO replace this with the canAdd check in DmtAdmin based on the meta-data
-        if(path.length == 5 || !path[4].equals("TrapRef"))
-            throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
-                                   "Cannot add nodes at the specified position.");
-
-        // path[4].equals("TrapRef") 
+        // path.length > 5 && path[4].equals("TrapRef"), because only these 
+        // nodes' parents can have ADD access type in their meta-data  
 
         if(path.length == 6) {
             server.addTrapRef(path[5], nodeUri);
@@ -295,10 +323,9 @@ public class MonitorPlugin implements DmtDataPlugin
         // No leaf node can be created by the caller in the current implementation 
         String[] path = prepareUri(nodeUri);
 
-        if(path.length < 4) // TODO replace this with the canAdd check in DmtAdmin based on the meta-data
-            throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
-                                   "Cannot add nodes at the specified position.");
-
+        // path.length > 3, because the higher interior nodes' parents do not 
+        // have ADD access type in their meta-data
+        
         StatusVarWrapper var = getStatusVar(path[0], path[1], nodeUri);
 
         // path[2].equals("Server") because parent must be an interior node
@@ -309,13 +336,9 @@ public class MonitorPlugin implements DmtDataPlugin
 
         Server server = var.getServer(path[3], nodeUri);
         
-        // TODO replace this with the canAdd check in DmtAdmin based on the meta-data
-        if(path.length == 5 || !path[4].equals("TrapRef"))
-            throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
-                                   "Cannot add nodes at the specified position.");
-
-        // path[4].equals("TrapRef") 
-
+        // path.length > 5 && path[4].equals("TrapRef"), because only these 
+        // nodes' parents can have ADD access type in their meta-data  
+        
         if(path.length == 6)
             throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
                                    "Cannot add leaf node at the specified position.");
@@ -324,7 +347,7 @@ public class MonitorPlugin implements DmtDataPlugin
         
         // path.length == 7, path[5] is not an existing trap reference name
 
-        // TODO allow adding TrapRefID leaf nodes?  Currently automatically created with parent.
+        // ENHANCE allow adding TrapRefID leaf nodes (currently created together with parent)
         throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
                                "Cannot add TrapRefID nodes manually.");
     }
@@ -335,11 +358,15 @@ public class MonitorPlugin implements DmtDataPlugin
     }
 
     public void copy(String nodeUri, String newNodeUri, boolean recursive) throws DmtException {
-        // TODO allow cloning a monitoring job?
+        // on protocol level there is no copy operation, and local users will 
+        // use Monitor Admin
+        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
+                               "Cannot copy monitoring nodes.");
     }
 
     public void renameNode(String nodeUri, String newName) throws DmtException {
-        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, "Cannot rename configuration nodes.");
+        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
+                               "Cannot rename monitoring nodes.");
     }
 
 
@@ -350,8 +377,6 @@ public class MonitorPlugin implements DmtDataPlugin
     }
 
     public boolean isNodeUri(String nodeUri) {
-        // TODO check path components for invalid characters (monitorable ID, status variable ID)
-
         String[] path = prepareUri(nodeUri);
 
         if(path.length == 0)
@@ -465,7 +490,7 @@ public class MonitorPlugin implements DmtDataPlugin
         if(path.length == 3) {
             StatusVariable realVar = var.getStatusVariable();
 
-            // TODO this should be a "unique registered identifier" according to the spec (e.g. reverse domain name)
+            // this is a "unique registered identifier" according to the spec
             if(path[2].equals("TrapID"))
                 return new DmtData(path[0] + '/' + path[1]);
 
@@ -506,27 +531,24 @@ public class MonitorPlugin implements DmtDataPlugin
     }
 
     public String getNodeTitle(String nodeUri) throws DmtException {
-        // TODO
         throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED, "Title property not supported.");
     }
 
     public String getNodeType(String nodeUri) throws DmtException {
-        // TODO
+        // TODO return DDF location for root, text/plain for most leaf nodes, and maybe text/xml for "Results"
         return null;
     }
 
     public int getNodeVersion(String nodeUri) throws DmtException {
-        // TODO
         throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED, "Version property not supported.");
     }
 
     public Date getNodeTimestamp(String nodeUri) throws DmtException {
-        // TODO
         throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED, "Timestamp property not supported.");
     }
 
     public int getNodeSize(String nodeUri) throws DmtException {
-        // TODO
+        // TODO calculate size for leaf nodes
         return 0;
     }
 
@@ -534,16 +556,11 @@ public class MonitorPlugin implements DmtDataPlugin
         String[] path = prepareUri(nodeUri);
 
         if(path.length == 0) {
-            // TODO should Monitorable names be checked for invalid characters?
-            // TODO return empty array or null for no children?
-            // TODO handle SecurityException?
-            return monitorAdmin.getMonitorableNames();
+            String[] monitorables = monitorAdmin.getMonitorableNames();
+            return monitorables != null ? monitorables : new String[0];
         }
 
         if(path.length == 1) {
-            // TODO should Status Variable names be checked for invalid characters?
-            // TODO return empty array or null for no children?
-            // TODO handle SecurityException?
             try {
                 return monitorAdmin.getStatusVariableNames(path[0]);
             } catch(IllegalArgumentException e) {
@@ -578,7 +595,7 @@ public class MonitorPlugin implements DmtDataPlugin
 
         // path.length == 6, path[4].equals("TrapRef")
 
-        // TODO make this optional if TrapRefID nodes are creatable/deletable
+        // ENHANCE make this optional if TrapRefID nodes are creatable/deletable
         return new String[] { "TrapRefID" };
     }
 
@@ -599,7 +616,6 @@ public class MonitorPlugin implements DmtDataPlugin
 
         StatusVariable var;
         try {
-            // TODO handle SecurityException?
             var = monitorAdmin.getStatusVariable(monId + "/" + id);
         } catch(IllegalArgumentException e) {
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, 
@@ -641,7 +657,6 @@ public class MonitorPlugin implements DmtDataPlugin
     }
 }
 
-// TODO do not store monitorAdmin refs everywhere
 class StatusVarWrapper {
     private static Hashtable serverLists = new Hashtable();
 
@@ -797,11 +812,21 @@ class Server {
 
         enabled = data.getBoolean();
 
-        // TODO do something with start/stop exceptions
-        if(enabled)
-            startJob();
-        else
-            stopJob();
+        if(enabled) {
+            try { // expecting SecurityException and IllegalArgumentException
+                startJob();
+            } catch(Exception e) {
+                throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
+                                       "Error starting monitoring job.", e);
+            }
+        } else {
+            try { // not expecting any specific exceptions
+                stopJob();
+            } catch(Exception e) {
+                throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
+                                       "Error stopping monitoring job.", e);
+            }
+        }
     }
 
     void setType(DmtData data, String nodeUri) throws DmtException {
@@ -839,13 +864,12 @@ class Server {
             throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED,
                                    "Trap reference leaf must have string format.");
         
-        // TODO check if data is "null" if this is valid in a DmtData
+        // data format is FORMAT_STRING because of meta-data
         trapRef.put(name, data.getString());
     }
 
-    // TODO allow separate creation of TrapRef/<X>/TrapRefID nodes?
+    // ENHANCE allow separate creation of TrapRef/<X>/TrapRefID nodes
     void addTrapRef(String name, String nodeUri) throws DmtException {
-        // TODO node name is not a good default, ref has to contain a / anyway
     	if(trapRef.put(name, name) != null)
     		throw new DmtException(nodeUri, DmtException.NODE_ALREADY_EXISTS,
                                    "A trap reference with the given ID already exists.");
@@ -881,6 +905,7 @@ class Server {
         for (int i = 0; i < trapRefIds.length; i++)
 			varNames[i+1] = trapRefIds[i];
                 
+        // throws SecurityException, IllegalArgumentException
         job = monitorAdmin.startJob(serverId, varNames, schedule, count, false);
     }
 
