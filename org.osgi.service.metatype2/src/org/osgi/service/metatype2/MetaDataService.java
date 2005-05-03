@@ -28,7 +28,6 @@ package org.osgi.service.metatype2;
 
 import org.osgi.service.metatype.ObjectClassDefinition;
 
-
 /**
  * This service can be used to obtain MetaType information provided in the 
  * framework - from @link org.osgi.service.metatype.MetaTypeProvider MetaTypeProviders}
