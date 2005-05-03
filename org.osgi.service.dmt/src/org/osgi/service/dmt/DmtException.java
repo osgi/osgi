@@ -363,6 +363,8 @@ public class DmtException extends Exception {
         case INVALID_URI:           return "INVALID_URI";
         case CONCURRENT_ACCESS:     return "CONCURRENT_ACCESS";
         case ALERT_NOT_ROUTED:      return "ALERT_NOT_ROUTED";
+        case TRANSACTION_ERROR:     return "TRANSACTION_ERROR";
+        case TIMEOUT:               return "TIMEOUT";
         default:
             return "<unknown code>";
         }
