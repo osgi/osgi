@@ -154,6 +154,7 @@ public final class MegletDescriptorImpl implements MegletDescriptor.Delegate {
 				localizedName = (String) names.get(firstKey);
 				locale = firstKey;
 			} else
+				localizedName = (String) names.get(defaultLanguage);
 				locale = defaultLanguage;
 		}
 		properties.put( MegletDescriptor.APPLICATION_NAME, localizedName);
