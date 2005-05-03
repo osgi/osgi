@@ -30,63 +30,51 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 15/04/2005   Alexandre Santos
+ * 08/03/2005   Alexandre Santos
  * 14           Implement MEG TCK
  * ===========  ==============================================================
  */
-package org.osgi.test.cases.monitor.tb1;
+package org.osgi.test.cases.monitor.tbc.Activators;
+
+import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.test.cases.monitor.tb1.MonitorAdmin.GetDescription;
-import org.osgi.test.cases.monitor.tb1.MonitorAdmin.GetMonitorableNames;
-import org.osgi.test.cases.monitor.tb1.MonitorAdmin.GetRunningJobs;
-import org.osgi.test.cases.monitor.tb1.MonitorAdmin.GetStatusVariable;
-import org.osgi.test.cases.monitor.tb1.MonitorAdmin.GetStatusVariableNames;
-import org.osgi.test.cases.monitor.tb1.MonitorAdmin.GetStatusVariables;
-import org.osgi.test.cases.monitor.tb1.MonitorAdmin.ResetStatusVariable;
-import org.osgi.test.cases.monitor.tb1.MonitorAdmin.StartJob;
-import org.osgi.test.cases.monitor.tb1.MonitorAdmin.StartScheduledJob;
-import org.osgi.test.cases.monitor.tb1.MonitorAdmin.SwitchEvents;
+import org.osgi.service.monitor.Monitorable;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
-import org.osgi.test.cases.monitor.tbc.TB1Service;
-import org.osgi.test.cases.monitor.tbc.TestInterface;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
  * @author Alexandre Santos
  *
  */
-public class Activator implements BundleActivator, TB1Service {
+public class MonitorableActivator2 implements BundleActivator {
 
 	private ServiceRegistration servReg;
 	
 	private MonitorTestControl tbc;
 
+	private MonitorableImpl2 testMonitorableImpl;
+
+	public MonitorableActivator2(MonitorTestControl tbc) {
+		this.tbc = tbc;
+	}
+	
 	public void start(BundleContext bc) throws Exception {
+		// creating the service
+		testMonitorableImpl = new MonitorableImpl2(tbc);
 		
-		servReg = bc.registerService(TB1Service.class.getName(), this, null);
-		System.out.println("TB1Service activated.");
+		Hashtable ht = new Hashtable();
+		ht.put("service.pid", MonitorTestControl.SV_MONITORABLEID2);		
+		
+		String[] ifs = new String[] { Monitorable.class.getName() };
+		servReg = bc.registerService(ifs, testMonitorableImpl, ht);
+		System.out.println("Monitorable activated.");
 	}
 
 	public void stop(BundleContext arg0) throws Exception {
+		// unregistering the service
 		servReg.unregister();
 	}
 
-	public TestInterface[] getTestClasses(DefaultTestBundleControl tbc) {
-		return new TestInterface[] {
-				new GetDescription((MonitorTestControl) tbc),
-				new GetMonitorableNames((MonitorTestControl) tbc),
-				new GetRunningJobs((MonitorTestControl) tbc),
-				new GetStatusVariable((MonitorTestControl) tbc),
-				new GetStatusVariableNames((MonitorTestControl) tbc),
-				new GetStatusVariables((MonitorTestControl) tbc),
-				new ResetStatusVariable((MonitorTestControl) tbc),
-				new StartJob((MonitorTestControl) tbc),
-				new StartScheduledJob((MonitorTestControl) tbc),
-				new SwitchEvents((MonitorTestControl) tbc)
-		};
-	}
-	
 }
