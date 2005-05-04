@@ -55,6 +55,7 @@ public class DmtAlertItem {
      * @param source The URI of the node which is the source of the
      * alert item
      * @param type The type of the alert item
+     * ### Needs to define where the possible values come from
      * @param format The format of the alert item
      * @param data The data of the alert item
      */
