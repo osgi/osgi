@@ -38,17 +38,21 @@ import org.osgi.framework.Version;
   * and uninstalled as a unit. A deployment package is a reified concept, like a bundle, 
   * in an OSGi Service Platform. It is not known by the OSGi Framework, but it is managed 
   * by the Deployment Admin service. A deployment package is a stream of resources 
-  * (including bundles) which, once processed, will result in new artifacts being added 
-  * to the OSGi platform.  These new artifacts can include installed Bundles, new 
-  * configuration objects added to the Configuration Admin service, new Wire objects 
-  * added to the Wire Admin service, or changed system properties. All the changes caused 
-  * by the processing of a deployment package are persistently associated with the 
-  * deployment package, so that they can be appropriately cleaned up when the deployment
-  * package is uninstalled. There is a strict “no overlap” rule imposed on deployment packages. 
-  * Two deployment packages are not allowed to create or manipulate the same artifact.  
-  * Obviously, this means that a bundle cannot be in two different DPs. Any violation of 
-  * this “no overlap” rule is considered an error and the install or update of the 
-  * offending deployment package must be aborted.  
+  * (including bundles) which, once processed, will result in new artifacts (effects on 
+  * the system) being added to the OSGi platform.  These new artifacts can include 
+  * installed Bundles, new configuration objects added to the Configuration Admin service, 
+  * new Wire objects added to the Wire Admin service, or changed system properties. All 
+  * the changes caused by the processing of a deployment package are persistently 
+  * associated with the deployment package, so that they can be appropriately cleaned 
+  * up when the deployment package is uninstalled. There is a strict “no overlap” rule 
+  * imposed on deployment packages. Two deployment packages are not allowed to create or 
+  * manipulate the same artifact. Obviously, this means that a bundle cannot be in two 
+  * different deployment packagess. Any violation of this “no overlap” rule is considered 
+  * an error and the install or update of the offending deployment package must be aborted.<p>
+  * The Deployment Admin service should do as much as possible to ensure transactionality. 
+  * It means that if a deployment package installation, update or removal (uninstall) fails 
+  * all the side effects caused by the process should be disappeared  and the system 
+  * should be in the state in which it was before the process.     
   */
 public interface DeploymentPackage {
  
@@ -61,32 +65,47 @@ public interface DeploymentPackage {
 	  
 	/**
 	 * Returns the name of the deployment package.
-	 * @return The name of the deployment package.
+	 * @return The name of the deployment package. It cannot be null.
 	 */
 	String getName();
 	  
 	/**
 	 * Returns the version of the deployment package.
-	 * @return version of the deployment package
+	 * @return version of the deployment package. It cannot be null.
 	 */
 	Version getVersion();
 	  
 	/**
-	 * Returns an 2D array of strings representing the bundles and their version that
-	 * are specified in the manifest of this deployment package
-	 * @return The 2d string array corresponding to bundle symbolic name and version pairs
+	 * Returns a two-dimensional array of strings representing the bundles and their version that
+	 * are specified in the manifest of this deployment package. The first dimension represents the 
+	 * bundles. Its size is equal to the number of the bundles in the deployment package. The size 
+	 * of the second dimension is 2. Its 0. value is the symbolic name and the 1. value is 
+	 * the version. E.g.<p>
+	 *     <blockquote><pre>
+     *         String[][] bundles = dp.getBundleSymNameVersionPairs();
+     *         for (int i = 0; i < bundles.length; i++) {
+     *             String symbolicName = bundles[i][0];
+     *             String version = bundles[i][1];
+     *             // ...
+     *         }	 
+     *     </pre></blockquote>
+ 	 * @return The two-dimensional string array corresponding to bundle symbolic name 
+	 *         and version pairs. It cannot be null but can be zero dimensional.
 	 */
     String[][] getBundleSymNameVersionPairs();  
  
     /**
-     * Returns the bundle instance that corresponds to the bundle's symbolic name.
+     * Returns the bundle instance, which is part of this deployment package, that corresponds 
+     * to the bundle's symbolic name passed in the <code>symbolicName</code> parameter.
      * This method will return null for request for bundles that are not part 
      * of this deployment package.<p>
-     * As this instance is transient, this method may return null if the bundle
+     * As this instance is transient (i.e. a bundle can be removed at any time because of the 
+     * dynamic nature of the OSGi platform), this method may also return null if the bundle
      * is part of this deployment package, but is not currently defined to the framework.
+     * @param symbolicName the symbolic name of the requested bundle
      * @return The <code>Bundle</code> instance for a given bundle symbolic name.
      */
-    Bundle getBundle(String bundleSymName);
+    Bundle getBundle(String symbolicName);
     
     /**
      * Returns an array of strings representing the resources that are specified in 
@@ -100,52 +119,61 @@ public interface DeploymentPackage {
      *     Resource-Processor: foo.rp
      * </pre></blockquote>
      * then the corresponding array element is the "foo/readme.txt" string.
-     * @return The string array corresponding to resources
+     * @return The string array corresponding to resources. It cannot be null but can be zero 
+     *         dimensional.
      */
     String[] getResources();   
     
     /**
      * At the time of deployment, resource processor service instances are located to 
-     * processor the resources contained in a deployment package.  This call returns a 
-     * service reference 
-     * to the corresponding service instance.
-     * If this call is made during deployment, prior to the locating of the service to 
-     * process a given resource, null will be returned.
-     * Services can be updated after a deployment packahge has been deployed.  In this event, 
-     * this call will return a reference to the updated service, not to the instance that was
-     * used at deployment time.
-     * @return resource procesor for the resource 
+     * resources contained in a deployment package.<p> 
+     * This call returns a service reference to the corresponding service instance.
+     * If the resource is not part of the deployment package or this call is made during 
+     * deployment, prior to the locating of the service to process a given resource, null will 
+     * be returned. Services can be updated after a deployment package has been deployed. 
+     * In this event, this call will return a reference to the updated service, not to the 
+     * instance that was used at deployment time.
+     * @param resource the name of the resource (it is the same as the value of the "Name" 
+     *        attribute in the deployment package's manifest) 
+     * @return resource processor for the resource 
      */
     ServiceReference getResourceProcessor(String resource);    
 
     /**
      * Returns the requested deployment package manifest header from the main section. 
-     * Header names are case insensitive.  
-     * @param name the requested header
+     * Header names are case insensitive. If the header doesn't exist it returns null.  
+     * @param header the requested header
      * @return the value of the header
      */
-    String getHeader(String name);
+    String getHeader(String header);
 
     /**
      * Returns the requested deployment package manifest header from the name 
-     * section determined by the path parameter. Header names are case insensitive.  
-     * @param name the requested header
+     * section determined by the path parameter. Header names are case insensitive. 
+     * If the header doesn't exist it returns null.
+     * @param resource the name of the resoure (it is the same as the value of the "Name" 
+     *        attribute in the deployment package's manifest)
+     * @param header the requested header
      * @return the value of the header
      */
-    String getResourceHeader(String path, String header);
+    String getResourceHeader(String resource, String header);
     
 	/**
 	  * Uninstalls the deployment package. After uninstallation, the deployment package 
-	  * object becomes stale.  This can be checked by using DeploymentPackage:getId(), which 
-	  * will return a -1 when stale.   
-	  * @throws DeploymentException if the deployment package could not be successfully uninstalled. 
+	  * object becomes stale. This can be checked by using <code>DeploymentPackage.getId()</code>, 
+	  * which will return a -1 when stale. <code>{@link DeploymentAdminPermission}("&lt;filter&gt;", 
+	  * "uninstall")</code> is needed for this operation.   
+	  * @throws DeploymentException if the deployment package could not be successfully uninstalled.
+	  * @throws SecurityException if access is not permitted based on the current security policy. 
 	  */
     void uninstall() throws DeploymentException;
  
     /**
      * This method is called to completely uninstall a deployment package, which couldn't be uninstalled
-     * using traditional means due to exceptions.
+     * using traditional means due to exceptions. <code>{@link DeploymentAdminPermission}("&lt;filter&gt;", 
+     * "uninstallForceful")</code> is needed for this operation.
      * @return true if the operation was successful
+     * @throws SecurityException if access is not permitted based on the current security policy.
      */  
     boolean uninstallForceful();  
  
@@ -157,7 +185,7 @@ public interface DeploymentPackage {
   
     /**
      * Indicates whether some other object is "equal to" this one. Two deployment packages 
-     * are equal if they have the sam name and version.
+     * are equal if they have the same name and version.
      * @param other the reference object with which to compare.
      * @return true if this object is the same as the obj argument; false otherwise.
      */
