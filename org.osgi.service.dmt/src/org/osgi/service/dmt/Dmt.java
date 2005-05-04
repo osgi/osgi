@@ -37,8 +37,8 @@ public interface Dmt extends DmtReadOnly {
     /**
      * Rolls back a series of DMT operations issued in the current atomic
      * session since the last transaction boundary. Transaction boundaries are
-     * the {@link DmtReadOnly#open open} call that starts the session, and all
-     * subsequent {@link #commit commit} and {@link #rollback rollback} calls.
+     * the creation of this object that starts the session, and all
+     * subsequent {@link Dmt#commit} and {@link Dmt#rollback} calls.
      * 
      * @throws DmtException with the following possible error codes
      *         <li><code>ROLLBACK_FAILED</code> in case the rollback did not
@@ -55,8 +55,8 @@ public interface Dmt extends DmtReadOnly {
     /**
      * Commits a series of DMT operations issued in the current atomic session
      * since the last transaction boundary. Transaction boundaries are the
-     * {@link DmtReadOnly#open open} call that starts the session, and all
-     * subsequent {@link #commit commit} and {@link #rollback rollback} calls.
+     * creation of this object that starts the session, and all
+     * subsequent {@link Dmt#commit} and {@link Dmt#rollback} calls.
      * <p>
      * This method can fail even if all operations were successful. This can
      * happen due to some multi-node semantic constraints defined by a specific
