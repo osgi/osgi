@@ -107,7 +107,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         AccessController.doPrivileged(new PrivilegedAction() {
             public Object run() {
                 fwBundleDir = (String) context.getBundle().getHeaders().
-            	get(DAConstants.FW_BUNDLES_DIR);
+            			get(DAConstants.FW_BUNDLES_DIR);
                 return null;
             }});
         
@@ -140,7 +140,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
         
         for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            String rootDir = fwBundleDir + "/" + be.getId() + "/**";
+            // TODO "data"
+            String rootDir = fwBundleDir + "/" + be.getId() + "/data/-";
             pa.setPermissions(location, new PermissionInfo[] {
                     new PermissionInfo(FilePermission.class.getName(), rootDir, 
                             "read, write, execute, delete")});
@@ -163,6 +164,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         String location = DeploymentAdminImpl.location(beCust.getSymbName(), 
                 beCust.getVersion());
         PermissionAdmin pa = (PermissionAdmin) trackPerm.getService();
+        pa.setPermissions(location, null);
         pa.setPermissions(location, (PermissionInfo[]) oldPerms.get(location));
     }
 
@@ -238,9 +240,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
             processBundles(wjis);
             Hashtable oldPerms = setFilePermissionForCustomizers();
             startCustomizers();
-            resetFilePermissionForCustomizers(oldPerms);
             processResources(wjis);
             dropResources();
+            resetFilePermissionForCustomizers(oldPerms);
             dropBundles();
             startBundles();
         } catch (CancelException e) {
@@ -493,7 +495,6 @@ public class DeploymentSessionImpl implements DeploymentSession {
         String pid = entry.getAttributes().getValue(DAConstants.RP_PID);
         WrappedResourceProcessor proc = new WrappedResourceProcessor(
                 findProcessor(pid), fetchAccessControlContext(entry.getCertificateChains()));
-        //ResourceProcessor proc = findProcessor(pid);
         transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, proc));
         proc.process(entry.getName(), entry.getInputStream());
         if (DeploymentSession.INSTALL == getDeploymentAction())
@@ -512,8 +513,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
                 Bundle b = processBundle(entry);
                 if (entry.isCustomizerBundle())
                     startBundle(b);
-            }
-            else
+            } else
                 ; // do nothing
             wjis.closeEntry();
             entry = wjis.nextEntry();

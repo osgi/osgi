@@ -1,6 +1,5 @@
 package org.osgi.impl.service.deploymentadmin;
 
-import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
@@ -9,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentSession;

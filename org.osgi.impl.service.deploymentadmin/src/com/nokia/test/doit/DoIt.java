@@ -28,6 +28,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
+import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 import org.osgi.service.permissionadmin.PermissionAdmin;
@@ -167,7 +168,16 @@ public class DoIt implements BundleActivator {
             System.out.println("*******************************************************************");
             try {db_test_05(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
-            try {db_test_06(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            //try {db_test_06(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            //System.out.println("*******************************************************************");
+            
+            try {bad_db_test_01(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
+            try {bad_db_test_02(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
+            try {bad_db_test_03(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
+            try {bad_db_test_04(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
             
             System.out.println("\n=====================================");
@@ -175,6 +185,46 @@ public class DoIt implements BundleActivator {
             System.out.println("=====================================");
         }
         
+    }
+
+    private void bad_db_test_01() throws Exception {
+        InputStream is = new FileInputStream(HOME + "bad_db_test_01.dp");
+        try {
+            DeploymentPackage dp = da.installDeploymentPackage(is);
+        } catch (DeploymentException e) {
+            return;
+        }
+        throw new Exception("Negative test failed");
+    }
+
+    private void bad_db_test_02() throws Exception {
+        InputStream is = new FileInputStream(HOME + "bad_db_test_02.dp");
+        try {
+            DeploymentPackage dp = da.installDeploymentPackage(is);
+        } catch (DeploymentException e) {
+            return;
+        }
+        throw new Exception("Negative test failed");
+    }
+
+    private void bad_db_test_03() throws Exception {
+        InputStream is = new FileInputStream(HOME + "bad_db_test_03.dp");
+        try {
+            DeploymentPackage dp = da.installDeploymentPackage(is);
+        } catch (DeploymentException e) {
+            return;
+        }
+        throw new Exception("Negative test failed");
+    }
+
+    private void bad_db_test_04() throws Exception {
+        InputStream is = new FileInputStream(HOME + "bad_db_test_04.dp");
+        try {
+            DeploymentPackage dp = da.installDeploymentPackage(is);
+        } catch (DeploymentException e) {
+            return;
+        }
+        throw new Exception("Negative test failed");
     }
 
     private void db_test_01() throws Exception {
@@ -319,15 +369,15 @@ public class DoIt implements BundleActivator {
             		"'db_test_01_t.dbscript' resource");
         refs = context.getServiceReferences(
                 ResourceProcessor.class.getName(), "(" + Constants.SERVICE_PID + "=default_pid)");
-        rp = (ResourceProcessor) context.getService(refs[0]);
-        s = ((DbResourceProcessor) rp).getResources(dp, "db_test_01_t.dbscript");
+        ResourceProcessor rp_def = (ResourceProcessor) context.getService(refs[0]);
+        s = ((DbResourceProcessor) rp_def).getResources(dp, "db_test_01_t.dbscript");
         if (null != s && s.contains("tmp"))
             throw new Exception("RP with id 'default_id' HAS receive the " +
             		"'db_test_01_t.dbscript' resource");
         
         is = new FileInputStream(HOME + "db_test_03_update_01.dp");
 		dp = da.installDeploymentPackage(is);
-        
+            	        
 		dp.uninstall();
         db.reset(null);
     }
@@ -392,7 +442,7 @@ public class DoIt implements BundleActivator {
         db.reset(null);
     }
     
-    private void db_test_06() throws Exception {
+    /*private void db_test_06() throws Exception {
         DeploymentPackage dp = null;
         InputStream is = new FileInputStream(HOME + "db_test_06.dp");
 		dp = da.installDeploymentPackage(is);
@@ -410,7 +460,7 @@ public class DoIt implements BundleActivator {
         System.out.println(Arrays.asList(fs));
         
         dp.uninstall();
-    }
+    }*/
 
     // FOR TEST ONLY
     /*public static void main(String[] args) throws IOException {

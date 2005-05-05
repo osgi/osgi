@@ -182,6 +182,11 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
 	                File f = session.getDataFile(b);
 	                System.out.println("Bundle (" + b + ") file: " + f);
 	                this.bundlePrivateArea = f;
+	            } else if (line.startsWith("CREATEFILE")) {
+	                String[] parts = Splitter.split(line, ' ', 0);
+	                String fileName = parts[1];
+	                File newFile = new File(bundlePrivateArea, fileName);
+	                newFile.createNewFile();
 	            }
 	            line = br.readLine();
 	        }

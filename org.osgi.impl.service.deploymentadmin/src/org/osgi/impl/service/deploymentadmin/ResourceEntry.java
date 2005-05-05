@@ -58,6 +58,10 @@ public class ResourceEntry implements Serializable {
         return getName();
     }
     
+    Hashtable getAttrs() {
+        return attrs;
+    }
+    
     public String getValue(String name) {
         return (String) attrs.get(name);
     }

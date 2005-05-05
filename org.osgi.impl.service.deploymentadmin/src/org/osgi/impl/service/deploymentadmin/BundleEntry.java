@@ -11,39 +11,49 @@ public class BundleEntry implements Serializable {
     private String  version;
     private Long    id;
     private Boolean customizer;
+    private Boolean missing;
 
     public BundleEntry(String location, 
             String symbName, 
             String version, 
             boolean customizer, 
-            long id) 
+            long id,
+            boolean missing) 
 	{
 		this.symbName = symbName;
 		this.version = version;
 		this.id = new Long(id);
 		this.customizer = new Boolean(customizer);
+		this.missing = new Boolean(missing);
 	}
 
-    public BundleEntry(String symbName, String version, boolean customizer) {
-        this(null, symbName, version, customizer, -1);
+    public BundleEntry(String symbName, 
+                       String version, 
+                       boolean customizer, 
+                       boolean missing) 
+    {
+        this(null, symbName, version, customizer, -1, missing);
     }
     
     public BundleEntry(BundleEntry other) {
         this.symbName = other.symbName;
         this.version = other.version;
         this.id = other.id;
+        this.missing = new Boolean(other.isMissing());
     }
     
     public BundleEntry(Bundle b) {
         this.symbName = (String) b.getHeaders().get("Bundle-SymbolicName");
         this.version = (String) b.getHeaders().get("Bundle-Version");
         this.id = new Long(b.getBundleId());
+        missing = new Boolean(true);
     }
     
     public BundleEntry(Entry entry) {
         symbName = entry.getAttributes().getValue(DAConstants.BUNDLE_SYMBOLIC_NAME);
         version = entry.getAttributes().getValue(DAConstants.BUNDLE_VERSION);
         customizer = new Boolean(entry.isCustomizerBundle());
+        missing = new Boolean(entry.isMissing());
     }
 
     public boolean equals(Object obj) {
@@ -67,7 +77,11 @@ public class BundleEntry implements Serializable {
     public boolean isCustomizer() {
         return customizer.booleanValue();
     }
-    
+
+    public boolean isMissing() {
+        return missing.booleanValue();
+    }
+
     public long getId() {
         return null == id ? -1 : id.longValue();
     }

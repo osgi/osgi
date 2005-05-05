@@ -33,9 +33,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.eclipse.osgi.service.resolver.VersionRange;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.Version;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
@@ -91,6 +93,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         try {
             wjis = new WrappedJarInputStream(in);
             srcDp = new DeploymentPackageImpl(wjis.getManifest(), nextDpId(), this);
+        } catch (DeploymentException e) {
+            throw e;
         } catch (Exception e) {
             throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
                     e.getMessage(), e);
@@ -127,6 +131,11 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         // find the package among installed packages
         DeploymentPackageImpl targetDp = findDp(srcDp);
         
+        // fix-pack has no target
+        if (srcDp.fixPack() && targetDp == null)
+            throw new DeploymentException(DeploymentException.CODE_MISSING_FIXPACK_TARGET,
+                    "Target of the fix-pack is missing");
+        
         // not found -> install
         if (null == targetDp) {
             // creates an empty dp
@@ -136,8 +145,18 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
         // found -> update
         else {
-            return new DeploymentSessionImpl(srcDp, targetDp,
+            DeploymentSessionImpl ret = new DeploymentSessionImpl(srcDp, targetDp,
                     DeploymentSession.UPDATE, logger, context);
+            if (srcDp.fixPack()) {
+                VersionRange range = srcDp.getFixPackRange();
+                Version ver = targetDp.getVersion();
+                if (!range.isIncluded(ver))
+                    throw new DeploymentException(DeploymentException.CODE_MISSING_FIXPACK_TARGET,
+                    		"Fix pack version range (" + srcDp.getFixPackRange() + ") doesn't fit " +
+                    		"to the version (" + targetDp.getVersion() + ") of the target " + 
+                    		"deployment package"); 
+            }
+            return ret;
         }
     }
     
@@ -165,6 +184,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return null;
     }
 
+    // TODO throws SecurityException
     public synchronized DeploymentPackage getDeploymentPackage(long id) {
         for (Iterator iter = dps.iterator(); iter.hasNext();) {
             DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();

@@ -17,12 +17,9 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -30,6 +27,7 @@ import java.util.Vector;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
+import org.eclipse.osgi.service.resolver.VersionRange;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
@@ -44,31 +42,32 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     private transient DeploymentAdminImpl da;
     
-    // TODO create a VersionRange class
-    private String  fixPackRange;	
-    private String  dpName;
-    private String  dpVersion;
-    private Integer id;
+    private String       fixPackRange; // String because VersionRange is not serializable	
+    private String       dpName;
+    private String       dpVersion;    // String because Version is not serializable
+    private Integer      id;
     
     private Map mainSection = new Hashtable();
     private Vector bundleEntries = new Vector();
     private Vector resourceEntries = new Vector();
     
-    /*
-     * to create a non-empty DP
-     */ 
-    public DeploymentPackageImpl(Manifest manifest, int id, DeploymentAdminImpl da) throws DeploymentException {
+    public DeploymentPackageImpl(Manifest manifest, int id, DeploymentAdminImpl da) 
+    		throws DeploymentException 
+    {
         this.id = new Integer(id);
         this.da = da;
         
         processMainSection(manifest);
         processNameSections(manifest);
+        
+        DeploymentPackageVerifier.verify(this);
     }
 
     /*
-     * to create an empty DP
+     * Creates an empty DP
      */
     public DeploymentPackageImpl() {
+        dpVersion = "0.0.0";
     }
     
     public boolean equals(Object obj) {
@@ -95,7 +94,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
     
     public String toString() {
-        return "{" + getName() + " " + getVersion() + "}";
+        return "{" + getName() + " " + ( dpVersion == null ? null : getVersion() ) + "}";
     }
 
     private void processMainSection(Manifest manifest) throws DeploymentException {
@@ -110,21 +109,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             mainSection.put(key.toString(), value);
         }
         
-        checkMainSection();
     }
     
-    private void checkMainSection() throws DeploymentException {
-        if (null == dpName)
-            throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER, 
-                    "Missing header: " + DAConstants.DP_NAME);
-     
-        if (null == dpVersion)
-            throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER, 
-                    "Missing header: " + DAConstants.DP_VERSION);
-        
-        // TODO check fixpack range
-    }
-
     private void processNameSections(Manifest manifest) throws DeploymentException {
         Map entries = manifest.getEntries();
         for (Iterator iter = entries.keySet().iterator(); iter.hasNext();) {
@@ -133,40 +119,20 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             String bSn = (String) attrs.getValue(DAConstants.BUNDLE_SYMBOLIC_NAME);
             String bVer = (String) attrs.getValue(DAConstants.BUNDLE_VERSION);
             String bCustStr = (String) attrs.getValue(DAConstants.CUSTOMIZER);
+            String missing = (String) attrs.getValue(DAConstants.MISSING);
             boolean isBundle = null != bSn && null != bVer; 
             boolean bCust = (bCustStr == null ? false : Boolean.valueOf(bCustStr).booleanValue());
             if (isBundle) {
                 // bundle
-                BundleEntry be = new BundleEntry(bSn, bVer, bCust);
+                BundleEntry be = new BundleEntry(bSn, bVer, bCust, missing == null);
                 bundleEntries.add(be);
             } else {
                 // resource
                 resourceEntries.add(new ResourceEntry(resPath, attrs));
             }
-            
-            checkNameSection(resPath, attrs, isBundle);
         }
     }
     
-    private void checkNameSection(String resPath, Attributes attrs, boolean isBundle) 
-    		throws DeploymentException 
-    {
-        if (fixPack()) {
-            String missing = attrs.getValue(DAConstants.MISSING);
-            if (null == missing)
-                throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
-                        "Missing \"" + DAConstants.MISSING + "\" header in \"" +
-                        resPath + "\" section");
-        }
-        
-        if (!isBundle) {
-            String rp = attrs.getValue(DAConstants.RP_PID);
-            if (null == rp)
-                throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
-                        "Missing \"" + DAConstants.RP_PID + "\" header in \"" +
-                        resPath + "\" section");
-        }
-    }
     
     Vector getBundleEntries() {
         return bundleEntries;
@@ -187,7 +153,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                 re.updateCertificates(entry);
         }
     }
-
+    
+    public VersionRange getFixPackRange() {
+        return new VersionRange(fixPackRange);
+    }
     
     Vector getResourceEntries() {
         return resourceEntries;
@@ -342,6 +311,89 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     public void setVersion(Version version) {
         this.dpVersion = version.toString();
+    }
+    
+    /*
+     * Checks whether the deployment package is valid.
+     */
+    private static class DeploymentPackageVerifier {
+
+        public static void verify(DeploymentPackageImpl dp) throws DeploymentException {
+            checkMainSection(dp);            
+            checkNameSections(dp);
+        }
+        
+        private static void checkMainSection(DeploymentPackageImpl dp)
+        		throws DeploymentException
+        {
+            if (null == dp.dpName)
+                throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
+                        "Missing deployment package name");
+            
+            if ("System".equals(dp.dpName))
+                throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
+                		"The \"System\" deployment package name is reserved");
+            
+            if (null == dp.dpVersion)
+                throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
+                        "Missing deployment package version in: " + dp.getName());
+            try {
+                Version version = new Version(dp.dpVersion);
+            }
+            catch (Exception e) {
+                throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
+                        "Bad version in: " + dp, e);
+            }
+            
+            if (dp.fixPack()) {
+	            try {
+	                VersionRange versionRange = new VersionRange(dp.fixPackRange);
+	            }
+	            catch (Exception e) {
+	                throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
+	                        "Bad version range in: " + dp, e);
+	            }
+            }
+            
+            if (null == dp.dpName)
+                throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER, 
+                        "Missing header in: " + dp + " header: " + DAConstants.DP_NAME);
+         
+            if (null == dp.dpVersion)
+                throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER, 
+                        "Missing header in: " + dp + " header: " + DAConstants.DP_VERSION);        
+        }
+    
+        private static void checkNameSections(DeploymentPackageImpl dp)
+        		throws DeploymentException
+        {
+            for (Iterator iter = dp.bundleEntries.iterator(); iter.hasNext();) {
+                BundleEntry be = (BundleEntry) iter.next();
+                checkBundleEntry(dp, be);
+            }
+            
+            for (Iterator iter = dp.resourceEntries.iterator(); iter.hasNext();) {
+                ResourceEntry re = (ResourceEntry) iter.next();
+                checkResourceEntry(dp, re);
+            }
+        }
+
+        private static void checkBundleEntry(DeploymentPackageImpl dp, BundleEntry be) 
+				throws DeploymentException
+        {
+            // there is nothing to check
+        }
+        
+        private static void checkResourceEntry(DeploymentPackageImpl dp, ResourceEntry re) 
+        		throws DeploymentException 
+        {
+            Hashtable attrs = re.getAttrs();
+            String processor = (String) attrs.get(DAConstants.RP_PID);
+            if (null == processor || "".equals(processor.trim()))
+                	throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER, 
+                        "Missing header in: " + dp + " header: " + DAConstants.RP_PID);
+        }
+
     }
   
 }
