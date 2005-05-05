@@ -179,6 +179,8 @@ public class DoIt implements BundleActivator {
             System.out.println("*******************************************************************");
             try {bad_db_test_04(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
+            try {bad_db_test_05(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
             
             System.out.println("\n=====================================");
             System.out.println("RESULT: OK = " + ok + " ERROR = " + error);
@@ -219,6 +221,16 @@ public class DoIt implements BundleActivator {
 
     private void bad_db_test_04() throws Exception {
         InputStream is = new FileInputStream(HOME + "bad_db_test_04.dp");
+        try {
+            DeploymentPackage dp = da.installDeploymentPackage(is);
+        } catch (DeploymentException e) {
+            return;
+        }
+        throw new Exception("Negative test failed");
+    }
+    
+    private void bad_db_test_05() throws Exception {
+        InputStream is = new FileInputStream(HOME + "bad_db_test_05.dp");
         try {
             DeploymentPackage dp = da.installDeploymentPackage(is);
         } catch (DeploymentException e) {

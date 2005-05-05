@@ -46,7 +46,7 @@ public class BundleEntry implements Serializable {
         this.symbName = (String) b.getHeaders().get("Bundle-SymbolicName");
         this.version = (String) b.getHeaders().get("Bundle-Version");
         this.id = new Long(b.getBundleId());
-        missing = new Boolean(true);
+        missing = new Boolean(false);
     }
     
     public BundleEntry(Entry entry) {

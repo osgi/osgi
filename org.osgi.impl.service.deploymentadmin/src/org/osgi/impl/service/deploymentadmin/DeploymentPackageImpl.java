@@ -119,12 +119,13 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             String bSn = (String) attrs.getValue(DAConstants.BUNDLE_SYMBOLIC_NAME);
             String bVer = (String) attrs.getValue(DAConstants.BUNDLE_VERSION);
             String bCustStr = (String) attrs.getValue(DAConstants.CUSTOMIZER);
-            String missing = (String) attrs.getValue(DAConstants.MISSING);
+            String missingStr = (String) attrs.getValue(DAConstants.MISSING);
+            boolean missing = (missingStr != null && "true".equalsIgnoreCase(missingStr.trim()));
             boolean isBundle = null != bSn && null != bVer; 
             boolean bCust = (bCustStr == null ? false : Boolean.valueOf(bCustStr).booleanValue());
             if (isBundle) {
                 // bundle
-                BundleEntry be = new BundleEntry(bSn, bVer, bCust, missing == null);
+                BundleEntry be = new BundleEntry(bSn, bVer, bCust, missing);
                 bundleEntries.add(be);
             } else {
                 // resource
@@ -381,12 +382,20 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         private static void checkBundleEntry(DeploymentPackageImpl dp, BundleEntry be) 
 				throws DeploymentException
         {
-            // there is nothing to check
+            if (!dp.fixPack() && be.isMissing())
+                	throw new DeploymentException(DeploymentException.CODE_BAD_HEADER, 
+                        DAConstants.MISSING + " header is only allowed in fix-pack (" +
+                        dp + ")");
         }
         
         private static void checkResourceEntry(DeploymentPackageImpl dp, ResourceEntry re) 
         		throws DeploymentException 
         {
+            if (!dp.fixPack() && re.isMissing())
+            	throw new DeploymentException(DeploymentException.CODE_BAD_HEADER, 
+                    DAConstants.MISSING + " header is only allowed in fix-pack (" +
+                    dp + ")");
+
             Hashtable attrs = re.getAttrs();
             String processor = (String) attrs.get(DAConstants.RP_PID);
             if (null == processor || "".equals(processor.trim()))

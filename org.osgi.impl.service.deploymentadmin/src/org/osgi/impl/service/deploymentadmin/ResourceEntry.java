@@ -62,6 +62,13 @@ public class ResourceEntry implements Serializable {
         return attrs;
     }
     
+    boolean isMissing() {
+        String missing = (String) getAttrs().get(DAConstants.MISSING);
+        if (null == missing)
+            return false;
+        return "true".equalsIgnoreCase(missing.trim());
+    }
+    
     public String getValue(String name) {
         return (String) attrs.get(name);
     }

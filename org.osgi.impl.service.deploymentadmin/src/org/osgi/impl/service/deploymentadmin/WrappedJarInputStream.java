@@ -54,6 +54,7 @@ public class WrappedJarInputStream {
             super(je);
             attrs = je.getAttributes();
             this.buffer = buffer;
+            missing = false;
         }
         
         private Entry(String name, Attributes attrs) {
