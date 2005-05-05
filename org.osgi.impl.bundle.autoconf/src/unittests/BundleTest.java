@@ -29,6 +29,8 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -44,11 +46,13 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.Version;
 import org.osgi.impl.bundle.autoconf.Autoconf;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 import org.osgi.service.metatype.MetaTypeInformation;
 import org.osgi.service.metatype.MetaTypeService;
@@ -197,6 +201,7 @@ public class BundleTest extends TestCase {
 		public DeploymentPackage[] listDeploymentPackages() { throw new IllegalStateException(); }
 		public String location(String symbName, String version) { return location(symbName,version); }
 		public boolean cancel() { throw new IllegalStateException(); }
+		public DeploymentPackage getDeploymentPackage(long id) { throw new IllegalStateException(); }
 	}
 	
 	public final class DummyDeploymentPackage implements DeploymentPackage {
@@ -205,13 +210,36 @@ public class BundleTest extends TestCase {
 			Bundle[] b = new Bundle[bundles.size()];
 			return (Bundle[]) bundles.toArray(b);
 		}
+		public Bundle getBundle(String bundleSymName) { 
+			for (Iterator i = bundles.iterator(); i.hasNext();) {
+				Bundle b = (Bundle) i.next();
+				if (b.getSymbolicName().equals(bundleSymName)) return b;
+			}
+			return null;
+		}
+		
 		public long getId() { throw new IllegalStateException(); }
 		public String getName() { throw new IllegalStateException(); }
-		public String getVersion() { throw new IllegalStateException(); }
+		public Version getVersion() { throw new IllegalStateException(); }
 		public void uninstall() { throw new IllegalStateException(); }
 		public boolean isNew(Bundle b) { throw new IllegalStateException(); }
 		public boolean isUpdated(Bundle b) { throw new IllegalStateException(); }
 		public boolean isPendingRemoval(Bundle b) { throw new IllegalStateException(); }
+		public File getDataFile(Bundle bundle) { throw new IllegalStateException(); }
+		public String[][] getBundleSymNameVersionPairs() { throw new IllegalStateException(); }
+		public String[] getResources() { throw new IllegalStateException(); }
+		public ServiceReference getResourceProcessor(String resource) { throw new IllegalStateException(); }
+		public String getHeader(String name) { throw new IllegalStateException(); }
+		public String getResourceHeader(String path, String header) { throw new IllegalStateException(); }
+		public boolean uninstallForceful() { throw new IllegalStateException(); }
+	}
+
+	public final class DummyDeploymentSession implements DeploymentSession {
+		public DummyDeploymentPackage sourceDeploymentPackage;
+		public DeploymentPackage getSourceDeploymentPackage() { return sourceDeploymentPackage; }
+
+		public int getDeploymentAction() { throw new IllegalStateException(); }
+		public DeploymentPackage getTargetDeploymentPackage() { throw new IllegalStateException(); }
 		public File getDataFile(Bundle bundle) { throw new IllegalStateException(); }
 	}
 
@@ -229,6 +257,7 @@ public class BundleTest extends TestCase {
 
 		public Dictionary getHeaders(String localeString) { return headers; }
 		public Dictionary getHeaders() { return headers; }
+		public String getSymbolicName() { return (String) headers.get("Bundle-SymbolicName"); }
 
 		public int getState() { throw new IllegalStateException(); }
 		public void start() throws BundleException { throw new IllegalStateException(); }
@@ -241,7 +270,6 @@ public class BundleTest extends TestCase {
 		public ServiceReference[] getServicesInUse() { throw new IllegalStateException(); }
 		public boolean hasPermission(java.lang.Object permission) { throw new IllegalStateException(); }
 		public URL getResource(String name) { throw new IllegalStateException(); }
-		public String getSymbolicName() { throw new IllegalStateException(); }
 		public Class loadClass(String name) throws ClassNotFoundException { throw new IllegalStateException(); }
 		public Enumeration getResources(String name) { throw new IllegalStateException(); }
 		public Enumeration getEntryPaths(String path) { throw new IllegalStateException(); }
@@ -285,8 +313,6 @@ public class BundleTest extends TestCase {
 		metaTypeService = null;
 		super.tearDown();
 	}
-
-	public void testNothing() throws Exception {}
 
 	private OCD createOCD1() throws Exception {
 		OCD ocd = of.createOCD();
@@ -368,7 +394,9 @@ public class BundleTest extends TestCase {
 	public void testBasic() throws Exception {
 		DummyDeploymentPackage dp = new DummyDeploymentPackage();
 		dp.bundles.add(new DummyBundle("foo","1.1"));
-		resourceProcessor.begin(dp,ResourceProcessor.INSTALL);
+		DummyDeploymentSession ds = new DummyDeploymentSession();
+		ds.sourceDeploymentPackage = dp;
+		resourceProcessor.begin(ds);
 
 		MetaData md = of.createMetaData();
 		md.getOCD().add(createOCD1());
@@ -425,7 +453,7 @@ public class BundleTest extends TestCase {
 		//jaxbContext.createMarshaller().marshal(md,System.out);
 		resourceProcessor.process("foo/autoconf.xml",getStream(md));
 
-		resourceProcessor.complete(true);
+		resourceProcessor.commit();
 		
 		DummyConfiguration conf = (DummyConfiguration) configurationAdmin.configurations.get("pid1");
 		assertEquals("data",conf.properties.get("ad_string1"));

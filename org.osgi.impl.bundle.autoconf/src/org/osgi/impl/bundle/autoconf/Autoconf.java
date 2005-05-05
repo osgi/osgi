@@ -17,6 +17,7 @@
  */
 package org.osgi.impl.bundle.autoconf;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -25,8 +26,11 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
+
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -38,11 +42,13 @@ import org.osgi.impl.bundle.autoconf.MetaData.Object;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
-import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.deploymentadmin.DeploymentException;
+import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 import org.osgi.service.metatype.AttributeDefinition;
 import org.osgi.service.metatype.MetaTypeService;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class Autoconf implements BundleActivator,ResourceProcessor {
 	BundleContext context;
@@ -51,7 +57,7 @@ public class Autoconf implements BundleActivator,ResourceProcessor {
 	DeploymentAdmin deploymentAdmin;
 	SAXParser saxp;
 	int operation;
-	DeploymentPackage deploymentPackage;
+	DeploymentSession	session;
 
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
@@ -80,22 +86,28 @@ public class Autoconf implements BundleActivator,ResourceProcessor {
 	}
 
 	public void stop(BundleContext context) throws Exception {
-		deploymentPackage = null;
 	}
 
-	public void begin(DeploymentPackage rp, int operation) {
-		this.operation = operation;
-		deploymentPackage = rp;
+	public void begin(DeploymentSession session) {
+		this.session = session;
 	}
 
-	public void complete(boolean commit) {
-		if (!commit) throw new IllegalStateException("rollback not implemented yet");
-	}
-
-	public void process(String name, InputStream stream) throws Exception {
+	public void process(String name, InputStream stream) throws DeploymentException {
 		InputSource is = new InputSource(stream);
 		is.setPublicId(name);
-		MetaData m = new MetaData(saxp,is);
+		MetaData m;
+		try {
+			m = new MetaData(saxp,is);
+		}
+		catch (ParserConfigurationException e) {
+			throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot create XML parser",e);
+		}
+		catch (IOException e) {
+			throw new DeploymentException(DeploymentException.CODE_MISSING_RESOURCE,"Cannot read configuration",e);
+		}
+		catch (SAXException e) {
+			throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Malformed configuration data in "+is.getSystemId(),e);
+		}
 		
 		for(int i = 0; i < m.designates.length; i++) {
 			MetaData.Designate d = m.designates[i];
@@ -127,18 +139,29 @@ public class Autoconf implements BundleActivator,ResourceProcessor {
 				String location = bundle.getLocation();
 
 				// write out the new configuration
-				Configuration conf = configurationAdmin.getConfiguration(d.pid,location);
+				Configuration conf;
+				try {
+					conf = configurationAdmin.getConfiguration(d.pid,location);
+				}
+				catch (IOException e) {
+					throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot get configuration",e);
+				}
 				Hashtable newProps = new Hashtable();
 				if (d.merge) {
 					Dictionary oldProps = conf.getProperties();
-					for(Enumeration enum = oldProps.keys();enum.hasMoreElements();) {
-						String propName = (String) enum.nextElement();
+					for(Enumeration e = oldProps.keys();e.hasMoreElements();) {
+						String propName = (String) e.nextElement();
 						java.lang.Object propValue = oldProps.get(propName);
 						newProps.put(propName,propValue);
 					}
 				}
 				newProps.putAll(values);
-				conf.update(newProps);
+				try {
+					conf.update(newProps);
+				}
+				catch (IOException e) {
+					throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot write configuration",e);
+				}
 			}
 		}
 	}
@@ -313,24 +336,14 @@ public class Autoconf implements BundleActivator,ResourceProcessor {
 	 * @return the bundle that matches, or null, if not found
 	 */
 	private Bundle searchForBundle(String bundleSymbolicName, String bundleVersion,boolean onlyInDeploymentPackage) {
-		Bundle[] bundles;
 		if (onlyInDeploymentPackage) {
-			bundles = deploymentPackage.listBundles();
+			return session.getSourceDeploymentPackage().getBundle(bundleSymbolicName);
 		} else {
 			throw new IllegalArgumentException("TODO");//TODO
 		}
-		
-		for (int i = 0; i < bundles.length; i++) {
-			Bundle b = bundles[i];
-			Dictionary h = b.getHeaders();
-			if (!bundleSymbolicName.equals(h.get("Bundle-SymbolicName"))) continue;
-			if (!bundleVersion.equals(h.get("Bundle-Version"))) continue;
-			return b;
-		}
-		return null;
 	}
 
-	public void dropped(String name) throws Exception {
+	public void dropped(String name) {
 		throw new IllegalStateException("not implemented yet");
 		// TODO Auto-generated method stub
 	}
@@ -338,5 +351,34 @@ public class Autoconf implements BundleActivator,ResourceProcessor {
 	public void dropped() {
 		throw new IllegalStateException("not implemented yet");
 		// TODO Auto-generated method stub
+	}
+
+
+	public void dropAllResources() throws DeploymentException {
+		throw new IllegalStateException("not implemented yet");
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void prepare() throws DeploymentException {
+		throw new IllegalStateException("not implemented yet");
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void commit() {
+		// TODO Auto-generated method stub
+	}
+
+	public void rollback() {
+		throw new IllegalStateException("not implemented yet");
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void cancel() {
+		throw new IllegalStateException("not implemented yet");
+		// TODO Auto-generated method stub
+		
 	}
 }
