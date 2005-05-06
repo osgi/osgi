@@ -19,29 +19,30 @@ package org.osgi.impl.service.dmt;
 
 import org.osgi.service.dmt.*;
 
-// TODO fill in the validNames attribute properly
+// TODO fill in the validNames attribute properly even for fix named nodes
+// --> (optional field)
 // TODO consider using the nameRegExp attribute
+// --> (optional field)
 public class DmtMetaNodeImpl implements DmtMetaNode {
-	// TODO make variables private, add constructors, add setters
-	boolean		deletable				= false;
-	boolean		extendable				= false;
-	boolean		retrievable				= true;
-	boolean		replaceable				= true;
-	boolean		executable				= false;
-	boolean		leaf; // there is no meaningful default
-	int         scope                   = PERMANENT;
-	String		description				= null;
-	int			maxOccurrence			= 1;
-	boolean		zeroOccurrenceAllowed	= false;
-	DmtData		defaultData				= null;
-	int			max						= Integer.MAX_VALUE;
-	int			min						= Integer.MIN_VALUE;
-	String[]	validNames				= null;
-	DmtData[]	validValues				= null;
-	int			format					= DmtData.FORMAT_NULL;
-	String		namePattern             = null;
-	String		valuePattern			= null;
-	String[]	mimeTypes				= null;
+	private boolean		deletable				= false;
+	private boolean		extendable				= false;
+	private boolean		retrievable				= true;
+	private boolean		replaceable				= true;
+	private boolean		executable				= false;
+	private boolean		leaf; // there is no meaningful default
+	private int         scope                   = PERMANENT;
+	private String		description				= null;
+	private int			maxOccurrence			= 1;
+	private boolean		zeroOccurrenceAllowed	= false;
+	private DmtData		defaultData				= null;
+	private int			max						= Integer.MAX_VALUE;
+	private int			min						= Integer.MIN_VALUE;
+	private String[]	validNames				= null;
+	private DmtData[]	validValues				= null;
+	private int			format					= DmtData.FORMAT_NULL;
+	private String		namePattern             = null;
+	private String		valuePattern			= null;
+	private String[]	mimeTypes				= null;
     
 	// Interior node with default properties
 	public DmtMetaNodeImpl() {
