@@ -111,7 +111,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             return null;
         }
         
-        if (session.getDeploymentAction() == DeploymentSession.INSTALL) {
+        if (session.getDeploymentAction() == DeploymentSessionImpl.INSTALL) {
             dps.add(srcDp);
             return srcDp;
         }
@@ -141,12 +141,12 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             // creates an empty dp
             targetDp = new DeploymentPackageImpl();
 	        return new DeploymentSessionImpl(srcDp, 
-	                targetDp, DeploymentSession.INSTALL, logger, context);
+	                targetDp, logger, context);
         }
         // found -> update
         else {
-            DeploymentSessionImpl ret = new DeploymentSessionImpl(srcDp, targetDp,
-                    DeploymentSession.UPDATE, logger, context);
+            DeploymentSessionImpl ret = new DeploymentSessionImpl(srcDp, targetDp, 
+                    logger, context);
             if (srcDp.fixPack()) {
                 VersionRange range = srcDp.getFixPackRange();
                 Version ver = targetDp.getVersion();
@@ -171,8 +171,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         if (null == dp)
             throw new RuntimeException("Internal error");
         
-        return new DeploymentSessionImpl(srcDp, 
-                targetDp, DeploymentSession.UNINSTALL, logger, context);
+        return new DeploymentSessionImpl(srcDp, targetDp, logger, context);
 	}
 
     private DeploymentPackageImpl findDp(DeploymentPackageImpl srcDp) {

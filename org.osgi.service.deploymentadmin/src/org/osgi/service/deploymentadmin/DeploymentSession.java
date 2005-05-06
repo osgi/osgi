@@ -32,27 +32,6 @@ package org.osgi.service.deploymentadmin;
  * deployed deployment package.
  */
 public interface DeploymentSession {
-    /**
-     * The action value INSTALL indicates this session is associated with the 
-     * installation of a deployment package.  
-     */
-    public static final int INSTALL = 1;
-    /**
-     * The action value UPDATE indicates this session is associated with the 
-     * update of a deployment package.  
-     */
-    public static final int UPDATE = 2;
-    /**
-     * The action value UNINSTALL indicates this session is associated with the 
-     * uninstalling of a deployment package.  
-     */
-    public static final int UNINSTALL = 3;   
-    /**
-     * Returns whether this session is doing an install, an update, or an uninstall.
-     * While this can be determined by inspecting the source and target deployment package, 
-     * providing this action saves resource processors from going through the trouble of doing so.
-     */
-    int getDeploymentAction();
     
     /**
      * If the deployment action is an update or an uninstall, this call returns
@@ -81,5 +60,6 @@ public interface DeploymentSession {
      *         deployment package.
      */     
      java.io.File getDataFile(org.osgi.framework.Bundle bundle);
+     
 }
 

@@ -38,6 +38,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
@@ -49,9 +50,26 @@ import org.osgi.util.tracker.ServiceTracker;
 
 public class DeploymentSessionImpl implements DeploymentSession {
     
+    /*
+     * The action value INSTALL indicates this session is associated with the 
+     * installation of a deployment package.  
+     */
+    static final int INSTALL = 0;
+    
+    /*
+     * The action value UPDATE indicates this session is associated with the 
+     * update of a deployment package.  
+     */
+    static final int UPDATE = 1;
+
+    /*
+     * The action value UNINSTALL indicates this session is associated with the 
+     * uninstalling of a deployment package.  
+     */
+    static final int UNINSTALL = 2;   
+    
     private DeploymentPackageImpl       srcDp;
     private DeploymentPackageImpl       targetDp;
-    private int                         action;
     private Transaction                 transaction;
     private Logger                      logger;
     private BundleContext               context;
@@ -92,12 +110,13 @@ public class DeploymentSessionImpl implements DeploymentSession {
         }
     }
 
-    DeploymentSessionImpl(DeploymentPackageImpl srcDp, DeploymentPackageImpl targetDp, int action,
-            Logger logger, final BundleContext context) 
+    DeploymentSessionImpl(DeploymentPackageImpl srcDp, 
+                          DeploymentPackageImpl targetDp, 
+                          Logger logger, 
+                          final BundleContext context) 
     {
         this.srcDp = srcDp;
         this.targetDp = targetDp;
-        this.action = action;
         this.logger = logger;
         this.context = context;
         trackRp = new TrackerRp();
@@ -168,12 +187,15 @@ public class DeploymentSessionImpl implements DeploymentSession {
         pa.setPermissions(location, (PermissionInfo[]) oldPerms.get(location));
     }
 
-    /**
-     * @return
-     * @see org.osgi.service.deploymentadmin.DeploymentSession#getDeploymentAction()
-     */
-    public int getDeploymentAction() {
-        return action;
+    int getDeploymentAction() {
+        Version verZero = new Version(0, 0, 0);
+        Version verSrc = srcDp.getVersion();
+        Version verTarget = targetDp.getVersion();
+        if (!verZero.equals(verSrc) && !verZero.equals(verTarget))
+            return UPDATE;
+        if (verZero.equals(verTarget))
+            return INSTALL;
+        return UNINSTALL;
     }
 
     /**
@@ -211,9 +233,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
      */
     public File getDataFile(Bundle b) {
         DeploymentPackageImpl dp;
-        if (DeploymentSession.INSTALL == getDeploymentAction())
+        if (INSTALL == getDeploymentAction())
             dp = srcDp;
-        else if (DeploymentSession.UPDATE == getDeploymentAction())
+        else if (UPDATE == getDeploymentAction())
             dp = targetDp;
         else //DeploymentSession.UNINSTALL == getDeploymentAction()
             dp = targetDp;
@@ -278,9 +300,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
     
     private void startBundles() throws BundleException {
         DeploymentPackageImpl dp = null;
-        if (DeploymentSession.INSTALL == getDeploymentAction())
+        if (INSTALL == getDeploymentAction())
             dp = srcDp;
-        else if (DeploymentSession.UNINSTALL == getDeploymentAction())
+        else if (UNINSTALL == getDeploymentAction())
             dp = targetDp;
         else //DeploymentSession.UNINSTALL == getDeploymentAction()
             dp = targetDp;
@@ -295,9 +317,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
     
     private void startCustomizers() throws BundleException {
         DeploymentPackageImpl dp;
-        if (DeploymentSession.INSTALL == getDeploymentAction())
+        if (INSTALL == getDeploymentAction())
             dp = srcDp;
-        else if (DeploymentSession.UPDATE == getDeploymentAction())
+        else if (UPDATE == getDeploymentAction())
             dp = srcDp;
         else //DeploymentSession.UNINSTALL == getDeploymentAction()
             dp = targetDp;
@@ -326,7 +348,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     }
 
     private void stopBundles() throws BundleException {
-        if (DeploymentSession.INSTALL == getDeploymentAction())
+        if (INSTALL == getDeploymentAction())
             return;
         
         for (Iterator iter = targetDp.getBundleEntries().iterator(); iter.hasNext();) {
@@ -354,9 +376,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
     		throws DeploymentException, IOException 
     {
         DeploymentPackageImpl dp;
-        if (DeploymentSession.INSTALL == getDeploymentAction())
+        if (INSTALL == getDeploymentAction())
             dp = srcDp;
-        else if (DeploymentSession.UPDATE == getDeploymentAction())
+        else if (UPDATE == getDeploymentAction())
             dp = targetDp;
         else //DeploymentSession.UNINSTALL == getDeploymentAction()
             dp = targetDp;
@@ -497,9 +519,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
                 findProcessor(pid), fetchAccessControlContext(entry.getCertificateChains()));
         transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, proc));
         proc.process(entry.getName(), entry.getInputStream());
-        if (DeploymentSession.INSTALL == getDeploymentAction())
+        if (INSTALL == getDeploymentAction())
             srcDp.setProcessorPid(entry.getName(), pid);
-        else if (DeploymentSession.UPDATE == getDeploymentAction())
+        else if (UPDATE == getDeploymentAction())
             targetDp.setProcessorPid(entry.getName(), pid);    
     }
     

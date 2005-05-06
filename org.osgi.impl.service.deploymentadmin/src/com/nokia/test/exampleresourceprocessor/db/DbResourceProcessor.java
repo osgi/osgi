@@ -22,6 +22,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.DeploymentSession;
@@ -31,6 +32,24 @@ import com.nokia.test.db.Db;
 import com.nokia.test.db.FieldDef;
 
 public class DbResourceProcessor implements ResourceProcessor, BundleActivator, Serializable {
+    
+    /*
+     * The action value INSTALL indicates this session is associated with the 
+     * installation of a deployment package.  
+     */
+    private static final int INSTALL = 0;
+    
+    /*
+     * The action value UPDATE indicates this session is associated with the 
+     * update of a deployment package.  
+     */
+    private static final int UPDATE = 1;
+
+    /*
+     * The action value UNINSTALL indicates this session is associated with the 
+     * uninstalling of a deployment package.  
+     */
+    private static final int UNINSTALL = 2;   
     
     // refrence to the database service
     private transient Db				db;
@@ -112,10 +131,10 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
     
     public void begin(DeploymentSession session) {
         this.session = session;
-        if (DeploymentSession.INSTALL == session.getDeploymentAction())
+        if (INSTALL == getDeploymentAction())
             this.actDp = new DpRec(session.getSourceDeploymentPackage().getName(),
                     session.getSourceDeploymentPackage().getVersion().toString());
-        else if (DeploymentSession.UPDATE == session.getDeploymentAction())
+        else if (UPDATE == getDeploymentAction())
             this.actDp = new DpRec(session.getTargetDeploymentPackage().getName(),
                     session.getTargetDeploymentPackage().getVersion().toString());
         else
@@ -131,6 +150,17 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private int getDeploymentAction() {
+        Version verZero = new Version(0, 0, 0);
+        Version verSrc = session.getSourceDeploymentPackage().getVersion();
+        Version verTarget = session.getTargetDeploymentPackage().getVersion();
+        if (!verZero.equals(verSrc) && !verZero.equals(verTarget))
+            return UPDATE;
+        if (verZero.equals(verTarget))
+            return INSTALL;
+        return UNINSTALL;
     }
 
     public void process(String resName, InputStream stream) throws DeploymentException {

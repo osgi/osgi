@@ -40,12 +40,13 @@ public interface ResourceProcessor {
 
 	/**
 	  * Called when the Deployment Admin starts a new operation on the given deployment package, 
-	  * and the resource processor is associated a resource within the package.  Only one 
+	  * and the resource processor is associated a resource within the package. Only one 
 	  * deployment package can be processed at a time.
 	  * It is important to note that the deployment action (i.e. install, update, uninstall) 
 	  * that is part of the deployment session instance passed to the begin method corresponds
-	  * to what is happening to the resources being processed by this RP.  For example, an
-	  * "update" of a DP, can result in the "install" of a new resource. 
+	  * to what is happening to the resources being processed by this resource processor. 
+	  * For example, an "update" of a deployment package, can result in the "install" of a new 
+	  * resource. 
 	  * @param session object that represents the current session to the resource processor
 	  */
     void begin(DeploymentSession session);
@@ -65,27 +66,30 @@ public interface ResourceProcessor {
 	  * the deployment package.  This provides an opportunity for the processor to cleanup any 
 	  * memory and persistent data being maintained for the particular resource.  
 	  * This method will only be called during "update" deployment sessions.
-	  * @param name Name of the resource being dropped from the deployment package.
+	  * @param resource the name of the resource to drop (it is the same as the value of the 
+	  *                 "Name" attribute in the deployment package's manifest)
 	  * @throws DeploymentException if the resource is not allowed to be dropped.
 	  */
-    void dropped(String name) throws DeploymentException;
+    void dropped(String resource) throws DeploymentException;
     
     /**
      * This method is called during an "uninstall" deployment session.
-     * This method will be called on all RPs that are associated with resources in the DP 
-     * being uninstalled. This provides an opportunity for the processor to cleanup any 
-     * memory and persistent data being maintained for the deployment package.
+     * This method will be called on all resource processors that are associated with resources 
+     * in the deployment package being uninstalled. This provides an opportunity for the processor 
+     * to cleanup any memory and persistent data being maintained for the deployment package.
      * @throws DeploymentException if all resources could not be dropped.
      */
     void dropAllResources() throws DeploymentException;
   
     /**
-     * This method is called on the Resource Processor immediately before calling the commit 
-     * method.  The Resource Processor has to check whether it is able to commit the operations
-     * since the last begin method call. If it determines that it is not able to commit the
-     * changes, it has to raise a DeploymentException with {@link DeploymentException#CODE_PREPARE} 
-     * exception code (see {@link DeploymentException}).
-     * @throws DeploymentException if the resource processor is able to determine it is not able to commit.
+     * This method is called on the Resource Processor immediately before calling the 
+     * <code>commit</code> method. The Resource Processor has to check whether it is able 
+     * to commit the operations since the last <code>begin</code> method call. If it determines 
+     * that it is not able to commit the changes, it has to raise a 
+     * <code>DeploymentException</code> with {@link DeploymentException#CODE_PREPARE} exception 
+     * code (see {@link DeploymentException}).
+     * @throws DeploymentException if the resource processor is able to determine it is 
+     *         not able to commit.
      */
     void prepare() throws DeploymentException;        
    

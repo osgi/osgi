@@ -33,48 +33,48 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 /**
- * DeploymentAdminPermission controls access to MEG management framework functions. 
- * This permission controls only Deployment Admin-specific functions; 
- * framework-specific access is controlled by usual OSGi permissions 
- * (AdminPermission, etc.) <b>In addition to DeploymentAdminPermission, the caller 
- * of Deployment Admin must hold the appropriate AdminPermissions.</b> 
- * For example, installing a deployment package requires DeploymentAdminPermission 
- * to access the installDeploymentPackage method and AdminPermission to access 
+ * DeploymentAdminPermission controls access to MEG management framework functions.
+ * This permission controls only Deployment Admin-specific functions;
+ * framework-specific access is controlled by usual OSGi permissions
+ * (<code>AdminPermission</code>, etc.) <b>In addition to <code>DeploymentAdminPermission</code>, the caller
+ * of Deployment Admin must hold the appropriate <code>AdminPermission</code>s.</b>
+ * For example, installing a deployment package requires <code>DeploymentAdminPermission</code>
+ * to access the <code>installDeploymentPackage</code> method and <code>AdminPermission</code> to access
  * the framework's install/update/uninstall methods. <p>
- * The permission uses a &lt;filter&gt; string formatted similarly to the filter in RFC 73. 
- * The DeploymentAdminPermission filter does not use the id and location filters. 
- * The "signer" filter is matched against the signer chain of the deployment package, and 
+ * The permission uses a &lt;filter&gt; string formatted similarly to the filter in RFC 73.
+ * The <code>DeploymentAdminPermission</code> filter does not use the id and location filters.
+ * The "signer" filter is matched against the signer chain of the deployment package, and
  * the "name" filter is matched against the DeploymentPackage-Name header.
  * <blockquote><code>
  * DeploymentAdminPermission( "&lt;filter&gt;", "list" )<p>
  * </code></blockquote>
- * A holder of this permission can access the inventory information of the deployment 
- * packages selected by the &lt;filter&gt; string. The filter selects the deployment packages 
- * on which the holder of the permission can acquire detailed inventory information. 
- * See {@link DeploymentAdmin#getDeploymentPackage} and 
+ * A holder of this permission can access the inventory information of the deployment
+ * packages selected by the &lt;filter&gt; string. The filter selects the deployment packages
+ * on which the holder of the permission can acquire detailed inventory information.
+ * See {@link DeploymentAdmin#getDeploymentPackage} and
  * {@link DeploymentAdmin#listDeploymentPackages}.
  * <blockquote><code>
  * DeploymentAdminPermission( "&lt;filter&gt;", "install" )
  * </code></blockquote>
- * A holder of this permission can install/upgrade deployment packages if the deployment 
- * package satisfies the &lt;filter&gt; string. See {@link DeploymentAdmin#installDeploymentPackage}. 
+ * A holder of this permission can install/upgrade deployment packages if the deployment
+ * package satisfies the &lt;filter&gt; string. See {@link DeploymentAdmin#installDeploymentPackage}.
  * <blockquote><code>
  * DeploymentAdminPermission( "&lt;filter&gt;", "uninstall" )
  * </code></blockquote>
- * A holder of this permission can uninstall deployment packages if the deployment 
+ * A holder of this permission can uninstall deployment packages if the deployment
  * package satisfies the &lt;filter&gt; string. See {@link DeploymentPackage#uninstall}.
  * <blockquote><code>
  * DeploymentAdminPermission( "&lt;filter&gt;", "uninstallForceful" )
  * </code></blockquote>
- * A holder of this permission can forecfully uninstall deployment packages if the deployment 
+ * A holder of this permission can forcefully uninstall deployment packages if the deployment
  * package satisfies the  string. See {@link DeploymentPackage#uninstallForceful}.
  * <blockquote><code>
  * DeploymentAdminPermission( "&lt;filter&gt;", "cancel" )
  * </code></blockquote>
- * A holder of this permission can cancel an active deployment action. This action being 
- * cancelled could correspond to the install, update or uninstall of a deployment package  
- * satisfies the  string. See {@link DeploymentAdmin#cancel}<p>
- * Wildcards can be used both in the name and the signer (see RFC-95) filers.<p>
+ * A holder of this permission can cancel an active deployment action. This action being
+ * cancelled could correspond to the install, update or uninstall of a deployment package
+ * that satisfies the  string. See {@link DeploymentAdmin#cancel}<p>
+ * Wildcards can be used both in the name and the signer (see RFC-95) filters.<p>
  */
 public class DeploymentAdminPermission extends Permission {
     
@@ -117,11 +117,14 @@ public class DeploymentAdminPermission extends Permission {
     private Vector actionsVector;
     
     /**
-     * Creates a new DeploymentAdminPermission for the given name (containing the name 
-     * of the target deployment package) and action.
-     * @param target Target string.
-     * @param action Action string.
-     * @throws IllegalArgumentException if the arguments are incorrect
+     * Creates a new <code>DeploymentAdminPermission</code> object for the given name (containing the name
+     * of the target deployment package) and action.<p>
+     * The <code>name</code> parameter identifies the target depolyment package the permission 
+     * relates to. The <code>actions</code> parameter contains the comma separated list of allowed actions. 
+     * @param name Target string. Mustn't be null.
+     * @param action Action string. Mustn't be null.
+     * @throws <code>IllegalArgumentException</code> if the filter is invalid or the list of actions 
+     *         contains unknown operations
      */
     public DeploymentAdminPermission(String name, String actions) {
         super(name);
@@ -142,6 +145,8 @@ public class DeploymentAdminPermission extends Permission {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object obj) {
+        if (null == obj)
+            return false;
         if (!(obj instanceof DeploymentAdminPermission))
             return false;
         DeploymentAdminPermission other = (DeploymentAdminPermission) obj;
@@ -182,6 +187,8 @@ public class DeploymentAdminPermission extends Permission {
      * @see java.security.Permission#implies(java.security.Permission)
      */
     public boolean implies(Permission permission) {
+        if (null == permission)
+            return false;
         if (!(permission instanceof DeploymentAdminPermission))
             return false;
         DeploymentAdminPermission other = (DeploymentAdminPermission) permission;
@@ -203,10 +210,14 @@ public class DeploymentAdminPermission extends Permission {
     }
     
     /**
-     * Returns a string representation of the object.
-     * @return string representation of the object
+     * Returns a string representation of the object. Returns a string describing 
+     * this Permission. The convention is to specify the class name, the permission 
+     * name, and the actions in the following format:<p>
+     * '("ClassName" "name" "actions")'.
+     * @return string representation of the permission
      */
     public String toString() {
+        // TODO see its JavaDoc
         return "name: \"" + namePart(getName()) + "\" signer: \"" +
         		signerPart(getName()) + "\"";
     }
