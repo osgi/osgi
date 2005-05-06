@@ -20,6 +20,7 @@ package org.osgi.impl.service.deploymentadmin;
 import java.io.Serializable;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     private String       fixPackRange; // String because VersionRange is not serializable	
     private String       dpName;
     private String       dpVersion;    // String because Version is not serializable
-    private Integer      id;
+    private Long         id;
     
     private Map mainSection = new Hashtable();
     private Vector bundleEntries = new Vector();
@@ -55,7 +56,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     public DeploymentPackageImpl(Manifest manifest, int id, DeploymentAdminImpl da) 
     		throws DeploymentException 
     {
-        this.id = new Integer(id);
+        this.id = new Long(id);
         this.da = da;
         
         processMainSection(manifest);
@@ -75,7 +76,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     static DeploymentPackageImpl createSystemBundle(Set bundleEntries) {
         DeploymentPackageImpl dp = new DeploymentPackageImpl();
         dp.dpName = "System";
-        dp.id = new Integer(0);
+        dp.id = new Long(0);
         dp.bundleEntries = new Vector(bundleEntries);
         
         return dp;
@@ -166,7 +167,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         }
     }
     
-    public VersionRange getFixPackRange() {
+    VersionRange getFixPackRange() {
         return new VersionRange(fixPackRange);
     }
     
@@ -178,6 +179,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getBundleSymNameVersionPairs()
      */
     public String[][] getBundleSymNameVersionPairs() {
+        checkStale();
+        
         String[][] ret = new String[bundleEntries.size()][2];
         int i = 0;
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
@@ -189,10 +192,17 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return ret;
     }
     
+    private void checkStale() {
+        if (-1 == id.longValue())
+            throw new IllegalStateException("Deployment package is stale");
+    }
+
     /**
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResources()
      */
     public String[] getResources() {
+        checkStale();
+        
         String[]ret = new String[resourceEntries.size()];
         int i = 0;
         for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
@@ -207,6 +217,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResourceHeader(java.lang.String, java.lang.String)
      */
     public String getResourceHeader(String name, String header) {
+        checkStale();
+        
         for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
             if (re.getName().equals(name))
@@ -219,6 +231,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getHeader(java.lang.String)
      */
     public String getHeader(String name) {
+        checkStale();
+        
         return (String) mainSection.get(name);
     }
 
@@ -249,6 +263,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getBundle(java.lang.String)
      */
     public Bundle getBundle(final String symbName) {
+        checkStale();
+        
         Bundle[] bs = da.getBundleContext().getBundles();
         for (int i = 0; i < bs.length; i++) {
             final Bundle b = bs[i];
@@ -270,6 +286,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResourceProcessor(java.lang.String)
      */
     public ServiceReference getResourceProcessor(String resName) {
+        checkStale();
+        
         for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
             if (re.getName().equals(resName)) {
@@ -293,7 +311,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#uninstall()
      */
     public void uninstall() throws DeploymentException {
+        checkStale();
+        
         da.uninstall(this);
+        id = new Long(-1);
     }
 
     /**
@@ -301,6 +322,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#uninstallForceful()
      */
     public boolean uninstallForceful() {
+        checkStale();
+        
+        id = new Long(-1);
         return da.uninstallForceful(this);
     }
 
@@ -317,11 +341,11 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         }
     }
 
-    public void setDeploymentAdmin(DeploymentAdminImpl da) {
+    void setDeploymentAdmin(DeploymentAdminImpl da) {
         this.da = da;
     }
 
-    public void setVersion(Version version) {
+    void setVersion(Version version) {
         this.dpVersion = version.toString();
     }
     
@@ -387,6 +411,18 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             for (Iterator iter = dp.resourceEntries.iterator(); iter.hasNext();) {
                 ResourceEntry re = (ResourceEntry) iter.next();
                 checkResourceEntry(dp, re);
+            }
+            
+            Set s = new HashSet();
+            for (Iterator iter = dp.bundleEntries.iterator(); iter.hasNext();) {
+                BundleEntry be = (BundleEntry) iter.next();
+                if (s.contains(be.getSymbName()))
+                    throw new DeploymentException(
+                            DeploymentException.CODE_BUNDLE_SHARING_VIOLATION,
+                            "Bundle with symbolic name \"" + be.getSymbName() + "\" " +
+                            "is allready present in the system");
+                else
+                    s.add(be.getSymbName());
             }
         }
 

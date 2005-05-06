@@ -183,6 +183,8 @@ public class DoIt implements BundleActivator {
             System.out.println("*******************************************************************");
             try {bad_db_test_05(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
+            try {bad_db_test_06(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
             
             System.out.println("\n=====================================");
             System.out.println("RESULT: OK = " + ok + " ERROR = " + error);
@@ -236,6 +238,21 @@ public class DoIt implements BundleActivator {
         try {
             DeploymentPackage dp = da.installDeploymentPackage(is);
         } catch (DeploymentException e) {
+            return;
+        }
+        throw new Exception("Negative test failed");
+    }
+
+    private void bad_db_test_06() throws Exception {
+        ServiceReference ref = context.getServiceReference(Db.class.getName());
+        DeploymentPackage dp = null;
+        
+        InputStream is = new FileInputStream(HOME + "bad_db_test_06.dp");
+        try {
+            dp = da.installDeploymentPackage(is);
+        } catch (DeploymentException e) {
+            if (e.getCode() != DeploymentException.CODE_BUNDLE_SHARING_VIOLATION)
+                	throw new Exception("Negative test failed");
             return;
         }
         throw new Exception("Negative test failed");
@@ -478,7 +495,7 @@ public class DoIt implements BundleActivator {
     
     private void db_test_07() throws Exception {
 		DeploymentPackage[] dps = da.listDeploymentPackages();
-		System.out.println(dps);
+		// TODO
     }
 
     // FOR TEST ONLY

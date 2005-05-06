@@ -547,6 +547,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     
     private void checkEntry(Entry entry) throws DeploymentException {
         BundleEntry be = new BundleEntry(entry);
+        
         if (!srcDp.getBundleEntries().contains(be))
             throw new DeploymentException(DeploymentException.CODE_ORDER_ERROR, 
                     entry.getName() + " is in the deployment package but doesn't " +
