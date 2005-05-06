@@ -29,6 +29,7 @@ class ScriptParser extends DefaultHandler {
 	Tag parse(InputSource source) throws Exception {
 		current = new Tag("");
 		SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+		parserFactory.setNamespaceAware(true);
 		parser = parserFactory.newSAXParser();
 		parser.parse(source, this);
 		if (current.getContents().size() != 1)
