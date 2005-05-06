@@ -20,9 +20,8 @@ package org.osgi.impl.service.dmt;
 import java.util.Date;
 import org.osgi.service.dmt.*;
 
-// TODO implement leaf nodes as well if needed
 public class RootPlugin implements DmtReadOnlyDataPlugin {
-	// TODO find the missing parts of the "main" tree
+	// TODO update the "main" tree
 	private static Node	root	= 
         new Node(".", new Node[] {new Node("OSGi", new Node[] {
 			new Node("Policies", new Node[] {new Node("Java", 
@@ -30,11 +29,8 @@ public class RootPlugin implements DmtReadOnlyDataPlugin {
 			                     new Node("DmtPrincipal", null),
                                  new Node("ConditionalPermission", null)
             })}),
-			new Node("applications", null),
-			new Node("application_instances", null),
-			new Node("application_containers", null),
-			new Node("content_handlers", null), new Node("cfg", null),
-			new Node("log", null), new Node("mon", null),
+			new Node("apps", null),	new Node("app_instances", null),
+			new Node("cfg", null), new Node("log", null), new Node("mon", null),
 			new Node("deploy", null)	})});
 
 	//----- DmtReadOnlyDataPlugin methods -----//
@@ -49,13 +45,11 @@ public class RootPlugin implements DmtReadOnlyDataPlugin {
 	public DmtMetaNode getMetaNode(String nodeUri)
 			throws DmtException {
 		findNode(nodeUri); // check that the node exists
-		return new DmtMetaNodeImpl(); // TODO return different info for different nodes
+		return new DmtMetaNodeImpl();
 	}
 
 	//----- DmtReadOnly methods -----//
-	public void close() throws DmtException {
-		// TODO
-	}
+	public void close() throws DmtException {}
 
 	public boolean isNodeUri(String nodeUri) {
 		try {
@@ -78,7 +72,6 @@ public class RootPlugin implements DmtReadOnlyDataPlugin {
 	}
 
 	public String getNodeTitle(String nodeUri) throws DmtException {
-		// TODO
 		throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED,
 				"Title property not supported.");
 	}
@@ -88,13 +81,10 @@ public class RootPlugin implements DmtReadOnlyDataPlugin {
 	}
 
 	public int getNodeVersion(String nodeUri) throws DmtException {
-		// TODO
-		throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED,
-				"Version property not supported.");
+        return 0;
 	}
 
 	public Date getNodeTimestamp(String nodeUri) throws DmtException {
-		// TODO
 		throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED,
 				"Timestamp property not supported.");
 	}
