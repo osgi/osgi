@@ -29,25 +29,28 @@ package org.osgi.service.dmt;
 /**
  * An implementation of this interface takes the responsibility over a
  * non-modifiable subtree of the DMT. In an OSGi environment such
- * implementations should be registered at the OSGi service registry
- * specifying the list of root node URIs in a String array in the
+ * implementations should be registered at the OSGi service registry specifying
+ * the list of root node URIs in a <code>String</code> array in the
  * <code>dataRootURIs</code> registration parameter.
  */
 public interface DmtReadOnlyDataPlugin extends DmtReadOnly {
 
+    // TODO can we specify OTHER_ERROR more precisely?
     /**
-     * This method is called to signal the start of a transaction when the
-     * first reference is made within a DmtSession to a node which is
-     * handled by this plugin. Although a read only plugin need not be
-     * concerned about transactionality, knowing the session from which it
-     * is accessed can be useful for example in the case of sending alerts.
-     * @param subtreeUri The subtree which is locked in the current session
-     * @param session The session from which this plugin instance is accessed
+     * This method is called to signal the start of a transaction when the first
+     * reference is made within a <code>DmtSession</code> to a node which is
+     * handled by this plugin. Session information is given as it is needed for
+     * sending alerts back from the plugin.
+     * 
+     * @param subtreeUri the subtree which is locked in the current session,
+     *        must not be <code>null</code>
+     * @param session the session from which this plugin instance is accessed,
+     *        must not be <code>null</code>
      * @throws DmtException with the following possible error codes
-     * <li> <code>NODE_NOT_FOUND</code>
-     * <li> <code>OTHER_ERROR</code> [TODO can we specify this more precisely?]
+     *         <li><code>NODE_NOT_FOUND</code>
+     *         <li><code>OTHER_ERROR</code>
      * @throws SecurityException if some underlying operation failed because of
-     * lack of permissions
+     *         lack of permissions
      */
     void open(String subtreeUri, DmtSession session) throws DmtException;
 }
