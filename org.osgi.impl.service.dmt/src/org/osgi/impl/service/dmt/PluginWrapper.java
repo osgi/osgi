@@ -35,22 +35,28 @@ import org.osgi.service.dmt.DmtSession;
 /**
  * Wrapper class around data plugins, for reducing the privileges of remote
  * callers while the plugin is executed. Additionally, it hides the two types of
- * open methods from DmtSessionImpl, and in case of rollback it calls close
- * instead for read-only plugins.
+ * open methods from DmtSessionImpl.
+ * <p>
+ * This class also takes over the responsibility of properly handling plugins
+ * that do not support transactions in atomic transactions.  Commit and rollback
+ * calls are not propagated to such plugins, and an exception is thrown if there 
+ * is an attempt to call any of their write methods. 
  */
 
 // TODO should the write methods check if this wraps a writeable plugin?
-// TODO should the rollback method check if this wraps a transactional plugin?
-// TODO should this wrapper decide whether to roll back or close?
 public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
     private DmtDataPlugin dataPlugin;
     private DmtReadOnlyDataPlugin readOnlyDataPlugin;
 
+    // always equal to one of the above members, used for type-safety 
     private DmtReadOnly dmtReadOnly;
     
+    private int lockMode;
     private AccessControlContext securityContext;
     
-    public PluginWrapper(Object plugin, AccessControlContext securityContext) {
+    public PluginWrapper(Object plugin, int lockMode,
+                         AccessControlContext securityContext) {
+        
         if(plugin instanceof DmtDataPlugin) {
             dataPlugin = (DmtDataPlugin) plugin;
             readOnlyDataPlugin = null;
@@ -63,6 +69,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         
         dmtReadOnly = (DmtReadOnly) plugin;
         
+        this.lockMode = lockMode;
         this.securityContext = securityContext;
     }
     
@@ -128,15 +135,16 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
     }
 
     /*
-     * NOTE: if this class wraps a read-only plugin, this call is ignored
+     * NOTE: 
+     * - if this class wraps a read-only plugin, this call is ignored
+     * - if the (writable) plugin does not support transactions, commit is not called
      */
     public void commit() throws DmtException {
-        // TODO what happens with DmtDataPlugins that do not support transactions?
         if(dataPlugin == null) // ignore commit for read-only plugins
             return;
         
         if (securityContext == null) {                      // local caller
-            dataPlugin.commit();
+            commitIfTransactional();
             return;
         }
 
@@ -144,7 +152,39 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
-                    dataPlugin.commit();
+                    commitIfTransactional();
+                    return null;
+                }
+            }, securityContext);
+        } catch (PrivilegedActionException e) {
+            throw (DmtException) e.getException();
+        }
+    }
+
+    private void commitIfTransactional() throws DmtException {
+        if(dataPlugin.supportsAtomic())
+            dataPlugin.commit();
+    }
+    
+    /*
+     * NOTE: 
+     * - if this class wraps a read-only plugin, this call is ignored
+     * - if the (writable) plugin does not support transactions, rollback is not called
+     */
+    public void rollback() throws DmtException {
+        if(dataPlugin == null) // ignore rollback for read-only plugins
+            return;
+        
+        if (securityContext == null) {                      // local caller
+            rollbackIfTransactional();
+            return;
+        }
+        
+
+        try {                                               // remote caller
+            AccessController.doPrivileged(new PrivilegedExceptionAction() {
+                public Object run() throws DmtException {
+                    rollbackIfTransactional();
                     return null;
                 }
             }, securityContext);
@@ -153,35 +193,15 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         }
     }
     
-    /*
-     * NOTE: if this class wraps a read-only plugin, this call is ignored
-     */
-    public void rollback() throws DmtException {
-        // TODO what happens with DmtDataPlugins that do not support transactions?
-        if(dataPlugin == null) // ignore rollback for read-only plugins
-            return;
-        
-        if (securityContext == null) {                      // local caller
+    private void rollbackIfTransactional() throws DmtException {
+        if(dataPlugin.supportsAtomic())
             dataPlugin.rollback();
-            return;
-        }
-        
-
-        try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
-                    dataPlugin.rollback();
-                    return null;
-                }
-            }, securityContext);
-        } catch (PrivilegedActionException e) {
-            throw (DmtException) e.getException();
-        }
     }
 
     public void setNodeTitle(final String uri, final String title)
             throws DmtException {
         if (securityContext == null) {                      // local caller
+            checkTransactionSupport(uri);
             dataPlugin.setNodeTitle(uri, title);
             return;
         }
@@ -190,6 +210,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
+                    checkTransactionSupport(uri);
                     dataPlugin.setNodeTitle(uri, title);
                     return null;
                 }
@@ -198,10 +219,11 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
             throw (DmtException) e.getException();
         }
     }
-
+    
     public void setNodeValue(final String uri, final DmtData data)
             throws DmtException {
         if (securityContext == null) {                      // local caller
+            checkTransactionSupport(uri);
             dataPlugin.setNodeValue(uri, data);
             return;
         }
@@ -210,6 +232,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
+                    checkTransactionSupport(uri);
                     dataPlugin.setNodeValue(uri, data);
                     return null;
                 }
@@ -222,6 +245,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
     public void setDefaultNodeValue(final String uri)
             throws DmtException {
         if (securityContext == null) {                      // local caller
+            checkTransactionSupport(uri);
             dataPlugin.setDefaultNodeValue(uri);
             return;
         }
@@ -229,6 +253,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
+                    checkTransactionSupport(uri);
                     dataPlugin.setDefaultNodeValue(uri);
                     return null;
                 }
@@ -241,6 +266,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
     public void setNodeType(final String uri, final String type)
             throws DmtException {
         if (securityContext == null) {                      // local caller
+            checkTransactionSupport(uri);
             dataPlugin.setNodeType(uri, type);
             return;
         }
@@ -249,6 +275,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
+                    checkTransactionSupport(uri);
                     dataPlugin.setNodeType(uri, type);
                     return null;
                 }
@@ -260,6 +287,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
 
     public void deleteNode(final String uri) throws DmtException {
         if (securityContext == null) {                      // local caller
+            checkTransactionSupport(uri);
             dataPlugin.deleteNode(uri);
             return;
         }
@@ -268,6 +296,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
+                    checkTransactionSupport(uri);
                     dataPlugin.deleteNode(uri);
                     return null;
                 }
@@ -279,6 +308,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
 
     public void createInteriorNode(final String uri) throws DmtException {
         if (securityContext == null) {                      // local caller
+            checkTransactionSupport(uri);
             dataPlugin.createInteriorNode(uri);
             return;
         }
@@ -287,6 +317,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
+                    checkTransactionSupport(uri);
                     dataPlugin.createInteriorNode(uri);
                     return null;
                 }
@@ -299,6 +330,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
     public void createInteriorNode(final String uri, final String type)
             throws DmtException {
         if (securityContext == null) {                      // local caller
+            checkTransactionSupport(uri);
             dataPlugin.createInteriorNode(uri, type);
             return;
         }
@@ -307,6 +339,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
+                    checkTransactionSupport(uri);
                     dataPlugin.createInteriorNode(uri, type);
                     return null;
                 }
@@ -318,6 +351,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
 
     public void createLeafNode(final String uri) throws DmtException {
         if (securityContext == null) {                      // local caller
+            checkTransactionSupport(uri);
             dataPlugin.createLeafNode(uri);
             return;
         }
@@ -326,6 +360,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
+                    checkTransactionSupport(uri);
                     dataPlugin.createLeafNode(uri);
                     return null;
                 }
@@ -338,6 +373,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
     public void createLeafNode(final String uri, final DmtData value)
             throws DmtException {
         if (securityContext == null) {                      // local caller
+            checkTransactionSupport(uri);
             dataPlugin.createLeafNode(uri, value);
             return;
         }
@@ -346,6 +382,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
+                    checkTransactionSupport(uri);
                     dataPlugin.createLeafNode(uri, value);
                     return null;
                 }
@@ -358,6 +395,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
     public void createLeafNode(final String uri, final DmtData value, 
             final String mimeType) throws DmtException {
         if (securityContext == null) {                      // local caller
+            checkTransactionSupport(uri);
             dataPlugin.createLeafNode(uri, value, mimeType);
             return;
         }
@@ -365,6 +403,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
+                    checkTransactionSupport(uri);
                     dataPlugin.createLeafNode(uri, value, mimeType);
                     return null;
                 }
@@ -377,6 +416,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
     public void copy(final String uri, final String newUri,
             final boolean recursive) throws DmtException {
         if (securityContext == null) {                      // local caller
+            checkTransactionSupport(uri);
             dataPlugin.copy(uri, newUri, recursive);
             return;
         }
@@ -385,6 +425,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
+                    checkTransactionSupport(uri);
                     dataPlugin.copy(uri, newUri, recursive);
                     return null;
                 }
@@ -397,6 +438,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
     public void renameNode(final String uri, final String newName)
             throws DmtException {
         if (securityContext == null) {                      // local caller
+            checkTransactionSupport(uri);
             dataPlugin.renameNode(uri, newName);
             return;
         }
@@ -405,6 +447,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
+                    checkTransactionSupport(uri);
                     dataPlugin.renameNode(uri, newName);
                     return null;
                 }
@@ -600,5 +643,24 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         } catch (PrivilegedActionException e) {
             throw (DmtException) e.getException();
         }
+    }
+    
+    public boolean equals(Object obj) {
+        if(obj == null || !(obj instanceof PluginWrapper))
+            return false;
+        
+        return dmtReadOnly.equals(((PluginWrapper) obj).dmtReadOnly); 
+    }
+    
+    public int hashCode() {
+        return dmtReadOnly.hashCode();
+    }
+    
+    private void checkTransactionSupport(String uri) throws DmtException {
+        if(lockMode == DmtSession.LOCK_TYPE_ATOMIC
+                && !dataPlugin.supportsAtomic())
+            throw new DmtException(uri, DmtException.TRANSACTION_ERROR,
+                    "Write operation attempted in atomic session " + 
+                    "on a non-transactional plugin.");
     }
 }
