@@ -36,6 +36,11 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 // known problem: if a principal is called "service.pid" it will be ignored
 public class DmtPrincipalPermissionAdminImpl 
         implements DmtPrincipalPermissionAdmin, ManagedService {
+
+    // The prefix used to distinguish the configuration entries containing
+    // permission information from other entries (e.g. service.pid).
+    private static final String CONFIG_KEY_PREFIX = "principal.";
+    private static final int PREFIX_LENGTH = CONFIG_KEY_PREFIX.length();
     
     private Hashtable permissions;
     private ConfigurationAdmin configAdmin;
@@ -82,7 +87,7 @@ public class DmtPrincipalPermissionAdminImpl
             for (int j = 0; j < permInfos.length; j++)
                 permStrings[j] = permInfos[j].getEncoded();
 
-            properties.put(principal, permStrings);
+            properties.put(CONFIG_KEY_PREFIX + principal, permStrings);
         }
         config.update(properties);
     }
@@ -98,8 +103,7 @@ public class DmtPrincipalPermissionAdminImpl
         while (keys.hasMoreElements()) {
             String key = (String) keys.nextElement();
 
-            // TODO what about other mandatory fields?  Maybe ignore everything that is not a String[]?
-            if(key == "service.pid")
+            if(!key.startsWith(CONFIG_KEY_PREFIX))
                 continue;
             
             String[] permStrings;
@@ -119,7 +123,7 @@ public class DmtPrincipalPermissionAdminImpl
                             "Invalid permission string: " + e.getMessage());
                 }
             }
-            newPermissions.put(key, permInfos);
+            newPermissions.put(key.substring(PREFIX_LENGTH), permInfos);
         }
         permissions = newPermissions;
     }
