@@ -50,13 +50,10 @@ import java.util.Iterator;
  */
 public class DmtException extends Exception {
 	// TODO add static final serialVersionUID
-    private String    uri     = null;
-    private int       code    = 0;
-    private String    message = null;
-    private Vector    causes  = null;
-    private boolean   fatal   = false;
 
-   /**
+    //----- Public constants -----//
+    
+    /**
      * The requested target node was not found. No indication is given as to
      * whether this is a temporary or permanent condition.
      * This error code corresponds to the OMA DM response status code 404.
@@ -190,12 +187,27 @@ public class DmtException extends Exception {
      */
     public static final int TIMEOUT               = 7;
 
+    //----- Private fields -----//
+    
+    private String    uri     = null;
+    private int       code    = 0;
+    private String    message = null;
+    private Vector    causes  = null;
+    private boolean   fatal   = false;
+
+    
+    //----- Constructors -----//
+    
     /**
-     * Create an instance of the exception.
-     * No originating exception is specified.
-     * @param uri The node on which the failed DMT operation was issued
+     * Create an instance of the exception. The <code>uri</code> and
+     * <code>message</code> parameters are optional. No originating exception
+     * is specified.
+     * 
+     * @param uri The node on which the failed DMT operation was issued, or
+     *        <code>null</code> if the operation is not associated with a node
      * @param code The error code of the failure
-     * @param message Message associated with the exception
+     * @param message The message associated with the exception, or
+     *        <code>null</code> if there is no error message
      */
     public DmtException(String uri, int code, String message) {
         this.uri = uri;
@@ -205,43 +217,66 @@ public class DmtException extends Exception {
     }
 
     /**
-     * Create an instance of the exception, specifying the cause exception.
-     * @param uri The node on which the failed DMT operation was issued
+     * Create an instance of the exception, specifying the cause exception. The
+     * <code>uri</code>, <code>message</code> and <code>cause</code>
+     * parameters are optional.
+     * 
+     * @param uri The node on which the failed DMT operation was issued, or
+     *        <code>null</code> if the operation is not associated with a node
      * @param code The error code of the failure
-     * @param message Message associated with the exception
-     * @param cause The originating exception
+     * @param message The message associated with the exception, or
+     *        <code>null</code> if there is no error message
+     * @param cause The originating exception, or <code>null</code> if there
+     *        is no originating exception
      */
     public DmtException(String uri, int code, String message,
                         Throwable cause) {
         this(uri, code, message);
-        causes.add(cause);
+        if(cause != null)
+            causes.add(cause);
     }
 
     /**
      * Create an instance of the exception, specifying the list of cause
-     * exceptions.
-     * @param uri The node on which the failed DMT operation was issued
+     * exceptions. The <code>uri</code>, <code>message</code> and
+     * <code>causes</code> parameters are optional.
+     * 
+     * @param uri The node on which the failed DMT operation was issued, or
+     *        <code>null</code> if the operation is not associated with a node
      * @param code The error code of the failure
-     * @param message Message associated with the exception
-     * @param causes The list of originating exceptions
+     * @param message The message associated with the exception, or
+     *        <code>null</code> if there is no error message
+     * @param causes The list of originating exceptions, or empty list or
+     *        <code>null</code> if there are no originating exceptions
      */
     public DmtException(String uri, int code, String message,
                         Vector causes) {
         this(uri, code, message);
-        this.causes = (Vector) causes.clone();
+        if(causes != null)
+            this.causes = (Vector) causes.clone();
     }
     
     /**
      * Create an instance of the exception, specifying the list of cause
-     * exceptions and whether the exception is a fatal one. This constructor
-     * is meant to be used by plugins wishing to indicate that a serious error
-     * occurred which should invalidate the ongoing atomic session.
-     * @param uri The node on which the failed DMT operation was issued
+     * exceptions and whether the exception is a fatal one. This constructor is
+     * meant to be used by plugins wishing to indicate that a serious error
+     * occurred which should invalidate the ongoing atomic session. The
+     * <code>uri</code>, <code>message</code> and <code>causes</code>
+     * parameters are optional.
+     * <p>
+     * If a fatal exception is thrown, no further business methods will be
+     * called on the originator plugin. In case of atomic sessions, all other 
+     * open plugins will be rolled back automatically, except if the fatal
+     * exception was thrown during commit.
+     * 
+     * @param uri The node on which the failed DMT operation was issued, or
+     *        <code>null</code> if the operation is not associated with a node
      * @param code The error code of the failure
-     * @param message Message associated with the exception. Can be null.
-     * @param causes The list of originating exceptions
-     * @param fatal Whether the exception is fatal, that is it triggers the 
-     * automatic rollback of an ongoing atomic session. 
+     * @param message The message associated with the exception, or
+     *        <code>null</code> if there is no error message
+     * @param causes The list of originating exceptions, or empty list or
+     *        <code>null</code> if there are no originating exceptions
+     * @param fatal Whether the exception is fatal
      */
     public DmtException(String uri, int code, String message,
                         Vector causes, boolean fatal) {
@@ -249,11 +284,13 @@ public class DmtException extends Exception {
         this.fatal = fatal;
     }
     
-
+    //----- Public methods -----//
+    
     /**
      * Get the node on which the failed DMT operation was issued. Some
      * operations like <code>DmtSession.close()</code> don't require an URI,
      * in this case this method returns <code>null</code>.
+     * 
      * @return the URI of the node, or <code>null</code>
      */
     public String getURI() {
@@ -262,16 +299,17 @@ public class DmtException extends Exception {
 
     /**
      * Get the error code associated with this exception. Most of the error
-     * codes (returned by <code>getCode()</code>) within this exception
-     * correspond to OMA DM error codes.
+     * codes within this exception correspond to OMA DM error codes.
+     * 
      * @return the error code
      */
     public int getCode() {
         return code;
     }
     /**
-     * Get the message associated with this exception.  The message also
-     * contains the associated URI and the exception code, if specified.
+     * Get the message associated with this exception. The message also contains
+     * the associated URI and the exception code, if specified.
+     * 
      * @return the error message, or <code>null</code> if not specified
      */
     public String getMessage() {
@@ -287,9 +325,13 @@ public class DmtException extends Exception {
     }
 
     /**
-     * Get the cause of this exception.  Returns non-<code>null</code>,
-     * if this exception is caused by one or more other exceptions
-     * (like a <code>NullPointerException</code> in a Dmt Plugin).
+     * Get the cause of this exception. Returns non-<code>null</code>, if
+     * this exception is caused by one or more other exceptions (like a
+     * <code>NullPointerException</code> in a Dmt Plugin).  If there are more
+     * than one cause exceptions, the first one is returned.
+     * 
+     * @return the cause of this exception, or <code>null</code> if no cause
+     *         was given
      */
     public Throwable getCause() {
         return causes.size() == 0 ? null : (Throwable) causes.firstElement();
@@ -298,14 +340,18 @@ public class DmtException extends Exception {
     /**
      * Get all causes of this exception.  Returns the causing exceptions
      * in a vector.  If no cause was specified, an empty vector is returned.
+     * 
+     * @return the list of causes of this exception
      */
     public Vector getCauses() {
         return causes;
     }
     
     /**
-     * Check whether this exception is fatal in the session, meaning that it 
-     * triggers an automatic rollback of atomic sessions.
+     * Check whether this exception is marked as fatal in the session. Fatal
+     * exceptions trigger an automatic rollback of atomic sessions.
+     * 
+     * @return whether the exception is marked as fatal
      */
     public boolean isFatal() {
         return fatal;
@@ -342,6 +388,8 @@ public class DmtException extends Exception {
             ((Throwable) i.next()).printStackTrace(s);
         }
     }
+    
+    //----- Private methods -----//
 
     private String getCodeText(int code) {
         // todo sync codes
