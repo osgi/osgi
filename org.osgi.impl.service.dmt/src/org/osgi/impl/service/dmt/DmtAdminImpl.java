@@ -17,6 +17,9 @@
  */
 package org.osgi.impl.service.dmt;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
 import org.osgi.impl.service.dmt.api.RemoteAlertSender;
 import org.osgi.service.dmt.*;
@@ -25,10 +28,15 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class DmtAdminImpl implements DmtAdmin {
+    // timeout after 10 seconds, to make testing easier 
+    private static final long TIMEOUT = 10000; 
+    
     private DmtPrincipalPermissionAdmin dmtPermissionAdmin;
 	private DmtPluginDispatcher	dispatcher;
 	private EventAdmin eventChannel;
 	private ServiceTracker remoteAdapterTracker;
+    
+    private List openSessions; // a list of DmtSession refs to open sessions
 
     // OPTIMIZE maybe make some context object to store these references
     public DmtAdminImpl(DmtPrincipalPermissionAdmin dmtPermissionAdmin,
@@ -38,6 +46,8 @@ public class DmtAdminImpl implements DmtAdmin {
         this.dispatcher = dispatcher;
         this.eventChannel = eventChannel;
         this.remoteAdapterTracker = remoteAdapterTracker;
+        
+        openSessions = new Vector();
     }
 
 	public DmtSession getSession(String subtreeUri) throws DmtException {
@@ -49,17 +59,75 @@ public class DmtAdminImpl implements DmtAdmin {
 		return getSession(null, subtreeUri, lockMode);
 	}
 
-	public DmtSession getSession(String principal, String subtreeUri, int lockMode)
-			throws DmtException {
+	public synchronized DmtSession getSession(String principal,
+            String subtreeUri, int lockMode) throws DmtException {
+        
         PermissionInfo[] permissions = null;
         if(principal != null)
             permissions = (PermissionInfo[]) 
                 dmtPermissionAdmin.getPrincipalPermissions().get(principal);
         
-		return new DmtSessionImpl(principal, subtreeUri, lockMode, 
-                                  permissions, eventChannel, dispatcher);
+		DmtSessionImpl session = new DmtSessionImpl(principal, subtreeUri,
+                lockMode, permissions, eventChannel, dispatcher, this);
+                
+        // passing the normalized variant of the subtreeUri parameter
+		waitUntilNoConflictingSessions(session.getRootUri(), lockMode);
+		session.open();
+        openSessions.add(session); 
+        
+        // it must be ensured that releaseSession is called for each session
+        // that is added to the list, otherwise threads might get stuck
+        return session;
 	}
 
+    // Note, that this does not provide fair scheduling of waiting sessions,
+    // the order of sessions depends on the order of thread activation when
+    // notifyAll is called.  Some threads may be "starved", i.e. timed out.
+    private void waitUntilNoConflictingSessions(String subtreeUri, int lockMode) 
+            throws DmtException {
+        // TODO also check for (non-shared) sessions within the same plugin
+        final long timeLimit = System.currentTimeMillis() + TIMEOUT;
+        
+        while(conflictsWithOpenSessions(subtreeUri, lockMode)) {
+            long timeLeft = timeLimit - System.currentTimeMillis();
+            
+            // throw exception if this session cannot run and time runs out
+            if(timeLeft <= 0) 
+                throw new DmtException(subtreeUri, DmtException.TIMEOUT,
+                        "Session creation timed out because of concurrent " +
+                        "sessions blocking access to Device Management Tree.");
+            
+            try {
+                wait(timeLeft);
+            } catch(InterruptedException e) {}
+            
+            // if wait() terminated because of timeout, then there must still
+            // be a conflict (if the code works as it should)
+        }
+    }
+    
+    private boolean conflictsWithOpenSessions(String subtreeUri, int lockMode) {
+        boolean shared = (lockMode == DmtSession.LOCK_TYPE_SHARED);
+        
+        Iterator i = openSessions.iterator();
+        while (i.hasNext()) {
+            DmtSession openSession = (DmtSession) i.next();
+            if(Utils.isOnSameBranch(subtreeUri, openSession.getRootUri()) && 
+                    (lockMode != DmtSession.LOCK_TYPE_SHARED || 
+                     openSession.getLockType() != DmtSession.LOCK_TYPE_SHARED))
+                return true; // only two shared sessions can be on one branch
+        }
+        return false;
+    }
+
+    synchronized void releaseSession(DmtSession session) {
+        if(!openSessions.remove(session)) // TODO write log message instead
+            System.out.println("Session release notification from unknown session!");
+        
+        notifyAll(); // wake all waiting sessions, and reevaluate conflicts
+    }
+    
+    
     public void sendAlert(String principal, int code, DmtAlertItem[] items)
             throws DmtException {
         RemoteAlertSender alertSender = getAlertSender(principal);
