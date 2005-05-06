@@ -39,15 +39,17 @@ import java.security.BasicPermission;
  * adapter can act. A wildcard is allowed in the target as defined by
  * <code>BasicPermission</code>, for example a &quot;*&quot; means the
  * adapter can create a session in the name of any principal.
- * @version $Revision$
  */
 public class DmtPrincipalPermission extends BasicPermission {
     // TODO add static final serialVersionUID
 
     /**
      * Creates a new <code>DmtPrincipalPermission</code> object with its name
-     * set to the target string
-     * @param target Name of the principal
+     * set to the target string.  Name must be non-null and non-empty.
+     * 
+     * @param target the name of the principal
+     * @throws NullPointerException if <code>name</code> is <code>null</code>
+     * @throws IllegalArgumentException if <code>name</code> is empty
      */
     public DmtPrincipalPermission(String target) {
         super(target);
@@ -56,14 +58,26 @@ public class DmtPrincipalPermission extends BasicPermission {
     /**
      * Creates a new <code>DmtPrincipalPermission</code> object using the
      * 'canonic' two argument constructor. In this version this class does not
-     * define any actions, the second argument of this constructor must be "*" 
+     * define any actions, the second argument of this constructor must be "*"
      * so that later this class can be extended in a backward compatible way.
-     * @param target Name of the principal
-     * @param actions No actions defined, must be "*". It is ignored, clients 
-     * may use the single argument constructor.
+     * 
+     * @param target the name of the principal
+     * @param actions no actions defined, must be "*" for forward compatibility
+     * @throws NullPointerException if <code>name</code> or
+     *         <code>actions</code> is <code>null</code>
+     * @throws IllegalArgumentException if <code>name</code> is empty or
+     *         <code>actions</code> is not "*"
      */
     public DmtPrincipalPermission(String target, String actions) {
         this(target);
+        
+        if(actions == null)
+            throw new NullPointerException(
+                    "'actions' parameter must not be null.");
+        
+        if(!actions.equals("*"))
+            throw new IllegalArgumentException(
+                    "'actions' parameter must be \"*\".");
     }
 
     // All methods are good for us as implemented by BasicPermission.

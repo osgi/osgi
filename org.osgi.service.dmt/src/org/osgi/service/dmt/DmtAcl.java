@@ -35,12 +35,14 @@ import java.util.Map;
 // TODO write equals() and hashCode() if needed
 
 /**
- * DmtAcl is an immutable class representing structured access to DMT ACLs.
- * Under OMA DM the ACLs are defined as strings with an internal syntax.
+ * <code>DmtAcl</code> is an immutable class representing structured access to
+ * DMT ACLs. Under OMA DM the ACLs are defined as strings with an internal
+ * syntax.
  * <p>
  * The methods of this class taking a principal as parameter accept remote
- * server IDs (as passed to <code>DmtAdmin.getSession</code>), as well as
- * &quot;<code>*</code>&quot; indicating any principal.
+ * server IDs (as passed to
+ * {@link DmtAdmin#getSession(String, String, int) DmtAdmin.getSession}), as
+ * well as &quot; <code>*</code> &quot; indicating any principal.
  */
 public class DmtAcl implements Cloneable {
 
@@ -78,8 +80,9 @@ public class DmtAcl implements Cloneable {
 
     /**
      * Principals holding this permission can issue any command on the node
-     * having this ACL. This permission is the logical OR of ADD, DELETE, EXEC,
-     * GET and REPLACE permissions.
+     * having this ACL. This permission is the logical OR of {@link #ADD},
+     * {@link #DELETE}, {@link #EXEC}, {@link #GET} and {@link #REPLACE}
+     * permissions.
      */
     public static final int ALL_PERMISSION =
         ADD | DELETE | EXEC | GET | REPLACE;
@@ -141,7 +144,6 @@ public class DmtAcl implements Cloneable {
      *         the same or any array element is invalid
      */
     public DmtAcl(String[] principals, int[] permissions) {
-        // TODO maybe disallow principal-specific permissions to be stricter than the global permissions
         if(principals.length != permissions.length)
             throw new IllegalArgumentException(
                     "The lengths of the principal and permission arrays are not the same.");
@@ -173,7 +175,8 @@ public class DmtAcl implements Cloneable {
     /**
      * Creates a copy of this ACL object.
      * 
-     * @return a DmtAcl instance descibing the same permissions as this instance
+     * @return a <code>DmtAcl</code> instance describing the same permissions
+     *         as this instance
      */
     public Object clone() {
         DmtAcl cloned = null;
@@ -192,16 +195,16 @@ public class DmtAcl implements Cloneable {
     }
 
     /**
-     * Create a new DmtAcl instance by adding a specific permission to a given
-     * principal. The already existing permissions of the principal are not
-     * affected.
+     * Create a new <code>DmtAcl</code> instance by adding a specific
+     * permission to a given principal. The already existing permissions of the
+     * principal are not affected.
      * 
      * @param principal The entity to which permissions should be granted, or
      *        &quot;*&quot; to grant permissions to all principals.
      * @param permissions The permissions to be given. The parameter can be a
      *        logical <code>or</code> of more permission constants defined in
      *        this class.
-     * @return a new DmtAcl instance
+     * @return a new <code>DmtAcl</code> instance
      * @throws IllegalArgumentException if <code>principal</code> is not a
      *         valid principal name or if <code>permissions</code> is not a
      *         valid combination of the permission constants defined in this
@@ -216,8 +219,9 @@ public class DmtAcl implements Cloneable {
     }
 
     /**
-     * Create a new DmtAcl instance by revoking a specific permission from a
-     * given principal. Other permissions of the principal are not affected.
+     * Create a new <code>DmtAcl</code> instance by revoking a specific
+     * permission from a given principal. Other permissions of the principal are
+     * not affected.
      * <p>
      * Note, that it is not valid to revoke a permission from a specific
      * principal if that permission is granted globally to all principals.
@@ -227,7 +231,7 @@ public class DmtAcl implements Cloneable {
      * @param permissions The permissions to be revoked. The parameter can be a
      *        logical <code>or</code> of more permission constants defined in
      *        this class.
-     * @return a new DmtAcl instance
+     * @return a new <code>DmtAcl</code> instance
      * @throws IllegalArgumentException if <code>principal</code> is not a
      *         valid principal name, if <code>permissions</code> is not a
      *         valid combination of the permission constants defined in this
@@ -289,8 +293,9 @@ public class DmtAcl implements Cloneable {
     }
 
     /**
-     * Create a new DmtAcl instance by setting the list of permissions a given
-     * principal has. All permissions the principal had will be overwritten.
+     * Create a new <code>DmtAcl</code> instance by setting the list of
+     * permissions a given principal has. All permissions the principal had will
+     * be overwritten.
      * <p>
      * Note, that when changing the permissions of a specific principal, it is
      * not allowed to specify a set of permissions stricter than the global set
@@ -301,7 +306,7 @@ public class DmtAcl implements Cloneable {
      * @param permissions The set of permissions to be given. The parameter can
      *        be a logical <code>or</code> of the permission constants defined
      *        in this class.
-     * @return a new DmtAcl instance
+     * @return a new <code>DmtAcl</code> instance
      * @throws IllegalArgumentException if <code>principal</code> is not a
      *         valid principal name, if <code>permissions</code> is not a
      *         valid combination of the permission constants defined in this
@@ -377,8 +382,8 @@ public class DmtAcl implements Cloneable {
      * principal had will be overwritten.
      * <p>
      * Assumes that the permissions parameter has been checked. All
-     * modifications of a DmtAcl instance (add, delete, set) are done through
-     * this method.
+     * modifications of a <code>DmtAcl</code> instance (add, delete, set) are
+     * done through this method.
      * 
      * @param principal The entity to which permission should be granted.
      * @param permissions The set of permissions to be given. The parameter can
@@ -428,7 +433,7 @@ public class DmtAcl implements Cloneable {
         globalPermissions = 0;
     }
 
-    // TODO find out if ACL string (commands and/or server IDs) should be case insensitive
+    // ACL commands and server IDs are treated case-sensitively
     private void parseAcl(String acl)
     {
         clearPermissions();
@@ -510,7 +515,6 @@ public class DmtAcl implements Cloneable {
 
     private static void checkPrincipal(String principal)
     {
-        // TODO is there any other syntactic requirement for principal names?
         if(principal == null)
             throw new IllegalArgumentException("Principal is null.");
 
