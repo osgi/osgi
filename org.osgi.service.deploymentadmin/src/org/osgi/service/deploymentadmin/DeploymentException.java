@@ -60,13 +60,13 @@ public class DeploymentException extends Exception {
     public static final int CODE_MISSING_FIXPACK_TARGET     = 3;
     
     /**
-     * A bundle in the deployment package is marked as MissingResource-Bundle 
+     * A bundle in the deployment package is marked as DeploymentPackage-Missing 
      * but there is no such bundle in the target deployment package.
      */
     public static final int CODE_MISSING_BUNDLE             = 4;
     
     /**
-     * A resource in the deployment package is marked as MissingResource-Resource
+     * A resource in the deployment package is marked as DeploymentPackage-Missing
      * but there is no such resource in the target deployment package.
      */
     public static final int CODE_MISSING_RESOURCE           = 5;

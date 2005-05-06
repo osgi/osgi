@@ -39,6 +39,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
+import org.osgi.impl.service.deploymentadmin.WrappedJarInputStream.Entry;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
@@ -526,11 +527,13 @@ public class DeploymentSessionImpl implements DeploymentSession {
     }
     
     private void processBundles(WrappedJarInputStream wjis) 
-    		throws BundleException, IOException 
+    		throws BundleException, IOException, DeploymentException 
     {
         WrappedJarInputStream.Entry entry = wjis.nextEntry();
         while (null != entry && entry.isBundle()) 
         {
+            checkEntry(entry);
+            
             if (!entry.isMissing()) {
                 Bundle b = processBundle(entry);
                 if (entry.isCustomizerBundle())
@@ -542,6 +545,14 @@ public class DeploymentSessionImpl implements DeploymentSession {
         }
     }
     
+    private void checkEntry(Entry entry) throws DeploymentException {
+        BundleEntry be = new BundleEntry(entry);
+        if (!srcDp.getBundleEntries().contains(be))
+            throw new DeploymentException(DeploymentException.CODE_ORDER_ERROR, 
+                    entry.getName() + " is in the deployment package but doesn't " +
+                    "exist in the manifest");
+    }
+
     private Bundle processBundle(WrappedJarInputStream.Entry entry) 
     		throws BundleException, IOException 
     {

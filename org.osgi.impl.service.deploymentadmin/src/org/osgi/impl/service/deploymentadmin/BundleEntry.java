@@ -1,6 +1,8 @@
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.Serializable;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 import org.osgi.framework.Bundle;
 import org.osgi.impl.service.deploymentadmin.WrappedJarInputStream.Entry;
@@ -42,10 +44,19 @@ public class BundleEntry implements Serializable {
         this.missing = new Boolean(other.isMissing());
     }
     
-    public BundleEntry(Bundle b) {
-        this.symbName = (String) b.getHeaders().get("Bundle-SymbolicName");
-        this.version = (String) b.getHeaders().get("Bundle-Version");
-        this.id = new Long(b.getBundleId());
+    public BundleEntry(final Bundle b) {
+        Object[] triple = (Object[]) AccessController.doPrivileged(new PrivilegedAction() {
+            public Object run() {
+                Object[] triple = new Object[3];
+                triple[0] = (String) b.getHeaders().get(DAConstants.BUNDLE_SYMBOLIC_NAME);
+                triple[1] = (String) b.getHeaders().get(DAConstants.BUNDLE_VERSION);
+                triple[2] = new Long(b.getBundleId());
+                return triple;
+            }
+        });
+        this.symbName = (String) triple[0];
+        this.version = (String) triple[1];
+        this.id = (Long) triple[2];
         missing = new Boolean(false);
     }
     
@@ -62,8 +73,8 @@ public class BundleEntry implements Serializable {
         if (!(obj instanceof BundleEntry))
             return false;
         BundleEntry other = (BundleEntry) obj;
-        return symbName.equals(other.symbName) &&
-               version.equals(other.version);
+        return ((null == symbName && null == other.symbName) || symbName.equals(other.symbName)) &&
+               ((null == version && null == other.version) || version.equals(other.version));
     }
     
     public int hashCode() {

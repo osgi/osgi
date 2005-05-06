@@ -170,6 +170,8 @@ public class DoIt implements BundleActivator {
             System.out.println("*******************************************************************");
             //try {db_test_06(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             //System.out.println("*******************************************************************");
+            try {db_test_07(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
             
             try {bad_db_test_01(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
@@ -473,6 +475,11 @@ public class DoIt implements BundleActivator {
         
         dp.uninstall();
     }*/
+    
+    private void db_test_07() throws Exception {
+		DeploymentPackage[] dps = da.listDeploymentPackages();
+		System.out.println(dps);
+    }
 
     // FOR TEST ONLY
     /*public static void main(String[] args) throws IOException {

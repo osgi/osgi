@@ -34,6 +34,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.osgi.service.resolver.VersionRange;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -42,7 +43,6 @@ import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.DeploymentSession;
 
 public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     
@@ -53,7 +53,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     
     // persisted fields
     private Set     dps = new HashSet();		// deployment packages
-    private Integer nextDpId = new Integer(0);  // id of the next DP
+    private Integer nextDpId = new Integer(1);  // id of the next DP ("System" dp == 0)
     private boolean cancelled;
     
 	public void start(BundleContext context) throws Exception {
@@ -205,8 +205,29 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 
 	public DeploymentPackage[] listDeploymentPackages() {
 	    // TODO checkPermission("", DeploymentAdminPermission.ACTION_LIST_DPS);
-		return (DeploymentPackage[]) dps.toArray(new DeploymentPackage[] {});
+	    DeploymentPackage[] src = (DeploymentPackage[]) dps.toArray(new DeploymentPackage[] {});
+	    DeploymentPackage[] tar = new DeploymentPackage[dps.size() + 1]; 
+	    System.arraycopy(src, 0, tar, 0, src.length);
+	    tar[tar.length - 1] = createSystemDp();
+		return tar;
 	}
+
+    private DeploymentPackage createSystemDp() {
+        Set all = new HashSet();
+        Bundle[] bundles = context.getBundles();
+        for (int i = 0; i < bundles.length; i++)
+            all.add(new BundleEntry(bundles[i]));
+
+        Set sub = new HashSet();
+        for (Iterator iter = dps.iterator(); iter.hasNext();) {
+            DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();
+            Set s = new HashSet(dp.getBundleEntries());
+            sub.addAll(s);
+        }
+        
+        all.removeAll(sub);
+        return DeploymentPackageImpl.createSystemBundle(all);
+    }
 
     /*
      * Saves persistent data.

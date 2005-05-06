@@ -23,6 +23,7 @@ import java.security.PrivilegedAction;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -68,6 +69,16 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      */
     public DeploymentPackageImpl() {
         dpVersion = "0.0.0";
+    }
+    
+
+    static DeploymentPackageImpl createSystemBundle(Set bundleEntries) {
+        DeploymentPackageImpl dp = new DeploymentPackageImpl();
+        dp.dpName = "System";
+        dp.id = new Integer(0);
+        dp.bundleEntries = new Vector(bundleEntries);
+        
+        return dp;
     }
     
     public boolean equals(Object obj) {
