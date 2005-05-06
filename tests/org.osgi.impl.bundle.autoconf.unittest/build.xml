@@ -2,10 +2,25 @@
 <project name="project" default="publish"> 
 	<import file="../cnf/build.xml"/>
 	
-	<target name="signtestbundles">
-		<signjar jar="integrationtests.bundle1.jar" alias="sarahbar" 
-			keystore="integration_test/keystore" storepass="123456"/>
+	<target name="generate-binding">
+		<path id="generate.class.path">
+			<pathelement location="jaxme/jaxme2.jar"/>
+			<pathelement location="jaxme/jaxmejs.jar"/>
+			<pathelement location="jaxme/jaxmexs.jar"/>
+			<pathelement location="jaxme/jaxmeapi.jar"/>
+		</path>
+		<taskdef name="xjc"
+	        classname="org.apache.ws.jaxme.generator.XJCTask"
+	        classpathref="generate.class.path"/>
+		<xjc 
+	        schema="../org.osgi.impl.bundle.autoconf/src/org/osgi/impl/bundle/autoconf/autoconf.xsd" 
+	        target="src"
+	      	package="unittests.metadata">
+		</xjc>
+	</target>
+	<target name="compile" depends="generate-binding,master.compile"/>
+	<target name="clean" depends="master.clean">
+		<delete dir="${project}/src/unittests/metadata" verbose="$verbose" quiet="true"/>
 	</target>
 
-	<target name="jars" depends="master.jars,signtestbundles"/>
 </project>
