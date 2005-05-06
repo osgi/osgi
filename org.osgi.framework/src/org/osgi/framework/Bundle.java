@@ -824,7 +824,7 @@ public abstract interface Bundle {
 	public Enumeration getResources(String name) throws IOException;
 
 	/**
-	 * Returns an Enumeration of all the paths (<code>String</code) objects) to 
+	 * Returns an Enumeration of all the paths (<code>String</code>) objects) to 
 	 * entries within the bundle whose longest sub-path matches the supplied path 
 	 * argument. The bundle's classloader is not used to search for entries. Only 
 	 * the contents of the bundle is searched.  A specified path of &quot;/&quot; 
@@ -896,11 +896,9 @@ public abstract interface Bundle {
 	 * bundle and its attatched fragments are searched for the specified
 	 * entries.
 	 * 
-	 * <p>
 	 * If this bundle's state is <code>INSTALLED</code>, this method must
-	 * attempt to resolve the bundle before attempting to find entries.
+	 * attempt to resolve the bundle before attempting to find entries.<p>
 	 * 
-	 * <p>
 	 * This method is intended to be used to obtain configuration, setup,
 	 * localization and other information from this bundle. This method takes
 	 * into account that the &quot;contents&quot; of this bundle can be extended
@@ -916,24 +914,16 @@ public abstract interface Bundle {
 	 * returned.
 	 * <p>
 	 * Examples:
-	 * <ul>
-	 * <li>List all XML files in the OSGI-INF directory and below</li>
-	 * 
 	 * <pre>
+	 * // List all XML files in the OSGI-INF directory and below
 	 * Enumeration	e	= b.findEntries(&quot;OSGI-INF&quot;, &quot;*.xml&quot;, true);
-	 * </pre>
 	 * 
-	 * <li>Find a specific localization file</li>
-	 * 
-	 * <pre>
+	 * // Find a specific localization file
 	 * Enumeration e = b.findEntries(&quot;OSGI-INF/l10n&quot;, 
-	 * 								 &quot;bundle_nl_DU.properties&quot;, 
-	 * 								 false);
+	 *    &quot;bundle_nl_DU.properties&quot;, false);
 	 * if (e.hasMoreElements())
 	 * 	return (URL) e.nextElement();
 	 * </pre>
-	 * 
-	 * </ul>
 	 * 
 	 * @param path The path name in which to look. A specified path of
 	 *        &quot;/&quot; indicates the root of the bundle. Path is relative
