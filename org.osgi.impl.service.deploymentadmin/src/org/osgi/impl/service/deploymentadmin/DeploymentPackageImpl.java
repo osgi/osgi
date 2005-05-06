@@ -312,6 +312,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      */
     public void uninstall() throws DeploymentException {
         checkStale();
+        if (0 == getId())
+            throw new RuntimeException("\"System\" bundle cannot be uninstalled");
         
         da.uninstall(this);
         id = new Long(-1);
@@ -323,6 +325,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      */
     public boolean uninstallForceful() {
         checkStale();
+        if (0 == getId())
+            throw new RuntimeException("\"System\" bundle cannot be uninstalled");
         
         id = new Long(-1);
         return da.uninstallForceful(this);

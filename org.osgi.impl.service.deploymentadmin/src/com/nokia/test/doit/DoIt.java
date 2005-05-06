@@ -103,7 +103,8 @@ public class DoIt implements BundleActivator {
                 // to be able to set permissions during next run
                 // and because "In addition to DeploymentAdminPermission, the caller 
                 // of Deployment Admin must in addition hold the appropriate AdminPermissions."
-                new PermissionInfo(AdminPermission.class.getName(), "*", "permission") 
+                new PermissionInfo(AdminPermission.class.getName(), "*", "permission"),
+                new PermissionInfo(AdminPermission.class.getName(), "*", "metadata")
             });
     }
 
