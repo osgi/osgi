@@ -18,16 +18,21 @@
 package org.osgi.impl.service.dmt;
 
 class Utils {
-    // TODO do not allow ":" in the first segment of a node URI (?)
-    // TODO allow escaped (%HH) characters in URIs?  (--> segments must be passed separately to plugins)
     /* 
      * Permitted characters in a segment of a relative URI (RFC 2396):
      * - letters and digits: a-z, A-Z, 0-9
      * - mark symbols: "-", "_", ".", "!", "~", "*", "'", "(", ")"
      * - escaped characters: '% hex hex' where 'hex' is 0-9, a-f, A-F
      * - other symbols: ";", "@", "&", "=", "+", "$", ","
-     * Additionally, ":" is allowed in all but the first segment of a URI 
+     * Additionally, ":" is allowed in all but the first segment of a URI
+     * 
+     * Differences from the above in this implementation:
+     * - allowing ":" in the first segment of a node URI
+     * - not handling escaped characters 
      */
+    // TODO allow escaped (%HH) characters in URIs?
+    // --> see if Peter solves this in CPEG with list of allowed characters
+    // --> ('/' cannot be escaped, because plugin API does not support it)
     private static final String URI_SYMBOLS = ";:@&=+$,-_.!~*'()";
     private static final String URI_DIGITS = "0123456789";
     private static final String URI_LETTERS = 
@@ -124,6 +129,12 @@ class Utils {
 			return true;
 		return node.startsWith(ancestor + "/");
 	}
+    
+    // returns whether two nodes are on the same branch, i.e. one is the
+    // ancestor of the other
+    static boolean isOnSameBranch(String uri1, String uri2) {
+        return isAncestor(uri1, uri2) || isAncestor(uri2, uri1);
+    }
 
 	static String relativeUri(String ancestor, String node) {
 		if (!isAncestor(ancestor, node))
@@ -150,4 +161,11 @@ class Utils {
 			return "";
 		return uri.substring(sep + 1);
 	}
+    
+    static String lastSegment(String uri) {
+        int sep = uri.lastIndexOf('/');
+        if (sep == -1)
+            return uri;
+        return uri.substring(sep + 1);
+    }
 }
