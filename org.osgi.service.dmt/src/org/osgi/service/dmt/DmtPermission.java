@@ -72,7 +72,7 @@ public class DmtPermission extends Permission {
     /**
      * Holders of DmtPermission with the Add action present can create new nodes
      * in the DMT, that is they are authorized to execute the
-     * createInteriorNode() or createLeafNode() methods of the DmtSession.
+     * createInteriorNode() and createLeafNode() methods of the DmtSession.
      */
     public static final String ADD = "Add";
 
@@ -93,16 +93,17 @@ public class DmtPermission extends Permission {
     /**
      * Holders of DmtPermission with the Get action present can query DMT node
      * value or properties, that is they are authorized to execute the
-     * getChildNodeNames(), getNodeSize(), getNodeTimeStamp(), getNodeTitle(),
-     * getNodeType(), getNodeVersion(), getNodeAcl() or getNodeValue()
-     * methods of the DmtSession.
+     * isLeafNode(), getNodeAcl(), getEffectiveNodeAcl(), getMetaNode(),
+     * getNodeValue(), getChildNodeNames(), getNodeTitle(), getNodeVersion(),
+     * getNodeTimeStamp(), getNodeSize() and getNodeType() methods of the
+     * DmtSession.
      */
     public static final String GET = "Get";
 
     /**
-     * Holders of DmtPermission with the Replace action present can update DMT node
-     * value or properties, that is they are authorized to execute the
-     * setNodeTitle(), setNodeType(), setNodeAcl() or setNodeValue()
+     * Holders of DmtPermission with the Replace action present can update DMT
+     * node value or properties, that is they are authorized to execute the
+     * setNodeAcl(), setNodeTitle(), setNodeValue(), setNodeType() and rename()
      * methods of the DmtSession.
      */
     public static final String REPLACE = "Replace";
@@ -119,26 +120,29 @@ public class DmtPermission extends Permission {
     // the actions string (redundant)
     private String actions;
 
-    private void init(String name, int mask) {
-        if(name == null)
-            throw new NullPointerException("Name parameter cannot be null.");
+    // initializes the member fields from the given URI and actions mask
+    private void init(String dmtUri, int mask) {
+        if(dmtUri == null)
+            throw new NullPointerException(
+                    "'dmtUri' parameter cannot be null.");
         
+        // TODO check all other constraints for URIs (e.g. valid characters) 
         // URI must be absolute, i.e. equal to . or beginning with ./
-        if(!name.startsWith("./") && !name.equals("."))
+        if(!dmtUri.startsWith("./") && !dmtUri.equals("."))
             throw new IllegalArgumentException(
-                    "Name parameter is not an absolute URI.");
+                    "'dmtUri' parameter is not an absolute URI.");
         
-        if (name.endsWith("*")) {
+        if (dmtUri.endsWith("*")) {
             prefixPath = true;
-            path = name.substring(0, name.length() - 1);
+            path = dmtUri.substring(0, dmtUri.length() - 1);
         }
         else {
             // Trailing slash ignored
-            if(name.endsWith("/"))
-                name = name.substring(0, name.length() - 1);
+            if(dmtUri.endsWith("/"))
+                dmtUri = dmtUri.substring(0, dmtUri.length() - 1);
             
             prefixPath = false;
-            path = name;
+            path = dmtUri;
         }
         
         if(mask == 0)
@@ -148,11 +152,16 @@ public class DmtPermission extends Permission {
     }
 
     /**
-     * Creates a new DmtPermission object for the specified DMT URI
-     * with the specified actions.
-     *
-     * @param dmtUri URI of the management object (or subtree).
-     * @param actions OMA DM actions allowed.
+     * Creates a new DmtPermission object for the specified DMT URI with the
+     * specified actions. The given URI must be an absolute URI, possibly ending
+     * with the "*" wildcard. The actions string must contain a non-empty subset
+     * of the valid actions, defined as constants in this class.
+     * 
+     * @param dmtUri URI of the management object (or subtree)
+     * @param actions OMA DM actions allowed
+     * @throws NullPointerException if any of the parameters are
+     *         <code>null</code>
+     * @throws IllegalArgumentException if any of the parameters are invalid
      */
     public DmtPermission(String dmtUri, String actions) {
         super(dmtUri);
@@ -163,11 +172,12 @@ public class DmtPermission extends Permission {
     }
 
     /**
-     * Checks two DmtPermission objects for equality. Two
-     * DmtPermissions are equal if they have the same target and
-     * action strings.
-     *
-     * @return true if the two objects are equal.
+     * Checks whether the given object is equal to this DmtPermission instance.
+     * Two DmtPermission instances are equal if they have the same target string
+     * and the same action mask.
+     * 
+     * @return <code>true</code> if the parameter represents the same
+     *         permissions as this instance
      */
     public boolean equals(Object obj) {
         if(obj == this)
@@ -185,24 +195,24 @@ public class DmtPermission extends Permission {
     }
 
     /**
-     * Returns the String representation of the action list. 
+     * Returns the String representation of the action list. The allowed actions
+     * are listed in the following order: Add, Delete, Exec, Get, Replace. The
+     * wildcard character is not used in the returned string, even if the class
+     * was created using the "*" wildcard.
      * 
-     * @return Action list for this permission object. The allowed actions
-     * are listed in this order: Add, Delete, Exec, Get, Replace. The wildcard
-     * character is not used in the returned string, even if the class was
-     * created using the * wildcard.
+     * @return canonical action list for this permission object
      */
     public String getActions() {
         return actions;
     }
 
     /**
-     * Returns hash code for this permission object. If two
-     * DmtPermission objects are equal according to the equals method,
-     * then calling the hashCode method on each of the two
-     * DmtPermission objects must produce the same integer result.
-     *
-     * @return hash code for this permission object.
+     * Returns the hash code for this permission object. If two DmtPermission
+     * objects are equal according to the {@link #equals} method, then calling
+     * this method on each of the two DmtPermission objects must produce the
+     * same integer result.
+     * 
+     * @return hash code for this permission object
      */
     public int hashCode() {
         return
@@ -215,9 +225,9 @@ public class DmtPermission extends Permission {
      * Checks if this DmtPermission object &quot;implies&quot; the
      * specified permission.
      *
-     * @param p Permission to check.
-     * @return true if this DmtPermission object implies the specified
-     * permission.
+     * @param p the permission to check for implication
+     * @return true if this DmtPermission instance implies the specified
+     * permission
      */
     public boolean implies(Permission p) {
         if(!(p instanceof DmtPermission))
@@ -235,23 +245,24 @@ public class DmtPermission extends Permission {
      * Returns a new PermissionCollection object for storing
      * DmtPermission objects.
      *
-     * @return the new PermissionCollection.
+     * @return the new PermissionCollection
      */
     public PermissionCollection newPermissionCollection() {
         return new DmtPermissionCollection();
     }
     
-
+    // parses the given action string, and returns the corresponding action mask
     private static int getMask(String actions) {
         int mask = 0;
 
         if(actions == null)
-            throw new NullPointerException("actions parameter cannot be null.");
+            throw new NullPointerException(
+                    "'actions' parameter cannot be null.");
 
         if(actions.equals("*"))
             return DmtAcl.ALL_PERMISSION;
-        
-        // TODO throw exception on empty tokens (now swallowed by the tokenizer)
+
+        // empty tokens (swallowed by StringTokenizer) are not considered errors
         StringTokenizer st = new StringTokenizer(actions, ",");
         while(st.hasMoreTokens()) {
             String action = st.nextToken();
@@ -273,16 +284,23 @@ public class DmtPermission extends Permission {
         return mask;
     }
 
+    // used by DmtPermissionCollection to retrieve the action mask
     int getMask() {
         return mask;
     }
 
+    // returns true if the path parameter of the given DmtPermission is
+    // implied by the path of this permission, i.e. this path is a prefix of the
+    // other path, but ends with a *, or the two path strings are equal
     boolean impliesPath(DmtPermission p) {
         return prefixPath ? p.path.startsWith(path) :
             !p.prefixPath && p.path.equals(path);
     }
 }
 
+/**
+ * Represents a homogeneous collection of DmtPermission objects.
+ */
 final class DmtPermissionCollection extends PermissionCollection {
     // OPTIMIZE keep a special flag for permissions of "*" path
     // TODO serialization
@@ -320,8 +338,8 @@ final class DmtPermissionCollection extends PermissionCollection {
     }
     
     /**
-     * Check and see if this set of permissions implies the permissions
-     * specified n the parameter.
+     * Check whether this set of permissions implies the permission specified in
+     * the parameter.
      * 
      * @param permission the Permission object to compare
      * @return true if the parameter permission is a proper subset of the
@@ -354,8 +372,9 @@ final class DmtPermissionCollection extends PermissionCollection {
     
     /**
      * Returns an enumeration of all the DmtPermission objects in the container.
+     * The returned value cannot be <code>null</code>.
      * 
-     * @return an enumeration of all the DmtPermission objects.
+     * @return an enumeration of all the DmtPermission objects
      */
     public Enumeration elements() {
         // Convert Iterator into Enumeration
