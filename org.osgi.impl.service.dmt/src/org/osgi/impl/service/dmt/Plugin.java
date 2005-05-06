@@ -20,13 +20,13 @@ package org.osgi.impl.service.dmt;
 import org.osgi.service.dmt.*;
 
 class Plugin {
-	Object		plugin;
-	String[]	roots;
-	String[]	execs;
+	private Object   plugin;
+	private String[] roots;
+	private String[] execs;
 
 	// precondition: roots != null && execs != null && (roots.length != 0 ||
 	// execs.length != 0)
-	public Plugin(Object plugin, String[] roots, String[] execs) {
+	Plugin(Object plugin, String[] roots, String[] execs) {
 		if (roots.length > 0 && !isDataPlugin(plugin))
 			throw new IllegalArgumentException(
 					"The plugin must implement DmtDataPlugin or DmtReadOnlyDataPlugin "
@@ -39,7 +39,7 @@ class Plugin {
 		this.execs = Utils.normalizeAbsoluteUris(execs);
 	}
 
-	public Object getDataPlugin() {
+	Object getDataPlugin() {
 		if (!isDataPlugin(plugin))
 			throw new IllegalStateException(
 					"Plugin object is not a data plugin.");
@@ -51,27 +51,39 @@ class Plugin {
 				|| (plugin instanceof DmtReadOnlyDataPlugin);
 	}
 
-	public DmtExecPlugin getExecPlugin() {
+	DmtExecPlugin getExecPlugin() {
 		if (!(plugin instanceof DmtExecPlugin))
 			throw new IllegalStateException(
 					"Plugin object is not an exec plugin.");
 		return (DmtExecPlugin) plugin;
 	}
 
-	// TODO both data and exec URIs now indicate subtrees, common code should be
-	// used
-	public boolean handlesData(String subtreeUri) {
-		for (int i = 0; i < roots.length; i++)
-			if (Utils.isAncestor(roots[i], subtreeUri))
-				return true;
-		return false;
+	boolean handlesData(String subtreeUri) {
+        return handles(subtreeUri, roots);
 	}
 
-	public boolean handlesExec(String nodeUri) {
-		for (int i = 0; i < execs.length; i++)
-			if (Utils.isAncestor(execs[i], nodeUri))
-				return true;
-		return false;
-		// return Arrays.asList(execs).contains(nodeUri);
+	boolean handlesExec(String subtreeUri) {
+        return handles(subtreeUri, execs);
 	}
+    
+    private static boolean handles(String uri, String[] roots) {
+        for (int i = 0; i < roots.length; i++)
+            if (Utils.isAncestor(roots[i], uri))
+                return true;
+        return false;
+    }
+    
+    boolean conflictsWith(String[] otherRoots, String[] otherExecs) {
+        return 
+            conflicts(roots, otherRoots) ||
+            conflicts(execs, otherExecs);
+    }
+    
+    private static boolean conflicts(String[] roots, String[] otherRoots) {
+        for(int i = 0; i < roots.length; i++)
+            for(int j = 0; j < otherRoots.length; j++)
+                if (Utils.isOnSameBranch(roots[i], otherRoots[j]))
+                    return true;
+        return false;
+    }
 }
