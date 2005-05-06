@@ -33,15 +33,18 @@ import java.util.Arrays;
  * only the value and the format property of the node, all other properties of 
  * the node (like MIME type) can be set and read using the <code>Dmt</code> 
  * and <code>DmtReadOnly</code> interfaces.
- * <p> Different constructors are available to create nodes with different 
+ * <p> 
+ * Different constructors are available to create nodes with different 
  * formats. Nodes of <code>null</code> format can be created using the static
- * <code>DmtData.NULL_VALUE</code> constant instance of this class.
+ * {@link #NULL_VALUE} constant instance of this class.
  */
 public class DmtData {
 
+    // TODO check if OMA DM integers still cannot be signed
     /**
-     * The node holds an integer value. Note that this does not correspond to
-     * the Java <code>int</code> type, OMA DM integers are unsigned.
+     * The node holds an OMA DM <code>int</code> value. Note that this does
+     * not correspond to the Java <code>int</code> type, OMA DM integers are
+     * unsigned.
      */
     public static final int FORMAT_INTEGER = 0x01;
 
@@ -56,7 +59,7 @@ public class DmtData {
     public static final int FORMAT_BOOLEAN = 0x04;
 
     /**
-     * The node holds an OMA DM <code>binary</code> value. The value of the
+     * The node holds an OMA DM <code>bin</code> value. The value of the
      * node corresponds to the Java <code>byte[]</code> type.
      */
     public static final int FORMAT_BINARY  = 0x08;
@@ -73,9 +76,9 @@ public class DmtData {
     public static final int FORMAT_NULL    = 0x20;
 
     /**
-     * Format specifier of an internal node. A DmtData instance can not have 
-     * this value. This is used only as a return value of the 
-     * <code>DmtMetaNode.getFormat()</code> method.
+     * Format specifier of an internal node. A <code>DmtData</code> instance
+     * can not have this value. This is used only as a return value of the
+     * {@link DmtMetaNode#getFormat} method.
      */
     public static final int FORMAT_NODE    = 0x40;
 
@@ -92,17 +95,19 @@ public class DmtData {
     private int     format;
 
     /**
-     * Create a DmtData instance of <code>null</code> format. This 
-     * constructor is private and used only to create the public
-     * NULL DmtData constant class.
+     * Create a <code>DmtData</code> instance of <code>null</code> format.
+     * This constructor is private and used only to create the public
+     * {@link #NULL_VALUE} constant.
      */
     private DmtData() {
         format = DmtData.FORMAT_NULL;
     }
 
     /**
-     * Create a DmtData instance of <code>chr</code> format with the given 
-     * string value.
+     * Create a <code>DmtData</code> instance of <code>chr</code> format
+     * with the given string value. The <code>null</code> string argument is
+     * valid.
+     * 
      * @param str The string value to set
      */
     public DmtData(String str) {
@@ -111,11 +116,13 @@ public class DmtData {
     }
 
     /**
-     * Create a DmtData instance of <code>xml</code> format and set its value.
-     * @param str The string or xml value to set
+     * Create a <code>DmtData</code> instance of <code>xml</code> format and
+     * set its value. The <code>null</code> string argument is valid.
+     * 
+     * @param str The string or XML value to set
      * @param xml If <code>true</code> then a node of <code>xml</code> is
-     * created otherwise this constructor behaves the same as
-     * <code>DmtData(String)</code>.
+     *        created otherwise this constructor behaves the same as
+     *        {@link #DmtData(String)}
      */
     public DmtData(String str, boolean xml) {
         this(str);
@@ -124,8 +131,9 @@ public class DmtData {
     }
 
     /**
-     * Create a DmtData instance of <code>int</code> format and set its
-     * value.
+     * Create a <code>DmtData</code> instance of <code>int</code> format and
+     * set its value.
+     * 
      * @param integer The integer value to set
      */
     public DmtData(int integer) {
@@ -134,8 +142,9 @@ public class DmtData {
     }
 
     /**
-     * Create a DmtData instance of <code>bool</code> format and set its
-     * value.
+     * Create a <code>DmtData</code> instance of <code>bool</code> format
+     * and set its value.
+     * 
      * @param bool The boolean value to set
      */
     public DmtData(boolean bool) {
@@ -144,8 +153,9 @@ public class DmtData {
     }
 
     /**
-     * Create a DmtData instance of <code>bin</code> format and set its
-     * value.
+     * Create a <code>DmtData</code> instance of <code>bin</code> format and
+     * set its value.
+     * 
      * @param bytes The byte array to set
      */
     public DmtData(byte[] bytes) {
@@ -155,10 +165,11 @@ public class DmtData {
 
     
     /**
-     * Gets the value of a node with chr format
+     * Gets the value of a node with string (<code>chr</code>) format.
+     * 
      * @return The string value
-     * @throws DmtException with the error code 
-     * <code>OTHER_ERROR</code> if the format of the node is not chr
+     * @throws DmtException with the error code <code>OTHER_ERROR</code> if
+     *         the format of the node is not string
      */
     public String getString() throws DmtException {
         if(format == DmtData.FORMAT_STRING)
@@ -169,24 +180,26 @@ public class DmtData {
     }
 
     /**
-     * Gets the value of a node with xml format
-     * @return The xml value
-     * @throws DmtException with the error code 
-     * <code>OTHER_ERROR</code> if the format of the node is not xml
+     * Gets the value of a node with <code>xml</code> format.
+     * 
+     * @return The XML value
+     * @throws DmtException with the error code <code>OTHER_ERROR</code> if
+     *         the format of the node is not <code>xml</code>
      */
     public String getXml() throws DmtException {
         if(format == DmtData.FORMAT_XML)
             return str;
 
         throw new DmtException(null, DmtException.OTHER_ERROR,
-                               "DmtData value is not xml.");
+                               "DmtData value is not XML.");
     }
     
     /**
-     * Gets the value of a node with integer format
+     * Gets the value of a node with integer (<code>int</code>) format.
+     * 
      * @return The integer value
-     * @throws DmtException with the error code 
-     * <code>OTHER_ERROR</code> if the format of the node is not integer
+     * @throws DmtException with the error code <code>OTHER_ERROR</code> if
+     *         the format of the node is not integer
      */
     public int getInt() throws DmtException {
         if(format == DmtData.FORMAT_INTEGER)
@@ -197,10 +210,11 @@ public class DmtData {
     }
 
     /**
-     * Gets the value of a node with boolean format
+     * Gets the value of a node with boolean (<code>bool</code>) format.
+     * 
      * @return The boolean value
-     * @throws DmtException with the error code 
-     * <code>OTHER_ERROR</code> if the format of the node is not boolean
+     * @throws DmtException with the error code <code>OTHER_ERROR</code> if
+     *         the format of the node is not boolean
      */
     public boolean getBoolean() throws DmtException {
         if(format == DmtData.FORMAT_BOOLEAN)
@@ -211,10 +225,11 @@ public class DmtData {
     }
 
     /**
-     * Gets the value of a node with binary format
+     * Gets the value of a node with binary (<code>bin</code>) format.
+     * 
      * @return The binary value
-     * @throws DmtException with the error code 
-     * <code>OTHER_ERROR</code> if the format of the node is not binary
+     * @throws DmtException with the error code <code>OTHER_ERROR</code> if
+     *         the format of the node is not binary
      */
     public byte[] getBinary() throws DmtException {
         if(format == DmtData.FORMAT_BINARY) {
@@ -231,20 +246,27 @@ public class DmtData {
     }
 
     /**
-     * Get the node's format, expressed in terms of type constants
-     * defined in this class. Note that the 'format' term is a legacy
-     * from OMA DM, it is more customary to think of this as 'type'.
-     * @return The format of the node.
+     * Get the node's format, expressed in terms of type constants defined in
+     * this class. Note that the 'format' term is a legacy from OMA DM, it is
+     * more customary to think of this as 'type'.
+     * 
+     * @return The format of the node
      */
     public int getFormat() {
         return format;
     }
 
-    // TODO follow format when it is specified
     /**
-     * Gets the string representation of the DmtNode. This method works for all
-     * formats. [TODO specify for all formats. what does it mean if binary]
-     * @return The string value of the DmtData
+     * Gets the string representation of the <code>DmtData</code>. This
+     * method works for all formats.
+     * <p>
+     * For string format data, the string value itself is returned,
+     * while for XML, integer and boolean formats the string form of the value
+     * is returned. Binary data is represented by two-digit hexadecimal numbers
+     * for each byte separated by spaces. The {@link #NULL_VALUE} data has the
+     * string form of "<code>null</code>".
+     *
+     * @return The string representation of this <code>DmtData</code> instance
      */
     public String toString() {
         switch(format) {
@@ -252,13 +274,22 @@ public class DmtData {
         case DmtData.FORMAT_XML:     return str;
         case DmtData.FORMAT_INTEGER: return String.valueOf(integer);
         case DmtData.FORMAT_BOOLEAN: return String.valueOf(bool);
-        case DmtData.FORMAT_BINARY:  return new String(bytes);
-        case DmtData.FORMAT_NULL:    return null;
+        case DmtData.FORMAT_BINARY:  return getHexDump(bytes);
+        case DmtData.FORMAT_NULL:    return "null";
         }
 
         return null; // never reached
     }
 
+    /**
+     * Compares the specified object with this <code>DmtData</code> instance.
+     * Two <code>DmtData</code> objects are considered equal if their format
+     * is the same, and their data (selected by the format) is equal.
+     * 
+     * @param obj the object to compare with this <code>DmtData</code>
+     * @return true if the argument represents the same <code>DmtData</code>
+     *         as this object
+     */
     public boolean equals(Object obj) {
         if(!(obj instanceof DmtData))
             return false;
@@ -281,16 +312,37 @@ public class DmtData {
         return false;           // never reached
     }
 
+    /**
+     * Returns the hash code value for this <code>DmtData</code> instance. The
+     * hash code is calculated based on the data (selected by the format) of
+     * this object.
+     * 
+     * @return the hash code value for this object
+     */
     public int hashCode() {
         switch(format) {
         case DmtData.FORMAT_STRING:
-        case DmtData.FORMAT_XML:     return str.hashCode();
+        case DmtData.FORMAT_XML:     return str == null ? 0 : str.hashCode();
         case DmtData.FORMAT_INTEGER: return new Integer(integer).hashCode();
         case DmtData.FORMAT_BOOLEAN: return new Boolean(bool).hashCode();
         case DmtData.FORMAT_BINARY:  return new String(bytes).hashCode();
-        case DmtData.FORMAT_NULL:    return 0; // TODO is this OK?
+        case DmtData.FORMAT_NULL:    return 0;
         }
 
         return 0;               // never reached
+    }
+    
+    // character array of hexadecimal digits, used for printing binary data
+    private static char[] hex = "0123456789ABCDEF".toCharArray();
+        
+    // generates a hexadecimal dump of the given binary data
+    private static String getHexDump(byte[] bytes) {
+        StringBuffer buf = new StringBuffer();
+        for (int i = 0; i < bytes.length; i++) {
+            byte b = bytes[i];
+            buf.append(hex[(b & 0xF0) >> 4]).append(hex[b & 0x0F]).append(' ');
+        }
+        
+        return buf.toString();
     }
 }
