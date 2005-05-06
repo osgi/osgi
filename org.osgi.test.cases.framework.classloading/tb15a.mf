@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb15a
+Bundle-SymbolicName: ${p}.tb15a
+Bundle-ManifestVersion: 2
+Bundle-Version: 1
+Export-Package: resources;${p}.exports.service;version="2.0.0"
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+

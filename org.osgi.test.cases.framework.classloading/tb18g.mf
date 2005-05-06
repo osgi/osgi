@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb18g
+Bundle-SymbolicName: ${p}.tb18a
+Bundle-Version: 1
+Bundle-ManifestVersion: 2
+Bundle-Activator: $(p).tb18a.Activator
+Reexport-Package: test.package.resources; uses:="dummy.package"
+Import-Package: org.osgi.framework, test.package.resources;version="1.0.0";myattribute="foo"
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+
+

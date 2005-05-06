@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb5a
+Bundle-SymbolicName: ${p}.tb5a
+Bundle-Version: 4
+Bundle-ManifestVersion: 2
+Bundle-Activator: $(p).tb5a.Activator
+Import-Package: org.osgi.framework, org.osgi.test.cases.framework.classloading.exports.service;version="2.0.0", org.osgi.test.cases.framework.classloading.exports.listener
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+
+

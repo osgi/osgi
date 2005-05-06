@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb16i
+Bundle-SymbolicName: ${p}.tb16i
+Bundle-Version: 1
+Bundle-ManifestVersion: 2
+Bundle-Activator: $(p).tb16i.Activator
+Require-Bundle: ${p}.tb16a
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+
+

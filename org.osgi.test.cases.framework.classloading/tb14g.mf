@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb14g
+Bundle-SymbolicName: ${p}.tb14g
+Bundle-Version: 1
+Bundle-ManifestVersion: 2
+Bundle-Activator: $(p).tb14a.Activator
+Import-Package: org.osgi.framework;specification-version=1;version=2
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+
+

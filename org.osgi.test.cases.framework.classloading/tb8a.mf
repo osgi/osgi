@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb8a
+Bundle-SymbolicName: ${p}.tb8a
+Bundle-Version: 4
+Bundle-ManifestVersion: 2
+$(IMPORT-PACKAGE)
+Export-Package: resources
+$(PRIVATE-PACKAGE)
+
+
+

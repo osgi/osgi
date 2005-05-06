@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb13h
+Bundle-SymbolicName: ${p}.tb13h
+Bundle-ManifestVersion: 2
+Bundle-Version: 1
+$(EXPORT-PACKAGE)
+Import-Package: ${p}.exports.listener;version="1.0.0";myattribute="foo"
+$(PRIVATE-PACKAGE)
+

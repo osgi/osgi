@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb14f
+Bundle-SymbolicName: ${p}.tb14f; fragment-attach:="none"
+Bundle-Version: invalid
+Bundle-ManifestVersion: 2
+Bundle-Activator: $(p).tb14a.Activator
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+
+

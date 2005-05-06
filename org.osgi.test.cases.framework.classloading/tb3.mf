@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb3
+Bundle-SymbolicName: ${p}.tb3
+Bundle-Version: 4
+Bundle-ManifestVersion: 2
+$(IMPORT-PACKAGE)
+Export-Package: org.osgi.test.cases.framework.classloading.exports.service;version="3.0.0"
+$(PRIVATE-PACKAGE)
+
+
+

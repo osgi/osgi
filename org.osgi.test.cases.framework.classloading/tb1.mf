@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-Name: ${p}.tb1
 Bundle-SymbolicName: ${p}.tb1
 Bundle-Version: 4
-Bundle-Activator: $(p).tb1.Activator
+Bundle-ManifestVersion: 2
 $(IMPORT-PACKAGE)
-$(EXPORT-PACKAGE)
+Export-Package: org.osgi.test.cases.framework.classloading.exports.service;version="1.0.0"
 $(PRIVATE-PACKAGE)
 
 

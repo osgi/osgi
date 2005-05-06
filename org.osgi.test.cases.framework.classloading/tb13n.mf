@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb13n
+Bundle-SymbolicName: ${p}.tb13n
+Bundle-ManifestVersion: 2
+Bundle-Version: 1
+Export-Package: .
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
