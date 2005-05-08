@@ -26,15 +26,13 @@ import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
-/**
- *
- * TODO Add Javadoc comment for this type.
- * 
- * @version $Revision$
- */
 public class DummyConditionalPermissionAdmin extends TreeSet implements
 		ConditionalPermissionAdmin
 {
+	private static final long	serialVersionUID	= 3618422626792781876L;
+
+
+
 	public class PI implements ConditionalPermissionInfo, Comparable {
 		ConditionInfo[] conditionInfo;
 		PermissionInfo[] permissionInfo;

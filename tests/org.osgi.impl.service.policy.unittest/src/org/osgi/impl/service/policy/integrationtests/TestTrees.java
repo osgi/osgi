@@ -18,7 +18,6 @@
 package org.osgi.impl.service.policy.integrationtests;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.security.AccessControlContext;
 import java.security.AccessControlException;
 import java.security.AccessController;
@@ -26,6 +25,7 @@ import java.security.Permissions;
 import java.security.PrivilegedExceptionAction;
 import java.security.ProtectionDomain;
 import java.util.Enumeration;
+
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServiceReference;
