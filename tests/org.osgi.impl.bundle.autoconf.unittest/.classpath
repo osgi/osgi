@@ -12,23 +12,11 @@
 		<attributes>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="/org.osgi.impl.service.policy">
-		<attributes>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="src" path="/org.osgi.impl.framework.eclipse">
 		<attributes>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="/org.osgi.framework">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="/org.osgi.impl.service.dmt">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="/org.osgi.service.permissionadmin">
 		<attributes>
 		</attributes>
 	</classpathentry>
@@ -45,14 +33,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="/org.osgi.service.event">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="/org.osgi.util.mobile">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="/org.osgi.util.gsm">
 		<attributes>
 		</attributes>
 	</classpathentry>
@@ -81,10 +61,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.impl.bundle.autoconf">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.impl.service.deploymentadmin">
 		<attributes>
 		</attributes>
 	</classpathentry>
