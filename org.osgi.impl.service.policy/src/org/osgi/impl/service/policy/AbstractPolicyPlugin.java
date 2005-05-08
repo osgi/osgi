@@ -153,9 +153,4 @@ public abstract class AbstractPolicyPlugin implements DmtDataPlugin {
 		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
-
-	public void commit() throws DmtException {
-		// TODO implement it when sematic wars are over
-		throw new DmtException("",DmtException.FEATURE_NOT_SUPPORTED,"commit not supported");
-	}
 }

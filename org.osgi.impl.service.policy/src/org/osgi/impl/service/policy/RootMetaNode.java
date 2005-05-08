@@ -32,7 +32,7 @@ public final class RootMetaNode implements DmtMetaNode {
 		this.description = description;
 	}
 
-	public boolean can(int operation) { return false; } // ALL of them are false
+	public boolean can(int operation) { return (operation==CMD_ADD)||(operation==CMD_GET); }
 	public boolean isLeaf() { return false;	}
 	public int getScope() { return PERMANENT; }
 	public String getDescription() { return description; }

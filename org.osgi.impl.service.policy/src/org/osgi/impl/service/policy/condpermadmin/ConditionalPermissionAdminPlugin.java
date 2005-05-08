@@ -269,7 +269,7 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 	}
 
 
-	public void close() throws DmtException {
+	public void commit() throws DmtException {
 		if (!isDirty()) return; 
 		
 		// TODO check for consistency
@@ -302,6 +302,8 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 		// do some cleanup
 		conditionalPermissions = null;
 	}
+	
+	public void close() {}
 
 	public boolean isNodeUri(String nodeUri) {
 		String[] path = getPath(nodeUri);

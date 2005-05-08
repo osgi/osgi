@@ -233,7 +233,7 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		entries.put(path[0],new Entry(false,null,new PermissionInfo[0]));
 	}
 
-	public void close() throws DmtException {
+	public void commit() throws DmtException {
 		if (!isDirty()) return;
 
 		// check if current tree is consistent
@@ -277,6 +277,8 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		entries = null;
 	}
 
+	public void close() {}
+	
 	public boolean isNodeUri(String nodeUri) {
 		Entry e = null;
 		String[] path = getPath(nodeUri);

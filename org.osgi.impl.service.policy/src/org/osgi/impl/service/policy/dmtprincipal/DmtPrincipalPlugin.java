@@ -205,7 +205,7 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 		currentState.put(path[0],new PrincipalPermission("",null));
 	}
 
-	public void close() throws DmtException {
+	public void commit() throws DmtException {
 		if (!isDirty()) return;
 		
 		// used for consistency check...
@@ -238,6 +238,8 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 		currentState = null;
 	}
 
+	public void close() {}
+	
 	public boolean isNodeUri(String nodeUri) {
 		String path[] = getPath(nodeUri);
 		if (path.length==0) return true;

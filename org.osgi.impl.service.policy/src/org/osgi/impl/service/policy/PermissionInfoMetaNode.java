@@ -29,9 +29,7 @@ import org.osgi.service.dmt.DmtMetaNode;
 public final class PermissionInfoMetaNode implements DmtMetaNode {
 	public static final String PERMISSIONINFO = "PermissionInfo";
 	public static final String[] PERMISSIONINFO_ARRAY = new String[] { PERMISSIONINFO };
-	public boolean can(int operation) {
-		return operation==CMD_GET;
-	}
+	public boolean can(int operation) {	return (operation==CMD_GET)||(operation==CMD_REPLACE);}
 	public boolean isLeaf() { return true;	}
 	public int getScope() { return DYNAMIC; }
 	public String getDescription() { return "Permission Info array"; }

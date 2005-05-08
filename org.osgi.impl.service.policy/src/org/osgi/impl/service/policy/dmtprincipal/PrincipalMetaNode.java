@@ -27,7 +27,7 @@ import org.osgi.service.dmt.DmtMetaNode;
  * @version $Revision$
  */
 public final class PrincipalMetaNode implements DmtMetaNode {
-	public boolean can(int operation) { return operation==CMD_GET; }
+	public boolean can(int operation) { return (operation==CMD_GET)||(operation==CMD_REPLACE); }
 	public boolean isLeaf() { return true;	}
 	public int getScope() { return DYNAMIC; }
 	public String getDescription() { return "the string identifying the principal"; }
