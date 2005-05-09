@@ -72,10 +72,6 @@
 		<attributes>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.impl.service.policy.unittest">
-		<attributes>
-		</attributes>
-	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.impl.bundle.jaxp">
 		<attributes>
 		</attributes>
@@ -89,6 +85,10 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.impl.service.metatype">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/org.osgi.impl.service.policy.unittest/src">
 		<attributes>
 		</attributes>
 	</classpathentry>
