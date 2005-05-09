@@ -41,6 +41,7 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentFactory;
 import org.osgi.service.component.ComponentInstance;
+import org.osgi.test.cases.component.tb2.ServiceConsumerLookup;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -55,8 +56,11 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 	private static final String	PROVIDER_CLASS	= "org.osgi.test.cases.component.tb1.ServiceProvider";
 	private static final String	LOOKUP_CLASS	= "org.osgi.test.cases.component.tb2.ServiceConsumerLookup";
+	private static final String	DYN_CLASS		= "org.osgi.test.cases.component.tb2.DynService";
 	private static final String	EVENT_CLASS		= "org.osgi.test.cases.component.tb3.ServiceConsumerEvent";
 	private static final String	NAMED_CLASS		= "org.osgi.test.cases.component.tb4.NamedService";
+
+	private static final int	SLEEP			= 200;
 
 	private Bundle				tb1, tb2, tb3;
 
@@ -77,6 +81,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 	private ServiceTracker		trackerProvider;
 	private ServiceTracker		trackerConsumerLookup;
+	private ServiceTracker		trackerDyn;
 	private ServiceTracker		trackerConsumerEvent;
 	private ServiceTracker		trackerNamedService;
 	private ServiceTracker		trackerNamedServiceFactory;
@@ -102,13 +107,13 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		tb1.start();
 		tb2.start();
 		tb3.start();
-		Thread.yield();
 
 		// init trackers
 		BundleContext bc = getContext();
 
 		trackerProvider = new ServiceTracker(bc, PROVIDER_CLASS, null);
 		trackerConsumerLookup = new ServiceTracker(bc, LOOKUP_CLASS, null);
+		trackerDyn = new ServiceTracker(bc, DYN_CLASS, null);
 		trackerConsumerEvent = new ServiceTracker(bc, EVENT_CLASS, null);
 		trackerNamedService = new ServiceTracker(bc, NAMED_CLASS, null);
 		Filter filter = bc.createFilter("(&("
@@ -122,6 +127,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// start listening
 		trackerProvider.open();
 		trackerConsumerLookup.open();
+		trackerDyn.open();
 		trackerConsumerEvent.open();
 		trackerNamedService.open();
 		trackerNamedServiceFactory.open();
@@ -136,6 +142,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				configs[i].delete();
 			}
 		}
+
+		Thread.sleep(1000);
 	}
 
 	/**
@@ -149,11 +157,10 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		uninstallBundle(tb1);
 		uninstallBundle(tb2);
 		uninstallBundle(tb3);
-		Thread.yield();
-		// stop listening
 
 		trackerProvider.close();
 		trackerConsumerLookup.close();
+		trackerDyn.close();
 		trackerConsumerEvent.close();
 		trackerNamedService.close();
 		trackerNamedServiceFactory.close();
@@ -187,13 +194,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				serviceConsumerEvent);
 
 		tb1.uninstall();
+		Thread.sleep(SLEEP);
 		serviceProvider = (TBCService) trackerProvider.getService();
 		assertNull("ServiceProvider service should not be registered",
 				serviceProvider);
 
 		tb1 = installBundle("tb1.jar");
 		tb1.stop();
-		Thread.yield();
+		Thread.sleep(SLEEP);
 		serviceProvider = (TBCService) trackerProvider.getService();
 		assertEquals("ServiceProvider bundle should be in resolved state",
 				Bundle.RESOLVED, tb1.getState());
@@ -201,7 +209,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				serviceProvider);
 
 		tb1.start();
-		Thread.yield();
+		Thread.sleep(SLEEP);
 		serviceProvider = (TBCService) trackerProvider.getService();
 		assertEquals("ServiceProvider bundle should be in active state",
 				Bundle.ACTIVE, tb1.getState());
@@ -288,7 +296,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	public void testComponentFactory() throws Exception {
 		Bundle bundle = installBundle("tb4.jar");
 		bundle.start();
-		Thread.yield();
+		Thread.sleep(SLEEP);
 
 		Hashtable props;
 		int oldCount = trackerNamedService.getTrackingCount();
@@ -324,12 +332,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		props = new Hashtable();
 		props.put("name", "world");
 		ComponentInstance worldInstance = factory.newInstance(props);
+		Thread.sleep(SLEEP);
 
 		// make sure that the new service is registered
 		assertEquals("The instances tracking count should be increased by two",
 				oldCount + 2, trackerNamedService.getTrackingCount());
 
 		worldInstance.dispose();
+		Thread.sleep(SLEEP);
 		assertEquals(
 				"The service should be unregistered if the instance is disposed",
 				oldCount + 1, trackerNamedService.getServices().length);
@@ -337,7 +347,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// stop the bundle in order to check if some services remained
 		// registered
 		bundle.uninstall();
-		Thread.yield();
+		Thread.sleep(SLEEP);
 
 		assertNull("The component factory must be unregistered",
 				trackerNamedServiceFactory.getService());
@@ -377,7 +387,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// the bundle contains some illegal definitions
 		tb1 = installBundle("tb1.jar");
 		tb1.start();
-		Thread.yield();
+		Thread.sleep(SLEEP);
 
 		bc.removeFrameworkListener(this);
 
@@ -434,17 +444,20 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			int count = refs.length;
 
 			scr.stop();
-			Thread.yield();
+			Thread.sleep(SLEEP);
 
-			refs = bc.getServiceReferences(null, filter);
-			assertNull(
-					"The Service Component Runtime must stop all services if SCR is stopped",
-					refs);
-
-			// make sure that after SCR is being started it will activate
-			// the components which bundles are active
-			scr.start();
-			Thread.yield();
+			try {
+				refs = bc.getServiceReferences(null, filter);
+				assertNull(
+						"The Service Component Runtime must stop all services if SCR is stopped",
+						refs);
+			}
+			finally {
+				// make sure that after SCR is being started it will activate
+				// the components which bundles are active
+				scr.start();
+				Thread.sleep(SLEEP);
+			}
 
 			refs = bc.getServiceReferences(null, filter);
 			assertEquals(
@@ -494,7 +507,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		Bundle bundle = installBundle("tb4.jar");
 		bundle.start();
-		Thread.yield();
+		Thread.sleep(SLEEP);
 
 		assertEquals("No instance created yet, so the bind count must be zero",
 				0, getCount());
@@ -506,6 +519,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		Hashtable props = new Hashtable();
 		props.put("name", "hello");
 		ComponentInstance instance1 = factory.newInstance(props);
+		Thread.sleep(SLEEP);
 
 		assertEquals("The should be bound to the first instance", 1, getCount());
 
@@ -517,10 +531,12 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				getCount());
 
 		instance1.dispose();
+		Thread.sleep(SLEEP);
 		assertEquals("The should be unbound from the first instance", 1,
 				getCount());
 
 		bundle.uninstall(); // must also dispose the second instance!
+		Thread.sleep(SLEEP);
 		assertEquals("The should be unbound from the all component instances",
 				0, getCount());
 	}
@@ -548,8 +564,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		Configuration config = cm.getConfiguration(LOOKUP_CLASS);
 		config.update(props);
 
-		// let SCR to complete it's job
-		Thread.sleep(500);
+		// let SCR & CM to complete it's job
+		Thread.sleep(1000);
 
 		// verify that the service is updated
 		assertNotSame("The service shoud be restarted with a new instance",
@@ -568,8 +584,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		// make sure that the SCR handles delete events!
 		config.delete();
-		// wait to complete
-		Thread.sleep(500);
+		// wait to complete - slow becase CM may use threads for notify
+		Thread.sleep(1000);
 
 		assertNotSame(
 				"After delete the service shoud be restarted with a new instance",
@@ -601,7 +617,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		props = new Hashtable(2);
 		props.put("instance", "1");
 		config.update(props);
-		Thread.sleep(500); // let it finish update
+		Thread.sleep(1000); // let it finish update, CM + SCR
 
 		// verify the result
 		length = trackerConsumerEvent.getServices().length;
@@ -614,7 +630,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		props = new Hashtable(2);
 		props.put("instance", "2");
 		config.update(props);
-		Thread.sleep(500); // let it finish update
+		Thread.sleep(1000); // let it finish update, CM + SCR
 
 		// verify the result
 		length = trackerConsumerEvent.getServices().length;
@@ -624,7 +640,35 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	public void testComponentEnableAndDisable() throws Exception {
-		// TODO: needs to be implemented
-	}
+		int count;
 
+		// initially the DynService shouldn't be register because it's disabled
+		count = trackerDyn.getServices() == null ? 0
+				: trackerDyn.getServices().length;
+		assertEquals(
+				"The DynService shouldn't be instantiated because it is disabled",
+				0, count);
+
+		// enable the all services (actually only dyn service)
+		ServiceConsumerLookup lookupService = (ServiceConsumerLookup) trackerConsumerLookup
+				.getService();
+		lookupService.enableComponent(null, true);
+		Thread.sleep(SLEEP); // let SCR complete
+
+		// verify that it is instantiate
+		count = trackerDyn.getServices() == null ? 0
+				: trackerDyn.getServices().length;
+		assertEquals("The DynService must be enabled and instantiated", 1,
+				count);
+
+		// disable dyn service
+		lookupService.enableComponent(DYN_CLASS, false);
+		Thread.sleep(SLEEP); // let SCR complete
+
+		// verify that DYN services is not available
+		count = trackerDyn.getServices() == null ? 0
+				: trackerDyn.getServices().length;
+		assertEquals("The DynService must be disabled & removed again", 0,
+				count);
+	}
 }
