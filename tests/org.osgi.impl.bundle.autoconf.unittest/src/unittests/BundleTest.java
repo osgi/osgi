@@ -33,9 +33,10 @@ import java.util.Iterator;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
+
 import junit.framework.TestCase;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -56,7 +57,7 @@ import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 import org.osgi.service.metatype.MetaTypeInformation;
 import org.osgi.service.metatype.MetaTypeService;
-import org.xml.sax.SAXException;
+
 import unittests.metadata.AD;
 import unittests.metadata.Attribute;
 import unittests.metadata.Designate;
@@ -87,15 +88,7 @@ public class BundleTest extends TestCase {
 				SAXParserFactory sp = SAXParserFactory.newInstance();
 				sp.setNamespaceAware(true);
 				sp.setValidating(true);
-				try {
-					return sp.newSAXParser();
-				}
-				catch (ParserConfigurationException e) {
-					throw new IllegalStateException();
-				}
-				catch (SAXException e) {
-					throw new IllegalStateException();
-				}
+				return sp;
 			}
 			if (clazz.equals(ConfigurationAdmin.class.getName())) {
 				return configurationAdmin;
