@@ -36,8 +36,9 @@ import java.util.Vector;
  * DeploymentAdminPermission controls access to MEG management framework functions.
  * This permission controls only Deployment Admin-specific functions;
  * framework-specific access is controlled by usual OSGi permissions
- * (<code>AdminPermission</code>, etc.) <b>In addition to <code>DeploymentAdminPermission</code>, the caller
- * of Deployment Admin must hold the appropriate <code>AdminPermission</code>s.</b>
+ * (<code>AdminPermission</code>, etc.) <p>
+ * In addition to <code>DeploymentAdminPermission</code>, the caller
+ * of Deployment Admin must hold the appropriate <code>AdminPermission</code>s.<p>
  * For example, installing a deployment package requires <code>DeploymentAdminPermission</code>
  * to access the <code>installDeploymentPackage</code> method and <code>AdminPermission</code> to access
  * the framework's install/update/uninstall methods. <p>
@@ -45,32 +46,32 @@ import java.util.Vector;
  * The <code>DeploymentAdminPermission</code> filter does not use the id and location filters.
  * The "signer" filter is matched against the signer chain of the deployment package, and
  * the "name" filter is matched against the DeploymentPackage-Name header.
- * <blockquote><code>
+ * <pre>
  * DeploymentAdminPermission( "&lt;filter&gt;", "list" )<p>
- * </code></blockquote>
+ * </pre>
  * A holder of this permission can access the inventory information of the deployment
  * packages selected by the &lt;filter&gt; string. The filter selects the deployment packages
  * on which the holder of the permission can acquire detailed inventory information.
  * See {@link DeploymentAdmin#getDeploymentPackage} and
  * {@link DeploymentAdmin#listDeploymentPackages}.
- * <blockquote><code>
+ * <pre>
  * DeploymentAdminPermission( "&lt;filter&gt;", "install" )
- * </code></blockquote>
+ * </pre>
  * A holder of this permission can install/upgrade deployment packages if the deployment
  * package satisfies the &lt;filter&gt; string. See {@link DeploymentAdmin#installDeploymentPackage}.
- * <blockquote><code>
+ * <pre>
  * DeploymentAdminPermission( "&lt;filter&gt;", "uninstall" )
- * </code></blockquote>
+ * </pre>
  * A holder of this permission can uninstall deployment packages if the deployment
  * package satisfies the &lt;filter&gt; string. See {@link DeploymentPackage#uninstall}.
- * <blockquote><code>
+ * <pre>
  * DeploymentAdminPermission( "&lt;filter&gt;", "uninstallForceful" )
- * </code></blockquote>
+ * </pre>
  * A holder of this permission can forcefully uninstall deployment packages if the deployment
  * package satisfies the  string. See {@link DeploymentPackage#uninstallForceful}.
- * <blockquote><code>
+ * <pree>
  * DeploymentAdminPermission( "&lt;filter&gt;", "cancel" )
- * </code></blockquote>
+ * </pre>
  * A holder of this permission can cancel an active deployment action. This action being
  * cancelled could correspond to the install, update or uninstall of a deployment package
  * that satisfies the  string. See {@link DeploymentAdmin#cancel}<p>
