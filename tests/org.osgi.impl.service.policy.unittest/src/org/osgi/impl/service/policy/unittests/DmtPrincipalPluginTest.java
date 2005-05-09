@@ -65,7 +65,9 @@ public class DmtPrincipalPluginTest extends DmtPluginTestCase implements DmtPrin
 	public void setUp() throws Exception {
 		super.setUp();
 		principalPermissions = new HashMap();
-		plugin = new DmtPrincipalPlugin(this);
+//		plugin = new DmtPrincipalPlugin(this);
+		plugin = new DmtPrincipalPlugin();
+		
 		addDataPlugin(DmtPrincipalPlugin.dataRootURI,plugin);
 	}
 

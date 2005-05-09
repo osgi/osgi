@@ -54,7 +54,9 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 		permAdmin = new DummyPermissionAdmin();
-		plugin = new PermissionAdminPlugin(permAdmin);
+//		plugin = new PermissionAdminPlugin(permAdmin);
+		plugin = new PermissionAdminPlugin();
+		
 		addDataPlugin(PermissionAdminPlugin.dataRootURI,plugin);
 	}
 	

@@ -37,6 +37,7 @@ import org.osgi.impl.service.policy.PermissionInfoMetaNode;
 import org.osgi.impl.service.policy.RootMetaNode;
 import org.osgi.impl.service.policy.util.PermissionInfoComparator;
 import org.osgi.impl.service.policy.util.Splitter;
+import org.osgi.service.component.ComponentContext;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtMetaNode;
@@ -57,7 +58,7 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 	 * This object is the interface to the DMT Admin. Through this, we can
 	 * modify the different Principals PermissionInfo.
 	 */
-	private final DmtPrincipalPermissionAdmin dmtPrincipalPermissionAdmin;
+	private DmtPrincipalPermissionAdmin dmtPrincipalPermissionAdmin;
 	
 	/**
 	 * The current state of the tree. It is a map from hashes to PrincipalPermissions.
@@ -138,12 +139,14 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 	};
 	private final SetPrincipalPermissions setPrincipalPermissions = new SetPrincipalPermissions();
 
-	public DmtPrincipalPlugin(DmtPrincipalPermissionAdmin dmtPrincipalPermissionAdmin) throws NoSuchAlgorithmException {
-		this.dmtPrincipalPermissionAdmin = dmtPrincipalPermissionAdmin;
-		this.currentState = null; // open() fills it
+	public DmtPrincipalPlugin() throws NoSuchAlgorithmException {
 		ROOT = dataRootURI;
 	}
 
+	protected void activate(ComponentContext context) {
+		dmtPrincipalPermissionAdmin = (DmtPrincipalPermissionAdmin) context.locateService("dmtPrincipalPermissionAdmin");
+	}
+	
 	public void open(String subtreeUri, int lockMode, DmtSession session)
 			throws DmtException {
 		super.open(subtreeUri,lockMode,session);

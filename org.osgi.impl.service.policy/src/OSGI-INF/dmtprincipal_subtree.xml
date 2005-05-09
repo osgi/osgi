@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="org.osgi.impl.service.policy.dmtprincipal" 
+	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
+	<implementation class="org.osgi.impl.service.policy.dmtprincipal.DmtPrincipalPlugin"/>
+	<property name="dataRootURIs" value="./OSGi/Policies/Java/DmtPrincipal"/>
+	<service>
+		<provide interface="org.osgi.service.dmt.DmtDataPlugin"/>
+	</service>
+	<reference name="dmtPrincipalPermissionAdmin"
+		interface="org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin"/>
+</scr:component>

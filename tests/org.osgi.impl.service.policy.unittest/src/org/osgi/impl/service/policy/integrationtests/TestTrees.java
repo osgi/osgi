@@ -60,6 +60,8 @@ public class TestTrees extends IntegratedTest {
 		ServiceReference sr = systemBundleContext.getServiceReference(DmtAdmin.class.getName());
 		dmtAdmin = (DmtAdmin)systemBundleContext.getService(sr);
 		
+		// deferred services are added asynch, give component service some time. 
+		synchronized (this) { this.wait(100); }
 	}
 
 	public void stopFramework() throws Exception {

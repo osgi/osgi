@@ -99,7 +99,7 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 		condPermAdmin = new DummyConditionalPermissionAdmin();
-		plugin = new ConditionalPermissionAdminPlugin(condPermAdmin);
+		plugin = new ConditionalPermissionAdminPlugin();
 		addDataPlugin(ConditionalPermissionAdminPlugin.dataRootURI,plugin);
 	}
 	

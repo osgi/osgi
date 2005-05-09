@@ -1,13 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="/org.osgi.framework"/>
-	<classpathentry kind="src" path="/org.osgi.service.condpermadmin"/>
-	<classpathentry kind="src" path="/org.osgi.service.permissionadmin"/>
-	<classpathentry kind="src" path="/org.osgi.service.dmt"/>
-	<classpathentry kind="src" path="/org.osgi.impl.service.dmt"/>
-	<classpathentry sourcepath="/osgi.released/ee.foundation.jar" kind="lib" path="/osgi.released/ee.foundation.jar"/>
-	<classpathentry kind="src" path="/org.osgi.util.tracker"/>
-	<classpathentry kind="src" path="/org.osgi.util.mobile"/>
+	<classpathentry kind="src" path="src">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="/org.osgi.framework">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="/org.osgi.service.condpermadmin">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="/org.osgi.service.permissionadmin">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="/org.osgi.service.dmt">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="/org.osgi.impl.service.dmt">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/osgi.released/ee.foundation.jar" kind="lib" path="/osgi.released/ee.foundation.jar">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="/org.osgi.util.tracker">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="/org.osgi.util.mobile">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.service.component">
+		<attributes>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="src"/>
 </classpath>

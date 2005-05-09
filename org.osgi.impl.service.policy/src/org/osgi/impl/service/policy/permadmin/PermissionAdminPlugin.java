@@ -30,6 +30,8 @@ import org.osgi.impl.service.policy.PermissionInfoMetaNode;
 import org.osgi.impl.service.policy.RootMetaNode;
 import org.osgi.impl.service.policy.util.PermissionInfoComparator;
 import org.osgi.impl.service.policy.util.Splitter;
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.ComponentInstance;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtMetaNode;
@@ -44,7 +46,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  * @version $Revision$
  */
 public class PermissionAdminPlugin extends AbstractPolicyPlugin {
-	private final PermissionAdmin	permissionAdmin;
+	private PermissionAdmin	permissionAdmin;
 	
 	/*
 	 * ------------------------------------- 
@@ -137,18 +139,14 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		}
 	};
 
-	
-	/**
-	 * create a new PermissionAdmin plugin for the DMT admin. It is the responsibility
-	 * of the caller to register in the service registry.
-	 * @param permissionAdmin
-	 * @throws NoSuchAlgorithmException
-	 */
-	public PermissionAdminPlugin(PermissionAdmin permissionAdmin) throws NoSuchAlgorithmException {
-		this.permissionAdmin = permissionAdmin;
+	public PermissionAdminPlugin() throws NoSuchAlgorithmException {
 		ROOT = dataRootURI;
 	}
 	
+	protected void activate(ComponentContext context) {
+		permissionAdmin = (PermissionAdmin) context.locateService("permissionAdmin");
+	}
+
 	public void open(String subtreeUri, int lockMode, DmtSession session)
 			throws DmtException {
 		super.open(subtreeUri,lockMode,session);

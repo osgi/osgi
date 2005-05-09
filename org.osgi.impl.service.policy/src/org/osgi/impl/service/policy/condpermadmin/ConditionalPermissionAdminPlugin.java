@@ -34,6 +34,7 @@ import org.osgi.impl.service.policy.RootMetaNode;
 import org.osgi.impl.service.policy.util.ConditionInfoComparator;
 import org.osgi.impl.service.policy.util.PermissionInfoComparator;
 import org.osgi.impl.service.policy.util.Splitter;
+import org.osgi.service.component.ComponentContext;
 import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
@@ -58,7 +59,7 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 	/**
 	 * the conditional permission admin to communicate with
 	 */
-	private final ConditionalPermissionAdmin	condPermAdmin;
+	private ConditionalPermissionAdmin	condPermAdmin;
 
 	/**
 	 * the official root position in the management tree
@@ -183,9 +184,12 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 	private static final Comparator conditionInfoComparator = new ConditionInfoComparator();
 	
 	
-	public ConditionalPermissionAdminPlugin(ConditionalPermissionAdmin condPermAdmin) throws NoSuchAlgorithmException {
-		this.condPermAdmin = condPermAdmin;
+	public ConditionalPermissionAdminPlugin() throws NoSuchAlgorithmException {
 		ROOT = dataRootURI;
+	}
+	
+	protected void activate(ComponentContext context) {
+		condPermAdmin = (ConditionalPermissionAdmin) context.locateService("condPermAdmin");
 	}
 
 	public void open(String subtreeUri, int lockMode, DmtSession session)

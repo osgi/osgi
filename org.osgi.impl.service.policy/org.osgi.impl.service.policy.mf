@@ -3,7 +3,8 @@ Bundle-Name: MonitorAdmin
 Bundle-SymbolicName: ${p}
 Bundle-Vendor: Nokia
 Bundle-Version: 1.0
-Bundle-Activator: ${p}.JavaPolicyActivator
+Bundle-Activator: ${p}.userprompt.UserPromptActivator
+Service-Component: OSGI-INF/permadmin_subtree.xml, OSGI-INF/dmtprincipal_subtree.xml, OSGI-INF/condpermadmin_subtree.xml
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
