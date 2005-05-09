@@ -27,6 +27,7 @@ import java.security.ProtectionDomain;
 import java.util.Enumeration;
 
 import org.osgi.framework.AdminPermission;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.policy.condpermadmin.ConditionalPermissionAdminPlugin;
@@ -43,18 +44,26 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 public class TestTrees extends IntegratedTest {
+	public static final String	ORG_OSGI_IMPL_SERVICE_POLICY_JAR	= "file:../../org.osgi.impl.service.policy/org.osgi.impl.service.policy.jar";
 	public static final String PRINCIPAL1 = "principal1";
 	public static final String PRINCIPAL1_HASH = "zDcCo9K+A67rtQI3TQEDg6_LEIw";
 	public DmtAdmin	dmtAdmin;
+	public Bundle	policyBundle;
 	
 	public void startFramework(boolean fresh) throws Exception {
 		super.startFramework(fresh);
+		if (fresh) {
+			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_POLICY_JAR);
+		}
+		policyBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_POLICY_JAR);
+		policyBundle.start();
 		ServiceReference sr = systemBundleContext.getServiceReference(DmtAdmin.class.getName());
 		dmtAdmin = (DmtAdmin)systemBundleContext.getService(sr);
 		
 	}
 
 	public void stopFramework() throws Exception {
+		policyBundle = null;
 		dmtAdmin = null;
 		super.stopFramework();
 	}

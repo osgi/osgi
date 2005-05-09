@@ -27,6 +27,8 @@ import java.security.AllPermission;
 import java.security.PrivilegedExceptionAction;
 
 import org.osgi.framework.AdminPermission;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.PackagePermission;
 import org.osgi.service.condpermadmin.BundleLocationCondition;
 import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -39,6 +41,9 @@ import org.osgi.util.mobile.UserPromptCondition;
  * @version $Revision$
  */
 public class TestUserPrompt extends IntegratedTest {
+	public static final String	ORG_OSGI_IMPL_SERVICE_POLICY_JAR	= "file:../../org.osgi.impl.service.policy/org.osgi.impl.service.policy.jar";
+	public static final String	INTEGRATIONTESTS_MESSAGES_JAR = "file:../integrationtests.messages.jar";
+
 	public static final ConditionInfo ADMINISTRATION_QUESTION = new ConditionInfo(UserPromptCondition.class.getName(),
 			new String[] {"BLANKET","","org.osgi.impl.service.policy.integrationtests.messages.userprompt","%ADMIN_TASK"});
 	public static final ConditionInfo ADMINISTRATION_SESSION_QUESTION = new ConditionInfo(UserPromptCondition.class.getName(),
@@ -59,6 +64,9 @@ public class TestUserPrompt extends IntegratedTest {
 	PrintStream stdinPrinter;
 	ByteArrayOutputStream stdinByteArray;
 	int byteArrayPos;
+
+	public Bundle	policyBundle;
+	public Bundle	integrationTestMessagesBundle;
 	
 	class MyInputStream extends InputStream {
 		public int read() throws IOException {
@@ -107,7 +115,30 @@ public class TestUserPrompt extends IntegratedTest {
 		originalStdin = null;
 		super.tearDown();
 	}
+
 	
+	public void startFramework(boolean fresh) throws Exception {
+		super.startFramework(fresh);
+		if (fresh) {
+			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_POLICY_JAR);
+			permissionAdmin.setPermissions(INTEGRATIONTESTS_MESSAGES_JAR,
+					new PermissionInfo[]{
+						new PermissionInfo(PackagePermission.class.getName(),"*","EXPORT")
+					}
+				);
+			
+		}
+		policyBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_POLICY_JAR);
+		integrationTestMessagesBundle = systemBundleContext.installBundle(INTEGRATIONTESTS_MESSAGES_JAR);
+		policyBundle.start();
+		integrationTestMessagesBundle.start();
+	}
+
+	public void stopFramework() throws Exception {
+		policyBundle=null;
+		super.stopFramework();
+	}
+
 	public void testBasicAlways() throws Exception {
 		startFramework(true);
 
