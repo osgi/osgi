@@ -44,10 +44,10 @@ import org.osgi.framework.Version;
   * new Wire objects added to the Wire Admin service, or changed system properties. All 
   * the changes caused by the processing of a deployment package are persistently 
   * associated with the deployment package, so that they can be appropriately cleaned 
-  * up when the deployment package is uninstalled. There is a strict “no overlap” rule 
+  * up when the deployment package is uninstalled. There is a strict ï¿½no overlapï¿½ rule 
   * imposed on deployment packages. Two deployment packages are not allowed to create or 
   * manipulate the same artifact. Obviously, this means that a bundle cannot be in two 
-  * different deployment packagess. Any violation of this “no overlap” rule is considered 
+  * different deployment packagess. Any violation of this ï¿½no overlapï¿½ rule is considered 
   * an error and the install or update of the offending deployment package must be aborted.<p>
   * The Deployment Admin service should do as much as possible to ensure transactionality. 
   * It means that if a deployment package installation, update or removal (uninstall) fails 
@@ -80,15 +80,15 @@ public interface DeploymentPackage {
 	 * are specified in the manifest of this deployment package. The first dimension represents the 
 	 * bundles. Its size is equal to the number of the bundles in the deployment package. The size 
 	 * of the second dimension is 2. Its 0. value is the symbolic name and the 1. value is 
-	 * the version. E.g.<p>
-	 *     <blockquote><pre>
+	 * the version. E.g.:
+	 * <pre>
      *         String[][] bundles = dp.getBundleSymNameVersionPairs();
      *         for (int i = 0; i < bundles.length; i++) {
      *             String symbolicName = bundles[i][0];
      *             String version = bundles[i][1];
      *             // ...
      *         }	 
-     *     </pre></blockquote>
+     * </pre>
  	 * @return The two-dimensional string array corresponding to bundle symbolic name 
 	 *         and version pairs. It cannot be null but can be zero dimensional.
 	 */
@@ -114,10 +114,10 @@ public interface DeploymentPackage {
      * E.g. if the "Name" section of the resource (or individual-section as the 
      * {@see <a href="http://java.sun.com/j2se/1.4.2/docs/guide/jar/jar.html#Manifest%20Specification">Manifest Specification</a>} 
      * calls it) in the manifest is the following
-     * <blockquote><pre>
+     * <pre>
      *     Name: foo/readme.txt
      *     Resource-Processor: foo.rp
-     * </pre></blockquote>
+     * </pre>
      * then the corresponding array element is the "foo/readme.txt" string.
      * @return The string array corresponding to resources. It cannot be null but can be zero 
      *         dimensional.

@@ -122,9 +122,9 @@ public class DeploymentAdminPermission extends Permission {
      * of the target deployment package) and action.<p>
      * The <code>name</code> parameter identifies the target depolyment package the permission 
      * relates to. The <code>actions</code> parameter contains the comma separated list of allowed actions. 
-     * @param name Target string. Mustn't be null.
-     * @param action Action string. Mustn't be null.
-     * @throws <code>IllegalArgumentException</code> if the filter is invalid or the list of actions 
+     * @param name Target string, must not be null.
+     * @param action Action string, must not be null.
+     * @throws IllegalArgumentException if the filter is invalid or the list of actions 
      *         contains unknown operations
      */
     public DeploymentAdminPermission(String name, String actions) {
