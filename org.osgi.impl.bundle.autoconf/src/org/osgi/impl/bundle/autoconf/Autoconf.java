@@ -66,7 +66,8 @@ public class Autoconf implements BundleActivator,ResourceProcessor {
 		refs = context.getServiceReferences(SAXParserFactory.class.getName(),
 				"(&(parser.namespaceAware=true)(parser.validating=true))");
 		if (refs==null) { throw new Exception("Cannot get a validating parser"); }
-		saxp = (SAXParser) context.getService(refs[0]);
+		SAXParserFactory saxParserFactory = (SAXParserFactory) context.getService(refs[0]);
+		saxp = saxParserFactory.newSAXParser();
 		
 		ServiceReference ref = context.getServiceReference(ConfigurationAdmin.class.getName());
 		if (ref==null) { throw new Exception("cannot get Configuration Admin"); }
