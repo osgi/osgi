@@ -853,8 +853,6 @@ public class CMControl extends DefaultTestBundleControl {
 			Synchronizer synchronizer, int eventCount) throws Exception {
 		ConfigurationListenerImpl listener = new ConfigurationListenerImpl(
 				synchronizer, eventCount);
-		// give time so the framework clears out old event broadcasts
-		Thread.sleep(100);
 		registerService(ConfigurationListener.class.getName(), listener, null);
 		return listener;
 	}
