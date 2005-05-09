@@ -33,12 +33,12 @@ package org.osgi.service.dmt;
  * as a service. <code>DmtAdmin</code> is the entry point for applications to
  * use the DMT API. The <code>getSession</code> methods are used to open a
  * session on a specified subtree of the DMT. A typical way of usage:
- * <blockquote><pre>
+ * <pre>
  *     serviceRef = context.getServiceReference(DmtAdmin.class.getName());
  *     DmtAdmin factory = (DmtAdmin) context.getService(serviceRef);
  *     DmtSession session = factory.getSession(&quot;./OSGi/cfg&quot;);
  *     session.createInteriorNode(&quot;./OSGi/cfg/mycfg&quot;);
- * </pre></blockquote>
+ * </pre>
  */
 public interface DmtAdmin {
     /**
