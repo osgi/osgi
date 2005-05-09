@@ -56,17 +56,20 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  *   
  *  <p>
  *  
- *  A metatype header must follow the syntax :<br>
- *   <code>&nbsp;Meta-Type: = xml=&lt;resource>; id=&lt;MetaType ID> [;category=&lt;meta type category>; ][; version=&lt;version>]</code>
+ *  A metatype header must follow the syntax :
+ *  <pre>Meta-Type: = 'xml' '=' &lt;resource&gt; ';' 'id' '=' &lt;MetaType ID&gt; 
+ *      [ ';' 'category=' '=' &lt;meta type category&gt; ]
+ *      [ ';' 'version'   '=' &lt;version&gt;]
+ *  </pre>
  *  <p>
  *  
- *  For example :<br>
- *  <code>
- *  Meta-Type:<br>
- *   &nbsp;xml=org/osgi/impl/cu/fw/fwcu.xml; category=ControlUnit; id=FRAMEWORK; version=1.0.0,<br>
- *   &nbsp;xml=org/osgi/impl/cu/bundle/bundlecu.xml; category=ControlUnit; id=BUNDLE; version=1.0.0,<br>
- *   &nbsp;xml=configuration.xml; category=Config; id=cu.config; version=1.0.0<br>
- *  </code>
+ *  For example :
+ *  <pre>
+ *  Meta-Type:
+ *   xml=org/osgi/impl/cu/fw/fwcu.xml; category=ControlUnit; id=FRAMEWORK; version=1.0.0,
+ *   xml=org/osgi/impl/cu/bundle/bundlecu.xml; category=ControlUnit; id=BUNDLE; version=1.0.0,
+ *   xml=configuration.xml; category=Config; id=cu.config; version=1.0.0
+ *  </pre>
  *  <p>
  *  
  *  If a non-valid MetaType XML is provided the <code>MetaDataService</code> 
