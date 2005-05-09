@@ -28,20 +28,16 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.impl.bundle.autoconf.MetaData.AD;
 import org.osgi.impl.bundle.autoconf.MetaData.Attribute;
 import org.osgi.impl.bundle.autoconf.MetaData.OCD;
 import org.osgi.impl.bundle.autoconf.MetaData.Object;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
-import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
@@ -50,43 +46,23 @@ import org.osgi.service.metatype.MetaTypeService;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class Autoconf implements BundleActivator,ResourceProcessor {
-	BundleContext context;
-	ConfigurationAdmin configurationAdmin;
-	MetaTypeService metaTypeService;
-	DeploymentAdmin deploymentAdmin;
-	SAXParser saxp;
+public class Autoconf implements ResourceProcessor {
+	final BundleContext context;
+	final ConfigurationAdmin configurationAdmin;
+	final MetaTypeService metaTypeService;
+	final SAXParserFactory saxParserFactory;
 	int operation;
 	DeploymentSession	session;
 
-	public void start(BundleContext context) throws Exception {
+	public Autoconf(
+			BundleContext context,
+			ConfigurationAdmin configurationAdmin,
+			MetaTypeService metaTypeService,
+			SAXParserFactory saxParserFactory) {
 		this.context = context;
-		ServiceReference[] refs;
-		
-		refs = context.getServiceReferences(SAXParserFactory.class.getName(),
-				"(&(parser.namespaceAware=true)(parser.validating=true))");
-		if (refs==null) { throw new Exception("Cannot get a validating parser"); }
-		SAXParserFactory saxParserFactory = (SAXParserFactory) context.getService(refs[0]);
-		saxp = saxParserFactory.newSAXParser();
-		
-		ServiceReference ref = context.getServiceReference(ConfigurationAdmin.class.getName());
-		if (ref==null) { throw new Exception("cannot get Configuration Admin"); }
-		configurationAdmin = (ConfigurationAdmin) context.getService(ref);
-
-		ref = context.getServiceReference(MetaTypeService.class.getName());
-		if (ref==null) { throw new Exception("cannot get Meta Type Service"); }
-		metaTypeService = (MetaTypeService) context.getService(ref);
-		
-		ref = context.getServiceReference(DeploymentAdmin.class.getName());
-		if (ref==null) { throw new Exception("cannot get Deployment Admin"); }
-		deploymentAdmin =  (DeploymentAdmin) context.getService(ref);
-
-		Hashtable d = new Hashtable();
-		d.put("processor","AutoconfProcessor"); // TODO this is just an "example" in rfc88 5.2.5
-		context.registerService(ResourceProcessor.class.getName(),this,d);
-	}
-
-	public void stop(BundleContext context) throws Exception {
+		this.configurationAdmin = configurationAdmin;
+		this.metaTypeService = metaTypeService;
+		this.saxParserFactory = saxParserFactory;
 	}
 
 	public void begin(DeploymentSession session) {
@@ -98,7 +74,7 @@ public class Autoconf implements BundleActivator,ResourceProcessor {
 		is.setPublicId(name);
 		MetaData m;
 		try {
-			m = new MetaData(saxp,is);
+			m = new MetaData(saxParserFactory.newSAXParser(),is);
 		}
 		catch (ParserConfigurationException e) {
 			throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot create XML parser",e);

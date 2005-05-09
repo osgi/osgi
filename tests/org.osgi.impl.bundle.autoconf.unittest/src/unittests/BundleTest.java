@@ -290,16 +290,15 @@ public class BundleTest extends TestCase {
 		bundleContext = new DummyBundleContext();
 		metaTypeService = new DummyMetaTypeService();
 		configurationAdmin = new DummyConfigurationAdmin();
-		deploymentAdmin = new DummyDeploymentAdmin();
-		activator = new Autoconf();
-		activator.start(bundleContext);
+		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+		saxParserFactory.setNamespaceAware(true);
+		saxParserFactory.setValidating(true);
+		resourceProcessor = new Autoconf(bundleContext,configurationAdmin,metaTypeService,saxParserFactory);
 		
 	}
 
 	protected void tearDown() throws Exception {
 		resourceProcessor = null;
-		activator.stop(bundleContext);
-		activator = null;
 		bundleContext = null;
 		configurationAdmin = null;
 		deploymentAdmin = null;
