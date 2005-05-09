@@ -37,4 +37,6 @@ import org.osgi.test.cases.component.tbc.TBCService;
 public interface ServiceConsumerLookup extends TBCService {
 
   public Dictionary getProperties();
+  
+  public void enableComponent(String name, boolean flag);
 }

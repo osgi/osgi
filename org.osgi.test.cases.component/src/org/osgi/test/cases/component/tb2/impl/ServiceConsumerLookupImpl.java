@@ -39,25 +39,35 @@ import org.osgi.test.cases.component.tbc.TestObject;
  */
 public class ServiceConsumerLookupImpl implements ServiceConsumerLookup {
 
-  private ComponentContext context;
+	private ComponentContext	context;
 
-  public ServiceConsumerLookupImpl() {
-  }
+	public ServiceConsumerLookupImpl() {
+	}
 
-  protected void activate(ComponentContext context) {
-    this.context = context;
-  }
+	protected void activate(ComponentContext context) {
+		this.context = context;
+	}
 
-  protected void deactivate(ComponentContext context) {
-    this.context = null;
-  }
+	protected void deactivate(ComponentContext context) {
+		this.context = null;
+	}
 
-  public Dictionary getProperties() {
-    return context.getProperties();
-  }
+	public Dictionary getProperties() {
+		return context.getProperties();
+	}
 
-  public TestObject getTestObject() {
-    ServiceProvider serviceProvider = (ServiceProvider) context.locateService("serviceProvider");
-    return serviceProvider.getTestObject();
-  }
+	public TestObject getTestObject() {
+		ServiceProvider serviceProvider = (ServiceProvider) context
+				.locateService("serviceProvider");
+		return serviceProvider.getTestObject();
+	}
+
+	public void enableComponent(String name, boolean flag) {
+		if (flag) {
+			context.enableComponent(name);
+		}
+		else {
+			context.disableComponent(name);
+		}
+	}
 }
