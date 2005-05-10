@@ -1190,19 +1190,19 @@ public class TestControl extends DefaultTestBundleControl implements
 		// installing bad extension bundle
 		Bundle tb4 = getContext().installBundle(getWebServer() + "tb4.jar");
 		// installing regular fragment
-		Bundle tb1 = getContext().installBundle(getWebServer() + "tb1.jar");
-		String class1 = "org.osgi.test.cases.framework.fragments.tb1.FooTB1";
+		Bundle tb20 = getContext().installBundle(getWebServer() + "tb20.jar");
+		String class20 = "org.osgi.test.cases.framework.fragments.tb20.FooTB20";
 		String class4 = "org.osgi.test.cases.framework.fragments.tb4.FooTB4";
 
 		try {
 			// classloader must be the same
-			assertEquals("loaded by host bundle classloader", tb1.loadClass(
-					class1).getClassLoader(), tb1.loadClass(class4)
+			assertEquals("loaded by host bundle classloader", tb20.loadClass(
+					class20).getClassLoader(), tb20.loadClass(class4)
 					.getClassLoader());
 		}
 		finally {
 			tb4.uninstall();
-			tb1.uninstall();
+			tb20.uninstall();
 		}
 	}
 
@@ -1320,9 +1320,10 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * should be in <code>Bundle.INSTALLED</code> state. When it's refreshed,
 	 * it should go to <code>Bundle.RESOLVED</code> state if the framework
 	 * supports dynamically attaching fragments to resolved bundles. When it's
-	 * uninstalled, it should go to <code>Bundle.UNINSTALLED</code> state and
-	 * when it's refreshed again, should not be present in the framework
-	 * anymore. Will only perform this test if
+	 * uninstalled, it should go to <code>Bundle.UNINSTALLED</code> state.
+	 * Additional test cases are needed to check situations where the framework
+	 * must shutdown and restart (using a script to coordinate the different
+	 * test cases). Will only perform this test if
 	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
@@ -1339,7 +1340,9 @@ public class TestControl extends DefaultTestBundleControl implements
 				// should be in INSTALLED state
 				assertEquals("bundle installed", tb6.getState(),
 						Bundle.INSTALLED);
+				// refresh bundle
 				pkgAdm.refreshPackages(new Bundle[] {tb6});
+				Thread.sleep(5000); // asynchronous call, wait some time
 				if (tb6.getState() == Bundle.RESOLVED) {
 					trace("framework supports dynamically attaching "
 							+ "fragments to resolved bundles");
@@ -1358,10 +1361,6 @@ public class TestControl extends DefaultTestBundleControl implements
 				// should be in UNINSTALLED state
 				assertEquals("bundle uninstalled", tb6.getState(),
 						Bundle.UNINSTALLED);
-				pkgAdm.refreshPackages(new Bundle[] {tb6});
-				// should not be present in the framework anynmore
-				assertNull("bundle not present", getContext().getBundle(
-						bundleId));
 			}
 			finally {
 				if (tb6.getState() != Bundle.UNINSTALLED) {
@@ -1380,9 +1379,10 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * should be in <code>Bundle.INSTALLED</code> state. When it's refreshed,
 	 * it should go to <code>Bundle.RESOLVED</code> state if the framework
 	 * supports dynamically attaching fragments to resolved bundles. When it's
-	 * uninstalled, it should go to <code>Bundle.UNINSTALLED</code> state and
-	 * when it's refreshed again, should not be present in the framework
-	 * anymore. Will only perform this test if
+	 * uninstalled, it should go to <code>Bundle.UNINSTALLED</code> state.
+	 * Additional test cases are needed to check situations where the framework
+	 * must shutdown and restart (using a script to coordinate the different
+	 * test cases). Will only perform this test if
 	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
@@ -1399,7 +1399,9 @@ public class TestControl extends DefaultTestBundleControl implements
 				// should be in INSTALLED state
 				assertEquals("bundle installed", tb5.getState(),
 						Bundle.INSTALLED);
+				// refresh bundle
 				pkgAdm.refreshPackages(new Bundle[] {tb5});
+				Thread.sleep(5000); // asynchronous call, wait some time
 				if (tb5.getState() == Bundle.RESOLVED) {
 					trace("framework supports dynamically attaching "
 							+ "fragments to resolved bundles");
@@ -1420,10 +1422,6 @@ public class TestControl extends DefaultTestBundleControl implements
 				// should be in UNINSTALLED state
 				assertEquals("bundle uninstalled", tb5.getState(),
 						Bundle.UNINSTALLED);
-				pkgAdm.refreshPackages(new Bundle[] {tb5});
-				// should not be present in the framework anynmore
-				assertNull("bundle not present", getContext().getBundle(
-						bundleId));
 			}
 			finally {
 				if (tb5.getState() != Bundle.UNINSTALLED) {
@@ -1514,20 +1512,20 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 */
 	public void testFrameworkExtensionDefault() throws Exception {
-		String class7 = "org.osgi.test.cases.framework.fragments.tb7.FooTB7";
-		Bundle tb7 = null;
+		String class21 = "org.osgi.test.cases.framework.fragments.tb21.FooTB21";
+		Bundle tb21 = null;
 		if ("true".equals(getContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
-			tb7 = getContext().installBundle(getWebServer() + "tb7.jar");
+			tb21 = getContext().installBundle(getWebServer() + "tb21.jar");
 			try {
 				// check if classloader is framework classloader
 				assertEquals("loaded by the framework classloader",
 						getContext().getClass().getClassLoader().loadClass(
-								class7).getClassLoader(), getContext()
+								class21).getClassLoader(), getContext()
 								.getClass().getClassLoader());
 			}
 			finally {
-				tb7.uninstall();
+				tb21.uninstall();
 			}
 
 		}
@@ -1545,11 +1543,11 @@ public class TestControl extends DefaultTestBundleControl implements
 	 */
 	public void testFrameworkExtensionNativeCode() throws Exception {
 		String message = "extension bundle cannot load native code";
-		Bundle tb8 = null;
+		Bundle tb22 = null;
 		if ("true".equals(getContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			try {
-				tb8 = getContext().installBundle(getWebServer() + "tb8.jar");
+				tb22 = getContext().installBundle(getWebServer() + "tb22.jar");
 				// should fail, since extension bundles are not able to
 				// declare native code headers
 				failException(message, BundleException.class);
@@ -1558,8 +1556,8 @@ public class TestControl extends DefaultTestBundleControl implements
 				assertException(message, BundleException.class, e);
 			}
 			finally {
-				if (tb8 != null) {
-					tb8.uninstall();
+				if (tb22 != null) {
+					tb22.uninstall();
 				}
 			}
 		}

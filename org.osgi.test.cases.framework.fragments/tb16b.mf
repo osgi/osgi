@@ -1,9 +1,10 @@
 Manifest-Version: 1.0
 Bundle-Name: ${p}.tb16b
+Bundle-SymbolicName: ${p}.tb16b
 Bundle-Description: This is a framework extension bundle used
  in the test that checks if a bundle has permissions to install a
  framework extension bundle.
-BundleManifest-Version: 2
+Bundle-ManifestVersion: 2
 Bundle-SymbolicName: ${p}.tb16b
 Bundle-Version: 1.0
 Bundle-Classpath: .

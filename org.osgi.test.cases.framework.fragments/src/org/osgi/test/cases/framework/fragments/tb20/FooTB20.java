@@ -25,7 +25,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.framework.fragments.tb7;
+package org.osgi.test.cases.framework.fragments.tb20;
 
 /**
  *
@@ -33,6 +33,6 @@ package org.osgi.test.cases.framework.fragments.tb7;
  * 
  * @version $Revision$
  */
-public class FooTB7 {
+public class FooTB20 {
 
 }

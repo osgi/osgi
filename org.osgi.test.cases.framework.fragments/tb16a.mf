@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-Name: ${p}.tb16a
+Bundle-SymbolicName: ${p}.tb16a
 Bundle-Description: This is a regular bundle used to try to install
  a framework extension bundle without permission.
-BundleManifest-Version: 2
+Bundle-ManifestVersion: 2
 Bundle-Activator: ${p}.tb16a.Activator
 Bundle-Version: 1.0
 $(IMPORT-PACKAGE)

@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-Name: ${p}.tb19
+Bundle-SymbolicName: ${p}.tb19
 Bundle-Description: This is a regular bundle used to try to install
  a boot classpath extension bundle with permission.
-BundleManifest-Version: 2
+Bundle-ManifestVersion: 2
 Bundle-Activator: ${p}.tb19.Activator
 Bundle-Version: 1.0
 $(IMPORT-PACKAGE)

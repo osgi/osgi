@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -25,21 +25,22 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.framework.fragments.tb1;
+package org.osgi.test.cases.framework.fragments.tb21;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 /**
- * Bundle for Extension Bundles tests. This is a regular bundle (tb1) to
- * be compared to another bundle (tb4) that should be treated as a regular
- * bundle since its host symbolic name is not system.bundle.
+ * 
+ * Bundle for Extension Bundles tests. Classes in this bundle's classpath
+ * should be appended to the framework classpath. Extension bundles
+ * should be treated as framework extension bundles by default.
  * 
  * @author jorge.mascena@cesar.org.br
  * 
  * @version $Revision$
  */
-public class Activator implements BundleActivator {
+public class Activator implements BundleActivator{
 
 	/**
 	 * Starts Bundle. Nothing to be done here.
@@ -47,7 +48,9 @@ public class Activator implements BundleActivator {
 	 * @param context
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
-	public void start(BundleContext context) throws Exception {
+
+	public void start(BundleContext context) {
+
 	}
 
 	/**
@@ -56,6 +59,8 @@ public class Activator implements BundleActivator {
 	 * @param context
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
-	public void stop(BundleContext context) throws Exception {
+	public void stop(BundleContext context) {
+
 	}
+
 }

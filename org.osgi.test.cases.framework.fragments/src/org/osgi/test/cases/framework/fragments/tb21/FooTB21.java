@@ -25,42 +25,14 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.framework.fragments.tb7;
-
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
+package org.osgi.test.cases.framework.fragments.tb21;
 
 /**
- * 
- * Bundle for Extension Bundles tests. Classes in this bundle's classpath
- * should be appended to the framework classpath. Extension bundles
- * should be treated as framework extension bundles by default.
- * 
- * @author jorge.mascena@cesar.org.br
+ *
+ * Dummy class to be added to the bundle's classpath
  * 
  * @version $Revision$
  */
-public class Activator implements BundleActivator{
-
-	/**
-	 * Starts Bundle. Nothing to be done here.
-	 * 
-	 * @param context
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
-	 */
-
-	public void start(BundleContext context) {
-
-	}
-
-	/**
-	 * Stops Bundle. Nothing to be done here.
-	 * 
-	 * @param context
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
-	 */
-	public void stop(BundleContext context) {
-
-	}
+public class FooTB21 {
 
 }

@@ -1,9 +1,10 @@
 Manifest-Version: 1.0
-Bundle-Name: ${p}.tb7
+Bundle-Name: ${p}.tb21
+Bundle-SymbolicName: ${p}.tb21
 Bundle-Description: This is a framework extension bundle used in the
  test that checks if an extension bundle is a framework extension
  bundle by default.
-BundleManifest-Version: 2
+Bundle-ManifestVersion: 2
 Bundle-Version: 1.0
 Bundle-Classpath: .
 Fragment-Host: system.bundle

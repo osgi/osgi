@@ -25,7 +25,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.framework.fragments.tb8;
+package org.osgi.test.cases.framework.fragments.tb22;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;

@@ -1,9 +1,10 @@
 Manifest-Version: 1.0
 Bundle-Name: ${p}.tb13
+Bundle-SymbolicName: ${p}.tb13
 Bundle-Description: This is a boot classpath extension bundle used
  in the test that checks if a bundle that contains a native code
  header is not installed.
-BundleManifest-Version: 2
+Bundle-ManifestVersion: 2
 Bundle-Version: 1.0
 Bundle-Classpath: .
 Fragment-Host: system.bundle; extension:=bootclasspath
