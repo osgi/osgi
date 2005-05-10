@@ -35,7 +35,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  * @version $Revision$
  */
 public class PermissionAdminPluginTest extends DmtPluginTestCase {
-	public static final String ROOT = PermissionAdminPlugin.dataRootURI;
+	public static final String ROOT = "./OSGi/Policies/Java/Bundle";
 
 	public static final String LOCATION1 = "http://location1";
 	public static final String LOCATION1_HASH = "W+7i9Qa7tsvxf7Z9COBtdKgvKhM";
@@ -57,7 +57,7 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 //		plugin = new PermissionAdminPlugin(permAdmin);
 		plugin = new PermissionAdminPlugin();
 		
-		addDataPlugin(PermissionAdminPlugin.dataRootURI,plugin);
+		addDataPlugin(ROOT,plugin);
 	}
 	
 	public void tearDown() throws Exception {

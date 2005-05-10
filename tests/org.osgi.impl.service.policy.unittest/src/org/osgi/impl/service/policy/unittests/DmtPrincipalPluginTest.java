@@ -37,6 +37,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  * @version $Revision$
  */
 public class DmtPrincipalPluginTest extends DmtPluginTestCase implements DmtPrincipalPermissionAdmin {
+	public static final String ROOT = "./OSGi/Policies/Java/DmtPrincipal";
 	public static final String PRINCIPAL1 = "principal1";
 	public static final String PRINCIPAL1_HASH = "zDcCo9K+A67rtQI3TQEDg6_LEIw";
 	public static final String PRINCIPAL2 = "principal2";
@@ -68,7 +69,7 @@ public class DmtPrincipalPluginTest extends DmtPluginTestCase implements DmtPrin
 //		plugin = new DmtPrincipalPlugin(this);
 		plugin = new DmtPrincipalPlugin();
 		
-		addDataPlugin(DmtPrincipalPlugin.dataRootURI,plugin);
+		addDataPlugin(ROOT,plugin);
 	}
 
 	public void tearDown() throws Exception {
@@ -79,18 +80,18 @@ public class DmtPrincipalPluginTest extends DmtPluginTestCase implements DmtPrin
 	}
 
 	public void newSession() throws DmtException {
-		dmtSession = dmtFactory.getSession(DmtPrincipalPlugin.dataRootURI);
+		dmtSession = dmtFactory.getSession(ROOT);
 		assertNotNull(dmtSession);
 	}
 
 	public void newAtomicSession() throws DmtException {
-		dmtSession = dmtFactory.getSession(DmtPrincipalPlugin.dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
+		dmtSession = dmtFactory.getSession(ROOT,DmtSession.LOCK_TYPE_ATOMIC);
 		assertNotNull(dmtSession);
 	}
 
 	public void testEmptyTable() throws Exception {
 		newSession();
-		String[] children = dmtSession.getChildNodeNames(DmtPrincipalPlugin.dataRootURI);
+		String[] children = dmtSession.getChildNodeNames(ROOT);
 		assertEquals(0,children.length);
 	}
 
@@ -98,7 +99,7 @@ public class DmtPrincipalPluginTest extends DmtPluginTestCase implements DmtPrin
 		principalPermissions.put(PRINCIPAL1,new PermissionInfo[]{});
 		principalPermissions.put(PRINCIPAL2,new PermissionInfo[]{});
 		newSession();
-		String[] children = dmtSession.getChildNodeNames(DmtPrincipalPlugin.dataRootURI);
+		String[] children = dmtSession.getChildNodeNames(ROOT);
 		assertEquals(2,children.length);
 		Arrays.sort(children);
 		assertEquals(PRINCIPAL2_HASH,children[0]);

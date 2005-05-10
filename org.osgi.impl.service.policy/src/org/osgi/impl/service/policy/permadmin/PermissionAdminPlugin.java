@@ -25,13 +25,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
+
 import org.osgi.impl.service.policy.AbstractPolicyPlugin;
 import org.osgi.impl.service.policy.PermissionInfoMetaNode;
 import org.osgi.impl.service.policy.RootMetaNode;
 import org.osgi.impl.service.policy.util.PermissionInfoComparator;
 import org.osgi.impl.service.policy.util.Splitter;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.ComponentInstance;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtMetaNode;
@@ -57,7 +57,6 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 	private final static DmtMetaNode	locationMetaNode = new LocationMetaNode();
 	private final static Comparator permissionInfoComparator = new PermissionInfoComparator();
 
-	public static final String dataRootURI = "./OSGi/Policies/Java/Bundle";
 	public static final String PERMISSIONINFO = PermissionInfoMetaNode.PERMISSIONINFO;
 	public static final String LOCATION = "Location";
 	public static final String	DEFAULT	= "Default";
@@ -139,11 +138,10 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		}
 	};
 
-	public PermissionAdminPlugin() throws NoSuchAlgorithmException {
-		ROOT = dataRootURI;
-	}
+	public PermissionAdminPlugin() throws NoSuchAlgorithmException {}
 	
 	protected void activate(ComponentContext context) {
+		super.activate(context);
 		permissionAdmin = (PermissionAdmin) context.locateService("permissionAdmin");
 	}
 
@@ -240,7 +238,7 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 			Entry e = (Entry) iter.next();
 			if (e.isDefault) continue;
 			if ((e.location==null)||(e.location.equals(""))) {
-				throw new DmtException(dataRootURI,DmtException.METADATA_MISMATCH,"location is empty");
+				throw new DmtException(ROOT,DmtException.METADATA_MISMATCH,"location is empty");
 			}
 		}
 		

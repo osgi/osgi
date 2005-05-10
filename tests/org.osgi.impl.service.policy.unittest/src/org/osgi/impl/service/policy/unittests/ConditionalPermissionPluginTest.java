@@ -57,7 +57,7 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 	 */
 	public DummyConditionalPermissionAdmin condPermAdmin;
 
-	public static final String ROOT = ConditionalPermissionAdminPlugin.dataRootURI;
+	public static final String ROOT = "./OSGi/Policies/Java/ConditionalPermission";
 	
 	public static final ConditionInfo LOC1CONDITION = new ConditionInfo(
 			BundleLocationCondition.class.getName(),
@@ -100,7 +100,7 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 		super.setUp();
 		condPermAdmin = new DummyConditionalPermissionAdmin();
 		plugin = new ConditionalPermissionAdminPlugin();
-		addDataPlugin(ConditionalPermissionAdminPlugin.dataRootURI,plugin);
+		addDataPlugin(ROOT,plugin);
 	}
 	
 	public void tearDown() throws Exception {
@@ -111,12 +111,12 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 	}
 
 	public void newSession() throws DmtException {
-		dmtSession = dmtFactory.getSession(ConditionalPermissionAdminPlugin.dataRootURI);
+		dmtSession = dmtFactory.getSession(ROOT);
 		assertNotNull(dmtSession);
 	}
 
 	public void newAtomicSession() throws DmtException {
-		dmtSession = dmtFactory.getSession(ConditionalPermissionAdminPlugin.dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
+		dmtSession = dmtFactory.getSession(ROOT,DmtSession.LOCK_TYPE_ATOMIC);
 		assertNotNull(dmtSession);
 	}
 	
@@ -126,7 +126,7 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 
 	public void testRootMetaNode() throws Exception {
 		newSession();
-		DmtMetaNode mn = dmtSession.getMetaNode(ConditionalPermissionAdminPlugin.dataRootURI);
+		DmtMetaNode mn = dmtSession.getMetaNode(ROOT);
 		assertNotNull(mn);
 		assertEquals(false,mn.can(DmtMetaNode.CMD_DELETE));
 	}

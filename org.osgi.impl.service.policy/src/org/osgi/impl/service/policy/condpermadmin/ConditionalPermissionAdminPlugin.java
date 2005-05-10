@@ -62,11 +62,6 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 	private ConditionalPermissionAdmin	condPermAdmin;
 
 	/**
-	 * the official root position in the management tree
-	 */
-	public static final String dataRootURI = "./OSGi/Policies/Java/ConditionalPermission";
-
-	/**
 	 * a map of String->ConditionalPermission, where the key is the hash as seen in the tree
 	 */
 	private Map conditionalPermissions;
@@ -184,11 +179,10 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 	private static final Comparator conditionInfoComparator = new ConditionInfoComparator();
 	
 	
-	public ConditionalPermissionAdminPlugin() throws NoSuchAlgorithmException {
-		ROOT = dataRootURI;
-	}
+	public ConditionalPermissionAdminPlugin() throws NoSuchAlgorithmException {}
 	
 	protected void activate(ComponentContext context) {
+		super.activate(context);
 		condPermAdmin = (ConditionalPermissionAdmin) context.locateService("condPermAdmin");
 	}
 

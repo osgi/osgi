@@ -30,9 +30,9 @@ import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServiceReference;
-import org.osgi.impl.service.policy.condpermadmin.ConditionalPermissionAdminPlugin;
-import org.osgi.impl.service.policy.dmtprincipal.DmtPrincipalPlugin;
-import org.osgi.impl.service.policy.permadmin.PermissionAdminPlugin;
+import org.osgi.impl.service.policy.unittests.ConditionalPermissionPluginTest;
+import org.osgi.impl.service.policy.unittests.DmtPrincipalPluginTest;
+import org.osgi.impl.service.policy.unittests.PermissionAdminPluginTest;
 import org.osgi.service.condpermadmin.BundleSignerCondition;
 import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.dmt.DmtAdmin;
@@ -44,6 +44,10 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 public class TestTrees extends IntegratedTest {
+	public static final String permissionAdminPlugin_dataRootURI = PermissionAdminPluginTest.ROOT;
+	public static final String conditionalPermissionAdminPlugin_dataRootURI = ConditionalPermissionPluginTest.ROOT;
+	public static final String dmtPrincipalPlugin_dataRootURI = DmtPrincipalPluginTest.ROOT;
+
 	public static final String	ORG_OSGI_IMPL_SERVICE_POLICY_JAR	= "file:../../org.osgi.impl.service.policy/org.osgi.impl.service.policy.jar";
 	public static final String PRINCIPAL1 = "principal1";
 	public static final String PRINCIPAL1_HASH = "zDcCo9K+A67rtQI3TQEDg6_LEIw";
@@ -76,11 +80,11 @@ public class TestTrees extends IntegratedTest {
 
 		// check if all three policy trees are registered
 		ServiceReference[] sr;
-		sr = systemBundleContext.getServiceReferences(DmtDataPlugin.class.getName(),"(dataRootURIs="+PermissionAdminPlugin.dataRootURI+")");
+		sr = systemBundleContext.getServiceReferences(DmtDataPlugin.class.getName(),"(dataRootURIs="+permissionAdminPlugin_dataRootURI+")");
 		assertNotNull(sr[0]);
-		sr = systemBundleContext.getServiceReferences(DmtDataPlugin.class.getName(),"(dataRootURIs="+ConditionalPermissionAdminPlugin.dataRootURI+")");
+		sr = systemBundleContext.getServiceReferences(DmtDataPlugin.class.getName(),"(dataRootURIs="+conditionalPermissionAdminPlugin_dataRootURI+")");
 		assertNotNull(sr[0]);
-		sr = systemBundleContext.getServiceReferences(DmtDataPlugin.class.getName(),"(dataRootURIs="+DmtPrincipalPlugin.dataRootURI+")");
+		sr = systemBundleContext.getServiceReferences(DmtDataPlugin.class.getName(),"(dataRootURIs="+dmtPrincipalPlugin_dataRootURI+")");
 		assertNotNull(sr[0]);
 		stopFramework();
 	}
@@ -89,10 +93,10 @@ public class TestTrees extends IntegratedTest {
 		startFramework(true);
 
 		// "principal1" gets the right to read the principal tree
-		DmtSession session = dmtAdmin.getSession(DmtPrincipalPlugin.dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
+		DmtSession session = dmtAdmin.getSession(dmtPrincipalPlugin_dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
 		session.createInteriorNode("1");
 		session.setNodeValue("1/Principal",new DmtData(PRINCIPAL1));
-		session.setNodeValue("1/PermissionInfo",new DmtData("(org.osgi.service.dmt.DmtPermission \""+DmtPrincipalPlugin.dataRootURI+"\" \"Get\")"));
+		session.setNodeValue("1/PermissionInfo",new DmtData("(org.osgi.service.dmt.DmtPermission \""+dmtPrincipalPlugin_dataRootURI+"\" \"Get\")"));
 		session.close();
 
 		//stopFramework();
@@ -100,20 +104,20 @@ public class TestTrees extends IntegratedTest {
 		//startFramework(false);
 
 		// check if it is there
-		session = dmtAdmin.getSession(DmtPrincipalPlugin.dataRootURI);
+		session = dmtAdmin.getSession(dmtPrincipalPlugin_dataRootURI);
 		DmtData value = session.getNodeValue(PRINCIPAL1_HASH+"/Principal");
 		assertEquals(PRINCIPAL1,value.getString());
 		session.close();
 				
 		// try to read from the principal tree as "principal1"
-		session = dmtAdmin.getSession(PRINCIPAL1,DmtPrincipalPlugin.dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
+		session = dmtAdmin.getSession(PRINCIPAL1,dmtPrincipalPlugin_dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
 		value = session.getNodeValue(PRINCIPAL1_HASH+"/Principal");
 		assertEquals(PRINCIPAL1,value.getString());
 		session.close();
 
 		// try to read from the principal tree as "principal2", which does not have any rights
 		// TODO: as I understand it, this should fail. check with dmt impl
-		session = dmtAdmin.getSession("principal2",DmtPrincipalPlugin.dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
+		session = dmtAdmin.getSession("principal2",dmtPrincipalPlugin_dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
 		value = session.getNodeValue(PRINCIPAL1_HASH+"/Principal");
 		assertEquals(PRINCIPAL1,value.getString());
 		session.close();
@@ -122,18 +126,18 @@ public class TestTrees extends IntegratedTest {
 	
 	public void testAccessControl() throws Exception {
 		startFramework(true);
-		final DmtSession session = dmtAdmin.getSession(PermissionAdminPlugin.dataRootURI);
+		final DmtSession session = dmtAdmin.getSession(permissionAdminPlugin_dataRootURI);
 		
 		// this is a call with allpermission
-		session.getChildNodeNames(PermissionAdminPlugin.dataRootURI);
+		session.getChildNodeNames(permissionAdminPlugin_dataRootURI);
 //		session.getChildNodeNames(""); TODO
 
 		// this is a call with read permission
 		Permissions permissions = new Permissions();
-		permissions.add(new DmtPermission(PermissionAdminPlugin.dataRootURI,"Get"));
+		permissions.add(new DmtPermission(permissionAdminPlugin_dataRootURI,"Get"));
 		AccessController.doPrivileged(new PrivilegedExceptionAction() {
 			public Object run() throws DmtException {
-				session.getChildNodeNames(PermissionAdminPlugin.dataRootURI);
+				session.getChildNodeNames(permissionAdminPlugin_dataRootURI);
 				return null;
 			}
 		
@@ -145,7 +149,7 @@ public class TestTrees extends IntegratedTest {
 		try {
 			AccessController.doPrivileged(new PrivilegedExceptionAction() {
 				public Object run() throws DmtException {
-					session.getChildNodeNames(PermissionAdminPlugin.dataRootURI);
+					session.getChildNodeNames(permissionAdminPlugin_dataRootURI);
 					return null;
 				}
 			
@@ -159,7 +163,7 @@ public class TestTrees extends IntegratedTest {
 	public void testPermissionAdmin() throws Exception {
 		startFramework(true);
 		
-		DmtSession session = dmtAdmin.getSession(PermissionAdminPlugin.dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
+		DmtSession session = dmtAdmin.getSession(permissionAdminPlugin_dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
 		String value = session.getNodeValue("Default/PermissionInfo").getString();
 		// the default permission is already set at startup, let's check if it is there
 		assertEquals(new PermissionInfo(PackagePermission.class.getName(),"*","IMPORT").getEncoded()+"\n",value);
@@ -185,9 +189,9 @@ public class TestTrees extends IntegratedTest {
 				);
 		String nameHash = "pOWUUF7ZBzn2HHOc26VuZdn3RWI";
 		
-		DmtSession session = dmtAdmin.getSession(ConditionalPermissionAdminPlugin.dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
+		DmtSession session = dmtAdmin.getSession(conditionalPermissionAdminPlugin_dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
 
-		String names[] = session.getChildNodeNames(ConditionalPermissionAdminPlugin.dataRootURI);
+		String names[] = session.getChildNodeNames(conditionalPermissionAdminPlugin_dataRootURI);
 		
 		String conditionInfo = session.getNodeValue(nameHash+"/ConditionInfo").getString();
 		assertEquals(cond1.getEncoded()+"\n",conditionInfo);
@@ -228,7 +232,7 @@ public class TestTrees extends IntegratedTest {
 			if (!(e.getCause() instanceof AccessControlException)) throw e;
 		}
 		
-		DmtSession session = dmtAdmin.getSession(ConditionalPermissionAdminPlugin.dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
+		DmtSession session = dmtAdmin.getSession(conditionalPermissionAdminPlugin_dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
 		session.createInteriorNode("1");
 		session.setNodeValue("1/ConditionInfo",new DmtData(SIGNER_SARAH.getEncoded()));
 		session.setNodeValue("1/PermissionInfo",new DmtData(ADMINPERMISSION.getEncoded()));

@@ -114,11 +114,6 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 		}
 	}
 
-	/**
-	 * The point where this plugin should go in the DMT.
-	 */
-	public static final String dataRootURI = "./OSGi/Policies/Java/DmtPrincipal";
-	
 	private static final DmtMetaNode rootMetaNode = new RootMetaNode("tree representing DMT Principal permissions");
 	private static final DmtMetaNode principalMetaNode = new PrincipalMetaNode();
 	private static final DmtMetaNode permissionInfoMetaNode = new PermissionInfoMetaNode();
@@ -139,11 +134,10 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 	};
 	private final SetPrincipalPermissions setPrincipalPermissions = new SetPrincipalPermissions();
 
-	public DmtPrincipalPlugin() throws NoSuchAlgorithmException {
-		ROOT = dataRootURI;
-	}
+	public DmtPrincipalPlugin() throws NoSuchAlgorithmException {}
 
 	protected void activate(ComponentContext context) {
+		super.activate(context);
 		dmtPrincipalPermissionAdmin = (DmtPrincipalPermissionAdmin) context.locateService("dmtPrincipalPermissionAdmin");
 	}
 	
@@ -183,7 +177,7 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 	}
 
 	public void rollback() throws DmtException {
-		throw new DmtException(dataRootURI,DmtException.FEATURE_NOT_SUPPORTED,"");
+		throw new DmtException(ROOT,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
 	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
@@ -220,10 +214,10 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 			PrincipalPermission element = (PrincipalPermission) iter.next();
 			String principal = element.principal;
 			if ((principal==null)||(principal.equals(""))) {
-				throw new DmtException(dataRootURI,DmtException.OTHER_ERROR,"empty principal");
+				throw new DmtException(ROOT,DmtException.OTHER_ERROR,"empty principal");
 			}
 			if (principals.contains(principal)) {
-				throw new DmtException(dataRootURI,DmtException.OTHER_ERROR,"principal name "+principal+" occurs twice");
+				throw new DmtException(ROOT,DmtException.OTHER_ERROR,"principal name "+principal+" occurs twice");
 			}
 			principals.add(principal);
 			systemState.put(principal,element.permissionInfo);
@@ -233,7 +227,7 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 		    AccessController.doPrivileged(setPrincipalPermissions);
         }
 		catch (PrivilegedActionException e) {
-            throw new DmtException(dataRootURI, DmtException.DATA_STORE_FAILURE,
+            throw new DmtException(ROOT, DmtException.DATA_STORE_FAILURE,
                     "error persisting permissions", e);
 		}
 		

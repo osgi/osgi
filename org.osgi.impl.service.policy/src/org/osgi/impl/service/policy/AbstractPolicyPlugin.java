@@ -21,6 +21,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import org.osgi.impl.service.policy.util.HashCalculator;
 import org.osgi.impl.service.policy.util.Splitter;
+import org.osgi.service.component.ComponentContext;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.dmt.DmtException;
@@ -57,6 +58,10 @@ public abstract class AbstractPolicyPlugin implements DmtDataPlugin {
 		hashCalculator = new HashCalculator();
 	}
 
+	protected void activate(ComponentContext context) {
+		ROOT = (String) context.getProperties().get("dataRootURIs");
+	}
+	
 	public void open(String subtreeUri, int lockMode, DmtSession session)
 			throws DmtException {
 		dirty = false;
