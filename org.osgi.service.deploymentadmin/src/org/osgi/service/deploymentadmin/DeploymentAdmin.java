@@ -39,11 +39,11 @@ import java.io.InputStream;
 public interface DeploymentAdmin {
 
 	/**
-	 * Installs a deployment package from an Input Stream. If a version of that deployment package
+	 * Installs a deployment package from an input stream. If a version of that deployment package
 	 * is already installed and the versions are different, the installed version is updated
 	 * with this new version even if it is older. If the two versions are the same, then this 
 	 * method simply returns without any action. 
-	 * <code>DeploymentAdminPermission}("&lt;filter&gt;", "install")</code> is 
+	 * <code>{@link DeploymentAdminPermission}("&lt;filter&gt;", "install")</code> is 
 	 * needed for this operation.
 	 * @param  in The input stream which where the deployment package can be read. It mustn't be null.
 	 * @return A DeploymentPackage object representing the newly installed/updated deployment package. 
@@ -56,7 +56,7 @@ public interface DeploymentAdmin {
 
     /**
       * Lists the deployment packages currently installed on the platform.
-      * <code>DeploymentAdminPermission("&lt;filter&gt;", "list")</code> is 
+      * <code>{@link DeploymentAdminPermission}("&lt;filter&gt;", "list")</code> is 
       * needed for this operation. 
       * @return Array of DeploymentPackage objects representing all the installed deployment packages. 
       *         Return value cannot be null. If there are no deployment packages installed it gives back 
@@ -82,7 +82,7 @@ public interface DeploymentAdmin {
      * This method cancels the currently active deployment session. This method addresses the need
      * to cancel the processing of excessively long running, or resource consuming install, updates
      * or uninstalls.
-     * <code>DeploymentAdminPermission("&lt;filter&gt;", "cancel")</code> is needed for this operation. 
+     * <code>{@link DeploymentAdminPermission}("&lt;filter&gt;", "cancel")</code> is needed for this operation. 
      * @return true if there was an active session and it was successfully cancelled.
      * @throws SecurityException if the operation is not permitted based on the current security policy.
      * @see DeploymentAdminPermission

@@ -44,10 +44,10 @@ import org.osgi.framework.Version;
   * new Wire objects added to the Wire Admin service, or changed system properties. All 
   * the changes caused by the processing of a deployment package are persistently 
   * associated with the deployment package, so that they can be appropriately cleaned 
-  * up when the deployment package is uninstalled. There is a strict ï¿½no overlapï¿½ rule 
+  * up when the deployment package is uninstalled. There is a strict “no overlap” rule 
   * imposed on deployment packages. Two deployment packages are not allowed to create or 
   * manipulate the same artifact. Obviously, this means that a bundle cannot be in two 
-  * different deployment packagess. Any violation of this ï¿½no overlapï¿½ rule is considered 
+  * different deployment packagess. Any violation of this “no overlap” rule is considered 
   * an error and the install or update of the offending deployment package must be aborted.<p>
   * The Deployment Admin service should do as much as possible to ensure transactionality. 
   * It means that if a deployment package installation, update or removal (uninstall) fails 
