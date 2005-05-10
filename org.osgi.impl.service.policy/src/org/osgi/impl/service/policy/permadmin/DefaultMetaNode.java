@@ -27,7 +27,7 @@ import org.osgi.service.dmt.DmtMetaNode;
  * @version $Revision$
  */
 public final class DefaultMetaNode implements DmtMetaNode {
-	public boolean can(int operation) { return operation==CMD_DELETE; }
+	public boolean can(int operation) { return (operation==CMD_DELETE)||(operation==CMD_GET); }
 	public boolean isLeaf() { return false;	}
 	public int getScope() { return DYNAMIC; }
 	public String getDescription() { return "default permissions"; }
