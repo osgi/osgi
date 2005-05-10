@@ -57,6 +57,8 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 	 */
 	public DummyConditionalPermissionAdmin condPermAdmin;
 
+	public DummyComponentContext context;
+	
 	public static final String ROOT = "./OSGi/Policies/Java/ConditionalPermission";
 	
 	public static final ConditionInfo LOC1CONDITION = new ConditionInfo(
@@ -99,7 +101,11 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 		condPermAdmin = new DummyConditionalPermissionAdmin();
+		context = new DummyComponentContext();
+		context.properties.put("dataRootURIs",ROOT);
+		context.services.put("condPermAdmin",condPermAdmin);
 		plugin = new ConditionalPermissionAdminPlugin();
+		context.doActivate(plugin);
 		addDataPlugin(ROOT,plugin);
 	}
 	

@@ -63,12 +63,16 @@ public class DmtPrincipalPluginTest extends DmtPluginTestCase implements DmtPrin
 	public Map getPrincipalPermissions() { return principalPermissions; }
 	public void setPrincipalPermissions(Map permissions) { principalPermissions = permissions; }
 
+	public DummyComponentContext context;
+	
 	public void setUp() throws Exception {
 		super.setUp();
 		principalPermissions = new HashMap();
-//		plugin = new DmtPrincipalPlugin(this);
+		context = new DummyComponentContext();
+		context.properties.put("dataRootURIs",ROOT);
+		context.services.put("dmtPrincipalPermissionAdmin",this);
 		plugin = new DmtPrincipalPlugin();
-		
+		context.doActivate(plugin);
 		addDataPlugin(ROOT,plugin);
 	}
 

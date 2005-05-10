@@ -18,6 +18,7 @@
 package org.osgi.impl.service.policy.unittests;
 
 import java.util.Arrays;
+
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.PackagePermission;
 import org.osgi.impl.service.policy.permadmin.PermissionAdminPlugin;
@@ -45,6 +46,7 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 
 	public DummyPermissionAdmin	permAdmin;
 	public PermissionAdminPlugin	plugin;
+	public DummyComponentContext context;
 	public static final PermissionInfo ADMINPERMISSION = new PermissionInfo(AdminPermission.class.getName(),"","");
 	public static final PermissionInfo IMPORTFRAMEWORKPERMISSION 
 		= new PermissionInfo(PackagePermission.class.getName(),"org.osgi.framework","IMPORT");
@@ -54,9 +56,11 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 		permAdmin = new DummyPermissionAdmin();
-//		plugin = new PermissionAdminPlugin(permAdmin);
+		context = new DummyComponentContext();
+		context.properties.put("dataRootURIs",ROOT);
+		context.services.put("permissionAdmin",permAdmin);
 		plugin = new PermissionAdminPlugin();
-		
+		context.doActivate(plugin);
 		addDataPlugin(ROOT,plugin);
 	}
 	
