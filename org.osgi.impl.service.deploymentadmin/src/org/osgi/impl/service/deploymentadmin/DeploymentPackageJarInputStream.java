@@ -32,13 +32,15 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 
+import org.osgi.service.deploymentadmin.DeploymentException;
+
 /**
- * WrappedJarInputStream class wraps the JarInputStream implementation  
+ * DeploymentPackageJarInputStream class wraps the JarInputStream implementation  
  * to override its behaviour according to the needs of the deployment 
  * packages (DPs). See nextEntry(), closeEntry() and getNextJarEntry() 
  * methods! 
  */
-public class WrappedJarInputStream {
+public class DeploymentPackageJarInputStream {
     
     /**
      * Extends the JarEntry functionality according to the needs of 
@@ -145,10 +147,13 @@ public class WrappedJarInputStream {
     private JarInputStream jis;
     private Map            resourceNames;
     private Entry          actEntry;
+    private boolean        fixPack;
         
-    public WrappedJarInputStream(InputStream is) throws IOException {
+    public DeploymentPackageJarInputStream(InputStream is) throws IOException {
 	    this.jis = new JarInputStream(is);
 	    resourceNames = new HashMap(getManifest().getEntries());
+	    fixPack = (null != 
+	        	jis.getManifest().getMainAttributes().getValue(DAConstants.DP_FIXPACK));
 	}
 	
 	/**
@@ -156,8 +161,9 @@ public class WrappedJarInputStream {
 	 * @return The next Entry or <code>null</code> if there is no 
 	 * more entries.
 	 * @throws IOException
+	 * @throws DeploymentException
 	 */
-    public Entry nextEntry() throws IOException {
+    public Entry nextEntry() throws IOException, DeploymentException {
         if (null != actEntry)
             return actEntry;
         
@@ -167,13 +173,21 @@ public class WrappedJarInputStream {
             Iterator it = resourceNames.keySet().iterator();
             if (it.hasNext()) {
                 String name = (String) it.next();
+                if (!fixPack)
+                    throw new DeploymentException(DeploymentException.CODE_ORDER_ERROR,
+                            "There is no data in the stream for \"Name\"-section: " +
+                            name);
                 actEntry = new Entry(name, (Attributes) resourceNames.get(name));
-            
+                
                 // remove to ensure that the sequence of Entries ends
                 it.remove();
             }
         }
         else {
+            if (null == je.getAttributes())
+                throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
+                        "There is no \"Name\"-section for JarEntry: " + je);
+            
             ByteArrayOutputStream bos = readIntoBuffer();
             closeEntry();
 

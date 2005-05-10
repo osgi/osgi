@@ -39,7 +39,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
-import org.osgi.impl.service.deploymentadmin.WrappedJarInputStream.Entry;
+import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Entry;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
@@ -254,7 +254,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         		"package: " + dp);
     }
 
-    void installUpdate(WrappedJarInputStream wjis) throws DeploymentException {
+    void installUpdate(DeploymentPackageJarInputStream wjis) throws DeploymentException {
         openTrackers();
         transaction = Transaction.createTransaction(this, logger);
         try {
@@ -269,6 +269,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
             dropBundles();
             startBundles();
         } catch (CancelException e) {
+            throw e;
+        } catch (DeploymentException e) {
             throw e;
         } catch (Exception e) {
             transaction.rollback();
@@ -373,7 +375,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         transaction.addRecord(new TransactionRecord(Transaction.STOPBUNDLE, b));
     }
 
-    private void processResources(WrappedJarInputStream wjis) 
+    private void processResources(DeploymentPackageJarInputStream wjis) 
     		throws DeploymentException, IOException 
     {
         DeploymentPackageImpl dp;
@@ -384,7 +386,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         else //DeploymentSession.UNINSTALL == getDeploymentAction()
             dp = targetDp;
         
-        WrappedJarInputStream.Entry entry = wjis.nextEntry();
+        DeploymentPackageJarInputStream.Entry entry = wjis.nextEntry();
         dp.updateResourceEntry(entry);
         while (null != entry) {
             if (!entry.isResource())
@@ -410,6 +412,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         toDrop.removeAll(tmpSet);
         for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
+            targetDp.getResourceEntries().remove(re);
             dropResource(re);
         }
     }
@@ -444,6 +447,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         toDrop.removeAll(tmpSet);
         for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
+            targetDp.getBundleEntries().remove(be);
             dropBundle(be);
         }
     }
@@ -512,7 +516,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         return null;
     }
 
-    private void processResource(final WrappedJarInputStream.Entry entry) 
+    private void processResource(final DeploymentPackageJarInputStream.Entry entry) 
     		throws DeploymentException, IOException 
     {
         String pid = entry.getAttributes().getValue(DAConstants.RP_PID);
@@ -526,10 +530,10 @@ public class DeploymentSessionImpl implements DeploymentSession {
             targetDp.setProcessorPid(entry.getName(), pid);    
     }
     
-    private void processBundles(WrappedJarInputStream wjis) 
+    private void processBundles(DeploymentPackageJarInputStream wjis) 
     		throws BundleException, IOException, DeploymentException 
     {
-        WrappedJarInputStream.Entry entry = wjis.nextEntry();
+        DeploymentPackageJarInputStream.Entry entry = wjis.nextEntry();
         while (null != entry && entry.isBundle()) 
         {
             checkEntry(entry);
@@ -554,7 +558,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
                     "exist in the manifest");
     }
 
-    private Bundle processBundle(WrappedJarInputStream.Entry entry) 
+    private Bundle processBundle(DeploymentPackageJarInputStream.Entry entry) 
     		throws BundleException, IOException 
     {
         Bundle ret;

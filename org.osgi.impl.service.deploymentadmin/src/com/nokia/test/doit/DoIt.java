@@ -25,6 +25,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
 import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
@@ -184,7 +185,11 @@ public class DoIt implements BundleActivator {
             System.out.println("*******************************************************************");
             try {bad_db_test_05(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
-            try {bad_db_test_06(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            //try {bad_db_test_06(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            //System.out.println("*******************************************************************");
+            try {bad_db_test_07(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
+            try {bad_db_test_08(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
             
             System.out.println("\n=====================================");
@@ -244,17 +249,24 @@ public class DoIt implements BundleActivator {
         throw new Exception("Negative test failed");
     }
 
-    private void bad_db_test_06() throws Exception {
-        ServiceReference ref = context.getServiceReference(Db.class.getName());
-        DeploymentPackage dp = null;
-        
-        InputStream is = new FileInputStream(HOME + "bad_db_test_06.dp");
+    private void bad_db_test_07() throws Exception {
+        InputStream is = new FileInputStream(HOME + "bad_db_test_07.dp");
         try {
-            dp = da.installDeploymentPackage(is);
+            DeploymentPackage dp = da.installDeploymentPackage(is);
         } catch (DeploymentException e) {
-            if (e.getCode() != DeploymentException.CODE_BUNDLE_SHARING_VIOLATION)
-                	throw new Exception("Negative test failed");
-            return;
+            if (DeploymentException.CODE_ORDER_ERROR == e.getCode())
+                return;
+        }
+        throw new Exception("Negative test failed");
+    }
+
+    private void bad_db_test_08() throws Exception {
+        InputStream is = new FileInputStream(HOME + "bad_db_test_08.dp");
+        try {
+            DeploymentPackage dp = da.installDeploymentPackage(is);
+        } catch (DeploymentException e) {
+            if (DeploymentException.CODE_MISSING_HEADER == e.getCode())
+                return;
         }
         throw new Exception("Negative test failed");
     }
@@ -290,6 +302,12 @@ public class DoIt implements BundleActivator {
             throw new Exception("Row with '1' primary key is missing");
         if (null == db.findRow(null, "tmp", new Integer(1)))
             throw new Exception("Row with '1' primary key is missing");
+        if (!dp.getVersion().equals(new Version("1.0")))
+            throw new Exception("Version should be 1.0");
+        if (!dp.getHeader("Other-Main-header").equals("1"))
+            throw new Exception("Header value (Other-Main-header) should be 1");
+        if (!dp.getResourceHeader("db_test_01.dbscript", "Other-header").equals("1"))
+            throw new Exception("Header value (Other-header) should be 1");
 
         is = new FileInputStream(HOME + "db_test_01_update_01.dp");
 		dp = da.installDeploymentPackage(is);
@@ -314,6 +332,12 @@ public class DoIt implements BundleActivator {
             throw new Exception("Row with '1' primary key is not updated");
         if (!((Object[]) db.findRow(null, "game", new Integer(1)))[1].equals("chess_Upd"))
             throw new Exception("Row with '1' primary key is not updated");
+        if (!dp.getVersion().equals(new Version("2.0")))
+            throw new Exception("Version should be 2.0");
+        if (!dp.getHeader("Other-Main-header").equals("2"))
+            throw new Exception("Header value (Other-Main-header) should be 2");
+        if (!dp.getResourceHeader("db_test_01.dbscript", "Other-header").equals("2"))
+            throw new Exception("Header value (Other-header) shoul dbe 2");
         
         dp.uninstall();
         db.reset(null);

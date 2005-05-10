@@ -5,7 +5,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 
 import org.osgi.framework.Bundle;
-import org.osgi.impl.service.deploymentadmin.WrappedJarInputStream.Entry;
+import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Entry;
 
 public class BundleEntry implements Serializable {
     

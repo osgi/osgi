@@ -26,6 +26,8 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.security.AccessController;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.Permission;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
@@ -50,6 +52,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	private ServiceRegistration   registration;
     private Logger 				  logger;
     private DeploymentSessionImpl session;
+    private KeyStore              keystore;
     
     // persisted fields
     private Set     dps = new HashSet();		// deployment packages
@@ -61,9 +64,22 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 		load();
         registration = context.registerService(DeploymentAdmin.class.getName(), this, null);
         logger = new Logger(context);
+        
+        initKeyStore();
 	}
 	
-	public void stop(BundleContext context) throws Exception {
+    private void initKeyStore() throws Exception {
+        File file = new File((String) context.getBundle().getHeaders().get(DAConstants.KEYSTORE));
+        if (!file.exists())
+            throw new RuntimeException("Keystore is not found: " + file);
+        String pwd = (String) context.getBundle().getHeaders().get(DAConstants.KEYSTORE_PWD);
+        if (null == pwd)
+            throw new RuntimeException("There is no password set in the manifest");
+        keystore = KeyStore.getInstance("JKS");
+        keystore.load(new FileInputStream(file), pwd.toCharArray());
+    }
+
+    public void stop(BundleContext context) throws Exception {
 	    registration.unregister();
 	    logger.stop();
 	}
@@ -85,13 +101,13 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     public DeploymentPackage installDeploymentPackage(InputStream in)
     		throws DeploymentException
     {
-        WrappedJarInputStream wjis;
+        DeploymentPackageJarInputStream wjis;
         DeploymentPackageImpl srcDp = null;
         cancelled = false;
         
         // create source DP
         try {
-            wjis = new WrappedJarInputStream(in);
+            wjis = new DeploymentPackageJarInputStream(in);
             srcDp = new DeploymentPackageImpl(wjis.getManifest(), nextDpId(), this);
         } catch (DeploymentException e) {
             throw e;
@@ -116,12 +132,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             return srcDp;
         }
         else { // if (session.getDeploymentAction() == DeploymentSession.UPDATE) 
-            DeploymentPackageImpl targetDp = (DeploymentPackageImpl) 
-            		session.getTargetDeploymentPackage();
-            dps.remove(targetDp);
-            targetDp.setVersion(session.getSourceDeploymentPackage().getVersion());
-            dps.add(targetDp);
-            return targetDp;
+            dps.remove(session.getTargetDeploymentPackage());
+            dps.add(session.getSourceDeploymentPackage());
+            return session.getSourceDeploymentPackage();
         }
     }
 
@@ -140,12 +153,13 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         if (null == targetDp) {
             // creates an empty dp
             targetDp = new DeploymentPackageImpl();
-	        return new DeploymentSessionImpl(srcDp, 
+	        return new DeploymentSessionImpl(new DeploymentPackageImpl(srcDp), 
 	                targetDp, logger, context);
         }
         // found -> update
         else {
-            DeploymentSessionImpl ret = new DeploymentSessionImpl(srcDp, targetDp, 
+            DeploymentSessionImpl ret = new DeploymentSessionImpl(
+                    new DeploymentPackageImpl(srcDp), new DeploymentPackageImpl(targetDp), 
                     logger, context);
             if (srcDp.fixPack()) {
                 VersionRange range = srcDp.getFixPackRange();
@@ -171,7 +185,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         if (null == dp)
             throw new RuntimeException("Internal error");
         
-        return new DeploymentSessionImpl(srcDp, targetDp, logger, context);
+        return new DeploymentSessionImpl(srcDp, new DeploymentPackageImpl(targetDp), logger, context);
 	}
 
     private DeploymentPackageImpl findDp(DeploymentPackageImpl srcDp) {

@@ -24,7 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.jar.Attributes;
 
-import org.osgi.impl.service.deploymentadmin.WrappedJarInputStream.Entry;
+import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Entry;
 
 public class ResourceEntry implements Serializable {
 
@@ -34,13 +34,8 @@ public class ResourceEntry implements Serializable {
     private List   	   certChains = new LinkedList();
 
     public ResourceEntry(String name, Attributes attrs) {
-        this(name, attrs, null);
-    }
-    
-    private ResourceEntry(String name, Attributes attrs, String pid) {
         this.name = name;
         extractAttrs(attrs);
-        this.pid = pid;
     }
     
     public boolean equals(Object o) {

@@ -35,7 +35,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
-import org.osgi.impl.service.deploymentadmin.WrappedJarInputStream.Entry;
+import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Entry;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
@@ -44,13 +44,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     private transient DeploymentAdminImpl da;
     
-    private String       fixPackRange; // String because VersionRange is not serializable	
-    private String       dpName;
-    private String       dpVersion;    // String because Version is not serializable
-    private Long         id;
-    
-    private Map mainSection = new Hashtable();
-    private Vector bundleEntries = new Vector();
+    private Long   id;
+    private Map    mainSection     = new Hashtable();
+    private Vector bundleEntries   = new Vector();
     private Vector resourceEntries = new Vector();
     
     public DeploymentPackageImpl(Manifest manifest, int id, DeploymentAdminImpl da) 
@@ -66,16 +62,29 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
 
     /*
+     * Copy constructor
+     */
+    public DeploymentPackageImpl(DeploymentPackageImpl other) {
+        this.da = other.da;
+        
+        this.id = other.id;
+        this.mainSection = new Hashtable(other.mainSection);
+        bundleEntries = (Vector) other.bundleEntries.clone();
+        resourceEntries = (Vector) other.resourceEntries.clone();
+    }
+
+    /*
      * Creates an empty DP
      */
     public DeploymentPackageImpl() {
-        dpVersion = "0.0.0";
+        mainSection.put(DAConstants.DP_NAME, "");
+        mainSection.put(DAConstants.DP_VERSION, "0.0.0");
     }
-    
 
     static DeploymentPackageImpl createSystemBundle(Set bundleEntries) {
         DeploymentPackageImpl dp = new DeploymentPackageImpl();
-        dp.dpName = "System";
+        dp.mainSection.put(DAConstants.DP_NAME, "System");
+        dp.mainSection.put(DAConstants.DP_VERSION, "0.0.0");
         dp.id = new Long(0);
         dp.bundleEntries = new Vector(bundleEntries);
         
@@ -106,14 +115,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
     
     public String toString() {
-        return "{" + getName() + " " + ( dpVersion == null ? null : getVersion() ) + "}";
+        return "{" + getName() + " " + ( getVersion() == null ? null : getVersion() ) + "}";
     }
 
     private void processMainSection(Manifest manifest) throws DeploymentException {
-        dpName = manifest.getMainAttributes().getValue(DAConstants.DP_NAME);
-        fixPackRange = manifest.getMainAttributes().getValue(DAConstants.DP_FIXPACK);
-        dpVersion = manifest.getMainAttributes().getValue(DAConstants.DP_VERSION);
-        
         Attributes attrs = manifest.getMainAttributes();
         for (Iterator iter = attrs.keySet().iterator(); iter.hasNext();) {
             Attributes.Name key = (Attributes.Name) iter.next();
@@ -168,7 +173,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
     
     VersionRange getFixPackRange() {
-        return new VersionRange(fixPackRange);
+        return new VersionRange((String) mainSection.get(DAConstants.DP_FIXPACK));
     }
     
     Vector getResourceEntries() {
@@ -247,14 +252,14 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getName()
      */
     public String getName() {
-        return dpName;
+        return (String) mainSection.get(DAConstants.DP_NAME);
     }
 
     /**
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getVersion()
      */
     public Version getVersion() {
-        return new Version(dpVersion); 
+        return new Version((String) mainSection.get(DAConstants.DP_VERSION)); 
     }
 
     /**
@@ -333,7 +338,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
 
     boolean fixPack() {
-        return fixPackRange != null;
+        return null != mainSection.get(DAConstants.DP_FIXPACK);
     }
 
     void setProcessorPid(String resName, String pid) {
@@ -350,7 +355,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
 
     void setVersion(Version version) {
-        this.dpVersion = version.toString();
+        mainSection.put(DAConstants.DP_VERSION, version.toString());
     }
     
     /*
@@ -366,19 +371,20 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         private static void checkMainSection(DeploymentPackageImpl dp)
         		throws DeploymentException
         {
-            if (null == dp.dpName)
+            if (null == dp.getName())
                 throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
                         "Missing deployment package name");
             
-            if ("System".equals(dp.dpName))
+            if ("System".equals(dp.getName()))
                 throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
                 		"The \"System\" deployment package name is reserved");
             
-            if (null == dp.dpVersion)
+            if (null == dp.getVersion())
                 throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
                         "Missing deployment package version in: " + dp.getName());
             try {
-                Version version = new Version(dp.dpVersion);
+                String s = (String) dp.mainSection.get(DAConstants.DP_VERSION);
+                Version version = new Version(s);
             }
             catch (Exception e) {
                 throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
@@ -387,7 +393,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             
             if (dp.fixPack()) {
 	            try {
-	                VersionRange versionRange = new VersionRange(dp.fixPackRange);
+	                String s = (String) dp.mainSection.get(DAConstants.DP_FIXPACK);
+	                VersionRange versionRange = new VersionRange(s);
 	            }
 	            catch (Exception e) {
 	                throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
@@ -395,11 +402,11 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 	            }
             }
             
-            if (null == dp.dpName)
+            if (null == dp.getName())
                 throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER, 
                         "Missing header in: " + dp + " header: " + DAConstants.DP_NAME);
          
-            if (null == dp.dpVersion)
+            if (null == dp.getVersion())
                 throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER, 
                         "Missing header in: " + dp + " header: " + DAConstants.DP_VERSION);        
         }
@@ -417,6 +424,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                 checkResourceEntry(dp, re);
             }
             
+            // TODO this check only inside one dp
             Set s = new HashSet();
             for (Iterator iter = dp.bundleEntries.iterator(); iter.hasNext();) {
                 BundleEntry be = (BundleEntry) iter.next();

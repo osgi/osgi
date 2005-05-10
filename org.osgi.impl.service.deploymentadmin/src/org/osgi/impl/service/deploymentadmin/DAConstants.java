@@ -20,7 +20,7 @@ package org.osgi.impl.service.deploymentadmin;
 public class DAConstants {
     
     // debug mode
-    public static final boolean DEBUG               = true;
+    public static final boolean DEBUG               = false;
 
     // headers in the main section of DPs
     public static final String DP_NAME              = "DeploymentPackage-Name";
@@ -36,5 +36,7 @@ public class DAConstants {
 
     // private headers of the DA bundle 
     public static final String FW_BUNDLES_DIR	    = "Framework-Bundles-Dir";
+    public static final String KEYSTORE     	    = "Keystore";
+    public static final String KEYSTORE_PWD    	    = "Keystore-Password";
     
 }
