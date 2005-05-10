@@ -42,14 +42,14 @@ public interface DeploymentAdmin {
 	 * Installs a deployment package from an input stream. If a version of that deployment package
 	 * is already installed and the versions are different, the installed version is updated
 	 * with this new version even if it is older. If the two versions are the same, then this 
-	 * method simply returns without any action. 
+	 * method simply returns without any action and gives back the original deployment package. 
 	 * <code>{@link DeploymentAdminPermission}("&lt;filter&gt;", "install")</code> is 
 	 * needed for this operation.
-	 * @param  in The input stream which where the deployment package can be read. It mustn't be null.
+	 * @param  in The input stream the deployment package can be read from. It mustn't be null.
 	 * @return A DeploymentPackage object representing the newly installed/updated deployment package. 
-	 *         Return value cannot be null.
-	 * @throws DeploymentException if the installation was not successful
-	 * @throws SecurityException if access is not permitted based on the current security policy.
+	 *         Return value can only be null if the action was cancelled (see {@see #cancel}).
+	 * @throws <code>DeploymentException</code> if the installation was not successful
+	 * @throws <code>SecurityException</code> if access is not permitted based on the current security policy.
 	 * @see DeploymentAdminPermission
 	 */
     DeploymentPackage installDeploymentPackage(InputStream in) throws DeploymentException;
@@ -58,8 +58,9 @@ public interface DeploymentAdmin {
       * Lists the deployment packages currently installed on the platform.
       * <code>{@link DeploymentAdminPermission}("&lt;filter&gt;", "list")</code> is 
       * needed for this operation. 
-      * @return Array of DeploymentPackage objects representing all the installed deployment packages. 
-      *         Return value cannot be null. If there are no deployment packages installed it gives back 
+      * @return Array of <code>DeploymentPackage</code> objects representing all the installed deployment 
+      *         packages. Return value cannot be null. If there are no deployment packages installed it 
+      * gives back 
       *         an empty array.  
       * @see DeploymentAdminPermission
       */
@@ -70,8 +71,8 @@ public interface DeploymentAdmin {
      * <code>{@link DeploymentAdminPermission}("&lt;filter&gt;", "list")</code> is 
      * needed for this operation. 
      * @param  id the id of the deployment package to be retrieved. It mustn't be negative.
-     * @return The DeploymentPackage for the request id. If there is no deployment package with 
-     *         that id, null is returned.
+     * @return The <code>DeploymentPackage</code> for the request id. If there is no deployment 
+     *         package with that id, null is returned.
      * @throws SecurityException if access to the deployment package identified by <code>id</code> 
      * 	       is not permitted based on the current security policy.
      * @see DeploymentAdminPermission
