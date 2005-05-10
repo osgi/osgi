@@ -293,7 +293,7 @@ public class BundleTest extends TestCase {
 		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
 		saxParserFactory.setNamespaceAware(true);
 		saxParserFactory.setValidating(true);
-		resourceProcessor = new Autoconf(bundleContext,configurationAdmin,metaTypeService,saxParserFactory);
+//		resourceProcessor = new Autoconf(bundleContext,configurationAdmin,metaTypeService,saxParserFactory);
 		
 	}
 

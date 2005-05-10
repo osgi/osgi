@@ -88,7 +88,11 @@
 		<attributes>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/org.osgi.impl.service.policy.unittest/src">
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.impl.service.component">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/org.osgi.impl.service.policy.unittest/src">
 		<attributes>
 		</attributes>
 	</classpathentry>

@@ -27,39 +27,38 @@
 
 package integrationtests;
 
-import org.osgi.framework.Bundle;
-import org.osgi.impl.service.policy.integrationtests.IntegratedTest;
+import junit.framework.Test;
 
-public class TestAutoconf extends IntegratedTest {
+import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceReference;
+import org.osgi.impl.bundle.autoconf.Autoconf;
+import org.osgi.impl.service.policy.integrationtests.IntegratedTest;
+import org.osgi.service.deploymentadmin.ResourceProcessor;
+
+public class TestAutoconf extends IntegratedTest implements Test {
 	public static final String	ORG_OSGI_IMPL_SERVICE_DEPLOYMENTADMIN_JAR	= "file:../../org.osgi.impl.service.deploymentadmin/org.osgi.impl.service.deploymentadmin.jar";
 	public static final String	ORG_OSGI_IMPL_SERVICE_METATYPE_JAR	= "file:../../org.osgi.impl.service.metatype/org.osgi.impl.service.metatype.jar";
 	public static final String  ORG_OSGI_IMPL_BUNDLE_AUTOCONF_JAR = "file:../../org.osgi.impl.bundle.autoconf/org.osgi.impl.bundle.autoconf.jar";
-	public static final String  ORG_OSGI_IMPL_BUNDLE_JAXP_JAR = "file:../../org.osgi.impl.bundle.jaxp/org.osgi.impl.bundle.jaxp.jar";
 	public Bundle	deploymentAdmin;
 	public Bundle	autoconf;
-	public Bundle	jaxp;
 	public Bundle	metatype;
 	
-	public void test1() throws Exception {
-		startFramework(true);
-	}
-
 	public void startFramework(boolean fresh) throws Exception {
 		super.startFramework(fresh);
 		if (fresh) {
 			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_DEPLOYMENTADMIN_JAR);
 			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_METATYPE_JAR);
-			setBundleAsAdministrator(ORG_OSGI_IMPL_BUNDLE_JAXP_JAR);
 			setBundleAsAdministrator(ORG_OSGI_IMPL_BUNDLE_AUTOCONF_JAR);
 		}
 		deploymentAdmin = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_DEPLOYMENTADMIN_JAR);
-		jaxp = systemBundleContext.installBundle(ORG_OSGI_IMPL_BUNDLE_JAXP_JAR);
 		metatype = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_METATYPE_JAR);
 		autoconf = systemBundleContext.installBundle(ORG_OSGI_IMPL_BUNDLE_AUTOCONF_JAR);
 		deploymentAdmin.start();
-		jaxp.start();
 		metatype.start();
 		autoconf.start();
+		
+		// component service bundle has some race condition issues
+		synchronized(this) { this.wait(100); }
 	}
 
 	public void stopFramework() throws Exception {
@@ -68,5 +67,12 @@ public class TestAutoconf extends IntegratedTest {
 		super.stopFramework();
 	}
 
+	public void testRegistered() throws Exception {
+		startFramework(true);
+		ServiceReference[] sr = systemBundleContext.getServiceReferences(ResourceProcessor.class.getName(),"(processor=AutoconfProcessor)");
+		assertEquals(1,sr.length);
+		Object sp = systemBundleContext.getService(sr[0]);
+		assertEquals(Autoconf.class.getName(),sp.getClass().getName()); // different classloaders!
+	}
 	
 }

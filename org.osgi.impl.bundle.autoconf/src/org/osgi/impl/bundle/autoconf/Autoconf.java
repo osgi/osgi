@@ -38,6 +38,7 @@ import org.osgi.impl.bundle.autoconf.MetaData.OCD;
 import org.osgi.impl.bundle.autoconf.MetaData.Object;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.component.ComponentContext;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
@@ -47,24 +48,20 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 public class Autoconf implements ResourceProcessor {
-	final BundleContext context;
-	final ConfigurationAdmin configurationAdmin;
-	final MetaTypeService metaTypeService;
-	final SAXParserFactory saxParserFactory;
+	BundleContext context;
+	ConfigurationAdmin configurationAdmin;
+	MetaTypeService metaTypeService;
+	SAXParserFactory saxParserFactory;
 	int operation;
 	DeploymentSession	session;
-
-	public Autoconf(
-			BundleContext context,
-			ConfigurationAdmin configurationAdmin,
-			MetaTypeService metaTypeService,
-			SAXParserFactory saxParserFactory) {
-		this.context = context;
-		this.configurationAdmin = configurationAdmin;
-		this.metaTypeService = metaTypeService;
-		this.saxParserFactory = saxParserFactory;
+	
+	protected void activate(ComponentContext context) {
+		configurationAdmin = (ConfigurationAdmin) context.locateService("configurationAdmin");
+		metaTypeService = (MetaTypeService) context.locateService("metaTypeService");
+		saxParserFactory = (SAXParserFactory) context.locateService("saxParserFactory");
+		this.context = context.getBundleContext();
 	}
-
+	
 	public void begin(DeploymentSession session) {
 		this.session = session;
 	}

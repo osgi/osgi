@@ -4,7 +4,7 @@ Bundle-Name: ${p}
 Bundle-Vendor: Nokia
 Bundle-Copyright: All Rights Reserved, (c) OSGi Alliance, 2000-2005
 Bundle-Version: 1.0
-Bundle-Activator: ${p}.Activator
+Service-Component: OSGI-INF/services.xml
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
