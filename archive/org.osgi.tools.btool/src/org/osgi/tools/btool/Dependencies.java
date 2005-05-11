@@ -318,7 +318,6 @@ public class Dependencies {
 				Package p = makePackage(name);
 				if (p != null) {
 					p.uses = (Set) uses.get(p.getPath()); 
-					System.out.println( "Uses " + p.getPath() + " => " + p.uses );
 					result.add(p);
 				}
 			}
