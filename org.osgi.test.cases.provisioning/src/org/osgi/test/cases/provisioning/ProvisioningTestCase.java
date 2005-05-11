@@ -27,54 +27,77 @@
  */
 
 package org.osgi.test.cases.provisioning;
-import java.net.*;
+
+import java.net.URL;
+
+import javax.servlet.ServletException;
 
 import org.osgi.framework.*;
 import org.osgi.service.http.*;
-import org.osgi.test.cases.util.*;
+import org.osgi.service.http.HttpService;
+import org.osgi.test.cases.util.DefaultTestCase;
+import org.osgi.util.tracker.ServiceTracker;
 
-public class ProvisioningTestCase extends DefaultTestCase {	
-	HttpService				http;
-	
+public class ProvisioningTestCase extends DefaultTestCase {
+	HttpService		http;
+	ServiceTracker	tracker;
+
 	public String getMimeType(String name) {
-		if ( name.endsWith(".ipa") 
-			|| name.endsWith(".jar")
-			|| name.endsWith(".zip") )
+		if (name.endsWith(".ipa") || name.endsWith(".jar")
+				|| name.endsWith(".zip"))
 			return "application/zip";
 		return null;
 	}
 
-	
-	public URL getResource( String name ) {
-		if ( name.endsWith( "delay.jar" ) )
-			try { Thread.sleep(10000); } catch(InterruptedException e) {}
-		return super.getResource( name );
+	public URL getResource(String name) {
+		if (name.endsWith("delay.jar"))
+			try {
+				Thread.sleep(10000);
+			}
+			catch (InterruptedException e) {
+			}
+		return super.getResource(name);
 	}
-	
-	
-	
+
 	public void xinit() throws Exception {
-		ServiceReference ref = getBundleContext().getServiceReference(HttpService.class.getName());
-		if ( ref == null )
-			throw new IllegalStateException( "Requires HTTP service" );
-		
-		http = (HttpService) getBundleContext().getService(ref);
-		http.registerServlet("/test/rsh", new RshServlet(), null, this );
+		final ProvisioningTestCase p = this;
+
+		tracker = new ServiceTracker(getBundleContext(), HttpService.class
+				.getName(), null) {
+			public Object addingService(ServiceReference ref) {
+				HttpService http = (HttpService) getBundleContext();
+				try {
+					getBundleContext().getService(ref);
+					http
+							.registerServlet("/test/rsh", new RshServlet(),
+									null, p);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+				return http;
+			}
+		};
 	}
-	
+
 	public void xdeinit() {
-		http.unregister( "/test/rsh" );
+		tracker.close();
 	}
 
-	public void start( BundleContext c )  {
-		super.start( c );
-		try { xinit(); } catch( Exception e ) { e.printStackTrace(); new RuntimeException( e+"" ); }
+	public void start(BundleContext c) {
+		super.start(c);
+		try {
+			xinit();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			new RuntimeException(e + "");
+		}
 	}
-	
-	public void stop( BundleContext c ) {
+
+	public void stop(BundleContext c) {
 		xdeinit();
-		super.stop( c );
+		super.stop(c);
 	}
-	
-}
 
+}
