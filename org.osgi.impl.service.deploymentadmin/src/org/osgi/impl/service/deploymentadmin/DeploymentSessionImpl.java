@@ -26,6 +26,8 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -126,8 +128,15 @@ public class DeploymentSessionImpl implements DeploymentSession {
         
         AccessController.doPrivileged(new PrivilegedAction() {
             public Object run() {
-                fwBundleDir = (String) context.getBundle().getHeaders().
-            			get(DAConstants.FW_BUNDLES_DIR);
+                StringBuffer sb = new StringBuffer((String) context.getBundle().
+                        getHeaders().get(DAConstants.FW_BUNDLES_DIR));
+                char sc = (sb.toString().indexOf("/") != -1 ? '/' : '\\');
+                int i = sb.toString().indexOf(sc);
+                while (-1 != i) {
+                    sb.setCharAt(i, File.separatorChar);
+                    i = sb.toString().indexOf(sc);
+                }
+                fwBundleDir = sb.toString();
                 return null;
             }});
         
@@ -158,14 +167,19 @@ public class DeploymentSessionImpl implements DeploymentSession {
         if (null != old)
             oldPerms.put(location, old);
         
+        ArrayList permInfos = new ArrayList();
         for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             // TODO "data"
-            String rootDir = fwBundleDir + "/" + be.getId() + "/data/-";
-            pa.setPermissions(location, new PermissionInfo[] {
-                    new PermissionInfo(FilePermission.class.getName(), rootDir, 
-                            "read, write, execute, delete")});
+            char fs = File.separatorChar;
+            String rootDir = fwBundleDir + fs + be.getId() + fs + "data";
+            // TODO only "/-"
+            permInfos.add(new PermissionInfo(FilePermission.class.getName(), rootDir + fs + "-", 
+                    "read, write, execute, delete"));
+            permInfos.add(new PermissionInfo(FilePermission.class.getName(), rootDir + fs + "*", 
+            		"read, write, execute, delete"));
         }
+        pa.setPermissions(location, (PermissionInfo[]) permInfos.toArray(new PermissionInfo[] {}));
     }
 
     private void resetFilePermissionForCustomizers(Hashtable oldPerms) {
@@ -261,11 +275,21 @@ public class DeploymentSessionImpl implements DeploymentSession {
             transaction.start();
             stopBundles();
             processBundles(wjis);
-            Hashtable oldPerms = setFilePermissionForCustomizers();
+//            Hashtable oldPerms = setFilePermissionForCustomizers();
+//System.out.println("ADD >>>>>>>>>>>>>");            
+//PermissionAdmin pa = (PermissionAdmin) trackPerm.getService();
+//PermissionInfo[] ps = pa.getPermissions("com.nokia.test.exampleresourceprocessor.db.DbResourceProcessor_db_test_06");
+//System.out.println("com.nokia.test.exampleresourceprocessor.db.DbResourceProcessor_db_test_06");
+//if (null != ps) System.out.println(Arrays.asList(ps));
+//System.out.println("ADD >>>>>>>>>>>>>");
             startCustomizers();
             processResources(wjis);
             dropResources();
-            resetFilePermissionForCustomizers(oldPerms);
+//            resetFilePermissionForCustomizers(oldPerms);
+//System.out.println("DEL >>>>>>>>>>>>>");            
+//ps = pa.getPermissions("com.nokia.test.exampleresourceprocessor.db.DbResourceProcessor_db_test_06");
+//if (null != ps) System.out.println(Arrays.asList(ps));
+//System.out.println("DEL >>>>>>>>>>>>>");
             dropBundles();
             startBundles();
         } catch (CancelException e) {

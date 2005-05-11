@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Activator: com.nokia.test.exampleresourceprocessor.ExampleResourceProcessor
-Bundle-SymbolicName: com.nokia.test.exampleresourceprocessor.ExampleResourceProcessor
-Bundle-Version: 1.0
-MyID: exampleresourceprocessor
-$(EXPORT-PACKAGE)
-$(IMPORT-PACKAGE)
-$(PRIVATE-PACKAGE)

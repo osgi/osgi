@@ -22,6 +22,7 @@ import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -146,6 +147,7 @@ public class DeploymentPackageJarInputStream {
     
     private JarInputStream jis;
     private Map            resourceNames;
+    private Map            signatures = new Hashtable();
     private Entry          actEntry;
     private boolean        fixPack;
         
@@ -212,11 +214,21 @@ public class DeploymentPackageJarInputStream {
         return je; 
     }
 
-    private boolean isUninterested(JarEntry je) {
+    private boolean isUninterested(JarEntry je) throws IOException {
         if (je.isDirectory())
             return true;
-        if (je.getName().toLowerCase().startsWith("meta-inf/"))
+        if (je.getName().toLowerCase().startsWith("meta-inf/")) {
+            // TODO it is not too nice
+            String name = je.getName().toLowerCase();
+            if (name.endsWith(".dsa")) {
+                ByteArrayOutputStream bos = readIntoBuffer();
+                ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+                closeEntry();
+                String key = name.substring("meta-inf/".length(), name.indexOf(".dsa"));
+                signatures.put(key, bis);
+            }
             return true;
+        }
         return false;
     }
 

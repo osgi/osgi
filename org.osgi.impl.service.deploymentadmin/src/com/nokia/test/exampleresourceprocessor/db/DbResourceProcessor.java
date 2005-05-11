@@ -10,6 +10,8 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.security.AccessController;
+import java.security.PrivilegedExceptionAction;
 import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -30,8 +32,11 @@ import org.osgi.service.deploymentadmin.ResourceProcessor;
 
 import com.nokia.test.db.Db;
 import com.nokia.test.db.FieldDef;
+import com.nokia.test.exampleresourceprocessor.db.api.DbRpTest;
 
-public class DbResourceProcessor implements ResourceProcessor, BundleActivator, Serializable {
+public class DbResourceProcessor 
+		implements ResourceProcessor, BundleActivator, Serializable, DbRpTest 
+	{
     
     /*
      * The action value INSTALL indicates this session is associated with the 
@@ -215,8 +220,13 @@ public class DbResourceProcessor implements ResourceProcessor, BundleActivator, 
 	            } else if (line.startsWith("CREATEFILE")) {
 	                String[] parts = Splitter.split(line, ' ', 0);
 	                String fileName = parts[1];
-	                File newFile = new File(bundlePrivateArea, fileName);
-	                newFile.createNewFile();
+	                final File newFile = new File(bundlePrivateArea, fileName);
+	                AccessController.doPrivileged(new PrivilegedExceptionAction() {
+	                        public Object run() throws Exception {
+	                            newFile.createNewFile();
+	                            return null;
+	                        }
+	                    });
 	            }
 	            line = br.readLine();
 	        }

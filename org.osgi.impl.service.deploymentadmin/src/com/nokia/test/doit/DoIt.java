@@ -36,7 +36,8 @@ import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 import com.nokia.test.db.Db;
-import com.nokia.test.exampleresourceprocessor.db.DbResourceProcessor;
+import com.nokia.test.exampleresourceprocessor.db.api.DbRpTest;
+//import com.nokia.test.exampleresourceprocessor.db.DbResourceProcessor;
 
 public class DoIt implements BundleActivator {
     
@@ -75,15 +76,16 @@ public class DoIt implements BundleActivator {
                 "(type=db)");
         for (int i = 0; i < refs.length; i++) {
             String rpLoc = refs[i].getBundle().getLocation();
-            pa.setPermissions(rpLoc, new PermissionInfo[] {
-                    new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
-                    // to allow RP to read its id from its manifest
-                    new PermissionInfo(AdminPermission.class.getName(), "*", "metadata"),
-                    // to reach the database service
-                    new PermissionInfo(ServicePermission.class.getName(), "*", "get"),
-                    // to register itsel as a RP service
-                    new PermissionInfo(ServicePermission.class.getName(), "*", "register")
-                });
+            PermissionInfo[] pis = new PermissionInfo[] {
+	                new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
+	                // to allow RP to read its id from its manifest
+	                new PermissionInfo(AdminPermission.class.getName(), "*", "metadata"),
+	                // to reach the database service
+	                new PermissionInfo(ServicePermission.class.getName(), "*", "get"),
+	                // to register itsel as a RP service
+	                new PermissionInfo(ServicePermission.class.getName(), "*", "register")
+            	};
+            pa.setPermissions(rpLoc, pis);
         }
 
         ref = context.getServiceReference(Db.class.getName());
@@ -170,8 +172,8 @@ public class DoIt implements BundleActivator {
             System.out.println("*******************************************************************");
             try {db_test_05(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
-            //try {db_test_06(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
-            //System.out.println("*******************************************************************");
+            try {db_test_06(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
             try {db_test_07(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
             
@@ -419,14 +421,14 @@ public class DoIt implements BundleActivator {
         ServiceReference[] refs = context.getServiceReferences(
                 ResourceProcessor.class.getName(), "(" + Constants.SERVICE_PID + "=db_test_03)");
         ResourceProcessor rp = (ResourceProcessor) context.getService(refs[0]);
-        Set s = ((DbResourceProcessor) rp).getResources(dp, "db_test_01_t.dbscript");
+        Set s = ((DbRpTest) rp).getResources(dp, "db_test_01_t.dbscript");
         if (null == s || !s.contains("tmp"))
             throw new Exception("RP with id 'db_test_03' HASN'T receive the " +
             		"'db_test_01_t.dbscript' resource");
         refs = context.getServiceReferences(
                 ResourceProcessor.class.getName(), "(" + Constants.SERVICE_PID + "=default_pid)");
         ResourceProcessor rp_def = (ResourceProcessor) context.getService(refs[0]);
-        s = ((DbResourceProcessor) rp_def).getResources(dp, "db_test_01_t.dbscript");
+        s = ((DbRpTest) rp_def).getResources(dp, "db_test_01_t.dbscript");
         if (null != s && s.contains("tmp"))
             throw new Exception("RP with id 'default_id' HAS receive the " +
             		"'db_test_01_t.dbscript' resource");
@@ -498,16 +500,16 @@ public class DoIt implements BundleActivator {
         db.reset(null);
     }
     
-    /*private void db_test_06() throws Exception {
+    private void db_test_06() throws Exception {
         DeploymentPackage dp = null;
         InputStream is = new FileInputStream(HOME + "db_test_06.dp");
 		dp = da.installDeploymentPackage(is);
 		
         ServiceReference[] refs = context.getServiceReferences(
-                ResourceProcessor.class.getName(), "(" + Constants.SERVICE_PID + "=default_pid)");
+                ResourceProcessor.class.getName(), "(" + Constants.SERVICE_PID + "=db_test_06)");
         ResourceProcessor rp = (ResourceProcessor) context.getService(refs[0]);
         
-        File f = ((DbResourceProcessor) rp).getBundlePrivateArea();
+        File f = ((DbRpTest) rp).getBundlePrivateArea();
         if (null == f)
             throw new Exception("Private area error: null returned");
         if (!f.exists())
@@ -516,7 +518,7 @@ public class DoIt implements BundleActivator {
         System.out.println(Arrays.asList(fs));
         
         dp.uninstall();
-    }*/
+    }
     
     private void db_test_07() throws Exception {
 		DeploymentPackage[] dps = da.listDeploymentPackages();
