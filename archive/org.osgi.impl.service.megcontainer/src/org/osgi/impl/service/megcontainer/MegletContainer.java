@@ -138,16 +138,12 @@ public class MegletContainer implements BundleListener, EventHandler {
 			Constructor constructor = megletClass.getConstructor( new Class[0] );
 			app = (Meglet) constructor.newInstance( new Object[0] );
 		}else {
-/*			Object cd = bc.getService( components[ 0 ] );
-			System.out.println( cd.getClass().getName() );
+			Object cd = bc.getService( components[ 0 ] );
 			bc.getService( components[ 0 ] );
 			ComponentFactory cf = (ComponentFactory)bc.getService( components[ 0 ] );
 			ComponentInstance ci = cf.newInstance( null );
 			app = (Meglet) ci.getInstance();
-			bc.ungetService( components[ 0 ] );*/
-			Class megletClass = Class.forName( appDesc.getStartClass() );
-			Constructor constructor = megletClass.getConstructor( new Class[0] );
-			app = (Meglet) constructor.newInstance( new Object[0] );
+			bc.ungetService( components[ 0 ] );
 		}
 		
 		Method registerListenerMethod = Meglet.class.getDeclaredMethod( "registerForEvents",
