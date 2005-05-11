@@ -12,6 +12,7 @@ Test-2: ${if:${p}:YES}
 Test-2a: ${if::NO:YES}
 Test-3: ${replace:${specs}:$:.jar}
 Test-4: ${sort:${replace:${specs}:$:.jar}}
+Character: %2A $2a $bun
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
