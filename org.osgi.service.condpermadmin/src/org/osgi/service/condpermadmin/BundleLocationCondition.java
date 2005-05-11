@@ -96,7 +96,7 @@ public class BundleLocationCondition implements Condition {
 	 * @param conds the conditions to check for satisfiability.
 	 * @param context not used.
 	 * @return true if all of the conditions are satisfied.
-	 * @see org.osgi.service.condpermadmin.Condition#isSatisfied(org.osgi.service.condpermadmin.Condition[])
+	 * @see org.osgi.service.condpermadmin.Condition#isSatisfied(org.osgi.service.condpermadmin.Condition[],Dictionary)
 	 */
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
 		for(int i = 0; i < conds.length; i++) {
