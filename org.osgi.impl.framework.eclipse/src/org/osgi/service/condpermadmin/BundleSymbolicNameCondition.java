@@ -122,7 +122,7 @@ public class BundleSymbolicNameCondition implements Condition {
 	 * 
 	 * @param conds the conditions to be evaluated.
 	 * @param context not used.
-	 * @return
+	 * @return If this condition is satisfied
 	 * @see org.osgi.service.condpermadmin.Condition#isSatisfied(org.osgi.service.condpermadmin.Condition[],
 	 *      java.util.Dictionary)
 	 */
