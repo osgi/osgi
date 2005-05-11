@@ -49,11 +49,11 @@ public class FileResource extends Resource {
 							n = 0;
 							break;
 							
-						case '%' :
-							if (i < line.length() - 2) {
+						case '$' :
+							if (i < line.length() - 2 ) {
 								int c2 = hex(line.charAt(i+1), line.charAt(i+2));
 								if ( c2 >= 0 ) {
-									c = (char) c;
+									c = (char) c2;
 									i+=2;
 								}
 							}
@@ -85,7 +85,12 @@ public class FileResource extends Resource {
 	 * @return
 	 */
 	static int hex(char c, char d) {
-		return nibble(c) << 4 + nibble(d);
+		int cc = nibble(c);
+		int dd = nibble(d);
+		if ( cc < 0 || dd < 0 )
+			return -1;
+		System.out.println( "Hex " + c + " " + d  + " " + (cc*16+ dd) );
+		return cc * 16 + dd;
 	}
 	static int nibble(char c) {
 		if ( c >= '0' && c <= '9' )
