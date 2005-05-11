@@ -30,7 +30,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 
 /**
- * Custom exception thrown from some control unit related methods.<BR>
+ * Custom exception thrown from Control Unit related methods.
  * 
  * It has an error code, defining the type of the error that occurred and 
  * an optional nested exception.
@@ -90,7 +90,7 @@ public class ControlUnitException extends Exception {
   }
 
   /**
-   * Creates a new exception with the given nested exception.<br>
+   * Creates a new exception with the given nested exception.
    * 
    * The error code of the constructed exception will be
    * {@link #UNDETERMINED_ERROR}. The nested exception may be
@@ -104,7 +104,7 @@ public class ControlUnitException extends Exception {
 
   /**
    * Constructs a new exception with the specified message and assigned nested
-   * error.<br>
+   * error.
    * 
    * The error code of the constructed exception will be
    * {@link #UNDETERMINED_ERROR}. The nested exception may be

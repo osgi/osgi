@@ -69,7 +69,7 @@ import java.util.Vector;
  * </pre>
  * A holder of this permission can forcefully uninstall deployment packages if the deployment
  * package satisfies the  string. See {@link DeploymentPackage#uninstallForceful}.
- * <pree>
+ * <pre>
  * DeploymentAdminPermission( "&lt;filter&gt;", "cancel" )
  * </pre>
  * A holder of this permission can cancel an active deployment action. This action being
