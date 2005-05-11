@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="org.osgi.impl.bundle.autoconf" 
+	xmlns="http://www.osgi.org/xmlns/scr/v1.0.0">
+	<implementation class="integrationtests.managedservice1.CTest"/>
+	<property name="service.pid" value="integrationtests.managedservice1.pid"/>
+	<service>
+		<provide interface="integrationtests.api.ITest"/>
+		<provide interface="org.osgi.service.cm.ManagedService"/>
+	</service>
+</component>

@@ -27,21 +27,36 @@
 
 package integrationtests;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+
+import integrationtests.api.ITest;
 import junit.framework.Test;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.bundle.autoconf.Autoconf;
 import org.osgi.impl.service.policy.integrationtests.IntegratedTest;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.cm.ManagedService;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.metatype.AttributeDefinition;
+import org.osgi.service.metatype.MetaTypeInformation;
+import org.osgi.service.metatype.MetaTypeService;
+import org.osgi.service.metatype.ObjectClassDefinition;
 
 public class TestAutoconf extends IntegratedTest implements Test {
 	public static final String	ORG_OSGI_IMPL_SERVICE_DEPLOYMENTADMIN_JAR	= "file:../../org.osgi.impl.service.deploymentadmin/org.osgi.impl.service.deploymentadmin.jar";
 	public static final String	ORG_OSGI_IMPL_SERVICE_METATYPE_JAR	= "file:../../org.osgi.impl.service.metatype/org.osgi.impl.service.metatype.jar";
 	public static final String  ORG_OSGI_IMPL_BUNDLE_AUTOCONF_JAR = "file:../../org.osgi.impl.bundle.autoconf/org.osgi.impl.bundle.autoconf.jar";
+	public static final String	INTEGRATIONTESTS_MANAGEDSERVICE1_JAR = "file:../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.managedservice1.jar";
+
 	public Bundle	deploymentAdmin;
 	public Bundle	autoconf;
 	public Bundle	metatype;
+	public MetaTypeService	metaTypeService;
 	
 	public void startFramework(boolean fresh) throws Exception {
 		super.startFramework(fresh);
@@ -56,6 +71,9 @@ public class TestAutoconf extends IntegratedTest implements Test {
 		deploymentAdmin.start();
 		metatype.start();
 		autoconf.start();
+
+		ServiceReference sr = systemBundleContext.getServiceReference(MetaTypeService.class.getName());
+		metaTypeService = (MetaTypeService) systemBundleContext.getService(sr);
 		
 		// component service bundle has some race condition issues
 		synchronized(this) { this.wait(100); }
@@ -75,4 +93,24 @@ public class TestAutoconf extends IntegratedTest implements Test {
 		assertEquals(Autoconf.class.getName(),sp.getClass().getName()); // different classloaders!
 	}
 	
+	public void testManagedServiceWorks() throws Exception {
+		startFramework(true);
+		setBundleAsAdministrator(INTEGRATIONTESTS_MANAGEDSERVICE1_JAR);
+		Bundle managedService1 = systemBundleContext.installBundle(INTEGRATIONTESTS_MANAGEDSERVICE1_JAR);
+		managedService1.start();
+
+		ServiceReference sr = systemBundleContext.getServiceReference(ITest.class.getName());
+		ITest iTest = (ITest) systemBundleContext.getService(sr);
+
+		sr = systemBundleContext.getServiceReference(ConfigurationAdmin.class.getName());
+		ConfigurationAdmin configurationAdmin = (ConfigurationAdmin) systemBundleContext.getService(sr);
+		Configuration conf = configurationAdmin.getConfiguration("integrationtests.managedservice1.pid");
+		conf.setBundleLocation(INTEGRATIONTESTS_MANAGEDSERVICE1_JAR);
+		Hashtable props = new Hashtable();
+		props.put("increment",new Integer(2));
+		conf.update(props);
+
+		int i = iTest.succ(3);
+		assertEquals(5,i);
+	}
 }
