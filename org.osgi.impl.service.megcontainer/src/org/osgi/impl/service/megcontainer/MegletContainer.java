@@ -118,11 +118,10 @@ public class MegletContainer implements BundleListener, EventHandler {
 		if( !checkSingletonity( appDesc, resume ) )
 			throw new Exception("Singleton Exception!");
 
-		MEGBundleDescriptor desc = getBundleDescriptor(
-					((MegletDescriptorImpl)appDesc).getBundleId() );
+		MEGBundleDescriptor desc = getBundleDescriptor( appDesc.getBundleId() );
 		int i = getApplicationIndex( desc, appDesc.getMegletDescriptor() );
         
-    String depResult = checkDependencies(desc.dependencies[i]);      
+    String depResult = checkDependencies( appDesc, desc.dependencies[i]);      
 		if ( depResult != null )
     {
       System.err.println( depResult );
@@ -175,8 +174,13 @@ public class MegletContainer implements BundleListener, EventHandler {
 				"Application wasn't installed onto the meglet container!");
 	}
 
-	private String checkDependencies(Dependencies deps) {
+	private String checkDependencies(MegletDescriptorImpl appDesc, Dependencies deps) {
 		try {
+			ServiceReference components[] = bc.getServiceReferences( ComponentFactory.class.getName(),
+					"(" + ComponentConstants.COMPONENT_NAME + "=" + appDesc.getComponentName() + ")" );
+			if( components == null || components.length == 0 )
+				return null;
+			
 			if (deps.requiredServices != null) {
 				for (int i = 0; i != deps.requiredServices.length; i++) {
 					ServiceReference servRef = bc
@@ -249,7 +253,7 @@ public class MegletContainer implements BundleListener, EventHandler {
 			if( i == -1 )
 				return false;
             
-      String depResult = checkDependencies(desc.dependencies[i]);
+      String depResult = checkDependencies( appDesc, desc.dependencies[i] );
       if( depResult != null) {
 //        System.err.println( depResult );
       }        
