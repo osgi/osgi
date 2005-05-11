@@ -1,3 +1,4 @@
 *.backup.*
 *.fm.lck
 *.lck
+*.recover.fm
