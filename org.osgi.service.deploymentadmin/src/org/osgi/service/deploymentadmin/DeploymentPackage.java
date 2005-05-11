@@ -44,10 +44,10 @@ import org.osgi.framework.Version;
   * new Wire objects added to the Wire Admin service, or changed system properties. All 
   * the changes caused by the processing of a deployment package are persistently 
   * associated with the deployment package, so that they can be appropriately cleaned 
-  * up when the deployment package is uninstalled. There is a strict “no overlap” rule 
+  * up when the deployment package is uninstalled. There is a strict no overlap rule 
   * imposed on deployment packages. Two deployment packages are not allowed to create or 
   * manipulate the same artifact. Obviously, this means that a bundle cannot be in two 
-  * different deployment packagess. Any violation of this “no overlap” rule is considered 
+  * different deployment packagess. Any violation of this no overlap rule is considered 
   * an error and the install or update of the offending deployment package must be aborted.<p>
   * The Deployment Admin service should do as much as possible to ensure transactionality. 
   * It means that if a deployment package installation, update or removal (uninstall) fails 
@@ -112,8 +112,9 @@ public interface DeploymentPackage {
      * the  manifest of this deployment package. A string element of the array is the 
      * same as the value of the "Name" attribute in the manifest.<p>
      * E.g. if the "Name" section of the resource (or individual-section as the 
-     * {@see <a href="http://java.sun.com/j2se/1.4.2/docs/guide/jar/jar.html#Manifest%20Specification">Manifest Specification</a>} 
+     * <a href="http://java.sun.com/j2se/1.4.2/docs/guide/jar/jar.html#Manifest%20Specification">Manifest Specification</a> 
      * calls it) in the manifest is the following
+     * ### Does this list include the bundles?
      * <pre>
      *     Name: foo/readme.txt
      *     Resource-Processor: foo.rp
@@ -161,8 +162,8 @@ public interface DeploymentPackage {
 	/**
 	  * Uninstalls the deployment package. After uninstallation, the deployment package 
 	  * object becomes stale. This can be checked by using <code>DeploymentPackage.getId()</code>, 
-	  * which will return a -1 when stale. <code>{@link DeploymentAdminPermission}("&lt;filter&gt;", 
-	  * "uninstall")</code> is needed for this operation.   
+	  * which will return a -1 when stale. {@link DeploymentAdminPermission}("&lt;filter&gt;", 
+	  * "uninstall") is needed for this operation.   
 	  * @throws DeploymentException if the deployment package could not be successfully uninstalled.
 	  * @throws SecurityException if access is not permitted based on the current security policy. 
 	  */
@@ -170,8 +171,8 @@ public interface DeploymentPackage {
  
     /**
      * This method is called to completely uninstall a deployment package, which couldn't be uninstalled
-     * using traditional means due to exceptions. <code>{@link DeploymentAdminPermission}("&lt;filter&gt;", 
-     * "uninstallForceful")</code> is needed for this operation.
+     * using traditional means due to exceptions. {@link DeploymentAdminPermission}("&lt;filter&gt;", 
+     * "uninstallForceful") is needed for this operation.
      * @return true if the operation was successful
      * @throws SecurityException if access is not permitted based on the current security policy.
      */  
