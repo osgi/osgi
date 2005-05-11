@@ -30,7 +30,6 @@ import java.net.URL;
  * <p>
  * Usage example:
  * <p>
- * <blockquote>
  * 
  * <pre>
  * 
@@ -49,7 +48,6 @@ import java.net.URL;
  *  
  * </pre>
  * 
- * </blockquote>
  */
 public interface DownloadAgent {
 	/**

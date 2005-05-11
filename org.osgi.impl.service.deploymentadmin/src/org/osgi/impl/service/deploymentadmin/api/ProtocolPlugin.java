@@ -36,8 +36,6 @@ import java.util.Map;
  * ProtocolPlugin</code>
  * interface and is able to download the target of an URL.
  * <p>
- * <blockquote>
- * 
  * <pre>
  * 
  *       Dictionary dict = new Hashtable();
@@ -46,13 +44,9 @@ import java.util.Map;
  *           ProtocolPlugin.class.getName(), sObj, dict);
  *  
  * </pre>
- * 
- * </blockquote>
  * <p>
  * The client of the service finds it as follows:
  * <p>
- * <blockquote>
- * 
  * <pre>
  * 
  *       Filter filter = context.createFilter(&quot;(&quot; + &lt;b&gt;ProtocolPlugin.PROTOCOL&lt;/b&gt; + &quot;=&lt;b&gt;url&lt;/b&gt;)&quot;);
@@ -60,8 +54,6 @@ import java.util.Map;
  *           filter.toString());
  *  
  * </pre>
- * 
- * </blockquote>
  */
 public interface ProtocolPlugin {
 	/**

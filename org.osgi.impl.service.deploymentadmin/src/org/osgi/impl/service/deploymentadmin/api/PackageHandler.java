@@ -42,19 +42,13 @@ import java.util.Map;
  * The following registration means that the bundle provides the <code>
  * PackageHandler</code>
  * interface and supports the "bundle" and the "suite" package types.
- * <p>
- * <blockquote>
- * 
  * <pre>
- * 
  *       Dictionary dict = new Hashtable();
  *       dict.put(&lt;b&gt;PackageHandler.PACKAGETYPE&lt;/b&gt;, &quot;&lt;b&gt;bundle, suite&lt;/b&gt;&quot;);
  *       ServiceRegistration sReg = context.registerService(
  *           PackageHandler.class.getName(), sObj, dict);
  *  
  * </pre>
- * 
- * </blockquote>
  */
 public interface PackageHandler {
 	/**
