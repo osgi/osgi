@@ -43,7 +43,9 @@ import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 import org.osgi.service.metatype.AttributeDefinition;
+import org.osgi.service.metatype.MetaTypeInformation;
 import org.osgi.service.metatype.MetaTypeService;
+import org.osgi.service.metatype.ObjectClassDefinition;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -59,6 +61,8 @@ public class Autoconf implements ResourceProcessor {
 		configurationAdmin = (ConfigurationAdmin) context.locateService("configurationAdmin");
 		metaTypeService = (MetaTypeService) context.locateService("metaTypeService");
 		saxParserFactory = (SAXParserFactory) context.locateService("saxParserFactory");
+		saxParserFactory.setValidating(true);
+		saxParserFactory.setNamespaceAware(true);
 		this.context = context.getBundleContext();
 	}
 	
@@ -105,11 +109,14 @@ public class Autoconf implements ResourceProcessor {
 						" needs to be configured but is not part of the deployment package");
 				}
 				MetaData.OCD ocd = getOCD(m,o.ocdref);
+				ObjectClassDefinition realOCD=null;
 				if (ocd==null) {
-					// TODO: metatype registry lookup
-					throw new IllegalArgumentException("no ocd with name "+o.ocdref+" found");
+					MetaTypeInformation mti = metaTypeService.getMetaTypeInformation(bundle);
+					if (mti==null) throw new IllegalArgumentException("no ocd found for pid "+d.pid);
+					realOCD = mti.getObjectClassDefinition(d.pid,null);
+					if (realOCD==null) throw new IllegalArgumentException("no ocd found for pid "+d.pid);
 				}
-				Map values = createData(ocd,o);
+				Map values = createData(ocd,realOCD,o);
 				String location = bundle.getLocation();
 
 				// write out the new configuration
@@ -148,13 +155,22 @@ public class Autoconf implements ResourceProcessor {
 	 * OCD defines something, and there is no actual value to it, then it is not included.
 	 * 
 	 * @param ocd
+	 * @param realOCD 
 	 * @param o
 	 */
-	private Map createData(OCD ocd, Object o) {
+	private Map createData(OCD ocd, ObjectClassDefinition realOCD, Object o) {
 		
 		// create hash to look up attribute definitions by id
 		HashMap types = new HashMap();
-		for(int i=0;i<ocd.ads.length;i++) types.put(ocd.ads[i].id,ocd.ads[i]);
+		if (ocd!=null) {
+			for(int i=0;i<ocd.ads.length;i++) types.put(ocd.ads[i].id,ocd.ads[i]);
+		} else {
+			AttributeDefinition[] ads = realOCD.getAttributeDefinitions(ObjectClassDefinition.ALL);
+			for (int i = 0; i < ads.length; i++) {
+				AttributeDefinition rad = ads[i];
+				types.put(rad.getID(),new MetaData.AD(rad));
+			}
+		}
  		
 		// unfortunately the attribute values are a little messed up.
 		// array values are not explicitly described as such. For example an array
@@ -335,7 +351,6 @@ public class Autoconf implements ResourceProcessor {
 	}
 
 	public void prepare() throws DeploymentException {
-		throw new IllegalStateException("not implemented yet");
 		// TODO Auto-generated method stub
 		
 	}
