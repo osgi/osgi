@@ -8,6 +8,7 @@ import org.osgi.tools.btool.parser.*;
 
 public class ExpandProperties extends Task implements Domain {
 	File			propertyFile;
+	private boolean	override;
 	
 	public void execute() throws BuildException {
 		try {
@@ -22,7 +23,8 @@ public class ExpandProperties extends Task implements Domain {
 				for ( Iterator i=properties.keySet().iterator(); i.hasNext(); ) {
 					String key = (String) i.next();
 					String value = properties.getProperty(key);
-					project.setProperty(key,value);
+					if ( override || project.getProperty(key)==null)
+						project.setProperty(key,value);
 				}
 			}
 		}
@@ -30,6 +32,10 @@ public class ExpandProperties extends Task implements Domain {
 			e.printStackTrace();
 			throw new BuildException(e);
 		}
+	}
+	
+	public void setOverride(boolean t) {
+		override = t;
 	}
 
 	public void setPropertyFile( String file ) {
