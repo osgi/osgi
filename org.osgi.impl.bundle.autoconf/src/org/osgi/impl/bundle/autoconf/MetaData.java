@@ -18,9 +18,12 @@
 package org.osgi.impl.bundle.autoconf;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
+
 import org.osgi.service.metatype.AttributeDefinition;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -71,7 +74,16 @@ public class MetaData  {
     }
     
     public static class AD {
-    	public String name,description,id;
+		public AD() {}
+    	public AD(AttributeDefinition rad) {
+			name = rad.getName();
+			description = rad.getDescription();
+			id = rad.getID();
+			cardinality = rad.getCardinality();
+			type = rad.getType();
+			defaultValue = rad.getDefaultValue()[0]; // TODO
+		}
+		public String name,description,id;
     	public long min,max;
     	public int cardinality;
     	public int type;
@@ -348,7 +360,8 @@ public class MetaData  {
 	
     public MetaData(SAXParser sp,InputSource is) throws ParserConfigurationException, IOException, SAXException {
 		sp.setProperty(JAXP_SCHEMA_LANGUAGE,W3C_XML_SCHEMA);
-		sp.setProperty(JAXP_SCHEMA_SOURCE,MetaData.class.getResource("autoconf.xsd").getFile());
+		URL autoconfURL = MetaData.class.getResource("autoconf.xsd");
+		sp.setProperty(JAXP_SCHEMA_SOURCE,autoconfURL.toExternalForm());
 		XMLReader xr = sp.getXMLReader();
 		xr.setErrorHandler(errorHandler);
 		xr.setContentHandler(new Parser());
