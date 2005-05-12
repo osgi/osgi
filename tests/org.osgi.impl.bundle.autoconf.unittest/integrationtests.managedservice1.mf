@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Name: IntegrationTestManagedService1
-Bundle-SymbolicName: ManagedService1
+Bundle-SymbolicName: integrationtests.managedservice1
 Bundle-Vendor: Nokia
 Bundle-Version: 1.0
 Service-Component: OSGI-INF/managedservice1.xml
