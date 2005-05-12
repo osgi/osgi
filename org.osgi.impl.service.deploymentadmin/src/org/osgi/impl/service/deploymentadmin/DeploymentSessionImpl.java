@@ -27,7 +27,6 @@ import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -170,14 +169,10 @@ public class DeploymentSessionImpl implements DeploymentSession {
         ArrayList permInfos = new ArrayList();
         for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            // TODO "data"
             char fs = File.separatorChar;
             String rootDir = fwBundleDir + fs + be.getId() + fs + "data";
-            // TODO only "/-"
             permInfos.add(new PermissionInfo(FilePermission.class.getName(), rootDir + fs + "-", 
                     "read, write, execute, delete"));
-            permInfos.add(new PermissionInfo(FilePermission.class.getName(), rootDir + fs + "*", 
-            		"read, write, execute, delete"));
         }
         pa.setPermissions(location, (PermissionInfo[]) permInfos.toArray(new PermissionInfo[] {}));
     }
@@ -275,21 +270,11 @@ public class DeploymentSessionImpl implements DeploymentSession {
             transaction.start();
             stopBundles();
             processBundles(wjis);
-//            Hashtable oldPerms = setFilePermissionForCustomizers();
-//System.out.println("ADD >>>>>>>>>>>>>");            
-//PermissionAdmin pa = (PermissionAdmin) trackPerm.getService();
-//PermissionInfo[] ps = pa.getPermissions("com.nokia.test.exampleresourceprocessor.db.DbResourceProcessor_db_test_06");
-//System.out.println("com.nokia.test.exampleresourceprocessor.db.DbResourceProcessor_db_test_06");
-//if (null != ps) System.out.println(Arrays.asList(ps));
-//System.out.println("ADD >>>>>>>>>>>>>");
+            Hashtable oldPerms = setFilePermissionForCustomizers();
             startCustomizers();
             processResources(wjis);
             dropResources();
-//            resetFilePermissionForCustomizers(oldPerms);
-//System.out.println("DEL >>>>>>>>>>>>>");            
-//ps = pa.getPermissions("com.nokia.test.exampleresourceprocessor.db.DbResourceProcessor_db_test_06");
-//if (null != ps) System.out.println(Arrays.asList(ps));
-//System.out.println("DEL >>>>>>>>>>>>>");
+            resetFilePermissionForCustomizers(oldPerms);
             dropBundles();
             startBundles();
         } catch (CancelException e) {

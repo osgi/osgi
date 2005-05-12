@@ -385,28 +385,4 @@ public class DbResourceProcessor
         // TODO
     }
     
-    // FOR TEST ONLY
-    /*private static Db db = new Db();
-    public static void main(String[] args) throws Exception {
-        ResourceProcessor rp = new DbResourceProcessor();
-        
-        String s = 
-            "TABLE score (no Integer, player Integer, game Integer, score Integer) KEY 0\n" +
-            "INSERT score 1/1/1/1050\n" +
-            "\n" + 
-            "# comment\n" + 
-            "INSERT score 2/2/1/2000\n" +
-            "INSERT score 3/3/1/5000\n" +
-            "INSERT score 4/3/2/200\n" +
-            "DELETE score 3";
-
-        InputStream input = new ByteArrayInputStream(s.getBytes());
-        rp.begin(null, 0);
-        rp.process("sg.dbscript", input);
-        rp.complete(true);
-        
-        db.printTableHeader(null, "score", System.out);
-        db.printTableContent(null, "score", System.out);
-    }*/
-
 }

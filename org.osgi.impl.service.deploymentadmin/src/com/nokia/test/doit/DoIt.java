@@ -525,28 +525,4 @@ public class DoIt implements BundleActivator {
 		// TODO
     }
 
-    // FOR TEST ONLY
-    /*public static void main(String[] args) throws IOException {
-        FileInputStream is = null;
-        try {
-	        is = new FileInputStream("/eclipse/workspaceMEG/org.osgi.impl.service.deploymentadmin/res/db_test_02_update_01.dp");
-	        JarInputStream jis = new JarInputStream(is);
-	        
-	        System.out.println(jis.getManifest().getEntries());
-	        
-	        JarEntry je = jis.getNextJarEntry();
-	        jis.closeEntry();
-	        je = jis.getNextJarEntry();
-	        System.out.println(je);
-        } finally {
-            if (null != is)
-                try {
-                    is.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-        }
-    }*/
-    
 }

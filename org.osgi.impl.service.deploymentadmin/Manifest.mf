@@ -4,8 +4,8 @@ Bundle-SymbolicName: ${p}
 Bundle-Version: 1.0
 Bundle-Vendor: Nokia
 Bundle-Activator: $(p).Activator
-Framework-Bundles-Dir: /eclipse/workspaceMEG/osgi.test/target/bundles
-Keystore: /eclipse/workspaceMEG/org.osgi.impl.service.deploymentadmin/res/keystore
+Framework-Bundles-Dir: c:/eclipse/workspaceMEG/osgi.test/target/bundles
+Keystore: c:/eclipse/workspaceMEG/org.osgi.impl.service.deploymentadmin/res/keystore
 Keystore-Password: 123456
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
