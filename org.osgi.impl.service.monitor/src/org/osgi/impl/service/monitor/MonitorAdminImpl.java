@@ -282,7 +282,7 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
         case StatusVariable.TYPE_STRING:  return var.getString();
         case StatusVariable.TYPE_LONG:    return Long.toString(var.getLong());
         case StatusVariable.TYPE_DOUBLE:  return Double.toString(var.getDouble());
-        case StatusVariable.TYPE_BOOLEAN: return Boolean.toString(var.getBoolean());
+        case StatusVariable.TYPE_BOOLEAN: return var.getBoolean() ? "true" : "false";
         }
         
         // never reached
