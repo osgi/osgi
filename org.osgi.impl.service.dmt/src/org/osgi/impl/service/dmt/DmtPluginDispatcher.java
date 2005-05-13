@@ -23,16 +23,16 @@ import org.osgi.service.dmt.*;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 public class DmtPluginDispatcher implements ServiceTrackerCustomizer {
-    private BundleContext         bc;
-    private ArrayList             plugins;
-    private DmtReadOnlyDataPlugin dataRoot;
+    private BundleContext  bc;
+    private ArrayList      plugins;
+    private Plugin         rootPlugin;
 
     public DmtPluginDispatcher(BundleContext bc) {
         this.bc = bc;
         plugins = new ArrayList();
-        // should get the root plugin as a normal plugin when there are
-        // overlapping plugins
-        dataRoot = new RootPlugin();
+        // root plugin could be a normal plugin when overlapping is allowed
+        DmtReadOnlyDataPlugin root = new RootPlugin(); 
+        rootPlugin = new Plugin(root, new String[] { "." }, new String[] {});
     }
 
     public synchronized Object addingService(ServiceReference serviceRef) {
@@ -71,14 +71,14 @@ public class DmtPluginDispatcher implements ServiceTrackerCustomizer {
         bc.ungetService(serviceRef);
     }
 
-    public synchronized Object getDataPlugin(String nodeUri) {
+    public synchronized Plugin getDataPlugin(String nodeUri) {
         Iterator i = plugins.iterator();
         while (i.hasNext()) {
             Plugin plugin = (Plugin) i.next();
             if (plugin.handlesData(nodeUri))
-                return plugin.getDataPlugin();
+                return plugin;
         }
-        return dataRoot;
+        return rootPlugin;
     }
 
     public synchronized DmtExecPlugin getExecPlugin(String nodeUri) {
@@ -100,7 +100,7 @@ public class DmtPluginDispatcher implements ServiceTrackerCustomizer {
             if (plugin.handlesData(nodeUri2))
                 return false;
         }
-        return false;
+        return true; // both URIs are handled by the root plugin
     }
 
     private String[] getURIs(ServiceReference serviceRef, String propertyName) {
