@@ -29,12 +29,13 @@ package org.osgi.service.power;
 
 /**
  * Thrown when a power management related error is encountered. Different
- * errors can be identified by the error code. Method getErrCode can be used to
- * retrieve the error that causes the exception. Error code
+ * errors can be identified by the error code. Method <code>getErrCode()</code> 
+ * can be used to retrieve the error that causes the exception. Error code
  * ILLEGAL_STATE_TRANSITION_REQUEST, STATE_TRANSITION_FAILURE, must be used by
- * <code>DevicePower</code> or <code>SystemPower</code> services to indicate power state related errors. Error
- * code KEEP_CURRENT_STATE should be used by the PowerStateEvent listener when
- * the listener wants to oppose the current state change event.
+ * <code>DevicePower</code> or <code>SystemPower</code> services to indicate 
+ * power state related errors. Error code KEEP_CURRENT_STATE should be used 
+ * by the PowerStateEvent listener when the listener wants to oppose the current 
+ * state change.
  */
 public class PowerException extends Exception
 {

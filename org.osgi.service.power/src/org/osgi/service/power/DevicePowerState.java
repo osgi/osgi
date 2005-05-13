@@ -46,7 +46,7 @@ public interface DevicePowerState
      * Device is fully on, completely active and responsive to application 
      * requests. Devices in this state consume the most power but have maximum 
      * performance. Devices are expected to continuously remember all relevant 
-     * device context when operating in the D0 state.
+     * device context when operating in the D0 state. (Definitiuon from MNCRS spec)
      */
     public static final int D0 = 1;
     

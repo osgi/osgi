@@ -43,7 +43,7 @@ public class PowerStateEvent extends EventObject
     private boolean urgency;
 
     /**
-     * Creates a PowerStateEvent object that will be sent to SystemPower listeners
+     * Creates a PowerStateEvent object that will be sent to System Power listeners.
      * 
      * @param source the system power from where the event is generated
      * @param previousState the state at the time when the event object is
@@ -51,15 +51,6 @@ public class PowerStateEvent extends EventObject
      * @param newState the state that the system is going to transit to.
      * @param urgency If urgent is true, it indicates that objections to the
      * state change event from the event listeners will be ignored.
-     * Meaning that the <code>PowerException</code> (with error code KEEP_CURRENT_STATE) 
-     * sent by the event listeners (normal applications) will be ignored, 
-     * and the state transition will occur. If urgent is false, objections 
-     * to the current state change event will be dealt with. Meaning that the
-     * <code>PowerException</code> (with error code KEEP_CURRENT_STATE)
-     * sent by the event listeners (normal applications) will be serviced. 
-     * It is recommended that the state change may be aborted or delayed 
-     * when there are objections to the state change; however, actions taken 
-     * to service the exception is implementation dependent. 
      * Note: The value of urgent should reflect the value of the "urgency" parameter 
      * used in the setPowerState() method.
      */
@@ -80,15 +71,6 @@ public class PowerStateEvent extends EventObject
      * @param newState the state that the system is going to transit to.
      * @param urgency If urgent is true, it indicates that objections to the
      * state change event from the event listeners will be ignored.
-     * Meaning that the <code>PowerException</code> (with error code KEEP_CURRENT_STATE) 
-     * sent by the event listeners (normal applications) will be ignored, 
-     * and the state transition will occur. If urgent is false, objections 
-     * to the current state change event will be dealt with. Meaning that the
-     * <code>PowerException</code> (with error code KEEP_CURRENT_STATE)
-     * sent by the event listeners (normal applications) will be serviced. 
-     * It is recommended that the state change may be aborted or delayed 
-     * when there are objections to the state change; however, actions taken 
-     * to service the exception is implementation dependent. 
      * Note: The value of urgent should reflect the value of the "urgency" parameter 
      * used in the setPowerState() method.
      */
@@ -123,16 +105,11 @@ public class PowerStateEvent extends EventObject
     }
 
     /**
-     * Event listeners use this method to determine if the power state change
-     * event can be opposed. If the return is true, the event source will
-     * ignore the <code>PowerException</code> (with error code KEEP_CURRENT_STATE)
-     * thrown by the event listeners. State transition will occur. If the
-     * return is false, the event source will respond to the
-     * <code>PowerException</code> (with error code KEEP_CURRENT_STATE) thrown by the
-     * event listeners. The kind of response to the exception is implementation
-     * dependent.
-     * 
-     * @return true if urgent. false otherwise. 
+     * Event listeners will use this method to determine if the power state change can
+     * be opposed or not. If the power state change is urgent then execptions that listeners
+     * may thrown will not be considered by the application. If the power state change is not
+     * urgent then the behaviour is application dependent.
+     * @return true if urgent, otherwise false. 
      */
     public boolean isUrgent()
     {

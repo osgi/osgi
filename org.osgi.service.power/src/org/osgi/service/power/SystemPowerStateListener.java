@@ -41,13 +41,10 @@ public interface SystemPowerStateListener
     * 
     * @param event the power state event broadcasted to listeners
     * @throws PowerException A <code>PowerException</code> with error code
-    * KEEP_CURRENT_STATE may be thrown by the listener if the listener wants to 
-    * oppose the current state change event. The listener should use the isUgrent 
-    * method in the <code>PowerStateEvent</code> object to examine if the state 
-    * change event can be opposed. If the return value from the isUrgent method 
-    * call is true, the <code>PowerException</code> thrown by the listener will be ignored 
-    * by the event source; otherwise, the exception will be serviced by the
-    * event source. The response to the exception is system dependent.
+    * KEEP_CURRENT_STATE may be thrown by the device power listener if the listener 
+    * wants to oppose the change and keep the current device power state. If the urgent flag is set to
+    * true then the opposition is not considered by the application, otherwise (false) the 
+    * behaviour is application dependent. 
     */
     public void systemPowerStateChange(PowerStateEvent event) throws PowerException;
 }

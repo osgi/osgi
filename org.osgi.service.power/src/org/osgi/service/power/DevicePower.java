@@ -56,10 +56,10 @@ public interface DevicePower
    * If urgency is set to false, applications may be able to oppose the state change event. 
    * 
    * @throws PowerException A <code>PowerException</code> must be thrown with the 
-   * error code STATE_TRANSITION_FAILURE if an error is encountered during the state 
-   * change process. A <code>PowerException</code> must be thrown with the error code 
-   * ILLEGAL_STATE_TRANSITION_REQUEST if an unrecognized "state" value is passed to 
-   * the method or when there is an invalid state request transition.
+   * error code STATE_TRANSITION_FAILURE if the device power state transition fails. 
+   * A <code>PowerException</code> must be thrown with the error code 
+   * ILLEGAL_STATE_TRANSITION_REQUEST if the requested state is invalid or if the 
+   * transition request is invalid.
    * @throws java.lang.SecurityException A <code>java.lang.SecurityException</code> 
    * must be thrown if the caller does not have the valid <code>PowerPermission</code> 
    * to initiate the call. 
