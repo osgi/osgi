@@ -564,13 +564,13 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
     private static Random random = new Random();
 
     private StatusVariable getLoadVar() {
-        return new StatusVariable(ClientActivator.SERVICE_PID, "CPULoad", 
+        return new StatusVariable("CPULoad", 
                        StatusVariable.CM_SI, random.nextInt(101));
     }
 
     private StatusVariable getUpdateVar() {
-        return new StatusVariable(ClientActivator.SERVICE_PID, "NumOfChanges", 
-                       StatusVariable.CM_CC, updateCount);
+        return new StatusVariable("NumOfChanges", 
+                StatusVariable.CM_CC, updateCount);
     }
 
     /*
