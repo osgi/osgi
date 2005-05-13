@@ -24,6 +24,10 @@ import org.osgi.service.monitor.*;
 
 public class MonitorPlugin implements DmtDataPlugin
 {
+    // node size values for fixed size formats
+    private static final int BOOLEAN_SIZE = 1;
+    private static final int INT_SIZE     = 4;
+    
     private BundleContext bc;
     
     // maybe this could be made friendly static, to be available from the 
@@ -534,9 +538,9 @@ public class MonitorPlugin implements DmtDataPlugin
         throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED, "Title property not supported.");
     }
 
+    // TODO return DDF location for root, and maybe text/xml for "Results"
     public String getNodeType(String nodeUri) throws DmtException {
-        // TODO return DDF location for root, text/plain for most leaf nodes, and maybe text/xml for "Results"
-        return null;
+        return isLeafNode(nodeUri) ? "text/plain" : null;
     }
 
     public int getNodeVersion(String nodeUri) throws DmtException {
@@ -548,8 +552,53 @@ public class MonitorPlugin implements DmtDataPlugin
     }
 
     public int getNodeSize(String nodeUri) throws DmtException {
-        // TODO calculate size for leaf nodes
-        return 0;
+        String[] path = prepareUri(nodeUri);
+
+        // path has at least three elements because the first leaf node is three levels deep
+
+        StatusVarWrapper var = getStatusVar(path[0], path[1], nodeUri);
+
+        if(path.length == 3) {
+            StatusVariable realVar = var.getStatusVariable();
+
+            // this is a "unique registered identifier" according to the spec
+            if(path[2].equals("TrapID"))
+                return path[0].length() + path[1].length() + 1;
+
+            if(path[2].equals("CM"))
+                return cmName(realVar.getCollectionMethod()).length();
+
+            // path[2].equals("Results")
+
+            return MonitorAdminImpl.createXml(realVar).length();
+        }
+
+        // path.length > 4, path[2].equals("Server")
+
+        Server server = var.getServer(path[3], nodeUri);
+
+        if(path.length == 5) {
+            if(path[4].equals("ServerID"))
+                return server.getServerId().getString().length();
+
+            // path[4].equals("Enabled")
+
+            return BOOLEAN_SIZE;
+        }
+
+        if(path.length == 6) {
+            // path[4].equals("Reporting")
+
+            if(path[5].equals("Type"))
+                return server.getType().getString().length();
+
+            // path[5].equals("Value")
+            return INT_SIZE;
+        }
+
+        // path.length == 7, path[4].equals("TrapRef"), path[6].equals("TrapRefID")
+
+        return server.getTrapRefId(path[5], nodeUri).getString().length();
     }
 
     public String[] getChildNodeNames(String nodeUri) throws DmtException {
