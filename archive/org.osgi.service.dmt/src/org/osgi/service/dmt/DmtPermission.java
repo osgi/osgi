@@ -176,6 +176,7 @@ public class DmtPermission extends Permission {
      * Two DmtPermission instances are equal if they have the same target string
      * and the same action mask.
      * 
+     * @param obj the object to compare to this DmtPermission instance
      * @return <code>true</code> if the parameter represents the same
      *         permissions as this instance
      */
