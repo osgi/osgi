@@ -43,7 +43,8 @@ import org.osgi.service.dmt.DmtSession;
  * is an attempt to call any of their write methods. 
  */
 
-// TODO should the write methods check if this wraps a writeable plugin?
+// TODO find a way to make "privileged" calls with no security check
+// (for getMetaNodeNoCheck, isLeafNoCheck, and cardinality checks with getChildNodeNames)
 public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
     private DmtDataPlugin dataPlugin;
     private DmtReadOnlyDataPlugin readOnlyDataPlugin;
@@ -51,26 +52,35 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
     // always equal to one of the above members, used for type-safety 
     private DmtReadOnly dmtReadOnly;
     
+    // stores the roots of the subtrees handled by the plugins
+    private String[] dataRoots;
+    
     private int lockMode;
     private AccessControlContext securityContext;
     
-    public PluginWrapper(Object plugin, int lockMode,
+    public PluginWrapper(Plugin plugin, int lockMode,
                          AccessControlContext securityContext) {
         
-        if(plugin instanceof DmtDataPlugin) {
-            dataPlugin = (DmtDataPlugin) plugin;
-            readOnlyDataPlugin = null;
-        } else if(plugin instanceof DmtReadOnlyDataPlugin) {
+        if(plugin.isReadOnlyDataPlugin()) {
             dataPlugin = null;
-            readOnlyDataPlugin = (DmtReadOnlyDataPlugin) plugin;
+            readOnlyDataPlugin = plugin.getReadOnlyDataPlugin();
+            dmtReadOnly = (DmtReadOnly) readOnlyDataPlugin;
+        } else if(plugin.isWritableDataPlugin()) {
+            dataPlugin = plugin.getWritableDataPlugin();
+            readOnlyDataPlugin = null;
+            dmtReadOnly = (DmtReadOnly) dataPlugin;
         } else // never happens
-            throw new IllegalArgumentException("'plugin' parameter is not " +
-                    "of the type 'DmtDataPlugin' or 'DmtReadOnlyDataPlugin'.");
-        
-        dmtReadOnly = (DmtReadOnly) plugin;
+            throw new IllegalArgumentException("'plugin' parameter does not " +
+                    "contain a 'DmtDataPlugin' or 'DmtReadOnlyDataPlugin'.");
         
         this.lockMode = lockMode;
         this.securityContext = securityContext;
+        
+        dataRoots = plugin.getDataRoots();
+    }
+    
+    String[] getDataRoots() {
+        return dataRoots;
     }
     
     /*
