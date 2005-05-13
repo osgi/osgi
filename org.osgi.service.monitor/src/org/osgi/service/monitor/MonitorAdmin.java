@@ -270,6 +270,7 @@ public interface MonitorAdmin {
      *             if the list of StatusVariable names contains a non-existing
      *             StatusVariable or the initiator, schedule or count parameters
      *             are invalid
+     *             ### or the variable does not support does not support needed events? 
      * @throws SecurityException
      *             if the caller does not hold <code>MonitorPermission</code>
      *             for all the specified StatusVariables, with the
