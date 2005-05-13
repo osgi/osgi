@@ -23,6 +23,7 @@ import java.util.*;
 import org.osgi.framework.*;
 import org.osgi.service.cm.*;
 import org.osgi.service.dmt.*;
+import org.osgi.util.tracker.ServiceTracker;
 
 // TODO Boolean scalar/array/vector value is set/created even if the DmtData has STRING "true"/"false" in it, should be error
 // TODO non-Boolean scalar/array/vector value can be set/created using a BOOLEAN DmtData, should be error
@@ -83,8 +84,8 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 			validCardinalityData[i] = new DmtData(validCardinalityStrings[i]);
 	}
 
-	ConfigurationPlugin(BundleContext bc, ConfigurationAdmin configAdmin) {
-		Service.init(bc, configAdmin);
+	ConfigurationPlugin(BundleContext bc, ServiceTracker configTracker) {
+		Service.init(bc, configTracker);
 	}
 
 	//----- DmtDataPlugin methods -----//
@@ -664,15 +665,15 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 
 // TODO cannot delete and create the same object in one session
 class Service {
-	static BundleContext		bc			= null;
-	static ConfigurationAdmin	configAdmin	= null;
-	static Hashtable			services	= new Hashtable();
-	static Vector				deletedPids	= new Vector();
-	static int					lockMode	= DmtSession.LOCK_TYPE_SHARED;
+	static BundleContext  bc            = null;
+	static ServiceTracker configTracker = null;
+	static Hashtable      services      = new Hashtable();
+	static Vector         deletedPids   = new Vector();
+	static int            lockMode      = DmtSession.LOCK_TYPE_SHARED;
 
-	static void init(BundleContext bc, ConfigurationAdmin configAdmin) {
+	static void init(BundleContext bc, ServiceTracker configTracker) {
 		Service.bc = bc;
-		Service.configAdmin = configAdmin;
+		Service.configTracker = configTracker;
 	}
 
 	static void setLockMode(int lm) {
@@ -736,7 +737,7 @@ class Service {
 			// (currently it is created again if it was deleted and overwritten if it was created)
 			// TODO set location according to RFC87
 			try {
-				Configuration conf = configAdmin.getConfiguration(pid, null);
+				Configuration conf = getConfigurationAdmin().getConfiguration(pid, null);
 				CMDictionary properties = service.getStoredProperties(false,
 						root + pid);
 				CMDictionary incompleteProperties = service.addTempProperties(
@@ -796,7 +797,7 @@ class Service {
 		ServiceReference[] refs = null;
 		try {
 			// TODO handle managed service factories according to RFC87
-			configs = configAdmin.listConfigurations(null);
+			configs = getConfigurationAdmin().listConfigurations(null);
 			refs = bc
 					.getServiceReferences(ManagedService.class.getName(), null);
 		}
@@ -986,6 +987,7 @@ class Service {
 			throws DmtException {
 		String filter = "(service.pid=" + pid + ")";
 		try {
+            ConfigurationAdmin configAdmin = getConfigurationAdmin();
 			Configuration[] configs = configAdmin.listConfigurations(filter);
 			if (configs != null)
 				return configs[0];
@@ -1004,6 +1006,17 @@ class Service {
 							+ "' is syntactically incorrect.", e);
 		}
 	}
+    
+    private static ConfigurationAdmin getConfigurationAdmin() {
+        ConfigurationAdmin configAdmin = 
+            (ConfigurationAdmin) configTracker.getService();
+        
+        if(configAdmin == null)
+            throw new MissingResourceException("Configuration Admin not found.",
+                    ConfigurationAdmin.class.getName(), null);
+        
+        return configAdmin;
+    }
 }
 
 class Property {

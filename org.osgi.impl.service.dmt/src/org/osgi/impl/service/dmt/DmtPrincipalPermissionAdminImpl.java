@@ -25,6 +25,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.MissingResourceException;
 import org.osgi.framework.AdminPermission;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
 import org.osgi.service.cm.Configuration;
@@ -32,6 +33,7 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.util.tracker.ServiceTracker;
 
 // known problem: if a principal is called "service.pid" it will be ignored
 public class DmtPrincipalPermissionAdminImpl 
@@ -43,10 +45,10 @@ public class DmtPrincipalPermissionAdminImpl
     private static final int PREFIX_LENGTH = CONFIG_KEY_PREFIX.length();
     
     private Hashtable permissions;
-    private ConfigurationAdmin configAdmin;
+    private ServiceTracker configTracker;
     
-    public DmtPrincipalPermissionAdminImpl(ConfigurationAdmin configAdmin) {
-        this.configAdmin = configAdmin;
+    public DmtPrincipalPermissionAdminImpl(ServiceTracker configTracker) {
+        this.configTracker = configTracker;
         
         // persisted permission table will be set by the Configuration Admin
         permissions = new Hashtable();
@@ -66,8 +68,14 @@ public class DmtPrincipalPermissionAdminImpl
         // when the (asynchronous) update arrives from the config. admin
         this.permissions = new Hashtable(permissions);
         
-        Configuration config = 
-            configAdmin.getConfiguration(DmtAdminActivator.DMT_PERMISSION_ADMIN_SERVICE_PID);
+        ConfigurationAdmin configAdmin = 
+            (ConfigurationAdmin) configTracker.getService();
+        if(configAdmin == null)
+            throw new MissingResourceException("Configuration Admin not found.",
+                    ConfigurationAdmin.class.getName(), null);
+
+        Configuration config = configAdmin.getConfiguration(
+                DmtAdminActivator.DMT_PERMISSION_ADMIN_SERVICE_PID);
         
         Hashtable properties = new Hashtable();
         Iterator i = permissions.entrySet().iterator();

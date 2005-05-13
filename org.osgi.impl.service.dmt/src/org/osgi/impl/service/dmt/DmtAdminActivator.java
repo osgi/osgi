@@ -38,31 +38,23 @@ public class DmtAdminActivator implements BundleActivator {
     private ServiceRegistration	adminReg;
 	private ServiceRegistration	alertReg;
     private ServiceRegistration permissionReg;
-    private ServiceReference    eventChannelRef;
-    private ServiceReference    configRef;
-    private ServiceTracker      remoteAdapterTracker;
+	private ServiceTracker      eventTracker;
+    private ServiceTracker      configTracker;
 	private ServiceTracker      pluginTracker;
+    private ServiceTracker      remoteAdapterTracker;
+
 
 	public void start(BundleContext bc) throws BundleException {
 		try {
-            eventChannelRef = 
-                bc.getServiceReference(EventAdmin.class.getName());
-            if(eventChannelRef == null)
-                throw new BundleException("Cannot find Event Channel service.");
-            EventAdmin eventChannel = 
-                (EventAdmin) bc.getService(eventChannelRef);
-            if(eventChannel == null)
-                throw new BundleException("Event Channel service no longer registered.");
+            eventTracker = new ServiceTracker(bc, 
+                    EventAdmin.class.getName(), null);
+            eventTracker.open();
             
-            configRef = bc.getServiceReference(ConfigurationAdmin.class.getName());
-            if(configRef == null)
-                throw new Exception("Cannot find ConfigurationAdmin service.");
-            ConfigurationAdmin ca = (ConfigurationAdmin) bc.getService(configRef);
-            if(ca == null)
-                throw new Exception("ConfigurationAdmin service no longer registered.");
+            configTracker = new ServiceTracker(bc, 
+                    ConfigurationAdmin.class.getName(), null);
+            configTracker.open();
             
 			DmtPluginDispatcher dispatcher = new DmtPluginDispatcher(bc);
-			//tracker = new ServiceTracker(bc, DmtDataPlugin.class.getName(), dispatcher);
 			String filter = "(|(objectClass=org.osgi.service.dmt.DmtDataPlugin)" +
 					          "(objectClass=org.osgi.service.dmt.DmtExecPlugin)" +
                               "(objectClass=org.osgi.service.dmt.DmtReadOnlyDataPlugin))";
@@ -76,10 +68,10 @@ public class DmtAdminActivator implements BundleActivator {
             
 			// creating the services
             DmtPrincipalPermissionAdmin dmtPermissionAdmin =
-                new DmtPrincipalPermissionAdminImpl(ca);
+                new DmtPrincipalPermissionAdminImpl(configTracker);
 			DmtAdminImpl dmtAdmin = 
                 new DmtAdminImpl(dmtPermissionAdmin,
-                    dispatcher, eventChannel, remoteAdapterTracker);
+                    dispatcher, eventTracker, remoteAdapterTracker);
 			
             // registering the services
 			adminReg = bc.registerService(DmtAdmin.class.getName(),
@@ -106,12 +98,11 @@ public class DmtAdminActivator implements BundleActivator {
 	}
 
 	public void stop(BundleContext bc) throws BundleException {
-        // releasing referenced services
-        bc.ungetService(eventChannelRef);
-        bc.ungetService(configRef);
 		// stopping service trackers
-		pluginTracker.close();
 		remoteAdapterTracker.close();
+		pluginTracker.close();
+        configTracker.close();
+        eventTracker.close();
 		// unregistering the service
 		adminReg.unregister();
 		alertReg.unregister();

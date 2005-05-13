@@ -23,7 +23,6 @@ import java.util.Vector;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
 import org.osgi.impl.service.dmt.api.RemoteAlertSender;
 import org.osgi.service.dmt.*;
-import org.osgi.service.event.EventAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -33,18 +32,18 @@ public class DmtAdminImpl implements DmtAdmin {
     
     private DmtPrincipalPermissionAdmin dmtPermissionAdmin;
 	private DmtPluginDispatcher	dispatcher;
-	private EventAdmin eventChannel;
+	private ServiceTracker eventTracker;
 	private ServiceTracker remoteAdapterTracker;
     
     private List openSessions; // a list of DmtSession refs to open sessions
 
     // OPTIMIZE maybe make some context object to store these references
     public DmtAdminImpl(DmtPrincipalPermissionAdmin dmtPermissionAdmin,
-            DmtPluginDispatcher dispatcher, EventAdmin eventChannel,
+            DmtPluginDispatcher dispatcher, ServiceTracker eventTracker,
             ServiceTracker remoteAdapterTracker) {
         this.dmtPermissionAdmin = dmtPermissionAdmin;
         this.dispatcher = dispatcher;
-        this.eventChannel = eventChannel;
+        this.eventTracker = eventTracker;
         this.remoteAdapterTracker = remoteAdapterTracker;
         
         openSessions = new Vector();
@@ -68,7 +67,7 @@ public class DmtAdminImpl implements DmtAdmin {
                 dmtPermissionAdmin.getPrincipalPermissions().get(principal);
         
 		DmtSessionImpl session = new DmtSessionImpl(principal, subtreeUri,
-                lockMode, permissions, eventChannel, dispatcher, this);
+                lockMode, permissions, eventTracker, dispatcher, this);
                 
         // passing the normalized variant of the subtreeUri parameter
 		waitUntilNoConflictingSessions(session.getRootUri(), lockMode);

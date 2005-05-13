@@ -21,38 +21,40 @@ import java.util.Hashtable;
 import org.osgi.framework.*;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.dmt.DmtDataPlugin;
+import org.osgi.util.tracker.ServiceTracker;
 
 public class ConfigurationPluginActivator implements BundleActivator {
-	private ServiceRegistration	servReg;
-	private ServiceReference	configRef;
-	private ConfigurationPlugin	configPlugin;
-	static final String			PLUGIN_ROOT	= "./OSGi/cfg";
+    static final String PLUGIN_ROOT = "./OSGi/cfg";
+
+    private ServiceRegistration servReg;
+	private ServiceTracker      configTracker;
+	private ConfigurationPlugin configPlugin;
+	
 
 	public void start(BundleContext bc) throws BundleException {
 		System.out.println("Configuration plugin activation started.");
-		//looking up the Configuration Admin
-		configRef = bc.getServiceReference(ConfigurationAdmin.class.getName());
-		if (configRef == null)
-			throw new BundleException("Cannot find ConfigurationAdmin service.");
-		ConfigurationAdmin ca = (ConfigurationAdmin) bc.getService(configRef);
-		if (ca == null)
-			throw new BundleException(
-					"ConfigurationAdmin service no longer registered.");
-		//creating the service
-		configPlugin = new ConfigurationPlugin(bc, ca);
+        
+		// looking up the Configuration Admin
+        configTracker = 
+            new ServiceTracker(bc, ConfigurationAdmin.class.getName(), null);
+        configTracker.open();
+        
+		// creating the service
+		configPlugin = new ConfigurationPlugin(bc, configTracker);
 		Hashtable properties = new Hashtable();
 		properties.put("dataRootURIs", new String[] {PLUGIN_ROOT});
-		//registering the service
+        
+		// registering the service
 		servReg = bc.registerService(DmtDataPlugin.class.getName(),
 				configPlugin, properties);
-		System.out
-				.println("Configuration plugin activation finished successfully.");
+		System.out.println("Configuration plugin activation finished successfully.");
 	}
 
 	public void stop(BundleContext bc) throws BundleException {
-		//unregistering the service
+		// unregistering the service
 		servReg.unregister();
-		//releasing the Configuration Admin
-		bc.ungetService(configRef);
+        
+		// stopping the Configuration Admin tracker
+		configTracker.close();
 	}
 }
