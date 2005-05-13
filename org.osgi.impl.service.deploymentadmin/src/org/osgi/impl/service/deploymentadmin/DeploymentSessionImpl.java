@@ -27,6 +27,7 @@ import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -165,8 +166,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
         PermissionInfo[] old = pa.getPermissions(location);
         if (null != old)
             oldPerms.put(location, old);
-        
-        ArrayList permInfos = new ArrayList();
+        ArrayList permInfos = null != old ? 
+                new ArrayList(Arrays.asList(old)) : new ArrayList();
         for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             char fs = File.separatorChar;

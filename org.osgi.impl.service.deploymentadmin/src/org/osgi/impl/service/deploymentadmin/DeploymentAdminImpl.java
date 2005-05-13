@@ -31,6 +31,7 @@ import java.security.Permission;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -44,6 +45,9 @@ import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
+import org.osgi.util.tracker.ServiceTracker;
 
 public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     
@@ -52,6 +56,17 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private Logger 				  logger;
     private DeploymentSessionImpl session;
     private KeyStore              keystore;
+    private TrackerEvent          trackEvent;
+    
+    /*
+     * Class to track the event admin
+     */
+    private class TrackerEvent extends ServiceTracker {
+        public TrackerEvent() {
+            super(DeploymentAdminImpl.this.context, 
+                    EventAdmin.class.getName(), null);
+        }
+    }
     
     // persisted fields
     private Set     dps = new HashSet();		// deployment packages
@@ -60,6 +75,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
+		trackEvent = new TrackerEvent();
+		trackEvent.open();
 		load();
         registration = context.registerService(DeploymentAdmin.class.getName(), this, null);
         logger = new Logger(context);
@@ -68,7 +85,13 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	}
 	
     private void initKeyStore() throws Exception {
-        File file = new File((String) context.getBundle().getHeaders().get(DAConstants.KEYSTORE));
+        String ks = (String) context.getBundle().getHeaders().get(DAConstants.KEYSTORE);
+        if (null == ks) {
+            logger.log(Logger.LOG_WARNING, "Keystore location is not defined. Check the " + 
+                    DAConstants.KEYSTORE + " manifest header.");
+            return;
+        }
+        File file = new File(ks);
         if (!file.exists())
             throw new RuntimeException("Keystore is not found: " + file);
         String pwd = (String) context.getBundle().getHeaders().get(DAConstants.KEYSTORE_PWD);
@@ -81,6 +104,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     public void stop(BundleContext context) throws Exception {
 	    registration.unregister();
 	    logger.stop();
+	    trackEvent.close();
 	}
 
     private synchronized int nextDpId() {
@@ -119,12 +143,17 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         checkPermission("name: "  + srcDp.getName(), 
                 DeploymentAdminPermission.ACTION_INSTALL);
         
+        sendInstallEvent(srcDp.getName());
+        
         session = createInstallUpdateSession(srcDp);
         try {
             session.installUpdate(wjis);
         } catch (CancelException e) {
+            sendCompleteEvent(false);
             return null;
         }
+        
+        sendCompleteEvent(true);
         
         if (session.getDeploymentAction() == DeploymentSessionImpl.INSTALL) {
             dps.add(srcDp);
@@ -135,6 +164,34 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             dps.add(session.getSourceDeploymentPackage());
             return session.getSourceDeploymentPackage();
         }
+    }
+
+    private void sendInstallEvent(String dpName) {
+        EventAdmin ea = (EventAdmin) trackEvent.getService();
+        if (null == ea)
+            return;
+        Hashtable ht = new Hashtable();
+        ht.put(DAConstants.EVENTPROP_DPNAME, dpName);
+        ea.postEvent(new Event(DAConstants.TOPIC_INSTALL, ht));
+    }
+
+    private void sendUninstallEvent(String dpName) {
+        EventAdmin ea = (EventAdmin) trackEvent.getService();
+        if (null == ea)
+            return;
+        Hashtable ht = new Hashtable();
+        ht.put(DAConstants.EVENTPROP_DPNAME, dpName);
+        ea.postEvent(new Event(DAConstants.TOPIC_UNINSTALL, ht));
+    }
+
+    private void sendCompleteEvent(boolean succ) {
+        EventAdmin ea = (EventAdmin) trackEvent.getService();
+        if (null == ea)
+            return;
+        Hashtable ht = new Hashtable();
+        ht.put(DAConstants.EVENTPROP_DPNAME, session.getSourceDeploymentPackage().getName());
+        ht.put(DAConstants.EVENTPROP_SUCCESSFUL, new Boolean(succ));
+        ea.postEvent(new Event(DAConstants.TOPIC_COMPLETE, ht));
     }
 
     private DeploymentSessionImpl createInstallUpdateSession(DeploymentPackageImpl srcDp) 
@@ -337,18 +394,25 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     void uninstall(DeploymentPackageImpl targetDp) throws DeploymentException {
         // TODO checkPermission 
 
+        sendUninstallEvent(targetDp.getName());
+        
         session = createUninstallSession(targetDp);
         try {
             session.uninstall();
         } catch (CancelException e) {
+            sendCompleteEvent(false);
             return;
         }
+        
+        sendCompleteEvent(true);
         
         dps.remove(targetDp);
     }
     
     boolean uninstallForceful(DeploymentPackageImpl dp) {
+        sendUninstallEvent(dp.getName());
         // TODO        
+        sendCompleteEvent(true);
         dps.remove(dp);
         return false;
     }

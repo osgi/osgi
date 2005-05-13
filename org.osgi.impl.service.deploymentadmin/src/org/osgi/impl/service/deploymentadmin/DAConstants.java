@@ -39,4 +39,11 @@ public class DAConstants {
     public static final String KEYSTORE     	    = "Keystore";
     public static final String KEYSTORE_PWD    	    = "Keystore-Password";
     
+    // event related constants
+    public static final String TOPIC_INSTALL		= "org/osgi/service/deployment/INSTALL";
+    public static final String TOPIC_UNINSTALL		= "org/osgi/service/deployment/UNINSTALL";
+    public static final String TOPIC_COMPLETE		= "org/osgi/service/deployment/COMPLETE";
+    public static final String EVENTPROP_DPNAME		= "DPname";
+    public static final String EVENTPROP_SUCCESSFUL	= "successful";
+    
 }
