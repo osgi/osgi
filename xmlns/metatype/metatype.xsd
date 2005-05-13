@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+/*
+ * $Header$
+ * 
+ * Copyright (c) OSGi Alliance (2005). All Rights Reserved.
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this 
+ * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
+-->		
 <schema xmlns="http://www.w3.org/2001/XMLSchema" 
 	targetNamespace="http://www.osgi.org/xmlns/metatype/v1.0.0" 
 	xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">

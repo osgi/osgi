@@ -1,22 +1,11 @@
 /*
  * $Header$
  *
- * Copyright (c) 2002 - Acunia
- * Copyright (c) 2002 - IBM Corporation
- * All Rights Reserved.
- * 	
- * These materials have been contributed to the OSGi Alliance
- * as "MEMBER LICENSED MATERIALS" as defined in, and
- * subject to the terms of, the OSGi Member Agreement by and between the OSGi Alliance and
- * IBM, specifically including but not limited to, the license
- * rights and warranty disclaimers as set forth in Sections 3.2 and 12.1
- * thereof.
- *
- * All company, brand and product names contained within this document may be
- * trademarks that are the sole property of the respective owners.
- *
- * The above notice must be included on all copies of this document that are
- * made.
+ * Copyright (c) OSGi Alliance (2002, 2005). All Rights Reserved.
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this 
+ * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 package org.osgi.service.io;
 
