@@ -231,6 +231,7 @@ public interface DmtMetaNode {
      * 
      * @return The regular expression associated with the name of this node or
      *         <code>null</code> if not defined.
+     *         ### which regex can be used?
      */
     String getNamePattern();
 
