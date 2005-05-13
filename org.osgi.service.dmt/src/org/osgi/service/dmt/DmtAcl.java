@@ -32,8 +32,6 @@ import java.util.Vector;
 import java.util.Arrays;
 import java.util.Map;
 
-// TODO write equals() and hashCode() if needed
-
 /**
  * <code>DmtAcl</code> is an immutable class representing structured access to
  * DMT ACLs. Under OMA DM the ACLs are defined as strings with an internal
@@ -99,6 +97,7 @@ public class DmtAcl implements Cloneable {
 
     //----- Private fields -----//
 
+        // the implementation takes advantage of this being a sorted map
     private TreeMap principalPermissions;
     private int globalPermissions;
 
@@ -192,6 +191,49 @@ public class DmtAcl implements Cloneable {
         cloned.principalPermissions = (TreeMap) principalPermissions.clone();
         
         return cloned;
+    }
+
+    /**
+     * Checks whether the given object is equal to this <code>DmtAcl</code>
+     * instance. Two <code>DmtAcl</code> instances are equal if they allow the
+     * same set of permissions for the same set of principals.
+     * 
+     * @param obj the object to compare with this <code>DmtAcl</code> instance
+     * @return <code>true</code> if the parameter represents the same ACL as
+     *         this instance
+     */
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        
+        if(!(obj instanceof DmtAcl))
+            return false;
+        
+        DmtAcl other = (DmtAcl) obj;
+        
+        if(globalPermissions != other.globalPermissions ||
+                principalPermissions.size() != other.principalPermissions.size())
+            return false;
+        
+        // principalPermissions sets cannot be easily compared, because they are
+        // not canonical: the global permissions may or may not be present for 
+        // each principal, without changing the meaning of the DmtAcl object.
+        
+        // Compare canonical string representations, inefficient but simple.
+        return toString().equals(other.toString());
+    }
+    
+    /**
+     * Returns the hash code for this ACL instance. If two <code>DmtAcl</code>
+     * instances are equal according to the {@link #equals} method, then calling
+     * this method on each of them must produce the same integer result.
+     * 
+     * @return hash code for this ACL
+     */
+    public int hashcode() {
+        // Using the hash code of the canonical string representation, because
+        // the principalPermissions set is not canonical (see above). 
+        return toString().hashCode();
     }
 
     /**
