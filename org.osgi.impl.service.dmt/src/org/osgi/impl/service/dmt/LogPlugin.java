@@ -24,6 +24,7 @@ import java.net.URL;
 import org.osgi.framework.*;
 import org.osgi.service.dmt.*;
 import org.osgi.service.log.*;
+import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.impl.service.dmt.wbxmlenc.*;
 import java.text.*;
 
@@ -36,23 +37,22 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
     // TODO int size should be defined elsewhere (at least in the getSize() javadoc)
     private static final int INT_SIZE = 4;
     
-	private BundleContext		bc;
-	private LogService			logservice;
-	private LogReaderService	logreaderservice;
-	private DmtAdmin		    alertsender;
-	private Hashtable			requests;
-	private boolean				debug	= false;
-	private WbxmlCodePages wbxmlCodePages;
+	private BundleContext  bc;
+	private ServiceTracker logReaderTracker;
+	private ServiceTracker adminTracker;
+	private Hashtable      requests;
+	
+    private WbxmlCodePages wbxmlCodePages;
 
     // the state of the request table is stored here in atomic sessions 
     private Hashtable           savedRequests;
     
-	LogPlugin(BundleContext bc, LogService ls, LogReaderService lrs,
-			DmtAdmin da) throws BundleException {
+	LogPlugin(BundleContext bc, ServiceTracker logReaderTracker, 
+              ServiceTracker adminTracker) throws BundleException {
 		this.bc = bc;
-		this.logservice = ls;
-		this.logreaderservice = lrs;
-		this.alertsender = da;
+		this.logReaderTracker = logReaderTracker;
+		this.adminTracker = adminTracker;
+        
 		requests = new Hashtable();
 		
 		String resourceName = getClass().getName();
@@ -456,7 +456,13 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 		String result = formatResult(records);
 		DmtAlertItem[] items = new DmtAlertItem[1];
 		items[0] = new DmtAlertItem(nodeUri, null, null, result);
-		alertsender.sendAlert(session.getPrincipal(), 1224, items);
+        
+		DmtAdmin admin = (DmtAdmin) adminTracker.getService();
+        if(admin == null)
+            throw new MissingResourceException("Alert sender service not found.",
+                    DmtAdmin.class.getName(), null);
+        
+        admin.sendAlert(session.getPrincipal(), 1224, items);
 	}
 
 	//----- Private utility methods -----//
@@ -566,17 +572,23 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 	 */
 	private Vector getResult(LogRequest lr) throws DmtException {
 		Vector ret = new Vector();
+        
 		Filter filter = null;
 		try {
-			if (lr.filter != null) {
-				filter = bc.createFilter(lr.filter);
-			}
-		}
-		catch (InvalidSyntaxException e) {
+			if (lr.filter != null)
+                filter = bc.createFilter(lr.filter);
+		} catch (InvalidSyntaxException e) {
 			throw new DmtException(lr.uri, DmtException.OTHER_ERROR,
 					"Cannot parse filter", e);
 		}
-		Enumeration e = logreaderservice.getLog();
+        
+        LogReaderService logReader = 
+            (LogReaderService) logReaderTracker.getService();
+        if(logReader == null)
+            throw new MissingResourceException("Log Reader service not found.",
+                    LogReaderService.class.getName(), null);
+        
+		Enumeration e = logReader.getLog();
 		int max = Integer.MAX_VALUE;
 		if (lr.maxrecords != 0)
 			max = lr.maxrecords;
@@ -602,11 +614,6 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 			ret.add(le);
 		}
 		return ret;
-	}
-
-	private void d(String s) {
-		if (debug)
-			System.out.println("debug> " + s);
 	}
 
 	class LogRequest implements Cloneable {
