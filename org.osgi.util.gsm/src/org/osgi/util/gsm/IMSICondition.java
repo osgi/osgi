@@ -60,9 +60,9 @@ public class IMSICondition implements Condition {
 	 * 
 	 * @return True if the {@link #isSatisfied()} method can give results instantly.
 	 */
-	public boolean isEvaluated() {
+	public boolean isPostponed() {
 		// this reference implementation only supports one IMSI, that cannot change
-		return true;
+		return false;
 	}
 
 	/**

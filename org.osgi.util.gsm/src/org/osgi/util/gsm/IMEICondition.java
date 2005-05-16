@@ -62,8 +62,8 @@ public class IMEICondition implements Condition {
 	 * 
 	 * @return True if the {@link #isSatisfied()} method can give results instantly.
 	 */
-	public boolean isEvaluated() {
-		return true;
+	public boolean isPostponed() {
+		return false;
 	}
 
 	/**

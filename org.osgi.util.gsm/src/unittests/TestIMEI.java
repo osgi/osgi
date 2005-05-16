@@ -61,11 +61,11 @@ public class TestIMEI extends TestCase {
 	
 	public void testBasic() throws Exception {
 		IMEICondition imei = (IMEICondition) IMEICondition.getInstance(bundle,SYSTEM_IMEI);
-		assertTrue(imei.isEvaluated());
+		assertFalse(imei.isPostponed());
 		assertTrue(imei.isSatisfied());
 		
 		imei = (IMEICondition) IMEICondition.getInstance(bundle,OTHER_IMEI);
-		assertTrue(imei.isEvaluated());
+		assertFalse(imei.isPostponed());
 		assertFalse(imei.isSatisfied());
 	}
 	

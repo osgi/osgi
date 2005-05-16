@@ -24,8 +24,8 @@ public class TestCondition implements Condition {
 //	}
 	
 	
-	public boolean isEvaluated() {
-		return evaluated;
+	public boolean isPostponed() {
+		return !evaluated;
 	}
 
 

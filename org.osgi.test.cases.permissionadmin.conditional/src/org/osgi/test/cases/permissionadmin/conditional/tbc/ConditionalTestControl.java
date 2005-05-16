@@ -59,7 +59,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
 	private ConditionalUtility			utility;
 	
 	private String						BUNDLE_LOCATION_CONDITION = BundleLocationCondition.class.getName();
-	private String						BUNDLE_SYMBOLIC_NAME_CONDITION = BundleSymbolicNameCondition.class.getName();
+	//private String						BUNDLE_SYMBOLIC_NAME_CONDITION = BundleSymbolicNameCondition.class.getName();
 	private String						BUNDLE_SIGNER_CONDITION = BundleSignerCondition.class.getName();
 	
 	
@@ -159,14 +159,14 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
 		ConditionInfo cInfo2 = new ConditionInfo(BUNDLE_SIGNER_CONDITION,
 				new String[]{ConditionResource.getString(ConditionalUtility.DN_S)});
 		
-		ConditionInfo cInfo3 = new ConditionInfo(BUNDLE_SYMBOLIC_NAME_CONDITION,
-				new String[]{testBundle.getSymbolicName(), null});
+		//ConditionInfo cInfo3 = new ConditionInfo(BUNDLE_SYMBOLIC_NAME_CONDITION,
+		//		new String[]{testBundle.getSymbolicName(), null});
 		
 		
 		PermissionInfo pInfo = new PermissionInfo(AdminPermission.class.getName(), 
 												  "*", "*");
 		
-		ConditionInfo[] conditions = new ConditionInfo[]{cInfo1, cInfo2, cInfo3};
+		ConditionInfo[] conditions = new ConditionInfo[]{cInfo1, cInfo2 }; //, cInfo3};
 		PermissionInfo[] permissions = new PermissionInfo[]{pInfo}; 
 		
 		ConditionalPermissionInfo cpInfo = conditionalAdmin.addConditionalPermissionInfo(
@@ -251,24 +251,24 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
 		for (int i = 0; i < names.size(); ++i) {
 			name = (String)names.elementAt(i);
 
-			cInfo = new ConditionInfo(BUNDLE_SYMBOLIC_NAME_CONDITION, 
-					new String[]{name, null});
+			//cInfo = new ConditionInfo(BUNDLE_SYMBOLIC_NAME_CONDITION, 
+			//		new String[]{name, null});
 		
 			utility.testPermissions(new ConditionInfo[]{cInfo}, permission, 
 					new AdminPermission[]{permission}, new AdminPermission[]{allPermissions});
 			
 			
 			for (int j = 0; j < correctRanges.size(); ++j) {
-				cInfo = new ConditionInfo(BUNDLE_SYMBOLIC_NAME_CONDITION, 
-						new String[]{name, (String)correctRanges.elementAt(j)});
+				//cInfo = new ConditionInfo(BUNDLE_SYMBOLIC_NAME_CONDITION, 
+				//		new String[]{name, (String)correctRanges.elementAt(j)});
 				
 				utility.testPermissions(new ConditionInfo[]{cInfo}, permission, 
 						new AdminPermission[]{permission}, new AdminPermission[]{allPermissions});
 			}
 			
 			for (int k = 0; k < notCorrectRanges.size(); ++k) {
-				cInfo = new ConditionInfo(BUNDLE_SYMBOLIC_NAME_CONDITION, 
-						new String[]{name, (String)notCorrectRanges.elementAt(k)});
+				//cInfo = new ConditionInfo(BUNDLE_SYMBOLIC_NAME_CONDITION, 
+				//		new String[]{name, (String)notCorrectRanges.elementAt(k)});
 				
 				utility.testPermissions(new ConditionInfo[]{cInfo}, permission, 
 						new AdminPermission[]{}, new AdminPermission[]{permission, allPermissions});

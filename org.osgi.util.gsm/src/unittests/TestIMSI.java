@@ -61,12 +61,12 @@ public class TestIMSI extends TestCase {
 	
 	public void testBasic() throws Exception {
 		IMSICondition imei = (IMSICondition) IMSICondition.getInstance(bundle,SYSTEM_IMSI);
-		assertTrue(imei.isEvaluated());
+		assertFalse(imei.isPostponed());
 		assertTrue(imei.isSatisfied());
 		
 		imei = (IMSICondition) IMSICondition.getInstance(bundle,OTHER_IMSI);
-		assertTrue(imei.isEvaluated());
-		assertFalse(imei.isSatisfied());
+		assertTrue(imei.isPostponed());
+		assertTrue(imei.isSatisfied());
 	}
 	
 	public void testIMSIValidator() throws Exception {
