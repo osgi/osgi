@@ -118,8 +118,8 @@ public class TransferCostCondition implements Condition {
 	 * 
 	 * @return Always true.
 	 */
-	public boolean isEvaluated() {
-		return true;
+	public boolean isPostponed() {
+		return false;
 	}
 
 	/**

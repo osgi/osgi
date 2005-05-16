@@ -143,12 +143,13 @@ public class UserPromptCondition implements Condition {
 	 * 
 	 * @return True, if no prompt is needed.
 	 */
-	public boolean isEvaluated() {
+	public boolean isPostponed() {
 		lookForImplementation();
 		if (realUserPromptCondition!=null) {
-			return realUserPromptCondition.isEvaluated();
+			return realUserPromptCondition.isPostponed();
 		} else {
-			return false;
+			return true;
+			//### check
 		}
 	}
 
