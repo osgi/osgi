@@ -126,10 +126,10 @@ public class ConditionalPermissions extends PermissionCollection {
 						if (conds[j] == null) {
 							continue;
 						}
-						if (conds[j].isEvaluated() && !conds[j].isSatisfied()) {
+						if (! conds[j].isPostponed() && !conds[j].isSatisfied()) {
 							continue cpsLoop;
 						}
-						if (!conds[j].isEvaluated()) {
+						if (conds[j].isPostponed()) {
 							if (fsm == null) {
 								// If there is no FrameworkSecurityManager, we must evaluate now
 								if (!conds[j].isSatisfied()) {

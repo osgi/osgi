@@ -44,10 +44,10 @@ public class BundleLocationCondition implements Condition {
 	 * This method is always true since this is an immutable Condition.
 	 * 
 	 * @return always true.
-	 * @see org.osgi.service.condpermadmin.Condition#isEvaluated()
+	 * @see org.osgi.service.condpermadmin.Condition#isPostponed()
 	 */
-	public boolean isEvaluated() {
-		return true;
+	public boolean isPostponed() {
+		return false;
 	}
 
 	/**

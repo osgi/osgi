@@ -52,10 +52,10 @@ public class BundleSignerCondition implements Condition {
 	/**
 	 * Always returns true, since this condition is immutable.
 	 * @return always returns true;
-	 * @see org.osgi.service.condpermadmin.Condition#isEvaluated()
+	 * @see org.osgi.service.condpermadmin.Condition#isPostponed()
 	 */
-	public boolean isEvaluated() {
-		return true;
+	public boolean isPostponed() {
+		return false;
 	}
 
 	/**

@@ -73,8 +73,8 @@ public class BundleSignerCondition implements Condition {
 	 * @return always returns true;
 	 * @see org.osgi.service.condpermadmin.Condition#isEvaluated()
 	 */
-	public boolean isEvaluated() {
-		return true;
+	public boolean isPostponed() {
+		return false;
 	}
 
 	/**
