@@ -17,7 +17,10 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentInstance;
+import org.eclipse.osgi.component.instance.*;
+import org.eclipse.osgi.component.model.*;
 
 /**
  * A ComponentInstance encapsulates an instance of a component.
@@ -30,6 +33,9 @@ public class ComponentInstanceImpl implements ComponentInstance {
 
 	Object instance;
 	Dictionary properties = null;
+	BuildDispose buildDispose;
+	ComponentDescriptionProp component;
+	ServiceRegistration serviceRegistration = null;
 
 	//ServiceReference:ServiceObject that binded to this reference
 	private Hashtable serviceReferenceToServiceObject = new Hashtable();
@@ -39,9 +45,11 @@ public class ComponentInstanceImpl implements ComponentInstance {
 	 * @param Object instance
 	 * 
 	 */
-	public ComponentInstanceImpl(Object instance, Dictionary properties) {
+	public ComponentInstanceImpl(BuildDispose buildDispose, ComponentDescriptionProp component, Object instance, Dictionary properties) {
+		this.buildDispose = buildDispose;
 		this.instance = instance;
 		this.properties = properties;
+		this.component = component;
 
 	}
 
@@ -50,6 +58,10 @@ public class ComponentInstanceImpl implements ComponentInstance {
 	 * the instance has already been deactivated, this method does nothing.
 	 */
 	public void dispose() {
+		//deactivate, unregister if a service
+		if(serviceRegistration != null)
+			serviceRegistration.unregister();
+		buildDispose.disposeComponentInstance(component, this);
 		instance = null;
 		properties = null;
 	}
@@ -84,6 +96,10 @@ public class ComponentInstanceImpl implements ComponentInstance {
 	public Object getServiceObject(ServiceReference serviceReference)
 	{
 		return serviceReferenceToServiceObject.get(serviceReference);
+	}
+		
+	public void setServiceRegistration(ServiceRegistration serviceRegistration){
+		this.serviceRegistration =  serviceRegistration;
 	}
 	
 }

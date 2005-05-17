@@ -19,7 +19,6 @@ import java.util.Iterator;
 import org.eclipse.osgi.component.model.ComponentDescription;
 import org.eclipse.osgi.component.model.PropertyValueDescription;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class PropertyElement extends DefaultHandler {
@@ -28,7 +27,7 @@ public class PropertyElement extends DefaultHandler {
 	protected PropertyValueDescription property;
 	protected List values;
 
-	public PropertyElement(ParserHandler root, ComponentElement parent, Attributes attributes) throws SAXException {
+	public PropertyElement(ParserHandler root, ComponentElement parent, Attributes attributes) {
 		this.root = root;
 		this.parent = parent;
 		property = new PropertyValueDescription(parent.getComponentDescription());
@@ -53,20 +52,19 @@ public class PropertyElement extends DefaultHandler {
 				property.setType(value);
 				continue;
 			}
-
-			throw new SAXException("unrecognized properties element attribute: " + key);
+			root.logError("unrecognized properties element attribute: " + key);
 		}
 
 		if (property.getName() == null) {
-			throw new SAXException("property name not specified");
+			root.logError("property name not specified");
 		}
 	}
 
-	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-		throw new SAXException("property does not support nested elements");
+	public void startElement(String uri, String localName, String qName, Attributes attributes) {
+		root.logError("property does not support nested elements");
 	}
 
-	public void characters(char[] ch, int start, int length) throws SAXException {
+	public void characters(char[] ch, int start, int length) {
 		int end = start + length;
 		int cursor = start;
 		while (cursor < end) {
@@ -88,11 +86,16 @@ public class PropertyElement extends DefaultHandler {
 		}
 	}
 
-	public void endElement(String uri, String localName, String qName) throws SAXException {
+	public void endElement(String uri, String localName, String qName) {
 
-		//if characters were specified 
 		int size = values.size();
-		if (size > 0) {
+
+		//If the value attribute is specified, then body of the property element is ignored. 
+		if ((property.getValue() != null) && (size > 0)) {
+			root.logError("If the value attribute is specified, the body of the property element is ignored. key = " + property.getName() + " value = " + property.getValue());
+
+			//if characters were specified ( values are specifed in the body of the property element )
+		} else if (size > 0) {
 			//if String then store as String[]
 			if (property.getType().equals("String")) {
 				String[] result = new String[size];

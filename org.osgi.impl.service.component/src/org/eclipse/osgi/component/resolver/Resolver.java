@@ -1,5 +1,4 @@
 /*
- * $Header$
  * 
  * Copyright (c) IBM Corporation (2005)
  *
@@ -17,6 +16,7 @@ package org.eclipse.osgi.component.resolver;
 
 import java.io.IOException;
 import java.util.*;
+
 import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.component.instance.InstanceProcess;
 import org.eclipse.osgi.component.model.*;
@@ -26,6 +26,8 @@ import org.osgi.framework.*;
 import org.osgi.service.cm.*;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentException;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * 
@@ -35,7 +37,7 @@ import org.osgi.service.component.ComponentException;
  * 
  * @version $Revision$
  */
-public class Resolver implements ServiceListener, ConfigurationListener, WorkDispatcher {
+public class Resolver implements ServiceListener, WorkDispatcher, ServiceTrackerCustomizer {
 
 	/* set this to true to compile in debug messages */
 	static final boolean DEBUG = false;
@@ -44,6 +46,13 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	 * The ConfigurationListener class
 	 */
 	static final String CONFIG_LISTENER_CLASS = "org.osgi.service.cm.ConfigurationListener";
+	static final String CMADMIN_SERVICE_CLASS = "org.osgi.service.cm.ConfigurationAdmin";
+
+	/** ConfigurationAdmin instance */
+	protected ConfigurationAdmin configurationAdmin;
+
+	/* ServiceTracker for configurationAdmin */
+	private ServiceTracker configAdminTracker;
 
 	/**
 	 * Service Component instances need to be built.
@@ -65,7 +74,9 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	 */
 	public static final int DYNAMICUNBIND = 4;
 
-	/** Main class for the SCR */
+	/** 
+	 * Main class for the SCR 
+	 */
 	public Main main;
 
 	public InstanceProcess instanceProcess;
@@ -75,12 +86,8 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	/** ServiceComponent Runtime Bundle Context */
 	protected BundleContext scrBundleContext;
 
-	/** ConfigurationAdmin instance */
-	protected ConfigurationAdmin configurationAdmin;
+	protected List componentDescriptions;
 
-	/* CD:CD+P ( 1:n) */
-	protected Hashtable componentDescriptionToProps;
-	/* [CD+P] enabled */
 	protected List componentDescriptionPropsEnabled;
 
 	protected ServiceRegistration configListener;
@@ -100,11 +107,12 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 		workQueue = main.workQueue;
 		scrBundleContext = main.context;
 		componentDescriptionPropsEnabled = new ArrayList();
-		componentDescriptionToProps = new Hashtable();
+		componentDescriptions = new ArrayList();
 		instanceProcess = new InstanceProcess(main);
 		componentProperties = new ComponentProperties(main);
 		addServiceListener();
-		registerConfigurationListener();
+		configAdminTracker = new ServiceTracker(scrBundleContext, CMADMIN_SERVICE_CLASS, this);
+		configAdminTracker.open(true); //true for track all services
 
 	}
 
@@ -114,10 +122,11 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	public void dispose() {
 
 		removeServiceListener();
-		removeConfigurationListener();
 		instanceProcess.dispose();
+		configAdminTracker.close();
+		configAdminTracker = null;
 		componentDescriptionPropsEnabled = null;
-		componentDescriptionToProps = null;
+
 	}
 
 	/**
@@ -125,14 +134,10 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	 * 
 	 * @param descriptions -
 	 *            a list of all component descriptions for a single bundle to be
-	 *            enabled Receive List of enabled CD's from ComponentCache
+	 *            enabled. Receive List of enabled CD's from ComponentCache
 	 *            For each CD add to list of enabled create list of CD:CD+P
 	 *            create list of CD+P:ref ( where ref is a Reference Object)
 	 *            resolve CD+P
-	 * 
-	 * @param descriptions -
-	 *            a list of all component descriptions for a single bundle to be
-	 *            enabled
 	 * 
 	 */
 	public void enableComponents(List componentDescriptions) throws IOException {
@@ -147,6 +152,7 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 				ComponentDescription componentDescription = (ComponentDescription) it.next();
 
 				// check for a Configuration properties for this component
+
 				try {
 					config = componentProperties.getConfiguration(componentDescription.getName());
 				} catch (Exception e) {
@@ -155,9 +161,10 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 
 				// if no Configuration
 				if (config == null) {
-
+					Dictionary props = new Hashtable();
+					addComponentName(componentDescription, props);
 					// create ComponentDescriptionProp
-					map(componentDescription, null);
+					map(componentDescription, props);
 
 				} else {
 
@@ -170,22 +177,87 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 						}
 						try {
 							// configs = configurationAdmin.listConfigurations("(service.factoryPid="+config.getFactoryPid()+")");
-							configs = componentProperties.getConfigurationAdmin().listConfigurations("(service.factoryPid=" + config.getFactoryPid() + ")");
+							ConfigurationAdmin cm = (ConfigurationAdmin) configAdminTracker.getService();
+							configs = cm.listConfigurations("(service.factoryPid=" + config.getFactoryPid() + ")");
 						} catch (Exception e) {
 							main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(), e);
 						}
 						// for each MSF set of properties(P), map(CD, new CD+P(CD,P))
 						if (configs != null) {
 							for (int index = 0; index < configs.length; index++) {
+								Dictionary props = configs[index].getProperties();
+								if (props == null) {
+									props = new Hashtable();
+								}
+								addComponentName(componentDescription, props);
 								map(componentDescription, configs[index].getProperties());
 							}
 						}
 					} else {
 						// if Service
-						map(componentDescription, config.getProperties());
+						Dictionary props = config.getProperties();
+						if (props == null) {
+							props = new Hashtable();
+						}
+						addComponentName(componentDescription, props);
+						map(componentDescription, props);
 					}
 				}
 			}
+		}
+		// resolve
+		getEligible(null);
+	}
+
+	/**
+	 * enableComponent - create a new instance with properties.
+	 * 
+	 * @param description -
+	 *            a component description
+	 * 
+	 * @param config -
+	 *            Configuration object
+	 * 
+	 */
+	public void enableComponent(ComponentDescription componentDescription, Configuration config) throws IOException {
+
+		Configuration componentConfig = null;
+
+		if (componentDescription != null) {
+
+			//  if ManagedServiceFactory cannot also be a ComponentFactory
+			if (config.getFactoryPid() != null) {
+				// if ComponentFactory is specified
+				if (componentDescription.getFactory() != null) {
+					throw new ComponentException("incompatible to specify both ComponentFactory and ManagedServiceFactory are incompatible");
+				}
+			}
+
+			// check for existing component configuration
+
+			try {
+				componentConfig = componentProperties.getConfiguration(componentDescription.getName());
+			} catch (Exception e) {
+				main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(), e);
+			}
+
+			// if no component configuration then create one, else get the current properties
+			Hashtable props = null;
+			if (componentConfig == null) {
+				props = new Hashtable();
+				// 	add the component.name
+				addComponentName(componentDescription, props);
+			} else {
+				props = (Hashtable) componentConfig.getProperties();
+			}
+
+			//add the provided properties
+			if (config != null)
+				props.putAll((Map) config.getProperties());
+
+			// create ComponentDescriptionProp
+			map(componentDescription, props);
+
 		}
 		// resolve
 		getEligible(null);
@@ -200,27 +272,12 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	 */
 	public void map(ComponentDescription componentDescription, Dictionary properties) throws IOException {
 
-		ComponentDescriptionProp componentDescriptionProp;
+		componentDescriptions.add(componentDescription);
 		List references = new ArrayList();
-		List componentDescriptionProps = null;
 
 		// Create CD+P
-		componentDescriptionProp = new ComponentDescriptionProp(componentDescription, properties);
-
-		// if CD not already in Map create list to add to map
-		if (componentDescriptionToProps.get(componentDescription) == null) {
-			// create list
-			componentDescriptionProps = new ArrayList();
-			componentDescriptionProps.add(componentDescriptionProp);
-
-			// else add to current list
-		} else {
-			componentDescriptionProps = (List) componentDescriptionToProps.get(componentDescription);
-			componentDescriptionProps.add(componentDescriptionProp);
-		}
-
-		// add to CD:CD+P map
-		componentDescriptionToProps.put(componentDescription, componentDescriptionProps);
+		ComponentDescriptionProp componentDescriptionProp = new ComponentDescriptionProp(componentDescription, properties);
+		componentDescription.addComponentDescriptionProp(componentDescriptionProp);
 
 		List services = new ArrayList();
 		ServiceDescription serviceDescription = componentDescription.getService();
@@ -270,12 +327,6 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	 * @param componentDescriptions
 	 */
 	public void disableComponents(List componentDescriptions) {
-
-		ComponentDescriptionProp componentDescriptionProp;
-		ComponentDescription componentDescriptionInput;
-		ComponentDescription componentDescription;
-		List componentDescriptionProps;
-
 		List removeList = new ArrayList();
 
 		// Received list of CDs to disable
@@ -284,38 +335,28 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 			while (it.hasNext()) {
 
 				// get the first CD
-				componentDescriptionInput = (ComponentDescription) it.next();
+				ComponentDescription componentDescription = (ComponentDescription) it.next();
 
 				// process CD:CDP list and see if there is a match
-				Enumeration keys = componentDescriptionToProps.keys();
-				while (keys.hasMoreElements()) {
-					componentDescription = (ComponentDescription) keys.nextElement();
-
-					// see if the CD's match
-					if ((componentDescription.getName()).equals(componentDescriptionInput.getName())) {
-
-						// then get the list of CDPs for this CD
-						componentDescriptionProps = (List) componentDescriptionToProps.get(componentDescription);
-						if (componentDescriptionProps != null) {
-							Iterator iter = componentDescriptionProps.iterator();
-							while (iter.hasNext()) {
-
-								componentDescriptionProp = (ComponentDescriptionProp) iter.next();
-								removeList.add(componentDescriptionProp);
-								componentDescriptionPropsEnabled.remove(componentDescriptionProp);
-							}
-						}
-						componentDescriptionToProps.remove(componentDescription);
-					}
+				List cdps = componentDescription.getComponentDescriptionProps();
+				List cdpsClone = (List) ((ArrayList) componentDescription.getComponentDescriptionProps()).clone();
+				Iterator it_ = cdpsClone.iterator();
+				while (it_.hasNext()) {
+					ComponentDescriptionProp componentDescriptionProp = (ComponentDescriptionProp) it_.next();
+					removeList.add(componentDescriptionProp);
+					componentDescriptionPropsEnabled.remove(componentDescriptionProp);
+					componentDescription.removeComponentDescriptionProp(componentDescriptionProp);
 				}
+				//  
+				//		componentDescriptions.remove(componentDescription);
 			}
+
+			// re-run resolver - there might be components that depended on this component
+			getEligible(null);
+
+			// dispose of all instances for this CDP
+			workQueue.enqueueWork(this, DISPOSE, removeList);
 		}
-		// re-run resolver - there might be components that depended on this component
-		getEligible(null);
-
-		// dispose of all instances for this CDP
-		workQueue.enqueueWork(this, DISPOSE, removeList);
-
 	}
 
 	/**
@@ -344,7 +385,7 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 		List newlyIneligibleComponents = selectNewlyInEligible(resolvedComponents);
 		if (!newlyIneligibleComponents.isEmpty())
 			workQueue.enqueueWork(this, DISPOSE, newlyIneligibleComponents);
-		
+
 		//	 check if there are Service Components which  need to dynamically unbind from this unregistering Service
 		if ((event != null) && (event.getType() == ServiceEvent.UNREGISTERING)) {
 			//Pass in the set of currently resolved components, check each one - do we need to unbind
@@ -356,7 +397,7 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	}
 
 	public List resolveEligible() {
-		List enabledCDPs = (List) ((ArrayList)componentDescriptionPropsEnabled).clone();
+		List enabledCDPs = (List) ((ArrayList) componentDescriptionPropsEnabled).clone();
 		boolean runAgain = true;
 		while (runAgain) {
 			Iterator it = enabledCDPs.iterator();
@@ -384,14 +425,12 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 		try {
 			List sortedCDPs = sortCDPs(enabledCDPs);
 			return sortedCDPs;
-		}
-		catch(CircularityException ex)
-		{
+		} catch (CircularityException ex) {
 			ComponentDescriptionProp circularCDP = ex.getCircularDependency();
-			
+
 			//log the error
 			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, circularCDP.getComponentDescription().getBundle(), ex);
-			
+
 			//remove offending CDP and re-resolve
 			componentDescriptionPropsEnabled.remove(ex.getCircularDependency());
 			return resolveEligible();
@@ -437,15 +476,19 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 			System.out.println("ServiceChanged: Event type = " + eventType + " , reference.getBundle() = " + reference.getBundle());
 		}
 
-		// No need to process events that SCR initiated
-		// check for component.id and ignore the event if set
-		if (
-				(reference.getProperty(ComponentConstants.COMPONENT_ID) == null) &&
-				(eventType == ServiceEvent.REGISTERED) || 
-				eventType == ServiceEvent.UNREGISTERING
-			) {
-			
-			getEligible(event);
+		// if ((reference.getProperty(ComponentConstants.COMPONENT_ID) == null)
+
+		switch (eventType) {
+			// The properties of a registered Service have been modified
+			case ServiceEvent.MODIFIED :
+				getEligible(event);
+				break;
+			case ServiceEvent.REGISTERED :
+				getEligible(event);
+				break;
+			case ServiceEvent.UNREGISTERING :
+				getEligible(event);
+				break;
 		}
 
 	}
@@ -521,46 +564,14 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 
 			if (provideList.contains(reference.getReferenceDescription().getInterfacename())) {
 				//check the target field
-//				if(reference.matchProperties(cdp,scrBundleContext))
-//				{
+				if (reference.matchProperties(cdpRefLookup, scrBundleContext)) {
 					cdp.setReferenceCDP(cdpRefLookup);
 					return true;
-//				}
+				}
 			}
 		}
 
 		return false;
-	}
-
-	/**
-	 * Listen for configuration changes
-	 * 
-	 * Service Components can receive properties from the Configuration 
-	 * Admin service. If a Service Component is activated and it’s properties
-	 * are updated in the Configuration Admin service, the SCR must deactivate the component
-	 * and activate the component again using the new properties.
-	 * 
-	 * @param event ConfigurationEvent
-	 */
-	public void configurationEvent(ConfigurationEvent event) {
-
-		List componentDescriptions = new ArrayList();
-
-		String pid = event.getPid();
-		if (pid == null)
-			pid = event.getFactoryPid();
-
-		// If configuration change was for a Service Component
-		// then deactivate and reactivate the Service Component
-		Enumeration keys = componentDescriptionToProps.keys();
-		while (keys.hasMoreElements()) {
-			ComponentDescription componentDescription = (ComponentDescription) keys.nextElement();
-			if (componentDescription.getName().equals(pid)) {
-				componentDescription.setReactivate(true);
-				componentDescriptions.add(componentDescription);
-			}
-		}
-		disableComponents(componentDescriptions);
 	}
 
 	/**
@@ -604,25 +615,6 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 		//TODO does any action need to take place on build complete
 	}
 
-	/**
-	 * registerConfigListener - Listen for changes in the configuration
-	 * 
-	 */
-	public void registerConfigurationListener() {
-		configListener = scrBundleContext.registerService(CONFIG_LISTENER_CLASS, this, null);
-
-	}
-
-	/**
-	 * removeConfigurationListener -
-	 * 
-	 */
-	public void removeConfigurationListener() {
-		if (configListener != null)
-			scrBundleContext.ungetService(configListener.getReference());
-
-	}
-
 	private Hashtable selectDynamicBind(List cdps, ServiceReference serviceReference) {
 		Hashtable bindTable = new Hashtable();
 		Iterator it = cdps.iterator();
@@ -654,7 +646,7 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 	private List selectDynamicUnBind(List cdps, ServiceReference serviceReference) {
 
 		List unbindJobs = new ArrayList();
-		
+
 		Iterator it = cdps.iterator();
 		while (it.hasNext()) {
 			ComponentDescriptionProp cdp = (ComponentDescriptionProp) it.next();
@@ -674,13 +666,14 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 		}
 		return unbindJobs;
 	}
+
 	static public class DynamicUnbindJob {
 		public ComponentDescriptionProp component;
 		public Reference reference;
 		public ServiceReference serviceReference;
 	}
 
-	private List sortCDPs(List cdps) throws CircularityException{
+	private List sortCDPs(List cdps) throws CircularityException {
 		Iterator it = cdps.iterator();
 		List sortedList = new ArrayList();
 		List circularityCheck;
@@ -710,5 +703,46 @@ public class Resolver implements ServiceListener, ConfigurationListener, WorkDis
 		}
 		//finally write the cdp
 		sortedList.add(cdp);
+	}
+
+	private void addComponentName(ComponentDescription cd, Dictionary props) {
+		props.put("component.name", cd.getName());
+		props.put("objectClass", cd.getName());
+	}
+
+	/**
+	 * A ConfigurationAdmin Service is being added to the ServiceTracker object.
+	 *
+	 * @param reference Reference to service being added to the <tt>ServiceTracker</tt> object.
+	 * @return The service object to be tracked for the
+	 * <tt>ServiceReference</tt> object or <tt>null</tt> if the <tt>ServiceReference</tt> object should not
+	 * be tracked.
+	 */
+	public Object addingService(ServiceReference ref) {
+		configurationAdmin = (ConfigurationAdmin) main.context.getService(ref);
+		return configurationAdmin;
+	}
+
+	/**
+	 * A ConfigurationAdmin Service tracked by the ServiceTracker object has been modified.
+	 *
+	 * @param reference Reference to service that has been modified.
+	 * @param service The service object for the modified service.
+	 */
+	public void modifiedService(ServiceReference ref, Object object) {
+
+	}
+
+	/**
+	 * The ConfigurationAdmin Service tracked by the Service Tracker has been removed
+	 *
+	 * <p>This method is called after a service is no longer being tracked
+	 * by the <tt>ServiceTracker</tt> object.
+	 *
+	 * @param reference Reference to service that has been removed.
+	 * @param service The service object for the removed service.
+	 */
+	public void removedService(ServiceReference reference, Object object) {
+		main.context.ungetService(reference);
 	}
 }

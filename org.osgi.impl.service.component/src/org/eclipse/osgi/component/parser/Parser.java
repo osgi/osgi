@@ -46,7 +46,7 @@ public class Parser {
 	public Parser(Main main) {
 		this.main = main;
 		parserTracker = new ServiceTracker(main.context, ParserConstants.SAX_FACTORY_CLASS, null);
-		parserTracker.open();
+		parserTracker.open(true);
 	}
 
 	public void dispose() {
@@ -59,7 +59,7 @@ public class Parser {
 		List result = new ArrayList(length);
 
 		for (int i = 0; i < length; i++) {
-			List components = parseComponentDescription(bundle, xml[i].getValue());
+			List components = parseComponentDescription(main, bundle, xml[i].getValue());
 			result.addAll(components);
 		}
 
@@ -90,7 +90,7 @@ public class Parser {
 	 * @param bundle Bundle
 	 * @param xml String
 	 */
-	public List parseComponentDescription(Bundle bundle, String xml) {
+	public List parseComponentDescription(Main main, Bundle bundle, String xml) {
 		List result = new ArrayList();
 		try {
 			URL url = bundle.getEntry(xml);
@@ -102,7 +102,7 @@ public class Parser {
 			SAXParserFactory parserFactory = (SAXParserFactory) parserTracker.getService();
 			parserFactory.setNamespaceAware(true);
 			SAXParser saxParser = parserFactory.newSAXParser();
-			saxParser.parse(is, new ParserHandler(bundle, result));
+			saxParser.parse(is, new ParserHandler(main, bundle, result));
 		} catch (Exception e) {
 			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, e);
 		}

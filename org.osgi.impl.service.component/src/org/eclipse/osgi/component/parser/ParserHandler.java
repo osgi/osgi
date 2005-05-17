@@ -14,8 +14,10 @@
 package org.eclipse.osgi.component.parser;
 
 import java.util.List;
+import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.component.model.ComponentDescription;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkEvent;
 import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -33,10 +35,13 @@ public class ParserHandler extends DefaultHandler {
 
 	protected DefaultHandler handler;
 	protected List components;
+	protected Main main;
 	protected Bundle bundle;
 	protected int depth;
+	protected boolean error;
 
-	public ParserHandler(Bundle bundle, List components) {
+	public ParserHandler(Main main, Bundle bundle, List components) {
+		this.main = main;
 		this.bundle = bundle;
 		this.components = components;
 	}
@@ -47,6 +52,19 @@ public class ParserHandler extends DefaultHandler {
 
 	public void addComponentDescription(ComponentDescription component) {
 		components.add(component);
+	}
+
+	public void setError(boolean error) {
+		this.error = error;
+	}
+
+	public boolean isError() {
+		return error;
+	}
+
+	public void logError(String msg) {
+		error = true;
+		main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, new SAXException(msg));
 	}
 
 	public void startDocument() throws SAXException {

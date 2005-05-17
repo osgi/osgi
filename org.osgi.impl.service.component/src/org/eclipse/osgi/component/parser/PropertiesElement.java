@@ -16,7 +16,6 @@ package org.eclipse.osgi.component.parser;
 import org.eclipse.osgi.component.model.ComponentDescription;
 import org.eclipse.osgi.component.model.PropertyResourceDescription;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class PropertiesElement extends DefaultHandler {
@@ -24,7 +23,7 @@ public class PropertiesElement extends DefaultHandler {
 	protected ComponentElement parent;
 	protected PropertyResourceDescription properties;
 
-	public PropertiesElement(ParserHandler root, ComponentElement parent, Attributes attributes) throws SAXException {
+	public PropertiesElement(ParserHandler root, ComponentElement parent, Attributes attributes) {
 		this.root = root;
 		this.parent = parent;
 		properties = new PropertyResourceDescription(parent.getComponentDescription());
@@ -38,29 +37,28 @@ public class PropertiesElement extends DefaultHandler {
 				properties.setEntry(value);
 				continue;
 			}
-
-			throw new SAXException("unrecognized properties element attribute: " + key);
+			root.logError("unrecognized properties element attribute: " + key);
 		}
 
 		if (properties.getEntry() == null) {
-			throw new SAXException("properties entry not specified");
+			root.logError("properties entry not specified");
 		}
 	}
 
-	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-		throw new SAXException("properties does not support nested elements");
+	public void startElement(String uri, String localName, String qName, Attributes attributes) {
+		root.logError("properties does not support nested elements");
 	}
 
-	public void characters(char[] ch, int start, int length) throws SAXException {
+	public void characters(char[] ch, int start, int length) {
 		int end = start + length;
 		for (int i = start; i < end; i++) {
 			if (!Character.isWhitespace(ch[i])) {
-				throw new SAXException("element body must be empty");
+				root.logError("element body must be empty");
 			}
 		}
 	}
 
-	public void endElement(String uri, String localName, String qName) throws SAXException {
+	public void endElement(String uri, String localName, String qName) {
 		ComponentDescription component = parent.getComponentDescription();
 		component.addProperty(properties);
 		root.setHandler(parent);

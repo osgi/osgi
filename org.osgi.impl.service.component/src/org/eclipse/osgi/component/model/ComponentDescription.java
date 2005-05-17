@@ -10,7 +10,7 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
- 
+
 package org.eclipse.osgi.component.model;
 
 import java.util.ArrayList;
@@ -39,6 +39,8 @@ public class ComponentDescription {
 	protected ServiceDescription service;
 	protected List references;
 
+	protected List componentDescriptionProps;
+
 	/**
 	 * @param bundle The bundle to set.
 	 */
@@ -48,6 +50,7 @@ public class ComponentDescription {
 		reactivate = false;
 		properties = new ArrayList();
 		references = new ArrayList();
+		componentDescriptionProps = new ArrayList();
 	}
 
 	/**
@@ -217,4 +220,15 @@ public class ComponentDescription {
 		return reactivate;
 	}
 
+	public void addComponentDescriptionProp(ComponentDescriptionProp cdp) {
+		componentDescriptionProps.add(cdp);
+	}
+
+	public List getComponentDescriptionProps() {
+		return componentDescriptionProps;
+	}
+
+	public void removeComponentDescriptionProp(ComponentDescriptionProp cdp) {
+		componentDescriptionProps.remove(cdp);
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * * Copyright (c) IBM Corporation (2005)
+ * Copyright (c) IBM Corporation (2005)
  *
  * These materials have been contributed  to the OSGi Alliance as 
  * "MEMBER LICENSED MATERIALS" as defined in, and subject to the terms of, 
@@ -13,8 +13,10 @@
 
 package org.eclipse.osgi.component.instance;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Dictionary;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,8 +36,11 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.cm.ConfigurationEvent;
+import org.osgi.service.cm.ConfigurationListener;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentFactory;
+import org.osgi.util.tracker.*;
 
 /**
  * @author Administrator
@@ -43,12 +48,20 @@ import org.osgi.service.component.ComponentFactory;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class InstanceProcess implements WorkDispatcher {
+public class InstanceProcess implements WorkDispatcher, ConfigurationListener, ServiceTrackerCustomizer {
 
 	/* set this to true to compile in debug messages */
 	static final boolean DEBUG = false;
 
 	static final String COMPONENT_FACTORY_CLASS = "org.osgi.service.component.ComponentFactory";
+	static final String CMADMIN_SERVICE_CLASS = "org.osgi.service.cm.ConfigurationAdmin";
+	static final String CONFIG_LISTENER_CLASS = "org.osgi.service.cm.ConfigurationListener";
+
+	/** ConfigurationAdmin instance */
+	protected ConfigurationAdmin configurationAdmin;
+
+	/* ServiceTracker for configurationAdmin */
+	private ServiceTracker configAdminTracker;
 
 	/**
 	 * Service Component instances need to be built.
@@ -60,9 +73,12 @@ public class InstanceProcess implements WorkDispatcher {
 	 */
 	public static final int DISPOSED = 2;
 
-	/** map CDP:serviceRegistration [1:1] */
+	/** map CDP:serviceRegistration [1:n] */
 	public Hashtable registrations;
-	
+
+	/** map fpid:spids [1:n] */
+	protected Hashtable fpids;
+
 	/** SCR bundle context */
 	protected BundleContext scrBundleContext;
 
@@ -72,9 +88,6 @@ public class InstanceProcess implements WorkDispatcher {
 	/** map CDP:factory */
 	protected Hashtable factories;
 
-	/** ConfigurationAdmin instance */
-	protected ConfigurationAdmin configurationAdmin;
-
 	/** Properties for this Component from the Configuration Admin */
 	protected ComponentProperties componentProperties = null;
 
@@ -82,6 +95,8 @@ public class InstanceProcess implements WorkDispatcher {
 	public BuildDispose buildDispose;
 
 	private WorkQueue workQueue;
+
+	protected ServiceRegistration configListener;
 
 	/** 
 	 * Handle Instance processing building and disposing.  
@@ -96,9 +111,13 @@ public class InstanceProcess implements WorkDispatcher {
 		workQueue = main.workQueue;
 		scrBundleContext = main.context;
 		registrations = new Hashtable();
+		fpids = new Hashtable();
 		factories = new Hashtable();
 		buildDispose = new BuildDispose(main);
 		componentProperties = new ComponentProperties(main);
+		configAdminTracker = new ServiceTracker(scrBundleContext, CMADMIN_SERVICE_CLASS, this);
+		configAdminTracker.open(true); //true for track all services
+		registerConfigurationListener();
 
 	}
 
@@ -107,12 +126,16 @@ public class InstanceProcess implements WorkDispatcher {
 	 */
 	public void dispose() {
 
+		removeConfigurationListener();
 		buildDispose.dispose();
+		configAdminTracker.close();
+		configAdminTracker = null;
 		buildDispose = null;
 		main = null;
 		factories = null;
 		workQueue = null;
 		registrations = null;
+		fpids = null;
 		componentProperties = null;
 		scrBundleContext = null;
 	}
@@ -135,6 +158,9 @@ public class InstanceProcess implements WorkDispatcher {
 			while (it.hasNext()) {
 				componentDescriptionProp = (ComponentDescriptionProp) it.next();
 				componentDescription = componentDescriptionProp.getComponentDescription();
+				if (DEBUG)
+					System.out.println("InstanceProcess: buildInstances: component name = " + componentDescription.getName());
+
 				BundleContext bundleContext = main.framework.getBundleContext(componentDescription.getBundle());
 
 				//if Service not provided - create instance immediately
@@ -148,7 +174,8 @@ public class InstanceProcess implements WorkDispatcher {
 
 					// ComponentFactory
 					if (componentDescription.getFactory() != null) {
-
+						if (DEBUG)
+							System.out.println("InstanceProcess: buildInstances: ComponentFactory");
 						//check if MSF
 						configurationAdmin = componentProperties.getConfigurationAdmin();
 
@@ -166,21 +193,13 @@ public class InstanceProcess implements WorkDispatcher {
 						}
 						ComponentFactory factory = new ComponentFactoryImpl(bundleContext, componentDescriptionProp, this);
 						registerComponentFactory(bundleContext, componentDescriptionProp, factory);
-						factory.newInstance(null);
 
-						// ServiceFactory
+						// if ServiceFactory
 					} else if (componentDescription.getService().isServicefactory()) {
-						registrations.put(
-								componentDescriptionProp, 
-								RegisterComponentService.registerService(this,bundleContext, componentDescriptionProp,true)
-								);
-
-						// No ServiceFactory
+						registrations.put(componentDescriptionProp, RegisterComponentService.registerService(this, bundleContext, componentDescriptionProp, true, null));
+						// if Service
 					} else {
-						registrations.put(
-								componentDescriptionProp,
-								RegisterComponentService.registerService(this,bundleContext, componentDescriptionProp, false)
-								);
+						registrations.put(componentDescriptionProp, RegisterComponentService.registerService(this, bundleContext, componentDescriptionProp, false, null));
 					}
 				}
 			}//end while(more componentDescriptionProps)
@@ -195,7 +214,7 @@ public class InstanceProcess implements WorkDispatcher {
 	 */
 
 	public void disposeInstances(List componentDescriptionProps) {
-		
+
 		ComponentDescriptionProp componentDescriptionProp;
 		ComponentDescription componentDescription;
 		//	loop through CD+P list to be disposed
@@ -208,12 +227,18 @@ public class InstanceProcess implements WorkDispatcher {
 				//if no Services provided - dispose of instance immediately
 				if (componentDescription.getService() == null) {
 					buildDispose.disposeComponent(componentDescriptionProp);
+					//if ComponentFactory or if just Services
 				} else {
-					// if ComponentFactory or if just Services
+					// if ComponentFactory 
 					if (componentDescription.getFactory() != null) {
 						buildDispose.disposeComponent(componentDescriptionProp);
 						ServiceRegistration reg = (ServiceRegistration) factories.get(componentDescriptionProp);
-						reg.unregister();
+						try {
+							reg.unregister();
+						} catch (IllegalStateException e) {
+							//Service is already unregistered
+							//do nothing
+						}
 					}
 					//unregister all services
 					ServiceRegistration serviceRegistration = (ServiceRegistration) registrations.get(componentDescriptionProp);
@@ -230,7 +255,7 @@ public class InstanceProcess implements WorkDispatcher {
 				}
 			}
 		}
-		
+
 		// when dispose is complete, call back to resolver with list of disposed components
 		workQueue.enqueueWork(this, DISPOSED, componentDescriptionProps);
 	}
@@ -242,11 +267,10 @@ public class InstanceProcess implements WorkDispatcher {
 	 * 
 	 */
 
-	public void registerServices(BundleContext bundleContext, ComponentDescriptionProp componentDescriptionProp) {
-		registrations.put(
-				componentDescriptionProp, 
-				RegisterComponentService.registerService(this,bundleContext, componentDescriptionProp,false)
-				);
+	public ServiceRegistration registerServices(BundleContext bundleContext, ComponentDescriptionProp componentDescriptionProp) {
+		ServiceRegistration reg = RegisterComponentService.registerService(this, bundleContext, componentDescriptionProp, false, null);
+		registrations.put(componentDescriptionProp, reg);
+		return reg;
 	}
 
 	/**
@@ -291,13 +315,13 @@ public class InstanceProcess implements WorkDispatcher {
 		while (e.hasMoreElements()) {
 			Reference reference = (Reference) e.nextElement();
 			ComponentDescriptionProp cdp = (ComponentDescriptionProp) serviceTable.get(reference);
-			List instances = (List) buildDispose.instanceMap.get(cdp);
+			List instances = cdp.getInstances();
 			Iterator it = instances.iterator();
 			while (it.hasNext()) {
 				ComponentInstanceImpl compInstance = (ComponentInstanceImpl) it.next();
 				if (compInstance != null) {
 					try {
-						buildDispose.bindReference(reference, compInstance,main.framework.getBundleContext(cdp.getComponentDescription().getBundle()));
+						buildDispose.bindReference(reference, compInstance, main.framework.getBundleContext(cdp.getComponentDescription().getBundle()));
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
@@ -305,7 +329,7 @@ public class InstanceProcess implements WorkDispatcher {
 			}
 		}
 	}
-	
+
 	/**
 	 * Called by dispatcher ( Resolver) when work available on queue
 	 * 
@@ -323,23 +347,204 @@ public class InstanceProcess implements WorkDispatcher {
 			ServiceReference serviceReference = unbindJob.serviceReference;
 
 			//get the list of instances created
-			List instances = (List) buildDispose.instanceMap.get(cdp);
+			List instances = cdp.getInstances();
 			Iterator it = instances.iterator();
 			while (it.hasNext()) {
 				ComponentInstanceImpl compInstance = (ComponentInstanceImpl) it.next();
 				Object instance = compInstance.getInstance();
 				if (instance != null) {
 					try {
-						buildDispose.unbindDynamicReference(cdp,reference, compInstance, serviceReference);
+						buildDispose.unbindDynamicReference(cdp, reference, compInstance, serviceReference);
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
 				}
 			}
-			
+
 			//all instances are now unbound
 			reference.removeServiceReference(serviceReference);
 		}
 	}
-}
 
+	/**
+	 * registerConfigListener - Listen for changes in the configuration
+	 * 
+	 */
+	public void registerConfigurationListener() {
+		configListener = scrBundleContext.registerService(CONFIG_LISTENER_CLASS, this, null);
+
+	}
+
+	/**
+	 * removeConfigurationListener -
+	 * 
+	 */
+	public void removeConfigurationListener() {
+		if (configListener != null)
+			scrBundleContext.ungetService(configListener.getReference());
+
+	}
+
+	/**
+	 * Listen for configuration changes
+	 * 
+	 * Service Components can receive properties from the Configuration 
+	 * Admin service. If a Service Component is activated and it’s properties
+	 * are updated in the Configuration Admin service, the SCR must deactivate the component
+	 * and activate the component again using the new properties.
+	 * 
+	 * @param event ConfigurationEvent
+	 */
+	public void configurationEvent(ConfigurationEvent event) {
+
+		Configuration[] config = null;
+		ArrayList spids = null;
+		ComponentDescriptionProp componentDescriptionProp;
+		ServiceRegistration serviceRegistration;
+		Enumeration keys;
+
+		String pid = event.getPid();
+		if (DEBUG)
+			System.out.println("pid = " + pid);
+
+		String fpid = event.getFactoryPid();
+		if (DEBUG)
+			System.out.println("fpid = " + fpid);
+
+		switch (event.getType()) {
+			case ConfigurationEvent.CM_UPDATED :
+
+				// Get the config for this service.pid
+				ConfigurationAdmin cm = (ConfigurationAdmin) configAdminTracker.getService();
+				try {
+					config = cm.listConfigurations("(service.pid=" + pid + ")");
+				} catch (Exception e) {
+					main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, null, e);
+				}
+
+				//If a MSF
+				//Register a SF for each new config
+				if (fpid != null) {
+
+					// if fpid is found in list of saved factory pids
+					if (fpids.containsKey(fpid)) {
+
+						// get service pids associated to this factory pid
+						spids = (ArrayList) fpids.get(fpid);
+						if (spids == null)
+							spids = new ArrayList();
+
+						// if a service pid match is found then this is an UPDATE of the properties
+						if (spids.contains(pid)) {
+
+							updateServiceProperties(fpid, config);
+
+							// else this is a NEW config
+						} else {
+
+							//register a new SF with config.getProperties();
+							keys = registrations.keys();
+							while (keys.hasMoreElements()) {
+								componentDescriptionProp = (ComponentDescriptionProp) keys.nextElement();
+								if (fpid.equals(componentDescriptionProp.getComponentDescription().getName())) {
+									BundleContext bundleContext = main.framework.getBundleContext(componentDescriptionProp.getComponentDescription().getBundle());
+									ServiceRegistration t = RegisterComponentService.registerService(this, bundleContext, componentDescriptionProp, false, config[0].getProperties());
+									registrations.put(componentDescriptionProp, t);
+								}
+							}
+							spids.add(pid);
+							fpids.put(fpid, spids);
+						}
+
+						// fpid is not found so create a new entry
+						// Since the config has never been updated before do an update instead of a new
+					} else {
+
+						spids = new ArrayList();
+						spids.add(pid);
+						fpids.put(fpid, spids);
+						updateServiceProperties(fpid, config);
+					}
+
+					// else if NOT a factory	
+				} else {
+
+					//find the spid == implementation name in the CDP list
+					//then get service registration and update properties
+					updateServiceProperties(pid, config);
+				}
+
+				break;
+			case ConfigurationEvent.CM_DELETED :
+
+				//unregister the Service if the config was deleted
+				String comparePid = fpid == null ? pid : fpid;
+				updateServiceProperties(comparePid, null);
+
+				break;
+		}
+
+	}
+
+	private void updateServiceProperties(String pid, Configuration[] config) {
+
+		Enumeration keys;
+		ServiceRegistration serviceRegistration;
+		ComponentDescriptionProp componentDescriptionProp;
+
+		Dictionary props = null;
+		if (config != null)
+			props = config[0].getProperties();
+
+		//New properties for Service
+		keys = registrations.keys();
+		while (keys.hasMoreElements()) {
+			componentDescriptionProp = (ComponentDescriptionProp) keys.nextElement();
+			if (pid.equals(componentDescriptionProp.getComponentDescription().getName())) {
+				serviceRegistration = (ServiceRegistration) registrations.get(componentDescriptionProp);
+				BundleContext bundleContext = main.framework.getBundleContext(componentDescriptionProp.getComponentDescription().getBundle());
+				ServiceRegistration reg = RegisterComponentService.registerService(this, bundleContext, componentDescriptionProp, false, props);
+				registrations.put(componentDescriptionProp, reg);
+				serviceRegistration.unregister();
+				//serviceRegistration.setProperties((config[0]).getProperties());
+			}
+		}
+	}
+
+	/**
+	 * A ConfigurationAdmin Service is being added to the ServiceTracker object.
+	 *
+	 * @param reference Reference to service being added to the <tt>ServiceTracker</tt> object.
+	 * @return The service object to be tracked for the
+	 * <tt>ServiceReference</tt> object or <tt>null</tt> if the <tt>ServiceReference</tt> object should not
+	 * be tracked.
+	 */
+	public Object addingService(ServiceReference ref) {
+		configurationAdmin = (ConfigurationAdmin) main.context.getService(ref);
+		return configurationAdmin;
+	}
+
+	/**
+	 * A ConfigurationAdmin Service tracked by the ServiceTracker object has been modified.
+	 *
+	 * @param reference Reference to service that has been modified.
+	 * @param service The service object for the modified service.
+	 */
+	public void modifiedService(ServiceReference ref, Object object) {
+
+	}
+
+	/**
+	 * The ConfigurationAdmin Service tracked by the Service Tracker has been removed
+	 *
+	 * <p>This method is called after a service is no longer being tracked
+	 * by the <tt>ServiceTracker</tt> object.
+	 *
+	 * @param reference Reference to service that has been removed.
+	 * @param service The service object for the removed service.
+	 */
+	public void removedService(ServiceReference reference, Object object) {
+		main.context.ungetService(reference);
+	}
+
+}

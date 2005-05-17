@@ -80,7 +80,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 		bundleToLastModified = new Hashtable();
 
 		packageAdminTracker = new ServiceTracker(context, PackageAdmin.class.getName(), null);
-		packageAdminTracker.open();
+		packageAdminTracker.open(true);
 		bundleTracker = new BundleTracker(context, Bundle.ACTIVE, this);
 		workQueue = new WorkQueue(this, "SCR Work Queue");
 		resolver = new Resolver(this);
@@ -278,8 +278,8 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	public void enableComponent(String name, Bundle bundle) {
 
 		// get all ComponentDescriptions for this bundle
-		List componentDescriptions = cache.getComponentDescriptions(bundle);
-
+      List componentDescriptions = (List) bundleToComponentDescriptions.get(new Long(bundle.getBundleId()));
+      
 		//Create the list of CD's to be enabled
 		List enableCDs = new ArrayList();
 
@@ -460,8 +460,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 		if (
 				(componentDescription.getFactory() != null) &&
 				(componentDescription.getService() != null) &&
-				(componentDescription.getService().isServicefactory())
-			) {
+				(componentDescription.getService().isServicefactory())) {
 			componentDescription.setValid(false);
 			framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(), new Throwable("invalid to specify both ComponentFactory and ServiceFactory"));
 		} else {

@@ -16,7 +16,6 @@ package org.eclipse.osgi.component.parser;
 import org.eclipse.osgi.component.model.ComponentDescription;
 import org.eclipse.osgi.component.model.ReferenceDescription;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ReferenceElement extends DefaultHandler {
@@ -24,7 +23,7 @@ public class ReferenceElement extends DefaultHandler {
 	protected ComponentElement parent;
 	protected ReferenceDescription reference;
 
-	public ReferenceElement(ParserHandler root, ComponentElement parent, Attributes attributes) throws SAXException {
+	public ReferenceElement(ParserHandler root, ComponentElement parent, Attributes attributes) {
 		this.root = root;
 		this.parent = parent;
 		reference = new ReferenceDescription(parent.getComponentDescription());
@@ -68,33 +67,35 @@ public class ReferenceElement extends DefaultHandler {
 				reference.setUnbind(value);
 				continue;
 			}
-
-			throw new SAXException("unrecognized reference element attribute: " + key);
+			root.logError("unrecognized reference element attribute: " + key);
 		}
 
 		if (reference.getName() == null) {
-			throw new SAXException("reference name not specified");
+			root.logError("reference name not specified");
 		}
 		if (reference.getInterfacename() == null) {
-			throw new SAXException("reference interface not specified");
+			root.logError("reference interface not specified");
 		}
 	}
 
-	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-		throw new SAXException("reference does not support nested elements");
+	public void startElement(String uri, String localName, String qName, Attributes attributes) {
+		root.logError("reference does not support nested elements");
 	}
 
-	public void characters(char[] ch, int start, int length) throws SAXException {
+	public void characters(char[] ch, int start, int length) {
 		int end = start + length;
 		for (int i = start; i < end; i++) {
 			if (!Character.isWhitespace(ch[i])) {
-				throw new SAXException("element body must be empty");
+				root.logError("element body must be empty");
 			}
 		}
 	}
 
-	public void endElement(String uri, String localName, String qName) throws SAXException {
+	public void endElement(String uri, String localName, String qName) {
 		ComponentDescription component = parent.getComponentDescription();
+		if (((reference.getBind() == null) && (reference.getUnbind() != null)) || ((reference.getBind() != null) && (reference.getUnbind() == null))) {
+			root.logError("missing bind or unbind method");
+		}
 		component.addReference(reference);
 		root.setHandler(parent);
 	}

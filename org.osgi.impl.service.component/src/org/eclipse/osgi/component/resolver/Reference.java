@@ -1,5 +1,4 @@
 /*
- * $Header$
  * 
  * Copyright (c) IBM Corporation (2005)
  *
@@ -38,7 +37,7 @@ public class Reference {
 	protected String policy;
 	protected int cardinalityHigh;
 	protected int cardinalityLow;
-	
+
 	protected List serviceReferences = new ArrayList();
 
 	/**
@@ -56,10 +55,14 @@ public class Reference {
 		// property, then the selection filter used to select the desired
 		// service is
 		// “(objectClass=”+<interface-name>+”)”.
-		if (properties != null)
-			target = (String) properties.get(referenceDescription.getName() + TARGET);
+		if (properties != null) {
+			String newTarget = (String) properties.get(referenceDescription.getName() + TARGET);
+			if (newTarget != null) {
+				this.target = newTarget;
+			}
+		}
 		if (target == null) {
-			target = "(objectClass=" + referenceDescription.getInterfacename()+ ")";
+			target = "(objectClass=" + referenceDescription.getInterfacename() + ")";
 		}
 
 		// If it is not specified, then a policy of “static” is used.
@@ -115,6 +118,7 @@ public class Reference {
 	public ReferenceDescription getReferenceDescription() {
 		return referenceDescription;
 	}
+
 	public String getTarget() {
 		return target;
 	}
@@ -148,7 +152,7 @@ public class Reference {
 	}
 
 	public boolean unBindReference(ServiceReference serviceReference) {
-		
+
 		// nothing dynamic to do if static
 		if ("static".equals(policy)) {
 			return false;
@@ -168,26 +172,25 @@ public class Reference {
 		return true;
 
 	}
-	
+
 	public void addServiceReference(ServiceReference serviceReference) {
 		serviceReferences.add(serviceReference);
 	}
-	
+
 	public void removeServiceReference(ServiceReference serviceReference) {
 		serviceReferences.remove(serviceReference);
 	}
-	
+
 	public List getServiceReferences() {
 		return serviceReferences;
 	}
-	
+
 	public boolean bindedToServiceReference(ServiceReference serviceReference) {
 		return serviceReferences.contains(serviceReference);
 	}
-	
-	public boolean matchProperties(ComponentDescriptionProp cdp,BundleContext context) {
-		if(target == null)
-		{
+
+	public boolean matchProperties(ComponentDescriptionProp cdp, BundleContext context) {
+		if (target == null) {
 			return true;
 		}
 		Dictionary properties = cdp.getProperties();
@@ -201,6 +204,5 @@ public class Reference {
 			return false; //TODO - is this correct?
 		}
 	}
-
 
 }

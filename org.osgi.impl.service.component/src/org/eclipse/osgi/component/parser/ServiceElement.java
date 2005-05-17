@@ -16,7 +16,6 @@ package org.eclipse.osgi.component.parser;
 import org.eclipse.osgi.component.model.ComponentDescription;
 import org.eclipse.osgi.component.model.ServiceDescription;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ServiceElement extends DefaultHandler {
@@ -24,7 +23,7 @@ public class ServiceElement extends DefaultHandler {
 	protected ComponentElement parent;
 	protected ServiceDescription service;
 
-	public ServiceElement(ParserHandler root, ComponentElement parent, Attributes attributes) throws SAXException {
+	public ServiceElement(ParserHandler root, ComponentElement parent, Attributes attributes) {
 		this.root = root;
 		this.parent = parent;
 		service = new ServiceDescription(parent.getComponentDescription());
@@ -38,8 +37,7 @@ public class ServiceElement extends DefaultHandler {
 				service.setServicefactory(value.equalsIgnoreCase("true"));
 				continue;
 			}
-
-			throw new SAXException("unrecognized service element attribute: " + key);
+			root.logError("unrecognized service element attribute: " + key);
 		}
 	}
 
@@ -47,32 +45,35 @@ public class ServiceElement extends DefaultHandler {
 		return service;
 	}
 
-	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+	public void startElement(String uri, String localName, String qName, Attributes attributes) {
 		if (localName.equals(ParserConstants.PROVIDE_ELEMENT)) {
 			root.setHandler(new ProvideElement(root, this, attributes));
 			return;
 		}
-
-		throw new SAXException("unrecognized element of service: " + localName);
+		root.logError("unrecognized element of service: " + localName);
 	}
 
-	public void characters(char[] ch, int start, int length) throws SAXException {
+	public void characters(char[] ch, int start, int length) {
 		int end = start + length;
 		for (int i = start; i < end; i++) {
 			if (!Character.isWhitespace(ch[i])) {
-				throw new SAXException("element body must be empty");
+				root.logError("element body must be empty");
 			}
 		}
 	}
 
-	public void endElement(String uri, String localName, String qName) throws SAXException {
+	public void endElement(String uri, String localName, String qName) {
 		ComponentDescription component = parent.getComponentDescription();
 		if (component.getService() != null) {
-			throw new SAXException("more than one service element");
+			root.logError("more than one service element");
 		}
 
 		if (service.getProvides().length == 0) {
-			throw new SAXException("no provide elements specified");
+			root.logError("no provide elements specified");
+		}
+
+		if ((component.getFactory() != null) && service.isServicefactory()) {
+			root.logError("component factory is incompatible with Service factory ");
 		}
 
 		component.setService(service);

@@ -36,10 +36,11 @@ public class ComponentDescriptionProp {
 	protected ComponentProperties componentProperties;
 	protected Hashtable properties;
 	protected ComponentContext componentContext;
-	
+
 	protected List referenceCDPs;
 	protected List servicesProvided;
 	protected List references;
+	protected List instances;
 
 	/**
 	 * @param bundle The bundle to set.
@@ -50,15 +51,20 @@ public class ComponentDescriptionProp {
 		properties = new Hashtable();
 		referenceCDPs = new ArrayList();
 		servicesProvided = new ArrayList();
+		instances = new ArrayList();
 		initProperties(configProperties);
-
 	}
 
 	/** 
 	 * Initialize Properties for this Component 
 	 * 
 	 * The property elements provide default or supplemental property values 
-	 * if not overridden by the properties retrieved from Configuration Admin
+	 * if not overridden by the properties retrieved from Configuration Admin.
+	 * 
+	 * The property and properties elements are processed in top to bottom order.
+	 * This allows later elements to override property values defined by earlier 
+	 * elements.  There can be many property and properties elements and they may be 
+	 * interleaved.
 	 * 
 	 * @return Dictionary properties
 	 */
@@ -72,15 +78,6 @@ public class ComponentDescriptionProp {
 				properties.put(propvalue.getName(), propvalue.getValue());
 			} else {
 				addEntryProperties(((PropertyResourceDescription) propertyDescriptions[i]).getEntry());
-			}
-		}
-
-		// properties from Configuration Admin
-		if (configProperties != null) {
-			Enumeration keys = configProperties.keys();
-			while (keys.hasMoreElements()) {
-				String key = (String) keys.nextElement();
-				properties.put(key, configProperties.get(key));
 			}
 		}
 
@@ -115,7 +112,6 @@ public class ComponentDescriptionProp {
 			in = url.openStream();
 		}
 		if (in != null) {
-
 			props.load(new BufferedInputStream(in));
 			in.close();
 		} else {
@@ -128,9 +124,7 @@ public class ComponentDescriptionProp {
 			Enumeration keys = props.propertyNames();
 			while (keys.hasMoreElements()) {
 				String key = (String) keys.nextElement();
-				String[] result = new String[1];
-				result[0] = (String) props.get(key);
-				properties.put(key, result);
+				properties.put(key, props.get(key));
 			}
 		}
 
@@ -156,49 +150,56 @@ public class ComponentDescriptionProp {
 		return componentDescription;
 	}
 
-	public void setComponentContext(ComponentContext context)
-	{
+	public void setComponentContext(ComponentContext context) {
 		this.componentContext = context;
 	}
-	
-	public ComponentContext getComponentContext()
-	{
+
+	public ComponentContext getComponentContext() {
 		return componentContext;
 	}
-	
-	public void setReferenceCDP(ComponentDescriptionProp cdp)
-	{
+
+	public void setReferenceCDP(ComponentDescriptionProp cdp) {
 		if (!referenceCDPs.contains(cdp))
 			referenceCDPs.add(cdp);
 	}
-	
-	public List getReferenceCDPs()
-	{
+
+	public List getReferenceCDPs() {
 		return referenceCDPs == null ? Collections.EMPTY_LIST : referenceCDPs;
 	}
-	
-	public void clearReferenceCDPs()
-	{
-	     referenceCDPs.clear();	
+
+	public void clearReferenceCDPs() {
+		referenceCDPs.clear();
 	}
-	
-	public void setServiceProvided(List services)
-	{
+
+	public void setServiceProvided(List services) {
 		this.servicesProvided = services;
 	}
-	
-	public List getServicesPrivided()
-	{
+
+	public List getServicesPrivided() {
 		return servicesProvided == null ? Collections.EMPTY_LIST : servicesProvided;
 	}
-	
-	public void setReferences(List references)
-	{
+
+	public void setReferences(List references) {
 		this.references = references;
 	}
-	
-	public List getReferences()
-	{
+
+	public List getReferences() {
 		return references == null ? Collections.EMPTY_LIST : references;
+	}
+
+	public void addInstance(Object object) {
+		instances.add(object);
+	}
+
+	public List getInstances() {
+		return instances;
+	}
+
+	public void removeInstance(Object object) {
+		instances.remove(object);
+	}
+
+	public void removeAllInstances() {
+		instances.clear();
 	}
 }

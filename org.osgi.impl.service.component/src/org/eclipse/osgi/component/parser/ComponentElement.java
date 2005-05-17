@@ -10,7 +10,7 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
- 
+
 package org.eclipse.osgi.component.parser;
 
 import org.eclipse.osgi.component.model.ComponentDescription;
@@ -23,7 +23,7 @@ public class ComponentElement extends DefaultHandler {
 	protected ParserHandler parent;
 	protected ComponentDescription component;
 
-	public ComponentElement(ParserHandler root, Attributes attributes) throws SAXException {
+	public ComponentElement(ParserHandler root, Attributes attributes) {
 		this.root = root;
 		this.parent = root;
 		component = new ComponentDescription(root.bundle);
@@ -45,12 +45,11 @@ public class ComponentElement extends DefaultHandler {
 				component.setFactory(value);
 				continue;
 			}
-
-			throw new SAXException("unrecognized component element attribute: " + key);
+			root.logError("unrecognized component element attribute: " + key);
 		}
 
 		if (component.getName() == null) {
-			throw new SAXException("component name not specified");
+			root.logError("component name not specified");
 		}
 	}
 
@@ -83,25 +82,29 @@ public class ComponentElement extends DefaultHandler {
 			root.setHandler(new ReferenceElement(root, this, attributes));
 			return;
 		}
-
-		throw new SAXException("unrecognized element of component: " + localName);
+		root.logError("unrecognized element of component: " + localName);
 	}
 
-	public void characters(char[] ch, int start, int length) throws SAXException {
+	public void characters(char[] ch, int start, int length) {
 		int end = start + length;
 		for (int i = start; i < end; i++) {
 			if (!Character.isWhitespace(ch[i])) {
-				throw new SAXException("element body must be empty");
+				root.logError("element body must be empty");
 			}
 		}
 	}
 
-	public void endElement(String uri, String localName, String qName) throws SAXException {
+	public void endElement(String uri, String localName, String qName) {
 		if (component.getImplementation() == null) {
-			throw new SAXException("no implementation element");
+			root.logError("no implementation element");
 		}
 
-		parent.addComponentDescription(component);
+		if (root.isError()) {
+			root.setError(false);
+		} else {
+			parent.addComponentDescription(component);
+		}
+
 		root.setHandler(parent);
 	}
 }

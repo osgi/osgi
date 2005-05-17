@@ -58,6 +58,7 @@ public class ComponentFactoryImpl implements ComponentFactory {
 
 		if (componentDescription.getService() != null)
 			registerService = true;
+
 	}
 
 	/**
@@ -74,11 +75,16 @@ public class ComponentFactoryImpl implements ComponentFactory {
 		try {
 			instance = instanceProcess.buildDispose.build(bundleContext, null, componentDescriptionProp, properties);
 
-			if (registerService)
-				instanceProcess.registerServices(bundleContext, componentDescriptionProp);
+			if (registerService) {
+				//instanceProcess.registerServices(bundleContext, componentDescriptionProp);
+				serviceRegistration = instanceProcess.registerServices(bundleContext, componentDescriptionProp);
+				ComponentInstanceImpl componentInstanceImpl = (ComponentInstanceImpl) instance;
+				componentInstanceImpl.setServiceRegistration(serviceRegistration);
+			}
 		} catch (Exception e) {
 			//TODO what to do here?  we need to add throws to the interface
 			System.err.println("Could not create instance of " + componentDescription + " with properties " + properties);
+			e.printStackTrace();
 		}
 
 		return instance;

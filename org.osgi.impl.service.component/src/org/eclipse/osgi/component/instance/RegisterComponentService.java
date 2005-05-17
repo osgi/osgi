@@ -12,10 +12,12 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
+
 package org.eclipse.osgi.component.instance;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Enumeration;
 
 import org.eclipse.osgi.component.model.ComponentDescriptionProp;
 import org.eclipse.osgi.component.model.ProvideDescription;
@@ -42,6 +44,7 @@ abstract class RegisterComponentService {
 	//cannot instantiate - this is a utility class
 	private RegisterComponentService() {
 	}
+
 	/**
 	 * registerService
 	 * 
@@ -51,7 +54,8 @@ abstract class RegisterComponentService {
 	 * @param factory - boolean 
 	 * @return ServiceRegistration
 	 */
-	static ServiceRegistration registerService(InstanceProcess ip,BundleContext bc, ComponentDescriptionProp cdp, boolean factory) {
+	static ServiceRegistration registerService(InstanceProcess ip, BundleContext bc, ComponentDescriptionProp cdp, boolean factory, Dictionary props) {
+		//static ServiceRegistration registerService(String[] clazzes, Dictionary properties) {	
 
 		final InstanceProcess instanceProcess = ip;
 		final ComponentDescriptionProp component = cdp;
@@ -60,44 +64,49 @@ abstract class RegisterComponentService {
 		// process each provided service
 		ProvideDescription[] provides = cdp.getComponentDescription().getService().getProvides();
 
-		String [] interfaces = new String [provides.length];
-		
+		String[] interfaces = new String[provides.length];
+
 		for (int i = 0; i < provides.length; i++) {
 			interfaces[i] = provides[i].getInterfacename();
 		}
 
-		//Register the service
-		// set the component.name
-		Dictionary properties = cdp.getProperties();
-		if (properties == null) {
-			properties = new Hashtable(2);
-		}
+		//get the xml properties
+		Dictionary properties = new Hashtable((Hashtable) cdp.getProperties());
+
+		//add required properties
 		properties.put(ComponentConstants.COMPONENT_NAME, cdp.getComponentDescription().getName());
-		properties.put(ComponentConstants.COMPONENT_ID, new Long(instanceProcess.buildDispose.getNextComponentId()));
+		if (cdp.getComponentDescription().getFactory() == null)
+			properties.put(ComponentConstants.COMPONENT_ID, new Long(instanceProcess.buildDispose.getNextComponentId()));
+
+		//add additional properties
+		if (props != null) {
+			Enumeration keys = props.keys();
+			while (keys.hasMoreElements()) {
+				Object keyValue = keys.nextElement();
+				properties.put(keyValue, props.get(keyValue));
+			}
+		}
 
 		//	register the service using a ServiceFactory
 		ServiceRegistration serviceRegistration = null;
 		if (factory) {
 			//	register the service using a ServiceFactory
 			serviceRegistration = bundleContext.registerService(interfaces, new ServiceFactory() {
-
 				/* the instance created */
 				Object instance;
 
 				//ServiceFactory.getService method.
 				public Object getService(Bundle bundle, ServiceRegistration registration) {
-
 					if (DEBUG)
 						System.out.println("RegisterComponentServiceFactory:getService: registration:" + registration);
-
 					try {
 						ComponentInstance componentInstance = instanceProcess.buildDispose.build(bundleContext, bundle, component, null);
 						instance = componentInstance.getInstance();
 					} catch (Exception e) {
 						//what to do here?
 						System.err.println("Could not create instance of " + component.getComponentDescription());
+						e.printStackTrace();
 					}
-
 					return instance;
 				}
 
@@ -105,53 +114,45 @@ abstract class RegisterComponentService {
 				public void ungetService(Bundle bundle, ServiceRegistration registration, Object service) {
 					if (DEBUG)
 						System.out.println("RegisterComponentServiceFactory:ungetService: registration = " + registration);
-
 					instanceProcess.buildDispose.disposeComponent(component);
-
 				}
 			}, properties);
-
 		} else {
+			//servicefactory=false
+			//always return the same instance
 			serviceRegistration = bundleContext.registerService(interfaces, new ServiceFactory() {
-	
-				private Object instance;
-				private int useCount = 0;
-	
+				private Object instance = null;
+
 				//ServiceFactory.getService method.
 				public Object getService(Bundle bundle, ServiceRegistration registration) {
-	
-					try {
-						if (instance == null) {
+					if (DEBUG)
+						System.out.println("RegisterComponentService: getService: registration = " + registration);
+					if (instance == null) {
+						try {
 							ComponentInstance componentInstance = instanceProcess.buildDispose.build(bundleContext, null, component, null);
 							instance = componentInstance.getInstance();
+						} catch (Exception e) {
+							//TODO handle error
+							System.err.println("Could not create instance of " + component.getComponentDescription());
+							e.printStackTrace();
 						}
-						useCount++;
-					} catch (Exception e) {
-						//TODO handle error
-						System.err.println("Could not create instance of " + component.getComponentDescription());
 					}
-	
-					if (DEBUG)
-						System.out.println("RegisterComponentService: getService: registration:" + registration);
-	
+
 					return instance;
 				}
-	
+
 				// ServiceFactory.ungetService method.
 				public void ungetService(Bundle bundle, ServiceRegistration registration, Object service) {
 					if (DEBUG)
 						System.out.println("RegisterComponentService: ungetService: registration = " + registration);
-					useCount--;
-					if (useCount == 0)
-						instanceProcess.buildDispose.disposeComponent(component);
-					//registration.unregister();
+					instanceProcess.buildDispose.disposeComponent(component);
 				}
 			}, properties);
-		}	
+		}
 
 		if (DEBUG)
 			System.out.println("RegisterComponentService: register: " + serviceRegistration);
-		
+
 		return serviceRegistration;
 	}
 

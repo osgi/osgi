@@ -99,18 +99,37 @@ class InvokeMethod {
 
 		// Get the runtime class of the Service Component object
 		Class c = instance.getClass();
-		// Get all the methods for this class
+		//get all methods declared by the class, including package, protected, and private (Class.getDeclaredMethods()).
+		//and check for the specifed methodName
 		Method method = getMethod(methodName, c.getDeclaredMethods());
-		if (method == null)
-			//check the inherited methods
+		if (method == null) {
+			//check inherited public methods
+			//get a list of all public methods of the class, including those inherited (Class.getMethods())
+			//and check for the specifed methodName
 			method = getMethod(methodName, c.getMethods());
-		if (method == null)
+		}
+		if (method == null) {
+			//check inherited public and protected methods
+			//search thru all the superclasses until you hit Object or find the method
+			Class ss = c.getSuperclass();
+			String ssName = ss.getName();
+			while (!ssName.equals("java.lang.Object") && (method == null)) {
+				//get a list of all public methods of the class, including those inherited (Class.getMethods())
+				//and check for the specifed methodName
+				method = getMethod(methodName, ss.getDeclaredMethods());
+				ss = ss.getSuperclass();
+				ssName = ss.getName();
+			}
+		}
+		if (method == null) {
+			//should log error here
 			return;
+		}
 		//If the method is declared protected or public, SCR will call the method
 		int mod = method.getModifiers();
 		if ((Modifier.isProtected(mod)) || (Modifier.isPublic(mod))) {
 			//if the method is protected must set accessibility(true) to invoke it
-			if(Modifier.isProtected(mod))
+			if (Modifier.isProtected(mod))
 				method.setAccessible(true);
 			//invoke the method
 			method.invoke(instance, parameterTypes);

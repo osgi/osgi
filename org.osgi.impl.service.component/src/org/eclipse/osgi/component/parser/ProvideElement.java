@@ -16,7 +16,6 @@ package org.eclipse.osgi.component.parser;
 import org.eclipse.osgi.component.model.ProvideDescription;
 import org.eclipse.osgi.component.model.ServiceDescription;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ProvideElement extends DefaultHandler {
@@ -24,7 +23,7 @@ public class ProvideElement extends DefaultHandler {
 	protected ServiceElement parent;
 	protected ProvideDescription provide;
 
-	public ProvideElement(ParserHandler root, ServiceElement parent, Attributes attributes) throws SAXException {
+	public ProvideElement(ParserHandler root, ServiceElement parent, Attributes attributes) {
 		this.root = root;
 		this.parent = parent;
 		provide = new ProvideDescription(parent.getServiceDescription());
@@ -38,29 +37,28 @@ public class ProvideElement extends DefaultHandler {
 				provide.setInterfacename(value);
 				continue;
 			}
-
-			throw new SAXException("unrecognized provide element attribute: " + key);
+			root.logError("unrecognized provide element attribute: " + key);
 		}
 
 		if (provide.getInterfacename() == null) {
-			throw new SAXException("provide interface not specified");
+			root.logError("provide interface not specified");
 		}
 	}
 
-	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-		throw new SAXException("provide does not support nested elements");
+	public void startElement(String uri, String localName, String qName, Attributes attributes) {
+		root.logError("provide does not support nested elements");
 	}
 
-	public void characters(char[] ch, int start, int length) throws SAXException {
+	public void characters(char[] ch, int start, int length) {
 		int end = start + length;
 		for (int i = start; i < end; i++) {
 			if (!Character.isWhitespace(ch[i])) {
-				throw new SAXException("element body must be empty");
+				root.logError("element body must be empty");
 			}
 		}
 	}
 
-	public void endElement(String uri, String localName, String qName) throws SAXException {
+	public void endElement(String uri, String localName, String qName) {
 		ServiceDescription service = parent.getServiceDescription();
 
 		service.addProvide(provide);

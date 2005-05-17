@@ -10,6 +10,7 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
+
 package org.eclipse.osgi.component.instance;
 
 import java.util.*;
@@ -37,9 +38,6 @@ public class BuildDispose {
 
 	protected InvokeMethod invoke;
 
-	/** Map CD+P:instances (1:n) */
-	protected Hashtable instanceMap;
-
 	/** next free component id. */
 	protected long componentid;
 
@@ -54,7 +52,6 @@ public class BuildDispose {
 	 */
 
 	public BuildDispose(Main main) {
-		instanceMap = new Hashtable();
 		invoke = new InvokeMethod();
 		this.main = main;
 	}
@@ -63,7 +60,6 @@ public class BuildDispose {
 	 * dispose cleanup the SCR is shutting down
 	 */
 	void dispose() {
-		instanceMap = null;
 		invoke = null;
 		main = null;
 	}
@@ -79,25 +75,22 @@ public class BuildDispose {
 	 * @return ComponentInstance
 	 */
 	public ComponentInstance build(BundleContext bundleContext, Bundle usingBundle, ComponentDescriptionProp component, Dictionary properties) throws Exception {
-
-		List instances = new ArrayList();
 		ComponentDescription componentDescription = component.getComponentDescription();
 
 		Object instance = createInstance(componentDescription);
 
-		ComponentInstanceImpl componentInstance = instantiate(instance, properties);
+		ComponentInstanceImpl componentInstance = instantiate(component, instance, properties);
 
 		bind(component, componentInstance, bundleContext);
 
 		activate(component, usingBundle, componentInstance);
 
-		instances.add(componentInstance);
-		instanceMap.put(component, instances);
+		component.addInstance(componentInstance);
 
 		return componentInstance;
 	}
 
-	/** dispose of the Component Instance
+	/** dispose of the Component Instances
 	 * 
 	 * @param component Component Description plus properties
 	 */
@@ -105,7 +98,7 @@ public class BuildDispose {
 
 		ComponentInstanceImpl componentInstance;
 		// get all instances for this component
-		List instances = (List) instanceMap.get(component);
+		List instances = component.getInstances();
 		if (instances != null) {
 			Iterator it = instances.iterator();
 			while (it.hasNext()) {
@@ -115,7 +108,21 @@ public class BuildDispose {
 				componentInstance = null;
 			}
 		}
-		instanceMap.remove(component);
+		component.removeAllInstances();
+	}
+
+	/** dispose of the Component Instance
+	 * 
+	 * @param component Component Description plus properties
+	 * @param ci ComponentInstance
+	 */
+	public void disposeComponentInstance(ComponentDescriptionProp component, ComponentInstance ci) {
+
+		ComponentInstanceImpl componentInstance = (ComponentInstanceImpl) ci;
+		deactivate(component, componentInstance.getInstance());
+		unbind(component, componentInstance);
+		componentInstance = null;
+		component.removeInstance(componentInstance);
 	}
 
 	/**
@@ -142,8 +149,8 @@ public class BuildDispose {
 	 * @param instance 
 	 * @param properties
 	 */
-	private ComponentInstanceImpl instantiate(Object instance, Dictionary properties) {
-		return new ComponentInstanceImpl(instance, properties);
+	private ComponentInstanceImpl instantiate(ComponentDescriptionProp component, Object instance, Dictionary properties) {
+		return new ComponentInstanceImpl(this, component, instance, properties);
 	}
 
 	/**
@@ -205,13 +212,13 @@ public class BuildDispose {
 
 	//helper method for bindReference
 	private void bindServiceToReference(Reference reference, ServiceReference serviceReference, ComponentInstanceImpl componentInstance, BundleContext bundleContext) throws Exception {
-		//	make sure we have not already binded this object
+		//	make sure we have not already bound this object
 		if (!reference.bindedToServiceReference(serviceReference)) {
 			Object serviceObject = bundleContext.getService(serviceReference);
 			if (reference.getReferenceDescription().getBind() != null) {
 				try {
 					invoke.bindComponent(reference.getReferenceDescription().getBind(), componentInstance.getInstance(), serviceObject);
-					//if this suceeds, save the servicereference and service object so we can call unbind later
+					//if this succeeds, save the servicereference and service object so we can call unbind later
 					reference.addServiceReference(serviceReference);
 					componentInstance.addServiceReference(serviceReference, serviceObject);
 				} catch (Exception e) {

@@ -10,7 +10,7 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
- 
+
 package org.eclipse.osgi.component.resolver;
 
 import java.io.IOException;
@@ -56,7 +56,7 @@ public class ComponentProperties implements ServiceTrackerCustomizer {
 	public ComponentProperties(Main main) {
 		this.main = main;
 		configAdminTracker = new ServiceTracker(main.context, CMADMIN_SERVICE_CLASS, this);
-		configAdminTracker.open();
+		configAdminTracker.open(true); //true for track all services
 	}
 
 	/**
