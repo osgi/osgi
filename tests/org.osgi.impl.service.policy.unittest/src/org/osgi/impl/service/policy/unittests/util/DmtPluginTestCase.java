@@ -20,7 +20,9 @@ package org.osgi.impl.service.policy.unittests.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import junit.framework.TestCase;
 import org.osgi.framework.Bundle;
@@ -56,6 +58,8 @@ public abstract class DmtPluginTestCase extends TestCase {
 	public BundleContext dmtBundleContext;
 	public ServiceListener	dmtRemoteAlertSenderServiceListener;
 	public ServiceListener newServiceTracker;
+	public ServiceListener	eventAdminServiceListener;
+	public ServiceListener	configurationAdminServiceListener;
 	public DmtAdmin dmtFactory;
 	public DmtPrincipalPermissionAdmin dmtPrincipalPermissionAdmin;
 	public DummyConfigurationAdmin	configurationAdmin;
@@ -87,7 +91,13 @@ public abstract class DmtPluginTestCase extends TestCase {
 			if (filter.equals("(objectClass=org.osgi.impl.service.dmt.api.RemoteAlertSender)")) {
 				return new DummyFilter("remotealertsender");
 			}
-			throw new IllegalStateException();
+			if (filter.equals("(objectClass=org.osgi.service.event.EventAdmin)")) {
+				return new DummyFilter("eventadmin");
+			}
+			if (filter.equals("(objectClass=org.osgi.service.cm.ConfigurationAdmin)")) {
+				return new DummyFilter("configurationadmin");
+			}
+			throw new IllegalStateException("unknown filter: "+filter);
 		}
 
 		public void addServiceListener(ServiceListener listener, String filter) throws InvalidSyntaxException {
@@ -99,17 +109,31 @@ public abstract class DmtPluginTestCase extends TestCase {
 				dmtRemoteAlertSenderServiceListener = listener;
 				return;
 			}
-			throw new IllegalArgumentException();
+			if (filter.equals("(objectClass=org.osgi.service.event.EventAdmin)")) {
+				eventAdminServiceListener = listener;
+				return;
+			}
+			if (filter.equals("(objectClass=org.osgi.service.cm.ConfigurationAdmin)")) {
+				configurationAdminServiceListener = listener;
+				return;
+			}
+			throw new IllegalArgumentException("unknown filter: "+filter);
 		}
 
 		public ServiceReference[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
 			if (RemoteAlertSender.class.getName().equals(clazz)) {
 				return new ServiceReference[0];
 			}
+			if (EventAdmin.class.getName().equals(clazz)) {
+				return new ServiceReference[] { new DummyServiceReference(new DummyEventAdmin()) };
+			}
+			if (ConfigurationAdmin.class.getName().equals(clazz)) {
+				return new ServiceReference[] { new DummyServiceReference(configurationAdmin) };
+			}
 			if ("plugin".equals(filter)) {
 				return new ServiceReference[0];
 			}
-			throw new IllegalStateException();
+			throw new IllegalStateException(filter);
 		}
 
 		public ServiceRegistration registerService(String clazz, Object service, Dictionary properties) {
@@ -203,8 +227,12 @@ public abstract class DmtPluginTestCase extends TestCase {
 			}
 			throw new IllegalStateException();
 		}
+
+		public Bundle getBundle() {
+			return new DummyBundle();
+		}
+		
 		public String[] getPropertyKeys() {	throw new IllegalStateException();}
-		public Bundle getBundle() {	throw new IllegalStateException();}
 		public Bundle[] getUsingBundles() {	throw new IllegalStateException();}
 		public boolean isAssignableTo(Bundle bundle, String className) {	throw new IllegalStateException();}
 	}
@@ -228,6 +256,31 @@ public abstract class DmtPluginTestCase extends TestCase {
 		public boolean matchCase(Dictionary dictionary) { throw new IllegalStateException();}
 	}
 	
+	public class DummyBundle implements Bundle {
+		public int getState() { throw new IllegalStateException();}		
+		public void start() throws BundleException { throw new IllegalStateException();}
+		public void stop() throws BundleException { throw new IllegalStateException();}
+		public void update() throws BundleException { throw new IllegalStateException();}
+		public void update(InputStream in) throws BundleException { throw new IllegalStateException();}
+		public void uninstall() throws BundleException { throw new IllegalStateException();}
+		public Dictionary getHeaders() { throw new IllegalStateException();}
+		public long getBundleId() { throw new IllegalStateException();}
+		public String getLocation() { throw new IllegalStateException();}
+		public ServiceReference[] getRegisteredServices() { throw new IllegalStateException();}
+		public ServiceReference[] getServicesInUse() { throw new IllegalStateException();}
+		public boolean hasPermission(Object permission) { throw new IllegalStateException();}
+		public URL getResource(String name) { throw new IllegalStateException();}
+		public Dictionary getHeaders(String locale) { throw new IllegalStateException();}
+		public String getSymbolicName() { throw new IllegalStateException();}
+		public Class loadClass(String name) throws ClassNotFoundException { throw new IllegalStateException();}
+		public Enumeration getResources(String name) throws IOException { throw new IllegalStateException();}
+		public Enumeration getEntryPaths(String path) { throw new IllegalStateException();}
+		public URL getEntry(String name) { throw new IllegalStateException();}
+		public long getLastModified() { throw new IllegalStateException();}
+		public Enumeration findEntries(String path, String filePattern, boolean recurse) { throw new IllegalStateException();}
+	}
+	
+	
 	public void setUp() throws Exception {
 		dmtAdminActivator = new DmtAdminActivator();
 		dmtBundleContext = new DummyContext(); 
@@ -239,6 +292,8 @@ public abstract class DmtPluginTestCase extends TestCase {
 		dmtFactory = null;
 		configurationAdmin = null;
 		dmtRemoteAlertSenderServiceListener = null;
+		eventAdminServiceListener = null;
+		configurationAdminServiceListener = null;
 		dmtAdminActivator = null;
 		dmtBundleContext = null;
 	}
