@@ -64,6 +64,7 @@ public class DmtAlertItem {
     /**
      * Get the type associated with the alert item. There might be no format
      * associated with the alert item.
+     * ### define where the value comes from, is the the DmtData FORMAT? Als "no format" must be "no type"
      * 
      * @return The type type associated with the alert item, or
      *         <code>null</code> if there is no type
