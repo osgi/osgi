@@ -97,8 +97,8 @@ public class UserPromptCondition
 		return ""+bundle.getBundleId()+"|"+catalogName+"|"+message;
 	}
 
-	public boolean isEvaluated() {
-		return status!=null;
+	public boolean isPostponed() {
+		return status==null;
 	}
 	
 	public boolean isMutable() {
@@ -209,7 +209,7 @@ public class UserPromptCondition
 		for(int i=0;i<conds.length;i++) {
 			org.osgi.util.mobile.UserPromptCondition ucond = (org.osgi.util.mobile.UserPromptCondition) conds[i];
 			UserPromptCondition cond = (UserPromptCondition) org.osgi.util.mobile.UserPromptCondition.unWrap(ucond);
-			if (cond.isEvaluated()) throw new IllegalStateException("This should not be called");
+			if (!cond.isPostponed()) throw new IllegalStateException("This should not be called");
 			questions[i]=cond.getLocalizedMessage();
 			bundles[i]=UserPromptCondition.context.getBundle(cond.bundleID);
 			possibleAnswers[i] = cond.getPossibleAnswers();
