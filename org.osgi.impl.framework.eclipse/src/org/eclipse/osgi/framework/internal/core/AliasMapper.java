@@ -14,7 +14,6 @@ import java.io.*;
 import java.util.Hashtable;
 import java.util.Vector;
 import org.eclipse.osgi.framework.debug.Debug;
-import org.eclipse.osgi.framework.util.Tokenizer;
 
 /**
  * This class maps aliases.

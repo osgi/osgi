@@ -22,6 +22,15 @@ package org.eclipse.osgi.service.resolver;
  */
 public interface StateHelper {
 	/**
+	 * Indicates that access is encouraged to an <code>ExportPackageDescription</code>.
+	 */
+	public static int ACCESS_ENCOURAGED = 0x01;
+	/**
+	 * Indicates that access is discouraged to an <code>ExportPackageDescription</code>.
+	 */
+	public static int ACCESS_DISCOURAGED = 0x02;
+
+	/**
 	 * Returns all bundles in the state depending on the given bundles. The given bundles
 	 * appear in the returned array.
 	 * 
@@ -51,7 +60,7 @@ public interface StateHelper {
 	 * it has not been resolved for some other reason (e.g. another constraint 
 	 * could not be resolved, another version has been picked, etc).
 	 *  
-	 * @param constraint the package specification constraint to be examined
+	 * @param specification the package specification constraint to be examined
 	 * @return <code>true</code> if the constraint can be resolved, 
 	 * <code>false</code> otherwise
 	 */
@@ -64,7 +73,7 @@ public interface StateHelper {
 	 * it has not been resolved for some other reason (e.g. another constraint 
 	 * could not be resolved, another version has been picked, etc).
 	 *  
-	 * @param constraint the bundle specification constraint to be examined
+	 * @param specification the bundle specification constraint to be examined
 	 * @return <code>true</code> if the constraint can be resolved, 
 	 * <code>false</code> otherwise
 	 */
@@ -77,14 +86,14 @@ public interface StateHelper {
 	 * it has not been resolved for some other reason (e.g. another constraint 
 	 * could not be resolved, another version has been picked, etc).
 	 *  
-	 * @param constraint the host specification constraint to be examined
+	 * @param specification the host specification constraint to be examined
 	 * @return <code>true</code> if the constraint can be resolved, 
 	 * <code>false</code> otherwise
 	 */
 	public boolean isResolvable(HostSpecification specification);
 
 	/**
-	 * Sorts the given array of <strong>resolved</strong>bundles in pre-requisite order. If A 
+	 * Sorts the given array of <strong>resolved</strong> bundles in pre-requisite order. If A 
 	 * requires B, A appears after B. 
 	 * Fragments will appear after all of their hosts. Constraints contributed by fragments will 
 	 * be treated as if contributed by theirs hosts, affecting their position. This is true even if
@@ -110,4 +119,15 @@ public interface StateHelper {
 	 * exported by other bundles.
 	 */
 	public ExportPackageDescription[] getVisiblePackages(BundleDescription bundle);
+
+	/**
+	 * Returns the access code that the specified <code>BundleDescription</code> has to the 
+	 * specified <code>ExportPackageDescription</code>.
+	 * @param bundle the bundle to find the access code for
+	 * @param export the export to find the access code for
+	 * @return the access code to the export.
+	 * @see StateHelper#ACCESS_ENCOURAGED
+	 * @see StateHelper#ACCESS_DISCOURAGED
+	 */
+	public int getAccessCode(BundleDescription bundle, ExportPackageDescription export);
 }

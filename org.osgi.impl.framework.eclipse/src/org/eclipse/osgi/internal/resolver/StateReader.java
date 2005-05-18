@@ -34,7 +34,7 @@ class StateReader {
 	private boolean lazyLoad = true;
 	private int numBundles;
 
-	public static final byte STATE_CACHE_VERSION = 20;
+	public static final byte STATE_CACHE_VERSION = 21;
 	public static final byte NULL = 0;
 	public static final byte OBJECT = 1;
 	public static final byte INDEX = 2;
@@ -325,9 +325,10 @@ class StateReader {
 			byte type = in.readByte();
 			if (type == 0)
 				 value = readString(in, false);
-			else
-				if (type ==1)
-					value = readList(in);
+			else if (type == 1)
+				value = readList(in);
+			else if (type == 2)
+				value = new Boolean(in.readBoolean());
 			result.put(key, value);
 		}
 		return result;

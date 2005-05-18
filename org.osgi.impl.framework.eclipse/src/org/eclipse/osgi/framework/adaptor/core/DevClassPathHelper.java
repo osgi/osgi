@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package org.eclipse.osgi.framework.internal.defaultadaptor;
+package org.eclipse.osgi.framework.adaptor.core;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,10 +16,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
-public class DevClassPathHelper {
-	static protected boolean inDevelopmentMode = false;
-	static protected String[] devDefaultClasspath;
-	static protected Dictionary devProperties = null;
+public final class DevClassPathHelper {
+	static private boolean inDevelopmentMode = false;
+	static private String[] devDefaultClasspath;
+	static private Dictionary devProperties = null;
 
 	static {
 		// Check the osgi.dev property to see if dev classpath entries have been defined.
@@ -93,7 +93,8 @@ public class DevClassPathHelper {
 				is = url.openStream();
 				props.load(is);
 			} finally {
-				is.close();
+				if (is != null)
+					is.close();
 			}
 		} catch (IOException e) {
 			// TODO consider logging here

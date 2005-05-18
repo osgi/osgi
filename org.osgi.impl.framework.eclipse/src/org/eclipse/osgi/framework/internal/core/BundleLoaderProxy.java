@@ -189,6 +189,11 @@ public class BundleLoaderProxy implements RequiredBundle {
 			String includes = (String) export.getDirective(Constants.INCLUDE_DIRECTIVE);
 			String excludes = (String) export.getDirective(Constants.EXCLUDE_DIRECTIVE);
 			String[] friends = (String[]) export.getDirective(Constants.FRIENDS_DIRECTIVE);
+			if (friends != null) {
+				boolean strict = Constants.STRICT_MODE.equals(bundle.framework.adaptor.getState().getPlatformProperties()[0].get(Constants.OSGI_RESOLVER_MODE));
+				if (!strict)
+					friends = null; // do not pay attention to friends if not in strict mode
+			}
 			if (includes != null || excludes != null || friends != null) {
 				ExportPackageDescription[] exports = description.getExportPackages();
 				int index = -1;

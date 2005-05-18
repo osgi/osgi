@@ -126,7 +126,7 @@ public class ConditionalPermissions extends PermissionCollection {
 						if (conds[j] == null) {
 							continue;
 						}
-						if (! conds[j].isPostponed() && !conds[j].isSatisfied()) {
+						if (!conds[j].isPostponed() && !conds[j].isSatisfied()) {
 							continue cpsLoop;
 						}
 						if (conds[j].isPostponed()) {

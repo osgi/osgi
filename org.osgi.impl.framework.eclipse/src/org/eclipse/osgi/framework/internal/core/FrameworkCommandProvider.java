@@ -19,7 +19,9 @@ import java.util.*;
 import org.eclipse.osgi.framework.console.CommandInterpreter;
 import org.eclipse.osgi.framework.console.CommandProvider;
 import org.eclipse.osgi.framework.launcher.Launcher;
-import org.eclipse.osgi.profile.Profile;
+import org.eclipse.osgi.internal.profile.Profile;
+import org.eclipse.osgi.service.resolver.ExportPackageDescription;
+import org.eclipse.osgi.service.resolver.PlatformAdmin;
 import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.*;
 import org.osgi.service.packageadmin.RequiredBundle;
@@ -1539,6 +1541,26 @@ public void _classSpaces(CommandInterpreter intp) {
 	 */
 	public void _profilelog(CommandInterpreter intp) throws Exception {
 		intp.println(Profile.getProfileLog());
+	}
+
+	public void _getPackages(CommandInterpreter intp) {
+
+		String nextArg = intp.nextArgument();
+		if (nextArg == null)
+			return;
+		AbstractBundle bundle = getBundleFromToken(intp, nextArg, true);
+		ServiceReference ref = context.getServiceReference("org.eclipse.osgi.service.resolver.PlatformAdmin"); //$NON-NLS-1$
+		if (ref == null)
+			return;
+		PlatformAdmin platformAdmin = (PlatformAdmin) context.getService(ref);
+		try {
+			ExportPackageDescription[] exports = platformAdmin.getStateHelper().getVisiblePackages(bundle.getBundleDescription());
+			for (int i = 0; i < exports.length; i++) {
+				intp.println(exports[i] + ": " + platformAdmin.getStateHelper().getAccessCode(bundle.getBundleDescription(), exports[i])); //$NON-NLS-1$
+			}
+		} finally {
+			context.ungetService(ref);
+		}
 	}
 
 	/**

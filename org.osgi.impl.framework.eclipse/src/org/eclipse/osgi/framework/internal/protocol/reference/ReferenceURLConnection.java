@@ -13,7 +13,7 @@ package org.eclipse.osgi.framework.internal.protocol.reference;
 
 import java.io.*;
 import java.net.*;
-import org.eclipse.osgi.framework.adaptor.core.ReferenceInputStream;
+import org.eclipse.osgi.framework.internal.core.ReferenceInputStream;
 
 /**
  * URLConnection for the reference protocol.

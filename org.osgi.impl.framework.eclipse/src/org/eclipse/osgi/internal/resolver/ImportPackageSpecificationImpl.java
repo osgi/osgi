@@ -68,13 +68,17 @@ public class ImportPackageSpecificationImpl extends VersionConstraintImpl implem
 		// If we are in strict mode, check to see if the export specifies friends.
 		// If it does, are we one of the friends 
 		String[] friends = (String[]) pkgDes.getDirective(Constants.FRIENDS_DIRECTIVE);
-		if (friends != null) {
-			boolean strict = Constants.STRICT_MODE.equals(((StateImpl) getBundle().getContainingState()).getPlatformProperties()[0].get(Constants.OSGI_RESOLVER_MODE));
+		Boolean internal = (Boolean) pkgDes.getDirective(Constants.INTERNAL_DIRECTIVE);
+		if (internal.booleanValue() || friends != null) {
+			boolean strict = ((StateImpl) getBundle().getContainingState()).inStrictMode();
 			if (strict) {
+				if (internal.booleanValue())
+					return false;
 				boolean found = false;
-				for (int i = 0; i < friends.length; i++)
-					if (getBundle().getSymbolicName().equals(friends[i]))
-						found = true;
+				if (friends != null)
+					for (int i = 0; i < friends.length; i++)
+						if (getBundle().getSymbolicName().equals(friends[i]))
+							found = true;
 				if (!found)
 					return false;
 			}

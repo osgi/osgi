@@ -161,6 +161,12 @@ public class MetaData {
 	 * @throws IOException if there is a problem saving to persistent storage.
 	 */
 	public void save() throws IOException {
+		if (!datafile.exists() && datafile.getParent() != null) {
+			File parent = new File(datafile.getParent());
+			if (!parent.exists())
+				parent.mkdir();
+		}
+			
 		FileOutputStream fos = new FileOutputStream(datafile);
 		try {
 			properties.store(fos, header);

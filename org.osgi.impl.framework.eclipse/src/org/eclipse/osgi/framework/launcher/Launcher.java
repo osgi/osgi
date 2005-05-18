@@ -14,9 +14,7 @@ package org.eclipse.osgi.framework.launcher;
 import java.lang.reflect.Constructor;
 import java.util.*;
 import org.eclipse.osgi.framework.adaptor.FrameworkAdaptor;
-import org.eclipse.osgi.framework.internal.core.Msg;
-import org.eclipse.osgi.framework.internal.core.OSGi;
-import org.eclipse.osgi.framework.util.Tokenizer;
+import org.eclipse.osgi.framework.internal.core.*;
 import org.eclipse.osgi.util.NLS;
 
 /**
@@ -309,7 +307,7 @@ public class Launcher {
 	 *
 	 * @param adaptor The FrameworkAdaptor object
 	 */
-	protected OSGi doOSGi(FrameworkAdaptor adaptor) {
+	private OSGi doOSGi(FrameworkAdaptor adaptor) {
 		return new OSGi(adaptor);
 	}
 
@@ -320,7 +318,7 @@ public class Launcher {
 	 * @param consoleArgs An String array containing commands from the command line
 	 * for the console to execute
 	 */
-	protected void doConsole(OSGi osgi, String[] consoleArgs) {
+	private void doConsole(OSGi osgi, String[] consoleArgs) {
 
 		Constructor consoleConstructor;
 		Object osgiconsole;

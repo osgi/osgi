@@ -125,3 +125,11 @@ org.osgi.framework.system.packages = \
  org.xml.sax,\
  org.xml.sax.ext,\
  org.xml.sax.helpers
+org.osgi.framework.bootdelegation = \
+ javax.*,\
+ org.ietf.jgss,\
+ org.omg.*,\
+ org.w3c.*,\
+ org.xml.*,\
+ sun.*,\
+ com.sun.*

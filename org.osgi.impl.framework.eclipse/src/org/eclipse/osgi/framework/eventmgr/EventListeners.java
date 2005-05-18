@@ -203,4 +203,32 @@ public class EventListeners {
 		}
 		list = newList;
 	}
+
+	/**
+	 * ListElement is a package private class. This class
+	 * represents a primary object (e.g. listener) and its companion object.
+	 * ListElements are stored in EventListeners.
+	 * ListElements are immutable.
+	 */
+	static class ListElement {
+		/**
+		 * Primary object.
+		 */
+		final Object primary;
+
+		/**
+		 * Companion object.
+		 */
+		final Object companion;
+
+		/**
+		 * Constructor for ElementList element
+		 * @param primary Primary object in element. Used for uniqueness.
+		 * @param companion Companion object stored with primary object.
+		 */
+		ListElement(final Object primary, final Object companion) {
+			this.primary = primary;
+			this.companion = companion;
+		}
+	}
 }

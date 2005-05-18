@@ -8,10 +8,11 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package org.eclipse.osgi.internal.resolver;
+package org.eclipse.osgi.framework.adaptor.core;
 
 import java.io.File;
 import java.io.IOException;
+import org.eclipse.osgi.internal.resolver.*;
 import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -105,7 +106,12 @@ public class StateManager implements PlatformAdmin, Runnable {
 		return !systemState.setPlatformProperties(System.getProperties());
 	}
 
-	public synchronized StateImpl createSystemState() {
+	/**
+	 * Creates a new State used by the system.  If the system State already 
+	 * exists then a new system State is not created.
+	 * @return the State used by the system.
+	 */
+	public synchronized State createSystemState() {
 		if (systemState == null) {
 			systemState = factory.createSystemState();
 			initializeSystemState();
@@ -113,16 +119,36 @@ public class StateManager implements PlatformAdmin, Runnable {
 		return systemState;
 	}
 
-	public synchronized StateImpl readSystemState() {
+	/**
+	 * Reads the State used by the system.  If the system State already
+	 * exists then the system State is not read from a cache.  If the State could 
+	 * not be read from a cache then <code>null</code> is returned.
+	 * @return the State used by the system or <code>null</code> if the State
+	 * could not be read from a cache.
+	 */
+	public synchronized State readSystemState() {
 		if (systemState == null)
 			readSystemState(stateFile, lazyFile, expectedTimeStamp);
 		return systemState;
 	}
 
-	public StateImpl getSystemState() {
+	/**
+	 * Returns the State used by the system.  If the system State does 
+	 * not exist then <code>null</code> is returned.
+	 * @return the State used by the system or <code>null</code> if one
+	 * does not exist.
+	 */
+	public State getSystemState() {
 		return systemState;
 	}
 
+	/**
+	 * Returns the cached time stamp of the system State.  This value is the 
+	 * original time stamp of the system state when it was created or read from
+	 * a cache.
+	 * @see State#getTimeStamp()
+	 * @return the cached time stamp of the system State
+	 */
 	public long getCachedTimeStamp() {
 		return lastTimeStamp;
 	}

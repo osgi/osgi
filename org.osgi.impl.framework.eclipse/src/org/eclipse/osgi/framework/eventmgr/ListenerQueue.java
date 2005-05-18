@@ -12,6 +12,8 @@
 package org.eclipse.osgi.framework.eventmgr;
 
 import java.util.ArrayList;
+import org.eclipse.osgi.framework.eventmgr.EventListeners.ListElement;
+import org.eclipse.osgi.framework.eventmgr.EventManager.EventThread;
 
 /**
  * The ListenerQueue is used to snapshot the set of listeners at the time the event
@@ -90,7 +92,7 @@ public class ListenerQueue {
 			ListElement[] list = listeners.getListeners();
 
 			if (list.length > 0) {
-				queue.add(new ListElement(list, dispatcher));
+				queue.add(new EventListeners.ListElement(list, dispatcher));
 			}
 		}
 	}

@@ -14,15 +14,15 @@ package org.eclipse.osgi.util;
 import java.util.*;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.internal.core.Msg;
-import org.eclipse.osgi.framework.util.Tokenizer;
+import org.eclipse.osgi.framework.internal.core.Tokenizer;
 import org.osgi.framework.BundleException;
 
 /**
  * This class represents a single manifest element.  A manifest element must consist of a single
- * String value.  The String value may be split up into component values each
- * separated by a ';'.  A manifeset element may optionally have a set of 
- * attribute values associated with it. The general syntax of a manifest 
- * element is the following <p>
+ * {@link String} value.  The {@link String} value may be split up into component values each
+ * separated by a semi-colon (';').  A manifest element may optionally have a set of 
+ * attribute values associated with it. The general syntax of a manifest element is as follows:
+ * <p>
  * <pre>
  * ManifestElement ::= headervalues (';' attribute)*
  * headervalues ::= headervalue (';' headervalue)*
@@ -31,27 +31,38 @@ import org.osgi.framework.BundleException;
  * key ::= token
  * value ::= token | quoted-string
  * </pre>
- * 
+ * </p>
  * <p>
- * For example, The following is an example of a manifest element to the Export-Package header: <p>
+ * For example, The following is an example of a manifest element to the <tt>Export-Package</tt> header:
+ * </p>
+ * <p>
  * <pre>
  * org.osgi.framework; specification-version="1.2"; another-attr="examplevalue"
  * </pre>
+ * </p>
  * <p>
- * This manifest element has a value of org.osgi.framework and it has two attributes, specification-version
- * and another-attr. <p>
- * 
+ * This manifest element has a value of <tt>org.osgi.framework</tt> and it has two attributes, 
+ * <tt>specification-version</tt> and <tt>another-attr</tt>. 
+ * </p>
+ * <p>
  * The following manifest element is an example of a manifest element that has multiple
- * components to its value: <p>
- * 
+ * components to its value: 
+ * </p>
+ * <p>
  * <pre>
  * code1.jar;code2.jar;code3.jar;attr1=value1;attr2=value2;attr3=value3
  * </pre>
+ * </p>
  * <p>
- * This manifest element has a value of "code1.jar;code2.jar;code3.jar".  
+ * This manifest element has a value of <tt>code1.jar;code2.jar;code3.jar</tt>.  
  * This is an example of a multiple component value.  This value has three
- * components: code1.jar, code2.jar, and code3.jar.
+ * components: <tt>code1.jar</tt>, <tt>code2.jar</tt>, and <tt>code3.jar</tt>.
+ * </p>
+ * <p>
+ * This class is not intended to be subclassed by clients.
+ * </p>
  * 
+ * @since 3.0
  */
 public class ManifestElement {
 
@@ -77,20 +88,23 @@ public class ManifestElement {
 
 	/**
 	 * Constructs an empty manifest element with no value or attributes.
-	 *
 	 */
 	protected ManifestElement() {
+		super();
 	}
 
 	/**
 	 * Returns the value of the manifest element.  The value returned is the
 	 * complete value up to the first attribute.  For example, the 
-	 * following manifest element: <p>
-	 * 
-	 * test1.jar;test2.jar;test3.jar;selection-filter="(os.name=Windows XP)"
-	 * 
+	 * following manifest element: 
 	 * <p>
-	 * This manifest element has a value of "test1.jar;test2.jar;test3.jar"
+	 * <pre>
+	 * test1.jar;test2.jar;test3.jar;selection-filter="(os.name=Windows XP)"
+	 * </pre>
+	 * </p>
+	 * <p>
+	 * This manifest element has a value of <tt>test1.jar;test2.jar;test3.jar</tt>
+	 * </p>
 	 * 
 	 * @return the value of the manifest element.
 	 */
@@ -102,14 +116,18 @@ public class ManifestElement {
 	 * Returns the value components of the manifest element. The value
 	 * components returned are the complete list of value components up to 
 	 * the first attribute.  
-	 * For example, the folowing manifest element: <p>
-	 * 
+	 * For example, the folowing manifest element: 
+	 * <p>
+	 * <pre>
 	 * test1.jar;test2.jar;test3.jar;selection-filter="(os.name=Windows XP)"
-	 * 
+	 * </pre>
+	 * </p>
 	 * <p>
 	 * This manifest element has the value components array 
-	 * { "test1.jar", "test2.jar", "test3.jar" }
-	 * Each value component is delemited by a ';'.
+	 * <tt>{ "test1.jar", "test2.jar", "test3.jar" }</tt>
+	 * Each value component is delemited by a semi-colon (<tt>';'</tt>).
+	 * </p>
+	 * 
 	 * @return the String[] of value components
 	 */
 	public String[] getValueComponents() {
@@ -117,42 +135,52 @@ public class ManifestElement {
 	}
 
 	/**
-	 * Returns the value for the specified attribute.  If the attribute
-	 * has multiple values specified then the last value specified is returned.
-	 * For example the following manifest element: <p>
+	 * Returns the value for the specified attribute or <code>null</code> if it does 
+	 * not exist.  If the attribute has multiple values specified then the last value 
+	 * specified is returned. For example the following manifest element: 
+	 * <p>
 	 * <pre>
 	 * elementvalue; myattr="value1"; myattr="value2"
 	 * </pre>
+	 * </p>
 	 * <p>
-	 * specifies two values for the attribute key myattr.  In this case value2
+	 * specifies two values for the attribute key <tt>myattr</tt>.  In this case <tt>value2</tt>
 	 * will be returned because it is the last value specified for the attribute
-	 * myattr.
-	 * @param key the attribute key to return the value for.
-	 * @return the attribute value or null if the attribute does not exist.
+	 * <tt>myattr</tt>.
+	 * </p>
+	 * 
+	 * @param key the attribute key to return the value for
+	 * @return the attribute value or <code>null</code>
 	 */
 	public String getAttribute(String key) {
 		return getTableValue(attributes, key);
 	}
 
 	/**
-	 * Returns an array of values for the specified attribute.
-	 * @param key the attribute key to return the values for.
-	 * @return the array of attribute values or null if the attribute does not exist. 
+	 * Returns an array of values for the specified attribute or 
+	 * <code>null</code> if the attribute does not exist.
+	 * 
+	 * @param key the attribute key to return the values for
+	 * @return the array of attribute values or <code>null</code> 
+	 * @see #getAttribute(String)
 	 */
 	public String[] getAttributes(String key) {
 		return getTableValues(attributes, key);
 	}
 
 	/**
-	 * Returns the Enumeration of attribute keys for this manifest element.
-	 * @return the Enumeration of attribute keys or null if none exist.
+	 * Returns an enumeration of attribute keys for this manifest element or
+	 * <code>null</code> if none exist.
+	 * 
+	 * @return the enumeration of attribute keys or null if none exist.
 	 */
 	public Enumeration getKeys() {
 		return getTableKeys(attributes);
 	}
 
 	/**
-	 * Adds an attribute to this manifest element.
+	 * Add an attribute to this manifest element.
+	 * 
 	 * @param key the key of the attribute
 	 * @param value the value of the attribute
 	 */
@@ -161,42 +189,51 @@ public class ManifestElement {
 	}
 
 	/**
-	 * Returns the value for the specified attribute.  If the attribute
-	 * has multiple values specified then the last value specified is returned.
-	 * For example the following manifest element: <p>
-	 * <pre>
-	 * elementvalue; myatt:r="value1"; myattr:="value2"
-	 * </pre>
+	 * Returns the value for the specified directive or <code>null</code> if it 
+	 * does not exist.  If the directive has multiple values specified then the 
+	 * last value specified is returned. For example the following manifest element: 
 	 * <p>
-	 * specifies two values for the attribute key myattr.  In this case value2
-	 * will be returned because it is the last value specified for the attribute
-	 * myattr.
-	 * @param key the attribute key to return the value for.
-	 * @return the attribute value or null if the attribute does not exist.
+	 * <pre>
+	 * elementvalue; mydir:="value1"; mydir:="value2"
+	 * </pre>
+	 * </p>
+	 * <p>
+	 * specifies two values for the directive key <tt>mydir</tt>.  In this case <tt>value2</tt>
+	 * will be returned because it is the last value specified for the directive <tt>mydir</tt>.
+	 * </p>
+	 * 
+	 * @param key the directive key to return the value for
+	 * @return the directive value or <code>null</code>
 	 */
 	public String getDirective(String key) {
 		return getTableValue(directives, key);
 	}
 
 	/**
-	 * Returns an array of values for the specified attribute.
-	 * @param key the attribute key to return the values for.
-	 * @return the array of attribute values or null if the attribute does not exist. 
+	 * Returns an array of string values for the specified directives or 
+	 * <code>null</code> if it does not exist.
+	 * 
+	 * @param key the directive key to return the values for
+	 * @return the array of directive values or <code>null</code>
+	 * @see #getDirective(String)
 	 */
 	public String[] getDirectives(String key) {
 		return getTableValues(directives, key);
 	}
 
 	/**
-	 * Returns the Enumeration of attribute keys for this manifest element.
-	 * @return the Enumeration of attribute keys or null if none exist.
+	 * Return an enumeration of directive keys for this manifest element or
+	 * <code>null</code> if there are none.
+	 * 
+	 * @return the enumeration of directive keys or <code>null</code>
 	 */
 	public Enumeration getDirectiveKeys() {
 		return getTableKeys(directives);
 	}
 
 	/**
-	 * Adds an attribute to this manifest element.
+	 * Add a directive to this manifest element.
+	 * 
 	 * @param key the key of the attribute
 	 * @param value the value of the attribute
 	 */
@@ -204,7 +241,10 @@ public class ManifestElement {
 		directives = addTableValue(directives, key, value);
 	}
 
-	public String getTableValue(Hashtable table, String key) {
+	/*
+	 * 
+	 */
+	private String getTableValue(Hashtable table, String key) {
 		if (table == null)
 			return null;
 		Object result = table.get(key);
@@ -218,6 +258,9 @@ public class ManifestElement {
 		return (String) valueList.get(valueList.size() - 1);
 	}
 
+	/*
+	 * Return the values associated with the given key in the specified table.
+	 */
 	private String[] getTableValues(Hashtable table, String key) {
 		if (table == null)
 			return null;
@@ -226,18 +269,24 @@ public class ManifestElement {
 			return null;
 		if (result instanceof String)
 			return new String[] {(String) result};
-
 		ArrayList valueList = (ArrayList) result;
 		return (String[]) valueList.toArray(new String[valueList.size()]);
 	}
 
+	/*
+	 * Return an enumeration of table keys for the specified table. 
+	 */
 	private Enumeration getTableKeys(Hashtable table) {
-		if (table == null) {
+		if (table == null)
 			return null;
-		}
 		return table.keys();
 	}
 
+	/*
+	 * Add the given key/value association to the specified table. If an entry already exists
+	 * for this key, then create an array list from the current value (if necessary) and
+	 * append the new value to the end of the list.
+	 */
 	protected Hashtable addTableValue(Hashtable table, String key, String value) {
 		if (table == null) {
 			table = new Hashtable(7);
@@ -263,13 +312,14 @@ public class ManifestElement {
 	/**
 	 * Parses a manifest header value into an array of ManifestElements.  Each
 	 * ManifestElement returned will have a non-null value returned by getValue().
+	 * 
 	 * @param header the header name to parse.  This is only specified to provide error messages
-	 * when the header value is invalid.
+	 * 	when the header value is invalid.
 	 * @param value the header value to parse.
 	 * @return the array of ManifestElements that are represented by the header value; null will be
-	 * returned if the value specified is null or if the value does not parse into
-	 * one or more ManifestElements.
-	 * @throws BundleException if the header value is invalid.
+	 * 	returned if the value specified is null or if the value does not parse into
+	 * 	one or more ManifestElements.
+	 * @throws BundleException if the header value is invalid
 	 */
 	public static ManifestElement[] parseHeader(String header, String value) throws BundleException {
 		if (value == null) {
@@ -372,7 +422,7 @@ public class ManifestElement {
 	}
 
 	/**
-	 * Returns the result of converting a list of comma-separated tokens into an array
+	 * Returns the result of converting a list of comma-separated tokens into an array.
 	 * 
 	 * @return the array of string tokens or <code>null</code> if there are none
 	 * @param stringList the initial comma-separated string

@@ -15,17 +15,22 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
+import org.eclipse.osgi.service.debug.DebugOptions;
 
-public class DebugOptions implements org.eclipse.osgi.service.debug.DebugOptions {
-	Properties options = null;
-
-	private static DebugOptions singleton = null;
+public class FrameworkDebugOptions implements DebugOptions {
+	private Properties options = null;
+	private static FrameworkDebugOptions singleton = null;
 	private static boolean debugEnabled = true;
 	private static final String OPTIONS = ".options"; //$NON-NLS-1$
 
-	public static DebugOptions getDefault() {
+	/**
+	 * Returns the singleton instance of <code>FrameworkDebugOptions</code>.  If
+	 * debug is not enabled then <code>null</code> is returned.
+	 * @return the instance of <code>FrameworkDebugOptions</code>
+	 */
+	public static FrameworkDebugOptions getDefault() {
 		if (singleton == null && debugEnabled) {
-			DebugOptions result = new DebugOptions();
+			FrameworkDebugOptions result = new FrameworkDebugOptions();
 			debugEnabled = result.isDebugEnabled();
 			if (debugEnabled)
 				singleton = result;
@@ -33,15 +38,14 @@ public class DebugOptions implements org.eclipse.osgi.service.debug.DebugOptions
 		return singleton;
 	}
 
-	public static URL buildURL(String spec, boolean trailingSlash) {
+	private static URL buildURL(String spec, boolean trailingSlash) {
 		if (spec == null)
 			return null;
 		boolean isFile = spec.startsWith("file:"); //$NON-NLS-1$
 		try {
 			if (isFile)
 				return adjustTrailingSlash(new File(spec.substring(5)).toURL(), trailingSlash);
-			else
-				return new URL(spec);
+			return new URL(spec);
 		} catch (MalformedURLException e) {
 			// if we failed and it is a file spec, there is nothing more we can do
 			// otherwise, try to make the spec into a file URL.
@@ -63,24 +67,36 @@ public class DebugOptions implements org.eclipse.osgi.service.debug.DebugOptions
 		return new URL(url.getProtocol(), url.getHost(), file);
 	}
 
-	private DebugOptions() {
+	private FrameworkDebugOptions() {
 		super();
 		loadOptions();
 	}
 
+	/**
+	 * @see DebugOptions#getBooleanOption(String, boolean)
+	 */
 	public boolean getBooleanOption(String option, boolean defaultValue) {
 		String optionValue = getOption(option);
 		return (optionValue != null && optionValue.equalsIgnoreCase("true")) || defaultValue; //$NON-NLS-1$
 	}
 
+	/**
+	 * @see DebugOptions#getOption(String)
+	 */
 	public String getOption(String option) {
 		return options != null ? options.getProperty(option) : null;
 	}
 
+	/**
+	 * @see DebugOptions#getOption(String, String)
+	 */
 	public String getOption(String option, String defaultValue) {
 		return options != null ? options.getProperty(option, defaultValue) : defaultValue;
 	}
 
+	/**
+	 * @see DebugOptions#getIntegerOption(String, int)
+	 */
 	public int getIntegerOption(String option, int defaultValue) {
 		String value = getOption(option);
 		try {
@@ -90,12 +106,15 @@ public class DebugOptions implements org.eclipse.osgi.service.debug.DebugOptions
 		}
 	}
 
+	/**
+	 * @see DebugOptions#setOption(String, String)
+	 */
 	public void setOption(String option, String value) {
 		if (options != null)
 			options.put(option, value.trim());
 	}
 
-	public boolean isDebugEnabled() {
+	private boolean isDebugEnabled() {
 		return options != null;
 	}
 

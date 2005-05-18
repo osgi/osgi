@@ -12,14 +12,11 @@
 package org.eclipse.osgi.framework.internal.core;
 
 import java.io.IOException;
-import java.security.AccessControlContext;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.security.*;
+import java.util.*;
 import org.eclipse.osgi.framework.adaptor.PermissionStorage;
 import org.osgi.framework.FrameworkEvent;
-import org.osgi.service.condpermadmin.ConditionInfo;
-import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
-import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
+import org.osgi.service.condpermadmin.*;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 /**
@@ -54,6 +51,9 @@ public class ConditionalPermissionAdminImpl implements ConditionalPermissionAdmi
 	 * @see org.osgi.service.condpermadmin.ConditionalPermissionAdmin#addConditionalPermissionInfo(org.osgi.service.condpermadmin.ConditionInfo[], org.osgi.service.permissionadmin.PermissionInfo[])
 	 */
 	public ConditionalPermissionInfo addConditionalPermissionInfo(ConditionInfo[] conds, PermissionInfo[] perms) {
+		SecurityManager sm = System.getSecurityManager();
+		if (sm != null)
+			sm.checkPermission(new AllPermission());
 		ConditionalPermissionInfoImpl condPermInfo = new ConditionalPermissionInfoImpl(conds, perms);
 		synchronized (condPerms) {
 			condPerms.add(condPermInfo);
@@ -106,7 +106,35 @@ public class ConditionalPermissionAdminImpl implements ConditionalPermissionAdmi
 	 * @see org.osgi.service.condpermadmin.ConditionalPermissionAdmin#getAccessControlContext(java.lang.String[])
 	 */
 	public AccessControlContext getAccessControlContext(String[] signers) {
-		// TODO This may not need to be implemented if MEG doesn't need it.
-		return null;
+		Enumeration infos = getConditionalPermissionInfos();
+		ArrayList permissionInfos = new ArrayList();
+		if (infos != null) {
+			while (infos.hasMoreElements()) {
+				ConditionalPermissionInfoImpl condPermInfo = (ConditionalPermissionInfoImpl) infos.nextElement();
+				ConditionInfo[] condInfo = condPermInfo.getConditionInfos();
+				boolean match = true;
+				for (int i = 0; i < condInfo.length; i++) {
+					if (BundleSignerCondition.class.getName().equals(condInfo[i].getType())){
+						String[] args = condInfo[i].getArgs();
+						for (int j = 0; j < args.length; j++)
+							if (!framework.adaptor.matchDNChain(args[j], signers)) {
+								match = false;
+								break;
+							}
+					}
+					else {
+						match = false;
+						break;
+					}
+				}
+				if (match) {
+					PermissionInfo[] addPermInfos = condPermInfo.getPermissionInfos();
+					for (int i = 0; i < addPermInfos.length; i++)
+						permissionInfos.add(addPermInfos[i]);
+				}
+			}
+		}
+		BundlePermissionCollection collection = framework.permissionAdmin.createPermissions((PermissionInfo[]) permissionInfos.toArray(new PermissionInfo[permissionInfos.size()]), null);
+		return new AccessControlContext(collection == null ? new ProtectionDomain[0] : new ProtectionDomain[] {new ProtectionDomain(null, collection)});
 	}
 }

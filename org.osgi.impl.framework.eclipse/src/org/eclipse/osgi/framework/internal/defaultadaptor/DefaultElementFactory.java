@@ -14,9 +14,7 @@ import java.io.IOException;
 
 import org.eclipse.osgi.framework.adaptor.BundleProtectionDomain;
 import org.eclipse.osgi.framework.adaptor.ClassLoaderDelegate;
-import org.eclipse.osgi.framework.adaptor.core.AbstractBundleData;
-import org.eclipse.osgi.framework.adaptor.core.AbstractFrameworkAdaptor;
-import org.eclipse.osgi.framework.adaptor.core.AdaptorElementFactory;
+import org.eclipse.osgi.framework.adaptor.core.*;
 
 public class DefaultElementFactory implements AdaptorElementFactory {
 

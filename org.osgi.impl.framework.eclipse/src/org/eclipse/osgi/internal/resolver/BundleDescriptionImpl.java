@@ -93,7 +93,7 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 	private ExportPackageDescription[] mergeSystemExports(ExportPackageDescription[] existingExports) {
 		if (containingState == null)
 			return existingExports;
-		ExportPackageDescription[] systemExports = containingState.getSystemExports();
+		ExportPackageDescription[] systemExports = containingState.getSystemPackages();
 		if (systemExports == null || systemExports.length == 0)
 			return existingExports;
 		for (int i = 0; i < systemExports.length; i++)

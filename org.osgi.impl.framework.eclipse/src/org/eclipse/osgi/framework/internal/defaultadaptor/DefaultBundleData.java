@@ -68,7 +68,8 @@ public class DefaultBundleData extends AbstractBundleData {
 	 * @throws IOException if a write error occurs.
 	 */
 	public synchronized void save() throws IOException {
-		((DefaultAdaptor) adaptor).saveMetaDataFor(this);
+		if (adaptor.canWrite())
+			((DefaultAdaptor) adaptor).saveMetaDataFor(this);
 	}
 
 	/**

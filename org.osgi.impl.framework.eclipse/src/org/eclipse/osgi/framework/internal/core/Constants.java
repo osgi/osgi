@@ -113,6 +113,17 @@ public class Constants implements org.osgi.framework.Constants {
 	public static final String OSGI_IMPL_VERSION_KEY = "osgi.framework.version"; //$NON-NLS-1$
 	/** OSGi java profile; used to give a URL to a java profile */
 	public static final String OSGI_JAVA_PROFILE = "osgi.java.profile"; //$NON-NLS-1$
+	/** 
+	 * OSGi java profile bootdelegation; used to indicate how the org.osgi.framework.bootdelegation
+	 * property defined in the java profile should be processed, (ingnore, override, none). default is ignore
+	 */
+	public static final String OSGI_JAVA_PROFILE_BOOTDELEGATION = "osgi.java.profile.bootdelegation"; //$NON-NLS-1$
+	/** indicates that the org.osgi.framework.bootdelegation in the java profile should be ingored */
+	public static final String OSGI_BOOTDELEGATION_IGNORE = "ignore"; //$NON-NLS-1$
+	/** indicates that the org.osgi.framework.bootdelegation in the java profile should override the system property */
+	public static final String OSGI_BOOTDELEGATION_OVERRIDE = "override"; //$NON-NLS-1$
+	/** indicates that the org.osgi.framework.bootdelegation in the java profile AND the system properties should be ignored */
+	public static final String OSGI_BOOTDELEGATION_NONE = "none"; //$NON-NLS-1$
 	/** OSGi strict delegation **/
 	public static final String OSGI_RESOLVER_MODE = "osgi.resolverMode"; //$NON-NLS-1$
 	public static final String STRICT_MODE = "strict"; //$NON-NLS-1$
@@ -216,4 +227,10 @@ public class Constants implements org.osgi.framework.Constants {
 	 */
 	public final static String REQUIRE_PACKAGES_ATTRIBUTE = "require-packages"; //$NON-NLS-1$
 
+	 /**
+	 * The key used to designate the buddy loader associated with a given bundle.
+	 */
+	 public final static String BUDDY_LOADER = "Eclipse-BuddyPolicy"; //$NON-NLS-1$
+
+	 public final static String REGISTERED_POLICY = "Eclipse-RegisterBuddy";  //$NON-NLS-1$
 }

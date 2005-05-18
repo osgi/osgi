@@ -70,7 +70,7 @@ org.eclipse.osgi/profile/benchmark = false
 org.eclipse.osgi/profile/debug = false
 
 # Override the default implemenation 
-org.eclipse.osgi/profile/impl = org.eclipse.osgi.profile.DefaultProfileLogger
+org.eclipse.osgi/profile/impl = org.eclipse.osgi.internal.profile.DefaultProfileLogger
 
 # Append all profile messages to the filename specified
 org.eclipse.osgi/defaultprofile/logfilename = 

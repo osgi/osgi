@@ -16,13 +16,14 @@ import org.eclipse.osgi.framework.internal.core.MessageResourceBundle;
  * Common superclass for all message bundle classes.  Provides convenience
  * methods for manipulating messages.
  * <p>
- * The #bind methods perform string substitution and should be considered a
- * convenience and <em>not</em> a full substitute replacement for MessageFormat#format
+ * The <code>#bind</code> methods perform string substitution and should be considered a
+ * convenience and <em>not</em> a full substitute replacement for <code>MessageFormat#format</code>
  * method calls. 
  * </p>
- * <p>Text appearing within curly braces in the given message, will be interpreted
+ * <p>
+ * Text appearing within curly braces in the given message, will be interpreted
  * as a numeric index to the corresponding substitution object in the given array. Calling
- * the #bind methods with text that does not map to an integer will result in an
+ * the <code>#bind</code> methods with text that does not map to an integer will result in an
  * {@link IllegalArgumentException}.
  * </p>
  * <p>
@@ -30,24 +31,18 @@ import org.eclipse.osgi.framework.internal.core.MessageResourceBundle;
  * a preceeding single quote.
  * </p>
  * <p>
- * Clients who wish to use the full substitution power of the MessageFormat class should
- * call that class directly and not use these #bind methods.
+ * Clients who wish to use the full substitution power of the <code>MessageFormat</code> class should
+ * call that class directly and not use these <code>#bind</code> methods.
  * </p>
  * 
  * @since 3.1
  */
 public abstract class NLS {
 
-	/**
-	 * @deprecated This was never intended to be API.  It will be
-	 * removed prior to 3.1 M7.
-	 */
-	public static boolean DEBUG_MESSAGE_BUNDLES = false;
-
 	private static final Object[] EMPTY_ARGS = new Object[0];
 
 	/**
-	 * Bind the given message's substitution locations with the given string values.
+	 * Bind the given message's substitution locations with the given string value.
 	 * 
 	 * @param message the message to be manipulated
 	 * @param binding the object to be inserted into the message
@@ -77,8 +72,6 @@ public abstract class NLS {
 	 * @return the manipulated String
 	 */
 	public static String bind(String message, Object[] bindings) {
-		if (message == null)
-			return "No message available."; //$NON-NLS-1$
 		return internalBind(message, bindings, null, null);
 	}
 
@@ -97,6 +90,8 @@ public abstract class NLS {
 	 * See the class comment for exact details.
 	 */
 	private static String internalBind(String message, Object[] args, String argZero, String argOne) {
+		if (message == null)
+			return "No message available."; //$NON-NLS-1$
 		if (args == null || args.length == 0)
 			args = EMPTY_ARGS;
 

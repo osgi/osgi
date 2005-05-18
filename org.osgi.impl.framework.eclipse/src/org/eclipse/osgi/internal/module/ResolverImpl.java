@@ -13,7 +13,7 @@ package org.eclipse.osgi.internal.module;
 import java.util.*;
 import org.eclipse.osgi.framework.adaptor.FrameworkAdaptor;
 import org.eclipse.osgi.framework.debug.Debug;
-import org.eclipse.osgi.framework.debug.DebugOptions;
+import org.eclipse.osgi.framework.debug.FrameworkDebugOptions;
 import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.*;
 
@@ -1028,7 +1028,7 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 	}
 
 	private void setDebugOptions() {
-		DebugOptions options = DebugOptions.getDefault();
+		FrameworkDebugOptions options = FrameworkDebugOptions.getDefault();
 		// may be null if debugging is not enabled
 		if (options == null)
 			return;

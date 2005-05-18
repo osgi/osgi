@@ -19,7 +19,7 @@ import org.eclipse.osgi.event.BatchBundleListener;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.eventmgr.EventDispatcher;
 import org.eclipse.osgi.framework.eventmgr.EventListeners;
-import org.eclipse.osgi.profile.Profile;
+import org.eclipse.osgi.internal.profile.Profile;
 import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.*;
 

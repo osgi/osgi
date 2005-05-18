@@ -18,6 +18,7 @@ import java.util.*;
 import org.eclipse.osgi.framework.console.CommandInterpreter;
 import org.eclipse.osgi.framework.console.CommandProvider;
 import org.eclipse.osgi.util.NLS;
+import org.osgi.framework.Bundle;
 
 /**
  * This class knows how to parse and execute the command line arguments to the FrameworkConsole.
@@ -322,7 +323,7 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 	 * @param bundle	the bundle containing the resource
 	 * @param resource	the resource to print
 	 */
-	public void printBundleResource(AbstractBundle bundle, String resource) {
+	public void printBundleResource(Bundle bundle, String resource) {
 		URL entry = null;
 		entry = bundle.getEntry(resource);
 		if (entry != null) {

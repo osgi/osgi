@@ -9,10 +9,10 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.osgi.profile;
+package org.eclipse.osgi.internal.profile;
 
 import java.io.*;
-import org.eclipse.osgi.framework.debug.DebugOptions;
+import org.eclipse.osgi.framework.debug.FrameworkDebugOptions;
 
 public class DefaultProfileLogger implements ProfileLogger {
 	protected static final String DEFAULTPROFILE_PROP = "osgi.defaultprofile."; //$NON-NLS-1$
@@ -97,12 +97,12 @@ public class DefaultProfileLogger implements ProfileLogger {
 
 	public void initProps() {
 		String prop;
-		DebugOptions dbgOptions = null;
+		FrameworkDebugOptions dbgOptions = null;
 		// if osgi.debug is not available, don't force DebugOptions
 		//  to init as this variable may be set later on where 
 		//  DebugOptions will succeed.
 		if (System.getProperty("osgi.debug") != null) { //$NON-NLS-1$
-			dbgOptions = DebugOptions.getDefault();
+			dbgOptions = FrameworkDebugOptions.getDefault();
 			if (dbgOptions != null) {
 				logFileName = dbgOptions.getOption(OPTION_FILENAME);
 				logSynchronously = dbgOptions.getBooleanOption(OPTION_LOGSYNCHRONOUSLY, false);

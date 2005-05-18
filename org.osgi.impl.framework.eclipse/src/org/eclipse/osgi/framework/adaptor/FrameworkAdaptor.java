@@ -308,4 +308,34 @@ public interface FrameworkAdaptor {
 	 * @param error The Throwable for the runtime error that is to be handled.
 	 */
 	public void handleRuntimeError(Throwable error);
+
+	/**
+	 * Matches the distinguished name chain against a 
+	 * pattern of a distinguished name chain.
+	 * 
+	 * @param pattern the pattern of distinguished name (DN) chains to match
+	 *        against the dnChain. Wildcards "*" can be used in three cases:
+	 *        <ol>
+	 *        <li>As a DN. In this case, the DN will consist of just the "*".
+	 *        It will match zero or more DNs. For example, "cn=me,c=US;*;cn=you"
+	 *        will match "cn=me,c=US";cn=you" and
+	 *        "cn=me,c=US;cn=her,c=CA;cn=you".
+	 *        <li>As a DN prefix. In this case, the DN must start with "*,".
+	 *        The wild card will match zero or more RDNs at the start of a DN.
+	 *        For example, "*,cn=me,c=US;cn=you" will match "cn=me,c=US";cn=you"
+	 *        and "ou=my org unit,o=my org,cn=me,c=US;cn=you"</li>
+	 *        <li>As a value. In this case the value of a name value pair in an
+	 *        RDN will be a "*". The wildcard will match any value for the given
+	 *        name. For example, "cn=*,c=US;cn=you" will match
+	 *        "cn=me,c=US";cn=you" and "cn=her,c=US;cn=you", but it will not
+	 *        match "ou=my org unit,c=US;cn=you". If the wildcard does not occur
+	 *        by itself in the value, it will not be used as a wildcard. In
+	 *        other words, "cn=m*,c=US;cn=you" represents the common name of
+	 *        "m*" not any common name starting with "m".</li>
+	 *        </ol>
+	 * @return true if a dnChain matches the pattern. A value of false is returned
+	 * if bundle signing is not supported.
+	 * @throws IllegalArgumentException
+	 */
+	public boolean matchDNChain(String pattern, String dnChain[]);
 }

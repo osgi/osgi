@@ -91,17 +91,6 @@ public class GroupingChecker {
 					}
 				}
 			}
-			// Check against requires (split packages)
-			for (int j = 0; j < requires.length; j++) {
-				ResolverBundle matchingBundle = requires[j].getMatchingBundle();
-				if (matchingBundle == null)
-					continue;
-				ResolverExport[] exports = matchingBundle.getExportPackages();
-				for (int k = 0; k < exports.length; k++) {
-					if (imports[i].getName().equals(exports[k].getName()) && imports[i].getMatchingExport() != exports[k])
-						return imports[i].getMatchingExport();
-				}
-			}
 		}
 		// Check imports against requires
 		for (int i = 0; i < requires.length; i++) {

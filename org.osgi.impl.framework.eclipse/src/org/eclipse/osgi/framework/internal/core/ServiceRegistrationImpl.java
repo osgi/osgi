@@ -67,8 +67,11 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 	/* internal object to use for synchronization */
 	protected Object registrationLock = new Object();
 
-	/** This boolean will be true when the service registration is unregistered */
-	protected boolean unregistered;
+	/** The registration state */
+	protected int state = REGISTERED;
+	public static final int REGISTERED = 0x00;
+	public static final int UNREGISTERING = 0x01;
+	public static final int UNREGISTERED = 0x02;
 
 	/**
 	 * Construct a ServiceRegistration and register the service
@@ -82,7 +85,6 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 		this.clazzes = clazzes; /* must be set before calling createProperties. */
 		this.service = service;
 		this.contextsUsing = null;
-		this.unregistered = false;
 		this.reference = new ServiceReferenceImpl(this);
 
 		synchronized (framework.serviceRegistry) {
@@ -132,7 +134,7 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 	 */
 	public void unregister() {
 		synchronized (registrationLock) {
-			if (service == null) /* in the process of unregisterING */
+			if (state != REGISTERED) /* in the process of unregisterING */
 			{
 				throw new IllegalStateException(Msg.SERVICE_ALREADY_UNREGISTERED_EXCEPTION); //$NON-NLS-1$
 			}
@@ -146,14 +148,15 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 				framework.serviceRegistry.unpublishService(context, this);
 			}
 
-			service = null; /* mark unregisterING */
+			state = UNREGISTERING; /* mark unregisterING */
 		}
 
 		/* must not hold the registrationLock when this event is published */
 		framework.publishServiceEvent(ServiceEvent.UNREGISTERING, reference);
 
 		/* we have published the ServiceEvent, now mark the service fully unregistered */
-		unregistered = true;
+		service = null;
+		state = UNREGISTERED;
 
 		int size = 0;
 		BundleContextImpl[] users = null;
@@ -231,7 +234,7 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 	 */
 	public void setProperties(Dictionary props) {
 		synchronized (registrationLock) {
-			if (service == null) /* in the process of unregistering */
+			if (state != REGISTERED) /* in the process of unregistering */
 			{
 				throw new IllegalStateException(Msg.SERVICE_ALREADY_UNREGISTERED_EXCEPTION); //$NON-NLS-1$
 			}
@@ -325,7 +328,7 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 	 */
 	protected Object getService(BundleContextImpl user) {
 		synchronized (registrationLock) {
-			if (unregistered) /* service unregistered */
+			if (state == UNREGISTERED) /* service unregistered */
 			{
 				return (null);
 			}
@@ -370,7 +373,7 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 	 */
 	protected boolean ungetService(BundleContextImpl user) {
 		synchronized (registrationLock) {
-			if (unregistered) {
+			if (state == UNREGISTERED) {
 				return (false);
 			}
 
@@ -437,7 +440,7 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 	 */
 	protected AbstractBundle[] getUsingBundles() {
 		synchronized (registrationLock) {
-			if (unregistered) /* service unregistered */
+			if (state == UNREGISTERED) /* service unregistered */
 				return (null);
 
 			if (contextsUsing == null)

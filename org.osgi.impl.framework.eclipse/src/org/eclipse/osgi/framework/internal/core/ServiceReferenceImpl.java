@@ -242,16 +242,34 @@ public class ServiceReferenceImpl implements ServiceReference, Comparable {
 		PackageSource producerSource = producerBL.getPackageSource(pkgName);
 		if (producerSource == null) {
 			// 5) If no wiring is found for the registrant bundle then find the wiring for the classloader of the service object.  If no wiring is found return false.
-			AbstractBundle serviceBundle = (AbstractBundle) registration.framework.packageAdmin.getBundle(registration.service.getClass());
-			producerBL = serviceBundle.getBundleLoader();
-			if (producerBL == null)
-				return false;
-			producerSource = producerBL.getPackageSource(pkgName);
+			producerSource = getPackageSource(registration.service.getClass(), pkgName);
 			if (producerSource == null)
 				return false;
-			return true;
 		}
 		// 6) If the two wirings found are equal then return true; otherwise return false.
 		return producerSource.hasCommonSource(consumerSource);
+	}
+
+	private PackageSource getPackageSource(Class serviceClass, String pkgName) {
+		if (serviceClass == null)
+			return null;
+		AbstractBundle serviceBundle = (AbstractBundle) registration.framework.packageAdmin.getBundle(serviceClass);
+		if (serviceBundle == null)
+			return null;
+		BundleLoader producerBL = serviceBundle.getBundleLoader();
+		if (producerBL == null)
+			return null;
+		PackageSource producerSource = producerBL.getPackageSource(pkgName);
+		if (producerSource != null)
+			return producerSource;
+		// try the interfaces
+		Class[] interfaces = serviceClass.getInterfaces();
+		for (int i = 0; i < interfaces.length; i++) {
+			producerSource = getPackageSource(serviceClass.getSuperclass(), pkgName);
+			if (producerSource != null)
+				return producerSource;
+		}
+		// try super class
+		return getPackageSource(serviceClass.getSuperclass(), pkgName);
 	}
 }

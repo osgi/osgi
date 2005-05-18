@@ -46,7 +46,7 @@ public class ConditionalPermissionInfoImpl implements ConditionalPermissionInfo,
 	 * When true, this object has been deleted and any information retrieved
 	 * from it should be discarded.
 	 */
-	public boolean isDeleted() {
+	boolean isDeleted() {
 		return deleted;
 	}
 
@@ -59,7 +59,11 @@ public class ConditionalPermissionInfoImpl implements ConditionalPermissionInfo,
 	 * @see org.osgi.service.condpermadmin.ConditionalPermissionInfo#getConditionInfos()
 	 */
 	public ConditionInfo[] getConditionInfos() {
-		return conds;
+		if (conds == null)
+			return null;
+		ConditionInfo[] results = new ConditionInfo[conds.length];
+		System.arraycopy(conds, 0, results, 0, conds.length);
+		return results;
 	}
 
 	/* Used to find permission constructors in addPermissions */
@@ -92,7 +96,7 @@ public class ConditionalPermissionInfoImpl implements ConditionalPermissionInfo,
 	 * @throws InstantiationException
 	 * @throws IllegalArgumentException
 	 */
-	public int addPermissions(PermissionCollection collection, Class permClass) throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
+	int addPermissions(PermissionCollection collection, Class permClass) throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		String permClassName = permClass.getName();
 		Constructor constructor = permClass.getConstructor(twoStringClassArray);
 		int count = 0;
@@ -126,7 +130,7 @@ public class ConditionalPermissionInfoImpl implements ConditionalPermissionInfo,
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public Condition[] getConditions(Bundle bundle) throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
+	Condition[] getConditions(Bundle bundle) throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		Condition conditions[] = new Condition[conds.length];
 		for (int i = 0; i < conds.length; i++) {
 			/*
@@ -192,7 +196,11 @@ public class ConditionalPermissionInfoImpl implements ConditionalPermissionInfo,
 	 * @see org.osgi.service.condpermadmin.ConditionalPermissionInfo#getPermissionInfos()
 	 */
 	public PermissionInfo[] getPermissionInfos() {
-		return perms;
+		if (perms == null)
+			return null;
+		PermissionInfo[] results = new PermissionInfo[perms.length];
+		System.arraycopy(perms, 0, results, 0, perms.length);
+		return results;
 	}
 
 	/**

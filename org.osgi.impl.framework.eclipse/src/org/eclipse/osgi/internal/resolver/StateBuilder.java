@@ -62,7 +62,7 @@ class StateBuilder {
 		ManifestElement[] exports = ManifestElement.parseHeader(Constants.EXPORT_PACKAGE, (String) manifest.get(Constants.EXPORT_PACKAGE));
 		ManifestElement[] reexports = ManifestElement.parseHeader(Constants.REEXPORT_PACKAGE, (String) manifest.get(Constants.REEXPORT_PACKAGE));
 		ManifestElement[] provides = ManifestElement.parseHeader(Constants.PROVIDE_PACKAGE, (String) manifest.get(Constants.PROVIDE_PACKAGE)); // TODO this is null for now until the framwork is updated to handle the new re-export semantics
-		boolean strict = state != null && Constants.STRICT_MODE.equals(state.getPlatformProperties()[0].get(Constants.OSGI_RESOLVER_MODE));
+		boolean strict = state != null && state.inStrictMode();
 		ArrayList providedExports = new ArrayList(provides == null ? 0 : provides.length);
 		result.setExportPackages(createExportPackages(exports, reexports, provides, providedExports, manifestVersion, strict));
 		ManifestElement[] imports = ManifestElement.parseHeader(Constants.IMPORT_PACKAGE, (String) manifest.get(Constants.IMPORT_PACKAGE));
@@ -181,7 +181,7 @@ class StateBuilder {
 		String[] exportNames = exportPackage.getValueComponents();
 		for (int i = 0; i < exportNames.length; i++) {
 			// if we are in strict mode and the package is marked as internal, skip it.
-			if (strict && "true".equals(exportPackage.getDirective(Constants.INTERNAL_DIRECTIVE)))
+			if (strict && "true".equals(exportPackage.getDirective(Constants.INTERNAL_DIRECTIVE))) //$NON-NLS-1$
 				continue;
 			ExportPackageDescriptionImpl result = new ExportPackageDescriptionImpl();
 			result.setName(exportNames[i]);
@@ -194,6 +194,7 @@ class StateBuilder {
 			result.setDirective(Constants.INCLUDE_DIRECTIVE, exportPackage.getDirective(Constants.INCLUDE_DIRECTIVE));
 			result.setDirective(Constants.EXCLUDE_DIRECTIVE, exportPackage.getDirective(Constants.EXCLUDE_DIRECTIVE));
 			result.setDirective(Constants.FRIENDS_DIRECTIVE, ManifestElement.getArrayFromList(exportPackage.getDirective(Constants.FRIENDS_DIRECTIVE)));
+			result.setDirective(Constants.INTERNAL_DIRECTIVE, Boolean.valueOf(exportPackage.getDirective(Constants.INTERNAL_DIRECTIVE)));
 			result.setDirective(Constants.MANDATORY_DIRECTIVE, ManifestElement.getArrayFromList(exportPackage.getDirective(Constants.MANDATORY_DIRECTIVE)));
 			result.setAttributes(getAttributes(exportPackage, DEFINED_MATCHING_ATTRS));
 			result.setRoot(!reexported);
@@ -249,7 +250,7 @@ class StateBuilder {
 		HostSpecificationImpl result = new HostSpecificationImpl();
 		result.setName(spec.getValue());
 		result.setVersionRange(getVersionRange(spec.getAttribute(Constants.BUNDLE_VERSION_ATTRIBUTE)));
-		result.setIsMultiHost("true".equals(spec.getDirective("multiple-hosts"))); //$NON-NLS-1$
+		result.setIsMultiHost("true".equals(spec.getDirective("multiple-hosts"))); //$NON-NLS-1$ //$NON-NLS-2$
 		return result;
 	}
 

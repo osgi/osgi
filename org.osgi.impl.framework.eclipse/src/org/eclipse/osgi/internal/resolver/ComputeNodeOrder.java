@@ -19,7 +19,7 @@ import java.util.*;
  * Implementation of a sort algorithm for computing the node order. This
  * algorithm handles cycles in the node reference graph in a reasonable way.
  * 
- * @see org.eclipse.core.runtime.adaptor.BundleStopper#stopBundles()
+ * @see org.eclipse.core.runtime.internal.adaptor.BundleStopper#stopBundles()
  * @since 3.0
  */
 public class ComputeNodeOrder {

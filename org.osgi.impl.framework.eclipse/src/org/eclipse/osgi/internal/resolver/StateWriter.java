@@ -291,11 +291,12 @@ class StateWriter {
 				if (value instanceof String) {
 					out.writeByte(0);
 					writeStringOrNull((String) value, out);
-				} else {
-					if (value instanceof String[]) {
-						out.writeByte(1);
-						writeList(out, (String[]) value);
-					}
+				} else if (value instanceof String[]) {
+					out.writeByte(1);
+					writeList(out, (String[]) value);
+				} else if (value instanceof Boolean) {
+					out.writeByte(2);
+					out.writeBoolean(((Boolean) value).booleanValue());
 				}
 			}
 		}

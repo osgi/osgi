@@ -9,9 +9,9 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.osgi.profile;
+package org.eclipse.osgi.internal.profile;
 
-import org.eclipse.osgi.framework.debug.DebugOptions;
+import org.eclipse.osgi.framework.debug.FrameworkDebugOptions;
 
 /**
  * This class is a development tool that provides a simple way to log 
@@ -86,13 +86,13 @@ public class Profile {
 	 */
 	public static void initProps() {
 		String prop;
-		DebugOptions dbgOptions = null;
+		FrameworkDebugOptions dbgOptions = null;
 
 		// if osgi.debug is not available, don't force DebugOptions
 		//  to init as this variable may be set later on where 
 		//  DebugOptions will succeed.
 		if (System.getProperty("osgi.debug") != null) { //$NON-NLS-1$
-			dbgOptions = DebugOptions.getDefault();
+			dbgOptions = FrameworkDebugOptions.getDefault();
 			if (dbgOptions != null) {
 				STARTUP = dbgOptions.getBooleanOption(OPTION_STARTUP, false);
 				BENCHMARK = dbgOptions.getBooleanOption(OPTION_BENCHMARK, false);

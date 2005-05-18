@@ -48,7 +48,7 @@ public class Debug {
 	public static final String OPTION_DEBUG_MESSAGE_BUNDLES = ECLIPSE_OSGI + "/debug/messageBundles"; //$NON-NLS-1$
 
 	static {
-		DebugOptions dbgOptions = DebugOptions.getDefault();
+		FrameworkDebugOptions dbgOptions = FrameworkDebugOptions.getDefault();
 		if (dbgOptions != null) {
 			DEBUG_GENERAL = dbgOptions.getBooleanOption(OPTION_DEBUG_GENERAL, false);
 			DEBUG_BUNDLE_TIME = dbgOptions.getBooleanOption(OPTION_DEBUG_BUNDLE_TIME, false) || dbgOptions.getBooleanOption("org.eclipse.core.runtime/timing/startup", false); //$NON-NLS-1$

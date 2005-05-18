@@ -151,11 +151,12 @@ public abstract class BundleEntry {
 		public URL getFileURL() {
 			try {
 				File file = bundleFile.getFile(zipEntry.getName());
-				return file.toURL();
+				if (file != null)
+					return file.toURL();
 			} catch (MalformedURLException e) {
 				//This can not happen. 
-				return null;
 			}
+			return null;
 		}
 	}
 

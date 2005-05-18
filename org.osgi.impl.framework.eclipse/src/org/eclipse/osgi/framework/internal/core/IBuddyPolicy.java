@@ -8,25 +8,15 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
+package org.eclipse.osgi.framework.internal.core;
 
-package org.eclipse.osgi.profile;
+import java.net.URL;
+import java.util.Enumeration;
 
-public interface ProfileLogger {
+public interface IBuddyPolicy {
+	public Class loadClass(String name);
 
-	/**
-	 * 
-	 *@see Profile#initProps()
-	 */
-	public void initProps();
+	public URL loadResource(String name);
 
-	/**
-	 *@see Profile#logTime(int, String, String, String) 
-	 */
-	public void logTime(int flag, String id, String msg, String description);
-
-	/**
-	 * 
-	 * @see Profile#getProfileLog()
-	 */
-	public String getProfileLog();
+	public Enumeration loadResources(String name);
 }

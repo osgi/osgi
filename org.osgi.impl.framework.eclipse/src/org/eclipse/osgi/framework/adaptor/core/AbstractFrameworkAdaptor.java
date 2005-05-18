@@ -19,11 +19,10 @@ import java.net.URLConnection;
 import java.util.*;
 import org.eclipse.osgi.framework.adaptor.*;
 import org.eclipse.osgi.framework.debug.Debug;
-import org.eclipse.osgi.framework.internal.core.BundleResourceHandler;
+import org.eclipse.osgi.framework.internal.core.*;
 import org.eclipse.osgi.framework.internal.core.Constants;
 import org.eclipse.osgi.framework.log.FrameworkLog;
 import org.eclipse.osgi.framework.util.Headers;
-import org.eclipse.osgi.internal.resolver.StateManager;
 import org.eclipse.osgi.service.resolver.*;
 import org.eclipse.osgi.util.ManifestElement;
 import org.eclipse.osgi.util.NLS;
@@ -50,7 +49,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 
 	/** Name of the Adaptor manifest file */
 	protected final String ADAPTOR_MANIFEST = "ADAPTOR.MF"; //$NON-NLS-1$
-	protected final String DEFAULT_SIGNEDBUNDLE_SUPPORT = "org.eclipse.osgi.framework.pkcs7verify.SignedBundleImpl"; //$NON-NLS-1$
+	protected final String DEFAULT_SIGNEDBUNDLE_SUPPORT = "org.eclipse.osgi.framework.pkcs7verify.SignedBundleSupportImpl"; //$NON-NLS-1$
 
 	/**
 	 * The EventPublisher for the FrameworkAdaptor
@@ -60,7 +59,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	/**
 	 * The ServiceRegistry object for this FrameworkAdaptor.
 	 */
-	protected ServiceRegistryImpl serviceRegistry;
+	protected ServiceRegistry serviceRegistry;
 
 	/**
 	 * The Properties object for this FrameworkAdaptor
@@ -125,12 +124,12 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 			bundleClassLoaderParent = new ParentClassLoader();
 	}
 
-	protected Method addURLMethod = findaddURLMethod(AbstractFrameworkAdaptor.class.getClassLoader().getClass());
+	protected Method addURLMethod;
 
 	protected String[] configuredExtensions;
 
 	protected boolean supportSignedBundles = true;
-	protected Class signedBundleSupport = null;
+	protected SignedBundleSupport signedBundleSupport = null;
 
 	/**
 	 * Constructor for DefaultAdaptor.  This constructor parses the arguments passed
@@ -150,6 +149,9 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	 *
 	 */
 	public AbstractFrameworkAdaptor(String[] args) {
+		ClassLoader fwloader = AbstractFrameworkAdaptor.class.getClassLoader();
+		if (fwloader != null)
+			addURLMethod = findaddURLMethod(fwloader.getClass());
 		if (args != null) {
 			for (int i = 0; i < args.length; i++) {
 				String arg = args[i];
@@ -176,7 +178,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	public void initialize(EventPublisher eventPublisher) {
 		this.eventPublisher = eventPublisher;
 		serviceRegistry = new ServiceRegistryImpl();
-		serviceRegistry.initialize();
+		((ServiceRegistryImpl) serviceRegistry).initialize();
 		loadProperties();
 		readAdaptorManifest();
 		initBundleStoreRootDir();
@@ -222,7 +224,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		try {
 			return (new URL(location).openConnection());
 		} catch (IOException e) {
-			throw new BundleException(NLS.bind(AdaptorMsg.ADAPTOR_URL_CREATE_EXCEPTION, location), e); 
+			throw new BundleException(NLS.bind(AdaptorMsg.ADAPTOR_URL_CREATE_EXCEPTION, location), e);
 		}
 	}
 
@@ -542,10 +544,23 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	}
 
 	protected void processExtension(BundleData bundleData, byte type) throws BundleException {
-		if ((bundleData.getType() & BundleData.TYPE_FRAMEWORK_EXTENSION) != 0)
+		if ((bundleData.getType() & BundleData.TYPE_FRAMEWORK_EXTENSION) != 0) {
+			validateExtension(bundleData);
 			processFrameworkExtension(bundleData, type);
-		else if ((bundleData.getType() & BundleData.TYPE_BOOTCLASSPATH_EXTENSION) != 0)
+		} else if ((bundleData.getType() & BundleData.TYPE_BOOTCLASSPATH_EXTENSION) != 0) {
+			validateExtension(bundleData);
 			processBootExtension(bundleData, type);
+		}
+	}
+
+	protected void validateExtension(BundleData bundleData) throws BundleException {
+		Dictionary extensionManifest = bundleData.getManifest();
+		if (extensionManifest.get(Constants.IMPORT_PACKAGE) != null)
+			throw new BundleException(NLS.bind(AdaptorMsg.ADAPTOR_EXTENSION_IMPORT_ERROR, bundleData.getLocation()));
+		if (extensionManifest.get(Constants.REQUIRE_BUNDLE) != null)
+			throw new BundleException(NLS.bind(AdaptorMsg.ADAPTOR_EXTENSION_REQUIRE_ERROR, bundleData.getLocation()));
+		if (extensionManifest.get(Constants.BUNDLE_NATIVECODE) != null)
+			throw new BundleException(NLS.bind(AdaptorMsg.ADAPTOR_EXTENSION_NATIVECODE_ERROR, bundleData.getLocation()));
 	}
 
 	protected void processFrameworkExtension(BundleData bundleData, byte type) throws BundleException {
@@ -644,14 +659,31 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		BundleFile base = createBundleFile(basefile, bundledata);
 		if (System.getSecurityManager() == null || !supportSignedBundles)
 			return base;
+		SignedBundleSupport support = getSignedBundleSupport();
+		if (support == null)
+			return base;
+		SignedBundle signedBundle = support.createSignedBundle();
+		signedBundle.setBundleFile(base);
+		return signedBundle;
+	}
+
+	public boolean matchDNChain(String pattern, String[] dnChain) {
+		SignedBundleSupport support = getSignedBundleSupport();
+		if (support != null)
+			return support.matchDNChain(pattern, dnChain);
+		return false;
+	}
+
+	protected SignedBundleSupport getSignedBundleSupport() {
+		if (System.getSecurityManager() == null || !supportSignedBundles)
+			return null;
 		try {
 			if (signedBundleSupport == null) {
 				String clazzName = System.getProperty(PROP_SIGNINGSUPPORT, DEFAULT_SIGNEDBUNDLE_SUPPORT);
-				signedBundleSupport = Class.forName(clazzName);
+				Class clazz = Class.forName(clazzName);
+				signedBundleSupport = (SignedBundleSupport) clazz.newInstance();
 			}
-			SignedBundle signedBundle = (SignedBundle) signedBundleSupport.newInstance();
-			signedBundle.setBundleFile(base);
-			return signedBundle;
+			return signedBundleSupport;
 		} catch (ClassNotFoundException e) {
 			supportSignedBundles = false;
 		} catch (IllegalAccessException e) {
@@ -659,7 +691,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		} catch (InstantiationException e) {
 			supportSignedBundles = false;
 		}
-		return base;
+		return null;
 	}
 
 	/**
@@ -849,7 +881,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	 */
 	protected void shutdownStateManager() {
 		try {
-			if (canWrite())
+			if (canWrite() && (getBundleStoreRootDir().exists() || getBundleStoreRootDir().mkdirs()))
 				stateManager.shutdown(new File(getBundleStoreRootDir(), ".state"), new File(getBundleStoreRootDir(), ".lazy")); //$NON-NLS-1$//$NON-NLS-2$
 		} catch (IOException e) {
 			frameworkLog.log(new FrameworkEvent(FrameworkEvent.ERROR, context.getBundle(), e));
@@ -869,7 +901,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	/**
 	 * Dictionary containing permission data 
 	 */
-	protected DefaultPermissionStorage permissionStore;
+	protected PermissionStorage permissionStore;
 	protected boolean reset = false;
 	/**
 	 * directory containing data directories for installed bundles 
@@ -1173,8 +1205,8 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	 * Init the directory to store the bundles in.  Bundledir can be set in 3 different ways.
 	 * Priority is:
 	 * 1 - OSGI Launcher command line -adaptor argument
-	 * 2 - System property org.eclipse.osgi.framework.defaultadaptor.bundledir - could be specified with -D when launching
-	 * 3 - osgi.properties - org.eclipse.osgi.framework.defaultadaptor.bundledir property
+	 * 2 - System property osgi.bundlestore - could be specified with -D when launching
+	 * 3 - osgi.properties - osgi.bundlestore property
 	 *
 	 * Bundledir will be stored back to adaptor properties which
 	 * the framework will copy into the System properties.
@@ -1223,7 +1255,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	 * If a dir was specified in the -adaptor command line option, then it
 	 * is used.  If not,
 	 * if the property
-	 * <i>org.eclipse.osgi.framework.defaultadaptor.bundledir</i> is specifed, its value
+	 * <i>osgi.bundlestore</i> is specified, its value
 	 * will be used as the name of the bundle directory
 	 * instead of <tt>./bundles</tt>.
 	 * If reset was specified on the -adaptor command line option,
@@ -1232,37 +1264,18 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	 * @throws IOException If an error occurs initializing the storage.
 	 */
 	public void initializeStorage() throws IOException {
-		boolean makedir = false;
-		File bundleStore = getBundleStoreRootDir();
-		if (bundleStore.exists()) {
-			if (reset) {
-				makedir = true;
-				if (!rm(bundleStore)) {
+		File bundleStore;
+		// only touch the file system if reset is specified
+		// we create the area on demand later if needed
+		if (reset && (bundleStore = getBundleStoreRootDir()).exists()) {
+			if (!canWrite() || !rm(bundleStore)) {
 					if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 						Debug.println("Could not remove directory: " + bundleStore.getPath()); //$NON-NLS-1$
 					}
-				}
-			} else {
-				if (!bundleStore.isDirectory()) {
-					if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
-						Debug.println("Exists but not a directory: " + bundleStore.getPath()); //$NON-NLS-1$
-					}
 
-					throw new IOException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION);
+				throw new IOException(NLS.bind(AdaptorMsg.ADAPTOR_DIRECTORY_REMOVE_EXCEPTION, bundleStore));
 				}
 			}
-		} else {
-			makedir = true;
-		}
-		if (makedir) {
-			if (!bundleStore.mkdirs()) {
-				if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
-					Debug.println("Unable to create directory: " + bundleStore.getPath()); //$NON-NLS-1$
-				}
-
-				throw new IOException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION);
-			}
-		}
 
 		initializeMetadata();
 	}
@@ -1298,7 +1311,8 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	 *
 	 */
 	public void compactStorage() {
-		compact(getBundleStoreRootDir());
+		if (canWrite())
+			compact(getBundleStoreRootDir());
 	}
 
 	/**
@@ -1386,7 +1400,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 				break;
 		}
 	}
-	
+
 	/**
 	 * Whether the adaptor can make changes to the file system. Default is <code>true</code>.
 	 */

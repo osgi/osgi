@@ -9,12 +9,13 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.osgi.framework.adaptor.core;
+package org.eclipse.osgi.framework.internal.core;
 
 import java.io.*;
 import java.net.URL;
 import java.util.Enumeration;
 import org.eclipse.osgi.framework.adaptor.*;
+import org.eclipse.osgi.framework.adaptor.core.*;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.internal.core.Constants;
 import org.eclipse.osgi.framework.util.Headers;

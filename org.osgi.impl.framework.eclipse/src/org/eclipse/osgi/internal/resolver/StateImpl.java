@@ -12,11 +12,10 @@ package org.eclipse.osgi.internal.resolver;
 
 import java.util.*;
 
+import org.eclipse.osgi.framework.adaptor.core.StateManager;
 import org.eclipse.osgi.framework.debug.Debug;
-import org.eclipse.osgi.framework.debug.DebugOptions;
+import org.eclipse.osgi.framework.debug.FrameworkDebugOptions;
 import org.eclipse.osgi.framework.internal.core.*;
-import org.eclipse.osgi.framework.internal.core.KeyedElement;
-import org.eclipse.osgi.framework.internal.core.KeyedHashSet;
 import org.eclipse.osgi.service.resolver.*;
 import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.BundleException;
@@ -275,7 +274,7 @@ public abstract class StateImpl implements State {
 				long time = System.currentTimeMillis() - start;
 				Debug.println("Time spent resolving: " + time); //$NON-NLS-1$
 				cumulativeTime = cumulativeTime + time;
-				DebugOptions.getDefault().setOption("org.eclipse.core.runtime.adaptor/resolver/timing/value", Long.toString(cumulativeTime)); //$NON-NLS-1$
+				FrameworkDebugOptions.getDefault().setOption("org.eclipse.core.runtime.adaptor/resolver/timing/value", Long.toString(cumulativeTime)); //$NON-NLS-1$
 			}
 
 			return savedChanges;
@@ -455,7 +454,7 @@ public abstract class StateImpl implements State {
 		return result;
 	}
 
-	Dictionary[] getPlatformProperties() {
+	public Dictionary[] getPlatformProperties() {
 		return platformProperties;
 	}
 
@@ -497,7 +496,7 @@ public abstract class StateImpl implements State {
 		return changed;
 	}
 
-	BundleDescription[] getRemovalPendings() {
+	public BundleDescription[] getRemovalPendings() {
 		return (BundleDescription[]) removalPendings.toArray(new BundleDescription[removalPendings.size()]);
 	}
 
@@ -522,7 +521,7 @@ public abstract class StateImpl implements State {
 		return reader;
 	}
 
-	void fullyLoad() {
+	public void fullyLoad() {
 		if (fullyLoaded == true)
 			return;
 		if (reader != null && reader.isLazyLoaded())
@@ -530,7 +529,7 @@ public abstract class StateImpl implements State {
 		fullyLoaded = true;
 	}
 
-	void unloadLazyData(long expireTime) {
+	public void unloadLazyData(long expireTime) {
 		long currentTime = System.currentTimeMillis();
 		BundleDescription[] bundles = getBundles();
 		// make sure no other thread is trying to unload or load
@@ -551,7 +550,13 @@ public abstract class StateImpl implements State {
 		}
 	}
 
-	ExportPackageDescription[] getSystemExports() {
+	public ExportPackageDescription[] getSystemPackages() {
+		if (systemExports == null)
+			return new ExportPackageDescription[0];
 		return systemExports;
+	}
+
+	boolean inStrictMode() {
+		return Constants.STRICT_MODE.equals(getPlatformProperties()[0].get(Constants.OSGI_RESOLVER_MODE));
 	}
 }

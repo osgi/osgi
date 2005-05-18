@@ -9,16 +9,15 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.osgi.framework.internal.defaultadaptor;
+package org.eclipse.osgi.framework.adaptor.core;
 
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.*;
-import java.security.ProtectionDomain;
+import java.security.cert.Certificate;
 import java.util.*;
 import org.eclipse.osgi.framework.adaptor.ClassLoaderDelegate;
-import org.eclipse.osgi.framework.adaptor.core.*;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.BundleException;
@@ -616,7 +615,7 @@ public class DefaultClassLoader extends AbstractClassLoader {
 	 */
 	protected class ClasspathDomain extends ProtectionDomain {
 		public ClasspathDomain(URL codeLocation, PermissionCollection permissions) {
-			super(new CodeSource(codeLocation, null), permissions);
+			super(new CodeSource(codeLocation, (Certificate[]) null), permissions);
 		}
 	}
 }

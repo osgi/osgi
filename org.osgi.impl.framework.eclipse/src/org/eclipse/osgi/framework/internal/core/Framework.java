@@ -21,7 +21,7 @@ import org.eclipse.osgi.framework.internal.protocol.ContentHandlerFactory;
 import org.eclipse.osgi.framework.internal.protocol.StreamHandlerFactory;
 import org.eclipse.osgi.framework.log.FrameworkLog;
 import org.eclipse.osgi.framework.util.SecureAction;
-import org.eclipse.osgi.profile.Profile;
+import org.eclipse.osgi.internal.profile.Profile;
 import org.eclipse.osgi.util.ManifestElement;
 import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.*;
@@ -83,8 +83,10 @@ public class Framework implements EventDispatcher, EventPublisher {
 	protected Hashtable installLock;
 	/** System Bundle object */
 	protected SystemBundle systemBundle;
-	protected String[] bootDelegation;
-	protected boolean bootDelegateAll = false;
+	String[] bootDelegation;
+	String[] bootDelegationStems;
+	boolean bootDelegateAll = false;
+	boolean contextBootDelegation = "true".equals(System.getProperty("osgi.context.bootdelegation", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 	/**
 	 * The AliasMapper used to alias OS Names.
@@ -175,6 +177,8 @@ public class Framework implements EventDispatcher, EventPublisher {
 		installLock = new Hashtable(10);
 		/* create the system bundle */
 		createSystemBundle();
+		loadVMProfile(); // load VM profile after the system bundle has been created
+		setBootDelegation(); //set boot delegation property after system exports have been set
 		if (Profile.PROFILE && Profile.STARTUP)
 			Profile.logTime("Framework.initialze()", "done createSystemBundle"); //$NON-NLS-1$ //$NON-NLS-2$
 		/* install URLStreamHandlerFactory */
@@ -202,7 +206,7 @@ public class Framework implements EventDispatcher, EventPublisher {
 		if (Debug.DEBUG && Debug.DEBUG_GENERAL)
 			System.out.println("Initialize the framework: " + (System.currentTimeMillis() - start)); //$NON-NLS-1$
 		if (Profile.PROFILE && Profile.STARTUP)
-			Profile.logExit("Framework.initialze()");
+			Profile.logExit("Framework.initialize()"); //$NON-NLS-1$
 	}
 
 	private void createSystemBundle() {
@@ -212,7 +216,6 @@ public class Framework implements EventDispatcher, EventPublisher {
 			e.printStackTrace();
 			throw new RuntimeException(NLS.bind(Msg.OSGI_SYSTEMBUNDLE_CREATE_EXCEPTION, e.getMessage()));
 		}
-		setSystemExports();
 	}
 
 	/**
@@ -293,7 +296,6 @@ public class Framework implements EventDispatcher, EventPublisher {
 			}
 		}
 		setExecutionEnvironment();
-		setBootDelegation();
 	}
 
 	private void setExecutionEnvironment() {
@@ -336,42 +338,65 @@ public class Framework implements EventDispatcher, EventPublisher {
 		properties.put(Constants.FRAMEWORK_EXECUTIONENVIRONMENT, ee.toString());
 	}
 
-
 	private void setBootDelegation() {
 		String bootDelegationProp = properties.getProperty(Constants.OSGI_BOOTDELEGATION);
 		if (bootDelegationProp == null)
 			return;
 		if (bootDelegationProp.trim().length() == 0)
-			bootDelegation = new String[] {""}; //$NON-NLS-1$
-		else
-			bootDelegation = ManifestElement.getArrayFromList(bootDelegationProp);
-		for (int i = 0; i < bootDelegation.length; i++)
-			if (bootDelegation[i].length() == 0)
+			return;
+		String[] bootPackages = ManifestElement.getArrayFromList(bootDelegationProp);
+		ArrayList exactMatch = new ArrayList(bootPackages.length);
+		ArrayList stemMatch = new ArrayList(bootPackages.length);
+		for (int i = 0; i < bootPackages.length; i++) {
+			if (bootPackages[i].equals("*")) { //$NON-NLS-1$
 				bootDelegateAll = true;
-	}
-
-	private void setSystemExports() {
-		String systemExports = properties.getProperty(Constants.OSGI_FRAMEWORK_SYSTEM_PACKAGES);
-		if (systemExports != null)
-			return;
-		InputStream in = findVMProfile();
-		if (in == null)
-			return;
-		Properties vmPackages = new Properties();
-		try {
-			vmPackages.load(new BufferedInputStream(in));
-		} catch (IOException e) {
-			// do nothing
-		} finally {
-			try {
-				in.close();
-			} catch (IOException ee) {
-				// do nothing
+				return;
+			} else if (bootPackages[i].endsWith("*")) { //$NON-NLS-1$
+				if (bootPackages[i].length() > 2 && bootPackages[i].endsWith(".*")) //$NON-NLS-1$
+					stemMatch.add(bootPackages[i].substring(0, bootPackages[i].length() - 1));
+			} else {
+				exactMatch.add(bootPackages[i]);
 			}
 		}
-		systemExports = vmPackages.getProperty(Constants.OSGI_FRAMEWORK_SYSTEM_PACKAGES);
-		if (systemExports != null)
-			properties.put(Constants.OSGI_FRAMEWORK_SYSTEM_PACKAGES, systemExports);
+		if (exactMatch.size() > 0)
+			bootDelegation = (String[]) exactMatch.toArray(new String[exactMatch.size()]);
+		if (stemMatch.size() > 0)
+			bootDelegationStems = (String[]) stemMatch.toArray(new String[stemMatch.size()]);
+	}
+
+	private void loadVMProfile() {
+		InputStream in = findVMProfile();
+		Properties profileProps = new Properties();
+		if (in != null) {
+			try {
+				profileProps.load(new BufferedInputStream(in));
+			} catch (IOException e) {
+				// do nothing
+			} finally {
+				try {
+					in.close();
+				} catch (IOException ee) {
+					// do nothing
+				}
+			}
+		}
+		String systemExports = properties.getProperty(Constants.OSGI_FRAMEWORK_SYSTEM_PACKAGES);
+		// set the system exports property using the vm profile; only if the property is not already set
+		if (systemExports == null) {
+			systemExports = profileProps.getProperty(Constants.OSGI_FRAMEWORK_SYSTEM_PACKAGES);
+			if (systemExports != null)
+				properties.put(Constants.OSGI_FRAMEWORK_SYSTEM_PACKAGES, systemExports);
+		}
+		// set the org.osgi.framework.bootdelegation property according to the java profile
+		String type = properties.getProperty(Constants.OSGI_JAVA_PROFILE_BOOTDELEGATION); // a null value means ignore
+		String profileBootDelegation = profileProps.getProperty(Constants.OSGI_BOOTDELEGATION);
+		if (Constants.OSGI_BOOTDELEGATION_OVERRIDE.equals(type)) {
+			if (profileBootDelegation == null)
+				properties.remove(Constants.OSGI_BOOTDELEGATION); // override with a null value
+			else
+				properties.put(Constants.OSGI_BOOTDELEGATION, profileBootDelegation); // override with the profile value
+		} else if (Constants.OSGI_BOOTDELEGATION_NONE.equals(type))
+			properties.remove(Constants.OSGI_BOOTDELEGATION); // remove the bootdelegation property in case it was set
 	}
 
 	private InputStream findVMProfile() {

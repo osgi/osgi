@@ -24,6 +24,7 @@ public class ExportPackageDescriptionImpl extends BaseDescriptionImpl implements
 	private String include;
 	private String[] friends;
 	private String[] mandatory;
+	private Boolean internal = Boolean.FALSE;
 	private boolean root;
 	private int tableIndex;
 
@@ -39,6 +40,7 @@ public class ExportPackageDescriptionImpl extends BaseDescriptionImpl implements
 			result.put(Constants.MANDATORY_DIRECTIVE, mandatory);
 		if (friends != null)
 			result.put(Constants.FRIENDS_DIRECTIVE, friends);
+		result.put(Constants.INTERNAL_DIRECTIVE, internal);
 		return result;
 	}
 	
@@ -54,7 +56,7 @@ public class ExportPackageDescriptionImpl extends BaseDescriptionImpl implements
 		if (key.equals(Constants.FRIENDS_DIRECTIVE))
 			return friends;
 		if (key.equals(Constants.INTERNAL_DIRECTIVE))
-			return Boolean.FALSE;
+			return internal;
 		return null;
 	}
 
@@ -70,7 +72,7 @@ public class ExportPackageDescriptionImpl extends BaseDescriptionImpl implements
 		if (key.equals(Constants.FRIENDS_DIRECTIVE))
 			return friends = (String[]) value;
 		if (key.equals(Constants.INTERNAL_DIRECTIVE))
-			return Boolean.FALSE;
+			return internal = (Boolean) value;
 		return null;
 	}
 
@@ -82,6 +84,7 @@ public class ExportPackageDescriptionImpl extends BaseDescriptionImpl implements
 		include = (String)directives.get(Constants.INCLUDE_DIRECTIVE);
 		mandatory = (String[])directives.get(Constants.MANDATORY_DIRECTIVE);
 		friends = (String[])directives.get(Constants.FRIENDS_DIRECTIVE);
+		internal = (Boolean)directives.get(Constants.INTERNAL_DIRECTIVE);
 	}
 	
 	public Map getAttributes() {

@@ -13,7 +13,7 @@ package org.eclipse.osgi.framework.internal.core;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
-import org.eclipse.osgi.framework.debug.DebugOptions;
+import org.eclipse.osgi.framework.debug.FrameworkDebugOptions;
 import org.osgi.framework.*;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 
@@ -47,8 +47,8 @@ public class SystemBundleActivator implements BundleActivator {
 			startLevel = register(Constants.OSGI_STARTLEVEL_NAME, framework.startLevelManager);
 		if (framework.condPermAdmin != null)
 			condPermAdmin = register(ConditionalPermissionAdmin.class.getName(), framework.condPermAdmin);
-		DebugOptions dbgOptions = null;
-		if ((dbgOptions = DebugOptions.getDefault()) != null)
+		FrameworkDebugOptions dbgOptions = null;
+		if ((dbgOptions = FrameworkDebugOptions.getDefault()) != null)
 			debugOptions = register(org.eclipse.osgi.service.debug.DebugOptions.class.getName(), dbgOptions);
 
 		// Always call the adaptor.frameworkStart() at the end of this method.

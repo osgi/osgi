@@ -9,12 +9,14 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.osgi.framework.adaptor.core;
+package org.eclipse.osgi.framework.internal.core;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import org.eclipse.osgi.framework.adaptor.core.AdaptorMsg;
+import org.eclipse.osgi.framework.adaptor.core.BundleEntry;
 import org.eclipse.osgi.util.NLS;
 
 /**

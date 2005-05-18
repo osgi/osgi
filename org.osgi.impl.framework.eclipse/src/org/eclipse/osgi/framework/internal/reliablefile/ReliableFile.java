@@ -70,7 +70,7 @@ public class ReliableFile {
 	 */
 	public static final String PROP_MAX_GENERATIONS = "osgi.ReliableFile.maxGenerations"; //$NON-NLS-1$
 	/**
-	 * @see org.eclipse.core.runtime.adaptor.BasicLocation#PROP_OSGI_LOCKING
+	 * @see org.eclipse.core.runtime.internal.adaptor.BasicLocation#PROP_OSGI_LOCKING
 	 */
 	public static final String PROP_OSGI_LOCKING = "osgi.locking"; //$NON-NLS-1$
 

@@ -9,7 +9,7 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.osgi.framework.util;
+package org.eclipse.osgi.framework.internal.core;
 
 /**
  * Simple tokenizer class. Used to parse data.

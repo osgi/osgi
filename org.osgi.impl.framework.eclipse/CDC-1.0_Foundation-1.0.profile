@@ -10,3 +10,5 @@
 ###############################################################################
 org.osgi.framework.system.packages = \
  javax.microedition.io
+org.osgi.framework.bootdelegation = \
+ javax.microedition.io

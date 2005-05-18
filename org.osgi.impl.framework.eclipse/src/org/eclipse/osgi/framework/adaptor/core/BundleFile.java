@@ -126,7 +126,8 @@ abstract public class BundleFile {
 		BundleEntry bundleEntry = getEntry(path);
 		if (bundleEntry == null)
 			return null;
-
+		if (path.length() == 0 || path.charAt(0) != '/')
+			path = '/' + path;
 		try {
 			//use the constant string for the protocol to prevent duplication
 			return secureAction.getURL(Constants.OSGI_RESOURCE_URL_PROTOCOL, Long.toString(hostBundleID), index, path, new Handler(bundleEntry));

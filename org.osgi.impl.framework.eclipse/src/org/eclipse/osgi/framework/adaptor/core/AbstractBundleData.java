@@ -171,6 +171,8 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 		if (entry == null) {
 			return null;
 		}
+		if (path.length() == 0 || path.charAt(0) != '/')
+			path = path = '/' + path;
 		try {
 			//use the constant string for the protocol to prevent duplication
 			return new URL(Constants.OSGI_ENTRY_URL_PROTOCOL, Long.toString(id), 0, path, new Handler(entry));
@@ -522,14 +524,17 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 	}
 
 	protected File[] getClasspathFiles(String[] classpaths) {
-		File[] results = new File[classpaths.length];
+		ArrayList results = new ArrayList(classpaths.length);
 		for (int i = 0; i < classpaths.length; i++) {
-			if (".".equals(classpaths[i]))
-				results[i] = getBaseFile();
-			else
-				results[i] = getBaseBundleFile().getFile(classpaths[i]);
+			if (".".equals(classpaths[i])) //$NON-NLS-1$
+				results.add(getBaseFile());
+			else {
+				File result = getBaseBundleFile().getFile(classpaths[i]);
+				if (result != null)
+					results.add(result);
+			}
 		}
-		return results;
+		return (File[]) results.toArray(new File[results.size()]);
 	}
 
 	protected void setDataDir(File dirData) {
@@ -577,7 +582,6 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 	}
 
 	protected String findNativePath(String libname) {
-		String path = null;
 		if (!libname.startsWith("/")) { //$NON-NLS-1$
 			libname = '/' + libname;
 		}
@@ -586,11 +590,12 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 			for (int i = 0; i < nativepaths.length; i++) {
 				if (nativepaths[i].endsWith(libname)) {
 					File nativeFile = baseBundleFile.getFile(nativepaths[i]);
-					path = nativeFile.getAbsolutePath();
+					if (nativeFile != null)
+						return nativeFile.getAbsolutePath();
 				}
 			}
 		}
-		return path;
+		return null;
 	}
 
 	/**
