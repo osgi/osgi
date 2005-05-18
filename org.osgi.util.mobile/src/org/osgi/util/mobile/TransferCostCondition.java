@@ -114,9 +114,9 @@ public class TransferCostCondition implements Condition {
 	}
 
 	/**
-	 * Checks whether the condition is evaluated, so {@link #isSatisfied()} can give answer instantly.
+	 * Checks whether condition evaluation is postponed, because {@link #isSatisfied()} cannot give answer instantly.
 	 * 
-	 * @return Always true.
+	 * @return Always false.
 	 */
 	public boolean isPostponed() {
 		return false;

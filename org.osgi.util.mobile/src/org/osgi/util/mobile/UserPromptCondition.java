@@ -131,17 +131,18 @@ public class UserPromptCondition implements Condition {
 	}
 	
 	/**
-	 * Checks if the {@link #isSatisfied()} method can return a result without actually
-	 * prompting the user. This depends on the possible permission levels given in 
+	 * Checks if the {@link #isSatisfied()} method needs to prompt the user, thus cannot
+	 * give results instantly. 
+	 * This depends on the possible permission levels given in 
 	 * {@link UserPromptCondition#getInstance(Bundle, String, String, String, String)}. 
 	 * <ul>
-	 * <li>ONESHOT - isEvaluated always returns false. The user is prompted for question every time.
-	 * <li>SESSION - isEvaluated returns false until the user decides either yes or no for the current session.
-	 * <li>BLANKET - isEvaluated returns false until the user decides either always or never.
-	 * 			After that, it is always true.
+	 * <li>ONESHOT - isPostponed always returns true. The user is prompted for question every time.
+	 * <li>SESSION - isPostponed returns true until the user decides either yes or no for the current session.
+	 * <li>BLANKET - isPostponed returns true until the user decides either always or never.
+	 * 			After that, it is always false.
 	 * </ul>
 	 * 
-	 * @return True, if no prompt is needed.
+	 * @return True, if user interaction is needed.
 	 */
 	public boolean isPostponed() {
 		lookForImplementation();
@@ -149,7 +150,6 @@ public class UserPromptCondition implements Condition {
 			return realUserPromptCondition.isPostponed();
 		} else {
 			return true;
-			//### check
 		}
 	}
 

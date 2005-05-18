@@ -56,9 +56,9 @@ public class IMSICondition implements Condition {
 	}
 
 	/**
-	 * Checks whether the condition is evaluated.
+	 * Checks whether condition evaluation is postponed, because {@link #isSatisfied()} cannot give answer instantly.
 	 * 
-	 * @return True if the {@link #isSatisfied()} method can give results instantly.
+	 * @return True if the {@link #isSatisfied()} method cannot give results instantly.
 	 */
 	public boolean isPostponed() {
 		// this reference implementation only supports one IMSI, that cannot change
