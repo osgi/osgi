@@ -708,8 +708,11 @@ public class BundleLoader implements ClassLoaderDelegate {
 		}
 
 		// now add the locally provided package.
-		if (local != null && local.isFriend(symbolicName))
+		if (local != null && local.isFriend(symbolicName)) {
+			if (local instanceof BundleLoaderProxy.ReexportPackageSource)
+				local = new SingleSourcePackage(packageName, -1, proxy);
 			result.add(local);
+		}
 	}
 
 	final boolean isExportedPackage(String name) {
