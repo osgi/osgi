@@ -97,6 +97,7 @@ public class Transaction {
 	                case INSTALLBUNDLE :
 	                    break;
 	                case UPDATEBUNDLE :
+	                    
 	                    break;
 	                case UNINSTALLBUNDLE :
 	                	try {
@@ -156,6 +157,7 @@ public class Transaction {
 	                    break;
 	                } 
 	                case UPDATEBUNDLE :
+                        // TODO use framework backdoor for transactionality
 	                    break;
 	                case UNINSTALLBUNDLE : {
 	                    break;

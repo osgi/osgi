@@ -83,7 +83,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     static DeploymentPackageImpl createSystemBundle(Set bundleEntries) {
         DeploymentPackageImpl dp = new DeploymentPackageImpl();
-        dp.mainSection.put(DAConstants.DP_NAME, "System");
+        dp.mainSection.put(DAConstants.DP_NAME, "system");
         dp.mainSection.put(DAConstants.DP_VERSION, "0.0.0");
         dp.id = new Long(0);
         dp.bundleEntries = new Vector(bundleEntries);
@@ -375,7 +375,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                 throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
                         "Missing deployment package name");
             
-            if ("System".equals(dp.getName()))
+            if ("system".equals(dp.getName()))
                 throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
                 		"The \"System\" deployment package name is reserved");
             
