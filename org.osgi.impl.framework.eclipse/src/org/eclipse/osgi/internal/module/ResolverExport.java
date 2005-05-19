@@ -54,16 +54,17 @@ public class ResolverExport implements VersionSupplier {
 		ResolverImport ri;
 		ResolverExport re = this;
 		while (re != null && !re.getExportPackageDescription().isRoot()) {
+			ResolverExport root = null;
 			ResolverBundle reExporter = re.getExporter();
 			ri = reExporter.getImport(re.getName());
-			if (ri != null) {
-				re = ri.getMatchingExport();
-				continue;
-			}
-			// If there is no import then we need to try going thru the requires
-			ResolverExport root = getRootRequires(re, reExporter);
-			if (root != re)
-				return root;
+			if (ri != null)
+				root = ri.getMatchingExport();
+			else
+				// If there is no import then we need to try going thru the requires
+				root = getRootRequires(re, reExporter);
+			if (root == null || root == re || root == this)
+				return null;
+			re = root;
 		}
 		return re;
 	}
