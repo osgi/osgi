@@ -13,81 +13,92 @@ package org.osgi.service.monitor;
 import java.util.Date;
 
 /**
- * A StatusVariable object represents the value of a status variable taken with
- * a certain collection method at a certain point of time. The type of the
- * StatusVariable can be long, double, boolean or string.
+ * A <code>StatusVariable</code> object represents the value of a status
+ * variable taken with a certain collection method at a certain point of time.
+ * The type of the <code>StatusVariable</code> can be <code>long</code>,
+ * <code>double</code>, <code>boolean</code> or <code>String</code>.
+ * <p>
+ * A <code>StatusVariable</code> is identified by an ID string that is unique
+ * within the scope of a <code>Monitorable</code>. The ID must be a non-
+ * <code>null</code>, non-empty string that does not contain the Reserved
+ * characters described in 2.2 of RFC-2396 (URI Generic Syntax). As the ID is
+ * used as a node name in the DMT, the restrictions on node names must also be
+ * observed.
  */
 public final class StatusVariable {
     //----- Public constants -----//
     /**
-     * StatusVariable type identifying long data.
+     * Constant for identifying <code>long</code> data type.
      */
     public static final int    TYPE_LONG   = 0;
 
     /**
-     * StatusVariable type identifying double data.
+     * Constant for identifying <code>double</code> data type.
      */
     public static final int    TYPE_DOUBLE = 1;
 
     /**
-     * StatusVariable type identifying string data.
+     * Constant for identifying <code>string</code> data type.
      */
     public static final int    TYPE_STRING = 2;
-    
+
     /**
-     * StatusVariable type identifying string data.
+     * Constant for identifying <code>boolean</code> data type.
      */
    public static final int    TYPE_BOOLEAN = 3;
-    
+
     /**
-     * Collection method type identifying 'Cumulative Counter' data collection. 
+     * Constant for identifying 'Cumulative Counter' data collection method. 
      */
     public static final int    CM_CC        = 0;
 
     /**
-	 * Collection method type identifying 'Discrete Event Registration' data
-	 * collection.
-	 */
+     * Constant for identifying 'Discrete Event Registration' data collection
+     * method.
+     */
     public static final int    CM_DER       = 1;
-    
+
     /**
-     * Collection method type identifying 'Gauge' data collection. 
+     * Constant for identifying 'Gauge' data collection method. 
      */
     public static final int    CM_GAUGE     = 2;
-    
+
     /**
-	 * Collection method type identifying 'Status Inspection' data collection.
-	 */
+     * Constant for identifying 'Status Inspection' data collection method.
+     */
     public static final int    CM_SI        = 3;
-    
+
     //----- Private constants -----//
-    
+
     private static final String URI_CHARACTERS =
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789" +
         "-_.!~*'()";   // ";:@&=+$," not allowed by Monitoring RFC 
-        
+
     //----- Private fields -----//
     private String  id;
     private Date    timeStamp;
     private int     cm;
     private int     type;
-    
-    private long     longData;
-    private double   doubleData;
+
+    private long    longData;
+    private double  doubleData;
     private String  stringData;
     private boolean booleanData;
-    
+
     //----- Constructors -----//
     /**
-     * Constructor for a StatusVariable of long type.
+     * Constructor for a <code>StatusVariable</code> of <code>long</code>
+     * type.
      * 
-     * @param id The identifier of the StatusVariable
-     * @param cm Collection method, should be one of the CM_ constants
-     * @param data The long value of the StatusVariable
-     * @throws IllegalArgumentException if the id parameter is empty or contains
-     *         invalid characters, or if <code>cm</code> is not one of the
-     *         collection method constants
-     * @throws NullPointerException if the id parameter is <code>null</code>
+     * @param id the identifier of the <code>StatusVariable</code>
+     * @param cm the collection method, one of the <code>CM_</code> constants
+     * @param data the <code>long</code> value of the
+     *        <code>StatusVariable</code>
+     * @throws java.lang.IllegalArgumentException if the given <code>id</code>
+     *         is not a valid <code>StatusVariable</code> name, or if 
+     *         <code>cm</code> is not one of the collection method constants
+     * @throws java.lang.NullPointerException if the <code>id</code>
+     *         parameter is <code>null</code>
      */
     public StatusVariable(String id, int cm, long data) {
         setCommon(id, cm);
@@ -96,15 +107,18 @@ public final class StatusVariable {
     }
 
     /**
-     * Constructor for a StatusVariable of double type.
+     * Constructor for a <code>StatusVariable</code> of <code>double</code>
+     * type.
      * 
-     * @param id The identifier of the StatusVariable
-     * @param cm Collection method, should be one of the CM_ constants
-     * @param data The double value of the StatusVariable
-     * @throws IllegalArgumentException if the id parameter is empty or contains
-     *         invalid characters, or if <code>cm</code> is not one of the
-     *         collection method constants
-     * @throws NullPointerException if the id parameter is <code>null</code>
+     * @param id the identifier of the <code>StatusVariable</code>
+     * @param cm the collection method, one of the <code>CM_</code> constants
+     * @param data The <code>double</code> value of the
+     *        <code>StatusVariable</code>
+     * @throws java.lang.IllegalArgumentException if the given <code>id</code>
+     *         is not a valid <code>StatusVariable</code> name, or if 
+     *         <code>cm</code> is not one of the collection method constants
+     * @throws java.lang.NullPointerException if the <code>id</code> parameter
+     *         is <code>null</code>
      */
     public StatusVariable(String id, int cm, double data) {
         setCommon(id, cm);
@@ -113,15 +127,18 @@ public final class StatusVariable {
     }
 
     /**
-     * Constructor for a StatusVariable of boolean type.
+     * Constructor for a <code>StatusVariable</code> of <code>boolean</code>
+     * type.
      * 
-     * @param id The identifier of the StatusVariable
-     * @param cm Collection method, should be one of the CM_ constants
-     * @param data The boolean value of the StatusVariable
-     * @throws IllegalArgumentException if the id parameter is empty or contains
-     *         invalid characters, or if <code>cm</code> is not one of the
-     *         collection method constants
-     * @throws NullPointerException if the id parameter is <code>null</code>
+     * @param id the identifier of the <code>StatusVariable</code>
+     * @param cm the collection method, one of the <code>CM_</code> constants
+     * @param data the <code>boolean</code> value of the
+     *        <code>StatusVariable</code>
+     * @throws java.lang.IllegalArgumentException if the given <code>id</code>
+     *         is not a valid <code>StatusVariable</code> name, or if 
+     *         <code>cm</code> is not one of the collection method constants
+     * @throws java.lang.NullPointerException if the <code>id</code> parameter
+     *         is <code>null</code>
      */
     public StatusVariable(String id, int cm, boolean data) {
         setCommon(id, cm);
@@ -130,15 +147,18 @@ public final class StatusVariable {
     }
 
     /**
-     * Constructor for a StatusVariable of String type.
+     * Constructor for a <code>StatusVariable</code> of <code>String</code>
+     * type.
      * 
-     * @param id The identifier of the StatusVariable
-     * @param cm Collection method, should be one of the CM_ constants
-     * @param data The string value of the StatusVariable
-     * @throws IllegalArgumentException if the id parameter is empty or contains
-     *         invalid characters, or if <code>cm</code> is not one of the
-     *         collection method constants
-     * @throws NullPointerException if the id parameter is <code>null</code>
+     * @param id the identifier of the <code>StatusVariable</code>
+     * @param cm the collection method, one of the <code>CM_</code> constants
+     * @param data the <code>String</code> value of the
+     *        <code>StatusVariable</code>, can be <code>null</code>
+     * @throws java.lang.IllegalArgumentException if the given <code>id</code>
+     *         is not a valid <code>StatusVariable</code> name, or if 
+     *         <code>cm</code> is not one of the collection method constants
+     * @throws java.lang.NullPointerException if the <code>id</code> parameter
+     *         is <code>null</code>
      */
     public StatusVariable(String id, int cm, String data) {
         setCommon(id, cm);
@@ -149,43 +169,46 @@ public final class StatusVariable {
     
     // ----- Public methods -----//
     /**
-     * Returns the name of this StatusVariable. A StatusVariable name is unique
-     * within the scope of a Monitorable. A StatusVariable name must not contain
-     * the Reserved characters described in 2.2 of RFC-2396 (URI Generic
-     * Syntax).
+     * Returns the ID of this <code>StatusVariable</code>. The ID is unique 
+     * within the scope of a <code>Monitorable</code>.
      * 
-     * @return the name of this StatusVariable
+     * @return the ID of this <code>StatusVariable</code>
      */
     public String getID() {
         return id;
     }
 
     /**
-     * Returns information on the data type of this StatusVariable.
+     * Returns information on the data type of this <code>StatusVariable</code>.
      * 
-     * @return one value of the set of type constants
+     * @return one of the <code>TYPE_</code> constants indicating the type of
+     *         this <code>StatusVariable</code>
      */
     public int getType() {
         return type;
     }
 
     /**
-     * Returns the time when the StatusVariable value was queried. The
-     * StatusVariable's value is set when the getStatusVariable() or
-     * getStatusVariables() methods are called on the Monitorable object.
+     * Returns the time when the <code>StatusVariable</code> value was
+     * queried. The <code>StatusVariable</code>'s timestamp is set when the
+     * {@link Monitorable#getStatusVariable Monitorable.getStatusVariable()}
+     * method is called.
      * 
-     * @return the time when the StatusVariable value was queried
+     * @return the time when the <code>StatusVariable</code> value was
+     *         queried, cannot be <code>null</code>
+     * 
      */
     public Date getTimeStamp() {
         return timeStamp;
     }
 
     /**
-     * Returns the StatusVariable value if its type is String.
+     * Returns the <code>StatusVariable</code> value if its type is
+     * <code>String</code>.
      * 
-     * @return the StatusVariable value as a string
-     * @throws java.lang.IllegalStateException if the type of the StatusVariable
-     *         is not String
+     * @return the <code>StatusVariable</code> value as a <code>String</code>
+     * @throws java.lang.IllegalStateException if the type of the 
+     * <code>StatusVariable</code> is not <code>String</code>
      */
     public String getString() throws IllegalStateException {
         if (type != TYPE_STRING)
@@ -195,11 +218,12 @@ public final class StatusVariable {
     }
 
     /**
-     * Returns the StatusVariable value if its type is long.
+     * Returns the <code>StatusVariable</code> value if its type is
+     * <code>long</code>.
      * 
-     * @return the StatusVariable value as an long
+     * @return the <code>StatusVariable</code> value as a <code>long</code>
      * @throws java.lang.IllegalStateException if the type of this
-     *         StatusVariable is not long
+     *         <code>StatusVariable</code> is not <code>long</code>
      */
     public long getLong() throws IllegalStateException {
         if (type != TYPE_LONG)
@@ -209,11 +233,12 @@ public final class StatusVariable {
     }
 
     /**
-     * Returns the StatusVariable value if its type is double.
+     * Returns the <code>StatusVariable</code> value if its type is
+     * <code>double</code>.
      * 
-     * @return the StatusVariable value as a double
+     * @return the <code>StatusVariable</code> value as a <code>double</code>
      * @throws java.lang.IllegalStateException if the type of this
-     *         StatusVariable is not double
+     *         <code>StatusVariable</code> is not <code>double</code>
      */
     public double getDouble() throws IllegalStateException {
         if (type != TYPE_DOUBLE)
@@ -223,11 +248,12 @@ public final class StatusVariable {
     }
 
     /**
-     * Returns the StatusVariable value if its type is boolean.
+     * Returns the <code>StatusVariable</code> value if its type is
+     * <code>boolean</code>.
      * 
-     * @return the StatusVariable value as a boolean
+     * @return the <code>StatusVariable</code> value as a <code>boolean</code>
      * @throws java.lang.IllegalStateException if the type of this
-     *         StatusVariable is not double
+     *         <code>StatusVariable</code> is not <code>boolean</code>
      */
     public boolean getBoolean() throws IllegalStateException {
         if (type != TYPE_BOOLEAN)
@@ -237,8 +263,8 @@ public final class StatusVariable {
     }
     
     /**
-     * Returns the collection method of this StatusVariable. See section 3.3 b)
-     * in [ETSI TS 132 403]
+     * Returns the collection method of this <code>StatusVariable</code>. See
+     * section 3.3 b) in [ETSI TS 132 403]
      * 
      * @return one of the <code>CM_</code> constants
      */
@@ -247,14 +273,14 @@ public final class StatusVariable {
     }
 
     /**
-     * Compares the specified object with this StatusVariable. Two
-     * StatusVariable objects are considered equal if their full path,
-     * collection method and type are identical, and the data (selected by their
-     * type) is equal.
+     * Compares the specified object with this <code>StatusVariable</code>.
+     * Two <code>StatusVariable</code> objects are considered equal if their
+     * full path, collection method and type are identical, and the data
+     * (selected by their type) is equal.
      * 
-     * @param obj the object to compare with this StatusVariable
+     * @param obj the object to compare with this <code>StatusVariable</code>
      * @return <code>true</code> if the argument represents the same
-     *         StatusVariable as this object
+     *         <code>StatusVariable</code> as this object
      */
     public boolean equals(Object obj) {
         if (!(obj instanceof StatusVariable))
@@ -276,9 +302,11 @@ public final class StatusVariable {
     }
 
     /**
-     * Returns the hash code value for this StatusVariable. The hash code is
-     * calculated based on the full path, collection method and value of the
-     * StatusVariable.
+     * Returns the hash code value for this <code>StatusVariable</code>. The
+     * hash code is calculated based on the full path, collection method and
+     * value of the <code>StatusVariable</code>.
+     * 
+     * @return the hash code of this object
      */
     public int hashCode() {
         int hash = hashCode(id) ^ cm;
@@ -295,13 +323,14 @@ public final class StatusVariable {
 
     //  String representation: StatusVariable(path, cm, time, type, value)
     /**
-     * Returns a string representation of this StatusVariable. The returned
-     * string contains the full path, the collection method, the exact time of
-     * creation, the type and the value of the StatusVariable in the following
-     * format:
-     * <code>StatusVariable(&lt;path&gt;, &lt;cm&gt;, &lt;timestamp&gt;, &lt;type&gt;, &lt;value&gt;)</code>
+     * Returns a <code>String</code> representation of this
+     * <code>StatusVariable</code>. The returned <code>String</code>
+     * contains the full path, collection method, timestamp, type and value 
+     * parameters of the <code>StatusVariable</code> in the following format:
+     * <pre>StatusVariable(&lt;path&gt;, &lt;cm&gt;, &lt;timestamp&gt;, &lt;type&gt;, &lt;value&gt;)</pre>
      * 
-     * @return the string representation of this StatusVariable
+     * @return the <code>String</code> representation of this
+     *         <code>StatusVariable</code>
      */
     public String toString() {
         String cmName = null;

@@ -15,70 +15,82 @@ import java.util.StringTokenizer;
 
 /**
  * Indicates the callers authority to publish, discover, read or reset
- * StatusVariables, to switch event sending on or off or to start monitoring
- * jobs. The target of the permission is the identifier of the StatusVariable,
- * the action can be <code>read</code>, <code>publish</code>,
- * <code>reset</code>, <code>startjob</code>, <code>switchevents</code>,
- * <code>discover</code>, or the combination of these separated by commas.
+ * <code>StatusVariable</code>s, to switch event sending on or off or to
+ * start monitoring jobs. The target of the permission is the identifier of the
+ * <code>StatusVariable</code>, the action can be <code>read</code>,
+ * <code>publish</code>, <code>reset</code>, <code>startjob</code>,
+ * <code>switchevents</code>, <code>discover</code>, or the combination of
+ * these separated by commas.
  */
 public class MonitorPermission extends Permission {
     // TODO add static final serialVersionUID
 
     /**
-     * Holders of MonitorPermission with the read action present are allowed to
-     * read the value of the StatusVariables specified in the permission's
-     * target field.
+     * Holders of <code>MonitorPermission</code> with the <code>read</code>
+     * action present are allowed to read the value of the
+     * <code>StatusVariable</code>s specified in the permission's target field.
      */
     public static final String READ = "read";
 
     /**
-     * Holders of MonitorPermission with the reset action present are allowed to
-     * reset the value of the StatusVariables specified in the permission's
-     * target field.
+     * Holders of <code>MonitorPermission</code> with the <code>reset</code>
+     * action present are allowed to reset the value of the
+     * <code>StatusVariable</code>s specified in the permission's target field.
      */
     public static final String RESET = "reset";
 
     /**
-     * Holders of MonitorPermission with the publish action present are
-     * Monitorable services that are allowed to publish the StatusVariables
-     * specified in the permission's target field.
+     * Holders of <code>MonitorPermission</code> with the <code>publish</code>
+     * action present are <code>Monitorable</code> services that are allowed
+     * to publish the <code>StatusVariable</code>s specified in the
+     * permission's target field.  Note, that this permission cannot be enforced 
+     * when a <code>Monitorable</code> registers to the framework, because the
+     * Service Registry does not know about this permission.  Instead, any
+     * <code>StatusVariable</code>s published by a <code>Monitorable</code>
+     * without the corresponding <code>publish</code> permission are silently
+     * ignored by <code>MonitorAdmin</code>, and are therefore invisible to the
+     * users of the monitoring service.   
      */
     public static final String PUBLISH = "publish";
 
     /**
-     * Holders of MonitorPermission with the startjob action present are allowed
-     * to initiate monitoring jobs involving the StatusVariables specified in
-     * the permission's target field.
+     * Holders of <code>MonitorPermission</code> with the <code>startjob</code>
+     * action present are allowed to initiate monitoring jobs involving the 
+     * <code>StatusVariable</code>s specified in the permission's target field.
      * <p>
      * A minimal sampling interval can be optionally defined in the following
-     * form: <code>startjob:n</code>. Here <code>n</code> is the allowed
-     * minimal value of the schedule parameter of time based monitoring jobs the
-     * holder of this permission is allowed to initiate. If <code>n</code> is
-     * not specified or 0 then the holder of this permission is allowed to start
-     * monitoring jobs specifying any frequency.
+     * form: <code>startjob:n</code>.  This allows the holder of the permission
+     * to initiate time based jobs with a measurement interval of at least
+     * <code>n</code> seconds. If <code>n</code> is not specified or 0 then the 
+     * holder of this permission is allowed to start monitoring jobs specifying 
+     * any frequency.
      */
     public static final String STARTJOB = "startjob";
 
     /**
-     * Holders of MonitorPermission with the discover action present are allowed
-     * to list the currently registered Monitorable services and the
-     * StatusVariables a Monitorable publishes. Discover rights are implied by
-     * read rights.
+     * Holders of <code>MonitorPermission</code> with the
+     * <code>discover</code> action present are allowed to list the currently
+     * registered <code>Monitorable</code> services, and the
+     * <code>StatusVariable</code>s a <code>Monitorable</code> publishes.
+     * Discover rights are implied by read rights, if the target field is also 
+     * valid for the <code>discover</code> action.
      * <p>
-     * To list all registered Monitorables and all their StatusVariables the
-     * permission's target field must be <code>&#42;/*</code>. To allow
-     * listing the StatusVariables of only a specific Monitorable, the target
-     * field must be <code>[M_PID]/*</code> where <code>M_PID</code> matches
-     * the PID of the Monitorable service. In the latter case <code>M_PID</code>
-     * can end with <code>*</code>, to allow listing the StatusVariables of
-     * all matching Monitorables.
+     * To list all registered <code>Monitorable</code>s and all their
+     * <code>StatusVariable</code>s the permission's target field must be
+     * <code>&#42;/*</code>. To allow listing the <code>StatusVariable</code>s
+     * of only a specific <code>Monitorable</code>, the target field must be of
+     * the form <code>[Monitorable_ID]/*</code>. In the latter case 
+     * <code>[Monitorable_ID]</code> may end with <code>*</code> to allow
+     * listing the <code>StatusVariable</code>s of all matching 
+     * <code>Monitorable</code> services.
      */
     public static final String DISCOVER = "discover";
 
     /**
-     * Holders of MonitorPermission with the switchevents action present are
-     * allowed to switch event sending on or off for the value of the
-     * StatusVariables specified in the permission's target field.
+     * Holders of <code>MonitorPermission</code> with the
+     * <code>switchevents</code> action present are allowed to switch event
+     * sending on or off for the value of the <code>StatusVariable</code>s
+     * specified in the permission's target field.
      */
     public static final String SWITCHEVENTS = "switchevents";
 
@@ -97,38 +109,45 @@ public class MonitorPermission extends Permission {
     private int minJobInterval;
 
     /**
-     * Create a MonitorPermission object, specifying the target and actions.
+     * Create a <code>MonitorPermission</code> object, specifying the target
+     * and actions.
+     * <p>
+     * The meaning of the <code>statusVariable</code> parameter is slightly
+     * different depending on the <code>action</code> field, see the 
+     * descriptions of the individual actions.  In general, the wildcard 
+     * <code>*</code> is allowed in both fragments of the target string, but 
+     * only at the end of the fragments. It is not allowed to use a wildcard in 
+     * the first fragment while not using it in the second fragment.
+     * <p>
+     * The following targets are valid:
+     * <code>com.mycomp.myapp/queue_length</code>,
+     * <code>com.mycomp.&#42;/queue*</code>, <code>com.mycomp.myapp/*</code>,
+     * <code>&#42;/*</code>.
+     * <p>
+     * The following targets are invalid:
+     * <code>*.myapp/queue_length</code>, <code>com.*.myapp/*</code>,
+     * <code>*</code>, <code>&#42;/queue_length</code>.
+     * <p>
+     * The <code>actions</code> parameter specifies the allowed action(s): 
+     * <code>read</code>, <code>publish</code>, <code>startjob</code>,
+     * <code>reset</code>, <code>switchevents</code>, <code>discover</code>, or 
+     * the combination of these separated by commas. 
      * 
-     * @param statusVariable
-     *            The identifier of the StatusVariable in
-     *            [Monitorable_id]/[StatusVariable_id] format. The semantics of
-     *            this field is slightly different depending on the action
-     *            field. See the description of the action fields.
-     *            <p>
-     *            The wildcard <code>*</code> is allowed in both fragments of
-     *            the target string, but only at the end of the fragments. It is
-     *            not allowed to use a wildcard in the first fragment while not
-     *            using it in the second fragment.
-     *            <p>
-     *            The following targets are valid:
-     *            <code>com.mycomp.myapp/queue_length</code>,
-     *            <code>com.mycomp.&#42;/queue*</code>,
-     *            <code>com.mycomp.myapp/*</code>,<code>&#42;/*</code>.
-     *            <p>
-     *            The following targets are invalid:
-     *            <code>*.myapp/queue_length</code>,
-     *            <code>com.*.myapp/*</code>,<code>*</code>,
-     *            <code>&#42;/queue_length</code>.
-     * @param actions
-     *            The allowed action(s): <code>read</code>,
-     *            <code>publish</code>,<code>startjob</code>,
-     *            <code>reset</code>,<code>switchevents</code>,
-     *            <code>discover</code> or the combination of these separated
-     *            by commas.
+     * @param statusVariable the identifier of the <code>StatusVariable</code>
+     *        in [Monitorable_id]/[StatusVariable_id] format 
+     * @param actions the list of allowed actions separated by commas
+     * @throws java.lang.IllegalArgumentException if either parameter is 
+     *         <code>null</code>, or invalid with regard to the constraints
+     *         defined above and in the documentation of the used actions 
      */
-    public MonitorPermission(String statusVariable, String actions) {
+    public MonitorPermission(String statusVariable, String actions) 
+            throws IllegalArgumentException {
         super(statusVariable);
 
+        if(statusVariable == null)
+            throw new IllegalArgumentException(
+                    "Invalid StatusVariable path 'null'.");
+        
         int sep = statusVariable.indexOf('/');
         int len = statusVariable.length();
 
@@ -212,7 +231,8 @@ public class MonitorPermission extends Permission {
 
     /**
      * Create an integer hash of the object. The hash codes of
-     * MonitorPermissions p1 and p2 are the same if <code>p1.equals(p2)</code>
+     * <code>MonitorPermission</code>s <code>p1</code> and <code>p2</code> are 
+     * the same if <code>p1.equals(p2)</code>.
      * 
      * @return the hash of the object
      */
@@ -230,8 +250,7 @@ public class MonitorPermission extends Permission {
      * strings are equal and the same set of actions are listed in their action
      * strings.
      * 
-     * @param o
-     *            the object being compared for equality with this object
+     * @param o the object being compared for equality with this object
      * @return <code>true</code> if the two permissions are equal
      */
     public boolean equals(Object o) {
@@ -248,9 +267,10 @@ public class MonitorPermission extends Permission {
     }
 
     /**
-     * Get the action string associated with this permission
+     * Get the action string associated with this permission.
      * 
-     * @return the allowed actions separated by commas
+     * @return the allowed actions separated by commas, cannot be
+     *         <code>null</code>
      */
     public String getActions() {
         StringBuffer sb = new StringBuffer();
@@ -276,20 +296,22 @@ public class MonitorPermission extends Permission {
     /**
      * Determines if the specified permission is implied by this permission.
      * <p>
-     * This method returns <code>false</code> iff any of the following
-     * conditions are fulfilled for the specified permission:
-     * <li>it is not a MonitorPermission
+     * This method returns <code>false</code> if and only if at least one of the
+     * following conditions are fulfilled for the specified permission:
+     * <li>it is not a <code>MonitorPermission</code>
      * <li>it has a broader set of actions allowed than this one
      * <li>it allows initiating time based monitoring jobs with a lower minimal
      * sampling interval
-     * <li>the target set of Monitorables is not the same nor a subset of the
-     * target set of Monitorables of this permission
-     * <li>the target set of StatusVariables is not the same nor a subset of
-     * the target set of StatusVariables of this permission
+     * <li>the target set of <code>Monitorable</code>s is not the same nor a
+     * subset of the target set of <code>Monitorable</code>s of this permission
+     * <li>the target set of <code>StatusVariable</code>s is not the same
+     * nor a subset of the target set of <code>StatusVariable</code>s of this
+     * permission
      * <p>
-     * When comparing the permitted action sets, the presence of the read action
-     * implies the discover action, if the target string is valid for the
-     * discover action as well.
+     * When comparing the permitted action sets, the presence of the
+     * <code>read</code> action implies the <code>discover</code> action, if
+     * the target string is valid for the <code>discover</code> action as
+     * well.
      * 
      * @param p the permission to be checked
      * @return <code>true</code> if the given permission is implied by this

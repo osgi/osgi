@@ -11,20 +11,23 @@
 package org.osgi.service.monitor;
 
 /**
- * The MonitorListener is used by Monitorable services to send notifications
- * when a StatusVariable value is changed. The MonitorListener should register
- * itself as a service at the OSGi Service Registry. This interface is
- * implemented by the Monitor Admin component.
+ * The <code>MonitorListener</code> is used by <code>Monitorable</code>
+ * services to send notifications when a <code>StatusVariable</code> value is
+ * changed. The <code>MonitorListener</code> should register itself as a
+ * service at the OSGi Service Registry. This interface is implemented by the
+ * Monitor Admin component.
  */
 public interface MonitorListener {
     /**
-     * Callback for notification of a StatusVariable change.
+     * Callback for notification of a <code>StatusVariable</code> change.
      * 
-     * @param monitorableId the identifier of the Monitorable instance reporting
-     *        the change
-     * @param statusVariable the StatusVariable that has changed
-     * @throws IllegalArgumentException if the specified monitorable ID is
-     *         invalid (null, empty, or contains illegal characters)
+     * @param monitorableId the identifier of the <code>Monitorable</code>
+     *        instance reporting the change
+     * @param statusVariable the <code>StatusVariable</code> that has changed
+     * @throws java.lang.IllegalArgumentException if the specified
+     *         monitorable ID is invalid (<code>null</code>, empty, or
+     *         contains illegal characters)
      */
-    public void updated(String monitorableId, StatusVariable statusVariable);
+    public void updated(String monitorableId, StatusVariable statusVariable)
+            throws IllegalArgumentException;
 }
