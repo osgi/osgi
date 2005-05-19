@@ -19,6 +19,9 @@ package org.osgi.impl.bundle.autoconf;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -70,7 +73,24 @@ public class Autoconf implements ResourceProcessor {
 		this.session = session;
 	}
 
-	public void process(String name, InputStream stream) throws DeploymentException {
+	public void process(final String name, final InputStream stream) throws DeploymentException {
+		// just a wrapper call around the real one
+		try {
+			AccessController.doPrivileged(new PrivilegedExceptionAction() {
+				public java.lang.Object run() throws Exception {
+					processPrivileged(name,stream);
+					return null;
+				}});
+		}
+		catch (PrivilegedActionException e) {
+			Exception orig = e.getException();
+			if (orig instanceof DeploymentException) throw (DeploymentException)orig;
+			throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"",e);
+		}
+		
+	}
+	
+	private void processPrivileged(final String name, final InputStream stream) throws DeploymentException {
 		InputSource is = new InputSource(stream);
 		is.setPublicId(name);
 		MetaData m;
