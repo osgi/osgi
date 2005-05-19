@@ -35,9 +35,9 @@ public class DAConstants {
     public static final String CUSTOMIZER           = "DeploymentPackage-Customizer";
 
     // used system properties 
-    public static final String FW_BUNDLES_DIR	    = "com.nokia.osgi.da.fwbundledir";
-    public static final String KEYSTORE     	    = "com.nokia.osgi.da.keystore.path";
-    public static final String KEYSTORE_PWD    	    = "com.nokia.osgi.da.keystore.pwd";
+    public static final String FW_BUNDLES_DIR	    = "org.osgi.impl.service.deploymentadmin.fwbundledir";
+    public static final String KEYSTORE     	    = "org.osgi.impl.service.deploymentadmin.keystore.path";
+    public static final String KEYSTORE_PWD    	    = "org.osgi.impl.service.deploymentadmin.keystore.pwd";
     
     // event related constants
     public static final String TOPIC_INSTALL		= "org/osgi/service/deployment/INSTALL";
