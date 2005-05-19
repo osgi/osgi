@@ -101,6 +101,7 @@ public class Parser {
 			InputStream is = url.openStream();
 			SAXParserFactory parserFactory = (SAXParserFactory) parserTracker.getService();
 			parserFactory.setNamespaceAware(true);
+			parserFactory.setValidating(false);
 			SAXParser saxParser = parserFactory.newSAXParser();
 			saxParser.parse(is, new ParserHandler(main, bundle, result));
 		} catch (Exception e) {
