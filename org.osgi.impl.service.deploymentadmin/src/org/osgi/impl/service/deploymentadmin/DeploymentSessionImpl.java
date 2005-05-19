@@ -198,17 +198,16 @@ public class DeploymentSessionImpl implements DeploymentSession {
         pa.setPermissions(location, (PermissionInfo[]) oldPerms.get(location));
     }
 
-    // ### Can be removed?
-//    int getDeploymentAction() {
-//        Version verZero = new Version(0, 0, 0);
-//        Version verSrc = srcDp.getVersion();
-//        Version verTarget = targetDp.getVersion();
-//        if (!verZero.equals(verSrc) && !verZero.equals(verTarget))
-//            return UPDATE;
-//        if (verZero.equals(verTarget))
-//            return INSTALL;
-//        return UNINSTALL;
-//    }
+    int getDeploymentAction() {
+        Version verZero = new Version(0, 0, 0);
+        Version verSrc = srcDp.getVersion();
+        Version verTarget = targetDp.getVersion();
+        if (!verZero.equals(verSrc) && !verZero.equals(verTarget))
+            return UPDATE;
+        if (verZero.equals(verTarget))
+            return INSTALL;
+        return UNINSTALL;
+    }
 
     /**
      * @return
