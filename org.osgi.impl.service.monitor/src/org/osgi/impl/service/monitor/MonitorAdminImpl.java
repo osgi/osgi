@@ -428,7 +428,7 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
             });
 
         if(monitorableRefs == null)
-            return null;
+            return new String[] {};
         
         Vector monitorableNames = new Vector();
         for(int i = 0; i < monitorableRefs.length; i++) {
@@ -445,7 +445,7 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
         
         int size = monitorableNames.size();
         if(size == 0)
-            return null;
+            return new String[] {};
         
         String[] names = (String[]) monitorableNames.toArray(new String[size]);
         Arrays.sort(names);
