@@ -57,6 +57,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private DeploymentSessionImpl session;
     private KeyStore              keystore;
     private TrackerEvent          trackEvent;
+    private String                fwBundleDir;
     
     /*
      * Class to track the event admin
@@ -82,10 +83,15 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         logger = new Logger(context);
         
         initKeyStore();
+        fwBundleDir = System.getProperty(DAConstants.FW_BUNDLES_DIR);
+        if (null == fwBundleDir)
+            logger.log(Logger.LOG_WARNING, "The \"" + DAConstants.FW_BUNDLES_DIR + "\" system " +
+            		"property is missing.");
 	}
 	
     private void initKeyStore() throws Exception {
-        String ks = (String) context.getBundle().getHeaders().get(DAConstants.KEYSTORE);
+        //String ks = (String) context.getBundle().getHeaders().get(DAConstants.KEYSTORE);
+        String ks = System.getProperty(DAConstants.KEYSTORE);
         if (null == ks) {
             logger.log(Logger.LOG_WARNING, "Keystore location is not defined. Check the " + 
                     DAConstants.KEYSTORE + " manifest header.");
@@ -94,7 +100,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         File file = new File(ks);
         if (!file.exists())
             throw new RuntimeException("Keystore is not found: " + file);
-        String pwd = (String) context.getBundle().getHeaders().get(DAConstants.KEYSTORE_PWD);
+        //String pwd = (String) context.getBundle().getHeaders().get(DAConstants.KEYSTORE_PWD);
+        String pwd = System.getProperty(DAConstants.KEYSTORE_PWD);
         if (null == pwd)
             throw new RuntimeException("There is no password set in the manifest");
         keystore = KeyStore.getInstance("JKS");
@@ -210,13 +217,13 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             // creates an empty dp
             targetDp = new DeploymentPackageImpl();
 	        return new DeploymentSessionImpl(new DeploymentPackageImpl(srcDp), 
-	                targetDp, logger, context);
+	                targetDp, logger, context, fwBundleDir);
         }
         // found -> update
         else {
             DeploymentSessionImpl ret = new DeploymentSessionImpl(
                     new DeploymentPackageImpl(srcDp), new DeploymentPackageImpl(targetDp), 
-                    logger, context);
+                    logger, context, fwBundleDir);
             if (srcDp.fixPack()) {
                 VersionRange range = srcDp.getFixPackRange();
                 Version ver = targetDp.getVersion();
@@ -241,7 +248,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         if (null == dp)
             throw new RuntimeException("Internal error");
         
-        return new DeploymentSessionImpl(srcDp, new DeploymentPackageImpl(targetDp), logger, context);
+        return new DeploymentSessionImpl(srcDp, new DeploymentPackageImpl(targetDp), logger,
+                context, fwBundleDir);
 	}
 
     private DeploymentPackageImpl findDp(DeploymentPackageImpl srcDp) {

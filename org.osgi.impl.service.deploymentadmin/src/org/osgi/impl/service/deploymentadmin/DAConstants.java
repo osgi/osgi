@@ -34,10 +34,10 @@ public class DAConstants {
     public static final String RP_PID               = "Resource-Processor";
     public static final String CUSTOMIZER           = "DeploymentPackage-Customizer";
 
-    // private headers of the DA bundle 
-    public static final String FW_BUNDLES_DIR	    = "Framework-Bundles-Dir";
-    public static final String KEYSTORE     	    = "Keystore";
-    public static final String KEYSTORE_PWD    	    = "Keystore-Password";
+    // used system properties 
+    public static final String FW_BUNDLES_DIR	    = "com.nokia.osgi.da.fwbundledir";
+    public static final String KEYSTORE     	    = "com.nokia.osgi.da.keystore.path";
+    public static final String KEYSTORE_PWD    	    = "com.nokia.osgi.da.keystore.pwd";
     
     // event related constants
     public static final String TOPIC_INSTALL		= "org/osgi/service/deployment/INSTALL";

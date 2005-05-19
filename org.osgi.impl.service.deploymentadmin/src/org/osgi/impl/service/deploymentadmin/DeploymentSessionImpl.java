@@ -81,7 +81,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     private TrackerCondPerm             trackCondPerm;
     
     // getDataFile uses this. 
-    private String 						fwBundleDir;
+    private String 				        fwBundleDir;
     
     /*
      * Class to track resource processors
@@ -116,7 +116,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
     DeploymentSessionImpl(DeploymentPackageImpl srcDp, 
                           DeploymentPackageImpl targetDp, 
                           Logger logger, 
-                          final BundleContext context) 
+                          final BundleContext context,
+                          String fwbd) 
     {
         this.srcDp = srcDp;
         this.targetDp = targetDp;
@@ -125,11 +126,11 @@ public class DeploymentSessionImpl implements DeploymentSession {
         trackRp = new TrackerRp();
         trackPerm = new TrackerPerm();
         trackCondPerm = new TrackerCondPerm();
+        this.fwBundleDir = null == fwbd ? "" : fwbd;
         
         AccessController.doPrivileged(new PrivilegedAction() {
             public Object run() {
-                StringBuffer sb = new StringBuffer((String) context.getBundle().
-                        getHeaders().get(DAConstants.FW_BUNDLES_DIR));
+                StringBuffer sb = new StringBuffer(fwBundleDir);
                 char sc = (sb.toString().indexOf("/") != -1 ? '/' : '\\');
                 int i = sb.toString().indexOf(sc);
                 while (-1 != i) {
@@ -139,8 +140,6 @@ public class DeploymentSessionImpl implements DeploymentSession {
                 fwBundleDir = sb.toString();
                 return null;
             }});
-        
-        logger.log(Logger.LOG_INFO, "Framework's bundles dir: " + fwBundleDir);
     }
 
     private Hashtable setFilePermissionForCustomizers() {
