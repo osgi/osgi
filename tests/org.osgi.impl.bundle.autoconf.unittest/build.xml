@@ -23,9 +23,7 @@
 		<delete dir="${project}/src/unittests/metadata" verbose="$verbose" quiet="true"/>
 	</target>
 
-	<target name="deploymentpackages">
-		<signjar jar="integrationtests.managedservice1.jar" alias="sarahbar" 
-			keystore="../org.osgi.impl.service.policy.unittest/integration_test/keystore" storepass="123456"/>
+	<target name="deploymentpackages" depends="integrationtests.managedservice1.jar">
 		<jar destfile="integrationtests.dp1.jar">
 			<manifest>
 				<attribute name="DeploymentPackage-Name" value="integrationtests.dp1"/>
@@ -47,6 +45,24 @@
 			keystore="../org.osgi.impl.service.policy.unittest/integration_test/keystore" storepass="123456"/>
 	</target>
 
+	<target name="integrationtests.managedservice1.jar">
+		<jar destfile="integrationtests.managedservice1.jar">
+			<manifest>
+				<attribute name="Service-Component" value="OSGI-INF/managedservice1.xml"/>
+				<attribute name="Bundle-Name" value="IntegrationTestManagedService1"/>
+				<attribute name="Private-Package" value="OSGI-INF, OSGI-INF.metatype, integrationtests.managedservice1"/>
+				<attribute name="Import-Package" value="integrationtests.api, org.osgi.service.cm, org.osgi.service.component"/>
+				<attribute name="Bundle-Vendor" value="Nokia"/>
+				<attribute name="Bundle-SymbolicName" value="integrationtests.managedservice1"/>
+				<attribute name="Bundle-Version" value="1.0"/>
+			</manifest>
+			<fileset dir="src" includes="integrationtests/managedservice1/**"/>
+			<fileset dir="configs/integrationtests.managedservice1"/>
+		</jar>
+		<signjar jar="integrationtests.managedservice1.jar" alias="sarahbar" 
+			keystore="../org.osgi.impl.service.policy.unittest/integration_test/keystore" storepass="123456"/>
+	</target>
+	
 	<target name="jars" depends="master.jars,deploymentpackages"/>
 
 </project>
