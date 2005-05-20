@@ -46,7 +46,6 @@ public final class MegletHandleImpl implements MegletHandle.Delegate {
 	private ServiceReference			appDescRef;
 	private ServiceRegistration		serviceReg;
 	private File									suspendedFileName	= null;
-	private Map										resumeArgs				= null;
 	private String      					pid;
 	private MegletHandle 					megletHandle;
 	private MegletDescriptorImpl	megletDelegate;
@@ -64,7 +63,7 @@ public final class MegletHandleImpl implements MegletHandle.Delegate {
 	 */
 	public String getState() {
 		if( status == null )
-			throw new RuntimeException( "Invalid state!" );
+			throw new IllegalStateException();
 		return status;
 	}	
 
@@ -74,13 +73,8 @@ public final class MegletHandleImpl implements MegletHandle.Delegate {
 		AccessController.checkPermission(new ApplicationAdminPermission(pid, 
 				                             ApplicationAdminPermission.LIFECYCLE));
 
-		if (args == null)
-			resumeArgs = null;
-		else
-			resumeArgs = new Hashtable(args);
-
 		if (status != null )
-			throw new Exception("Invalid State");
+			throw new IllegalStateException();
 
 		if (meglet != null) {
 			startApplication( meglet, args, null);
@@ -100,7 +94,7 @@ public final class MegletHandleImpl implements MegletHandle.Delegate {
 	 */
 	public void destroySpecific() throws Exception {
 		if ( status == null )
-			throw new Exception("Invalid State");
+			throw new IllegalStateException();
 		if ( meglet != null ) {
 			stopApplication( meglet, null);
 			meglet = null;
@@ -128,7 +122,7 @@ public final class MegletHandleImpl implements MegletHandle.Delegate {
 				ApplicationAdminPermission.LIFECYCLE));
 
 		if (status != ApplicationHandle.RUNNING)
-			throw new Exception("Invalid State");
+			throw new IllegalStateException();
 		if (meglet != null) {
 			synchronized (counter) {
 				counter = new Long(counter.longValue() + 1);
@@ -170,12 +164,12 @@ public final class MegletHandleImpl implements MegletHandle.Delegate {
 				ApplicationAdminPermission.LIFECYCLE));
 
 		if (status != MegletHandle.SUSPENDED)
-			throw new Exception("Invalid State");
+			throw new IllegalStateException();
 
 		meglet = megletContainer.createMegletInstance( megletDelegate, true);
 
 		InputStream is = new FileInputStream(suspendedFileName);
-		startApplication( meglet, resumeArgs, is);
+		startApplication( meglet, null, is);
 		is.close();
 
 		setStatus(ApplicationHandle.RUNNING);
