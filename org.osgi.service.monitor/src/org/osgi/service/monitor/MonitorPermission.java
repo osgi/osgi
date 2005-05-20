@@ -116,17 +116,18 @@ public class MonitorPermission extends Permission {
      * different depending on the <code>action</code> field, see the 
      * descriptions of the individual actions.  In general, the wildcard 
      * <code>*</code> is allowed in both fragments of the target string, but 
-     * only at the end of the fragments. It is not allowed to use a wildcard in 
-     * the first fragment while not using it in the second fragment.
+     * only at the end of the fragments. It is not allowed to specify a Status
+     * Variable name (or prefix) if the Monitorable ID ended with a wildcard.
      * <p>
      * The following targets are valid:
      * <code>com.mycomp.myapp/queue_length</code>,
-     * <code>com.mycomp.&#42;/queue*</code>, <code>com.mycomp.myapp/*</code>,
+     * <code>com.mycomp.myapp/*</code>, <code>com.mycomp.&#42;/*</code>,
      * <code>&#42;/*</code>.
      * <p>
      * The following targets are invalid:
      * <code>*.myapp/queue_length</code>, <code>com.*.myapp/*</code>,
-     * <code>*</code>, <code>&#42;/queue_length</code>.
+     * <code>*</code>, <code>&#42;/queue_length</code>, 
+     * <code>&#42;/queue*</code>.
      * <p>
      * The <code>actions</code> parameter specifies the allowed action(s): 
      * <code>read</code>, <code>publish</code>, <code>startjob</code>,

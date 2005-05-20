@@ -165,11 +165,12 @@ public interface MonitorAdmin {
      * is ON by default.
      * <p>
      * Usage of the "*" wildcard is allowed in the path argument of this method
-     * as a convenience feature. The semantics of the wildcard is that it stands
-     * for any matching <code>StatusVariable</code> at the time of the method
-     * call, it does not effect the event sending status of
-     * <code>StatusVariable</code>s which are not yet registered. As an
-     * example, when the <code>switchEvents("MyMonitorable/*", false)</code>
+     * as a convenience feature. The wildcard can be used in either or both path
+     * fragments, but only at the end of the fragments.  The semantics of the 
+     * wildcard is that it stands for any matching <code>StatusVariable</code> 
+     * at the time of the method call, it does not effect the event sending 
+     * status of <code>StatusVariable</code>s which are not yet registered. As 
+     * an example, when the <code>switchEvents("MyMonitorable/*", false)</code>
      * method is executed, event sending from all <code>StatusVariables</code>
      * of the MyMonitorable service are switched off. However, if the
      * MyMonitorable service starts to publish a new <code>StatusVariable</code>
