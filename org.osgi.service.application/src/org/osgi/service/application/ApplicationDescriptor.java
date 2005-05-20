@@ -319,6 +319,7 @@ public abstract class ApplicationDescriptor {
 	 */
 	public final void lock() {
 		delegate.lock();
+		lockSpecific();
 	}
 	
 	/**
@@ -339,6 +340,7 @@ public abstract class ApplicationDescriptor {
 	 */
 	public final void unlock() {
 		delegate.unlock();
+		unlockSpecific();
 	}
 	
 	/**
