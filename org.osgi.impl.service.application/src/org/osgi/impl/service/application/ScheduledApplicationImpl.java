@@ -36,6 +36,7 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 	private String							topic;
 	private String  						eventFilter;
 	private boolean							recurring;
+	private boolean             invalid;
 
 	private ServiceRegistration	serviceReg;
 
@@ -51,6 +52,8 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 		this.topic = topic;
 		this.eventFilter = eventFilter;
 		this.recurring = recurring;
+		
+		invalid = false;
 	}
 
 	void validate(Scheduler scheduler, BundleContext bc)
@@ -64,24 +67,30 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 	}
 
 	public Map getArguments() {
+		checkValidity();		
 		if( args == null )
 			return null;
 		return new Hashtable( args );
 	}
 
 	public String getTopic() {
+		checkValidity();		
 		return topic;
 	}
 
 	public String getEventFilter() {
+		checkValidity();		
 		return eventFilter;
 	}
 
 	public boolean isRecurring() {
+		checkValidity();		
 		return recurring;
 	}
 
 	public ApplicationDescriptor getApplicationDescriptor() {
+		checkValidity();
+		
 		try {
 			ServiceReference refs[] = bc.getServiceReferences( 
 					"org.osgi.service.application.ApplicationDescriptor",
@@ -98,16 +107,18 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 	void register() {
 		serviceReg = bc.registerService( "org.osgi.service.application.ScheduledApplication", 
 				this, null );
-
 	}
 	
 	void unregister() {
 		if( serviceReg != null )
 		  serviceReg.unregister();
 		serviceReg = null;
+		invalid = true;
 	}
 	
 	public void remove() {
+		checkValidity();
+		
 		try {
 			scheduler.removeScheduledApplication( this );
 		}
@@ -134,6 +145,11 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 		eventFilter = (String) in.readObject();
 		Boolean recurring = (Boolean) in.readObject();		
 		this.recurring = recurring.booleanValue();
+	}
+	
+	private void checkValidity() {
+		if( invalid )
+			throw new IllegalStateException();
 	}
 	
 	ServiceReference getReference() {
