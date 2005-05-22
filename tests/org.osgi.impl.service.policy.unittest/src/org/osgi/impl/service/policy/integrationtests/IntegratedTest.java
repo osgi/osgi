@@ -52,7 +52,6 @@ public abstract class IntegratedTest extends TestCase {
 	public static final String	ORG_OSGI_IMPL_SERVICE_DMT_JAR	= "file:../../org.osgi.impl.service.dmt/org.osgi.impl.service.dmt.jar";
 	public static final String	ORG_OSGI_IMPL_SERVICE_LOG_JAR	= "file:../../org.osgi.impl.service.log/org.osgi.impl.service.log.jar";
 	public static final String	ORG_OSGI_IMPL_SERVICE_CM_JAR	= "file:../../org.osgi.impl.service.cm/org.osgi.impl.service.cm.jar";
-	public static final String	ORG_OSGI_IMPL_SERVICE_EVENT_MAPPER_JAR	= "file:../../org.osgi.impl.service.event/org.osgi.impl.service.event.mapper.jar";
 	public static final String	ORG_OSGI_IMPL_SERVICE_EVENT_JAR	= "file:../../org.osgi.impl.service.event/org.osgi.impl.service.event.jar";
 	public static final String	ORG_OSGI_IMPL_SERVICE_COMPONENT_JAR = "file:../../org.osgi.impl.service.component/org.osgi.impl.service.component.jar";
 	public static final String	INTEGRATIONTESTS_BUNDLE1_JAR = "file:../../org.osgi.impl.service.policy.unittest/integrationtests.bundle1.jar";
@@ -64,7 +63,6 @@ public abstract class IntegratedTest extends TestCase {
 	public Bundle	osgiAPIsBundle;
 	public Bundle	jaxp;
 	public Bundle	eventBundle;
-	public Bundle	eventMapperBundle;
 	public Bundle	configManagerBundle;
 	public Bundle	logBundle;
 	public Bundle	dmtBundle;
@@ -141,7 +139,6 @@ public abstract class IntegratedTest extends TestCase {
 			
 			setBundleAsAdministrator(ORG_OSGI_IMPL_BUNDLE_JAXP_JAR);
 			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_EVENT_JAR);
-			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_EVENT_MAPPER_JAR);
 			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_CM_JAR);
 			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_LOG_JAR);
 			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_DMT_JAR);
@@ -150,7 +147,6 @@ public abstract class IntegratedTest extends TestCase {
 
 		jaxp = systemBundleContext.installBundle(ORG_OSGI_IMPL_BUNDLE_JAXP_JAR);
 		eventBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_EVENT_JAR);
-		eventMapperBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_EVENT_MAPPER_JAR);
 		configManagerBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_CM_JAR);
 		logBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_LOG_JAR);
 		dmtBundle = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_DMT_JAR);
@@ -160,7 +156,6 @@ public abstract class IntegratedTest extends TestCase {
 
 		jaxp.start();
 		eventBundle.start();
-		eventMapperBundle.start();
 		configManagerBundle.start();
 		logBundle.start();
 		dmtBundle.start();
@@ -175,7 +170,7 @@ public abstract class IntegratedTest extends TestCase {
 	}
 
 	public void stopFramework() throws Exception {
-		serviceComponent.stop();
+		if (serviceComponent!=null) serviceComponent.stop();
 		if (framework!=null && framework.isActive()) framework.shutdown();
 		framework = null;
 		System.setSecurityManager(null);
@@ -185,7 +180,6 @@ public abstract class IntegratedTest extends TestCase {
 		systemBundleContext = null;
 		osgiAPIsBundle = null;
 		eventBundle = null;
-		eventMapperBundle = null;
 		configManagerBundle = null;
 		logBundle = null;
 		dmtBundle = null;
