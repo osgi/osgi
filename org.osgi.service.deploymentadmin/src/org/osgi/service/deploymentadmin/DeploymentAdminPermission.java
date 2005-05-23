@@ -1,17 +1,36 @@
 /*
  * $Header$
  * 
- * Copyright (c) The OSGi Alliance (2005). All Rights Reserved.
+ * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
- * This program and the accompanying materials are made available under the
- * terms of the Eclipse Public License v1.0 which accompanies this 
- * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
+ * Implementation of certain elements of the OSGi Specification may be subject
+ * to third party intellectual property rights, including without limitation,
+ * patent rights (such a third party may or may not be a member of the OSGi
+ * Alliance). The OSGi Alliance is not responsible and shall not be held
+ * responsible in any manner for identifying or failing to identify any or all
+ * such third party intellectual property rights.
+ * 
+ * This document and the information contained herein are provided on an "AS IS"
+ * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
+ * HEREIN WILL NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE
+ * OSGI ALLIANCE BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF
+ * USE OF DATA, INTERRUPTION OF BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR
+ * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
+ * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
+ * 
+ * All Company, brand and product names may be trademarks that are the sole
+ * property of their respective owners. All rights reserved.
  */
 
 package org.osgi.service.deploymentadmin;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -96,9 +115,13 @@ public class DeploymentAdminPermission extends Permission {
         ACTIONS.add(ACTION_CANCEL.toLowerCase());
     }
     
-    private String namePart;
-    private String signerPart;
-    private Vector actionsVector;
+    // used system properties
+    private static final String KEYSTORE_PATH = "org.osgi.service.deploymentadmin.keystore.path";
+    private static final String KEYSTORE_PWD  = "org.osgi.service.deploymentadmin.keystore.pwd";
+    
+    private           String actions;
+    private transient Vector actionsVector;
+    private transient Filter filter;
     
     /**
      * Creates a new <code>DeploymentAdminPermission</code> object for the given name (containing the name
@@ -111,17 +134,17 @@ public class DeploymentAdminPermission extends Permission {
      *         contains unknown operations
      */
     public DeploymentAdminPermission(String name, String actions) {
+        // TODO canonicalize "name"
         super(name);
-        namePart = namePart(name);
-        signerPart = signerPart(name);
-        actionsVector = actionsVector(actions);
+        String s = getName();
+        this.actions = actions;
         check();
     }
 
     /**
      * Checks two DeploymentAdminPermission objects for equality. 
      * Two permission objects are equal if: <p>
-     * - their "signer" and "name" parts of the name (target deployment package) 
+     * - their target filters 
      * are equal and<p>
      * - their actions are the same. 
      * @param obj The reference object with which to compare.
@@ -134,9 +157,12 @@ public class DeploymentAdminPermission extends Permission {
         if (!(obj instanceof DeploymentAdminPermission))
             return false;
         DeploymentAdminPermission other = (DeploymentAdminPermission) obj;
-        return namePart.equals(namePart(other.getName())) &&
-        	   signerPart.equals(signerPart(other.getName())) &&
-        	   actionsVector.equals(actionsVector(other.getActions()));
+        
+        Vector avThis = getActionVector();
+        Vector avOther = other.getActionVector();
+        boolean eqActions = (avThis.containsAll(avOther) &&
+                avOther.containsAll(avThis));
+        return getFilter().equals(other.getFilter()) && eqActions;
     }
 
     /**
@@ -145,7 +171,8 @@ public class DeploymentAdminPermission extends Permission {
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
-        return (namePart + signerPart + actionsVector).hashCode();
+        // TODO
+        return getActionVector().hashCode();
     }
 
     /**
@@ -155,12 +182,7 @@ public class DeploymentAdminPermission extends Permission {
      * @see java.security.Permission#getActions()
      */
     public String getActions() {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < actionsVector.size(); i++) {
-            String action = (String) actionsVector.get(i);
-            sb.append(action + (i == actionsVector.size() -1 ? "" : ", "));
-        }
-        return sb.toString();
+        return actions;
     }
 
     /**
@@ -176,10 +198,7 @@ public class DeploymentAdminPermission extends Permission {
         if (!(permission instanceof DeploymentAdminPermission))
             return false;
         DeploymentAdminPermission other = (DeploymentAdminPermission) permission;
-        
-        return impliesPackagePart(namePart, namePart(other.getName())) &&
-               impliessignerPart(signerPart, signerPart(other.getName())) &&
-               actionsVector.containsAll(actionsVector(other.getActions()));
+        return getFilter().match(other);
     }
 
     /**
@@ -189,7 +208,6 @@ public class DeploymentAdminPermission extends Permission {
      * @see java.security.Permission#newPermissionCollection()
      */
     public PermissionCollection newPermissionCollection() {
-        // TODO
         return null;
     }
     
@@ -201,65 +219,441 @@ public class DeploymentAdminPermission extends Permission {
      * @return string representation of the permission
      */
     public String toString() {
-        // TODO see its JavaDoc
-        return "name: \"" + namePart(getName()) + "\" signer: \"" +
-        		signerPart(getName()) + "\"";
-    }
-    
-    private String namePart(String name) {
-        if (0 == name.length())
-            return "";
-        int i = name.indexOf("name:");
-        if (-1 == i)
-            return "";
-        String s = name.substring("name:".length()).trim();
-        i = s.indexOf("signer:");
-        if (-1 == i)
-            return s.trim();
-        else
-            return s.substring(0, i).trim();
+        return "(" + getClass().getName() + " " + getName() + " " + actions + ")"; 
     }
 
-    private String signerPart(String name) {
-        int i = name.indexOf("signer:");
-        if (-1 == i)
-            return "";
-        return name.substring(i + "signer:".length()).trim();
-    }
-
-    private static Vector actionsVector(DeploymentAdminPermission perm) {
-        return actionsVector(perm.getActions());
-    }
-
-    private static Vector actionsVector(String actions) {
-        Vector v = new Vector();
+    private Vector getActionVector() {
+        if (null != actionsVector)
+            return actionsVector;
+        
+        actionsVector = new Vector();
         StringTokenizer t = new StringTokenizer(actions.toUpperCase(), ",");
         while (t.hasMoreTokens()) {
             String action = t.nextToken().trim();
-            v.add(action.toLowerCase());
+            actionsVector.add(action.toLowerCase());
         }
-        return v;
+        return actionsVector;
+    }
+
+    private Filter getFilter() {
+        if (null != filter)
+            return filter;
+        return filter = new Filter(getName());
     }
 
     private void check() {
-        if (!ACTIONS.containsAll(actionsVector))
+        if (!ACTIONS.containsAll(getActionVector()))
             throw new IllegalArgumentException("Illegal action");
     }
 
-    private boolean impliesPackagePart(String p1, String p2) {
-        if (p1.equals(p2))
-            return true;
-        if ("*".equals(p1))
-            return true;
-        return false;
+    static class Filter {
+        
+        static class Node {
+            private static final int ROOT  = 0;
+            private static final int LEAVE = 1; 
+            private static final int AND   = 2;
+            private static final int OR    = 3;
+            private static final int NOT   = 4;
+            
+            private int      op;
+            private Vector   args = new Vector();
+            private String[] leave;
+            
+            void setLeave (String attr, String value) {
+                leave = new String[] {attr, value};
+            }
+            
+            void setOp(int op) {
+                this.op = op;    
+            }
+            
+            void add(Node child) {
+                args.add(child);
+            }
+            
+            boolean match(Hashtable ht) {
+                switch (op) {
+                case ROOT: {
+                    return ((Node) args.get(0)).match(ht);
+                }
+                case LEAVE: {
+                    String attr = leave[0];
+                    String value = leave[1];
+                    if ("name".equals(attr))
+                        return doMatchName(value, (String) ht.get(attr));
+                    else if ("signer".equals(attr))
+                        return doMatchSignerChain(value, (String) ht.get(attr));
+                    else 
+                        return false;
+                }
+                case AND: {
+                    boolean ret = true;
+                    for (Iterator iter = args.iterator(); iter.hasNext();) {
+                        Node node = (Node) iter.next();
+                        ret = ret && node.match(ht);
+                    }
+                    return ret;
+                }
+                case OR: {
+                    boolean ret = false;
+                    for (Iterator iter = args.iterator(); iter.hasNext();) {
+                        Node node = (Node) iter.next();
+                        ret = ret || node.match(ht);
+                    }
+                    return ret;
+                }
+                case NOT: {
+                    return !((Node) args.get(0)).match(ht);
+                }
+                default:
+                    return false;
+                }
+            }
+            
+            private boolean doMatchSignerChain(String value1, String value2) {
+                return new SignerChainPattern(value1).match(value2);
+            }
+
+            private boolean doMatchName(String value1, String value2) {
+                return Matcher.match(value1, value2);
+            }
+
+        }
+
+        private Node      rootNode;
+        private Hashtable attrs = new Hashtable();
+
+        private char[]    filter;
+        private int       index;
+        
+        public boolean equals(Object o) {
+            if (null == o)
+                return false;
+            if (!(o instanceof Filter))
+                return false;
+            Filter other = (Filter) o;
+            
+            // TODO
+            return new String(filter).equals(new String(other.filter));
+        }
+        
+        public int hashCode() {
+            // TODO
+            return new String(filter).hashCode();
+        }
+        
+        Filter(String filter) {
+            this.filter = filter.toCharArray();
+            rootNode = new Node();
+            rootNode.setOp(Node.ROOT);
+            parse_filter(rootNode);
+        }
+        
+        boolean match(DeploymentAdminPermission perm) {
+            Filter f = new Filter(perm.getName());
+            return rootNode.match(f.attrs);
+        }
+        
+        private void parse_filter(Node node) {
+            accept('(');
+            Node newNode = new Node();    
+            parse_filter_comp(newNode);
+            accept(')');
+            node.add(newNode);
+        }
+
+        private void parse_filter_comp(Node node) {
+            switch (filter[index]) {
+                case '&' :
+                    accept('&');
+                    node.setOp(Node.AND);
+                    parse_filter_list(node);
+                    break;
+                case '|' :
+                    // TODO not allowed in case of concrete permissions
+                    accept('|');
+                    node.setOp(Node.OR);
+                    parse_filter_list(node);
+                    break;
+                case '!' :
+                    // TODO not allowed in case of concrete permissions
+                    accept('!');
+                    node.setOp(Node.NOT);
+                    parse_filter(node);
+                    break;
+                default :
+                    node.setOp(Node.LEAVE);
+                    parse_operation(node);
+                    break;
+            }
+        }
+
+        private void parse_operation(Node node) {
+            String f = new String(filter);
+            int indEq = f.indexOf("=", index);
+            if (-1 == indEq)
+                throwException();
+            String attr = f.substring(index, indEq);
+            int indPar = f.indexOf(")", indEq);
+            if (-1 == indEq)
+                throwException();
+            String value = f.substring(indEq + 1, indPar);
+            if (!"name".equals(attr) && !"signer".equals(attr))
+                throwException();
+            node.setLeave(attr, value);
+            
+            // it is used in case of concrete permissions 
+            // and not in case of wildcarded ones
+            attrs.put(attr, value);
+            
+            index = indPar;
+        }
+
+        private boolean isSimple() {
+            int i = index;
+            while (i < filter.length) {
+                if ('=' == filter[i]) {
+                    if (i < filter.length - 1) {
+                        return '*' != filter[i + 1];
+                    } else 
+                        return true;
+                }
+                ++i;
+            }
+            return false;
+        }
+
+        private void parse_filter_list(Node node) {
+            parse_filter(node);
+            if ('(' == filter[index])
+                parse_filter_list(node);
+        }
+
+        private boolean end() {
+            return index >= filter.length;
+        }
+        
+        private void accept(char ch) {
+            if (ch != filter[index])
+                throw new IllegalArgumentException();
+            ++index;
+        }
+        
+        private void throwException() {
+            throw new IllegalArgumentException("Error at position " + index + " in " +
+            		"\"" + new String(filter) + "\"");
+        }
     }
-    
-    private boolean impliessignerPart(String s1, String s2) {
-        if (s1.equals(s2))
-            return true;
-        if ("*".equals(s1))
-            return true;
-        return false;
+
+    static class SignerChainPattern {
+        private SignerPattern[] patterns;
+            
+        SignerChainPattern(String filter) {
+            String[] sa = Splitter.split(filter, ';', 0);
+            patterns = new SignerPattern[sa.length];
+            for (int i = 0; i < sa.length; i++)
+                patterns[i] = new SignerPattern(sa[i]);
+        }
+
+       public boolean match(String signerChain) {
+           String[] chain;
+           if (null == signerChain)
+               chain = new String[] {};
+           else
+               chain = Splitter.split(signerChain, ';', 0);
+           int i = patterns.length - 1;
+           int j = chain.length - 1;
+           boolean ok = false;
+           for (; i >= 0 && j >= 0;) {
+               if (patterns[i].isMinus())
+                   return true;
+               if (!patterns[i].match(chain[i]))
+                   return false;
+               --i; --j;
+           }
+           return true;
+       }
+        
+        static class SignerPattern {
+            private Hashtable table      = new Hashtable();
+            private boolean   exactMatch = true;
+            private boolean   trusted;
+            private boolean   minus;
+            
+            SignerPattern(String pattern) {
+                String p = pattern;
+                if ("-".equals(p.trim())) {
+                    minus = true;
+                    return;
+                }
+                if (pattern.startsWith("<") && pattern.endsWith(">")) {
+                    p = p.substring(1, p.length() - 1);
+                    trusted = true;
+                }
+                table = createTable(p);
+            }
+            
+            boolean isTrusted() {
+                return trusted;
+            }
+            
+            boolean isMinus() {
+                return minus;
+            }
+            
+            private Hashtable createTable(String str) {
+                Hashtable ht = new Hashtable();
+                String[] pairs = Splitter.split(str, ',', 0);
+                for (int i = 0; i < pairs.length; i++) {
+                    pairs[i] = pairs[i].trim();
+                    if ("*".equals(pairs[i])) {
+                        exactMatch = false;
+                    } else {
+                        int ioe = pairs[i].indexOf("=");
+                        String key = pairs[i].substring(0, ioe);
+                        String value = pairs[i].substring(ioe + 1);
+                        ht.put(key, value);
+                    }
+                }
+                return ht;
+            }
+            
+            public boolean match(String signer) {
+                Hashtable ht = createTable(signer);
+                for (Iterator iter = table.keySet().iterator(); iter.hasNext();) {
+                    String key = (String) iter.next();
+                    String v1 = (String) table.get(key);
+                    String v2 = (String) ht.get(key);
+                    if (null == v2)
+                        return false;
+                    ht.remove(key);
+                    if ("*".equals(v1))
+                        continue;
+                    if (!v1.equals(v2)) 
+                        return false;
+                }
+                if (exactMatch && ht.keySet().size() > 0)
+                    return false;
+                if (trusted) 
+                    ; // TODO check: signer in the keystore
+                return true;
+            }
+        }
+
+    }
+
+    static class Splitter {
+        public static String[] split(String input, char sep, int limit) {
+            Vector v = new Vector();
+            boolean limited = (limit > 0);
+            int applied = 0;
+            int index = 0;
+            StringBuffer part = new StringBuffer();
+            while (index < input.length()) {
+                char ch = input.charAt(index);
+                if (ch != sep)
+                    part.append(ch);
+                else {
+                    ++applied;
+                    v.add(part.toString());
+                    part = new StringBuffer();
+                }
+                ++index;
+                if (limited && applied == limit - 1)
+                    break;
+            }
+            while (index < input.length()) {
+                char ch = input.charAt(index);
+                part.append(ch);
+                ++index;
+            }
+            v.add(part.toString());
+            int last = v.size();
+            if (0 == limit) {
+                for (int j = v.size() - 1; j >= 0; --j) {
+                    String s = (String) v.elementAt(j);
+                    if ("".equals(s))
+                        --last;
+                    else
+                        break;
+                }
+            }
+            String[] ret = new String[last];
+            for (int i = 0; i < last; ++i)
+                ret[i] = (String) v.elementAt(i);
+            return ret;
+        }
+    }
+
+    static class Matcher {
+        public static boolean match(String pattern, String str) {
+            StringBuffer p = new StringBuffer(pattern);
+            StringBuffer s = new StringBuffer(str);
+            
+            while (p.length() > 0) {
+                char pch = p.charAt(0);
+                
+                if (pch == '*') {
+                    closeupAsterixs(p);
+                    String aa = afterAsterix(p); 
+                    int pos = find(aa, s);
+                    if (pos < 0)
+                        return false;
+                    // delete '*'
+                    p.deleteCharAt(0);
+                    // and replace it with the begining of s
+                    if (!"".equals(aa))
+                        p.insert(0, s.substring(0, pos));
+                    else
+                        p.insert(0, s);
+                    continue;
+                }
+                char sch = s.charAt(0);
+                if (pch == sch || pch == '?') {
+                    p.deleteCharAt(0);
+                    s.deleteCharAt(0);
+                    continue;   
+                }
+                
+                return false;
+            }
+            
+            return s.length() <= 0;
+        }
+
+        private static void closeupAsterixs(StringBuffer p) {
+            while (p.length() > 1 && '*' == p.charAt(1))
+                p.deleteCharAt(1);
+        }
+
+        private static String afterAsterix(StringBuffer ap) {
+            StringBuffer p = new StringBuffer(ap.toString());
+            p.deleteCharAt(0);
+            StringBuffer ret = new StringBuffer();
+            while (p.length() > 0 && p.charAt(0) != '*') {
+                ret.append(p.charAt(0));
+                p.deleteCharAt(0);
+            }   
+            return ret.toString();
+        }
+
+        private static int find(String afterAsterix, StringBuffer s) {
+            for (int i = 0; i < s.length() - afterAsterix.length() + 1; ++i) {
+                boolean error = false;
+                for (int j = 0; j < afterAsterix.length(); ++j) {
+                    if (s.charAt(i + j) != afterAsterix.charAt(j)) {
+                        if (afterAsterix.charAt(j) != '?') {
+                            error = true;
+                            break;
+                        }
+                    }
+                }
+                if (!error) 
+                    return i;
+            }
+            
+            return -1;
+        }
     }
     
 }
