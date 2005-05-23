@@ -146,8 +146,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                     e.getMessage(), e);
         }
         
-        // TODO
-        checkPermission("name: "  + srcDp.getName(), 
+        // TODO signer
+        checkPermission("(name="  + srcDp.getName() + ")", 
                 DeploymentAdminPermission.ACTION_INSTALL);
         
         sendInstallEvent(srcDp.getName());

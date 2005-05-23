@@ -56,7 +56,7 @@ public class DoIt implements BundleActivator {
         ref = context.getServiceReference(DeploymentAdmin.class.getName());
         String daLoc = ref.getBundle().getLocation();
         pa.setPermissions(daLoc, new PermissionInfo[] {
-                new PermissionInfo(DeploymentAdminPermission.class.getName(), "name:* signer:*", 
+                new PermissionInfo(DeploymentAdminPermission.class.getName(), "(&(name=*)(signer=-))", 
                         "install, uninstall, uninstallForceful, list, cancel"),
                 new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", 
                         "read, write, execute, delete"),
@@ -97,12 +97,8 @@ public class DoIt implements BundleActivator {
                 // to load files that are passed to the Deployment Admin
                 new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "read"),
                 // to install deployment packages 
-                new PermissionInfo(DeploymentAdminPermission.class.getName(), "name:* signer:*", 
+                new PermissionInfo(DeploymentAdminPermission.class.getName(), "(&(name=*)(signer=-))", 
                         "install"),
-                //new PermissionInfo(DeploymentAdminPermission.class.getName(), "name:db_test_01", "installDeploymentPackage"),
-                //new PermissionInfo(DeploymentAdminPermission.class.getName(), "name:db_test_02", "installDeploymentPackage"),
-                //new PermissionInfo(DeploymentAdminPermission.class.getName(), "name:db_test_03", "installDeploymentPackage"),
-                
                 // to be able to set permissions during next run
                 // and because "In addition to DeploymentAdminPermission, the caller 
                 // of Deployment Admin must in addition hold the appropriate AdminPermissions."
@@ -115,6 +111,9 @@ public class DoIt implements BundleActivator {
     }
 
     public void start(BundleContext context) throws Exception {
+        System.out.println(
+                new FilePermission("c:/temp", "read, write")
+        );
         this.context = context;
         setPermissions();
         
