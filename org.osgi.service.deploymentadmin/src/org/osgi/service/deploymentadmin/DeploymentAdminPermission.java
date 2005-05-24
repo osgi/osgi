@@ -434,8 +434,12 @@ public class DeploymentAdminPermission extends Permission {
         SignerChainPattern(String filter) {
             String[] sa = Splitter.split(filter, ';', 0);
             patterns = new SignerPattern[sa.length];
-            for (int i = 0; i < sa.length; i++)
+            for (int i = 0; i < sa.length; i++) {
+                // TODO syntax error ?
+                if (i > 0 && "-".equals(sa[i].trim()))
+                    continue;
                 patterns[i] = new SignerPattern(sa[i]);
+            }
         }
 
        public boolean match(String signerChain) {
@@ -495,7 +499,7 @@ public class DeploymentAdminPermission extends Permission {
                         int ioe = pairs[i].indexOf("=");
                         String key = pairs[i].substring(0, ioe);
                         String value = pairs[i].substring(ioe + 1);
-                        ht.put(key, value);
+                        ht.put(key.toUpperCase(), value);
                     }
                 }
                 return ht;
@@ -515,7 +519,7 @@ public class DeploymentAdminPermission extends Permission {
                     if (!v1.equals(v2)) 
                         return false;
                 }
-                if (exactMatch && ht.keySet().size() > 0)
+                if (exactMatch && !ht.keySet().isEmpty())
                     return false;
                 if (trusted) 
                     ; // TODO check: signer in the keystore
