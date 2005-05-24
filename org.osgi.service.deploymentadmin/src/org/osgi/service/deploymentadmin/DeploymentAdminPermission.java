@@ -450,7 +450,7 @@ public class DeploymentAdminPermission extends Permission {
            for (; i >= 0 && j >= 0;) {
                if (patterns[i].isMinus())
                    return true;
-               if (!patterns[i].match(chain[i]))
+               if (!patterns[i].match(chain[j]))
                    return false;
                --i; --j;
            }
