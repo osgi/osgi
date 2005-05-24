@@ -104,7 +104,7 @@ public class DeploymentAdminPermission extends Permission {
     
     private           String actions;
     private transient Vector actionsVector;
-    private transient Filter filter;
+    private transient Representation rep;
     
     /**
      * Creates a new <code>DeploymentAdminPermission</code> object for the given name (containing the name
@@ -119,8 +119,8 @@ public class DeploymentAdminPermission extends Permission {
     public DeploymentAdminPermission(String name, String actions) {
         // TODO canonicalize "name"
         super(name);
-        String s = getName();
         this.actions = actions;
+        rep = new Representation(getName());
         check();
     }
 
@@ -218,10 +218,8 @@ public class DeploymentAdminPermission extends Permission {
         return actionsVector;
     }
 
-    private Filter getFilter() {
-        if (null != filter)
-            return filter;
-        return filter = new Filter(getName());
+    private Representation getFilter() {
+        return rep; 
     }
 
     private void check() {
@@ -229,25 +227,39 @@ public class DeploymentAdminPermission extends Permission {
             throw new IllegalArgumentException("Illegal action");
     }
 
-    static class Filter {
+    static class Representation {
         
         static class Node {
+            // TODO eliminate ROOT level (not nice)
             private static final int ROOT  = 0;
-            private static final int LEAVE = 1; 
+            private static final int LEAF  = 1; 
             private static final int AND   = 2;
             private static final int OR    = 3;
             private static final int NOT   = 4;
             
-            private int      op;
-            private Vector   args = new Vector();
-            private String[] leave;
+            // only in interior nodes
+            private int                op;
+            private Vector             args = new Vector();
             
-            void setLeave (String attr, String value) {
-                leave = new String[] {attr, value};
+            // only in leaf nodes
+            private SignerChainPattern chainPattern;
+            private NamePattern        namePattern;
+            private String[]           leafValue;
+            
+            void setLeaf (String attr, String value) {
+                leafValue = new String[] {attr, value};
             }
             
             void setOp(int op) {
                 this.op = op;    
+            }
+            
+            void setSignerChainPattern(String str) {
+                chainPattern = new SignerChainPattern(str);    
+            }
+            
+            void setNamePattern(String str) {
+                namePattern = new NamePattern(str);    
             }
             
             void add(Node child) {
@@ -256,55 +268,53 @@ public class DeploymentAdminPermission extends Permission {
             
             boolean match(Hashtable ht) {
                 switch (op) {
-                case ROOT: {
-                    return ((Node) args.get(0)).match(ht);
-                }
-                case LEAVE: {
-                    String attr = leave[0];
-                    String value = leave[1];
-                    if ("name".equals(attr))
-                        return doMatchName(value, (String) ht.get(attr));
-                    else if ("signer".equals(attr))
-                        return doMatchSignerChain(value, (String) ht.get(attr));
-                    else 
-                        return false;
-                }
-                case AND: {
-                    boolean ret = true;
-                    for (Iterator iter = args.iterator(); iter.hasNext();) {
-                        Node node = (Node) iter.next();
-                        ret = ret && node.match(ht);
-                    }
-                    return ret;
-                }
-                case OR: {
-                    boolean ret = false;
-                    for (Iterator iter = args.iterator(); iter.hasNext();) {
-                        Node node = (Node) iter.next();
-                        ret = ret || node.match(ht);
-                    }
-                    return ret;
-                }
-                case NOT: {
-                    return !((Node) args.get(0)).match(ht);
-                }
-                default:
-                    return false;
+	                case ROOT: {
+	                    return ((Node) args.get(0)).match(ht);
+	                }
+	                case LEAF: {
+	                    String attr = leafValue[0];
+	                    String value = leafValue[1];
+	                    if ("name".equals(attr)) {
+	                        boolean b = namePattern.match((String) ht.get(attr));
+if (!b) System.out.println(">>>***>>> namePattern 1:" + namePattern.pattern + "< 2:" + (String) ht.get(attr) + "<"); 
+	                        return b;
+	                        //return namePattern.match((String) ht.get(attr));
+	                        }
+	                    else if ("signer".equals(attr)) { 
+	                        boolean b = chainPattern.match((String) ht.get(attr));
+if (!b) System.out.println(">>>***>>> chainPattern");	                        
+	                        return b;
+	                    	}
+	                    else 
+	                        return false;
+	                }
+	                case AND: {
+	                    boolean ret = true;
+	                    for (Iterator iter = args.iterator(); iter.hasNext();) {
+	                        Node node = (Node) iter.next();
+	                        ret = ret && node.match(ht);
+	                    }
+	                    return ret;
+	                }
+	                case OR: {
+	                    boolean ret = false;
+	                    for (Iterator iter = args.iterator(); iter.hasNext();) {
+	                        Node node = (Node) iter.next();
+	                        ret = ret || node.match(ht);
+	                    }
+	                    return ret;
+	                }
+	                case NOT: {
+	                    return !((Node) args.get(0)).match(ht);
+	                }
+	                default:
+	                    return false;
                 }
             }
-            
-            private boolean doMatchSignerChain(String value1, String value2) {
-                return new SignerChainPattern(value1).match(value2);
-            }
-
-            private boolean doMatchName(String value1, String value2) {
-                return Matcher.match(value1, value2);
-            }
-
         }
 
         private Node      rootNode;
-        private Hashtable attrs = new Hashtable();
+        private Hashtable attrTable = new Hashtable();
 
         private char[]    filter;
         private int       index;
@@ -312,9 +322,9 @@ public class DeploymentAdminPermission extends Permission {
         public boolean equals(Object o) {
             if (null == o)
                 return false;
-            if (!(o instanceof Filter))
+            if (!(o instanceof Representation))
                 return false;
-            Filter other = (Filter) o;
+            Representation other = (Representation) o;
             
             // TODO
             return new String(filter).equals(new String(other.filter));
@@ -325,7 +335,7 @@ public class DeploymentAdminPermission extends Permission {
             return new String(filter).hashCode();
         }
         
-        Filter(String filter) {
+        Representation(String filter) {
             this.filter = filter.toCharArray();
             rootNode = new Node();
             rootNode.setOp(Node.ROOT);
@@ -333,8 +343,8 @@ public class DeploymentAdminPermission extends Permission {
         }
         
         boolean match(DeploymentAdminPermission perm) {
-            Filter f = new Filter(perm.getName());
-            return rootNode.match(f.attrs);
+            Representation f = new Representation(perm.getName());
+            return rootNode.match(f.attrTable);
         }
         
         private void parse_filter(Node node) {
@@ -365,7 +375,7 @@ public class DeploymentAdminPermission extends Permission {
                     parse_filter(node);
                     break;
                 default :
-                    node.setOp(Node.LEAVE);
+                    node.setOp(Node.LEAF);
                     parse_operation(node);
                     break;
             }
@@ -381,13 +391,17 @@ public class DeploymentAdminPermission extends Permission {
             if (-1 == indEq)
                 throwException();
             String value = f.substring(indEq + 1, indPar);
-            if (!"name".equals(attr) && !"signer".equals(attr))
+            if ("name".equals(attr))
+                node.setNamePattern(value);
+            else if ("signer".equals(attr))
+                node.setSignerChainPattern(value);
+            else
                 throwException();
-            node.setLeave(attr, value);
+            node.setLeaf(attr, value);
             
             // it is used in case of concrete permissions 
             // and not in case of wildcarded ones
-            attrs.put(attr, value);
+            attrTable.put(attr, value);
             
             index = indPar;
         }
@@ -431,13 +445,13 @@ public class DeploymentAdminPermission extends Permission {
     static class SignerChainPattern {
         private SignerPattern[] patterns;
             
-        SignerChainPattern(String filter) {
-            String[] sa = Splitter.split(filter, ';', 0);
+        SignerChainPattern(String str) {
+            String[] sa = Splitter.split(str, ';', 0);
             patterns = new SignerPattern[sa.length];
             for (int i = 0; i < sa.length; i++) {
-                // TODO syntax error ?
-                if (i > 0 && "-".equals(sa[i].trim()))
-                    continue;
+                if (i > 0 && i < sa.length - 1 && "-".equals(sa[i].trim()))
+                    throw new IllegalArgumentException("'-' is not allowed in the middle of the " +
+                    		"chain");
                 patterns[i] = new SignerPattern(sa[i]);
             }
         }
@@ -572,41 +586,48 @@ public class DeploymentAdminPermission extends Permission {
         }
     }
 
-    static class Matcher {
-        public static boolean match(String pattern, String str) {
-            StringBuffer p = new StringBuffer(pattern);
-            StringBuffer s = new StringBuffer(str);
-            
-            while (p.length() > 0) {
-                char pch = p.charAt(0);
-                
-                if (pch == '*') {
-                    closeupAsterixs(p);
-                    String aa = afterAsterix(p); 
-                    int pos = find(aa, s);
-                    if (pos < 0)
-                        return false;
-                    // delete '*'
-                    p.deleteCharAt(0);
-                    // and replace it with the begining of s
-                    if (!"".equals(aa))
-                        p.insert(0, s.substring(0, pos));
-                    else
-                        p.insert(0, s);
-                    continue;
-                }
-                char sch = s.charAt(0);
-                if (pch == sch || pch == '?') {
-                    p.deleteCharAt(0);
-                    s.deleteCharAt(0);
-                    continue;   
-                }
-                
-                return false;
-            }
-            
-            return s.length() <= 0;
+    static class NamePattern {
+        
+        private String pattern;
+        
+        NamePattern(String str) {
+            pattern = str;
         }
+        
+        public boolean match(String str) {
+    		StringBuffer p = new StringBuffer(pattern);
+    		StringBuffer s = new StringBuffer(str);
+    		
+    		while (p.length() > 0) {
+    			char pch = p.charAt(0);
+    			
+    			if (pch == '*') {
+    				closeupAsterixs(p);
+    				String aa = afterAsterix(p); 
+    				int pos = find(aa, s);
+    				if (pos < 0)
+    					return false;
+    				// delete '*'
+    				p.deleteCharAt(0);
+    				// and replace it with the begining of s
+    				if (!"".equals(aa))
+    					p.insert(0, s.substring(0, pos));
+    				else
+    					p.insert(0, s);
+    				continue;
+    			}
+    			char sch = s.charAt(0);
+    			if (pch == sch || pch == '?') {
+    				p.deleteCharAt(0);
+    				s.deleteCharAt(0);
+    				continue;	
+    			}
+    			
+    			return false;
+    		}
+    		
+    		return s.length() <= 0;
+    	}
 
         private static void closeupAsterixs(StringBuffer p) {
             while (p.length() > 1 && '*' == p.charAt(1))

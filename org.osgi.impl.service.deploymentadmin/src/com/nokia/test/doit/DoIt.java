@@ -56,7 +56,8 @@ public class DoIt implements BundleActivator {
         ref = context.getServiceReference(DeploymentAdmin.class.getName());
         String daLoc = ref.getBundle().getLocation();
         pa.setPermissions(daLoc, new PermissionInfo[] {
-                new PermissionInfo(DeploymentAdminPermission.class.getName(), "(&(name=*)(signer=-))", 
+                new PermissionInfo(DeploymentAdminPermission.class.getName(), "(&(name=*)" +
+                		"(signer=-;CN=Root1,OU=FAKEDONTUSE,O=CASoft,L=Budapest,C=HU))", 
                         "install, uninstall, uninstallForceful, list, cancel"),
                 new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", 
                         "read, write, execute, delete"),
@@ -97,7 +98,8 @@ public class DoIt implements BundleActivator {
                 // to load files that are passed to the Deployment Admin
                 new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "read"),
                 // to install deployment packages 
-                new PermissionInfo(DeploymentAdminPermission.class.getName(), "(&(name=*)(signer=-))", 
+                new PermissionInfo(DeploymentAdminPermission.class.getName(), "(&(name=*)" +
+                		"(signer=-;CN=Root1,OU=FAKEDONTUSE,O=CASoft,L=Budapest,C=HU))", 
                         "install"),
                 // to be able to set permissions during next run
                 // and because "In addition to DeploymentAdminPermission, the caller 

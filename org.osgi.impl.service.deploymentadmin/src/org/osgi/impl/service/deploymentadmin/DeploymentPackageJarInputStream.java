@@ -22,7 +22,6 @@ import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -147,18 +146,36 @@ public class DeploymentPackageJarInputStream {
     
     private JarInputStream jis;
     private Map            resourceNames;
-    private Map            signatures = new Hashtable();
     private Entry          actEntry;
     private boolean        fixPack;
+    private LinkedList     buffer = new LinkedList();
+    private List           certChains;
         
-    public DeploymentPackageJarInputStream(InputStream is) throws IOException {
+    public DeploymentPackageJarInputStream(InputStream is) 
+    		throws IOException, DeploymentException 
+    {
 	    this.jis = new JarInputStream(is);
 	    resourceNames = new HashMap(getManifest().getEntries());
 	    fixPack = (null != 
 	        	jis.getManifest().getMainAttributes().getValue(DAConstants.DP_FIXPACK));
+	    fillBuffer();
 	}
+    
+    public List getCertChains() {
+        return certChains;
+    }
 	
-	/**
+    private void fillBuffer() throws IOException, DeploymentException {
+        Entry entry = readNextEntry();
+        while (null != entry && isUninterested(entry)) {
+            buffer.addLast(entry);
+            entry = readNextEntry();
+        }
+        if (null != entry)
+            certChains  = entry.getCertificateChains();
+    }
+
+    /**
 	 * Gives back the next Entry in the dployment package.
 	 * @return The next Entry or <code>null</code> if there is no 
 	 * more entries.
@@ -166,6 +183,13 @@ public class DeploymentPackageJarInputStream {
 	 * @throws DeploymentException
 	 */
     public Entry nextEntry() throws IOException, DeploymentException {
+        if (buffer.isEmpty())
+            return readNextEntry();
+        else
+            return (Entry) buffer.removeFirst();
+    }
+    
+    private Entry readNextEntry() throws IOException, DeploymentException {
         if (null != actEntry)
             return actEntry;
         
@@ -225,7 +249,6 @@ public class DeploymentPackageJarInputStream {
                 ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
                 closeEntry();
                 String key = name.substring("meta-inf/".length(), name.indexOf(".dsa"));
-                signatures.put(key, bis);
             }
             return true;
         }

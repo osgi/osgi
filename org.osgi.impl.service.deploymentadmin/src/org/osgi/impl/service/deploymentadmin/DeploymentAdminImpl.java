@@ -33,6 +33,7 @@ import java.security.PrivilegedExceptionAction;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.osgi.service.resolver.VersionRange;
@@ -146,8 +147,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                     e.getMessage(), e);
         }
         
-        // TODO signer
-        checkPermission("(name="  + srcDp.getName() + ")", 
+        checkPermission(srcDp.getName(), wjis.getCertChains(), 
                 DeploymentAdminPermission.ACTION_INSTALL);
         
         sendInstallEvent(srcDp.getName());
@@ -171,6 +171,23 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             dps.add(session.getSourceDeploymentPackage());
             return session.getSourceDeploymentPackage();
         }
+    }
+
+    private DeploymentAdminPermission createPermission(String dpName, 
+            String[] certChain, String action) 
+    {
+        String target;
+        if (null == certChain || 0 == certChain.length)
+            target = "(name=" + dpName + ")";
+        else {
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < certChain.length; i++)
+                sb.append(certChain[i] + ";");
+            sb.deleteCharAt(sb.length() - 1);
+            target = "(&(name=" + dpName + ")(signer=" + sb + "))";
+        }
+        DeploymentAdminPermission perm = new DeploymentAdminPermission(target, action);
+        return perm;
     }
 
     private void sendInstallEvent(String dpName) {
@@ -371,12 +388,33 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
     }
 
-	private void checkPermission(String name, String action) {
+    // TODO is it correct?
+	private void checkPermission(String dpName, List certChains, String action) {
 	    SecurityManager sm = System.getSecurityManager();
 	    if (null == sm)
 	        return;
-	    Permission perm = new DeploymentAdminPermission(name, action);
-	    sm.checkPermission(perm);
+	    
+	    if (certChains.isEmpty()) {
+	        DeploymentAdminPermission perm = 
+            	createPermission(dpName, null, action);
+	        sm.checkPermission(perm);
+	        return;
+	    }
+	    
+	    SecurityException secExc = null;
+	    for (Iterator iter = certChains.iterator(); iter.hasNext();) {
+            String[] certChain = (String[]) iter.next();
+            DeploymentAdminPermission perm = 
+                	createPermission(dpName, certChain, action);
+            try {
+                sm.checkPermission(perm);
+                return;
+            } catch (SecurityException e) {
+                secExc = e;
+                continue;
+            }
+        }
+	    throw secExc;
 	}
 
     /*
