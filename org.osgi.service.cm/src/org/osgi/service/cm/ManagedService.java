@@ -56,10 +56,10 @@ import java.util.*;
  *    synchronized void open(CommPortIdentifier id,
  *    BundleContext context) {
  *      this.id = id;
- *      registration = context.registerService(
+  *      registration = context.registerService(
  *        ManagedService.class.getName(),
  *        this,
- *        null // Properties will come from CM in updated
+ *        getDefaults()
  *      );
  *    }
  * 
