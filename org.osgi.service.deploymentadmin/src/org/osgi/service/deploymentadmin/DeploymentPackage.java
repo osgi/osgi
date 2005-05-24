@@ -159,7 +159,7 @@ public interface DeploymentPackage {
      * @return true if the operation was successful
      * @throws SecurityException if access is not permitted based on the current security policy.
      */  
-    boolean uninstallForceful();  
+    boolean uninstallForced();  
  
     /**
      * Returns a hash code value for the object.
