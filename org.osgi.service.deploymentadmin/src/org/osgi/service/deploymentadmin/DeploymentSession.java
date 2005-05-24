@@ -36,7 +36,10 @@ public interface DeploymentSession {
 
     /**
      * Returns the private data area of the specified bundle. The bundle must be part of 
-     * either the source or target deployment packages.
+     * either the source or target deployment packages. The permission set the caller 
+     * resource processor needs to manipulate the private area of the bundle is set by the 
+     * Deployment Admin on the fly when this method is called. The permissions remain availble 
+     * during the deployment action only.
      * @param bundle the bundle the private are belongs to
      * @return file representing the private area of the bundle. It cannot be null.
      * @throws SecurityException if the caller is not the customizer of the corresponding 
