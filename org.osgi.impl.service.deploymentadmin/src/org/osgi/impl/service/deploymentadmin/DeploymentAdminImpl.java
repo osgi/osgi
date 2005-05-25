@@ -95,16 +95,16 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         String ks = System.getProperty(DAConstants.KEYSTORE);
         if (null == ks) {
             logger.log(Logger.LOG_WARNING, "Keystore location is not defined. Check the " + 
-                    DAConstants.KEYSTORE + " manifest header.");
+                    DAConstants.KEYSTORE + " system property!");
             return;
         }
         File file = new File(ks);
         if (!file.exists())
             throw new RuntimeException("Keystore is not found: " + file);
-        //String pwd = (String) context.getBundle().getHeaders().get(DAConstants.KEYSTORE_PWD);
         String pwd = System.getProperty(DAConstants.KEYSTORE_PWD);
         if (null == pwd)
-            throw new RuntimeException("There is no password set in the manifest");
+            throw new RuntimeException("There is no keystore password set. Check the " +
+                    DAConstants.KEYSTORE_PWD + " system property!");
         keystore = KeyStore.getInstance("JKS");
         keystore.load(new FileInputStream(file), pwd.toCharArray());
     }
