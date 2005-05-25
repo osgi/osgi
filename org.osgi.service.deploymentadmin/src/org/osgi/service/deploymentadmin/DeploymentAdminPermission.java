@@ -12,13 +12,10 @@ package org.osgi.service.deploymentadmin;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
-import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
-
-import org.osgi.service.deploymentadmin.DeploymentAdminPermission.Representation.Node;
 
 /**
  * DeploymentAdminPermission controls access to MEG management framework functions.
@@ -184,8 +181,7 @@ public class DeploymentAdminPermission extends Permission {
         if (!(permission instanceof DeploymentAdminPermission))
             return false;
         DeploymentAdminPermission other = (DeploymentAdminPermission) permission;
-        return getFilter().match(other) && 
-        		getActionVector().containsAll(other.getActionVector());
+        return getFilter().match(other);
     }
 
     /**
@@ -249,11 +245,6 @@ public class DeploymentAdminPermission extends Permission {
             private SignerChainPattern chainPattern;
             private NamePattern        namePattern;
             private String[]           leafValue;
-            private Node               parent;
-            
-            Node(Node parent) {
-                this.parent = parent;
-            }
             
             void setLeaf (String attr, String value) {
                 leafValue = new String[] {attr, value};
@@ -283,10 +274,17 @@ public class DeploymentAdminPermission extends Permission {
 	                case LEAF: {
 	                    String attr = leafValue[0];
 	                    String value = leafValue[1];
-	                    if ("name".equals(attr))
-	                        return namePattern.match((String) ht.get(attr));
-	                    else if ("signer".equals(attr)) 
-	                        return chainPattern.match((String) ht.get(attr));
+	                    if ("name".equals(attr)) {
+	                        boolean b = namePattern.match((String) ht.get(attr));
+if (!b) System.out.println(">>>***>>> namePattern 1:" + namePattern.pattern + "< 2:" + (String) ht.get(attr) + "<"); 
+	                        return b;
+	                        //return namePattern.match((String) ht.get(attr));
+	                        }
+	                    else if ("signer".equals(attr)) { 
+	                        boolean b = chainPattern.match((String) ht.get(attr));
+if (!b) System.out.println(">>>***>>> chainPattern");	                        
+	                        return b;
+	                    	}
 	                    else 
 	                        return false;
 	                }
@@ -339,11 +337,9 @@ public class DeploymentAdminPermission extends Permission {
         
         Representation(String filter) {
             this.filter = filter.toCharArray();
-            rootNode = new Node(null);
+            rootNode = new Node();
             rootNode.setOp(Node.ROOT);
             parse_filter(rootNode);
-            if (index < this.filter.length)
-                throwException();
         }
         
         boolean match(DeploymentAdminPermission perm) {
@@ -353,7 +349,7 @@ public class DeploymentAdminPermission extends Permission {
         
         private void parse_filter(Node node) {
             accept('(');
-            Node newNode = new Node(node);    
+            Node newNode = new Node();    
             parse_filter_comp(newNode);
             accept(')');
             node.add(newNode);
@@ -480,7 +476,8 @@ public class DeploymentAdminPermission extends Permission {
        }
         
         static class SignerPattern {
-            private Vector    rdns;
+            private Hashtable table      = new Hashtable();
+            private boolean   exactMatch = true;
             private boolean   trusted;
             private boolean   minus;
             
@@ -494,7 +491,7 @@ public class DeploymentAdminPermission extends Permission {
                     p = p.substring(1, p.length() - 1);
                     trusted = true;
                 }
-                rdns = createRdns(p);
+                table = createTable(p);
             }
             
             boolean isTrusted() {
@@ -505,61 +502,42 @@ public class DeploymentAdminPermission extends Permission {
                 return minus;
             }
             
-            private Vector createRdns(String str) {
-                Vector v = new Vector();
-                String[] rdnsArr = Splitter.split(str, ',', 0);
-                for (int i = 0; i < rdnsArr.length; i++) {
-                    rdnsArr[i] = rdnsArr[i].trim();
-                    if ("*".equals(rdnsArr[i]))
-                        v.add(new String[] {"*", null});
-                    else {
-                        int ioe = rdnsArr[i].indexOf("=");
-                        String key = rdnsArr[i].substring(0, ioe).trim();
-                        String value = rdnsArr[i].substring(ioe + 1).trim();
-                        v.add(new String[] {key, value});
+            private Hashtable createTable(String str) {
+                Hashtable ht = new Hashtable();
+                String[] pairs = Splitter.split(str, ',', 0);
+                for (int i = 0; i < pairs.length; i++) {
+                    pairs[i] = pairs[i].trim();
+                    if ("*".equals(pairs[i])) {
+                        exactMatch = false;
+                    } else {
+                        int ioe = pairs[i].indexOf("=");
+                        String key = pairs[i].substring(0, ioe);
+                        String value = pairs[i].substring(ioe + 1);
+                        ht.put(key.toUpperCase(), value);
                     }
                 }
-                return v;
+                return ht;
             }
             
             public boolean match(String signer) {
-                Vector v = createRdns(signer);
-                boolean skip = false;
-                int i = 0;
-                int j = 0;
-                while (i < rdns.size() && j < v.size()) {
-                    String pk = ((String[]) rdns.get(i))[0];
-                    String pv = ((String[]) rdns.get(i))[1];
-                    String sk = ((String[]) v.get(j))[0];
-                    String sv = ((String[]) v.get(j))[1];
-                    if (pk.equalsIgnoreCase(sk)) {
-                        NamePattern np = new NamePattern(pv);
-                        if (np.match(sv)) {
-                            ++i;
-                            ++j;
-                            skip = false;
-                            continue;
-                        } else {
-                            if (skip) {
-                                ++j;
-                                continue;
-                            } else {
-                                return false;
-                            }
-                        }
-                    } else if ("*".equals(pk)) {
-                        skip = true;
-                        ++i;
-                        continue;
-                    } else if (skip) {
-                        ++j;
-                    } else {
+                Hashtable ht = createTable(signer);
+                for (Iterator iter = table.keySet().iterator(); iter.hasNext();) {
+                    String key = (String) iter.next();
+                    String v1 = (String) table.get(key);
+                    String v2 = (String) ht.get(key);
+                    if (null == v2)
                         return false;
-                    }
+                    ht.remove(key);
+                    if ("*".equals(v1))
+                        continue;
+                    if (!v1.equals(v2)) 
+                        return false;
                 }
+                if (exactMatch && !ht.keySet().isEmpty())
+                    return false;
                 if (trusted) 
                     ; // TODO check: signer in the keystore
-                return (skip && i == rdns.size()) || (i == rdns.size() && j == v.size());
+                return true;
             }
         }
 
@@ -574,12 +552,9 @@ public class DeploymentAdminPermission extends Permission {
             StringBuffer part = new StringBuffer();
             while (index < input.length()) {
                 char ch = input.charAt(index);
-                boolean esc = (index - 1 > 0 && '\\' == input.charAt(index - 1));
-                if (ch != sep || esc) {
-                    if (esc && ch == sep)
-                        part.deleteCharAt(part.length() - 1);
+                if (ch != sep)
                     part.append(ch);
-                } else {
+                else {
                     ++applied;
                     v.add(part.toString());
                     part = new StringBuffer();
@@ -688,19 +663,5 @@ public class DeploymentAdminPermission extends Permission {
             return -1;
         }
     }
-
-    public static void main(String[] args) {
-        DeploymentAdminPermission perm = new DeploymentAdminPermission("(signer=" +
-    			"*, o=ACME, c=US" +
-        		")",
-        	"install");
-        System.out.println(perm.implies(new DeploymentAdminPermission("(signer=" +
-    			"street = 9C\\, Avenue St. Drézéry, o=ACME, c=FR" +
-        		")",
-        	"install"))
-        );
-
-        System.out.println("END");
-    }
-
+    
 }
