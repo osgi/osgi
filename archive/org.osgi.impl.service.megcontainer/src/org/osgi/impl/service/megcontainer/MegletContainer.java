@@ -129,6 +129,7 @@ public class MegletContainer implements BundleListener, EventHandler {
     }
 
 		Meglet app;
+		
 		ServiceReference components[] = bc.getServiceReferences( ComponentFactory.class.getName(),
 				"(" + ComponentConstants.COMPONENT_NAME + "=" + appDesc.getComponentName() + ")" );
 		if( components == null || components.length == 0 )
@@ -179,7 +180,7 @@ public class MegletContainer implements BundleListener, EventHandler {
 			ServiceReference components[] = bc.getServiceReferences( ComponentFactory.class.getName(),
 					"(" + ComponentConstants.COMPONENT_NAME + "=" + appDesc.getComponentName() + ")" );
 			if( components == null || components.length == 0 )
-				return null;
+				return "Cannot find launchable SCR component! Please check the dependencies.";
 			
 			if (deps.requiredServices != null) {
 				for (int i = 0; i != deps.requiredServices.length; i++) {
