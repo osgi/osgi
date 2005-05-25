@@ -23,6 +23,7 @@ import java.security.PrivilegedAction;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -48,12 +49,15 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     private Map    mainSection     = new Hashtable();
     private Vector bundleEntries   = new Vector();
     private Vector resourceEntries = new Vector();
+    private List   certChains      = new Vector();
     
-    public DeploymentPackageImpl(Manifest manifest, int id, DeploymentAdminImpl da) 
-    		throws DeploymentException 
+    public DeploymentPackageImpl(Manifest manifest, int id, DeploymentAdminImpl da,
+            List certChains) throws DeploymentException 
     {
         this.id = new Long(id);
         this.da = da;
+        if (null != certChains)
+            this.certChains = certChains;
         
         processMainSection(manifest);
         processNameSections(manifest);
@@ -65,9 +69,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * Copy constructor
      */
     public DeploymentPackageImpl(DeploymentPackageImpl other) {
-        this.da = other.da;
-        
         this.id = other.id;
+        this.da = other.da;
+        this.certChains = other.certChains;
         this.mainSection = new Hashtable(other.mainSection);
         bundleEntries = (Vector) other.bundleEntries.clone();
         resourceEntries = (Vector) other.resourceEntries.clone();
@@ -178,6 +182,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     
     Vector getResourceEntries() {
         return resourceEntries;
+    }
+    
+    List getCertChains() {
+        return certChains;
     }
 
     /**

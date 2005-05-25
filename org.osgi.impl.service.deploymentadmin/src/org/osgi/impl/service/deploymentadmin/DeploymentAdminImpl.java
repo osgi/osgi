@@ -139,7 +139,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         // create source DP
         try {
             wjis = new DeploymentPackageJarInputStream(in);
-            srcDp = new DeploymentPackageImpl(wjis.getManifest(), nextDpId(), this);
+            srcDp = new DeploymentPackageImpl(wjis.getManifest(), 
+                    nextDpId(), this, wjis.getCertChains());
         } catch (DeploymentException e) {
             throw e;
         } catch (Exception e) {
@@ -147,8 +148,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                     e.getMessage(), e);
         }
         
-        checkPermission(srcDp.getName(), wjis.getCertChains(), 
-                DeploymentAdminPermission.ACTION_INSTALL);
+        checkPermission(srcDp, DeploymentAdminPermission.ACTION_INSTALL);
         
         sendInstallEvent(srcDp.getName());
         
@@ -389,23 +389,23 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     }
 
     // TODO is it correct?
-	private void checkPermission(String dpName, List certChains, String action) {
+	private void checkPermission(DeploymentPackageImpl dp, String action) {
 	    SecurityManager sm = System.getSecurityManager();
 	    if (null == sm)
 	        return;
 	    
-	    if (certChains.isEmpty()) {
+	    if (dp.getCertChains().isEmpty()) {
 	        DeploymentAdminPermission perm = 
-            	createPermission(dpName, null, action);
+            	createPermission(dp.getName(), null, action);
 	        sm.checkPermission(perm);
 	        return;
 	    }
 	    
 	    SecurityException secExc = null;
-	    for (Iterator iter = certChains.iterator(); iter.hasNext();) {
+	    for (Iterator iter = dp.getCertChains().iterator(); iter.hasNext();) {
             String[] certChain = (String[]) iter.next();
             DeploymentAdminPermission perm = 
-                	createPermission(dpName, certChain, action);
+                	createPermission(dp.getName(), certChain, action);
             try {
                 sm.checkPermission(perm);
                 return;
