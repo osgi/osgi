@@ -58,6 +58,7 @@ public class UserPromptCondition implements Condition {
 	 * @param bundle the bundle to ask about.
 	 * @param levels the possible permission levels. This is a comma-separated list that can contain
 	 * 		following strings: ONESHOT SESSION BLANKET. The order is not important.
+	 * ### Is this case sensitive?
 	 * @param defaultLevel the default permission level, one chosen from the levels parameter. If
 	 * 		it is an empty string, then there is no default.
 	 * @param catalogName the message catalog base name. It will be loaded by a {@link java.util.ResourceBundle},
