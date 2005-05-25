@@ -12,7 +12,10 @@
     <vendor  value = "Nokia" />
     <scr:component name="TestApplicationComponent" 
        factory="Meglet-Sample-Nr-1-Version-1.0" autoenable="true">
-      <implementation class="com.nokia.test.megletsample.TestApplication"/>    
+      <implementation class="com.nokia.test.megletsample.TestApplication"/>        
+      <service>  
+        <provide interface="com.nokia.test.megletsample.TestApplication"/>
+      </service>      
     </scr:component>
   </application>
 </descriptor>

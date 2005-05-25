@@ -28,6 +28,9 @@
     <scr:component name="TestApplicationComponent2" 
        factory="Meglet-Sample-Nr-2-Version-1.0" autoenable="true">
       <implementation class="com.nokia.test.megletsample2.TestApplication2"/>
+      <service>  
+        <provide interface="com.nokia.test.megletsample.TestApplication"/>
+      </service>      
     </scr:component>
   </application>
 </descriptor>
