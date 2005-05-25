@@ -334,15 +334,15 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     /**
      * @return
-     * @see org.osgi.service.deploymentadmin.DeploymentPackage#uninstallForceful()
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#uninstallForced()
      */
-    public boolean uninstallForceful() {
+    public boolean uninstallForced() {
         checkStale();
         if (0 == getId())
             throw new RuntimeException("\"System\" bundle cannot be uninstalled");
         
         id = new Long(-1);
-        return da.uninstallForceful(this);
+        return da.uninstallForced(this);
     }
 
     boolean fixPack() {

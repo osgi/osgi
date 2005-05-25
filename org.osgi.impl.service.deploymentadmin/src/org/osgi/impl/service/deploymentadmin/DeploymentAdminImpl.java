@@ -455,7 +455,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         dps.remove(targetDp);
     }
     
-    boolean uninstallForceful(DeploymentPackageImpl dp) {
+    boolean uninstallForced(DeploymentPackageImpl dp) {
         sendUninstallEvent(dp.getName());
         // TODO        
         sendCompleteEvent(true);
