@@ -113,7 +113,7 @@ public class ApplicationDescriptorImpl implements Delegate {
 					for (int k = 0; k != appHandles.length; k++) {
 						if( appHandles[ k ].getProperty( ApplicationDescriptor.APPLICATION_PID )
 							  .equals( pid ) )
-							throw new Exception("Singleton Exception!");
+							throw new SingletonException();
 					}
 			}
 	}
