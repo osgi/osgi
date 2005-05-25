@@ -58,6 +58,9 @@ public class Scheduler implements Runnable, EventHandler {
 		AccessController.checkPermission(new ApplicationAdminPermission(pid, 
 				ApplicationAdminPermission.SCHEDULE));
 
+		if( topic == null )
+			throw new NullPointerException();
+		
 		ScheduledApplicationImpl app = new ScheduledApplicationImpl(this, bc,
 				pid, arguments, topic, eventFilter, recurring);
 		
