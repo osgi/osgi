@@ -17,8 +17,17 @@ import java.util.Map;
  * bundle manifest and managed by a state and resolver.
  */
 public interface ImportPackageSpecification extends VersionConstraint {
+	/**
+	 * The static resolution directive value.
+	 */
 	public static final String RESOLUTION_STATIC = "static"; //$NON-NLS-1$
+	/**
+	 * The optional resolution directive value.
+	 */
 	public static final String RESOLUTION_OPTIONAL = "optional"; //$NON-NLS-1$
+	/**
+	 * The dynamic resolution directive value.
+	 */
 	public static final String RESOLUTION_DYNAMIC  = "dynamic"; //$NON-NLS-1$
 
 	/**

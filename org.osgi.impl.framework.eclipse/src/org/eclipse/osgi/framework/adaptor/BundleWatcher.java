@@ -17,7 +17,15 @@ import org.osgi.framework.Bundle;
  * entry point for logging plugin activity.
  */
 public interface BundleWatcher {
+	/**
+	 * Called when a bundle is being activated.
+	 * @param bundle the bundle being activated.
+	 */
 	public void startActivation(Bundle bundle);
 
+	/**
+	 * Called after a bundle has been activated.
+	 * @param bundle the bundle being activated.
+	 */
 	public void endActivation(Bundle bundle);
 }

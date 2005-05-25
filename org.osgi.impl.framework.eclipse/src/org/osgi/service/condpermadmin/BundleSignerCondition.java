@@ -10,7 +10,6 @@
 
 package org.osgi.service.condpermadmin;
 
-import java.util.Dictionary;
 import org.eclipse.osgi.framework.internal.core.AbstractBundle;
 import org.osgi.framework.Bundle;
 
@@ -36,63 +35,29 @@ import org.osgi.framework.Bundle;
  * 
  * @version $Revision$
  */
-public class BundleSignerCondition implements Condition {
-	boolean satisfied;
-
+public class BundleSignerCondition {
+	private static final String CONDITION_TYPE = "org.osgi.service.condpermadmin.BundleSignerCondition";
 	/**
-	 * Constructs a BundleSignerCondition for the given bundle to check against the pattern specified in <code>dnChain</code>.
+	 * Constructs a condition that tries to match the passed Bundle's location
+	 * to the location pattern.
 	 * 
-	 * @param bundle the bundle to check this condition against.
-	 * @param dnChain the chain of distinguished names pattern to check against the signer of the bundle.
+	 * @param bundle the Bundle being evaluated.
+	 * @param info the ConditionInfo to construct the condition for.  The args of the 
+	 *        ConditionInfo specify the chain of distinguished names pattern to match 
+	 *        against the signer of the Bundle
 	 */
-	public BundleSignerCondition(Bundle bundle, String dnChain) {
+	static public Condition getCondition(Bundle bundle, ConditionInfo info) {
+		if (!CONDITION_TYPE.equals(info.getType()))
+			throw new IllegalArgumentException("ConditionInfo must be of type \"" + CONDITION_TYPE + "\"");
+		String[] args = info.getArgs();
+		if (args.length != 1)
+			throw new IllegalArgumentException("Illegal number of args: " + args.length);
+		// implementation specific code used here
 		AbstractBundle ab = (AbstractBundle) bundle;
-		satisfied = ab.getBundleData().matchDNChain(dnChain);
+		return ab.getBundleData().matchDNChain(args[0]) ? Condition.TRUE : Condition.FALSE;
 	}
 
-
-	/**
-	 * Always returns true, since this condition is immutable.
-	 * @return always returns true;
-	 * @see org.osgi.service.condpermadmin.Condition#isPostponed()
-	 */
-	public boolean isPostponed() {
-		return false;
-	}
-
-	/**
-	 * Returns true if the bundle used to construct this condition matches
-	 * the condition's DNChain expression.
-	 * @return true if the DNChain expression is matched.
-	 * @see org.osgi.service.condpermadmin.Condition#isSatisfied()
-	 */
-	public boolean isSatisfied() {
-		return satisfied;
-	}
-
-	/**
-	 * Always returns false, since this condition is immutable.
-	 * @return always returns false.
-	 * @see org.osgi.service.condpermadmin.Condition#isMutable()
-	 */
-	public boolean isMutable() {
-		return false;
-	}
-
-	/**
-	 * This method simply invokes the isSatisfied() method of all the conds
-	 * and returns true only if all of the method invocations return true.
-	 * @param conds the conditions to check for satisfiability.
-	 * @param context not used.
-	 * @return true only if all the conds are true.
-	 * @see org.osgi.service.condpermadmin.Condition#isSatisfied(org.osgi.service.condpermadmin.Condition[], java.util.Dictionary)
-	 */
-	public boolean isSatisfied(Condition[] conds, Dictionary context) {
-		for (int i = 0; i < conds.length; i++) {
-			if (!conds[i].isSatisfied()) {
-				return false;
-			}
-		}
-		return true;
+	private BundleSignerCondition() {
+		// private constructor to prevent objects of this type
 	}
 }

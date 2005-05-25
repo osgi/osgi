@@ -26,6 +26,10 @@ public class SecureAction {
 	// make sure we use the correct controlContext;
 	private AccessControlContext controlContext;
 
+	/**
+	 * Constructs a new SecureAction object.  The constructed SecureAction object 
+	 * uses the caller's AccessControlContext to perform security checks 
+	 */
 	public SecureAction() {
 		// save the control context to be used.
 		this.controlContext = AccessController.getContext();
@@ -127,6 +131,12 @@ public class SecureAction {
 		}
 	}
 
+	/**
+	 * Returns the length of a file.  Same as calling
+	 * file.length().
+	 * @param file a file object
+	 * @return the length of a file.
+	 */
 	public long length(final File file) {
 		if (System.getSecurityManager() == null)
 			return file.length();
@@ -137,6 +147,12 @@ public class SecureAction {
 		}, controlContext)).longValue();
 	}
 
+	/**
+	 * Returns true if a file exists, otherwise false is returned.  Same as calling
+	 * file.exists().
+	 * @param file a file object
+	 * @return true if a file exists, otherwise false
+	 */
 	public boolean exists(final File file) {
 		if (System.getSecurityManager() == null)
 			return file.exists();
@@ -147,6 +163,12 @@ public class SecureAction {
 		}, controlContext)).booleanValue();
 	}
 
+	/**
+	 * Returns true if a file is a directory, otherwise false is returned.  Same as calling
+	 * file.isDirectory().
+	 * @param file a file object
+	 * @return true if a file is a directory, otherwise false
+	 */
 	public boolean isDirectory(final File file) {
 		if (System.getSecurityManager() == null)
 			return file.isDirectory();
@@ -157,6 +179,12 @@ public class SecureAction {
 		}, controlContext)).booleanValue();
 	}
 
+	/**
+	 * Returns a file's last modified stamp.  Same as calling
+	 * file.lastModified().
+	 * @param file a file object
+	 * @return a file's last modified stamp.
+	 */
 	public long lastModified(final File file) {
 		if (System.getSecurityManager() == null)
 			return file.lastModified();
@@ -167,6 +195,12 @@ public class SecureAction {
 		}, controlContext)).longValue();
 	}
 
+	/**
+	 * Returns a file's list.  Same as calling
+	 * file.list().
+	 * @param file a file object
+	 * @return a file's list.
+	 */
 	public String[] list(final File file) {
 		if (System.getSecurityManager() == null)
 			return file.list();
@@ -177,6 +211,13 @@ public class SecureAction {
 		}, controlContext);
 	}
 
+	/**
+	 * Returns a ZipFile. Same as calling
+	 * new ZipFile(file)
+	 * @param file the file to get a ZipFile for
+	 * @return a ZipFile
+	 * @throws IOException if an error occured
+	 */
 	public ZipFile getZipFile(final File file) throws IOException {
 		if (System.getSecurityManager() == null)
 			return new ZipFile(file);
@@ -193,6 +234,17 @@ public class SecureAction {
 		}
 	}
 
+	/**
+	 * Gets a URL. Same a calling
+	 * {@link URL#URL(java.lang.String, java.lang.String, int, java.lang.String, java.net.URLStreamHandler)}
+	 * @param protocol the protocol
+	 * @param host the host
+	 * @param port the port
+	 * @param file the file
+	 * @param handler the URLStreamHandler
+	 * @return a URL
+	 * @throws MalformedURLException
+	 */
 	public URL getURL(final String protocol, final String host, final int port, final String file, final URLStreamHandler handler) throws MalformedURLException {
 		if (System.getSecurityManager() == null)
 			return new URL(protocol, host, port, file, handler);
@@ -226,6 +278,13 @@ public class SecureAction {
 		}, controlContext);
 	}
 
+	/**
+	 * Gets a service object. Same as calling
+	 * context.getService(reference)
+	 * @param reference the ServiceReference
+	 * @param context the BundleContext
+	 * @return a service object
+	 */
 	public Object getService(final ServiceReference reference, final BundleContext context) {
 		if (System.getSecurityManager() == null)
 			return context.getService(reference);
@@ -236,6 +295,13 @@ public class SecureAction {
 		}, controlContext);
 	}
 
+	/**
+	 * Returns a Class. Same as calling
+	 * Class.forName(name)
+	 * @param name the name of the class.
+	 * @return a Class
+	 * @throws ClassNotFoundException
+	 */
 	public Class forName(final String name) throws ClassNotFoundException {
 		if (System.getSecurityManager() == null)
 			return Class.forName(name);

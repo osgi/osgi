@@ -242,7 +242,7 @@ public class ManifestElement {
 	}
 
 	/*
-	 * 
+	 * Return the last value associated with the given key in the specified table.
 	 */
 	private String getTableValue(Hashtable table, String key) {
 		if (table == null)
@@ -287,7 +287,7 @@ public class ManifestElement {
 	 * for this key, then create an array list from the current value (if necessary) and
 	 * append the new value to the end of the list.
 	 */
-	protected Hashtable addTableValue(Hashtable table, String key, String value) {
+	private Hashtable addTableValue(Hashtable table, String key, String value) {
 		if (table == null) {
 			table = new Hashtable(7);
 		}

@@ -690,7 +690,22 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 			setNativePaths(sb.toString());
 	}
 
+	/**
+	 * Returns the generation directory for the bundle data.  The returned
+	 * file may not exist.
+	 * @return the generation directory for the bundle data.
+	 */
 	protected File getGenerationDir() {
 		return new File(getBundleStoreDir(), String.valueOf(getGeneration()));
+	}
+
+	/**
+	 * Returns the parent generation directory for the bundle data.  The returned
+	 * file may not exist.  A value of <code>null</code> is returned if there is
+	 * no parent generation directory.
+	 * @return the parent gneration directory for the bundle data.
+	 */
+	public File getParentGenerationDir() {
+		return null;
 	}
 }

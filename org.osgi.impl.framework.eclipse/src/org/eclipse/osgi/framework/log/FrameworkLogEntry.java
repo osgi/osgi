@@ -21,6 +21,14 @@ public class FrameworkLogEntry {
 	private Throwable throwable;
 	private FrameworkLogEntry[] children;
 
+	/**
+	 * Constructs a new FrameworkLogEntry
+	 * @param entry the entry
+	 * @param message the message
+	 * @param stackCode the stack code
+	 * @param throwable the throwable
+	 * @param children the children
+	 */
 	public FrameworkLogEntry(String entry, String message, int stackCode, Throwable throwable, FrameworkLogEntry[] children) {
 		this.entry = entry;
 		this.message = message;

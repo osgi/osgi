@@ -10,6 +10,9 @@
  *******************************************************************************/
 package org.eclipse.osgi.service.debug;
 
+/**
+ * Used to get debug options settings.
+ */
 public interface DebugOptions {
 
 	/**

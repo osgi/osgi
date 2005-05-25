@@ -70,7 +70,7 @@ public class ResolverExport implements VersionSupplier {
 	}
 
 	// Recurse down the requires, until we find the root export
-	private ResolverExport getRootRequires(ResolverExport re, ResolverBundle reExporter) {
+	static ResolverExport getRootRequires(ResolverExport re, ResolverBundle reExporter) {
 		BundleConstraint[] requires = reExporter.getRequires();
 		for (int i = 0; i < requires.length; i++) {
 			if (requires[i].getMatchingBundle() == null)
@@ -88,9 +88,8 @@ public class ResolverExport implements VersionSupplier {
 		return re;
 	}
 
-	boolean isOnRootPath(ResolverBundle rb) {
+	static boolean isOnRootPath(ResolverBundle rb, ResolverExport re) {
 		ResolverImport ri;
-		ResolverExport re = this;
 		if (re.getExporter() == rb)
 			return true;
 		while (re != null && !re.getExportPackageDescription().isRoot()) {

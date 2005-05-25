@@ -70,62 +70,6 @@ public class ResolverImport {
 		this.matchingExport = matchingExport;
 	}
 
-	ResolverExport getRoot() {
-		ResolverImport ri = this;
-		ResolverExport re = ri.getMatchingExport();
-		while (re != null && !re.getExportPackageDescription().isRoot()) {
-			ResolverBundle reExporter = re.getExporter();
-			ri = reExporter.getImport(re.getName());
-			if (ri != null) {
-				re = ri.getMatchingExport();
-				continue;
-			}
-			// If there is no import then we need to try going thru the requires
-			re = getRootRequires(re, reExporter);
-		}
-		return re;
-	}
-
-	// Recurse down the requires, until we find the root export
-	private ResolverExport getRootRequires(ResolverExport re, ResolverBundle reExporter) {
-		BundleConstraint[] requires = reExporter.getRequires();
-		for (int i = 0; i < requires.length; i++) {
-			if (requires[i].getMatchingBundle() == null)
-				continue;
-			ResolverExport[] exports = requires[i].getMatchingBundle().getExportPackages();
-			for (int j = 0; j < exports.length; j++) {
-				if (re.getName().equals(exports[j].getName())) {
-					return exports[j];
-				}
-			}
-			re = getRootRequires(re, requires[i].getMatchingBundle());
-			if (re.getExportPackageDescription().isRoot())
-				return re;
-		}
-		return re;
-	}
-
-	boolean isOnRootPath(ResolverBundle rb) {
-		ResolverImport ri = this;
-		ResolverExport re = ri.getMatchingExport();
-		if (re.getExporter() == rb)
-			return true;
-		while (re != null && !re.getExportPackageDescription().isRoot()) {
-			ResolverBundle reExporter = re.getExporter();
-			ri = reExporter.getImport(re.getName());
-			if (ri != null) {
-				re = ri.getMatchingExport();
-				if (re.getExporter() == rb)
-					return true;
-				continue;
-			}
-			re = getRootRequires(re, reExporter);
-			if (re.getExporter() == rb)
-				return true;
-		}
-		return false;
-	}
-
 	boolean isOnRootPathSplit(ResolverBundle bundle, ResolverBundle toFind) {
 		if (bundle == null)
 			return false;

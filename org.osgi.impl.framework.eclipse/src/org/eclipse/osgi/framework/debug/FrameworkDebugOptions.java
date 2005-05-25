@@ -17,6 +17,9 @@ import java.util.Iterator;
 import java.util.Properties;
 import org.eclipse.osgi.service.debug.DebugOptions;
 
+/**
+ * The DebugOptions class used by the framework to get debug options from.
+ */
 public class FrameworkDebugOptions implements DebugOptions {
 	private Properties options = null;
 	private static FrameworkDebugOptions singleton = null;

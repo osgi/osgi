@@ -140,6 +140,16 @@ public class DefaultClassLoader extends AbstractClassLoader {
 		return hostdata.getSymbolicName() + "_" + hostdata.getVersion(); //$NON-NLS-1$
 	}
 
+	public AbstractBundleData getHostData() {
+		return hostdata;
+	}
+
+	public FragmentClasspath[] getFragClasspaths() {
+		if (fragClasspaths == null)
+			return null;
+		return (FragmentClasspath[]) fragClasspaths.toArray(new FragmentClasspath[fragClasspaths.size()]);
+	}
+
 	/**
 	 * Gets a ClasspathEntry object for the specified ClassPath entry.
 	 * @param cp The ClassPath entry to get the ClasspathEntry for.
@@ -565,6 +575,10 @@ public class DefaultClassLoader extends AbstractClassLoader {
 					bundledata.getAdaptor().getEventPublisher().publishFrameworkEvent(FrameworkEvent.ERROR, bundledata.getBundle(), e);
 				}
 			}
+		}
+
+		public AbstractBundleData getBundleData() {
+			return bundledata;
 		}
 	}
 

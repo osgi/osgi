@@ -32,7 +32,7 @@ public interface StateDelta {
 
 	/**
 	 * Returns the state whose changes are represented by this delta.
-	 * @return
+	 * @return the state
 	 */
 	public State getState();
 }

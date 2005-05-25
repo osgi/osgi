@@ -69,17 +69,7 @@ public class ConditionalPermissionInfoImpl implements ConditionalPermissionInfo,
 	/* Used to find permission constructors in addPermissions */
 	static private Class twoStringClassArray[] = new Class[] {String.class, String.class};
 	/* Used to find condition constructors getConditions */
-	static private Class condClassArray[][];
-	static {
-		condClassArray = new Class[3][];
-		for (int i = 0; i < condClassArray.length; i++) {
-			condClassArray[i] = new Class[i + 1];
-			condClassArray[i][0] = Bundle.class;
-			for (int j = 1; j <= i; j++) {
-				condClassArray[i][j] = String.class;
-			}
-		}
-	}
+	static private Class[] condClassArray = new Class[] {Bundle.class, ConditionInfo.class};
 
 	/**
 	 * Adds the permissions of the given type (if any) that are part of this
@@ -123,14 +113,8 @@ public class ConditionalPermissionInfoImpl implements ConditionalPermissionInfo,
 	 * 
 	 * @return the array of Conditions that must be satisfied before permissions
 	 *         in the ConditionPermissionInfoImpl can be used.
-	 * @throws SecurityException
-	 * @throws NoSuchMethodException
-	 * @throws IllegalArgumentException
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
 	 */
-	Condition[] getConditions(Bundle bundle) throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
+	Condition[] getConditions(Bundle bundle) {
 		Condition conditions[] = new Condition[conds.length];
 		for (int i = 0; i < conds.length; i++) {
 			/*
@@ -146,48 +130,32 @@ public class ConditionalPermissionInfoImpl implements ConditionalPermissionInfo,
 			}
 			Constructor constructor = null;
 			Method method = null;
-			int argCount = conds[i].getArgs().length;
-			if (argCount < condClassArray.length) {
-				try {
-					method = clazz.getMethod("getInstance", condClassArray[argCount]); //$NON-NLS-1$
-					if ((method.getModifiers() & Modifier.STATIC) == 0) {
-						method = null;
-					}
-				} catch (NoSuchMethodException e) {
-					// This is a normal case
-				}
-				if (method == null) {
-					constructor = clazz.getConstructor(condClassArray[argCount]);
-				}
-			} else {
-				Class clazzes[] = new Class[argCount + 1];
-				clazzes[0] = Bundle.class;
-				for (int j = 1; j <= argCount; j++) {
-					clazzes[j] = String.class;
-				}
-				try {
-					method = clazz.getMethod("getInstance", clazzes); //$NON-NLS-1$
-					if ((method.getModifiers() & Modifier.STATIC) == 0) {
-						method = null;
-					}
-				} catch (NoSuchMethodException e) {
-					// This is a normal case
-				}
-				if (method == null) {
-					constructor = clazz.getConstructor(clazzes);
-				}
+			try {
+				method = clazz.getMethod("getCondition", condClassArray); //$NON-NLS-1$
+				if ((method.getModifiers() & Modifier.STATIC) == 0)
+					method = null;
+			} catch (NoSuchMethodException e) {
+				// This is a normal case
 			}
-			String strArgs[] = conds[i].getArgs();
-			Object args[] = new Object[strArgs.length + 1];
-			args[0] = bundle;
-			System.arraycopy(strArgs, 0, args, 1, strArgs.length);
-			Condition condition = null;
-			if (method != null) {
-				condition = (Condition) method.invoke(null, args);
-			} else {
-				condition = (Condition) constructor.newInstance(args);
+			if (method == null)
+				try {
+					constructor = clazz.getConstructor(condClassArray);
+				} catch (NoSuchMethodException e) {
+					// TODO should post a FrameworkEvent of type error here
+					conditions[i] = Condition.FALSE;
+					continue;
+				}
+
+			Object args[] = {bundle, conds[i]};
+			try {
+				if (method != null)
+					conditions[i] = (Condition) method.invoke(null, args);
+				else
+					conditions[i] = (Condition) constructor.newInstance(args);
+			} catch (Throwable t) {
+				// TODO should post a FrameworkEvent of type error here
+				conditions[i] = Condition.FALSE;
 			}
-			conditions[i] = condition;
 		}
 		return conditions;
 	}

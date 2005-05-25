@@ -14,6 +14,9 @@ import org.osgi.framework.Version;
 
 public class VersionRange {
 	private static final Version versionMax = new Version(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+	/**
+	 * An empty version
+	 */
 	public static final VersionRange emptyRange = new VersionRange(null);
 
 	private Version minVersion;

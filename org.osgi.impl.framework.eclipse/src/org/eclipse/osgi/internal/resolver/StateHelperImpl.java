@@ -161,8 +161,9 @@ public class StateHelperImpl implements StateHelper {
 		}
 		// now find all the packages that are visible from required bundles
 		BundleDescription[] requiredBundles = bundle.getResolvedRequires();
+		ArrayList visited = new ArrayList(requiredBundles.length);
 		for (int i = 0; i < requiredBundles.length; i++)
-			getPackages(requiredBundles[i], bundle.getSymbolicName(), importList, packageList, new ArrayList(), strict);
+			getPackages(requiredBundles[i], bundle.getSymbolicName(), importList, packageList, visited, strict);
 		return (ExportPackageDescription[]) packageList.toArray(new ExportPackageDescription[packageList.size()]);
 	}
 
