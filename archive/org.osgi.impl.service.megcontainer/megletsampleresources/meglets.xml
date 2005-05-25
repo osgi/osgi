@@ -10,7 +10,7 @@
     </locale>
     <version value = "0.1" />
     <vendor  value = "Nokia" />
-    <scr:component name="TestApplication component" 
+    <scr:component name="TestApplicationComponent" 
        factory="Meglet-Sample-Nr-1-Version-1.0" autoenable="true">
       <implementation class="com.nokia.test.megletsample.TestApplication"/>    
     </scr:component>
