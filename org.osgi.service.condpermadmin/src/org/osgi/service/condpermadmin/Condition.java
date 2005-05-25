@@ -20,6 +20,16 @@ import java.util.Dictionary;
  */
 public interface Condition {
 	/**
+	 * A condition object that will always evaluate to true and that is never postponed.
+	 */
+	public final static Condition TRUE = new BooleanCondition(true);
+
+	/**
+	 * A condition object that will always evaluate to false and that is never postponed.
+	 */
+	public final static Condition FALSE = new BooleanCondition(false);
+
+	/**
 	 * This method returns true if the evaluation of the Condition must be postponed
 	 * until the end of the permission check. If it returns false, it must be able
 	 * to directly answer the isSatisfied method. In other
@@ -56,4 +66,32 @@ public interface Condition {
 	 * @return true if all the Conditions are satisfied.
 	 */
 	boolean isSatisfied(Condition conds[], Dictionary context);
+
+	/**
+	 * Package internal class used to define the {@link Condition#FALSE} and 
+	 * {@link Condition#TRUE} constants.
+	 */
+	final static class BooleanCondition implements Condition {
+		boolean satisfied;
+		BooleanCondition(boolean satisfied) {
+			this.satisfied = satisfied;
+		}
+		public boolean isPostponed() {
+			return false;
+		}
+		public boolean isSatisfied() {
+			return satisfied;
+		}
+		public boolean isMutable() {
+			return false;
+		}
+		public boolean isSatisfied(Condition[] conds, Dictionary context) {
+			for(int i = 0; i < conds.length; i++) {
+				if (!conds[i].isSatisfied())
+					return false;
+			}
+			return true;
+		}
+		
+	}
 }
