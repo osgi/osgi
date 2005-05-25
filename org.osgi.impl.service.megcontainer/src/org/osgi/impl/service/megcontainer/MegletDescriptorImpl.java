@@ -146,7 +146,9 @@ public final class MegletDescriptorImpl implements MegletDescriptor.Delegate {
 	public Map getPropertiesSpecific(String locale) {
 
 		Hashtable properties = new Hashtable();
-		String localizedName = (String) names.get(locale);
+		String localizedName = null;
+		if( locale != null )
+		  localizedName = (String) names.get(locale);
 		if (localizedName == null) {
 			if( ( localizedName = (String) names.get( defaultLanguage ) ) == null ) {
 				Enumeration enum = names.keys();
