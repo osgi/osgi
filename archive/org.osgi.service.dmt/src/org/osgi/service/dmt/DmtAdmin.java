@@ -17,10 +17,14 @@ package org.osgi.service.dmt;
  * use the DMT API. The <code>getSession</code> methods are used to open a
  * session on a specified subtree of the DMT. A typical way of usage:
  * <pre>
- *     serviceRef = context.getServiceReference(DmtAdmin.class.getName());
- *     DmtAdmin factory = (DmtAdmin) context.getService(serviceRef);
- *     DmtSession session = factory.getSession(&quot;./OSGi/cfg&quot;);
- *     session.createInteriorNode(&quot;./OSGi/cfg/mycfg&quot;);
+ *  serviceRef = context.getServiceReference(
+ *    DmtAdmin.class.getName());
+ *  DmtAdmin factory = (DmtAdmin) 
+ *    context.getService(serviceRef);
+ *  DmtSession session = factory.getSession(
+ *    &quot;./OSGi/cfg&quot;);
+ *  session.createInteriorNode(
+ *    &quot;./OSGi/cfg/mycfg&quot;);
  * </pre>
  */
 public interface DmtAdmin {
@@ -123,10 +127,11 @@ public interface DmtAdmin {
      * @param items the data of the alert items carried in this alert, can be
      *        <code>null</code> or empty if not needed
      * @throws DmtException with the following possible error codes
+     * 			<ul>
      *         <li><code>ALERT_NOT_ROUTED</code> when the alert can not be
      *         routed to the server
      *         <li><code>REMOTE_ERROR</code> in case of communication
-     *         problems between the device and the server
+     *         problems between the device and the server</ul>
      */
     void sendAlert(String principal, int code, DmtAlertItem[] items)
         throws DmtException;
