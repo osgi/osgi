@@ -224,7 +224,7 @@ public class BundleTest extends TestCase {
 		public ServiceReference getResourceProcessor(String resource) { throw new IllegalStateException(); }
 		public String getHeader(String name) { throw new IllegalStateException(); }
 		public String getResourceHeader(String path, String header) { throw new IllegalStateException(); }
-		public boolean uninstallForceful() { throw new IllegalStateException(); }
+		public boolean uninstallForced() { throw new IllegalStateException(); }
 	}
 
 	public final class DummyDeploymentSession implements DeploymentSession {
