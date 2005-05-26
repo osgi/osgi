@@ -28,7 +28,7 @@
 package org.osgi.test.cases.dmt.tb1;
 
 import org.osgi.framework.*;
-import org.osgi.test.cases.dmt.tbc.TBCService;
+//import org.osgi.test.cases.dmt.tbc.TBCService;
 
 /**
  * A bundle that registers a service with the marker interface
@@ -36,9 +36,9 @@ import org.osgi.test.cases.dmt.tbc.TBCService;
  *
  * @version $Revision$
  */
-public class Activator implements BundleActivator, TBCService {
+public class Activator implements BundleActivator { // ### , TBCService {
 	public void start(BundleContext context) throws Exception {
-		context.registerService(TBCService.class.getName(),this,null);
+		//context.registerService(TBCService.class.getName(),this,null);
 	}
 	public void stop(BundleContext context) throws Exception {
 	}
