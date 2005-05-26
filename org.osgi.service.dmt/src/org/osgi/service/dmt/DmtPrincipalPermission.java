@@ -13,7 +13,7 @@ package org.osgi.service.dmt;
 import java.security.BasicPermission;
 
 /**
- * Indicates the callers authority to create DMT sessions in the name
+ * Indicates the callers authority to create DMT sessions on behalf
  * of a remote management server. Only protocol adapters communicating
  * with management servers should be granted this permission.
  * <p>
