@@ -17,11 +17,21 @@
  */
 package unittests;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+
+import javax.xml.bind.JAXBContext;
 import javax.xml.parsers.SAXParserFactory;
+
 import junit.framework.TestCase;
+
 import org.osgi.impl.bundle.autoconf.MetaData;
 import org.osgi.service.metatype.AttributeDefinition;
 import org.xml.sax.InputSource;
+
+import unittests.metadata.Designate;
+import unittests.metadata.Object;
+import unittests.metadata.ObjectFactory;
 
 /**
  *
@@ -30,15 +40,35 @@ import org.xml.sax.InputSource;
  * @version $Revision$
  */
 public class ParserTest extends TestCase {
+	JAXBContext jaxbContext;
+	ObjectFactory of;
+	unittests.metadata.MetaData metaData;
+	MetaData resultMetaData;
+	SAXParserFactory spf;
+
+	public void setUp() throws Exception {
+		of = new ObjectFactory();
+		jaxbContext = JAXBContext.newInstance("unittests.metadata");
+		metaData = of.createMetaData();
+		spf = SAXParserFactory.newInstance();
+		spf.setNamespaceAware(true);
+		spf.setValidating(true);
+		resultMetaData = null;
+	}
+	
+	public void tearDown() throws Exception {
+		of = null;
+		jaxbContext = null;
+		spf = null;
+		resultMetaData = null;
+	}
+
 	public InputSource getInputSource(String from) {
 		return new InputSource(ParserTest.class.getResourceAsStream(from));
 	}
 	
 	public void testParser1() throws Exception {
 		// just a basic test that everything is in place
-		SAXParserFactory spf = SAXParserFactory.newInstance();
-		spf.setNamespaceAware(true);
-		spf.setValidating(true);
 		MetaData md = new MetaData(spf.newSAXParser(),getInputSource("testParser1.xml"));
 		assertEquals(1,md.designates.length);
 		MetaData.Designate d = md.designates[0];
@@ -71,5 +101,39 @@ public class ParserTest extends TestCase {
 		MetaData.Option option = ad.options[0];
 		assertEquals("opt1",option.label);
 		assertEquals("optval1",option.value);
+	}
+	
+	public void testMinimal() throws Exception {
+		Designate des = of.createDesignate();
+		metaData.getDesignate().add(des);
+		des.setPid("foo");
+		Object obj = of.createObject();
+		des.setObject(obj);
+		obj.setOcdref("bar");
+		convert();
+		assertEquals(1,resultMetaData.designates.length);
+		assertEquals("foo",resultMetaData.designates[0].pid);
+		assertEquals(1,resultMetaData.designates[0].objects.length);
+		assertEquals("bar",resultMetaData.designates[0].objects[0].ocdref);
+	}
+
+	public void testMultipleDesignates() throws Exception {
+		Designate des = of.createDesignate();
+		metaData.getDesignate().add(des);
+		metaData.getDesignate().add(des);
+		metaData.getDesignate().add(des);
+		des.setPid("foo");
+		Object obj = of.createObject();
+		des.setObject(obj);
+		obj.setOcdref("bar");
+		convert();
+		assertEquals(3,resultMetaData.designates.length);
+	}
+	
+	public void convert() throws Exception {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		jaxbContext.createMarshaller().marshal(metaData,baos);
+		ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+		resultMetaData = new MetaData(spf.newSAXParser(),new InputSource(bais));
 	}
 }
