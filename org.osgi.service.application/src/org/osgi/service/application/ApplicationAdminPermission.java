@@ -11,6 +11,9 @@
 package org.osgi.service.application;
 
 import java.security.BasicPermission;
+import java.security.Permission;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 /**
  * This class implements permissions for manipulating applications and
@@ -25,7 +28,7 @@ import java.security.BasicPermission;
  */
 public class ApplicationAdminPermission extends BasicPermission {
 	private static final long serialVersionUID = 1L;
-
+  
 	/**
 	 * Allows the lifecycle management of the target applications.
 	 */
@@ -61,6 +64,50 @@ public class ApplicationAdminPermission extends BasicPermission {
 	 *                is thrown if the actions parameter is null
 	 */
 	public ApplicationAdminPermission(String pid, String actions) {
-		super(pid, actions);
+		super(pid == null ? "<All>" : pid, actions);
+		
+		actionsVector = actionsVector( actions );
+
+		if (!ACTIONS.containsAll(actionsVector))
+      throw new IllegalArgumentException("Illegal action!");
 	}
+
+  public boolean implies(Permission p) {
+  	  if( p == null )
+  	  	return false;
+  	  	
+      if(!(p instanceof ApplicationAdminPermission))
+          return false;
+
+      ApplicationAdminPermission other = (ApplicationAdminPermission) p;
+      
+      if( getName().equals("<All>") )
+      {      	
+      	if( !other.getName().equals( getName() ) )
+      		return false;
+      }
+      
+      if( !actionsVector.containsAll( other.actionsVector ) )
+      	return false;
+      
+      return true;
+  }
+
+  private static final Vector ACTIONS = new Vector();
+  private Vector actionsVector;
+  static {
+      ACTIONS.add(LIFECYCLE.toLowerCase());
+      ACTIONS.add(SCHEDULE.toLowerCase());
+      ACTIONS.add(LOCK.toLowerCase());
+  }
+
+  private static Vector actionsVector(String actions) {
+      Vector v = new Vector();
+      StringTokenizer t = new StringTokenizer(actions.toUpperCase(), ",");
+      while (t.hasMoreTokens()) {
+          String action = t.nextToken().trim();
+          v.add(action.toLowerCase());
+      }
+      return v;
+  }
 }
