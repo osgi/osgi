@@ -26,8 +26,9 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.security.AccessController;
+import java.security.cert.Certificate;
 import java.security.KeyStore;
-import java.security.Permission;
+import java.security.KeyStoreException;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.HashSet;
@@ -91,11 +92,18 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	}
 	
     private void initKeyStore() throws Exception {
-        //String ks = (String) context.getBundle().getHeaders().get(DAConstants.KEYSTORE);
-        String ks = System.getProperty(DAConstants.KEYSTORE);
+        String ksType = System.getProperty(DAConstants.KEYSTORE_TYPE);
+        if (null == ksType)
+            ksType = System.getProperty(DeploymentAdminPermission.KEYSTORE_TYPE);
+        if (null == ksType)
+            ksType = "JKS";
+        String ks = System.getProperty(DAConstants.KEYSTORE_PATH);
+        if (null == ks)
+            ks = System.getProperty(DeploymentAdminPermission.KEYSTORE_PATH);
         if (null == ks) {
-            logger.log(Logger.LOG_WARNING, "Keystore location is not defined. Check the " + 
-                    DAConstants.KEYSTORE + " system property!");
+            logger.log(Logger.LOG_WARNING, "Keystore location is not defined. Set the " + 
+                    DAConstants.KEYSTORE_PATH + " or the " + 
+                    DeploymentAdminPermission.KEYSTORE_PATH + " system property!");
             return;
         }
         File file = new File(ks);
@@ -103,8 +111,11 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             throw new RuntimeException("Keystore is not found: " + file);
         String pwd = System.getProperty(DAConstants.KEYSTORE_PWD);
         if (null == pwd)
-            throw new RuntimeException("There is no keystore password set. Check the " +
-                    DAConstants.KEYSTORE_PWD + " system property!");
+            pwd = System.getProperty(DeploymentAdminPermission.KEYSTORE_PWD);
+        if (null == pwd)
+            throw new RuntimeException("There is no keystore password set. Set the " +
+                    DAConstants.KEYSTORE_PWD + " or the " + 
+                    DeploymentAdminPermission.KEYSTORE_PWD + " system property!");
         keystore = KeyStore.getInstance("JKS");
         keystore.load(new FileInputStream(file), pwd.toCharArray());
     }
@@ -136,22 +147,26 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         DeploymentPackageImpl srcDp = null;
         cancelled = false;
         
-        // create source DP
+        // create the source DP
         try {
             wjis = new DeploymentPackageJarInputStream(in);
+            if (!checkCertificateChains(wjis.getCertChains()))
+                throw new DeploymentException(DeploymentException.CODE_SIGNING_ERROR, 
+                        "No certificate was found in the keystore for the deployment package");
             srcDp = new DeploymentPackageImpl(wjis.getManifest(), 
-                    nextDpId(), this, wjis.getCertChains());
-        } catch (DeploymentException e) {
-            throw e;
-        } catch (Exception e) {
+                    nextDpId(), this, wjis.getCertStringChains());
+        }
+        catch (IOException e) {
             throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
-                    e.getMessage(), e);
+                  e.getMessage(), e);
+        } catch (KeyStoreException e) {
+            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
+                  e.getMessage(), e);
         }
         
         checkPermission(srcDp, DeploymentAdminPermission.ACTION_INSTALL);
         
         sendInstallEvent(srcDp.getName());
-        
         session = createInstallUpdateSession(srcDp);
         try {
             session.installUpdate(wjis);
@@ -159,7 +174,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             sendCompleteEvent(false);
             return null;
         }
-        
         sendCompleteEvent(true);
         
         if (session.getDeploymentAction() == DeploymentSessionImpl.INSTALL) {
@@ -171,6 +185,28 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             dps.add(session.getSourceDeploymentPackage());
             return session.getSourceDeploymentPackage();
         }
+    }
+
+    private boolean checkCertificateChains(List certChains) throws KeyStoreException {
+        // TODO is it correct?
+        if (null == certChains)
+            return true;
+        
+        boolean ret = true;
+        for (Iterator iter = certChains.iterator(); iter.hasNext();) {
+            Certificate[] certChain = (Certificate[]) iter.next();
+            ret = ret && checkCertificateChain(certChain);
+        }
+        return ret;
+    }
+    
+    private boolean checkCertificateChain(Certificate[] certChain) throws KeyStoreException {
+        for (int i = 0; i < certChain.length; i++) {
+            Certificate cert = certChain[i];
+            if (null != keystore.getCertificateAlias(cert))
+                return true;
+        }
+        return false;
     }
 
     private DeploymentAdminPermission createPermission(String dpName, 

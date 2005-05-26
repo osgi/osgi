@@ -101,8 +101,9 @@ public class DeploymentPackageJarInputStream {
          * Return list of Certificate[]-s. One list element is one 
          * certificate chain.
          */
-        private List splitCertificates(Certificate[] certs) {
+        private List getCertificateChains() {
             List ret = new LinkedList();
+            Certificate[] certs = getCertificates();
             
             if (null == certs || certs.length == 0)
                 return ret;
@@ -130,8 +131,8 @@ public class DeploymentPackageJarInputStream {
          * Returns a the list of cerificate chains. One chain is a 
          * String[].
          */
-        public List getCertificateChains() {
-            List l = splitCertificates(getCertificates());
+        public List getCertificateStringChains() {
+            List l = getCertificateChains();
             List list = new LinkedList();
             for (Iterator iter = l.iterator(); iter.hasNext();) {
                 X509Certificate[] cs = (X509Certificate[]) iter.next();
@@ -150,6 +151,7 @@ public class DeploymentPackageJarInputStream {
     private boolean        fixPack;
     private LinkedList     buffer = new LinkedList();
     private List           certChains;
+    private List           certStringChains;
         
     public DeploymentPackageJarInputStream(InputStream is) 
     		throws IOException, DeploymentException 
@@ -164,15 +166,26 @@ public class DeploymentPackageJarInputStream {
     public List getCertChains() {
         return certChains;
     }
+    
+    public List getCertStringChains() {
+        return certStringChains;
+    }
 	
     private void fillBuffer() throws IOException, DeploymentException {
         Entry entry = readNextEntry();
+        if (null != entry) {
+            buffer.addLast(entry);
+            certChains = entry.getCertificateChains();
+            certStringChains = entry.getCertificateStringChains();
+        }
+
+        /*Entry entry = readNextEntry();
         while (null != entry && isUninterested(entry)) {
             buffer.addLast(entry);
             entry = readNextEntry();
         }
         if (null != entry)
-            certChains  = entry.getCertificateChains();
+            certChains = entry.getCertificateChains();*/
     }
 
     /**
@@ -246,7 +259,6 @@ public class DeploymentPackageJarInputStream {
             String name = je.getName().toLowerCase();
             if (name.endsWith(".dsa")) {
                 ByteArrayOutputStream bos = readIntoBuffer();
-                ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
                 closeEntry();
                 String key = name.substring("meta-inf/".length(), name.indexOf(".dsa"));
             }

@@ -93,6 +93,6 @@ public class ResourceEntry implements Serializable {
     }
 
     public void updateCertificates(Entry entry) {
-        certChains = entry.getCertificateChains();
+        certChains = entry.getCertificateStringChains();
     }
 }

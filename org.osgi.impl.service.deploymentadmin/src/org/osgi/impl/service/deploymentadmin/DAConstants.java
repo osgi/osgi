@@ -36,7 +36,8 @@ public class DAConstants {
 
     // used system properties 
     public static final String FW_BUNDLES_DIR	    = "org.osgi.impl.service.deploymentadmin.fwbundledir";
-    public static final String KEYSTORE     	    = "org.osgi.impl.service.deploymentadmin.keystore.path";
+    public static final String KEYSTORE_TYPE   	    = "org.osgi.impl.service.deploymentadmin.keystore.type";
+    public static final String KEYSTORE_PATH   	    = "org.osgi.impl.service.deploymentadmin.keystore.path";
     public static final String KEYSTORE_PWD    	    = "org.osgi.impl.service.deploymentadmin.keystore.pwd";
     
     // event related constants

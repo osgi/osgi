@@ -267,7 +267,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getVersion()
      */
     public Version getVersion() {
-        return new Version((String) mainSection.get(DAConstants.DP_VERSION)); 
+        String s = (String) mainSection.get(DAConstants.DP_VERSION);
+        if (null == s)
+            return null;
+        return new Version(s); 
     }
 
     /**

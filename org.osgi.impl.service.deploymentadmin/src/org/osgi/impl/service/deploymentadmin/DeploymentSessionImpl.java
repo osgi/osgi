@@ -530,7 +530,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     {
         String pid = entry.getAttributes().getValue(DAConstants.RP_PID);
         WrappedResourceProcessor proc = new WrappedResourceProcessor(
-                findProcessor(pid), fetchAccessControlContext(entry.getCertificateChains()));
+                findProcessor(pid), fetchAccessControlContext(entry.getCertificateStringChains()));
         transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, proc));
         proc.process(entry.getName(), entry.getInputStream());
         if (INSTALL == getDeploymentAction())

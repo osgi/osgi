@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.AllPermission;
 import java.util.Arrays;
+import java.util.PropertyPermission;
 import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
@@ -63,7 +64,8 @@ public class DoIt implements BundleActivator {
                         "read, write, execute, delete"),
                 new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
                 new PermissionInfo(ServicePermission.class.getName(), "*", "get, register"),
-                new PermissionInfo(AdminPermission.class.getName(), "*", "*")
+                new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
+                new PermissionInfo(PropertyPermission.class.getName(), "org.osgi.*", "read")
         	});
         
         ref = context.getServiceReference(Db.class.getName());
@@ -194,6 +196,8 @@ public class DoIt implements BundleActivator {
             System.out.println("*******************************************************************");
             try {bad_db_test_08(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
+            try {bad_db_test_09(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
             
             System.out.println("\n=====================================");
             System.out.println("RESULT: OK = " + ok + " ERROR = " + error);
@@ -269,6 +273,17 @@ public class DoIt implements BundleActivator {
             DeploymentPackage dp = da.installDeploymentPackage(is);
         } catch (DeploymentException e) {
             if (DeploymentException.CODE_MISSING_HEADER == e.getCode())
+                return;
+        }
+        throw new Exception("Negative test failed");
+    }
+    
+    private void bad_db_test_09() throws Exception {
+        InputStream is = new FileInputStream(HOME + "bad_db_test_09.dp");
+        try {
+            DeploymentPackage dp = da.installDeploymentPackage(is);
+        } catch (DeploymentException e) {
+            if (DeploymentException.CODE_SIGNING_ERROR == e.getCode())
                 return;
         }
         throw new Exception("Negative test failed");
