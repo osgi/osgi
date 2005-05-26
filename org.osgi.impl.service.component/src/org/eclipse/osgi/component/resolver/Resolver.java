@@ -24,7 +24,6 @@ import org.eclipse.osgi.component.workqueue.WorkDispatcher;
 import org.eclipse.osgi.component.workqueue.WorkQueue;
 import org.osgi.framework.*;
 import org.osgi.service.cm.*;
-import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentException;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
@@ -412,7 +411,7 @@ public class Resolver implements ServiceListener, WorkDispatcher, ServiceTracker
 					// re-run the algorithm
 					Reference reference = (Reference) iterator.next();
 					if (reference != null) {
-						if (!resolveReference(cdp, reference, enabledCDPs)) {
+						if (!reference.resolve(cdp, main.framework.getBundleContext(cdp.getComponentDescription().getBundle()), enabledCDPs)) {
 							cdp.clearReferenceCDPs();
 							enabledCDPs.remove(cdp);
 							runAgain = true;
@@ -545,33 +544,6 @@ public class Resolver implements ServiceListener, WorkDispatcher, ServiceTracker
 			}
 		}
 		return inEligibleCDPs;
-	}
-
-	private boolean resolveReference(ComponentDescriptionProp cdp, Reference reference, List enabledCDPs) {
-		//if the cardinality is "0..1" or "0..n" then this refernce is not required
-		//TODO - how do we place this refernece in the ordering?
-		if (!reference.isRequiredFor(cdp.getComponentDescription()))
-			return true;
-
-		if (reference.hasLegacyProviders(scrBundleContext))
-			return true; //we found an availible provider in the legacy services
-
-		// loop thru all components to match providers of services
-		Iterator it = enabledCDPs.iterator();
-		while (it.hasNext()) {
-			ComponentDescriptionProp cdpRefLookup = (ComponentDescriptionProp) it.next();
-			List provideList = cdpRefLookup.getServicesPrivided();
-
-			if (provideList.contains(reference.getReferenceDescription().getInterfacename())) {
-				//check the target field
-				if (reference.matchProperties(cdpRefLookup, scrBundleContext)) {
-					cdp.setReferenceCDP(cdpRefLookup);
-					return true;
-				}
-			}
-		}
-
-		return false;
 	}
 
 	/**

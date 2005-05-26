@@ -15,6 +15,7 @@
 package org.eclipse.osgi.component.resolver;
 
 import java.util.*;
+
 import org.eclipse.osgi.component.model.*;
 import org.osgi.framework.*;
 
@@ -203,6 +204,41 @@ public class Reference {
 			e.printStackTrace();
 			return false; //TODO - is this correct?
 		}
+	}
+
+	/**
+	 * Check if this reference can be satisfied for a particular CDP and set of enabled CDPs
+	 * 
+	 * @param cdp
+	 * @param bc the bundle context of the cdp
+	 * @param enabledCDPs the list of enabled cdps
+	 * @return true if the reference can be resolved
+	 */
+	public boolean resolve(ComponentDescriptionProp cdp, BundleContext bc, List enabledCDPs) {
+		//if the cardinality is "0..1" or "0..n" then this refernce is not required
+		//TODO - how do we place this reference in the ordering?
+		if (!this.isRequiredFor(cdp.getComponentDescription()))
+			return true;
+
+		if (this.hasLegacyProviders(bc))
+			return true; //we found an availible provider in the legacy services
+
+		// loop thru all components to match providers of services
+		Iterator it = enabledCDPs.iterator();
+		while (it.hasNext()) {
+			ComponentDescriptionProp cdpRefLookup = (ComponentDescriptionProp) it.next();
+			List provideList = cdpRefLookup.getServicesPrivided();
+
+			if (provideList.contains(this.getReferenceDescription().getInterfacename())) {
+				//check the target field
+				if (this.matchProperties(cdpRefLookup, bc)) {
+					cdp.setReferenceCDP(cdpRefLookup);
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 }
