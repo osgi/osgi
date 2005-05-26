@@ -501,7 +501,7 @@ public class Unit {
 		return name;
 	}
 
-	public static Unit fromString(String unit) {
+	static Unit fromString(String unit) {
 		Unit result = Unit.unity;
 		boolean div = false;
 		outer: while (unit.length() > 0) {
