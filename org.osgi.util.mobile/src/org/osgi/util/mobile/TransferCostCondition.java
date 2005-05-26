@@ -42,7 +42,7 @@ public class TransferCostCondition implements Condition {
 	 * when {@link org.osgi.service.condpermadmin.ConditionalPermissionAdmin Conditional Permission Admin} initializes the object.
 	 * 
 	 * @param bundle ignored.
-	 * @param costLimit the abstract limit cost. Its getArgs() method should return a String array
+	 * @param costLimit the abstract limit cost. Its {@link ConditionInfo#getArgs()} method should return a String array
 	 * 		with the length of 1. The string inside can have the possible values of <code>"LOW"</code>,<code>"MEDIUM"</code>
 	 *        and <code>"HIGH"</code>.
 	 * @return A TransferCostCondition object with the specified costLimit.
