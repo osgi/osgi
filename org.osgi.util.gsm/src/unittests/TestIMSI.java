@@ -26,6 +26,8 @@ import java.util.Enumeration;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.condpermadmin.Condition;
+import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.util.gsm.IMSICondition;
 import junit.framework.TestCase;
 
@@ -60,30 +62,30 @@ public class TestIMSI extends TestCase {
 	}
 	
 	public void testBasic() throws Exception {
-		IMSICondition imei = (IMSICondition) IMSICondition.getInstance(bundle,SYSTEM_IMSI);
+		Condition imei = (Condition) IMSICondition.getInstance(bundle,new ConditionInfo("",new String[]{SYSTEM_IMSI}));
 		assertFalse(imei.isPostponed());
 		assertTrue(imei.isSatisfied());
 		
-		imei = (IMSICondition) IMSICondition.getInstance(bundle,OTHER_IMSI);
-		assertTrue(imei.isPostponed());
-		assertTrue(imei.isSatisfied());
+		imei = (Condition) IMSICondition.getInstance(bundle,new ConditionInfo("",new String[]{OTHER_IMSI}));
+		assertFalse(imei.isPostponed());
+		assertFalse(imei.isSatisfied());
 	}
 	
 	public void testIMSIValidator() throws Exception {
 		try {
-			IMSICondition imei = (IMSICondition) IMSICondition.getInstance(bundle,"");
+			IMSICondition imei = (IMSICondition) IMSICondition.getInstance(bundle,new ConditionInfo("",new String[]{""}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 		try {
-			IMSICondition imei = (IMSICondition) IMSICondition.getInstance(bundle,"12345678901234");
+			IMSICondition imei = (IMSICondition) IMSICondition.getInstance(bundle,new ConditionInfo("",new String[]{"12345678901234"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 		try {
-			IMSICondition imei = (IMSICondition) IMSICondition.getInstance(bundle,"1234567890123456");
+			IMSICondition imei = (IMSICondition) IMSICondition.getInstance(bundle,new ConditionInfo("",new String[]{"1234567890123456"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 		try {
-			IMSICondition imei = (IMSICondition) IMSICondition.getInstance(bundle,"12345678901234a");
+			IMSICondition imei = (IMSICondition) IMSICondition.getInstance(bundle,new ConditionInfo("",new String[]{"12345678901234a"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 	}

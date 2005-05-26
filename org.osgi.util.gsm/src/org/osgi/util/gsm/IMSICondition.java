@@ -12,6 +12,7 @@ package org.osgi.util.gsm;
 import java.util.Dictionary;
 import org.osgi.framework.Bundle;
 import org.osgi.service.condpermadmin.Condition;
+import org.osgi.service.condpermadmin.ConditionInfo;
 
 /**
  * Class representing an IMSI condition. Instances of this class contain a
@@ -21,29 +22,32 @@ public class IMSICondition implements Condition {
 	// this reference implementation only supports one IMSI, that cannot change
 	protected static final String imsi = System.getProperty("org.osgi.util.gsm.imsi");
 
-	private static final IMSICondition trueCondition = new IMSICondition(true);
-	private static final IMSICondition falseCondition = new IMSICondition(false);
-	private final boolean satisfied;
-
-	private IMSICondition(boolean satisfied) { this.satisfied = satisfied; }
+	private IMSICondition() {
+		// this class is never instantiated
+		throw new IllegalArgumentException();
+	}
 
 	/**
 	 * Creates an IMSI condition object.
 	 * 
 	 * @param bundle ignored, as the IMSI number is the same for all bundles.
-	 * @param imsi the IMSI value of the subscriber identity.
+	 * @param conditionInfo contains the IMSI value of the subscriber identity. Its
+	 * 		{@link ConditionInfo#getArgs()} method should return a String array with one String,
+	 * 		the IMSI value. The IMSI must be 15 digits, no hypens.
 	 * @throws NullPointerException if one of the parameters is null.
 	 * @throws IllegalArgumentException if the imsi is not a string of 15 digits.
 	 */
-	public static Condition getInstance(Bundle bundle, String imsi) {
+	public static Condition getInstance(Bundle bundle, ConditionInfo conditionInfo) {
 		if (bundle==null) throw new NullPointerException("bundle");
+		if (conditionInfo==null) throw new NullPointerException("conditionInfo");
+		String imsi = conditionInfo.getArgs()[0];
 		if (imsi==null) throw new NullPointerException("imsi");
 		if (imsi.length()!=15) throw new IllegalArgumentException("not a valid imei: "+imsi);
 		for(int i=0;i<imsi.length();i++) {
 			int c = imsi.charAt(i);
 			if (c<'0'||c>'9') throw new IllegalArgumentException("not a valid imei: "+imsi);
 		}
-		return (imsi.equals(IMSICondition.imsi))?trueCondition:falseCondition;
+		return (imsi.equals(IMSICondition.imsi))?TRUE:FALSE;
 	}
 
 	/**
@@ -52,7 +56,8 @@ public class IMSICondition implements Condition {
 	 * @return True if the IMSI value in this condition is the same as the IMSI of subscriber.
 	 */
 	public boolean isSatisfied() {
-		return satisfied;
+		// this class is never instantiated
+		throw new IllegalStateException();
 	}
 
 	/**
@@ -61,8 +66,8 @@ public class IMSICondition implements Condition {
 	 * @return True if the {@link #isSatisfied()} method cannot give results instantly.
 	 */
 	public boolean isPostponed() {
-		// this reference implementation only supports one IMSI, that cannot change
-		return false;
+		// this class is never instantiated
+		throw new IllegalStateException();
 	}
 
 	/**
@@ -72,8 +77,8 @@ public class IMSICondition implements Condition {
 	 * @return True, if the IMSI can change (mobile device supports live SIM card swaps, etc.)
 	 */
 	public boolean isMutable() {
-		// this reference implementation only supports one IMSI, that cannot change
-		return false;
+		// this class is never instantiated
+		throw new IllegalStateException();
 	}
 
 	/**
@@ -85,10 +90,7 @@ public class IMSICondition implements Condition {
 	 * @throws NullPointerException if conds is <code>null</code>.
 	 */
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
-		// we don't use context
-		for(int i=0;i<conds.length;i++) {
-			if (!conds[i].isSatisfied()) return false;
-		}
-		return true;
+		// this class is never instantiated
+		throw new IllegalStateException();
 	}
 }

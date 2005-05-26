@@ -26,6 +26,8 @@ import java.util.Enumeration;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.condpermadmin.Condition;
+import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.util.gsm.IMEICondition;
 import junit.framework.TestCase;
 
@@ -60,30 +62,30 @@ public class TestIMEI extends TestCase {
 	}
 	
 	public void testBasic() throws Exception {
-		IMEICondition imei = (IMEICondition) IMEICondition.getInstance(bundle,SYSTEM_IMEI);
+		Condition imei = (Condition) IMEICondition.getInstance(bundle,new ConditionInfo("",new String[]{SYSTEM_IMEI}));
 		assertFalse(imei.isPostponed());
 		assertTrue(imei.isSatisfied());
 		
-		imei = (IMEICondition) IMEICondition.getInstance(bundle,OTHER_IMEI);
+		imei = (Condition) IMEICondition.getInstance(bundle,new ConditionInfo("",new String[]{OTHER_IMEI}));
 		assertFalse(imei.isPostponed());
 		assertFalse(imei.isSatisfied());
 	}
 	
 	public void testIMEIValidator() throws Exception {
 		try {
-			IMEICondition imei = (IMEICondition) IMEICondition.getInstance(bundle,"");
+			IMEICondition imei = (IMEICondition) IMEICondition.getInstance(bundle,new ConditionInfo("",new String[]{""}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 		try {
-			IMEICondition imei = (IMEICondition) IMEICondition.getInstance(bundle,"12345678901234");
+			IMEICondition imei = (IMEICondition) IMEICondition.getInstance(bundle,new ConditionInfo("",new String[]{"12345678901234"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 		try {
-			IMEICondition imei = (IMEICondition) IMEICondition.getInstance(bundle,"1234567890123456");
+			IMEICondition imei = (IMEICondition) IMEICondition.getInstance(bundle,new ConditionInfo("",new String[]{"1234567890123456"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 		try {
-			IMEICondition imei = (IMEICondition) IMEICondition.getInstance(bundle,"12345678901234a");
+			IMEICondition imei = (IMEICondition) IMEICondition.getInstance(bundle,new ConditionInfo("",new String[]{"12345678901234a"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 	}

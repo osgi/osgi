@@ -12,6 +12,7 @@ package org.osgi.util.gsm;
 import java.util.Dictionary;
 import org.osgi.framework.Bundle;
 import org.osgi.service.condpermadmin.Condition;
+import org.osgi.service.condpermadmin.ConditionInfo;
 
 /**
  * Class representing an IMEI condition. Instances of this class contain a
@@ -19,33 +20,34 @@ import org.osgi.service.condpermadmin.Condition;
  */
 public class IMEICondition implements Condition {
 	protected static final String imei = System.getProperty("org.osgi.util.gsm.imei");
-	private static final IMEICondition trueCondition = new IMEICondition(true);
-	private static final IMEICondition falseCondition = new IMEICondition(false);
-
-	private final boolean satisfied;
 	
-	// the default constructor is public
-	protected IMEICondition(boolean match) { satisfied = match; }
+	private IMEICondition() {
+		// this class is never instantiated
+		throw new IllegalArgumentException();
+	}
 
 	/**
 	 * Creates an IMEICondition object.
 	 * 
 	 * @param bundle ignored, as the IMEI number is the property of the mobile device,
 	 * 					and thus the same for all bundles.
-	 * @param imei the IMEI value to match the device's IMEI against. Must be 15 digits, no hypens.
+	 * @param conditionInfo contains the IMEI value to match the device's IMEI against. Its
+	 * 		{@link ConditionInfo#getArgs()} method should return a String array with one value, the
+	 * 		IMEI string. The IMEI  must be 15 digits, no hypens.
 	 * @return An IMEICondition object, that can tell whether its IMEI number matches that of the device.
 	 * @throws NullPointerException if one of the parameters is <code>null</code>.
 	 * @throws IllegalArgumentException if the IMEI is not a string of 15 digits.
 	 */
-	public static Condition getInstance(Bundle bundle, String imei) {
+	public static Condition getInstance(Bundle bundle, ConditionInfo conditionInfo) {
 		if (bundle==null) throw new NullPointerException("bundle");
+		String imei = conditionInfo.getArgs()[0];
 		if (imei==null) throw new NullPointerException("imei");
 		if (imei.length()!=15) throw new IllegalArgumentException("not a valid imei: "+imei);
 		for(int i=0;i<imei.length();i++) {
 			int c = imei.charAt(i);
 			if (c<'0'||c>'9') throw new IllegalArgumentException("not a valid imei: "+imei);
 		}
-		return imei.equals(IMEICondition.imei)?trueCondition:falseCondition;
+		return imei.equals(IMEICondition.imei)?TRUE:FALSE;
 	}
 
 	/**
@@ -54,7 +56,8 @@ public class IMEICondition implements Condition {
 	 * @return True if the IMEI value in this condition is the same as the IMEI of the device.
 	 */
 	public boolean isSatisfied() {
-		return satisfied;
+		// this class is never instantiated
+		throw new IllegalStateException();
 	}
 
 	/**
@@ -63,7 +66,8 @@ public class IMEICondition implements Condition {
 	 * @return True if the {@link #isSatisfied()} method cannot give results instantly.
 	 */
 	public boolean isPostponed() {
-		return false;
+		// this class is never instantiated
+		throw new IllegalStateException();
 	}
 
 	/**
@@ -73,7 +77,8 @@ public class IMEICondition implements Condition {
 	 * @return Always false.
 	 */
 	public boolean isMutable() {
-		return false;
+		// this class is never instantiated
+		throw new IllegalStateException();
 	}
 
 	/**
@@ -85,10 +90,7 @@ public class IMEICondition implements Condition {
 	 * @throws NullPointerException if conds is <code>null</code>.
 	 */
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
-		// we don't use context
-		for(int i=0;i<conds.length;i++) {
-			if (!conds[i].isSatisfied()) return false;
-		}
-		return true;
+		// this class is never instantiated
+		throw new IllegalStateException();
 	}
 }
