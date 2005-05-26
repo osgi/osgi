@@ -13,6 +13,7 @@ import java.util.Dictionary;
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.service.condpermadmin.Condition;
+import org.osgi.service.condpermadmin.ConditionInfo;
 
 /**
  * Class representing a user prompt condition. Instances of this class hold two
@@ -56,29 +57,38 @@ public class UserPromptCondition implements Condition {
 	 * given. Thus, the lifetime of the permission is controlled by the user.
 	 *
 	 * @param bundle the bundle to ask about.
-	 * @param levels the possible permission levels. This is a comma-separated list that can contain
+	 * @param conditionInfo the conditionInfo containing the construction information. Its 
+	 * 			{@link ConditionInfo#getArgs()} method should return a String array with 4
+	 * 			strings in it:
+	 * <ol start="0">
+	 * <li>the possible permission levels. This is a comma-separated list that can contain
 	 * 		following strings: ONESHOT SESSION BLANKET. The order is not important.
-	 * ### Is this case sensitive?
-	 * @param defaultLevel the default permission level, one chosen from the levels parameter. If
-	 * 		it is an empty string, then there is no default.
-	 * @param catalogName the message catalog base name. It will be loaded by a {@link java.util.ResourceBundle},
+	 * 
+	 * ### Is this case sensitive?</li>
+	 * <li>the default permission level, one chosen from the possible permission levels. If
+	 * 		it is an empty string, then there is no default.</li>
+	 * <li>the message catalog base name. It will be loaded by a {@link java.util.ResourceBundle},
 	 * 		or equivalent
 	 * 		from an exporting OSGi Bundle. Thus, if the catalogName is "com.provider.messages.userprompt",
 	 * 		then there should be an OSGi Bundle exporting the "com.provider.messages" package, and inside
-	 * 		it files like "userprompt_en_US.properties".
-	 * @param message textual description of the condition, to be displayed to the user. If
-	 * 		it starts with a '%' sign, then the message is looked up from the catalog specified
-	 * 		by the catalogName parameter. The key is the rest of the string after the '%' sign.
-	 * @throws IllegalArgumentException if the parameters are malformed.
+	 * 		it files like "userprompt_en_US.properties".</li>
+	 * <li>textual description of the condition, to be displayed to the user. If
+	 * 		it starts with a '%' sign, then the message is looked up from the catalog specified previously.
+	 * 		The key is the rest of the string after the '%' sign.</li>
+	 * </ol>
+	 * @throws IllegalArgumentException if the parameters are malformed.</li>
 	 * @throws NullPointerException if one of the parameters is <code>null</code>.
 	 */
-	public static Condition getInstance(Bundle bundle,
-					String levels,
-					String defaultLevel, 
-					String catalogName, 
-					String message) 
+	public static Condition getCondition(Bundle bundle,ConditionInfo conditionInfo)
 	{
+		String[] args = conditionInfo.getArgs();
+		if (args==null) throw new NullPointerException("args");
+		if (args.length!=4) throw new IllegalArgumentException("args.length=="+args.length+" (should be 4)");
 		if (bundle==null) throw new NullPointerException("bundle");
+		String levels = args[0];
+		String defaultLevel = args[1];
+		String catalogName = args[2];
+		String message = args[3];
 		if (levels==null) throw new NullPointerException("levels");
 		if (defaultLevel==null) throw new NullPointerException("defaultLevel");
 		if (catalogName==null) throw new NullPointerException("catalogName");
@@ -135,7 +145,7 @@ public class UserPromptCondition implements Condition {
 	 * Checks if the {@link #isSatisfied()} method needs to prompt the user, thus cannot
 	 * give results instantly. 
 	 * This depends on the possible permission levels given in 
-	 * {@link UserPromptCondition#getInstance(Bundle, String, String, String, String)}. 
+	 * {@link UserPromptCondition#getCondition(Bundle, ConditionInfo)}. 
 	 * <ul>
 	 * <li>ONESHOT - isPostponed always returns true. The user is prompted for question every time.
 	 * <li>SESSION - isPostponed returns true until the user decides either yes or no for the current session.
@@ -179,7 +189,7 @@ public class UserPromptCondition implements Condition {
 	 * the user and returns true if the user accepts. Depending on the
 	 * amount of levels the condition is assigned to, the prompt may have
 	 * multiple accept buttons and one of them can be selected by default (see
-	 * deflevel parameter at UserPrompt constructor). It must be always possible
+	 * default level parameter at {@link UserPromptCondition#getCondition(Bundle, ConditionInfo)}). It must be always possible
 	 * to deny the permission (e.g. by a separate "deny" button). In case of BLANKET
 	 * and SESSION levels, it is possible that the user has already answered the question,
 	 * in this case there will be no prompting, but immediate return with the previous answer.

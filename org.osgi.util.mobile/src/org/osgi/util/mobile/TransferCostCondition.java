@@ -12,6 +12,7 @@ package org.osgi.util.mobile;
 import java.util.Dictionary;
 import org.osgi.framework.Bundle;
 import org.osgi.service.condpermadmin.Condition;
+import org.osgi.service.condpermadmin.ConditionInfo;
 
 /**
  * Class representing abstract transfer cost values. Implementation assigns
@@ -41,19 +42,22 @@ public class TransferCostCondition implements Condition {
 	 * when {@link org.osgi.service.condpermadmin.ConditionalPermissionAdmin Conditional Permission Admin} initializes the object.
 	 * 
 	 * @param bundle ignored.
-	 * @param costLimit the abstract limit cost. Possible values are <code>"LOW"</code>,<code>"MEDIUM"</code>
+	 * @param costLimit the abstract limit cost. Its getArgs() method should return a String array
+	 * 		with the length of 1. The string inside can have the possible values of <code>"LOW"</code>,<code>"MEDIUM"</code>
 	 *        and <code>"HIGH"</code>.
 	 * @return A TransferCostCondition object with the specified costLimit.
 	 * @throws IllegalArgumentException if the costLimit parameter is not from the possible values.
 	 * @throws NullPointerException if one of the parameters is <code>null</code>.
 	 */
-	public static Condition getInstance(Bundle bundle, String costLimit) {
+	public static Condition getInstance(Bundle bundle, ConditionInfo costLimit) {
 		if (costLimit==null) throw new NullPointerException("costLimit");
+		String l = costLimit.getArgs()[0];
+		if (l==null) throw new NullPointerException("costLimit");
 		if (bundle==null) throw new NullPointerException("bundle");
-		if (costLimit.equals("LOW")) return lowCostLimit;
-		if (costLimit.equals("MEDIUM")) return mediumCostLimit;
-		if (costLimit.equals("HIGH")) return highCostLimit;
-		throw new IllegalArgumentException("unknown costLimit: "+costLimit);
+		if (l.equals("LOW")) return lowCostLimit;
+		if (l.equals("MEDIUM")) return mediumCostLimit;
+		if (l.equals("HIGH")) return highCostLimit;
+		throw new IllegalArgumentException("unknown costLimit: "+l);
 	}
 
 	/**

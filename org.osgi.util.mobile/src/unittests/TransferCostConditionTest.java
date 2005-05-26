@@ -27,13 +27,49 @@
 
 package unittests;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Dictionary;
+import java.util.Enumeration;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.condpermadmin.Condition;
+import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.util.mobile.TransferCostCondition;
 import junit.framework.TestCase;
 
 public class TransferCostConditionTest extends TestCase {
+	public static class DummyBundle implements Bundle {
+		public int getState() {return 0;}
+		public void start() throws BundleException {}
+		public void stop() throws BundleException {}
+		public void update() throws BundleException {}
+		public void update(InputStream in) throws BundleException {}
+		public void uninstall() throws BundleException {}
+		public Dictionary getHeaders() {return null;}
+		public long getBundleId() {return 0;}
+		public String getLocation() {return null;}
+		public ServiceReference[] getRegisteredServices() {	return null;}
+		public ServiceReference[] getServicesInUse() {return null;}
+		public boolean hasPermission(Object permission) {return false;}
+		public URL getResource(String name) {return null;}
+		public Dictionary getHeaders(String locale) {return null;}
+		public String getSymbolicName() {return null;}
+		public Class loadClass(String name) throws ClassNotFoundException {return null;}
+		public Enumeration getResources(String name) throws IOException {return null;}
+		public Enumeration getEntryPaths(String path) {return null;}
+		public URL getEntry(String name) {return null;}
+		public long getLastModified() {return 0;}
+		public Enumeration findEntries(String path, String filePattern, boolean recurse) {return null;}
+	}
+	
+	
 	public void testHighLimit() throws Exception {
-		Condition c = TransferCostCondition.getInstance(null,"HIGH");
+		Condition c = TransferCostCondition.getInstance(new DummyBundle(),
+				new ConditionInfo("",new String[]{"HIGH"}));
 		TransferCostCondition.setTransferCost(null);
 		assertTrue(c.isSatisfied());
 		TransferCostCondition.setTransferCost("LOW");
@@ -45,7 +81,8 @@ public class TransferCostConditionTest extends TestCase {
 	}
 	
 	public void testMediumLimit() throws Exception {
-		Condition c = TransferCostCondition.getInstance(null,"MEDIUM");
+		Condition c = TransferCostCondition.getInstance(new DummyBundle(),
+				new ConditionInfo("",new String[]{"MEDIUM"}));
 		TransferCostCondition.setTransferCost(null);
 		assertTrue(c.isSatisfied());
 		TransferCostCondition.setTransferCost("LOW");
@@ -57,7 +94,8 @@ public class TransferCostConditionTest extends TestCase {
 	}
 
 	public void testLowLimit() throws Exception {
-		Condition c = TransferCostCondition.getInstance(null,"LOW");
+		Condition c = TransferCostCondition.getInstance(new DummyBundle(),
+				new ConditionInfo("",new String[]{"LOW"}));
 		TransferCostCondition.setTransferCost(null);
 		assertTrue(c.isSatisfied());
 		TransferCostCondition.setTransferCost("LOW");
