@@ -37,6 +37,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Entry;
+import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
@@ -331,6 +332,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         if (0 == getId())
             throw new RuntimeException("\"System\" bundle cannot be uninstalled");
         
+        da.checkPermission(this, DeploymentAdminPermission.ACTION_UNINSTALL);
+        
         da.uninstall(this);
         id = new Long(-1);
     }
@@ -343,6 +346,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         checkStale();
         if (0 == getId())
             throw new RuntimeException("\"System\" bundle cannot be uninstalled");
+        
+        da.checkPermission(this, DeploymentAdminPermission.ACTION_UNINSTALL_FORCED);
         
         id = new Long(-1);
         return da.uninstallForced(this);

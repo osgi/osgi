@@ -91,9 +91,9 @@ public class DeploymentAdminPermission extends Permission {
     public static final String ACTION_UNINSTALL          = "uninstall";
 
     /**
-     * Constant String to the "uninstallForceful" action.
+     * Constant String to the "uninstallForced" action.
      */
-    public static final String ACTION_UNINSTALL_FORCEFUL = "uninstallForceful";
+    public static final String ACTION_UNINSTALL_FORCED   = "uninstallForced";
     
     /**
      * Constant String to the "cancel" action.
@@ -105,7 +105,7 @@ public class DeploymentAdminPermission extends Permission {
         ACTIONS.add(ACTION_INSTALL.toLowerCase());
         ACTIONS.add(ACTION_LIST.toLowerCase());
         ACTIONS.add(ACTION_UNINSTALL.toLowerCase());
-        ACTIONS.add(ACTION_UNINSTALL_FORCEFUL.toLowerCase());
+        ACTIONS.add(ACTION_UNINSTALL_FORCED.toLowerCase());
         ACTIONS.add(ACTION_CANCEL.toLowerCase());
     }
     
@@ -782,20 +782,6 @@ public class DeploymentAdminPermission extends Permission {
             
             return -1;
         }
-    }
-
-    public static void main(String[] args) {
-        DeploymentAdminPermission perm = new DeploymentAdminPermission("(signer=" +
-    			"<*, OU=Human Resources, O=FooSoft, C=HU>" +
-        		")",
-        	"install");
-        System.out.println(perm.implies(new DeploymentAdminPermission("(signer=" +
-    			"CN=John Foo, OU=Human Resources, O=FooSoft, C=HU" +
-        		")",
-        	"install"))
-        );
-
-        System.out.println("END");
     }
 
 }

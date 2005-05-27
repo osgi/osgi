@@ -59,7 +59,7 @@ public class DoIt implements BundleActivator {
         pa.setPermissions(daLoc, new PermissionInfo[] {
                 new PermissionInfo(DeploymentAdminPermission.class.getName(), "(&(name=*)" +
                 		"(signer=-;CN=Root1,OU=FAKEDONTUSE,O=CASoft,L=Budapest,C=HU))", 
-                        "install, uninstall, uninstallForceful, list, cancel"),
+                        "install, uninstall, uninstallForced, list, cancel"),
                 new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", 
                         "read, write, execute, delete"),
                 new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
@@ -102,7 +102,7 @@ public class DoIt implements BundleActivator {
                 // to install deployment packages 
                 new PermissionInfo(DeploymentAdminPermission.class.getName(), "(&(name=*)" +
                 		"(signer=-;CN=Root1,OU=FAKEDONTUSE,O=CASoft,L=Budapest,C=HU))", 
-                        "install"),
+                        "install, uninstall, cancel"),
                 // for db_test_07
                 new PermissionInfo(DeploymentAdminPermission.class.getName(), "(name=db_test_*)", 
                         "list"),

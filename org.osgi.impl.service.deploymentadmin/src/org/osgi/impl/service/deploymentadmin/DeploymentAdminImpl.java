@@ -322,12 +322,13 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return null;
     }
 
-    // TODO throws SecurityException
     public synchronized DeploymentPackage getDeploymentPackage(long id) {
         for (Iterator iter = dps.iterator(); iter.hasNext();) {
             DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();
-            if (dp.getId() == id)
+            if (dp.getId() == id) {
+                checkPermission(dp, DeploymentAdminPermission.ACTION_LIST);
                 return dp;
+            }
         }
         return null;
 	}
@@ -336,6 +337,12 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	    if (null == session)
 	        return false;
 	    else  {
+	        if (DeploymentSessionImpl.UNINSTALL == session.getDeploymentAction())
+	            checkPermission((DeploymentPackageImpl) session.getTargetDeploymentPackage(), 
+	                    DeploymentAdminPermission.ACTION_CANCEL);
+	        else
+	            checkPermission((DeploymentPackageImpl) session.getSourceDeploymentPackage(), 
+	                    DeploymentAdminPermission.ACTION_CANCEL);
 	        session.cancel();
 	        cancelled = true;
 	        return true;
@@ -447,8 +454,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
     }
 
-    // TODO is it correct?
-	private void checkPermission(DeploymentPackageImpl dp, String action) {
+	void checkPermission(DeploymentPackageImpl dp, String action) {
 	    SecurityManager sm = System.getSecurityManager();
 	    if (null == sm)
 	        return;
