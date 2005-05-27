@@ -30,6 +30,7 @@ import org.osgi.framework.Version;
 import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
+import org.osgi.service.deploymentadmin.DeploymentCustomizerPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
@@ -60,6 +61,8 @@ public class DoIt implements BundleActivator {
                 new PermissionInfo(DeploymentAdminPermission.class.getName(), "(&(name=*)" +
                 		"(signer=-;CN=Root1,OU=FAKEDONTUSE,O=CASoft,L=Budapest,C=HU))", 
                         "install, uninstall, uninstallForced, list, cancel"),
+                new PermissionInfo(DeploymentCustomizerPermission.class.getName(), 
+                        "(name=*)", "privatearea"),
                 new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", 
                         "read, write, execute, delete"),
                 new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
@@ -90,6 +93,22 @@ public class DoIt implements BundleActivator {
             	};
             pa.setPermissions(rpLoc, pis);
         }
+        
+        //db_test_06 needs this
+        PermissionInfo[] pis = new PermissionInfo[] {
+                new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
+                // to allow RP to read its id from its manifest
+                new PermissionInfo(AdminPermission.class.getName(), "*", "metadata"),
+                // to reach the database service
+                new PermissionInfo(ServicePermission.class.getName(), "*", "get"),
+                // to register itsel as a RP service
+                new PermissionInfo(ServicePermission.class.getName(), "*", "register"),
+                // to handle private area
+                new PermissionInfo(DeploymentCustomizerPermission.class.getName(), 
+                        "(name=easygame)", "privatearea"),
+        	};
+        pa.setPermissions("com.nokia.test.exampleresourceprocessor.db." +
+        		"DbResourceProcessor_db_test_06", pis);
 
         ref = context.getServiceReference(Db.class.getName());
         String doitLoc = context.getBundle().getLocation();

@@ -213,8 +213,12 @@ public class DbResourceProcessor
 	            } else if (line.startsWith("GETDATAFILE")) {
 	                String[] parts = Splitter.split(line, ' ', 0);
 	                String symbName = parts[1];
-	                Bundle b = session.getSourceDeploymentPackage().getBundle(symbName);
-	                File f = session.getDataFile(b);
+	                final Bundle b = session.getSourceDeploymentPackage().getBundle(symbName);
+	                File f = (File) AccessController.doPrivileged(new PrivilegedExceptionAction() {
+                        public Object run() throws Exception {
+                            return session.getDataFile(b);
+                        }
+                    });
 	                System.out.println("Bundle (" + b + ") file: " + f);
 	                this.bundlePrivateArea = f;
 	            } else if (line.startsWith("CREATEFILE")) {

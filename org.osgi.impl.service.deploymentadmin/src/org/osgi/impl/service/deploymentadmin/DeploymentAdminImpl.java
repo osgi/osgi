@@ -48,6 +48,7 @@ import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.deploymentadmin.SignerChainPattern;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
@@ -95,16 +96,16 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private void initKeyStore() throws Exception {
         String ksType = System.getProperty(DAConstants.KEYSTORE_TYPE);
         if (null == ksType)
-            ksType = System.getProperty(DeploymentAdminPermission.KEYSTORE_TYPE);
+            ksType = System.getProperty(SignerChainPattern.KEYSTORE_TYPE);
         if (null == ksType)
             ksType = "JKS";
         String ks = System.getProperty(DAConstants.KEYSTORE_PATH);
         if (null == ks)
-            ks = System.getProperty(DeploymentAdminPermission.KEYSTORE_PATH);
+            ks = System.getProperty(SignerChainPattern.KEYSTORE_PATH);
         if (null == ks) {
             logger.log(Logger.LOG_WARNING, "Keystore location is not defined. Set the " + 
                     DAConstants.KEYSTORE_PATH + " or the " + 
-                    DeploymentAdminPermission.KEYSTORE_PATH + " system property!");
+                    SignerChainPattern.KEYSTORE_PATH + " system property!");
             return;
         }
         File file = new File(ks);
@@ -112,11 +113,11 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             throw new RuntimeException("Keystore is not found: " + file);
         String pwd = System.getProperty(DAConstants.KEYSTORE_PWD);
         if (null == pwd)
-            pwd = System.getProperty(DeploymentAdminPermission.KEYSTORE_PWD);
+            pwd = System.getProperty(SignerChainPattern.KEYSTORE_PWD);
         if (null == pwd)
             throw new RuntimeException("There is no keystore password set. Set the " +
                     DAConstants.KEYSTORE_PWD + " or the " + 
-                    DeploymentAdminPermission.KEYSTORE_PWD + " system property!");
+                    SignerChainPattern.KEYSTORE_PWD + " system property!");
         keystore = KeyStore.getInstance("JKS");
         keystore.load(new FileInputStream(file), pwd.toCharArray());
     }

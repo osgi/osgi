@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.AccessControlContext;
 import java.security.AccessController;
+import java.security.Permission;
 import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
@@ -43,6 +44,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Entry;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
+import org.osgi.service.deploymentadmin.DeploymentCustomizerPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.DeploymentSession;
@@ -242,6 +244,13 @@ public class DeploymentSessionImpl implements DeploymentSession {
      * @see org.osgi.service.deploymentadmin.DeploymentSession#getDataFile(org.osgi.framework.Bundle)
      */
     public File getDataFile(Bundle b) {
+        Permission perm = new DeploymentCustomizerPermission(
+                "(name=" + b.getSymbolicName() + ")", 
+                DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
+        SecurityManager sm = System.getSecurityManager();
+        if (null != sm)
+            sm.checkPermission(perm);
+        
         DeploymentPackageImpl dp;
         if (INSTALL == getDeploymentAction())
             dp = srcDp;
