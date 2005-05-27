@@ -29,7 +29,9 @@ import org.osgi.impl.bundle.autoconf.MetaData;
 import org.osgi.service.metatype.AttributeDefinition;
 import org.xml.sax.InputSource;
 
+import unittests.metadata.AD;
 import unittests.metadata.Designate;
+import unittests.metadata.OCD;
 import unittests.metadata.Object;
 import unittests.metadata.ObjectFactory;
 
@@ -45,6 +47,8 @@ public class ParserTest extends TestCase {
 	unittests.metadata.MetaData metaData;
 	MetaData resultMetaData;
 	SAXParserFactory spf;
+	AD	ad;
+	MetaData.AD ad0;
 
 	public void setUp() throws Exception {
 		of = new ObjectFactory();
@@ -54,6 +58,8 @@ public class ParserTest extends TestCase {
 		spf.setNamespaceAware(true);
 		spf.setValidating(true);
 		resultMetaData = null;
+		ad = null;
+		ad0 = null;
 	}
 	
 	public void tearDown() throws Exception {
@@ -61,6 +67,8 @@ public class ParserTest extends TestCase {
 		jaxbContext = null;
 		spf = null;
 		resultMetaData = null;
+		ad = null;
+		ad0 = null;
 	}
 
 	public InputSource getInputSource(String from) {
@@ -130,10 +138,86 @@ public class ParserTest extends TestCase {
 		assertEquals(3,resultMetaData.designates.length);
 	}
 	
+	private void setupBasicAD() throws Exception {
+		Designate des = of.createDesignate();
+		metaData.getDesignate().add(des);
+		des.setPid("foo");
+		Object obj = of.createObject();
+		des.setObject(obj);
+		obj.setOcdref("bar");
+		
+		OCD ocd = of.createOCD();
+		metaData.getOCD().add(ocd);
+		ocd.setName("ocd1");
+		ocd.setId("id1");
+		ad = of.createAD();
+		ocd.getAD().add(ad);
+		ad.setId("ad1");
+	}
+
+	public void testIntegerAD() throws Exception {
+		setupBasicAD();
+		
+		ad.setType("Integer");
+		convert();
+		assertEquals(AttributeDefinition.INTEGER,ad0.type);
+		assertEquals(0,ad0.cardinality);
+		
+		ad.setDefault("3");
+		convert();
+		assertEquals(1,ad0.defaultValue.length);
+		assertEquals("3",ad0.defaultValue[0]);
+		
+		ad.setDefault(null);
+		ad.setCardinality(0);
+		convert();
+		assertEquals(0,ad0.cardinality);
+		
+		ad.setCardinality(1);
+		convert();
+		assertEquals(1,ad0.cardinality);
+		
+		ad.setCardinality(4);
+		ad.setDefault("1,2,3,4");
+		convert();
+		assertEquals(4,ad0.defaultValue.length);
+		assertEquals("1",ad0.defaultValue[0]);
+		assertEquals("4",ad0.defaultValue[3]);
+	}
+	
+	public void testStringAD() throws Exception {
+		setupBasicAD();
+		
+		ad.setType("String");
+		convert();
+		assertEquals(AttributeDefinition.STRING,ad0.type);
+		assertEquals(0,ad0.cardinality);
+		
+		ad.setDefault("foo");
+		convert();
+		assertEquals("foo",ad0.defaultValue[0]);
+		
+		ad.setCardinality(4);
+		ad.setDefault("a\\,b,b\\,c,c\\\\,d");
+		convert();
+		assertEquals(4,ad0.defaultValue.length);
+		assertEquals("a,b",ad0.defaultValue[0]);
+		assertEquals("b,c",ad0.defaultValue[1]);
+		assertEquals("c\\",ad0.defaultValue[2]);
+		assertEquals("d",ad0.defaultValue[3]);
+	}
+	
 	public void convert() throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		jaxbContext.createMarshaller().marshal(metaData,baos);
 		ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
 		resultMetaData = new MetaData(spf.newSAXParser(),new InputSource(bais));
+		if ((resultMetaData!=null)&&(resultMetaData.ocds!=null)&&(resultMetaData.ocds.length>0)&&
+				(resultMetaData.ocds[0]!=null)&&(resultMetaData.ocds[0].ads!=null)
+				&&(resultMetaData.ocds[0].ads.length>0))
+		{
+			ad0 = resultMetaData.ocds[0].ads[0];
+		}
+		
 	}
 }
