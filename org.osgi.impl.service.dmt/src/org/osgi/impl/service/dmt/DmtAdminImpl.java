@@ -66,6 +66,9 @@ public class DmtAdminImpl implements DmtAdmin {
             permissions = (PermissionInfo[]) 
                 dmtPermissionAdmin.getPrincipalPermissions().get(principal);
         
+        if(subtreeUri == null)
+            subtreeUri = ".";
+        
 		DmtSessionImpl session = new DmtSessionImpl(principal, subtreeUri,
                 lockMode, permissions, eventTracker, dispatcher, this);
                 
