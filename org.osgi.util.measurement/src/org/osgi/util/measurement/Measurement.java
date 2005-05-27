@@ -9,7 +9,6 @@
  */
 package org.osgi.util.measurement;
 
-import java.util.*;
 
 /**
  * Represents a value with an error, a unit and a time-stamp.
@@ -48,38 +47,6 @@ public class Measurement implements Comparable {
 	final long		time;
 	final Unit		unit;
 	private transient String	name;
-
-	/**
-	 * Create a new <code>Measurement</code> object from a String.
-	 * 
-	 * The format of the string must be: 
-	 * <pre>
-	 * &lt;value&gt; ':' &lt;unit&gt; [ ':' &lt;error&gt; ]
-	 * </pre>
-	 * Whitespace is not allowed.
-	 * 
-	 * @param encoded The encoded value of the <code>Measurement</code>.
-	 * @throws IllegalArgumentException If the encoded value cannot be properly
-	 *         parsed.
-	 * @since 1.1        
-	 */
-	public Measurement(String encoded) {
-		try {
-			StringTokenizer st = new StringTokenizer(encoded, ":");
-			value = Double.parseDouble(st.nextToken());
-			unit = Unit.parseUnit(st.nextToken());
-			if (st.hasMoreTokens()) {
-				error = Double.parseDouble(st.nextToken());
-			}
-			else {
-				error = 0.0d;
-			}
-			time = 0l;
-		}
-		catch (NoSuchElementException e) {
-			throw new IllegalArgumentException("Invalid value");
-		}
-	}
 
 	/**
 	 * Create a new <code>Measurement</code> object.

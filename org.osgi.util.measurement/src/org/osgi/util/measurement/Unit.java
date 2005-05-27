@@ -279,12 +279,6 @@ public class Unit {
 	private final static Unit[]	allUnits	= new Unit[] {m, s, kg, K, A, mol,
 			cd, rad, m_s, m_s2, m2, m3, Hz, N, Pa, J, W, C, V, F, Ohm, S, Wb,
 			T, lx, Gy, kat, unity			};
-	/**
-	 * An array containing all units defined. The elements must be sorted in 
-	 * ascending order! This is used by fromString.
-	 */
-	private final static Unit[]	sortedUnits	= new Unit[] {cd, kat, kg, lx, mol,
-			m, rad, s, unity, A, C, F, J, Hz, K, N, Ohm, Pa, S, T, V, Wb, W, Gy};
 	private static Hashtable	base;
 	private String				name;
 	private long				type;
@@ -503,57 +497,6 @@ public class Unit {
 			name = numerator.toString();
 		}
 		return name;
-	}
-
-	/**
-	 * @param unit
-	 * @return
-	 */
-	static Unit parseUnit(String unit) {
-		Unit result = Unit.unity;
-		boolean div = false;
-		outer: while (unit.length() > 0) {
-			if (unit.startsWith("/")) {
-				if (div)
-					throw new IllegalArgumentException(
-							"Only 1 slash (/) allowed in unit");
-				div = true;
-				unit = unit.substring(1);
-				continue outer;
-			}
-			else
-				for (int i = 0; i < sortedUnits.length; i++) {
-					Unit rover = sortedUnits[i];
-					String prefix = rover.name;
-					if (rover == Unit.unity)
-						prefix = "1";
-					if (unit.startsWith(prefix)) {
-						Unit current = sortedUnits[i];
-						unit = unit.substring(prefix.length());
-						int exponent = 1;
-						if (unit.length() > 0) {
-							char digit = unit.charAt(0);
-							if (digit > '0' && digit <= '5') {
-								exponent = digit - '0';
-								unit = unit.substring(1);
-							}
-						}
-						if (div) {
-							for (int e = 0; e < exponent; e++) {
-								result = result.div(current);
-							}
-						}
-						else {
-							for (int e = 0; e < exponent; e++) {
-								result = result.mul(current);
-							}
-						}
-						continue outer;
-					}
-				}
-			throw new IllegalArgumentException("Unknown unit name " + unit);
-		}
-		return result;
 	}
 
 	private void addSIname(int si, String name, StringBuffer numerator,
