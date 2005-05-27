@@ -279,6 +279,10 @@ public class Unit {
 	private final static Unit[]	allUnits	= new Unit[] {m, s, kg, K, A, mol,
 			cd, rad, m_s, m_s2, m2, m3, Hz, N, Pa, J, W, C, V, F, Ohm, S, Wb,
 			T, lx, Gy, kat, unity			};
+	/**
+	 * An array containing all units defined. The elements must be sorted in 
+	 * ascending order! This is used by fromString.
+	 */
 	private final static Unit[]	sortedUnits	= new Unit[] {cd, kat, kg, lx, mol,
 			m, rad, s, unity, A, C, F, J, Hz, K, N, Ohm, Pa, S, T, V, Wb, W, Gy};
 	private static Hashtable	base;
@@ -501,7 +505,11 @@ public class Unit {
 		return name;
 	}
 
-	static Unit fromString(String unit) {
+	/**
+	 * @param unit
+	 * @return
+	 */
+	static Unit parseUnit(String unit) {
 		Unit result = Unit.unity;
 		boolean div = false;
 		outer: while (unit.length() > 0) {
