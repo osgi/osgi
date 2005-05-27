@@ -188,23 +188,30 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     }
 
     private boolean checkCertificateChains(List certChains) throws KeyStoreException {
-        // TODO is it correct?
-        if (null == certChains)
+        if (null == certChains || certChains.isEmpty())
             return true;
-        
-        boolean ret = true;
         for (Iterator iter = certChains.iterator(); iter.hasNext();) {
             Certificate[] certChain = (Certificate[]) iter.next();
-            ret = ret && checkCertificateChain(certChain);
+            if (certChain.length > 0 &&
+                // checks only the root certificates
+                checkCertificate(certChain[certChain.length - 1]))
+                	return true;
         }
-        return ret;
+        return false;
     }
     
-    private boolean checkCertificateChain(Certificate[] certChain) throws KeyStoreException {
-        for (int i = 0; i < certChain.length; i++) {
-            Certificate cert = certChain[i];
-            if (null != keystore.getCertificateAlias(cert))
+    private boolean checkCertificate(Certificate cert) throws KeyStoreException {
+        String alias = keystore.getCertificateAlias(cert);
+        if (null != alias) {
+            Certificate kCert = keystore.getCertificate(alias);
+            if (null == kCert)
+                return false;
+            try {
+                cert.verify(kCert.getPublicKey());
                 return true;
+            } catch (Exception e) {
+                // do nothing
+            }
         }
         return false;
     }

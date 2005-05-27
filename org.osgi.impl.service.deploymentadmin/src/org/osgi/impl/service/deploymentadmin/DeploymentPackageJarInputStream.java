@@ -254,16 +254,8 @@ public class DeploymentPackageJarInputStream {
     private boolean isUninterested(JarEntry je) throws IOException {
         if (je.isDirectory())
             return true;
-        if (je.getName().toLowerCase().startsWith("meta-inf/")) {
-            // TODO it is not too nice
-            String name = je.getName().toLowerCase();
-            if (name.endsWith(".dsa")) {
-                ByteArrayOutputStream bos = readIntoBuffer();
-                closeEntry();
-                String key = name.substring("meta-inf/".length(), name.indexOf(".dsa"));
-            }
+        if (je.getName().toLowerCase().startsWith("meta-inf/"))
             return true;
-        }
         return false;
     }
 
@@ -291,5 +283,5 @@ public class DeploymentPackageJarInputStream {
     public Manifest getManifest() {
         return jis.getManifest();
     }
-    
+
 }

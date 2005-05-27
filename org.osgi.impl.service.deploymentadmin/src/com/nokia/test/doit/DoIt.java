@@ -94,7 +94,7 @@ public class DoIt implements BundleActivator {
         ref = context.getServiceReference(Db.class.getName());
         String doitLoc = context.getBundle().getLocation();
         pa.setPermissions(doitLoc, new PermissionInfo[] {
-                new PermissionInfo(PackagePermission.class.getName(), "*", "import"),
+                new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
                 // to find the Deployment Admin
                 new PermissionInfo(ServicePermission.class.getName(), "*", "get"),
                 // to load files that are passed to the Deployment Admin
@@ -115,9 +115,6 @@ public class DoIt implements BundleActivator {
     }
 
     public void start(BundleContext context) throws Exception {
-        System.out.println(
-                new FilePermission("c:/temp", "read, write")
-        );
         this.context = context;
         setPermissions();
         
@@ -289,6 +286,7 @@ public class DoIt implements BundleActivator {
         throw new Exception("Negative test failed");
     }
 
+    public static final String db_test_01 = "Ez a metodus ezt csinalja";
     private void db_test_01() throws Exception {
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         Db db = (Db) context.getService(ref);
