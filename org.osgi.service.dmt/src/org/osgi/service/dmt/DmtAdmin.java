@@ -34,11 +34,11 @@ public interface DmtAdmin {
      * following:
      * <code>getSession(null, subtreeUri, DmtSession.LOCK_TYPE_EXCLUSIVE)</code>
      * <p>
-     * To access the whole tree in this session, use the &quot;.&quot; string as
-     * subtree URI.
+     * To access the whole tree in this session, use the &quot;.&quot; string or
+     * <code>null</code> as subtree URI.
      * 
      * @param subtreeUri the subtree on which DMT manipulations can be performed
-     *        within the returned session, must not be <code>null</code>
+     *        within the returned session
      * @return a <code>DmtSession</code> object for the requested subtree
      * @throws DmtException with the following possible error codes
      *         <li><code>NODE_NOT_FOUND</code>
@@ -54,11 +54,11 @@ public interface DmtAdmin {
      * subtree with a given locking mode. This call is equivalent to the
      * following: <code>getSession(null, subtreeUri, lockMode)</code>
      * <p>
-     * To access the whole tree in this session, use the &quot;.&quot; string as
-     * subtree URI.
+     * To access the whole tree in this session, use the &quot;.&quot; string or
+     * <code>null</code> as subtree URI.
      * 
      * @param subtreeUri the subtree on which DMT manipulations can be performed
-     *        within the returned session, must not be <code>null</code>
+     *        within the returned session
      * @param lockMode one of the locking modes specified in
      *        <code>DmtSession</code>
      * @return a <code>DmtSession</code> object for the requested subtree
@@ -81,14 +81,14 @@ public interface DmtAdmin {
      * other forms of this method without providing a principal string. This
      * method is guarded by <code>DmtPrincipalPermission</code>.
      * <p>
-     * To access the whole tree in this session, use the &quot;.&quot; string as
-     * subtree URI.
+     * To access the whole tree in this session, use the &quot;.&quot; string or
+     * <code>null</code> as subtree URI.
      * 
      * @param principal the identifier of the remote server on whose behalf the
      *        data manipulation is performed, or <code>null</code> for local
      *        sessions
      * @param subtreeUri the subtree on which DMT manipulations can be performed
-     *        within the returned session, must not be <code>null</code>
+     *        within the returned session
      * @param lockMode one of the locking modes specified in
      *        <code>DmtSession</code>
      * @return a <code>DmtSession</code> object for the requested subtree
