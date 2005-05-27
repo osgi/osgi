@@ -119,10 +119,10 @@ public interface DmtMetaNode {
      * Get the number of maximum occurrences of this type of nodes on the same
      * level in the DMT. Returns <code>Integer.MAX_VALUE</code> if there is no
      * upper limit. Note that if the occurrence is greater than 1 then this node
-     * can not have siblings with different metadata. That is, if different
-     * types of nodes coexist on the same level, their occurrence can not be
-     * greater than 1. If no meta-data is provided for a node, there is no upper
-     * limit on the number of occurrences.
+     * can not have siblings with different metadata. In other words, if
+     * different types of nodes coexist on the same level, their occurrence can 
+     * not be greater than 1. If no meta-data is provided for a node, there is 
+     * no upper limit on the number of occurrences.
      * 
      * @return The maximum allowed occurrence of this node type
      */
