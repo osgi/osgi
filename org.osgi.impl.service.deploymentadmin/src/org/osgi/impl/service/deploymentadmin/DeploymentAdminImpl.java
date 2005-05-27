@@ -36,6 +36,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 
 import org.eclipse.osgi.service.resolver.VersionRange;
 import org.osgi.framework.Bundle;
@@ -342,15 +343,30 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	}
 
 	public DeploymentPackage[] listDeploymentPackages() {
-	    // TODO checkPermission("", DeploymentAdminPermission.ACTION_LIST_DPS);
-	    DeploymentPackage[] src = (DeploymentPackage[]) dps.toArray(new DeploymentPackage[] {});
-	    DeploymentPackage[] tar = new DeploymentPackage[dps.size() + 1]; 
-	    System.arraycopy(src, 0, tar, 0, src.length);
-	    tar[tar.length - 1] = createSystemDp();
-		return tar;
+	    Vector ret = new Vector();
+	    DeploymentPackageImpl[] src = (DeploymentPackageImpl[]) dps.toArray(
+	            new DeploymentPackageImpl[] {});
+	    for (int i = 0; i < src.length; i++) {
+	        try {
+	            checkPermission(src[i], DeploymentAdminPermission.ACTION_LIST);
+	            ret.add(src[i]);
+	        } catch (SecurityException e) {
+	            // do nothing
+	        }
+        }
+	    
+	    DeploymentPackageImpl sysDp = createSystemDp();
+	    try {
+	        checkPermission(sysDp, DeploymentAdminPermission.ACTION_LIST);
+	        ret.add(sysDp);
+	    } catch (SecurityException e) {
+            // do nothing
+        }
+	    
+		return (DeploymentPackage[]) ret.toArray(new DeploymentPackage[] {});
 	}
 
-    private DeploymentPackage createSystemDp() {
+    private DeploymentPackageImpl createSystemDp() {
         Set all = new HashSet();
         Bundle[] bundles = context.getBundles();
         for (int i = 0; i < bundles.length; i++)

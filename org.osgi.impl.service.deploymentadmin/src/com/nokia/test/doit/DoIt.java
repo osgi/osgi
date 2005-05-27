@@ -103,6 +103,9 @@ public class DoIt implements BundleActivator {
                 new PermissionInfo(DeploymentAdminPermission.class.getName(), "(&(name=*)" +
                 		"(signer=-;CN=Root1,OU=FAKEDONTUSE,O=CASoft,L=Budapest,C=HU))", 
                         "install"),
+                // for db_test_07
+                new PermissionInfo(DeploymentAdminPermission.class.getName(), "(name=db_test_*)", 
+                        "list"),
                 // to be able to set permissions during next run
                 // and because "In addition to DeploymentAdminPermission, the caller 
                 // of Deployment Admin must in addition hold the appropriate AdminPermissions."
@@ -535,8 +538,24 @@ public class DoIt implements BundleActivator {
     }
     
     private void db_test_07() throws Exception {
+        InputStream is = new FileInputStream(HOME + "db_test_01.dp");
+        DeploymentPackage dp = da.installDeploymentPackage(is);
+        
 		DeploymentPackage[] dps = da.listDeploymentPackages();
-		// TODO
+		boolean b1 = false;
+		boolean b2 = false;
+		for (int i = 0; i < dps.length; i++) {
+            if (dps[i].getName().equals("db_test_01"))
+                b1 = true;
+            if (dps[i].getName().equalsIgnoreCase("system"))
+                b2 = true;
+        }
+		if (!b1)
+            throw new Exception("'db_test_01' DP should be visble");
+		if (b2)
+            throw new Exception("'system' DP should NOT be visble");
+		
+		dp.uninstall();
     }
 
 }
