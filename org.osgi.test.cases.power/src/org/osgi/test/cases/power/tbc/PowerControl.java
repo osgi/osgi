@@ -28,14 +28,21 @@ package org.osgi.test.cases.power.tbc;
 
 import org.osgi.framework.*;
 import org.osgi.service.power.*;
+import org.osgi.service.power.*;
+import org.osgi.service.permissionadmin.*;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
  * A test case for the System Power service.
  */
-public class PowerControl extends DefaultTestBundleControl implements SystemPowerStateListener {
+public class PowerControl extends DefaultTestBundleControl implements SystemPowerStateListener, DevicePowerStateListener {
+  PermissionAdmin permissionAdmin;
 	SystemPower sysPower;
-	ServiceRegistration reg;
+	DevicePower devPower;
+	ServiceRegistration regSPSL;
+	ServiceRegistration regDPSL;
+	
+  PermissionInfo allPermission = new PermissionInfo("java.security.AllPermission", "", "");
 	
 	/**
 	 * List of test methods used in this test case.
@@ -55,25 +62,47 @@ public class PowerControl extends DefaultTestBundleControl implements SystemPowe
 	 * Check the availability of the System Power service.
 	 */	
 	public boolean checkPrerequisites() {
-	  return serviceAvailable(SystemPower.class);
+	  try {
+	    installBundle("tb1.jar");
+	  } catch (Exception e) {
+		}
+	  return serviceAvailable(SystemPower.class); // && serviceAvailable(DevicePower.class);
 	}
 
 	/**
 	 * Get the SystemPower service
 	 */
 	public void prepare() {
-	  reg = this.getContext().registerService(SystemPowerStateListener.class.getName(), this, null);
+	  regSPSL = this.getContext().registerService(SystemPowerStateListener.class.getName(), this, null);
 	  try {
 	    sysPower = (SystemPower) getService(SystemPower.class);
-	  } catch( Exception e ) {
-			log( "Cannot start System power service test case " + e );
+	  } catch (Exception e ) {
+			log("Cannot get System power service! " + e );
+			e.printStackTrace();
+		}
+	  regDPSL = this.getContext().registerService(DevicePowerStateListener.class.getName(), this, null);
+	  try {
+		  BundleContext bc = getContext();
+			devPower = (DevicePower)bc.getService(bc.getServiceReference(DevicePower.class.getName()));
+	  } catch (Exception e) {
+			log("Cannot get Device power service! " + e );
+			e.printStackTrace();
+		}
+	  try {
+		  /* Get the PermissionAdmin service */
+	    permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
+	  } catch (Exception e) {
+			log("Cannot get PermissionAdmin service! " + e );
 			e.printStackTrace();
 		}
 	}
 	
 	public void unprepare() {
-	  if (reg != null) {
-	    reg.unregister();
+	  if (regSPSL != null) {
+	    regSPSL.unregister();
+	  }
+	  if (regDPSL != null) {
+	    regDPSL.unregister();
 	  }
 	}
 	
@@ -81,29 +110,29 @@ public class PowerControl extends DefaultTestBundleControl implements SystemPowe
 	  int[][] legalTransitions = new int[][] {
 	      /*OFF*/{ SystemPowerState.PM_ACTIVE, SystemPowerState.FULL_POWER },
 	      /*SUSPEND*/{ SystemPowerState.PM_ACTIVE, SystemPowerState.FULL_POWER },
-	      /*SLEEP*/{ SystemPowerState.OFF, SystemPowerState.SUSPEND, SystemPowerState.SLEEP, SystemPowerState.PM_ACTIVE, SystemPowerState.FULL_POWER},
-	      /*PM_ACTIVE*/{ SystemPowerState.OFF, SystemPowerState.SUSPEND, SystemPowerState.SLEEP, SystemPowerState.PM_ACTIVE, SystemPowerState.FULL_POWER},
-	      /*FULL_POWER*/{ SystemPowerState.OFF, SystemPowerState.SUSPEND, SystemPowerState.SLEEP, SystemPowerState.PM_ACTIVE, SystemPowerState.FULL_POWER},
+	      /*SLEEP*/{ SystemPowerState.PM_ACTIVE, SystemPowerState.FULL_POWER, SystemPowerState.SUSPEND},
+	      /*PM_ACTIVE*/{ SystemPowerState.OFF, SystemPowerState.SUSPEND, SystemPowerState.SLEEP, SystemPowerState.FULL_POWER},
+	      /*FULL_POWER*/{ SystemPowerState.OFF, SystemPowerState.SUSPEND, SystemPowerState.SLEEP, SystemPowerState.PM_ACTIVE}
 	  };
-		log("Current system power state: " + getPowerStateDescription(sysPower.getPowerState()));
+		log("Current system power state: " + getSystemPowerStateDescription(sysPower.getPowerState()));
 		for (int i = 1; i < legalTransitions.length + 1; i++) {
 			try {
 			  if (sysPower.getPowerState() != i) {
-					log("Change to system power state: " + getPowerStateDescription(i));
+					log("Change to system power state: " + getSystemPowerStateDescription(i));
 			    sysPower.setPowerState(i, true);
 			  }
 			  int[] legalStates = legalTransitions[i - 1];
 			  for (int j = 0; j < legalStates.length; j++) {
 				  if (sysPower.getPowerState() != legalStates[j]) {
 					  sysPower.setPowerState(legalStates[j], true);
-					  assertEquals(" System power state transition: from: " + getPowerStateDescription(i) + " to: " + getPowerStateDescription(legalStates[j]) + ".", sysPower.getPowerState(), legalStates[j]);
-					  sysPower.setPowerState(i, true);
+					  assertEquals("System power state transition: from: " + getSystemPowerStateDescription(i) + " to: " + getSystemPowerStateDescription(legalStates[j]) + ".", sysPower.getPowerState(), legalStates[j]);
+					  if (j < legalStates.length - 2) {
+					    sysPower.setPowerState(i, true);
+					  }
 				  }
 			  }
 			}	catch (PowerException pe) {
-				log("PowerException: Error code: " + getErrorCodeDescription(pe.getErrorCode()));
-			  pe.printStackTrace();
-				assertException("Exception while changing system power state", PowerException.class, pe);
+				assertException("Error code: " + getErrorCodeDescription(pe.getErrorCode()), PowerException.class, pe);
 			}
 		}
 	}
@@ -112,39 +141,139 @@ public class PowerControl extends DefaultTestBundleControl implements SystemPowe
 	  int[][] illegalTransitions = new int[][] {
 	      /*OFF*/{SystemPowerState.SUSPEND, SystemPowerState.SLEEP},
 	      /*SUSPEND*/{SystemPowerState.OFF, SystemPowerState.SLEEP},
-	      /*SLEEP*/{},
-	      /*PM_ACTIVE*/{},
-	      /*FULL_POWER*/{},
 	  };
-		log("Current system power state: " + getPowerStateDescription(sysPower.getPowerState()));
+		log("Current system power state: " + getSystemPowerStateDescription(sysPower.getPowerState()));
 		for (int i = 1; i < illegalTransitions.length + 1; i++) {
-			try {
-			  if (sysPower.getPowerState() != i) {
-					log("Change to system power state: " + getPowerStateDescription(i));
+		  if (sysPower.getPowerState() != i) {
+				try {
 			    sysPower.setPowerState(i, true);
-			  }
-			  int[] illegalStates = illegalTransitions[i - 1];
-			  for (int j = 0; j < illegalStates.length; j++) {
+				}	catch (PowerException pe) {
+				  assertException("Error while changing system power state: from " + getSystemPowerStateDescription(sysPower.getPowerState()) + " to " + getSystemPowerStateDescription(i) + ".", PowerException.class, pe);
+				}
+		  }
+		  int[] illegalStates = illegalTransitions[i - 1];
+		  for (int j = 0; j < illegalStates.length; j++) {
+		    try {
 				  sysPower.setPowerState(illegalStates[j], true);
-				  if (sysPower.getPowerState() == illegalStates[j]) {
-						log(" !!! Illegal system power state transition: from: " + getPowerStateDescription(i) + " to: " + getPowerStateDescription(illegalStates[j]) + ".");
-				  }
-				  sysPower.setPowerState(i, true);
+				}	catch (PowerException pe) {
+					assertException("Illegal transition '" + getSystemPowerStateDescription(i) + " -> " + getSystemPowerStateDescription(illegalStates[j]) + "' is managed correctly! ", PowerException.class, pe);
+				}
+			  if (sysPower.getPowerState() == illegalStates[j]) {
+					log(" !!! Illegal system power state transition: from: " + getSystemPowerStateDescription(i) + " to: " + getSystemPowerStateDescription(illegalStates[j]) + ".");
 			  }
+		  }
+			try {
+		    sysPower.setPowerState(SystemPowerState.FULL_POWER, true);
 			}	catch (PowerException pe) {
-				log("PowerException: Error code: " + getErrorCodeDescription(pe.getErrorCode()));
-			  pe.printStackTrace();
-				assertException("Exception while changing system power state", PowerException.class, pe);
+			  // do nothing
 			}
 		}
 	}
 	
+	public void testPowerManagerRestrictions() {
+	  try {
+	    // power restriction
+	    sysPower.setPowerState(SystemPowerState.FULL_POWER, true);
+	    devPower.setPowerState(DevicePowerState.D1, true);
+	    assertEquals("Error: The power restriction is that in Full Power state all devices must be in D0 device state!", DevicePowerState.D0, devPower.getPowerState());
+	    sysPower.setPowerState(SystemPowerState.OFF, true);
+	    devPower.setPowerState(DevicePowerState.D2, true);
+	    assertEquals("Error: The power restriction is that in OFF Power state all devices must be in D3 device state!", DevicePowerState.D3, devPower.getPowerState());
+	    sysPower.setPowerState(SystemPowerState.FULL_POWER, true);
+	  } catch (PowerException pe) {
+	    pe.printStackTrace();
+	  }
+	}
+
+	public void testPermissions() {
+	  if (permissionAdmin != null) {
+	    if (sysPower != null) {
+			  String systemPowerLocation = ((getContext().getServiceReference(SystemPower.class.getName())).getBundle()).getLocation();
+			  PermissionInfo[] originalPermissions = permissionAdmin.getPermissions(systemPowerLocation);
+			  log("Set wrong permissions for System power!");
+			  PermissionInfo[] wrongPermissions = new PermissionInfo[] {
+					  new PermissionInfo(PowerPermission.class.getName(), "agaf*", ""),
+					  new PermissionInfo(PowerPermission.class.getName(), "systemdag", ""),
+				  };
+				permissionAdmin.setPermissions(systemPowerLocation, wrongPermissions);
+		  	try {
+		  	  sysPower.setPowerState(SystemPowerState.FULL_POWER, true);
+		  	  log("Error: Security check FAILED! System power state is changed with wrong permissions.");
+		  	}	catch (SecurityException se) {
+		  	  log("Security check PASSED!");
+		  	}	catch (PowerException pe) {
+		  	  pe.printStackTrace();
+				}
+			  log("Set correct permissions for System power!");
+			  PermissionInfo[] correctPermissions = new PermissionInfo[] {
+					  new PermissionInfo(PowerPermission.class.getName(), "*", ""),
+					  new PermissionInfo(PowerPermission.class.getName(), "system", ""),
+				  };
+				permissionAdmin.setPermissions(systemPowerLocation, correctPermissions);
+		  	try {
+		  	  sysPower.setPowerState(SystemPowerState.FULL_POWER, true);
+		  	  log("Security check PASSED!");
+		  	}	catch (SecurityException se) {
+		  	  assertException("Error: Security check FAILED! System power state can not changed with correct permissions.", SecurityException.class, se);
+		  	}	catch (PowerException pe) {
+		  	  pe.printStackTrace();
+				}
+		  	// restore original permissions
+				permissionAdmin.setPermissions(systemPowerLocation, originalPermissions);
+	    } else {
+				log("SystemPower service is not available!");
+	    }
+	    if (devPower != null) {
+			  String devicePowerLocation = ((getContext().getServiceReference(DevicePower.class.getName())).getBundle()).getLocation();
+			  PermissionInfo[] originalPermissions = permissionAdmin.getPermissions(devicePowerLocation);
+			  log("Set correct permissions for Device power!");
+			  PermissionInfo[] correctPermissions = new PermissionInfo[] {
+					  new PermissionInfo(PowerPermission.class.getName(), "*", ""),
+					  new PermissionInfo(PowerPermission.class.getName(), "<<ALL DEVICES>>", ""),
+				  };
+				permissionAdmin.setPermissions(devicePowerLocation, correctPermissions);
+		  	try {
+		  	  sysPower.setPowerState(DevicePowerState.D0, true);
+		  	  log("Security check PASSED!");
+		  	}	catch (SecurityException se) {
+		  	  assertException("Error: Security check FAILED! Device power state can not changed with correct permissions.", SecurityException.class, se);
+		  	}	catch (PowerException pe) {
+		  	  pe.printStackTrace();
+				}
+			  log("Set wrong permissions for Device power!");
+			  PermissionInfo[] wrongPermissions = new PermissionInfo[] {
+					  new PermissionInfo(PowerPermission.class.getName(), "*ljh", ""),
+					  new PermissionInfo(PowerPermission.class.getName(), "<<ALL DEVICES>>dag", ""),
+				  };
+				permissionAdmin.setPermissions(devicePowerLocation, wrongPermissions);
+		  	try {
+		  	  devPower.setPowerState(DevicePowerState.D0, true);
+		  	  log("Error: Security check FAILED! Device power state is changed with wrong permissions.");
+		  	}	catch (SecurityException se) {
+		  	  log("Security check PASSED!");
+		  	}	catch (PowerException pe) {
+		  	  pe.printStackTrace();
+				}
+		  	// restore original permissions
+				permissionAdmin.setPermissions(devicePowerLocation, originalPermissions);
+	    } else {
+				log("DevicePower service is not available!");
+	    }
+	  } else {
+			log("PermissionAdmin service is not available!");
+	  }
+	}
+	
   public void systemPowerStateChange(PowerStateEvent event) throws PowerException {
-		log("SPListener. New system power state: " + getPowerStateDescription(event.getNewState()) + " ; Previous system power state: " + getPowerStateDescription(event.getPreviousState()) + " ; Urgency: " + event.isUrgent());
+		log("SPListener. New system power state: " + getSystemPowerStateDescription(event.getNewState()) + " ; Previous system power state: " + getSystemPowerStateDescription(event.getPreviousState()) + " ; Urgency: " + event.isUrgent());
   }	
   
-  private String getPowerStateDescription(int state) {
-    String desc = "Error. Wrong Power State!";
+  public void devicePowerStateChange(PowerStateEvent event) throws PowerException {
+		log("DPListener. New device power state: " + getDevicePowerStateDescription(event.getNewState()) + " ; Previous device power state: " + getDevicePowerStateDescription(event.getPreviousState()) + " ; Urgency: " + event.isUrgent());
+  }	
+
+  private String getSystemPowerStateDescription(int state) {
+    String desc = "Error. Wrong System Power State!";
     switch (state) {
       case SystemPowerState.OFF : desc = "OFF"; break;
       case SystemPowerState.SUSPEND : desc = "SUSPEND"; break;
@@ -155,6 +284,17 @@ public class PowerControl extends DefaultTestBundleControl implements SystemPowe
     return desc;
   }
   
+  private String getDevicePowerStateDescription(int state) {
+    String desc = "Error. Wrong Device Power State!";
+    switch (state) {
+      case DevicePowerState.D0 : desc = "ON"; break;
+      case DevicePowerState.D1 : desc = "DEVICE SPECIFIC(D1)"; break;
+      case DevicePowerState.D2 : desc = "DEVICE SPECIFIC(D2)"; break;
+      case DevicePowerState.D3 : desc = "OFF"; break;
+    }
+    return desc;
+  }
+
   private String getErrorCodeDescription(int errCode) {
     String desc = "Error. Wrong error code!";
     switch (errCode) {

@@ -28,18 +28,25 @@
 package org.osgi.test.cases.power.tb1;
 
 import org.osgi.framework.*;
-import org.osgi.test.cases.power.tbc.TBCService;
+import org.osgi.service.power.*;
 
 /**
- * A bundle that registers a service with the marker interface
- * TBCService so it can be checked the exporter is correct.
+ * A bundle that registers a device power service.
  *
  * @version $Revision$
  */
-public class Activator implements BundleActivator, TBCService {
-	public void start(BundleContext context) throws Exception {
-		context.registerService(TBCService.class.getName(),this,null);
+public class Activator implements BundleActivator {
+	ServiceRegistration srDevice;
+
+	public void start(BundleContext bc) throws Exception {
+		srDevice = bc.registerService(DevicePower.class.getName(), new DevicePowerImpl(bc), null);
+		System.out.println("Device Power service(" + srDevice + ") registered!");
 	}
-	public void stop(BundleContext context) throws Exception {
+	
+	public void stop(BundleContext bc) throws Exception {
+	  if (srDevice != null) {
+	    srDevice.unregister();
+	  }
 	}
+	
 }
