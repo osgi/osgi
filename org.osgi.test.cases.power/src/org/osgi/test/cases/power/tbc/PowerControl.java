@@ -28,7 +28,6 @@ package org.osgi.test.cases.power.tbc;
 
 import org.osgi.framework.*;
 import org.osgi.service.power.*;
-import org.osgi.service.power.*;
 import org.osgi.service.permissionadmin.*;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
