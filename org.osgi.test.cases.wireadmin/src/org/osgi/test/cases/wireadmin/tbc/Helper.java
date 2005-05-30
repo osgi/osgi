@@ -8,6 +8,9 @@ import org.osgi.service.wireadmin.*;
  * Contains some helper methods for registering/unregistering producers
  * 
  * $Log$
+ * Revision 1.5  2005/05/30 13:41:07  polivier
+ * Add test in case of no wires to delete
+ *
  * Revision 1.4  2004/12/03 09:12:32  pkriens
  * Added service project
  * Revision 1.3 2004/11/03 11:47:09 pkriens Format and
@@ -103,6 +106,7 @@ public class Helper {
 	public void deleteAllWires(WireAdmin wa) {
 		try {
 			Wire[] wires = wa.getWires("(org.osgi.test.wireadmin=yes)");
+			if (wires != null)
 			for (int counter = 0; counter < wires.length; counter++) {
 				wa.deleteWire(wires[counter]);
 			}
