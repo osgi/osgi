@@ -269,6 +269,7 @@ public class WireAdminImpl implements ServiceListener, WireAdmin,
 			properties.put(WireConstants.WIREADMIN_PID, String.valueOf(pid));
 			getCM().getConfiguration(((WireImpl) wire).getPID()).update(
 					properties);
+			((WireImpl)wire).setProperties(properties);
 		}
 		catch (IOException iox) {
 			getLogService().log(LogService.LOG_ERROR,

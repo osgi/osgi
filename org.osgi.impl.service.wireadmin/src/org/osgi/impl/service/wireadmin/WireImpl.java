@@ -232,7 +232,7 @@ public class WireImpl implements Wire, WireConstants {
 	 * @see WireConstants#WIREADMIN_FILTER
 	 */
 	public void update(Object value) {
-		lastValue = null;
+		//lastValue = null;
 		Consumer consumer = getConsumer();
 		if (consumer == null) {
 			// disconnected
@@ -251,19 +251,16 @@ public class WireImpl implements Wire, WireConstants {
 				myProps.put(WireConstants.WIREVALUE_ELAPSED, new Long(
 						timeStamp == -1 ? 0 : System.currentTimeMillis()
 								- timeStamp));
-				timeStamp = System.currentTimeMillis();
+				//timeStamp = System.currentTimeMillis();
 				if (value instanceof Number && lastValue instanceof Number) {
 					double currentNumber = ((Number) value).doubleValue();
 					double lastNumber = ((Number) lastValue).doubleValue();
-					Double abDelta = new Double(Math.abs(currentNumber
-							- lastNumber));
-					myProps
-							.put(WireConstants.WIREVALUE_DELTA_ABSOLUTE,
-									abDelta);
-					Double relDelta = new Double((lastNumber - currentNumber)
-							/ currentNumber);
-					myProps.put(WireConstants.WIREVALUE_DELTA_RELATIVE,
-							relDelta);
+					// Calculates the absolute delta
+					Double abDelta = new Double(Math.abs(currentNumber - lastNumber));
+					myProps.put(WireConstants.WIREVALUE_DELTA_ABSOLUTE, abDelta);
+					// Calculates the relative delta
+					Double relDelta = new Double(Math.abs((lastNumber - currentNumber) / currentNumber));
+					myProps.put(WireConstants.WIREVALUE_DELTA_RELATIVE, relDelta);
 					if (!filter.match(myProps)) {
 						parent.getLogService().log(LogService.LOG_DEBUG,
 								"filter match on update failed");
@@ -283,6 +280,7 @@ public class WireImpl implements Wire, WireConstants {
 			}
 			try {
 				consumer.updated(this, value);
+				timeStamp = System.currentTimeMillis();
 				lastValue = value;
 				parent.bCast(WireAdminEvent.WIRE_TRACE, this, null);
 			}
