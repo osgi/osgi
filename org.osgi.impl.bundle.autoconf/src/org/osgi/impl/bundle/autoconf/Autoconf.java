@@ -20,6 +20,7 @@ package org.osgi.impl.bundle.autoconf;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.Dictionary;
@@ -27,6 +28,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Vector;
 
@@ -59,6 +61,17 @@ public class Autoconf implements ResourceProcessor {
 	SAXParserFactory saxParserFactory;
 	int operation;
 	DeploymentSession	session;
+
+	LinkedList rollbackData;
+	
+	private static class OriginalConfiguration {
+
+		public String	pid;
+		/**
+		 * null means there was no configuration with this pid
+		 */
+		public Dictionary properties;
+	}
 	
 	protected void activate(ComponentContext context) {
 		configurationAdmin = (ConfigurationAdmin) context.locateService("configurationAdmin");
@@ -71,6 +84,7 @@ public class Autoconf implements ResourceProcessor {
 	
 	public void begin(DeploymentSession session) {
 		this.session = session;
+		rollbackData = new LinkedList();
 	}
 
 	public void process(final String name, final InputStream stream) throws DeploymentException {
@@ -141,12 +155,16 @@ public class Autoconf implements ResourceProcessor {
 
 				// write out the new configuration
 				Configuration conf;
+				OriginalConfiguration originalConfiguration = new OriginalConfiguration();
+				originalConfiguration.pid = d.pid;
 				try {
 					conf = configurationAdmin.getConfiguration(d.pid,location);
 				}
 				catch (IOException e) {
 					throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot get configuration",e);
 				}
+				originalConfiguration.properties = conf.getProperties();
+				
 				Hashtable newProps = new Hashtable();
 				if (d.merge) {
 					Dictionary oldProps = conf.getProperties();
@@ -163,6 +181,8 @@ public class Autoconf implements ResourceProcessor {
 				catch (IOException e) {
 					throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot write configuration",e);
 				}
+				
+				rollbackData.add(originalConfiguration);
 			}
 		}
 	}
@@ -358,11 +378,6 @@ public class Autoconf implements ResourceProcessor {
 		// TODO Auto-generated method stub
 	}
 
-	public void dropped() {
-		throw new IllegalStateException("not implemented yet");
-		// TODO Auto-generated method stub
-	}
-
 
 	public void dropAllResources() throws DeploymentException {
 		throw new IllegalStateException("not implemented yet");
@@ -371,18 +386,40 @@ public class Autoconf implements ResourceProcessor {
 	}
 
 	public void prepare() throws DeploymentException {
-		// TODO Auto-generated method stub
+		// since we do all the configuration writes in the 'process' call,
+		// there is nothing to prepare
 		
 	}
 
 	public void commit() {
-		// TODO Auto-generated method stub
+		// we did everything already, nothing to do
 	}
 
 	public void rollback() {
-		throw new IllegalStateException("not implemented yet");
-		// TODO Auto-generated method stub
-		
+		// just a wrapper call around the real one
+		AccessController.doPrivileged(new PrivilegedAction() {
+			public java.lang.Object run()  {
+				rollbackPrivileged();
+				return null;
+			}});
+	}
+
+	public void rollbackPrivileged() {
+		for (Iterator i = rollbackData.iterator(); i.hasNext();) {
+			OriginalConfiguration oc = (OriginalConfiguration) i.next();
+			try {
+				Configuration conf = configurationAdmin.getConfiguration(oc.pid);
+				if (oc.properties==null) {
+					conf.delete();
+				} else {
+					conf.update(oc.properties);
+				}
+			}
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void cancel() {
