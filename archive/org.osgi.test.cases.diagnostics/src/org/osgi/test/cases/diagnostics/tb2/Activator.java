@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) The OSGi Alliance (2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -25,7 +25,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.diagnostics.tb1;
+package org.osgi.test.cases.diagnostics.tb2;
 
 import java.util.Hashtable;
 
@@ -34,21 +34,23 @@ import org.osgi.service.cu.*;
 import org.osgi.service.cu.admin.spi.ControlUnitFactory;
 
 /**
- * Bundle that registers a Diagnosable Control Unit used by the test control.
+ * Bundle that registers a factory of DCU. 
+ *
  * @version $Revision$
  */
 public class Activator implements BundleActivator {
-	private ServiceRegistration regTacho;
+	private ServiceRegistration regDoor;
 	
 	public void start(BundleContext context) throws Exception {
+		// regsiter door CUFactory
 		Hashtable p = new Hashtable();
-    p.put(ControlUnitConstants.TYPE, "tachometer");
-    regTacho = context.registerService(ControlUnitFactory.class.getName(), new TachometerFactory(), p);
+		p.put(ControlUnitConstants.TYPE, "door");
+		regDoor = context.registerService(ControlUnitFactory.class.getName(), new DoorFactory(), p);
 	}
 	
 	public void stop(BundleContext context) throws Exception {
-		if (regTacho!= null) {
-			regTacho.unregister();
+		if (regDoor != null) {
+			regDoor.unregister();
     }
-	}
+  }
 }
