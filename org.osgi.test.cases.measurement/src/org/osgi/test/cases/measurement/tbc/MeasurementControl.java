@@ -57,7 +57,7 @@ public class MeasurementControl extends DefaultTestBundleControl {
 			"testMeasurementComparison", "testMeasurementAddition",
 			"testMeasurementSubstraction", "testMeasurementMultiplication",
 			"testMeasurementDivision", "testMeasurementFromString",
-			"testUnitFromString"			};
+			};
 
 	/**
 	 * Returns the list of test methods contained in this test case.
@@ -540,110 +540,6 @@ public class MeasurementControl extends DefaultTestBundleControl {
 				Unit.Hz), new Measurement("3.5e10:Hz:3.5e10"));
 		assertEquals("3.5e10:1/s:3.5e10", new Measurement(3.5e10, 3.5e10,
 				Unit.Hz), new Measurement("3.5e10:1/s:3.5e10"));
-	}
-
-	/**
-	 * Test the string constuctor of the Unit class
-	 */
-	public void testUnitFromString() {
-		assertUnit(Unit.unity, "");
-		assertUnit(Unit.s, "s");
-		assertUnit(Unit.kg, "kg");
-		assertUnit(Unit.K, "K");
-		assertUnit(Unit.A, "A");
-		assertUnit(Unit.cd, "cd");
-		assertUnit(Unit.m, "m");
-		assertUnit(Unit.m_s, "m/s");
-		assertUnit(Unit.m_s2, "m/s2");
-		assertUnit(Unit.m2, "m2");
-		assertUnit(Unit.m3, "m3");
-		assertUnit(Unit.Hz, "1/s");
-		assertUnit(Unit.Hz, "Hz");
-		assertUnit(Unit.Pa, "kg/ms2");
-		assertUnit(Unit.Pa, "N/m2");
-		assertUnit(Unit.J, "m2kg/s2");
-		assertUnit(Unit.J, "Nm");
-		assertUnit(Unit.W, "J/s");
-		assertUnit(Unit.W, "m2kg/s3");
-		assertUnit(Unit.N, "mkg/s2");
-		assertUnit(Unit.C, "sA");
-		assertUnit(Unit.C, "As");
-		assertUnit(Unit.V, "V");
-		assertUnit(Unit.V, "W/A");
-		assertUnit(Unit.V, "m2kg/s3A");
-		assertUnit(Unit.F, "C/V");
-		assertUnit(Unit.F, "s4A2/m2kg");
-		assertUnit(Unit.Ohm, "Ohm");
-		assertUnit(Unit.Ohm, "V/A");
-		assertUnit(Unit.Ohm, "m2kg/s3A2");
-		assertUnit(Unit.S, "A/V");
-		assertUnit(Unit.S, "s3A2/m2kg");
-		assertUnit(Unit.S, "A2s3/m2kg");
-		assertUnit(Unit.S, "s3A2/kgm2");
-		assertUnit(Unit.S, "A2s3/kgm2");
-		assertUnit(Unit.Wb, "Wb");
-		assertUnit(Unit.Wb, "Vs");
-		assertUnit(Unit.Wb, "m2kg/s2A");
-		assertUnit(Unit.T, "kg/s2A");
-		assertUnit(Unit.T, "Wb/m2");
-		assertUnit(Unit.kat, "kat");
-		assertUnit(Unit.kat, "mol/s");
-		assertUnit(Unit.rad, "rad");
-		Measurement m = new Measurement(1, 0, Unit.rad).div(new Measurement(1,
-				0, Unit.s));
-		assertUnit(m.getUnit(), "rad/s");
-		assertUnit(Unit.Gy, "Gy");
-		assertUnit(Unit.Gy, "J/kg");
-		assertUnit(Unit.Gy, "m2/s2");
-		assertUnit(Unit.lx, "lx");
-		assertUnit(Unit.lx, "cd/m2");
-		assertUnit(Unit.mol, "mol");
-		assertUnit(Unit.N, "mkg/s2");
-		assertUnit(Unit.N, "mkg/s2");
-		assertUnit(Unit.N, "mkg/s2");
-		try {
-			Unit.fromString("1/s/s");
-			assertTrue("Should not have thrown exception ", false);
-		}
-		catch (IllegalArgumentException e) {
-		}
-		try {
-			Unit.fromString("Xyz");
-			assertTrue("Should not have thrown exception ", false);
-		}
-		catch (IllegalArgumentException e) {
-		}
-		try {
-			Unit.fromString("3/s");
-			assertTrue("Should not have thrown exception ", false);
-		}
-		catch (IllegalArgumentException e) {
-		}
-		try {
-			Unit.fromString("1/s5");
-		}
-		catch (IllegalArgumentException e) {
-			assertException("Exponent 5 is allowed",
-					IllegalArgumentException.class, e);
-		}
-		try {
-			Unit.fromString("1/s0");
-		}
-		catch (IllegalArgumentException e) {
-			assertException("Exponent 5 is allowed",
-					IllegalArgumentException.class, e);
-		}
-		try {
-			Unit.fromString("1/Wb1");
-		}
-		catch (IllegalArgumentException e) {
-			assertException("Exponent 5 is allowed",
-					IllegalArgumentException.class, e);
-		}
-	}
-
-	void assertUnit(Unit unit, String s) {
-		assertEquals("" + unit + " " + s, unit, Unit.fromString(s));
 	}
 
 	/**
