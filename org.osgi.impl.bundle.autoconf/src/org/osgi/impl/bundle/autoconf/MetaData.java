@@ -81,13 +81,13 @@ public class MetaData  {
 			id = rad.getID();
 			cardinality = rad.getCardinality();
 			type = rad.getType();
-			defaultValue = rad.getDefaultValue()[0]; // TODO
+			defaultValue = rad.getDefaultValue();
 		}
 		public String name,description,id;
     	public long min,max;
     	public int cardinality;
     	public int type;
-    	public String defaultValue;
+    	public String[] defaultValue;
     	public Option[] options;
     }
     
@@ -233,7 +233,34 @@ public class MetaData  {
 						}
 						
 						// TODO min, max
-						currentAD.defaultValue = attr.getValue("default");
+						String defaultValue = attr.getValue("default");
+						if (defaultValue!=null) {
+							if (currentAD.cardinality==0) {
+								currentAD.defaultValue = new String[] { defaultValue };
+							} else {
+								ArrayList values = new ArrayList();
+								StringBuffer tmp = new StringBuffer();
+								for(int i=0;i<defaultValue.length();i++) {
+									char c = defaultValue.charAt(i);
+									if (c==',') {
+										values.add(tmp.toString());
+										tmp = new StringBuffer();
+										continue;
+									}
+									if (c=='\\') {
+										i++;
+										c = defaultValue.charAt(i);
+										if ((c!='\\')&&(c!=',')) {
+											tmp.append('\\');
+										}
+									}
+									tmp.append(c);
+								}
+								values.add(tmp.toString());
+								currentAD.defaultValue = new String[values.size()];
+								currentAD.defaultValue = (String[]) values.toArray(currentAD.defaultValue);
+							}
+						}
 						optionsA.clear();
 						
 					} else {
