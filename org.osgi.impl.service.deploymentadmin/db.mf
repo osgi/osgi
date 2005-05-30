@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Activator: com.nokia.test.db.Db
-Bundle-SymbolicName: com.nokia.test.db.Db
-Bundle-Version: 1.0
-$(EXPORT-PACKAGE)
-$(IMPORT-PACKAGE)
-$(PRIVATE-PACKAGE)

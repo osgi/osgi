@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Activator: com.nokia.test.doit.DoIt
-Bundle-SymbolicName: com.nokia.test.doit.DoIt
-Bundle-Version: 1.0
-$(EXPORT-PACKAGE)
-$(IMPORT-PACKAGE)
-$(PRIVATE-PACKAGE)
