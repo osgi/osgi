@@ -516,13 +516,20 @@ public class DeploymentSessionImpl implements DeploymentSession {
         if (null != sref) {
             ConditionalPermissionAdmin cpa = (ConditionalPermissionAdmin) 
             		trackCondPerm.getService(sref);
+			ArrayList chainsAsStrings = new ArrayList();
             for (Iterator iter = certChains.iterator(); iter.hasNext();) {
                 String[] chain = (String[]) iter.next();
-                ret = cpa.getAccessControlContext(chain);
-                if (null != ret)
-                    return ret;
+				if (chain.length==0) continue;
+				StringBuffer chainAsString = new StringBuffer(chain[0]);
+				for(int i=1;i<chain.length;i++) {
+					chainAsString.append(';');
+					chainAsString.append(chain[i]);
+				}
+				chainsAsStrings.add(chainAsString.toString());
             }
-            return ret;
+			String [] signers = new String[chainsAsStrings.size()];
+			signers = (String[]) chainsAsStrings.toArray(signers);
+			return cpa.getAccessControlContext(signers);
         } else {
             return createAccessControlContext();
         }
