@@ -30,6 +30,7 @@ package integrationtests;
 import integrationtests.api.ITest;
 
 import java.io.FileInputStream;
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import junit.framework.Test;
@@ -41,6 +42,7 @@ import org.osgi.impl.service.policy.integrationtests.IntegratedTest;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
+import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 import org.osgi.service.metatype.MetaTypeService;
 
@@ -50,6 +52,7 @@ public class TestAutoconf extends IntegratedTest implements Test {
 	public static final String  ORG_OSGI_IMPL_BUNDLE_AUTOCONF_JAR = "file:../../org.osgi.impl.bundle.autoconf/org.osgi.impl.bundle.autoconf.jar";
 	public static final String	INTEGRATIONTESTS_MANAGEDSERVICE1_JAR = "file:../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.managedservice1.jar";
 	public static final String	INTEGRATIONTESTS_DP1_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp1.jar";
+	public static final String	INTEGRATIONTESTS_DP1_ROLLBACK_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp1_rollback.jar";
 
 	public Bundle	deploymentAdminBundle;
 	public Bundle	autoconf;
@@ -134,5 +137,25 @@ public class TestAutoconf extends IntegratedTest implements Test {
 		int i = iTest.succ(7);
 		assertEquals(10,i);
 
+	}
+
+	/**
+	 * The deployment package contains a good designate, and then one without
+	 * an OCD. Since this second one is not defined, and not marked optional, the 
+	 * resource processor should fail, and then roll back the changes.
+	 */
+	public void testDeployManagedService1Rollback() throws Exception {
+		startFramework(true);
+		setBundleAsAdministrator(INTEGRATIONTESTS_MANAGEDSERVICE1_JAR);
+		
+		try {
+			deploymentAdmin.installDeploymentPackage(new FileInputStream(INTEGRATIONTESTS_DP1_ROLLBACK_JAR));
+			fail();
+		} catch (DeploymentException e) {
+		}
+
+		Configuration conf = configurationAdmin.getConfiguration("integrationtests.managedservice1.pid");
+		Dictionary props = conf.getProperties();
+		assertNull(props);
 	}
 }
