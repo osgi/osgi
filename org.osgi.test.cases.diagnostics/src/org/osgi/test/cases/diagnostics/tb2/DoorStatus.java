@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) The OSGi Alliance (2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -24,31 +24,63 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
+package org.osgi.test.cases.diagnostics.tb2;
 
-package org.osgi.test.cases.diagnostics.tb1;
-
-import java.util.Hashtable;
-
-import org.osgi.framework.*;
-import org.osgi.service.cu.*;
-import org.osgi.service.cu.admin.spi.ControlUnitFactory;
+import org.osgi.service.cu.diag.Status;
 
 /**
- * Bundle that registers a Diagnosable Control Unit used by the test control.
- * @version $Revision$
- */
-public class Activator implements BundleActivator {
-	private ServiceRegistration regTacho;
-	
-	public void start(BundleContext context) throws Exception {
-		Hashtable p = new Hashtable();
-    p.put(ControlUnitConstants.TYPE, "tachometer");
-    regTacho = context.registerService(ControlUnitFactory.class.getName(), new TachometerFactory(), p);
-	}
-	
-	public void stop(BundleContext context) throws Exception {
-		if (regTacho!= null) {
-			regTacho.unregister();
+*
+* @version $Revision$
+*/
+public class DoorStatus implements Status {
+  /**
+   * Indicates that there is no error. 
+   */
+   public static int NO_ERROR = -1;
+   
+   /**
+    * Indicates that the door is open. 
+    */
+   public static int OPEN_ERROR = 1;
+  
+  private int errorCode;
+  private String errorMessage;
+
+  public DoorStatus(int errorCode) {
+    this.errorCode = errorCode;
+    setMessage();
+  }
+
+  /* 
+   * @see org.osgi.service.cu.diag.Status#getStatus()
+   */
+  public byte getStatus() {
+    if (errorCode != -1) {
+      return Status.STATUS_FAILED;
     }
-	}
+    return Status.STATUS_OK;
+  }
+
+  /* 
+   * @see org.osgi.service.cu.diag.Status#getError()
+   */
+  public int getError() {
+    return errorCode;
+  }
+
+  private void setMessage() {
+    if (errorCode == DoorStatus.NO_ERROR) {
+      errorMessage = "";
+      return;
+    } else if (errorCode == DoorStatus.OPEN_ERROR) {
+      errorMessage = "The door is open!";
+    }
+  }
+
+  /* 
+   * @see org.osgi.service.cu.diag.Status#getMessage()
+   */
+  public String getMessage() {
+    return errorMessage;
+  }
 }
