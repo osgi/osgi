@@ -40,7 +40,7 @@
 
 package org.osgi.test.cases.dmt.tbc.DmtDataType;
 
-import org.osgi.service.dmt.DmtDataType;
+import org.osgi.service.dmt.DmtData;
 import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 
 /**
@@ -74,21 +74,21 @@ public class DmtDataTypeConstants {
 	/**
 	 * @testID testDmtDataTypeConstants001
 	 * @testDescription This method asserts the value of the constants
+	 * ### This test does not work because it tests against the compiled constants, 
+	 * it is needed to use reflection to do this ok.
 	 */
 	public void testDmtDataTypeConstants001() {
 		tbc.assertEquals("Assertion of the INTEGER constant", 1,
-				DmtDataType.INTEGER);
+				DmtData.FORMAT_INTEGER);
 		tbc.assertEquals("Assertion of the STRING constant", 2,
-				DmtDataType.STRING);
+				DmtData.FORMAT_STRING);
 		tbc.assertEquals("Assertion of the BOOLEAN constant", 3,
-				DmtDataType.BOOLEAN);
+				DmtData.FORMAT_BOOLEAN);
 		tbc.assertEquals("Assertion of the BINARY constant", 4,
-				DmtDataType.BINARY);
-		tbc.assertEquals("Assertion of the XML constant", 5, DmtDataType.XML);
-		tbc.assertEquals("Assertion of the NULL constant", 6, DmtDataType.NULL);
-		tbc.assertEquals("Assertion of the NODE constant", 7, DmtDataType.NODE);
-		tbc.assertEquals("Assertion of the UNSPECIFIED constant", 8, 
-				DmtDataType.UNSPECIFIED);
+				DmtData.FORMAT_BINARY);
+		tbc.assertEquals("Assertion of the XML constant", 5, DmtData.FORMAT_XML);
+		tbc.assertEquals("Assertion of the NULL constant", 6, DmtData.FORMAT_NULL);
+		tbc.assertEquals("Assertion of the NODE constant", 7, DmtData.FORMAT_NODE);
 	}
 
 

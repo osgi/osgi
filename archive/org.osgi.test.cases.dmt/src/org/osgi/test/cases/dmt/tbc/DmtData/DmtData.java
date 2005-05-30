@@ -90,7 +90,7 @@ public class DmtData {
 
 		// asserts that dd has the String format
 		tbc.assertEquals("Asserting String format",
-				org.osgi.service.dmt.DmtDataType.STRING, dd.getFormat());
+				org.osgi.service.dmt.DmtData.FORMAT_STRING, dd.getFormat());
 
 		try {		
 			// asserts that the value passed is the same as the DmtData
@@ -116,7 +116,7 @@ public class DmtData {
 
 		// asserts that dd has the null String format
 		tbc.assertEquals("Asserting String format",
-				org.osgi.service.dmt.DmtDataType.NULL, dd.getFormat());
+				org.osgi.service.dmt.DmtData.FORMAT_NULL, dd.getFormat());
 
 		try {
 			// asserts that the value passed is the same as the DmtData
@@ -141,7 +141,7 @@ public class DmtData {
 
 		// asserts that dd has the String format
 		tbc.assertEquals("Asserting String format",
-				org.osgi.service.dmt.DmtDataType.STRING, dd.getFormat());
+				org.osgi.service.dmt.DmtData.FORMAT_STRING, dd.getFormat());
 
 		try {
 			// asserts that the value passed is the same as the DmtData
@@ -169,7 +169,7 @@ public class DmtData {
 
 		// asserts that dd has the XML format
 		tbc.assertEquals("Asserting XML format",
-				org.osgi.service.dmt.DmtDataType.XML, dd.getFormat());
+				org.osgi.service.dmt.DmtData.FORMAT_XML, dd.getFormat());
 
 		try {
 			// asserts that the value passed is the same as the DmtData
@@ -196,7 +196,7 @@ public class DmtData {
 
 		// asserts that dd has the XML format
 		tbc.assertEquals("Asserting String format",
-				org.osgi.service.dmt.DmtDataType.STRING, dd.getFormat());
+				org.osgi.service.dmt.DmtData.FORMAT_STRING, dd.getFormat());
 
 		try {
 			// asserts that the value passed is the same as the DmtData
@@ -223,7 +223,7 @@ public class DmtData {
 
 		// asserts that dd has the INTEGER format
 		tbc.assertEquals("Asserting INTEGER format",
-				org.osgi.service.dmt.DmtDataType.INTEGER, dd.getFormat());
+				org.osgi.service.dmt.DmtData.FORMAT_INTEGER, dd.getFormat());
 
 		try {
 			// asserts that the value passed is the same as the DmtData
@@ -250,7 +250,7 @@ public class DmtData {
 
 		// asserts that dd has the BOOLEAN format
 		tbc.assertEquals("Asserting BOOLEAN format",
-				org.osgi.service.dmt.DmtDataType.BOOLEAN, dd.getFormat());
+				org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN, dd.getFormat());
 
 		try {
 			// asserts that the value passed is the same as the DmtData
@@ -276,7 +276,7 @@ public class DmtData {
 
 		// asserts that dd has the binary format
 		tbc.assertEquals("Asserting BINARY format",
-				org.osgi.service.dmt.DmtDataType.BINARY, dd.getFormat());
+				org.osgi.service.dmt.DmtData.FORMAT_BINARY, dd.getFormat());
 
 		try {
 			// asserts that the value passed is the same as the DmtData
