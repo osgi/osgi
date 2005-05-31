@@ -622,36 +622,6 @@ public class TestControl extends DefaultTestBundleControl implements
 	}
 
 	/**
-	 * Tests that attaching a fragment bundle to an already resolved host bundle
-	 * is not possible when the fragment’s Export-Package entries add additional
-	 * packages to the host.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 */
-	public void testAttachToResolvedHost03() throws Exception {
-		// Install and start host bundle
-		Bundle tb1a = getContext().installBundle(getWebServer() + "tb1a.jar");
-		tb1a.start();
-
-		// Install fragment bundle, host is already ACTIVE
-		Bundle tb1j = getContext().installBundle(getWebServer() + "tb1j.jar");
-		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
-		pa.resolveBundles(new Bundle[] {tb1a, tb1j});
-
-		// Verify that fragment bundle is still in INSTALLED state
-		try {
-			assertEquals("Expecting fragment bundle to be in INSTALLED state.",
-					Bundle.INSTALLED, tb1j.getState());
-		}
-		finally {
-			tb1a.stop();
-			tb1a.uninstall();
-			tb1j.uninstall();
-			ungetService(pa);
-		}
-	}
-
-	/**
 	 * Tests that when an attached fragment bundle is updated, the content of
 	 * the previous fragment remains attached to the host bundle. The new
 	 * content of the updated fragment must not be allowed to attach to the host
@@ -986,57 +956,6 @@ public class TestControl extends DefaultTestBundleControl implements
 			tb1a.stop();
 			tb1a.uninstall();
 			tb1b.uninstall();
-			getContext().removeFrameworkListener(this);
-			purgeEvents();
-		}
-
-	}
-
-	/**
-	 * Tests that the Framework publishes a Framework Event of type INFO if the
-	 * Bundle-Classpath evaluates to the null set.
-	 * 
-	 * Tests that if a Bundle-Classpath manifest header is declared and dot (’.’
-	 * or ‘/’) is not an element of the classpath, then the bundle itself is not
-	 * searched. In this case, only the specified classpath entries must be
-	 * searched.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 */
-	public void testBundleClassPathHeader02() throws Exception {
-
-		// Add framework listener
-		purgeEvents();
-		getContext().addFrameworkListener(this);
-
-		// Install bundle with empty Bundle-ClassPath
-		Bundle tb1i = getContext().installBundle(getWebServer() + "tb1i.jar");
-
-		// Install the host bundle
-		Bundle tb1a = getContext().installBundle(getWebServer() + "tb1a.jar");
-
-		// Start the host bundle
-		tb1a.start();
-
-		try {
-			assertEquals(
-					"Expecting fragment bundle to be in the RESOLVED state.",
-					Bundle.RESOLVED, tb1i.getState());
-
-			// Test that resource in the fragment is not accessible
-			URL url = tb1a.getResource("resources/notinhost.txt");
-			assertNull("Expecting resource in fragment to be unavailable.", url);
-
-			// Test if FrameworkEvent event of type INFO was generated
-			Thread.sleep(2000); // wait a while
-			assertTrue("Expecting FrameworkEvent of type INFO.",
-					hasEventOccurred(tb1a, FrameworkEvent.class,
-							FrameworkEvent.INFO));
-		}
-		finally {
-			tb1a.stop();
-			tb1a.uninstall();
-			tb1i.uninstall();
 			getContext().removeFrameworkListener(this);
 			purgeEvents();
 		}
