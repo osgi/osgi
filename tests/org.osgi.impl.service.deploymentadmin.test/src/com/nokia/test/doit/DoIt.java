@@ -362,7 +362,7 @@ public class DoIt implements BundleActivator {
         throw new Exception("Negative test failed");
     }
 
-    public static final String db_test_10 = "Installing a Deployment Package with " +
+    public static final String bad_db_test_10 = "Installing a Deployment Package with " +
     		"name version identical to the existing Deployment Package will not " +
     		"perform any actions.";
     private void bad_db_test_10() throws Exception {
@@ -380,7 +380,7 @@ public class DoIt implements BundleActivator {
         dp1.uninstall();
     }
 
-    public static final String db_test_11 = "Tests bundle sharing violation";
+    public static final String bad_db_test_11 = "Tests bundle sharing violation";
     private void bad_db_test_11() throws Exception {
         InputStream is = new FileInputStream(HOME + "bad_db_test_11_1.dp");
         DeploymentPackage dp1 = da.installDeploymentPackage(is);
@@ -402,7 +402,7 @@ public class DoIt implements BundleActivator {
         }
     }
 
-    public static final String db_test_12 = "Tests resource sharing violation";
+    public static final String bad_db_test_12 = "Tests resource sharing violation";
     private void bad_db_test_12() throws Exception {
         InputStream is = new FileInputStream(HOME + "bad_db_test_12_1.dp");
         DeploymentPackage dp1 = da.installDeploymentPackage(is);
@@ -425,7 +425,7 @@ public class DoIt implements BundleActivator {
         }
     }
 
-    public static final String db_test_13 = "deployment package installs a bundle, " +
+    public static final String bad_db_test_13 = "deployment package installs a bundle, " +
 			"which symbolic name is not the same as defined by the deployment package " +
 			"manifest";
     private void bad_db_test_13() throws Exception {
