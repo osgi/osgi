@@ -20,6 +20,9 @@ import org.osgi.service.condpermadmin.ConditionInfo;
  */
 public class IMSICondition implements Condition {
 	// this reference implementation only supports one IMSI, that cannot change
+	// ### you can now return Condition.TRUE/FALSE
+	// The property get requirs protection because it can be
+	// called in a security check. Same for IMEI
 	protected static final String imsi = System.getProperty("org.osgi.util.gsm.imsi");
 
 	private IMSICondition() {
