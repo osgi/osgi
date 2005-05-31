@@ -62,30 +62,30 @@ public class TestIMSI extends TestCase {
 	}
 	
 	public void testBasic() throws Exception {
-		Condition imei = (Condition) IMSICondition.getInstance(bundle,new ConditionInfo("",new String[]{SYSTEM_IMSI}));
-		assertFalse(imei.isPostponed());
-		assertTrue(imei.isSatisfied());
+		Condition imsi = (Condition) IMSICondition.getInstance(bundle,new ConditionInfo("",new String[]{SYSTEM_IMSI}));
+		assertFalse(imsi.isPostponed());
+		assertTrue(imsi.isSatisfied());
 		
-		imei = (Condition) IMSICondition.getInstance(bundle,new ConditionInfo("",new String[]{OTHER_IMSI}));
-		assertFalse(imei.isPostponed());
-		assertFalse(imei.isSatisfied());
+		imsi = (Condition) IMSICondition.getInstance(bundle,new ConditionInfo("",new String[]{OTHER_IMSI}));
+		assertFalse(imsi.isPostponed());
+		assertFalse(imsi.isSatisfied());
 	}
 	
 	public void testIMSIValidator() throws Exception {
 		try {
-			IMSICondition imei = (IMSICondition) IMSICondition.getInstance(bundle,new ConditionInfo("",new String[]{""}));
+			IMSICondition imsi = (IMSICondition) IMSICondition.getInstance(bundle,new ConditionInfo("",new String[]{""}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 		try {
-			IMSICondition imei = (IMSICondition) IMSICondition.getInstance(bundle,new ConditionInfo("",new String[]{"12345678901234"}));
+			IMSICondition imsi = (IMSICondition) IMSICondition.getInstance(bundle,new ConditionInfo("",new String[]{"12345678901234"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 		try {
-			IMSICondition imei = (IMSICondition) IMSICondition.getInstance(bundle,new ConditionInfo("",new String[]{"1234567890123456"}));
+			IMSICondition imsi = (IMSICondition) IMSICondition.getInstance(bundle,new ConditionInfo("",new String[]{"1234567890123456"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 		try {
-			IMSICondition imei = (IMSICondition) IMSICondition.getInstance(bundle,new ConditionInfo("",new String[]{"12345678901234a"}));
+			IMSICondition imsi = (IMSICondition) IMSICondition.getInstance(bundle,new ConditionInfo("",new String[]{"12345678901234a"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 	}
