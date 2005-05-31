@@ -287,8 +287,10 @@ public class DeploymentSessionImpl implements DeploymentSession {
             dropBundles();
             startBundles();
         } catch (CancelException e) {
+            transaction.rollback();
             throw e;
         } catch (DeploymentException e) {
+            transaction.rollback();
             throw e;
         } catch (Exception e) {
             transaction.rollback();
@@ -584,7 +586,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     }
 
     private Bundle processBundle(DeploymentPackageJarInputStream.Entry entry) 
-    		throws BundleException, IOException 
+    		throws BundleException, IOException, DeploymentException 
     {
         Bundle ret;
         BundleEntry be = new BundleEntry(entry);
@@ -595,7 +597,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         } else {
             ret = installBundle(be, entry.getInputStream());
         }
-        srcDp.updateBundleEntry(be);
+        srcDp.updateBundleEntry(new BundleEntry(ret));
         return ret;
     }
 

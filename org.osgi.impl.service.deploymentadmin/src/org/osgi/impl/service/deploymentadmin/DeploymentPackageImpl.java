@@ -161,8 +161,13 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return bundleEntries;
     }
     
-    void updateBundleEntry(BundleEntry be) {
+    void updateBundleEntry(BundleEntry be) throws DeploymentException {
         int index = bundleEntries.indexOf(be);
+        if (-1 == index)
+            throw new DeploymentException(DeploymentException.CODE_BUNDLE_NAME_ERROR, 
+                    "The symbolic name in the deployment package manifest is " +
+                    		"not the same as the symbolic name in the bundle " +
+                    		"(" + be.getSymbName() + ")");
         BundleEntry e = (BundleEntry) bundleEntries.get(index);
         e.setId(be.getId());
         e.setSymbName(be.getSymbName());
