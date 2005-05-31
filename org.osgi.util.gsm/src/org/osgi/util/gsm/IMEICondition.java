@@ -9,21 +9,29 @@
  */
 package org.osgi.util.gsm;
 
-import java.util.Dictionary;
+import java.security.*;
+
 import org.osgi.framework.Bundle;
-import org.osgi.service.condpermadmin.Condition;
-import org.osgi.service.condpermadmin.ConditionInfo;
+import org.osgi.service.condpermadmin.*;
 
 /**
  * Class representing an IMEI condition. Instances of this class contain a
  * string value that is matched against the IMEI of the device.
  */
-public class IMEICondition implements Condition {
-	protected static final String imei = System.getProperty("org.osgi.util.gsm.imei");
-	
+public class IMEICondition {
+	private static String imei ;
+		
+	{
+		AccessController.doPrivileged(
+				new PrivilegedAction() {
+					public Object run() {
+					imei = System.getProperty("org.osgi.util.gsm.imei");
+					return null;
+					}
+				}
+				);
+	}
 	private IMEICondition() {
-		// this class is never instantiated
-		throw new IllegalArgumentException();
 	}
 
 	/**
@@ -47,50 +55,6 @@ public class IMEICondition implements Condition {
 			int c = imei.charAt(i);
 			if (c<'0'||c>'9') throw new IllegalArgumentException("not a valid imei: "+imei);
 		}
-		return imei.equals(IMEICondition.imei)?TRUE:FALSE;
-	}
-
-	/**
-	 * Checks whether IMEI value in the condition and of the device match.
-	 * 
-	 * @return True if the IMEI value in this condition is the same as the IMEI of the device.
-	 */
-	public boolean isSatisfied() {
-		// this class is never instantiated
-		throw new IllegalStateException();
-	}
-
-	/**
-	 * Checks whether condition evaluation is postponed, because {@link #isSatisfied()} cannot give answer instantly.
-	 * 
-	 * @return True if the {@link #isSatisfied()} method cannot give results instantly.
-	 */
-	public boolean isPostponed() {
-		// this class is never instantiated
-		throw new IllegalStateException();
-	}
-
-	/**
-	 * Checks whether the condition can change. As an IMEI number is factory-set in the
-	 * device, this condition is not mutable.
-	 * 
-	 * @return Always false.
-	 */
-	public boolean isMutable() {
-		// this class is never instantiated
-		throw new IllegalStateException();
-	}
-
-	/**
-	 * Checks an array of IMEI conditions if they all match this device.
-	 * 
-	 * @param conds an array, containing only IMEIConditions.
-	 * @param context ignored.
-	 * @return True if all conditions match.
-	 * @throws NullPointerException if conds is <code>null</code>.
-	 */
-	public boolean isSatisfied(Condition[] conds, Dictionary context) {
-		// this class is never instantiated
-		throw new IllegalStateException();
+		return imei.equals(IMEICondition.imei)?Condition.TRUE:Condition.FALSE;
 	}
 }

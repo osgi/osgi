@@ -9,26 +9,30 @@
  */
 package org.osgi.util.gsm;
 
-import java.util.Dictionary;
+import java.security.*;
+
 import org.osgi.framework.Bundle;
-import org.osgi.service.condpermadmin.Condition;
-import org.osgi.service.condpermadmin.ConditionInfo;
+import org.osgi.service.condpermadmin.*;
 
 /**
  * Class representing an IMSI condition. Instances of this class contain a
  * string value that is matched against the IMSI of the subscriber.
  */
-public class IMSICondition implements Condition {
-	// this reference implementation only supports one IMSI, that cannot change
-	// ### you can now return Condition.TRUE/FALSE
-	// The property get requirs protection because it can be
-	// called in a security check. Same for IMEI
-	protected static final String imsi = System.getProperty("org.osgi.util.gsm.imsi");
-
-	private IMSICondition() {
-		// this class is never instantiated
-		throw new IllegalArgumentException();
+public class IMSICondition {
+	private static String imsi;
+	
+	{
+		AccessController.doPrivileged(
+				new PrivilegedAction() {
+					public Object run() {
+					imsi = System.getProperty("org.osgi.util.gsm.imsi");
+					return null;
+					}
+				}
+				);
 	}
+
+	private IMSICondition() {}
 
 	/**
 	 * Creates an IMSI condition object.
@@ -50,50 +54,6 @@ public class IMSICondition implements Condition {
 			int c = imsi.charAt(i);
 			if (c<'0'||c>'9') throw new IllegalArgumentException("not a valid imei: "+imsi);
 		}
-		return (imsi.equals(IMSICondition.imsi))?TRUE:FALSE;
-	}
-
-	/**
-	 * Checks whether the condition is true. 
-	 * 
-	 * @return True if the IMSI value in this condition is the same as the IMSI of subscriber.
-	 */
-	public boolean isSatisfied() {
-		// this class is never instantiated
-		throw new IllegalStateException();
-	}
-
-	/**
-	 * Checks whether condition evaluation is postponed, because {@link #isSatisfied()} cannot give answer instantly.
-	 * 
-	 * @return True if the {@link #isSatisfied()} method cannot give results instantly.
-	 */
-	public boolean isPostponed() {
-		// this class is never instantiated
-		throw new IllegalStateException();
-	}
-
-	/**
-	 * Checks whether the condition can change. On most systems the IMSI cannot change, since the
-	 * device need to be powered down to change the SIM card.
-	 * 
-	 * @return True, if the IMSI can change (mobile device supports live SIM card swaps, etc.)
-	 */
-	public boolean isMutable() {
-		// this class is never instantiated
-		throw new IllegalStateException();
-	}
-
-	/**
-	 * Checks whether an array of IMSI conditions match.
-	 * 
-	 * @param conds an array, containing only IMSI conditions.
-	 * @param context ignored.
-	 * @return True, if they all match.
-	 * @throws NullPointerException if conds is <code>null</code>.
-	 */
-	public boolean isSatisfied(Condition[] conds, Dictionary context) {
-		// this class is never instantiated
-		throw new IllegalStateException();
+		return (imsi.equals(IMSICondition.imsi))?Condition.TRUE:Condition.FALSE;
 	}
 }
