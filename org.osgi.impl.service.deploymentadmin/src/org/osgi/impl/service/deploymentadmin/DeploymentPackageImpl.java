@@ -469,7 +469,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                     continue;
                 for (Iterator iterator = eDp.getBundleEntries().iterator(); iterator.hasNext();) {
                     BundleEntry	eBe	= (BundleEntry) iterator.next();
-                    if (be.equals(eBe))
+                    if (be.getSymbName().equals(eBe.getSymbName()))
                         throw new DeploymentException(DeploymentException.CODE_BUNDLE_SHARING_VIOLATION, 
                                 "Bundle " + be + " is already installed");
                 }
