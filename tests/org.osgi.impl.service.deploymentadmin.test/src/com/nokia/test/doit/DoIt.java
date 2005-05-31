@@ -425,7 +425,9 @@ public class DoIt implements BundleActivator {
         }
     }
 
-    public static final String db_test_13 = "Tests resource sharing violation";
+    public static final String db_test_13 = "deployment package installs a bundle, " +
+			"which symbolic name is not the same as defined by the deployment package " +
+			"manifest";
     private void bad_db_test_13() throws Exception {
         InputStream is = null;
         DeploymentPackage dp = null;
