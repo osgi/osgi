@@ -40,11 +40,11 @@ import org.osgi.framework.Version;
 public interface DeploymentPackage {
  
 	/**
-	 * Returns the identifier of the deployment package.  Every installed deployment package 
-	 * has its own unique identifier.
-	 * @return The ID of the resource package.
+	 * Gives back the state of the deployment package (it is stale or not).
+	 * @return <code>true</code> if the deployment package is stale. <code>false</code>
+	 *         otherwise
 	 */
-    long getId();
+    boolean isStale();
 	  
 	/**
 	 * Returns the name of the deployment package.

@@ -334,13 +334,14 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return null;
     }
 
-    public synchronized DeploymentPackage getDeploymentPackage(long id) {
-        if (id < 0)
-            throw new IllegalArgumentException("Id cannot be negative");
+    public synchronized DeploymentPackage getDeploymentPackage(String symbName) {
+        if (null == symbName)
+            throw new IllegalArgumentException("Deployment package symbolic name " +
+            		"cannot be null");
         
         for (Iterator iter = dps.iterator(); iter.hasNext();) {
             DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();
-            if (dp.getId() == id) {
+            if (dp.getName().equals(symbName)) {
                 checkPermission(dp, DeploymentAdminPermission.ACTION_LIST);
                 return dp;
             }

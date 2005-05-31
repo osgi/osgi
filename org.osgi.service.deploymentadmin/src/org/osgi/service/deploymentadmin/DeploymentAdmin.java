@@ -50,18 +50,18 @@ public interface DeploymentAdmin {
     DeploymentPackage[] listDeploymentPackages();
 
     /**
-     * Get the deployment package instance based on the id of the package.
+     * Get the deployment package instance based on its symbolic name.
      * {@link DeploymentAdminPermission}("&lt;filter&gt;", "list") is 
      * needed for this operation. 
-     * @param  id the id of the deployment package to be retrieved. It mustn't be negative.
-     * @return The <code>DeploymentPackage</code> for the request id. If there is no deployment 
-     *         package with that id, null is returned.
+     * @param  symbolic name of the deployment package to be retrieved. It mustn't be null.
+     * @return The <code>DeploymentPackage</code> for the given symbolic name. 
+     *         If there is no deployment package with that symbolic name, null is returned.
      * @throws SecurityException if access to the deployment package identified by <code>id</code> 
      * 	       is not permitted based on the current security policy.
-     * @throws <code>IllegalArgumentException</code> if the given <code>id</code> is negative
+     * @throws <code>IllegalArgumentException</code> if the given <code>symbName</code> is null
      * @see DeploymentAdminPermission
      */
-    DeploymentPackage getDeploymentPackage(long id);  
+    DeploymentPackage getDeploymentPackage(String symbName);  
   
     /**
      * This method cancels the currently active deployment session. This method addresses the need

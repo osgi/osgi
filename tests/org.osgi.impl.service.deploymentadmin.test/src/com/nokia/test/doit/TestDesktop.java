@@ -50,8 +50,9 @@ public class TestDesktop extends Frame {
         Class c = Class.forName("com.nokia.test.doit.DoIt");
         tests = c.getDeclaredMethods();
         for (int i = 0; i < tests.length; i++) {
-            if (tests[i].getName().startsWith("db_test"))
-                li_tests.add(tests[i].getName());
+            if (tests[i].getName().startsWith("db_test") || 
+                tests[i].getName().startsWith("bad_db_test"))
+                	li_tests.add(tests[i].getName());
         }
         
         Field[] fs = c.getDeclaredFields();

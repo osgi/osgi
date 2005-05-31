@@ -212,7 +212,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
     
     private void checkStale() {
-        if (-1 == id.longValue())
+        if (isStale())
             throw new IllegalStateException("Deployment package is stale");
     }
 
@@ -255,11 +255,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return (String) mainSection.get(name);
     }
 
-    /**
-     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getId()
-     */
-    public long getId() {
-        return null == id ? -1 : id.longValue();
+    public boolean isStale() {
+        long l = (null == id ? -1 : id.longValue());
+        return l == -1;
     }
 
     /**
@@ -334,7 +332,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      */
     public void uninstall() throws DeploymentException {
         checkStale();
-        if (0 == getId())
+        if (0 == id.longValue())
             throw new RuntimeException("\"System\" bundle cannot be uninstalled");
         
         da.checkPermission(this, DeploymentAdminPermission.ACTION_UNINSTALL);
@@ -349,7 +347,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      */
     public boolean uninstallForced() {
         checkStale();
-        if (0 == getId())
+        if (0 == id.longValue())
             throw new RuntimeException("\"System\" bundle cannot be uninstalled");
         
         da.checkPermission(this, DeploymentAdminPermission.ACTION_UNINSTALL_FORCED);

@@ -47,6 +47,8 @@ public class DoIt implements BundleActivator {
     
     private DeploymentAdmin da;
     private BundleContext   context;
+
+    private TestDesktop desktop;
     
     private void setPermissions() throws InvalidSyntaxException {
         ServiceReference paRef = context.getServiceReference(PermissionAdmin.class.getName());
@@ -137,11 +139,12 @@ public class DoIt implements BundleActivator {
     }
 
     public void stop(BundleContext context) throws Exception {
+        desktop.setVisible(false);
+        desktop.dispose();
     }
 
     public void start(BundleContext context) throws Exception {
-        new TestDesktop();
-        
+        desktop = new TestDesktop();
         
         this.context = context;
         setPermissions();

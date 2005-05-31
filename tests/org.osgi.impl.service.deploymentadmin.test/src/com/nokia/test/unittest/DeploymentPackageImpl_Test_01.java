@@ -55,10 +55,6 @@ public class DeploymentPackageImpl_Test_01 extends TestCase {
         assertFalse(dp.getHeader("DeploymentPackage-Name").equals("error"));
     }
     
-    public void testGetId() {
-        assertTrue(dp.getId() == 99);
-    }
-    
     public void testGetResourceHeader() {
         assertTrue(dp.getResourceHeader("res1", "header1").equals("val1"));
         assertTrue(dp.getResourceHeader("res1", "header2").equals("val2"));
