@@ -21,7 +21,7 @@ import org.osgi.service.condpermadmin.*;
 public class IMSICondition {
 	private static String imsi;
 	
-	{
+	static {
 		AccessController.doPrivileged(
 				new PrivilegedAction() {
 					public Object run() {

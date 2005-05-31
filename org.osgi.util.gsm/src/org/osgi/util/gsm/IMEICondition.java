@@ -21,7 +21,7 @@ import org.osgi.service.condpermadmin.*;
 public class IMEICondition {
 	private static String imei ;
 		
-	{
+	static {
 		AccessController.doPrivileged(
 				new PrivilegedAction() {
 					public Object run() {
@@ -31,6 +31,7 @@ public class IMEICondition {
 				}
 				);
 	}
+	
 	private IMEICondition() {
 	}
 
