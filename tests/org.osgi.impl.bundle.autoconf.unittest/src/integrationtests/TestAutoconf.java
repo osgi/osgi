@@ -30,6 +30,7 @@ package integrationtests;
 import integrationtests.api.ITest;
 
 import java.io.FileInputStream;
+import java.security.AllPermission;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -41,12 +42,18 @@ import org.osgi.impl.bundle.autoconf.Autoconf;
 import org.osgi.impl.service.policy.integrationtests.IntegratedTest;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.condpermadmin.BundleSignerCondition;
+import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 import org.osgi.service.metatype.MetaTypeService;
+import org.osgi.service.permissionadmin.PermissionInfo;
 
 public class TestAutoconf extends IntegratedTest implements Test {
+	public static final ConditionInfo[] SIGNER_SARAH =  new ConditionInfo[] {new ConditionInfo(BundleSignerCondition.class.getName(),new String[] {"CN=Sarah Bar, OU=Informatical Infrastructure Management, O=ConstructionOy, C=HU; CN=People, OU=Informatical Infrastructure Maintenance, O=ConstructionOy, L=Budapest, C=HU; CN=Root1, OU=FAKEDONTUSE, O=CASoft, L=Budapest, C=HU"})};
+	public static final PermissionInfo[] ALL_PERMISSION = new PermissionInfo[] { new PermissionInfo(AllPermission.class.getName(),"*","*")};
+
 	public static final String	ORG_OSGI_IMPL_SERVICE_DEPLOYMENTADMIN_JAR	= "file:../../org.osgi.impl.service.deploymentadmin/org.osgi.impl.service.deploymentadmin.jar";
 	public static final String	ORG_OSGI_IMPL_SERVICE_METATYPE_JAR	= "file:../../org.osgi.impl.service.metatype/org.osgi.impl.service.metatype.jar";
 	public static final String  ORG_OSGI_IMPL_BUNDLE_AUTOCONF_JAR = "file:../../org.osgi.impl.bundle.autoconf/org.osgi.impl.bundle.autoconf.jar";
@@ -108,7 +115,7 @@ public class TestAutoconf extends IntegratedTest implements Test {
 	// this is not really a test, just to make sure we didn't mess up the package
 	public void testManagedService1Works() throws Exception {
 		startFramework(true);
-		setBundleAsAdministrator(INTEGRATIONTESTS_MANAGEDSERVICE1_JAR);
+		conditionalPermissionAdmin.addConditionalPermissionInfo(SIGNER_SARAH,ALL_PERMISSION);
 		Bundle managedService1 = systemBundleContext.installBundle(INTEGRATIONTESTS_MANAGEDSERVICE1_JAR);
 		managedService1.start();
 
@@ -127,7 +134,7 @@ public class TestAutoconf extends IntegratedTest implements Test {
 	
 	public void testDeployManagedService1() throws Exception {
 		startFramework(true);
-		setBundleAsAdministrator(INTEGRATIONTESTS_MANAGEDSERVICE1_JAR);
+		conditionalPermissionAdmin.addConditionalPermissionInfo(SIGNER_SARAH,ALL_PERMISSION);
 		deploymentAdmin.installDeploymentPackage(new FileInputStream(INTEGRATIONTESTS_DP1_JAR));
 		// the deploymentpackage configures "increment" to 3
 
@@ -146,7 +153,7 @@ public class TestAutoconf extends IntegratedTest implements Test {
 	 */
 	public void testDeployManagedService1Rollback() throws Exception {
 		startFramework(true);
-		setBundleAsAdministrator(INTEGRATIONTESTS_MANAGEDSERVICE1_JAR);
+		conditionalPermissionAdmin.addConditionalPermissionInfo(SIGNER_SARAH,ALL_PERMISSION);
 		
 		try {
 			deploymentAdmin.installDeploymentPackage(new FileInputStream(INTEGRATIONTESTS_DP1_ROLLBACK_JAR));

@@ -21,8 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -88,23 +86,6 @@ public class Autoconf implements ResourceProcessor {
 	}
 
 	public void process(final String name, final InputStream stream) throws DeploymentException {
-		// just a wrapper call around the real one
-		try {
-			AccessController.doPrivileged(new PrivilegedExceptionAction() {
-				public java.lang.Object run() throws Exception {
-					processPrivileged(name,stream);
-					return null;
-				}});
-		}
-		catch (PrivilegedActionException e) {
-			Exception orig = e.getException();
-			if (orig instanceof DeploymentException) throw (DeploymentException)orig;
-			throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"",e);
-		}
-		
-	}
-	
-	private void processPrivileged(final String name, final InputStream stream) throws DeploymentException {
 		InputSource is = new InputSource(stream);
 		is.setPublicId(name);
 		MetaData m;
@@ -388,6 +369,7 @@ public class Autoconf implements ResourceProcessor {
 	public void prepare() throws DeploymentException {
 		// since we do all the configuration writes in the 'process' call,
 		// there is nothing to prepare
+		// we are 'always ready' :-)
 		
 	}
 
@@ -397,6 +379,8 @@ public class Autoconf implements ResourceProcessor {
 
 	public void rollback() {
 		// just a wrapper call around the real one
+		// whatever the access rights of the caller, rolling back to the original
+		// state should be done
 		AccessController.doPrivileged(new PrivilegedAction() {
 			public java.lang.Object run()  {
 				rollbackPrivileged();
