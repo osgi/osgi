@@ -41,12 +41,12 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 
-public class SignerChainPattern {
+class SignerChainPattern {
     
     // used system properties
-    public static final String KEYSTORE_TYPE = "org.osgi.service.deploymentadmin.keystore.type";
-    public static final String KEYSTORE_PATH = "org.osgi.service.deploymentadmin.keystore.path";
-    public static final String KEYSTORE_PWD  = "org.osgi.service.deploymentadmin.keystore.pwd";
+    private static final String KEYSTORE_TYPE = "org.osgi.service.deploymentadmin.keystore.type";
+    private static final String KEYSTORE_PATH = "org.osgi.service.deploymentadmin.keystore.path";
+    private static final String KEYSTORE_PWD  = "org.osgi.service.deploymentadmin.keystore.pwd";
 
     private static Object keystore;
     static {

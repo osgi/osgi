@@ -58,6 +58,7 @@ public interface DeploymentAdmin {
      *         package with that id, null is returned.
      * @throws SecurityException if access to the deployment package identified by <code>id</code> 
      * 	       is not permitted based on the current security policy.
+     * @throws <code>IllegalArgumentException</code> if the given <code>id</code> is negative
      * @see DeploymentAdminPermission
      */
     DeploymentPackage getDeploymentPackage(long id);  

@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 
-public class Representation {
+class Representation {
     
     public static class Node {
         // TODO eliminate ROOT level (not nice)

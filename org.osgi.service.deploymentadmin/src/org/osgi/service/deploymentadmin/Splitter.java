@@ -30,7 +30,7 @@ package org.osgi.service.deploymentadmin;
 import java.util.Vector;
 
 
-public class Splitter {
+class Splitter {
     public static String[] split(String input, char sep, int limit) {
         Vector v = new Vector();
         boolean limited = (limit > 0);

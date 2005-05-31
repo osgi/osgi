@@ -63,7 +63,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         processMainSection(manifest);
         processNameSections(manifest);
         
-        DeploymentPackageVerifier.verify(this);
+        new DeploymentPackageVerifier().verify(this);
     }
 
     /*
@@ -377,14 +377,14 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     /*
      * Checks whether the deployment package is valid.
      */
-    private static class DeploymentPackageVerifier {
-
-        public static void verify(DeploymentPackageImpl dp) throws DeploymentException {
+    private class DeploymentPackageVerifier {
+        
+        public void verify(DeploymentPackageImpl dp) throws DeploymentException {
             checkMainSection(dp);            
             checkNameSections(dp);
         }
         
-        private static void checkMainSection(DeploymentPackageImpl dp)
+        private void checkMainSection(DeploymentPackageImpl dp)
         		throws DeploymentException
         {
             if (null == dp.getName())
@@ -427,7 +427,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                         "Missing header in: " + dp + " header: " + DAConstants.DP_VERSION);        
         }
     
-        private static void checkNameSections(DeploymentPackageImpl dp)
+        private void checkNameSections(DeploymentPackageImpl dp)
         		throws DeploymentException
         {
             for (Iterator iter = dp.bundleEntries.iterator(); iter.hasNext();) {
@@ -440,7 +440,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                 checkResourceEntry(dp, re);
             }
             
-            // TODO this check only inside one dp
+            // this check only inside one dp
             Set s = new HashSet();
             for (Iterator iter = dp.bundleEntries.iterator(); iter.hasNext();) {
                 BundleEntry be = (BundleEntry) iter.next();
@@ -454,16 +454,29 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             }
         }
 
-        private static void checkBundleEntry(DeploymentPackageImpl dp, BundleEntry be) 
+        private void checkBundleEntry(DeploymentPackageImpl dp, BundleEntry be) 
 				throws DeploymentException
         {
             if (!dp.fixPack() && be.isMissing())
                 	throw new DeploymentException(DeploymentException.CODE_BAD_HEADER, 
                         DAConstants.MISSING + " header is only allowed in fix-pack (" +
                         dp + ")");
+            
+            Set set = da.getDeploymentPackages();
+            for (Iterator iter = set.iterator(); iter.hasNext();) {
+                DeploymentPackageImpl eDp = (DeploymentPackageImpl) iter.next();
+                if (dp.getName().equals(eDp.getName()))
+                    continue;
+                for (Iterator iterator = eDp.getBundleEntries().iterator(); iterator.hasNext();) {
+                    BundleEntry	eBe	= (BundleEntry) iterator.next();
+                    if (be.equals(eBe))
+                        throw new DeploymentException(DeploymentException.CODE_BUNDLE_SHARING_VIOLATION, 
+                                "Bundle " + be + " is already installed");
+                }
+            }
         }
         
-        private static void checkResourceEntry(DeploymentPackageImpl dp, ResourceEntry re) 
+        private void checkResourceEntry(DeploymentPackageImpl dp, ResourceEntry re) 
         		throws DeploymentException 
         {
             if (!dp.fixPack() && re.isMissing())

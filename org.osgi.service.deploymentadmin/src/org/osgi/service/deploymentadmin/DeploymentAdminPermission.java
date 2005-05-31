@@ -175,8 +175,9 @@ public class DeploymentAdminPermission extends Permission {
         if (!(permission instanceof DeploymentAdminPermission))
             return false;
         DeploymentAdminPermission other = (DeploymentAdminPermission) permission;
-        return getRepresentation().match(other.getRepresentation()) && 
-        	   getActionVector().containsAll(other.getActionVector());
+        boolean ret = getRepresentation().match(other.getRepresentation()) && 
+ 	   			getActionVector().containsAll(other.getActionVector());
+        return ret;
     }
 
     /**

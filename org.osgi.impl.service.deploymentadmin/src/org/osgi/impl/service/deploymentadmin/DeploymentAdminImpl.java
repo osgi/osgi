@@ -48,7 +48,6 @@ import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.SignerChainPattern;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
@@ -96,16 +95,16 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private void initKeyStore() throws Exception {
         String ksType = System.getProperty(DAConstants.KEYSTORE_TYPE);
         if (null == ksType)
-            ksType = System.getProperty(SignerChainPattern.KEYSTORE_TYPE);
+            ksType = System.getProperty("org.osgi.service.deploymentadmin.keystore.type");
         if (null == ksType)
             ksType = "JKS";
         String ks = System.getProperty(DAConstants.KEYSTORE_PATH);
         if (null == ks)
-            ks = System.getProperty(SignerChainPattern.KEYSTORE_PATH);
+            ks = System.getProperty("org.osgi.service.deploymentadmin.keystore.path");
         if (null == ks) {
             logger.log(Logger.LOG_WARNING, "Keystore location is not defined. Set the " + 
                     DAConstants.KEYSTORE_PATH + " or the " + 
-                    SignerChainPattern.KEYSTORE_PATH + " system property!");
+                    "org.osgi.service.deploymentadmin.keystore.path" + " system property!");
             return;
         }
         File file = new File(ks);
@@ -113,11 +112,11 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             throw new RuntimeException("Keystore is not found: " + file);
         String pwd = System.getProperty(DAConstants.KEYSTORE_PWD);
         if (null == pwd)
-            pwd = System.getProperty(SignerChainPattern.KEYSTORE_PWD);
+            pwd = System.getProperty("org.osgi.service.deploymentadmin.keystore.pwd");
         if (null == pwd)
             throw new RuntimeException("There is no keystore password set. Set the " +
                     DAConstants.KEYSTORE_PWD + " or the " + 
-                    SignerChainPattern.KEYSTORE_PWD + " system property!");
+                    "org.osgi.service.deploymentadmin.keystore.pwd" + " system property!");
         keystore = KeyStore.getInstance("JKS");
         keystore.load(new FileInputStream(file), pwd.toCharArray());
     }
@@ -170,6 +169,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         
         sendInstallEvent(srcDp.getName());
         session = createInstallUpdateSession(srcDp);
+        if (!checkSessionSilent())
+            return null;
         try {
             session.installUpdate(wjis);
         } catch (CancelException e) {
@@ -187,6 +188,16 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             dps.add(session.getSourceDeploymentPackage());
             return session.getSourceDeploymentPackage();
         }
+    }
+
+    private boolean checkSessionSilent() throws DeploymentException {
+        DeploymentPackage sDp = session.getSourceDeploymentPackage();
+        DeploymentPackage tDp = session.getTargetDeploymentPackage();
+        if (sDp.getName().equals(tDp.getName()) &&
+                sDp.getVersion().equals(tDp.getVersion()))
+            return false;
+        
+        return true;
     }
 
     private boolean checkCertificateChains(List certChains) throws KeyStoreException {
@@ -324,6 +335,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     }
 
     public synchronized DeploymentPackage getDeploymentPackage(long id) {
+        if (id < 0)
+            throw new IllegalArgumentException("Id cannot be negative");
+        
         for (Iterator iter = dps.iterator(); iter.hasNext();) {
             DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();
             if (dp.getId() == id) {
@@ -535,6 +549,10 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 
     static String location(String symbName, String version) {
         return symbName;
+    }
+
+    Set getDeploymentPackages() {
+        return dps;
     }
     
 }
