@@ -68,7 +68,7 @@ public class TransferCostConditionTest extends TestCase {
 	
 	
 	public void testHighLimit() throws Exception {
-		Condition c = TransferCostCondition.getInstance(new DummyBundle(),
+		Condition c = TransferCostCondition.getCondition(new DummyBundle(),
 				new ConditionInfo("",new String[]{"HIGH"}));
 		TransferCostCondition.setTransferCost(null);
 		assertTrue(c.isSatisfied());
@@ -81,7 +81,7 @@ public class TransferCostConditionTest extends TestCase {
 	}
 	
 	public void testMediumLimit() throws Exception {
-		Condition c = TransferCostCondition.getInstance(new DummyBundle(),
+		Condition c = TransferCostCondition.getCondition(new DummyBundle(),
 				new ConditionInfo("",new String[]{"MEDIUM"}));
 		TransferCostCondition.setTransferCost(null);
 		assertTrue(c.isSatisfied());
@@ -94,7 +94,7 @@ public class TransferCostConditionTest extends TestCase {
 	}
 
 	public void testLowLimit() throws Exception {
-		Condition c = TransferCostCondition.getInstance(new DummyBundle(),
+		Condition c = TransferCostCondition.getCondition(new DummyBundle(),
 				new ConditionInfo("",new String[]{"LOW"}));
 		TransferCostCondition.setTransferCost(null);
 		assertTrue(c.isSatisfied());

@@ -47,7 +47,7 @@ public class IMEICondition {
 	 * @throws NullPointerException if one of the parameters is <code>null</code>.
 	 * @throws IllegalArgumentException if the IMEI is not a string of 15 digits.
 	 */
-	public static Condition getInstance(Bundle bundle, ConditionInfo conditionInfo) {
+	public static Condition getCondition(Bundle bundle, ConditionInfo conditionInfo) {
 		if (bundle==null) throw new NullPointerException("bundle");
 		String imei = conditionInfo.getArgs()[0];
 		if (imei==null) throw new NullPointerException("imei");

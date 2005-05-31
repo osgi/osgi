@@ -44,7 +44,7 @@ public class IMSICondition {
 	 * @throws NullPointerException if one of the parameters is null.
 	 * @throws IllegalArgumentException if the imsi is not a string of 15 digits.
 	 */
-	public static Condition getInstance(Bundle bundle, ConditionInfo conditionInfo) {
+	public static Condition getCondition(Bundle bundle, ConditionInfo conditionInfo) {
 		if (bundle==null) throw new NullPointerException("bundle");
 		if (conditionInfo==null) throw new NullPointerException("conditionInfo");
 		String imsi = conditionInfo.getArgs()[0];

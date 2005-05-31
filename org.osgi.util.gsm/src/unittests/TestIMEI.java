@@ -62,30 +62,30 @@ public class TestIMEI extends TestCase {
 	}
 	
 	public void testBasic() throws Exception {
-		Condition imei = (Condition) IMEICondition.getInstance(bundle,new ConditionInfo("",new String[]{SYSTEM_IMEI}));
+		Condition imei = (Condition) IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{SYSTEM_IMEI}));
 		assertFalse(imei.isPostponed());
 		assertTrue(imei.isSatisfied());
 		
-		imei = (Condition) IMEICondition.getInstance(bundle,new ConditionInfo("",new String[]{OTHER_IMEI}));
+		imei = (Condition) IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{OTHER_IMEI}));
 		assertFalse(imei.isPostponed());
 		assertFalse(imei.isSatisfied());
 	}
 	
 	public void testIMEIValidator() throws Exception {
 		try {
-			IMEICondition imei = (IMEICondition) IMEICondition.getInstance(bundle,new ConditionInfo("",new String[]{""}));
+			IMEICondition imei = (IMEICondition) IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{""}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 		try {
-			IMEICondition imei = (IMEICondition) IMEICondition.getInstance(bundle,new ConditionInfo("",new String[]{"12345678901234"}));
+			IMEICondition imei = (IMEICondition) IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 		try {
-			IMEICondition imei = (IMEICondition) IMEICondition.getInstance(bundle,new ConditionInfo("",new String[]{"1234567890123456"}));
+			IMEICondition imei = (IMEICondition) IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"1234567890123456"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 		try {
-			IMEICondition imei = (IMEICondition) IMEICondition.getInstance(bundle,new ConditionInfo("",new String[]{"12345678901234a"}));
+			IMEICondition imei = (IMEICondition) IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234a"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 	}

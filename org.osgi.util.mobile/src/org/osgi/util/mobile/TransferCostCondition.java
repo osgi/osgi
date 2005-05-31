@@ -49,7 +49,7 @@ public class TransferCostCondition implements Condition {
 	 * @throws IllegalArgumentException if the costLimit parameter is not from the possible values.
 	 * @throws NullPointerException if one of the parameters is <code>null</code>.
 	 */
-	public static Condition getInstance(Bundle bundle, ConditionInfo costLimit) {
+	public static Condition getCondition(Bundle bundle, ConditionInfo costLimit) {
 		if (costLimit==null) throw new NullPointerException("costLimit");
 		String l = costLimit.getArgs()[0];
 		if (l==null) throw new NullPointerException("costLimit");
