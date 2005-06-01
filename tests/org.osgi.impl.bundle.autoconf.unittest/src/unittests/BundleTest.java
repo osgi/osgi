@@ -194,7 +194,7 @@ public class BundleTest extends TestCase {
 		public DeploymentPackage[] listDeploymentPackages() { throw new IllegalStateException(); }
 		public String location(String symbName, String version) { return location(symbName,version); }
 		public boolean cancel() { throw new IllegalStateException(); }
-		public DeploymentPackage getDeploymentPackage(long id) { throw new IllegalStateException(); }
+		public DeploymentPackage getDeploymentPackage(String symbName) { throw new IllegalStateException(); }
 	}
 	
 	public final class DummyDeploymentPackage implements DeploymentPackage {
@@ -225,6 +225,7 @@ public class BundleTest extends TestCase {
 		public String getHeader(String name) { throw new IllegalStateException(); }
 		public String getResourceHeader(String path, String header) { throw new IllegalStateException(); }
 		public boolean uninstallForced() { throw new IllegalStateException(); }
+		public boolean isStale() { throw new IllegalStateException(); }
 	}
 
 	public final class DummyDeploymentSession implements DeploymentSession {
