@@ -62,11 +62,9 @@ public class DeploymentPackageJarInputStream {
         private Entry(String name, Attributes attrs) {
             super(name);
             String miss = attrs.getValue(DAConstants.MISSING);
-            if (null == miss || !Boolean.valueOf(miss).booleanValue())
-                throw new RuntimeException("Internal error.");
-            
+            if (null != miss)
+                missing = Boolean.valueOf(miss).booleanValue();
             this.attrs = attrs;
-            missing = true;
         }
         
         public InputStream getInputStream() throws IOException {
