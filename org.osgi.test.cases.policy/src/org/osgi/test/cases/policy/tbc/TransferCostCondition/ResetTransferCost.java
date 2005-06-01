@@ -33,10 +33,14 @@
  * 06/04/2005   Leonardo Barros
  * 33           Implement MEG TCK
  * ===========  ==============================================================
+ * 31/05/2005   Eduardo Oliveira
+ * 101          Implement MEG TCK
+ * ===========  ==============================================================
  */
 package org.osgi.test.cases.policy.tbc.TransferCostCondition;
 
 import org.osgi.service.condpermadmin.Condition;
+import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.test.cases.policy.tbc.PolicyTestControl;
 import org.osgi.test.cases.policy.tbc.util.MessagesConstants;
 import org.osgi.util.mobile.TransferCostCondition;
@@ -69,8 +73,8 @@ public class ResetTransferCost {
 	public void testResetTransferCost001() {
         tbc.log("#testResetTransferCost001");
         try {
-			Condition cond = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.HIGH}));
 
 			TransferCostCondition.resetTransferCost();
 
@@ -97,8 +101,8 @@ public class ResetTransferCost {
 	public void testResetTransferCost002() {
         tbc.log("#testResetTransferCost002");
 		try {
-			Condition cond = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.LOW);
+			Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
 
 			TransferCostCondition.resetTransferCost();
 
@@ -125,8 +129,8 @@ public class ResetTransferCost {
 	public void testResetTransferCost003() {
         tbc.log("#testResetTransferCost003");
 		try {
-			Condition cond = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
 
 			TransferCostCondition.resetTransferCost();
 
@@ -154,8 +158,8 @@ public class ResetTransferCost {
         tbc.log("#testResetTransferCost004");
 		try {
             TransferCostCondition.setTransferCost(TransferCostCondition.HIGH);
-            Condition cond = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-                    TransferCostCondition.LOW);
+            Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
 
 			TransferCostCondition.resetTransferCost();
 

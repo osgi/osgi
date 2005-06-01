@@ -39,6 +39,7 @@
 package org.osgi.test.cases.policy.tbc;
 
 import java.security.MessageDigest;
+
 import org.osgi.framework.Bundle;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.dmt.DmtAdmin;
@@ -83,12 +84,6 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 
 	public static final String INVALID_CODE = "@#$%sA!&_";
 
-	public static final String LEVEL_ONESHOT = "ONESHOT";
-
-	public static final String LEVEL_SESSION = "SESSION";
-
-	public static final String LEVEL_BLANKET = "BLANKET";
-
 	public static final String PRINCIPAL = "www.cesar.org.br";
 
 	public static final String PRINCIPAL_HASH = "orcrg8rpqoT4sm1pCeZDObtaZGI";
@@ -123,7 +118,6 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 
 	private Bundle bundle;
 	
-
 	public void prepare() {
 		cpa = (ConditionalPermissionAdmin) getContext().getService(
 				getContext().getServiceReference(
@@ -141,42 +135,20 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 	}
 
 	/*
-	 * Calls IMSICondition.getInstance test methods
+	 * Calls IMSICondition.getCondition test methods
 	 */
-	public void testIMSIConditionGetInstance() {
-		new org.osgi.test.cases.policy.tbc.IMSICondition.GetInstance(this)
+	public void testIMSIConditionGetCondition() {
+		new org.osgi.test.cases.policy.tbc.IMSICondition.GetCondition(this)
 				.run();
 	}
 
+	
 	/*
-	 * Calls IMSICondition.isSatisfied test methods
+	 * Calls IMEICondition.getCondition test methods
 	 */
-	public void testIMSIConditionIsSatisfied() {
-		new org.osgi.test.cases.policy.tbc.IMSICondition.IsSatisfied(this)
+	public void testIMEIConditionGetCondition() {
+		new org.osgi.test.cases.policy.tbc.IMEICondition.GetCondition(this)
 				.run();
-	}
-
-	/*
-	 * Calls IMEICondition.getInstance test methods
-	 */
-	public void testIMEIConditionGetInstance() {
-		new org.osgi.test.cases.policy.tbc.IMEICondition.GetInstance(this)
-				.run();
-	}
-
-	/*
-	 * Calls IMEICondition.isSatisfied test methods
-	 */
-	public void testIMEIConditionIsSatisfied() {
-		new org.osgi.test.cases.policy.tbc.IMEICondition.IsSatisfied(this)
-				.run();
-	}
-
-	/*
-	 * Calls IMEICondition.isMutable test methods
-	 */
-	public void testIMEIConditionIsMutable() {
-		new org.osgi.test.cases.policy.tbc.IMEICondition.IsMutable(this).run();
 	}
 
 	/*
@@ -187,10 +159,10 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 	}
 
 	/*
-	 * Calls TransferCostCondition.getInstance test methods
+	 * Calls TransferCostCondition.getCondition test methods
 	 */
-	public void testTransferCostConditionGetInstance() {
-		new org.osgi.test.cases.policy.tbc.TransferCostCondition.GetInstance(
+	public void testTransferCostConditionGetCondition() {
+		new org.osgi.test.cases.policy.tbc.TransferCostCondition.GetCondition(
 				this).run();
 	}
 
@@ -223,7 +195,7 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 	public void testTransferCostConditionSetTransferCost() {
 		new SetTransferCost(this).run();
 	}
-
+	
 	public ConditionalPermissionAdmin getConditionalPermissionAdmin() {
 		return cpa;
 	}
@@ -249,6 +221,7 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 			throw new NullPointerException("null Bundle.");
 		return bundle;
 	}
+
 
 	public DmtSession getSession(String nodeURI, int lockMode) {
 		

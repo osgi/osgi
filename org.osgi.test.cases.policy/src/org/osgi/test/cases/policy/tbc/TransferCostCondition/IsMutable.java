@@ -33,10 +33,14 @@
  * 06/04/2005   Leonardo Barros
  * 33           Implement MEG TCK
  * ===========  ==============================================================
+ * 31/05/2005   Eduardo Oliveira
+ * 101          Implement MEG TCK
+ * ===========  ==============================================================
  */
 package org.osgi.test.cases.policy.tbc.TransferCostCondition;
 
 import org.osgi.service.condpermadmin.Condition;
+import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.test.cases.policy.tbc.PolicyTestControl;
 import org.osgi.test.cases.policy.tbc.util.MessagesConstants;
 import org.osgi.util.mobile.TransferCostCondition;
@@ -69,8 +73,8 @@ public class IsMutable {
 	public void testIsMutable001() {
         tbc.log("#testIsMutable001");
 		try {
-			Condition cond = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.HIGH}));
 
 			tbc
 					.assertTrue(
@@ -96,8 +100,8 @@ public class IsMutable {
 	public void testIsMutable002() {
         tbc.log("#testIsMutable002");
 		try {
-			Condition cond = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.LOW);
+			Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
 
 			tbc
 					.assertTrue(
@@ -123,8 +127,8 @@ public class IsMutable {
 	public void testIsMutable003() {
         tbc.log("#testIsMutable003");
 		try {
-			Condition cond = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
 
 			tbc
 					.assertTrue(

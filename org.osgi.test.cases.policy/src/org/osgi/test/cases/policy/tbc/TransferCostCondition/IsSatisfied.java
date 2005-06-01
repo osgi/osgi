@@ -39,10 +39,14 @@
  * 13/05/2005   Eduardo Oliveira
  * 33           Updates after inspection JSTD-MEGTCK-CODE-INSP014 
  * ===========  ==============================================================
+ * 31/05/2005   Eduardo Oliveira
+ * 101          Implement MEG TCK
+ * ===========  ==============================================================
  */
 package org.osgi.test.cases.policy.tbc.TransferCostCondition;
 
 import org.osgi.service.condpermadmin.Condition;
+import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.test.cases.policy.tbc.PolicyTestControl;
 import org.osgi.test.cases.policy.tbc.util.MessagesConstants;
 import org.osgi.util.mobile.TransferCostCondition;
@@ -101,11 +105,11 @@ public class IsSatisfied {
         try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.HIGH);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.HIGH}));
 
-			Condition cond2 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond2 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.HIGH}));
 
 			tbc
 					.assertTrue(
@@ -137,11 +141,11 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.MEDIUM);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
 
-			Condition cond2 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond2 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
 
 			tbc
 					.assertTrue(
@@ -173,11 +177,11 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.LOW);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.LOW);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
 
-			Condition cond2 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.LOW);
+			Condition cond2 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
 
 			tbc
 					.assertTrue(
@@ -209,11 +213,11 @@ public class IsSatisfied {
         try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.LOW);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
 
-			Condition cond2 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond2 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
 
 			tbc
 					.assertTrue(
@@ -245,11 +249,11 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.MEDIUM);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.HIGH}));
 
-			Condition cond2 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond2 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.HIGH}));
 
 			tbc
 					.assertTrue(
@@ -281,11 +285,11 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.LOW);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.HIGH}));
 
-			Condition cond2 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond2 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.HIGH}));
 
 			tbc
 					.assertTrue(
@@ -317,11 +321,11 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.LOW);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.LOW);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
 
-			Condition cond2 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond2 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
 
 			tbc
 					.assertTrue(
@@ -353,11 +357,11 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.MEDIUM);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.HIGH}));
 
-			Condition cond2 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond2 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
 
 			tbc
 					.assertTrue(
@@ -389,11 +393,11 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.MEDIUM);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.LOW);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
 
-			Condition cond2 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.LOW);
+			Condition cond2 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
 
 			tbc
 					.assertTrue(
@@ -425,11 +429,11 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.HIGH);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.LOW);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
 
-			Condition cond2 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.LOW);
+			Condition cond2 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
 
 			tbc
 					.assertTrue(
@@ -461,11 +465,11 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.HIGH);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
 
-			Condition cond2 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond2 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
 
 			tbc
 					.assertTrue(
@@ -497,11 +501,11 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.HIGH);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
 
-			Condition cond2 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond2 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.HIGH}));
 
 			tbc
 					.assertTrue(
@@ -533,11 +537,11 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.MEDIUM);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
 
-			Condition cond2 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.LOW);
+			Condition cond2 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
 
 			tbc
 					.assertTrue(
@@ -570,11 +574,11 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.MEDIUM);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.HIGH}));
 
-			Condition cond2 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.LOW);
+			Condition cond2 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
 
 			tbc
 					.assertTrue(
@@ -606,11 +610,11 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.LOW);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.LOW);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
 
-			Condition cond2 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond2 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.HIGH}));
 
 			tbc
 					.assertTrue(
@@ -642,11 +646,11 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.HIGH);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.LOW);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
 
-			Condition cond2 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond2 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
 
 			tbc
 					.assertTrue(
@@ -678,11 +682,11 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.HIGH);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.LOW);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
 
-			Condition cond2 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond2 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.HIGH}));
 
 			tbc
 					.assertTrue(
@@ -714,11 +718,11 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.LOW);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
 
-			Condition cond2 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond2 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.HIGH}));
 
 			tbc
 					.assertTrue(
@@ -750,8 +754,8 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.LOW);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
 
 			tbc
 					.assertTrue(
@@ -782,8 +786,8 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.LOW);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.HIGH}));
 
 			tbc
 					.assertTrue(
@@ -814,8 +818,8 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.MEDIUM);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.HIGH}));
 
 			tbc
 					.assertTrue(
@@ -846,8 +850,8 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.HIGH);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
 
 			tbc
 					.assertTrue(
@@ -878,8 +882,8 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.HIGH);
 
-			Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.LOW);
+			Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
 
 			tbc
 					.assertTrue(
@@ -910,8 +914,9 @@ public class IsSatisfied {
 		try {
 			TransferCostCondition.setTransferCost(TransferCostCondition.MEDIUM);
 
-			Condition cond1 = TransferCostCondition.getInstance(
-					PolicyTestControl.TEST_BUNDLE, TransferCostCondition.LOW);
+			Condition cond1 = TransferCostCondition.getCondition(
+					PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
 
 			tbc
 					.assertTrue(
@@ -942,8 +947,8 @@ public class IsSatisfied {
         try {
             TransferCostCondition.setTransferCost(TransferCostCondition.LOW);
 
-            Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-                    TransferCostCondition.LOW);
+            Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
 
             tbc
                     .assertTrue(
@@ -973,8 +978,8 @@ public class IsSatisfied {
         try {
             TransferCostCondition.setTransferCost(TransferCostCondition.MEDIUM);
 
-            Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-                    TransferCostCondition.MEDIUM);
+            Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
 
             tbc
                     .assertTrue(
@@ -1005,8 +1010,8 @@ public class IsSatisfied {
         try {
             TransferCostCondition.setTransferCost(TransferCostCondition.HIGH);
 
-            Condition cond1 = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-                    TransferCostCondition.HIGH);
+            Condition cond1 = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.HIGH}));
 
             tbc
                     .assertTrue(

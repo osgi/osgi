@@ -36,10 +36,14 @@
  * 13/04/2005   Eduardo Oliveira
  * 33           Implement MEG TCK
  * ===========  ==============================================================
+ * 31/05/2005   Eduardo Oliveira
+ * 101          Implement MEG TCK
+ * ===========  ==============================================================
  */
 package org.osgi.test.cases.policy.tbc.TransferCostCondition;
 
 import org.osgi.service.condpermadmin.Condition;
+import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.test.cases.policy.tbc.PolicyTestControl;
 import org.osgi.test.cases.policy.tbc.util.MessagesConstants;
 import org.osgi.util.mobile.TransferCostCondition;
@@ -79,8 +83,8 @@ public class SetTransferCost {
 	public void testSetTransferCost001() {
         tbc.log("#testSetTransferCost001");
 		try {
-			Condition cond = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.LOW);
+			Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[] {TransferCostCondition.LOW}));
 
 			TransferCostCondition.setTransferCost(TransferCostCondition.LOW);
 
@@ -110,8 +114,8 @@ public class SetTransferCost {
 	public void testSetTransferCost002() {
         tbc.log("#testSetTransferCost002");
 		try {
-			Condition cond = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[] {TransferCostCondition.MEDIUM}));
 
 			TransferCostCondition.setTransferCost(TransferCostCondition.MEDIUM);
 
@@ -141,8 +145,8 @@ public class SetTransferCost {
 	public void testSetTransferCost003() {
         tbc.log("#testSetTransferCost003");
 		try {
-			Condition cond = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[] {TransferCostCondition.HIGH}));
 
 			TransferCostCondition.setTransferCost(TransferCostCondition.HIGH);
 
@@ -172,8 +176,8 @@ public class SetTransferCost {
 	public void testSetTransferCost004() {
         tbc.log("#testSetTransferCost004");
 		try {
-			Condition cond = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[] {TransferCostCondition.MEDIUM}));
 
 			TransferCostCondition.setTransferCost(TransferCostCondition.LOW);
 
@@ -203,8 +207,8 @@ public class SetTransferCost {
 	public void testSetTransferCost005() {
         tbc.log("#testSetTransferCost005");
 		try {
-			Condition cond = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[] {TransferCostCondition.HIGH}));
 
 			TransferCostCondition.setTransferCost(TransferCostCondition.LOW);
 
@@ -234,8 +238,8 @@ public class SetTransferCost {
 	public void testSetTransferCost006() {
         tbc.log("#testSetTransferCost006");
 		try {
-			Condition cond = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.HIGH);
+			Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[] {TransferCostCondition.HIGH}));
 
 			TransferCostCondition.setTransferCost(TransferCostCondition.MEDIUM);
 
@@ -265,8 +269,8 @@ public class SetTransferCost {
 	public void testSetTransferCost007() {
         tbc.log("#testSetTransferCost007");
 		try {
-			Condition cond = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.LOW);
+			Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[] {TransferCostCondition.LOW}));
 
 			TransferCostCondition.setTransferCost(TransferCostCondition.MEDIUM);
 
@@ -296,8 +300,8 @@ public class SetTransferCost {
 	public void testSetTransferCost008() {
         tbc.log("#testSetTransferCost008");
         try {
-			Condition cond = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.LOW);
+			Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[] {TransferCostCondition.LOW}));
 
 			TransferCostCondition.setTransferCost(TransferCostCondition.HIGH);
 
@@ -327,8 +331,8 @@ public class SetTransferCost {
 	public void testSetTransferCost009() {
         tbc.log("#testSetTransferCost009");
 		try {
-			Condition cond = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[] {TransferCostCondition.MEDIUM}));
 
 			TransferCostCondition.setTransferCost(TransferCostCondition.HIGH);
 
@@ -357,8 +361,8 @@ public class SetTransferCost {
 	public void testSetTransferCost010() {
         tbc.log("#testSetTransferCost010");
 		try {
-			Condition cond = TransferCostCondition.getInstance(PolicyTestControl.TEST_BUNDLE,
-					TransferCostCondition.MEDIUM);
+			Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+					new ConditionInfo("",new String[] {TransferCostCondition.HIGH}));
 
 			TransferCostCondition.setTransferCost(PolicyTestControl.INVALID_COST_LIMIT);
 
