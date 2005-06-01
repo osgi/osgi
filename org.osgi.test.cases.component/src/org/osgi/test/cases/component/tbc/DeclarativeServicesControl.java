@@ -125,7 +125,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				null);
 
 		// start listening
-		trackerProvider.open();
+		trackerProvider.open(true);
 		trackerConsumerLookup.open();
 		trackerDyn.open();
 		trackerConsumerEvent.open();
@@ -521,23 +521,24 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		ComponentInstance instance1 = factory.newInstance(props);
 		Thread.sleep(SLEEP);
 
-		assertEquals("The should be bound to the first instance", 1, getCount());
+		assertEquals("The component should be bound to the first instance", 1, getCount());
 
 		props = new Hashtable();
 		props.put("name", "world");
 		// ComponentInstance instance2 =
 		factory.newInstance(props);
-		assertEquals("The should be bound to the second instance too", 2,
+		Thread.sleep(SLEEP);
+		assertEquals("The component should be bound to the second instance too", 2,
 				getCount());
 
 		instance1.dispose();
 		Thread.sleep(SLEEP);
-		assertEquals("The should be unbound from the first instance", 1,
+		assertEquals("The component should be unbound from the first instance", 1,
 				getCount());
 
 		bundle.uninstall(); // must also dispose the second instance!
 		Thread.sleep(SLEEP);
-		assertEquals("The should be unbound from the all component instances",
+		assertEquals("The component should be unbound from the all component instances",
 				0, getCount());
 	}
 
