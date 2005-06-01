@@ -486,12 +486,6 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             	throw new DeploymentException(DeploymentException.CODE_BAD_HEADER, 
                     DAConstants.MISSING + " header is only allowed in fix-pack (" +
                     dp + ")");
-
-            Hashtable attrs = re.getAttrs();
-            String processor = (String) attrs.get(DAConstants.RP_PID);
-            if (null == processor || "".equals(processor.trim()))
-                	throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER, 
-                        "Missing header in: " + dp + " header: " + DAConstants.RP_PID);
         }
 
     }

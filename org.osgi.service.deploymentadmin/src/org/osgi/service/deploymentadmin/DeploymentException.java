@@ -95,9 +95,15 @@ public class DeploymentException extends Exception {
     public static final int CODE_PREPARE                    = 12;
     
     /**
+     * The Resource Processor service with the given PID (see 
+     * <code>Resource-Processor</code> manifest header) is not found.  
+     */
+    public static final int CODE_PROCESSOR_NOT_FOUND        = 13;
+    
+    /**
      * Other error condition.
      */
-    public static final int CODE_OTHER_ERROR                = 13;
+    public static final int CODE_OTHER_ERROR                = 14;
 
     private int       code;
     private String    message;

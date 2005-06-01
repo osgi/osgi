@@ -171,6 +171,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         session = createInstallUpdateSession(srcDp);
         if (!checkSessionSilent())
             return null;
+        checkSession();
         try {
             session.installUpdate(wjis);
         } catch (CancelException e) {
@@ -187,6 +188,25 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             dps.remove(session.getTargetDeploymentPackage());
             dps.add(session.getSourceDeploymentPackage());
             return session.getSourceDeploymentPackage();
+        }
+    }
+
+    private void checkSession() throws DeploymentException {
+        DeploymentPackageImpl srcDp = (DeploymentPackageImpl) session.getSourceDeploymentPackage();
+        DeploymentPackageImpl tarDp = (DeploymentPackageImpl) session.getTargetDeploymentPackage();
+        
+        for (Iterator iter = srcDp.getResourceEntries().iterator(); iter.hasNext();) {
+            ResourceEntry re = (ResourceEntry) iter.next();
+            if (re.isMissing() && !tarDp.getResourceEntries().contains(re))
+                throw new DeploymentException(DeploymentException.CODE_MISSING_RESOURCE, 
+                        "Resource '" + re + "' in the target Deployment Package is missing");            
+        }
+        
+        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            if (be.isMissing() && !tarDp.getBundleEntries().contains(be))
+                throw new DeploymentException(DeploymentException.CODE_MISSING_BUNDLE, 
+                        "Bundle '" + be + "' in the target Deployment Package is missing");            
         }
     }
 

@@ -547,10 +547,17 @@ public class DeploymentSessionImpl implements DeploymentSession {
     		throws DeploymentException, IOException 
     {
         String pid = entry.getAttributes().getValue(DAConstants.RP_PID);
-        WrappedResourceProcessor proc = new WrappedResourceProcessor(
-                findProcessor(pid), fetchAccessControlContext(entry.getCertificateStringChains()));
-        transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, proc));
-        proc.process(entry.getName(), entry.getInputStream());
+        if (null == pid)
+            return;
+        ResourceProcessor proc = findProcessor(pid);
+        if (null == proc)
+            throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND, 
+                    "Resource processor (PID=" + pid + ") for '" + entry.getName() +
+                    "' is not found.");
+        WrappedResourceProcessor wrProc = new WrappedResourceProcessor(
+                proc, fetchAccessControlContext(entry.getCertificateStringChains()));
+        transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, wrProc));
+        wrProc.process(entry.getName(), entry.getInputStream());
         if (INSTALL == getDeploymentAction())
             srcDp.setProcessorPid(entry.getName(), pid);
         else if (UPDATE == getDeploymentAction())
