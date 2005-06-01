@@ -107,12 +107,15 @@ public class DeploymentAdminPermission extends Permission {
      * relates to. The <code>actions</code> parameter contains the comma separated list of allowed actions. 
      * @param name Target string, must not be null.
      * @param action Action string, must not be null.
-     * @throws IllegalArgumentException if the filter is invalid or the list of actions 
-     *         contains unknown operations
+     * @throws IllegalArgumentException if the filter is invalid, the list of actions 
+     *         contains unknown operations or one of the parameters is null
      */
     public DeploymentAdminPermission(String name, String actions) {
-        // TODO canonicalize "name"
         super(name);
+        if (null == name || null == actions)
+            throw new IllegalArgumentException("Neither of the parameters can be null");
+
+        // TODO canonicalize "name"
         this.actions = actions;
         rep = new Representation(getName());
         check();

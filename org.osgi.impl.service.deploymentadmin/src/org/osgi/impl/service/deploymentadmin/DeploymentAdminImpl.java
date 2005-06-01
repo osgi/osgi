@@ -29,6 +29,7 @@ import java.security.AccessController;
 import java.security.cert.Certificate;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
+import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.HashSet;
@@ -216,7 +217,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         if (sDp.getName().equals(tDp.getName()) &&
                 sDp.getVersion().equals(tDp.getVersion()))
             return false;
-        
+
         return true;
     }
 
@@ -267,31 +268,44 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     }
 
     private void sendInstallEvent(String dpName) {
-        EventAdmin ea = (EventAdmin) trackEvent.getService();
+        final EventAdmin ea = (EventAdmin) trackEvent.getService();
         if (null == ea)
             return;
-        Hashtable ht = new Hashtable();
+        final Hashtable ht = new Hashtable();
         ht.put(DAConstants.EVENTPROP_DPNAME, dpName);
-        ea.postEvent(new Event(DAConstants.TOPIC_INSTALL, ht));
+        AccessController.doPrivileged(new PrivilegedAction() {
+            public Object run() {
+                ea.postEvent(new Event(DAConstants.TOPIC_INSTALL, ht));
+                return null;
+            }
+            });
     }
 
     private void sendUninstallEvent(String dpName) {
-        EventAdmin ea = (EventAdmin) trackEvent.getService();
+        final EventAdmin ea = (EventAdmin) trackEvent.getService();
         if (null == ea)
             return;
-        Hashtable ht = new Hashtable();
+        final Hashtable ht = new Hashtable();
         ht.put(DAConstants.EVENTPROP_DPNAME, dpName);
-        ea.postEvent(new Event(DAConstants.TOPIC_UNINSTALL, ht));
+        AccessController.doPrivileged(new PrivilegedAction() {
+            public Object run() {
+                ea.postEvent(new Event(DAConstants.TOPIC_UNINSTALL, ht));
+                return null;
+            }});
     }
 
     private void sendCompleteEvent(boolean succ) {
-        EventAdmin ea = (EventAdmin) trackEvent.getService();
+        final EventAdmin ea = (EventAdmin) trackEvent.getService();
         if (null == ea)
             return;
-        Hashtable ht = new Hashtable();
+        final Hashtable ht = new Hashtable();
         ht.put(DAConstants.EVENTPROP_DPNAME, session.getSourceDeploymentPackage().getName());
         ht.put(DAConstants.EVENTPROP_SUCCESSFUL, new Boolean(succ));
-        ea.postEvent(new Event(DAConstants.TOPIC_COMPLETE, ht));
+        AccessController.doPrivileged(new PrivilegedAction() {
+            public Object run() {
+                ea.postEvent(new Event(DAConstants.TOPIC_COMPLETE, ht));
+                return null;
+            }});
     }
 
     private DeploymentSessionImpl createInstallUpdateSession(DeploymentPackageImpl srcDp) 
