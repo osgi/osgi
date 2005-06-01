@@ -523,7 +523,9 @@ public class WireAdminImpl implements ServiceListener, WireAdmin,
 	public void modifiedService(ServiceReference reference) {
 		String[] classes = (String[]) reference
 				.getProperty(org.osgi.framework.Constants.OBJECTCLASS);
+		
 		for (int x = 0; x < classes.length; x++) {
+			// Checks if the service is a Consumer and modifies reference to the service
 			if (classes[x].equals(Consumer.class.getName())) {
 				String pid = (String) reference
 						.getProperty(org.osgi.framework.Constants.SERVICE_PID);
@@ -531,6 +533,17 @@ public class WireAdminImpl implements ServiceListener, WireAdmin,
 				synchronized (wires) {
 					for (Enumeration e = wires.elements(); e.hasMoreElements();) {
 						((WireImpl) e.nextElement()).setConsumer(reference);
+					}
+				}
+			}
+			
+			// Checks if the service is a Producer and modifies reference to the service
+			else if (classes[x].equals(Producer.class.getName())) {
+				String pid = (String) reference.getProperty(org.osgi.framework.Constants.SERVICE_PID);
+				Vector wires = (Vector) producers.get(pid);
+				synchronized (wires) {
+					for (Enumeration e = wires.elements(); e.hasMoreElements();) {
+						((WireImpl) e.nextElement()).setProducer(reference);
 					}
 				}
 			}
