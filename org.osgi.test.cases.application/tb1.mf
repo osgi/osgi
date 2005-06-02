@@ -1,11 +1,8 @@
 Manifest-Version: 1.0
-Bundle-Name: ${p}.tb1
-Bundle-SymbolicName: ${p}.tb1
-Bundle-Version: 4
-Bundle-Activator: $(p).tb1.Activator
-$(IMPORT-PACKAGE)
-$(EXPORT-PACKAGE)
-$(PRIVATE-PACKAGE)
-
-
-
+Bundle-Name: Meglet
+Bundle-Vendor: Cesar
+Bundle-Version: 1.0
+Bundle-ClassPath: .
+Service-Component: META-INF/meglets.xml
+Import-Package: org.osgi.meglet, org.osgi.service.application, org.osgi.service.application.meglet,  org.osgi.test.cases.application.tbc
+Export-Package: org.osgi.test.cases.application.tb1
