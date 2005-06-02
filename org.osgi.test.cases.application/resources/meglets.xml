@@ -1,0 +1,45 @@
+<descriptor xmlns="http://www.osgi.org/xmlns/app/v1.0.0" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
+  <application>
+    <locale name = "en" default="true">
+      <name value = "MEG Test Application" />
+      <icon value = "/TestIcon.gif" sizex="8" sizey="8" />
+    </locale>
+    <locale name = "br">
+      <name value = "MEG Test Application" />
+      <icon value = "/TestIcon.gif" />
+    </locale>
+    <version value = "1.0" />
+    <vendor value = "Cesar" />
+    <singleton value = "true" />
+    <autostart value = "true" />
+    <visibility value="true"/>
+    <locked value="false"/>
+    <launchable value="true"/>
+    <scr:component name="TestMeglet component" 
+       factory="Meglet-Sample-Version-1.0" autoenable="true">
+      <implementation class="org.osgi.test.cases.application.tb1.TestMeglet"/>
+    </scr:component>
+  </application>
+
+  <application>
+    <locale name = "en" default="true">
+      <name value = "MEG Test Application" />
+      <icon value = "/TestIcon.gif" sizex="8" sizey="8" />
+    </locale>
+    <locale name = "br">
+      <name value = "MEG Test Application" />
+      <icon value = "/TestIcon.gif" />
+    </locale>
+    <version value = "2.0" />
+    <vendor value = "Cesar" />
+    <singleton value = "false" />
+    <autostart value = "false" />
+    <visibility value="true"/>
+    <locked value="true"/>
+    <launchable value="true"/>
+    <scr:component name="TestMeglet component" 
+       factory="Meglet-Sample-Version-2.0" autoenable="true">
+      <implementation class="org.osgi.test.cases.application.tb1.TestMeglet"/>
+    </scr:component>
+  </application>
+</descriptor>
