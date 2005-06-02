@@ -63,7 +63,7 @@ public class TestDesktop extends Frame {
         pa_right.add(ta_descr);
         
         pack();
-        setSize(200, 200);
+        setSize(800, 600);
         setVisible(true);
     }
 

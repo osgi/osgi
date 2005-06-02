@@ -34,6 +34,7 @@ import org.osgi.service.deploymentadmin.DeploymentCustomizerPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.event.TopicPermission;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
@@ -69,7 +70,13 @@ public class DoIt implements BundleActivator {
                 new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
                 new PermissionInfo(ServicePermission.class.getName(), "*", "get, register"),
                 new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
-                new PermissionInfo(PropertyPermission.class.getName(), "org.osgi.*", "read")
+                new PermissionInfo(PropertyPermission.class.getName(), "org.osgi.*", "read")/*,
+                new PermissionInfo(TopicPermission.class.getName(), "org/osgi/service/deployment/INSTALL", 
+                        TopicPermission.PUBLISH),
+                new PermissionInfo(TopicPermission.class.getName(), "org/osgi/service/deployment/UNINSTALL", 
+                        TopicPermission.PUBLISH),
+                new PermissionInfo(TopicPermission.class.getName(), "org/osgi/service/deployment/COMPLETE", 
+                        TopicPermission.PUBLISH)*/
         	});
         
         // DATABASE
@@ -172,6 +179,45 @@ public class DoIt implements BundleActivator {
             DeploymentPackage[] dps = da.listDeploymentPackages();
             for (int i = 0; i < dps.length; i++)
                 System.out.println(" " + i + " " + dps[i]);
+        } else if ("dpbundles".equalsIgnoreCase(line)) {
+            DeploymentPackage[] dps = da.listDeploymentPackages();
+            for (int i = 0; i < dps.length; i++)
+                System.out.println(" " + i + " " + dps[i]);
+            System.out.print(" which: ");
+            line = in.readLine();
+            String[][] bs = dps[Integer.parseInt(line)].getBundleSymNameVersionPairs();
+            for (int i = 0; i < bs.length; i++)
+                System.out.println(" " + bs[i][0] + " " + bs[i][1]);
+        } else if ("geth".equalsIgnoreCase(line)) {
+            DeploymentPackage[] dps = da.listDeploymentPackages();
+            for (int i = 0; i < dps.length; i++)
+                System.out.println(" " + i + " " + dps[i]);
+            System.out.print(" which: ");
+            String dp = in.readLine();
+            System.out.print(" header: ");
+            String header = in.readLine();
+            String hval = dps[Integer.parseInt(dp)].getHeader(header);
+            System.out.println(" " + hval);
+        } else if ("getrh".equalsIgnoreCase(line)) {
+            DeploymentPackage[] dps = da.listDeploymentPackages();
+            for (int i = 0; i < dps.length; i++)
+                System.out.println(" " + i + " " + dps[i]);
+            System.out.print(" which: ");
+            String dp = in.readLine();
+            System.out.print(" resource: ");
+            String res = in.readLine();
+            System.out.print(" header: ");
+            String header = in.readLine();
+            String hval = dps[Integer.parseInt(dp)].getResourceHeader(res, header);
+            System.out.println(" " + hval);
+        } else if ("res".equalsIgnoreCase(line)) {
+            DeploymentPackage[] dps = da.listDeploymentPackages();
+            for (int i = 0; i < dps.length; i++)
+                System.out.println(" " + i + " " + dps[i]);
+            System.out.print(" which: ");
+            String dp = in.readLine();
+            String [] sa = dps[Integer.parseInt(dp)].getResources();
+            System.out.println(Arrays.asList(sa));
         } else if ("uni".equalsIgnoreCase(line)) {
             DeploymentPackage[] dps = da.listDeploymentPackages();
             for (int i = 0; i < dps.length; i++)
@@ -219,8 +265,11 @@ public class DoIt implements BundleActivator {
             System.out.println("*******************************************************************");
             try {bad_db_test_03(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
-            try {bad_db_test_04(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
-            System.out.println("*******************************************************************");
+            
+            // depricated test
+            //try {bad_db_test_04(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            //System.out.println("*******************************************************************");
+            
             try {bad_db_test_05(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
             //try {bad_db_test_06(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
@@ -289,7 +338,7 @@ public class DoIt implements BundleActivator {
         throw new Exception("Negative test failed");
     }
 
-    private void bad_db_test_04() throws Exception {
+    /*private void bad_db_test_04() throws Exception {
         InputStream is = new FileInputStream(HOME + "bad_db_test_04.dp");
         try {
             DeploymentPackage dp = da.installDeploymentPackage(is);
@@ -301,7 +350,7 @@ public class DoIt implements BundleActivator {
             db.reset(null);
         }
         throw new Exception("Negative test failed");
-    }
+    }*/
     
     private void bad_db_test_05() throws Exception {
         InputStream is = new FileInputStream(HOME + "bad_db_test_05.dp");

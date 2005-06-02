@@ -93,7 +93,8 @@ public interface DeploymentPackage {
     /**
      * Returns an array of strings representing the resources that are specified in 
      * the  manifest of this deployment package. A string element of the array is the 
-     * same as the value of the "Name" attribute in the manifest.<p>
+     * same as the value of the "Name" attribute in the manifest. The array contains 
+     * the bundles as well.<p>
      * E.g. if the "Name" section of the resource (or individual-section as the 
      * <a href="http://java.sun.com/j2se/1.4.2/docs/guide/jar/jar.html#Manifest%20Specification">Manifest Specification</a> 
      * calls it) in the manifest is the following

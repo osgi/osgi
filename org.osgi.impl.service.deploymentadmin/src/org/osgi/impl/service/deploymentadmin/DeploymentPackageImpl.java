@@ -21,7 +21,6 @@ import java.io.Serializable;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -46,11 +45,11 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     private transient DeploymentAdminImpl da;
     
-    private Long   id;
-    private Map    mainSection     = new Hashtable();
-    private Vector bundleEntries   = new Vector();
-    private Vector resourceEntries = new Vector();
-    private List   certChains      = new Vector();
+    private Long               id;
+    private CaseInsensitiveMap mainSection     = new CaseInsensitiveMap();
+    private Vector             bundleEntries   = new Vector();
+    private Vector             resourceEntries = new Vector();
+    private List               certChains      = new Vector();
     
     public DeploymentPackageImpl(Manifest manifest, int id, DeploymentAdminImpl da,
             List certChains) throws DeploymentException 
@@ -73,7 +72,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         this.id = other.id;
         this.da = other.da;
         this.certChains = other.certChains;
-        this.mainSection = new Hashtable(other.mainSection);
+        this.mainSection = new CaseInsensitiveMap(other.mainSection);
         bundleEntries = (Vector) other.bundleEntries.clone();
         resourceEntries = (Vector) other.resourceEntries.clone();
     }
@@ -88,7 +87,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     static DeploymentPackageImpl createSystemBundle(Set bundleEntries) {
         DeploymentPackageImpl dp = new DeploymentPackageImpl();
-        dp.mainSection.put(DAConstants.DP_NAME, "system");
+        dp.mainSection.put(DAConstants.DP_NAME, "System");
         dp.mainSection.put(DAConstants.DP_VERSION, "0.0.0");
         dp.id = new Long(0);
         dp.bundleEntries = new Vector(bundleEntries);
@@ -147,7 +146,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             boolean bCust = (bCustStr == null ? false : Boolean.valueOf(bCustStr).booleanValue());
             if (isBundle) {
                 // bundle
-                BundleEntry be = new BundleEntry(bSn, bVer, bCust, missing);
+                BundleEntry be = new BundleEntry(resPath, bSn, bVer, bCust, missing, attrs);
                 bundleEntries.add(be);
             } else {
                 // resource
@@ -222,8 +221,13 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     public String[] getResources() {
         checkStale();
         
-        String[]ret = new String[resourceEntries.size()];
+        String[]ret = new String[resourceEntries.size() + bundleEntries.size()];
         int i = 0;
+        for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            ret[i] = be.getName();
+            ++i;    
+        }
         for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
             ret[i] = re.getName();
@@ -243,6 +247,13 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             if (re.getName().equals(name))
                 return re.getValue(header);
         }
+        
+        for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            if (be.getName().equals(name))
+                return be.getValue(header);
+        }
+
         return null;
     }
 

@@ -18,7 +18,6 @@
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.Serializable;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,10 +27,10 @@ import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Ent
 
 public class ResourceEntry implements Serializable {
 
-    private String     name;
-    private Hashtable  attrs = new Hashtable();
-    private String	   pid;
-    private List   	   certChains = new LinkedList();
+    private String             name;
+    private CaseInsensitiveMap attrs = new CaseInsensitiveMap();
+    private String	           pid;
+    private List   	           certChains = new LinkedList();
 
     public ResourceEntry(String name, Attributes attrs) {
         this.name = name;
@@ -53,7 +52,7 @@ public class ResourceEntry implements Serializable {
         return getName();
     }
     
-    Hashtable getAttrs() {
+    CaseInsensitiveMap getAttrs() {
         return attrs;
     }
     

@@ -3,45 +3,57 @@ package org.osgi.impl.service.deploymentadmin;
 import java.io.Serializable;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.Iterator;
+import java.util.jar.Attributes;
 
 import org.osgi.framework.Bundle;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Entry;
 
 public class BundleEntry implements Serializable {
     
-    private String  symbName;
-    private String  version;
-    private Long    id;
-    private Boolean customizer;
-    private Boolean missing;
+    private String             name;
+    private String             symbName;
+    private String             version;
+    private Long               id;
+    private Boolean            customizer;
+    private Boolean            missing;
+    private CaseInsensitiveMap attrs = new CaseInsensitiveMap();
 
-    public BundleEntry(String location, 
+    public BundleEntry(String name,
+            String location, 
             String symbName, 
             String version, 
             boolean customizer, 
             long id,
-            boolean missing) 
+            boolean missing,
+            Attributes attrs) 
 	{
+        this.name = name;
 		this.symbName = symbName;
 		this.version = version;
 		this.id = new Long(id);
 		this.customizer = new Boolean(customizer);
 		this.missing = new Boolean(missing);
+		extractAttrs(attrs);
 	}
 
-    public BundleEntry(String symbName, 
+    public BundleEntry(String name,
+            		   String symbName, 
                        String version, 
                        boolean customizer, 
-                       boolean missing) 
+                       boolean missing,
+                       Attributes attrs) 
     {
-        this(null, symbName, version, customizer, -1, missing);
+        this(name, null, symbName, version, customizer, -1, missing, attrs);
     }
     
     public BundleEntry(BundleEntry other) {
+        this.name = other.getName();
         this.symbName = other.symbName;
         this.version = other.version;
         this.id = other.id;
         this.missing = new Boolean(other.isMissing());
+        this.attrs = new CaseInsensitiveMap(other.attrs);
     }
     
     public BundleEntry(final Bundle b) {
@@ -61,10 +73,20 @@ public class BundleEntry implements Serializable {
     }
     
     public BundleEntry(Entry entry) {
+        name = entry.getName();
         symbName = entry.getAttributes().getValue(DAConstants.BUNDLE_SYMBOLIC_NAME);
         version = entry.getAttributes().getValue(DAConstants.BUNDLE_VERSION);
         customizer = new Boolean(entry.isCustomizerBundle());
         missing = new Boolean(entry.isMissing());
+        extractAttrs(entry.getAttributes());
+    }
+
+    private void extractAttrs(Attributes as) {
+        for (Iterator iter = as.keySet().iterator(); iter.hasNext();) {
+            Attributes.Name key = (Attributes.Name) iter.next();
+            Object value = as.getValue(key);
+            attrs.put(key.toString(), value);
+        }
     }
 
     public boolean equals(Object obj) {
@@ -109,6 +131,14 @@ public class BundleEntry implements Serializable {
         return version;
     }
 
+    public String getName() {
+        return name;
+    }
+    
+    CaseInsensitiveMap getAttrs() {
+        return attrs;
+    }
+
     public void setSymbName(String symbName) {
         this.symbName = symbName;
     }
@@ -116,5 +146,10 @@ public class BundleEntry implements Serializable {
     public void setVersion(String version) {
         this.version = version;
     }
+
+    public String getValue(String header) {
+        return (String) attrs.get(header);
+    }
+
 }
 
