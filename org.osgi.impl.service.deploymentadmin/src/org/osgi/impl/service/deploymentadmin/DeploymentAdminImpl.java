@@ -75,7 +75,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     
     // persisted fields
     private Set     dps = new HashSet();		// deployment packages
-    private Integer nextDpId = new Integer(1);  // id of the next DP ("system" dp == 0)
+    private Integer nextDpId = new Integer(1);  // id of the next DP ("System" dp == 0)
     private boolean cancelled;
     
 	public void start(BundleContext context) throws Exception {

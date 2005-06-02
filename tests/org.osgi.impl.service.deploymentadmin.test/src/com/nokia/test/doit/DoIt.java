@@ -151,7 +151,7 @@ public class DoIt implements BundleActivator {
     }
 
     public void start(BundleContext context) throws Exception {
-        desktop = new TestDesktop();
+        desktop = new TestDesktop(this);
         
         this.context = context;
         setPermissions();
@@ -296,7 +296,7 @@ public class DoIt implements BundleActivator {
         
     }
 
-    private void bad_db_test_01() throws Exception {
+    public void bad_db_test_01() throws Exception {
         InputStream is = new FileInputStream(HOME + "bad_db_test_01.dp");
         try {
             DeploymentPackage dp = da.installDeploymentPackage(is);
@@ -310,7 +310,7 @@ public class DoIt implements BundleActivator {
         throw new Exception("Negative test failed");
     }
 
-    private void bad_db_test_02() throws Exception {
+    public void bad_db_test_02() throws Exception {
         InputStream is = new FileInputStream(HOME + "bad_db_test_02.dp");
         try {
             DeploymentPackage dp = da.installDeploymentPackage(is);
@@ -324,7 +324,7 @@ public class DoIt implements BundleActivator {
         throw new Exception("Negative test failed");
     }
 
-    private void bad_db_test_03() throws Exception {
+    public void bad_db_test_03() throws Exception {
         InputStream is = new FileInputStream(HOME + "bad_db_test_03.dp");
         try {
             DeploymentPackage dp = da.installDeploymentPackage(is);
@@ -338,7 +338,7 @@ public class DoIt implements BundleActivator {
         throw new Exception("Negative test failed");
     }
 
-    /*private void bad_db_test_04() throws Exception {
+    /*public void bad_db_test_04() throws Exception {
         InputStream is = new FileInputStream(HOME + "bad_db_test_04.dp");
         try {
             DeploymentPackage dp = da.installDeploymentPackage(is);
@@ -352,7 +352,7 @@ public class DoIt implements BundleActivator {
         throw new Exception("Negative test failed");
     }*/
     
-    private void bad_db_test_05() throws Exception {
+    public void bad_db_test_05() throws Exception {
         InputStream is = new FileInputStream(HOME + "bad_db_test_05.dp");
         try {
             DeploymentPackage dp = da.installDeploymentPackage(is);
@@ -366,7 +366,7 @@ public class DoIt implements BundleActivator {
         throw new Exception("Negative test failed");
     }
 
-    private void bad_db_test_07() throws Exception {
+    public void bad_db_test_07() throws Exception {
         InputStream is = new FileInputStream(HOME + "bad_db_test_07.dp");
         try {
             DeploymentPackage dp = da.installDeploymentPackage(is);
@@ -381,7 +381,7 @@ public class DoIt implements BundleActivator {
         throw new Exception("Negative test failed");
     }
 
-    private void bad_db_test_08() throws Exception {
+    public void bad_db_test_08() throws Exception {
         InputStream is = new FileInputStream(HOME + "bad_db_test_08.dp");
         try {
             DeploymentPackage dp = da.installDeploymentPackage(is);
@@ -396,7 +396,7 @@ public class DoIt implements BundleActivator {
         throw new Exception("Negative test failed");
     }
     
-    private void bad_db_test_09() throws Exception {
+    public void bad_db_test_09() throws Exception {
         InputStream is = new FileInputStream(HOME + "bad_db_test_09.dp");
         try {
             DeploymentPackage dp = da.installDeploymentPackage(is);
@@ -414,7 +414,7 @@ public class DoIt implements BundleActivator {
     public static final String bad_db_test_10 = "Installing a Deployment Package with " +
     		"name version identical to the existing Deployment Package will not " +
     		"perform any actions.";
-    private void bad_db_test_10() throws Exception {
+    public void bad_db_test_10() throws Exception {
         InputStream is = new FileInputStream(HOME + "bad_db_test_10.dp");
         DeploymentPackage dp1 = da.installDeploymentPackage(is);
         is.close();
@@ -430,7 +430,7 @@ public class DoIt implements BundleActivator {
     }
 
     public static final String bad_db_test_11 = "Tests bundle sharing violation";
-    private void bad_db_test_11() throws Exception {
+    public void bad_db_test_11() throws Exception {
         InputStream is = new FileInputStream(HOME + "bad_db_test_11_1.dp");
         DeploymentPackage dp1 = da.installDeploymentPackage(is);
         is.close();
@@ -452,7 +452,7 @@ public class DoIt implements BundleActivator {
     }
 
     public static final String bad_db_test_12 = "Tests resource sharing violation";
-    private void bad_db_test_12() throws Exception {
+    public void bad_db_test_12() throws Exception {
         InputStream is = new FileInputStream(HOME + "bad_db_test_12_1.dp");
         DeploymentPackage dp1 = da.installDeploymentPackage(is);
         is.close();
@@ -477,7 +477,7 @@ public class DoIt implements BundleActivator {
     public static final String bad_db_test_13 = "deployment package installs a bundle, " +
 			"which symbolic name is not the same as defined by the deployment package " +
 			"manifest";
-    private void bad_db_test_13() throws Exception {
+    public void bad_db_test_13() throws Exception {
         InputStream is = null;
         DeploymentPackage dp = null;
         try {
@@ -498,7 +498,7 @@ public class DoIt implements BundleActivator {
     }
 
     public static final String db_test_01 = "Desc.";
-    private void db_test_01() throws Exception {
+    public void db_test_01() throws Exception {
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         Db db = (Db) context.getService(ref);
         
@@ -570,7 +570,7 @@ public class DoIt implements BundleActivator {
         db.reset(null);
     }
 
-    private void db_test_02() throws Exception {
+    public void db_test_02() throws Exception {
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         Db db = (Db) context.getService(ref);
         
@@ -618,7 +618,7 @@ public class DoIt implements BundleActivator {
         db.reset(null);
     }
     
-    private void db_test_03() throws Exception {
+    public void db_test_03() throws Exception {
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         Db db = (Db) context.getService(ref);
         DeploymentPackage dp = null;
@@ -665,7 +665,7 @@ public class DoIt implements BundleActivator {
         db.reset(null);
     }
 
-    private void db_test_04() throws Exception {
+    public void db_test_04() throws Exception {
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         Db db = (Db) context.getService(ref);
         DeploymentPackage dp = null;
@@ -694,7 +694,7 @@ public class DoIt implements BundleActivator {
         db.reset(null);
     }
     
-    private void db_test_05() throws Exception {
+    public void db_test_05() throws Exception {
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         Db db = (Db) context.getService(ref);
         DeploymentPackage dp = null;
@@ -725,7 +725,7 @@ public class DoIt implements BundleActivator {
         db.reset(null);
     }
     
-    private void db_test_06() throws Exception {
+    public void db_test_06() throws Exception {
         DeploymentPackage dp = null;
         InputStream is = new FileInputStream(HOME + "db_test_06.dp");
 		dp = da.installDeploymentPackage(is);
@@ -748,7 +748,7 @@ public class DoIt implements BundleActivator {
         dp.uninstall();
     }
     
-    private void db_test_07() throws Exception {
+    public void db_test_07() throws Exception {
         InputStream is = new FileInputStream(HOME + "db_test_01.dp");
         DeploymentPackage dp = da.installDeploymentPackage(is);
         

@@ -49,6 +49,7 @@ import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.util.tracker.ServiceTracker;
@@ -81,6 +82,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     private TrackerRp                   trackRp;
     private TrackerPerm                 trackPerm;
     private TrackerCondPerm             trackCondPerm;
+    private TrackerPackageAdmin         trackPackAdmin;
     
     // getDataFile uses this. 
     private String 				        fwBundleDir;
@@ -115,6 +117,16 @@ public class DeploymentSessionImpl implements DeploymentSession {
         }
     }
 
+    /*
+     * Class to track package admin
+     */
+    private class TrackerPackageAdmin extends ServiceTracker {
+        public TrackerPackageAdmin() {
+            super(DeploymentSessionImpl.this.context, 
+                    "org.osgi.service.packageadmin.PackageAdmin", null);
+        }
+    }
+
     DeploymentSessionImpl(DeploymentPackageImpl srcDp, 
                           DeploymentPackageImpl targetDp, 
                           Logger logger, 
@@ -128,6 +140,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         trackRp = new TrackerRp();
         trackPerm = new TrackerPerm();
         trackCondPerm = new TrackerCondPerm();
+        trackPackAdmin = new TrackerPackageAdmin();
         this.fwBundleDir = null == fwbd ? "" : fwbd;
         
         AccessController.doPrivileged(new PrivilegedAction() {
@@ -230,12 +243,14 @@ public class DeploymentSessionImpl implements DeploymentSession {
         trackCondPerm.open();
         trackPerm.open();
         trackRp.open();
+        trackPackAdmin.open();
     }
     
     private void closeTrackers() {
         trackCondPerm.close();
         trackPerm.close();
         trackRp.close();
+        trackPackAdmin.close();
     }
 
     /**
@@ -285,6 +300,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
             dropResources();
             resetFilePermissionForCustomizers(oldPerms);
             dropBundles();
+            refreshPackages();
             startBundles();
         } catch (CancelException e) {
             transaction.rollback();
@@ -301,6 +317,17 @@ public class DeploymentSessionImpl implements DeploymentSession {
         closeTrackers();
     }
     
+    private void refreshPackages() {
+        final PackageAdmin packAdmin = (PackageAdmin) trackPackAdmin.getService();
+        if (null != packAdmin) {
+            AccessController.doPrivileged(new PrivilegedAction() {
+                public Object run() {
+                    packAdmin.refreshPackages(null);
+                    return null;
+                }});
+        }
+    }
+
     void uninstall() throws DeploymentException {
         openTrackers();
         transaction = Transaction.createTransaction(this, logger);

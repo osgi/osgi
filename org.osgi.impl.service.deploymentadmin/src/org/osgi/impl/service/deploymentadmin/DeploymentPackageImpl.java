@@ -405,7 +405,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                 throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
                         "Missing deployment package name");
             
-            if ("system".equals(dp.getName()))
+            if ("System".equals(dp.getName()))
                 throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
                 		"The \"System\" deployment package name is reserved");
             
@@ -471,6 +471,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         private void checkBundleEntry(DeploymentPackageImpl dp, BundleEntry be) 
 				throws DeploymentException
         {
+            checkResourceName(be.getName());
+            
             if (!dp.fixPack() && be.isMissing())
                 	throw new DeploymentException(DeploymentException.CODE_BAD_HEADER, 
                         DAConstants.MISSING + " header is only allowed in fix-pack (" +
@@ -490,6 +492,22 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             }
         }
         
+        private void checkResourceName(String name) throws DeploymentException {
+            for (int i = 0; i < name.length(); i++) {
+                char ch = name.charAt(i);
+                if (ch >= 'a' && ch <= 'z')
+                    return;
+                if (ch >= 'A' && ch <= 'Z')
+                    return;
+                if (ch >= '0' && ch <= '9')
+                    return;
+                if (ch == '_' || ch == '.' || ch == '-' || ch == '/')
+                    return;
+                throw new DeploymentException(DeploymentException.CODE_BAD_HEADER, 
+                        "Character '" + ch + "' is not allowed in resource names");
+            }
+        }
+
         private void checkResourceEntry(DeploymentPackageImpl dp, ResourceEntry re) 
         		throws DeploymentException 
         {
