@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -100,6 +101,9 @@ public class Autoconf implements ResourceProcessor {
 		}
 		catch (SAXException e) {
 			throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Malformed configuration data in "+is.getSystemId(),e);
+		}
+		catch (PrivilegedActionException e) {
+			throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"",e);
 		}
 		
 		for(int i = 0; i < m.designates.length; i++) {

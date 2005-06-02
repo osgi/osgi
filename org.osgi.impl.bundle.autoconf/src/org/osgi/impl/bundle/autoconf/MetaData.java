@@ -19,6 +19,9 @@ package org.osgi.impl.bundle.autoconf;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -385,15 +388,29 @@ public class MetaData  {
 		
 	}
 	
-    public MetaData(SAXParser sp,InputSource is) throws ParserConfigurationException, IOException, SAXException {
+    public MetaData(SAXParser sp,final InputSource is) throws ParserConfigurationException, IOException, SAXException, PrivilegedActionException {
 		sp.setProperty(JAXP_SCHEMA_LANGUAGE,W3C_XML_SCHEMA);
 		URL autoconfURL = MetaData.class.getResource("autoconf.xsd");
 		sp.setProperty(JAXP_SCHEMA_SOURCE,autoconfURL.toExternalForm());
-		XMLReader xr = sp.getXMLReader();
+		final XMLReader xr = sp.getXMLReader();
 		xr.setErrorHandler(errorHandler);
 		xr.setContentHandler(new Parser());
 
-		xr.parse(is);
+		try {
+			AccessController.doPrivileged(new PrivilegedExceptionAction() {
+				public java.lang.Object run() throws Exception {
+					xr.parse(is);
+					return null;
+				}});
+		}
+		catch (PrivilegedActionException e) {
+			Exception original = e.getException();
+			if (original==null) throw e;
+			if (original instanceof ParserConfigurationException) { throw (ParserConfigurationException) original; }
+			if (original instanceof IOException) { throw (IOException) original; }
+			if (original instanceof SAXException) { throw (SAXException) original; }
+			throw e;
+		}
 		// if there was any trouble, contenthandler functions threw error, so that's it
 	}
 
