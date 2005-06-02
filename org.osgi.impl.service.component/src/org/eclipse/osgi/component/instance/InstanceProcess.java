@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) IBM Corporation (2005)
  *
  * These materials have been contributed  to the OSGi Alliance as 
@@ -389,7 +389,7 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 	 * Listen for configuration changes
 	 * 
 	 * Service Components can receive properties from the Configuration 
-	 * Admin service. If a Service Component is activated and it�s properties
+	 * Admin service. If a Service Component is activated and it’s properties
 	 * are updated in the Configuration Admin service, the SCR must deactivate the component
 	 * and activate the component again using the new properties.
 	 * 

@@ -1,4 +1,4 @@
-/*
+Ôªø/*
  * 
  * Copyright (c) IBM Corporation (2005)
  *
@@ -55,7 +55,7 @@ public class Reference {
 		// component
 		// property, then the selection filter used to select the desired
 		// service is
-		// ì(objectClass=î+<interface-name>+î)î.
+		// ‚Äú(objectClass=‚Äù+<interface-name>+‚Äù)‚Äù.
 		if (properties != null) {
 			String newTarget = (String) properties.get(referenceDescription.getName() + TARGET);
 			if (newTarget != null) {
@@ -66,7 +66,7 @@ public class Reference {
 			target = "(objectClass=" + referenceDescription.getInterfacename() + ")";
 		}
 
-		// If it is not specified, then a policy of ìstaticî is used.
+		// If it is not specified, then a policy of ‚Äústatic‚Äù is used.
 		policy = referenceDescription.getPolicy();
 		if (policy == null) {
 			policy = POLICY_DEFAULT;
@@ -78,7 +78,7 @@ public class Reference {
 		// 0..1, 0..n, 1..1 (i.e. exactly one), 1..n (i.e. at least one).
 		// This attribute is optional. If it is not specified, then a
 		// cardinality
-		// of ì1..1î is used.
+		// of ‚Äú1..1‚Äù is used.
 		cardinality = referenceDescription.getCardinality();
 		if (cardinality == null) {
 			cardinality = CARDINALITY_DEFAULT;
