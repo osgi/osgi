@@ -28,6 +28,7 @@
 package integrationtests;
 
 import integrationtests.api.ITest;
+import integrationtests.managedservicefactory1.CTestFactory;
 
 import java.io.FileInputStream;
 import java.security.AllPermission;
@@ -58,6 +59,7 @@ public class TestAutoconf extends IntegratedTest implements Test {
 	public static final String	ORG_OSGI_IMPL_SERVICE_METATYPE_JAR	= "file:../../org.osgi.impl.service.metatype/org.osgi.impl.service.metatype.jar";
 	public static final String  ORG_OSGI_IMPL_BUNDLE_AUTOCONF_JAR = "file:../../org.osgi.impl.bundle.autoconf/org.osgi.impl.bundle.autoconf.jar";
 	public static final String	INTEGRATIONTESTS_MANAGEDSERVICE1_JAR = "file:../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.managedservice1.jar";
+	public static final String	INTEGRATIONTESTS_MANAGEDSERVICEFACTORY1_JAR = "file:../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.managedservicefactory1.jar";
 	public static final String	INTEGRATIONTESTS_DP1_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp1.jar";
 	public static final String	INTEGRATIONTESTS_DP1_ROLLBACK_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp1_rollback.jar";
 
@@ -131,6 +133,49 @@ public class TestAutoconf extends IntegratedTest implements Test {
 		int i = iTest.succ(3);
 		assertEquals(5,i);
 	}
+
+	// this is not really a test, just to make sure we didn't mess up the package
+	// this is the test of the test, so I don't have to debug in vain
+	public void testManagedServiceFactory1Works() throws Exception {
+		startFramework(true);
+		conditionalPermissionAdmin.addConditionalPermissionInfo(SIGNER_SARAH,ALL_PERMISSION);
+		Bundle managedService1 = systemBundleContext.installBundle(INTEGRATIONTESTS_MANAGEDSERVICEFACTORY1_JAR);
+		managedService1.start();
+
+		ServiceReference[] sr = systemBundleContext.getServiceReferences(ITest.class.getName(),"(increment=5)");
+		assertNull(sr);
+
+		Configuration fc5 = configurationAdmin.createFactoryConfiguration(CTestFactory.INTEGRATIONTESTS_MANAGEDSERVICEFACTORY1_PID,INTEGRATIONTESTS_MANAGEDSERVICEFACTORY1_JAR);
+		Dictionary props = new Hashtable();
+		props.put("increment",new Integer(5));
+		fc5.update(props);
+
+		sr = systemBundleContext.getServiceReferences(ITest.class.getName(),"(increment=5)");
+		assertEquals(1,sr.length);
+		ITest i5 = (ITest) systemBundleContext.getService(sr[0]);
+		
+		int result = i5.succ(4);
+		assertEquals(9,result);
+		
+		Configuration fc3 = configurationAdmin.createFactoryConfiguration(CTestFactory.INTEGRATIONTESTS_MANAGEDSERVICEFACTORY1_PID,INTEGRATIONTESTS_MANAGEDSERVICEFACTORY1_JAR);
+		props = new Hashtable();
+		props.put("increment",new Integer(3));
+		fc3.update(props);
+		
+		sr = systemBundleContext.getServiceReferences(ITest.class.getName(),"(increment=3)");
+		assertEquals(1,sr.length);
+		ITest i3 = (ITest) systemBundleContext.getService(sr[0]);
+		
+		result = i3.succ(5);
+		assertEquals(8,result);
+		
+		fc5.delete();
+		synchronized(this) { wait(1000); }
+		systemBundleContext.getServiceReferences(ITest.class.getName(),"(increment=5)");
+		assertNull(sr);
+		
+	}
+	
 	
 	public void testDeployManagedService1() throws Exception {
 		startFramework(true);
