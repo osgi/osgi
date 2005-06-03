@@ -30,8 +30,8 @@ package org.osgi.test.cases.component.tb2.impl;
 import java.util.Dictionary;
 
 import org.osgi.service.component.ComponentContext;
-import org.osgi.test.cases.component.tb1.ServiceProvider;
 import org.osgi.test.cases.component.tb2.ServiceConsumerLookup;
+import org.osgi.test.cases.component.tbc.ServiceProvider;
 import org.osgi.test.cases.component.tbc.TestObject;
 
 /**

@@ -27,8 +27,8 @@
 
 package org.osgi.test.cases.component.tb3.impl;
 
-import org.osgi.test.cases.component.tb1.ServiceProvider;
 import org.osgi.test.cases.component.tb3.MissingBindMethods;
+import org.osgi.test.cases.component.tbc.ServiceProvider;
 
 /**
  * @version $Revision$

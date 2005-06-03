@@ -29,7 +29,7 @@ package org.osgi.test.cases.component.tb1.impl;
 
 import java.util.Dictionary;
 
-import org.osgi.test.cases.component.tb1.ServiceProvider;
+import org.osgi.test.cases.component.tbc.ServiceProvider;
 import org.osgi.test.cases.component.tbc.TestObject;
 
 /**

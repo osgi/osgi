@@ -54,7 +54,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public class DeclarativeServicesControl extends DefaultTestBundleControl
 		implements FrameworkListener {
 
-	private static final String	PROVIDER_CLASS	= "org.osgi.test.cases.component.tb1.ServiceProvider";
+	private static final String	PROVIDER_CLASS	= "org.osgi.test.cases.component.tbc.ServiceProvider";
 	private static final String	LOOKUP_CLASS	= "org.osgi.test.cases.component.tb2.ServiceConsumerLookup";
 	private static final String	DYN_CLASS		= "org.osgi.test.cases.component.tb2.DynService";
 	private static final String	EVENT_CLASS		= "org.osgi.test.cases.component.tb3.ServiceConsumerEvent";

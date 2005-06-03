@@ -8,10 +8,10 @@
 	</service>
 
   <reference name="serviceProvider"
-		interface="org.osgi.test.cases.component.tb1.ServiceProvider"
+		interface="org.osgi.test.cases.component.tbc.ServiceProvider"
 		cardinality="1..1"
 		policy="static"
-		target="(component.name=org.osgi.test.cases.component.tb1.ServiceProvider)"
+		target="(component.name=org.osgi.test.cases.component.tbc.ServiceProvider)"
 		bind="bindServiceProvider"
 	/>
 </scr:component>
