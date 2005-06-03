@@ -54,6 +54,7 @@ public class CTestFactory implements BundleActivator,ManagedServiceFactory {
 			Dictionary d = new Hashtable();
 			d.put(INCREMENT,increment);
 			serviceRegistration = context.registerService(ITest.class.getName(),this,d);
+			System.out.println("CTestFactory.CTest(increment="+increment+") registered");
 		}
 
 		public int succ(int i) {
@@ -62,15 +63,17 @@ public class CTestFactory implements BundleActivator,ManagedServiceFactory {
 		
 		public void update(Dictionary properties) {
 			Integer increment = (Integer) properties.get(INCREMENT);
+			int oldIncrement = this.increment;
 			this.increment = increment.intValue();
 			Dictionary d = new Hashtable();
 			d.put(INCREMENT,increment);
 			serviceRegistration.setProperties(d);
-			
+			System.out.println("CTestFactory.CTest(increment="+oldIncrement+") updated to increment="+increment+")");
 		}
 		
 		public void unregister() {
 			serviceRegistration.unregister();
+			System.out.println("CTestFactory.CTest(increment="+increment+") unregistered");
 		}
 	}
 

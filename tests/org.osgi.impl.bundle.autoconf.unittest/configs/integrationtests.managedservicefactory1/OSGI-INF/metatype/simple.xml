@@ -4,7 +4,7 @@
 		<AD id="ad1" type="String" default="value1"/>
 		<AD id="increment" type="Integer" default="1"/>
 	</OCD>
-	<Designate pid="integrationtests.managedservice1.pid">
+	<Designate pid="integrationtests.managedservicefactory1.pid">
 		<Object ocdref="ocd1"/>
 	</Designate>
 </MetaData>

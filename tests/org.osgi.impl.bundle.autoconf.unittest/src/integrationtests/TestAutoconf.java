@@ -62,6 +62,7 @@ public class TestAutoconf extends IntegratedTest implements Test {
 	public static final String	INTEGRATIONTESTS_MANAGEDSERVICEFACTORY1_JAR = "file:../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.managedservicefactory1.jar";
 	public static final String	INTEGRATIONTESTS_DP1_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp1.jar";
 	public static final String	INTEGRATIONTESTS_DP1_ROLLBACK_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp1_rollback.jar";
+	public static final String	INTEGRATIONTESTS_DP2_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp2.jar";
 
 	public Bundle	deploymentAdminBundle;
 	public Bundle	autoconf;
@@ -129,6 +130,8 @@ public class TestAutoconf extends IntegratedTest implements Test {
 		Hashtable props = new Hashtable();
 		props.put("increment",new Integer(2));
 		conf.update(props);
+		
+		synchronized(this) { this.wait(100); }
 
 		int i = iTest.succ(3);
 		assertEquals(5,i);
@@ -150,6 +153,8 @@ public class TestAutoconf extends IntegratedTest implements Test {
 		props.put("increment",new Integer(5));
 		fc5.update(props);
 
+		synchronized(this) { wait(100); }
+
 		sr = systemBundleContext.getServiceReferences(ITest.class.getName(),"(increment=5)");
 		assertEquals(1,sr.length);
 		ITest i5 = (ITest) systemBundleContext.getService(sr[0]);
@@ -161,6 +166,10 @@ public class TestAutoconf extends IntegratedTest implements Test {
 		props = new Hashtable();
 		props.put("increment",new Integer(3));
 		fc3.update(props);
+		props = fc3.getProperties();
+		System.out.println("fc3.properties = "+props);
+
+		synchronized(this) { wait(100); }
 		
 		sr = systemBundleContext.getServiceReferences(ITest.class.getName(),"(increment=3)");
 		assertEquals(1,sr.length);
@@ -170,8 +179,8 @@ public class TestAutoconf extends IntegratedTest implements Test {
 		assertEquals(8,result);
 		
 		fc5.delete();
-		synchronized(this) { wait(1000); }
-		systemBundleContext.getServiceReferences(ITest.class.getName(),"(increment=5)");
+		synchronized(this) { wait(100); }
+		sr = systemBundleContext.getServiceReferences(ITest.class.getName(),"(increment=5)");
 		assertNull(sr);
 		
 	}
@@ -209,5 +218,20 @@ public class TestAutoconf extends IntegratedTest implements Test {
 		Configuration conf = configurationAdmin.getConfiguration("integrationtests.managedservice1.pid");
 		Dictionary props = conf.getProperties();
 		assertNull(props);
+	}
+
+	public void testDeployManagedServiceFactory1() throws Exception {
+		startFramework(true);
+		conditionalPermissionAdmin.addConditionalPermissionInfo(SIGNER_SARAH,ALL_PERMISSION);
+		deploymentAdmin.installDeploymentPackage(new FileInputStream(INTEGRATIONTESTS_DP2_JAR));
+		// the deploymentpackage creates two services, one with increment of 3, the other with 5
+
+		synchronized(this) { wait(100); }
+		ServiceReference sr = systemBundleContext.getServiceReference(ITest.class.getName());
+		ITest iTest = (ITest) systemBundleContext.getService(sr);
+
+		int i = iTest.succ(7);
+		assertEquals(10,i);
+
 	}
 }

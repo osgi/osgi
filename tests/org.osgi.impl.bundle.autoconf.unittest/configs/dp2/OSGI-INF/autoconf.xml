@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<mt:MetaData xmlns:mt="http://www.osgi.org/xmlns/metatype/v1.0.0">
+	<Designate pid="integrationtests.managedservicefactory1.pid" 
+			bundle="integrationtests.managedservicefactory1-1.0"
+			factory="true">
+		<Object ocdref="ocd1">
+			<Attribute adref="increment" content="3"/>
+		</Object>
+	</Designate>
+	<Designate pid="integrationtests.managedservicefactory1.pid" 
+			bundle="integrationtests.managedservicefactory1-1.0"
+			factory="true">
+		<Object ocdref="ocd1">
+			<Attribute adref="increment" content="5"/>
+		</Object>
+	</Designate>
+</mt:MetaData>
