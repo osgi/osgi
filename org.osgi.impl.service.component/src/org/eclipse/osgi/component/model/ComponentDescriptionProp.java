@@ -18,6 +18,7 @@ import java.net.URL;
 import java.util.*;
 import org.eclipse.osgi.component.resolver.ComponentProperties;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.Constants;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.ComponentException;
 
@@ -69,6 +70,16 @@ public class ComponentDescriptionProp {
 	 * @return Dictionary properties
 	 */
 	public void initProperties(Dictionary configProperties) throws IOException {
+
+		//add ObjectClass so we can match target filters before actually being registered
+		ProvideDescription[] provides = componentDescription.getService().getProvides();
+		String[] interfaces = new String[provides.length];
+		for (int i = 0; i < provides.length; i++) {
+			interfaces[i] = provides[i].getInterfacename();
+		}
+		if (interfaces.length > 0) {
+			properties.put(Constants.OBJECTCLASS, interfaces);
+		}
 
 		// ComponentDescription Default Properties
 		PropertyDescription[] propertyDescriptions = componentDescription.getProperties();
@@ -175,7 +186,7 @@ public class ComponentDescriptionProp {
 		this.servicesProvided = services;
 	}
 
-	public List getServicesPrivided() {
+	public List getServicesProvided() {
 		return servicesProvided == null ? Collections.EMPTY_LIST : servicesProvided;
 	}
 

@@ -10,7 +10,6 @@
  * All company, brand and product names contained within this document may be 
  * trademarks that are the sole property of the respective owners.
  */
-
 package org.eclipse.osgi.component.instance;
 
 import java.util.*;
@@ -109,6 +108,7 @@ public class BuildDispose {
 			}
 		}
 		component.removeAllInstances();
+		component.clearReferenceCDPs();
 	}
 
 	/** dispose of the Component Instance

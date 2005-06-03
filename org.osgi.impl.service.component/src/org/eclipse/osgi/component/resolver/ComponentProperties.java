@@ -14,13 +14,11 @@
 package org.eclipse.osgi.component.resolver;
 
 import java.io.IOException;
+
 import org.eclipse.osgi.component.Main;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  *
@@ -28,22 +26,10 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * 
  * @version $Revision$
  */
-public class ComponentProperties implements ServiceTrackerCustomizer {
-
-	/* set this to true to compile in debug messages */
-	static final boolean DEBUG = false;
+public class ComponentProperties {
 
 	/** The ConfigurationAdmin class */
 	public final static String CMADMIN_SERVICE_CLASS = "org.osgi.service.cm.ConfigurationAdmin";
-
-	/** ConfigurationAdmin Service */
-	protected ConfigurationAdmin configurationAdmin;
-
-	/** Bundle Context */
-	protected BundleContext bundleContext;
-
-	/** Main SCR class */
-	protected Main main;
 
 	/* ServiceTracker for configurationAdmin */
 	private ServiceTracker configAdminTracker;
@@ -54,8 +40,7 @@ public class ComponentProperties implements ServiceTrackerCustomizer {
 	 * @param main Main SCR class
 	 */
 	public ComponentProperties(Main main) {
-		this.main = main;
-		configAdminTracker = new ServiceTracker(main.context, CMADMIN_SERVICE_CLASS, this);
+		configAdminTracker = new ServiceTracker(main.context, CMADMIN_SERVICE_CLASS, null);
 		configAdminTracker.open(true); //true for track all services
 	}
 
@@ -73,7 +58,7 @@ public class ComponentProperties implements ServiceTrackerCustomizer {
 	 */
 
 	public ConfigurationAdmin getConfigurationAdmin() {
-		return configurationAdmin;
+		return (ConfigurationAdmin) configAdminTracker.getService();
 	}
 
 	/**
@@ -89,47 +74,10 @@ public class ComponentProperties implements ServiceTrackerCustomizer {
 	public Configuration getConfiguration(String componentName) throws IOException {
 
 		Configuration config = null;
+		ConfigurationAdmin configurationAdmin = (ConfigurationAdmin) configAdminTracker.getService();
 		if (configurationAdmin != null) {
 			config = configurationAdmin.getConfiguration(componentName);
 		}
 		return config;
 	}
-
-	/**
-	 * A ConfigurationAdmin Service is being added to the ServiceTracker object.
-	 *
-	 * @param reference Reference to service being added to the <tt>ServiceTracker</tt> object.
-	 * @return The service object to be tracked for the
-	 * <tt>ServiceReference</tt> object or <tt>null</tt> if the <tt>ServiceReference</tt> object should not
-	 * be tracked.
-	 */
-	public Object addingService(ServiceReference ref) {
-		System.out.println("ServiceReference = " + ref);
-		configurationAdmin = (ConfigurationAdmin) main.context.getService(ref);
-		return configurationAdmin;
-	}
-
-	/**
-	 * A ConfigurationAdmin Service tracked by the ServiceTracker object has been modified.
-	 *
-	 * @param reference Reference to service that has been modified.
-	 * @param service The service object for the modified service.
-	 */
-	public void modifiedService(ServiceReference ref, Object object) {
-
-	}
-
-	/**
-	 * The ConfigurationAdmin Service tracked by the Service Tracker has been removed
-	 *
-	 * <p>This method is called after a service is no longer being tracked
-	 * by the <tt>ServiceTracker</tt> object.
-	 *
-	 * @param reference Reference to service that has been removed.
-	 * @param service The service object for the removed service.
-	 */
-	public void removedService(ServiceReference reference, Object object) {
-		main.context.ungetService(reference);
-	}
-
 }

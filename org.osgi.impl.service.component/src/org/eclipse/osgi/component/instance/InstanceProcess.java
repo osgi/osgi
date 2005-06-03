@@ -14,9 +14,9 @@
 package org.eclipse.osgi.component.instance;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Dictionary;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,7 +40,8 @@ import org.osgi.service.cm.ConfigurationEvent;
 import org.osgi.service.cm.ConfigurationListener;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentFactory;
-import org.osgi.util.tracker.*;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * @author Administrator
@@ -79,9 +80,6 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 	/** map fpid:spids [1:n] */
 	protected Hashtable fpids;
 
-	/** SCR bundle context */
-	protected BundleContext scrBundleContext;
-
 	/** Main SCR class */
 	protected Main main;
 
@@ -109,13 +107,12 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 
 		//for now use Main's workqueue
 		workQueue = main.workQueue;
-		scrBundleContext = main.context;
 		registrations = new Hashtable();
 		fpids = new Hashtable();
 		factories = new Hashtable();
 		buildDispose = new BuildDispose(main);
 		componentProperties = new ComponentProperties(main);
-		configAdminTracker = new ServiceTracker(scrBundleContext, CMADMIN_SERVICE_CLASS, this);
+		configAdminTracker = new ServiceTracker(main.context, CMADMIN_SERVICE_CLASS, this);
 		configAdminTracker.open(true); //true for track all services
 		registerConfigurationListener();
 
@@ -137,7 +134,6 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 		registrations = null;
 		fpids = null;
 		componentProperties = null;
-		scrBundleContext = null;
 	}
 
 	/**
@@ -371,7 +367,7 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 	 * 
 	 */
 	public void registerConfigurationListener() {
-		configListener = scrBundleContext.registerService(CONFIG_LISTENER_CLASS, this, null);
+		configListener = main.context.registerService(CONFIG_LISTENER_CLASS, this, null);
 
 	}
 
@@ -381,7 +377,7 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 	 */
 	public void removeConfigurationListener() {
 		if (configListener != null)
-			scrBundleContext.ungetService(configListener.getReference());
+			main.context.ungetService(configListener.getReference());
 
 	}
 
@@ -502,11 +498,11 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 			componentDescriptionProp = (ComponentDescriptionProp) keys.nextElement();
 			if (pid.equals(componentDescriptionProp.getComponentDescription().getName())) {
 				serviceRegistration = (ServiceRegistration) registrations.get(componentDescriptionProp);
+				serviceRegistration.unregister();
+				registrations.remove(componentDescriptionProp);
 				BundleContext bundleContext = main.framework.getBundleContext(componentDescriptionProp.getComponentDescription().getBundle());
 				ServiceRegistration reg = RegisterComponentService.registerService(this, bundleContext, componentDescriptionProp, false, props);
 				registrations.put(componentDescriptionProp, reg);
-				serviceRegistration.unregister();
-				//serviceRegistration.setProperties((config[0]).getProperties());
 			}
 		}
 	}

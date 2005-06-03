@@ -15,18 +15,31 @@
 package org.eclipse.osgi.component.resolver;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.component.instance.InstanceProcess;
-import org.eclipse.osgi.component.model.*;
+import org.eclipse.osgi.component.model.ComponentDescription;
+import org.eclipse.osgi.component.model.ComponentDescriptionProp;
+import org.eclipse.osgi.component.model.ProvideDescription;
+import org.eclipse.osgi.component.model.ReferenceDescription;
+import org.eclipse.osgi.component.model.ServiceDescription;
 import org.eclipse.osgi.component.workqueue.WorkDispatcher;
 import org.eclipse.osgi.component.workqueue.WorkQueue;
-import org.osgi.framework.*;
-import org.osgi.service.cm.*;
+import org.osgi.framework.AllServiceListener;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.ComponentException;
 import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * 
@@ -36,7 +49,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * 
  * @version $Revision$
  */
-public class Resolver implements ServiceListener, WorkDispatcher, ServiceTrackerCustomizer {
+public class Resolver implements AllServiceListener, WorkDispatcher {
 
 	/* set this to true to compile in debug messages */
 	static final boolean DEBUG = false;
@@ -46,9 +59,6 @@ public class Resolver implements ServiceListener, WorkDispatcher, ServiceTracker
 	 */
 	static final String CONFIG_LISTENER_CLASS = "org.osgi.service.cm.ConfigurationListener";
 	static final String CMADMIN_SERVICE_CLASS = "org.osgi.service.cm.ConfigurationAdmin";
-
-	/** ConfigurationAdmin instance */
-	protected ConfigurationAdmin configurationAdmin;
 
 	/* ServiceTracker for configurationAdmin */
 	private ServiceTracker configAdminTracker;
@@ -82,9 +92,6 @@ public class Resolver implements ServiceListener, WorkDispatcher, ServiceTracker
 
 	protected ComponentProperties componentProperties = null;
 
-	/** ServiceComponent Runtime Bundle Context */
-	protected BundleContext scrBundleContext;
-
 	protected List componentDescriptions;
 
 	protected List componentDescriptionPropsEnabled;
@@ -104,13 +111,12 @@ public class Resolver implements ServiceListener, WorkDispatcher, ServiceTracker
 
 		// for now use Main's workqueue
 		workQueue = main.workQueue;
-		scrBundleContext = main.context;
 		componentDescriptionPropsEnabled = new ArrayList();
 		componentDescriptions = new ArrayList();
 		instanceProcess = new InstanceProcess(main);
 		componentProperties = new ComponentProperties(main);
 		addServiceListener();
-		configAdminTracker = new ServiceTracker(scrBundleContext, CMADMIN_SERVICE_CLASS, this);
+		configAdminTracker = new ServiceTracker(main.context, CMADMIN_SERVICE_CLASS, null);
 		configAdminTracker.open(true); //true for track all services
 
 	}
@@ -442,7 +448,7 @@ public class Resolver implements ServiceListener, WorkDispatcher, ServiceTracker
 	 */
 	public void addServiceListener() {
 		try {
-			scrBundleContext.addServiceListener(this);
+			main.context.addServiceListener(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -454,7 +460,7 @@ public class Resolver implements ServiceListener, WorkDispatcher, ServiceTracker
 	 */
 	public void removeServiceListener() {
 		try {
-			scrBundleContext.removeServiceListener(this);
+			main.context.removeServiceListener(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -680,41 +686,5 @@ public class Resolver implements ServiceListener, WorkDispatcher, ServiceTracker
 	private void addComponentName(ComponentDescription cd, Dictionary props) {
 		props.put("component.name", cd.getName());
 		props.put("objectClass", cd.getName());
-	}
-
-	/**
-	 * A ConfigurationAdmin Service is being added to the ServiceTracker object.
-	 *
-	 * @param reference Reference to service being added to the <tt>ServiceTracker</tt> object.
-	 * @return The service object to be tracked for the
-	 * <tt>ServiceReference</tt> object or <tt>null</tt> if the <tt>ServiceReference</tt> object should not
-	 * be tracked.
-	 */
-	public Object addingService(ServiceReference ref) {
-		configurationAdmin = (ConfigurationAdmin) main.context.getService(ref);
-		return configurationAdmin;
-	}
-
-	/**
-	 * A ConfigurationAdmin Service tracked by the ServiceTracker object has been modified.
-	 *
-	 * @param reference Reference to service that has been modified.
-	 * @param service The service object for the modified service.
-	 */
-	public void modifiedService(ServiceReference ref, Object object) {
-
-	}
-
-	/**
-	 * The ConfigurationAdmin Service tracked by the Service Tracker has been removed
-	 *
-	 * <p>This method is called after a service is no longer being tracked
-	 * by the <tt>ServiceTracker</tt> object.
-	 *
-	 * @param reference Reference to service that has been removed.
-	 * @param service The service object for the removed service.
-	 */
-	public void removedService(ServiceReference reference, Object object) {
-		main.context.ungetService(reference);
 	}
 }

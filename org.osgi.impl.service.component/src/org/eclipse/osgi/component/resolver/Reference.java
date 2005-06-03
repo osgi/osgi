@@ -227,7 +227,7 @@ public class Reference {
 		Iterator it = enabledCDPs.iterator();
 		while (it.hasNext()) {
 			ComponentDescriptionProp cdpRefLookup = (ComponentDescriptionProp) it.next();
-			List provideList = cdpRefLookup.getServicesPrivided();
+			List provideList = cdpRefLookup.getServicesProvided();
 
 			if (provideList.contains(this.getReferenceDescription().getInterfacename())) {
 				//check the target field
