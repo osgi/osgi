@@ -106,6 +106,7 @@ public class Autoconf implements ResourceProcessor {
 			throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"",e);
 		}
 		
+		designates:
 		for(int i = 0; i < m.designates.length; i++) {
 			MetaData.Designate d = m.designates[i];
 			MetaData.Object o = d.objects[0]; // There can be only one!
@@ -116,27 +117,56 @@ public class Autoconf implements ResourceProcessor {
 			String bundleSymbolicName = bundleName.substring(0,dash);
 			String bundleVersion = bundleName.substring(dash+1);
 			
+			Bundle bundle = searchForBundle(bundleSymbolicName,bundleVersion,!d.factory);
+			if (bundle==null) {
+				if (d.optional) { continue designates; }
+				throw new IllegalArgumentException(
+					"the bundle "+bundleSymbolicName+" "+bundleVersion+
+					" needs to be configured but is not part of the deployment package");
+			}
+
+			MetaData.OCD ocd = getOCD(m,o.ocdref);
+			ObjectClassDefinition realOCD=null;
+			if (ocd==null) {
+				MetaTypeInformation mti = metaTypeService.getMetaTypeInformation(bundle);
+				if (mti==null) {
+					if (d.optional) { continue designates; }
+					throw new IllegalArgumentException("no ocd found for pid "+d.pid);
+				}
+				realOCD = mti.getObjectClassDefinition(d.pid,null);
+				if (realOCD==null) {
+					if (d.optional) { continue designates; }
+					throw new IllegalArgumentException("no ocd found for pid "+d.pid);
+				}
+			}
+			Map values = createData(ocd,realOCD,o);
+			String location = bundle.getLocation();
 			
 			if (d.factory) {
-				throw new IllegalStateException("factories not supported yet!");
+				OriginalConfiguration originalConfiguration = new OriginalConfiguration();
+				Configuration conf;
+				try {
+					conf = configurationAdmin.createFactoryConfiguration(d.pid,location);
+				}
+				catch (IOException e) {
+					throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot create new factory configuration",e);
+				}
+
+				// if rollback, delete
+				originalConfiguration.pid = conf.getPid();
+				originalConfiguration.properties = null;
+				
+				try {
+					conf.update(new Hashtable(values));
+					//Dictionary d1 = conf.getProperties();
+					//System.out.println("updated: "+d1);
+					
+				}
+				catch (IOException e) {
+					throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot write factory configuration",e);
+				}
+				
 			} else {
-				Bundle bundle = searchForBundle(bundleSymbolicName,bundleVersion,true);
-				if (bundle==null) {
-					// TODO what to do if "optional"
-					throw new IllegalArgumentException(
-						"the bundle "+bundleSymbolicName+" "+bundleVersion+
-						" needs to be configured but is not part of the deployment package");
-				}
-				MetaData.OCD ocd = getOCD(m,o.ocdref);
-				ObjectClassDefinition realOCD=null;
-				if (ocd==null) {
-					MetaTypeInformation mti = metaTypeService.getMetaTypeInformation(bundle);
-					if (mti==null) throw new IllegalArgumentException("no ocd found for pid "+d.pid);
-					realOCD = mti.getObjectClassDefinition(d.pid,null);
-					if (realOCD==null) throw new IllegalArgumentException("no ocd found for pid "+d.pid);
-				}
-				Map values = createData(ocd,realOCD,o);
-				String location = bundle.getLocation();
 
 				// write out the new configuration
 				Configuration conf;
@@ -354,7 +384,9 @@ public class Autoconf implements ResourceProcessor {
 		if (onlyInDeploymentPackage) {
 			return session.getSourceDeploymentPackage().getBundle(bundleSymbolicName);
 		} else {
-			throw new IllegalArgumentException("TODO");//TODO
+			// TODO: the spec needs to clear how the bundle should be searched
+			// for now, we only search for bundles in the deployment package
+			return session.getSourceDeploymentPackage().getBundle(bundleSymbolicName);
 		}
 	}
 
