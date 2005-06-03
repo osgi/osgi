@@ -34,21 +34,18 @@ public interface RemoteAlertSender {
 	 * services registered, the Dmt Admin uses this call to find out which
 	 * service serves a given server.
 	 * 
-	 * @param serverId The ID of the server
+	 * @param serverId the ID of the server
 	 * @return true if a subsequent sendAlert() call to the same server ID will
 	 *         be likely to succeed
 	 */
 	boolean acceptServerId(String serverId);
 
 	/**
-     * Sends an alert to a given server. If the sender can supply session
-     * related information it can do so, however it is protocol specific whether
-     * it is needed or not, or whether it carries any meaningful information to
-     * the adapter at all.
+     * Sends an alert to a given server.
      * 
-     * @param serverId The ID of the server where the alert should be sent
-     * @param code Alert code. Can be 0 if not needed.
-     * @param items The data of the alert items carried in this alert
+     * @param serverId the ID of the server where the alert should be sent
+     * @param code the alert code, can be 0 if not needed
+     * @param items the data of the alert items carried in this alert
      * @throws Exception Thrown when the alert can not be sent to the server. No
      *         separate Exception class is created, it will be wrapped to a
      *         DmtException in the Dmt Admin.
