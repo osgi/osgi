@@ -156,7 +156,7 @@ public interface DeploymentPackage {
     /**
      * This method is called to completely uninstall a deployment package, which couldn't be uninstalled
      * using traditional means due to exceptions. {@link DeploymentAdminPermission}("&lt;filter&gt;", 
-     * "uninstallForceful") is needed for this operation.
+     * "uninstallForced") is needed for this operation.
      * @return true if the operation was successful
      * @throws SecurityException if access is not permitted based on the current security policy.
      */  

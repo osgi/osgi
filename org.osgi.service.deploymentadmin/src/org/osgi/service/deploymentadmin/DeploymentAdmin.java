@@ -58,7 +58,7 @@ public interface DeploymentAdmin {
      *         If there is no deployment package with that symbolic name, null is returned.
      * @throws SecurityException if access to the deployment package identified by <code>id</code> 
      * 	       is not permitted based on the current security policy.
-     * @throws <code>IllegalArgumentException</code> if the given <code>symbName</code> is null
+     * @throws IllegalArgumentException if the given <code>symbName</code> is null
      * @see DeploymentAdminPermission
      */
     DeploymentPackage getDeploymentPackage(String symbName);  
