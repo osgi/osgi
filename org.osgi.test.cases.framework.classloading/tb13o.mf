@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
-Bundle-Name: ${p}.tb13n
-Bundle-SymbolicName: ${p}.tb13n
+Bundle-Name: ${p}.tb13o
+Bundle-SymbolicName: ${p}.tb13o
 Bundle-ManifestVersion: 2
 Bundle-Version: 1
 $(EXPORT-PACKAGE)
-Import-Package: ${p}.exports.service;${p}.exports.listener;version="0.0.0"
+Import-Package: ${p}.exports.listener
 $(PRIVATE-PACKAGE)
 

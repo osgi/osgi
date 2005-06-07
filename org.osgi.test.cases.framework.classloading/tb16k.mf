@@ -5,7 +5,6 @@ Bundle-Version: 1
 Bundle-ManifestVersion: 2
 Bundle-Activator: $(p).tb16a.Activator
 Require-Bundle: ${p}.tb16b;visibility:="private"
-Reexport-Package: test.package.resources
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)

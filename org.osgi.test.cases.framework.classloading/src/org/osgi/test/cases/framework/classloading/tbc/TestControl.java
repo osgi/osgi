@@ -35,9 +35,9 @@ import java.net.URL;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * This class contains tests related with the framework class loading policies.
@@ -583,8 +583,33 @@ public class TestControl extends DefaultTestBundleControl {
 	 * 
 	 * @throws Exception if there is any problem or an assert fails
 	 */
-	public void testAllServiceTracker001() {
-		fail("AllServiceTracker is not implemented");
+	public void testServiceTracker001() throws Exception {
+		Bundle tb1;
+		Bundle tb1a;
+		Object[] services;
+		ServiceTracker serviceTracker;
+
+		tb1 = installBundle("tb1.jar");
+		tb1a = installBundle("tb1a.jar");
+
+		serviceTracker = new ServiceTracker(
+				getContext(),
+				"org.osgi.test.cases.framework.classloading.exports.service.SomeService",
+				null);
+		serviceTracker.open(true);
+
+		try {
+			services = serviceTracker.getServices();
+			assertNotNull(
+					"ServiceTracker must track services which are not class loader accessibile",
+					services);
+		}
+		finally {
+			tb1a.uninstall();
+			tb1.uninstall();
+
+			serviceTracker.close();
+		}
 	}
 
 	// Permission Checking -----------------------
@@ -717,70 +742,6 @@ public class TestControl extends DefaultTestBundleControl {
 		}
 	}
 
-	/**
-	 * Explicitly imported class path packages are a way for the framework to
-	 * export classes on the system class path to other bundles, effectively
-	 * unhiding them. To achieve this, the system bundle is used to export
-	 * nonjava.* packages on the system class path. A system property is
-	 * introduced to delineate all packages on the class path exported via the
-	 * system bundle (e.g. org.org.osgi.framework.systemPackages)
-	 * 
-	 * @throws Exception if there is any problem or an assert fails
-	 */
-	public void testHiddenPackages002() throws Exception {
-		Bundle tb7d;
-		String systemPackages;
-
-		systemPackages = System
-				.getProperty("org.osgi.framework.systemPackages");
-		if (systemPackages == null) {
-			fail("This test requires the system property 'org.osgi.framework.systemPackages'");
-		}
-		if (systemPackages.indexOf("javax.xml.parsers") == -1) {
-			fail("The system bundle does not export a package required by this test");
-		}
-
-		trace("Installing a bundle which imports a package exported by the system bundle");
-		try {
-			tb7d = installBundle("tb7d.jar");
-			tb7d.uninstall();
-		}
-		catch (Exception ex) {
-			fail(ex.getMessage());
-		}
-	}
-
-	/**
-	 * The exported packages have a bundle symbolic name value of system.bundle
-	 * and a bundle version value of 0.
-	 * 
-	 * @throws Exception if there is any problem or an assert fails
-	 */
-	public void testHiddenPackages003() throws Exception {
-		Bundle tb7e;
-		String systemPackages;
-
-		systemPackages = System
-				.getProperty("org.osgi.framework.systemPackages");
-		if (systemPackages == null) {
-			fail("This test requires the system property 'org.osgi.framework.systemPackages'");
-		}
-		if (systemPackages.indexOf("javax.xml.parsers") == -1) {
-			fail("The system bundle does not export a package required by this test");
-		}
-
-		tb7e = installBundle("tb7e.jar");
-
-		try {
-			tb7e.loadClass("javax.xml.parsers.SomeClass");
-		}
-		catch (ClassNotFoundException ex) {
-			fail("A bundle must not fail when import a class from the system bunde");
-		}
-
-		tb7e.uninstall();
-	}
-
 	// Class Loading Search Order ----------------
 
 	/**
@@ -909,7 +870,7 @@ public class TestControl extends DefaultTestBundleControl {
 
 			// This resource cannot be found when loaded with the class
 			// loader of the exporting bundle
-			url = tb8c.getResource("resources/tb8b-resource.txt");
+			url = tb8d.getResource("resources/tb8b-resource.txt");
 			assertNull("Checking if the resource is incorrectly found", url);
 
 			tb8d.uninstall();
@@ -1242,7 +1203,7 @@ public class TestControl extends DefaultTestBundleControl {
 
 			// Bundle id must not change after update
 			assertTrue("Bundle id must not change after update",
-					bundleId != tb1.getBundleId());
+					bundleId == tb1.getBundleId());
 		}
 		finally {
 			tb1.uninstall();
@@ -1360,41 +1321,6 @@ public class TestControl extends DefaultTestBundleControl {
 			// Ignore this exception
 		}
 		finally {
-			tb12a.uninstall();
-		}
-	}
-
-	// Updating Bundles -----------------------------------
-
-	/**
-	 * If an attempt is made to update a bundle which has the same bundle
-	 * symbolic name and bundle version another already installed bundle, then a
-	 * BundleException must be thrown and the update must fail.
-	 * 
-	 * @throws Exception if there is any problem or an assert fails
-	 */
-	public void testBundleUpdate001() throws Exception {
-		Bundle tb12a;
-		InputStream inputStream;
-		URL url;
-
-		tb12a = getContext().installBundle(getWebServer() + "tb12a.jar");
-
-		url = new URL(getWebServer() + "tb12b.jar");
-		inputStream = url.openStream();
-
-		try {
-
-			trace("Updating a bundle with the same symbolic name and version of other installed bundle");
-			tb12a.update(inputStream);
-			fail("A bundle with the same symbolic name and version of other must not be updated");
-		}
-		catch (BundleException ex) {
-			// Ignore this exception
-		}
-		finally {
-			inputStream.close();
-
 			tb12a.uninstall();
 		}
 	}
@@ -1761,13 +1687,15 @@ public class TestControl extends DefaultTestBundleControl {
 	 */
 	public void testPackageExport007() throws Exception {
 		Bundle tb13j;
+		Bundle tb13o;
 
 		tb13j = installBundle("tb13j.jar");
+		tb13o = installBundle("tb13o.jar");
 
 		try {
 			trace("Loading a class which matchs the include list");
 			try {
-				tb13j
+				tb13o
 						.loadClass("org.osgi.test.cases.framework.classloading.exports.listener.ServiceListenerTester");
 			}
 			catch (ClassNotFoundException ex) {
@@ -1776,7 +1704,7 @@ public class TestControl extends DefaultTestBundleControl {
 
 			trace("Loading a class which matchs the exclude list");
 			try {
-				tb13j
+				tb13o
 						.loadClass("org.osgi.test.cases.framework.classloading.exports.listener.AllServiceListenerTester");
 				fail("The class belongs the exported package must not be found");
 			}
@@ -1785,6 +1713,7 @@ public class TestControl extends DefaultTestBundleControl {
 			}
 		}
 		finally {
+			tb13o.uninstall();
 			tb13j.uninstall();
 		}
 	}
@@ -2536,7 +2465,9 @@ public class TestControl extends DefaultTestBundleControl {
 		catch (BundleException e) {
 
 		}
-		uninstallBundle(tb18a);
+		finally {
+			uninstallBundle(tb18a);
+		}
 	}
 
 	/**
@@ -3030,17 +2961,6 @@ public class TestControl extends DefaultTestBundleControl {
 		}
 	}
 
-	// Support for OSGi R3 Bundles -----------------------------
-
-	/**
-	 * A bundle manifest which mixes R3 specific syntax with bundle manifest
-	 * version 2 syntax is in error and causes the containing bundle to fail to
-	 * install.
-	 */
-	public void testSupportR3Bundles001() throws Exception {
-		fail("Waiting feedback about syntax specific to R3");
-	}
-
 	// Installing Modules -------------------------------------
 
 	/**
@@ -3181,10 +3101,10 @@ public class TestControl extends DefaultTestBundleControl {
 				"testBundleContextIsAssignableTo002",
 				"testServiceRegistryWithMultipleServices001",
 				"testServiceListener001", "testServiceListener002",
-				"testAllServiceListener001", "testPermissionChecking001",
+				"testAllServiceListener001", "testServiceTracker001",
+				"testPermissionChecking001",
 				"testJavaPackageExplicityExportImport001",
-				"testHiddenPackages001", "testHiddenPackages002",
-				"testHiddenPackages003", "testClassLoadingSearchOrder001",
+				"testHiddenPackages001", "testClassLoadingSearchOrder001",
 				"testClassLoadingSearchOrder002",
 				"testClassLoadingSearchOrder003",
 				"testClassLoadingSearchOrder004",
@@ -3193,28 +3113,27 @@ public class TestControl extends DefaultTestBundleControl {
 				"testClassLoadingSearchOrder007",
 				"testClassLoadingSearchOrder008", "testBundleModule001",
 				"testBundleSymbolicName001", "testSingletonBundle001",
-				"testBundleInstall001", "testBundleUpdate001",
-				"testPackageExport001", "testPackageExport002",
-				"testPackageExport003", "testPackageExport004",
-				"testPackageExport005", "testPackageExport006",
-				"testPackageExport007", "testPackageExport008",
-				"testPackageExport009", "testPackageExport010",
-				"testPackageImport001", "testPackageImport002",
-				"testPackageImport003", "testPackageImport004",
-				"testPackageImport005", "testPackageImport006",
-				"testPackageImport007", "testPackageDynamicImport001",
-				"testPackageDynamicImport002", "testPackageDynamicImport003",
-				"testPackageDynamicImport004", "testPackageDynamicImport005",
-				"testPackageDynamicImport006", "testPackageDynamicImport007",
-				"testPackageDynamicImport008", "testInstallingModules001",
-				"testInstallingModules002", "testInstallingModules003",
-				"testInstallingModules004", "testInstallingModules005",
-				"testInstallingModules006", "testRequiredBundle001",
-				"testRequiredBundle002", "testRequiredBundle003",
-				"testRequiredBundle004", "testRequiredBundle005",
-				"testRequiredBundle006", "testRequiredBundle007",
-				"testRequiredBundle008", "testRequiredBundle009",
-				"testRequiredBundle010", "testSupportR3Bundles001",
+				"testBundleInstall001", "testPackageExport001",
+				"testPackageExport002", "testPackageExport003",
+				"testPackageExport004", "testPackageExport005",
+				"testPackageExport006", "testPackageExport007",
+				"testPackageExport008", "testPackageExport009",
+				"testPackageExport010", "testPackageImport001",
+				"testPackageImport002", "testPackageImport003",
+				"testPackageImport004", "testPackageImport005",
+				"testPackageImport006", "testPackageImport007",
+				"testPackageDynamicImport001", "testPackageDynamicImport002",
+				"testPackageDynamicImport003", "testPackageDynamicImport004",
+				"testPackageDynamicImport005", "testPackageDynamicImport006",
+				"testPackageDynamicImport007", "testPackageDynamicImport008",
+				"testInstallingModules001", "testInstallingModules002",
+				"testInstallingModules003", "testInstallingModules004",
+				"testInstallingModules005", "testInstallingModules006",
+				"testRequiredBundle001", "testRequiredBundle002",
+				"testRequiredBundle003", "testRequiredBundle004",
+				"testRequiredBundle005", "testRequiredBundle006",
+				"testRequiredBundle007", "testRequiredBundle008",
+				"testRequiredBundle009", "testRequiredBundle010",
 				"testPackageReexport001", "testPackageReexport002",
 				"testPackageReexport003", "testPackageReexport004",
 				"testPackageReexport005", "testPackageReexport006"};
