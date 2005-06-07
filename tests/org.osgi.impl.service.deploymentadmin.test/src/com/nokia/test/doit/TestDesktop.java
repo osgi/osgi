@@ -14,7 +14,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Hashtable;
 
 
@@ -22,7 +24,7 @@ public class TestDesktop extends Frame implements ActionListener {
 
     private List      li_tests = new List();
     private TextArea  ta_descr = new TextArea();
-    private Method[]  tests;
+    private Method[]  methods;
     private Hashtable fields = new Hashtable();
     
     private Panel pa_left = new Panel();
@@ -32,9 +34,11 @@ public class TestDesktop extends Frame implements ActionListener {
     
     private static final String START        = "Start";
     private static final String DESELECT_ALL = "Deselect all";
+    private static final String SELECT_ALL   = "Select all";
     
     private Button b_start = new Button(START);
     private Button b_deselect_all = new Button(DESELECT_ALL);
+    private Button b_select_all = new Button(SELECT_ALL);
     
     private DoIt doit;
     
@@ -54,6 +58,9 @@ public class TestDesktop extends Frame implements ActionListener {
         pa_right_bottom.add(b_start);
         b_start.setActionCommand(START);
         b_start.addActionListener(this);
+        pa_right_bottom.add(b_select_all);
+        b_select_all.setActionCommand(SELECT_ALL);
+        b_select_all.addActionListener(this);
         pa_right_bottom.add(b_deselect_all);
         b_deselect_all.setActionCommand(DESELECT_ALL);
         b_deselect_all.addActionListener(this);
@@ -77,14 +84,18 @@ public class TestDesktop extends Frame implements ActionListener {
                 ta_descr.setText(null == text ? "" : text);
             }});
         Class c = Class.forName("com.nokia.test.doit.DoIt");
-        tests = c.getDeclaredMethods();
-        for (int i = 0; i < tests.length; i++) {
-            if (tests[i].getName().startsWith("db_test") || 
-                tests[i].getName().startsWith("bad_db_test"))
-                	li_tests.add(tests[i].getName());
+        methods = c.getDeclaredMethods();
+        ArrayList tests = new ArrayList();
+        for (int i = 0; i < methods.length; i++) {
+            if (methods[i].getName().startsWith("db_test") || 
+                methods[i].getName().startsWith("bad_db_test"))
+                	tests.add(methods[i].getName());
         }
-        for (int i = 0; i < li_tests.getItemCount(); i++)
+        Collections.sort(tests);
+        for (int i = 0; i < tests.size(); i++) {
+            li_tests.add((String) tests.get(i));
             li_tests.select(i);
+        }
         
         Field[] fs = c.getDeclaredFields();
         for (int i = 0; i < fs.length; i++)
@@ -115,13 +126,18 @@ public class TestDesktop extends Frame implements ActionListener {
 	                catch (Exception e) {
                         ++failed;
                     }
-	                setTitle("Passed / failed: " + passed + " / " + (passed + failed));
+	                setTitle("Passed / all: " + passed + " / " + (passed + failed));
 	            }
 	        }
 	        
 	        if (ae.getSource() == b_deselect_all) {
 	            for (int i = 0; i < li_tests.getItemCount(); i++)
 	                li_tests.deselect(i);
+	        }
+	        
+	        if (ae.getSource() == b_select_all) {
+	            for (int i = 0; i < li_tests.getItemCount(); i++)
+	                li_tests.select(i);
 	        }
     }
 

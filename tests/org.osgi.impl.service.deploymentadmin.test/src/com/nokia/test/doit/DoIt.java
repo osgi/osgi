@@ -496,6 +496,83 @@ public class DoIt implements BundleActivator {
             is.close();
         }
     }
+    
+    public static final String bad_db_test_14 = "Fix-Pack manifest says that 'bad_db_test_14.dbscript' " +
+    		"resource is missing but it is not present in the old (target) DP.";
+    public void bad_db_test_14() throws Exception {
+        InputStream is = null;
+        DeploymentPackage dp = null;
+        try {
+            is = new FileInputStream(HOME + "bad_db_test_14_1.dp");
+            dp = da.installDeploymentPackage(is);
+            is.close();
+            is = new FileInputStream(HOME + "bad_db_test_14_2.dp");
+            dp = da.installDeploymentPackage(is);
+            throw new Exception("Negative test failed");
+        }
+        catch (DeploymentException e) {
+            if (e.getCode() != DeploymentException.CODE_MISSING_RESOURCE)
+                throw new Exception("Negative test failed");
+        }
+        finally {
+            ServiceReference ref = context.getServiceReference(Db.class
+                    .getName());
+            Db db = (Db) context.getService(ref);
+            db.reset(null);
+
+            is.close();
+        }
+    }
+
+    public static final String bad_db_test_15 = "Fix-Pack manifest says that 'easygame' bundle " +
+    		"is missing but it is not present in the old (target) DP.";
+    public void bad_db_test_15() throws Exception {
+        InputStream is = null;
+        DeploymentPackage dp = null;
+        try {
+            is = new FileInputStream(HOME + "bad_db_test_15_1.dp");
+            dp = da.installDeploymentPackage(is);
+            is.close();
+            is = new FileInputStream(HOME + "bad_db_test_15_2.dp");
+            dp = da.installDeploymentPackage(is);
+            throw new Exception("Negative test failed");
+        }
+        catch (DeploymentException e) {
+            if (e.getCode() != DeploymentException.CODE_MISSING_BUNDLE)
+                throw new Exception("Negative test failed");
+        }
+        finally {
+            ServiceReference ref = context.getServiceReference(Db.class
+                    .getName());
+            Db db = (Db) context.getService(ref);
+            db.reset(null);
+
+            is.close();
+        }
+    }
+
+    public static final String bad_db_test_16 = "Bundle name section contains illegal character";
+    public void bad_db_test_16() throws Exception {
+        InputStream is = null;
+        DeploymentPackage dp = null;
+        try {
+            is = new FileInputStream(HOME + "bad_db_test_16.dp");
+            dp = da.installDeploymentPackage(is);
+            is.close();
+        }
+        catch (DeploymentException e) {
+            if (e.getCode() != DeploymentException.CODE_BAD_HEADER)
+                throw new Exception("Negative test failed");
+        }
+        finally {
+            ServiceReference ref = context.getServiceReference(Db.class
+                    .getName());
+            Db db = (Db) context.getService(ref);
+            db.reset(null);
+
+            is.close();
+        }
+}
 
     public static final String db_test_01 = "Desc.";
     public void db_test_01() throws Exception {
