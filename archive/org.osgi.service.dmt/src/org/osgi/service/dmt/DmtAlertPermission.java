@@ -1,0 +1,257 @@
+/*
+ * $Header$
+ *
+ * Copyright (c) OSGi Alliance (2004, 2005). All Rights Reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this 
+ * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
+package org.osgi.service.dmt;
+
+import java.security.Permission;
+import java.security.PermissionCollection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+
+/**
+ * Indicates the callers authority to send alerts to management servers.
+ * <p>
+ * <code>DmtAlertPermission</code> has a target string which controls the name
+ * of the server where alerts can be sent. A wildcard is allowed at the end of
+ * the target string, to allow sending alerts to any server with a name matching
+ * the given prefix. The &quot;*&quot; target means the adapter send alerts to
+ * any management server.
+ */
+public class DmtAlertPermission extends Permission {
+    // TODO add static final serialVersionUID
+
+    // specifies whether the target string had a wildcard at the end
+    private boolean isPrefix;
+
+    // the target string without the wildcard (if there was one)
+    private String serverId;
+    
+    /**
+     * Creates a new <code>DmtAlertPermission</code> object with its name
+     * set to the target string.  Name must be non-null and non-empty.
+     * 
+     * @param target the name of the server, can end with <code>*</code> to
+     *        match any server identifier with the given prefix
+     * @throws NullPointerException if <code>name</code> is <code>null</code>
+     * @throws IllegalArgumentException if <code>name</code> is empty
+     */
+    public DmtAlertPermission(String target) {
+        super(target);
+        
+        if (target == null)
+            throw new NullPointerException(
+                    "'target' parameter must not be null.");
+
+        if (target.equals(""))
+            throw new IllegalArgumentException(
+                    "'target' parameter must not be empty.");
+
+        isPrefix = target.endsWith("*");
+        if(isPrefix)
+            serverId = target.substring(0, target.length()-1);
+        else
+            serverId = target;
+    }
+
+    /**
+     * Creates a new <code>DmtAlertPermission</code> object using the
+     * 'canonical' two argument constructor. In this version this class does not
+     * define any actions, the second argument of this constructor must be "*"
+     * so that this class can later be extended in a backward compatible way.
+     * 
+     * @param target the name of the server, can end with <code>*</code> to
+     *        match any server identifier with the given prefix
+     * @param actions no actions defined, must be "*" for forward compatibility
+     * @throws NullPointerException if <code>name</code> or
+     *         <code>actions</code> is <code>null</code>
+     * @throws IllegalArgumentException if <code>name</code> is empty or
+     *         <code>actions</code> is not "*"
+     */
+    public DmtAlertPermission(String target, String actions) {
+        this(target);
+        
+        if(actions == null)
+            throw new NullPointerException(
+                    "'actions' parameter must not be null.");
+        
+        if(!actions.equals("*"))
+            throw new IllegalArgumentException(
+                    "'actions' parameter must be \"*\".");
+    }
+
+    /**
+     * Checks whether the given object is equal to this DmtAlertPermission
+     * instance. Two DmtAlertPermission instances are equal if they have the
+     * same target string.
+     * 
+     * @param obj the object to compare to this DmtAlertPermission instance
+     * @return <code>true</code> if the parameter represents the same
+     *         permissions as this instance
+     */
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        
+        if(!(obj instanceof DmtAlertPermission))
+            return false;
+
+        DmtAlertPermission other = (DmtAlertPermission) obj;
+
+        return
+            isPrefix == other.isPrefix &&
+            serverId.equals(other.serverId);
+    }
+
+    /**
+     * Returns the action list (always <code>*</code> in the current version). 
+     * 
+     * @return the action string &quot;*&quot;
+     */
+    public String getActions() {
+        return "*";
+    }
+
+    /**
+     * Returns the hash code for this permission object. If two
+     * DmtAlertPermission objects are equal according to the {@link #equals}
+     * method, then calling this method on each of the two
+     * DmtAlertPermission objects must produce the same integer result.
+     * 
+     * @return hash code for this permission object
+     */
+    public int hashCode() {
+        return new Boolean(isPrefix).hashCode() ^ serverId.hashCode();
+    }
+
+    /**
+     * Checks if this DmtAlertPermission object implies the specified
+     * permission.
+     * 
+     * @param p the permission to check for implication
+     * @return true if this DmtAlertPermission instance implies the
+     *         specified permission
+     */
+    public boolean implies(Permission p) {
+        if(!(p instanceof DmtAlertPermission))
+            return false;
+
+        DmtAlertPermission other = (DmtAlertPermission) p;
+
+        return impliesServer(other);
+    }
+
+    /**
+     * Returns a new PermissionCollection object for storing
+     * DmtAlertPermission objects.
+     *
+     * @return the new PermissionCollection
+     */
+    public PermissionCollection newPermissionCollection() {
+        return new DmtAlertPermissionCollection();
+    }
+    
+    /* Returns true if the server name parameter of the given
+     * DmtAlertPermission is implied by the server name of this permission,
+     * i.e. this server name is a prefix of the other one but ends with a *,
+     * or the two server names are equal.
+     */
+    boolean impliesServer(DmtAlertPermission p) {
+        return isPrefix ? p.serverId.startsWith(serverId) :
+            !p.isPrefix && p.serverId.equals(serverId);
+    }
+}
+
+/**
+ * Represents a homogeneous collection of DmtAlertPermission objects.
+ */
+final class DmtAlertPermissionCollection extends PermissionCollection {
+    // TODO serialization
+    
+    private List perms;
+    
+    /**
+     * Create an empty DmtAlertPermissionCollection object.
+     */
+    public DmtAlertPermissionCollection() {
+        perms = new ArrayList();
+    }
+    
+    /**
+     * Adds a permission to the DmtAlertPermissionCollection.
+     * 
+     * @param permission the Permission object to add
+     * @exception IllegalArgumentException if the permission is not a
+     *            DmtAlertPermission
+     * @exception SecurityException if this DmtAlertPermissionCollection
+     *            object has been marked readonly
+     */
+    public void add(Permission permission) {
+        if (!(permission instanceof DmtAlertPermission))
+            throw new IllegalArgumentException(
+                    "Cannot add permission, invalid permission type: "
+                            + permission);
+        if (isReadOnly())
+            throw new SecurityException(
+                    "Cannot add permission, collection is marked read-only.");
+
+        // only add new permission if it is not already implied by the 
+        // permissions in the collection
+        if(!implies(permission)) {
+            // remove all permissions that are implied by the new one
+            Iterator i = perms.iterator();
+            while(i.hasNext())
+                if(permission.implies((DmtAlertPermission) i.next()))
+                    i.remove();
+                
+            // no need to synchronize because all adds are done sequentially
+            // before any implies() calls
+            perms.add(permission);
+            
+        }
+    }
+    
+    /**
+     * Check whether this set of permissions implies the permission specified in
+     * the parameter.
+     * 
+     * @param permission the Permission object to compare
+     * @return true if the parameter permission is a proper subset of the
+     *         permissions in the collection, false otherwise
+     */
+    public boolean implies(Permission permission) 
+    {
+        if (!(permission instanceof DmtAlertPermission))
+            return false;
+        
+        DmtAlertPermission other = (DmtAlertPermission) permission;
+        
+        Iterator i = perms.iterator();
+        while (i.hasNext())
+            if (((DmtAlertPermission) i.next()).impliesServer(other))
+                return true;
+
+        return false;
+    }
+    
+    /**
+     * Returns an enumeration of all the DmtAlertPermission objects in the
+     * container. The returned value cannot be <code>null</code>.
+     * 
+     * @return an enumeration of all the DmtAlertPermission objects
+     */
+    public Enumeration elements() {
+        // Convert Iterator into Enumeration
+        return Collections.enumeration(perms);
+    }
+}
+
+
