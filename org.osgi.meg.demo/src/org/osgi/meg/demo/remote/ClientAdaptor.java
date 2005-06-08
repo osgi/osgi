@@ -41,11 +41,6 @@ public class ClientAdaptor implements RemoteAlertSender {
 		goon = false;
 	}
 
-	// TODO
-	public boolean acceptServerId(String serverid) {
-		return true;
-	}
-
 	public void sendAlert(String serverid, int code, String correlator, 
                           DmtAlertItem[] items)
             throws Exception {
