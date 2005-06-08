@@ -125,9 +125,42 @@ public interface DmtSession extends Dmt {
      *         <li><code>DATA_STORE_FAILURE</code>
      * @throws IllegalStateException if the session is invalidated because of
      *         timeout, or if the session is already closed.
+     * @see #execute(String, String, String)
      */
     void execute(String nodeUri, String data) throws DmtException;
 
+    /**
+     * Executes a node, also specifying a correlation ID for use in response
+     * alerts. The semantics of an EXEC operation depend on the definition of
+     * the managed object on which it is issued.
+     * 
+     * @param nodeUri the node on which the execute operation is issued
+     * @param correlator an identifier to associate this operation with any
+     *        alerts sent in response to it, can be <code>null</code> if not
+     *        needed
+     * @param data the parameters to the execute operation. The format of the
+     *        data string is described by the managed object definition. Can be
+     *        <code>null</code>.
+     * @throws DmtException with the following possible error codes
+     *         <li><code>NODE_NOT_FOUND</code> if the node does not exist and
+     *         the plugin does not allow executing unexisting nodes
+     *         <li><code>URI_TOO_LONG</code>
+     *         <li><code>INVALID_URI</code>
+     *         <li><code>OTHER_ERROR</code> if the URI is not within the
+     *         current
+     *         <li><code>PERMISSION_DENIED</code> session's subtree
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the node is
+     *         non-executable
+     *         <li><code>COMMAND_FAILED</code> if no DmtExecPlugin is
+     *         associated with the node
+     *         <li><code>DATA_STORE_FAILURE</code>
+     * @throws IllegalStateException if the session is invalidated because of
+     *         timeout, or if the session is already closed.
+     * @see #execute(String, String)
+     */
+    void execute(String nodeUri, String correlator, String data) 
+            throws DmtException;
+    
     /**
      * Gives the Access Control List associated with a given node. The returned
      * <code>DmtAcl</code> does not take inheritance into account, it gives
