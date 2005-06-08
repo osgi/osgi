@@ -23,10 +23,10 @@ import java.util.Map;
 
 import org.osgi.framework.*;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
-import org.osgi.impl.service.dmt.api.RemoteAlertSender;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.RemoteAlertSender;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.util.tracker.ServiceTracker;
