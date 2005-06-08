@@ -239,7 +239,7 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
             try {
                 StatusVariable var = trustedGetStatusVariable(paths[i]);
                 itemList.add(new DmtAlertItem(Activator.PLUGIN_ROOT + "/" + paths[i],
-                        "x-oma-trap:" + paths[i], "xml", createXml(var)));
+                        "x-oma-trap:" + paths[i], "xml", null, createXml(var)));
             } catch(IllegalArgumentException e) {
                 // Ignore Status Variables that are (temporarily) unavailable                
             }
@@ -249,7 +249,8 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
             itemList.toArray(new DmtAlertItem[itemList.size()]);
 
         try {
-            alertSender.sendAlert(initiator, MONITORING_ALERT_CODE, items);
+            alertSender.sendAlert(initiator, MONITORING_ALERT_CODE, null, 
+                                  items);
         } catch(DmtException e) {
             // expected error codes: ALERT_NOT_ROUTED, REMOTE_ERROR
             log(LogService.LOG_WARNING, 
