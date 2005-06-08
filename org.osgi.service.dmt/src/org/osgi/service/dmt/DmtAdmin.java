@@ -120,19 +120,28 @@ public interface DmtAdmin {
      * principal name. Even in this case the routing might be possible if the
      * <code>DmtAdmin</code> is connected to only one protocol adapter, which
      * is connected to only one remote server.
+     * <p>
+     * In case the alert is an asynchronous response to a previous 
+     * {@link DmtSession#execute(String, String, String) execute} command,
+     * a correlation identifier can be specified to provide the association
+     * between the exec and the alert.
      * 
      * @param principal the principal name which is the recepient of this alert,
      *        can be <code>null</code>
      * @param code the alert code, can be 0 if not needed
+     * @param correlator optional field that contains the correlation identifier
+     *        of an associated exec command, can be <code>null</code> if not
+     *        needed
      * @param items the data of the alert items carried in this alert, can be
      *        <code>null</code> or empty if not needed
      * @throws DmtException with the following possible error codes
-     * 			<ul>
+     *         <ul>
      *         <li><code>ALERT_NOT_ROUTED</code> when the alert can not be
      *         routed to the server
      *         <li><code>REMOTE_ERROR</code> in case of communication
-     *         problems between the device and the server</ul>
+     *         problems between the device and the server
+     *         </ul>
      */
-    void sendAlert(String principal, int code, DmtAlertItem[] items)
-        throws DmtException;
+    void sendAlert(String principal, int code, String correlator, 
+            DmtAlertItem[] items) throws DmtException;
 }
