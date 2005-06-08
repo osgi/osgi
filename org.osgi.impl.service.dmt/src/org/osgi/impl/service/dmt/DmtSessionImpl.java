@@ -278,8 +278,13 @@ public class DmtSessionImpl implements DmtSession {
 		state = STATE_OPEN;
     }
 
-	public synchronized void execute(String nodeUri, final String data) 
-	        throws DmtException {
+    public synchronized void execute(String nodeUri, String data) 
+            throws DmtException {
+        execute(nodeUri, null, data);
+    } 
+   
+	public synchronized void execute(String nodeUri, final String correlator,
+            final String data) throws DmtException {
         checkSession();
         // not allowing to execute non-existent nodes, all Management Objects
         // defined in the spec have data plugins backing them
@@ -296,7 +301,7 @@ public class DmtSessionImpl implements DmtSession {
         try {
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
-                    plugin.execute(session, uri, data);
+                    plugin.execute(session, uri, correlator, data);
                     return null;
                 }
             }, securityContext);
