@@ -440,8 +440,8 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
     }
 
 	//  ----- DmtExecPlugin methods -----//
-	public void execute(DmtSession session, String nodeUri, String data)
-			throws DmtException {
+	public void execute(DmtSession session, String nodeUri, String correlator, 
+            String data) throws DmtException {
 		String[] path = prepareUri(nodeUri);
 		if (path.length != 1) {
 			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
@@ -455,14 +455,14 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 		Vector records = getResult(lr);
 		String result = formatResult(records);
 		DmtAlertItem[] items = new DmtAlertItem[1];
-		items[0] = new DmtAlertItem(nodeUri, null, null, result);
+		items[0] = new DmtAlertItem(nodeUri, null, null, null, result);
         
 		DmtAdmin admin = (DmtAdmin) adminTracker.getService();
         if(admin == null)
             throw new MissingResourceException("Alert sender service not found.",
                     DmtAdmin.class.getName(), null);
         
-        admin.sendAlert(session.getPrincipal(), 1224, items);
+        admin.sendAlert(session.getPrincipal(), 1224, correlator, items);
 	}
 
 	//----- Private utility methods -----//
