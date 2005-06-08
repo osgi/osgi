@@ -21,10 +21,10 @@ import java.io.*;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import org.osgi.framework.*;
-import org.osgi.impl.service.dmt.api.RemoteAlertSender;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.RemoteAlertSender;
 import org.osgi.service.permissionadmin.PermissionInfo;
 //import org.osgi.service.dmt.DmtSession;
 
@@ -73,8 +73,11 @@ public class Activator implements BundleActivator {
 			System.out.println("Remote adapter connects to server: " + host + ":" + PORT);
 			clientAdaptor = new ClientAdaptor(factory, host, PORT, pingTime);
 			System.out.println("Remote adapter connected to server " + host + ":" + PORT);
+
+            Dictionary properties = new Hashtable();
+            properties.put("servers", new String[] { "admin", "test" });
 			remoteAlertSenderReg = bc.registerService(RemoteAlertSender.class
-					.getName(), clientAdaptor, null);
+					.getName(), clientAdaptor, properties);
 			
 			System.out.println("Remote adapter activated.");
 		}
