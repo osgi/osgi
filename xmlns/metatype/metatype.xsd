@@ -17,7 +17,7 @@
         <complexType name="MetaData">
                 <sequence>
                         <element name="OCD" type="metatype:OCD" minOccurs="0" maxOccurs="unbounded"/>
-                        <element name="Designate" type="metatype:Designate" minOccurs="1" maxOccurs="unbounded"/>
+                        <element name="Designate" type="metatype:Designate" minOccurs="0" maxOccurs="unbounded"/>
                 </sequence>
 				<attribute name="localization" type="string" use="optional"/>
         </complexType>
