@@ -40,7 +40,7 @@
                 <attribute name="description" type="string" use="optional"/>
                 <attribute name="id" type="string" use="required"/>
                 <attribute name="type" type="metatype:Scalar" use="required"/>
-                <attribute name="cardinality" type="integer" use="optional" default="0"/>
+                <attribute name="cardinality" type="int" use="optional" default="0"/>
                 <attribute name="min" type="string" use="optional"/>
                 <attribute name="max" type="string" use="optional"/>
                 <attribute name="default" type="string" use="optional"/>
