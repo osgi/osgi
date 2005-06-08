@@ -20,8 +20,8 @@ package org.osgi.impl.service.dmt;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
-import org.osgi.impl.service.dmt.api.RemoteAlertSender;
 import org.osgi.service.dmt.*;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.util.tracker.ServiceTracker;
@@ -130,8 +130,8 @@ public class DmtAdminImpl implements DmtAdmin {
     }
     
     
-    public void sendAlert(String principal, int code, DmtAlertItem[] items)
-            throws DmtException {
+    public void sendAlert(String principal, int code, String correlator,
+            DmtAlertItem[] items) throws DmtException {
         RemoteAlertSender alertSender = getAlertSender(principal);
         if (alertSender == null) {
             if (principal == null)
@@ -145,7 +145,7 @@ public class DmtAdminImpl implements DmtAdmin {
         }
         
         try {
-            alertSender.sendAlert(principal, code, items);
+            alertSender.sendAlert(principal, code, correlator, items);
         }
         catch (Exception e) {
             String message = "Error sending remote alert";
@@ -157,22 +157,42 @@ public class DmtAdminImpl implements DmtAdmin {
     }
     
     private RemoteAlertSender getAlertSender(String principal) {
-        Object[] alertSenders = remoteAdapterTracker.getServices();
-        
-        if (principal == null) { // return adapter if unique and accepts anything
-            if(alertSenders.length != 1)
-                return null;
-            RemoteAlertSender alertSender = (RemoteAlertSender) alertSenders[0];
-            return alertSender.acceptServerId(null) ? alertSender : null;
+        if (principal == null) { // return adapter if it is unique 
+            Object[] alertSenders = remoteAdapterTracker.getServices();
+            return alertSenders.length != 1 ? null :
+                (RemoteAlertSender) alertSenders[0];
         }
-            
+       
+        ServiceReference[] alertSenderRefs = 
+            remoteAdapterTracker.getServiceReferences(); 
+        
+        if(alertSenderRefs == null)
+            return null;
+        
         // find adapter that accepts alerts for the given principal
-        for(int i = 0; i < alertSenders.length; i++) {
-            RemoteAlertSender alertSender = (RemoteAlertSender) alertSenders[i];
-            if (alertSender.acceptServerId(principal))
-                return alertSender;
+        for(int i = 0; i < alertSenderRefs.length; i++) {
+            if(acceptsServerId(alertSenderRefs[i], principal)) {
+                RemoteAlertSender alertSender = (RemoteAlertSender)
+                    remoteAdapterTracker.getService(alertSenderRefs[i]);
+                if(alertSender != null)
+                    return alertSender;
+            }
         }
         
         return null;
+    }
+    
+    // precondition: parameters are not null
+    private boolean acceptsServerId(ServiceReference ref, String principal) {
+        Object param = ref.getProperty("servers");
+        if(param == null || !(param instanceof String[]))
+            return false;
+
+        String[] servers = (String[]) param;
+        for (int i = 0; i < servers.length; i++)
+            if(principal.equals(servers[i]))
+                return true;
+        
+        return false;
     }
 }
