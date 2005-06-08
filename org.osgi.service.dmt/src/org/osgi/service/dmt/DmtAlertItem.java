@@ -28,6 +28,7 @@ public class DmtAlertItem {
     private String source;
     private String type;
     private String format;
+    private String mark;
     private String data;
 
     /**
@@ -35,17 +36,19 @@ public class DmtAlertItem {
      * data entries as parameters. Any of these parameters can be
      * <code>null</code>.
      * 
-     * @param source The URI of the node which is the source of the alert item
-     * @param type The type of the alert item
+     * @param source the URI of the node which is the source of the alert item
+     * @param type the type of the alert item
      * ### Needs to define where the possible values come from
-     * @param format The format of the alert item
-     * @param data The data of the alert item
+     * @param format the format of the alert item
+     * @param mark the mark parameter of the alert item
+     * @param data the data of the alert item
      */
-    public DmtAlertItem(String source, String type, String format,
+    public DmtAlertItem(String source, String type, String format, String mark,
                         String data) {
         this.source = source;
         this.type   = type;
         this.format = format;
+        this.mark   = mark;
         this.data   = data;
     }
 
@@ -54,7 +57,7 @@ public class DmtAlertItem {
      * Get the node which is the source of the alert. There might be no source
      * associated with the alert item.
      * 
-     * @return The URI of the node which is the source of this alert, or
+     * @return the URI of the node which is the source of this alert, or
      *         <code>null</code> if there is no source
      */
     public String getSource() {
@@ -62,11 +65,11 @@ public class DmtAlertItem {
     }
 
     /**
-     * Get the type associated with the alert item. There might be no format
+     * Get the type associated with the alert item. There might be no type
      * associated with the alert item.
-     * ### define where the value comes from, is the the DmtData FORMAT? Als "no format" must be "no type"
+     * ### define where the value comes from, is the the DmtData FORMAT? Also "no format" must be "no type"
      * 
-     * @return The type type associated with the alert item, or
+     * @return the type type associated with the alert item, or
      *         <code>null</code> if there is no type
      */
     public String getType() {
@@ -77,7 +80,7 @@ public class DmtAlertItem {
      * Get the format associated with the alert item. There might be no format
      * associated with the alert item.
      * 
-     * @return The format associated with the alert item, or <code>null</code>
+     * @return the format associated with the alert item, or <code>null</code>
      *         if there is no format
      */
     public String getFormat() {
@@ -85,10 +88,21 @@ public class DmtAlertItem {
     }
 
     /**
+     * Get the mark parameter associated with the alert item. There might be no
+     * mark associated with the alert item.
+     * 
+     * @return the mark associated with the alert item, or <code>null</code>
+     *         if there is no mark
+     */
+    public String getMark() {
+        return format;
+    }
+
+    /**
      * Get the data associated with the alert item. There might be no data
      * associated with the alert item.
      * 
-     * @return The data associated with the alert item, or <code>null</code>
+     * @return the data associated with the alert item, or <code>null</code>
      *         if there is no data
      */
     public String getData() {
@@ -98,13 +112,13 @@ public class DmtAlertItem {
     /**
      * Returns the string representation of this alert item.  The returned
      * includes all parameters of the alert item, and has the following format:
-     * <code>DmtAlertItem(&lt;source&gt;, &lt;type&gt;, &lt;format&gt;, &lt;data&gt;)</code>
+     * <code>DmtAlertItem(&lt;source&gt;, &lt;type&gt;, &lt;format&gt;, &lt;mark&gt;, &lt;data&gt;)</code>
      * 
      * @return the string representation of this alert item
      */
     public String toString() {
         return
             "DmtAlertItem(\"" + source + "\", \"" + type + "\", \"" +
-            format + "\", \"" + data + "\")";
+            format + "\", \"" + mark + "\", \"" + data + "\")";
     }
 }
