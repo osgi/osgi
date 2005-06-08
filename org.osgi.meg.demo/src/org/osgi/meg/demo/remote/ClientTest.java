@@ -28,7 +28,7 @@ public class ClientTest {
 		String cmd;
 		while (!(cmd = in.readLine()).equals("bye")) {
 			try {
-				ca.sendAlert("serverid", 1224, null);
+				ca.sendAlert("serverid", 1224, null, null);
 			}
 			catch (Exception e) {
 				e.printStackTrace();
