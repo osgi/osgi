@@ -204,7 +204,7 @@ public class DmtSessionImpl implements DmtSession {
         state = STATE_INVALID; 
 
         if (lockMode != LOCK_TYPE_ATOMIC)
-            throw new IllegalStateException(
+            throw new DmtException(null, DmtException.FEATURE_NOT_SUPPORTED,
                     "Commit can only be requested for atomic sessions.");
         
         commitPlugins();
@@ -252,7 +252,7 @@ public class DmtSessionImpl implements DmtSession {
         state = STATE_INVALID; 
 
 		if (lockMode != LOCK_TYPE_ATOMIC)
-			throw new IllegalStateException(
+			throw new DmtException(null, DmtException.FEATURE_NOT_SUPPORTED,
 					"Rollback can only be requested for atomic sessions.");
         
         acls = (Hashtable) savedAcls.clone();
@@ -691,7 +691,7 @@ public class DmtSessionImpl implements DmtSession {
             // plugin, checking the value and mime-type against the new 
             // meta-data is the responsibility of the plugin itself
 			
-            getWritableDataPlugin(newUri).copy(uri, newUri, true);
+            getWritableDataPlugin(newUri).copy(uri, newUri, recursive);
 		}
 		else
 			copyNoCheck(uri, newUri, recursive); // does not trigger any events  
