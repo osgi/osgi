@@ -582,7 +582,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return context;
     }
 
-    static String location(String symbName, String version) {
+    static String location(String symbName, Version version) {
         return symbName;
     }
 

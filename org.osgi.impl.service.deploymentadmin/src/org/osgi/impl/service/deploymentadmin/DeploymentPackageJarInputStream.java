@@ -61,20 +61,31 @@ public class DeploymentPackageJarInputStream {
         
         private Entry(String name, Attributes attrs) {
             super(name);
+            missing = isMissing(attrs);
+            this.attrs = attrs;
+        }
+        
+        static boolean isMissing(Attributes attrs) {
             String miss = attrs.getValue(DAConstants.MISSING);
             if (null != miss)
-                missing = Boolean.valueOf(miss).booleanValue();
-            this.attrs = attrs;
+                return Boolean.valueOf(miss).booleanValue();
+            return false;
         }
         
         public InputStream getInputStream() throws IOException {
             return new ByteArrayInputStream(buffer.toByteArray());
         }
         
-        public boolean isBundle() {
+        public static boolean isBundle(Attributes attrs) {
+            if (null == attrs)
+                return false;
             String symbName = attrs.getValue(DAConstants.BUNDLE_SYMBOLIC_NAME);
             String version = attrs.getValue(DAConstants.BUNDLE_VERSION);
             return null != symbName && null != version;
+        }
+        
+        public boolean isBundle() {
+            return isBundle(this.attrs);
         }
         
         public boolean isCustomizerBundle() {
@@ -144,7 +155,10 @@ public class DeploymentPackageJarInputStream {
     }
     
     private JarInputStream jis;
+    
     private Map            resourceNames;
+    private LinkedList     missingBundleNames = new LinkedList();
+    
     private Entry          actEntry;
     private boolean        fixPack;
     private LinkedList     buffer = new LinkedList();
@@ -155,7 +169,15 @@ public class DeploymentPackageJarInputStream {
     		throws IOException, DeploymentException 
     {
 	    this.jis = new JarInputStream(is);
+	    
 	    resourceNames = new HashMap(getManifest().getEntries());
+	    for (Iterator iter = resourceNames.keySet().iterator(); iter.hasNext();) {
+            String name = (String) iter.next();
+            Attributes as = (Attributes) resourceNames.get(name);
+            if (Entry.isBundle(as) && Entry.isMissing(as))
+                missingBundleNames.add(name);
+        }
+	    
 	    fixPack = (null != 
 	        	jis.getManifest().getMainAttributes().getValue(DAConstants.DP_FIXPACK));
 	    fillBuffer();
@@ -176,14 +198,6 @@ public class DeploymentPackageJarInputStream {
             certChains = entry.getCertificateChains();
             certStringChains = entry.getCertificateStringChains();
         }
-
-        /*Entry entry = readNextEntry();
-        while (null != entry && isUninterested(entry)) {
-            buffer.addLast(entry);
-            entry = readNextEntry();
-        }
-        if (null != entry)
-            certChains = entry.getCertificateChains();*/
     }
 
     /**
@@ -205,6 +219,13 @@ public class DeploymentPackageJarInputStream {
             return actEntry;
         
         JarEntry je = getNextJarEntry();
+        
+        if ((null == je || !Entry.isBundle(je.getAttributes())) && !missingBundleNames.isEmpty()) {
+            String name = (String) missingBundleNames.removeFirst();
+            actEntry = new Entry(name, (Attributes) resourceNames.remove(name));
+            return actEntry;
+        }
+        
         if (null == je) {
             // The stream ended but we may have missing bundles/resources
             Iterator it = resourceNames.keySet().iterator();

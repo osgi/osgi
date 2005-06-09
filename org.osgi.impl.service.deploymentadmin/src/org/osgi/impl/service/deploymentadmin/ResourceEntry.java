@@ -56,6 +56,10 @@ public class ResourceEntry implements Serializable {
         return attrs;
     }
     
+    void setAttrs(Attributes attrs) {
+        extractAttrs(attrs);
+    }
+    
     boolean isMissing() {
         String missing = (String) getAttrs().get(DAConstants.MISSING);
         if (null == missing)
@@ -94,4 +98,5 @@ public class ResourceEntry implements Serializable {
     public void updateCertificates(Entry entry) {
         certChains = entry.getCertificateStringChains();
     }
+
 }

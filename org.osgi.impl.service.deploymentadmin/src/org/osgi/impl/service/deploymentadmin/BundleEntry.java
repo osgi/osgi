@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.jar.Attributes;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.Version;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Entry;
 
 public class BundleEntry implements Serializable {
@@ -127,8 +128,8 @@ public class BundleEntry implements Serializable {
         return symbName;
     }
 
-    public String getVersion() {
-        return version;
+    public Version getVersion() {
+        return new Version(version);
     }
 
     public String getName() {
@@ -137,6 +138,10 @@ public class BundleEntry implements Serializable {
     
     CaseInsensitiveMap getAttrs() {
         return attrs;
+    }
+    
+    void setAttrs(CaseInsensitiveMap attrs) {
+        this.attrs = attrs;
     }
 
     public void setSymbName(String symbName) {
@@ -149,6 +154,10 @@ public class BundleEntry implements Serializable {
 
     public String getValue(String header) {
         return (String) attrs.get(header);
+    }
+
+    public void update(Bundle b) {
+        id = new Long(b.getBundleId());
     }
 
 }

@@ -160,24 +160,51 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return bundleEntries;
     }
     
-    void updateBundleEntry(BundleEntry be) throws DeploymentException {
-        int index = bundleEntries.indexOf(be);
-        if (-1 == index)
-            throw new DeploymentException(DeploymentException.CODE_BUNDLE_NAME_ERROR, 
-                    "The symbolic name in the deployment package manifest is " +
-                    		"not the same as the symbolic name in the bundle " +
-                    		"(" + be.getSymbName() + ")");
-        BundleEntry e = (BundleEntry) bundleEntries.get(index);
-        e.setId(be.getId());
-        e.setSymbName(be.getSymbName());
-        e.setVersion(be.getVersion());
+    BundleEntry getBundleEntryByName(String name) {
+        for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            if (be.getName().equals(name))
+                return be;
+        }
+        return null;
     }
     
+    BundleEntry getBundleEntry(String symbName, Version version) throws DeploymentException {
+        for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            boolean b1 = be.getSymbName().equals(symbName);
+            boolean b2  = be.getVersion().equals(version);
+            if (be.getSymbName().equals(symbName) && be.getVersion().equals(version))
+                return be;
+        }
+        return null;
+    }
+    
+    void updateBundleEntry(Bundle b) throws DeploymentException {
+        BundleEntry newBe = new BundleEntry(b);
+        BundleEntry be = getBundleEntry(newBe.getSymbName(), newBe.getVersion());
+        if (null == be)
+            throw new RuntimeException("Internal error");
+        be.update(b);
+    }
+
+
+    BundleEntry getBundleEntry(String symbName) {
+        for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            if (be.getSymbName().equals(symbName))
+                return be;
+        }
+        return null;
+    }
+
     void updateResourceEntry(Entry entry) {
         for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
-            if (re.getName().equals(entry.getName()))
+            if (re.getName().equals(entry.getName())) {
                 re.updateCertificates(entry);
+                re.setAttrs(entry.getAttributes());
+            }
         }
     }
     
@@ -204,7 +231,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             ret[i][0] = be.getSymbName();
-            ret[i][1] = be.getVersion();
+            ret[i][1] = be.getVersion().toString();
             ++i;    
         }
         return ret;

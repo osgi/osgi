@@ -258,6 +258,14 @@ public class DoIt implements BundleActivator {
             System.out.println("*******************************************************************");
             try {db_test_07(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
+            try {db_test_09(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
+            try {db_test_10(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
+            try {db_test_11(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
+            try {db_test_12(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
             
             try {bad_db_test_01(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
@@ -287,6 +295,16 @@ public class DoIt implements BundleActivator {
             try {bad_db_test_12(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
             try {bad_db_test_13(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
+            try {bad_db_test_14(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
+            try {bad_db_test_15(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
+            try {bad_db_test_16(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
+            try {bad_db_test_17(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
+            try {bad_db_test_18(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
             
             System.out.println("\n=====================================");
@@ -501,13 +519,14 @@ public class DoIt implements BundleActivator {
     		"resource is missing but it is not present in the old (target) DP.";
     public void bad_db_test_14() throws Exception {
         InputStream is = null;
-        DeploymentPackage dp = null;
+        DeploymentPackage dp1 = null;
+        DeploymentPackage dp2 = null;
         try {
             is = new FileInputStream(HOME + "bad_db_test_14_1.dp");
-            dp = da.installDeploymentPackage(is);
+            dp1 = da.installDeploymentPackage(is);
             is.close();
             is = new FileInputStream(HOME + "bad_db_test_14_2.dp");
-            dp = da.installDeploymentPackage(is);
+            dp2 = da.installDeploymentPackage(is);
             throw new Exception("Negative test failed");
         }
         catch (DeploymentException e) {
@@ -521,6 +540,7 @@ public class DoIt implements BundleActivator {
             db.reset(null);
 
             is.close();
+            dp1.uninstall();
         }
     }
 
@@ -528,13 +548,14 @@ public class DoIt implements BundleActivator {
     		"is missing but it is not present in the old (target) DP.";
     public void bad_db_test_15() throws Exception {
         InputStream is = null;
-        DeploymentPackage dp = null;
+        DeploymentPackage dp1 = null;
+        DeploymentPackage dp2 = null;
         try {
             is = new FileInputStream(HOME + "bad_db_test_15_1.dp");
-            dp = da.installDeploymentPackage(is);
+            dp1 = da.installDeploymentPackage(is);
             is.close();
             is = new FileInputStream(HOME + "bad_db_test_15_2.dp");
-            dp = da.installDeploymentPackage(is);
+            dp2 = da.installDeploymentPackage(is);
             throw new Exception("Negative test failed");
         }
         catch (DeploymentException e) {
@@ -548,6 +569,7 @@ public class DoIt implements BundleActivator {
             db.reset(null);
 
             is.close();
+            dp1.uninstall();
         }
     }
 
@@ -572,7 +594,47 @@ public class DoIt implements BundleActivator {
 
             is.close();
         }
-}
+    }
+
+    public void bad_db_test_17() throws Exception {
+        InputStream is = null;
+        DeploymentPackage dp = null;
+        
+        is = new FileInputStream(HOME + "bad_db_test_17_1.dp");
+        dp = da.installDeploymentPackage(is);
+        is.close();
+        
+        try {
+            is = new FileInputStream(HOME + "bad_db_test_17_2.dp");
+            dp = da.installDeploymentPackage(is);
+            is.close();
+        }
+        catch (DeploymentException e) {
+            if (e.getCode() != DeploymentException.CODE_MISSING_RESOURCE)
+                throw new Exception("Negative test failed");
+        }
+        
+        dp.uninstall();
+    }
+
+    public void bad_db_test_18() throws Exception {
+        InputStream is = null;
+        DeploymentPackage dp = null;
+        
+        is = new FileInputStream(HOME + "bad_db_test_18_1.dp");
+        dp = da.installDeploymentPackage(is);
+        is.close();
+        
+        try {
+            is = new FileInputStream(HOME + "bad_db_test_18_2.dp");
+            dp = da.installDeploymentPackage(is);
+            is.close();
+        }
+        catch (DeploymentException e) {
+            if (e.getCode() != DeploymentException.CODE_MISSING_BUNDLE)
+                throw new Exception("Negative test failed");
+        }
+    }
 
     public static final String db_test_01 = "Desc.";
     public void db_test_01() throws Exception {
@@ -848,5 +910,83 @@ public class DoIt implements BundleActivator {
         Db db = (Db) context.getService(ref);
         db.reset(null);
     }
+    
+    public static final String db_test_09 = "Updates bundles and version has to be changed in " +
+    		"getBundleSymNameVersionPairs() result";
+    public void db_test_09() throws Exception {
+        InputStream is = new FileInputStream(HOME + "db_test_09.dp");
+        DeploymentPackage dp = da.installDeploymentPackage(is);
+        is.close();
+        
+        DeploymentPackage dp2 = da.getDeploymentPackage("db_test_09");
+		String[][] snvps = dp2.getBundleSymNameVersionPairs();
+		boolean b11 = snvps[0][1].equals("1.0.0");
+		boolean b12 = snvps[0][1].equals("1.0.0");
 
+        is = new FileInputStream(HOME + "db_test_09_update_01.dp");
+        dp = da.installDeploymentPackage(is);
+        is.close();
+
+        dp2 = da.getDeploymentPackage("db_test_09");
+		snvps = dp2.getBundleSymNameVersionPairs();
+		boolean b21 = snvps[0][1].equals("1.5.0");
+		
+		if (!(b11 && b12 && b21))
+		    throw new Exception("Test failed");
+
+		dp.uninstall();
+    }
+
+    public static final String db_test_10 = "";
+    public void db_test_10() throws Exception {
+        InputStream is = new FileInputStream(HOME + "db_test_10.dp");
+        DeploymentPackage dp = da.installDeploymentPackage(is);
+        is.close();
+
+        is = new FileInputStream(HOME + "db_test_10_update_01.dp");
+        dp = da.installDeploymentPackage(is);
+        is.close();
+
+        dp.uninstall();
+    }
+
+    public static final String db_test_11 = "Update adds a new bundle -> new element in " +
+    		"getBundleSymNameVersionPairs() result";
+    public void db_test_11() throws Exception {
+        InputStream is = new FileInputStream(HOME + "db_test_11.dp");
+        DeploymentPackage dp = da.installDeploymentPackage(is);
+        is.close();
+        
+        String[][] bsnvps = dp.getBundleSymNameVersionPairs();
+        if (bsnvps.length != 2)
+            throw new Exception("Test failed");
+
+        is = new FileInputStream(HOME + "db_test_11_update_01.dp");
+        dp = da.installDeploymentPackage(is);
+        is.close();
+        
+        bsnvps = dp.getBundleSymNameVersionPairs();
+        if (bsnvps.length != 3)
+            throw new Exception("Test failed");
+
+        dp.uninstall();
+    }
+
+    public static final String db_test_12 = "";
+    public void db_test_12() throws Exception {
+        InputStream is = new FileInputStream(HOME + "db_test_12.dp");
+        DeploymentPackage dp = da.installDeploymentPackage(is);
+        is.close();
+
+        String[] res = dp.getResources();
+        
+        is = new FileInputStream(HOME + "db_test_12_update_01.dp");
+        dp = da.installDeploymentPackage(is);
+        is.close();
+
+        res = dp.getResources();
+
+        dp.uninstall();
+    }
+    
 }
