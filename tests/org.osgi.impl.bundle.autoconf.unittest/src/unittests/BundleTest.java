@@ -396,7 +396,7 @@ public class BundleTest extends TestCase {
 
 		Designate d = of.createDesignate();
 		md.getDesignate().add(d);
-		d.setFactory(false);
+		d.setFactoryPid("factorypid1");
 		d.setBundle("foo-1.1");
 		d.setPid("pid1");
 		Object o = of.createObject();

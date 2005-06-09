@@ -54,7 +54,7 @@ public class MetaData  {
     
     public static class Designate {
     	public String pid;
-    	public boolean factory;
+    	public String factoryPid;
     	public String bundle;
     	public boolean optional;
     	public Object[] objects;
@@ -174,7 +174,8 @@ public class MetaData  {
 						state = DESIGNATE;
 						currentDesignate = new Designate();
 						currentDesignate.pid = attr.getValue("pid");
-						currentDesignate.factory = getBool(attr,"factory",false);
+						currentDesignate.factoryPid = attr.getValue("factoryPid");
+						if ("".equals(currentDesignate.factoryPid)) currentDesignate.factoryPid = null;
 						currentDesignate.bundle = attr.getValue("bundle");
 						currentDesignate.optional = getBool(attr,"optional",false);
 						currentDesignate.merge = getBool(attr,"merge",false);

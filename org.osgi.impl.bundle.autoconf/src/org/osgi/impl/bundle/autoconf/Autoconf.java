@@ -117,7 +117,7 @@ public class Autoconf implements ResourceProcessor {
 			String bundleSymbolicName = bundleName.substring(0,dash);
 			String bundleVersion = bundleName.substring(dash+1);
 			
-			Bundle bundle = searchForBundle(bundleSymbolicName,bundleVersion,!d.factory);
+			Bundle bundle = searchForBundle(bundleSymbolicName,bundleVersion,d.factoryPid==null);
 			if (bundle==null) {
 				if (d.optional) { continue designates; }
 				throw new IllegalArgumentException(
@@ -133,7 +133,11 @@ public class Autoconf implements ResourceProcessor {
 					if (d.optional) { continue designates; }
 					throw new IllegalArgumentException("no ocd found for pid "+d.pid);
 				}
-				realOCD = mti.getObjectClassDefinition(d.pid,null);
+				if (d.factoryPid!=null) {
+					realOCD = mti.getObjectClassDefinition(d.factoryPid,null);
+				} else {
+					realOCD = mti.getObjectClassDefinition(d.pid,null);
+				}
 				if (realOCD==null) {
 					if (d.optional) { continue designates; }
 					throw new IllegalArgumentException("no ocd found for pid "+d.pid);
@@ -142,11 +146,11 @@ public class Autoconf implements ResourceProcessor {
 			Map values = createData(ocd,realOCD,o);
 			String location = bundle.getLocation();
 			
-			if (d.factory) {
+			if (d.factoryPid!=null) {
 				OriginalConfiguration originalConfiguration = new OriginalConfiguration();
 				Configuration conf;
 				try {
-					conf = configurationAdmin.createFactoryConfiguration(d.pid,location);
+					conf = configurationAdmin.createFactoryConfiguration(d.factoryPid,location);
 				}
 				catch (IOException e) {
 					throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot create new factory configuration",e);
