@@ -139,7 +139,7 @@ public class CommandProcessor {
 			}
 			else if (cmd.equals("getmetanode") || cmd.equals("gm")) {
 				DmtMetaNode mn = session.getMetaNode(uri);
-				ret = mn.toString(); // TODO does it have a good tostring?
+				ret = mn == null ? "null" : mn.toString(); // TODO does it have a good tostring?
 			}
 			else {
 				ret = "Command unknown:" + cmd;
