@@ -74,10 +74,6 @@ public class TreeNodeImpl implements TreeNode {
     ///////////////////////////////////////////////////////////////////////
     
 	public int getChildCount() {
-        // TODO eliminate this
-        if ("./OSGi/deploy".equalsIgnoreCase(uri()))
-            return 1;
-        
         String[] sarr;
 		try {
 			sarr = Splitter.split(commander.command("gc " + uri()).trim(), '/', 0);
@@ -104,12 +100,6 @@ public class TreeNodeImpl implements TreeNode {
 	}
 
 	public boolean isLeaf() {
-		// TODO eliminate this
-        if ("./OSGi/deploy".equalsIgnoreCase(uri()))
-            return false;
-        if ("./OSGi/deploy/install".equalsIgnoreCase(uri()))
-            return true;
-        
         boolean ret;
 		try {
 			ret = "true".equals(commander.command("il " + uri()).trim());
@@ -123,13 +113,6 @@ public class TreeNodeImpl implements TreeNode {
 	}
 
 	public Enumeration children() {
-		// TODO eliminate this
-        if ("./OSGi/deploy".equals(uri())) {
-            return new Vector(Arrays.asList(new Object[] {
-            		new TreeNodeImpl("install", this, commander)
-                })).elements();
-        }
-        
 		String s;
 		try {
 			s = commander.command("gc " + uri()).trim();
@@ -154,10 +137,6 @@ public class TreeNodeImpl implements TreeNode {
 	}
 
 	public TreeNode getChildAt(int childIndex) {
-        // TODO eliminate this
-        if ("./OSGi/deploy".equalsIgnoreCase(uri()) && childIndex == 0)
-        	return new TreeNodeImpl("install", this, commander);
-            
         String s;
 		try {
 			s = commander.command("gc " + uri()).trim();
@@ -177,10 +156,6 @@ public class TreeNodeImpl implements TreeNode {
 	}
 
 	public int getIndex(TreeNode node) {
-        // TODO eliminate this
-        if ("./OSGi/deploy".equalsIgnoreCase(uri()) && "install".equals(((TreeNodeImpl) node).getLabel()))
-            return 0;
-
 		String s;
 		try {
 			s = commander.command("gc " + uri()).trim();
