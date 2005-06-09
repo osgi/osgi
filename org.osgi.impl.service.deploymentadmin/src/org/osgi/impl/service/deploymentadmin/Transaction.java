@@ -110,7 +110,7 @@ public class Transaction {
 	                    catch (PrivilegedActionException e) {
 	                        throw (BundleException) e.getException();
 	                    }
-	                    element.dp.getBundleEntries().remove(
+	                    element.dp.remove(
 	                            element.be);
 	                    break;
 	                case STARTBUNDLE :

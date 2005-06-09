@@ -34,7 +34,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -163,7 +162,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         if (null == sref)
             return oldPerms;
         
-        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
+        for (Iterator iter = srcDp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             if (be.isCustomizer())
                 setFilePermissionForCustomizer(be, oldPerms);
@@ -182,7 +181,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
             oldPerms.put(location, old);
         ArrayList permInfos = null != old ? 
                 new ArrayList(Arrays.asList(old)) : new ArrayList();
-        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
+        for (Iterator iter = srcDp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             char fs = File.separatorChar;
             String rootDir = fwBundleDir + fs + be.getId() + fs + "data";
@@ -197,7 +196,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         if (null == sref)
             return;
         
-        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
+        for (Iterator iter = srcDp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             if (be.isCustomizer())
                 resetFilePermissionForCustomizer(be, oldPerms);
@@ -274,7 +273,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         else //DeploymentSession.UNINSTALL == getDeploymentAction()
             dp = targetDp;
         
-        Vector bes = dp.getBundleEntries();
+        Set bes = dp.getBundleEntriesAsSet();
         for (Iterator iter = bes.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             if (be.getId() == b.getBundleId()) {
@@ -356,7 +355,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
             dp = targetDp;
         else //DeploymentSession.UNINSTALL == getDeploymentAction()
             dp = targetDp;
-        for (Iterator iter = dp.getBundleEntries().iterator(); iter.hasNext();) {
+        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry entry = (BundleEntry) iter.next();
             Bundle b = context.getBundle(entry.getId());
             if (entry.isCustomizer())
@@ -373,7 +372,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
             dp = srcDp;
         else //DeploymentSession.UNINSTALL == getDeploymentAction()
             dp = targetDp;
-        for (Iterator iter = dp.getBundleEntries().iterator(); iter.hasNext();) {
+        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry entry = (BundleEntry) iter.next();
             Bundle b = context.getBundle(entry.getId());
             if (!entry.isCustomizer())
@@ -401,7 +400,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         if (INSTALL == getDeploymentAction())
             return;
         
-        for (Iterator iter = targetDp.getBundleEntries().iterator(); iter.hasNext();) {
+        for (Iterator iter = targetDp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry entry = (BundleEntry) iter.next();
             Bundle b = context.getBundle(entry.getId());
             stopBundle(b);
@@ -425,14 +424,6 @@ public class DeploymentSessionImpl implements DeploymentSession {
     private void processResources(DeploymentPackageJarInputStream wjis) 
     		throws DeploymentException, IOException 
     {
-        DeploymentPackageImpl dp;
-        if (INSTALL == getDeploymentAction())
-            dp = srcDp;
-        else if (UPDATE == getDeploymentAction())
-            dp = targetDp;
-        else //DeploymentSession.UNINSTALL == getDeploymentAction()
-            dp = targetDp;
-        
         DeploymentPackageJarInputStream.Entry entry = wjis.nextEntry();
         while (null != entry) {
             if (!entry.isResource())
@@ -441,7 +432,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
             
             if (!entry.isMissing()) {
                 processResource(entry);
-                dp.updateResourceEntry(entry);
+                ResourceEntry re = srcDp.getResourceEntryByName(entry.getName());
+                re.updateCertificates(entry);
             } else
                 ; // do nothing
             wjis.closeEntry();
@@ -454,12 +446,12 @@ public class DeploymentSessionImpl implements DeploymentSession {
      * marked as missing resources
      */
     private void dropResources() throws DeploymentException {
-        Set toDrop = new HashSet(targetDp.getResourceEntries());
-        Set tmpSet = new HashSet(srcDp.getResourceEntries());
+        Set toDrop = targetDp.getResourceEntriesAsSet();
+        Set tmpSet = srcDp.getResourceEntriesAsSet();
         toDrop.removeAll(tmpSet);
         for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
-            targetDp.getResourceEntries().remove(re);
+            targetDp.remove(re);
             dropResource(re);
         }
     }
@@ -468,7 +460,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
      * Drop all rsources pf the target DP
      */
     private void dropAllResources() throws DeploymentException {
-        Set toDrop = new HashSet(targetDp.getResourceEntries());
+        Set toDrop = new HashSet(targetDp.getResourceEntriesAsSet());
         Set procs = new HashSet();
         for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
@@ -492,13 +484,13 @@ public class DeploymentSessionImpl implements DeploymentSession {
      */
     private void dropBundles() throws BundleException {
         Set toDrop = new HashSet();
-        for (Iterator iter = targetDp.getBundleEntries().iterator(); iter.hasNext();) {
+        for (Iterator iter = targetDp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             toDrop.add(be.getSymbName());
         }
 
         Set tmpSet = new HashSet();
-        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
+        for (Iterator iter = srcDp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             tmpSet.add(be.getSymbName());
         }
@@ -507,18 +499,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
         for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
             String bsn = (String) iter.next();
             BundleEntry be = targetDp.getBundleEntry(bsn);
-            targetDp.getBundleEntries().remove(be);
+            targetDp.remove(be);
             dropBundle(be);
         }
-        
-        /*Set toDrop = new HashSet(targetDp.getBundleEntries());
-        Set tmpSet = new HashSet(srcDp.getBundleEntries());
-        toDrop.removeAll(tmpSet);
-        for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
-            BundleEntry be = (BundleEntry) iter.next();
-            targetDp.getBundleEntries().remove(be);
-            dropBundle(be);
-        }*/
     }
 
     /*
@@ -623,14 +606,15 @@ public class DeploymentSessionImpl implements DeploymentSession {
             
             if (!entry.isMissing()) {
                 Bundle b = processBundle(entry);
-                srcDp.updateBundleEntry(b);
+                srcDp.getBundleEntryByName(entry.getName()).
+                	setBundleId(b.getBundleId());
                 if (entry.isCustomizerBundle())
                     startBundle(b);
             } else {
                 BundleEntry beS = srcDp.getBundleEntryByName(entry.getName());
                 BundleEntry beT = targetDp.getBundleEntryByName(entry.getName());
-                srcDp.getBundleEntries().remove(beS);
-                srcDp.getBundleEntries().add(beT);
+                srcDp.remove(beS);
+                srcDp.add(beT);
             }
             wjis.closeEntry();
             entry = wjis.nextEntry();
@@ -639,7 +623,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     
     private void checkManifestEntryPresence(Entry entry) throws DeploymentException {
         BundleEntry be = new BundleEntry(entry);
-        if (!srcDp.getBundleEntries().contains(be))
+        if (!srcDp.contains(be))
             throw new DeploymentException(DeploymentException.CODE_ORDER_ERROR, 
                     entry.getName() + " is in the deployment package but doesn't " +
                     "exist in the manifest");

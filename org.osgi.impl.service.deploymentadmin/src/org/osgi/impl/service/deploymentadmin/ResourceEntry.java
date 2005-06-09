@@ -37,6 +37,11 @@ public class ResourceEntry implements Serializable {
         extractAttrs(attrs);
     }
     
+    public ResourceEntry(Entry entry) {
+        name = entry.getName();
+        extractAttrs(entry.getAttributes());
+    }
+    
     public boolean equals(Object o) {
         if (!(o instanceof ResourceEntry))
             return false;
@@ -54,10 +59,6 @@ public class ResourceEntry implements Serializable {
     
     CaseInsensitiveMap getAttrs() {
         return attrs;
-    }
-    
-    void setAttrs(Attributes attrs) {
-        extractAttrs(attrs);
     }
     
     boolean isMissing() {

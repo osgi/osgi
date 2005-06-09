@@ -35,7 +35,6 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
-import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Entry;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
@@ -45,7 +44,6 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     private transient DeploymentAdminImpl da;
     
-    private Long               id;
     private CaseInsensitiveMap mainSection     = new CaseInsensitiveMap();
     private Vector             bundleEntries   = new Vector();
     private Vector             resourceEntries = new Vector();
@@ -53,10 +51,11 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     // List of String[]
     private List               certChains      = new Vector();
     
-    public DeploymentPackageImpl(Manifest manifest, int id, DeploymentAdminImpl da,
+    private Boolean            stale           = Boolean.FALSE;
+    
+    public DeploymentPackageImpl(Manifest manifest, DeploymentAdminImpl da,
             List certChains) throws DeploymentException 
     {
-        this.id = new Long(id);
         this.da = da;
         if (null != certChains)
             this.certChains = certChains;
@@ -71,7 +70,6 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * Copy constructor
      */
     public DeploymentPackageImpl(DeploymentPackageImpl other) {
-        this.id = other.id;
         this.da = other.da;
         this.certChains = other.certChains;
         this.mainSection = new CaseInsensitiveMap(other.mainSection);
@@ -91,7 +89,6 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         DeploymentPackageImpl dp = new DeploymentPackageImpl();
         dp.mainSection.put(DAConstants.DP_NAME, "System");
         dp.mainSection.put(DAConstants.DP_VERSION, "0.0.0");
-        dp.id = new Long(0);
         dp.bundleEntries = new Vector(bundleEntries);
         
         return dp;
@@ -107,12 +104,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                getVersion().equals(other.getVersion());
     }
     
-    boolean equalsIgnoreVersion(Object obj) {
-        if (null == obj)
+    boolean equalsIgnoreVersion(DeploymentPackage other) {
+        if (null == other)
             return false;
-        if (!(obj instanceof DeploymentPackage))
-            return false;
-        DeploymentPackage other = (DeploymentPackage) obj;
         return getName().equals(other.getName());
     }
     
@@ -121,7 +115,12 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
     
     public String toString() {
-        return "{" + getName() + " " + ( getVersion() == null ? null : getVersion() ) + "}";
+        return "{Deployment Package: " + getName() + " " + 
+        		( getVersion() == null ? null : getVersion() ) + "}";
+    }
+
+    boolean isSystem() {
+        return "System".equals(getName());
     }
 
     private void processMainSection(Manifest manifest) throws DeploymentException {
@@ -129,9 +128,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         for (Iterator iter = attrs.keySet().iterator(); iter.hasNext();) {
             Attributes.Name key = (Attributes.Name) iter.next();
             Object value = attrs.getValue(key);
+            // Attributes.Name is not Serializable
             mainSection.put(key.toString(), value);
         }
-        
     }
     
     private void processNameSections(Manifest manifest) throws DeploymentException {
@@ -157,9 +156,24 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         }
     }
     
+    Set getBundleEntriesAsSet() {
+        return new HashSet(bundleEntries);
+    }
+
+    Iterator getBundleEntryIterator() {
+        return bundleEntries.iterator();
+    }
     
-    Vector getBundleEntries() {
-        return bundleEntries;
+    boolean contains(BundleEntry be) {
+        return bundleEntries.contains(be);
+    }
+    
+    public void add(BundleEntry be) {
+        bundleEntries.add(be);
+    }
+
+    public void remove(BundleEntry be) {
+        bundleEntries.remove(be);
     }
     
     BundleEntry getBundleEntryByName(String name) {
@@ -174,23 +188,12 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     BundleEntry getBundleEntry(String symbName, Version version) throws DeploymentException {
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            boolean b1 = be.getSymbName().equals(symbName);
-            boolean b2  = be.getVersion().equals(version);
             if (be.getSymbName().equals(symbName) && be.getVersion().equals(version))
                 return be;
         }
         return null;
     }
     
-    void updateBundleEntry(Bundle b) throws DeploymentException {
-        BundleEntry newBe = new BundleEntry(b);
-        BundleEntry be = getBundleEntry(newBe.getSymbName(), newBe.getVersion());
-        if (null == be)
-            throw new RuntimeException("Internal error");
-        be.update(b);
-    }
-
-
     BundleEntry getBundleEntry(String symbName) {
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
@@ -200,22 +203,17 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return null;
     }
 
-    void updateResourceEntry(Entry entry) {
-        for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
-            ResourceEntry re = (ResourceEntry) iter.next();
-            if (re.getName().equals(entry.getName())) {
-                re.updateCertificates(entry);
-                re.setAttrs(entry.getAttributes());
-            }
-        }
-    }
-    
     VersionRange getFixPackRange() {
         return new VersionRange((String) mainSection.get(DAConstants.DP_FIXPACK));
     }
     
-    Vector getResourceEntries() {
-        return resourceEntries;
+    public ResourceEntry getResourceEntryByName(String name) {
+        for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
+            ResourceEntry entry = (ResourceEntry) iter.next();
+            if (entry.getName().equals(name))
+                return entry;
+        }
+        return null;
     }
     
     List getCertChains() {
@@ -296,8 +294,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
 
     public boolean isStale() {
-        long l = (null == id ? -1 : id.longValue());
-        return l == -1;
+        return stale.booleanValue();
     }
 
     /**
@@ -372,13 +369,14 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      */
     public void uninstall() throws DeploymentException {
         checkStale();
-        if (0 == id.longValue())
+        if (isSystem())
             throw new RuntimeException("\"System\" bundle cannot be uninstalled");
         
         da.checkPermission(this, DeploymentAdminPermission.ACTION_UNINSTALL);
         
         da.uninstall(this);
-        id = new Long(-1);
+        
+        stale = Boolean.TRUE;
     }
 
     /**
@@ -387,12 +385,13 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      */
     public boolean uninstallForced() {
         checkStale();
-        if (0 == id.longValue())
+        if (isSystem())
             throw new RuntimeException("\"System\" bundle cannot be uninstalled");
         
         da.checkPermission(this, DeploymentAdminPermission.ACTION_UNINSTALL_FORCED);
         
-        id = new Long(-1);
+        stale = Boolean.TRUE;
+        
         return da.uninstallForced(this);
     }
 
@@ -512,7 +511,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                 DeploymentPackageImpl eDp = (DeploymentPackageImpl) iter.next();
                 if (dp.getName().equals(eDp.getName()))
                     continue;
-                for (Iterator iterator = eDp.getBundleEntries().iterator(); iterator.hasNext();) {
+                for (Iterator iterator = eDp.getBundleEntryIterator(); iterator.hasNext();) {
                     BundleEntry	eBe	= (BundleEntry) iterator.next();
                     if (be.getSymbName().equals(eBe.getSymbName()))
                         throw new DeploymentException(DeploymentException.CODE_BUNDLE_SHARING_VIOLATION, 
@@ -546,6 +545,22 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                     dp + ")");
         }
 
+    }
+
+    Set getResourceEntriesAsSet() {
+        return new HashSet(resourceEntries);
+    }
+
+    public void remove(ResourceEntry re) {
+        resourceEntries.remove(re);
+    }
+
+    public Iterator getResourceEntryIterator() {
+        return resourceEntries.iterator();
+    }
+
+    public boolean contains(ResourceEntry re) {
+        return resourceEntries.contains(re);
     }
   
 }

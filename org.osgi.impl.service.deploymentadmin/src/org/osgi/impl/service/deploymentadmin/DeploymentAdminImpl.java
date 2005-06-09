@@ -75,7 +75,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     
     // persisted fields
     private Set     dps = new HashSet();		// deployment packages
-    private Integer nextDpId = new Integer(1);  // id of the next DP ("System" dp == 0)
     private boolean cancelled;
     
 	public void start(BundleContext context) throws Exception {
@@ -128,20 +127,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	    trackEvent.close();
 	}
 
-    private synchronized int nextDpId() {
-        int ret = nextDpId.intValue(); 
-        nextDpId = new Integer(ret + 1);
-        try {
-            save();
-        } catch (IOException e) {
-            logger.log(Logger.LOG_ERROR, "Error occured during persisting " +
-            		"deployment packages.");
-            logger.log(e);
-            throw new RuntimeException("Internal error.");
-        }
-        return ret;
-    }
-
     public DeploymentPackage installDeploymentPackage(InputStream in)
     		throws DeploymentException
     {
@@ -155,8 +140,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             if (!checkCertificateChains(wjis.getCertificateChains()))
                 throw new DeploymentException(DeploymentException.CODE_SIGNING_ERROR, 
                         "No certificate was found in the keystore for the deployment package");
-            srcDp = new DeploymentPackageImpl(wjis.getManifest(), 
-                    nextDpId(), this, wjis.getCertificateChainStringArrays());
+            srcDp = new DeploymentPackageImpl(wjis.getManifest(), this, 
+                    wjis.getCertificateChainStringArrays());
         }
         catch (IOException e) {
             throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
@@ -196,16 +181,16 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         DeploymentPackageImpl srcDp = (DeploymentPackageImpl) session.getSourceDeploymentPackage();
         DeploymentPackageImpl tarDp = (DeploymentPackageImpl) session.getTargetDeploymentPackage();
         
-        for (Iterator iter = srcDp.getResourceEntries().iterator(); iter.hasNext();) {
+        for (Iterator iter = srcDp.getResourceEntryIterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
-            if (re.isMissing() && !tarDp.getResourceEntries().contains(re))
+            if (re.isMissing() && !tarDp.contains(re))
                 throw new DeploymentException(DeploymentException.CODE_MISSING_RESOURCE, 
                         "Resource '" + re + "' in the target Deployment Package is missing");            
         }
         
-        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
+        for (Iterator iter = srcDp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            if (be.isMissing() && !tarDp.getBundleEntries().contains(be))
+            if (be.isMissing() && !tarDp.contains(be))
                 throw new DeploymentException(DeploymentException.CODE_MISSING_BUNDLE, 
                         "Bundle '" + be + "' in the target Deployment Package is missing");            
         }
@@ -432,7 +417,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         Set sub = new HashSet();
         for (Iterator iter = dps.iterator(); iter.hasNext();) {
             DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();
-            Set s = new HashSet(dp.getBundleEntries());
+            Set s = dp.getBundleEntriesAsSet();
             sub.addAll(s);
         }
         
@@ -456,7 +441,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                 public Object run() throws IOException {
                     FileOutputStream fos = new FileOutputStream(f);
                     ObjectOutputStream oos = new ObjectOutputStream(fos);
-                    oos.writeObject(nextDpId);
                     oos.writeObject(dps);
                     oos.close();
                     fos.close();
@@ -480,7 +464,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         try {
             fis = new FileInputStream(f);
             DPObjectInputStream ois = new DPObjectInputStream(fis);
-            nextDpId = (Integer) ois.readObject();
             dps = (Set) ois.readObject();
             ois.close();
             fis.close();

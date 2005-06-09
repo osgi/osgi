@@ -156,8 +156,8 @@ public class BundleEntry implements Serializable {
         return (String) attrs.get(header);
     }
 
-    public void update(Bundle b) {
-        id = new Long(b.getBundleId());
+    public void setBundleId(long bundleId) {
+        id = new Long(bundleId);
     }
 
 }
