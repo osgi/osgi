@@ -152,11 +152,11 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         // create the source DP
         try {
             wjis = new DeploymentPackageJarInputStream(in);
-            if (!checkCertificateChains(wjis.getCertChains()))
+            if (!checkCertificateChains(wjis.getCertificateChains()))
                 throw new DeploymentException(DeploymentException.CODE_SIGNING_ERROR, 
                         "No certificate was found in the keystore for the deployment package");
             srcDp = new DeploymentPackageImpl(wjis.getManifest(), 
-                    nextDpId(), this, wjis.getCertStringChains());
+                    nextDpId(), this, wjis.getCertificateChainStringArrays());
         }
         catch (IOException e) {
             throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,

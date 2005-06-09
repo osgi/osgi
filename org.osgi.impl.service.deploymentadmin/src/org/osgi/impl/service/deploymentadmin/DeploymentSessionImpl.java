@@ -604,7 +604,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
                     "Resource processor (PID=" + pid + ") for '" + entry.getName() +
                     "' is not found.");
         WrappedResourceProcessor wrProc = new WrappedResourceProcessor(
-                proc, fetchAccessControlContext(entry.getCertificateStringChains()));
+                proc, fetchAccessControlContext(entry.getCertificateChainStringArrays()));
         transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, wrProc));
         wrProc.process(entry.getName(), entry.getInputStream());
         if (INSTALL == getDeploymentAction())

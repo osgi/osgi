@@ -49,6 +49,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     private CaseInsensitiveMap mainSection     = new CaseInsensitiveMap();
     private Vector             bundleEntries   = new Vector();
     private Vector             resourceEntries = new Vector();
+    
+    // List of String[]
     private List               certChains      = new Vector();
     
     public DeploymentPackageImpl(Manifest manifest, int id, DeploymentAdminImpl da,

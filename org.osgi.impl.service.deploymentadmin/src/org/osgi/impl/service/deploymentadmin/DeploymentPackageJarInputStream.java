@@ -21,11 +21,9 @@ import java.io.*;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
@@ -37,8 +35,7 @@ import org.osgi.service.deploymentadmin.DeploymentException;
 /**
  * DeploymentPackageJarInputStream class wraps the JarInputStream implementation  
  * to override its behaviour according to the needs of the deployment 
- * packages (DPs). See nextEntry(), closeEntry() and getNextJarEntry() 
- * methods! 
+ * packages (DPs).
  */
 public class DeploymentPackageJarInputStream {
     
@@ -48,35 +45,32 @@ public class DeploymentPackageJarInputStream {
      * resources and their missing variations.
      */
     public static class Entry extends JarEntry {
-        private boolean               missing;
         private Attributes            attrs;
         private ByteArrayOutputStream buffer;
 
         private Entry(JarEntry je, ByteArrayOutputStream buffer) throws IOException {
             super(je);
+            if (null == buffer)
+                throw new IllegalArgumentException("The 'buffer' parameter cannot be null");
             attrs = je.getAttributes();
             this.buffer = buffer;
-            missing = false;
         }
         
         private Entry(String name, Attributes attrs) {
             super(name);
-            missing = isMissing(attrs);
             this.attrs = attrs;
         }
         
-        static boolean isMissing(Attributes attrs) {
+        private static boolean isMissing(Attributes attrs) {
+            if (null == attrs)
+                return false;
             String miss = attrs.getValue(DAConstants.MISSING);
             if (null != miss)
                 return Boolean.valueOf(miss).booleanValue();
             return false;
         }
         
-        public InputStream getInputStream() throws IOException {
-            return new ByteArrayInputStream(buffer.toByteArray());
-        }
-        
-        public static boolean isBundle(Attributes attrs) {
+        private static boolean isBundle(Attributes attrs) {
             if (null == attrs)
                 return false;
             String symbName = attrs.getValue(DAConstants.BUNDLE_SYMBOLIC_NAME);
@@ -84,8 +78,12 @@ public class DeploymentPackageJarInputStream {
             return null != symbName && null != version;
         }
         
+        public InputStream getInputStream() throws IOException {
+            return new ByteArrayInputStream(buffer.toByteArray());
+        }
+        
         public boolean isBundle() {
-            return isBundle(this.attrs);
+            return isBundle(attrs);
         }
         
         public boolean isCustomizerBundle() {
@@ -99,7 +97,7 @@ public class DeploymentPackageJarInputStream {
         }
         
         public boolean isMissing() {
-            return missing;
+            return isMissing(attrs);
         }
 
         public Attributes getAttributes() {
@@ -140,7 +138,7 @@ public class DeploymentPackageJarInputStream {
          * Returns a the list of cerificate chains. One chain is a 
          * String[].
          */
-        public List getCertificateStringChains() {
+        public List getCertificateChainStringArrays() {
             List l = getCertificateChains();
             List list = new LinkedList();
             for (Iterator iter = l.iterator(); iter.hasNext();) {
@@ -156,50 +154,50 @@ public class DeploymentPackageJarInputStream {
     
     private JarInputStream jis;
     
-    private Map            resourceNames;
-    private LinkedList     missingBundleNames = new LinkedList();
+    private Manifest       manifest;
+    //these Entries must precede resource entries in the subsequent nextEntry() calls
+    private LinkedList     missingBundleEntries = new LinkedList();
+
+    // this will contains the cerificates if there are any
+    private Entry          firstEntry;
     
     private Entry          actEntry;
     private boolean        fixPack;
-    private LinkedList     buffer = new LinkedList();
-    private List           certChains;
-    private List           certStringChains;
         
     public DeploymentPackageJarInputStream(InputStream is) 
     		throws IOException, DeploymentException 
     {
 	    this.jis = new JarInputStream(is);
+	    manifest = (Manifest) getManifest().clone();
 	    
-	    resourceNames = new HashMap(getManifest().getEntries());
-	    for (Iterator iter = resourceNames.keySet().iterator(); iter.hasNext();) {
+	    // these Entries must precede resource entries in the subsequent nextEntry() calls
+	    for (Iterator iter = manifest.getEntries().keySet().iterator(); iter.hasNext();) {
             String name = (String) iter.next();
-            Attributes as = (Attributes) resourceNames.get(name);
+            Attributes as = (Attributes) manifest.getEntries().get(name);
             if (Entry.isBundle(as) && Entry.isMissing(as))
-                missingBundleNames.add(name);
+                missingBundleEntries.add(name);
         }
 	    
-	    fixPack = (null != 
-	        	jis.getManifest().getMainAttributes().getValue(DAConstants.DP_FIXPACK));
-	    fillBuffer();
+	    fixPack = (null != manifest.getMainAttributes().getValue(DAConstants.DP_FIXPACK));
+	
+	    // this skips the "uninterested" part of the stream (manifest, sign. files, etc.)
+	    firstEntry = nextEntry();
 	}
     
-    public List getCertChains() {
-        return certChains;
+    public List getCertificateChains() {
+        if (null != firstEntry)
+            return firstEntry.getCertificateChains();
+        else
+            return null;
     }
     
-    public List getCertStringChains() {
-        return certStringChains;
+    public List getCertificateChainStringArrays() {
+        if (null != firstEntry)
+            return firstEntry.getCertificateChainStringArrays();
+        else
+            return null;
     }
 	
-    private void fillBuffer() throws IOException, DeploymentException {
-        Entry entry = readNextEntry();
-        if (null != entry) {
-            buffer.addLast(entry);
-            certChains = entry.getCertificateChains();
-            certStringChains = entry.getCertificateStringChains();
-        }
-    }
-
     /**
 	 * Gives back the next Entry in the dployment package.
 	 * @return The next Entry or <code>null</code> if there is no 
@@ -208,34 +206,30 @@ public class DeploymentPackageJarInputStream {
 	 * @throws DeploymentException
 	 */
     public Entry nextEntry() throws IOException, DeploymentException {
-        if (buffer.isEmpty())
-            return readNextEntry();
-        else
-            return (Entry) buffer.removeFirst();
-    }
-    
-    private Entry readNextEntry() throws IOException, DeploymentException {
         if (null != actEntry)
             return actEntry;
         
         JarEntry je = getNextJarEntry();
         
-        if ((null == je || !Entry.isBundle(je.getAttributes())) && !missingBundleNames.isEmpty()) {
-            String name = (String) missingBundleNames.removeFirst();
-            actEntry = new Entry(name, (Attributes) resourceNames.remove(name));
+        // these Entries must precede resource entries in the subsequent nextEntry() calls
+        if ((null == je || !Entry.isBundle(je.getAttributes())) && 
+                !missingBundleEntries.isEmpty()) 
+        {
+            String name = (String) missingBundleEntries.removeFirst();
+            actEntry = new Entry(name, (Attributes) manifest.getEntries().remove(name));
             return actEntry;
         }
         
         if (null == je) {
-            // The stream ended but we may have missing bundles/resources
-            Iterator it = resourceNames.keySet().iterator();
+            // The stream ended but we may have missing resources (in the manifest)
+            Iterator it = manifest.getEntries().keySet().iterator();
             if (it.hasNext()) {
                 String name = (String) it.next();
                 if (!fixPack)
                     throw new DeploymentException(DeploymentException.CODE_ORDER_ERROR,
                             "There is no data in the stream for \"Name\"-section: " +
                             name);
-                actEntry = new Entry(name, (Attributes) resourceNames.get(name));
+                actEntry = new Entry(name, (Attributes) manifest.getEntries().get(name));
                 
                 // remove to ensure that the sequence of Entries ends
                 it.remove();
@@ -254,7 +248,7 @@ public class DeploymentPackageJarInputStream {
             actEntry = new Entry(je, bos);
             
             // remove to ensure that the sequence of Entries ends
-            resourceNames.remove(je.getName());
+            manifest.getEntries().remove(je.getName());
         }
         return actEntry;
     }
