@@ -123,7 +123,8 @@ public class DmtAcl implements Cloneable {
      * @param principals The array of principals
      * @param permissions The array of permissions
      * @throws IllegalArgumentException if the length of the two arrays are not
-     *         the same or any array element is invalid
+     *         the same, if any array element is invalid, or if a principal
+     *         appears multiple times in the <code>principals</code> array
      */
     public DmtAcl(String[] principals, int[] permissions) {
         if(principals.length != permissions.length)
