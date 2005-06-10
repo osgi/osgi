@@ -38,12 +38,12 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.dmt.DmtAdminActivator;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
-import org.osgi.impl.service.dmt.api.RemoteAlertSender;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.RemoteAlertSender;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 
@@ -88,7 +88,7 @@ public abstract class DmtPluginTestCase extends TestCase {
 			if (filter.equals("(|(objectClass=org.osgi.service.dmt.DmtDataPlugin)(objectClass=org.osgi.service.dmt.DmtExecPlugin)(objectClass=org.osgi.service.dmt.DmtReadOnlyDataPlugin))")){
 				return new DummyFilter("plugin");
 			}
-			if (filter.equals("(objectClass=org.osgi.impl.service.dmt.api.RemoteAlertSender)")) {
+			if (filter.equals("(objectClass=org.osgi.service.dmt.RemoteAlertSender)")) {
 				return new DummyFilter("remotealertsender");
 			}
 			if (filter.equals("(objectClass=org.osgi.service.event.EventAdmin)")) {
@@ -105,7 +105,7 @@ public abstract class DmtPluginTestCase extends TestCase {
 				newServiceTracker = listener;
 				return;
 			}
-			if (filter.equals("(objectClass=org.osgi.impl.service.dmt.api.RemoteAlertSender)")) {
+			if (filter.equals("(objectClass=org.osgi.service.dmt.RemoteAlertSender)")) {
 				dmtRemoteAlertSenderServiceListener = listener;
 				return;
 			}
