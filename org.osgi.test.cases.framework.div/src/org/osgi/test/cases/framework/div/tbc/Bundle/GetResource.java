@@ -69,7 +69,6 @@ public class GetResource {
 		testGetResource0003();
 		testGetResource0004();
 		testGetResource0005();
-		testGetResource0006();
 	}
 
 	/**
@@ -164,33 +163,6 @@ public class GetResource {
 		}
 		catch (IllegalStateException ex) {
 			// This is an expected exception and can be ignored
-		}
-	}
-
-	/**
-	 * Test the method invocation using a unresolved bundle
-	 */
-	public void testGetResource0006() throws Exception {
-		Bundle bundle;
-
-		bundle = context.installBundle(tcHome + "tb10.jar");
-
-		if (bundle.getState() == Bundle.RESOLVED) {
-			throw new BundleTestException(
-					"Cannot test with a bundle in resolved state");
-		}
-
-		try {
-			bundle
-					.getResource("/org/osgi/test/cases/framework/div/tb10/Foo.class");
-			throw new BundleTestException(
-					"Testing the method invocation with unresolved bundle");
-		}
-		catch (IllegalStateException ex) {
-			// This is an expected exception and can be ignored
-		}
-		finally {
-			bundle.uninstall();
 		}
 	}
 

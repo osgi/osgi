@@ -788,21 +788,6 @@ public class TestControl extends DefaultTestBundleControl {
 				// Expected exception
 			}
 
-			// The loading class must be loaded by the parent class loader
-			clazz = tb8d.loadClass("javax.xml.parsers.DocumentBuilderFactory");
-			assertTrue("Checking the number of class methods", clazz
-					.getMethods().length != 0);
-
-			// Loading a class which does not exist when loaded by the parent
-			// class loader
-			try {
-				clazz = tb8d.loadClass("javax.xml.parsers.SomeClass");
-				fail("The classes belongs to package included in the boot delegation must be loaded only with the parent class loader");
-			}
-			catch (ClassNotFoundException ex) {
-				// Expected exception
-			}
-
 			tb8d.uninstall();
 		}
 		catch (BundleException ex) {
