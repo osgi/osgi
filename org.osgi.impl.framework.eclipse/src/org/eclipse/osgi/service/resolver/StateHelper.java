@@ -17,7 +17,7 @@ package org.eclipse.osgi.service.resolver;
  * <p>
  * Clients should not implement this interface.
  * </p>
- * 
+ * @since 3.1
  * @see PlatformAdmin#getStateHelper
  */
 public interface StateHelper {

@@ -44,6 +44,7 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 	/** Strings used to format other strings */
 	private String tab = "\t"; //$NON-NLS-1$
 	private String newline = "\r\n"; //$NON-NLS-1$
+	private boolean firstCommand = true;
 
 	/**
 	 * The maximum number of lines to print without user prompt.
@@ -66,13 +67,13 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 	}
 
 	/**
-		Get the next argument in the input.
-	
-		E.g. if the commandline is hello world, the _hello method
-		will get "world" as the first argument.
-	
-	    @return A string containing the next argument on the command line
-	*/
+	 Get the next argument in the input.
+	 
+	 E.g. if the commandline is hello world, the _hello method
+	 will get "world" as the first argument.
+	 
+	 @return A string containing the next argument on the command line
+	 */
 	public String nextArgument() {
 		if (tok == null || !tok.hasMoreElements()) {
 			return null;
@@ -99,17 +100,20 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 	}
 
 	/**
-		Execute a command line as if it came from the end user.
-	
-	    Searches the list of command providers using introspection until
-	    it finds one that contains a matching method.  It searches for a method
-	    with the name "_cmd" where cmd is the command to execute.  For example,
-	    for a command of "launch" execute searches for a method called "_launch".
-	
-	    @param cmd The name of the command to execute.
-	    @return The object returned by the method executed.
-	*/
+	 Execute a command line as if it came from the end user.
+	 
+	 Searches the list of command providers using introspection until
+	 it finds one that contains a matching method.  It searches for a method
+	 with the name "_cmd" where cmd is the command to execute.  For example,
+	 for a command of "launch" execute searches for a method called "_launch".
+	 
+	 @param cmd The name of the command to execute.
+	 @return The object returned by the method executed.
+	 */
 	public Object execute(String cmd) {
+		if (!firstCommand)
+			return innerExecute(cmd);
+		firstCommand = false;
 		resetLineCount();
 		Object retval = null;
 		// handle "more" command here
@@ -130,8 +134,8 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 			}
 			return retval;
 		}
-		Class[] parameterTypes = new Class[] { CommandInterpreter.class };
-		Object[] parameters = new Object[] { this };
+		Class[] parameterTypes = new Class[] {CommandInterpreter.class};
+		Object[] parameters = new Object[] {this};
 		boolean executed = false;
 		int size = commandProviders.length;
 		for (int i = 0; !executed && (i < size); i++) {
@@ -166,6 +170,16 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 			out.flush();
 		}
 		return retval;
+	}
+
+	private Object innerExecute(String cmd) {
+		if (cmd != null && cmd.length() > 0) {
+			CommandInterpreter intcp = new FrameworkCommandInterpreter(cmd, commandProviders, con);
+			String command = intcp.nextArgument();
+			if (command != null)
+				return intcp.execute(command);
+		}
+		return null;
 	}
 
 	/**
@@ -256,7 +270,7 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 					Throwable nested = (Throwable) method.invoke(t, null);
 
 					if ((nested != null) && (nested != t)) {
-						out.println(ConsoleMsg.CONSOLE_NESTED_EXCEPTION); 
+						out.println(ConsoleMsg.CONSOLE_NESTED_EXCEPTION);
 						printStackTrace(nested);
 					}
 				} catch (IllegalAccessException e) {
@@ -312,7 +326,7 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 			println(title);
 		}
 		for (i = 0; i < count; i++) {
-			println(" " + keys[i] + " = " + dic.get(keys[i]));  //$NON-NLS-1$//$NON-NLS-2$
+			println(" " + keys[i] + " = " + dic.get(keys[i])); //$NON-NLS-1$//$NON-NLS-2$
 		}
 		println();
 	}
@@ -360,7 +374,7 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 		int max = getMaximumLinesToScroll();
 		if (max > 0) {
 			if (currentLineCount >= max) {
-				out.print(ConsoleMsg.CONSOLE_MORE); 
+				out.print(ConsoleMsg.CONSOLE_MORE);
 				out.flush();
 				con.getInput(); // wait for user entry
 				resetLineCount(); //Reset the line counter for the 'more' prompt
@@ -369,22 +383,22 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 	}
 
 	/**
-		Answer a string (may be as many lines as you like) with help
-		texts that explain the command.
-	*/
+	 Answer a string (may be as many lines as you like) with help
+	 texts that explain the command.
+	 */
 	public String getHelp() {
 		StringBuffer help = new StringBuffer(256);
 		help.append(newline);
-		help.append(ConsoleMsg.CONSOLE_HELP_CONTROLLING_CONSOLE_HEADING); 
+		help.append(ConsoleMsg.CONSOLE_HELP_CONTROLLING_CONSOLE_HEADING);
 		help.append(newline);
 		help.append(tab);
 		help.append("more - "); //$NON-NLS-1$
-		help.append(ConsoleMsg.CONSOLE_HELP_MORE); 
+		help.append(ConsoleMsg.CONSOLE_HELP_MORE);
 		if (con.getUseSocketStream()) {
 			help.append(newline);
 			help.append(tab);
 			help.append("disconnect - "); //$NON-NLS-1$
-			help.append(ConsoleMsg.CONSOLE_HELP_DISCONNECT); 
+			help.append(ConsoleMsg.CONSOLE_HELP_DISCONNECT);
 		}
 		return help.toString();
 	}
@@ -394,7 +408,7 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 	 *
 	 */
 	public void _more() throws Exception {
-		if (confirm(ConsoleMsg.CONSOLE_CONFIRM_MORE, true)) { 
+		if (confirm(ConsoleMsg.CONSOLE_CONFIRM_MORE, true)) {
 			int lines = prompt(newline + ConsoleMsg.CONSOLE_MORE_ENTER_LINES, 24);
 			setMaximumLinesToScroll(lines);
 		} else {
@@ -425,7 +439,7 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 			}
 			print(" (" + ConsoleMsg.CONSOLE_CONFIRM_VALUES); //$NON-NLS-1$
 			if (defaultAnswer) {
-				print(ConsoleMsg.CONSOLE_Y + ") ");  //$NON-NLS-1$
+				print(ConsoleMsg.CONSOLE_Y + ") "); //$NON-NLS-1$
 			} else {
 				print(ConsoleMsg.CONSOLE_N + ") "); //$NON-NLS-1$
 			}
@@ -491,7 +505,7 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 				}
 			} catch (NumberFormatException e) {
 			}
-			println(ConsoleMsg.CONSOLE_INVALID_INPUT); 
+			println(ConsoleMsg.CONSOLE_INVALID_INPUT);
 		}
 		println(ConsoleMsg.CONSOLE_TOO_MUCH_INVALID_INPUT);
 		return defaultAnswer;

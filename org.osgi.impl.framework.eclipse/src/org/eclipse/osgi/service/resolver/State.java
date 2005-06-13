@@ -20,6 +20,10 @@ import org.osgi.framework.Version;
  * The state of a system as reported by a resolver. This includes all bundles
  * presented to the resolver relative to this state (i.e., both resolved and
  * unresolved).
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
  */
 public interface State {
 	/**
@@ -97,9 +101,11 @@ public interface State {
 
 	/**
 	 * Returns the bundle descriptor for the bundle with the given name and
-	 * version. null is returned if no such bundle is found in this state. If
-	 * the version argument is null then the bundle with the given name which
-	 * is resolve and/or has the highest version number is returned.
+	 * version. A null value is returned if no such bundle is found in this state.
+	 * A resolved bundle is always preferably returned over an unresolved bundle.
+	 * If multiple bundles with the same resolution state are available, the bundle
+	 * with the highest version number is returned if the <code>version<code> is
+	 * null.
 	 * 
 	 * @param symbolicName symbolic name of the bundle to query
 	 * @param version version of the bundle to query. null matches any bundle

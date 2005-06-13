@@ -28,6 +28,10 @@ import org.osgi.framework.FrameworkEvent;
 /**
  * The BundleFile API is used by Adaptors to read resources out of an 
  * installed Bundle in the Framework.
+ * <p>
+ * Clients may extend this class.
+ * </p>
+ * @since 3.1
  */
 abstract public class BundleFile {
 	static final SecureAction secureAction = new SecureAction();
@@ -140,10 +144,25 @@ abstract public class BundleFile {
 	 * A BundleFile that uses a ZipFile as it base file.
 	 */
 	public static class ZipBundleFile extends BundleFile {
+		/**
+		 * The bundle data
+		 */
 		protected BundleData bundledata;
+		/**
+		 * The zip file
+		 */
 		protected ZipFile zipFile;
+		/**
+		 * The closed flag
+		 */
 		protected boolean closed = true;
 
+		/**
+		 * Constructs a ZipBundle File
+		 * @param basefile the base file
+		 * @param bundledata the bundle data
+		 * @throws IOException
+		 */
 		public ZipBundleFile(File basefile, BundleData bundledata) throws IOException {
 			super(basefile);
 			if (!secureAction.exists(basefile))
@@ -152,6 +171,10 @@ abstract public class BundleFile {
 			this.closed = true;
 		}
 
+		/**
+		 * Checks if the zip file is open
+		 * @return true if the zip file is open
+		 */
 		protected boolean checkedOpen() {
 			try {
 				return getZipFile() != null;
@@ -162,10 +185,22 @@ abstract public class BundleFile {
 			}
 		}
 
+		/**
+		 * Opens the ZipFile for this bundle file
+		 * @return an open ZipFile for this bundle file
+		 * @throws IOException
+		 */
 		protected ZipFile basicOpen() throws IOException {
 			return secureAction.getZipFile(this.basefile);
 		}
 
+		/**
+		 * Returns an open ZipFile for this bundle file.  If an open
+		 * ZipFile does not exist then a new one is created and
+		 * returned.
+		 * @return an open ZipFile for this bundle
+		 * @throws IOException
+		 */
 		protected ZipFile getZipFile() throws IOException {
 			if (closed) {
 				zipFile = basicOpen();
@@ -187,6 +222,13 @@ abstract public class BundleFile {
 			return entry;
 		}
 
+		/**
+		 * Extracts a directory and all sub content to disk
+		 * @param dirName the directory name to extract
+		 * @return the File used to extract the content to.  A value
+		 * of <code>null</code> is returned if the directory to extract does 
+		 * not exist or if content extraction is not supported.
+		 */
 		protected File extractDirectory(String dirName) {
 			if (!checkedOpen())
 				return null;
@@ -391,6 +433,11 @@ abstract public class BundleFile {
 	 */
 	public static class DirBundleFile extends BundleFile {
 
+		/**
+		 * Constructs a DirBundleFile
+		 * @param basefile the base file
+		 * @throws IOException
+		 */
 		public DirBundleFile(File basefile) throws IOException {
 			super(basefile);
 			if (!secureAction.exists(basefile) || !secureAction.isDirectory(basefile)) {
@@ -496,6 +543,11 @@ abstract public class BundleFile {
 		BundleFile baseBundleFile;
 		String cp;
 
+		/**
+		 * Constructs a NestedDirBundleFile
+		 * @param baseBundlefile the base bundle file
+		 * @param cp
+		 */
 		public NestedDirBundleFile(BundleFile baseBundlefile, String cp) {
 			super(baseBundlefile.basefile);
 			this.baseBundleFile = baseBundlefile;
@@ -541,6 +593,10 @@ abstract public class BundleFile {
 		}
 	}
 
+	/**
+	 * Returns the base file for this BundleFile
+	 * @return the base file for this BundleFile
+	 */
 	public File getBaseFile() {
 		return basefile;
 	}

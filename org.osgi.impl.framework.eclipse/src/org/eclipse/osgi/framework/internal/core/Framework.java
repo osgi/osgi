@@ -128,7 +128,6 @@ public class Framework implements EventDispatcher, EventPublisher {
 			Profile.logTime("Framework.initialze()", "adapter initialized"); //$NON-NLS-1$//$NON-NLS-2$
 		try {
 			adaptor.initializeStorage();
-			adaptor.compactStorage();
 		} catch (IOException e) /* fatal error */{
 			e.printStackTrace();
 			throw new RuntimeException(e.getMessage());
@@ -865,8 +864,8 @@ public class Framework implements EventDispatcher, EventPublisher {
 			} catch (BundleException ee) {
 				publishFrameworkEvent(FrameworkEvent.ERROR, systemBundle, ee);
 			}
-			if (t instanceof RuntimeException)
-				throw (RuntimeException) t;
+			if (t instanceof SecurityException)
+				throw (SecurityException) t;
 			if (t instanceof BundleException)
 				throw (BundleException) t;
 			throw new BundleException(t.getMessage(), t);

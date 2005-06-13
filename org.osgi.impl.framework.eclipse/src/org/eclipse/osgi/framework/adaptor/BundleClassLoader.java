@@ -25,7 +25,10 @@ import java.util.Enumeration;
  * ClassLoaders that implement the <code>BundleClassLoader</code> interface
  * must use a <code>ClassLoaderDelegate</code> to delegate all class, resource
  * and native library lookups.
- * 
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
  * @see org.eclipse.osgi.framework.adaptor.BundleData#createClassLoader(ClassLoaderDelegate, BundleProtectionDomain, String[])
  */
 public interface BundleClassLoader /*extends ClassLoader*/{

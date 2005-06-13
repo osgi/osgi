@@ -12,6 +12,10 @@ package org.eclipse.osgi.framework.adaptor.core;
 
 /**
  * Provides the implementation of signed bundle support for the framework adaptor.
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1 
  */
 public interface SignedBundleSupport {
 	/**

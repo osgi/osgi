@@ -13,6 +13,10 @@ package org.eclipse.osgi.service.resolver;
 /**
  * A representation of one host bundle constraint as seen in a 
  * bundle manifest and managed by a state and resolver.
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
  */
 public interface HostSpecification extends VersionConstraint {
 	/**

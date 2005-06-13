@@ -18,6 +18,10 @@ import java.util.zip.ZipEntry;
 
 /**
  * A BundleEntry represents one entry of a BundleFile.
+ * <p>
+ * Clients may extend this class.
+ * </p>
+ * @since 3.1
  */
 public abstract class BundleEntry {
 	/**
@@ -169,6 +173,9 @@ public abstract class BundleEntry {
 		 * File for this entry.
 		 */
 		private File file;
+		/**
+		 * The name for this entry
+		 */
 		private String name;
 
 		/**
@@ -244,6 +251,9 @@ public abstract class BundleEntry {
 		 * ZipBundleFile for this entry.
 		 */
 		private BundleFile.ZipBundleFile bundleFile;
+		/**
+		 * The name for this entry
+		 */
 		private String name;
 
 		public DirZipBundleEntry(BundleFile.ZipBundleFile bundleFile, String name) {

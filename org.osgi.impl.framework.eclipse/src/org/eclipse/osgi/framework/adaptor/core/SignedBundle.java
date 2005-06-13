@@ -13,6 +13,15 @@ package org.eclipse.osgi.framework.adaptor.core;
 
 import java.io.IOException;
 
+/**
+ * The SignedBundle class is used to support bundle signing.  Every SignedBundle wraps a
+ * BundleFile object.  A SignedBundle uses the wrapped BundleFile to extract signitures
+ * and digents from and validates input streams for the wrapped BundleFile.
+ * <p>
+ * Clients may extend this class.
+ * </p>
+ * @since 3.1 
+ */
 public abstract class SignedBundle extends BundleFile {
 	/**
 	 * Sets the BundleFile for this singed bundle. It will extract

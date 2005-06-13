@@ -17,13 +17,42 @@ import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
+/**
+ * The StateManager manages the system state for the framework.  It also provides the implementation
+ * to the PlatformAdmin service.
+ * <p>
+ * Clients may extend this class.
+ * </p>
+ * @since 3.1
+ */
 public class StateManager implements PlatformAdmin, Runnable {
+	/**
+	 * General debug flag
+	 */
 	public static boolean DEBUG = false;
+	/**
+	 * Reader debug flag
+	 */
 	public static boolean DEBUG_READER = false;
+	/**
+	 * PlatformAdmin debug flag
+	 */
 	public static boolean DEBUG_PLATFORM_ADMIN = false;
+	/**
+	 * PlatformAdmin resolver debug flag
+	 */
 	public static boolean DEBUG_PLATFORM_ADMIN_RESOLVER = false;
+	/**
+	 * Monitor PlatformAdmin debug flag
+	 */
 	public static boolean MONITOR_PLATFORM_ADMIN = false;
+	/**
+	 * System property used to disable lazy state loading
+	 */
 	public static String PROP_NO_LAZY_LOADING = "osgi.noLazyStateLoading"; //$NON-NLS-1$
+	/**
+	 * System property used to specify to amount time before lazy data can be flushed from memory
+	 */
 	public static String PROP_LAZY_UNLOADING_TIME = "osgi.lazyStateUnloadingTime"; //$NON-NLS-1$
 	private long expireTime = 300000; // default to five minutes
 	private long readStartupTime;
@@ -37,11 +66,25 @@ public class StateManager implements PlatformAdmin, Runnable {
 	private long expectedTimeStamp;
 	private BundleContext context;
 
+	/**
+	 * Constructs a StateManager using the specified files and context
+	 * @param stateFile a file with the data required to persist in memory
+	 * @param lazyFile a file with the data that may be lazy loaded and can be flushed from memory
+	 * @param context the bundle context of the system bundle
+	 */
 	public StateManager(File stateFile, File lazyFile, BundleContext context) {
 		// a negative timestamp means no timestamp checking
 		this(stateFile, lazyFile, context, -1);
 	}
 
+	/**
+	 * Constructs a StateManager using the specified files and context
+	 * @param stateFile a file with the data required to persist in memory
+	 * @param lazyFile a file with the data that may be lazy loaded and can be flushed from memory
+	 * @param context the bundle context of the system bundle
+	 * @param expectedTimeStamp the expected timestamp of the persisted system state.  A negative
+	 * value indicates that no timestamp checking is done
+	 */
 	public StateManager(File stateFile, File lazyFile, BundleContext context, long expectedTimeStamp) {
 		this.stateFile = stateFile;
 		this.lazyFile = lazyFile;
@@ -50,6 +93,12 @@ public class StateManager implements PlatformAdmin, Runnable {
 		factory = new StateObjectFactoryImpl();
 	}
 
+	/**
+	 * Shutsdown the state manager.  If the timestamp of the system state has changed
+	 * @param stateFile
+	 * @param lazyFile
+	 * @throws IOException
+	 */
 	public void shutdown(File stateFile, File lazyFile) throws IOException {
 		BundleDescription[] removalPendings = systemState.getRemovalPendings();
 		if (removalPendings.length > 0)
@@ -153,18 +202,30 @@ public class StateManager implements PlatformAdmin, Runnable {
 		return lastTimeStamp;
 	}
 
+	/**
+	 * @see PlatformAdmin#getState(boolean)
+	 */
 	public State getState(boolean mutable) {
 		return mutable ? factory.createState(systemState) : new ReadOnlyState(systemState);
 	}
 
+	/**
+	 * @see PlatformAdmin#getState()
+	 */
 	public State getState() {
 		return getState(true);
 	}
 
+	/**
+	 * @see PlatformAdmin#getFactory()
+	 */
 	public StateObjectFactory getFactory() {
 		return factory;
 	}
 
+	/**
+	 * @see PlatformAdmin#commit(State)
+	 */
 	public synchronized void commit(State state) throws BundleException {
 		// no installer have been provided - commit not supported
 		if (installer == null)
@@ -187,6 +248,9 @@ public class StateManager implements PlatformAdmin, Runnable {
 			}
 	}
 
+	/**
+	 * @see PlatformAdmin#getResolver()
+	 */
 	public Resolver getResolver() {
 		return getResolver(false);
 	}
@@ -195,14 +259,26 @@ public class StateManager implements PlatformAdmin, Runnable {
 		return new org.eclipse.osgi.internal.module.ResolverImpl(context, checkPermissions);
 	}
 
+	/**
+	 * @see PlatformAdmin#getStateHelper()
+	 */
 	public StateHelper getStateHelper() {
 		return StateHelperImpl.getInstance();
 	}
 
+	/**
+	 * Returns the bundle installer.
+	 * @return the bundle installer
+	 */
 	public BundleInstaller getInstaller() {
 		return installer;
 	}
 
+	/**
+	 * Sets the bundle installer.  The bundle installer will be used when a state is commited
+	 * using the commit(State) method.
+	 * @param installer the bundle installer
+	 */
 	public void setInstaller(BundleInstaller installer) {
 		this.installer = installer;
 	}

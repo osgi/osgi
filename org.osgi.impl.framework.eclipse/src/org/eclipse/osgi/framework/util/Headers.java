@@ -27,6 +27,7 @@ import org.osgi.framework.BundleException;
  * <li>The String keys in the Dictionary are case-preserved,
  * but the get operation is case-insensitive.
  * </ul>
+ * @since 3.1
  */
 public class Headers extends Dictionary {
 	Object[] headers;

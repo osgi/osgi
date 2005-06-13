@@ -17,6 +17,10 @@ import java.security.ProtectionDomain;
 /**
  * 
  * This is a specialized ProtectionDomain for a bundle.
+ * <p>
+ * This class is not intended to be extended by clients.
+ * </p>
+ * @since 3.1
  */
 public abstract class BundleProtectionDomain extends ProtectionDomain {
 

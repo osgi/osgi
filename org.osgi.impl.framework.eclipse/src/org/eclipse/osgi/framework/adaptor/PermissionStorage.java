@@ -36,7 +36,10 @@ import java.util.Vector;
  *          // Take some error action.
  *      }
  * </pre>
- *
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
  */
 public interface PermissionStorage {
 	/**

@@ -18,6 +18,7 @@ import org.osgi.framework.FrameworkEvent;
  * FrameworkAdaptor and used by the Framework to log any error messages and
  * FrameworkEvents of type ERROR.  The FrameworkLog may persist the log messages 
  * to the filesystem or allow other ways of accessing the log information.
+ * @since 3.1
  */
 public interface FrameworkLog {
 	/**

@@ -14,8 +14,8 @@ package org.eclipse.osgi.framework.eventmgr;
 /**
  * This class manages a list of listeners.
  * Listeners may be added or removed as necessary.
+ * @since 3.1
  */
-
 public class EventListeners {
 	/**
 	 * The empty array singleton instance, returned by getListeners()

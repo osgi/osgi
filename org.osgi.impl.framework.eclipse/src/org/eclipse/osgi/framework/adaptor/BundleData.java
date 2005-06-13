@@ -27,6 +27,10 @@ import org.osgi.framework.BundleException;
  * FrameworkAdaptor for the bundle, creates data files for the bundle,
  * used to access bundle entries, manifest information, and getting and saving
  * metadata.
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
  */
 public interface BundleData {
 

@@ -389,7 +389,7 @@ public class PermissionAdminImpl implements PermissionAdmin {
 
 		/* now process the permissions.perm file, if it exists, and build the
 		 * restrictedPermissions using it. */
-		URL u = bundle.getEntry("META-INF/permissions.perm"); //$NON-NLS-1$
+		URL u = bundle.getEntry("OSGI-INF/permissions.perm"); //$NON-NLS-1$
 		if (u != null) {
 			try {
 				DataInputStream dis = new DataInputStream(u.openStream());

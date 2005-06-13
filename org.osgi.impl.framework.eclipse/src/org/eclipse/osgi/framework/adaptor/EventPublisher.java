@@ -16,6 +16,10 @@ import org.osgi.framework.Bundle;
 /**
  * The EventPublisher is used by FrameworkAdaptors to publish events to the
  * Framework.
+ * <p>
+ * This interface is not intended to be implemented by clients.
+ * </p>
+ * @since 3.1
  */
 public interface EventPublisher {
 

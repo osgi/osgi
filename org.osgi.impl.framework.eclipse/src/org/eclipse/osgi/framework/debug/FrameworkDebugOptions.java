@@ -19,6 +19,7 @@ import org.eclipse.osgi.service.debug.DebugOptions;
 
 /**
  * The DebugOptions class used by the framework to get debug options from.
+ * @since 3.1
  */
 public class FrameworkDebugOptions implements DebugOptions {
 	private Properties options = null;

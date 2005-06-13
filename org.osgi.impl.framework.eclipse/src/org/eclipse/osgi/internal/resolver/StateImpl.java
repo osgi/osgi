@@ -158,14 +158,44 @@ public abstract class StateImpl implements State {
 		return null;
 	}
 
-	// TODO: this does not comply with the spec	
 	public BundleDescription getBundle(String name, Version version) {
-		for (Iterator i = bundleDescriptions.iterator(); i.hasNext();) {
-			BundleDescription current = (BundleDescription) i.next();
-			if (name.equals(current.getSymbolicName()) && (version == null || current.getVersion().equals(version)))
-				return current;
+		BundleDescription[] allBundles = getBundles(name);
+		if (allBundles.length == 1)
+			return version == null || allBundles[0].getVersion().equals(version) ? allBundles[0] : null;
+
+		if (allBundles.length == 0)
+			return null;
+
+		BundleDescription unresolvedFound = null;
+		BundleDescription resolvedFound = null;
+		for (int i = 0; i < allBundles.length; i++) {
+			BundleDescription current = allBundles[i];
+			BundleDescription base;
+
+			if (current.isResolved())
+				base = resolvedFound;
+			else
+				base = unresolvedFound;
+
+			if (version == null || current.getVersion().equals(version)) {
+				if (base != null && (base.getVersion().compareTo(current.getVersion()) <= 0 || base.getBundleId() > current.getBundleId())) {
+					if (base == resolvedFound)
+						resolvedFound = current;
+					else
+						unresolvedFound = current;
+				} else {
+					if (current.isResolved())
+						resolvedFound = current;
+					else
+						unresolvedFound = current;
+				}
+
+			}
 		}
-		return null;
+		if (resolvedFound != null)
+			return resolvedFound;
+
+		return unresolvedFound;
 	}
 
 	public long getTimeStamp() {

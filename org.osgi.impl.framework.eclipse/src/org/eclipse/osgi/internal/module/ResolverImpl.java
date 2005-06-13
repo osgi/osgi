@@ -190,7 +190,10 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 
 	// Checks a bundle to make sure it is valid.  If this method returns false for
 	// a given bundle, then that bundle will not even be considered for resolution
-	private boolean isResolvable(BundleDescription bundle, Dictionary[] platformProperties) {
+	private boolean isResolvable(BundleDescription bundle, Dictionary[] platformProperties, ArrayList rejectedSingletons) {
+		// check if this is a rejected singleton
+		if (rejectedSingletons.contains(bundle))
+			return false;
 		ImportPackageSpecification[] imports = bundle.getImportPackages();
 		for (int i = 0; i < imports.length; i++) {
 			// Don't allow non-dynamic imports to specify wildcards
@@ -220,9 +223,25 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 	}
 
 	// Attach fragment to its host
-	private void attachFragment(ResolverBundle bundle) {
-		if (!bundle.isFragment() || !bundle.isResolvable())
+	private void attachFragment(ResolverBundle bundle, ArrayList rejectedSingletons) {
+		if (!bundle.isFragment() || !bundle.isResolvable() || rejectedSingletons.contains(bundle.getBundle()))
 			return;
+		if (bundle.getBundle().isSingleton()) {
+			BundleDescription bundleDesc = bundle.getBundle();
+			VersionSupplier[] sameName = resolverBundles.getArray(bundleDesc.getName());
+			if (sameName.length > 1) {
+				for (int j = 0; j < sameName.length; j++) {
+					BundleDescription sameNameDesc = sameName[j].getBundle();
+					if (sameName[j] == bundle || !sameNameDesc.isSingleton() || rejectedSingletons.contains(sameNameDesc))
+						continue; // Ignore the bundle we are selecting, non-singletons and rejected singletons
+					if (sameNameDesc.isResolved() || sameNameDesc.getVersion().compareTo(bundle.getBundle().getVersion()) > 0) {
+						rejectedSingletons.add(bundle.getBundle());
+						return;
+					}
+					rejectedSingletons.add(sameNameDesc);
+				}
+			}
+		}
 		BundleConstraint hostConstraint = bundle.getHost();
 		VersionSupplier[] hosts = resolverBundles.getArray(hostConstraint.getVersionConstraint().getName());
 		for (int i = 0; i < hosts.length; i++) {
@@ -248,14 +267,16 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 				if (rb != null)
 					unresolveBundle(rb, false);
 			}
+		// keep a list of rejected singltons
+		ArrayList rejectedSingletons = new ArrayList();
 		// attempt to resolve all unresolved bundles
 		ResolverBundle[] bundles = (ResolverBundle[]) unresolvedBundles.toArray(new ResolverBundle[unresolvedBundles.size()]);
-		resolveBundles(bundles, platformProperties);
-		if (selectSingletons(bundles)) {
+		resolveBundles(bundles, platformProperties, rejectedSingletons);
+		if (selectSingletons(bundles, rejectedSingletons)) {
 			// a singleton was unresolved as a result of selecting a different version
 			// try to resolve unresolved bundles again; this will attempt to use the selected singleton
 			bundles = (ResolverBundle[]) unresolvedBundles.toArray(new ResolverBundle[unresolvedBundles.size()]);
-			resolveBundles(bundles, platformProperties);
+			resolveBundles(bundles, platformProperties, rejectedSingletons);
 		}
 		if (DEBUG_WIRING)
 			printWirings();
@@ -263,7 +284,7 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			ResolverImpl.log("*** END RESOLUTION ***"); //$NON-NLS-1$
 	}
 
-	private void resolveBundles(ResolverBundle[] bundles, Dictionary[] platformProperties) {
+	private void resolveBundles(ResolverBundle[] bundles, Dictionary[] platformProperties, ArrayList rejectedSingletons) {
 		// Initialize the resolving and resolved bundle lists
 		resolvingBundles = new ArrayList(unresolvedBundles.size());
 		resolvedBundles = new ArrayList(unresolvedBundles.size());
@@ -271,11 +292,11 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		// First check that all the meta-data is valid for each unresolved bundle
 		// This will reset the resolvable flag for each bundle
 		for (int i = 0; i < bundles.length; i++)
-			bundles[i].setResolvable(isResolvable(bundles[i].getBundle(), platformProperties));
+			bundles[i].setResolvable(isResolvable(bundles[i].getBundle(), platformProperties, rejectedSingletons));
 
 		// First attach all fragments to the matching hosts
 		for (int i = 0; i < bundles.length; i++)
-			attachFragment(bundles[i]);
+			attachFragment(bundles[i], rejectedSingletons);
 
 		// Attempt to resolve all unresolved bundles
 		for (int i = 0; i < bundles.length; i++) {
@@ -320,30 +341,35 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		resolvedBundles = null;
 	}
 
-	private boolean selectSingletons(ResolverBundle[] bundles) {
+	private boolean selectSingletons(ResolverBundle[] bundles, ArrayList rejectedSingletons) {
 		boolean result = false;
 		for (int i = 0; i < bundles.length; i++) {
 			BundleDescription bundleDesc = bundles[i].getBundle();
-			if (!bundleDesc.isSingleton() || !bundleDesc.isResolved())
+			if (!bundleDesc.isSingleton() || !bundleDesc.isResolved() || rejectedSingletons.contains(bundleDesc))
 				continue;
 			VersionSupplier[] sameName = resolverBundles.getArray(bundleDesc.getName());
 			if (sameName.length > 1) { // Need to make a selection based off of num dependents
 				int numDeps = bundleDesc.getDependents().length;
 				for (int j = 0; j < sameName.length; j++) {
 					BundleDescription sameNameDesc = sameName[j].getBundle();
-					if (sameName[j] == bundles[i] || !sameNameDesc.isSingleton() || !sameNameDesc.isResolved())
+					if (sameName[j] == bundles[i] || !sameNameDesc.isSingleton() || !sameNameDesc.isResolved() || rejectedSingletons.contains(sameNameDesc))
 						continue; // Ignore the bundle we are selecting, non-singletons, and non-resolved
 					result = true;
 					if (sameNameDesc.getVersion().compareTo(bundleDesc.getVersion()) > 0 && (sameNameDesc.getDependents().length > 0 || numDeps == 0)) {
-						// this bundle is not selected; unresolve it and break out to the next bundle to process
-						unresolveBundle(bundles[i], false);
+						// this bundle is not selected; add it to the rejected list
+						if (!rejectedSingletons.contains(bundles[i].getBundle()))
+							rejectedSingletons.add(bundles[i].getBundle());
 						break;
 					}
-					// we selected a lower version; unresolve the higher one.
-					unresolveBundle((ResolverBundle) sameName[j], false);
+					// we did not select the sameNameDesc; add the bundle to the rejected list
+					if (!rejectedSingletons.contains(sameNameDesc))
+						rejectedSingletons.add(sameNameDesc);
 				}
 			}
 		}
+		// unresolve the rejected singletons
+		for (Iterator rejects = rejectedSingletons.iterator(); rejects.hasNext();)
+			unresolveBundle((ResolverBundle) bundleMapping.get(rejects.next()), false);
 		return result;
 	}
 

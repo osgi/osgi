@@ -22,6 +22,10 @@ import org.eclipse.osgi.framework.debug.Debug;
  * The AbstractClassLoader provides some basic functionality that all
  * BundleClassLoaders must provide.  It properly delegates resource and
  * class lookups to a parent classloader and the to a ClassLoaderDelegate.
+ * <p>
+ * Clients may extend this class.
+ * </p>
+ * @since 3.1
  */
 public abstract class AbstractClassLoader extends ClassLoader implements BundleClassLoader {
 	/**
@@ -179,14 +183,35 @@ public abstract class AbstractClassLoader extends ClassLoader implements BundleC
 		return findClass(classname);
 	}
 
+	/**
+	 * Returns a local entry for the specified path
+	 * @param path the entry path
+	 * @return a bundle entry for the specified path or <code>null</code> if the 
+	 * path does not exist
+	 */
+	// TODO should rename to findLocalEntry ??
 	abstract public Object findLocalObject(String path);
 
+	/**
+	 * Returns an Enumeration of local entries for the specified path.  The returned
+	 * Enumeration is ordered using the correct local search order of the classpath for
+	 * this classloader.
+	 * @param path the entry path
+	 * @return an enumeration of entries for the specified path or <code>null</code> if 
+	 * the path does not exist.
+	 */
 	abstract public Enumeration findLocalObjects(String path);
 
+	/**
+	 * @see BundleClassLoader#getDelegate()
+	 */
 	public ClassLoaderDelegate getDelegate() {
 		return delegate;
 	}
 
+	/**
+	 * @see BundleClassLoader#close()
+	 */
 	public void close() {
 		// do nothing
 	}

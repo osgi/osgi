@@ -31,24 +31,68 @@ import org.osgi.framework.*;
 /**
  * An abstract FrameworkAdaptor class that has default implementations that most
  * FrameworkAdaptor implementations can use.
+ * <p>
+ * Clients may extend this class.
+ * </p>
+ * @since 3.1
  */
 public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
+	/**
+	 * System property used to set the parent classloader type (boot is the default)
+	 */
 	public static final String PROP_PARENT_CLASSLOADER = "osgi.parentClassloader"; //$NON-NLS-1$
+	/**
+	 * System property used to specify the list of framework extension bundles
+	 */
 	public static final String PROP_FRAMEWORK_EXTENSIONS = "osgi.framework.extensions"; //$NON-NLS-1$
+	/**
+	 * System property used to specify the bundle singing support class name
+	 */
 	public static final String PROP_SIGNINGSUPPORT = "osgi.bundlesigning.support"; //$NON-NLS-1$
+	/**
+	 * A parent classloader type that specifies the application classloader
+	 */
 	public static final String PARENT_CLASSLOADER_APP = "app"; //$NON-NLS-1$
+	/**
+	 * A parent classloader type that specifies the extension classlaoder
+	 */
 	public static final String PARENT_CLASSLOADER_EXT = "ext"; //$NON-NLS-1$
+	/**
+	 * A parent classloader type that specifies the boot classlaoder
+	 */
 	public static final String PARENT_CLASSLOADER_BOOT = "boot"; //$NON-NLS-1$
+	/**
+	 * A parent classloader type that specifies the framework classlaoder
+	 */
 	public static final String PARENT_CLASSLOADER_FWK = "fwk"; //$NON-NLS-1$
+	/**
+	 * The bundle file name used to store bundles into the bundle storage area
+	 */
 	public static final String BUNDLEFILE_NAME = "bundlefile"; //$NON-NLS-1$
 
+	/**
+	 * flag to indicate a framework extension is being intialized
+	 */
 	public static final byte EXTENSION_INITIALIZE = 0x01;
+	/**
+	 * flag to indicate a framework extension is being installed
+	 */
 	public static final byte EXTENSION_INSTALLED = 0x02;
+	/**
+	 * flag to indicate a framework extension is being uninstalled
+	 */
 	public static final byte EXTENSION_UNINSTALLED = 0x04;
+	/**
+	 * flag to indicate a framework extension is being updated
+	 */
 	public static final byte EXTENSION_UPDATED = 0x08;
 
 	/** Name of the Adaptor manifest file */
 	protected final String ADAPTOR_MANIFEST = "ADAPTOR.MF"; //$NON-NLS-1$
+
+	/**
+	 * The default bundle signing support class name
+	 */
 	protected final String DEFAULT_SIGNEDBUNDLE_SUPPORT = "org.eclipse.osgi.framework.pkcs7verify.SignedBundleSupportImpl"; //$NON-NLS-1$
 
 	/**
@@ -104,6 +148,9 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	 */
 	protected File bundleStoreRootDir;
 
+	/**
+	 * The adaptor element factory
+	 */
 	protected AdaptorElementFactory elementFactory;
 
 	static {
@@ -124,11 +171,23 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 			bundleClassLoaderParent = new ParentClassLoader();
 	}
 
+	/**
+	 * The add URL method used to support framework extensions
+	 */
 	protected Method addURLMethod;
 
+	/**
+	 * The list of configured framework extensions
+	 */
 	protected String[] configuredExtensions;
 
+	/**
+	 * Indicates if signed bundles are supported
+	 */
 	protected boolean supportSignedBundles = true;
+	/**
+	 * The SingedBundleSupport object.  This is set if signed bundles are supported
+	 */
 	protected SignedBundleSupport signedBundleSupport = null;
 
 	/**
@@ -172,8 +231,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	}
 
 	/**
-	 * Initializes the ServiceRegistry, loads the properties for this
-	 * FrameworkAdaptor reads the adaptor manifest file.
+	 * @see FrameworkAdaptor#initialize(EventPublisher)
 	 */
 	public void initialize(EventPublisher eventPublisher) {
 		this.eventPublisher = eventPublisher;
@@ -201,18 +259,32 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	 */
 	public abstract AdaptorElementFactory getElementFactory();
 
+	/**
+	 * Saves the next bundle id to persist storage
+	 * @param value the next bundle id
+	 * @throws IOException
+	 */
 	protected abstract void persistNextBundleID(long value) throws IOException;
 
+	/**
+	 * @see FrameworkAdaptor#getFrameworkLog()
+	 */
 	public FrameworkLog getFrameworkLog() {
 		if (frameworkLog == null)
 			frameworkLog = createFrameworkLog();
 		return frameworkLog;
 	}
 
+	/**
+	 * @see FrameworkAdaptor#getState()
+	 */
 	public State getState() {
 		return stateManager.getSystemState();
 	}
 
+	/**
+	 * @see FrameworkAdaptor#getPlatformAdmin()
+	 */
 	public PlatformAdmin getPlatformAdmin() {
 		return stateManager;
 	}
@@ -300,6 +372,9 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		return (String) manifest.get(Constants.EXPORT_SERVICE);
 	}
 
+	/**
+	 * @see FrameworkAdaptor#getProvidePackages()
+	 */
 	public String getProvidePackages() {
 		if (manifest == null)
 			return null;
@@ -314,18 +389,31 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		return eventPublisher;
 	}
 
+	/**
+	 * Indicates if the framework is currently stopping
+	 * @return true if the framework is currently stopping
+	 */
 	public boolean isStopping() {
 		return stopping;
 	}
 
+	/**
+	 * @see FrameworkAdaptor#getInitialBundleStartLevel()
+	 */
 	public int getInitialBundleStartLevel() {
 		return initialBundleStartLevel;
 	}
 
+	/**
+	 * @see FrameworkAdaptor#setInitialBundleStartLevel(int)
+	 */
 	public void setInitialBundleStartLevel(int value) {
 		initialBundleStartLevel = value;
 	}
 
+	/**
+	 * @see FrameworkAdaptor#getBundleWatcher()
+	 */
 	public BundleWatcher getBundleWatcher() {
 		return null;
 	}
@@ -411,6 +499,10 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		throw new IOException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION);
 	}
 
+	/**
+	 * Initializes the root bundle data directory
+	 *
+	 */
 	protected void initDataRootDir() {
 		dataRootDir = getBundleStoreRootDir();
 	}
@@ -444,11 +536,14 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	}
 
 	/**
-	 * 
-	 *
+	 * Creates a framework log
+	 * @return a framework log
 	 */
 	abstract protected FrameworkLog createFrameworkLog();
 
+	/**
+	 * @see FrameworkAdaptor#createSystemBundleData()
+	 */
 	public BundleData createSystemBundleData() throws BundleException {
 		return new SystemBundleData(this);
 	}
@@ -539,10 +634,19 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		return findaddURLMethod(clazz.getSuperclass());
 	}
 
+	/**
+	 * @see FrameworkAdaptor#getBundleClassLoaderParent()
+	 */
 	public ClassLoader getBundleClassLoaderParent() {
 		return bundleClassLoaderParent;
 	}
 
+	/**
+	 * Processes an extension bundle
+	 * @param bundleData the extension bundle data 
+	 * @param type the type of extension bundle
+	 * @throws BundleException on any errors or if the extension bundle type is not supported
+	 */
 	protected void processExtension(BundleData bundleData, byte type) throws BundleException {
 		if ((bundleData.getType() & BundleData.TYPE_FRAMEWORK_EXTENSION) != 0) {
 			validateExtension(bundleData);
@@ -553,6 +657,11 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		}
 	}
 
+	/**
+	 * Validates the extension bundle metadata
+	 * @param bundleData the extension bundle data
+	 * @throws BundleException if the extension bundle metadata is invalid
+	 */
 	protected void validateExtension(BundleData bundleData) throws BundleException {
 		Dictionary extensionManifest = bundleData.getManifest();
 		if (extensionManifest.get(Constants.IMPORT_PACKAGE) != null)
@@ -563,6 +672,12 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 			throw new BundleException(NLS.bind(AdaptorMsg.ADAPTOR_EXTENSION_NATIVECODE_ERROR, bundleData.getLocation()));
 	}
 
+	/**
+	 * Processes a framework extension bundle
+	 * @param bundleData the extension bundle data
+	 * @param type the type of extension bundle
+	 * @throws BundleException on errors or if framework extensions are not supported
+	 */
 	protected void processFrameworkExtension(BundleData bundleData, byte type) throws BundleException {
 		if (addURLMethod == null)
 			throw new BundleException("Framework extensions are not supported.", new UnsupportedOperationException()); //$NON-NLS-1$
@@ -595,6 +710,10 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		}
 	}
 
+	/**
+	 * Returns a list of configured extensions
+	 * @return a list of configured extensions
+	 */
 	protected String[] getConfiguredExtensions() {
 		if (configuredExtensions != null)
 			return configuredExtensions;
@@ -606,10 +725,21 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		return configuredExtensions;
 	}
 
+	/**
+	 * Processes a boot extension bundle
+	 * @param bundleData the extension bundle data
+	 * @param type the type of extension bundle
+	 * @throws BundleException on errors or if boot extensions are not supported
+	 */
 	protected void processBootExtension(BundleData bundleData, byte type) throws BundleException {
 		throw new BundleException("Boot classpath extensions are not supported.", new UnsupportedOperationException()); //$NON-NLS-1$
 	}
 
+	/**
+	 * Returns a list of classpath files for an extension bundle
+	 * @param bundleData the bundle data for an extension bundle
+	 * @return a list of classpath files for an extension bundle
+	 */
 	protected File[] getExtensionFiles(BundleData bundleData) {
 		File[] files = null;
 		try {
@@ -628,10 +758,17 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		return files;
 	}
 
+	/**
+	 * @see FrameworkAdaptor#handleRuntimeError(Throwable)
+	 */
 	public void handleRuntimeError(Throwable error) {
 		// do nothing by default.
 	}
 
+	/**
+	 * Returns the root data directory
+	 * @return the root data directory
+	 */
 	public File getDataRootDir() {
 		if (dataRootDir == null)
 			initDataRootDir();
@@ -655,6 +792,13 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		return new BundleFile.ZipBundleFile(basefile, bundledata);
 	}
 
+	/**
+	 * Creates a base bundle file for a bundle
+	 * @param basefile the base file object for the bundle
+	 * @param bundledata the bundle data for the bundle
+	 * @return a base bundle file for a bundle
+	 * @throws IOException
+	 */
 	public BundleFile createBaseBundleFile(File basefile, BundleData bundledata) throws IOException {
 		BundleFile base = createBundleFile(basefile, bundledata);
 		if (System.getSecurityManager() == null || !supportSignedBundles)
@@ -667,6 +811,9 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		return signedBundle;
 	}
 
+	/**
+	 * @see FrameworkAdaptor#matchDNChain(String, String[])
+	 */
 	public boolean matchDNChain(String pattern, String[] dnChain) {
 		SignedBundleSupport support = getSignedBundleSupport();
 		if (support != null)
@@ -674,6 +821,12 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		return false;
 	}
 
+	/**
+	 * Returns the SignedBundleSupport object.  If signed bundles are not
+	 * supported then <code>null</code> is returned.
+	 * @return the SignedBundleSupport object or <code>null</code> if signed bundles
+	 * are not supported.
+	 */
 	protected SignedBundleSupport getSignedBundleSupport() {
 		if (System.getSecurityManager() == null || !supportSignedBundles)
 			return null;
@@ -695,21 +848,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	}
 
 	/**
-	 * Prepare to install a bundle from a URLConnection.
-	 * <p>To complete the install,
-	 * begin and then commit
-	 * must be called on the returned <code>BundleOperation</code> object.
-	 * If either of these methods throw a BundleException
-	 * or some other error occurs,
-	 * then undo must be called on the <code>BundleOperation</code> object
-	 * to undo the change to persistent storage.
-	 *
-	 * @param location Bundle location.
-	 * @param source URLConnection from which the bundle may be read.
-	 * Any InputStreams returned from the source
-	 * (URLConnections.getInputStream) must be closed by the
-	 * <code>BundleOperation</code> object.
-	 * @return BundleOperation object to be used to complete the install.
+	 * @see FrameworkAdaptor#installBundle(String, URLConnection)
 	 */
 	public BundleOperation installBundle(final String location, final URLConnection source) {
 		return (new BundleOperation() {
@@ -890,6 +1029,10 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		}
 	}
 
+	/**
+	 * Returns the bundle store root directory
+	 * @return the bundle store root directory
+	 */
 	public File getBundleStoreRootDir() {
 		return bundleStoreRootDir;
 	}
@@ -902,29 +1045,28 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	 * Dictionary containing permission data 
 	 */
 	protected PermissionStorage permissionStore;
+	/**
+	 * inidicates that the bundle storage should be reset
+	 */
 	protected boolean reset = false;
 	/**
 	 * directory containing data directories for installed bundles 
 	 */
 	protected File dataRootDir;
+	/**
+	 * The name of the bundle data directory
+	 */
 	public static final String DATA_DIR_NAME = "data";//$NON-NLS-1$
+	/**
+	 * Indicates that the state has become invalid as a result of 
+	 * installing/updating/uninstalling a bundle before the state mananger is 
+	 * created
+	 */
 	protected boolean invalidState = false;
 
 	/**
-	 * Prepare to update a bundle from a URLConnection.
-	 * <p>To complete the update,
-	 * modify and then commit
-	 * will be called on the returned BundleStorage object.
-	 * If either of these methods throw a BundleException
-	 * or some other error occurs,
-	 * then undo will be called on the BundleStorage object
-	 * to undo the change to persistent storage.
-	 *
-	 * @param bundledata BundleData to update.
-	 * @param source URLConnection from which the bundle may be read.
-	 * @return BundleOperation object to be used to complete the update.
+	 * @see FrameworkAdaptor#updateBundle(BundleData, URLConnection)
 	 */
-
 	public BundleOperation updateBundle(final org.eclipse.osgi.framework.adaptor.BundleData bundledata, final URLConnection source) {
 		return (new BundleOperation() {
 			private AbstractBundleData data;
@@ -1080,6 +1222,11 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		});
 	}
 
+	/**
+	 * Iterates over the bundles in a state and removes any bundles in state that
+	 * do not exist in the framework
+	 * @param state the state to check
+	 */
 	protected void checkSystemState(State state) {
 		BundleDescription[] bundles = state.getBundles();
 		if (bundles == null)
@@ -1129,17 +1276,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	}
 
 	/**
-	 * Prepare to uninstall a bundle.
-	 * <p>To complete the uninstall,
-	 * modify and then commit
-	 * will be called on the returned BundleStorage object.
-	 * If either of these methods throw a BundleException
-	 * or some other error occurs,
-	 * then undo will be called on the BundleStorage object
-	 * to undo the change to persistent storage.
-	 *
-	 * @param bundledata BundleData to uninstall.
-	 * @return BundleOperation object to be used to complete the uninstall.
+	 * @see FrameworkAdaptor#uninstallBundle(BundleData)
 	 */
 	public BundleOperation uninstallBundle(final org.eclipse.osgi.framework.adaptor.BundleData bundledata) {
 		return (new BundleOperation() {
@@ -1231,7 +1368,10 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 
 	/**
 	 * Register a service object.
-	 *
+	 * @param name the service class name
+	 * @param service the service object
+	 * @param bundle the registering bundle
+	 * @return the service registration object
 	 */
 	protected ServiceRegistration register(String name, Object service, Bundle bundle) {
 		Hashtable properties = new Hashtable(7);
@@ -1280,17 +1420,14 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		initializeMetadata();
 	}
 
+	/**
+	 * Initialize the metadata for the adaptor
+	 * @throws IOException
+	 */
 	abstract protected void initializeMetadata() throws IOException;
 
 	/**
-	 * Returns the PermissionStorage object which will be used to
-	 * to manage the permission data.
-	 *
-	 * <p>The PermissionStorage object will store permission data
-	 * in the "permdata" subdirectory of the bundle storage directory
-	 * assigned by <tt>initializeStorage</tt>.
-	 *
-	 * @return The PermissionStorage object for the DefaultAdaptor.
+	 * @see FrameworkAdaptor#getPermissionStorage()
 	 */
 	public org.eclipse.osgi.framework.adaptor.PermissionStorage getPermissionStorage() throws IOException {
 		if (permissionStore == null) {
@@ -1305,10 +1442,7 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 	}
 
 	/**
-	 * Clean up the persistent storage.
-	 *
-	 * <p>Cleans up any deferred deletions in persistent storage.
-	 *
+	 * @see FrameworkAdaptor#compactStorage()
 	 */
 	public void compactStorage() {
 		if (canWrite())
@@ -1367,6 +1501,10 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		}
 	}
 
+	/**
+	 * Returns the metadata file for the adaptor
+	 * @return the metadata file for the adaptor
+	 */
 	protected File getMetaDataFile() {
 		return new File(getBundleStoreRootDir(), ".framework"); //$NON-NLS-1$
 	}
@@ -1381,6 +1519,12 @@ public abstract class AbstractFrameworkAdaptor implements FrameworkAdaptor {
 		}
 	}
 
+	/**
+	 * Updates the state mananager with an updated/installed/uninstalled bundle
+	 * @param bundleData the modified bundle
+	 * @param type the type of modification
+	 * @throws BundleException
+	 */
 	protected void updateState(BundleData bundleData, int type) throws BundleException {
 		if (stateManager == null) {
 			invalidState = true;

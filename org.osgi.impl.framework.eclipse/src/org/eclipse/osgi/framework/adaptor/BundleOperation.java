@@ -40,7 +40,10 @@ import org.osgi.framework.BundleException;
  *      }
  *      return bundle;
  * </pre>
- *
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
  */
 public abstract interface BundleOperation {
 

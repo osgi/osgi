@@ -26,6 +26,10 @@ import org.osgi.framework.FrameworkEvent;
 /**
  * A concrete implementation of BundleClassLoader.  This implementation 
  * consolidates all Bundle-ClassPath entries into a single ClassLoader.
+ * <p>
+ * Clients may extend this class.
+ * </p>
+ * @since 3.1
  */
 public class DefaultClassLoader extends AbstractClassLoader {
 	/**
@@ -49,6 +53,9 @@ public class DefaultClassLoader extends AbstractClassLoader {
 	 */
 	protected ClasspathEntry[] classpathEntries;
 
+	/**
+	 * A list of fragment classpaths for this classloader
+	 */
 	protected Vector fragClasspaths; //TODO This should be an array or an arraylist if the synchronization is not required
 
 	/**
@@ -78,22 +85,15 @@ public class DefaultClassLoader extends AbstractClassLoader {
 		}
 	}
 
+	/**
+	 * @see org.eclipse.osgi.framework.adaptor.BundleClassLoader#initialize()
+	 */
 	public void initialize() {
 		classpathEntries = buildClasspath(hostclasspath, hostdata, hostdomain);
 	}
 
 	/**
-	 * Attaches the BundleData for a fragment to this BundleClassLoader.
-	 * The Fragment BundleData resources must be appended to the end of
-	 * this BundleClassLoader's classpath.  Fragment BundleData resources 
-	 * must be searched ordered by Bundle ID's.  
-	 * @param bundledata The BundleData of the fragment.
-	 * @param domain The ProtectionDomain of the resources of the fragment.
-	 * Any classes loaded from the fragment's BundleData must belong to this
-	 * ProtectionDomain.
-	 * @param classpath An array of Bundle-ClassPath entries to
-	 * use for loading classes and resources.  This is specified by the 
-	 * Bundle-ClassPath manifest entry of the fragment.
+	 * @see org.eclipse.osgi.framework.adaptor.BundleClassLoader#attachFragment(BundleData, ProtectionDomain, String[])
 	 */
 	public void attachFragment(org.eclipse.osgi.framework.adaptor.BundleData bundledata, ProtectionDomain domain, String[] classpath) {
 		AbstractBundleData abstractbundledata = (AbstractBundleData) bundledata;
@@ -136,14 +136,26 @@ public class DefaultClassLoader extends AbstractClassLoader {
 		fragClasspaths.addElement(fragClasspath);
 	}
 
+	/**
+	 * Returns a string of the symbolic name and version
+	 * @return a string of the symbolic name and version
+	 */
 	protected String getBundleSymbolicName() {
 		return hostdata.getSymbolicName() + "_" + hostdata.getVersion(); //$NON-NLS-1$
 	}
 
+	/**
+	 * Returns the host BundleData for this classloader
+	 * @return the host BundleData for this classloader
+	 */
 	public AbstractBundleData getHostData() {
 		return hostdata;
 	}
 
+	/**
+	 * Returns a list of FragmentClasspath objects for the currently attached fragments
+	 * @return a list of FragmentClasspath objects for the currently attached fragments
+	 */
 	public FragmentClasspath[] getFragClasspaths() {
 		if (fragClasspaths == null)
 			return null;
@@ -174,6 +186,14 @@ public class DefaultClassLoader extends AbstractClassLoader {
 		return null;
 	}
 
+	/**
+	 * Gets a ClasspathEntry object for the specified classpath entry which is external to the
+	 * bundledata.
+	 * @param cp The ClassPath entry to get the ClasspathEntry for.
+	 * @param bundledata The BundleData that the ClassPath entry is for.
+	 * @param domain The ProtectionDomain for the ClassPath entry.
+	 * @return The ClasspathEntry object for the ClassPath entry.
+	 */
 	protected ClasspathEntry getExternalClassPath(String cp, AbstractBundleData bundledata, ProtectionDomain domain) {
 		File file = new File(cp);
 		if (!file.isAbsolute())
@@ -184,6 +204,12 @@ public class DefaultClassLoader extends AbstractClassLoader {
 		return null;
 	}
 
+	/**
+	 * Creates a BundleFile object for a classpath entry
+	 * @param file the file object used to create a BundleFile
+	 * @param bundledata the bundle data
+	 * @return a BundleFile object for a classpath entry
+	 */
 	protected BundleFile createBundleFile(File file, AbstractBundleData bundledata) {
 		if (file == null || !file.exists())
 			return null;
@@ -195,6 +221,9 @@ public class DefaultClassLoader extends AbstractClassLoader {
 		return null;
 	}
 
+	/**
+	 * @see ClassLoader#findClass(java.lang.String)
+	 */
 	protected synchronized Class findClass(String name) throws ClassNotFoundException {
 		// must call findLoadedClass here even if it was called earlier,
 		// the findLoadedClass and defineClass calls must be atomic
@@ -321,6 +350,16 @@ public class DefaultClassLoader extends AbstractClassLoader {
 		}
 	}
 
+	/**
+	 * Defines a class for this classloader
+	 * @param name the name of the class
+	 * @param classbytes the class bytes
+	 * @param off the offset in the class bytes array
+	 * @param len the legth of the class bytes
+	 * @param classpathEntry the classpath entry used for the class
+	 * @return a loaded Class object
+	 * @throws ClassFormatError if the class has a format error
+	 */
 	protected Class defineClass(String name, byte[] classbytes, int off, int len, ClasspathEntry classpathEntry) throws ClassFormatError {
 		if (name != null && name.startsWith("java.")) { //$NON-NLS-1$
 			// To work around the security issue that prevents any
@@ -331,6 +370,9 @@ public class DefaultClassLoader extends AbstractClassLoader {
 		return defineClass(name, classbytes, off, len, classpathEntry.getProtectionDomain());
 	}
 
+	/**
+	 * @see ClassLoader#findResource(java.lang.String)
+	 */
 	protected URL findResource(String name) {
 		URL result = null;
 		for (int i = 0; i < classpathEntries.length; i++) {
@@ -405,6 +447,9 @@ public class DefaultClassLoader extends AbstractClassLoader {
 		return null;
 	}
 
+	/**
+	 * @see AbstractClassLoader#findLocalObject(String)
+	 */
 	public Object findLocalObject(String object) {
 		BundleEntry result = null;
 		for (int i = 0; i < classpathEntries.length; i++) {
@@ -431,6 +476,9 @@ public class DefaultClassLoader extends AbstractClassLoader {
 		return null;
 	}
 
+	/**
+	 * @see AbstractClassLoader#findLocalObjects(String)
+	 */
 	public Enumeration findLocalObjects(String object) {
 		Vector objects = new Vector(6); // use a Vector instead of ArrayList because we need an enumeration
 		for (int i = 0; i < classpathEntries.length; i++) {
@@ -457,12 +505,19 @@ public class DefaultClassLoader extends AbstractClassLoader {
 		return null;
 	}
 
+	/**
+	 * Looks in the specified BundleFile for the entry.
+	 * @param object The name of the entry to find.
+	 * @param bundleFile The BundleFile to look in.
+	 * @return a bundle entry for the specified entry or <code>null</code> if the 
+	 * entry does not exist
+	 */
 	protected BundleEntry findObjectImpl(String object, BundleFile bundleFile) {
 		return bundleFile.getEntry(object);
 	}
 
 	/**
-	 * Closes all the BundleFile objects for this BundleClassLoader.
+	 * @see org.eclipse.osgi.framework.adaptor.BundleClassLoader#close()
 	 */
 	public void close() {
 		super.close();
@@ -486,6 +541,13 @@ public class DefaultClassLoader extends AbstractClassLoader {
 		}
 	}
 
+	/**
+	 * Builds the classpath entry objects for this classloader
+	 * @param classpath a list of classpath entries to build
+	 * @param bundledata the bundle data
+	 * @param domain the ProtectionDomain for the classpath entry objects
+	 * @return
+	 */
 	protected ClasspathEntry[] buildClasspath(String[] classpath, AbstractBundleData bundledata, ProtectionDomain domain) {
 		ArrayList result = new ArrayList(classpath.length);
 		// if in dev mode add the dev entries
@@ -496,6 +558,13 @@ public class DefaultClassLoader extends AbstractClassLoader {
 		return (ClasspathEntry[]) result.toArray(new ClasspathEntry[result.size()]);
 	}
 
+	/**
+	 * Adds the default development classpath entries
+	 * @param result a list of current classpath entries.  This list is modified by this method to add
+	 * a new classpath entry.
+	 * @param bundledata the bundle data
+	 * @param domain the ProtectionDomain for the classpath entry
+	 */
 	protected void addDefaultDevEntries(ArrayList result, AbstractBundleData bundledata, ProtectionDomain domain) {
 		String[] devClassPath = !DevClassPathHelper.inDevelopmentMode() ? null : DevClassPathHelper.getDevClassPath(bundledata.getSymbolicName());
 		if (devClassPath == null)
@@ -504,6 +573,14 @@ public class DefaultClassLoader extends AbstractClassLoader {
 			findClassPathEntry(result, devClassPath[i], bundledata, domain);
 	}
 
+	/**
+	 * Finds a classpath entry for this classloader
+	 * @param result a list of current classpath entries.  This list is modified by this method to add
+	 * a new classpath entry.
+	 * @param entry the path to the entry to find
+	 * @param bundledata the bundle data
+	 * @param domain the ProtectionDomain for the classpath entry
+	 */
 	protected void findClassPathEntry(ArrayList result, String entry, AbstractBundleData bundledata, ProtectionDomain domain) {
 		if (!addClassPathEntry(result, entry, bundledata, domain)) {
 			String[] devCP = !DevClassPathHelper.inDevelopmentMode() ? null : DevClassPathHelper.getDevClassPath(bundledata.getSymbolicName());
@@ -514,6 +591,16 @@ public class DefaultClassLoader extends AbstractClassLoader {
 		}
 	}
 
+	/**
+	 * Adds a classpath entry to this classloader
+	 * @param result a list of current classpath entries.  This list is modified by this method to add
+	 * a new classpath entry.
+	 * @param entry the path to the entry to add
+	 * @param bundledata the bundle data
+	 * @param domain the ProtectionDomain for the classpath entry
+	 * @return true if a classpath entry was added to the result; false if the classpath entry could
+	 * not be found
+	 */
 	protected boolean addClassPathEntry(ArrayList result, String entry, AbstractBundleData bundledata, ProtectionDomain domain) {
 		if (entry.equals(".")) { //$NON-NLS-1$
 			result.add(createClassPathEntry(bundledata.getBaseBundleFile(), domain));

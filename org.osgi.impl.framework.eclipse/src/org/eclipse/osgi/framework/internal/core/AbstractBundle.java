@@ -749,8 +749,8 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 				/* if we fail to revert then we are in big trouble */
 				framework.publishFrameworkEvent(FrameworkEvent.ERROR, this, ee);
 			}
-			if (t instanceof RuntimeException)
-				throw (RuntimeException) t;
+			if (t instanceof SecurityException)
+				throw (SecurityException) t;
 			if (t instanceof BundleException)
 				throw (BundleException) t;
 			throw new BundleException(t.getMessage(), t);

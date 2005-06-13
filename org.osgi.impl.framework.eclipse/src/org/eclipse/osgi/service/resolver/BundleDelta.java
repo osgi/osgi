@@ -13,6 +13,10 @@ package org.eclipse.osgi.service.resolver;
 /**
  * BundleDeltas represent the changes related to an individual bundle between two
  * states.
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
  */
 public interface BundleDelta extends Comparable {
 

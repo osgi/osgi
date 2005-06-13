@@ -15,6 +15,10 @@ import org.osgi.framework.Bundle;
 /**
  * Contains information about activated bundles and acts as the main 
  * entry point for logging plugin activity.
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
  */
 public interface BundleWatcher {
 	/**

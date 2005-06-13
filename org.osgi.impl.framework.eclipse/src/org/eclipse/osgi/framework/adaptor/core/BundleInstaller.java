@@ -17,7 +17,10 @@ import org.osgi.framework.BundleException;
  * A bundle installer allows the platform admin implementation to 
  * delegate the behavior of installing/uninstalling bundles to 
  * another object.
- *  
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1 
  * @see StateManager#commit 
  */
 public interface BundleInstaller {

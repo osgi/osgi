@@ -353,13 +353,14 @@ public class BundleLoader implements ClassLoaderDelegate {
 	Class findClass(String name, boolean checkParent) throws ClassNotFoundException {
 		if (Debug.DEBUG && Debug.DEBUG_LOADER)
 			Debug.println("BundleLoader[" + this + "].loadBundleClass(" + name + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String pkgName = getPackageName(name);
 		// follow the OSGi delegation model
 		if (checkParent && parent != null) {
 			if (name.startsWith(JAVA_PACKAGE))
 				// 1) if startsWith "java." delegate to parent and terminate search
 				// we want to throw ClassNotFoundExceptions if a java.* class cannot be loaded from the parent.
 				return parent.loadClass(name);
-			else if (isBootDelegationPackage(name))
+			else if (isBootDelegationPackage(pkgName))
 				// 2) if part of the bootdelegation list then delegate to parent and continue of failure
 				try {
 					return parent.loadClass(name);
@@ -368,7 +369,6 @@ public class BundleLoader implements ClassLoaderDelegate {
 				}
 		}
 
-		String pkgName = getPackageName(name);
 		Class result = null;
 		// 3) search the imported packages
 		PackageSource source = findImportedSource(pkgName);

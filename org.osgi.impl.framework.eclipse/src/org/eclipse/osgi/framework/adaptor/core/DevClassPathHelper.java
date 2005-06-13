@@ -16,6 +16,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
+/**
+ * This class provides helper methods to support developement classpaths.
+ * @since 3.1
+ */
 public final class DevClassPathHelper {
 	static private boolean inDevelopmentMode = false;
 	static private String[] devDefaultClasspath;
@@ -49,12 +53,24 @@ public final class DevClassPathHelper {
 		return result;
 	}
 
+	/**
+	 * Returns a list of classpath elements for the specified bundle symbolic name.
+	 * @param id a bundle symbolic name to get the development classpath for
+	 * @param properties a Dictionary of properties to use or <code>null</code> if
+	 * the default develoment classpath properties should be used
+	 * @return a list of development classpath elements
+	 */
 	public static String[] getDevClassPath(String id, Dictionary properties) {
 		if (properties == null)
 			return getDevClassPath(id, devProperties, devDefaultClasspath);
 		return getDevClassPath(id, properties, getArrayFromList((String) properties.get("*"))); //$NON-NLS-1$
 	}
 
+	/**
+	 * Returns a list of classpath elements for the specified bundle symbolic name.
+	 * @param id a bundle symbolic name to get the development classpath for
+	 * @return a list of development classpath elements
+	 */
 	public static String[] getDevClassPath(String id) {
 		return getDevClassPath(id, null);
 	}
@@ -78,6 +94,10 @@ public final class DevClassPathHelper {
 		return list.isEmpty() ? new String[0] : (String[]) list.toArray(new String[list.size()]);
 	}
 
+	/**
+	 * Indicates the development mode.
+	 * @return true if in development mode; false otherwise
+	 */
 	public static boolean inDevelopmentMode() {
 		return inDevelopmentMode;
 	}

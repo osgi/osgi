@@ -31,6 +31,10 @@ package org.eclipse.osgi.framework.console;
  return "hello " + intp.nextArgument();
  }
  </pre>
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
  */
 public interface CommandProvider {
 	/**

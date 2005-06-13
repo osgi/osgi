@@ -21,7 +21,11 @@ import java.util.Enumeration;
  * be queried for any resource or class before it is loaded by the 
  * BundleClassLoader.  The Framework implements the ClassLoaderDelegate
  * and supplies it to the BundleClassLoader.  FrameworkAdaptor implementations
- * are not responsible for suppling an implementation for ClassLoaderDelegate
+ * are not responsible for suppling an implementation for ClassLoaderDelegate.
+ * <p>
+ * This interface is not intended to be implemented by clients.
+ * </p>
+ * @since 3.1
  */
 public interface ClassLoaderDelegate {
 	/**

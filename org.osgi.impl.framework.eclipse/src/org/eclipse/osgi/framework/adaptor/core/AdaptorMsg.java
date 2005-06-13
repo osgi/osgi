@@ -12,6 +12,13 @@ package org.eclipse.osgi.framework.adaptor.core;
 
 import org.eclipse.osgi.util.NLS;
 
+/**
+ * Commom framework adaptor messages.
+ * <p>
+ * Clients may not extend this class
+ * </p>
+ * @since 3.1
+ */
 public class AdaptorMsg extends NLS {
 	
 	public static String ADAPTER_FILEEXIST_EXCEPTION;

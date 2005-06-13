@@ -74,6 +74,7 @@ import org.eclipse.osgi.util.NLS;
  * <li>without a console window
  * <li>without the remote agent
  * </ul>
+ * @since 3.1
  */
 public class Launcher {
 

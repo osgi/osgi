@@ -14,6 +14,11 @@ package org.eclipse.osgi.framework.debug;
 import java.io.PrintStream;
 import java.lang.reflect.*;
 
+/**
+ * This class has debug constants which can be used by the Framework implementation 
+ * and Adaptor implementations
+ * @since 3.1
+ */
 public class Debug {
 	/**
 	 * DEBUG flag.  If set to false then the debug statements will be optimized out during compilation.

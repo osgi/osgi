@@ -36,8 +36,8 @@ import org.eclipse.osgi.framework.eventmgr.EventManager.EventThread;
  * EventListeners uses copy-on-write semantics for managing the array and will copy the array
  * before changing it once the array has been shared with a ListenerQueue. This minimizes 
  * object creation while guaranteeing the snapshot list is never modified once created.
+ * @since 3.1
  */
-
 public class ListenerQueue {
 	/**
 	 * EventManager with which this queue is associated.

@@ -11,6 +11,10 @@
 
 package org.eclipse.osgi.framework.log;
 
+/**
+ * A framework log entry used to log information to a FrameworkLog
+ * @since 3.1
+ */
 public class FrameworkLogEntry {
 	//TODO "entry" has another meaning here - title, summary, tag are better names 
 	private String entry;

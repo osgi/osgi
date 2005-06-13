@@ -16,6 +16,14 @@ public class StateMsg extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.osgi.internal.resolver.StateMessages"; //$NON-NLS-1$
 
 	public static String COMMIT_INVALID_TIMESTAMP;
+	public static String HEADER_REQUIRED;
+	public static String HEADER_PACKAGE_DUPLICATES;
+	public static String HEADER_PACKAGE_JAVA;
+	public static String HEADER_VERSION_ERROR;
+	public static String HEADER_EXPORT_ATTR_ERROR;
+	public static String HEADER_DIRECTIVE_DUPLICATES;
+	public static String HEADER_REEXPORT_USES;
+
 	static {
 		// initialize resource bundles
 		NLS.initializeMessages(BUNDLE_NAME, StateMsg.class);

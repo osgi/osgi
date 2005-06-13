@@ -14,6 +14,7 @@ import java.util.*;
 import org.eclipse.osgi.framework.internal.core.Constants;
 import org.eclipse.osgi.service.resolver.*;
 import org.eclipse.osgi.util.ManifestElement;
+import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Version;
 
@@ -23,13 +24,18 @@ import org.osgi.framework.Version;
 class StateBuilder {
 	static String[] DEFINED_MATCHING_ATTRS = {Constants.BUNDLE_SYMBOLICNAME_ATTRIBUTE, Constants.BUNDLE_VERSION_ATTRIBUTE, Constants.PACKAGE_SPECIFICATION_VERSION, Constants.VERSION_ATTRIBUTE};
 
+	static String[] DEFINED_OSGI_VALIDATE_HEADERS = {Constants.IMPORT_PACKAGE, Constants.DYNAMICIMPORT_PACKAGE, Constants.EXPORT_PACKAGE, Constants.FRAGMENT_HOST, Constants.BUNDLE_SYMBOLICNAME, Constants.REEXPORT_PACKAGE, Constants.REQUIRE_BUNDLE};
+
 	static BundleDescription createBundleDescription(StateImpl state, Dictionary manifest, String location) throws BundleException {
 		BundleDescriptionImpl result = new BundleDescriptionImpl();
 		String manifestVersionHeader = (String) manifest.get(Constants.BUNDLE_MANIFESTVERSION);
 		int manifestVersion = 1;
 		if (manifestVersionHeader != null)
 			manifestVersion = Integer.parseInt(manifestVersionHeader);
-		// retrieve the symbolic-name and the singleton status 
+		if (manifestVersion >= 2)
+			validateHeaders(manifest);
+
+		// retrieve the symbolic-name and the singleton status
 		String symbolicNameHeader = (String) manifest.get(Constants.BUNDLE_SYMBOLICNAME);
 		if (symbolicNameHeader != null) {
 			ManifestElement[] symbolicNameElements = ManifestElement.parseHeader(Constants.BUNDLE_SYMBOLICNAME, symbolicNameHeader);
@@ -53,7 +59,11 @@ class StateBuilder {
 		}
 		// retrieve other headers
 		String version = (String) manifest.get(Constants.BUNDLE_VERSION);
-		result.setVersion((version != null) ? Version.parseVersion(version) : Version.emptyVersion);
+		try {
+			result.setVersion((version != null) ? Version.parseVersion(version) : Version.emptyVersion);
+		} catch (NumberFormatException ex) {
+			throw new BundleException(ex.getMessage());
+		}
 		result.setLocation(location);
 		result.setPlatformFilter((String) manifest.get(Constants.ECLIPSE_PLATFORMFILTER));
 		ManifestElement[] host = ManifestElement.parseHeader(Constants.FRAGMENT_HOST, (String) manifest.get(Constants.FRAGMENT_HOST));
@@ -71,6 +81,24 @@ class StateBuilder {
 		ManifestElement[] requires = ManifestElement.parseHeader(Constants.REQUIRE_BUNDLE, (String) manifest.get(Constants.REQUIRE_BUNDLE));
 		result.setRequiredBundles(createRequiredBundles(requires));
 		return result;
+	}
+
+	private static void validateHeaders(Dictionary manifest) throws BundleException {
+		for (int i = 0; i < DEFINED_OSGI_VALIDATE_HEADERS.length; i++) {
+			String header = (String) manifest.get(DEFINED_OSGI_VALIDATE_HEADERS[i]);
+			if (header != null) {
+				ManifestElement[] elements = ManifestElement.parseHeader(DEFINED_OSGI_VALIDATE_HEADERS[i], header);
+				checkForDuplicateDirectives(elements);
+				if (DEFINED_OSGI_VALIDATE_HEADERS[i] == Constants.REEXPORT_PACKAGE)
+					checkForUsesDirective(elements);
+				if (DEFINED_OSGI_VALIDATE_HEADERS[i] == Constants.IMPORT_PACKAGE || DEFINED_OSGI_VALIDATE_HEADERS[i] == Constants.DYNAMICIMPORT_PACKAGE)
+					checkImportExportSyntax(elements, false);
+				if (DEFINED_OSGI_VALIDATE_HEADERS[i] == Constants.EXPORT_PACKAGE)
+					checkImportExportSyntax(elements, true);
+			} else if (DEFINED_OSGI_VALIDATE_HEADERS[i] == Constants.BUNDLE_SYMBOLICNAME) {
+				throw new BundleException(NLS.bind(StateMsg.HEADER_REQUIRED, Constants.BUNDLE_SYMBOLICNAME));
+			}
+		}
 	}
 
 	private static BundleSpecification[] createRequiredBundles(ManifestElement[] specs) {
@@ -258,5 +286,60 @@ class StateBuilder {
 		if (versionRange == null)
 			return null;
 		return new VersionRange(versionRange);
+	}
+
+	private static void checkImportExportSyntax(ManifestElement[] elements, boolean export) throws BundleException {
+		if (elements == null)
+			return;
+		int length = elements.length;
+		Set packages = new HashSet(length);
+		for (int i = 0; i < length; i++) {
+			// check for duplicate imports
+			String[] packageNames = elements[i].getValueComponents();
+			for (int j = 0; j < packageNames.length; j++) {
+				if (packages.contains(packageNames[j]))
+					throw new BundleException(StateMsg.HEADER_PACKAGE_DUPLICATES);
+				// check for java.*
+				if (packageNames[j].startsWith("java.")) //$NON-NLS-1$
+					throw new BundleException(StateMsg.HEADER_PACKAGE_JAVA);
+				packages.add(packageNames[j]);
+			}
+			// check for version/specification version mismatch
+			String version = elements[i].getAttribute(Constants.VERSION_ATTRIBUTE);
+			if (version != null) {
+				String specVersion = elements[i].getAttribute(Constants.PACKAGE_SPECIFICATION_VERSION);
+				if (specVersion != null && !specVersion.equals(version))
+					throw new BundleException(NLS.bind(StateMsg.HEADER_VERSION_ERROR, Constants.VERSION_ATTRIBUTE, Constants.PACKAGE_SPECIFICATION_VERSION));
+			}
+			// check for bundle-symbolic-name and bundle-verion attibures
+			// (failure)
+			if (export) {
+				if (elements[i].getAttribute(Constants.BUNDLE_SYMBOLICNAME_ATTRIBUTE) != null)
+					throw new BundleException(NLS.bind(StateMsg.HEADER_EXPORT_ATTR_ERROR, Constants.BUNDLE_SYMBOLICNAME_ATTRIBUTE, Constants.EXPORT_PACKAGE));
+				if (elements[i].getAttribute(Constants.BUNDLE_VERSION_ATTRIBUTE) != null)
+					throw new BundleException(NLS.bind(StateMsg.HEADER_EXPORT_ATTR_ERROR, Constants.BUNDLE_VERSION_ATTRIBUTE, Constants.EXPORT_PACKAGE));
+			}
+		}
+	}
+
+	private static void checkForDuplicateDirectives(ManifestElement[] elements) throws BundleException {
+		// check for duplicate directives
+		for (int i = 0; i < elements.length; i++) {
+			Enumeration keys = elements[i].getDirectiveKeys();
+			if (keys != null) {
+				while (keys.hasMoreElements()) {
+					String key = (String) keys.nextElement();
+					String[] directives = elements[i].getDirectives(key);
+					if (directives.length > 1)
+						throw new BundleException(StateMsg.HEADER_DIRECTIVE_DUPLICATES);
+				}
+			}
+		}
+	}
+
+	private static void checkForUsesDirective(ManifestElement[] elements) throws BundleException {
+		for (int i = 0; i < elements.length; i++)
+			if (elements[i].getDirective(Constants.USES_DIRECTIVE) != null)
+				throw new BundleException(NLS.bind(StateMsg.HEADER_REEXPORT_USES, Constants.USES_DIRECTIVE, Constants.REEXPORT_PACKAGE));
 	}
 }

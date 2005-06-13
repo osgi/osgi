@@ -15,6 +15,10 @@ import org.osgi.framework.Version;
 /**
  * This class represents a base description object for a state.  All description
  * objects in a state have a name and a version.
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
  */
 public interface BaseDescription {
 	/**

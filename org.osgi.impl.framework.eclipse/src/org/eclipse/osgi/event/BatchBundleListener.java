@@ -43,6 +43,10 @@ import org.osgi.framework.*;
  * overlap.  This can result in the method {@link #batchBegin()} being called
  * multiple times before the first {@link #batchEnd()} is called. 
  * 
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
  * @see BundleEvent
  * @see BundleListener
  */

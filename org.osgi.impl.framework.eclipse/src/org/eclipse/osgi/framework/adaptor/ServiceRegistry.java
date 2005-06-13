@@ -16,6 +16,10 @@ import org.osgi.framework.*;
 /**
  * The ServiceRegistry interface is used by the framework to store and
  * lookup currently registered services.
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
  */
 public interface ServiceRegistry {
 

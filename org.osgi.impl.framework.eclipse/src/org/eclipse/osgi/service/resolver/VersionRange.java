@@ -12,6 +12,10 @@ package org.eclipse.osgi.service.resolver;
 
 import org.osgi.framework.Version;
 
+/**
+ * This class represents a version range.
+ * @since 3.1
+ */
 public class VersionRange {
 	private static final Version versionMax = new Version(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
 	/**

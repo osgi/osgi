@@ -11,7 +11,14 @@
 package org.eclipse.osgi.service.resolver;
 
 import java.util.Dictionary;
-
+/**
+ * An implementation of a resolver which resolves the constraints of the bundles
+ * in a system.
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
+ */
 public interface Resolver {
 
 	/**

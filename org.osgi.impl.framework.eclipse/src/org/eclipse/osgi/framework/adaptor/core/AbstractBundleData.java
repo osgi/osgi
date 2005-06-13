@@ -28,14 +28,18 @@ import org.osgi.framework.*;
 /**
  * An abstract BundleData class that has default implementations that most
  * BundleData implementations can use.
+ * <p>
+ * Clients may extend this class.
+ * </p>
+ * @since 3.1
  */
 public abstract class AbstractBundleData implements BundleData, Cloneable {
 
-	/** the DefaultAdaptor for this BundleData */
+	/** the Adaptor for this BundleData */
 	protected AbstractFrameworkAdaptor adaptor;
 
 	/**
-	 * The BundleManfifest for this BundleData.
+	 * The Bundle Manifest for this BundleData.
 	 */
 	protected Dictionary manifest = null;
 
@@ -96,6 +100,11 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 
 	///////////////////// End values from Manifest       /////////////////////
 
+	/**
+	 * Constructor for AbstractBundleData
+	 * @param adaptor The adaptor for this bundle data
+	 * @param id The bundle id for this bundle data
+	 */
 	public AbstractBundleData(AbstractFrameworkAdaptor adaptor, long id) {
 		this.adaptor = adaptor;
 		this.id = id;
@@ -103,13 +112,7 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 	}
 
 	/**
-	 * Return the BundleManifest for the BundleData.  If the manifest
-	 * field is null this method will parse the bundle manifest file and
-	 * construct a BundleManifest file to return.  If the manifest field is
-	 * not null then the manifest object is returned.
-	 * @return BundleManifest for the BundleData.
-	 * @throws BundleException if an error occurred while reading the
-	 * bundle manifest data.
+	 * @see BundleData#getManifest()
 	 */
 	public Dictionary getManifest() throws BundleException {
 		if (manifest == null) {
@@ -132,8 +135,7 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 	}
 
 	/**
-	 * Sets the Bundle object for this BundleData.
-	 * @param bundle The Bundle Object for this BundleData.
+	 * @see BundleData#setBundle(Bundle)
 	 */
 	public void setBundle(Bundle bundle) {
 		this.bundle = bundle;
@@ -148,23 +150,14 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 	}
 
 	/**
-	 * Get the BundleData bundle ID.  This will be used as the bundle
-	 * ID by the framework.
-	 * @return The BundleData ID.
+	 * @see BundleData#getBundleID()
 	 */
 	public long getBundleID() {
 		return (id);
 	}
 
 	/**
-	 * Gets a <code>URL</code> to the bundle entry specified by path. This
-	 * method must not use the BundleClassLoader to find the bundle entry since
-	 * the ClassLoader will delegate to find the resource.
-	 * 
-	 * @param path
-	 *            The bundle entry path.
-	 * @return A URL used to access the entry or null if the entry does not
-	 *         exist.
+	 * @see BundleData#getEntry(String)
 	 */
 	public URL getEntry(String path) {
 		BundleEntry entry = getBaseBundleFile().getEntry(path);
@@ -182,43 +175,32 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 	}
 
 	/**
-	 * Gets all of the bundle entries that exist under the specified path. For
-	 * example:
-	 * <p>
-	 * <code>getEntryPaths("/META-INF")</code>
-	 * <p>
-	 * This will return all entries from the /META-INF directory of the bundle.
-	 * 
-	 * @param path
-	 *            The path to a directory in the bundle.
-	 * @return An Enumeration of the entry paths or null if the specified path
-	 *         does not exist.
+	 * @see BundleData#getEntryPaths(String)
 	 */
 	public Enumeration getEntryPaths(String path) {
 		return getBaseBundleFile().getEntryPaths(path);
 	}
 
 	/**
-	 * Creates the ClassLoader for the BundleData.  The ClassLoader created
-	 * must use the <code>ClassLoaderDelegate</code> to delegate class, resource
-	 * and library loading.  The delegate is responsible for finding any resource
-	 * or classes imported by the bundle or provided by bundle fragments or 
-	 * bundle hosts.  The <code>ProtectionDomain</code> domain must be used
-	 * by the Classloader when defining a class.  
-	 * @param delegate The <code>ClassLoaderDelegate</code> to delegate to.
-	 * @param domain The <code>ProtectionDomain</code> to use when defining a class.
-	 * @param bundleclasspath An array of bundle classpaths to use to create this
-	 * classloader.  This is specified by the Bundle-ClassPath manifest entry.
-	 * @return The new ClassLoader for the BundleData.
+	 * @see BundleData#createClassLoader(ClassLoaderDelegate, BundleProtectionDomain, String[])
 	 */
 	public org.eclipse.osgi.framework.adaptor.BundleClassLoader createClassLoader(ClassLoaderDelegate delegate, BundleProtectionDomain domain, String[] bundleclasspath) {
 		return getAdaptor().getElementFactory().createClassLoader(delegate, domain, bundleclasspath, this);
 	}
 
+	/**
+	 * Returns the adaptor for this bundle data.
+	 * @return the adaptor for this bundle data.
+	 */
 	public AbstractFrameworkAdaptor getAdaptor() {
 		return adaptor;
 	}
 
+	/**
+	 * Returns a list of classpath entries from a list of manifest elements
+	 * @param classpath a list of ManifestElement objects
+	 * @return a list of classpath entries from a list of manifest elements
+	 */
 	static String[] getClassPath(ManifestElement[] classpath) {
 		if (classpath == null) {
 			if (Debug.DEBUG && Debug.DEBUG_LOADER)
@@ -241,26 +223,48 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 	}
 
 	///////////////////// Begin Meta Data Accessor Methods ////////////////////
+	/**
+	 * @see BundleData#getLocation()
+	 */
 	public String getLocation() {
 		return location;
 	}
-
+	/**
+	 * Sets the location for this bundle data
+	 * @param location the location string
+	 */
 	public void setLocation(String location) {
 		this.location = location;
 	}
 
+	/**
+	 * Returns the filename for the base file of this bundle data
+	 * @return the filename for the base file of this bundle data
+	 */
 	public String getFileName() {
 		return fileName;
 	}
 
+	/**
+	 * Sets the filename for the base file of this bundle data
+	 * @param fileName the name of the base file of this bundle data
+	 */
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
 
+	/**
+	 * Returns the list of native file paths to install for this bundle
+	 * @return the list of native file paths to install for this bundle
+	 */
 	public String[] getNativePaths() {
 		return nativePaths;
 	}
 
+	/**
+	 * Returns a comma separated list of native file paths to install for this bundle
+	 * @return a comma separated list of native file paths to install for this bundle
+	 */
 	public String getNativePathsString() {
 		if (nativePaths == null || nativePaths.length == 0)
 			return null;
@@ -273,10 +277,18 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 		return sb.toString();
 	}
 
+	/**
+	 * Sets the list of native file paths to install for this bundle
+	 * @param nativePaths the list of native file paths to install for this bundle
+	 */
 	public void setNativePaths(String[] nativePaths) {
 		this.nativePaths = nativePaths;
 	}
 
+	/**
+	 * Sets the comma separated list of native file paths to install for this bundle
+	 * @param nativePaths the comma separated list of native file paths to install for this bundle
+	 */
 	public void setNativePaths(String nativePaths) {
 		if (nativePaths == null)
 			return;
@@ -289,42 +301,77 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 		setNativePaths((String[]) result.toArray(new String[result.size()]));
 	}
 
+	/**
+	 * Returns the generation number for this bundle
+	 * @return the generation number for this bundle
+	 */
 	public int getGeneration() {
 		return generation;
 	}
 
+	/**
+	 * Sets the generation number for this bundle
+	 * @param generation the generation number for this bundle
+	 */
 	public void setGeneration(int generation) {
 		this.generation = generation;
 	}
 
+	/**
+	 * @see BundleData#getLastModified()
+	 */
 	public long getLastModified() {
 		return lastModified;
 	}
 
+	/**
+	 * Sets the last modified timestamp for this bundle
+	 * @param lastModified the last modified timestamp for this bundle
+	 */
 	public void setLastModified(long lastModified) {
 		this.lastModified = lastModified;
 	}
 
+	/**
+	 * @see BundleData#getStartLevel()
+	 */
 	public int getStartLevel() {
 		return startLevel;
 	}
 
+	/**
+	 * @see BundleData#setStartLevel(int)
+	 */
 	public void setStartLevel(int startLevel) {
 		this.startLevel = startLevel;
 	}
 
+	/**
+	 * @see BundleData#getStatus()
+	 */
 	public int getStatus() {
 		return status;
 	}
 
+	/**
+	 * @see BundleData#setStatus(int)
+	 */
 	public void setStatus(int status) {
 		this.status = status;
 	}
 
+	/**
+	 * Returns if this bundle is installed by reference
+	 * @return true if this bundle is installed by reference
+	 */
 	public boolean isReference() {
 		return reference;
 	}
 
+	/**
+	 * Sets if this bundle is installed by reference
+	 * @param reference indicates if this bundle is installed by reference
+	 */
 	public void setReference(boolean reference) {
 		this.reference = reference;
 	}
@@ -333,18 +380,33 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 
 	///////////////////// Begin Manifest Value Accessor Methods /////////////////////
 
+	/**
+	 * @see BundleData#getSymbolicName()
+	 */
 	public String getSymbolicName() {
 		return symbolicName;
 	}
 
+	/**
+	 * Returns the base storage directory for this bundle
+	 * @return the base storage directory for this bundle
+	 */
 	public File getBundleStoreDir() {
 		return bundleStoreDir;
 	}
 
+	/**
+	 * Sets the symbolic name of this bundle
+	 * @param symbolicName the symbolic name of this bundle
+	 */
 	public void setSymbolicName(String symbolicName) {
 		this.symbolicName = symbolicName;
 	}
 
+	/**
+	 * Loads all metadata for this bundle from the bundle manifest
+	 * @throws BundleException
+	 */
 	protected void loadFromManifest() throws BundleException {
 		getManifest();
 		if (manifest == null)
@@ -379,73 +441,134 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 		setDynamicImports((String) manifest.get(Constants.DYNAMICIMPORT_PACKAGE));
 	}
 
+	/**
+	 * @see BundleData#getVersion()
+	 */
 	public Version getVersion() {
 		return version;
 	}
 
+	/**
+	 * Sets the version of this bundle
+	 * @param version the version of this bundle
+	 */
 	public void setVersion(Version version) {
 		this.version = version;
 	}
 
+	/**
+	 * @see BundleData#getActivator()
+	 */
 	public String getActivator() {
 		return activator;
 	}
 
+	/**
+	 * Returns the data storage directory for this bundle
+	 * @return the data storage directory for this bundle
+	 */
 	protected File getDataDir() {
 		return dirData;
 	}
 
+	/**
+	 * Sets the bundle store directory for this bundle
+	 * @param bundleStoreDir the store directory for this bundle
+	 */
 	protected void setBundleStoreDir(File bundleStoreDir) {
 		this.bundleStoreDir = bundleStoreDir;
 	}
 
+	/**
+	 * Sets the initial bundle store directory according to the bundle ID
+	 * @param bundleID the bundle ID
+	 */
 	protected void initBundleStoreDirs(String bundleID) {
 		setBundleStoreDir(new File(((AbstractFrameworkAdaptor) adaptor).getBundleStoreRootDir(), bundleID));
 	}
 
+	/**
+	 * Sets the activator for this bundle
+	 * @param activator the activator for this bundle
+	 */
 	public void setActivator(String activator) {
 		this.activator = activator;
 	}
 
+	/**
+	 * @see BundleData#getClassPath()
+	 */
 	public String[] getClassPath() throws BundleException {
 		ManifestElement[] classpathElements = ManifestElement.parseHeader(Constants.BUNDLE_CLASSPATH, classpath);
 		return getClassPath(classpathElements);
 	}
 
+	/**
+	 * Returns the Bundle-ClassPath value as specified in the bundle manifest file.
+	 * @return the Bundle-ClassPath value as specified in the bundle manifest file.
+	 */
 	public String getClassPathString() {
 		return classpath;
 	}
 
+	/**
+	 * Sets the bundle classpath value of this bundle data.
+	 * @param classpath the bundle classpath
+	 */
 	public void setClassPathString(String classpath) {
 		this.classpath = classpath;
 	}
 
+	/**
+	 * @see BundleData#getExecutionEnvironment()
+	 */
 	public String getExecutionEnvironment() {
 		return executionEnvironment;
 	}
 
+	/**
+	 * Sets the execution environment for this bundle
+	 * @param executionEnvironment the execution environment for this bundle
+	 */
 	public void setExecutionEnvironment(String executionEnvironment) {
 		this.executionEnvironment = executionEnvironment;
 	}
 
+	/**
+	 * @see BundleData#getDynamicImports()
+	 */
 	public String getDynamicImports() {
 		return dynamicImports;
 	}
 
+	/**
+	 * Sets the dynamic imports of this bundle data.
+	 * @param dynamicImports the dynamic imports
+	 */
 	public void setDynamicImports(String dynamicImports) {
 		this.dynamicImports = dynamicImports;
 	}
 
+	/**
+	 * @see BundleData#getType()
+	 */
 	public int getType() {
 		return type;
 	}
 
+	/**
+	 * Sets the type of this bundle
+	 * @param type the type of this bundle
+	 */
 	public void setType(int type) {
 		this.type = type;
 	}
 
 	///////////////////// End Manifest Value Accessor Methods  /////////////////////
 
+	/**
+	 * @see BundleData#matchDNChain(String)
+	 */
 	public boolean matchDNChain(String pattern) {
 		if (System.getSecurityManager() == null)
 			return false;
@@ -502,12 +625,21 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 		throw new IOException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION);
 	}
 
+	/**
+	 * Initializes a new bundle and loads all its metadata from the bundle manifest
+	 * @throws IOException
+	 * @throws BundleException
+	 */
 	public void initializeNewBundle() throws IOException, BundleException {
 		createBaseBundleFile();
-
 		loadFromManifest();
 	}
 
+	/**
+	 * Creates the base BundleFile for this bundle
+	 * @return the base BundleFile for this bundle
+	 * @throws IOException if an IOExceptions occurs
+	 */
 	protected BundleFile createBaseBundleFile() throws IOException {
 		baseBundleFile = getAdaptor().createBaseBundleFile(getBaseFile(), this);
 		return baseBundleFile;
@@ -523,6 +655,12 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 		return isReference() ? new File(getFileName()) : new File(createGenerationDir(), getFileName());
 	}
 
+	/**
+	 * Returns a list of files used for the classpath of this bundle data.
+	 * the contents of the bundle are searched for the classpath entries.
+	 * @param classpaths the classpath entries to search for
+	 * @return a list of files used for the classpath of this bundle data.
+	 */
 	protected File[] getClasspathFiles(String[] classpaths) {
 		ArrayList results = new ArrayList(classpaths.length);
 		for (int i = 0; i < classpaths.length; i++) {
@@ -537,18 +675,16 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 		return (File[]) results.toArray(new File[results.size()]);
 	}
 
+	/**
+	 * Sets the data directory for this bundle
+	 * @param dirData the data directory for this bundle
+	 */
 	protected void setDataDir(File dirData) {
 		this.dirData = dirData;
 	}
 
 	/**
-	 * Returns the absolute path name of a native library. The BundleData
-	 * ClassLoader invokes this method to locate the native libraries that 
-	 * belong to classes loaded from this BundleData. Returns 
-	 * null if the library does not exist in this BundleData.
-	 * @param libname The name of the library to find the absolute path to.
-	 * @return The absolute path name of the native library or null if
-	 * the library does not exist.
+	 * @see BundleData#findLibrary(String)
 	 */
 	public String findLibrary(String libname) {
 		String mappedName = System.mapLibraryName(libname);
@@ -574,13 +710,19 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 	}
 
 	/**
-	 * Opens all resource for this BundleData.  Reopens the BundleData if
-	 * it was previosly closed.
+	 * @see BundleData#open()
 	 */
 	public void open() throws IOException {
 		baseBundleFile.open();
 	}
 
+	/**
+	 * Searches the native paths for a match against the specified libname.
+	 * If a match is found then the native path is returned; otherwise a
+	 * <code>null</code> value is returned.
+	 * @param libname a library name
+	 * @return a matching native path or <code>null</code>. 
+	 */
 	protected String findNativePath(String libname) {
 		if (!libname.startsWith("/")) { //$NON-NLS-1$
 			libname = '/' + libname;
@@ -599,20 +741,12 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 	}
 
 	/**
-	 * Return the bundle generation directory.
-	 * Attempt to create the directory if it does not exist.
-	 *
-	 * @return Bundle generation directory.
-	 */
-
-	/**
 	 * Return the generation directory for the bundle data.  The generation
 	 * directory can be used by the framework to cache files from the bundle
-	 * to the file system.
+	 * to the file system. Attempt to create the directory if it does not exist.
 	 * @return The generation directory for the bundle data or null if not
 	 * supported.
 	 */
-
 	public File createGenerationDir() {
 		File generationDir = getGenerationDir();
 		if (!generationDir.exists() && (!adaptor.canWrite() || !generationDir.mkdirs())) {
@@ -649,7 +783,7 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 	 * @return Bundle data directory.
 	 */
 	public File getDataFile(String path) {
-		// lazily initialize dirData to prevent early access to instance location
+		// lazily initialize dirData to prevent early access to configuration location
 		if (getDataDir() == null) {
 			File dataRoot = adaptor.getDataRootDir();
 			if (dataRoot == null)
@@ -666,12 +800,7 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 	}
 
 	/**
-	 * Installs the native code paths for this BundleData.  Each
-	 * element of nativepaths must be installed for lookup when findLibrary 
-	 * is called.
-	 * @param nativepaths The array of native code paths to install for
-	 * the bundle.
-	 * @throws BundleException If any error occurs during install.
+	 * @see BundleData#installNativeCode(String[])
 	 */
 	public void installNativeCode(String[] nativepaths) throws BundleException {
 		StringBuffer sb = new StringBuffer();

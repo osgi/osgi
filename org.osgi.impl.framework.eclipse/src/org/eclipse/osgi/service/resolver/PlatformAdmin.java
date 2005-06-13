@@ -20,6 +20,10 @@ import org.osgi.framework.BundleException;
  *
  * If present, there will only be a single instance of this service
  * registered with the Framework.
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
  */
 public interface PlatformAdmin {
 

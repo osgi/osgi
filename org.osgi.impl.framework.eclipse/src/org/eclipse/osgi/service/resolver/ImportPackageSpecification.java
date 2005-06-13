@@ -15,6 +15,10 @@ import java.util.Map;
 /**
  * A representation of one package import constraint as seen in a 
  * bundle manifest and managed by a state and resolver.
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
  */
 public interface ImportPackageSpecification extends VersionConstraint {
 	/**

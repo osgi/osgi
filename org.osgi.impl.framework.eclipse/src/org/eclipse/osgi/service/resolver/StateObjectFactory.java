@@ -18,6 +18,10 @@ import org.osgi.framework.Version;
 
 /**
  * A factory for states and their component objects.  
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
  */
 public interface StateObjectFactory {
 	/**

@@ -34,6 +34,10 @@ import org.osgi.framework.BundleException;
  * The constructor should parse the arguments passed to it and remember them.
  * The initialize method should perform the actual processing of the adaptor
  * arguments.
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
  */
 
 public interface FrameworkAdaptor {

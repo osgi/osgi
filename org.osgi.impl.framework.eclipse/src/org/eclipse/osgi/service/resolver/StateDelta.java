@@ -10,6 +10,13 @@
  *******************************************************************************/
 package org.eclipse.osgi.service.resolver;
 
+/**
+ * A state delta contains all the changes to bundles within a state.
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
+ */
 public interface StateDelta {
 	/**
 	 * Returns an array of all the bundle deltas in this delta regardless of type.

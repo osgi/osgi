@@ -21,6 +21,7 @@ import org.osgi.framework.ServiceReference;
 
 /**
  * Utility class to execute common privileged code.
+ * @since 3.1
  */
 public class SecureAction {
 	// make sure we use the correct controlContext;

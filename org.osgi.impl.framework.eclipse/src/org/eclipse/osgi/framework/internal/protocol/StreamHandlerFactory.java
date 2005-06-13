@@ -36,7 +36,6 @@ public class StreamHandlerFactory implements java.net.URLStreamHandlerFactory {
 	protected static final String URLSTREAMHANDLERCLASS = "org.osgi.service.url.URLStreamHandlerService"; //$NON-NLS-1$
 	protected static final String PROTOCOL_HANDLER_PKGS = "java.protocol.handler.pkgs"; //$NON-NLS-1$
 	protected static final String INTERNAL_PROTOCOL_HANDLER_PKG = "org.eclipse.osgi.framework.internal.protocol."; //$NON-NLS-1$
-	private static final String DEFAULT_VM_PROTOCOL_HANDLERS = "sun.net.www.protocol"; //$NON-NLS-1$
 
 	private Hashtable proxies;
 
@@ -66,7 +65,6 @@ public class StreamHandlerFactory implements java.net.URLStreamHandlerFactory {
 
 		//first check for built in handlers
 		String builtInHandlers = System.getProperty(PROTOCOL_HANDLER_PKGS);
-		builtInHandlers = builtInHandlers == null ? DEFAULT_VM_PROTOCOL_HANDLERS : DEFAULT_VM_PROTOCOL_HANDLERS + '|' + builtInHandlers;
 		Class clazz = null;
 		if (builtInHandlers != null) {
 			StringTokenizer tok = new StringTokenizer(builtInHandlers, "|"); //$NON-NLS-1$
@@ -90,7 +88,7 @@ public class StreamHandlerFactory implements java.net.URLStreamHandlerFactory {
 		String name = INTERNAL_PROTOCOL_HANDLER_PKG + protocol + ".Handler"; //$NON-NLS-1$
 
 		try {
-			clazz = Class.forName(name);
+			clazz = secureAction.forName(name);
 		}
 		//Now we check the service registry
 		catch (Throwable t) {

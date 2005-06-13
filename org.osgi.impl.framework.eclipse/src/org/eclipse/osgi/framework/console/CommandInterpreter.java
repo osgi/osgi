@@ -14,9 +14,14 @@ package org.eclipse.osgi.framework.console;
 import java.util.Dictionary;
 import org.osgi.framework.Bundle;
 
-/**	A command interpreter is a shell that can interpret command
- *	lines. This object is passed as parameter when a CommandProvider
- *	is invoked.
+/**	
+ * A command interpreter is a shell that can interpret command
+ * lines. This object is passed as parameter when a CommandProvider
+ * is invoked.
+ * <p>
+ * This interface is not intended to be implemented by clients.
+ * </p>
+ * @since 3.1
  */
 public interface CommandInterpreter {
 	/**

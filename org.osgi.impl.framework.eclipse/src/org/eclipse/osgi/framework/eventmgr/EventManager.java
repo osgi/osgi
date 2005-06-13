@@ -90,6 +90,7 @@ import org.eclipse.osgi.framework.eventmgr.EventListeners.ListElement;
  * 
  * <p> The highly dynamic nature of the OSGi framework had necessitated these features for 
  * proper and efficient event delivery.  
+ * @since 3.1
  */
 
 public class EventManager {

@@ -14,8 +14,11 @@ package org.eclipse.osgi.framework.eventmgr;
 /**
  * The EventDispatcher interface contains the method that is called by the
  * Event Manager to complete the event delivery to the event listener.
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
  */
-
 public interface EventDispatcher {
 	/**
 	 * This method is called once for each listener.

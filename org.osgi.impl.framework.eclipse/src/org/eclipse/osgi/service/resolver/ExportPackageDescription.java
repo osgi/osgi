@@ -12,6 +12,13 @@ package org.eclipse.osgi.service.resolver;
 
 import java.util.Map;
 
+/**
+ * This class represents a specific version of an exported package in the system.
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
+ */
 public interface ExportPackageDescription extends BaseDescription {
 
 	/**

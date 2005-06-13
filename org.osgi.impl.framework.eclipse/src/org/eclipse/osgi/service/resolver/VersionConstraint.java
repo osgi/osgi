@@ -13,6 +13,10 @@ package org.eclipse.osgi.service.resolver;
 /**
  * VersionConstraints represent the relationship between two bundles (in the 
  * case of bundle requires) or a bundle and a package (in the case of import/export).
+ * <p>
+ * Clients may implement this interface.
+ * </p>
+ * @since 3.1
  */
 public interface VersionConstraint extends Cloneable {
 
