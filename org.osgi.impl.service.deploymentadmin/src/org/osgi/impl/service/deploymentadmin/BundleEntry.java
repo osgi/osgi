@@ -16,15 +16,15 @@ public class BundleEntry implements Serializable {
     private String             symbName;
     private String             version;
     private Long               id;
-    private Boolean            customizer;
     private Boolean            missing;
+    private String             pid;
     private CaseInsensitiveMap attrs = new CaseInsensitiveMap();
+    
 
     public BundleEntry(String name,
             String location, 
             String symbName, 
             String version, 
-            boolean customizer, 
             long id,
             boolean missing,
             Attributes attrs) 
@@ -33,7 +33,6 @@ public class BundleEntry implements Serializable {
 		this.symbName = symbName;
 		this.version = version;
 		this.id = new Long(id);
-		this.customizer = new Boolean(customizer);
 		this.missing = new Boolean(missing);
 		extractAttrs(attrs);
 	}
@@ -41,11 +40,10 @@ public class BundleEntry implements Serializable {
     public BundleEntry(String name,
             		   String symbName, 
                        String version, 
-                       boolean customizer, 
                        boolean missing,
                        Attributes attrs) 
     {
-        this(name, null, symbName, version, customizer, -1, missing, attrs);
+        this(name, null, symbName, version, -1, missing, attrs);
     }
     
     public BundleEntry(BundleEntry other) {
@@ -77,7 +75,6 @@ public class BundleEntry implements Serializable {
         name = entry.getName();
         symbName = entry.getAttributes().getValue(DAConstants.BUNDLE_SYMBOLIC_NAME);
         version = entry.getAttributes().getValue(DAConstants.BUNDLE_VERSION);
-        customizer = new Boolean(entry.isCustomizerBundle());
         missing = new Boolean(entry.isMissing());
         extractAttrs(entry.getAttributes());
     }
@@ -109,7 +106,10 @@ public class BundleEntry implements Serializable {
     }
 
     public boolean isCustomizer() {
-        return customizer.booleanValue();
+        String s = (String) attrs.get(DAConstants.CUSTOMIZER);
+        if (null == s)
+            return false;
+        return Boolean.valueOf(s).booleanValue();
     }
 
     public boolean isMissing() {
@@ -158,6 +158,10 @@ public class BundleEntry implements Serializable {
 
     public void setBundleId(long bundleId) {
         id = new Long(bundleId);
+    }
+    
+    public void setPid(String pid) {
+        this.pid = pid;
     }
 
 }

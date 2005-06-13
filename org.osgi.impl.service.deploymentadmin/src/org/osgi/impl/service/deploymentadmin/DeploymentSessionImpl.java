@@ -289,15 +289,15 @@ public class DeploymentSessionImpl implements DeploymentSession {
     void installUpdate(DeploymentPackageJarInputStream wjis) throws DeploymentException {
         openTrackers();
         transaction = Transaction.createTransaction(this, logger);
+        Hashtable oldPerms = null;
         try {
             transaction.start();
             stopBundles();
             processBundles(wjis);
-            Hashtable oldPerms = setFilePermissionForCustomizers();
+            oldPerms = setFilePermissionForCustomizers();
             startCustomizers();
             processResources(wjis);
             dropResources();
-            resetFilePermissionForCustomizers(oldPerms);
             dropBundles();
             //refreshPackages();
             startBundles();
@@ -311,6 +311,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
             transaction.rollback();
             throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR, 
                     e.getMessage(), e);
+        } finally {
+            if (null != oldPerms)
+                resetFilePermissionForCustomizers(oldPerms);
         }
         transaction.commit();
         closeTrackers();

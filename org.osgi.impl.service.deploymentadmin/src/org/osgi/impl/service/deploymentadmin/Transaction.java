@@ -6,6 +6,7 @@ import java.security.PrivilegedExceptionAction;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Vector;
 
 import org.osgi.framework.BundleException;
@@ -90,8 +91,8 @@ public class Transaction {
         
         // commit !
         try {
-	        for (Iterator iter = steps.iterator(); iter.hasNext();) {
-	            final TransactionRecord element = (TransactionRecord) iter.next();
+	        for (ListIterator iter = steps.listIterator(steps.size()); iter.hasPrevious();) {
+	            final TransactionRecord element = (TransactionRecord) iter.previous();
 	            logger.log(Logger.LOG_INFO, "Commit\n" + element);
 	            switch (element.code) {
 	                case INSTALLBUNDLE :
@@ -139,8 +140,8 @@ public class Transaction {
                 return;
             }
             
-	        for (int i = steps.size() - 1; i >= 0; --i) {
-	            final TransactionRecord element = (TransactionRecord) steps.get(i);
+            for (ListIterator iter = steps.listIterator(steps.size()); iter.hasPrevious();) {
+                final TransactionRecord element = (TransactionRecord) iter.previous();
 	            logger.log(Logger.LOG_INFO, "Rollback\n" + element);
 	            switch (element.code) {
 	                case INSTALLBUNDLE : {
@@ -203,5 +204,5 @@ public class Transaction {
     public synchronized void cancel() {
         cancelled = true;
     }
-
+    
 }

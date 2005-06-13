@@ -144,10 +144,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             String missingStr = (String) attrs.getValue(DAConstants.MISSING);
             boolean missing = (missingStr != null && "true".equalsIgnoreCase(missingStr.trim()));
             boolean isBundle = null != bSn && null != bVer; 
-            boolean bCust = (bCustStr == null ? false : Boolean.valueOf(bCustStr).booleanValue());
             if (isBundle) {
                 // bundle
-                BundleEntry be = new BundleEntry(resPath, bSn, bVer, bCust, missing, attrs);
+                BundleEntry be = new BundleEntry(resPath, bSn, bVer, missing, attrs);
                 bundleEntries.add(be);
             } else {
                 // resource
@@ -331,7 +330,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                 }});
             if (null == location)
                 return null;
-            if (location.equals(symbName))
+            if (location.equals(DeploymentAdminImpl.location(symbName, null)))
                 return b;
         }
         return null;

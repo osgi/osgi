@@ -62,6 +62,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private KeyStore              keystore;
     private TrackerEvent          trackEvent;
     private String                fwBundleDir;
+    private boolean               cancelled;
     
     /*
      * Class to track the event admin
@@ -75,7 +76,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     
     // persisted fields
     private Set     dps = new HashSet();		// deployment packages
-    private boolean cancelled;
     
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
@@ -166,15 +166,28 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
         sendCompleteEvent(true);
         
+        DeploymentPackage ret;
         if (session.getDeploymentAction() == DeploymentSessionImpl.INSTALL) {
-            dps.add(srcDp);
-            return srcDp;
+            //dps.add(srcDp);
+            addDp(srcDp);
+            ret = srcDp;
         }
         else { // if (session.getDeploymentAction() == DeploymentSession.UPDATE) 
-            dps.remove(session.getTargetDeploymentPackage());
-            dps.add(session.getSourceDeploymentPackage());
-            return session.getSourceDeploymentPackage();
+            //dps.remove(session.getTargetDeploymentPackage());
+            //dps.add(session.getSourceDeploymentPackage());
+            removeDp((DeploymentPackageImpl) session.getTargetDeploymentPackage());
+            addDp((DeploymentPackageImpl) session.getSourceDeploymentPackage());
+            ret = session.getSourceDeploymentPackage();
         }
+        return ret;
+    }
+    
+    private void addDp(DeploymentPackageImpl dp) {
+        dps.add(dp);
+    }
+
+    private void removeDp(DeploymentPackageImpl dp) {
+        dps.remove(dp);
     }
 
     private void checkSession() throws DeploymentException {
@@ -543,21 +556,23 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         session = createUninstallSession(targetDp);
         try {
             session.uninstall();
+            sendCompleteEvent(true);
         } catch (CancelException e) {
             sendCompleteEvent(false);
             return;
+        } finally {
+            session = null;
         }
-        
-        sendCompleteEvent(true);
-        
-        dps.remove(targetDp);
+
+        removeDp(targetDp);
     }
     
     boolean uninstallForced(DeploymentPackageImpl dp) {
         sendUninstallEvent(dp.getName());
         // TODO        
         sendCompleteEvent(true);
-        dps.remove(dp);
+        //dps.remove(dp);
+        removeDp(dp);
         return false;
     }
     
@@ -566,7 +581,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     }
 
     static String location(String symbName, Version version) {
-        return symbName;
+        return "osgi-dp:" + symbName;
     }
 
     Set getDeploymentPackages() {

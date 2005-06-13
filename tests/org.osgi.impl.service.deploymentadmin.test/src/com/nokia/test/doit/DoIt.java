@@ -117,7 +117,7 @@ public class DoIt implements BundleActivator {
                 new PermissionInfo(DeploymentCustomizerPermission.class.getName(), 
                         "(name=easygame)", "privatearea"),
         	};
-        pa.setPermissions("com.nokia.test.exampleresourceprocessor.db." +
+        pa.setPermissions("osgi-dp:com.nokia.test.exampleresourceprocessor.db." +
         		"DbResourceProcessor_db_test_06", pis);
 
         ref = context.getServiceReference(Db.class.getName());
@@ -210,6 +210,16 @@ public class DoIt implements BundleActivator {
             String header = in.readLine();
             String hval = dps[Integer.parseInt(dp)].getResourceHeader(res, header);
             System.out.println(" " + hval);
+        } else if ("getrp".equalsIgnoreCase(line)) {
+            DeploymentPackage[] dps = da.listDeploymentPackages();
+            for (int i = 0; i < dps.length; i++)
+                System.out.println(" " + i + " " + dps[i]);
+            System.out.print(" which: ");
+            String dp = in.readLine();
+            System.out.print(" resource: ");
+            String res = in.readLine();
+            ServiceReference rp = dps[Integer.parseInt(dp)].getResourceProcessor(res);
+            System.out.println(" " + rp);
         } else if ("res".equalsIgnoreCase(line)) {
             DeploymentPackage[] dps = da.listDeploymentPackages();
             for (int i = 0; i < dps.length; i++)
@@ -619,21 +629,24 @@ public class DoIt implements BundleActivator {
 
     public void bad_db_test_18() throws Exception {
         InputStream is = null;
-        DeploymentPackage dp = null;
+        DeploymentPackage dp1 = null;
+        DeploymentPackage dp2 = null;
         
         is = new FileInputStream(HOME + "bad_db_test_18_1.dp");
-        dp = da.installDeploymentPackage(is);
+        dp1 = da.installDeploymentPackage(is);
         is.close();
         
         try {
             is = new FileInputStream(HOME + "bad_db_test_18_2.dp");
-            dp = da.installDeploymentPackage(is);
+            dp2 = da.installDeploymentPackage(is);
             is.close();
         }
         catch (DeploymentException e) {
             if (e.getCode() != DeploymentException.CODE_MISSING_BUNDLE)
                 throw new Exception("Negative test failed");
         }
+        
+        dp1.uninstall();
     }
 
     public static final String db_test_01 = "Desc.";
