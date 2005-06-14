@@ -19,6 +19,12 @@ package org.osgi.service.dmt;
  * parameter.
  */
 public interface DmtExecPlugin {
+    /**
+     * The registration parameter that specifies the subtrees handled by this
+     * plugin. The parameter with this name must contain the array of root URIs
+     * of all subtrees in which this plugin handles the EXEC operations.
+     */
+    String EXEC_ROOT_URIS = "execRootURIs";
 
     // TODO can we specify OTHER_ERROR more precisely?
     /**
