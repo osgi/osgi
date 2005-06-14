@@ -144,4 +144,52 @@ public interface DmtAdmin {
      */
     void sendAlert(String principal, int code, String correlator, 
             DmtAlertItem[] items) throws DmtException;
+
+    /**
+     * Creates a valid URI string from the given base URI and node name. The
+     * base URI is assumed to be valid, while the node name is assumed
+     * un-mangled.
+     * <p>
+     * Node name mangling is needed in the following cases:
+     * <ul>
+     * <li>if the name contains '/' or '\' characters
+     * <li>if the length of the name exceeds the limit defined by the
+     * implementation
+     * </ul>
+     * <p>
+     * A node name that does not suffer from either of these problems is
+     * guaranteed to remain unchanged by this method. Therefore the client may
+     * skip the mangling if the node name is known to be valid (though it is
+     * always safe to call this method).
+     * <p>
+     * The method returns a URI created by appending together the
+     * <code>base</code> URI, the '/' separator (if <code>base</code> does
+     * not already end with it), and the normalized <code>nodeName</code>.
+     * Invalid node names are normalized in different ways, depending on the
+     * cause. If the length of the name does not exceed the limit, but the name
+     * contains '/' or '\' characters, then these are simply escaped by
+     * inserting an additional '\' before each occurrence. If the length of the
+     * name does exceed the limit, the following mechanism is used to normalize
+     * it:
+     * <ul>
+     * <li>the SHA 1 digest of the name is calculated
+     * <li>the digest is encoded with the base 64 algorithm
+     * <li>all '/' characters in the encoded digest are replaced with '_'
+     * <li>trailing '=' signs are removed
+     * </ul>
+     * <p>
+     * If the <code>base</code> parameter is <code>null</code> or empty, the
+     * returned string contains only the normalized version of the
+     * <code>nodeName</code> parameter, without any prefix.
+     * 
+     * @param base the URI to be used as the base of the returned URI, can be
+     *        <code>null</code> or empty
+     * @param nodeName the node name to be mangled (if necessary), must not be
+     *        <code>null</code> or empty
+     * @return the URI containing the <code>base</code> prefix and the
+     *         possibly mangled node name as the last segment
+     * @throws IllegalArgumentException if <code>nodeName</code> is
+     *         <code>null</code> or empty
+     */
+    String mangle(String base, String nodeName);
 }
