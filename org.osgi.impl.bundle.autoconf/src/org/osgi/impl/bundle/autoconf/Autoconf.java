@@ -19,8 +19,6 @@ package org.osgi.impl.bundle.autoconf;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -61,15 +59,11 @@ public class Autoconf implements ResourceProcessor {
 	int operation;
 	DeploymentSession	session;
 
-	LinkedList rollbackData;
+	LinkedList commitData;
 	
-	private static class OriginalConfiguration {
-
-		public String	pid;
-		/**
-		 * null means there was no configuration with this pid
-		 */
+	private static class ConfigurationData {
 		public Dictionary properties;
+		public Configuration configuration;
 	}
 	
 	protected void activate(ComponentContext context) {
@@ -83,7 +77,7 @@ public class Autoconf implements ResourceProcessor {
 	
 	public void begin(DeploymentSession session) {
 		this.session = session;
-		rollbackData = new LinkedList();
+		commitData = new LinkedList();
 	}
 
 	public void process(final String name, final InputStream stream) throws DeploymentException {
@@ -147,61 +141,39 @@ public class Autoconf implements ResourceProcessor {
 			String location = bundle.getLocation();
 			
 			if (d.factoryPid!=null) {
-				OriginalConfiguration originalConfiguration = new OriginalConfiguration();
-				Configuration conf;
+				ConfigurationData toWrite = new ConfigurationData();
 				try {
-					conf = configurationAdmin.createFactoryConfiguration(d.factoryPid,location);
+					toWrite.configuration = configurationAdmin.createFactoryConfiguration(d.factoryPid,location);
 				}
 				catch (IOException e) {
 					throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot create new factory configuration",e);
 				}
 
-				// if rollback, delete
-				originalConfiguration.pid = conf.getPid();
-				originalConfiguration.properties = null;
-				
-				try {
-					conf.update(new Hashtable(values));
-					//Dictionary d1 = conf.getProperties();
-					//System.out.println("updated: "+d1);
-					
-				}
-				catch (IOException e) {
-					throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot write factory configuration",e);
-				}
-				
+				toWrite.properties = new Hashtable(values);
+				commitData.add(toWrite);
 			} else {
-
-				// write out the new configuration
-				Configuration conf;
-				OriginalConfiguration originalConfiguration = new OriginalConfiguration();
-				originalConfiguration.pid = d.pid;
+				ConfigurationData toWrite = new ConfigurationData();
 				try {
-					conf = configurationAdmin.getConfiguration(d.pid,location);
+					toWrite.configuration = configurationAdmin.getConfiguration(d.pid,location);
 				}
 				catch (IOException e) {
 					throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot get configuration",e);
 				}
-				originalConfiguration.properties = conf.getProperties();
-				
-				Hashtable newProps = new Hashtable();
+
 				if (d.merge) {
-					Dictionary oldProps = conf.getProperties();
+					Dictionary oldProps = toWrite.configuration.getProperties();
+					Hashtable newProps = new Hashtable();
 					for(Enumeration e = oldProps.keys();e.hasMoreElements();) {
 						String propName = (String) e.nextElement();
 						java.lang.Object propValue = oldProps.get(propName);
 						newProps.put(propName,propValue);
 					}
+					newProps.putAll(values);
+					toWrite.properties = newProps;
+				} else {
+					toWrite.properties = new Hashtable(values);
 				}
-				newProps.putAll(values);
-				try {
-					conf.update(newProps);
-				}
-				catch (IOException e) {
-					throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot write configuration",e);
-				}
-				
-				rollbackData.add(originalConfiguration);
+				commitData.add(toWrite);
 			}
 		}
 	}
@@ -410,40 +382,26 @@ public class Autoconf implements ResourceProcessor {
 		// since we do all the configuration writes in the 'process' call,
 		// there is nothing to prepare
 		// we are 'always ready' :-)
-		
 	}
 
 	public void commit() {
-		// we did everything already, nothing to do
-	}
-
-	public void rollback() {
-		// just a wrapper call around the real one
-		// whatever the access rights of the caller, rolling back to the original
-		// state should be done
-		AccessController.doPrivileged(new PrivilegedAction() {
-			public java.lang.Object run()  {
-				rollbackPrivileged();
-				return null;
-			}});
-	}
-
-	public void rollbackPrivileged() {
-		for (Iterator i = rollbackData.iterator(); i.hasNext();) {
-			OriginalConfiguration oc = (OriginalConfiguration) i.next();
+		for (Iterator i = commitData.iterator(); i.hasNext();) {
+			ConfigurationData oc = (ConfigurationData) i.next();
 			try {
-				Configuration conf = configurationAdmin.getConfiguration(oc.pid);
-				if (oc.properties==null) {
-					conf.delete();
-				} else {
-					conf.update(oc.properties);
-				}
+				oc.configuration.update(oc.properties);
 			}
 			catch (IOException e) {
-				// TODO Auto-generated catch block
+				// TODO what to do when the commit fails because of access control violation?
+				// TODO the process() method should somehow filter this out, but there is only one
+				// way currently: call the update() method there. But this is something the
+				// spec forbids
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void rollback() {
+		// we didn't do a thing, so simply leave everything as it is
 	}
 
 	public void cancel() {
