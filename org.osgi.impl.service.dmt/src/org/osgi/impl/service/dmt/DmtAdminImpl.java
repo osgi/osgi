@@ -17,9 +17,13 @@
  */
 package org.osgi.impl.service.dmt;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
 import org.osgi.service.dmt.*;
@@ -27,9 +31,27 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class DmtAdminImpl implements DmtAdmin {
-    // timeout after 10 seconds, to make testing easier 
-    private static final long TIMEOUT = 10000; 
+    // the name of the system property containing the URI segment length limit 
+    public static final String SEGMENT_LENGTH_LIMIT_PROPERTY = 
+        "osgi.ri.uri.limits.segmentlength";
     
+    // the smallest valid value for the URI segment length limit
+    public static final int MINIMAL_SEGMENT_LENGTH_LIMIT = 32;
+
+    // timeout after 10 seconds, to make testing easier 
+    public static final long TIMEOUT = 10000; 
+    
+	private static final char base64table[] = {
+		'A','B','C','D','E','F','G','H',
+		'I','J','K','L','M','N','O','P',
+		'Q','R','S','T','U','V','W','X',
+		'Y','Z','a','b','c','d','e','f',
+		'g','h','i','j','k','l','m','n',
+		'o','p','q','r','s','t','u','v',
+		'w','x','y','z','0','1','2','3',
+		'4','5','6','7','8','9','+','_', // !!! this differs from base64
+	};
+	
     private DmtPrincipalPermissionAdmin dmtPermissionAdmin;
 	private DmtPluginDispatcher	dispatcher;
 	private ServiceTracker eventTracker;
@@ -37,16 +59,40 @@ public class DmtAdminImpl implements DmtAdmin {
     
     private List openSessions; // a list of DmtSession refs to open sessions
 
+	private MessageDigest md;
+    
+    // contains the maximum length of node names or 0 if there is no limit
+    private final int segmentLengthLimit;
+
     // OPTIMIZE maybe make some context object to store these references
-    public DmtAdminImpl(DmtPrincipalPermissionAdmin dmtPermissionAdmin,
-            DmtPluginDispatcher dispatcher, ServiceTracker eventTracker,
-            ServiceTracker remoteAdapterTracker) {
-        this.dmtPermissionAdmin = dmtPermissionAdmin;
-        this.dispatcher = dispatcher;
-        this.eventTracker = eventTracker;
-        this.remoteAdapterTracker = remoteAdapterTracker;
+	public DmtAdminImpl(DmtPrincipalPermissionAdmin dmtPermissionAdmin,
+			DmtPluginDispatcher dispatcher, ServiceTracker eventTracker,
+			ServiceTracker remoteAdapterTracker) 
+			throws NoSuchAlgorithmException
+	{
+		this.dmtPermissionAdmin = dmtPermissionAdmin;
+		this.dispatcher = dispatcher;
+		this.eventTracker = eventTracker;
+		this.remoteAdapterTracker = remoteAdapterTracker;
+		
+		openSessions = new Vector();
+		
+		segmentLengthLimit = getSegmentLengthLimit();
+		
+		md = MessageDigest.getInstance("SHA");
+	}
+
+    private int getSegmentLengthLimit() {
+        String limitString = System.getProperty(SEGMENT_LENGTH_LIMIT_PROPERTY);
+        int limit = MINIMAL_SEGMENT_LENGTH_LIMIT; // min. used as default
         
-        openSessions = new Vector();
+        try {
+            int limitInt = Integer.parseInt(limitString);
+            if(limitInt == 0 || limitInt >= MINIMAL_SEGMENT_LENGTH_LIMIT)
+                limit = limitInt;
+        } catch(NumberFormatException e) {}
+        
+        return limit;
     }
 
 	public DmtSession getSession(String subtreeUri) throws DmtException {
@@ -129,7 +175,73 @@ public class DmtAdminImpl implements DmtAdmin {
         notifyAll(); // wake all waiting sessions, and reevaluate conflicts
     }
     
+    public String mangle(String base, String nodeName) {
+        if(nodeName == null)
+            throw new NullPointerException(
+                    "The 'nodeName' parameter must not be null.");
+            
+        if(nodeName.equals(""))
+            throw new IllegalArgumentException(
+                    "The 'nodeName' parameter must not be empty.");        
+
+		StringBuffer nameBuffer;
+        if(nodeName.length() > segmentLengthLimit) {
+            // create node name hash
+			nameBuffer = getHash(nodeName);
+        } else {
+			// escape any '/' and '\' characters in the node name
+			nameBuffer = new StringBuffer(nodeName);
+			int i = 0;
+			while(i < nameBuffer.length()) {
+				if(nameBuffer.charAt(i) == '\\' || nameBuffer.charAt(i) == '/')
+					nameBuffer.insert(i++, '\\');
+				i++;
+			}
+        }
+        
+        if(base != null) {
+            if(base.length() == 0 || base.charAt(base.length()-1) != '/')
+				nameBuffer.insert(0, '/');
+            
+			nameBuffer.insert(0, base);
+        }
+        
+        return nameBuffer.toString();
+    }
     
+	private StringBuffer getHash(String from) {
+		byte[] byteStream;
+		try {
+			byteStream = from.getBytes("UTF-8");
+		}
+		catch (UnsupportedEncodingException e) {
+			// There's no way UTF-8 encoding is not implemented...
+			throw new IllegalStateException("there's no UTF-8 encoder here!");
+		}
+		byte[] digest = md.digest(byteStream);
+		
+		// very dumb base64 encoder code. There is no need for multiple lines
+		// or trailing '='-s....
+		// also, we hardcoded the fact that sha-1 digests are 20 bytes long
+		StringBuffer sb = new StringBuffer(digest.length*2);
+		for(int i=0;i<6;i++) {
+			int d0 = digest[i*3]&0xff;
+			int d1 = digest[i*3+1]&0xff;
+			int d2 = digest[i*3+2]&0xff;
+			sb.append(base64table[d0>>2]);
+			sb.append(base64table[(d0<<4|d1>>4)&63]);
+			sb.append(base64table[(d1<<2|d2>>6)&63]);
+			sb.append(base64table[d2&63]);
+		}
+		int d0 = digest[18]&0xff;
+		int d1 = digest[19]&0xff;
+		sb.append(base64table[d0>>2]);
+		sb.append(base64table[(d0<<4|d1>>4)&63]);
+		sb.append(base64table[(d1<<2)&63]);
+		
+		return sb;
+	}
+
     public void sendAlert(String principal, int code, String correlator,
             DmtAlertItem[] items) throws DmtException {
         RemoteAlertSender alertSender = getAlertSender(principal);
@@ -169,17 +281,19 @@ public class DmtAdminImpl implements DmtAdmin {
         if(alertSenderRefs == null)
             return null;
         
-        // find adapter that accepts alerts for the given principal
-        for(int i = 0; i < alertSenderRefs.length; i++) {
-            if(acceptsServerId(alertSenderRefs[i], principal)) {
-                RemoteAlertSender alertSender = (RemoteAlertSender)
-                    remoteAdapterTracker.getService(alertSenderRefs[i]);
-                if(alertSender != null)
-                    return alertSender;
-            }
-        }
+        ServiceReference bestRef = null;
         
-        return null;
+        // find best adapter that accepts alerts for the given principal
+        for(int i = 0; i < alertSenderRefs.length; i++)
+            if(acceptsServerId(alertSenderRefs[i], principal))
+                bestRef = betterRef(alertSenderRefs[i], bestRef);
+
+        if(bestRef == null)
+            return null;
+        
+        // return service object for the best reference
+        // can still be null if service was unregistered in the meantime
+        return (RemoteAlertSender) remoteAdapterTracker.getService(bestRef);
     }
     
     // precondition: parameters are not null
@@ -194,5 +308,32 @@ public class DmtAdminImpl implements DmtAdmin {
                 return true;
         
         return false;
+    }
+    
+    private ServiceReference betterRef(ServiceReference ref, 
+                                       ServiceReference best) {
+        if(best == null)
+            return ref;
+       
+        int refRank = getRanking(ref);
+        int bestRank = getRanking(best);
+        
+        if(refRank != bestRank)
+            return refRank > bestRank ? ref : best;
+        
+        return getId(ref) < getId(best) ? ref : best;
+    }
+    
+    private int getRanking(ServiceReference ref) {
+        Object property = ref.getProperty(Constants.SERVICE_RANKING);
+        // a ranking of 0 must be assumed if property is missing or invalid
+        if(property == null || !(property instanceof Integer))
+            return 0;
+        return ((Integer) property).intValue();
+    }
+    
+    private long getId(ServiceReference ref) {
+        // this property must be guaranteed to be set by the framework
+        return ((Long) ref.getProperty(Constants.SERVICE_ID)).longValue();
     }
 }
