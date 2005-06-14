@@ -23,6 +23,13 @@ package org.osgi.service.dmt;
  * parameter.
  */
 public interface DmtDataPlugin extends Dmt {
+    /**
+     * The registration parameter that specifies the subtrees handled by this
+     * plugin. The parameter with this name must contain the array of root URIs
+     * of all subtrees in which this plugin handles the data manipulation
+     * operations.
+     */
+    String DATA_ROOT_URIS = "dataRootURIs";
 
     // TODO can we specify OTHER_ERROR more precisely?
     /**
