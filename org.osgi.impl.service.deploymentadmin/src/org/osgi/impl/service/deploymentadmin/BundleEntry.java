@@ -22,7 +22,6 @@ public class BundleEntry implements Serializable {
     
 
     public BundleEntry(String name,
-            String location, 
             String symbName, 
             String version, 
             long id,
@@ -43,7 +42,7 @@ public class BundleEntry implements Serializable {
                        boolean missing,
                        Attributes attrs) 
     {
-        this(name, null, symbName, version, -1, missing, attrs);
+        this(name, symbName, version, -1, missing, attrs);
     }
     
     public BundleEntry(BundleEntry other) {
@@ -162,6 +161,10 @@ public class BundleEntry implements Serializable {
     
     public void setPid(String pid) {
         this.pid = pid;
+    }
+
+    public String getPid() {
+        return pid;
     }
 
 }

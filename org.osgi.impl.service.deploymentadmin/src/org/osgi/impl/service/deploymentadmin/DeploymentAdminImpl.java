@@ -75,7 +75,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     }
     
     // persisted fields
-    private Set     dps = new HashSet();		// deployment packages
+    private Set       dps = new HashSet();		// deployment packages
+    private Hashtable mappingRpDp = new Hashtable();
     
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
@@ -173,8 +174,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             ret = srcDp;
         }
         else { // if (session.getDeploymentAction() == DeploymentSession.UPDATE) 
-            //dps.remove(session.getTargetDeploymentPackage());
-            //dps.add(session.getSourceDeploymentPackage());
             removeDp((DeploymentPackageImpl) session.getTargetDeploymentPackage());
             addDp((DeploymentPackageImpl) session.getSourceDeploymentPackage());
             ret = session.getSourceDeploymentPackage();
@@ -184,10 +183,24 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     
     private void addDp(DeploymentPackageImpl dp) {
         dps.add(dp);
+        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
+            BundleEntry	be = (BundleEntry) iter.next();
+            if (be.isCustomizer())
+                mappingRpDp.put(be.getPid(), dp.getName());
+        }
     }
 
     private void removeDp(DeploymentPackageImpl dp) {
         dps.remove(dp);
+        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
+            BundleEntry	be = (BundleEntry) iter.next();
+            if (be.isCustomizer())
+                mappingRpDp.remove(be.getPid());
+        }
+    }
+    
+    String getMappedDp(String pid) {
+        return (String) mappingRpDp.get(pid);
     }
 
     private void checkSession() throws DeploymentException {
@@ -322,13 +335,13 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             // creates an empty dp
             targetDp = new DeploymentPackageImpl();
 	        return new DeploymentSessionImpl(new DeploymentPackageImpl(srcDp), 
-	                targetDp, logger, context, fwBundleDir);
+	                targetDp, logger, context, fwBundleDir, this);
         }
         // found -> update
         else {
             DeploymentSessionImpl ret = new DeploymentSessionImpl(
                     new DeploymentPackageImpl(srcDp), new DeploymentPackageImpl(targetDp), 
-                    logger, context, fwBundleDir);
+                    logger, context, fwBundleDir, this);
             if (srcDp.fixPack()) {
                 VersionRange range = srcDp.getFixPackRange();
                 Version ver = targetDp.getVersion();
@@ -354,7 +367,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             throw new RuntimeException("Internal error");
         
         return new DeploymentSessionImpl(srcDp, new DeploymentPackageImpl(targetDp), logger,
-                context, fwBundleDir);
+                context, fwBundleDir, this);
 	}
 
     private DeploymentPackageImpl findDp(DeploymentPackageImpl srcDp) {
@@ -455,6 +468,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                     FileOutputStream fos = new FileOutputStream(f);
                     ObjectOutputStream oos = new ObjectOutputStream(fos);
                     oos.writeObject(dps);
+                    oos.writeObject(mappingRpDp);
                     oos.close();
                     fos.close();
                     return null;
@@ -478,6 +492,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             fis = new FileInputStream(f);
             DPObjectInputStream ois = new DPObjectInputStream(fis);
             dps = (Set) ois.readObject();
+            mappingRpDp = (Hashtable) ois.readObject();
             ois.close();
             fis.close();
         } catch (FileNotFoundException e) {

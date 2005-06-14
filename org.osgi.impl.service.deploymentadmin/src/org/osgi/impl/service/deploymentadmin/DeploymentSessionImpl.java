@@ -82,6 +82,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     private TrackerPerm                 trackPerm;
     private TrackerCondPerm             trackCondPerm;
     private TrackerPackageAdmin         trackPackAdmin;
+    private DeploymentAdminImpl         da;
     
     // getDataFile uses this. 
     private String 				        fwBundleDir;
@@ -130,7 +131,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
                           DeploymentPackageImpl targetDp, 
                           Logger logger, 
                           final BundleContext context,
-                          String fwbd) 
+                          String fwbd,
+                          DeploymentAdminImpl da) 
     {
         this.srcDp = srcDp;
         this.targetDp = targetDp;
@@ -141,6 +143,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         trackCondPerm = new TrackerCondPerm();
         trackPackAdmin = new TrackerPackageAdmin();
         this.fwBundleDir = null == fwbd ? "" : fwbd;
+        this.da = da;
         
         AccessController.doPrivileged(new PrivilegedAction() {
             public Object run() {
@@ -381,6 +384,11 @@ public class DeploymentSessionImpl implements DeploymentSession {
             if (!entry.isCustomizer())
                 continue;
             startBundle(b);
+            
+            // TODO is it sure?
+            ServiceReference sref = b.getRegisteredServices()[0];
+            String pid = (String) sref.getProperty(Constants.SERVICE_PID);
+            entry.setPid(pid);
         }
     }
     
@@ -584,6 +592,11 @@ public class DeploymentSessionImpl implements DeploymentSession {
         String pid = entry.getAttributes().getValue(DAConstants.RP_PID);
         if (null == pid)
             return;
+        String mDp = da.getMappedDp(pid);
+        if (null != mDp && !srcDp.getName().equals(mDp))
+            throw new DeploymentException(DeploymentException.CODE_FOREIGN_CUSTOMIZER,
+                    "PID '" + pid + "' belongs to another DP (" + mDp + ")");
+            
         ResourceProcessor proc = findProcessor(pid);
         if (null == proc)
             throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND, 
