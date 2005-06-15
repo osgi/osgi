@@ -238,8 +238,10 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
         for (int i = 0; i < paths.length; i++) {
             try {
                 StatusVariable var = trustedGetStatusVariable(paths[i]);
-                itemList.add(new DmtAlertItem(Activator.PLUGIN_ROOT + "/" + paths[i],
-                        "x-oma-trap:" + paths[i], "xml", null, createXml(var)));
+                itemList.add(new DmtAlertItem(
+                        Activator.PLUGIN_ROOT + "/" + paths[i],
+                        "x-oma-trap:" + paths[i], null, 
+                        new DmtData(createXml(var), true)));
             } catch(IllegalArgumentException e) {
                 // Ignore Status Variables that are (temporarily) unavailable                
             }

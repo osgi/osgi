@@ -52,8 +52,7 @@ public class ClientAdaptor implements RemoteAlertSender {
             for (int i = 0; i < items.length; i++) {
                 msg += "Item# " + i + ":" + "Source:" + items[i].getSource()
                         + s + "Data:" + items[i].getData() + s + "Type:"
-                        + items[i].getType() + s + "Format:"
-                        + items[i].getFormat() + "\n";
+                        + items[i].getType() + "\n";
             }
         }
         this.message = msg;

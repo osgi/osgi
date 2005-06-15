@@ -455,7 +455,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 		Vector records = getResult(lr);
 		String result = formatResult(records);
 		DmtAlertItem[] items = new DmtAlertItem[1];
-		items[0] = new DmtAlertItem(nodeUri, null, null, null, result);
+		items[0] = new DmtAlertItem(nodeUri, null, null, new DmtData(result));
         
 		DmtAdmin admin = (DmtAdmin) adminTracker.getService();
         if(admin == null)
