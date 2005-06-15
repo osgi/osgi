@@ -50,191 +50,193 @@ import org.osgi.util.mobile.TransferCostCondition;
 
 /**
  * @methodUnderTest org.osgi.util.mobile.TransferCostCondition#getCondition
- * @generalDescription This class tests getInstance method according with MEG
+ * @generalDescription This class tests getCondition method according with MEG
  *                     specification (rfc0092)
  */
 public class GetCondition {
-    private PolicyTestControl tbc;
+	private PolicyTestControl tbc;
 
-    public GetCondition(PolicyTestControl tbc) {
-        this.tbc = tbc;
-    }
+	public GetCondition(PolicyTestControl tbc) {
+		this.tbc = tbc;
+	}
 
-    public void run() {
-        testGetCondition001();
-        testGetCondition002();
-        testGetCondition003();
-        testGetCondition004();
-        testGetCondition005();
-        testGetCondition006();
-        testGetCondition007();
-    }
+	public void run() {
+		testGetCondition001();
+		testGetCondition002();
+		testGetCondition003();
+		testGetCondition004();
+		testGetCondition005();
+		testGetCondition006();
+	}
 
-    /**
-     * @testID testGetCondition001
-     * @testDescription Asserts if a condition is sucessfully created when "LOW"
-     *                  is passed as costLimit parameter
-     * 
-     */
-    public void testGetCondition001() {
-        tbc.log("#testGetCondition001");
-        try {
-            Condition cond = TransferCostCondition.getCondition(
-                    PolicyTestControl.TEST_BUNDLE, new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
+	/**
+	 * @testID testGetCondition001
+	 * @testDescription Asserts if a condition is sucessfully created when "LOW"
+	 *                  is passed as costLimit parameter
+	 * 
+	 */
+	public void testGetCondition001() {
+		tbc.log("#testGetCondition001");
+		try {
+			Condition cond = TransferCostCondition.getCondition(
+					PolicyTestControl.TEST_BUNDLE, new ConditionInfo("",
+							new String[] { TransferCostCondition.LOW }));
 
-            tbc.assertNotNull(MessagesConstants.getMessage(
-                    MessagesConstants.ASSERT_NOT_NULL,
-                    new String[] { "created condition" }), cond);
+			tbc.assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] { "created condition" }), cond);
 
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                    MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-                            .getClass().getName() }));
-        }
-    }
+			tbc
+					.assertTrue(
+							"The returned condition is an instance of TransferCostCondition",
+							(cond instanceof TransferCostCondition));
 
-    /**
-     * @testID testGetCondition002
-     * @testDescription Asserts if a condition is sucessfully created when
-     *                  "MEDIUM" is passed as costLimit parameter
-     * 
-     */
-    public void testGetCondition002() {
-        tbc.log("#testGetCondition002");
-        try {
-            Condition cond = TransferCostCondition
-                    .getCondition(PolicyTestControl.TEST_BUNDLE,
-                            new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
+							.getClass().getName() }));
+		}
+	}
 
-            tbc.assertNotNull(MessagesConstants.getMessage(
-                    MessagesConstants.ASSERT_NOT_NULL,
-                    new String[] { "created condition" }), cond);
+	/**
+	 * @testID testGetCondition002
+	 * @testDescription Asserts if a condition is sucessfully created when
+	 *                  "MEDIUM" is passed as costLimit parameter
+	 * 
+	 */
+	public void testGetCondition002() {
+		tbc.log("#testGetCondition002");
+		try {
+			Condition cond = TransferCostCondition.getCondition(
+					PolicyTestControl.TEST_BUNDLE, new ConditionInfo("",
+							new String[] { TransferCostCondition.MEDIUM }));
 
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                    MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-                            .getClass().getName() }));
-        }
-    }
+			tbc.assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] { "created condition" }), cond);
 
-    /**
-     * @testID testGetCondition003
-     * @testDescription Asserts if a condition is sucessfully created when
-     *                  "HIGH" is passed as costLimit parameter
-     * 
-     */
-    public void testGetCondition003() {
-        tbc.log("#testGetCondition003");
-        try {
-            Condition cond = TransferCostCondition.getCondition(
-                    PolicyTestControl.TEST_BUNDLE, new ConditionInfo("",new String[]{TransferCostCondition.HIGH}));
+			tbc
+					.assertTrue(
+							"The returned condition is an instance of TransferCostCondition",
+							(cond instanceof TransferCostCondition));
 
-            tbc.assertNotNull(MessagesConstants.getMessage(
-                    MessagesConstants.ASSERT_NOT_NULL,
-                    new String[] { "created condition" }), cond);
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
+							.getClass().getName() }));
+		}
+	}
 
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                    MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-                            .getClass().getName() }));
-        }
-    }
+	/**
+	 * @testID testGetCondition003
+	 * @testDescription Asserts if a condition is sucessfully created when
+	 *                  "HIGH" is passed as costLimit parameter
+	 * 
+	 */
+	public void testGetCondition003() {
+		tbc.log("#testGetCondition003");
+		try {
+			Condition cond = TransferCostCondition.getCondition(
+					PolicyTestControl.TEST_BUNDLE, new ConditionInfo("",
+							new String[] { TransferCostCondition.HIGH }));
 
-    /**
-     * @testID testGetCondition004
-     * @testDescription Asserts if an IllegalArgumentException is thrown if the
-     *                  costLimit parameter is not from the possible values
-     * 
-     */
-    public void testGetCondition004() {
-        tbc.log("#testGetCondition004");
-        try {
-            Condition cond = TransferCostCondition.getCondition(
-                    PolicyTestControl.TEST_BUNDLE,
-                    new ConditionInfo("",new String[]{PolicyTestControl.INVALID_COST_LIMIT }));
+			tbc.assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] { "created condition" }), cond);
 
-            tbc.failException("#", IllegalArgumentException.class);
-        } catch (IllegalArgumentException e) {
-            tbc.pass(MessagesConstants.getMessage(
-                    MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-                    new String[] { e.getClass().getName() }));
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                    MessagesConstants.EXCEPTION_THROWN, new String[] {
-                            IllegalArgumentException.class.getName(),
-                            e.getClass().getName() }));
-        }
-    }
+			tbc
+					.assertTrue(
+							"The returned condition is an instance of TransferCostCondition",
+							(cond instanceof TransferCostCondition));
 
-    /**
-     * @testID testGetCondition005
-     * @testDescription Asserts if a NullPointerException is thrown if 
-     *                  one of the parameters is null
-     * 
-     */
-    public void testGetCondition005() {
-        tbc.log("#testGetCondition005");
-        try {
-            Condition cond = TransferCostCondition.getCondition(
-                    null,
-                    new ConditionInfo("",new String[]{PolicyTestControl.INVALID_COST_LIMIT }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
+							.getClass().getName() }));
+		}
+	}
 
-            tbc.failException("#", NullPointerException.class);
-        } catch (NullPointerException e) {
-            tbc.pass(MessagesConstants.getMessage(
-                    MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-                    new String[] { e.getClass().getName() }));
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                    MessagesConstants.EXCEPTION_THROWN, new String[] {
-                            IllegalArgumentException.class.getName(),
-                            e.getClass().getName() }));
-        }
-    }
-    
-    /**
-     * @testID testGetCondition006
-     * @testDescription Asserts if a NullPointerException is thrown if 
-     *                  one of the parameters is null
-     * 
-     */
-    public void testGetCondition006() {
-        tbc.log("#testGetCondition006");
-        try {
-            Condition cond = TransferCostCondition.getCondition(
-                    PolicyTestControl.TEST_BUNDLE,
-                    null);
+	/**
+	 * @testID testGetCondition004
+	 * @testDescription Asserts if an IllegalArgumentException is thrown if the
+	 *                  costLimit parameter is not from the possible values
+	 * 
+	 */
+	public void testGetCondition004() {
+		tbc.log("#testGetCondition004");
+		try {
+			Condition cond = TransferCostCondition
+					.getCondition(
+							PolicyTestControl.TEST_BUNDLE,
+							new ConditionInfo(
+									"",
+									new String[] { PolicyTestControl.INVALID_COST_LIMIT }));
 
-            tbc.failException("#", NullPointerException.class);
-        } catch (NullPointerException e) {
-            tbc.pass(MessagesConstants.getMessage(
-                    MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-                    new String[] { e.getClass().getName() }));
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                    MessagesConstants.EXCEPTION_THROWN, new String[] {
-                            IllegalArgumentException.class.getName(),
-                            e.getClass().getName() }));
-        }
-    }
-    
-    /**
-     * @testID testGetCondition007
-     * @testDescription Asserts if the returned Condition is an instance of TransferCostCondition.
-     * 
-     */
-    public void testGetCondition007() {
-        tbc.log("#testGetCondition007");
-        try {
-            Condition cond = TransferCostCondition.getCondition(
-                    PolicyTestControl.TEST_BUNDLE, new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
-            
-            tbc.assertTrue("The returned condition is an instance of TransferCostCondition", (cond instanceof TransferCostCondition));
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                    MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-                            .getClass().getName() }));
-        }
-    }
-    
+			tbc.failException("#", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { e.getClass().getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		}
+	}
+
+	/**
+	 * @testID testGetCondition005
+	 * @testDescription Asserts if a NullPointerException is thrown if one of
+	 *                  the parameters is null
+	 * 
+	 */
+	public void testGetCondition005() {
+		tbc.log("#testGetCondition005");
+		try {
+			Condition cond = TransferCostCondition
+					.getCondition(
+							null,
+							new ConditionInfo(
+									"",
+									new String[] { PolicyTestControl.INVALID_COST_LIMIT }));
+
+			tbc.failException("#", NullPointerException.class);
+		} catch (NullPointerException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { e.getClass().getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		}
+	}
+
+	/**
+	 * @testID testGetCondition006
+	 * @testDescription Asserts if a NullPointerException is thrown if one of
+	 *                  the parameters is null
+	 * 
+	 */
+	public void testGetCondition006() {
+		tbc.log("#testGetCondition006");
+		try {
+			Condition cond = TransferCostCondition.getCondition(
+					PolicyTestControl.TEST_BUNDLE, null);
+
+			tbc.failException("#", NullPointerException.class);
+		} catch (NullPointerException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { e.getClass().getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		}
+	}
+
 }

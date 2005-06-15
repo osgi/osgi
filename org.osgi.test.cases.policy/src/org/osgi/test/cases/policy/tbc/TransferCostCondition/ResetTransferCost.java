@@ -63,6 +63,8 @@ public class ResetTransferCost {
 		testResetTransferCost002();
 		testResetTransferCost003();
 		testResetTransferCost004();
+		testResetTransferCost005();
+		testResetTransferCost006();
 	}
 
 	/**
@@ -178,6 +180,62 @@ public class ResetTransferCost {
 		}
 	}
 	
+	/**
+	 * @testID testResetTransferCost005
+	 * @testDescription Asserts if isSatisfied method returns true after
+	 *                  is reseted
+	 */
+	public void testResetTransferCost005() {
+        tbc.log("#testResetTransferCost005");
+		try {
+            TransferCostCondition.setTransferCost(TransferCostCondition.HIGH);
+            Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.MEDIUM}));
 
+			TransferCostCondition.resetTransferCost();
+
+			tbc
+					.assertTrue(
+							MessagesConstants
+									.getMessage(
+											MessagesConstants.ASSERT_TRUE,
+											new String[] { "isSatisfied method returns true after resetTransferCost method call" }),
+							cond.isSatisfied());
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
+							.getClass().getName() }));
+		}
+	}
+	
+	/**
+	 * @testID testResetTransferCost006
+	 * @testDescription Asserts if isSatisfied method returns true after
+	 *                  is reseted
+	 */
+	public void testResetTransferCost006() {
+        tbc.log("#testResetTransferCost006");
+		try {
+            TransferCostCondition.setTransferCost(TransferCostCondition.MEDIUM);
+            Condition cond = TransferCostCondition.getCondition(PolicyTestControl.TEST_BUNDLE,
+                    new ConditionInfo("",new String[]{TransferCostCondition.LOW}));
+
+			TransferCostCondition.resetTransferCost();
+
+			tbc
+					.assertTrue(
+							MessagesConstants
+									.getMessage(
+											MessagesConstants.ASSERT_TRUE,
+											new String[] { "isSatisfied method returns true after resetTransferCost method call" }),
+							cond.isSatisfied());
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
+							.getClass().getName() }));
+		}
+	}
     
 }

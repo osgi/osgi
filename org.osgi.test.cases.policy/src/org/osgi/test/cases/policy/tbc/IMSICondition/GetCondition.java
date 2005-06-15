@@ -46,11 +46,12 @@ import org.osgi.service.condpermadmin.Condition;
 import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.test.cases.policy.tbc.PolicyTestControl;
 import org.osgi.test.cases.policy.tbc.util.MessagesConstants;
+import org.osgi.util.gsm.IMEICondition;
 import org.osgi.util.gsm.IMSICondition;
 
 /**
  * @methodUnderTest org.osgi.util.gsm.IMSICondition#getCondition
- * @generalDescription This class tests getInstance method according with MEG
+ * @generalDescription This class tests getCondition method according with MEG
  *                     specification (rfc0092)
  */
 public class GetCondition {
@@ -82,7 +83,7 @@ public class GetCondition {
         try {
             Condition cond = IMSICondition.getCondition(
                     PolicyTestControl.TEST_BUNDLE,
-                    new ConditionInfo("",new String[]{PolicyTestControl.IMSI_VALID_CODE}));
+                    new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyTestControl.IMSI_VALID_CODE}));
 
             tbc.assertNotNull(MessagesConstants.getMessage(
                     MessagesConstants.ASSERT_NOT_NULL,
@@ -104,7 +105,7 @@ public class GetCondition {
         tbc.log("#testGetCondition002");
         try {
             Condition cond = IMSICondition.getCondition(null,
-                    new ConditionInfo("",new String[]{PolicyTestControl.IMSI_VALID_CODE}));
+                    new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyTestControl.IMSI_VALID_CODE}));
 
             tbc.failException("", NullPointerException.class);
         } catch (NullPointerException e) {
@@ -153,7 +154,7 @@ public class GetCondition {
         try {
             Condition cond = IMSICondition.getCondition(
                     PolicyTestControl.TEST_BUNDLE,
-                    new ConditionInfo("",new String[]{PolicyTestControl.INVALID_CODE}));
+                    new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyTestControl.INVALID_CODE}));
 
             tbc.failException("", IllegalArgumentException.class);
         } catch (IllegalArgumentException e) {
@@ -171,14 +172,14 @@ public class GetCondition {
     /**
      * @testID testGetCondition005
      * @testDescription Asserts if IllegalArgumentException is thrown if the
-     *                  imsi is not a string of 15 digits
+     *                  imsi code is with more than 15 digits
      */
     public void testGetCondition005() {
         tbc.log("#testGetCondition005");
         try {
             Condition cond = IMSICondition.getCondition(
                     PolicyTestControl.TEST_BUNDLE,
-                    new ConditionInfo("",new String[]{PolicyTestControl.IMSI_MORE_DIGIT_CODE}));
+                    new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyTestControl.IMSI_MORE_DIGIT_CODE}));
 
             tbc.failException("", IllegalArgumentException.class);
         } catch (IllegalArgumentException e) {
@@ -195,14 +196,14 @@ public class GetCondition {
 
     /**
      * @testID testGetCondition006
-     * @testDescription Asserts if a condition is sucessfully created when imsi
-     *                  parameter is a valid char code
+     * @testDescription Asserts if a condition is not created when imsi
+     *                  parameter is an invalid char code
      */
     public void testGetCondition006() {
         tbc.log("#testGetCondition006");
         try {
             Condition cond = IMSICondition.getCondition(PolicyTestControl.TEST_BUNDLE,
-                    new ConditionInfo("",new String[]{PolicyTestControl.IMSI_CHAR_CODE}));
+                    new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyTestControl.IMSI_CHAR_CODE}));
     
             tbc.failException("", IllegalArgumentException.class);
         } catch (IllegalArgumentException e) {
@@ -220,14 +221,14 @@ public class GetCondition {
     /**
      * @testID testGetCondition007
      * @testDescription Asserts if IllegalArgumentException is thrown if the
-     *                  imsi is not a string of 15 digits
+     *                  imsi code is with less than 15 digits
      */
     public void testGetCondition007() {
         tbc.log("#testGetCondition007");
         try {
             Condition cond = IMSICondition.getCondition(
                     PolicyTestControl.TEST_BUNDLE,
-                    new ConditionInfo("",new String[]{PolicyTestControl.IMSI_LESS_DIGIT_CODE}));
+                    new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyTestControl.IMSI_LESS_DIGIT_CODE}));
 
                tbc.failException("", IllegalArgumentException.class);
         } catch (IllegalArgumentException e) {
@@ -241,28 +242,30 @@ public class GetCondition {
                             e.getClass().getName() }));
         }
     }
-
     
     /**
      * @testID testGetCondition008
-     * @testDescription Asserts if a condition is sucessfully created when IMSI
-     *                  parameter is equals to IMSI phone code
+     * @testDescription Asserts if IllegalArgumentException is thrown if the
+     *                  imsi code is a string with hyphens
      */
     public void testGetCondition008() {
         tbc.log("#testGetCondition008");
         try {
-            Condition cond = IMSICondition.getCondition(
+            Condition cond = IMEICondition.getCondition(
                     PolicyTestControl.TEST_BUNDLE,
-                    new ConditionInfo("",new String[]{PolicyTestControl.IMSI_PHONE_CODE}));
+                    new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyTestControl.IMSI_INVALID_CODE}));
 
-            tbc.assertNotNull(MessagesConstants.getMessage(
-                    MessagesConstants.ASSERT_NOT_NULL,
-                    new String[] { "created condition" }), cond);
-
+            tbc.failException("", IllegalArgumentException.class);
+        } catch (IllegalArgumentException e) {
+            tbc.pass(MessagesConstants.getMessage(
+                    MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+                    new String[] { e.getClass().getName() }));
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
-                    MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-                            .getClass().getName() }));
+                    MessagesConstants.EXCEPTION_THROWN, new String[] {
+                            IllegalArgumentException.class.getName(),
+                            e.getClass().getName() }));
         }
     }
+
 }

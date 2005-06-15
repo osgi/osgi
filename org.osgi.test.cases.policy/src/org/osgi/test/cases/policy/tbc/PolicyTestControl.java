@@ -40,12 +40,20 @@ package org.osgi.test.cases.policy.tbc;
 
 import java.security.MessageDigest;
 
+import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.PackagePermission;
+import org.osgi.framework.ServicePermission;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtPermission;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.event.TopicPermission;
 import org.osgi.service.permissionadmin.PermissionAdmin;
+import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.policy.tbc.TransferCostCondition.IsPostponed;
 import org.osgi.test.cases.policy.tbc.TransferCostCondition.ResetTransferCost;
 import org.osgi.test.cases.policy.tbc.TransferCostCondition.SetTransferCost;
 import org.osgi.test.cases.policy.tbc.TransferCostCondition.TransferCostConditionConstants;
@@ -66,7 +74,21 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 			.getProperty("org.osgi.util.gsm.imsi");
 
 	
+	public static String LOCATION = "";
+
+	public static final String ALL_ACTIONS = DmtPermission.ADD + ","
+			+ DmtPermission.DELETE + "," + DmtPermission.EXEC + ","
+			+ DmtPermission.GET + "," + DmtPermission.REPLACE;
+	public static final String ALL_NODES = "./*";
+
+
+	private TB1Service tb1Service;
+
+	private TestInterface[] testBundleTB1;
+
 	public static final String IMEI_VALID_CODE = "012345678912345";
+	
+	public static final String IMEI_INVALID_CODE = "0123456-8912345";
 
 	public static final String IMEI_CHAR_CODE = "abcdefghijklmno";
 
@@ -80,23 +102,29 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 
 	public static final String IMSI_LESS_DIGIT_CODE = "12345";
 	
+	public static final String IMSI_INVALID_CODE = "0123456-8912345";
+	
 	public static final String IMSI_MORE_DIGIT_CODE = "1234567890123456";
 
 	public static final String INVALID_CODE = "@#$%sA!&_";
 
 	public static final String PRINCIPAL = "www.cesar.org.br";
 
-	public static final String PRINCIPAL_HASH = "orcrg8rpqoT4sm1pCeZDObtaZGI";
-
-	public static final String PRINCIPAL_DMT = "./OSGi/Policies/Java/DmtPrincipal";
+	public static final String OSGI_ROOT = "./OSGi";
+	
+	public static final String POLICY_JAVA_NODE =  OSGI_ROOT + "/Policy/Java";
+	
+	public static final String LOCATION_PERMISSION_NODE =  POLICY_JAVA_NODE + "/LocationPermission";
+	
+	public static final String DEFAULT_PERMISSION_NODE =  LOCATION_PERMISSION_NODE + "/Default";
+	
+	public static final String PRINCIPAL_PERMISSION_NODE =  POLICY_JAVA_NODE + "/PrincipalPermission";
+	
+	public static final String CONDITIONAL_PERMISSION_NODE =  POLICY_JAVA_NODE + "/ConditionalPermission";
 	
 	public static final String CONDITION_HASH = "Egtd5i+S33Y94dHent1bFdlb_ak";
 	
 	public static final String CONDITION_DMT = "./OSGi/Policies/Java/ConditionalPermission";
-	
-	public static final String PERMISSION_DMT = "./OSGi/Policies/Java/Bundle";
-	
-	public static final String DEFAULT_DMT = "./OSGi/Policies/Java/Bundle/Default";
 	
 	public static final String PERMISSION_INFO = "(org.osgi.framework.AdminPermission \"*\" \"*\")\n";
 	
@@ -131,7 +159,8 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 				getContext().getServiceReference(DmtAdmin.class.getName()));
         
         bundle = new TestBundle();
-		
+        
+        installBundle();		
 	}
 
 	/*
@@ -195,7 +224,21 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 	public void testTransferCostConditionSetTransferCost() {
 		new SetTransferCost(this).run();
 	}
+    
+    /*
+     * Calls TransferCostCondition.SetTransferCost test methods
+     */
+    public void testTransferCostConditionIsPostponed() {
+        new IsPostponed(this).run();
+    }
 	
+	/*
+	 * Executes test methods for tree structure
+	 */
+	public void testTreeStructure() {
+		testBundleTB1[0].run();
+	}
+
 	public ConditionalPermissionAdmin getConditionalPermissionAdmin() {
 		return cpa;
 	}
@@ -222,32 +265,79 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 		return bundle;
 	}
 
+	private void installBundle() {
+		try {
+			installBundle("tb1.jar");
+		} catch (Exception e) {
+			log("TestControl: Failed installing a bundle");
+		}
+		ServiceReference tb1SvrReference = getContext().getServiceReference(
+				TB1Service.class.getName());
+		LOCATION = tb1SvrReference.getBundle().getLocation();
+		tb1Service = (TB1Service) getContext().getService(tb1SvrReference);
+		testBundleTB1 = tb1Service.getTestClasses(this);
+		setPermissions(new PermissionInfo(DmtPermission.class.getName(),
+				ALL_NODES, ALL_ACTIONS));
+	}
 
-	public DmtSession getSession(String nodeURI, int lockMode) {
-		
-		if (nodeURI != null) {
-			try {
-				if (session != null && session.getState() != DmtSession.STATE_CLOSED ) {
-					session.close();
-				}
-				session = da.getSession(nodeURI, lockMode);
-			} catch (DmtException e) {
-				log("TestControl: Fail to get the session");
-			} catch (IllegalStateException e) {
+
+	public void setPermissions(PermissionInfo permission) {
+		pa.setPermissions(LOCATION,
+				new PermissionInfo[] {
+						new PermissionInfo(TopicPermission.class.getName(),
+								"org/osgi/service/dmt/ADDED",
+								TopicPermission.PUBLISH),
+						new PermissionInfo(TopicPermission.class.getName(),
+								"org/osgi/service/dmt/REPLACED",
+								TopicPermission.PUBLISH),
+						new PermissionInfo(TopicPermission.class.getName(),
+								"org/osgi/service/dmt/DELETED",
+								TopicPermission.PUBLISH),
+						new PermissionInfo(TopicPermission.class.getName(),
+								"org/osgi/service/dmt/RENAMED",
+								TopicPermission.PUBLISH),
+						new PermissionInfo(TopicPermission.class.getName(),
+								"org/osgi/service/dmt/COPIED",
+								TopicPermission.PUBLISH),
+						new PermissionInfo(PackagePermission.class.getName(),
+								"*", "EXPORT, IMPORT"),
+						new PermissionInfo(ServicePermission.class.getName(),
+								"*", "GET"),
+						new PermissionInfo(AdminPermission.class.getName(),
+								"*", "*"), permission });
+	}
+
+	public void closeSession(DmtSession session) {
+		if (null != session) {
+			if (session.getState() == DmtSession.STATE_OPEN) {
 				try {
-					session = da.getSession(nodeURI, lockMode);
-				} catch (DmtException e1) {
-					log("TestControl: Fail to get the session");
+					session.close();
+				} catch (DmtException e) {
+					log("#Exception closing the session: "
+							+ e.getClass().getName() + "Message: ["
+							+ e.getMessage() + "]");
 				}
-				return session;
-			} catch (Exception e) {
-				log("TestControl: Unexpected Exception "
-						+ e.getClass().getName());
 			}
-			return session;
-		} else {
-			throw new IllegalArgumentException("node URI is null or invalid.");
 		}
 	}
+
+	public void cleanUp(DmtSession session, String[] nodeUri) {
+		if (session != null && session.getState() == DmtSession.STATE_OPEN) {
+			if (nodeUri == null) {
+				closeSession(session);
+			} else {
+				for (int i = 0; i < nodeUri.length; i++) {
+					try {
+						session.deleteNode(nodeUri[i]);
+					} catch (Throwable e) {
+						log("#Exception at cleanUp: " + e.getClass().getName()
+								+ " [Message: " + e.getMessage() + "]");
+					}
+				}
+				closeSession(session);
+			}
+		}
+	}
+
 	
 }
