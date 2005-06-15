@@ -25,29 +25,30 @@ package org.osgi.service.dmt;
  */
 public class DmtAlertItem {
 
-    private String source;
-    private String type;
-    private String format;
-    private String mark;
-    private String data;
+    private String  source;
+    private String  type;
+    private String  mark;
+    private DmtData data;
 
     /**
      * Create an instance of the alert item. The constructor takes all possible
      * data entries as parameters. Any of these parameters can be
-     * <code>null</code>.
+     * <code>null</code>. The semantics of the parameters may be refined by
+     * the definition of a specific alert, identified by its alert code (see
+     * {@link DmtAdmin#sendAlert sendAlert}). In case of Generic Alerts for
+     * example (code 1226), the <code>mark</code> parameter contains a
+     * severity string.
      * 
      * @param source the URI of the node which is the source of the alert item
-     * @param type the type of the alert item
-     * ### Needs to define where the possible values come from
-     * @param format the format of the alert item
+     * @param type a MIME type or a URN that identifies the type of the data in
+     *        the alert item
+     * @param data a <code>DmtData</code> object that contains the format and
+     *        value of the data in the alert item
      * @param mark the mark parameter of the alert item
-     * @param data the data of the alert item
      */
-    public DmtAlertItem(String source, String type, String format, String mark,
-                        String data) {
+    public DmtAlertItem(String source, String type, String mark, DmtData data) {
         this.source = source;
         this.type   = type;
-        this.format = format;
         this.mark   = mark;
         this.data   = data;
     }
@@ -65,9 +66,12 @@ public class DmtAlertItem {
     }
 
     /**
-     * Get the type associated with the alert item. There might be no type
-     * associated with the alert item.
-     * ### define where the value comes from, is the the DmtData FORMAT? Also "no format" must be "no type"
+     * Get the type associated with the alert item. The type string is a MIME
+     * type or a URN that identifies the type of the data in the alert item
+     * (returned by {@link #getData}). There might be no type associated with
+     * the alert item.
+     * 
+     * ### "no format" must be "no type"?
      * 
      * @return the type type associated with the alert item, or
      *         <code>null</code> if there is no type
@@ -77,48 +81,42 @@ public class DmtAlertItem {
     }
 
     /**
-     * Get the format associated with the alert item. There might be no format
-     * associated with the alert item.
-     * 
-     * @return the format associated with the alert item, or <code>null</code>
-     *         if there is no format
-     */
-    public String getFormat() {
-        return format;
-    }
-
-    /**
-     * Get the mark parameter associated with the alert item. There might be no
-     * mark associated with the alert item.
+     * Get the mark parameter associated with the alert item. The interpretation
+     * of the mark parameter depends on the alert being sent, as identified by
+     * the alert code in {@link DmtAdmin#sendAlert sendAlert}. There might be
+     * no mark associated with the alert item.
      * 
      * @return the mark associated with the alert item, or <code>null</code>
      *         if there is no mark
      */
     public String getMark() {
-        return format;
+        return mark;
     }
 
     /**
-     * Get the data associated with the alert item. There might be no data
-     * associated with the alert item.
+     * Get the data associated with the alert item. The returned
+     * <code>DmtData</code> object contains the format and the value of the
+     * data in the alert item. There might be no data associated with the alert
+     * item.
      * 
      * @return the data associated with the alert item, or <code>null</code>
      *         if there is no data
      */
-    public String getData() {
+    public DmtData getData() {
         return data;
     }
 
     /**
-     * Returns the string representation of this alert item.  The returned
+     * Returns the string representation of this alert item. The returned string
      * includes all parameters of the alert item, and has the following format:
-     * <code>DmtAlertItem(&lt;source&gt;, &lt;type&gt;, &lt;format&gt;, &lt;mark&gt;, &lt;data&gt;)</code>
+     * <pre> DmtAlertItem(&lt;source&gt;, &lt;type&gt;, &lt;mark&gt;, &lt;data&gt;)</pre>
+     * The last parameter is the string representation of the data value.  The 
+     * format of the data is not explicitly included.
      * 
      * @return the string representation of this alert item
      */
     public String toString() {
         return
-            "DmtAlertItem(\"" + source + "\", \"" + type + "\", \"" +
-            format + "\", \"" + mark + "\", \"" + data + "\")";
+            "DmtAlertItem(\"" + source + "\", \"" + type + "\", \"" + mark + "\", \"" + data + "\")";
     }
 }
