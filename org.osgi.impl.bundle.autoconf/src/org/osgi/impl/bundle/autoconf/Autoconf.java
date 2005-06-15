@@ -80,6 +80,86 @@ public class Autoconf implements ResourceProcessor {
 		commitData = new LinkedList();
 	}
 
+	/**
+	 * Process a designate element, and put it 
+	 * @param d
+	 * @param ocds
+	 * @throws DeploymentException if the element cannot be processed for any reason. It 
+	 * is the callers' responsibility to recover work if the element is optional
+	 */
+	public ConfigurationData processDesignate(MetaData.Designate d,MetaData.OCD[] ocds) throws DeploymentException {
+		MetaData.Object o = d.objects[0]; // There can be only one!
+
+		// unfortunately the bundle name is in symbName-version format
+		String bundleName = d.bundle;
+		int dash = bundleName.indexOf('-');
+		String bundleSymbolicName = bundleName.substring(0,dash);
+		String bundleVersion = bundleName.substring(dash+1);
+		
+		Bundle bundle = searchForBundle(bundleSymbolicName,bundleVersion,d.factoryPid==null);
+		if (bundle==null) {
+			throw new IllegalArgumentException(
+				"the bundle "+bundleSymbolicName+" "+bundleVersion+
+				" needs to be configured but is not part of the deployment package");
+		}
+
+		MetaData.OCD ocd = getOCD(ocds,o.ocdref);
+		ObjectClassDefinition realOCD=null;
+		if (ocd==null) {
+			MetaTypeInformation mti = metaTypeService.getMetaTypeInformation(bundle);
+			if (mti==null) {
+				throw new IllegalArgumentException("no ocd found for pid "+d.pid);
+			}
+			if (d.factoryPid!=null) {
+				realOCD = mti.getObjectClassDefinition(d.factoryPid,null);
+			} else {
+				realOCD = mti.getObjectClassDefinition(d.pid,null);
+			}
+			if (realOCD==null) {
+				throw new IllegalArgumentException("no ocd found for pid "+d.pid);
+			}
+		}
+
+		Map values = createData(ocd,realOCD,o);
+		String location = bundle.getLocation();
+		
+		if (d.factoryPid!=null) {
+			ConfigurationData toWrite = new ConfigurationData();
+			try {
+				toWrite.configuration = configurationAdmin.createFactoryConfiguration(d.factoryPid,location);
+			}
+			catch (IOException e) {
+				throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot create new factory configuration",e);
+			}
+
+			toWrite.properties = new Hashtable(values);
+			return toWrite;
+		} else {
+			ConfigurationData toWrite = new ConfigurationData();
+			try {
+				toWrite.configuration = configurationAdmin.getConfiguration(d.pid,location);
+			}
+			catch (IOException e) {
+				throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot get configuration",e);
+			}
+
+			if (d.merge) {
+				Dictionary oldProps = toWrite.configuration.getProperties();
+				Hashtable newProps = new Hashtable();
+				for(Enumeration e = oldProps.keys();e.hasMoreElements();) {
+					String propName = (String) e.nextElement();
+					java.lang.Object propValue = oldProps.get(propName);
+					newProps.put(propName,propValue);
+				}
+				newProps.putAll(values);
+				toWrite.properties = newProps;
+			} else {
+				toWrite.properties = new Hashtable(values);
+			}
+			return toWrite;
+		}
+	}
+	
 	public void process(final String name, final InputStream stream) throws DeploymentException {
 		InputSource is = new InputSource(stream);
 		is.setPublicId(name);
@@ -103,77 +183,15 @@ public class Autoconf implements ResourceProcessor {
 		designates:
 		for(int i = 0; i < m.designates.length; i++) {
 			MetaData.Designate d = m.designates[i];
-			MetaData.Object o = d.objects[0]; // There can be only one!
-
-			// unfortunately the bundle name is in symbName-version format
-			String bundleName = d.bundle;
-			int dash = bundleName.indexOf('-');
-			String bundleSymbolicName = bundleName.substring(0,dash);
-			String bundleVersion = bundleName.substring(dash+1);
-			
-			Bundle bundle = searchForBundle(bundleSymbolicName,bundleVersion,d.factoryPid==null);
-			if (bundle==null) {
-				if (d.optional) { continue designates; }
-				throw new IllegalArgumentException(
-					"the bundle "+bundleSymbolicName+" "+bundleVersion+
-					" needs to be configured but is not part of the deployment package");
-			}
-
-			MetaData.OCD ocd = getOCD(m,o.ocdref);
-			ObjectClassDefinition realOCD=null;
-			if (ocd==null) {
-				MetaTypeInformation mti = metaTypeService.getMetaTypeInformation(bundle);
-				if (mti==null) {
-					if (d.optional) { continue designates; }
-					throw new IllegalArgumentException("no ocd found for pid "+d.pid);
-				}
-				if (d.factoryPid!=null) {
-					realOCD = mti.getObjectClassDefinition(d.factoryPid,null);
-				} else {
-					realOCD = mti.getObjectClassDefinition(d.pid,null);
-				}
-				if (realOCD==null) {
-					if (d.optional) { continue designates; }
-					throw new IllegalArgumentException("no ocd found for pid "+d.pid);
-				}
-			}
-			Map values = createData(ocd,realOCD,o);
-			String location = bundle.getLocation();
-			
-			if (d.factoryPid!=null) {
-				ConfigurationData toWrite = new ConfigurationData();
-				try {
-					toWrite.configuration = configurationAdmin.createFactoryConfiguration(d.factoryPid,location);
-				}
-				catch (IOException e) {
-					throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot create new factory configuration",e);
-				}
-
-				toWrite.properties = new Hashtable(values);
+			try {
+				ConfigurationData toWrite = processDesignate(d,m.ocds);
 				commitData.add(toWrite);
-			} else {
-				ConfigurationData toWrite = new ConfigurationData();
-				try {
-					toWrite.configuration = configurationAdmin.getConfiguration(d.pid,location);
+			} catch (DeploymentException e) {
+				if (d.optional) {
+					// TODO should log something
+					continue; 
 				}
-				catch (IOException e) {
-					throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot get configuration",e);
-				}
-
-				if (d.merge) {
-					Dictionary oldProps = toWrite.configuration.getProperties();
-					Hashtable newProps = new Hashtable();
-					for(Enumeration e = oldProps.keys();e.hasMoreElements();) {
-						String propName = (String) e.nextElement();
-						java.lang.Object propValue = oldProps.get(propName);
-						newProps.put(propName,propValue);
-					}
-					newProps.putAll(values);
-					toWrite.properties = newProps;
-				} else {
-					toWrite.properties = new Hashtable(values);
-				}
-				commitData.add(toWrite);
+				throw e;
 			}
 		}
 	}
@@ -342,9 +360,9 @@ public class Autoconf implements ResourceProcessor {
 	 * @param ocdref
 	 * @return
 	 */
-	private OCD getOCD(MetaData m, String ocdref) {
-		for(int i=0;i<m.ocds.length;i++) {
-			OCD ocd = m.ocds[i];
+	private OCD getOCD(MetaData.OCD[] ocds, String ocdref) {
+		for(int i=0;i<ocds.length;i++) {
+			OCD ocd = ocds[i];
 			if (ocd.id.equals(ocdref)) return ocd;
 		}
 		return null;
