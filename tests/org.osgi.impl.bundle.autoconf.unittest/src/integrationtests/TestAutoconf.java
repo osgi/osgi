@@ -109,7 +109,7 @@ public class TestAutoconf extends IntegratedTest implements Test {
 
 	public void testRegistered() throws Exception {
 		startFramework(true);
-		ServiceReference[] sr = systemBundleContext.getServiceReferences(ResourceProcessor.class.getName(),"(service.pid=org.osgi.deployment.config_resource_processor)");
+		ServiceReference[] sr = systemBundleContext.getServiceReferences(ResourceProcessor.class.getName(),"(service.pid=org.osgi.deployment.rp.autoconf)");
 		assertEquals(1,sr.length);
 		Object sp = systemBundleContext.getService(sr[0]);
 		assertEquals(Autoconf.class.getName(),sp.getClass().getName()); // different classloaders!

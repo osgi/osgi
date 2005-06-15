@@ -33,7 +33,7 @@
 					<attribute name="Bundle-Version" value="1.0"/>
 				</section>
 				<section name="OSGI-INF/autoconf.xml">
-					<attribute name="Resource-Processor" value="org.osgi.deployment.config_resource_processor"/>
+					<attribute name="Resource-Processor" value="org.osgi.deployment.rp.autoconf"/>
 				</section>
 			</manifest>
 			<fileset dir=".">
@@ -53,7 +53,7 @@
 					<attribute name="Bundle-Version" value="1.0"/>
 				</section>
 				<section name="OSGI-INF/autoconf.xml">
-					<attribute name="Resource-Processor" value="org.osgi.deployment.config_resource_processor"/>
+					<attribute name="Resource-Processor" value="org.osgi.deployment.rp.autoconf"/>
 				</section>
 			</manifest>
 			<fileset dir=".">
@@ -73,7 +73,7 @@
 					<attribute name="Bundle-Version" value="1.0"/>
 				</section>
 				<section name="OSGI-INF/autoconf.xml">
-					<attribute name="Resource-Processor" value="org.osgi.deployment.config_resource_processor"/>
+					<attribute name="Resource-Processor" value="org.osgi.deployment.rp.autoconf"/>
 				</section>
 			</manifest>
 			<fileset dir=".">
