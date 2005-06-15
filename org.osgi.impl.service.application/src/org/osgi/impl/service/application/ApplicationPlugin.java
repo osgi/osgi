@@ -459,8 +459,8 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		return ret;
 	}
 	
-	public void execute(DmtSession session, String nodeUri, String data)
-			throws DmtException {
+	public void execute(DmtSession session, String nodeUri, String correlator,
+            String data) throws DmtException {
 
 		String[] path = prepareUri( nodeUri );
 
