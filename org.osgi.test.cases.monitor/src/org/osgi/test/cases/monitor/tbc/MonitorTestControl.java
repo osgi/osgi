@@ -57,6 +57,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.monitor.tbc.Activators.MonitorHandlerActivator;
 import org.osgi.test.cases.monitor.tbc.Activators.MonitorableActivator;
 import org.osgi.test.cases.monitor.tbc.Activators.MonitorableActivator2;
+import org.osgi.test.cases.monitor.tbc.Activators.RemoteAlertSenderActivator;
 import org.osgi.test.cases.monitor.tbc.MonitorListener.Updated;
 import org.osgi.test.cases.monitor.tbc.MonitorPermission.Implies;
 import org.osgi.test.cases.monitor.tbc.MonitorPermission.MonitorPermission;
@@ -65,7 +66,7 @@ import org.osgi.test.cases.monitor.tbc.Monitorable.GetStatusVariable;
 import org.osgi.test.cases.monitor.tbc.Monitorable.Monitorables;
 import org.osgi.test.cases.monitor.tbc.Monitorable.NotifiesOnChange;
 import org.osgi.test.cases.monitor.tbc.MonitoringJob.IsLocal;
-import org.osgi.test.cases.monitor.tbc.MonitoringJob.RemoteStartJob;
+import org.osgi.test.cases.monitor.tbc.MonitoringJob.RemoteAlertSender;
 import org.osgi.test.cases.monitor.tbc.MonitoringJob.Stop;
 import org.osgi.test.cases.monitor.tbc.StatusVariable.StatusVariable;
 import org.osgi.test.cases.monitor.tbc.StatusVariable.StatusVariableConstants;
@@ -150,7 +151,9 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 		DMT_URI_MONITORABLE1_SV1+"/Server/remoteServer/Reporting/Value",
 		DMT_URI_MONITORABLE1_SV1+"/Server/remoteServer/Enabled"
 	};
-
+	
+	public static final String REMOTE_SERVER = "remoteServer";
+	
 	private MonitorAdmin monitorAdmin;
 
 	private MonitorListener monitorListener;
@@ -171,6 +174,12 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	private TestInterface[] testInterfaces;
 	
 	private ServiceReference[] srvReferences;
+	
+	private String serverId = null;
+	
+	private String correlator = null;
+	
+	private boolean receivedAlert = false;
 	
 	public void stopMonitorables() {
 		try {
@@ -229,10 +238,22 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 					+ e.getClass());			
 		}		
 	}
+	
+	private void installRemoteAlertSender() {
+		try {
+			RemoteAlertSenderActivator remoteAlertSenderActivator = new RemoteAlertSenderActivator(this);
+			remoteAlertSenderActivator.start(getContext());
+		}
+		catch (Exception e) {
+			this.fail("Unexpected exception at prepare(installRemoteAlertSender). "
+					+ e.getClass());			
+		}				
+	}
 
 	public void prepare() throws Exception {
 			installMonitorables();
 			installEventHandler();
+			installRemoteAlertSender();
 			
 			permissionAdmin = (PermissionAdmin) getContext().getService(
 					getContext().getServiceReference(
@@ -488,8 +509,8 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	/*
 	 * Executes the RemoteStartJob tests
 	 */
-	public void testRemoteStartJob() {
-		new RemoteStartJob(this).run();
+	public void testRemoteAlertSender() {
+		new RemoteAlertSender(this).run();
 	}	
 	
 	/*
@@ -566,5 +587,48 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 		} catch (DmtException e) {
 			log("#fail when closing the session.");
 		}
+	}
+	
+	/**
+	 * @return Returns the correlator.
+	 */
+	public String getCorrelator() {
+		return correlator;
+	}
+	/**
+	 * @param correlator The correlator to set.
+	 */
+	public void setCorrelator(String correlator) {
+		this.correlator = correlator;
+	}
+	/**
+	 * @return Returns the receivedAlert.
+	 */
+	public boolean isReceivedAlert() {
+		return receivedAlert;
+	}
+	/**
+	 * @param receivedAlert The receivedAlert to set.
+	 */
+	public void setReceivedAlert(boolean receivedAlert) {
+		this.receivedAlert = receivedAlert;
+	}
+	/**
+	 * @return Returns the serverId.
+	 */
+	public String getServerId() {
+		return serverId;
+	}
+	/**
+	 * @param serverId The serverId to set.
+	 */
+	public void setServerId(String serverId) {
+		this.serverId = serverId;
+	}
+	
+	public void resetAlert() {
+		serverId = null;
+		correlator = null;
+		receivedAlert = false;
 	}
 }
