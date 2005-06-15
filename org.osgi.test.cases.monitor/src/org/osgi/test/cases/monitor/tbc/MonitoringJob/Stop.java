@@ -70,6 +70,7 @@ public class Stop {
 	 *                  calling of stop().
 	 */
 	public void testStop001() {
+		tbc.log("#testStop001");
 		try {
 			tbc.stopRunningJobs();
 			
@@ -92,7 +93,7 @@ public class Stop {
 			}
 			tbc.pass("The MonitoringJob was started and stopped with success.");
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -102,6 +103,7 @@ public class Stop {
 	 *                  calling of stop().
 	 */
 	public void testStop002() {
+		tbc.log("#testStop002");
 		try {
 			tbc.stopRunningJobs();
 
@@ -124,7 +126,7 @@ public class Stop {
 			}
 			tbc.pass("The MonitoringJob was started and stopped with success.");
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 	

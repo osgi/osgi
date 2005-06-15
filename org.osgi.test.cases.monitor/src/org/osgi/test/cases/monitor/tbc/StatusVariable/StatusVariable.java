@@ -36,6 +36,9 @@
  * 24/03/2005   Alexandre Alves
  * 14           Updates after formal inspection (JSTD-MEGTCK-CODE-INSP011)
  * ===========  ==============================================================
+ * 14/06/2005   Alexandre Alves
+ * 14           Updates after revision of spec.
+ * ===========  ==============================================================
  */
 package org.osgi.test.cases.monitor.tbc.StatusVariable;
 
@@ -92,6 +95,10 @@ public class StatusVariable {
 		testStatusVariable030();
 		testStatusVariable031();
 		testStatusVariable032();
+		testStatusVariable033();
+		testStatusVariable034();
+		testStatusVariable035();
+		testStatusVariable036();
 	}
 
 	/**
@@ -103,6 +110,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable001() {
 		try {
+			tbc.log("#testStatusVariable001");
 			new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.INVALID_ID,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -129,6 +137,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable002() {
 		try {
+			tbc.log("#testStatusVariable002");
 			new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.INVALID_ID,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -155,6 +164,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable003() {
 		try {
+			tbc.log("#testStatusVariable003");
 			new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.INVALID_ID,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -181,6 +191,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable004() {
 		try {
+			tbc.log("#testStatusVariable004");
 			new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.INVALID_ID,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -206,6 +217,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable005() {
 		try {
+			tbc.log("#testStatusVariable005");
 			new org.osgi.service.monitor.StatusVariable(
 					null,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -231,6 +243,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable006() {
 		try {
+			tbc.log("#testStatusVariable006");
 			new org.osgi.service.monitor.StatusVariable(
 					null,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -256,6 +269,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable007() {
 		try {
+			tbc.log("#testStatusVariable007");
 			new org.osgi.service.monitor.StatusVariable(
 					null,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -281,6 +295,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable008() {
 		try {
+			tbc.log("#testStatusVariable008");
 			new org.osgi.service.monitor.StatusVariable(
 					null,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -306,6 +321,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable009() {
 		try {
+			tbc.log("#testStatusVariable009");
 			new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1, MonitorTestControl.INVALID_CM,
 					MonitorTestControl.SV_LONG_VALUE);
@@ -330,6 +346,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable010() {
 		try {
+			tbc.log("#testStatusVariable010");
 			new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1, MonitorTestControl.INVALID_CM,
 					MonitorTestControl.SV_DOUBLE_VALUE);
@@ -354,6 +371,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable011() {
 		try {
+			tbc.log("#testStatusVariable011");
 			new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1, MonitorTestControl.INVALID_CM,
 					MonitorTestControl.SV_STRING_VALUE);
@@ -378,6 +396,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable012() {
 		try {
+			tbc.log("#testStatusVariable012");
 			new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1, MonitorTestControl.INVALID_CM,
 					MonitorTestControl.SV_BOOLEAN_VALUE);
@@ -401,6 +420,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable013() {
 		try {
+			tbc.log("#testStatusVariable013");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -442,10 +462,10 @@ public class StatusVariable {
 							org.osgi.service.monitor.StatusVariable.CM_CC,
 							method);
 			
-			tbc.assertNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NULL, new String[] { "getTimeStamp()" }), sv.getTimeStamp());
+			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NULL, new String[] { "getTimeStamp()" }), sv.getTimeStamp());
 			
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -456,6 +476,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable014() {
 		try {
+			tbc.log("#testStatusVariable014");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -500,10 +521,10 @@ public class StatusVariable {
 							org.osgi.service.monitor.StatusVariable.CM_CC,
 							method);
 			
-			tbc.assertNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NULL, new String[] { "getTimeStamp()" }), sv.getTimeStamp());
+			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NULL, new String[] { "getTimeStamp()" }), sv.getTimeStamp());
 			
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -514,6 +535,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable015() {
 		try {
+			tbc.log("#testStatusVariable015");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -556,10 +578,10 @@ public class StatusVariable {
 							org.osgi.service.monitor.StatusVariable.CM_CC,
 							method);
 			
-			tbc.assertNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NULL, new String[] { "getTimeStamp()" }), sv.getTimeStamp());
+			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NULL, new String[] { "getTimeStamp()" }), sv.getTimeStamp());
 			
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -570,6 +592,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable016() {
 		try {
+			tbc.log("#testStatusVariable016");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -613,10 +636,10 @@ public class StatusVariable {
 							org.osgi.service.monitor.StatusVariable.CM_CC,
 							method);
 			
-			tbc.assertNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NULL, new String[] { "getTimeStamp()" }), sv.getTimeStamp());
+			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NULL, new String[] { "getTimeStamp()" }), sv.getTimeStamp());
 			
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -627,6 +650,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable017() {
 		try {
+			tbc.log("#testStatusVariable017");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -652,6 +676,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable018() {
 		try {
+			tbc.log("#testStatusVariable018");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -677,6 +702,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable019() {
 		try {
+			tbc.log("#testStatusVariable019");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -702,6 +728,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable020() {
 		try {
+			tbc.log("#testStatusVariable020");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -727,6 +754,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable021() {
 		try {
+			tbc.log("#testStatusVariable021");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -752,6 +780,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable022() {
 		try {
+			tbc.log("#testStatusVariable022");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -777,6 +806,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable023() {
 		try {
+			tbc.log("#testStatusVariable023");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -802,6 +832,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable024() {
 		try {
+			tbc.log("#testStatusVariable024");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -827,6 +858,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable025() {
 		try {
+			tbc.log("#testStatusVariable025");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -852,6 +884,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable026() {
 		try {
+			tbc.log("#testStatusVariable026");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -877,6 +910,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable027() {
 		try {
+			tbc.log("#testStatusVariable027");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -902,6 +936,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable028() {
 		try {
+			tbc.log("#testStatusVariable028");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -927,6 +962,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable029() {
 		try {
+			tbc.log("#testStatusVariable029");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					"",
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -952,6 +988,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable030() {
 		try {
+			tbc.log("#testStatusVariable030");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					"",
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -977,6 +1014,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable031() {
 		try {
+			tbc.log("#testStatusVariable031");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					"",
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -1002,6 +1040,7 @@ public class StatusVariable {
 	 */
 	public void testStatusVariable032() {
 		try {
+			tbc.log("#testStatusVariable032");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					"",
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -1018,6 +1057,106 @@ public class StatusVariable {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
 		}
-	}		
+	}
+	
+	/**
+	 * @testID testStatusVariable033
+	 * @testDescription This method asserts if an IllegalArgumentException is
+	 *                  thrown when use a statusvariable name with more than 20 characters.
+	 */
+	public void testStatusVariable033() {
+		try {
+			tbc.log("#testStatusVariable033");
+			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
+					MonitorTestControl.LONGID,
+					org.osgi.service.monitor.StatusVariable.CM_CC,
+					MonitorTestControl.SV_DOUBLE_VALUE);
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		}
+	}
+	
+	/**
+	 * @testID testStatusVariable034
+	 * @testDescription This method asserts if an IllegalArgumentException is
+	 *                  thrown when use a statusvariable name with more than 20 characters.
+	 */
+	public void testStatusVariable034() {
+		try {
+			tbc.log("#testStatusVariable034");
+			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
+					MonitorTestControl.LONGID,
+					org.osgi.service.monitor.StatusVariable.CM_CC,
+					MonitorTestControl.SV_BOOLEAN_VALUE);
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		}
+	}			
+	
+	/**
+	 * @testID testStatusVariable035
+	 * @testDescription This method asserts if an IllegalArgumentException is
+	 *                  thrown when use a statusvariable name with more than 20 characters.
+	 */
+	public void testStatusVariable035() {
+		try {
+			tbc.log("#testStatusVariable035");
+			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
+					MonitorTestControl.LONGID,
+					org.osgi.service.monitor.StatusVariable.CM_CC,
+					MonitorTestControl.SV_LONG_VALUE);
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		}
+	}			
+	
+	/**
+	 * @testID testStatusVariable036
+	 * @testDescription This method asserts if an IllegalArgumentException is
+	 *                  thrown when use a statusvariable name with more than 20 characters.
+	 */
+	public void testStatusVariable036() {
+		try {
+			tbc.log("#testStatusVariable036");
+			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
+					MonitorTestControl.LONGID,
+					org.osgi.service.monitor.StatusVariable.CM_CC,
+					MonitorTestControl.SV_STRING_VALUE);
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		}
+	}			
 
 }

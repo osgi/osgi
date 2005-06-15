@@ -45,6 +45,8 @@ import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.event.TopicPermission;
 import org.osgi.service.monitor.MonitorAdmin;
 import org.osgi.service.monitor.MonitorListener;
@@ -60,6 +62,7 @@ import org.osgi.test.cases.monitor.tbc.MonitorPermission.Implies;
 import org.osgi.test.cases.monitor.tbc.MonitorPermission.MonitorPermission;
 import org.osgi.test.cases.monitor.tbc.MonitorPermission.MonitorPermissionConstants;
 import org.osgi.test.cases.monitor.tbc.Monitorable.GetStatusVariable;
+import org.osgi.test.cases.monitor.tbc.Monitorable.Monitorables;
 import org.osgi.test.cases.monitor.tbc.Monitorable.NotifiesOnChange;
 import org.osgi.test.cases.monitor.tbc.MonitoringJob.IsLocal;
 import org.osgi.test.cases.monitor.tbc.MonitoringJob.RemoteStartJob;
@@ -73,6 +76,8 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
  * Controls the execution of the test case
  */
 public class MonitorTestControl extends DefaultTestBundleControl {
+	
+	public static final String LONGID = "abcdefghjklmnoprstuvw";
 
 	public final static String INVALID_ID = ";/?:@&=+$,";
 
@@ -123,6 +128,8 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	public final static String INVALID_MONITORABLE_SV = "tmp";
 
 	public static int EVENT_COUNT = 0;
+	
+	public static final int TIMEOUT = 2000;
 	
 	public static final String CONST_STATUSVARIABLE_NAME = "mon.statusvariable.name";
 	public static final String CONST_STATUSVARIABLE_VALUE = "mon.statusvariable.value";
@@ -184,8 +191,8 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 			monitorableActivator.start(getContext());
 			
 			monitorableActivator2 = new MonitorableActivator2(this);
-			monitorableActivator2.start(getContext());    
-			
+			monitorableActivator2.start(getContext());    						
+	
 			ServiceReference[] refs = getContext().getServiceReferences(
 					Monitorable.class.getName(), null);
 			if (refs.length == 1) {
@@ -485,6 +492,12 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 		new RemoteStartJob(this).run();
 	}	
 	
+	/*
+	 * Executes the Monitorables tests
+	 */
+	public void testMonitorables() {
+		new Monitorables(this).run();
+	}		
 
 	/**
 	 * @return Returns the monitorAdmin.
@@ -545,5 +558,13 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	 */
 	public String getTb1Location() {
 		return tb1Location;
+	}
+	
+	public void closeSession(DmtSession session) {
+		try {
+			session.close();
+		} catch (DmtException e) {
+			log("#fail when closing the session.");
+		}
 	}
 }

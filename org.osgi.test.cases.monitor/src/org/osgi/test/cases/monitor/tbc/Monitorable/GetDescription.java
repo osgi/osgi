@@ -67,6 +67,7 @@ public class GetDescription {
 	 */
 	public void testGetDescription001() {
 		try {
+			tbc.log("#testGetDescription001");
 			tbc.getMonitorable().getDescription(
 					MonitorTestControl.INVALID_MONITORABLE_SV);
 			tbc.failException("", IllegalArgumentException.class);
@@ -89,11 +90,12 @@ public class GetDescription {
 	 */
 	public void testGetDescription002() {
 		try {
+			tbc.log("#testGetDescription002");
 			tbc.assertNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NULL, new String[] { "getDescription returned value" }), tbc
 					.getMonitorable().getDescription(
 							MonitorTestControl.SV_NAME1));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 

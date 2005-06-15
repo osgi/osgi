@@ -67,6 +67,7 @@ public class ResetStatusVariable {
 	 */
 	public void testResetStatusVariable001() {
 		try {
+			tbc.log("#testResetStatusVariable001");
 			tbc.getMonitorable().resetStatusVariable(
 					MonitorTestControl.INVALID_MONITORABLE_SV);
 			tbc.failException("", IllegalArgumentException.class);
@@ -89,12 +90,13 @@ public class ResetStatusVariable {
 	 */
 	public void testResetStatusVariable002() {
 		try {
+			tbc.log("#testResetStatusVariable002");
 			tbc
 					.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE, new String[] { "ours monitorable returns false when use a valid id." }),
 							!tbc.getMonitorable().resetStatusVariable(
 									MonitorTestControl.SV_NAME1));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 
 	}

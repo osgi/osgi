@@ -40,10 +40,8 @@ package org.osgi.test.cases.monitor;
 import org.osgi.test.cases.util.DefaultTestCase;
 
 /**
- * @classUnderTest org.osgi.service.monitor
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>Monitor<code> class, according to MEG reference
- *                     documentation.
+ * @generalDescription This Test Case Validates the implementation
+ *                     according to RFC-84.
  */
 
 public class TestMonitor extends DefaultTestCase {

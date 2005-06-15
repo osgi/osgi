@@ -30,50 +30,52 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * Mar 9, 2005  Alexandre Santos
+ * 24/06/2005   Alexandre Santos
  * 14           Implement MEG TCK
  * ===========  ==============================================================
  */
-package org.osgi.test.cases.monitor.tbc.Monitorable;
+package org.osgi.test.cases.monitor.tbc.Activators;
 
+import java.util.Hashtable;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.monitor.Monitorable;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
-import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.test.cases.monitor.tbc.Monitorable#getStatusVariableNames
- * @generalDescription This Test Class Validates the implementation of
- *                     <code>getStatusVariableNames<code> method, according to MEG reference
- *                     documentation.
+ * @author Alexandre Santos
+ *
  */
-public class GetStatusVariableNames {
+public class MonitorableSameSvActivator implements BundleActivator {
+
+	private ServiceRegistration servReg;
+	
 	private MonitorTestControl tbc;
 
-	public GetStatusVariableNames(MonitorTestControl tbc) {
+	private MonitorableSameSvImpl testMonitorableImpl;
+
+	public MonitorableSameSvActivator(MonitorTestControl tbc) {
 		this.tbc = tbc;
 	}
 	
-	public void run(){
-		testGetStatusVariableNames001();
-	}	
-	
-	/**
-	 * @testID testGetStatusVariableNames001
-	 * @testDescription Tests if the returned names
-	 *                  was the same used in monitorable impl.
-	 */
-	public void testGetStatusVariableNames001() {
-		tbc.log("#testGetStatusVariableNames001");
-		String[] statusVariables = tbc.getMonitorable().getStatusVariableNames();
+	public void start(BundleContext bc) throws Exception {
+		// creating the service
+		testMonitorableImpl = new MonitorableSameSvImpl(tbc);
 		
-		tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "length of the returned variable names", MonitorTestControl.SV_LENGTH+"" }) , MonitorTestControl.SV_LENGTH, statusVariables.length);
+		Hashtable ht = new Hashtable();
+		ht.put("service.pid", "sameSV");
 		
-		boolean passed = true;
-		for (int i=0; i<statusVariables.length; i++) {
-			if ((!statusVariables[i].equals(MonitorTestControl.SV_NAME1)) && (!statusVariables[i].equals(MonitorTestControl.SV_NAME2))) {
-				passed = false;
-			}
-		}
-		
-		tbc.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE, new String[] { "ours monitorable returns all the statusvariables." }), passed);
+			
+		String[] ifs = new String[] { Monitorable.class.getName() };
+		servReg = bc.registerService(ifs, testMonitorableImpl, ht);
+		System.out.println("Monitorable activated.");
 	}
+
+	public void stop(BundleContext arg0) throws Exception {
+		// unregistering the service
+		servReg.unregister();
+	}
+
 }

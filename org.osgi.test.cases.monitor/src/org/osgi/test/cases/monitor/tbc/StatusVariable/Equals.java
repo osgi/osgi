@@ -86,6 +86,7 @@ public class Equals {
 	 */
 	public void testEquals001() {
 		try {
+			tbc.log("#testEquals001");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -102,7 +103,7 @@ public class Equals {
 											new String[] { "two objects created with same parameters are equal" }),
 							sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -113,6 +114,7 @@ public class Equals {
 	 */
 	public void testEquals002() {
 		try {
+			tbc.log("#testEquals002");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -131,7 +133,7 @@ public class Equals {
 											new String[] { "two objects created with different data are not equal" }),
 							!sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -142,6 +144,7 @@ public class Equals {
 	 */
 	public void testEquals003() {
 		try {
+			tbc.log("#testEquals003");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -160,7 +163,7 @@ public class Equals {
 											new String[] { "two objects created with different collection methods are not equal" }),
 							!sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -171,6 +174,7 @@ public class Equals {
 	 */
 	public void testEquals004() {
 		try {
+			tbc.log("#testEquals004");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -189,7 +193,7 @@ public class Equals {
 											new String[] { "two objects created with different path are not equal" }),
 							!sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -200,7 +204,8 @@ public class Equals {
 	 */
 	public void testEquals005() {
 		try {
-			org.osgi.service.monitor.StatusVariable sv = tbc.getMonitorAdmin().getStatusVariable(MonitorTestControl.SVS[0]);
+			tbc.log("#testEquals005");
+			org.osgi.service.monitor.StatusVariable sv = tbc.getMonitorAdmin().getStatusVariable(MonitorTestControl.SVS[1]);
 
 			org.osgi.service.monitor.StatusVariable sv2 = tbc.getMonitorAdmin().getStatusVariable(MonitorTestControl.SVS_NOT_SUPPORT_NOTIFICATION[0]);
 			tbc
@@ -211,7 +216,7 @@ public class Equals {
 											new String[] { "two objects with different path are not equal" }),
 							!sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -222,6 +227,7 @@ public class Equals {
 	 */
 	public void testEquals006() {
 		try {
+			tbc.log("#testEquals006");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -240,7 +246,7 @@ public class Equals {
 											new String[] { "two objects created with different types are not equal" }),
 							!sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -251,6 +257,7 @@ public class Equals {
 	 */
 	public void testEquals007() {
 		try {
+			tbc.log("#testEquals007");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -267,7 +274,7 @@ public class Equals {
 											new String[] { "two objects created with same parameters are equal" }),
 							sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -278,6 +285,7 @@ public class Equals {
 	 */
 	public void testEquals008() {
 		try {
+			tbc.log("#testEquals008");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -296,7 +304,7 @@ public class Equals {
 											new String[] { "two objects created with different data are not equal" }),
 							!sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -307,6 +315,7 @@ public class Equals {
 	 */
 	public void testEquals009() {
 		try {
+			tbc.log("#testEquals009");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -325,7 +334,7 @@ public class Equals {
 											new String[] { "two objects created with different collection methods are not equal" }),
 							!sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -336,6 +345,7 @@ public class Equals {
 	 */
 	public void testEquals010() {
 		try {
+			tbc.log("#testEquals010");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -354,7 +364,7 @@ public class Equals {
 											new String[] { "two objects created with different path are not equal" }),
 							!sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -365,6 +375,7 @@ public class Equals {
 	 */
 	public void testEquals011() {
 		try {
+			tbc.log("#testEquals011");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -383,7 +394,7 @@ public class Equals {
 											new String[] { "two objects created with different type are not equal" }),
 							!sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -394,6 +405,7 @@ public class Equals {
 	 */
 	public void testEquals012() {
 		try {
+			tbc.log("#testEquals012");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_MONITORABLEID1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -410,7 +422,7 @@ public class Equals {
 											new String[] { "two objects created with same parameters are equal" }),
 							sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -421,6 +433,7 @@ public class Equals {
 	 */
 	public void testEquals013() {
 		try {
+			tbc.log("#testEquals013");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -439,7 +452,7 @@ public class Equals {
 											new String[] { "two objects created with different data are not equal" }),
 							!sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -450,6 +463,7 @@ public class Equals {
 	 */
 	public void testEquals014() {
 		try {
+			tbc.log("#testEquals014");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -468,7 +482,7 @@ public class Equals {
 											new String[] { "two objects created with different collection methods are not equal" }),
 							!sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -479,6 +493,7 @@ public class Equals {
 	 */
 	public void testEquals015() {
 		try {
+			tbc.log("#testEquals015");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -497,7 +512,7 @@ public class Equals {
 											new String[] { "two objects created with different path are not equal" }),
 							!sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -508,6 +523,7 @@ public class Equals {
 	 */
 	public void testEquals016() {
 		try {
+			tbc.log("#testEquals016");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -526,7 +542,7 @@ public class Equals {
 											new String[] { "two objects created with different type are not equal" }),
 							!sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -537,6 +553,7 @@ public class Equals {
 	 */
 	public void testEquals017() {
 		try {
+			tbc.log("#testEquals017");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -553,7 +570,7 @@ public class Equals {
 											new String[] { "two objects created with same parameters are equal" }),
 							sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -564,6 +581,7 @@ public class Equals {
 	 */
 	public void testEquals018() {
 		try {
+			tbc.log("#testEquals018");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -582,7 +600,7 @@ public class Equals {
 											new String[] { "two objects created with different data are not equal" }),
 							!sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -593,6 +611,7 @@ public class Equals {
 	 */
 	public void testEquals019() {
 		try {
+			tbc.log("#testEquals019");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -611,7 +630,7 @@ public class Equals {
 											new String[] { "two objects created with different collection methods are not equal" }),
 							!sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -622,6 +641,7 @@ public class Equals {
 	 */
 	public void testEquals020() {
 		try {
+			tbc.log("#testEquals020");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -640,7 +660,7 @@ public class Equals {
 											new String[] { "two objects created with different path are not equal" }),
 							!sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -651,6 +671,7 @@ public class Equals {
 	 */
 	public void testEquals021() {
 		try {
+			tbc.log("#testEquals021");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -669,7 +690,7 @@ public class Equals {
 											new String[] { "two objects created with different type are not equal" }),
 							!sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 

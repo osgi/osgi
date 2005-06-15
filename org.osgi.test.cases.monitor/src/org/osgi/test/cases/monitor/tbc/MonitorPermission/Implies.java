@@ -74,6 +74,7 @@ public class Implies {
 	 */
 	public void testImplies001() {
 		try {
+			tbc.log("#testImplies001");
 			MonitorPermission mp1 = new MonitorPermission("*/*",
 					org.osgi.service.monitor.MonitorPermission.READ);
 			AllPermission all = new AllPermission();
@@ -86,7 +87,7 @@ public class Implies {
 											new String[] { "a MonitorPermission does not implies a AllPermission" }),
 							!mp1.implies(all));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -97,6 +98,7 @@ public class Implies {
 	 */
 	public void testImplies002() {
 		try {
+			tbc.log("#testImplies002");
 			MonitorPermission mp1 = new MonitorPermission(
 					"*/*",
 					org.osgi.service.monitor.MonitorPermission.READ
@@ -115,7 +117,7 @@ public class Implies {
 											new String[] { "a MonitorPermission with less actions then it is implied by it" }),
 							mp1.implies(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -126,6 +128,7 @@ public class Implies {
 	 */
 	public void testImplies003() {
 		try {
+			tbc.log("#testImplies003");
 			MonitorPermission mp1 = new MonitorPermission(
 					"*/*",
 					org.osgi.service.monitor.MonitorPermission.READ
@@ -149,7 +152,7 @@ public class Implies {
 											new String[] { "a MonitorPermission implies another MonitorPermission with same target and actions" }),
 							mp1.implies(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -160,6 +163,7 @@ public class Implies {
 	 */
 	public void testImplies004() {
 		try {
+			tbc.log("#testImplies004");
 			MonitorPermission mp1 = new MonitorPermission("*/*",
 					org.osgi.service.monitor.MonitorPermission.STARTJOB + ","
 							+ org.osgi.service.monitor.MonitorPermission.RESET);
@@ -179,7 +183,7 @@ public class Implies {
 											new String[] { "a MonitorPermission implies another MonitorPermission with more actions then it" }),
 							!mp1.implies(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -190,6 +194,7 @@ public class Implies {
 	 */
 	public void testImplies005() {
 		try {
+			tbc.log("#testImplies005");
 			MonitorPermission mp1 = new MonitorPermission(
 					"com.mycomp.myapp/*",
 					org.osgi.service.monitor.MonitorPermission.READ
@@ -213,7 +218,7 @@ public class Implies {
 											new String[] { "a MonitorPermission implies another MonitorPermission with different targets" }),
 							!mp1.implies(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 }

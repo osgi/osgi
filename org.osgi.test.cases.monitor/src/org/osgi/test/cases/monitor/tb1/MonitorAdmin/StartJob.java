@@ -39,6 +39,9 @@
  * 29/03/2005   Alexandre Santos
  * 14           Updates after formal inspection (JSTD-MEGTCK-CODE-INSP011)
  * ===========  ==============================================================
+ * May 20, 2005	Alexandre Alves
+ * 92           Make changes according to monitor RFC updates
+ * ===========  ==============================================================
  */
 package org.osgi.test.cases.monitor.tb1.MonitorAdmin;
 
@@ -72,6 +75,8 @@ public class StartJob implements TestInterface {
 		testStartJob007();
 		testStartJob008();
 		testStartJob009();
+		testStartJob010();
+		testStartJob011();
 	}
 
 	/**
@@ -80,6 +85,7 @@ public class StartJob implements TestInterface {
 	 *                  list of StatusVariables is null
 	 */
 	public void testStartJob001() {
+		tbc.log("#testStartJob001");
 		try {
 			tbc.stopRunningJobs();
 						
@@ -107,6 +113,7 @@ public class StartJob implements TestInterface {
 	 *                  list of StatusVariables is empty
 	 */
 	public void testStartJob002() {
+		tbc.log("#testStartJob002");
 		try {
 			tbc.stopRunningJobs();
 			
@@ -134,6 +141,7 @@ public class StartJob implements TestInterface {
 	 *                  parameter is invalid
 	 */
 	public void testStartJob003() {
+		tbc.log("#testStartJob003");
 		try {
 			tbc.stopRunningJobs();
 			
@@ -162,6 +170,7 @@ public class StartJob implements TestInterface {
 	 *                  startjob action and validate all parameters.
 	 */
 	public void testStartJob004() {
+		tbc.log("#testStartJob004");
 		PermissionInfo[] infos = null;
 		try {
 			tbc.stopRunningJobs();
@@ -214,7 +223,7 @@ public class StartJob implements TestInterface {
 
 			mj.stop();
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			tbc.getPermissionAdmin().setPermissions(
 					tbc.getTb1Location(), infos);
@@ -227,6 +236,7 @@ public class StartJob implements TestInterface {
 	 *                  no permission to start a job
 	 */
 	public void testStartJob005() {
+		tbc.log("#testStartJob005");
 		PermissionInfo[] infos = null;
 		try {
 			tbc.stopRunningJobs();
@@ -268,6 +278,7 @@ public class StartJob implements TestInterface {
 	 *                  passed as parameter
 	 */
 	public void testStartJob006() {
+		tbc.log("#testStartJob006");
 		PermissionInfo[] infos = null;
 		try {
 			tbc.stopRunningJobs();
@@ -308,6 +319,7 @@ public class StartJob implements TestInterface {
 	 *                  list of StatusVariables does not supports notification
 	 */
 	public void testStartJob007() {
+		tbc.log("#testStartJob007");
 		try {		
 			tbc.stopRunningJobs();
 			
@@ -337,6 +349,7 @@ public class StartJob implements TestInterface {
 	 *                  updates.
 	 */
 	public synchronized void testStartJob008() {
+		tbc.log("#testStartJob008");
 		PermissionInfo[] infos = null;
 		try {
 			tbc.stopRunningJobs();
@@ -360,7 +373,7 @@ public class StartJob implements TestInterface {
 					new StatusVariable(
 							MonitorTestControl.SV_NAME1, StatusVariable.CM_CC,
 							"test1"));
-			wait(200);
+			wait(MonitorTestControl.TIMEOUT);
 			
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] { "variable of event modification",
@@ -373,7 +386,7 @@ public class StartJob implements TestInterface {
 							MonitorTestControl.SV_NAME1, StatusVariable.CM_CC,
 							"test1"));
 			
-			wait(200);
+			wait(MonitorTestControl.TIMEOUT);
 			
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] { "variable of event modification",
@@ -395,6 +408,7 @@ public class StartJob implements TestInterface {
 	 *                  initiator is null.
 	 */
 	public void testStartJob009() {
+		tbc.log("#testStartJob009");
 		try {
 			tbc.stopRunningJobs();
 			
@@ -415,6 +429,64 @@ public class StartJob implements TestInterface {
 							e.getClass().getName() }));
 		}
 
-	}	
+	}
+	
+	/**
+	 * @testID testStartJob010
+	 * @testDescription Tests if a IllegalArgumentException is thrown if the
+	 *                  initiator is empty.
+	 */
+	public void testStartJob010() {
+		tbc.log("#testStartJob010");
+		try {
+			tbc.stopRunningJobs();
+			
+			MonitoringJob job = tbc.getMonitorAdmin().startJob("", MonitorTestControl.SVS,
+					MonitorTestControl.COUNT);
+			
+			job.stop();
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		}
+
+	}		
+	
+	/**
+	 * @testID testStartJob011
+	 * @testDescription Tests if a IllegalArgumentException is thrown if the
+	 *                  StatusVariable name is invalid.
+	 */
+	public void testStartJob011() {
+		tbc.log("#testStartJob011");
+		try {
+			tbc.stopRunningJobs();
+			
+			MonitoringJob job = tbc.getMonitorAdmin().startJob(MonitorTestControl.INITIATOR, new String[] { "cesar/"+MonitorTestControl.INVALID_ID },
+					MonitorTestControl.COUNT);
+			
+			job.stop();
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		}
+
+	}		
 
 }

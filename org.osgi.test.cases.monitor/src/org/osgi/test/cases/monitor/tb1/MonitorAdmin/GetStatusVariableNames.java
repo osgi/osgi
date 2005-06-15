@@ -39,6 +39,9 @@
  * 24/03/2005   Alexandre Alves
  * 14           Updates after formal inspection (JSTD-MEGTCK-CODE-INSP011)
  * ===========  ==============================================================
+ * May 20, 2005	Alexandre Alves
+ * 92           Make changes according to monitor RFC updates
+ * ===========  ==============================================================
  */
 package org.osgi.test.cases.monitor.tb1.MonitorAdmin;
 
@@ -70,6 +73,8 @@ public class GetStatusVariableNames implements TestInterface {
 		testGetStatusVariableNames007();
 		testGetStatusVariableNames008();
 		testGetStatusVariableNames009();
+		testGetStatusVariableNames010();
+		testGetStatusVariableNames011();
 	}
 
 	/**
@@ -78,6 +83,7 @@ public class GetStatusVariableNames implements TestInterface {
 	 *                  monitorableId is null
 	 */
 	public void testGetStatusVariableNames001() {
+		tbc.log("#testGetStatusVariableNames001");
 		try {
 			tbc.getMonitorAdmin().getStatusVariableNames(null);
 
@@ -100,6 +106,7 @@ public class GetStatusVariableNames implements TestInterface {
 	 *                  monitorableId is invalid
 	 */
 	public void testGetStatusVariableNames002() {
+		tbc.log("#testGetStatusVariableNames002");
 		try {
 			tbc.getMonitorAdmin().getStatusVariableNames(
 					MonitorTestControl.INVALID_ID);
@@ -123,6 +130,7 @@ public class GetStatusVariableNames implements TestInterface {
 	 *                  monitorableId points to a non-existing id
 	 */
 	public void testGetStatusVariableNames003() {
+		tbc.log("#testGetStatusVariableNames003");
 		try {
 			tbc.getMonitorAdmin().getStatusVariableNames(
 					MonitorTestControl.INVALID_MONITORABLE_SV);
@@ -145,6 +153,7 @@ public class GetStatusVariableNames implements TestInterface {
 	 * @testDescription Tests if monitorable_id parameter is valid
 	 */
 	public void testGetStatusVariableNames004() {
+		tbc.log("#testGetStatusVariableNames004");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -167,7 +176,7 @@ public class GetStatusVariableNames implements TestInterface {
 					MonitorTestControl.SV_NAME2, sv[1]);
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			tbc.getPermissionAdmin().setPermissions(
 					tbc.getTb1Location(), infos);
@@ -180,6 +189,7 @@ public class GetStatusVariableNames implements TestInterface {
 	 *                  of status variables defined for monitorable id cesar.
 	 */
 	public void testGetStatusVariableNames005() {
+		tbc.log("#testGetStatusVariableNames005");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -196,7 +206,7 @@ public class GetStatusVariableNames implements TestInterface {
 					MonitorTestControl.SV_LENGTH, sv.length);
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			tbc.getPermissionAdmin().setPermissions(
 					tbc.getTb1Location(), infos);
@@ -209,6 +219,7 @@ public class GetStatusVariableNames implements TestInterface {
 	 *                  that was registered in monitorable implementation.
 	 */
 	public void testGetStatusVariableNames006() {
+		tbc.log("#testGetStatusVariableNames006");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -236,7 +247,7 @@ public class GetStatusVariableNames implements TestInterface {
 							passed);
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			tbc.getPermissionAdmin().setPermissions(
 					tbc.getTb1Location(), infos);
@@ -249,6 +260,7 @@ public class GetStatusVariableNames implements TestInterface {
 	 *                  statusVariables names.
 	 */
 	public void testGetStatusVariableNames007() {
+		tbc.log("#testGetStatusVariableNames007");
 		PermissionInfo[] infos = null;
 		try {
 
@@ -275,7 +287,7 @@ public class GetStatusVariableNames implements TestInterface {
 											new String[] { "The returned statusVariables names is in alphabetical order." }),
 							passed);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			tbc.getPermissionAdmin().setPermissions(
 					tbc.getTb1Location(), infos);
@@ -288,6 +300,7 @@ public class GetStatusVariableNames implements TestInterface {
 	 *                  has no discover permission
 	 */
 	public void testGetStatusVariableNames008() {
+		tbc.log("#testGetStatusVariableNames008");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -321,6 +334,7 @@ public class GetStatusVariableNames implements TestInterface {
 	 *                  has no discover permission
 	 */
 	public void testGetStatusVariableNames009() {
+		tbc.log("#testGetStatusVariableNames009");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -347,5 +361,63 @@ public class GetStatusVariableNames implements TestInterface {
 					tbc.getTb1Location(), infos);
 		}
 	}
+	
+	/**
+	 * @testID testGetStatusVariableNames010
+	 * @testDescription Tests if IllegalArgumentException is thrown when
+	 *                  we pass an empty string as argument.
+	 */
+	public void testGetStatusVariableNames010() {
+		tbc.log("#testGetStatusVariableNames010");
+		try {
+			tbc.getMonitorAdmin().getStatusVariableNames("");
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		} 
+	}
+	
+	/**
+	 * @testID testGetStatusVariableNames011
+	 * @testDescription Asserts if a SecurityException is thrown when the caller
+	 *                  has discover permission for other monitorable
+	 */
+	public void testGetStatusVariableNames011() {
+		tbc.log("#testGetStatusVariableNames011");
+		PermissionInfo[] infos = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb1Location());
+
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SV_MONITORABLEID2+"/*", MonitorPermission.DISCOVER));
+
+			tbc.getMonitorAdmin().getStatusVariableNames(
+					MonitorTestControl.SV_MONITORABLEID1);
+
+			tbc.failException("", SecurityException.class);
+
+		} catch (SecurityException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { SecurityException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							SecurityException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.getPermissionAdmin().setPermissions(
+					tbc.getTb1Location(), infos);
+		}
+	}
+		
 
 }

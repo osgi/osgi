@@ -69,6 +69,7 @@ public class RemoteStartJob {
 	 *                  the remote server after changes at statusvariable using the event based job.
 	 */    
     public void testRemoteStartJob001() {
+    	tbc.log("#testRemoteStartJob001");
     	DmtSession session = null;
         try {
         	session = tbc.getDmtAdmin().getSession(".");					
@@ -82,14 +83,14 @@ public class RemoteStartJob {
 					new StatusVariable(MonitorTestControl.SV_NAME1, StatusVariable.CM_CC,
 							"test1"));			
 		} catch (DmtException e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			try {
 				session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[3], new DmtData(false));
 				session.deleteNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]);
 				session.close();
 			} catch (DmtException e1) {
-				tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+				tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e1.getClass().getName());
 			}
 		}
     }
@@ -100,6 +101,7 @@ public class RemoteStartJob {
 	 *                  the remote server after changes at statusvariable using the time based job.
 	 */    
     public void testRemoteStartJob002() {
+    	tbc.log("#testRemoteStartJob002");
     	DmtSession session = null;
         try {
         	session = tbc.getDmtAdmin().getSession(".");					
@@ -114,14 +116,14 @@ public class RemoteStartJob {
 							"test1"));
 			
 		} catch (DmtException e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			try {
 				session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[3], new DmtData(false));
 				session.deleteNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]);
 				session.close();
 			} catch (DmtException e1) {
-				tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+				tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e1.getClass().getName());
 			}
 		}
     }           

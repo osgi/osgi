@@ -63,8 +63,10 @@ public class TreeStructure {
 	 *                  is according to RFC-87 specify. If node exists and its stores the correct value.
 	 */
 	public void testTreeStructure001() {
+		DmtSession session = null;
 		try {
-			DmtSession session = tbc.getDmtAdmin().getSession(".");
+			tbc.log("#testTreeStructure001");
+			session = tbc.getDmtAdmin().getSession(".");
 			boolean passed = true;
 			passed = session.isNodeUri(MonitorTestControl.DMT_URI_MONITORABLE1_SV1) && passed;
 			
@@ -73,7 +75,9 @@ public class TreeStructure {
 					new String[] { "dmt structure of the monitorable is according to RFC-87 Specify." }), passed);
 							
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);		
 		}
 	}
 
@@ -83,8 +87,10 @@ public class TreeStructure {
 	 *                  is according to RFC-87 specify. If node exists and its stores the correct value.
 	 */
 	public void testTreeStructure002() {
+		DmtSession session = null;
 		try {
-			DmtSession session = tbc.getDmtAdmin().getSession(".");
+			tbc.log("#testTreeStructure002");
+			session = tbc.getDmtAdmin().getSession(".");
 			boolean passed = true;
 			passed = session.isNodeUri(MonitorTestControl.DMT_URI_MONITORABLE1_SV2) && passed;
 			
@@ -93,7 +99,9 @@ public class TreeStructure {
 					new String[] { "dmt structure of the monitorable is according to RFC-87 Specify." }), passed);
 							
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);		
 		}
 	}
 
@@ -104,8 +112,10 @@ public class TreeStructure {
 	 *                  is according to RFC-87 specify. If node exists and its stores the correct value.
 	 */
 	public void testTreeStructure003() {
+		DmtSession session = null;
 		try {
-			DmtSession session = tbc.getDmtAdmin().getSession(".");
+			tbc.log("#testTreeStructure003");
+			session = tbc.getDmtAdmin().getSession(".");
 			boolean passed = true;
 			passed = session.isNodeUri(MonitorTestControl.DMT_URI_MONITORABLE2_SV1) && passed;
 			
@@ -114,7 +124,9 @@ public class TreeStructure {
 					new String[] { "dmt structure of the monitorable is according to RFC-87 Specify." }), passed);
 							
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);		
 		}
 
 	}
@@ -125,8 +137,10 @@ public class TreeStructure {
 	 *                  is according to RFC-87 specify. If node exists and its stores the correct value.
 	 */
 	public void testTreeStructure004() {
+		DmtSession session = null;
 		try {
-			DmtSession session = tbc.getDmtAdmin().getSession(".");
+			tbc.log("#testTreeStructure004");
+			session = tbc.getDmtAdmin().getSession(".");
 			boolean passed = true;
 			passed = session.isNodeUri(MonitorTestControl.DMT_URI_MONITORABLE2_SV2) && passed;
 			
@@ -135,7 +149,9 @@ public class TreeStructure {
 					new String[] { "dmt structure of the monitorable is according to RFC-87 Specify." }), passed);
 							
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);		
 		}
 
 	}	

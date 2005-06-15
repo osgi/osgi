@@ -68,6 +68,7 @@ public class GetStatusVariable {
 	 */
 	public void testGetStatusVariable001() {
 		try {
+			tbc.log("#testGetStatusVariable001");
 			tbc.getMonitorable().getStatusVariable(
 					MonitorTestControl.INVALID_MONITORABLE_SV);
 			tbc.failException("", IllegalArgumentException.class);
@@ -90,13 +91,14 @@ public class GetStatusVariable {
 	 */
 	public void testGetStatusVariable002() {
 		try {
+			tbc.log("#testGetStatusVariable002");
 			StatusVariable statusVariable = tbc.getMonitorable()
 					.getStatusVariable(MonitorTestControl.SV_NAME1);
 			tbc
 					.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "ID", MonitorTestControl.SV_NAME1 }),
 							MonitorTestControl.SV_NAME1, statusVariable.getID());
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 }

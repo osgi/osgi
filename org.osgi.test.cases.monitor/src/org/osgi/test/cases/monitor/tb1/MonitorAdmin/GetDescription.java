@@ -33,6 +33,9 @@
  * Mar 29, 2005	Leonardo Barros
  * 14           Implement MEG TCK
  * ===========  ==============================================================
+ * May 20, 2005	Alexandre Alves
+ * 92           Make changes according to monitor RFC updates
+ * ===========  ==============================================================
  **/
 package org.osgi.test.cases.monitor.tb1.MonitorAdmin;
 
@@ -65,6 +68,8 @@ public class GetDescription implements TestInterface {
 		testGetDescription004();
 		testGetDescription005();
 		testGetDescription006();
+		testGetDescription007();
+		testGetDescription008();
 	}
 
 	/**
@@ -75,6 +80,7 @@ public class GetDescription implements TestInterface {
 	 */
 	public void testGetDescription001() {
 		try { 
+			tbc.log("#testGetDescription001");
 			tbc.getMonitorAdmin().getDescription(null);
 			tbc.failException("", IllegalArgumentException.class);
 			
@@ -97,6 +103,7 @@ public class GetDescription implements TestInterface {
 	 */
 	public void testGetDescription002() {
 		try {
+			tbc.log("#testGetDescription002");
 			tbc.getMonitorAdmin().getDescription(MonitorTestControl.INVALID_ID);
 
 			tbc.failException("", IllegalArgumentException.class);
@@ -120,6 +127,7 @@ public class GetDescription implements TestInterface {
 	 */
 	public void testGetDescription003() {
 		try {
+			tbc.log("#testGetDescription003");
 			tbc.getMonitorAdmin().getDescription(MonitorTestControl.SVS_DONT_EXIST);
 
 			tbc.failException("", IllegalArgumentException.class);
@@ -142,6 +150,7 @@ public class GetDescription implements TestInterface {
 	 *                  passed as argument.
 	 */
 	public void testGetDescription004() {
+		tbc.log("#testGetDescription004");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -152,7 +161,7 @@ public class GetDescription implements TestInterface {
 			tbc
 					.pass("A description is corretly returned when a valid path is passed as argument");
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			tbc.getPermissionAdmin().setPermissions(tbc.getTb1Location(), infos);
 		}
@@ -164,6 +173,7 @@ public class GetDescription implements TestInterface {
 	 *                  has no read permission
 	 */
 	public void testGetDescription005() {
+		tbc.log("#testGetDescription005");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -196,6 +206,7 @@ public class GetDescription implements TestInterface {
 	 *                  has no read permission
 	 */
 	public void testGetDescription006() {
+		tbc.log("#testGetDescription006");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -221,5 +232,63 @@ public class GetDescription implements TestInterface {
 					tbc.getTb1Location(), infos);
 		}
 	}
+	
+	/**
+	 * @testID testGetDescription007
+	 * @testDescription Asserts if a SecurityException is thrown when the caller
+	 *                  has read permission for other StatusVariable
+	 */
+	public void testGetDescription007() {
+		tbc.log("#testGetDescription007");
+		PermissionInfo[] infos = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb1Location());
 
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[1], MonitorPermission.READ));
+
+			tbc.getMonitorAdmin().getDescription(MonitorTestControl.SVS[0]);
+
+			tbc.failException("", SecurityException.class);
+
+		} catch (SecurityException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { SecurityException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							SecurityException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.getPermissionAdmin().setPermissions(
+					tbc.getTb1Location(), infos);
+		}
+	}
+	
+	/**
+	 * @testID testGetDescription008
+	 * @testDescription Asserts if IllegalArgumentException is thrown when we pass
+	 *                  an empty string as argument to getDescription
+	 *                  method
+	 */
+	public void testGetDescription008() {
+		try { 
+			tbc.log("#testGetDescription008");
+			tbc.getMonitorAdmin().getDescription("");
+			tbc.failException("", IllegalArgumentException.class);
+			
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		}
+	}
+	
+	
 }

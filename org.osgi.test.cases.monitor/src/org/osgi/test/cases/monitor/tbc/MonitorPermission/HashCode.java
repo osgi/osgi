@@ -70,6 +70,7 @@ public class HashCode {
 	 */
 	public void testHashCode001() {
 		try {
+			tbc.log("#testHashCode001");
 			MonitorPermission mp1 = new MonitorPermission("*/*",
 					org.osgi.service.monitor.MonitorPermission.READ);
 			MonitorPermission mp2 = new MonitorPermission("*/*",
@@ -84,7 +85,7 @@ public class HashCode {
 							mp1.hashCode() == mp2.hashCode());
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -95,6 +96,7 @@ public class HashCode {
 	 */
 	public void testHashCode002() {
 		try {
+			tbc.log("#testHashCode002");
 			MonitorPermission mp1 = new MonitorPermission(
 					"com.mycomp.myapp/queue_length",
 					org.osgi.service.monitor.MonitorPermission.READ + ","
@@ -112,7 +114,7 @@ public class HashCode {
 											new String[] { "the hashCode of two MonitorPermission objects are equal when equals method returns true" }),
 							mp1.hashCode() == mp2.hashCode());
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -123,6 +125,7 @@ public class HashCode {
 	 */
 	public void testHashCode003() {
 		try {
+			tbc.log("#testHashCode003");
 			MonitorPermission mp1 = new MonitorPermission("*/*",
 					org.osgi.service.monitor.MonitorPermission.READ);
 			MonitorPermission mp2 = new MonitorPermission(
@@ -137,7 +140,7 @@ public class HashCode {
 											new String[] { "the hashCode of two MonitorPermission objects are different when equals method returns false" }),
 							!(mp1.hashCode() == mp2.hashCode()));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -148,6 +151,7 @@ public class HashCode {
 	 */
 	public void testHashCode004() {
 		try {
+			tbc.log("#testHashCode004");
 			MonitorPermission mp1 = new MonitorPermission("*/*",
 					org.osgi.service.monitor.MonitorPermission.READ);
 			MonitorPermission mp2 = new MonitorPermission("*/*",
@@ -161,7 +165,7 @@ public class HashCode {
 											new String[] { "the hashCode of two MonitorPermission objects are different when equals method returns false" }),
 							!(mp1.hashCode() == mp2.hashCode()));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -172,6 +176,7 @@ public class HashCode {
 	 */
 	public void testHashCode005() {
 		try {
+			tbc.log("#testHashCode005");
 			MonitorPermission mp1 = new MonitorPermission(
 					"*/*",
 					org.osgi.service.monitor.MonitorPermission.READ
@@ -193,7 +198,7 @@ public class HashCode {
 											new String[] { "the hashCode of two MonitorPermission objects are different when equals method returns false" }),
 							!(mp1.hashCode() == mp2.hashCode()));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -204,6 +209,7 @@ public class HashCode {
 	 */
 	public void testHashCode006() {
 		try {
+			tbc.log("#testHashCode006");
 			MonitorPermission mp1 = new MonitorPermission(
 					"com.mycomp.myapp/queue_length",
 					org.osgi.service.monitor.MonitorPermission.READ + ","
@@ -221,7 +227,7 @@ public class HashCode {
 											new String[] { "the hashCode of two MonitorPermission objects are equal when equals method return true" }),
 							mp1.hashCode() == mp2.hashCode());
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 

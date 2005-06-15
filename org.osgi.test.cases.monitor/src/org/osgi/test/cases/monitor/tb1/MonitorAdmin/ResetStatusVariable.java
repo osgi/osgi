@@ -39,6 +39,9 @@
  * 14/04/2005   Alexandre Santos
  * 14           Updates for SecurityException tests
  * ===========  ==============================================================
+ * May 20, 2005	Alexandre Alves
+ * 92           Make changes according to monitor RFC updates
+ * ===========  ==============================================================
  */
 package org.osgi.test.cases.monitor.tb1.MonitorAdmin;
 
@@ -69,6 +72,8 @@ public class ResetStatusVariable implements TestInterface {
 		testResetStatusVariable004();
 		testResetStatusVariable005();
 		testResetStatusVariable006();
+		testResetStatusVariable007();
+		testResetStatusVariable008();
 	}
 
 	/**
@@ -76,6 +81,7 @@ public class ResetStatusVariable implements TestInterface {
 	 * @testDescription Tests if an invalid characters throws an IllegalArgumentException
 	 */
 	public void testResetStatusVariable001() {
+		tbc.log("#testResetStatusVariable001");
 		try {
 			tbc.getMonitorAdmin().resetStatusVariable(
 					MonitorTestControl.INVALID_ID);
@@ -99,6 +105,7 @@ public class ResetStatusVariable implements TestInterface {
 	 * 					IllegalArgumentException
 	 */
 	public void testResetStatusVariable002() {
+		tbc.log("#testResetStatusVariable002");
 		try {
 			tbc.getMonitorAdmin().resetStatusVariable(null);
 			tbc.failException("", IllegalArgumentException.class);
@@ -121,6 +128,7 @@ public class ResetStatusVariable implements TestInterface {
 	 *					throws an IllegalArgumentException 					
 	 */
 	public void testResetStatusVariable003() {
+		tbc.log("#testResetStatusVariable003");
 		try {
 			tbc.getMonitorAdmin()
 					.resetStatusVariable(MonitorTestControl.SVS_DONT_EXIST);
@@ -143,6 +151,7 @@ public class ResetStatusVariable implements TestInterface {
 	 * @testDescription Tests if the valid ID is reseted using long as type.
 	 */
 	public void testResetStatusVariable004() {
+		tbc.log("#testResetStatusVariable004");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -157,7 +166,7 @@ public class ResetStatusVariable implements TestInterface {
 					new String[] { "resetStatusVariable was called in correct implementation returning false as result. " }), !result);
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			tbc.getPermissionAdmin().setPermissions(
 					tbc.getTb1Location(), infos);
@@ -170,6 +179,7 @@ public class ResetStatusVariable implements TestInterface {
 	 *                  has no reset permission
 	 */
 	public void testResetStatusVariable005() {
+		tbc.log("#testResetStatusVariable005");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -203,6 +213,7 @@ public class ResetStatusVariable implements TestInterface {
 	 *                  has no reset permission
 	 */
 	public void testResetStatusVariable006() {
+		tbc.log("#testResetStatusVariable006");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -229,5 +240,63 @@ public class ResetStatusVariable implements TestInterface {
 					tbc.getTb1Location(), infos);
 		}
 	}
+	
+	/**
+	 * @testID testResetStatusVariable007
+	 * @testDescription Tests if a statusvariable if an empty string is passed
+	 *					as argument, it throws an IllegalArgumentException 					
+	 */
+	public void testResetStatusVariable007() {
+		tbc.log("#testResetStatusVariable007");
+		try {
+			tbc.getMonitorAdmin()
+					.resetStatusVariable("");
+			tbc.failException("", IllegalArgumentException.class);
+
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		}
+	}	
+	
+	/**
+	 * @testID testResetStatusVariable008
+	 * @testDescription Asserts if a SecurityException is thrown when the caller
+	 *                  has reset permission for other statusvariable
+	 */
+	public void testResetStatusVariable008() {
+		tbc.log("#testResetStatusVariable008");
+		PermissionInfo[] infos = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb1Location());
+
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[1], MonitorPermission.RESET));
+
+			tbc.getMonitorAdmin().resetStatusVariable(
+					MonitorTestControl.SVS[0]);
+
+			tbc.failException("", SecurityException.class);
+
+		} catch (SecurityException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { SecurityException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							SecurityException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.getPermissionAdmin().setPermissions(
+					tbc.getTb1Location(), infos);
+		}
+	}	
 
 }

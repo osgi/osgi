@@ -39,7 +39,10 @@
  * 24/03/2005   Alexandre Alves
  * 14           Updates after formal inspection (JSTD-MEGTCK-CODE-INSP011)
  * ===========  ==============================================================
- */
+ * May 20, 2005	Alexandre Alves
+ * 92           Make changes according to monitor RFC updates
+ * ===========  ==============================================================
+ **/
 package org.osgi.test.cases.monitor.tb1.MonitorAdmin;
 
 import org.osgi.service.monitor.MonitoringJob;
@@ -64,6 +67,7 @@ public class GetRunningJobs implements TestInterface {
 		testGetRunningJobs001();
 		testGetRunningJobs002();
 		testGetRunningJobs003();
+		testGetRunningJobs004();
 	}
 
 	/**
@@ -71,6 +75,7 @@ public class GetRunningJobs implements TestInterface {
 	 * @testDescription Tests if the correct list of running jobs is returned.
 	 */
 	public void testGetRunningJobs001() {
+		tbc.log("#testGetRunningJobs001");
 		MonitoringJob mj = null;
 		MonitoringJob[] mjs = null;
 		PermissionInfo[] infos = null;		
@@ -113,7 +118,7 @@ public class GetRunningJobs implements TestInterface {
 							 }), MonitorTestControl.COUNT, mj.getReportCount());			
 			
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			tbc.getPermissionAdmin().setPermissions(
 					tbc.getTb1Location(), infos);			
@@ -126,6 +131,7 @@ public class GetRunningJobs implements TestInterface {
 	 * @testDescription Tests if the correct list of running jobs is returned
 	 */
 	public void testGetRunningJobs002() {
+		tbc.log("#testGetRunningJobs002");
 		MonitoringJob mj = null;
 		MonitoringJob[] mjs = null;
 		PermissionInfo[] infos = null;	
@@ -171,7 +177,7 @@ public class GetRunningJobs implements TestInterface {
 					MonitorTestControl.COUNT, mj.getReportCount());
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			tbc.getPermissionAdmin().setPermissions(
 					tbc.getTb1Location(), infos);				
@@ -184,6 +190,7 @@ public class GetRunningJobs implements TestInterface {
 	 * @testDescription Tests if the correct list of running jobs is returned
 	 */
 	public void testGetRunningJobs003() {
+		tbc.log("#testGetRunningJobs003");
 		MonitoringJob mj = null;
 		MonitoringJob mj2 = null;
 		MonitoringJob[] mjs = null;
@@ -251,7 +258,7 @@ public class GetRunningJobs implements TestInterface {
 					MonitorTestControl.COUNT, mj2.getReportCount());	
 			
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {			
 			tbc.getPermissionAdmin().setPermissions(
 					tbc.getTb1Location(), infos);			
@@ -259,5 +266,40 @@ public class GetRunningJobs implements TestInterface {
 			mj2.stop();
 		}
 	}
+	
+	/**
+	 * @testID testGetRunningJobs004
+	 * @testDescription Tests if an empty array is returned when no 
+	 * 					MonitoringJob is running.
+	 */
+	public void testGetRunningJobs004() {
+		tbc.log("#testGetRunningJobs004");
+		MonitoringJob mj = null;
+		MonitoringJob[] mjs = null;
+		PermissionInfo[] infos = null;		
+		try {						
+			
+			tbc.stopRunningJobs();
+			
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb1Location());
+			
+			tbc.setLocalPermission(new PermissionInfo[] {
+					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorTestControl.SVS[0], org.osgi.service.monitor.MonitorPermission.STARTJOB),	
+					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorTestControl.SVS[1], org.osgi.service.monitor.MonitorPermission.STARTJOB)
+			});
+
+			mjs = tbc.getMonitorAdmin().getRunningJobs();
+				
+			tbc.assertEquals("Asserting if an empty array is returned when no MonitoringJob is running",
+					0, mjs.length);
+					
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		} finally {
+			tbc.getPermissionAdmin().setPermissions(
+					tbc.getTb1Location(), infos);					
+		}
+	}	
 
 }

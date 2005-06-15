@@ -67,6 +67,7 @@ public class Updated {
 	 */
 	public void testUpdated001() {
 		try { 
+			tbc.log("#testUpdated001");
 			tbc.getMonitorListener().updated(null, 
 					new StatusVariable(
 							MonitorTestControl.SV_NAME1, StatusVariable.CM_CC,
@@ -92,6 +93,7 @@ public class Updated {
 	 */
 	public void testUpdated002() {
 		try {
+			tbc.log("#testUpdated002");
 			tbc.getMonitorListener().updated(MonitorTestControl.INVALID_ID, 
 					new StatusVariable(
 							MonitorTestControl.SV_NAME1, StatusVariable.CM_CC,
@@ -118,6 +120,7 @@ public class Updated {
 	 */
 	public void testUpdated003() {
 		try {
+			tbc.log("#testUpdated003");
 			tbc.getMonitorListener().updated(MonitorTestControl.INVALID_MONITORABLE_SV, 
 					new StatusVariable(
 							MonitorTestControl.SV_NAME1, StatusVariable.CM_CC,
@@ -144,6 +147,7 @@ public class Updated {
 	 */
 	public void testUpdated004() {
 		try {
+			tbc.log("#testUpdated004");
 			tbc.getMonitorListener().updated("", 
 					new StatusVariable(
 							MonitorTestControl.SV_NAME1, StatusVariable.CM_CC,
@@ -170,19 +174,12 @@ public class Updated {
 	 */
 	public void testUpdated005() {
 		try {
+			tbc.log("#testUpdated005");
 			tbc.getMonitorListener().updated(MonitorTestControl.SV_MONITORABLEID1, null);
 
-			tbc.failException("", IllegalArgumentException.class);
-			
-		} catch (IllegalArgumentException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { IllegalArgumentException.class.getName() }));
+			tbc.pass("Accept null as statusvariable. No exception was thrown.");			
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalArgumentException.class.getName(),
-							e.getClass().getName() }));
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} 
 	}		
 

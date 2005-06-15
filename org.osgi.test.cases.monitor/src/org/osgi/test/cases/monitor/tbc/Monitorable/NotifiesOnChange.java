@@ -67,6 +67,7 @@ public class NotifiesOnChange {
 	 */
 	public void testNotifiesOnChange001() {
 		try {
+			tbc.log("#testNotifiesOnChange001");
 			tbc.getMonitorable().notifiesOnChange(
 					MonitorTestControl.INVALID_MONITORABLE_SV);
 			tbc.failException("", IllegalArgumentException.class);
@@ -90,12 +91,13 @@ public class NotifiesOnChange {
 	 */
 	public void testNotifiesOnChange002() {
 		try {
+			tbc.log("#testNotifiesOnChange002");
 			tbc
 					.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE, new String[] { "ours monitorable returns true when use a valid id." }),
 							tbc.getMonitorable().notifiesOnChange(
 									MonitorTestControl.SV_NAME1));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 }

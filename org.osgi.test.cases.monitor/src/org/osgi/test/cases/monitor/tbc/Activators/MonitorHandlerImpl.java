@@ -92,7 +92,12 @@ public class MonitorHandlerImpl implements EventHandler {
 		tbc.assertEquals(MessagesConstants.getMessage(
 				MessagesConstants.ASSERT_EQUALS, new String[] { "the value in " + MonitorTestControl.CONST_MONITORABLE_PID,
 						MonitorTestControl.SV_MONITORABLEID1 }),
-						MonitorTestControl.SV_MONITORABLEID1, arg0.getProperty(MonitorTestControl.CONST_MONITORABLE_PID));				
+						MonitorTestControl.SV_MONITORABLEID1, arg0.getProperty(MonitorTestControl.CONST_MONITORABLE_PID));	
+		
+		tbc.assertEquals(MessagesConstants.getMessage(
+				MessagesConstants.ASSERT_EQUALS, new String[] { "the value in " + MonitorTestControl.CONST_LISTENER_ID,
+						MonitorTestControl.INITIATOR }),
+						MonitorTestControl.INITIATOR, arg0.getProperty(MonitorTestControl.CONST_LISTENER_ID));
 		
 	}
 

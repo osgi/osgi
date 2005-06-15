@@ -39,6 +39,9 @@
  * 24/03/2005   Alexandre Alves
  * 14           Updates after formal inspection (JSTD-MEGTCK-CODE-INSP011)
  * ===========  ==============================================================
+ * May 20, 2005	Alexandre Alves
+ * 92           Make changes according to monitor RFC updates
+ * ===========  ==============================================================
  */
 package org.osgi.test.cases.monitor.tb1.MonitorAdmin;
 
@@ -69,6 +72,8 @@ public class GetStatusVariables implements TestInterface {
 		testGetStatusVariables005();
 		testGetStatusVariables006();
 		testGetStatusVariables007();
+		testGetStatusVariables008();
+		testGetStatusVariables009();
 	}
 
 	/**
@@ -76,6 +81,7 @@ public class GetStatusVariables implements TestInterface {
 	 * @testDescription Tests the length of the returned statusvariables.
 	 */
 	public void testGetStatusVariables001() {
+		tbc.log("#testGetStatusVariables001");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -93,7 +99,7 @@ public class GetStatusVariables implements TestInterface {
 					MonitorTestControl.SV_LENGTH, statusVariables.length);
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			tbc.getPermissionAdmin().setPermissions(
 					tbc.getTb1Location(), infos);
@@ -105,6 +111,7 @@ public class GetStatusVariables implements TestInterface {
 	 * @testDescription Tests if the StatusVariables returned was the expected.
 	 */
 	public void testGetStatusVariables002() {
+		tbc.log("#testGetStatusVariables002");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -135,7 +142,7 @@ public class GetStatusVariables implements TestInterface {
 											new String[] { "all the StatusVariable names is in the StatusVariable list returned by monitorable." }),
 							hasN1 && hasN2);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			tbc.getPermissionAdmin().setPermissions(
 					tbc.getTb1Location(), infos);
@@ -148,6 +155,7 @@ public class GetStatusVariables implements TestInterface {
 	 *                  passed as parameter
 	 */
 	public void testGetStatusVariables003() {
+		tbc.log("#testGetStatusVariables003");
 		try {
 			tbc.getMonitorAdmin().getStatusVariables(null);
 
@@ -170,6 +178,7 @@ public class GetStatusVariables implements TestInterface {
 	 *                  invalid id is passed as parameter
 	 */
 	public void testGetStatusVariables004() {
+		tbc.log("#testGetStatusVariables004");
 		try {
 			tbc.getMonitorAdmin().getStatusVariables(
 					MonitorTestControl.INVALID_ID);
@@ -189,10 +198,11 @@ public class GetStatusVariables implements TestInterface {
 
 	/**
 	 * @testID testGetStatusVariables005
-	 * @testDescription Tests if IllegalArgumentException is thrown when an path
+	 * @testDescription Tests if IllegalArgumentException is thrown when n path
 	 *                  that doesn't exist is passed as parameter
 	 */
 	public void testGetStatusVariables005() {
+		tbc.log("#testGetStatusVariables005");
 		try {
 			tbc.getMonitorAdmin().getStatusVariables(
 					MonitorTestControl.VALID_ID);
@@ -216,6 +226,7 @@ public class GetStatusVariables implements TestInterface {
 	 *                  has no read permission
 	 */
 	public void testGetStatusVariables006() {
+		tbc.log("#testGetStatusVariables006");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -248,6 +259,7 @@ public class GetStatusVariables implements TestInterface {
 	 *                  has no read permission
 	 */
 	public void testGetStatusVariables007() {
+		tbc.log("#testGetStatusVariables007");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -273,6 +285,62 @@ public class GetStatusVariables implements TestInterface {
 					tbc.getTb1Location(), infos);
 		}
 	}
+	
+	/**
+	 * @testID testGetStatusVariables008
+	 * @testDescription Tests if IllegalArgumentException is thrown when an empty
+	 *                  string is passed as parameter.
+	 */
+	public void testGetStatusVariables008() {
+		tbc.log("#testGetStatusVariables008");
+		try {
+			tbc.getMonitorAdmin().getStatusVariables("");
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		} 
+	}	
+	
+	/**
+	 * @testID testGetStatusVariables009
+	 * @testDescription Asserts if a SecurityException is thrown when the caller
+	 *                  has read permission for only one of two statusvariables.
+	 */
+	public void testGetStatusVariables009() {
+		tbc.log("#testGetStatusVariables009");
+		PermissionInfo[] infos = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb1Location());
+
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[0], null));
+
+			tbc.getMonitorAdmin().getStatusVariables(MonitorTestControl.SV_MONITORABLEID1);
+
+			tbc.failException("", SecurityException.class);
+
+		} catch (SecurityException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { SecurityException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							SecurityException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.getPermissionAdmin().setPermissions(
+					tbc.getTb1Location(), infos);
+		}
+	}	
 
 
 }

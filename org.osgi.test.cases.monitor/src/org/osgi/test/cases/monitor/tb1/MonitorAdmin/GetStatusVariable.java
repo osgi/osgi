@@ -36,6 +36,9 @@
  * 22/03/2005   Eduardo Oliveira
  * 14           Updates after formal inspection (JSTD-MEGTCK-CODE-INSP011)
  * ===========  ==============================================================
+ * May 20, 2005	Alexandre Alves
+ * 92           Make changes according to monitor RFC updates
+ * ===========  ==============================================================
  */
 package org.osgi.test.cases.monitor.tb1.MonitorAdmin;
 
@@ -66,6 +69,7 @@ public class GetStatusVariable implements TestInterface {
 		testGetStatusVariable005();
 		testGetStatusVariable006();
 		testGetStatusVariable007();
+		testGetStatusVariable008();
 	}
 
 	/**
@@ -74,6 +78,7 @@ public class GetStatusVariable implements TestInterface {
 	 *                  passed as parameter
 	 */
 	public void testGetStatusVariable001() {
+		tbc.log("#testGetStatusVariable001");
 		PermissionInfo[] infos = null;
 		try {
 			tbc.getMonitorAdmin().getStatusVariable(null);
@@ -97,6 +102,7 @@ public class GetStatusVariable implements TestInterface {
 	 *                  invalid path is passed as parameter
 	 */
 	public void testGetStatusVariable002() {
+		tbc.log("#testGetStatusVariable002");
 		try {
 			tbc.getMonitorAdmin().getStatusVariable(
 					MonitorTestControl.INVALID_ID);
@@ -117,11 +123,12 @@ public class GetStatusVariable implements TestInterface {
 	/**
 	 * @testID testGetStatusVariable003
 	 * @testDescription Tests if IllegalArgumentException is thrown when an
-	 *                  invalid path is passed as parameter
+	 *                  empty string is passed as parameter
 	 */
 	public void testGetStatusVariable003() {
+		tbc.log("#testGetStatusVariable003");
 		try {
-			tbc.getMonitorAdmin().getStatusVariable("*_length");
+			tbc.getMonitorAdmin().getStatusVariable("");
 
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -142,6 +149,7 @@ public class GetStatusVariable implements TestInterface {
 	 *                  points to a non-existing StatusVariable
 	 */
 	public void testGetStatusVariable004() {
+		tbc.log("#testGetStatusVariable004");
 		try {
 			tbc.getMonitorAdmin().getStatusVariable(MonitorTestControl.SVS_DONT_EXIST);
 
@@ -166,6 +174,7 @@ public class GetStatusVariable implements TestInterface {
 	 * 
 	 */
 	public void testGetStatusVariable005() {
+		tbc.log("#testGetStatusVariable005");
 		PermissionInfo[] infos = null;
 		try {
 			
@@ -195,7 +204,7 @@ public class GetStatusVariable implements TestInterface {
 											.indexOf("/") + 1), sv.getID());
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			tbc.getPermissionAdmin().setPermissions(
 					tbc.getTb1Location(), infos);
@@ -208,6 +217,7 @@ public class GetStatusVariable implements TestInterface {
 	 *                  has no read permission
 	 */
 	public void testGetStatusVariable006() {
+		tbc.log("#testGetStatusVariable006");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -240,6 +250,7 @@ public class GetStatusVariable implements TestInterface {
 	 *                  has no read permission.
 	 */
 	public void testGetStatusVariable007() {
+		tbc.log("#testGetStatusVariable007");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -265,5 +276,38 @@ public class GetStatusVariable implements TestInterface {
 					tbc.getTb1Location(), infos);
 		}
 	}
+	
+	/**
+	 * @testID testGetStatusVariable008
+	 * @testDescription Asserts if SecurityException is thrown when the caller
+	 *                  has read permission to other statusvariable.
+	 */
+	public void testGetStatusVariable008() {
+		tbc.log("#testGetStatusVariable008");
+		PermissionInfo[] infos = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb1Location());
+
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[1], MonitorPermission.READ));
+
+			tbc.getMonitorAdmin().getStatusVariable(MonitorTestControl.SVS[0]);
+
+			tbc.failException("", SecurityException.class);
+
+		} catch (SecurityException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { SecurityException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							SecurityException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.getPermissionAdmin().setPermissions(
+					tbc.getTb1Location(), infos);
+		}
+	}	
 
 }

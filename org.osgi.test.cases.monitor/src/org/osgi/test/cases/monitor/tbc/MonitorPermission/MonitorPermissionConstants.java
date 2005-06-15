@@ -54,15 +54,16 @@ public class MonitorPermissionConstants {
 	}
 
 	public void run() {
-		testMonitorPermissionConstants001();
+		testConstants001();
 	}
 
 	/**
-	 * @testID testMonitorPermissionConstants001
+	 * @testID testConstants001
 	 * @testDescription Tests all constants values according to Constants fields
 	 *                  values.
 	 */
-	public void testMonitorPermissionConstants001() {
+	public void testConstants001() {
+		tbc.log("#testConstants001");
 		tbc.assertEquals("Asserting DISCOVER value", "discover", org.osgi.service.monitor.MonitorPermission.DISCOVER);
 		tbc.assertEquals("Asserting PUBLISH value", "publish", org.osgi.service.monitor.MonitorPermission.PUBLISH);
 		tbc.assertEquals("Asserting READ value", "read", org.osgi.service.monitor.MonitorPermission.READ);

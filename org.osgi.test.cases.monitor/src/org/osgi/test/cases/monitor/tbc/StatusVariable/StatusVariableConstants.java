@@ -50,15 +50,16 @@ public class StatusVariableConstants {
 	}
 
 	public void run() {
-		testStatusVariableConstants001();
+		testConstants001();
 	}
 
 	/**
-	 * @testID testStatusVariableConstants001
+	 * @testID testConstants001
 	 * @testDescription Tests all constants values according to Constants fields
 	 *                  values.
 	 */
-	public void testStatusVariableConstants001() {
+	public void testConstants001() {
+		tbc.log("#testConstants001");
 		tbc.assertEquals("Asserting CM_CC value", 0, org.osgi.service.monitor.StatusVariable.CM_CC);
 		tbc.assertEquals("Asserting CM_DER value", 1, org.osgi.service.monitor.StatusVariable.CM_DER);
 		tbc.assertEquals("Asserting CM_GAUGE value", 2, org.osgi.service.monitor.StatusVariable.CM_GAUGE);

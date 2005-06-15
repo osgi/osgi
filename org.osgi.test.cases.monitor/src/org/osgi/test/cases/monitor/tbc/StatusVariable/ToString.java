@@ -66,7 +66,7 @@ public class ToString {
 	 */
 	public void testToString001() {
 		try {
-
+			tbc.log("#testToString001");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_DER,
@@ -83,7 +83,7 @@ public class ToString {
 					.toString());
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -94,7 +94,7 @@ public class ToString {
 	 */
 	public void testToString002() {
 		try {
-
+			tbc.log("#testToString002");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_GAUGE,
@@ -112,7 +112,7 @@ public class ToString {
 					sv.toString());
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -123,7 +123,7 @@ public class ToString {
 	 */
 	public void testToString003() {
 		try {
-
+			tbc.log("#testToString003");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_DER,
@@ -141,7 +141,7 @@ public class ToString {
 					sv.toString());
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -152,7 +152,7 @@ public class ToString {
 	 */
 	public void testToString004() {
 		try {
-
+			tbc.log("#testToString004");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_SI,
@@ -169,7 +169,7 @@ public class ToString {
 							+ sv.getBoolean() + ")", sv.toString());
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 

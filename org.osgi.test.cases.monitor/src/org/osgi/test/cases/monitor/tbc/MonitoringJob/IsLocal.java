@@ -71,6 +71,7 @@ public class IsLocal {
 	 * 					true when use a isLocal call.
 	 */    
     public void testIsLocal001() {
+    	tbc.log("#testIsLocal001");
     	MonitoringJob mj = null;
 		try {
 			tbc.stopRunningJobs();
@@ -85,7 +86,7 @@ public class IsLocal {
 
 			
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			mj.stop();
 		}
@@ -97,6 +98,7 @@ public class IsLocal {
 	 * 					false when use a isLocal call.
 	 */    
     public void testIsLocal002() {
+    	tbc.log("#testIsLocal002");
     	DmtSession session = null;
         try {
         	tbc.stopRunningJobs();
@@ -117,14 +119,14 @@ public class IsLocal {
 			}
 
         } catch (DmtException e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+        	tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			try {
 				session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[3], new DmtData(false));
 				session.deleteNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]);
 				session.close();
 			} catch (DmtException e1) {
-				tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+				tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e1.getClass().getName());
 			}
 		}
     }   

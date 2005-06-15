@@ -70,6 +70,7 @@ public class Equals {
 	 */
 	public void testEquals001() {
 		try {
+			tbc.log("#testEquals001");
 			MonitorPermission mp1 = new MonitorPermission("*/*",
 					org.osgi.service.monitor.MonitorPermission.READ);
 			MonitorPermission mp2 = new MonitorPermission("*/*",
@@ -83,7 +84,7 @@ public class Equals {
 											new String[] { "equals method returns true when two MonitorPermission objects are initialized with same target and action strings" }),
 							mp1.equals(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -95,6 +96,7 @@ public class Equals {
 	 */
 	public void testEquals002() {
 		try {
+			tbc.log("#testEquals002");
 			MonitorPermission mp1 = new MonitorPermission(
 					"com.mycomp.myapp/queue_length",
 					org.osgi.service.monitor.MonitorPermission.READ + ","
@@ -112,7 +114,7 @@ public class Equals {
 											new String[] { "equals method returns true when two MonitorPermission objects are initialized with same target and action strings" }),
 							mp1.equals(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -124,6 +126,7 @@ public class Equals {
 	 */
 	public void testEquals003() {
 		try {
+			tbc.log("#testEquals003");
 			MonitorPermission mp1 = new MonitorPermission("*/*",
 					org.osgi.service.monitor.MonitorPermission.READ);
 			MonitorPermission mp2 = new MonitorPermission(
@@ -138,7 +141,7 @@ public class Equals {
 											new String[] { "equals method returns false when two MonitorPermission objects are initialized with different target or action strings" }),
 							!mp1.equals(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -150,6 +153,7 @@ public class Equals {
 	 */
 	public void testEquals004() {
 		try {
+			tbc.log("#testEquals004");
 			MonitorPermission mp1 = new MonitorPermission("*/*",
 					org.osgi.service.monitor.MonitorPermission.READ);
 			MonitorPermission mp2 = new MonitorPermission("*/*",
@@ -163,7 +167,7 @@ public class Equals {
 											new String[] { "equals method returns false when two MonitorPermission objects are initialized with different target or action strings" }),
 							!mp1.equals(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -175,6 +179,7 @@ public class Equals {
 	 */
 	public void testEquals005() {
 		try {
+			tbc.log("#testEquals005");
 			MonitorPermission mp1 = new MonitorPermission(
 					"*/*",
 					org.osgi.service.monitor.MonitorPermission.READ
@@ -196,7 +201,7 @@ public class Equals {
 											new String[] { "equals method returns false when two MonitorPermission objects are initialized with different target or action strings" }),
 							!mp1.equals(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
@@ -208,6 +213,7 @@ public class Equals {
 	 */
 	public void testEquals006() {
 		try {
+			tbc.log("#testEquals006");
 			MonitorPermission mp1 = new MonitorPermission(
 					"com.mycomp.myapp/queue_length",
 					org.osgi.service.monitor.MonitorPermission.READ + ","
@@ -225,7 +231,7 @@ public class Equals {
 											new String[] { "equals returns true when two MonitorPermission objects are initialized with same target and action strings differently disposed" }),
 							mp1.equals(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 

@@ -39,7 +39,10 @@
  * 24/03/2005   Alexandre Alves
  * 14           Updates after formal inspection (JSTD-MEGTCK-CODE-INSP011)
  * ===========  ==============================================================
- */
+ * May 20, 2005	Alexandre Alves
+ * 92           Make changes according to monitor RFC updates
+ * ===========  ==============================================================
+ **/
 package org.osgi.test.cases.monitor.tb1.MonitorAdmin;
 
 import org.osgi.service.monitor.MonitorPermission;
@@ -66,6 +69,7 @@ public class GetMonitorableNames implements TestInterface {
 		testGetMonitorableNames003();
 		testGetMonitorableNames004();
 		testGetMonitorableNames005();
+		testGetMonitorableNames006();
 	}
 
 	/**
@@ -74,6 +78,7 @@ public class GetMonitorableNames implements TestInterface {
 	 *                  has no discover permission
 	 */
 	public void testGetMonitorableNames001() {
+		tbc.log("#testGetMonitorableNames001");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -106,6 +111,7 @@ public class GetMonitorableNames implements TestInterface {
 	 *                  was registered.
 	 */
 	public void testGetMonitorableNames002() {
+		tbc.log("#testGetMonitorableNames002");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -138,7 +144,7 @@ public class GetMonitorableNames implements TestInterface {
 							hasMon1 && hasMon2);
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			tbc.getPermissionAdmin().setPermissions(
 					tbc.getTb1Location(), infos);
@@ -151,6 +157,7 @@ public class GetMonitorableNames implements TestInterface {
 	 *                  names.
 	 */
 	public void testGetMonitorableNames003() {
+		tbc.log("#testGetMonitorableNames003");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -176,7 +183,7 @@ public class GetMonitorableNames implements TestInterface {
 											new String[] { "The returned monitorable names is in alphabetical order." }),
 							passed);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			tbc.getPermissionAdmin().setPermissions(
 					tbc.getTb1Location(), infos);
@@ -189,6 +196,7 @@ public class GetMonitorableNames implements TestInterface {
 	 *                  has no discover permission
 	 */	
 	public void testGetMonitorableNames004() {
+		tbc.log("#testGetMonitorableNames004");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
@@ -221,6 +229,7 @@ public class GetMonitorableNames implements TestInterface {
 	 *                  registered.
 	 */
 	public void testGetMonitorableNames005() {
+		tbc.log("#testGetMonitorableNames005");
 		PermissionInfo[] infos = null;
 		tbc.stopMonitorables();
 		try {
@@ -232,14 +241,47 @@ public class GetMonitorableNames implements TestInterface {
 			String[] monitorableNames = tbc.getMonitorAdmin()
 					.getMonitorableNames();
 			
-			tbc.assertNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NULL, new String[] { "the returned monitorableNames"} ), monitorableNames);
+			tbc.assertEquals("Asserting if the returned monitorables names list is empty. ", new String[0], monitorableNames);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION);
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			tbc.installMonitorables();
 			tbc.getPermissionAdmin().setPermissions(
 					tbc.getTb1Location(), infos);
 		}
 	}
+	
+	/**
+	 * @testID testGetMonitorableNames006
+	 * @testDescription Asserts if a SecurityException is thrown when the caller
+	 *                  has discover permission but does not use the correct target
+	 */
+	public void testGetMonitorableNames006() {
+		tbc.log("#testGetMonitorableNames006");
+		PermissionInfo[] infos = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb1Location());
+
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[0], MonitorPermission.RESET));
+
+			tbc.getMonitorAdmin().getMonitorableNames();
+
+			tbc.failException("", SecurityException.class);
+
+		} catch (SecurityException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { SecurityException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.getPermissionAdmin().setPermissions(
+					tbc.getTb1Location(), infos);
+		}
+	}	
 	
 }
