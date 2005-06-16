@@ -85,7 +85,7 @@ public abstract class ApplicationHandle {
 	}
 
 	/**
-	 * Retrieves the <coed>ApplicationDescriptor</code> to which this 
+	 * Retrieves the <code>ApplicationDescriptor</code> to which this 
 	 * <code>ApplicationHandle</code> belongs. 
 	 * 
 	 * @return The corresponding <code>ApplicationDescriptor</code>
