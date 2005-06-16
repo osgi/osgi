@@ -47,6 +47,7 @@ import org.osgi.service.condpermadmin.BundleSignerCondition;
 import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentException;
+import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 import org.osgi.service.metatype.MetaTypeService;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -63,6 +64,7 @@ public class TestAutoconf extends IntegratedTest implements Test {
 	public static final String	INTEGRATIONTESTS_DP1_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp1.jar";
 	public static final String	INTEGRATIONTESTS_DP1_ROLLBACK_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp1_rollback.jar";
 	public static final String	INTEGRATIONTESTS_DP2_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp2.jar";
+	public static final String	INTEGRATIONTESTS_DP1_UPGRADE1_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp1_upgrade1.jar";
 
 	public Bundle	deploymentAdminBundle;
 	public Bundle	autoconf;
@@ -184,20 +186,35 @@ public class TestAutoconf extends IntegratedTest implements Test {
 		assertNull(sr);
 		
 	}
-	
-	
+		
 	public void testDeployManagedService1() throws Exception {
 		startFramework(true);
 		conditionalPermissionAdmin.addConditionalPermissionInfo(SIGNER_SARAH,ALL_PERMISSION);
 		deploymentAdmin.installDeploymentPackage(new FileInputStream(INTEGRATIONTESTS_DP1_JAR));
-		// the deploymentpackage configures "increment" to 3
 
+		// the deploymentpackage configures "increment" to 3
+		Configuration conf = configurationAdmin.getConfiguration("integrationtests.managedservice1.pid");
+		Object inc = conf.getProperties().get("increment");
+		assertEquals(new Integer(3),inc);
+		
 		ServiceReference sr = systemBundleContext.getServiceReference(ITest.class.getName());
 		ITest iTest = (ITest) systemBundleContext.getService(sr);
-
 		int i = iTest.succ(7);
 		assertEquals(10,i);
+		
+		DeploymentPackage dp = deploymentAdmin.installDeploymentPackage(new FileInputStream(INTEGRATIONTESTS_DP1_UPGRADE1_JAR));
+		sr = systemBundleContext.getServiceReference(ITest.class.getName());
+		iTest = (ITest) systemBundleContext.getService(sr);
+		i = iTest.succ(7);
+		assertEquals(11,i);
+		
+		dp.uninstall();
+		sr = systemBundleContext.getServiceReference(ITest.class.getName());
+		assertNull(sr);
 
+		// check if the configuration is deleted, too
+		conf = configurationAdmin.getConfiguration("integrationtests.managedservice1.pid");
+		assertNull(conf.getProperties());
 	}
 
 	/**
@@ -232,6 +249,5 @@ public class TestAutoconf extends IntegratedTest implements Test {
 
 		int i = iTest.succ(7);
 		assertEquals(10,i);
-
 	}
 }

@@ -17,15 +17,19 @@
  */
 package org.osgi.impl.bundle.autoconf;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.AccessController;
 import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -58,26 +62,35 @@ public class Autoconf implements ResourceProcessor {
 	SAXParserFactory saxParserFactory;
 	int operation;
 	DeploymentSession	session;
-
-	LinkedList commitData;
+	LinkedList commitTasks;
+	StoredConfigurations storedConfigurations;
 	
-	private static class ConfigurationData {
+
+	private static class CommitTask {
 		public Dictionary properties;
 		public Configuration configuration;
+		public String pidAlias;
+		public String factoryPid;
+		public String resourceName;
 	}
+
 	
-	protected void activate(ComponentContext context) {
+	protected void activate(final ComponentContext context) throws PrivilegedActionException {
 		configurationAdmin = (ConfigurationAdmin) context.locateService("configurationAdmin");
 		metaTypeService = (MetaTypeService) context.locateService("metaTypeService");
 		saxParserFactory = (SAXParserFactory) context.locateService("saxParserFactory");
-		saxParserFactory.setValidating(true);
-		saxParserFactory.setNamespaceAware(true);
 		this.context = context.getBundleContext();
+		AccessController.doPrivileged(new PrivilegedExceptionAction(){
+			public java.lang.Object run() throws Exception {
+				File stf = context.getBundleContext().getDataFile("storedConfigurations");
+				storedConfigurations = new StoredConfigurations(stf);
+				return null;
+			}});
 	}
 	
 	public void begin(DeploymentSession session) {
 		this.session = session;
-		commitData = new LinkedList();
+		commitTasks = new LinkedList();
 	}
 
 	/**
@@ -87,7 +100,7 @@ public class Autoconf implements ResourceProcessor {
 	 * @throws DeploymentException if the element cannot be processed for any reason. It 
 	 * is the callers' responsibility to recover work if the element is optional
 	 */
-	public ConfigurationData processDesignate(MetaData.Designate d,MetaData.OCD[] ocds) throws DeploymentException {
+	public CommitTask processDesignate(MetaData.Designate d,MetaData.OCD[] ocds) throws DeploymentException {
 		MetaData.Object o = d.objects[0]; // There can be only one!
 
 		// unfortunately the bundle name is in symbName-version format
@@ -124,18 +137,21 @@ public class Autoconf implements ResourceProcessor {
 		String location = bundle.getLocation();
 		
 		if (d.factoryPid!=null) {
-			ConfigurationData toWrite = new ConfigurationData();
+			CommitTask toWrite = new CommitTask();
 			try {
 				toWrite.configuration = configurationAdmin.createFactoryConfiguration(d.factoryPid,location);
+				System.out.println(toWrite.configuration.getPid());
 			}
 			catch (IOException e) {
 				throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot create new factory configuration",e);
 			}
 
 			toWrite.properties = new Hashtable(values);
+			toWrite.factoryPid = d.factoryPid;
+			toWrite.pidAlias = d.pid;
 			return toWrite;
 		} else {
-			ConfigurationData toWrite = new ConfigurationData();
+			CommitTask toWrite = new CommitTask();
 			try {
 				toWrite.configuration = configurationAdmin.getConfiguration(d.pid,location);
 			}
@@ -165,6 +181,9 @@ public class Autoconf implements ResourceProcessor {
 		is.setPublicId(name);
 		MetaData m;
 		try {
+			saxParserFactory.setValidating(true);
+			saxParserFactory.setNamespaceAware(true);
+
 			m = new MetaData(saxParserFactory.newSAXParser(),is);
 		}
 		catch (ParserConfigurationException e) {
@@ -184,8 +203,9 @@ public class Autoconf implements ResourceProcessor {
 		for(int i = 0; i < m.designates.length; i++) {
 			MetaData.Designate d = m.designates[i];
 			try {
-				ConfigurationData toWrite = processDesignate(d,m.ocds);
-				commitData.add(toWrite);
+				CommitTask toWrite = processDesignate(d,m.ocds);
+				toWrite.resourceName = name;
+				commitTasks.add(toWrite);
 			} catch (DeploymentException e) {
 				if (d.optional) {
 					// TODO should log something
@@ -194,6 +214,9 @@ public class Autoconf implements ResourceProcessor {
 				throw e;
 			}
 		}
+		
+		// TODO: create 'delete' jobs for all the stored configurations that were not 
+		// in this new version of the resource
 	}
 
 	/**
@@ -385,15 +408,25 @@ public class Autoconf implements ResourceProcessor {
 	}
 
 	public void dropped(String name) {
-		throw new IllegalStateException("not implemented yet");
 		// TODO Auto-generated method stub
 	}
 
 
 	public void dropAllResources() throws DeploymentException {
-		throw new IllegalStateException("not implemented yet");
-		// TODO Auto-generated method stub
-		
+		List toDrop = storedConfigurations.getByPackageName(session.getTargetDeploymentPackage().getName());
+		for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
+			StoredConfiguration sc = (StoredConfiguration) iter.next();
+			CommitTask ct = new CommitTask();
+			try {
+				ct.configuration = configurationAdmin.getConfiguration(sc.pid);
+				ct.properties = null;
+				commitTasks.add(ct);
+			}
+			catch (IOException e) {
+				// TODO what to do here? forceful/non-forceful things?
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void prepare() throws DeploymentException {
@@ -403,18 +436,52 @@ public class Autoconf implements ResourceProcessor {
 	}
 
 	public void commit() {
-		for (Iterator i = commitData.iterator(); i.hasNext();) {
-			ConfigurationData oc = (ConfigurationData) i.next();
-			try {
-				oc.configuration.update(oc.properties);
+		try {
+			for (Iterator i = commitTasks.iterator(); i.hasNext();) {
+				CommitTask oc = (CommitTask) i.next();
+				String pid = oc.configuration.getPid();
+				try {
+					if (oc.properties==null) {
+						oc.configuration.delete();
+						storedConfigurations.remove(pid);
+					} else {
+						oc.configuration.update(oc.properties);
+						StoredConfiguration sc = new StoredConfiguration(
+								session.getTargetDeploymentPackage().getName(),
+								oc.resourceName,
+								pid,
+								oc.factoryPid,
+								oc.pidAlias);
+						storedConfigurations.add(sc);
+					}
+				}
+				catch (IOException e) {
+					// TODO what to do when the commit fails because of access control violation?
+					// TODO the process() method should somehow filter this out, but there is only one
+					// way currently: call the update() method there. But this is something the
+					// spec forbids
+					e.printStackTrace();
+				}
 			}
-			catch (IOException e) {
-				// TODO what to do when the commit fails because of access control violation?
-				// TODO the process() method should somehow filter this out, but there is only one
-				// way currently: call the update() method there. But this is something the
-				// spec forbids
-				e.printStackTrace();
-			}
+		} finally {
+			flushStoredConfigurations();
+		}
+	} 
+
+	/**
+	 * write out storedConfiguration to the persistent storage.
+	 */
+	private void flushStoredConfigurations() {
+		try {
+			AccessController.doPrivileged(new PrivilegedExceptionAction() {
+				public java.lang.Object run() throws Exception {
+					storedConfigurations.flush();
+					return null;
+				}});
+		}
+		catch (PrivilegedActionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -425,6 +492,5 @@ public class Autoconf implements ResourceProcessor {
 	public void cancel() {
 		throw new IllegalStateException("not implemented yet");
 		// TODO Auto-generated method stub
-		
 	}
 }

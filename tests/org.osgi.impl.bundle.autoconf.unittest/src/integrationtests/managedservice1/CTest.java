@@ -48,6 +48,7 @@ public class CTest implements ITest,ManagedService {
 	}
 
 	public void updated(Dictionary props) throws ConfigurationException {
+		System.out.println("updated "+props);
 		if (props==null) {
 			configured = false;
 			return;
