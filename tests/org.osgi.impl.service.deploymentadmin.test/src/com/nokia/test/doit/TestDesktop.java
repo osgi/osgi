@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -44,8 +46,13 @@ public class TestDesktop extends Frame implements ActionListener {
     
     public TestDesktop(DoIt doit) throws Exception {
         this.doit = doit;
-        
         setLayout(new GridLayout(1, 0));
+        addWindowListener(new WindowAdapter() {
+        	public void windowClosing(WindowEvent e) {
+        	    setVisible(false);
+        	    dispose();
+        	}
+        });
         
         pa_left.setLayout(new GridLayout(0, 1));
         pa_right.setLayout(new GridLayout(2, 0));
@@ -125,6 +132,7 @@ public class TestDesktop extends Frame implements ActionListener {
 	                }
 	                catch (Exception e) {
                         ++failed;
+                        e.printStackTrace();
                     }
 	                setTitle("Passed / all: " + passed + " / " + (passed + failed));
 	            }

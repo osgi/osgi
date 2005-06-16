@@ -49,6 +49,9 @@ import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtDataPlugin;
+import org.osgi.service.dmt.DmtExecPlugin;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
@@ -61,8 +64,12 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private DeploymentSessionImpl session;
     private KeyStore              keystore;
     private TrackerEvent          trackEvent;
+    private TrackerDmt            trackDmt;
     private String                fwBundleDir;
     private boolean               cancelled;
+    
+    // Dmt plugin registrations
+    private ServiceRegistration regDmtPlugin;
     
     /*
      * Class to track the event admin
@@ -73,7 +80,17 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                     EventAdmin.class.getName(), null);
         }
     }
-    
+
+    /*
+     * Class to track the Dmt Admin
+     */
+    private class TrackerDmt extends ServiceTracker {
+        public TrackerDmt() {
+            super(DeploymentAdminImpl.this.context, 
+                    DmtAdmin.class.getName(), null);
+        }
+    }
+
     // persisted fields
     private Set       dps = new HashSet();		// deployment packages
     private Hashtable mappingRpDp = new Hashtable();
@@ -82,6 +99,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 		this.context = context;
 		trackEvent = new TrackerEvent();
 		trackEvent.open();
+		trackDmt = new TrackerDmt();
+		trackDmt.open();
 		load();
         registration = context.registerService(DeploymentAdmin.class.getName(), this, null);
         logger = new Logger(context);
@@ -91,8 +110,24 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         if (null == fwBundleDir)
             logger.log(Logger.LOG_WARNING, "The \"" + DAConstants.FW_BUNDLES_DIR + "\" system " +
             		"property is missing.");
+        
+        registerDmtPlugin();
 	}
 	
+    private void registerDmtPlugin() {
+        Hashtable props;
+        Plugin plugin = new Plugin(this);
+        
+        props = new Hashtable();
+        props.put(DmtDataPlugin.DATA_ROOT_URIS, "./OSGi/Deployment");
+        regDmtPlugin = context.registerService(DmtDataPlugin.class.getName(), plugin, props);
+
+        props = new Hashtable();
+        props.put(DmtExecPlugin.EXEC_ROOT_URIS, "./OSGi/Deployment");
+        regDmtPlugin = context.registerService(DmtDataPlugin.class.getName(), plugin, props);
+        regDmtPlugin = context.registerService(DmtExecPlugin.class.getName(), plugin, props);
+    }
+
     private void initKeyStore() throws Exception {
         String ksType = System.getProperty(DAConstants.KEYSTORE_TYPE);
         if (null == ksType)
@@ -126,6 +161,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	    registration.unregister();
 	    logger.stop();
 	    trackEvent.close();
+	    trackDmt.close();
+	    
+	    regDmtPlugin.unregister();
 	}
 
     public DeploymentPackage installDeploymentPackage(InputStream in)
@@ -601,6 +639,10 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 
     Set getDeploymentPackages() {
         return dps;
+    }
+    
+    DmtAdmin getDmtAdmin() {
+        return (DmtAdmin) trackDmt.getService();
     }
     
 }
