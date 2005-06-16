@@ -427,9 +427,15 @@ public class Autoconf implements ResourceProcessor {
 		if (onlyInDeploymentPackage) {
 			return sourceDeploymentPackage.getBundle(bundleSymbolicName);
 		} else {
-			// TODO: the spec needs to clear how the bundle should be searched
-			// for now, we only search for bundles in the deployment package
-			return sourceDeploymentPackage.getBundle(bundleSymbolicName);
+			// linear search is "fast enough" here
+			Bundle[] bundles = context.getBundles();
+			for (int i = 0; i < bundles.length; i++) {
+				Bundle b = bundles[i];
+				if (bundleSymbolicName.equals(b.getSymbolicName())) {
+					return b;
+				}
+			}
+			return null;
 		}
 	}
 

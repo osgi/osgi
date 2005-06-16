@@ -66,6 +66,7 @@ public class TestAutoconf extends IntegratedTest implements Test {
 	public static final String	INTEGRATIONTESTS_DP2_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp2.jar";
 	public static final String	INTEGRATIONTESTS_DP1_UPGRADE1_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp1_upgrade1.jar";
 	public static final String	INTEGRATIONTESTS_DP2_UPGRADE1_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp2_upgrade1.jar";
+	public static final String	INTEGRATIONTESTS_DP3_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp3.jar";
 
 	public Bundle	deploymentAdminBundle;
 	public Bundle	autoconf;
@@ -275,5 +276,32 @@ public class TestAutoconf extends IntegratedTest implements Test {
 		assertNull(srs);
 		Configuration configuration = configurationAdmin.getConfiguration(pid);
 		assertNull(configuration.getProperties());
+	}
+
+	public void testConfigureManagedServiceFactoryOutsidePackage() throws Exception {
+		// factory configurations can work with bundles outside the package
+		startFramework(true);
+		
+		conditionalPermissionAdmin.addConditionalPermissionInfo(SIGNER_SARAH,ALL_PERMISSION);
+
+		Bundle factory = systemBundleContext.installBundle(INTEGRATIONTESTS_MANAGEDSERVICEFACTORY1_JAR);
+		factory.start();
+		
+		DeploymentPackage dp = deploymentAdmin.installDeploymentPackage(new FileInputStream(INTEGRATIONTESTS_DP3_JAR));
+		synchronized(this) { wait(100); }
+
+		// the deploymentpackage has one service with increment of 3
+		ServiceReference[] srs = systemBundleContext.getServiceReferences(ITest.class.getName(),null);
+		assertEquals(1,srs.length);
+		ITest iTest = (ITest) systemBundleContext.getService(srs[0]);
+		int i = iTest.succ(7);
+		assertEquals(10,i);
+
+		// remove and see if they are removed, too
+		dp.uninstall();
+		synchronized(this) { wait(100); }
+		srs = systemBundleContext.getServiceReferences(ITest.class.getName(),null);
+		assertNull(srs);
+		
 	}
 }
