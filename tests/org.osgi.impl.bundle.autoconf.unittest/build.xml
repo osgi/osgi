@@ -104,6 +104,26 @@
 		<signjar jar="integrationtests.dp2.jar" alias="sarahbar" 
 			keystore="../org.osgi.impl.service.policy.unittest/integration_test/keystore" storepass="123456"/>
 
+		<jar destfile="integrationtests.dp2_upgrade1.jar">
+			<manifest>
+				<attribute name="DeploymentPackage-Name" value="integrationtests.dp2"/>
+				<attribute name="DeploymentPackage-Version" value="1.0.1"/>
+				<section name="integrationtests.managedservicefactory1.jar">
+					<attribute name="Bundle-SymbolicName" value="integrationtests.managedservicefactory1"/>
+					<attribute name="Bundle-Version" value="1.0"/>
+				</section>
+				<section name="OSGI-INF/autoconf.xml">
+					<attribute name="Resource-Processor" value="org.osgi.deployment.rp.autoconf"/>
+				</section>
+			</manifest>
+			<fileset dir=".">
+				<filename name="integrationtests.managedservicefactory1.jar"/>
+			</fileset>
+			<fileset dir="configs/dp2_upgrade1"/>
+		</jar>
+		<signjar jar="integrationtests.dp2_upgrade1.jar" alias="sarahbar" 
+			keystore="../org.osgi.impl.service.policy.unittest/integration_test/keystore" storepass="123456"/>
+
 	</target>
 
 	<target name="integrationtests.managedservice1.jar">

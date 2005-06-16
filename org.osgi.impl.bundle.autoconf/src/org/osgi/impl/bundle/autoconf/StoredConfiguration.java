@@ -35,10 +35,16 @@ public final class StoredConfiguration implements Serializable {
 		if (!o.packageName.equals(packageName)) return false;
 		if (!o.resourceName.equals(resourceName)) return false;
 		if (!o.pid.equals(pid)) return false;
-		if (o.factoryPid==null && factoryPid!=null) return false;
-		if (!o.factoryPid.equals(factoryPid)) return false;
-		if (o.pidAlias==null && pidAlias!=null) return false;
-		if (!o.pidAlias.equals(pidAlias)) return false;
+		if (o.factoryPid==null) {
+			if (factoryPid!=null) return false;
+		} else {
+			if (!o.factoryPid.equals(factoryPid)) return false;
+		}
+		if (o.pidAlias==null) {
+			if (pidAlias!=null) return false;
+		} else {
+			if (!o.pidAlias.equals(pidAlias)) return false;
+		}
 		
 		return true;
 	}

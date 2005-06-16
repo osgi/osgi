@@ -65,6 +65,7 @@ public class TestAutoconf extends IntegratedTest implements Test {
 	public static final String	INTEGRATIONTESTS_DP1_ROLLBACK_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp1_rollback.jar";
 	public static final String	INTEGRATIONTESTS_DP2_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp2.jar";
 	public static final String	INTEGRATIONTESTS_DP1_UPGRADE1_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp1_upgrade1.jar";
+	public static final String	INTEGRATIONTESTS_DP2_UPGRADE1_JAR = "../../org.osgi.impl.bundle.autoconf.unittest/integrationtests.dp2_upgrade1.jar";
 
 	public Bundle	deploymentAdminBundle;
 	public Bundle	autoconf;
@@ -241,13 +242,38 @@ public class TestAutoconf extends IntegratedTest implements Test {
 		startFramework(true);
 		conditionalPermissionAdmin.addConditionalPermissionInfo(SIGNER_SARAH,ALL_PERMISSION);
 		deploymentAdmin.installDeploymentPackage(new FileInputStream(INTEGRATIONTESTS_DP2_JAR));
-		// the deploymentpackage creates two services, one with increment of 3, the other with 5
-
 		synchronized(this) { wait(100); }
-		ServiceReference sr = systemBundleContext.getServiceReference(ITest.class.getName());
-		ITest iTest = (ITest) systemBundleContext.getService(sr);
 
+		// the deploymentpackage creates two services, one with increment of 3, the other with 5
+		// we look up the configuration with increment 3, and store the generated pid, so
+		// that we can later test whether the update happens in-place
+		Configuration[] configurations = configurationAdmin.listConfigurations("(&(service.factoryPid=integrationtests.managedservicefactory1.pid)(increment=3))");
+		assertEquals(1,configurations.length);
+		String pid = configurations[0].getPid();
+
+		// the deploymentpackage has two services, one with increment 3, the other with increment 5
+		ServiceReference[] srs = systemBundleContext.getServiceReferences(ITest.class.getName(),null);
+		assertEquals(2,srs.length);
+		srs = systemBundleContext.getServiceReferences(ITest.class.getName(),"(increment=3)");
+		assertEquals(1,srs.length);
+		ITest iTest = (ITest) systemBundleContext.getService(srs[0]);
 		int i = iTest.succ(7);
 		assertEquals(10,i);
+
+		// This changes the 3 to 8, and removes the increment=5.
+		DeploymentPackage dp = deploymentAdmin.installDeploymentPackage(new FileInputStream(INTEGRATIONTESTS_DP2_UPGRADE1_JAR));
+		synchronized(this) { wait(100); }
+		srs = systemBundleContext.getServiceReferences(ITest.class.getName(),null);
+		assertEquals(1,srs.length);
+		iTest = (ITest) systemBundleContext.getService(srs[0]);
+		i = iTest.succ(5);
+		assertEquals(13,i);
+		
+		// uninstall and see what happens
+		dp.uninstall();
+		srs = systemBundleContext.getServiceReferences(ITest.class.getName(),null);
+		assertNull(srs);
+		Configuration configuration = configurationAdmin.getConfiguration(pid);
+		assertNull(configuration.getProperties());
 	}
 }

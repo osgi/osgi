@@ -73,4 +73,15 @@ public class StoredConfigurations {
 		}
 		return r;
 	}
+	
+	public List getByPackageAndResourceName(String packageName,String resourceName) {
+		ArrayList r = new ArrayList();
+		for (Iterator iter = storedConfigurations.iterator(); iter.hasNext();) {
+			StoredConfiguration element = (StoredConfiguration) iter.next();
+			if (packageName.equals(element.packageName)&&resourceName.equals(element.resourceName)) r.add(element);
+		}
+		return r;
+	}
+
+
 }

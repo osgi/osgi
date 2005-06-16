@@ -46,6 +46,7 @@ import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.deploymentadmin.DeploymentException;
+import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 import org.osgi.service.metatype.AttributeDefinition;
@@ -61,9 +62,10 @@ public class Autoconf implements ResourceProcessor {
 	MetaTypeService metaTypeService;
 	SAXParserFactory saxParserFactory;
 	int operation;
-	DeploymentSession	session;
 	LinkedList commitTasks;
 	StoredConfigurations storedConfigurations;
+	String packageName;
+	DeploymentPackage	sourceDeploymentPackage;
 	
 
 	private static class CommitTask {
@@ -89,7 +91,9 @@ public class Autoconf implements ResourceProcessor {
 	}
 	
 	public void begin(DeploymentSession session) {
-		this.session = session;
+		packageName = session.getSourceDeploymentPackage().getName();
+		if ("".equals(packageName)) packageName = session.getTargetDeploymentPackage().getName();
+		sourceDeploymentPackage = session.getSourceDeploymentPackage();
 		commitTasks = new LinkedList();
 	}
 
@@ -175,9 +179,16 @@ public class Autoconf implements ResourceProcessor {
 		}
 	}
 	
-	public void process(final String name, final InputStream stream) throws DeploymentException {
+	public void process(final String resourceName, final InputStream stream) throws DeploymentException {
+
+		// this contains those configurations that were created by the same package, and the same
+		// resource in some previous version
+		List oldConfigs = storedConfigurations.getByPackageAndResourceName(packageName,resourceName);
+
+		List newConfigs = new LinkedList();
+
 		InputSource is = new InputSource(stream);
-		is.setPublicId(name);
+		is.setPublicId(resourceName);
 		MetaData m;
 		try {
 			saxParserFactory.setValidating(true);
@@ -203,8 +214,9 @@ public class Autoconf implements ResourceProcessor {
 			MetaData.Designate d = m.designates[i];
 			try {
 				CommitTask toWrite = processDesignate(d,m.ocds);
-				toWrite.resourceName = name;
+				toWrite.resourceName = resourceName;
 				commitTasks.add(toWrite);
+				newConfigs.add(new StoredConfiguration(packageName,resourceName,toWrite.configuration.getPid(),toWrite.factoryPid,toWrite.pidAlias));
 			} catch (DeploymentException e) {
 				if (d.optional) {
 					// TODO should log something
@@ -214,8 +226,22 @@ public class Autoconf implements ResourceProcessor {
 			}
 		}
 		
-		// TODO: create 'delete' jobs for all the stored configurations that were not 
-		// in this new version of the resource
+		// delete all configurations that are not in the new one
+		oldConfigs.removeAll(newConfigs);
+		for (Iterator iter = oldConfigs.iterator(); iter.hasNext();) {
+			StoredConfiguration sc = (StoredConfiguration) iter.next();
+			CommitTask toWrite = new CommitTask();
+			try {
+				toWrite.configuration = configurationAdmin.getConfiguration(sc.pid);
+			}
+			catch (IOException e) {
+				throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
+						"Configuration with pid "+sc.pid+" needs to be removed, but cannot be "+
+						"accessed",e);
+			}
+			toWrite.properties = null;
+			commitTasks.add(toWrite);
+		}
 	}
 
 	/**
@@ -378,7 +404,8 @@ public class Autoconf implements ResourceProcessor {
 	}
 
 	/**
-	 * @param m
+	 * Looks up the object class definition in the metadata file.
+	 * @param ocds array of the object classes in the metadata
 	 * @param ocdref
 	 * @return
 	 */
@@ -398,11 +425,11 @@ public class Autoconf implements ResourceProcessor {
 	 */
 	private Bundle searchForBundle(String bundleSymbolicName, String bundleVersion,boolean onlyInDeploymentPackage) {
 		if (onlyInDeploymentPackage) {
-			return session.getSourceDeploymentPackage().getBundle(bundleSymbolicName);
+			return sourceDeploymentPackage.getBundle(bundleSymbolicName);
 		} else {
 			// TODO: the spec needs to clear how the bundle should be searched
 			// for now, we only search for bundles in the deployment package
-			return session.getSourceDeploymentPackage().getBundle(bundleSymbolicName);
+			return sourceDeploymentPackage.getBundle(bundleSymbolicName);
 		}
 	}
 
@@ -412,7 +439,7 @@ public class Autoconf implements ResourceProcessor {
 
 
 	public void dropAllResources() throws DeploymentException {
-		List toDrop = storedConfigurations.getByPackageName(session.getTargetDeploymentPackage().getName());
+		List toDrop = storedConfigurations.getByPackageName(packageName);
 		for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
 			StoredConfiguration sc = (StoredConfiguration) iter.next();
 			CommitTask ct = new CommitTask();
@@ -429,9 +456,7 @@ public class Autoconf implements ResourceProcessor {
 	}
 
 	public void prepare() throws DeploymentException {
-		// since we do all the configuration writes in the 'process' call,
-		// there is nothing to prepare
-		// we are 'always ready' :-)
+		// everything is prepared in the 'process' call
 	}
 
 	public void commit() {
@@ -446,7 +471,7 @@ public class Autoconf implements ResourceProcessor {
 					} else {
 						oc.configuration.update(oc.properties);
 						StoredConfiguration sc = new StoredConfiguration(
-								session.getTargetDeploymentPackage().getName(),
+								packageName,
 								oc.resourceName,
 								pid,
 								oc.factoryPid,
@@ -489,7 +514,7 @@ public class Autoconf implements ResourceProcessor {
 	}
 
 	public void cancel() {
-		throw new IllegalStateException("not implemented yet");
-		// TODO Auto-generated method stub
+		// there's not much to do. This resource processor doesn't do any computing intensive
+		// thing, and doesn't access slow resources.
 	}
 }
