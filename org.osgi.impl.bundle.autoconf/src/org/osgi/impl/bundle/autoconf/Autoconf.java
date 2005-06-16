@@ -140,7 +140,6 @@ public class Autoconf implements ResourceProcessor {
 			CommitTask toWrite = new CommitTask();
 			try {
 				toWrite.configuration = configurationAdmin.createFactoryConfiguration(d.factoryPid,location);
-				System.out.println(toWrite.configuration.getPid());
 			}
 			catch (IOException e) {
 				throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot create new factory configuration",e);
