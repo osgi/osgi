@@ -38,8 +38,6 @@
  */
 package org.osgi.test.cases.policy.tbc;
 
-import java.security.MessageDigest;
-
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.PackagePermission;
@@ -57,7 +55,6 @@ import org.osgi.test.cases.policy.tbc.TransferCostCondition.IsPostponed;
 import org.osgi.test.cases.policy.tbc.TransferCostCondition.ResetTransferCost;
 import org.osgi.test.cases.policy.tbc.TransferCostCondition.SetTransferCost;
 import org.osgi.test.cases.policy.tbc.TransferCostCondition.TransferCostConditionConstants;
-import org.osgi.test.cases.policy.tbc.util.Base64Encoder;
 import org.osgi.test.cases.policy.tbc.util.TestBundle;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
@@ -108,9 +105,25 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 
 	public static final String INVALID_CODE = "@#$%sA!&_";
 
+	public static final String CONDITION_HASH = "Egtd5i+S33Y94dHent1bFdlb_ak";
+	
 	public static final String PRINCIPAL = "www.cesar.org.br";
 
 	public static final String OSGI_ROOT = "./OSGi";
+	
+	public static final String TEST_NODE = "test";
+	
+	public static final String TEST_NODE_LOCATION = "test/Location";
+	
+	public static final String PRINCIPAL_LOCATION = PRINCIPAL+ "/Principal";
+	
+	public static final String PRINCIPAL_PERMISSION = PRINCIPAL+ "/PermissionInfo";
+	
+	public static final String CONDITIONAL_PERMISSIONINFO = CONDITION_HASH+ "/PermissionInfo";
+	
+	public static final String CONDITIONAL_CONDITIONINFO = CONDITION_HASH+ "/ConditionInfo";
+	
+	public static final String TEST_NODE_PERMISSION = "test/PermissionInfo";
 	
 	public static final String POLICY_JAVA_NODE =  OSGI_ROOT + "/Policy/Java";
 	
@@ -121,14 +134,6 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 	public static final String PRINCIPAL_PERMISSION_NODE =  POLICY_JAVA_NODE + "/PrincipalPermission";
 	
 	public static final String CONDITIONAL_PERMISSION_NODE =  POLICY_JAVA_NODE + "/ConditionalPermission";
-	
-	public static final String CONDITION_HASH = "Egtd5i+S33Y94dHent1bFdlb_ak";
-	
-	public static final String CONDITION_DMT = "./OSGi/Policies/Java/ConditionalPermission";
-	
-	public static final String PERMISSION_INFO = "(org.osgi.framework.AdminPermission \"*\" \"*\")\n";
-	
-	public static final String PERMISSION_DEFAULT = "(org.osgi.framework.AdminPermission \"*\" \"GET\")\n";
 	
 	public static final Bundle TEST_BUNDLE = new TestBundle();
 	
@@ -251,14 +256,6 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 		return da;
 	}
 	
-	public String getHash(String str) throws Exception {
-		MessageDigest md = MessageDigest.getInstance("SHA");
-		byte[] b = md.digest(str.getBytes("UTF-8"));
-		String temp = Base64Encoder.encode(b);
-		temp = temp.replace('=', '\0');
-		return temp.replace('/', '_');
-	}
-
 	public Bundle getBundle() {
 		if (bundle == null)
 			throw new NullPointerException("null Bundle.");
