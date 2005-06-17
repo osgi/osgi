@@ -14,17 +14,16 @@ import java.security.Permission;
 import java.util.StringTokenizer;
 
 /**
- * Indicates the callers authority to publish, discover, read or reset
+ * Indicates the callers authority to publish, read or reset
  * <code>StatusVariable</code>s, to switch event sending on or off or to
  * start monitoring jobs. The target of the permission is the identifier of the
  * <code>StatusVariable</code>, the action can be <code>read</code>,
- * <code>publish</code>, <code>reset</code>, <code>startjob</code>,
- * <code>switchevents</code>, <code>discover</code>, or the combination of
- * these separated by commas.
+ * <code>publish</code>,<code>reset</code>,<code>startjob</code>,
+ * <code>switchevents</code>, or the combination of these separated by
+ * commas.
  */
 public class MonitorPermission extends Permission {
     // TODO add static final serialVersionUID
-    // TODO remove discover action, allow * in both segments of target
 
     /**
      * Holders of <code>MonitorPermission</code> with the <code>read</code>
@@ -70,25 +69,6 @@ public class MonitorPermission extends Permission {
 
     /**
      * Holders of <code>MonitorPermission</code> with the
-     * <code>discover</code> action present are allowed to list the currently
-     * registered <code>Monitorable</code> services, and the
-     * <code>StatusVariable</code>s a <code>Monitorable</code> publishes.
-     * Discover rights are implied by read rights, if the target field is also 
-     * valid for the <code>discover</code> action.
-     * <p>
-     * To list all registered <code>Monitorable</code>s and all their
-     * <code>StatusVariable</code>s the permission's target field must be
-     * <code>&#42;/*</code>. To allow listing the <code>StatusVariable</code>s
-     * of only a specific <code>Monitorable</code>, the target field must be of
-     * the form <code>[Monitorable_ID]/*</code>. In the latter case 
-     * <code>[Monitorable_ID]</code> may end with <code>*</code> to allow
-     * listing the <code>StatusVariable</code>s of all matching 
-     * <code>Monitorable</code> services.
-     */
-    public static final String DISCOVER = "discover";
-
-    /**
-     * Holders of <code>MonitorPermission</code> with the
      * <code>switchevents</code> action present are allowed to switch event
      * sending on or off for the value of the <code>StatusVariable</code>s
      * specified in the permission's target field.
@@ -99,8 +79,7 @@ public class MonitorPermission extends Permission {
     private static final int RESET_FLAG        = 0x2;
     private static final int PUBLISH_FLAG      = 0x4;
     private static final int STARTJOB_FLAG     = 0x8;
-    private static final int DISCOVER_FLAG     = 0x10;
-    private static final int SWITCHEVENTS_FLAG = 0x20;
+    private static final int SWITCHEVENTS_FLAG = 0x10;
 
     private String monId;
     private String varId;
@@ -117,23 +96,22 @@ public class MonitorPermission extends Permission {
      * different depending on the <code>action</code> field, see the 
      * descriptions of the individual actions.  In general, the wildcard 
      * <code>*</code> is allowed in both fragments of the target string, but 
-     * only at the end of the fragments. It is not allowed to specify a Status
-     * Variable name (or prefix) if the Monitorable ID ended with a wildcard.
+     * only at the end of the fragments.
      * <p>
      * The following targets are valid:
      * <code>com.mycomp.myapp/queue_length</code>,
      * <code>com.mycomp.myapp/*</code>, <code>com.mycomp.&#42;/*</code>,
-     * <code>&#42;/*</code>.
+     * <code>&#42;/*</code>, <code>&#42;/queue_length</code>, 
+     * <code>&#42;/queue*</code>.
      * <p>
      * The following targets are invalid:
      * <code>*.myapp/queue_length</code>, <code>com.*.myapp/*</code>,
-     * <code>*</code>, <code>&#42;/queue_length</code>, 
-     * <code>&#42;/queue*</code>.
+     * <code>*</code>.
      * <p>
      * The <code>actions</code> parameter specifies the allowed action(s): 
      * <code>read</code>, <code>publish</code>, <code>startjob</code>,
-     * <code>reset</code>, <code>switchevents</code>, <code>discover</code>, or 
-     * the combination of these separated by commas. 
+     * <code>reset</code>, <code>switchevents</code>, or the combination of 
+     * these separated by commas. 
      * 
      * @param statusVariable the identifier of the <code>StatusVariable</code>
      *        in [Monitorable_id]/[StatusVariable_id] format 
@@ -164,19 +142,15 @@ public class MonitorPermission extends Permission {
             throw new IllegalArgumentException(
                     "Invalid StatusVariable path: empty monitorable ID or StatusVariable name.");
 
-        // TODO: full ID check (e.g. no / in statusVariable, no invalid chars, no * within IDs)
-
         prefixMonId = statusVariable.charAt(sep - 1) == '*';
         prefixVarId = statusVariable.charAt(len - 1) == '*';
         
         monId = statusVariable.substring(0, prefixMonId ? sep - 1 : sep);
         varId = statusVariable.substring(sep + 1, prefixVarId ? len - 1 : len);
 
-        if(prefixMonId && !varId.equals(""))
-            throw new IllegalArgumentException(
-                    "Invalid StatusVariable path: wildcard in monitorable ID " +
-                    "must be followed by '*' as StatusVariable name.");
-        
+        checkId(monId, "Monitorable ID part of the target");
+        checkId(varId, "Status Variable ID part of the target");
+
         mask = 0;
         minJobInterval = 0;
 
@@ -189,12 +163,6 @@ public class MonitorPermission extends Permission {
                 addToMask(RESET_FLAG, RESET);
             } else if (action.equalsIgnoreCase(PUBLISH)) {
                 addToMask(PUBLISH_FLAG, PUBLISH);
-            } else if (action.equalsIgnoreCase(DISCOVER)) {
-                if(!varId.equals("")) // implies prefixVarId
-                    throw new IllegalArgumentException(
-                            "Invalid target for 'discover' action, " + 
-                            "StatusVariable name in target must be '*'.");
-                addToMask(DISCOVER_FLAG, DISCOVER);
             } else if (action.equalsIgnoreCase(SWITCHEVENTS)) {
                 addToMask(SWITCHEVENTS_FLAG, SWITCHEVENTS);
             } else if (action.toLowerCase().startsWith(STARTJOB)) {
@@ -220,11 +188,6 @@ public class MonitorPermission extends Permission {
                 throw new IllegalArgumentException("Invalid action '" + action
                         + "'");
         }
-        
-        // "read" implies "discover" for targets */*, mon*/* and monId/*
-        // the varId == "" check identifies exactly these targets
-        if((mask & READ_FLAG) != 0 && varId.equals(""))
-            mask |= DISCOVER_FLAG;
     }
     
     private void addToMask(int action, String actionString) {
@@ -235,6 +198,23 @@ public class MonitorPermission extends Permission {
         mask |= action;
     }
 
+    private void checkId(String id, String idName)
+            throws IllegalArgumentException {
+        
+        if (id.length() > StatusVariable.MAX_ID_LENGTH)
+            throw new IllegalArgumentException(idName + " is too long (over "
+                    + StatusVariable.MAX_ID_LENGTH + " characters).");
+        
+        if (id.equals(".."))
+            throw new IllegalArgumentException(idName + " is invalid.");
+        
+        char[] chars = id.toCharArray();
+        for (int i = 0; i < chars.length; i++)
+            if (StatusVariable.SYMBOLIC_NAME_CHARACTERS.indexOf(chars[i]) == -1)
+                throw new IllegalArgumentException(idName
+                        + " contains invalid characters.");
+    }
+    
     /**
      * Create an integer hash of the object. The hash codes of
      * <code>MonitorPermission</code>s <code>p1</code> and <code>p2</code> are 
@@ -285,7 +265,6 @@ public class MonitorPermission extends Permission {
         appendAction(sb, RESET_FLAG,        RESET);
         appendAction(sb, PUBLISH_FLAG,      PUBLISH);
         appendAction(sb, STARTJOB_FLAG,     STARTJOB);
-        appendAction(sb, DISCOVER_FLAG,     DISCOVER);
         appendAction(sb, SWITCHEVENTS_FLAG, SWITCHEVENTS);
 
         return sb.toString();
@@ -296,6 +275,9 @@ public class MonitorPermission extends Permission {
             if(sb.length() != 0)
                 sb.append(',');
             sb.append(actionName);
+            
+            if(flag == STARTJOB_FLAG && minJobInterval != 0)
+                sb.append(':').append(minJobInterval);
         }
     }
 
@@ -313,11 +295,6 @@ public class MonitorPermission extends Permission {
      * <li>the target set of <code>StatusVariable</code>s is not the same
      * nor a subset of the target set of <code>StatusVariable</code>s of this
      * permission
-     * <p>
-     * When comparing the permitted action sets, the presence of the
-     * <code>read</code> action implies the <code>discover</code> action, if
-     * the target string is valid for the <code>discover</code> action as
-     * well.
      * 
      * @param p the permission to be checked
      * @return <code>true</code> if the given permission is implied by this
