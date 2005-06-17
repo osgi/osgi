@@ -70,10 +70,12 @@ public final class StatusVariable {
 
     //----- Private constants -----//
 
-    private static final String URI_CHARACTERS =
+    private static final String SYMBOLIC_NAME_CHARACTERS =
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789" +
-        "-_.!~*'()";   // ";:@&=+$," not allowed by Monitoring RFC 
+        "-_.";   // a subset of the characters allowed in DMT URIs 
 
+    private static final int MAX_ID_LENGTH = 20;
+    
     //----- Private fields -----//
     private String  id;
     private Date    timeStamp;
@@ -84,6 +86,7 @@ public final class StatusVariable {
     private double  doubleData;
     private String  stringData;
     private boolean booleanData;
+
 
     //----- Constructors -----//
     /**
@@ -375,6 +378,9 @@ public final class StatusVariable {
             throw new NullPointerException(idName + " is null.");
         if(id.length() == 0)
             throw new IllegalArgumentException(idName + " is empty.");
+        if(id.length() > MAX_ID_LENGTH)
+            throw new IllegalArgumentException(idName + 
+                    " is too long (over " + MAX_ID_LENGTH + " characters).");
         if(id.equals(".."))
             throw new IllegalArgumentException(idName + " is invalid.");
         
@@ -387,7 +393,7 @@ public final class StatusVariable {
         char[] chars = name.toCharArray();
         int i = 0;
         while(i < chars.length) {
-            if(URI_CHARACTERS.indexOf(chars[i]) == -1)
+            if(SYMBOLIC_NAME_CHARACTERS.indexOf(chars[i]) == -1)
                 return false;
             i++;
         }

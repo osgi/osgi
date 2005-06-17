@@ -22,17 +22,19 @@ package org.osgi.impl.service.monitor;
 class Path {
     //----- Static fields and methods -----//
     
-    // character set copied from org.osgi.impl.service.dmt.Utils
     // duplicated in org.osgi.service.monitor.StatusVariable, keep synchronized!
-    private static final String URI_CHARACTERS =
+    private static final String SYMBOLIC_NAME_CHARACTERS =
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789" +
-        "-_.!~*'()";   // ";:@&=+$," not allowed by Monitoring RFC 
-        
+        "-_.";   // a subset of the characters allowed in DMT URIs  
+     
+    // duplicated in org.osgi.service.monitor.StatusVariable, keep synchronized!
+    private static final int MAX_ID_LENGTH = 20;
+    
     private static boolean containsValidChars(String name) {
         char[] chars = name.toCharArray();
         int i = 0;
         while(i < chars.length) {
-            if(URI_CHARACTERS.indexOf(chars[i]) == -1)
+            if(SYMBOLIC_NAME_CHARACTERS.indexOf(chars[i]) == -1)
                 return false;
             i++;
         }
@@ -52,6 +54,9 @@ class Path {
             throws IllegalArgumentException {
         checkString(name, errorPrefix);
         
+        if(name.length() > MAX_ID_LENGTH)
+            throw new IllegalArgumentException(errorPrefix + 
+                    " is too long (over " + MAX_ID_LENGTH + " characters).");
         if(name.equals(".."))
             throw new IllegalArgumentException(errorPrefix + " is invalid.");
         
