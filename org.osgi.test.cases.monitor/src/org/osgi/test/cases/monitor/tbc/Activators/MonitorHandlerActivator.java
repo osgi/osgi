@@ -64,9 +64,10 @@ public class MonitorHandlerActivator implements BundleActivator {
 		// creating the service
 		testMonitorHandlerImpl = new MonitorHandlerImpl(tbc);
 			
-		String[] topics = new String[] {"org/osgi/service/monitor"};
+		String[] topics = new String[] {"org/osgi/service/monitor/MonitorEvent"};
 		Hashtable ht = new Hashtable();
 		ht.put(org.osgi.service.event.EventConstants.EVENT_TOPIC, topics);
+		//ht.put(org.osgi.service.event.EventConstants.EVENT_FILTER, "("+MonitorTestControl.CONST_LISTENER_ID+"="+MonitorTestControl.INITIATOR+")");
 		servReg = bc.registerService(EventHandler.class.getName(), testMonitorHandlerImpl, ht);
 	}
 

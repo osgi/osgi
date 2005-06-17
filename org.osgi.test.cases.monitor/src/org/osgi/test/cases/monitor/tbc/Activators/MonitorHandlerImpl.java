@@ -39,66 +39,66 @@ package org.osgi.test.cases.monitor.tbc.Activators;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
-import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
 /**
  * @author Alexandre Santos
  */
 public class MonitorHandlerImpl implements EventHandler {
-	
+
 	private MonitorTestControl tbc;
-	
+
 	public MonitorHandlerImpl(MonitorTestControl tbc) {
 		this.tbc = tbc;
 	}
-	/** 
-	 * Should be called by EventAdmin when a StatusVariable was updated
-	 * and will increment the variable in MonitorTestControl.
+
+	/**
+	 * Should be called by EventAdmin when a StatusVariable was updated and will
+	 * increment the variable in MonitorTestControl.
 	 */
 	public void handleEvent(Event arg0) {
-		MonitorTestControl.EVENT_COUNT += 1;
+		String listenerId = (String) arg0.getProperty(MonitorTestControl.CONST_LISTENER_ID); 
 		
-		String properties[] = arg0.getPropertyNames();
-		boolean isMonitorablePid = false;
-		boolean isStatusVariableName = false;
-		boolean isStatusVariableValue = false;
-		boolean isListenerId = false;
-		for (int i=0; i<properties.length; i++) {
-			if (properties[i].equals(MonitorTestControl.CONST_MONITORABLE_PID)) {
-				isMonitorablePid = true;
-			} else if (properties[i].equals(MonitorTestControl.CONST_STATUSVARIABLE_NAME)) {
-				isStatusVariableName = true;
-			} else if (properties[i].equals(MonitorTestControl.CONST_STATUSVARIABLE_VALUE)) {
-				isStatusVariableValue = true;
-			} else if (properties[i].equals(MonitorTestControl.CONST_LISTENER_ID)) {
-				isListenerId = true;
+		if ((listenerId!=null) && (listenerId.equals(
+				MonitorTestControl.INITIATOR))) {
+
+			MonitorTestControl.EVENT_COUNT += 1;
+			
+			tbc.resetEvent();
+
+			String properties[] = arg0.getPropertyNames();
+
+			for (int i = 0; i < properties.length; i++) {
+				if (properties[i]
+						.equals(MonitorTestControl.CONST_MONITORABLE_PID)) {
+					tbc.setMonitorablePid(true);
+				} else if (properties[i]
+						.equals(MonitorTestControl.CONST_STATUSVARIABLE_NAME)) {
+					tbc.setStatusVariableName(true);
+				} else if (properties[i]
+						.equals(MonitorTestControl.CONST_STATUSVARIABLE_VALUE)) {
+					tbc.setStatusVariableValue(true);
+				} else if (properties[i]
+						.equals(MonitorTestControl.CONST_LISTENER_ID)) {
+					tbc.setListenerId(true);
+				}
 			}
+			
+			tbc.setStatusVariableName((String) arg0
+									.getProperty(MonitorTestControl.CONST_STATUSVARIABLE_NAME));
+			
+			tbc.setStatusVariableValue((String) arg0
+									.getProperty(MonitorTestControl.CONST_STATUSVARIABLE_VALUE));
+			
+			tbc.setMonitorablePid((String) arg0.getProperty(MonitorTestControl.CONST_MONITORABLE_PID));
+			
+			tbc.setListenerId((String) arg0
+							.getProperty(MonitorTestControl.CONST_LISTENER_ID));
+			
+		} else {
+			
+			MonitorTestControl.SWITCH_EVENTS_COUNT =+ 1;					
+			
 		}
-		
-		tbc.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE, new String[] { "event properties correspond to the properties specified in rfc." }),
-				isMonitorablePid && isStatusVariableName && isStatusVariableValue && isListenerId);
-		
-		
-		tbc.assertEquals(MessagesConstants.getMessage(
-				MessagesConstants.ASSERT_EQUALS, new String[] { "the value in " +MonitorTestControl.CONST_STATUSVARIABLE_NAME,
-						MonitorTestControl.SV_NAME1 }),
-						MonitorTestControl.SV_NAME1, arg0.getProperty(MonitorTestControl.CONST_STATUSVARIABLE_NAME));
-		
-		tbc.assertEquals(MessagesConstants.getMessage(
-				MessagesConstants.ASSERT_EQUALS, new String[] { "the value in " + MonitorTestControl.CONST_STATUSVARIABLE_VALUE,
-						"test1" }),
-				"test1", arg0.getProperty(MonitorTestControl.CONST_STATUSVARIABLE_VALUE));	
-		
-		tbc.assertEquals(MessagesConstants.getMessage(
-				MessagesConstants.ASSERT_EQUALS, new String[] { "the value in " + MonitorTestControl.CONST_MONITORABLE_PID,
-						MonitorTestControl.SV_MONITORABLEID1 }),
-						MonitorTestControl.SV_MONITORABLEID1, arg0.getProperty(MonitorTestControl.CONST_MONITORABLE_PID));	
-		
-		tbc.assertEquals(MessagesConstants.getMessage(
-				MessagesConstants.ASSERT_EQUALS, new String[] { "the value in " + MonitorTestControl.CONST_LISTENER_ID,
-						MonitorTestControl.INITIATOR }),
-						MonitorTestControl.INITIATOR, arg0.getProperty(MonitorTestControl.CONST_LISTENER_ID));
-		
 	}
 
 }

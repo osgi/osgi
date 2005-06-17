@@ -76,7 +76,6 @@ public class Equals {
 		testEquals018();
 		testEquals019();
 		testEquals020();
-		testEquals021();
 	}
 
 	/**
@@ -400,40 +399,12 @@ public class Equals {
 
 	/**
 	 * @testID testEquals012
-	 * @testDescription This method asserts if two objects created with same
-	 *                  parameters are equal.
+	 * @testDescription This method asserts if two objects created with
+	 *                  different data are not equal.
 	 */
 	public void testEquals012() {
 		try {
 			tbc.log("#testEquals012");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_MONITORABLEID1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_STRING_VALUE);
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_STRING_VALUE);
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with same parameters are equal" }),
-							sv.equals(sv2));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		}
-	}
-
-	/**
-	 * @testID testEquals013
-	 * @testDescription This method asserts if two objects created with
-	 *                  different data are not equal.
-	 */
-	public void testEquals013() {
-		try {
-			tbc.log("#testEquals013");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -457,13 +428,13 @@ public class Equals {
 	}
 
 	/**
-	 * @testID testEquals014
+	 * @testID testEquals013
 	 * @testDescription This method asserts if two objects created with
 	 *                  different collection methods are not equal.
 	 */
-	public void testEquals014() {
+	public void testEquals013() {
 		try {
-			tbc.log("#testEquals014");
+			tbc.log("#testEquals013");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -487,13 +458,13 @@ public class Equals {
 	}
 
 	/**
-	 * @testID testEquals015
+	 * @testID testEquals014
 	 * @testDescription This method asserts if two objects created with
 	 *                  different path are not equal.
 	 */
-	public void testEquals015() {
+	public void testEquals014() {
 		try {
-			tbc.log("#testEquals015");
+			tbc.log("#testEquals014");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -517,13 +488,13 @@ public class Equals {
 	}
 
 	/**
-	 * @testID testEquals016
+	 * @testID testEquals015
 	 * @testDescription This method asserts if two objects created with
 	 *                  different type are not equal.
 	 */
-	public void testEquals016() {
+	public void testEquals015() {
 		try {
-			tbc.log("#testEquals016");
+			tbc.log("#testEquals015");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -547,13 +518,13 @@ public class Equals {
 	}
 
 	/**
-	 * @testID testEquals017
+	 * @testID testEquals016
 	 * @testDescription This method asserts if two objects created with same
 	 *                  parameters are equal.
 	 */
-	public void testEquals017() {
+	public void testEquals016() {
 		try {
-			tbc.log("#testEquals017");
+			tbc.log("#testEquals016");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -575,13 +546,13 @@ public class Equals {
 	}
 
 	/**
-	 * @testID testEquals018
+	 * @testID testEquals017
 	 * @testDescription This method asserts if two objects created with
 	 *                  different data are not equal.
 	 */
-	public void testEquals018() {
+	public void testEquals017() {
 		try {
-			tbc.log("#testEquals018");
+			tbc.log("#testEquals017");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -605,13 +576,13 @@ public class Equals {
 	}
 
 	/**
-	 * @testID testEquals019
+	 * @testID testEquals018
 	 * @testDescription This method asserts if two objects created with
 	 *                  different collection methods are not equal.
 	 */
-	public void testEquals019() {
+	public void testEquals018() {
 		try {
-			tbc.log("#testEquals019");
+			tbc.log("#testEquals018");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -635,13 +606,13 @@ public class Equals {
 	}
 
 	/**
-	 * @testID testEquals020
+	 * @testID testEquals019
 	 * @testDescription This method asserts if two objects created with
 	 *                  different path are not equal.
 	 */
-	public void testEquals020() {
+	public void testEquals019() {
 		try {
-			tbc.log("#testEquals020");
+			tbc.log("#testEquals019");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
@@ -665,13 +636,13 @@ public class Equals {
 	}
 
 	/**
-	 * @testID testEquals021
+	 * @testID testEquals020
 	 * @testDescription This method asserts if two objects created with
 	 *                  different type are not equal.
 	 */
-	public void testEquals021() {
+	public void testEquals020() {
 		try {
-			tbc.log("#testEquals021");
+			tbc.log("#testEquals020");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,

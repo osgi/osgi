@@ -190,8 +190,8 @@ public class SwitchEvents implements TestInterface {
 
 	/**
 	 * @testID testSwitchEvents005
-	 * @testDescription Asserts if the switchevents is working like it was
-	 * 					defined. When it is set to false, not events is fired.		
+	 * @testDescription Asserts if the switchevents is ignored when the StatusVariable
+	 * 					is used in a MonitoringJob.
 	 */
 	public synchronized void testSwitchEvents005() {
 		tbc.log("#testSwitchEvents005");
@@ -225,25 +225,11 @@ public class SwitchEvents implements TestInterface {
 			
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] { "variable of event modification",
-							0+"" }), 0,
+							1+"" }), 1,
 					MonitorTestControl.EVENT_COUNT);
 			
-			tbc.getMonitorAdmin().switchEvents(MonitorTestControl.SVS[0], true);
-			
-			tbc.getMonitorListener().updated(
-					MonitorTestControl.SV_MONITORABLEID1,
-					new StatusVariable(
-							MonitorTestControl.SV_NAME1, StatusVariable.CM_DER,
-							"test1"));			
-
-			
-			wait(MonitorTestControl.TIMEOUT);
-			
-			tbc.assertEquals(MessagesConstants.getMessage(
-					MessagesConstants.ASSERT_EQUALS, new String[] { "variable of event modification",
-							1+"" }), 1,
-					MonitorTestControl.EVENT_COUNT);			
-			
+			mj.stop();
+						
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
@@ -321,7 +307,7 @@ public class SwitchEvents implements TestInterface {
 	 * @testID testSwitchEvents008
 	 * @testDescription Asserts if the wildcard works in switchevents method.		
 	 */
-	public void testSwitchEvents008() {
+	public synchronized void testSwitchEvents008() {
 		tbc.log("#testSwitchEvents008");
 		PermissionInfo[] infos = null;
 		try {
@@ -330,17 +316,11 @@ public class SwitchEvents implements TestInterface {
 
 			
 			tbc.setLocalPermission(new PermissionInfo[] {
-					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorTestControl.SVS[0], org.osgi.service.monitor.MonitorPermission.STARTJOB),	
-					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorTestControl.SVS[1], org.osgi.service.monitor.MonitorPermission.STARTJOB),
-					new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[0], MonitorPermission.SWITCHEVENTS)
+					new PermissionInfo(MonitorPermission.class.getName(),"cesar/*", MonitorPermission.SWITCHEVENTS)
 			});
 			
-			MonitorTestControl.EVENT_COUNT = 0;
+			MonitorTestControl.SWITCH_EVENTS_COUNT = 0;
 
-			MonitoringJob mj = tbc.getMonitorAdmin().startJob(
-					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
-					MonitorTestControl.COUNT);
-			
 			tbc.getMonitorAdmin().switchEvents("cesar/*", false);			
 			
 			tbc.getMonitorListener().updated(
@@ -354,7 +334,7 @@ public class SwitchEvents implements TestInterface {
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] { "variable of event modification",
 							0+"" }), 0,
-					MonitorTestControl.EVENT_COUNT);
+					MonitorTestControl.SWITCH_EVENTS_COUNT);
 			
 			tbc.getMonitorAdmin().switchEvents("*/*", true);
 			
@@ -370,7 +350,7 @@ public class SwitchEvents implements TestInterface {
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] { "variable of event modification",
 							1+"" }), 1,
-					MonitorTestControl.EVENT_COUNT);			
+					MonitorTestControl.SWITCH_EVENTS_COUNT);			
 			
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
