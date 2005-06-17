@@ -65,9 +65,9 @@ public class TachometerStatus implements Status {
    */
   public byte getStatus() {
     if (errorCode != -1) {
-      return Status.STATUS_FAILED;
+      return (byte) Status.STATUS_FAILED;
     }
-    return Status.STATUS_OK;
+    return (byte) Status.STATUS_OK;
   }
 
   /* 
