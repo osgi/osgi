@@ -34,6 +34,7 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.Constants;
 import org.osgi.service.metatype.MetaTypeProvider;
 import org.osgi.service.metatype.ObjectClassDefinition;
 import org.xml.sax.Attributes;
@@ -218,10 +219,6 @@ public class MetaTypeProviderHandler extends AbstractHandler implements MetaType
   }
   
   private Localizator getDefaultLocalizator() {
-    if (localization == null) {
-      return new Localizator(null);
-    }
-
     return new Localizator( getResourceBundle(null) );
   }
   
@@ -229,8 +226,11 @@ public class MetaTypeProviderHandler extends AbstractHandler implements MetaType
     if ( !isLocaleValid(locale) ) {
       throw new IllegalArgumentException("Invalid locale '" + locale + "'!");
     }
+
+    String resourceBaseName = localization != null ? localization :
+      Constants.BUNDLE_LOCALIZATION_DEFAULT_BASENAME;
     
-    String fileLocation = localization + 
+    String fileLocation = resourceBaseName + 
       (locale != null ? LOCALE_SEPARATOR + locale : "") + RESOURCE_FILE_EXTENTION;
     
     URL propertiesURL = bundle.getResource(fileLocation);
