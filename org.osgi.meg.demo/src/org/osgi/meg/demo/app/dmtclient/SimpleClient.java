@@ -44,6 +44,8 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
 
     private int updateCount = 0;
 
+    private String dummy = "Dummy string 1";
+    
     public SimpleClient(DmtAdmin factory, MonitorListener monitorListener, BundleContext bc) {
         this.factory = factory;
         this.monitorListener = monitorListener;
@@ -139,7 +141,12 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
             //ma.startJob("schedule-listener", new String[] { pid + "/NumOfChanges" }, 60, 5);
 
             ma.startJob("2nd-change-listener", new String[] { pid + "/NumOfChanges" }, 2);
+            ma.startScheduledJob("scheduled-listener", new String[] { pid + "/Dummy" }, 5, 1);
 
+            // need to wait a bit with updating Dummy, because events are not 
+            // delivered to this bundle while its start() method is running
+            delayedUpdate();
+            
             bc.ungetService(monitorRef);
 
             ServiceReference configRef = bc.getServiceReference(ConfigurationAdmin.class.getName());
@@ -278,6 +285,18 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
         }
     }
 
+    private void delayedUpdate() {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {}
+                setDummy("Dummy string 2");
+                setDummy("Dummy string 3");   
+            }
+        }).start();
+    }
+    
     private void sessionOpenTests() {
         // parallel sessions
         sessionOpenTest("./OSGi/mon", DmtSession.LOCK_TYPE_EXCLUSIVE,
@@ -505,6 +524,9 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
         if(id.equals("CPULoad"))
             return getLoadVar();
         
+        if(id.equals("Dummy"))
+            return getDummyVar();
+        
         throw new IllegalArgumentException("Status Variable '" + id + 
                 "' not found in Monitorable '" + ClientActivator.SERVICE_PID + 
                 "'.");
@@ -512,7 +534,7 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
  
 	public String[] getStatusVariableNames()
     {
-        return new String[] { "NumOfChanges", "CPULoad" };
+        return new String[] { "NumOfChanges", "CPULoad", "Dummy" };
     }
 
     public boolean notifiesOnChange(String id) 
@@ -522,6 +544,9 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
         
         if(id.equals("CPULoad"))
             return false;
+
+        if(id.equals("Dummy"))
+            return true;
 
         throw new IllegalArgumentException("Status Variable '" + id + 
                 "' not found in Monitorable '" + ClientActivator.SERVICE_PID + 
@@ -537,6 +562,9 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
 
         if(id.equals("CPULoad"))
             return false;
+        
+        if(id.equals("Dummy"))
+            return false;
 
         throw new IllegalArgumentException("Status Variable '" + id + 
                 "' not found in Monitorable '" + ClientActivator.SERVICE_PID + 
@@ -549,6 +577,9 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
         
         if(id.equals("CPULoad"))
             return "CPU load percentage indicator (dummy)";
+        
+        if(id.equals("Dummy"))
+            return "Just a string.";
 
         throw new IllegalArgumentException("Status Variable '" + id + 
                 "' not found in Monitorable '" + ClientActivator.SERVICE_PID + 
@@ -561,6 +592,12 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
         monitorListener.updated(ClientActivator.SERVICE_PID, getUpdateVar());
     }
 
+    private void setDummy(String newDummy)
+    {
+        dummy = newDummy;
+        monitorListener.updated(ClientActivator.SERVICE_PID, getDummyVar());
+    }
+    
     private static Random random = new Random();
 
     private StatusVariable getLoadVar() {
@@ -573,6 +610,10 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
                 StatusVariable.CM_CC, updateCount);
     }
 
+    private StatusVariable getDummyVar() {
+        return new StatusVariable("Dummy", StatusVariable.CM_SI, dummy);
+    }
+    
     /*
     private StatusVariable getDoubles() {
         double[] doubles = new double[random.nextInt(4)];
@@ -640,8 +681,16 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
         }
 
         if(error != null)
-            System.out.println("Error retrieving new value of Status Variable: " + error);
+            System.out.println("Error retrieving new value of Status Variable from admin: " + error);
         else
-            System.out.println("Value: " + var);
+            System.out.println("Value in admin: " + var);
+        
+        
+        String eventVar = (String) event.getProperty("mon.statusvariable.value");
+
+        if(eventVar == null)
+            System.out.println("Error retrieving new value of Status Variable from event.");
+        else
+            System.out.println("Value in event: " + eventVar);
     }
 }
