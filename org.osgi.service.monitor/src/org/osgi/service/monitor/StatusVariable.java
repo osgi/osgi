@@ -68,13 +68,13 @@ public final class StatusVariable {
      */
     public static final int    CM_SI        = 3;
 
-    //----- Private constants -----//
+    //----- Package private constants -----//
 
-    private static final String SYMBOLIC_NAME_CHARACTERS =
+    static final String SYMBOLIC_NAME_CHARACTERS =
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789" +
         "-_.";   // a subset of the characters allowed in DMT URIs 
 
-    private static final int MAX_ID_LENGTH = 20;
+    static final int MAX_ID_LENGTH = 20;
     
     //----- Private fields -----//
     private String  id;
@@ -372,7 +372,16 @@ public final class StatusVariable {
         timeStamp = new Date();
     }
 
-    private void checkId(String id, String idName)
+    
+    private boolean equals(Object o1, Object o2) {
+        return o1 == null ? o2 == null : o1.equals(o2);
+    }
+
+    private int hashCode(Object o) {
+        return o == null ? 0 : o.hashCode();
+    }
+
+    private static void checkId(String id, String idName)
             throws IllegalArgumentException, NullPointerException {
         if (id == null)
             throw new NullPointerException(idName + " is null.");
@@ -389,23 +398,12 @@ public final class StatusVariable {
                     " contains invalid characters.");
     }
     
-    private boolean containsValidChars(String name) {
+    private static boolean containsValidChars(String name) {
         char[] chars = name.toCharArray();
-        int i = 0;
-        while(i < chars.length) {
+        for(int i = 0; i < chars.length; i++)
             if(SYMBOLIC_NAME_CHARACTERS.indexOf(chars[i]) == -1)
                 return false;
-            i++;
-        }
         
         return true;        
-    }
-    
-    private boolean equals(Object o1, Object o2) {
-        return o1 == null ? o2 == null : o1.equals(o2);
-    }
-
-    private int hashCode(Object o) {
-        return o == null ? 0 : o.hashCode();
     }
 }
