@@ -17,9 +17,16 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtDataPlugin;
@@ -228,27 +235,57 @@ public class PluginDeployed implements DmtDataPlugin, DmtExecPlugin {
             return false;                
         if (l == 6)
             return true; 
-        if (l == 7) {
-            if (nodeUriArr[6].equals("ID"))
-                return true;
-            if (nodeUriArr[6].equals("EnvType"))
-                return true;
-            if (nodeUriArr[6].equals("Operations"))
-                return true;
-            if (nodeUriArr[6].equals("Ext"))
-                return true;
-            return false;
-        }
+        if (!nodeUriArr[6].equals("ID") && 
+            !nodeUriArr[6].equals("EnvType") &&
+            !nodeUriArr[6].equals("Operations") &&
+            !nodeUriArr[6].equals("Ext"))
+            	return false;
+        if (l == 7)
+            return true;
         if ("Operations".equals(nodeUriArr[6])) {
-            if (nodeUriArr[7].equals("Remove"))
-                return true;
-            return false;
+            if (!nodeUriArr[7].equals("Remove"))
+                return false;
+            return true;
         } else if ("Ext".equals(nodeUriArr[6])) {
-            if (l == 8) {
-                if ("Version".equals(nodeUriArr[7]))
-                    return true;
-                // TODO
+            DeploymentPackageImpl dp = (DeploymentPackageImpl) mt.get(nodeUriArr[5]);
+            if (!"Version".equals(nodeUriArr[7]) &&
+                !"ProcessorBundle".equals(nodeUriArr[7]) &&
+                !"Processors".equals(nodeUriArr[7]) &&
+                !"Bundles".equals(nodeUriArr[7]))
+                	return false;
+            if ("ProcessorBundle".equals(nodeUriArr[7]) &&
+                getCustomizers(dp).length == 0)
+                	return false;
+            if ("Processors".equals(nodeUriArr[7]) &&
+                    getCustomizers(dp).length == 0)
+                    	return false;
+            if (l == 8)
+                return true;
+            Set bundleSet = new HashSet(Arrays.asList(getBundleIDs(dp)));
+            if (!bundleSet.contains(nodeUriArr[8]))
+                return false;
+            if (l == 9)
+                return true;
+            if (!"SymbolicName".equals(nodeUriArr[9]) &&
+                !"Location".equals(nodeUriArr[9]) &&
+                !"Version".equals(nodeUriArr[9]) &&
+                !"State".equals(nodeUriArr[9]) &&
+                !"NativeCode".equals(nodeUriArr[9]) &&
+                !"ApplicationType".equals(nodeUriArr[9]) &&
+                !"ImportPackage".equals(nodeUriArr[9]) &&
+                !"ExportPackage".equals(nodeUriArr[9]) &&
+                !"Signers".equals(nodeUriArr[9]) &&
+                !"ApplicationDescriptor".equals(nodeUriArr[9]))
+                	return false;
+            if (l == 10)
+                return true;
+            if ("ImportPackage".equals(nodeUriArr[9])) {
+                String[] ips = getImportedPackages(
+                        dp.getBundleEntryByBundleId(Long.parseLong(nodeUriArr[8])));
+                Set s = new HashSet(Arrays.asList(ips));
+                return s.contains(nodeUriArr[10]);
             }
+            // TODO
         }
         
         return false;
@@ -265,16 +302,11 @@ public class PluginDeployed implements DmtDataPlugin, DmtExecPlugin {
         if (!mt.containsKey(nodeUriArr[5]))
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");                
         if (l == 6)
-            return false; 
+            return false;
         if (l == 7) {
-            if (nodeUriArr[6].equals("ID"))
-                return true;
-            if (nodeUriArr[6].equals("EnvType"))
-                return true;
-            if (nodeUriArr[6].equals("Operations"))
-                return false;
-            if (nodeUriArr[6].equals("Ext"))
-                return false;
+            if (nodeUriArr[6].equals("ID") ||
+                nodeUriArr[6].equals("EnvType"))
+                	return true;
             return false;
         }
         if ("Operations".equals(nodeUriArr[6])) {
@@ -285,8 +317,23 @@ public class PluginDeployed implements DmtDataPlugin, DmtExecPlugin {
             if (l == 8) {
                 if ("Version".equals(nodeUriArr[7]))
                     return true;
-                // TODO
+                return false;
             }
+            if (l == 9)
+                return false;
+            if (l == 10) {
+	            if ("SymbolicName".equals(nodeUriArr[9]) &&
+	                "Location".equals(nodeUriArr[9]) &&
+	                "Version".equals(nodeUriArr[9]) &&
+	                "State".equals(nodeUriArr[9]) &&
+	                "NativeCode".equals(nodeUriArr[9]) &&
+	                "ApplicationType".equals(nodeUriArr[9]) &&
+	                "ApplicationDescriptor".equals(nodeUriArr[9]))
+	                	return true;
+	            return false;
+            }
+            if (l == 11)
+                return true;
         }
         
         throw new RuntimeException("Internal error");
@@ -314,8 +361,9 @@ public class PluginDeployed implements DmtDataPlugin, DmtExecPlugin {
             if (l == 8) {
                 if ("Version".equals(nodeUriArr[7]))
                     return new DmtData(dp.getVersion().toString());
-                // TODO
+                throw new RuntimeException("Internal error");
             }
+            // TODO
         }
         
         throw new RuntimeException("Internal error");
@@ -376,12 +424,6 @@ public class PluginDeployed implements DmtDataPlugin, DmtExecPlugin {
         return 0;
     }
 
-    /**
-     * @param nodeUri
-     * @return
-     * @throws DmtException
-     * @see org.osgi.service.dmt.DmtReadOnly#getChildNodeNames(java.lang.String)
-     */
     public String[] getChildNodeNames(String nodeUri) throws DmtException {
         String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
         int l = nodeUriArr.length;
@@ -399,20 +441,38 @@ public class PluginDeployed implements DmtDataPlugin, DmtExecPlugin {
                 return new String[] {"Remove"};
             throw new RuntimeException("Internal error");
         } else if ("Ext".equals(nodeUriArr[6])) {
+            DeploymentPackageImpl dp = (DeploymentPackageImpl) mt.get(nodeUriArr[5]);
             if (l == 7)
                 return new String[] {"Version", "Processors", "ProcessorBundle", 
                     "Bundles"};
+            if (l == 8) {
+                if ("ProcessorBundle".equals(nodeUriArr[7]))
+                    return getCustomizers(dp);
+                if ("Processors".equals(nodeUriArr[7]))
+                    return getCustomizerPIDs(dp);
+                if ("Bundles".equals(nodeUriArr[7]))
+                    return getBundleIDs(dp);
+            }
+            Set s = new HashSet(Arrays.asList(getBundleIDs(dp)));
+            if (!s.contains(nodeUriArr[8]))
+                throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
+            if (l == 9)
+                return new String[] {"SymbolicName", "Location", "Version", "State", 
+                    "NativeCode", "ApplicationType", "ImportPackage", "ExportPackage", 
+                    "Signers", "ApplicationDescriptor"};
+            if (l == 10) {
+                if ("ImportPackage".equals(nodeUriArr[9])) {
+	                BundleEntry be = 
+	                    dp.getBundleEntryByBundleId(Long.parseLong(nodeUriArr[8]));
+	                return getImportedPackages(be);
+                }
+                // TODO
+            }
         }
         
         throw new RuntimeException("Internal error");
     }
 
-    /**
-     * @param nodeUri
-     * @return
-     * @throws DmtException
-     * @see org.osgi.service.dmt.DmtReadOnly#getMetaNode(java.lang.String)
-     */
     public DmtMetaNode getMetaNode(String nodeUri) throws DmtException {
         String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
         int l = nodeUriArr.length;
@@ -453,8 +513,33 @@ public class PluginDeployed implements DmtDataPlugin, DmtExecPlugin {
                 if ("Version".equals(nodeUriArr[7]))
                     return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
                             "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
-                // TODO
+                if ("ProcessorBundle".equals(nodeUriArr[7]))
+                    return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                            "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
+                if ("Processors".equals(nodeUriArr[7]))
+                    return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                            "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
+                if ("Bundles".equals(nodeUriArr[7]))
+                    return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                            "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
             }
+            if (l == 9)
+                return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                        "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
+            if (l == 10) {
+                if ("SymbolicName".equals(nodeUriArr[9]) ||
+                    "Location".equals(nodeUriArr[9]) ||
+                    "Version".equals(nodeUriArr[9]) ||
+                    "ApplicationType".equals(nodeUriArr[9]) ||
+                    "ApplicationDescriptor".equals(nodeUriArr[9]))
+                    return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                            "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
+                return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                    "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
+            }
+            if (l == 10)
+                return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                    "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
         }
         
         throw new RuntimeException("Internal error");
@@ -483,6 +568,48 @@ public class PluginDeployed implements DmtDataPlugin, DmtExecPlugin {
             ht.put(mv, dps[i]);
         }
         return ht;
+    }
+
+    private String[] getCustomizers(DeploymentPackageImpl dp) {
+        ArrayList ret = new ArrayList();
+        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            if (be.isCustomizer())
+                ret.add(be.getSymbName());
+        }
+        return (String[]) ret.toArray(new String[] {});
+    }
+
+    private String[] getCustomizerPIDs(DeploymentPackageImpl dp) {
+        ArrayList ret = new ArrayList();
+        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            if (be.isCustomizer())
+                ret.add(be.getPid());
+        }
+        return (String[]) ret.toArray(new String[] {});
+    }
+
+    private String[] getBundleIDs(DeploymentPackageImpl dp) {
+        ArrayList ret = new ArrayList();
+        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            ret.add(String.valueOf(be.getId()));
+        }
+        return (String[]) ret.toArray(new String[] {});
+    }
+
+    private String[] getImportedPackages(BundleEntry be) {
+        BundleContext context = da.getContext();
+        Bundle b = context.getBundle(be.getId());
+        String iph = (String) b.getHeaders().get("Import-Package");
+        if (null == iph)
+            return new String[] {};
+        String[] fip = Splitter.split(iph, ',', 0);
+        ArrayList ipal = new ArrayList();
+        for (int i = 0; i < fip.length; i++)
+            ipal.add(Splitter.split(fip[i], ';', 0)[0].trim());
+        return (String[]) ipal.toArray(new String[] {});
     }
 
 }

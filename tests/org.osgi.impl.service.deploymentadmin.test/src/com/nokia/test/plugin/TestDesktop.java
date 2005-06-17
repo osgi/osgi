@@ -19,6 +19,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -51,6 +52,7 @@ public class TestDesktop extends Frame implements ActionListener {
     private static final String GET_CHILD_NODE_NAMES = "getChildNodeNames";
     private static final String GET_NODE_VALUE       = "getNodeValue";
     private static final String MAKE_TEST            = "MAKE TEST";
+    private static final String RUN_TESTS            = "RUN TESTS";
     
     private TextField tf_uri = new TextField(); 
     private TextField tf_result = new TextField();
@@ -60,8 +62,11 @@ public class TestDesktop extends Frame implements ActionListener {
     private Button b_getChildNodeNames = new Button(GET_CHILD_NODE_NAMES);
     private Button b_getNodeValue = new Button(GET_NODE_VALUE);
     private Button b_makeTest = new Button(MAKE_TEST);
+    private Button b_runTests = new Button(RUN_TESTS);
     
     private Checkbox cb_negativeTest = new Checkbox("Negative test");
+    
+    private Label la_passed = new Label();
     
     private DmtAdmin admin;
     private DmtSession session;
@@ -107,43 +112,111 @@ public class TestDesktop extends Frame implements ActionListener {
         b_makeTest.addActionListener(this);
         pa_left.add(b_makeTest);
         
+        b_runTests.addActionListener(this);
+        pa_left.add(b_runTests);
+        
         pa_left.add(cb_negativeTest);
+        
+        pa_left.add(la_passed);
         
         pack();
         setSize(800, 600);
         setVisible(true);
+        
+        runTests();
     }
 
     public void actionPerformed(ActionEvent ae) {
-        String acc = ae.getActionCommand();
-        String uri = tf_uri.getText();
-        
         try {
-            if (IS_NODE_URI.equals(acc)) {
-                tf_result.setText(Boolean.toString(session.isNodeUri(uri)));
-            } else if (IS_LEAF_NODE.equals(acc)) {
-                tf_result.setText(Boolean.toString(session.isLeafNode(uri)));
-            } else if (GET_CHILD_NODE_NAMES.equals(acc)) {
-                String[] sa = session.getChildNodeNames(uri);
-                tf_result.setText(Arrays.asList(sa).toString());
-            } else if (GET_NODE_VALUE.equals(acc)) {
-                tf_result.setText(session.getNodeValue(uri).toString());
-            } else if (MAKE_TEST.equals(acc)) {
-                File f = new File(TEST_FILE);
-                if (!f.exists())
-                    f.createNewFile();
-                PrintWriter pw = new PrintWriter(new FileWriter(f, true));
-                String neg = "" + cb_negativeTest.getState();
-                pw.println(uri + " " + lastCommand + " " + tf_result.getText() + 
-                        " " + neg);
-                pw.close(); // TODO finally etc.
-            }
+            action(ae.getActionCommand(), tf_uri.getText());
         }
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    public String action(String acc, String uri) throws Exception {
+        String res = null; 
         
-        lastCommand = acc;
+        if (IS_NODE_URI.equals(acc)) {
+            lastCommand = acc;
+            res = Boolean.toString(session.isNodeUri(uri));
+        } else if (IS_LEAF_NODE.equals(acc)) {
+            lastCommand = acc;
+            res = Boolean.toString(session.isLeafNode(uri));
+        } else if (GET_CHILD_NODE_NAMES.equals(acc)) {
+            lastCommand = acc;
+            String[] sa = session.getChildNodeNames(uri);
+            res = Arrays.asList(sa).toString();
+        } else if (GET_NODE_VALUE.equals(acc)) {
+            lastCommand = acc;
+            res = session.getNodeValue(uri).toString();
+        } else if (MAKE_TEST.equals(acc)) {
+            if (null == lastCommand)
+                return null;
+            File f = new File(TEST_FILE);
+            if (!f.exists())
+                f.createNewFile();
+            PrintWriter pw = new PrintWriter(new FileWriter(f, true));
+            String neg = "" + cb_negativeTest.getState();
+            pw.println(uri + "\t" + lastCommand + "\t" + tf_result.getText() + 
+                    "\t" + neg);
+            pw.close(); // TODO finally etc.
+            lastCommand = null;
+        } else if (RUN_TESTS.equals(acc)) {
+            runTests();
+        }
+        
+        tf_result.setText(res);
+        
+        return res;
+    }
+    
+    private void runTests() throws IOException {
+        File f = new File(TEST_FILE);
+        BufferedReader r = new BufferedReader(new FileReader(f));
+        String line = r.readLine();
+        int passedC = 0;
+        int failedC = 0;
+        ArrayList failedLines = new ArrayList();
+        int lineNo = 0;
+        while (null != line) {
+            ++lineNo;
+            if (line.trim().equals("")) {
+                line = r.readLine();
+                continue;
+            }
+                
+            String[] sa = line.split("\t", 0);
+            boolean neg = Boolean.valueOf(sa[3]).booleanValue();
+            String res = null;
+            Exception ex = null;
+            try {
+                res = action(sa[1], sa[0]);
+            } catch (Exception e) {
+                ex = e;
+            }
+            
+            System.out.println(line);
+            System.out.print(" " + res + " " + ex + " --> ");
+            boolean passed;
+            if (!neg) {
+                passed = (ex == null && res.equals(sa[2]));
+            } else {
+                passed = (ex != null);
+            }
+            System.out.println(passed);
+            if (passed)
+                ++passedC;
+            else {
+                ++failedC;
+                failedLines.add(new Long(lineNo));
+            }
+            la_passed.setText("RESULT (passed/failed): " + passedC + " / " + failedC);
+            line = r.readLine();
+        }
+        r.close();
+        System.out.println("FAILED LINES: " + failedLines);
     }
 
 }

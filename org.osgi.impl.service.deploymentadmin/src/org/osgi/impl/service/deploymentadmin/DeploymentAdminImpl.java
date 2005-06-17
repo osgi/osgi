@@ -644,5 +644,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     DmtAdmin getDmtAdmin() {
         return (DmtAdmin) trackDmt.getService();
     }
+
+    BundleContext getContext() {
+        return context;
+    }
     
 }

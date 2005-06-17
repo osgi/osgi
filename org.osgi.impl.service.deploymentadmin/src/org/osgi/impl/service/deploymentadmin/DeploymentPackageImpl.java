@@ -175,6 +175,16 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         bundleEntries.remove(be);
     }
     
+    public BundleEntry getBundleEntryByBundleId(long id) {
+        for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            if (be.getId() == id)
+                return be;
+        }
+        return null;
+    }
+
+    
     BundleEntry getBundleEntryByName(String name) {
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
@@ -561,5 +571,5 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     public boolean contains(ResourceEntry re) {
         return resourceEntries.contains(re);
     }
-  
+
 }
