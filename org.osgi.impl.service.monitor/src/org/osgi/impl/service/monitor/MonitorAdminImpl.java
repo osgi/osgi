@@ -87,7 +87,8 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
 
     public String[] getStatusVariableNames(String monitorableId) {
         Path.checkName(monitorableId, "Monitorable ID");
-        checkPermission(monitorableId + "/*", MonitorPermission.DISCOVER);
+        // TODO monitorableId/* is too general, but not doing any complicated checking until getMonitorableNames() permissions are cleared up
+        checkPermission(monitorableId + "/*", MonitorPermission.READ);
         
         Monitorable monitorable = new MonitorableWrapper(monitorableId);
         String[] varNames = monitorable.getStatusVariableNames();
@@ -133,7 +134,7 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
     public void switchEvents(String pathStr, boolean on) {
         // publisher perms not checked, but this has no security implications
 
-        Path path = Path.getPath(pathStr);
+        Path path = Path.getPath(pathStr, true);
         checkPermission(pathStr, MonitorPermission.SWITCHEVENTS);
         
         if(on) 
@@ -173,9 +174,17 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
     }
 
     public String[] getMonitorableNames() {
-        checkPermission("*/*", MonitorPermission.DISCOVER);
+        // TODO */* might be too big requirement, but I don't know how to check for */<anything> ?
+        checkPermission("*/*", MonitorPermission.READ);
 
-        return trustedGetMonitorableNames();
+        List monitorableNames = trustedGetMonitorableNames();
+        int size = monitorableNames.size();
+        if(size == 0)
+            return new String[] {};
+        
+        String[] names = (String[]) monitorableNames.toArray(new String[size]);
+        Arrays.sort(names);
+        return names;
     }
 
     public synchronized void updated(String monitorableId, StatusVariable var) 
@@ -193,7 +202,8 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
         if(!new MonitorableWrapper(monitorableId).hasPublishPermission(varId))
             return;
         
-        sendEvent(monitorableId, var, null);
+        if(!quietVars.contains(new Path(monitorableId, varId)))
+            sendEvent(monitorableId, var, null);
 
         Vector listeners = new Vector();
         Vector remoteJobs = new Vector();
@@ -303,10 +313,11 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
         
         if(monId.endsWith("*")) {
             String monIdPrefix = monId.substring(0, monId.length()-1);
-            String[] monNames = trustedGetMonitorableNames();
-            for (int i = 0; i < monNames.length; i++) {
-                if(monNames[i].startsWith(monIdPrefix))
-                    addImpliedVariables(monNames[i], varId);
+            Iterator i = trustedGetMonitorableNames().iterator();
+            while(i.hasNext()) {
+                String monName = (String) i.next();
+                if(monName.startsWith(monIdPrefix))
+                    addImpliedVariables(monName, varId);
             }
         }
         else
@@ -322,9 +333,10 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
                 if(varNames[i].startsWith(varIdPrefix))
                     quietVars.add(new Path(monId, varNames[i]));
         }
-        else
+        else {
             monitorable.getStatusVariable(varId);
             quietVars.add(new Path(monId, varId));
+        }
     }
 
     private void removeImpliedVariables(Path path) {
@@ -426,7 +438,7 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
      * MonitorAdmin bundle, caller permissions must be checked before this
      * method is called.
      */
-    private String[] trustedGetMonitorableNames() {
+    private List trustedGetMonitorableNames() {
         ServiceReference[] monitorableRefs = (ServiceReference[]) 
             AccessController.doPrivileged(new PrivilegedAction() {
                 public Object run() {
@@ -434,10 +446,11 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
                 }
             });
 
-        if(monitorableRefs == null)
-            return new String[] {};
-        
         Vector monitorableNames = new Vector();
+
+        if(monitorableRefs == null)
+            return monitorableNames;
+        
         for(int i = 0; i < monitorableRefs.length; i++) {
             String servicePid = (String) monitorableRefs[i].getProperty("service.pid");
             
@@ -450,13 +463,7 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
             }
         }
         
-        int size = monitorableNames.size();
-        if(size == 0)
-            return new String[] {};
-        
-        String[] names = (String[]) monitorableNames.toArray(new String[size]);
-        Arrays.sort(names);
-        return names;
+        return monitorableNames;
     }
     
     
