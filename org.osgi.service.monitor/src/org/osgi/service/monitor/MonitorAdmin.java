@@ -168,7 +168,7 @@ public interface MonitorAdmin {
      * as a convenience feature. The wildcard can be used in either or both path
      * fragments, but only at the end of the fragments.  The semantics of the 
      * wildcard is that it stands for any matching <code>StatusVariable</code> 
-     * at the time of the method call, it does not effect the event sending 
+     * at the time of the method call, it does not affect the event sending 
      * status of <code>StatusVariable</code>s which are not yet registered. As 
      * an example, when the <code>switchEvents("MyMonitorable/*", false)</code>
      * method is executed, event sending from all <code>StatusVariables</code>
@@ -178,7 +178,7 @@ public interface MonitorAdmin {
      * 
      * @param path the identifier of the <code>StatusVariable</code>(s) in
      *        [Monitorable_id]/[StatusVariable_id] format, possibly with the 
-     *        "*" wildcard in either path fragment
+     *        "*" wildcard at the end of either path fragment
      * @param on <code>false</code> if event sending should be switched off, 
      *        <code>true</code> if it should be switched on for the given path
      * @throws java.lang.SecurityException if the caller does not hold
