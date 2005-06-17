@@ -317,7 +317,6 @@ public class WireImpl implements Wire, WireConstants {
 	}
 	static Wire[] EMPTY = new Wire[0];
 	public void delete() {	
-		parent.wireDisconnected(this);
 		parent.removeWire(this);
 		parent.updateProducer(getProducer(), this, producerPID);
 		parent.updateConsumer(getConsumer(), this, consumerPID);
