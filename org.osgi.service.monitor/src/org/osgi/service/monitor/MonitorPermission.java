@@ -24,6 +24,7 @@ import java.util.StringTokenizer;
  */
 public class MonitorPermission extends Permission {
     // TODO add static final serialVersionUID
+    // TODO remove discover action, allow * in both segments of target
 
     /**
      * Holders of <code>MonitorPermission</code> with the <code>read</code>
@@ -149,6 +150,10 @@ public class MonitorPermission extends Permission {
             throw new IllegalArgumentException(
                     "Invalid StatusVariable path 'null'.");
         
+        if(actions == null)
+            throw new IllegalArgumentException(
+                    "Invalid actions string 'null'.");
+        
         int sep = statusVariable.indexOf('/');
         int len = statusVariable.length();
 
@@ -159,7 +164,7 @@ public class MonitorPermission extends Permission {
             throw new IllegalArgumentException(
                     "Invalid StatusVariable path: empty monitorable ID or StatusVariable name.");
 
-        // TODO: full ID check? (e.g. no / in statusVariable, no invalid chars, no * within IDs)
+        // TODO: full ID check (e.g. no / in statusVariable, no invalid chars, no * within IDs)
 
         prefixMonId = statusVariable.charAt(sep - 1) == '*';
         prefixVarId = statusVariable.charAt(len - 1) == '*';
