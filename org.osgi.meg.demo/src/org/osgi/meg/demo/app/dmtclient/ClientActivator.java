@@ -32,7 +32,7 @@ import org.osgi.service.monitor.MonitorListener;
 
 public class ClientActivator implements BundleActivator 
 {
-    static final String SERVICE_PID = "org.osgi.meg.demo.app.dmtclient";
+    static final String SERVICE_PID = "meg.test.monitorable";
 
     private BundleContext bc;
     private ServiceReference factoryRef;
