@@ -99,6 +99,15 @@ public class WireAdminImpl implements ServiceListener, WireAdmin,
 	 */
 	public Wire createWire(String producerPID, String consumerPID,
 			Dictionary properties) {
+		
+		// The producerPID must not be null
+		if (producerPID == null) 
+			throw new NullPointerException("Producer PID must not be null");
+		
+		// The producerPID must not be null
+		if (consumerPID == null) 
+			throw new NullPointerException("Consumer PID must not be null");
+		
 		Hashtable copy = new Hashtable();
 		Object pkey;
 		if (properties != null) {
