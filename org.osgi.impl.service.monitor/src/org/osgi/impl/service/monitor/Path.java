@@ -30,18 +30,6 @@ class Path {
     // duplicated in org.osgi.service.monitor.StatusVariable, keep synchronized!
     private static final int MAX_ID_LENGTH = 20;
     
-    private static boolean containsValidChars(String name) {
-        char[] chars = name.toCharArray();
-        int i = 0;
-        while(i < chars.length) {
-            if(SYMBOLIC_NAME_CHARACTERS.indexOf(chars[i]) == -1)
-                return false;
-            i++;
-        }
-        
-        return true;        
-    }
-    
     static void checkString(String str, String errorPrefix) 
             throws IllegalArgumentException {
         if(str == null)
@@ -50,7 +38,7 @@ class Path {
             throw new IllegalArgumentException(errorPrefix + " is empty.");
     }
     
-    static void checkName(String name, String errorPrefix)
+    static void checkName(String name, String errorPrefix, boolean allowWildcard)
             throws IllegalArgumentException {
         checkString(name, errorPrefix);
         
@@ -60,12 +48,22 @@ class Path {
         if(name.equals(".."))
             throw new IllegalArgumentException(errorPrefix + " is invalid.");
         
-        if(!containsValidChars(name))
-            throw new IllegalArgumentException(errorPrefix + 
-                    " contains invalid characters.");
+        char[] chars = name.toCharArray();
+        int length = chars.length;
+        
+        // if there is a wildcard at the end, and it is allowed, then checking
+        // is stopped before it is reached
+        if(allowWildcard && chars[length-1] == '*') // length != 0 checked previously
+            length--;
+        
+        for(int i = 0; i < length; i++)
+            if(SYMBOLIC_NAME_CHARACTERS.indexOf(chars[i]) == -1)
+                throw new IllegalArgumentException(errorPrefix
+                        + " contains invalid characters.");
     }
     
-    static Path getPath(String pathStr) throws IllegalArgumentException {
+    static Path getPath(String pathStr, boolean allowWildcard)
+            throws IllegalArgumentException {
         if(pathStr == null)
             throw new IllegalArgumentException("Path argument is null.");
         
@@ -78,10 +76,19 @@ class Path {
         Path path = new Path(pathStr.substring(0, pos), 
                 pathStr.substring(pos + 1));
         
-        checkName(path.monId, "Monitorable ID");
-        checkName(path.varId, "Status Variable ID");
+        checkName(path.monId, "Monitorable ID", allowWildcard);
+        checkName(path.varId, "Status Variable ID", allowWildcard);
 
         return path;
+    }
+    
+    static void checkName(String name, String errorPrefix)
+            throws IllegalArgumentException {
+        checkName(name, errorPrefix, false);
+    }
+
+    static Path getPath(String pathStr) throws IllegalArgumentException {
+        return getPath(pathStr, false);
     }
     
     static Path getPathNoCheck(String pathStr) {
