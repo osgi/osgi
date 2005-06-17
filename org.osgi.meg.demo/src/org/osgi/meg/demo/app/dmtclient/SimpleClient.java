@@ -143,6 +143,8 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
             ma.startJob("2nd-change-listener", new String[] { pid + "/NumOfChanges" }, 2);
             ma.startScheduledJob("scheduled-listener", new String[] { pid + "/Dummy" }, 5, 1);
 
+            ma.switchEvents("meg*/Num*", false);
+            
             // need to wait a bit with updating Dummy, because events are not 
             // delivered to this bundle while its start() method is running
             delayedUpdate();
