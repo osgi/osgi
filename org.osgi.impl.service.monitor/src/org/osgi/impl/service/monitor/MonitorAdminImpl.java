@@ -182,6 +182,10 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
             throws IllegalArgumentException {
         Path.checkName(monitorableId, "Monitorable ID");
         
+        if(var == null)
+            throw new IllegalArgumentException(
+                    "Status Variable parameter is null.");
+        
         String varId = var.getID();
 
         // ignore update indication if the Monitorable does not have publish
