@@ -131,6 +131,27 @@ public class DmtSessionImpl implements DmtSession {
 		// given node really exists
 		checkNode(subtreeUri, SHOULD_EXIST);
     }
+
+    // called by the Session Wrapper, rollback parameter is:
+    // - true if a fatal exception has been thrown in a DMT access method
+    // - false if any exception has been thrown in the commit/rollback methods
+    protected void invalidateSession(boolean rollback) {
+        state = STATE_INVALID;
+        
+        if(lockMode == LOCK_TYPE_ATOMIC && rollback) {
+            try {
+                rollbackPlugins();
+            } catch(DmtException e) {
+                // TODO
+            }
+        }
+        
+        try {
+            closeAndRelease(false);
+        } catch(DmtException e) {
+            // TODO
+        }
+    }
     
     /* These methods can be called even before the session has been opened, and 
      * also after the session has been closed. */
@@ -164,8 +185,14 @@ public class DmtSessionImpl implements DmtSession {
         // changed to CLOSED if this method finishes without error
         state = STATE_INVALID; 
 
+        closeAndRelease(lockMode == LOCK_TYPE_ATOMIC);
+        
+        state = STATE_CLOSED;
+	}
+    
+    private void closeAndRelease(boolean commit) throws DmtException {
         try {
-            if(lockMode == LOCK_TYPE_ATOMIC)
+            if(commit)
                 commitPlugins();
             closePlugins();
         } finally {
@@ -173,9 +200,7 @@ public class DmtSessionImpl implements DmtSession {
             // other sessions might never be allowed to run
             dmtAdmin.releaseSession(this);
         }
-        
-        state = STATE_CLOSED;
-	}
+    }
     
     private void closePlugins() throws DmtException {
         Vector closeExceptions = new Vector();
@@ -257,6 +282,14 @@ public class DmtSessionImpl implements DmtSession {
         
         acls = (Hashtable) savedAcls.clone();
 		
+        rollbackPlugins();
+        
+		state = STATE_OPEN;
+    }
+    
+    private void rollbackPlugins() throws DmtException {
+		eventList.clear();
+        
         Vector rollbackExceptions = new Vector();
         // this block requires synchronization
         Iterator i = dataPlugins.iterator();
@@ -268,14 +301,11 @@ public class DmtSessionImpl implements DmtSession {
                 rollbackExceptions.add(e);
             }
         }
-		if (rollbackExceptions.size() != 0)
+
+        if (rollbackExceptions.size() != 0)
 			throw new DmtException(null, DmtException.ROLLBACK_FAILED,
 					"Some plugins failed to roll back or close.",
 					rollbackExceptions);
-        
-		eventList.clear();
-        
-		state = STATE_OPEN;
     }
 
     public synchronized void execute(String nodeUri, String data) 
@@ -1238,9 +1268,11 @@ public class DmtSessionImpl implements DmtSession {
             throw new DmtException(nodeUri, DmtException.INVALID_URI,
                                    "URI parameter is 'null'.");
         
+        // ENHANCE add redundant segment length check for more specific error msg.
+        
 		if (!Utils.isValidUri(nodeUri))
 			throw new DmtException(nodeUri, DmtException.INVALID_URI,
-					               "Syntactically invalid URI string.");
+			    "URI string syntactically invalid or contains too long segment.");
 	}
 }
 
