@@ -55,6 +55,9 @@ class Utils {
         if(nodeName == null || nodeName.length() == 0 || nodeName.equals(".."))
             return false;
         
+        if(nodeName.length() > DmtAdminImpl.segmentLengthLimit)
+            return false; // segment too long
+        
 		char[] chars = nodeName.toCharArray();
         int i = 0;
 		while(i < chars.length) {
