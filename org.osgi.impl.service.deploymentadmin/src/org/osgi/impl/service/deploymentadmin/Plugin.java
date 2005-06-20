@@ -129,7 +129,7 @@ public class Plugin implements DmtDataPlugin, DmtExecPlugin {
             return true;
         if (l == 4 && nodeUriArr[3].equals("Inventory"))
             return true;
-        DmtReadOnly p = getForward(nodeUriArr);
+        DmtReadOnly p = (DmtReadOnly) getForward(nodeUriArr);
         if (null == p)
             return false;
         else 
@@ -143,7 +143,7 @@ public class Plugin implements DmtDataPlugin, DmtExecPlugin {
             return false;
         if (l == 4 && nodeUriArr[3].equals("Inventory"))
             return false;
-        DmtReadOnly p = getForward(nodeUriArr);
+        DmtReadOnly p = (DmtReadOnly) getForward(nodeUriArr);
         if (null == p)
             return false;
         else 
@@ -152,7 +152,7 @@ public class Plugin implements DmtDataPlugin, DmtExecPlugin {
 
     public DmtData getNodeValue(String nodeUri) throws DmtException {
         String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
-        DmtReadOnly p = getForward(nodeUriArr);
+        DmtReadOnly p = (DmtReadOnly) getForward(nodeUriArr);
         if (null == p)
             throw new RuntimeException("Internal error");
         else 
@@ -165,7 +165,7 @@ public class Plugin implements DmtDataPlugin, DmtExecPlugin {
 
     public String getNodeType(String nodeUri) throws DmtException {
         String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
-        DmtReadOnly p = getForward(nodeUriArr);
+        DmtReadOnly p = (DmtReadOnly) getForward(nodeUriArr);
         if (null == p)
             return null;
         else 
@@ -174,7 +174,7 @@ public class Plugin implements DmtDataPlugin, DmtExecPlugin {
 
     public int getNodeVersion(String nodeUri) throws DmtException {
         String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
-        DmtReadOnly p = getForward(nodeUriArr);
+        DmtReadOnly p = (DmtReadOnly) getForward(nodeUriArr);
         if (null == p)
             return -1; // undefined
         else 
@@ -183,7 +183,7 @@ public class Plugin implements DmtDataPlugin, DmtExecPlugin {
 
     public Date getNodeTimestamp(String nodeUri) throws DmtException {
         String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
-        DmtReadOnly p = getForward(nodeUriArr);
+        DmtReadOnly p = (DmtReadOnly) getForward(nodeUriArr);
         if (null == p)
             return null;
         else 
@@ -192,7 +192,7 @@ public class Plugin implements DmtDataPlugin, DmtExecPlugin {
 
     public int getNodeSize(String nodeUri) throws DmtException {
         String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
-        DmtReadOnly p = getForward(nodeUriArr);
+        DmtReadOnly p = (DmtReadOnly) getForward(nodeUriArr);
         if (null == p)
             return 0;
         else 
@@ -208,7 +208,7 @@ public class Plugin implements DmtDataPlugin, DmtExecPlugin {
             return new String[] {"Delivered", "Deployed"};
         if (l == 5 && nodeUriArr[3].equals("Ext"))
             return new String[] {};
-        DmtReadOnly p = getForward(nodeUriArr);
+        DmtReadOnly p = (DmtReadOnly) getForward(nodeUriArr);
         if (null == p)
             throw new RuntimeException("Internal error");
         else 
@@ -227,7 +227,7 @@ public class Plugin implements DmtDataPlugin, DmtExecPlugin {
         if (l == 4 && nodeUriArr[3].equals("Ext"))
             return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.PERMANENT,
                     "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
-        DmtReadOnly p = getForward(nodeUriArr);
+        DmtReadOnly p = (DmtReadOnly) getForward(nodeUriArr);
         if (null == p)
             throw new RuntimeException("Internal error");
         else 
@@ -235,12 +235,17 @@ public class Plugin implements DmtDataPlugin, DmtExecPlugin {
     }
 
     public void execute(DmtSession session, String nodeUri, String correlator, String data) throws DmtException {
-        // TODO Auto-generated method stub
+        String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
+        DmtExecPlugin p = (DmtExecPlugin) getForward(nodeUriArr);
+        if (null == p)
+            throw new RuntimeException("Internal error");
+        else 
+            p.execute(session, nodeUri, correlator, data);
     }
 
     /********************************************************************************/
     
-    private DmtReadOnly getForward(String[] nodeUriArr) {
+    private Object getForward(String[] nodeUriArr) {
         int l = nodeUriArr.length;
         if (l >= 5 && nodeUriArr[4].equals("Deployed"))
             return pluginDeployed;

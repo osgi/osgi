@@ -38,6 +38,20 @@ public class Metanode implements DmtMetaNode {
     private DmtData[] validValues;
     private int       format;
     
+    public String toString() {
+        return "(ops: " + ops + 
+               ", leaf: " + isLeaf + 
+               ", scope: " + scope + 
+               ", descr: " + description + 
+               ", maxOcc: " + maxOccurrence + 
+               ", zeroOcc: " + zeroOccurrenceAllowed + 
+               ", def: " + def + 
+               ", min: " + min + 
+               ", max: " + max + 
+               ", validVals: " + validValues + 
+               ", format: " + format + ")";
+    }
+    
     public Metanode(int ops,
             		boolean isLeaf,
             		int scope,

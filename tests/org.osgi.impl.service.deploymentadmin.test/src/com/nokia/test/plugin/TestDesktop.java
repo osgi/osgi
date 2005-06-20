@@ -49,8 +49,10 @@ public class TestDesktop extends Frame implements ActionListener {
     
     private static final String IS_NODE_URI          = "isNodeUri";
     private static final String IS_LEAF_NODE         = "isLeafNode";
+    private static final String GET_META_NODE        = "getMetaNode";
     private static final String GET_CHILD_NODE_NAMES = "getChildNodeNames";
     private static final String GET_NODE_VALUE       = "getNodeValue";
+    private static final String EXECUTE              = "execute";
     private static final String MAKE_TEST            = "MAKE TEST";
     private static final String RUN_TESTS            = "RUN TESTS";
     
@@ -59,8 +61,10 @@ public class TestDesktop extends Frame implements ActionListener {
     
     private Button b_isNodeUri = new Button(IS_NODE_URI);
     private Button b_isLeafNode = new Button(IS_LEAF_NODE);
+    private Button b_getMetaNode = new Button(GET_META_NODE);
     private Button b_getChildNodeNames = new Button(GET_CHILD_NODE_NAMES);
     private Button b_getNodeValue = new Button(GET_NODE_VALUE);
+    private Button b_execute = new Button(EXECUTE);
     private Button b_makeTest = new Button(MAKE_TEST);
     private Button b_runTests = new Button(RUN_TESTS);
     
@@ -102,12 +106,18 @@ public class TestDesktop extends Frame implements ActionListener {
 
         b_isLeafNode.addActionListener(this);
         pa_left.add(b_isLeafNode);
+        
+        b_getMetaNode.addActionListener(this);
+        pa_left.add(b_getMetaNode);
 
         b_getChildNodeNames.addActionListener(this);
         pa_left.add(b_getChildNodeNames);
 
         b_getNodeValue.addActionListener(this);
         pa_left.add(b_getNodeValue);
+        
+        b_execute.addActionListener(this);
+        pa_left.add(b_execute);
         
         b_makeTest.addActionListener(this);
         pa_left.add(b_makeTest);
@@ -151,6 +161,12 @@ public class TestDesktop extends Frame implements ActionListener {
         } else if (GET_NODE_VALUE.equals(acc)) {
             lastCommand = acc;
             res = session.getNodeValue(uri).toString();
+        } else if (GET_META_NODE.equals(acc)) {
+            lastCommand = acc;
+            res = session.getMetaNode(uri).toString();
+        } else if (EXECUTE.equals(acc)) {
+                lastCommand = acc;
+                session.execute(uri, "", "");
         } else if (MAKE_TEST.equals(acc)) {
             if (null == lastCommand)
                 return null;
