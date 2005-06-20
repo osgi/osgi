@@ -41,17 +41,33 @@ public class DmtAdminImpl implements DmtAdmin {
     // timeout after 10 seconds, to make testing easier 
     public static final long TIMEOUT = 10000; 
     
-	private static final char base64table[] = {
-		'A','B','C','D','E','F','G','H',
-		'I','J','K','L','M','N','O','P',
-		'Q','R','S','T','U','V','W','X',
-		'Y','Z','a','b','c','d','e','f',
-		'g','h','i','j','k','l','m','n',
-		'o','p','q','r','s','t','u','v',
-		'w','x','y','z','0','1','2','3',
-		'4','5','6','7','8','9','+','_', // !!! this differs from base64
-	};
-	
+    // contains the maximum length of node names or 0 if there is no limit
+    static final int segmentLengthLimit;
+
+    static {
+        String limitString = System.getProperty(SEGMENT_LENGTH_LIMIT_PROPERTY);
+        int limit = MINIMAL_SEGMENT_LENGTH_LIMIT; // min. used as default
+        
+        try {
+            int limitInt = Integer.parseInt(limitString);
+            if(limitInt == 0 || limitInt >= MINIMAL_SEGMENT_LENGTH_LIMIT)
+                limit = limitInt;
+        } catch(NumberFormatException e) {}
+        
+        segmentLengthLimit = limit;
+    }
+    
+    private static final char base64table[] = {
+        'A','B','C','D','E','F','G','H',
+        'I','J','K','L','M','N','O','P',
+        'Q','R','S','T','U','V','W','X',
+        'Y','Z','a','b','c','d','e','f',
+        'g','h','i','j','k','l','m','n',
+        'o','p','q','r','s','t','u','v',
+        'w','x','y','z','0','1','2','3',
+        '4','5','6','7','8','9','+','_', // !!! this differs from base64
+    };
+    
     private DmtPrincipalPermissionAdmin dmtPermissionAdmin;
 	private DmtPluginDispatcher	dispatcher;
 	private ServiceTracker eventTracker;
@@ -61,9 +77,6 @@ public class DmtAdminImpl implements DmtAdmin {
 
 	private MessageDigest md;
     
-    // contains the maximum length of node names or 0 if there is no limit
-    private final int segmentLengthLimit;
-
     // OPTIMIZE maybe make some context object to store these references
 	public DmtAdminImpl(DmtPrincipalPermissionAdmin dmtPermissionAdmin,
 			DmtPluginDispatcher dispatcher, ServiceTracker eventTracker,
@@ -77,23 +90,8 @@ public class DmtAdminImpl implements DmtAdmin {
 		
 		openSessions = new Vector();
 		
-		segmentLengthLimit = getSegmentLengthLimit();
-		
 		md = MessageDigest.getInstance("SHA");
 	}
-
-    private int getSegmentLengthLimit() {
-        String limitString = System.getProperty(SEGMENT_LENGTH_LIMIT_PROPERTY);
-        int limit = MINIMAL_SEGMENT_LENGTH_LIMIT; // min. used as default
-        
-        try {
-            int limitInt = Integer.parseInt(limitString);
-            if(limitInt == 0 || limitInt >= MINIMAL_SEGMENT_LENGTH_LIMIT)
-                limit = limitInt;
-        } catch(NumberFormatException e) {}
-        
-        return limit;
-    }
 
 	public DmtSession getSession(String subtreeUri) throws DmtException {
 		return getSession(null, subtreeUri, DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -115,7 +113,7 @@ public class DmtAdminImpl implements DmtAdmin {
         if(subtreeUri == null)
             subtreeUri = ".";
         
-		DmtSessionImpl session = new DmtSessionImpl(principal, subtreeUri,
+		SessionWrapper session = new SessionWrapper(principal, subtreeUri,
                 lockMode, permissions, eventTracker, dispatcher, this);
                 
         // passing the normalized variant of the subtreeUri parameter
