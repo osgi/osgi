@@ -35,7 +35,7 @@ public interface Constants {
 	public static final String	SYSTEM_BUNDLE_LOCATION					= "System Bundle";
 
 	/**
-	 * Symbolic name of the OSGi <i>system bundle </i>, which is defined
+	 * Alias for the symbolic name of the OSGi <i>system bundle </i>. It is defined
 	 * to be &quot;system.bundle&quot;.
 	 * @since 1.3
 	 */
@@ -394,6 +394,30 @@ public interface Constants {
 
 	/**
 	 * Framework environment property (named
+	 * &quot;org.osgi.framework.bootdelegation&quot;) identifying
+	 * packages for which the Framework must delegate class loading to the boot class path.
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * <code>BundleContext.getProperty</code> method.
+	 * 
+	 * @since 1.3
+	 */
+	public static final String	FRAMEWORK_BOOTDELEGATION			= "org.osgi.framework.bootdelegation";
+
+	/**
+	 * Framework environment property (named
+	 * &quot;org.osgi.framework.system.packages&quot;) identifying
+	 * package which the system bundle must export.
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * <code>BundleContext.getProperty</code> method.
+	 * 
+	 * @since 1.3
+	 */
+	public static final String	FRAMEWORK_SYSTEMPACKAGES			= "org.osgi.framework.system.packages";
+
+	/**
+	 * Framework environment property (named
 	 * &quot;org.osgi.supports.framework.extension&quot;) identifying
 	 * whether the Framework supports framework extension bundles.
 	 * If the value of this property is <code>true</code>, then the Framework
@@ -421,6 +445,36 @@ public interface Constants {
 	 * @since 1.3
 	 */
 	public static final String	SUPPORTS_BOOTCLASSPATH_EXTENSION		= "org.osgi.supports.bootclasspath.extension";
+
+	/**
+	 * Framework environment property (named
+	 * &quot;org.osgi.supports.framework.fragment&quot;) identifying
+	 * whether the Framework supports fragment bundles.
+	 * If the value of this property is <code>true</code>, then the Framework
+	 * supports fragment bundles.
+	 * The default value is <code>false</code>.
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * <code>BundleContext.getProperty</code> method.
+	 * 
+	 * @since 1.3
+	 */
+	public static final String	SUPPORTS_FRAMEWORK_FRAGMENT			= "org.osgi.supports.framework.fragment";
+
+	/**
+	 * Framework environment property (named
+	 * &quot;org.osgi.supports.framework.requirebundle&quot;) identifying
+	 * whether the Framework supports the <code>Require-Bundle</code> manifest header.
+	 * If the value of this property is <code>true</code>, then the Framework
+	 * supports the <code>Require-Bundle</code> manifest header.
+	 * The default value is <code>false</code>.
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * <code>BundleContext.getProperty</code> method.
+	 * 
+	 * @since 1.3
+	 */
+	public static final String	SUPPORTS_FRAMEWORK_REQUIREBUNDLE			= "org.osgi.supports.framework.requirebundle";
 
 	/*
 	 * Service properties.
