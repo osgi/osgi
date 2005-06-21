@@ -873,7 +873,7 @@ public abstract interface Bundle {
 	/**
 	 * Returns entries in this bundle and its attached fragments. The bundle's
 	 * classloader is not used to search for entries. Only the contents of the
-	 * bundle and its attatched fragments are searched for the specified
+	 * bundle and its attached fragments are searched for the specified
 	 * entries.
 	 * 
 	 * If this bundle's state is <code>INSTALLED</code>, this method must
