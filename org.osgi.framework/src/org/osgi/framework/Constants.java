@@ -1012,17 +1012,4 @@ public interface Constants {
 	 * @since 1.3
 	 */
 	public final static String	VISIBILITY_REEXPORT						= "reexport";
-
-	/**
-	 * Manifest header (named &quot;Reexport-Package&quot;) identifying the
-	 * names of the packages that the bundle offers to the Framework for
-	 * reexport.
-	 * 
-	 * <p>
-	 * The attribute value may be retrieved from the <code>Dictionary</code>
-	 * object returned by the <code>Bundle.getHeaders</code> method.
-	 * 
-	 * @since 1.3
-	 */
-	public final static String	REEXPORT_PACKAGE						= "Reexport-Package";
 }
