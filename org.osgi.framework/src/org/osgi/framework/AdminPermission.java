@@ -239,7 +239,7 @@ public final class AdminPermission extends Permission
      * <code>resource</code>, <code>startlevel</code>, or "*" to indicate all actions
      */
     public AdminPermission(Bundle bundle, String actions) {
-    	super(bundle.toString());
+    	super(bundle.toString()); // TODO Bundle.toString is unspecified!
     	this.bundle = bundle;
     	this.wildcard = false;
     	this.filter = null;
@@ -581,7 +581,7 @@ public final class AdminPermission extends Permission
     	return bundleProperties;
     }
 
-    public static class SignerWrapper extends Object {
+    private static class SignerWrapper extends Object {
     	private Bundle bundle;
     	private String pattern;
     	public SignerWrapper(String pattern) {
