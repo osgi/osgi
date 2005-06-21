@@ -103,6 +103,7 @@ public class PermissionInfo {
 			}
 			this.type = new String(encoded, begin, end - begin);
 			/* type may be followed by name which is quoted and encoded */
+			// TODO Need to support multiple spaces
 			if (encoded[end] == ' ') {
 				end++;
 				if (encoded[end] != '"') {
@@ -119,6 +120,7 @@ public class PermissionInfo {
 				this.name = decodeString(encoded, begin, end);
 				end++;
 				/* name may be followed by actions which is quoted and encoded */
+				// TODO Need to support multiple spaces
 				if (encoded[end] == ' ') {
 					end++;
 					if (encoded[end] != '"') {
@@ -153,7 +155,7 @@ public class PermissionInfo {
 	 * suitable for restoring this <code>PermissionInfo</code>.
 	 * 
 	 * <p>
-	 * The encoding format is:
+	 * The encoded format is:
 	 * 
 	 * <pre>
 	 * (type)
@@ -162,32 +164,24 @@ public class PermissionInfo {
 	 * or
 	 * 
 	 * <pre>
-	 * 
-	 *  
-	 *   (type &quot;&lt;i&gt;name&lt;/i&gt;&quot;)
-	 *   
-	 *  
+	 * (type &quot;name&quot;)
 	 * </pre>
 	 * 
 	 * or
 	 * 
 	 * <pre>
-	 * 
-	 *  
-	 *   (type &quot;&lt;i&gt;name&lt;/i&gt;&quot; &quot;&lt;i&gt;actions&lt;/i&gt;&quot;)
-	 *   
-	 *  
+	 * (type &quot;name&quot; &quot;actions&quot;)
 	 * </pre>
 	 * 
-	 * where <i>name </i> and <i>actions </i> are strings that are encoded for
+	 * where <i>name</i> and <i>actions</i> are strings that are encoded for
 	 * proper parsing. Specifically, the <code>"</code>,<code>\</code>, carriage
 	 * return, and linefeed characters are escaped using <code>\"</code>,
 	 * <code>\\</code>,<code>\r</code>, and <code>\n</code>, respectively.
 	 * 
 	 * <p>
 	 * The encoded string must contain no leading or trailing whitespace
-	 * characters. A single space character must be used between type and "
-	 * <i>name </i>" and between " <i>name </i>" and " <i>actions </i>".
+	 * characters. A single space character must be used between <i>type</i> and 
+	 * &quot;<i>name</i>&quot; and between &quot;<i>name</i>&quot; and &quot;<i>actions</i>&quot;.
 	 * 
 	 * @return The string encoding of this <code>PermissionInfo</code>.
 	 */
