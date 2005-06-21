@@ -110,7 +110,6 @@ public abstract interface Bundle {
 	 * Note that the bundle is not active yet. A bundle must be put in the
 	 * <code>RESOLVED</code> state before it can be started. The Framework may
 	 * attempt to resolve a bundle at any time. 
-	 * ### Does there need to be a caveat here for fragments, which can not be started?
 	 * <p>
 	 * The value of <code>RESOLVED</code> is 0x00000004.
 	 */
@@ -660,7 +659,7 @@ public abstract interface Bundle {
 	public abstract boolean hasPermission(Object permission);
 
 	/**
-	 * Find the specified resource in this bundle.
+	 * Find the specified resource from this bundle.
 	 * 
 	 * This bundle's class loader is called to search for the named resource. If
 	 * this bundle's state is <code>INSTALLED</code>, then only this bundle
@@ -780,17 +779,13 @@ public abstract interface Bundle {
 	public Class loadClass(String name) throws ClassNotFoundException;
 
 	/**
-	 * Find the specified resources in this bundle.
+	 * Find the specified resources from this bundle.
 	 * 
 	 * This bundle's class loader is called to search for the named resource. If
 	 * this bundle's state is <code>INSTALLED</code>, then only this bundle
 	 * must be searched for the specified resource. Imported packages cannot be
 	 * searched when a bundle has not been resolved. If this bundle is a
 	 * fragment bundle then <code>null</code> is returned.
-	 * 
-	 * ### How are split packages treated??? 
-	 * ### shouldn't we mention that this can create a classloader? 
-	 * ### How is the Bundle-Class path treated
 	 * 
 	 * @param name The name of the resource. See
 	 *        <code>java.lang.ClassLoader.getResources</code> for a

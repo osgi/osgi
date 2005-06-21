@@ -40,10 +40,6 @@ import java.util.Hashtable;
 
 public final class BundlePermission extends BasicPermission {
 
-	/**
-	 * ### Comments are nonsense in this file. Comment for
-	 * <code>serialVersionUID</code>
-	 */
 	private static final long	serialVersionUID	= 3257846601685873716L;
 
 	/**
