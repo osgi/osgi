@@ -11,11 +11,9 @@
 package org.osgi.framework;
 
 import java.io.IOException;
-import java.util.Hashtable;
+import java.security.*;
 import java.util.Enumeration;
-import java.security.Permission;
-import java.security.BasicPermission;
-import java.security.PermissionCollection;
+import java.util.Hashtable;
 
 /**
  * A bundle's authority to require or provide a bundle or to receive or attach
@@ -43,8 +41,8 @@ import java.security.PermissionCollection;
 public final class BundlePermission extends BasicPermission {
 
 	/**
-	 * ### Comments are nonsense in this file.
-	 * Comment for <code>serialVersionUID</code>
+	 * ### Comments are nonsense in this file. Comment for
+	 * <code>serialVersionUID</code>
 	 */
 	private static final long	serialVersionUID	= 3257846601685873716L;
 
@@ -52,14 +50,6 @@ public final class BundlePermission extends BasicPermission {
 	 * The action string <code>provide</code>.
 	 */
 	public final static String	PROVIDE				= "provide";
-
-	/**
-	 * A bundle that has the <code>dominant</code> action must not be updated by
-	 * a bundle that does not have the <code>dominant</code> action. The <code>dominant</code>
-	 * action implies the <code>provide</code> action.
-	 * ### Proposed  
-	 */
-	public final static String	DOMINANT			= "dominant";
 
 	/**
 	 * The action string <code>require</code>.
@@ -80,11 +70,9 @@ public final class BundlePermission extends BasicPermission {
 	private final static int	ACTION_REQUIRE		= 0x00000002;
 	private final static int	ACTION_HOST			= 0x00000004;
 	private final static int	ACTION_FRAGMENT		= 0x00000008;
-	private final static int	ACTION_DOMINANT		= 0x00000010;
 	private final static int	ACTION_ALL			= ACTION_PROVIDE
 															| ACTION_REQUIRE
 															| ACTION_HOST
-															| ACTION_DOMINANT
 															| ACTION_FRAGMENT;
 	private final static int	ACTION_NONE			= 0;
 	private final static int	ACTION_ERROR		= 0x80000000;
@@ -179,64 +167,52 @@ public final class BundlePermission extends BasicPermission {
 			// check for the known strings
 			int matchlen;
 
-			if (i >= 7 && (a[i - 7] == 'd' || a[i - 7] == 'D')
-					&& (a[i - 6] == 'o' || a[i - 6] == 'O')
-					&& (a[i - 5] == 'm' || a[i - 5] == 'M')
-					&& (a[i - 4] == 'i' || a[i - 4] == 'I')
-					&& (a[i - 3] == 'n' || a[i - 3] == 'N')
-					&& (a[i - 2] == 'a' || a[i - 2] == 'A')
-					&& (a[i - 1] == 'n' || a[i - 1] == 'N')
-					&& (a[i] == 't' || a[i] == 'T')) {
+			if (i >= 6 && (a[i - 6] == 'p' || a[i - 6] == 'P')
+					&& (a[i - 5] == 'r' || a[i - 5] == 'R')
+					&& (a[i - 4] == 'o' || a[i - 4] == 'O')
+					&& (a[i - 3] == 'v' || a[i - 3] == 'V')
+					&& (a[i - 2] == 'i' || a[i - 2] == 'I')
+					&& (a[i - 1] == 'd' || a[i - 1] == 'D')
+					&& (a[i] == 'e' || a[i] == 'E')) {
 				matchlen = 7;
-				mask |= ACTION_DOMINANT | ACTION_PROVIDE;
+				mask |= ACTION_PROVIDE | ACTION_REQUIRE;
 			}
 			else
-				if (i >= 6 && (a[i - 6] == 'p' || a[i - 6] == 'P')
-						&& (a[i - 5] == 'r' || a[i - 5] == 'R')
-						&& (a[i - 4] == 'o' || a[i - 4] == 'O')
-						&& (a[i - 3] == 'v' || a[i - 3] == 'V')
+				if (i >= 6 && (a[i - 6] == 'r' || a[i - 6] == 'R')
+						&& (a[i - 5] == 'e' || a[i - 5] == 'E')
+						&& (a[i - 4] == 'q' || a[i - 4] == 'Q')
+						&& (a[i - 3] == 'u' || a[i - 3] == 'U')
 						&& (a[i - 2] == 'i' || a[i - 2] == 'I')
-						&& (a[i - 1] == 'd' || a[i - 1] == 'D')
+						&& (a[i - 1] == 'r' || a[i - 1] == 'R')
 						&& (a[i] == 'e' || a[i] == 'E')) {
 					matchlen = 7;
-					mask |= ACTION_PROVIDE | ACTION_REQUIRE;
+					mask |= ACTION_REQUIRE;
 				}
 				else
-					if (i >= 6 && (a[i - 6] == 'r' || a[i - 6] == 'R')
-							&& (a[i - 5] == 'e' || a[i - 5] == 'E')
-							&& (a[i - 4] == 'q' || a[i - 4] == 'Q')
-							&& (a[i - 3] == 'u' || a[i - 3] == 'U')
-							&& (a[i - 2] == 'i' || a[i - 2] == 'I')
-							&& (a[i - 1] == 'r' || a[i - 1] == 'R')
-							&& (a[i] == 'e' || a[i] == 'E')) {
-						matchlen = 7;
-						mask |= ACTION_REQUIRE;
+					if (i >= 3 && (a[i - 3] == 'h' || a[i - 3] == 'H')
+							&& (a[i - 2] == 'o' || a[i - 2] == 'O')
+							&& (a[i - 1] == 's' || a[i - 1] == 'S')
+							&& (a[i] == 't' || a[i] == 'T')) {
+						matchlen = 4;
+						mask |= ACTION_HOST;
 					}
 					else
-						if (i >= 3 && (a[i - 3] == 'h' || a[i - 3] == 'H')
-								&& (a[i - 2] == 'o' || a[i - 2] == 'O')
-								&& (a[i - 1] == 's' || a[i - 1] == 'S')
+						if (i >= 7 && (a[i - 7] == 'f' || a[i - 7] == 'F')
+								&& (a[i - 6] == 'r' || a[i - 6] == 'R')
+								&& (a[i - 5] == 'a' || a[i - 5] == 'A')
+								&& (a[i - 4] == 'g' || a[i - 4] == 'G')
+								&& (a[i - 3] == 'm' || a[i - 3] == 'M')
+								&& (a[i - 2] == 'e' || a[i - 2] == 'E')
+								&& (a[i - 1] == 'n' || a[i - 1] == 'N')
 								&& (a[i] == 't' || a[i] == 'T')) {
-							matchlen = 4;
-							mask |= ACTION_HOST;
+							matchlen = 8;
+							mask |= ACTION_FRAGMENT;
 						}
-						else
-							if (i >= 7 && (a[i - 7] == 'f' || a[i - 7] == 'F')
-									&& (a[i - 6] == 'r' || a[i - 6] == 'R')
-									&& (a[i - 5] == 'a' || a[i - 5] == 'A')
-									&& (a[i - 4] == 'g' || a[i - 4] == 'G')
-									&& (a[i - 3] == 'm' || a[i - 3] == 'M')
-									&& (a[i - 2] == 'e' || a[i - 2] == 'E')
-									&& (a[i - 1] == 'n' || a[i - 1] == 'N')
-									&& (a[i] == 't' || a[i] == 'T')) {
-								matchlen = 8;
-								mask |= ACTION_FRAGMENT;
-							}
-							else {
-								// parse error
-								throw new IllegalArgumentException(
-										"invalid permission: " + actions);
-							}
+						else {
+							// parse error
+							throw new IllegalArgumentException(
+									"invalid permission: " + actions);
+						}
 
 			// make sure we didn't just match the tail of a word
 			// like "ackbarfrequire". Also, skip to the comma.
@@ -283,18 +259,10 @@ public final class BundlePermission extends BasicPermission {
 	 * named symbolic name.
 	 * 
 	 * <pre>
-	 * 
-	 *  
-	 *   
-	 *    
-	 *     x.y.*,&quot;provide&quot; -&gt; x.y.z,&quot;provide&quot; is true
-	 *     *,&quot;require&quot; -&gt; x.y, &quot;require&quot;      is true
-	 *     *,&quot;provide&quot; -&gt; x.y, &quot;require&quot;      is true
-	 *     x.y,&quot;provide&quot; -&gt; x.y.z, &quot;provide&quot;  is false
-	 *     
-	 *    
-	 *   
-	 *  
+	 *      x.y.*,&quot;provide&quot; -&gt; x.y.z,&quot;provide&quot; is true
+	 *      *,&quot;require&quot; -&gt; x.y, &quot;require&quot;      is true
+	 *      *,&quot;provide&quot; -&gt; x.y, &quot;require&quot;      is true
+	 *      x.y,&quot;provide&quot; -&gt; x.y.z, &quot;provide&quot;  is false
 	 * </pre>
 	 * 
 	 * @param p The target permission to interrogate.
