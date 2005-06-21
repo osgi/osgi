@@ -397,7 +397,8 @@ public abstract interface Bundle {
 	 * @exception java.lang.IllegalStateException If this bundle has been
 	 *            uninstalled or this bundle tries to change its own state.
 	 * @exception java.lang.SecurityException If the caller does not have the
-	 *            appropriate <code>AdminPermission[bundle, LIFECYCLE]</code>,
+	 *            appropriate <code>AdminPermission[bundle, LIFECYCLE]</code> for both
+	 *            the current bundle and the updated bundle,
 	 *            and the Java Runtime Environment supports permissions.
 	 * @see #stop()
 	 * @see #start()
@@ -422,7 +423,8 @@ public abstract interface Bundle {
 	 * @exception java.lang.IllegalStateException If this bundle has been
 	 *            uninstalled or this bundle tries to change its own state.
 	 * @exception java.lang.SecurityException If the caller does not have the
-	 *            appropriate <code>AdminPermission[bundle, LIFECYCLE]</code>,
+	 *            appropriate <code>AdminPermission[bundle, LIFECYCLE]</code> for both
+	 *            the current bundle and the updated bundle,
 	 *            and the Java Runtime Environment supports permissions.
 	 * @see #update()
 	 */
