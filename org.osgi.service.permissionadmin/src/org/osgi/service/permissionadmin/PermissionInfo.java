@@ -117,7 +117,7 @@ public class PermissionInfo {
 					}
 					end++;
 				}
-				this.name = decodeString(encoded, begin, end);
+				this.name = unescapeString(encoded, begin, end);
 				end++;
 				/* name may be followed by actions which is quoted and encoded */
 				// TODO Need to support multiple spaces
@@ -135,7 +135,7 @@ public class PermissionInfo {
 						}
 						end++;
 					}
-					this.actions = decodeString(encoded, begin, end);
+					this.actions = unescapeString(encoded, begin, end);
 					end++;
 				}
 			}
@@ -195,15 +195,15 @@ public class PermissionInfo {
 		output.append(type);
 		if (name != null) {
 			output.append(" \"");
-			encodeString(name, output);
+			escapeString(name, output);
 			if (actions != null) {
 				output.append("\" \"");
-				encodeString(actions, output);
+				escapeString(actions, output);
 			}
 			output.append('\"');
 		}
 		output.append(')');
-		return (output.toString());
+		return output.toString();
 	}
 
 	/**
@@ -214,7 +214,7 @@ public class PermissionInfo {
 	 * @return The string representation of this <code>PermissionInfo</code>.
 	 */
 	public String toString() {
-		return (getEncoded());
+		return getEncoded();
 	}
 
 	/**
@@ -225,7 +225,7 @@ public class PermissionInfo {
 	 *         this <code>PermissionInfo</code>.
 	 */
 	public final String getType() {
-		return (type);
+		return type;
 	}
 
 	/**
@@ -237,7 +237,7 @@ public class PermissionInfo {
 	 *         does not have a name.
 	 */
 	public final String getName() {
-		return (name);
+		return name;
 	}
 
 	/**
@@ -249,7 +249,7 @@ public class PermissionInfo {
 	 *         does not have any actions associated with it.
 	 */
 	public final String getActions() {
-		return (actions);
+		return actions;
 	}
 
 	/**
@@ -266,27 +266,27 @@ public class PermissionInfo {
 	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
-			return (true);
+			return true;
 		}
 		if (!(obj instanceof PermissionInfo)) {
-			return (false);
+			return false;
 		}
 		PermissionInfo other = (PermissionInfo) obj;
 		if (!type.equals(other.type) || ((name == null) ^ (other.name == null))
 				|| ((actions == null) ^ (other.actions == null))) {
-			return (false);
+			return false;
 		}
 		if (name != null) {
 			if (actions != null) {
-				return (name.equals(other.name) && actions
-						.equals(other.actions));
+				return name.equals(other.name) && actions
+						.equals(other.actions);
 			}
 			else {
-				return (name.equals(other.name));
+				return name.equals(other.name);
 			}
 		}
 		else {
-			return (true);
+			return true;
 		}
 	}
 
@@ -303,14 +303,14 @@ public class PermissionInfo {
 				hash ^= actions.hashCode();
 			}
 		}
-		return (hash);
+		return hash;
 	}
 
 	/**
 	 * This escapes the quotes, backslashes, \n, and \r in the string using a
 	 * backslash and appends the newly escaped string to a StringBuffer.
 	 */
-	private static void encodeString(String str, StringBuffer output) {
+	private static void escapeString(String str, StringBuffer output) {
 		int len = str.length();
 		for (int i = 0; i < len; i++) {
 			char c = str.charAt(i);
@@ -336,7 +336,7 @@ public class PermissionInfo {
 	/**
 	 * Takes an encoded character array and decodes it into a new String.
 	 */
-	private static String decodeString(char[] str, int begin, int end) {
+	private static String unescapeString(char[] str, int begin, int end) {
 		StringBuffer output = new StringBuffer(end - begin);
 		for (int i = begin; i < end; i++) {
 			char c = str[i];
@@ -355,6 +355,7 @@ public class PermissionInfo {
 			}
 			output.append(c);
 		}
-		return (output.toString());
+		
+		return output.toString();
 	}
 }
