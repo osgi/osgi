@@ -30,44 +30,19 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * Feb 21, 2005 Alexandre Santos
- * 14           Implement MEG TCK
+ * 17/06/2005   Alexandre Santos
+ * 95           Implement Updates
  * ===========  ==============================================================
  */
-package org.osgi.test.cases.monitor.tbc.MonitorPermission;
+package org.osgi.test.cases.monitor.tbc;
 
-import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
+import org.osgi.service.monitor.StatusVariable;
 
 /**
- * @generalDescription This Test Class Validates the constants according to MEG
- *                     reference documentation.
+ * 	@Author Alexandre Alves
  */
+public interface SetStatusVariableInterface {
+	
+	public void setStatusVariable(StatusVariable sv);
 
-public class MonitorPermissionConstants {
-	private MonitorTestControl tbc;
-
-	/**
-	 * @param tbc
-	 */
-	public MonitorPermissionConstants(MonitorTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testConstants001();
-	}
-
-	/**
-	 * @testID testConstants001
-	 * @testDescription Tests all constants values according to Constants fields
-	 *                  values.
-	 */
-	public void testConstants001() {
-		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting PUBLISH value", "publish", org.osgi.service.monitor.MonitorPermission.PUBLISH);
-		tbc.assertEquals("Asserting READ value", "read", org.osgi.service.monitor.MonitorPermission.READ);
-		tbc.assertEquals("Asserting RESET value", "reset", org.osgi.service.monitor.MonitorPermission.RESET);
-		tbc.assertEquals("Asserting STARTJOB value", "startjob", org.osgi.service.monitor.MonitorPermission.STARTJOB);
-		tbc.assertEquals("Asserting SWITCHEVENTS value", "switchevents", org.osgi.service.monitor.MonitorPermission.SWITCHEVENTS);	
-	}
 }

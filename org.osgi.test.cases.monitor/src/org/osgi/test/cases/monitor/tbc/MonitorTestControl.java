@@ -41,6 +41,7 @@
 package org.osgi.test.cases.monitor.tbc;
 
 import org.osgi.framework.AdminPermission;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
@@ -78,6 +79,8 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
  */
 public class MonitorTestControl extends DefaultTestBundleControl {
 	
+	public static final String DISCOVER = "DISCOVER";
+	
 	public static final String LONGID = "abcdefghjklmnoprstuvw";
 
 	public final static String INVALID_ID = ";/?:@&=+$,";
@@ -94,7 +97,7 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 
 	public final static String SV_NAME2 = "test1";
 
-	public final static String VALID_ID = "a23";
+	public final static String VALID_ID = "a23_-.";
 
 	public final static String IDENTIFY_ID = "ID";
 
@@ -116,7 +119,7 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 
 	public final static String[] SVS_NOT_SUPPORT_NOTIFICATION = { "cesar2/test0" };
 
-	public final static String SVS_DONT_EXIST = "cesar/tmp";
+	public final static String INEXISTENT_SVS = "cesar/tmp";
 
 	public final static int SCHEDULE = 1;
 
@@ -129,6 +132,8 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	public final static String INVALID_MONITORABLE_SV = "tmp";
 
 	public static int EVENT_COUNT = 0;
+	
+	public static int SWITCH_EVENTS_COUNT = 0;
 	
 	public static final int TIMEOUT = 2000;
 	
@@ -180,6 +185,16 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	private String correlator = null;
 	
 	private boolean receivedAlert = false;
+
+	private boolean isMonitorablePid = false;
+	private boolean isStatusVariableName = false;
+	private boolean isStatusVariableValue = false;
+	private boolean isListenerId = false;	
+	
+	private String statusVariableName = null;
+	private String statusVariableValue = null;
+	private String monitorablePid = null;
+	private String listenerId = null;
 	
 	public void stopMonitorables() {
 		try {
@@ -630,5 +645,133 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 		serverId = null;
 		correlator = null;
 		receivedAlert = false;
+	}
+	
+	/**
+	 * @return Returns the isListenerId.
+	 */
+	public boolean isListenerId() {
+		return isListenerId;
+	}
+	/**
+	 * @param isListenerId The isListenerId to set.
+	 */
+	public void setListenerId(boolean isListenerId) {
+		this.isListenerId = isListenerId;
+	}
+	/**
+	 * @return Returns the isMonitorablePid.
+	 */
+	public boolean isMonitorablePid() {
+		return isMonitorablePid;
+	}
+	/**
+	 * @param isMonitorablePid The isMonitorablePid to set.
+	 */
+	public void setMonitorablePid(boolean isMonitorablePid) {
+		this.isMonitorablePid = isMonitorablePid;
+	}
+	/**
+	 * @return Returns the isStatusVariableName.
+	 */
+	public boolean isStatusVariableName() {
+		return isStatusVariableName;
+	}
+	/**
+	 * @param isStatusVariableName The isStatusVariableName to set.
+	 */
+	public void setStatusVariableName(boolean isStatusVariableName) {
+		this.isStatusVariableName = isStatusVariableName;
+	}
+	/**
+	 * @return Returns the isStatusVariableValue.
+	 */
+	public boolean isStatusVariableValue() {
+		return isStatusVariableValue;
+	}
+	/**
+	 * @param isStatusVariableValue The isStatusVariableValue to set.
+	 */
+	public void setStatusVariableValue(boolean isStatusVariableValue) {
+		this.isStatusVariableValue = isStatusVariableValue;
+	}
+	
+	public void resetEvent() {
+		isMonitorablePid = false;
+		isStatusVariableName = false;
+		isStatusVariableValue = false;
+		isListenerId = false;	
+		statusVariableName = null;
+		statusVariableValue = null;
+		monitorablePid = null;
+		listenerId = null;		
+	}
+	/**
+	 * @return Returns the listenerId.
+	 */
+	public String getListenerId() {
+		return listenerId;
+	}
+	/**
+	 * @param listenerId The listenerId to set.
+	 */
+	public void setListenerId(String listenerId) {
+		this.listenerId = listenerId;
+	}
+	/**
+	 * @return Returns the monitorablePid.
+	 */
+	public String getMonitorablePid() {
+		return monitorablePid;
+	}
+	/**
+	 * @param monitorablePid The monitorablePid to set.
+	 */
+	public void setMonitorablePid(String monitorablePid) {
+		this.monitorablePid = monitorablePid;
+	}
+	/**
+	 * @return Returns the statusVariableName.
+	 */
+	public String getStatusVariableName() {
+		return statusVariableName;
+	}
+	/**
+	 * @param statusVariableName The statusVariableName to set.
+	 */
+	public void setStatusVariableName(String statusVariableName) {
+		this.statusVariableName = statusVariableName;
+	}
+	/**
+	 * @return Returns the statusVariableValue.
+	 */
+	public String getStatusVariableValue() {
+		return statusVariableValue;
+	}
+	/**
+	 * @param statusVariableValue The statusVariableValue to set.
+	 */
+	public void setStatusVariableValue(String statusVariableValue) {
+		this.statusVariableValue = statusVariableValue;
+	}
+	
+	
+	public SetStatusVariableInterface getStatusVariableInterface() {
+		try {
+			ServiceReference[] rfs = getContext().getServiceReferences(Monitorable.class.getName(), "(service.pid="+MonitorTestControl.SV_MONITORABLEID1+")");
+			return rfs == null ? null: (SetStatusVariableInterface) getContext().getService(rfs[0]);
+		} catch (InvalidSyntaxException e) {
+			log("Error on getStatusVariableInterface");
+			return null;
+		}
+	}
+	
+	public void reinstallMonitorable1() {
+		try {
+			monitorableActivator.stop(this.getContext());
+			monitorableActivator.start(getContext());
+		} catch (Exception e) {
+			log("Fail when we try to reinstall the monitorable");
+		}
 	}
 }

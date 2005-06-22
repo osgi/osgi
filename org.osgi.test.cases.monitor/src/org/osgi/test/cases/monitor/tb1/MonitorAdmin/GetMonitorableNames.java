@@ -97,7 +97,7 @@ public class GetMonitorableNames implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalArgumentException.class.getName(),
+							SecurityException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
 			tbc.getPermissionAdmin().setPermissions(
@@ -117,7 +117,7 @@ public class GetMonitorableNames implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),"*/*", MonitorPermission.DISCOVER));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),"*/*", MonitorTestControl.DISCOVER));
 
 			String[] monitorableNames = tbc.getMonitorAdmin()
 					.getMonitorableNames();
@@ -163,7 +163,7 @@ public class GetMonitorableNames implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),"*/*", MonitorPermission.DISCOVER));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),"*/*", MonitorTestControl.DISCOVER));
 
 			String[] monitorableNames = tbc.getMonitorAdmin()
 					.getMonitorableNames();
@@ -215,7 +215,7 @@ public class GetMonitorableNames implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalArgumentException.class.getName(),
+							SecurityException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
 			tbc.getPermissionAdmin().setPermissions(
@@ -225,8 +225,7 @@ public class GetMonitorableNames implements TestInterface {
 	
 	/**
 	 * @testID testGetMonitorableNames005
-	 * @testDescription Tests if null is returned when no monitorable is
-	 *                  registered.
+	 * @testDescription Tests if the returned monitorables name list is empty.
 	 */
 	public void testGetMonitorableNames005() {
 		tbc.log("#testGetMonitorableNames005");
@@ -236,12 +235,12 @@ public class GetMonitorableNames implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),"*/*", MonitorPermission.DISCOVER));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),"*/*", MonitorTestControl.DISCOVER));
 
 			String[] monitorableNames = tbc.getMonitorAdmin()
 					.getMonitorableNames();
 			
-			tbc.assertEquals("Asserting if the returned monitorables names list is empty. ", new String[0], monitorableNames);
+			tbc.assertTrue("Asserting if the returned monitorables names list is empty. ", (monitorableNames.length==0));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
@@ -263,7 +262,7 @@ public class GetMonitorableNames implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[0], MonitorPermission.RESET));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[0], MonitorTestControl.DISCOVER));
 
 			tbc.getMonitorAdmin().getMonitorableNames();
 
@@ -276,7 +275,7 @@ public class GetMonitorableNames implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalArgumentException.class.getName(),
+							SecurityException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
 			tbc.getPermissionAdmin().setPermissions(

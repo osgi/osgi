@@ -291,8 +291,8 @@ public class GetRunningJobs implements TestInterface {
 
 			mjs = tbc.getMonitorAdmin().getRunningJobs();
 				
-			tbc.assertEquals("Asserting if an empty array is returned when no MonitoringJob is running",
-					0, mjs.length);
+			tbc.assertTrue("Asserting if an empty array is returned when no MonitoringJob is running",
+					(mjs.length==0));
 					
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());

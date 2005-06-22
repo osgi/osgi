@@ -73,7 +73,6 @@ public class GetStatusVariables implements TestInterface {
 		testGetStatusVariables006();
 		testGetStatusVariables007();
 		testGetStatusVariables008();
-		testGetStatusVariables009();
 	}
 
 	/**
@@ -92,11 +91,11 @@ public class GetStatusVariables implements TestInterface {
 			StatusVariable[] statusVariables = tbc.getMonitorAdmin()
 					.getStatusVariables(MonitorTestControl.SV_MONITORABLEID1);
 
-			tbc.assertEquals(MessagesConstants.getMessage(
+			tbc.assertTrue(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"length of statusvariables",
 							MonitorTestControl.SV_LENGTH+"" }),
-					MonitorTestControl.SV_LENGTH, statusVariables.length);
+					(MonitorTestControl.SV_LENGTH==statusVariables.length));
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
@@ -288,34 +287,11 @@ public class GetStatusVariables implements TestInterface {
 	
 	/**
 	 * @testID testGetStatusVariables008
-	 * @testDescription Tests if IllegalArgumentException is thrown when an empty
-	 *                  string is passed as parameter.
-	 */
-	public void testGetStatusVariables008() {
-		tbc.log("#testGetStatusVariables008");
-		try {
-			tbc.getMonitorAdmin().getStatusVariables("");
-
-			tbc.failException("", IllegalArgumentException.class);
-		} catch (IllegalArgumentException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { IllegalArgumentException.class.getName() }));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalArgumentException.class.getName(),
-							e.getClass().getName() }));
-		} 
-	}	
-	
-	/**
-	 * @testID testGetStatusVariables009
 	 * @testDescription Asserts if a SecurityException is thrown when the caller
 	 *                  has read permission for only one of two statusvariables.
 	 */
-	public void testGetStatusVariables009() {
-		tbc.log("#testGetStatusVariables009");
+	public void testGetStatusVariables008() {
+		tbc.log("#testGetStatusVariables008");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(

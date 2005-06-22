@@ -105,7 +105,7 @@ public class Implies {
 							+ ","
 							+ org.osgi.service.monitor.MonitorPermission.RESET
 							+ ","
-							+ org.osgi.service.monitor.MonitorPermission.DISCOVER);
+							+ org.osgi.service.monitor.MonitorPermission.STARTJOB);
 			MonitorPermission mp2 = new MonitorPermission("*/*",
 					org.osgi.service.monitor.MonitorPermission.READ + ","
 							+ org.osgi.service.monitor.MonitorPermission.RESET);
@@ -133,16 +133,12 @@ public class Implies {
 					"*/*",
 					org.osgi.service.monitor.MonitorPermission.READ
 							+ ","
-							+ org.osgi.service.monitor.MonitorPermission.RESET
-							+ ","
-							+ org.osgi.service.monitor.MonitorPermission.DISCOVER);
+							+ org.osgi.service.monitor.MonitorPermission.RESET);
 			MonitorPermission mp2 = new MonitorPermission(
 					"*/*",
 					org.osgi.service.monitor.MonitorPermission.READ
 							+ ","
-							+ org.osgi.service.monitor.MonitorPermission.RESET
-							+ ","
-							+ org.osgi.service.monitor.MonitorPermission.DISCOVER);
+							+ org.osgi.service.monitor.MonitorPermission.RESET);
 
 			tbc
 					.assertTrue(
@@ -199,16 +195,12 @@ public class Implies {
 					"com.mycomp.myapp/*",
 					org.osgi.service.monitor.MonitorPermission.READ
 							+ ","
-							+ org.osgi.service.monitor.MonitorPermission.RESET
-							+ ","
-							+ org.osgi.service.monitor.MonitorPermission.DISCOVER);
+							+ org.osgi.service.monitor.MonitorPermission.RESET);
 			MonitorPermission mp2 = new MonitorPermission(
 					"co.myco.myap/*",
 					org.osgi.service.monitor.MonitorPermission.READ
 							+ ","
-							+ org.osgi.service.monitor.MonitorPermission.RESET
-							+ ","
-							+ org.osgi.service.monitor.MonitorPermission.DISCOVER);
+							+ org.osgi.service.monitor.MonitorPermission.RESET);
 
 			tbc
 					.assertTrue(

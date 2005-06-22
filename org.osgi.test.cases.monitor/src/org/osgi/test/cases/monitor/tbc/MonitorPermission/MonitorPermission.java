@@ -122,7 +122,7 @@ public class MonitorPermission {
 	/**
 	 * @testID testMonitorPermission003
 	 * @testDescription Tests if the constructor with a valid target passed as
-	 *                  parameter throws IllegalArgumentException
+	 *                  parameter does not throws IllegalArgumentException
 	 */
 	public void testMonitorPermission003() {
 		try {
@@ -131,22 +131,15 @@ public class MonitorPermission {
 					"com.mycomp.*/queue*",
 					org.osgi.service.monitor.MonitorPermission.READ);
 
-			tbc.failException("", IllegalArgumentException.class);
-		} catch (IllegalArgumentException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { IllegalArgumentException.class.getName() }));
+			tbc.pass("MonitorPermission object was created successfully");
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalArgumentException.class.getName(),
-							e.getClass().getName() }));
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
 	/**
 	 * @testID testMonitorPermission004
-	 * @testDescription Tests if the constructor with a valid target passed as
+	 * @testDescription Tests if the constructor with an invalid target passed as
 	 *                  parameter throws IllegalArgumentException
 	 */
 	public void testMonitorPermission004() {
@@ -170,7 +163,7 @@ public class MonitorPermission {
 
 	/**
 	 * @testID testMonitorPermission005
-	 * @testDescription Tests if the constructor with an valid target passed as
+	 * @testDescription Tests if the constructor with a valid target passed as
 	 *                  parameter does not throws an exception
 	 */
 	public void testMonitorPermission005() {
@@ -355,27 +348,21 @@ public class MonitorPermission {
 
 	/**
 	 * @testID testMonitorPermission013
-	 * @testDescription Tests if getActions method returns the correct value as
-	 *                  passed to the constructor
-	 * 
+	 * @testDescription Tests if the constructor with STARTJOB as actions
+	 *                  works well when we use a limit with it.
 	 */
 	public void testMonitorPermission013() {
 		try {
 			tbc.log("#testMonitorPermission013");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
-					"*/*", org.osgi.service.monitor.MonitorPermission.READ);
-
-			String actions = mp.getActions();
-
-			tbc.assertEquals(MessagesConstants.getMessage(
-					MessagesConstants.ASSERT_EQUALS, new String[] { "getActions() results",
-							org.osgi.service.monitor.MonitorPermission.READ+","+org.osgi.service.monitor.MonitorPermission.DISCOVER}),
-							org.osgi.service.monitor.MonitorPermission.READ+","+org.osgi.service.monitor.MonitorPermission.DISCOVER, actions);
-
+					"*/*",
+					org.osgi.service.monitor.MonitorPermission.STARTJOB+":1");
+			tbc.assertEquals("Asserting if we receive the passed parameter as result.", org.osgi.service.monitor.MonitorPermission.STARTJOB+":1", mp.getActions());
+			
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
-	}
+	}	
 
 	/**
 	 * @testID testMonitorPermission014
@@ -611,5 +598,5 @@ public class MonitorPermission {
 							e.getClass().getName() }));
 		}
 	}		
-
+	
 }

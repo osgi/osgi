@@ -52,6 +52,7 @@ import org.osgi.service.monitor.MonitoringJob;
 import org.osgi.service.monitor.StatusVariable;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
+import org.osgi.test.cases.monitor.tbc.SetStatusVariableInterface;
 import org.osgi.test.cases.monitor.tbc.TestInterface;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
@@ -80,6 +81,7 @@ public class StartScheduledJob implements TestInterface {
 		testStartScheduledJob009();
 		testStartScheduledJob010();
 		testStartScheduledJob011();
+		testStartScheduledJob012();
 	}
 
 	/**
@@ -487,12 +489,12 @@ public class StartScheduledJob implements TestInterface {
 									+ MonitorTestControl.CONST_LISTENER_ID,
 							MonitorTestControl.INITIATOR }),
 					MonitorTestControl.INITIATOR, tbc.getListenerId());
-
-			tbc.getMonitorListener().updated(
-					MonitorTestControl.SV_MONITORABLEID1,
-					new StatusVariable(MonitorTestControl.SV_NAME2,
-							StatusVariable.CM_CC, "test1")); // update the second statusvariable value to test1, to check it later. 
 			
+			SetStatusVariableInterface monitorable = tbc.getStatusVariableInterface();
+			StatusVariable sv = new StatusVariable(MonitorTestControl.SV_NAME2,
+					StatusVariable.CM_DER, "test1");
+			monitorable.setStatusVariable(sv); // update the second statusvariable value to test1, to check it later. 
+	
 			wait(MonitorTestControl.TIMEOUT * 2); // wait 4 seconds, after that will be 12 seconds in total.
 
 			tbc.assertEquals(MessagesConstants.getMessage(
@@ -554,7 +556,7 @@ public class StartScheduledJob implements TestInterface {
 			wait(MonitorTestControl.TIMEOUT * 3); // wait 6 seconds, after that will be 18 seconds.
 
 			tbc.assertEquals("Asserting if the monitoringjob stops the reporting. So, we expect the same value.", 4,
-					MonitorTestControl.EVENT_COUNT); // I have set only two measurements, so, the event count must be 4, if it is biger than 4,
+					MonitorTestControl.EVENT_COUNT); // I have set only two measurements, so, the event count must be 4, if it is bigger than 4, then
 														// the monitoring job was not stopped automatically.
 
 		} catch (Exception e) {
@@ -654,5 +656,55 @@ public class StartScheduledJob implements TestInterface {
 							e.getClass().getName() }));
 		}
 	}
+	
+	/**
+	 * @testID testStartScheduledJob012
+	 * @testDescription Tests if SecurityException is thrown when the entity has
+	 *                  to use at minimum two as scheduled value.
+	 */
+	public void testStartScheduledJob012() {
+		tbc.log("#testStartScheduledJob012");
+		PermissionInfo[] infos = null;
+		try {
+			tbc.stopRunningJobs();
+
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb1Location());
+
+			tbc
+					.setLocalPermission(new PermissionInfo[] {
+							new PermissionInfo(
+									org.osgi.service.monitor.MonitorPermission.class
+											.getName(),
+									MonitorTestControl.SVS[0],
+									org.osgi.service.monitor.MonitorPermission.STARTJOB+":2"),
+							new PermissionInfo(
+									org.osgi.service.monitor.MonitorPermission.class
+											.getName(),
+									MonitorTestControl.SVS[1],
+									org.osgi.service.monitor.MonitorPermission.PUBLISH) });
+
+			MonitoringJob mj = tbc.getMonitorAdmin().startScheduledJob(
+					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
+					MonitorTestControl.SCHEDULE, MonitorTestControl.COUNT);
+
+			mj.stop();
+
+			tbc.failException("", IllegalArgumentException.class);
+
+		} catch (SecurityException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { SecurityException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							SecurityException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.getPermissionAdmin()
+					.setPermissions(tbc.getTb1Location(), infos);
+		}
+	}	
 
 }

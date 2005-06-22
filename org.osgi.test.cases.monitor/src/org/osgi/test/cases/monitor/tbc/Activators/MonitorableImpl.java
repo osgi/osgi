@@ -43,11 +43,12 @@ package org.osgi.test.cases.monitor.tbc.Activators;
 import org.osgi.service.monitor.Monitorable;
 import org.osgi.service.monitor.StatusVariable;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
+import org.osgi.test.cases.monitor.tbc.SetStatusVariableInterface;
 
 /**
  * @author Leonardo Barros
  */
-public class MonitorableImpl implements Monitorable {
+public class MonitorableImpl implements Monitorable, SetStatusVariableInterface {
 	private static StatusVariable sv0;
 	private static StatusVariable sv1;
 	private MonitorTestControl tbc;
@@ -187,6 +188,21 @@ public class MonitorableImpl implements Monitorable {
 				throw new IllegalArgumentException();
 			}
 		}	
+	}
+
+	/**
+	 * This method has to be used by StartScheduledJob, to receive the values of
+	 * the updated statusvariable in the report.
+	 */
+	public void setStatusVariable(StatusVariable sv) throws IllegalArgumentException {
+		if (sv.getID().equals(sv0.getID())) {
+			sv0 = sv;			
+		} else if (sv.getID().equals(sv1.getID())) {
+			sv1 = sv;
+		} else {
+			throw new IllegalArgumentException("No StatusVariable with this id was found.");
+		}
+		
 	}
 
 }

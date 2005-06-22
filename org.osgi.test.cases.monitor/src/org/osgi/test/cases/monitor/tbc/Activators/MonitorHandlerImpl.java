@@ -96,7 +96,7 @@ public class MonitorHandlerImpl implements EventHandler {
 			
 		} else {
 			
-			MonitorTestControl.SWITCH_EVENTS_COUNT =+ 1;					
+			MonitorTestControl.SWITCH_EVENTS_COUNT += 1;					
 			
 		}
 	}

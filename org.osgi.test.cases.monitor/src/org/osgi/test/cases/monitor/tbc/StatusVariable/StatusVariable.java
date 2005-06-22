@@ -99,6 +99,10 @@ public class StatusVariable {
 		testStatusVariable034();
 		testStatusVariable035();
 		testStatusVariable036();
+		testStatusVariable037();
+		testStatusVariable038();
+		testStatusVariable039();
+		testStatusVariable040();
 	}
 
 	/**
@@ -1158,5 +1162,77 @@ public class StatusVariable {
 							e.getClass().getName() }));
 		}
 	}			
+	
+	/**
+	 * @testID testStatusVariable037
+	 * @testDescription This method asserts no exception was thrown when
+	 *                  we pass a valid id as name.
+	 */
+	public void testStatusVariable037() {
+		try {
+			tbc.log("#testStatusVariable037");
+			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
+					MonitorTestControl.VALID_ID,
+					org.osgi.service.monitor.StatusVariable.CM_CC,
+					MonitorTestControl.SV_STRING_VALUE);
+			tbc.pass("Passed. No exception was thrown.");
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		}
+	}
+	
+	/**
+	 * @testID testStatusVariable038
+	 * @testDescription This method asserts no exception was thrown when
+	 *                  we pass a valid id as name.
+	 */
+	public void testStatusVariable038() {
+		try {
+			tbc.log("#testStatusVariable038");
+			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
+					MonitorTestControl.VALID_ID,
+					org.osgi.service.monitor.StatusVariable.CM_CC,
+					MonitorTestControl.SV_BOOLEAN_VALUE);
+			tbc.pass("Passed. No exception was thrown.");
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		}
+	}	
+	
+	/**
+	 * @testID testStatusVariable039
+	 * @testDescription This method asserts no exception was thrown when
+	 *                  we pass a valid id as name.
+	 */
+	public void testStatusVariable039() {
+		try {
+			tbc.log("#testStatusVariable039");
+			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
+					MonitorTestControl.VALID_ID,
+					org.osgi.service.monitor.StatusVariable.CM_CC,
+					MonitorTestControl.SV_DOUBLE_VALUE);
+			tbc.pass("Passed. No exception was thrown.");
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		}
+	}	
+	
+	/**
+	 * @testID testStatusVariable040
+	 * @testDescription This method asserts no exception was thrown when
+	 *                  we pass a valid id as name.
+	 */
+	public void testStatusVariable040() {
+		try {
+			tbc.log("#testStatusVariable040");
+			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
+					MonitorTestControl.VALID_ID,
+					org.osgi.service.monitor.StatusVariable.CM_CC,
+					MonitorTestControl.SV_LONG_VALUE);
+			tbc.pass("Passed. No exception was thrown.");
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		}
+	}		
 
 }

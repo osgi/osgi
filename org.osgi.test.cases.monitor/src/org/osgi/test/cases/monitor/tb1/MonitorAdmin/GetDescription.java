@@ -69,7 +69,6 @@ public class GetDescription implements TestInterface {
 		testGetDescription005();
 		testGetDescription006();
 		testGetDescription007();
-		testGetDescription008();
 	}
 
 	/**
@@ -128,7 +127,7 @@ public class GetDescription implements TestInterface {
 	public void testGetDescription003() {
 		try {
 			tbc.log("#testGetDescription003");
-			tbc.getMonitorAdmin().getDescription(MonitorTestControl.SVS_DONT_EXIST);
+			tbc.getMonitorAdmin().getDescription(MonitorTestControl.INEXISTENT_SVS);
 
 			tbc.failException("", IllegalArgumentException.class);
 			
@@ -265,30 +264,5 @@ public class GetDescription implements TestInterface {
 					tbc.getTb1Location(), infos);
 		}
 	}
-	
-	/**
-	 * @testID testGetDescription008
-	 * @testDescription Asserts if IllegalArgumentException is thrown when we pass
-	 *                  an empty string as argument to getDescription
-	 *                  method
-	 */
-	public void testGetDescription008() {
-		try { 
-			tbc.log("#testGetDescription008");
-			tbc.getMonitorAdmin().getDescription("");
-			tbc.failException("", IllegalArgumentException.class);
-			
-		} catch (IllegalArgumentException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { IllegalArgumentException.class.getName() }));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalArgumentException.class.getName(),
-							e.getClass().getName() }));
-		}
-	}
-	
 	
 }

@@ -177,10 +177,18 @@ public class Updated {
 			tbc.log("#testUpdated005");
 			tbc.getMonitorListener().updated(MonitorTestControl.SV_MONITORABLEID1, null);
 
-			tbc.pass("Accept null as statusvariable. No exception was thrown.");			
+			tbc.failException("", IllegalArgumentException.class);
+			
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
 		} 
-	}		
+	}			
 
 }
