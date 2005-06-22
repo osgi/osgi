@@ -833,8 +833,8 @@ public class Framework implements EventDispatcher, EventPublisher {
 				if (System.getSecurityManager() != null) {
 					final boolean extension = (bundledata.getType() & (BundleData.TYPE_BOOTCLASSPATH_EXTENSION | BundleData.TYPE_FRAMEWORK_EXTENSION)) != 0;
 					// must check for AllPermission before allow a bundle extension to be installed
-					if (extension)
-						bundle.hasPermission(new AllPermission());
+					if (extension && !bundle.hasPermission(new AllPermission()))
+						throw new BundleException(Msg.BUNDLE_EXTENSION_PERMISSION, new SecurityException(Msg.BUNDLE_EXTENSION_PERMISSION));
 					try {
 						AccessController.doPrivileged(new PrivilegedExceptionAction() {
 							public Object run() throws Exception {

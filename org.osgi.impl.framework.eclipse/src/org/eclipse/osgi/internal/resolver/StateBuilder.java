@@ -170,13 +170,14 @@ class StateBuilder {
 			result.setVersionRange(getVersionRange(versionString));
 			result.setBundleSymbolicName(importPackage.getAttribute(Constants.BUNDLE_SYMBOLICNAME_ATTRIBUTE));
 			result.setBundleVersionRange(getVersionRange(importPackage.getAttribute(Constants.BUNDLE_VERSION_ATTRIBUTE)));
-			result.setAttributes(getAttributes(importPackage, DEFINED_MATCHING_ATTRS));
+			// only set the matching attributes if manfest version >= 2
+			if (manifestVersion >= 2)
+				result.setAttributes(getAttributes(importPackage, DEFINED_MATCHING_ATTRS));
 
-			if (dynamic) {
+			if (dynamic)
 				result.setDirective(Constants.RESOLUTION_DIRECTIVE, ImportPackageSpecification.RESOLUTION_DYNAMIC);
-			} else {
+			else
 				result.setDirective(Constants.RESOLUTION_DIRECTIVE, getResolution(importPackage.getDirective(Constants.RESOLUTION_DIRECTIVE)));
-			}
 
 			allImports.add(result);
 		}

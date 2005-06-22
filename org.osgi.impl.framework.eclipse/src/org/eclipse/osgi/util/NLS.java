@@ -34,6 +34,9 @@ import org.eclipse.osgi.framework.internal.core.MessageResourceBundle;
  * Clients who wish to use the full substitution power of the <code>MessageFormat</code> class should
  * call that class directly and not use these <code>#bind</code> methods.
  * </p>
+ * <p>
+ * Clients may subclass this type.
+ * </p>
  * 
  * @since 3.1
  */

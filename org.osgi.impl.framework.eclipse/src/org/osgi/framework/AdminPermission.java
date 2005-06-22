@@ -584,7 +584,7 @@ public final class AdminPermission extends Permission
     	return bundleProperties;
     }
 
-    public static class SignerWrapper extends Object {
+    private static class SignerWrapper extends Object {
     	private Bundle bundle;
     	private String pattern;
     	public SignerWrapper(String pattern) {

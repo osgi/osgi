@@ -233,4 +233,17 @@ public class Constants implements org.osgi.framework.Constants {
 	 public final static String BUDDY_LOADER = "Eclipse-BuddyPolicy"; //$NON-NLS-1$
 
 	 public final static String REGISTERED_POLICY = "Eclipse-RegisterBuddy";  //$NON-NLS-1$
+
+	/**
+	 * Manifest header (named &quot;Reexport-Package&quot;) identifying the
+	 * names of the packages that the bundle offers to the Framework for
+	 * reexport.
+	 * 
+	 * <p>
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
+	 * 
+	 * @deprecated
+	 */
+	 public final static String REEXPORT_PACKAGE = "Reexport-Package"; //$NON-NLS-1$
 }
