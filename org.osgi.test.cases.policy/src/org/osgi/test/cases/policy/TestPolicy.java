@@ -39,7 +39,6 @@ package org.osgi.test.cases.policy;
 import org.osgi.test.cases.util.DefaultTestCase;
 
 /**
- * @classUnderTest org.osgi.service.policy
  * @generalDescription This Test Case Validates the implementation of
  *                     <code>Policy<code> service, according to MEG reference
  *                     documentation.

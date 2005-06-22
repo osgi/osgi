@@ -46,6 +46,7 @@ import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.policy.tbc.PolicyTestControl;
@@ -57,6 +58,8 @@ import org.osgi.test.cases.policy.tbc.util.MessagesConstants;
  *                     Permissions according with MEG specification
  */
 public class TreeStructure implements TestInterface {
+	// TODO some metanode tests are missing due to misunderstood information in
+	// Spec
 	private PolicyTestControl tbc;
 
 	public TreeStructure(PolicyTestControl tbc) {
@@ -76,6 +79,16 @@ public class TreeStructure implements TestInterface {
 		testTreeStructure010();
 		testTreeStructure011();
 		testTreeStructure012();
+		testTreeStructure013();
+		testTreeStructure014();
+		testTreeStructure015();
+		testTreeStructure016();
+		testTreeStructure017();
+		testTreeStructure018();
+		testTreeStructure019();
+		testTreeStructure020();
+		testTreeStructure021();
+		testTreeStructure022();
 	}
 
 	/**
@@ -97,13 +110,7 @@ public class TreeStructure implements TestInterface {
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
 							.getClass().getName() }));
 		} finally {
-			try {
-				session.close();
-			} catch (DmtException e) {
-				tbc.fail(MessagesConstants.getMessage(
-						MessagesConstants.UNEXPECTED_EXCEPTION,
-						new String[] { e.getClass().getName() }));
-			}
+			tbc.closeSession(session);
 		}
 	}
 
@@ -130,13 +137,7 @@ public class TreeStructure implements TestInterface {
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
 							.getClass().getName() }));
 		} finally {
-			try {
-				session.close();
-			} catch (DmtException e) {
-				tbc.fail(MessagesConstants.getMessage(
-						MessagesConstants.UNEXPECTED_EXCEPTION,
-						new String[] { e.getClass().getName() }));
-			}
+			tbc.closeSession(session);
 		}
 	}
 
@@ -163,13 +164,7 @@ public class TreeStructure implements TestInterface {
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
 							.getClass().getName() }));
 		} finally {
-			try {
-				session.close();
-			} catch (DmtException e) {
-				tbc.fail(MessagesConstants.getMessage(
-						MessagesConstants.UNEXPECTED_EXCEPTION,
-						new String[] { e.getClass().getName() }));
-			}
+			tbc.closeSession(session);
 		}
 	}
 
@@ -196,62 +191,17 @@ public class TreeStructure implements TestInterface {
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
 							.getClass().getName() }));
 		} finally {
-			try {
-				session.close();
-			} catch (DmtException e) {
-				tbc.fail(MessagesConstants.getMessage(
-						MessagesConstants.UNEXPECTED_EXCEPTION,
-						new String[] { e.getClass().getName() }));
-			}
+			tbc.closeSession(session);
 		}
 	}
 
 	/**
 	 * @testID testTreeStructure005
-	 * @testDescription Asserts if $/Policy/Java/LocationPermission/Default is a
-	 *                  valid node
-	 */
-	public void testTreeStructure005() {
-		tbc.log("#testTreeStructure005");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(PolicyTestControl.OSGI_ROOT,
-					DmtSession.LOCK_TYPE_SHARED);
-
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/Default is a valid node",
-							session
-									.isNodeUri(PolicyTestControl.DEFAULT_PERMISSION_NODE));
-
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/Default is a leaf node",
-							session
-									.isLeafNode(PolicyTestControl.DEFAULT_PERMISSION_NODE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-							.getClass().getName() }));
-		} finally {
-			try {
-				session.close();
-			} catch (DmtException e) {
-				tbc.fail(MessagesConstants.getMessage(
-						MessagesConstants.UNEXPECTED_EXCEPTION,
-						new String[] { e.getClass().getName() }));
-			}
-		}
-	}
-
-	/**
-	 * @testID testTreeStructure006
 	 * @testDescription Asserts if the correct permission is added in the
 	 *                  permission admin when setting permissions from DMT
 	 */
-	public void testTreeStructure006() {
-		tbc.log("#testTreeStructure006");
+	public void testTreeStructure005() {
+		tbc.log("#testTreeStructure005");
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
@@ -307,12 +257,12 @@ public class TreeStructure implements TestInterface {
 	}
 
 	/**
-	 * @testID testTreeStructure007
+	 * @testID testTreeStructure006
 	 * @testDescription Asserts if the correct permission is added in DMT when
 	 *                  setting permissions through permission admin service
 	 */
-	public void testTreeStructure007() {
-		tbc.log("#testTreeStructure007");
+	public void testTreeStructure006() {
+		tbc.log("#testTreeStructure006");
 		DmtSession session = null;
 		try {
 			PermissionInfo pInfo = new PermissionInfo(AdminPermission.class
@@ -326,14 +276,14 @@ public class TreeStructure implements TestInterface {
 					PolicyTestControl.LOCATION_PERMISSION_NODE,
 					DmtSession.LOCK_TYPE_SHARED);
 
-			session.close();
-
 			tbc
 					.assertEquals(
 							"Asserts if the correct permission is added in DMT when setting permissions through permission admin service",
 							pInfo.getEncoded(),
 							session
 									.getNodeValue(PolicyTestControl.TEST_NODE_PERMISSION));
+
+            session.close();
 
 			tbc.getPermissionAdmin().setPermissions(
 					PolicyTestControl.TEST_NODE, null);
@@ -355,12 +305,12 @@ public class TreeStructure implements TestInterface {
 	}
 
 	/**
-	 * @testID testTreeStructure008
-	 * @testDescription Asserts if the absence of aDefault node is equivalent to
+	 * @testID testTreeStructure007
+	 * @testDescription Asserts if the absence of a Default node is equivalent to
 	 *                  having All Permission as the default permission
 	 */
-	public void testTreeStructure008() {
-		tbc.log("#testTreeStructure008");
+	public void testTreeStructure007() {
+		tbc.log("#testTreeStructure007");
 		DmtSession session = null;
 		PermissionInfo info[] = null;
 		try {
@@ -373,7 +323,9 @@ public class TreeStructure implements TestInterface {
 					PolicyTestControl.LOCATION_PERMISSION_NODE,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
-			session.deleteNode(PolicyTestControl.DEFAULT_PERMISSION_NODE);
+            if(session.isNodeUri(PolicyTestControl.DEFAULT_PERMISSION_NODE)) {
+                session.deleteNode(PolicyTestControl.DEFAULT_PERMISSION_NODE);
+            }
 
 			session.close();
 
@@ -412,12 +364,12 @@ public class TreeStructure implements TestInterface {
 	}
 
 	/**
-	 * @testID testTreeStructure009
+	 * @testID testTreeStructure008
 	 * @testDescription Asserts that creating a Default node with an empty
 	 *                  string makes the default permissions empty
 	 */
-	public void testTreeStructure009() {
-		tbc.log("#testTreeStructure009");
+	public void testTreeStructure008() {
+		tbc.log("#testTreeStructure008");
 		DmtSession session = null;
 		PermissionInfo info[] = null;
 		try {
@@ -429,8 +381,10 @@ public class TreeStructure implements TestInterface {
 			session = tbc.getDmtAdmin().getSession(
 					PolicyTestControl.LOCATION_PERMISSION_NODE,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			session.setNodeValue("Default", new DmtData(""));
+			
+            if(!session.isNodeUri(PolicyTestControl.DEFAULT_PERMISSION_NODE)) {
+                session.createLeafNode(PolicyTestControl.DEFAULT_PERMISSION_NODE,new DmtData(""));
+            }
 
 			session.close();
 
@@ -467,44 +421,12 @@ public class TreeStructure implements TestInterface {
 	}
 
 	/**
-	 * @testID testTreeStructure010
-	 * @testDescription Asserts if the correct subtree is mounted when a
-	 *                  principal is added
-	 */
-	public void testTreeStructure010() {
-		tbc.log("#testTreeStructure010");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.PRINCIPAL_PERMISSION_NODE,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			session.createInteriorNode(PolicyTestControl.PRINCIPAL);
-
-			tbc.assertTrue("Asserts if Principal node was created", session
-					.isLeafNode(PolicyTestControl.PRINCIPAL_LOCATION));
-
-			tbc.assertTrue("Asserts if PermissionInfo node was created",
-					session.isLeafNode(PolicyTestControl.PRINCIPAL_PERMISSION));
-
-			session.close();
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-							.getClass().getName() }));
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-	/**
-	 * @testID testTreeStructure011
+	 * @testID testTreeStructure009
 	 * @testDescription Asserts if ConditionPermission is added in condtional
 	 *                  permission service when setting the permission in DMT
 	 */
-	public void testTreeStructure011() {
-		tbc.log("#testTreeStructure011");
+	public void testTreeStructure009() {
+		tbc.log("#testTreeStructure009");
 		DmtSession session = null;
 		try {
 			PermissionInfo pInfo1 = new PermissionInfo(ServicePermission.class
@@ -606,13 +528,13 @@ public class TreeStructure implements TestInterface {
 	}
 
 	/**
-	 * @testID testTreeStructure012
+	 * @testID testTreeStructure010
 	 * @testDescription Asserts if ConditionalPermission is added in DMT when
 	 *                  setting the permission through the conditional
 	 *                  permission service
 	 */
-	public void testTreeStructure012() {
-		tbc.log("#testTreeStructure012");
+	public void testTreeStructure010() {
+		tbc.log("#testTreeStructure010");
 		DmtSession session = null;
 		try {
 			PermissionInfo pInfo1 = new PermissionInfo(ServicePermission.class
@@ -685,6 +607,761 @@ public class TreeStructure implements TestInterface {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
 							.getClass().getName() }));
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+
+	/**
+	 * @testID testTreeStructure011
+	 * @testDescription Asserts $/Policy/Java/LocationPermission metanode
+	 */
+	public void testTreeStructure011() {
+		tbc.log("#testTreeStructure011");
+		DmtSession session = null;
+		try {
+			session = tbc.getDmtAdmin().getSession(
+					PolicyTestControl.POLICY_JAVA_NODE,
+					DmtSession.LOCK_TYPE_SHARED);
+
+			DmtMetaNode metaNode = session
+					.getMetaNode(PolicyTestControl.LOCATION_PERMISSION_NODE);
+
+			tbc.assertEquals(
+					"Asserts $/Policy/Java/LocationPermission metanode",
+					DmtMetaNode.PERMANENT, metaNode.getScope());
+
+			tbc.assertEquals(
+					"Asserts $/Policy/Java/LocationPermission metanode",
+					DmtData.FORMAT_NODE, metaNode.getFormat());
+
+			tbc.assertTrue("Asserts $/Policy/Java/LocationPermission metanode",
+					!metaNode.isZeroOccurrenceAllowed()
+							&& metaNode.getMaxOccurrence() == 1);
+
+			tbc.assertTrue("Asserts $/Policy/Java/LocationPermission metanode",
+					metaNode.can(DmtMetaNode.CMD_ADD));
+			tbc.assertTrue("Asserts $/Policy/Java/LocationPermission metanode",
+					!metaNode.can(DmtMetaNode.CMD_GET));
+			tbc.assertTrue("Asserts $/Policy/Java/LocationPermission metanode",
+					!metaNode.can(DmtMetaNode.CMD_REPLACE));
+			tbc.assertTrue("Asserts $/Policy/Java/LocationPermission metanode",
+					metaNode.can(DmtMetaNode.CMD_DELETE));
+			tbc.assertTrue("Asserts $/Policy/Java/LocationPermission metanode",
+					!metaNode.can(DmtMetaNode.CMD_EXECUTE));
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							DmtException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+
+	/**
+	 * @testID testTreeStructure012
+	 * @testDescription Asserts $/Policy/Java/LocationPermission/Default
+	 *                  metanode
+	 */
+	public void testTreeStructure012() {
+		tbc.log("#testTreeStructure012");
+		DmtSession session = null;
+		try {
+			session = tbc.getDmtAdmin().getSession(
+					PolicyTestControl.LOCATION_PERMISSION_NODE,
+					DmtSession.LOCK_TYPE_SHARED);
+
+            if(!session.isNodeUri(PolicyTestControl.DEFAULT_PERMISSION_NODE)) {
+                session.createLeafNode(PolicyTestControl.DEFAULT_PERMISSION_NODE,new DmtData(""));
+            }
+            
+			DmtMetaNode metaNode = session
+					.getMetaNode(PolicyTestControl.DEFAULT_PERMISSION_NODE);
+
+			tbc
+					.assertEquals(
+							"Asserts $/Policy/Java/LocationPermission/Default metanode",
+							DmtMetaNode.DYNAMIC, metaNode.getScope());
+
+			tbc
+					.assertEquals(
+							"Asserts $/Policy/Java/LocationPermission/Default metanode",
+							DmtData.FORMAT_STRING, metaNode.getFormat());
+
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/LocationPermission/Default metanode",
+							!metaNode.isZeroOccurrenceAllowed()
+									&& metaNode.getMaxOccurrence() == 1);
+
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/LocationPermission/Default metanode",
+							!metaNode.can(DmtMetaNode.CMD_ADD));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/LocationPermission/Default metanode",
+							metaNode.can(DmtMetaNode.CMD_GET));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/LocationPermission/Default metanode",
+							metaNode.can(DmtMetaNode.CMD_REPLACE));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/LocationPermission/Default metanode",
+							metaNode.can(DmtMetaNode.CMD_DELETE));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/LocationPermission/Default metanode",
+							!metaNode.can(DmtMetaNode.CMD_EXECUTE));
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							DmtException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+
+	/**
+	 * @testID testTreeStructure013
+	 * @testDescription Asserts $/Policy/Java/LocationPermission/ <location>
+	 *                  metanode
+	 */
+	public void testTreeStructure013() {
+		tbc.log("#testTreeStructure013");
+		DmtSession session = null;
+		try {
+			session = tbc.getDmtAdmin().getSession(
+					PolicyTestControl.LOCATION_PERMISSION_NODE,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+			session.createInteriorNode(PolicyTestControl.TEST_NODE);
+
+			DmtMetaNode metaNode = session
+					.getMetaNode(PolicyTestControl.TEST_NODE);
+
+			tbc
+					.assertEquals(
+							"Asserts $/Policy/Java/LocationPermission/<location> metanode",
+							DmtMetaNode.DYNAMIC, metaNode.getScope());
+
+			tbc
+					.assertEquals(
+							"Asserts $/Policy/Java/LocationPermission/<location> metanode",
+							DmtData.FORMAT_NODE, metaNode.getFormat());
+
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/LocationPermission/<location> metanode",
+							metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence() == Integer.MAX_VALUE);
+
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/LocationPermission/<location> metanode",
+							metaNode.can(DmtMetaNode.CMD_ADD));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/LocationPermission/<location> metanode",
+							metaNode.can(DmtMetaNode.CMD_GET));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/LocationPermission/<location> metanode",
+							!metaNode.can(DmtMetaNode.CMD_REPLACE));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/LocationPermission/<location> metanode",
+							!metaNode.can(DmtMetaNode.CMD_DELETE));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/LocationPermission/<location> metanode",
+							!metaNode.can(DmtMetaNode.CMD_EXECUTE));
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							DmtException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(session, new String[] { PolicyTestControl.TEST_NODE });
+		}
+	}
+
+	/**
+	 * @testID testTreeStructure014
+	 * @testDescription Asserts $/Policy/Java/LocationPermission/
+	 *                  <location>/PermissionInfo metanode
+	 */
+	public void testTreeStructure014() {
+		tbc.log("#testTreeStructure014");
+		DmtSession session = null;
+		try {
+			session = tbc.getDmtAdmin().getSession(
+					PolicyTestControl.LOCATION_PERMISSION_NODE,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+			session.createInteriorNode(PolicyTestControl.TEST_NODE);
+
+			session.createLeafNode(PolicyTestControl.TEST_NODE_PERMISSION);
+
+			DmtMetaNode metaNode = session
+					.getMetaNode(PolicyTestControl.TEST_NODE_PERMISSION);
+
+			tbc
+					.assertEquals(
+							"Asserts $/Policy/Java/LocationPermission/<location>/PermissionInfo metanode",
+							DmtMetaNode.DYNAMIC, metaNode.getScope());
+			tbc
+					.assertEquals(
+							"Asserts $/Policy/Java/LocationPermission/<location>/PermissionInfo metanode",
+							DmtData.FORMAT_STRING, metaNode.getFormat());
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/LocationPermission/<location>/PermissionInfo metanode",
+							!metaNode.isZeroOccurrenceAllowed()
+									&& metaNode.getMaxOccurrence() == 1);
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/LocationPermission/<location>/PermissionInfo metanode",
+							!metaNode.can(DmtMetaNode.CMD_ADD));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/LocationPermission/<location>/PermissionInfo metanode",
+							metaNode.can(DmtMetaNode.CMD_GET));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/LocationPermission/<location>/PermissionInfo metanode",
+							metaNode.can(DmtMetaNode.CMD_REPLACE));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/LocationPermission/<location>/PermissionInfo metanode",
+							metaNode.can(DmtMetaNode.CMD_DELETE));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/LocationPermission/<location>/PermissionInfo metanode",
+							!metaNode.can(DmtMetaNode.CMD_EXECUTE));
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							DmtException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(session, new String[] { PolicyTestControl.TEST_NODE });
+		}
+	}
+
+	/**
+	 * @testID testTreeStructure015
+	 * @testDescription Asserts $/Policy/Java/PrincipalPermission metanode
+	 */
+	public void testTreeStructure015() {
+		tbc.log("#testTreeStructure015");
+		DmtSession session = null;
+		try {
+			session = tbc.getDmtAdmin().getSession(
+					PolicyTestControl.POLICY_JAVA_NODE,
+					DmtSession.LOCK_TYPE_SHARED);
+
+			DmtMetaNode metaNode = session
+					.getMetaNode(PolicyTestControl.PRINCIPAL_PERMISSION_NODE);
+
+			tbc.assertEquals(
+					"Asserts $/Policy/Java/PrincipalPermission metanode",
+					DmtMetaNode.PERMANENT, metaNode.getScope());
+			tbc.assertEquals(
+					"Asserts $/Policy/Java/PrincipalPermission metanode",
+					DmtData.FORMAT_NODE, metaNode.getFormat());
+			tbc.assertTrue(
+					"Asserts $/Policy/Java/PrincipalPermission metanode",
+					!metaNode.isZeroOccurrenceAllowed()
+							&& metaNode.getMaxOccurrence() == 1);
+			tbc.assertTrue(
+					"Asserts $/Policy/Java/PrincipalPermission metanode",
+					!metaNode.can(DmtMetaNode.CMD_ADD));
+			tbc.assertTrue(
+					"Asserts $/Policy/Java/PrincipalPermission metanode",
+					!metaNode.can(DmtMetaNode.CMD_GET));
+			tbc.assertTrue(
+					"Asserts $/Policy/Java/PrincipalPermission metanode",
+					!metaNode.can(DmtMetaNode.CMD_REPLACE));
+			tbc.assertTrue(
+					"Asserts $/Policy/Java/PrincipalPermission metanode",
+					!metaNode.can(DmtMetaNode.CMD_DELETE));
+			tbc.assertTrue(
+					"Asserts $/Policy/Java/PrincipalPermission metanode",
+					!metaNode.can(DmtMetaNode.CMD_EXECUTE));
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							DmtException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+
+	/**
+	 * @testID testTreeStructure016
+	 * @testDescription Asserts $/Policy/Java/PrincipalPermission/ <principal>
+	 *                  metanode
+	 */
+	public void testTreeStructure016() {
+		tbc.log("#testTreeStructure016");
+		DmtSession session = null;
+		try {
+			session = tbc.getDmtAdmin().getSession(
+					PolicyTestControl.PRINCIPAL_PERMISSION_NODE,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+			session.createInteriorNode(PolicyTestControl.PRINCIPAL);
+
+			DmtMetaNode metaNode = session
+					.getMetaNode(PolicyTestControl.PRINCIPAL);
+
+			tbc
+					.assertEquals(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal> metanode",
+							DmtMetaNode.DYNAMIC, metaNode.getScope());
+			tbc
+					.assertEquals(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal> metanode",
+							DmtData.FORMAT_NODE, metaNode.getFormat());
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal> metanode",
+							metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence() == Integer.MAX_VALUE);
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal> metanode",
+							metaNode.can(DmtMetaNode.CMD_ADD));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal> metanode",
+							!metaNode.can(DmtMetaNode.CMD_GET));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal> metanode",
+							!metaNode.can(DmtMetaNode.CMD_REPLACE));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal> metanode",
+							metaNode.can(DmtMetaNode.CMD_DELETE));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal> metanode",
+							!metaNode.can(DmtMetaNode.CMD_EXECUTE));
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							DmtException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(session, new String[] { PolicyTestControl.PRINCIPAL });
+		}
+	}
+
+	/**
+	 * @testID testTreeStructure017
+	 * @testDescription Asserts $/Policy/Java/PrincipalPermission/
+	 *                  <principal>/Principal metanode
+	 */
+	public void testTreeStructure017() {
+		tbc.log("#testTreeStructure017");
+		DmtSession session = null;
+		try {
+			session = tbc.getDmtAdmin().getSession(
+					PolicyTestControl.PRINCIPAL_PERMISSION_NODE,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+			session.createInteriorNode(PolicyTestControl.PRINCIPAL);
+
+			session.createLeafNode(PolicyTestControl.PRINCIPAL_LOCATION);
+
+			DmtMetaNode metaNode = session
+					.getMetaNode(PolicyTestControl.PRINCIPAL_LOCATION);
+
+			tbc
+					.assertEquals(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal>/Principal metanode",
+							DmtMetaNode.DYNAMIC, metaNode.getScope());
+			tbc
+					.assertEquals(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal>/Principal metanode",
+							DmtData.FORMAT_STRING, metaNode.getFormat());
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal>/Principal metanode",
+							!metaNode.isZeroOccurrenceAllowed()
+									&& metaNode.getMaxOccurrence() == 1);
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal>/Principal metanode",
+							metaNode.can(DmtMetaNode.CMD_ADD));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal>/Principal metanode",
+							!metaNode.can(DmtMetaNode.CMD_GET));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal>/Principal metanode",
+							!metaNode.can(DmtMetaNode.CMD_REPLACE));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal>/Principal metanode",
+							!metaNode.can(DmtMetaNode.CMD_DELETE));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal>/Principal metanode",
+							!metaNode.can(DmtMetaNode.CMD_EXECUTE));
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							DmtException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(session, new String[] { PolicyTestControl.PRINCIPAL });
+		}
+	}
+
+	/**
+	 * @testID testTreeStructure018
+	 * @testDescription Asserts $/Policy/Java/PrincipalPermission/
+	 *                  <principal>/PermissionInfo metanode
+	 */
+	public void testTreeStructure018() {
+		tbc.log("#testTreeStructure018");
+		DmtSession session = null;
+		try {
+			session = tbc.getDmtAdmin().getSession(
+					PolicyTestControl.PRINCIPAL_PERMISSION_NODE,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+			session.createInteriorNode(PolicyTestControl.PRINCIPAL);
+
+			session.createLeafNode(PolicyTestControl.PRINCIPAL_PERMISSION);
+
+			DmtMetaNode metaNode = session
+					.getMetaNode(PolicyTestControl.PRINCIPAL_PERMISSION);
+
+			tbc
+					.assertEquals(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal>/PermissionInfo metanode",
+							DmtMetaNode.DYNAMIC, metaNode.getScope());
+			tbc
+					.assertEquals(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal>/PermissionInfo metanode",
+							DmtData.FORMAT_STRING, metaNode.getFormat());
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal>/PermissionInfo metanode",
+							!metaNode.isZeroOccurrenceAllowed()
+									&& metaNode.getMaxOccurrence() == 1);
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal>/PermissionInfo metanode",
+							!metaNode.can(DmtMetaNode.CMD_ADD));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal>/PermissionInfo metanode",
+							metaNode.can(DmtMetaNode.CMD_GET));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal>/PermissionInfo metanode",
+							metaNode.can(DmtMetaNode.CMD_REPLACE));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal>/PermissionInfo metanode",
+							metaNode.can(DmtMetaNode.CMD_DELETE));
+			tbc
+					.assertTrue(
+							"Asserts $/Policy/Java/PrincipalPermission/<principal>/PermissionInfo metanode",
+							!metaNode.can(DmtMetaNode.CMD_EXECUTE));
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							DmtException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(session, new String[] { PolicyTestControl.PRINCIPAL });
+		}
+	}
+
+	/**
+	 * @testID testTreeStructure019
+	 * @testDescription Asserts $/Policy/Java/ConditionalPermission metanode
+	 */
+	public void testTreeStructure019() {
+		tbc.log("#testTreeStructure019");
+		DmtSession session = null;
+		try {
+			session = tbc.getDmtAdmin().getSession(
+					PolicyTestControl.POLICY_JAVA_NODE,
+					DmtSession.LOCK_TYPE_SHARED);
+
+
+				DmtMetaNode metaNode = session
+						.getMetaNode(PolicyTestControl.CONDITIONAL_PERMISSION_NODE);
+
+				tbc.assertEquals(
+						"Asserts $/Policy/Java/ConditionalPermission metanode",
+						DmtMetaNode.PERMANENT, metaNode.getScope());
+				tbc.assertEquals(
+						"Asserts $/Policy/Java/ConditionalPermission metanode",
+						DmtData.FORMAT_NODE, metaNode.getFormat());
+				tbc.assertTrue(
+						"Asserts $/Policy/Java/ConditionalPermission metanode",
+						metaNode.isZeroOccurrenceAllowed()
+								&& metaNode.getMaxOccurrence() == 1);
+				tbc.assertTrue(
+						"Asserts $/Policy/Java/ConditionalPermission metanode",
+						!metaNode.can(DmtMetaNode.CMD_ADD));
+				tbc.assertTrue(
+						"Asserts $/Policy/Java/ConditionalPermission metanode",
+						!metaNode.can(DmtMetaNode.CMD_GET));
+				tbc.assertTrue(
+						"Asserts $/Policy/Java/ConditionalPermission metanode",
+						!metaNode.can(DmtMetaNode.CMD_REPLACE));
+				tbc.assertTrue(
+						"Asserts $/Policy/Java/ConditionalPermission metanode",
+						!metaNode.can(DmtMetaNode.CMD_DELETE));
+				tbc.assertTrue(
+						"Asserts $/Policy/Java/ConditionalPermission metanode",
+						!metaNode.can(DmtMetaNode.CMD_EXECUTE));
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							DmtException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+
+	/**
+	 * @testID testTreeStructure020
+	 * @testDescription Asserts $/Policy/Java/ConditionalPermission/ <hash>
+	 *                  metanode
+	 */
+	public void testTreeStructure020() {
+		tbc.log("#testTreeStructure020");
+		DmtSession session = null;
+		try {
+			session = tbc.getDmtAdmin().getSession(
+					PolicyTestControl.POLICY_JAVA_NODE,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+
+				session
+						.createInteriorNode(PolicyTestControl.CONDITIONAL_PERMISSION_NODE
+								+ "/" + PolicyTestControl.CONDITION_HASH);
+
+				DmtMetaNode metaNode = session
+						.getMetaNode(PolicyTestControl.CONDITIONAL_PERMISSION_NODE
+								+ "/" + PolicyTestControl.CONDITION_HASH);
+
+				tbc
+						.assertEquals(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash> metanode",
+								DmtMetaNode.DYNAMIC, metaNode.getScope());
+				tbc
+						.assertEquals(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash> metanode",
+								DmtData.FORMAT_NODE, metaNode.getFormat());
+				tbc
+						.assertTrue(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash> metanode",
+								metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence() == Integer.MAX_VALUE);
+				tbc
+						.assertTrue(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash> metanode",
+								metaNode.can(DmtMetaNode.CMD_ADD));
+				tbc
+						.assertTrue(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash> metanode",
+								!metaNode.can(DmtMetaNode.CMD_GET));
+				tbc
+						.assertTrue(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash> metanode",
+								!metaNode.can(DmtMetaNode.CMD_REPLACE));
+				tbc
+						.assertTrue(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash> metanode",
+								metaNode.can(DmtMetaNode.CMD_DELETE));
+				tbc
+						.assertTrue(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash> metanode",
+								!metaNode.can(DmtMetaNode.CMD_EXECUTE));
+
+				tbc
+						.cleanUp(
+								session,
+								new String[] { PolicyTestControl.CONDITIONAL_PERMISSION_NODE
+										+ "/"
+										+ PolicyTestControl.CONDITION_HASH });
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							DmtException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+
+	/**
+	 * @testID testTreeStructure021
+	 * @testDescription Asserts $/Policy/Java/ConditionalPermission/
+	 *                  <hash>/ConditionInfo metanode
+	 */
+	public void testTreeStructure021() {
+		tbc.log("#testTreeStructure021");
+		DmtSession session = null;
+		try {
+			session = tbc.getDmtAdmin().getSession(
+					PolicyTestControl.POLICY_JAVA_NODE,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+				session
+						.createInteriorNode(PolicyTestControl.CONDITIONAL_PERMISSION_NODE
+								+ "/" + PolicyTestControl.CONDITION_HASH);
+
+				DmtMetaNode metaNode = session
+						.getMetaNode(PolicyTestControl.CONDITIONAL_PERMISSION_NODE
+								+ "/"
+								+ PolicyTestControl.CONDITIONAL_CONDITIONINFO);
+
+				tbc
+						.assertEquals(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo metanode",
+								DmtMetaNode.DYNAMIC, metaNode.getScope());
+				tbc
+						.assertEquals(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo metanode",
+								DmtData.FORMAT_STRING, metaNode.getFormat());
+				tbc
+						.assertTrue(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo metanode",
+								!metaNode.isZeroOccurrenceAllowed()
+										&& metaNode.getMaxOccurrence() == 1);
+				tbc
+						.assertTrue(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo metanode",
+								metaNode.can(DmtMetaNode.CMD_ADD));
+				tbc
+						.assertTrue(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo metanode",
+								metaNode.can(DmtMetaNode.CMD_GET));
+				tbc
+						.assertTrue(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo metanode",
+								metaNode.can(DmtMetaNode.CMD_REPLACE));
+				tbc
+						.assertTrue(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo metanode",
+								metaNode.can(DmtMetaNode.CMD_DELETE));
+				tbc
+						.assertTrue(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo metanode",
+								!metaNode.can(DmtMetaNode.CMD_EXECUTE));
+
+				tbc
+						.cleanUp(
+								session,
+								new String[] { PolicyTestControl.CONDITIONAL_PERMISSION_NODE
+										+ "/"
+										+ PolicyTestControl.CONDITION_HASH });
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							DmtException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+
+	/**
+	 * @testID testTreeStructure022
+	 * @testDescription Asserts $/Policy/Java/ConditionalPermission/
+	 *                  <hash>/PermissionInfo metanode
+	 */
+	public void testTreeStructure022() {
+		tbc.log("#testTreeStructure022");
+		DmtSession session = null;
+		try {
+			session = tbc.getDmtAdmin().getSession(
+					PolicyTestControl.POLICY_JAVA_NODE,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+
+				session
+						.createInteriorNode(PolicyTestControl.CONDITIONAL_PERMISSION_NODE
+								+ "/" + PolicyTestControl.CONDITION_HASH);
+
+
+				DmtMetaNode metaNode = session
+						.getMetaNode(PolicyTestControl.CONDITIONAL_PERMISSION_NODE
+								+ "/"
+								+ PolicyTestControl.CONDITIONAL_PERMISSIONINFO);
+
+				tbc
+						.assertEquals(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo metanode",
+								DmtMetaNode.DYNAMIC, metaNode.getScope());
+				tbc
+						.assertEquals(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo metanode",
+								DmtData.FORMAT_STRING, metaNode.getFormat());
+				tbc
+						.assertTrue(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo metanode",
+								!metaNode.isZeroOccurrenceAllowed()
+										&& metaNode.getMaxOccurrence() == 1);
+				tbc
+						.assertTrue(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo metanode",
+								!metaNode.can(DmtMetaNode.CMD_ADD));
+				tbc
+						.assertTrue(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo metanode",
+								metaNode.can(DmtMetaNode.CMD_GET));
+				tbc
+						.assertTrue(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo metanode",
+								metaNode.can(DmtMetaNode.CMD_REPLACE));
+				tbc
+						.assertTrue(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo metanode",
+								metaNode.can(DmtMetaNode.CMD_DELETE));
+				tbc
+						.assertTrue(
+								"Asserts $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo metanode",
+								!metaNode.can(DmtMetaNode.CMD_EXECUTE));
+
+				tbc
+						.cleanUp(
+								session,
+								new String[] { PolicyTestControl.CONDITIONAL_PERMISSION_NODE
+										+ "/"
+										+ PolicyTestControl.CONDITION_HASH });
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							DmtException.class.getName(),
+							e.getClass().getName() }));
 		} finally {
 			tbc.closeSession(session);
 		}
