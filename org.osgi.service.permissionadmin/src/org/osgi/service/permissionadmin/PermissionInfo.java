@@ -87,62 +87,89 @@ public class PermissionInfo {
 		}
 		try {
 			char[] encoded = encodedPermission.toCharArray();
+			int length = encoded.length;
+			int pos = 0;
+			
+			/* skip whitespace */
+			while (Character.isWhitespace(encoded[pos])) {
+				pos++;
+			}
+			
 			/* the first character must be '(' */
-			if (encoded[0] != '(') {
+			if (encoded[pos] != '(') {
 				throw new IllegalArgumentException(
-						"first character not open parenthesis");
+						"expecting open parenthesis");
 			}
+			pos++;
+
+			/* skip whitespace */
+			while (Character.isWhitespace(encoded[pos])) {
+				pos++;
+			}
+			
 			/* type is not quoted or encoded */
-			int end = 1;
-			int begin = end;
-			while ((encoded[end] != ' ') && (encoded[end] != ')')) {
-				end++;
+			int begin = pos;
+			while (!Character.isWhitespace(encoded[pos]) && (encoded[pos] != ')')) {
+				pos++;
 			}
-			if (end == begin) {
+			if (pos == begin) {
 				throw new IllegalArgumentException("expecting type");
 			}
-			this.type = new String(encoded, begin, end - begin);
+			this.type = new String(encoded, begin, pos - begin);
+			
+			/* skip whitespace */
+			while (Character.isWhitespace(encoded[pos])) {
+				pos++;
+			}
+			
 			/* type may be followed by name which is quoted and encoded */
-			// TODO Need to support multiple spaces
-			if (encoded[end] == ' ') {
-				end++;
-				if (encoded[end] != '"') {
-					throw new IllegalArgumentException("expecting quoted name");
-				}
-				end++;
-				begin = end;
-				while (encoded[end] != '"') {
-					if (encoded[end] == '\\') {
-						end++;
+			if (encoded[pos] == '"') {
+				pos++;
+				begin = pos;
+				while (encoded[pos] != '"') {
+					if (encoded[pos] == '\\') {
+						pos++;
 					}
-					end++;
+					pos++;
 				}
-				this.name = unescapeString(encoded, begin, end);
-				end++;
-				/* name may be followed by actions which is quoted and encoded */
-				// TODO Need to support multiple spaces
-				if (encoded[end] == ' ') {
-					end++;
-					if (encoded[end] != '"') {
-						throw new IllegalArgumentException(
-								"expecting quoted actions");
+				this.name = unescapeString(encoded, begin, pos);
+				pos++;
+
+				if (Character.isWhitespace(encoded[pos])) {
+					/* skip whitespace */
+					while (Character.isWhitespace(encoded[pos])) {
+						pos++;
 					}
-					end++;
-					begin = end;
-					while (encoded[end] != '"') {
-						if (encoded[end] == '\\') {
-							end++;
+					
+					/* name may be followed by actions which is quoted and encoded */
+					if (encoded[pos] == '"') {
+						pos++;
+						begin = pos;
+						while (encoded[pos] != '"') {
+							if (encoded[pos] == '\\') {
+								pos++;
+							}
+							pos++;
 						}
-						end++;
+						this.actions = unescapeString(encoded, begin, pos);
+						pos++;
+
+						/* skip whitespace */
+						while (Character.isWhitespace(encoded[pos])) {
+							pos++;
+						}
 					}
-					this.actions = unescapeString(encoded, begin, end);
-					end++;
 				}
 			}
+			
 			/* the final character must be ')' */
-			if ((encoded[end] != ')') || (end + 1 != encoded.length)) {
-				throw new IllegalArgumentException("last character not "
-						+ "close parenthesis");
+			char c = encoded[pos];
+			pos++;
+			while ((pos < length) && Character.isWhitespace(encoded[pos])) {
+				pos++;
+			}
+			if ((c != ')') || (pos != length)) {
+				throw new IllegalArgumentException("expecting close parenthesis");
 			}
 		}
 		catch (ArrayIndexOutOfBoundsException e) {
@@ -179,8 +206,8 @@ public class PermissionInfo {
 	 * <code>\\</code>,<code>\r</code>, and <code>\n</code>, respectively.
 	 * 
 	 * <p>
-	 * The encoded string must contain no leading or trailing whitespace
-	 * characters. A single space character must be used between <i>type</i> and 
+	 * The encoded string contains no leading or trailing whitespace
+	 * characters. A single space character is used between <i>type</i> and 
 	 * &quot;<i>name</i>&quot; and between &quot;<i>name</i>&quot; and &quot;<i>actions</i>&quot;.
 	 * 
 	 * @return The string encoding of this <code>PermissionInfo</code>.
@@ -344,13 +371,21 @@ public class PermissionInfo {
 				i++;
 				if (i < end) {
 					c = str[i];
-					if (c == 'n') {
-						c = '\n';
-					}
-					else
-						if (c == 'r') {
+					switch (c) {
+						case '"' :
+						case '\\' :
+							break;
+						case 'r' :
 							c = '\r';
-						}
+							break;
+						case 'n' :
+							c = '\n';
+							break;
+						default :
+							c = '\\';
+							i--;
+							break;
+					}
 				}
 			}
 			output.append(c);
