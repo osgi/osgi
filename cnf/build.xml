@@ -101,7 +101,7 @@
 
 		<expand propertyFile="${workspace}/cnf/global.properties"/>
 		<expand propertyFile="${project}/build.properties"/>
-		<expand propertyFile="${env.HOME}/osgi.properties"/>
+		<property file="${env.HOME}/osgi.properties"/>
 		<expand propertyFile="${workspace}/cnf/build.properties"/>
 		
 		<property name="prebuild" value="" />
