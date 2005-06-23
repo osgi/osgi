@@ -2,7 +2,11 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this
+ * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
 package java.lang;
@@ -25,6 +29,7 @@ public final class Long extends java.lang.Number implements java.lang.Comparable
 	public static java.lang.String toHexString(long var0) { return null; }
 	public java.lang.String toString() { return null; }
 	public static java.lang.String toString(long var0) { return null; }
+	public static java.lang.String toString(long var0, int var1) { return null; }
 	public static java.lang.Long valueOf(java.lang.String var0, int var1) throws java.lang.NumberFormatException { return null; }
 	public final static long MAX_VALUE = 9223372036854775807l;
 	public final static long MIN_VALUE = -9223372036854775808l;

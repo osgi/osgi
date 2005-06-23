@@ -2,12 +2,17 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this
+ * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
 package java.util;
 public abstract class Calendar implements java.io.Serializable, java.lang.Cloneable {
 	protected Calendar() { }
+	protected Calendar(java.util.TimeZone var0, java.util.Locale var1) { }
 	public abstract void add(int var0, int var1);
 	public boolean after(java.lang.Object var0) { return false; }
 	public boolean before(java.lang.Object var0) { return false; }
@@ -19,9 +24,12 @@ public abstract class Calendar implements java.io.Serializable, java.lang.Clonea
 	protected abstract void computeTime();
 	public boolean equals(java.lang.Object var0) { return false; }
 	public final int get(int var0) { return 0; }
+	public static java.util.Locale[] getAvailableLocales() { return null; }
 	public int getFirstDayOfWeek() { return 0; }
 	public static java.util.Calendar getInstance() { return null; }
+	public static java.util.Calendar getInstance(java.util.Locale var0) { return null; }
 	public static java.util.Calendar getInstance(java.util.TimeZone var0) { return null; }
+	public static java.util.Calendar getInstance(java.util.TimeZone var0, java.util.Locale var1) { return null; }
 	public int getMinimalDaysInFirstWeek() { return 0; }
 	public final java.util.Date getTime() { return null; }
 	protected long getTimeInMillis() { return 0l; }

@@ -2,7 +2,11 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this
+ * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
 package java.util;
@@ -11,7 +15,9 @@ public class GregorianCalendar extends java.util.Calendar {
 	public GregorianCalendar(int var0, int var1, int var2) { }
 	public GregorianCalendar(int var0, int var1, int var2, int var3, int var4) { }
 	public GregorianCalendar(int var0, int var1, int var2, int var3, int var4, int var5) { }
+	public GregorianCalendar(java.util.Locale var0) { }
 	public GregorianCalendar(java.util.TimeZone var0) { }
+	public GregorianCalendar(java.util.TimeZone var0, java.util.Locale var1) { }
 	public void add(int var0, int var1) { }
 	protected void computeFields() { }
 	protected void computeTime() { }

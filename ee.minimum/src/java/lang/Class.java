@@ -2,7 +2,11 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this
+ * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
 package java.lang;
@@ -32,6 +36,7 @@ public final class Class implements java.io.Serializable {
 	public java.security.ProtectionDomain getProtectionDomain() { return null; }
 	public java.net.URL getResource(java.lang.String var0) { return null; }
 	public java.io.InputStream getResourceAsStream(java.lang.String var0) { return null; }
+	public java.lang.Object[] getSigners() { return null; }
 	public java.lang.Class getSuperclass() { return null; }
 	public boolean isArray() { return false; }
 	public boolean isAssignableFrom(java.lang.Class var0) { return false; }

@@ -2,7 +2,11 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this
+ * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
 package java.util;
@@ -11,8 +15,21 @@ public final class Locale implements java.lang.Cloneable, java.io.Serializable {
 	public Locale(java.lang.String var0, java.lang.String var1, java.lang.String var2) { }
 	public java.lang.Object clone() { return null; }
 	public boolean equals(java.lang.Object var0) { return false; }
+	public static java.util.Locale[] getAvailableLocales() { return null; }
 	public java.lang.String getCountry() { return null; }
 	public static java.util.Locale getDefault() { return null; }
+	public final java.lang.String getDisplayCountry() { return null; }
+	public java.lang.String getDisplayCountry(java.util.Locale var0) { return null; }
+	public final java.lang.String getDisplayLanguage() { return null; }
+	public java.lang.String getDisplayLanguage(java.util.Locale var0) { return null; }
+	public final java.lang.String getDisplayName() { return null; }
+	public java.lang.String getDisplayName(java.util.Locale var0) { return null; }
+	public final java.lang.String getDisplayVariant() { return null; }
+	public java.lang.String getDisplayVariant(java.util.Locale var0) { return null; }
+	public java.lang.String getISO3Country() throws java.util.MissingResourceException { return null; }
+	public java.lang.String getISO3Language() throws java.util.MissingResourceException { return null; }
+	public static java.lang.String[] getISOCountries() { return null; }
+	public static java.lang.String[] getISOLanguages() { return null; }
 	public java.lang.String getLanguage() { return null; }
 	public java.lang.String getVariant() { return null; }
 	public int hashCode() { return 0; }

@@ -2,7 +2,11 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this
+ * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
 package java.lang;
@@ -18,7 +22,9 @@ public final class Double extends java.lang.Number implements java.lang.Comparab
 	public float floatValue() { return 0.0f; }
 	public int hashCode() { return 0; }
 	public int intValue() { return 0; }
+	public boolean isInfinite() { return false; }
 	public static boolean isInfinite(double var0) { return false; }
+	public boolean isNaN() { return false; }
 	public static boolean isNaN(double var0) { return false; }
 	public static double longBitsToDouble(long var0) { return 0.0d; }
 	public long longValue() { return 0l; }

@@ -2,7 +2,11 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this
+ * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
 package java.lang;
@@ -15,6 +19,7 @@ public final class String implements java.io.Serializable, java.lang.Comparable 
 	public String(char[] var0) { }
 	public String(char[] var0, int var1, int var2) { }
 	public String(java.lang.String var0) { }
+	public String(java.lang.StringBuffer var0) { }
 	public char charAt(int var0) { return 0; }
 	public int compareTo(java.lang.Object var0) { return 0; }
 	public int compareTo(java.lang.String var0) { return 0; }
@@ -46,9 +51,13 @@ public final class String implements java.io.Serializable, java.lang.Comparable 
 	public java.lang.String substring(int var0, int var1) { return null; }
 	public char[] toCharArray() { return null; }
 	public java.lang.String toLowerCase() { return null; }
+	public java.lang.String toLowerCase(java.util.Locale var0) { return null; }
 	public java.lang.String toString() { return null; }
 	public java.lang.String toUpperCase() { return null; }
+	public java.lang.String toUpperCase(java.util.Locale var0) { return null; }
 	public java.lang.String trim() { return null; }
+	public static java.lang.String valueOf(char[] var0) { return null; }
+	public static java.lang.String valueOf(char[] var0, int var1, int var2) { return null; }
 	public static java.lang.String valueOf(char var0) { return null; }
 	public static java.lang.String valueOf(double var0) { return null; }
 	public static java.lang.String valueOf(float var0) { return null; }

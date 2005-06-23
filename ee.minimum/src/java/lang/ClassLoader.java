@@ -2,7 +2,11 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this
+ * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
 package java.lang;
@@ -28,5 +32,6 @@ public abstract class ClassLoader {
 	protected java.net.URL findResource(java.lang.String var0) { return null; }
 	protected java.util.Enumeration findResources(java.lang.String var0) throws java.io.IOException { return null; }
 	protected java.lang.String findLibrary(java.lang.String var0) { return null; }
+	protected final void setSigners(java.lang.Class var0, java.lang.Object[] var1) { }
 }
 

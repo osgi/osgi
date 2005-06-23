@@ -1,11 +1,12 @@
 Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
 Bundle-Name: Minimum-EE
 Bundle-Description: Contains the OSGi minimum execution environment stubbed classes and sources
-Bundle-Version: 1.0
+Bundle-SymbolicName: org.osgi.ee.minimum
+Bundle-Version: 1.1
 Bundle-Vendor: OSGi Alliance
-Bundle-Copyright: Copyrights (c) OSGi Alliance (2002). All rights reserved.
+Bundle-Copyright: Copyrights (c) OSGi Alliance (2001, 2005). All rights reserved.
 Bundle-DocURL: www.osgi.org
 Bundle-Address: speccomments@mail.osgi.org
-Bundle-RequiredExecutionEnvironment: OSGi/Minimum-1.0
+Bundle-RequiredExecutionEnvironment: OSGi/Minimum-1.1
 CVS-Header: $Header$
-$(PRIVATE-PACKAGE)
