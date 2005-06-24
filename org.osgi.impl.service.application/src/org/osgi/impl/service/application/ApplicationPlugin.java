@@ -523,6 +523,9 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 				case DmtData.FORMAT_INTEGER:
 					args.put( argKey, new Integer( argValue.getInt() ) );
 					break;
+				case DmtData.FORMAT_FLOAT:
+					args.put( argKey, new Float( argValue.getInt() ) );
+					break;
 				case DmtData.FORMAT_STRING:
 				case DmtData.FORMAT_XML:
 					args.put( argKey, argValue.getString() );
@@ -625,22 +628,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 	}
 
 	public int getNodeSize(String nodeUri) throws DmtException {
-		DmtData nodeValue = getNodeValue( nodeUri );
-		
-		switch( nodeValue.getFormat() )
-		{
-		case DmtData.FORMAT_BINARY:
-			return nodeValue.getBinary().length;
-		case DmtData.FORMAT_BOOLEAN:
-			return 1;
-		case DmtData.FORMAT_INTEGER:
-			return 4;
-		case DmtData.FORMAT_STRING:
-		case DmtData.FORMAT_XML:
-			return nodeValue.getString().length();
-		default:
-			return 0;
-		}
+		return getNodeValue( nodeUri ).getSize();
 	}
 
 	public void deleteNode(String nodeUri) throws DmtException {
