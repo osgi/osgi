@@ -97,7 +97,9 @@ public class MonitorPlugin implements DmtDataPlugin
 
             if(path[2].equals("Results"))
                 return new MonitorMetaNodeImpl("Current value of the Performance Indicator.",
-                                               false, false, null, null, DmtData.FORMAT_XML);
+                                               false, false, null, null, 
+                                               DmtData.FORMAT_STRING | DmtData.FORMAT_BOOLEAN |
+                                               DmtData.FORMAT_INTEGER | DmtData.FORMAT_FLOAT);
 
             if(path[2].equals("Server"))
                 return new MonitorMetaNodeImpl("Root node for server monitoring requests.", 
@@ -503,7 +505,7 @@ public class MonitorPlugin implements DmtDataPlugin
 
             // path[2].equals("Results")
 
-            return new DmtData(MonitorAdminImpl.createXml(realVar), true);
+            return MonitorAdminImpl.createData(realVar);
         }
 
         // path.length > 4, path[2].equals("Server")
@@ -538,7 +540,7 @@ public class MonitorPlugin implements DmtDataPlugin
         throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED, "Title property not supported.");
     }
 
-    // TODO return DDF location for root, and maybe text/xml for "Results"
+    // TODO return DDF location for root
     public String getNodeType(String nodeUri) throws DmtException {
         return isLeafNode(nodeUri) ? "text/plain" : null;
     }
@@ -570,7 +572,7 @@ public class MonitorPlugin implements DmtDataPlugin
 
             // path[2].equals("Results")
 
-            return MonitorAdminImpl.createXml(realVar).length();
+            return MonitorAdminImpl.createData(realVar).getSize();
         }
 
         // path.length > 4, path[2].equals("Server")
@@ -789,7 +791,7 @@ class Server {
     private String serverId;
     private boolean enabled;
     private String type;
-    private int value;          // should be 'long' to store unsigned int
+    private int value;
     private Hashtable trapRef;
 
     private MonitorAdminImpl monitorAdmin;
