@@ -28,7 +28,7 @@ package org.osgi.service.monitor;
  * is guaranteed that only those <code>Monitorable</code> services will be
  * accessed who are authorized to publish <code>StatusVariable</code>s. It is
  * the responsibility of the <code>MonitorAdmin</code> implementation to check
- * the required permissions and show only those services which pass this check.
+ * the required permissions and show only those variables which pass this check.
  * <p>
  * The events posted by <code>MonitorAdmin</code> contain the following
  * properties:
@@ -75,84 +75,80 @@ public interface MonitorAdmin {
 
     /**
      * Returns the names of the <code>Monitorable</code> services that are
-     * currently registered. The returned array contains the names in
-     * alphabetical order. For security reasons this method should be used
-     * instead of querying the monitorable services from the service registry.
-     * The <code>Monitorable</code> instances are not accessible through the
-     * <code>MonitorAdmin</code>.
+     * currently registered. The <code>Monitorable</code> instances are not
+     * accessible through the <code>MonitorAdmin</code>, so that requests to
+     * individual status variables can be filtered with respect to the
+     * publishing rights of the <code>Monitorable</code> and the reading
+     * rights of the caller.
      * <p>
-     * The returned array cannot be <code>null</code>, an empty array is
-     * returned if no <code>Monitorable</code> services are registered.
+     * The returned array contains the names in alphabetical order. It cannot be
+     * <code>null</code>, an empty array is returned if no
+     * <code>Monitorable</code> services are registered.
      * 
      * @return the array of <code>Monitorable</code> names
-     * @throws java.lang.SecurityException if the caller does not hold a
-     *         <code>MonitorPermission</code> with the <code>discover</code>
-     *         action present. The target field must be "&#42;/*".
      */
-    public String[] getMonitorableNames()
-            throws SecurityException;
+    public String[] getMonitorableNames();
 
     /**
-     * Returns all the <code>StatusVariable</code> objects published by a
+     * Returns the <code>StatusVariable</code> objects published by a
      * <code>Monitorable</code> instance. The <code>StatusVariables</code>
-     * will hold the values taken at the time of this method call. The array
-     * contains the elements in no particular order.
+     * will hold the values taken at the time of this method call. Only those
+     * status variables are returned where the following two conditions are met:
+     * <ul>
+     * <li>the specified <code>Monitorable</code> holds a
+     * <code>MonitorPermission</code> for the status variable with the
+     * <code>publish</code> action present
+     * <li>the caller holds a <code>MonitorPermission</code> for the status
+     * variable with the <code>read</code> action present
+     * </ul>
+     * All other status variables are silently ignored, they are omitted from
+     * the result.
      * <p>
-     * The entity which queries the <code>StatusVariable</code> list needs to
-     * hold <code>MonitorPermission</code> with the <code>read</code> action
-     * present. The target field of the permission must match all the
-     * <code>StatusVariable</code>s published by the <code>Monitorable</code>,
-     * e.g. it may be <code>[Monitorable_ID]/*</code>.
-     * <p>
-     * The returned array cannot be <code>null</code>, an empty array is
-     * returned if no Status Variables are provided by the given
+     * The returned array contains the elements in no particular order. It
+     * cannot be <code>null</code>, an empty array is returned if no
+     * (authorized and readable) Status Variables are provided by the given
      * <code>Monitorable</code>.
      * 
-     * @param monitorableId The identifier of a <code>Monitorable</code>
+     * @param monitorableId the identifier of a <code>Monitorable</code>
      *        instance
-     * @return the <code>StatusVariable</code> objects published by the
-     *         specified <code>Monitorable</code>
-     * @throws java.lang.SecurityException if the caller does not hold
-     *         <code>MonitorPermission</code> with the <code>read</code>
-     *         action or if there is any <code>StatusVariable</code> published
-     *         by the <code>Monitorable</code> which is not allowed to be read
-     *         as per the target field of the permission
-     * @throws java.lang.IllegalArgumentException if <code>monitorableId</code> 
-     *         is <code>null</code> or otherwise invalid, or points to a 
+     * @return a list of <code>StatusVariable</code> objects published
+     *         by the specified <code>Monitorable</code>
+     * @throws java.lang.IllegalArgumentException if <code>monitorableId</code>
+     *         is <code>null</code> or otherwise invalid, or points to a
      *         non-existing <code>Monitorable</code>
      */
     public StatusVariable[] getStatusVariables(String monitorableId)
-            throws IllegalArgumentException, SecurityException;
+            throws IllegalArgumentException;
 
     /**
      * Returns the list of <code>StatusVariable</code> names published by a
-     * <code>Monitorable</code> instance. The array contains the elements in
-     * alphabetical order.
+     * <code>Monitorable</code> instance. Only those status variables are
+     * listed where the following two conditions are met:
+     * <ul>
+     * <li>the specified <code>Monitorable</code> holds a
+     * <code>MonitorPermission</code> for the status variable with the
+     * <code>publish</code> action present
+     * <li>the caller holds a <code>MonitorPermission</code> for
+     * the status variable with the <code>read</code> action present
+     * </ul>
+     * All other status variables are silently ignored, their names are omitted
+     * from the list.
      * <p>
-     * The entity which queries the <code>StatusVariable</code> list needs to
-     * hold <code>MonitorPermission</code> with the <code>discover</code>
-     * action present. The target field of the permission must match the
-     * identifier of the <code>Monitorable</code> service.
-     * <p>
-     * The returned array cannot be <code>null</code>, an empty array is
-     * returned if no Status Variables are provided by the given
+     * The returned array contains the elements in alphabetical order. It cannot
+     * be <code>null</code>, an empty array is returned if no (authorized and
+     * readable) Status Variables are provided by the given
      * <code>Monitorable</code>.
      * 
-     * @param monitorableId The identifier of a <code>Monitorable</code>
+     * @param monitorableId the identifier of a <code>Monitorable</code>
      *        instance
-     * @return the names of the <code>StatusVariable</code> objects published
-     *         by the specified <code>Monitorable</code>
-     * @throws java.lang.SecurityException if the caller does not hold
-     *         <code>MonitorPermission</code> with the <code>discover</code>
-     *         action or if the <code>StatusVariables</code> published by the
-     *         given <code>Monitorable</code> are not allowed to be discovered
-     *         as per the target field of the permission
-     * @throws java.lang.IllegalArgumentException if <code>monitorableId</code> 
-     *         is <code>null</code> or otherwise invalid, or points to a 
+     * @return a list of <code>StatusVariable</code> objects names
+     *         published by the specified <code>Monitorable</code>
+     * @throws java.lang.IllegalArgumentException if <code>monitorableId</code>
+     *         is <code>null</code> or otherwise invalid, or points to a
      *         non-existing <code>Monitorable</code>
      */
     public String[] getStatusVariableNames(String monitorableId)
-            throws IllegalArgumentException, SecurityException;
+            throws IllegalArgumentException;
 
     /**
      * Switches event sending on or off for the specified 
