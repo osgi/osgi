@@ -15,30 +15,31 @@ import java.util.Date;
 /**
  * A <code>StatusVariable</code> object represents the value of a status
  * variable taken with a certain collection method at a certain point of time.
- * The type of the <code>StatusVariable</code> can be <code>long</code>,
- * <code>double</code>, <code>boolean</code> or <code>String</code>.
+ * The type of the <code>StatusVariable</code> can be <code>int</code>,
+ * <code>float</code>, <code>boolean</code> or <code>String</code>.
  * <p>
  * A <code>StatusVariable</code> is identified by an ID string that is unique
  * within the scope of a <code>Monitorable</code>. The ID must be a non-
- * <code>null</code>, non-empty string that does not contain the Reserved
- * characters described in 2.2 of RFC-2396 (URI Generic Syntax). As the ID is
- * used as a node name in the DMT, the restrictions on node names must also be
- * observed.
+ * <code>null</code>, non-empty string that conforms to the "symbolic-name"
+ * definition in the OSGi core specification. This means that only the
+ * characters [-_.a-zA-Z0-9] may be used. The length of the ID must not exceed
+ * 20 characters. As the ID is used as a node name in the DMT, the restrictions
+ * on node names must also be observed.
  */
 public final class StatusVariable {
     //----- Public constants -----//
     /**
-     * Constant for identifying <code>long</code> data type.
+     * Constant for identifying <code>int</code> data type.
      */
-    public static final int    TYPE_LONG   = 0;
+    public static final int    TYPE_INTEGER   = 0;
 
     /**
-     * Constant for identifying <code>double</code> data type.
+     * Constant for identifying <code>float</code> data type.
      */
-    public static final int    TYPE_DOUBLE = 1;
+    public static final int    TYPE_FLOAT = 1;
 
     /**
-     * Constant for identifying <code>string</code> data type.
+     * Constant for identifying <code>String</code> data type.
      */
     public static final int    TYPE_STRING = 2;
 
@@ -74,6 +75,7 @@ public final class StatusVariable {
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789" +
         "-_.";   // a subset of the characters allowed in DMT URIs 
 
+    // TODO increase to minimum node segment length (currently 32), also in class javadoc above
     static final int MAX_ID_LENGTH = 20;
     
     //----- Private fields -----//
@@ -82,20 +84,20 @@ public final class StatusVariable {
     private int     cm;
     private int     type;
 
-    private long    longData;
-    private double  doubleData;
+    private int     intData;
+    private float   floatData;
     private String  stringData;
     private boolean booleanData;
 
 
     //----- Constructors -----//
     /**
-     * Constructor for a <code>StatusVariable</code> of <code>long</code>
+     * Constructor for a <code>StatusVariable</code> of <code>int</code>
      * type.
      * 
      * @param id the identifier of the <code>StatusVariable</code>
      * @param cm the collection method, one of the <code>CM_</code> constants
-     * @param data the <code>long</code> value of the
+     * @param data the <code>int</code> value of the
      *        <code>StatusVariable</code>
      * @throws java.lang.IllegalArgumentException if the given <code>id</code>
      *         is not a valid <code>StatusVariable</code> name, or if 
@@ -103,30 +105,30 @@ public final class StatusVariable {
      * @throws java.lang.NullPointerException if the <code>id</code>
      *         parameter is <code>null</code>
      */
-    public StatusVariable(String id, int cm, long data) {
+    public StatusVariable(String id, int cm, int data) {
         setCommon(id, cm);
-        type = TYPE_LONG;
-        longData = data;
+        type = TYPE_INTEGER;
+        intData = data;
     }
 
     /**
-     * Constructor for a <code>StatusVariable</code> of <code>double</code>
+     * Constructor for a <code>StatusVariable</code> of <code>float</code>
      * type.
      * 
      * @param id the identifier of the <code>StatusVariable</code>
      * @param cm the collection method, one of the <code>CM_</code> constants
-     * @param data The <code>double</code> value of the
+     * @param data the <code>float</code> value of the
      *        <code>StatusVariable</code>
      * @throws java.lang.IllegalArgumentException if the given <code>id</code>
-     *         is not a valid <code>StatusVariable</code> name, or if 
+     *         is not a valid <code>StatusVariable</code> name, or if
      *         <code>cm</code> is not one of the collection method constants
      * @throws java.lang.NullPointerException if the <code>id</code> parameter
      *         is <code>null</code>
      */
-    public StatusVariable(String id, int cm, double data) {
+    public StatusVariable(String id, int cm, float data) {
         setCommon(id, cm);
-        type = TYPE_DOUBLE;
-        doubleData = data;
+        type = TYPE_FLOAT;
+        floatData = data;
     }
 
     /**
@@ -222,32 +224,32 @@ public final class StatusVariable {
 
     /**
      * Returns the <code>StatusVariable</code> value if its type is
-     * <code>long</code>.
+     * <code>int</code>.
      * 
-     * @return the <code>StatusVariable</code> value as a <code>long</code>
+     * @return the <code>StatusVariable</code> value as an <code>int</code>
      * @throws java.lang.IllegalStateException if the type of this
-     *         <code>StatusVariable</code> is not <code>long</code>
+     *         <code>StatusVariable</code> is not <code>int</code>
      */
-    public long getLong() throws IllegalStateException {
-        if (type != TYPE_LONG)
+    public int getInteger() throws IllegalStateException {
+        if (type != TYPE_INTEGER)
             throw new IllegalStateException(
-                    "This StatusVariable does not contain a long value.");
-        return longData;
+                    "This StatusVariable does not contain an integer value.");
+        return intData;
     }
 
     /**
      * Returns the <code>StatusVariable</code> value if its type is
-     * <code>double</code>.
+     * <code>float</code>.
      * 
-     * @return the <code>StatusVariable</code> value as a <code>double</code>
+     * @return the <code>StatusVariable</code> value as a <code>float</code>
      * @throws java.lang.IllegalStateException if the type of this
-     *         <code>StatusVariable</code> is not <code>double</code>
+     *         <code>StatusVariable</code> is not <code>float</code>
      */
-    public double getDouble() throws IllegalStateException {
-        if (type != TYPE_DOUBLE)
+    public float getFloat() throws IllegalStateException {
+        if (type != TYPE_FLOAT)
             throw new IllegalStateException(
-                    "This StatusVariable does not contain a double value.");
-        return doubleData;
+                    "This StatusVariable does not contain a float value.");
+        return floatData;
     }
 
     /**
@@ -295,8 +297,8 @@ public final class StatusVariable {
             return false;
         
         switch (type) {
-        case TYPE_LONG:    return longData == other.longData;
-        case TYPE_DOUBLE:  return doubleData == other.doubleData;
+        case TYPE_INTEGER: return intData == other.intData;
+        case TYPE_FLOAT:   return floatData == other.floatData;
         case TYPE_STRING:  return equals(stringData, other.stringData);
         case TYPE_BOOLEAN: return booleanData == other.booleanData;
         }
@@ -315,8 +317,8 @@ public final class StatusVariable {
         int hash = hashCode(id) ^ cm;
 
         switch (type) {
-        case TYPE_LONG:    return hash ^ hashCode(new Long(longData));
-        case TYPE_DOUBLE:  return hash ^ hashCode(new Double(doubleData));
+        case TYPE_INTEGER: return hash ^ intData;
+        case TYPE_FLOAT:   return hash ^ hashCode(new Float(floatData));
         case TYPE_BOOLEAN: return hash ^ hashCode(new Boolean(booleanData));
         case TYPE_STRING:  return hash ^ hashCode(stringData);
         }
@@ -348,8 +350,8 @@ public final class StatusVariable {
                 + timeStamp + ", ";
         
         switch (type) {
-        case TYPE_LONG:    return beg + "LONG, " + longData + ")";
-        case TYPE_DOUBLE:  return beg + "DOUBLE, " + doubleData + ")";
+        case TYPE_INTEGER: return beg + "INTEGER, " + intData + ")";
+        case TYPE_FLOAT:   return beg + "FLOAT, " + floatData + ")";
         case TYPE_STRING:  return beg + "STRING, " + stringData + ")";
         case TYPE_BOOLEAN: return beg + "BOOLEAN, " + booleanData + ")";
         }
@@ -390,7 +392,7 @@ public final class StatusVariable {
         if(id.length() > MAX_ID_LENGTH)
             throw new IllegalArgumentException(idName + 
                     " is too long (over " + MAX_ID_LENGTH + " characters).");
-        if(id.equals(".."))
+        if(id.equals(".") || id.equals(".."))
             throw new IllegalArgumentException(idName + " is invalid.");
         
         if(!containsValidChars(id))
