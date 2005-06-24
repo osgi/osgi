@@ -45,7 +45,7 @@ class Path {
         if(name.length() > MAX_ID_LENGTH)
             throw new IllegalArgumentException(errorPrefix + 
                     " is too long (over " + MAX_ID_LENGTH + " characters).");
-        if(name.equals(".."))
+        if(name.equals(".") || name.equals(".."))
             throw new IllegalArgumentException(errorPrefix + " is invalid.");
         
         char[] chars = name.toCharArray();
