@@ -493,7 +493,6 @@ public class PluginDeployed implements DmtDataPlugin, DmtExecPlugin {
     public DmtMetaNode getMetaNode(String nodeUri) throws DmtException {
         String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
         int l = nodeUriArr.length;
-        
         if (l < 5)
             throw new RuntimeException("Internal error");
         if (l == 5)

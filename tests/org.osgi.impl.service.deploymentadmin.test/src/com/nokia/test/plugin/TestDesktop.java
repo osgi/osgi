@@ -37,7 +37,7 @@ import org.osgi.service.dmt.DmtSession;
 
 public class TestDesktop extends Frame implements ActionListener {
     
-    private String ROOT = "./OSGi/Deployment/Inventory/Deployed";
+    private String ROOT = "./OSGi/Deployment";
     private String TEST_FILE = "../../org.osgi.impl.service.deploymentadmin.test/" +
     		"DmtPluginTest.txt";
 
@@ -50,6 +50,7 @@ public class TestDesktop extends Frame implements ActionListener {
     private static final String IS_LEAF_NODE         = "isLeafNode";
     private static final String GET_META_NODE        = "getMetaNode";
     private static final String GET_CHILD_NODE_NAMES = "getChildNodeNames";
+    private static final String CREATE_INT_NODE      = "createInteriorNode";
     private static final String GET_NODE_VALUE       = "getNodeValue";
     private static final String EXECUTE              = "execute";
     private static final String MAKE_TEST            = "MAKE TEST";
@@ -62,6 +63,7 @@ public class TestDesktop extends Frame implements ActionListener {
     private Button b_isLeafNode = new Button(IS_LEAF_NODE);
     private Button b_getMetaNode = new Button(GET_META_NODE);
     private Button b_getChildNodeNames = new Button(GET_CHILD_NODE_NAMES);
+    private Button b_createInteriorNode = new Button(CREATE_INT_NODE);
     private Button b_getNodeValue = new Button(GET_NODE_VALUE);
     private Button b_execute = new Button(EXECUTE);
     private Button b_makeTest = new Button(MAKE_TEST);
@@ -100,27 +102,39 @@ public class TestDesktop extends Frame implements ActionListener {
         
         pa_right_bottom.add(tf_result);
         
+        b_isNodeUri.setActionCommand(IS_NODE_URI);
         b_isNodeUri.addActionListener(this);
         pa_left.add(b_isNodeUri);
 
+        b_isLeafNode.setActionCommand(IS_LEAF_NODE);
         b_isLeafNode.addActionListener(this);
         pa_left.add(b_isLeafNode);
         
+        b_getMetaNode.setActionCommand(GET_META_NODE);
         b_getMetaNode.addActionListener(this);
         pa_left.add(b_getMetaNode);
 
+        b_getChildNodeNames.setActionCommand(GET_CHILD_NODE_NAMES);
         b_getChildNodeNames.addActionListener(this);
         pa_left.add(b_getChildNodeNames);
+        
+        b_createInteriorNode.setActionCommand(CREATE_INT_NODE);
+        b_createInteriorNode.addActionListener(this);
+        pa_left.add(b_createInteriorNode);
 
+        b_getNodeValue.setActionCommand(GET_NODE_VALUE);
         b_getNodeValue.addActionListener(this);
         pa_left.add(b_getNodeValue);
         
+        b_execute.setActionCommand(EXECUTE);
         b_execute.addActionListener(this);
         pa_left.add(b_execute);
         
+        b_makeTest.setActionCommand(MAKE_TEST);
         b_makeTest.addActionListener(this);
         pa_left.add(b_makeTest);
         
+        b_runTests.setActionCommand(RUN_TESTS);
         b_runTests.addActionListener(this);
         pa_left.add(b_runTests);
         
@@ -157,6 +171,9 @@ public class TestDesktop extends Frame implements ActionListener {
             lastCommand = acc;
             String[] sa = session.getChildNodeNames(uri);
             res = Arrays.asList(sa).toString();
+        } else if (CREATE_INT_NODE.equals(acc)){
+        	lastCommand = acc;
+        	session.createInteriorNode(uri);
         } else if (GET_NODE_VALUE.equals(acc)) {
             lastCommand = acc;
             res = session.getNodeValue(uri).toString();

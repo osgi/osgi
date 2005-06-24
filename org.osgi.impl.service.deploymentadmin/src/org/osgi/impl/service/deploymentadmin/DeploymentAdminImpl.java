@@ -69,7 +69,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private boolean               cancelled;
     
     // Dmt plugin registrations
-    private ServiceRegistration regDmtPlugin;
+    private ServiceRegistration regDmtDataPlugin;
+    private ServiceRegistration regDmtExecPlugin;
     
     /*
      * Class to track the event admin
@@ -120,12 +121,11 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         
         props = new Hashtable();
         props.put(DmtDataPlugin.DATA_ROOT_URIS, "./OSGi/Deployment");
-        regDmtPlugin = context.registerService(DmtDataPlugin.class.getName(), plugin, props);
+        regDmtDataPlugin = context.registerService(DmtDataPlugin.class.getName(), plugin, props);
 
         props = new Hashtable();
         props.put(DmtExecPlugin.EXEC_ROOT_URIS, "./OSGi/Deployment");
-        regDmtPlugin = context.registerService(DmtDataPlugin.class.getName(), plugin, props);
-        regDmtPlugin = context.registerService(DmtExecPlugin.class.getName(), plugin, props);
+        regDmtExecPlugin = context.registerService(DmtDataPlugin.class.getName(), plugin, props);
     }
 
     private void initKeyStore() throws Exception {
@@ -163,7 +163,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	    trackEvent.close();
 	    trackDmt.close();
 	    
-	    regDmtPlugin.unregister();
+	    regDmtDataPlugin.unregister();
+	    regDmtExecPlugin.unregister();
 	}
 
     public DeploymentPackage installDeploymentPackage(InputStream in)
