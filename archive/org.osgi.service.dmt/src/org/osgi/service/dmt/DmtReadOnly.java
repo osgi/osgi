@@ -215,7 +215,8 @@ public interface DmtReadOnly {
      * <ul>
      * <li>{@link DmtData#FORMAT_STRING STRING}, {@link DmtData#FORMAT_XML XML}
      * and {@link DmtData#FORMAT_BINARY BINARY}: the length of the stored data
-     * <li>{@link DmtData#FORMAT_INTEGER INTEGER}: 4
+     * <li>{@link DmtData#FORMAT_INTEGER INTEGER} and 
+     * {@link DmtData#FORMAT_FLOAT FLOAT}: 4
      * <li>{@link DmtData#FORMAT_BOOLEAN BOOLEAN}: 1
      * <li>{@link DmtData#FORMAT_NULL NULL}: 0
      * </ul>
@@ -239,6 +240,7 @@ public interface DmtReadOnly {
      *         timeout, or if the session is already closed
      * @throws SecurityException if the caller does not have the necessary
      *         permissions to execute the underlying management operation
+     * @see DmtData#getSize
      */
     int getNodeSize(String nodeUri) throws DmtException;
 
