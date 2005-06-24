@@ -19,7 +19,6 @@ package org.osgi.impl.service.monitor;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.text.MessageFormat;
 import java.util.*;
 
 import org.osgi.framework.*;
@@ -54,9 +53,6 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
     private static final String MONITOR_EVENT_TOPIC = "org/osgi/service/monitor/MonitorEvent";
     private static final int MONITORING_ALERT_CODE = 1226;
     
-    private static final MessageFormat statusVariableTag =
-        new MessageFormat("<statusVariable type=\"{0}\" value=\"{1}\"/>");
-
     private BundleContext bc;
     private ServiceTracker tracker;
     private EventAdmin eventChannel;
@@ -87,27 +83,48 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
 
     public String[] getStatusVariableNames(String monitorableId) {
         Path.checkName(monitorableId, "Monitorable ID");
-        // TODO monitorableId/* is too general, but not doing any complicated checking until getMonitorableNames() permissions are cleared up
-        checkPermission(monitorableId + "/*", MonitorPermission.READ);
-        
+
         Monitorable monitorable = new MonitorableWrapper(monitorableId);
         String[] varNames = monitorable.getStatusVariableNames();
-        Arrays.sort(varNames);
-        return varNames;
+        
+        // Only add status variables names that the caller has read permissions 
+        // for (not very efficient if there is no security manager)
+        
+        List readableVarNames = new Vector();
+        for (int i = 0; i < varNames.length; i++) {
+            try {
+                checkPermission(monitorableId + '/' + varNames[i], 
+                                MonitorPermission.READ);
+                readableVarNames.add(varNames[i]);
+            } catch(SecurityException e) {
+                // varNames[i] not added to readableVarNames
+            }
+        }
+
+        return sortedArrayFromStringList(readableVarNames);
     }
     
     public StatusVariable[] getStatusVariables(String monitorableId) {
         Path.checkName(monitorableId, "Monitorable ID");
-        checkPermission(monitorableId + "/*", MonitorPermission.READ);
-        
+
         Monitorable monitorable = new MonitorableWrapper(monitorableId);
         String[] varNames = monitorable.getStatusVariableNames();
         
-        StatusVariable[] vars = new StatusVariable[varNames.length];
-        for (int i = 0; i < vars.length; i++)
-            vars[i] = monitorable.getStatusVariable(varNames[i]);
+        // Only add status variables that the caller has read permissions for
+        // (not very efficient if there is no security manager)
+        
+        List readableVars = new Vector();
+        for (int i = 0; i < varNames.length; i++) {
+            try {
+                checkPermission(monitorableId + '/' + varNames[i], 
+                                MonitorPermission.READ);
+                readableVars.add(monitorable.getStatusVariable(varNames[i]));
+            } catch(SecurityException e) {
+                // varNames[i] not retrieved
+            }
+        }
 
-        return vars;
+        return (StatusVariable[]) readableVars.toArray(new StatusVariable[] {});
     }
     
     public boolean resetStatusVariable(String pathStr)
@@ -173,20 +190,23 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
         return (MonitoringJob[]) jobs.toArray(new MonitoringJob[jobs.size()]);
     }
 
+    // No read or publish permissions are checked for listing monitorable names,
+    // because it would be very inefficient to check for MonitorPermissions
+    // with "<monId>/*anything*" target.
     public String[] getMonitorableNames() {
-        // TODO */* might be too big requirement, but I don't know how to check for */<anything> ?
-        checkPermission("*/*", MonitorPermission.READ);
+        return sortedArrayFromStringList(trustedGetMonitorableNames());
+    }
 
-        List monitorableNames = trustedGetMonitorableNames();
-        int size = monitorableNames.size();
+    private String[] sortedArrayFromStringList(List list) {
+        int size = list.size();
         if(size == 0)
             return new String[] {};
         
-        String[] names = (String[]) monitorableNames.toArray(new String[size]);
+        String[] names = (String[]) list.toArray(new String[size]);
         Arrays.sort(names);
         return names;
     }
-
+    
     public synchronized void updated(String monitorableId, StatusVariable var) 
             throws IllegalArgumentException {
         Path.checkName(monitorableId, "Monitorable ID");
@@ -254,8 +274,7 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
                 StatusVariable var = trustedGetStatusVariable(paths[i]);
                 itemList.add(new DmtAlertItem(
                         Activator.PLUGIN_ROOT + "/" + paths[i],
-                        "x-oma-trap:" + paths[i], null, 
-                        new DmtData(createXml(var), true)));
+                        "x-oma-trap:" + paths[i], null, createData(var)));
             } catch(IllegalArgumentException e) {
                 // Ignore Status Variables that are (temporarily) unavailable                
             }
@@ -274,31 +293,28 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
         }
     }
 
-    static String createXml(StatusVariable var) {
-        String typeString;
-        String value = getStatusVariableString(var);
+    static DmtData createData(StatusVariable var) {
+        DmtData data;
         
         int type = var.getType();
         switch(type) {
-        case StatusVariable.TYPE_STRING:  typeString = "string";  break;
-        case StatusVariable.TYPE_LONG:    typeString = "long";    break;
-        case StatusVariable.TYPE_DOUBLE:  typeString = "double";  break;
-        case StatusVariable.TYPE_BOOLEAN: typeString = "boolean"; break;
+        case StatusVariable.TYPE_STRING:  return new DmtData(var.getString());
+        case StatusVariable.TYPE_INTEGER: return new DmtData(var.getInteger());
+        case StatusVariable.TYPE_FLOAT:   return new DmtData(var.getFloat());
+        case StatusVariable.TYPE_BOOLEAN: return new DmtData(var.getBoolean());
         default:
             throw new IllegalArgumentException(
                     "Unknown Status Variable type '" + type + "'.");
         }
-        
-        return statusVariableTag.format(new Object[] { typeString, value });
     }
-
+    
     private static String getStatusVariableString(StatusVariable var) {
         
         int type = var.getType(); 
         switch(type) {
         case StatusVariable.TYPE_STRING:  return var.getString();
-        case StatusVariable.TYPE_LONG:    return Long.toString(var.getLong());
-        case StatusVariable.TYPE_DOUBLE:  return Double.toString(var.getDouble());
+        case StatusVariable.TYPE_INTEGER: return Integer.toString(var.getInteger());
+        case StatusVariable.TYPE_FLOAT:   return Float.toString(var.getFloat());
         case StatusVariable.TYPE_BOOLEAN: return var.getBoolean() ? "true" : "false";
         }
         
