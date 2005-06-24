@@ -205,7 +205,7 @@ public class MonitorPermission extends Permission {
             throw new IllegalArgumentException(idName + " is too long (over "
                     + StatusVariable.MAX_ID_LENGTH + " characters).");
         
-        if (id.equals(".."))
+        if (id.equals(".") || id.equals(".."))
             throw new IllegalArgumentException(idName + " is invalid.");
         
         char[] chars = id.toCharArray();
