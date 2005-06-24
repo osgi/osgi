@@ -439,6 +439,9 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
             case DmtData.FORMAT_INTEGER:
                 System.out.println("INTEGER: " + value.getInt());
                 break;
+            case DmtData.FORMAT_FLOAT:
+                System.out.println("FLOAT: " + value.getFloat());
+                break;
             case DmtData.FORMAT_BINARY:
                 System.out.println("BINARY: '" + new String(value.getBinary()) + "'");
                 break;
