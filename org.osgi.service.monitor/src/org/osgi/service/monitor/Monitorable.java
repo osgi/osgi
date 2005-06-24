@@ -19,16 +19,14 @@ package org.osgi.service.monitor;
  * available also through the Device Management Tree (DMT).
  * <p>
  * The monitorable service is identified by its PID string which must be a non-
- * <code>null</code>, non-empty string that does not contain the Reserved
- * characters described in 2.2 of RFC-2396 (URI Generic Syntax).  As the PID is
- * used as a node name in the DMT, the restrictions on node names must also be 
- * observed.  Also, the length of the PID should be kept as small as possible, 
- * because certain DMT implementations may have limits on node name length. The 
- * length limit is not specified in any standard, it is recommended not to use 
- * names longer than 20 characters.
+ * <code>null</code>, non-empty string that conforms to the "symbolic-name"
+ * definition in the OSGi core specification. This means that only the
+ * characters [-_.a-zA-Z0-9] may be used. The length of the PID must not exceed
+ * 20 characters. As the PID is used as a node name in the DMT, the restrictions
+ * on node names must also be observed.
  * <p>
  * A <code>Monitorable</code> may optionally support sending notifications
- * when the status of its <code>StatusVariables</code> change.  Support for
+ * when the status of its <code>StatusVariables</code> change. Support for
  * change notifications can be defined per <code>StatusVariable</code>.
  * <p>
  * Publishing <code>StatusVariables</code> requires the presence of the
@@ -56,7 +54,7 @@ public interface Monitorable {
      * identifier. The <code>StatusVariable</code> will hold the value taken
      * at the time of this method call.
      * <p>
-     * The given identifier does not contain the Monitorable ID, i.e. it 
+     * The given identifier does not contain the Monitorable PID, i.e. it 
      * specifies the name and not the path of the Status Variable.
      * 
      * @param id the identifier of the <code>StatusVariable</code>, cannot be
@@ -77,7 +75,7 @@ public interface Monitorable {
      * <code>Monitorable</code> finds the <code>MonitorListener</code>
      * service through the Service Registry.
      * <p>
-     * The given identifier does not contain the Monitorable ID, i.e. it 
+     * The given identifier does not contain the Monitorable PID, i.e. it 
      * specifies the name and not the path of the Status Variable.
      * 
      * @param id the identifier of the <code>StatusVariable</code>, cannot be
@@ -99,7 +97,7 @@ public interface Monitorable {
      * <code>StatusVariables</code> the starting value may not necessarily be
      * 0. Resetting a <code>StatusVariable</code> must trigger a monitor event.
      * <p>
-     * The given identifier does not contain the Monitorable ID, i.e. it 
+     * The given identifier does not contain the Monitorable PID, i.e. it 
      * specifies the name and not the path of the Status Variable.
      * 
      * @param id the identifier of the <code>StatusVariable</code>, cannot be
@@ -119,7 +117,7 @@ public interface Monitorable {
      * <code>null</code> return value is allowed if there is no description for
      * the specified Status Variable.
      * <p>
-     * The given identifier does not contain the Monitorable ID, i.e. it 
+     * The given identifier does not contain the Monitorable PID, i.e. it 
      * specifies the name and not the path of the Status Variable.
      * 
      * @param id the identifier of the <code>StatusVariable</code>, cannot be
