@@ -18,6 +18,8 @@
 package org.osgi.impl.service.dmt;
 
 class Utils {
+    // TODO use new character set, handle escaping 
+    // TODO handle node name segment limit
     /* 
      * Permitted characters in a segment of a relative URI (RFC 2396):
      * - letters and digits: a-z, A-Z, 0-9
