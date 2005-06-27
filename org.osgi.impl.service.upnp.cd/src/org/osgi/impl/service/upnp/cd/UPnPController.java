@@ -36,7 +36,7 @@ public class UPnPController implements BundleActivator {
 		sa = new SubscriptionAlive();
 		sa.start();
 		try {
-			server = new GenaServer(8080, control, bc, eventregistry);
+			server = new GenaServer(8180, control, bc, eventregistry);
 			server.start();
 		}
 		catch (Exception e) {
