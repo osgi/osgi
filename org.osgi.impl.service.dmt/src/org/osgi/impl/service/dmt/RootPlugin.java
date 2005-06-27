@@ -21,17 +21,19 @@ import java.util.Date;
 import org.osgi.service.dmt.*;
 
 public class RootPlugin implements DmtReadOnlyDataPlugin {
-	// TODO update the "main" tree
 	private static Node	root	= 
         new Node(".", new Node[] {new Node("OSGi", new Node[] {
-			new Node("Policies", new Node[] {new Node("Java", 
-                    new Node[] { new Node("Bundle", null),
-			                     new Node("DmtPrincipal", null),
+			new Node("Application", null),
+			new Node("Configuration", null), 
+			new Node("Deployment", null),
+            new Node("Log", null), 
+            new Node("Monitoring", null),
+			new Node("Policy", new Node[] {new Node("Java", 
+                    new Node[] { new Node("LocationPermission", null),
+			                     new Node("DmtPrincipalPermission", null),
                                  new Node("ConditionalPermission", null)
-            })}),
-			new Node("apps", null),	new Node("app_instances", null),
-			new Node("cfg", null), new Node("log", null), new Node("mon", null),
-			new Node("deploy", null)	})});
+            })})
+            })});
 
 	//----- DmtReadOnlyDataPlugin methods -----//
 	public void open(DmtSession session) throws DmtException {
