@@ -24,7 +24,7 @@ import org.osgi.framework.*;
  */
 public class BundleTracker implements BundleTrackerCustomizer {
 	/* set this to true to compile in debug messages */
-	static final boolean DEBUG = true;
+	static final boolean DEBUG = false;
 
 	/**
 	 * Bundle context this <tt>BundleTracker</tt> object is tracking against.
