@@ -43,7 +43,7 @@ import org.osgi.service.dmt.DmtSession;
  * Simple read-only data plugin for trial purposes.
  */
 public class ReadOnlyDataPlugin implements DmtReadOnlyDataPlugin, BundleActivator {
-    private static final String PLUGIN_ROOT = "./OSGi/deploy";
+    private static final String PLUGIN_ROOT = "./OSGi/Application/Test";
     private static final String VALUE = "foobar!";
     private ServiceRegistration reg;
 
