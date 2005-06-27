@@ -86,19 +86,19 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 
 	public DmtMetaNode getMetaNode(String nodeUri) throws DmtException {
         String[] path = prepareUri(nodeUri);
-        if (path.length == 0) // OSGi/log
+        if (path.length == 0) // OSGi/Log
             return new LogPluginMetanode(LogPluginMetanode.IS_PERMANENT, 
                                          !LogPluginMetanode.CAN_EXECUTE, 
                                          !LogPluginMetanode.ALLOW_INFINITE, 
                                          "Root node for log search requests.");
         
-        if (path.length == 1) // OSGi/log/<search_id>
+        if (path.length == 1) // OSGi/Log/<search_id>
             return new LogPluginMetanode(!LogPluginMetanode.IS_PERMANENT,
                                          LogPluginMetanode.CAN_EXECUTE,
                                          LogPluginMetanode.ALLOW_INFINITE,
                                          "Root node of a log search request.");
         
-        if (path.length == 2) { // OSGi/log/<search_id>/<param>
+        if (path.length == 2) { // OSGi/Log/<search_id>/<param>
             if(path[1].equals(FILTER))
                 return new LogPluginMetanode(DmtData.FORMAT_STRING, 
                         "Filter expression to select log records included in the result.");
@@ -265,7 +265,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 	public boolean isNodeUri(String nodeUri) {
         String[] path = prepareUri(nodeUri);
         
-        if (path.length == 0) // ./OSGi/log
+        if (path.length == 0) // ./OSGi/Log
             return true;
         
         LogRequest lr = (LogRequest) requests.get(path[0]);
@@ -295,7 +295,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
     public boolean isLeafNode(String nodeUri) throws DmtException {
         String[] path = prepareUri(nodeUri);
         
-        if(path.length == 0) // ./OSGi/log
+        if(path.length == 0) // ./OSGi/Log
             return false;
         
         String id = path[0];
@@ -305,7 +305,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
                                    "No such log request");
         }
         
-        if(path.length == 1) // ./OSGi/log/<search_id>
+        if(path.length == 1) // ./OSGi/Log/<search_id>
             return false;
         
         String leaf = path[1];

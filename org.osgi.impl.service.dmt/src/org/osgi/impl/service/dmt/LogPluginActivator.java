@@ -24,7 +24,7 @@ import org.osgi.service.log.*;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class LogPluginActivator implements BundleActivator {
-	static final String PLUGIN_ROOT = "./OSGi/log";
+	static final String PLUGIN_ROOT = "./OSGi/Log";
 
     private ServiceRegistration servReg;
 	private ServiceTracker      logReaderTracker;

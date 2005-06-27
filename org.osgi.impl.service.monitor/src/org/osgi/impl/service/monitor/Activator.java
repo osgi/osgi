@@ -35,7 +35,7 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class Activator implements BundleActivator
 {
-    static final String PLUGIN_ROOT = "./OSGi/mon";
+    static final String PLUGIN_ROOT = "./OSGi/Monitor";
 
     ServiceTracker monitorableTracker;
     ServiceRegistration monitorAdminReg;
