@@ -74,7 +74,6 @@ abstract class RegisterComponentService {
 		Dictionary properties = new Hashtable((Hashtable) cdp.getProperties());
 
 		//add required properties
-		properties.put(ComponentConstants.COMPONENT_NAME, cdp.getComponentDescription().getName());
 		if (cdp.getComponentDescription().getFactory() == null)
 			properties.put(ComponentConstants.COMPONENT_ID, new Long(instanceProcess.buildDispose.getNextComponentId()));
 
@@ -121,16 +120,14 @@ abstract class RegisterComponentService {
 			//servicefactory=false
 			//always return the same instance
 			serviceRegistration = bundleContext.registerService(interfaces, new ServiceFactory() {
-				private Object instance = null;
 
 				//ServiceFactory.getService method.
 				public Object getService(Bundle bundle, ServiceRegistration registration) {
 					if (DEBUG)
 						System.out.println("RegisterComponentService: getService: registration = " + registration);
-					if (instance == null) {
+					if (component.getInstances().isEmpty()) {
 						try {
-							ComponentInstance componentInstance = instanceProcess.buildDispose.build(bundleContext, null, component, null);
-							instance = componentInstance.getInstance();
+							instanceProcess.buildDispose.build(bundleContext, null, component, null);
 						} catch (Exception e) {
 							//TODO handle error
 							System.err.println("Could not create instance of " + component.getComponentDescription());
@@ -138,7 +135,7 @@ abstract class RegisterComponentService {
 						}
 					}
 
-					return instance;
+					return ((ComponentInstance) component.getInstances().get(0)).getInstance();
 				}
 
 				// ServiceFactory.ungetService method.

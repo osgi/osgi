@@ -92,7 +92,7 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 	/* Actually does the work of building and disposing of instances */
 	public BuildDispose buildDispose;
 
-	private WorkQueue workQueue;
+	protected WorkQueue workQueue;
 
 	protected ServiceRegistration configListener;
 
@@ -317,7 +317,7 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 				ComponentInstanceImpl compInstance = (ComponentInstanceImpl) it.next();
 				if (compInstance != null) {
 					try {
-						buildDispose.bindReference(reference, compInstance, main.framework.getBundleContext(cdp.getComponentDescription().getBundle()));
+						buildDispose.bindReference(cdp, reference, compInstance, main.framework.getBundleContext(cdp.getComponentDescription().getBundle()));
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}

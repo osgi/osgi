@@ -20,6 +20,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 import org.eclipse.osgi.component.Main;
@@ -31,9 +32,12 @@ import org.eclipse.osgi.component.model.ReferenceDescription;
 import org.eclipse.osgi.component.model.ServiceDescription;
 import org.eclipse.osgi.component.workqueue.WorkDispatcher;
 import org.eclipse.osgi.component.workqueue.WorkQueue;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.AllServiceListener;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
@@ -94,7 +98,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 
 	protected List componentDescriptions;
 
-	protected List componentDescriptionPropsEnabled;
+	public List componentDescriptionPropsEnabled;
 
 	protected ServiceRegistration configListener;
 
@@ -409,6 +413,8 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 			runAgain = false;
 			while (it.hasNext() && !runAgain) {
 				ComponentDescriptionProp cdp = (ComponentDescriptionProp) it.next();
+				cdp.clearReferenceCDPs();
+				cdp.clearDelayActivateCDPNames();
 				List refs = cdp.getReferences();
 				Iterator iterator = refs.iterator();
 				while (iterator.hasNext()) {
@@ -418,7 +424,6 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 					Reference reference = (Reference) iterator.next();
 					if (reference != null) {
 						if (!reference.resolve(cdp, main.framework.getBundleContext(cdp.getComponentDescription().getBundle()), enabledCDPs)) {
-							cdp.clearReferenceCDPs();
 							enabledCDPs.remove(cdp);
 							runAgain = true;
 							break; //we need to re-run as our lists have changed
@@ -528,9 +533,19 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 		while (iterator.hasNext()) {
 			ComponentDescriptionProp cdp = (ComponentDescriptionProp) iterator.next();
 			ComponentDescription cd = cdp.getComponentDescription();
-			if (!cd.isEligible()) {
-				cd.setEligible(true);
-				eligibleCDPs.add(cdp);
+
+			//check if the bundle providing the service has permission to register the provided service
+			//if a service is provided
+			if (cd.getService() != null) {
+				Bundle bundle = cd.getBundle();
+				//if the bundle has permission to register the service
+				if (bundle.hasPermission(new ServicePermission(cd.getImplementation().getClassname(), ServicePermission.REGISTER))) {
+
+					if (!cd.isEligible()) {
+						cd.setEligible(true);
+						eligibleCDPs.add(cdp);
+					}
+				}
 			}
 		}
 		return eligibleCDPs;
@@ -654,33 +669,71 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	private List sortCDPs(List cdps) throws CircularityException {
 		Iterator it = cdps.iterator();
 		List sortedList = new ArrayList();
-		List circularityCheck;
 		while (it.hasNext()) {
 			ComponentDescriptionProp cdp = (ComponentDescriptionProp) it.next();
-			circularityCheck = new ArrayList();
-			writeCDPDependencies(cdp, sortedList, circularityCheck);
+			List currentStack = new ArrayList();
+			traverseDependencies(cdp, sortedList, currentStack);
 		}
 		return sortedList;
 	}
 
-	private void writeCDPDependencies(ComponentDescriptionProp cdp, List sortedList, List circularityCheck) throws CircularityException {
-		if (circularityCheck.contains(cdp)) {
-			throw new CircularityException(cdp);
-		}
-		circularityCheck.add(cdp);
+	private void traverseDependencies(ComponentDescriptionProp cdp, List sortedList, List currentStack) throws CircularityException {
+
 		//the component is already added it and all it's dependencies -egad, how do we unwind?
 		if (sortedList.contains(cdp)) {
 			return;
 		}
-		List referenceCDPs = cdp.getReferenceCDPs();
-		Iterator it = referenceCDPs.iterator();
+
+		List refCDPs = cdp.getReferenceCDPs();
+		Iterator it = refCDPs.iterator();
 		//first, add the CDP's dependencies
 		while (it.hasNext()) {
-			ComponentDescriptionProp referenceCDP = (ComponentDescriptionProp) it.next();
-			writeCDPDependencies(referenceCDP, sortedList, circularityCheck);
+
+			ComponentDescriptionProp.ReferenceCDP refCDP = (ComponentDescriptionProp.ReferenceCDP) it.next();
+
+			if (currentStack.contains(refCDP)) {
+				//may throw circularity exception
+				handleDependencyCycle(refCDP, currentStack);
+				return;
+			} else {
+				currentStack.add(refCDP);
+
+				traverseDependencies(refCDP.producer, sortedList, currentStack);
+
+				currentStack.remove(refCDP);
+			}
 		}
 		//finally write the cdp
 		sortedList.add(cdp);
+
+	}
+
+	/*
+	 * A cycle was detected.  CDP is referenced by the last element in currentStack.
+	 * returns CircularityException if the cycle does not contain an optional dependency.
+	 * else choses a starting point at which to initialize the cycle (the starting point
+	 * must be immediately after an optional dependency).
+	 */
+	private void handleDependencyCycle(ComponentDescriptionProp.ReferenceCDP refCDP, List currentStack) throws CircularityException {
+		ListIterator cycleIterator = currentStack.listIterator(currentStack.indexOf(refCDP));
+
+		//find an optional dependency
+		ComponentDescriptionProp.ReferenceCDP optionalRefCDP = null;
+		while (cycleIterator.hasNext()) {
+			ComponentDescriptionProp.ReferenceCDP cycleRefCDP = (ComponentDescriptionProp.ReferenceCDP) cycleIterator.next();
+			if (cycleRefCDP.ref.cardinalityLow == 0) {
+				optionalRefCDP = cycleRefCDP;
+				break;
+			}
+		}
+
+		if (optionalRefCDP == null) {
+			//no optional dependency
+			throw new CircularityException(refCDP.consumer);
+		}
+
+		//add note not to initiate activation of next dependency
+		optionalRefCDP.consumer.setDelayActivateCDPName(optionalRefCDP.producer.getComponentDescription().getName());
 	}
 
 	private void addComponentName(ComponentDescription cd, Dictionary props) {

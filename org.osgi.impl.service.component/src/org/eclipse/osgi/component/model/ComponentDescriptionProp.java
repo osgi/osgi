@@ -13,10 +13,22 @@
 
 package org.eclipse.osgi.component.model;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Properties;
+
 import org.eclipse.osgi.component.resolver.ComponentProperties;
+import org.eclipse.osgi.component.resolver.Reference;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.ComponentContext;
@@ -38,6 +50,7 @@ public class ComponentDescriptionProp {
 	protected Hashtable properties;
 	protected ComponentContext componentContext;
 
+	protected List delayActivateCDPNames;
 	protected List referenceCDPs;
 	protected List servicesProvided;
 	protected List references;
@@ -51,6 +64,7 @@ public class ComponentDescriptionProp {
 		this.componentDescription = cd;
 		properties = new Hashtable();
 		referenceCDPs = new ArrayList();
+		delayActivateCDPNames = new ArrayList();
 		servicesProvided = new ArrayList();
 		instances = new ArrayList();
 		initProperties(configProperties);
@@ -72,13 +86,15 @@ public class ComponentDescriptionProp {
 	public void initProperties(Dictionary configProperties) throws IOException {
 
 		//add ObjectClass so we can match target filters before actually being registered
-		ProvideDescription[] provides = componentDescription.getService().getProvides();
-		String[] interfaces = new String[provides.length];
-		for (int i = 0; i < provides.length; i++) {
-			interfaces[i] = provides[i].getInterfacename();
-		}
-		if (interfaces.length > 0) {
-			properties.put(Constants.OBJECTCLASS, interfaces);
+		if (componentDescription.getService() != null) {
+			ProvideDescription[] provides = componentDescription.getService().getProvides();
+			String[] interfaces = new String[provides.length];
+			for (int i = 0; i < provides.length; i++) {
+				interfaces[i] = provides[i].getInterfacename();
+			}
+			if (interfaces.length > 0) {
+				properties.put(Constants.OBJECTCLASS, interfaces);
+			}
 		}
 
 		// ComponentDescription Default Properties
@@ -169,9 +185,23 @@ public class ComponentDescriptionProp {
 		return componentContext;
 	}
 
-	public void setReferenceCDP(ComponentDescriptionProp cdp) {
-		if (!referenceCDPs.contains(cdp))
-			referenceCDPs.add(cdp);
+	static public class ReferenceCDP {
+		public ComponentDescriptionProp consumer;
+		public Reference ref;
+		public ComponentDescriptionProp producer;
+
+		private ReferenceCDP(ComponentDescriptionProp consumer, Reference ref, ComponentDescriptionProp producer) {
+			this.consumer = consumer;
+			this.ref = ref;
+			this.producer = producer;
+		}
+
+	}
+
+	public void setReferenceCDP(Reference ref, ComponentDescriptionProp cdp) {
+		ReferenceCDP refCDP = new ReferenceCDP(this, ref, cdp);
+		if (!referenceCDPs.contains(refCDP))
+			referenceCDPs.add(refCDP);
 	}
 
 	public List getReferenceCDPs() {
@@ -180,6 +210,19 @@ public class ComponentDescriptionProp {
 
 	public void clearReferenceCDPs() {
 		referenceCDPs.clear();
+	}
+
+	public void setDelayActivateCDPName(String cdpName) {
+		if (!delayActivateCDPNames.contains(cdpName))
+			delayActivateCDPNames.add(cdpName);
+	}
+
+	public List getDelayActivateCDPNames() {
+		return delayActivateCDPNames == null ? Collections.EMPTY_LIST : delayActivateCDPNames;
+	}
+
+	public void clearDelayActivateCDPNames() {
+		delayActivateCDPNames.clear();
 	}
 
 	public void setServiceProvided(List services) {

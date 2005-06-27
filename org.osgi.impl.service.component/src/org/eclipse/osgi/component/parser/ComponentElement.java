@@ -14,6 +14,8 @@
 package org.eclipse.osgi.component.parser;
 
 import org.eclipse.osgi.component.model.ComponentDescription;
+import org.eclipse.osgi.component.model.PropertyValueDescription;
+import org.osgi.service.component.ComponentConstants;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -35,6 +37,10 @@ public class ComponentElement extends DefaultHandler {
 
 			if (key.equals(ParserConstants.NAME_ATTRIBUTE)) {
 				component.setName(value);
+				PropertyValueDescription nameProperty = new PropertyValueDescription(component);
+				nameProperty.setName(ComponentConstants.COMPONENT_NAME);
+				nameProperty.setValue(value);
+				component.addProperty(nameProperty);
 				continue;
 			}
 			if (key.equals(ParserConstants.AUTOENABLE_ATTRIBUTE)) {

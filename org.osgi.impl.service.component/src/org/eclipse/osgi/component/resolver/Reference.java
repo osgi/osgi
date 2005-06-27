@@ -14,10 +14,21 @@
 
 package org.eclipse.osgi.component.resolver;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Iterator;
+import java.util.List;
 
-import org.eclipse.osgi.component.model.*;
-import org.osgi.framework.*;
+import org.eclipse.osgi.component.model.ComponentDescription;
+import org.eclipse.osgi.component.model.ComponentDescriptionProp;
+import org.eclipse.osgi.component.model.ReferenceDescription;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServicePermission;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.ComponentConstants;
 
 /**
  * 
@@ -103,7 +114,7 @@ public class Reference {
 		// Get all service references for this target filter
 		try {
 			ServiceReference[] serviceReferences = null;
-			serviceReferences = scrBundleContext.getServiceReferences(referenceDescription.getInterfacename(), target);
+			serviceReferences = scrBundleContext.getServiceReferences(referenceDescription.getInterfacename(), "(&" + target + "(!(" + ComponentConstants.COMPONENT_ID + "=*)))");
 			// if there is no service published that this Service ComponentReferences
 			if (serviceReferences != null) {
 				return true;
@@ -131,8 +142,8 @@ public class Reference {
 	//	if the cardinality is "0..1" or "0..n" then this refernce is not required
 	public boolean isRequiredFor(ComponentDescription cd) {
 		//we want to re-resolve if the component is static and already eligible
-		if (policy.equals("static") && cd.isEligible())
-			return true;
+		//		if (policy.equals("static") && cd.isEligible())
+		//		return true;
 		return (cardinality.charAt(0) == '1');
 	}
 
@@ -215,10 +226,12 @@ public class Reference {
 	 * @return true if the reference can be resolved
 	 */
 	public boolean resolve(ComponentDescriptionProp cdp, BundleContext bc, List enabledCDPs) {
-		//if the cardinality is "0..1" or "0..n" then this refernce is not required
-		//TODO - how do we place this reference in the ordering?
-		if (!this.isRequiredFor(cdp.getComponentDescription()))
-			return true;
+
+		//check if this bundle has the permission to GET the Service it Requires
+		Bundle bundle = bc.getBundle();
+		if (!bundle.hasPermission(new ServicePermission(referenceDescription.getInterfacename(), ServicePermission.REGISTER))) {
+			return false;
+		}
 
 		if (this.hasLegacyProviders(bc))
 			return true; //we found an availible provider in the legacy services
@@ -232,11 +245,16 @@ public class Reference {
 			if (provideList.contains(this.getReferenceDescription().getInterfacename())) {
 				//check the target field
 				if (this.matchProperties(cdpRefLookup, bc)) {
-					cdp.setReferenceCDP(cdpRefLookup);
+					cdp.setReferenceCDP(this, cdpRefLookup);
 					return true;
 				}
 			}
 		}
+
+		//if the cardinality is "0..1" or "0..n" then this refernce is not required
+		//TODO - how do we place this reference in the ordering?
+		if (!this.isRequiredFor(cdp.getComponentDescription()))
+			return true;
 
 		return false;
 	}
