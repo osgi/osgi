@@ -17,6 +17,8 @@
  */
 package org.osgi.impl.service.dmt;
 
+import java.util.List;
+import java.util.Vector;
 import org.osgi.service.dmt.*;
 
 class Plugin {
@@ -108,5 +110,16 @@ class Plugin {
                 if (Utils.isOnSameBranch(roots[i], otherRoots[j]))
                     return true;
         return false;
+    }
+    
+    // finds the data root URIs that are directly below the given uri, and
+    // returns the list of their last segments
+    List getChildRootNames(String uri) {
+        List childRootNames = new Vector();
+        for(int i = 0; i < roots.length; i++)
+            if(Utils.isParent(uri, roots[i]))
+                childRootNames.add(Utils.lastSegment(roots[i]));
+            
+        return childRootNames;
     }
 }
