@@ -73,8 +73,8 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
     {
         String pid = ClientActivator.SERVICE_PID;
 
+        
         try {
-
             /*
             ServiceReference refs[] = bc.getServiceReferences( SAXParserFactory.class.getName(), 
                     "(&(parser.namespaceAware=true)(parser.validating=false))" ); 
@@ -228,7 +228,7 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
                                ", root=" + session.getRootUri());
             //printTree();
 
-            session.createInteriorNode("./OSGi/cfg/future.service.pid");
+            session.createInteriorNode("./OSGi/Configuration/future.service.pid");
             System.out.println("Created new configuration dictionary for service 'future.service.pid'.");
 
             Configuration[] configs = ca.listConfigurations(null);
@@ -239,8 +239,8 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
             bc.ungetService(configRef);
 
             /*
-            session.createInteriorNode("./OSGi/log/interior");
-            System.out.println("Created node: ./OSGi/log/interior");
+            session.createInteriorNode("./OSGi/Log/interior");
+            System.out.println("Created node: ./OSGi/Log/interior");
             */
 
             session.close();
@@ -251,7 +251,7 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
             //printTree();
 
             /*
-            session = factory.getSession("OSGi/log/");
+            session = factory.getSession("OSGi/Log/");
             System.out.println("Retrieved session, id=" + session.getSessionId() +
                                ", lock type=" + session.getLockType() +
                                ", principal=" + session.getPrincipal() +
@@ -272,7 +272,7 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
                     throw e;
             }
 
-            //session.execute("./OSGi/dm/deploy/install" ,"ftp://ftpuser:ftp@artemis/target.txt");
+            //session.execute("./OSGi/Deployment/install" ,"ftp://ftpuser:ftp@artemis/target.txt");
 
             session.close();
             System.out.println("Closed session.");
@@ -301,25 +301,25 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
     
     private void sessionOpenTests() {
         // parallel sessions
-        sessionOpenTest("./OSGi/mon", DmtSession.LOCK_TYPE_EXCLUSIVE,
-                        "./OSGi/cfg", DmtSession.LOCK_TYPE_EXCLUSIVE);
+        sessionOpenTest("./OSGi/Monitor", DmtSession.LOCK_TYPE_EXCLUSIVE,
+                        "./OSGi/Configuration", DmtSession.LOCK_TYPE_EXCLUSIVE);
         
         sessionOpenTest("./OSGi",     DmtSession.LOCK_TYPE_SHARED,
-                        "./OSGi/cfg", DmtSession.LOCK_TYPE_SHARED);
+                        "./OSGi/Configuration", DmtSession.LOCK_TYPE_SHARED);
 
         // error in session initialization
         sessionOpenTest("./OSGi/manci", DmtSession.LOCK_TYPE_SHARED,
-                        "./OSGi/cfg",   DmtSession.LOCK_TYPE_EXCLUSIVE);
+                        "./OSGi/Configuration", DmtSession.LOCK_TYPE_EXCLUSIVE);
         
         // conflicting sessions
         sessionOpenTest("./OSGi",     DmtSession.LOCK_TYPE_SHARED,
-                        "./OSGi/cfg", DmtSession.LOCK_TYPE_EXCLUSIVE);
+                        "./OSGi/Configuration", DmtSession.LOCK_TYPE_EXCLUSIVE);
         
         System.out.println("-----");
-        SessionThread a = new SessionThread(factory, "./OSGi/mon", DmtSession.LOCK_TYPE_EXCLUSIVE);
-        SessionThread b = new SessionThread(factory, "./OSGi",     DmtSession.LOCK_TYPE_ATOMIC);
-        SessionThread c = new SessionThread(factory, "./OSGi/mon", DmtSession.LOCK_TYPE_SHARED);
-        SessionThread d = new SessionThread(factory, "./OSGi",     DmtSession.LOCK_TYPE_SHARED);
+        SessionThread a = new SessionThread(factory, "./OSGi/Monitor", DmtSession.LOCK_TYPE_EXCLUSIVE);
+        SessionThread b = new SessionThread(factory, "./OSGi",         DmtSession.LOCK_TYPE_ATOMIC);
+        SessionThread c = new SessionThread(factory, "./OSGi/Monitor", DmtSession.LOCK_TYPE_SHARED);
+        SessionThread d = new SessionThread(factory, "./OSGi",         DmtSession.LOCK_TYPE_SHARED);
         
         a.start();
         b.start();
