@@ -24,7 +24,7 @@ import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class ConfigurationPluginActivator implements BundleActivator {
-    static final String PLUGIN_ROOT = "./OSGi/cfg";
+    static final String PLUGIN_ROOT = "./OSGi/Configuration";
 
     private ServiceRegistration servReg;
 	private ServiceTracker      configTracker;
