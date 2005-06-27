@@ -65,6 +65,7 @@
 		btool.analyse       Analyse the manifest values
 		btool.showmanifest 	Display the manifest during the build
 		btool.noversion    	Ignore versions of import/export
+		btool.manifestVersion
 		
 	-->
 	<target name="all" depends="publish">
@@ -168,6 +169,7 @@
 	     eclipse             project directory
 	     analyse             Analyse the manifest
 	     showmanifest        List the manifest on the console
+	     manifestVersion	 Manifest version
 	     silent              Suppress messages
 	     includeProperty     name of the property that is a 
 	                         list of include files (may rename with 
@@ -195,7 +197,8 @@
 		       ipaProperty="ipa.${item.jarFile}"
 		       verbose="${verbose}"
 		       sources="${btool.sources}"
-		       ignoreVersions="${btool.noversion}" />
+		       ignoreVersions="${btool.noversion}"
+			   manifestVersion="${btool.manifestVersion}"/>
 	</target>
 
 	<!--
