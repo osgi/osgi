@@ -54,14 +54,6 @@ public class Unit {
 	private final static int	cd_SHIFT	= 42;
 	private final static int	rad_SHIFT	= 49;
 	private final static int	x_SHIFT		= 56;
-	private final static long	m_MASK		= MASK << m_SHIFT;
-	private final static long	s_MASK		= MASK << s_SHIFT;
-	private final static long	kg_MASK		= MASK << kg_SHIFT;
-	private final static long	K_MASK		= MASK << K_SHIFT;
-	private final static long	A_MASK		= MASK << A_SHIFT;
-	private final static long	mol_MASK	= MASK << mol_SHIFT;
-	private final static long	cd_MASK		= MASK << cd_SHIFT;
-	private final static long	rad_MASK	= MASK << rad_SHIFT;
 	private final static long	x_MASK		= MASK << x_SHIFT;
 	/** No Unit (Unity) */
 	public final static Unit	unity		= new Unit("", UNITY);					// Unity
@@ -471,7 +463,6 @@ public class Unit {
 			int mol = (int) (((type >> mol_SHIFT) & MASK) - ZERO);
 			int cd = (int) (((type >> cd_SHIFT) & MASK) - ZERO);
 			int rad = (int) (((type >> rad_SHIFT) & MASK) - ZERO);
-			int x = (int) ((type >> x_SHIFT) & MASK);
 			StringBuffer numerator = new StringBuffer();
 			StringBuffer denominator = new StringBuffer();
 			addSIname(m, "m", numerator, denominator);
