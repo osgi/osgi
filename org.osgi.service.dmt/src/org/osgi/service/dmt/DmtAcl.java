@@ -9,11 +9,7 @@
  */
 package org.osgi.service.dmt;
 
-import java.util.Iterator;
-import java.util.TreeMap;
-import java.util.Vector;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <code>DmtAcl</code> is an immutable class representing structured access to
@@ -81,7 +77,7 @@ public class DmtAcl implements Cloneable {
     //----- Private fields -----//
 
         // the implementation takes advantage of this being a sorted map
-    private TreeMap principalPermissions;
+    private Map principalPermissions;
     private int globalPermissions;
 
 
@@ -173,7 +169,7 @@ public class DmtAcl implements Cloneable {
         
         // make a shallow copy of the permission table, the keys (String) and
         // values (Integer) are immutable anyway
-        cloned.principalPermissions = (TreeMap) principalPermissions.clone();
+        cloned.principalPermissions = (Map) ((Hashtable) principalPermissions).clone();
         
         return cloned;
     }
@@ -456,7 +452,7 @@ public class DmtAcl implements Cloneable {
 
     private void clearPermissions()
     {
-        principalPermissions = new TreeMap();
+        principalPermissions = new Hashtable();
         globalPermissions = 0;
     }
 
