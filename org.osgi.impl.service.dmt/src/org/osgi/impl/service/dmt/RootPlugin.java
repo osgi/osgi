@@ -22,18 +22,28 @@ import org.osgi.service.dmt.*;
 
 public class RootPlugin implements DmtReadOnlyDataPlugin {
 	private static Node	root	= 
-        new Node(".", new Node[] {new Node("OSGi", new Node[] {
-			new Node("Application", null),
-			new Node("Configuration", null), 
-			new Node("Deployment", null),
-            new Node("Log", null), 
-            new Node("Monitoring", null),
-			new Node("Policy", new Node[] {new Node("Java", 
-                    new Node[] { new Node("LocationPermission", null),
-			                     new Node("DmtPrincipalPermission", null),
-                                 new Node("ConditionalPermission", null)
-            })})
-            })});
+        new Node(".", new Node[] {
+                new Node("OSGi", new Node[] {
+                        new Node("Application", null),
+                        new Node("Configuration", null), 
+                        new Node("Deployment", new Node[] {
+                                new Node("Inventory", new Node[] {
+                                        new Node("Deployed", null),
+                                        new Node("Delivered", null)
+                                }),
+                                new Node("Download", null)
+                        }),
+                        new Node("Log", null), 
+                        new Node("Monitoring", null),
+                        new Node("Policy", new Node[] {
+                                new Node("Java", new Node[] { 
+                                        new Node("LocationPermission", null),
+                                        new Node("DmtPrincipalPermission", null),
+                                        new Node("ConditionalPermission", null)
+                                })
+                        })
+                })
+        });
 
 	//----- DmtReadOnlyDataPlugin methods -----//
 	public void open(DmtSession session) throws DmtException {
