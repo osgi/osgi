@@ -4,9 +4,7 @@ Bundle-Name: ${p}
 Bundle-SymbolicName: ${p}
 Bundle-Version: 4
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000-2005). All Rights Reserved.
-Bundle-Description: This is a template description. It should contain 
-  general information about the test case. The test tool allows this text to be
-  displayed by double clicking on the test case.
+Bundle-Description: A test case for the event generic mechanism implementation.
 Bundle-Vendor: OSGi Alliance
 Bundle-DocUrl: http://www.osgi.org/testcases/4/test.cases.template
 Bundle-ContactAddress: speccomments@mail.osgi.org
