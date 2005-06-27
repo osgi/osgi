@@ -132,8 +132,13 @@ class Utils {
 	static boolean isAncestor(String ancestor, String node) {
 		if (node.equals(ancestor))
 			return true;
-		return node.startsWith(ancestor + "/");
+		return node.startsWith(ancestor + '/');
 	}
+    
+    static boolean isParent(String parent, String node) {
+        return node.startsWith(parent + '/')
+                && node.indexOf('/', parent.length() + 1) == -1;
+    }
     
     // returns whether two nodes are on the same branch, i.e. one is the
     // ancestor of the other
