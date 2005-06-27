@@ -389,13 +389,11 @@ public class DmtSessionImpl implements DmtSession {
 		checkSession();
 		String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
         
-		boolean isRoot = uri.equals(".");
 		// check for REPLACE permission:
-		if (isRoot) // on the root itself for the root node
-			checkNodePermission(uri, DmtAcl.REPLACE);
-		else if (isLeafNodeNoCheck(uri)) // on the parent node for leaf nodes
+		if (isLeafNodeNoCheck(uri)) // on the parent node for leaf nodes
 		    checkNodePermission(Utils.parentUri(uri), DmtAcl.REPLACE);
-		else // on the node itself or the parent for non-root interior nodes
+		else // on the node itself or the parent for interior nodes (parent will
+            // be ignored in case of the root node)
 		    checkNodeOrParentPermission(uri, DmtAcl.REPLACE);
         
         // Not checking REPLACE capability, node does not have to be modifiable
@@ -403,6 +401,7 @@ public class DmtSessionImpl implements DmtSession {
         // ACLs everywhere, and the "Replace" Access Type seems to be given
         // only for modifiable nodes.
         
+		boolean isRoot = uri.equals(".");
         if (acl == null) {
             acls.remove(uri);
         } else {
@@ -606,6 +605,9 @@ public class DmtSessionImpl implements DmtSession {
             boolean sendEvent) throws DmtException {
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_NOT_EXIST);
         String parent = Utils.parentUri(uri);
+        if(parent == null)
+            throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+                    "Cannot create root node.");
         checkNode(parent, SHOULD_BE_INTERIOR);
         checkOperation(parent, DmtAcl.ADD, DmtMetaNode.CMD_ADD);
 
@@ -660,6 +662,9 @@ public class DmtSessionImpl implements DmtSession {
         
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_NOT_EXIST);
         String parent = Utils.parentUri(uri);
+        if(parent == null)
+            throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+                    "Cannot create root node.");
         checkNode(parent, SHOULD_BE_INTERIOR);
         checkOperation(parent, DmtAcl.ADD, DmtMetaNode.CMD_ADD);
 
@@ -701,7 +706,8 @@ public class DmtSessionImpl implements DmtSession {
 			throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
 					"Cannot copy node to its descendant, '" + newUri + "'.");
 		String newParentUri = Utils.parentUri(newUri);
-        
+        // newParentUri cannot be null, because newUri is a valid absolute URI
+        // that points to a nonexisting node, and as such it must contain a '/'
 		checkNode(newParentUri, SHOULD_BE_INTERIOR);
 
         // DMTND 7.7.1.5: "needs correct access rights for the equivalent Add,
@@ -1187,14 +1193,18 @@ public class DmtSessionImpl implements DmtSession {
         return acl;
     }
     
+    // precondition: uri parameter must be an absolute URI
 	// throws SecurityException if principal is local user, and sufficient
 	// privileges are missing
 	private static void checkNodeOrParentPermission(String name, String uri,
 			int actions, boolean checkParent) throws DmtException {
 
+        if(uri.equals("."))
+            checkParent = false;
+        
         String parentUri = null;
-        if(checkParent)
-            parentUri = Utils.parentUri(uri);
+        if(checkParent)         // not null, as the uri is absolute but not "."
+            parentUri = Utils.parentUri(uri); 
         
 		if (name != null) {
             // succeed if the principal has the required permissions on the
