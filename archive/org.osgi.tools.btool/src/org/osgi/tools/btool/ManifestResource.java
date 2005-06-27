@@ -44,8 +44,6 @@ public class ManifestResource extends FileResource {
 		}
 		if (key.equals("FILE-SECTION")) {
 			StringBuffer sb = new StringBuffer();
-			Collection exports = btool.getExports();
-			Collection imports = btool.getImports();
 			
 			for (Iterator i = btool.contents.values().iterator(); i.hasNext();) {
 				Resource r = (Resource) i.next();

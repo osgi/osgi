@@ -1087,4 +1087,8 @@ public class BTool extends Task {
 	public void setPrebuild(String prebuild) {
 		this.prebuild = prebuild;
 	}
+
+	public void setManifestVersion(int manifestVersion) {
+		this.manifestVersion = manifestVersion;
+	}
 }
