@@ -18,6 +18,7 @@
 package org.osgi.impl.service.dmt;
 
 import java.util.Date;
+import java.util.Set;
 import org.osgi.service.dmt.*;
 
 public class RootPlugin implements DmtReadOnlyDataPlugin {
@@ -34,7 +35,7 @@ public class RootPlugin implements DmtReadOnlyDataPlugin {
                                 new Node("Download", null)
                         }),
                         new Node("Log", null), 
-                        new Node("Monitoring", null),
+                        new Node("Monitor", null),
                         new Node("Policy", new Node[] {
                                 new Node("Java", new Node[] { 
                                         new Node("LocationPermission", null),
@@ -44,7 +45,13 @@ public class RootPlugin implements DmtReadOnlyDataPlugin {
                         })
                 })
         });
+    
+    private DmtPluginDispatcher dispatcher;
 
+    RootPlugin(DmtPluginDispatcher dispatcher) {
+        this.dispatcher = dispatcher;
+    }
+    
 	//----- DmtReadOnlyDataPlugin methods -----//
 	public void open(DmtSession session) throws DmtException {
 	}
@@ -107,57 +114,15 @@ public class RootPlugin implements DmtReadOnlyDataPlugin {
 	}
 
 	public String[] getChildNodeNames(String nodeUri) throws DmtException {
+        Set children = dispatcher.getChildPluginNames(nodeUri);
+        
 		Node[] childNodes = findNode(nodeUri).getChildren();
-		String[] childNames = new String[childNodes.length];
 		for (int i = 0; i < childNodes.length; i++)
-			childNames[i] = childNodes[i].getName();
-		return childNames;
+			children.add(childNodes[i].getName());
+
+        return (String[]) children.toArray(new String[] {});
 	}
 
-	/*
-	 * // methods of Dmt, probably not needed here public void rollback() throws
-	 * DmtException {}
-	 * 
-	 * public void setNodeTitle(String nodeUri, String title) throws
-	 * DmtException { throw new DmtException(nodeUri,
-	 * DmtException.FEATURE_NOT_SUPPORTED, "Title property not supported."); }
-	 * 
-	 * public void setNode(String nodeUri, DmtData data) throws DmtException {
-	 * findNode(nodeUri); // check that the node exists throw new
-	 * DmtException(nodeUri, DmtException.OTHER_ERROR, "Specified URI points to
-	 * an internal node."); }
-	 * 
-	 * public void setNodeType(String nodeUri, String type) throws DmtException {
-	 * findNode(nodeUri); // check that the node exists throw new
-	 * DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, "Permanent node,
-	 * cannot set type."); }
-	 * 
-	 * public void deleteNode(String nodeUri) throws DmtException {
-	 * findNode(nodeUri); // check that the node exists throw new
-	 * DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, "Permanent node,
-	 * cannot be deleted."); }
-	 * 
-	 * public void createInteriorNode(String nodeUri) throws DmtException {
-	 * throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, "Cannot
-	 * create nodes."); }
-	 * 
-	 * public void createInteriorNode(String nodeUri, String type) throws
-	 * DmtException { throw new DmtException(nodeUri,
-	 * DmtException.COMMAND_NOT_ALLOWED, "Cannot create nodes."); }
-	 * 
-	 * public void createLeafNode(String nodeUri, DmtData value) throws
-	 * DmtException { throw new DmtException(nodeUri,
-	 * DmtException.COMMAND_NOT_ALLOWED, "Cannot create nodes."); }
-	 * 
-	 * public void copy(String nodeUri, String newNodeUri) throws DmtException {
-	 * throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, "Cannot
-	 * create nodes."); }
-	 * 
-	 * public void renameNode(String nodeUri, String newName) throws
-	 * DmtException { findNode(nodeUri); // check that the node exists throw new
-	 * DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, "Permanent node,
-	 * cannot be renamed."); }
-	 */
 	private Node findNode(String uri) throws DmtException {
 		if (uri.equals("."))
 			return root;
