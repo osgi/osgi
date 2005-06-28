@@ -143,10 +143,14 @@ public class MetaTypeProviderHandler extends AbstractHandler implements MetaType
 
   public void endElement(String namespaceURI, String localName, String qualifiedName) throws SAXException {
     if (ocdTable == null) {
-      throw new SAXException("There shoudl be at least one " +
+      throw new SAXException("There should be at least one " +
         ObjectClassDefinitionHandler.OCD_TAG + " element in " + META_DATA_TAG + "!");
     }
 
+    if (localization == null) {
+      localization = Constants.BUNDLE_LOCALIZATION_DEFAULT_BASENAME;
+    }
+    
     locales = getLocales(bundle, localization);
     
     attributesTable = null;
@@ -227,10 +231,7 @@ public class MetaTypeProviderHandler extends AbstractHandler implements MetaType
       throw new IllegalArgumentException("Invalid locale '" + locale + "'!");
     }
 
-    String resourceBaseName = localization != null ? localization :
-      Constants.BUNDLE_LOCALIZATION_DEFAULT_BASENAME;
-    
-    String fileLocation = resourceBaseName + 
+    String fileLocation = localization + 
       (locale != null ? LOCALE_SEPARATOR + locale : "") + RESOURCE_FILE_EXTENTION;
     
     URL propertiesURL = bundle.getResource(fileLocation);
