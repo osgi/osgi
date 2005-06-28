@@ -103,7 +103,7 @@ public class MonitorPlugin implements DmtDataPlugin
 
             if(path[2].equals("Server"))
                 return new MonitorMetaNodeImpl("Root node for server monitoring requests.", 
-                                               false, true, false, false);
+                                               false, false, false, false);
             
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, 
                     "No such node defined in the monitoring tree");
@@ -116,7 +116,7 @@ public class MonitorPlugin implements DmtDataPlugin
         //Server server = var.getServer(path[3], nodeUri);
 
         if(path.length == 4)
-            return new MonitorMetaNodeImpl("Root node of a server monitoring request.", true, false, true, false);
+            return new MonitorMetaNodeImpl("Root node of a server monitoring request.", true, true, true, false);
 
         if(path.length == 5) {
             if(path[4].equals("ServerID"))
@@ -133,7 +133,7 @@ public class MonitorPlugin implements DmtDataPlugin
 
             if(path[4].equals("TrapRef"))
                 return new MonitorMetaNodeImpl("Root node for references to other required monitoring data.",
-                                               false, true, false, false);
+                                               false, false, false, false);
 
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
                     "No such node defined in the monitoring tree");
@@ -161,7 +161,7 @@ public class MonitorPlugin implements DmtDataPlugin
             if(path[4].equals("TrapRef"))
                 //server.getTrapRefId(path[5], nodeUri);
                 return new MonitorMetaNodeImpl("Placeholder for a reference to other monitoring data.", 
-                                               true, false, true, false);
+                                               true, true, true, false);
 
 
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,

@@ -20,10 +20,12 @@ package org.osgi.impl.service.monitor;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtData;
 
+// TODO update meta-info based on spec (e.g. wrt permanent/automatic nodes)
+
 public class MonitorMetaNodeImpl implements DmtMetaNode
 {
     boolean   deletable             = false;
-    boolean   extendable            = false;
+    boolean   addable               = false;
     boolean   retrievable           = true;
     boolean   replaceable           = true;
     boolean   executable            = false;
@@ -64,15 +66,16 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
 
     // Interior node in ConfigurationPlugin
     public MonitorMetaNodeImpl(String description, boolean deletable, 
-                               boolean extendable, boolean allowInfinte, 
+                               boolean addable, boolean allowInfinte, 
                                boolean isPermanent)
     {
+        // TODO merge deletable and addable parameter into one (they are always the same at the time of reading)
         leaf = false;
         format = DmtData.FORMAT_NODE;
 
         scope = isPermanent ? PERMANENT : DYNAMIC;
         this.deletable = deletable;
-        this.extendable = extendable;
+        this.addable = addable;
 
         setCommon(description, allowInfinte);        
     }
@@ -80,7 +83,7 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
     public boolean can(int operation) {
         switch(operation) {
         case CMD_DELETE:  return deletable;
-        case CMD_ADD:     return extendable;
+        case CMD_ADD:     return addable;
         case CMD_GET:     return retrievable;
         case CMD_REPLACE: return replaceable;
         case CMD_EXECUTE: return executable;
