@@ -52,6 +52,7 @@ import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.dmt.DmtExecPlugin;
+import org.osgi.service.dmt.DmtReadOnlyDataPlugin;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
@@ -67,10 +68,10 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private TrackerDmt            trackDmt;
     private String                fwBundleDir;
     private boolean               cancelled;
-    
-    // Dmt plugin registrations
-    private ServiceRegistration regDmtDataPlugin;
-    private ServiceRegistration regDmtExecPlugin;
+
+    private PluginDownload  pluginDownload  = new PluginDownload(this);
+    private PluginDeployed  pluginDeployed  = new PluginDeployed(this);
+    private PluginDelivered pluginDelivered = new PluginDelivered(this);
     
     /*
      * Class to track the event admin
@@ -117,16 +118,31 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	
     private void registerDmtPlugin() {
         Hashtable props;
-        Plugin plugin = new Plugin(this);
-        
+                
         props = new Hashtable();
-        props.put(DmtDataPlugin.DATA_ROOT_URIS, "./OSGi/Deployment");
-        regDmtDataPlugin = context.registerService(DmtDataPlugin.class.getName(), plugin, props);
+        props.put(DmtDataPlugin.DATA_ROOT_URIS, "./OSGi/Deployment/Download");
+        context.registerService(DmtDataPlugin.class.getName(), pluginDownload, props);
 
         props = new Hashtable();
-        props.put(DmtExecPlugin.EXEC_ROOT_URIS, "./OSGi/Deployment");
-        regDmtExecPlugin = context.registerService(DmtDataPlugin.class.getName(), plugin, props);
-    }
+        props.put(DmtExecPlugin.EXEC_ROOT_URIS, "./OSGi/Deployment/Download");
+        context.registerService(DmtDataPlugin.class.getName(), pluginDownload, props);
+
+        props = new Hashtable();
+        props.put(DmtDataPlugin.DATA_ROOT_URIS, "./OSGi/Deployment/Inventory/Deployed");
+        context.registerService(DmtReadOnlyDataPlugin.class.getName(), pluginDeployed, props);
+
+        props = new Hashtable();
+        props.put(DmtExecPlugin.EXEC_ROOT_URIS, "./OSGi/Deployment/Inventory/Deployed");
+        context.registerService(DmtReadOnlyDataPlugin.class.getName(), pluginDeployed, props);
+        
+        props = new Hashtable();
+        props.put(DmtDataPlugin.DATA_ROOT_URIS, "./OSGi/Deployment/Inventory/Delivered");
+        context.registerService(DmtReadOnlyDataPlugin.class.getName(), pluginDelivered, props);
+
+        props = new Hashtable();
+        props.put(DmtExecPlugin.EXEC_ROOT_URIS, "./OSGi/Deployment/Inventory/Delivered");
+        context.registerService(DmtReadOnlyDataPlugin.class.getName(), pluginDelivered, props);
+}
 
     private void initKeyStore() throws Exception {
         String ksType = System.getProperty(DAConstants.KEYSTORE_TYPE);
@@ -162,9 +178,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	    logger.stop();
 	    trackEvent.close();
 	    trackDmt.close();
-	    
-	    regDmtDataPlugin.unregister();
-	    regDmtExecPlugin.unregister();
 	}
 
     public DeploymentPackage installDeploymentPackage(InputStream in)

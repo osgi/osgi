@@ -10,7 +10,6 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.deploymentadmin.DeploymentException;
-import org.osgi.service.dmt.DmtAlertItem;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.dmt.DmtException;
@@ -48,7 +47,10 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
 	PluginDownload(DeploymentAdminImpl da) {
 		this.da = da;		
 	}
-
+	
+    ///////////////////////////////////////////////////////////////////////////
+    // Parser methods
+	
 	private SAXParser getParser() throws Exception {
 		ServiceReference refs[] = da.getBundleContext().getServiceReferences(
 				SAXParserFactory.class.getName(),
@@ -78,29 +80,23 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
 	    }
 	}
 
+    ///////////////////////////////////////////////////////////////////////////
+    // DMT methods
+
 	public void open(String subtreeUri, int lockMode, DmtSession session) throws DmtException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public boolean supportsAtomic() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public void rollback() throws DmtException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void commit() throws DmtException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void setNodeTitle(String nodeUri, String title) throws DmtException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
@@ -115,18 +111,12 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
     }
 
 	public void setDefaultNodeValue(String nodeUri) throws DmtException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void setNodeType(String nodeUri, String type) throws DmtException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void deleteNode(String nodeUri) throws DmtException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void createInteriorNode(String nodeUri) throws DmtException {
@@ -138,38 +128,25 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
 	}
 
 	public void createInteriorNode(String nodeUri, String type) throws DmtException {
-		// TODO Auto-generated method stub
-		
+	    createInteriorNode(nodeUri);
 	}
 
 	public void createLeafNode(String nodeUri) throws DmtException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void createLeafNode(String nodeUri, DmtData value) throws DmtException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void createLeafNode(String nodeUri, DmtData value, String mimeType) throws DmtException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void copy(String nodeUri, String newNodeUri, boolean recursive) throws DmtException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void renameNode(String nodeUri, String newName) throws DmtException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void close() throws DmtException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public boolean isNodeUri(String nodeUri) {
@@ -246,28 +223,24 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
 	}
 
 	public String getNodeTitle(String nodeUri) throws DmtException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public String getNodeType(String nodeUri) throws DmtException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public int getNodeVersion(String nodeUri) throws DmtException {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	public Date getNodeTimestamp(String nodeUri) throws DmtException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public int getNodeSize(String nodeUri) throws DmtException {
-		// TODO Auto-generated method stub
-		return 0;
+		DmtData data = getNodeValue(nodeUri);
+		return data.getSize();
 	}
 
 	public String[] getChildNodeNames(String nodeUri) throws DmtException {
@@ -342,29 +315,14 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
         
         // parse the DLOTA descriptor
-        InputStream is = null;
-        try {
-            URL url = new URL(uri); // TODO
-            is = url.openStream();
-            SAXParser p = getParser();
-            p.parse(is, this);
-        }
-        catch (Exception e) {
-            status = STATUS_DOWNLOAD_FAILED;
-            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "");
-        } finally {
-            if (null != is) {
-                try {
-                    is.close();
-                }
-                catch (IOException ioe) {
-                    ioe.printStackTrace();
-                }
-                
-            }
-        }
+        parseDescriptor(nodeUri);
 
         // install content
+        downloadAndInstall(nodeUri);
+	}
+
+    private void downloadAndInstall(String nodeUri) throws DmtException {
+        InputStream is = null;
         // TODO states doesn't describe streaming
         try {
             URL url = new URL(contentURI.toString());
@@ -390,6 +348,31 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
                 
             }
         }
-	}
+    }
+
+    private void parseDescriptor(String nodeUri) throws DmtException {
+        InputStream is = null;
+        try {
+            URL url = new URL(uri); // TODO
+            is = url.openStream();
+            SAXParser p = getParser();
+            p.parse(is, this);
+        }
+        catch (Exception e) {
+            status = STATUS_DOWNLOAD_FAILED;
+            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "");
+        }
+        finally {
+            if (null != is) {
+                try {
+                    is.close();
+                }
+                catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+
+            }
+        }
+    }
 
 }

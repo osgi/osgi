@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.osgi.framework.Bundle;
@@ -30,13 +31,13 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtExecPlugin;
 import org.osgi.service.dmt.DmtMetaNode;
+import org.osgi.service.dmt.DmtReadOnlyDataPlugin;
 import org.osgi.service.dmt.DmtSession;
 
-public class PluginDeployed implements DmtDataPlugin, DmtExecPlugin {
+public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin {
 
     private DeploymentAdminImpl da;
 
@@ -44,158 +45,107 @@ public class PluginDeployed implements DmtDataPlugin, DmtExecPlugin {
         this.da= da;
     }
 
-    /**
-     * @param subtreeUri
-     * @param lockMode
-     * @param session
-     * @throws DmtException
-     * @see org.osgi.service.dmt.DmtDataPlugin#open(java.lang.String, int, org.osgi.service.dmt.DmtSession)
-     */
-    public void open(String subtreeUri, int lockMode, DmtSession session) throws DmtException {
-        // TODO Auto-generated method stub
-        
+    private Hashtable getMangleTable() {
+        Hashtable ht = new Hashtable();
+        DeploymentPackage[] dps = da.listDeploymentPackages();
+        for (int i = 0; i < dps.length; i++) {
+            String mv = da.getDmtAdmin().mangle(null, dps[i].getName());
+            ht.put(mv, dps[i]);
+        }
+        return ht;
+    }
+    
+    private String[] getCustomizers(DeploymentPackageImpl dp) {
+        ArrayList ret = new ArrayList();
+        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            if (be.isCustomizer())
+                ret.add(be.getSymbName());
+        }
+        return (String[]) ret.toArray(new String[] {});
     }
 
-    /**
-     * @return
-     * @see org.osgi.service.dmt.DmtDataPlugin#supportsAtomic()
-     */
-    public boolean supportsAtomic() {
-        // TODO Auto-generated method stub
-        return false;
+    private String[] getCustomizerPIDs(DeploymentPackageImpl dp) {
+        ArrayList ret = new ArrayList();
+        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            if (be.isCustomizer())
+                ret.add(be.getPid());
+        }
+        return (String[]) ret.toArray(new String[] {});
     }
 
-    /**
-     * @throws DmtException
-     * @see org.osgi.service.dmt.Dmt#rollback()
-     */
-    public void rollback() throws DmtException {
-        // TODO Auto-generated method stub
-        
+    private String[] getBundleIDs(DeploymentPackageImpl dp) {
+        ArrayList ret = new ArrayList();
+        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            ret.add(String.valueOf(be.getId()));
+        }
+        return (String[]) ret.toArray(new String[] {});
     }
 
-    /**
-     * @throws DmtException
-     * @see org.osgi.service.dmt.Dmt#commit()
-     */
-    public void commit() throws DmtException {
-        // TODO Auto-generated method stub
-        
+    private String[] getImportedPackages(BundleEntry be) {
+        BundleContext context = da.getContext();
+        Bundle b = context.getBundle(be.getId());
+        String iph = (String) b.getHeaders().get("Import-Package");
+        if (null == iph)
+            return new String[] {};
+        String[] fip = Splitter.split(iph, ',', 0);
+        ArrayList ipal = new ArrayList();
+        for (int i = 0; i < fip.length; i++)
+            ipal.add(Splitter.split(fip[i], ';', 0)[0].trim());
+        return (String[]) ipal.toArray(new String[] {});
     }
 
-    /**
-     * @param nodeUri
-     * @param title
-     * @throws DmtException
-     * @see org.osgi.service.dmt.Dmt#setNodeTitle(java.lang.String, java.lang.String)
-     */
-    public void setNodeTitle(String nodeUri, String title) throws DmtException {
-        // TODO Auto-generated method stub
-        
+    private String[] getExportedPackages(BundleEntry be) {
+        BundleContext context = da.getContext();
+        Bundle b = context.getBundle(be.getId());
+        String iph = (String) b.getHeaders().get("Export-Package");
+        if (null == iph)
+            return new String[] {};
+        String[] fip = Splitter.split(iph, ',', 0);
+        ArrayList ipal = new ArrayList();
+        for (int i = 0; i < fip.length; i++)
+            ipal.add(Splitter.split(fip[i], ';', 0)[0].trim());
+        return (String[]) ipal.toArray(new String[] {});
     }
 
-    /**
-     * @param nodeUri
-     * @param data
-     * @throws DmtException
-     * @see org.osgi.service.dmt.Dmt#setNodeValue(java.lang.String, org.osgi.service.dmt.DmtData)
-     */
-    public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
-        // TODO Auto-generated method stub
-        
+    private String getBundleSymbolicName(BundleEntry be) {
+        BundleContext context = da.getContext();
+        Bundle b = context.getBundle(be.getId());
+        return b.getSymbolicName();
+    }
+    
+    private String getBundleLocation(BundleEntry be) {
+        BundleContext context = da.getContext();
+        Bundle b = context.getBundle(be.getId());
+        return b.getLocation();
+    }
+    
+    private String getBundleVersion(BundleEntry be) {
+        BundleContext context = da.getContext();
+        Bundle b = context.getBundle(be.getId());
+        String ver = (String) b.getHeaders().get("Bundle-Version");
+        return ver;
+    }
+    
+    private int getBundleState(BundleEntry be) {
+        BundleContext context = da.getContext();
+        Bundle b = context.getBundle(be.getId());
+        return b.getState();
     }
 
-    /**
-     * @param nodeUri
-     * @throws DmtException
-     * @see org.osgi.service.dmt.Dmt#setDefaultNodeValue(java.lang.String)
-     */
-    public void setDefaultNodeValue(String nodeUri) throws DmtException {
-        // TODO Auto-generated method stub
-        
+    private String getBundleNativeCode(BundleEntry be) {
+        BundleContext context = da.getContext();
+        Bundle b = context.getBundle(be.getId());
+        String nc = (String) b.getHeaders().get("Bundle-NativeCode");
+        return nc;
     }
 
-    /**
-     * @param nodeUri
-     * @param type
-     * @throws DmtException
-     * @see org.osgi.service.dmt.Dmt#setNodeType(java.lang.String, java.lang.String)
-     */
-    public void setNodeType(String nodeUri, String type) throws DmtException {
-        // TODO Auto-generated method stub
-        
-    }
+    ///////////////////////////////////////////////////////////////////////////
+    // Plugin methods
 
-    /**
-     * @param nodeUri
-     * @throws DmtException
-     * @see org.osgi.service.dmt.Dmt#deleteNode(java.lang.String)
-     */
-    public void deleteNode(String nodeUri) throws DmtException {
-        // TODO Auto-generated method stub
-        
-    }
-
-    /**
-     * @param nodeUri
-     * @throws DmtException
-     * @see org.osgi.service.dmt.Dmt#createInteriorNode(java.lang.String)
-     */
-    public void createInteriorNode(String nodeUri) throws DmtException {
-        // TODO Auto-generated method stub
-        
-    }
-
-    /**
-     * @param nodeUri
-     * @param type
-     * @throws DmtException
-     * @see org.osgi.service.dmt.Dmt#createInteriorNode(java.lang.String, java.lang.String)
-     */
-    public void createInteriorNode(String nodeUri, String type) throws DmtException {
-        // TODO Auto-generated method stub
-        
-    }
-
-    /**
-     * @param nodeUri
-     * @throws DmtException
-     * @see org.osgi.service.dmt.Dmt#createLeafNode(java.lang.String)
-     */
-    public void createLeafNode(String nodeUri) throws DmtException {
-        // TODO Auto-generated method stub
-        
-    }
-
-    /**
-     * @param nodeUri
-     * @param value
-     * @throws DmtException
-     * @see org.osgi.service.dmt.Dmt#createLeafNode(java.lang.String, org.osgi.service.dmt.DmtData)
-     */
-    public void createLeafNode(String nodeUri, DmtData value) throws DmtException {
-        // TODO Auto-generated method stub
-        
-    }
-
-    /**
-     * @param nodeUri
-     * @param value
-     * @param mimeType
-     * @throws DmtException
-     * @see org.osgi.service.dmt.Dmt#createLeafNode(java.lang.String, org.osgi.service.dmt.DmtData, java.lang.String)
-     */
-    public void createLeafNode(String nodeUri, DmtData value, String mimeType) throws DmtException {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void copy(String nodeUri, String newNodeUri, boolean recursive) throws DmtException {
-        throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED, "");
-    }
-
-    public void renameNode(String nodeUri, String newName) throws DmtException {
-        throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED, "");
+    public void open(String subtreeUri, DmtSession session) throws DmtException {
     }
 
     public void close() throws DmtException {
@@ -272,7 +222,10 @@ public class PluginDeployed implements DmtDataPlugin, DmtExecPlugin {
                 return s.contains(nodeUriArr[10]);
             }
             if ("Signers".equals(nodeUriArr[9])) {
-                // TODO
+                BundleEntry be = 
+                    dp.getBundleEntryByBundleId(Long.parseLong(nodeUriArr[8]));
+                String[] signers = extractSigners(be);
+                Arrays.asList(signers).contains(nodeUriArr[10]);
             }
         }
         
@@ -379,59 +332,25 @@ public class PluginDeployed implements DmtDataPlugin, DmtExecPlugin {
         throw new RuntimeException("Internal error");
     }
 
-    /**
-     * @param nodeUri
-     * @return
-     * @throws DmtException
-     * @see org.osgi.service.dmt.DmtReadOnly#getNodeTitle(java.lang.String)
-     */
     public String getNodeTitle(String nodeUri) throws DmtException {
-        // TODO Auto-generated method stub
         return null;
     }
 
-    /**
-     * @param nodeUri
-     * @return
-     * @throws DmtException
-     * @see org.osgi.service.dmt.DmtReadOnly#getNodeType(java.lang.String)
-     */
     public String getNodeType(String nodeUri) throws DmtException {
-        // TODO Auto-generated method stub
         return null;
     }
 
-    /**
-     * @param nodeUri
-     * @return
-     * @throws DmtException
-     * @see org.osgi.service.dmt.DmtReadOnly#getNodeVersion(java.lang.String)
-     */
     public int getNodeVersion(String nodeUri) throws DmtException {
-        // TODO Auto-generated method stub
         return 0;
     }
 
-    /**
-     * @param nodeUri
-     * @return
-     * @throws DmtException
-     * @see org.osgi.service.dmt.DmtReadOnly#getNodeTimestamp(java.lang.String)
-     */
     public Date getNodeTimestamp(String nodeUri) throws DmtException {
-        // TODO Auto-generated method stub
         return null;
     }
 
-    /**
-     * @param nodeUri
-     * @return
-     * @throws DmtException
-     * @see org.osgi.service.dmt.DmtReadOnly#getNodeSize(java.lang.String)
-     */
     public int getNodeSize(String nodeUri) throws DmtException {
-        // TODO Auto-generated method stub
-        return 0;
+        DmtData data = getNodeValue(nodeUri);
+        return data.getSize();
     }
 
     public String[] getChildNodeNames(String nodeUri) throws DmtException {
@@ -482,7 +401,9 @@ public class PluginDeployed implements DmtDataPlugin, DmtExecPlugin {
 	                return getExportedPackages(be);
                 }
                 if ("Signers".equals(nodeUriArr[9])) {
-                    // TODO
+                    BundleEntry be = 
+                        dp.getBundleEntryByBundleId(Long.parseLong(nodeUriArr[8]));
+                    return extractSigners(be);
                 }
             }
         }
@@ -581,103 +502,20 @@ public class PluginDeployed implements DmtDataPlugin, DmtExecPlugin {
         }
     }
 
-    /*************************************************************************/
-    
-    private Hashtable getMangleTable() {
-        Hashtable ht = new Hashtable();
-        DeploymentPackage[] dps = da.listDeploymentPackages();
-        for (int i = 0; i < dps.length; i++) {
-            String mv = da.getDmtAdmin().mangle(null, dps[i].getName());
-            ht.put(mv, dps[i]);
-        }
-        return ht;
-    }
-
-    private String[] getCustomizers(DeploymentPackageImpl dp) {
-        ArrayList ret = new ArrayList();
-        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
-            BundleEntry be = (BundleEntry) iter.next();
-            if (be.isCustomizer())
-                ret.add(be.getSymbName());
-        }
-        return (String[]) ret.toArray(new String[] {});
-    }
-
-    private String[] getCustomizerPIDs(DeploymentPackageImpl dp) {
-        ArrayList ret = new ArrayList();
-        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
-            BundleEntry be = (BundleEntry) iter.next();
-            if (be.isCustomizer())
-                ret.add(be.getPid());
-        }
-        return (String[]) ret.toArray(new String[] {});
-    }
-
-    private String[] getBundleIDs(DeploymentPackageImpl dp) {
-        ArrayList ret = new ArrayList();
-        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
-            BundleEntry be = (BundleEntry) iter.next();
-            ret.add(String.valueOf(be.getId()));
-        }
-        return (String[]) ret.toArray(new String[] {});
-    }
-
-    private String[] getImportedPackages(BundleEntry be) {
-        BundleContext context = da.getContext();
-        Bundle b = context.getBundle(be.getId());
-        String iph = (String) b.getHeaders().get("Import-Package");
-        if (null == iph)
+    private String[] extractSigners(BundleEntry be) {
+        List list = be.getCertificateChainStringArrays();
+        if (null == list)
             return new String[] {};
-        String[] fip = Splitter.split(iph, ',', 0);
-        ArrayList ipal = new ArrayList();
-        for (int i = 0; i < fip.length; i++)
-            ipal.add(Splitter.split(fip[i], ';', 0)[0].trim());
-        return (String[]) ipal.toArray(new String[] {});
+        String[] signers = new String[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            String[] e = (String[]) list.get(i);
+            StringBuffer sb = new StringBuffer();
+            for (int j = 0; j < e.length; j++)
+                sb.append(e[j] + ";");
+            sb.deleteCharAt(sb.length() - 1);
+            signers[i] = sb.toString();
+        }
+        return signers;
     }
 
-    private String[] getExportedPackages(BundleEntry be) {
-        BundleContext context = da.getContext();
-        Bundle b = context.getBundle(be.getId());
-        String iph = (String) b.getHeaders().get("Export-Package");
-        if (null == iph)
-            return new String[] {};
-        String[] fip = Splitter.split(iph, ',', 0);
-        ArrayList ipal = new ArrayList();
-        for (int i = 0; i < fip.length; i++)
-            ipal.add(Splitter.split(fip[i], ';', 0)[0].trim());
-        return (String[]) ipal.toArray(new String[] {});
-    }
-
-    private String getBundleSymbolicName(BundleEntry be) {
-        BundleContext context = da.getContext();
-        Bundle b = context.getBundle(be.getId());
-        return b.getSymbolicName();
-    }
-    
-    private String getBundleLocation(BundleEntry be) {
-        BundleContext context = da.getContext();
-        Bundle b = context.getBundle(be.getId());
-        return b.getLocation();
-    }
-    
-    private String getBundleVersion(BundleEntry be) {
-        BundleContext context = da.getContext();
-        Bundle b = context.getBundle(be.getId());
-        String ver = (String) b.getHeaders().get("Bundle-Version");
-        return ver;
-    }
-    
-    private int getBundleState(BundleEntry be) {
-        BundleContext context = da.getContext();
-        Bundle b = context.getBundle(be.getId());
-        return b.getState();
-    }
-
-    private String getBundleNativeCode(BundleEntry be) {
-        BundleContext context = da.getContext();
-        Bundle b = context.getBundle(be.getId());
-        String nc = (String) b.getHeaders().get("Bundle-NativeCode");
-        return nc;
-    }
-    
 }

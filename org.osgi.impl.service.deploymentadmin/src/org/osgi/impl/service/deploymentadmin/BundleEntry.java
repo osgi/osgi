@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Iterator;
+import java.util.List;
 import java.util.jar.Attributes;
 
 import org.osgi.framework.Bundle;
@@ -19,8 +20,8 @@ public class BundleEntry implements Serializable {
     private Boolean            missing;
     private String             pid;
     private CaseInsensitiveMap attrs = new CaseInsensitiveMap();
+    private List               certChains;
     
-
     public BundleEntry(String name,
             String symbName, 
             String version, 
@@ -71,6 +72,7 @@ public class BundleEntry implements Serializable {
     }
     
     public BundleEntry(Entry entry) {
+        certChains = entry.getCertificateChainStringArrays();
         name = entry.getName();
         symbName = entry.getAttributes().getValue(DAConstants.BUNDLE_SYMBOLIC_NAME);
         version = entry.getAttributes().getValue(DAConstants.BUNDLE_VERSION);
@@ -102,6 +104,10 @@ public class BundleEntry implements Serializable {
     
     public String toString() {
         return "[" + symbName + " " + version + "]";
+    }
+    
+    public List getCertificateChainStringArrays() {
+        return certChains;
     }
 
     public boolean isCustomizer() {
