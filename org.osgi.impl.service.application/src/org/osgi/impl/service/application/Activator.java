@@ -35,6 +35,7 @@ public class Activator extends Object implements
 	public void start(BundleContext bc) throws Exception {
         // Application tree has changed, commenting out until it is properly
         // defined and implemented.
+        System.out.println("Application service is currently disabled.");
         
         /*
 		Activator.bc = bc;
