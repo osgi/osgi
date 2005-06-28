@@ -26,6 +26,8 @@ public class TargetLink extends Link {
 	final static int		REBOOT				= 11;
 	final static int		CLOSE_TARGET		= 12;
 	final static int		UPDATE_FRAMEWORK	= 13;
+	final static int        SET_TEST_PROPERTIES = 14;
+	
 	public IRun				_run;
 	public ITarget			_target;
 
@@ -99,6 +101,11 @@ public class TargetLink extends Link {
 		request(SEND_TO_TARGET, new Object[] {name, msg});
 	}
 
+	
+	public void setTestProperties( Dictionary d ) throws IOException {
+		request(SET_TEST_PROPERTIES, new Object[] {d});		
+	}
+	
 	//
 	//  Target -> Run
 	//
@@ -181,6 +188,10 @@ public class TargetLink extends Link {
 				case CLOSE_TARGET :
 					close();
 					return;
+				case SET_TEST_PROPERTIES:
+					p = (Object[]) msg.getContent();
+					_target.setTestProperties((Dictionary)p[0]);
+					break;
 				//
 				// Target -> run
 				case SEND_TO_RUN :

@@ -7,6 +7,7 @@
 package org.osgi.test.shared;
 
 import java.io.*;
+import java.util.Dictionary;
 
 public interface ITarget {
 	void linkClosed();
@@ -24,4 +25,6 @@ public interface ITarget {
 	void reboot(int cause);
 
 	void updateFramework();
+
+	void setTestProperties(Dictionary dictionary) throws IOException;
 }

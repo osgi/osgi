@@ -307,16 +307,11 @@ public class Link extends Thread {
 	 * Send a message to the other side.
 	 */
 	synchronized void send(Message msg) throws IOException {
-		try {
 			byte[] data = msg.asBytes();
 			debug("tx", msg + "  " + data.length);
 			_out.writeInt(data.length);
 			_out.write(data);
 			_out.flush();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Dictionary;
 
 public interface IRun {
+	final static String TEST_PROPERTIES_FILE = "org.osgi.test.properties.file";
 	void linkClosed() throws Exception;
 
 	void push(String bundle, Object msg);
