@@ -37,7 +37,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * If there is no permission admin service, this class does nothing relevant.
  */
 public class SimplePermissionPolicy implements SynchronousBundleListener {
-	static final String	PERMISSION_RESOURCE			= "/OSGI-INF/permissions.perm";
+	static final String	PERMISSION_RESOURCE			= "/META-INF/permissions.perm";
 	static final String	DEFAULT_PERMISSION_RESOURCE	= "default.perm";
 	BundleContext		context;
 	ServiceTracker		tracker;
@@ -99,7 +99,6 @@ public class SimplePermissionPolicy implements SynchronousBundleListener {
 		if (url == null)
 			url = bundle.getResource(PERMISSION_RESOURCE.toUpperCase());
 		
-		// For backward compatibility
 		if (url == null)
 			url = bundle.getResource("/META-INF/permissions.perm");
 		if (url == null)
