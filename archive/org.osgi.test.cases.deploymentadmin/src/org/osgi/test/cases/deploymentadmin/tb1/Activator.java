@@ -1,6 +1,4 @@
 /*
- * $Header$
- * 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
@@ -23,23 +21,60 @@
  * 
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
+ * 
+ */
+
+/*
+ * REVISION HISTORY:
+ *
+ * Date          Author(s)
+ * CR            Headline
+ * ============  ==============================================================
+ * 14/04/2005    Andre Assad
+ * 26            Implement MEG TCK for the deployment RFC-88
+ * ============  ==============================================================
  */
 
 package org.osgi.test.cases.deploymentadmin.tb1;
 
-import org.osgi.framework.*;
-import org.osgi.test.cases.deploymentadmin.tbc.TBCService;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.test.cases.deploymentadmin.tb1.DeploymentAdmin.*;
+import org.osgi.test.cases.deploymentadmin.tbc.DeploymentTestControl;
+import org.osgi.test.cases.deploymentadmin.tbc.TB1Service;
+import org.osgi.test.cases.deploymentadmin.tbc.TestInterface;
+import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
- * A bundle that registers a service with the marker interface
- * TBCService so it can be checked the exporter is correct.
- *
- * @version $Revision$
+ * @author Andre Assad
+ * 
+ * Activator of bundle that will test DeploymentAdmin methods
  */
-public class Activator implements BundleActivator, TBCService {
-	public void start(BundleContext context) throws Exception {
-		context.registerService(TBCService.class.getName(),this,null);
+
+public class Activator implements BundleActivator, TB1Service {
+	
+	ServiceRegistration sr;
+	
+	private DeploymentTestControl tbc;
+
+	public void start(BundleContext bc) throws Exception {
+		sr = bc.registerService(TB1Service.class.getName(), this, null);
+		System.out.println("TB1Service started.");
+
 	}
-	public void stop(BundleContext context) throws Exception {
+
+	public void stop(BundleContext arg0) throws Exception {
+		sr.unregister();
+
+	}
+	
+	public TestInterface[] getTestClasses(DefaultTestBundleControl tbc) {
+		return new TestInterface[] {
+				new InstallDeploymentPackage((DeploymentTestControl) tbc),
+				new InstallFixPack((DeploymentTestControl) tbc),
+				new ListDeploymentPackage((DeploymentTestControl) tbc),
+				new GetDeploymentPackage((DeploymentTestControl) tbc),
+				};
 	}
 }

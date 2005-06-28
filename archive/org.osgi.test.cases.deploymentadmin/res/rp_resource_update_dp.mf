@@ -1,0 +1,6 @@
+Manifest-Version: 1.1
+DeploymentPackage-Name: rp_bundle_dp
+DeploymentPackage-Version: 1.1
+
+Name: resource_processor_file.txt
+Resource-Processor: org.osgi.test.cases.deployment.bundles.rp2

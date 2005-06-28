@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+DeploymentPackage-Name: rp_bundle_dp
+DeploymentPackage-Version: 1.0
+
+Name: bundle003.jar
+Bundle-SymbolicName: bundles.tb3
+Bundle-Version: 1.0
+
+Name: resource_processor_file.txt
+Resource-Processor: org.osgi.test.cases.deployment.bundles.rp2
