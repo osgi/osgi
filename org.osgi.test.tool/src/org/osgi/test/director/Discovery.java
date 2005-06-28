@@ -116,7 +116,7 @@ public class Discovery extends Thread {
 			String comment;
 			String host;
 			listener = new DatagramSocket(PORT);
-			listener.setSoTimeout(5000);
+			listener.setSoTimeout(25000);
 			log("Discovery starts.", null);
 			while (cont) {
 				try {
