@@ -26,7 +26,8 @@
  */
 package org.osgi.test.cases.deploymentadmin.tbc;
 
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
