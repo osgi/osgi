@@ -904,7 +904,7 @@ public class TestApplet extends Application implements ExtendedTarget, IApplet,
 	public void _properties( Object o ) {
 		FileChooser fc = new FileChooser(Application.application()
 				.mainRootView(), "Open Properties File", FileChooser.LOAD_TYPE);
-		String targetProperties = System.getProperty("org.osgi.test.target.properties");
+		String targetProperties = System.getProperty(IRun.TEST_PROPERTIES_FILE);
 		if ( targetProperties != null ) {
 			File 	f = new File( targetProperties );
 			fc.setFile(f.getName());

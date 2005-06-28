@@ -565,7 +565,6 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 			String key = (String) e.nextElement();
 			String  value = (String) properties.get(key);
 			System.setProperty(key, value );
-			System.out.println("Test property " + key + "=" + value );
 		}		
 	}
 }
