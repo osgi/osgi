@@ -268,10 +268,10 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
         if (l == 4)
 			return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF,
 					DmtMetaNode.PERMANENT, "", 1, !Metanode.ZERO_OCC, null, 0,
-					0, null, DmtData.FORMAT_NODE).orOperation(DmtMetaNode.CMD_ADD);
+					0, null, DmtData.FORMAT_NODE);
         if (l == 5)
 			return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF,
-					DmtMetaNode.PERMANENT, "", 1, !Metanode.ZERO_OCC, null, 0,
+					DmtMetaNode.DYNAMIC, "", 1, !Metanode.ZERO_OCC, null, 0,
 					0, null, DmtData.FORMAT_NODE).orOperation(DmtMetaNode.CMD_ADD);
         if (l == 6) {
             if (nodeUriArr[5].equals("ID"))
