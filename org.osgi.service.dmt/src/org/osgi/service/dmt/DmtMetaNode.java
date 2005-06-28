@@ -9,8 +9,11 @@
  */
 package org.osgi.service.dmt;
 
+// TODO remove pattern methods, and all references to regular expressions
+// TODO add isValid... methods
+
 /**
- * The DmtMetaNode contains meta data both standard for SyncML DM and defined by
+ * The DmtMetaNode contains meta data both standard for OMA DM and defined by
  * OSGi MEG (without breaking the compatibility) to provide for better DMT data
  * quality in an environment where many software components manipulate this
  * data.
@@ -28,8 +31,9 @@ public interface DmtMetaNode {
 
     /**
      * Constant for the ADD access type. If {@link #can(int)} returns
-     * <code>true</code> for this operation, new nodes can potentially be
-     * added as children under this node.
+     * <code>true</code> for this operation, this node can potentially be
+     * added to its parent. Nodes with {@link #PERMANENT} or {@link #AUTOMATIC}
+     * scope typically do not have this access type.
      */
     public int CMD_ADD     = 0;
 
@@ -66,15 +70,30 @@ public interface DmtMetaNode {
      * Constant for representing a permanent node in the tree.  This must be
      * returned by {@link #getScope} if the node cannot be added, deleted or  
      * modified in any way through tree operations.  Permanent nodes cannot
-     * have dynamic nodes as parents.
+     * have non-permanent nodes as parents.
      */
     public int PERMANENT   = 0;
     
     /**
      * Constant for representing a dynamic node in the tree.  This must be
-     * returned by {@link #getScope} for all nodes that are not permanent.
+     * returned by {@link #getScope} for all nodes that are not permanent and
+     * are not created automatically by the management object.
      */
     public int DYNAMIC     = 1;
+    
+    /**
+     * Constant for representing an automatic node in the tree. This must be
+     * returned by {@link #getScope()} for all nodes that are created
+     * automatically by the management object. Automatic nodes represent a
+     * special case of dynamic nodes, so this scope should be mapped to
+     * {@link #DYNAMIC} when used in an OMA DM context.
+     * <p>
+     * An automatic node is usually created instantly when its parent is 
+     * created, but it is also valid if it only appears later, triggered by some
+     * other condition.  The exact behaviour must be defined by the Management
+     * Object.
+     */
+    public int AUTOMATIC   = 2;
     
     /**
      * Check whether the given operation is valid for this node. If no meta-data
@@ -95,14 +114,17 @@ public interface DmtMetaNode {
 
     /**
      * Return the scope of the node. Valid values are
-     * {@link #PERMANENT DmtMetaNode.PERMANENT} and
-     * {@link #DYNAMIC DmtMetaNode.DYNAMIC}. Note that a permanent node is not
-     * the same as a node where the DELETE operation is not allowed. Permanent
-     * nodes never can be deleted, whereas a non-deletable node can disappear in
-     * a recursive DELETE operation issued on one of its parents. If no
-     * meta-data is provided for a node, it can be assumed to be a dynamic node.
+     * {@link #PERMANENT DmtMetaNode.PERMANENT},
+     * {@link #DYNAMIC DmtMetaNode.DYNAMIC} and
+     * {@link #AUTOMATIC DmtMetaNode.AUTOMATIC}. Note that a permanent node is
+     * not the same as a node where the DELETE operation is not allowed.
+     * Permanent nodes never can be deleted, whereas a non-deletable node can
+     * disappear in a recursive DELETE operation issued on one of its parents.
+     * If no meta-data is provided for a node, it can be assumed to be a dynamic
+     * node.
      * 
-     * @return {@link #PERMANENT} for permanent nodes and {@link #DYNAMIC}
+     * @return {@link #PERMANENT} for permanent nodes, {@link #AUTOMATIC} for
+     *         nodes that are automatically created, and {@link #DYNAMIC}
      *         otherwise
      */
     int getScope();
