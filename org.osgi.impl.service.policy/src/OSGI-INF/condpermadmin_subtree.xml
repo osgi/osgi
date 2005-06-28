@@ -2,7 +2,7 @@
 <scr:component name="org.osgi.impl.service.policy.permadmin" 
 	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
 	<implementation class="org.osgi.impl.service.policy.condpermadmin.ConditionalPermissionAdminPlugin"/>
-	<property name="dataRootURIs" value="./OSGi/Policies/Java/ConditionalPermission"/>
+	<property name="dataRootURIs" value="./OSGi/Policy/Java/ConditionalPermission"/>
 	<service>
 		<provide interface="org.osgi.service.dmt.DmtDataPlugin"/>
 	</service>

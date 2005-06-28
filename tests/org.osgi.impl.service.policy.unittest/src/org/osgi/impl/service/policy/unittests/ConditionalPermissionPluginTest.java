@@ -59,7 +59,7 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 
 	public DummyComponentContext context;
 	
-	public static final String ROOT = "./OSGi/Policies/Java/ConditionalPermission";
+	public static final String ROOT = "./OSGi/Policy/Java/ConditionalPermission";
 	
 	public static final ConditionInfo LOC1CONDITION = new ConditionInfo(
 			BundleLocationCondition.class.getName(),

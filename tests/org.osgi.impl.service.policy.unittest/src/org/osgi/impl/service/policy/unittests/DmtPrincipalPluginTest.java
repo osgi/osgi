@@ -37,7 +37,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  * @version $Revision$
  */
 public class DmtPrincipalPluginTest extends DmtPluginTestCase implements DmtPrincipalPermissionAdmin {
-	public static final String ROOT = "./OSGi/Policies/Java/DmtPrincipal";
+	public static final String ROOT = "./OSGi/Policy/Java/DmtPrincipalPermission";
 	public static final String PRINCIPAL1 = "principal1";
 	public static final String PRINCIPAL1_HASH = "zDcCo9K+A67rtQI3TQEDg6_LEIw";
 	public static final String PRINCIPAL2 = "principal2";
