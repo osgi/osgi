@@ -234,10 +234,10 @@ public class TestApplet extends Application implements ExtendedTarget, IApplet,
 	 * @returns The plan object or null if not found
 	 */
 	static Plan getPlan(String name) {
-		String file = "plans/" + name + ".planb";
+		String file = "plans/" + name + ".plana";
 		InputStream in = getResourceAsStream(file);
 		if (in != null) {
-			Plan plan = Plan.createPlan(in, Plan.BINARY_TYPE);
+			Plan plan = Plan.createPlan(in, Plan.ASCII_TYPE);
 			plan.unarchiveObjects(TargetChain.applicationChain());
 			return plan;
 		}
@@ -898,6 +898,25 @@ public class TestApplet extends Application implements ExtendedTarget, IApplet,
 		control.setAltImage(TestApplet.getBitmap("mml_in.gif"));
 		control.setTitle("step");
 		control.setDirty(true);
+	}
+	
+	
+	public void _properties( Object o ) {
+		FileChooser fc = new FileChooser(Application.application()
+				.mainRootView(), "Open Properties File", FileChooser.LOAD_TYPE);
+		String targetProperties = System.getProperty("org.osgi.test.target.properties");
+		if ( targetProperties != null ) {
+			File 	f = new File( targetProperties );
+			fc.setFile(f.getName());
+			if ( f.getParentFile() != null )
+				fc.setDirectory(f.getParentFile().getAbsolutePath());			
+		}
+		
+		fc.showModally();
+		targetProperties = fc.file();
+		if ( targetProperties != null )
+			System.setProperty("org.osgi.test.target.properties", targetProperties);
+		setMessage("Set properties file to " + targetProperties );
 	}
 
 	/**
