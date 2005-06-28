@@ -12,7 +12,7 @@ import java.util.*;
 import org.osgi.framework.*;
 import org.osgi.test.script.*;
 import org.osgi.test.service.TestCase;
-import org.osgi.test.shared.IHandler;
+import org.osgi.test.shared.*;
 import org.osgi.tools.command.*;
 
 /**
@@ -94,6 +94,23 @@ public class TestCommands implements CommandProvider {
 		throw new RuntimeException("Timed out");
 	}
 
+	/**
+	 * Set the properties property
+	 */
+	
+	public Tag _properties( ScriptContext script, Tag tag) throws Exception {
+		Tag result = new Tag("testproperties");
+		String location = tag.getAttribute("location");
+		if ( location != null ) {
+			result.addAttribute("location", location );
+			System.setProperty(IRun.TEST_PROPERTIES_FILE, location );
+		} else {
+			result.addAttribute("error", "no location");
+		}
+		return tag;
+	}
+
+	
 	/**
 	 * Update the framework.
 	 * 

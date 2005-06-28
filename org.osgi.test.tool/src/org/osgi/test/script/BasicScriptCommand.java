@@ -50,4 +50,5 @@ class BasicScriptCommand {
 		}
 		return result;
 	}
+	
 }
