@@ -52,7 +52,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
         if (nodeUriArr[7].equals("Remove"))
             return true;
         if (nodeUriArr[7].equals("InstallAndActivate"))
-            return false;
+            return true;
         
         return false;
     }
@@ -160,7 +160,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
 	    if (l == 6)
             return new String[] {"ID", "EnvType", "Data", "Operations"};
         if (l == 7) {
-            if (nodeUriArr[6].equals("Operation"))
+            if (nodeUriArr[6].equals("Operations"))
                 return new String[] {"Remove", "InstallAndActivate"};
         }
         
@@ -201,7 +201,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
     					0, null, DmtData.FORMAT_NODE);
         }
         if (l == 8) {
-            return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF,
+            return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF,
 					DmtMetaNode.PERMANENT, "", 1, !Metanode.ZERO_OCC, null, 0,
 					0, null, DmtData.FORMAT_NULL).orOperation(DmtMetaNode.CMD_EXECUTE);
         }
@@ -215,11 +215,11 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
             throw new RuntimeException("Internal error");
         if (!Arrays.asList(store.listFiles()).contains(new File(nodeUriArr[6])))
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");        
-        if (!nodeUriArr[7].equals("Remove")) {
+        if (nodeUriArr[7].equals("Remove")) {
             File f = new File(store, nodeUriArr[5]);
             f.delete();
         }
-        if (!nodeUriArr[7].equals("InstallAndActivate")) {
+        if (nodeUriArr[7].equals("InstallAndActivate")) {
             install(nodeUri);
         }
     }
