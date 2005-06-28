@@ -2,14 +2,16 @@ package org.osgi.test.eclipse;
 
 import java.io.*;
 import java.net.*;
-import java.net.Socket;
 import java.util.*;
+
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.action.*;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.*;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.*;
 import org.osgi.service.packageadmin.PackageAdmin;
@@ -32,6 +34,8 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 	IProgressMonitor	progress;
 	int					lastWork	= 0;
 	Label				status;
+	Action				propertiesAction;
+	Action				targetsAction;
 
 	public TestView() {
 		packageAdmin = (PackageAdmin) getService(PackageAdmin.class);
@@ -43,6 +47,70 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	void makeActions() {
+		propertiesAction = new Action() {
+			public void run() {
+				FileDialog dialog = new FileDialog(viewer.getControl().getShell(), SWT.SINGLE);
+				String tp = System.getProperty(IRun.TEST_PROPERTIES_FILE);
+				if (tp != null)
+					dialog.setFilterPath(tp);
+				String result = dialog.open();
+				if (result == null)
+					return;
+				String file = dialog.getFileName();
+				tp = dialog.getFilterPath() + File.separator + file;
+				System.setProperty(IRun.TEST_PROPERTIES_FILE, tp);
+				Properties properties = new Properties();
+				try {
+					properties.load( new FileInputStream(tp));
+					showMessage("Properties " + properties);					
+				}
+				catch (FileNotFoundException e) {
+					showMessage("Can't find file: " + tp );					
+				}
+				catch (IOException e) {
+					showMessage("Not a properties file: " + tp );					
+				}
+			}
+		};
+		targetsAction = new Action() {
+			public void run() {
+				try {
+					StringBuffer sb = new StringBuffer();
+					String del = "";
+					ServiceReference refs[] = Activator.context
+							.getServiceReferences(
+									RemoteService.class.getName(), null);
+					for (int i = 0; refs != null && i < refs.length; i++) {
+						sb.append(del);
+						sb.append(refs[i].getProperty("host"));
+						sb.append(":");
+						sb.append(refs[i].getProperty("port"));
+						del = "\n";
+					}
+					showMessage(sb.toString());
+				}
+				catch (InvalidSyntaxException e) {
+					// cannot happen, filter is null
+				}
+			}
+		};
+		propertiesAction.setText("Test Properties");
+		propertiesAction.setToolTipText("Select Properties file for target");
+
+		targetsAction.setText("Show Targets");
+		targetsAction.setToolTipText("List currently registered targetst");
+
+		IActionBars bars = getViewSite().getActionBars();
+		bars.getMenuManager().add(propertiesAction);
+		bars.getMenuManager().add(targetsAction);
+	}
+
+	void showMessage(String message) {
+		MessageDialog.openInformation(viewer.getControl().getShell(),
+				"OSGi Test View", message);
 	}
 
 	public void dispose() {
@@ -70,6 +138,7 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 		viewer.setLabelProvider(new LogLabelProvider());
 		viewer.setContentProvider(this);
 		viewer.setInput(new ArrayList());
+		makeActions();
 	}
 
 	/**
@@ -77,13 +146,6 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 	 */
 	public void setFocus() {
 		viewer.getControl().setFocus();
-	}
-
-	/**
-	 * @return
-	 */
-	private Shell getShell() {
-		return viewer.getControl().getShell();
 	}
 
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
@@ -106,7 +168,7 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 	}
 
 	public void setResult(TestCase tc, int errors) {
-		//add(new TestResult("r:" + tc.getName() + " Errors: " + errors));
+		// add(new TestResult("r:" + tc.getName() + " Errors: " + errors));
 	}
 
 	public void setTargetProperties(Dictionary properties) {
@@ -127,7 +189,7 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 	}
 
 	public void alive(String msg) {
-		//add(new TestResult("a:" + msg));
+		// add(new TestResult("a:" + msg));
 	}
 
 	public void step(String msg) {
@@ -144,7 +206,7 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 	}
 
 	/**
-	 *  
+	 * 
 	 */
 	public void clear() {
 		viewer.setInput(new ArrayList());
@@ -202,7 +264,7 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 					catch (Exception e) {
 						error("Exception in testcase " + testcase.getName(), e);
 					}
-					String lastRun = handler.stopRun();
+					handler.stopRun();
 					for (Iterator i = bundles.iterator(); i.hasNext();) {
 						try {
 							Bundle b = (Bundle) i.next();
@@ -330,7 +392,6 @@ public class TestView extends ViewPart implements IStructuredContentProvider,
 							InputStream in = url.openStream();
 							if (in != null)
 								try {
-									ByteArrayOutputStream bout = new ByteArrayOutputStream();
 									target
 											.install(url.getFile() + "~keep~",
 													in);
