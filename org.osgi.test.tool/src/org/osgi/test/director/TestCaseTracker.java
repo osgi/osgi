@@ -73,7 +73,7 @@ class TestCaseTracker extends ServiceTracker {
 				"<br>");
 		result.append("</pre></small>");
 		String r = result.toString();
-		return result.toString();
+		return r;
 	}
 
 	/**

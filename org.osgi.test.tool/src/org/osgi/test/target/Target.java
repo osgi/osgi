@@ -9,6 +9,7 @@ package org.osgi.test.target;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
 import org.osgi.framework.*;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.permissionadmin.PermissionAdmin;
@@ -221,7 +222,6 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 	 * and then to broadcast an announcement on the net of our existence.
 	 */
 	public void run() {
-		PermissionAdmin permissionAdmin;
 		int preferredSocket = 3191;
 		while (cont)
 			try {
@@ -287,7 +287,7 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 							run.open(socket);
 							setProperties();
 						}
-						catch (IOException e) {
+						catch (Throwable e) {
 							log("Error in socket initialization", e);
 							run.close();
 							linkClosed();
@@ -558,5 +558,14 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 			result = context.getProperty(name);
 		}
 		return (result == null) ? def : result;
+	}
+
+	public void setTestProperties(Dictionary properties) throws IOException {
+		for ( Enumeration e=properties.keys(); e.hasMoreElements(); ) {
+			String key = (String) e.nextElement();
+			String  value = (String) properties.get(key);
+			System.setProperty(key, value );
+			System.out.println("Test property " + key + "=" + value );
+		}		
 	}
 }

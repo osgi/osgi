@@ -9,6 +9,7 @@ package org.osgi.test.director;
 import java.io.*;
 import java.net.Socket;
 import java.util.*;
+
 import org.osgi.test.script.Tag;
 import org.osgi.test.service.*;
 import org.osgi.test.shared.*;
@@ -101,6 +102,9 @@ public class Run implements IRun, TestRun {
 			target.setTimeout(5 * 60000);
 			history.addContent(new Tag("forever"));
 		}
+		
+		updateTestProperties(target);		
+		
 		Tag testcase = new Tag("testcase");
 		this.history.addContent(testcase);
 		testcase.addAttribute("starting", new Date());
@@ -147,6 +151,18 @@ public class Run implements IRun, TestRun {
 		else
 			applet.setResult(tc, errors);
 		return testcase;
+	}
+
+	private void updateTestProperties(TargetLink target) throws IOException, FileNotFoundException {
+		String targetProperties = System.getProperty(IRun.TEST_PROPERTIES_FILE);
+		if ( targetProperties != null ) {
+			File tp = new File( targetProperties );
+			if ( tp.exists() ) {
+				Properties properties = new Properties();
+				properties.load( new FileInputStream( tp ));
+				target.setTestProperties(properties);
+			} 
+		}
 	}
 
 	/**
@@ -305,7 +321,7 @@ public class Run implements IRun, TestRun {
 			target = new TargetLink(this);
 			target.open(new Socket(host, port));
 			wait(15000);
-			target.updateFramework();
+			target.updateFramework();			
 			target.close();
 		}
 		catch (Exception e) {
