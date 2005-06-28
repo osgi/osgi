@@ -49,8 +49,14 @@ public class CommandProcessor {
 		}
 		try {
 			if (cmd.equals("open")) {
-				session = fact.getSession(args[2], uri,
-						DmtSession.LOCK_TYPE_ATOMIC);
+			    int lockMode = DmtSession.LOCK_TYPE_ATOMIC;
+                if(args.length > 3) {
+                    if(args[3].equals("shared")) 
+                            lockMode = DmtSession.LOCK_TYPE_SHARED;
+                    else if(args[3].equals("exclusive")) 
+                        lockMode = DmtSession.LOCK_TYPE_EXCLUSIVE;
+                }
+				session = fact.getSession(args[2], uri,	lockMode);
 				// TODO other lock types
 			}
 			else if (cmd.equals("close")) {
@@ -154,6 +160,7 @@ public class CommandProcessor {
 	}
 
 	private DmtData dmtFromString(String typedata) {
+        // TODO add new types (here and in remote gui)
 		// expected format eg "int:23"
 		int pos = typedata.indexOf(":");
 		String type = typedata.substring(0, pos);
@@ -193,60 +200,60 @@ public class CommandProcessor {
 	private String help() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("\n");
-		sb.append("Command          Short Params          Returns ");
+		sb.append("Command          Short Params              Returns ");
 		sb.append("\n");
-		sb.append("===============================================");
+		sb.append("===================================================");
 		sb.append("\n");
-		sb.append("open                    uri serverid           ");
+		sb.append("open                    uri serverid [lockmode]    ");
 		sb.append("\n");
-		sb.append("close                                          ");
+		sb.append("close                                              ");
 		sb.append("\n");
-        sb.append("commit            c                            ");
+        sb.append("commit            c                                ");
         sb.append("\n");
-        sb.append("rollback          r                            ");
+        sb.append("rollback          r                                ");
         sb.append("\n");
-		sb.append("isNodeUri               uri             true/false");
+		sb.append("isNodeUri               uri                 true/false");
 		sb.append("\n");
-		sb.append("getNodeValue      gv    uri             value as string");
+		sb.append("getNodeValue      gv    uri                 value as string");
 		sb.append("\n");
-		sb.append("getNodeTitle      gt    uri             title  ");
+		sb.append("getNodeTitle      gt    uri                 title  ");
 		sb.append("\n");
-		sb.append("getNodeVersion          uri             version");
+		sb.append("getNodeVersion          uri                 version");
 		sb.append("\n");
-		sb.append("getNodeTimestamp        uri             time   ");
+		sb.append("getNodeTimestamp        uri                 time   ");
 		sb.append("\n");
-		sb.append("getNodeSize             uri             size   ");
+		sb.append("getNodeSize             uri                 size   ");
 		sb.append("\n");
-		sb.append("getChildNodeNames gc    uri             names/ ");
+		sb.append("getChildNodeNames gc    uri                 names/ ");
 		sb.append("\n");
-		sb.append("setNodeTitle      st    uri title              ");
+		sb.append("setNodeTitle      st    uri title                  ");
 		sb.append("\n");
 		sb.append("setNodeValue      sv    uri type:data_as_string "
-				+ "(type can be 'int', 'chr', 'boolean')");
+				+ "(type can be 'int', 'chr', 'boolean', 'xml', 'bin', 'null')");
 		sb.append("\n");
-		sb.append("setNodeType       sty   uri type               ");
+		sb.append("setNodeType       sty   uri type                   ");
 		sb.append("\n");
-		sb.append("deleteNode        d     uri                    ");
+		sb.append("deleteNode        d     uri                        ");
 		sb.append("\n");
-		sb.append("createInterior    ci    uri                    ");
+		sb.append("createInterior    ci    uri                        ");
 		sb.append("\n");
-		sb.append("createLeaf        cl    uri type:data (as above)");
+		sb.append("createLeaf        cl    uri type:data (as above)   ");
 		sb.append("\n");
-		sb.append("copy                   uri new_uri            ");
+		sb.append("copy                    uri new_uri                ");
 		sb.append("\n");
-		sb.append("renameNode        re    uri new_name           ");
+		sb.append("renameNode        re    uri new_name               ");
 		sb.append("\n");
-		sb.append("execute           x     uri data               ");
+		sb.append("execute           x     uri data                   ");
 		sb.append("\n");
-		sb.append("isLeafNode        il    uri             true/false");
+		sb.append("isLeafNode        il    uri                 true/false");
 		sb.append("\n");
-		sb.append("setNodeAcl        sa    uri acl_as_string      ");
+		sb.append("setNodeAcl        sa    uri acl_as_string          ");
 		sb.append("\n");
-		sb.append("getNodeAcl        ga    uri             acl    ");
+		sb.append("getNodeAcl        ga    uri                 acl    ");
 		sb.append("\n");
-		sb.append("getEffectiveNodeAcl gea uri             effective acl");
+		sb.append("getEffectiveNodeAcl gea uri                 effective acl");
 		sb.append("\n");
-		sb.append("getMetaNode       gm    uri             metainfo");
+		sb.append("getMetaNode       gm    uri                 metainfo");
 		sb.append("\n");
 		return new String(sb);
 	}
