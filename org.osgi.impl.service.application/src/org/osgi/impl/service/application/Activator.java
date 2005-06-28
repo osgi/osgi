@@ -33,6 +33,10 @@ public class Activator extends Object implements
 	}
 
 	public void start(BundleContext bc) throws Exception {
+        // Application tree has changed, commenting out until it is properly
+        // defined and implemented.
+        
+        /*
 		Activator.bc = bc;
 		scheduler = new Scheduler(bc);
 		
@@ -40,9 +44,11 @@ public class Activator extends Object implements
 		appPlugin.start( bc );
 		
 		System.out.println("Application service started successfully!");
+        */
 	}
 
 	public void stop(BundleContext bc) throws Exception {
+        /*
 		//unregistering the service
 		appPlugin.stop( bc );
 		appPlugin = null;
@@ -53,5 +59,6 @@ public class Activator extends Object implements
 		Activator.bc = null;
 		
 		System.out.println("Application service stopped successfully!");
+        */
 	}
 }
