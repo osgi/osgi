@@ -70,8 +70,26 @@ public class Plugin implements DmtDataPlugin, DmtExecPlugin {
     }
 
     public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
-        // TODO Auto-generated method stub
-        
+    	String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
+		int l = nodeUriArr.length;
+		if (l < 4)
+			throw new RuntimeException("Internal error");
+		if (nodeUriArr[3].equals("Download")) {
+			pluginDownload.setNodeValue(nodeUri, data);
+			return;
+		}
+		if (nodeUriArr[3].equals("Inventory")) {
+			if (nodeUriArr[4].equals("Delivered")) {
+				; // TODO
+				return;
+			}
+			if (nodeUriArr[4].equals("Deployed")) {
+			    ; // TODO
+				return;
+			}
+		}
+
+		throw new RuntimeException("Internal error");
     }
 
     public void setDefaultNodeValue(String nodeUri) throws DmtException {
@@ -91,13 +109,19 @@ public class Plugin implements DmtDataPlugin, DmtExecPlugin {
 		int l = nodeUriArr.length;
 		if (l < 4)
 			throw new RuntimeException("Internal error");
-		if (nodeUriArr[3].equals("Download"))
+		if (nodeUriArr[3].equals("Download")) {
 			pluginDownload.createInteriorNode(nodeUri);
+			return;
+		}
 		if (nodeUriArr[3].equals("Inventory")) {
-			if (nodeUriArr[4].equals("Delivered"))
+			if (nodeUriArr[4].equals("Delivered")) {
 				; // TODO
-			if (nodeUriArr[4].equals("Deployed"))
+				return;
+			}
+			if (nodeUriArr[4].equals("Deployed")) {
 				pluginDeployed.createInteriorNode(nodeUri);
+				return;
+			}
 		}
 
 		throw new RuntimeException("Internal error");
@@ -275,13 +299,19 @@ public class Plugin implements DmtDataPlugin, DmtExecPlugin {
 		int l = nodeUriArr.length;
 		if (l < 5)
 			throw new RuntimeException("Internal error");
-		if (nodeUriArr[3].equals("Download"))
+		if (nodeUriArr[3].equals("Download")) {
 			pluginDownload.execute(session, nodeUri, correlator, data);
+			return;
+		}
 		if (nodeUriArr[3].equals("Inventory")) {
-			if (nodeUriArr[4].equals("Delivered"))
+			if (nodeUriArr[4].equals("Delivered")) {
 				; // TODOD
-			if (nodeUriArr[4].equals("Deployed"))
+				return;
+			}
+			if (nodeUriArr[4].equals("Deployed")) {
 				pluginDeployed.execute(session, nodeUri, correlator, data);
+				return;
+			}
 		}
 
 		throw new RuntimeException("Internal error");

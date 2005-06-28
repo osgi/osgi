@@ -31,7 +31,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Hashtable;
 
+import javax.swing.JOptionPane;
+
 import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtSession;
 
 
@@ -51,6 +54,7 @@ public class TestDesktop extends Frame implements ActionListener {
     private static final String GET_META_NODE        = "getMetaNode";
     private static final String GET_CHILD_NODE_NAMES = "getChildNodeNames";
     private static final String CREATE_INT_NODE      = "createInteriorNode";
+    private static final String SET_NODE_VALUE       = "setNodeValue";
     private static final String GET_NODE_VALUE       = "getNodeValue";
     private static final String EXECUTE              = "execute";
     private static final String MAKE_TEST            = "MAKE TEST";
@@ -64,6 +68,7 @@ public class TestDesktop extends Frame implements ActionListener {
     private Button b_getMetaNode = new Button(GET_META_NODE);
     private Button b_getChildNodeNames = new Button(GET_CHILD_NODE_NAMES);
     private Button b_createInteriorNode = new Button(CREATE_INT_NODE);
+    private Button b_setNodeValue = new Button(SET_NODE_VALUE);
     private Button b_getNodeValue = new Button(GET_NODE_VALUE);
     private Button b_execute = new Button(EXECUTE);
     private Button b_makeTest = new Button(MAKE_TEST);
@@ -121,7 +126,11 @@ public class TestDesktop extends Frame implements ActionListener {
         b_createInteriorNode.setActionCommand(CREATE_INT_NODE);
         b_createInteriorNode.addActionListener(this);
         pa_left.add(b_createInteriorNode);
-
+        
+        b_setNodeValue.setActionCommand(SET_NODE_VALUE);
+        b_setNodeValue.addActionListener(this);
+        pa_left.add(b_setNodeValue);
+        
         b_getNodeValue.setActionCommand(GET_NODE_VALUE);
         b_getNodeValue.addActionListener(this);
         pa_left.add(b_getNodeValue);
@@ -174,6 +183,11 @@ public class TestDesktop extends Frame implements ActionListener {
         } else if (CREATE_INT_NODE.equals(acc)){
         	lastCommand = acc;
         	session.createInteriorNode(uri);
+        } else if (SET_NODE_VALUE.equals(acc)){
+        	lastCommand = acc;
+        	String text = JOptionPane.showInputDialog(this, "");
+        	DmtData data = new DmtData(text);
+        	session.setNodeValue(uri, data);
         } else if (GET_NODE_VALUE.equals(acc)) {
             lastCommand = acc;
             res = session.getNodeValue(uri).toString();
