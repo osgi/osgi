@@ -187,8 +187,8 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin {
                 getCustomizers(dp).length == 0)
                 	return false;
             if ("Processors".equals(nodeUriArr[7]) &&
-                    getCustomizers(dp).length == 0)
-                    	return false;
+                getCustomizers(dp).length == 0)
+                  	return false;
             if (l == 8)
                 return true;
             Set bundleSet = new HashSet(Arrays.asList(getBundleIDs(dp)));
@@ -371,9 +371,13 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin {
             throw new RuntimeException("Internal error");
         } else if ("Ext".equals(nodeUriArr[6])) {
             DeploymentPackageImpl dp = (DeploymentPackageImpl) mt.get(nodeUriArr[5]);
-            if (l == 7)
-                return new String[] {"Version", "Processors", "ProcessorBundle", 
-                    "Bundles"};
+            if (l == 7) {
+                if (getCustomizers(dp).length == 0)
+                    return new String[] {"Version", "Bundles"};
+                else
+                    return new String[] {"Version", "Processors", "ProcessorBundle", 
+            			"Bundles"};
+            }
             if (l == 8) {
                 if ("ProcessorBundle".equals(nodeUriArr[7]))
                     return getCustomizers(dp);
