@@ -609,7 +609,8 @@ public class DmtSessionImpl implements DmtSession {
             throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
                     "Cannot create root node.");
         checkNode(parent, SHOULD_BE_INTERIOR);
-        checkOperation(parent, DmtAcl.ADD, DmtMetaNode.CMD_ADD);
+        checkNodePermission(parent, DmtAcl.ADD);
+        checkNodeCapability(uri, DmtMetaNode.CMD_ADD);
 
         DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
         if(metaNode != null && metaNode.isLeaf())
@@ -625,6 +626,10 @@ public class DmtSessionImpl implements DmtSession {
         // it is forbidden to create permanent nodes, but this is not checked
         // here: a permanent node must always exist, so NODE_ALREADY_EXISTS
         // exception will be thrown anyway
+        
+        // it is not really useful to allow creating automatic nodes, but this
+        // is not a hard requirement, and should be enforced by the (lack of 
+        // the) ADD access type instead
         
         if(type == null)
             getWritableDataPlugin(uri).createInteriorNode(uri);
@@ -666,7 +671,8 @@ public class DmtSessionImpl implements DmtSession {
             throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
                     "Cannot create root node.");
         checkNode(parent, SHOULD_BE_INTERIOR);
-        checkOperation(parent, DmtAcl.ADD, DmtMetaNode.CMD_ADD);
+        checkNodePermission(parent, DmtAcl.ADD);
+        checkNodeCapability(uri, DmtMetaNode.CMD_ADD);
 
         DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
         if(metaNode != null && !metaNode.isLeaf())
@@ -683,6 +689,10 @@ public class DmtSessionImpl implements DmtSession {
         // here: a permanent node must always exist, so NODE_ALREADY_EXISTS
         // exception will be thrown anyway
 
+        // it is not really useful to allow creating automatic nodes, but this
+        // is not a hard requirement, and should be enforced by the (lack of 
+        // the) ADD access type instead
+        
         if(value == null)
             getWritableDataPlugin(uri).createLeafNode(uri);
         else if(mimeType == null)
@@ -718,7 +728,8 @@ public class DmtSessionImpl implements DmtSession {
 
             // ACL not copied, so parent does not need REPLACE permission even
             // if the copied node is a leaf
-			checkOperation(newParentUri, DmtAcl.ADD, DmtMetaNode.CMD_ADD);
+            checkNodePermission(newParentUri, DmtAcl.ADD);
+            checkNodeCapability(newUri, DmtMetaNode.CMD_ADD);
 
 			checkNewNodeName(newUri);
             checkMaxOccurrence(newUri);
@@ -1026,7 +1037,7 @@ public class DmtSessionImpl implements DmtSession {
         if(metaNode != null && !metaNode.can(capability))
             throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
                     "Node meta-data does not allow the " + 
-                    capabilityName(capability) + " operation on this node.");
+                    capabilityName(capability) + " operation for this node.");
         // default for all capabilities is 'true', if no meta-data is provided
     }
 
