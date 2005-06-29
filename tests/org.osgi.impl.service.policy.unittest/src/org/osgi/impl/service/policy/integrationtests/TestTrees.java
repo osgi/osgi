@@ -164,14 +164,14 @@ public class TestTrees extends IntegratedTest {
 		startFramework(true);
 		
 		DmtSession session = dmtAdmin.getSession(permissionAdminPlugin_dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
-		String value = session.getNodeValue("Default/PermissionInfo").getString();
+		String value = session.getNodeValue("Default").getString();
 		// the default permission is already set at startup, let's check if it is there
 		assertEquals(new PermissionInfo(PackagePermission.class.getName(),"*","IMPORT").getEncoded()+"\n",value);
 
-		session.createInteriorNode("1");
-		session.setNodeValue("1/Location",new DmtData("http://location1"));
+		session.createInteriorNode("Location/1");
+		session.setNodeValue("Location/1/Location",new DmtData("http://location1"));
 		PermissionInfo pi = new PermissionInfo(AdminPermission.class.getName(),"*","*");
-		session.setNodeValue("1/PermissionInfo",new DmtData(pi.getEncoded()));
+		session.setNodeValue("Location/1/PermissionInfo",new DmtData(pi.getEncoded()));
 		session.close();
 		
 		PermissionInfo[] permissions = permissionAdmin.getPermissions("http://location1");

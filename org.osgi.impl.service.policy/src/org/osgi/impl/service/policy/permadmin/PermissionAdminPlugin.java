@@ -51,10 +51,12 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 	/*
 	 * ------------------------------------- 
 	 */
-	private final static DmtMetaNode	rootMetaNode = new RootMetaNode("permissions associated with bundle locations");
+	private final static DmtMetaNode	rootMetaNode = new RootMetaNode("PermissionAdmin tree");
+	private final static DmtMetaNode	locationDirMetaNode = new RootMetaNode("permissions associated with bundle location");
 	private final static DmtMetaNode	permissionInfoMetaNode = new PermissionInfoMetaNode();
 	private final static DmtMetaNode 	defaultMetaNode = new DefaultMetaNode();
 	private final static DmtMetaNode	locationMetaNode = new LocationMetaNode();
+	private final static DmtMetaNode	locationEntryMetaNode = new LocationEntryMetaNode();
 	private final static Comparator permissionInfoComparator = new PermissionInfoComparator();
 
 	public static final String PERMISSIONINFO = PermissionInfoMetaNode.PERMISSIONINFO;
@@ -62,15 +64,39 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 	public static final String	DEFAULT	= "Default";
 
 	/** internal representation of the tree */
-	HashMap	entries;
+	HashMap	locationEntries;
+	
+	/** default permissions */
+	PermissionInfo[] defaultPermissions;
 
+	private final PermissionInfo[] stringToPermissionInfos(String str) {
+		String[] ss;
+		ss = Splitter.split(str,'\n',0);
+		PermissionInfo[] pis = new PermissionInfo[ss.length]; 
+		for(int i=0;i<ss.length;i++) {
+			pis[i] = new PermissionInfo(ss[i]);
+		}
+		
+		// we do the sorting on this, instead of the original strings, since these
+		// are canonical
+		Arrays.sort(pis,permissionInfoComparator);
+		return pis;
+	}
+
+	private final String permissionInfosToString(PermissionInfo[] permissionInfo) {
+		StringBuffer sb = new StringBuffer();
+		for(int i=0;i<permissionInfo.length;i++) {
+			sb.append(permissionInfo[i].getEncoded());
+			sb.append("\n");
+		}
+		return sb.toString();
+	}
+	
 	private final class Entry {
-		final boolean isDefault;
 		String location;
 		PermissionInfo[] permissionInfo; // sorted!
 
-		public Entry(boolean isDefault,String location,PermissionInfo[] permissionInfo) {
-			this.isDefault = isDefault;
+		public Entry(String location,PermissionInfo[] permissionInfo) {
 			this.location = location;
 			
 			this.permissionInfo = (PermissionInfo[]) permissionInfo.clone();
@@ -83,44 +109,23 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		 */
 		public boolean isNodeUri(String nodename) {
 			if (PERMISSIONINFO.equals(nodename)) return true;
-			if (LOCATION.equals(nodename) && !isDefault) return true;
+			if (LOCATION.equals(nodename)) return true;
 			return false;
 		}
 
 		public DmtData getNodeValue(String nodename) {
-			if (PERMISSIONINFO.equals(nodename)) {
-				StringBuffer sb = new StringBuffer();
-				for(int i=0;i<permissionInfo.length;i++) {
-					sb.append(permissionInfo[i].getEncoded());
-					sb.append("\n");
-				}
-				return new DmtData(sb.toString());
-			}
-			if (LOCATION.equals(nodename)) return new DmtData(location);
+			if (PERMISSIONINFO.equals(nodename))
+				return new DmtData(permissionInfosToString(permissionInfo));
+			if (LOCATION.equals(nodename))
+				return new DmtData(location);
 
 			// isNodeUri should prevent this
 			throw new IllegalStateException();
 		}
 
-		public void setNodeValue(String nodename, DmtData data) throws IllegalArgumentException {
+		public void setNodeValue(String nodename, DmtData data) throws IllegalArgumentException,DmtException {
 			if (nodename.equals(PERMISSIONINFO)) {
-				String[] ss;
-				try {
-					ss = Splitter.split(data.getString(),'\n',0);
-				}
-				catch (DmtException e) {
-					// this cannot happen, since metadata info should block non-string data
-					throw new IllegalArgumentException(e.getMessage());
-				}
-				PermissionInfo[] pis = new PermissionInfo[ss.length]; 
-				for(int i=0;i<ss.length;i++) {
-					pis[i] = new PermissionInfo(ss[i]);
-				}
-				
-				// we do the sorting on this, instead of the original strings, since these
-				// are canonical
-				Arrays.sort(pis,permissionInfoComparator);
-				this.permissionInfo = pis;
+				this.permissionInfo = stringToPermissionInfos(data.getString());
 				return;
 			}
 			if (nodename.equals(LOCATION)) {
@@ -134,7 +139,7 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 			}
 
 			// isNodeUri should prevent this
-			throw new IllegalStateException();
+			throw new IllegalStateException(nodename);
 		}
 	};
 
@@ -159,15 +164,14 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		PermissionInfo[] permissionInfo;
 		String location;
 		if (locations==null) locations=new String[0];
-		entries = new HashMap();
+		locationEntries = new HashMap();
 		for(int i=0;i<locations.length;i++) {
 			location = locations[i];
 			permissionInfo = permissionAdmin.getPermissions(location);
-			Entry e = new Entry(false,location,permissionInfo);
-			entries.put(hashCalculator.getHash(e.location),e);
+			Entry e = new Entry(location,permissionInfo);
+			locationEntries.put(hashCalculator.getHash(e.location),e);
 		}
-		permissionInfo = permissionAdmin.getDefaultPermissions();
-		if (permissionInfo!=null) entries.put(DEFAULT,new Entry(true,null,permissionInfo));
+		defaultPermissions = permissionAdmin.getDefaultPermissions();
 	}
 
 	public DmtMetaNode getMetaNode(String nodeUri)
@@ -176,44 +180,82 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		if (path.length==0) {
 			return rootMetaNode;
 		}
+		if (path.length>=1) {
+			if (!path[0].equals(LOCATION)&&!path[0].equals(DEFAULT)) 
+				throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,"");
+		}
 		if (path.length==1) {
-			return defaultMetaNode;
+			if (path[0].equals(LOCATION)) {
+				return locationDirMetaNode;
+			} else {
+				return defaultMetaNode;
+			}
+		}
+		if (path.length>=2) {
+			if (!path[0].equals(LOCATION))
+				throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,"");
 		}
 		if (path.length==2) {
-			if (path[1].equals(PERMISSIONINFO)) return permissionInfoMetaNode;
-			if (path[1].equals(LOCATION)) return locationMetaNode;
+			return locationEntryMetaNode;
 		}
-		throw new IllegalStateException("not implemented");
+		if (path.length>=3) {
+			if (!path[2].equals(PERMISSIONINFO)&&!path[2].equals(LOCATION)) {
+				throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,"");
+			}
+		}
+		if (path.length==3) {
+			if (path[2].equals(PERMISSIONINFO)) return permissionInfoMetaNode;
+			if (path[2].equals(LOCATION)) return locationMetaNode;
+		}
+
+		throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,"");
 	}
 
 	public void rollback() throws DmtException {
 		// simply don't write data back to the permission admin
-		entries = null;
+		// but do some cleanup, anyway
+		defaultPermissions = null;
+		locationEntries = null;
 	}
 
 	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
+		switchToWriteMode(nodeUri);
 		String[] path = getPath(nodeUri);
-		if (path.length!=2) {
-			// this cannot happen, isNodeUri and MetaData info should prevent this
-			throw new IllegalStateException();
+		if (path.length==1) {
+			// this must be the Default node
+			this.defaultPermissions = stringToPermissionInfos(data.getString());
+			return;
 		}
-		Entry e = (Entry) entries.get(path[0]);
-		try {
-			switchToWriteMode(nodeUri);
-			e.setNodeValue(path[1],data);
-		} catch (IllegalArgumentException iae) {
-			throw new DmtException(nodeUri,DmtException.METADATA_MISMATCH,"cannot parse permission",iae);
+		if (path.length==3) {
+			// this must be Location/<location>/*
+			Entry e = (Entry) locationEntries.get(path[1]);
+			try {
+				switchToWriteMode(nodeUri);
+				e.setNodeValue(path[2],data);
+			} catch (IllegalArgumentException iae) {
+				throw new DmtException(nodeUri,DmtException.METADATA_MISMATCH,"cannot parse permission",iae);
+			}
+			return;
 		}
+		// this cannot happen, isNodeUri and MetaData info should prevent this
+		throw new IllegalStateException();
 	}
 
 	public void deleteNode(String nodeUri) throws DmtException {
 		switchToWriteMode(nodeUri);
 		String[] path = getPath(nodeUri);
-		if (path.length!=1) {
-			// should not get here, metanode info should prevent this
-			throw new IllegalStateException();
+		if (path.length==1) {
+			// this must be the Default node
+			this.defaultPermissions = null;
+			return;
 		}
-		entries.remove(path[0]); // isNodeUri already checked this
+		if (path.length==2) {
+			// this must be Location/<location>
+			locationEntries.remove(path[1]);
+			return;
+		}
+		// should not get here, metanode info should prevent this
+		throw new IllegalStateException();
 	}
 
 	public void createInteriorNode(String nodeUri) throws DmtException {
@@ -222,21 +264,20 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		switchToWriteMode(nodeUri);
 		
 		if (path[0].equals(DEFAULT)) {
-			entries.put(DEFAULT,new Entry(true,null,new PermissionInfo[]{}));
+			defaultPermissions = new PermissionInfo[0];
 			return;
 		}
 
-		entries.put(path[0],new Entry(false,null,new PermissionInfo[0]));
+		locationEntries.put(path[1],new Entry(null,new PermissionInfo[0]));
 	}
 
 	public void commit() throws DmtException {
 		if (!isDirty()) return;
 
 		// check if current tree is consistent
-		Collection coll = entries.values();
+		Collection coll = locationEntries.values();
 		for (Iterator iter = coll.iterator(); iter.hasNext();) {
 			Entry e = (Entry) iter.next();
-			if (e.isDefault) continue;
 			if ((e.location==null)||(e.location.equals(""))) {
 				throw new DmtException(ROOT,DmtException.METADATA_MISMATCH,"location is empty");
 			}
@@ -244,12 +285,7 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		
 		
 		// the default
-		Entry defaulte = (Entry) entries.get(DEFAULT);
-		if (defaulte == null) {
-			permissionAdmin.setDefaultPermissions(null);
-		} else {
-			permissionAdmin.setDefaultPermissions(defaulte.permissionInfo);
-		}
+		permissionAdmin.setDefaultPermissions(this.defaultPermissions);
 		
 		// the location -> permissionInfo data
 		// FIRST, put everything into the permissionadmin,
@@ -258,7 +294,6 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		Set locationSet = new TreeSet();
 		for (Iterator iter = coll.iterator(); iter.hasNext();) {
 			Entry entry = (Entry) iter.next();
-			if (entry.isDefault) continue;
 			locationSet.add(entry.location);
 			permissionAdmin.setPermissions(entry.location,entry.permissionInfo);
 		}
@@ -270,7 +305,8 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		}
 
 		// some cleanup
-		entries = null;
+		locationEntries = null;
+		defaultPermissions = null;
 	}
 
 	public void close() {}
@@ -280,53 +316,85 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		String[] path = getPath(nodeUri);
 		if (path.length==0) { return true; }
 		if (path.length>=1) {
-			e = (Entry) entries.get(path[0]);
+			if (!path[0].equals(DEFAULT)&&!path[0].equals(LOCATION)) return false;
+			if (path[0].equals(DEFAULT)&&defaultPermissions==null) return false;
+		}
+		if (path.length==1) return true;
+		if (path.length>=2) {
+			if (!path[0].equals(LOCATION)) return false;
+			e = (Entry) locationEntries.get(path[1]);
 			if (e==null) return false;
 		}
-		if (path.length==2) {
-			return e.isNodeUri(path[1]);
-		}
-		if (path.length>2) {
-			return false;
-		}
-		return true;
+		if (path.length==2) return true;
+		if (path.length>3) return false;
+		
+		return e.isNodeUri(path[2]);
 	}
 
 	public DmtData getNodeValue(String nodeUri) throws DmtException {
 		String path[] = getPath(nodeUri);
-		if (path.length!=2) {
-			// metanodes should prevent this
-			throw new IllegalStateException();
+		
+		if (path.length==1) {
+			return new DmtData(permissionInfosToString(defaultPermissions));
 		}
-		Entry e = (Entry) entries.get(path[0]);
-		return e.getNodeValue(path[1]);
+		if (path.length==3) {
+			Entry e = (Entry) locationEntries.get(path[1]);
+			return e.getNodeValue(path[2]);
+		}
+		throw new IllegalStateException(nodeUri);
 	}
 
 	public boolean isLeafNode(String nodeUri) throws DmtException {
 		String[] path = getPath(nodeUri);
-		return path.length==2;
+		if (path.length==0) return false;
+		if (path.length==1) {
+			return (path[0].equals(DEFAULT));
+		}
+		if (path.length==2) {
+			return false;
+		}
+		if (path.length==3) {
+			return true;
+		}
+		return false;
 	}
 
 	public void setDefaultNodeValue(String nodeUri) throws DmtException {
 		String path[] = getPath(nodeUri);
+		// TODO
 	}
 
 	public String[] getChildNodeNames(String nodeUri) throws DmtException {
 		String[] path = getPath(nodeUri);
 		if (path.length==0) {
-			String keys[] = new String[0];
-			keys = (String[]) entries.keySet().toArray(keys);
-			return keys;
-		}
-		if (path.length==1) {
-			if (DEFAULT.equals(path[0])) {
-				return new String[] { PERMISSIONINFO };
+			if (defaultPermissions==null) {
+				return new String[] { LOCATION };
 			} else {
-				return new String[] { LOCATION, PERMISSIONINFO };
+				return new String[] { DEFAULT, LOCATION };
 			}
 		}
-		throw new IllegalStateException("not implemented");
+		if (path.length==1) {
+			String keys[] = new String[0];
+			keys = (String[]) locationEntries.keySet().toArray(keys);
+			return keys;
+		}
+		if (path.length==2) {
+			return new String[] { LOCATION, PERMISSIONINFO };
+		}
+		throw new IllegalStateException(nodeUri);
 	}
 
+	public void createLeafNode(String nodeUri, DmtData value, String mimeType) throws DmtException {
+		// only one leaf node can be created: Default
+		switchToWriteMode(nodeUri);
+		defaultPermissions = stringToPermissionInfos(value.getString());
+	}
 
+	public void createLeafNode(String nodeUri) throws DmtException {
+		// only one leaf node can be created: Default
+		switchToWriteMode(nodeUri);
+		defaultPermissions = new PermissionInfo[0];
+	}
+
+	
 }
