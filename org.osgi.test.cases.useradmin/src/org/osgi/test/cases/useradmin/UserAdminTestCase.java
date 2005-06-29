@@ -29,5 +29,13 @@ package org.osgi.test.cases.useradmin;
 
 import org.osgi.test.cases.util.DefaultTestCase;
 
+/**
+ * 
+ *
+ * TODO Add Javadoc comment for this type.
+ * 
+ * @testcase org.osgi.service.useradmin
+ * @version $Revision$
+ */
 public class UserAdminTestCase extends DefaultTestCase {
 }

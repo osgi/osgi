@@ -3,10 +3,6 @@ package org.osgi.test.cases.upnp.tbc;
 /**
  * Parsing java.util.Data in date of type iso8601 Not ready for Time Zones
  * 
- * @Marian Dichev
- * @m_dichev@prosyst.bg
- * @1.0
- * @since
  */
 public class DTParser {
 	private String	toParse;

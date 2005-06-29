@@ -7,10 +7,6 @@ import org.osgi.test.cases.upnp.tbc.device.*;
 /**
  * 
  * 
- * @Marian Dichev
- * @m_dichev@prosyst.bg
- * @1.0
- * @since
  */
 public class DiscoveryMsgSender extends DiscoveryClient {
 	private DiscoveryServer		server;

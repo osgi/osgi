@@ -5,10 +5,6 @@ import org.osgi.service.upnp.*;
 /**
  * 
  * 
- * @Marian Dichev
- * @m_dichev@prosyst.bg
- * @1.0
- * @since
  */
 public class TestStateVariable implements UPnPStateVariable {
 	/**

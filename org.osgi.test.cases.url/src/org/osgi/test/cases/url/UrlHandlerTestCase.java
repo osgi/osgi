@@ -12,6 +12,14 @@ package org.osgi.test.cases.url;
 
 import org.osgi.test.cases.util.DefaultTestCase;
 
+/**
+ * 
+ *
+ * TODO Add Javadoc comment for this type.
+ * 
+ * @testcase org.osgi.service.url
+ * @version $Revision$
+ */
 public class UrlHandlerTestCase extends DefaultTestCase {
 	//*********************************************************
 	/**

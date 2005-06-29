@@ -7,10 +7,6 @@ import org.osgi.service.upnp.*;
 /**
  * 
  * 
- * @Marian Dichev
- * @m_dichev@prosyst.bg
- * @1.0
- * @since
  */
 public abstract class TestService implements UPnPService, ServiceListener {
 	private UPnPAction[]		actions;

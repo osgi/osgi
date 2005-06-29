@@ -6,10 +6,6 @@ import java.net.*;
 /**
  * 
  * 
- * @Marian Dichev
- * @m_dichev@prosyst.bg
- * @1.0
- * @since
  */
 public class ControlPoint extends Thread {
 	public String			received;

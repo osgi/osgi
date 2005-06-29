@@ -5,10 +5,6 @@ import java.net.*;
 /**
  * 
  * 
- * @Marian Dichev
- * @m_dichev@prosyst.bg
- * @1.0
- * @since
  */
 public final class UPnPConstants {
 	//test props

@@ -13,10 +13,9 @@ public final class Hex {
 	/**
 	 * Encodes <code>byte[]</code> into HEX.
 	 * 
-	 * @param <code>byte[]</code>
-	 * @return <code>String</code> which contains encoded in HEX bytes If
-	 *         <code>byte[]</code> is with length 0 retunrs an empty
-	 *         <code>String</code>
+	 * @return String which contains encoded in HEX bytes If
+	 *         byte[] is with length 0 retunrs an empty
+	 *         String
 	 */
 	public static final String encode(byte[] buff) {
 		String enc = "";
@@ -30,9 +29,9 @@ public final class Hex {
 	/**
 	 * Decodes HEX form a <code>String</code>.
 	 * 
-	 * @param <code>String</code> to decode
-	 * @return <code>byte[]</code> decoded bytes
-	 * @exception <code>Exception</code> if the string does not contain HEX
+	 * @param String to decode
+	 * @return byte[] decoded bytes
+	 * @exception Exception if the string does not contain HEX
 	 *            encoded bytes If there are <code>\n</code> or
 	 *            <code>\r</code> line breaks they are ignored
 	 */

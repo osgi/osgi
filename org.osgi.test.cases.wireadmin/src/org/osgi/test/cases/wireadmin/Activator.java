@@ -7,6 +7,7 @@ import org.osgi.test.cases.util.DefaultTestCase;
  * implementation supplied by OSGi
  * 
  * @author Neviana Ducheva
+ * @testcase org.osgi.service.wireadmin
  * @version 1.0
  */
 public class Activator extends DefaultTestCase {

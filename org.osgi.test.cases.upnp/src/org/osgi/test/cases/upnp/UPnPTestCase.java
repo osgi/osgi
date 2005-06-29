@@ -5,10 +5,8 @@ import org.osgi.test.cases.util.*;
 /**
  * 
  * 
- * @Marian Dichev
- * @m_dichev@prosyst.bg
- * @1.0
- * @since
+ * @testcase org.osgi.service.upnp
+ * @author m_dichev@prosyst.bg
  */
 public class UPnPTestCase extends DefaultTestCase {
 }

@@ -8,10 +8,6 @@ import org.osgi.service.http.*;
 /**
  * 
  * 
- * @Marian Dichev
- * @m_dichev@prosyst.bg
- * @1.0
- * @since
  */
 public class DServletContext implements HttpContext {
 	public DServletContext() {

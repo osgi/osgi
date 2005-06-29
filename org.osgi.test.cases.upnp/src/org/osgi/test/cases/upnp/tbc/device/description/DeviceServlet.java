@@ -12,10 +12,6 @@ import org.osgi.test.cases.util.*;
 /**
  * 
  * 
- * @Marian Dichev
- * @m_dichev@prosyst.bg
- * @1.0
- * @since
  */
 public class DeviceServlet extends HttpServlet {
 	private DescriptionInvoker			invoker;

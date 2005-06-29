@@ -8,10 +8,6 @@ import org.osgi.test.cases.upnp.tbc.*;
 /**
  * 
  * 
- * @Marian Dichev
- * @m_dichev@prosyst.bg
- * @1.0
- * @since
  */
 public class UPnPExportedDevice implements UPnPDevice {
 	private boolean					root;

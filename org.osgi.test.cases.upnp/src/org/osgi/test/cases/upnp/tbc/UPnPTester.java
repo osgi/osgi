@@ -11,8 +11,7 @@ import org.osgi.test.cases.util.*;
 /**
  * 
  * 
- * @author Plamen K. Kosseff
- * @1.1
+ * @version 1.1
  */
 public class UPnPTester implements UPnPEventListener {
 	private DefaultTestBundleControl	control;
