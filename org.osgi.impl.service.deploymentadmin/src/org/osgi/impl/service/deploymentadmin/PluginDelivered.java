@@ -4,9 +4,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
+import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtExecPlugin;
@@ -38,7 +40,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
          	return false;
         if (l == 5)
             return true;
-        if (!Arrays.asList(store.listFiles()).contains(new File(store, nodeUriArr[5])))
+        if (!Arrays.asList(getFiles(nodeUri)).contains(new File(store, nodeUriArr[5])))
             return false;
         if (l == 6)
             return true;
@@ -64,7 +66,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
             throw new RuntimeException("Internal error");
         if (l == 5)
             return false;
-        if (!Arrays.asList(store.listFiles()).contains(new File(store, nodeUriArr[5])))
+        if (!Arrays.asList(getFiles(nodeUri)).contains(new File(store, nodeUriArr[5])))
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
         if (l == 6)
             return false;
@@ -84,7 +86,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
     public DmtData getNodeValue(String nodeUri) throws DmtException {
 	    String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
         int l = nodeUriArr.length;
-        if (!Arrays.asList(store.listFiles()).contains(new File(store, nodeUriArr[5])))
+        if (!Arrays.asList(getFiles(nodeUri)).contains(new File(store, nodeUriArr[5])))
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
 		if (l == 7) {
 		    if (nodeUriArr[6].equals("ID"))
@@ -103,7 +105,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
 		            } 
                 }
                 catch (Exception e) {
-                    // TODO: handle exception
+                    throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "", e);
                 }
                 finally {
                     try {
@@ -119,6 +121,8 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
 		    if (nodeUriArr[6].equals("EnvType"))
 		        return new DmtData("OSGi.R4");
 		}
+		if (l == 8)
+		    return DmtData.NULL_VALUE;
 		
 		throw new RuntimeException("Internal error");
     }
@@ -148,14 +152,14 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
         int l = nodeUriArr.length;
         if (l < 5)
             throw new RuntimeException("Internal error");
-        File[] files = store.listFiles();
+        File[] files = getFiles(nodeUri);
         if (l == 5) {
             String[] ret = new String[files.length];
             for (int i = 0; i < files.length; i++)
                 ret[i] = files[i].getName();
         	return ret;
         }
-        if (!Arrays.asList(store.listFiles()).contains(new File(store, nodeUriArr[5])))
+        if (!Arrays.asList(getFiles(nodeUri)).contains(new File(store, nodeUriArr[5])))
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
 	    if (l == 6)
             return new String[] {"ID", "EnvType", "Data", "Operations"};
@@ -176,7 +180,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
 			return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF,
 					DmtMetaNode.PERMANENT, "", 1, !Metanode.ZERO_OCC, null, 0,
 					0, null, DmtData.FORMAT_NODE).orOperation(DmtMetaNode.CMD_ADD);
-        if (!Arrays.asList(store.listFiles()).contains(new File(store, nodeUriArr[5])))
+        if (!Arrays.asList(getFiles(nodeUri)).contains(new File(store, nodeUriArr[5])))
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
         if (l == 6)
 			return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF,
@@ -213,7 +217,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
         int l = nodeUriArr.length;
         if (l != 8)
             throw new RuntimeException("Internal error");
-        if (!Arrays.asList(store.listFiles()).contains(new File(nodeUriArr[6])))
+        if (!Arrays.asList(getFiles(nodeUri)).contains(new File(nodeUriArr[6])))
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");        
         if (nodeUriArr[7].equals("Remove")) {
             File f = new File(store, nodeUriArr[5]);
@@ -233,7 +237,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
             da.installDeploymentPackage(is);
         }
         catch (Exception e) {
-            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "");
+            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "", e);
         }
         finally {
             try {
@@ -244,6 +248,24 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
                 ioe.printStackTrace();
             }
         }
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////
+    // Private methods
+    
+    private File[] getFiles(String nodeUri) {
+        DmtAdmin dmtA = da.getDmtAdmin();
+        if (null == dmtA)
+            throw new RuntimeException("DMT Admin doesn't run");
+        File[] files = store.listFiles();
+        ArrayList ret = new ArrayList();
+        for (int i = 0; i < files.length; i++) {
+            String a = files[i].getName();
+            String b = dmtA.mangle(null, files[i].getName());
+            if (a.equals(b) && !files[i].isDirectory())
+                ret.add(files[i]);
+        }
+        return (File[]) ret.toArray(new File[] {});
     }
 
 

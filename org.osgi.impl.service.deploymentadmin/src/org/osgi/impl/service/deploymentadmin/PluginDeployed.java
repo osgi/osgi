@@ -297,7 +297,7 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin {
             throw new RuntimeException("Internal error");
         }
         if ("Operations".equals(nodeUriArr[6])) {
-            throw new RuntimeException("Internal error");
+            return DmtData.NULL_VALUE;
         } else if ("Ext".equals(nodeUriArr[6])) {
             if (l == 8) {
                 if ("Version".equals(nodeUriArr[7]))
@@ -442,8 +442,9 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin {
         }
         if ("Operations".equals(nodeUriArr[6])) {
             if (nodeUriArr[7].equals("Remove"))
-                return new Metanode(DmtMetaNode.CMD_EXECUTE, Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
-                        "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_BOOLEAN);
+                return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                        "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_BOOLEAN).
+                        orOperation(DmtMetaNode.CMD_EXECUTE);
             throw new RuntimeException("Internal error");
         } else if ("Ext".equals(nodeUriArr[6])) {
             if (l == 8) {

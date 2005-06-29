@@ -217,6 +217,10 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
 		        return new DmtData("OSGi.R4");
 		    if (nodeUriArr[5].equals("Status"))
 		        return new DmtData(status);
+		    throw new RuntimeException("Internal error");
+		}
+		if (l == 7) {
+		    return DmtData.NULL_VALUE;
 		}
 		
 		throw new RuntimeException("Internal error");
