@@ -147,12 +147,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private void initKeyStore() throws Exception {
         String ksType = System.getProperty(DAConstants.KEYSTORE_TYPE);
         if (null == ksType)
-            ksType = System.getProperty("org.osgi.service.deploymentadmin.keystore.type");
-        if (null == ksType)
             ksType = "JKS";
         String ks = System.getProperty(DAConstants.KEYSTORE_PATH);
-        if (null == ks)
-            ks = System.getProperty("org.osgi.service.deploymentadmin.keystore.path");
         if (null == ks) {
             logger.log(Logger.LOG_WARNING, "Keystore location is not defined. Set the " + 
                     DAConstants.KEYSTORE_PATH + " or the " + 
@@ -163,8 +159,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         if (!file.exists())
             throw new RuntimeException("Keystore is not found: " + file);
         String pwd = System.getProperty(DAConstants.KEYSTORE_PWD);
-        if (null == pwd)
-            pwd = System.getProperty("org.osgi.service.deploymentadmin.keystore.pwd");
         if (null == pwd)
             throw new RuntimeException("There is no keystore password set. Set the " +
                     DAConstants.KEYSTORE_PWD + " or the " + 

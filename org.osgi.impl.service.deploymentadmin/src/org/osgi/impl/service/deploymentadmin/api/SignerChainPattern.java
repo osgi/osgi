@@ -40,45 +40,41 @@ import java.security.cert.Certificate;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import org.osgi.impl.service.deploymentadmin.DAConstants;
 import org.osgi.impl.service.deploymentadmin.Splitter;
 
 
 class SignerChainPattern {
-    
-    // used system properties
-    private static final String KEYSTORE_TYPE = "org.osgi.service.deploymentadmin.keystore.type";
-    private static final String KEYSTORE_PATH = "org.osgi.service.deploymentadmin.keystore.path";
-    private static final String KEYSTORE_PWD  = "org.osgi.service.deploymentadmin.keystore.pwd";
 
     private static Object keystore;
     static {
         try {
             String ksType = (String) AccessController.doPrivileged(new PrivilegedAction() {
 	                public Object run() {
-	                    return System.getProperty(KEYSTORE_TYPE);
+	                    return System.getProperty(DAConstants.KEYSTORE_TYPE);
 	                }
                 }); 
             if (null == ksType)
                 ksType = "JKS";
             String ksPath = (String) AccessController.doPrivileged(new PrivilegedAction() {
                 public Object run() {
-                    return System.getProperty(KEYSTORE_PATH);
+                    return System.getProperty(DAConstants.KEYSTORE_PATH);
                 }
             }); 
             if (null == ksPath)
                 throw new RuntimeException("Keystore path is not defined. Set the " +
-                        KEYSTORE_PATH + " system property!");
+                        DAConstants.KEYSTORE_PATH + " system property!");
             File file = new File(ksPath);
             if (!file.exists())
                 throw new RuntimeException("Keystore is not found: " + file);
             String pwd = (String) AccessController.doPrivileged(new PrivilegedAction() {
                 public Object run() {
-                    return System.getProperty(KEYSTORE_PWD);
+                    return System.getProperty(DAConstants.KEYSTORE_PWD);
                 }
             }); 
             if (null == pwd)
                 throw new RuntimeException("There is no keystore password. Set the " +
-                        KEYSTORE_PWD + " system property!");
+                        DAConstants.KEYSTORE_PWD + " system property!");
             
             final String ksTypeF = ksType;
             final String pwdF = pwd;
