@@ -32,6 +32,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class DmtAdminActivator implements BundleActivator {
+    // TODO make this PID shorter otherwise it could be mangled...
     static final String DMT_PERMISSION_ADMIN_SERVICE_PID = 
         "org.osgi.impl.service.dmt.permissions";
 
