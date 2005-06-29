@@ -33,7 +33,7 @@ import org.osgi.test.cases.util.*;
  *
  * TODO Add Javadoc comment for this type.
  * 
- * @testcase org.osgi.service.application
+ * @testcase org.osgi.service.cm
  * @version $Revision$
  */
 public class CMTestCase extends DefaultTestCase {

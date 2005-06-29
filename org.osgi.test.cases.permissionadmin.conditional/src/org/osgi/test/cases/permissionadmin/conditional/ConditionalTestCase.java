@@ -33,8 +33,8 @@ import org.osgi.test.cases.util.DefaultTestCase;
  *
  * This class may remain empty
  * 
-  *  @testcase org.osgi.service.condpermadmin
-* @version $Revision$
+ * @testcase org.osgi.service.condpermadmin
+ * @version $Revision$
  */
 public class ConditionalTestCase extends DefaultTestCase {
 }

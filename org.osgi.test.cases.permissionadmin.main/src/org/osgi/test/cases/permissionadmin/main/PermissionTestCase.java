@@ -33,7 +33,7 @@ import org.osgi.test.cases.util.*;
  *
  * TODO Add Javadoc comment for this type.
  * 
- *  @testcase org.osgi.service.packageadmin
+ *  @testcase org.osgi.service.permissionadmin
  * @version $Revision$
  */
 public class PermissionTestCase extends DefaultTestCase {
