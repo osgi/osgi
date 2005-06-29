@@ -44,8 +44,8 @@ import java.util.Vector;
 import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 
 /**
- * @methodUnderTest org.osgi.service.dmt.DmtException#getCode
- * @generalDescription This class tests DmtException.getCode method according
+ * org.osgi.service.dmt.DmtException#getCode
+ * This class tests DmtException.getCode method according
  *                     with MEG specification (rfc0085)
  */
 
@@ -61,9 +61,11 @@ public class GetCode {
 	}
 
 	/**
-	 * @testID testGetCode001
-	 * @testDescription Tests if getCode returns a value that is equals to the
+	 * 
+	 *  Tests if getCode returns a value that is equals to the
 	 *                  value passed as a parameter for the constructor
+	 *  @spec DmtException.getCode()
+	 *  @spec DmtException.DmtException(String,int,String)
 	 */
 	public void testGetCode001() {
 		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(

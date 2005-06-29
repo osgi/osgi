@@ -46,8 +46,7 @@ import java.util.Vector;
 import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 
 /**
- * @methodUnderTest org.osgi.service.dmt.DmtException#getCauses
- * @generalDescription This class tests DmtException.getCauses method according
+ * This class tests DmtException.getCauses method according
  *                     with MEG specification (rfc0085)
  */
 
@@ -64,10 +63,13 @@ public class GetCauses {
 	}
 
 	/**
-	 * @testID testGetCauses001
-	 * @testDescription Tests if the exception returned in the getCauses method
+	 * 
+	 *  Tests if the exception returned in the getCauses method
 	 *                  is from the same type of the exception passed as a
 	 *                  parameter for the constructor
+	 *                  
+	 *  @spec DmtException.getCauses()
+	 *  @spec DmtException.DmtException(String,int,String,Vector)
 	 */
 	public void testGetCauses001() {
 		Vector causes = new Vector();
@@ -82,9 +84,11 @@ public class GetCauses {
 	}
 
 	/**
-	 * @testID testGetCauses002
-	 * @testDescription Tests If an empty vector is returned no cause was
+	 * 
+	 *  Tests If an empty vector is returned no cause was
 	 *                  specified in the constructor
+	 *  @spec DmtException.getCauses()
+	 *  @spec DmtException.DmtException(String,int,String,Vector)
 	 */
 	public void testGetCauses002() {
 		Vector causes = new Vector();
@@ -95,9 +99,11 @@ public class GetCauses {
 		tbc.assertEquals("Asserts getCauses method",0,de.getCauses().size());
 	}
 	/**
-	 * @testID testGetCauses003
-	 * @testDescription Tests if an empty vector is returned if no cause is
+	 * 
+	 *  Tests if an empty vector is returned if no cause is
 	 *                  specified in the constructor
+	 *  @spec DmtException.getCauses()
+	 *  @spec DmtException.DmtException(String,int,String,Vector)
 	 */
 	public void testGetCauses003() {
 

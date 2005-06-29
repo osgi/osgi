@@ -47,13 +47,13 @@ import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 /**
  * @author Andre Assad
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtAcl#setPermission
- * @generalDescription This Test Class Validates the implementation of
- *                     <code>setPermission<code> method, according to MEG reference
+ * org.osgi.service.dmt.DmtAcl#setPermission This Test Class Validates the
+ * implementation of
+ * <code>setPermission<code> method, according to MEG reference
  *                     documentation (rfc0085).
  */
 public class SetPermission {
-	private DmtTestControl tbc;
+	private DmtTestControl	tbc;
 
 	/**
 	 * @param tbc
@@ -71,15 +71,17 @@ public class SetPermission {
 	}
 
 	/**
-	 * @testID testSetPermission001
-	 * @testDescription This method asserts that a principal gets all the
-	 *                  permissions previously set.
+	 * This method asserts that a principal gets all the permissions previously
+	 * set.
+	 * 
+	 * @spec DmtAcl.setPermission(String,int)
 	 */
 	public void testSetPermission001() {
 		org.osgi.service.dmt.DmtAcl dmtAcl = new org.osgi.service.dmt.DmtAcl();
 
-		dmtAcl = dmtAcl.setPermission(DmtTestControl.PRINCIPAL, org.osgi.service.dmt.DmtAcl.ADD
-				| org.osgi.service.dmt.DmtAcl.EXEC);
+		dmtAcl = dmtAcl.setPermission(DmtTestControl.PRINCIPAL,
+				org.osgi.service.dmt.DmtAcl.ADD
+						| org.osgi.service.dmt.DmtAcl.EXEC);
 
 		tbc.assertEquals("Asserting Get Permission",
 				org.osgi.service.dmt.DmtAcl.ADD
@@ -88,16 +90,20 @@ public class SetPermission {
 	}
 
 	/**
-	 * @testID testSetPermission002
-	 * @testDescription This method asserts that a set of permissions the
-	 *                  principal had is overriden by new ones.
+	 * 
+	 * This method asserts that a set of permissions the principal had is
+	 * overriden by new ones.
+	 * 
+	 * @spec DmtAcl.setPermission(String,int)
 	 */
 	public void testSetPermission002() {
 		org.osgi.service.dmt.DmtAcl dmtAcl = new org.osgi.service.dmt.DmtAcl(
-				"Add=" + DmtTestControl.PRINCIPAL + "&Delete=" + DmtTestControl.PRINCIPAL);
+				"Add=" + DmtTestControl.PRINCIPAL + "&Delete="
+						+ DmtTestControl.PRINCIPAL);
 
-		dmtAcl = dmtAcl.setPermission(DmtTestControl.PRINCIPAL, org.osgi.service.dmt.DmtAcl.ADD
-				| org.osgi.service.dmt.DmtAcl.EXEC);
+		dmtAcl = dmtAcl.setPermission(DmtTestControl.PRINCIPAL,
+				org.osgi.service.dmt.DmtAcl.ADD
+						| org.osgi.service.dmt.DmtAcl.EXEC);
 
 		tbc.assertEquals("Asserting Get Permission",
 				org.osgi.service.dmt.DmtAcl.ADD
@@ -106,34 +112,40 @@ public class SetPermission {
 	}
 
 	/**
-	 * @testID testSetPermission003
-	 * @testDescription Asserts that an IllegalArgumentException is thrown
-	 *                  whenever an invalid permission is set to a principal.
+	 * 
+	 * Asserts that an IllegalArgumentException is thrown whenever an invalid
+	 * permission is set to a principal.
+	 * 
+	 * @spec DmtAcl.setPermission(String,int)
 	 */
 	public void testSetPermission003() {
 		org.osgi.service.dmt.DmtAcl dmtAcl = new org.osgi.service.dmt.DmtAcl(
-				"Add=" + DmtTestControl.PRINCIPAL + "&Delete=" + DmtTestControl.PRINCIPAL);
+				"Add=" + DmtTestControl.PRINCIPAL + "&Delete="
+						+ DmtTestControl.PRINCIPAL);
 
 		try {
 			dmtAcl = dmtAcl.setPermission(DmtTestControl.PRINCIPAL,
 					org.osgi.service.dmt.DmtAcl.ADD | 2005);
 			// should not reach this point
 			tbc.fail("No Exception thrown");
-		} catch (IllegalArgumentException e) {
+		}
+		catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		}
 	}
 
 	/**
-	 * @testID testSetPermission004
-	 * @testDescription Asserts that an IllegalArgumentException is thrown
-	 *                  whenever a valid permission is set to an invalid
-	 *                  principal.
+	 * 
+	 * Asserts that an IllegalArgumentException is thrown whenever a valid
+	 * permission is set to an invalid principal.
+	 * 
+	 * @spec DmtAcl.setPermission(String,int)
 	 */
 	public void testSetPermission004() {
 		String principal = "www.cesar.org.br";
 		org.osgi.service.dmt.DmtAcl dmtAcl = new org.osgi.service.dmt.DmtAcl(
-				"Add=" + DmtTestControl.PRINCIPAL + "&Delete=" + DmtTestControl.PRINCIPAL);
+				"Add=" + DmtTestControl.PRINCIPAL + "&Delete="
+						+ DmtTestControl.PRINCIPAL);
 
 		try {
 			dmtAcl = dmtAcl.setPermission("INVALID_PRINCIPAL",
@@ -141,53 +153,66 @@ public class SetPermission {
 							| org.osgi.service.dmt.DmtAcl.REPLACE);
 			// should not reach this point
 			tbc.fail("No Exception thrown");
-		} catch (IllegalArgumentException e) {
+		}
+		catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		}
 	}
 
 	/**
-	 * @testID testSetPermission005
-	 * @testDescription Asserts that an IllegalArgumentException is thrown
-	 *                  whenever a valid permission is set to a principal which
-	 *                  was not created on the constructor.
+	 * 
+	 * Asserts that an IllegalArgumentException is thrown whenever a valid
+	 * permission is set to a principal which was not created on the
+	 * constructor.
+	 * 
+	 * @spec DmtAcl.setPermission(String,int)
 	 */
 	public void testSetPermission005() {
 		org.osgi.service.dmt.DmtAcl dmtAcl = new org.osgi.service.dmt.DmtAcl(
-				"Add=" + DmtTestControl.PRINCIPAL + "&Delete=" + DmtTestControl.PRINCIPAL + "&Exec="
+				"Add=" + DmtTestControl.PRINCIPAL + "&Delete="
+						+ DmtTestControl.PRINCIPAL + "&Exec="
 						+ DmtTestControl.PRINCIPAL + "&Get=*");
 		try {
-			dmtAcl = dmtAcl.setPermission(DmtTestControl.PRINCIPAL_2, org.osgi.service.dmt.DmtAcl.ADD
-					| org.osgi.service.dmt.DmtAcl.GET
-					| org.osgi.service.dmt.DmtAcl.EXEC);
-			
-			tbc.assertEquals("Assert " + DmtTestControl.PRINCIPAL_2 + " permission.",
+			dmtAcl = dmtAcl.setPermission(DmtTestControl.PRINCIPAL_2,
 					org.osgi.service.dmt.DmtAcl.ADD
 							| org.osgi.service.dmt.DmtAcl.GET
-							| org.osgi.service.dmt.DmtAcl.EXEC, dmtAcl.getPermissions(DmtTestControl.PRINCIPAL_2));
-		} catch (IllegalArgumentException e) {
+							| org.osgi.service.dmt.DmtAcl.EXEC);
+
+			tbc.assertEquals("Assert " + DmtTestControl.PRINCIPAL_2
+					+ " permission.", org.osgi.service.dmt.DmtAcl.ADD
+					| org.osgi.service.dmt.DmtAcl.GET
+					| org.osgi.service.dmt.DmtAcl.EXEC, dmtAcl
+					.getPermissions(DmtTestControl.PRINCIPAL_2));
+		}
+		catch (IllegalArgumentException e) {
 			tbc.fail("Unexpected IllegalArgumentException");
 		}
 	}
-	
+
 	/**
-	 * @testID testSetPermission006
-	 * @testDescription Passes all permission and check if the permission set is the same as ALL_PERMISSION. 
+	 * 
+	 * Passes all permission and check if the permission set is the same as
+	 * ALL_PERMISSION.
+	 * 
+	 * @spec DmtAcl.setPermission(String,int)
 	 */
 	public void testSetPermission006() {
 		String principal = "www.cesar.org.br";
 		org.osgi.service.dmt.DmtAcl dmtAcl = new org.osgi.service.dmt.DmtAcl(
-				"Add=" + principal + "&Delete=" + principal + "&Exec=" + principal );
+				"Add=" + principal + "&Delete=" + principal + "&Exec="
+						+ principal);
 		try {
 			dmtAcl.setPermission(principal, org.osgi.service.dmt.DmtAcl.ADD
 					| org.osgi.service.dmt.DmtAcl.GET
 					| org.osgi.service.dmt.DmtAcl.EXEC
 					| org.osgi.service.dmt.DmtAcl.DELETE
 					| org.osgi.service.dmt.DmtAcl.REPLACE);
-			
+
 			tbc.assertEquals("Assert " + principal + " all permissions",
-					org.osgi.service.dmt.DmtAcl.ALL_PERMISSION, dmtAcl.getPermissions(principal));
-		} catch (IllegalArgumentException e) {
+					org.osgi.service.dmt.DmtAcl.ALL_PERMISSION, dmtAcl
+							.getPermissions(principal));
+		}
+		catch (IllegalArgumentException e) {
 			tbc.fail("Unexpected IllegalArgumentException");
 		}
 	}

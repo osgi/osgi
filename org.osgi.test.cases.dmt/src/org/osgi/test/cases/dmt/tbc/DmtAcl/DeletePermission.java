@@ -44,8 +44,7 @@ import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 /**
  * @author Andre Assad
  *
- * @methodUnderTest org.osgi.service.dmt.DmtAcl#deletePermission
- * @generalDescription This Test Class Validates the implementation of
+ * This Test Class Validates the implementation of
  *                     <code>deletePermission<code> method, according to MEG reference
  *                     documentation (rfc0085).
  */
@@ -69,9 +68,9 @@ public class DeletePermission {
 	}
 
 	/**
-	 * @testID testDeletePermission001
-	 * @testDescription This method asserts that a principal permission is
+	 * This method asserts that a principal permission is
 	 *                  correctly deleted from its Acl.
+	 * @spec DmtAcl.deletePermission(String,int)
 	 */
 	public void testDeletePermission001() {
 		String principal = "www.cesar.org.br";
@@ -87,9 +86,9 @@ public class DeletePermission {
 	}
 
 	/**
-	 * @testID testDeletePermission002
-	 * @testDescription Test that more than one permission can be deleted in the
+	 * Test that more than one permission can be deleted in the
 	 *                  same time from a principal.
+	 * @spec DmtAcl.deletePermission(String,int)
 	 */
 	public void testDeletePermission002() {
 		String principal = "www.cesar.org.br";
@@ -107,10 +106,10 @@ public class DeletePermission {
 	}
 
 	/**
-	 * @testID testDeletePermission003
-	 * @testDescription Asserts that an IllegalArgumentException is thrown
+	 * Asserts that an IllegalArgumentException is thrown
 	 *                  whenever an invalid permission is deleted from a
 	 *                  principal.
+	 * @spec DmtAcl.deletePermission(String,int)
 	 */
 	public void testDeletePermission003() {
 		String principal = "www.cesar.org.br";
@@ -127,10 +126,10 @@ public class DeletePermission {
 	}
 
 	/**
-	 * @testID testDeletePermission004
-	 * @testDescription Asserts that an IllegalArgumentException is thrown
+	 * Asserts that an IllegalArgumentException is thrown
 	 *                  whenever a permission which does not belong to a
 	 *                  principal is deleted.
+	 * @spec DmtAcl.deletePermission(String,int)
 	 */
 	public void testDeletePermission004() {
 		String principal = "www.cesar.org.br";
@@ -148,10 +147,10 @@ public class DeletePermission {
 	}
 
 	/**
-	 * @testID testDeletePermission005
-	 * @testDescription Asserts that an IllegalArgumentException is thrown
+	 * Asserts that an IllegalArgumentException is thrown
 	 *                  whenever a valid permission is deleted from an invalid
 	 *                  principal.
+	 * @spec DmtAcl.deletePermission(String,int)
 	 */
 	public void testDeletePermission005() {
 		String principal = "www.cesar.org.br";
@@ -169,10 +168,10 @@ public class DeletePermission {
 	}
 
 	/**
-	 * @testID testDeletePermission006
-	 * @testDescription Asserts that an IllegalArgumentException is thrown
+	 * Asserts that an IllegalArgumentException is thrown
 	 *                  whenever a valid permission is deleted from a principal
 	 *                  which was not created on the constructor.
+	 * @spec DmtAcl.deletePermission(String,int)
 	 */
 	public void testDeletePermission006() {
 		String principal_1 = "www.cesar.org.br";

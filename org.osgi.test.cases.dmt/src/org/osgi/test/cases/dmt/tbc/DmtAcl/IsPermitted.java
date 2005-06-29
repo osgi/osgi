@@ -45,8 +45,7 @@ import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 /**
  * @author Andre Assad
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtAcl#isPermitted
- * @generalDescription This Test Class Validates the implementation of
+ * This Test Class Validates the implementation of
  *                     <code>isPermitted<code> method, according to MEG reference
  *                     documentation.
  */
@@ -72,9 +71,10 @@ public class IsPermitted {
 	}
 
 	/**
-	 * @testID testIsPermitted001
-	 * @testDescription This method tests if a given permission is granted to a
+	 * This method tests if a given permission is granted to a
 	 *                  principal.
+	 *                  
+	 * @spec DmtAcl.isPermitted(String,int)
 	 */
 	public void testIsPermitted001() {
 		String principal = "www.cesar.org.br";
@@ -85,9 +85,10 @@ public class IsPermitted {
 	}
 
 	/**
-	 * @testID testIsPermitted002
-	 * @testDescription This method asserts that a given permission is not
+	 * This method asserts that a given permission is not
 	 *                  granted to a principal.
+	 *                  
+	 * @spec DmtAcl.isPermitted(String,int)
 	 */
 	public void testIsPermitted002() {
 		String principal = "www.cesar.org.br";
@@ -98,11 +99,12 @@ public class IsPermitted {
 	}
 
 	/**
-	 * @testID testIsPermitted003
-	 * @testDescription Asserts that an IllegalArgumentException is thrown
+	 * Asserts that an IllegalArgumentException is thrown
 	 *                  whenever an invalid permission code is passed to
 	 *                  isPermitted(java.lang.String principal, int
 	 *                  permissions).
+	 *                  
+	 * @spec DmtAcl.isPermitted(String,int)
 	 */
 	public void testIsPermitted003() {
 		String principal = "www.cesar.org.br";
@@ -120,11 +122,13 @@ public class IsPermitted {
 	}
 
 	/**
-	 * @testID testIsPermitted004
-	 * @testDescription Asserts that an IllegalArgumentException is thrown
+	 * 
+	 *  Asserts that an IllegalArgumentException is thrown
 	 *                  whenever a valid permission code and an invalid
 	 *                  principal is passed isPermitted(java.lang.String
 	 *                  principal, int permissions).
+	 *                  
+	 * @spec DmtAcl.isPermitted(String,int)
 	 */
 	public void testIsPermitted004() {
 		String principal = "www.cesar.org.br";
@@ -142,8 +146,8 @@ public class IsPermitted {
 	}
 
 	/**
-	 * @testID testIsPermitted005
-	 * @testDescription Asserts that an IllegalArgumentException is thrown
+	 * 
+	 *  Asserts that an IllegalArgumentException is thrown
 	 *                  whenever a valid permission code and null principal is
 	 *                  passed isPermitted(java.lang.String principal, int
 	 *                  permissions).
@@ -164,10 +168,11 @@ public class IsPermitted {
 	}
 	
 	/**
-	 * @testID testIsPermitted006
-	 * @testDescription Asserts that an IllegalArgumentException is thrown
+	 * 
+	 *  Asserts that an IllegalArgumentException is thrown
 	 *                  whenever a valid permission is deleted from a principal
 	 *                  which was not created on the constructor.
+	 * @spec DmtAcl.isPermitted(String,int)
 	 */
 	public void testIsPermitted006() {
 		String principal_1 = "www.cesar.org.br";

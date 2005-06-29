@@ -46,8 +46,7 @@ import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 /**
  * @author André Assad
  * 
- * @classUnderTest org.osgi.service.DmtDataType
- * @generalDescription This class contains all the tests for DmtDataType
+ * This class contains all the tests for DmtDataType
  *                     Constants. In other words it asserts the all the
  *                     constants values specified on the reference documentation
  *                     has been inplemented correctly.
@@ -72,10 +71,17 @@ public class DmtDataTypeConstants {
 	}
 
 	/**
-	 * @testID testDmtDataTypeConstants001
-	 * @testDescription This method asserts the value of the constants
+	 * 
+	 *  This method asserts the value of the constants
 	 * ### This test does not work because it tests against the compiled constants, 
 	 * it is needed to use reflection to do this ok.
+	 *  @spec DmtData.FORMAT_INTEGER
+	 *  @spec DmtData.FORMAT_STRING
+	 *  @spec DmtData.FORMAT_BOOLEAN
+	 *  @spec DmtData.FORMAT_BINARY
+	 *  @spec DmtData.FORMAT_XML
+	 *  @spec DmtData.FORMAT_NULL
+	 *  @spec DmtData.FORMAT_NODE
 	 */
 	public void testDmtDataTypeConstants001() {
 		tbc.assertEquals("Assertion of the INTEGER constant", 1,

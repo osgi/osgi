@@ -42,8 +42,7 @@ package org.osgi.test.cases.dmt.tbc.DmtPrincipalPermission;
 import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 
 /**
- * @methodUnderTest org.osgi.service.dmt.DmtPrincipalPermission#DmtPrincipalPermission
- * @generalDescription This class tests DmtPrincipalPermission constructors
+ * This class tests DmtPrincipalPermission constructors
  *                     according with MEG specification (rfc0085)
  */
 
@@ -66,9 +65,12 @@ public class DmtPrincipalPermission {
 	}
 
 	/**
-	 * @testID testDmtPrincipalPermission001
-	 * @testDescription It asserts if the principal passed in the constructor is equals to
+	 * 
+	 *  It asserts if the principal passed in the constructor is equals to
 	 * 					DmtPrincipalPermission.getName() method.
+	 * 
+	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String)
+	 * @spec DmtPrincipalPermission.getName()
 	 */
 	public void testDmtPrincipalPermission001() {
 		tbc
@@ -80,9 +82,10 @@ public class DmtPrincipalPermission {
 	}
 	
 	/**
-	 * @testID testDmtPrincipalPermission002
-	 * @testDescription It asserts if a null value passed in the constructor as principal
+	 * 
+	 *  It asserts if a null value passed in the constructor as principal
 	 * 					throws an NullPointerException
+	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String)
 	 */
 	public void testDmtPrincipalPermission002() {
 		try {
@@ -94,10 +97,13 @@ public class DmtPrincipalPermission {
 		}
 	}
 	/**
-	 * @testID testDmtPrincipalPermission003
-	 * @testDescription Tests the constructor which has two string parameters.
+	 * 
+	 *  Tests the constructor which has two string parameters.
 	 *                  The second parameter is ignored and the first one
 	 *                  sets the principal
+	 *                  
+	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String,String)
+	 * @spec DmtPrincipalPermission.getName()
 	 */
 	public void testDmtPrincipalPermission003() {
 		tbc
@@ -110,10 +116,12 @@ public class DmtPrincipalPermission {
 	}
     
     /**
-     * @testID testDmtPrincipalPermission004
-     * @testDescription Tests the constructor which has two string parameters.
+     * 
+     *  Tests the constructor which has two string parameters.
      *                  The second parameter is ignored so this method asserts if
      *                  DmtPrincipalPermission actions is empty
+	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String,String)
+	 * @spec DmtPrincipalPermission.getActions()
      */
     public void testDmtPrincipalPermission004() {
         tbc.assertEquals("Asserts if an empty string is equals to DmtPrincipalPermission(DmtTestControl.PRINCIPAL,\"actions\").getActions() returned value",
@@ -122,10 +130,12 @@ public class DmtPrincipalPermission {
                                 "actions").getActions());
     }
     /**
-     * @testID testDmtPrincipalPermission005
-     * @testDescription Tests the constructor which has two string parameters.
+     * 
+     *  Tests the constructor which has two string parameters.
      *                  The second parameter is ignored so this method asserts if
      *                  DmtPrincipalPermission actions is empty
+	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String,String)
+	 * @spec DmtPrincipalPermission.getActions()
      */
     public void testDmtPrincipalPermission005() {
         tbc.assertEquals("Asserts if an empty string is equals to DmtPrincipalPermission(DmtTestControl.PRINCIPAL,null).getActions() returned value",
@@ -135,10 +145,12 @@ public class DmtPrincipalPermission {
     }
     
     /**
-     * @testID testDmtPrincipalPermission006
-     * @testDescription Tests the constructor which has two string parameters.
+     * 
+     *  Tests the constructor which has two string parameters.
      *                  To the second method is passed null, so this method asserts if
      *                  the principal passed is correctly returned
+	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String,String)
+	 * @spec DmtPrincipalPermission.getName()
      */
     public void testDmtPrincipalPermission006() {
 		tbc
@@ -150,15 +162,19 @@ public class DmtPrincipalPermission {
 								null).getName());
 	}
 	/**
-	 * @testID testDmtPrincipalPermission007
-	 * @testDescription It asserts if a null value passed in the constructor as
+	 * 
+	 *  It asserts if a null value passed in the constructor as
 	 *                  principal throws an NullPointerException
+	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String,String)
+	 * @spec DmtPrincipalPermission.getActions()
 	 */
 	public void testDmtPrincipalPermission007() {
 		try {
 
 			org.osgi.service.dmt.DmtPrincipalPermission principalPermission = new org.osgi.service.dmt.DmtPrincipalPermission(
 					null,null);
+			
+			// ### so what happens in this case? This is an error isnt it?
 		} catch (NullPointerException e) {
 			tbc.pass("NullPointerException caught correctly");
 		}

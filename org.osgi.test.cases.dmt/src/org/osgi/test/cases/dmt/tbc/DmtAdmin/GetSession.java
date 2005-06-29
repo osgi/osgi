@@ -47,8 +47,7 @@ import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 /**
  * @author Andre Assad
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtAdmin#getSession
- * @generalDescription This Test Class Validates the implementation of
+ * This Test Class Validates the implementation of
  *                     <code>getSession<code> constructor, according to MEG reference
  *                     documentation (rfc0085).
  */
@@ -76,9 +75,10 @@ public class GetSession {
 	}
 
 	/**
-	 * @testID testGetSession001
-	 * @testDescription This method asserts that a session is opened with the
+	 * 
+	 *  This method asserts that a session is opened with the
      *                  specified subtree, lock type and principal. This constructor use by default LOCK_TYPE_EXCLUSIVE
+	 * @spec DmtAdmin.getSession(String)
 	 */
 	public void testGetSession001() {
 		try {
@@ -94,9 +94,10 @@ public class GetSession {
 	}
     
     /**
-     * @testID testGetSession002
-     * @testDescription This method asserts if an invalid node causes 
+     * 
+     *  This method asserts if an invalid node causes 
      *                  an exception with NODE_NOT_FOUND code
+	 * @spec DmtAdmin.getSession(String)
      */
     public void testGetSession002() {
         try {
@@ -110,9 +111,10 @@ public class GetSession {
     }
     
     /**
-     * @testID testGetSession003
-     * @testDescription This method asserts if a too long uri causes 
+     * 
+     *  This method asserts if a too long uri causes 
      *                  an exception with URI_TOO_LONG code
+	 * @spec DmtAdmin.getSession(String)
      */
     public void testGetSession003() {
         try {
@@ -126,9 +128,10 @@ public class GetSession {
     }    
     
     /**
-     * @testID testGetSession004
-     * @testDescription This method asserts if a node using invalid characters causes 
+     * 
+     *  This method asserts if a node using invalid characters causes 
      *                  an exception with INVALID_URI code
+	 * @spec DmtAdmin.getSession(String)
      */
     public void testGetSession004() {
         try {
@@ -143,9 +146,10 @@ public class GetSession {
     
 
 	/**
-     * @testID testGetSession005
-     * @testDescription This method asserts that a session is opened with the
+     * 
+     *  This method asserts that a session is opened with the
      *                  specified subtree, lock type and principal. This constructor use by default LOCK_TYPE_SHARED
+	 * @spec DmtAdmin.getSession(String)
 	 */
 	public void testGetSession005() {
         try {
@@ -161,9 +165,11 @@ public class GetSession {
 	}
     
     /**
-     * @testID testGetSession006
-     * @testDescription This method asserts if an invalid node causes 
+     * 
+     *  This method asserts if an invalid node causes 
      *                  an exception with NODE_NOT_FOUND code
+	 * @spec DmtAdmin.getSession(String,int)
+	 * @spec DmtSession.LOCK_TYPE_SHARED
      */
     public void testGetSession006() {
         try {
@@ -177,9 +183,11 @@ public class GetSession {
     }
     
     /**
-     * @testID testGetSession007
-     * @testDescription This method asserts if a too long uri causes 
+     * 
+     *  This method asserts if a too long uri causes 
      *                  an exception with URI_TOO_LONG code
+	 * @spec DmtAdmin.getSession(String,int)
+	 * @spec DmtSession.LOCK_TYPE_SHARED
      */
     public void testGetSession007() {
         try {
@@ -193,9 +201,10 @@ public class GetSession {
     }        
     
     /**
-     * @testID testGetSession008
-     * @testDescription This method asserts if a invalid lock mode causes 
+     * 
+     *  This method asserts if a invalid lock mode causes 
      *                  an exception with OTHER_ERROR code
+	 * @spec DmtAdmin.getSession(String,int)
      */
     public void testGetSession008() {
         try {
@@ -209,9 +218,11 @@ public class GetSession {
     }       
     
     /**
-     * @testID testGetSession009
-     * @testDescription This method asserts if a node using invalid characters causes 
+     * 
+     *  This method asserts if a node using invalid characters causes 
      *                  an exception with INVALID_URI code
+	 * @spec DmtAdmin.getSession(String,int)
+	 * @spec DmtSession.LOCK_TYPE_SHARED
      */
     public void testGetSession009() {
         try {
@@ -225,12 +236,14 @@ public class GetSession {
     }          
 
 	/**
-	 * @testID testGetSession010
-     * @testDescription This method asserts that a session is opened with the
+	 * 
+     *  This method asserts that a session is opened with the
      *                  specified subtree, lock type and principal. This constructor use by default LOCK_TYPE_ATOMIC
      *                  
      * TODO TCs for java.lang.SecurityException using this getSessions
      * TODO remove String principal ?!?! (String principal) but I need it to test the getSession with 3 arguments.
+	 * @spec DmtAdmin.getSession(String,String,int)
+	 * @spec DmtSession.LOCK_TYPE_ATOMIC
 	 */
 	public void testGetSession010() {
         try {
@@ -246,9 +259,11 @@ public class GetSession {
 	}
     
     /**
-     * @testID testGetSession011
-     * @testDescription This method asserts if an invalid node causes 
+     * 
+     *  This method asserts if an invalid node causes 
      *                  an exception with NODE_NOT_FOUND code
+	 * @spec DmtAdmin.getSession(String,String,int)
+	 * @spec DmtSession.LOCK_TYPE_SHARED
      */
     public void testGetSession011() {
         try {
@@ -262,9 +277,11 @@ public class GetSession {
     }
     
     /**
-     * @testID testGetSession012
-     * @testDescription This method asserts if a too long uri causes 
+     * 
+     *  This method asserts if a too long uri causes 
      *                  an exception with URI_TOO_LONG code
+	 * @spec DmtAdmin.getSession(String,String,int)
+	 * @spec DmtSession.LOCK_TYPE_SHARED
      */
     public void testGetSession012() {
         try {
@@ -278,9 +295,10 @@ public class GetSession {
     }        
     
     /**
-     * @testID testGetSession013
-     * @testDescription This method asserts if a invalid lock mode causes 
+     * 
+     *  This method asserts if a invalid lock mode causes 
      *                  an exception with OTHER_ERROR code
+	 * @spec DmtAdmin.getSession(String,String,int)
      */
     public void testGetSession013() {
         try {
@@ -294,9 +312,11 @@ public class GetSession {
     }
     
     /**
-     * @testID testGetSession014
-     * @testDescription This method asserts if a node using invalid characters causes 
+     * 
+     *  This method asserts if a node using invalid characters causes 
      *                  an exception with INVALID_URI code
+	 * @spec DmtAdmin.getSession(String,String,int)
+	 * @spec DmtSession.LOCK_TYPE_SHARED
      */
     public void testGetSession014() {
         try {

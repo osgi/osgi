@@ -44,8 +44,8 @@ import java.util.Vector;
 import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 
 /**
- * @methodUnderTest org.osgi.service.dmt.DmtException#getMessage
- * @generalDescription This class tests DmtException.getMessage method according
+ * org.osgi.service.dmt.DmtException#getMessage
+ * This class tests DmtException.getMessage method according
  *                     with MEG specification (rfc0085)
  */
 public class GetMessage {
@@ -63,9 +63,12 @@ public class GetMessage {
 	}
 
 	/**
-	 * @testID testGetMessage001
-	 * @testDescription Tests if getMessage returns a value that is equals to
+	 * 
+	 *  Tests if getMessage returns a value that is equals to
 	 *                  the value passed as a parameter for the constructor
+	 *  @spec DmtException.getMessage()
+	 *  @spec DmtException.DmtException(String,int,String)
+
 	 */
 	public void testGetMessage001() {
 		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
@@ -92,10 +95,12 @@ public class GetMessage {
 	}
 
 	/**
-	 * @testID testGetMessage002
-	 * @testDescription Tests if getMessage returns a string that contains the
+	 * 
+	 *  Tests if getMessage returns a string that contains the
 	 *                  message and code values passed as parameters for the
 	 *                  constructor
+	 *  @spec DmtException.getMessage()
+	 *  @spec DmtException.DmtException(String,int,String)
 	 */
 	public void testGetMessage002() {
 		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
@@ -108,10 +113,12 @@ public class GetMessage {
 	}
 
 	/**
-	 * @testID testGetMessage003
-	 * @testDescription Tests if getMessage returns a string that contains the
+	 * 
+	 *  Tests if getMessage returns a string that contains the
 	 *                  message and URI values passed as parameters for the
 	 *                  constructor
+	 *  @spec DmtException.getMessage()
+	 *  @spec DmtException.DmtException(String,int,String)
 	 */
 	public void testGetMessage003() {
 		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
@@ -124,10 +131,12 @@ public class GetMessage {
 	}
 
 	/**
-	 * @testID testGetMessage004
-	 * @testDescription Tests if getMessage returns a string that contains the
+	 * 
+	 *  Tests if getMessage returns a string that contains the
 	 *                  message, code and URI values passed as parameters for
 	 *                  the constructor
+	 *  @spec DmtException.getMessage()
+	 *  @spec DmtException.DmtException(String,int,String)
 	 */
 	public void testGetMessage004() {
 		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(

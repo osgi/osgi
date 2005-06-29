@@ -44,12 +44,12 @@ import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 
 /**
  * @author Andre Assad
- *
- * @generalDescription This Test Class Validates the Constants Fields Values,
- *                     according to MEG reference documentation (rfc0085).
+ * 
+ * This Test Class Validates the Constants Fields Values, according to MEG
+ * reference documentation (rfc0085).
  */
 public class DmtAclConstants {
-	private DmtTestControl tbc;
+	private DmtTestControl	tbc;
 
 	/**
 	 * @param arg0
@@ -63,9 +63,17 @@ public class DmtAclConstants {
 	}
 
 	/**
-	 * @testID testDmtAclConstants001
-	 * @testDescription Tests all constants values according to Constants fields
-	 *                  values JavaDoc.
+	 * Tests all constants values according to Constants fields values JavaDoc.
+	 * 
+	 * @spec DmtAcl.GET
+	 * @spec DmtAcl.ADD
+	 * @spec DmtAcl.REPLACE
+	 * @spec DmtAcl.DELETE
+	 * @spec DmtAcl.EXEC
+	 * 
+	 * ### btw, this tests the compiler, not the system under test because the
+	 * constants are final so they are compiled inline ... You need to use
+	 * reflection.
 	 */
 	public void testDmtAclConstants001() {
 		tbc.assertEquals("Asserting GET value", 1, DmtAcl.GET);

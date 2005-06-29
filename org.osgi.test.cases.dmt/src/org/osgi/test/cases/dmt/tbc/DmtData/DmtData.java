@@ -42,8 +42,7 @@ import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 
 /**
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtData#DmtData, getString, getInt, getFormat, getBinary, getBoolean
- * @generalDescription This class contains all the test methods for all the
+ * This class contains all the test methods for all the
  *                     DmtData constructors.
  */
 public class DmtData {
@@ -76,11 +75,13 @@ public class DmtData {
 	}
 
 	/**
-	 * @testID testDmtData001
-	 * @testDescription This method asserts that the Data format of String
+	 * 
+	 *  This method asserts that the Data format of String
 	 *                  DmtData Constructor is equal to DmtDataType.STRING and
 	 *                  that the string value passed is the same as
 	 *                  DmtData.getString()
+	 *                  
+	 *  @spec DmtData.DmtData(String)
 	 */
 	public void testDmtData001() {
 		tbc.log("Test DmtData Constructor with String format");
@@ -102,10 +103,12 @@ public class DmtData {
 	}
 
 	/**
-	 * @testID testDmtData002
-	 * @testDescription This method passes a String equals to
+	 * 
+	 *  This method passes a String equals to
 	 *                  DmtData.FORMAT_NULL in order to assert that a node with
 	 *                  null format is created.
+	 *  ### Huh?? This creates an INT DmtData???
+	 *  @spec DmtData.DmtData(int)
 	 */
 	public void testDmtData002() {
 		tbc.log("Test DmtData Constructor with null String format");
@@ -127,9 +130,10 @@ public class DmtData {
 	}
 
 	/**
-	 * @testID testDmtData003
-	 * @testDescription This method asserts that a null String parameter can
+	 * 
+	 *  This method asserts that a null String parameter can
 	 *                  create a new DmtData.
+	 *  @spec DmtData.DmtData(String)
 	 */
 	public void testDmtData003() {
 		tbc.log("Test DmtData Constructor with null String parameter");
@@ -152,10 +156,11 @@ public class DmtData {
 	}
 
 	/**
-	 * @testID testDmtData004
-	 * @testDescription This method asserts that the Data format of DmtData is
+	 * 
+	 *  This method asserts that the Data format of DmtData is
 	 *                  equal to DmtDataType.XML and that the string value
 	 *                  passed is the same as DmtData.getString()
+	 *  @spec DmtData.DmtData(String,boolean)
 	 */
 	public void testDmtData004() {
 		String xmlStr = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -180,9 +185,10 @@ public class DmtData {
 	}
 
 	/**
-	 * @testID testDmtData005
-	 * @testDescription This method asserts that if a false parameter is passed
+	 * 
+	 *  This method asserts that if a false parameter is passed
 	 *                  on the constructor, it behaves the same as DmtData(str)
+	 *  @spec DmtData.DmtData(String,boolean)
 	 */
 	public void testDmtData005() {
 		String xmlStr = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -208,10 +214,11 @@ public class DmtData {
 
 	/**
 	 * @throws DmtException
-	 * @testID testDmtData006
-	 * @testDescription This method asserts that the Data format of DmtData is
+	 * 
+	 *  This method asserts that the Data format of DmtData is
 	 *                  equal to DmtDataType.INTEGER and that the int value
 	 *                  passed is the same as dd.getInt()
+	 *  @spec DmtData.DmtData(int)
 	 */
 	public void testDmtData006() {
 		int i = 6;
@@ -235,10 +242,11 @@ public class DmtData {
 
 	/**
 	 * @throws DmtException
-	 * @testID testDmtData007
-	 * @testDescription This method asserts that the Data format of DmtData is
+	 * 
+	 *  This method asserts that the Data format of DmtData is
 	 *                  equal to DmtDataType.BOOLEAN and that the boolean value
 	 *                  passed is the same as dd.getBoolean()
+	 *  @spec DmtData.DmtData(boolean)
 	 */
 	public void testDmtData007() {
 		boolean b = true;
@@ -261,10 +269,11 @@ public class DmtData {
 	}
 
 	/**
-	 * @testID testDmtData008
-	 * @testDescription This method asserts that the Data format of DmtData is
+	 * 
+	 *  This method asserts that the Data format of DmtData is
 	 *                  equal to DmtDataType.BINARY and that the string value
 	 *                  passed is the same as dd.getString()
+	 *  @spec DmtData.DmtData(byte[])
 	 */
 	public void testDmtData008() {
 		byte[] b = new byte[1024];
@@ -287,10 +296,12 @@ public class DmtData {
 	}
 
 	/**
-	 * @testID testDmtData009
-	 * @testDescription This method asserts if getInt method throws a
+	 * 
+	 *  This method asserts if getInt method throws a
 	 *                  DmtException when the DmtData is not created with an
 	 *                  integer
+	 *  @spec DmtData.getInt()
+	 *  @spec DmtData.DmtData(boolean)
 	 */
 	public void testDmtData009() {
 		dd = new org.osgi.service.dmt.DmtData(true);
@@ -305,10 +316,12 @@ public class DmtData {
 	}
 	
 	/**
-	 * @testID testDmtData010
-	 * @testDescription This method asserts if getBoolean method throws a
+	 * 
+	 *  This method asserts if getBoolean method throws a
 	 *                  DmtException when the DmtData is not created with an
 	 *                  boolean
+	 *  @spec DmtData.getBoolean()
+	 *  @spec DmtData.DmtData(int)
 	 */
 	public void testDmtData010() {
 		dd = new org.osgi.service.dmt.DmtData(0);

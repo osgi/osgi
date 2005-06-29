@@ -45,15 +45,14 @@ import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 /**
  * @author Andre Assad
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtAcl#toString
- * @generalDescription This Test Class Validates the implementation of
- *                     <code>toString<code> method, according to MEG reference
+ * This Test Class Validates the implementation of
+ * <code>toString<code> method, according to MEG reference
  *                     documentation.
  */
 public class ToString {
-	private DmtTestControl tbc;
+	private DmtTestControl	tbc;
 
-	private DmtAcl dmtAcl;
+	private DmtAcl			dmtAcl;
 
 	/**
 	 * @param tbc
@@ -67,10 +66,11 @@ public class ToString {
 	}
 
 	/**
-	 * @testID testToString001
-	 * @testDescription This method asserts that the string representing this
-	 *                  ACL is the same as the canonic string as specified in
-	 *                  OMA DM.
+	 * 
+	 * This method asserts that the string representing this ACL is the same as
+	 * the canonic string as specified in OMA DM.
+	 * 
+	 * @spec DmtAcl.toString()
 	 */
 	public void testToString001() {
 		String principal = "www.cesar.org.br";
