@@ -87,7 +87,7 @@ public interface MetaDataService {
    * @param metaTypeID The ID of the meta-data.
    * @param ocdID The ID of the requested object class.
    * @param locale The locale of the definition or null for default locale.
-   * @return <code>ExtendedObjectClassDefinition</code> or <code>null</code> 
+   * @return <code>ObjectClassDefinition</code>, <code>ExtendedObjectClassDefinition</code> or <code>null</code> 
    * if there is no MetaType provided with the given category and ID.
    * @throws IllegalArgumentException If the locale argument is not valid.
    * @throws NullPointerException If the meta-data or object class id is <code>null</code>.
