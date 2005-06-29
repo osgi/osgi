@@ -11,7 +11,18 @@
 	<Attribute id="Att7Def" type="Double"/>
 	<Attribute id="Att8Def" type="Float"/>
 	<Attribute id="Att9Def" type="Boolean"/>
-	<Attribute id="Att10Def" type="ObjectClass"/>
+	<Attribute id="Att10Def1" type="Short"/>
+	<Attribute id="Att10Def2" type="Long"/>
+	<Attribute id="Att10Def" type="ObjectClass">
+		<Property key="readOnly" value="true"/>
+		<Property key="hidden" value="true"/>
+		<Property key="minValue" value="1"/>
+		<Property key="maxValue" value="100"/>
+		<Property key="stepValue" value="10"/>
+		<Property key="newKey" value="valueNewKey"/>
+		<Attribute id="att10part1" refid="Att10Def1" name="%att10name1" description="%att10Descr1"/>
+		<Attribute id="att10part2" refid="Att10Def2" name="%att10name2" description="%att10Descr2"/>
+	</Attribute>
 	<Attribute id="msgDigestProviderIDDef" type="String">
 		<Property key="readOnly" value="true"/>
 	</Attribute>

@@ -58,7 +58,8 @@ public class TestControl extends DefaultTestBundleControl {
 											"testExtendedOCD",
 											"testExtendedAD",
 											"testAction",
-											"testListeners"};
+											"testListeners",
+											"testLocalization"};
 
 	/**
 	 * 
@@ -81,6 +82,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 * @see org.osgi.test.cases.util.DefaultTestBundleControl#getMethods()
 	 */
 	public void testBasicCommands() {
+		
 		String[] cats;
 		String[] mts;
 		String[] locs;
@@ -170,7 +172,7 @@ public class TestControl extends DefaultTestBundleControl {
 		}
 		
 		try {
-			ocd = (ExtendedObjectClassDefinition)MDService.getObjectClassDefinition("ControlUnit", "HipModule", "messageDigestService", null);
+			ocd = (ExtendedObjectClassDefinition)MDService.getObjectClassDefinition("ControlUnit", "HipModule", "messageDigestService", null);			
 			log("Gets OCD with category = ControlUnit, metatype ID = HipModule, ocd ID = messageDigestService, locale = null");
 			OCDtoString(ocd);
 		}
@@ -186,23 +188,26 @@ public class TestControl extends DefaultTestBundleControl {
 	 */
 	public void testExtendedAD() {
 		ExtendedObjectClassDefinition ocd;
-		AttributeDefinition ad;
+		ExtendedAttributeDefinition ad;
 		AttributeDefinition[] ads;
+		Object obj;
 		
 		// Retrieve all attributes
 		ocd = (ExtendedObjectClassDefinition)MDService.getObjectClassDefinition("ControlUnit", "HipModule", "messageDigestService", null);
 		ads = ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
 		
 		log("Retrieve list of attributes of ocd ID = messageDigestService");
-		for (int i=0; i<ads.length; i++) {
-			ADtoString(ads[i]);
-		}		
+		if (ads != null) {
+			for (int i=0; i<ads.length; i++) {
+				ADtoString(ads[i]);
+			}		
+		}
 		
 		// retrieve only one attribute
-		ad = (AttributeDefinition)ocd.getAttributeDefinition("Att1");		
-		log("Retrieve only one attribute ID = Att1");
+		ad = (ExtendedAttributeDefinition)ocd.getAttributeDefinition("Att10");		
+		log("Retrieve only one attribute ID = Att10");
 		if (ad != null) 
-			ADtoString(ad);
+			ExADtoString(ad);
 		
 	}
 	
@@ -231,6 +236,27 @@ public class TestControl extends DefaultTestBundleControl {
 		if (act != null) 
 			ActDtoString(act);
 	}
+	
+	/**
+	 * 
+	 * @return
+	 * @see org.osgi.test.cases.util.DefaultTestBundleControl#getMethods()
+	 */
+	public void testLocalization() {
+		ExtendedObjectClassDefinition ocd;
+		ActionDefinition[] acts;
+		ActionDefinition act;
+		
+		// Retrieve all actions
+		ocd = (ExtendedObjectClassDefinition)MDService.getObjectClassDefinition("ControlUnit", "HipModule", "messageDigestService", "fr_FR");
+		acts = ocd.getActionDefinitions();
+		
+		log("Retrieve list of actions of ocd ID = messageDigestService");
+		for (int i=0; i<acts.length; i++) {
+			ActDtoString(acts[i]);
+		}		
+	}
+	
 	
 	/**
 	 * 
@@ -363,13 +389,15 @@ public class TestControl extends DefaultTestBundleControl {
 		
 		ADtoString((AttributeDefinition)ad);
 		ads = ad.getAttributeDefinitions();
-		for (int i=0; i<ads.length; i++) {
-			ExADtoString(ads[i]);
+		if (ads != null) {
+			for (int i=0; i<ads.length; i++) {
+				ExADtoString(ads[i]);
+			}
 		}
 		
 		props = (Hashtable)ad.getProperties();		
 		if (props != null)
-			props.toString();
+			log(props.toString());
 	}
 	
 	/**
