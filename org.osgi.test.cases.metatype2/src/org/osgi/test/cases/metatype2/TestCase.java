@@ -33,6 +33,7 @@ import org.osgi.test.cases.util.DefaultTestCase;
  *
  * This class may remain empty
  * 
+ * @testcase org.osgi.service.metatype2
  * @version $Revision$
  */
 public class TestCase extends DefaultTestCase {
