@@ -25,13 +25,14 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.service.deploymentadmin;
+package org.osgi.impl.service.deploymentadmin.api;
 
-import java.lang.reflect.Constructor;
-import java.security.AccessController;
 import java.security.Permission;
 import java.security.PermissionCollection;
-import java.security.PrivilegedAction;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+import org.osgi.impl.service.deploymentadmin.api.Representation;
 
 /**
  * The <code>DeploymentCustomizerPermission</code> permission gives the right to 
@@ -43,29 +44,15 @@ import java.security.PrivilegedAction;
  */
 public class DeploymentCustomizerPermission extends Permission {
     
-    /**
-     * Constant String to the "privatearea" action.
-     */
-    public static final String ACTION_PRIVATEAREA = "privatearea";
-
-    private static final String      delegateProperty = "org.osgi.vendor.deploymentadmin";
-    private static final Constructor constructor;
-    private final        Permission  delegate;
+    private static final Vector ACTIONS = new Vector();
     static {
-        constructor = (Constructor) AccessController.doPrivileged(new PrivilegedAction() {
-            public Object run() {
-                String pckg = System.getProperty(delegateProperty);
-                if (null == pckg)
-                    throw new RuntimeException("Property '" + delegateProperty + "' is not set");
-                try {
-                    Class c = Class.forName(pckg + ".DeploymentCustomizerPermission");
-                    return c.getConstructor(new Class[] {String.class, String.class});    
-                }
-                catch (Exception e) {
-                    throw new RuntimeException(e.getMessage());
-                }
-            }});
+        ACTIONS.add(org.osgi.service.deploymentadmin.DeploymentCustomizerPermission.
+                ACTION_PRIVATEAREA.toLowerCase());
     }
+    
+    private           String actions;
+    private transient Vector actionsVector;
+    private transient Representation rep;
 
     /**
      * Creates a new <code>DeploymentCustomizerPermission</code> object for the given 
@@ -88,15 +75,9 @@ public class DeploymentCustomizerPermission extends Permission {
      */
     public DeploymentCustomizerPermission(String name, String actions) {
         super(name);
-        try {
-            delegate = (Permission) constructor.newInstance(new Object[] {name, actions});
-        }
-		catch (RuntimeException e) {
-			throw e;
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e.toString());
-		}
+        this.actions = actions;
+        rep = new Representation(getName());
+        check();
     }
 
     /**
@@ -110,12 +91,17 @@ public class DeploymentCustomizerPermission extends Permission {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object obj) {
-        if (obj == this)
-        	return true;
+        if (null == obj)
+            return false;
         if (!(obj instanceof DeploymentCustomizerPermission))
             return false;
-        DeploymentCustomizerPermission dcp = (DeploymentCustomizerPermission) obj;
-        return delegate.equals(dcp.delegate);
+        DeploymentCustomizerPermission other = (DeploymentCustomizerPermission) obj;
+        
+        Vector avThis = getActionVector();
+        Vector avOther = other.getActionVector();
+        boolean eqActions = (avThis.containsAll(avOther) &&
+                avOther.containsAll(avThis));
+        return getRepresentation().equals(other.getRepresentation()) && eqActions;
     }
 
     /**
@@ -124,7 +110,8 @@ public class DeploymentCustomizerPermission extends Permission {
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
-        return delegate.hashCode();
+        // TODO
+        return getActionVector().hashCode();
     }
 
     /**
@@ -134,7 +121,7 @@ public class DeploymentCustomizerPermission extends Permission {
      * @see java.security.Permission#getActions()
      */
     public String getActions() {
-        return delegate.getActions();
+        return actions;
     }
 
     /**
@@ -145,12 +132,13 @@ public class DeploymentCustomizerPermission extends Permission {
      * @see java.security.Permission#implies(java.security.Permission)
      */
     public boolean implies(Permission permission) {
+        if (null == permission)
+            return false;
         if (!(permission instanceof DeploymentCustomizerPermission))
-    		return false;
-    	        
-        DeploymentCustomizerPermission dcp = (DeploymentCustomizerPermission) permission;
-        
-        return delegate.implies(dcp.delegate);
+            return false;
+        DeploymentCustomizerPermission other = (DeploymentCustomizerPermission) permission;
+        return getRepresentation().match(other.getRepresentation()) && 
+        	   getActionVector().containsAll(other.getActionVector());
     }
 
     /**
@@ -160,7 +148,30 @@ public class DeploymentCustomizerPermission extends Permission {
      * @see java.security.Permission#newPermissionCollection()
      */
     public PermissionCollection newPermissionCollection() {
-        return delegate.newPermissionCollection();
+        return null;
     }
+    
+    private Vector getActionVector() {
+        if (null != actionsVector)
+            return actionsVector;
+        
+        actionsVector = new Vector();
+        StringTokenizer t = new StringTokenizer(actions.toUpperCase(), ",");
+        while (t.hasMoreTokens()) {
+            String action = t.nextToken().trim();
+            actionsVector.add(action.toLowerCase());
+        }
+        return actionsVector;
+    }
+
+    private Representation getRepresentation() {
+        return rep; 
+    }
+
+    private void check() {
+        if (!ACTIONS.containsAll(getActionVector()))
+            throw new IllegalArgumentException("Illegal action");
+    }
+
 
 }

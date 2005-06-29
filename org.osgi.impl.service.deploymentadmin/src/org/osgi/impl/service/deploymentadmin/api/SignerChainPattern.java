@@ -25,7 +25,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.service.deploymentadmin;
+package org.osgi.impl.service.deploymentadmin.api;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,6 +39,8 @@ import java.security.PrivilegedExceptionAction;
 import java.security.cert.Certificate;
 import java.util.Enumeration;
 import java.util.Vector;
+
+import org.osgi.impl.service.deploymentadmin.Splitter;
 
 
 class SignerChainPattern {
