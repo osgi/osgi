@@ -34,6 +34,7 @@ import org.osgi.test.cases.util.DefaultTestCase;
  * implementation supplied by OSGi
  * 
  * @author Petia Sotirova
+ *  @testcase org.osgi.service.condpermadmin
  * @version 1.0
  */
 public class PermissionSignatureTestCase extends DefaultTestCase {

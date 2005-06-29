@@ -29,5 +29,13 @@ package org.osgi.test.cases.position;
 
 import org.osgi.test.cases.util.*;
 
+/**
+ * 
+ *
+ * TODO Add Javadoc comment for this type.
+ * 
+ *  @testcase org.osgi.util.position
+ * @version $Revision$
+ */
 public class PositionTestCase extends DefaultTestCase {
 }

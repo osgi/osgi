@@ -29,5 +29,13 @@ package org.osgi.test.cases.log;
 
 import org.osgi.test.cases.util.*;
 
+
+/**
+ * 
+ *
+ * TODO Add Javadoc comment for this type.
+ * @testcase org.osgi.service.log
+ * @version $Revision$
+ */
 public class LogTestCase extends DefaultTestCase {
 }

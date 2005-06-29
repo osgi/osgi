@@ -38,6 +38,14 @@ import org.osgi.service.http.HttpService;
 import org.osgi.test.cases.util.DefaultTestCase;
 import org.osgi.util.tracker.ServiceTracker;
 
+/**
+ * 
+ *
+ * TODO Add Javadoc comment for this type.
+ * 
+ * @testcase org.osgi.service.provisioning
+ * @version $Revision$
+ */
 public class ProvisioningTestCase extends DefaultTestCase {
 	HttpService		http;
 	ServiceTracker	tracker;

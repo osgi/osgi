@@ -29,5 +29,13 @@ package org.osgi.test.cases.permissionadmin.nosecurity;
 
 import org.osgi.test.cases.util.*;
 
+/**
+ * 
+ *
+ * TODO Add Javadoc comment for this type.
+ * 
+ *  @testcase org.osgi.service.permissionadmin
+ * @version $Revision$
+ */
 public class PermissionNoSecurityTestCase extends DefaultTestCase {
 }

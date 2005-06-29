@@ -11,6 +11,7 @@ import org.osgi.test.cases.util.*;
 /**
  * A TestCase testing diverse issues.
  * 
+ * @testcase org.osgi.framework
  * @author Ericsson Telecom AB
  */
 public class SyncListenerTest extends DefaultTestCase {

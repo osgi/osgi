@@ -28,6 +28,13 @@
 package org.osgi.test.cases.cm;
 
 import org.osgi.test.cases.util.*;
+/**
 
+ *
+ * TODO Add Javadoc comment for this type.
+ * 
+ * @testcase org.osgi.service.application
+ * @version $Revision$
+ */
 public class CMTestCase extends DefaultTestCase {
 }

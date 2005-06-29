@@ -28,6 +28,13 @@
 package org.osgi.test.cases.framework.classpath;
 
 import org.osgi.test.cases.util.*;
-
+/**
+ * 
+ *
+ * TODO Add Javadoc comment for this type.
+ * 
+ * @testcase org.osgi.framework
+ * @version $Revision$
+ */
 public class ClassPathTestCase extends DefaultTestCase {
 }

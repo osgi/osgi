@@ -28,6 +28,13 @@
 package org.osgi.test.cases.permissionadmin.main;
 
 import org.osgi.test.cases.util.*;
-
+/**
+ * 
+ *
+ * TODO Add Javadoc comment for this type.
+ * 
+ *  @testcase org.osgi.service.packageadmin
+ * @version $Revision$
+ */
 public class PermissionTestCase extends DefaultTestCase {
 }

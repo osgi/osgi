@@ -29,5 +29,12 @@ package org.osgi.test.cases.framework.lifecycle;
 
 import org.osgi.test.cases.util.*;
 
+/**
+ * 
+ *
+ * TODO Add Javadoc comment for this type.
+ * @testcase org.osgi.framework
+ * @version $Revision$
+ */
 public class LifeCycleTestCase extends DefaultTestCase {
 }

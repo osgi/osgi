@@ -39,6 +39,8 @@ package org.osgi.test.cases.application;
 import org.osgi.test.cases.util.DefaultTestCase;
 
 /**
+ * 
+ * @testcase org.osgi.service.application
  * @generalDescription This Test Case Validates the Application Model RF
  *                     according to MEG reference documentation.
  */

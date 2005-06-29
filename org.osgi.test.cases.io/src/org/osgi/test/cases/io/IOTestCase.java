@@ -28,6 +28,12 @@
 package org.osgi.test.cases.io;
 
 import org.osgi.test.cases.util.*;
-
+/**
+ * 
+ *
+ * TODO Add Javadoc comment for this type.
+ * @testcase org.osgi.service.io
+ * @version $Revision$
+ */
 public class IOTestCase extends DefaultTestCase {
 }

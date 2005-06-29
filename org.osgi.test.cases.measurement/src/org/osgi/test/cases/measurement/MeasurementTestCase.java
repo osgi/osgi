@@ -29,5 +29,12 @@ package org.osgi.test.cases.measurement;
 
 import org.osgi.test.cases.util.*;
 
+/**
+ * 
+ *
+ * TODO Add Javadoc comment for this type.
+ * @testcase org.osgi.util.measurement
+ * @version $Revision$
+ */
 public class MeasurementTestCase extends DefaultTestCase {
 }

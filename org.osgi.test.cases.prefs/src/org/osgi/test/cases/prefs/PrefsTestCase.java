@@ -29,7 +29,14 @@
 package org.osgi.test.cases.prefs;
 
 import org.osgi.test.cases.util.*;
-
+/**
+ * 
+ *
+ * TODO Add Javadoc comment for this type.
+ * 
+ * @testcase org.osgi.service.prefs
+ * @version $Revision$
+ */
 public class PrefsTestCase extends DefaultTestCase {
 }
 

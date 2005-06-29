@@ -29,5 +29,13 @@ package org.osgi.test.cases.http;
 
 import org.osgi.test.cases.util.*;
 
+
+/**
+ * 
+ *
+ * TODO Add Javadoc comment for this type.
+ * @testcase org.osgi.service.http
+ * @version $Revision$
+ */
 public class HttpTestCase extends DefaultTestCase {
 }
