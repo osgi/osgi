@@ -31,7 +31,6 @@ import org.osgi.test.cases.util.DefaultTestCase;
  * @author Andre Assad
  * 
  * @testcase org.osgi.service.dmt
- * @classUnderTest org.osgi.service.dmt.Dmt
  * @generalDescription This Test Case Validates the implementation of
  *                     <code>Dmt<code> class, according to MEG reference
  *                     documentation.

@@ -44,17 +44,13 @@ import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 /**
  * @author Andre Assad
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtAcl#addPermission
- * @generalDescription This Test Class Validates the implementation of
- *                     <code>addPermission<code> method, according to MEG reference
- *                     documentation.
+ * This Test Class Validates the implementation of
+ * <code>addPermission<code> method, according to MEG reference
+ * documentation.
  */
 public class AddPermission {
-	private DmtTestControl tbc;
+	private DmtTestControl	tbc;
 
-	/**
-	 * @param tbc
-	 */
 	public AddPermission(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
@@ -68,9 +64,10 @@ public class AddPermission {
 	}
 
 	/**
-	 * @testID testAddPermission001
-	 * @testDescription This method creates a new Acl and asserts that a new
-	 *                  permission is correctly added to the Acl principal.
+	 * This method creates a new Acl and asserts that a new permission is
+	 * correctly added to the Acl principal.
+	 * 
+	 * @spec DmtAcl.addPermission(String,int)
 	 */
 	public void testAddPermission001() {
 		String principal = "www.cesar.org.br";
@@ -87,9 +84,10 @@ public class AddPermission {
 	}
 
 	/**
-	 * @testID testAddPermission002
-	 * @testDescription Test that more than one permission is added in the same
-	 *                  time to a principal.
+	 * Test that more than one permission is added in the same time to a
+	 * principal.
+	 * 
+	 * @spec DmtAcl.addPermission(String,int)
 	 */
 	public void testAddPermission002() {
 		String principal = "www.cesar.org.br";
@@ -110,9 +108,10 @@ public class AddPermission {
 	}
 
 	/**
-	 * @testID testAddPermission003
-	 * @testDescription Asserts that an IllegalArgumentException is thrown
-	 *                  whenever an invalid permission is added to a principal.
+	 * Asserts that an IllegalArgumentException is thrown whenever an invalid
+	 * permission is added to a principal.
+	 * 
+	 * @spec DmtAcl.addPermission(String,int)
 	 */
 	public void testAddPermission003() {
 		String principal = "www.cesar.org.br";
@@ -122,16 +121,17 @@ public class AddPermission {
 			dmtAcl.addPermission(principal, 2005);
 			// should not reach
 			tbc.fail("No IllegalArgumentException thrown");
-		} catch (IllegalArgumentException e) {
+		}
+		catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		}
 	}
 
 	/**
-	 * @testID testAddPermission004
-	 * @testDescription Asserts that an IllegalArgumentException is thrown
-	 *                  whenever a valid permission is added to an invalid
-	 *                  principal.
+	 * Asserts that an IllegalArgumentException is
+	 *         thrown whenever a valid permission is added to an invalid
+	 *         principal.
+	 * @spec DmtAcl.addPermission(String,int)
 	 */
 	public void testAddPermission004() {
 		String principal = "www.cesar.org.br";
@@ -144,16 +144,17 @@ public class AddPermission {
 							| org.osgi.service.dmt.DmtAcl.REPLACE);
 			// should not reach
 			tbc.fail("No IllegalArgumentException thrown");
-		} catch (IllegalArgumentException e) {
+		}
+		catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		}
 	}
 
 	/**
-	 * @testID testAddPermission005
-	 * @testDescription Asserts that an IllegalArgumentException is thrown
-	 *                  whenever a valid permission is added to a principal
-	 *                  which was not created on the constructor.
+	 * Asserts that an IllegalArgumentException is
+	 *         thrown whenever a valid permission is added to a principal which
+	 *         was not created on the constructor.
+	 * @spec DmtAcl.addPermission(String,int)
 	 */
 	public void testAddPermission005() {
 		String principal_1 = "www.cesar.org.br";
@@ -166,8 +167,10 @@ public class AddPermission {
 					| org.osgi.service.dmt.DmtAcl.EXEC);
 			tbc.assertEquals("Assert " + principal_2 + " permission",
 					org.osgi.service.dmt.DmtAcl.GET
-							| org.osgi.service.dmt.DmtAcl.EXEC, dmtAcl.getPermissions(principal_2));
-		} catch (IllegalArgumentException e) {
+							| org.osgi.service.dmt.DmtAcl.EXEC, dmtAcl
+							.getPermissions(principal_2));
+		}
+		catch (IllegalArgumentException e) {
 			tbc.fail("Unexpected IllegalArgumentException");
 		}
 	}

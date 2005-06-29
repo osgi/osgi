@@ -49,11 +49,10 @@ import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 /**
  * @author Andre Assad
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtAcl#DmtAcl, getPrincipals,
- *                  getPermissions
- * @generalDescription This Class Validates the implementation of
+ * This Class Validates the implementation of
  *                     <code>DmtAcl<code> costructor, according to MEG reference
  *                     documentation (rfc0085).
+ * 
  */
 public class DmtAcl {
 	private DmtTestControl tbc;
@@ -81,10 +80,11 @@ public class DmtAcl {
 	}
 
 	/**
-	 * @testID testDmtAcl001
-	 * @testDescription This method asserts that an instance of the ACL is
+	 * This method asserts that an instance of the ACL is
 	 *                  created from its canonic string representation. It also
 	 *                  tests getPermissions, and getPrincipals.
+	 *                  
+	 *  @spec DmtAcl.DmtAcl(String)
 	 */
 	public void testDmtAcl001() {
 		String principal = "www.cesar.org.br";
@@ -112,10 +112,10 @@ public class DmtAcl {
 	}
 
 	/**
-	 * @testID testDmtAcl002
-	 * @testDescription This method creates a new ACL from another predefined
+	 * This method creates a new ACL from another predefined
 	 *                  ACL, and asserts that it have got all the later ACL
 	 *                  properties.
+	 *  @spec DmtAcl.DmtAcl(String,int)
 	 */
 	public void testDmtAcl002() {
 		String[] principal = { "www.cesar.org.br" };
@@ -141,10 +141,10 @@ public class DmtAcl {
 	}
 
 	/**
-	 * @testID testDmtAcl003
-	 * @testDescription This method asserts that an ACL instance that represents
+	 * This method asserts that an ACL instance that represents
 	 *                  an empty list of principals with no permissions is
 	 *                  created.
+	 *  @spec DmtAcl.getPrincipals()
 	 */
 	public void testDmtAcl003() {
 		org.osgi.service.dmt.DmtAcl dmtAcl = new org.osgi.service.dmt.DmtAcl();
@@ -155,10 +155,9 @@ public class DmtAcl {
 	}
 
 	/**
-	 * @testID testDmtAcl004
-	 * @testDescription Checks if IllegalArgumentException is thrown on
-	 *                  DmtAcl(java.lang.String acl) and DmtAcl(DmtAcl acl)
-	 *                  constructors.
+	 * Checks if IllegalArgumentException is thrown on
+	 *                  DmtAcl(java.lang.String acl) constructors.
+	 *  @spec DmtAcl.DmtAcl(String)
 	 */
 	public void testDmtAcl004() {
 		String aclStr = "INVALID_ACL_STRING";
@@ -175,10 +174,10 @@ public class DmtAcl {
 	}
 
 	/**
-	 * @testID testDmtAcl005
-	 * @testDescription Passes NULL as argument in the constructor and asserts
+	 * Passes NULL as argument in the constructor and asserts
 	 *                  that an empty list of principals with no permissions is
 	 *                  created.
+	 * @spec DmtAcl.getPrincipals()
 	 */
 	/*
 	 * Test is failing because DmtAcl(null) constructor is ambiguous. rfc0085
@@ -199,9 +198,10 @@ public class DmtAcl {
 	}
 
 	/**
-	 * @testID testDmtAcl006
-	 * @testDescription Validates a constructor of an DmtAcl object with more
+	 * 
+	 * Validates a constructor of an DmtAcl object with more
 	 *                  than one principal.
+	 * @spec DmtAcl.DmtAcl(String)
 	 */
 	public void testDmtAcl006() {
 		String[] principal = { "www.cesar.org.br", "www.cin.ufpe.br" };
@@ -235,10 +235,14 @@ public class DmtAcl {
 	}
 
 	/**
-	 * @testID testDmtAcl007
-	 * @testDescription Asserts that an IllegalArgumentException is thrown
+	 * 
+	 * Asserts that an IllegalArgumentException is thrown
 	 *                  whenever an ACL is created from an acl String with an
 	 *                  invalid permission code.
+	 *                  
+	 * ### Why does the constructor not throw an exception?
+	 * 
+	 * @spec DmtAcl.getPermissions(String)
 	 */
 	public void testDmtAcl007() {
 		String principal = "www.cesar.org.br";
@@ -258,10 +262,12 @@ public class DmtAcl {
 	}
 
 	/**
-	 * @testID testDmtAcl008
-	 * @testDescription Asserts that an IllegalArgumentException is thrown
+	 * 
+	 * Asserts that an IllegalArgumentException is thrown
 	 *                  whenever an ACL is created from an acl String with a
 	 *                  null principal.
+	 *                  
+	 * @spec DmtAcl.DmtAcl(String)
 	 */
 	public void testDmtAcl008() {
 		String principal = null;
@@ -281,10 +287,12 @@ public class DmtAcl {
 	}
 
 	/**
-	 * @testID testDmtAcl009
-	 * @testDescription Asserts that an IllegalArgumentException is thrown
+	 * 
+	 * Asserts that an IllegalArgumentException is thrown
 	 *                  whenever an ACL is created from an acl String with an
 	 *                  invalid principal.
+	 *                  
+	 * @spec DmtAcl.DmtAcl(String)
 	 */
 	public void testDmtAcl009() {
 		String principal = "%INVALID*_PRINCIPAL_NÂME";
@@ -304,10 +312,12 @@ public class DmtAcl {
 	}
 
 	/**
-	 * @testID testDmtAcl010
-	 * @testDescription Test if an IllegalArgumentException is thrown when the
+	 * 
+	 * Test if an IllegalArgumentException is thrown when the
 	 *                  DmtAcl constructors receives two arrays with different
 	 *                  lenghts.
+	 *                  
+	 * @spec DmtAcl.DmtAcl(String[],int)
 	 */
 	public void testDmtAcl010() {
 		String[] principal = { "www.cesar.org.br", "www.cin.ufpe.br" };
@@ -323,10 +333,11 @@ public class DmtAcl {
 	}
 
 	/**
-	 * @testID testDmtAcl011
-	 * @testDescription Test if an IllegalArgumentException is thrown when the
+	 * 
+	 * Test if an IllegalArgumentException is thrown when the
 	 *                  DmtAcl constructors receives an invalid permission array
 	 *                  element.
+	 * @spec DmtAcl.DmtAcl(String[],int)
 	 */
 	public void testDmtAcl011() {
 		String[] principal = { "www.cesar.org.br", "www.cin.ufpe.br" };
@@ -341,10 +352,11 @@ public class DmtAcl {
 	}
 	
 	/**
-	 * @testID testDmtAcl012
-	 * @testDescription Test if an IllegalArgumentException is thrown when the
+	 * 
+	 * Test if an IllegalArgumentException is thrown when the
 	 *                  DmtAcl constructors receives an invalid principal array
 	 *                  element.
+	 * @spec DmtAcl.DmtAcl(String[],int)
 	 */
 	public void testDmtAcl012() {
 		String[] principal = { "www.cesar.org.br", "%INVALID*_PRINCIPAL_NÂME" };

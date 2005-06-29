@@ -44,8 +44,7 @@ import java.util.Vector;
 import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 
 /**
- * @methodUnderTest org.osgi.service.dmt.DmtException#getURI
- * @generalDescription This class tests DmtException.getURI method according
+ * This class tests DmtException.getURI method according
  *                     with MEG specification (rfc0085)
  */
 public class GetURI {
@@ -60,9 +59,11 @@ public class GetURI {
 	}
 
 	/**
-	 * @testID testGetURI001
-	 * @testDescription Tests if getURI returns a value that is equals to the
+	 * 
+	 *  Tests if getURI returns a value that is equals to the
 	 *                  value passed as a parameter for the constructor
+	 *  @spec DmtException.getURI()
+	 *  @spec DmtException.DmtException(String,int,String)
 	 */
 	public void testGetURI001() {
 		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(

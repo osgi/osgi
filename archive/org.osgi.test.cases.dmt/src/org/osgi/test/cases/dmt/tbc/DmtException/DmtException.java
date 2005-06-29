@@ -44,8 +44,7 @@ import java.util.Vector;
 import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 
 /**
- * @methodUnderTest org.osgi.service.dmt.DmtException#DmtException
- * @generalDescription This class tests DmtException constructors according with
+ * This class tests DmtException constructors according with
  *                     MEG specification (rfc0085)
  */
 
@@ -63,11 +62,12 @@ public class DmtException {
 	}
 
 	/**
-	 * @testID testDmtException001
-	 * @testDescription Tests if the values that are passed as parameters for
+	 * 
+	 *  Tests if the values that are passed as parameters for
 	 *                  the constructor are equal to the values returned through
 	 *                  its corresponding get methods
 	 * 
+	 * @spec DmtException.DmtException(String,int,String)
 	 */
 	public void testDmtException001() {
 
@@ -86,10 +86,11 @@ public class DmtException {
 	}
 
 	/**
-	 * @testID testDmtException002
-	 * @testDescription Tests if the values that are passed as parameters for
+	 * 
+	 *  Tests if the values that are passed as parameters for
 	 *                  the constructor are equal to the values returned through
 	 *                  its corresponding get methods
+	 * @spec DmtException.DmtException(String,int,String,Throwable)
 	 */
 	public void testDmtException002() {
 
@@ -114,10 +115,11 @@ public class DmtException {
 	}
 
 	/**
-	 * @testID testDmtException003
-	 * @testDescription Tests if the values that are passed as parameters for
+	 * 
+	 *  Tests if the values that are passed as parameters for
 	 *                  the constructor are equal to the values returned through
 	 *                  its corresponding get methods
+	 * @spec DmtException.DmtException(String,int,String,throwable)
 	 */
 	public void testDmtException003() {
 		Vector causes = new Vector();

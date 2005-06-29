@@ -22,7 +22,7 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
- 
+
 /* 
  * REVISION HISTORY:
  *
@@ -48,12 +48,11 @@ import java.util.Vector;
 import org.osgi.test.cases.dmt.tbc.DmtTestControl;
 
 /**
- * @methodUnderTest org.osgi.service.dmt.DmtException#printStackTrace
- * @generalDescription This class tests printStackTrace methods according with
- *                     MEG specification (rfc0085)
+ * org.osgi.service.dmt.DmtException#printStackTrace This class tests
+ * printStackTrace methods according with MEG specification (rfc0085)
  */
 public class PrintStackTrace {
-	private DmtTestControl tbc;
+	private DmtTestControl	tbc;
 
 	public PrintStackTrace(DmtTestControl tbc) {
 		this.tbc = tbc;
@@ -67,9 +66,14 @@ public class PrintStackTrace {
 	}
 
 	/**
-	 * @testID testPrintStackTrace001
-	 * @testDescription Tests if the string printed contains causes passed as
-	 *                  parameters for the constructor
+	 * 
+	 * Tests if the string printed contains causes passed as parameters for the
+	 * constructor
+	 * 
+	 * ### How useful is this test??
+	 * 
+	 * @spec DmtException.printStackTrace()
+	 * @spec DmtException.DmtException(String,int,String)
 	 */
 	public void testPrintStackTrace001() {
 		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
@@ -79,98 +83,108 @@ public class PrintStackTrace {
 		PrintStream ps = new PrintStream(baos);
 		de.printStackTrace(ps);
 
-		tbc.assertTrue("Asserts printStackTrace method",
-						baos.toString().indexOf("java.lang.Exception") > -1);
-		
+		tbc.assertTrue("Asserts printStackTrace method", baos.toString()
+				.indexOf("java.lang.Exception") > -1);
+
 		try {
 			ps.close();
 			baos.close();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 		}
 	}
-	
+
 	/**
-	 * @testID testPrintStackTrace002
-	 * @testDescription Tests if the string printed contains causes passed as
-	 *                  parameters for the constructor
+	 * 
+	 * Tests if the string printed contains causes passed as parameters for the
+	 * constructor
+	 * @spec DmtException.printStackTrace()
+	 * @spec DmtException.DmtException(String,int,String,Vector)
 	 */
 	public void testPrintStackTrace002() {
 		Vector causes = new Vector();
-		causes.add(0,new Exception());
-		causes.add(1,new NullPointerException());
-		
+		causes.add(0, new Exception());
+		causes.add(1, new NullPointerException());
+
 		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
-				null, 0, null,causes);
+				null, 0, null, causes);
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		PrintStream ps = new PrintStream(baos);
 		de.printStackTrace(ps);
 
-		tbc.assertTrue("Asserts prinStackTrace method",
-						baos.toString().indexOf("java.lang.Exception") > -1);
+		tbc.assertTrue("Asserts prinStackTrace method", baos.toString()
+				.indexOf("java.lang.Exception") > -1);
 
-		tbc.assertTrue("Asserts printStackTrace method",
-				baos.toString().indexOf("java.lang.NullPointerException") > -1);
+		tbc.assertTrue("Asserts printStackTrace method", baos.toString()
+				.indexOf("java.lang.NullPointerException") > -1);
 
 		try {
 			ps.close();
 			baos.close();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 		}
 	}
-	
+
 	/**
-	 * @testID testPrintStackTrace003
-	 * @testDescription Tests if the string printed contains causes passed as
-	 *                  parameters for the constructor
+	 * 
+	 * Tests if the string printed contains causes passed as parameters for the
+	 * constructor
+	 * @spec DmtException.printStackTrace()
+	 * @spec DmtException.DmtException(String,int,String,Throwable)
 	 */
 	public void testPrintStackTrace003() {
 		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
 				null, 0, null, new Exception());
-		
+
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		PrintWriter pw = new PrintWriter(baos);
-		
+
 		de.printStackTrace(pw);
 
-		tbc.assertTrue("Asserts printStackTrace method",
-				baos.toString().indexOf("java.lang.Exception") > -1);
+		tbc.assertTrue("Asserts printStackTrace method", baos.toString()
+				.indexOf("java.lang.Exception") > -1);
 
 		try {
 			pw.close();
 			baos.close();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 		}
 	}
-	
+
 	/**
-	 * @testID testPrintStackTrace004
-	 * @testDescription Tests if the string printed contains causes passed as
-	 *                  parameters for the constructor
+	 * 
+	 * Tests if the string printed contains causes passed as parameters for the
+	 * constructor
+	 * @spec DmtException.printStackTrace()
+	 * @spec DmtException.DmtException(String,int,String,Vector)
 	 */
 	public void testPrintStackTrace004() {
 		Vector causes = new Vector();
-		causes.add(0,new Exception());
-		causes.add(1,new NullPointerException());
-		
+		causes.add(0, new Exception());
+		causes.add(1, new NullPointerException());
+
 		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
-				null, 0, null,causes);
+				null, 0, null, causes);
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		PrintWriter pw = new PrintWriter(baos); 
-		
+		PrintWriter pw = new PrintWriter(baos);
+
 		de.printStackTrace(pw);
 
-		tbc.assertTrue("Asserts printStackTrace method",
-						baos.toString().indexOf("java.lang.Exception") > -1);
+		tbc.assertTrue("Asserts printStackTrace method", baos.toString()
+				.indexOf("java.lang.Exception") > -1);
 
-		tbc.assertTrue("Asserts printStackTrace method",
-				baos.toString().indexOf("java.lang.NullPointerException") > -1);
+		tbc.assertTrue("Asserts printStackTrace method", baos.toString()
+				.indexOf("java.lang.NullPointerException") > -1);
 
 		try {
 			pw.close();
 			baos.close();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 		}
 	}
 
