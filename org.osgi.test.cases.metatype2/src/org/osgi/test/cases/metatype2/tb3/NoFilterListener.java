@@ -44,7 +44,6 @@ public class NoFilterListener implements MetaDataListener {
 	 * @see org.osgi.service.metatype2.MetaDataListener#metaDataChanged(java.lang.String, java.lang.String, int)
 	 */
 	public void metaDataChanged(String category, String id, int eventType) {
-		System.out.println("<NoFilterListener> Meta data changed");
 		Activator.log("<NoFilterListener> EventType=" + eventType + ", category=" + category + ", Id=" + id);
 	}
 }
