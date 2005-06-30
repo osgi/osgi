@@ -9,19 +9,28 @@
  */
 package org.osgi.service.dmt;
 
-// TODO remove pattern methods, and all references to regular expressions
-// TODO add isValid... methods
-
 /**
  * The DmtMetaNode contains meta data both standard for OMA DM and defined by
  * OSGi MEG (without breaking the compatibility) to provide for better DMT data
  * quality in an environment where many software components manipulate this
  * data.
  * <p>
- * The interface has two types of functions to describe type of nodes in the
- * DMT. One is used to retrieve standard OMA DM metadata, such as access mode,
- * cardinality, default etc. Another is used for meta data extensions defined by
- * OSGi MEG, such as valid values and regular expressions.
+ * The interface has several types of functions to describe the nodes in the
+ * DMT. Some methods can be used to retrieve standard OMA DM metadata such as
+ * access type, cardinality, default, etc., others are for data extensions
+ * defined by OSGi MEG, such as valid names and values. In some cases the
+ * standard behaviour has been extended, for example it is possible to provide
+ * several valid MIME types, or to differentiate between normal and automatic
+ * dynamic nodes.
+ * <p>
+ * The Dmt Admin calls the methods {@link #isValidName} and
+ * {@link #isValidValue} to check the validity of the name and value of a node.
+ * These should do a full check on their parameter and return <code>false</code>
+ * if it does not conform to all constraints.  Some methods overlap the purpose 
+ * of the validate methods (e.g. {@link #getFormat} or {@link #getValidNames}),
+ * these are not checked by Dmt Admin, but are only for external use, for 
+ * example user interfaces.  It is indicated in the description of the methods 
+ * if the Dmt Admin does not enforce the constraints defined by it.  
  * <p>
  * Most of the methods of this class return <code>null</code> if a certain
  * piece of meta information is not defined for the node or providing this
@@ -166,8 +175,24 @@ public interface DmtMetaNode {
     DmtData getDefault();
 
     /**
+     * Get the list of MIME types this node can hold. If there is a default
+     * value defined for this node then the associated MIME type (if any) must
+     * be the first element of the list. If no meta-data is provided for a node,
+     * all MIME types are considered valid.
+     * 
+     * @return The list of allowed MIME types for this node or <code>null</code>
+     *         if not defined
+     */
+    String[] getMimeTypes();
+    
+    /**
      * Get the maximum allowed value associated with an integer node. If no
      * meta-data is provided for a node, there is no upper limit to its value.
+     * <p>
+     * The information returned by this method is not checked by Dmt Admin, it
+     * is only for external use, for example in user interfaces.  Dmt Admin
+     * only calls {@link #isValidValue} for checking the value, its behaviour 
+     * should be consistent with this method.
      * 
      * @return the allowed maximum, or <code>Integer.MAX_VALUE</code> if there 
      *         is no upper limit defined or the node's format is not integer
@@ -177,6 +202,11 @@ public interface DmtMetaNode {
     /**
      * Get the minimum allowed value associated with an integer node. If no
      * meta-data is provided for a node, there is no lower limit to its value.
+     * <p>
+     * The information returned by this method is not checked by Dmt Admin, it
+     * is only for external use, for example in user interfaces.  Dmt Admin
+     * only calls {@link #isValidValue} for checking the value, its behaviour 
+     * should be consistent with this method.
      * 
      * @return the allowed minimum, or <code>Integer.MIN_VALUE</code> if there
      *         is no lower limit defined or the node's format is not integer
@@ -187,23 +217,17 @@ public interface DmtMetaNode {
      * Return an array of DmtData objects if valid values are defined for the
      * node, or <code>null</code> otherwise. If no meta-data is provided for a
      * node, all values are considered valid.
+     * <p>
+     * The information returned by this method is not checked by Dmt Admin, it
+     * is only for external use, for example in user interfaces.  Dmt Admin
+     * only calls {@link #isValidValue} for checking the value, its behaviour 
+     * should be consistent with this method.
      * 
      * @return the valid values for this node, or <code>null</code> if not
      *         defined
      */
     DmtData[] getValidValues();
     
-    /**
-     * Return an array of Strings if valid names are defined for the node, or
-     * <code>null</code> if no valid name list is defined or if this piece of
-     * meta info is not supported.  If no meta-data is provided for a node, all
-     * names are considered valid.
-     * 
-     * @return the valid values for this node name, or <code>null</code> if
-     *         not defined
-     */
-    String[] getValidNames();
-
     /**
      * Get the node's format, expressed in terms of type constants defined in
      * {@link DmtData}. If there are multiple formats allowed for the node then
@@ -215,39 +239,58 @@ public interface DmtMetaNode {
      * <p>
      * Note that the 'format' term is a legacy from OMA DM, it is more customary
      * to think of this as 'type'.
+     * <p>
+     * The formats returned by this method are not checked by Dmt Admin, they
+     * are only for external use, for example in user interfaces.  Dmt Admin
+     * only calls {@link #isValidValue} for checking the value, its behaviour  
+     * should be consistent with this method.
      * 
-     * @return The allowed format(s) of the node
+     * @return the allowed format(s) of the node
      */
     int getFormat();
 
     /**
-     * Get the regular expression associated with the value of this node, if
-     * any. This method makes sense only in the case of <code>chr</code>
-     * nodes.
+     * Checks whether the given value is valid for this node.  This method 
+     * should do a full check on the value, including (but not limited to)
+     * checking the format, well-formedness, range, etc. of the value.  This
+     * method should be consistent with the constraints defined by the
+     * {@link #getFormat}, {@link #getValidValues}, {@link #getMin} and
+     * {@link #getMax} methods (if applicable), the Dmt Admin only calls this
+     * method for value validation.
      * 
-     * @return The regular expression associated with this node or
-     *         <code>null</code> if not defined, or if the node is not of type
-     *         <code>chr</code>
+     * @param value the value to check for validity
+     * @return <code>true</code> if the specified value is valid for the node
+     *         described by this meta-node
      */
-    String getPattern();
-    
-    /**
-     * Get the regular expression associated with the name of this node, if any.
-     * 
-     * @return The regular expression associated with the name of this node or
-     *         <code>null</code> if not defined.
-     *         ### which regex can be used?
-     */
-    String getNamePattern();
+    boolean isValidValue(DmtData value);
 
     /**
-     * Get the list of MIME types this node can hold. If there is a default
-     * value defined for this node then the associated MIME type (if any) must
-     * be the first element of the list. If no meta-data is provided for a node,
-     * all MIME types are considered valid.
+     * Return an array of Strings if valid names are defined for the node, or
+     * <code>null</code> if no valid name list is defined or if this piece of
+     * meta info is not supported.  If no meta-data is provided for a node, all
+     * names are considered valid.
+     * <p>
+     * The information returned by this method is not checked by Dmt Admin, it
+     * is only for external use, for example in user interfaces.  Dmt Admin
+     * only calls {@link #isValidName} for checking the name, its behaviour  
+     * should be consistent with this method.
      * 
-     * @return The list of allowed MIME types for this node or <code>null</code>
-     *         if not defined
+     * @return the valid values for this node name, or <code>null</code> if
+     *         not defined
      */
-    String[] getMimeTypes();
+    String[] getValidNames();
+
+    /**
+     * Checks whether the given name is a valid name for this node. This method
+     * can be used for example to ensure that the node name is always one of a
+     * predefined set of valid names, or that it matches a specific pattern.
+     * This method should be consistent with the values returned by
+     * {@link #getValidNames} (if any), the Dmt Admin only calls this method for
+     * name validation.
+     * 
+     * @param name the node name to check for validity
+     * @return <code>true</code> if the specified name is valid for the node
+     *         described by this meta-node
+     */
+    boolean isValidName(String name);
 }
