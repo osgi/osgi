@@ -45,12 +45,16 @@ public class DmtData {
     public static final int FORMAT_BOOLEAN = 0x0008;
 
     /**
-     * The node holds an OMA DM <code>date</code> value. ### not implemented yet
+     * The node holds an OMA DM <code>date</code> value. 
+     * <p>
+     * ### not implemented yet
      */
     public static final int FORMAT_DATE    = 0x0010;
     
     /**
-     * The node holds an OMA DM <code>time</code> value. ### not implemented yet
+     * The node holds an OMA DM <code>time</code> value. 
+     * <p>
+     * ### not implemented yet
      */
     public static final int FORMAT_TIME    = 0x0020;
     
