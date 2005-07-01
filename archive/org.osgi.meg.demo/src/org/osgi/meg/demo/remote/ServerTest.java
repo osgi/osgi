@@ -51,7 +51,16 @@ public class ServerTest implements RemoteReceiver {
 			msg = "OK";
 		System.out.println("Result: " + msg);
 	}
-
+    
+    public void onError(String exception, String code, String uri, 
+            String message, String trace) {
+        System.out.println("Error: " + exception + ": " + 
+                (code != null ? code + ": " : "") +
+                (uri != null ? uri + ": " : "") +
+                (message != null ? message + ": " : "") +
+                trace);
+    }
+    
 	private class Consol extends Thread {
 		public void run() {
 			try {

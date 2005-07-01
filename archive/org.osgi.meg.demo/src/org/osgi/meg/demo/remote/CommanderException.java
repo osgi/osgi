@@ -20,20 +20,53 @@ package org.osgi.meg.demo.remote;
 
 public class CommanderException extends Exception {
     
+    private String exception;
     private String code;
+    private String uri;
     private String trace;
+    
+    public String getException() {
+        return exception;
+    }
     
 	public String getCode() {
 		return code;
+	}
+    
+	public String getUri() {
+		return uri;
 	}
     
     public String getTrace() {
         return trace;
     }
     
-    public CommanderException(String code, String trace) {
+    public CommanderException(String exception, String code, String uri, 
+            String message, String trace) {
+        super(message);
+        this.exception = exception;
         this.code = code;
+        this.uri = uri;
         this.trace = trace;
     }
-
+    
+    public String getString() {
+        String str = null;
+        str = add(str, "Exception", exception); 
+        str = add(str, "Code", code);
+        str = add(str, "Uri", uri);
+        str = add(str, "Message", getMessage());
+        str = add(str, "Trace", trace);
+        
+        return str;
+    }
+    
+    private String add(String orig, String name, String value) {
+        if(value == null)
+            return orig;
+        
+        String line = name + ": " + value;
+        
+        return (orig == null ? "" : orig + "\n") + line;
+    }
 }

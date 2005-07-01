@@ -22,6 +22,9 @@ public interface RemoteReceiver {
 	void onAlert(String alert);
 
 	void onResult(String result);
+    
+	void onError(String exception, String code, String uri, String message, 
+            String trace);
 
 	void setConnected(boolean b);
 	

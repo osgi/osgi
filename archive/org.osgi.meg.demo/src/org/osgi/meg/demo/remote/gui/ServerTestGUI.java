@@ -171,7 +171,7 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
 			commander.command("close");
 		}
 		catch (CommanderException e) {
-			// TODO Auto-generated catch block
+            System.err.println(e.getString());
 			e.printStackTrace();
 		}
         rms.setRunning(false);
@@ -339,8 +339,7 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
 			}
 			catch (CommanderException ex) {
 				ex.printStackTrace();
-				JOptionPane.showMessageDialog(this, 
-						"Code: " + ex.getCode() + "\nTrace:\n" + ex.getTrace() , 
+				JOptionPane.showMessageDialog(this, ex.getString(), 
 						"Error", JOptionPane.ERROR_MESSAGE);
 			}
 			catch (IOException ex) {
@@ -539,7 +538,7 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
             jTextAreaCommandLog.append(result + "\n");
 		} catch (CommanderException e) {
             JOptionPane.showMessageDialog(this, e.getCode(), "Error", JOptionPane.ERROR_MESSAGE);
-            jTextAreaCommandLog.append("EXCEPTION code: " + e.getCode() + " trace:\n" + e.getTrace());
+            jTextAreaCommandLog.append(e.getString());
 		}
     }
 
@@ -553,6 +552,7 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
 						hideProgressBar();
 						refreshToolBar();
 					} catch (CommanderException e) {
+                        System.err.println(e.getString());
 						e.printStackTrace();
 					}
 				}}).start();
