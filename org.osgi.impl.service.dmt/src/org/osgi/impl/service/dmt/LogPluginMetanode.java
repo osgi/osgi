@@ -17,68 +17,77 @@
  */
 package org.osgi.impl.service.dmt;
 
+import java.util.List;
 import org.osgi.service.dmt.*;
 
 public class LogPluginMetanode implements DmtMetaNode {
-    static final boolean CAN_EXECUTE    = true;
-    static final boolean IS_PERMANENT   = true;
+    static final boolean MODIFIABLE = true; 
+    static final boolean SEARCH_PARAMETER = true; 
     static final boolean ALLOW_INFINITE = true; 
 
 	static final String  LEAF_MIME_TYPE = "text/plain";
     
 	// private fields
-	private boolean	 canDelete;
-	private boolean	 canAdd;
-	private boolean	 canGet;
-	private boolean	 canReplace;
-	private boolean	 canExecute;
-	private boolean	 isLeaf;
+	private boolean	  canDelete;
+	private boolean	  canAdd;
+	private boolean	  canGet;
+	private boolean	  canReplace;
+	private boolean	  canExecute;
+	private boolean	  isLeaf;
     
-	private boolean  isPermanent;
-    private String   description;
-    private int      maxOccurrence;
-    private boolean  isZeroOccurrenceAllowed;
-    private int      format;
-    private String[] validNames;
-    private String[] mimeTypes;
+	private int       scope;
+    private String    description;
+    private int       maxOccurrence;
+    private boolean   isZeroOccurrenceAllowed;
+    private int       format;
+    private String[]  mimeTypes;
+    private DmtData   defaultValue;
+
+    // used for checking the components of a comma-separated list
+    private List validComponents;
 
     // Meta-node constructor for interior nodes
-    protected LogPluginMetanode(boolean isPermanent, boolean canExecute, 
-                                boolean allowInfinite, String description) {
+    protected LogPluginMetanode(int scope, boolean modifiable, 
+            boolean allowInfinite, String description) {
         
-        this.canDelete     = !isPermanent;
-        this.canAdd        = true;
-        this.canGet        = true;
-        this.canReplace    = true;
-        this.canExecute    = canExecute;
-        this.isLeaf        = false;
+        this.canDelete       = modifiable;
+        this.canAdd          = modifiable;
+        this.canGet          = true;
+        this.canReplace      = true;
+        //this.canExecute      = false;
+        // TODO remove executability when LogResult subtree is implemented
+        this.canExecute      = modifiable;
+        this.isLeaf          = false;
         
-        this.isPermanent   = isPermanent;
-        this.description   = description;
-        this.maxOccurrence = allowInfinite ? Integer.MAX_VALUE : 1;
+        this.scope           = scope;
+        this.description     = description;
+        this.maxOccurrence   = allowInfinite ? Integer.MAX_VALUE : 1;
         this.isZeroOccurrenceAllowed = allowInfinite;
-        this.format        = DmtData.FORMAT_NODE;
-        this.validNames    = null;
-        this.mimeTypes     = null;
+        this.format          = DmtData.FORMAT_NODE;
+        this.validComponents = null;
+        this.mimeTypes       = null;
+        this.defaultValue    = null;
     }
     
     // Meta-node constructor for leaf nodes
-	protected LogPluginMetanode(int format, String description) {
-        this.canDelete     = true;
-        this.canAdd        = false;
-        this.canGet        = true;
-        this.canReplace    = true;
-        this.canExecute    = false;
-        this.isLeaf        = true;
+	protected LogPluginMetanode(boolean isSearchParameter, int format, 
+            DmtData defaultValue, List validComponents, 
+            String description) {
+        this.canDelete       = false;
+        this.canAdd          = false;
+        this.canGet          = true;
+        this.canReplace      = isSearchParameter;
+        this.canExecute      = false;
+        this.isLeaf          = true;
         
-        this.isPermanent   = false;
-        this.description   = description;
-        this.maxOccurrence = 1;
-        this.isZeroOccurrenceAllowed = false;
-        this.format        = format;
-        this.validNames    = new String[] { LogPlugin.FILTER, LogPlugin.EXCLUDE,
-                                            LogPlugin.MAXR, LogPlugin.MAXS };
-        this.mimeTypes     = new String[] { LEAF_MIME_TYPE };
+        this.scope           = DmtMetaNode.AUTOMATIC;
+        this.description     = description;
+        this.maxOccurrence   = 1;
+        this.isZeroOccurrenceAllowed = !isSearchParameter;
+        this.format          = format;
+        this.validComponents = validComponents;
+        this.mimeTypes       = new String[] { LEAF_MIME_TYPE };
+        this.defaultValue    = defaultValue;
 	}
 
 	/* ---------------------------------------------------------------------- */
@@ -99,7 +108,7 @@ public class LogPluginMetanode implements DmtMetaNode {
 	}
 
 	public int getScope() {
-		return isPermanent ? PERMANENT : DYNAMIC;
+		return scope;
 	}
 
 	public String getDescription() {
@@ -115,7 +124,6 @@ public class LogPluginMetanode implements DmtMetaNode {
 	}
 
 	public DmtData getDefault() {
-        // ENHANCE provide defaults for log search request parameters
 		return null;
 	}
 
@@ -128,11 +136,10 @@ public class LogPluginMetanode implements DmtMetaNode {
 	}
 
     public String[] getValidNames() {
-        return validNames;
+        return null;
     }
     
 	public DmtData[] getValidValues() {
-        // ENHANCE add valid value list for "exclude" node
 		return null;
 	}
 
@@ -140,15 +147,30 @@ public class LogPluginMetanode implements DmtMetaNode {
 		return format;
 	}
 
-    public String getNamePattern() {
-        return null;
-    }
-    
-	public String getPattern() {
-		return null;
-	}
-
 	public String[] getMimeTypes() {
 		return mimeTypes;
 	}
+    
+    public boolean isValidName(String name) {
+        return true;
+    }
+    
+    public boolean isValidValue(DmtData value) {
+        if((format & value.getFormat()) == 0)
+            return false;
+        
+        if(validComponents != null) { // format assumed to be FORMAT_STRING
+            try {
+                String excludes = value.getString();
+                String[] components = Splitter.split(excludes, ',', 0);
+                for (int i = 0; i < components.length; i++)
+                    if(!validComponents.contains(components[i]))
+                        return false;
+            } catch(DmtException e) {
+                // not checking components if format is not string
+            }
+        }
+        
+        return true;
+    }
 }
