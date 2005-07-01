@@ -125,16 +125,6 @@ public class ApplicationMetaNode implements DmtMetaNode {
 		return 0;
 	}
 
-	public String getPattern() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getNamePattern() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public String[] getMimeTypes() {
 		// TODO Auto-generated method stub
 		return null;
@@ -144,4 +134,14 @@ public class ApplicationMetaNode implements DmtMetaNode {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+    public boolean isValidValue(DmtData arg0) {
+        // TODO Auto-generated method stub
+        return true;
+    }
+
+    public boolean isValidName(String arg0) {
+        // TODO Auto-generated method stub
+        return true;
+    }
 }
