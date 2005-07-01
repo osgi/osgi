@@ -17,6 +17,8 @@
  */
 package org.osgi.impl.service.monitor;
 
+import java.util.Arrays;
+import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtData;
 
@@ -44,8 +46,6 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
     String[]  validNames            = null;
     DmtData[] validValues           = null;
     int       format                = DmtData.FORMAT_NULL;
-    String    namePattern           = null;    
-    String    pattern               = null;
     String[]  mimeTypes             = null;
 
     // Leaf node in MonitorPlugin
@@ -145,20 +145,33 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
         return format;
     }
 
-    public String getNamePattern() {
-        return namePattern;
-    }
-    
-    public String getPattern()
-    {
-        return pattern;
-    }
-
     public String [] getMimeTypes()
     {
         return mimeTypes;
     }
 
+    public boolean isValidName(String name) {
+        return validNames == null ? true :
+            Arrays.asList(validNames).contains(name);
+    }
+    
+    public boolean isValidValue(DmtData value) {
+        int valueFormat = value.getFormat();
+        if((valueFormat & format) == 0)
+            return false;
+        
+        try {
+            int intValue = value.getInt();
+            if(intValue < min || intValue > max)
+                return false;
+        } catch(DmtException e) {
+            // ignore OTHER_ERROR if format of value was not FORMAT_INTEGER
+        }
+            
+        return validValues == null ? true :
+            Arrays.asList(validValues).contains(value);
+    }
+    
     private void setCommon(String description, boolean allowInfinte)
     {
         this.description = description;
