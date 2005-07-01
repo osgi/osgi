@@ -157,6 +157,8 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	 * through the RSH handler and thus passes all encryption/decryption
 	 * routines. The RSH protocol is optional so this case
 	 * fails silently if there is no such protocol
+	 * 
+	 * @spec rsh
 	 */
 	public void testRSHFile() throws Exception {
 		if ( ! rshAvailable() )
@@ -206,6 +208,7 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	 * The RSH server gives us an ipa file with sample.jar and
 	 * will start it. It will also place the "time" parameter
 	 * in the zip file.
+	 * @spec rsh
 	 */
 	public void testProvisoningWithRsh() throws Exception {
 		if ( ! rshAvailable() ) 
@@ -257,6 +260,18 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 
 	/**
 	 * Test if all the constants have the right values.
+	 * 
+	 * @spec ProvisioningService.MIME_BUNDLE
+	 * @spec ProvisioningService.MIME_BUNDLE_URL
+	 * @spec ProvisioningService.MIME_BYTE_ARRAY
+	 * @spec ProvisioningService.MIME_STRING
+	 * @spec ProvisioningService.PROVISIONING_AGENT_CONFIG
+	 * @spec ProvisioningService.PROVISIONING_REFERENCE
+	 * @spec ProvisioningService.PROVISIONING_ROOTX509
+	 * @spec ProvisioningService.PROVISIONING_RSH_SECRET
+	 * @spec ProvisioningService.PROVISIONING_SPID
+	 * @spec ProvisioningService.PROVISIONING_START_BUNDLE
+	 * @spec ProvisioningService.PROVISIONING_UPDATE_COUNT
 	 */
 	public void testConstants() {
 		assertEquals( "MIME_BUNDLE", 				"application/x-osgi-bundle", 	ProvisioningService.MIME_BUNDLE );
@@ -276,6 +291,8 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	/**
 	 * The content can have UNICODE. This will test if we can
 	 * actually place unicode characters in the content.
+	 * 
+	 * @spec unicode
 	 */
 	public void testUnicode() throws Exception {
 		loadFromResource( "unicode.ipa" );
@@ -284,7 +301,13 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	}
 	
 	/**
-	 *  Check the dictionary manipulations.
+	 *  Check the dictionary manipulations. Mainly the fact that the
+	 *  dictionary should not be mutable.
+	 *  
+	 *  @spec ProvisioningService.getInformation()
+	 *  @spec ProvisioningService.setInformation(Dictionary)
+	 *  @spec ProvisioningService.addInformation(Dictionary)
+	 *  @spec ProvisioningService.addInformation(ZipInputStream)
 	 */
 	
 	public void testDictionary() throws Exception {
@@ -379,6 +402,10 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	 * Check if the changes to the dictionary are persistent. We will test this
 	 * by stopping the provisioning service and verifiying the update count
 	 * and a key set to the time.
+	 * 
+	 * @spec ProvisioningService.setInformation(Dictionary)
+	 * @spec ProvisioningService.getInformation()
+	 * @spec ProvisioningService.updateCount
 	 */
 	
 	public void testPersistence() throws Exception {
@@ -409,6 +436,8 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	 * provisioning.reference to be set in the same same go. So ipa-ref-start
 	 * refers to another ipa file (simple.ipa) that loads a bundle,
 	 * but also loads and starts a local bundle.
+	 * 
+	 * @spec ProvisioningService.getInformation()
 	 */
 	
 	public void testStartAndRef() throws Exception {
@@ -432,6 +461,7 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	 * Test if the provisioning service sends the SPID to the server. we
 	 * have registered a "spid-test" url handler that we use. It will
 	 * store the query part of a URL in the query field.
+	 * @spec ProvisioningService.getInformation()
 	 */
 	
 	public void testSPID() throws IOException {
@@ -448,6 +478,8 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	/**
 	 * Test if our own parameters are maintained when we give a URL
 	 * where the Provisioning Service will add a SPID.
+	 * 
+	 * @spec ProvisioningService.getInformation()
 	 */
 	public void testSPIDWithQuery() throws IOException {
 		query = null;
@@ -472,6 +504,8 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	 * Load an ipa file with a reference that delays the loading of the
 	 * JAR file. We want to assure that the start bundle is not to be started
 	 * before it or others are loaded.
+	 * 
+	 * @spec ProvisioningService.getInformation()
 	 */
 	public void testDelayReference() throws Exception {
 		loadFromResource( "delay-ref.ipa" );
@@ -487,6 +521,9 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	/**
 	 * Test if an ipa file that contains a PROVISIONING_REFERENCE 
 	 * is correctly loading the first + referred file.
+	 * 
+	 * @spec ProvisioningService.getInformation()
+	 * @spec ProvisioningService.addInformation(Dictionary)
 	 */	
 	public void testIPAReference() throws Exception {
 		int count = getCount();
@@ -504,6 +541,8 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	 * URL. This file, simple.ipa contains a bundle and
 	 * it has the start reference set. The simple.jar bundle
 	 * should start.
+	 * @spec ProvisioningService.getInformation()
+	 * @spec ProvisioningService.addInformation(Dictionary)
 	 */
 	public void testFileLoad() throws Exception {
 		loadFromResource( "simple.ipa" );
@@ -512,6 +551,7 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	
 	/**
 	 * Test a download from the http server
+	 * @spec ProvisioningService.addInformation(String)
 	 */
 	public void testHttpLoad()throws Exception {
 		loadFromURL( new URL( getWebServer() + "simple.ipa" ), "simple.ipa" );
@@ -521,6 +561,8 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	
 	/**
 	 * Test a file that only references a JAR by a URL
+	 * @spec ProvisioningService.getInformation()
+	 * @spec ProvisioningService.addInformation(Dictionary)
 	 */
 	public void testFileWithReference() throws Exception {
 		loadFromResource( "ref.ipa" );
@@ -571,6 +613,8 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	 * mime type. According to rfc 2046, mime types are not case sensitive.
 	 * There is a mistake in the spec because it refers to the mime type
 	 * with upper and lower case URL/url. See issue #175
+	 * @spec ProvisioningService.getInformation()
+	 * @spec ProvisioningService.addInformation(Dictionary)
 	 */
 	public void testCaseReference() throws Exception {
 		loadFromResource( "case-ref.ipa" );
