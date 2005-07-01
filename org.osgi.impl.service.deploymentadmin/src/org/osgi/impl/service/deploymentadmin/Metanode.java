@@ -133,19 +133,19 @@ public class Metanode implements DmtMetaNode {
         return format;
     }
 
-    public String getPattern() {
-        // TODO
-        return null;
-    }
-
-    public String getNamePattern() {
-        // TODO
-        return null;
-    }
-
     public String[] getMimeTypes() {
         // TODO
         return null;
+    }
+
+    public boolean isValidValue(DmtData value) {
+        // TODO
+        return true;
+    }
+
+    public boolean isValidName(String name) {
+        // TODO
+        return true;
     }
 
 }
