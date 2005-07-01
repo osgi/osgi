@@ -17,31 +17,24 @@
  */
 package org.osgi.impl.service.dmt;
 
+import java.util.Arrays;
 import org.osgi.service.dmt.*;
 
-// TODO fill in the validNames attribute properly even for fix named nodes
-// --> (optional field)
-// TODO consider using the nameRegExp attribute
-// --> (optional field)
+// TODO update the meta-data according to the new tree definitions
 public class DmtMetaNodeImpl implements DmtMetaNode {
-	private boolean		deletable				= false;
-	private boolean		extendable				= false;
-	private boolean		retrievable				= true;
-	private boolean		replaceable				= true;
-	private boolean		executable				= false;
+	private boolean		deletable               = false;
+	private boolean		addable                 = false;
+	private boolean		retrievable             = true;
+	private boolean		replaceable             = true;
+	private boolean		executable              = false;
 	private boolean		leaf; // there is no meaningful default
 	private int         scope                   = PERMANENT;
 	private String		description				= null;
 	private int			maxOccurrence			= 1;
 	private boolean		zeroOccurrenceAllowed	= false;
 	private DmtData		defaultData				= null;
-	private int			max						= Integer.MAX_VALUE;
-	private int			min						= Integer.MIN_VALUE;
-	private String[]	validNames				= null;
 	private DmtData[]	validValues				= null;
 	private int			format					= DmtData.FORMAT_NULL;
-	private String		namePattern             = null;
-	private String		valuePattern			= null;
 	private String[]	mimeTypes				= null;
     
 	// Interior node with default properties
@@ -54,6 +47,7 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 	public DmtMetaNodeImpl(String description, boolean allowInfinte,
 			DmtData[] validValues, int format) {
 		leaf = true;
+        addable = true;
 		scope = DYNAMIC;
 		this.validValues = validValues;
 		this.format = format;
@@ -64,7 +58,7 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 	public DmtMetaNodeImpl(String description, boolean allowInfinte,
 			boolean isPermanent) {
 		leaf = false;
-		extendable = true;
+		addable = !isPermanent;
 		format = DmtData.FORMAT_NODE;
 		scope = isPermanent ? PERMANENT : DYNAMIC;
 		setCommon(description, allowInfinte);
@@ -75,7 +69,7 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
     public boolean can(int operation) {
         switch(operation) {
         case CMD_DELETE:  return deletable;
-        case CMD_ADD:     return extendable;
+        case CMD_ADD:     return addable;
         case CMD_GET:     return retrievable;
         case CMD_REPLACE: return replaceable;
         case CMD_EXECUTE: return executable;
@@ -108,15 +102,15 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 	}
 
 	public int getMax() {
-		return max;
+		return Integer.MAX_VALUE;
 	}
 
 	public int getMin() {
-		return min;
+		return Integer.MIN_VALUE;
 	}
 
     public String[] getValidNames() {
-        return validNames;
+        return null;
     }
 	public DmtData[] getValidValues() {
 		return validValues;
@@ -126,17 +120,21 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 		return format;
 	}
 
-    public String getNamePattern() {
-        return namePattern;
-    }
-    
-	public String getPattern() {
-		return valuePattern;
-	}
-
 	public String[] getMimeTypes() {
 		return mimeTypes;
 	}
+    
+    public boolean isValidName(String name) {
+        return true;
+    }
+    
+    public boolean isValidValue(DmtData value) {
+        if((format & value.getFormat()) == 0)
+            return false;
+        
+        return validValues == null ? true : 
+            Arrays.asList(validValues).contains(value);
+    }
 
 	private void setCommon(String description, boolean allowInfinte) {
 		this.description = description;
