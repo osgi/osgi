@@ -452,6 +452,14 @@ public class DeploymentSessionImpl implements DeploymentSession {
         }
     }
 
+    /*private boolean isLocalizationEntry(Entry entry) {
+        String prefix = srcDp.getHeader(DAConstants.BUNDLE_LOCALIZATION);
+        if (null == prefix || prefix.trim().equals(""))
+            prefix = "OSGI-INF/l10n/bundle";
+        
+        return entry.getName().startsWith(prefix);
+    }*/
+
     /*
      * Drop rsources that don't present in the DP and are not 
      * marked as missing resources

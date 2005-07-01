@@ -206,7 +206,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
         }
         if (l == 8) {
             return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF,
-					DmtMetaNode.PERMANENT, "", 1, !Metanode.ZERO_OCC, null, 0,
+					DmtMetaNode.DYNAMIC, "", 1, !Metanode.ZERO_OCC, null, 0,
 					0, null, DmtData.FORMAT_NULL).orOperation(DmtMetaNode.CMD_EXECUTE);
         }
         
@@ -217,7 +217,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
         int l = nodeUriArr.length;
         if (l != 8)
             throw new RuntimeException("Internal error");
-        if (!Arrays.asList(getFiles(nodeUri)).contains(new File(nodeUriArr[6])))
+        if (!Arrays.asList(getFiles(nodeUri)).contains(new File(store, nodeUriArr[5])))
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");        
         if (nodeUriArr[7].equals("Remove")) {
             File f = new File(store, nodeUriArr[5]);
@@ -230,7 +230,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
     
     private void install(String nodeUri) throws DmtException {
         String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
-        File f = new File(store, nodeUriArr[6]);
+        File f = new File(store, nodeUriArr[5]);
         FileInputStream is = null;
         try {
             is = new FileInputStream(f);
