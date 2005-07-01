@@ -1,0 +1,22 @@
+A,OL,LI,BODY		{ background-color:#FFFFFF; font-family: Helvetica, Arial, sans-serif; font-size: 10pt; font-weight: plain; }
+H1  		{ font-size: 14pt; font-weight: bold; font-family: Helvetica, Arial, sans-serif;}
+H2  		{ font-size: 12pt; font-weight: bold; font-family: Helvetica, Arial, sans-serif;}
+H3  		{ font-size: 10pt; font-weight: bold; font-family: Helvetica, Arial, sans-serif;}
+H4  		{ font-size: 10pt; font-weight: bold; font-family: Helvetica, Arial, sans-serif;}
+TD  		{ vertical-align:top; text-align:left; font-family: Helvetica, Arial, sans-serif; font-size: 10pt; font-weight: plain;}
+TH  		{ background-color: #FFFFDD; color:blue; vertical-align:top; text-align:left; font-family: Helvetica, Arial, sans-serif; font-size: 10pt; font-weight: plain; }
+TH.title	{ background-color: #FFFFFF; vertical-align:top; text-align:left; font-family: Helvetica, Arial, sans-serif; font-size: 10pt; font-weight: plain; }
+TABLE.list  { background-color: #B0B0FF}
+EM  		{ font-weight: bold }
+DIV.body	{ width:600;margin-left:50; }
+P.footer	{ font-size:9pt; font-family: Helvetica, Arial, sans-serif;}
+A.navigate  { font-weight: bold }
+P   		{ font-size:10pt; font-weight:plain; font-size:10pt;  font-family: Helvetica, Arial, sans-serif;}
+PRE 		{ font-family: Courier }
+TD.index	{ background-color: #B0B0FF; font-size: 12pt; font-weight:bold; }
+TD.categories    { background-color: #B0B0FF; font-size: 14pt; font-weight: bold; }
+.done	 	{ background-color: #A0A0A0; color: #FFFFFF }
+.passed 	{ background-color: #FF9090; color: #FFFFFF }
+.early  	{ background-color: #509050; color: #FFFFFF }
+.pointer	{ font-size: 12pt; font-weight:bold;}
+

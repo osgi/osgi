@@ -1,0 +1,299 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <link rel="stylesheet" href="osgi.css" type="text/css">
+      <title>Overview Test Case org.osgi.test.cases.provisioning</title>
+   </head>
+   <body>
+      <div width="700px">
+         <h1>Overview Test Case org.osgi.test.cases.provisioning</h1>
+         <p>
+            						This Testcase tests the OSGi specification: <a href="org.osgi.service.provisioning.html">org.osgi.service.provisioning</a>.
+            					
+         </p>
+         <p>
+            <description>
+               
+                  
+            </description>
+            <description>
+               TODO Add Javadoc comment for this type.
+                  
+            </description>
+         </p>
+         <table>
+            <tr>
+               <th>Class</th>
+               <th>Tests</th>
+            </tr>
+            <tr>
+               <td><a href="#ProvisioningControl">ProvisioningControl</a></td>
+               <td>19</td>
+            </tr>
+         </table>
+         <h2><a name="ProvisioningControl"></a>org.osgi.test.cases.provisioning.tbc.ProvisioningControl
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#rsh">rsh</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#ProvisioningService.MIME_BUNDLE">ProvisioningService.MIME_BUNDLE</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#ProvisioningService.MIME_BUNDLE_URL">ProvisioningService.MIME_BUNDLE_URL</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#ProvisioningService.MIME_BYTE_ARRAY">ProvisioningService.MIME_BYTE_ARRAY</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#ProvisioningService.MIME_STRING">ProvisioningService.MIME_STRING</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#ProvisioningService.PROVISIONING_AGENT_CONFIG">ProvisioningService.PROVISIONING_AGENT_CONFIG</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#ProvisioningService.PROVISIONING_REFERENCE">ProvisioningService.PROVISIONING_REFERENCE</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#ProvisioningService.PROVISIONING_ROOTX509">ProvisioningService.PROVISIONING_ROOTX509</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#ProvisioningService.PROVISIONING_RSH_SECRET">ProvisioningService.PROVISIONING_RSH_SECRET</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#ProvisioningService.PROVISIONING_SPID">ProvisioningService.PROVISIONING_SPID</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#ProvisioningService.PROVISIONING_START_BUNDLE">ProvisioningService.PROVISIONING_START_BUNDLE</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#ProvisioningService.PROVISIONING_UPDATE_COUNT">ProvisioningService.PROVISIONING_UPDATE_COUNT</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#unicode">unicode</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#ProvisioningService.getInformation()">ProvisioningService.getInformation()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#ProvisioningService.setInformation(Dictionary)">ProvisioningService.setInformation(Dictionary)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#ProvisioningService.addInformation(Dictionary)">ProvisioningService.addInformation(Dictionary)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#ProvisioningService.addInformation(ZipInputStream)">ProvisioningService.addInformation(ZipInputStream)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#ProvisioningService.updateCount">ProvisioningService.updateCount</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.provisioning.html#ProvisioningService.addInformation(String)">ProvisioningService.addInformation(String)</a></td>
+            </tr>
+            <tr>
+               <th width="350">testCaseReference</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Load an ipa file with a reference that uses an unusal case for the
+                   mime type. According to rfc 2046, mime types are not case sensitive.
+                   There is a mistake in the spec because it refers to the mime type
+                   with upper and lower case URL/url. See issue #175
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.provisioning.html#ProvisioningService.getInformation()">ProvisioningService.getInformation()</a><br><a href="org.osgi.service.provisioning.html#ProvisioningService.addInformation(Dictionary)">ProvisioningService.addInformation(Dictionary)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testConstants</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test if all the constants have the right values.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.provisioning.html#ProvisioningService.MIME_BUNDLE">ProvisioningService.MIME_BUNDLE</a><b class="passed"> X </b><br><a href="org.osgi.service.provisioning.html#ProvisioningService.MIME_BUNDLE_URL">ProvisioningService.MIME_BUNDLE_URL</a><b class="passed"> X </b><br><a href="org.osgi.service.provisioning.html#ProvisioningService.MIME_BYTE_ARRAY">ProvisioningService.MIME_BYTE_ARRAY</a><b class="passed"> X </b><br><a href="org.osgi.service.provisioning.html#ProvisioningService.MIME_STRING">ProvisioningService.MIME_STRING</a><b class="passed"> X </b><br><a href="org.osgi.service.provisioning.html#ProvisioningService.PROVISIONING_AGENT_CONFIG">ProvisioningService.PROVISIONING_AGENT_CONFIG</a><b class="passed"> X </b><br><a href="org.osgi.service.provisioning.html#ProvisioningService.PROVISIONING_REFERENCE">ProvisioningService.PROVISIONING_REFERENCE</a><b class="passed"> X </b><br><a href="org.osgi.service.provisioning.html#ProvisioningService.PROVISIONING_ROOTX509">ProvisioningService.PROVISIONING_ROOTX509</a><b class="passed"> X </b><br><a href="org.osgi.service.provisioning.html#ProvisioningService.PROVISIONING_RSH_SECRET">ProvisioningService.PROVISIONING_RSH_SECRET</a><b class="passed"> X </b><br><a href="org.osgi.service.provisioning.html#ProvisioningService.PROVISIONING_SPID">ProvisioningService.PROVISIONING_SPID</a><b class="passed"> X </b><br><a href="org.osgi.service.provisioning.html#ProvisioningService.PROVISIONING_START_BUNDLE">ProvisioningService.PROVISIONING_START_BUNDLE</a><b class="passed"> X </b><br><a href="org.osgi.service.provisioning.html#ProvisioningService.PROVISIONING_UPDATE_COUNT">ProvisioningService.PROVISIONING_UPDATE_COUNT</a><b class="passed"> X </b><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDelayReference</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Initial Provisioning : 26.2 Procedure
+                   The provisioning service must install (but not start) all entries
+                   in the zip file that are typed in the extra field with bundle or bundle-url.
+                   In an entry named PROVISIONING_START_BUNDLE ... This designated bundle
+                   must be given all permission and started.
+                   Load an ipa file with a reference that delays the loading of the
+                   JAR file. We want to assure that the start bundle is not to be started
+                   before it or others are loaded.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.provisioning.html#ProvisioningService.getInformation()">ProvisioningService.getInformation()</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDictionary</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Check the dictionary manipulations. Mainly the fact that the
+                    dictionary should not be mutable.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.provisioning.html#ProvisioningService.getInformation()">ProvisioningService.getInformation()</a><br><a href="org.osgi.service.provisioning.html#ProvisioningService.setInformation(Dictionary)">ProvisioningService.setInformation(Dictionary)</a><br><a href="org.osgi.service.provisioning.html#ProvisioningService.addInformation(Dictionary)">ProvisioningService.addInformation(Dictionary)</a><br><a href="org.osgi.service.provisioning.html#ProvisioningService.addInformation(ZipInputStream)">ProvisioningService.addInformation(ZipInputStream)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testFileLoad</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test if it is possible to load a provisioning jar
+                   setting the PROVISIONING_REFERENCE to a file:
+                   URL. This file, simple.ipa contains a bundle and
+                   it has the start reference set. The simple.jar bundle
+                   should start.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.provisioning.html#ProvisioningService.getInformation()">ProvisioningService.getInformation()</a><br><a href="org.osgi.service.provisioning.html#ProvisioningService.addInformation(Dictionary)">ProvisioningService.addInformation(Dictionary)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testFileWithReference</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test a file that only references a JAR by a URL
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.provisioning.html#ProvisioningService.getInformation()">ProvisioningService.getInformation()</a><br><a href="org.osgi.service.provisioning.html#ProvisioningService.addInformation(Dictionary)">ProvisioningService.addInformation(Dictionary)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testHttpLoad</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test a download from the http server
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.provisioning.html#ProvisioningService.addInformation(String)">ProvisioningService.addInformation(String)</a><b class="passed"> X </b><br></td>
+            </tr>
+            <tr>
+               <th width="350">testIPAReference</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test if an ipa file that contains a PROVISIONING_REFERENCE 
+                   is correctly loading the first + referred file.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.provisioning.html#ProvisioningService.getInformation()">ProvisioningService.getInformation()</a><br><a href="org.osgi.service.provisioning.html#ProvisioningService.addInformation(Dictionary)">ProvisioningService.addInformation(Dictionary)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testPersistence</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Check if the changes to the dictionary are persistent. We will test this
+                   by stopping the provisioning service and verifiying the update count
+                   and a key set to the time.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.provisioning.html#ProvisioningService.setInformation(Dictionary)">ProvisioningService.setInformation(Dictionary)</a><br><a href="org.osgi.service.provisioning.html#ProvisioningService.getInformation()">ProvisioningService.getInformation()</a><br><a href="org.osgi.service.provisioning.html#ProvisioningService.updateCount">ProvisioningService.updateCount</a><b class="passed"> X </b><br></td>
+            </tr>
+            <tr>
+               <th width="350">testProvisoningWithRsh</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test if we can load files through RSH
+                  
+                   The RSH server gives us an ipa file with sample.jar and
+                   will start it. It will also place the "time" parameter
+                   in the zip file.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.provisioning.html#rsh">rsh</a><b class="passed"> X </b><br></td>
+            </tr>
+            <tr>
+               <th width="350">testRSHFile</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test if we actually have RSH stream handler installed. If
+                   read a file and check the contents. This reading will go
+                   through the RSH handler and thus passes all encryption/decryption
+                   routines. The RSH protocol is optional so this case
+                   fails silently if there is no such protocol
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.provisioning.html#rsh">rsh</a><b class="passed"> X </b><br></td>
+            </tr>
+            <tr>
+               <th width="350">testSPID</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test if the provisioning service sends the SPID to the server. we
+                   have registered a "spid-test" url handler that we use. It will
+                   store the query part of a URL in the query field.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.provisioning.html#ProvisioningService.getInformation()">ProvisioningService.getInformation()</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testSPIDWithQuery</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test if our own parameters are maintained when we give a URL
+                   where the Provisioning Service will add a SPID.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.provisioning.html#ProvisioningService.getInformation()">ProvisioningService.getInformation()</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testStartAndRef</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Figure 78 allows both the key provisioning.start.bundle and 
+                   provisioning.reference to be set in the same same go. So ipa-ref-start
+                   refers to another ipa file (simple.ipa) that loads a bundle,
+                   but also loads and starts a local bundle.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.provisioning.html#ProvisioningService.getInformation()">ProvisioningService.getInformation()</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testUnicode</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  The content can have UNICODE. This will test if we can
+                   actually place unicode characters in the content.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.provisioning.html#unicode">unicode</a><b class="passed"> X </b><br></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

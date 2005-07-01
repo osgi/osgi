@@ -1,0 +1,327 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <link rel="stylesheet" href="osgi.css" type="text/css">
+      <title>Test Matrix for org.osgi.service.event</title>
+   </head>
+   <body>
+      <div width="700px">
+         <h1>Test Matrix for org.osgi.service.event</h1>
+         <p>
+            <description>
+               
+               <p>The OSGi Event Admin Specification Version 1.0.
+                  
+               </p>
+               <p>Bundles wishing to use this package must list the package
+                  in the <tt>Import-Package</tt> header of the bundle's manifest.
+                  For example:
+                  
+               </p><pre>Import-Package:&nbsp;org.osgi.service.event;&nbsp;version=1.0</pre>
+                  </description><br></p>
+         <table>
+            <tr>
+               <th colspan="2">Tested by:</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.test.cases.event.html">org.osgi.test.cases.event</a></td>
+            </tr>
+         </table><br><br><table width="300">
+            <tr>
+               <th></th>
+               <th>Class</th>
+               <th>Methods</th>
+               <th>Tests</th>
+               <th>Ratio</th>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.event.Event">Event</a></td>
+               <td>8</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.event.EventAdmin">EventAdmin</a></td>
+               <td>2</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.event.EventConstants">EventConstants</a></td>
+               <td>0</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.event.EventHandler">EventHandler</a></td>
+               <td>1</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.event.TopicPermission">TopicPermission</a></td>
+               <td>6</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.event.Event"></a>Class org.osgi.service.event.Event
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  An event.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Event.equals(Object)"></a>equals(Object)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Compares this Event object to another object.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Event.Event(String,Dictionary)"></a>Event(String,Dictionary)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Constructs an event.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Event.getProperty(String)"></a>getProperty(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Retrieves a property.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Event.getPropertyNames()"></a>getPropertyNames()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns a list of this event's property names.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Event.getTopic()"></a>getTopic()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the topic of this event.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Event.hashCode()"></a>hashCode()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns a hash code value for the object.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Event.matches(Filter)"></a>matches(Filter)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests this event's properties against the given filter.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Event.toString()"></a>toString()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the string representation of this event.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.event.EventAdmin"></a>Class org.osgi.service.event.EventAdmin
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  The Event Admin service.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="EventAdmin.postEvent(Event)"></a>postEvent(Event)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Initiate asynchronous delivery of an event.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="EventAdmin.sendEvent(Event)"></a>sendEvent(Event)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Initiate synchronous delivery of an event.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.event.EventHandler"></a>Class org.osgi.service.event.EventHandler
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  Listener for Events.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="EventHandler.handleEvent(Event)"></a>handleEvent(Event)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Called by the    EventAdmin service to notify the listener of an event.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.event.TopicPermission"></a>Class org.osgi.service.event.TopicPermission
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  A bundle's authority to publish or subscribe to event on a topic.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="TopicPermission.equals(Object)"></a>equals(Object)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Determines the equality of two TopicPermission objects.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="TopicPermission.getActions()"></a>getActions()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the canonical string representation of the
+                   TopicPermission actions.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="TopicPermission.hashCode()"></a>hashCode()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the hash code value for this object.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="TopicPermission.implies(Permission)"></a>implies(Permission)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Determines if the specified permission is implied by this object.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="TopicPermission.newPermissionCollection()"></a>newPermissionCollection()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns a new PermissionCollection object suitable for
+                   storing TopicPermission objects.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="TopicPermission.TopicPermission(String,String)"></a>TopicPermission(String,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Defines the authority to publich and/or subscribe to a topic within the
+                   EventAdmin service.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

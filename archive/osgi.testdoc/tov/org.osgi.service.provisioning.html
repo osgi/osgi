@@ -1,0 +1,184 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <link rel="stylesheet" href="osgi.css" type="text/css">
+      <title>Test Matrix for org.osgi.service.provisioning</title>
+   </head>
+   <body>
+      <div width="700px">
+         <h1>Test Matrix for org.osgi.service.provisioning</h1>
+         <p>
+            <description>
+               
+               <p>The OSGi Provisioning Service Package. Specification Version 1.0.
+                  
+               </p>
+               <p>Bundles wishing to use this package must list the package
+                  in the Import-Package header of the bundle's manifest.
+                  For example:
+                  
+               </p><pre>Import-Package:&nbsp;org.osgi.service.provisioning;&nbsp;version=1.0</pre>
+                  </description><br></p>
+         <table>
+            <tr>
+               <th colspan="2">Tested by:</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.test.cases.provisioning.html">org.osgi.test.cases.provisioning</a></td>
+            </tr>
+         </table><br><br><table width="300">
+            <tr>
+               <th></th>
+               <th>Class</th>
+               <th>Methods</th>
+               <th>Tests</th>
+               <th>Ratio</th>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.provisioning.ProvisioningService">ProvisioningService</a></td>
+               <td>4</td>
+               <td>12</td>
+               <td class="early">2.40</td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.provisioning.ProvisioningService"></a>Class org.osgi.service.provisioning.ProvisioningService
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  Service for managing the initial provisioning information.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ProvisioningService.addInformation(Dictionary)"></a>addInformation(Dictionary)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Adds the key/value pairs contained in info to the Provisioning
+                   Information dictionary.
+                     
+               </td>
+               <td width="350"><b>testDictionary</b>
+                  Check the dictionary manipulations. Mainly the fact that the
+                    dictionary should not be mutable.
+                     <br><b>testIPAReference</b>
+                  Test if an ipa file that contains a PROVISIONING_REFERENCE 
+                   is correctly loading the first + referred file.
+                     <br><b>testFileLoad</b>
+                  Test if it is possible to load a provisioning jar
+                   setting the PROVISIONING_REFERENCE to a file:
+                   URL. This file, simple.ipa contains a bundle and
+                   it has the start reference set. The simple.jar bundle
+                   should start.
+                     <br><b>testFileWithReference</b>
+                  Test a file that only references a JAR by a URL
+                     <br><b>testCaseReference</b>
+                  Load an ipa file with a reference that uses an unusal case for the
+                   mime type. According to rfc 2046, mime types are not case sensitive.
+                   There is a mistake in the spec because it refers to the mime type
+                   with upper and lower case URL/url. See issue #175
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ProvisioningService.addInformation(ZipInputStream)"></a>addInformation(ZipInputStream)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Processes the ZipInputStream and extracts information to add
+                   to the Provisioning Information dictionary, as well as, install/update
+                   and start bundles.
+                     
+               </td>
+               <td width="350"><b>testDictionary</b>
+                  Check the dictionary manipulations. Mainly the fact that the
+                    dictionary should not be mutable.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ProvisioningService.getInformation()"></a>getInformation()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns a reference to the Provisioning Dictionary.
+                     
+               </td>
+               <td width="350"><b>testDictionary</b>
+                  Check the dictionary manipulations. Mainly the fact that the
+                    dictionary should not be mutable.
+                     <br><b>testPersistence</b>
+                  Check if the changes to the dictionary are persistent. We will test this
+                   by stopping the provisioning service and verifiying the update count
+                   and a key set to the time.
+                     <br><b>testStartAndRef</b>
+                  Figure 78 allows both the key provisioning.start.bundle and 
+                   provisioning.reference to be set in the same same go. So ipa-ref-start
+                   refers to another ipa file (simple.ipa) that loads a bundle,
+                   but also loads and starts a local bundle.
+                     <br><b>testSPID</b>
+                  Test if the provisioning service sends the SPID to the server. we
+                   have registered a "spid-test" url handler that we use. It will
+                   store the query part of a URL in the query field.
+                     <br><b>testSPIDWithQuery</b>
+                  Test if our own parameters are maintained when we give a URL
+                   where the Provisioning Service will add a SPID.
+                     <br><b>testDelayReference</b>
+                  Initial Provisioning : 26.2 Procedure
+                   The provisioning service must install (but not start) all entries
+                   in the zip file that are typed in the extra field with bundle or bundle-url.
+                   In an entry named PROVISIONING_START_BUNDLE ... This designated bundle
+                   must be given all permission and started.
+                   Load an ipa file with a reference that delays the loading of the
+                   JAR file. We want to assure that the start bundle is not to be started
+                   before it or others are loaded.
+                     <br><b>testIPAReference</b>
+                  Test if an ipa file that contains a PROVISIONING_REFERENCE 
+                   is correctly loading the first + referred file.
+                     <br><b>testFileLoad</b>
+                  Test if it is possible to load a provisioning jar
+                   setting the PROVISIONING_REFERENCE to a file:
+                   URL. This file, simple.ipa contains a bundle and
+                   it has the start reference set. The simple.jar bundle
+                   should start.
+                     <br><b>testFileWithReference</b>
+                  Test a file that only references a JAR by a URL
+                     <br><b>testCaseReference</b>
+                  Load an ipa file with a reference that uses an unusal case for the
+                   mime type. According to rfc 2046, mime types are not case sensitive.
+                   There is a mistake in the spec because it refers to the mime type
+                   with upper and lower case URL/url. See issue #175
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ProvisioningService.setInformation(Dictionary)"></a>setInformation(Dictionary)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Replaces the Provisioning Information dictionary with the key/value pairs
+                   contained in info.
+                     
+               </td>
+               <td width="350"><b>testDictionary</b>
+                  Check the dictionary manipulations. Mainly the fact that the
+                    dictionary should not be mutable.
+                     <br><b>testPersistence</b>
+                  Check if the changes to the dictionary are persistent. We will test this
+                   by stopping the provisioning service and verifiying the update count
+                   and a key set to the time.
+                     <br></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

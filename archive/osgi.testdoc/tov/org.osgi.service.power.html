@@ -1,0 +1,405 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <link rel="stylesheet" href="osgi.css" type="text/css">
+      <title>Test Matrix for org.osgi.service.power</title>
+   </head>
+   <body>
+      <div width="700px">
+         <h1>Test Matrix for org.osgi.service.power</h1>
+         <p>
+            <description>
+               
+               <p>The OSGi Power Manager Package. Specification Version 1.0.
+                  
+               </p>
+               <p>Bundles wishing to use this package must list the package
+                  in the Import-Package header of the bundle's manifest.
+                  For example:
+                  
+               </p><pre>Import-Package:&nbsp;org.osgi.service.power;&nbsp;version=1.0</pre>
+                  </description><br></p>
+         <table>
+            <tr>
+               <th colspan="2">Tested by:</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.test.cases.power.html">org.osgi.test.cases.power</a></td>
+            </tr>
+         </table><br><br><table width="300">
+            <tr>
+               <th></th>
+               <th>Class</th>
+               <th>Methods</th>
+               <th>Tests</th>
+               <th>Ratio</th>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.power.DevicePower">DevicePower</a></td>
+               <td>2</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.power.DevicePowerState">DevicePowerState</a></td>
+               <td>0</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.power.DevicePowerStateListener">DevicePowerStateListener</a></td>
+               <td>1</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.power.PowerException">PowerException</a></td>
+               <td>3</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.power.PowerPermission">PowerPermission</a></td>
+               <td>4</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.power.PowerStateEvent">PowerStateEvent</a></td>
+               <td>5</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.power.SystemPower">SystemPower</a></td>
+               <td>2</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.power.SystemPowerState">SystemPowerState</a></td>
+               <td>0</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.power.SystemPowerStateListener">SystemPowerStateListener</a></td>
+               <td>1</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.power.DevicePower"></a>Class org.osgi.service.power.DevicePower
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  This interface has to be implemented by services that play the role of a 
+                   device with power management capabilities.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DevicePower.getPowerState()"></a>getPowerState()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the current power state of the device.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DevicePower.setPowerState(int,boolean)"></a>setPowerState(int,boolean)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Set the device power state.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.power.DevicePowerStateListener"></a>Class org.osgi.service.power.DevicePowerStateListener
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  The listener interface for receiving device power events.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DevicePowerStateListener.devicePowerStateChange(PowerStateEvent)"></a>devicePowerStateChange(PowerStateEvent)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Invoked when the power state is going to change or changed within the device.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.power.PowerException"></a>Class org.osgi.service.power.PowerException
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  Thrown when a power management related error is encountered.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="PowerException.getErrorCode()"></a>getErrorCode()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the exception error code.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="PowerException.PowerException(int)"></a>PowerException(int)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Creates a new PowerException object with an error code.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="PowerException.PowerException(int,String)"></a>PowerException(int,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a new PowerException object with an error code and a
+                   detailed message.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.power.PowerPermission"></a>Class org.osgi.service.power.PowerPermission
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  Indicates a bundle's authority to set a new power state to the system
+                   and/or devices.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="PowerPermission.implies(Permission)"></a>implies(Permission)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Determines if a PowerPermission object "implies" the
+                   specified permission.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="PowerPermission.newPermissionCollection()"></a>newPermissionCollection()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns a new PermissionCollection object for storing
+                   PowerPermission objects.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="PowerPermission.PowerPermission(String)"></a>PowerPermission(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Creates a new PowerPermission with the specified name.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="PowerPermission.PowerPermission(String,String)"></a>PowerPermission(String,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Creates a new PowerPermission with the specified name.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.power.PowerStateEvent"></a>Class org.osgi.service.power.PowerStateEvent
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  Event object that is used for system power state or device power 
+                   state change notifications.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="PowerStateEvent.getNewState()"></a>getNewState()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the new power state that the system is going to transit to.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="PowerStateEvent.getPreviousState()"></a>getPreviousState()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the previous power state, which is the state at the time when
+                   the event object is created.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="PowerStateEvent.isUrgent()"></a>isUrgent()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Event listeners will use this method to determine if the power state change can
+                   be opposed or not.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="PowerStateEvent.PowerStateEvent(SystemPower,int,int,boolean)"></a>PowerStateEvent(SystemPower,int,int,boolean)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Creates a PowerStateEvent object that will be sent to System Power listeners.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="PowerStateEvent.PowerStateEvent(DevicePower,int,int,boolean)"></a>PowerStateEvent(DevicePower,int,int,boolean)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Creates a PowerStateEvent object that will be sent to DevicePower listeners
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.power.SystemPower"></a>Class org.osgi.service.power.SystemPower
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  This service manages the current system power state.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="SystemPower.getPowerState()"></a>getPowerState()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the current system power state of the system.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="SystemPower.setPowerState(int,boolean)"></a>setPowerState(int,boolean)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Changes the current system power state to the value given as parameter.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.power.SystemPowerStateListener"></a>Class org.osgi.service.power.SystemPowerStateListener
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  Interface of listener to power state changes.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="SystemPowerStateListener.systemPowerStateChange(PowerStateEvent)"></a>systemPowerStateChange(PowerStateEvent)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Invoked when the system is going to change state, or has changed state.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>
