@@ -28,14 +28,26 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.impl.service.dmt.wbxmlenc.*;
 import java.text.*;
 
+// TODO implement LogResult tree, make nodes automatic
+
 public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
-	static final String	FILTER	= "filter";
-	static final String	EXCLUDE	= "exclude";
-	static final String	MAXR	= "maxrecords";
-	static final String	MAXS	= "maxsize";
+	private static final String FILTER    = "Filter";
+	private static final String EXCLUDE   = "Exclude";
+	private static final String MAXR      = "MaxRecords";
+
+    private static final String SEVERITY  = "Severity";
+	private static final String TIME      = "Time";
+	private static final String SYSTEM    = "System";
+	private static final String SUBSYSTEM = "SubSystem";
+	private static final String MESSAGE   = "Message";
+	private static final String DATA      = "Data";
     
-    // TODO int size should be defined elsewhere (at least in the getSize() javadoc)
-    private static final int INT_SIZE = 4;
+    private static final String DEFAULT_FILTER  = "";
+    private static final String DEFAULT_EXCLUDE = "";
+    private static final int    DEFAULT_MAXR    = 0;
+    
+    private static final List VALID_EXCLUDE_COMPONENTS = Arrays.asList(
+            new String[] { SEVERITY, TIME, SYSTEM, SUBSYSTEM, MESSAGE, DATA });
     
 	private BundleContext  bc;
 	private ServiceTracker logReaderTracker;
@@ -87,38 +99,41 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 	public DmtMetaNode getMetaNode(String nodeUri) throws DmtException {
         String[] path = prepareUri(nodeUri);
         if (path.length == 0) // OSGi/Log
-            return new LogPluginMetanode(LogPluginMetanode.IS_PERMANENT, 
-                                         !LogPluginMetanode.CAN_EXECUTE, 
+            return new LogPluginMetanode(DmtMetaNode.PERMANENT, 
+                                         !LogPluginMetanode.MODIFIABLE, 
                                          !LogPluginMetanode.ALLOW_INFINITE, 
                                          "Root node for log search requests.");
         
         if (path.length == 1) // OSGi/Log/<search_id>
-            return new LogPluginMetanode(!LogPluginMetanode.IS_PERMANENT,
-                                         LogPluginMetanode.CAN_EXECUTE,
+            return new LogPluginMetanode(DmtMetaNode.DYNAMIC,
+                                         LogPluginMetanode.MODIFIABLE,
                                          LogPluginMetanode.ALLOW_INFINITE,
                                          "Root node of a log search request.");
         
         if (path.length == 2) { // OSGi/Log/<search_id>/<param>
             if(path[1].equals(FILTER))
-                return new LogPluginMetanode(DmtData.FORMAT_STRING, 
+                return new LogPluginMetanode(LogPluginMetanode.SEARCH_PARAMETER,
+                        DmtData.FORMAT_STRING, new DmtData(DEFAULT_FILTER), null,  
                         "Filter expression to select log records included in the result.");
                 
             if(path[1].equals(EXCLUDE))
-                return new LogPluginMetanode(DmtData.FORMAT_STRING, 
+                return new LogPluginMetanode(LogPluginMetanode.SEARCH_PARAMETER,
+                        DmtData.FORMAT_STRING, new DmtData(DEFAULT_EXCLUDE), VALID_EXCLUDE_COMPONENTS,
                         "A list of log entry attributes not to include in the result records.");
             
             if(path[1].equals(MAXR))
-                return new LogPluginMetanode(DmtData.FORMAT_INTEGER,
+                return new LogPluginMetanode(LogPluginMetanode.SEARCH_PARAMETER,
+                        DmtData.FORMAT_INTEGER, new DmtData(DEFAULT_MAXR), null,
                         "The maximum number of records to be included in the result.");
             
-            if(path[1].equals(MAXS))
-                return new LogPluginMetanode(DmtData.FORMAT_INTEGER,
-                        "The maximum size of the result.");
+            // TODO LogResult node
             
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, 
                     "No such node defined in the logging tree");
         }
             
+        // TODO LogResult subtree
+        
         // path.length > 2
         throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
                                "No such node defined in the logging tree");
@@ -146,12 +161,50 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 	}
 
 	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
-		createLeafNode(nodeUri, data);
+        String[] path = prepareUri(nodeUri);
+        
+        // path.length >= 2 because there are no leaf nodes above this
+        String id = path[0];
+        LogRequest lr = (LogRequest) requests.get(id);
+        if (lr == null) {
+            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+                                   "No such log request exists");
+        }
+        String leaf = path[1];
+        if (leaf.equals(EXCLUDE))
+            lr.exclude = data.getString();
+        else if (leaf.equals(FILTER))
+            lr.filter = data.getString();
+        else if (leaf.equals(MAXR))
+            lr.maxrecords = data.getInt();
+        else {
+            // should never happen because of meta-data
+            throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+                "Node cannot be modified");
+        }
 	}
 
     public void setDefaultNodeValue(String nodeUri) throws DmtException {
-        throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
-                               "The specified node has no default value.");
+        String[] path = prepareUri(nodeUri);
+        
+        // path.length >= 2 because there are no leaf nodes above this
+        String id = path[0];
+        LogRequest lr = (LogRequest) requests.get(id);
+        if (lr == null) {
+            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
+                                   "No such log request exists");
+        }
+        String leaf = path[1];
+        if (leaf.equals(FILTER))
+            lr.filter = DEFAULT_FILTER;
+        else if (leaf.equals(EXCLUDE))
+            lr.exclude = DEFAULT_EXCLUDE;
+        else if (leaf.equals(MAXR))
+            lr.maxrecords = DEFAULT_MAXR;
+        
+        // should never happen because of meta-data
+        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+            "Node cannot be modified");
     }
     
 	public void setNodeType(String nodeUri, String type) throws DmtException {
@@ -162,31 +215,14 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 	public void deleteNode(String nodeUri) throws DmtException {
         String[] path = prepareUri(nodeUri);
         
-        // path.length > 0 because log tree root is not deletable
+        // path.length == 1 because only search request root is deletable
         String id = path[0];
         LogRequest lr = (LogRequest) requests.get(id);
         if (lr == null)
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
                                    "No such log request, cannot be deleted");
         
-        if (path.length == 1) {
-            requests.remove(id);
-            return;
-        }
-        
-        // path.length == 2 
-        String leaf = path[1];
-        if (leaf.equals(EXCLUDE))
-            lr.exclude = null;
-        else if (leaf.equals(FILTER))
-            lr.filter = null;
-        else if (leaf.equals(MAXR))
-            lr.maxrecords = 0;
-        else if (leaf.equals(MAXS))
-            lr.maxsize = 0;
-        else
-            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
-                                   "No such node, cannot be deleted");
+        requests.remove(id);
     }
 
 	public void createInteriorNode(String nodeUri) throws DmtException {
@@ -210,39 +246,23 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
     }
 
     public void createLeafNode(String nodeUri) throws DmtException {
-        throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
-                               "The specified node has no default value.");
+        // should never be reached because of meta-data, every leaf is automatic
+        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+                               "All leaf nodes are created automatically.");
     }
     
 	public void createLeafNode(String nodeUri, DmtData value)
             throws DmtException {
-        String[] path = prepareUri(nodeUri);
-        
-        // path.length == 2 because there are no leaf nodes on other levels
-        String id = path[0];
-        LogRequest lr = (LogRequest) requests.get(id);
-        if (lr == null) {
-            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
-                                   "No such log request exists");
-        }
-        String leaf = path[1];
-        if (leaf.equals(EXCLUDE))
-            lr.exclude = value.getString();
-        else if (leaf.equals(FILTER))
-            lr.filter = value.getString();
-        else if (leaf.equals(MAXR))
-            lr.maxrecords = value.getInt();
-        else if (leaf.equals(MAXS))
-            lr.maxsize = value.getInt();
-        else // should never happen if admin checks "validNames"
-            throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
-                                   "No such node allowed");
+        // should never be reached because of meta-data, every leaf is automatic
+        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+                               "All leaf nodes are created automatically.");
     }
 
     public void createLeafNode(String nodeUri, DmtData value, String mimeType)
             throws DmtException {
-        // mimeType must be "text/plain" as given in meta-data, ensured by admin 
-        createLeafNode(nodeUri, value);
+        // should never be reached because of meta-data, every leaf is automatic
+        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+                               "All leaf nodes are created automatically.");
     }
     
 	public void copy(String nodeUri, String newNodeUri, boolean recursive)
@@ -275,20 +295,15 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
         if (path.length == 1)
             return true;
         
-        if (path.length == 2) {
-            String leaf = path[1];
-            if (leaf.equals(EXCLUDE))
-                return lr.exclude != null;
-            if (leaf.equals(FILTER))
-                return lr.filter != null;
-            if (leaf.equals(MAXS))
-                return lr.maxsize != 0;
-            if (leaf.equals(MAXR))
-                return lr.maxrecords != 0;
-            
-            return false;
-        }
+        if (path.length == 2)
+            // TODO LogResult node
+            return 
+                path[1].equals(FILTER) || 
+                path[1].equals(EXCLUDE) || 
+                path[1].equals(MAXR);
 
+        // TODO LogResult subtree
+        
         return false;
     }
 
@@ -300,55 +315,43 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
         
         String id = path[0];
         LogRequest lr = (LogRequest) requests.get(id);
-        if (lr == null) {
+        if (lr == null)
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
                                    "No such log request");
-        }
         
         if(path.length == 1) // ./OSGi/Log/<search_id>
             return false;
         
-        String leaf = path[1];
-        if(leaf.equals(EXCLUDE)) {
-            if(lr.exclude != null)
-                return true;
-        } else if(leaf.equals(FILTER)) {
-            if(lr.filter != null)
-                return true;
-        } else if(leaf.equals(MAXR)) {
-            if(lr.maxrecords != 0)
-                return true;
-        } else if(leaf.equals(MAXS)) {
-            if(lr.maxsize != 0)
-                return true;
-        }
+        if(path.length == 2)
+            return true; // TODO LogResult node
         
+        // TODO LogResult subtree
+        
+        // should never be reached
         throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
                                "No such node");
     }
     
 	public DmtData getNodeValue(String nodeUri) throws DmtException {
         String[] path = prepareUri(nodeUri);
+        
+        // path.length > 1 because there are no leaf node above this
         LogRequest lr = (LogRequest) requests.get(path[0]);
         if (lr == null)
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
                                    "No such log request");
         
         String leaf = path[1];
-        if (leaf.equals(EXCLUDE)) {
-            if(lr.exclude != null)
-                return new DmtData(lr.exclude);
-        } else if (leaf.equals(FILTER)) {
-            if(lr.filter != null)
-                return new DmtData(lr.filter);
-        } else if (leaf.equals(MAXR)) {
-            if(lr.maxrecords != 0)
-                return new DmtData(lr.maxrecords);
-        } else if (leaf.equals(MAXS)) {
-            if(lr.maxsize != 0)
-                return new DmtData(lr.maxsize);
-        }
+        if (leaf.equals(FILTER))
+            return new DmtData(lr.filter);
+        if (leaf.equals(EXCLUDE))
+            return new DmtData(lr.exclude);
+        if (leaf.equals(MAXR))
+            return new DmtData(lr.maxrecords);
 
+        // TODO LogResult subtree
+        
+        // should never be reached
         throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
                                "No such node");
     }
@@ -374,7 +377,10 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
             return null;
         
         // path.length == 2
+        // TODO LogResult node
         return LogPluginMetanode.LEAF_MIME_TYPE;
+        
+        // TODO LogResult subtree
 	}
 
 	public int getNodeVersion(String nodeUri) throws DmtException {
@@ -388,26 +394,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 	}
 
 	public int getNodeSize(String nodeUri) throws DmtException {
-        String[] path = prepareUri(nodeUri);
-        
-        // path.length == 2 because this method is only valid for leaf nodes
-        LogRequest lr = (LogRequest) requests.get(path[0]);
-        if (lr == null)
-            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
-                    "No such log request");
-        
-        String leaf = path[1];
-        if (leaf.equals(EXCLUDE) && lr.exclude != null)
-            return lr.exclude.length();
-        else if (leaf.equals(FILTER) && lr.filter != null)
-            return lr.filter.length();
-        else if (leaf.equals(MAXR) && lr.maxrecords != 0)
-            return INT_SIZE;
-        else if (leaf.equals(MAXS) && lr.maxsize != 0)
-            return INT_SIZE;
-
-        throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
-                              "No such node");
+        return getNodeValue(nodeUri).getSize();
 	}
 
 	public String[] getChildNodeNames(String nodeUri) throws DmtException {
@@ -421,20 +408,13 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
                                    "No such log request");
         
-        if (path.length == 1) {
-            Vector ch = new Vector();
-            if (lr.exclude != null)
-                ch.add(EXCLUDE);
-            if (lr.filter != null)
-                ch.add(FILTER);
-            if (lr.maxsize != 0)
-                ch.add(MAXS);
-            if (lr.maxrecords != 0)
-                ch.add(MAXR);
-            return (String[]) ch.toArray(new String[ch.size()]);
-        }
+        if (path.length == 1)
+            // TODO LogResult node
+            return new String[] { FILTER, EXCLUDE, MAXR };
 
-        // should not happen because of !isLeafNode...
+        // TODO LogResult subtree
+        
+        // should never be reached
         throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
                                "The specified URI points to a leaf node.");
     }
@@ -522,6 +502,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 			
 			String logEncode = "";
 
+            // TODO this might use the default locale to determine the time, which is not good 
 			SimpleDateFormat sdf = new SimpleDateFormat( "yyMMdd'T'HHmmss'Z'" );
 			
 			logEncode += createNode( "time", "chr", sdf.format( new Date( e.getTime() ) ) , null );
@@ -565,7 +546,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 		return result;
 	}
 
-    //TODO use the maxsize and exclude filters also within the loop so that it need not be done separately
+    //TODO use the exclude filter also within the loop so that it need not be done separately
 	/*
 	 * Calculates the result of a log request. Uses the filter and maxrecords.
 	 * Returns a vector of logentries 
@@ -575,7 +556,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
         
 		Filter filter = null;
 		try {
-			if (lr.filter != null)
+			if (!lr.filter.equals(""))
                 filter = bc.createFilter(lr.filter);
 		} catch (InvalidSyntaxException e) {
 			throw new DmtException(lr.uri, DmtException.OTHER_ERROR,
@@ -597,16 +578,15 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 			if (filter != null) {
 				//create a dictionary for matching with the filter
 				Hashtable dict = new Hashtable();
-				dict.put("severity", new Integer(le.getLevel()));
+				dict.put(SEVERITY, new Integer(le.getLevel()));
 				if (le.getBundle() != null)
-					dict.put("system", le.getBundle().toString());
+					dict.put(SYSTEM, le.getBundle().toString());
 				if (le.getServiceReference() != null)
-					dict.put("subsystem", le.getServiceReference().toString());
-				dict.put("message", le.getMessage());
+					dict.put(SUBSYSTEM, le.getServiceReference().toString());
+				dict.put(MESSAGE, le.getMessage());
 				if (le.getException() != null)
-					dict.put("data", le.getException().toString());
-				//TODO convert timestamp to iso 8601
-				dict.put("time", new Long(le.getTime()));
+					dict.put(DATA, le.getException().toString());
+				dict.put(TIME, timeToString(le.getTime()));
 				if (!filter.match(dict)) {
 					continue;
 				}
@@ -616,12 +596,37 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 		return ret;
 	}
 
+    private String timeToString(long time) {
+        SimpleTimeZone utc = new SimpleTimeZone(0, "GMT+00");
+        Calendar utcCal = Calendar.getInstance(utc);
+        utcCal.setTime(new Date(time));
+        
+        StringBuffer sb = new StringBuffer();
+        pad(sb, utcCal.get(Calendar.YEAR), 4);
+        pad(sb, utcCal.get(Calendar.MONTH)+1, 2);
+        pad(sb, utcCal.get(Calendar.DAY_OF_MONTH), 2);
+        sb.append("T");
+        pad(sb, utcCal.get(Calendar.HOUR_OF_DAY), 2);
+        pad(sb, utcCal.get(Calendar.MINUTE), 2);
+        pad(sb, utcCal.get(Calendar.SECOND), 2);
+        sb.append("Z");
+
+        return sb.toString(); 
+    }
+    
+    private void pad(StringBuffer sb, int num, int width) {
+        String numStr = String.valueOf(num);
+        width -= numStr.length();
+        while(width > 0)
+            sb.append('0');
+        sb.append(numStr);
+    }
+    
 	class LogRequest implements Cloneable {
 		String uri        = null;
-		String filter     = null;
-		String exclude    = null;
-		int    maxrecords = 0;
-		int    maxsize    = 0;
+		String filter     = DEFAULT_FILTER;
+		String exclude    = DEFAULT_EXCLUDE;
+		int    maxrecords = DEFAULT_MAXR;
         
         public Object clone() {
             LogRequest lr = new LogRequest();
@@ -630,7 +635,6 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
             lr.filter     = filter;
             lr.exclude    = exclude;
             lr.maxrecords = maxrecords;
-            lr.maxsize    = maxsize;
             
             return lr;
         }
