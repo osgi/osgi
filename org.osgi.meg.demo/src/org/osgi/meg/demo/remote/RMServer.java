@@ -19,6 +19,7 @@ package org.osgi.meg.demo.remote;
 
 import java.io.*;
 import java.net.*;
+import java.util.StringTokenizer;
 
 public class RMServer extends Thread {
 	
@@ -137,8 +138,15 @@ public class RMServer extends Thread {
 						continue;
 					}
 					if (input.startsWith("result:")) {
-						input = readBlock();
-						receiver.onResult(input);
+						result = readBlock();
+                        if(result.startsWith(CommandProcessor.MAGIC_EXCEPTION_PREFIX)) {
+                            String[] parts = Splitter.split(result, '\n', 6);
+                            receiver.onError(parts[1], convertNull(parts[2]),
+                                convertNull(parts[3]), convertNull(parts[4]),
+                                convertNull(parts[5]));
+                        } else {
+                            receiver.onResult(result);
+                        }
 						out.println("result_ok");
 						continue;
 					}
@@ -173,5 +181,8 @@ public class RMServer extends Thread {
 		}
 		return ret;
 	}
-
+    
+    private String convertNull(String string) {
+        return string.equals("null") ? null : string;
+    }
 }

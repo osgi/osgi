@@ -23,6 +23,8 @@ import org.osgi.service.dmt.*;
 
 // TODO support non-recursive copy operation if necessary
 public class CommandProcessor {
+    
+    public static final String MAGIC_EXCEPTION_PREFIX = "###exception###"; 
 	
 	private DmtAdmin	fact	= null;
 	private DmtSession	session	= null;
@@ -151,12 +153,64 @@ public class CommandProcessor {
 				ret = "Command unknown:" + cmd;
 			}
 		}
-		catch (DmtException e) {
+		catch (Exception e) {
 			StringWriter stringWriter = new StringWriter();
 			e.printStackTrace(new PrintWriter(stringWriter));
-			return stringWriter.toString();
-		}
-		return (ret);
+            
+            // exception is sent in a six-line message
+            // ###exception###
+            // <exception class>
+            // <exception code or "null">
+            // <exception URI or "null">
+            // <exception message or "null">
+            // <stack trace>
+            
+            String exName = e.getClass().getName();
+            String fullTrace = stringWriter.toString();
+            String stackTrace = "";
+            int newline = fullTrace.indexOf('\n');
+            if(newline != -1) {
+                int end = fullTrace.length();
+                while(end > newline && Character.isWhitespace(fullTrace.charAt(end-1)))
+                    end--;
+                // cut off extra whitespace from the end
+                stackTrace = fullTrace.substring(newline + 1, end);
+            }
+            
+            if(e instanceof DmtException) {
+                String code    = null;
+                String exUri     = null;
+                String message = null;
+                
+                String[] parts = Splitter.split(e.toString(), ':', 4);
+
+                switch(parts.length) {
+                case 1: 
+                    break;
+                case 2: 
+                    message = parts[1].trim(); 
+                    break;
+                case 3:
+                    // we don't know whether parts[1] is a code or a URI...
+                    message = (parts[1] + ':' + parts[2]).trim(); 
+                    break;
+                case 4: 
+                    code = parts[1].trim();
+                    exUri = parts[2].trim();
+                    message = parts[3].trim();
+                    break;
+                }
+                
+                return MAGIC_EXCEPTION_PREFIX + "\n" + exName + "\n" +
+                    code + "\n" + exUri + "\n" + message + "\n" + stackTrace;  
+            }
+            
+            String[] parts = Splitter.split(e.toString(), ':', 2);
+            return MAGIC_EXCEPTION_PREFIX + "\n" + exName + "\nnull\nnull\n" + 
+                (parts.length > 1 ? parts[1] : "null") + "\n" + stackTrace; 
+        }
+         
+        return ret;
 	}
 
 	private DmtData dmtFromString(String typedata) {

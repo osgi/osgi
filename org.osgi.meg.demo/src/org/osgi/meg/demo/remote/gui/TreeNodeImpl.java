@@ -78,8 +78,7 @@ public class TreeNodeImpl implements TreeNode {
 		try {
 			sarr = Splitter.split(commander.command("gc " + uri()).trim(), '/', 0);
 		} catch (CommanderException e) {
-            // TODO
-			e.printStackTrace();
+            printException(e);
             return 0;
 		}
 		//System.out.println(">>>getChildCount> " + uri() + " " + sarr.length);
@@ -91,8 +90,7 @@ public class TreeNodeImpl implements TreeNode {
 		try {
 			ret = "true".equals(commander.command("il " + uri()).trim());
 		} catch (CommanderException e) {
-			// TODO
-			e.printStackTrace();
+            printException(e);
             return false;
 		}
 		//System.out.println(">>>getAllowsChildren> " + uri() + " " + ret);
@@ -104,8 +102,7 @@ public class TreeNodeImpl implements TreeNode {
 		try {
 			ret = "true".equals(commander.command("il " + uri()).trim());
 		} catch (CommanderException e) {
-			// TODO
-			e.printStackTrace();
+            printException(e);
             return false;
 		}
 		//System.out.println(">>>isLeaf> " + uri() + " " + ret);
@@ -117,8 +114,7 @@ public class TreeNodeImpl implements TreeNode {
 		try {
 			s = commander.command("gc " + uri()).trim();
 		} catch (CommanderException e) {
-			// TODO
-			e.printStackTrace();
+			printException(e);
             return new Vector().elements();
 		}
 		String[] sarr = Splitter.split(s, '/', 0);
@@ -141,8 +137,7 @@ public class TreeNodeImpl implements TreeNode {
 		try {
 			s = commander.command("gc " + uri()).trim();
 		} catch (CommanderException e) {
-			// TODO
-			e.printStackTrace();
+		    printException(e);
             return null;
 		}
 		String[] sarr = Splitter.split(s, '/', 0);
@@ -160,8 +155,7 @@ public class TreeNodeImpl implements TreeNode {
 		try {
 			s = commander.command("gc " + uri()).trim();
 		} catch (CommanderException e) {
-			// TODO
-			e.printStackTrace();
+            printException(e);
             return -1;
 		}
 		String[] sarr = Splitter.split(s, '/', 0);
@@ -198,4 +192,8 @@ public class TreeNodeImpl implements TreeNode {
         return commander.command("gm " + uri());
 	}
 
+    private void printException(CommanderException e) {
+        System.err.println(e.getString());
+        e.printStackTrace();
+    }
 }

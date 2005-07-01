@@ -23,9 +23,10 @@ import org.osgi.meg.demo.remote.RemoteReceiver;
 
 public class Commander implements RemoteReceiver {
     
-    private RMServer      rms;
-    private String        result;
-    private ServerTestGUI gui;
+    private RMServer           rms;
+    private String             result;
+    private CommanderException ex;
+    private ServerTestGUI      gui;
     
     public Commander(RMServer rms, ServerTestGUI gui) {
         this.rms = rms;
@@ -39,13 +40,11 @@ public class Commander implements RemoteReceiver {
 		} catch (InterruptedException e) {
             return "error: " + e.getMessage();
 		}
-        String exStr = "org.osgi.service.dmt.DmtException: ";
-        if (result.startsWith(exStr)) {
-            int exStrL = exStr.length();
-            int index = result.indexOf(':', exStrL);
-            String code = result.substring(exStrL, index);
-            throw new CommanderException(code, result);
+        if(ex != null) {
+            ex.fillInStackTrace();
+            throw ex;
         }
+
         return result;
     }
     
@@ -57,6 +56,15 @@ public class Commander implements RemoteReceiver {
 
 	public void onResult(String result) {
 		this.result = result;
+        ex = null;
+        synchronized (this) {
+        	notify();
+        }
+    }
+    
+    public void onError(String exception, String code, String uri, 
+            String message, String trace) {
+        ex = new CommanderException(exception, code, uri, message, trace);
         synchronized (this) {
         	notify();
         }
