@@ -26,6 +26,7 @@ public class DAConstants {
     public static final String DP_NAME              = "DeploymentPackage-SymbolicName";
     public static final String DP_VERSION           = "DeploymentPackage-Version";
     public static final String DP_FIXPACK           = "DeploymentPackage-FixPack";
+    public static final String BUNDLE_LOCALIZATION  = "Bundle-Localization";
     
     // headers in the name sections of DPs
     public static final String MISSING              = "DeploymentPackage-Missing";
