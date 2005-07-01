@@ -23,7 +23,7 @@ public class DAConstants {
     public static final boolean DEBUG               = false;
 
     // headers in the main section of DPs
-    public static final String DP_NAME              = "DeploymentPackage-Name";
+    public static final String DP_NAME              = "DeploymentPackage-SymbolicName";
     public static final String DP_VERSION           = "DeploymentPackage-Version";
     public static final String DP_FIXPACK           = "DeploymentPackage-FixPack";
     
