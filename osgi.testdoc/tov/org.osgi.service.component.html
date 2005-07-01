@@ -1,0 +1,333 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <link rel="stylesheet" href="osgi.css" type="text/css">
+      <title>Test Matrix for org.osgi.service.component</title>
+   </head>
+   <body>
+      <div width="700px">
+         <h1>Test Matrix for org.osgi.service.component</h1>
+         <p>
+            <description>
+               
+               <p>The OSGi Service Component Package. Specification Version 1.0.
+                  
+               </p>
+               <p>Bundles wishing to use this package must list the package
+                  in the Import-Package header of the bundle's manifest.
+                  For example:
+                  
+               </p><pre>Import-Package:&nbsp;org.osgi.service.component;&nbsp;version=1.0</pre>
+                  </description><br></p>
+         <table>
+            <tr>
+               <th colspan="2">Tested by:</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.test.cases.component.html">org.osgi.test.cases.component</a></td>
+            </tr>
+         </table><br><br><table width="300">
+            <tr>
+               <th></th>
+               <th>Class</th>
+               <th>Methods</th>
+               <th>Tests</th>
+               <th>Ratio</th>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.component.ComponentConstants">ComponentConstants</a></td>
+               <td>0</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.component.ComponentContext">ComponentContext</a></td>
+               <td>9</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.component.ComponentException">ComponentException</a></td>
+               <td>5</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.component.ComponentFactory">ComponentFactory</a></td>
+               <td>1</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.component.ComponentInstance">ComponentInstance</a></td>
+               <td>2</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.component.ComponentContext"></a>Class org.osgi.service.component.ComponentContext
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  A ComponentContext object is used by a Service Component to interact with it
+                   execution context including locating services by reference name.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ComponentContext.disableComponent(String)"></a>disableComponent(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Disables the specified component name.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ComponentContext.enableComponent(String)"></a>enableComponent(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Enables the specified component name.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ComponentContext.getBundleContext()"></a>getBundleContext()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the BundleContext of the bundle which contains this component.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ComponentContext.getComponentInstance()"></a>getComponentInstance()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the ComponentInstance object for this component.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ComponentContext.getProperties()"></a>getProperties()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the component properties for this ComponentContext.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ComponentContext.getServiceReference()"></a>getServiceReference()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  If this component is registered as a service using the
+                   service element, then this method returns the service
+                   reference of the service provided by this component.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ComponentContext.getUsingBundle()"></a>getUsingBundle()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  If this component is registered as a service using the
+                   servicefactory="true" attribute, then this
+                   method returns the bundle using the service provided by this component.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ComponentContext.locateService(String)"></a>locateService(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the service object for the specified service reference name.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ComponentContext.locateServices(String)"></a>locateServices(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the service objects for the specified service reference name.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.component.ComponentException"></a>Class org.osgi.service.component.ComponentException
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  Unchecked exception which may be thrown by the Service Component Runtime.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ComponentException.ComponentException(String,Throwable)"></a>ComponentException(String,Throwable)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Construct a new ComponentException with the specified message and cause.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ComponentException.ComponentException(String)"></a>ComponentException(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Construct a new ComponentException with the specified message.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ComponentException.ComponentException(Throwable)"></a>ComponentException(Throwable)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Construct a new ComponentException with the specified cause.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ComponentException.getCause()"></a>getCause()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the cause of this exception or null if no cause was
+                   specified when this exception was created.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ComponentException.initCause(Throwable)"></a>initCause(Throwable)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  The cause of this exception can only be set when constructed.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.component.ComponentFactory"></a>Class org.osgi.service.component.ComponentFactory
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  When a component is declared with the factory attribute on its
+                   component element, the Service Component Runtime will register a
+                   ComponentFactory service to allow instances of the component to be created
+                   rather than automatically create component instances as necessary.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ComponentFactory.newInstance(Dictionary)"></a>newInstance(Dictionary)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a new instance of the component.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.component.ComponentInstance"></a>Class org.osgi.service.component.ComponentInstance
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  A ComponentInstance encapsulates an instance of a component.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ComponentInstance.dispose()"></a>dispose()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Dispose of this component instance.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ComponentInstance.getInstance()"></a>getInstance()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the component instance.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>
