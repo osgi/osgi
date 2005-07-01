@@ -26,7 +26,7 @@ public interface DeploymentAdmin {
 	 * is already installed and the versions are different, the installed version is updated
 	 * with this new version even if it is older. If the two versions are the same, then this 
 	 * method simply returns without any action. 
-	 * <code>DeploymentAdminPermission}("&lt;filter&gt;", "install")</code> is 
+	 * <code>DeploymentAdminPermission("&lt;filter&gt;", "install")</code> is 
 	 * needed for this operation.
 	 * @param  in The input stream which where the deployment package can be read. It mustn't be null.
 	 * @return A DeploymentPackage object representing the newly installed/updated deployment package. 

@@ -15,7 +15,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 
 /**
-  * The DeploymentPackage object represents a deployment package (already installed
+  * The <code>DeploymentPackage</code> object represents a deployment package (already installed
   * or being currently processed). A Deployment Package groups resources as a unit 
   * of management. A deployment package is something that can be installed, updated, 
   * and uninstalled as a unit. A deployment package is a reified concept, like a bundle, 
@@ -35,7 +35,7 @@ import org.osgi.framework.Version;
   * The Deployment Admin service should do as much as possible to ensure transactionality. 
   * It means that if a deployment package installation, update or removal (uninstall) fails 
   * all the side effects caused by the process should be disappeared  and the system 
-  * should be in the state in which it was before the process.     
+  * should be in the state in which it was before the process.      
   */
 public interface DeploymentPackage {
  
