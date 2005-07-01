@@ -49,7 +49,7 @@ public class Transaction {
         return instance;
     }
     
-    public void start() {
+    public synchronized void start() {
         steps = new Vector();
         processors = new HashSet();
         cancelled = false;
@@ -119,7 +119,6 @@ public class Transaction {
 	                case STOPBUNDLE :
 	                    break;
 	                case PROCESSOR:
-	                    // TODO security !
 	                    element.rp.commit();
 	                    break;
 	                default :

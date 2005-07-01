@@ -28,9 +28,19 @@ import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 
+/*
+ * The Deployment Admin service must execute all its operations, including calls 
+ * for handling bundles and all calls that are forwarded to a Resource Processor
+ * service, inside a doPrivileged block. This privileged block must use an
+ * AccessControlContext object that limits the permissions to the security scope.
+ * Wraps resource processor calls into doPrivileged calls with the got 
+ * AccessControlContext.  
+ */
 public class WrappedResourceProcessor implements ResourceProcessor {
     
+    // the wrapped processor
     private final ResourceProcessor    rp;
+    // the context of the calls
     private final AccessControlContext ctx;
 
     public WrappedResourceProcessor(ResourceProcessor rp, AccessControlContext ctx) {

@@ -609,14 +609,14 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
 	}
 
-    void uninstall(DeploymentPackageImpl targetDp) throws DeploymentException {
-        // TODO checkPermission 
+    void uninstall(DeploymentPackageImpl dp) throws DeploymentException {
+        checkPermission(dp, DeploymentAdminPermission.ACTION_UNINSTALL); 
 
-        sendUninstallEvent(targetDp.getName());
+        sendUninstallEvent(dp.getName());
         
-        session = createUninstallSession(targetDp);
+        session = createUninstallSession(dp);
         try {
-            session.uninstall();
+            session.uninstall(false);
             sendCompleteEvent(true);
         } catch (CancelException e) {
             sendCompleteEvent(false);
@@ -625,16 +625,30 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             session = null;
         }
 
-        removeDp(targetDp);
+        removeDp(dp);
     }
     
     boolean uninstallForced(DeploymentPackageImpl dp) {
+        checkPermission(dp, DeploymentAdminPermission.ACTION_UNINSTALL);
+        
         sendUninstallEvent(dp.getName());
-        // TODO        
-        sendCompleteEvent(true);
-        //dps.remove(dp);
+        
+        boolean ret = true;
+        try {
+            session = createUninstallSession(dp);
+            ret = session.uninstall(true);
+            sendCompleteEvent(true);
+        } catch (DeploymentException e) {
+            logger.log(e);
+        } catch (CancelException e) {
+            sendCompleteEvent(false);
+            return false;
+        } finally {
+            session = null;
+        }        
+        
         removeDp(dp);
-        return false;
+        return ret;
     }
     
     BundleContext getBundleContext() {

@@ -79,14 +79,14 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin {
         ArrayList ret = new ArrayList();
         for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            ret.add(String.valueOf(be.getId()));
+            ret.add(String.valueOf(be.getBundleId()));
         }
         return (String[]) ret.toArray(new String[] {});
     }
 
     private String[] getImportedPackages(BundleEntry be) {
         BundleContext context = da.getContext();
-        Bundle b = context.getBundle(be.getId());
+        Bundle b = context.getBundle(be.getBundleId());
         String iph = (String) b.getHeaders().get("Import-Package");
         if (null == iph)
             return new String[] {};
@@ -99,7 +99,7 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin {
 
     private String[] getExportedPackages(BundleEntry be) {
         BundleContext context = da.getContext();
-        Bundle b = context.getBundle(be.getId());
+        Bundle b = context.getBundle(be.getBundleId());
         String iph = (String) b.getHeaders().get("Export-Package");
         if (null == iph)
             return new String[] {};
@@ -112,32 +112,32 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin {
 
     private String getBundleSymbolicName(BundleEntry be) {
         BundleContext context = da.getContext();
-        Bundle b = context.getBundle(be.getId());
+        Bundle b = context.getBundle(be.getBundleId());
         return b.getSymbolicName();
     }
     
     private String getBundleLocation(BundleEntry be) {
         BundleContext context = da.getContext();
-        Bundle b = context.getBundle(be.getId());
+        Bundle b = context.getBundle(be.getBundleId());
         return b.getLocation();
     }
     
     private String getBundleVersion(BundleEntry be) {
         BundleContext context = da.getContext();
-        Bundle b = context.getBundle(be.getId());
+        Bundle b = context.getBundle(be.getBundleId());
         String ver = (String) b.getHeaders().get("Bundle-Version");
         return ver;
     }
     
     private int getBundleState(BundleEntry be) {
         BundleContext context = da.getContext();
-        Bundle b = context.getBundle(be.getId());
+        Bundle b = context.getBundle(be.getBundleId());
         return b.getState();
     }
 
     private String getBundleNativeCode(BundleEntry be) {
         BundleContext context = da.getContext();
-        Bundle b = context.getBundle(be.getId());
+        Bundle b = context.getBundle(be.getBundleId());
         String nc = (String) b.getHeaders().get("Bundle-NativeCode");
         return nc;
     }

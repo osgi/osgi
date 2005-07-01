@@ -83,6 +83,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     private TrackerCondPerm             trackCondPerm;
     private TrackerPackageAdmin         trackPackAdmin;
     private DeploymentAdminImpl         da;
+    private boolean                     forced;
     
     // getDataFile uses this. 
     private String 				        fwBundleDir;
@@ -187,7 +188,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         for (Iterator iter = srcDp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             char fs = File.separatorChar;
-            String rootDir = fwBundleDir + fs + be.getId() + fs + "data";
+            String rootDir = fwBundleDir + fs + be.getBundleId() + fs + "data";
             permInfos.add(new PermissionInfo(FilePermission.class.getName(), rootDir + fs + "-", 
                     "read, write, execute, delete"));
         }
@@ -262,8 +263,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
      */
     public File getDataFile(Bundle b) {
         Permission perm = new DeploymentCustomizerPermission(
-                "(name=" + b.getSymbolicName() + ")", 
-                DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
+            "(name=" + b.getSymbolicName() + ")", 
+            DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
         SecurityManager sm = System.getSecurityManager();
         if (null != sm)
             sm.checkPermission(perm);
@@ -279,7 +280,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         Set bes = dp.getBundleEntriesAsSet();
         for (Iterator iter = bes.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            if (be.getId() == b.getBundleId()) {
+            if (be.getBundleId() == b.getBundleId()) {
                 String dir = fwBundleDir + "/" + b.getBundleId() + "/data";
                 return new File(dir);
             }
@@ -333,7 +334,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
         }
     }
 
-    void uninstall() throws DeploymentException {
+    boolean uninstall(boolean forced) throws DeploymentException {
+        this.forced = forced;
+        boolean ret = true;
         openTrackers();
         transaction = Transaction.createTransaction(this, logger);
         try {
@@ -345,12 +348,18 @@ public class DeploymentSessionImpl implements DeploymentSession {
         } catch (CancelException e) {
             throw e;
         } catch (Exception e) {
-            transaction.rollback();
-            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR, 
-                    e.getMessage(), e);
+            if (!forced) {
+                transaction.rollback();
+                throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR, 
+                        e.getMessage(), e);
+            } else { 
+                logger.log(e);
+                ret = false;
+            }
         }
         transaction.commit();
         closeTrackers();
+        return ret;
     }
     
     private void startBundles() throws BundleException {
@@ -363,14 +372,14 @@ public class DeploymentSessionImpl implements DeploymentSession {
             dp = targetDp;
         for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry entry = (BundleEntry) iter.next();
-            Bundle b = context.getBundle(entry.getId());
+            Bundle b = context.getBundle(entry.getBundleId());
             if (entry.isCustomizer())
                 continue;
             startBundle(b);
         }
     }
     
-    private void startCustomizers() throws BundleException {
+    private void startCustomizers() throws Exception {
         DeploymentPackageImpl dp;
         if (INSTALL == getDeploymentAction())
             dp = srcDp;
@@ -380,15 +389,20 @@ public class DeploymentSessionImpl implements DeploymentSession {
             dp = targetDp;
         for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry entry = (BundleEntry) iter.next();
-            Bundle b = context.getBundle(entry.getId());
-            if (!entry.isCustomizer())
-                continue;
-            startBundle(b);
-            
-            // TODO is it sure?
-            ServiceReference sref = b.getRegisteredServices()[0];
-            String pid = (String) sref.getProperty(Constants.SERVICE_PID);
-            entry.setPid(pid);
+            try {
+                Bundle b = context.getBundle(entry.getBundleId());
+                if (!entry.isCustomizer())
+                    continue;
+                startBundle(b);
+                ServiceReference sref = b.getRegisteredServices()[0];
+                String pid = (String) sref.getProperty(Constants.SERVICE_PID);
+                entry.setPid(pid);
+            } catch (Exception e) {
+                if (forced)
+                    logger.log(e);
+                else
+                    throw e;
+            }
         }
     }
     
@@ -407,14 +421,20 @@ public class DeploymentSessionImpl implements DeploymentSession {
         transaction.addRecord(new TransactionRecord(Transaction.STARTBUNDLE, b));
     }
 
-    private void stopBundles() throws BundleException {
+    private void stopBundles() {
         if (INSTALL == getDeploymentAction())
             return;
         
         for (Iterator iter = targetDp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry entry = (BundleEntry) iter.next();
-            Bundle b = context.getBundle(entry.getId());
-            stopBundle(b);
+            try {
+	            Bundle b = context.getBundle(entry.getBundleId());
+	            stopBundle(b);
+            } catch (Exception e) {
+                // Exceptions are ignored in this phase to allow repairs 
+                // to always succeed, even if the existing package is corrupted.
+                logger.log(e);
+            }
         }
     }
     
@@ -461,38 +481,61 @@ public class DeploymentSessionImpl implements DeploymentSession {
     }*/
 
     /*
-     * Drop rsources that don't present in the DP and are not 
+     * Drops resources that don't present in the source package and are not 
      * marked as missing resources
      */
-    private void dropResources() throws DeploymentException {
+    private void dropResources() {
         Set toDrop = targetDp.getResourceEntriesAsSet();
         Set tmpSet = srcDp.getResourceEntriesAsSet();
         toDrop.removeAll(tmpSet);
         for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
-            ResourceEntry re = (ResourceEntry) iter.next();
-            targetDp.remove(re);
-            dropResource(re);
+            try {
+                ResourceEntry re = (ResourceEntry) iter.next();
+                targetDp.remove(re);
+                dropResource(re);
+            } catch (Exception e) {
+                // Exceptions are ignored in this phase to allow repairs 
+                // to always succeed, even if the existing package is corrupted.
+                logger.log(e);
+            }
         }
     }
     
     /*
-     * Drop all rsources pf the target DP
+     * Drops all rsources of the target DP
      */
-    private void dropAllResources() throws DeploymentException {
-        Set toDrop = new HashSet(targetDp.getResourceEntriesAsSet());
+    private void dropAllResources() throws Exception {
+        // gathers resource processors that have alerady been called 
         Set procs = new HashSet();
+
+        Set toDrop = new HashSet(targetDp.getResourceEntriesAsSet());
         for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
-            ResourceEntry re = (ResourceEntry) iter.next();
-            String pid = re.getValue(DAConstants.RP_PID);
-            if (null == pid)
-                return;
-            WrappedResourceProcessor proc = new WrappedResourceProcessor(
-                    findProcessor(pid), fetchAccessControlContext(re.getCertChains()));
-            //ResourceProcessor proc = findProcessor(pid);
-            if (!procs.contains(pid)) {
-                transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, proc));
-                proc.dropAllResources();
-                procs.add(pid);
+            try {
+	            ResourceEntry re = (ResourceEntry) iter.next();
+	            
+	            String pid = re.getValue(DAConstants.RP_PID);
+	            if (null == pid)
+	                continue;
+	            
+	            ResourceProcessor proc = findProcessor(pid);
+	            if (null == proc)
+	                throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND, 
+	                    "Resource processor for pid " + pid + "is not found");
+	            
+	            WrappedResourceProcessor wProc = new WrappedResourceProcessor(proc, 
+	                    fetchAccessControlContext(re.getCertChains()));
+	            
+	            // each processor is called only once
+	            if (!procs.contains(pid)) {
+	                transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, wProc));
+	                wProc.dropAllResources();
+	                procs.add(pid);
+	            }
+            } catch (Exception e) {
+                if (forced)
+                    logger.log(e);
+                else
+                    throw e;
             }
         }
     }
@@ -501,7 +544,10 @@ public class DeploymentSessionImpl implements DeploymentSession {
      * Drop bundles that don't present in the DP and are not 
      * marked as missing resources
      */
-    private void dropBundles() throws BundleException {
+    private void dropBundles() {
+        // the sets contain SymbolicNames and not BundleEntries because
+        // the BundleEntry.equals checks name and version but the version 
+        // in the source is different from the version in the target.
         Set toDrop = new HashSet();
         for (Iterator iter = targetDp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
@@ -516,10 +562,16 @@ public class DeploymentSessionImpl implements DeploymentSession {
         
         toDrop.removeAll(tmpSet);
         for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
-            String bsn = (String) iter.next();
-            BundleEntry be = targetDp.getBundleEntry(bsn);
-            targetDp.remove(be);
-            dropBundle(be);
+            try {	
+                String bsn = (String) iter.next();
+            	BundleEntry be = targetDp.getBundleEntry(bsn);
+            	targetDp.remove(be);
+                dropBundle(be);
+            } catch (Exception e) {
+                // Exceptions are ignored in this phase to allow repairs 
+                // to always succeed, even if the existing package is corrupted.
+                logger.log(e);
+            }
         }
     }
 
@@ -527,31 +579,32 @@ public class DeploymentSessionImpl implements DeploymentSession {
      * Drops a particluar resource
      */
     private void dropResource(ResourceEntry re) throws DeploymentException {
-        ResourceProcessor p = findProcessor(re.getValue(DAConstants.RP_PID));
-        WrappedResourceProcessor proc = new WrappedResourceProcessor(
-                p, fetchAccessControlContext(re.getCertChains()));
-        transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, proc));
-        proc.dropped(re.getName());
+        String pid = re.getValue(DAConstants.RP_PID);
+        ResourceProcessor proc = findProcessor(pid);
+        if (null == proc)
+            throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND,
+                "Resource processor for pid " + pid + "is not found");
+        WrappedResourceProcessor wProc = new WrappedResourceProcessor(
+                proc, fetchAccessControlContext(re.getCertChains()));
+        transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, wProc));
+        wProc.dropped(re.getName());
     }
     
     /*
-     * Drops a particluar bundle
+     * Drops a bundle
      */
-    private void dropBundle(BundleEntry be) throws BundleException {
-        Bundle b = context.getBundle(be.getId());
-        if (null == b) {
-            // TODO ???
-            return;
-        }
-        transaction.addRecord(new TransactionRecord(
-                Transaction.UNINSTALLBUNDLE, 
-                b,
-                be,
-                targetDp));
-        
-        // Bundle.uninstall() is called by the transaction instance
+    private void dropBundle(BundleEntry be) throws BundleException, DeploymentException {
+        Bundle b = context.getBundle(be.getBundleId());
+        if (null == b)
+            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
+                "Bundle " + b + " was removed directly");
+        transaction.addRecord(new TransactionRecord(Transaction.UNINSTALLBUNDLE, 
+                b, be, targetDp));
     }
 
+    /*
+     * Finds a Resource processor to the given PID
+     */
     private ResourceProcessor findProcessor(String pid) {
         ServiceReference[] refs = trackRp.getServiceReferences();
         for (int i = 0; i < refs.length; i++) {
@@ -589,8 +642,10 @@ public class DeploymentSessionImpl implements DeploymentSession {
     }
     
     private AccessControlContext createAccessControlContext() {
-        // TODO MEG Deployment Admin must construct the AccessControlContext itself, 
-        // using permission information in the DMT
+        // TODO 
+        // If there is no ConditionalPermissionAdmin running Deployment Admin 
+        // must construct the AccessControlContext itself, using permission 
+        // information in the DMT
         return null;
     }
 
@@ -669,8 +724,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     
     private void checkDpBundleConformity(Bundle b) throws DeploymentException {
         BundleEntry be = new BundleEntry(b);
-        BundleEntry entry = srcDp.getBundleEntry(be.getSymbName(), be.getVersion());
-        if (null == entry)
+        if (!srcDp.contains(be))
             throw new DeploymentException(DeploymentException.CODE_BUNDLE_NAME_ERROR, 
                     "The symbolic name or version in the deployment package manifest is " +
                     		"not the same as the symbolic name and version in the bundle " +
@@ -692,7 +746,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         catch (PrivilegedActionException e) {
             throw (BundleException) e.getException();
         }
-        be.setId(b.getBundleId());
+        be.setBundleId(b.getBundleId());
 		transaction.addRecord(new TransactionRecord(Transaction.INSTALLBUNDLE, b));
 		return b;
     }
@@ -722,7 +776,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
             }
             if (found.booleanValue()) { 
                 transaction.addRecord(new TransactionRecord(Transaction.UPDATEBUNDLE, b));
-            	be.setId(b.getBundleId());
+            	be.setBundleId(b.getBundleId());
             	return b;
             }
         }

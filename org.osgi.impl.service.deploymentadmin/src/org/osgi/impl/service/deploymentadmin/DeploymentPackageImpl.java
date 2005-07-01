@@ -178,7 +178,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     public BundleEntry getBundleEntryByBundleId(long id) {
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            if (be.getId() == id)
+            if (be.getBundleId() == id)
                 return be;
         }
         return null;

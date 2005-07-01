@@ -13,12 +13,13 @@ import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Ent
 
 public class BundleEntry implements Serializable {
     
-    private String             name;
-    private String             symbName;
+    private String             name;     // name in the manifest
+    private String             symbName; // Bundle-SymbolicName
     private String             version;
-    private Long               id;
+    private Long               bundleId;
     private Boolean            missing;
-    private String             pid;
+    private String             pid;      // if it's a customizer
+                                         
     private CaseInsensitiveMap attrs = new CaseInsensitiveMap();
     private List               certChains;
     
@@ -32,7 +33,7 @@ public class BundleEntry implements Serializable {
         this.name = name;
 		this.symbName = symbName;
 		this.version = version;
-		this.id = new Long(id);
+		this.bundleId = new Long(id);
 		this.missing = new Boolean(missing);
 		extractAttrs(attrs);
 	}
@@ -50,7 +51,7 @@ public class BundleEntry implements Serializable {
         this.name = other.getName();
         this.symbName = other.symbName;
         this.version = other.version;
-        this.id = other.id;
+        this.bundleId = other.bundleId;
         this.missing = new Boolean(other.isMissing());
         this.attrs = new CaseInsensitiveMap(other.attrs);
     }
@@ -67,7 +68,7 @@ public class BundleEntry implements Serializable {
         });
         this.symbName = (String) triple[0];
         this.version = (String) triple[1];
-        this.id = (Long) triple[2];
+        this.bundleId = (Long) triple[2];
         missing = new Boolean(false);
     }
     
@@ -94,6 +95,8 @@ public class BundleEntry implements Serializable {
         if (!(obj instanceof BundleEntry))
             return false;
         BundleEntry other = (BundleEntry) obj;
+        
+        // TODO bit ugly
         return ((null == symbName && null == other.symbName) || symbName.equals(other.symbName)) &&
                ((null == version && null == other.version) || version.equals(other.version));
     }
@@ -105,7 +108,8 @@ public class BundleEntry implements Serializable {
     public String toString() {
         return "[" + symbName + " " + version + "]";
     }
-    
+
+    // PluginDeployed uses this
     public List getCertificateChainStringArrays() {
         return certChains;
     }
@@ -119,14 +123,6 @@ public class BundleEntry implements Serializable {
 
     public boolean isMissing() {
         return missing.booleanValue();
-    }
-
-    public long getId() {
-        return null == id ? -1 : id.longValue();
-    }
-
-    public void setId(long id) {
-        this.id = new Long(id);
     }
 
     public String getSymbName() {
@@ -161,8 +157,14 @@ public class BundleEntry implements Serializable {
         return (String) attrs.get(header);
     }
 
+    public long getBundleId() {
+        if (null == bundleId)
+            throw new RuntimeException("Internal error");
+        return bundleId.longValue();
+    }
+    
     public void setBundleId(long bundleId) {
-        id = new Long(bundleId);
+        this.bundleId = new Long(bundleId);
     }
     
     public void setPid(String pid) {
