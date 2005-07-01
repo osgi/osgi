@@ -27,7 +27,7 @@ import org.osgi.service.dmt.DmtMetaNode;
  * @version $Revision$
  */
 public final class LocationEntryMetaNode implements DmtMetaNode {
-	public boolean can(int operation) { return (operation==CMD_DELETE)||(operation==CMD_GET); }
+	public boolean can(int operation) { return (operation==CMD_DELETE)||(operation==CMD_ADD)||(operation==CMD_GET); }
 	public boolean isLeaf() { return false;	}
 	public int getScope() { return DYNAMIC; }
 	public String getDescription() { return "permissions for a given location"; }
@@ -38,11 +38,11 @@ public final class LocationEntryMetaNode implements DmtMetaNode {
 	public int getMin() { return Integer.MIN_VALUE;	}
 	public DmtData[] getValidValues() { return null; }
 	public int getFormat() { return 0; }
-	public String getPattern() {	return null; }
 	public String[] getMimeTypes() { return null; }
 	public String getReferredURI() { return null; }
 	public String[] getDependentURIs() { return null; }
 	public String[] getChildURIs() { return null; }
 	public String[] getValidNames() { return null; }
-	public String getNamePattern() { return null; }
+	public boolean isValidValue(DmtData value) { return true; }
+	public boolean isValidName(String name) { return true; }
 }

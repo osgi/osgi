@@ -27,7 +27,7 @@ import org.osgi.service.dmt.DmtMetaNode;
  * @version $Revision$
  */
 public final class PrincipalPermissionMetaNode implements DmtMetaNode {
-	public boolean can(int operation) { return operation==CMD_DELETE; }
+	public boolean can(int operation) { return (operation==CMD_DELETE)||(operation==CMD_ADD)||(operation==CMD_GET); }
 	public boolean isLeaf() { return false;	}
 	public int getScope() { return DYNAMIC; }
 	public String getDescription() { return "permissions for a principal"; }
@@ -45,4 +45,6 @@ public final class PrincipalPermissionMetaNode implements DmtMetaNode {
 	public String[] getChildURIs() { return null; }
 	public String[] getValidNames() { return null; }
 	public String getNamePattern() { return null; }
+	public boolean isValidValue(DmtData value) { return true; }
+	public boolean isValidName(String name) { return true; }
 }

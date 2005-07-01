@@ -32,7 +32,7 @@ public final class RootMetaNode implements DmtMetaNode {
 		this.description = description;
 	}
 
-	public boolean can(int operation) { return (operation==CMD_ADD)||(operation==CMD_GET); }
+	public boolean can(int operation) { return (operation==CMD_GET); }
 	public boolean isLeaf() { return false;	}
 	public int getScope() { return PERMANENT; }
 	public String getDescription() { return description; }
@@ -43,8 +43,8 @@ public final class RootMetaNode implements DmtMetaNode {
 	public int getMin() { return Integer.MIN_VALUE;	}
 	public DmtData[] getValidValues() { return null; }
 	public int getFormat() { return 0; }
-	public String getPattern() {	return null; }
 	public String[] getMimeTypes() { return null; }
 	public String[] getValidNames() { return null;	}
-	public String getNamePattern() {	return null; }
+	public boolean isValidValue(DmtData value) { return true; }
+	public boolean isValidName(String name) { return true; }
 }

@@ -52,8 +52,8 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  */
 public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 	
-	private static final String	PERMISSIONINFO	= "PermissionInfo";
-	private static final String	PRINCIPAL	= "Principal";
+	private static final String	PERMISSIONINFO	= PermissionInfoMetaNode.PERMISSIONINFO;
+	private static final String	PRINCIPAL	= PrincipalMetaNode.PRINCIPAL;
 	/**
 	 * This object is the interface to the DMT Admin. Through this, we can
 	 * modify the different Principals PermissionInfo.
@@ -170,10 +170,10 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 		if (path.length==2) {
 			if (PRINCIPAL.equals(path[1])) return principalMetaNode;
 			if (PERMISSIONINFO.equals(path[1])) return permissionInfoMetaNode;
+			throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,
+					"Must be either "+PRINCIPAL+" or "+PERMISSIONINFO);
 		}
-
-		// cannot get here
-		throw new IllegalStateException();
+		throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,"");
 	}
 
 	public void rollback() throws DmtException {

@@ -27,6 +27,9 @@ import org.osgi.service.dmt.DmtMetaNode;
  * @version $Revision$
  */
 public final class LocationMetaNode implements DmtMetaNode {
+	public static final String LOCATION = "Location";
+	public static final String[] LOCATION_ARRAY = new String[] { LOCATION };
+	
 	public boolean can(int operation) {	return (operation==CMD_GET)||(operation==CMD_REPLACE); }
 	public boolean isLeaf() { return true;	}
 	public int getScope() { return DYNAMIC; }
@@ -38,11 +41,11 @@ public final class LocationMetaNode implements DmtMetaNode {
 	public int getMin() { return Integer.MIN_VALUE;	}
 	public DmtData[] getValidValues() { return null; }
 	public int getFormat() { return DmtData.FORMAT_STRING; }
-	public String getPattern() {	return null; }
 	public String[] getMimeTypes() { return null; }
 	public String getReferredURI() { return null; }
 	public String[] getDependentURIs() { return null; }
 	public String[] getChildURIs() { return null; }
 	public String[] getValidNames() { return null; }
-	public String getNamePattern() {	return null; }
+	public boolean isValidValue(DmtData value) { return true; }
+	public boolean isValidName(String name) { return LOCATION.equals(name); }
 }

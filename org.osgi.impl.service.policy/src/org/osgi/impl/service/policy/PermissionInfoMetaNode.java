@@ -40,8 +40,8 @@ public final class PermissionInfoMetaNode implements DmtMetaNode {
 	public int getMin() { return Integer.MIN_VALUE;	}
 	public DmtData[] getValidValues() { return null; }
 	public int getFormat() { return DmtData.FORMAT_STRING; }
-	public String getPattern() {	return null; }
 	public String[] getMimeTypes() { return null; }
 	public String[] getValidNames() { return PERMISSIONINFO_ARRAY; }
-	public String getNamePattern() { return null; }
+	public boolean isValidValue(DmtData value) { return true; }
+	public boolean isValidName(String name) { return PERMISSIONINFO.equals(name); }
 }

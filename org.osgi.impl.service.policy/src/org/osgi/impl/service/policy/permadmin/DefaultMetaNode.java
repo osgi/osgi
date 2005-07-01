@@ -27,6 +27,9 @@ import org.osgi.service.dmt.DmtMetaNode;
  * @version $Revision$
  */
 public final class DefaultMetaNode implements DmtMetaNode {
+	public static final String DEFAULT = "Default";
+	public static final String[] DEFAULT_ARRAY = new String[] { DEFAULT };
+	
 	private static final DmtData defaultData = new DmtData("");
 	public boolean can(int operation) { 
 		return 
@@ -45,8 +48,11 @@ public final class DefaultMetaNode implements DmtMetaNode {
 	public int getMin() { return Integer.MIN_VALUE;	}
 	public DmtData[] getValidValues() { return null; }
 	public int getFormat() { return DmtData.FORMAT_STRING; }
-	public String getPattern() {	return null; }
 	public String[] getMimeTypes() { return null; }
 	public String[] getValidNames() { return null; }
-	public String getNamePattern() { return null; }
+	public boolean isValidValue(DmtData value) {
+		// TODO
+		return true;
+	}
+	public boolean isValidName(String name) { return DEFAULT.equals(name); }
 }

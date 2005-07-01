@@ -53,8 +53,8 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 	
 	
-	private static final String	PERMISSIONINFO	= "PermissionInfo";
-	private static final String CONDITIONINFO = "ConditionInfo";
+	private static final String	PERMISSIONINFO	= PermissionInfoMetaNode.PERMISSIONINFO;
+	private static final String CONDITIONINFO = ConditionInfoMetaNode.CONDITIONINFO;
 
 	/**
 	 * the conditional permission admin to communicate with
@@ -221,7 +221,6 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 
 	public DmtMetaNode getMetaNode(String nodeUri)
 			throws DmtException {
-		// note: nodeUri is already checked here
 		String[] path = getPath(nodeUri);
 		if (path.length==0) {
 			return rootMetaNode;
@@ -229,11 +228,14 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 		if (path.length==1) {
 			return conditionalPermissionMetaNode;
 		}
-		if (path[1].equals(PERMISSIONINFO)) {
-			return permissionInfoMetaNode;
-		} else {
-			return conditionInfoMetaNode;
+		if (path.length==2) {
+			if (path[1].equals(PERMISSIONINFO)) return permissionInfoMetaNode;
+			if (path[1].equals(CONDITIONINFO)) return conditionInfoMetaNode;
+			throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,
+					"Must be eitner "+PERMISSIONINFO+" or "+CONDITIONINFO);
 		}
+		
+		throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,"");
 	}
 
 	public void rollback() throws DmtException {
