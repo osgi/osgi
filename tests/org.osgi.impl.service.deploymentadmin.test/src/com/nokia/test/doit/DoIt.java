@@ -134,9 +134,10 @@ public class DoIt implements BundleActivator {
 //                        "install, uninstall, cancel"),
                 // for db_test_07
                 new PermissionInfo(DeploymentAdminPermission.class.getName(), 
-                        "(name=apple)", "list, install, uninstall, cancel"),
+                        "(name=apple)", "list, install, uninstall, uninstallForced, cancel"),
                 new PermissionInfo(DeploymentAdminPermission.class.getName(), 
-                        "(|(name=db_test_*)(name=bad_db_test_*))", "list, install, uninstall, cancel"),
+                        "(|(name=db_test_*)(name=bad_db_test_*))", "list, install, uninstall, " +
+                        		"uninstallForced, cancel"),
                 // to be able to set permissions during next run
                 // and because "In addition to DeploymentAdminPermission, the caller 
                 // of Deployment Admin must in addition hold the appropriate AdminPermissions."
@@ -242,6 +243,21 @@ public class DoIt implements BundleActivator {
             } else {
                 DeploymentPackage dp = dps[Integer.parseInt(line)];
                 dp.uninstall();
+            }
+        } else if ("unif".equalsIgnoreCase(line)) {
+            DeploymentPackage[] dps = da.listDeploymentPackages();
+            for (int i = 0; i < dps.length; i++)
+                System.out.println(" " + i + " " + dps[i]);
+            System.out.print(" which: ");
+            line = in.readLine();
+            if ("all".equalsIgnoreCase(line)) {
+                for (int i = 0; i < dps.length; i++) {
+                    DeploymentPackage dp = dps[i];
+                    dp.uninstallForced();
+                }
+            } else {
+                DeploymentPackage dp = dps[Integer.parseInt(line)];
+                dp.uninstallForced();
             }
         } else if ("tables".equalsIgnoreCase(line)) {
             ServiceReference ref = context.getServiceReference(Db.class.getName());
