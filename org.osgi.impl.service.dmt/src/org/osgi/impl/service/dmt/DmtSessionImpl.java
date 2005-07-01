@@ -620,9 +620,6 @@ public class DmtSessionImpl implements DmtSession {
         checkNewNodeName(uri);
         checkMaxOccurrence(uri);
         
-        // not checking (metaNode.getFormat() == DmtData.FORMAT_NODE) for now, 
-        // the same info is in DmtMetaNode.isLeaf() and DmtReadOnly.isLeafNode()
-        
         // it is forbidden to create permanent nodes, but this is not checked
         // here: a permanent node must always exist, so NODE_ALREADY_EXISTS
         // exception will be thrown anyway
@@ -1054,8 +1051,15 @@ public class DmtSessionImpl implements DmtSession {
                         "This node has no default value in the meta-data.");
             return;
         }
+
+        if(!metaNode.isValidValue(data))
+            throw new DmtException(uri, DmtException.METADATA_MISMATCH,
+                    "The specified node value is not valid according to " +
+                    "the meta-data.");
         
-        // check all meta-data constraints that apply to the value of the node
+        // not checking value meta-data constraints individually, but leaving
+        // this to the isValidValue method of the meta-node
+        /*
         if((metaNode.getFormat() & data.getFormat()) == 0)
             throw new DmtException(uri, DmtException.METADATA_MISMATCH,
                     "The format of the specified value is not in the list of " +
@@ -1076,17 +1080,6 @@ public class DmtSessionImpl implements DmtSession {
             throw new DmtException(uri, DmtException.METADATA_MISMATCH,
                     "Specified value is not in the list of valid values " +
                     "given in the node meta-data.");
-
-        // TODO value pattern matching requires regexp support
-        /*
-        if(data.getFormat() == DmtData.FORMAT_STRING) {
-            String value = data.getString();
-            String valuePattern = metaNode.getPattern();
-            if(valuePattern != null && !Pattern.matches(valuePattern, value))
-                throw new DmtException(uri, DmtException.METADATA_MISMATCH,
-                        "The specified value does not match the pattern of " +
-                        "valid values specified in the node meta-data.");
-        }
         */
     }
     
@@ -1097,19 +1090,19 @@ public class DmtSessionImpl implements DmtSession {
             return;
         
         String name = Utils.lastSegment(uri);
+        if(!metaNode.isValidName(name))
+            throw new DmtException(uri, DmtException.METADATA_MISMATCH,
+                    "The specified node name is not valid according to " +
+                    "the meta-data.");
+
+        // not checking valid name list from meta-data, but leaving this to the
+        // isValidName method of the meta-node
+        /*
         String[] validNames = metaNode.getValidNames();
         if(validNames != null && !Arrays.asList(validNames).contains(name))
             throw new DmtException(uri, DmtException.METADATA_MISMATCH,
                     "The specified node name is not in the list of valid " +
                     "names specified in the node meta-data.");
-
-        // TODO name pattern matching requires regexp support
-        /*
-        String namePattern = metaNode.getNamePattern();
-        if(namePattern != null && !Pattern.matches(namePattern, name))
-            throw new DmtException(uri, DmtException.METADATA_MISMATCH,
-                    "The specified node name does not match the pattern of " +
-                    "valid names specified in the node meta-data.");
         */
     }
     
