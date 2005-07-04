@@ -3,7 +3,9 @@ package org.osgi.test.cases.permissionadmin.conditional.tbc;
 
 
 import java.lang.reflect.Constructor;
+import java.security.AccessControlException;
 import java.security.Permission;
+import java.util.Enumeration;
 import java.util.Vector;
 
 import org.osgi.framework.AdminPermission;
@@ -27,7 +29,7 @@ public class ConditionalUtility {
 	private Bundle						testBundle;
 	private boolean						hasPermissionsPerm;
 	
-	static String REQUIRED 					= "RequiredPermission";
+	static String REQUIRED 					  = "RequiredPermission";
 	static String CP_PERMISSION 			= "CPAdminPermission";
 	static String P_PERMISSION 				= "PAdminPermission";
 	static String REQUIRED_CP_PERMISSION 	= "RequiredIntersectCPAdminPermission";
@@ -36,9 +38,9 @@ public class ConditionalUtility {
 	static String VERSION_FLOOR				= "version_range_floor";
 	static String VERSION_CEILING			= "version_range_ceiling";
 	
-	static String DN_S						= "DNs";
-	static String INAPPROPRIATE_DN_S		= "inappropriateDNs";
-	static String SEPARATOR                 = "\"";
+	static String DN_S						    = "DNs";
+	static String INAPPROPRIATE_DN_S	= "inappropriateDNs";
+	static String SEPARATOR           = "\"";
 	
 	static String BUNDLE_VERSION 			= "Bundle-Version";
 
@@ -55,12 +57,18 @@ public class ConditionalUtility {
 	public void setTestBunde(Bundle bundle, boolean hasPermissionsPerm) {
 		this.testBundle = bundle;
 		this.hasPermissionsPerm = hasPermissionsPerm;
+//    pAdmin.setPermissions(bundle.getLocation(), new PermissionInfo[] {});
+//    PermissionInfo[] perms = pAdmin.getPermissions(bundle.getLocation());
+//    for (int i = 0; i < perms.length; i++) {
+//      PermissionInfo info = perms[i];
+//      System.out.println("info = " + info);   
+//    }
 	}
 	
 	
-	ConditionInfo createTestCInfo(boolean evaluated, boolean satisfied, boolean mutable) {
+	ConditionInfo createTestCInfo(boolean postponed, boolean satisfied, boolean mutable) {
 		return new ConditionInfo(TestCondition.class.getName(), 
-					new String[]{String.valueOf(evaluated), 
+					new String[]{String.valueOf(postponed), 
 								 String.valueOf(satisfied), 
 								 String.valueOf(mutable)});
 	}
@@ -84,7 +92,8 @@ public class ConditionalUtility {
 		}
 	}
 
-	void allowed(String message, AdminPermission permission) {
+	void allowed(AdminPermission permission) {
+    String message = "allowed permission " + permToString(permission);
 		try {
 			checkPermission(permission);
 			testControl.pass(message);
@@ -93,14 +102,41 @@ public class ConditionalUtility {
 		}
 	}
 	
-	void notAllowed(String message, AdminPermission permission, Class wanted) {
+	void notAllowed(AdminPermission permission, Class wanted) {
+    String message = "not allowed " + permToString(permission);
 		try {
 			checkPermission(permission);
+      //testControl.pass("FAIL>>>>" + message);
 			testControl.failException(message, wanted);
 		} catch (Throwable e) {
-			testControl.assertException(message, wanted, e);
+      if (!e.getClass().equals(wanted.getClass()) && (wanted.isInstance(e))) {
+        testControl.pass(message + " and [" + e.getClass() + "] was thrown");
+      } else {
+        testControl.assertException(message, wanted, e);
+      }
 		}
 	}
+  
+  private String permToString(AdminPermission permission) {
+    return "permission [" + permission.getName() + ", " + permission.getActions() + "]";
+  }
+  
+  private String cpInfoToString(ConditionalPermissionInfo cpInfo) {
+    StringBuffer result = new StringBuffer("ConditionalPermissionInfo: ");
+    ConditionInfo[] condInfos = cpInfo.getConditionInfos();
+    result.append("\n       with conditional infos:");
+    for (int i = 0; i < condInfos.length; i++) {
+      result.append("\n         ");
+      result.append(condInfos[i]);      
+    }
+    PermissionInfo[] permInfos = cpInfo.getPermissionInfos();
+    result.append("\n       with permission infos:");
+    for (int i = 0; i < permInfos.length; i++) {
+      result.append("\n         ");
+      result.append(permInfos[i]);      
+    }
+    return result.toString();
+  }
 	
 	private void checkPermission(AdminPermission permission) throws Throwable {
 		Permission p = getPermission(permission, testBundle);
@@ -121,9 +157,8 @@ public class ConditionalUtility {
 		while (index != -1) {
 			lastIndex = index + 1;
 			result.addElement(value.substring(0, lastIndex) + "*");
-			index = value.indexOf(".", lastIndex);
-		}
-		
+			index = value.indexOf(".", lastIndex); 
+		}		
 		return result;
 	}
 	
@@ -199,23 +234,38 @@ public class ConditionalUtility {
 	
 	void testPermissions(ConditionInfo[] conditions, Permission permission, AdminPermission[] allowedPermission, AdminPermission[] notAllowedPermission) {
 		ConditionalPermissionInfo cpInfo = setPermissionsByCPermissionAdmin(conditions, permission);
-		for (int i = 0; i < allowedPermission.length; ++i) {
-			allowed(cpInfo.toString(), allowedPermission[i]);
+    testControl.pass("Test " + cpInfoToString(cpInfo));
+    for (int i = 0; i < allowedPermission.length; i++) {
+			allowed(allowedPermission[i]);
 		}
-		for (int k = 0; k < notAllowedPermission.length; ++k) {
-			notAllowed(cpInfo.toString(), notAllowedPermission[k], SecurityException.class);
+		for (int k = 0; k < notAllowedPermission.length; k++) {
+			notAllowed(notAllowedPermission[k], SecurityException.class);
 		}
 		cpInfo.delete();
-		for (int j = 0; j < allowedPermission.length; ++j) {
-			notAllowed(cpInfo.toString(), allowedPermission[j], SecurityException.class);
-		}
 	}
+  
+  void deletePermissions(ConditionInfo[] conditions, Permission permission) {
+    ConditionalPermissionInfo cpInfo = setPermissionsByCPermissionAdmin(conditions, permission);
+    testControl.pass("New permissions are set: " + cpInfoToString(cpInfo));
+    Enumeration infos = cpAdmin.getConditionalPermissionInfos();
+    testControl.pass("All set conditional permissions are: ");
+    while (infos.hasMoreElements()) {
+      testControl.pass(cpInfoToString((ConditionalPermissionInfo)infos.nextElement()));
+    }
+    cpInfo.delete();
+    testControl.pass("ConditionalPermissionInfo deleted");
+    int cpCounter = 0;
+    while (infos.hasMoreElements()) {
+      cpCounter++;
+      testControl.pass(cpInfoToString((ConditionalPermissionInfo)infos.nextElement()));
+    }
+    testControl.assertEquals("After delete there have to be no conditional permissions: ", 0, cpCounter);
+  }
 	
 	Vector createWildcardDNs(String value) {
 		Vector result = new Vector();
 		String semicolon = ";";
-		String asterisk = "*";
-		
+		String asterisk = "*";		
 		
 		int lastIndex = 0;
 		int semicolonIndex = value.indexOf(semicolon);
@@ -292,8 +342,6 @@ public class ConditionalUtility {
 		return result;
 	}
 	
-	
-
 	private Permission getPermission(AdminPermission permission, Bundle bundle) {
 		return new AdminPermission(bundle, permission.getActions());
 	}
