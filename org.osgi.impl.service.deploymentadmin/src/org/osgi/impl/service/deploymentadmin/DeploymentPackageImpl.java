@@ -188,7 +188,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     BundleEntry getBundleEntryByName(String name) {
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            if (be.getName().equals(name))
+            if (be.getResName().equals(name))
                 return be;
         }
         return null;
@@ -219,7 +219,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     public ResourceEntry getResourceEntryByName(String name) {
         for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
             ResourceEntry entry = (ResourceEntry) iter.next();
-            if (entry.getName().equals(name))
+            if (entry.getResName().equals(name))
                 return entry;
         }
         return null;
@@ -261,12 +261,12 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         int i = 0;
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            ret[i] = be.getName();
+            ret[i] = be.getResName();
             ++i;    
         }
         for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
-            ret[i] = re.getName();
+            ret[i] = re.getResName();
             ++i;    
         }
         return ret;
@@ -280,13 +280,13 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         
         for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
-            if (re.getName().equals(name))
+            if (re.getResName().equals(name))
                 return re.getValue(header);
         }
         
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            if (be.getName().equals(name))
+            if (be.getResName().equals(name))
                 return be.getValue(header);
         }
 
@@ -356,7 +356,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         
         for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
-            if (re.getName().equals(resName)) {
+            if (re.getResName().equals(resName)) {
                 	try {
                         ServiceReference[] refs = da.getBundleContext().getServiceReferences(
                                 ResourceProcessor.class.getName(),
@@ -411,7 +411,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     void setProcessorPid(String resName, String pid) {
         for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
-            if (re.getName().equals(resName)) {
+            if (re.getResName().equals(resName)) {
                 re.setPid(pid);
             }
         }
@@ -508,7 +508,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         private void checkBundleEntry(DeploymentPackageImpl dp, BundleEntry be) 
 				throws DeploymentException
         {
-            checkResourceName(be.getName());
+            checkResourceName(be.getResName());
             
             if (!dp.fixPack() && be.isMissing())
                 	throw new DeploymentException(DeploymentException.CODE_BAD_HEADER, 

@@ -1,10 +1,27 @@
+/*
+ * ============================================================================
+ * (c) Copyright 2004 Nokia
+ * This material, including documentation and any related computer programs,
+ * is protected by copyright controlled by Nokia and its licensors. 
+ * All rights are reserved.
+ * 
+ * These materials have been contributed  to the Open Services Gateway 
+ * Initiative (OSGi)as "MEMBER LICENSED MATERIALS" as defined in, and subject 
+ * to the terms of, the OSGi Member Agreement specifically including, but not 
+ * limited to, the license rights and warranty disclaimers as set forth in 
+ * Sections 3.2 and 12.1 thereof, and the applicable Statement of Work. 
+ * All company, brand and product names contained within this document may be 
+ * trademarks that are the sole property of the respective owners.  
+ * The above notice must be included on all copies of this document.
+ * ============================================================================
+ */
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.Serializable;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.jar.Attributes;
 
 import org.osgi.framework.Bundle;
@@ -13,29 +30,30 @@ import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Ent
 
 public class BundleEntry implements Serializable {
     
-    private String             name;     // name in the manifest
-    private String             symbName; // Bundle-SymbolicName
+    private String             resName;    // name in the manifest
+    private String             symbName;   // Bundle-SymbolicName
     private String             version;
     private Long               bundleId;
     private Boolean            missing;
-    private String             pid;      // if it's a customizer
+    private String             pid;        // if it's a customizer
                                          
     private CaseInsensitiveMap attrs = new CaseInsensitiveMap();
-    private List               certChains;
+    private List               certChains; // list of cerificate chains
+                                           // (one chain is a String[]
     
     public BundleEntry(String name,
             String symbName, 
             String version, 
             long id,
             boolean missing,
-            Attributes attrs) 
+            Map jarAttrs) 
 	{
-        this.name = name;
+        this.resName = name;
 		this.symbName = symbName;
 		this.version = version;
 		this.bundleId = new Long(id);
 		this.missing = new Boolean(missing);
-		extractAttrs(attrs);
+		this.attrs = new CaseInsensitiveMap(jarAttrs);
 	}
 
     public BundleEntry(String name,
@@ -48,12 +66,8 @@ public class BundleEntry implements Serializable {
     }
     
     public BundleEntry(BundleEntry other) {
-        this.name = other.getName();
-        this.symbName = other.symbName;
-        this.version = other.version;
-        this.bundleId = other.bundleId;
-        this.missing = new Boolean(other.isMissing());
-        this.attrs = new CaseInsensitiveMap(other.attrs);
+        this(other.getResName(), other.getSymbName(), other.version,
+             other.getBundleId(), other.isMissing(), other.attrs);
     }
     
     public BundleEntry(final Bundle b) {
@@ -73,20 +87,9 @@ public class BundleEntry implements Serializable {
     }
     
     public BundleEntry(Entry entry) {
-        certChains = entry.getCertificateChainStringArrays();
-        name = entry.getName();
-        symbName = entry.getAttributes().getValue(DAConstants.BUNDLE_SYMBOLIC_NAME);
-        version = entry.getAttributes().getValue(DAConstants.BUNDLE_VERSION);
-        missing = new Boolean(entry.isMissing());
-        extractAttrs(entry.getAttributes());
-    }
-
-    private void extractAttrs(Attributes as) {
-        for (Iterator iter = as.keySet().iterator(); iter.hasNext();) {
-            Attributes.Name key = (Attributes.Name) iter.next();
-            Object value = as.getValue(key);
-            attrs.put(key.toString(), value);
-        }
+        this(entry.getName(), entry.getAttributes().getValue(DAConstants.BUNDLE_SYMBOLIC_NAME),
+             entry.getAttributes().getValue(DAConstants.BUNDLE_VERSION), -1, entry.isMissing(),
+             entry.getAttributes());
     }
 
     public boolean equals(Object obj) {
@@ -106,7 +109,7 @@ public class BundleEntry implements Serializable {
     }
     
     public String toString() {
-        return "[" + symbName + " " + version + "]";
+        return "[SymbolicName: " + symbName + " Version: " + version + "]";
     }
 
     // PluginDeployed uses this
@@ -133,8 +136,8 @@ public class BundleEntry implements Serializable {
         return new Version(version);
     }
 
-    public String getName() {
-        return name;
+    public String getResName() {
+        return resName;
     }
     
     CaseInsensitiveMap getAttrs() {

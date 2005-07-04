@@ -30,6 +30,7 @@ package org.osgi.impl.service.deploymentadmin;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.jar.*;
 
 
 public class CaseInsensitiveMap extends Hashtable {
@@ -41,16 +42,14 @@ public class CaseInsensitiveMap extends Hashtable {
 
     public CaseInsensitiveMap(Map other) {
         for (Iterator iter = other.keySet().iterator(); iter.hasNext();) {
-            Object raw = iter.next();
-            if (!(raw instanceof String))
-                throw new IllegalArgumentException("Only String keys are allowed in " +
-                		"the parameter map");
-            String key = (String) raw;
-            Object value = other.get(key);
-            put(key.toUpperCase(), value);
+            Object key = iter.next();
+            if (!(key instanceof String) && !(key instanceof Attributes.Name))
+                throw new IllegalArgumentException("Only String and java.util.jar.Attributes.Name " +
+                		"keys are allowed in the parameter map");
+            put(key.toString().toUpperCase(), other.get(key));
         }
     }
-    
+
     public Object put(Object key, Object value) {
         if (!(key instanceof String))
             throw new IllegalArgumentException("Only String key is allowed");

@@ -587,7 +587,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         WrappedResourceProcessor wProc = new WrappedResourceProcessor(
                 proc, fetchAccessControlContext(re.getCertChains()));
         transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, wProc));
-        wProc.dropped(re.getName());
+        wProc.dropped(re.getResName());
     }
     
     /*

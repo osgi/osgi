@@ -18,7 +18,6 @@
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.jar.Attributes;
@@ -27,34 +26,34 @@ import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Ent
 
 public class ResourceEntry implements Serializable {
 
-    private String             name;
+    private String             resName;
     private CaseInsensitiveMap attrs = new CaseInsensitiveMap();
     private String	           pid;
     private List   	           certChains = new LinkedList();
 
-    public ResourceEntry(String name, Attributes attrs) {
-        this.name = name;
-        extractAttrs(attrs);
+    public ResourceEntry(String name, Attributes jarAttrs) {
+        this.resName = name;
+        this.attrs = new CaseInsensitiveMap(jarAttrs);
     }
     
     public ResourceEntry(Entry entry) {
-        name = entry.getName();
-        extractAttrs(entry.getAttributes());
+        resName = entry.getName();
+        this.attrs = new CaseInsensitiveMap(entry.getAttributes());
     }
     
     public boolean equals(Object o) {
         if (!(o instanceof ResourceEntry))
             return false;
         ResourceEntry other = (ResourceEntry) o;
-        return getName().equals(other.getName());
+        return getResName().equals(other.getResName());
     }
     
     public int hashCode() {
-        return name.hashCode();
+        return resName.hashCode();
     }
     
     public String toString() {
-        return getName();
+        return getResName();
     }
     
     CaseInsensitiveMap getAttrs() {
@@ -72,16 +71,8 @@ public class ResourceEntry implements Serializable {
         return (String) attrs.get(name);
     }
 
-    public String getName() {
-        return name;
-    }
-    
-    private void extractAttrs(Attributes as) {
-        for (Iterator iter = as.keySet().iterator(); iter.hasNext();) {
-            Attributes.Name key = (Attributes.Name) iter.next();
-            Object value = as.getValue(key);
-            attrs.put(key.toString(), value);
-        }
+    public String getResName() {
+        return resName;
     }
 
     public String getPid() {

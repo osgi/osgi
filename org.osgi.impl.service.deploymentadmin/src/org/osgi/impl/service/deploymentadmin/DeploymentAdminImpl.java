@@ -60,7 +60,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     
 	private BundleContext 		  context;
-	private ServiceRegistration   registration;
+	private HashSet               serviceRegs = new HashSet();
     private Logger 				  logger;
     private DeploymentSessionImpl session;
     private KeyStore              keystore;
@@ -69,9 +69,14 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private String                fwBundleDir;
     private boolean               cancelled;
 
+    // DMT plugins
     private PluginDownload  pluginDownload  = new PluginDownload(this);
     private PluginDeployed  pluginDeployed  = new PluginDeployed(this);
     private PluginDelivered pluginDelivered = new PluginDelivered(this);
+    
+    // persisted fields
+    private Set       dps = new HashSet(); // deployment packages
+    private Hashtable mappingRpDp = new Hashtable();
     
     /*
      * Class to track the event admin
@@ -92,19 +97,17 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                     DmtAdmin.class.getName(), null);
         }
     }
-
-    // persisted fields
-    private Set       dps = new HashSet();		// deployment packages
-    private Hashtable mappingRpDp = new Hashtable();
     
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
+
 		trackEvent = new TrackerEvent();
 		trackEvent.open();
 		trackDmt = new TrackerDmt();
 		trackDmt.open();
+		
 		load();
-        registration = context.registerService(DeploymentAdmin.class.getName(), this, null);
+        registerService(DeploymentAdmin.class.getName(), this, null);
         logger = new Logger(context);
         
         initKeyStore();
@@ -121,28 +124,39 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                 
         props = new Hashtable();
         props.put(DmtDataPlugin.DATA_ROOT_URIS, "./OSGi/Deployment/Download");
-        context.registerService(DmtDataPlugin.class.getName(), pluginDownload, props);
+        registerService(DmtDataPlugin.class.getName(), pluginDownload, props);
 
         props = new Hashtable();
         props.put(DmtExecPlugin.EXEC_ROOT_URIS, "./OSGi/Deployment/Download");
-        context.registerService(DmtDataPlugin.class.getName(), pluginDownload, props);
+        registerService(DmtDataPlugin.class.getName(), pluginDownload, props);
 
         props = new Hashtable();
         props.put(DmtDataPlugin.DATA_ROOT_URIS, "./OSGi/Deployment/Inventory/Deployed");
-        context.registerService(DmtReadOnlyDataPlugin.class.getName(), pluginDeployed, props);
+        registerService(DmtReadOnlyDataPlugin.class.getName(), pluginDeployed, props);
 
         props = new Hashtable();
         props.put(DmtExecPlugin.EXEC_ROOT_URIS, "./OSGi/Deployment/Inventory/Deployed");
-        context.registerService(DmtReadOnlyDataPlugin.class.getName(), pluginDeployed, props);
+        registerService(DmtReadOnlyDataPlugin.class.getName(), pluginDeployed, props);
         
         props = new Hashtable();
         props.put(DmtDataPlugin.DATA_ROOT_URIS, "./OSGi/Deployment/Inventory/Delivered");
-        context.registerService(DmtReadOnlyDataPlugin.class.getName(), pluginDelivered, props);
+        registerService(DmtReadOnlyDataPlugin.class.getName(), pluginDelivered, props);
 
         props = new Hashtable();
         props.put(DmtExecPlugin.EXEC_ROOT_URIS, "./OSGi/Deployment/Inventory/Delivered");
-        context.registerService(DmtReadOnlyDataPlugin.class.getName(), pluginDelivered, props);
-}
+        registerService(DmtReadOnlyDataPlugin.class.getName(), pluginDelivered, props);
+    }
+    
+    private void registerService(String className, Object service, Hashtable props) {
+        serviceRegs.add(context.registerService(className, service, props));
+    }
+    
+    private void unregisterServices() {
+        for (Iterator iter = serviceRegs.iterator(); iter.hasNext();) {
+            ServiceRegistration reg = (ServiceRegistration) iter.next();
+            reg.unregister();
+        }
+    }
 
     private void initKeyStore() throws Exception {
         String ksType = System.getProperty(DAConstants.KEYSTORE_TYPE);
@@ -151,8 +165,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         String ks = System.getProperty(DAConstants.KEYSTORE_PATH);
         if (null == ks) {
             logger.log(Logger.LOG_WARNING, "Keystore location is not defined. Set the " + 
-                    DAConstants.KEYSTORE_PATH + " or the " + 
-                    "org.osgi.service.deploymentadmin.keystore.path" + " system property!");
+                    DAConstants.KEYSTORE_PATH + " system property!");
             return;
         }
         File file = new File(ks);
@@ -161,14 +174,13 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         String pwd = System.getProperty(DAConstants.KEYSTORE_PWD);
         if (null == pwd)
             throw new RuntimeException("There is no keystore password set. Set the " +
-                    DAConstants.KEYSTORE_PWD + " or the " + 
-                    "org.osgi.service.deploymentadmin.keystore.pwd" + " system property!");
+                    DAConstants.KEYSTORE_PWD + " system property!");
         keystore = KeyStore.getInstance("JKS");
         keystore.load(new FileInputStream(file), pwd.toCharArray());
     }
 
     public void stop(BundleContext context) throws Exception {
-	    registration.unregister();
+        unregisterServices();
 	    logger.stop();
 	    trackEvent.close();
 	    trackDmt.close();
@@ -177,7 +189,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     public DeploymentPackage installDeploymentPackage(InputStream in)
     		throws DeploymentException
     {
-        DeploymentPackageJarInputStream wjis;
+        DeploymentPackageJarInputStream wjis = null;
         DeploymentPackageImpl srcDp = null;
         cancelled = false;
         
@@ -199,12 +211,15 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
         
         checkPermission(srcDp, DeploymentAdminPermission.ACTION_INSTALL);
-        
         sendInstallEvent(srcDp.getName());
         session = createInstallUpdateSession(srcDp);
-        if (!checkSessionSilent())
-            return null;
-        checkSession();
+        
+        // checks the session
+        if (skipInstallUpdate())
+            return session.getTargetDeploymentPackage();
+        checkMissingEntities();
+
+        // the install/update operation 
         try {
             session.installUpdate(wjis);
         } catch (CancelException e) {
@@ -213,20 +228,20 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
         sendCompleteEvent(true);
         
-        DeploymentPackage ret;
-        if (session.getDeploymentAction() == DeploymentSessionImpl.INSTALL) {
-            //dps.add(srcDp);
-            addDp(srcDp);
-            ret = srcDp;
-        }
+        updateDps();
+        
+        return srcDp;
+    }
+    
+    private void updateDps() {
+        if (session.getDeploymentAction() == DeploymentSessionImpl.INSTALL)
+            addDp((DeploymentPackageImpl) session.getSourceDeploymentPackage());
         else { // if (session.getDeploymentAction() == DeploymentSession.UPDATE) 
             removeDp((DeploymentPackageImpl) session.getTargetDeploymentPackage());
             addDp((DeploymentPackageImpl) session.getSourceDeploymentPackage());
-            ret = session.getSourceDeploymentPackage();
-        }
-        return ret;
+        }    
     }
-    
+
     private void addDp(DeploymentPackageImpl dp) {
         dps.add(dp);
         for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
@@ -249,7 +264,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return (String) mappingRpDp.get(pid);
     }
 
-    private void checkSession() throws DeploymentException {
+    private void checkMissingEntities() throws DeploymentException {
         DeploymentPackageImpl srcDp = (DeploymentPackageImpl) session.getSourceDeploymentPackage();
         DeploymentPackageImpl tarDp = (DeploymentPackageImpl) session.getTargetDeploymentPackage();
         
@@ -268,17 +283,18 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
     }
 
-    private boolean checkSessionSilent() throws DeploymentException {
+    private boolean skipInstallUpdate() throws DeploymentException {
         DeploymentPackage sDp = session.getSourceDeploymentPackage();
         DeploymentPackage tDp = session.getTargetDeploymentPackage();
         if (sDp.getName().equals(tDp.getName()) &&
-                sDp.getVersion().equals(tDp.getVersion()))
-            return false;
-
-        return true;
+            sDp.getVersion().equals(tDp.getVersion()))
+            	return true;
+        return false;
     }
 
     private boolean checkCertificateChains(List certChains) throws KeyStoreException {
+        if (null == keystore)
+            return true;
         if (null == certChains || certChains.isEmpty())
             return true;
         for (Iterator iter = certChains.iterator(); iter.hasNext();) {
