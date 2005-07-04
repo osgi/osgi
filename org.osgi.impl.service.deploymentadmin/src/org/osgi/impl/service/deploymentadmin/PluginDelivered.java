@@ -19,9 +19,15 @@ import org.osgi.service.dmt.DmtSession;
 public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
     
 	private DeploymentAdminImpl da;
-	private File                store = new File("/temp");
+	private File                store;
 
 	PluginDelivered(DeploymentAdminImpl da) {
+	    String delArea = System.getProperty(DAConstants.DELIVERED_AREA);
+	    if (null == delArea)
+	        delArea = "/temp";
+	    store = new File(delArea);
+	    if (!store.exists())
+	        throw new RuntimeException("Delivered area ('" + delArea + "') does not exist");
 		this.da = da;		
 	}
 
