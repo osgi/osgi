@@ -25,14 +25,13 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.impl.service.deploymentadmin.api;
+package org.osgi.impl.service.deploymentadmin.perm;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import org.osgi.impl.service.deploymentadmin.api.Representation;
 
 /**
  * The <code>DeploymentCustomizerPermission</code> permission gives the right to 

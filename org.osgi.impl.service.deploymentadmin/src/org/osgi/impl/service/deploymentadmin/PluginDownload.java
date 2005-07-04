@@ -2,13 +2,14 @@ package org.osgi.impl.service.deploymentadmin;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Date;
+import java.util.Hashtable;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.deploymentadmin.api.DownloadAgent;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtDataPlugin;
@@ -43,7 +44,7 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
 	private String				id;
 	private String   			uri;
 	private int 				status = STATUS_IDLE;
-
+	
 	PluginDownload(DeploymentAdminImpl da) {
 		this.da = da;		
 	}
@@ -327,10 +328,16 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
 
     private void downloadAndInstall(String nodeUri) throws DmtException {
         InputStream is = null;
+        DownloadAgent dwnl = da.getDownloadAgent();
+        if (null == dwnl)
+            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, 
+                "Download Agent service is not available");
+            
         // TODO states doesn't describe streaming
         try {
-            URL url = new URL(contentURI.toString());
-            is = url.openStream();
+            Hashtable props = new Hashtable();
+            props.put("url", contentURI.toString());
+            is = dwnl.download("url", props);
             status = STATUS_DEPLOYMENT_SUCCESSFUL;
             da.installDeploymentPackage(is);
             status = STATUS_DEPLOYMENT_SUCCESSFUL;
@@ -355,10 +362,16 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
     }
 
     private void parseDescriptor(String nodeUri) throws DmtException {
+        DownloadAgent dwnl = da.getDownloadAgent();
+        if (null == dwnl)
+            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, 
+                "Download Agent service is not available");
+        
         InputStream is = null;
         try {
-            URL url = new URL(uri); // TODO
-            is = url.openStream();
+            Hashtable props = new Hashtable();
+            props.put("url", uri);
+            is = dwnl.download("url", props);
             SAXParser p = getParser();
             p.parse(is, this);
         }

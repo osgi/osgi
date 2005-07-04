@@ -15,48 +15,66 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package org.osgi.impl.service.deploymentadmin;
+package org.osgi.impl.service.deploymentadmin.dwnl;
 
-import java.net.URL;
+import java.io.InputStream;
 import java.util.*;
+
 import org.osgi.framework.*;
 import org.osgi.impl.service.deploymentadmin.api.*;
 import org.osgi.util.tracker.ServiceTracker;
 
-public class DownloadAgentImpl extends ServiceTracker implements DownloadAgent {
-	public DownloadAgentImpl(BundleContext context) {
-		super(context, ProtocolPlugin.class.getName(), null);
-		open();
-		context.registerService(DownloadAgent.class.getName(), this, null);
-	}
+public class DownloadAgentImpl implements DownloadAgent, BundleActivator {
+    
+    private BundleContext         context;
+    private ServiceRegistration   reg;
+    private TrackerProtocolPlugin trackPP;
+   
+    /*
+     * Class to track the Protocol Plugins
+     */
+    private class TrackerProtocolPlugin extends ServiceTracker {
+        public TrackerProtocolPlugin() {
+            super(DownloadAgentImpl.this.context, 
+                    ProtocolPlugin.class.getName(), null);
+        }
+    }
 
-	void destroy() {
-		close();
-	}
+    public void start(BundleContext context) throws Exception {
+        this.context = context;
+        
+		reg = context.registerService(DownloadAgent.class.getName(), this, null);
+		
+		trackPP = new TrackerProtocolPlugin();
+		trackPP.open();
+    }
+
+    public void stop(BundleContext context) throws Exception {
+        trackPP.close();        
+        reg.unregister();
+    }
 
 	private ProtocolPlugin getPlugin(String protocol) {
 		ProtocolPlugin ret = null;
-		ServiceReference[] refs = getServiceReferences();
+		ServiceReference[] refs = trackPP.getServiceReferences();
 		if (null == refs)
 			return null;
 		for (int i = 0; i < refs.length; ++i) {
 			String prop = (String) refs[i].getProperty(ProtocolPlugin.PROTOCOL);
 			if (protocol.equals(prop)) {
-				ret = (ProtocolPlugin) getService(refs[i]);
+				ret = (ProtocolPlugin) trackPP.getService(refs[i]);
 				break;
 			}
 		}
 		return ret;
 	}
 
-	public DownloadInputStream download(URL url) throws DownloadException {
-		ProtocolPlugin plugin = getPlugin("url");
+	public InputStream download(String protocol, Map attrs) throws Exception {
+		ProtocolPlugin plugin = getPlugin(protocol);
 		if (null == plugin)
-			throw new DownloadException(
-					"There is no appropriate protocol plugin " + "for " + url);
-		// only "url" is supported
-		Map map = new HashMap();
-		map.put("url", url);
-		return plugin.download(map);
+			throw new Exception("There is no appropriate protocol plugin " + 
+			    "for " + protocol);
+		return plugin.download(attrs);
 	}
+	
 }

@@ -25,7 +25,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.impl.service.deploymentadmin.api;
+package org.osgi.impl.service.deploymentadmin.perm;
 
 
 class NamePattern {

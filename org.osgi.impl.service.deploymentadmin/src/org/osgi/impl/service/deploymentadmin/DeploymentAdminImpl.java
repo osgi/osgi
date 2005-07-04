@@ -45,6 +45,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Version;
+import org.osgi.impl.service.deploymentadmin.api.DownloadAgent;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
@@ -66,6 +67,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private KeyStore              keystore;
     private TrackerEvent          trackEvent;
     private TrackerDmt            trackDmt;
+    private TrackerDownloadAgent  trackDownloadAgent;
     private String                fwBundleDir;
     private boolean               cancelled;
 
@@ -98,6 +100,16 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
     }
     
+    /*
+     * Class to track the Download Agent
+     */
+    private class TrackerDownloadAgent extends ServiceTracker {
+        public TrackerDownloadAgent() {
+            super(DeploymentAdminImpl.this.context, 
+                    DownloadAgent.class.getName(), null);
+        }
+    }
+    
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
 
@@ -105,6 +117,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 		trackEvent.open();
 		trackDmt = new TrackerDmt();
 		trackDmt.open();
+		trackDownloadAgent = new TrackerDownloadAgent();
+		trackDownloadAgent.open();
 		
 		load();
         registerService(DeploymentAdmin.class.getName(), this, null);
@@ -184,6 +198,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	    logger.stop();
 	    trackEvent.close();
 	    trackDmt.close();
+	    trackDownloadAgent.close();
 	}
 
     public DeploymentPackage installDeploymentPackage(InputStream in)
@@ -685,6 +700,10 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 
     BundleContext getContext() {
         return context;
+    }
+    
+    DownloadAgent getDownloadAgent() {
+        return (DownloadAgent) trackDownloadAgent.getService();
     }
     
 }

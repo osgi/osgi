@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-Name: URLProtocolPlugin
+Bundle-SymbolicName: org.osgi.impl.service.deploymentadmin.dwnl.plugins.URLProtocolPlugin
+Bundle-Version: 1.0
+Bundle-Vendor: Nokia
+Bundle-Activator: org.osgi.impl.service.deploymentadmin.dwnl.plugins.URLProtocolPlugin
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)

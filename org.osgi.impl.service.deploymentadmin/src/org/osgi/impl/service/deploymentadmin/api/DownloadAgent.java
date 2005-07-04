@@ -17,46 +17,22 @@
  */
 package org.osgi.impl.service.deploymentadmin.api;
 
-import java.net.URL;
+import java.io.InputStream;
+import java.util.Map;
 
 /**
  * The <code>DownloadAgent</code> iterface is used internally in the OSGi MEG
  * reference implementation. It provides download service for an arbitrary
- * module of the MEG reference implementation (e.g. for containers).
- * <p>
- * The interface is available as a standard OSGi service under the
- * <code>org.osgi.impl.service.deploymentadmin.api.DownloadAgent</code>
- * service name.
- * <p>
- * Usage example:
- * <p>
- * 
- * <pre>
- * 
- *       ServiceReference sRef = context.getServiceReference(
- *           DownloadAgent.class.getName());
- *       DownloadAgent admin = (DownloadAgent) 
- *           context.getService(sRef);
- *       DownloadInputStream dwnldIs = admin.download(url);
- *       String mimeType = dwnldIs.getDescriptor(
- *           DownloadInputStream.KEY_MIMETYPE);
- *       int ch = dwnldIs.read();
- *       while (-1 != ch) {
- *           ...
- *           ch = dwnldIs.read();
- *       }
- *  
- * </pre>
- * 
+ * module of the MEG reference implementation (e.g. for Deployment DMT plugin).
  */
 public interface DownloadAgent {
-	/**
+
+    /**
 	 * Opens an input stream to the received URL.
-	 * <p>
-	 * 
-	 * @param url the URL of the requested resource
-	 * @return the {@link DownloadInputStream}to the URL
-	 * @throws DownloadException if any error occures
+	 * @param attr attributes needed for the InputStream creation
+	 * @return the InputStream to the resource
+	 * @throws Exception if any error occures
 	 */
-	DownloadInputStream download(URL url) throws DownloadException;
+	InputStream download(String protocol, Map attr) throws Exception;
+	
 }

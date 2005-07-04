@@ -8,12 +8,13 @@
  * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package org.osgi.impl.service.deploymentadmin.api;
+package org.osgi.impl.service.deploymentadmin.perm;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
 
 /**
  * DeploymentAdminPermission controls access to MEG management framework functions.

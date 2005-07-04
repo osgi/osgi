@@ -3,7 +3,7 @@
  *
  * author: Ivan Zahoranszky
  */
-package org.osgi.impl.service.deploymentadmin.api;
+package org.osgi.impl.service.deploymentadmin.perm;
 
 import java.util.Vector;
 

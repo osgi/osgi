@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-Name: DownloadAgent
+Bundle-SymbolicName: org.osgi.impl.service.deploymentadmin.dwnl.DownloadAgent
+Bundle-Version: 1.0
+Bundle-Vendor: Nokia
+Bundle-Activator: org.osgi.impl.service.deploymentadmin.dwnl.DownloadAgentImpl
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)

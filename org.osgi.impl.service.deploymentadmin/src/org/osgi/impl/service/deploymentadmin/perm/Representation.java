@@ -25,11 +25,12 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.impl.service.deploymentadmin.api;
+package org.osgi.impl.service.deploymentadmin.perm;
 
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
+
 
 
 class Representation {

@@ -15,38 +15,34 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package org.osgi.impl.service.deploymentadmin;
+package org.osgi.impl.service.deploymentadmin.dwnl.plugins;
 
-import java.io.IOException;
+import java.io.InputStream;
 import java.net.*;
 import java.util.*;
 import org.osgi.framework.*;
 import org.osgi.impl.service.deploymentadmin.api.*;
 
 public class URLProtocolPlugin implements ProtocolPlugin, BundleActivator {
-	public DownloadInputStream download(Map attr) throws DownloadException {
-		URL url = (URL) attr.get("url");
+    
+    private ServiceRegistration reg;
+
+    public InputStream download(Map attr) throws Exception {
+		URL url = new URL((String) attr.get("url"));
 		if (null == url)
-			throw new DownloadException("URL is missing");
-		try {
-			URLConnection connection = url.openConnection();
-			HashMap map = new HashMap();
-			map.put(DownloadInputStream.MIMETYPE, connection.getContentType());
-			return new DownloadInputStream(connection.getInputStream(), map);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-			throw new DownloadException(e);
-		}
+			throw new Exception("URL is missing");
+		URLConnection connection = url.openConnection();
+		return connection.getInputStream();
 	}
 
 	public void start(BundleContext context) throws Exception {
 		Dictionary dict = new Hashtable();
 		dict.put(ProtocolPlugin.PROTOCOL, "url");
-		// unregistered by the OSGi framework
-		context.registerService(ProtocolPlugin.class.getName(), this, dict);
+		reg = context.registerService(ProtocolPlugin.class.getName(), this, dict);
 	}
 
 	public void stop(BundleContext context) throws Exception {
+	    reg.unregister();
 	}
+	
 }
