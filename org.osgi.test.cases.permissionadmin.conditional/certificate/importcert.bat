@@ -1,0 +1,1 @@
+keytool -import -alias trustcert -file cert.crt -keypass testtest
