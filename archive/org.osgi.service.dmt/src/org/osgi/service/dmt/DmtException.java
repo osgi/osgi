@@ -33,12 +33,17 @@ import java.util.Iterator;
  */
 public class DmtException extends Exception {
 	// TODO add static final serialVersionUID
+    // TODO clarify exception codes so that there is no overlap (or define precedence, see below)
+    // define which specific errors "eclipse" general errors, e.g.
+    // NODE_NOT_FOUND gives more information than METADATA_MISMATCH
 
     //----- Public constants -----//
     
     /**
      * The requested target node was not found. No indication is given as to
-     * whether this is a temporary or permanent condition.
+     * whether this is a temporary or permanent condition. This is only
+     * used when the requested node name is valid, otherwise the more specific
+     * error codes {@link #URI_TOO_LONG} or {@link #INVALID_URI} are used. 
      * This error code corresponds to the OMA DM response status code 404.
      */
     public static final int NODE_NOT_FOUND        = 404;
@@ -120,9 +125,9 @@ public class DmtException extends Exception {
     public static final int REMOTE_ERROR          = 1;
 
     /**
-     * Invalid data, operation failed bacause of meta data restrictions.
-     * Examples can be violating referential integrity constraints or
-     * exceeding maximum node value limits, etc.
+     * Operation failed bacause of meta data restrictions. Examples can be
+     * violating cardinality constraints, attempting to set invalid node values,
+     * etc. 
      * This error code does not correspond to any OMA DM response status code.
      */
     public static final int METADATA_MISMATCH     = 2;
@@ -293,7 +298,8 @@ public class DmtException extends Exception {
      * Get the message associated with this exception. The message also contains
      * the associated URI and the exception code, if specified.
      * 
-     * @return the error message, or <code>null</code> if not specified
+     * @return the error message, or <code>null</code> if no message, URI or
+     *         code was specified with the exception
      */
     public String getMessage() {
         String fullMessage = message == null ? "" : message;
@@ -304,7 +310,7 @@ public class DmtException extends Exception {
         if(code != OTHER_ERROR)
             fullMessage = getCodeText(code) + ": " + fullMessage;
 
-        return fullMessage;
+        return fullMessage.length() == 0 ? null : fullMessage;
     }
 
     /**
