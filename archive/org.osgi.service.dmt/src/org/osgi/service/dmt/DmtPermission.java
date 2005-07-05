@@ -44,9 +44,12 @@ import java.util.StringTokenizer;
  * to follow a '/' character. For example the 
  * <code>&quot;./OSGi/a*&quot;<code> target matches the 
  * <code>./OSGi/applications</code> subtree.
- * <p>If wildcard is present in the actions
- * field, all legal OMA DM commands are allowed on the designated
- * nodes(s) by the owner of the permission.
+ * <p>
+ * If wildcard is present in the actions field, all legal OMA DM commands are 
+ * allowed on the designated nodes(s) by the owner of the permission.  Action
+ * names are interpreted case-insensitively, but the canonical action string
+ * returned by {@link #getActions} uses the forms defined by the action 
+ * constants.
  */
 public class DmtPermission extends Permission {
     // TODO serialization
@@ -100,7 +103,7 @@ public class DmtPermission extends Permission {
     // the actions mask
     private int mask;
     
-    // the actions string (redundant)
+    // the canonical action string (redundant)
     private String actions;
 
     // initializes the member fields from the given URI and actions mask
@@ -132,13 +135,16 @@ public class DmtPermission extends Permission {
             throw new IllegalArgumentException("Action mask cannot be empty.");
         
         this.mask = mask;
+        
+        actions = canonicalActions(mask);
     }
 
     /**
      * Creates a new DmtPermission object for the specified DMT URI with the
      * specified actions. The given URI must be an absolute URI, possibly ending
-     * with the "*" wildcard. The actions string must contain a non-empty subset
-     * of the valid actions, defined as constants in this class.
+     * with the "*" wildcard. The actions string must either be "*" to allow all
+     * actions, or it must contain a non-empty subset of the valid actions,
+     * defined as constants in this class.
      * 
      * @param dmtUri URI of the management object (or subtree)
      * @param actions OMA DM actions allowed
@@ -148,8 +154,6 @@ public class DmtPermission extends Permission {
      */
     public DmtPermission(String dmtUri, String actions) {
         super(dmtUri);
-        
-        this.actions = actions;
         
         init(dmtUri, getMask(actions));
     }
@@ -266,6 +270,28 @@ public class DmtPermission extends Permission {
         }
         
         return mask;
+    }
+
+    // generates the canonical string representation of the action list
+    private static String canonicalActions(int mask) {
+        StringBuffer sb = new StringBuffer();
+        addAction(sb, mask, DmtAcl.ADD,     ADD);
+        addAction(sb, mask, DmtAcl.DELETE,  DELETE);
+        addAction(sb, mask, DmtAcl.EXEC,    EXEC);
+        addAction(sb, mask, DmtAcl.GET,     GET);
+        addAction(sb, mask, DmtAcl.REPLACE, REPLACE);
+        return sb.toString();
+    }
+    
+    // if 'flag' appears in 'mask', appends the 'action' string to the contents
+    // of 'sb', separated by a comma if needed
+    private static void addAction(StringBuffer sb, int mask, int flag, 
+            String action) {
+        if((mask & flag) != 0) {
+            if(sb.length() > 0)
+                sb.append(',');
+            sb.append(action);
+        }
     }
 
     // used by DmtPermissionCollection to retrieve the action mask
