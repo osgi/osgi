@@ -79,7 +79,8 @@ public interface DmtAdmin {
      * management applications are using this method then they should provide
      * <code>null</code> as the first parameter. Alternatively they can use
      * other forms of this method without providing a principal string. This
-     * method is guarded by <code>DmtPrincipalPermission</code>.
+     * method is guarded by <code>DmtPrincipalPermission</code> in case of 
+     * remote sessions.
      * <p>
      * To access the whole tree in this session, use the &quot;.&quot; string or
      * <code>null</code> as subtree URI.
@@ -100,7 +101,8 @@ public interface DmtAdmin {
      *         <li><code>OTHER_ERROR</code> if the lockMode is unknown
      *         <li><code>TIMEOUT</code>
      * @throws SecurityException if the caller does not have the required
-     *         <code>DmtPrincipalPermission</code>
+     *         <code>DmtPrincipalPermission</code> with a target matching the
+     *         <code>principal</code> parameter
      * @see DmtPrincipalPermission
      */
     DmtSession getSession(String principal, String subtreeUri, int lockMode)
