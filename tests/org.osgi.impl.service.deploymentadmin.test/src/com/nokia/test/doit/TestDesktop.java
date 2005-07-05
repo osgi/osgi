@@ -37,10 +37,12 @@ public class TestDesktop extends Frame implements ActionListener {
     private static final String START        = "Start";
     private static final String DESELECT_ALL = "Deselect all";
     private static final String SELECT_ALL   = "Select all";
+    private static final String COMMAND      = "Command";
     
     private Button b_start = new Button(START);
     private Button b_deselect_all = new Button(DESELECT_ALL);
     private Button b_select_all = new Button(SELECT_ALL);
+    private Button b_command = new Button(COMMAND);
     
     private DoIt doit;
     
@@ -71,6 +73,9 @@ public class TestDesktop extends Frame implements ActionListener {
         pa_right_bottom.add(b_deselect_all);
         b_deselect_all.setActionCommand(DESELECT_ALL);
         b_deselect_all.addActionListener(this);
+        pa_right_bottom.add(b_command);
+        b_command.setActionCommand(DESELECT_ALL);
+        b_command.addActionListener(this);
 
         li_tests.setMultipleSelections(true);
         li_tests.addItemListener(new ItemListener() {
@@ -146,6 +151,15 @@ public class TestDesktop extends Frame implements ActionListener {
 	        if (ae.getSource() == b_select_all) {
 	            for (int i = 0; i < li_tests.getItemCount(); i++)
 	                li_tests.select(i);
+	        }
+	        
+	        if (ae.getSource() == b_command) {
+	            try {
+                    doit.command();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
 	        }
     }
 

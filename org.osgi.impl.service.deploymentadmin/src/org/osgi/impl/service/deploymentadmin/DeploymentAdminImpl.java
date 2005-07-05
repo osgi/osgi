@@ -69,7 +69,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private TrackerDmt            trackDmt;
     private TrackerDownloadAgent  trackDownloadAgent;
     private String                fwBundleDir;
-    private boolean               cancelled;
+    
+    private long                  waitForSessionTimeout = 1000;
+    private boolean				  busy;
 
     // DMT plugins
     private PluginDownload  pluginDownload  = new PluginDownload(this);
@@ -200,52 +202,67 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	    trackDmt.close();
 	    trackDownloadAgent.close();
 	}
-
+    
+    private synchronized void waitIfBusy() throws DeploymentException {
+        if (busy) {
+            try {
+                wait(waitForSessionTimeout);
+            } catch (InterruptedException e) {
+                logger.log(e);
+            }
+            if (busy)
+	            throw new DeploymentException(DeploymentException.CODE_TIMEOUT,
+	                "Timeout period (" + waitForSessionTimeout + " ms) expired");
+        }
+        busy = true;
+    }
+    
+    private synchronized void clearSession() {
+        session = null;
+        busy = false;
+        notify();
+    }
+    
     public DeploymentPackage installDeploymentPackage(InputStream in)
     		throws DeploymentException
     {
+        waitIfBusy();
         DeploymentPackageJarInputStream wjis = null;
         DeploymentPackageImpl srcDp = null;
-        cancelled = false;
-        
-        // create the source DP
+        boolean result = false;
         try {
+            // create the source DP
             wjis = new DeploymentPackageJarInputStream(in);
             if (!checkCertificateChains(wjis.getCertificateChains()))
                 throw new DeploymentException(DeploymentException.CODE_SIGNING_ERROR, 
-                        "No certificate was found in the keystore for the deployment package");
+                    "No certificate was found in the keystore for the deployment package");
             srcDp = new DeploymentPackageImpl(wjis.getManifest(), this, 
                     wjis.getCertificateChainStringArrays());
-        }
-        catch (IOException e) {
-            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
-                  e.getMessage(), e);
-        } catch (KeyStoreException e) {
-            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
-                  e.getMessage(), e);
-        }
         
-        checkPermission(srcDp, DeploymentAdminPermission.ACTION_INSTALL);
-        sendInstallEvent(srcDp.getName());
-        session = createInstallUpdateSession(srcDp);
+	        checkPermission(srcDp, DeploymentAdminPermission.ACTION_INSTALL);
+	        sendInstallEvent(srcDp.getName());
+	        session = createInstallUpdateSession(srcDp);
         
-        // checks the session
-        if (skipInstallUpdate())
-            return session.getTargetDeploymentPackage();
-        checkMissingEntities();
+	        // checks the session
+	        if (equalSymbNameAndVersion())
+	            return session.getTargetDeploymentPackage();
+	        checkMissingEntities();
 
-        // the install/update operation 
-        try {
             session.installUpdate(wjis);
+            updateDps();
+            result = true;
+            return srcDp;
+        } catch (DeploymentException e) {
+            throw e;
         } catch (CancelException e) {
-            sendCompleteEvent(false);
             return null;
+        } catch (Exception e) {
+            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
+                e.getMessage(), e);
+        } finally {
+            sendCompleteEvent(result);
+            clearSession();
         }
-        sendCompleteEvent(true);
-        
-        updateDps();
-        
-        return srcDp;
     }
     
     private void updateDps() {
@@ -298,7 +315,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
     }
 
-    private boolean skipInstallUpdate() throws DeploymentException {
+    private boolean equalSymbNameAndVersion() throws DeploymentException {
         DeploymentPackage sDp = session.getSourceDeploymentPackage();
         DeploymentPackage tDp = session.getTargetDeploymentPackage();
         if (sDp.getName().equals(tDp.getName()) &&
@@ -387,7 +404,12 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         if (null == ea)
             return;
         final Hashtable ht = new Hashtable();
-        ht.put(DAConstants.EVENTPROP_DPNAME, session.getSourceDeploymentPackage().getName());
+        if (null == session)
+            return;
+        DeploymentPackage srcDp = session.getSourceDeploymentPackage();
+        if (null == srcDp)
+            return;
+        ht.put(DAConstants.EVENTPROP_DPNAME, srcDp.getName());
         ht.put(DAConstants.EVENTPROP_SUCCESSFUL, new Boolean(succ));
         AccessController.doPrivileged(new PrivilegedAction() {
             public Object run() {
@@ -396,8 +418,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             }});
     }
 
-    private DeploymentSessionImpl createInstallUpdateSession(DeploymentPackageImpl srcDp) 
-    		throws DeploymentException 
+    private DeploymentSessionImpl createInstallUpdateSession(
+            DeploymentPackageImpl srcDp) throws DeploymentException 
     {
         // find the package among installed packages
         DeploymentPackageImpl targetDp = findDp(srcDp);
@@ -405,28 +427,28 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         // fix-pack has no target
         if (srcDp.fixPack() && targetDp == null)
             throw new DeploymentException(DeploymentException.CODE_MISSING_FIXPACK_TARGET,
-                    "Target of the fix-pack is missing");
+                "Target of the fix-pack is missing");
         
         // not found -> install
         if (null == targetDp) {
             // creates an empty dp
             targetDp = new DeploymentPackageImpl();
 	        return new DeploymentSessionImpl(new DeploymentPackageImpl(srcDp), 
-	                targetDp, logger, context, fwBundleDir, this);
+                targetDp, logger, context, fwBundleDir, this);
         }
         // found -> update
         else {
             DeploymentSessionImpl ret = new DeploymentSessionImpl(
-                    new DeploymentPackageImpl(srcDp), new DeploymentPackageImpl(targetDp), 
-                    logger, context, fwBundleDir, this);
+                new DeploymentPackageImpl(srcDp), new DeploymentPackageImpl(targetDp), 
+                logger, context, fwBundleDir, this);
             if (srcDp.fixPack()) {
                 VersionRange range = srcDp.getFixPackRange();
                 Version ver = targetDp.getVersion();
                 if (!range.isIncluded(ver))
                     throw new DeploymentException(DeploymentException.CODE_MISSING_FIXPACK_TARGET,
-                    		"Fix pack version range (" + srcDp.getFixPackRange() + ") doesn't fit " +
-                    		"to the version (" + targetDp.getVersion() + ") of the target " + 
-                    		"deployment package"); 
+                		"Fix pack version range (" + srcDp.getFixPackRange() + ") doesn't fit " +
+                		"to the version (" + targetDp.getVersion() + ") of the target " + 
+                		"deployment package"); 
             }
             return ret;
         }
@@ -456,7 +478,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return null;
     }
 
-    public synchronized DeploymentPackage getDeploymentPackage(String symbName) {
+    public DeploymentPackage getDeploymentPackage(String symbName) {
         if (null == symbName)
             throw new IllegalArgumentException("Deployment package symbolic name " +
             		"cannot be null");
@@ -482,7 +504,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	            checkPermission((DeploymentPackageImpl) session.getSourceDeploymentPackage(), 
 	                    DeploymentAdminPermission.ACTION_CANCEL);
 	        session.cancel();
-	        cancelled = true;
 	        return true;
 	    }
 	}
@@ -531,7 +552,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     /*
      * Saves persistent data.
      */
-    private synchronized void save() throws IOException {
+    private void save() throws IOException {
         final File f = context.getDataFile(this.getClass().getName() + ".obj");
         if (null == f) {
             logger.log(Logger.LOG_WARNING, "Platform does not have file system support. " + 
@@ -559,7 +580,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     /*
      * Reads persistent data
      */
-    private synchronized void load() {
+    private void load() {
         File f = context.getDataFile(this.getClass().getName() + ".obj");
         if (!f.exists())  
             return;
@@ -641,45 +662,43 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	}
 
     void uninstall(DeploymentPackageImpl dp) throws DeploymentException {
-        checkPermission(dp, DeploymentAdminPermission.ACTION_UNINSTALL); 
-
-        sendUninstallEvent(dp.getName());
-        
-        session = createUninstallSession(dp);
+        waitIfBusy();
+        checkPermission(dp, DeploymentAdminPermission.ACTION_UNINSTALL);
+        boolean result = false;
         try {
+            sendUninstallEvent(dp.getName());
+            session = createUninstallSession(dp);
             session.uninstall(false);
-            sendCompleteEvent(true);
-        } catch (CancelException e) {
-            sendCompleteEvent(false);
-            return;
+            removeDp(dp);
+            result = true;
         } finally {
-            session = null;
+            sendCompleteEvent(result);
+            clearSession();
         }
-
-        removeDp(dp);
     }
     
     boolean uninstallForced(DeploymentPackageImpl dp) {
+        try {
+            waitIfBusy();
+        } catch (DeploymentException e) {
+            throw new RuntimeException("Timeout period (" + waitForSessionTimeout + 
+                " ms) expired");
+        }
         checkPermission(dp, DeploymentAdminPermission.ACTION_UNINSTALL);
-        
         sendUninstallEvent(dp.getName());
-        
-        boolean ret = true;
+        boolean result = false;
         try {
             session = createUninstallSession(dp);
-            ret = session.uninstall(true);
-            sendCompleteEvent(true);
+            boolean r = session.uninstall(true);
+            removeDp(dp);
+            result = r;
         } catch (DeploymentException e) {
             logger.log(e);
-        } catch (CancelException e) {
-            sendCompleteEvent(false);
-            return false;
         } finally {
-            session = null;
-        }        
-        
-        removeDp(dp);
-        return ret;
+            sendCompleteEvent(result);
+            clearSession();
+        }
+        return result;
     }
     
     BundleContext getBundleContext() {

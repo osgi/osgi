@@ -56,30 +56,18 @@ public class DoIt implements BundleActivator {
         if (null == paRef)
             return;
         PermissionAdmin pa = (PermissionAdmin) context.getService(paRef);
-        
         ServiceReference ref;
+
+        // Deployment Admin
         ref = context.getServiceReference(DeploymentAdmin.class.getName());
         String daLoc = ref.getBundle().getLocation();
         pa.setPermissions(daLoc, new PermissionInfo[] {
-                new PermissionInfo(DeploymentAdminPermission.class.getName(), "(name=*)", 
-                		"install, uninstall, uninstallForced, list, cancel"),
+                new PermissionInfo(AllPermission.class.getName(), "*", "*"),
                 new PermissionInfo(DeploymentCustomizerPermission.class.getName(), 
-                        "(name=*)", "privatearea"),
-                new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", 
-                        "read, write, execute, delete"),
-                new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
-                new PermissionInfo(ServicePermission.class.getName(), "*", "get, register"),
-                new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
-                new PermissionInfo(PropertyPermission.class.getName(), "org.osgi.*", "read")/*,
-                new PermissionInfo(TopicPermission.class.getName(), "org/osgi/service/deployment/INSTALL", 
-                        TopicPermission.PUBLISH),
-                new PermissionInfo(TopicPermission.class.getName(), "org/osgi/service/deployment/UNINSTALL", 
-                        TopicPermission.PUBLISH),
-                new PermissionInfo(TopicPermission.class.getName(), "org/osgi/service/deployment/COMPLETE", 
-                        TopicPermission.PUBLISH)*/
+                    "(name=*)", "privatearea")
         	});
         
-        // DATABASE
+        // Database
         ref = context.getServiceReference(Db.class.getName());
         String dbLoc = ref.getBundle().getLocation();
         pa.setPermissions(dbLoc, new PermissionInfo[] {
@@ -160,6 +148,9 @@ public class DoIt implements BundleActivator {
         ServiceReference refDa = context.getServiceReference(DeploymentAdmin.class.getName());
 		da = (DeploymentAdmin) context.getService(refDa);
 		
+    }
+    
+    void command() throws Exception {
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 System.in));
         System.out.print("command: ");
@@ -265,7 +256,7 @@ public class DoIt implements BundleActivator {
             String[] tables = db.tableNames(null);
             for (int i = 0; i < tables.length; i++)
                 System.out.println(" " + tables[i]);
-            context.ungetService(refDa);
+            context.ungetService(ref);
         } else if ("tdb".equalsIgnoreCase(line)) {
             int ok = 0;
             int error = 0;
@@ -291,6 +282,8 @@ public class DoIt implements BundleActivator {
             try {db_test_11(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
             try {db_test_12(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
+            try {db_test_14(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
             
             try {bad_db_test_01(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
@@ -337,7 +330,7 @@ public class DoIt implements BundleActivator {
             System.out.println("RESULT: OK = " + ok + " ERROR = " + error);
             System.out.println("=====================================");
         }
-        
+
     }
 
     public void bad_db_test_01() throws Exception {
@@ -1017,5 +1010,65 @@ public class DoIt implements BundleActivator {
 
         dp.uninstall();
     }
-    
+
+    public static final String db_test_14 = "When a client requests a new session \n" +
+    		"with an install or uninstall operation, it must block that call until \n" +
+    		"the earlier session is completed. The Deployment Admin service must \n" +
+    		"throw a DeploymentException when the session can not be created after \n" +
+    		"an appropriate time out period.";
+    public void db_test_14() throws Exception {
+        final DeploymentException[] ex = new DeploymentException[2];
+        
+        // INSTALL
+        
+        // creates a thread that calls install
+        Thread installThread = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    try {Thread.sleep(1000);} catch (Exception e) {}
+                    InputStream is = new FileInputStream(HOME + "db_test_14_02.dp");
+                    DeploymentPackage dp = da.installDeploymentPackage(is);
+                    is.close();
+                } catch (DeploymentException e) {
+                    ex[0] = e;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        installThread.start();
+
+        InputStream is = new FileInputStream(HOME + "db_test_14_01.dp");
+        final DeploymentPackage dp1 = da.installDeploymentPackage(is);
+        is.close();
+
+        if (null == ex[0] || ex[0].getCode() != DeploymentException.CODE_TIMEOUT)
+            throw new Exception("Test failed");
+        
+        // UNINSTALL
+        
+        // creates a thread that calls uninstall
+        Thread uninstallThread = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    try {Thread.sleep(1000);} catch (Exception e) {}
+                    dp1.uninstall();
+                } catch (DeploymentException e) {
+                    ex[1] = e;
+                }
+            }
+        });
+        uninstallThread.start();
+        
+        is = new FileInputStream(HOME + "db_test_14_02.dp");
+        DeploymentPackage dp2 = da.installDeploymentPackage(is);
+        is.close();
+        
+        if (null == ex[1] || ex[1].getCode() != DeploymentException.CODE_TIMEOUT)
+            throw new Exception("Test failed");
+        
+        dp1.uninstall();
+        dp2.uninstall();
+    }
+
 }

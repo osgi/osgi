@@ -346,6 +346,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
             dropAllResources();
             dropBundles();
         } catch (CancelException e) {
+            transaction.rollback();
             throw e;
         } catch (Exception e) {
             if (!forced) {

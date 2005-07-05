@@ -379,7 +379,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     public void uninstall() throws DeploymentException {
         checkStale();
         if (isSystem())
-            throw new RuntimeException("\"System\" bundle cannot be uninstalled");
+            throw new RuntimeException("\"System\" deployment package cannot be uninstalled");
         
         da.checkPermission(this, DeploymentAdminPermission.ACTION_UNINSTALL);
         
@@ -395,7 +395,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     public boolean uninstallForced() {
         checkStale();
         if (isSystem())
-            throw new RuntimeException("\"System\" bundle cannot be uninstalled");
+            throw new RuntimeException("\"System\" deployment package cannot be uninstalled");
         
         da.checkPermission(this, DeploymentAdminPermission.ACTION_UNINSTALL_FORCED);
         
