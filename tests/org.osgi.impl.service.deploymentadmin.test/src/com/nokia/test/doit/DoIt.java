@@ -658,7 +658,8 @@ public class DoIt implements BundleActivator {
         dp1.uninstall();
     }
 
-    public static final String db_test_01 = "Desc.";
+    public static final String db_test_01 = "Uses default RP, two resource files (one of them \n" +
+    	"is updated the other removed)";
     public void db_test_01() throws Exception {
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         Db db = (Db) context.getService(ref);
@@ -731,6 +732,8 @@ public class DoIt implements BundleActivator {
         db.reset(null);
     }
 
+    public static final String db_test_02 = "Uses default RP, two resource files (one of them \n" +
+		"is updated the other is a Missing resource)";
     public void db_test_02() throws Exception {
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         Db db = (Db) context.getService(ref);
@@ -779,6 +782,8 @@ public class DoIt implements BundleActivator {
         db.reset(null);
     }
     
+    public static final String db_test_03 = "Uses customizer, two resource files two bundles \n" +
+    		"(one of them is updated the other removed)";
     public void db_test_03() throws Exception {
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         Db db = (Db) context.getService(ref);
@@ -821,7 +826,26 @@ public class DoIt implements BundleActivator {
         
         is = new FileInputStream(HOME + "db_test_03_update_01.dp");
 		dp = da.installDeploymentPackage(is);
-            	        
+		
+        Bundle[] bs = context.getBundles();
+        Bundle b = null;
+        for (int i = 0; i < bs.length; i++) {
+            String sn = bs[i].getSymbolicName();
+            if (null == sn)
+                continue;
+            if (sn.equals("easygame")) {
+                b = bs[i];
+                break;
+            }
+        }
+        if (null == b)
+            throw new Exception("Test Failed");
+        String bv = (String) b.getHeaders().get("Bundle-Version");
+        if (null == bv)
+            throw new Exception("Test Failed");
+        if ( !(new Version(bv).equals(new Version(2, 0, 0))) )
+            throw new Exception("Test Failed");
+        
 		dp.uninstall();
         db.reset(null);
     }

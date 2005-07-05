@@ -59,7 +59,7 @@ public class TestDesktop extends Frame implements ActionListener {
         pa_left.setLayout(new GridLayout(0, 1));
         pa_right.setLayout(new GridLayout(2, 0));
         pa_right_top.setLayout(new GridLayout(0, 1));
-        pa_right_bottom.setLayout(new GridLayout(5, 1));
+        pa_right_bottom.setLayout(new GridLayout(4, 0));
         add(pa_left, BorderLayout.EAST);
         add(pa_right, BorderLayout.WEST);
         pa_right.add(pa_right_top);
