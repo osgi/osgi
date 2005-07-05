@@ -325,7 +325,7 @@ public class DmtSessionImpl implements DmtSession {
         final DmtSession session = this;
 		
         if (plugin == null)
-			throw new DmtException(uri, DmtException.OTHER_ERROR,
+			throw new DmtException(uri, DmtException.COMMAND_FAILED,
 					"No exec plugin registered for given node.");
         
         try {
