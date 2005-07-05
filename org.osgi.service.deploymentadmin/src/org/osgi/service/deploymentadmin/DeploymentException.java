@@ -20,12 +20,6 @@ package org.osgi.service.deploymentadmin;
 public class DeploymentException extends Exception {
     
     /**
-     * The manifest is not the first file in the stream or bundles don't 
-     * precede resource files.
-     */
-    public static final int CODE_ORDER_ERROR                = 0;
-    
-    /**
      * Missing mandatory manifest header.
      */
     public static final int CODE_MISSING_HEADER             = 1;
@@ -101,9 +95,24 @@ public class DeploymentException extends Exception {
     public static final int CODE_PROCESSOR_NOT_FOUND        = 13;
     
     /**
+     * The manifest is not the first file in the stream or bundles don't 
+     * precede resource files.
+     */
+    public static final int CODE_ORDER_ERROR                = 14;
+    
+    /**
+     * When a client requests a new session with an install or uninstall 
+     * operation, it must block that call until the earlier session
+     * is completed. The Deployment Admin service must throw a Deployment
+     * Exception with this code when the session can not be created after 
+     * an appropriate time out period.
+     */
+    public static final int CODE_TIMEOUT                    = 15;    
+    
+    /**
      * Other error condition.
      */
-    public static final int CODE_OTHER_ERROR                = 14;
+    public static final int CODE_OTHER_ERROR                = 0;
 
     private int       code;
     private String    message;
