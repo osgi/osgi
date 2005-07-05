@@ -104,6 +104,7 @@ public class DmtAdminImpl implements DmtAdmin {
 
 	public synchronized DmtSession getSession(String principal,
             String subtreeUri, int lockMode) throws DmtException {
+        checkLockMode(lockMode);
         
         PermissionInfo[] permissions = null;
         if(principal != null)
@@ -126,6 +127,14 @@ public class DmtAdminImpl implements DmtAdmin {
         return session;
 	}
 
+    private void checkLockMode(int lockMode) throws DmtException {
+        if (lockMode != DmtSession.LOCK_TYPE_SHARED
+                && lockMode != DmtSession.LOCK_TYPE_EXCLUSIVE
+                && lockMode != DmtSession.LOCK_TYPE_ATOMIC)
+            throw new DmtException(null, DmtException.OTHER_ERROR, 
+                    "Unknown lockMode '" + lockMode + "' specified.");
+    }
+    
     // Note, that this does not provide fair scheduling of waiting sessions,
     // the order of sessions depends on the order of thread activation when
     // notifyAll is called.  Some threads may be "starved", i.e. timed out.
@@ -183,7 +192,7 @@ public class DmtAdminImpl implements DmtAdmin {
                     "The 'nodeName' parameter must not be empty.");        
 
 		StringBuffer nameBuffer;
-        if(nodeName.length() > segmentLengthLimit) {
+        if(segmentLengthLimit > 0 && nodeName.length() > segmentLengthLimit) {
             // create node name hash
 			nameBuffer = getHash(nodeName);
         } else {
