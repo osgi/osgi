@@ -23,14 +23,19 @@ package org.osgi.service.dmt;
  * several valid MIME types, or to differentiate between normal and automatic
  * dynamic nodes.
  * <p>
- * The Dmt Admin calls the methods {@link #isValidName} and
- * {@link #isValidValue} to check the validity of the name and value of a node.
- * These should do a full check on their parameter and return <code>false</code>
- * if it does not conform to all constraints.  Some methods overlap the purpose 
- * of the validate methods (e.g. {@link #getFormat} or {@link #getValidNames}),
- * these are not checked by Dmt Admin, but are only for external use, for 
- * example user interfaces.  It is indicated in the description of the methods 
- * if the Dmt Admin does not enforce the constraints defined by it.  
+ * The Dmt Admin calls the methods {@link #isValidName} before creating nodes
+ * and {@link #isValidValue} before setting leaf nodes, to check the validity of
+ * the name/value. These should perform some checks on their parameter and
+ * return <code>false</code> if some constraint is not met. The plugin may
+ * carry out more thorough (more expensive) checks when the node is actually
+ * created or set, so returning <code>true</code> in the validation methods
+ * does not guarantee that the following operation will succeed.
+ * <p>
+ * Some methods overlap the purpose of the validate methods (e.g.
+ * {@link #getFormat} or {@link #getValidNames}), these are not checked by Dmt
+ * Admin, but are only for external use, for example in user interfaces. It is
+ * indicated in the description of the methods if the Dmt Admin does not enforce
+ * the constraints defined by it.
  * <p>
  * Most of the methods of this class return <code>null</code> if a certain
  * piece of meta information is not defined for the node or providing this
@@ -250,17 +255,22 @@ public interface DmtMetaNode {
     int getFormat();
 
     /**
-     * Checks whether the given value is valid for this node.  This method 
-     * should do a full check on the value, including (but not limited to)
-     * checking the format, well-formedness, range, etc. of the value.  This
-     * method should be consistent with the constraints defined by the
-     * {@link #getFormat}, {@link #getValidValues}, {@link #getMin} and
-     * {@link #getMax} methods (if applicable), the Dmt Admin only calls this
-     * method for value validation.
+     * Checks whether the given value is valid for this node. This method can be
+     * used to ensure that the value has the correct format and range, that it
+     * is well formed, etc. This method should be consistent with the
+     * constraints defined by the {@link #getFormat}, {@link #getValidValues},
+     * {@link #getMin} and {@link #getMax} methods (if applicable), as the Dmt
+     * Admin only calls this method for value validation.
+     * <p>
+     * This method may return <code>true</code> even if not all aspects of the
+     * value have been checked, expensive operations (for example those that
+     * require external resources) need not be performed here. The actual value
+     * setting method may still indicate that the value is invalid.
      * 
      * @param value the value to check for validity
-     * @return <code>true</code> if the specified value is valid for the node
-     *         described by this meta-node
+     * @return <code>false</code> if the specified value is found to be invalid 
+     *         for the node described by this meta-node, <code>true</code>
+     *         otherwise
      */
     boolean isValidValue(DmtData value);
 
@@ -287,10 +297,16 @@ public interface DmtMetaNode {
      * This method should be consistent with the values returned by
      * {@link #getValidNames} (if any), the Dmt Admin only calls this method for
      * name validation.
+     * <p>
+     * This method may return <code>true</code> even if not all aspects of the
+     * name have been checked, expensive operations (for example those that
+     * require external resources) need not be performed here. The actual node 
+     * creation may still indicate that the node name is invalid.
      * 
      * @param name the node name to check for validity
-     * @return <code>true</code> if the specified name is valid for the node
-     *         described by this meta-node
+     * @return <code>false</code> if the specified name is found to be invalid 
+     *         for the node described by this meta-node, <code>true</code>
+     *         otherwise
      */
     boolean isValidName(String name);
 }
