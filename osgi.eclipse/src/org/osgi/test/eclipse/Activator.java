@@ -28,6 +28,9 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		try {
+			String port = System.getProperty("org.osgi.service.http.port", "8000");
+			System.setProperty("org.osgi.service.http.port", port);
+			
 			Activator.context = context;
 			log = getLog();
 			super.start(context);
