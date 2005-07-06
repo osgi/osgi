@@ -99,6 +99,13 @@ public class CMControl extends DefaultTestBundleControl {
 	/**
 	 * Test that the methods throws IllegalStateException when operating on a
 	 * deleted Configuration
+	 * 
+	 * @spec Configuration.delete()
+	 * @spec Configuration.getBundleLocation()
+	 * @spec Configuration.getFactoryPid()
+	 * @spec Configuration.getPid()
+	 * @spec Configuration.getProperties()
+	 * @spec Configuration.setBundleLocation(String)
 	 */
 	public void testDeletedConfiguration() throws Exception {
 		String pid = getPackage();
@@ -143,6 +150,19 @@ public class CMControl extends DefaultTestBundleControl {
 		}
 	}
 
+	/**
+	 * TODO comments
+	 * 
+	 * @spec ConfigurationAdmin.getConfiguration(String)
+	 * @spec ConfigurationAdmin.getConfiguration(String,String)
+	 * @spec Configuration.getBundleLocation()
+	 * @spec Configuration.getFactoryPid()
+	 * @spec Configuration.getPid()
+	 * @spec Configuration.getProperties()
+	 * @spec Configuration.setBundleLocation(String)
+	 * 
+	 * @throws Exception
+	 */
 	public void testGetConfiguration() throws Exception {
 		String pid = getPackage();
 		String thisLocation = getLocation();
@@ -177,6 +197,18 @@ public class CMControl extends DefaultTestBundleControl {
 		conf.delete();
 	}
 
+	/**
+	 * TODO comments
+	 * 
+	 * @spec ConfigurationAdmin.getConfiguration(String,String)
+	 * @spec Configuration.getBundleLocation()
+	 * @spec Configuration.getFactoryPid()
+	 * @spec Configuration.getPid()
+	 * @spec Configuration.delete()
+	 * @spec Configuration.getProperties()
+	 * 
+	 * @throws Exception
+	 */
 	public void testGetConfigurationWithLocation() throws Exception {
 		String pid1 = getPackage() + ".1";
 		String pid2 = getPackage() + ".2";
@@ -207,6 +239,15 @@ public class CMControl extends DefaultTestBundleControl {
 		conf.delete();
 	}
 
+	/**
+	 * TODO comments
+	 * 
+	 * @spec ConfigurationAdmin.getConfiguration(String)
+	 * @spec Configuration.update()
+	 * @spec Configuration.getProperties()
+	 * 
+	 * @throws Exception
+	 */
 	public void testUpdate() throws Exception {
 		String pid = "pidX";
 		Configuration conf = cm.getConfiguration(pid);
@@ -248,6 +289,14 @@ public class CMControl extends DefaultTestBundleControl {
 		}
 	}
 
+	/**
+	 * Tests if we really get the same configuration.
+	 * 
+	 * @spec ConfigurationAdmin.getConfiguration(String)
+	 * @spec Configuration.update()
+	 * @spec Configuration.getPid()
+	 * @throws Exception
+	 */
 	public void _testEquals() throws Exception {
 		Configuration conf1 = cm.getConfiguration("pidA");
 		Configuration conf2 = cm.getConfiguration("pidA");
@@ -255,6 +304,15 @@ public class CMControl extends DefaultTestBundleControl {
 		assertTrue("Equal configurations", equals(conf1, conf2));
 	}
 
+	/**
+	 * Tests listing of configurations.
+	 * 
+	 * @spec ConfigurationAdmin.getConfiguration(String)
+	 * @spec ConfigurationAdmin.listConfigurations(String)
+	 * @spec Configuration.getPid()
+	 * @spec Configuration.delete()
+	 * @throws Exception
+	 */
 	public void testListConfigurations() throws Exception {
 		/* Create configurations */
 		Configuration[] configs = {cm.getConfiguration("pid1")};
@@ -303,6 +361,12 @@ public class CMControl extends DefaultTestBundleControl {
 	/**
 	 * Tests to register a ManagedService when a configuration is existing for
 	 * it.
+	 * 
+	 * @spec ConfigurationAdmin.getConfiguration(String)
+	 * @spec Configuration.update(Dictionary)
+	 * @spec Configuration.getPid()
+	 * @spec Configuration.getProperties()
+	 * @spec Configuration.getBundleLocation()
 	 */
 	public void testManagedServiceRegistration() throws Exception {
 		String pid = "somepid";
@@ -333,6 +397,7 @@ public class CMControl extends DefaultTestBundleControl {
 		// assertNotSame("Properties same?", props, ms.getProperties());
 	}
 
+	
 	private Dictionary getManagedProperties(String pid) throws Exception {
 		Semaphore semaphore = new Semaphore();
 		ManagedServiceImpl ms = createManagedService(pid, semaphore);
@@ -340,6 +405,13 @@ public class CMControl extends DefaultTestBundleControl {
 		return ms.getProperties();
 	}
 
+	/**
+	 * 
+	 * @spec ConfigurationAdmin.getConfiguration(String)
+	 * @spec Configuration.update(Dictionary)
+	 * @spec Configuration.getProperties()
+	 * @throws Exception
+	 */
 	public void testManagedProperties() throws Exception {
 		String pid = "somepid";
 		/* Set up the configuration */
@@ -448,14 +520,47 @@ public class CMControl extends DefaultTestBundleControl {
 		/* Check if the properties are case independent */
 	}
 
+	/**
+	 * Test created Factory configuration without location.
+	 * 
+	 * @spec ConfigurationAdmin.createFactoryConfiguration(String)
+	 * @spec Configuration.update(Dictionary)
+	 * @spec Configuration.getPid()
+	 * @spec Configuration.getFactoryPid()
+	 * @spec Configuration.getProperties()
+	 * @spec Configuration.getBundleLocation()
+	 * @throws Exception
+	 */
 	public void testCreateFactoryConfiguration() throws Exception {
 		commonTestCreateFactoryConfiguration(false, getLocation());
 	}
 
+	/**
+	 * Test created Factory configuration with location.
+	 * 
+	 * @spec ConfigurationAdmin.createFactoryConfiguration(String,String)
+	 * @spec Configuration.update(Dictionary)
+	 * @spec Configuration.getPid()
+	 * @spec Configuration.getFactoryPid()
+	 * @spec Configuration.getProperties()
+	 * @spec Configuration.getBundleLocation()
+	 * @throws Exception
+	 */
 	public void testCreateFactoryConfigurationWithLocation() throws Exception {
 		commonTestCreateFactoryConfiguration(true, "http://neverneverland/");
 	}
 
+	/**
+	 * Test created Factory configuration with null location.
+	 * 
+	 * @spec ConfigurationAdmin.createFactoryConfiguration(String,String)
+	 * @spec Configuration.update(Dictionary)
+	 * @spec Configuration.getPid()
+	 * @spec Configuration.getFactoryPid()
+	 * @spec Configuration.getProperties()
+	 * @spec Configuration.getBundleLocation()
+	 * @throws Exception
+	 */
 	public void testCreateFactoryConfigurationWithNullLocation()
 			throws Exception {
 		commonTestCreateFactoryConfiguration(true, null);
@@ -486,6 +591,17 @@ public class CMControl extends DefaultTestBundleControl {
 		}
 	}
 
+	/**
+	 * Test Managed Service Factory.
+	 * 
+	 * @spec ConfigurationAdmin.createFactoryConfiguration(String)
+	 * @spec Configuration.update(Dictionary)
+	 * @spec Configuration.getPid()
+	 * @spec Configuration.getFactoryPid()
+	 * @spec Configuration.getProperties()
+	 * @spec ManagedServiceFactory.updated(String,Dictionary)
+	 * @throws Exception
+	 */
 	public void testManagedServiceFactory() throws Exception {
 		final int NUMBER_OF_CONFIGS = 3;
 		String factorypid = "somefactorypid";
@@ -520,7 +636,15 @@ public class CMControl extends DefaultTestBundleControl {
 	 * configuration service. The event data should match the data that
 	 * originated the event (pid, factorypid...).
 	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec ConfigurationAdmin.getConfiguration(String)
+	 * @spec Configuration.update(Dictionary)
+	 * @spec ConfigurationListener.configurationEvent(ConfigurationEvent)
+	 * @spec ConfigurationEvent.getPid()
+	 * @spec ConfigurationEvent.getFactoryPid()
+	 * @spec ConfigurationEvent.getReference()
+	 * @spec ConfigurationEvent.getType()
+	 * @spec Configuration.update(Dictionary)
+	 * @throws Exception
 	 */
 	public void testUpdateConfigEvent() throws Exception {
 		ConfigurationListenerImpl cl = null;
@@ -561,6 +685,14 @@ public class CMControl extends DefaultTestBundleControl {
 	 * configuration service factory. The event data should match the data that
 	 * originated the event (pid, factorypid...).
 	 * 
+	 * @spec ConfigurationAdmin.createFactoryConfiguration(String)
+	 * @spec Configuration.getPid()
+	 * @spec Configuration.update(Dictionary)
+	 * @spec ConfigurationListener.configurationEvent(ConfigurationEvent)
+	 * @spec ConfigurationEvent.getPid()
+	 * @spec ConfigurationEvent.getFactoryPid()
+	 * @spec ConfigurationEvent.getReference()
+	 * @spec ConfigurationEvent.getType()
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 */
 	public void testUpdateConfigFactoryEvent() throws Exception {
@@ -606,6 +738,16 @@ public class CMControl extends DefaultTestBundleControl {
 	 * empty (<code>ConfigurationAdmin.listConfigurations(null)</code> must
 	 * not contain the deleted <code>Configuration</code>).
 	 * 
+	 * @spec ConfigurationAdmin.getConfiguration(String)
+	 * @spec Configuration.getPid()
+	 * @spec Configuration.delete()
+	 * @spec Configuration.update(Dictionary)
+	 * @spec ConfigurationListener.configurationEvent(ConfigurationEvent)
+	 * @spec ConfigurationEvent.getPid()
+	 * @spec ConfigurationEvent.getFactoryPid()
+	 * @spec ConfigurationEvent.getReference()
+	 * @spec ConfigurationEvent.getType()
+	 * @spec ConfigurationAdmin.listConfigurations(String)
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 */
 	public void testDeleteConfigEvent() throws Exception {
@@ -648,6 +790,16 @@ public class CMControl extends DefaultTestBundleControl {
 	 * <code>ConfigurationAdmin.listConfigurations(null)</code> must not
 	 * contain the deleted <code>Configuration</code>).
 	 * 
+	 * @spec ConfigurationAdmin.createFactoryConfiguration(String)
+	 * @spec Configuration.getPid()
+	 * @spec Configuration.delete()
+	 * @spec Configuration.update(Dictionary)
+	 * @spec ConfigurationListener.configurationEvent(ConfigurationEvent)
+	 * @spec ConfigurationEvent.getPid()
+	 * @spec ConfigurationEvent.getFactoryPid()
+	 * @spec ConfigurationEvent.getReference()
+	 * @spec ConfigurationEvent.getType()
+	 * @spec ConfigurationAdmin.listConfigurations(String)
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 */
 	public void testDeleteConfigFactoryEvent() throws Exception {
@@ -689,6 +841,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 * try to register a <code>ConfigurationListener</code>. An exception
 	 * must be thrown.
 	 * 
+	 * @spec permissions
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 */
 	public void testConfigListenerPermission() throws Exception {
@@ -713,6 +866,15 @@ public class CMControl extends DefaultTestBundleControl {
 	 * <code>ConfigurationListener</code> should get the event even if it was
 	 * generated from a different bundle.
 	 * 
+	 * @spec ConfigurationAdmin.getConfiguration(String)
+	 * @spec Configuration.getPid()
+	 * @spec Configuration.delete()
+	 * @spec Configuration.update(Dictionary)
+	 * @spec ConfigurationListener.configurationEvent(ConfigurationEvent)
+	 * @spec ConfigurationEvent.getPid()
+	 * @spec ConfigurationEvent.getFactoryPid()
+	 * @spec ConfigurationEvent.getReference()
+	 * @spec ConfigurationEvent.getType()
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 */
 	public void testConfigEventFromDifferentBundle() throws Exception {
@@ -772,6 +934,11 @@ public class CMControl extends DefaultTestBundleControl {
 	 * Tests if a configuration plugin is invoked when only a configuration
 	 * listener is registered (no managed service). It should not be invoked.
 	 * 
+	 * @spec ConfigurationAdmin.getConfiguration(String)
+	 * @spec Configuration.update(Dictionary)
+	 * @spec ConfigurationListener.configurationEvent(ConfigurationEvent)
+	 * @spec ConfigurationPlugin.modifyConfiguration(ServiceReference,Dictionary)
+	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 */
 	public void testConfigurationPluginService() throws Exception {
@@ -805,6 +972,11 @@ public class CMControl extends DefaultTestBundleControl {
 	 * Tests if a configuration plugin is invoked when only a configuration
 	 * listener is registered (managed service factory). It should not be
 	 * invoked.
+	 * 
+	 * @spec ConfigurationAdmin.createFactoryConfiguration(String)
+	 * @spec Configuration.update(Dictionary)
+	 * @spec ConfigurationListener.configurationEvent(ConfigurationEvent)
+	 * @spec ConfigurationPlugin.modifyConfiguration(ServiceReference,Dictionary)
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 */
