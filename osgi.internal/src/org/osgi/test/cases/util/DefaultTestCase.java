@@ -174,7 +174,7 @@ public class DefaultTestCase
 		}
 		
 		ServerSocket socket;
-		int			 attempts[] = new int[] { 80, 8080, 8081, 8000,9000 };
+		int			 attempts[] = new int[] { 80, 8080, 8081, 8082, 8083, 8000,9000};
 		
 		for ( int i=0; i<attempts.length; i++ )
 		try {
