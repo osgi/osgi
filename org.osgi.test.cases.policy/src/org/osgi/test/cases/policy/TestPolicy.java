@@ -39,10 +39,12 @@ package org.osgi.test.cases.policy;
 import org.osgi.test.cases.util.DefaultTestCase;
 
 /**
- *  @testcase org.osgi.service.condpermadmin
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>Policy<code> service, according to MEG reference
- *                     documentation.
+ * This Test Case Validates the implementation of
+ * <code>Policy<code> service, according to MEG reference
+ * documentation.
+ *                     
+ *  @testcase org.osgi.util.gsm
+ *  @testcase org.osgi.util.mobile
  */
 public class TestPolicy extends DefaultTestCase {
 

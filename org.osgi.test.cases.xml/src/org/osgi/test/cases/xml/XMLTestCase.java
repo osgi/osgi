@@ -31,6 +31,7 @@ import org.osgi.test.cases.util.DefaultTestCase;
 
 /**
  * This is the test-case control bundle for the XML Parser Service test suite
+ * 
  *  @testcase org.osgi.util.xml
  */
 public class XMLTestCase extends DefaultTestCase {
