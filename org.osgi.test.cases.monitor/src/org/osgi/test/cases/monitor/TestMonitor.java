@@ -40,8 +40,9 @@ package org.osgi.test.cases.monitor;
 import org.osgi.test.cases.util.DefaultTestCase;
 
 /**
- * @generalDescription This Test Case Validates the implementation
- *                     according to RFC-84.
+ * This Test Case Validates the implementation according to RFC-84.
+ * 
+ * @testcase org.osgi.service.monitor
  */
 
 public class TestMonitor extends DefaultTestCase {

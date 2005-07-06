@@ -70,16 +70,16 @@ public class ToString {
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_DER,
-					MonitorTestControl.SV_LONG_VALUE);
+					MonitorTestControl.SV_INTEGER_VALUE);
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] { "sv.toString()",
 							"StatusVariable("+
 									MonitorTestControl.SV_NAME1
 									+ ", DER, " + sv.getTimeStamp()
-									+ ", LONG, " + sv.getLong() + ")" }), "StatusVariable("
+									+ ", LONG, " + sv.getInteger() + ")" }), "StatusVariable("
 					+ MonitorTestControl.SV_NAME1 + ", DER, "
-					+ sv.getTimeStamp() + ", LONG, " + sv.getLong() + ")", sv
+					+ sv.getTimeStamp() + ", LONG, " + sv.getInteger() + ")", sv
 					.toString());
 
 		} catch (Exception e) {
@@ -98,17 +98,17 @@ public class ToString {
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_GAUGE,
-					MonitorTestControl.SV_DOUBLE_VALUE);
+					MonitorTestControl.SV_FLOAT_VALUE);
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] { "sv.toString()",
 							"StatusVariable("
 									+ MonitorTestControl.SV_NAME1
 									+ ", GAUGE, " + sv.getTimeStamp()
-									+ ", DOUBLE, " + sv.getDouble() + ")"
+									+ ", FLOAT, " + sv.getFloat() + ")"
 							}), "StatusVariable("
 					+ MonitorTestControl.SV_NAME1 + ", GAUGE, "
-					+ sv.getTimeStamp() + ", DOUBLE, " + sv.getDouble() + ")",
+					+ sv.getTimeStamp() + ", FLOAT, " + sv.getFloat() + ")",
 					sv.toString());
 
 		} catch (Exception e) {

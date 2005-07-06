@@ -89,11 +89,11 @@ public class Equals {
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_DOUBLE_VALUE);
+					MonitorTestControl.SV_FLOAT_VALUE);
 			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_DOUBLE_VALUE);
+					MonitorTestControl.SV_FLOAT_VALUE);
 			tbc
 					.assertTrue(
 							MessagesConstants
@@ -117,12 +117,12 @@ public class Equals {
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_DOUBLE_VALUE);
+					MonitorTestControl.SV_FLOAT_VALUE);
 
 			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_DOUBLE_VALUE + 10);
+					MonitorTestControl.SV_FLOAT_VALUE + 10);
 
 			tbc
 					.assertTrue(
@@ -147,12 +147,12 @@ public class Equals {
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_DOUBLE_VALUE);
+					MonitorTestControl.SV_FLOAT_VALUE);
 
 			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_DER,
-					MonitorTestControl.SV_DOUBLE_VALUE);
+					MonitorTestControl.SV_FLOAT_VALUE);
 
 			tbc
 					.assertTrue(
@@ -177,12 +177,12 @@ public class Equals {
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_DOUBLE_VALUE);
+					MonitorTestControl.SV_FLOAT_VALUE);
 
 			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME2,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_DOUBLE_VALUE);
+					MonitorTestControl.SV_FLOAT_VALUE);
 
 			tbc
 					.assertTrue(
@@ -230,7 +230,7 @@ public class Equals {
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_DOUBLE_VALUE);
+					MonitorTestControl.SV_FLOAT_VALUE);
 
 			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
@@ -260,11 +260,11 @@ public class Equals {
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_LONG_VALUE);
+					MonitorTestControl.SV_INTEGER_VALUE);
 			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_LONG_VALUE);
+					MonitorTestControl.SV_INTEGER_VALUE);
 			tbc
 					.assertTrue(
 							MessagesConstants
@@ -288,12 +288,12 @@ public class Equals {
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_LONG_VALUE);
+					MonitorTestControl.SV_INTEGER_VALUE);
 
 			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_LONG_VALUE + 10);
+					MonitorTestControl.SV_INTEGER_VALUE + 10);
 
 			tbc
 					.assertTrue(
@@ -318,12 +318,12 @@ public class Equals {
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_LONG_VALUE);
+					MonitorTestControl.SV_INTEGER_VALUE);
 
 			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_DER,
-					MonitorTestControl.SV_LONG_VALUE);
+					MonitorTestControl.SV_INTEGER_VALUE);
 
 			tbc
 					.assertTrue(
@@ -348,12 +348,12 @@ public class Equals {
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_LONG_VALUE);
+					MonitorTestControl.SV_INTEGER_VALUE);
 
 			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME2,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_LONG_VALUE);
+					MonitorTestControl.SV_INTEGER_VALUE);
 
 			tbc
 					.assertTrue(
@@ -378,7 +378,7 @@ public class Equals {
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_LONG_VALUE);
+					MonitorTestControl.SV_INTEGER_VALUE);
 
 			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
@@ -503,7 +503,7 @@ public class Equals {
 			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_LONG_VALUE);
+					MonitorTestControl.SV_INTEGER_VALUE);
 
 			tbc
 					.assertTrue(
@@ -651,7 +651,7 @@ public class Equals {
 			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_LONG_VALUE);
+					MonitorTestControl.SV_INTEGER_VALUE);
 
 			tbc
 					.assertTrue(

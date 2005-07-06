@@ -105,9 +105,9 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 
 	public final static int INVALID_CM = -1;
 
-	public final static long SV_LONG_VALUE = 1;
+	public final static long SV_INTEGER_VALUE = 1;
 
-	public final static double SV_DOUBLE_VALUE = 1.0;
+	public final static float SV_FLOAT_VALUE = (float)1.0;
 
 	public final static boolean SV_BOOLEAN_VALUE = false;
 

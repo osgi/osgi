@@ -64,8 +64,8 @@ public class StatusVariableConstants {
 		tbc.assertEquals("Asserting CM_DER value", 1, org.osgi.service.monitor.StatusVariable.CM_DER);
 		tbc.assertEquals("Asserting CM_GAUGE value", 2, org.osgi.service.monitor.StatusVariable.CM_GAUGE);
 		tbc.assertEquals("Asserting CM_SI value", 3, org.osgi.service.monitor.StatusVariable.CM_SI);
-		tbc.assertEquals("Asserting TYPE_LONG value", 0, org.osgi.service.monitor.StatusVariable.TYPE_LONG);
-		tbc.assertEquals("Asserting TYPE_DOUBLE value", 1, org.osgi.service.monitor.StatusVariable.TYPE_DOUBLE);
+		tbc.assertEquals("Asserting TYPE_INTEGER value", 0, org.osgi.service.monitor.StatusVariable.TYPE_INTEGER);
+		tbc.assertEquals("Asserting TYPE_FLOAT value", 1, org.osgi.service.monitor.StatusVariable.TYPE_FLOAT);
 		tbc.assertEquals("Asserting TYPE_STRING value", 2, org.osgi.service.monitor.StatusVariable.TYPE_STRING);
 		tbc.assertEquals("Asserting TYPE_BOOLEAN value", 3, org.osgi.service.monitor.StatusVariable.TYPE_BOOLEAN);
 	}
