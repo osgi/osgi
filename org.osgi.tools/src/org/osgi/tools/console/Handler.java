@@ -243,6 +243,7 @@ class Handler extends Thread {
 	static Vector	_history	= new Vector();
 
 	String getLine(boolean _echo, boolean _break) throws IOException {
+		_echo = false;
 		byte buffer[] = new byte[8192];
 		int index = 0;
 		int c = _in.read();

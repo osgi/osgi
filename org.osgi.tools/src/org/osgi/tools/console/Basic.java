@@ -508,10 +508,11 @@ public class Basic implements CommandProvider {
 						result.addElement(entry);
 					break;
 				default :
-					result.insertElementAt(entry, 0);
+					result.addElement(entry);
 					break;
 			}
 		}
+		Collections.reverse( result );
 		return result;
 	}
 
