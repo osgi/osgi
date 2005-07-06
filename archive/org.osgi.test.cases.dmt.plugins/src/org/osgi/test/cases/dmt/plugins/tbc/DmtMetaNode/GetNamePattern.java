@@ -75,10 +75,11 @@ public class GetNamePattern {
 			DmtMetaNode metanode = session
 					.getMetaNode(TestMetaNodeDataPluginActivator.TEST_METANODE_PLUGIN_ROOT);
 
-			tbc
-					.assertEquals("Asserts getNamePattern method",
-							TestMetaNode.DEFAULT_NAME_REGEXP, metanode
-									.getNamePattern());
+// TODO patterns are gone
+//			tbc
+//					.assertEquals("Asserts getNamePattern method",
+//							TestMetaNode.DEFAULT_NAME_REGEXP, metanode
+//									.getNamePattern());
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
