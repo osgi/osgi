@@ -144,4 +144,14 @@ public class ApplicationMetaNode implements DmtMetaNode {
         // TODO Auto-generated method stub
         return true;
     }
+
+	public String getPattern() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getNamePattern() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
