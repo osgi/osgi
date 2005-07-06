@@ -5,7 +5,7 @@ import java.util.*;
 
 public class PermissionResource extends FileResource {
 	PermissionResource(BTool btool, File file) {
-		super(btool, "META-INF/permissions.perm", file, true);
+		super(btool, "OSGI-INF/permissions.perm", file, true);
 	}
 
 	public String replace(String key) throws IOException {
