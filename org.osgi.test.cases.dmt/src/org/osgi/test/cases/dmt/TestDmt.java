@@ -28,12 +28,12 @@ package org.osgi.test.cases.dmt;
 import org.osgi.test.cases.util.DefaultTestCase;
 
 /**
- * @author Andre Assad
  * 
+ * This Test Case Validates the implementation of
+ * <code>Dmt<code> class, according to MEG reference
+ * documentation.
+ * @author Andre Assad
  * @testcase org.osgi.service.dmt
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>Dmt<code> class, according to MEG reference
- *                     documentation.
  */
 public class TestDmt extends DefaultTestCase {
 
