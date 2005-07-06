@@ -243,4 +243,16 @@ public class TestPluginMetaDataMetaNode implements DmtMetaNode {
 	public void setValidValues(DmtData[] validValues) {
 		this.validValues = validValues;
 	}
+
+
+	public boolean isValidValue(DmtData value) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	public boolean isValidName(String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

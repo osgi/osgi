@@ -164,4 +164,14 @@ public class TestMetaNode implements DmtMetaNode {
 		return DEFAULT_NAME_REGEXP;
 	}
 
+	public boolean isValidValue(DmtData value) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isValidName(String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

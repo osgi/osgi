@@ -115,4 +115,14 @@ public class TestPluginMetaNode implements DmtMetaNode {
 	public String[] getMimeTypes() {
 		return null;
 	}
+
+	public boolean isValidValue(DmtData value) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isValidName(String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
