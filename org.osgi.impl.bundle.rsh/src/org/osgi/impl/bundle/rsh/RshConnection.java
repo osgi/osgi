@@ -133,9 +133,8 @@ public class RshConnection extends URLConnection {
 			urlConnection = httpURL.openConnection();
 		InputStream is = urlConnection.getInputStream();
 		DataInputStream dis = new DataInputStream(is);
-		int offset;
-		int headlen = dis.readInt();
-		short ver = dis.readShort();
+		dis.readInt();
+		dis.readShort();
 		byte serverFG[] = new byte[16];
 		dis.read(serverFG);
 		int maclen = dis.readInt();

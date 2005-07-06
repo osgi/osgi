@@ -1,8 +1,5 @@
 package org.osgi.impl.service.deploymentadmin;
 
-import java.util.Iterator;
-import java.util.Vector;
-
 import org.osgi.framework.Bundle;
 
 public class TransactionRecord {
@@ -50,22 +47,22 @@ public class TransactionRecord {
         		"----------------------------------------------------]";
     }
 
-    private String breakLines(String str, int max) {
-        String s = new String(str);
-        Vector v = new Vector();
-        while (s.length() > max) {
-            String l = s.substring(0, Math.min(s.length(), max));
-            v.add(l);
-            s = s.substring(Math.min(s.length(), max));
-        }
-        v.add(s);
-        
-        StringBuffer ret = new StringBuffer();
-        for (Iterator iter = v.iterator(); iter.hasNext();) {
-            String element = (String) iter.next();
-            ret.append(element);
-        }
-        return ret.toString();
-    }
+//    private String breakLines(String str, int max) {
+//        String s = new String(str);
+//        Vector v = new Vector();
+//        while (s.length() > max) {
+//            String l = s.substring(0, Math.min(s.length(), max));
+//            v.add(l);
+//            s = s.substring(Math.min(s.length(), max));
+//        }
+//        v.add(s);
+//        
+//        StringBuffer ret = new StringBuffer();
+//        for (Iterator iter = v.iterator(); iter.hasNext();) {
+//            String element = (String) iter.next();
+//            ret.append(element);
+//        }
+//        return ret.toString();
+//    }
 
 }

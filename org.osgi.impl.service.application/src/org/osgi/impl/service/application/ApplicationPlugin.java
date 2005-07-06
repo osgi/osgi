@@ -387,7 +387,6 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 				
 				checkUniqueID( nodeUri, path[ 1 ] );
 				
-				String uid = path[1];
 				return propertyNames;
 			}
 			/* ./OSGi/app_instances/<application.pid> */
@@ -418,7 +417,6 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 				
 				checkUniqueID( nodeUri, path[ 1 ] );
 				
-				String param = path[ 3 ];
 				String key = path[ 1 ] + "/" + path[3];
 				
 				Hashtable ht = (Hashtable) execIds.get(key);

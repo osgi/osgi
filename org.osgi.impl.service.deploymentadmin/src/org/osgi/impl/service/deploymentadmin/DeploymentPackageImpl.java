@@ -140,7 +140,6 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             Attributes attrs = (Attributes) entries.get(resPath);
             String bSn = (String) attrs.getValue(DAConstants.BUNDLE_SYMBOLIC_NAME);
             String bVer = (String) attrs.getValue(DAConstants.BUNDLE_VERSION);
-            String bCustStr = (String) attrs.getValue(DAConstants.CUSTOMIZER);
             String missingStr = (String) attrs.getValue(DAConstants.MISSING);
             boolean missing = (missingStr != null && "true".equalsIgnoreCase(missingStr.trim()));
             boolean isBundle = null != bSn && null != bVer; 
@@ -451,7 +450,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                         "Missing deployment package version in: " + dp.getName());
             try {
                 String s = (String) dp.mainSection.get(DAConstants.DP_VERSION);
-                Version version = new Version(s);
+                new Version(s);
             }
             catch (Exception e) {
                 throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
@@ -461,7 +460,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             if (dp.fixPack()) {
 	            try {
 	                String s = (String) dp.mainSection.get(DAConstants.DP_FIXPACK);
-	                VersionRange versionRange = new VersionRange(s);
+	                new VersionRange(s);
 	            }
 	            catch (Exception e) {
 	                throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,

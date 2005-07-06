@@ -357,8 +357,6 @@ public class ConfigurationImpl implements Configuration, Serializable {
 
 	private static boolean isCorrectType(Dictionary props) {
 		Enumeration e = props.keys();
-		Object o;
-		Class c;
 		String key;
 		while (e.hasMoreElements()) {
 			try {

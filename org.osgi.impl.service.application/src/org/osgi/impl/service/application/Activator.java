@@ -26,7 +26,6 @@ public class Activator extends Object implements
 		BundleActivator {
 	static  Scheduler					scheduler;
 	static  BundleContext 		bc;
-	private ApplicationPlugin appPlugin;
 
 	public Activator() {
 		super();

@@ -17,40 +17,15 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
-import java.io.File;
-import java.io.FilePermission;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.AccessControlContext;
-import java.security.AccessController;
-import java.security.Permission;
-import java.security.PrivilegedAction;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.io.*;
+import java.security.*;
+import java.util.*;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.Version;
+import org.osgi.framework.*;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Entry;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
-import org.osgi.service.deploymentadmin.DeploymentCustomizerPermission;
-import org.osgi.service.deploymentadmin.DeploymentException;
-import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.DeploymentSession;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
-import org.osgi.service.packageadmin.PackageAdmin;
-import org.osgi.service.permissionadmin.PermissionAdmin;
-import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.service.deploymentadmin.*;
+import org.osgi.service.permissionadmin.*;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class DeploymentSessionImpl implements DeploymentSession {
@@ -323,16 +298,16 @@ public class DeploymentSessionImpl implements DeploymentSession {
         closeTrackers();
     }
     
-    private void refreshPackages() {
-        final PackageAdmin packAdmin = (PackageAdmin) trackPackAdmin.getService();
-        if (null != packAdmin) {
-            AccessController.doPrivileged(new PrivilegedAction() {
-                public Object run() {
-                    packAdmin.refreshPackages(null);
-                    return null;
-                }});
-        }
-    }
+//    private void refreshPackages() {
+//        final PackageAdmin packAdmin = (PackageAdmin) trackPackAdmin.getService();
+//        if (null != packAdmin) {
+//            AccessController.doPrivileged(new PrivilegedAction() {
+//                public Object run() {
+//                    packAdmin.refreshPackages(null);
+//                    return null;
+//                }});
+//        }
+//    }
 
     boolean uninstall(boolean forced) throws DeploymentException {
         this.forced = forced;
@@ -618,7 +593,6 @@ public class DeploymentSessionImpl implements DeploymentSession {
     }
     
     private AccessControlContext fetchAccessControlContext(List certChains) {
-        AccessControlContext ret = null;
         ServiceReference sref = trackCondPerm.getServiceReference();
         if (null != sref) {
             ConditionalPermissionAdmin cpa = (ConditionalPermissionAdmin) 

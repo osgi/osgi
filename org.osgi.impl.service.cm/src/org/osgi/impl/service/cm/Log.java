@@ -41,14 +41,14 @@ public class Log implements ServiceListener {
 	private final static String		DEBUG			= "DEBUG";
 	private final static String		WARN			= "WARNING";
 	private final static String		ERROR			= "ERROR";
-	private final static String		PROP_DEBUG		= "cm.debug";
+	//private final static String		PROP_DEBUG		= "cm.debug";
 	private final static String		PROP_CONSOLE	= "cm.console";
 	private static BundleContext	bc;
 	private static ServiceReference	sRef;
 	private static LogService		logService;
 	private static long				bundleId;
 	private static boolean			printOnConsole;
-	private static boolean			debug;
+	//private static boolean			debug;
 
 	/**
 	 * Constructs a Log, trying to get Log Service.
@@ -60,7 +60,7 @@ public class Log implements ServiceListener {
 		Log.bc = bc;
 		bundleId = bc.getBundle().getBundleId();
 		printOnConsole = Boolean.getBoolean(PROP_CONSOLE);
-		debug = Boolean.getBoolean(PROP_DEBUG);
+		//debug = Boolean.getBoolean(PROP_DEBUG);
 		sRef = bc.getServiceReference(LogService.class.getName());
 		if (sRef != null) {
 			logService = (LogService) bc.getService(sRef);

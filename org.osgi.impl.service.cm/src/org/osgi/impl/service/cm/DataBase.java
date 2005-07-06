@@ -356,7 +356,7 @@ public class DataBase {
 		dataRAF.seek(info.address + info.keyLength);
 		if (type == TYPE_BYTE_ARR) {
 			byte[] data = new byte[info.blockLength - info.keyLength];
-			int read = dataRAF.read(data);
+			dataRAF.read(data);
 			return data;
 		}
 		else {
