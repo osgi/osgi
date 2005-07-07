@@ -229,7 +229,7 @@ public class Reference {
 
 		//check if this bundle has the permission to GET the Service it Requires
 		Bundle bundle = bc.getBundle();
-		if (!bundle.hasPermission(new ServicePermission(referenceDescription.getInterfacename(), ServicePermission.REGISTER))) {
+		if (!bundle.hasPermission(new ServicePermission(referenceDescription.getInterfacename(), ServicePermission.GET))) {
 			return false;
 		}
 
