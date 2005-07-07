@@ -17,13 +17,8 @@ import org.osgi.framework.Filter;
 /**
  * An event.
  * 
- * <p>
  * <code>Event</code> objects are delivered to <code>EventHandler</code>
  * services which subsrcibe to the topic of the event.
- * 
- * <p>
- * <i>NOTE: Although it is permitted to subclass <code>Event</code>, the
- * operations defined by this class MUST NOT be overridden. </i>
  * 
  * @version $Revision$
  */
