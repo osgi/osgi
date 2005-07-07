@@ -22,7 +22,7 @@ package org.osgi.service.event;
  * <code>Event</code> object to determine its topic and properties.
  * 
  * <p>
- * <code>EventHandler</code> objects should be registered with a service
+ * <code>EventHandler</code> objects must be registered with a service
  * property {@link EventConstants#EVENT_TOPIC} whose value is the list of
  * topics in which the event handler is interesed.
  * <p>
@@ -34,10 +34,6 @@ package org.osgi.service.event;
  * ht.put(EVENT_TOPIC, topics);
  * context.registerService(EventHandler.class.getName(), this, ht);
  * </pre>
- * 
- * If an <code>EventHandler</code> object is registered without a service
- * property {@link EventConstants#EVENT_TOPIC}, then the
- * <code>EventHandler</code> will receive events of all topics.
  * 
  * <p>
  * Security Considerations. Bundles wishing to monitor <code>Event</code>
