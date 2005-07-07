@@ -34,7 +34,7 @@ Otherwise the namespace must be used.
 			<element name="service" type="scr:Tservice" minOccurs="0" maxOccurs="1"></element>
 			<element name="reference" type="scr:Treference" minOccurs="0" maxOccurs="unbounded"></element>
 		</sequence>
-		<attribute name="autoenable" type="boolean" default="true" use="optional"></attribute>
+		<attribute name="enabled" type="boolean" default="true" use="optional"></attribute>
 		<attribute name="name" type="token" use="required"></attribute>
 		<attribute name="factory" type="string" use="optional"></attribute>
 	</complexType>
