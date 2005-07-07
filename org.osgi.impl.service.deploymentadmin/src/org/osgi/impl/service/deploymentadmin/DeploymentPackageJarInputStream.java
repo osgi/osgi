@@ -187,15 +187,14 @@ public class DeploymentPackageJarInputStream {
     public List getCertificateChains() {
         if (null != firstEntry)
             return firstEntry.getCertificateChains();
-        else
-            return null;
+        return null;
     }
     
     public List getCertificateChainStringArrays() {
         if (null != firstEntry)
             return firstEntry.getCertificateChainStringArrays();
-        else
-            return null;
+
+        return null;
     }
 	
     /**

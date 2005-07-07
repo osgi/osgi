@@ -438,21 +438,19 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                 targetDp, logger, context, fwBundleDir, this);
         }
         // found -> update
-        else {
-            DeploymentSessionImpl ret = new DeploymentSessionImpl(
-                new DeploymentPackageImpl(srcDp), new DeploymentPackageImpl(targetDp), 
-                logger, context, fwBundleDir, this);
-            if (srcDp.fixPack()) {
-                VersionRange range = srcDp.getFixPackRange();
-                Version ver = targetDp.getVersion();
-                if (!range.isIncluded(ver))
-                    throw new DeploymentException(DeploymentException.CODE_MISSING_FIXPACK_TARGET,
-                		"Fix pack version range (" + srcDp.getFixPackRange() + ") doesn't fit " +
-                		"to the version (" + targetDp.getVersion() + ") of the target " + 
-                		"deployment package"); 
-            }
-            return ret;
+        DeploymentSessionImpl ret = new DeploymentSessionImpl(
+            new DeploymentPackageImpl(srcDp), new DeploymentPackageImpl(targetDp), 
+            logger, context, fwBundleDir, this);
+        if (srcDp.fixPack()) {
+            VersionRange range = srcDp.getFixPackRange();
+            Version ver = targetDp.getVersion();
+            if (!range.isIncluded(ver))
+                throw new DeploymentException(DeploymentException.CODE_MISSING_FIXPACK_TARGET,
+            		"Fix pack version range (" + srcDp.getFixPackRange() + ") doesn't fit " +
+            		"to the version (" + targetDp.getVersion() + ") of the target " + 
+            		"deployment package"); 
         }
+        return ret;
     }
     
     private DeploymentSessionImpl createUninstallSession(DeploymentPackageImpl targetDp) 
@@ -497,16 +495,15 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	public boolean cancel() {
 	    if (null == session)
 	        return false;
-	    else  {
-	        if (DeploymentSessionImpl.UNINSTALL == session.getDeploymentAction())
-	            checkPermission((DeploymentPackageImpl) session.getTargetDeploymentPackage(), 
-	                    DeploymentAdminPermission.ACTION_CANCEL);
-	        else
-	            checkPermission((DeploymentPackageImpl) session.getSourceDeploymentPackage(), 
-	                    DeploymentAdminPermission.ACTION_CANCEL);
-	        session.cancel();
-	        return true;
-	    }
+
+        if (DeploymentSessionImpl.UNINSTALL == session.getDeploymentAction())
+            checkPermission((DeploymentPackageImpl) session.getTargetDeploymentPackage(), 
+                    DeploymentAdminPermission.ACTION_CANCEL);
+        else
+            checkPermission((DeploymentPackageImpl) session.getSourceDeploymentPackage(), 
+                    DeploymentAdminPermission.ACTION_CANCEL);
+        session.cancel();
+        return true;
 	}
 
 	public DeploymentPackage[] listDeploymentPackages() {

@@ -61,13 +61,10 @@ public class Transaction {
             throw new CancelException();
         
         if (PROCESSOR == record.code) {
-            if (processors.contains(record.rp)) {
+            if (processors.contains(record.rp))
                 return true;
-            }
-            else {
-                record.rp.begin(session);
-                processors.add(record.rp);
-            }
+            record.rp.begin(session);
+            processors.add(record.rp);
         }
         steps.add(record);
         logger.log(Logger.LOG_INFO, "Transaction record added:\n" + record);

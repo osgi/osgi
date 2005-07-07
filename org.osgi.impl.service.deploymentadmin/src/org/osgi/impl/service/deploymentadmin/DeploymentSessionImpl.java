@@ -328,10 +328,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
                 transaction.rollback();
                 throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR, 
                         e.getMessage(), e);
-            } else { 
-                logger.log(e);
-                ret = false;
-            }
+            }  
+            logger.log(e);
+            ret = false;
         }
         transaction.commit();
         closeTrackers();
@@ -611,9 +610,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
 			String [] signers = new String[chainsAsStrings.size()];
 			signers = (String[]) chainsAsStrings.toArray(signers);
 			return cpa.getAccessControlContext(signers);
-        } else {
-            return createAccessControlContext();
-        }
+        } 
+        return createAccessControlContext();
     }
     
     private AccessControlContext createAccessControlContext() {

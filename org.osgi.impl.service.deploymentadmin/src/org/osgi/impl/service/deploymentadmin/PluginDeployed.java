@@ -374,9 +374,8 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin {
             if (l == 7) {
                 if (getCustomizers(dp).length == 0)
                     return new String[] {"Version", "Bundles"};
-                else
-                    return new String[] {"Version", "Processors", "ProcessorBundle", 
-            			"Bundles"};
+                return new String[] {"Version", "Processors", "ProcessorBundle", 
+        			"Bundles"};
             }
             if (l == 8) {
                 if ("ProcessorBundle".equals(nodeUriArr[7]))

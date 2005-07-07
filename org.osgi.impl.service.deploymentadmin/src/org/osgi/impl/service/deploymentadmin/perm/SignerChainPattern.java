@@ -121,7 +121,6 @@ class SignerChainPattern {
            chain = Splitter.split(signerChain, ';', 0);
        int i = patterns.length - 1;
        int j = chain.length - 1;
-       boolean ok = false;
        for (; i >= 0 && j >= 0;) {
            if (patterns[i].isMinus())
                return true;
@@ -192,14 +191,12 @@ class SignerChainPattern {
                         ++j;
                         skip = false;
                         continue;
-                    } else {
-                        if (skip) {
-                            ++j;
-                            continue;
-                        } else {
-                            return false;
-                        }
+                    } 
+                    if (skip) {
+                        ++j;
+                        continue;
                     }
+                    return false;
                 } else if ("*".equals(pk)) {
                     skip = true;
                     ++i;

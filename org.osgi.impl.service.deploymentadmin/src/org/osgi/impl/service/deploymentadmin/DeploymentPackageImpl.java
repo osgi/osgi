@@ -138,9 +138,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         for (Iterator iter = entries.keySet().iterator(); iter.hasNext();) {
             String resPath = (String) iter.next();
             Attributes attrs = (Attributes) entries.get(resPath);
-            String bSn = (String) attrs.getValue(DAConstants.BUNDLE_SYMBOLIC_NAME);
-            String bVer = (String) attrs.getValue(DAConstants.BUNDLE_VERSION);
-            String missingStr = (String) attrs.getValue(DAConstants.MISSING);
+            String bSn = attrs.getValue(DAConstants.BUNDLE_SYMBOLIC_NAME);
+            String bVer = attrs.getValue(DAConstants.BUNDLE_VERSION);
+            String missingStr = attrs.getValue(DAConstants.MISSING);
             boolean missing = (missingStr != null && "true".equalsIgnoreCase(missingStr.trim()));
             boolean isBundle = null != bSn && null != bVer; 
             if (isBundle) {
@@ -499,8 +499,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                             DeploymentException.CODE_BUNDLE_SHARING_VIOLATION,
                             "Bundle with symbolic name \"" + be.getSymbName() + "\" " +
                             "is allready present in the system");
-                else
-                    s.add(be.getSymbName());
+                s.add(be.getSymbName());
             }
         }
 

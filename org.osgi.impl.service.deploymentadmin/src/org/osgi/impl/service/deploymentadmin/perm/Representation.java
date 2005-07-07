@@ -51,12 +51,7 @@ class Representation {
         private SignerChainPattern chainPattern;
         private NamePattern        namePattern;
         private String[]           leafValue;
-        private Node               parent;
-        
-        Node(Node parent) {
-            this.parent = parent;
-        }
-        
+       
         void setLeaf (String attr, String value) {
             leafValue = new String[] {attr, value};
         }
@@ -84,7 +79,6 @@ class Representation {
                 }
                 case LEAF: {
                     String attr = leafValue[0];
-                    String value = leafValue[1];
                     if ("name".equals(attr))
                         return namePattern.match((String) ht.get(attr));
                     else if ("signer".equals(attr)) 
@@ -141,7 +135,7 @@ class Representation {
     
     Representation(String filter) {
         this.filter = filter.toCharArray();
-        rootNode = new Node(null);
+        rootNode = new Node();
         rootNode.setOp(Node.ROOT);
         parse_filter(rootNode);
         if (index < this.filter.length)
@@ -154,7 +148,7 @@ class Representation {
     
     private void parse_filter(Node node) {
         accept('(');
-        Node newNode = new Node(node);    
+        Node newNode = new Node();    
         parse_filter_comp(newNode);
         accept(')');
         node.add(newNode);
@@ -211,30 +205,12 @@ class Representation {
         index = indPar;
     }
 
-    private boolean isSimple() {
-        int i = index;
-        while (i < filter.length) {
-            if ('=' == filter[i]) {
-                if (i < filter.length - 1) {
-                    return '*' != filter[i + 1];
-                } else 
-                    return true;
-            }
-            ++i;
-        }
-        return false;
-    }
-
     private void parse_filter_list(Node node) {
         parse_filter(node);
         if ('(' == filter[index])
             parse_filter_list(node);
     }
 
-    private boolean end() {
-        return index >= filter.length;
-    }
-    
     private void accept(char ch) {
         if (ch != filter[index])
             throw new IllegalArgumentException();
