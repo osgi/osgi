@@ -17,17 +17,45 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
-import java.io.*;
-import java.security.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.security.AccessController;
 import java.security.cert.Certificate;
-import java.util.*;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
 
 import org.eclipse.osgi.service.resolver.VersionRange;
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.Version;
 import org.osgi.impl.service.deploymentadmin.api.DownloadAgent;
-import org.osgi.service.deploymentadmin.*;
-import org.osgi.service.dmt.*;
-import org.osgi.service.event.*;
+import org.osgi.service.deploymentadmin.DeploymentAdmin;
+import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
+import org.osgi.service.deploymentadmin.DeploymentException;
+import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtDataPlugin;
+import org.osgi.service.dmt.DmtExecPlugin;
+import org.osgi.service.dmt.DmtReadOnlyDataPlugin;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
@@ -222,6 +250,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 
             session.installUpdate(wjis);
             updateDps();
+            save();
             result = true;
             return srcDp;
         } catch (DeploymentException e) {
@@ -523,6 +552,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 
     /*
      * Saves persistent data.
+     */
     private void save() throws IOException {
         final File f = context.getDataFile(this.getClass().getName() + ".obj");
         if (null == f) {
@@ -547,7 +577,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             throw (IOException) e.getException();
         }
     }
-     */
 
     /*
      * Reads persistent data
@@ -642,7 +671,13 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             session = createUninstallSession(dp);
             session.uninstall(false);
             removeDp(dp);
+            save();
             result = true;
+        } catch (DeploymentException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
+                e.getMessage(), e);
         } finally {
             sendCompleteEvent(result);
             clearSession();
@@ -663,8 +698,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             session = createUninstallSession(dp);
             boolean r = session.uninstall(true);
             removeDp(dp);
+            save();
             result = r;
-        } catch (DeploymentException e) {
+        } catch (Exception e) {
             logger.log(e);
         } finally {
             sendCompleteEvent(result);
