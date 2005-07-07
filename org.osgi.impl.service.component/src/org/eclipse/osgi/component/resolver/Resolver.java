@@ -413,6 +413,24 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 			runAgain = false;
 			while (it.hasNext() && !runAgain) {
 				ComponentDescriptionProp cdp = (ComponentDescriptionProp) it.next();
+				ComponentDescription cd = cdp.getComponentDescription();
+
+				//check if the bundle providing the service has permission to register the provided interface(s)
+				//if a service is provided
+				if (cd.getService() != null) {
+					ProvideDescription[] provides = cd.getService().getProvides();
+					Bundle bundle = cd.getBundle();
+					for (int i=0;i<provides.length;i++) {
+						//make sure bundle has permission to register the service
+						if (!bundle.hasPermission(new ServicePermission(provides[i].getInterfacename(),ServicePermission.REGISTER))) {
+							enabledCDPs.remove(cdp);
+							runAgain=true;
+							break;
+						}
+					}
+					if (runAgain=true)
+						break;
+				}
 				cdp.clearReferenceCDPs();
 				cdp.clearDelayActivateCDPNames();
 				List refs = cdp.getReferences();
@@ -534,19 +552,11 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 			ComponentDescriptionProp cdp = (ComponentDescriptionProp) iterator.next();
 			ComponentDescription cd = cdp.getComponentDescription();
 
-			//check if the bundle providing the service has permission to register the provided service
-			//if a service is provided
-			if (cd.getService() != null) {
-				Bundle bundle = cd.getBundle();
-				//if the bundle has permission to register the service
-				if (bundle.hasPermission(new ServicePermission(cd.getImplementation().getClassname(), ServicePermission.REGISTER))) {
-
-					if (!cd.isEligible()) {
-						cd.setEligible(true);
-						eligibleCDPs.add(cdp);
-					}
-				}
+			if (!cd.isEligible()) {
+				cd.setEligible(true);
+				eligibleCDPs.add(cdp);
 			}
+	
 		}
 		return eligibleCDPs;
 	}
