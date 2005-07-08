@@ -137,11 +137,11 @@ public interface DmtReadOnly {
 
     /**
      * Get the type of a node. The type of leaf node is the MIME type of the
-     * data it contains. The type of interior node is an URL pointing to a DDF
+     * data it contains. The type of interior node is a URL pointing to a DDF
      * document.
      * 
      * @param nodeUri the URI of the node
-     * @return the type of the node
+     * @return the type of the node, can be <code>null</code>
      * @throws DmtException with the following possible error codes
      *         <li><code>NODE_NOT_FOUND</code>
      *         <li><code>URI_TOO_LONG</code>
@@ -151,7 +151,6 @@ public interface DmtReadOnly {
      *         current session's subtree
      *         <li><code>COMMAND_FAILED</code>
      *         <li><code>COMMAND_NOT_ALLOWED</code>
-     *         <li><code>FEATURE_NOT_SUPPORTED</code>
      *         <li><code>DATA_STORE_FAILURE</code>
      * @throws IllegalStateException if the session is invalidated because of
      *         timeout, or if the session is already closed
@@ -210,8 +209,8 @@ public interface DmtReadOnly {
     Date getNodeTimestamp(String nodeUri) throws DmtException;
 
     /**
-     * Get the size of the data in the node. The value to return depends on the 
-     * format of data in the node:
+     * Get the size of the data in a leaf node. The value to return depends on
+     * the format of data in the node:
      * <ul>
      * <li>{@link DmtData#FORMAT_STRING STRING}, {@link DmtData#FORMAT_XML XML}
      * and {@link DmtData#FORMAT_BINARY BINARY}: the length of the stored data
@@ -220,11 +219,11 @@ public interface DmtReadOnly {
      * <li>{@link DmtData#FORMAT_BOOLEAN BOOLEAN}: 1
      * <li>{@link DmtData#FORMAT_NULL NULL}: 0
      * </ul>
-     * Throws <code>DmtException</code> with the error code
-     * <code>COMMAND_NOT_ALLOWED</code> if issued on an interior node.
+     * This information can also be retrieved using the 
+     * {@link DmtData#getSize()} method.
      * 
-     * @param nodeUri the URI of the node
-     * @return the size of the node
+     * @param nodeUri the URI of the leaf node
+     * @return the size of the data in the node
      * @throws DmtException with the following possible error codes
      *         <li><code>NODE_NOT_FOUND</code>
      *         <li><code>URI_TOO_LONG</code>
@@ -233,7 +232,8 @@ public interface DmtReadOnly {
      *         <li><code>OTHER_ERROR</code> if the URI is not within the
      *         current session's subtree
      *         <li><code>COMMAND_FAILED</code>
-     *         <li><code>COMMAND_NOT_ALLOWED</code>
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the URI specifies an
+     *         interior node
      *         <li><code>FEATURE_NOT_SUPPORTED</code>
      *         <li><code>DATA_STORE_FAILURE</code>
      * @throws IllegalStateException if the session is invalidated because of
@@ -293,7 +293,9 @@ public interface DmtReadOnly {
      * precedence.
      * 
      * @param nodeUri the URI of the node
-     * @return a DmtMetaNode which describes meta data information
+     * @return a DmtMetaNode which describes meta data information, can be
+     *         <code>null</code> if there is no meta data available for the
+     *         given node
      * @throws DmtException with the following possible error codes
      *         <li><code>NODE_NOT_FOUND</code>. Note that a node does not
      *         have to exist for having metadata associated to it. This error is
@@ -306,7 +308,6 @@ public interface DmtReadOnly {
      *         current session's subtree
      *         <li><code>COMMAND_FAILED</code>
      *         <li><code>COMMAND_NOT_ALLOWED</code>
-     *         <li><code>FEATURE_NOT_SUPPORTED</code>
      *         <li><code>DATA_STORE_FAILURE</code>
      * @throws IllegalStateException if the session is invalidated because of
      *         timeout, or if the session is already closed
