@@ -64,11 +64,11 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         if(plugin.isReadOnlyDataPlugin()) {
             dataPlugin = null;
             readOnlyDataPlugin = plugin.getReadOnlyDataPlugin();
-            dmtReadOnly = (DmtReadOnly) readOnlyDataPlugin;
+            dmtReadOnly = readOnlyDataPlugin;
         } else if(plugin.isWritableDataPlugin()) {
             dataPlugin = plugin.getWritableDataPlugin();
             readOnlyDataPlugin = null;
-            dmtReadOnly = (DmtReadOnly) dataPlugin;
+            dmtReadOnly = dataPlugin;
         } else // never happens
             throw new IllegalArgumentException("'plugin' parameter does not " +
                     "contain a 'DmtDataPlugin' or 'DmtReadOnlyDataPlugin'.");
