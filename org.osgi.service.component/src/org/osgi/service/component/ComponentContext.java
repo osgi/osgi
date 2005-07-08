@@ -14,8 +14,9 @@ import java.util.Dictionary;
 import org.osgi.framework.*;
 
 /**
- * A ComponentContext object is used by a Service Component to interact with it
- * execution context including locating services by reference name.
+ * A ComponentContext object is used by a Service Component instance to interact
+ * with its execution context including locating services by reference name.
+ * Each Service Component instance has a unique ComponentContext.
  * 
  * <p>
  * A component's implementation class may optional implement an activate method:
@@ -28,7 +29,7 @@ import org.osgi.framework.*;
  * component is activated to provide the component's ComponentContext object.
  * 
  * <p>
- * A component's implementation class may optional implement a deactivate
+ * A component's implementation class may optionaly implement a deactivate
  * method:
  * 
  * <pre>
@@ -59,9 +60,18 @@ public interface ComponentContext {
 	public Dictionary getProperties();
 
 	/**
-	 * Returns the service object for the specified service reference name.
+	 * Returns the service object for the specified reference name.
 	 * 
-	 * @param name The name of a service reference as specified in a
+	 * <p>
+	 * If the cardinality of the reference is <code>0..n</code> or
+	 * <code>1..n</code> and multiple services are bound to the reference, the
+	 * service with the highest ranking (as specified in its
+	 * <code>Constants.SERVICE_RANKING</code< property) is returned.
+	 * If there is a tie in ranking, the service with the lowest service ID (as
+	 * specified in its <code>Constants.SERVICE_ID</code> property); that is, the
+	 * service that was registered first is returned.
+
+	 * @param name The name of a reference as specified in a
 	 *        <code>reference</code> element in this component's description.
 	 * @return A service object for the referenced service or <code>null</code>
 	 *         if the reference cardinality is <code>0..1</code> or
@@ -72,9 +82,9 @@ public interface ComponentContext {
 	public Object locateService(String name);
 
 	/**
-	 * Returns the service objects for the specified service reference name.
+	 * Returns the service objects for the specified reference name.
 	 * 
-	 * @param name The name of a service reference as specified in a
+	 * @param name The name of a reference as specified in a
 	 *        <code>reference</code> element in this component's description.
 	 * @return An array of service objects for the referenced service or
 	 *         <code>null</code> if the reference cardinality is
