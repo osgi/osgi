@@ -865,10 +865,10 @@ public class DmtSessionImpl implements DmtSession {
 		Object plugin = getDataPlugin(uri);
 		if (plugin instanceof DmtDataPlugin)
 			return ((DmtDataPlugin) plugin).getMetaNode(uri);
-		else
-			// (plugin instanceof DmtReadOnlyDataPlugin) as guaranteed by
-			// getDataPlugin()
-			return ((DmtReadOnlyDataPlugin) plugin).getMetaNode(uri);
+        
+        // (plugin instanceof DmtReadOnlyDataPlugin) as guaranteed by
+        // getDataPlugin()
+        return ((DmtReadOnlyDataPlugin) plugin).getMetaNode(uri);
 	}
 
     // precondition: 'uri' must point be valid (checked with isNodeUri or
