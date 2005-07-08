@@ -55,6 +55,8 @@ public class EventTestControl extends DefaultTestBundleControl {
                                                   "testEventConstruction", // "TC3"
                                                   "testSendEventNotification", // "TC4"
                                                   "testPostEventNotification", // "TC5"
+                                                  "testMultiSendThreads", // "TC6"
+                                                  "testMultiPostThreads", // "TC7"
                                                   };
 
   /**
@@ -142,7 +144,7 @@ public class EventTestControl extends DefaultTestBundleControl {
 	 * Tests if the permissions are set correctly and the exceptions 
    * that are thrown if they are not.
 	 */
-	public void testSetPermissions() {
+	public void testSetPermissions() {//TB4
     PermissionAdmin permissionAdmin = (PermissionAdmin)getRegistry().getService(PermissionAdmin.class);
     
     PermissionInfo regInfo = new PermissionInfo(ServicePermission.class.getName(), 
@@ -198,7 +200,7 @@ public class EventTestControl extends DefaultTestBundleControl {
    * 
    * @param event the event used for testing
    */
-  private void checkTestingPermissions(Event event) {
+  private void checkTestingPermissions(Event event) {//TB5
     boolean hasTopicPermission = hasTopicPermissionForEvent(event);
     String message;
     if (hasTopicPermission) {
@@ -281,7 +283,7 @@ public class EventTestControl extends DefaultTestBundleControl {
    * Tests the notification for events after sending 
    * (if they match of the listeners).
    */
-  public void testSendEventNotification() {
+  public void testSendEventNotification() { //TC4
     ServiceTracker trackerProvider1 = new ServiceTracker(getContext(), "org.osgi.test.cases.event.tb1.Activator", null);
     trackerProvider1.open();
     TBCService tbcService1 = (TBCService) trackerProvider1.getService();
@@ -319,7 +321,7 @@ public class EventTestControl extends DefaultTestBundleControl {
    * Tests the notification for events after posting 
    * (if they match of the listeners).
    */
-  public void testPostEventNotification() {
+  public void testPostEventNotification() { //TC5
     ServiceTracker trackerProvider1 = new ServiceTracker(getContext(), "org.osgi.test.cases.event.tb1.Activator", null);
     trackerProvider1.open();
     TBCService tbcService1 = (TBCService) trackerProvider1.getService();
@@ -328,11 +330,8 @@ public class EventTestControl extends DefaultTestBundleControl {
     trackerProvider2.open();
     TBCService tbcService2 = (TBCService) trackerProvider2.getService();
     
-    String[] topics;
-    topics = new String[] {"test/*"};
+    String[] topics = new String[] {"test/*"};
     tbcService1.setTopics(topics);
-    
-    topics = new String[] {"test/*"};
     tbcService2.setTopics(topics);    
     
     Event[] events = new Event[10];
@@ -345,7 +344,7 @@ public class EventTestControl extends DefaultTestBundleControl {
     }
     //wait to ensure that events are recieved asynchronous
     try { 
-      Thread.sleep(10000); 
+      Thread.sleep(5000); 
     } catch (InterruptedException e) {
     }
     
@@ -379,7 +378,221 @@ public class EventTestControl extends DefaultTestBundleControl {
     trackerProvider2.close();
   }
 
-	
+  /**
+   * Tests the notification for events after posting
+   * simultaneously in 10 threads 
+   * (if they match of the listeners).
+   */
+  public void testMultiPostThreads() { //TC7
+    ServiceTracker trackerProvider1 = new ServiceTracker(getContext(), "org.osgi.test.cases.event.tb1.Activator", null);
+    trackerProvider1.open();
+    TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+    
+    ServiceTracker trackerProvider2 = new ServiceTracker(getContext(), "org.osgi.test.cases.event.tb2.Activator", null);
+    trackerProvider2.open();
+    TBCService tbcService2 = (TBCService) trackerProvider2.getService();
+    
+    String[] topics = new String[] {"test/*"};
+    tbcService1.setTopics(topics); 
+    tbcService2.setTopics(topics);    
+    
+    Event[] events = new Event[10];
+    for (int i = 0; i < events.length; i++) {
+      events[i] = new Event("test/Event" + i, new Hashtable()); 
+    }    
+    
+    MultyPostSendThread []mpts = new MultyPostSendThread[events.length];
+    
+    Object lock = new Object();
+    for (int i = 0; i < events.length; i++) {
+      mpts[i] = new MultyPostSendThread(events[i], lock, "[MultyPostSendThread] - " + i, true);
+      mpts[i].start();
+    }    
+    
+    //wait to ensure that all threads are started
+    boolean allAlive;
+    do {
+      allAlive = true;
+      for (int i = 0; i < mpts.length; i++) {
+        if (!mpts[i].isAlive()) {
+          allAlive = false;
+          try { 
+            Thread.sleep(100); 
+          } catch (InterruptedException e) {
+          }                  
+          break;
+        }
+      }
+    } while(!allAlive);
+    //add small sleep to shure all threads go to wait on lock
+    try { 
+      Thread.sleep(3000); 
+    } catch (InterruptedException e) {
+    }     
+    trace("All MultyPostSendThread started, notify all...");
+    //here notify all threads to start posting events simultaneously
+    synchronized (lock) {
+      lock.notifyAll();
+    }
+    trace("Wait all MultyPostSendThread to post events");
+    //wait to ensure that events are recieved asynchronous
+    try { 
+      Thread.sleep(5000); 
+    } catch (InterruptedException e) {
+    }    
+    
+    Vector tbc1Events = tbcService1.getLastReceivedEvents();
+    Vector tbc2Events = tbcService2.getLastReceivedEvents();
+    
+    if (tbc1Events == null || tbc1Events.size() == 0) {
+      fail("tbc1: No events recived");
+    }
+    if (tbc2Events == null || tbc2Events.size() == 0) {
+      fail("tbc2: No events recived");
+    }
+    
+    for (int i = 0; i < events.length; i++) {
+      if (tbc1Events.contains(events[i])) {
+        pass("tbc1: Event with topic [test/Event" + i + "] recieved");
+      } else {
+        fail("tbc1: Event with topic [test/Event" + i + "] not recieved");        
+      }
+    }    
+    for (int i = 0; i < events.length; i++) {
+      if (tbc2Events.contains(events[i])) {
+        pass("tbc2: Event with topic [test/Event" + i + "] recieved");
+      } else {
+        fail("tbc2: Event with topic [test/Event" + i + "] not recieved");        
+      }
+    }    
+    trackerProvider1.close();
+    trackerProvider2.close();
+  }
+   
+  /**
+   * This is used to start posting or sending simultaneously.
+   */
+  class MultyPostSendThread extends Thread {
+	  private Event event;
+    private Object lock;
+    private boolean post;
+
+    MultyPostSendThread(Event event, Object lock, String name, boolean post) {
+		  super(name);
+      this.lock = lock;
+		  this.event = event;
+      this.post = post;
+	  }
+	  
+    public void run() {
+      trace("MultyPostSendThread started on event: " + event);
+      synchronized (lock) {
+        try {
+          lock.wait();
+        } catch (InterruptedException e) {
+        }
+      }
+      if (post) {
+        eventAdmin.postEvent(event);
+      } else {
+        eventAdmin.sendEvent(event);
+      }
+      trace("MultyPostSendThread " + (post?"post":"send") + " event: " + event);
+    }
+  }
+  
+  /**
+   * Tests the notification for events after sending
+   * simultaneously in 10 threads 
+   * (if they match of the listeners).
+   */
+  public void testMultiSendThreads() { //TC6
+    ServiceTracker trackerProvider1 = new ServiceTracker(getContext(), "org.osgi.test.cases.event.tb1.Activator", null);
+    trackerProvider1.open();
+    TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+    
+    ServiceTracker trackerProvider2 = new ServiceTracker(getContext(), "org.osgi.test.cases.event.tb2.Activator", null);
+    trackerProvider2.open();
+    TBCService tbcService2 = (TBCService) trackerProvider2.getService();
+    
+    String[] topics;
+    topics = new String[] {"test/*"};
+    tbcService1.setTopics(topics);
+    tbcService2.setTopics(topics);    
+    
+    Event[] events = new Event[10];
+    for (int i = 0; i < events.length; i++) {
+      events[i] = new Event("test/Event" + i, new Hashtable()); 
+    }    
+    
+    MultyPostSendThread []mpts = new MultyPostSendThread[events.length];
+    
+    Object lock = new Object();
+    for (int i = 0; i < events.length; i++) {
+      mpts[i] = new MultyPostSendThread(events[i], lock, "[MultyPostSendThread] - " + i, false);
+      mpts[i].start();
+    }    
+    
+    //wait to ensure that all threads are started
+    boolean allAlive;
+    do {
+      allAlive = true;
+      for (int i = 0; i < mpts.length; i++) {
+        if (!mpts[i].isAlive()) {
+          allAlive = false;
+          try { 
+            Thread.sleep(100); 
+          } catch (InterruptedException e) {
+          }                  
+          break;
+        }
+      }
+    } while(!allAlive);
+    //add small sleep to shure all threads go to wait on lock
+    try { 
+      Thread.sleep(3000); 
+    } catch (InterruptedException e) {
+    }     
+    trace("All MultyPostSendThread started, notify all...");
+    //here notify all threads to start posting events simultaneously
+    synchronized (lock) {
+      lock.notifyAll();
+    }
+    trace("Wait all MultyPostSendThread to send events");
+    //wait to ensure that events are recieved asynchronous
+    try { 
+      Thread.sleep(5000); 
+    } catch (InterruptedException e) {
+    }    
+    
+    Vector tbc1Events = tbcService1.getLastReceivedEvents();
+    Vector tbc2Events = tbcService2.getLastReceivedEvents();
+    
+    if (tbc1Events == null || tbc1Events.size() == 0) {
+      fail("tbc1: No events recived");
+    }
+    if (tbc2Events == null || tbc2Events.size() == 0) {
+      fail("tbc2: No events recived");
+    }
+    
+    for (int i = 0; i < events.length; i++) {
+      if (tbc1Events.contains(events[i])) {
+        pass("tbc1: Event with topic [test/Event" + i + "] recieved");
+      } else {
+        fail("tbc1: Event with topic [test/Event" + i + "] not recieved");        
+      }
+    }    
+    for (int i = 0; i < events.length; i++) {
+      if (tbc2Events.contains(events[i])) {
+        pass("tbc2: Event with topic [test/Event" + i + "] recieved");
+      } else {
+        fail("tbc2: Event with topic [test/Event" + i + "] not recieved");        
+      }
+    }    
+    trackerProvider1.close();
+    trackerProvider2.close();
+  }
+  
 	/**
 	 * Verify that the service with name is exported by the bundle b.
 	 * 
@@ -411,7 +624,7 @@ public class EventTestControl extends DefaultTestBundleControl {
       String property;
       for (int i = 0; i < properties.length; i++) {
         property = properties[i];
-        Object value = eventReceived.getProperty(property);
+        eventReceived.getProperty(property);
       }
     }
   }
