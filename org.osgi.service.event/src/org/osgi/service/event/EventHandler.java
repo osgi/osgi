@@ -29,7 +29,7 @@ package org.osgi.service.event;
  * For example:
  * 
  * <pre>
- * String[] topics = new String[] {&quot;org/osgi/topic&quot;, &quot;com/isv/*&quot;};
+ * String[] topics = new String[] {EventConstants.EVENT_TOPIC, &quot;com/isv/*&quot;};
  * Hashtable ht = new Hashtable();
  * ht.put(EVENT_TOPIC, topics);
  * context.registerService(EventHandler.class.getName(), this, ht);
