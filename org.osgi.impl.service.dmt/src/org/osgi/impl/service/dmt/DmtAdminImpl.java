@@ -162,8 +162,6 @@ public class DmtAdminImpl implements DmtAdmin {
     }
     
     private boolean conflictsWithOpenSessions(String subtreeUri, int lockMode) {
-        boolean shared = (lockMode == DmtSession.LOCK_TYPE_SHARED);
-        
         Iterator i = openSessions.iterator();
         while (i.hasNext()) {
             DmtSession openSession = (DmtSession) i.next();

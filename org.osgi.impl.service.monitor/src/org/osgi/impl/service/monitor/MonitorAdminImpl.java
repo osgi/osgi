@@ -245,7 +245,7 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
             sendEvent(monitorableId, var, listeners.firstElement());
         else if(matchNum > 1)
             sendEvent(monitorableId, var, 
-                    (String[]) listeners.toArray(new String[matchNum]));
+                    listeners.toArray(new String[matchNum]));
 
         Iterator j = remoteJobs.iterator();
         while(j.hasNext()) {
@@ -294,8 +294,6 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
     }
 
     static DmtData createData(StatusVariable var) {
-        DmtData data;
-        
         int type = var.getType();
         switch(type) {
         case StatusVariable.TYPE_STRING:  return new DmtData(var.getString());

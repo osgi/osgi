@@ -28,28 +28,18 @@ public class MonitorPlugin implements DmtDataPlugin
     private static final int BOOLEAN_SIZE = 1;
     private static final int INT_SIZE     = 4;
     
-    private BundleContext bc;
-    
     // maybe this could be made friendly static, to be available from the 
     // StatusVarWrapper and Server classes without passing it to each instance
     private MonitorAdminImpl monitorAdmin;
 
-    private DmtSession session;
-    
-
     public MonitorPlugin(BundleContext bc, MonitorAdminImpl monitorAdmin) {
-        this.bc = bc;
         this.monitorAdmin = monitorAdmin;
-
-        session = null;
     }
 
 
     //----- DmtDataPlugin methods -----//
 
-    public void open(int lockMode, DmtSession session) throws DmtException {
-        this.session = session;
-    }
+    public void open(int lockMode, DmtSession session) throws DmtException {}
 
     public void open(String subtreeUri, int lockMode, DmtSession session) throws DmtException {
         open(lockMode, session);
@@ -787,7 +777,6 @@ class Server {
     static final String DEFAULT_TYPE = "TM";
     static final int DEFAULT_SCHEDULE = 60;
 
-    private String nodeName;
     private String serverId;
     private boolean enabled;
     private String type;
@@ -800,13 +789,12 @@ class Server {
     private String path;
 
     Server(String nodeName, String path, MonitorAdminImpl monitorAdmin) {
-        this.nodeName = nodeName;
         this.path = path;
         this.monitorAdmin = monitorAdmin;
 
         job = null;
 
-        serverId = nodeName;
+        serverId = nodeName; // default server ID is the name of the node
         enabled = false;
         type = DEFAULT_TYPE;
         value = DEFAULT_SCHEDULE;
