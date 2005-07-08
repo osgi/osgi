@@ -158,11 +158,11 @@ public interface Dmt extends DmtReadOnly {
     
     /**
      * Set the type of a node. The type of leaf node is the MIME type of the
-     * data it contains. The type of interior node is an URL pointing to a DDF
+     * data it contains. The type of interior node is a URL pointing to a DDF
      * document.
      * 
      * @param nodeUri The URI of the node
-     * @param type The type of the node
+     * @param type The type of the node, can be <code>null</code>
      * @throws DmtException with the following possible error codes
      *         <li><code>NODE_NOT_FOUND</code>
      *         <li><code>URI_TOO_LONG</code>
@@ -170,7 +170,6 @@ public interface Dmt extends DmtReadOnly {
      *         <li><code>PERMISSION_DENIED</code>
      *         <li><code>OTHER_ERROR</code> if the URI is not within the
      *         current session's subtree
-     *         <li><code>FEATURE_NOT_SUPPORTED</code>
      *         <li><code>COMMAND_FAILED</code> if the type string is
      *         <code>null</code> or invalid
      *         <li><code>COMMAND_NOT_ALLOWED</code>
@@ -369,6 +368,7 @@ public interface Dmt extends DmtReadOnly {
      *         <li><code>COMMAND_NOT_ALLOWED</code> if any of the implied Get
      *         or Add commands are not allowed, or if nodeUri is an ancestor of
      *         newNodeUri
+     *         <li><code>FEATURE_NOT_SUPPORTED</code>
      *         <li><code>METADATA_MISMATCH</code>
      *         <li><code>DATA_STORE_FAILURE</code>
      *         <li><code>FORMAT_NOT_SUPPORTED</code>
