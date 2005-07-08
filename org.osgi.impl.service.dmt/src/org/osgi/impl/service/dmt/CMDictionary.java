@@ -69,9 +69,7 @@ public class CMDictionary extends Hashtable {
 		if (realCase != null) {
 			return super.get(realCase);
 		}
-		else {
-			return null;
-		}
+        return null;
 	}
 
 	/**
@@ -93,9 +91,7 @@ public class CMDictionary extends Hashtable {
 			if (oldKey != null && !oldKey.equals(key)) {
 				return super.remove(oldKey);
 			}
-			else {
-				return null;
-			}
+            return null;
 		}
 		return oldValue;
 	}
