@@ -43,7 +43,7 @@ public class ComponentElement extends DefaultHandler {
 				component.addProperty(nameProperty);
 				continue;
 			}
-			if (key.equals(ParserConstants.AUTOENABLE_ATTRIBUTE)) {
+			if (key.equals(ParserConstants.ENABLED_ATTRIBUTE)) {
 				component.setAutoenable(value.equalsIgnoreCase("true"));
 				continue;
 			}

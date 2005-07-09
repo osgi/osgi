@@ -35,7 +35,7 @@ public interface ParserConstants {
 	static final String TYPE_ATTRIBUTE = "type";
 	static final String ENTRY_ATTRIBUTE = "entry";
 	static final String PROVIDE_ELEMENT = "provide";
-	static final String AUTOENABLE_ATTRIBUTE = "autoenable";
+	static final String ENABLED_ATTRIBUTE = "enabled";
 	static final String FACTORY_ATTRIBUTE = "factory";
 	static final String SERVICEFACTORY_ATTRIBUTE = "servicefactory";
 	static final String CLASS_ATTRIBUTE = "class";
