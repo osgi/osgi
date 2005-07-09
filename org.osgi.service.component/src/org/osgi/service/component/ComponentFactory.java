@@ -14,21 +14,25 @@ import java.util.Dictionary;
 /**
  * When a component is declared with the <code>factory</code> attribute on its
  * <code>component</code> element, the Service Component Runtime will register
- * a ComponentFactory service to allow instances of the component to be created
- * rather than automatically creating component instances as necessary.
+ * a ComponentFactory service to allow new component configurations to be
+ * created and activated rather than automatically creating and activating
+ * component configuration as necessary.
  * 
  * @version $Revision$
  */
 public interface ComponentFactory {
 	/**
-	 * Create a new instance of the component. Additional properties may be
-	 * provided for the component instance.
+	 * Create and activate a new component configuration. Additional properties
+	 * may be provided for the component configuration.
 	 * 
-	 * @param properties Additional properties for the component instance.
-	 * @return A ComponentInstance object encapsulating the component instance.
-	 *         The returned component instance has been activated and, if the
-	 *         component specifies a <code>service</code> element, the
-	 *         component instance has been registered as a service.
+	 * @param properties Additional properties for the component configuration.
+	 * @return A ComponentInstance object encapsulating the component
+	 *         configuration. The returned component configuration has been
+	 *         activated and, if the component specifies a <code>service</code>
+	 *         element, the component configuration has been registered as a
+	 *         service.
+	 * @throws ComponentException If the Service Component Runtime is unable to
+	 *         satisfy the component configuration.
 	 */
 	public ComponentInstance newInstance(Dictionary properties);
 }

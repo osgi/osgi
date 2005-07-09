@@ -14,19 +14,22 @@ import java.util.Dictionary;
 import org.osgi.framework.*;
 
 /**
- * A ComponentContext object is used by a Service Component instance to interact
- * with its execution context including locating services by reference name.
- * Each Service Component instance has a unique ComponentContext.
+ * A ComponentContext object is used by an activated Service Component
+ * configuration to interact with its execution context including locating
+ * services by reference name. Each activated Service Component configuration
+ * has a unique ComponentContext.
  * 
  * <p>
- * A component's implementation class may optional implement an activate method:
+ * A component's implementation class may optionaly implement an activate
+ * method:
  * 
  * <pre>
  * protected void activate(ComponentContext context);
  * </pre>
  * 
- * If a component implements this method, this method will be called when the
- * component is activated to provide the component's ComponentContext object.
+ * If a component implements this method, this method will be called when a
+ * component configuration is activated to provide the component configuration's
+ * ComponentContext object.
  * 
  * <p>
  * A component's implementation class may optionaly implement a deactivate
@@ -37,7 +40,7 @@ import org.osgi.framework.*;
  * </pre>
  * 
  * If a component implements this method, this method will be called when the
- * component is deactivated.
+ * component configuration is deactivated.
  * 
  * <p>
  * The activate and deactivate methods will be called using reflection and must
@@ -75,9 +78,9 @@ public interface ComponentContext {
 	 *        <code>reference</code> element in this component's description.
 	 * @return A service object for the referenced service or <code>null</code>
 	 *         if the reference cardinality is <code>0..1</code> or
-	 *         <code>0..n</code> and no matching service is available.
+	 *         <code>0..n</code> and no bound service is available.
 	 * @throws ComponentException If the Service Component Runtime catches an
-	 *         exception while activating the target service.
+	 *         exception while activating the bound service.
 	 */
 	public Object locateService(String name);
 
@@ -88,10 +91,10 @@ public interface ComponentContext {
 	 *        <code>reference</code> element in this component's description.
 	 * @return An array of service objects for the referenced service or
 	 *         <code>null</code> if the reference cardinality is
-	 *         <code>0..1</code> or <code>0..n</code> and no matching
-	 *         service is available.
+	 *         <code>0..1</code> or <code>0..n</code> and no bound service
+	 *         is available.
 	 * @throws ComponentException If the Service Component Runtime catches an
-	 *         exception while activating a target service.
+	 *         exception while activating a bound service.
 	 */
 	public Object[] locateServices(String name);
 
@@ -103,9 +106,10 @@ public interface ComponentContext {
 	public BundleContext getBundleContext();
 
 	/**
-	 * If this component is registered as a service using the
+	 * If this component configuration is registered as a service using the
 	 * <code>servicefactory=&quot;true&quot;</code> attribute, then this
-	 * method returns the bundle using the service provided by this component.
+	 * method returns the bundle using the service provided by this component
+	 * configuration.
 	 * <p>
 	 * This method will return <code>null</code> if:
 	 * <ul>
@@ -114,19 +118,20 @@ public interface ComponentContext {
 	 * <li>This component is a service but did not specify the
 	 * <code>servicefactory=&quot;true&quot;</code> attribute, then all
 	 * bundles using the service provided by this component will share this
-	 * component instance.
+	 * component configuration.
 	 * <li>The service provided by this component is not currently being used
 	 * by any bundle.
 	 * </ul>
 	 * 
-	 * @return The bundle using this component as a service or <code>null</code>.
+	 * @return The bundle using this component configuration as a service or
+	 *         <code>null</code>.
 	 */
 	public Bundle getUsingBundle();
 
 	/**
-	 * Returns the ComponentInstance object for this component.
+	 * Returns the ComponentInstance object for this component configuration.
 	 * 
-	 * @return The ComponentInstance object for this component.
+	 * @return The ComponentInstance object for this component configuration.
 	 */
 	public ComponentInstance getComponentInstance();
 
@@ -148,16 +153,16 @@ public interface ComponentContext {
 	public void disableComponent(String name);
 
 	/**
-	 * If this component is registered as a service using the
+	 * If this component configuration is registered as a service using the
 	 * <code>service</code> element, then this method returns the service
-	 * reference of the service provided by this component.
+	 * reference of the service provided by this component configuration.
 	 * <p>
-	 * This method will return <code>null</code> if this component is not
-	 * registered as a service.
+	 * This method will return <code>null</code> if this component
+	 * configuration is not registered as a service.
 	 * 
-	 * @return The <code>ServiceReference</code> object for this component or
-	 *         <code>null</code> if this component is not registered as a
-	 *         service.
+	 * @return The <code>ServiceReference</code> object for this component
+	 *         configuration or <code>null</code> if this component
+	 *         configuration is not registered as a service.
 	 */
 	public ServiceReference getServiceReference();
 

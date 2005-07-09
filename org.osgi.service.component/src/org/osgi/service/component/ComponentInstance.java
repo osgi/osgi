@@ -10,24 +10,29 @@
 package org.osgi.service.component;
 
 /**
- * A ComponentInstance encapsulates an instance of a component.
- * ComponentInstances are created whenever an instance of a component is
- * created.
+ * A ComponentInstance encapsulates an activated component configuration.
+ * ComponentInstances are created whenever an configuration of a component is
+ * activated.
+ * 
+ * <p>
+ * ComponentInstances are never reused. A new ComponentInstance object will be
+ * created when the component configuration is activated again.
  * 
  * @version $Revision$
  */
 public interface ComponentInstance {
 	/**
-	 * Dispose of this component instance. The instance will be deactivated. If
-	 * the instance has already been deactivated, this method does nothing.
+	 * Dispose of this component configuration. The component configuration will
+	 * be deactivated. If the component configuration has already been
+	 * deactivated, this method does nothing.
 	 */
 	public void dispose();
 
 	/**
-	 * Returns the component instance. The instance has been activated.
+	 * Returns the component object for this activated component configuration.
 	 * 
-	 * @return The component instance or <code>null</code> if the instance has
-	 *         been deactivated.
+	 * @return The component object or <code>null</code> if the component
+	 *         configuration has been deactivated.
 	 */
 	public Object getInstance();
 }

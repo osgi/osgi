@@ -15,7 +15,7 @@ package org.osgi.service.component;
  * @version $Revision$
  */
 public class ComponentException extends RuntimeException {
-	static final long serialVersionUID = -7438212656298726924L;
+	static final long	serialVersionUID	= -7438212656298726924L;
 	/**
 	 * Nested exception.
 	 */
@@ -53,11 +53,11 @@ public class ComponentException extends RuntimeException {
 	}
 
 	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause was
-	 * specified when this exception was created.
+	 * Returns the cause of this exception or <code>null</code> if no cause
+	 * was specified when this exception was created.
 	 * 
-	 * @return The cause of this exception or <code>null</code> if no cause was
-	 *         specified.
+	 * @return The cause of this exception or <code>null</code> if no cause
+	 *         was specified.
 	 */
 	public Throwable getCause() {
 		return cause;
