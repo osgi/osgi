@@ -32,7 +32,7 @@ public interface ComponentFactory {
 	 *         element, the component configuration has been registered as a
 	 *         service.
 	 * @throws ComponentException If the Service Component Runtime is unable to
-	 *         satisfy the component configuration.
+	 *         activate the component configuration.
 	 */
 	public ComponentInstance newInstance(Dictionary properties);
 }
