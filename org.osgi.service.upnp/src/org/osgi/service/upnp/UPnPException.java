@@ -18,12 +18,39 @@ package org.osgi.service.upnp;
 import java.lang.Exception;
 
 public class UPnPException extends Exception {
-    static final long serialVersionUID = -262013318122195146L;
+	static final long		serialVersionUID		= -262013318122195146L;
+
+	/**
+	 * No Action found by that name at this service.
+	 */
+	public final static int	INVALID_ACTION			= 401;
+
+	/**
+	 * Not enough arguments, too many arguments with a specific name, or one of
+	 * more of the arguments are of the wrong type.
+	 */
+	public final static int	INVALID_ARGS			= 402;
+
+	/**
+	 * The different end-points are no longer in synchronization.
+	 */
+	public final static int	INVALID_SEQUENCE_NUMBER	= 403;
+
+	/**
+	 * Refers to a non existing variable.
+	 */
+	public final static int	INVALID_VARIABLE		= 404;
+
+	/**
+	 * The invoked action failed during execution.
+	 */
+	public final static int	DEVICE_INTERNAL_ERROR	= 501;
+
 	/**
 	 * Key for an error information that is an int type variable and that is
 	 * used to identify occured errors.
 	 */
-	private int	errorCode;
+	private int				errorCode;
 
 	/**
 	 * This constructor creates a UPnPException on the specified error code and
