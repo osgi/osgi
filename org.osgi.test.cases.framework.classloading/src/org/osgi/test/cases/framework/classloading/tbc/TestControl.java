@@ -1768,25 +1768,6 @@ public class TestControl extends DefaultTestBundleControl {
 		}
 	}
 
-	/**
-	 * Modules cannot export the default package
-	 * 
-	 * @throws Exception if there is any problem or an assert fails
-	 */
-	public void testPackageExport010() throws Exception {
-		Bundle tb13n;
-
-		try {
-			trace("Installing a bundle exporting the default package");
-			tb13n = getContext().installBundle(getWebServer() + "tb13n.jar");
-			tb13n.uninstall();
-			fail("A bundle exporting the default package must fail to install");
-		}
-		catch (BundleException ex) {
-
-		}
-	}
-
 	// Importing Packages -----------------------------------
 
 	/**
@@ -2323,25 +2304,6 @@ public class TestControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Modules cannot import the default package.
-	 * 
-	 * @throws Exception if there is any problem or an assert fails
-	 */
-	public void testPackageDynamicImport006() throws Exception {
-		Bundle tb17f;
-
-		try {
-			trace("Installing a bundle importing dynamically the default package");
-			tb17f = getContext().installBundle(getWebServer() + "tb17f.jar");
-			tb17f.uninstall();
-			fail("A bundle importing the default package must fail to install");
-		}
-		catch (BundleException ex) {
-
-		}
-	}
-
-	/**
 	 * In order for a DynamicImport-Package to be resolved to an export
 	 * statement, any arbitrary attributes specified must match the attributes
 	 * of the export statement. However, a match is not prevented if the export
@@ -2352,7 +2314,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 * 
 	 * @throws Exception if there is any problem or an assert fails
 	 */
-	public void testPackageDynamicImport007() throws Exception {
+	public void testPackageDynamicImport006() throws Exception {
 		Bundle tb13g;
 		Bundle tb17g;
 
@@ -2389,7 +2351,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 * 
 	 * @throws Exception if there is any problem or an assert fails
 	 */
-	public void testPackageDynamicImport008() throws Exception {
+	public void testPackageDynamicImport007() throws Exception {
 		Bundle tb13g;
 		Bundle tb17h;
 
@@ -2412,152 +2374,6 @@ public class TestControl extends DefaultTestBundleControl {
 			tb13g.uninstall();
 		}
 
-	}
-
-	// Re-exporting Packages --------------------------------
-
-	/**
-	 * The metadata of a module specifies which imported packages are re-
-	 * exported by the module. If multiple packages need to be re-exported with
-	 * identical parameters, the syntax permits a list of packages, separated by
-	 * semicolons, to be specified before the parameters. The same package may
-	 * be re-exported more than once with different parameters.
-	 * 
-	 * @throws Exception if any failure occurs or any assert fails
-	 */
-	public void testPackageReexport001() throws Exception {
-		Bundle tb18f = getContext().installBundle(getWebServer() + "tb18f.jar");
-		Bundle tb18a = getContext().installBundle(getWebServer() + "tb18h.jar");
-		tb18a.start();
-		tb18a.stop();
-		uninstallBundle(tb18a);
-		uninstallBundle(tb18f);
-	}
-
-	/**
-	 * Any module which attempts to re-export a package which is not imported or
-	 * found in a required bundle fails to resolve.
-	 * 
-	 * @throws Exception if any failure occurs or any assert fails
-	 */
-	public void testPackageReexport002() throws Exception {
-		Bundle tb18a = getContext().installBundle(getWebServer() + "tb18a.jar");
-		try {
-			tb18a.start();
-			tb18a.stop();
-			fail("Bundle should not be resolved");
-		}
-		catch (BundleException e) {
-
-		}
-		finally {
-			uninstallBundle(tb18a);
-		}
-	}
-
-	/**
-	 * Test that the re-export statement does not inherit matching attributes or
-	 * the "mandatoryness" of matching attributes via the corresponding import
-	 * of the package. If these are not specified on the re-export statement,
-	 * they are either unspecified or take default values where defaults are
-	 * defined.
-	 * 
-	 * Test that the bundle symbolic name of the re-exporting bundle is
-	 * implicitly associated with the re-export statement.
-	 * 
-	 * Test that the bundle-version of the re-exporting bundle is implicitly
-	 * associated with the re-export statement.
-	 * 
-	 * Test attribute version - the version of the named packages. The default
-	 * value is "0.0.0".
-	 * 
-	 * Test mandatory directive - a string with no default value. The list
-	 * specifies names of matching attributes which must be specified by
-	 * matching Import-Package statements.
-	 * 
-	 * @throws Exception if any failure occurs or any assert fails
-	 */
-	public void testPackageReexport003() throws Exception {
-		Bundle tb18f = getContext().installBundle(getWebServer() + "tb18f.jar");
-		Bundle tb18a = getContext().installBundle(getWebServer() + "tb18d.jar");
-		Bundle tb18e = getContext().installBundle(getWebServer() + "tb18e.jar");
-		tb18a.start();
-		tb18e.start();
-		try {
-			URL url = tb18e
-					.getResource("test/package/resources/tb18f-resource.txt");
-			assertNotNull("Expecting to find the resource tb18f-resource.txt",
-					url);
-		}
-		finally {
-			tb18a.stop();
-			tb18e.stop();
-			uninstallBundle(tb18a);
-			uninstallBundle(tb18e);
-			uninstallBundle(tb18f);
-		}
-	}
-
-	/**
-	 * Test that the uses directive cannot be redefined, it is passed unchanged.
-	 * 
-	 * @throws Exception if any failure occurs or any assert fails
-	 */
-	public void testPackageReexport004() throws Exception {
-		Bundle tb18f = getContext().installBundle(getWebServer() + "tb18f.jar");
-		Bundle tb18a = getContext().installBundle(getWebServer() + "tb18g.jar");
-		try {
-			tb18a.start();
-			tb18a.stop();
-			fail("Bundle should not be resolved");
-		}
-		finally {
-			tb18a.stop();
-			uninstallBundle(tb18a);
-			uninstallBundle(tb18f);
-		}
-	}
-
-	/**
-	 * Test that re-export statement cannot specify an explicit bundle symbolic
-	 * name.
-	 * 
-	 * @throws Exception if any failure occurs or any assert fails
-	 */
-	public void testPackageReexport005() throws Exception {
-		Bundle tb18a = getContext().installBundle(getWebServer() + "tb18c.jar");
-		try {
-			tb18a.start();
-			tb18a.stop();
-			fail("Bundle should not be resolved");
-		}
-		catch (BundleException e) {
-
-		}
-		finally {
-			uninstallBundle(tb18a);
-		}
-	}
-
-	/**
-	 * Test that the re-export statement cannot not specify an explicit bundle
-	 * version.
-	 * 
-	 * @throws Exception if any failure occurs or any assert fails
-	 */
-	public void testPackageReexport006() throws Exception {
-		Bundle tb18a = getContext().installBundle(getWebServer() + "tb18b.jar");
-		try {
-			tb18a.start();
-			tb18a.stop();
-			fail("Bundle should not be resolved");
-		}
-		catch (BundleException e) {
-
-		}
-		finally {
-			uninstallBundle(tb18a);
-		}
 	}
 
 	// Requiring a Bundle -------------------------------------
@@ -2949,30 +2765,12 @@ public class TestControl extends DefaultTestBundleControl {
 	// Installing Modules -------------------------------------
 
 	/**
-	 * Test that the Bundle-ManifestVersion value greater than 2 causes a R4
-	 * bundle to fail to install.
-	 * 
-	 * @throws Exception if there is any problem or an assert fails
-	 */
-	public void testInstallingModules001() throws Exception {
-		try {
-			Bundle tb14a = getContext().installBundle(
-					getWebServer() + "tb14a.jar");
-			tb14a.uninstall();
-			fail("Expecting bundle install to fail because the Bundle-ManifestVersion value is greater than 2.");
-		}
-		catch (BundleException e) {
-
-		}
-	}
-
-	/**
 	 * Test that any duplicate attribute or duplicate directive causes a R4
 	 * bundle to fail to install.
 	 * 
 	 * @throws Exception if there is any problem or an assert fails
 	 */
-	public void testInstallingModules002() throws Exception {
+	public void testInstallingModules001() throws Exception {
 		try {
 			Bundle tb14b = getContext().installBundle(
 					getWebServer() + "tb14b.jar");
@@ -2990,7 +2788,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 * 
 	 * @throws Exception if there is any problem or an assert fails
 	 */
-	public void testInstallingModules003() throws Exception {
+	public void testInstallingModules002() throws Exception {
 		try {
 			Bundle tb14c = getContext().installBundle(
 					getWebServer() + "tb14c.jar");
@@ -3008,7 +2806,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 * 
 	 * @throws Exception if there is any problem or an assert fails
 	 */
-	public void testInstallingModules004() throws Exception {
+	public void testInstallingModules003() throws Exception {
 		try {
 			Bundle tb14d = getContext().installBundle(
 					getWebServer() + "tb14d.jar");
@@ -3037,7 +2835,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 * 
 	 * @throws Exception if there is any problem or an assert fails
 	 */
-	public void testInstallingModules005() throws Exception {
+	public void testInstallingModules004() throws Exception {
 
 		try {
 			Bundle tb14f = getContext().installBundle(
@@ -3064,7 +2862,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 * 
 	 * @throws Exception if there is any problem or an assert fails
 	 */
-	public void testInstallingModules006() throws Exception {
+	public void testInstallingModules005() throws Exception {
 
 		try {
 			Bundle tb14g = getContext().installBundle(
@@ -3078,49 +2876,4 @@ public class TestControl extends DefaultTestBundleControl {
 
 	}
 
-	public String[] getMethods() {
-		return new String[] {"testBundleContextGetReference001",
-				"testBundleContextGetReference002",
-				"testBundleContextGetAllServiceReferences001",
-				"testBundleContextIsAssignableTo001",
-				"testBundleContextIsAssignableTo002",
-				"testServiceRegistryWithMultipleServices001",
-				"testServiceListener001", "testServiceListener002",
-				"testAllServiceListener001", "testServiceTracker001",
-				"testPermissionChecking001",
-				"testJavaPackageExplicityExportImport001",
-				"testHiddenPackages001", "testClassLoadingSearchOrder001",
-				"testClassLoadingSearchOrder002",
-				"testClassLoadingSearchOrder003",
-				"testClassLoadingSearchOrder004",
-				"testClassLoadingSearchOrder005",
-				"testClassLoadingSearchOrder006",
-				"testClassLoadingSearchOrder007",
-				"testClassLoadingSearchOrder008", "testBundleModule001",
-				"testBundleSymbolicName001", "testSingletonBundle001",
-				"testBundleInstall001", "testPackageExport001",
-				"testPackageExport002", "testPackageExport003",
-				"testPackageExport004", "testPackageExport005",
-				"testPackageExport006", "testPackageExport007",
-				"testPackageExport008", "testPackageExport009",
-				"testPackageExport010", "testPackageImport001",
-				"testPackageImport002", "testPackageImport003",
-				"testPackageImport004", "testPackageImport005",
-				"testPackageImport006", "testPackageImport007",
-				"testPackageDynamicImport001", "testPackageDynamicImport002",
-				"testPackageDynamicImport003", "testPackageDynamicImport004",
-				"testPackageDynamicImport005", "testPackageDynamicImport006",
-				"testPackageDynamicImport007", "testPackageDynamicImport008",
-				"testInstallingModules001", "testInstallingModules002",
-				"testInstallingModules003", "testInstallingModules004",
-				"testInstallingModules005", "testInstallingModules006",
-				"testRequiredBundle001", "testRequiredBundle002",
-				"testRequiredBundle003", "testRequiredBundle004",
-				"testRequiredBundle005", "testRequiredBundle006",
-				"testRequiredBundle007", "testRequiredBundle008",
-				"testRequiredBundle009", "testRequiredBundle010",
-				"testPackageReexport001", "testPackageReexport002",
-				"testPackageReexport003", "testPackageReexport004",
-				"testPackageReexport005", "testPackageReexport006"};
-	}
 }
