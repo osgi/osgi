@@ -57,6 +57,7 @@ public class DoIt implements BundleActivator {
             return;
         PermissionAdmin pa = (PermissionAdmin) context.getService(paRef);
         ServiceReference ref;
+        PermissionInfo[] pis;
 
         // Deployment Admin
         ref = context.getServiceReference(DeploymentAdmin.class.getName());
@@ -74,26 +75,31 @@ public class DoIt implements BundleActivator {
                 new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
                 new PermissionInfo(ServicePermission.class.getName(), "*", "register")
             });
+
+        pis = new PermissionInfo[] {
+                new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
+                // to allow RP to read its id from its manifest
+                new PermissionInfo(AdminPermission.class.getName(), "*", "metadata"),
+                // to reach the database service
+                new PermissionInfo(ServicePermission.class.getName(), "*", "get"),
+                // to register itsel as a RP service
+                new PermissionInfo(ServicePermission.class.getName(), "*", "register")
+        	};
         
-        
+        // preinstalled resource processors
         ServiceReference[] refs = context.getServiceReferences(ResourceProcessor.class.getName(),
                 "(type=db)");
         for (int i = 0; i < refs.length; i++) {
             String rpLoc = refs[i].getBundle().getLocation();
-            PermissionInfo[] pis = new PermissionInfo[] {
-	                new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
-	                // to allow RP to read its id from its manifest
-	                new PermissionInfo(AdminPermission.class.getName(), "*", "metadata"),
-	                // to reach the database service
-	                new PermissionInfo(ServicePermission.class.getName(), "*", "get"),
-	                // to register itsel as a RP service
-	                new PermissionInfo(ServicePermission.class.getName(), "*", "register")
-            	};
             pa.setPermissions(rpLoc, pis);
         }
         
+        // db_test_05 needs this
+        pa.setPermissions("osgi-dp:com.nokia.test.exampleresourceprocessor.db." +
+        		"DbResourceProcessor_db_test_05", pis);
+        
         //db_test_06 needs this
-        PermissionInfo[] pis = new PermissionInfo[] {
+        pis = new PermissionInfo[] {
                 new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
                 // to allow RP to read its id from its manifest
                 new PermissionInfo(AdminPermission.class.getName(), "*", "metadata"),
@@ -105,6 +111,8 @@ public class DoIt implements BundleActivator {
                 new PermissionInfo(DeploymentCustomizerPermission.class.getName(), 
                         "(name=easygame)", "privatearea"),
         	};
+        pa.setPermissions("osgi-dp:com.nokia.test.exampleresourceprocessor.db." +
+        		"DbResourceProcessor_db_test_03", pis);
         pa.setPermissions("osgi-dp:com.nokia.test.exampleresourceprocessor.db." +
         		"DbResourceProcessor_db_test_06", pis);
 
@@ -284,6 +292,8 @@ public class DoIt implements BundleActivator {
             try {db_test_12(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
             try {db_test_14(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
+            try {db_test_15(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
             
             try {bad_db_test_01(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
@@ -1095,4 +1105,28 @@ public class DoIt implements BundleActivator {
         dp2.uninstall();
     }
 
+    public static final String db_test_15 = "Tests localization";
+    public void db_test_15() throws Exception {
+        InputStream is = new FileInputStream(HOME + "db_test_15.dp");
+		DeploymentPackage dp = da.installDeploymentPackage(is);
+		
+		String s;
+		s = dp.getHeader("MHColor");	
+		if (!"COLOR".equals(s))
+		    throw new Exception("Negative test failed");
+		
+		s = dp.getResourceHeader("db_test_15.dbscript", "RHR");
+		if (!"RED".equals(s))
+		    throw new Exception("Negative test failed");
+
+		s = dp.getResourceHeader("db_test_15.dbscript", "RHW");
+		if (!"WHITE".equals(s))
+		    throw new Exception("Negative test failed");
+
+		s = dp.getResourceHeader("db_test_15.dbscript", "RHG");
+		if (!"GREEN".equals(s))
+		    throw new Exception("Negative test failed");
+
+		dp.uninstall();
+    }
 }
