@@ -25,6 +25,7 @@ import org.osgi.framework.*;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Entry;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.deploymentadmin.*;
+import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.permissionadmin.*;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -269,6 +270,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         openTrackers();
         transaction = Transaction.createTransaction(this, logger);
         Hashtable oldPerms = null;
+        int numOfErrors = 0;
         try {
             transaction.start();
             stopBundles();
@@ -278,8 +280,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
             processResources(wjis);
             dropResources();
             dropBundles();
-            //refreshPackages();
-            startBundles();
+            refreshPackages();
+            numOfErrors = startBundles();
         } catch (CancelException e) {
             transaction.rollback();
             throw e;
@@ -296,18 +298,21 @@ public class DeploymentSessionImpl implements DeploymentSession {
         }
         transaction.commit();
         closeTrackers();
+        if (numOfErrors > 0) {
+            // TODO throw Exception here
+        }
     }
     
-//    private void refreshPackages() {
-//        final PackageAdmin packAdmin = (PackageAdmin) trackPackAdmin.getService();
-//        if (null != packAdmin) {
-//            AccessController.doPrivileged(new PrivilegedAction() {
-//                public Object run() {
-//                    packAdmin.refreshPackages(null);
-//                    return null;
-//                }});
-//        }
-//    }
+    private void refreshPackages() {
+        final PackageAdmin packAdmin = (PackageAdmin) trackPackAdmin.getService();
+        if (null != packAdmin) {
+            AccessController.doPrivileged(new PrivilegedAction() {
+                public Object run() {
+                    packAdmin.refreshPackages(null);
+                    return null;
+                }});
+        }
+    }
 
     boolean uninstall(boolean forced) throws DeploymentException {
         this.forced = forced;
@@ -337,7 +342,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         return ret;
     }
     
-    private void startBundles() throws BundleException {
+    private int startBundles() {
         DeploymentPackageImpl dp = null;
         if (INSTALL == getDeploymentAction())
             dp = srcDp;
@@ -345,13 +350,22 @@ public class DeploymentSessionImpl implements DeploymentSession {
             dp = targetDp;
         else //DeploymentSession.UNINSTALL == getDeploymentAction()
             dp = targetDp;
+        int numOfErrors = 0;
         for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry entry = (BundleEntry) iter.next();
             Bundle b = context.getBundle(entry.getBundleId());
             if (entry.isCustomizer())
                 continue;
-            startBundle(b);
+            try {
+                startBundle(b);
+            }
+            catch (BundleException e) {
+                logger.log(e);
+                ++numOfErrors;
+            }
         }
+        
+        return numOfErrors;
     }
     
     private void startCustomizers() throws Exception {
@@ -495,7 +509,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
 	            ResourceProcessor proc = findProcessor(pid);
 	            if (null == proc)
 	                throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND, 
-	                    "Resource processor for pid " + pid + "is not found");
+	                    "Resource processor for pid " + pid + " is not found");
 	            
 	            WrappedResourceProcessor wProc = new WrappedResourceProcessor(proc, 
 	                    fetchAccessControlContext(re.getCertChains()));
@@ -660,8 +674,6 @@ public class DeploymentSessionImpl implements DeploymentSession {
                 Bundle b = processBundle(entry);
                 srcDp.getBundleEntryByName(entry.getName()).
                 	setBundleId(b.getBundleId());
-                if (entry.isCustomizerBundle())
-                    startBundle(b);
             } else {
                 BundleEntry beS = srcDp.getBundleEntryByName(entry.getName());
                 BundleEntry beT = targetDp.getBundleEntryByName(entry.getName());

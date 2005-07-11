@@ -27,18 +27,18 @@ import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Ent
 public class ResourceEntry implements Serializable {
 
     private String             resName;
-    private CaseInsensitiveMap attrs = new CaseInsensitiveMap();
+    private CaseInsensitiveMap attrs;
     private String	           pid;
     private List   	           certChains = new LinkedList();
 
-    public ResourceEntry(String name, Attributes jarAttrs) {
+    public ResourceEntry(String name, Attributes jarAttrs, DeploymentPackageImpl dp) {
         this.resName = name;
-        this.attrs = new CaseInsensitiveMap(jarAttrs);
+        this.attrs = new CaseInsensitiveMap(jarAttrs, dp);
     }
     
-    public ResourceEntry(Entry entry) {
+    public ResourceEntry(Entry entry, DeploymentPackageImpl dp) {
         resName = entry.getName();
-        this.attrs = new CaseInsensitiveMap(entry.getAttributes());
+        this.attrs = new CaseInsensitiveMap(entry.getAttributes(), dp);
     }
     
     public boolean equals(Object o) {

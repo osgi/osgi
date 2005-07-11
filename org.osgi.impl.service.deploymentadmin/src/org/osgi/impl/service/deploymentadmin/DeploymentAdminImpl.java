@@ -236,8 +236,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             if (!checkCertificateChains(wjis.getCertificateChains()))
                 throw new DeploymentException(DeploymentException.CODE_SIGNING_ERROR, 
                     "No certificate was found in the keystore for the deployment package");
-            srcDp = new DeploymentPackageImpl(wjis.getManifest(), this, 
+            srcDp = new DeploymentPackageImpl(this, wjis.getManifest(), 
                     wjis.getCertificateChainStringArrays());
+            srcDp.setResourceBundle(wjis.getResourceBundle());
         
 	        checkPermission(srcDp, DeploymentAdminPermission.ACTION_INSTALL);
 	        sendInstallEvent(srcDp.getName());
@@ -426,22 +427,21 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         DeploymentPackageImpl targetDp = findDp(srcDp);
         
         // fix-pack has no target
-        if (srcDp.fixPack() && targetDp == null)
+        if (null != srcDp.getFixPackRange() && targetDp == null)
             throw new DeploymentException(DeploymentException.CODE_MISSING_FIXPACK_TARGET,
                 "Target of the fix-pack is missing");
         
         // not found -> install
         if (null == targetDp) {
             // creates an empty dp
-            targetDp = new DeploymentPackageImpl();
-	        return new DeploymentSessionImpl(new DeploymentPackageImpl(srcDp), 
-                targetDp, logger, context, fwBundleDir, this);
+            targetDp = DeploymentPackageImpl.createEmpty(this);
+	        return new DeploymentSessionImpl(srcDp, targetDp, logger, context, 
+	                fwBundleDir, this);
         }
         // found -> update
-        DeploymentSessionImpl ret = new DeploymentSessionImpl(
-            new DeploymentPackageImpl(srcDp), new DeploymentPackageImpl(targetDp), 
+        DeploymentSessionImpl ret = new DeploymentSessionImpl(srcDp, targetDp, 
             logger, context, fwBundleDir, this);
-        if (srcDp.fixPack()) {
+        if (null != srcDp.getFixPackRange()) {
             VersionRange range = srcDp.getFixPackRange();
             Version ver = targetDp.getVersion();
             if (!range.isIncluded(ver))
@@ -457,14 +457,14 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 			throws DeploymentException 
 	{
         // creates an empty dp
-        DeploymentPackageImpl srcDp = new DeploymentPackageImpl();
+        DeploymentPackageImpl srcDp = DeploymentPackageImpl.createEmpty(this);
 
         // find the package among installed packages
         DeploymentPackageImpl dp = findDp(targetDp);
         if (null == dp)
             throw new RuntimeException("Internal error");
         
-        return new DeploymentSessionImpl(srcDp, new DeploymentPackageImpl(targetDp), logger,
+        return new DeploymentSessionImpl(srcDp, targetDp, logger,
                 context, fwBundleDir, this);
 	}
 
@@ -544,7 +544,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
         
         all.removeAll(sub);
-        return DeploymentPackageImpl.createSystemBundle(all);
+        return DeploymentPackageImpl.createSystem(this, all);
     }
 
     /*

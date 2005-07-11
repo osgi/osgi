@@ -35,18 +35,25 @@ import java.util.jar.*;
 
 public class CaseInsensitiveMap extends Hashtable {
     
+    private DeploymentPackageImpl dp;
+
     // TODO make other methods case insensitive
-    
-    public CaseInsensitiveMap() {
+
+    public CaseInsensitiveMap(Map other, DeploymentPackageImpl dp) {
+        this.dp = dp;
+        fill(other);
     }
 
-    public CaseInsensitiveMap(Map other) {
-        for (Iterator iter = other.keySet().iterator(); iter.hasNext();) {
+    private void fill(Map map) {
+        if (null == map)
+            return;
+        
+        for (Iterator iter = map.keySet().iterator(); iter.hasNext();) {
             Object key = iter.next();
             if (!(key instanceof String) && !(key instanceof Attributes.Name))
                 throw new IllegalArgumentException("Only String and java.util.jar.Attributes.Name " +
                 		"keys are allowed in the parameter map");
-            put(key.toString().toUpperCase(), other.get(key));
+            put(key.toString().toUpperCase(), map.get(key));
         }
     }
 
@@ -61,7 +68,15 @@ public class CaseInsensitiveMap extends Hashtable {
         if (!(key instanceof String))
             throw new IllegalArgumentException("Only String key is allowed");
         String skey = ((String) key).toUpperCase(); 
-        return super.get(skey);
+        String rawValue = (String) super.get(skey);
+        if (null == rawValue)
+            return null;
+        if (null == dp.getResourceBundle())
+            return rawValue;
+        if (rawValue.startsWith("%")) {
+            return dp.getResourceBundle().getString(rawValue.substring(1));
+        }
+        return rawValue;
     }
     
 }

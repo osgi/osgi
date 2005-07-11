@@ -152,7 +152,8 @@ public class DeploymentPackageJarInputStream {
         }
     }
     
-    private JarInputStream jis;
+    private JarInputStream                  jis;
+    private DeploymentPackageResourceBundle dprb = new DeploymentPackageResourceBundle();
     
     private Manifest       manifest;
     //these Entries must precede resource entries in the subsequent nextEntry() calls
@@ -163,12 +164,17 @@ public class DeploymentPackageJarInputStream {
     
     private Entry          actEntry;
     private boolean        fixPack;
-        
+    private String         locPath;
+
     public DeploymentPackageJarInputStream(InputStream is) 
     		throws IOException, DeploymentException 
     {
 	    this.jis = new JarInputStream(is);
 	    manifest = (Manifest) getManifest().clone();
+	    
+	    locPath = manifest.getMainAttributes().getValue(DAConstants.LOC_PATH);
+	    if (null == locPath)
+	        locPath = DAConstants.DEF_LOC_PATH;
 	    
 	    // these Entries must precede resource entries in the subsequent nextEntry() calls
 	    for (Iterator iter = manifest.getEntries().keySet().iterator(); iter.hasNext();) {
@@ -241,6 +247,9 @@ public class DeploymentPackageJarInputStream {
             
             ByteArrayOutputStream bos = readIntoBuffer();
             closeEntry();
+            
+            if (je.getName().startsWith(locPath))
+                dprb.addPropertyFile(je.getName(), bos);
 
             // We have opened a JarEntries so we have to close it 
             // when nextEntry() is called next time
@@ -294,6 +303,10 @@ public class DeploymentPackageJarInputStream {
 
     public Manifest getManifest() {
         return jis.getManifest();
+    }
+    
+    DeploymentPackageResourceBundle getResourceBundle() {
+        return dprb;
     }
 
 }

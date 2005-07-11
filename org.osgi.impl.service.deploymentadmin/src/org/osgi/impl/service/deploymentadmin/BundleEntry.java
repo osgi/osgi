@@ -37,7 +37,7 @@ public class BundleEntry implements Serializable {
     private Boolean            missing;
     private String             pid;        // if it's a customizer
                                          
-    private CaseInsensitiveMap attrs = new CaseInsensitiveMap();
+    private CaseInsensitiveMap attrs;
     private List               certChains; // list of cerificate chains
                                            // (one chain is a String[]
     
@@ -46,28 +46,30 @@ public class BundleEntry implements Serializable {
             String version, 
             long id,
             boolean missing,
-            Map jarAttrs) 
+            Map jarAttrs,
+            DeploymentPackageImpl dp) 
 	{
         this.resName = name;
 		this.symbName = symbName;
 		this.version = version;
 		this.bundleId = new Long(id);
 		this.missing = new Boolean(missing);
-		this.attrs = new CaseInsensitiveMap(jarAttrs);
+		this.attrs = new CaseInsensitiveMap(jarAttrs, dp);
 	}
 
     public BundleEntry(String name,
             		   String symbName, 
                        String version, 
                        boolean missing,
-                       Attributes attrs) 
+                       Attributes attrs, 
+                       DeploymentPackageImpl dp) 
     {
-        this(name, symbName, version, -1, missing, attrs);
+        this(name, symbName, version, -1, missing, attrs, dp);
     }
     
     public BundleEntry(BundleEntry other) {
         this(other.getResName(), other.getSymbName(), other.version,
-             other.getBundleId(), other.isMissing(), other.attrs);
+             other.getBundleId(), other.isMissing(), other.attrs, null);
     }
     
     public BundleEntry(final Bundle b) {
@@ -89,7 +91,7 @@ public class BundleEntry implements Serializable {
     public BundleEntry(Entry entry) {
         this(entry.getName(), entry.getAttributes().getValue(DAConstants.BUNDLE_SYMBOLIC_NAME),
              entry.getAttributes().getValue(DAConstants.BUNDLE_VERSION), -1, entry.isMissing(),
-             entry.getAttributes());
+             entry.getAttributes(), null);
     }
 
     public boolean equals(Object obj) {

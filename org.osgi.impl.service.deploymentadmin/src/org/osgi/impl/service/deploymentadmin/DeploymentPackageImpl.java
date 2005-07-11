@@ -42,56 +42,78 @@ import org.osgi.service.deploymentadmin.ResourceProcessor;
 
 public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
-    private transient DeploymentAdminImpl da;
+    private transient DeploymentAdminImpl   da;
+
+    private DeploymentPackageResourceBundle dprb;
+    private CaseInsensitiveMap              mainSection;
+    private Vector                          bundleEntries = new Vector();
+    private Vector                          resourceEntries = new Vector();
     
-    private CaseInsensitiveMap mainSection     = new CaseInsensitiveMap();
-    private Vector             bundleEntries   = new Vector();
-    private Vector             resourceEntries = new Vector();
+    // List of String[]s
+    private List certChains = new Vector();
     
-    // List of String[]
-    private List               certChains      = new Vector();
+    private Boolean stale = Boolean.FALSE;
     
-    private Boolean            stale           = Boolean.FALSE;
+    private DeploymentPackageImpl() {
+    }
     
-    public DeploymentPackageImpl(Manifest manifest, DeploymentAdminImpl da,
+    DeploymentPackageImpl(DeploymentAdminImpl da, Manifest manifest,
             List certChains) throws DeploymentException 
     {
+        if (null == da)
+            throw new IllegalArgumentException("Internal error");
         this.da = da;
+
+        if (null == manifest)
+            mainSection = new CaseInsensitiveMap(null, this);
+        else 
+            mainSection = new CaseInsensitiveMap(manifest.getMainAttributes(), this);
+        processNameSections(manifest);
+
         if (null != certChains)
             this.certChains = certChains;
-        
-        processMainSection(manifest);
-        processNameSections(manifest);
         
         new DeploymentPackageVerifier().verify(this);
     }
 
     /*
-     * Copy constructor
+     * Creates an empty DP
      */
-    public DeploymentPackageImpl(DeploymentPackageImpl other) {
-        this.da = other.da;
-        this.certChains = other.certChains;
-        this.mainSection = new CaseInsensitiveMap(other.mainSection);
-        bundleEntries = (Vector) other.bundleEntries.clone();
-        resourceEntries = (Vector) other.resourceEntries.clone();
+    static DeploymentPackageImpl createEmpty(DeploymentAdminImpl da) {
+        if (null == da)
+            throw new IllegalArgumentException("Internal error");
+        
+        DeploymentPackageImpl dp = new DeploymentPackageImpl();
+        dp.da = da;
+        dp.mainSection = new CaseInsensitiveMap(null, dp);
+        dp.mainSection.put(DAConstants.DP_NAME, "");
+        dp.mainSection.put(DAConstants.DP_VERSION, "0.0.0");
+        
+        return dp;
     }
 
     /*
-     * Creates an empty DP
+     * Creates the Systemp DP
      */
-    public DeploymentPackageImpl() {
-        mainSection.put(DAConstants.DP_NAME, "");
-        mainSection.put(DAConstants.DP_VERSION, "0.0.0");
-    }
-
-    static DeploymentPackageImpl createSystemBundle(Set bundleEntries) {
+    static DeploymentPackageImpl createSystem(DeploymentAdminImpl da, Set bundleEntries) {
+        if (null == da)
+            throw new IllegalArgumentException("Internal error");
+        
         DeploymentPackageImpl dp = new DeploymentPackageImpl();
+        dp.mainSection = new CaseInsensitiveMap(null, dp);
         dp.mainSection.put(DAConstants.DP_NAME, "System");
         dp.mainSection.put(DAConstants.DP_VERSION, "0.0.0");
         dp.bundleEntries = new Vector(bundleEntries);
         
         return dp;
+    }
+    
+    boolean isEmpty() {
+        return getName().equals("") && getVersion().equals(new Version("0.0.0"));
+    }
+    
+    boolean isSystem() {
+        return getName().equals("System") && getVersion().equals(new Version("0.0.0"));
     }
     
     public boolean equals(Object obj) {
@@ -115,25 +137,13 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
     
     public String toString() {
-        return "{Deployment Package: " + getName() + " " + 
-        		( getVersion() == null ? null : getVersion() ) + "}";
+        return "[Deployment Package: " + getName() + " " + getVersion() + "]";
     }
 
-    boolean isSystem() {
-        return "System".equals(getName());
-    }
-
-    private void processMainSection(Manifest manifest) throws DeploymentException {
-        Attributes attrs = manifest.getMainAttributes();
-        for (Iterator iter = attrs.keySet().iterator(); iter.hasNext();) {
-            Attributes.Name key = (Attributes.Name) iter.next();
-            Object value = attrs.getValue(key);
-            // Attributes.Name is not Serializable
-            mainSection.put(key.toString(), value);
-        }
-    }
-    
     private void processNameSections(Manifest manifest) throws DeploymentException {
+        if (null == manifest)
+            return;
+        
         Map entries = manifest.getEntries();
         for (Iterator iter = entries.keySet().iterator(); iter.hasNext();) {
             String resPath = (String) iter.next();
@@ -145,11 +155,11 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             boolean isBundle = null != bSn && null != bVer; 
             if (isBundle) {
                 // bundle
-                BundleEntry be = new BundleEntry(resPath, bSn, bVer, missing, attrs);
+                BundleEntry be = new BundleEntry(resPath, bSn, bVer, missing, attrs, this);
                 bundleEntries.add(be);
             } else {
                 // resource
-                resourceEntries.add(new ResourceEntry(resPath, attrs));
+                resourceEntries.add(new ResourceEntry(resPath, attrs, this));
             }
         }
     }
@@ -166,15 +176,15 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return bundleEntries.contains(be);
     }
     
-    public void add(BundleEntry be) {
+    void add(BundleEntry be) {
         bundleEntries.add(be);
     }
 
-    public void remove(BundleEntry be) {
+    void remove(BundleEntry be) {
         bundleEntries.remove(be);
     }
     
-    public BundleEntry getBundleEntryByBundleId(long id) {
+    BundleEntry getBundleEntryByBundleId(long id) {
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             if (be.getBundleId() == id)
@@ -182,7 +192,6 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         }
         return null;
     }
-
     
     BundleEntry getBundleEntryByName(String name) {
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
@@ -212,10 +221,13 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
 
     VersionRange getFixPackRange() {
-        return new VersionRange((String) mainSection.get(DAConstants.DP_FIXPACK));
+        String s = (String) mainSection.get(DAConstants.DP_FIXPACK);
+        if (null == s)
+            return null;
+        return new VersionRange(s);
     }
     
-    public ResourceEntry getResourceEntryByName(String name) {
+    ResourceEntry getResourceEntryByName(String name) {
         for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
             ResourceEntry entry = (ResourceEntry) iter.next();
             if (entry.getResName().equals(name))
@@ -377,7 +389,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      */
     public void uninstall() throws DeploymentException {
         checkStale();
-        if (isSystem())
+        if (isSystem() || isEmpty())
             throw new RuntimeException("\"System\" deployment package cannot be uninstalled");
         
         da.checkPermission(this, DeploymentAdminPermission.ACTION_UNINSTALL);
@@ -393,7 +405,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      */
     public boolean uninstallForced() {
         checkStale();
-        if (isSystem())
+        if (isSystem() || isEmpty())
             throw new RuntimeException("\"System\" deployment package cannot be uninstalled");
         
         da.checkPermission(this, DeploymentAdminPermission.ACTION_UNINSTALL_FORCED);
@@ -401,10 +413,6 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         stale = Boolean.TRUE;
         
         return da.uninstallForced(this);
-    }
-
-    boolean fixPack() {
-        return null != mainSection.get(DAConstants.DP_FIXPACK);
     }
 
     void setProcessorPid(String resName, String pid) {
@@ -448,6 +456,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             if (null == dp.getVersion())
                 throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
                         "Missing deployment package version in: " + dp.getName());
+            
             try {
                 String s = (String) dp.mainSection.get(DAConstants.DP_VERSION);
                 new Version(s);
@@ -457,7 +466,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                         "Bad version in: " + dp, e);
             }
             
-            if (dp.fixPack()) {
+            if (null != dp.getFixPackRange()) {
 	            try {
 	                String s = (String) dp.mainSection.get(DAConstants.DP_FIXPACK);
 	                new VersionRange(s);
@@ -508,7 +517,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         {
             checkResourceName(be.getResName());
             
-            if (!dp.fixPack() && be.isMissing())
+            if (null == dp.getFixPackRange() && be.isMissing())
                 	throw new DeploymentException(DeploymentException.CODE_BAD_HEADER, 
                         DAConstants.MISSING + " header is only allowed in fix-pack (" +
                         dp + ")");
@@ -546,7 +555,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         private void checkResourceEntry(DeploymentPackageImpl dp, ResourceEntry re) 
         		throws DeploymentException 
         {
-            if (!dp.fixPack() && re.isMissing())
+            if (null == dp.getFixPackRange() && re.isMissing())
             	throw new DeploymentException(DeploymentException.CODE_BAD_HEADER, 
                     DAConstants.MISSING + " header is only allowed in fix-pack (" +
                     dp + ")");
@@ -558,16 +567,24 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return new HashSet(resourceEntries);
     }
 
-    public void remove(ResourceEntry re) {
+    void remove(ResourceEntry re) {
         resourceEntries.remove(re);
     }
 
-    public Iterator getResourceEntryIterator() {
+    Iterator getResourceEntryIterator() {
         return resourceEntries.iterator();
     }
 
-    public boolean contains(ResourceEntry re) {
+    boolean contains(ResourceEntry re) {
         return resourceEntries.contains(re);
+    }
+
+    void setResourceBundle(DeploymentPackageResourceBundle dprb) {
+        this.dprb = dprb;  
+    }
+    
+    DeploymentPackageResourceBundle getResourceBundle() {
+        return dprb;  
     }
 
 }
