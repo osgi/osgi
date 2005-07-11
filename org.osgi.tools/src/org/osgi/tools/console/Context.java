@@ -119,7 +119,7 @@ class Context implements CommandInterpreter {
 				if (ite.getTargetException() instanceof BundleException) {
 					BundleException be = (BundleException) ite
 							.getTargetException();
-					return "ERROR: Bundle Exception " + cmd + " ("
+					return "ERROR: Bundle Exception " + cmd + " " + be.getMessage() + " ("
 							+ be.getNestedException() + " )";
 				}
 				return "ERROR: Command resulted in exception "

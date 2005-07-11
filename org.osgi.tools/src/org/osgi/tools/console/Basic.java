@@ -1,7 +1,7 @@
 package org.osgi.tools.console;
 
 import java.io.*;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.net.URL;
 import java.util.*;
 
@@ -15,13 +15,13 @@ import org.osgi.tools.command.*;
  * Provide a basic set of commands.
  */
 public class Basic implements CommandProvider {
-	boolean			_stacktraces;
-	Hashtable		_variables;
-	String			_user;
-	BundleContext	_context;
 	Console			_console;
-	String			_username	= null;
+	BundleContext	_context;
 	String			_password	= null;
+	boolean			_stacktraces;
+	String			_user;
+	String			_username	= null;
+	Hashtable		_variables;
 
 	Basic(Console console, BundleContext context) {
 		_console = console;
@@ -42,318 +42,75 @@ public class Basic implements CommandProvider {
 		}
 	}
 
-	public String getName() {
-		return "basic";
+	//
+	//	Sets the console to ascii (normal) mode. Lines are terminated with \r\n.
+	//
+	public Object _ascii(CommandInterpreter intp) throws Exception {
+		intp.setVariable("eol", "\r\n");
+		return null;
 	}
 
-	public String getUser() {
-		return _user;
+	//
+	//	Sets the console to binary mode. Lines are terminated with CTRL-A instead
+	// of \r\n.
+	//  
+	public Object _bin(CommandInterpreter intp) throws Exception {
+		intp.setVariable("eol", "\001");
+		return null;
 	}
 
-	public Object _lsb(CommandInterpreter intp) throws Exception {
-		Bundle[] bundles = _context.getBundles();
-		return bundles;
+	public Object _cat(CommandInterpreter intp) throws IOException {
+		return _v(intp);
 	}
 
-	public Object _start(CommandInterpreter intp) throws Exception {
-		Bundle b = getBundle(intp);
-		b.start();
-		return b;
+	public Object _cd(CommandInterpreter intp) throws IOException {
+		String name = intp.nextArgument();
+		File pwd = getPWD(intp);
+		if (name == null)
+			pwd = new File("");
+		else
+			pwd = new File(pwd, name);
+		pwd = new File(pwd.getCanonicalPath());
+		if (!pwd.exists())
+			return intp.error("No Such direcory " + name);
+		intp.setVariable("PWD", pwd);
+		return pwd;
 	}
 
-	public Object _stop(CommandInterpreter intp) throws Exception {
-		Bundle b = getBundle(intp);
-		b.stop();
-		return b;
-	}
-
-	public Object _lss(CommandInterpreter intp) throws Exception {
-		String f = intp.nextArgument();
-		ServiceReference[] refs = _context.getServiceReferences(null, f);
-		return refs;
-	}
-
-	public Object _ss(CommandInterpreter intp) throws Exception {
+	public Object _decompile( CommandInterpreter intp ) throws InvalidSyntaxException {
 		ServiceReference[] refs = _context.getServiceReferences(null,
 				"(service.id=" + intp.nextArgument() + ")");
+		for ( int i=0; refs!= null && i<refs.length; i++ ) {
+			Object o = _context.getService(refs[i]);
+			ByteArrayOutputStream out= new ByteArrayOutputStream();
+			PrintWriter pw= new PrintWriter( new OutputStreamWriter(out));
+			decompile(pw,o);
+			pw.flush();
+			return new String( out.toByteArray() );
+		}
+		return null;
+	}
+
+	public Object _defaultpermissions(CommandInterpreter intp) throws Exception {
+		PermissionAdmin	admin = getPermissionAdmin();
+		return admin.getDefaultPermissions();
+	}
+
+	public Object _echo(CommandInterpreter intp) {
+		String v = intp.nextArgument();
 		StringBuffer sb = new StringBuffer();
-		for (int i = 0; refs != null && i < refs.length; i++) {
-			String[] keys = refs[i].getPropertyKeys();
-			sb.append("service.id=" + refs[i].getProperty("service.id"));
-			sb.append("\r\n");
-			for (int j = 0; keys != null && j < keys.length; j++) {
-				//sb.append( " " );
-				sb.append(keys[j] + "=");
-				sb.append(Handler.toString(4, refs[i].getProperty(keys[j])));
-				sb.append("\r\n");
+		String del = "";
+		while (v != null) {
+			if (v.equals("^"))
+				del = "";
+			else {
+				sb.append(del);
+				sb.append(v);
+				del = " ";
 			}
+			v = intp.nextArgument();
 		}
 		return sb.toString();
-	}
-
-	Thread[] getThreads() {
-		ThreadGroup g = Thread.currentThread().getThreadGroup();
-		while (g.getParent() != null)
-			g = g.getParent();
-		Thread list[] = new Thread[g.activeCount() + 20];
-		g.enumerate(list);
-		return list;
-	}
-
-	public Object _threads(CommandInterpreter intp) throws Exception {
-		return getThreads();
-	}
-
-	public Object _stacktraces(CommandInterpreter intp) {
-		String arg = intp.nextArgument();
-		if (arg == null || arg.equals("on"))
-			_stacktraces = true;
-		else
-			_stacktraces = false;
-		return null;
-	}
-
-	public Object _interrupt(CommandInterpreter intp) throws Exception {
-		String name = intp.nextArgument();
-		Thread t = getThread(name);
-		if (t != null) {
-			t.interrupt();
-			return t;
-		}
-		else
-			return intp.error("No such thread " + name);
-	}
-
-	Thread getThread(String name) {
-		Thread[] list = getThreads();
-		for (int i = 0; i < list.length; i++)
-			if (list[i] != null && list[i].getName().equals(name))
-				return list[i];
-		return null;
-	}
-
-	public Object _install(CommandInterpreter intp) throws Exception {
-		String s = intp.nextArgument();
-		if (s.indexOf(":") <= 0) {
-			String prefix = (String) intp.getVariable("PREFIX");
-			if (prefix != null)
-				s = prefix + "/" + s;
-		}
-		return _context.installBundle(s);
-	}
-
-	public Object _uninstall(CommandInterpreter intp) throws Exception {
-		Bundle b = getBundle(intp);
-		b.uninstall();
-		return b;
-	}
-
-	public Object _updatebundle(CommandInterpreter intp) throws Exception {
-		Bundle b = getBundle(intp);
-		String s = intp.nextArgument();
-		if (s == null)
-			b.update();
-		else
-			b.update((new URL(s)).openStream());
-		return b;
-	}
-
-	public Object _inspect(CommandInterpreter intp) throws Exception {
-		StringBuffer sb = new StringBuffer();
-		Bundle b = getBundle(intp);
-		sb.append("Id:          " + b.getBundleId() + "\r\n" + "Location:  "
-				+ b.getLocation() + "\r\n" + "Status:      " + status(b)
-				+ "\r\n");
-		return sb;
-	}
-
-	public Object _inuse(CommandInterpreter intp) {
-		Bundle b = getBundle(intp);
-		return b.getServicesInUse();
-	}
-
-	public Object _registered(CommandInterpreter intp) {
-		Bundle b = getBundle(intp);
-		return b.getRegisteredServices();
-	}
-
-	public Object _headers(CommandInterpreter intp) throws Exception {
-		StringBuffer sb = new StringBuffer();
-		Bundle b = getBundle(intp);
-		Dictionary d = b.getHeaders();
-		for (Enumeration e = d.keys(); e.hasMoreElements();) {
-			String key = (String) e.nextElement();
-			sb.append(" " + key + "=" + Handler.toString(d.get(key)) + "\r\n");
-		}
-		return sb.toString();
-	}
-
-	public String getHelp() {
-		return ""
-				+ "BASIC\r\n"
-				+ "cd <dir>                        Change directory (for v cmd -> sets PWD)\r\n"
-				+ "exports [-s]                    List all exports\r\n"
-				+ "free                            free memory\r\n"
-				+ "gc                              garbage collect\r\n"
-				+ "headers <id>                    Show the manifest headers\r\n"
-				+ "inspect <id>                    inspect bundle <id>\r\n"
-				+ "install <url>                   install a bundle\r\n"
-				+ "interrupt <thread>              interrupt thread\r\n"
-				+ "inuse <id>                      Services in use by <id>\r\n"
-				+ "load <name>                     load library with full name\r\n"
-				+ "loadlibrary <name>              load library with library name\r\n"
-				+ "log [all|warning|info|error|debug]* [bundle <id>] Show log\r\n"
-				+ "login <user> <password>         Login user\r\n"
-				+ "lsb                             list installed bundles\r\n"
-				+ "lss [ \"<filter>\" ]              list services, filter is LDAP syntax, no spaces\r\n"
-				+ "registered <id>                 Services registered by <id>\r\n"
-				+ "restart                         Restart the framework\r\n"
-				+ "shutdown                        Stops the system bundle\r\n"
-				+ "ss <sid>                        Show service\r\n"
-				+ "start <id>                      Start bundle\r\n"
-				+ "stop <id>                       Stop bundle\r\n"
-				+ "service <id>                    Show service info\r\n"
-				+ "threads                         Show threads\r\n"
-				+ "total                           Total memory\r\n"
-				+ "uninstall <id>                  uninstal bundle\r\n"
-				+ "update bundle <id>              update bundle\r\n"
-				+ "v <file>                        View a file or directory\r\n";
-	}
-
-	public Object _help(CommandInterpreter intp) {
-		StringBuffer sb = new StringBuffer();
-		String type = intp.nextArgument();
-		Object services[] = _console.providers();
-		for (int i = 0; services != null && i < services.length; i++) {
-			CommandProvider p = (CommandProvider) services[i];
-			String help = p.getHelp();
-			if (type == null || help.startsWith(type))
-				sb.append(help);
-		}
-		return sb.toString();
-	}
-
-	String status(Bundle b) {
-		switch (b.getState()) {
-			case Bundle.ACTIVE :
-				return "ACTIVE";
-			case Bundle.STARTING :
-				return "STARTING";
-			case Bundle.STOPPING :
-				return "STOPPING";
-			case Bundle.INSTALLED :
-				return "INSTALLED";
-			case Bundle.UNINSTALLED :
-				return "UNINSTALLED";
-			case Bundle.RESOLVED :
-				return "RESOLVED";
-			default :
-				return "UNKNOWN STATE";
-		}
-	}
-
-	public Bundle getBundle(CommandInterpreter intp) {
-		String bundle = intp.nextArgument();
-		if ( bundle == null )
-			return null;
-		
-		Object var = intp.getVariable(bundle);
-		if (var != null && var instanceof String)
-			bundle = (String) var;
-		try {
-			int id = Integer.parseInt(bundle);
-			Bundle Bundle = _context.getBundle(id);
-			if (Bundle == null)
-				throw new RuntimeException("No such bundle " + id);
-			return Bundle;
-		}
-		catch (NumberFormatException e) {
-		}
-		catch (NullPointerException e) {
-		}
-		return null;
-	}
-
-	public Object _free(CommandInterpreter intp) {
-		return new Long(Runtime.getRuntime().freeMemory());
-	}
-
-	public Object _sleep(CommandInterpreter intp) {
-		String time = intp.nextArgument();
-		if (time == null)
-			time = "1";
-		long t = Long.parseLong(time) * 1000;
-		try {
-			Thread.sleep(t);
-		}
-		catch (Exception e) {
-		}
-		return new Date();
-	}
-
-	public Object _framework(CommandInterpreter intp) {
-		StringBuffer sb = new StringBuffer();
-		sb.append("Vendor                 "
-				+ _context.getProperty("org.osgi.framework.vendor") + "\r\n");
-		sb.append("Version                "
-				+ _context.getProperty("org.osgi.framework.version") + "\r\n");
-		sb.append("OS name                "
-				+ _context.getProperty("org.osgi.framework.os.name") + "\r\n");
-		sb.append("OS version             "
-				+ _context.getProperty("org.osgi.framework.os.version")
-				+ "\r\n");
-		sb
-				.append("Processor              "
-						+ _context.getProperty("org.osgi.framework.processor")
-						+ "\r\n");
-		return sb.toString();
-	}
-
-	public Object _gc(CommandInterpreter intp) {
-		Runtime.getRuntime().gc();
-		return _free(intp);
-	}
-
-	public Object _load(CommandInterpreter intp) {
-		Runtime.getRuntime().load(intp.nextArgument());
-		return null;
-	}
-
-	public Object _library(CommandInterpreter intp) {
-		Runtime.getRuntime().loadLibrary(intp.nextArgument());
-		return null;
-	}
-
-	public Object _total(CommandInterpreter intp) {
-		return new Long(Runtime.getRuntime().totalMemory());
-	}
-
-	public Object _refresh(CommandInterpreter intp) throws Exception {
-		PackageAdmin admin = getPackageAdmin();
-		admin.refreshPackages(null);
-		return null;
-	}
-
-	PackageAdmin getPackageAdmin() {
-		ServiceReference ref = _context.getServiceReference(PackageAdmin.class
-				.getName());
-		if (ref == null)
-			throw new RuntimeException("No Package Admin available");
-		PackageAdmin pa = (PackageAdmin) _context.getService(ref);
-		if (pa == null)
-			throw new RuntimeException("No Package Admin available");
-		return pa;
-	}
-	
-	PermissionAdmin getPermissionAdmin() {
-		ServiceReference ref = _context.getServiceReference(PermissionAdmin.class
-				.getName());
-		if (ref == null)
-			throw new RuntimeException("No Permission Admin available");
-		PermissionAdmin pa = (PermissionAdmin) _context.getService(ref);
-		if (pa == null)
-			throw new RuntimeException("No Permission Admin available");
-		return pa;
 	}
 
 	public Object _exports(CommandInterpreter intp) {
@@ -423,33 +180,149 @@ public class Basic implements CommandProvider {
 		return sb.toString();
 	}
 
-	/*
-	 * public Object _quit( CommandInterpreter intp ) throws Exception { String
-	 * error = intp.nextArgument(); int n = 0; if ( error != null ) n =
-	 * Integer.parseInt( error );
-	 * 
-	 * System.exit( n ); return null; }
-	 */
-	public Object copy(CommandInterpreter intp) throws Exception {
+	public Object _framework(CommandInterpreter intp) {
 		StringBuffer sb = new StringBuffer();
-		URL src = new URL(intp.nextArgument());
-		String dst = intp.nextArgument();
-		FileOutputStream out = null;
-		BufferedReader in = new BufferedReader(new InputStreamReader(src
-				.openStream()));
-		if (dst != null)
-			out = new FileOutputStream(dst);
-		String line = in.readLine();
-		while (line != null) {
-			if (out == null)
-				sb.append(line + "\r\n");
-			else
-				out.write(line.getBytes());
-			line = in.readLine();
-		}
-		in.close();
-		out.close();
+		sb.append("Vendor                 "
+				+ _context.getProperty("org.osgi.framework.vendor") + "\r\n");
+		sb.append("Version                "
+				+ _context.getProperty("org.osgi.framework.version") + "\r\n");
+		sb.append("OS name                "
+				+ _context.getProperty("org.osgi.framework.os.name") + "\r\n");
+		sb.append("OS version             "
+				+ _context.getProperty("org.osgi.framework.os.version")
+				+ "\r\n");
+		sb
+				.append("Processor              "
+						+ _context.getProperty("org.osgi.framework.processor")
+						+ "\r\n");
 		return sb.toString();
+	}
+
+	public Object _free(CommandInterpreter intp) {
+		return new Long(Runtime.getRuntime().freeMemory());
+	}
+
+	public Object _gc(CommandInterpreter intp) {
+		Runtime.getRuntime().gc();
+		return _free(intp);
+	}
+
+	public Object _get(CommandInterpreter intp) {
+		String name = intp.nextArgument();
+		if (name == null)
+			return intp.error("Name of variable non null");
+		return intp.getVariable(name);
+	}
+
+	public Object _global(CommandInterpreter intp) {
+		String name = intp.nextArgument();
+		String value = intp.nextArgument();
+		if (value != null && value.equals("="))
+			value = intp.nextArgument();
+		if (name == null || value == null)
+			return intp.error("Name and value should be non null, name=" + name
+					+ " and value=" + value);
+		_console.setGlobal(name, value);
+		return null;
+	}
+
+	public Object _headers(CommandInterpreter intp) throws Exception {
+		StringBuffer sb = new StringBuffer();
+		Bundle b = getBundle(intp);
+		Dictionary d = b.getHeaders();
+		for (Enumeration e = d.keys(); e.hasMoreElements();) {
+			String key = (String) e.nextElement();
+			sb.append(" " + key + "=" + Handler.toString(d.get(key)) + "\r\n");
+		}
+		return sb.toString();
+	}
+
+	public Object _help(CommandInterpreter intp) {
+		StringBuffer sb = new StringBuffer();
+		String type = intp.nextArgument();
+		Object services[] = _console.providers();
+		for (int i = 0; services != null && i < services.length; i++) {
+			CommandProvider p = (CommandProvider) services[i];
+			String help = p.getHelp();
+			if (type == null || help.startsWith(type))
+				sb.append(help);
+		}
+		return sb.toString();
+	}
+
+	public Object _inspect(CommandInterpreter intp) throws Exception {
+		StringBuffer sb = new StringBuffer();
+		Bundle b = getBundle(intp);
+		sb.append("Id:          " + b.getBundleId() + "\r\n" + "Location:  "
+				+ b.getLocation() + "\r\n" + "Status:      " + status(b)
+				+ "\r\n");
+		return sb;
+	}
+
+	public Object _install(CommandInterpreter intp) throws Exception {
+		String s = intp.nextArgument();
+		if (s.indexOf(":") <= 0) {
+			String prefix = (String) intp.getVariable("PREFIX");
+			if (prefix != null)
+				s = prefix + "/" + s;
+		}
+		return _context.installBundle(s);
+	}
+
+	public Object _interrupt(CommandInterpreter intp) throws Exception {
+		String name = intp.nextArgument();
+		Thread t = getThread(name);
+		if (t != null) {
+			t.interrupt();
+			return t;
+		}
+		else
+			return intp.error("No such thread " + name);
+	}
+
+	public Object _inuse(CommandInterpreter intp) {
+		Bundle b = getBundle(intp);
+		return b.getServicesInUse();
+	}
+
+	public Object _library(CommandInterpreter intp) {
+		Runtime.getRuntime().loadLibrary(intp.nextArgument());
+		return null;
+	}
+
+		
+	//
+	// List the resources in the jar file
+	//
+	public Object _listresources(CommandInterpreter intp) throws Exception {
+		Bundle b = getBundle(intp);
+		if ( b == null )
+			return "No bundle specified";
+		
+		String prefix = intp.nextArgument();
+		if (prefix == null)
+			prefix = "";
+		try {
+			Method m = b.getClass().getMethod("getEntryPaths",
+					new Class[] {String.class});
+			Vector v = new Vector();
+			for (Enumeration e = (Enumeration) m.invoke(b,
+					new Object[] {prefix}); e.hasMoreElements();) {
+				String path = (String) e.nextElement();
+				v.add(path);
+			}
+			return v;
+		}
+		catch (Error e) {
+			// This might be a framework < 1.2
+			throw new RuntimeException(
+					"This framework does not support enumerating resources");
+		}
+	}
+
+	public Object _load(CommandInterpreter intp) {
+		Runtime.getRuntime().load(intp.nextArgument());
+		return null;
 	}
 
 	public Object _log(CommandInterpreter intp) throws Exception {
@@ -516,37 +389,66 @@ public class Basic implements CommandProvider {
 		return result;
 	}
 
-	public Object _type(CommandInterpreter intp) throws IOException {
-		StringBuffer sb = new StringBuffer();
-		File file = new File(intp.nextArgument());
-		if (file.isDirectory()) {
-			String list[] = file.list();
-			sb.append(Handler.toString(list));
+	//
+	//	Login user
+	//
+	public Object _login(CommandInterpreter intp) throws Exception {
+		String user = intp.nextArgument();
+		String pass = intp.nextArgument();
+		if (user == null || pass == null || _username == null
+				|| _password == null) {
+			return new Boolean(false);
 		}
-		else
-			if (!file.exists()) {
-				return intp.error("No Such File: " + file);
-			}
-			else {
-				FileInputStream in = new FileInputStream(file);
-				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(in));
-				String line = reader.readLine();
-				while (line != null) {
-					sb.append(line + "\r\n");
-					line = reader.readLine();
-				}
-				reader.close();
-				in.close();
-			}
-		return sb.toString();
+		return new Boolean(user.equals(_username) && pass.equals(_password));
 	}
 
-	public Object _shutdown(CommandInterpreter intp) throws BundleException {
-		Bundle system = _context.getBundle(0);
-		system.stop();
-		System.exit(0);
+	public Object _ls(CommandInterpreter intp) throws IOException {
+		return _v(intp);
+	}
+	
+	
+	
+
+	public Object _lsb(CommandInterpreter intp) throws Exception {
+		Bundle[] bundles = _context.getBundles();
+		return bundles;
+	}
+
+	public Object _lss(CommandInterpreter intp) throws Exception {
+		String f = intp.nextArgument();
+		ServiceReference[] refs = _context.getServiceReferences(null, f);
+		return refs;
+	}
+
+	public Object _permissions(CommandInterpreter intp) throws Exception {
+		PermissionAdmin	admin = getPermissionAdmin();
+		Bundle b= getBundle(intp);
+		if ( b != null ) {
+			return admin.getPermissions(b.getLocation());
+		}
+		else  {
+			Vector	v = new Vector();
+			String [] locations = admin.getLocations();
+			for ( int i=0; locations!=null && i <locations.length; i++ ) {
+				v.add( admin.getPermissions(locations[i]));
+			}
+			return v;
+		}
+	}
+
+	public Object _properties(CommandInterpreter intp) {
+		return System.getProperties();
+	}
+
+	public Object _refresh(CommandInterpreter intp) throws Exception {
+		PackageAdmin admin = getPackageAdmin();
+		admin.refreshPackages(null);
 		return null;
+	}
+
+	public Object _registered(CommandInterpreter intp) {
+		Bundle b = getBundle(intp);
+		return b.getRegisteredServices();
 	}
 
 	public Object _restart(CommandInterpreter intp) throws BundleException {
@@ -554,132 +456,7 @@ public class Basic implements CommandProvider {
 		system.update();
 		return null;
 	}
-
-	public Object _properties(CommandInterpreter intp) {
-		return System.getProperties();
-	}
-
-	public Object _set(CommandInterpreter intp) {
-		String name = intp.nextArgument();
-		String value = intp.nextArgument();
-		if (value != null && value.equals("="))
-			value = intp.nextArgument();
-		if (name == null)
-			return intp.error("Name should be non null, name=" + name);
-		if (value != null)
-			intp.setVariable(name, value);
-		else
-			intp.setVariable(name, "");
-		return null;
-	}
-
-	public Object _global(CommandInterpreter intp) {
-		String name = intp.nextArgument();
-		String value = intp.nextArgument();
-		if (value != null && value.equals("="))
-			value = intp.nextArgument();
-		if (name == null || value == null)
-			return intp.error("Name and value should be non null, name=" + name
-					+ " and value=" + value);
-		_console.setGlobal(name, value);
-		return null;
-	}
-
-	public Object _get(CommandInterpreter intp) {
-		String name = intp.nextArgument();
-		if (name == null)
-			return intp.error("Name of variable non null");
-		return intp.getVariable(name);
-	}
-
-	public Object _echo(CommandInterpreter intp) {
-		String v = intp.nextArgument();
-		StringBuffer sb = new StringBuffer();
-		String del = "";
-		while (v != null) {
-			if (v.equals("^"))
-				del = "";
-			else {
-				sb.append(del);
-				sb.append(v);
-				del = " ";
-			}
-			v = intp.nextArgument();
-		}
-		return sb.toString();
-	}
-
-	public Object _ls(CommandInterpreter intp) throws IOException {
-		return _v(intp);
-	}
-
-	public Object _cat(CommandInterpreter intp) throws IOException {
-		return _v(intp);
-	}
-
-	public Object _cd(CommandInterpreter intp) throws IOException {
-		String name = intp.nextArgument();
-		File pwd = getPWD(intp);
-		if (name == null)
-			pwd = new File("");
-		else
-			pwd = new File(pwd, name);
-		pwd = new File(pwd.getCanonicalPath());
-		if (!pwd.exists())
-			return intp.error("No Such direcory " + name);
-		intp.setVariable("PWD", pwd);
-		return pwd;
-	}
-
-	File getPWD(CommandInterpreter intp) throws IOException {
-		File file = (File) intp.getVariable("PWD");
-		if (file == null)
-			return new File("");
-		else
-			return new File(file.getCanonicalPath());
-	}
-
-	public Object _v(CommandInterpreter intp) throws IOException {
-		StringBuffer sb = new StringBuffer();
-		File file = getFile(intp);
-		if (!file.exists())
-			return intp.error("No such file " + file.getPath());
-		if (file.isDirectory())
-			return file.list();
-		FileInputStream fin = new FileInputStream(file);
-		BufferedReader in = new BufferedReader(new InputStreamReader(fin));
-		String line = in.readLine();
-		while (line != null) {
-			sb.append(line);
-			sb.append("\r\n");
-			line = in.readLine();
-		}
-		return sb;
-	}
-
-	File getFile(CommandInterpreter intp) throws IOException {
-		String name = intp.nextArgument();
-		File pwd = getPWD(intp);
-		if (name == null)
-			name = "";
-		return new File(pwd, name);
-	}
-
-	public Object toString(Object o) {
-		return Handler.toString(o);
-	}
-
-	public Object _system(CommandInterpreter intp) throws Exception {
-		StringBuffer sb = new StringBuffer();
-		String s = intp.nextArgument();
-		while (s != null) {
-			sb.append(s + " ");
-			s = intp.nextArgument();
-		}
-		Runtime.getRuntime().exec(sb.toString());
-		return null;
-	}
-
+	
 	public Object _service(CommandInterpreter intp) throws Exception {
 		Vector all = new Vector();
 		StringBuffer sb = new StringBuffer();
@@ -708,60 +485,18 @@ public class Basic implements CommandProvider {
 		return all;
 	}
 
-	//
-	//	Sets the console to binary mode. Lines are terminated with CTRL-A instead
-	// of \r\n.
-	//  
-	public Object _bin(CommandInterpreter intp) throws Exception {
-		intp.setVariable("eol", "\001");
+	public Object _set(CommandInterpreter intp) {
+		String name = intp.nextArgument();
+		String value = intp.nextArgument();
+		if (value != null && value.equals("="))
+			value = intp.nextArgument();
+		if (name == null)
+			return intp.error("Name should be non null, name=" + name);
+		if (value != null)
+			intp.setVariable(name, value);
+		else
+			intp.setVariable(name, "");
 		return null;
-	}
-
-	//
-	//	Sets the console to ascii (normal) mode. Lines are terminated with \r\n.
-	//
-	public Object _ascii(CommandInterpreter intp) throws Exception {
-		intp.setVariable("eol", "\r\n");
-		return null;
-	}
-
-	//
-	//	Login user
-	//
-	public Object _login(CommandInterpreter intp) throws Exception {
-		String user = intp.nextArgument();
-		String pass = intp.nextArgument();
-		if (user == null || pass == null || _username == null
-				|| _password == null) {
-			return new Boolean(false);
-		}
-		return new Boolean(user.equals(_username) && pass.equals(_password));
-	}
-
-	//
-	// List the resources in the jar file
-	//
-	public Object _listresources(CommandInterpreter intp) throws Exception {
-		Bundle b = getBundle(intp);
-		String prefix = intp.nextArgument();
-		if (prefix == null)
-			prefix = "";
-		try {
-			Method m = b.getClass().getMethod("getEntryPaths",
-					new Class[] {String.class});
-			Vector v = new Vector();
-			for (Enumeration e = (Enumeration) m.invoke(b,
-					new Object[] {prefix}); e.hasMoreElements();) {
-				String path = (String) e.nextElement();
-				v.add(path);
-			}
-			return v;
-		}
-		catch (Error e) {
-			// This might be a framework < 1.2
-			throw new RuntimeException(
-					"This framework does not support enumerating resources");
-		}
 	}
 
 	public Object _showresource(CommandInterpreter intp) throws Exception {
@@ -804,30 +539,391 @@ public class Basic implements CommandProvider {
 		}
 	}
 
+	public Object _shutdown(CommandInterpreter intp) throws BundleException {
+		Bundle system = _context.getBundle(0);
+		system.stop();
+		System.exit(0);
+		return null;
+	}
+
+	public Object _sleep(CommandInterpreter intp) {
+		String time = intp.nextArgument();
+		if (time == null)
+			time = "1";
+		long t = Long.parseLong(time) * 1000;
+		try {
+			Thread.sleep(t);
+		}
+		catch (Exception e) {
+		}
+		return new Date();
+	}
+
+	public Object _ss(CommandInterpreter intp) throws Exception {
+		ServiceReference[] refs = _context.getServiceReferences(null,
+				"(service.id=" + intp.nextArgument() + ")");
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; refs != null && i < refs.length; i++) {
+			String[] keys = refs[i].getPropertyKeys();
+			sb.append("service.id=" + refs[i].getProperty("service.id"));
+			sb.append("\r\n");
+			for (int j = 0; keys != null && j < keys.length; j++) {
+				//sb.append( " " );
+				sb.append(keys[j] + "=");
+				sb.append(Handler.toString(4, refs[i].getProperty(keys[j])));
+				sb.append("\r\n");
+			}
+		}
+		return sb.toString();
+	}
+
+	public Object _stacktraces(CommandInterpreter intp) {
+		String arg = intp.nextArgument();
+		if (arg == null || arg.equals("on"))
+			_stacktraces = true;
+		else
+			_stacktraces = false;
+		return null;
+	}
+
+	public Object _start(CommandInterpreter intp) throws Exception {
+		Bundle b = getBundle(intp);
+		b.start();
+		return b;
+	}
+	
+	
+	public Object _stop(CommandInterpreter intp) throws Exception {
+		Bundle b = getBundle(intp);
+		b.stop();
+		return b;
+	}
+
+	public Object _system(CommandInterpreter intp) throws Exception {
+		StringBuffer sb = new StringBuffer();
+		String s = intp.nextArgument();
+		while (s != null) {
+			sb.append(s + " ");
+			s = intp.nextArgument();
+		}
+		Runtime.getRuntime().exec(sb.toString());
+		return null;
+	}
+	
+	public Object _threads(CommandInterpreter intp) throws Exception {
+		return getThreads();
+	}
+
+	public Object _total(CommandInterpreter intp) {
+		return new Long(Runtime.getRuntime().totalMemory());
+	}
+	
+	public Object _type(CommandInterpreter intp) throws IOException {
+		StringBuffer sb = new StringBuffer();
+		File file = new File(intp.nextArgument());
+		if (file.isDirectory()) {
+			String list[] = file.list();
+			sb.append(Handler.toString(list));
+		}
+		else
+			if (!file.exists()) {
+				return intp.error("No Such File: " + file);
+			}
+			else {
+				FileInputStream in = new FileInputStream(file);
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(in));
+				String line = reader.readLine();
+				while (line != null) {
+					sb.append(line + "\r\n");
+					line = reader.readLine();
+				}
+				reader.close();
+				in.close();
+			}
+		return sb.toString();
+	}
+	
+	
+	
+	public Object _uninstall(CommandInterpreter intp) throws Exception {
+		Bundle b = getBundle(intp);
+		b.uninstall();
+		return b;
+	}
+
+	public Object _updatebundle(CommandInterpreter intp) throws Exception {
+		Bundle b = getBundle(intp);
+		String s = intp.nextArgument();
+		if (s == null)
+			b.update();
+		else
+			b.update((new URL(s)).openStream());
+		return b;
+	}
+
+	public Object _v(CommandInterpreter intp) throws IOException {
+		StringBuffer sb = new StringBuffer();
+		File file = getFile(intp);
+		if (!file.exists())
+			return intp.error("No such file " + file.getPath());
+		if (file.isDirectory())
+			return file.list();
+		FileInputStream fin = new FileInputStream(file);
+		BufferedReader in = new BufferedReader(new InputStreamReader(fin));
+		String line = in.readLine();
+		while (line != null) {
+			sb.append(line);
+			sb.append("\r\n");
+			line = in.readLine();
+		}
+		return sb;
+	}
+
+	/*
+	 * public Object _quit( CommandInterpreter intp ) throws Exception { String
+	 * error = intp.nextArgument(); int n = 0; if ( error != null ) n =
+	 * Integer.parseInt( error );
+	 * 
+	 * System.exit( n ); return null; }
+	 */
+	public Object copy(CommandInterpreter intp) throws Exception {
+		StringBuffer sb = new StringBuffer();
+		URL src = new URL(intp.nextArgument());
+		String dst = intp.nextArgument();
+		FileOutputStream out = null;
+		BufferedReader in = new BufferedReader(new InputStreamReader(src
+				.openStream()));
+		if (dst != null)
+			out = new FileOutputStream(dst);
+		String line = in.readLine();
+		while (line != null) {
+			if (out == null)
+				sb.append(line + "\r\n");
+			else
+				out.write(line.getBytes());
+			line = in.readLine();
+		}
+		in.close();
+		out.close();
+		return sb.toString();
+	}
+
+	void decompile(PrintWriter pw, Class c ) {
+		pw.print("interface ");
+		pw.print(c.getName());
+		pw.println("{");
+		Field f[] = c.getFields();
+		for ( int i=0; i<f.length; i++ ) {
+			pw.print("   ");
+			decompile(pw,f[i]);
+			pw.println(";");
+		}
+		Method m[] = c.getMethods();
+		for ( int i=0; i<m.length; i++ ) {
+			pw.print("   ");
+			decompile(pw,m[i]);
+			pw.println(";");
+		}
+		pw.println("}");
+		PackageAdmin admin = getPackageAdmin();
+		if ( admin != null ) {
+			Bundle b = admin.getBundle(c);
+			pw.println("loaded from " + Handler.getName(b));
+		}
+	}
+
+	void decompile(PrintWriter pw, Field f ) {
+		Class c = f.getType();
+		pw.print( simpleName(c));		
+		pw.print( " ");
+		pw.print( f.getName());
+	}
+
+	void decompile(PrintWriter pw, Method m ) {
+		Class c = m.getReturnType();
+		pw.print( simpleName(c));
+		pw.print(" ");
+		pw.print( m.getName() );
+		pw.print("(");
+		Class parameters[] = m.getParameterTypes();
+		String del = "";
+		for ( int i=0; i<parameters.length; i++ ) {
+			pw.print(del);
+			pw.print(simpleName(parameters[i]));
+			del = ",";		
+		}
+		pw.print(")");		
+	}
+
+	void decompile(PrintWriter pw, Object o) {
+		pw.println(o.getClass().getName());
+		Class clazzes[] = o.getClass().getInterfaces(); 
+		for ( int i=0; i<clazzes.length; i++ ) {
+			decompile(pw,clazzes[i]);
+		}
+	}
+
+	public Bundle getBundle(CommandInterpreter intp) {
+		String bundle = intp.nextArgument();
+		if ( bundle == null )
+			return null;
+		
+		Object var = intp.getVariable(bundle);
+		if (var != null && var instanceof String)
+			bundle = (String) var;
+		try {
+			int id = Integer.parseInt(bundle);
+			Bundle Bundle = _context.getBundle(id);
+			if (Bundle == null)
+				throw new RuntimeException("No such bundle " + id);
+			return Bundle;
+		}
+		catch (NumberFormatException e) {
+		}
+		catch (NullPointerException e) {
+		}
+		return null;
+	}
+
+	File getFile(CommandInterpreter intp) throws IOException {
+		String name = intp.nextArgument();
+		File pwd = getPWD(intp);
+		if (name == null)
+			name = "";
+		return new File(pwd, name);
+	}
+
+	public String getHelp() {
+		return ""
+				+ "BASIC\r\n"
+				+ "cd <dir>                        Change directory (for v cmd -> sets PWD)\r\n"
+				+ "exports [-s]                    List all exports\r\n"
+				+ "decompile <service_id>          Decompile the interfaces of the given interface\r\n"
+				+ "free                            free memory\r\n"
+				+ "framework                       Show framework info\r\n"
+				+ "gc                              garbage collect\r\n"
+				+ "headers <id>                    Show the manifest headers\r\n"
+				+ "inspect <id>                    inspect bundle <id>\r\n"
+				+ "install <url>                   install a bundle\r\n"
+				+ "interrupt <thread>              interrupt thread\r\n"
+				+ "inuse <id>                      Services in use by <id>\r\n"
+				+ "list resources <bundle> [ prfx] List resources in a bundle\r\n"
+				+ "load <name>                     load library with full name\r\n"
+				+ "loadlibrary <name>              load library with library name\r\n"
+				+ "log [all|warning|info|error|debug]* [bundle <id>] Show log\r\n"
+				+ "login <user> <password>         Login user\r\n"
+				+ "lsb                             list installed bundles\r\n"
+				+ "lss [ \"<filter>\" ]              list services, filter is LDAP syntax, no spaces\r\n"
+				+ "registered <id>                 Services registered by <id>\r\n"
+				+ "restart                         Restart the framework\r\n"
+				+ "shutdown                        Stops the system bundle\r\n"
+				+ "ss <sid>                        Show service\r\n"
+				+ "start <id>                      Start bundle\r\n"
+				+ "stop <id>                       Stop bundle\r\n"
+				+ "service <id>                    Show service info\r\n"
+				+ "threads                         Show threads\r\n"
+				+ "total                           Total memory\r\n"
+				+ "uninstall <id>                  uninstal bundle\r\n"
+				+ "update bundle <id>              update bundle\r\n"
+				+ "v <file>                        View a file or directory\r\n";
+	}
+
+	public String getName() {
+		return "basic";
+	}
+
+	PackageAdmin getPackageAdmin() {
+		ServiceReference ref = _context.getServiceReference(PackageAdmin.class
+				.getName());
+		if (ref == null)
+			throw new RuntimeException("No Package Admin available");
+		PackageAdmin pa = (PackageAdmin) _context.getService(ref);
+		if (pa == null)
+			throw new RuntimeException("No Package Admin available");
+		return pa;
+	}
+
+	PermissionAdmin getPermissionAdmin() {
+		ServiceReference ref = _context.getServiceReference(PermissionAdmin.class
+				.getName());
+		if (ref == null)
+			throw new RuntimeException("No Permission Admin available");
+		PermissionAdmin pa = (PermissionAdmin) _context.getService(ref);
+		if (pa == null)
+			throw new RuntimeException("No Permission Admin available");
+		return pa;
+	}
+
+	File getPWD(CommandInterpreter intp) throws IOException {
+		File file = (File) intp.getVariable("PWD");
+		if (file == null)
+			return new File("");
+		else
+			return new File(file.getCanonicalPath());
+	}
+
+	Thread getThread(String name) {
+		Thread[] list = getThreads();
+		for (int i = 0; i < list.length; i++)
+			if (list[i] != null && list[i].getName().equals(name))
+				return list[i];
+		return null;
+	}
+
+	Thread[] getThreads() {
+		ThreadGroup g = Thread.currentThread().getThreadGroup();
+		while (g.getParent() != null)
+			g = g.getParent();
+		Thread list[] = new Thread[g.activeCount() + 20];
+		g.enumerate(list);
+		return list;
+	}
+
+	public String getUser() {
+		return _user;
+	}
+
 	char nibble(int c) {
 		return (char) (c < 10 ? c + '0' : c - 10 + 'A');
 	}
-	
-	
-	
-	public Object _permissions(CommandInterpreter intp) throws Exception {
-		PermissionAdmin	admin = getPermissionAdmin();
-		Bundle b= getBundle(intp);
-		if ( b != null ) {
-			return admin.getPermissions(b.getLocation());
-		}
-		else  {
-			Vector	v = new Vector();
-			String [] locations = admin.getLocations();
-			for ( int i=0; locations!=null && i <locations.length; i++ ) {
-				v.add( admin.getPermissions(locations[i]));
+
+	String simpleName(Class c) {
+		int arrays = 0;
+		int last = 0;
+		String s = c.getName();
+		for ( int i=0; i<s.length(); i++ ) {
+			char ch= s.charAt(i);
+			switch(ch) {
+				case '[': arrays++; break;
+				case '.': last = i+1;
 			}
-			return v;
+		}
+		return s.substring(last,s.length());
+	}
+	
+	
+	
+	String status(Bundle b) {
+		switch (b.getState()) {
+			case Bundle.ACTIVE :
+				return "ACTIVE";
+			case Bundle.STARTING :
+				return "STARTING";
+			case Bundle.STOPPING :
+				return "STOPPING";
+			case Bundle.INSTALLED :
+				return "INSTALLED";
+			case Bundle.UNINSTALLED :
+				return "UNINSTALLED";
+			case Bundle.RESOLVED :
+				return "RESOLVED";
+			default :
+				return "UNKNOWN STATE";
 		}
 	}
 	
-	public Object _defaultpermissions(CommandInterpreter intp) throws Exception {
-		PermissionAdmin	admin = getPermissionAdmin();
-		return admin.getDefaultPermissions();
+	public Object toString(Object o) {
+		return Handler.toString(o);
 	}
 }

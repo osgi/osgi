@@ -1,7 +1,6 @@
 package org.osgi.tools.indexer;
 
 import java.io.*;
-import org.osgi.tools.btool.*;
 import java.util.zip.*;
 import java.util.*;
 
@@ -84,7 +83,7 @@ public class Index {
 					continue;
 				}
 				
-				Manifest			m  = new Manifest( null, zip.getInputStream(entry) );
+				org.osgi.tools.btool.Manifest			m  = new org.osgi.tools.btool.Manifest( null, zip.getInputStream(entry) );
 				Hashtable   		properties = new Hashtable();
 				String name = (String) m.get( "Bundle-Name" );
 				if ( name == null )

@@ -194,7 +194,11 @@ class Handler extends Thread {
 	}
 
 	static String getName(Bundle b) {
-		String name = (String) b.getHeaders().get("Bundle-Name");
+		String name = (String) b.getSymbolicName();
+		if ( name != null )
+			return name;
+		
+		name = (String) b.getHeaders().get("Bundle-Name");
 		if (name != null)
 			return name;
 		return b.getLocation();
