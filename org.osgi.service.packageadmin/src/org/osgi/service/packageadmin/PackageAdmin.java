@@ -21,7 +21,7 @@ import org.osgi.framework.Bundle;
  * 
  * <p>
  * The term <i>exported package </i> (and the corresponding interface
- * {@link ExportedPackage})refers to a package that has actually been exported
+ * {@link ExportedPackage}) refers to a package that has actually been exported
  * (as opposed to one that is available for export).
  * 
  * <p>
