@@ -55,6 +55,9 @@ public interface EventConstants {
 	 * registered with this service property, then the properties of the event
 	 * must also match the filter for the event to be delivered to the event
 	 * handler.
+	 * <p>
+	 * If the filter syntax is invalid, then the Event Handler must be ignored and a 
+	 * warning should be logged.
 	 * 
 	 * @see Event
 	 * @see org.osgi.framework.Filter
