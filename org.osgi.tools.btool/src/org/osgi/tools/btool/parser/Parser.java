@@ -316,7 +316,6 @@ public class Parser {
 			return null;
 		}
 
-		StringBuffer sb = new StringBuffer();
 		if (args[1].trim().length() != 0)
 			return args[2];
 		if (args.length > 3)

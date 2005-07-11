@@ -98,7 +98,7 @@ public class Dependencies {
 			String path = act.replace('.', '/') + ".class";
 			String packageName = base(path);
 			referred.add(packageName);
-			addUses(base(path),packageName);
+			addUses(base(path), packageName);
 		}
 		referred.removeAll(contained);
 	}
@@ -123,16 +123,16 @@ public class Dependencies {
 	}
 
 	void addUses(String sourcePackage, String packageName) {
-		if ( sourcePackage.equals(packageName))
+		if (sourcePackage.equals(packageName))
 			return;
-		
+
 		Set set = (Set) uses.get(sourcePackage);
 		if (set == null) {
 			set = new TreeSet();
 			uses.put(sourcePackage, set);
 		}
 		if (!set.contains(packageName)) {
-			btool.trace("Uses " + sourcePackage + " <= " + packageName );
+			btool.trace("Uses " + sourcePackage + " <= " + packageName);
 			set.add(packageName);
 		}
 	}
@@ -218,8 +218,9 @@ public class Dependencies {
 			String next = (String) pool.get(n);
 			if (next != null) {
 				String normalized = normalize(next);
-				if (normalized != null)
+				if (normalized != null) {
 					set.add(normalized);
+				}
 			}
 			else
 				throw new IllegalArgumentException("Invalid class, parent=");
@@ -234,7 +235,6 @@ public class Dependencies {
 	 * we should get rid of this. The following rules apply:
 	 * 
 	 * <pre>
-	 * 
 	 *  
 	 *   
 	 *    
@@ -246,11 +246,13 @@ public class Dependencies {
 	 *          
 	 *           
 	 *            
-	 *                   	 [L*               =&gt; remove [L, try again
-	 *                   	 [* &amp;&amp; length=2     =&gt; ignore (int,byte,char etc class)
-	 *                   	 [*                =&gt; remove [, try again
-	 *                   ;                =&gt; remove ;, try again (do not know why)
-	 *                   	 A i in skip | &lt;i&gt;* =&gt; ignore
+	 *             
+	 *                    	 [L*               =&gt; remove [L, try again
+	 *                    	 [* &amp;&amp; length=2     =&gt; ignore (int,byte,char etc class)
+	 *                    	 [*                =&gt; remove [, try again
+	 *                    ;                =&gt; remove ;, try again (do not know why)
+	 *                    	 A i in skip | &lt;i&gt;* =&gt; ignore
+	 *              
 	 *             
 	 *            
 	 *           
@@ -262,7 +264,6 @@ public class Dependencies {
 	 *     
 	 *    
 	 *   
-	 *  
 	 * </pre>
 	 * 
 	 * Notice that we ALWAYS suffix the name with class. E.g. normalize cannot
@@ -317,7 +318,7 @@ public class Dependencies {
 			if (includes == null || in(includes, name)) {
 				Package p = makePackage(name);
 				if (p != null) {
-					p.uses = (Set) uses.get(p.getPath()); 
+					p.uses = (Set) uses.get(p.getPath());
 					result.add(p);
 				}
 			}
@@ -361,7 +362,9 @@ public class Dependencies {
 				byte[] buffer = readAll(in, 0);
 				String s = new String(buffer);
 				Map map = getMap(s);
-				if (map.containsKey("version")) {
+				if (map == null)
+					btool.warnings.add("Invalid package def: " + name);
+				else if (map.containsKey("version")) {
 					version = (String) map.get("version");
 				}
 			}
@@ -372,6 +375,7 @@ public class Dependencies {
 		}
 		catch (Exception e) {
 			btool.warning("Invalid packagedefinition " + name);
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -379,9 +383,13 @@ public class Dependencies {
 	Map getMap(String definition) {
 		Map map = new Hashtable();
 		StringTokenizer st = new StringTokenizer(definition, " \n\r\t");
-		while (st.hasMoreTokens()) {
-			map.put(st.nextToken(), st.nextToken());
-		}
+		do {
+			String t1 = st.nextToken();
+			if (!st.hasMoreTokens())
+				return null;
+			String t2 = st.nextToken();
+			map.put(t1, t2);
+		} while (st.hasMoreTokens());
 		return map;
 	}
 
