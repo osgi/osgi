@@ -16,78 +16,33 @@ import java.security.*;
 /**
  * Indicates the caller's authority to perform specific privileged administrative 
  * operations on or to get sensitive information about a bundle.
- * 
- * <table>
- * <tr>
- * <th>Action</th>
- * <th>Methods</th>
- * </tr>
- * 
- * <tr>
- * <td>class</td>      
- * <td>Bundle.loadClass</td>
- * </tr>
- * 
- * <tr>
- * <td>execute</td>    
- * <td>Bundle.start<br/>
- * Bundle.stop</td>
- * </tr>
- *           
- * <tr>
- * <td>extensionLifecycle</td>  
- * <td>BundleContext.installBundle<br/>
- * Bundle.update<br/>
- * Bundle.uninstall<br/>
- * </tr>
- *           
- * <tr>
- * <td>lifecycle</td>  
- * <td>BundleContext.installBundle<br/>
- * Bundle.update<br/>
- * Bundle.uninstall<br/>
- * StartLevel.setBundleStartLevel</td>
- * </tr>
- *           
- * <tr>
- * <td>listener</td>   
- * <td>BundleContext.addBundleListener for SynchronousBundleListener<br/>
- * BundleContext.removeBundleListener for SynchronousBundleListener</td>
- * </tr>
- *           
- * <tr>
- * <td>metadata</td> 
- * <td>Bundle.getHeaders<br/>
- * Bundle.getLocation</td>
- * </tr>
- *           
- * <tr>
- * <td>permission</td> 
- * <td>PermissionAdmin.setPermissions<br/>
- * PermissionAdmin.setDefaultPermissions</td>
- * </tr>
- *           
- * <tr>
- * <td>resolve</td>   
- * <td>PackageAdmin.refreshPackages<br/>
- * PackageAdmin.resolveBundles</td>
- * </tr>
- *           
- * <tr>
- * <td>resource</td> 
- * <td>Bundle.getResource<br/>
- * Bundle.getEntry<br/>
- * Bundle.getEntryPaths<br/>
- * Bundle resource/entry URL creation</td>
- * </tr>
- *           
- * <tr>
- * <td>startlevel</td> 
- * <td>StartLevel.setStartLevel<br/>
- * StartLevel.setInitialBundleStartLevel</td> 
- * </tr>          
- * </table> 
- * 
+ * <pre>
+ * Action               Methods
+ * class                Bundle.loadClass
+ * execute              Bundle.start
+ *                      Bundle.stop
+ * extensionLifecycle   BundleContext.installBundle
+ *                      Bundle.update
+ *                      Bundle.uninstall
+ * lifecycle            BundleContext.installBundle
+ *                      Bundle.update
+ *                      Bundle.uninstall
+ *                      StartLevel.setBundleStartLevel
+ * listener             BundleContext.addBundleListener for SynchronousBundleListener
+ *                      BundleContext.removeBundleListener for SynchronousBundleListener
+ * metadata             Bundle.getHeaders
+ *                      Bundle.getLocation
+ * permission           PermissionAdmin.setPermissions
+ *                      PermissionAdmin.setDefaultPermissions
+ * resolve              PackageAdmin.refreshPackages
+ *                      PackageAdmin.resolveBundles
+ * resource             Bundle.getResource
+ *                      Bundle.getEntry
+ *                      Bundle.getEntryPaths
+ *                      Bundle resource/entry URL creation
+ * startlevel           StartLevel.setStartLevel
+ *                      StartLevel.setInitialBundleStartLevel 
+ *</pre> 
  * <p>The special action "*" will represent all actions.
  * 
  * @version $Revision$
