@@ -428,7 +428,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 							break;
 						}
 					}
-					if (runAgain==true)
+					if (runAgain)
 						break;
 				}
 				cdp.clearReferenceCDPs();
