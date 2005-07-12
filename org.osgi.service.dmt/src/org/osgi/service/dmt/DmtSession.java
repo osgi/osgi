@@ -152,6 +152,7 @@ public interface DmtSession extends Dmt {
      *         <li><code>PERMISSION_DENIED</code> session's subtree
      *         <li><code>COMMAND_NOT_ALLOWED</code> if the node is
      *         non-executable
+     *         <li><code>FEATURE_NOT_SUPPORTED</code>
      *         <li><code>COMMAND_FAILED</code> if no DmtExecPlugin is
      *         associated with the node
      *         <li><code>DATA_STORE_FAILURE</code>
