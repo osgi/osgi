@@ -26,9 +26,8 @@ public interface UPnPIcon {
 	 * method, is encoded.
 	 * <p>
 	 * The format of the returned string is in accordance to RFC2046. A list of
-	 * valid MIME types is maintained by the IANA at <a
-	 * href="http://www.iana.org/assignments/media-types/"
-	 * </a>.
+	 * valid MIME types is maintained by the <a
+	 * href="http://www.iana.org/assignments/media-types/">IANA</a>.
 	 * <p>
 	 * Typical values returned include: "image/jpeg" or "image/gif"
 	 * 
