@@ -759,13 +759,19 @@ public class CMControl extends DefaultTestBundleControl {
 		Configuration conf = cm.getConfiguration(pid);
 		Hashtable props = new Hashtable();
 		props.put("key", "value1");
-		conf.update(props);
 		trace("Create and register a new ConfigurationListener");
-		cl = createConfigurationListener(synchronizer);
-		conf.delete();
-		trace("Wait until the ConfigurationListener has gotten the delete");
 		try {
+			cl = createConfigurationListener(synchronizer);
+			conf.update(props);
+			trace("Wait until the ConfigurationListener has gotten the update");
 			assertTrue("Update done", synchronizer
+					.waitForSignal(SIGNAL_WAITING_TIME));
+			
+			conf.delete();
+			
+			trace("Wait until the ConfigurationListener has gotten the delete");
+			
+			assertTrue("Delete done", synchronizer
 					.waitForSignal(SIGNAL_WAITING_TIME));
 			assertEquals("Config event pid match", pid, cl.getPid());
 			assertEquals("Config event type match",
