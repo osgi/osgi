@@ -526,7 +526,6 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 		Property prop = service.getProperty(path[1], nodeUri);
         
 		if (path.length == 3) {
-			String stringData = null;
 			if (path[2].equals("type")) {
 				if (!prop.hasType())
 					throw new DmtException(nodeUri,
@@ -1234,7 +1233,6 @@ class Property {
 			throw new IllegalStateException(
 					"Cannot call 'getDmtElement()' for incomplete or scalar property.");
 		Object data;
-		boolean isPrimitiveBoolean = false;
 		if (isCompleteArray())
 			data = Array.get(value, index); // returns primitive types wrapped
 											// in the corresponding Object type
