@@ -29,8 +29,11 @@ package integrationtests.managedservice1;
 
 import integrationtests.api.ITest;
 
+import java.io.IOException;
 import java.util.Dictionary;
 
+import org.osgi.framework.Constants;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.component.ComponentContext;
@@ -39,7 +42,20 @@ public class CTest implements ITest,ManagedService {
 	int increment;
 	boolean configured = false;;
 	
-	protected void activate(ComponentContext context) {
+	protected void activate(ComponentContext context) throws IOException {
+		//System.out.println(this+" activated "+context);
+		ConfigurationAdmin ca = (ConfigurationAdmin)context.locateService("configurationAdmin");
+		String pid = (String) context.getProperties().get(Constants.SERVICE_PID);
+		Dictionary props = ca.getConfiguration(pid).getProperties();
+		if (props!=null) {
+			configured = true;
+			Integer i = (Integer) props.get("increment");
+			increment = i.intValue();
+		}
+	}
+	
+	protected void deactivate(ComponentContext context) {
+		//System.out.println(this+" deactivated "+context);
 	}
 
 	public int succ(int i) {
@@ -48,7 +64,7 @@ public class CTest implements ITest,ManagedService {
 	}
 
 	public void updated(Dictionary props) throws ConfigurationException {
-		System.out.println("updated "+props);
+		//System.out.println(this+" updated "+props);
 		if (props==null) {
 			configured = false;
 			return;

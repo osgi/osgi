@@ -7,4 +7,6 @@
 		<provide interface="integrationtests.api.ITest"/>
 		<provide interface="org.osgi.service.cm.ManagedService"/>
 	</service>
+	<reference name="configurationAdmin"
+		interface="org.osgi.service.cm.ConfigurationAdmin"/>
 </component>
