@@ -22,13 +22,14 @@ import java.util.Hashtable;
 import org.osgi.framework.*;
 
 import org.osgi.service.cm.ManagedService;
+import org.osgi.service.cm.ManagedServiceFactory;
 
 import org.osgi.service.dmt.*;
 
 import org.osgi.service.event.*;
 
-import org.osgi.service.monitor.Monitorable;
 import org.osgi.service.monitor.MonitorListener;
+import org.osgi.service.monitor.Monitorable;
 
 public class ClientActivator implements BundleActivator 
 {
@@ -77,6 +78,7 @@ public class ClientActivator implements BundleActivator
 
             String[] services = new String[] {
                 ManagedService.class.getName(),
+                ManagedServiceFactory.class.getName(),
                 Monitorable.class.getName(),
                 EventHandler.class.getName()
             };

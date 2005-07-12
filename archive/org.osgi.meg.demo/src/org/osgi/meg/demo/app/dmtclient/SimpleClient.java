@@ -34,7 +34,8 @@ import org.osgi.service.monitor.*;
 //import org.xml.sax.helpers.DefaultHandler;
 //import org.xml.sax.Attributes;
 
-public class SimpleClient implements ManagedService, Monitorable, EventHandler
+public class SimpleClient implements ManagedService, ManagedServiceFactory,
+        Monitorable, EventHandler
 {
     private BundleContext bc;
 
@@ -159,8 +160,18 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
             if(ca == null)
                 throw new Exception("ConfigurationAdmin service no longer registered.");
 
-            Configuration config = ca.getConfiguration(pid);
+            Configuration factConfig = ca.createFactoryConfiguration(pid);
             Hashtable properties = new Hashtable();
+            properties.put("alma", "bela");
+            factConfig.update(properties);
+            factConfig.delete();
+            
+            Configuration dummy = ca.getConfiguration("CM_GENERATED_PID_0");
+            System.out.println("Bad pid factory: " + dummy.getFactoryPid() +
+                    "; pid: " + dummy.getPid());
+            
+            Configuration config = ca.getConfiguration(pid);
+            properties = new Hashtable();
             properties.put("my.int.array", new int[] { 3, 2, 1 });
             
             /*
@@ -299,6 +310,7 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
         }).start();
     }
     
+    /*
     private void sessionOpenTests() {
         // parallel sessions
         sessionOpenTest("./OSGi/Monitor", DmtSession.LOCK_TYPE_EXCLUSIVE,
@@ -465,6 +477,7 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
             Thread.sleep(l);
         } catch (InterruptedException e) {}
     }
+    */
 
     static class SessionThread extends Thread {
         private DmtAdmin factory;
@@ -514,6 +527,26 @@ public class SimpleClient implements ManagedService, Monitorable, EventHandler
         }
     }
 
+    public String getName()
+    {
+        return "Managed Service Factory test of SimpleClient";
+    }
+    
+    public void deleted(String pid)
+    {
+        System.out.println("Factory configuration '" + pid + "' deleted.");
+    }
+    
+    public void updated(String pid, Dictionary properties)
+    {
+        String factoryPid = (String) 
+                properties.get(ConfigurationAdmin.SERVICE_FACTORYPID);
+        
+        System.out.println("Factory configuration '" + pid + "' updated.");
+        System.out.println("PIDs: configuration: " + 
+                properties.get("service.pid") + "; factory: " + factoryPid);
+    }
+    
     public void updated(Dictionary properties)
     {
         System.out.println("Received new configuration dictionary: " + properties);
