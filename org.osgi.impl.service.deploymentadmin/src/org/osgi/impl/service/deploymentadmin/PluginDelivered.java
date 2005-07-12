@@ -27,7 +27,8 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
 	        delArea = "/temp";
 	    store = new File(delArea);
 	    if (!store.exists())
-	        throw new RuntimeException("Delivered area ('" + delArea + "') does not exist");
+	        throw new RuntimeException("Delivered area ('" + delArea + "') does not exist. " +
+                "Set the " + DAConstants.DELIVERED_AREA + " system property");
 		this.da = da;		
 	}
 
