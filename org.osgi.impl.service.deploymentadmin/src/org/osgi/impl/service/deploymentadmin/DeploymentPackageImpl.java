@@ -22,7 +22,9 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -46,8 +48,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     private DeploymentPackageResourceBundle dprb;
     private CaseInsensitiveMap              mainSection;
-    private Vector                          bundleEntries = new Vector();
-    private Vector                          resourceEntries = new Vector();
+    private LinkedList                      bundleEntries = new LinkedList();
+    private LinkedList                      resourceEntries = new LinkedList();
     
     // List of String[]s
     private List certChains = new Vector();
@@ -103,7 +105,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         dp.mainSection = new CaseInsensitiveMap(null, dp);
         dp.mainSection.put(DAConstants.DP_NAME, "System");
         dp.mainSection.put(DAConstants.DP_VERSION, "0.0.0");
-        dp.bundleEntries = new Vector(bundleEntries);
+        dp.bundleEntries = new LinkedList(bundleEntries);
         
         return dp;
     }
@@ -170,6 +172,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     Iterator getBundleEntryIterator() {
         return bundleEntries.iterator();
+    }
+    
+    ListIterator getReverseBundleEntryIterator() {
+        return bundleEntries.listIterator(bundleEntries.size());
     }
     
     boolean contains(BundleEntry be) {
@@ -531,7 +537,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                     BundleEntry	eBe	= (BundleEntry) iterator.next();
                     if (be.getSymbName().equals(eBe.getSymbName()))
                         throw new DeploymentException(DeploymentException.CODE_BUNDLE_SHARING_VIOLATION, 
-                                "Bundle " + be + " is already installed");
+                                "Bundle " + be + " is already installed by the package " + eDp);
                 }
             }
         }

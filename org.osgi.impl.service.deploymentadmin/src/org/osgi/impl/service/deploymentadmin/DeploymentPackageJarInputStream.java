@@ -170,7 +170,11 @@ public class DeploymentPackageJarInputStream {
     		throws IOException, DeploymentException 
     {
 	    this.jis = new JarInputStream(is);
-	    manifest = (Manifest) getManifest().clone();
+        Manifest mf = getManifest();
+        if (null == mf)
+            throw new DeploymentException(DeploymentException.CODE_ORDER_ERROR,
+                "META-INF/MANIFEST.MF is not the first file or completely missing");
+	    manifest = (Manifest) mf.clone();
 	    
 	    locPath = manifest.getMainAttributes().getValue(DAConstants.LOC_PATH);
 	    if (null == locPath)

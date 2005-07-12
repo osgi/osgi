@@ -414,8 +414,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
         if (INSTALL == getDeploymentAction())
             return;
         
-        for (Iterator iter = targetDp.getBundleEntryIterator(); iter.hasNext();) {
-            BundleEntry entry = (BundleEntry) iter.next();
+        for (ListIterator iter = targetDp.getReverseBundleEntryIterator(); iter.hasPrevious();) {
+            BundleEntry entry = (BundleEntry) iter.previous();
             try {
 	            Bundle b = context.getBundle(entry.getBundleId());
 	            stopBundle(b);
