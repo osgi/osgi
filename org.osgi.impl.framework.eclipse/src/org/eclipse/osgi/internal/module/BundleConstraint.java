@@ -11,63 +11,33 @@
 package org.eclipse.osgi.internal.module;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import org.eclipse.osgi.service.resolver.*;
-import org.eclipse.osgi.service.resolver.BundleDescription;
-import org.eclipse.osgi.service.resolver.VersionConstraint;
 
-public class BundleConstraint {
-	private ResolverBundle bundle;
-	private VersionConstraint bundleConstraint;
-	private ResolverBundle matchingBundle;
+/*
+ * A companion to BundleSpecification from the state for use while resolving
+ */
+public class BundleConstraint extends ResolverConstraint {
+	// a list of matching bundles; multiple matches are only supported for fragment host constraints
 	private ArrayList matchingBundles;
 
 	BundleConstraint(ResolverBundle bundle, VersionConstraint bundleConstraint) {
-		this.bundle = bundle;
-		this.bundleConstraint = bundleConstraint;
-	}
-
-	boolean isFromFragment() {
-		return bundleConstraint.getBundle().getHost() != null;
-	}
-
-	ResolverBundle getBundle() {
-		return bundle;
-	}
-
-	BundleDescription getActualBundle() {
-		return bundle.getBundle();
-	}
-
-	boolean isSatisfiedBy(ResolverBundle rb) {
-		if (!bundle.getResolver().getPermissionChecker().checkBundlePermission(bundleConstraint, rb.getBundle()))
-			return false;
-		return bundleConstraint.isSatisfiedBy(rb.getBundle());
+		super(bundle, bundleConstraint);
 	}
 
 	boolean isOptional() {
-		if (bundleConstraint instanceof HostSpecification)
+		if (constraint instanceof HostSpecification)
 			return false;
-		return ((BundleSpecification) bundleConstraint).isOptional();
-	}
-
-	VersionConstraint getVersionConstraint() {
-		return bundleConstraint;
+		return ((BundleSpecification) constraint).isOptional();
 	}
 
 	ResolverBundle getMatchingBundle() {
-		return matchingBundle;
+		return (ResolverBundle) (matchingBundles != null && matchingBundles.size() > 0 ? matchingBundles.get(0) : null);
 	}
 
 	ResolverBundle[] getMatchingBundles() {
-		if (matchingBundles == null)
+		if (matchingBundles == null || matchingBundles.size() == 0)
 			return null;
-		ResolverBundle[] results = new ResolverBundle[matchingBundles.size()];
-		int i = 0;
-		for (Iterator iter = matchingBundles.iterator(); iter.hasNext(); i++) {
-			results[i] = (ResolverBundle) iter.next();
-		}
-		return results.length == 0 ? null : results;
+		return (ResolverBundle[]) matchingBundles.toArray(new ResolverBundle[matchingBundles.size()]);
 	}
 
 	void addMatchingBundle(ResolverBundle rb) {
@@ -88,10 +58,12 @@ public class BundleConstraint {
 	}
 
 	void setMatchingBundle(ResolverBundle rb) {
-		this.matchingBundle = rb;
+		removeAllMatchingBundles();
+		if (rb != null)
+			addMatchingBundle(rb);
 	}
 
-	public boolean foundMatchingBundles() {
+	boolean foundMatchingBundles() {
 		return matchingBundles == null ? false : matchingBundles.size() > 0;
 	}
 }

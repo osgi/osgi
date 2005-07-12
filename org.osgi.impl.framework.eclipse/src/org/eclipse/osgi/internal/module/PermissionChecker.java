@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.osgi.internal.module;
 
+import java.security.Permission;
 import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.*;
 
@@ -22,34 +23,31 @@ public class PermissionChecker {
 		this.checkPermissions = checkPermissions;
 	}
 
-	public boolean checkImportPermission(ImportPackageSpecification ips, ExportPackageDescription epd) {
+	/*
+	 * checks the permission for a bundle to import/reqiure a constraint
+	 * and for a bundle to export/provide a package/BSN
+	 */
+	public boolean checkPermission(VersionConstraint vc, BaseDescription bd) {
 		if (!checkPermissions)
 			return true;
-		boolean success = true;
-		// first check the exporter permissions
-		Bundle exporter = context.getBundle(epd.getExporter().getBundleId());
-		if (exporter != null && (exporter.getState() & Bundle.UNINSTALLED) == 0)
-			success = exporter.hasPermission(new PackagePermission(epd.getName(), PackagePermission.EXPORT));
-		// now check the importer permissions
-		Bundle importer = context.getBundle(ips.getBundle().getBundleId());
-		if (success && importer != null && (importer.getState() & Bundle.UNINSTALLED) == 0)
-			success = importer.hasPermission(new PackagePermission(ips.getName(), PackagePermission.IMPORT));
-		return success;
-	}
-
-	public boolean checkBundlePermission(VersionConstraint vc, BundleDescription bd) {
-		if (!checkPermissions)
-			return true;
-		boolean success = true;
-		boolean requireBundle = vc instanceof BundleSpecification;
-		// first check the bundle description
-		Bundle provider = context.getBundle(bd.getBundleId());
-		if (provider != null && (provider.getState() & Bundle.UNINSTALLED) == 0)
-			success = provider.hasPermission(new BundlePermission(bd.getSymbolicName(), requireBundle ? BundlePermission.PROVIDE : BundlePermission.HOST));
-		// now check the requirer permissions
-		Bundle requirer = context.getBundle(vc.getBundle().getBundleId());
-		if (success && requirer != null && (requirer.getState() & Bundle.UNINSTALLED) == 0)
-			success = requirer.hasPermission(new BundlePermission(vc.getName(), requireBundle ? BundlePermission.REQUIRE : BundlePermission.FRAGMENT));
+		boolean success = false;
+		Permission producerPermission = null, consumerPermission = null;
+		Bundle producer = null, consumer = null;
+		if (vc instanceof ImportPackageSpecification) {
+			producerPermission = new PackagePermission(bd.getName(), PackagePermission.EXPORT);
+			consumerPermission = new PackagePermission(vc.getName(), PackagePermission.IMPORT);
+			producer = context.getBundle(((ExportPackageDescription) bd).getExporter().getBundleId());
+		} else {
+			boolean requireBundle = vc instanceof BundleSpecification;
+			producerPermission = new BundlePermission(bd.getName(), requireBundle ? BundlePermission.PROVIDE : BundlePermission.HOST);
+			consumerPermission = new BundlePermission(vc.getName(), requireBundle ? BundlePermission.REQUIRE : BundlePermission.FRAGMENT);
+			producer = context.getBundle(((BundleDescription) bd).getBundleId());
+		}
+		consumer = context.getBundle(vc.getBundle().getBundleId());
+		if (producer != null && (producer.getState() & Bundle.UNINSTALLED) == 0)
+			success = producer.hasPermission(producerPermission);
+		if (success && consumer != null && (consumer.getState() & Bundle.UNINSTALLED) == 0)
+			success = consumer.hasPermission(consumerPermission);
 		return success;
 	}
 }

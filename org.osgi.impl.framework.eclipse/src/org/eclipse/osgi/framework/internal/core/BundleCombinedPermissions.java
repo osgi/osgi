@@ -184,8 +184,8 @@ final class BundleCombinedPermissions extends BundlePermissionCollection {
 
 		/* If we aren't using the default permissions, then the assigned
 		 * permission are the exact permissions the bundle has. */
-		if (!isDefault && (assigned != null) && assigned.implies(permission))
-			return true;
+		if (!isDefault && assigned != null)
+			return assigned.implies(permission);
 		if (conditional != null) {
 			boolean conditionalImplies = conditional.implies(permission);
 			if (!conditional.isEmpty()) {

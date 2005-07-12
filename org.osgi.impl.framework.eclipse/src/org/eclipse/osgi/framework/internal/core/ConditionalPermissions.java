@@ -103,11 +103,11 @@ public class ConditionalPermissions extends PermissionCollection {
 
 	public boolean implies(Permission perm) {
 		processPending();
-		if (satisfiedCPS.implies(perm)) {
+		boolean newEmpty = !satisfiedCPS.isNonEmpty();
+		if (!newEmpty && satisfiedCPS.implies(perm)) {
 			this.empty = false;
 			return true;
 		}
-		boolean newEmpty = !satisfiedCPS.isNonEmpty();
 		boolean satisfied = false;
 		Vector unevalCondsSets = null;
 		SecurityManager sm = System.getSecurityManager();
@@ -175,9 +175,10 @@ public class ConditionalPermissions extends PermissionCollection {
 			synchronized (satisfiedCPIs) {
 				for (int i = 0; i < satisfiedCPIs.size(); i++) {
 					ConditionalPermissionInfoImpl cpi = (ConditionalPermissionInfoImpl) satisfiedCPIs.get(i);
-					satisfiedCPS.addConditionalPermissionInfo(cpi);
+					if (!cpi.isDeleted())
+						satisfiedCPS.addConditionalPermissionInfo(cpi);
 				}
-				satisfiableCPSs.clear();
+				satisfiedCPIs.clear();
 			}
 		}
 	}

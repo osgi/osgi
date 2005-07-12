@@ -11,55 +11,29 @@
 package org.eclipse.osgi.internal.module;
 
 import java.util.ArrayList;
-import org.eclipse.osgi.service.resolver.*;
+import org.eclipse.osgi.service.resolver.ImportPackageSpecification;
 import org.osgi.framework.Constants;
 
-public class ResolverImport {
-	private ImportPackageSpecification importPackageSpecification;
+/*
+ * A companion to ImportPackageSpecification from the state used while resolving
+ */
+public class ResolverImport extends ResolverConstraint {
 	private ResolverExport matchingExport;
-	private ResolverBundle bundle;
-	// Wirings we know will cause the module to become unresolvable (due to grouping dependencies)
+	// Wires we know will cause the module to become unresolvable (due to grouping dependencies)
 	private ArrayList unresolvableWirings = new ArrayList();
-	private String name = null;
+	// only used for dynamic imports
+	private String name;
 
 	ResolverImport(ResolverBundle bundle, ImportPackageSpecification ips) {
-		this.bundle = bundle;
-		importPackageSpecification = ips;
+		super(bundle, ips);
 	}
 
-	boolean isFromFragment() {
-		return importPackageSpecification.getBundle().getHost() != null;
+	boolean isOptional() {
+		return ImportPackageSpecification.RESOLUTION_OPTIONAL.equals(((ImportPackageSpecification) constraint).getDirective(Constants.RESOLUTION_DIRECTIVE));
 	}
 
-	String getName() {
-		if (name != null) {
-			return name;
-		} else {
-			return importPackageSpecification.getName();
-		}
-	}
-
-	void setName(String name) {
-		this.name = name;
-	}
-
-	ResolverBundle getBundle() {
-		return bundle;
-	}
-
-	BundleDescription getActualBundle() {
-		return bundle.getBundle();
-	}
-
-	boolean isSatisfiedBy(ResolverExport re) {
-		// first check permissions
-		if (!bundle.getResolver().getPermissionChecker().checkImportPermission(importPackageSpecification, re.getExportPackageDescription()))
-			return false;
-		// See if the import is satisfied
-		if (!importPackageSpecification.isSatisfiedBy(re.getExportPackageDescription())) {
-			return false;
-		}
-		return true;
+	boolean isDynamic() {
+		return ImportPackageSpecification.RESOLUTION_DYNAMIC.equals(((ImportPackageSpecification) constraint).getDirective(Constants.RESOLUTION_DIRECTIVE));
 	}
 
 	ResolverExport getMatchingExport() {
@@ -70,26 +44,9 @@ public class ResolverImport {
 		this.matchingExport = matchingExport;
 	}
 
-	boolean isOnRootPathSplit(ResolverBundle bundle, ResolverBundle toFind) {
-		if (bundle == null)
-			return false;
-		BundleConstraint[] requires = bundle.getRequires();
-		for (int i = 0; i < requires.length; i++) {
-			if (requires[i].getMatchingBundle() == toFind)
-				return true;
-			if (isOnRootPathSplit(requires[i].getMatchingBundle(), toFind))
-				return true;
-		}
-		return false;
-	}
-
 	// Records an unresolvable wiring for this import (grouping dependencies)
-	void addUnresolvableWiring(ResolverBundle module) {
-		unresolvableWirings.add(module);
-	}
-
-	void removeUnresolvableWiring(ResolverBundle module) {
-		unresolvableWirings.remove(module);
+	void addUnresolvableWiring(ResolverBundle exporter) {
+		unresolvableWirings.add(exporter);
 	}
 
 	// Clear the list of all the unresovable wirings. This is called when we move
@@ -104,19 +61,14 @@ public class ResolverImport {
 		return !unresolvableWirings.contains(exp.getExporter());
 	}
 
-	ImportPackageSpecification getImportPackageSpecification() {
-		return importPackageSpecification;
+	public String getName() {
+		if (name != null)
+			return name; // return the required package set for a dynamic import
+		return super.getName();
 	}
 
-	boolean isOptional() {
-		return ImportPackageSpecification.RESOLUTION_OPTIONAL.equals(importPackageSpecification.getDirective(Constants.RESOLUTION_DIRECTIVE));
-	}
-
-	boolean isDynamic() {
-		return ImportPackageSpecification.RESOLUTION_DYNAMIC.equals(importPackageSpecification.getDirective(Constants.RESOLUTION_DIRECTIVE));
-	}
-
-	public String toString() {
-		return importPackageSpecification.toString();
+	// used for dynamic import package when wildcards are used
+	void setName(String requestedPackage) {
+		this.name = requestedPackage;
 	}
 }

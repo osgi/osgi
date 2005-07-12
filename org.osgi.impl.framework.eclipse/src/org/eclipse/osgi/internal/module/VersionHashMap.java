@@ -10,153 +10,94 @@
  *******************************************************************************/
 package org.eclipse.osgi.internal.module;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
-import org.eclipse.osgi.service.resolver.BundleDescription;
+public class VersionHashMap extends MappedList implements Comparator {
 
-public class VersionHashMap {
-	private HashMap internal = new HashMap();
-
-	Object put(VersionSupplier versionSupplier) {
-		VersionSupplier[] existing = (VersionSupplier[]) internal.get(versionSupplier.getName());
-		if (existing == null) {
-			VersionSupplier[] vss = new VersionSupplier[1];
-			vss[0] = versionSupplier;
-			internal.put(versionSupplier.getName(), vss);
-		} else {
-			for (int i = 0; i < existing.length; i++) {
-				VersionSupplier e = existing[i];
-				if (e == versionSupplier)
-					return e;
-				if (versionSupplier.getBundle().isResolved() && !e.getBundle().isResolved()) {
-					// Put resolved bundles ahead of unresolved bundles
-					internal.put(versionSupplier.getName(), add(i, versionSupplier, existing));
-					return null;
-				} else if (versionSupplier.getBundle().isResolved() == e.getBundle().isResolved()) {
-					if (versionSupplier.getVersion().compareTo(e.getVersion()) > 0) {
-						// Put highest versions first
-						internal.put(versionSupplier.getName(), add(i, versionSupplier, existing));
-						return null;
-					} else if (e.getVersion().equals(versionSupplier.getVersion())) {
-						if (versionSupplier.getBundle().getBundleId() < e.getBundle().getBundleId()) {
-							// Versions match - order by bundle ID
-							internal.put(versionSupplier.getName(), add(i, versionSupplier, existing));
-							return e;
-						}
-					}
-				}
-			}
-			// Lowest version, so add at end
-			internal.put(versionSupplier.getName(), add(existing.length, versionSupplier, existing));
-		}
-		return null;
+	// sorts using the Comparator#compare method to sort
+	protected void sort(Object[] values) {
+		Arrays.sort(values, this);
 	}
 
-	void put(VersionSupplier[] versionSuppliers) {
-		for (int i = 0; i < versionSuppliers.length; i++) {
-			put(versionSuppliers[i]);
-		}
+	public void put(VersionSupplier[] versionSuppliers) {
+		for (int i = 0; i < versionSuppliers.length; i++)
+			put(versionSuppliers[i].getName(), versionSuppliers[i]);
 	}
 
-	private VersionSupplier[] add(int index, VersionSupplier versionSupplier, VersionSupplier[] existing) {
-		VersionSupplier[] newVS = new VersionSupplier[existing.length + 1];
-		for (int i = 0; i < index; i++) {
-			newVS[i] = existing[i];
-		}
-		newVS[index] = versionSupplier;
-		for (int i = index + 1; i < newVS.length; i++) {
-			newVS[i] = existing[i - 1];
-		}
-		return newVS;
+	public void put(Object key, Object value) {
+		super.put(key, value);
+		((VersionSupplier) value).setDropped(false);
 	}
 
-	VersionSupplier[] getArray(String supplierName) {
-		VersionSupplier[] existing = (VersionSupplier[]) internal.get(supplierName);
-		if (existing != null)
-			return existing;
-		else
-			return new VersionSupplier[0];
+	public boolean contains(VersionSupplier vs) {
+		return contains(vs, false) != null;
 	}
 
-	boolean contains(VersionSupplier vs) {
-		VersionSupplier[] existing = (VersionSupplier[]) internal.get(vs.getName());
+	private VersionSupplier contains(VersionSupplier vs, boolean remove) {
+		Object[] existing = (Object[]) internal.get(vs.getName());
 		if (existing == null)
-			return false;
-		for (int i = 0; i < existing.length; i++) {
-			if (existing[i] == vs)
-				return true;
-		}
-		return false;
-	}
-
-	private void remove(VersionSupplier[] existing, String name, int index) {
-		if (existing.length == 1) {
-			internal.remove(name);
-		} else {
-			VersionSupplier[] newVS = new VersionSupplier[existing.length - 1];
-			for (int i = 0; i < index; i++) {
-				newVS[i] = existing[i];
-			}
-			for (int i = index + 1; i < existing.length; i++) {
-				newVS[i - 1] = existing[i];
-			}
-			internal.put(name, newVS);
-		}
-	}
-
-	Object remove(VersionSupplier toBeRemoved) {
-		VersionSupplier[] existing = (VersionSupplier[]) internal.get(toBeRemoved.getName());
-		if (existing != null) {
-			for (int i = 0; i < existing.length; i++) {
-				if (toBeRemoved == existing[i]) {
-					remove(existing, toBeRemoved.getName(), i);
-					return toBeRemoved;
+			return null;
+		for (int i = 0; i < existing.length; i++)
+			if (existing[i] == vs) {
+				if (remove) {
+					vs.setDropped(true);
+					if (existing.length == 1) {
+						internal.remove(vs.getName());
+						return vs;
+					}
+					Object[] newExisting = new Object[existing.length - 1];
+					System.arraycopy(existing, 0, newExisting, 0, i);
+					if (i + 1 < existing.length)
+						System.arraycopy(existing, i + 1, newExisting, i, existing.length - i - 1);
+					internal.put(vs.getName(), newExisting);
 				}
+				return vs;
 			}
-		}
 		return null;
 	}
 
-	void remove(VersionSupplier[] versionSuppliers) {
-		for (int i = 0; i < versionSuppliers.length; i++) {
+	public Object remove(VersionSupplier toBeRemoved) {
+		return contains(toBeRemoved, true);
+	}
+
+	public void remove(VersionSupplier[] versionSuppliers) {
+		for (int i = 0; i < versionSuppliers.length; i++)
 			remove(versionSuppliers[i]);
-		}
 	}
 
-	// Once we have resolved bundles, we need to make sure that exports
-	// from these are ahead of those from unresolved bundles
+	public Object[] remove(Object key) {
+		Object[] results = super.remove(key);
+		for (int i = 0; i < results.length; i++)
+			((VersionSupplier) results[i]).setDropped(true);
+		return results;
+	}
+
+	// Once we have resolved bundles, we need to make sure that version suppliers
+	// from the resolved bundles are ahead of those from unresolved bundles
 	void reorder() {
-		Iterator it = internal.values().iterator();
-		while (it.hasNext()) {
-			ArrayList toBeReordered = new ArrayList();
-			VersionSupplier[] existing = (VersionSupplier[]) it.next();
-			if (existing == null || existing.length <= 1)
+		for (Iterator it = internal.values().iterator(); it.hasNext();) {
+			Object[] existing = (Object[]) it.next();
+			if (existing.length <= 1)
 				continue;
-			// Find any VersionSuppliers that need to be reordered
-			VersionSupplier vs1 = (VersionSupplier) existing[0];
-			for (int i = 1; i < existing.length; i++) {
-				VersionSupplier vs2 = (VersionSupplier) existing[i];
-				BundleDescription b1 = vs1.getBundle();
-				BundleDescription b2 = vs2.getBundle();
-				if (b2.isResolved() && !b1.isResolved()) {
-					toBeReordered.add(vs2);
-				} else if (b2.isResolved() == b1.isResolved()) {
-					int versionDiff = vs2.getVersion().compareTo(vs1.getVersion());
-					if (versionDiff > 0 || (b2.getBundleId() < b1.getBundleId() && versionDiff == 0)) {
-						toBeReordered.add(vs2);
-					}
-				}
-				vs1 = vs2;
-			}
-			// Reorder them
-			for (int i = 0; i < toBeReordered.size(); i++) {
-				VersionSupplier vs = (VersionSupplier) toBeReordered.get(i);
-				remove(vs);
-				put(vs);
-			}
+			sort(existing);
 		}
 	}
 
+	// Compares two VersionSuppliers for descending ordered sorts.
+	// The VersionSuppliers are sorted by the following priorities
+	// First the resolution status of the supplying bundle.
+	// Second is the supplier version.
+	// Third is the bundle id of the supplying bundle.
+	public int compare(Object o1, Object o2) {
+		if (!(o1 instanceof VersionSupplier) || !(o2 instanceof VersionSupplier))
+			throw new IllegalArgumentException();
+		VersionSupplier vs1 = (VersionSupplier) o1;
+		VersionSupplier vs2 = (VersionSupplier) o2;
+		if (vs1.getBundle().isResolved() != vs2.getBundle().isResolved())
+			return vs1.getBundle().isResolved() ? -1 : 1;
+		int versionCompare = -(vs1.getVersion().compareTo(vs2.getVersion()));
+		if (versionCompare != 0)
+			return versionCompare;
+		return vs1.getBundle().getBundleId() < vs2.getBundle().getBundleId() ? -1 : 1;
+	}
 }

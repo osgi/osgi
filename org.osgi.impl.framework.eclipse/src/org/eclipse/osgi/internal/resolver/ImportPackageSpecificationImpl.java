@@ -15,7 +15,6 @@ import org.eclipse.osgi.framework.internal.core.Constants;
 import org.eclipse.osgi.service.resolver.*;
 
 public class ImportPackageSpecificationImpl extends VersionConstraintImpl implements ImportPackageSpecification {
-	private static final String ALL_PACKAGES = "*"; //$NON-NLS-1$
 	private String resolution = ImportPackageSpecification.RESOLUTION_STATIC; // the default is static
 	private String symbolicName;
 	private VersionRange bundleVersionRange;
@@ -84,7 +83,6 @@ public class ImportPackageSpecificationImpl extends VersionConstraintImpl implem
 			}
 		}
 
-		boolean matchName = false;
 		if (symbolicName != null) {
 			BundleDescription exporter = pkgDes.getExporter();
 			if (!symbolicName.equals(exporter.getSymbolicName()))
@@ -96,18 +94,7 @@ public class ImportPackageSpecificationImpl extends VersionConstraintImpl implem
 		String name = getName();
 		// shortcut '*'
 		// NOTE: wildcards are supported only in cases where this is a dynamic import
-		if ("*".equals(name) || "*".equals(pkgDes.getName())) {//$NON-NLS-1$ //$NON-NLS-2$
-			matchName = true;
-		} else if (name.endsWith(".*")) { //$NON-NLS-1$
-			if (pkgDes.getName().startsWith((name.substring(0, name.length() - 1))))
-				matchName = true;
-		} else if (pkgDes.getName().equals(name)) {
-			matchName = true;
-		} else if (pkgDes.getName().endsWith(".*")) { //$NON-NLS-1$
-			if (name.startsWith((pkgDes.getName().substring(0, name.length() - 1))))
-				matchName = true;
-		}
-		if (!matchName)
+		if (!"*".equals(name) && !(name.endsWith(".*") && pkgDes.getName().startsWith(name.substring(0, name.length() - 1))) && !pkgDes.getName().equals(name)) //$NON-NLS-1$ //$NON-NLS-2$
 			return false;
 		if (getVersionRange() != null && !getVersionRange().isIncluded(pkgDes.getVersion()))
 			return false;

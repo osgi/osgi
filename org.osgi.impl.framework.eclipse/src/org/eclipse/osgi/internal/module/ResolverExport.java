@@ -10,117 +10,63 @@
  *******************************************************************************/
 package org.eclipse.osgi.internal.module;
 
+import java.util.ArrayList;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.osgi.service.resolver.ExportPackageDescription;
-import org.osgi.framework.Version;
 
-public class ResolverExport implements VersionSupplier {
-	private ResolverBundle exporter;
-	private ExportPackageDescription exportPackageDescription;
-	private boolean reprovide = false;
-	private boolean dropped = false;
+/*
+ * A companion to ExportPackageDescription from the state used while resolving.
+ */
+public class ResolverExport extends VersionSupplier {
+	private ResolverBundle resolverBundle;
 
-	ResolverExport(ResolverBundle bundle, ExportPackageDescription export) {
-		exporter = bundle;
-		exportPackageDescription = export;
+	ResolverExport(ResolverBundle resolverBundle, ExportPackageDescription epd) {
+		super(epd);
+		this.resolverBundle = resolverBundle;
 	}
 
-	ResolverExport(ResolverBundle bundle, ExportPackageDescription export, boolean reprovide) {
-		this(bundle, export);
-		this.reprovide = reprovide;
-	}
-
-	public String getName() {
-		return exportPackageDescription.getName();
-	}
-
-	public Version getVersion() {
-		return exportPackageDescription.getVersion();
+	public ExportPackageDescription getExportPackageDescription() {
+		return (ExportPackageDescription) base;
 	}
 
 	public BundleDescription getBundle() {
-		return exportPackageDescription.getExporter();
+		return getExportPackageDescription().getExporter();
 	}
 
 	ResolverBundle getExporter() {
-		return exporter;
+		return resolverBundle;
 	}
 
-	ExportPackageDescription getExportPackageDescription() {
-		return exportPackageDescription;
+	/*
+	 * returns a list of roots for this export.  The returned list will include and exports
+	 * which the exporting bundle may get access to from imported packages or required bundles.
+	 */
+	ResolverExport[] getRoots() {
+		ArrayList results = new ArrayList(1); // usually only one root
+		addRoots(results);
+		return (ResolverExport[]) results.toArray(new ResolverExport[results.size()]);
 	}
 
-	ResolverExport getRoot() {
-		ResolverImport ri;
-		ResolverExport re = this;
-		while (re != null && !re.getExportPackageDescription().isRoot()) {
-			ResolverExport root = null;
-			ResolverBundle reExporter = re.getExporter();
-			ri = reExporter.getImport(re.getName());
-			if (ri != null)
-				root = ri.getMatchingExport();
-			else
-				// If there is no import then we need to try going thru the requires
-				root = getRootRequires(re, reExporter);
-			if (root == null || root == re || root == this)
-				return null;
-			re = root;
+	/*
+	 * Adds roots for this export to the specified roots list.
+	 */
+	private void addRoots(ArrayList roots) {
+		if (roots.contains(this))
+			return;
+		ResolverImport ri = getExporter().getImport(getName());
+		if (ri != null && ri.getMatchingExport() != null && ri.getMatchingExport() != this) {
+			ri.getMatchingExport().addRoots(roots);
+			return;
 		}
-		return re;
-	}
-
-	// Recurse down the requires, until we find the root export
-	static ResolverExport getRootRequires(ResolverExport re, ResolverBundle reExporter) {
-		BundleConstraint[] requires = reExporter.getRequires();
+		// always add to the front of the list
+		roots.add(0, this);
+		BundleConstraint[] requires = getExporter().getRequires();
 		for (int i = 0; i < requires.length; i++) {
 			if (requires[i].getMatchingBundle() == null)
 				continue;
-			ResolverExport[] exports = requires[i].getMatchingBundle().getExportPackages();
-			for (int j = 0; j < exports.length; j++) {
-				if (re.getName().equals(exports[j].getName())) {
-					return exports[j];
-				}
-			}
-			re = getRootRequires(re, requires[i].getMatchingBundle());
-			if (re.getExportPackageDescription().isRoot())
-				return re;
+			ResolverExport requiredExport = requires[i].getBundle().getExport(getName());
+			if (requiredExport != null && !requiredExport.isDropped())
+				requiredExport.addRoots(roots);
 		}
-		return re;
-	}
-
-	static boolean isOnRootPath(ResolverBundle rb, ResolverExport re) {
-		ResolverImport ri;
-		if (re.getExporter() == rb)
-			return true;
-		while (re != null && !re.getExportPackageDescription().isRoot()) {
-			ResolverBundle reExporter = re.getExporter();
-			ri = reExporter.getImport(re.getName());
-			if (ri != null) {
-				re = ri.getMatchingExport();
-				if (re.getExporter() == rb)
-					return true;
-				continue;
-			}
-			re = getRootRequires(re, reExporter);
-			if (re.getExporter() == rb)
-				return true;
-		}
-		return false;
-	}
-
-	boolean isReprovide() {
-		return reprovide;
-	}
-
-	public String toString() {
-		return exportPackageDescription.toString();
-	}
-
-	boolean isDropped() {
-		return dropped;
-	}
-
-	void setDropped(boolean dropped) {
-		this.dropped = dropped;
 	}
 }

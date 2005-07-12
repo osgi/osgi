@@ -33,33 +33,33 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 	public static boolean DEBUG_GROUPING = false;
 	public static boolean DEBUG_CYCLES = false;
 
-	// Set of bundles that have been removed
-	private HashMap removalPending = new HashMap();
+	// The State associated with this resolver
 	private State state;
+	// The BundleContext of the system bundle
+	private BundleContext context;
+	// Used to check permissions for import/export, provide/require, host/fragment
+	private PermissionChecker permissionChecker;
+	// Set of bundles that are pending removal
+	private MappedList removalPending = new MappedList();
+	// Indicates whether this resolver has been initialized
+	private boolean initialized = false;
+
 	// Repository for exports
 	private VersionHashMap resolverExports = null;
 	// Repository for bundles
 	private VersionHashMap resolverBundles = null;
 	// List of unresolved bundles
 	private ArrayList unresolvedBundles = null;
-	// Temporary repositories used during resolution
-	private ArrayList resolvedBundles = null;
-	private ArrayList resolvingBundles = null;
-	// Lists of cyclic dependencies recording during resolving
-	private CyclicDependencyHashMap cyclicDependencies = null;
 	// Keys are BundleDescriptions, values are ResolverBundles
 	private HashMap bundleMapping = null;
-	private boolean initialized = false;
-	private PermissionChecker permissionChecker;
 	private GroupingChecker groupingChecker;
-	private BundleContext context;
 
 	public ResolverImpl(BundleContext context, boolean checkPermissions) {
 		this.context = context;
 		this.permissionChecker = new PermissionChecker(context, checkPermissions);
 	}
 
-	protected PermissionChecker getPermissionChecker() {
+	PermissionChecker getPermissionChecker() {
 		return permissionChecker;
 	}
 
@@ -69,7 +69,6 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		resolverBundles = new VersionHashMap();
 		unresolvedBundles = new ArrayList();
 		bundleMapping = new HashMap();
-		cyclicDependencies = new CyclicDependencyHashMap();
 		BundleDescription[] bundles = state.getBundles();
 		groupingChecker = new GroupingChecker();
 
@@ -78,9 +77,9 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		for (int i = 0; i < bundles.length; i++)
 			initResolverBundle(bundles[i], fragmentBundles, false);
 		// Add each removal pending bundle to the resolver's internal state
-		BundleDescription[] removedBundles = getRemovalPending();
+		Object[] removedBundles = removalPending.getAllValues();
 		for (int i = 0; i < removedBundles.length; i++)
-			initResolverBundle(removedBundles[i], fragmentBundles, true);
+			initResolverBundle((BundleDescription) removedBundles[i], fragmentBundles, true);
 		// Iterate over the resolved fragments and attach them to their hosts
 		for (Iterator iter = fragmentBundles.iterator(); iter.hasNext();) {
 			ResolverBundle fragment = (ResolverBundle) iter.next();
@@ -93,7 +92,12 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			}
 		}
 		rewireBundles(); // Reconstruct wirings
-		groupingChecker.addInitialGroupingConstraints((ResolverBundle[]) bundleMapping.values().toArray(new ResolverBundle[bundleMapping.size()]));
+		ResolverBundle[] initBundles = (ResolverBundle[]) bundleMapping.values().toArray(new ResolverBundle[bundleMapping.size()]);
+		for (int i = 0; i < initBundles.length; i++)
+			// only initialize grouping constraint for resolved bundles; 
+			// we add the constraints for unresolved bundles before we start a resolve opertation
+			if (initBundles[i].isResolved())
+				groupingChecker.addInitialGroupingConstraints(initBundles[i]);
 		setDebugOptions();
 		initialized = true;
 	}
@@ -101,17 +105,18 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 	private void initResolverBundle(BundleDescription bundleDesc, ArrayList fragmentBundles, boolean pending) {
 		ResolverBundle bundle = new ResolverBundle(bundleDesc, this);
 		bundleMapping.put(bundleDesc, bundle);
-		if (pending)
-			return;
-		resolverBundles.put(bundle);
+		if (!pending || bundleDesc.isResolved()) {
+			resolverExports.put(bundle.getExportPackages());
+			resolverBundles.put(bundle.getName(), bundle);
+		}
 		if (bundleDesc.isResolved()) {
 			bundle.setState(ResolverBundle.RESOLVED);
 			if (bundleDesc.getHost() != null)
 				fragmentBundles.add(bundle);
 		} else {
-			unresolvedBundles.add(bundle);
+			if (!pending)
+				unresolvedBundles.add(bundle);
 		}
-		resolverExports.put(bundle.getExportPackages());
 	}
 
 	// Re-wire previously resolved bundles
@@ -158,9 +163,9 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			return;
 		// Re-wire 'imp'
 		ResolverExport matchingExport = null;
-		ExportPackageDescription importSupplier = (ExportPackageDescription) imp.getImportPackageSpecification().getSupplier();
+		ExportPackageDescription importSupplier = (ExportPackageDescription) imp.getVersionConstraint().getSupplier();
 		ResolverBundle exporter = importSupplier == null ? null : (ResolverBundle) bundleMapping.get(importSupplier.getExporter());
-		VersionSupplier[] matches = resolverExports.getArray(imp.getName());
+		Object[] matches = resolverExports.get(imp.getName());
 		for (int j = 0; j < matches.length; j++) {
 			ResolverExport export = (ResolverExport) matches[j];
 			if (export.getExporter() == exporter && imp.isSatisfiedBy(export)) {
@@ -172,15 +177,15 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		// Check if we wired to a reprovided package (in which case the ResolverExport doesn't exist)
 		if (matchingExport == null && exporter != null) {
 			ResolverExport reprovidedExport = new ResolverExport(exporter, importSupplier);
-			if (exporter.getExport(imp) == null) {
+			if (exporter.getExport(imp.getName()) == null) {
 				exporter.addExport(reprovidedExport);
-				resolverExports.put(reprovidedExport);
+				resolverExports.put(reprovidedExport.getName(), reprovidedExport);
 			}
 			imp.setMatchingExport(reprovidedExport);
 		}
 		// If we still have a null wire and it's not optional, then we have an error
 		if (imp.getMatchingExport() == null && !imp.isOptional()) {
-			System.err.println("Could not find matching export for " + imp.getImportPackageSpecification()); //$NON-NLS-1$
+			System.err.println("Could not find matching export for " + imp.getVersionConstraint()); //$NON-NLS-1$
 			// TODO log error!!
 		}
 		if (imp.getMatchingExport() != null) {
@@ -194,21 +199,9 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		// check if this is a rejected singleton
 		if (rejectedSingletons.contains(bundle))
 			return false;
-		ImportPackageSpecification[] imports = bundle.getImportPackages();
-		for (int i = 0; i < imports.length; i++) {
-			// Don't allow non-dynamic imports to specify wildcards
-			if (!ImportPackageSpecification.RESOLUTION_DYNAMIC.equals(imports[i].getDirective(Constants.RESOLUTION_DIRECTIVE)) && imports[i].getName().endsWith("*")) //$NON-NLS-1$
-				return false;
-			// Don't allow multiple imports of the same package
-			for (int j = 0; j < i; j++) {
-				if (imports[i] != imports[j] && imports[i].getName().equals(imports[j]))
-					return false;
-			}
-		}
 		String platformFilter = bundle.getPlatformFilter();
-		if (platformFilter == null) {
+		if (platformFilter == null)
 			return true;
-		}
 		if (platformProperties == null)
 			return false;
 		try {
@@ -226,28 +219,32 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 	private void attachFragment(ResolverBundle bundle, ArrayList rejectedSingletons) {
 		if (!bundle.isFragment() || !bundle.isResolvable() || rejectedSingletons.contains(bundle.getBundle()))
 			return;
+		// select singleton fragments
 		if (bundle.getBundle().isSingleton()) {
 			BundleDescription bundleDesc = bundle.getBundle();
-			VersionSupplier[] sameName = resolverBundles.getArray(bundleDesc.getName());
+			Object[] sameName = resolverBundles.get(bundleDesc.getName());
 			if (sameName.length > 1) {
+				// we found some other bundles with the same BSN
 				for (int j = 0; j < sameName.length; j++) {
-					BundleDescription sameNameDesc = sameName[j].getBundle();
+					BundleDescription sameNameDesc = ((ResolverBundle) sameName[j]).getBundle();
 					if (sameName[j] == bundle || !sameNameDesc.isSingleton() || rejectedSingletons.contains(sameNameDesc))
 						continue; // Ignore the bundle we are selecting, non-singletons and rejected singletons
+					// if the bundle sameNameDesc is resolved or has a greater version then reject the other bundle 
 					if (sameNameDesc.isResolved() || sameNameDesc.getVersion().compareTo(bundle.getBundle().getVersion()) > 0) {
 						rejectedSingletons.add(bundle.getBundle());
 						return;
 					}
+					// reject the bundle sameNameDesc
 					rejectedSingletons.add(sameNameDesc);
 				}
 			}
 		}
+		// find all available hosts to attach to.
 		BundleConstraint hostConstraint = bundle.getHost();
-		VersionSupplier[] hosts = resolverBundles.getArray(hostConstraint.getVersionConstraint().getName());
-		for (int i = 0; i < hosts.length; i++) {
+		Object[] hosts = resolverBundles.get(hostConstraint.getVersionConstraint().getName());
+		for (int i = 0; i < hosts.length; i++)
 			if (((ResolverBundle) hosts[i]).isResolvable() && hostConstraint.isSatisfiedBy((ResolverBundle) hosts[i]))
 				resolverExports.put(((ResolverBundle) hosts[i]).attachFragment(bundle, true));
-		}
 	}
 
 	public synchronized void resolve(BundleDescription[] reRefresh, Dictionary[] platformProperties) {
@@ -256,9 +253,8 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		if (state == null)
 			throw new IllegalStateException("RESOLVER_NO_STATE"); //$NON-NLS-1$
 
-		if (!initialized) {
+		if (!initialized)
 			initialize();
-		}
 
 		// Unresolve all the supplied bundles and their dependents
 		if (reRefresh != null)
@@ -267,6 +263,9 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 				if (rb != null)
 					unresolveBundle(rb, false);
 			}
+		// reorder exports and bundles after unresolving the bundles
+		resolverExports.reorder();
+		resolverBundles.reorder();
 		// keep a list of rejected singltons
 		ArrayList rejectedSingletons = new ArrayList();
 		// attempt to resolve all unresolved bundles
@@ -278,67 +277,87 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			bundles = (ResolverBundle[]) unresolvedBundles.toArray(new ResolverBundle[unresolvedBundles.size()]);
 			resolveBundles(bundles, platformProperties, rejectedSingletons);
 		}
-		if (DEBUG_WIRING)
-			printWirings();
 		if (DEBUG)
 			ResolverImpl.log("*** END RESOLUTION ***"); //$NON-NLS-1$
 	}
 
 	private void resolveBundles(ResolverBundle[] bundles, Dictionary[] platformProperties, ArrayList rejectedSingletons) {
-		// Initialize the resolving and resolved bundle lists
-		resolvingBundles = new ArrayList(unresolvedBundles.size());
-		resolvedBundles = new ArrayList(unresolvedBundles.size());
-		groupingChecker.addInitialGroupingConstraints(bundles);
 		// First check that all the meta-data is valid for each unresolved bundle
 		// This will reset the resolvable flag for each bundle
-		for (int i = 0; i < bundles.length; i++)
+		for (int i = 0; i < bundles.length; i++) {
 			bundles[i].setResolvable(isResolvable(bundles[i].getBundle(), platformProperties, rejectedSingletons));
+			groupingChecker.removeAllExportConstraints(bundles[i]);
+		}
 
 		// First attach all fragments to the matching hosts
 		for (int i = 0; i < bundles.length; i++)
 			attachFragment(bundles[i], rejectedSingletons);
 
+		// add initial grouping constraints after fragments have been attached
+		for (int i = 0; i < bundles.length; i++)
+			groupingChecker.addInitialGroupingConstraints(bundles[i]);
+		// Lists of cyclic dependencies recording during resolving
+		ArrayList cycle = new ArrayList(1); // start small
+		ArrayList resolvedBundles = new ArrayList(bundles.length);
 		// Attempt to resolve all unresolved bundles
 		for (int i = 0; i < bundles.length; i++) {
 			if (DEBUG)
 				ResolverImpl.log("** RESOLVING " + bundles[i] + " **"); //$NON-NLS-1$ //$NON-NLS-2$
-			resolveBundle(bundles[i]);
-			// Check for any bundles still in RESOLVING state - these can now be
-			// moved to RESOLVED as they are dependent on each other.  Any that
-			// could not be resolved would have been moved back to UNRESOLVED
-			while (resolvingBundles.size() > 0) {
-				ResolverBundle rb = (ResolverBundle) resolvingBundles.get(0);
-				// Check that we haven't wired to any dropped exports
-				ResolverImport[] imports = rb.getImportPackages();
-				boolean needRewire = false;
-				for (int j = 0; j < imports.length; j++) {
-					if (imports[j].getMatchingExport() != null && !resolverExports.contains(imports[j].getMatchingExport())) {
-						imports[j].setMatchingExport(null);
-						needRewire = true;
-					}
-				}
-				if (needRewire)
-					resolveBundle(rb);
-				if (rb.isFullyWired()) {
-					if (DEBUG || DEBUG_CYCLES)
-						ResolverImpl.log("Pushing " + rb + " to RESOLVED"); //$NON-NLS-1$ //$NON-NLS-2$
-					setBundleResolved(rb);
-				}
-			}
+			cycle.clear();
+			resolveBundle(bundles[i], cycle);
+			// Check for any bundles involved in a cycle.
+			// if any bundles in the cycle are not resolved then we need to resolve the resolvable ones
+			checkCycle(cycle);
+			if (bundles[i].isResolvable())
+				resolvedBundles.add(bundles[i]);
 		}
 
 		// Resolve all fragments that are still attached to at least one host.
 		if (unresolvedBundles.size() > 0) {
-			bundles = (ResolverBundle[]) unresolvedBundles.toArray(new ResolverBundle[unresolvedBundles.size()]);
-			for (int i = 0; i < bundles.length; i++)
-				resolveFragment(bundles[i]);
+			ResolverBundle[] unresolved = (ResolverBundle[]) unresolvedBundles.toArray(new ResolverBundle[unresolvedBundles.size()]);
+			for (int i = 0; i < unresolved.length; i++)
+				resolveFragment(unresolved[i]);
 		}
 
-		stateResolveBundles();
+		if (DEBUG_WIRING)
+			printWirings();
+		// set the resolved status of the bundles in the State
+		stateResolveBundles(bundles);
+	}
 
-		// throw away the temporary resolving and resolved bundle lists
-		resolvingBundles = null;
-		resolvedBundles = null;
+	private void checkCycle(ArrayList cycle) {
+		int cycleSize = cycle.size();
+		if (cycleSize == 0)
+			return;
+		for (int i = cycleSize - 1; i >= 0; i--)
+			if (!((ResolverBundle) cycle.get(i)).isResolvable())
+				cycle.remove(i); // remove this from the list of bundles that need reresolved
+		boolean reresolveCycle = cycle.size() != cycleSize; //we removed an unresolvable bundle; must reresolve remaining cycle
+		for (int i = 0; !reresolveCycle && i < cycle.size(); i++) {
+			ResolverBundle rb = (ResolverBundle) cycle.get(0);
+			// Check that we haven't wired to any dropped exports
+			ResolverImport[] imports = rb.getImportPackages();
+			for (int j = 0; j < imports.length; j++)
+				// check for dropped exports
+				if (imports[j].getMatchingExport() != null && imports[j].getMatchingExport().isDropped()) {
+					imports[j].addUnresolvableWiring(imports[j].getMatchingExport().getExporter());
+					reresolveCycle = true;
+				}
+		}
+		if (reresolveCycle) {
+			for (int i = 0; i < cycle.size(); i++)
+				((ResolverBundle) cycle.get(i)).clearWires(false);
+			ArrayList innerCycle = new ArrayList(cycle.size());
+			for (int i = 0; i < cycle.size(); i++)
+				resolveBundle((ResolverBundle) cycle.get(i), innerCycle);
+			checkCycle(innerCycle);
+		} else {
+			for (int i = 0; i < cycle.size(); i++) {
+				if (DEBUG || DEBUG_CYCLES)
+					ResolverImpl.log("Pushing " + cycle.get(i) + " to RESOLVED"); //$NON-NLS-1$ //$NON-NLS-2$
+				setBundleResolved((ResolverBundle) cycle.get(i));
+			}
+		}
 	}
 
 	private boolean selectSingletons(ResolverBundle[] bundles, ArrayList rejectedSingletons) {
@@ -347,11 +366,11 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			BundleDescription bundleDesc = bundles[i].getBundle();
 			if (!bundleDesc.isSingleton() || !bundleDesc.isResolved() || rejectedSingletons.contains(bundleDesc))
 				continue;
-			VersionSupplier[] sameName = resolverBundles.getArray(bundleDesc.getName());
+			Object[] sameName = resolverBundles.get(bundleDesc.getName());
 			if (sameName.length > 1) { // Need to make a selection based off of num dependents
 				int numDeps = bundleDesc.getDependents().length;
 				for (int j = 0; j < sameName.length; j++) {
-					BundleDescription sameNameDesc = sameName[j].getBundle();
+					BundleDescription sameNameDesc = ((VersionSupplier) sameName[j]).getBundle();
 					if (sameName[j] == bundles[i] || !sameNameDesc.isSingleton() || !sameNameDesc.isResolved() || rejectedSingletons.contains(sameNameDesc))
 						continue; // Ignore the bundle we are selecting, non-singletons, and non-resolved
 					result = true;
@@ -381,7 +400,7 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 	}
 
 	// This method will attempt to resolve the supplied bundle and any bundles that it is dependent on
-	private boolean resolveBundle(ResolverBundle bundle) {
+	private boolean resolveBundle(ResolverBundle bundle, ArrayList cycle) {
 		if (bundle.isFragment())
 			return false;
 		if (!bundle.isResolvable()) {
@@ -396,7 +415,7 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			return true;
 		} else if (bundle.getState() == ResolverBundle.UNRESOLVED) {
 			// 'bundle' is UNRESOLVED so move to RESOLVING
-			bundle.clearWires();
+			bundle.clearWires(true);
 			setBundleResolving(bundle);
 		}
 
@@ -404,10 +423,10 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 
 		// Check for singletons
 		if (bundle.getBundle().isSingleton()) {
-			VersionSupplier[] sameName = resolverBundles.getArray(bundle.getName());
+			Object[] sameName = resolverBundles.get(bundle.getName());
 			if (sameName.length > 1) // Need to check if one is already resolved
 				for (int i = 0; i < sameName.length; i++) {
-					if (sameName[i] == bundle || !sameName[i].getBundle().isSingleton())
+					if (sameName[i] == bundle || !((ResolverBundle) sameName[i]).getBundle().isSingleton())
 						continue; // Ignore the bundle we are resolving and non-singletons
 					if (((ResolverBundle) sameName[i]).getBundle().isResolved()) {
 						failed = true; // Must fail since there is already a resolved bundle
@@ -420,9 +439,9 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			// Iterate thru required bundles of 'bundle' trying to find matching bundles.
 			BundleConstraint[] requires = bundle.getRequires();
 			for (int i = 0; i < requires.length; i++) {
-				if (!resolveRequire(requires[i])) {
+				if (!resolveRequire(requires[i], cycle)) {
 					if (DEBUG || DEBUG_REQUIRES)
-						ResolverImpl.log("** REQUIRE " + requires[i].getVersionConstraint().getName() + "[" + requires[i].getActualBundle() + "] failed to resolve"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						ResolverImpl.log("** REQUIRE " + requires[i].getVersionConstraint().getName() + "[" + requires[i].getBundleDescription() + "] failed to resolve"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					// If the require has failed to resolve and it is from a fragment, then remove the fragment from the host
 					if (requires[i].isFromFragment()) {
 						resolverExports.remove(bundle.detachFragment((ResolverBundle) bundleMapping.get(requires[i].getVersionConstraint().getBundle())));
@@ -439,73 +458,31 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			ResolverImport[] imports = bundle.getImportPackages();
 			for (int i = 0; i < imports.length; i++) {
 				// Only resolve non-dynamic imports here
-				if (!imports[i].isDynamic()) {
-					if (!resolveImport(imports[i], true)) {
-						if (DEBUG || DEBUG_IMPORTS)
-							ResolverImpl.log("** IMPORT " + imports[i].getName() + "[" + imports[i].getActualBundle() + "] failed to resolve"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-						// If the import has failed to resolve and it is from a fragment, then remove the fragment from the host
-						if (imports[i].isFromFragment()) {
-							resolverExports.remove(bundle.detachFragment((ResolverBundle) bundleMapping.get(imports[i].getImportPackageSpecification().getBundle())));
-							continue;
-						}
-						failed = true;
-						break;
+				if (!imports[i].isDynamic() && !resolveImport(imports[i], true, cycle)) {
+					if (DEBUG || DEBUG_IMPORTS)
+						ResolverImpl.log("** IMPORT " + imports[i].getName() + "[" + imports[i].getBundleDescription() + "] failed to resolve"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					// If the import has failed to resolve and it is from a fragment, then remove the fragment from the host
+					if (imports[i].isFromFragment()) {
+						resolverExports.remove(bundle.detachFragment((ResolverBundle) bundleMapping.get(imports[i].getBundleDescription())));
+						continue;
 					}
+					failed = true;
+					break;
 				}
 			}
 		}
 		// Need to check that all mandatory imports are wired. If they are then
 		// set the bundle RESOLVED, otherwise set it back to UNRESOLVED
-		boolean fullyWired = bundle.isFullyWired();
-		if (!failed && fullyWired && !bundle.isDependentOnCycle()) {
-			if (!groupingChecker.checkRequiresConstraints(bundle)) {
-				setBundleUnresolved(bundle, false);
-				if (DEBUG)
-					ResolverImpl.log(bundle + " NOT RESOLVED due to propagation or grouping constraints"); //$NON-NLS-1$
-			} else {
-				setBundleResolved(bundle);
-				if (DEBUG)
-					ResolverImpl.log(bundle + " RESOLVED"); //$NON-NLS-1$
-			}
-		} else if (failed || !fullyWired) {
+		if (!failed && !cycle.contains(bundle)) {
+			setBundleResolved(bundle);
+			if (DEBUG)
+				ResolverImpl.log(bundle + " RESOLVED"); //$NON-NLS-1$
+		} else if (failed) {
 			setBundleUnresolved(bundle, false);
 			if (DEBUG)
 				ResolverImpl.log(bundle + " NOT RESOLVED"); //$NON-NLS-1$
 		}
-		if (!failed && fullyWired) {
-			groupingChecker.addReExportConstraints(bundle);
-			groupingChecker.addRequireConstraints(bundle.getExportPackages(), bundle);
-		}
-		// Check cyclic dependencies
-		ArrayList v = cyclicDependencies.remove(bundle);
-		if (v != null) {
-			// We have some cyclic dependencies on 'bundle', so iterate thru
-			// them and inform each one whether 'bundle' has resolved or not
-			for (int i = 0; i < v.size(); i++) {
-				ResolverBundle dependent = (ResolverBundle) v.get(i);
-				if (bundle.isDependentOnUnresolvedFragment(dependent)) {
-					dependent.cyclicDependencyFailed(bundle);
-					setBundleUnresolved(dependent, false);
-					if (DEBUG_CYCLES)
-						ResolverImpl.log("Setting dependent bundle (" + dependent + ") to unresolved (due to fragment)"); //$NON-NLS-1$ //$NON-NLS-2$
-				} else if (bundle.getState() == ResolverBundle.RESOLVED) {
-					// Tell dependent bundles that we have resolved so that they can resolve
-					// (they may be dependent on other bundles as well though)
-					if (dependent.cyclicDependencyResolved(bundle)) {
-						setBundleResolved(dependent);
-						if (DEBUG_CYCLES)
-							ResolverImpl.log("Telling dependent bundle (" + dependent + ") that " + bundle + " has resolved"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					}
-				} else if (bundle.getState() == ResolverBundle.UNRESOLVED) {
-					// Tell dependent bundles that we have failed to
-					// resolve - this forces them to be unresolved
-					dependent.cyclicDependencyFailed(bundle);
-					setBundleUnresolved(dependent, false);
-					if (DEBUG_CYCLES)
-						ResolverImpl.log("Setting dependent bundle (" + dependent + ") to unresolved"); //$NON-NLS-1$ //$NON-NLS-2$
-				}
-			}
-		}
+
 		if (bundle.getState() == ResolverBundle.UNRESOLVED)
 			bundle.setResolvable(false); // Set it to unresolvable so we don't attempt to resolve it again in this round
 
@@ -515,53 +492,40 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 	}
 
 	// Resolve the supplied import. Returns true if the import can be resolved, false otherwise
-	private boolean resolveRequire(BundleConstraint req) {
+	private boolean resolveRequire(BundleConstraint req, ArrayList cycle) {
 		if (DEBUG_REQUIRES)
 			ResolverImpl.log("Trying to resolve: " + req.getBundle() + ", " + req.getVersionConstraint()); //$NON-NLS-1$ //$NON-NLS-2$
 		if (req.getMatchingBundle() != null) {
 			// Check for unrecorded cyclic dependency
-			if (req.getMatchingBundle().getState() == ResolverBundle.RESOLVING) {
-				cyclicDependencies.put(req.getMatchingBundle(), req.getBundle());
-				req.getBundle().recordCyclicDependency(req.getMatchingBundle());
-			}
+			if (req.getMatchingBundle().getState() == ResolverBundle.RESOLVING)
+				if (!cycle.contains(req.getBundle()))
+					cycle.add(req.getBundle());
 			if (DEBUG_REQUIRES)
 				ResolverImpl.log("  - already wired"); //$NON-NLS-1$
 			return true; // Already wired (due to grouping dependencies) so just return
 		}
-		VersionSupplier[] bundles = resolverBundles.getArray(req.getVersionConstraint().getName());
+		Object[] bundles = resolverBundles.get(req.getVersionConstraint().getName());
 		for (int i = 0; i < bundles.length; i++) {
 			ResolverBundle bundle = (ResolverBundle) bundles[i];
 			if (DEBUG_REQUIRES)
 				ResolverImpl.log("CHECKING: " + bundle.getBundle()); //$NON-NLS-1$
 			// Check if export matches
 			if (req.isSatisfiedBy(bundle)) {
-				int originalState = bundle.getState();
 				req.setMatchingBundle(bundle); // Wire to the bundle
 				if (req.getBundle() == bundle)
 					return true; // Wired to ourselves
-				if ((originalState == ResolverBundle.UNRESOLVED && !resolveBundle(bundle))) {
+				if ((bundle.getState() != ResolverBundle.RESOLVED && !resolveBundle(bundle, cycle))) {
 					req.setMatchingBundle(null);
 					continue; // Bundle hasn't resolved
 				}
 				// Check cyclic dependencies
-				if (originalState == ResolverBundle.RESOLVING) {
-					// If the bundle was RESOLVING, we have a cyclic dependency
-					cyclicDependencies.put(bundle, req.getBundle());
-					req.getBundle().recordCyclicDependency(bundle);
-				} else if (originalState == ResolverBundle.UNRESOLVED && bundle.getState() == ResolverBundle.RESOLVING) {
-					// If the bundle has gone from UNRESOLVED to RESOLVING, we have a cyclic dependency
-					ArrayList exportersCyclicDependencies = bundle.getCyclicDependencies();
-					for (int k = 0; k < exportersCyclicDependencies.size(); k++) {
-						ResolverBundle dependentOn = (ResolverBundle) exportersCyclicDependencies.get(k);
-						if (dependentOn != req.getBundle()) {
-							cyclicDependencies.put(dependentOn, req.getBundle());
-							req.getBundle().recordCyclicDependency(dependentOn);
-						}
-					}
-				}
+				if (bundle.getState() == ResolverBundle.RESOLVING)
+					// If the bundle is RESOLVING, we have a cyclic dependency
+					if (!cycle.contains(req.getBundle()))
+						cycle.add(req.getBundle());
 				if (DEBUG_REQUIRES)
 					ResolverImpl.log("Found match: " + bundle.getBundle() + ". Wiring"); //$NON-NLS-1$ //$NON-NLS-2$
-				return true;
+				return checkRequiresConstraints(req, req.getMatchingBundle());
 			}
 		}
 		if (req.isOptional())
@@ -570,25 +534,32 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		return false;
 	}
 
+	private boolean checkRequiresConstraints(BundleConstraint req, ResolverBundle bundle) {
+		if (groupingChecker.isConsistent(req, bundle) != null) {
+			req.setMatchingBundle(null);
+			return req.isOptional();
+		}
+		return true;
+	}
+
 	// Resolve the supplied import. Returns true if the import can be resolved, false otherwise
-	private boolean resolveImport(ResolverImport imp, boolean checkReexportsFromRequires) {
+	private boolean resolveImport(ResolverImport imp, boolean checkReexportsFromRequires, ArrayList cycle) {
 		if (DEBUG_IMPORTS)
 			ResolverImpl.log("Trying to resolve: " + imp.getBundle() + ", " + imp.getName()); //$NON-NLS-1$ //$NON-NLS-2$
 		if (imp.getMatchingExport() != null) {
 			// Check for unrecorded cyclic dependency
-			if (imp.getMatchingExport().getExporter().getState() == ResolverBundle.RESOLVING) {
-				cyclicDependencies.put(imp.getMatchingExport().getExporter(), imp.getBundle());
-				imp.getBundle().recordCyclicDependency(imp.getMatchingExport().getExporter());
-			}
+			if (imp.getMatchingExport().getExporter().getState() == ResolverBundle.RESOLVING)
+				if (!cycle.contains(imp.getBundle()))
+					cycle.add(imp.getBundle());
 			if (DEBUG_IMPORTS)
 				ResolverImpl.log("  - already wired"); //$NON-NLS-1$
 			return true; // Already wired (due to grouping dependencies) so just return
 		}
-		VersionSupplier[] exports = resolverExports.getArray(imp.getName());
-		for (int i = 0; i < exports.length; i++) {
+		Object[] exports = resolverExports.get(imp.getName());
+		exportsloop: for (int i = 0; i < exports.length; i++) {
 			ResolverExport export = (ResolverExport) exports[i];
 			if (DEBUG_IMPORTS)
-				ResolverImpl.log("CHECKING: " + export.getExporter().getBundle() + ", " + exports[i].getName()); //$NON-NLS-1$ //$NON-NLS-2$
+				ResolverImpl.log("CHECKING: " + export.getExporter().getBundle() + ", " + export.getName()); //$NON-NLS-1$ //$NON-NLS-2$
 			// Check if export matches
 			if (imp.isSatisfiedBy(export) && imp.isNotAnUnresolvableWiring(export)) {
 				int originalState = export.getExporter().getState();
@@ -598,18 +569,18 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 					continue; // Can't wire to our own re-export
 				imp.setMatchingExport(export); // Wire the import to the export
 				if (imp.getBundle() != export.getExporter()) {
-					ResolverExport exp = imp.getBundle().getExport(imp);
-					if (exp != null) {
-						if (exp.getExportPackageDescription().isRoot() && !export.getExportPackageDescription().isRoot())
-							continue; // TODO hack to prevent imports from getting wired to re-exports if we offer a root export
-						resolverExports.remove(exp); // Import wins, remove export
-						exp.setDropped(true);
+					ResolverExport[] exps = imp.getBundle().getExports(imp.getName());
+					for (int j = 0; j < exps.length; j++) {
+						if (exps[j].getExportPackageDescription().isRoot() && !export.getExportPackageDescription().isRoot())
+							continue exportsloop; // to prevent imports from getting wired to re-exports if we offer a root export
+						if (exps[j].getExportPackageDescription().isRoot()) // do not drop reexports when import wins
+							resolverExports.remove(exps[j]); // Import wins, remove export
 					}
-					if (((originalState == ResolverBundle.UNRESOLVED || !export.getExportPackageDescription().isRoot()) && !resolveBundle(export.getExporter())) || !resolverExports.contains(export)) {
-						if (exp != null) {
-							resolverExports.put(exp);
-							exp.setDropped(false);
-						}
+					if ((originalState != ResolverBundle.RESOLVED && !resolveBundle(export.getExporter(), cycle)) || export.isDropped()) {
+						if (imp.getMatchingExport() != null && imp.getMatchingExport() != export) // has been resolved to some other export recursively
+							return true;
+						for (int j = 0; j < exps.length; j++)
+							resolverExports.put(exps[j].getName(), exps[j]);
 						imp.setMatchingExport(null);
 						continue; // Bundle hasn't resolved || export has not been selected and is unavailable
 					}
@@ -618,27 +589,16 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 				if (!imp.getBundle().isResolvable())
 					return false;
 				// Check grouping dependencies
-				if (checkAndResolveDependencies(imp, imp.getMatchingExport())) {
-					if (imp.getMatchingExport() != export)
-						return true; // Grouping has changed the wiring, so return here
+				if (checkImportConstraints(imp, imp.getMatchingExport(), cycle) && imp.getMatchingExport() != null) {
 					// Record any cyclic dependencies
-					if (imp.getBundle() != export.getExporter()) {
-						if (originalState == ResolverBundle.RESOLVING) {
-							// If the exporter was RESOLVING, we have a cyclic dependency
-							cyclicDependencies.put(export.getExporter(), imp.getBundle());
-							imp.getBundle().recordCyclicDependency(export.getExporter());
-						} else if (originalState == ResolverBundle.UNRESOLVED && export.getExporter().getState() == ResolverBundle.RESOLVING) {
-							// If the exporter has gone from UNRESOLVED to RESOLVING, we have a cyclic dependency
-							ArrayList exportersCyclicDependencies = export.getExporter().getCyclicDependencies();
-							for (int k = 0; k < exportersCyclicDependencies.size(); k++) {
-								ResolverBundle dependentOn = (ResolverBundle) exportersCyclicDependencies.get(k);
-								if (dependentOn != imp.getBundle()) {
-									cyclicDependencies.put(dependentOn, imp.getBundle());
-									imp.getBundle().recordCyclicDependency(dependentOn);
-								}
-							}
+					if (export != imp.getMatchingExport())
+						export = imp.getMatchingExport();
+					if (imp.getBundle() != export.getExporter())
+						if (export.getExporter().getState() == ResolverBundle.RESOLVING) {
+							// If the exporter is RESOLVING, we have a cyclic dependency
+							if (!cycle.contains(imp.getBundle()))
+								cycle.add(imp.getBundle());
 						}
-					}
 					if (DEBUG_IMPORTS)
 						ResolverImpl.log("Found match: " + export.getExporter() + ". Wiring " + imp.getBundle() + ":" + imp.getName()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					return true;
@@ -647,9 +607,11 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 					// then we need to catch that here, so we don't continue trying to wire here
 					return false;
 				}
+				if (imp.getMatchingExport() != null && imp.getMatchingExport() != export)
+					return true; // Grouping has changed the wiring, so return here
 			}
 		}
-		if (checkReexportsFromRequires && resolveImportReprovide(imp))
+		if (checkReexportsFromRequires && resolveImportReprovide(imp, cycle))
 			return true; // A reprovide satisfies imp
 		if (imp.isOptional())
 			return true; // If the import is optional then just return true
@@ -657,59 +619,54 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		return false;
 	}
 
-	// Check if the import can be resolved to a reprovided package (has no export object to match to)
-	private boolean resolveImportReprovide(ResolverImport imp) {
-		String bsn = imp.getImportPackageSpecification().getBundleSymbolicName();
+	// Check if the import can be resolved to a re-exported package (has no export object to match to)
+	private boolean resolveImportReprovide(ResolverImport imp, ArrayList cycle) {
+		String bsn = ((ImportPackageSpecification) imp.getVersionConstraint()).getBundleSymbolicName();
 		// If no symbolic name specified then just return (since this is a
 		// re-export an import not specifying a bsn will wire to the root)
-		if (bsn == null) {
+		if (bsn == null)
 			return false;
-		}
 		if (DEBUG_IMPORTS)
 			ResolverImpl.log("Checking reprovides: " + imp.getName()); //$NON-NLS-1$
-		ResolverBundle rb;
 		// Find bundle with specified bsn
-		for (Iterator iter = bundleMapping.values().iterator(); iter.hasNext();) {
-			rb = (ResolverBundle) iter.next();
-			if (bsn.equals(rb.getBundle().getSymbolicName()) && !rb.isFragment()) {
-				if (resolveBundle(rb))
-					if (resolveImportReprovide0(imp, rb, rb))
-						return true;
-			}
-		}
+		Object[] bundles = resolverBundles.get(bsn);
+		for (int i = 0; i < bundles.length; i++)
+			if (resolveBundle((ResolverBundle) bundles[i], cycle))
+				if (resolveImportReprovide0(imp, (ResolverBundle) bundles[i], (ResolverBundle) bundles[i], cycle, new ArrayList(5)))
+					return true;
 		return false;
 	}
 
-	private boolean resolveImportReprovide0(ResolverImport imp, ResolverBundle reexporter, ResolverBundle rb) {
+	private boolean resolveImportReprovide0(ResolverImport imp, ResolverBundle reexporter, ResolverBundle rb, ArrayList cycle, ArrayList visited) {
+		if (visited.contains(rb))
+			return false; // make sure we don't endless recurse cycles
+		visited.add(rb);
 		BundleConstraint[] requires = rb.getRequires();
 		for (int i = 0; i < requires.length; i++) {
 			if (!((BundleSpecification) requires[i].getVersionConstraint()).isExported())
-				continue; // Skip require if it doesn't reprovide the packages
+				continue; // Skip require if it doesn't re-export the packages
 			// Check exports to see if we've found the root
 			if (requires[i].getMatchingBundle() == null)
 				continue;
-			ResolverExport[] exports = requires[i].getMatchingBundle().getExportPackages();
+			ResolverExport[] exports = requires[i].getMatchingBundle().getExports(imp.getName());
 			for (int j = 0; j < exports.length; j++) {
-				if (imp.getName().equals(exports[j].getName())) {
-					Map directives = exports[j].getExportPackageDescription().getDirectives();
-					directives.remove(Constants.USES_DIRECTIVE);
-					ExportPackageDescription epd = state.getFactory().createExportPackageDescription(exports[j].getName(), exports[j].getVersion(), directives, exports[j].getExportPackageDescription().getAttributes(), false, reexporter.getBundle());
-					if (imp.getImportPackageSpecification().isSatisfiedBy(epd)) {
-						// Create reexport and add to bundle and resolverExports
-						if (DEBUG_IMPORTS)
-							ResolverImpl.log(" - Creating re-export for reprovide: " + reexporter + ":" + epd.getName()); //$NON-NLS-1$ //$NON-NLS-2$
-						ResolverExport re = new ResolverExport(reexporter, epd, true);
-						reexporter.addExport(re);
-						groupingChecker.addReprovideConstraints(re);
-						resolverExports.put(re);
-						// Resolve import
-						if (resolveImport(imp, false))
-							return true;
-					}
+				Map directives = exports[j].getExportPackageDescription().getDirectives();
+				directives.remove(Constants.USES_DIRECTIVE);
+				ExportPackageDescription epd = state.getFactory().createExportPackageDescription(exports[j].getName(), exports[j].getVersion(), directives, exports[j].getExportPackageDescription().getAttributes(), false, reexporter.getBundle());
+				if (imp.getVersionConstraint().isSatisfiedBy(epd)) {
+					// Create reexport and add to bundle and resolverExports
+					if (DEBUG_IMPORTS)
+						ResolverImpl.log(" - Creating re-export for reprovide: " + reexporter + ":" + epd.getName()); //$NON-NLS-1$ //$NON-NLS-2$
+					ResolverExport re = new ResolverExport(reexporter, epd);
+					reexporter.addExport(re);
+					resolverExports.put(re.getName(), re);
+					// Resolve import
+					if (resolveImport(imp, false, cycle))
+						return true;
 				}
 			}
 			// Check requires of matching bundle (recurse down the chain)
-			if (resolveImportReprovide0(imp, reexporter, requires[i].getMatchingBundle()))
+			if (resolveImportReprovide0(imp, reexporter, requires[i].getMatchingBundle(), cycle, visited))
 				return true;
 		}
 		return false;
@@ -717,7 +674,7 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 
 	// This method checks and resolves (if possible) grouping dependencies
 	// Returns true, if the dependencies can be resolved, false otherwise
-	private boolean checkAndResolveDependencies(ResolverImport imp, ResolverExport exp) {
+	private boolean checkImportConstraints(ResolverImport imp, ResolverExport exp, ArrayList cycle) {
 		if (DEBUG_GROUPING)
 			ResolverImpl.log("  Checking grouping for " + imp.getBundle() + ":" + imp.getName() + " -> " + exp.getExporter() + ":" + exp.getName()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ResolverBundle importer = imp.getBundle();
@@ -729,7 +686,7 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		// Try to rewire imp
 		imp.addUnresolvableWiring(exp.getExporter());
 		imp.setMatchingExport(null);
-		if (resolveImport(imp, false))
+		if (resolveImport(imp, false, cycle))
 			return true;
 		if (imp.isDynamic())
 			return false;
@@ -740,18 +697,16 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		for (int i = 0; i < imports.length; i++) {
 			if (imports[i].getMatchingExport() != null && imports[i].getMatchingExport().getName().equals(clash.getName())) {
 				imports[i].addUnresolvableWiring(imports[i].getMatchingExport().getExporter());
-				importer.clearWires();
+				imports[i].setMatchingExport(null); // clear the conflicting wire
 				// If the clashing import package was also exported then
 				// we need to put the export back into resolverExports
-				ResolverExport removed = importer.getExport(imports[i]);
-				if (removed != null)
-					resolverExports.put(removed);
-				// Try to re-resolve the bundle
-				if (resolveBundle(importer))
-					return true;
-				return false;
+				ResolverExport removed[] = importer.getExports(imports[i].getName());
+				resolverExports.put(removed);
 			}
 		}
+		// Try to re-resolve the bundle
+		if (resolveBundle(importer, cycle))
+			return true;
 		return false;
 	}
 
@@ -765,13 +720,8 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			if (!removed)
 				resolverExports.put(bundle.getExportPackages());
 		}
-		if (resolvingBundles != null)
-			resolvingBundles.remove(bundle);
-		if (resolvedBundles != null)
-			resolvedBundles.remove(bundle);
-		if (!removed) {
+		if (!removed)
 			unresolvedBundles.add(bundle);
-		}
 		bundle.detachAllFragments();
 		bundle.setState(ResolverBundle.UNRESOLVED);
 	}
@@ -780,10 +730,7 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 	private void setBundleResolved(ResolverBundle bundle) {
 		if (bundle.getState() == ResolverBundle.RESOLVED)
 			return;
-
-		resolvingBundles.remove(bundle);
 		unresolvedBundles.remove(bundle);
-		resolvedBundles.add(bundle);
 		bundle.setState(ResolverBundle.RESOLVED);
 	}
 
@@ -791,23 +738,15 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 	private void setBundleResolving(ResolverBundle bundle) {
 		if (bundle.getState() == ResolverBundle.RESOLVING)
 			return;
-
-		resolvedBundles.remove(bundle);
 		unresolvedBundles.remove(bundle);
-		resolvingBundles.add(bundle);
 		bundle.setState(ResolverBundle.RESOLVING);
 	}
 
 	// Resolves the bundles in the State
-	private void stateResolveBundles() {
-		for (int i = 0; i < resolvedBundles.size(); i++) {
-			ResolverBundle rb = (ResolverBundle) resolvedBundles.get(i);
-			if (!rb.getBundle().isResolved()) {
-				stateResolveBundle(rb);
-			}
-		}
-		resolverExports.reorder();
-		resolverBundles.reorder();
+	private void stateResolveBundles(ResolverBundle[] resolvedBundles) {
+		for (int i = 0; i < resolvedBundles.length; i++)
+			if (resolvedBundles[i].isResolved() && !resolvedBundles[i].getBundle().isResolved())
+				stateResolveBundle(resolvedBundles[i]);
 	}
 
 	private void stateResolveConstraints(ResolverBundle rb) {
@@ -815,7 +754,7 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		for (int i = 0; i < imports.length; i++) {
 			ResolverExport export = imports[i].getMatchingExport();
 			BaseDescription supplier = export == null ? null : export.getExportPackageDescription();
-			state.resolveConstraint(imports[i].getImportPackageSpecification(), supplier);
+			state.resolveConstraint(imports[i].getVersionConstraint(), supplier);
 		}
 		BundleConstraint[] requires = rb.getRequires();
 		for (int i = 0; i < requires.length; i++) {
@@ -885,13 +824,15 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			initialize();
 
 		ResolverBundle rb = (ResolverBundle) bundleMapping.get(importingBundle);
+		if (rb.getExport(requestedPackage) != null)
+			return null; // do not allow dynamic wires for packages which this bundle exports
 		ResolverImport[] resolverImports = rb.getImportPackages();
 		// Check through the ResolverImports of this bundle.
 		// If there is a matching one then pass it into resolveImport()
 		boolean found = false;
 		for (int j = 0; j < resolverImports.length; j++) {
 			// Make sure it is a dynamic import
-			if (!ImportPackageSpecification.RESOLUTION_DYNAMIC.equals(resolverImports[j].getImportPackageSpecification().getDirective(Constants.RESOLUTION_DIRECTIVE)))
+			if (!resolverImports[j].isDynamic())
 				continue;
 			String importName = resolverImports[j].getName();
 			// If the import uses a wildcard, then temporarily replace this with the requested package
@@ -902,11 +843,7 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			// Resolve the import
 			if (requestedPackage.equals(resolverImports[j].getName())) {
 				found = true;
-				boolean resolved = resolveImport(resolverImports[j], true);
-				while (resolved && !checkDynamicGrouping(resolverImports[j])) {
-					resolved = resolveImport(resolverImports[j], true);
-				}
-				if (resolved) {
+				if (resolveImport(resolverImports[j], true, new ArrayList())) {
 					// If the import resolved then return it's matching export
 					resolverImports[j].setName(null);
 					if (DEBUG_IMPORTS)
@@ -914,41 +851,26 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 					ExportPackageDescription matchingExport = resolverImports[j].getMatchingExport().getExportPackageDescription();
 					// If it is a wildcard import then clear the wire, so other
 					// exported packages can be found for it
-					if (importName.endsWith("*")) { //$NON-NLS-1$
+					if (importName.endsWith("*")) //$NON-NLS-1$
 						resolverImports[j].setMatchingExport(null);
-					}
 					return matchingExport;
 				}
 			}
 			// Reset the import package name
 			resolverImports[j].setName(null);
 		}
+		// this is to support adding dynamic imports on the fly.
 		if (!found) {
 			Map directives = new HashMap(1);
 			directives.put(Constants.RESOLUTION_DIRECTIVE, ImportPackageSpecification.RESOLUTION_DYNAMIC);
 			ImportPackageSpecification packageSpec = state.getFactory().createImportPackageSpecification(requestedPackage, null, null, null, directives, null, importingBundle);
 			ResolverImport newImport = new ResolverImport(rb, packageSpec);
-			boolean resolved = resolveImport(newImport, true);
-			while (resolved && !checkDynamicGrouping(newImport))
-				resolved = resolveImport(newImport, true);
-			if (resolved)
+			if (resolveImport(newImport, true, new ArrayList()))
 				return newImport.getMatchingExport().getExportPackageDescription();
 		}
 		if (DEBUG || DEBUG_IMPORTS)
 			ResolverImpl.log("Failed to resolve dynamic import: " + requestedPackage); //$NON-NLS-1$
 		return null; // Couldn't resolve the import, so return null
-	}
-
-	// Checks that dynamic import 'imp' does not break grouping dependencies with the existing wirings
-	private boolean checkDynamicGrouping(ResolverImport imp) {
-		if (groupingChecker.isConsistent(imp, imp.getMatchingExport()) != null) {
-			imp.addUnresolvableWiring(imp.getMatchingExport().getExporter());
-			imp.setMatchingExport(null);
-			if (DEBUG_GROUPING)
-				ResolverImpl.log("  Dynamic grouping failed: " + imp.getName()); //$NON-NLS-1$
-			return false;
-		}
-		return true;
 	}
 
 	public void bundleAdded(BundleDescription bundle) {
@@ -967,14 +889,14 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			bundleMapping.put(bundle, rb);
 			unresolvedBundles.add(rb);
 			resolverExports.put(rb.getExportPackages());
-			resolverBundles.put(rb);
+			resolverBundles.put(rb.getName(), rb);
 		}
 	}
 
 	public void bundleRemoved(BundleDescription bundle, boolean pending) {
 		// check if there are any dependants
 		if (pending)
-			addRemovalPending(bundle);
+			removalPending.put(new Long(bundle.getBundleId()), bundle);
 		if (!initialized)
 			return;
 		ResolverBundle rb = (ResolverBundle) bundleMapping.get(bundle);
@@ -985,48 +907,29 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 			bundleMapping.remove(bundle);
 			groupingChecker.removeAllExportConstraints(rb);
 		}
-		unresolvedBundles.remove(rb);
-		resolverExports.remove(rb.getExportPackages());
-		resolverBundles.remove(rb);
-
-	}
-
-	private void addRemovalPending(BundleDescription bundle) {
-		Long id = new Long(bundle.getBundleId());
-		ArrayList removedBundles = (ArrayList) removalPending.get(id);
-		if (removedBundles == null) {
-			removedBundles = new ArrayList(1); // very rare that more than one version of a bundle will be pending
-			removedBundles.add(bundle);
-			removalPending.put(id, removedBundles);
-		} else {
-			removedBundles.add(bundle);
+		if (!pending || !bundle.isResolved()) {
+			resolverExports.remove(rb.getExportPackages());
+			resolverBundles.remove(rb);
 		}
-	}
-
-	private BundleDescription[] getRemovalPending(BundleDescription bundle) {
-		Long id = new Long(bundle.getBundleId());
-		ArrayList removedBundles = (ArrayList) removalPending.remove(id);
-		if (removedBundles == null)
-			return null;
-		return (BundleDescription[]) removedBundles.toArray(new BundleDescription[removedBundles.size()]);
+		unresolvedBundles.remove(rb);
 	}
 
 	private void unresolveBundle(ResolverBundle bundle, boolean removed) {
 		if (bundle == null)
 			return;
 		// check the removed list if unresolving then remove from the removed list
-		BundleDescription[] removedBundles = null;
-		if ((removedBundles = getRemovalPending(bundle.getBundle())) != null) {
-			for (int i = 0; i < removedBundles.length; i++) {
-				ResolverBundle re = (ResolverBundle) bundleMapping.get(removedBundles[i]);
-				unresolveBundle(re, true);
-				state.removeBundleComplete(removedBundles[i]);
-				bundleMapping.remove(removedBundles[i]);
-				groupingChecker.removeAllExportConstraints(re);
-				// the bundle is removed
-				if (removedBundles[i] == bundle.getBundle())
-					removed = true;
-			}
+		Object[] removedBundles = removalPending.remove(new Long(bundle.getBundle().getBundleId()));
+		for (int i = 0; i < removedBundles.length; i++) {
+			ResolverBundle re = (ResolverBundle) bundleMapping.get(removedBundles[i]);
+			unresolveBundle(re, true);
+			state.removeBundleComplete((BundleDescription) removedBundles[i]);
+			resolverExports.remove(re.getExportPackages());
+			resolverBundles.remove(re);
+			bundleMapping.remove(removedBundles[i]);
+			groupingChecker.removeAllExportConstraints(re);
+			// the bundle is removed
+			if (removedBundles[i] == bundle.getBundle())
+				removed = true;
 		}
 
 		if (!bundle.getBundle().isResolved())
@@ -1035,13 +938,10 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		setBundleUnresolved(bundle, removed);
 		// Get bundles dependent on 'bundle' and selected exports of 'bundle'
 		BundleDescription[] dependents = bundle.getBundle().getDependents();
-		// Unresolve 'bundle'
-		bundle.setState(ResolverBundle.UNRESOLVED);
 		state.resolveBundle(bundle.getBundle(), false, null, null, null, null);
 		// Unresolve dependents of 'bundle'
-		for (int i = 0; i < dependents.length; i++) {
+		for (int i = 0; i < dependents.length; i++)
 			unresolveBundle((ResolverBundle) bundleMapping.get(dependents[i]), false);
-		}
 	}
 
 	public void bundleUpdated(BundleDescription newDescription, BundleDescription existingDescription, boolean pending) {
@@ -1054,12 +954,9 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 		resolverBundles = null;
 		unresolvedBundles = null;
 		bundleMapping = null;
-		cyclicDependencies = null;
-		if (removalPending.size() > 0) {
-			BundleDescription[] pending = getRemovalPending();
-			for (int i = 0; i < pending.length; i++)
-				state.removeBundleComplete(pending[i]);
-		}
+		Object[] removed = removalPending.getAllValues();
+		for (int i = 0; i < removed.length; i++)
+			state.removeBundleComplete((BundleDescription) removed[i]);
 		removalPending.clear();
 		initialized = false;
 	}
@@ -1071,18 +968,6 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 	public void setState(State newState) {
 		state = newState;
 		flush();
-	}
-
-	private BundleDescription[] getRemovalPending() {
-		if (removalPending.size() == 0)
-			return new BundleDescription[0];
-		ArrayList results = new ArrayList(removalPending.size());
-		Iterator iter = removalPending.values().iterator();
-		while (iter.hasNext()) {
-			ArrayList removedBundles = (ArrayList) iter.next();
-			results.addAll(removedBundles);
-		}
-		return (BundleDescription[]) results.toArray(new BundleDescription[results.size()]);
 	}
 
 	private void setDebugOptions() {
@@ -1100,8 +985,10 @@ public class ResolverImpl implements org.eclipse.osgi.service.resolver.Resolver 
 
 	// LOGGING METHODS
 	private void printWirings() {
-		for (int k = 0; k < resolvedBundles.size(); k++) {
-			ResolverBundle rb = (ResolverBundle) resolvedBundles.get(k);
+		ResolverImpl.log("****** Result Wirings ******"); //$NON-NLS-1$
+		Object[] bundles = resolverBundles.getAllValues();
+		for (int j = 0; j < bundles.length; j++) {
+			ResolverBundle rb = (ResolverBundle) bundles[j];
 			if (rb.getBundle().isResolved()) {
 				continue;
 			}
