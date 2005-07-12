@@ -9,6 +9,7 @@
  */
 package org.osgi.service.condpermadmin;
 
+import java.io.File;
 import java.io.FilePermission;
 import org.osgi.framework.Bundle;
 
@@ -38,8 +39,14 @@ public class BundleLocationCondition {
 		if (args.length != 1)
 			throw new IllegalArgumentException("Illegal number of args: " + args.length);
 		String location = args[0];
+		String bundleLocation = bundle.getLocation();
+		if ('/' != File.separatorChar) {
+			// must use the seperatorChar of the platform for FilePermission to work
+			location = location.replace('/', File.separatorChar);
+			bundleLocation = bundleLocation.replace('/', File.separatorChar);
+		}
 		FilePermission locationPat = new FilePermission(location, "read");
-		FilePermission sourcePat = new FilePermission(bundle.getLocation().toString(), "read");
+		FilePermission sourcePat = new FilePermission(bundleLocation, "read");
 		return locationPat.implies(sourcePat) ? Condition.TRUE : Condition.FALSE;
 	}
 
