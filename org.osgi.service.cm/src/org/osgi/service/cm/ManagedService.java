@@ -118,6 +118,9 @@ public interface ManagedService {
 	 * which initiated the callback. This implies that implementors of Managed
 	 * Service can be assured that the callback will not take place during
 	 * registration when they execute the registration in a synchronized method.
+	 * <p>
+	 * The implementer of this method must have <code>ConfigurationPermission[GET]</code>. This 
+	 * must be tested with the hasPermission method for the receiving bundle.
 	 * 
 	 * @param properties A copy of the Configuration properties, or
 	 *        <code>null</code>. This argument must not contain the

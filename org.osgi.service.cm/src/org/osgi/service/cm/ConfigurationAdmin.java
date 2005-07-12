@@ -130,7 +130,8 @@ public interface ConfigurationAdmin {
 	 * @throws IOException if access to persistent storage fails.
 	 * @throws SecurityException if caller does not have
 	 *         <code>AdminPermission</code> and <code>factoryPid</code> is bound to
-	 *         another bundle.
+	 *         another bundle, or when the caller does not have <code>ConfigurationPermission[READ]</code>
+	 *         
 	 */
 	Configuration createFactoryConfiguration(String factoryPid)
 			throws IOException;
@@ -159,7 +160,7 @@ public interface ConfigurationAdmin {
 	 * @return a new <code>Configuration</code> object.
 	 * @throws IOException if access to persistent storage fails.
 	 * @throws SecurityException if caller does not have
-	 *         <code>AdminPermission</code>.
+	 *         <code>AdminPermission</code> or when the caller does not have <code>ConfigurationPermission[READ]</code>
 	 */
 	Configuration createFactoryConfiguration(String factoryPid, String location)
 			throws IOException;
@@ -187,7 +188,7 @@ public interface ConfigurationAdmin {
 	 * @return an existing or new <code>Configuration</code> object.
 	 * @throws IOException if access to persistent storage fails.
 	 * @throws SecurityException if the caller does not have
-	 *         <code>AdminPermission</code>.
+	 *         <code>AdminPermission</code> or when the caller does not have <code>ConfigurationPermission[READ]</code>
 	 */
 	Configuration getConfiguration(String pid, String location)
 			throws IOException;
@@ -213,7 +214,7 @@ public interface ConfigurationAdmin {
 	 * @throws IOException if access to persistent storage fails.
 	 * @throws SecurityException if the <code>Configuration</code> object is bound
 	 *         to a location different from that of the calling bundle and it
-	 *         has no <code>AdminPermission</code>.
+	 *         has no <code>AdminPermission</code>  or <code>ConfigurationPermission[READ]</code>
 	 */
 	Configuration getConfiguration(String pid) throws IOException;
 
@@ -233,6 +234,9 @@ public interface ConfigurationAdmin {
 	 * <code>AdminPermission</code>, then all matching <code>Configuration</code>
 	 * objects are returned.
 	 * 
+	 * <p>
+	 * The returned array must only contain Configuration objects that for which the caller 
+	 * has <code>ConfigurationPermission[READ]</code> access.
 	 * <p>
 	 * The syntax of the filter string is as defined in the <code>Filter</code>
 	 * class. The filter can test any configuration parameters including the

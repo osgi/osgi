@@ -124,6 +124,9 @@ public interface ManagedServiceFactory {
 	 * This implies that implementors of the <code>ManagedServiceFactory</code>
 	 * class can be assured that the callback will not take place during
 	 * registration when they execute the registration in a synchronized method.
+	 * <p>
+	 * The implementer of this method must have <code>ConfigurationPermission[GET]</code>. This 
+	 * must be tested with the hasPermission method for the receiving bundle.
 	 * 
 	 * @param pid The PID for this configuration.
 	 * @param properties A copy of the configuration properties. This argument
@@ -146,6 +149,9 @@ public interface ManagedServiceFactory {
 	 * service must catch it and should log it.
 	 * <p>
 	 * The Configuration Admin service must call this method asynchronously.
+	 * <p>
+	 * The implementer of this method must have <code>ConfigurationPermission[GET]</code>. This 
+	 * must be tested with the hasPermission method for the receiving bundle.
 	 * 
 	 * @param pid the PID of the service to be removed
 	 */
