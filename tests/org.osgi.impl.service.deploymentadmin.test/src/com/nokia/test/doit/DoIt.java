@@ -155,7 +155,6 @@ public class DoIt implements BundleActivator {
         
         ServiceReference refDa = context.getServiceReference(DeploymentAdmin.class.getName());
 		da = (DeploymentAdmin) context.getService(refDa);
-		
     }
     
     void command() throws Exception {
@@ -295,6 +294,8 @@ public class DoIt implements BundleActivator {
             System.out.println("*******************************************************************");
             try {db_test_15(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
+            try {db_test_16(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
             
             try {bad_db_test_01(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
@@ -334,6 +335,8 @@ public class DoIt implements BundleActivator {
             try {bad_db_test_17(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
             try {bad_db_test_18(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
+            System.out.println("*******************************************************************");
+            try {bad_db_test_19(); ++ok;} catch (Exception e) {e.printStackTrace(); ++error;}
             System.out.println("*******************************************************************");
             
             System.out.println("\n=====================================");
@@ -668,8 +671,30 @@ public class DoIt implements BundleActivator {
         dp1.uninstall();
     }
 
-    public static final String db_test_01 = "Uses default RP, two resource files (one of them \n" +
-    	"is updated the other removed)";
+    public static final String bad_db_test_19 = "MANIFEST IS NOT THE FIRST\n";
+    public void bad_db_test_19() throws Exception {
+        InputStream is = null;
+        
+        try {
+            is = new FileInputStream(HOME + "bad_db_test_19.dp");
+            DeploymentPackage dp = da.installDeploymentPackage(is);
+            is.close();
+        }
+        catch (DeploymentException e) {
+            if (e.getCode() != DeploymentException.CODE_ORDER_ERROR)
+                throw new Exception("Negative test failed");
+        }
+    }
+
+    public static final String db_test_01 = "COMPOUND\n" +
+        "Uses default RP, two resource files (one of them \n" +
+    	"is updated the other removed)\n" +
+        "ASSERTS\n" +
+        " - tables exist and certains disappear after update\n" +
+        " - rows in tables exist\n" +
+        " - DP version changes\n" +
+        " - main header changes\n" +
+        " - resource header changes";
     public void db_test_01() throws Exception {
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         Db db = (Db) context.getService(ref);
@@ -677,13 +702,13 @@ public class DoIt implements BundleActivator {
         InputStream is = new FileInputStream(HOME + "db_test_01.dp");
 		DeploymentPackage dp = da.installDeploymentPackage(is);
 		
-		String[] tables = db.tableNames(null);
+		/*String[] tables = db.tableNames(null);
 		for (int i = 0; i < tables.length; i++) {
 		    System.out.println("TABLE: " + tables[i]);
 		    db.printTableHeader(null, tables[i], System.out);
 			db.printTableContent(null, tables[i], System.out);
 			System.out.println();                
-        }
+        }*/
         
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
             throw new Exception("Table 'player' is missing");
@@ -711,14 +736,6 @@ public class DoIt implements BundleActivator {
         is = new FileInputStream(HOME + "db_test_01_update_01.dp");
 		dp = da.installDeploymentPackage(is);
 		
-		tables = db.tableNames(null);
-		for (int i = 0; i < tables.length; i++) {
-		    System.out.println("TABLE: " + tables[i]);
-		    db.printTableHeader(null, tables[i], System.out);
-			db.printTableContent(null, tables[i], System.out);
-			System.out.println();                
-        }
-        
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
             throw new Exception("Table 'player' is missing");
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
@@ -727,9 +744,9 @@ public class DoIt implements BundleActivator {
             throw new Exception("Table 'score' is present");
         if (-1 != Arrays.asList(db.tableNames(null)).indexOf("tmp"))
             throw new Exception("Table 'tmp' is present");
-        if (!((Object[]) db.findRow(null, "player", new Integer(1)))[1].equals("Joe_Upd"))
+        if (!db.findRow(null, "player", new Integer(1))[1].equals("Joe_Upd"))
             throw new Exception("Row with '1' primary key is not updated");
-        if (!((Object[]) db.findRow(null, "game", new Integer(1)))[1].equals("chess_Upd"))
+        if (!db.findRow(null, "game", new Integer(1))[1].equals("chess_Upd"))
             throw new Exception("Row with '1' primary key is not updated");
         if (!dp.getVersion().equals(new Version("2.0")))
             throw new Exception("Version should be 2.0");
@@ -742,8 +759,11 @@ public class DoIt implements BundleActivator {
         db.reset(null);
     }
 
-    public static final String db_test_02 = "Uses default RP, two resource files (one of them \n" +
-		"is updated the other is a Missing resource)";
+    public static final String db_test_02 = "MISSING RESOURCE\n" +
+        "Uses default RP, two resource files (one of them \n" +
+		"is updated the other is a Missing resource)\n" +
+        "ASSERTS\n" +
+        " - table of the missing resource mustn't disappera after uninstall";
     public void db_test_02() throws Exception {
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         Db db = (Db) context.getService(ref);
@@ -751,14 +771,6 @@ public class DoIt implements BundleActivator {
         InputStream is = new FileInputStream(HOME + "db_test_02.dp");
         DeploymentPackage dp = da.installDeploymentPackage(is);
 		
-		String[] tables = db.tableNames(null);
-		for (int i = 0; i < tables.length; i++) {
-		    System.out.println("TABLE: " + tables[i]);
-		    db.printTableHeader(null, tables[i], System.out);
-			db.printTableContent(null, tables[i], System.out);
-			System.out.println();                
-        }
-      
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
             throw new Exception("Table 'player' is missing");
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
@@ -771,14 +783,6 @@ public class DoIt implements BundleActivator {
         is = new FileInputStream(HOME + "db_test_02_update_01.dp");
 		dp = da.installDeploymentPackage(is);
 		
-		tables = db.tableNames(null);
-		for (int i = 0; i < tables.length; i++) {
-		    System.out.println("TABLE: " + tables[i]);
-		    db.printTableHeader(null, tables[i], System.out);
-			db.printTableContent(null, tables[i], System.out);
-			System.out.println();                
-        }
-        
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
             throw new Exception("Table 'player' is missing");
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
@@ -792,8 +796,17 @@ public class DoIt implements BundleActivator {
         db.reset(null);
     }
     
-    public static final String db_test_03 = "Uses customizer, two resource files two bundles \n" +
-    		"(one of them is updated the other removed)";
+    public static final String db_test_03 = "COMPOUND\n" +
+        "Uses customizer, two resource files (one processed by the \n" +
+        "preinstalled RP, one by the customizer). Two bundles \n" +
+    	"(one of them is updated the other removed).\n" +
+        "ASSERTS\n" +
+        " - tables exist and certains disappear after update\n" +
+        " - preinstalled RP gets the first res. file\n" +
+        " - customizer gets the other" +
+        " - 'hardgame' bundle has to disappear after update\n" +
+        " - 'easygame' bundle has to remain after update" +
+        " - 'easygame' version changes";
     public void db_test_03() throws Exception {
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         Db db = (Db) context.getService(ref);
@@ -801,14 +814,6 @@ public class DoIt implements BundleActivator {
         
         InputStream is = new FileInputStream(HOME + "db_test_03.dp");
 		dp = da.installDeploymentPackage(is);
-		
-		String[] tables = db.tableNames(null);
-		for (int i = 0; i < tables.length; i++) {
-		    System.out.println("TABLE: " + tables[i]);
-		    db.printTableHeader(null, tables[i], System.out);
-			db.printTableContent(null, tables[i], System.out);
-			System.out.println();                
-        }
         
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
             throw new Exception("Table 'player' is missing");
@@ -838,19 +843,23 @@ public class DoIt implements BundleActivator {
 		dp = da.installDeploymentPackage(is);
 		
         Bundle[] bs = context.getBundles();
-        Bundle b = null;
+        Bundle b_eg = null;
+        Bundle b_hg = null;
         for (int i = 0; i < bs.length; i++) {
             String sn = bs[i].getSymbolicName();
             if (null == sn)
                 continue;
-            if (sn.equals("easygame")) {
-                b = bs[i];
-                break;
-            }
+            if (sn.equals("easygame"))
+                b_eg = bs[i];
+            if (sn.equals("hardgame"))
+                b_hg = bs[i];
         }
-        if (null == b)
+        if (null == b_eg)
             throw new Exception("Test Failed");
-        String bv = (String) b.getHeaders().get("Bundle-Version");
+        if (null != b_hg)
+            throw new Exception("Test Failed");
+        
+        String bv = (String) b_eg.getHeaders().get("Bundle-Version");
         if (null == bv)
             throw new Exception("Test Failed");
         if ( !(new Version(bv).equals(new Version(2, 0, 0))) )
@@ -860,6 +869,8 @@ public class DoIt implements BundleActivator {
         db.reset(null);
     }
 
+    public static final String db_test_04 = "CANCELLING\n" +
+        "Tests cancelling an install operation";
     public void db_test_04() throws Exception {
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         Db db = (Db) context.getService(ref);
@@ -889,6 +900,8 @@ public class DoIt implements BundleActivator {
         db.reset(null);
     }
     
+    public static final String db_test_05 = "SIGNING\n" +
+        "Same as db_test_03 but the DP is signed\n";
     public void db_test_05() throws Exception {
         ServiceReference ref = context.getServiceReference(Db.class.getName());
         Db db = (Db) context.getService(ref);
@@ -897,14 +910,6 @@ public class DoIt implements BundleActivator {
         InputStream is = new FileInputStream(HOME + "db_test_05.dp");
 		dp = da.installDeploymentPackage(is);
 		
-		String[] tables = db.tableNames(null);
-		for (int i = 0; i < tables.length; i++) {
-		    System.out.println("TABLE: " + tables[i]);
-		    db.printTableHeader(null, tables[i], System.out);
-			db.printTableContent(null, tables[i], System.out);
-			System.out.println();                
-        }
-        
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
             throw new Exception("Table 'player' is missing");
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
@@ -920,6 +925,7 @@ public class DoIt implements BundleActivator {
         db.reset(null);
     }
     
+    public static final String db_test_06 = "PRIVATE AREA\n";
     public void db_test_06() throws Exception {
         DeploymentPackage dp = null;
         InputStream is = new FileInputStream(HOME + "db_test_06.dp");
@@ -943,6 +949,11 @@ public class DoIt implements BundleActivator {
         dp.uninstall();
     }
     
+    public static final String db_test_07 = "LIST DEPLOYMENT PACKAGES\n" +
+        "Shows only those DPs it has permissions to." +
+        "ASSERTS\n" +
+        " - 'System' DP should NOT be visble\n" +
+        " - 'db_test_01' DP should be visble";
     public void db_test_07() throws Exception {
         InputStream is = new FileInputStream(HOME + "db_test_01.dp");
         DeploymentPackage dp = da.installDeploymentPackage(is);
@@ -959,7 +970,7 @@ public class DoIt implements BundleActivator {
 		if (!b1)
             throw new Exception("'db_test_01' DP should be visble");
 		if (b2)
-            throw new Exception("'system' DP should NOT be visble");
+            throw new Exception("'System' DP should NOT be visble");
 		
 		dp.uninstall();
         ServiceReference ref = context.getServiceReference(Db.class.getName());
@@ -967,33 +978,35 @@ public class DoIt implements BundleActivator {
         db.reset(null);
     }
     
-    public static final String db_test_09 = "Updates bundles and version has to be changed in " +
-    		"getBundleSymNameVersionPairs() result";
+    public static final String db_test_09 = "GET BUNDLE SYMBOLIC NAME VERSION PAIRS\n" +
+        "Updates bundles and version has to be changed in \n" +
+    	"getBundleSymNameVersionPairs() result\n" +
+        "ASSERTS\n" +
+        " - bundle version changes from 1.0.0 to 1.5.0";
     public void db_test_09() throws Exception {
         InputStream is = new FileInputStream(HOME + "db_test_09.dp");
         DeploymentPackage dp = da.installDeploymentPackage(is);
         is.close();
         
-        DeploymentPackage dp2 = da.getDeploymentPackage("db_test_09");
-		String[][] snvps = dp2.getBundleSymNameVersionPairs();
-		boolean b11 = snvps[0][1].equals("1.0.0");
-		boolean b12 = snvps[0][1].equals("1.0.0");
+        dp = da.getDeploymentPackage("db_test_09");
+		String[][] snvps = dp.getBundleSymNameVersionPairs();
+		boolean b1 = snvps[0][1].equals("1.0.0");
 
         is = new FileInputStream(HOME + "db_test_09_update_01.dp");
         dp = da.installDeploymentPackage(is);
         is.close();
 
-        dp2 = da.getDeploymentPackage("db_test_09");
-		snvps = dp2.getBundleSymNameVersionPairs();
-		boolean b21 = snvps[0][1].equals("1.5.0");
+        dp = da.getDeploymentPackage("db_test_09");
+		snvps = dp.getBundleSymNameVersionPairs();
+		boolean b2 = snvps[0][1].equals("1.5.0");
 		
-		if (!(b11 && b12 && b21))
+		if (!(b1 && b2))
 		    throw new Exception("Test failed");
 
 		dp.uninstall();
     }
 
-    public static final String db_test_10 = "";
+    public static final String db_test_10 = "INSTALL RESOURCE THAT HAS NO PID";
     public void db_test_10() throws Exception {
         InputStream is = new FileInputStream(HOME + "db_test_10.dp");
         DeploymentPackage dp = da.installDeploymentPackage(is);
@@ -1006,8 +1019,9 @@ public class DoIt implements BundleActivator {
         dp.uninstall();
     }
 
-    public static final String db_test_11 = "Update adds a new bundle -> new element in " +
-    		"getBundleSymNameVersionPairs() result";
+    public static final String db_test_11 = "NEW BUNDLE DURING UPDATE\n" +
+            "Update adds a new bundle\n" +
+            " - new element in getBundleSymNameVersionPairs() result";
     public void db_test_11() throws Exception {
         InputStream is = new FileInputStream(HOME + "db_test_11.dp");
         DeploymentPackage dp = da.installDeploymentPackage(is);
@@ -1028,19 +1042,16 @@ public class DoIt implements BundleActivator {
         dp.uninstall();
     }
 
-    public static final String db_test_12 = "";
+    public static final String db_test_12 = "\n" +
+        "DeploymentPackage-Missing: false EQUALS WITH the lack of the header";
     public void db_test_12() throws Exception {
         InputStream is = new FileInputStream(HOME + "db_test_12.dp");
         DeploymentPackage dp = da.installDeploymentPackage(is);
         is.close();
 
-        String[] res = dp.getResources();
-        
         is = new FileInputStream(HOME + "db_test_12_update_01.dp");
         dp = da.installDeploymentPackage(is);
         is.close();
-
-        res = dp.getResources();
 
         dp.uninstall();
     }
@@ -1129,4 +1140,25 @@ public class DoIt implements BundleActivator {
 
 		dp.uninstall();
     }
+    
+    public static final String db_test_16 = "BUNDLE START FAILS\n";
+    public void db_test_16() throws Exception {
+        InputStream is = new FileInputStream(HOME + "db_test_16.dp");
+        DeploymentPackage dp = da.installDeploymentPackage(is);
+
+        String[][] bs = dp.getBundleSymNameVersionPairs();
+        
+        if (!bs[0][0].equals("easygame"))
+            throw new Exception("Test Failed");
+        if (!bs[1][0].equals("hardgame"))
+            throw new Exception("Test Failed");
+
+        dp.uninstall();
+    }
+    
+    public static void main(String[] args) throws Exception {
+        DoIt doit = new DoIt();
+        doit.desktop = new TestDesktop(doit);
+    }
+    
 }
