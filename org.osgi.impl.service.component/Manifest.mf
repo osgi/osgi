@@ -1,5 +1,4 @@
 Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
 Bundle-Name: Service Component Runtime
 Bundle-Description: Service Component Runtime Reference Implementation
 Bundle-Copyright: Copyright (c) IBM Corporation (2005). All Rights Reserved.
