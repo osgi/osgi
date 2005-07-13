@@ -11,35 +11,46 @@ package org.osgi.service.condpermadmin;
 
 import java.io.File;
 import java.io.FilePermission;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
 import org.osgi.framework.Bundle;
 
 /**
  * 
- * Checks to see if a Bundle matches the given location pattern. Pattern matching
- * is done using FilePermission style patterns.
+ * Checks to see if a Bundle matches the given location pattern. Pattern
+ * matching is done using FilePermission style patterns.
  * 
  * @version $Revision$
  */
 public class BundleLocationCondition {
-	private static final String CONDITION_TYPE = "org.osgi.service.condpermadmin.BundleLocationCondition";
+	private static final String	CONDITION_TYPE	= "org.osgi.service.condpermadmin.BundleLocationCondition";
+
 	/**
 	 * Constructs a condition that tries to match the passed Bundle's location
 	 * to the location pattern.
 	 * 
 	 * @param bundle the Bundle being evaluated.
-	 * @param info the ConditionInfo to construct the condition for.  The args of the 
-	 *        ConditionInfo specify the location to match the Bundle
+	 * @param info the ConditionInfo to construct the condition for. The args of
+	 *        the ConditionInfo specify the location to match the Bundle
 	 *        location to. Matching is done according to the patterns documented
 	 *        in FilePermission.
 	 */
-	static public Condition getCondition(Bundle bundle, ConditionInfo info) {
+	static public Condition getCondition(final Bundle bundle, ConditionInfo info) {
 		if (!CONDITION_TYPE.equals(info.getType()))
-			throw new IllegalArgumentException("ConditionInfo must be of type \"" + CONDITION_TYPE + "\"");
+			throw new IllegalArgumentException(
+					"ConditionInfo must be of type \"" + CONDITION_TYPE + "\"");
 		String[] args = info.getArgs();
 		if (args.length != 1)
-			throw new IllegalArgumentException("Illegal number of args: " + args.length);
+			throw new IllegalArgumentException("Illegal number of args: "
+					+ args.length);
 		String location = args[0];
-		String bundleLocation = bundle.getLocation();
+		String bundleLocation = (String) AccessController.doPrivileged(new PrivilegedAction() {
+					public Object run() {
+						return bundle.getLocation();
+					}
+				});
+
 		if ('/' != File.separatorChar) {
 			// must use the seperatorChar of the platform for FilePermission to work
 			location = location.replace('/', File.separatorChar);
@@ -47,7 +58,8 @@ public class BundleLocationCondition {
 		}
 		FilePermission locationPat = new FilePermission(location, "read");
 		FilePermission sourcePat = new FilePermission(bundleLocation, "read");
-		return locationPat.implies(sourcePat) ? Condition.TRUE : Condition.FALSE;
+		return locationPat.implies(sourcePat) ? Condition.TRUE
+				: Condition.FALSE;
 	}
 
 	private BundleLocationCondition() {
