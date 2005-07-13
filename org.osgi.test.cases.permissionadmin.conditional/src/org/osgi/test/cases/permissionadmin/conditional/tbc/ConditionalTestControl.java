@@ -296,37 +296,52 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
 //		utility.testPermissions(new ConditionInfo[]{}, permission, 
 //			new AdminPermission[]{permission}, new AdminPermission[]{allPermissions});
 
-		utility.testPermissions(
+		//Check 2nd at creation, 3rd and then first because it is postponed
+    utility.testPermissions(
 			new ConditionInfo[]{
 				utility.createTestCInfo(true,  true, false), // postponed, satisfied, not mutable
 				utility.createTestCInfo(false, true, false), // not postponed, satisfied, not mutable		
-				utility.createTestCInfo(false, true, true)	// not postponed, satisfied, mutable	
+				utility.createTestCInfo(false, true, true)	 // not postponed, satisfied, mutable	
 			}, 
 			permission, 
 			new AdminPermission[]{permission}, 
-			new AdminPermission[]{allPermissions});
+			new AdminPermission[]{allPermissions});    
 
-		utility.testPermissions(
+    //Check 2nd at creation and then first because it is postponed
+    utility.testPermissions(
+        new ConditionInfo[]{
+          utility.createTestCInfo(true, true, false),  // not postponed, satisfied, not mutable
+          utility.createTestCInfo(false, true, false), // not postponed, satisfied, not mutable
+        }, 
+        permission, 
+        new AdminPermission[]{permission}, 
+        new AdminPermission[]{allPermissions});
+
+		//Don't check 1st because 2nd is not satisfied
+    utility.testPermissions(
+        new ConditionInfo[]{
+          utility.createTestCInfo(false, true, false),  // not postponed, satisfied, not mutable
+          utility.createTestCInfo(false, false, false), // not postponed, not satisfied, not mutable    
+        }, 
+        permission, 
+        new AdminPermission[]{}, 
+        new AdminPermission[]{permission, allPermissions});
+    
+    utility.testPermissions(
 			new ConditionInfo[]{
-				utility.createTestCInfo(true, false, false), // not postponed, not satisfied, not mutable
+				utility.createTestCInfo(true, true, false),   // not postponed, satisfied, not mutable
+        utility.createTestCInfo(false, false, false), // not postponed, not satisfied, not mutable
 			}, 
 			permission, 
 			new AdminPermission[]{permission}, 
-			new AdminPermission[]{allPermissions});
-
-		utility.testPermissions(
-			new ConditionInfo[]{
-				utility.createTestCInfo(false, true, false), // not postponed, satisfied, not mutable
-				utility.createTestCInfo(false, false, false), // not postponed, not satisfied, not mutable		
-			}, 
-			permission, 
-			new AdminPermission[]{}, 
-			new AdminPermission[]{permission, allPermissions});
+			new AdminPermission[]{allPermissions});		
 	
-		utility.testPermissions(
+		
+    //Don't check the postponed (2nd) because first is not satisfied
+    utility.testPermissions(
 			new ConditionInfo[]{
 				utility.createTestCInfo(false, false, true), // not postponed, not satisfied, mutable		
-				utility.createTestCInfo(true, true, false), // postponed, satisfied, not mutable
+				utility.createTestCInfo(true, true, false),  // postponed, satisfied, not mutable
 			}, 
 			permission, 
 			new AdminPermission[]{}, 
