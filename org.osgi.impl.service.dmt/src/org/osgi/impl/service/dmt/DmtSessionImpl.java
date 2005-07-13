@@ -402,7 +402,7 @@ public class DmtSessionImpl implements DmtSession {
         // only for modifiable nodes.
         
 		boolean isRoot = uri.equals(".");
-        if (acl == null) {
+        if (acl == null || isEmptyAcl(acl)) {
             acls.remove(uri);
         } else {
             // check that the new ACL is valid
