@@ -218,9 +218,9 @@ public final class AdminPermission extends Permission {
             return false;
         }
         
-        AdminPermission a = (AdminPermission) obj;
+        AdminPermission p = (AdminPermission) obj;
 
-        return delegate.equals(a.delegate);
+        return delegate.equals(p.delegate);
     }
 
     /**
@@ -278,7 +278,8 @@ public final class AdminPermission extends Permission {
     		return false;
     	}
     	
-    	return delegate.implies(p);
+        AdminPermission pp = (AdminPermission) p;
+    	return delegate.implies(pp.delegate);
     }
 
     /**
