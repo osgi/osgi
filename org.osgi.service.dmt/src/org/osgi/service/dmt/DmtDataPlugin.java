@@ -71,6 +71,10 @@ public interface DmtDataPlugin extends Dmt {
      * Admin must call this method whenever the ACL property of a node changes.
      * 
      * @param nodeUri the URI of the node that has changed
+     * @throws DmtException with the following possible error codes
+     *         <li><code>NODE_NOT_FOUND</code>
+     *         <li><code>COMMAND_FAILED</code>
+     *         <li><code>OTHER_ERROR</code>
      */
-    void nodeChanged(String nodeUri);
+    void nodeChanged(String nodeUri) throws DmtException;
 }
