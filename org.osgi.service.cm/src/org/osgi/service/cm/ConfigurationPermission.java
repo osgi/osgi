@@ -57,23 +57,14 @@ import org.osgi.framework.Bundle;
  * @since 1.2
  */
 
-final public class ConfigurationPermission extends Permission {
+public final class ConfigurationPermission extends Permission {
 	static final long			serialVersionUID	= 5716868734811965383L;
-	public final static int		ACTION_GET			= 0x00000001;
-	public static int			ACTION_SET			= 0x00000002;
-	public static int			ACTION_READ			= 0x00000004;
-	public static int			ACTION_REBIND		= 0x00000008;
-	public static int			ACTION_ALL			= ACTION_GET | ACTION_SET
-															| ACTION_READ
-															| ACTION_REBIND;
-	public static int			ACTION_NONE			= 0;
-	public static int			ACTION_ERROR		= 0x80000000;
 	/**
 	 * The action string <code>get</code>.
 	 */
 	public final static String	GET					= "get";
 	/**
-	 * The action string <code>set</code>. This implies
+	 * The action string <code>set</code>. This implies ### what
 	 */
 	public final static String	SET					= "set";
 
@@ -87,30 +78,54 @@ final public class ConfigurationPermission extends Permission {
 	 */
 	public static final String	REBIND				= "rebind";
 
-	public final static int		ACTIONS[]			= {ACTION_GET, ACTION_SET,
-			ACTION_READ, ACTION_REBIND				};
-	public final static String	ACTION_NAMES[]		= {
-			GET, SET, READ, REBIND };
-	static Class				implementation;
-	static Constructor			repositoryConstructor;
-	static Constructor			checkConstructor;
-
+	/*
+	 * This class will load the ConfigurationPermission class in the package named by the
+	 * org.osgi.vender.cm package. For each instance of this class, an
+	 * instance of the vendor ConfigurationPermission class will be created and this 
+	 * class will delegate method calls to the vendor ConfigurationPermission instance.
+	 */
+	private static final String packageProperty = "org.osgi.vendor.cm";
+	private static final Constructor			initFilter;
+	private static final Constructor			initBundle;
 	static {
-		try {
-			implementation = Class.forName(System
-					.getProperty("org.osgi.vendor.cm.ConfigurationPermission"));
-			repositoryConstructor = implementation.getConstructor(new Class[] {
-			String.class, String.class});
-			checkConstructor = implementation.getConstructor(new Class[] {
-			Bundle.class, String.class, String.class, Integer.class});
-		}
-		catch (Exception e) {
-			implementation = null;
-			repositoryConstructor = checkConstructor = null;
-		}
+		Constructor[] constructors = (Constructor[]) AccessController.doPrivileged(new PrivilegedAction() {
+			public Object run() {
+				String packageName = System.getProperty(packageProperty);
+				if (packageName == null) {
+					throw new NoClassDefFoundError(packageProperty+" property not set");
+				}
+				
+				Class delegateClass;
+				try {
+					delegateClass = Class.forName(packageName+".ConfigurationPermission");
+				}
+				catch (ClassNotFoundException e) {
+					throw new NoClassDefFoundError(e.toString());
+				}
+
+				Constructor[] result = new Constructor[2];
+				try {
+					result[0] = delegateClass.getConstructor(new Class[] {
+							String.class, String.class});
+					result[1] = delegateClass.getConstructor(new Class[] {
+							Bundle.class, String.class, String.class, Integer.class});
+				}
+				catch (NoSuchMethodException e) {
+					throw new NoSuchMethodError(e.toString());
+				}
+				
+				return result;
+			}
+		});
+	
+		initFilter = constructors[0];		
+		initBundle = constructors[1];
 	}
 
-	private Permission			proxied;
+	/**
+	 * This is the delegate permission created by the constructor.
+	 */
+	private final Permission delegate;
 
 	/**
 	 * Create a new ConfigurationPermission.
@@ -121,45 +136,39 @@ final public class ConfigurationPermission extends Permission {
 	 * 
 	 * <p>
 	 * Examples:
-	 * 
 	 * <pre>
-	 * 
-	 *  
-	 *   
-	 *    
 	 *       (signer=*,o=ACME,c=US)   
 	 *       (pid=com.acme.*)
 	 *       (factoryPid=com.acme.*)
 	 *       (&amp;(signer=*,o=ACME,c=US)(pid=com.acme.*))   
-	 *     
-	 *    
-	 *   
-	 *  
 	 * </pre>
 	 * 
 	 * <p>
 	 * There are the following actions: <code>get</code>,<code>set</code>,
-	 * and <code>read</code>. The <code>set/tt> action allows a bundle
+	 * and <code>read</code>. The <code>set</code> action allows a bundle
 	 * to create, list, get, update and delete configurations for the target.
 	 * The <code>get</code> action allows a bundle to receive a configuration
 	 * object. The target bundle is itself in that case. The <code>read</code>
 	 * action permits listing the configurations. The <code>set</code> action
 	 * implies <code>read</code>.
 	 *
-	 * @param target A filter expression that can use signer, location, name, pid or factoryPid
+	 * @param filter A filter expression that can use signer, location, name, pid or factoryPid
 	 * @param actions <code>get</code>, <code>set</code>, <code>read</code> (canonical order)
 	 */
 
-	public ConfigurationPermission(String name, String actions) {
-		super(name);
+	public ConfigurationPermission(String filter, String actions) {
+		super(filter);
 		try {
-			proxied = (Permission) repositoryConstructor
-					.newInstance(new Object[] {name, actions});
+			delegate = (Permission) initFilter
+			.newInstance(new Object[] {filter, actions});
+		}
+		catch (RuntimeException e) {
+			throw e;
 		}
 		catch (Exception e) {
-			throw new RuntimeException(
-					"Could not create proxied Config. Perm. " + e);
+			throw new RuntimeException(e.toString());
 		}
+
 	}
 
 	/**
@@ -177,15 +186,18 @@ final public class ConfigurationPermission extends Permission {
 	 */
 	public ConfigurationPermission(Bundle bundle, String pid,
 			String factoryPid, int action) {
-		super("check");
+		super(Long.toString(bundle.getBundleId()));
 		try {
-			proxied = (Permission) checkConstructor.newInstance(new Object[] {
+			delegate = (Permission) initBundle.newInstance(new Object[] {
 					bundle, pid, factoryPid, new Integer(action)});
 		}
-		catch (Exception e) {
-			throw new RuntimeException(
-					"Could not create proxied Config. Perm. " + e);
+		catch (RuntimeException e) {
+			throw e;
 		}
+		catch (Exception e) {
+			throw new RuntimeException(e.toString());
+		}
+
 	}
 
 	/**
@@ -198,31 +210,59 @@ final public class ConfigurationPermission extends Permission {
 	 */
 
 	public boolean implies(Permission p) {
-		ConfigurationPermission pp = (ConfigurationPermission) p;
-		return proxied.implies(pp.proxied);
+    	if (!(p instanceof ConfigurationPermission)) {
+    		return false;
+    	}
+    	
+    	ConfigurationPermission pp = (ConfigurationPermission) p;
+    	return delegate.implies(pp.delegate);
 	}
 
+    /**
+     * Returns the canonical string representation of the <code>ConfigurationPermission</code> actions.
+     *
+     * <p>Always returns present <code>ConfigurationPermission</code> actions in the following order:
+     * <code>GET</code>, <code>SET</code>, <code>READ</code>, <code>REBIND</code> 
+     * @return Canonical string representation of the <code>ConfigurationPermission</code> actions.
+     */
 	public String getActions() {
-		return proxied.getActions();
+		return delegate.getActions();
 	}
 
+    /**
+     * Returns a new <code>PermissionCollection</code> object suitable for storing
+     * <code>ConfigurationPermission</code>s.
+     * 
+     * @return A new <code>PermissionCollection</code> object.
+     */
+	
 	public PermissionCollection newPermissionCollection() {
-		return proxied.newPermissionCollection();
+		return delegate.newPermissionCollection();
 	}
 
-	public boolean equals(Object obj) {
-		if (obj == this) {
-			return true;
-		}
+    /**
+     * Determines the equality of two <code>ConfigurationPermission</code> objects. <p>Two 
+     * <code>ConfigurationPermission</code> objects are equal.
+     *
+     * @param obj The object being compared for equality with this object.
+     * @return <code>true</code> if <code>obj</code> is equivalent to this 
+     * <code>ConfigurationPermission</code>; <code>false</code> otherwise.
+     */
+    public boolean equals(Object obj)
+    {
+        if (obj == this) {
+        	return true;
+        }
+        
+        if (!(obj instanceof ConfigurationPermission))
+        {
+            return false;
+        }
+        
+        ConfigurationPermission p = (ConfigurationPermission) obj;
 
-		if (!(obj instanceof ConfigurationPermission)) {
-			return false;
-		}
-
-		ConfigurationPermission p = (ConfigurationPermission) obj;
-
-		return proxied.equals(p.proxied);
-	}
+        return delegate.equals(p.delegate);
+    }
 
 	/**
 	 * Returns the hash code value for this object.
@@ -231,6 +271,6 @@ final public class ConfigurationPermission extends Permission {
 	 */
 
 	public int hashCode() {
-		return proxied.hashCode();
+		return delegate.hashCode();
 	}
 }
