@@ -61,4 +61,16 @@ public interface DmtDataPlugin extends Dmt {
      * @return <code>true</code> if the plugin can handle atomic transactions
      */
     boolean supportsAtomic();
+    
+
+    /**
+     * Notifies the plugin that the given node has changed outside the scope of
+     * the plugin, therefore the version and timestamp properties must be
+     * updated (if supported).  This method is needed because the ACL property
+     * of a node is managed by the Dmt Admin instead of the plugin.  The Dmt 
+     * Admin must call this method whenever the ACL property of a node changes.
+     * 
+     * @param nodeUri the URI of the node that has changed
+     */
+    void nodeChanged(String nodeUri);
 }
