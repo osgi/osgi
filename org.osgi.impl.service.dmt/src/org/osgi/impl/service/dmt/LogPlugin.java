@@ -95,6 +95,10 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 			throws DmtException {
 		open(lockMode, session);
 	}
+    
+    public void nodeChanged(String nodeUri) {
+        // do nothing - the version and timestamp properties are not supported
+    }
 
 	public DmtMetaNode getMetaNode(String nodeUri) throws DmtException {
         String[] path = prepareUri(nodeUri);

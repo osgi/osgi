@@ -412,6 +412,7 @@ public class DmtSessionImpl implements DmtSession {
                         "Root ACL must allow the Add operation for all principals.");
 
             acls.put(uri, acl);
+            getPlugin(uri, false).nodeChanged(uri);
         }
         
         enqueueEvent(EventList.REPLACE, nodeUri);

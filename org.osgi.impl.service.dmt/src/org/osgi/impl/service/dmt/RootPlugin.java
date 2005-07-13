@@ -60,6 +60,10 @@ public class RootPlugin implements DmtReadOnlyDataPlugin {
 		findNode(subtreeUri); // check that the node exists
 		open(session);
 	}
+    
+    public void nodeChanged(String nodeUri) {
+        // do nothing - the version and timestamp properties are not supported
+    }
 
 	public DmtMetaNode getMetaNode(String nodeUri)
 			throws DmtException {
@@ -100,7 +104,8 @@ public class RootPlugin implements DmtReadOnlyDataPlugin {
 	}
 
 	public int getNodeVersion(String nodeUri) throws DmtException {
-        return 0;
+        throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED,
+                "Version property not supported.");
 	}
 
 	public Date getNodeTimestamp(String nodeUri) throws DmtException {
