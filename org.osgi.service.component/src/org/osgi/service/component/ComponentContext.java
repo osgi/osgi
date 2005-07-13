@@ -69,7 +69,7 @@ public interface ComponentContext {
 	 * If the cardinality of the reference is <code>0..n</code> or
 	 * <code>1..n</code> and multiple services are bound to the reference, the
 	 * service with the highest ranking (as specified in its
-	 * <code>Constants.SERVICE_RANKING</code< property) is returned.
+	 * <code>Constants.SERVICE_RANKING</code> property) is returned.
 	 * If there is a tie in ranking, the service with the lowest service ID (as
 	 * specified in its <code>Constants.SERVICE_ID</code> property); that is, the
 	 * service that was registered first is returned.
