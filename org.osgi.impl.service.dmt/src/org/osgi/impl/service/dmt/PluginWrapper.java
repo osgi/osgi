@@ -83,7 +83,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         return dataRoots;
     }
     
-    public void nodeChanged(String nodeUri) {
+    public void nodeChanged(String nodeUri) throws DmtException {
         // no need to override the permissions of the plugin here,
         // only internal data structures have to be modified
         
