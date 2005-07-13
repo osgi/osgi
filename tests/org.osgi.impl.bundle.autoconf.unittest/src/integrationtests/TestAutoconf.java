@@ -125,6 +125,7 @@ public class TestAutoconf extends IntegratedTest implements Test {
 		conditionalPermissionAdmin.addConditionalPermissionInfo(SIGNER_SARAH,ALL_PERMISSION);
 		Bundle managedService1 = systemBundleContext.installBundle(INTEGRATIONTESTS_MANAGEDSERVICE1_JAR);
 		managedService1.start();
+		synchronized(this) { this.wait(100); }
 
 		ServiceReference sr = systemBundleContext.getServiceReference(ITest.class.getName());
 		ITest iTest = (ITest) systemBundleContext.getService(sr);
