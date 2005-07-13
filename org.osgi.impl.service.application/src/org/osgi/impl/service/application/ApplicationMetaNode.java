@@ -105,14 +105,14 @@ public class ApplicationMetaNode implements DmtMetaNode {
 		return false;
 	}
 
-	public int getMax() {
+	public double getMax() {
 		// TODO Auto-generated method stub
-		return Integer.MAX_VALUE;
+		return Double.MAX_VALUE;
 	}
 
-	public int getMin() {
+	public double getMin() {
 		// TODO Auto-generated method stub
-		return Integer.MIN_VALUE;
+		return Double.MIN_VALUE;
 	}
 
 	public DmtData[] getValidValues() {

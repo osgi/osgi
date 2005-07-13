@@ -41,8 +41,8 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
     boolean   zeroOccurrenceAllowed = false;
 
     DmtData   defaultData           = null;
-    int       max                   = Integer.MAX_VALUE;
-    int       min                   = Integer.MIN_VALUE;
+    double    max                   = Double.MAX_VALUE;
+    double    min                   = Double.MIN_VALUE;
     String[]  validNames            = null;
     DmtData[] validValues           = null;
     int       format                = DmtData.FORMAT_NULL;
@@ -121,12 +121,12 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
         return defaultData;
     }
 
-    public int getMax()
+    public double getMax()
     {
         return max;
     }
 
-    public int getMin()
+    public double getMin()
     {
         return min;
     }

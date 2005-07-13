@@ -101,12 +101,12 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 		return defaultData;
 	}
 
-	public int getMax() {
-		return Integer.MAX_VALUE;
+	public double getMax() {
+		return Double.MAX_VALUE;
 	}
 
-	public int getMin() {
-		return Integer.MIN_VALUE;
+	public double getMin() {
+		return Double.MIN_VALUE;
 	}
 
     public String[] getValidNames() {

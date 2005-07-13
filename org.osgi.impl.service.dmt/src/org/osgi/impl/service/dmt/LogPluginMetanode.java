@@ -127,12 +127,12 @@ public class LogPluginMetanode implements DmtMetaNode {
 		return null;
 	}
 
-	public int getMax() {
-		return Integer.MAX_VALUE;
+	public double getMax() {
+		return Double.MAX_VALUE;
 	}
 
-	public int getMin() {
-		return Integer.MIN_VALUE;
+	public double getMin() {
+		return Double.MIN_VALUE;
 	}
 
     public String[] getValidNames() {
