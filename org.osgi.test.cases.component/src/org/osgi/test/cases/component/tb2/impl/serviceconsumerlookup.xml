@@ -27,7 +27,7 @@
 this component is registerd with its class name instead of
 using an interface. In addition it is disable on startup 
 -->
-<scr:component autoenable="false"
+<scr:component enabled="false"
 		name="org.osgi.test.cases.component.tb2.DynService"
 		xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
 	<implementation class="org.osgi.test.cases.component.tb2.DynService"/>
