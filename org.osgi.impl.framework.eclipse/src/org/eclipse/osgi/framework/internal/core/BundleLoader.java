@@ -389,10 +389,12 @@ public class BundleLoader implements ClassLoaderDelegate {
 			result = findLocalClass(name);
 		if (result != null)
 			return result;
-		// 6) attempt to find a dynamic import source
-		source = findDynamicSource(pkgName);
-		if (source != null)
-			result = source.loadClass(name);
+		// 6) attempt to find a dynamic import source; only do this if a required source was not found
+		if (source == null) {
+			source = findDynamicSource(pkgName);
+			if (source != null)
+				result = source.loadClass(name);
+		}
 		// do buddy policy loading
 		if (result == null && policy != null)
 			result = policy.doBuddyClassLoading(name);
@@ -482,10 +484,12 @@ public class BundleLoader implements ClassLoaderDelegate {
 			result = findLocalResource(name);
 		if (result != null)
 			return result;
-		// 6) attempt to find a dynamic import source
-		source = findDynamicSource(pkgName);
-		if (source != null)
-			result = source.getResource(name);
+		// 6) attempt to find a dynamic import source; only do this if a required source was not found
+		if (source == null) {
+			source = findDynamicSource(pkgName);
+			if (source != null)
+				result = source.getResource(name);
+		}
 		// do buddy policy loading
 		if (result == null && policy != null)
 			return policy.doBuddyResourceLoading(name);
@@ -534,10 +538,12 @@ public class BundleLoader implements ClassLoaderDelegate {
 			result = findLocalResources(name);
 		if (result != null)
 			return result;
-		// 6) attempt to find a dynamic import source
-		source = findDynamicSource(pkgName);
-		if (source != null)
-			result = source.getResources(name);
+		// 6) attempt to find a dynamic import source; only do this if a required source was not found
+		if (source == null) {
+			source = findDynamicSource(pkgName);
+			if (source != null)
+				result = source.getResources(name);
+		}
 		if (result == null && policy != null)
 			result = policy.doBuddyResourcesLoading(name);
 		return result;

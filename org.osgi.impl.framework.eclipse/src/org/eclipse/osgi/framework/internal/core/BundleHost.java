@@ -223,7 +223,7 @@ public class BundleHost extends AbstractBundle {
 		}
 		BundleLoader loader = checkLoader();
 		if (loader == null)
-			throw new ClassNotFoundException(NLS.bind(Msg.BUNDLE_CNFE_NOT_RESOLVED, getLocation(), name)); //$NON-NLS-1$
+			throw new ClassNotFoundException(NLS.bind(Msg.BUNDLE_CNFE_NOT_RESOLVED, getBundleData().getLocation(), name)); //$NON-NLS-1$
 		return (loader.loadClass(name));
 	}
 
@@ -342,7 +342,7 @@ public class BundleHost extends AbstractBundle {
 					if (state == UNINSTALLED) {
 						context.close();
 						context = null;
-						throw new BundleException(NLS.bind(Msg.BUNDLE_UNINSTALLED_EXCEPTION, getLocation())); //$NON-NLS-1$
+						throw new BundleException(NLS.bind(Msg.BUNDLE_UNINSTALLED_EXCEPTION, getBundleData().getLocation())); //$NON-NLS-1$
 					}
 				}
 			} finally {

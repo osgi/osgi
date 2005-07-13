@@ -81,7 +81,7 @@ public class BundleLoaderProxy implements RequiredBundle {
 
 	public String toString() {
 		String symbolicName = bundle.getSymbolicName();
-		StringBuffer sb = new StringBuffer(symbolicName == null ? bundle.getLocation() : symbolicName);
+		StringBuffer sb = new StringBuffer(symbolicName == null ? bundle.getBundleData().getLocation() : symbolicName);
 		sb.append("; ").append(Constants.BUNDLE_VERSION_ATTRIBUTE); //$NON-NLS-1$
 		sb.append("=\"").append(description.getVersion().toString()).append("\""); //$NON-NLS-1$//$NON-NLS-2$
 		return sb.toString();

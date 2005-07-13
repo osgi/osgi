@@ -298,7 +298,7 @@ class StateBuilder {
 			// check for duplicate imports
 			String[] packageNames = elements[i].getValueComponents();
 			for (int j = 0; j < packageNames.length; j++) {
-				if (packages.contains(packageNames[j]))
+				if (!export && packages.contains(packageNames[j]))
 					throw new BundleException(StateMsg.HEADER_PACKAGE_DUPLICATES);
 				// check for java.*
 				if (packageNames[j].startsWith("java.")) //$NON-NLS-1$

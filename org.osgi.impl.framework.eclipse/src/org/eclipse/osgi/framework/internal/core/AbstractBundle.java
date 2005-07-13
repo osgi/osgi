@@ -1113,7 +1113,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 					return;
 				}
 				if (doubleFault || (stateChanging == Thread.currentThread())) {
-					throw new BundleException(NLS.bind(Msg.BUNDLE_STATE_CHANGE_EXCEPTION, getLocation(), stateChanging.getName()));
+					throw new BundleException(NLS.bind(Msg.BUNDLE_STATE_CHANGE_EXCEPTION, getBundleData().getLocation(), stateChanging.getName()));
 				}
 				try {
 					if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
@@ -1197,7 +1197,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	 */
 	protected void checkValid() {
 		if (state == UNINSTALLED) {
-			throw new IllegalStateException(NLS.bind(Msg.BUNDLE_UNINSTALLED_EXCEPTION, getLocation()));
+			throw new IllegalStateException(NLS.bind(Msg.BUNDLE_UNINSTALLED_EXCEPTION, getBundleData().getLocation()));
 		}
 	}
 
