@@ -80,7 +80,7 @@ public class DmtAcl implements Cloneable {
 
     //----- Private fields -----//
 
-        // the implementation takes advantage of this being a sorted map
+    // the implementation takes advantage of this being a sorted map
     private TreeMap principalPermissions;
     private int globalPermissions;
 
@@ -113,7 +113,7 @@ public class DmtAcl implements Cloneable {
      * Creates an instance with specifying the list of principals and the
      * permissions they hold. The two arrays run in parallel, that is
      * <code>principals[i]</code> will hold <code>permissions[i]</code> in
-     * the ACL.
+     * the ACL.  Entries with no permissions (value 0) are silently ignored.
      * <p>
      * A principal name may not appear multiple times in the 'principals'
      * argument. If the &quot;*&quot; principal appears in the array, the
@@ -137,15 +137,18 @@ public class DmtAcl implements Cloneable {
             // allow one * in 'principals' array, remove after loop
             if(!ALL_PRINCIPALS.equals(principals[i]))
                 checkPrincipal(principals[i]);
+            
+            // check that next element in permissions array has only perm. bits
             checkPermissions(permissions[i]);
-            // ### That previous line looks VERY fishy
         
-            Integer permInt = new Integer(permissions[i]);
-            Object old = principalPermissions.put(principals[i], permInt);                
-            if(old != null)
-                throw new IllegalArgumentException("Principal '" + 
-                        principals[i] + 
-                        "' appears multiple times in the principal array.");
+            if(permissions[i] != 0) {
+                Integer permInt = new Integer(permissions[i]);
+                Object old = principalPermissions.put(principals[i], permInt);                
+                if(old != null)
+                    throw new IllegalArgumentException("Principal '" + 
+                            principals[i] + 
+                            "' appears multiple times in the principal array.");
+            }
         }
         
         // set the global permissions if there was a * in the array
