@@ -77,6 +77,10 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		}
 	}
 
+    public void nodeChanged(String nodeUri) {
+        // do nothing - the version and timestamp properties are not supported
+    }
+    
 	public DmtMetaNode getMetaNode( String nodeUri )
 			throws DmtException {
 		
@@ -583,7 +587,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		}
 	}
 		
-  public void open(String subtreeUri, int lockMode, DmtSession session) throws DmtException {
+    public void open(String subtreeUri, int lockMode, DmtSession session) throws DmtException {
 	}
 
 	public void close() throws DmtException {
