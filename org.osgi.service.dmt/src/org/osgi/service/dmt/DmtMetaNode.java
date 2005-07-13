@@ -191,32 +191,44 @@ public interface DmtMetaNode {
     String[] getMimeTypes();
     
     /**
-     * Get the maximum allowed value associated with an integer node. If no
+     * Get the maximum allowed value associated with a number node. If no
      * meta-data is provided for a node, there is no upper limit to its value.
+     * This method is only meaningful if the node has integer or float format.
+     * The returned limit has <code>double</code> type, as this can be used to
+     * denote both integer and float limits with full precision.  The actual
+     * maximum should be the largest integer or float number that does not
+     * exceed the returned value.
      * <p>
      * The information returned by this method is not checked by Dmt Admin, it
      * is only for external use, for example in user interfaces.  Dmt Admin
      * only calls {@link #isValidValue} for checking the value, its behaviour 
      * should be consistent with this method.
      * 
-     * @return the allowed maximum, or <code>Integer.MAX_VALUE</code> if there 
-     *         is no upper limit defined or the node's format is not integer
+     * @return the allowed maximum, or <code>Double.MAX_VALUE</code> if there 
+     *         is no upper limit defined or the node's format is not integer or
+     *         float 
      */
-    int getMax();
+    double getMax();
 
     /**
-     * Get the minimum allowed value associated with an integer node. If no
+     * Get the minimum allowed value associated with a number node. If no
      * meta-data is provided for a node, there is no lower limit to its value.
+     * This method is only meaningful if the node has integer or float format.
+     * The returned limit has <code>double</code> type, as this can be used to
+     * denote both integer and float limits with full precision.  The actual
+     * minimum should be the smallest integer or float number that is larger
+     * than the returned value.
      * <p>
      * The information returned by this method is not checked by Dmt Admin, it
      * is only for external use, for example in user interfaces.  Dmt Admin
      * only calls {@link #isValidValue} for checking the value, its behaviour 
      * should be consistent with this method.
      * 
-     * @return the allowed minimum, or <code>Integer.MIN_VALUE</code> if there
-     *         is no lower limit defined or the node's format is not integer
+     * @return the allowed minimum, or <code>Double.MIN_VALUE</code> if there
+     *         is no lower limit defined or the node's format is not integer or
+     *         float
      */
-    int getMin();
+    double getMin();
 
     /**
      * Return an array of DmtData objects if valid values are defined for the
