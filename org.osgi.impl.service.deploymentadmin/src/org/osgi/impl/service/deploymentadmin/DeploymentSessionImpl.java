@@ -258,7 +258,10 @@ public class DeploymentSessionImpl implements DeploymentSession {
             BundleEntry be = (BundleEntry) iter.next();
             if (be.getBundleId() == b.getBundleId()) {
                 String dir = fwBundleDir + "/" + b.getBundleId() + "/data";
-                return new File(dir);
+                File f = new File(dir);
+                if (!f.exists())
+                    f.mkdir();
+                return f;
             }
         }
         
