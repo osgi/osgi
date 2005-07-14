@@ -43,7 +43,7 @@ public class BundleSignerCondition {
 
 	/*
 	 * This class will load the BundleSignerCondition class in the package named by the
-	 * org.osgi.vender.condpermadmin package. This 
+	 * org.osgi.vendor.condpermadmin package. This 
 	 * class will delegate getCondition methods calls to the vendor BundleSignerCondition class.
 	 */
 	private static final String packageProperty = "org.osgi.vendor.condpermadmin";

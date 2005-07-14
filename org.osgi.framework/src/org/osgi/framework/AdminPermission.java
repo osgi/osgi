@@ -99,7 +99,7 @@ public final class AdminPermission extends Permission {
 	
 	/*
 	 * This class will load the AdminPermission class in the package named by the
-	 * org.osgi.vender.framework package. For each instance of this class, an
+	 * org.osgi.vendor.framework package. For each instance of this class, an
 	 * instance of the vendor AdminPermission class will be created and this 
 	 * class will delegate method calls to the vendor AdminPermission instance.
 	 */
