@@ -6,19 +6,19 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class Parser {
-	Domain		domain;
-	String		file;
-	int			options;
-	int			lineWidth = Integer.MAX_VALUE;
-	String		lineEnd = "\r\n";
-	
-	public final static int SHOW = 1;
-	
-	public Parser( Domain domain, String file, int options ) {
+	Domain					domain;
+	String					file;
+	int						options;
+	int						lineWidth	= Integer.MAX_VALUE;
+	String					lineEnd		= "\r\n";
+
+	public final static int	SHOW		= 1;
+
+	public Parser(Domain domain, String file, int options) {
 		this.domain = domain;
 		this.file = file;
 	}
-	
+
 	public InputStream getInputStream() throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		BufferedReader br = new BufferedReader(new InputStreamReader(
@@ -31,12 +31,12 @@ public class Parser {
 		return new ByteArrayInputStream(out.toByteArray());
 	}
 
-	void parse( BufferedReader br, PrintWriter pw ) throws IOException {
-		parse(br,pw, lineWidth, lineEnd);
+	void parse(BufferedReader br, PrintWriter pw) throws IOException {
+		parse(br, pw, lineWidth, lineEnd);
 	}
-	
-	void parse(BufferedReader rdr, PrintWriter pw, int linewidth, String continuation)
-			throws IOException {
+
+	void parse(BufferedReader rdr, PrintWriter pw, int linewidth,
+			String continuation) throws IOException {
 		String line = rdr.readLine();
 		while (line != null) {
 			line = process(line);
@@ -50,17 +50,18 @@ public class Parser {
 						case '\r' :
 							n = 0;
 							break;
-							
+
 						case '$' :
 							if (i < line.length() - 2) {
-								int c2 = hex(line.charAt(i+1), line.charAt(i+2));
-								if ( c2 >= 0 ) {
+								int c2 = hex(line.charAt(i + 1), line
+										.charAt(i + 2));
+								if (c2 >= 0) {
 									c = (char) c2;
-									i+=2;
+									i += 2;
 								}
 							}
 					}
-					if (n > linewidth ) {
+					if (n > linewidth) {
 						sb.append(continuation);
 						n = 1;
 					}
@@ -69,8 +70,8 @@ public class Parser {
 				}
 				String s = sb.toString();
 				pw.print(s);
-				pw.print( "\r\n" );
-				if ( (options&SHOW) != 0 )
+				pw.print("\r\n");
+				if ((options & SHOW) != 0)
 					pw.println(s);
 			}
 			line = rdr.readLine();
@@ -79,7 +80,7 @@ public class Parser {
 		String lastLine = process("");
 		if (lastLine != null)
 			pw.print(lastLine + "\r\n");
-		if ( (options&SHOW) != 0 )
+		if ((options & SHOW) != 0)
 			pw.println(lastLine);
 	}
 
@@ -91,39 +92,41 @@ public class Parser {
 	static int hex(char c, char d) {
 		int cc = nibble(c);
 		int dd = nibble(d);
-		if ( cc < 0 || dd < 0 )
+		if (cc < 0 || dd < 0)
 			return -1;
 		return cc << 4 + dd;
 	}
+
 	static int nibble(char c) {
-		if ( c >= '0' && c <= '9' )
+		if (c >= '0' && c <= '9')
 			return c - '0';
 		c = Character.toUpperCase(c);
-		if ( c >= 'A' && c <= 'F')
+		if (c >= 'A' && c <= 'F')
 			return c - 'A' + 10;
-		
+
 		return -1;
 	}
 
 	String process(String line) throws IOException {
 		StringBuffer sb = new StringBuffer();
-		process(line, 0, '\0', sb );
+		process(line, 0, '\0', sb);
 		return sb.toString();
 	}
 
-	int process(String line, int index, char type, StringBuffer result) throws IOException {
+	int process(String line, int index, char type, StringBuffer result)
+			throws IOException {
 		StringBuffer variable = new StringBuffer();
 		outer: while (index < line.length()) {
 			char c1 = line.charAt(index++);
-			if ( ( ( type=='(' && c1==')') || (type=='{' && c1=='}'))) {
+			if (((type == '(' && c1 == ')') || (type == '{' && c1 == '}'))) {
 				result.append(replace(variable.toString()));
 				return index;
 			}
-				
+
 			if (c1 == '$' && index < line.length() - 2) {
 				char c2 = line.charAt(index);
 				if (c2 == '(' || c2 == '{') {
-					index = process(line,index+1,c2, variable);
+					index = process(line, index + 1, c2, variable);
 					continue outer;
 				}
 			}
@@ -168,7 +171,7 @@ public class Parser {
 			}
 			return replace(sb.toString());
 		}
-		return "${"+ key + "}";
+		return "${" + key + "}";
 	}
 
 	/**
@@ -178,26 +181,25 @@ public class Parser {
 	 * @param key
 	 * @return
 	 */
-	static Pattern	commands	= Pattern.compile(":");
+	static Pattern	commands	= Pattern.compile(";");
 
 	private String doCommands(String key) throws IOException {
 		String[] args = commands.split(key);
 		if (args == null || args.length == 0)
 			return null;
 
-
-		String result = doCommand(domain,args);
-		if ( result != null )
+		String result = doCommand(domain, args);
+		if (result != null)
 			return result;
-		
-		return doCommand(this,args);
+
+		return doCommand(this, args);
 	}
 
 	private String doCommand(Object target, String[] args) {
 		String cname = "_" + args[0].replaceAll("-", "_");
 		try {
-			Method m = target.getClass()
-					.getMethod(cname, new Class[] {String[].class});
+			Method m = target.getClass().getMethod(cname,
+					new Class[] {String[].class});
 			return (String) m.invoke(target, new Object[] {args});
 		}
 		catch (Exception e) {
@@ -328,5 +330,29 @@ public class Parser {
 		return new Date().toString();
 	}
 
-	
+	public String _fmodified(String args[]) throws Exception {
+		if (args.length != 2) {
+			domain.warning("Fmodified takes only 1 parameter "
+					+ Arrays.asList(args));
+			return null;
+		}
+		long time = 0;
+		String list[] = args[1].split("\\s*,\\s*");
+		for (int i =0; i < list.length; i++) {
+			File f = new File(list[i].trim());
+			if (f.exists() && f.lastModified() > time)
+				time = f.lastModified();
+		}
+		return "" + time;
+	}
+
+	public String _long2date(String args[]) {
+		try {
+			return new Date(Long.parseLong(args[1])).toString();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "not a valid long";
+	}
 }
