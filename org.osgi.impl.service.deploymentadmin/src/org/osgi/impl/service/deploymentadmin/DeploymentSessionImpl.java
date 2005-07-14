@@ -280,7 +280,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
             processResources(wjis);
             dropResources();
             dropBundles();
-            refreshPackages();
+            //refreshPackages();
             numOfErrors = startBundles();
         } catch (CancelException e) {
             transaction.rollback();
@@ -725,7 +725,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
         try {
             b = (Bundle) AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws Exception {
-                    return context.installBundle(location, is);
+                    Bundle ret = context.installBundle(location, is);
+                    return ret;
                 }});
         }
         catch (PrivilegedActionException e) {
