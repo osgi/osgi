@@ -198,7 +198,9 @@
 		       verbose="${verbose}"
 		       sources="${btool.sources}"
 		       ignoreVersions="${btool.noversion}"
-			   manifestVersion="${btool.manifestVersion}"/>
+			   manifestVersion="${btool.manifestVersion}"
+			   modified="${base.modified}"
+			   />
 	</target>
 
 	<!--
@@ -247,6 +249,8 @@
 		<echo>jars.compile.order:     ${jars.compile.order}</echo>
 		<echo>bin.includes:           ${bin.includes}</echo>
 		<echo>prebuild:               ${prebuild}</echo>
+		<echo>base.modfied:           ${base.modified} (${base.modified.readable})</echo>
+		
 	</target>
 
 	<!--
