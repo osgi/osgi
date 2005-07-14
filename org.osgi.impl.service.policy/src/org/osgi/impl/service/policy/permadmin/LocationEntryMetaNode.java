@@ -34,10 +34,10 @@ public final class LocationEntryMetaNode implements DmtMetaNode {
 	public int getMaxOccurrence() {	return Integer.MAX_VALUE; }
 	public boolean isZeroOccurrenceAllowed() { return true; }
 	public DmtData getDefault() { return null; }
-	public int getMax() { return Integer.MAX_VALUE; }
-	public int getMin() { return Integer.MIN_VALUE;	}
+	public double getMax() { return Double.MAX_VALUE; }
+	public double getMin() { return Double.MIN_VALUE;	}
 	public DmtData[] getValidValues() { return null; }
-	public int getFormat() { return 0; }
+	public int getFormat() { return DmtData.FORMAT_NODE; }
 	public String[] getMimeTypes() { return null; }
 	public String getReferredURI() { return null; }
 	public String[] getDependentURIs() { return null; }

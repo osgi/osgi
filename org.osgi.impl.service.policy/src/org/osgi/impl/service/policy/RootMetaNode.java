@@ -39,10 +39,10 @@ public final class RootMetaNode implements DmtMetaNode {
 	public int getMaxOccurrence() {	return 1; }
 	public boolean isZeroOccurrenceAllowed() { return false; }
 	public DmtData getDefault() { return null; }
-	public int getMax() { return Integer.MAX_VALUE; }
-	public int getMin() { return Integer.MIN_VALUE;	}
+	public double getMax() { return Double.MAX_VALUE; }
+	public double getMin() { return Double.MIN_VALUE;	}
 	public DmtData[] getValidValues() { return null; }
-	public int getFormat() { return 0; }
+	public int getFormat() { return DmtData.FORMAT_NODE; }
 	public String[] getMimeTypes() { return null; }
 	public String[] getValidNames() { return null;	}
 	public boolean isValidValue(DmtData value) { return true; }
