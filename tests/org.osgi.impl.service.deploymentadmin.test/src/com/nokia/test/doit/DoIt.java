@@ -955,6 +955,9 @@ public class DoIt implements BundleActivator {
         " - 'System' DP should NOT be visble\n" +
         " - 'db_test_01' DP should be visble";
     public void db_test_07() throws Exception {
+        if (null == System.getSecurityManager())
+            return;
+        
         InputStream is = new FileInputStream(HOME + "db_test_01.dp");
         DeploymentPackage dp = da.installDeploymentPackage(is);
         
