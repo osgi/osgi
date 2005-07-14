@@ -66,11 +66,12 @@ public class ConditionalUtility {
 	}
 	
 	
-	ConditionInfo createTestCInfo(boolean postponed, boolean satisfied, boolean mutable) {
-		return new ConditionInfo(TestCondition.class.getName(), 
+	ConditionInfo createTestCInfo(boolean postponed, boolean satisfied, boolean mutable, String name) {
+    return new ConditionInfo(TestCondition.class.getName(), 
 					new String[]{String.valueOf(postponed), 
 								 String.valueOf(satisfied), 
-								 String.valueOf(mutable)});
+								 String.valueOf(mutable),
+                 name});
 	}
 	
 	
@@ -226,26 +227,57 @@ public class ConditionalUtility {
 		pAdmin.setPermissions(bundleLocation, new PermissionInfo[]{pInfo});
 	}
 	
-	ConditionalPermissionInfo setPermissionsByCPermissionAdmin(ConditionInfo[] cInfos, Permission permission) {
-		PermissionInfo pInfo = new PermissionInfo(permission.getClass().getName(), 
-				permission.getName(), permission.getActions());
-		return cpAdmin.addConditionalPermissionInfo(cInfos, new PermissionInfo[]{pInfo});
+	ConditionalPermissionInfo setPermissionsByCPermissionAdmin(ConditionInfo[] cInfos, Permission[] permissions) {
+    PermissionInfo[] permInfos = null;
+    if (permissions != null) {
+      permInfos = new PermissionInfo[permissions.length];
+      for (int i = 0; i < permissions.length; i++) {
+        Permission perm = permissions[i];
+        permInfos[i] = new PermissionInfo(perm.getClass().getName(), perm.getName(), perm.getActions());
+      }
+    }
+		return cpAdmin.addConditionalPermissionInfo(cInfos, permInfos);
 	}
 	
 	void testPermissions(ConditionInfo[] conditions, Permission permission, AdminPermission[] allowedPermission, AdminPermission[] notAllowedPermission) {
-		ConditionalPermissionInfo cpInfo = setPermissionsByCPermissionAdmin(conditions, permission);
-    testControl.pass("Test " + cpInfoToString(cpInfo));
-    for (int i = 0; i < allowedPermission.length; i++) {
-			allowed(allowedPermission[i]);
-		}
-		for (int k = 0; k < notAllowedPermission.length; k++) {
-			notAllowed(notAllowedPermission[k], SecurityException.class);
-		}
-		cpInfo.delete();
+    testPermissions(conditions, new Permission[]{permission}, allowedPermission, notAllowedPermission);
 	}
   
+  void testPermissions(ConditionInfo[] conditions, Permission[] permissions, AdminPermission[] allowedPermission, AdminPermission[] notAllowedPermission) {
+    ConditionalPermissionInfo cpInfo = setPermissionsByCPermissionAdmin(conditions, permissions);
+    testControl.trace("Test " + cpInfoToString(cpInfo));
+    testControl.trace("Test for allowed permissions:");
+    for (int i = 0; i < allowedPermission.length; i++) {
+      allowed(allowedPermission[i]);
+    }
+    testControl.trace("Test for not allowed permissions:");
+    for (int k = 0; k < notAllowedPermission.length; k++) {
+      notAllowed(notAllowedPermission[k], SecurityException.class);
+    }
+    cpInfo.delete();
+  }
+  
+  void testPermissions(ConditionInfo[] conditions, Permission[] permissions,
+      AdminPermission[] allowedPermission, AdminPermission[] notAllowedPermission, String[] order) {
+    ConditionalPermissionInfo cpInfo = setPermissionsByCPermissionAdmin(conditions, permissions);
+    testControl.trace("Test " + cpInfoToString(cpInfo));
+    testControl.trace("Test for allowed permissions:");
+    for (int i = 0; i < allowedPermission.length; i++) {
+      allowed(allowedPermission[i]);
+    }
+    //it doesn't work because loadClass method in RI works with the system class loader only
+    //when it works with other class loader, uncomment next row
+    //testEqualArrays(order, TestCondition.getSatisfOrder());
+    testControl.trace("Test for not allowed permissions:");
+    for (int k = 0; k < notAllowedPermission.length; k++) {
+      notAllowed(notAllowedPermission[k], SecurityException.class);
+      //testEqualArrays(order, TestCondition.getSatisfOrder());
+    }
+    cpInfo.delete();
+  }
+  
   void deletePermissions(ConditionInfo[] conditions, Permission permission) {
-    ConditionalPermissionInfo cpInfo = setPermissionsByCPermissionAdmin(conditions, permission);
+    ConditionalPermissionInfo cpInfo = setPermissionsByCPermissionAdmin(conditions, new Permission[] {permission});
     testControl.pass("New permissions are set: " + cpInfoToString(cpInfo));
     Enumeration infos = cpAdmin.getConditionalPermissionInfos();
     testControl.pass("All set conditional permissions are: ");
@@ -260,6 +292,17 @@ public class ConditionalUtility {
       testControl.pass(cpInfoToString((ConditionalPermissionInfo)infos.nextElement()));
     }
     testControl.assertEquals("After delete there have to be no conditional permissions: ", 0, cpCounter);
+  }
+  
+  private void testEqualArrays(String[] array1, String[] array2) {
+    if (array1 != null && array2 != null) {
+      testControl.assertEquals("The number of checked TestCondionions: ", array1.length, array2.length);
+      for (int i=0; i<array1.length; i++) {
+        testControl.assertEquals("checked condition: ", array1[i], array2[i]);
+      }
+    } else {
+      testControl.fail("Not correct check of TestConditions.");
+    }
   }
 	
 	Vector createWildcardDNs(String value) {
