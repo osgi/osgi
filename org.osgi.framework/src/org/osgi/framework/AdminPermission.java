@@ -178,8 +178,8 @@ public final class AdminPermission extends Permission {
 	}
 
 	/**
-	 * Creates a new <code>AdminPermission</code> object for use by the <code>Policy</code>
-	 * object to instantiate new <code>Permission</code> objects.
+	 * Creates a new <code>AdminPermission</code> object to be used by the code
+	 * that must check a <code>Permission</code> object.
 	 * 
 	 * @param bundle A bundle
 	 * @param actions <code>class</code>, <code>execute</code>, <code>lifecycle</code>, 
