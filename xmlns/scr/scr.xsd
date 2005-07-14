@@ -23,89 +23,90 @@ case, the scr namespace is assumed. Otherwise the namespace must be used.
 		</documentation>
 	</annotation>
 
-	<element name="component" type="scr:Tcomponent"></element>
+	<element name="component" type="scr:Tcomponent"/>
 
 	<complexType name="Tcomponent">
 		<sequence>
-			<element name="implementation" type="scr:Timplementation" minOccurs="1" maxOccurs="1"></element>
+			<element name="implementation" type="scr:Timplementation" minOccurs="1" maxOccurs="1"/>
 			<choice minOccurs="0" maxOccurs="unbounded">
-				<element name="property" type="scr:Tproperty"></element>
-				<element name="properties" type="scr:Tproperties"></element>
+				<element name="property" type="scr:Tproperty"/>
+				<element name="properties" type="scr:Tproperties"/>
 			</choice>
-			<element name="service" type="scr:Tservice" minOccurs="0" maxOccurs="1"></element>
-			<element name="reference" type="scr:Treference" minOccurs="0" maxOccurs="unbounded"></element>
+			<element name="service" type="scr:Tservice" minOccurs="0" maxOccurs="1"/>
+			<element name="reference" type="scr:Treference" minOccurs="0" maxOccurs="unbounded"/>
 		</sequence>
-		<attribute name="enabled" type="boolean" default="true" use="optional"></attribute>
-		<attribute name="name" type="token" use="required"></attribute>
-		<attribute name="factory" type="string" use="optional"></attribute>
+		<attribute name="enabled" type="boolean" default="true" use="optional"/>
+		<attribute name="name" type="token" use="required"/>
+		<attribute name="factory" type="string" use="optional"/>
+		<attribute name="immediate" type="boolean" use="optional"/>
 	</complexType>
 
 	<complexType name="Timplementation">
-		<attribute name="class" type="token" use="required"></attribute>
+		<attribute name="class" type="token" use="required"/>
 	</complexType>
 
 	<complexType name="Tproperty">
 		<simpleContent>
 			<extension base="string">
-				<attribute name="name" type="string" use="required"></attribute>
-				<attribute name="value" type="string" use="optional"></attribute>
-				<attribute name="type" type="scr:TjavaTypes" use="optional" default="String"></attribute>
+				<attribute name="name" type="string" use="required"/>
+				<attribute name="value" type="string" use="optional"/>
+				<attribute name="type" type="scr:TjavaTypes" use="optional" default="String"/>
 			</extension>
 		</simpleContent>
 	</complexType>
 
 	<complexType name="Tproperties">
-		<attribute name="entry" type="string" use="required"></attribute>
+		<attribute name="entry" type="string" use="required"/>
 	</complexType>
 
 	<complexType name="Tservice">
 		<sequence>
-			<element name="provide" type="scr:Tprovide" minOccurs="1" maxOccurs="unbounded"></element>
+			<element name="provide" type="scr:Tprovide" minOccurs="1" maxOccurs="unbounded"/>
 		</sequence>
-		<attribute name="servicefactory" type="boolean" default="false" use="optional"></attribute>
+		<attribute name="servicefactory" type="boolean" default="false" use="optional"/>
 	</complexType>
 
 	<complexType name="Tprovide">
-		<attribute name="interface" type="token" use="required"></attribute>
+		<attribute name="interface" type="token" use="required"/>
 	</complexType>
 
 	<complexType name="Treference">
-		<attribute name="name" type="NMTOKEN" use="required"></attribute>
-		<attribute name="interface" type="token" use="required"></attribute>
-		<attribute name="cardinality" type="scr:Tcardinality" default="1..1" use="optional"></attribute>
-		<attribute name="policy" type="scr:Tpolicy" use="optional" default="static"></attribute>
-		<attribute name="target" type="string" use="optional"></attribute>
-		<attribute name="bind" type="token" use="optional"></attribute>
-		<attribute name="unbind" type="token" use="optional"></attribute>
+		<attribute name="name" type="NMTOKEN" use="required"/>
+		<attribute name="interface" type="token" use="required"/>
+		<attribute name="cardinality" type="scr:Tcardinality" default="1..1" use="optional"/>
+		<attribute name="policy" type="scr:Tpolicy" use="optional" default="static"/>
+		<attribute name="target" type="string" use="optional"/>
+		<attribute name="bind" type="token" use="optional"/>
+		<attribute name="unbind" type="token" use="optional"/>
 	</complexType>
 
 	<simpleType name="TjavaTypes">
 		<restriction base="string">
-			<enumeration value="String"></enumeration>
-			<enumeration value="Long"></enumeration>
-			<enumeration value="Double"></enumeration>
-			<enumeration value="Float"></enumeration>
-			<enumeration value="Integer"></enumeration>
-			<enumeration value="Byte"></enumeration>
-			<enumeration value="Char"></enumeration>
-			<enumeration value="Boolean"></enumeration>
-			<enumeration value="Short"></enumeration>
+			<enumeration value="String"/>
+			<enumeration value="Long"/>
+			<enumeration value="Double"/>
+			<enumeration value="Float"/>
+			<enumeration value="Integer"/>
+			<enumeration value="Byte"/>
+			<enumeration value="Char"/>
+			<enumeration value="Boolean"/>
+			<enumeration value="Short"/>
 		</restriction>
 	</simpleType>
 
 	<simpleType name="Tcardinality">
 		<restriction base="string">
-			<enumeration value="0..1"></enumeration>
-			<enumeration value="0..n"></enumeration>
-			<enumeration value="1..1"></enumeration>
-			<enumeration value="1..n"></enumeration>
+			<enumeration value="0..1"/>
+			<enumeration value="0..n"/>
+			<enumeration value="1..1"/>
+			<enumeration value="1..n"/>
 		</restriction>
 	</simpleType>
 
 	<simpleType name="Tpolicy">
 		<restriction base="string">
-			<enumeration value="static"></enumeration>
-			<enumeration value="dynamic"></enumeration>
+			<enumeration value="static"/>
+			<enumeration value="dynamic"/>
 		</restriction>
 	</simpleType>
 
