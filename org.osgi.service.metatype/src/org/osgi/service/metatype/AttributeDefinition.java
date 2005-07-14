@@ -237,15 +237,11 @@ public interface AttributeDefinition {
 	 * attempt to validate the attribute according to these constraints. It can
 	 * return three different values:
 	 * 
-	 * <table>
-	 * <tr>
-	 *  <td><code>null</code></td> <td>no validation present</td>
-	 * </tr><tr> 
-	 *  <td>&quot;&quot;</td> <td>no problems detected</td>
-	 * </tr><tr> 
-	 *  <td>&quot;...&quot;</td> <td>A localized description of why the value is wrong</td>
-	 * </tr> 
-	 * </table>
+	 * <pre>
+	 *  null           No validation present
+	 *  ""             No problems detected
+	 *  "..."          A localized description of why the value is wrong
+	 * </pre>
 	 * 
 	 * @param value The value before turning it into the basic data type
 	 * @return <code>null</code>, "", or another string
