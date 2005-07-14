@@ -10,5 +10,7 @@
 	<classpathentry kind="lib" path="jar/tools.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.tools.btool"/>
 	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.test.tool"/>
+	<classpathentry kind="lib" path="/cnf/jar/bcel.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

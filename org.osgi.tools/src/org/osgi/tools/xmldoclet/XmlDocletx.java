@@ -4,13 +4,14 @@ import com.sun.javadoc.*;
 import java.io.*;
 import java.util.*;
 
-public class XmlDoclet extends Doclet {
+public class XmlDocletx extends Doclet {
 	PrintWriter				pw;
 	String					currentPackage;
 	
 	public static boolean start( RootDoc doc ) {
 		try {
-			XmlDoclet doclet = new XmlDoclet();
+			System.out.println("Hello world!");
+			XmlDocletx doclet = new XmlDocletx();
 			doclet.startx( doc );
 			return true;
 		}
@@ -172,7 +173,7 @@ public class XmlDoclet extends Doclet {
 			+ "' modifiers='" + cnst.modifiers()
 			+ "' typeName='" + cnst.type().typeName()
 			+ "' qualifiedTypeName='" + cnst.type().qualifiedTypeName()
-			+ ( constantValueExpression != null ?	"' constantValue='" + constantValueExpression : "" )
+			+ ( constantValueExpression != null ?	"' constantValue='" + escape(constantValueExpression) : "" )
 			+ "'>" );
 		printComment( cnst );
 		pw.println("     </field>" ); 
@@ -334,5 +335,20 @@ public class XmlDoclet extends Doclet {
 		}
 		out.append( ")" );
 		return out.toString();
+	}
+	
+	String escape( String in ) {
+		StringBuffer sb = new StringBuffer();
+		for ( int i=0; i<in.length(); i++ ) {
+			char c = in.charAt(i);
+			switch(c) {
+				case '&': sb.append("&amp;"); break;
+				case '<': sb.append("&lt;"); break;
+				case '>': sb.append("&gt;"); break;
+				default:
+					sb.append(c);
+			}
+		}
+		return sb.toString();
 	}
 }
