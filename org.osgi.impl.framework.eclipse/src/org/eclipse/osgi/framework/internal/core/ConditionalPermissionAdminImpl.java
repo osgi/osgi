@@ -51,18 +51,22 @@ public class ConditionalPermissionAdminImpl implements ConditionalPermissionAdmi
 	 * @see org.osgi.service.condpermadmin.ConditionalPermissionAdmin#addConditionalPermissionInfo(org.osgi.service.condpermadmin.ConditionInfo[], org.osgi.service.permissionadmin.PermissionInfo[])
 	 */
 	public ConditionalPermissionInfo addConditionalPermissionInfo(ConditionInfo[] conds, PermissionInfo[] perms) {
+		return setConditionalPermissionInfo(null, conds, perms);
+	}
+
+	public ConditionalPermissionInfo setConditionalPermissionInfo(String name, ConditionInfo conds[], PermissionInfo perms[]) {
 		SecurityManager sm = System.getSecurityManager();
 		if (sm != null)
 			sm.checkPermission(new AllPermission());
-		ConditionalPermissionInfoImpl condPermInfo = new ConditionalPermissionInfoImpl(conds, perms);
+		if (name == null)
+			name = "generated_" + Long.toString(System.currentTimeMillis()); //$NON-NLS-1$
+		ConditionalPermissionInfoImpl condPermInfo = new ConditionalPermissionInfoImpl(name, conds, perms);
 		synchronized (condPerms) {
+			ConditionalPermissionInfoImpl existing = (ConditionalPermissionInfoImpl) getConditionalPermissionInfo(condPermInfo.getName());
+			if (existing != null) // do not call existing.delete() to avoid multiple saves
+				existing.deleted = true;
 			condPerms.add(condPermInfo);
-			try {
-				storage.serializeConditionalPermissionInfos(condPerms);
-			} catch (IOException e) {
-				e.printStackTrace();
-				framework.publishFrameworkEvent(FrameworkEvent.ERROR, framework.systemBundle, e);
-			}
+			saveCondPermInfos();
 		}
 		AbstractBundle bundles[] = framework.getAllBundles();
 		for (int i = 0; i < bundles.length; i++) {
@@ -81,6 +85,15 @@ public class ConditionalPermissionAdminImpl implements ConditionalPermissionAdmi
 		return condPermInfo;
 	}
 
+	public ConditionalPermissionInfo getConditionalPermissionInfo(String name) {
+		for (Enumeration eCondPerms = condPerms.elements(); eCondPerms.hasMoreElements();) {
+			ConditionalPermissionInfoImpl condPerm = (ConditionalPermissionInfoImpl) eCondPerms.nextElement();
+			if (name.equals(condPerm.getName()))
+				return condPerm;
+		}
+		return null;
+	}
+
 	/**
 	 * Returns an Enumeration of current ConditionalPermissionInfos. Each element will be of type 
 	 * ConditionalPermissionInfoImpl.
@@ -88,17 +101,24 @@ public class ConditionalPermissionAdminImpl implements ConditionalPermissionAdmi
 	 * @see org.osgi.service.condpermadmin.ConditionalPermissionAdmin#getConditionalPermissionInfos()
 	 */
 	public Enumeration getConditionalPermissionInfos() {
-		return condPerms.elements();
+		synchronized (condPerms) {
+			return condPerms.elements();
+		}
 	}
 
 	void deleteConditionalPermissionInfo(ConditionalPermissionInfo cpi) {
 		synchronized (condPerms) {
 			condPerms.remove(cpi);
-			try {
-				storage.serializeConditionalPermissionInfos(condPerms);
-			} catch (IOException e) {
-				// TODO We need to log this
-			}
+			saveCondPermInfos();
+		}
+	}
+
+	private void saveCondPermInfos() {
+		try {
+			storage.serializeConditionalPermissionInfos(condPerms);
+		} catch (IOException e) {
+			e.printStackTrace();
+			framework.publishFrameworkEvent(FrameworkEvent.ERROR, framework.systemBundle, e);
 		}
 	}
 
@@ -114,15 +134,14 @@ public class ConditionalPermissionAdminImpl implements ConditionalPermissionAdmi
 				ConditionInfo[] condInfo = condPermInfo.getConditionInfos();
 				boolean match = true;
 				for (int i = 0; i < condInfo.length; i++) {
-					if (BundleSignerCondition.class.getName().equals(condInfo[i].getType())){
+					if (BundleSignerCondition.class.getName().equals(condInfo[i].getType())) {
 						String[] args = condInfo[i].getArgs();
 						for (int j = 0; j < args.length; j++)
 							if (!framework.adaptor.matchDNChain(args[j], signers)) {
 								match = false;
 								break;
 							}
-					}
-					else {
+					} else {
 						match = false;
 						break;
 					}

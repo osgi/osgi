@@ -331,6 +331,9 @@ public class DefaultPermissionStorage implements PermissionStorage {
 				ConditionalPermissionInfo cpi = (ConditionalPermissionInfo) en.nextElement();
 				ConditionInfo cis[] = cpi.getConditionInfos();
 				PermissionInfo pis[] = cpi.getPermissionInfos();
+				writer.write('#');
+				writer.write(((ConditionalPermissionInfoImpl) cpi).getName());
+				writer.newLine();
 				for (int i = 0; i < cis.length; i++) {
 					writer.write(cis[i].getEncoded());
 					writer.newLine();
@@ -362,17 +365,21 @@ public class DefaultPermissionStorage implements PermissionStorage {
 			String line;
 			Vector c = new Vector(3);
 			Vector p = new Vector(3);
+			String id = null;
 			while ((line = reader.readLine()) != null) {
 				if (line.length() == 0) {
 					ConditionalPermissionInfoImpl cpi;
-					cpi = new ConditionalPermissionInfoImpl((ConditionInfo[]) c.toArray(new ConditionInfo[0]), (PermissionInfo[]) p.toArray(new PermissionInfo[0]));
+					cpi = new ConditionalPermissionInfoImpl(id, (ConditionInfo[]) c.toArray(new ConditionInfo[0]), (PermissionInfo[]) p.toArray(new PermissionInfo[0]));
 					v.add(cpi);
 					c.clear();
 					p.clear();
+					id = null;
 				} else if (line.startsWith("(")) { //$NON-NLS-1$
 					p.add(new PermissionInfo(line));
 				} else if (line.startsWith("[")) { //$NON-NLS-1$
 					c.add(new ConditionInfo(line));
+				} else if (line.startsWith("#")) { //$NON-NLS-1$
+					id = line.substring(1);
 				}
 			}
 		} catch (FileNotFoundException e) {

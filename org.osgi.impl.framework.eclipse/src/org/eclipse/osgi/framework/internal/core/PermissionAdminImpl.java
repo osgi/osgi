@@ -409,7 +409,7 @@ public class PermissionAdminImpl implements PermissionAdmin {
 					}
 				}
 				ConditionalPermissionInfoImpl cpiArray[] = new ConditionalPermissionInfoImpl[1];
-				cpiArray[0] = new ConditionalPermissionInfoImpl(new ConditionInfo[0], (PermissionInfo[]) piList.toArray(new PermissionInfo[0]));
+				cpiArray[0] = new ConditionalPermissionInfoImpl(null, new ConditionInfo[0], (PermissionInfo[]) piList.toArray(new PermissionInfo[0]));
 				ConditionalPermissionSet cps = new ConditionalPermissionSet(cpiArray, new Condition[0]);
 				combined.setRestrictedPermissions(cps);
 			} catch (IOException e) {

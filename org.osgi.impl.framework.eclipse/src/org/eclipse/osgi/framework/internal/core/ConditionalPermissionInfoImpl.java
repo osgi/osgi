@@ -36,6 +36,12 @@ public class ConditionalPermissionInfoImpl implements ConditionalPermissionInfo,
 	 * permissions.
 	 */
 	ConditionInfo conds[];
+
+	/**
+	 * The name of the ConditionalPermissionInfo
+	 */
+	String name;
+
 	/**
 	 * When true, this object has been deleted and any information retrieved
 	 * from it should be discarded.
@@ -50,9 +56,14 @@ public class ConditionalPermissionInfoImpl implements ConditionalPermissionInfo,
 		return deleted;
 	}
 
-	public ConditionalPermissionInfoImpl(ConditionInfo conds[], PermissionInfo perms[]) {
+	public ConditionalPermissionInfoImpl(String name, ConditionInfo conds[], PermissionInfo perms[]) {
+		this.name = name;
 		this.conds = conds;
 		this.perms = perms;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	/**
@@ -185,4 +196,5 @@ public class ConditionalPermissionInfoImpl implements ConditionalPermissionInfo,
 	static void setConditionalPermissionAdminImpl(ConditionalPermissionAdminImpl condAdmin) {
 		ConditionalPermissionInfoImpl.condAdmin = condAdmin;
 	}
+
 }
