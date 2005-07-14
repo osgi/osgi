@@ -108,15 +108,11 @@ public class Autoconf implements ResourceProcessor {
 		MetaData.Object o = d.objects[0]; // There can be only one!
 
 		// unfortunately the bundle name is in symbName-version format
-		String bundleName = d.bundle;
-		int dash = bundleName.indexOf('-');
-		String bundleSymbolicName = bundleName.substring(0,dash);
-		String bundleVersion = bundleName.substring(dash+1);
-		
-		Bundle bundle = searchForBundle(bundleSymbolicName,bundleVersion,d.factoryPid==null);
+		Bundle bundle = searchForBundle(d.bundle,d.factoryPid==null);
+
 		if (bundle==null) {
 			throw new IllegalArgumentException(
-				"the bundle "+bundleSymbolicName+" "+bundleVersion+
+				"the bundle "+d.bundle+
 				" needs to be configured but is not part of the deployment package");
 		}
 
@@ -423,15 +419,19 @@ public class Autoconf implements ResourceProcessor {
 	 * @param bundleVersion
 	 * @return the bundle that matches, or null, if not found
 	 */
-	private Bundle searchForBundle(String bundleSymbolicName, String bundleVersion,boolean onlyInDeploymentPackage) {
+	private Bundle searchForBundle(String bundleLocation,boolean onlyInDeploymentPackage) {
 		if (onlyInDeploymentPackage) {
+			if (!bundleLocation.startsWith("osgi-dp:")) throw new IllegalArgumentException(
+					"the bundle at location \""+bundleLocation+
+					"\" needs to be configured but the location string doesn't start with osgi-dp:");
+			String bundleSymbolicName = bundleLocation.substring(8);
 			return sourceDeploymentPackage.getBundle(bundleSymbolicName);
 		} else {
 			// linear search is "fast enough" here
 			Bundle[] bundles = context.getBundles();
 			for (int i = 0; i < bundles.length; i++) {
 				Bundle b = bundles[i];
-				if (bundleSymbolicName.equals(b.getSymbolicName())) {
+				if (bundleLocation.equals(b.getLocation())) {
 					return b;
 				}
 			}
