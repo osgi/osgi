@@ -176,11 +176,9 @@ public interface Configuration {
 	 * bundle location will be set persistently.
 	 * 
 	 * <p>
-	 * This method requires <code>AdminPermission</code>.
+	 * This method requires <code>ConfigurationPermission[REBIND]</code>.
 	 * 
 	 * @param bundleLocation a bundle location or <code>null</code>
-	 * @throws SecurityException if the caller does not have
-	 *         <code>AdminPermission</code>
 	 * @throws IllegalStateException if this configuration has been deleted
 	 * @throws SecurityException when the caller does not have <code>ConfigurationPermission[REBIND]</code>
 	 */
@@ -192,12 +190,12 @@ public interface Configuration {
 	 * Returns the bundle location to which this configuration is bound, or
 	 * <code>null</code> if it is not yet bound to a bundle location.
 	 * <p>
-	 * This call requires <code>AdminPermission</code>.
+	 * This call requires <code>ConfigurationPermission[REBIND]</code>.
 	 * 
 	 * @return location to which this configuration is bound, or
 	 *         <code>null</code>.
 	 * @throws SecurityException if the caller does not have
-	 *         <code>AdminPermission</code>.
+	 *         <code>ConfigurationPermission[REBIND]</code>.
 	 * @throws IllegalStateException if this <code>Configuration</code> object
 	 *         has been deleted.
 	 */
