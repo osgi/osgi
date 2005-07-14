@@ -19,7 +19,6 @@ import java.util.Dictionary;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.osgi.component.model.ComponentDescription;
 import org.eclipse.osgi.component.model.ComponentDescriptionProp;
 import org.eclipse.osgi.component.model.ReferenceDescription;
 import org.osgi.framework.Bundle;
@@ -140,7 +139,7 @@ public class Reference {
 	}
 
 	//	if the cardinality is "0..1" or "0..n" then this refernce is not required
-	public boolean isRequiredFor(ComponentDescription cd) {
+	public boolean isRequired() {
 		//we want to re-resolve if the component is static and already eligible
 		//		if (policy.equals("static") && cd.isEligible())
 		//		return true;
@@ -253,7 +252,7 @@ public class Reference {
 
 		//if the cardinality is "0..1" or "0..n" then this refernce is not required
 		//TODO - how do we place this reference in the ordering?
-		if (!this.isRequiredFor(cdp.getComponentDescription()))
+		if (!this.isRequired())
 			return true;
 
 		return false;

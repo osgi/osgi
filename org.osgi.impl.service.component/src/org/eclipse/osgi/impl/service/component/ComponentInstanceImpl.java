@@ -15,12 +15,13 @@ package org.eclipse.osgi.impl.service.component;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Set;
 
+import org.eclipse.osgi.component.instance.BuildDispose;
+import org.eclipse.osgi.component.model.ComponentDescriptionProp;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentInstance;
-import org.eclipse.osgi.component.instance.*;
-import org.eclipse.osgi.component.model.*;
 
 /**
  * A ComponentInstance encapsulates an instance of a component.
@@ -34,7 +35,7 @@ public class ComponentInstanceImpl implements ComponentInstance {
 	Object instance;
 	Dictionary properties = null;
 	BuildDispose buildDispose;
-	ComponentDescriptionProp component;
+	public ComponentDescriptionProp component;
 	ServiceRegistration serviceRegistration = null;
 
 	//ServiceReference:ServiceObject that binded to this reference
@@ -62,6 +63,7 @@ public class ComponentInstanceImpl implements ComponentInstance {
 		if(serviceRegistration != null)
 			serviceRegistration.unregister();
 		buildDispose.disposeComponentInstance(component, this);
+		component.removeInstance(this);
 		instance = null;
 		properties = null;
 	}
@@ -86,6 +88,10 @@ public class ComponentInstanceImpl implements ComponentInstance {
 	public void addServiceReference(ServiceReference serviceReference, Object serviceObject)
 	{
 		serviceReferenceToServiceObject.put(serviceReference,serviceObject);
+	}
+	
+	public Set getServiceReferences() {
+		return serviceReferenceToServiceObject.entrySet();
 	}
 	
 	public void removeServiceReference(ServiceReference serviceReference)

@@ -91,20 +91,29 @@ abstract class RegisterComponentService {
 		if (factory) {
 			//	register the service using a ServiceFactory
 			serviceRegistration = bundleContext.registerService(interfaces, new ServiceFactory() {
-				/* the instance created */
-				Object instance;
+				/* map of instace:componentInstance*/
+				Hashtable instances;
 
 				//ServiceFactory.getService method.
 				public Object getService(Bundle bundle, ServiceRegistration registration) {
 					if (DEBUG)
 						System.out.println("RegisterComponentServiceFactory:getService: registration:" + registration);
+					ComponentInstance componentInstance = null;
+					Object instance = null;
 					try {
-						ComponentInstance componentInstance = instanceProcess.buildDispose.build(bundleContext, bundle, component, null);
+						componentInstance = instanceProcess.buildDispose.build(bundleContext, bundle, component, null);
 						instance = componentInstance.getInstance();
 					} catch (Exception e) {
 						//what to do here?
 						System.err.println("Could not create instance of " + component.getComponentDescription());
 						e.printStackTrace();
+					}
+					if (componentInstance != null && instance != null) {
+						//save so we can dispose later
+						if (instances == null) {
+							instances = new Hashtable();
+						}
+						instances.put(instance,componentInstance);
 					}
 					return instance;
 				}
@@ -113,7 +122,11 @@ abstract class RegisterComponentService {
 				public void ungetService(Bundle bundle, ServiceRegistration registration, Object service) {
 					if (DEBUG)
 						System.out.println("RegisterComponentServiceFactory:ungetService: registration = " + registration);
-					instanceProcess.buildDispose.disposeComponent(component);
+					((ComponentInstance)instances.get(service)).dispose();
+					instances.remove(service);
+					if (instances.isEmpty()) {
+						instances = null;
+					}
 				}
 			}, properties);
 		} else {
@@ -121,20 +134,25 @@ abstract class RegisterComponentService {
 			//always return the same instance
 			serviceRegistration = bundleContext.registerService(interfaces, new ServiceFactory() {
 
+				int references = 0;
+				//if we create an instance, keep track of it
+				ComponentInstance instance;
+
 				//ServiceFactory.getService method.
 				public Object getService(Bundle bundle, ServiceRegistration registration) {
 					if (DEBUG)
 						System.out.println("RegisterComponentService: getService: registration = " + registration);
 					if (component.getInstances().isEmpty()) {
 						try {
-							instanceProcess.buildDispose.build(bundleContext, null, component, null);
+							instance = instanceProcess.buildDispose.build(bundleContext, null, component, null);
 						} catch (Exception e) {
 							//TODO handle error
 							System.err.println("Could not create instance of " + component.getComponentDescription());
 							e.printStackTrace();
+							return null;
 						}
 					}
-
+					references++;
 					return ((ComponentInstance) component.getInstances().get(0)).getInstance();
 				}
 
@@ -142,7 +160,13 @@ abstract class RegisterComponentService {
 				public void ungetService(Bundle bundle, ServiceRegistration registration, Object service) {
 					if (DEBUG)
 						System.out.println("RegisterComponentService: ungetService: registration = " + registration);
-					instanceProcess.buildDispose.disposeComponent(component);
+					references--;
+					if (references == 0 && instance != null) {
+						//if instance != null then we created it
+						//dispose instance
+						instance.dispose();
+						instance = null;
+					}
 				}
 			}, properties);
 		}

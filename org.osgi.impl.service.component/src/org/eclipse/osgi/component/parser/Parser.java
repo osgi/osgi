@@ -17,12 +17,17 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.List;
+
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
 import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.util.ManifestElement;
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.FrameworkEvent;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -92,12 +97,13 @@ public class Parser {
 	 */
 	public List parseComponentDescription(Main main, Bundle bundle, String xml) {
 		List result = new ArrayList();
+		int fileIndex = xml.lastIndexOf('/');
 		try {
-			URL url = bundle.getEntry(xml);
-			if (url == null) {
+			Enumeration urls = bundle.findEntries(xml.substring(0,fileIndex),xml.substring(fileIndex+1), false);
+			if (urls == null || !urls.hasMoreElements()) {
 				throw new BundleException("resource not found: " + xml);
 			}
-
+			URL url = (URL)urls.nextElement();
 			InputStream is = url.openStream();
 			SAXParserFactory parserFactory = (SAXParserFactory) parserTracker.getService();
 			parserFactory.setNamespaceAware(true);

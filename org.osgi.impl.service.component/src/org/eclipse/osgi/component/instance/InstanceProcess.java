@@ -396,7 +396,6 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 		Configuration[] config = null;
 		ArrayList spids = null;
 		ComponentDescriptionProp componentDescriptionProp;
-		ServiceRegistration serviceRegistration;
 		Enumeration keys;
 
 		String pid = event.getPid();

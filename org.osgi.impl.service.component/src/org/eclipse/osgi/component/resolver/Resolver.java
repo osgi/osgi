@@ -33,7 +33,6 @@ import org.eclipse.osgi.component.model.ServiceDescription;
 import org.eclipse.osgi.component.workqueue.WorkDispatcher;
 import org.eclipse.osgi.component.workqueue.WorkQueue;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.AllServiceListener;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.ServiceEvent;
@@ -347,7 +346,6 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 				ComponentDescription componentDescription = (ComponentDescription) it.next();
 
 				// process CD:CDP list and see if there is a match
-				List cdps = componentDescription.getComponentDescriptionProps();
 				List cdpsClone = (List) ((ArrayList) componentDescription.getComponentDescriptionProps()).clone();
 				Iterator it_ = cdpsClone.iterator();
 				while (it_.hasNext()) {
@@ -705,13 +703,12 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 				//may throw circularity exception
 				handleDependencyCycle(refCDP, currentStack);
 				return;
-			} else {
-				currentStack.add(refCDP);
-
-				traverseDependencies(refCDP.producer, sortedList, currentStack);
-
-				currentStack.remove(refCDP);
 			}
+			currentStack.add(refCDP);
+
+			traverseDependencies(refCDP.producer, sortedList, currentStack);
+
+			currentStack.remove(refCDP);
 		}
 		//finally write the cdp
 		sortedList.add(cdp);

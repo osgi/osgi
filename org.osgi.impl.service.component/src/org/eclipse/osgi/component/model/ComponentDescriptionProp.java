@@ -85,6 +85,9 @@ public class ComponentDescriptionProp {
 	 */
 	public void initProperties(Dictionary configProperties) throws IOException {
 
+		//load initial properties
+		properties.putAll((Hashtable)configProperties);
+		
 		//add ObjectClass so we can match target filters before actually being registered
 		if (componentDescription.getService() != null) {
 			ProvideDescription[] provides = componentDescription.getService().getProvides();
@@ -190,7 +193,7 @@ public class ComponentDescriptionProp {
 		public Reference ref;
 		public ComponentDescriptionProp producer;
 
-		private ReferenceCDP(ComponentDescriptionProp consumer, Reference ref, ComponentDescriptionProp producer) {
+		protected ReferenceCDP(ComponentDescriptionProp consumer, Reference ref, ComponentDescriptionProp producer) {
 			this.consumer = consumer;
 			this.ref = ref;
 			this.producer = producer;

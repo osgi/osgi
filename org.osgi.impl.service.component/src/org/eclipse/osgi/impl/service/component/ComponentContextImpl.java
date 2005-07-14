@@ -14,11 +14,25 @@
  */
 package org.eclipse.osgi.impl.service.component;
 
-import java.util.*;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+
 import org.eclipse.osgi.component.Main;
-import org.eclipse.osgi.component.model.*;
-import org.osgi.framework.*;
-import org.osgi.service.component.*;
+import org.eclipse.osgi.component.model.ComponentDescription;
+import org.eclipse.osgi.component.model.ComponentDescriptionProp;
+import org.eclipse.osgi.component.resolver.Reference;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.ComponentException;
+import org.osgi.service.component.ComponentInstance;
 
 /**
  * A ComponentContext object is used by a Service Component to interact with it
@@ -68,7 +82,7 @@ public class ComponentContextImpl implements ComponentContext {
 	ComponentDescription componentDescription;
 
 	/* ComponentDescription plus Properties */
-	ComponentDescriptionProp componentDescriptionProp;
+	ComponentDescriptionProp cdp;
 
 	Main main;
 
@@ -82,7 +96,7 @@ public class ComponentContextImpl implements ComponentContext {
 	 * @param bundle The ComponentDescriptionProp we are wrapping.
 	 */
 	public ComponentContextImpl(Main main, Bundle usingBundle, ComponentDescriptionProp component, ComponentInstance ci) {
-		this.componentDescriptionProp = component;
+		this.cdp = component;
 		this.componentDescription = component.getComponentDescription();
 		this.componentInstance = ci;
 		this.bundleContext = main.framework.getBundleContext(component.getComponentDescription().getBundle());
@@ -104,18 +118,27 @@ public class ComponentContextImpl implements ComponentContext {
 	 */
 	public Dictionary getProperties() {
 
-		Dictionary props = ((ComponentInstanceImpl) componentInstance).getProperties();
+		Dictionary props = (Dictionary) AccessController.doPrivileged(
+		          new PrivilegedAction() {
+		            public Object run() {
+		                
+		                Dictionary props = ((ComponentInstanceImpl) componentInstance).getProperties();
 
-		if (props != null) {
-			Dictionary properties = componentDescriptionProp.getProperties();
-			Enumeration keys = props.keys();
-			while (keys.hasMoreElements()) {
-				Object key = keys.nextElement();
-				properties.put(key, props.get(key));
-			}
-			return properties;
-		}
-		return componentDescriptionProp.getProperties();
+		        		if (props != null) {
+		        			Dictionary properties = cdp.getProperties();
+		        			Enumeration keys = props.keys();
+		        			while (keys.hasMoreElements()) {
+		        				Object key = keys.nextElement();
+		        				properties.put(key, props.get(key));
+		        			}
+		        			return properties;
+		        		}
+		        		return cdp.getProperties();
+		            }
+		          }
+		        );
+
+		return props;
 	}
 
 	/**
@@ -131,25 +154,43 @@ public class ComponentContextImpl implements ComponentContext {
 	 */
 	public Object locateService(String name) throws ComponentException {
 
-		Object obj = null;
-		ReferenceDescription[] references = componentDescription.getReferences();
-
-		for (int i = 0; i < references.length; i++) {
-
-			String referenceName = references[i].getName();
-
+		try {
 			//find the Reference Description with the specified name
-			if (referenceName.equals(name)) {
-
-				//get the interface name
-				String interfaceName = references[i].getInterfacename();
-
-				obj = bundleContext.getService(bundleContext.getServiceReference(interfaceName));
-
-				return obj;
+			Iterator references = cdp.getReferences().iterator();
+			Reference thisReference = null;
+			while(references.hasNext()) {
+				Reference reference = (Reference)references.next();
+				if (reference.getReferenceDescription().getName().equals(name)) {
+					thisReference = reference;
+					break;
+				}
 			}
+			
+			if (thisReference != null) {
+				ServiceReference serviceReference;
+				//check to see if this reference is already bound
+				if (!thisReference.getServiceReferences().isEmpty()) {
+					//if possible, return reference we are already bound to
+					serviceReference = (ServiceReference)thisReference.getServiceReferences().get(0);
+				} else {
+					serviceReference = bundleContext.getServiceReference(
+							thisReference.getReferenceDescription().getInterfacename()
+							);
+				}
+				return main.resolver.instanceProcess.buildDispose.getService(
+						cdp,
+						thisReference,
+						bundleContext,
+						serviceReference
+						);
+			}
+
+			return null;
+
+		} catch (Exception e) {
+			throw new ComponentException(e.getMessage());
 		}
-		return null;
+
 	}
 
 	/**
@@ -164,37 +205,44 @@ public class ComponentContextImpl implements ComponentContext {
 	 *         exception while activating a target service.
 	 */
 	public Object[] locateServices(String name) throws ComponentException {
-
-		ReferenceDescription[] references = componentDescription.getReferences();
-
-		for (int i = 0; i < references.length; i++) {
-
-			String referenceName = references[i].getName();
-
-			if (referenceName.equals(name)) {
-
-				//get the interface name and target 
-				String interfaceName = references[i].getInterfacename();
-				String target = references[i].getTarget();
-
-				ServiceReference[] serviceReferences = null;
-				try {
-					serviceReferences = bundleContext.getServiceReferences(interfaceName, target);
-				} catch (Exception e) {
-					throw new ComponentException(e.getMessage());
+		try {
+			//find the Reference Description with the specified name
+			Iterator references = cdp.getReferences().iterator();
+			Reference thisReference = null;
+			while(references.hasNext()) {
+				Reference reference = (Reference)references.next();
+				if (reference.getReferenceDescription().getName().equals(name)) {
+					thisReference = reference;
+					break;
 				}
-
-				List serviceObjects = new ArrayList();
-
-				//Get the service object
-				for (int j = 0; j < serviceReferences.length; j++) {
-					serviceObjects.add(bundleContext.getService(serviceReferences[j]));
-				}
-
-				return serviceObjects.toArray();
 			}
+			
+			if (thisReference != null) {
+				ServiceReference [] serviceReferences = bundleContext.getServiceReferences(
+							thisReference.getReferenceDescription().getInterfacename(),
+							thisReference.getTarget()
+							);
+				List serviceObjects = new ArrayList(serviceReferences.length);
+				for (int counter = 0;counter < serviceReferences.length;counter++) {
+					Object serviceObject = main.resolver.instanceProcess.buildDispose.getService(
+						cdp,
+						thisReference,
+						bundleContext,
+						serviceReference
+						);
+					if (serviceObject != null) {
+						serviceObjects.add(serviceObject);
+					}
+				} //end for serviceReferences
+				if (!serviceObjects.isEmpty()) {
+					return serviceObjects.toArray();
+				} 
+			} 
+			return null;
+
+		} catch (Exception e) {
+			throw new ComponentException(e.getMessage());
 		}
-		return null;
 	}
 
 	/**
@@ -247,7 +295,16 @@ public class ComponentContextImpl implements ComponentContext {
 	 *        components in the bundle.
 	 */
 	public void enableComponent(String name) {
-		main.enableComponent(name, bundleContext.getBundle());
+		final String componentName = name;
+		
+		 AccessController.doPrivileged(new PrivilegedAction() {
+            public Object run() {
+                // privileged code goes here, for example:
+            	main.enableComponent(componentName, bundleContext.getBundle());
+                return null; // nothing to return
+            }
+        });
+		
 	}
 
 	/**
@@ -257,7 +314,16 @@ public class ComponentContextImpl implements ComponentContext {
 	 * @param name The name of a component.
 	 */
 	public void disableComponent(String name) {
-		main.disableComponent(name, bundleContext.getBundle());
+		
+		final String componentName = name;
+		
+		AccessController.doPrivileged(new PrivilegedAction() {
+            public Object run() {
+                // privileged code goes here, for example:
+            	main.disableComponent(componentName, bundleContext.getBundle());
+                return null; // nothing to return
+            }
+        });
 	}
 
 	/**
