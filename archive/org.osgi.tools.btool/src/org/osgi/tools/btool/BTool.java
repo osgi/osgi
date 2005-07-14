@@ -73,8 +73,11 @@ public class BTool extends Task {
 			if (!zipfile.exists())
 				archiveChanged = true;
 
+			if ( zipfile.lastModified() < modified ) {
+				archiveChanged = true;
+			}
+			trace("Zip name " + zipname + " " + archiveChanged + " " + new Date(modified) + " " + new Date(zipfile.lastModified()));
 			modified = zipfile.lastModified();
-			trace("Zip name " + zipname);
 			getManifest(); // Read manifest
 			getPermissions();
 			setClasspath(); // Create search path
@@ -91,7 +94,7 @@ public class BTool extends Task {
 			doIpa();
 			doProperties();
 
-			trace("Date of archive: " + modified);
+			trace("Date of archive: " + new Date(modified));
 			if (archiveChanged) {
 				openZip();
 				doMetaInf();
@@ -1090,5 +1093,9 @@ public class BTool extends Task {
 
 	public void setManifestVersion(int manifestVersion) {
 		this.manifestVersion = manifestVersion;
+	}
+
+	public void setModified(long modified) {
+		this.modified = modified;
 	}
 }
