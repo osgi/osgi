@@ -36,4 +36,10 @@ public interface ConditionalPermissionInfo {
 	 * ConditionalPermissionAdmin.
 	 */
 	void delete();
+	
+	/**
+	 * Return the name of this Conditional Permission Info object.
+	 * 
+	 */
+	String getName();
 }
