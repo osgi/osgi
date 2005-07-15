@@ -264,6 +264,8 @@ public class Activator extends Thread implements FrameworkListener,
 	 * Tests basic native code invocation.
 	 * 
 	 * @spec BundleContext.installBundle(String)
+	 * @spec Bundle.start()
+	 * @spec Bundle.uninstall()
 	 */
 	void testNativeCode() throws Exception {
 		Bundle tb;
@@ -297,6 +299,8 @@ public class Activator extends Thread implements FrameworkListener,
 	 * optional clause present (*).
 	 * 
 	 * @spec BundleContext.installBundle(String)
+	 * @spec Bundle.start()
+	 * @spec Bundle.uninstall()
 	 */
 	void testNativeCodeFilterOptional() throws Exception {
 		Bundle tb;
@@ -330,6 +334,8 @@ public class Activator extends Thread implements FrameworkListener,
 	 * optional clause present (*).
 	 * 
 	 * @spec BundleContext.installBundle(String)
+	 * @spec Bundle.start()
+	 * @spec Bundle.uninstall()
 	 */
 	void testNativeCodeFilterNoOptional() throws Exception {
 		Bundle tb;
@@ -362,6 +368,8 @@ public class Activator extends Thread implements FrameworkListener,
 	 * osname alias (win32) matches properly (OSGi R4).
 	 * 
 	 * @spec BundleContext.installBundle(String)
+	 * @spec Bundle.start()
+	 * @spec Bundle.uninstall()
 	 */
 	void testNativeCodeFilterAlias() throws Exception {
 		Bundle tb;
@@ -396,6 +404,8 @@ public class Activator extends Thread implements FrameworkListener,
 	 * loaded from a fragment bundle of the host bundle.
 	 * 
 	 * @spec BundleContext.installBundle(String)
+	 * @spec Bundle.start()
+	 * @spec Bundle.uninstall()
 	 */
 	void testNativeCodeFragment() throws Exception {
 		Bundle tb;
@@ -433,6 +443,8 @@ public class Activator extends Thread implements FrameworkListener,
 	 * clause present (*).
 	 * 
 	 * @spec BundleContext.installBundle(String)
+	 * @spec Bundle.start()
+	 * @spec Bundle.uninstall()
 	 */
 	void testNativeCodeLanguage() throws Exception {
 		Bundle tb;
@@ -466,6 +478,8 @@ public class Activator extends Thread implements FrameworkListener,
 	 *      language codes.
 	 *      
 	 * @spec BundleContext.installBundle(String)
+	 * @spec Bundle.start()
+	 * @spec Bundle.uninstall()
 	 */
 	void testNativeCodeLanguageSuccess() throws Exception {
 		Bundle tb;
@@ -498,6 +512,8 @@ public class Activator extends Thread implements FrameworkListener,
 	 * optional clause present (*).
 	 * 
 	 * @spec BundleContext.installBundle(String)
+	 * @spec Bundle.start()
+	 * @spec Bundle.uninstall()
 	 */
 	void testNativeCodeVersion() throws Exception {
 		Bundle tb;
@@ -527,6 +543,8 @@ public class Activator extends Thread implements FrameworkListener,
 	 * since the version range should contain all valid os versions.
 	 * 
 	 * @spec BundleContext.installBundle(String)
+	 * @spec Bundle.start()
+	 * @spec Bundle.uninstall()
 	 */
 	void testNativeCodeVersionSuccess() throws Exception {
 		Bundle tb;
