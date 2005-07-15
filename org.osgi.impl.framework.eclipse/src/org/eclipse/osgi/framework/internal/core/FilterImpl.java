@@ -13,6 +13,8 @@ package org.eclipse.osgi.framework.internal.core;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.Dictionary;
 import java.util.Vector;
 import org.eclipse.osgi.framework.debug.Debug;
@@ -1174,6 +1176,8 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 			return false;
 		}
 		try {
+			if (!constructor.isAccessible())
+				AccessController.doPrivileged(new SetAccessibleAction(constructor));
 			value2 = constructor.newInstance(new Object[] {((String) value2).trim()});
 		}
 		catch (IllegalAccessException e) {
@@ -1229,7 +1233,6 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 
 	protected boolean compare_Unknown(int operation, Object value1, Object value2) { //RFC 59
 		Constructor constructor;
-	
 		try {
 			constructor = value1.getClass().getConstructor(constructorType);
 		} 
@@ -1240,6 +1243,8 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 			return false;
 		}
 		try {
+			if (!constructor.isAccessible())
+				AccessController.doPrivileged(new SetAccessibleAction(constructor));
 			value2 = constructor.newInstance(new Object[] {((String) value2).trim()});
 		}
 		catch (IllegalAccessException e) {
@@ -1677,6 +1682,17 @@ public class FilterImpl implements Filter /* since Framework 1.1 */{
 			while ((pos < length) && Character.isWhitespace(filter[pos])) {
 				pos++;
 			}
+		}
+	}
+
+	static class SetAccessibleAction implements PrivilegedAction {
+		private Constructor constructor;
+		public SetAccessibleAction(Constructor constructor) {
+			this.constructor = constructor;
+		}
+		public Object run() {
+			constructor.setAccessible(true);
+			return null;
 		}
 	}
 }
