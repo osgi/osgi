@@ -28,10 +28,9 @@
 package org.osgi.test.cases.cm;
 
 import org.osgi.test.cases.util.*;
-/**
 
- *
- * TODO Add Javadoc comment for this type.
+/**
+ * Configuration Management test case.
  * 
  * @testcase org.osgi.service.cm
  * @version $Revision$
