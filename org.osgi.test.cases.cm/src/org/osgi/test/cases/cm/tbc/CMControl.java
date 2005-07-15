@@ -847,7 +847,9 @@ public class CMControl extends DefaultTestBundleControl {
 	 * try to register a <code>ConfigurationListener</code>. An exception
 	 * must be thrown.
 	 * 
-	 * @spec permissions
+	 * @spec BundleContext.installBundle(String)
+	 * @spec Bundle.start()
+	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 */
 	public void testConfigListenerPermission() throws Exception {
