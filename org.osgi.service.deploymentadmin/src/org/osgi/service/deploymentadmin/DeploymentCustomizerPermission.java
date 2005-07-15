@@ -12,10 +12,8 @@
 package org.osgi.service.deploymentadmin;
 
 import java.lang.reflect.Constructor;
-import java.security.AccessController;
-import java.security.Permission;
-import java.security.PermissionCollection;
-import java.security.PrivilegedAction;
+import java.lang.reflect.InvocationTargetException;
+import java.security.*;
 
 /**
  * The <code>DeploymentCustomizerPermission</code> permission gives the right to 
@@ -66,19 +64,27 @@ public class DeploymentCustomizerPermission extends Permission {
      * Resource Processor will have <code>FilePermission</code> with "read", "write" and "delete" 
      * actions for the returned {@link java.io.File} and its subdirectories.
      * @param name Symbolic name of the target bundle, must not be null.
-     * @param action Action string (only the "privatearea" action is valid), must not be null.
+     * @param actions Action string (only the "privatearea" action is valid), must not be null.
      * @throws IllegalArgumentException if the filter is invalid or the list of actions 
      *         contains unknown operations
      */
     public DeploymentCustomizerPermission(String name, String actions) {
         super(name);
-        try {
-            delegate = (Permission) constructor.newInstance(new Object[] {name, actions});
-        }
+		try {
+			try {
+	            delegate = (Permission) constructor.newInstance(new Object[] {name, actions});
+			}
+			catch (InvocationTargetException e) {
+				throw e.getTargetException();
+			}
+		}
+		catch (Error e) {
+			throw e;
+		}
 		catch (RuntimeException e) {
 			throw e;
 		}
-		catch (Exception e) {
+		catch (Throwable e) {
 			throw new RuntimeException(e.toString());
 		}
     }

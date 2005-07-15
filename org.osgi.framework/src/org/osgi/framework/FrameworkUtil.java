@@ -10,8 +10,7 @@
 
 package org.osgi.framework;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
@@ -26,6 +25,11 @@ import java.security.PrivilegedAction;
  * @since 1.3
  */
 public class FrameworkUtil {
+	/*
+	 * NOTE: A framework implementor may also choose to replace this
+	 * class in their distribution with a class that directly interfaces
+	 * with the framework implementation.
+	 */
 
 	/*
 	 * This class will load the FrameworkUtil class in the package named by the
@@ -90,23 +94,32 @@ public class FrameworkUtil {
 	 * 
 	 * @param filter The filter string.
 	 * @return A <code>Filter</code> object encapsulating the filter string.
-	 * @exception InvalidSyntaxException If <code>filter</code> contains an
+	 * @throws InvalidSyntaxException If <code>filter</code> contains an
 	 *            invalid filter string that cannot be parsed.
-	 * @exception NullPointerException If <code>filter</code> is null.
-	 * @exception java.lang.IllegalStateException If this BundleContext is no
-	 *            longer valid.
+	 * @throws NullPointerException If <code>filter</code> is null.
 	 * 
 	 * @see Filter
 	 */
 	public static Filter createFilter(String filter)
 			throws InvalidSyntaxException {
 		try {
-			return (Filter) createFilter.invoke(null, new Object[] {filter});
+			try {
+				return (Filter) createFilter.invoke(null, new Object[] {filter});
+			}
+			catch (InvocationTargetException e) {
+				throw e.getTargetException();
+			}
+		}
+		catch (InvalidSyntaxException e) {
+			throw e;
+		}
+		catch (Error e) {
+			throw e;
 		}
 		catch (RuntimeException e) {
 			throw e;
 		}
-		catch (Exception e) {
+		catch (Throwable e) {
 			throw new RuntimeException(e.toString());
 		}
 	}

@@ -10,8 +10,7 @@
 
 package org.osgi.service.condpermadmin;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
@@ -100,12 +99,20 @@ public class BundleSignerCondition {
 			throw new IllegalArgumentException("Illegal number of args: " + args.length);
 
 		try {
-			return (Condition) getCondition.invoke(null, new Object[] {bundle, info});
+			try {
+				return (Condition) getCondition.invoke(null, new Object[] {bundle, info});
+			}
+			catch (InvocationTargetException e) {
+				throw e.getTargetException();
+			}
+		}
+		catch (Error e) {
+			throw e;
 		}
 		catch (RuntimeException e) {
 			throw e;
 		}
-		catch (Exception e) {
+		catch (Throwable e) {
 			throw new RuntimeException(e.toString());
 		}
 	}

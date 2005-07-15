@@ -11,10 +11,8 @@
 package org.osgi.service.deploymentadmin;
 
 import java.lang.reflect.Constructor;
-import java.security.AccessController;
-import java.security.Permission;
-import java.security.PermissionCollection;
-import java.security.PrivilegedAction;
+import java.lang.reflect.InvocationTargetException;
+import java.security.*;
 
 /**
  * DeploymentAdminPermission controls access to MEG management framework functions.
@@ -113,19 +111,27 @@ public final class DeploymentAdminPermission extends Permission {
      * The <code>name</code> parameter identifies the target depolyment package the permission 
      * relates to. The <code>actions</code> parameter contains the comma separated list of allowed actions. 
      * @param name Target string, must not be null.
-     * @param action Action string, must not be null.
+     * @param actions Action string, must not be null.
      * @throws IllegalArgumentException if the filter is invalid, the list of actions 
      *         contains unknown operations or one of the parameters is null
      */
     public DeploymentAdminPermission(String name, String actions) {
         super(name);
-        try {
-            delegate = (Permission) constructor.newInstance(new Object[] {name, actions});
-        }
+		try {
+			try {
+	            delegate = (Permission) constructor.newInstance(new Object[] {name, actions});
+			}
+			catch (InvocationTargetException e) {
+				throw e.getTargetException();
+			}
+		}
+		catch (Error e) {
+			throw e;
+		}
 		catch (RuntimeException e) {
 			throw e;
 		}
-		catch (Exception e) {
+		catch (Throwable e) {
 			throw new RuntimeException(e.toString());
 		}
     }

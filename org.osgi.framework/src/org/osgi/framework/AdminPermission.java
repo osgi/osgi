@@ -11,6 +11,7 @@
 package org.osgi.framework;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.security.*;
 
 /**
@@ -92,11 +93,12 @@ public final class AdminPermission extends Permission {
 	 */
 	public final static String	STARTLEVEL	= "startlevel";
 
-	/**
-	 * This is the delegate permission created by the constructor.
+	/*
+	 * NOTE: A framework implementor may also choose to replace this
+	 * class in their distribution with a class that directly interfaces
+	 * with the framework implementation.
 	 */
-	private final Permission delegate;
-	
+
 	/*
 	 * This class will load the AdminPermission class in the package named by the
 	 * org.osgi.vendor.framework package. For each instance of this class, an
@@ -140,6 +142,11 @@ public final class AdminPermission extends Permission {
 		initStringString = constructors[0];		
 		initBundleString = constructors[1];
 	}
+	
+	/*
+	 * This is the delegate permission created by the constructor.
+	 */
+	private final Permission delegate;
 
 	/**
 	 * Creates a new <code>AdminPermission</code> object that matches 
@@ -167,12 +174,20 @@ public final class AdminPermission extends Permission {
 		//arguments will be null if called from a PermissionInfo defined with no args
 		super(filter == null ? "*" : filter);
 		try {
-			delegate = (Permission) initStringString.newInstance(new Object[] {filter, actions});
+			try {
+				delegate = (Permission) initStringString.newInstance(new Object[] {filter, actions});
+			}
+			catch (InvocationTargetException e) {
+				throw e.getTargetException();
+			}
+		}
+		catch (Error e) {
+			throw e;
 		}
 		catch (RuntimeException e) {
 			throw e;
 		}
-		catch (Exception e) {
+		catch (Throwable e) {
 			throw new RuntimeException(e.toString());
 		}
 	}
@@ -189,12 +204,20 @@ public final class AdminPermission extends Permission {
 	public AdminPermission(Bundle bundle, String actions) {
 		super(Long.toString(bundle.getBundleId()));
 		try {
-			delegate = (Permission) initBundleString.newInstance(new Object[] {bundle, actions});
+			try {
+				delegate = (Permission) initBundleString.newInstance(new Object[] {bundle, actions});
+			}
+			catch (InvocationTargetException e) {
+				throw e.getTargetException();
+			}
+		}
+		catch (Error e) {
+			throw e;
 		}
 		catch (RuntimeException e) {
 			throw e;
 		}
-		catch (Exception e) {
+		catch (Throwable e) {
 			throw new RuntimeException(e.toString());
 		}
 	}
