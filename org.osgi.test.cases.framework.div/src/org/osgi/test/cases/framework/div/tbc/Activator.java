@@ -261,7 +261,9 @@ public class Activator extends Thread implements FrameworkListener,
 	}
 
 	/**
-	 * Tests native code.
+	 * Tests basic native code invocation.
+	 * 
+	 * @spec BundleContext.installBundle(String)
 	 */
 	void testNativeCode() throws Exception {
 		Bundle tb;
@@ -293,6 +295,8 @@ public class Activator extends Thread implements FrameworkListener,
 	 * Tests native code selection filter. The bundle should be loaded even if
 	 * no native code clause matches the selection filter, since there's an
 	 * optional clause present (*).
+	 * 
+	 * @spec BundleContext.installBundle(String)
 	 */
 	void testNativeCodeFilterOptional() throws Exception {
 		Bundle tb;
@@ -324,6 +328,8 @@ public class Activator extends Thread implements FrameworkListener,
 	 * Tests native code selection filter. The bundle should NOT be loaded if no
 	 * native code clause matches the selection filter, since there's no
 	 * optional clause present (*).
+	 * 
+	 * @spec BundleContext.installBundle(String)
 	 */
 	void testNativeCodeFilterNoOptional() throws Exception {
 		Bundle tb;
@@ -354,6 +360,8 @@ public class Activator extends Thread implements FrameworkListener,
 	 * at least one native code clause matches the selection filter, since
 	 * there's no optional clause present (*). This test also checks if the new
 	 * osname alias (win32) matches properly (OSGi R4).
+	 * 
+	 * @spec BundleContext.installBundle(String)
 	 */
 	void testNativeCodeFilterAlias() throws Exception {
 		Bundle tb;
@@ -386,6 +394,8 @@ public class Activator extends Thread implements FrameworkListener,
 	/**
 	 * Tests native code from a fragment bundle. The native code should be
 	 * loaded from a fragment bundle of the host bundle.
+	 * 
+	 * @spec BundleContext.installBundle(String)
 	 */
 	void testNativeCodeFragment() throws Exception {
 		Bundle tb;
@@ -421,6 +431,8 @@ public class Activator extends Thread implements FrameworkListener,
 	 * Tests native code language filter. The bundle should NOT be loaded if no
 	 * native code clause matches the os language, since there's no optional
 	 * clause present (*).
+	 * 
+	 * @spec BundleContext.installBundle(String)
 	 */
 	void testNativeCodeLanguage() throws Exception {
 		Bundle tb;
@@ -452,6 +464,8 @@ public class Activator extends Thread implements FrameworkListener,
 	 * 
 	 * @see http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt for valid
 	 *      language codes.
+	 *      
+	 * @spec BundleContext.installBundle(String)
 	 */
 	void testNativeCodeLanguageSuccess() throws Exception {
 		Bundle tb;
@@ -482,6 +496,8 @@ public class Activator extends Thread implements FrameworkListener,
 	 * Tests native code os version. The bundle should NOT be loaded if no
 	 * native code clause matches the os version range, since there's no
 	 * optional clause present (*).
+	 * 
+	 * @spec BundleContext.installBundle(String)
 	 */
 	void testNativeCodeVersion() throws Exception {
 		Bundle tb;
@@ -509,6 +525,8 @@ public class Activator extends Thread implements FrameworkListener,
 	/**
 	 * Tests successful native code os version. The bundle should be loaded
 	 * since the version range should contain all valid os versions.
+	 * 
+	 * @spec BundleContext.installBundle(String)
 	 */
 	void testNativeCodeVersionSuccess() throws Exception {
 		Bundle tb;
