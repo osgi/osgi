@@ -19,30 +19,33 @@ package org.osgi.impl.service.policy.unittests;
 
 import java.security.AccessControlContext;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.TreeSet;
+
 import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
-public class DummyConditionalPermissionAdmin extends TreeSet implements
+public class DummyConditionalPermissionAdmin extends HashMap implements
 		ConditionalPermissionAdmin
 {
-	private static final long	serialVersionUID	= 3618422626792781876L;
+	private static final long	serialVersionUID	= 3618422626792781877L;
 
 
 
 	public class PI implements ConditionalPermissionInfo, Comparable {
+		String id;
 		ConditionInfo[] conditionInfo;
 		PermissionInfo[] permissionInfo;
 
-		public PI(ConditionInfo[] conditionInfo,PermissionInfo[] permissionInfo) {
+		public PI(String id,ConditionInfo[] conditionInfo,PermissionInfo[] permissionInfo) {
+			this.id = id;
 			this.conditionInfo = conditionInfo;
 			this.permissionInfo = permissionInfo;
 		}
 		public void delete() {
-			remove(this);
+			remove(id);
 		}
 		public ConditionInfo[] getConditionInfos() {
 			return conditionInfo;
@@ -67,18 +70,13 @@ public class DummyConditionalPermissionAdmin extends TreeSet implements
 			}
 			return sb.toString();
 		}
+		public String getName() {
+			return id;
+		}
 	}
 	
-	public ConditionalPermissionInfo addConditionalPermissionInfo(ConditionInfo[] conds, PermissionInfo[] perms) 
-	{
-		PI pi = new PI(conds,perms);
-		add(pi);
-		return pi;
-	}
-
 	public Enumeration getConditionalPermissionInfos() {
-		final Iterator iter = iterator();
-		
+		final Iterator iter = values().iterator();	
 		return new Enumeration() {
 			public boolean hasMoreElements() {
 				return iter.hasNext();
@@ -93,8 +91,20 @@ public class DummyConditionalPermissionAdmin extends TreeSet implements
 
 
 	public AccessControlContext getAccessControlContext(String[] signers) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new IllegalArgumentException();
 	}
 
+	public ConditionalPermissionInfo addConditionalPermissionInfo(ConditionInfo[] conds, PermissionInfo[] perms) {
+		throw new IllegalArgumentException();
+	}
+
+	public ConditionalPermissionInfo setConditionalPermissionInfo(String name, ConditionInfo[] conds, PermissionInfo[] perms) {
+		PI pi = new PI(name,conds,perms);
+		put(name,pi);
+		return pi;
+	}
+
+	public ConditionalPermissionInfo getConditionalPermissionInfo(String name) {
+		return getConditionalPermissionInfo(name);
+	}
 }

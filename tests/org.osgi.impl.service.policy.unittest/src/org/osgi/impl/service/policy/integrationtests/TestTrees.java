@@ -50,7 +50,6 @@ public class TestTrees extends IntegratedTest {
 
 	public static final String	ORG_OSGI_IMPL_SERVICE_POLICY_JAR	= "file:../../org.osgi.impl.service.policy/org.osgi.impl.service.policy.jar";
 	public static final String PRINCIPAL1 = "principal1";
-	public static final String PRINCIPAL1_HASH = "zDcCo9K+A67rtQI3TQEDg6_LEIw";
 	public DmtAdmin	dmtAdmin;
 	public Bundle	policyBundle;
 	
@@ -105,20 +104,20 @@ public class TestTrees extends IntegratedTest {
 
 		// check if it is there
 		session = dmtAdmin.getSession(dmtPrincipalPlugin_dataRootURI);
-		DmtData value = session.getNodeValue(PRINCIPAL1_HASH+"/Principal");
+		DmtData value = session.getNodeValue(PRINCIPAL1+"/Principal");
 		assertEquals(PRINCIPAL1,value.getString());
 		session.close();
 				
 		// try to read from the principal tree as "principal1"
 		session = dmtAdmin.getSession(PRINCIPAL1,dmtPrincipalPlugin_dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
-		value = session.getNodeValue(PRINCIPAL1_HASH+"/Principal");
+		value = session.getNodeValue(PRINCIPAL1+"/Principal");
 		assertEquals(PRINCIPAL1,value.getString());
 		session.close();
 
 		// try to read from the principal tree as "principal2", which does not have any rights
 		// TODO: as I understand it, this should fail. check with dmt impl
 		session = dmtAdmin.getSession("principal2",dmtPrincipalPlugin_dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
-		value = session.getNodeValue(PRINCIPAL1_HASH+"/Principal");
+		value = session.getNodeValue(PRINCIPAL1+"/Principal");
 		assertEquals(PRINCIPAL1,value.getString());
 		session.close();
 	
@@ -183,22 +182,22 @@ public class TestTrees extends IntegratedTest {
 		startFramework(true);
 		ConditionInfo cond1 =  new ConditionInfo(BundleSignerCondition.class.getName(),new String[] {"*"});
 		PermissionInfo perm1 = new PermissionInfo(AdminPermission.class.getName(),"*","*");
-		conditionalPermissionAdmin.addConditionalPermissionInfo(
+		conditionalPermissionAdmin.setConditionalPermissionInfo(
+				"foo",
 				new ConditionInfo[] { cond1 },
 				new PermissionInfo[] { perm1  }
 				);
-		String nameHash = "pOWUUF7ZBzn2HHOc26VuZdn3RWI";
 		
 		DmtSession session = dmtAdmin.getSession(conditionalPermissionAdminPlugin_dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
 
 		String names[] = session.getChildNodeNames(conditionalPermissionAdminPlugin_dataRootURI);
 		
-		String conditionInfo = session.getNodeValue(nameHash+"/ConditionInfo").getString();
+		String conditionInfo = session.getNodeValue("foo/ConditionInfo").getString();
 		assertEquals(cond1.getEncoded()+"\n",conditionInfo);
-		String permissionInfo = session.getNodeValue(nameHash+"/PermissionInfo").getString();
+		String permissionInfo = session.getNodeValue("foo/PermissionInfo").getString();
 		assertEquals(perm1.getEncoded()+"\n",permissionInfo);
 
-		session.deleteNode(nameHash);
+		session.deleteNode("foo");
 		session.close();
 		
 		// since we deleted it, conditions should be empty

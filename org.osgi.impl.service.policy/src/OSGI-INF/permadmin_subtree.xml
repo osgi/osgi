@@ -8,4 +8,6 @@
 	</service>
 	<reference name="permissionAdmin"
 		interface="org.osgi.service.permissionadmin.PermissionAdmin"/>
+	<reference name="dmtAdmin"
+		interface="org.osgi.service.dmt.DmtAdmin"/>
 </scr:component>

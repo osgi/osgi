@@ -156,7 +156,7 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 			String p =  (String) e.getKey();
 			PermissionInfo[] pi = (PermissionInfo[]) e.getValue();
 			pi = (PermissionInfo[]) pi.clone();
-			currentState.put(hashCalculator.getHash(p),new PrincipalPermission(p,pi));
+			currentState.put(mangle(p),new PrincipalPermission(p,pi));
 		}
 	}
 

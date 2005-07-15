@@ -22,17 +22,17 @@ import org.osgi.service.dmt.DmtMetaNode;
 
 /**
  *
- * Meta node for ConditionInfo.
+ * Meta node for Name.
  * 
  * @version $Revision$
  */
-public final class ConditionInfoMetaNode implements DmtMetaNode {
-	public static final String CONDITIONINFO = "ConditionInfo";
-	public static final String[] CONDITIONINFO_ARRAY = new String[] { CONDITIONINFO };
+public final class NameMetaNode implements DmtMetaNode {
+	public static final String NAME = "Name";
+	public static final String[] NAME_ARRAY = new String[] { NAME };
 	public boolean can(int operation) { return (operation==CMD_GET)||(operation==CMD_REPLACE); }
 	public boolean isLeaf() { return true;	}
 	public int getScope() { return DYNAMIC; }
-	public String getDescription() { return "Condition Info array"; }
+	public String getDescription() { return "Name of the ConditionPermission"; }
 	public int getMaxOccurrence() {	return 1; }
 	public boolean isZeroOccurrenceAllowed() { return false; }
 	public DmtData getDefault() { return null; }
@@ -44,10 +44,7 @@ public final class ConditionInfoMetaNode implements DmtMetaNode {
 	public String getReferredURI() { return null; }
 	public String[] getDependentURIs() { return null; }
 	public String[] getChildURIs() { return null; }
-	public String[] getValidNames() { return CONDITIONINFO_ARRAY; }
-	public boolean isValidValue(DmtData value) {
-		// TODO
-		return true;
-	}
-	public boolean isValidName(String name) { return CONDITIONINFO.equals(name); }
+	public String[] getValidNames() { return NAME_ARRAY; }
+	public boolean isValidValue(DmtData value) { return true; }
+	public boolean isValidName(String name) { return NAME.equals(name); }
 }

@@ -17,11 +17,11 @@
  */
 package org.osgi.impl.service.policy;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
-import org.osgi.impl.service.policy.util.HashCalculator;
+
 import org.osgi.impl.service.policy.util.Splitter;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.dmt.DmtException;
@@ -50,16 +50,17 @@ public abstract class AbstractPolicyPlugin implements DmtDataPlugin {
 	boolean atomic;
 	
 	/**
-	 * utility for calculating hashes
+	 * the dmt admin, needed for the mangle function
 	 */
-	protected final HashCalculator hashCalculator;
+	private DmtAdmin dmtAdmin;
 	
-	public AbstractPolicyPlugin() throws NoSuchAlgorithmException {
-		hashCalculator = new HashCalculator();
-	}
-
 	protected void activate(ComponentContext context) {
 		ROOT = (String) context.getProperties().get("dataRootURIs");
+		dmtAdmin = (DmtAdmin) context.locateService("dmtAdmin");
+	}
+	
+	public final String mangle(String nodename) {
+		return dmtAdmin.mangle(null,nodename);
 	}
 	
 	public void open(String subtreeUri, int lockMode, DmtSession session)

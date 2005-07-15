@@ -22,6 +22,7 @@ import org.osgi.framework.AdminPermission;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.impl.service.policy.condpermadmin.ConditionalPermissionAdminPlugin;
+import org.osgi.impl.service.policy.unittests.DummyConditionalPermissionAdmin.PI;
 import org.osgi.impl.service.policy.unittests.util.DmtPluginTestCase;
 import org.osgi.service.condpermadmin.BundleLocationCondition;
 import org.osgi.service.condpermadmin.ConditionInfo;
@@ -34,12 +35,6 @@ import org.osgi.service.http.HttpService;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.util.gsm.IMEICondition;
 
-/**
- *
- * TODO Add Javadoc comment for this type.
- * 
- * @version $Revision$
- */
 public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 	
 	/**
@@ -78,7 +73,6 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 	/*
 	 * This is the example written in the policy RFC.
 	 */
-	public static final String RFC_EXAMPLE_HASH = "WovYXjHL_EgRTOVWHgipOk82tt8";
 	public static final ConditionInfo[] RFC_EXAMPLE_COND = new ConditionInfo[] {LOC1CONDITION};
 	public static final String RFC_EXAMPLE_COND_STR = RFC_EXAMPLE_COND[0].getEncoded()+"\n";
 	public static final PermissionInfo[] RFC_EXAMPLE_PERM = new PermissionInfo[] {HTTPREGISTERPERMISSION,OSGIIMPORTPERMISSION};
@@ -136,97 +130,89 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 		assertNotNull(mn);
 		assertEquals(false,mn.can(DmtMetaNode.CMD_DELETE));
 	}
-	
-	public void testRFCHashExample() throws Exception {
-		condPermAdmin.addConditionalPermissionInfo(RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
-		newSession();
-		DmtData pis = dmtSession.getNodeValue(RFC_EXAMPLE_HASH+"/PermissionInfo");
-		assertEquals(RFC_EXAMPLE_PERM_STR,pis.getString());
-		DmtData cis = dmtSession.getNodeValue(RFC_EXAMPLE_HASH+"/ConditionInfo");
-		assertEquals(RFC_EXAMPLE_COND_STR,cis.getString());
-	}
-	
+		
 	public void testListings() throws Exception {
-		condPermAdmin.addConditionalPermissionInfo(RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
+		condPermAdmin.setConditionalPermissionInfo("rfc",RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
 		newSession();
 		String ch[] = dmtSession.getChildNodeNames(ROOT);
 		assertEquals(1,ch.length);
-		assertEquals(RFC_EXAMPLE_HASH,ch[0]);
-		ch = dmtSession.getChildNodeNames(RFC_EXAMPLE_HASH);
+		assertEquals("rfc",ch[0]);
+		ch = dmtSession.getChildNodeNames("rfc");
 		Arrays.sort(ch);
-		assertEquals(2,ch.length);
+		assertEquals(3,ch.length);
 		assertEquals("ConditionInfo",ch[0]);
-		assertEquals("PermissionInfo",ch[1]);
+		assertEquals("Name",ch[1]);
+		assertEquals("PermissionInfo",ch[2]);
 	}
 
 	public void testDelete() throws Exception {
-		condPermAdmin.addConditionalPermissionInfo(RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
+		condPermAdmin.setConditionalPermissionInfo("rfc",RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
 		newAtomicSession();
-		dmtSession.deleteNode(RFC_EXAMPLE_HASH);
+		dmtSession.deleteNode("rfc");
 		dmtSession.close();
 		assertEquals(0,condPermAdmin.size());
 	}
 	
 	public void testAdd() throws Exception {
-		DummyConditionalPermissionAdmin.PI cp1 = condPermAdmin.new PI(CP1_COND,CP1_PERM);
-		assertFalse(condPermAdmin.contains(cp1));
+		assertFalse(condPermAdmin.containsKey("1"));
 		newAtomicSession();
 		dmtSession.createInteriorNode("1");
+		dmtSession.setNodeValue("1/Name",new DmtData("1"));;
 		dmtSession.setNodeValue("1/PermissionInfo",new DmtData(CP1_PERM_STR));
 		dmtSession.setNodeValue("1/ConditionInfo",new DmtData(CP1_COND_STR));
 		dmtSession.close();
-		assertTrue(condPermAdmin.contains(cp1));
+		assertTrue(condPermAdmin.containsKey("1"));
 	}
 	
 	public void testAddAndDelete() throws Exception {
 		// we add one, and delete an other one
-		DummyConditionalPermissionAdmin.PI cp1 = condPermAdmin.new PI(CP1_COND,CP1_PERM);
-		ConditionalPermissionInfo rfc = condPermAdmin.addConditionalPermissionInfo(RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
-		assertFalse(condPermAdmin.contains(cp1));
-		assertTrue(condPermAdmin.contains(rfc));
+		ConditionalPermissionInfo rfc = condPermAdmin.setConditionalPermissionInfo("rfc",RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
+		assertFalse(condPermAdmin.containsKey("1"));
+		assertFalse(condPermAdmin.containsKey("rfc"));
 		newAtomicSession();
 		dmtSession.createInteriorNode("1");
+		dmtSession.setNodeValue("1/Name",new DmtData("1"));
 		dmtSession.setNodeValue("1/PermissionInfo",new DmtData(CP1_PERM_STR));
 		dmtSession.setNodeValue("1/ConditionInfo",new DmtData(CP1_COND_STR));
-		dmtSession.deleteNode(RFC_EXAMPLE_HASH);
+		dmtSession.deleteNode("rfc");
 		dmtSession.close();
-		assertTrue(condPermAdmin.contains(cp1));
-		assertFalse(condPermAdmin.contains(rfc));
+		assertTrue(condPermAdmin.containsKey("1"));
+		assertFalse(condPermAdmin.containsKey("rfc"));
 	}
 	
 	public void testDeleteOneFromTwo() throws Exception {
 		// have two conditionalpermissions, delete one of them
-		ConditionalPermissionInfo cp1 = condPermAdmin.addConditionalPermissionInfo(CP1_COND,CP1_PERM);
-		ConditionalPermissionInfo rfc = condPermAdmin.addConditionalPermissionInfo(RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
-		assertTrue(condPermAdmin.contains(cp1));
-		assertTrue(condPermAdmin.contains(rfc));
+		ConditionalPermissionInfo cp1 = condPermAdmin.setConditionalPermissionInfo("cp1",CP1_COND,CP1_PERM);
+		ConditionalPermissionInfo rfc = condPermAdmin.setConditionalPermissionInfo("rfc",RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
+		assertTrue(condPermAdmin.containsKey("cp1"));
+		assertTrue(condPermAdmin.containsKey("rfc"));
 		newAtomicSession();
-		dmtSession.deleteNode(RFC_EXAMPLE_HASH);
+		dmtSession.deleteNode("rfc");
 		dmtSession.close();
-		assertTrue(condPermAdmin.contains(cp1));
-		assertFalse(condPermAdmin.contains(rfc));
+		assertTrue(condPermAdmin.containsKey("cp1"));
+		assertFalse(condPermAdmin.containsKey("rfc"));
 	}
 
 	public void modifyPermissionInfo() throws Exception {
 		// replace the permission infos in the RFC example with something else
-		ConditionalPermissionInfo expected_target = condPermAdmin.new PI(RFC_EXAMPLE_COND,CP1_PERM);
-		ConditionalPermissionInfo rfc = condPermAdmin.addConditionalPermissionInfo(RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
-		assertFalse(condPermAdmin.contains(expected_target));
-		assertTrue(condPermAdmin.contains(rfc));
+		ConditionalPermissionInfo rfc = condPermAdmin.setConditionalPermissionInfo("1",RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
+		assertTrue(condPermAdmin.containsKey("1"));
 		newAtomicSession();
-		dmtSession.setNodeValue(RFC_EXAMPLE_HASH+"/PermissionInfo",new DmtData(CP1_PERM_STR));
+		dmtSession.setNodeValue("1/PermissionInfo",new DmtData(CP1_PERM_STR));
 		dmtSession.close();
-		assertTrue(condPermAdmin.contains(expected_target));
-		assertFalse(condPermAdmin.contains(rfc));
+		assertTrue(condPermAdmin.containsKey("1"));
+		PI pi = (PI) condPermAdmin.get("1");
+		assertEquals(pi.permissionInfo.length,CP1_PERM.length);
+		for(int i=0;i<pi.permissionInfo.length;i++) assertEquals(pi.permissionInfo[i],CP1_PERM[i]);
 	}
 	
 	public void testRollBack() throws Exception {
-		ConditionalPermissionInfo rfc = condPermAdmin.addConditionalPermissionInfo(RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
-		assertTrue(condPermAdmin.contains(rfc));
+		ConditionalPermissionInfo rfc = condPermAdmin.setConditionalPermissionInfo("1",RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
+		assertTrue(condPermAdmin.containsKey("1"));
 		newAtomicSession();
-		dmtSession.deleteNode(RFC_EXAMPLE_HASH);
+		dmtSession.deleteNode("1");
 		dmtSession.rollback();
-		assertTrue(condPermAdmin.contains(rfc));
+		assertTrue(condPermAdmin.containsKey("1"));
 	}
 	
 	public void testNonAtomicWrite() throws Exception {

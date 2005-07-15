@@ -8,4 +8,6 @@
 	</service>
 	<reference name="condPermAdmin"
 		interface="org.osgi.service.condpermadmin.ConditionalPermissionAdmin"/>
+	<reference name="dmtAdmin"
+		interface="org.osgi.service.dmt.DmtAdmin"/>
 </scr:component>

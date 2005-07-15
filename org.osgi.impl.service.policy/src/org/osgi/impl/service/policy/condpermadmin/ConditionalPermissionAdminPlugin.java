@@ -17,10 +17,7 @@
  */
 package org.osgi.impl.service.policy.condpermadmin;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -28,6 +25,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
+
 import org.osgi.impl.service.policy.AbstractPolicyPlugin;
 import org.osgi.impl.service.policy.PermissionInfoMetaNode;
 import org.osgi.impl.service.policy.RootMetaNode;
@@ -55,58 +54,68 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 	
 	private static final String	PERMISSIONINFO	= PermissionInfoMetaNode.PERMISSIONINFO;
 	private static final String CONDITIONINFO = ConditionInfoMetaNode.CONDITIONINFO;
+	private static final String NAME = NameMetaNode.NAME;
 
 	/**
 	 * the conditional permission admin to communicate with
 	 */
 	private ConditionalPermissionAdmin	condPermAdmin;
-
+	
 	/**
 	 * a map of String->ConditionalPermission, where the key is the hash as seen in the tree
 	 */
 	private Map conditionalPermissions;
 	
 	/**
-	 * metanode given back when asked about ./OSGi/Policies/Java/ConditionalPermission
+	 * metanode given back when asked about ./OSGi/Policy/Java/ConditionalPermission
 	 */
 	private static final DmtMetaNode rootMetaNode = new RootMetaNode("permissions specified by conditions");
 
 	/**
-	 * metanode given back when asked about ./OSGi/Policies/Java/ConditionalPermission/[...]/PermissionInfo
+	 * metanode given back when asked about ./OSGi/Policy/Java/ConditionalPermission/[...]/PermissionInfo
 	 */
 	private static final DmtMetaNode permissionInfoMetaNode = new PermissionInfoMetaNode();
 	
 	/**
-	 * metanode given back when asked about ./OSGi/Policies/Java/ConditionalPermission/[...]/ConditionInfo
+	 * metanode given back when asked about ./OSGi/Policy//Java/ConditionalPermission/[...]/ConditionInfo
 	 */
 	private static final DmtMetaNode conditionInfoMetaNode = new ConditionInfoMetaNode();
 
 	/**
-	 * metanode given back when asked about ./OSGi/Policies/Java/ConditionalPermission/[...]
+	 * metanode given back when asked about ./OSGi/Policy/Java/ConditionalPermission/[...]
 	 */
 	private static final DmtMetaNode conditionalPermissionMetaNode = new ConditionalPermissionMetaNode();
+
+	/**
+	 * metanode given back when asked about ./OSGi/Policy/Java/ConditionalPermission/[...]/Name
+	 */
+	private static final DmtMetaNode nameMetaNode = new NameMetaNode();
 
 	/**
 	 * internal representation of a conditional permission
 	 */
 	private static class ConditionalPermission {
+		public String name;
 		public ConditionInfo[] conditionInfo;
 		public PermissionInfo[] permissionInfo;
 		
-		public ConditionalPermission(ConditionInfo[] conditionInfo,PermissionInfo permissionInfo[]) {
+		public ConditionalPermission(String name,ConditionInfo[] conditionInfo,PermissionInfo permissionInfo[]) {
+			this.name = name;
 			this.conditionInfo = conditionInfo;
 			this.permissionInfo = permissionInfo;
 		}
 
 		public ConditionalPermission() {
+			name = "";
 			conditionInfo = new ConditionInfo[0];
 			permissionInfo = new PermissionInfo[0];
-			
-			
 		}
 
 		public DmtData getNodeValue(String nodeName) {
 			// note: nodeName is already checked here
+			if (nodeName.equals(NAME)) {
+				return new DmtData(name);
+			}
 			if (nodeName.equals(PERMISSIONINFO)) {
 				StringBuffer sb = new StringBuffer();
 				for(int i=0;i<permissionInfo.length;i++) {
@@ -124,32 +133,10 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 			}
 		}
 		
-		
-		public boolean equals(Object obj) {
-			if (obj==this) return true;
-			ConditionalPermission o = (ConditionalPermission)obj;
-			return equals(o.permissionInfo,o.conditionInfo);
-		}
-		
-		public boolean equals(PermissionInfo pi[],ConditionInfo ci[]) {
-			if (conditionInfo.length!=ci.length) return false;
-			if (permissionInfo.length!=pi.length) return false;
-			for(int i=0;i<permissionInfo.length;i++) {
-				if (!permissionInfo[i].equals(pi[i])) return false;
-			}
-			for(int i=0;i<conditionInfo.length;i++) {
-				if (!conditionInfo[i].equals(ci[i])) return false;
-			}
-			return true;
-			
-		}
-		
-		
-		public int hashCode() {
-			return 0; // TODO
-		}
-
 		public void setNodeValue(String nodeName, DmtData data) throws DmtException {
+			if (nodeName.equals(NAME)) {
+				name=data.getString();
+			}
 			if (nodeName.equals(PERMISSIONINFO)) {
 				String[] strs = Splitter.split(data.getString(),'\n',0);
 				PermissionInfo[] pis = new PermissionInfo[strs.length];
@@ -166,6 +153,7 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 				conditionInfo = cis;
 			}
 		}
+
 	}
 
 	/**
@@ -178,9 +166,7 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 	 */
 	private static final Comparator conditionInfoComparator = new ConditionInfoComparator();
 	
-	
-	public ConditionalPermissionAdminPlugin() throws NoSuchAlgorithmException {}
-	
+		
 	protected void activate(ComponentContext context) {
 		super.activate(context);
 		condPermAdmin = (ConditionalPermissionAdmin) context.locateService("condPermAdmin");
@@ -195,27 +181,8 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 		for(Enumeration en = condPermAdmin.getConditionalPermissionInfos(); en.hasMoreElements();) {
 			ConditionalPermissionInfo e = (ConditionalPermissionInfo)en.nextElement();
 
-			// calculate hash
-			ConditionInfo[] conditionInfo = (ConditionInfo[]) e.getConditionInfos().clone();
-			PermissionInfo[] permissionInfo = (PermissionInfo[]) e.getPermissionInfos().clone();
-			Arrays.sort(conditionInfo,conditionInfoComparator);
-			Arrays.sort(permissionInfo,permissionInfoComparator);
-			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < permissionInfo.length; i++) {
-				PermissionInfo info = permissionInfo[i];
-				sb.append(info.getEncoded());
-				sb.append('\n');
-			}
-			for (int i = 0; i < conditionInfo.length; i++) {
-				ConditionInfo info = conditionInfo[i];
-				sb.append(info.getEncoded());
-				sb.append('\n');
-			}
-			
-			// add to tree
-			String hash = hashCalculator.getHash(sb.toString());
-			conditionalPermissions.put(hash,
-					new ConditionalPermission(e.getConditionInfos(),e.getPermissionInfos()));
+			conditionalPermissions.put(mangle(e.getName()),
+					new ConditionalPermission(e.getName(),e.getConditionInfos(),e.getPermissionInfos()));
 		}
 	}
 
@@ -229,10 +196,11 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 			return conditionalPermissionMetaNode;
 		}
 		if (path.length==2) {
+			if (path[1].equals(NAME)) return nameMetaNode;
 			if (path[1].equals(PERMISSIONINFO)) return permissionInfoMetaNode;
 			if (path[1].equals(CONDITIONINFO)) return conditionInfoMetaNode;
 			throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,
-					"Must be eitner "+PERMISSIONINFO+" or "+CONDITIONINFO);
+					"Must be either "+PERMISSIONINFO+" or "+CONDITIONINFO);
 		}
 		
 		throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,"");
@@ -276,11 +244,12 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 		
 		// find out which to delete, which to add
 		Enumeration originals = condPermAdmin.getConditionalPermissionInfos();
-		Collection toAdd = conditionalPermissions.values();
+		TreeSet toAdd = new TreeSet();
+		toAdd.addAll(conditionalPermissions.values());
 		List toDelete = new ArrayList();
 		while(originals.hasMoreElements()) {
 			ConditionalPermissionInfo cpi = (ConditionalPermissionInfo) originals.nextElement();
-			ConditionalPermission cp = new ConditionalPermission(cpi.getConditionInfos(),cpi.getPermissionInfos());
+			ConditionalPermission cp = new ConditionalPermission(cpi.getName(),cpi.getConditionInfos(),cpi.getPermissionInfos());
 
 			if (toAdd.contains(cp)) {
 				// it is already in the system, don't do anything with it
@@ -312,6 +281,7 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 		if (cp==null) return false;
 		if (path.length==1) return true;
 		if (path.length!=2) return false;
+		if (path[1].equals(NAME)) return true;
 		if (path[1].equals(PERMISSIONINFO)) return true;
 		if (path[1].equals(CONDITIONINFO)) return true;
 		return false;
@@ -340,7 +310,7 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 			String children[] = new String[hashes.size()];
 			return (String[]) hashes.toArray(children);
 		} else {
-			return new String[] { PERMISSIONINFO, CONDITIONINFO };
+			return new String[] { NAME,PERMISSIONINFO, CONDITIONINFO };
 		}
 	}
 

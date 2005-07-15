@@ -169,7 +169,7 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 			location = locations[i];
 			permissionInfo = permissionAdmin.getPermissions(location);
 			Entry e = new Entry(location,permissionInfo);
-			locationEntries.put(hashCalculator.getHash(e.location),e);
+			locationEntries.put(mangle(e.location),e);
 		}
 		defaultPermissions = permissionAdmin.getDefaultPermissions();
 	}
