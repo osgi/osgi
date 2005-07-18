@@ -61,6 +61,8 @@ public class ConditionalPermissions extends PermissionCollection {
 
 	void checkConditionalPermissionInfo(ConditionalPermissionInfoImpl cpi) {
 		try {
+			// first remove the cpi incase of an update
+			removeCPI(cpi);
 			Condition conds[] = cpi.getConditions(bundle);
 			if (conds == null) {
 				/* Couldn't process the conditions, so we can't use them */
@@ -89,6 +91,15 @@ public class ConditionalPermissions extends PermissionCollection {
 		} catch (Exception e) {
 			bundle.framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, e);
 		}
+	}
+
+	private void removeCPI(ConditionalPermissionInfoImpl cpi) {
+		satisfiedCPIs.remove(cpi);
+		satisfiedCPS.remove(cpi);
+		ConditionalPermissionSet cpsArray[] = (ConditionalPermissionSet[]) satisfiableCPSs.toArray(new ConditionalPermissionSet[0]);
+		for (int i = 0; i < cpsArray.length; i++)
+			if (cpsArray[i].remove(cpi))
+				satisfiableCPSs.remove(cpsArray[i]);
 	}
 
 	/**

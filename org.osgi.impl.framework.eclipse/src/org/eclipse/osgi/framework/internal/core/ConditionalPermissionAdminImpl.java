@@ -60,12 +60,13 @@ public class ConditionalPermissionAdminImpl implements ConditionalPermissionAdmi
 			sm.checkPermission(new AllPermission());
 		if (name == null)
 			name = "generated_" + Long.toString(System.currentTimeMillis()); //$NON-NLS-1$
-		ConditionalPermissionInfoImpl condPermInfo = new ConditionalPermissionInfoImpl(name, conds, perms);
+		ConditionalPermissionInfoImpl condPermInfo = null;
 		synchronized (condPerms) {
-			ConditionalPermissionInfoImpl existing = (ConditionalPermissionInfoImpl) getConditionalPermissionInfo(condPermInfo.getName());
-			if (existing != null) // do not call existing.delete() to avoid multiple saves
-				existing.deleted = true;
-			condPerms.add(condPermInfo);
+			condPermInfo = (ConditionalPermissionInfoImpl) getConditionalPermissionInfo(name);
+			if (condPermInfo == null) {
+				condPermInfo = new ConditionalPermissionInfoImpl(name, conds, perms);
+				condPerms.add(condPermInfo);
+			}
 			saveCondPermInfos();
 		}
 		AbstractBundle bundles[] = framework.getAllBundles();

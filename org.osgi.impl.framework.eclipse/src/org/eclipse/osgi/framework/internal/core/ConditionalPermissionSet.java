@@ -57,9 +57,15 @@ public class ConditionalPermissionSet extends PermissionCollection {
 	 *        immutable and satisfied may be added. </b>
 	 */
 	void addConditionalPermissionInfo(ConditionalPermissionInfoImpl cpi) {
-		if (neededConditions.length > 0) {
+		if (neededConditions.length > 0)
 			throw new RuntimeException("Cannot add ConditionalPermissionInfoImpl to a non satisfied set");
-		}
+		// first look for a null slot
+		for (int i = 0; i < cpis.length; i++)
+			if (cpis[i] == null) { // found an empty slot; use it
+				cpis[i] = cpi;
+				cachedPermissionCollections.clear();
+				return;
+			}
 		ConditionalPermissionInfoImpl newcpis[] = new ConditionalPermissionInfoImpl[cpis.length + 1];
 		System.arraycopy(cpis, 0, newcpis, 0, cpis.length);
 		newcpis[cpis.length] = cpi;
@@ -230,5 +236,15 @@ public class ConditionalPermissionSet extends PermissionCollection {
 	void unresolvePermissions(AbstractBundle[] refreshedBundles) {
 		cachedPermissionCollections.clear();
 
+	}
+
+	boolean remove(ConditionalPermissionInfoImpl cpi) {
+		for (int i = 0; i < cpis.length; i++)
+			if (cpis[i] == cpi) {
+				cpis[i] = null;
+				cachedPermissionCollections.clear();
+				return true;
+			}
+		return false;
 	}
 }
