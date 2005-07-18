@@ -345,7 +345,7 @@ public final class ConfigurationPermission extends Permission {
 				(bundle == p.bundle) &&
 				(pid == null ? p.pid == null : pid.equals(p.pid)) &&
 				(f_pid == null ? p.f_pid == null : f_pid.equals(p.f_pid)) &&
-				(filter == null ? p.filter == null	: filter.equals(filter)));
+				(filter == null ? p.filter == null	: filter.equals(p.filter)));
 	}
 
 	/**
