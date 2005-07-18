@@ -275,5 +275,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
         return (File[]) ret.toArray(new File[] {});
     }
 
+    public void nodeChanged(String nodeUri) throws DmtException {
+    }
 
 }

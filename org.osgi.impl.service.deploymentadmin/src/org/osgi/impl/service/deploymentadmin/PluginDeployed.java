@@ -522,4 +522,7 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin {
         return signers;
     }
 
+    public void nodeChanged(String nodeUri) throws DmtException {
+    }
+
 }
