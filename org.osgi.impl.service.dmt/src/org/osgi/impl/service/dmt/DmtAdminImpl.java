@@ -38,7 +38,7 @@ public class DmtAdminImpl implements DmtAdmin {
     // the smallest valid value for the URI segment length limit
     public static final int MINIMAL_SEGMENT_LENGTH_LIMIT = 32;
 
-    // timeout after 10 seconds, to make testing easier 
+    // session initiation timeout after 10 seconds, to make testing easier 
     public static final long TIMEOUT = 10000; 
     
     // contains the maximum length of node names or 0 if there is no limit
