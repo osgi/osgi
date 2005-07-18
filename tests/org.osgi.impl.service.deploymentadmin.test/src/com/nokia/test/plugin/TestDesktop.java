@@ -54,6 +54,7 @@ public class TestDesktop extends Frame implements ActionListener {
     private static final String GET_META_NODE        = "getMetaNode";
     private static final String GET_CHILD_NODE_NAMES = "getChildNodeNames";
     private static final String CREATE_INT_NODE      = "createInteriorNode";
+    private static final String DELETE_NODE          = "DeleteNode";
     private static final String SET_NODE_VALUE       = "setNodeValue";
     private static final String GET_NODE_VALUE       = "getNodeValue";
     private static final String EXECUTE              = "execute";
@@ -68,6 +69,7 @@ public class TestDesktop extends Frame implements ActionListener {
     private Button b_getMetaNode = new Button(GET_META_NODE);
     private Button b_getChildNodeNames = new Button(GET_CHILD_NODE_NAMES);
     private Button b_createInteriorNode = new Button(CREATE_INT_NODE);
+    private Button b_deleteNode = new Button(DELETE_NODE);
     private Button b_setNodeValue = new Button(SET_NODE_VALUE);
     private Button b_getNodeValue = new Button(GET_NODE_VALUE);
     private Button b_execute = new Button(EXECUTE);
@@ -80,7 +82,9 @@ public class TestDesktop extends Frame implements ActionListener {
     
     private DmtAdmin admin;
     private DmtSession session;
+    
     private String lastCommand;
+    private String lastValue;
     
     public TestDesktop(DmtAdmin admin) throws Exception {
         this.admin = admin;
@@ -127,6 +131,10 @@ public class TestDesktop extends Frame implements ActionListener {
         b_createInteriorNode.addActionListener(this);
         pa_left.add(b_createInteriorNode);
         
+        b_deleteNode.setActionCommand(DELETE_NODE);
+        b_deleteNode.addActionListener(this);
+        pa_left.add(b_deleteNode);
+        
         b_setNodeValue.setActionCommand(SET_NODE_VALUE);
         b_setNodeValue.addActionListener(this);
         pa_left.add(b_setNodeValue);
@@ -160,14 +168,14 @@ public class TestDesktop extends Frame implements ActionListener {
 
     public void actionPerformed(ActionEvent ae) {
         try {
-            action(ae.getActionCommand(), tf_uri.getText());
+            action(ae.getActionCommand(), tf_uri.getText(), null);
         }
         catch (Exception e) {
             e.printStackTrace();
         }
     }
     
-    public String action(String acc, String uri) throws Exception {
+    public String action(String acc, String uri, String value) throws Exception {
         String res = null; 
         
         if (IS_NODE_URI.equals(acc)) {
@@ -183,9 +191,18 @@ public class TestDesktop extends Frame implements ActionListener {
         } else if (CREATE_INT_NODE.equals(acc)){
         	lastCommand = acc;
         	session.createInteriorNode(uri);
+        } else if (DELETE_NODE.equals(acc)) {
+            lastCommand = acc;
+            session.deleteNode(uri);
         } else if (SET_NODE_VALUE.equals(acc)){
         	lastCommand = acc;
-        	String text = JOptionPane.showInputDialog(this, "");
+            String text;
+            if (null != value)
+                text = value;
+            else {
+                text = JOptionPane.showInputDialog(this, "");
+                lastValue = text;
+            }
         	DmtData data = new DmtData(text);
         	session.setNodeValue(uri, data);
         } else if (GET_NODE_VALUE.equals(acc)) {
@@ -205,10 +222,15 @@ public class TestDesktop extends Frame implements ActionListener {
                 f.createNewFile();
             PrintWriter pw = new PrintWriter(new FileWriter(f, true));
             String neg = "" + cb_negativeTest.getState();
-            pw.println(uri + "\t" + lastCommand + "\t" + tf_result.getText() + 
+            pw.print(uri + "\t" + lastCommand + "\t" + tf_result.getText() + 
                     "\t" + neg);
+            if ("setNodeValue".equals(lastCommand))
+                pw.println("\t" + lastValue);
+            else
+                pw.println();
             pw.close(); // TODO finally etc.
             lastCommand = null;
+            lastValue = null;
         } else if (RUN_TESTS.equals(acc)) {
             runTests();
         }
@@ -235,23 +257,27 @@ public class TestDesktop extends Frame implements ActionListener {
                 
             String[] sa = line.split("\t", 0);
             boolean neg = Boolean.valueOf(sa[3]).booleanValue();
-            String res = null;
+            String res = "";
             Exception ex = null;
             try {
-                res = action(sa[1], sa[0]);
+                String value = null;
+                if (sa[1].equals("setNodeValue"))
+                    value = sa[4];
+                res = action(sa[1], sa[0], value);
+                res = (null == res ? "" : res);
             } catch (Exception e) {
                 ex = e;
             }
             
-            System.out.println(line);
-            System.out.print(" " + res + " " + ex + " --> ");
+            //System.out.println(line);
+            //System.out.print(" " + res + " " + ex + " --> ");
             boolean passed;
             if (!neg) {
                 passed = (ex == null && res.equals(sa[2]));
             } else {
                 passed = (ex != null);
             }
-            System.out.println(passed);
+            //System.out.println(passed);
             if (passed)
                 ++passedC;
             else {

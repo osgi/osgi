@@ -52,7 +52,7 @@ public class Metanode implements DmtMetaNode {
                ", format: " + format + ")";
     }
     
-    public Metanode(int ops,
+    public Metanode(int op,
             		boolean isLeaf,
             		int scope,
     				String description,
@@ -64,7 +64,7 @@ public class Metanode implements DmtMetaNode {
     				DmtData[] validValues,
     				int format) 
     {
-        orOperation(ops);
+        orOperation(op);
         this.isLeaf = isLeaf;
         this.scope = scope;
         this.description = description;
@@ -78,13 +78,13 @@ public class Metanode implements DmtMetaNode {
     }
     
     public boolean can(int operation) {
-        int op = 1 << (operation - 1);
-        int can = this.ops & op;
+        int ops = (1 << operation);
+        int can = this.ops & ops;
         return can != 0;
     }
     
     public Metanode orOperation(int op) {
-        ops = ops | (1 << (op - 1));
+        ops = ops | (1 << op);
         return this;
     }
 
@@ -112,11 +112,11 @@ public class Metanode implements DmtMetaNode {
         return def;
     }
 
-    public int getMax() {
+    public double getMax() {
         return max;
     }
 
-    public int getMin() {
+    public double getMin() {
         return min;
     }
 
