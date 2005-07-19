@@ -27,6 +27,7 @@ import org.osgi.util.tracker.ServiceTracker;
 
 // TODO IMPLEMENT NEW CONFIG MO DEFINITION
 // TODO mangle PIDs
+// TODO handle escaped characters in node names
 
 // TODO Boolean scalar/array/vector value is set/created even if the DmtData has STRING "true"/"false" in it, should be error
 // TODO non-Boolean scalar/array/vector value can be set/created using a BOOLEAN DmtData, should be error
