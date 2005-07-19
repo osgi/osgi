@@ -40,8 +40,6 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	protected Object statechangeLock = new Object();
 	/** ProtectionDomain for the bundle */
 	protected BundleProtectionDomain domain;
-	/* Single object for permission checks */
-	BundleResourcePermission resourcePermission;
 
 	/**
 	 * This String captures the dependencies that could not be resolved
@@ -1198,15 +1196,6 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 	protected void checkValid() {
 		if (state == UNINSTALLED) {
 			throw new IllegalStateException(NLS.bind(Msg.BUNDLE_UNINSTALLED_EXCEPTION, getBundleData().getLocation()));
-		}
-	}
-
-	protected void checkResourcePermission() {
-		SecurityManager sm = System.getSecurityManager();
-		if (sm != null) {
-			if (resourcePermission == null)
-				resourcePermission = new BundleResourcePermission(getBundleId());
-			sm.checkPermission(resourcePermission);
 		}
 	}
 

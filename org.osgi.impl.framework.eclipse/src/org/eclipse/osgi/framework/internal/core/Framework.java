@@ -94,6 +94,8 @@ public class Framework implements EventDispatcher, EventPublisher {
 	protected static AliasMapper aliasMapper = new AliasMapper();
 	protected ConditionalPermissionAdminImpl condPermAdmin;
 	SecureAction secureAction = new SecureAction();
+	// cache of AdminPermissions keyed by Bundle ID
+	private HashMap adminPermissions;
 
 	/**
 	 * Constructor for the Framework instance. This method initializes the
@@ -1249,9 +1251,27 @@ public class Framework implements EventDispatcher, EventPublisher {
 	 */
 	protected void checkAdminPermission(Bundle bundle, String action) {
 		SecurityManager sm = System.getSecurityManager();
-		if (sm != null) {
-			sm.checkPermission(new AdminPermission(bundle, action));
+		if (sm != null)
+			sm.checkPermission(getAdminPermission(bundle, action));
+	}
+
+	// gets AdminPermission objects from a cache to reduce the number of AdminPermission
+	// objects that are created.
+	private synchronized AdminPermission getAdminPermission(Bundle bundle, String action) {
+		if (adminPermissions == null)
+			adminPermissions = new HashMap();
+		Long ID = new Long(bundle.getBundleId());
+		HashMap bundlePermissions = (HashMap) adminPermissions.get(ID);
+		if (bundlePermissions == null) {
+			bundlePermissions = new HashMap();
+			adminPermissions.put(ID, bundlePermissions);
 		}
+		AdminPermission result = (AdminPermission) bundlePermissions.get(action);
+		if (result == null) {
+			result = new AdminPermission(bundle, action);
+			bundlePermissions.put(action, result);
+		}
+		return result;
 	}
 
 	/**

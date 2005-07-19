@@ -66,6 +66,8 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  * and <tt>getDefaultPermissions</tt>.
  */
 public class PermissionAdminImpl implements PermissionAdmin {
+	private static final String ADMIN_IMPLIED_ACTIONS = AdminPermission.RESOLVE + ',' + AdminPermission.METADATA + ',' + AdminPermission.CLASS;
+
 	/** framework object */
 	protected Framework framework;
 
@@ -474,20 +476,15 @@ public class PermissionAdminImpl implements PermissionAdmin {
 	 * @return A PermissionCollection of the implied permissions.
 	 */
 	protected BundlePermissionCollection getImpliedPermissions(AbstractBundle bundle) {
-		if (Debug.DEBUG && Debug.DEBUG_SECURITY) {
+		if (Debug.DEBUG && Debug.DEBUG_SECURITY)
 			Debug.println("Creating implied permissions for " + bundle); //$NON-NLS-1$
-		}
 
 		BundlePermissionCollection collection = createPermissions(baseImpliedPermissionInfos, bundle);
-
-		Permission permission = new BundleResourcePermission(bundle.getBundleId());
-
-		if (Debug.DEBUG && Debug.DEBUG_SECURITY) {
+		// create the implied AdminPermission actions for this bundle
+		Permission permission = new AdminPermission("(id=" + bundle.getBundleId() + ")", ADMIN_IMPLIED_ACTIONS); //$NON-NLS-1$ //$NON-NLS-2$
+		if (Debug.DEBUG && Debug.DEBUG_SECURITY)
 			Debug.println("Created permission: " + permission); //$NON-NLS-1$
-		}
-
 		collection.add(permission);
-
 		return collection;
 	}
 
