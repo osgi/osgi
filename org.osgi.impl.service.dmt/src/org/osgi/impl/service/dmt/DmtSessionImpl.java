@@ -86,8 +86,7 @@ public class DmtSessionImpl implements DmtSession {
                    DmtPluginDispatcher dispatcher, DmtAdminImpl dmtAdmin) 
             throws DmtException {
         
-		checkNodeUri(subtreeUri);
-		subtreeUri = Utils.normalizeAbsoluteUri(subtreeUri);
+        subtreeUri = Utils.validateAndNormalizeAbsoluteUri(subtreeUri);
 		
         this.principal = principal;
 		this.subtreeUri = subtreeUri;
@@ -408,14 +407,14 @@ public class DmtSessionImpl implements DmtSession {
             // check that the new ACL is valid
             if (isRoot && !acl.isPermitted("*", DmtAcl.ADD)) 
                 // should be 405 "Forbidden" according to DMTND 7.7.1.2
-                throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+                throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
                         "Root ACL must allow the Add operation for all principals.");
 
             acls.put(uri, acl);
             getPlugin(uri, false).nodeChanged(uri);
         }
         
-        enqueueEvent(EventList.REPLACE, nodeUri);
+        enqueueEvent(EventList.REPLACE, uri);
 	}
 
 	public synchronized DmtMetaNode getMetaNode(String nodeUri)
@@ -439,7 +438,7 @@ public class DmtSessionImpl implements DmtSession {
 	public synchronized String[] getChildNodeNames(String nodeUri) 
             throws DmtException {
         checkSession();
-        final String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_INTERIOR);
+        String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_INTERIOR);
         checkOperation(uri, DmtAcl.GET, DmtMetaNode.CMD_GET);
         String[] pluginChildNodes = getDataPlugin(uri).getChildNodeNames(uri);
         
@@ -506,7 +505,7 @@ public class DmtSessionImpl implements DmtSession {
         
         try {
             if (title != null && title.getBytes("UTF-8").length > 255)
-                throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
+                throw new DmtException(uri, DmtException.COMMAND_FAILED,
                         "Length of Title property exceeds 255 bytes (UTF-8).");
         } catch (UnsupportedEncodingException e) {
             // never happens
@@ -514,13 +513,14 @@ public class DmtSessionImpl implements DmtSession {
         
         getWritableDataPlugin(uri).setNodeTitle(uri, title);
         if(sendEvent)
-            enqueueEvent(EventList.REPLACE, nodeUri);
+            enqueueEvent(EventList.REPLACE, uri);
     }
 
 	public synchronized void setNodeValue(String nodeUri, DmtData data)
             throws DmtException {
         if (data == null)
-            throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
+            throw new DmtException(makeAbsoluteUri(nodeUri), 
+                    DmtException.COMMAND_FAILED,
                     "'null' value given for DmtData argument.");
         commonSetNodeValue(nodeUri, data);
     }
@@ -541,22 +541,22 @@ public class DmtSessionImpl implements DmtSession {
             getWritableDataPlugin(uri).setDefaultNodeValue(uri);
         else
             getWritableDataPlugin(uri).setNodeValue(uri, data);
-        enqueueEvent(EventList.REPLACE, nodeUri);        
+        enqueueEvent(EventList.REPLACE, uri);        
     }
     
     // SyncML DMTND 7.5 (p16) Type: only the Get command is applicable!
     public synchronized void setNodeType(String nodeUri, String type)
             throws DmtException {
         checkSession();
-        if (type == null)
-            throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
-                    "'null' value given for node type.");
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
+        if (type == null)
+            throw new DmtException(uri, DmtException.COMMAND_FAILED,
+                    "'null' value given for node type.");
         checkOperation(uri, DmtAcl.REPLACE, DmtMetaNode.CMD_REPLACE);
         if(isLeafNodeNoCheck(uri))
             checkMimeType(uri, type);
         getWritableDataPlugin(uri).setNodeType(uri, type);
-        enqueueEvent(EventList.REPLACE, nodeUri);
+        enqueueEvent(EventList.REPLACE, uri);
     }
 
 	public synchronized void deleteNode(String nodeUri) throws DmtException {
@@ -583,7 +583,7 @@ public class DmtSessionImpl implements DmtSession {
         
 		getWritableDataPlugin(uri).deleteNode(uri);
 		moveAclEntries(uri, null);
-        enqueueEvent(EventList.DELETE, nodeUri);
+        enqueueEvent(EventList.DELETE, uri);
 	}
     
 	public synchronized void createInteriorNode(String nodeUri)
@@ -596,7 +596,8 @@ public class DmtSessionImpl implements DmtSession {
 			throws DmtException {
         checkSession();
 	    if(type == null)
-            throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, 
+            throw new DmtException(makeAbsoluteUri(nodeUri), 
+                    DmtException.COMMAND_FAILED, 
                     "'null' value given for interior node type.");
         commonCreateInteriorNode(nodeUri, type, true);
 	}
@@ -607,7 +608,7 @@ public class DmtSessionImpl implements DmtSession {
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_NOT_EXIST);
         String parent = Utils.parentUri(uri);
         if(parent == null)
-            throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+            throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
                     "Cannot create root node.");
         checkNode(parent, SHOULD_BE_INTERIOR);
         checkNodePermission(parent, DmtAcl.ADD);
@@ -615,7 +616,7 @@ public class DmtSessionImpl implements DmtSession {
 
         DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
         if(metaNode != null && metaNode.isLeaf())
-                throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
+                throw new DmtException(uri, DmtException.METADATA_MISMATCH,
                         "Cannot create the specified interior node, " +
                         "meta-data defines it as a leaf node.");
         checkNewNodeName(uri);
@@ -635,7 +636,7 @@ public class DmtSessionImpl implements DmtSession {
             getWritableDataPlugin(uri).createInteriorNode(uri, type);
         assignNewNodePermissions(uri, parent);
         if(sendEvent)
-            enqueueEvent(EventList.ADD, nodeUri);
+            enqueueEvent(EventList.ADD, uri);
     }
 
     public synchronized void createLeafNode(String nodeUri) throws DmtException {
@@ -653,7 +654,8 @@ public class DmtSessionImpl implements DmtSession {
             String mimeType) throws DmtException {
         checkSession();
         if (value == null)
-            throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, 
+            throw new DmtException(makeAbsoluteUri(nodeUri), 
+                    DmtException.COMMAND_FAILED, 
                     "'null' value given for DmtData argument.");
         // mimeType not checked, null means use default from meta-data
         commonCreateLeafNode(nodeUri, value, mimeType, true);
@@ -666,7 +668,7 @@ public class DmtSessionImpl implements DmtSession {
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_NOT_EXIST);
         String parent = Utils.parentUri(uri);
         if(parent == null)
-            throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+            throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
                     "Cannot create root node.");
         checkNode(parent, SHOULD_BE_INTERIOR);
         checkNodePermission(parent, DmtAcl.ADD);
@@ -674,7 +676,7 @@ public class DmtSessionImpl implements DmtSession {
 
         DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
         if(metaNode != null && !metaNode.isLeaf())
-                throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
+                throw new DmtException(uri, DmtException.METADATA_MISMATCH,
                         "Cannot create the specified leaf node, meta-data " +
                         "defines it as an interior node.");
         checkNewNodeName(uri);
@@ -699,7 +701,7 @@ public class DmtSessionImpl implements DmtSession {
             getWritableDataPlugin(uri).createLeafNode(uri, value, mimeType);
         
         if(sendEvent)
-            enqueueEvent(EventList.ADD, nodeUri);        
+            enqueueEvent(EventList.ADD, uri);        
     }
 
 	// Tree may be left in an inconsistent state if there is an error when only
@@ -744,12 +746,10 @@ public class DmtSessionImpl implements DmtSession {
         enqueueEvent(EventList.COPY, uri, newUri);
 	}
 
-	public synchronized void renameNode(String nodeUri, String newName) 
+	public synchronized void renameNode(String nodeUri, String newNodeName) 
             throws DmtException {
 		checkSession();
-        if (!Utils.isValidNodeName(newName))
-			throw new DmtException(newName, DmtException.OTHER_ERROR,
-					"Syntactically invalid node name.");
+        String newName = Utils.validateAndNormalizeNodeName(newNodeName);
 		String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
 		String parent = Utils.parentUri(uri);
 		if (parent == null)
@@ -1090,7 +1090,7 @@ public class DmtSessionImpl implements DmtSession {
         if(metaNode == null)
             return;
         
-        String name = Utils.lastSegment(uri);
+        String name = Utils.getUriPart(uri, false, true);
         if(!metaNode.isValidName(name))
             throw new DmtException(uri, DmtException.METADATA_MISMATCH,
                     "The specified node name is not valid according to " +
@@ -1138,8 +1138,7 @@ public class DmtSessionImpl implements DmtSession {
     }
 
     private String makeAbsoluteUri(String nodeUri) throws DmtException {
-		checkNodeUri(nodeUri);
-		String normNodeUri = Utils.normalizeUri(nodeUri);
+        String normNodeUri = Utils.validateAndNormalizeUri(nodeUri);
 		if (Utils.isAbsoluteUri(normNodeUri)) {
 			if (!Utils.isAncestor(subtreeUri, normNodeUri))
 				throw new DmtException(nodeUri, DmtException.OTHER_ERROR,
@@ -1276,18 +1275,6 @@ public class DmtSessionImpl implements DmtSession {
 
 	private static boolean isEmptyAcl(DmtAcl acl) {
 		return acl.getPermissions("*") == 0 && acl.getPrincipals().length == 0;
-	}
-
-	private static void checkNodeUri(String nodeUri) throws DmtException {
-        if(nodeUri == null) // redundant check to give more specific error msg.
-            throw new DmtException(nodeUri, DmtException.INVALID_URI,
-                                   "URI parameter is 'null'.");
-        
-        // ENHANCE add redundant segment length check for more specific error msg.
-        
-		if (!Utils.isValidUri(nodeUri))
-			throw new DmtException(nodeUri, DmtException.INVALID_URI,
-			    "URI string syntactically invalid or contains too long segment.");
 	}
 }
 
