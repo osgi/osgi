@@ -76,7 +76,7 @@ public class TreeNodeImpl implements TreeNode {
 	public int getChildCount() {
         String[] sarr;
 		try {
-			sarr = Splitter.split(commander.command("gc " + uri()).trim(), '/', 0);
+			sarr = getChildArray();
 		} catch (CommanderException e) {
             printException(e);
             return 0;
@@ -110,16 +110,14 @@ public class TreeNodeImpl implements TreeNode {
 	}
 
 	public Enumeration children() {
-		String s;
+        Vector v = new Vector();
+		String[] sarr;
 		try {
-			s = commander.command("gc " + uri()).trim();
+		    sarr = getChildArray();
 		} catch (CommanderException e) {
 			printException(e);
-            return new Vector().elements();
+            return v.elements();
 		}
-		String[] sarr = Splitter.split(s, '/', 0);
-        Arrays.sort(sarr);
-        Vector v = new Vector();
         for (int i = 0; i < sarr.length; ++i) {
         	v.add(new TreeNodeImpl(sarr[i], this, commander));   
         }
@@ -133,15 +131,13 @@ public class TreeNodeImpl implements TreeNode {
 	}
 
 	public TreeNode getChildAt(int childIndex) {
-        String s;
+		String[] sarr;
 		try {
-			s = commander.command("gc " + uri()).trim();
+            sarr = getChildArray();
 		} catch (CommanderException e) {
 		    printException(e);
             return null;
 		}
-		String[] sarr = Splitter.split(s, '/', 0);
-        Arrays.sort(sarr);
         if (childIndex >= sarr.length)
         	return null;
         // TODO factory pattern
@@ -151,15 +147,13 @@ public class TreeNodeImpl implements TreeNode {
 	}
 
 	public int getIndex(TreeNode node) {
-		String s;
+	    String[] sarr;
 		try {
-			s = commander.command("gc " + uri()).trim();
+            sarr = getChildArray();
 		} catch (CommanderException e) {
             printException(e);
             return -1;
 		}
-		String[] sarr = Splitter.split(s, '/', 0);
-        Arrays.sort(sarr);
         int ret = -1;
         for (int i = 0; i < sarr.length; ++i) {
         	if (((TreeNodeImpl) node).getLabel().equals(sarr[i])) {
@@ -195,5 +189,32 @@ public class TreeNodeImpl implements TreeNode {
     private void printException(CommanderException e) {
         System.err.println(e.getString());
         e.printStackTrace();
+    }
+    
+    // TODO maybe implement escape handling in Splitter.split and revert to that
+    private String[] getChildArray() throws CommanderException {
+        String s = commander.command("gc " + uri()).trim();
+
+        Vector children = new Vector();
+        StringBuffer child = new StringBuffer();
+            
+        boolean escape = false;
+        for(int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            
+            if(escape || ch != '/') {
+                child.append(ch);
+                escape = !escape && ch == '\\';
+            } else {
+                children.add(child.toString());
+                child = new StringBuffer();
+            }
+        }
+        if(child.length() != 0) // protocol can leave an extra '/' at the end
+            children.add(child.toString());
+        
+        String[] sarr = (String[]) children.toArray(new String[] {});
+        Arrays.sort(sarr);
+        return sarr;
     }
 }
