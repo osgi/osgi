@@ -403,9 +403,16 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 
 	public String[] getChildNodeNames(String nodeUri) throws DmtException {
         String[] path = prepareUri(nodeUri);
-        if (path.length == 0)
-            return (String[]) 
-                requests.keySet().toArray(new String[requests.size()]);
+        if (path.length == 0) {
+            String[] requestArray = (String[]) 
+                    requests.keySet().toArray(new String[requests.size()]);
+            // escape '/' and '\' characters in request IDs before returning 
+            // TODO is this needed; if it is, won't it be done by DmtAdmin?
+            for(int i = 0; i < requestArray.length; i++)
+                requestArray[i] = escape(requestArray[i]);
+
+            return requestArray;
+        }
 
         LogRequest lr = (LogRequest) requests.get(path[0]);
         if (lr == null)
@@ -441,12 +448,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 		DmtAlertItem[] items = new DmtAlertItem[1];
 		items[0] = new DmtAlertItem(nodeUri, null, null, new DmtData(result));
         
-		DmtAdmin admin = (DmtAdmin) adminTracker.getService();
-        if(admin == null)
-            throw new MissingResourceException("Alert sender service not found.",
-                    DmtAdmin.class.getName(), null);
-        
-        admin.sendAlert(session.getPrincipal(), 1224, correlator, items);
+        getDmtAdmin().sendAlert(session.getPrincipal(), 1224, correlator, items);
 	}
 
 	//----- Private utility methods -----//
@@ -455,12 +457,31 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 				                               nodeUri);
 		// relativeUri will not be null because the DmtAdmin only gives us nodes
 		// in our subtree
-		String[] path = Splitter.split(relativeUri, '/', -1);
+		String[] path = Utils.splitUri(relativeUri);
 		if (path.length == 1 && path[0].equals(""))
 			return new String[] {};
 		return path;
 	}
+    
+    private static String escape(String nodeName) {
+        StringBuffer sb = new StringBuffer();
+        for(int i = 0; i < nodeName.length(); i++) {
+            char ch = nodeName.charAt(i);
+            if(ch == '/' || ch == '\\')
+                sb.append('\\');
+            sb.append(ch);
+        }
+        return sb.toString();
+    }
 
+    private DmtAdmin getDmtAdmin() {
+        DmtAdmin admin = (DmtAdmin) adminTracker.getService();
+        if(admin == null)
+            throw new MissingResourceException("Dmt Admin service not found.",
+                    DmtAdmin.class.getName(), null);
+        return admin;
+    }
+    
     private Hashtable copyRequests(Hashtable original) {
         Hashtable copy = new Hashtable();
         Iterator i = original.entrySet().iterator();
