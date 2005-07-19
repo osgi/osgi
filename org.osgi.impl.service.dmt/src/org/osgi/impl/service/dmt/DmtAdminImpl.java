@@ -276,8 +276,10 @@ public class DmtAdminImpl implements DmtAdmin {
     private RemoteAlertSender getAlertSender(String principal) {
         if (principal == null) { // return adapter if it is unique 
             Object[] alertSenders = remoteAdapterTracker.getServices();
-            return alertSenders.length != 1 ? null :
-                (RemoteAlertSender) alertSenders[0];
+            if(alertSenders == null || alertSenders.length != 1)
+                return null;
+            
+            return (RemoteAlertSender) alertSenders[0];
         }
        
         ServiceReference[] alertSenderRefs = 
