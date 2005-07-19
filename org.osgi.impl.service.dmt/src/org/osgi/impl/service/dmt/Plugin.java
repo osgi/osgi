@@ -46,8 +46,8 @@ class Plugin {
                     "are specified");
         
 		this.plugin = plugin;
-		this.roots = Utils.normalizeAbsoluteUris(roots);
-		this.execs = Utils.normalizeAbsoluteUris(execs);
+		this.roots = roots;
+		this.execs = execs;
 	}
 
 	DmtDataPlugin getWritableDataPlugin() {
@@ -118,7 +118,7 @@ class Plugin {
         List childRootNames = new Vector();
         for(int i = 0; i < roots.length; i++)
             if(Utils.isParent(uri, roots[i]))
-                childRootNames.add(Utils.lastSegment(roots[i]));
+                childRootNames.add(Utils.getUriPart(roots[i], false, true));
             
         return childRootNames;
     }

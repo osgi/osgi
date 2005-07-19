@@ -22,6 +22,7 @@ import org.osgi.framework.*;
 import org.osgi.service.dmt.*;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
+// TODO replace System.out-s with log messages
 public class DmtPluginDispatcher implements ServiceTrackerCustomizer {
     private BundleContext  bc;
     private ArrayList      plugins;
@@ -124,8 +125,8 @@ public class DmtPluginDispatcher implements ServiceTrackerCustomizer {
     }
     
     private String[] getURIs(ServiceReference serviceRef, String propertyName) {
+        // property might be modified later, but framework RI gives us a copy
         Object property = serviceRef.getProperty(propertyName);
-        // System.out.println("Plugin property '" + propertyName + "': " + property);
         if (property == null)
             return new String[] {};
         
@@ -141,9 +142,17 @@ public class DmtPluginDispatcher implements ServiceTrackerCustomizer {
         }
         
         for (int i = 0; i < uris.length; i++) {
-            if (!Utils.isAbsoluteUri(uris[i]) || !Utils.isValidUri(uris[i])) {
+            try {
+                uris[i] = Utils.validateAndNormalizeAbsoluteUri(uris[i]);
+            } catch(DmtException e) {
                 System.out.println("Invalid URI '" + uris[i] + "' in property '" 
                         + propertyName + "', ignoring plugin.");
+                e.printStackTrace(System.out);
+                return null;
+            }
+            if (!Utils.isAbsoluteUri(uris[i])) {
+                System.out.println("Relative URI '" + uris[i] + "' in " +
+                        "property '" + propertyName + "', ignoring plugin.");
                 return null;
             }
         }

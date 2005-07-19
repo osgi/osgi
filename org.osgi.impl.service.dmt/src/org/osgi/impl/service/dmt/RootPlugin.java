@@ -153,12 +153,13 @@ class Node {
 	}
 
 	Node findNode(String name) {
-		if (name.length() == 0)
+		if (name == null || name.length() == 0)
 			return this;
-		String first = Utils.firstSegment(name);
+		String first = Utils.getUriPart(name, true, true); // get first segment
 		for (int i = 0; i < children.length; i++)
 			if (first.equals(children[i].name))
-				return children[i].findNode(Utils.lastSegments(name));
+                // recurse with all segments but the first
+				return children[i].findNode(Utils.getUriPart(name, true, false));
 		return null;
 	}
 
