@@ -622,7 +622,7 @@ public class MonitorPlugin implements DmtDataPlugin
         // path[2].equals("Server")
 
         if(path.length == 3)
-            return var.getServerNames();
+            return escape(var.getServerNames());
 
         Server server = var.getServer(path[3], nodeUri);
 
@@ -635,7 +635,7 @@ public class MonitorPlugin implements DmtDataPlugin
 
             // path[4].equals("TrapRef")
 
-            return server.getTrapRefNames();
+            return escape(server.getTrapRefNames());
         }
 
         // path.length == 6, path[4].equals("TrapRef")
@@ -680,12 +680,61 @@ public class MonitorPlugin implements DmtDataPlugin
         if(nodeUri.length() == rootLen)
             return new String[] {};
 
-        String[] path = Splitter.split(nodeUri.substring(rootLen + 1), '/', -1);
+        String[] path = splitUri(nodeUri.substring(rootLen + 1));
 
         if(path.length == 1 && path[0].equals("")) // shouldn't happen
             return new String[] {};
 
         return path;
+    }
+    
+    // TODO is this needed; if it is, won't it be done by DmtAdmin?
+    // escape '/' and '\' characters before returning in child node name array 
+    private static String[] escape(String[] nodeNames) {
+        for(int i = 0; i < nodeNames.length; i++)
+            nodeNames[i] = escape(nodeNames[i]);
+        return nodeNames;
+    }
+    
+    private static String escape(String nodeName) {
+        StringBuffer sb = new StringBuffer();
+        for(int i = 0; i < nodeName.length(); i++) {
+            char ch = nodeName.charAt(i);
+            if(ch == '/' || ch == '\\')
+                sb.append('\\');
+            sb.append(ch);
+        }
+        return sb.toString();
+    }
+
+    // TODO maybe replace with Splitter.split if (when) it can handle escapes
+    // (copied from org.osgi.impl.service.dmt.Utils.splitUri) 
+    /** 
+     * Returns an array of the segments of the given URI.  In each segment, the 
+     * escaped characters are unescaped before returning. 
+     */
+    private static String[] splitUri(String uri) {
+        List segments = new ArrayList();
+        StringBuffer segment = new StringBuffer();
+        
+        boolean escape = false;
+        for(int i = 0; i < uri.length(); i++) {
+            char ch = uri.charAt(i);
+            
+            if(escape) {
+                segment.append(ch);
+                escape = false;
+            } else if(ch == '/') {
+                segments.add(segment.toString());
+                segment = new StringBuffer();
+            } else if(ch == '\\') {
+                escape = true;
+            } else
+                segment.append(ch);
+        }
+        segments.add(segment.toString());
+    
+        return (String[]) segments.toArray(new String[] {});
     }
 
     private static String cmName(int cm) {
