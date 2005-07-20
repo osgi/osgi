@@ -126,11 +126,14 @@ public final class ConfigurationPermission extends Permission {
 	 * Examples:
 	 * 
 	 * <pre>
-	 *          (signer=*,o=ACME,c=US)   
+	 *          (signer=\*,o=ACME,c=US)   
 	 *          (pid=com.acme.*)
 	 *          (factoryPid=com.acme.*)
-	 *          (&amp;(signer=*,o=ACME,c=US)(pid=com.acme.*))   
+	 *          (&amp;(signer=\*,o=ACME,c=US)(pid=com.acme.*))   
 	 * </pre>
+	 * <p>
+	 * When a signer key is used within the filter expression the signer value 
+	 * must escape the special filter chars ('*', '(', ')').
 	 * 
 	 * <p>
 	 * There are the following actions: <code>get</code>,<code>set</code>,
