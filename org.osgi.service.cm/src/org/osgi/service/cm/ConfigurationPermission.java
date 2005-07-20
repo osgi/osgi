@@ -328,8 +328,8 @@ public final class ConfigurationPermission extends Permission {
 		if (!(obj instanceof ConfigurationPermission))
 			return false;
 		ConfigurationPermission p = (ConfigurationPermission) obj;
-		return ((action_mask == p.action_mask) && 
-				(bundle.getBundleId() == p.bundle.getBundleId()) &&
+		return ((action_mask == p.action_mask) &&
+				(bundle == null ? p.bundle == null : (p.bundle == null ? false : bundle.getBundleId() == p.bundle.getBundleId())) &&
 				(pid == null ? p.pid == null : pid.equals(p.pid)) &&
 				(factoryPid == null ? p.factoryPid == null : factoryPid.equals(p.factoryPid)) &&
 				(filter == null ? p.filter == null	: filter.equals(p.filter)));
