@@ -17,50 +17,36 @@
  */
 package com.nokia.test.plugin;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtSession;
+//import org.osgi.service.dmt.DmtSession;
+//import org.osgi.service.permissionadmin.PermissionAdmin;
+//import org.osgi.service.permissionadmin.PermissionInfo;
 
 
 public class DoIt implements BundleActivator {
     
     private DmtAdmin admin;
+    private TestDesktop desktop;
 
     public void start(BundleContext context) throws Exception {
         ServiceReference sref = context.getServiceReference(DmtAdmin.class.getName());
         admin = (DmtAdmin) context.getService(sref);
         
-        new TestDesktop(admin);
-        
-        /*BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        
-        System.out.print("pt:>");
-        String command = reader.readLine();
-        
-        while (!"stop".equalsIgnoreCase(command)) {
-            DmtSession session = null;
-            try {
-                session = admin.getSession(".");
-                String[] cnns = session.getChildNodeNames(command);
-                System.out.println(Arrays.asList(cnns));
-            } finally {
-                if (null != session)
-                    session.close();
-            }
-            
-            System.out.print("pt:> ");
-            command = reader.readLine();
-        }*/
+        desktop = new TestDesktop(admin);
+
+//        ServiceReference paRef = context.getServiceReference(PermissionAdmin.class.getName());
+//        if (null == paRef)
+//            return;
+//        PermissionAdmin pa = (PermissionAdmin) context.getService(paRef);
+//        String loc = context.getBundle().getLocation();
+//        pa.setPermissions(loc, new PermissionInfo[] {});
     }
 
     public void stop(BundleContext context) throws Exception {
-
+        desktop.destroy();
     }
 
 }

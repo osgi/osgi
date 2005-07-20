@@ -35,6 +35,7 @@ import javax.swing.JOptionPane;
 
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 
 
@@ -164,6 +165,10 @@ public class TestDesktop extends Frame implements ActionListener {
         setVisible(true);
         
         runTests();
+    }
+    
+    void destroy() throws DmtException {
+        session.close();
     }
 
     public void actionPerformed(ActionEvent ae) {
