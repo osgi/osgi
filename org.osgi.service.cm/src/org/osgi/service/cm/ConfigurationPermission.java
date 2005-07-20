@@ -11,8 +11,6 @@
 package org.osgi.service.cm;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.security.*;
 import java.util.*;
 
@@ -444,8 +442,12 @@ public final class ConfigurationPermission extends Permission {
 						if (bundle.getSymbolicName() != null)
 							properties.put(KEY_NAME, bundle.getSymbolicName());
 						// set signers
-						// TODO need to capture NoClassDefFoundError here if ConditionalPermissionAdmin not available.
-						properties.put(KEY_SIGNER, new SignerWrapper(bundle));
+						try {
+							properties.put(KEY_SIGNER, new SignerWrapper(bundle));
+						}
+						catch (NoClassDefFoundError e) {
+							// just in case the VM class verifier pulls in condpermadim while loading SignerWrapper
+						}
 					}
 					// set pid
 					if (pid != null)
@@ -582,65 +584,62 @@ public final class ConfigurationPermission extends Permission {
 		}
 	}
 
-	// TODO change to use classes directly rather than reflection.
+
+	// Private class used as the filter matching value for the filter key 'signer'.
 	private static class SignerWrapper {
-		private static Method		GET_CONDITION;
-		private static Constructor	INFO_CONSTRUCTOR;
-		private static Object		TRUE;
-		static {
-			AccessController.doPrivileged(new PrivilegedAction() {
-				public Object run() {
-					try {
-						Class bundleSignerCondition = Class
-								.forName("org.osgi.service.condpermadmin.BundleSignerCondition");
-						Class condition = Class
-								.forName("org.osgi.service.condpermadmin.Condition");
-						Class info = Class
-								.forName("org.osgi.service.condpermadmin.ConditionInfo");
-						GET_CONDITION = bundleSignerCondition.getMethod(
-								"getCondition",
-								new Class[] {Bundle.class, info});
-						TRUE = condition.getField("TRUE").get(null);
-						INFO_CONSTRUCTOR = info.getConstructor(new Class[] {
-								String.class, String[].class});
-					}
-					catch (Throwable e) {
-						e.printStackTrace();
-						// no signer support
-					}
-					return null;
-				}
-			});
-		}
+		// The bundle for this signer
 		private Bundle				bundle;
+		// The ConditionInfo object for this signer
 		private Object				info;
 
+		/*
+		 * Constructor used by the Filter match operation to construct a 
+		 * SignerWrapper with a given string value.
+		 */
 		public SignerWrapper(String pattern) {
 			try {
-				this.info = INFO_CONSTRUCTOR.newInstance(new Object[] {
-						"org.osgi.service.condpermadmin.BundleSignerCondition",
-						new String[] {pattern}});
+				this.info =
+					new org.osgi.service.condpermadmin.ConditionInfo(
+							"org.osgi.service.condpermadmin.BundleSignerCondition", 
+							new String[] {pattern});
 			}
-			catch (Exception e) {
+			catch (NoClassDefFoundError e) {
+				// just in case condpermadmin is not available
 			}
 		}
 
+		/*
+		 * Constructor used to construct SignerWrapper objects used as the value
+		 * of the 'signer' key in a Filter matching Dictionary.
+		 */
 		SignerWrapper(Bundle bundle) {
 			this.bundle = bundle;
 		}
 
-		// TODO This impl assumes FilterImpl calls equals in a certain order. Equals must be reflexive
+		/*
+		 * Used to compare SignerWrapper objects in a filter match operation.
+		 */
 		public boolean equals(Object o) {
 			if (!(o instanceof SignerWrapper))
 				return false;
 			SignerWrapper other = (SignerWrapper) o;
+			// Need to get the matching values for bundle and info.
+			// We cannot depend on the order of the SignerWrapper objects
+			// when the Filter impl calls equals on us during a match operation.
+			// If this bundle != null then use its bundle and the others info objects;
+			// otherwise use the others bundle and this info objects.
+			Bundle matchBundle = bundle != null ? bundle : other.bundle;
+			Object matchInfo = bundle != null ? other.info : info;
 			try {
-				return GET_CONDITION != null
-						&& other.info != null
-						&& TRUE == GET_CONDITION.invoke(null, new Object[] {
-								bundle, other.info});
+				return 	matchInfo != null && matchBundle != null &&
+						org.osgi.service.condpermadmin.BundleSignerCondition.getCondition(
+								matchBundle, 
+								(org.osgi.service.condpermadmin.ConditionInfo) matchInfo).isSatisfied();
 			}
-			catch (Exception e) {
+			catch (Throwable t) {
+				// Just in case condpermadmin is not available.
+				// Catch everything here because BundleSignerCondition#getCondition
+				// may throw a runtime exception if the vendor property is not set correctly
 			}
 			return false;
 		}
