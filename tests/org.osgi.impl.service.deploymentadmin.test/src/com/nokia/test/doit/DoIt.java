@@ -63,9 +63,7 @@ public class DoIt implements BundleActivator {
         ref = context.getServiceReference(DeploymentAdmin.class.getName());
         String daLoc = ref.getBundle().getLocation();
         pa.setPermissions(daLoc, new PermissionInfo[] {
-                new PermissionInfo(AllPermission.class.getName(), "*", "*"),
-                new PermissionInfo(DeploymentCustomizerPermission.class.getName(), 
-                    "(name=*)", "privatearea")
+                new PermissionInfo(AllPermission.class.getName(), "*", "*")
         	});
         
         // Database
@@ -116,7 +114,7 @@ public class DoIt implements BundleActivator {
         pa.setPermissions("osgi-dp:com.nokia.test.exampleresourceprocessor.db." +
         		"DbResourceProcessor_db_test_06", pis);
 
-        ref = context.getServiceReference(Db.class.getName());
+        // DoIt
         String doitLoc = context.getBundle().getLocation();
         pa.setPermissions(doitLoc, new PermissionInfo[] {
                 new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
@@ -124,10 +122,6 @@ public class DoIt implements BundleActivator {
                 new PermissionInfo(ServicePermission.class.getName(), "*", "get"),
                 // to load files that are passed to the Deployment Admin
                 new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "read"),
-                // to install deployment packages 
-//                new PermissionInfo(DeploymentAdminPermission.class.getName(), "(&(name=*)" +
-//                		"(signer=-;CN=Root1,OU=FAKEDONTUSE,O=CASoft,L=Budapest,C=HU))", 
-//                        "install, uninstall, cancel"),
                 // for db_test_07
                 new PermissionInfo(DeploymentAdminPermission.class.getName(), 
                         "(name=apple)", "list, install, uninstall, uninstallForced, cancel"),

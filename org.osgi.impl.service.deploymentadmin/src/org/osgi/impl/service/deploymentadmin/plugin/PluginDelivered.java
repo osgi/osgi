@@ -1,4 +1,4 @@
-package org.osgi.impl.service.deploymentadmin;
+package org.osgi.impl.service.deploymentadmin.plugin;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
+import org.osgi.impl.service.deploymentadmin.DAConstants;
+import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
+import org.osgi.impl.service.deploymentadmin.Metanode;
+import org.osgi.impl.service.deploymentadmin.Splitter;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
@@ -21,7 +25,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
 	private DeploymentAdminImpl da;
 	private File                store;
 
-	PluginDelivered(DeploymentAdminImpl da) {
+	public PluginDelivered(DeploymentAdminImpl da) {
 	    String delArea = System.getProperty(DAConstants.DELIVERED_AREA);
 	    if (null == delArea)
 	        delArea = "/temp";

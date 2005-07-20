@@ -170,7 +170,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return new HashSet(bundleEntries);
     }
 
-    Iterator getBundleEntryIterator() {
+    public Iterator getBundleEntryIterator() {
         return bundleEntries.iterator();
     }
     
@@ -190,7 +190,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         bundleEntries.remove(be);
     }
     
-    BundleEntry getBundleEntryByBundleId(long id) {
+    public BundleEntry getBundleEntryByBundleId(long id) {
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             if (be.getBundleId() == id)

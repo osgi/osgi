@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<media xmlns="http://www.openmobilealliance.org/xmlns/dd" xmlns:dd="http://www.osgi.org/xmlns/dd/v.1.0">
+   <objectURI>
+      file:///apps/eclipse/workspaceMEG/org.osgi.impl.service.deploymentadmin.test/res/db_test_03.dp
+   </objectURI>
+   <size>
+      1234
+   </size>
+   <type>
+      application/java-archive
+   </type>
+   <dd:environment envtype="http://www.osgi.org/xmlns/dd/DP"/>
+</media>

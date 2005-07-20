@@ -15,8 +15,9 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package org.osgi.impl.service.deploymentadmin;
+package org.osgi.impl.service.deploymentadmin.plugin;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -28,6 +29,11 @@ import java.util.Set;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.impl.service.deploymentadmin.BundleEntry;
+import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
+import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
+import org.osgi.impl.service.deploymentadmin.Metanode;
+import org.osgi.impl.service.deploymentadmin.Splitter;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.dmt.DmtData;
@@ -37,9 +43,10 @@ import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtReadOnlyDataPlugin;
 import org.osgi.service.dmt.DmtSession;
 
-public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin {
+public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Serializable {
 
-    private DeploymentAdminImpl da;
+    private transient DeploymentAdminImpl da;
+    private Hashtable idMappings = new Hashtable();
 
     public PluginDeployed(DeploymentAdminImpl da) {
         this.da= da;
@@ -85,7 +92,7 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin {
     }
 
     private String[] getImportedPackages(BundleEntry be) {
-        BundleContext context = da.getContext();
+        BundleContext context = da.getBundleContext();
         Bundle b = context.getBundle(be.getBundleId());
         String iph = (String) b.getHeaders().get("Import-Package");
         if (null == iph)
@@ -98,7 +105,7 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin {
     }
 
     private String[] getExportedPackages(BundleEntry be) {
-        BundleContext context = da.getContext();
+        BundleContext context = da.getBundleContext();
         Bundle b = context.getBundle(be.getBundleId());
         String iph = (String) b.getHeaders().get("Export-Package");
         if (null == iph)
@@ -111,32 +118,32 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin {
     }
 
     private String getBundleSymbolicName(BundleEntry be) {
-        BundleContext context = da.getContext();
+        BundleContext context = da.getBundleContext();
         Bundle b = context.getBundle(be.getBundleId());
         return b.getSymbolicName();
     }
     
     private String getBundleLocation(BundleEntry be) {
-        BundleContext context = da.getContext();
+        BundleContext context = da.getBundleContext();
         Bundle b = context.getBundle(be.getBundleId());
         return b.getLocation();
     }
     
     private String getBundleVersion(BundleEntry be) {
-        BundleContext context = da.getContext();
+        BundleContext context = da.getBundleContext();
         Bundle b = context.getBundle(be.getBundleId());
         String ver = (String) b.getHeaders().get("Bundle-Version");
         return ver;
     }
     
     private int getBundleState(BundleEntry be) {
-        BundleContext context = da.getContext();
+        BundleContext context = da.getBundleContext();
         Bundle b = context.getBundle(be.getBundleId());
         return b.getState();
     }
 
     private String getBundleNativeCode(BundleEntry be) {
-        BundleContext context = da.getContext();
+        BundleContext context = da.getBundleContext();
         Bundle b = context.getBundle(be.getBundleId());
         String nc = (String) b.getHeaders().get("Bundle-NativeCode");
         return nc;
@@ -291,7 +298,7 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin {
         DeploymentPackageImpl dp = (DeploymentPackageImpl) mt.get(nodeUriArr[5]);
         if (l == 7) {
             if (nodeUriArr[6].equals("ID"))
-                return new DmtData(dp.getName());
+                return new DmtData((String) idMappings.get(dp.getName()));
             if (nodeUriArr[6].equals("EnvType"))
                 return new DmtData("OSGi.R4");
             throw new RuntimeException("Internal error");
@@ -500,6 +507,7 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin {
         DeploymentPackageImpl dp = (DeploymentPackageImpl) mt.get(nodeUriArr[5]);
         try {
             dp.uninstall();
+            idMappings.remove(dp.getName());
         }
         catch (DeploymentException e) {
             throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, "", e);
@@ -523,6 +531,14 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin {
     }
 
     public void nodeChanged(String nodeUri) throws DmtException {
+    }
+
+    public void associateID(DeploymentPackageImpl dp, String id) {
+       idMappings.put(dp.getName(), id);
+    }
+
+    public void setDeploymentAdmin(DeploymentAdminImpl da) {
+        this.da = da;
     }
 
 }

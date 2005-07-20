@@ -46,6 +46,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Version;
 import org.osgi.impl.service.deploymentadmin.api.DownloadAgent;
+import org.osgi.impl.service.deploymentadmin.plugin.PluginDelivered;
+import org.osgi.impl.service.deploymentadmin.plugin.PluginDeployed;
+import org.osgi.impl.service.deploymentadmin.plugin.PluginDownload;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
@@ -550,7 +553,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     /*
      * Saves persistent data.
      */
-    private void save() throws IOException {
+    public void save() throws IOException {
         final File f = context.getDataFile(this.getClass().getName() + ".obj");
         if (null == f) {
             logger.log(Logger.LOG_WARNING, "Platform does not have file system support. " + 
@@ -565,6 +568,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                     ObjectOutputStream oos = new ObjectOutputStream(fos);
                     oos.writeObject(dps);
                     oos.writeObject(mappingRpDp);
+                    oos.writeObject(pluginDownload);
+                    oos.writeObject(pluginDeployed);
                     oos.close();
                     fos.close();
                     return null;
@@ -586,9 +591,11 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(f);
-            DPObjectInputStream ois = new DPObjectInputStream(fis);
+            DAObjectInputStream ois = new DAObjectInputStream(fis);
             dps = (Set) ois.readObject();
             mappingRpDp = (Hashtable) ois.readObject();
+            pluginDownload = (PluginDownload) ois.readObject();
+            pluginDeployed = (PluginDeployed) ois.readObject();
             ois.close();
             fis.close();
         } catch (FileNotFoundException e) {
@@ -643,8 +650,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
      * Encapsulates the deserialization task of the DeploymentPackageImpl
      * objects.
      */
-    private class DPObjectInputStream extends ObjectInputStream {
-        public DPObjectInputStream(FileInputStream in) throws IOException {
+    private class DAObjectInputStream extends ObjectInputStream {
+        public DAObjectInputStream(FileInputStream in) throws IOException {
             super(in);
             enableResolveObject(true);
         }
@@ -653,7 +660,13 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             if (obj instanceof DeploymentPackageImpl) {
                 DeploymentPackageImpl dp = (DeploymentPackageImpl) obj;
                 dp.setDeploymentAdmin(DeploymentAdminImpl.this);
-            }
+            } else if (obj instanceof PluginDownload) {
+                PluginDownload p = (PluginDownload) obj;
+                p.setDeploymentAdmin(DeploymentAdminImpl.this);
+            } else if (obj instanceof PluginDeployed) {
+                PluginDeployed p = (PluginDeployed) obj;
+                p.setDeploymentAdmin(DeploymentAdminImpl.this);
+            }  
             
             return obj;
         }
@@ -706,7 +719,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return result;
     }
     
-    BundleContext getBundleContext() {
+    public BundleContext getBundleContext() {
         return context;
     }
 
@@ -718,16 +731,16 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return dps;
     }
     
-    DmtAdmin getDmtAdmin() {
+    public DmtAdmin getDmtAdmin() {
         return (DmtAdmin) trackDmt.getService();
     }
 
-    BundleContext getContext() {
-        return context;
-    }
-    
-    DownloadAgent getDownloadAgent() {
+    public DownloadAgent getDownloadAgent() {
         return (DownloadAgent) trackDownloadAgent.getService();
+    }
+
+    public PluginDeployed getDeployedPlugin() {
+        return pluginDeployed;
     }
     
 }

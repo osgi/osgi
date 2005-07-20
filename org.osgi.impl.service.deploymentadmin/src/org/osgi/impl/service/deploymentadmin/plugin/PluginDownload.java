@@ -1,7 +1,8 @@
-package org.osgi.impl.service.deploymentadmin;
+package org.osgi.impl.service.deploymentadmin.plugin;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -11,7 +12,13 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
+import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
+import org.osgi.impl.service.deploymentadmin.Metanode;
+import org.osgi.impl.service.deploymentadmin.Splitter;
 import org.osgi.impl.service.deploymentadmin.api.DownloadAgent;
+import org.osgi.service.deploymentadmin.DeploymentException;
+import org.osgi.service.dmt.DmtAlertItem;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.dmt.DmtException;
@@ -22,38 +29,70 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class PluginDownload extends DefaultHandler implements DmtDataPlugin, DmtExecPlugin {
+public class PluginDownload extends DefaultHandler 
+        implements DmtDataPlugin, DmtExecPlugin, Serializable 
+{
     
     // download and deployment states
-    public static final int STATUS_IDLE                   = 10;
-    public static final int STATUS_DOWNLD_FAILED          = 20;
-    public static final int STATUS_STREAMING              = 50;
-    public static final int STATUS_DEPLOYMENT_FAILED      = 70;
-    public static final int STATUS_DEPLOYED               = 80;
+    private static final int STATUS_IDLE                   = 10;
+    private static final int STATUS_DOWNLD_FAILED          = 20;
+    private static final int STATUS_STREAMING              = 50;
+    private static final int STATUS_DEPLOYMENT_FAILED      = 70;
+    private static final int STATUS_DEPLOYED               = 80;
     
-	private DeploymentAdminImpl da;
+    // generic alert results
+    private static final int RESULT_SUCCESSFUL             = 200;
+    private static final int RESULT_BUNDLE_START_WARNING   = 250;
+    private static final int RESULT_REQUEST_TIMED_OUT      = 406;
+    private static final int RESULT_UNDEFINED_ERROR        = 407;
+    private static final int RESULT_DWNLD_DESCR_ERROR      = 410;
+    private static final int RESULT_ORDER_ERROR            = 450;
+    private static final int RESULT_MISSING_HEADER         = 451;
+    private static final int RESULT_BAD_HEADER             = 452;
+    private static final int RESULT_MISSING_FIXPACK_TARGET = 453;
+    private static final int RESULT_MISSING_BUNDLE         = 454;
+    private static final int RESULT_MISSING_RESOURCE       = 455;
+    private static final int RESULT_SIGNING_ERROR          = 456;
+    private static final int RESULT_BUNDLE_NAME_ERROR      = 457;
+    private static final int RESULT_FOREIGN_CUSTOMIZER     = 458;
+    private static final int RESULT_NO_SUCH_RESOURCE       = 459;
+    private static final int RESULT_BUNDLE_SHARING_VIOLATION = 460;
+    private static final int RESULT_CODE_RESOURCE_SHARING_VIOLATION = 461;
+    
+	private transient DeploymentAdminImpl da;
 
 	// used for XML parsing
-	private String       actElement;
-	private StringBuffer contentURI;
-    private StringBuffer contentType;
+	private transient String       actElement;
+	private transient StringBuffer contentURI;
+    private transient StringBuffer contentType;
+    
 	private Entries      entries = new Entries();
     
-    PluginDownload(DeploymentAdminImpl da) {
+    public PluginDownload(DeploymentAdminImpl da) {
         this.da = da;       
     }
 	
     ///////////////////////////////////////////////////////////////////////////
     // Private classes
     
-    private class Entry {
-        private String id;
-        private String uri;
-        private String envType;
-        private int    status = STATUS_IDLE;
+    private class Entry implements Serializable {
+        private String  id;
+        private String  uri;
+        private String  envType;
+        private Integer status = new Integer(STATUS_IDLE);
+        
+        private transient Thread thread;
+
+        public void setStatus(int status) {
+            this.status = new Integer(status);
+        }
+        
+        public int getStatus() {
+            return status.intValue();
+        }
     }
     
-    private class Entries {
+    private class Entries implements Serializable {
         private Hashtable ht = new Hashtable();
         
         private boolean contains(String nodeId) {
@@ -74,6 +113,109 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
 
         private String[] keys() {
             return (String[]) ht.keySet().toArray(new String[] {});
+        }
+        
+        private void start(String nodeUri, String correlator, String principal) {
+            String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
+            Entry entry = (Entry) ht.get(nodeUriArr[4]);
+            entry.thread = new Thread(new DownloadThread(nodeUri, correlator, principal));
+            entry.thread.start();
+        }
+    }
+    
+    private class DownloadThread implements Runnable {
+        private String               nodeUri;
+        private String[]             nodeUriArr;
+        private String               correlator;
+        private String               principal;
+        
+        private DownloadThread(String nodeUri, String correlator, String principal) {
+            this.nodeUri =  nodeUri;
+            nodeUriArr = Splitter.split(nodeUri, '/', 0);
+            this.principal = principal;
+        }
+        
+        public void run() {
+            entries.get(nodeUriArr[4]).setStatus(STATUS_STREAMING);
+            
+            // parse the DLOTA descriptor
+            try {
+                initParser();
+                parseDescriptor(nodeUri);
+                Set allowed = new HashSet();
+                allowed.add("application/java-archive");
+                allowed.add("application/vnd.osgi.dp");
+                if (!allowed.contains(contentType.toString().trim()))
+                    throw new DmtException(nodeUri, DmtException.OTHER_ERROR, 
+                            contentType + " MIME type is not supported");
+            } catch (Exception e) {
+                entries.get(nodeUriArr[4]).setStatus(STATUS_DOWNLD_FAILED);
+                sendAlertWithException(correlator, nodeUri, principal, e);
+                // TODO log
+                e.printStackTrace();
+                return;
+            }
+
+            InputStream is = null;
+            try {
+                is = getStream(nodeUri);
+            } catch (Exception e) {
+                if (null != is) {
+                    try {
+                        is.close();
+                    }
+                    catch (IOException ioe) {
+                        ioe.printStackTrace();
+                    }
+                }
+                entries.get(nodeUriArr[4]).setStatus(STATUS_DOWNLD_FAILED);
+                sendAlertWithException(correlator, nodeUri, principal, e);
+                // TODO log
+                e.printStackTrace();
+                return;
+            }
+            
+            // deploy content
+            DeploymentPackageImpl dp = null;
+            try {
+                dp = (DeploymentPackageImpl) da.installDeploymentPackage(is);
+            } catch (DeploymentException e) {
+                sendAlertWithException(correlator, nodeUri, principal,e);
+                entries.get(nodeUriArr[4]).setStatus(STATUS_DEPLOYMENT_FAILED);
+                // TODO log
+                e.printStackTrace();
+                return;
+            } finally {
+                if (null != is)
+                    try {
+                        is.close();
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
+            }
+
+            entries.get(nodeUriArr[4]).setStatus(STATUS_DEPLOYED);
+            da.getDeployedPlugin().associateID(dp, entries.get(nodeUriArr[4]).id);
+            try {
+                da.save();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                // TODO log
+            }
+            
+            try {
+                if (null != principal)
+                    da.getDmtAdmin().sendAlert(principal, 1226, correlator, new DmtAlertItem[] { 
+                        new DmtAlertItem(nodeUri, 
+                        "org.osgi.deployment.downloadandinstallandactivate", 
+                        null, new DmtData(RESULT_SUCCESSFUL))});
+            }
+            catch (DmtException e) {
+                // TODO log
+                e.printStackTrace();
+            }
         }
     }
 		
@@ -98,9 +240,7 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
 		actElement = localName;
 	}
 	
-	public void characters(char[] ch, int start, int length)
-			throws SAXException 
-	{
+	public void characters(char[] ch, int start, int length) throws SAXException {
 	    if (actElement.equals("objectURI")) {
 	        if (null == contentURI)
 	            contentURI = new StringBuffer();
@@ -146,6 +286,13 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
             entries.get(nodeUriArr[4]).uri = data.getString();
         if (nodeUriArr[5].equals("EnvType"))
             entries.get(nodeUriArr[4]).envType = data.getString();
+        try {
+            da.save();
+        }
+        catch (IOException e) {
+            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Changes cannot be " +
+                    "persisted", e); 
+        }
     }
 
 	public void setDefaultNodeValue(String nodeUri) throws DmtException {
@@ -160,6 +307,13 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
         if (l != 5)
             throw new RuntimeException("Internal error");
         entries.remove(nodeUriArr[4]);
+        try {
+            da.save();
+        }
+        catch (IOException e) {
+            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Changes cannot be " +
+                    "persisted", e); 
+        }
 	}
 
 	public void createInteriorNode(String nodeUri) throws DmtException {
@@ -167,7 +321,16 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
         int l = nodeUriArr.length;
         if (l != 5)
             throw new RuntimeException("Internal error");
+        if (entries.contains(nodeUriArr[4]))
+            throw new DmtException(nodeUri, DmtException.NODE_ALREADY_EXISTS, "");
         entries.add(nodeUriArr[4]);
+        try {
+            da.save();
+        }
+        catch (IOException e) {
+            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Changes cannot be " +
+                    "persisted", e); 
+        }
 	}
 
 	public void createInteriorNode(String nodeUri, String type) throws DmtException {
@@ -259,7 +422,7 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
 		    if (nodeUriArr[5].equals("EnvType"))
                 return new DmtData(entries.get(nodeUriArr[4]).envType);
 		    if (nodeUriArr[5].equals("Status"))
-                return new DmtData(entries.get(nodeUriArr[4]).status);
+                return new DmtData(entries.get(nodeUriArr[4]).getStatus());
 		    throw new RuntimeException("Internal error");
 		}
 		if (l == 7) {
@@ -368,32 +531,7 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
             throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "ID has to " +
                     "be set");
         
-        entries.get(nodeUriArr[4]).status = STATUS_STREAMING;
-        
-        // parse the DLOTA descriptor
-        initParser();
-        try {
-            parseDescriptor(nodeUri);
-            Set allowed = new HashSet();
-            allowed.add("application/java-archive");
-            allowed.add("application/vnd.osgi.dp");
-            if (!allowed.contains(contentType.toString().trim()))
-                throw new DmtException(nodeUri, DmtException.OTHER_ERROR, 
-                        contentType + " MIME type is not supported");
-        } catch (DmtException e) {
-            entries.get(nodeUriArr[4]).status = STATUS_DOWNLD_FAILED;
-            throw e;
-        }
-
-        // install content
-        try{
-            downloadAndInstall(nodeUri);
-        } catch (DmtException e) {
-            entries.get(nodeUriArr[4]).status = STATUS_DEPLOYMENT_FAILED;
-            throw e;
-        }
-        
-        entries.get(nodeUriArr[4]).status = STATUS_DEPLOYED;
+        entries.start(nodeUri, correlator, session.getPrincipal());
 	}
     
     private void initParser() {
@@ -407,7 +545,79 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
     ///////////////////////////////////////////////////////////////////////////
     // Private methods
 
-    private void downloadAndInstall(String nodeUri) throws DmtException {
+    private void sendAlertWithException(String correlator, String nodeUri,
+            String principal, Exception exception)  
+    {
+        if (null == principal)
+            return;
+        
+        int result_code = -1;
+        if (exception instanceof DmtException) {
+            DmtException e = (DmtException) exception;
+            switch (e.getCode()) {
+                case DeploymentException.CODE_BUNDLE_START :
+                    result_code = RESULT_BUNDLE_START_WARNING;
+                    break;
+                case DeploymentException.CODE_TIMEOUT :
+                    result_code = RESULT_REQUEST_TIMED_OUT;
+                    break;
+                case DeploymentException.CODE_ORDER_ERROR :
+                    result_code = RESULT_ORDER_ERROR;
+                    break;
+                case DeploymentException.CODE_MISSING_HEADER:
+                    result_code = RESULT_MISSING_HEADER;
+                    break;
+                case DeploymentException.CODE_BAD_HEADER :
+                    result_code = RESULT_BAD_HEADER;
+                    break;
+                case DeploymentException.CODE_MISSING_FIXPACK_TARGET :
+                    result_code = RESULT_MISSING_FIXPACK_TARGET;
+                    break;
+                case DeploymentException.CODE_MISSING_BUNDLE :
+                    result_code = RESULT_MISSING_BUNDLE;
+                    break;
+                case DeploymentException.CODE_MISSING_RESOURCE :
+                    result_code = RESULT_MISSING_RESOURCE;
+                    break;
+                case DeploymentException.CODE_SIGNING_ERROR :
+                    result_code = RESULT_SIGNING_ERROR;
+                    break;
+                case DeploymentException.CODE_BUNDLE_NAME_ERROR :
+                    result_code = RESULT_BUNDLE_NAME_ERROR;
+                    break;
+                case DeploymentException.CODE_FOREIGN_CUSTOMIZER :
+                    result_code = RESULT_FOREIGN_CUSTOMIZER;
+                    break;
+                case DeploymentException.CODE_NO_SUCH_RESOURCE :
+                    result_code = RESULT_NO_SUCH_RESOURCE;
+                    break;
+                case DeploymentException.CODE_BUNDLE_SHARING_VIOLATION :
+                    result_code = RESULT_BUNDLE_SHARING_VIOLATION;
+                    break;
+                case DeploymentException.CODE_RESOURCE_SHARING_VIOLATION :
+                    result_code = RESULT_CODE_RESOURCE_SHARING_VIOLATION;
+                    break;
+                case DeploymentException.CODE_OTHER_ERROR :
+                    result_code = RESULT_UNDEFINED_ERROR;
+                    break;
+                default :
+                    break;
+            }
+        } else if (exception instanceof SAXException){
+            result_code = RESULT_DWNLD_DESCR_ERROR;
+        }
+        try {
+            da.getDmtAdmin().sendAlert(principal, 1226, correlator, new DmtAlertItem[] {
+                    new DmtAlertItem(nodeUri, "org.osgi.deployment.downloadandinstallandactivate",
+                    null, new DmtData(result_code))});
+        }
+        catch (DmtException ex) {
+            // TODO log
+            ex.printStackTrace();
+        }
+    }
+    
+    private InputStream getStream(String nodeUri) throws DmtException {
         InputStream is = null;
         DownloadAgent dwnl = da.getDownloadAgent();
         if (null == dwnl)
@@ -417,10 +627,9 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
             Hashtable props = new Hashtable();
             props.put("url", contentURI.toString());
             is = dwnl.download("url", props);
-            da.installDeploymentPackage(is);
-        } catch (Exception e) {
-            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "");
-        } finally {
+            return is;
+        }
+        catch (Exception e) {
             if (null != is) {
                 try {
                     is.close();
@@ -430,10 +639,11 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
                 }
                 
             }
+            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "", e);
         }
     }
 
-    private void parseDescriptor(String nodeUri) throws DmtException {
+    private void parseDescriptor(String nodeUri) throws DmtException, SAXException {
         DownloadAgent dwnl = da.getDownloadAgent();
         if (null == dwnl)
             throw new DmtException(nodeUri, DmtException.OTHER_ERROR, 
@@ -447,8 +657,9 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
             is = dwnl.download("url", props);
             SAXParser p = getParser();
             p.parse(is, this);
-        }
-        catch (Exception e) {
+        } catch (SAXException e) {
+            throw e;
+        } catch (Exception e) {
             throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "");
         }
         finally {
@@ -462,6 +673,10 @@ public class PluginDownload extends DefaultHandler implements DmtDataPlugin, Dmt
 
             }
         }
+    }
+
+    public void setDeploymentAdmin(DeploymentAdminImpl da) {
+        this.da = da;
     }
 
 }

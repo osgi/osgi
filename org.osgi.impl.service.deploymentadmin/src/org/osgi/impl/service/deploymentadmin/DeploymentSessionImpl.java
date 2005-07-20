@@ -258,9 +258,14 @@ public class DeploymentSessionImpl implements DeploymentSession {
             BundleEntry be = (BundleEntry) iter.next();
             if (be.getBundleId() == b.getBundleId()) {
                 String dir = fwBundleDir + "/" + b.getBundleId() + "/data";
-                File f = new File(dir);
-                if (!f.exists())
-                    f.mkdir();
+                final File f = new File(dir);
+                AccessController.doPrivileged(new PrivilegedAction() {
+                    public Object run() {
+                        if (!f.exists())
+                            f.mkdir();
+                        return null;
+                    }
+                });
                 return f;
             }
         }
@@ -515,8 +520,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
 	                    "Resource processor for pid " + pid + " is not found");
 	            
 	            WrappedResourceProcessor wProc = new WrappedResourceProcessor(proc, 
-	                    fetchAccessControlContext(re.getCertChains()));
-	            
+	                fetchAccessControlContext(re.getCertChains()));
+                        
 	            // each processor is called only once
 	            if (!procs.contains(pid)) {
 	                transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, wProc));
