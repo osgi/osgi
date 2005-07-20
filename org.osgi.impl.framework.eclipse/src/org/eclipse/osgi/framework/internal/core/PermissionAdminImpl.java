@@ -66,7 +66,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  * and <tt>getDefaultPermissions</tt>.
  */
 public class PermissionAdminImpl implements PermissionAdmin {
-	private static final String ADMIN_IMPLIED_ACTIONS = AdminPermission.RESOLVE + ',' + AdminPermission.METADATA + ',' + AdminPermission.CLASS;
+	private static final String ADMIN_IMPLIED_ACTIONS = AdminPermission.RESOURCE + ',' + AdminPermission.METADATA + ',' + AdminPermission.CLASS;
 
 	/** framework object */
 	protected Framework framework;

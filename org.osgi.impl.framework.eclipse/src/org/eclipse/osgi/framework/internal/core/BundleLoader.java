@@ -536,6 +536,18 @@ public class BundleLoader implements ClassLoaderDelegate {
 		// 5) search the local bundle
 		if (result == null)
 			result = findLocalResources(name);
+		else {
+			//compound the required source results with the local ones
+			Enumeration localResults = findLocalResources(name);
+			if (localResults != null) {
+				Vector compoundResults = new Vector();
+				while (result.hasMoreElements())
+					compoundResults.add(result.nextElement());
+				while (localResults.hasMoreElements())
+					compoundResults.add(localResults.nextElement());
+				result = compoundResults.elements();
+			}
+		}
 		if (result != null)
 			return result;
 		// 6) attempt to find a dynamic import source; only do this if a required source was not found

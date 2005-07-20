@@ -12,6 +12,7 @@ package org.eclipse.osgi.framework.internal.core;
 
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.Vector;
 
 public class MultiSourcePackage extends PackageSource {
 	SingleSourcePackage[] suppliers;
@@ -46,12 +47,24 @@ public class MultiSourcePackage extends PackageSource {
 	}
 
 	public Enumeration getResources(String name) {
-		Enumeration result = null;
+		Enumeration firstResult = null;
+		Vector compoundResults = null;
 		for (int i = 0; i < suppliers.length; i++) {
-			result = suppliers[i].getResources(name);
-			if (result != null)
-				return result;
+			Enumeration resources = suppliers[i].getResources(name);
+			if (resources != null) {
+				if (firstResult == null)
+					firstResult = resources;
+				else {
+					if (compoundResults == null) {
+						compoundResults = new Vector();
+						while (firstResult.hasMoreElements())
+							compoundResults.add(firstResult.nextElement());
+					}
+					while (resources.hasMoreElements())
+						compoundResults.add(resources.nextElement());
+				}
+			}
 		}
-		return result;
+		return compoundResults == null ? firstResult : compoundResults.elements();
 	}
 }

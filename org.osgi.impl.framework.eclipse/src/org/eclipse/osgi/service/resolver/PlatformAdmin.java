@@ -42,7 +42,11 @@ public interface PlatformAdmin {
 	 * changes to the returned state, a mutable state must be requested. 
 	 * Otherwise, an immutable state should be requested. In this case, invoking 
 	 * any of the operations that could cause the state to be changed will throw 
-	 * an <code>java.lang.UnsupportedOperationException</code>. 
+	 * an <code>java.lang.UnsupportedOperationException</code>.
+	 * <p>
+	 * If a mutable state is requested, the resulting state will <strong>not</strong> 
+	 * be resolved. 
+	 * </p> 
 	 * @param mutable whether the returned state should mutable
 	 * @return a state representing the current framework.
 	 */
