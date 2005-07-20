@@ -10,6 +10,7 @@
 
 package org.osgi.service.cm;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.security.*;
@@ -21,15 +22,15 @@ import org.osgi.framework.*;
  * Indicates a bundle's authority to set or get a Configuration.
  * 
  * This permission verifies if the caller has the authority to get the
- * configuration of a specific PID and to get set it. The target of this
+ * configuration of a specific PID and to get set it. The name of this
  * permission is a filter expression. The filter gives access to the following
  * parameters:
  * <ul>
- * <li>signer - The signer of the bundle that receives the configuration</li>
- * <li>location - The location of the bundle that receives the configuration
+ * <li>signer - The signer of the target bundle that receives the configuration</li>
+ * <li>location - The location of the target bundle that receives the configuration
  * </li>
- * <li>id - The id of the bundle that receives the configuration</li>
- * <li>name - The bundle symbolic name of the bundle that receives the
+ * <li>id - The id of the target bundle that receives the configuration</li>
+ * <li>name - The bundle symbolic name of the target bundle that receives the
  * configuration</li>
  * <li>pid - The PID for a singleton configuration</li>
  * <li>factoryPid - The Factory PID for a factory configuration</li>
@@ -37,23 +38,23 @@ import org.osgi.framework.*;
  * The target bundle is not always known ahead of time. In that case, signer,
  * name and location will not be set. The target bundle can be found by the fact
  * that it has already registered a target service with the given PID, or the
- * setter has set the bundle location, which identifies the target bundle. The
+ * configuration has the bundle location set, which identifies the target bundle. The
  * filter can also check what PID (for singletons) or factory PID (for
- * factories) is used. <br/>The actions for this permission are:
+ * factories) is used. 
+ * <p>The actions for this permission are:
  * <ul>
  * <li>SET - The right to update a configuration. Checked during the
- * <code>update</code> method. This implies READ</li>
+ * <code>update</code> method. This implies READ.</li>
  * <li>GET - The right to be updated. The Configuration Admin must verify that
- * the bundle that receives the configuration has permission with the
- * <code>hasPermission</code> method before it calls the right variation of
+ * the target bundle that receives the configuration has permission with the
+ * <code>hasPermission</code> method before it calls the 
  * the <code>updated</code> method.</li>
  * <li>READ - The right to see a Configuration object. This action is needed
- * also when creation a new configuration.</li>
+ * also when creating a new configuration.</li>
  * <li>REBIND - The right to change the binding of an existing bound
  * configuration.</li>
- * <li>PLUGIN - The right to be called as a plugin</li>
  * </ul>
- * Every bundle must implicitly given the permission to set its own
+ * Every bundle must be given the permission to set its own
  * configuration.
  * 
  * @version $Revision$
@@ -66,8 +67,9 @@ public final class ConfigurationPermission extends Permission {
 	 * The action string <code>get</code>.
 	 */
 	public final static String		GET					= "get";
+	
 	/**
-	 * The action string <code>set</code>. This implies ### what
+	 * The action string <code>set</code>. This implies <code>read</code>.
 	 */
 	public final static String		SET					= "set";
 
@@ -90,30 +92,30 @@ public final class ConfigurationPermission extends Permission {
 																| ACTION_READ
 																| ACTION_REBIND;
 	private final static int		ACTION_NONE			= 0;
-	private final static int		ACTION_ERROR		= 0x80000000;
 
 	private final static int		ACTIONS[]			= {ACTION_GET,
-			ACTION_SET, ACTION_READ, ACTION_REBIND		};
+			ACTION_SET | ACTION_READ, ACTION_READ, ACTION_REBIND		};
 	private final static char[][][]	ACTION_NAMES		= {
 		new char[][] {new char[] {'g', 'G'}, new char[] {'e', 'E'}, new char[] {'t', 'T'}},
 		new char[][] {new char[] {'s', 'S'}, new char[] {'e', 'E'}, new char[] {'t', 'T'}},
 		new char[][] {new char[] {'r', 'R'}, new char[] {'e', 'E'}, new char[] {'a', 'A'}, new char[] {'d', 'D'}},
 		new char[][] {new char[] {'r', 'R'}, new char[] {'e', 'E'}, new char[] {'b', 'B'}, new char[] {'i', 'I'}, new char[] {'n', 'N'}, new char[]{'d', 'D'}}};
 
-	private static String			KEY_SIGNER			= "signer";
-	private static String			KEY_LOCATION		= "location";
-	private static String			KEY_ID				= "id";
-	private static String			KEY_NAME			= "name";
-	private static String			KEY_PID				= "pid";
-	private static String			KEY_FACTORYPID		= "factoryPid";
+	private final static String			KEY_SIGNER			= "signer";
+	private final static String			KEY_LOCATION		= "location";
+	private final static String			KEY_ID				= "id";
+	private final static String			KEY_NAME			= "name";
+	private final static String			KEY_PID				= "pid";
+	private final static String			KEY_FACTORYPID		= "factoryPid";
 
 	private transient int			action_mask			= ACTION_NONE;
 	private transient Filter		filter				= null;
 	private transient Bundle		bundle				= null;
 	private transient String		pid					= null;
-	private transient String		f_pid				= null;
-	private transient String		actions				= null;
+	private transient String		factoryPid				= null;
 	private transient Dictionary	properties			= null;
+
+	private String		actions				= null;
 
 	/**
 	 * Create a new ConfigurationPermission.
@@ -134,95 +136,38 @@ public final class ConfigurationPermission extends Permission {
 	 * 
 	 * <p>
 	 * There are the following actions: <code>get</code>,<code>set</code>,
-	 * and <code>read</code>. The <code>set</code> action allows a bundle
+	 * <code>read</code> and <code>rebind</code>. The <code>set</code> action allows a bundle
 	 * to create, list, get, update and delete configurations for the target.
 	 * The <code>get</code> action allows a bundle to receive a configuration
 	 * object. The target bundle is itself in that case. The <code>read</code>
-	 * action permits listing the configurations. The <code>set</code> action
+	 * action permits listing the configurations. 
+	 * The <code>rebind</code> action permits changing the binding of an existing bound
+     * configuration.
+	 * The <code>set</code> action
 	 * implies <code>read</code>.
 	 * 
-	 * @param filter A filter expression that can use signer, location, name,
+	 * @param name A filter expression that can use signer, location, name,
 	 *        pid or factoryPid
 	 * @param actions <code>get</code>, <code>set</code>,
 	 *        <code>read</code> (canonical order)
 	 */
 
-	public ConfigurationPermission(String filter, String actions) {
-		this(filter, getMask(actions));
+	public ConfigurationPermission(String name, String actions) {
+		this(name, createFilter(name), getMask(actions));
 	}
+	/**
+	 * Package private constructor used by ConfigurationPermissionCollection.
+	 * 
+	 * @param name 
+	 * @param mask action mask
+	 */
 
-	private ConfigurationPermission(String filter, int mask) {
-		super(filter);
+	private ConfigurationPermission(String name, Filter filter, int mask) {
+		super(name);
 		init(mask);
-		try {
-			filter = escapeSigner(filter);
-			this.filter = FrameworkUtil.createFilter(filter);
-		}
-		catch (InvalidSyntaxException e) {
-			// TODO not sure what to do here; for now this will
-			// cause filter to be null which makes this permission
-			// always return false from implies. Could throw an
-			// IllegalArgumentException
-		}
+		this.filter = filter;
 	}
-
-	private String escapeSigner(String sFilter) {
-		int pos = sFilter.indexOf(KEY_SIGNER);
-		if (pos < 0)
-			return sFilter;
-
-		// there may be a signer attribute
-		StringBuffer filterBuf = new StringBuffer(sFilter);
-		int numAsteriskFound = 0; // use as offset to replace in buffer
-		int walkbackPos; // temp pos
-		// find occurences of (signer= and escape out *'s
-		while (pos != -1) {
-			// walk back and look for '(' to see if this is an attr
-			walkbackPos = pos - 1;
-			// consume whitespace
-			while (walkbackPos >= 0
-					&& Character.isWhitespace(sFilter.charAt(walkbackPos)))
-				walkbackPos--;
-			if (walkbackPos < 0)
-				// filter is invalid - Filter creation will throw error
-				break;
-
-			// check to see if we have unescaped '('
-			if (sFilter.charAt(walkbackPos) != '('
-					|| (walkbackPos > 0 && sFilter.charAt(walkbackPos - 1) == '\\')) {
-				// '(' was escaped or not there
-				pos = sFilter.indexOf(KEY_SIGNER, pos + KEY_SIGNER.length()); //$NON-NLS-1$
-				continue;
-			}
-			pos += KEY_SIGNER.length(); // skip over 'signer'
-
-			// found signer - consume whitespace before '='
-			while (Character.isWhitespace(sFilter.charAt(pos)))
-				pos++;
-
-			// look for '='
-			if (sFilter.charAt(pos) != '=') {
-				// attr was signerx - keep looking
-				pos = sFilter.indexOf(KEY_SIGNER, pos); //$NON-NLS-1$
-				continue;
-			}
-			pos++; // skip over '='
-
-			// found signer value - escape '*'s
-			while (!(sFilter.charAt(pos) == ')' && sFilter.charAt(pos - 1) != '\\')) {
-				if (sFilter.charAt(pos) == '*') {
-					filterBuf.insert(pos + numAsteriskFound, '\\');
-					numAsteriskFound++;
-				}
-				pos++;
-			}
-
-			// end of signer value - look for more?
-			pos = sFilter.indexOf(KEY_SIGNER, pos); //$NON-NLS-1$
-		} // end while (pos != -1)
-		return filterBuf.toString();
-	}
-
+	
 	/**
 	 * Create a new Configuration Permission. This constructor is the check
 	 * version. It must be used by the Configuration Admin service to check the
@@ -239,13 +184,59 @@ public final class ConfigurationPermission extends Permission {
 	 */
 	public ConfigurationPermission(Bundle bundle, String pid,
 			String factoryPid, String action) {
-		super(Long.toString(bundle.getBundleId()));
+		super(createName(bundle, pid, factoryPid));
 		this.bundle = bundle;
 		this.pid = pid;
-		this.f_pid = factoryPid;
+		this.factoryPid = factoryPid;
 		init(getMask(action));
 	}
 
+	private static String createName(Bundle bundle, String pid,
+			String factoryPid) {
+		StringBuffer sb = new StringBuffer();
+		if ((pid != null) || (factoryPid != null)) {
+			sb.append("(&");
+		}
+		
+		sb.append("(");
+		sb.append(KEY_ID);
+		sb.append("=");
+		sb.append(bundle.getBundleId());
+		sb.append(")");
+		
+		if (pid != null) {
+			sb.append("(");
+			sb.append(KEY_PID);
+			sb.append("=");
+			sb.append(pid);
+			sb.append(")");
+		}
+		if (factoryPid != null) {
+			sb.append("(");
+			sb.append(KEY_FACTORYPID);
+			sb.append("=");
+			sb.append(factoryPid);
+			sb.append(")");
+		}
+
+		if ((pid != null) || (factoryPid != null)) {
+			sb.append(")");
+		}
+		return sb.toString();
+	}
+	/**
+	 * Static method to create a Filter object from a filter string.
+	 * @param filter Filter string
+	 * @return Filter object for the specified filter string
+	 */
+	private static Filter createFilter(String filter) {
+		try {
+			return FrameworkUtil.createFilter(filter);
+		}
+		catch (InvalidSyntaxException e) {
+			throw new IllegalArgumentException(e.getMessage());
+		}
+	}
 	/**
 	 * Determines if a <code>ConfigurationPermission</code> object "implies"
 	 * the specified permission.
@@ -259,13 +250,10 @@ public final class ConfigurationPermission extends Permission {
 		if (!(p instanceof ConfigurationPermission))
 			return false;
 		ConfigurationPermission target = (ConfigurationPermission) p;
-		// check actions first - much faster
-		if ((action_mask & target.action_mask) != target.action_mask)
-			return false;
-		// if passed in a filter bail now
-		if (target.filter != null)
-			throw new RuntimeException("Cannot imply a filter");
-		return filter != null && filter.match(target.getProperties());
+		return ((action_mask & target.action_mask) == target.action_mask) &&
+		        (filter != null) &&
+				(target.filter == null) &&
+				filter.match(target.getProperties());
 	}
 
 	/**
@@ -339,12 +327,10 @@ public final class ConfigurationPermission extends Permission {
 		if (!(obj instanceof ConfigurationPermission))
 			return false;
 		ConfigurationPermission p = (ConfigurationPermission) obj;
-		// use == to compare bundle objects because they must be the
-		// same object to be equal.
-		return ((action_mask == p.action_mask)&& 
-				(bundle == p.bundle) &&
+		return ((action_mask == p.action_mask) && 
+				(bundle.getBundleId() == p.bundle.getBundleId()) &&
 				(pid == null ? p.pid == null : pid.equals(p.pid)) &&
-				(f_pid == null ? p.f_pid == null : f_pid.equals(p.f_pid)) &&
+				(factoryPid == null ? p.factoryPid == null : factoryPid.equals(p.factoryPid)) &&
 				(filter == null ? p.filter == null	: filter.equals(p.filter)));
 	}
 
@@ -355,12 +341,7 @@ public final class ConfigurationPermission extends Permission {
 	 */
 
 	public int hashCode() {
-		int result = action_mask;
-		if (filter != null)
-			result = result ^ filter.hashCode();
-		if (bundle != null)
-			result = result ^ getProperties().hashCode();
-		return result;
+		return (getName().hashCode() ^ getActions().hashCode());
 	}
 
 	/**
@@ -449,7 +430,7 @@ public final class ConfigurationPermission extends Permission {
 		return mask;
 	}
 
-	private synchronized Dictionary getProperties() {
+	private Dictionary getProperties() {
 		if (properties == null) {
 			properties = new Hashtable();
 			AccessController.doPrivileged(new PrivilegedAction() {
@@ -463,19 +444,49 @@ public final class ConfigurationPermission extends Permission {
 						if (bundle.getSymbolicName() != null)
 							properties.put(KEY_NAME, bundle.getSymbolicName());
 						// set signers
+						// TODO need to capture NoClassDefFoundError here if ConditionalPermissionAdmin not available.
 						properties.put(KEY_SIGNER, new SignerWrapper(bundle));
 					}
 					// set pid
 					if (pid != null)
 						properties.put(KEY_PID, pid);
 					// set factoryPid
-					if (f_pid != null)
-						properties.put(KEY_FACTORYPID, f_pid);
+					if (factoryPid != null)
+						properties.put(KEY_FACTORYPID, factoryPid);
 					return properties;
 				}
 			});
 		}
 		return properties;
+	}
+
+	/**
+	 * WriteObject is called to save the state of this permission to a stream.
+	 * The actions are serialized, and the superclass takes care of the name.
+	 */
+	
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+			throws IOException {
+		// Write out the actions. The superclass takes care of the name
+		// call getActions to make sure actions field is initialized
+		if (actions == null)
+			getActions();
+		if (filter == null) {
+			throw new UnsupportedOperationException("cannot serialize");
+		}
+		s.defaultWriteObject();
+	}
+
+	/**
+	 * readObject is called to restore the state of this permission from a
+	 * stream.
+	 */
+	private synchronized void readObject(java.io.ObjectInputStream s)
+			throws IOException, ClassNotFoundException {
+		// Read in the action, then initialize the rest
+		s.defaultReadObject();
+		init(getMask(actions));
+		filter = createFilter(getName());
 	}
 
 	private final class ConfigurationPermissionCollection extends
@@ -528,7 +539,7 @@ public final class ConfigurationPermission extends Permission {
 				int oldMask = existing.action_mask;
 				int newMask = sp.action_mask;
 				if (oldMask != newMask) {
-					permissions.put(name, new ConfigurationPermission(name,
+					permissions.put(name, new ConfigurationPermission(name, existing.filter,
 							oldMask | newMask));
 				}
 			}
@@ -571,6 +582,7 @@ public final class ConfigurationPermission extends Permission {
 		}
 	}
 
+	// TODO change to use classes directly rather than reflection.
 	private static class SignerWrapper {
 		private static Method		GET_CONDITION;
 		private static Constructor	INFO_CONSTRUCTOR;
@@ -617,6 +629,7 @@ public final class ConfigurationPermission extends Permission {
 			this.bundle = bundle;
 		}
 
+		// TODO This impl assumes FilterImpl calls equals in a certain order. Equals must be reflexive
 		public boolean equals(Object o) {
 			if (!(o instanceof SignerWrapper))
 				return false;
