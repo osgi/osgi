@@ -26,12 +26,15 @@
  */
 package org.osgi.test.cases.permissionadmin.conditional.tbc;
 
+import org.osgi.test.cases.permissionadmin.conditional.testcond.TestCondition;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 import org.osgi.framework.*;
 import org.osgi.service.condpermadmin.*;
 import org.osgi.service.permissionadmin.*;
 
+import java.security.Permission;
+import java.util.PropertyPermission;
 import java.util.StringTokenizer;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -61,7 +64,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
   private String            BUNDLE_LOCATION_CONDITION = BundleLocationCondition.class.getName();
   private String            BUNDLE_SIGNER_CONDITION = BundleSignerCondition.class.getName();
   private static String[] methods = new String[] {"testConditionInfoCreation", // "TC1"
-                                                  "testCoditionalPermissionAdmin", // "TC2"
+                                                  "testConditionalPermissionAdmin", // "TC2"
                                                   "testConditionInfoDeletion", // "TC3"
                                                   "testBundleLocationCondition", // "TC4"
                                                   "testBundleSignerCondition", // "TC5"
@@ -85,7 +88,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     
     permBundle = installBundle("tb2.jar");
     permBundleLocation = permBundle.getLocation();
-    
+        
     permissionAdmin = (PermissionAdmin)getService(PermissionAdmin.class);
     conditionalAdmin = (ConditionalPermissionAdmin)getService(ConditionalPermissionAdmin.class);
     tbc = (ConditionalTBCService)getService(ConditionalTBCService.class);
@@ -160,7 +163,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
    * Check if ConditionalPermissionInfos added in CoditionalPermissionAdmin
    * are identical to the original.
    */
-  public void testCoditionalPermissionAdmin() {//TC2
+  public void testConditionalPermissionAdmin() {//TC2
     ConditionInfo cInfo1 = new ConditionInfo(BUNDLE_LOCATION_CONDITION, 
         new String[]{testBundleLocation});    
     ConditionInfo cInfo2 = new ConditionInfo(BUNDLE_SIGNER_CONDITION,
@@ -210,7 +213,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
         new String[]{ConditionResource.getString(ConditionalUtility.DN_S)});
         
     ConditionInfo[] conditions = new ConditionInfo[]{cInfo1, cInfo2 };
-    AdminPermission permission = new AdminPermission("*", AdminPermission.RESOURCE);
+    AdminPermission permission = new AdminPermission("*", AdminPermission.LIFECYCLE);
     utility.deletePermissions(new ConditionInfo[]{cInfo1}, permission);
     utility.deletePermissions(conditions, permission);
   }
@@ -226,7 +229,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     permissionAdmin.setPermissions(testBundleLocation, null);
     
     ConditionInfo cInfo = null;
-    AdminPermission permission = new AdminPermission("*", AdminPermission.RESOURCE);
+    AdminPermission permission = new AdminPermission("*", AdminPermission.LIFECYCLE);
     AdminPermission allPermissions = new AdminPermission("*", "*");
   
     Vector locations = utility.getWildcardString(testBundleLocation);
@@ -238,10 +241,15 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
                new AdminPermission[]{permission}, new AdminPermission[]{allPermissions});
     }
     
-    String bundleLocation = getContext().getBundle().getLocation();
-    cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[]{bundleLocation});
-    utility.testPermissions(new ConditionInfo[]{cInfo}, permission, 
-             new AdminPermission[]{}, new AdminPermission[]{permission, allPermissions});  
+    //Sets permission with not satisfied conditions and checks if the permission is not allowed
+    
+    //This block will be commented for now because it is not clear if in this case
+    //there are no permissions or the default permissions (all permissions now)
+//    String bundleLocation = getContext().getBundle().getLocation();
+//    cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[]{bundleLocation});
+//    utility.testPermissions(new ConditionInfo[]{cInfo}, permission, 
+//             new AdminPermission[]{}, //allowed
+//             new AdminPermission[]{permission, allPermissions}); //not allowed
   }
 
 
@@ -254,7 +262,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     permissionAdmin.setPermissions(testBundleLocation, null); 
     
     ConditionInfo cInfo = null;
-    AdminPermission permission = new AdminPermission("*", AdminPermission.RESOURCE);
+    AdminPermission permission = new AdminPermission("*", AdminPermission.LIFECYCLE);
     AdminPermission allPermissions = new AdminPermission("*", "*");    
  
     //test with appropriate certificates 
@@ -271,17 +279,24 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     }
     
     // test with inappropriate certificates 
+    cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[]{testBundleLocation});
+    ConditionalPermissionInfo condition = 
+      utility.setPermissionsByCPermissionAdmin(new ConditionInfo[]{cInfo}, 
+          new Permission[]{new PropertyPermission("java.vm", "read")});
     pass("Test with inappropriate certificates");
-    dn_s_value = ConditionResource.getString(ConditionalUtility.INAPPROPRIATE_DN_S);
-
-    StringTokenizer st = new StringTokenizer(dn_s_value, ConditionalUtility.SEPARATOR);
-    while (st.hasMoreTokens()) {
-      cInfo = new ConditionInfo(BUNDLE_SIGNER_CONDITION, new String[]{st.nextToken()});
-      utility.testPermissions(new ConditionInfo[]{cInfo}, permission, 
-            new AdminPermission[]{}, new AdminPermission[]{permission, allPermissions});
-    }
-  }
+    try {
+      dn_s_value = ConditionResource.getString(ConditionalUtility.INAPPROPRIATE_DN_S);
   
+      StringTokenizer st = new StringTokenizer(dn_s_value, ConditionalUtility.SEPARATOR);
+      while (st.hasMoreTokens()) {
+        cInfo = new ConditionInfo(BUNDLE_SIGNER_CONDITION, new String[]{st.nextToken()});
+        utility.testPermissions(new ConditionInfo[]{cInfo}, permission, 
+              new AdminPermission[]{}, new AdminPermission[]{permission, allPermissions});
+      }
+    } finally {
+      condition.delete();
+    }
+  }  
   
   /**
    * Check different cases with satisfied, postponed and mutable conditions.
@@ -289,51 +304,51 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
   public void testMoreConditions() {//TC6
     utility.setTestBunde(testBundle, false);
     
-    AdminPermission permission = new AdminPermission("*", AdminPermission.RESOURCE);
-    AdminPermission permission2 = new AdminPermission("*", AdminPermission.METADATA);
+    AdminPermission permission = new AdminPermission("*", AdminPermission.LIFECYCLE);
+    AdminPermission permission2 = new AdminPermission("*", AdminPermission.LISTENER);
     AdminPermission allPermissions = new AdminPermission("*", "*");
-    
-//    // All bundles must have that 'permission'
-//    utility.testPermissions(new ConditionInfo[]{}, permission, 
-//      new AdminPermission[]{permission}, new AdminPermission[]{allPermissions});
 
+    //it doesn't work because loadClass method in RI works with the system class loader only
+    //when it works with other class loader, uncomment next row
+    TestCondition.setTestBundleLocation(testBundleLocation);
+    
     //Check TestCondition_0 and TestCondition_1 at creation and later TestCondition_2 (when the check is performed)
     utility.testPermissions(
       new ConditionInfo[]{
-        utility.createTestCInfo(true,  true, false, "TestCondition_0"), // postponed, satisfied, not mutable
-        utility.createTestCInfo(false, true, false, "TestCondition_1"), // not postponed, satisfied, not mutable    
+        utility.createTestCInfo(false, true, false, "TestCondition_0"), // not postponed, satisfied, not mutable
+        utility.createTestCInfo(true,  true, false, "TestCondition_1"), // postponed, satisfied, not mutable    
         utility.createTestCInfo(false, true, true,  "TestCondition_2")  // not postponed, satisfied, mutable 
       }, 
       new AdminPermission[]{permission}, 
-      new AdminPermission[]{permission}, 
-      new AdminPermission[]{allPermissions},
+      new AdminPermission[]{permission},     //allowed
+      new AdminPermission[]{allPermissions}, //not allowed
       new String[] {"TestCondition_0", "TestCondition_1", "TestCondition_2"}); 
     
-    //Check TestCondition_0_1 and TestCondition_1_1 at creation and later two times 
-    //TestCondition_2_1 (when every check is performed)
+    //Check TestCondition_0_1 and TestCondition_2_1 at creation and later two times 
+    //TestCondition_1_1 (when every check is performed)
     utility.testPermissions(
       new ConditionInfo[]{
-        utility.createTestCInfo(true,  true, false, "TestCondition_0_1"), // postponed, satisfied, not mutable
-        utility.createTestCInfo(false, true, false, "TestCondition_1_1"), // not postponed, satisfied, not mutable    
-        utility.createTestCInfo(false, true, true,  "TestCondition_2_1")  // not postponed, satisfied, mutable  
+        utility.createTestCInfo(false, true, false, "TestCondition_0_1"), // not postponed, satisfied, not mutable
+        utility.createTestCInfo(false, true, true,  "TestCondition_1_1"), // not postponed, satisfied, mutable    
+        utility.createTestCInfo(true,  true, false, "TestCondition_2_1")  // npostponed, satisfied, not mutable  
       }, 
       new AdminPermission[]{permission, permission2}, 
-      new AdminPermission[]{permission, permission2}, 
-      new AdminPermission[]{allPermissions},
-      new String[] {"TestCondition_0_1", "TestCondition_1_1", "TestCondition_2_1", "TestCondition_2_1"});    
+      new AdminPermission[]{permission, permission2}, //allowed
+      new AdminPermission[]{allPermissions},          //not allowed
+      new String[] {"TestCondition_0_1", "TestCondition_2_1", "TestCondition_1_1", "TestCondition_1_1"});    
 
     //Check at creation 3 and 4, and then, 4_2, 4_3 and finally 4_1 because it is postponed
     utility.testPermissions(
         new ConditionInfo[]{
-          utility.createTestCInfo(true, true, false,  "TestCondition_3"), // postponed, satisfied, not mutable
-          utility.createTestCInfo(false, true, false, "TestCondition_4"), // not postponed, satisfied, not mutable
-          utility.createTestCInfo(true, true, true,  "TestCondition_4_1"), // postponed, satisfied, mutable
+          utility.createTestCInfo(false, true, false,  "TestCondition_3"), // not postponed, satisfied, not mutable
+          utility.createTestCInfo(true,  true, false, "TestCondition_4"), // postponed, satisfied, not mutable
+          utility.createTestCInfo(true,  true, true,  "TestCondition_4_1"), // postponed, satisfied, mutable
           utility.createTestCInfo(false, true, true, "TestCondition_4_2"), // not postponed, satisfied, mutable
           utility.createTestCInfo(false, true, true, "TestCondition_4_3"), // not postponed, satisfied, mutable
         }, 
         new AdminPermission[] {permission}, 
-        new AdminPermission[]{permission}, 
-        new AdminPermission[]{allPermissions},
+        new AdminPermission[]{permission},     //allowed
+        new AdminPermission[]{allPermissions}, //not allowed
         new String[] {"TestCondition_3", "TestCondition_4", "TestCondition_4_2", "TestCondition_4_3", "TestCondition_4_1"});
 
     utility.testPermissions(
@@ -343,9 +358,9 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
         utility.createTestCInfo(false, false, true, "TestCondition_7"), // not postponed, not satisfied, mutable
       }, 
       new AdminPermission[] {permission}, 
-      new AdminPermission[]{}, 
-      new AdminPermission[]{allPermissions},
-      new String[] {"TestCondition_5", "TestCondition_6", "TestCondition_7"});
+      new AdminPermission[]{},               //allowed
+      new AdminPermission[]{allPermissions}, //allowed
+      new String[] {"TestCondition_5"});//without "TestCondition_6", "TestCondition_7"
     
     //Don't check 2nd because 1st is not satisfied
     utility.testPermissions(
@@ -356,7 +371,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
         new AdminPermission[] {permission}, 
         new AdminPermission[]{allPermissions}, //because they are by default
         new AdminPermission[]{},//permission, allPermissions
-        new String[] {"TestCondition_8"});
+        new String[] {"TestCondition_8"});//without "TestCondition_9"
   
     
     //Don't check the postponed (2nd) because first is not satisfied
@@ -366,9 +381,9 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
         utility.createTestCInfo(true, true, false,  "TestCondition_11"), // postponed, satisfied, not mutable
       }, 
       new AdminPermission[] {permission}, 
-      new AdminPermission[]{},
+      new AdminPermission[]{},//allowed
       new AdminPermission[]{allPermissions},//permission, allPermissions
-      new String[] {"TestCondition_11", "TestCondition_10"});
+      new String[] {"TestCondition_11"});//without "TestCondition_10"
     
   }
   
@@ -379,10 +394,9 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     utility.setTestBunde(testBundle, false);
     
     AdminPermission pCPA = new AdminPermission("*", AdminPermission.LIFECYCLE);
-    AdminPermission pPA = new AdminPermission("*", AdminPermission.RESOURCE);//LISTENER); 
-    AdminPermission def = new AdminPermission("*", AdminPermission.METADATA);
-    
-    PermissionInfo[] defaultPermissions = permissionAdmin.getDefaultPermissions();
+    AdminPermission pPA = new AdminPermission("*", AdminPermission.LISTENER); 
+    //get permissions before test
+    PermissionInfo[] origPermissions = permissionAdmin.getPermissions(testBundleLocation);
         
     ConditionInfo cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[]{testBundleLocation});
     utility.testPermissions(new ConditionInfo[]{cInfo}, pCPA, 
@@ -392,10 +406,9 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     utility.testPermissions(new ConditionInfo[]{cInfo}, pCPA, 
         new AdminPermission[]{}, new AdminPermission[]{pCPA});
     
-    utility.setPermissionsByCPermissionAdmin(new ConditionInfo[]{}, new AdminPermission[] {pCPA});
     utility.allowed(pPA);   
-        
-    permissionAdmin.setDefaultPermissions(defaultPermissions);
+    //restore permissions after test
+    permissionAdmin.setPermissions(testBundleLocation, origPermissions);
   }
   
   
@@ -408,9 +421,10 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     AdminPermission pFromFile = utility.getPermission(ConditionalUtility.REQUIRED);
     AdminPermission pCP = utility.getPermission(ConditionalUtility.CP_PERMISSION);
     AdminPermission pCPIntersection = utility.getPermission(ConditionalUtility.REQUIRED_CP_PERMISSION);
+    ConditionInfo cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[]{permBundleLocation});
     
     // ConditionalPermissionAdmin && permissions.perm
-    utility.testPermissions(new ConditionInfo[]{}, pCP, 
+    utility.testPermissions(new ConditionInfo[]{cInfo}, pCP, 
         new AdminPermission[]{pCPIntersection}, new AdminPermission[]{pFromFile, pCP});
     
     
@@ -418,11 +432,11 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     AdminPermission pAPIntersection = utility.getPermission(ConditionalUtility.REQUIRED_P_PERMISSION);
     
     // PermissionAdmin && ConditionalPermissionAdmin && permissions.perm
-    utility.setPermissionsByPermissionAdmin(testBundleLocation, pAP);
-    utility.testPermissions(new ConditionInfo[]{}, pCP, 
+    utility.setPermissionsByPermissionAdmin(permBundleLocation, pAP);
+    utility.testPermissions(new ConditionInfo[]{cInfo}, pCP, 
         new AdminPermission[]{}, new AdminPermission[]{pFromFile, pCP, pCPIntersection});
     
-    utility.setPermissionsByCPermissionAdmin(new ConditionInfo[]{}, new AdminPermission[] {pCP});
+    utility.setPermissionsByCPermissionAdmin(new ConditionInfo[]{cInfo}, new AdminPermission[] {pCP});
     utility.allowed(pAPIntersection);
   }
 
