@@ -3,7 +3,6 @@ package org.osgi.test.cases.permissionadmin.conditional.tbc;
 
 
 import java.lang.reflect.Constructor;
-import java.security.AccessControlException;
 import java.security.Permission;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -17,6 +16,7 @@ import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.service.permissionadmin.PermissionAdmin;
+import org.osgi.test.cases.permissionadmin.conditional.testcond.TestCondition;
 
 
 public class ConditionalUtility {
@@ -24,10 +24,10 @@ public class ConditionalUtility {
 	private ConditionalTestControl 		testControl;
 	private ConditionalTBCService  		tbc;
 	private ConditionalPermTBCService	permTBC;
-	private PermissionAdmin		   		pAdmin;
+	private PermissionAdmin		   		  pAdmin;
 	private ConditionalPermissionAdmin 	cpAdmin;
-	private Bundle						testBundle;
-	private boolean						hasPermissionsPerm;
+	private Bundle	 testBundle;
+	private boolean	 hasPermissionsPerm;
 	
 	static String REQUIRED 					  = "RequiredPermission";
 	static String CP_PERMISSION 			= "CPAdminPermission";
@@ -57,12 +57,6 @@ public class ConditionalUtility {
 	public void setTestBunde(Bundle bundle, boolean hasPermissionsPerm) {
 		this.testBundle = bundle;
 		this.hasPermissionsPerm = hasPermissionsPerm;
-//    pAdmin.setPermissions(bundle.getLocation(), new PermissionInfo[] {});
-//    PermissionInfo[] perms = pAdmin.getPermissions(bundle.getLocation());
-//    for (int i = 0; i < perms.length; i++) {
-//      PermissionInfo info = perms[i];
-//      System.out.println("info = " + info);   
-//    }
 	}
 	
 	
@@ -148,20 +142,24 @@ public class ConditionalUtility {
 		}
 	}
 	
-	Vector getWildcardString(String value) {
-		Vector result = new Vector();
-		result.addElement(value);
-		
-		int index = value.indexOf(".");
-		int lastIndex;
-		
-		while (index != -1) {
-			lastIndex = index + 1;
-			result.addElement(value.substring(0, lastIndex) + "*");
-			index = value.indexOf(".", lastIndex); 
-		}		
-		return result;
-	}
+  Vector getWildcardString(String value) {
+    Vector result = new Vector();
+    result.addElement(value);
+    int beginIndex = 0;
+    if (value.startsWith("http://")) {
+      beginIndex = "http://".length();
+    }
+    int index = value.indexOf("/", beginIndex);
+    int lastIndex;
+    
+    while (index != -1) {
+      lastIndex = index + 1;
+      result.addElement(value.substring(0, lastIndex) + "-");
+      index = value.indexOf("/", lastIndex); 
+    }               
+    return result;
+}
+
 	
 	// Returns vector whose values are version-ranges, where version belong 
 	Vector getCorrectVersionRanges(String version, String floor, String ceiling) {
@@ -261,19 +259,27 @@ public class ConditionalUtility {
       AdminPermission[] allowedPermission, AdminPermission[] notAllowedPermission, String[] order) {
     ConditionalPermissionInfo cpInfo = setPermissionsByCPermissionAdmin(conditions, permissions);
     testControl.trace("Test " + cpInfoToString(cpInfo));
+    boolean testForAllowed = allowedPermission.length>0;
     testControl.trace("Test for allowed permissions:");
     for (int i = 0; i < allowedPermission.length; i++) {
       allowed(allowedPermission[i]);
     }
     //it doesn't work because loadClass method in RI works with the system class loader only
-    //when it works with other class loader, uncomment next row
-    //testEqualArrays(order, TestCondition.getSatisfOrder());
+    //when it works with other class loader, uncomment all 'testForAllowed' blocks here
+    //if (testForAllowed) testEqualArrays(order, TestCondition.getSatisfOrder());
     testControl.trace("Test for not allowed permissions:");
     for (int k = 0; k < notAllowedPermission.length; k++) {
       notAllowed(notAllowedPermission[k], SecurityException.class);
-      //testEqualArrays(order, TestCondition.getSatisfOrder());
     }
+    //if (testForAllowed) {
+    //  //alredy order is tested, so only clear the vector
+    //  TestCondition.satisfOrder.removeAllElements();
+    //} else {
+    //  //order not tested yet, test it here
+    //  testEqualArrays(order, TestCondition.getSatisfOrder());
+    //}
     cpInfo.delete();
+    
   }
   
   void deletePermissions(ConditionInfo[] conditions, Permission permission) {
