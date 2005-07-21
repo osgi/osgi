@@ -37,6 +37,7 @@ import org.osgi.test.cases.framework.div.tbc.Bundle.GetResource;
 import org.osgi.test.cases.framework.div.tbc.Bundle.GetResources;
 import org.osgi.test.cases.framework.div.tbc.Bundle.GetSymbolicName;
 import org.osgi.test.cases.framework.div.tbc.Bundle.LoadClass;
+import org.osgi.test.cases.framework.div.tbc.BundleContext.RegisterService;
 import org.osgi.test.cases.framework.div.tbc.BundleException.GetCause;
 import org.osgi.test.cases.framework.div.tbc.BundleException.InitCause;
 import org.osgi.test.cases.framework.div.tbc.Constants.ConstantsValues;
@@ -81,7 +82,8 @@ public class Activator extends Thread implements FrameworkListener,
 			"testVersionConstructors", "testVersionEquals",
 			"testVersionGetMajor", "testVersionGetMinor",
 			"testVersionGetMicro", "testVersionCompareTo",
-			"testVersionInstanceOf", "testBundleGetHeaders"};
+			"testVersionInstanceOf", "testBundleGetHeaders",
+			"testBundleContextRegisterService"};
 
 	/**
 	 * start. Gets a reference to the TestCaseLink to communicate with the
@@ -1056,4 +1058,17 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
+	/**
+	 * Tests service registration.
+	 */
+	void testBundleContextRegisterService() {
+		try {
+			(new RegisterService(_context, _link, _tcHome)).run();
+		}
+		catch (Exception e) {
+			log("Error.", e.getMessage());
+
+		}
+	}
+	
 }
