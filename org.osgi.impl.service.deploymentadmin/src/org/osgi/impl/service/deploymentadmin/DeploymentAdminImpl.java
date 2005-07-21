@@ -132,7 +132,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         initKeyStore();
         fwBundleDir = System.getProperty(DAConstants.FW_BUNDLES_DIR);
         if (null == fwBundleDir)
-            logger.log(Logger.LOG_WARNING, "The \"" + DAConstants.FW_BUNDLES_DIR + "\" system " +
+            throw new RuntimeException("The '" + DAConstants.FW_BUNDLES_DIR + "' system " +
             		"property is missing.");
         
         registerDmtPlugin();

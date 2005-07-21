@@ -119,10 +119,10 @@ public class DeploymentSessionImpl implements DeploymentSession {
         trackPerm = new TrackerPerm();
         trackCondPerm = new TrackerCondPerm();
         trackPackAdmin = new TrackerPackageAdmin();
-        this.fwBundleDir = null == fwbd ? "" : fwbd;
+        this.fwBundleDir = fwbd;
         this.da = da;
         
-        AccessController.doPrivileged(new PrivilegedAction() {
+        /*AccessController.doPrivileged(new PrivilegedAction() {
             public Object run() {
                 StringBuffer sb = new StringBuffer(fwBundleDir);
                 char sc = (sb.toString().indexOf("/") != -1 ? '/' : '\\');
@@ -133,7 +133,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
                 }
                 fwBundleDir = sb.toString();
                 return null;
-            }});
+            }});*/
     }
 
     private Hashtable setFilePermissionForCustomizers() {
@@ -163,9 +163,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
                 new ArrayList(Arrays.asList(old)) : new ArrayList();
         for (Iterator iter = srcDp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            char fs = File.separatorChar;
-            String rootDir = fwBundleDir + fs + be.getBundleId() + fs + "data";
-            permInfos.add(new PermissionInfo(FilePermission.class.getName(), rootDir + fs + "-", 
+            File rootDir = new File(fwBundleDir + "/" + be.getBundleId() + "/" + "data/-");
+            permInfos.add(new PermissionInfo(FilePermission.class.getName(), rootDir.toString(), 
                     "read, write, execute, delete"));
         }
         pa.setPermissions(location, (PermissionInfo[]) permInfos.toArray(new PermissionInfo[] {}));
@@ -307,7 +306,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
         transaction.commit();
         closeTrackers();
         if (numOfErrors > 0) {
-            // TODO throw Exception here
+            throw new DeploymentException(DeploymentException.CODE_BUNDLE_START, 
+                    numOfErrors + " bundles cannot be started");
         }
     }
     
