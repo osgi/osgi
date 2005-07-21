@@ -3,7 +3,7 @@ Bundle-Name: ${p}.tb17c
 Bundle-SymbolicName: ${p}.tb17c
 Bundle-Version: 1
 Bundle-ManifestVersion: 2
-DynamicImport-Package: resources;bundle-symbolic-name="${p}.tb8b",resources;bundle-symbolic-name="${p}.tb8a"
+DynamicImport-Package: resources;bundle-symbolic-name="${p}.tb8b",res*;bundle-symbolic-name="${p}.tb8a"
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)

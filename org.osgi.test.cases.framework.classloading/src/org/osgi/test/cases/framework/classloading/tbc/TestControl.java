@@ -573,12 +573,10 @@ public class TestControl extends DefaultTestBundleControl {
 		finally {
 			tb5c.uninstall();
 
-			tb5.start();
 			tb5.uninstall();
-			tb1a.uninstall();
-			tb2.stop();
+			tb2a.uninstall();
 			tb2.uninstall();
-			tb1.stop();
+			tb1a.uninstall();
 			tb1.uninstall();
 		}
 	}
@@ -2076,9 +2074,11 @@ public class TestControl extends DefaultTestBundleControl {
 		Bundle tb15h;
 
 		tb1 = installBundle("tb1.jar");
-		tb15h = getContext().installBundle(getWebServer() + "tb15h.jar");
+		tb15h = null;
 
 		try {
+			tb15h = getContext().installBundle(getWebServer() + "tb15h.jar");
+
 			trace("Starting a bundle which imports a given package more than once");
 			tb15h.start();
 			tb15h.stop();
@@ -2088,7 +2088,9 @@ public class TestControl extends DefaultTestBundleControl {
 
 		}
 		finally {
-			tb15h.uninstall();
+			if (tb15h != null) {
+				tb15h.uninstall();
+			}
 			tb1.uninstall();
 		}
 	}
@@ -2280,10 +2282,10 @@ public class TestControl extends DefaultTestBundleControl {
 		tb17j = installBundle("tb17j.jar");
 
 		try {
-			tb17i
-					.loadClass("org.osgi.test.cases.framework.classloading.exports.service.SomeService");
-
 			try {
+				tb17i
+						.loadClass("org.osgi.test.cases.framework.classloading.exports.service.SomeService");
+
 				tb17j
 						.loadClass("org.osgi.test.cases.framework.classloading.exports.service.SomeService");
 				fail("The dynamic import must not be propagated");
@@ -2868,35 +2870,6 @@ public class TestControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Test that Export or import of "." (i.e. the default package) causes a R4
-	 * bundle to fail to install.
-	 * 
-	 * @spec BundleContext.installBundle(String)
-	 * @throws Exception if there is any problem or an assert fails
-	 */
-	public void testInstallingModules003() throws Exception {
-		try {
-			Bundle tb14d = getContext().installBundle(
-					getWebServer() + "tb14d.jar");
-			tb14d.uninstall();
-			fail("Expecting bundle install to fail because the default package has been imported.");
-		}
-		catch (BundleException e) {
-
-		}
-
-		try {
-			Bundle tb14e = getContext().installBundle(
-					getWebServer() + "tb14e.jar");
-			tb14e.uninstall();
-			fail("Expecting bundle install to fail because the default package has been exported.");
-		}
-		catch (BundleException e) {
-
-		}
-	}
-
-	/**
 	 * Test that any syntactic error (e.g. improperly formatted version or
 	 * bundle symbolic name, unrecognized directive, unrecognized directive
 	 * value, etc.) causes a R4 bundle to fail to install.
@@ -2904,7 +2877,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 * @spec BundleContext.installBundle(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
-	public void testInstallingModules004() throws Exception {
+	public void testInstallingModules003() throws Exception {
 
 		try {
 			Bundle tb14f = getContext().installBundle(
@@ -2932,7 +2905,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 * @spec BundleContext.installBundle(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
-	public void testInstallingModules005() throws Exception {
+	public void testInstallingModules004() throws Exception {
 
 		try {
 			Bundle tb14g = getContext().installBundle(
