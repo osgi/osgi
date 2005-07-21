@@ -310,7 +310,13 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
 
     //it doesn't work because loadClass method in RI works with the system class loader only
     //when it works with other class loader, uncomment next row
-    TestCondition.setTestBundleLocation(testBundleLocation);
+    try {
+      TestCondition.setTestBundleLocation(testBundleLocation);
+    } catch (Exception ex) {
+      pass(ex.getMessage());
+      if (ex instanceof ClassNotFoundException)
+        fail("Please use Target_tck95.launch for successful run of 'testMoreConditions' test case");
+    }
     
     //Check TestCondition_0 and TestCondition_1 at creation and later TestCondition_2 (when the check is performed)
     utility.testPermissions(
@@ -359,8 +365,8 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       }, 
       new AdminPermission[] {permission}, 
       new AdminPermission[]{},               //allowed
-      new AdminPermission[]{allPermissions}, //allowed
-      new String[] {"TestCondition_5"});//without "TestCondition_6", "TestCondition_7"
+      new AdminPermission[]{allPermissions}, //not allowed
+      new String[] {"TestCondition_5", "TestCondition_6", "TestCondition_7"});//according 9.5.1 and fig 9.38
     
     //Don't check 2nd because 1st is not satisfied
     utility.testPermissions(
@@ -383,8 +389,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       new AdminPermission[] {permission}, 
       new AdminPermission[]{},//allowed
       new AdminPermission[]{allPermissions},//permission, allPermissions
-      new String[] {"TestCondition_11"});//without "TestCondition_10"
-    
+      new String[] {"TestCondition_11", "TestCondition_10"});//according 9.5.1 and fig 9.38
   }
   
   /**

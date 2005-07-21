@@ -1,4 +1,3 @@
-
 package org.osgi.test.cases.permissionadmin.conditional.tbc;
 
 
@@ -264,22 +263,19 @@ public class ConditionalUtility {
     for (int i = 0; i < allowedPermission.length; i++) {
       allowed(allowedPermission[i]);
     }
-    //it doesn't work because loadClass method in RI works with the system class loader only
-    //when it works with other class loader, uncomment all 'testForAllowed' blocks here
-    //if (testForAllowed) testEqualArrays(order, TestCondition.getSatisfOrder());
+    if (testForAllowed) testEqualArrays(order, TestCondition.getSatisfOrder());
     testControl.trace("Test for not allowed permissions:");
     for (int k = 0; k < notAllowedPermission.length; k++) {
       notAllowed(notAllowedPermission[k], SecurityException.class);
     }
-    //if (testForAllowed) {
-    //  //alredy order is tested, so only clear the vector
-    //  TestCondition.satisfOrder.removeAllElements();
-    //} else {
-    //  //order not tested yet, test it here
-    //  testEqualArrays(order, TestCondition.getSatisfOrder());
-    //}
+    if (testForAllowed) {
+      //alredy order is tested, so only clear the vector
+      TestCondition.satisfOrder.removeAllElements();
+    } else {
+      //order not tested yet, test it here
+      testEqualArrays(order, TestCondition.getSatisfOrder());
+    }
     cpInfo.delete();
-    
   }
   
   void deletePermissions(ConditionInfo[] conditions, Permission permission) {
@@ -314,12 +310,12 @@ public class ConditionalUtility {
 	Vector createWildcardDNs(String value) {
 		Vector result = new Vector();
 		String semicolon = ";";
-		String asterisk = "*";		
+		//String asterisk = "*";		
 		
 		int lastIndex = 0;
 		int semicolonIndex = value.indexOf(semicolon);
 		String element;
-		String rdns;
+		//String rdns;
 		String prefix;
 		String suffix;
 		while (semicolonIndex != -1) {
@@ -362,7 +358,6 @@ public class ConditionalUtility {
 		String comma = ",";
 		//String semicolon = ";";
 		String equal = "=";
-		String space = " ";
 		String asterisk = "*";
 		
 		int lastIndex = 0;
@@ -386,10 +381,8 @@ public class ConditionalUtility {
 		if (equalIndex > 0) {
 			result.addElement(value.substring(0, equalIndex + 1) + asterisk);
 		}
-
-		
 		return result;
-	}
+  }
 	
 	private Permission getPermission(AdminPermission permission, Bundle bundle) {
 		return new AdminPermission(bundle, permission.getActions());

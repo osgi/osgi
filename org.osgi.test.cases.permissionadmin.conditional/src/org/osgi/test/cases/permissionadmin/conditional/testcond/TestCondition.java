@@ -11,7 +11,7 @@ import org.osgi.framework.Bundle;
 
 public class TestCondition implements Condition {
   private static final String CONDITION_TYPE = TestCondition.class.getName();
-	private static final String TEST_BUNDLE = "http://172.22.102.4/permissionadmin.conditional/tb1.jar";
+	private static final String TEST_BUNDLE = "http://127.0.0.1/permissionadmin.conditional/tb1.jar";
   
   private static String testBundleLocation = TEST_BUNDLE;
   public  static Vector satisfOrder = new Vector();
