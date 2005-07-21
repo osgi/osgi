@@ -27,7 +27,10 @@
 
 package org.osgi.test.cases.permissionadmin.conditional.tb2;
 
+import java.security.AccessController;
 import java.security.Permission;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 
 import org.osgi.framework.*;
 import org.osgi.test.cases.permissionadmin.conditional.tbc.ConditionalPermTBCService;
@@ -41,9 +44,19 @@ public class Activator implements BundleActivator, ConditionalPermTBCService {
 	
 	public void stop(BundleContext context) throws Exception {
 	}
-		
-	public void checkPermission(Permission permission) throws SecurityException {
-		SecurityManager security = System.getSecurityManager();
-		security.checkPermission(permission);
-	}
+  
+  public void checkPermission(final Permission permission) 
+    throws SecurityException {
+    try {
+      AccessController.doPrivileged(new PrivilegedExceptionAction() {
+        public Object run() throws SecurityException {
+          SecurityManager security = System.getSecurityManager();
+          security.checkPermission(permission);
+          return null;
+        }
+      });
+    } catch (PrivilegedActionException e) {
+      throw (SecurityException) e.getException();
+    }
+  }
 }
