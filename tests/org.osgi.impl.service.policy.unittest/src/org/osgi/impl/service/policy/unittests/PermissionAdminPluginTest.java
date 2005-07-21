@@ -46,7 +46,6 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 
 	public DummyPermissionAdmin	permAdmin;
 	public PermissionAdminPlugin	plugin;
-	public DummyComponentContext context;
 	public static final PermissionInfo ADMINPERMISSION = new PermissionInfo(AdminPermission.class.getName(),"","");
 	public static final PermissionInfo IMPORTFRAMEWORKPERMISSION 
 		= new PermissionInfo(PackagePermission.class.getName(),"org.osgi.framework","IMPORT");
@@ -56,7 +55,6 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 		permAdmin = new DummyPermissionAdmin();
-		context = new DummyComponentContext();
 		context.properties.put("dataRootURIs",ROOT);
 		context.services.put("permissionAdmin",permAdmin);
 		plugin = new PermissionAdminPlugin();

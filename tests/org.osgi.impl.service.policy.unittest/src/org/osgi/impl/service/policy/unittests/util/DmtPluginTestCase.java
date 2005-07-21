@@ -38,6 +38,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.dmt.DmtAdminActivator;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
+import org.osgi.impl.service.policy.unittests.DummyComponentContext;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
@@ -65,6 +66,7 @@ public abstract class DmtPluginTestCase extends TestCase {
 	public DummyConfigurationAdmin	configurationAdmin;
     static final String DMT_PERMISSION_ADMIN_SERVICE_PID = 
         "org.osgi.impl.service.dmt.permissions";
+	public DummyComponentContext context;
 	
 	public class DummyContext implements BundleContext {
 		public ServiceReference getServiceReference(String clazz) {
@@ -286,6 +288,8 @@ public abstract class DmtPluginTestCase extends TestCase {
 		dmtBundleContext = new DummyContext(); 
 		configurationAdmin = new DummyConfigurationAdmin();
 		dmtAdminActivator.start(dmtBundleContext);
+		context = new DummyComponentContext();
+		context.services.put("dmtAdmin",dmtFactory);
 	}
 	
 	public void tearDown() throws Exception {

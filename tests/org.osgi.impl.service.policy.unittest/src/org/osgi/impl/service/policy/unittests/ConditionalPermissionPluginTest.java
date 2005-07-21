@@ -52,7 +52,6 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 	 */
 	public DummyConditionalPermissionAdmin condPermAdmin;
 
-	public DummyComponentContext context;
 	
 	public static final String ROOT = "./OSGi/Policy/Java/ConditionalPermission";
 	
@@ -95,7 +94,6 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 		condPermAdmin = new DummyConditionalPermissionAdmin();
-		context = new DummyComponentContext();
 		context.properties.put("dataRootURIs",ROOT);
 		context.services.put("condPermAdmin",condPermAdmin);
 		plugin = new ConditionalPermissionAdminPlugin();
@@ -168,7 +166,7 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 		// we add one, and delete an other one
 		ConditionalPermissionInfo rfc = condPermAdmin.setConditionalPermissionInfo("rfc",RFC_EXAMPLE_COND,RFC_EXAMPLE_PERM);
 		assertFalse(condPermAdmin.containsKey("1"));
-		assertFalse(condPermAdmin.containsKey("rfc"));
+		assertTrue(condPermAdmin.containsKey("rfc"));
 		newAtomicSession();
 		dmtSession.createInteriorNode("1");
 		dmtSession.setNodeValue("1/Name",new DmtData("1"));
