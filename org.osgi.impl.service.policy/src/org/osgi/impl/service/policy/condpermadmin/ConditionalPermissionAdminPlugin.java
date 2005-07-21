@@ -94,7 +94,7 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 	/**
 	 * internal representation of a conditional permission
 	 */
-	private static class ConditionalPermission {
+	private static class ConditionalPermission implements Comparable {
 		public String name;
 		public ConditionInfo[] conditionInfo;
 		public PermissionInfo[] permissionInfo;
@@ -136,8 +136,7 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 		public void setNodeValue(String nodeName, DmtData data) throws DmtException {
 			if (nodeName.equals(NAME)) {
 				name=data.getString();
-			}
-			if (nodeName.equals(PERMISSIONINFO)) {
+			} else 	if (nodeName.equals(PERMISSIONINFO)) {
 				String[] strs = Splitter.split(data.getString(),'\n',0);
 				PermissionInfo[] pis = new PermissionInfo[strs.length];
 				for(int i=0;i<pis.length;i++) {
@@ -152,6 +151,11 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 				}
 				conditionInfo = cis;
 			}
+		}
+
+		public int compareTo(Object var0) {
+			ConditionalPermission other = (ConditionalPermission) var0;
+			return this.name.compareTo(other.name);
 		}
 
 	}
@@ -261,7 +265,7 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 		}
 		for (Iterator iter = toAdd.iterator(); iter.hasNext();) {
 			ConditionalPermission cp = (ConditionalPermission) iter.next();
-			condPermAdmin.addConditionalPermissionInfo(cp.conditionInfo,cp.permissionInfo);
+			condPermAdmin.setConditionalPermissionInfo(cp.name,cp.conditionInfo,cp.permissionInfo);
 		}
 		for (Iterator iter = toDelete.iterator(); iter.hasNext();) {
 			ConditionalPermissionInfo cpi = (ConditionalPermissionInfo) iter.next();
