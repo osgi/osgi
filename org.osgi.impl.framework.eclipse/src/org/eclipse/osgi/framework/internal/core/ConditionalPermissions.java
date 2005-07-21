@@ -130,31 +130,32 @@ public class ConditionalPermissions extends PermissionCollection {
 		cpsLoop: for (int i = 0; i < cpsArray.length; i++) {
 			if (cpsArray[i].isNonEmpty()) {
 				newEmpty = false;
+				Condition conds[] = cpsArray[i].getNeededConditions();
+				// check mutable !isPostponed conditions first; 
+				// note that !mutable conditions have already been evaluated
+				for (int j = 0; j < conds.length; j++)
+					if (conds[j] != null && !conds[j].isPostponed() && !conds[j].isSatisfied())
+						continue cpsLoop;
+				// check the implies now
 				if (cpsArray[i].implies(perm)) {
-					Condition conds[] = cpsArray[i].getNeededConditions();
+					// the permission is implied; the only unevaluated conditions left are mutable postponed conditions
+					// postpone their evaluation until the end
 					Vector unevaluatedConds = null;
 					for (int j = 0; j < conds.length; j++) {
-						if (conds[j] == null) {
-							continue;
-						}
-						if (!conds[j].isPostponed() && !conds[j].isSatisfied()) {
-							continue cpsLoop;
-						}
-						if (conds[j].isPostponed()) {
+						if (conds[j] != null && conds[j].isPostponed()) {
 							if (fsm == null) {
 								// If there is no FrameworkSecurityManager, we must evaluate now
-								if (!conds[j].isSatisfied()) {
+								if (!conds[j].isSatisfied())
 									continue cpsLoop;
-								}
 							} else {
-								if (unevaluatedConds == null) {
+								if (unevaluatedConds == null)
 									unevaluatedConds = new Vector();
-								}
 								unevaluatedConds.add(conds[j]);
 							}
 						}
 					}
 					if (unevaluatedConds == null) {
+						// no postponed conditions exist return true now
 						this.empty = false;
 						return true;
 					}
@@ -164,7 +165,7 @@ public class ConditionalPermissions extends PermissionCollection {
 					satisfied = true;
 				}
 			} else {
-				satisfiedCPIs.remove(cpsArray[i]);
+				satisfiableCPSs.remove(cpsArray[i]);
 			}
 		}
 		this.empty = newEmpty;
