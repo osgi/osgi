@@ -56,13 +56,14 @@ public class MonitorHandlerImpl implements EventHandler {
 	 * increment the variable in MonitorTestControl.
 	 */
 	public void handleEvent(Event arg0) {
-		String listenerId = (String) arg0.getProperty(MonitorTestControl.CONST_LISTENER_ID); 
-		
-		if ((listenerId!=null) && (listenerId.equals(
-				MonitorTestControl.INITIATOR))) {
+		String listenerId = (String) arg0
+				.getProperty(MonitorTestControl.CONST_LISTENER_ID);
+
+		if ((listenerId != null)
+				&& (listenerId.equals(MonitorTestControl.INITIATOR))) {
 
 			MonitorTestControl.EVENT_COUNT += 1;
-			
+
 			tbc.resetEvent();
 
 			String properties[] = arg0.getPropertyNames();
@@ -82,22 +83,38 @@ public class MonitorHandlerImpl implements EventHandler {
 					tbc.setListenerId(true);
 				}
 			}
-			
+
 			tbc.setStatusVariableName((String) arg0
-									.getProperty(MonitorTestControl.CONST_STATUSVARIABLE_NAME));
-			
-			tbc.setStatusVariableValue((String) arg0
-									.getProperty(MonitorTestControl.CONST_STATUSVARIABLE_VALUE));
-			
-			tbc.setMonitorablePid((String) arg0.getProperty(MonitorTestControl.CONST_MONITORABLE_PID));
-			
+					.getProperty(MonitorTestControl.CONST_STATUSVARIABLE_NAME));
+
+			tbc
+					.setStatusVariableValue((String) arg0
+							.getProperty(MonitorTestControl.CONST_STATUSVARIABLE_VALUE));
+
+			tbc.setMonitorablePid((String) arg0
+					.getProperty(MonitorTestControl.CONST_MONITORABLE_PID));
+
 			tbc.setListenerId((String) arg0
-							.getProperty(MonitorTestControl.CONST_LISTENER_ID));
-			
+					.getProperty(MonitorTestControl.CONST_LISTENER_ID));
+
+			if (tbc.getEventClassCode() == 0) { // we are listening to events
+												// with listenerId
+				synchronized (tbc) {
+					tbc.notifyAll();
+				}
+			}
+
 		} else {
-			
-			MonitorTestControl.SWITCH_EVENTS_COUNT += 1;					
-			
+
+			MonitorTestControl.SWITCH_EVENTS_COUNT += 1;
+
+			if (tbc.getEventClassCode() == 1) { // we are listening to broadcast
+												// events
+				synchronized (tbc) {
+					tbc.notifyAll();
+				}
+			}
+
 		}
 	}
 

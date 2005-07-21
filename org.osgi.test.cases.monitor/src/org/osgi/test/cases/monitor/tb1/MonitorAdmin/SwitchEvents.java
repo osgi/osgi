@@ -51,9 +51,11 @@ import org.osgi.test.cases.monitor.tbc.TestInterface;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.service.monitor.MonitorAdmin#switchEvents
- * @generalDescription This class tests switchEvents method according with MEG
- *                     specification (rfc0084)
+ * @author Alexandre Alves
+ * 
+ * This Test Class Validates the implementation of
+ * <code>switchEvents<code> method, according to MEG reference
+ * documentation.
  */
 public class SwitchEvents implements TestInterface {
 	private MonitorTestControl tbc;
@@ -72,14 +74,17 @@ public class SwitchEvents implements TestInterface {
 		testSwitchEvents007();
 		testSwitchEvents008();
 		testSwitchEvents009();
+		testSwitchEvents010();
+		testSwitchEvents011();
 	}
 
 	/**
-	 * @testID testSwitchEvents001
-	 * @testDescription Asserts if IllegalArgumentException is thrown when use
-	 *                  invalid characters.
+	 * This method asserts if IllegalArgumentException is thrown
+	 * when we pass invalid characters as path to a statusvariable.
+	 * 
+	 * @spec MonitorAdmin.switchEvents(String,boolean)
 	 */
-	public void testSwitchEvents001() {
+	private void testSwitchEvents001() {
 		tbc.log("#testSwitchEvents001");
 		try {
 
@@ -99,13 +104,19 @@ public class SwitchEvents implements TestInterface {
 	}
 
 	/**
-	 * @testID testSwitchEvents002
-	 * @testDescription Tests if a IllegalArgumentException is thrown when use a
-	 *                  StatusVariable that doesn't exist.
+	 * This method asserts if IllegalArgumentException is thrown
+	 * when we pass a path that points to a non-existing StatusVariable.
+	 * 
+	 * @spec MonitorAdmin.switchEvents(String,boolean)
 	 */
-	public void testSwitchEvents002() {
+	private void testSwitchEvents002() {
 		tbc.log("#testSwitchEvents002");
+		PermissionInfo[] infos = null;
 		try {
+			infos = tbc.getPermissionAdmin().getPermissions(tbc.getTb1Location());
+
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.INEXISTENT_SVS, MonitorPermission.SWITCHEVENTS));
+			
 			tbc.getMonitorAdmin().switchEvents(
 					MonitorTestControl.INEXISTENT_SVS, false);
 			tbc.failException("", IllegalArgumentException.class);
@@ -118,23 +129,28 @@ public class SwitchEvents implements TestInterface {
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
+		} finally {
+			tbc.getPermissionAdmin().setPermissions(tbc.getTb1Location(), infos);
 		}
 	}
 
 	/**
-	 * @testID testSwitchEvents003
-	 * @testDescription Asserts if a SecurityException is thrown when the caller
-	 *                  has no switchevents permission
+	 * This method asserts that a SecurityException is thrown when
+	 * the statusvariable has other action permission.
+	 * 
+	 * @spec MonitorAdmin.switchEvents(String,boolean)
 	 */
-	public void testSwitchEvents003() {
+	private void testSwitchEvents003() {
 		tbc.log("#testSwitchEvents003");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[0], MonitorPermission.PUBLISH));
-			
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class
+					.getName(), MonitorTestControl.SVS[0],
+					MonitorPermission.PUBLISH));
+
 			tbc.getMonitorAdmin()
 					.switchEvents(MonitorTestControl.SVS[0], false);
 
@@ -150,24 +166,26 @@ public class SwitchEvents implements TestInterface {
 							SecurityException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);
+			tbc.getPermissionAdmin()
+					.setPermissions(tbc.getTb1Location(), infos);
 		}
 	}
 
 	/**
-	 * @testID testSwitchEvents004
-	 * @testDescription Asserts if a SecurityException is thrown when the caller
-	 *                  has no switchevents permission
+	 * This method asserts that a SecurityException is thrown when
+	 * the statusvariable does not have permission.
+	 * 
+	 * @spec MonitorAdmin.switchEvents(String,boolean)
 	 */
-	public void testSwitchEvents004() {
+	private void testSwitchEvents004() {
 		tbc.log("#testSwitchEvents004");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[0], null));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class
+					.getName(), MonitorTestControl.SVS[0], null));
 
 			tbc.getMonitorAdmin()
 					.switchEvents(MonitorTestControl.SVS[0], false);
@@ -184,74 +202,94 @@ public class SwitchEvents implements TestInterface {
 							SecurityException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);
+			tbc.getPermissionAdmin()
+					.setPermissions(tbc.getTb1Location(), infos);
 		}
 	}
 
 	/**
-	 * @testID testSwitchEvents005
-	 * @testDescription Asserts if the switchevents is ignored when the StatusVariable
-	 * 					is used in a MonitoringJob.
+	 * This method asserts if the switchevents is ignored when a
+	 * monitoringjob exist with the passed statusvariable.
+	 * 
+	 * @spec MonitorAdmin.switchEvents(String,boolean)
 	 */
-	public synchronized void testSwitchEvents005() {
+	private synchronized void testSwitchEvents005() {
 		tbc.log("#testSwitchEvents005");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			
-			tbc.setLocalPermission(new PermissionInfo[] {
-					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorTestControl.SVS[0], org.osgi.service.monitor.MonitorPermission.STARTJOB),	
-					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorTestControl.SVS[1], org.osgi.service.monitor.MonitorPermission.STARTJOB),
-					new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[0], MonitorPermission.SWITCHEVENTS)
-			});
-			
+			tbc
+					.setLocalPermission(new PermissionInfo[] {
+							new PermissionInfo(
+									org.osgi.service.monitor.MonitorPermission.class
+											.getName(),
+									MonitorTestControl.SVS[0],
+									org.osgi.service.monitor.MonitorPermission.STARTJOB),
+							new PermissionInfo(
+									org.osgi.service.monitor.MonitorPermission.class
+											.getName(),
+									MonitorTestControl.SVS[1],
+									org.osgi.service.monitor.MonitorPermission.STARTJOB),
+							new PermissionInfo(MonitorPermission.class
+									.getName(), MonitorTestControl.SVS[0],
+									MonitorPermission.SWITCHEVENTS) });
+
 			MonitorTestControl.EVENT_COUNT = 0;
+
+			tbc.resetEvent();
+			
+			tbc.setEventClassCode(0); // listen only for events with listenerId
 
 			MonitoringJob mj = tbc.getMonitorAdmin().startJob(
 					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
-					MonitorTestControl.COUNT);
-			
-			tbc.getMonitorAdmin().switchEvents(MonitorTestControl.SVS[0], false);			
-			
+					MonitorTestControl.COUNT);			
+
+			tbc.getMonitorAdmin()
+					.switchEvents(MonitorTestControl.SVS[0], false);
+
 			tbc.getMonitorListener().updated(
 					MonitorTestControl.SV_MONITORABLEID1,
-					new StatusVariable(
-							MonitorTestControl.SV_NAME1, StatusVariable.CM_CC,
-							"test1"));
-			
-			wait(MonitorTestControl.TIMEOUT);
-			
+					new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC, "test1"));
+
+			synchronized (tbc) {
+				tbc.wait(MonitorTestControl.TIMEOUT);
+			}
+
 			tbc.assertEquals(MessagesConstants.getMessage(
-					MessagesConstants.ASSERT_EQUALS, new String[] { "variable of event modification",
-							1+"" }), 1,
+					MessagesConstants.ASSERT_EQUALS, new String[] {
+							"variable of event modification", 1 + "" }), 1,
 					MonitorTestControl.EVENT_COUNT);
-			
+
 			mj.stop();
-						
+
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);
+			tbc.getPermissionAdmin()
+					.setPermissions(tbc.getTb1Location(), infos);
 		}
 	}
-	
+
 	/**
-	 * @testID testSwitchEvents006
-	 * @testDescription Tests if a IllegalArgumentException is thrown when use an
-	 *                  empty string as StatusVariable.
+	 * This method asserts if an IllegalArgumentException is thrown
+	 * when we pass an empty string as statusvariable.
+	 * 
+	 * @spec MonitorAdmin.switchEvents(String,boolean)
 	 */
-	public void testSwitchEvents006() {
+	private void testSwitchEvents006() {
 		tbc.log("#testSwitchEvents006");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[0], MonitorPermission.PUBLISH));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class
+					.getName(), MonitorTestControl.SVS[0],
+					MonitorPermission.PUBLISH));
 
 			tbc.getMonitorAdmin().switchEvents("", false);
 			tbc.failException("", IllegalArgumentException.class);
@@ -265,24 +303,27 @@ public class SwitchEvents implements TestInterface {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);
+			tbc.getPermissionAdmin()
+					.setPermissions(tbc.getTb1Location(), infos);
 		}
-	}	
-	
+	}
+
 	/**
-	 * @testID testSwitchEvents007
-	 * @testDescription Asserts if a SecurityException is thrown when the caller
-	 *                  has switchevents permission for other statusvariable.
+	 * This method asserts that a SecurityException is thrown when
+	 * the caller has permission for other statusvariable.
+	 * 
+	 * @spec MonitorAdmin.switchEvents(String,boolean)
 	 */
-	public void testSwitchEvents007() {
+	private void testSwitchEvents007() {
 		tbc.log("#testSwitchEvents007");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[1], MonitorPermission.SWITCHEVENTS));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class
+					.getName(), MonitorTestControl.SVS[1],
+					MonitorPermission.SWITCHEVENTS));
 
 			tbc.getMonitorAdmin()
 					.switchEvents(MonitorTestControl.SVS[0], false);
@@ -299,135 +340,241 @@ public class SwitchEvents implements TestInterface {
 							SecurityException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);
+			tbc.getPermissionAdmin()
+					.setPermissions(tbc.getTb1Location(), infos);
 		}
 	}
-	
+
 	/**
-	 * @testID testSwitchEvents008
-	 * @testDescription Asserts if the wildcard works in switchevents method.		
+	 * This method asserts that wildcards are acceptable normally.
+	 * 
+	 * @spec MonitorAdmin.switchEvents(String,boolean)
 	 */
-	public synchronized void testSwitchEvents008() {
+	private synchronized void testSwitchEvents008() {
 		tbc.log("#testSwitchEvents008");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			
-			tbc.setLocalPermission(new PermissionInfo[] {
-					new PermissionInfo(MonitorPermission.class.getName(),"cesar/*", MonitorPermission.SWITCHEVENTS)
-			});
+			tbc.setLocalPermission(new PermissionInfo[] { new PermissionInfo(
+					MonitorPermission.class.getName(), "*/*",
+					MonitorPermission.SWITCHEVENTS) });
+
+			tbc.stopRunningJobs();
 			
 			MonitorTestControl.SWITCH_EVENTS_COUNT = 0;
-
-			tbc.getMonitorAdmin().switchEvents("cesar/*", false);			
 			
+			tbc.setEventClassCode(1); // listen only for broadcast events
+
+			tbc.getMonitorAdmin().switchEvents("cesar/test*", false);
+
 			tbc.getMonitorListener().updated(
 					MonitorTestControl.SV_MONITORABLEID1,
-					new StatusVariable(
-							MonitorTestControl.SV_NAME1, StatusVariable.CM_CC,
-							"test1"));
-			
-			wait(MonitorTestControl.TIMEOUT);
-			
+					new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC, "test1"));
+
+			wait(MonitorTestControl.SHORT_TIMEOUT);
+
 			tbc.assertEquals(MessagesConstants.getMessage(
-					MessagesConstants.ASSERT_EQUALS, new String[] { "variable of event modification",
-							0+"" }), 0,
+					MessagesConstants.ASSERT_EQUALS, new String[] {
+							"variable of event modification", 0 + "" }), 0,
 					MonitorTestControl.SWITCH_EVENTS_COUNT);
-			
+
 			tbc.getMonitorListener().updated(
 					MonitorTestControl.SV_MONITORABLEID2,
-					new StatusVariable(
-							MonitorTestControl.SV_NAME1, StatusVariable.CM_CC,
-							"test1"));
-			
-			wait(MonitorTestControl.TIMEOUT);
-			
+					new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC, "test1"));
+
+			synchronized (tbc) {
+				tbc.wait(MonitorTestControl.TIMEOUT);
+			}
+
 			tbc.assertEquals(MessagesConstants.getMessage(
-					MessagesConstants.ASSERT_EQUALS, new String[] { "variable of event modification",
-							1+"" }), 1,
-					MonitorTestControl.SWITCH_EVENTS_COUNT);			
-			
-			tbc.getMonitorAdmin().switchEvents("cesar/*", true);
-			
+					MessagesConstants.ASSERT_EQUALS, new String[] {
+							"variable of event modification", 1 + "" }), 1,
+					MonitorTestControl.SWITCH_EVENTS_COUNT);
+
+			tbc.getMonitorAdmin().switchEvents("cesa*/test*", true);
+
 			tbc.getMonitorListener().updated(
 					MonitorTestControl.SV_MONITORABLEID1,
-					new StatusVariable(
-							MonitorTestControl.SV_NAME1, StatusVariable.CM_DER,
-							"test1"));	
-			
-			wait(MonitorTestControl.TIMEOUT);
-			
+					new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_DER, "test1"));
+
+			synchronized (tbc) {
+				tbc.wait(MonitorTestControl.TIMEOUT);
+			}
+
 			tbc.assertEquals(MessagesConstants.getMessage(
-					MessagesConstants.ASSERT_EQUALS, new String[] { "variable of event modification",
-							2+"" }), 2,
-					MonitorTestControl.SWITCH_EVENTS_COUNT);			
-			
+					MessagesConstants.ASSERT_EQUALS, new String[] {
+							"variable of event modification", 2 + "" }), 2,
+					MonitorTestControl.SWITCH_EVENTS_COUNT);
+
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);
+			tbc.getPermissionAdmin()
+					.setPermissions(tbc.getTb1Location(), infos);
 		}
-	}	
-	
+	}
+
 	/**
-	 * @testID testSwitchEvents009
-	 * @testDescription We have to test when a StatusVariable(Monitorable) is Registered
-	 * 					its event sending state is ON by default. Even if we switch off and then
-	 * 					we reinstall the statusvariable.
-	 */
-	public synchronized void testSwitchEvents009() {
+	 * This method asserts that when a StatusVariable is registered, its
+	 * event sending state is ON by default. Here, we reinstall the monitorable.
+	 * 
+	 * @spec MonitorAdmin.switchEvents(String,boolean)
+	 */	
+	private synchronized void testSwitchEvents009() {
 		tbc.log("#testSwitchEvents009");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			
-			tbc.setLocalPermission(new PermissionInfo[] {
-					new PermissionInfo(MonitorPermission.class.getName(),"*/*", MonitorPermission.SWITCHEVENTS)
-			});
-			
+			tbc.setLocalPermission(new PermissionInfo[] { new PermissionInfo(
+					MonitorPermission.class.getName(), "*/*",
+					MonitorPermission.SWITCHEVENTS) });
+
+			tbc.stopRunningJobs();
+
 			tbc.getMonitorAdmin().switchEvents("*/*", false);
-			
+
 			// stop all the monitorables
-			tbc.reinstallMonitorable1();	
-			
+			tbc.reinstallMonitorable1();
+
 			MonitorTestControl.SWITCH_EVENTS_COUNT = 0;
+			
+			tbc.setEventClassCode(1); // listen only for broadcast events
 
 			tbc.getMonitorListener().updated(
 					MonitorTestControl.SV_MONITORABLEID1,
-					new StatusVariable(
-							MonitorTestControl.SV_NAME1, StatusVariable.CM_CC,
-							"test1"));
-			
-			wait(MonitorTestControl.TIMEOUT);
-			
+					new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC, "test1"));
+
+			synchronized (tbc) {
+				tbc.wait(MonitorTestControl.TIMEOUT);
+			}
+
 			tbc.assertEquals(MessagesConstants.getMessage(
-					MessagesConstants.ASSERT_EQUALS, new String[] { "variable of event modification",
-							1+"" }), 1,
+					MessagesConstants.ASSERT_EQUALS, new String[] {
+							"variable of event modification", 1 + "" }), 1,
 					MonitorTestControl.SWITCH_EVENTS_COUNT);
-			
+
 			tbc.getMonitorListener().updated(
 					MonitorTestControl.SV_MONITORABLEID2,
-					new StatusVariable(
-							MonitorTestControl.SV_NAME1, StatusVariable.CM_CC,
-							"test1"));
+					new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC, "test1"));
 			
+			wait(MonitorTestControl.SHORT_TIMEOUT);
+
 			tbc.assertEquals(MessagesConstants.getMessage(
-					MessagesConstants.ASSERT_EQUALS, new String[] { "variable of event modification",
-							1+"" }), 1,
-					MonitorTestControl.SWITCH_EVENTS_COUNT);			
-			
+					MessagesConstants.ASSERT_EQUALS, new String[] {
+							"variable of event modification", 1 + "" }), 1,
+					MonitorTestControl.SWITCH_EVENTS_COUNT);
+
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);
+			tbc.getPermissionAdmin()
+					.setPermissions(tbc.getTb1Location(), infos);
 		}
-	}			
+	}
+
+	/**
+	 * This method asserts if IllegalArgumentException is thrown
+	 * when we pass an invalid target.
+	 * 
+	 * @spec MonitorAdmin.switchEvents(String,boolean)
+	 */	
+	private void testSwitchEvents010() {
+		tbc.log("#testSwitchEvents010");
+		try {
+			tbc.setLocalPermission(new PermissionInfo[] { new PermissionInfo(
+					MonitorPermission.class.getName(), "*/*",
+					MonitorPermission.SWITCHEVENTS) });
+
+			tbc.getMonitorAdmin().switchEvents("*esar/*", false);
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		}
+	}
+
+	/**
+	 * This method asserts that when a StatusVariable is registered, its
+	 * event sending state is ON by default. Here, we uninstall, call switchevents
+	 * and then install the monitorables.
+	 * 
+	 * @spec MonitorAdmin.switchEvents(String,boolean)
+	 */	
+	private synchronized void testSwitchEvents011() {
+		tbc.log("#testSwitchEvents011");
+		PermissionInfo[] infos = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb1Location());
+
+			tbc.setLocalPermission(new PermissionInfo[] { new PermissionInfo(
+					MonitorPermission.class.getName(), "*/*",
+					MonitorPermission.SWITCHEVENTS) });
+
+			tbc.stopRunningJobs();
+
+			tbc.stopMonitorables();
+
+			tbc.getMonitorAdmin().switchEvents("cesa*/*", false);
+
+			tbc.installMonitorables();
+
+			MonitorTestControl.SWITCH_EVENTS_COUNT = 0;
+			
+			tbc.setEventClassCode(1); // listen only for broadcast events
+
+			tbc.getMonitorListener().updated(
+					MonitorTestControl.SV_MONITORABLEID1,
+					new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC, "test1"));
+
+			synchronized (tbc) {
+				tbc.wait(MonitorTestControl.TIMEOUT);
+			}
+
+			tbc.assertEquals(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_EQUALS, new String[] {
+							"variable of event modification", 1 + "" }), 1,
+					MonitorTestControl.SWITCH_EVENTS_COUNT);
+
+			tbc.getMonitorListener().updated(
+					MonitorTestControl.SV_MONITORABLEID2,
+					new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC, "test1"));
+			
+			synchronized (tbc) {
+				tbc.wait(MonitorTestControl.TIMEOUT);
+			}			
+
+			tbc.assertEquals(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_EQUALS, new String[] {
+							"variable of event modification", 2 + "" }), 2,
+					MonitorTestControl.SWITCH_EVENTS_COUNT);
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
+		} finally {
+			tbc.getPermissionAdmin()
+					.setPermissions(tbc.getTb1Location(), infos);
+		}
+	}
 
 }

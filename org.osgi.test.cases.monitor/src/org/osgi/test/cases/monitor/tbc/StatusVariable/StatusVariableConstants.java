@@ -39,8 +39,10 @@ package org.osgi.test.cases.monitor.tbc.StatusVariable;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 
 /**
- * @generalDescription This Test Class Validates the constants according to MEG
- *                     reference documentation.
+ * @author Leonardo Barros
+ * 
+ * This test class validates StatusVariable constants according to MEG reference
+ * documentation.
  */
 public class StatusVariableConstants {
 	private MonitorTestControl tbc;
@@ -54,20 +56,28 @@ public class StatusVariableConstants {
 	}
 
 	/**
-	 * @testID testConstants001
-	 * @testDescription Tests all constants values according to Constants fields
-	 *                  values.
+	 * This method asserts StatusVariable constant fields.
+	 * 
+	 * @spec StatusVariable constant fields
 	 */
-	public void testConstants001() {
+	private void testConstants001() {
 		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting CM_CC value", 0, org.osgi.service.monitor.StatusVariable.CM_CC);
-		tbc.assertEquals("Asserting CM_DER value", 1, org.osgi.service.monitor.StatusVariable.CM_DER);
-		tbc.assertEquals("Asserting CM_GAUGE value", 2, org.osgi.service.monitor.StatusVariable.CM_GAUGE);
-		tbc.assertEquals("Asserting CM_SI value", 3, org.osgi.service.monitor.StatusVariable.CM_SI);
-		tbc.assertEquals("Asserting TYPE_INTEGER value", 0, org.osgi.service.monitor.StatusVariable.TYPE_INTEGER);
-		tbc.assertEquals("Asserting TYPE_FLOAT value", 1, org.osgi.service.monitor.StatusVariable.TYPE_FLOAT);
-		tbc.assertEquals("Asserting TYPE_STRING value", 2, org.osgi.service.monitor.StatusVariable.TYPE_STRING);
-		tbc.assertEquals("Asserting TYPE_BOOLEAN value", 3, org.osgi.service.monitor.StatusVariable.TYPE_BOOLEAN);
+		tbc.assertEquals("Asserts CM_CC value", 0,
+				org.osgi.service.monitor.StatusVariable.CM_CC);
+		tbc.assertEquals("Asserts CM_DER value", 1,
+				org.osgi.service.monitor.StatusVariable.CM_DER);
+		tbc.assertEquals("Asserts CM_GAUGE value", 2,
+				org.osgi.service.monitor.StatusVariable.CM_GAUGE);
+		tbc.assertEquals("Asserts CM_SI value", 3,
+				org.osgi.service.monitor.StatusVariable.CM_SI);
+		tbc.assertEquals("Asserts TYPE_INTEGER value", 0,
+				org.osgi.service.monitor.StatusVariable.TYPE_INTEGER);
+		tbc.assertEquals("Asserts TYPE_FLOAT value", 1,
+				org.osgi.service.monitor.StatusVariable.TYPE_FLOAT);
+		tbc.assertEquals("Asserts TYPE_STRING value", 2,
+				org.osgi.service.monitor.StatusVariable.TYPE_STRING);
+		tbc.assertEquals("Asserts TYPE_BOOLEAN value", 3,
+				org.osgi.service.monitor.StatusVariable.TYPE_BOOLEAN);
 	}
 
 }

@@ -40,12 +40,16 @@
 
 package org.osgi.test.cases.monitor.tbc;
 
+import java.net.SocketPermission;
+
 import org.osgi.framework.AdminPermission;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtAlertItem;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.event.TopicPermission;
@@ -56,16 +60,12 @@ import org.osgi.service.monitor.MonitoringJob;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.monitor.tbc.Activators.MonitorHandlerActivator;
-import org.osgi.test.cases.monitor.tbc.Activators.MonitorableActivator;
-import org.osgi.test.cases.monitor.tbc.Activators.MonitorableActivator2;
 import org.osgi.test.cases.monitor.tbc.Activators.RemoteAlertSenderActivator;
 import org.osgi.test.cases.monitor.tbc.MonitorListener.Updated;
 import org.osgi.test.cases.monitor.tbc.MonitorPermission.Implies;
 import org.osgi.test.cases.monitor.tbc.MonitorPermission.MonitorPermission;
 import org.osgi.test.cases.monitor.tbc.MonitorPermission.MonitorPermissionConstants;
-import org.osgi.test.cases.monitor.tbc.Monitorable.GetStatusVariable;
 import org.osgi.test.cases.monitor.tbc.Monitorable.Monitorables;
-import org.osgi.test.cases.monitor.tbc.Monitorable.NotifiesOnChange;
 import org.osgi.test.cases.monitor.tbc.MonitoringJob.IsLocal;
 import org.osgi.test.cases.monitor.tbc.MonitoringJob.RemoteAlertSender;
 import org.osgi.test.cases.monitor.tbc.MonitoringJob.Stop;
@@ -75,11 +75,11 @@ import org.osgi.test.cases.monitor.tbc.TreeStructure.TreeStructure;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
- * Controls the execution of the test case
+ * @author Alexandre Santos
+ *
+ * Controls the execution of the test case.
  */
 public class MonitorTestControl extends DefaultTestBundleControl {
-	
-	public static final String DISCOVER = "DISCOVER";
 	
 	public static final String LONGID = "abcdefghjklmnoprstuvw";
 
@@ -105,9 +105,9 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 
 	public final static int INVALID_CM = -1;
 
-	public final static long SV_INTEGER_VALUE = 1;
+	public final static int SV_INT_VALUE = 1;
 
-	public final static float SV_FLOAT_VALUE = (float)1.0;
+	public final static float SV_FLOAT_VALUE = 0.0f;
 
 	public final static boolean SV_BOOLEAN_VALUE = false;
 
@@ -135,38 +135,52 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	
 	public static int SWITCH_EVENTS_COUNT = 0;
 	
-	public static final int TIMEOUT = 2000;
+	public static final int TIMEOUT = 1000;
+	public static final int SHORT_TIMEOUT = 2000;
+	
+	private int eventClassCode = -1;
 	
 	public static final String CONST_STATUSVARIABLE_NAME = "mon.statusvariable.name";
 	public static final String CONST_STATUSVARIABLE_VALUE = "mon.statusvariable.value";
 	public static final String CONST_MONITORABLE_PID = "mon.monitorable.pid";
 	public static final String CONST_LISTENER_ID = "mon.listener.id";
 	
-	public final static String DMT_URI_MONITORABLE1 = "./OSGi/mon/"+SV_MONITORABLEID1;
-	public final static String DMT_URI_MONITORABLE2 = "./OSGi/mon/"+SV_MONITORABLEID2;
+	public static final String DMT_OSGI_MONITOR = "./OSGi/Monitor";
 	
-	public final static String DMT_URI_MONITORABLE1_SV1 = "./OSGi/mon/"+SV_MONITORABLEID1+"/"+SV_NAME1;
-	public final static String DMT_URI_MONITORABLE1_SV2 = "./OSGi/mon/"+SV_MONITORABLEID1+"/"+SV_NAME2;
-	public final static String DMT_URI_MONITORABLE2_SV1 = "./OSGi/mon/"+SV_MONITORABLEID2+"/"+SV_NAME1;
-	public final static String DMT_URI_MONITORABLE2_SV2 = "./OSGi/mon/"+SV_MONITORABLEID2+"/"+SV_NAME2;
+	public final static String DMT_URI_MONITORABLE1 = DMT_OSGI_MONITOR + "/"+SV_MONITORABLEID1;
+	public final static String DMT_URI_MONITORABLE2 = DMT_OSGI_MONITOR + "/"+SV_MONITORABLEID2;
 	
-	public final static String[] DMT_URI_MONITORABLE1_PROPERTIES = {
-		DMT_URI_MONITORABLE1_SV1+"/Server/remoteServer",
-		DMT_URI_MONITORABLE1_SV1+"/Server/remoteServer/Reporting/Type",
-		DMT_URI_MONITORABLE1_SV1+"/Server/remoteServer/Reporting/Value",
-		DMT_URI_MONITORABLE1_SV1+"/Server/remoteServer/Enabled"
-	};
+	public final static String MONITOR_XML_MONITORABLE1_SV1 = "x-oma-trap:"+SV_MONITORABLEID1+"/"+SV_NAME1;
+		
+	public final static String DMT_URI_MONITORABLE1_SV1 = DMT_URI_MONITORABLE1+"/"+SV_NAME1;
+	public final static String DMT_URI_MONITORABLE1_SV2 = DMT_URI_MONITORABLE1+"/"+SV_NAME2;
+	public final static String DMT_URI_MONITORABLE2_SV1 = DMT_URI_MONITORABLE2+"/"+SV_NAME1;
+	public final static String DMT_URI_MONITORABLE2_SV2 = DMT_URI_MONITORABLE2+"/"+SV_NAME2;
+	
+	public static final String DMT_URI_MONITORABLE_SV1_TRAPID = DMT_URI_MONITORABLE1_SV1 + "/TrapID";
+	public static final String DMT_URI_MONITORABLE_SV1_CM = DMT_URI_MONITORABLE1_SV1 + "/CM";
+	public static final String DMT_URI_MONITORABLE_SV1_RESULTS = DMT_URI_MONITORABLE1_SV1 + "/Results";
+	public static final String DMT_URI_MONITORABLE_SV1_SERVER = DMT_URI_MONITORABLE1_SV1 + "/Server";
 	
 	public static final String REMOTE_SERVER = "remoteServer";
+	
+	public final static String[] DMT_URI_MONITORABLE1_PROPERTIES = {
+		DMT_URI_MONITORABLE_SV1_SERVER+"/"+REMOTE_SERVER,
+		DMT_URI_MONITORABLE_SV1_SERVER+"/"+REMOTE_SERVER+"/Reporting/Type",
+		DMT_URI_MONITORABLE_SV1_SERVER+"/"+REMOTE_SERVER+"/Reporting/Value",
+		DMT_URI_MONITORABLE_SV1_SERVER+"/"+REMOTE_SERVER+"/Enabled",
+		DMT_URI_MONITORABLE_SV1_SERVER+"/"+REMOTE_SERVER+"/ServerId",
+		DMT_URI_MONITORABLE_SV1_SERVER+"/"+REMOTE_SERVER+"/Reporting",
+		DMT_URI_MONITORABLE_SV1_SERVER+"/"+REMOTE_SERVER+"/TrapRef",
+		DMT_URI_MONITORABLE_SV1_SERVER+"/"+REMOTE_SERVER+"/TrapRef/testId",
+		DMT_URI_MONITORABLE_SV1_SERVER+"/"+REMOTE_SERVER+"/TrapRef/testId/TrapRefID"
+	};
 	
 	private MonitorAdmin monitorAdmin;
 
 	private MonitorListener monitorListener;
 
 	private Monitorable monitorable;
-
-	private MonitorableActivator monitorableActivator;
-	private MonitorableActivator2 monitorableActivator2;
 
 	private PermissionAdmin permissionAdmin;
 	
@@ -184,6 +198,8 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	
 	private String correlator = null;
 	
+	private DmtAlertItem[] alerts = null;
+	
 	private boolean receivedAlert = false;
 
 	private boolean isMonitorablePid = false;
@@ -191,19 +207,25 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	private boolean isStatusVariableValue = false;
 	private boolean isListenerId = false;	
 	
+	private Bundle tb2 = null;
+	private Bundle tb3 = null;
+	
 	private String statusVariableName = null;
 	private String statusVariableValue = null;
 	private String monitorablePid = null;
 	private String listenerId = null;
 	
+
+	
 	public void stopMonitorables() {
-		try {
-			monitorableActivator.stop(this.getContext());
-			monitorableActivator2.stop(this.getContext());
+		try {		
 			
-			srvReferences = this.getContext().getServiceReferences(Monitorable.class.getName(), null);
-			if (srvReferences != null)
-				srvReferences[0].getBundle().uninstall();
+			this.uninstallBundle(tb2);
+			this.uninstallBundle(tb3);
+			
+			tb2 = null;
+			tb3 = null;
+			
 		} catch (Exception e) {
 			this.log("InvalidSyntaxException was raised. " + e.getClass().getName() );
 		}		
@@ -211,34 +233,26 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	
 	public void installMonitorables() {
 		try {
-			monitorableActivator = new MonitorableActivator(this);
-			monitorableActivator.start(getContext());
 			
-			monitorableActivator2 = new MonitorableActivator2(this);
-			monitorableActivator2.start(getContext());    						
-	
+			tb3 = this.installBundle("tb3.jar");						
+			
 			ServiceReference[] refs = getContext().getServiceReferences(
-					Monitorable.class.getName(), null);
-			if (refs.length == 1) {
-				monitorable = (Monitorable) getContext().getService(refs[0]);
-			} else {
-				Monitorable tempMonitorable = null;
-				boolean passed = false;
-				int i = 0;
-				while (!passed && i < refs.length) {
-					tempMonitorable = (Monitorable) getContext().getService(
-							refs[i++]); // first get and then increment
-					String[] names = tempMonitorable.getStatusVariableNames();
-					if ((names.length == 2)
-							&& (names[0].equals(MonitorTestControl.SV_NAME1))
-							&& (names[1].equals(MonitorTestControl.SV_NAME2))) {
-						monitorable = tempMonitorable;
-						passed = true;
-					}
-				}
-			}
+					Monitorable.class.getName(), "(service.pid=" + SV_MONITORABLEID2 + ")");
+			
+			((TestingMonitorable) getContext().getService(refs[0])).setMonitorTestControlInterface(this);
+			
+			tb2 = this.installBundle("tb2.jar");			
+			
+			refs = getContext().getServiceReferences(
+					Monitorable.class.getName(), "(service.pid=" + SV_MONITORABLEID1 + ")");
+			
+			monitorable = (Monitorable) getContext().getService(refs[0]);
+			
+			((TestingMonitorable) monitorable).setMonitorTestControlInterface(this);
+			
+			
 		} catch (Exception e) {
-			this.fail("Unexpected exception at prepare(installMonitorable). "
+			this.fail("Unexpected exception at prepare(installMonitorables). "
 					+ e.getClass());
 		}
 	}
@@ -301,6 +315,7 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 				new PermissionInfo(ServicePermission.class.getName(), "*", "GET"),
 				new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
 				new PermissionInfo(TopicPermission.class.getName(),"org/osgi/service/monitor/MonitorEvent",TopicPermission.PUBLISH),
+				new PermissionInfo(SocketPermission.class.getName(), "*", "connect,resolve"),
 				new PermissionInfo(ServicePermission.class.getName(), "*", ServicePermission.REGISTER),
 		};
 		int size = permissions.length + defaults.length;
@@ -318,12 +333,35 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 				new PermissionInfo(ServicePermission.class.getName(), "*", "GET"),
 				new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
 				new PermissionInfo(TopicPermission.class.getName(),"org/osgi/service/monitor/MonitorEvent",TopicPermission.PUBLISH),
+				new PermissionInfo(SocketPermission.class.getName(), "*", "connect,resolve"),
 				new PermissionInfo(ServicePermission.class.getName(), "*", ServicePermission.REGISTER),
 				permission
 		};
 
 		getPermissionAdmin().setPermissions(getTb1Location(), defaults);
+	}
+	
+	public void setLocalPermission(String target, String action) {
+		PermissionInfo[] defaults = new PermissionInfo[] {
+				new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),	
+				new PermissionInfo(ServicePermission.class.getName(), "*", "GET"),
+				new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
+				new PermissionInfo(TopicPermission.class.getName(),"org/osgi/service/monitor/MonitorEvent",TopicPermission.PUBLISH),
+				new PermissionInfo(SocketPermission.class.getName(), "*", "connect,resolve"),
+				new PermissionInfo(ServicePermission.class.getName(), "*", ServicePermission.REGISTER),
+				new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), target, action)
+		};
+
+		getPermissionAdmin().setPermissions(tb3.getLocation(), defaults);
 	}	
+	
+	/*
+	 * Returns Tb3 location
+	 */	
+	public String getTb3Location() {
+		return tb3.getLocation();
+	}
+	
 
 	/*
 	 * Executes Tcs for constants
@@ -447,7 +485,7 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	 * Executes MonitorAdmin.startJob test methods
 	 */
 	public void testMonitorAdminStartJob() {
-		testInterfaces[7].run();
+		testInterfaces[7].run();		
 	}
 
 	/*
@@ -468,44 +506,6 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 		new IsLocal(this).run();
 	}
 
-	/*
-	 * Executes the Monitorable.GetStatusVariable tests
-	 */
-	public void testMonitorableGetStatusVariable() {
-		new GetStatusVariable(this).run();
-	}
-
-	/*
-	 * Executes the Monitorable.NotifiesOnChange tests
-	 */
-	public void testMonitorableNotifiesOnChange() {
-		new NotifiesOnChange(this).run();
-	}
-
-	/*
-	 * Executes the Monitorable.GetStatusVariableNames tests
-	 */
-	public void testMonitorableGetStatusVariableNames() {
-		new org.osgi.test.cases.monitor.tbc.Monitorable.GetStatusVariableNames(
-				this).run();
-	}
-
-	/*
-	 * Executes the Monitorable.GetDescription tests
-	 */
-	public void testMonitorableGetDescription() {
-		new org.osgi.test.cases.monitor.tbc.Monitorable.GetDescription(this)
-				.run();
-	}
-
-	/*
-	 * Executes the Monitorable.ResetStatusVariable tests
-	 */
-	public void testMonitorableResetStatusVariable() {
-		new org.osgi.test.cases.monitor.tbc.Monitorable.ResetStatusVariable(
-				this).run();
-	}
-	
 	/*
 	 * Executes the MonitorListener.Updated tests
 	 */
@@ -562,8 +562,7 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 
 	public void unprepare() {
 		try {
-			monitorableActivator.stop(getContext());
-			monitorableActivator2.stop(getContext());
+			this.stopMonitorables();
 		} catch (Exception e) {
 			this.fail("Unexpected exception at unprepare. " + e.getClass());
 		}
@@ -645,6 +644,8 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 		serverId = null;
 		correlator = null;
 		receivedAlert = false;
+		alerts = null;
+		eventClassCode = -1;
 	}
 	
 	/**
@@ -756,22 +757,70 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	}
 	
 	
-	public SetStatusVariableInterface getStatusVariableInterface() {
+	public TestingMonitorable getMonitorableInterface() {
 		try {
 			ServiceReference[] rfs = getContext().getServiceReferences(Monitorable.class.getName(), "(service.pid="+MonitorTestControl.SV_MONITORABLEID1+")");
-			return rfs == null ? null: (SetStatusVariableInterface) getContext().getService(rfs[0]);
+			return rfs == null ? null: (TestingMonitorable) getContext().getService(rfs[0]);
 		} catch (InvalidSyntaxException e) {
-			log("Error on getStatusVariableInterface");
+			log("Error on TestingMonitorableInterface");
 			return null;
 		}
 	}
 	
 	public void reinstallMonitorable1() {
 		try {
-			monitorableActivator.stop(this.getContext());
-			monitorableActivator.start(getContext());
+			this.uninstallBundle(tb2);
+			tb2 = this.installBundle("tb2.jar");
+			ServiceReference[] refs = getContext().getServiceReferences(
+					Monitorable.class.getName(), "(service.pid=" + SV_MONITORABLEID1 + ")");
+			
+			monitorable = (Monitorable) getContext().getService(refs[0]);			
+			((TestingMonitorable) monitorable).setMonitorTestControlInterface(this);			
 		} catch (Exception e) {
 			log("Fail when we try to reinstall the monitorable");
 		}
+	}
+	
+	public void cleanUp(MonitoringJob job) {
+		if (job != null) {
+			job.stop();
+		}
+	}
+	
+	public void cleanUp(DmtSession session, String[] nodes) {
+		for (int i=0; i<nodes.length; i++) {
+			try {
+				session.deleteNode(nodes[i]);
+			} catch (DmtException e) {
+				log("error deleting the node: " + nodes[i]);
+			}
+		}
+		closeSession(session);
+		
+	}
+	
+	/**
+	 * @return Returns the eventClassCode.
+	 */
+	public int getEventClassCode() {
+		return eventClassCode;
+	}
+	/**
+	 * @param eventClassCode The eventClassCode to set.
+	 */
+	public void setEventClassCode(int eventClassCode) {
+		this.eventClassCode = eventClassCode;
+	}
+	/**
+	 * @return Returns the alerts.
+	 */
+	public DmtAlertItem[] getAlerts() {
+		return alerts;
+	}
+	/**
+	 * @param alerts The alerts to set.
+	 */
+	public void setAlerts(DmtAlertItem[] alerts) {
+		this.alerts = alerts;
 	}
 }

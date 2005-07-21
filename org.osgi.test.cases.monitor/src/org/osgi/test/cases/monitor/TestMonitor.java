@@ -40,11 +40,13 @@ package org.osgi.test.cases.monitor;
 import org.osgi.test.cases.util.DefaultTestCase;
 
 /**
- * This Test Case Validates the implementation according to RFC-84.
  * 
+ * This Test Case Validates the implementation of
+ * <code>Monitor<code> class, according to MEG reference
+ * documentation.
+ * @author Alexandre Alves
  * @testcase org.osgi.service.monitor
  */
-
 public class TestMonitor extends DefaultTestCase {
 
 }

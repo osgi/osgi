@@ -30,35 +30,20 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 15/06/2005   Alexandre Santos
+ * 11/07/2005  Alexandre Santos
  * 38           Implement MEGTCK for the application RFC 
  * ===========  ==============================================================
  */
-package org.osgi.test.cases.monitor.tbc.Activators;
+package org.osgi.test.cases.monitor.tbc;
 
-import org.osgi.service.dmt.DmtAlertItem;
-import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
+import org.osgi.service.monitor.StatusVariable;
 
 /**
- *	This class will test the alert sent by the monitoring job.
+ * @Author Alexandre Santos
  */
-public class RemoteAlertSenderImpl implements
-		org.osgi.service.dmt.RemoteAlertSender {
-	
-	private MonitorTestControl tbc = null;
-	
-	public RemoteAlertSenderImpl(MonitorTestControl tbc) {
-		this.tbc = tbc;		
-	}
+public interface TestingMonitorable {
 
-	public void sendAlert(String serverId, int code, String correlator,
-			DmtAlertItem[] items) throws Exception {
-		
-		tbc.setReceivedAlert(true);
-		tbc.setServerId(serverId);
-		tbc.setCorrelator(correlator);
-		tbc.setAlerts(items);
+	public void setStatusVariable(StatusVariable sv);
+	public void setMonitorTestControlInterface(MonitorTestControl tbc);
 	
-	}
-
 }

@@ -39,16 +39,20 @@
  */
 package org.osgi.test.cases.monitor.tbc.StatusVariable;
 
+import org.osgi.service.monitor.StatusVariable;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.service.monitor.StatusVariable#equals
- * @generalDescription This Test Class Validates the implementation of
- *                     <code>equals<code> method, according to MEG reference
- *                     documentation.
+ * @author Leonardo Barros
+ * 
+ * This test class validates the implementation of
+ * <code>equals<code> method, according to MEG reference
+ * documentation.
  */
 public class Equals {
+	private String[] CM = { "CC", "DER", "GAUGE", "SI" };
+
 	private MonitorTestControl tbc;
 
 	public Equals(MonitorTestControl tbc) {
@@ -63,605 +67,310 @@ public class Equals {
 		testEquals005();
 		testEquals006();
 		testEquals007();
-		testEquals008();
-		testEquals009();
-		testEquals010();
-		testEquals011();
-		testEquals012();
-		testEquals013();
-		testEquals014();
-		testEquals015();
-		testEquals016();
-		testEquals017();
-		testEquals018();
-		testEquals019();
-		testEquals020();
 	}
 
 	/**
-	 * @testID testEquals001
-	 * @testDescription This method asserts if two objects created with same
-	 *                  parameters are equal.
+	 * This method asserts if equals method returns true when two equal
+	 * StatusVariable are compared, otherwise it must returns false.
+	 * StatusVariables are created ranging all possible values for second
+	 * parameter and with an integer passed as third parameter.
+	 * 
+	 * @spec StatusVariable.equals(Object)
 	 */
-	public void testEquals001() {
+	private void testEquals001() {
 		try {
 			tbc.log("#testEquals001");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_FLOAT_VALUE);
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_FLOAT_VALUE);
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with same parameters are equal" }),
-							sv.equals(sv2));
+			StatusVariable sv = null;
+			StatusVariable sv2 = null;
+
+			for (int i = 0; i < 4; i++) {
+				sv = new StatusVariable(MonitorTestControl.SV_NAME1, i,
+						MonitorTestControl.SV_INT_VALUE);
+				for (int j = 0; j < 4; j++) {
+					sv2 = new StatusVariable(MonitorTestControl.SV_NAME1, j,
+							MonitorTestControl.SV_INT_VALUE);
+					if (i == j) {
+						tbc
+								.assertTrue(
+										"Asserts if equals method returns true when comparing two equal StatusVariable.",
+										sv.equals(sv2));
+					} else {
+						tbc
+								.assertTrue(
+										"Asserts if equals method returns false when comparing two different StatusVariable.",
+										!sv.equals(sv2));
+					}
+				}
+			}
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testEquals002
-	 * @testDescription This method asserts if two objects created with
-	 *                  different data are not equal.
+	 * This method asserts if equals method returns true when two equal
+	 * StatusVariable are compared, otherwise it must returns false.
+	 * StatusVariables are created ranging all possible values for second
+	 * parameter and with a boolean passed as third parameter.
+	 * 
+	 * @spec StatusVariable.equals(Object)
 	 */
-	public void testEquals002() {
+	private void testEquals002() {
 		try {
 			tbc.log("#testEquals002");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_FLOAT_VALUE);
+			StatusVariable sv = null;
+			StatusVariable sv2 = null;
 
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_FLOAT_VALUE + 10);
-
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with different data are not equal" }),
-							!sv.equals(sv2));
+			for (int i = 0; i < 4; i++) {
+				sv = new StatusVariable(MonitorTestControl.SV_NAME1, i,
+						MonitorTestControl.SV_BOOLEAN_VALUE);
+				for (int j = 0; j < 4; j++) {
+					sv2 = new StatusVariable(MonitorTestControl.SV_NAME1, j,
+							MonitorTestControl.SV_BOOLEAN_VALUE);
+					if (i == j) {
+						tbc
+								.assertTrue(
+										"Asserts if equals method returns true when comparing two equal StatusVariable.",
+										sv.equals(sv2));
+					} else {
+						tbc
+								.assertTrue(
+										"Asserts if equals method returns false when comparing two different StatusVariable.",
+										!sv.equals(sv2));
+					}
+				}
+			}
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testEquals003
-	 * @testDescription This method asserts if two objects created with
-	 *                  different collection methods are not equal.
+	 * This method asserts if equals method returns true when two equal
+	 * StatusVariable are compared, otherwise it must returns false.
+	 * StatusVariables are created ranging all possible values for second
+	 * parameter and with a String passed as third parameter.
+	 * 
+	 * @spec StatusVariable.equals(Object)
 	 */
-	public void testEquals003() {
+	private void testEquals003() {
 		try {
 			tbc.log("#testEquals003");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_FLOAT_VALUE);
+			StatusVariable sv = null;
+			StatusVariable sv2 = null;
 
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_DER,
-					MonitorTestControl.SV_FLOAT_VALUE);
-
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with different collection methods are not equal" }),
-							!sv.equals(sv2));
+			for (int i = 0; i < 4; i++) {
+				sv = new StatusVariable(MonitorTestControl.SV_NAME1, i,
+						MonitorTestControl.SV_STRING_VALUE);
+				for (int j = 0; j < 4; j++) {
+					sv2 = new StatusVariable(MonitorTestControl.SV_NAME1, j,
+							MonitorTestControl.SV_STRING_VALUE);
+					if (i == j) {
+						tbc
+								.assertTrue(
+										"Asserts if equals method returns true when comparing two equal StatusVariable.",
+										sv.equals(sv2));
+					} else {
+						tbc
+								.assertTrue(
+										"Asserts if equals method returns false when comparing two different StatusVariable.",
+										!sv.equals(sv2));
+					}
+				}
+			}
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testEquals004
-	 * @testDescription This method asserts if two objects created with
-	 *                  different path are not equal.
+	 * This method asserts if equals method returns true when two equal
+	 * StatusVariable are compared, otherwise it must returns false.
+	 * StatusVariables are created ranging all possible values for second
+	 * parameter and with a float passed as third parameter.
+	 * 
+	 * @spec StatusVariable.equals(Object)
 	 */
-	public void testEquals004() {
+	private void testEquals004() {
 		try {
 			tbc.log("#testEquals004");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_FLOAT_VALUE);
+			StatusVariable sv = null;
+			StatusVariable sv2 = null;
 
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME2,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_FLOAT_VALUE);
-
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with different path are not equal" }),
-							!sv.equals(sv2));
+			for (int i = 0; i < 4; i++) {
+				sv = new StatusVariable(MonitorTestControl.SV_NAME1, i,
+						MonitorTestControl.SV_FLOAT_VALUE);
+				for (int j = 0; j < 4; j++) {
+					sv2 = new StatusVariable(MonitorTestControl.SV_NAME1, j,
+							MonitorTestControl.SV_FLOAT_VALUE);
+					if (i == j) {
+						tbc
+								.assertTrue(
+										"Asserts if equals method returns true when comparing two equal StatusVariable.",
+										sv.equals(sv2));
+					} else {
+						tbc
+								.assertTrue(
+										"Asserts if equals method returns false when comparing two different StatusVariable.",
+										!sv.equals(sv2));
+					}
+				}
+			}
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testEquals005
-	 * @testDescription This method asserts if two objects with
-	 *                  different path are not equal.
+	 * This method asserts if equals method returns true when two equal
+	 * StatusVariable are compared. StatusVariables are created ranging all
+	 * possible types for the third parameter of the constructor.
+	 * 
+	 * @spec StatusVariable.equals(Object)
 	 */
-	public void testEquals005() {
+	private void testEquals005() {
 		try {
 			tbc.log("#testEquals005");
-			org.osgi.service.monitor.StatusVariable sv = tbc.getMonitorAdmin().getStatusVariable(MonitorTestControl.SVS[1]);
+			StatusVariable sv = null;
+			StatusVariable sv2 = null;
 
-			org.osgi.service.monitor.StatusVariable sv2 = tbc.getMonitorAdmin().getStatusVariable(MonitorTestControl.SVS_NOT_SUPPORT_NOTIFICATION[0]);
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects with different path are not equal" }),
-							!sv.equals(sv2));
+			for (int i = 0; i < 4; i++) {
+				if (i == 0) {
+					sv = new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC,
+							MonitorTestControl.SV_INT_VALUE);
+					sv2 = new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC,
+							MonitorTestControl.SV_INT_VALUE);
+				} else if (i == 1) {
+					sv = new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC,
+							MonitorTestControl.SV_BOOLEAN_VALUE);
+					sv2 = new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC,
+							MonitorTestControl.SV_BOOLEAN_VALUE);
+				} else if (i == 2) {
+					sv = new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC,
+							MonitorTestControl.SV_FLOAT_VALUE);
+					sv2 = new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC,
+							MonitorTestControl.SV_FLOAT_VALUE);
+				} else if (i == 3) {
+					sv = new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC,
+							MonitorTestControl.SV_STRING_VALUE);
+					sv2 = new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC,
+							MonitorTestControl.SV_STRING_VALUE);
+				}
+
+				tbc
+						.assertTrue(
+								"Asserts if equals method returns true when comparing two equal StatusVariable.",
+								sv.equals(sv2));
+			}
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testEquals006
-	 * @testDescription This method asserts if two objects created with
-	 *                  different types are not equal.
+	 * This method asserts if equals method returns false when two different
+	 * StatusVariable are compared. StatusVariables are created ranging all
+	 * possible types for the third parameter with different values.
+	 * 
+	 * @spec StatusVariable.equals(Object)
 	 */
-	public void testEquals006() {
+	private void testEquals006() {
 		try {
 			tbc.log("#testEquals006");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_FLOAT_VALUE);
+			StatusVariable sv = null;
+			StatusVariable sv2 = null;
 
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_STRING_VALUE);
+			for (int i = 0; i < 4; i++) {
+				if (i == 0) {
+					sv = new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC,
+							MonitorTestControl.SV_INT_VALUE);
+				} else if (i == 1) {
+					sv = new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC,
+							MonitorTestControl.SV_BOOLEAN_VALUE);
+				} else if (i == 2) {
+					sv = new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC,
+							MonitorTestControl.SV_FLOAT_VALUE);
+				} else if (i == 3) {
+					sv = new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC,
+							MonitorTestControl.SV_STRING_VALUE);
+				}
+				for (int j = 0; j < 4; j++) {
 
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with different types are not equal" }),
-							!sv.equals(sv2));
+					if (j == 0) {
+						sv2 = new StatusVariable(MonitorTestControl.SV_NAME1,
+								StatusVariable.CM_CC,
+								MonitorTestControl.SV_INT_VALUE + 1);
+					} else if (j == 1) {
+						sv2 = new StatusVariable(MonitorTestControl.SV_NAME1,
+								StatusVariable.CM_CC,
+								!MonitorTestControl.SV_BOOLEAN_VALUE);
+					} else if (j == 2) {
+						sv2 = new StatusVariable(MonitorTestControl.SV_NAME1,
+								StatusVariable.CM_CC,
+								MonitorTestControl.SV_FLOAT_VALUE + 1.0f);
+					} else if (j == 3) {
+						sv2 = new StatusVariable(MonitorTestControl.SV_NAME1,
+								StatusVariable.CM_CC,
+								MonitorTestControl.SV_STRING_VALUE + "a");
+					}
+					tbc
+							.assertTrue(
+									"Asserting equals method returns false when we pass two different statusvariable.",
+									!sv.equals(sv2));
+				}
+			}
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testEquals007
-	 * @testDescription This method asserts if two objects created with same
-	 *                  parameters are equal.
+	 * This method asserts if equals method returns false when comparing two
+	 * StatusVariable, created with different values for the first parameter.
+	 * 
+	 * @spec StatusVariable.equals(Object)
 	 */
-	public void testEquals007() {
+	private void testEquals007() {
 		try {
 			tbc.log("#testEquals007");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INTEGER_VALUE);
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INTEGER_VALUE);
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with same parameters are equal" }),
-							sv.equals(sv2));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		}
-	}
-
-	/**
-	 * @testID testEquals008
-	 * @testDescription This method asserts if two objects created with
-	 *                  different data are not equal.
-	 */
-	public void testEquals008() {
-		try {
-			tbc.log("#testEquals008");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INTEGER_VALUE);
-
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INTEGER_VALUE + 10);
-
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with different data are not equal" }),
-							!sv.equals(sv2));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		}
-	}
-
-	/**
-	 * @testID testEquals009
-	 * @testDescription This method asserts if two objects created with
-	 *                  different collection methods are not equal.
-	 */
-	public void testEquals009() {
-		try {
-			tbc.log("#testEquals009");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INTEGER_VALUE);
-
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_DER,
-					MonitorTestControl.SV_INTEGER_VALUE);
-
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with different collection methods are not equal" }),
-							!sv.equals(sv2));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		}
-	}
-
-	/**
-	 * @testID testEquals010
-	 * @testDescription This method asserts if two objects created with
-	 *                  different path are not equal.
-	 */
-	public void testEquals010() {
-		try {
-			tbc.log("#testEquals010");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INTEGER_VALUE);
+					MonitorTestControl.SV_INT_VALUE);
 
 			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
 					MonitorTestControl.SV_NAME2,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INTEGER_VALUE);
+					MonitorTestControl.SV_INT_VALUE);
 
 			tbc
 					.assertTrue(
 							MessagesConstants
 									.getMessage(
 											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with different path are not equal" }),
+											new String[] { "two StatusVariable, created with different paths, are different" }),
 							!sv.equals(sv2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		}
-	}
-
-	/**
-	 * @testID testEquals011
-	 * @testDescription This method asserts if two objects created with
-	 *                  different type are not equal.
-	 */
-	public void testEquals011() {
-		try {
-			tbc.log("#testEquals011");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INTEGER_VALUE);
-
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
-
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with different type are not equal" }),
-							!sv.equals(sv2));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		}
-	}
-
-	/**
-	 * @testID testEquals012
-	 * @testDescription This method asserts if two objects created with
-	 *                  different data are not equal.
-	 */
-	public void testEquals012() {
-		try {
-			tbc.log("#testEquals012");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_STRING_VALUE);
-
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_STRING_VALUE + "1");
-
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with different data are not equal" }),
-							!sv.equals(sv2));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		}
-	}
-
-	/**
-	 * @testID testEquals013
-	 * @testDescription This method asserts if two objects created with
-	 *                  different collection methods are not equal.
-	 */
-	public void testEquals013() {
-		try {
-			tbc.log("#testEquals013");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_STRING_VALUE);
-
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_DER,
-					MonitorTestControl.SV_STRING_VALUE);
-
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with different collection methods are not equal" }),
-							!sv.equals(sv2));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		}
-	}
-
-	/**
-	 * @testID testEquals014
-	 * @testDescription This method asserts if two objects created with
-	 *                  different path are not equal.
-	 */
-	public void testEquals014() {
-		try {
-			tbc.log("#testEquals014");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_STRING_VALUE);
-
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME2,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_STRING_VALUE);
-
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with different path are not equal" }),
-							!sv.equals(sv2));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		}
-	}
-
-	/**
-	 * @testID testEquals015
-	 * @testDescription This method asserts if two objects created with
-	 *                  different type are not equal.
-	 */
-	public void testEquals015() {
-		try {
-			tbc.log("#testEquals015");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_STRING_VALUE);
-
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INTEGER_VALUE);
-
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with different type are not equal" }),
-							!sv.equals(sv2));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		}
-	}
-
-	/**
-	 * @testID testEquals016
-	 * @testDescription This method asserts if two objects created with same
-	 *                  parameters are equal.
-	 */
-	public void testEquals016() {
-		try {
-			tbc.log("#testEquals016");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with same parameters are equal" }),
-							sv.equals(sv2));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		}
-	}
-
-	/**
-	 * @testID testEquals017
-	 * @testDescription This method asserts if two objects created with
-	 *                  different data are not equal.
-	 */
-	public void testEquals017() {
-		try {
-			tbc.log("#testEquals017");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
-
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_BOOLEAN_VALUE + "1");
-
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with different data are not equal" }),
-							!sv.equals(sv2));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		}
-	}
-
-	/**
-	 * @testID testEquals018
-	 * @testDescription This method asserts if two objects created with
-	 *                  different collection methods are not equal.
-	 */
-	public void testEquals018() {
-		try {
-			tbc.log("#testEquals018");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
-
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_DER,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
-
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with different collection methods are not equal" }),
-							!sv.equals(sv2));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		}
-	}
-
-	/**
-	 * @testID testEquals019
-	 * @testDescription This method asserts if two objects created with
-	 *                  different path are not equal.
-	 */
-	public void testEquals019() {
-		try {
-			tbc.log("#testEquals019");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
-
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME2,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
-
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with different path are not equal" }),
-							!sv.equals(sv2));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		}
-	}
-
-	/**
-	 * @testID testEquals020
-	 * @testDescription This method asserts if two objects created with
-	 *                  different type are not equal.
-	 */
-	public void testEquals020() {
-		try {
-			tbc.log("#testEquals020");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
-
-			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
-					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INTEGER_VALUE);
-
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "two objects created with different type are not equal" }),
-							!sv.equals(sv2));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 

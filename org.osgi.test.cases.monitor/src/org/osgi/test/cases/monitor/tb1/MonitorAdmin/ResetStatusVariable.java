@@ -52,11 +52,12 @@ import org.osgi.test.cases.monitor.tbc.TestInterface;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.service.monitor.MonitorAdmin#resetStatusVariable
- * @generalDescription This class tests resetStatusVariable method according
- *                     with MEG specification (rfc0084)
+ * @author Alexandre Alves
+ * 
+ * This Test Class Validates the implementation of
+ * <code>resetStatusVariable<code> method, according to MEG reference
+ * documentation.
  */
-
 public class ResetStatusVariable implements TestInterface {
 
 	private MonitorTestControl tbc;
@@ -76,10 +77,12 @@ public class ResetStatusVariable implements TestInterface {
 	}
 
 	/**
-	 * @testID testResetStatusVariable001
-	 * @testDescription Tests if an invalid characters throws an IllegalArgumentException
+	 * This method asserts if IllegalArgumentException is thrown
+	 * when we pass invalid characters as parameter.
+	 * 
+	 * @spec MonitorAdmin.resetStatusVariable(string)
 	 */
-	public void testResetStatusVariable001() {
+	private void testResetStatusVariable001() {
 		tbc.log("#testResetStatusVariable001");
 		try {
 			tbc.getMonitorAdmin().resetStatusVariable(
@@ -99,11 +102,12 @@ public class ResetStatusVariable implements TestInterface {
 	}
 
 	/**
-	 * @testID testResetStatusVariable002
-	 * @testDescription Tests if null is passed as parameter will throws an 
-	 * 					IllegalArgumentException
+	 * This method asserts if IllegalArgumentException is thrown
+	 * when we pass null as parameter.
+	 * 
+	 * @spec MonitorAdmin.resetStatusVariable(string)
 	 */
-	public void testResetStatusVariable002() {
+	private void testResetStatusVariable002() {
 		tbc.log("#testResetStatusVariable002");
 		try {
 			tbc.getMonitorAdmin().resetStatusVariable(null);
@@ -122,13 +126,18 @@ public class ResetStatusVariable implements TestInterface {
 	}
 
 	/**
-	 * @testID testResetStatusVariable003
-	 * @testDescription Tests if a statusvariable that doesn't exists
-	 *					throws an IllegalArgumentException 					
+	 * This method asserts if IllegalArgumentException is thrown
+	 * when we pass a path that points to a non-existing StatusVariable.
+	 * 
+	 * @spec MonitorAdmin.resetStatusVariable(string)
 	 */
-	public void testResetStatusVariable003() {
+	private void testResetStatusVariable003() {		
 		tbc.log("#testResetStatusVariable003");
+		PermissionInfo[] infos = null;		
 		try {
+			infos = tbc.getPermissionAdmin().getPermissions(tbc.getTb1Location());
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.INEXISTENT_SVS, MonitorPermission.RESET));			
+			
 			tbc.getMonitorAdmin()
 					.resetStatusVariable(MonitorTestControl.INEXISTENT_SVS);
 			tbc.failException("", IllegalArgumentException.class);
@@ -142,14 +151,18 @@ public class ResetStatusVariable implements TestInterface {
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
+		} finally {
+			tbc.getPermissionAdmin().setPermissions(tbc.getTb1Location(), infos);
 		}
 	}
 
 	/**
-	 * @testID testResetStatusVariable004
-	 * @testDescription Tests if the valid ID is reseted using long as type.
+	 * This method asserts if MonitorAdmin returns the value
+	 * returned by our monitorable implementation.
+	 * 
+	 * @spec MonitorAdmin.resetStatusVariable(string)
 	 */
-	public void testResetStatusVariable004() {
+	private void testResetStatusVariable004() {
 		tbc.log("#testResetStatusVariable004");
 		PermissionInfo[] infos = null;
 		try {
@@ -162,7 +175,7 @@ public class ResetStatusVariable implements TestInterface {
 					MonitorTestControl.SVS[0]);
 
 			tbc.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE,
-					new String[] { "resetStatusVariable was called in correct implementation returning false as result. " }), !result);
+					new String[] { "resetStatusVariable was called in correct implementation returning false as result. " }), result);
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
@@ -173,11 +186,12 @@ public class ResetStatusVariable implements TestInterface {
 	}
 
 	/**
-	 * @testID testResetStatusVariable005
-	 * @testDescription Asserts if a SecurityException is thrown when the caller
-	 *                  has no reset permission
+	 * This method asserts that a SecurityException is thrown when
+	 * we have set other action permission to the statusvariable that we are using.
+	 * 
+	 * @spec MonitorAdmin.resetStatusVariable(string)
 	 */
-	public void testResetStatusVariable005() {
+	private void testResetStatusVariable005() {
 		tbc.log("#testResetStatusVariable005");
 		PermissionInfo[] infos = null;
 		try {
@@ -207,11 +221,12 @@ public class ResetStatusVariable implements TestInterface {
 	}
 
 	/**
-	 * @testID testResetStatusVariable006
-	 * @testDescription Asserts if a SecurityException is thrown when the caller
-	 *                  has no reset permission
+	 * This method asserts that a SecurityException is thrown when
+	 * we have no action permission to the statusvariable that we are using.
+	 * 
+	 * @spec MonitorAdmin.resetStatusVariable(string)
 	 */
-	public void testResetStatusVariable006() {
+	private void testResetStatusVariable006() {
 		tbc.log("#testResetStatusVariable006");
 		PermissionInfo[] infos = null;
 		try {
@@ -241,11 +256,12 @@ public class ResetStatusVariable implements TestInterface {
 	}
 	
 	/**
-	 * @testID testResetStatusVariable007
-	 * @testDescription Asserts if a SecurityException is thrown when the caller
-	 *                  has reset permission for other statusvariable
+	 * This method asserts that a SecurityException is thrown when
+	 * we have reset permission to other statusvariable.
+	 * 
+	 * @spec MonitorAdmin.resetStatusVariable(string)
 	 */
-	public void testResetStatusVariable007() {
+	private void testResetStatusVariable007() {
 		tbc.log("#testResetStatusVariable007");
 		PermissionInfo[] infos = null;
 		try {

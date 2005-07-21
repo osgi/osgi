@@ -44,17 +44,15 @@ import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.service.monitor#stop
- * @generalDescription This Test Class Validates the implementation of
- *                     <code>Stop<code> method, according to MEG reference
- *                     documentation.
+ * @author Alexandre Alves
+ * 
+ * This Test Class Validates the implementation of
+ * <code>stop<code> method, according to MEG reference
+ * documentation.
  */
 public class Stop {
 	private MonitorTestControl tbc;
 
-	/**
-	 * @param tbc
-	 */
 	public Stop(MonitorTestControl tbc) {
 		this.tbc = tbc;
 	}
@@ -64,12 +62,14 @@ public class Stop {
 		testStop002();
 	}
 
+	
 	/**
-	 * @testID testStop001
-	 * @testDescription Tests if a MonitoringJob is really stopped after the
-	 *                  calling of stop().
+	 * This method asserts if a change based monitoringJob is really stopped after
+	 * a stop call.
+	 * 
+	 * @spec MonitoringJob.stop()
 	 */
-	public void testStop001() {
+	private void testStop001() {
 		tbc.log("#testStop001");
 		try {
 			tbc.stopRunningJobs();
@@ -98,11 +98,12 @@ public class Stop {
 	}
 
 	/**
-	 * @testID testStop002
-	 * @testDescription Tests if a MonitoringJob is really stopped after the
-	 *                  calling of stop().
+	 * This method asserts if a time based monitoringJob is really stopped after
+	 * a stop call.
+	 * 
+	 * @spec MonitoringJob.stop()
 	 */
-	public void testStop002() {
+	private void testStop002() {
 		tbc.log("#testStop002");
 		try {
 			tbc.stopRunningJobs();

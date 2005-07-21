@@ -48,18 +48,21 @@
  */
 package org.osgi.test.cases.monitor.tb1.MonitorAdmin;
 
+import org.osgi.service.monitor.MonitorPermission;
 import org.osgi.service.monitor.MonitoringJob;
 import org.osgi.service.monitor.StatusVariable;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
-import org.osgi.test.cases.monitor.tbc.SetStatusVariableInterface;
 import org.osgi.test.cases.monitor.tbc.TestInterface;
+import org.osgi.test.cases.monitor.tbc.TestingMonitorable;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.service.monitor.MonitorAdmin#startScheduledJob
- * @generalDescription This class tests startScheduledJob method according with
- *                     MEG specification (rfc0084)
+ * @author Alexandre Alves
+ * 
+ * This Test Class Validates the implementation of
+ * <code>startScheduledJob<code> method, according to MEG reference
+ * documentation.
  */
 public class StartScheduledJob implements TestInterface {
 
@@ -82,24 +85,25 @@ public class StartScheduledJob implements TestInterface {
 		testStartScheduledJob010();
 		testStartScheduledJob011();
 		testStartScheduledJob012();
+		testStartScheduledJob013();
+		testStartScheduledJob014();
 	}
 
 	/**
-	 * @testID testStartScheduledJob001
-	 * @testDescription Tests if a IllegalArgumentException is thrown if the
-	 *                  list of StatusVariables is null
+	 * This method asserts if IllegalArgumentException is thrown
+	 * when we pass null to the list of statusvariable.
+	 * 
+	 * @spec MonitorAdmin.startScheduledJob(String,String[],int,int)
 	 */
-	public void testStartScheduledJob001() {
+	private void testStartScheduledJob001() {
 		tbc.log("#testStartScheduledJob001");
+		MonitoringJob job = null;
 		try {
-			tbc.stopRunningJobs();
 
-			MonitoringJob job = tbc.getMonitorAdmin().startScheduledJob(
+			job = tbc.getMonitorAdmin().startScheduledJob(
 					MonitorTestControl.INITIATOR, null,
 					MonitorTestControl.SCHEDULE, MonitorTestControl.COUNT);
 
-			job.stop();
-
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -110,26 +114,24 @@ public class StartScheduledJob implements TestInterface {
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(job);
 		}
 	}
 
 	/**
-	 * @testID testStartScheduledJob002
-	 * @testDescription Tests if a IllegalArgumentException is thrown if the
-	 *                  list of StatusVariables is empty
+	 * This method asserts if IllegalArgumentException is thrown
+	 * when we pass a empty list of statusvariable.
+	 * 
+	 * @spec MonitorAdmin.startScheduledJob(String,String[],int,int)
 	 */
-	public void testStartScheduledJob002() {
+	private void testStartScheduledJob002() {
 		tbc.log("#testStartScheduledJob002");
+		MonitoringJob job = null;
 		try {
-			tbc.stopRunningJobs();
-
-			MonitoringJob[] jobs = tbc.getMonitorAdmin().getRunningJobs();
-
-			MonitoringJob job = tbc.getMonitorAdmin().startScheduledJob(
+			job = tbc.getMonitorAdmin().startScheduledJob(
 					MonitorTestControl.INITIATOR, new String[] {},
-					MonitorTestControl.SCHEDULE, MonitorTestControl.COUNT);
-
-			job.stop();
+					MonitorTestControl.SCHEDULE, MonitorTestControl.COUNT);			
 
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -141,26 +143,27 @@ public class StartScheduledJob implements TestInterface {
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(job);
 		}
 	}
 
 	/**
-	 * @testID testStartScheduledJob003
-	 * @testDescription Tests if a IllegalArgumentException is thrown if count
-	 *                  parameter is invalid
+	 * This method asserts if IllegalArgumentException is thrown
+	 * when we pass an invalid count as parameter.
+	 * 
+	 * @spec MonitorAdmin.startScheduledJob(String,String[],int,int)
 	 */
-	public void testStartScheduledJob003() {
+	private void testStartScheduledJob003() {
 		tbc.log("#testStartScheduledJob003");
+		MonitoringJob job = null;
 		try {
-			tbc.stopRunningJobs();
 
-			MonitoringJob job = tbc.getMonitorAdmin().startScheduledJob(
+			job = tbc.getMonitorAdmin().startScheduledJob(
 					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
 					MonitorTestControl.SCHEDULE,
 					MonitorTestControl.INVALID_COUNT);
 
-			job.stop();
-
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -171,20 +174,22 @@ public class StartScheduledJob implements TestInterface {
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(job);
 		}
 	}
 
 	/**
-	 * @testID testStartScheduledJob004
-	 * @testDescription Tests if SecurityException is not thrown when the entity
-	 *                  that start the job has the MonitorPermission with
-	 *                  startjob action.
+	 * This method tests the get methods for monitoringjob.
+	 * It asserts the values passed in startScheduledJob.
+	 * 
+	 * @spec MonitorAdmin.startScheduledJob(String,String[],int,int)
 	 */
-	public void testStartScheduledJob004() {
+	private void testStartScheduledJob004() {
 		tbc.log("#testStartScheduledJob004");
 		PermissionInfo[] infos = null;
+		MonitoringJob mj = null;
 		try {
-			tbc.stopRunningJobs();
 
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
@@ -202,9 +207,9 @@ public class StartScheduledJob implements TestInterface {
 									MonitorTestControl.SVS[1],
 									org.osgi.service.monitor.MonitorPermission.STARTJOB) });
 
-			MonitoringJob mj = tbc.getMonitorAdmin().startScheduledJob(
+			mj = tbc.getMonitorAdmin().startScheduledJob(
 					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
-					MonitorTestControl.SCHEDULE, MonitorTestControl.COUNT);
+					MonitorTestControl.SCHEDULE*4, MonitorTestControl.COUNT);
 
 			tbc.assertNotNull(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_NOT_NULL,
@@ -237,38 +242,39 @@ public class StartScheduledJob implements TestInterface {
 							MonitorTestControl.SVS[1] }),
 					MonitorTestControl.SVS[1], varName1);
 
-			long schec = mj.getSchedule();
+			long sched = mj.getSchedule();
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] { "schedule",
-							MonitorTestControl.SCHEDULE + "" }),
-					MonitorTestControl.SCHEDULE, schec);
+							MonitorTestControl.SCHEDULE*4 + "" }),
+							MonitorTestControl.SCHEDULE*4, sched);
 
 			int repCount = mj.getReportCount();
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] { "count",
 							MonitorTestControl.COUNT + "" }),
 					MonitorTestControl.COUNT, repCount);
-
-			mj.stop();
+			
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
 		} finally {
+			tbc.cleanUp(mj);
 			tbc.getPermissionAdmin()
 					.setPermissions(tbc.getTb1Location(), infos);
 		}
 	}
 
 	/**
-	 * @testID testStartScheduledJob005
-	 * @testDescription Tests if SecurityException is thrown when the entity has
-	 *                  no permission to start a job
+	 * This method asserts that a SecurityException is thrown when
+	 * one of the statusvariables does not have startjob permission.
+	 * 
+	 * @spec MonitorAdmin.startScheduledJob(String,String[],int,int)
 	 */
-	public void testStartScheduledJob005() {
+	private void testStartScheduledJob005() {
 		tbc.log("#testStartScheduledJob005");
 		PermissionInfo[] infos = null;
+		MonitoringJob mj = null;
 		try {
-			tbc.stopRunningJobs();
 
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
@@ -286,11 +292,9 @@ public class StartScheduledJob implements TestInterface {
 									MonitorTestControl.SVS[1],
 									org.osgi.service.monitor.MonitorPermission.PUBLISH) });
 
-			MonitoringJob mj = tbc.getMonitorAdmin().startScheduledJob(
+			mj = tbc.getMonitorAdmin().startScheduledJob(
 					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
 					MonitorTestControl.SCHEDULE, MonitorTestControl.COUNT);
-
-			mj.stop();
 
 			tbc.failException("", IllegalArgumentException.class);
 
@@ -304,22 +308,23 @@ public class StartScheduledJob implements TestInterface {
 							SecurityException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
+			tbc.cleanUp(mj);
 			tbc.getPermissionAdmin()
 					.setPermissions(tbc.getTb1Location(), infos);
 		}
 	}
 
 	/**
-	 * @testID testStartScheduledJob006
-	 * @testDescription Tests if SecurityException is thrown when the entity has
-	 *                  no permission to start a job for any StatusVariable
-	 *                  passed as parameter
+	 * This method asserts that a SecurityException is thrown when
+	 * the statusvariables does not have permission.
+	 * 
+	 * @spec MonitorAdmin.startScheduledJob(String,String[],int,int)
 	 */
-	public void testStartScheduledJob006() {
+	private void testStartScheduledJob006() {
 		tbc.log("#testStartScheduledJob006");
 		PermissionInfo[] infos = null;
+		MonitoringJob mj = null;
 		try {
-			tbc.stopRunningJobs();
 
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
@@ -335,11 +340,9 @@ public class StartScheduledJob implements TestInterface {
 											.getName(),
 									MonitorTestControl.SVS[1], null) });
 
-			MonitoringJob mj = tbc.getMonitorAdmin().startScheduledJob(
+			mj = tbc.getMonitorAdmin().startScheduledJob(
 					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
 					MonitorTestControl.SCHEDULE, MonitorTestControl.COUNT);
-
-			mj.stop();
 
 			tbc.failException("", IllegalArgumentException.class);
 
@@ -353,27 +356,27 @@ public class StartScheduledJob implements TestInterface {
 							SecurityException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
+			tbc.cleanUp(mj);
 			tbc.getPermissionAdmin()
 					.setPermissions(tbc.getTb1Location(), infos);
 		}
 	}
 
 	/**
-	 * @testID testStartScheduledJob007
-	 * @testDescription Tests if a IllegalArgumentException is thrown if
-	 *                  schedule parameter is invalid
+	 * This method asserts if IllegalArgumentException is thrown
+	 * when we pass an invalid schedule as parameter.
+	 * 
+	 * @spec MonitorAdmin.startScheduledJob(String,String[],int,int)
 	 */
-	public void testStartScheduledJob007() {
+	private void testStartScheduledJob007() {
 		tbc.log("#testStartScheduledJob007");
+		MonitoringJob job = null;
 		try {
-			tbc.stopRunningJobs();
 
-			MonitoringJob job = tbc.getMonitorAdmin().startScheduledJob(
+			job = tbc.getMonitorAdmin().startScheduledJob(
 					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
 					MonitorTestControl.INVALID_SCHEDULE,
 					MonitorTestControl.COUNT);
-
-			job.stop();
 
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -385,15 +388,18 @@ public class StartScheduledJob implements TestInterface {
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(job);
 		}
 	}
 
 	/**
-	 * @testID testStartScheduledJob008
-	 * @testDescription Tests if monitoring job notifies the listener in correct
-	 *                  time and if it stops after two measurements.
+	 * This method tests the schedule and count parameters, asserting the time in seconds
+	 * between two measurements and the number of measurements to be taken.
+	 * 
+	 * @spec MonitorAdmin.startScheduledJob(String,String[],int,int)
 	 */
-	public synchronized void testStartScheduledJob008() {
+	private synchronized void testStartScheduledJob008() {
 		tbc.log("#testStartScheduledJob008");
 		PermissionInfo[] infos = null;
 		MonitoringJob mj = null;
@@ -416,23 +422,23 @@ public class StartScheduledJob implements TestInterface {
 									MonitorTestControl.SVS[1],
 									org.osgi.service.monitor.MonitorPermission.STARTJOB) });
 
-			MonitoringJob[] job = tbc.getMonitorAdmin().getRunningJobs();
-
 			MonitorTestControl.EVENT_COUNT = 0;
+			
+			tbc.resetEvent();
 
 			mj = tbc.getMonitorAdmin().startScheduledJob(
 					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
 					MonitorTestControl.SCHEDULE + 4,
 					MonitorTestControl.COUNT + 1); // schedule for 5 seconds and count for 2 measurements 
 
-			wait(MonitorTestControl.TIMEOUT); // wait for 2 seconds
+			wait(MonitorTestControl.SHORT_TIMEOUT); // wait for 2 seconds
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"variable of event modification", 0 + "" }), 0,
 					MonitorTestControl.EVENT_COUNT); // assert that no events has been fired.
 
-			wait(MonitorTestControl.TIMEOUT*3); // wait for 6 seconds
+			wait(MonitorTestControl.SHORT_TIMEOUT*3); // wait for 6 seconds
 			
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
@@ -490,12 +496,12 @@ public class StartScheduledJob implements TestInterface {
 							MonitorTestControl.INITIATOR }),
 					MonitorTestControl.INITIATOR, tbc.getListenerId());
 			
-			SetStatusVariableInterface monitorable = tbc.getStatusVariableInterface();
+			TestingMonitorable monitorable = tbc.getMonitorableInterface();
 			StatusVariable sv = new StatusVariable(MonitorTestControl.SV_NAME2,
 					StatusVariable.CM_DER, "test1");
 			monitorable.setStatusVariable(sv); // update the second statusvariable value to test1, to check it later. 
 	
-			wait(MonitorTestControl.TIMEOUT * 2); // wait 4 seconds, after that will be 12 seconds in total.
+			wait(MonitorTestControl.SHORT_TIMEOUT * 2); // wait 4 seconds, after that will be 12 seconds in total.
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
@@ -553,7 +559,7 @@ public class StartScheduledJob implements TestInterface {
 							MonitorTestControl.INITIATOR }),
 					MonitorTestControl.INITIATOR, tbc.getListenerId());
 
-			wait(MonitorTestControl.TIMEOUT * 3); // wait 6 seconds, after that will be 18 seconds.
+			wait(MonitorTestControl.SHORT_TIMEOUT * 3); // wait 6 seconds, after that will be 18 seconds.
 
 			tbc.assertEquals("Asserting if the monitoringjob stops the reporting. So, we expect the same value.", 4,
 					MonitorTestControl.EVENT_COUNT); // I have set only two measurements, so, the event count must be 4, if it is bigger than 4, then
@@ -563,27 +569,26 @@ public class StartScheduledJob implements TestInterface {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
 		} finally {
-			mj.stop();
+			tbc.cleanUp(mj);
 			tbc.getPermissionAdmin()
 					.setPermissions(tbc.getTb1Location(), infos);
 		}
 	}
 
 	/**
-	 * @testID testStartScheduledJob009
-	 * @testDescription Tests if a IllegalArgumentException is thrown if the
-	 *                  initiator is null
+	 * This method asserts if IllegalArgumentException is thrown
+	 * when we pass null as initiator parameter.
+	 * 
+	 * @spec MonitorAdmin.startScheduledJob(String,String[],int,int)
 	 */
-	public void testStartScheduledJob009() {
+	private void testStartScheduledJob009() {
 		tbc.log("#testStartScheduledJob009");
+		MonitoringJob job = null;
 		try {
-			tbc.stopRunningJobs();
 
-			MonitoringJob job = tbc.getMonitorAdmin().startScheduledJob(null,
+			job = tbc.getMonitorAdmin().startScheduledJob(null,
 					MonitorTestControl.SVS, MonitorTestControl.SCHEDULE,
 					MonitorTestControl.COUNT);
-
-			job.stop();
 
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -595,55 +600,56 @@ public class StartScheduledJob implements TestInterface {
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(job);
 		}
 	}
 
 	/**
-	 * @testID testStartScheduledJob010
-	 * @testDescription Tests if a IllegalArgumentException is thrown if the
-	 *                  initiator is empty
+	 * This method asserts if IllegalArgumentException is thrown
+	 * when we pass an empty string as initiator parameter.
+	 * 
+	 * @spec MonitorAdmin.startScheduledJob(String,String[],int,int)
 	 */
-	public void testStartScheduledJob010() {
+	private void testStartScheduledJob010() {
 		tbc.log("#testStartScheduledJob010");
+		MonitoringJob job = null;
 		try {
-			tbc.stopRunningJobs();
-
-			MonitoringJob job = tbc.getMonitorAdmin().startScheduledJob("",
+			job = tbc.getMonitorAdmin().startScheduledJob("",
 					MonitorTestControl.SVS, MonitorTestControl.SCHEDULE,
 					MonitorTestControl.COUNT);
-
-			job.stop();
 
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
 					new String[] { IllegalArgumentException.class.getName() }));
-		} catch (Exception e) {
+		} catch (Exception e) {			
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(job);
 		}
 	}
 
 	/**
-	 * @testID testStartScheduledJob011
-	 * @testDescription Tests if a IllegalArgumentException is thrown if the
-	 *                  initiator is empty
+	 * This method asserts if IllegalArgumentException is thrown
+	 * when we pass invalid characters as path to a statusvariable.
+	 * 
+	 * @spec MonitorAdmin.startScheduledJob(String,String[],int,int)
 	 */
-	public void testStartScheduledJob011() {
+	private void testStartScheduledJob011() {
 		tbc.log("#testStartScheduledJob011");
+		MonitoringJob job = null;
 		try {
-			tbc.stopRunningJobs();
 
-			MonitoringJob job = tbc.getMonitorAdmin().startScheduledJob(
+			job = tbc.getMonitorAdmin().startScheduledJob(
 					MonitorTestControl.INITIATOR,
 					new String[] { "cesar/" + MonitorTestControl.INVALID_ID },
 					MonitorTestControl.SCHEDULE, MonitorTestControl.COUNT);
 
-			job.stop();
-
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -654,19 +660,22 @@ public class StartScheduledJob implements TestInterface {
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(job);
 		}
 	}
 	
 	/**
-	 * @testID testStartScheduledJob012
-	 * @testDescription Tests if SecurityException is thrown when the entity has
-	 *                  to use at minimum two as scheduled value.
+	 * This method asserts that a SecurityException is thrown
+	 * if the permission does not allow starting the job with the given frequency.
+	 * 
+	 * @spec MonitorAdmin.startScheduledJob(String,String[],int,int)
 	 */
-	public void testStartScheduledJob012() {
+	private void testStartScheduledJob012() {
 		tbc.log("#testStartScheduledJob012");
 		PermissionInfo[] infos = null;
+		MonitoringJob mj = null;
 		try {
-			tbc.stopRunningJobs();
 
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
@@ -684,11 +693,9 @@ public class StartScheduledJob implements TestInterface {
 									MonitorTestControl.SVS[1],
 									org.osgi.service.monitor.MonitorPermission.PUBLISH) });
 
-			MonitoringJob mj = tbc.getMonitorAdmin().startScheduledJob(
+			mj = tbc.getMonitorAdmin().startScheduledJob(
 					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
 					MonitorTestControl.SCHEDULE, MonitorTestControl.COUNT);
-
-			mj.stop();
 
 			tbc.failException("", IllegalArgumentException.class);
 
@@ -702,8 +709,99 @@ public class StartScheduledJob implements TestInterface {
 							SecurityException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
+			tbc.cleanUp(mj);
 			tbc.getPermissionAdmin()
 					.setPermissions(tbc.getTb1Location(), infos);
+		}
+	}
+	
+	/**
+	 * This method asserts if when we start a measurement to run indefinitely
+	 * it will run more than two times.
+	 * 
+	 * @spec MonitorAdmin.startScheduledJob(String,String[],int,int)
+	 */	
+	private synchronized void testStartScheduledJob013() {
+		tbc.log("#testStartScheduledJob013");
+		PermissionInfo[] infos = null;
+		MonitoringJob mj = null;
+		try {
+			
+			tbc.stopRunningJobs();
+
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb1Location());
+
+			tbc
+					.setLocalPermission(new PermissionInfo[] {
+							new PermissionInfo(
+									org.osgi.service.monitor.MonitorPermission.class
+											.getName(),
+									MonitorTestControl.SVS[0],
+									org.osgi.service.monitor.MonitorPermission.STARTJOB),
+							new PermissionInfo(
+									org.osgi.service.monitor.MonitorPermission.class
+											.getName(),
+									MonitorTestControl.SVS[1],
+									org.osgi.service.monitor.MonitorPermission.STARTJOB) });
+
+			MonitorTestControl.EVENT_COUNT = 0;
+			
+			mj = tbc.getMonitorAdmin().startScheduledJob(
+					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
+					MonitorTestControl.SCHEDULE + 3,
+					0); // to run indefinitely
+
+			wait(MonitorTestControl.SHORT_TIMEOUT*5); // wait for 10 seconds
+
+			tbc.assertEquals(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_EQUALS, new String[] {
+							"variable of event modification", 4 + "" }), 4,
+					MonitorTestControl.EVENT_COUNT); // assert that 4 events has been fired ( two for each statusvariable ).
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
+		} finally {
+			tbc.cleanUp(mj);
+			tbc.getPermissionAdmin()
+					.setPermissions(tbc.getTb1Location(), infos);
+		}
+	}
+	
+	/**
+	 * This method asserts if IllegalArgumentException is thrown when
+	 * we pass a path to a non-existing StatusVariable.
+	 * 
+	 * @spec MonitorAdmin.startScheduledJob(String,String[],int,int)
+	 */	
+	private void testStartScheduledJob014() {
+		tbc.log("#testStartScheduledJob014");
+		PermissionInfo[] infos = null;
+		MonitoringJob job = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(tbc.getTb1Location());
+
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.INEXISTENT_SVS, MonitorPermission.STARTJOB));
+
+			job = tbc.getMonitorAdmin().startScheduledJob(
+					MonitorTestControl.INITIATOR, new String[] { MonitorTestControl.INEXISTENT_SVS },
+					MonitorTestControl.SCHEDULE,
+					MonitorTestControl.COUNT);
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(job);
+			tbc.getPermissionAdmin().setPermissions(tbc.getTb1Location(), infos);
 		}
 	}	
 

@@ -41,9 +41,11 @@ import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.service.monitor.MonitorPermission#hashCode
- * @generalDescription This class tests equals method according with MEG
- *                     specification (rfc0084)
+ * @author Leonardo Barros
+ * 
+ * This test class validates the implementation of
+ * <code>hashCode<code> method, according to MEG reference
+ * documentation.
  */
 
 public class HashCode {
@@ -58,17 +60,15 @@ public class HashCode {
 		testHashCode001();
 		testHashCode002();
 		testHashCode003();
-		testHashCode004();
-		testHashCode005();
-		testHashCode006();
 	}
 
 	/**
-	 * @testID testHashCode001
-	 * @testDescription Tests if the hashCode of two MonitorPermission objects
-	 *                  are equal when equals method return true
+	 * This method asserts if hashCode returns same value for two equal
+	 * MonitorPermission objects
+	 * 
+	 * @spec MonitorPermission.hashCode()
 	 */
-	public void testHashCode001() {
+	private void testHashCode001() {
 		try {
 			tbc.log("#testHashCode001");
 			MonitorPermission mp1 = new MonitorPermission("*/*",
@@ -81,20 +81,22 @@ public class HashCode {
 							MessagesConstants
 									.getMessage(
 											MessagesConstants.ASSERT_TRUE,
-											new String[] { "the hashCode of two MonitorPermission objects are equal when equals method returns true" }),
+											new String[] { "hashCode returns same value for two equal MonitorPermission objects" }),
 							mp1.hashCode() == mp2.hashCode());
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testHashCode002
-	 * @testDescription Tests if the hashCode of two MonitorPermission objects
-	 *                  are equal when equals method return true
+	 * This method asserts if hashCode returns same value for two equal
+	 * MonitorPermission objects
+	 * 
+	 * @spec MonitorPermission.hashCode()
 	 */
-	public void testHashCode002() {
+	private void testHashCode002() {
 		try {
 			tbc.log("#testHashCode002");
 			MonitorPermission mp1 = new MonitorPermission(
@@ -111,105 +113,23 @@ public class HashCode {
 							MessagesConstants
 									.getMessage(
 											MessagesConstants.ASSERT_TRUE,
-											new String[] { "the hashCode of two MonitorPermission objects are equal when equals method returns true" }),
+											new String[] { "hashCode returns same value for two equal MonitorPermission objects" }),
 							mp1.hashCode() == mp2.hashCode());
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testHashCode003
-	 * @testDescription Tests if the hashCode of two MonitorPermission objects
-	 *                  are different when equals method return false
+	 * This method asserts if hashCode returns same value for two equal
+	 * MonitorPermission objects
+	 * 
+	 * @spec MonitorPermission.hashCode()
 	 */
-	public void testHashCode003() {
+	private void testHashCode003() {
 		try {
 			tbc.log("#testHashCode003");
-			MonitorPermission mp1 = new MonitorPermission("*/*",
-					org.osgi.service.monitor.MonitorPermission.READ);
-			MonitorPermission mp2 = new MonitorPermission(
-					"com.mycomp.myapp/queue_length",
-					org.osgi.service.monitor.MonitorPermission.READ);
-
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "the hashCode of two MonitorPermission objects are different when equals method returns false" }),
-							!(mp1.hashCode() == mp2.hashCode()));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		}
-	}
-
-	/**
-	 * @testID testHashCode004
-	 * @testDescription Tests if the hashCode of two MonitorPermission objects
-	 *                  are different when equals method return false
-	 */
-	public void testHashCode004() {
-		try {
-			tbc.log("#testHashCode004");
-			MonitorPermission mp1 = new MonitorPermission("*/*",
-					org.osgi.service.monitor.MonitorPermission.READ);
-			MonitorPermission mp2 = new MonitorPermission("*/*",
-					org.osgi.service.monitor.MonitorPermission.RESET);
-
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "the hashCode of two MonitorPermission objects are different when equals method returns false" }),
-							!(mp1.hashCode() == mp2.hashCode()));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		}
-	}
-
-	/**
-	 * @testID testHashCode005
-	 * @testDescription Tests if the hashCode of two MonitorPermission objects
-	 *                  are different when equals method return false
-	 */
-	public void testHashCode005() {
-		try {
-			tbc.log("#testHashCode005");
-			MonitorPermission mp1 = new MonitorPermission(
-					"*/*",
-					org.osgi.service.monitor.MonitorPermission.READ
-							+ ","
-							+ org.osgi.service.monitor.MonitorPermission.STARTJOB);
-			MonitorPermission mp2 = new MonitorPermission(
-					"com.mycomp.myapp/queue_length",
-					org.osgi.service.monitor.MonitorPermission.READ
-							+ ","
-							+ org.osgi.service.monitor.MonitorPermission.RESET
-							+ ","
-							+ org.osgi.service.monitor.MonitorPermission.STARTJOB);
-
-			tbc
-					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "the hashCode of two MonitorPermission objects are different when equals method returns false" }),
-							!(mp1.hashCode() == mp2.hashCode()));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		}
-	}
-
-	/**
-	 * @testID testHashCode006
-	 * @testDescription Tests if the hashCode of two MonitorPermission objects
-	 *                  are equal when equals method return true
-	 */
-	public void testHashCode006() {
-		try {
-			tbc.log("#testHashCode006");
 			MonitorPermission mp1 = new MonitorPermission(
 					"com.mycomp.myapp/queue_length",
 					org.osgi.service.monitor.MonitorPermission.READ + ","
@@ -224,10 +144,11 @@ public class HashCode {
 							MessagesConstants
 									.getMessage(
 											MessagesConstants.ASSERT_TRUE,
-											new String[] { "the hashCode of two MonitorPermission objects are equal when equals method return true" }),
+											new String[] { "hashCode returns same value for two equal MonitorPermission objects" }),
 							mp1.hashCode() == mp2.hashCode());
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 

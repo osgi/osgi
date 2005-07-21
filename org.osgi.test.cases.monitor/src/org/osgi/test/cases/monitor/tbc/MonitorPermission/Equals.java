@@ -41,9 +41,11 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 import org.osgi.service.monitor.MonitorPermission;
 
 /**
- * @methodUnderTest org.osgi.service.monitor.MonitorPermission#equals
- * @generalDescription This class tests equals method according with MEG
- *                     specification (rfc0084)
+ * @author Leonardo Barros
+ * 
+ * This test class validates the implementation of
+ * <code>equals<code> method, according to MEG reference
+ * documentation.
  */
 
 public class Equals {
@@ -63,12 +65,13 @@ public class Equals {
 	}
 
 	/**
-	 * @testID testEquals001
-	 * @testDescription Tests if equals returns true when two MonitorPermission
-	 *                  objects are initialized with same target and action
-	 *                  strings
+	 * This method asserts if equals method returns true when comparing two
+	 * MonitorPermission objects which are initialized with same target and
+	 * action strings
+	 * 
+	 * @spec MonitorPermission.equals(Object)
 	 */
-	public void testEquals001() {
+	private void testEquals001() {
 		try {
 			tbc.log("#testEquals001");
 			MonitorPermission mp1 = new MonitorPermission("*/*",
@@ -81,20 +84,22 @@ public class Equals {
 							MessagesConstants
 									.getMessage(
 											MessagesConstants.ASSERT_TRUE,
-											new String[] { "equals method returns true when two MonitorPermission objects are initialized with same target and action strings" }),
+											new String[] { "equals method returns true when comparing two MonitorPermission objects which are initialized with same target and action strings" }),
 							mp1.equals(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testEquals002
-	 * @testDescription Tests if equals returns true when two MonitorPermission
-	 *                  objects are initialized with same target and action
-	 *                  strings
+	 * This method asserts if equals method returns true when comparing two
+	 * MonitorPermission objects which are initialized with same target and
+	 * action strings
+	 * 
+	 * @spec MonitorPermission.equals(Object)
 	 */
-	public void testEquals002() {
+	private void testEquals002() {
 		try {
 			tbc.log("#testEquals002");
 			MonitorPermission mp1 = new MonitorPermission(
@@ -111,20 +116,22 @@ public class Equals {
 							MessagesConstants
 									.getMessage(
 											MessagesConstants.ASSERT_TRUE,
-											new String[] { "equals method returns true when two MonitorPermission objects are initialized with same target and action strings" }),
+											new String[] { "equals method returns true when comparing two MonitorPermission objects which are initialized with same target and action strings" }),
 							mp1.equals(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testEquals003
-	 * @testDescription Tests if equals returns false when two MonitorPermission
-	 *                  objects are initialized with different target or action
-	 *                  strings
+	 * This method asserts if equals method returns false when comparing two
+	 * MonitorPermission objects which are initialized with different target
+	 * string
+	 * 
+	 * @spec MonitorPermission.equals(Object)
 	 */
-	public void testEquals003() {
+	private void testEquals003() {
 		try {
 			tbc.log("#testEquals003");
 			MonitorPermission mp1 = new MonitorPermission("*/*",
@@ -138,20 +145,22 @@ public class Equals {
 							MessagesConstants
 									.getMessage(
 											MessagesConstants.ASSERT_TRUE,
-											new String[] { "equals method returns false when two MonitorPermission objects are initialized with different target or action strings" }),
+											new String[] { "equals method returns false when comparing two MonitorPermission objects which are initialized with different target string" }),
 							!mp1.equals(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testEquals004
-	 * @testDescription Tests if equals returns false when two MonitorPermission
-	 *                  objects are initialized with different target or action
-	 *                  strings
+	 * This method asserts if equals method returns false when comparing two
+	 * MonitorPermission objects which are initialized with different action
+	 * string
+	 * 
+	 * @spec MonitorPermission.equals(Object)
 	 */
-	public void testEquals004() {
+	private void testEquals004() {
 		try {
 			tbc.log("#testEquals004");
 			MonitorPermission mp1 = new MonitorPermission("*/*",
@@ -164,20 +173,22 @@ public class Equals {
 							MessagesConstants
 									.getMessage(
 											MessagesConstants.ASSERT_TRUE,
-											new String[] { "equals method returns false when two MonitorPermission objects are initialized with different target or action strings" }),
+											new String[] { "equals method returns false when comparing two MonitorPermission objects which are initialized with different action string" }),
 							!mp1.equals(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testEquals005
-	 * @testDescription Tests if equals returns false when two MonitorPermission
-	 *                  objects are initialized with different target or action
-	 *                  strings
+	 * This method asserts if equals method returns false when comparing two
+	 * MonitorPermission objects which are initialized with different target and
+	 * action strings
+	 * 
+	 * @spec MonitorPermission.equals(Object)
 	 */
-	public void testEquals005() {
+	private void testEquals005() {
 		try {
 			tbc.log("#testEquals005");
 			MonitorPermission mp1 = new MonitorPermission(
@@ -198,20 +209,22 @@ public class Equals {
 							MessagesConstants
 									.getMessage(
 											MessagesConstants.ASSERT_TRUE,
-											new String[] { "equals method returns false when two MonitorPermission objects are initialized with different target or action strings" }),
+											new String[] { "equals method returns false when comparing two MonitorPermission objects which are initialized with different target and action strings" }),
 							!mp1.equals(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testEquals006
-	 * @testDescription Tests if equals returns true when two MonitorPermission
-	 *                  objects are initialized with same target and action
-	 *                  strings differently disposed
+	 * This method asserts if equals method returns true when comparing two
+	 * MonitorPermission objects which are initialized with same actions but in
+	 * different order
+	 * 
+	 * @spec MonitorPermission.equals(Object)
 	 */
-	public void testEquals006() {
+	private void testEquals006() {
 		try {
 			tbc.log("#testEquals006");
 			MonitorPermission mp1 = new MonitorPermission(
@@ -228,10 +241,11 @@ public class Equals {
 							MessagesConstants
 									.getMessage(
 											MessagesConstants.ASSERT_TRUE,
-											new String[] { "equals returns true when two MonitorPermission objects are initialized with same target and action strings differently disposed" }),
+											new String[] { "equals method returns true when comparing two MonitorPermission objects which are initialized with same actions but in different order" }),
 							mp1.equals(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 

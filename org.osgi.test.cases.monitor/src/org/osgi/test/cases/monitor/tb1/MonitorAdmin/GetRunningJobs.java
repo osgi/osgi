@@ -52,9 +52,11 @@ import org.osgi.test.cases.monitor.tbc.TestInterface;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.service.monitor.MonitorAdmin#getRunningJobs
- * @generalDescription This class tests getRunningJobs method according with MEG
- *                     specification (rfc0084)
+ * @author Alexandre Alves
+ * 
+ * This Test Class Validates the implementation of
+ * <code>getRunningJobs<code> method, according to MEG reference
+ * documentation.
  */
 public class GetRunningJobs implements TestInterface {
 	private MonitorTestControl tbc;
@@ -71,10 +73,12 @@ public class GetRunningJobs implements TestInterface {
 	}
 
 	/**
-	 * @testID testGetRunningJobs001
-	 * @testDescription Tests if the correct list of running jobs is returned.
+	 * This method asserts if when we stop all running monitoring jobs
+	 * and start a change based job, this method returns only one monitoring job.
+	 * 
+	 * @spec MonitorAdmin.getRunningJobs()
 	 */
-	public void testGetRunningJobs001() {
+	private void testGetRunningJobs001() {
 		tbc.log("#testGetRunningJobs001");
 		MonitoringJob mj = null;
 		MonitoringJob[] mjs = null;
@@ -97,40 +101,44 @@ public class GetRunningJobs implements TestInterface {
 
 			mjs = tbc.getMonitorAdmin().getRunningJobs();
 		
+			tbc.assertNotNull("Asserting if a non-null value is returned by getRunningJobs().", mjs);
+			
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "number of running jobs", 1+"" }),
 					1, mjs.length);
 			
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[] { "the returned MonitoringJob" }), mj);
+			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[] { "the returned MonitoringJob" }), mjs[0]);
 			
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "initiator", MonitorTestControl.INITIATOR }),
-					MonitorTestControl.INITIATOR, mj.getInitiator());
+					MonitorTestControl.INITIATOR, mjs[0].getInitiator());
 
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "length of the statusvariable names", MonitorTestControl.SV_LENGTH+"" }),
-					MonitorTestControl.SV_LENGTH, mj.getStatusVariableNames().length);
+					MonitorTestControl.SV_LENGTH, mjs[0].getStatusVariableNames().length);
 
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "first statusvariable name", MonitorTestControl.SVS[0] }),					
-					MonitorTestControl.SVS[0], mj.getStatusVariableNames()[0]);
+					MonitorTestControl.SVS[0], mjs[0].getStatusVariableNames()[0]);
 
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "second statusvariable name", MonitorTestControl.SVS[1] }),
-					MonitorTestControl.SVS[1], mj.getStatusVariableNames()[1]);
+					MonitorTestControl.SVS[1], mjs[0].getStatusVariableNames()[1]);
 
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "count", MonitorTestControl.COUNT+""
-							 }), MonitorTestControl.COUNT, mj.getReportCount());			
+							 }), MonitorTestControl.COUNT, mjs[0].getReportCount());			
 			
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
+			mj.stop();				
 			tbc.getPermissionAdmin().setPermissions(
 					tbc.getTb1Location(), infos);			
-			mj.stop();			
 		}
 	}
 
 	/**
-	 * @testID testGetRunningJobs002
-	 * @testDescription Tests if the correct list of running jobs is returned
+	 * This method asserts if when we stop all running monitoring jobs
+	 * and start a time based job, this method returns only one monitoring job.
+	 * 
+	 * @spec MonitorAdmin.getRunningJobs()
 	 */
-	public void testGetRunningJobs002() {
+	private void testGetRunningJobs002() {
 		tbc.log("#testGetRunningJobs002");
 		MonitoringJob mj = null;
 		MonitoringJob[] mjs = null;
@@ -154,27 +162,29 @@ public class GetRunningJobs implements TestInterface {
 
 			mjs = tbc.getMonitorAdmin().getRunningJobs();
 		
+			tbc.assertNotNull("Asserting if a non-null value is returned by getRunningJobs().", mjs);
+			
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "number of running jobs", 1+""}),
 					1, mjs.length);
 			
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[] { "the returned MonitoringJob" }), mj);
+			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[] { "the returned MonitoringJob" }), mjs[0]);
 			
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "initiator", MonitorTestControl.INITIATOR }),
-					MonitorTestControl.INITIATOR, mj.getInitiator());
+					MonitorTestControl.INITIATOR, mjs[0].getInitiator());
 
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "length of statusvariable names", MonitorTestControl.SV_LENGTH+"" }),
-					MonitorTestControl.SV_LENGTH, mj.getStatusVariableNames().length);
+					MonitorTestControl.SV_LENGTH, mjs[0].getStatusVariableNames().length);
 
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "first statusvariable name", MonitorTestControl.SVS[0] }),					
-					MonitorTestControl.SVS[0], mj.getStatusVariableNames()[0]);
+					MonitorTestControl.SVS[0], mjs[0].getStatusVariableNames()[0]);
 
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "second statusvariable name", MonitorTestControl.SVS[1] }),
-					MonitorTestControl.SVS[1], mj.getStatusVariableNames()[1]);
+					MonitorTestControl.SVS[1], mjs[0].getStatusVariableNames()[1]);
 
-			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "schedule", MonitorTestControl.SCHEDULE+"" }), MonitorTestControl.SCHEDULE, mj.getSchedule());
+			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "schedule", MonitorTestControl.SCHEDULE+"" }), MonitorTestControl.SCHEDULE, mjs[0].getSchedule());
 			
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "count", MonitorTestControl.COUNT+"" }),
-					MonitorTestControl.COUNT, mj.getReportCount());
+					MonitorTestControl.COUNT, mjs[0].getReportCount());
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
@@ -186,10 +196,12 @@ public class GetRunningJobs implements TestInterface {
 	}
 
 	/**
-	 * @testID testGetRunningJobs003
-	 * @testDescription Tests if the correct list of running jobs is returned
+	 * This method asserts if when we stop all running monitoring jobs
+	 * and start a time based job and a change based job, this method returns two monitoring job.
+	 * 
+	 * @spec MonitorAdmin.getRunningJobs()
 	 */
-	public void testGetRunningJobs003() {
+	private void testGetRunningJobs003() {
 		tbc.log("#testGetRunningJobs003");
 		MonitoringJob mj = null;
 		MonitoringJob mj2 = null;
@@ -204,8 +216,7 @@ public class GetRunningJobs implements TestInterface {
 			tbc.setLocalPermission(new PermissionInfo[] {
 					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorTestControl.SVS[0], org.osgi.service.monitor.MonitorPermission.STARTJOB),	
 					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorTestControl.SVS[1], org.osgi.service.monitor.MonitorPermission.STARTJOB)
-			});
-		
+			});		
 
 			mj = tbc.getMonitorAdmin().startScheduledJob(
 					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
@@ -215,47 +226,49 @@ public class GetRunningJobs implements TestInterface {
 					MonitorTestControl.SVS, MonitorTestControl.COUNT);
 
 			mjs = tbc.getMonitorAdmin().getRunningJobs();
+			
+			tbc.assertNotNull("Asserting if a non-null value is returned by getRunningJobs().", mjs);		
 
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "number of running jobs", 2+"" }),
 					2, mjs.length);
 			
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[] { "the returned MonitoringJob" }), mj);
+			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[] { "the returned MonitoringJob" }), mjs[0]);
 			
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "initiator", MonitorTestControl.INITIATOR }),
-					MonitorTestControl.INITIATOR, mj.getInitiator());
+					MonitorTestControl.INITIATOR, mjs[0].getInitiator());
 
-			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "length of statusvariable names", MonitorTestControl.SV_LENGTH+"" }),	MonitorTestControl.SV_LENGTH, mj.getStatusVariableNames().length);
+			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "length of statusvariable names", MonitorTestControl.SV_LENGTH+"" }),	MonitorTestControl.SV_LENGTH, mjs[0].getStatusVariableNames().length);
 
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "first statusvariable name", MonitorTestControl.SVS[0] }),					
-					MonitorTestControl.SVS[0], mj.getStatusVariableNames()[0]);
+					MonitorTestControl.SVS[0], mjs[0].getStatusVariableNames()[0]);
 
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "second statusvariable name", MonitorTestControl.SVS[1] }),
-					MonitorTestControl.SVS[1], mj.getStatusVariableNames()[1]);
+					MonitorTestControl.SVS[1], mjs[0].getStatusVariableNames()[1]);
 
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "schedule", MonitorTestControl.SCHEDULE+"" }),
-					MonitorTestControl.SCHEDULE, mj.getSchedule());
+					MonitorTestControl.SCHEDULE, mjs[0].getSchedule());
 			
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "count", MonitorTestControl.COUNT+"" }),
-					MonitorTestControl.COUNT, mj.getReportCount());			
+					MonitorTestControl.COUNT, mjs[0].getReportCount());			
 			
 
 			
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[] { "the returned MonitoringJob" }), mj2);
+			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[] { "the returned MonitoringJob" }), mjs[1]);
 			
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "initiator", MonitorTestControl.INITIATOR }),
-					MonitorTestControl.INITIATOR, mj2.getInitiator());
+					MonitorTestControl.INITIATOR, mjs[1].getInitiator());
 
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "length of statusvariable names", MonitorTestControl.SV_LENGTH+""}),
-					MonitorTestControl.SV_LENGTH, mj2.getStatusVariableNames().length);
+					MonitorTestControl.SV_LENGTH, mjs[1].getStatusVariableNames().length);
 
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "first statusvariable name", MonitorTestControl.SVS[0] }),					
-					MonitorTestControl.SVS[0], mj2.getStatusVariableNames()[0]);
+					MonitorTestControl.SVS[0], mjs[1].getStatusVariableNames()[0]);
 
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "second statusvariable name", MonitorTestControl.SVS[1] }),
-					MonitorTestControl.SVS[1], mj2.getStatusVariableNames()[1]);
+					MonitorTestControl.SVS[1], mjs[1].getStatusVariableNames()[1]);
 
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "count", MonitorTestControl.COUNT+"" }),
-					MonitorTestControl.COUNT, mj2.getReportCount());	
+					MonitorTestControl.COUNT, mjs[1].getReportCount());	
 			
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
@@ -268,11 +281,12 @@ public class GetRunningJobs implements TestInterface {
 	}
 	
 	/**
-	 * @testID testGetRunningJobs004
-	 * @testDescription Tests if an empty array is returned when no 
-	 * 					MonitoringJob is running.
+	 * This method asserts that an empty array is returned if 
+	 * there are no running jobs at the time of the call.
+	 * 
+	 * @spec MonitorAdmin.getRunningJobs()
 	 */
-	public void testGetRunningJobs004() {
+	private void testGetRunningJobs004() {
 		tbc.log("#testGetRunningJobs004");
 		MonitoringJob mj = null;
 		MonitoringJob[] mjs = null;
@@ -290,6 +304,8 @@ public class GetRunningJobs implements TestInterface {
 			});
 
 			mjs = tbc.getMonitorAdmin().getRunningJobs();
+			
+			tbc.assertNotNull("Asserting if a non-null value is returned by getRunningJobs().", mjs);
 				
 			tbc.assertTrue("Asserting if an empty array is returned when no MonitoringJob is running",
 					(mjs.length==0));

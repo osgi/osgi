@@ -44,18 +44,16 @@ import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.service.monitor#isLocal
- * @generalDescription This Test Class Validates the implementation of
- *                     <code>IsLocal<code> method, according to MEG reference
- *                     documentation.
+ * @author Alexandre Alves
+ * 
+ * This Test Class Validates the implementation of
+ * <code>isLocal<code> method, according to MEG reference
+ * documentation.
  */
 public class IsLocal {
     
     private MonitorTestControl tbc;
 
-    /**
-     * @param tbc
-     */
     public IsLocal(MonitorTestControl tbc) {
         this.tbc = tbc;
     }
@@ -66,11 +64,12 @@ public class IsLocal {
     }
     
 	/**
-	 * @testID testIsLocal001
-	 * @testDescription This method asserts if a local monitoring job returns
-	 * 					true when use a isLocal call.
-	 */    
-    public void testIsLocal001() {
+	 * This method asserts that this method returns true when we are
+	 * using a local monitoring job.
+	 * 
+	 * @spec MonitoringJob.isLocal()
+	 */
+    private void testIsLocal001() {
     	tbc.log("#testIsLocal001");
     	MonitoringJob mj = null;
 		try {
@@ -93,11 +92,12 @@ public class IsLocal {
 	}        
     
 	/**
-	 * @testID testIsLocal002
-	 * @testDescription This method asserts if a remote monitoring job returns
-	 * 					false when use a isLocal call.
-	 */    
-    public void testIsLocal002() {
+	 * This method asserts that this method returns false when we are
+	 * using a remote monitoring job.
+	 * 
+	 * @spec MonitoringJob.isLocal()
+	 */   
+    private void testIsLocal002() {
     	tbc.log("#testIsLocal002");
     	DmtSession session = null;
         try {

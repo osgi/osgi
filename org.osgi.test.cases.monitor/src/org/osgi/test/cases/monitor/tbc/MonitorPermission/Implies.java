@@ -43,10 +43,11 @@ import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.test.cases.monitor.tbc.MonitorPermission#implies
- * @generalDescription This Test Class Validates the implementation of
- *                     <code>Implies<code> method, according to MEG reference
- *                     documentation.
+ * @author Leonardo Barros
+ * 
+ * This test class validates the implementation of
+ * <code>implies<code> method, according to MEG reference
+ * documentation.
  */
 public class Implies {
 
@@ -65,14 +66,17 @@ public class Implies {
 		testImplies003();
 		testImplies004();
 		testImplies005();
+		testImplies006();
+		testImplies007();
 	}
 
 	/**
-	 * @testID testImplies001
-	 * @testDescription Asserts if a MonitorPermission doesn't implies a
-	 *                  AllPermission
+	 * This method asserts if a MonitorPermission does not implies an
+	 * AllPermission
+	 * 
+	 * @spec MonitorPermission.implies(Object)
 	 */
-	public void testImplies001() {
+	private void testImplies001() {
 		try {
 			tbc.log("#testImplies001");
 			MonitorPermission mp1 = new MonitorPermission("*/*",
@@ -84,19 +88,21 @@ public class Implies {
 							MessagesConstants
 									.getMessage(
 											MessagesConstants.ASSERT_TRUE,
-											new String[] { "a MonitorPermission does not implies a AllPermission" }),
+											new String[] { "a MonitorPermission does not implies an AllPermission" }),
 							!mp1.implies(all));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testImplies002
-	 * @testDescription Asserts if a MonitorPermission with less actions then it
-	 *                  is implied by it.
+	 * This method asserts if implies method returns true when a
+	 * MonitorPermission has a lower set of actions allowed than this one
+	 * 
+	 * @spec MonitorPermission.implies(Object)
 	 */
-	public void testImplies002() {
+	private void testImplies002() {
 		try {
 			tbc.log("#testImplies002");
 			MonitorPermission mp1 = new MonitorPermission(
@@ -114,30 +120,28 @@ public class Implies {
 							MessagesConstants
 									.getMessage(
 											MessagesConstants.ASSERT_TRUE,
-											new String[] { "a MonitorPermission with less actions then it is implied by it" }),
+											new String[] { "implies method returns true when a MonitorPermission has a lower set of actions allowed than this one" }),
 							mp1.implies(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testImplies003
-	 * @testDescription Asserts if a MonitorPermission implies another
-	 *                  MonitorPermission with same target and actions.
+	 * This method asserts if a MonitorPermission implies another
+	 * MonitorPermission with same target and actions
+	 * 
+	 * @spec MonitorPermission.implies(Object)
 	 */
-	public void testImplies003() {
+	private void testImplies003() {
 		try {
 			tbc.log("#testImplies003");
-			MonitorPermission mp1 = new MonitorPermission(
-					"*/*",
-					org.osgi.service.monitor.MonitorPermission.READ
-							+ ","
+			MonitorPermission mp1 = new MonitorPermission("*/*",
+					org.osgi.service.monitor.MonitorPermission.READ + ","
 							+ org.osgi.service.monitor.MonitorPermission.RESET);
-			MonitorPermission mp2 = new MonitorPermission(
-					"*/*",
-					org.osgi.service.monitor.MonitorPermission.READ
-							+ ","
+			MonitorPermission mp2 = new MonitorPermission("*/*",
+					org.osgi.service.monitor.MonitorPermission.READ + ","
 							+ org.osgi.service.monitor.MonitorPermission.RESET);
 
 			tbc
@@ -145,19 +149,21 @@ public class Implies {
 							MessagesConstants
 									.getMessage(
 											MessagesConstants.ASSERT_TRUE,
-											new String[] { "a MonitorPermission implies another MonitorPermission with same target and actions" }),
+											new String[] { "a MonitorPermission implies another	MonitorPermission with same target and actions" }),
 							mp1.implies(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testImplies004
-	 * @testDescription Asserts if a MonitorPermission doesn't implies another
-	 *                  MonitorPermission with more actions then it.
+	 * This method asserts if implies method returns false when a
+	 * MonitorPermission has a broader set of actions allowed than this one
+	 * 
+	 * @spec MonitorPermission.implies(Object)
 	 */
-	public void testImplies004() {
+	private void testImplies004() {
 		try {
 			tbc.log("#testImplies004");
 			MonitorPermission mp1 = new MonitorPermission("*/*",
@@ -176,30 +182,28 @@ public class Implies {
 							MessagesConstants
 									.getMessage(
 											MessagesConstants.ASSERT_TRUE,
-											new String[] { "a MonitorPermission implies another MonitorPermission with more actions then it" }),
+											new String[] { "implies method returns false when a MonitorPermission has a broader set of actions allowed than this one" }),
 							!mp1.implies(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testImplies005
-	 * @testDescription Asserts if a MonitorPermission implies another
-	 *                  MonitorPermission with different targets.
+	 * This method asserts if a MonitorPermission does not imply another
+	 * MonitorPermission with different targets
+	 * 
+	 * @spec MonitorPermission.implies(Object)
 	 */
-	public void testImplies005() {
+	private void testImplies005() {
 		try {
 			tbc.log("#testImplies005");
-			MonitorPermission mp1 = new MonitorPermission(
-					"com.mycomp.myapp/*",
-					org.osgi.service.monitor.MonitorPermission.READ
-							+ ","
+			MonitorPermission mp1 = new MonitorPermission("com.mycomp.myapp/*",
+					org.osgi.service.monitor.MonitorPermission.READ + ","
 							+ org.osgi.service.monitor.MonitorPermission.RESET);
-			MonitorPermission mp2 = new MonitorPermission(
-					"co.myco.myap/*",
-					org.osgi.service.monitor.MonitorPermission.READ
-							+ ","
+			MonitorPermission mp2 = new MonitorPermission("co.myco.myap/*",
+					org.osgi.service.monitor.MonitorPermission.READ + ","
 							+ org.osgi.service.monitor.MonitorPermission.RESET);
 
 			tbc
@@ -207,10 +211,65 @@ public class Implies {
 							MessagesConstants
 									.getMessage(
 											MessagesConstants.ASSERT_TRUE,
-											new String[] { "a MonitorPermission implies another MonitorPermission with different targets" }),
+											new String[] { "a MonitorPermission does not imply another MonitorPermission with different targets" }),
 							!mp1.implies(mp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
+		}
+	}
+
+	/**
+	 * This method asserts if a MonitorPermission implies another
+	 * MonitorPermission with a broader minimal sampling interval
+	 * 
+	 * @spec MonitorPermission.implies(Object)
+	 */
+	private void testImplies006() {
+		try {
+			tbc.log("#testImplies006");
+			MonitorPermission mp1 = new MonitorPermission("*/*",
+					org.osgi.service.monitor.MonitorPermission.STARTJOB + ":2");
+			MonitorPermission mp2 = new MonitorPermission("*/*",
+					org.osgi.service.monitor.MonitorPermission.STARTJOB + ":4");
+
+			tbc
+					.assertTrue(
+							MessagesConstants
+									.getMessage(
+											MessagesConstants.ASSERT_TRUE,
+											new String[] { "a MonitorPermission implies another MonitorPermission with a broader minimal sampling interval" }),
+							mp1.implies(mp2));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
+		}
+	}
+
+	/**
+	 * This method asserts if a MonitorPermission does not imply another
+	 * MonitorPermission with a lower minimal sampling interval
+	 * 
+	 * @spec MonitorPermission.implies(Object)
+	 */
+	private void testImplies007() {
+		try {
+			tbc.log("#testImplies007");
+			MonitorPermission mp1 = new MonitorPermission("*/*",
+					org.osgi.service.monitor.MonitorPermission.STARTJOB + ":4");
+			MonitorPermission mp2 = new MonitorPermission("*/*",
+					org.osgi.service.monitor.MonitorPermission.STARTJOB + ":2");
+
+			tbc
+					.assertTrue(
+							MessagesConstants
+									.getMessage(
+											MessagesConstants.ASSERT_TRUE,
+											new String[] { "a MonitorPermission does not imply another MonitorPermission with a lower minimal sampling interval" }),
+							!mp1.implies(mp2));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 }

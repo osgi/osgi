@@ -30,15 +30,12 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 07/03/2005   Leonardo Barros
+ * 29/03/2005   Alexandre Santos
  * 14           Implement MEG TCK
- * ===========  ==============================================================
- * 18/04/2005   ALexandre Alves
- * 14           According to Updates in RI interfaces.
  * ===========  ==============================================================
  */
 
-package org.osgi.test.cases.monitor.tbc.Activators;
+package org.osgi.test.cases.monitor.tb3;
 
 import org.osgi.service.monitor.Monitorable;
 import org.osgi.service.monitor.StatusVariable;
@@ -51,15 +48,11 @@ import org.osgi.test.cases.monitor.tbc.TestingMonitorable;
 public class MonitorableImpl implements Monitorable, TestingMonitorable {
 	private static StatusVariable sv0;
 	private static StatusVariable sv1;
-	private MonitorTestControl tbc;
+	private MonitorTestControl tbc = null;
 	
 	static {
 		sv0 = new StatusVariable(MonitorTestControl.SV_NAME1,StatusVariable.CM_CC,"test");
 		sv1 = new StatusVariable(MonitorTestControl.SV_NAME2,StatusVariable.CM_DER,"test");
-	}
-	
-	public MonitorableImpl(MonitorTestControl tbc) {
-		this.tbc = tbc;
 	}
 	
     /**
@@ -71,7 +64,7 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
      */
 	public String[] getStatusVariableNames() {
 		tbc.log("#Start getStatusVariableNames()");
-		return null;
+		return new String[]{sv0.getID(),sv1.getID()};
 	}
 
 
@@ -128,13 +121,13 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
 		}else {
 			// according to JSTD-MEGTCK-CODE-INSP011.xls, use sv to return false and other to return true
 			if ((arg0.equals(MonitorTestControl.SV_NAME1)) || (arg0.equals(MonitorTestControl.SV_NAME2))) {
-				return true;				
+				return false;				
 			} else {
 				tbc.fail("Receive an argument different of original passed as parameter.");
 				throw new IllegalArgumentException();
 			}
 		}
-	}
+	}		
 
     /**
      * Issues a request to reset a given StatusVariable. Depending on the
@@ -175,23 +168,21 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
      * @throws IllegalArgumentException if the path points to a non existing
      *         StatusVariable
      */
-	public String getDescription(String arg0) throws java.lang.IllegalArgumentException {
-		tbc.log("#Start MonitorableImpl#getDescription()");
+	public String getDescription(String arg0) throws IllegalArgumentException  {		
+		tbc.log("#Start getDescription()");
 		
 		if(arg0==null || arg0.equals(MonitorTestControl.INVALID_MONITORABLE_SV)){
 			throw new IllegalArgumentException();
-		} else {
-			if (arg0.equals(MonitorTestControl.SV_NAME1)) {
+		}else {
+			if ((arg0.equals(MonitorTestControl.SV_NAME1)) || (arg0.equals(MonitorTestControl.SV_NAME2))) {
 				return null;				
-			} else if (arg0.equals(MonitorTestControl.SV_NAME2)) {
-				return MonitorTestControl.SVS[1];
 			} else {
 				tbc.fail("Receive an argument different of original passed as parameter.");
+				throw new IllegalArgumentException();
 			}
-		}
-		return null;
+		}	
 	}
-
+	
 	/**
 	 * This method has to be used by StartScheduledJob, to receive the values of
 	 * the updated statusvariable in the report.
@@ -205,13 +196,13 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
 			throw new IllegalArgumentException("No StatusVariable with this id was found.");
 		}
 		
-	}
-
+	}	
+	
 	/**
-	 * Only to implement TestingMonitorable interface.
+	 *	To set the MonitorTestControl 
 	 */
 	public void setMonitorTestControlInterface(MonitorTestControl tbc) {
-		// do nothing		
-	}
+		this.tbc = tbc;		
+	}	
 
 }

@@ -49,10 +49,11 @@ import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.test.cases.monitor.tbc.MonitorPermission#MonitorPermission,getActions
- * @generalDescription This Test Class Validates the implementation of
- *                     <code>MonitorPermission<code> method, according to MEG reference
- *                     documentation.
+ * @author Leonardo Barros
+ * 
+ * This test class validates the implementation of
+ * <code>MonitorPermission<code> method, according to MEG reference
+ * documentation.
  */
 public class MonitorPermission {
 	private MonitorTestControl tbc;
@@ -85,11 +86,12 @@ public class MonitorPermission {
 	}
 
 	/**
-	 * @testID testMonitorPermission001
-	 * @testDescription Tests if the constructor with a valid target passed as
-	 *                  parameter does not throws any exception
+	 * This method asserts if the constructor does not throw any exception when
+	 * a valid target is passed as parameter
+	 * 
+	 * @spec MonitorPermission.MonitorPermission(String, String)
 	 */
-	public void testMonitorPermission001() {
+	private void testMonitorPermission001() {
 		try {
 			tbc.log("#testMonitorPermission001");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
@@ -97,16 +99,18 @@ public class MonitorPermission {
 					org.osgi.service.monitor.MonitorPermission.READ);
 			tbc.pass("MonitorPermission object was created successfully");
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testMonitorPermission002
-	 * @testDescription Tests if the constructor with a valid target passed as
-	 *                  parameter does not throws any exception
+	 * This method asserts if the constructor does not throw any exception when
+	 * target with wildcard is passed as parameter
+	 * 
+	 * @spec MonitorPermission.MonitorPermission(String, String)
 	 */
-	public void testMonitorPermission002() {
+	private void testMonitorPermission002() {
 		try {
 			tbc.log("#testMonitorPermission002");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
@@ -115,16 +119,19 @@ public class MonitorPermission {
 
 			tbc.pass("MonitorPermission object was created successfully");
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testMonitorPermission003
-	 * @testDescription Tests if the constructor with a valid target passed as
-	 *                  parameter does not throws IllegalArgumentException
+	 * This method asserts if the constructor does not throw any exception when
+	 * wildcard is used at the end of the fragments Monitorable_id and
+	 * StatusVariable_id (target parameter)
+	 * 
+	 * @spec MonitorPermission.MonitorPermission(String, String)
 	 */
-	public void testMonitorPermission003() {
+	private void testMonitorPermission003() {
 		try {
 			tbc.log("#testMonitorPermission003");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
@@ -133,40 +140,39 @@ public class MonitorPermission {
 
 			tbc.pass("MonitorPermission object was created successfully");
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testMonitorPermission004
-	 * @testDescription Tests if the constructor with an invalid target passed as
-	 *                  parameter throws IllegalArgumentException
+	 * This method asserts if the constructor does not throw any exception when
+	 * wildcard is used at the end of the fragments Monitorable_id and
+	 * StatusVariable_id (target parameter)
+	 * 
+	 * @spec MonitorPermission.MonitorPermission(String, String)
 	 */
-	public void testMonitorPermission004() {
+	private void testMonitorPermission004() {
 		try {
 			tbc.log("#testMonitorPermission004");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
 					"*/queue*", org.osgi.service.monitor.MonitorPermission.READ);
 
-			tbc.failException("", IllegalArgumentException.class);
-		} catch (IllegalArgumentException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { IllegalArgumentException.class.getName() }));
+			tbc.pass("MonitorPermission object was created successfully");
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalArgumentException.class.getName(),
-							e.getClass().getName() }));
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testMonitorPermission005
-	 * @testDescription Tests if the constructor with a valid target passed as
-	 *                  parameter does not throws an exception
+	 * This method asserts if the constructor does not throw any exception when
+	 * wildcard is used at the end of the fragment Monitorable_id (target
+	 * parameter)
+	 * 
+	 * @spec MonitorPermission.MonitorPermission(String, String)
 	 */
-	public void testMonitorPermission005() {
+	private void testMonitorPermission005() {
 		try {
 			tbc.log("#testMonitorPermission005");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
@@ -175,16 +181,19 @@ public class MonitorPermission {
 
 			tbc.pass("MonitorPermission object was created successfully");
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testMonitorPermission006
-	 * @testDescription Tests if the constructor with a valid target passed as
-	 *                  parameter does not throws any exception
+	 * This method asserts if the constructor does not throw any exception when
+	 * wildcard is used for Monitorable_id and StatusVariable_id fragments
+	 * (target parameter)
+	 * 
+	 * @spec MonitorPermission.MonitorPermission(String, String)
 	 */
-	public void testMonitorPermission006() {
+	private void testMonitorPermission006() {
 		try {
 			tbc.log("#testMonitorPermission006");
 			org.osgi.service.monitor.MonitorPermission kp = new org.osgi.service.monitor.MonitorPermission(
@@ -192,16 +201,18 @@ public class MonitorPermission {
 
 			tbc.pass("MonitorPermission object was created successfully");
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testMonitorPermission007
-	 * @testDescription Tests if the constructor with an invalid target passed
-	 *                  as parameter throws an exception of correct type
+	 * This method asserts if IllegalArgumentException is thrown when
+	 * Monitorable_id fragment is invalid
+	 * 
+	 * @spec MonitorPermission.MonitorPermission(String, String)
 	 */
-	public void testMonitorPermission007() {
+	private void testMonitorPermission007() {
 		try {
 			tbc.log("#testMonitorPermission007");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
@@ -223,11 +234,12 @@ public class MonitorPermission {
 	}
 
 	/**
-	 * @testID testMonitorPermission008
-	 * @testDescription Tests if the constructor with an invalid target passed
-	 *                  as parameter throws an exception of correct type
+	 * This method asserts if IllegalArgumentException is thrown when
+	 * Monitorable_id fragment is invalid
+	 * 
+	 * @spec MonitorPermission.MonitorPermission(String, String)
 	 */
-	public void testMonitorPermission008() {
+	private void testMonitorPermission008() {
 		try {
 			tbc.log("#testMonitorPermission008");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
@@ -248,11 +260,12 @@ public class MonitorPermission {
 	}
 
 	/**
-	 * @testID testMonitorPermission009
-	 * @testDescription Tests if the constructor with an invalid target passed
-	 *                  as parameter throws an exception of correct type
+	 * This method asserts if IllegalArgumentException is thrown when
+	 * StatusVariable_id fragment is invalid
+	 * 
+	 * @spec MonitorPermission.MonitorPermission(String, String)
 	 */
-	public void testMonitorPermission009() {
+	private void testMonitorPermission009() {
 		try {
 			tbc.log("#testMonitorPermission009");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
@@ -273,11 +286,12 @@ public class MonitorPermission {
 	}
 
 	/**
-	 * @testID testMonitorPermission010
-	 * @testDescription Tests if the constructor with an invalid target passed
-	 *                  as parameter throws an exception of correct type
+	 * This method asserts if IllegalArgumentException is thrown when
+	 * StatusVariable_id fragment is invalid
+	 * 
+	 * @spec MonitorPermission.MonitorPermission(String, String)
 	 */
-	public void testMonitorPermission010() {
+	private void testMonitorPermission010() {
 		try {
 			tbc.log("#testMonitorPermission010");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
@@ -298,11 +312,12 @@ public class MonitorPermission {
 	}
 
 	/**
-	 * @testID testMonitorPermission011
-	 * @testDescription Tests if the constructor with an invalid action passed
-	 *                  as parameter throws an exception
+	 * This method asserts if IllegalArgumentException is thrown when an invalid
+	 * action is passed as parameter
+	 * 
+	 * @spec MonitorPermission.MonitorPermission(String, String)
 	 */
-	public void testMonitorPermission011() {
+	private void testMonitorPermission011() {
 		try {
 			tbc.log("#testMonitorPermission011");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
@@ -322,11 +337,12 @@ public class MonitorPermission {
 	}
 
 	/**
-	 * @testID testMonitorPermission012
-	 * @testDescription Tests if the constructor with an invalid action passed
-	 *                  as parameter throws an exception
+	 * This method asserts if IllegalArgumentException is thrown when one of the
+	 * actions passed as parameter is invalid
+	 * 
+	 * @spec MonitorPermission.MonitorPermission(String, String)
 	 */
-	public void testMonitorPermission012() {
+	private void testMonitorPermission012() {
 		try {
 			tbc.log("#testMonitorPermission012");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
@@ -347,30 +363,36 @@ public class MonitorPermission {
 	}
 
 	/**
-	 * @testID testMonitorPermission013
-	 * @testDescription Tests if the constructor with STARTJOB as actions
-	 *                  works well when we use a limit with it.
+	 * This method asserts if a MonitorPermission is successfully created with
+	 * an action defined in the following form: startjob:n
+	 * 
+	 * @spec MonitorPermission.MonitorPermission(String, String)
 	 */
-	public void testMonitorPermission013() {
+	private void testMonitorPermission013() {
 		try {
 			tbc.log("#testMonitorPermission013");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
-					"*/*",
-					org.osgi.service.monitor.MonitorPermission.STARTJOB+":1");
-			tbc.assertEquals("Asserting if we receive the passed parameter as result.", org.osgi.service.monitor.MonitorPermission.STARTJOB+":1", mp.getActions());
-			
+					"*/*", org.osgi.service.monitor.MonitorPermission.STARTJOB
+							+ ":1");
+			tbc
+					.assertEquals(
+							"Asserts if a MonitorPermission is successfully created with an action defined in the following form: startjob:n",
+							org.osgi.service.monitor.MonitorPermission.STARTJOB
+									+ ":1", mp.getActions());
+
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
-	}	
+	}
 
 	/**
-	 * @testID testMonitorPermission014
-	 * @testDescription Tests if getActions method returns the correct value as
-	 *                  passed to the constructor
+	 * This method asserts if getActions method returns the correct value as
+	 * passed to the constructor
 	 * 
+	 * @spec MonitorPermission.getActions()
 	 */
-	public void testMonitorPermission014() {
+	private void testMonitorPermission014() {
 		try {
 			tbc.log("#testMonitorPermission014");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
@@ -378,23 +400,25 @@ public class MonitorPermission {
 
 			String actions = mp.getActions();
 
-			tbc.assertEquals(MessagesConstants.getMessage(
-					MessagesConstants.ASSERT_EQUALS, new String[] { "getActions() results",
-							org.osgi.service.monitor.MonitorPermission.RESET }),
-					org.osgi.service.monitor.MonitorPermission.RESET, actions);
+			tbc
+					.assertEquals(
+							"Asserts if getActions method returns the correct value as passed to the constructor",
+							org.osgi.service.monitor.MonitorPermission.RESET,
+							actions);
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testMonitorPermission015
-	 * @testDescription Tests if getActions method returns the correct value as
-	 *                  passed to the constructor
+	 * This method asserts if getActions method returns the correct value as
+	 * passed to the constructor
 	 * 
+	 * @spec MonitorPermission.getActions()
 	 */
-	public void testMonitorPermission015() {
+	private void testMonitorPermission015() {
 		try {
 			tbc.log("#testMonitorPermission015");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
@@ -404,26 +428,23 @@ public class MonitorPermission {
 
 			tbc
 					.assertEquals(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_EQUALS,
-											new String[] { "getActions() results", 
-													org.osgi.service.monitor.MonitorPermission.PUBLISH }),
+							"Asserts if getActions method returns the correct value as passed to the constructor",
 							org.osgi.service.monitor.MonitorPermission.PUBLISH,
 							actions);
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testMonitorPermission016
-	 * @testDescription Tests if getActions method returns the correct value as
-	 *                  passed to the constructor
+	 * This method asserts if getActions method returns the correct value as
+	 * passed to the constructor
 	 * 
+	 * @spec MonitorPermission.getActions()
 	 */
-	public void testMonitorPermission016() {
+	private void testMonitorPermission016() {
 		try {
 			tbc.log("#testMonitorPermission016");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
@@ -433,26 +454,23 @@ public class MonitorPermission {
 
 			tbc
 					.assertEquals(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_EQUALS,
-											new String[] { "getActions() result", 
-													org.osgi.service.monitor.MonitorPermission.STARTJOB }),
+							"Asserts if getActions method returns the correct value as passed to the constructor",
 							org.osgi.service.monitor.MonitorPermission.STARTJOB,
 							actions);
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testMonitorPermission017
-	 * @testDescription Tests if getActions method returns the correct value as
-	 *                  passed to the constructor
+	 * This method asserts if getActions method returns the correct value as
+	 * passed to the constructor
 	 * 
+	 * @spec MonitorPermission.getActions()
 	 */
-	public void testMonitorPermission017() {
+	private void testMonitorPermission017() {
 		try {
 			tbc.log("#testMonitorPermission017");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
@@ -482,23 +500,21 @@ public class MonitorPermission {
 
 			tbc
 					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "getActions method returns the correct value as passed to the constructor" }),
+							"Asserts if getActions method returns the correct value as passed to the constructor",
 							isRead && isStartJob && !isOther);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testMonitorPermission018
-	 * @testDescription Tests if getActions method returns the correct value as
-	 *                  passed to the constructor
+	 * This method asserts if getActions method returns the correct value as
+	 * passed to the constructor
 	 * 
+	 * @spec MonitorPermission.getActions()
 	 */
-	public void testMonitorPermission018() {
+	private void testMonitorPermission018() {
 		try {
 			tbc.log("#testMonitorPermission018");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
@@ -538,28 +554,29 @@ public class MonitorPermission {
 				}
 			}
 
-			tbc.assertTrue(MessagesConstants
-					.getMessage(
-							MessagesConstants.ASSERT_TRUE,
-							new String[] { "getActions method returns the correct value as passed to the constructor" }), isRead && isStartJob
-					&& isReset && isPublish && !isOther);
+			tbc
+					.assertTrue(
+							"Asserts if getActions method returns the correct value as passed to the constructor",
+							isRead && isStartJob && isReset && isPublish
+									&& !isOther);
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		}
 	}
-	
+
 	/**
-	 * @testID testMonitorPermission019
-	 * @testDescription Tests if the constructor with null as statusvariable
-	 *                  throws IllegalArgumentException
+	 * This method asserts if IllegalArgumentException is thrown if
+	 * statusVariable parameter is null
+	 * 
+	 * @spec MonitorPermission.MonitorPermission(String,String)
 	 */
-	public void testMonitorPermission019() {
+	private void testMonitorPermission019() {
 		try {
 			tbc.log("#testMonitorPermission019");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
-					null,
-					org.osgi.service.monitor.MonitorPermission.READ);
+					null, org.osgi.service.monitor.MonitorPermission.READ);
 
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -573,18 +590,18 @@ public class MonitorPermission {
 							e.getClass().getName() }));
 		}
 	}
-	
+
 	/**
-	 * @testID testMonitorPermission020
-	 * @testDescription Tests if the constructor with null as actions
-	 *                  throws IllegalArgumentException
+	 * This method asserts if IllegalArgumentException is thrown if
+	 * actions parameter is null
+	 * 
+	 * @spec MonitorPermission.MonitorPermission(String,String)
 	 */
-	public void testMonitorPermission020() {
+	private void testMonitorPermission020() {
 		try {
 			tbc.log("#testMonitorPermission020");
 			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
-					"*/*",
-					null);
+					"*/*", null);
 
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -597,6 +614,6 @@ public class MonitorPermission {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
 		}
-	}		
-	
+	}
+
 }

@@ -39,10 +39,11 @@ package org.osgi.test.cases.monitor.tbc.MonitorPermission;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 
 /**
- * @generalDescription This Test Class Validates the constants according to MEG
- *                     reference documentation.
+ * @author Leonardo Barros
+ * 
+ * This test class validates MonitorPermission constants according to MEG
+ * reference documentation.
  */
-
 public class MonitorPermissionConstants {
 	private MonitorTestControl tbc;
 
@@ -58,16 +59,21 @@ public class MonitorPermissionConstants {
 	}
 
 	/**
-	 * @testID testConstants001
-	 * @testDescription Tests all constants values according to Constants fields
-	 *                  values.
+	 * This method asserts MonitorPermission constant fields.
+	 * 
+	 * @spec MonitorPermission constant fields
 	 */
-	public void testConstants001() {
+	private void testConstants001() {
 		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting PUBLISH value", "publish", org.osgi.service.monitor.MonitorPermission.PUBLISH);
-		tbc.assertEquals("Asserting READ value", "read", org.osgi.service.monitor.MonitorPermission.READ);
-		tbc.assertEquals("Asserting RESET value", "reset", org.osgi.service.monitor.MonitorPermission.RESET);
-		tbc.assertEquals("Asserting STARTJOB value", "startjob", org.osgi.service.monitor.MonitorPermission.STARTJOB);
-		tbc.assertEquals("Asserting SWITCHEVENTS value", "switchevents", org.osgi.service.monitor.MonitorPermission.SWITCHEVENTS);	
+		tbc.assertEquals("Asserting PUBLISH value", "publish",
+				org.osgi.service.monitor.MonitorPermission.PUBLISH);
+		tbc.assertEquals("Asserting READ value", "read",
+				org.osgi.service.monitor.MonitorPermission.READ);
+		tbc.assertEquals("Asserting RESET value", "reset",
+				org.osgi.service.monitor.MonitorPermission.RESET);
+		tbc.assertEquals("Asserting STARTJOB value", "startjob",
+				org.osgi.service.monitor.MonitorPermission.STARTJOB);
+		tbc.assertEquals("Asserting SWITCHEVENTS value", "switchevents",
+				org.osgi.service.monitor.MonitorPermission.SWITCHEVENTS);
 	}
 }

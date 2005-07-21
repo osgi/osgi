@@ -53,9 +53,11 @@ import org.osgi.test.cases.monitor.tbc.TestInterface;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.service.monitor.MonitorAdmin#getStatusVariables
- * @generalDescription This class tests getStatusVariables method according with
- *                     MEG specification (rfc0084)
+ * @author Alexandre Alves
+ * 
+ * This Test Class Validates the implementation of
+ * <code>getStatusVariables<code> method, according to MEG reference
+ * documentation.
  */
 public class GetStatusVariables implements TestInterface {
 	private MonitorTestControl tbc;
@@ -76,85 +78,59 @@ public class GetStatusVariables implements TestInterface {
 	}
 
 	/**
-	 * @testID testGetStatusVariables001
-	 * @testDescription Tests the length of the returned statusvariables.
+	 * This method asserts that all statusvariable of the
+	 * specific monitorable is returned.
+	 * 
+	 * @spec MonitorAdmin.getStatusVariables(string)
 	 */
-	public void testGetStatusVariables001() {
+	private void testGetStatusVariables001() {
 		tbc.log("#testGetStatusVariables001");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
-			
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SV_MONITORABLEID1+"/*", MonitorPermission.READ));
+
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class
+					.getName(), MonitorTestControl.SV_MONITORABLEID1 + "/*",
+					MonitorPermission.READ));
 
 			StatusVariable[] statusVariables = tbc.getMonitorAdmin()
 					.getStatusVariables(MonitorTestControl.SV_MONITORABLEID1);
 
-			tbc.assertTrue(MessagesConstants.getMessage(
-					MessagesConstants.ASSERT_EQUALS, new String[] {
-							"length of statusvariables",
-							MonitorTestControl.SV_LENGTH+"" }),
-					(MonitorTestControl.SV_LENGTH==statusVariables.length));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		} finally {
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);
-		}
-	}
-
-	/**
-	 * @testID testGetStatusVariables002
-	 * @testDescription Tests if the StatusVariables returned was the expected.
-	 */
-	public void testGetStatusVariables002() {
-		tbc.log("#testGetStatusVariables002");
-		PermissionInfo[] infos = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb1Location());
-
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SV_MONITORABLEID1+"/*", MonitorPermission.READ));
-
-			StatusVariable[] statusVariables = tbc.getMonitorAdmin()
-					.getStatusVariables(MonitorTestControl.SV_MONITORABLEID1);
-
-			boolean hasN1 = false;
-			boolean hasN2 = false;
-			for (int i = 0; i < statusVariables.length && !(hasN1 && hasN2); i++) {
-				if (statusVariables[i].getID().equals(
-						MonitorTestControl.SV_NAME1)) {
-					hasN1 = true;
-				} else if (statusVariables[i].getID().equals(
-						MonitorTestControl.SV_NAME2)) {
-					hasN2 = true;
-				}
-			}
+			tbc.assertEquals("Asserting if two StatusVariables was returned.",
+					MonitorTestControl.SV_LENGTH, statusVariables.length);
 
 			tbc
 					.assertTrue(
-							MessagesConstants
-									.getMessage(
-											MessagesConstants.ASSERT_TRUE,
-											new String[] { "all the StatusVariable names is in the StatusVariable list returned by monitorable." }),
-							hasN1 && hasN2);
+							"Asserting the name of the first StatusVariable.",
+							((statusVariables[0].getID()
+									.equals(MonitorTestControl.SV_NAME1)) || (statusVariables[0].getID()
+									.equals(MonitorTestControl.SV_NAME2))));
+			
+			tbc
+			.assertTrue(
+					"Asserting the name of the second StatusVariable.",
+					((statusVariables[1].getID()
+							.equals(MonitorTestControl.SV_NAME1)) || (statusVariables[1].getID()
+							.equals(MonitorTestControl.SV_NAME2))));			
+
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);
+			tbc.getPermissionAdmin()
+					.setPermissions(tbc.getTb1Location(), infos);
 		}
 	}
 
 	/**
-	 * @testID testGetStatusVariables003
-	 * @testDescription Tests if IllegalArgumentException is thrown when null is
-	 *                  passed as parameter
+	 * This method asserts if IllegalArgumentException is thrown
+	 * when we pass null as parameter.
+	 * 
+	 * @spec MonitorAdmin.getStatusVariables(string)
 	 */
-	public void testGetStatusVariables003() {
-		tbc.log("#testGetStatusVariables003");
+	private void testGetStatusVariables002() {
+		tbc.log("#testGetStatusVariables002");
 		try {
 			tbc.getMonitorAdmin().getStatusVariables(null);
 
@@ -168,16 +144,17 @@ public class GetStatusVariables implements TestInterface {
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
-		} 
+		}
 	}
 
 	/**
-	 * @testID testGetStatusVariables004
-	 * @testDescription Tests if IllegalArgumentException is thrown when an
-	 *                  invalid id is passed as parameter
+	 * This method asserts if IllegalArgumentException is thrown
+	 * when we pass invalid characters as parameter.
+	 * 
+	 * @spec MonitorAdmin.getStatusVariables(string)
 	 */
-	public void testGetStatusVariables004() {
-		tbc.log("#testGetStatusVariables004");
+	private void testGetStatusVariables003() {
+		tbc.log("#testGetStatusVariables003");
 		try {
 			tbc.getMonitorAdmin().getStatusVariables(
 					MonitorTestControl.INVALID_ID);
@@ -196,12 +173,13 @@ public class GetStatusVariables implements TestInterface {
 	}
 
 	/**
-	 * @testID testGetStatusVariables005
-	 * @testDescription Tests if IllegalArgumentException is thrown when n path
-	 *                  that doesn't exist is passed as parameter
+	 * This method asserts if IllegalArgumentException is thrown
+	 * when we pass a path that points to a non-existing Monitorable.
+	 * 
+	 * @spec MonitorAdmin.getStatusVariables(string)
 	 */
-	public void testGetStatusVariables005() {
-		tbc.log("#testGetStatusVariables005");
+	private void testGetStatusVariables004() {
+		tbc.log("#testGetStatusVariables004");
 		try {
 			tbc.getMonitorAdmin().getStatusVariables(
 					MonitorTestControl.VALID_ID);
@@ -216,107 +194,156 @@ public class GetStatusVariables implements TestInterface {
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
-		} 
+		}
 	}
 
 	/**
-	 * @testID testGetStatusVariables006
-	 * @testDescription Asserts if a SecurityException is thrown when the caller
-	 *                  has no read permission
+	 * This method asserts that no statusvariable is 
+	 * returned when the caller has no read permission.
+	 * 
+	 * @spec MonitorAdmin.getStatusVariables(string)
 	 */
-	public void testGetStatusVariables006() {
+	private void testGetStatusVariables005() {
+		tbc.log("#testGetStatusVariables005");
+		PermissionInfo[] infos = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb1Location());
+
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class
+					.getName(), "*/*", null));
+
+			StatusVariable[] statusVariables = tbc.getMonitorAdmin()
+					.getStatusVariables(MonitorTestControl.SV_MONITORABLEID1);
+
+			tbc
+					.assertTrue(
+							"Asserting if an empty array is returned when the caller has no read permission.",
+							(statusVariables.length == 0));
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
+		} finally {
+			tbc.getPermissionAdmin()
+					.setPermissions(tbc.getTb1Location(), infos);
+		}
+	}
+
+	/**
+	 * This method asserts that no statusvariable is 
+	 * returned when the caller has read permission for other monitorable.
+	 * 
+	 * @spec MonitorAdmin.getStatusVariables(string)
+	 */
+	private void testGetStatusVariables006() {
 		tbc.log("#testGetStatusVariables006");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SV_MONITORABLEID1+"/*", MonitorPermission.PUBLISH));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class
+					.getName(), MonitorTestControl.SV_MONITORABLEID2 + "/*",
+					MonitorPermission.READ));
 
-			tbc.getMonitorAdmin().getStatusVariables(MonitorTestControl.SV_MONITORABLEID1);
+			StatusVariable[] statusVariables = tbc.getMonitorAdmin()
+					.getStatusVariables(MonitorTestControl.SV_MONITORABLEID1);
 
-			tbc.failException("", SecurityException.class);
+			tbc
+					.assertTrue(
+							"Asserting if an empty array is returned when the caller has read permission for other monitorable.",
+							(statusVariables.length == 0));
 
-		} catch (SecurityException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { SecurityException.class.getName() }));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							SecurityException.class.getName(),
-							e.getClass().getName() }));
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);
+			tbc.getPermissionAdmin()
+					.setPermissions(tbc.getTb1Location(), infos);
 		}
 	}
-	
+
 	/**
-	 * @testID testGetStatusVariables007
-	 * @testDescription Asserts if a SecurityException is thrown when the caller
-	 *                  has no read permission
+	 * This method asserts if the only statusvariable that
+	 * we have set read permission is returned.
+	 * 
+	 * @spec MonitorAdmin.getStatusVariables(string)
 	 */
-	public void testGetStatusVariables007() {
+	private void testGetStatusVariables007() {
 		tbc.log("#testGetStatusVariables007");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SV_MONITORABLEID1+"/*", null));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class
+					.getName(), MonitorTestControl.SVS[0],
+					MonitorPermission.READ));
 
-			tbc.getMonitorAdmin().getStatusVariables(MonitorTestControl.SV_MONITORABLEID1);
+			StatusVariable[] statusVariables = tbc.getMonitorAdmin()
+					.getStatusVariables(MonitorTestControl.SV_MONITORABLEID1);
 
-			tbc.failException("", SecurityException.class);
+			tbc.assertTrue("Asserting if only one StatusVariable is returned.",
+					(statusVariables.length == 1));
 
-		} catch (SecurityException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { SecurityException.class.getName() }));
+			tbc
+					.assertEquals(
+							"Asserting if the MonitorAdmin returns the StatusVariable that we expect.",
+							MonitorTestControl.SV_NAME1,
+							statusVariables[0].getID());
+
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							SecurityException.class.getName(),
-							e.getClass().getName() }));
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);
+			tbc.getPermissionAdmin()
+					.setPermissions(tbc.getTb1Location(), infos);
 		}
 	}
 	
 	/**
-	 * @testID testGetStatusVariables008
-	 * @testDescription Asserts if a SecurityException is thrown when the caller
-	 *                  has read permission for only one of two statusvariables.
+	 * This method asserts if the only statusvariable that
+	 * has publish permission for the monitorable is returned.
+	 * 
+	 * @spec MonitorAdmin.getStatusVariables(string)
 	 */
-	public void testGetStatusVariables008() {
+	private void testGetStatusVariables008() {
 		tbc.log("#testGetStatusVariables008");
-		PermissionInfo[] infos = null;
+		PermissionInfo[] infosTb1 = null;
+		PermissionInfo[] infosTb3 = null;
 		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
+			infosTb1 = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
+			
+			infosTb3 = tbc.getPermissionAdmin().getPermissions(tbc.getTb3Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[0], null));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class
+					.getName(), "*/*",
+					MonitorPermission.READ));
+			
+			tbc.setLocalPermission("cesar2/test0", org.osgi.service.monitor.MonitorPermission.PUBLISH);
 
-			tbc.getMonitorAdmin().getStatusVariables(MonitorTestControl.SV_MONITORABLEID1);
+			StatusVariable[] statusVariables = tbc.getMonitorAdmin()
+					.getStatusVariables(MonitorTestControl.SV_MONITORABLEID2);
 
-			tbc.failException("", SecurityException.class);
+			tbc.assertTrue("Asserting if only one StatusVariable is returned.",
+					(statusVariables.length == 1));
 
-		} catch (SecurityException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { SecurityException.class.getName() }));
+			tbc
+					.assertEquals(
+							"Asserting if the MonitorAdmin returns the StatusVariable that we expect.",
+							MonitorTestControl.SV_NAME1,
+							statusVariables[0].getID());
+
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							SecurityException.class.getName(),
-							e.getClass().getName() }));
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);
+			tbc.getPermissionAdmin()
+					.setPermissions(tbc.getTb1Location(), infosTb1);
+			tbc.getPermissionAdmin().setPermissions(tbc.getTb3Location(), infosTb3);
 		}
 	}	
-
 
 }

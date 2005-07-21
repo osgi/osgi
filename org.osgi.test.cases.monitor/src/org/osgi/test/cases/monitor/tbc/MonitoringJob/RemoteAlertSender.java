@@ -36,23 +36,24 @@
  */
 package org.osgi.test.cases.monitor.tbc.MonitoringJob;
 
+import org.osgi.service.dmt.DmtAlertItem;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.monitor.StatusVariable;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
+import org.osgi.test.cases.monitor.tbc.TestingMonitorable;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
 /**
- * @generalDescription This Test Class Validates the process of starting
- *                     a job remotely.
+ * @author Alexandre Alves
+ * 
+ * This Class Validates the remote monitoring job.
+ * 
  */
 public class RemoteAlertSender {
     private MonitorTestControl tbc;
 
-    /**
-     * @param tbc
-     */
     public RemoteAlertSender(MonitorTestControl tbc) {
         this.tbc = tbc;
     }
@@ -63,11 +64,13 @@ public class RemoteAlertSender {
     }
     
 	/**
-	 * @testID testRemoteAlertSender001
-	 * @testDescription Tests if a monitoring job started remotely advise
-	 *                  the remote server after changes at statusvariable using the event based job.
+	 * This method asserts if a remote monitoring job advise
+	 * the remote server after changes at statusvariable using
+	 * the change based job.
+	 * 
+	 * @spec 120.4.4 Monitoring Job
 	 */    
-    public synchronized void testRemoteAlertSender001() {
+    private synchronized void testRemoteAlertSender001() {
     	tbc.log("#testRemoteAlertSender001");
     	DmtSession session = null;
         try {
@@ -79,16 +82,26 @@ public class RemoteAlertSender {
 					
 			tbc.resetAlert();
 			
+			TestingMonitorable monitorable = tbc.getMonitorableInterface();
+			StatusVariable sv = new StatusVariable(MonitorTestControl.SV_NAME1,
+					StatusVariable.CM_CC, "test1");
+			monitorable.setStatusVariable(sv);			
+			
 			tbc.getMonitorListener().updated(
 					MonitorTestControl.SV_MONITORABLEID1,
-					new StatusVariable(MonitorTestControl.SV_NAME1, StatusVariable.CM_CC,
-							"test1"));		
-			
-			wait(MonitorTestControl.TIMEOUT);
+					sv);		
 			
 			tbc.assertTrue("Asserting if our implementation of RemoteAlertSender was called.", tbc.isReceivedAlert());
 			tbc.assertEquals("Asserting if we receive the correct value of serverId.", MonitorTestControl.REMOTE_SERVER, tbc.getServerId());
 			tbc.assertNull("Asserting if we receive the correct value of correlator(null).", tbc.getCorrelator());
+			
+			DmtAlertItem[] alerts = tbc.getAlerts();
+			tbc.assertNotNull("Asserting that a non-null value was passed.", alerts);
+			tbc.assertEquals("Asserting that only one AlertItem was passed.", 1, alerts.length);
+			tbc.assertEquals("Asserting the source value in the AlertItem object.", MonitorTestControl.DMT_URI_MONITORABLE1_SV1, alerts[0].getSource());
+			tbc.assertEquals("Asserting the oma trap format in the AlertItem object.", MonitorTestControl.MONITOR_XML_MONITORABLE1_SV1, alerts[0].getType());
+			tbc.assertNull("Asserting that null is returned when getMark is called in AlertItem object.", alerts[0].getMark());
+			tbc.assertEquals("Asserting if the value in AlertItem object is the expected.", "test1", alerts[0].getData().getString());
 			
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
@@ -103,33 +116,38 @@ public class RemoteAlertSender {
 		}
     }
     
+    
 	/**
-	 * @testID testRemoteAlertSender002
-	 * @testDescription Tests if a monitoring job started remotely advise
-	 *                  the remote server after changes at statusvariable using the time based job.
+	 * This method asserts if a remote monitoring job send an alert
+	 * every 1 second indefinitely.
+	 * 
+	 * @spec 120.4.4 Monitoring Job
 	 */    
-    public synchronized void testRemoteAlertSender002() {
+    private synchronized void testRemoteAlertSender002() {
     	tbc.log("#testRemoteAlertSender002");
     	DmtSession session = null;
         try {
+			tbc.resetAlert();        	
+        	
         	session = tbc.getDmtAdmin().getSession(".");					
 			session.createInteriorNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
 			session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[1], new DmtData("TM"));
-			session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[2], new DmtData(MonitorTestControl.COUNT));
+			session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[2], new DmtData(MonitorTestControl.SCHEDULE));
 			session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[3], new DmtData(true));
-					
-			tbc.resetAlert();
-			
-			tbc.getMonitorListener().updated(
-					MonitorTestControl.SV_MONITORABLEID1,
-					new StatusVariable(MonitorTestControl.SV_NAME1, StatusVariable.CM_CC,
-							"test1"));
-			
-			wait(MonitorTestControl.TIMEOUT);
+							
+			wait(MonitorTestControl.SHORT_TIMEOUT);			
 			
 			tbc.assertTrue("Asserting if our implementation of RemoteAlertSender was called.", tbc.isReceivedAlert());
 			tbc.assertEquals("Asserting if we receive the correct value of serverId.", MonitorTestControl.REMOTE_SERVER, tbc.getServerId());
 			tbc.assertNull("Asserting if we receive the correct value of correlator(null).", tbc.getCorrelator());			
+
+			DmtAlertItem[] alerts = tbc.getAlerts();
+			tbc.assertNotNull("Asserting that a non-null value was passed.", alerts);
+			tbc.assertEquals("Asserting that only one AlertItem was passed.", 1, alerts.length);
+			tbc.assertEquals("Asserting the source value in the AlertItem object.", MonitorTestControl.DMT_URI_MONITORABLE1_SV1, alerts[0].getSource());
+			tbc.assertEquals("Asserting the oma trap format in the AlertItem object.", MonitorTestControl.MONITOR_XML_MONITORABLE1_SV1, alerts[0].getType());
+			tbc.assertNull("Asserting that null is returned when getMark is called in AlertItem object.", alerts[0].getMark());
+			tbc.assertEquals("Asserting if the value in AlertItem object is the expected.", "test1", alerts[0].getData().getString());			
 			
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());

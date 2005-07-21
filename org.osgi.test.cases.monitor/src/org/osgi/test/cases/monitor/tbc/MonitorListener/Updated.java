@@ -41,9 +41,11 @@ import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.service.monitor.UpdateListener#updated
- * @generalDescription This class tests updated method according with MEG
- *                     specification (rfc0084)
+ * @author Alexandre Alves
+ * 
+ * This Test Class Validates the implementation of
+ * <code>updated<code> method, according to MEG reference
+ * documentation.
  */
 public class Updated {
 	private MonitorTestControl tbc;
@@ -58,14 +60,17 @@ public class Updated {
 		testUpdated003();
 		testUpdated004();
 		testUpdated005();
+		testUpdated006();
 	}
+
 	
 	/**
-	 * @testID testUpdated001
-	 * @testDescription Asserts if IllegalArgumentException is thrown when null
-	 *                  is passed as argument
-	 */
-	public void testUpdated001() {
+	 * This method asserts that IllegalArgumentException is thrown when
+	 * null is passed as monitorableId argument.
+	 * 
+	 * @spec MonitorListener.updated(String,StatusVariable)
+	 */	
+	private void testUpdated001() {
 		try { 
 			tbc.log("#testUpdated001");
 			tbc.getMonitorListener().updated(null, 
@@ -87,11 +92,12 @@ public class Updated {
 	}
 
 	/**
-	 * @testID testUpdated002
-	 * @testDescription Tests if IllegalArgumentException is thrown when
-	 *                  invalid characters is passed as parameter
-	 */
-	public void testUpdated002() {
+	 * This method asserts that IllegalArgumentException is thrown when
+	 * invalid characters is passed as argument.
+	 * 
+	 * @spec MonitorListener.updated(String,StatusVariable)
+	 */	
+	private void testUpdated002() {
 		try {
 			tbc.log("#testUpdated002");
 			tbc.getMonitorListener().updated(MonitorTestControl.INVALID_ID, 
@@ -114,11 +120,12 @@ public class Updated {
 	}
 
 	/**
-	 * @testID testUpdated003
-	 * @testDescription Tests if IllegalArgumentException is thrown when an
-	 *                  invalid monitorableid is passed as parameter
-	 */
-	public void testUpdated003() {
+	 * This method asserts that IllegalArgumentException is thrown when
+	 * a non-existent monitorableId is passed as argument.
+	 * 
+	 * @spec MonitorListener.updated(String,StatusVariable)
+	 */	
+	private void testUpdated003() {
 		try {
 			tbc.log("#testUpdated003");
 			tbc.getMonitorListener().updated(MonitorTestControl.INVALID_MONITORABLE_SV, 
@@ -141,11 +148,12 @@ public class Updated {
 	}		
 	
 	/**
-	 * @testID testUpdated004
-	 * @testDescription Tests if IllegalArgumentException is thrown when an
-	 *                  empty string is passed as monitorableid
-	 */
-	public void testUpdated004() {
+	 * This method asserts that IllegalArgumentException is thrown when
+	 * an empty string is passed as argument.
+	 * 
+	 * @spec MonitorListener.updated(String,StatusVariable)
+	 */	
+	private void testUpdated004() {
 		try {
 			tbc.log("#testUpdated004");
 			tbc.getMonitorListener().updated("", 
@@ -168,11 +176,12 @@ public class Updated {
 	}	
 	
 	/**
-	 * @testID testUpdated005
-	 * @testDescription Tests if IllegalArgumentException is thrown when 
-	 *                  null is passed as statusvariable
-	 */
-	public void testUpdated005() {
+	 * This method asserts that IllegalArgumentException is thrown when
+	 * null is passed as statusvariable argument.
+	 * 
+	 * @spec MonitorListener.updated(String,StatusVariable)
+	 */	
+	private void testUpdated005() {
 		try {
 			tbc.log("#testUpdated005");
 			tbc.getMonitorListener().updated(MonitorTestControl.SV_MONITORABLEID1, null);
@@ -189,6 +198,28 @@ public class Updated {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
 		} 
-	}			
+	}		
+	
+	/**
+	 * This method asserts that no exception is thrown when
+	 * all parameters are valid.
+	 * 
+	 * @spec MonitorListener.updated(String,StatusVariable)
+	 */	
+	private void testUpdated006() {
+		try {
+			tbc.log("#testUpdated006");
+			tbc.getMonitorListener().updated(
+					MonitorTestControl.SV_MONITORABLEID1,
+					new StatusVariable(MonitorTestControl.SV_NAME1,
+							StatusVariable.CM_CC, "test"));
+
+			tbc.pass("No exception was thrown. Passed.");
+			
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + " "
+					+ e.getClass().getName() + " " + e.getMessage());
+		}
+	}	
 
 }

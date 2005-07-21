@@ -38,12 +38,13 @@ package org.osgi.test.cases.monitor.tbc.Monitorable;
 
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.Activators.MonitorableActivatorInvalid;
-import org.osgi.test.cases.monitor.tbc.Activators.MonitorableSameSvActivator;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
 /**
- * @generalDescription This Test Class Validates the service.pid of the 
- *                     <code>Monitorables<code>.
+ * @author Alexandre Alves
+ * 
+ * This Class Validates the constraints for monitorable registration.
+ * 
  */
 public class Monitorables {
 	private MonitorTestControl tbc;
@@ -63,11 +64,12 @@ public class Monitorables {
 	}
 
 	/**
-	 * @testID testMonitorables001
-	 * @testDescription This method asserts that when we use an empty string as service.pid
-	 *                 in a registration of a monitorable, it throws an exception.
-	 */
-	public void testMonitorables001() {
+	 * This method asserts that when we use an empty string as service.pid
+	 * in a monitorable registration, the monitorable is ignored.
+	 * 
+	 * @spec 120.7.2 Monitorable
+	 */	
+	private void testMonitorables001() {
 		try {
 			tbc.log("#testMonitorables001");
 			String[] monitorablesBefore = tbc.getMonitorAdmin().getMonitorableNames();
@@ -79,13 +81,14 @@ public class Monitorables {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}	
-	
+
 	/**
-	 * @testID testMonitorables002
-	 * @testDescription This method asserts that when we use an invalid string as service.pid
-	 *                  in a registration of a monitorable, it throws an exception.
-	 */
-	public void testMonitorables002() {
+	 * This method asserts that when we use invalid characters as service.pid
+	 * in a monitorable registration, the monitorable is ignored.
+	 * 
+	 * @spec 120.7.2 Monitorable
+	 */	
+	private void testMonitorables002() {
 		try {
 			tbc.log("#testMonitorables002");
 			String[] monitorablesBefore = tbc.getMonitorAdmin().getMonitorableNames();
@@ -98,12 +101,14 @@ public class Monitorables {
 		}
 	}	
 	
+	
 	/**
-	 * @testID testMonitorables003
-	 * @testDescription This method asserts that a monitorable id with more than 20
-	 *                  characters is not acceptable.
-	 */
-	public void testMonitorables003() {
+	 * This method asserts that when we use a monitorable id with more than 20 characters
+	 * in a monitorable registration, the monitorable is ignored.
+	 * 
+	 * @spec 120.7.2 Monitorable
+	 */		
+	private void testMonitorables003() {
 		try {
 			tbc.log("#testMonitorables003");
 			String[] monitorablesBefore = tbc.getMonitorAdmin().getMonitorableNames();
@@ -117,16 +122,16 @@ public class Monitorables {
 	}	
 	
 	/**
-	 * @testID testMonitorables004
-	 * @testDescription This method asserts that a monitorable with two statusVariable
-	 *                  with same name can not be installed.
-	 */
-	public void testMonitorables004() {
+	 * This method asserts that a monitorable with two equals statusvariable
+	 * is ignored.
+	 * 
+	 * @spec 120.7.2 Monitorable
+	 */		
+	private void testMonitorables004() {
 		try {
 			tbc.log("#testMonitorables004");
 			String[] monitorablesBefore = tbc.getMonitorAdmin().getMonitorableNames();
-			MonitorableSameSvActivator monitorableActivator = new MonitorableSameSvActivator(tbc);
-			monitorableActivator.start(tbc.getContext());		
+			tbc.installBundle("tb4.jar");		
 			String[] monitorablesAfter = tbc.getMonitorAdmin().getMonitorableNames();
 			tbc.assertEquals("Asserting if no monitorables was installed when we use a monitorable with two statusvariable with same name.", monitorablesBefore, monitorablesAfter);
 		} catch (Exception e) {
