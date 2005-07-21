@@ -70,6 +70,12 @@ import org.osgi.service.component.ComponentInstance;
  * 
  * @version $Revision$
  */
+/**
+ *
+ * TODO Add Javadoc comment for this type.
+ * 
+ * @version $Revision$
+ */
 public class ComponentContextImpl implements ComponentContext {
 
 	/** The BundleContext this component is associated with */
@@ -340,6 +346,18 @@ public class ComponentContextImpl implements ComponentContext {
 	 */
 	public ServiceReference getServiceReference(){
 		return this.serviceReference;
+	}
+
+	
+	/**
+	 * TODO Need to omplement this method.
+	 * @param name
+	 * @param reference
+	 * @return
+	 * @see org.osgi.service.component.ComponentContext#locateService(java.lang.String, org.osgi.framework.ServiceReference)
+	 */
+	public Object locateService(String name, ServiceReference reference) {
+		throw new UnsupportedOperationException("TODO Need to implement!");
 	}
 
 }

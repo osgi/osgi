@@ -26,10 +26,10 @@ public interface ComponentFactory {
 	 * may be provided for the component configuration.
 	 * 
 	 * @param properties Additional properties for the component configuration.
-	 * @return A ComponentInstance object encapsulating the component
-	 *         configuration. The returned component configuration has been
+	 * @return A <code>ComponentInstance</code> object encapsulating the component
+	 *         instance of the component configuration. The component configuration has been
 	 *         activated and, if the component specifies a <code>service</code>
-	 *         element, the component configuration has been registered as a
+	 *         element, the component instance has been registered as a
 	 *         service.
 	 * @throws ComponentException If the Service Component Runtime is unable to
 	 *         activate the component configuration.

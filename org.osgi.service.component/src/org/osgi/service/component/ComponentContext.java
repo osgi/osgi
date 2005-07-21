@@ -14,9 +14,9 @@ import java.util.Dictionary;
 import org.osgi.framework.*;
 
 /**
- * A ComponentContext object is used by an activated Service Component
- * configuration to interact with its execution context including locating
- * services by reference name. Each activated Service Component configuration
+ * A ComponentContext object is used by a Service Component
+ * instance to interact with its execution context including locating
+ * services by reference name. Each Service Component instance
  * has a unique ComponentContext.
  * 
  * <p>
@@ -28,7 +28,7 @@ import org.osgi.framework.*;
  * </pre>
  * 
  * If a component implements this method, this method will be called when a
- * component configuration is activated to provide the component configuration's
+ * component configuration is activated to provide the component instance's
  * ComponentContext object.
  * 
  * <p>
@@ -45,8 +45,8 @@ import org.osgi.framework.*;
  * <p>
  * The activate and deactivate methods will be called using reflection and must
  * be protected or public accessible. These methods do not need to be public
- * methods so that they do not appear as public methods on the component's
- * provided service object. The methods will be located by looking through the
+ * methods so that they do not appear as public methods on the component instance
+ * when used as a service object. The methods will be located by looking through the
  * component's implementation class hierarchy for the first declaration of the
  * method. If the method is declared protected or public, the method will be
  * called.
@@ -85,6 +85,22 @@ public interface ComponentContext {
 	public Object locateService(String name);
 
 	/**
+	 * Returns the service object for the specified reference name and <code>ServiceReference</code>.
+	 * 
+	 * @param name The name of a reference as specified in a
+	 *        <code>reference</code> element in this component's description.
+	 * @param reference The <code>ServiceReference</code> to a specific bound service. This must
+	 * 			be a <code>ServiceReference</code> provided to the component via the bind
+	 * 			or unbind method for the specified reference name.        
+	 * @return A service object for the referenced service or <code>null</code>
+	 *         if the specified <code>ServiceReference</code> is not a bound 
+	 *         service for the specified reference name.
+	 * @throws ComponentException If the Service Component Runtime catches an
+	 *         exception while activating the bound service.
+	 */
+	public Object locateService(String name, ServiceReference reference);
+
+	/**
 	 * Returns the service objects for the specified reference name.
 	 * 
 	 * @param name The name of a reference as specified in a
@@ -106,10 +122,10 @@ public interface ComponentContext {
 	public BundleContext getBundleContext();
 
 	/**
-	 * If this component configuration is registered as a service using the
+	 * If this component instance is registered as a service using the
 	 * <code>servicefactory=&quot;true&quot;</code> attribute, then this
 	 * method returns the bundle using the service provided by this component
-	 * configuration.
+	 * instance.
 	 * <p>
 	 * This method will return <code>null</code> if:
 	 * <ul>
@@ -118,20 +134,20 @@ public interface ComponentContext {
 	 * <li>This component is a service but did not specify the
 	 * <code>servicefactory=&quot;true&quot;</code> attribute, then all
 	 * bundles using the service provided by this component will share this
-	 * component configuration.
+	 * component instance.
 	 * <li>The service provided by this component is not currently being used
 	 * by any bundle.
 	 * </ul>
 	 * 
-	 * @return The bundle using this component configuration as a service or
+	 * @return The bundle using this component instance as a service or
 	 *         <code>null</code>.
 	 */
 	public Bundle getUsingBundle();
 
 	/**
-	 * Returns the ComponentInstance object for this component configuration.
+	 * Returns the ComponentInstance object for this component instance.
 	 * 
-	 * @return The ComponentInstance object for this component configuration.
+	 * @return The ComponentInstance object for this component instance.
 	 */
 	public ComponentInstance getComponentInstance();
 
@@ -153,16 +169,16 @@ public interface ComponentContext {
 	public void disableComponent(String name);
 
 	/**
-	 * If this component configuration is registered as a service using the
+	 * If this component instance is registered as a service using the
 	 * <code>service</code> element, then this method returns the service
-	 * reference of the service provided by this component configuration.
+	 * reference of the service provided by this component instance.
 	 * <p>
 	 * This method will return <code>null</code> if this component
-	 * configuration is not registered as a service.
+	 * instance is not registered as a service.
 	 * 
 	 * @return The <code>ServiceReference</code> object for this component
-	 *         configuration or <code>null</code> if this component
-	 *         configuration is not registered as a service.
+	 *         instance or <code>null</code> if this component
+	 *         instance is not registered as a service.
 	 */
 	public ServiceReference getServiceReference();
 

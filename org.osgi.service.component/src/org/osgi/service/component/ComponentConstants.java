@@ -55,7 +55,7 @@ public interface ComponentConstants {
 	public final static String	COMPONENT_FACTORY		= "component.factory";
 
 	/**
-	 * A suffix for a component property for a reference target. It contains the
+	 * The suffix for reference target properties. These properties contain the
 	 * filter to select the target services for a reference. The type of this
 	 * property must be <code>String</code>.
 	 */
