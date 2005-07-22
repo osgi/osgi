@@ -136,10 +136,10 @@ public class MonitorPlugin implements DmtDataPlugin
         if(path.length == 6) {
             if(path[4].equals("Reporting")) {
                 if(path[5].equals("Type")) {
-                    DmtData defaultData = new DmtData(Server.DEFAULT_TYPE);
-                    DmtData[] validValues = new DmtData[] { defaultData, new DmtData("EV") };
+                    DmtData[] validValues = new DmtData[] { new DmtData("TM"), new DmtData("EV") };
                     return new MonitorMetaNodeImpl("Indicates if the data reporting is time or event based.",
-                                                   true, false, defaultData, validValues, DmtData.FORMAT_STRING);
+                                                   true, false, new DmtData(Server.DEFAULT_TYPE), 
+                                                   validValues, DmtData.FORMAT_STRING);
                 }
 
                 if(path[5].equals("Value"))
@@ -360,7 +360,7 @@ public class MonitorPlugin implements DmtDataPlugin
     public void copy(String nodeUri, String newNodeUri, boolean recursive) throws DmtException {
         // on protocol level there is no copy operation, and local users will 
         // use Monitor Admin
-        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
+        throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED, 
                                "Cannot copy monitoring nodes.");
     }
 
@@ -886,11 +886,15 @@ class Server {
     }
 
     void setServerId(DmtData data, String nodeUri) throws DmtException {
+        // data format is FORMAT_STRING because of meta-data
+        /* // TODO remove this
         if(data.getFormat() != DmtData.FORMAT_STRING)
             throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED, 
                                    "Server ID leaf must have string format.");
+        */
 
         String id = data.getString();
+        // TODO add to metanode
         if(id == null || id.length() == 0)
             throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH, "Server ID string must not be null or empty.");
 
@@ -898,10 +902,13 @@ class Server {
     }
 
     void setEnabled(DmtData data, String nodeUri) throws DmtException {
+        // data format is FORMAT_BOOLEAN because of meta-data
+        /* // TODO remove this
         if(data.getFormat() != DmtData.FORMAT_BOOLEAN)
             throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED, 
                                    "Enabled leaf must have boolean format.");
-
+        */
+        
         enabled = data.getBoolean();
 
         if(enabled) {
@@ -922,6 +929,9 @@ class Server {
     }
 
     void setType(DmtData data, String nodeUri) throws DmtException {
+        // data format is FORMAT_STRING because of meta-data
+        // data content is "TM" or "EV" because of meta-data
+        /* // TODO remove this
         if(data.getFormat() != DmtData.FORMAT_STRING)
             throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED, 
                                    "Reporting type leaf must have string format.");
@@ -929,17 +939,24 @@ class Server {
         String newType = data.getString();
         if(newType == null || !(newType.equals("TM") || newType.equals("EV")))
             throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH, "Type string must 'TM' or 'EV'.");
-
+            
         type = newType;
+        */
+
+        type = data.getString();
     }
 
     void setValue(DmtData data, String nodeUri) throws DmtException {
+        // data format is FORMAT_INTEGER because of meta-data
+        /* // TODO remove this
         if(data.getFormat() != DmtData.FORMAT_INTEGER)
             throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED, 
                                    "Reporting schedule value leaf must have integer format.");
+        */
 
         int newInt = data.getInt();
 
+        // TODO add to metanode
         if(newInt < 0)
             throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH, 
                                    "Reporting schedule value parameter must be non-negative.");
@@ -952,11 +969,13 @@ class Server {
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
                                    "The trap reference with the specified ID does not exist.");
         
+        // data format is FORMAT_STRING because of meta-data
+        /* // TODO remove this
         if(data.getFormat() != DmtData.FORMAT_STRING)
             throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED,
                                    "Trap reference leaf must have string format.");
+        */
         
-        // data format is FORMAT_STRING because of meta-data
         trapRef.put(name, data.getString());
     }
 
