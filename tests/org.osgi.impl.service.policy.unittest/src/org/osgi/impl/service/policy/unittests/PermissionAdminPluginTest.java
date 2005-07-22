@@ -39,10 +39,10 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 	public static final String ROOT = "./OSGi/Policy/Java/LocationPermission";
 
 	public static final String LOCATION1 = "http://location1";
-	public static final String LOCATION1_HASH = "W+7i9Qa7tsvxf7Z9COBtdKgvKhM";
+	public static final String LOCATION1_HASH = "http:\\/\\/location1";
 
 	public static final String LOCATION2 = "http://location2";
-	public static final String LOCATION2_HASH = "xQrRNwWiEbyK3UXtpqgTb36LdZk";
+	public static final String LOCATION2_HASH = "http:\\/\\/location2";
 
 	public DummyPermissionAdmin	permAdmin;
 	public PermissionAdminPlugin	plugin;
