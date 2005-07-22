@@ -89,7 +89,7 @@ public class ConditionInfo {
 			int end = 1;
 			int begin = end;
 
-			while ((encoded[end] != ' ') && (encoded[end] != ')')) {
+			while ((encoded[end] != ' ') && (encoded[end] != ']')) {
 				end++;
 			}
 
@@ -123,7 +123,7 @@ public class ConditionInfo {
 				end++;
 			}
 			this.args = (String[]) args.toArray(new String[0]);
-			/* the final character must be ')' */
+			/* the final character must be ']' */
 			if ((encoded[end] != ']') || (end + 1 != encoded.length)) {
 				throw new IllegalArgumentException("last character not "
 						+ "close bracket");
