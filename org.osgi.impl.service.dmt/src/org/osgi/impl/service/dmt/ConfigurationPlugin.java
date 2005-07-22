@@ -263,7 +263,7 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 					"Value index out of range.");
         
 		if (index != prop.getSize() - 1)
-			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+			throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
 					"Cannot delete intermediate entry in array/vector.");
         
 		prop.deleteElement(service, nodeUri);
@@ -291,7 +291,7 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 						"Only the 'values' interior node is allowed in the configuration data tree.");
 			if (!prop.isNonScalar())
 				throw new DmtException(nodeUri,
-						DmtException.COMMAND_NOT_ALLOWED,
+						DmtException.COMMAND_FAILED,
 						"The 'cardinality' node must be set "
 								+ "to a non-scalar cardinality before the 'values' interior node can be created.");
 			if (prop.isCompleteNonScalar())
@@ -341,7 +341,7 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 			else if (path[2].equals("cardinality")) {
 			    if (!prop.hasType())
 			        throw new DmtException(nodeUri,
-			                DmtException.COMMAND_NOT_ALLOWED,
+			                DmtException.COMMAND_FAILED,
 			                "The 'type' node must be set before the 'cardinality' node can be created.");
 			    if (prop.hasCardinality())
 			        throw new DmtException(nodeUri,
@@ -355,7 +355,7 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 			} else if (path[2].equals("value")) {
 			    if (!prop.isScalar())
 			        throw new DmtException(nodeUri,
-			                DmtException.COMMAND_NOT_ALLOWED,
+			                DmtException.COMMAND_FAILED,
 			                "The 'cardinality' node must be 'scalar' for the 'value' leaf node to be valid.");
 			    if (prop.isCompleteScalar())
 			        throw new DmtException(nodeUri,
@@ -402,7 +402,7 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 	public void copy(String nodeUri, String newNodeUri, boolean recursive)
 			throws DmtException {
 		// TODO allow cloning pid, key (on the same level)
-        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+        throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED,
                 "Cannot copy configuration nodes.");
 	}
 
@@ -650,24 +650,6 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 			return new String[] {};
 		return path;
 	}
-
-    /* // TODO remove this
-	private static Object getSimpleData(DmtData value, String nodeUri)
-			throws DmtException {
-		switch (value.getFormat()) {
-			case DmtData.FORMAT_STRING :
-				return value.getString();
-			case DmtData.FORMAT_BOOLEAN :
-				return new Boolean(value.getBoolean());
-			case DmtData.FORMAT_BINARY :
-				return value.getBinary();
-			default :
-				throw new DmtException(nodeUri,
-						DmtException.FORMAT_NOT_SUPPORTED,
-						"The specified leaf node must contain string, boolean or binary data.");
-		}
-	}
-    */
 }
 
 // TODO cannot delete and create the same object in one session
@@ -840,7 +822,7 @@ class Service {
 
 	static void createService(String pid, String nodeUri) throws DmtException {
 		if (deletedPids.contains(pid)) // TODO this is NOT GOOD!
-			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+		    throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
 					"Cannot create a service node that was deleted in the same session.");
 		Service service = (Service) services.get(pid);
 		if (service != null && !service.isStored())
@@ -860,7 +842,7 @@ class Service {
 		// service cannot be deleted, because Service.getService would not have
 		// returned it
 		if (!service.isStored()) // TODO this is NOT GOOD!
-			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+			throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
 					"Cannot delete a service node that was created/modified in the same session.");
 		deletedPids.add(service.getPid());
 		commitIfNeeded();
@@ -947,7 +929,7 @@ class Service {
 			throws DmtException {
 		String key = property.getKey();
 		if (deletedPropertyNames.contains(key)) // TODO this is NOT GOOD!
-			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+			throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
 					"Cannot create a property that was deleted in the same session.");
 		if (!overwrite && getPropertyNoCheck(key, nodeUri) != null)
 			throw new DmtException(nodeUri, DmtException.NODE_ALREADY_EXISTS,
@@ -960,7 +942,7 @@ class Service {
 		String key = property.getKey();
 		// cannot be a deleted property, because service.getProperty would not return it
 		if (!property.isStored()) // TODO this is NOT GOOD!
-			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+			throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
 					"Cannot delete a property that was created/modified in the same session.");
 		deletedPropertyNames.add(key);
 		Service.commitIfNeeded();

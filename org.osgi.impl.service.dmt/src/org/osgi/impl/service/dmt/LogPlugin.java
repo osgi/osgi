@@ -272,7 +272,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 	public void copy(String nodeUri, String newNodeUri, boolean recursive)
 			throws DmtException {
 		// TODO allow cloning
-        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+        throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED,
                                "Cannot copy log request nodes.");
 	}
 
