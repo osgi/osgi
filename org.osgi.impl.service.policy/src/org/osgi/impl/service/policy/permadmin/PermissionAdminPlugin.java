@@ -52,7 +52,7 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 	 * ------------------------------------- 
 	 */
 	private final static DmtMetaNode	rootMetaNode = new RootMetaNode("PermissionAdmin tree");
-	private final static DmtMetaNode	locationDirMetaNode = new RootMetaNode("permissions associated with bundle location");
+	private final static DmtMetaNode	locationsDirMetaNode = new RootMetaNode("permissions associated with bundle location");
 	private final static DmtMetaNode	permissionInfoMetaNode = new PermissionInfoMetaNode();
 	private final static DmtMetaNode 	defaultMetaNode = new DefaultMetaNode();
 	private final static DmtMetaNode	locationMetaNode = new LocationMetaNode();
@@ -61,6 +61,7 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 
 	public static final String PERMISSIONINFO = PermissionInfoMetaNode.PERMISSIONINFO;
 	public static final String LOCATION = "Location";
+	public static final String LOCATIONS = "Locations";
 	public static final String	DEFAULT	= "Default";
 
 	/** internal representation of the tree */
@@ -181,18 +182,18 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 			return rootMetaNode;
 		}
 		if (path.length>=1) {
-			if (!path[0].equals(LOCATION)&&!path[0].equals(DEFAULT)) 
+			if (!path[0].equals(LOCATIONS)&&!path[0].equals(DEFAULT)) 
 				throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,"");
 		}
 		if (path.length==1) {
-			if (path[0].equals(LOCATION)) {
-				return locationDirMetaNode;
+			if (path[0].equals(LOCATIONS)) {
+				return locationsDirMetaNode;
 			} else {
 				return defaultMetaNode;
 			}
 		}
 		if (path.length>=2) {
-			if (!path[0].equals(LOCATION))
+			if (!path[0].equals(LOCATIONS))
 				throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,"");
 		}
 		if (path.length==2) {
@@ -316,12 +317,12 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		String[] path = getPath(nodeUri);
 		if (path.length==0) { return true; }
 		if (path.length>=1) {
-			if (!path[0].equals(DEFAULT)&&!path[0].equals(LOCATION)) return false;
+			if (!path[0].equals(DEFAULT)&&!path[0].equals(LOCATIONS)) return false;
 			if (path[0].equals(DEFAULT)&&defaultPermissions==null) return false;
 		}
 		if (path.length==1) return true;
 		if (path.length>=2) {
-			if (!path[0].equals(LOCATION)) return false;
+			if (!path[0].equals(LOCATIONS)) return false;
 			e = (Entry) locationEntries.get(path[1]);
 			if (e==null) return false;
 		}
@@ -368,9 +369,9 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		String[] path = getPath(nodeUri);
 		if (path.length==0) {
 			if (defaultPermissions==null) {
-				return new String[] { LOCATION };
+				return new String[] { LOCATIONS };
 			} else {
-				return new String[] { DEFAULT, LOCATION };
+				return new String[] { DEFAULT, LOCATIONS };
 			}
 		}
 		if (path.length==1) {

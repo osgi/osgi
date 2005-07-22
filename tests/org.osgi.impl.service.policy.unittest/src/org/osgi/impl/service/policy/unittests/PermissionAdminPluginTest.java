@@ -88,7 +88,7 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 		newSession();
 		String[] childNames = dmtSession.getChildNodeNames(ROOT);
 		assertEquals(1,childNames.length);
-		assertEquals("Location",childNames[0]);
+		assertEquals("Locations",childNames[0]);
 	}
 
 	public void testEmptyDefault() throws Exception {
@@ -98,7 +98,7 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 		assertEquals(2,childNames.length);
 		Arrays.sort(childNames);
 		assertEquals("Default",childNames[0]);
-		assertEquals("Location",childNames[1]);
+		assertEquals("Locations",childNames[1]);
 	}
 
 	public void testSimpleDefault() throws Exception {
@@ -165,7 +165,7 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 	public void testBasicPermissionRead() throws Exception {
 		permAdmin.setPermissions(LOCATION1, new PermissionInfo[] {ADMINPERMISSION});
 		newSession();
-		String pis = dmtSession.getNodeValue(ROOT+"/Location/"+LOCATION1_HASH+"/PermissionInfo").getString();
+		String pis = dmtSession.getNodeValue(ROOT+"/Locations/"+LOCATION1_HASH+"/PermissionInfo").getString();
 		assertEquals(ADMINPERMISSION.getEncoded()+"\n",pis);
 	}
 	
@@ -178,8 +178,8 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 		Arrays.sort(children);
 		assertEquals(2,children.length);
 		assertEquals("Default",children[0]);
-		assertEquals("Location",children[1]);
-		children = dmtSession.getChildNodeNames("Location");
+		assertEquals("Locations",children[1]);
+		children = dmtSession.getChildNodeNames("Locations");
 		assertEquals(2,children.length);
 		Arrays.sort(children);
 		assertEquals(LOCATION1_HASH,children[0]);
@@ -188,9 +188,9 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 	
 	public void testCreatePermission() throws Exception {
 		newAtomicSession();
-		dmtSession.createInteriorNode("Location/1");
-		dmtSession.setNodeValue("Location/1/Location",new DmtData(LOCATION1));
-		dmtSession.setNodeValue("Location/1/PermissionInfo",new DmtData(ADMINPERMISSION.getEncoded()));
+		dmtSession.createInteriorNode("Locations/1");
+		dmtSession.setNodeValue("Locations/1/Location",new DmtData(LOCATION1));
+		dmtSession.setNodeValue("Locations/1/PermissionInfo",new DmtData(ADMINPERMISSION.getEncoded()));
 		dmtSession.close();
 		PermissionInfo pi[] = permAdmin.getPermissions(LOCATION1);
 		assertEquals(1,pi.length);
@@ -200,7 +200,7 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 	public void testRemovePermission() throws Exception {
 		permAdmin.setPermissions(LOCATION1,new PermissionInfo[]{ADMINPERMISSION});
 		newAtomicSession();
-		dmtSession.deleteNode("Location/"+LOCATION1_HASH);
+		dmtSession.deleteNode("Locations/"+LOCATION1_HASH);
 		dmtSession.close();
 		PermissionInfo pi[] = permAdmin.getPermissions(LOCATION1);
 		assertNull(pi);
@@ -209,7 +209,7 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 	public void testChangePermission() throws Exception {
 		permAdmin.setPermissions(LOCATION1,new PermissionInfo[]{ADMINPERMISSION});
 		newAtomicSession();
-		dmtSession.setNodeValue("Location/"+LOCATION1_HASH+"/PermissionInfo",new DmtData(IMPORTFRAMEWORKPERMISSION.getEncoded()));
+		dmtSession.setNodeValue("Locations/"+LOCATION1_HASH+"/PermissionInfo",new DmtData(IMPORTFRAMEWORKPERMISSION.getEncoded()));
 		dmtSession.close();
 		PermissionInfo pi[] = permAdmin.getPermissions(LOCATION1);
 		assertEquals(1,pi.length);
@@ -219,7 +219,7 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 	public void testPermissionChildNodes() throws Exception {
 		permAdmin.setPermissions(LOCATION1,new PermissionInfo[]{ADMINPERMISSION});
 		newAtomicSession();
-		String[] names = dmtSession.getChildNodeNames("Location/"+LOCATION1_HASH);
+		String[] names = dmtSession.getChildNodeNames("Locations/"+LOCATION1_HASH);
 		Arrays.sort(names);
 		assertEquals(2,names.length);
 		assertEquals("Location",names[0]);

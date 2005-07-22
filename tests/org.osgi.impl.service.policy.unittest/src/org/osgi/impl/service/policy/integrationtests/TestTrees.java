@@ -167,10 +167,10 @@ public class TestTrees extends IntegratedTest {
 		// the default permission is already set at startup, let's check if it is there
 		assertEquals(new PermissionInfo(PackagePermission.class.getName(),"*","IMPORT").getEncoded()+"\n",value);
 
-		session.createInteriorNode("Location/1");
-		session.setNodeValue("Location/1/Location",new DmtData("http://location1"));
+		session.createInteriorNode("Locations/1");
+		session.setNodeValue("Locations/1/Location",new DmtData("http://location1"));
 		PermissionInfo pi = new PermissionInfo(AdminPermission.class.getName(),"*","*");
-		session.setNodeValue("Location/1/PermissionInfo",new DmtData(pi.getEncoded()));
+		session.setNodeValue("Locations/1/PermissionInfo",new DmtData(pi.getEncoded()));
 		session.close();
 		
 		PermissionInfo[] permissions = permissionAdmin.getPermissions("http://location1");
