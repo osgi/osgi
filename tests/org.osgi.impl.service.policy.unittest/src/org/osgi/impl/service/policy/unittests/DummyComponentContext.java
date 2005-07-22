@@ -62,4 +62,5 @@ public class DummyComponentContext implements ComponentContext {
 	public void enableComponent(String name) { throw new IllegalStateException(); }
 	public void disableComponent(String name) { throw new IllegalStateException(); }
 	public ServiceReference getServiceReference() { throw new IllegalStateException(); }
+	public Object locateService(String name, ServiceReference reference) { throw new IllegalStateException(); }
 }
