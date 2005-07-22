@@ -403,6 +403,7 @@ public class DmtSessionImpl implements DmtSession {
 		boolean isRoot = uri.equals(".");
         if (acl == null || isEmptyAcl(acl)) {
             acls.remove(uri);
+            getPlugin(uri, false).nodeChanged(uri);
         } else {
             // check that the new ACL is valid
             if (isRoot && !acl.isPermitted("*", DmtAcl.ADD)) 
@@ -881,6 +882,7 @@ public class DmtSessionImpl implements DmtSession {
 		// create new node (without sending a separate event about it)
 		if (isLeaf)
 		    // if getNodeValue() returns null, we attempt to set the default
+            // TODO copy node type as well?
             commonCreateLeafNode(newUri, getNodeValue(uri), null, false);
 		else
 			commonCreateInteriorNode(newUri, getNodeType(uri), false);
@@ -1133,7 +1135,7 @@ public class DmtSessionImpl implements DmtSession {
         if(maxOccurrence != Integer.MAX_VALUE && maxOccurrence > 1 
                 && getNodeCardinality(uri) >= maxOccurrence)
             throw new DmtException(uri, DmtException.METADATA_MISMATCH,
-                    "Cannot create the specified node, meta-data maximises " +
+                    "Cannot create the specified node, meta-data maximizes " +
                     "the number of instances of this node to " + maxOccurrence + ".");
     }
 
