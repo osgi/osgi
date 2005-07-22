@@ -47,8 +47,9 @@ class Utils {
      * 
      * @param nodeName the node name to check and canonicalize
      * @return the canonicalized form of the given node name
-     * @throws DmtException with code <code>INVALID_URI</code> if the node name
-     *         does not meet the constraints described above
+     * @throws DmtException with the code <code>URI_TOO_LONG</code> if the node
+     *         name is too long, or <code>INVALID_URI</code> if it does not meet
+     *         one of the other constraints described above
      */
     static String validateAndNormalizeNodeName(String nodeName) 
             throws DmtException {
@@ -81,7 +82,7 @@ class Utils {
                     "Node name must not be \"..\".");
         
         if(sb.length() > DmtAdminImpl.segmentLengthLimit)
-            throw new DmtException(nodeName, DmtException.INVALID_URI,
+            throw new DmtException(nodeName, DmtException.URI_TOO_LONG,
                     "Node name length exceeds maximum segment length limit " +
                     "of " + DmtAdminImpl.segmentLengthLimit + " characters.");
         
@@ -101,8 +102,10 @@ class Utils {
      *
      * @param uri the URI string to check and canonicalize
      * @return the canonicalized form of the given URI
-     * @throws DmtException with code <code>INVALID_URI</code> if the URI does
-     *         not meet the constraints described above
+     * @throws DmtException with the code <code>URI_TOO_LONG</code> if any
+     *         any segment of the URI is too long, or <code>INVALID_URI</code> 
+     *         if the URI does not meet one of the other constraints described 
+     *         above
      */
     static String validateAndNormalizeUri(String uri) throws DmtException {
         if (uri == null)
@@ -145,8 +148,10 @@ class Utils {
      *
      * @param uri the URI string to check and canonicalize
      * @return the canonicalized form of the given URI
-     * @throws DmtException with code <code>INVALID_URI</code> if the URI does
-     *         not meet the constraints described above
+     * @throws DmtException with the code <code>URI_TOO_LONG</code> if any
+     *         any segment of the URI is too long, or <code>INVALID_URI</code> 
+     *         if the URI does not meet one of the other constraints described 
+     *         above
      */
     static String validateAndNormalizeAbsoluteUri(String uri) 
             throws DmtException {
