@@ -17,9 +17,9 @@
  */
 package org.osgi.impl.service.policy;
 
+import java.util.ArrayList;
 import java.util.Date;
 
-import org.osgi.impl.service.policy.util.Splitter;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtData;
@@ -93,7 +93,22 @@ public abstract class AbstractPolicyPlugin implements DmtDataPlugin {
 		if (!nodeUri.startsWith(ROOT)) 
 			throw new IllegalStateException("Dmt should not give me URIs that are not mine");
 		if (nodeUri.length()==ROOT.length()) return new String[] {};
-		return Splitter.split(nodeUri.substring(ROOT.length()+1),'/',0);
+		ArrayList result = new ArrayList();
+		int pos = ROOT.length()+1;
+		while(pos<nodeUri.length()) {
+			int slashpos = nodeUri.indexOf('/',pos);
+			while((slashpos!=-1)&&(nodeUri.charAt(slashpos-1)=='\\')) {
+				slashpos = nodeUri.indexOf('/',slashpos+1);
+			}
+			if (slashpos==-1) {
+				result.add(nodeUri.substring(pos));
+				break;
+			}
+			result.add(nodeUri.substring(pos,slashpos));
+			pos=slashpos+1;
+		}
+		String[] r = new String[result.size()];
+		return (String[]) result.toArray(r);
 	}
 	
 	protected final boolean isDirty() {
