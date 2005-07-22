@@ -15,13 +15,12 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class DownloadThread extends Thread {
     
-    public static final int UNKNOWN               = -1;
-    public static final int OK                    =  0;
-    public static final int BAD_MIME_TYPE         =  1;
-    public static final int GETTING_TARGET_FAILED =  2;
-    public static final int PARSING_ERROR         =  3;
-    public static final int USER_CANCELLED        =  4;
-    public static final int OTHER_ERROR           =  5;
+    public static final int OK                        =  0;
+    public static final int NOT_ACCEPTABLE_CONTENT    =  PluginDownload.RESULT_NOT_ACCEPTABLE_CONTENT;
+    public static final int DWNL_SERVER_NOT_AVAILABLE =  PluginDownload.RESULT_DWNL_SERVER_NOT_AVAILABLE;
+    public static final int DWNLD_DESCR_ERROR         =  PluginDownload.RESULT_DWNLD_DESCR_ERROR;
+    public static final int USER_CANCELLED            =  PluginDownload.RESULT_USER_CANCELLED;
+    public static final int UNDEFINED_ERROR           =  PluginDownload.RESULT_UNDEFINED_ERROR;
     
     private SAXParser     parser;
     private Handler       handler = new Handler();
@@ -29,7 +28,7 @@ public class DownloadThread extends Thread {
     private String        descrUri;
     
     private InputStream  inputStream;
-    private int          status = UNKNOWN;
+    private int          status = -1;
     
     private class Handler extends DefaultHandler {
         
@@ -132,10 +131,10 @@ public class DownloadThread extends Thread {
         try {
             parseDescriptor();
         } catch (SAXException e) {
-            setStatus(PARSING_ERROR);
+            setStatus(DWNLD_DESCR_ERROR);
             return;
         } catch (Exception e) {
-            setStatus(OTHER_ERROR);
+            setStatus(UNDEFINED_ERROR);
             return;
         }
         
@@ -143,7 +142,7 @@ public class DownloadThread extends Thread {
         allowed.add("application/java-archive");
         allowed.add("application/vnd.osgi.dp");
         if (!allowed.contains(handler.getType())) {
-            setStatus(BAD_MIME_TYPE);
+            setStatus(NOT_ACCEPTABLE_CONTENT);
             return;
         }
 
@@ -170,7 +169,7 @@ public class DownloadThread extends Thread {
             is = dwnlAgent.download("url", props);
         }
         catch (Exception e) {
-            setStatus(GETTING_TARGET_FAILED);
+            setStatus(DWNL_SERVER_NOT_AVAILABLE);
             return;
         }
         

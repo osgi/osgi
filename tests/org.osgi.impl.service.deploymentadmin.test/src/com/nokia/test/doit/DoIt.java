@@ -128,6 +128,9 @@ public class DoIt implements BundleActivator {
                 new PermissionInfo(DeploymentAdminPermission.class.getName(), 
                         "(|(name=db_test_*)(name=bad_db_test_*))", "list, install, uninstall, " +
                         		"uninstallForced, cancel"),
+                // for db_test_16
+                new PermissionInfo(DeploymentAdminPermission.class.getName(), 
+                        "(name=db_test_16)", "list, install, uninstall"),
                 // to be able to set permissions during next run
                 // and because "In addition to DeploymentAdminPermission, the caller 
                 // of Deployment Admin must in addition hold the appropriate AdminPermissions."
@@ -1146,6 +1149,11 @@ public class DoIt implements BundleActivator {
             dp = da.installDeploymentPackage(is);
             throw new Exception("Test failed");
         } catch (DeploymentException e) {
+            // DeploymentException.CODE_BUNDLE_START means that Dp is installed
+            // but some bundles didn't start
+            dp = da.getDeploymentPackage("db_test_16");
+            dp.uninstall();
+            
             if (e.getCode() != DeploymentException.CODE_BUNDLE_START)
                 throw new Exception("Test failed");
         }

@@ -73,7 +73,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private TrackerDownloadAgent  trackDownloadAgent;
     private String                fwBundleDir;
     
-    private long                  waitForSessionTimeout = 1000;
+    private long                  sessionTimeout;
     private boolean				  busy;
 
     // DMT plugins
@@ -134,6 +134,12 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         if (null == fwBundleDir)
             throw new RuntimeException("The '" + DAConstants.FW_BUNDLES_DIR + "' system " +
             		"property is missing.");
+        
+        String s = System.getProperty(DAConstants.SESSION_TIMEOUT);
+        if (null == s)
+            sessionTimeout = 1000;
+        else
+            sessionTimeout = Long.parseLong(s);
         
         registerDmtPlugin();
 	}
@@ -209,13 +215,13 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private synchronized void waitIfBusy() throws DeploymentException {
         if (busy) {
             try {
-                wait(waitForSessionTimeout);
+                wait(sessionTimeout);
             } catch (InterruptedException e) {
                 logger.log(e);
             }
             if (busy)
 	            throw new DeploymentException(DeploymentException.CODE_TIMEOUT,
-	                "Timeout period (" + waitForSessionTimeout + " ms) expired");
+	                "Timeout period (" + sessionTimeout + " ms) expired");
         }
         busy = true;
     }
@@ -698,7 +704,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         try {
             waitIfBusy();
         } catch (DeploymentException e) {
-            throw new RuntimeException("Timeout period (" + waitForSessionTimeout + 
+            throw new RuntimeException("Timeout period (" + sessionTimeout + 
                 " ms) expired");
         }
         checkPermission(dp, DeploymentAdminPermission.ACTION_UNINSTALL);
