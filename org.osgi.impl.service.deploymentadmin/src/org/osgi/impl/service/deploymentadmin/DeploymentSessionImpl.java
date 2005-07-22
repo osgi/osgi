@@ -307,7 +307,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         closeTrackers();
         if (numOfErrors > 0) {
             throw new DeploymentException(DeploymentException.CODE_BUNDLE_START, 
-                    numOfErrors + " bundles cannot be started");
+                    numOfErrors + " bundle(s) cannot be started");
         }
     }
     

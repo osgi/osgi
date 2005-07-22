@@ -1141,16 +1141,14 @@ public class DoIt implements BundleActivator {
     public static final String db_test_16 = "BUNDLE START FAILS\n";
     public void db_test_16() throws Exception {
         InputStream is = new FileInputStream(HOME + "db_test_16.dp");
-        DeploymentPackage dp = da.installDeploymentPackage(is);
-
-        String[][] bs = dp.getBundleSymNameVersionPairs();
-        
-        if (!bs[0][0].equals("easygame"))
-            throw new Exception("Test Failed");
-        if (!bs[1][0].equals("hardgame"))
-            throw new Exception("Test Failed");
-
-        dp.uninstall();
+        DeploymentPackage dp = null;
+        try {
+            dp = da.installDeploymentPackage(is);
+            throw new Exception("Test failed");
+        } catch (DeploymentException e) {
+            if (e.getCode() != DeploymentException.CODE_BUNDLE_START)
+                throw new Exception("Test failed");
+        }
     }
     
     public static void main(String[] args) throws Exception {

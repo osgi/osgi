@@ -1,12 +1,9 @@
 package org.osgi.impl.service.deploymentadmin.plugin;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Set;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -25,15 +22,14 @@ import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtExecPlugin;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtSession;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class PluginDownload extends DefaultHandler 
         implements DmtDataPlugin, DmtExecPlugin, Serializable 
 {
     
-    // download and deployment states
+    // download and deployment states (value of the 
+    // ./OSGi/Deployment/Download/<node_id>/Status DMT node)
     private static final int STATUS_IDLE                   = 10;
     private static final int STATUS_DOWNLD_FAILED          = 20;
     private static final int STATUS_STREAMING              = 50;
@@ -43,6 +39,7 @@ public class PluginDownload extends DefaultHandler
     // generic alert results
     private static final int RESULT_SUCCESSFUL             = 200;
     private static final int RESULT_BUNDLE_START_WARNING   = 250;
+    private static final int RESULT_USER_CANCELLED         = 401;
     private static final int RESULT_REQUEST_TIMED_OUT      = 406;
     private static final int RESULT_UNDEFINED_ERROR        = 407;
     private static final int RESULT_DWNLD_DESCR_ERROR      = 410;
@@ -60,13 +57,7 @@ public class PluginDownload extends DefaultHandler
     private static final int RESULT_CODE_RESOURCE_SHARING_VIOLATION = 461;
     
 	private transient DeploymentAdminImpl da;
-
-	// used for XML parsing
-	private transient String       actElement;
-	private transient StringBuffer contentURI;
-    private transient StringBuffer contentType;
-    
-	private Entries      entries = new Entries();
+	private Entries                       entries = new Entries();
     
     public PluginDownload(DeploymentAdminImpl da) {
         this.da = da;       
@@ -81,8 +72,6 @@ public class PluginDownload extends DefaultHandler
         private String  envType;
         private Integer status = new Integer(STATUS_IDLE);
         
-        private transient Thread thread;
-
         public void setStatus(int status) {
             this.status = new Integer(status);
         }
@@ -115,145 +104,162 @@ public class PluginDownload extends DefaultHandler
             return (String[]) ht.keySet().toArray(new String[] {});
         }
         
-        private void start(String nodeUri, String correlator, String principal) {
+        private void start(final String nodeUri, final String correlator, final String principal) 
+                throws DmtException 
+        {
             String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
-            Entry entry = (Entry) ht.get(nodeUriArr[4]);
-            entry.thread = new Thread(new DownloadThread(nodeUri, correlator, principal));
-            entry.thread.start();
-        }
-    }
-    
-    private class DownloadThread implements Runnable {
-        private String               nodeUri;
-        private String[]             nodeUriArr;
-        private String               correlator;
-        private String               principal;
-        
-        private DownloadThread(String nodeUri, String correlator, String principal) {
-            this.nodeUri =  nodeUri;
-            nodeUriArr = Splitter.split(nodeUri, '/', 0);
-            this.principal = principal;
-        }
-        
-        public void run() {
-            entries.get(nodeUriArr[4]).setStatus(STATUS_STREAMING);
+            final Entry entry = (Entry) ht.get(nodeUriArr[4]);
             
-            // parse the DLOTA descriptor
+            entry.setStatus(STATUS_STREAMING);
+            
+            DownloadAgent dwnlAgent = da.getDownloadAgent();
+            if (null == dwnlAgent) {
+                entry.setStatus(STATUS_DOWNLD_FAILED);
+                throw new DmtException(nodeUri, DmtException.OTHER_ERROR, 
+                    "Download Agent service is not available");
+            }
+
+            SAXParser parser = null;
             try {
-                initParser();
-                parseDescriptor(nodeUri);
-                Set allowed = new HashSet();
-                allowed.add("application/java-archive");
-                allowed.add("application/vnd.osgi.dp");
-                if (!allowed.contains(contentType.toString().trim()))
+                ServiceReference refs[] = da.getBundleContext().getServiceReferences(
+                        SAXParserFactory.class.getName(),
+                        "(&(parser.namespaceAware=true)" + "(parser.validating=true))");
+                if (refs == null)
                     throw new DmtException(nodeUri, DmtException.OTHER_ERROR, 
-                            contentType + " MIME type is not supported");
+                        "SAX Parser is not available");
+                SAXParserFactory factory = (SAXParserFactory) da.getBundleContext().
+                        getService(refs[0]);
+                parser = factory.newSAXParser();
             } catch (Exception e) {
-                entries.get(nodeUriArr[4]).setStatus(STATUS_DOWNLD_FAILED);
-                sendAlertWithException(correlator, nodeUri, principal, e);
-                // TODO log
-                e.printStackTrace();
+                entry.setStatus(STATUS_DOWNLD_FAILED);
+                throw new RuntimeException("Internal error: " + e);
+            }
+
+            DownloadThread dwnlThread = new DownloadThread(parser, dwnlAgent, entry.uri);
+            dwnlThread.start();
+            
+            // waits until the DLOTA processor thread ends
+            try {
+                dwnlThread.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException("Internal error: " + e);
+            }
+            
+            if (dwnlThread.getStatus() != DownloadThread.OK) {
+                entry.setStatus(STATUS_DOWNLD_FAILED);
+                sendDownloadAlert(dwnlThread.getStatus(), 
+                    principal, correlator, nodeUri);
                 return;
             }
 
-            InputStream is = null;
-            try {
-                is = getStream(nodeUri);
-            } catch (Exception e) {
-                if (null != is) {
-                    try {
-                        is.close();
-                    }
-                    catch (IOException ioe) {
-                        ioe.printStackTrace();
-                    }
+            DeploymentThread deplThread = new DeploymentThread(da, dwnlThread.getInputStream(), new DeploymentThread.Listener() {
+                public void onFinish(DeploymentPackageImpl dp, DeploymentException exception) {
+                    if (null == exception)
+                        entry.setStatus(STATUS_DEPLOYED);
+                    else 
+                        entry.setStatus(STATUS_DEPLOYMENT_FAILED);
+                    sendDeployAlert(exception, principal, correlator, nodeUri);
+                    da.getDeployedPlugin().associateID(dp, entry.id);
                 }
-                entries.get(nodeUriArr[4]).setStatus(STATUS_DOWNLD_FAILED);
-                sendAlertWithException(correlator, nodeUri, principal, e);
-                // TODO log
-                e.printStackTrace();
-                return;
-            }
-            
-            // deploy content
-            DeploymentPackageImpl dp = null;
-            try {
-                dp = (DeploymentPackageImpl) da.installDeploymentPackage(is);
-            } catch (DeploymentException e) {
-                sendAlertWithException(correlator, nodeUri, principal,e);
-                entries.get(nodeUriArr[4]).setStatus(STATUS_DEPLOYMENT_FAILED);
-                // TODO log
-                e.printStackTrace();
-                return;
-            } finally {
-                if (null != is)
-                    try {
-                        is.close();
-                    }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
-            }
+            });
+            deplThread.start();
+        }
 
-            entries.get(nodeUriArr[4]).setStatus(STATUS_DEPLOYED);
-            da.getDeployedPlugin().associateID(dp, entries.get(nodeUriArr[4]).id);
+        private void sendDownloadAlert(int alertCode, String principal, String correlator, String nodeUri) {
+            if (null == principal)
+                return;
+
             try {
-                da.save();
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-                // TODO log
-            }
-            
-            try {
-                if (null != principal)
-                    da.getDmtAdmin().sendAlert(principal, 1226, correlator, new DmtAlertItem[] { 
-                        new DmtAlertItem(nodeUri, 
-                        "org.osgi.deployment.downloadandinstallandactivate", 
-                        null, new DmtData(RESULT_SUCCESSFUL))});
+                da.getDmtAdmin().sendAlert(principal, 1226, correlator, new DmtAlertItem[] {
+                        new DmtAlertItem(nodeUri, "org.osgi.deployment.downloadandinstallandactivate",
+                        null, new DmtData(alertCode))});
             }
             catch (DmtException e) {
                 // TODO log
                 e.printStackTrace();
             }
         }
-    }
-		
-    ///////////////////////////////////////////////////////////////////////////
-    // Parser methods
-	
-	private SAXParser getParser() throws Exception {
-		ServiceReference refs[] = da.getBundleContext().getServiceReferences(
-				SAXParserFactory.class.getName(),
-				"(&(parser.namespaceAware=true)" + "(parser.validating=true))");
-		if (refs == null)
-			return null;
-		SAXParserFactory factory = (SAXParserFactory) da.getBundleContext()
-				.getService(refs[0]);
-		SAXParser parser = factory.newSAXParser();
-		return parser;
-	}
 
-	public void startElement(String uri, String localName, String qName,
-			Attributes attributes) throws SAXException 
-	{
-		actElement = localName;
-	}
-	
-	public void characters(char[] ch, int start, int length) throws SAXException {
-	    if (actElement.equals("objectURI")) {
-	        if (null == contentURI)
-	            contentURI = new StringBuffer();
-	        String s = new String(ch, start, length).trim();
-	        contentURI.append(s);
-	    } else if (actElement.equals("type")) {
-            if (null == contentType)
-                contentType = new StringBuffer();
-            String s = new String(ch, start, length).trim();
-            contentType.append(s);
+        private void sendDeployAlert(DeploymentException exception, String principal, 
+                String correlator, String nodeUri) 
+        {
+            if (null == principal)
+                return;
+
+            try {
+                if (null == exception)
+                    da.getDmtAdmin().sendAlert(principal, 1226, correlator, new DmtAlertItem[] {
+                          new DmtAlertItem(nodeUri, "org.osgi.deployment.downloadandinstallandactivate",
+                          null, new DmtData(RESULT_SUCCESSFUL))});
+                else {
+                    // TODO
+                }
+            } catch (Exception e) {
+                // TODO log
+                e.printStackTrace();
+            }
+//          int status1 = -1;
+//          switch (status) {
+//              case DeploymentException.CODE_BUNDLE_START :
+//                  status = RESULT_BUNDLE_START_WARNING;
+//                  break;
+//              case DeploymentException.CODE_TIMEOUT :
+//                  status = RESULT_REQUEST_TIMED_OUT;
+//                  break;
+//              case DeploymentException.CODE_ORDER_ERROR :
+//                  status = RESULT_ORDER_ERROR;
+//                  break;
+//              case DeploymentException.CODE_MISSING_HEADER:
+//                  status = RESULT_MISSING_HEADER;
+//                  break;
+//              case DeploymentException.CODE_BAD_HEADER :
+//                  status = RESULT_BAD_HEADER;
+//                  break;
+//              case DeploymentException.CODE_MISSING_FIXPACK_TARGET :
+//                  status = RESULT_MISSING_FIXPACK_TARGET;
+//                  break;
+//              case DeploymentException.CODE_MISSING_BUNDLE :
+//                  status = RESULT_MISSING_BUNDLE;
+//                  break;
+//              case DeploymentException.CODE_MISSING_RESOURCE :
+//                  status = RESULT_MISSING_RESOURCE;
+//                  break;
+//              case DeploymentException.CODE_SIGNING_ERROR :
+//                  status = RESULT_SIGNING_ERROR;
+//                  break;
+//              case DeploymentException.CODE_BUNDLE_NAME_ERROR :
+//                  status = RESULT_BUNDLE_NAME_ERROR;
+//                  break;
+//              case DeploymentException.CODE_FOREIGN_CUSTOMIZER :
+//                  status = RESULT_FOREIGN_CUSTOMIZER;
+//                  break;
+//              case DeploymentException.CODE_NO_SUCH_RESOURCE :
+//                  status = RESULT_NO_SUCH_RESOURCE;
+//                  break;
+//              case DeploymentException.CODE_BUNDLE_SHARING_VIOLATION :
+//                  status = RESULT_BUNDLE_SHARING_VIOLATION;
+//                  break;
+//              case DeploymentException.CODE_RESOURCE_SHARING_VIOLATION :
+//                  status = RESULT_CODE_RESOURCE_SHARING_VIOLATION;
+//                  break;
+//              case DeploymentException.CODE_OTHER_ERROR :
+//                  status = RESULT_UNDEFINED_ERROR;
+//                  break;
+//              default :
+//                  break;
+//          }
+//            try {
+//                da.getDmtAdmin().sendAlert(principal, 1226, correlator, new DmtAlertItem[] {
+//                        new DmtAlertItem(nodeUri, "org.osgi.deployment.downloadandinstallandactivate",
+//                        null, new DmtData(alertCode))});
+//            }
+//            catch (DmtException e) {
+//                // TODO log
+//                e.printStackTrace();
+//            }
         }
-	}
-
+    }
+    
     ///////////////////////////////////////////////////////////////////////////
     // DMT methods
 
@@ -532,149 +538,21 @@ public class PluginDownload extends DefaultHandler
                     "be set");
         
         entries.start(nodeUri, correlator, session.getPrincipal());
+        try {
+            da.save();
+        }
+        catch (IOException e) {
+            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Changes cannot be " +
+                    "persisted", e); 
+        }
 	}
     
-    private void initParser() {
-        contentType = null;
-        contentURI = null;
-    }
-
     public void nodeChanged(String nodeUri) throws DmtException {
     }
     
     ///////////////////////////////////////////////////////////////////////////
     // Private methods
-
-    private void sendAlertWithException(String correlator, String nodeUri,
-            String principal, Exception exception)  
-    {
-        if (null == principal)
-            return;
-        
-        int result_code = -1;
-        if (exception instanceof DmtException) {
-            DmtException e = (DmtException) exception;
-            switch (e.getCode()) {
-                case DeploymentException.CODE_BUNDLE_START :
-                    result_code = RESULT_BUNDLE_START_WARNING;
-                    break;
-                case DeploymentException.CODE_TIMEOUT :
-                    result_code = RESULT_REQUEST_TIMED_OUT;
-                    break;
-                case DeploymentException.CODE_ORDER_ERROR :
-                    result_code = RESULT_ORDER_ERROR;
-                    break;
-                case DeploymentException.CODE_MISSING_HEADER:
-                    result_code = RESULT_MISSING_HEADER;
-                    break;
-                case DeploymentException.CODE_BAD_HEADER :
-                    result_code = RESULT_BAD_HEADER;
-                    break;
-                case DeploymentException.CODE_MISSING_FIXPACK_TARGET :
-                    result_code = RESULT_MISSING_FIXPACK_TARGET;
-                    break;
-                case DeploymentException.CODE_MISSING_BUNDLE :
-                    result_code = RESULT_MISSING_BUNDLE;
-                    break;
-                case DeploymentException.CODE_MISSING_RESOURCE :
-                    result_code = RESULT_MISSING_RESOURCE;
-                    break;
-                case DeploymentException.CODE_SIGNING_ERROR :
-                    result_code = RESULT_SIGNING_ERROR;
-                    break;
-                case DeploymentException.CODE_BUNDLE_NAME_ERROR :
-                    result_code = RESULT_BUNDLE_NAME_ERROR;
-                    break;
-                case DeploymentException.CODE_FOREIGN_CUSTOMIZER :
-                    result_code = RESULT_FOREIGN_CUSTOMIZER;
-                    break;
-                case DeploymentException.CODE_NO_SUCH_RESOURCE :
-                    result_code = RESULT_NO_SUCH_RESOURCE;
-                    break;
-                case DeploymentException.CODE_BUNDLE_SHARING_VIOLATION :
-                    result_code = RESULT_BUNDLE_SHARING_VIOLATION;
-                    break;
-                case DeploymentException.CODE_RESOURCE_SHARING_VIOLATION :
-                    result_code = RESULT_CODE_RESOURCE_SHARING_VIOLATION;
-                    break;
-                case DeploymentException.CODE_OTHER_ERROR :
-                    result_code = RESULT_UNDEFINED_ERROR;
-                    break;
-                default :
-                    break;
-            }
-        } else if (exception instanceof SAXException){
-            result_code = RESULT_DWNLD_DESCR_ERROR;
-        }
-        try {
-            da.getDmtAdmin().sendAlert(principal, 1226, correlator, new DmtAlertItem[] {
-                    new DmtAlertItem(nodeUri, "org.osgi.deployment.downloadandinstallandactivate",
-                    null, new DmtData(result_code))});
-        }
-        catch (DmtException ex) {
-            // TODO log
-            ex.printStackTrace();
-        }
-    }
     
-    private InputStream getStream(String nodeUri) throws DmtException {
-        InputStream is = null;
-        DownloadAgent dwnl = da.getDownloadAgent();
-        if (null == dwnl)
-            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, 
-                "Download Agent service is not available");
-        try {
-            Hashtable props = new Hashtable();
-            props.put("url", contentURI.toString());
-            is = dwnl.download("url", props);
-            return is;
-        }
-        catch (Exception e) {
-            if (null != is) {
-                try {
-                    is.close();
-                }
-                catch (IOException ioe) {
-                    ioe.printStackTrace();
-                }
-                
-            }
-            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "", e);
-        }
-    }
-
-    private void parseDescriptor(String nodeUri) throws DmtException, SAXException {
-        DownloadAgent dwnl = da.getDownloadAgent();
-        if (null == dwnl)
-            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, 
-                "Download Agent service is not available");
-        
-        String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
-        InputStream is = null;
-        try {
-            Hashtable props = new Hashtable();
-            props.put("url", entries.get(nodeUriArr[4]).uri);
-            is = dwnl.download("url", props);
-            SAXParser p = getParser();
-            p.parse(is, this);
-        } catch (SAXException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "");
-        }
-        finally {
-            if (null != is) {
-                try {
-                    is.close();
-                }
-                catch (IOException ioe) {
-                    ioe.printStackTrace();
-                }
-
-            }
-        }
-    }
-
     public void setDeploymentAdmin(DeploymentAdminImpl da) {
         this.da = da;
     }
