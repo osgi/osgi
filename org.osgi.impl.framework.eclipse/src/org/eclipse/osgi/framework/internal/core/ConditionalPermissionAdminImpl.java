@@ -30,6 +30,7 @@ public class ConditionalPermissionAdminImpl implements ConditionalPermissionAdmi
 	Vector condPerms;
 	Framework framework;
 	PermissionStorage storage;
+	private long nextID = System.currentTimeMillis();
 
 	/**
 	 * @param framework
@@ -59,13 +60,16 @@ public class ConditionalPermissionAdminImpl implements ConditionalPermissionAdmi
 		if (sm != null)
 			sm.checkPermission(new AllPermission());
 		if (name == null)
-			name = "generated_" + Long.toString(System.currentTimeMillis()); //$NON-NLS-1$
+			name = "generated_" + Long.toString(nextID++); //$NON-NLS-1$
 		ConditionalPermissionInfoImpl condPermInfo = null;
 		synchronized (condPerms) {
 			condPermInfo = (ConditionalPermissionInfoImpl) getConditionalPermissionInfo(name);
 			if (condPermInfo == null) {
 				condPermInfo = new ConditionalPermissionInfoImpl(name, conds, perms);
 				condPerms.add(condPermInfo);
+			} else {
+				condPermInfo.conds = conds;
+				condPermInfo.perms = perms;
 			}
 			saveCondPermInfos();
 		}
