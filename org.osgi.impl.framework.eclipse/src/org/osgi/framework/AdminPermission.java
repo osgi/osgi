@@ -10,6 +10,7 @@
 
 package org.osgi.framework;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.security.*;
 import java.util.*;
@@ -85,23 +86,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 public final class AdminPermission extends Permission
 {
 	static final long	serialVersionUID	= 207051004521261705L;
-	/**
-	 * The bundle governed by this AdminPermission - only used if 
-	 * wildcard is false and filter == null
-	 */
-	protected Bundle bundle;
-	
-	/**
-	 * Indicates that this AdminPermission refers to all bundles
-	 */
-	protected boolean wildcard;
-	
-	/**
-	 * An x.500 distinguished name used to match a bundle's signature - only used if
-	 * wildcard is false and bundle = null
-	 */
-	protected String filter;
-	
+
     /**
      * The action string <code>class</code> (Value is "class").
      */
@@ -174,11 +159,19 @@ public final class AdminPermission extends Permission
 		ACTION_STARTLEVEL			|
 		ACTION_EXTENSIONLIFECYCLE;
     private final static int ACTION_NONE = 0;
-
-    /**
-     * The actions mask.
-     */
-	protected transient int action_mask = ACTION_NONE;
+	
+	/**
+	 * Indicates that this AdminPermission refers to all bundles
+	 * @serial
+	 */
+	private boolean wildcard;
+	
+	/**
+	 * An x.500 distinguished name used to match a bundle's signature - only used if
+	 * wildcard is false and bundle = null
+	 * @serial
+	 */
+	private String filter;
 
     /**
      * The actions in canonical form.
@@ -186,20 +179,31 @@ public final class AdminPermission extends Permission
      * @serial
      */
     private String actions = null;
-    
+
+    /**
+     * The actions mask.
+     */
+	private transient int action_mask = ACTION_NONE;
+
+	/**
+	 * The bundle governed by this AdminPermission - only used if 
+	 * wildcard is false and filter == null
+	 */
+	private transient Bundle bundle;
+
     /**
      * If this AdminPermission was constructed with a bundle, this dictionary holds
      * the properties of that bundle, used to match a filter in implies.
      * This is not initialized until necessary, and then cached in this object.
      */
-    protected Dictionary bundleProperties;
+    private transient Dictionary bundleProperties;
     
     /**
      * If this AdminPermission was constructed with a filter, this dictionary holds
      * a Filter matching object used to evaluate the filter in implies.
      * This is not initialized until necessary, and then cached in this object
      */
-    protected Filter filterImpl;
+    private transient Filter filterImpl;
     
 	/**
      * Creates a new <code>AdminPermission</code> object that matches 
@@ -269,64 +273,6 @@ public final class AdminPermission extends Permission
     	this.bundle = null;
     	this.action_mask = action_mask;
     }
-    
-//    /**
-//     * TODO Canonicalize X.500 Distinguished Name Suffix
-//     */
-//    public static String canonicalize(String dnSuffix) {
-//    	/*
-//    	 * Escapes: 
-//    	 *   o   a space or "#" character occurring at the beginning of the string
-//    	 *   o   a space character occurring at the end of the string
-//    	 *   o   one of the characters ",", "+", """, "\", "<", ">" or ";"
-//    	 *   
-//    	 * Implementations MAY escape other characters.
-//    	 *   
-//    	 * If a character to be escaped is one of the list shown above, then it
-//    	 * is prefixed by a backslash ('\' ASCII 92).
-//    	 * Otherwise the character to be escaped is replaced by a backslash and
-//    	 * two hex digits, which form a single byte in the code of the
-//    	 * character.
-//    	 */
-//
-//    	//first break up in to tokens, dealing with escapes
-//    	char [] chars = dnSuffix.toCharArray();
-//    	int startIndex = 0;
-//    	int endIndex = 1;
-//    	List tokens = new ArrayList();
-//    	while (endIndex < chars.length) {
-//    		//find keys
-//    		while (
-//    				endIndex < chars.length && (
-//    					chars[endIndex] != ',' || //find comma
-//						chars[endIndex-1] == '\\' //avoid escaped commas
-//						)
-//					){
-//    			endIndex++;
-//    		}
-//    		tokens.add(new String(chars,startIndex,endIndex-startIndex));
-//    		
-//    		endIndex++;
-//    		startIndex = endIndex;
-//    	}
-//    	System.out.println("tokens: " + tokens.toString());
-//    	/*
-//    	 * Examples: 
-//    	 * 
-//    	 * CN=Steve Kille,O=Isode Limited,C=GB
-//    	 * 
-//    	 * multivalued:
-//    	 * OU=Sales+CN=J. Smith,O=Widget Inc.,C=US
-//    	 * 
-//    	 * escaped comma:
-//    	 * CN=L. Eagle,O=Sue\, Grabbit and Runn,C=GB
-//    	 */
-//    	
-//    //	StringTokenizer tokenizer = new StreamTokenizer(dnSuffix);
-//    	
-//    	return null;
-//    }
-//    
 
     /**
      * Parse action string into action mask.
@@ -570,9 +516,8 @@ public final class AdminPermission extends Permission
 		    		bundleProperties.put("location",bundle.getLocation()); //$NON-NLS-1$
 		    		
 		    		//set name
-		    		if (bundle.getSymbolicName() != null) {
+		    		if (bundle.getSymbolicName() != null)
 		    			bundleProperties.put("name",bundle.getSymbolicName()); //$NON-NLS-1$
-		    		}
 		    		
 		    		//set signers
 		    		bundleProperties.put("signer",new SignerWrapper(bundle)); //$NON-NLS-1$
@@ -594,10 +539,13 @@ public final class AdminPermission extends Permission
     		this.bundle = bundle;
     	}
     	
-		public boolean equals(Object arg0) {
-			return arg0 instanceof SignerWrapper &&
-				((AbstractBundle)bundle).getBundleData()
-					.matchDNChain(((SignerWrapper)arg0).pattern);
+		public boolean equals(Object o) {
+			if (!(o instanceof SignerWrapper))
+				return false;
+			SignerWrapper other = (SignerWrapper) o;
+			AbstractBundle matchBundle = (AbstractBundle) (bundle != null ? bundle : other.bundle);
+			String matchPattern = bundle != null ? other.pattern : pattern;
+			return matchBundle.getBundleData().matchDNChain(matchPattern);
 		}
     }
     
@@ -712,26 +660,18 @@ public final class AdminPermission extends Permission
      */
     public boolean implies(Permission p)
     {
-    	if (!(p instanceof AdminPermission)) {
+    	if (!(p instanceof AdminPermission))
     		return false;
-    	}
-    	
     	AdminPermission target = (AdminPermission)p;
-
     	//check actions first - much faster
-    	if ((action_mask & target.action_mask)!=target.action_mask) {
+    	if ((action_mask & target.action_mask)!=target.action_mask)
     		return false;
-    	}
-
     	//if passed in a filter, puke
-    	if (target.filter != null) {
+    	if (target.filter != null)
     		throw new RuntimeException("Cannot imply a filter");
-    	}
-    	
     	//special case - only wildcard implies wildcard
-    	if (target.wildcard) {
+    	if (target.wildcard)
     		return wildcard;
-    	}
 
     	//check our name 
     	if (filter != null) {
@@ -846,13 +786,10 @@ public final class AdminPermission extends Permission
         
         AdminPermission a = (AdminPermission) obj;
 
-        return((action_mask == a.action_mask) &&
+        return (action_mask == a.action_mask) &&
         		(wildcard == a.wildcard) &&
-        		((bundle == null) == (a.bundle == null)) &&
-        		(bundle == null ? true : bundle.equals(a.bundle)) &&
-				((filter == null) == (a.filter == null)) &&
-				(filter == null ? true : filter.equals(a.filter))
-				);
+        		(bundle == null ? a.bundle == null : (a.bundle == null ? false : bundle.getBundleId() == a.bundle.getBundleId())) &&
+				(filter == null ? a.filter == null : filter.equals(a.filter));
     }
 
     /**
@@ -861,124 +798,136 @@ public final class AdminPermission extends Permission
      * @return Hash code value for this object.
      */
 	public int hashCode() {
-		return action_mask ^ (filter != null ? filter.hashCode() : bundle.hashCode());
+		return getName().hashCode() ^ getActions().hashCode();
 	}
-	
+
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws IOException {
+		// Write out the actions. The superclass takes care of the name
+		// call getActions to make sure actions field is initialized
+		if (actions == null)
+			getActions();
+		if (filter == null && !wildcard)
+			throw new UnsupportedOperationException("cannot serialize");
+		s.defaultWriteObject();
+	}
+
+	/**
+	 * readObject is called to restore the state of this permission from a
+	 * stream.
+	 */
+	private synchronized void readObject(java.io.ObjectInputStream s) throws IOException, ClassNotFoundException {
+		// Read in the action, then initialize the rest
+		s.defaultReadObject();
+		action_mask = getMask(actions);
+	}
+
     /**
      * Returns a new <code>PermissionCollection</code> object suitable for storing
      * <code>AdminPermission</code>s.
      * 
      * @return A new <code>PermissionCollection</code> object.
      */
-
     public PermissionCollection newPermissionCollection()
     {
         return(new AdminPermissionCollection());
     }
-}
 
-/**
- * Stores a collection of <code>AdminPermission</code>s.
- */
-final class AdminPermissionCollection extends PermissionCollection
-{
-	private static final long serialVersionUID = 3906372644575328048L;
 	/**
-     * Collection of permissions.
-     *
-     * @serial
-     */
-	private Hashtable permissions;
+	 * Stores a collection of <code>AdminPermission</code>s.
+	 */
+	private final class AdminPermissionCollection extends PermissionCollection
+	{
+		private static final long serialVersionUID = 3906372644575328048L;
+		/**
+	     * Collection of permissions.
+	     *
+	     * @serial
+	     */
+		private Hashtable permissions;
+	
+	    /**
+	     * Create an empty AdminPermissions object.
+	     *
+	     */
+	
+	    public AdminPermissionCollection()
+	    {
+	        permissions = new Hashtable();        
+	    }
 
-    /**
-     * Create an empty AdminPermissions object.
-     *
-     */
-
-    public AdminPermissionCollection()
-    {
-        permissions = new Hashtable();        
-    }
-
-    /**
-     * Adds a permission to the <code>AdminPermission</code> objects. The key for 
-     * the hashtable is the name
-     *
-     * @param permission The <code>AdminPermission</code> object to add.
-     *
-     * @exception IllegalArgumentException If the permission is not an
-     * <code>AdminPermission</code> instance.
-     *
-     * @exception SecurityException If this <code>AdminPermissionCollection</code>
-     * object has been marked read-only.
-     */
-
-    public void add(Permission permission)
-    {
-        if (! (permission instanceof AdminPermission))
-            throw new IllegalArgumentException("invalid permission: "+
-                                               permission);
-        if (isReadOnly())
-            throw new SecurityException("attempt to add a Permission to a " +
-                                        "readonly AdminCollection");
-
-        AdminPermission ap = (AdminPermission) permission;
-        
-    	AdminPermission existing = (AdminPermission) permissions.get(ap.getName());
-    	
-    	if (existing != null){
-    		
-    		int oldMask = existing.action_mask;
-    		int newMask = ap.action_mask;
-        
-    		if (oldMask != newMask) {
-    			permissions.put(existing.getName(),
-    					new AdminPermission(existing.getName(), oldMask | newMask));
-    		}
-    	} else {
-    		permissions.put(ap.getName(), ap);
-    	}
-    }
-
-
-    /**
-     * Determines if the specified permissions implies the permissions
-     * expressed in <code>permission</code>.
-     *
-     * @param permission The Permission object to compare with the <code>AdminPermission</code>
-     *  objects in this collection.
-     *
-     * @return <code>true</code> if <code>permission</code> is implied by an 
-     * <code>AdminPermission</code> in this collection, <code>false</code> otherwise.
-     */
-    public boolean implies(Permission permission)
-    {
-        if (!(permission instanceof AdminPermission))
-            return(false);
-
-        AdminPermission target = (AdminPermission) permission;
-        
-        //just iterate one by one
-        Iterator permItr = permissions.values().iterator();
-        
-        while(permItr.hasNext()) {
-        	if (((AdminPermission)permItr.next()).implies(target)) {
-        		return true;
-        	}
-        }
-        return false;
-    }
- 
-
-    /**
-     * Returns an enumeration of all <code>AdminPermission</code> objects in the
-     * container.
-     *
-     * @return Enumeration of all <code>AdminPermission</code> objects.
-     */
-
-    public Enumeration elements()
-    {
-        return(Collections.enumeration(permissions.values()));
-    }
+	    /**
+	     * Adds a permission to the <code>AdminPermission</code> objects. The key for 
+	     * the hashtable is the name
+	     *
+	     * @param permission The <code>AdminPermission</code> object to add.
+	     *
+	     * @exception IllegalArgumentException If the permission is not an
+	     * <code>AdminPermission</code> instance.
+	     *
+	     * @exception SecurityException If this <code>AdminPermissionCollection</code>
+	     * object has been marked read-only.
+	     */
+	    public void add(Permission permission)
+	    {
+	        if (! (permission instanceof AdminPermission))
+	            throw new IllegalArgumentException("invalid permission: "+
+	                                               permission);
+	        if (isReadOnly())
+	            throw new SecurityException("attempt to add a Permission to a " +
+	                                        "readonly AdminCollection");
+	        AdminPermission ap = (AdminPermission) permission;
+	    	AdminPermission existing = (AdminPermission) permissions.get(ap.getName());
+	    	if (existing != null){
+	    		int oldMask = existing.action_mask;
+	    		int newMask = ap.action_mask;
+	        
+	    		if (oldMask != newMask) {
+	    			permissions.put(existing.getName(),
+	    					new AdminPermission(existing.getName(), oldMask | newMask));
+	    		}
+	    	} else {
+	    		permissions.put(ap.getName(), ap);
+	    	}
+	    }
+	
+	
+	    /**
+	     * Determines if the specified permissions implies the permissions
+	     * expressed in <code>permission</code>.
+	     *
+	     * @param permission The Permission object to compare with the <code>AdminPermission</code>
+	     *  objects in this collection.
+	     *
+	     * @return <code>true</code> if <code>permission</code> is implied by an 
+	     * <code>AdminPermission</code> in this collection, <code>false</code> otherwise.
+	     */
+	    public boolean implies(Permission permission)
+	    {
+	        if (!(permission instanceof AdminPermission))
+	            return(false);
+	
+	        AdminPermission target = (AdminPermission) permission;
+	        
+	        //just iterate one by one
+	        Iterator permItr = permissions.values().iterator();
+	        
+	        while(permItr.hasNext())
+	        	if (((AdminPermission)permItr.next()).implies(target))
+	        		return true;
+	        return false;
+	    }
+	 
+	
+	    /**
+	     * Returns an enumeration of all <code>AdminPermission</code> objects in the
+	     * container.
+	     *
+	     * @return Enumeration of all <code>AdminPermission</code> objects.
+	     */
+	
+	    public Enumeration elements()
+	    {
+	        return(Collections.enumeration(permissions.values()));
+	    }
+	}
 }
