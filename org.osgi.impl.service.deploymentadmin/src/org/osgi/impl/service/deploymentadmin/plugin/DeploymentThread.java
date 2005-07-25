@@ -14,7 +14,7 @@ public class DeploymentThread extends Thread {
     private Listener              listener;
     
     public interface Listener {
-        void onFinish(DeploymentPackageImpl dp, DeploymentException exception);
+        void onFinish(DeploymentPackageImpl dp, Exception exception);
     }
     
     public DeploymentThread(DeploymentAdmin da, InputStream inputStream, Listener listener) {
@@ -28,7 +28,7 @@ public class DeploymentThread extends Thread {
         try {
             dp = (DeploymentPackageImpl) da.installDeploymentPackage(is);
             listener.onFinish(dp, null);
-        } catch (DeploymentException e) {
+        } catch (Exception e) {
             listener.onFinish(dp, e);
         } finally {
             if (null != is) {

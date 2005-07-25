@@ -2,6 +2,7 @@ package org.osgi.impl.service.deploymentadmin.plugin;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.security.AccessControlException;
 import java.util.Date;
 import java.util.Hashtable;
 
@@ -14,6 +15,7 @@ import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.Metanode;
 import org.osgi.impl.service.deploymentadmin.Splitter;
 import org.osgi.impl.service.deploymentadmin.api.DownloadAgent;
+import org.osgi.impl.service.deploymentadmin.perm.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.dmt.DmtAlertItem;
 import org.osgi.service.dmt.DmtData;
@@ -37,28 +39,36 @@ public class PluginDownload extends DefaultHandler
     private static final int STATUS_DEPLOYED               = 80;
     
     // generic alert results
-    static final int RESULT_SUCCESSFUL                   = 200;
-    static final int RESULT_BUNDLE_START_WARNING         = 250;
-    static final int RESULT_USER_CANCELLED               = 401;
-    static final int RESULT_CORRUPTED_DEPLOYMENT_PACKAGE = 402;
-    static final int RESULT_PACKAGE_MISMATCH             = 403;
-    static final int RESULT_NOT_ACCEPTABLE_CONTENT       = 404;
-    static final int RESULT_REQUEST_TIMED_OUT            = 406;
-    static final int RESULT_UNDEFINED_ERROR              = 407;
-    static final int RESULT_DWNL_SERVER_NOT_AVAILABLE    = 409;
-    static final int RESULT_DWNLD_DESCR_ERROR            = 410;
-    static final int RESULT_ORDER_ERROR                  = 450;
-    static final int RESULT_MISSING_HEADER               = 451;
-    static final int RESULT_BAD_HEADER                   = 452;
-    static final int RESULT_MISSING_FIXPACK_TARGET       = 453;
-    static final int RESULT_MISSING_BUNDLE               = 454;
-    static final int RESULT_MISSING_RESOURCE             = 455;
-    static final int RESULT_SIGNING_ERROR                = 456;
-    static final int RESULT_BUNDLE_NAME_ERROR            = 457;
-    static final int RESULT_FOREIGN_CUSTOMIZER           = 458;
-    static final int RESULT_NO_SUCH_RESOURCE             = 459;
-    static final int RESULT_BUNDLE_SHARING_VIOLATION     = 460;
-    static final int RESULT_CODE_RESOURCE_SHARING_VIOLATION = 461;
+    static final int RESULT_SUCCESSFUL                        = 200;
+    static final int RESULT_BUNDLE_START_WARNING              = 250;
+    
+    static final int RESULT_USER_CANCELLED                    = 401;
+    static final int RESULT_CORRUPTED_DEPLOYMENT_PACKAGE      = 402;
+    static final int RESULT_PACKAGE_MISMATCH                  = 403;
+    static final int RESULT_NOT_ACCEPTABLE_CONTENT            = 404;
+    static final int RESULT_AUTHORIZATION_FAILURE             = 405;
+    static final int RESULT_REQUEST_TIMED_OUT                 = 406;
+    static final int RESULT_UNDEFINED_ERROR                   = 407;
+    static final int RESULT_MALFORMED_URL                     = 408;
+    static final int RESULT_DWNL_SERVER_NOT_AVAILABLE         = 409;
+    static final int RESULT_DWNLD_DESCR_ERROR                 = 410;
+    
+    static final int RESULT_DEPL_ORDER_ERROR                  = 450;
+    static final int RESULT_DEPL_MISSING_HEADER               = 451;
+    static final int RESULT_DEPL_BAD_HEADER                   = 452;
+    static final int RESULT_DEPL_MISSING_FIXPACK_TARGET       = 453;
+    static final int RESULT_DEPL_MISSING_BUNDLE               = 454;
+    static final int RESULT_DEPL_MISSING_RESOURCE             = 455;
+    static final int RESULT_DEPL_SIGNING_ERROR                = 456;
+    static final int RESULT_DEPL_BUNDLE_NAME_ERROR            = 457;
+    static final int RESULT_DEPL_FOREIGN_CUSTOMIZER           = 458;
+    static final int RESULT_DEPL_NO_SUCH_RESOURCE             = 459;
+    static final int RESULT_DEPL_BUNDLE_SHARING_VIOLATION     = 460;
+    static final int RESULT_DEPL_CODE_RESOURCE_SHARING_VIOLATION = 461;
+    static final int RESULT_DEPL_COMMIT_ERROR                 = 462;
+    static final int RESULT_DEPL_UNDEFINED                    = 463;
+    static final int RESULT_DEPL_RES_PROC_MISSING             = 464;
+    static final int RESULT_DEPL_TIMEOUT                      = 465;
     
 	private transient DeploymentAdminImpl da;
 	private Entries                       entries = new Entries();
@@ -159,7 +169,7 @@ public class PluginDownload extends DefaultHandler
             DeploymentThread deplThr = new DeploymentThread(da, dwnlThr.getInputStream(), 
                     new DeploymentThread.Listener() 
             {
-                public void onFinish(DeploymentPackageImpl dp, DeploymentException exception) {
+                public void onFinish(DeploymentPackageImpl dp, Exception exception) {
                     if (null == exception) {
                         entry.setStatus(STATUS_DEPLOYED);
                         da.getDeployedPlugin().associateID(dp, entry.id);
@@ -187,7 +197,7 @@ public class PluginDownload extends DefaultHandler
             }
         }
 
-        private void sendDeployAlert(DeploymentException exception, String principal, 
+        private void sendDeployAlert(Exception exception, String principal, 
                 String correlator, String nodeUri) 
         {
             if (null == principal)
@@ -199,7 +209,19 @@ public class PluginDownload extends DefaultHandler
                           new DmtAlertItem(nodeUri, "org.osgi.deployment.downloadandinstallandactivate",
                           null, new DmtData(RESULT_SUCCESSFUL))});
                 else {
-                    int res = getResultCodeToExceptionCode(exception.getCode());
+                    if (exception instanceof DeploymentException) {
+                        DeploymentException de = (DeploymentException) exception;
+                        int res = getResultCodeToExceptionCode(de.getCode());
+                        da.getDmtAdmin().sendAlert(principal, 1226, correlator, new DmtAlertItem[] {
+                            new DmtAlertItem(nodeUri, "org.osgi.deployment.downloadandinstallandactivate",
+                            null, new DmtData(res))});
+                    } else if (exception instanceof AccessControlException) {
+                        AccessControlException ae = (AccessControlException) exception;
+                        if (ae.getPermission() instanceof DeploymentAdminPermission)
+                            da.getDmtAdmin().sendAlert(principal, 1226, correlator, new DmtAlertItem[] {
+                                new DmtAlertItem(nodeUri, "org.osgi.deployment.downloadandinstallandactivate",
+                                null, new DmtData(RESULT_AUTHORIZATION_FAILURE))});
+                    }
                 }
             } catch (Exception e) {
                 // TODO log
@@ -214,33 +236,37 @@ public class PluginDownload extends DefaultHandler
               case DeploymentException.CODE_TIMEOUT :
                   return RESULT_REQUEST_TIMED_OUT;
               case DeploymentException.CODE_ORDER_ERROR :
-                  return RESULT_ORDER_ERROR;
+                  return RESULT_DEPL_ORDER_ERROR;
               case DeploymentException.CODE_MISSING_HEADER:
-                  return RESULT_MISSING_HEADER;
+                  return RESULT_DEPL_MISSING_HEADER;
               case DeploymentException.CODE_BAD_HEADER :
-                  return RESULT_BAD_HEADER;
+                  return RESULT_DEPL_BAD_HEADER;
               case DeploymentException.CODE_MISSING_FIXPACK_TARGET :
-                  return RESULT_MISSING_FIXPACK_TARGET;
+                  return RESULT_DEPL_MISSING_FIXPACK_TARGET;
               case DeploymentException.CODE_MISSING_BUNDLE :
-                  return RESULT_MISSING_BUNDLE;
+                  return RESULT_DEPL_MISSING_BUNDLE;
               case DeploymentException.CODE_MISSING_RESOURCE :
-                  return RESULT_MISSING_RESOURCE;
+                  return RESULT_DEPL_MISSING_RESOURCE;
               case DeploymentException.CODE_SIGNING_ERROR :
-                  return RESULT_SIGNING_ERROR;
+                  return RESULT_DEPL_SIGNING_ERROR;
               case DeploymentException.CODE_BUNDLE_NAME_ERROR :
-                  return RESULT_BUNDLE_NAME_ERROR;
+                  return RESULT_DEPL_BUNDLE_NAME_ERROR;
               case DeploymentException.CODE_FOREIGN_CUSTOMIZER :
-                  return RESULT_FOREIGN_CUSTOMIZER;
+                  return RESULT_DEPL_FOREIGN_CUSTOMIZER;
               case DeploymentException.CODE_NO_SUCH_RESOURCE :
-                  return RESULT_NO_SUCH_RESOURCE;
+                  return RESULT_DEPL_NO_SUCH_RESOURCE;
               case DeploymentException.CODE_BUNDLE_SHARING_VIOLATION :
-                  return RESULT_BUNDLE_SHARING_VIOLATION;
+                  return RESULT_DEPL_BUNDLE_SHARING_VIOLATION;
               case DeploymentException.CODE_RESOURCE_SHARING_VIOLATION :
-                  return RESULT_CODE_RESOURCE_SHARING_VIOLATION;
+                  return RESULT_DEPL_CODE_RESOURCE_SHARING_VIOLATION;
               case DeploymentException.CODE_OTHER_ERROR :
                   return RESULT_UNDEFINED_ERROR;
+              //case DeploymentException.COMMIT_ERROR :
+              //    return RESULT_DEPL_COMMIT_ERROR;
+              case DeploymentException.CODE_PROCESSOR_NOT_FOUND :
+                  return RESULT_DEPL_RES_PROC_MISSING;
               default :
-                  return -1;
+                  return RESULT_DEPL_UNDEFINED;
           }
         }
     }
