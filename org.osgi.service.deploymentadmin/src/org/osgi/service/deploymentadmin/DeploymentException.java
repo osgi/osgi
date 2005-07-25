@@ -107,7 +107,13 @@ public class DeploymentException extends Exception {
      * Exception with this code when the session can not be created after 
      * an appropriate time out period.
      */
-    public static final int CODE_TIMEOUT                    = 15;    
+    public static final int CODE_TIMEOUT                    = 15;
+    
+    /**
+     * It is only a hint that one or more bundles couldn't be started. 
+     * However the Deployment Package install/update was not rolled back.
+     */
+    public static final int CODE_BUNDLE_START               = 16;
     
     /**
      * Other error condition.
