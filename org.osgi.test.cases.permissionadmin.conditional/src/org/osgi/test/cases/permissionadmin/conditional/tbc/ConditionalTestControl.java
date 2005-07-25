@@ -128,8 +128,6 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     try {
       trace("Create only with type '[type]'");
       new ConditionInfo("[conditionType]");
-      trace("Create only with type and whitespace '[type ]'");
-      new ConditionInfo("[conditionType ]");
     } catch (Exception e) {
       fail("ConditonInfo not created. " + e.getClass() + ": " + e.getMessage());
     }
@@ -250,6 +248,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       for (int i = 0; i < cpInfos.length; i++) {
         cpInfos[i].delete();
       }
+      TestCondition.satisfOrder.removeAllElements();
     }  
     
     //2: Test set (or create) a Conditional Permission Info with conditions and permissions
