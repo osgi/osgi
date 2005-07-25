@@ -52,6 +52,10 @@ public class ConditionalUtility {
 		this.cpAdmin = cpAdmin;
 		this.permTBC = permTBC;
 	}
+  
+  public void setConditionalTBCService(ConditionalTBCService  tbc) {
+    this.tbc = tbc;
+  }
 	
 	public void setTestBunde(Bundle bundle, boolean hasPermissionsPerm) {
 		this.testBundle = bundle;
