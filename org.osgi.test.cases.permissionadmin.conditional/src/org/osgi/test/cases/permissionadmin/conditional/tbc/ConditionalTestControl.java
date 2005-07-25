@@ -216,17 +216,19 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
    */
   public void testNamedConditionalPermissionAdmin() {//TC2_1
     //1: Test unique names
-    ConditionInfo testCInfo = utility.createTestCInfo(false, false, false, "TestCondition");        
-    PermissionInfo pInfo = new PermissionInfo(AdminPermission.class.getName(), "*", "*");
+    ConditionInfo testCInfo = utility.createTestCInfo(false, false, false, "TestCondition");
+    AdminPermission perm1 = new AdminPermission("*", "*");
+    AdminPermission perm2 = new AdminPermission("*", AdminPermission.LIFECYCLE);
+    PermissionInfo pInfo1 = new PermissionInfo(perm1.getClass().getName(), perm1.getName(), perm1.getActions());
+    PermissionInfo pInfo2 = new PermissionInfo(perm2.getClass().getName(), perm2.getName(), perm2.getActions());
     
-    ConditionInfo[] conditions = new ConditionInfo[]{testCInfo};//cInfo1, cInfo2 };
-    PermissionInfo[] permissions = new PermissionInfo[]{pInfo};    
+    ConditionInfo[] conditions = new ConditionInfo[]{testCInfo}; 
     
     int numOfInfos = 10;
     ConditionalPermissionInfo cpInfos[] = new ConditionalPermissionInfo[numOfInfos];
     //create conditional permission infos
     for (int i = 0; i < cpInfos.length; i++) {
-      cpInfos[i] = conditionalAdmin.addConditionalPermissionInfo(conditions, permissions);
+      cpInfos[i] = conditionalAdmin.addConditionalPermissionInfo(conditions, new PermissionInfo[]{pInfo1});
     }
     //get name of the created conditional permission infos
     String[] names = new String[numOfInfos];
@@ -253,27 +255,26 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     
     //2: Test set (or create) a Conditional Permission Info with conditions and permissions
     ConditionInfo cInfo1 = new ConditionInfo(BUNDLE_LOCATION_CONDITION, 
-        new String[]{""});//testBundleLocation
+                                             new String[]{""});//testBundleLocation
     ConditionInfo cInfo2 = new ConditionInfo(BUNDLE_SIGNER_CONDITION,
-        new String[]{ConditionResource.getString(ConditionalUtility.DN_S)});
+                                             new String[]{ConditionResource.getString(ConditionalUtility.DN_S)});
     
     ConditionInfo[] conditions1 = new ConditionInfo[]{cInfo1};
     ConditionInfo[] conditions2 = new ConditionInfo[]{cInfo2 };
     
     //create first
     ConditionalPermissionInfo cpInfo1 
-      = conditionalAdmin.setConditionalPermissionInfo("cpInfo", conditions1, permissions);
+      = conditionalAdmin.setConditionalPermissionInfo("cpInfo", conditions1, new PermissionInfo[]{pInfo1});
     ConditionalPermissionInfo cpInfo2 = null;
     try {
       ConditionalPermissionInfo recievedCPInfo = conditionalAdmin.getConditionalPermissionInfo("cpInfo");
       assertEquals("ConditionInfos ", arrayToString(cpInfo1.getConditionInfos()),
-          arrayToString(recievedCPInfo.getConditionInfos()));
+                   arrayToString(recievedCPInfo.getConditionInfos()));
       assertEquals("PermissionInfos ", arrayToString(cpInfo1.getPermissionInfos()),
-          arrayToString(recievedCPInfo.getPermissionInfos()));
+                   arrayToString(recievedCPInfo.getPermissionInfos()));
 
       //create second with the same name (so only change the condition infos)
-      cpInfo2 = conditionalAdmin.setConditionalPermissionInfo("cpInfo",
-          conditions2, permissions);
+      cpInfo2 = conditionalAdmin.setConditionalPermissionInfo("cpInfo", conditions2, new PermissionInfo[]{pInfo2});
 
       Enumeration infos = conditionalAdmin.getConditionalPermissionInfos();
       int setInfosNumber = 0;
@@ -289,6 +290,12 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
           arrayToString(recievedCPInfo.getConditionInfos()));
       assertEquals("PermissionInfos ", arrayToString(cpInfo2.getPermissionInfos()),
           arrayToString(recievedCPInfo.getPermissionInfos()));
+      
+      //test if the second permission is now allowed (and if the first is not)
+      utility.setTestBunde(testBundle, false);
+      utility.allowed(perm2);
+      utility.notAllowed(perm1, SecurityException.class);
+      
     } catch (Exception e) {
       cpInfo1.delete();
       cpInfo2.delete();
