@@ -11,7 +11,6 @@
 package org.osgi.service.condpermadmin;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * Condition representation used by the Conditional Permission Admin service.
