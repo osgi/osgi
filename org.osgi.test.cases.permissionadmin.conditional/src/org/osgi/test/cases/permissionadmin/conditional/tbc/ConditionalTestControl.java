@@ -127,9 +127,9 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     trace("Test correct conditional infos creation:");    
     try {
       trace("Create only with type '[type]'");
-      new ConditionInfo("[conditionType\"]");
+      new ConditionInfo("[conditionType]");
       trace("Create only with type and whitespace '[type ]'");
-      new ConditionInfo("[conditionType \"]");
+      new ConditionInfo("[conditionType ]");
     } catch (Exception e) {
       fail("ConditonInfo not created. " + e.getClass() + ": " + e.getMessage());
     }
@@ -458,7 +458,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       new AdminPermission[] {permission}, 
       new AdminPermission[]{},               //allowed
       new AdminPermission[]{permission, allPermissions}, //not allowed
-      new String[] {"TestCondition_5", "TestCondition_6", "TestCondition_7"});
+      new String[] {"TestCondition_5", "TestCondition_6", "TestCondition_7", "TestCondition_6", "TestCondition_7"});
     
     //Don't check 2nd because 1st is not satisfied
     utility.testPermissions(
@@ -469,10 +469,9 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
         new AdminPermission[] {permission}, 
         new AdminPermission[]{allPermissions}, //because they are by default
         new AdminPermission[]{},//permission, allPermissions
-        new String[] {"TestCondition_8"});//without "TestCondition_9"
+        new String[] {"TestCondition_8"});
   
     
-    //Don't check the postponed (2nd) because first is not satisfied
     utility.testPermissions(
       new ConditionInfo[]{
         utility.createTestCInfo(false, false, true, "TestCondition_10"), // not postponed, not satisfied, mutable   
@@ -481,7 +480,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       new AdminPermission[] {permission}, 
       new AdminPermission[]{},//allowed
       new AdminPermission[]{permission, allPermissions},//permission, allPermissions
-      new String[] {"TestCondition_11", "TestCondition_10"});
+      new String[] {"TestCondition_11", "TestCondition_10", "TestCondition_10"});
     
     // Don't check TestCondition_14 because TestCondition_12 is not satisfied
     utility.testPermissions(
@@ -537,7 +536,6 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     utility.testPermissions(new ConditionInfo[]{cInfo}, pCP, 
         new AdminPermission[]{pCPIntersection}, new AdminPermission[]{pFromFile, pCP});
     
-    
     AdminPermission pAP = utility.getPermission(ConditionalUtility.P_PERMISSION);
     AdminPermission pAPIntersection = utility.getPermission(ConditionalUtility.REQUIRED_P_PERMISSION);
     
@@ -561,21 +559,24 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       testBundle.uninstall();
       pass("Bundle tb1 uninstalled");
     } catch (Exception e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
+    
     //set permissions
     ConditionInfo cInfo = null;
     AdminPermission allPermissions = new AdminPermission("*", "*");
     AdminPermission execPermissions = new AdminPermission("*", AdminPermission.EXECUTE);
+    PackagePermission pp = new PackagePermission("*", "import,export");
+    ServicePermission sp = new ServicePermission("*", "get,register");
     
     cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[]{testBundleLocation});
-    ConditionalPermissionInfo condition = 
-      utility.setPermissionsByCPermissionAdmin(new ConditionInfo[]{cInfo}, new Permission[]{execPermissions});
+    ConditionalPermissionInfo condition = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[]{cInfo}, 
+                                                                     new Permission[]{execPermissions, pp, sp});
     
     //install bundle again and see if the conditions permissions are applied to it
     try {
       testBundle = installBundle("tb1.jar");
+      utility.setConditionalTBCService((ConditionalTBCService)getService(ConditionalTBCService.class));
       utility.setTestBunde(testBundle, false);
       utility.allowed(execPermissions);
       utility.notAllowed(allPermissions, SecurityException.class);
@@ -587,7 +588,6 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       } else {
         fail(message);        
       }
-      //e1.printStackTrace();
     } finally {
       condition.delete();
     }
