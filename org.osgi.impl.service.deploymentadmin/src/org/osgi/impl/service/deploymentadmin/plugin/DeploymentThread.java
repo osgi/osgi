@@ -5,7 +5,6 @@ import java.io.InputStream;
 
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
-import org.osgi.service.deploymentadmin.DeploymentException;
 
 public class DeploymentThread extends Thread {
     

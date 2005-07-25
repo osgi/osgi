@@ -3,6 +3,7 @@ package org.osgi.impl.service.deploymentadmin.plugin;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +11,7 @@ import java.util.Date;
 
 import org.osgi.impl.service.deploymentadmin.DAConstants;
 import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
+import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.Metanode;
 import org.osgi.impl.service.deploymentadmin.Splitter;
 import org.osgi.service.dmt.DmtAdmin;
@@ -19,6 +21,7 @@ import org.osgi.service.dmt.DmtExecPlugin;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtReadOnlyDataPlugin;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.RemoteAlertSender;
 
 public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
     
@@ -239,26 +242,43 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
         }
     }
     
-    private void install(String nodeUri) throws DmtException {
+    private void install(final String nodeUri) throws DmtException {
         String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
         File f = new File(store, nodeUriArr[5]);
-        FileInputStream is = null;
+        final FileInputStream is;
         try {
             is = new FileInputStream(f);
-            da.installDeploymentPackage(is);
         }
-        catch (Exception e) {
-            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "", e);
+        catch (FileNotFoundException e) {
+            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, e.getMessage());
         }
-        finally {
-            try {
-                if (null != is)
-                    is.close();
-            }
-            catch (IOException ioe) {
-                ioe.printStackTrace();
-            }
-        }
+        DeploymentThread th = new DeploymentThread(da, is, new DeploymentThread.Listener() {
+            public void onFinish(DeploymentPackageImpl dp, Exception exception) {
+                DeplAlertSender.sendAlert(exception, null, null, nodeUri, da);
+                try {
+                    if (null != is)
+                        is.close();
+                }
+                catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+                if (null == exception) {
+                    String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
+                    
+                    da.getDeployedPlugin().associateID(dp, nodeUriArr[5]);
+                    
+                    File f = new File(store, nodeUriArr[5]);
+                    f.delete();
+                    
+                    try {
+                        da.save();
+                    }
+                    catch (IOException e) {
+                        // TODO log 
+                    }
+                }
+            }});
+        th.start();
     }
     
     ///////////////////////////////////////////////////////////////////////////
