@@ -1959,7 +1959,13 @@ public class TestControl extends DefaultTestBundleControl {
 			tb1 = installBundle("tb1.jar");
 
 			packageAdmin = (PackageAdmin) getService(PackageAdmin.class);
-			packageAdmin.resolveBundles(new Bundle[] {tb15d});
+			packageAdmin.refreshPackages(new Bundle[] { tb15d });
+			
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException ex) {
+				// Ignore this exception
+			}
 
 			// Check if the package is available
 			try {
