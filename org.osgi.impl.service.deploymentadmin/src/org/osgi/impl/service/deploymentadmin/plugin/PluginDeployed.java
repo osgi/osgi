@@ -17,6 +17,12 @@
  */
 package org.osgi.impl.service.deploymentadmin.plugin;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,13 +32,16 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.deploymentadmin.BundleEntry;
+import org.osgi.impl.service.deploymentadmin.CaseInsensitiveMap;
 import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.Metanode;
+import org.osgi.impl.service.deploymentadmin.ResourceEntry;
 import org.osgi.impl.service.deploymentadmin.Splitter;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
@@ -185,17 +194,10 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
             return true;
         } else if ("Ext".equals(nodeUriArr[6])) {
             DeploymentPackageImpl dp = (DeploymentPackageImpl) mt.get(nodeUriArr[5]);
-            if (!"Version".equals(nodeUriArr[7]) &&
-                !"ProcessorBundle".equals(nodeUriArr[7]) &&
-                !"Processors".equals(nodeUriArr[7]) &&
+            if (!"Signers".equals(nodeUriArr[7]) &&
+                !"Manifest".equals(nodeUriArr[7]) &&
                 !"Bundles".equals(nodeUriArr[7]))
                 	return false;
-            if ("ProcessorBundle".equals(nodeUriArr[7]) &&
-                getCustomizers(dp).length == 0)
-                	return false;
-            if ("Processors".equals(nodeUriArr[7]) &&
-                getCustomizers(dp).length == 0)
-                  	return false;
             if (l == 8)
                 return true;
             Set bundleSet = new HashSet(Arrays.asList(getBundleIDs(dp)));
@@ -203,31 +205,14 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
                 return false;
             if (l == 9)
                 return true;
-            if (!"SymbolicName".equals(nodeUriArr[9]) &&
-                !"Location".equals(nodeUriArr[9]) &&
-                !"Version".equals(nodeUriArr[9]) &&
-                !"State".equals(nodeUriArr[9]) &&
-                !"NativeCode".equals(nodeUriArr[9]) &&
-                !"ApplicationType".equals(nodeUriArr[9]) &&
-                !"ImportPackage".equals(nodeUriArr[9]) &&
-                !"ExportPackage".equals(nodeUriArr[9]) &&
+            if (!"Location".equals(nodeUriArr[9]) &&
+                !"ServiceComponent".equals(nodeUriArr[9]) &&
                 !"Signers".equals(nodeUriArr[9]) &&
-                !"ApplicationDescriptor".equals(nodeUriArr[9]))
+                !"Manifest".equals(nodeUriArr[9]) &&
+                !"ApplicationType".equals(nodeUriArr[9]))
                 	return false;
             if (l == 10)
                 return true;
-            if ("ImportPackage".equals(nodeUriArr[9])) {
-                String[] ips = getImportedPackages(
-                        dp.getBundleEntryByBundleId(Long.parseLong(nodeUriArr[8])));
-                Set s = new HashSet(Arrays.asList(ips));
-                return s.contains(nodeUriArr[10]);
-            }
-            if ("ExportPackage".equals(nodeUriArr[9])) {
-                String[] ips = getExportedPackages(
-                        dp.getBundleEntryByBundleId(Long.parseLong(nodeUriArr[8])));
-                Set s = new HashSet(Arrays.asList(ips));
-                return s.contains(nodeUriArr[10]);
-            }
             if ("Signers".equals(nodeUriArr[9])) {
                 BundleEntry be = 
                     dp.getBundleEntryByBundleId(Long.parseLong(nodeUriArr[8]));
@@ -251,6 +236,7 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");                
         if (l == 6)
             return false;
+        DeploymentPackageImpl dp = (DeploymentPackageImpl) mt.get(nodeUriArr[5]);
         if (l == 7) {
             if (nodeUriArr[6].equals("ID") ||
                 nodeUriArr[6].equals("EnvType"))
@@ -263,20 +249,22 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
             throw new RuntimeException("Internal error");
         } else if ("Ext".equals(nodeUriArr[6])) {
             if (l == 8) {
-                if ("Version".equals(nodeUriArr[7]))
+                if ("Manifest".equals(nodeUriArr[7]) ||
+                    "PackageType".equals(nodeUriArr[7]))
                     return true;
                 return false;
             }
-            if (l == 9)
+            if (l == 9) {
+                BundleEntry be = 
+                    dp.getBundleEntryByBundleId(Long.parseLong(nodeUriArr[8]));
+                if (Arrays.asList(extractSigners(be)).contains(nodeUriArr[8]))
+                    return true;
                 return false;
+            }
             if (l == 10) {
-	            if ("SymbolicName".equals(nodeUriArr[9]) ||
-	                "Location".equals(nodeUriArr[9]) ||
-	                "Version".equals(nodeUriArr[9]) ||
-	                "State".equals(nodeUriArr[9]) ||
-	                "NativeCode".equals(nodeUriArr[9]) ||
+	            if ("Location".equals(nodeUriArr[9]) ||
 	                "ApplicationType".equals(nodeUriArr[9]) ||
-	                "ApplicationDescriptor".equals(nodeUriArr[9]))
+	                "Manifest".equals(nodeUriArr[9]))
 	                	return true;
 	            return false;
             }
@@ -303,12 +291,10 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
                 return new DmtData("OSGi.R4");
             throw new RuntimeException("Internal error");
         }
-        if ("Operations".equals(nodeUriArr[6])) {
-            return DmtData.NULL_VALUE;
-        } else if ("Ext".equals(nodeUriArr[6])) {
+        if ("Ext".equals(nodeUriArr[6])) {
             if (l == 8) {
-                if ("Version".equals(nodeUriArr[7]))
-                    return new DmtData(dp.getVersion().toString());
+                if ("Manifest".equals(nodeUriArr[7]))
+                    return new DmtData(createManifest(dp));
                 throw new RuntimeException("Internal error");
             }
             if (l == 10) {
@@ -378,17 +364,13 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
             throw new RuntimeException("Internal error");
         } else if ("Ext".equals(nodeUriArr[6])) {
             DeploymentPackageImpl dp = (DeploymentPackageImpl) mt.get(nodeUriArr[5]);
-            if (l == 7) {
-                if (getCustomizers(dp).length == 0)
-                    return new String[] {"Version", "Bundles"};
-                return new String[] {"Version", "Processors", "ProcessorBundle", 
-        			"Bundles"};
-            }
+            if (l == 7)
+                return new String[] {"Signers", "Manifest", "Bundles", "PackageType"};
             if (l == 8) {
-                if ("ProcessorBundle".equals(nodeUriArr[7]))
-                    return getCustomizers(dp);
-                if ("Processors".equals(nodeUriArr[7]))
-                    return getCustomizerPIDs(dp);
+                if ("Signers".equals(nodeUriArr[7])) {
+                    // TODO
+                    return new String[] {"TODO"};
+                }
                 if ("Bundles".equals(nodeUriArr[7]))
                     return getBundleIDs(dp);
             }
@@ -396,24 +378,17 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
             if (!s.contains(nodeUriArr[8]))
                 throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
             if (l == 9)
-                return new String[] {"SymbolicName", "Location", "Version", "State", 
-                    "NativeCode", "ApplicationType", "ImportPackage", "ExportPackage", 
-                    "Signers", "ApplicationDescriptor"};
+                return new String[] {"ApplicationType", "Manifest", "Signers", 
+                    "ServiceComponent", "Location"};
             if (l == 10) {
-                if ("ImportPackage".equals(nodeUriArr[9])) {
-	                BundleEntry be = 
-	                    dp.getBundleEntryByBundleId(Long.parseLong(nodeUriArr[8]));
-	                return getImportedPackages(be);
-                }
-                if ("ExportPackage".equals(nodeUriArr[9])) {
-	                BundleEntry be = 
-	                    dp.getBundleEntryByBundleId(Long.parseLong(nodeUriArr[8]));
-	                return getExportedPackages(be);
-                }
                 if ("Signers".equals(nodeUriArr[9])) {
                     BundleEntry be = 
                         dp.getBundleEntryByBundleId(Long.parseLong(nodeUriArr[8]));
                     return extractSigners(be);
+                }
+                if ("ServiceComponent".equals(nodeUriArr[9])) {
+                    // TODO
+                    return new String[] {"TODO"};
                 }
             }
         }
@@ -431,6 +406,7 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
                     DmtMetaNode.PERMANENT, "", 1, !Metanode.ZERO_OCC, 
                     null, 0, 0, null, DmtData.FORMAT_NODE);
         Hashtable mt = getMangleTable();
+        DeploymentPackageImpl dp = (DeploymentPackageImpl) mt.get(nodeUriArr[5]);
         if (!mt.containsKey(nodeUriArr[5]))
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");                
         if (l == 6)
@@ -458,33 +434,34 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
             throw new RuntimeException("Internal error");
         } else if ("Ext".equals(nodeUriArr[6])) {
             if (l == 8) {
-                if ("Version".equals(nodeUriArr[7]))
+                if ("Signers".equals(nodeUriArr[7]))
+                    return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                            "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
+                if ("Manifest".equals(nodeUriArr[7]))
                     return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
                             "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
-                if ("ProcessorBundle".equals(nodeUriArr[7]))
-                    return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
-                            "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
-                if ("Processors".equals(nodeUriArr[7]))
+                if ("PackageType".equals(nodeUriArr[7]))
                     return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
                             "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
                 if ("Bundles".equals(nodeUriArr[7]))
                     return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
                             "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
             }
-            if (l == 9)
-                return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+//            Set s = new HashSet(Arrays.asList(getBundleIDs(dp)));
+//            if (!s.contains(nodeUriArr[8]))
+//                throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
+            if (l == 9) {
+                if ("Signers".equals(nodeUriArr[7]))
+                    return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
                         "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
+                return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                        "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
+            }
             if (l == 10) {
-                if ("SymbolicName".equals(nodeUriArr[9]) ||
-                    "Location".equals(nodeUriArr[9]) ||
-                    "Version".equals(nodeUriArr[9]) ||
-                    "ApplicationType".equals(nodeUriArr[9]) ||
-                    "ApplicationDescriptor".equals(nodeUriArr[9]))
+                if ("Signers".equals(nodeUriArr[9]) ||
+                    "ServiceComponent".equals(nodeUriArr[9]))
                     return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
                             "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
-                if ("State".equals(nodeUriArr[9]))
-                    return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
-                            "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_INTEGER);
                 return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
                     "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
             }
@@ -528,6 +505,83 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
             signers[i] = sb.toString();
         }
         return signers;
+    }
+    
+    private String createManifest(DeploymentPackageImpl dp) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        PrintWriter pw = new PrintWriter(new OutputStreamWriter(bos));
+        //PrintWriter pw = new PrintWriter(new OutputStreamWriter(System.out));
+     
+        // create Manifest-Version entry
+        CaseInsensitiveMap cm = dp.getMainSection();
+        pw.println(keyValuePair("Manifest-Version", cm.get("Manifest-Version")));
+        
+        // create main section
+        for (Iterator iter = cm.keySet().iterator(); iter.hasNext();) {
+            String key = (String) iter.next();
+            String rawKey = cm.getRawKey(key);
+            if ("Manifest-Version".equals(rawKey))
+                continue;
+            String kvp = keyValuePair(rawKey, cm.get(key));
+            pw.println(kvp);
+        }
+        
+        pw.println();
+        
+        // create name sections for bundles
+        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            pw.println(keyValuePair("Name", be.getResName()));
+            for (Iterator beit = be.getAttrs().keySet().iterator(); beit.hasNext();) {
+                String key = (String) beit.next();
+                String rawKey = be.getAttrs().getRawKey(key);
+                String kvp = keyValuePair(rawKey, be.getAttrs().get(key));
+                pw.println(kvp);
+            }
+            pw.println();
+        }
+        
+        pw.println();
+        
+        // create name sections for resources
+        for (Iterator iter = dp.getResourceEntryIterator(); iter.hasNext();) {
+            ResourceEntry re = (ResourceEntry) iter.next();
+            pw.println(keyValuePair("Name", re.getResName()));
+            for (Iterator reit = re.getAttrs().keySet().iterator(); reit.hasNext();) {
+                String key = (String) reit.next();
+                String rawKey = re.getAttrs().getRawKey(key);
+                String kvp = keyValuePair(rawKey, re.getAttrs().get(key));
+                pw.println(kvp);
+            }
+            pw.println();
+        }
+        
+        pw.close();
+        
+        Manifest mf = null;
+        try {
+            mf = new Manifest(new ByteArrayInputStream(bos.toByteArray()));
+            FileOutputStream fos = new FileOutputStream("/temp/mf.mf");
+            mf.write(fos);
+            fos.close();
+        }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String keyValuePair(String key, Object value) {
+        StringBuffer ret = new StringBuffer();
+        String tmp = key + ": " + value;
+        while (tmp.length() > 70) {
+            String s = tmp.substring(0, 70);
+            tmp = tmp.substring(71);
+            ret.append(s + "\n ");
+        }
+        ret.append(tmp);
+        return ret.toString();
     }
 
     public void nodeChanged(String nodeUri) throws DmtException {

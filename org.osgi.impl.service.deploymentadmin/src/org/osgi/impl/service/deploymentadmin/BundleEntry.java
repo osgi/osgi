@@ -142,7 +142,7 @@ public class BundleEntry implements Serializable {
         return resName;
     }
     
-    CaseInsensitiveMap getAttrs() {
+    public CaseInsensitiveMap getAttrs() {
         return attrs;
     }
     

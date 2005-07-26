@@ -56,7 +56,7 @@ public class ResourceEntry implements Serializable {
         return getResName();
     }
     
-    CaseInsensitiveMap getAttrs() {
+    public CaseInsensitiveMap getAttrs() {
         return attrs;
     }
     

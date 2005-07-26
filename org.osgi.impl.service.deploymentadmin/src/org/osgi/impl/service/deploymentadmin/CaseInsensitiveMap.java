@@ -27,6 +27,7 @@
 
 package org.osgi.impl.service.deploymentadmin;
 
+import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -36,6 +37,16 @@ import java.util.jar.*;
 public class CaseInsensitiveMap extends Hashtable {
     
     private DeploymentPackageImpl dp;
+    
+    private static class Entry implements Serializable {
+        private String rawKey;
+        private String value;
+        
+        private Entry(String rawKey, String value) {
+            this.rawKey = rawKey;
+            this.value = value;
+        }
+    }
 
     // TODO make other methods case insensitive
 
@@ -50,33 +61,43 @@ public class CaseInsensitiveMap extends Hashtable {
         
         for (Iterator iter = map.keySet().iterator(); iter.hasNext();) {
             Object key = iter.next();
-            if (!(key instanceof String) && !(key instanceof Attributes.Name))
-                throw new IllegalArgumentException("Only String and java.util.jar.Attributes.Name " +
-                		"keys are allowed in the parameter map");
-            put(key.toString().toUpperCase(), map.get(key));
+            put(key, map.get(key));
         }
     }
 
     public Object put(Object key, Object value) {
-        if (!(key instanceof String))
-            throw new IllegalArgumentException("Only String key is allowed");
-        String skey = ((String) key).toUpperCase(); 
-        return super.put(skey, value);
+        if (!(key instanceof String) && !(key instanceof Attributes.Name))
+            throw new IllegalArgumentException("Only String and java.util.jar.Attributes.Name " +
+                "keys are allowed");
+        if (!(value instanceof String))
+            throw new IllegalArgumentException("Only String value is allowed");
+        String upperKey = key.toString().toUpperCase(); 
+        return super.put(upperKey, new Entry(key.toString(), (String) value));
     }
     
     public Object get(Object key) {
         if (!(key instanceof String))
             throw new IllegalArgumentException("Only String key is allowed");
-        String skey = ((String) key).toUpperCase(); 
-        String rawValue = (String) super.get(skey);
-        if (null == rawValue)
+        String upperKey = ((String) key).toUpperCase(); 
+        Entry entry = (Entry) super.get(upperKey);
+        if (null == entry)
             return null;
         if (null == dp.getResourceBundle())
-            return rawValue;
-        if (rawValue.startsWith("%")) {
-            return dp.getResourceBundle().getString(rawValue.substring(1));
+            return entry.value;
+        if (entry.value.startsWith("%")) {
+            return dp.getResourceBundle().getString(entry.value.substring(1));
         }
-        return rawValue;
+        return entry.value;
+    }
+    
+    public String getRawKey(Object key) {
+        if (!(key instanceof String))
+            throw new IllegalArgumentException("Only String key is allowed");
+        String upperKey = ((String) key).toUpperCase(); 
+        Entry entry = (Entry) super.get(upperKey);
+        if (null == entry)
+            return null;
+        return entry.rawKey;
     }
     
 }

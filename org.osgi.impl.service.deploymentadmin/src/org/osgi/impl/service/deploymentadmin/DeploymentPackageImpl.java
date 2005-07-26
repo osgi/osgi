@@ -577,7 +577,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         resourceEntries.remove(re);
     }
 
-    Iterator getResourceEntryIterator() {
+    public Iterator getResourceEntryIterator() {
         return resourceEntries.iterator();
     }
 
@@ -591,6 +591,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     
     DeploymentPackageResourceBundle getResourceBundle() {
         return dprb;  
+    }
+    
+    public CaseInsensitiveMap getMainSection() {
+        return mainSection;
     }
 
 }

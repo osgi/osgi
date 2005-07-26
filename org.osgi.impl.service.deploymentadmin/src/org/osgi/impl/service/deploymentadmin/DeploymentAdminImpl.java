@@ -238,6 +238,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         waitIfBusy();
         DeploymentPackageJarInputStream wjis = null;
         DeploymentPackageImpl srcDp = null;
+        DeploymentException bundleStartException = null;
         boolean result = false;
         try {
             // create the source DP
@@ -258,15 +259,23 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	            return session.getTargetDeploymentPackage();
 	        checkMissingEntities();
 
-            session.installUpdate(wjis);
+            try {
+                session.installUpdate(wjis);
+            } catch (DeploymentException e) {
+                if (e.getCode() != DeploymentException.CODE_BUNDLE_START)
+                    throw e;
+                else
+                    bundleStartException = e;
+            }
             updateDps();
             save();
             result = true;
-            return srcDp;
         } catch (DeploymentException e) {
             throw e;
         } catch (CancelException e) {
             return null;
+        } catch (SecurityException e) {
+            throw e;
         } catch (Exception e) {
             throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
                 e.getMessage(), e);
@@ -274,6 +283,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             sendCompleteEvent(result);
             clearSession();
         }
+        if (null != bundleStartException)
+            throw bundleStartException;
+        return srcDp;
     }
     
     private void updateDps() {
