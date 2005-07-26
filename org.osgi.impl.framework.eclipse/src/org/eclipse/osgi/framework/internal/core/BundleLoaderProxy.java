@@ -46,7 +46,7 @@ public class BundleLoaderProxy implements RequiredBundle {
 	}
 
 	BundleLoader getBundleLoader() {
-		if (loader == null) {
+		if (loader == null && bundle.isResolved()) {
 			synchronized (this) {
 				if (loader == null)
 					try {
