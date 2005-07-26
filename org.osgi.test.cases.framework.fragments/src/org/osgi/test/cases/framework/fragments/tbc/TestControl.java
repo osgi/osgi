@@ -74,6 +74,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * a fragment bundle cannot be stopped.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.start()
 	 */
 	public void testFragmentLifecycle() throws Exception {
 		// Install fragment bundle
@@ -104,6 +105,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * loader.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.loadClass(String)
 	 */
 	public void testAppendClasspath01() throws Exception {
 		Class classObj1;
@@ -148,6 +150,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * bundle id order.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.getResource(String)
 	 */
 	public void testAppendClasspath02() throws Exception {
 
@@ -206,6 +209,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * “/myimages/test.gif”.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.getResource(String)
 	 */
 	public void testExistingResourceNotReplaced() throws Exception {
 		URL url;
@@ -256,6 +260,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * Tests that a fragment cannot be a host to another fragment.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFragmentCannotBeHost() throws Exception {
 		// Install fragment bundles
@@ -290,6 +295,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * have BundlePermission[ <bundle symbolic name>,“fragment”].
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testBundlePermission() throws Exception {
 		// Install fragment bundle with normal permissions
@@ -348,6 +354,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * during the process of resolving the host bundle).
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFragmentHostHeader01() throws Exception {
 		// Install and start host bundle version 1.0
@@ -405,6 +412,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * during the process of resolving the host bundle).
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFragmentHostHeader02() throws Exception {
 		// Install and start host bundle version 1.0
@@ -456,6 +464,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * fragments are allowed to attach to the host bundle at any time.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFragmentAttachmentDirective01() throws Exception {
 		// Install and start host bundle
@@ -490,6 +499,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * process of resolving the host bundle.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFragmentAttachmentDirective02() throws Exception {
 		// Install and start host bundle
@@ -524,6 +534,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * process of resolving the host bundle.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFragmentAttachmentDirective03() throws Exception {
 		// Install fragment bundle, host not yet resolved
@@ -563,6 +574,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * to one or more host bundles.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testAttachToResolvedHost01() throws Exception {
 		// Install and start host bundle
@@ -593,6 +605,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * required bundles to the host.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testAttachToResolvedHost02() throws Exception {
 		// Install and start host bundle
@@ -631,6 +644,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * bundle in the set must have an UNRESOLVED BundleEvent published.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFragmentUpdate() throws Exception {
 		// Add BundleEvent listener
@@ -710,6 +724,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * the fragment is not attached to the host bundle.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testConflictingImportPackage() throws Exception {
 		// Install and start bundles that export packages
@@ -751,6 +766,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * is ignored.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testConflictingExportPackage() throws Exception {
 		// Install fragment bundle
@@ -795,6 +811,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * attached to the host bundle.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testConflictingRequireBundle() throws Exception {
 		// Install required bundles
@@ -837,6 +854,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * UNRESOLVED.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.uninstall()
 	 */
 	public void testFragmentBundleDetach() throws Exception {
 		URL url;
@@ -929,6 +947,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * appropriate message for each entry that cannot be located.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testBundleClassPathHeader01() throws Exception {
 		// Add framework listener
@@ -1004,6 +1023,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * to the Framework defined value.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testResourceAccessPermission() throws Exception {
 		// Install bundle that has the resource
@@ -1104,6 +1124,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * bundle is not system.bundle
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testBadExtensionBundle() throws Exception {
 		// installing bad extension bundle
@@ -1145,6 +1166,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testBootClasspathExtensionBundle() throws Exception {
 		String class5 = "org.osgi.test.cases.framework.fragments.tb5.FooTB5";
@@ -1193,6 +1215,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFrameworkExtensionBundle() throws Exception {
 		String class6 = "org.osgi.test.cases.framework.fragments.tb6.FooTB6";
@@ -1240,6 +1263,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFrameworkExtensionBundleLoadClass() throws Exception {
 		String class6 = "org.osgi.test.cases.framework.fragments.tb6.FooTB6";
@@ -1274,6 +1298,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testBootClasspathExtensionBundleLoadClass() throws Exception {
 		String class5 = "org.osgi.test.cases.framework.fragments.tb5.FooTB5";
@@ -1308,6 +1333,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFrameworkExtensionDefault() throws Exception {
 		String class21 = "org.osgi.test.cases.framework.fragments.tb21.FooTB21";
@@ -1338,6 +1364,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFrameworkExtensionNativeCode() throws Exception {
 		String message = "extension bundle cannot load native code";
@@ -1370,6 +1397,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testBootClasspathExtensionNativeCode() throws Exception {
 		String message = "extension bundle cannot load native code";
@@ -1402,6 +1430,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * equals <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFrameworkExtensionImportPackage() throws Exception {
 		String message = "extension bundle cannot import packages";
@@ -1434,6 +1463,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testBootClasspathExtensionImportPackage() throws Exception {
 		String message = "extension bundle cannot import packages";
@@ -1466,6 +1496,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * equals <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFrameworkExtensionRequireBundle() throws Exception {
 		String message = "extension bundle cannot require bundles";
@@ -1498,6 +1529,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testBootClasspathExtensionRequireBundle() throws Exception {
 		String message = "extension bundle cannot require bundles";
@@ -1531,6 +1563,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFrameworkExtensionPermission() throws Exception {
 		String message = "extension bundle does not have"
@@ -1565,6 +1598,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFrameworkExtensionInvokerPermission() throws Exception {
 		String message = "bundle does not have"
@@ -1605,6 +1639,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFrameworkExtensionInvokerPermissionOk() throws Exception {
 		String message = "bundle does have"
@@ -1643,6 +1678,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * equals <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testBootClasspathExtensionPermission() throws Exception {
 		String message = "extension bundle does not have"
@@ -1678,6 +1714,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testBootClasspathExtensionInvokerPermission() throws Exception {
 		String message = "bundle does not have"
@@ -1719,6 +1756,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * <code>true</code>.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
+	 * @spec Bundle.installBundle(String)
 	 */
 	public void testBootClasspathExtensionInvokerPermissionOk()
 			throws Exception {
