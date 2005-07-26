@@ -1,23 +1,5 @@
 // Grant Framework AllPermission.
 
-grant codeBase "file:../src/" {
-        permission java.security.AllPermission;
-};
-grant codeBase "file:../../org.osgi.framework/src/" {
-        permission java.security.AllPermission;
-};
-grant codeBase "file:../../org.osgi.service.packageadmin/src/" {
-        permission java.security.AllPermission;
-};
-grant codeBase "file:../../org.osgi.service.permissionadmin/src/" {
-        permission java.security.AllPermission;
-};
-grant codeBase "file:../../org.osgi.service.startlevel/src/" {
-        permission java.security.AllPermission;
-};
-grant codeBase "file:../../org.osgi.service.url/src/" {
-        permission java.security.AllPermission;
-};
-grant codeBase "file:../../org.osgi.util.tracker/src/" {
+grant {
         permission java.security.AllPermission;
 };
