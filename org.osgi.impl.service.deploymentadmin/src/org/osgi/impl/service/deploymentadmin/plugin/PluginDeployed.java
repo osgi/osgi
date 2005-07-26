@@ -508,13 +508,11 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
     }
     
     private String createManifest(DeploymentPackageImpl dp) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        PrintWriter pw = new PrintWriter(new OutputStreamWriter(bos));
-        //PrintWriter pw = new PrintWriter(new OutputStreamWriter(System.out));
+        StringBuffer manifest = new StringBuffer();
      
         // create Manifest-Version entry
         CaseInsensitiveMap cm = dp.getMainSection();
-        pw.println(keyValuePair("Manifest-Version", cm.get("Manifest-Version")));
+        manifest.append(keyValuePair("Manifest-Version", cm.get("Manifest-Version")) + "\n");
         
         // create main section
         for (Iterator iter = cm.keySet().iterator(); iter.hasNext();) {
@@ -523,53 +521,38 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
             if ("Manifest-Version".equals(rawKey))
                 continue;
             String kvp = keyValuePair(rawKey, cm.get(key));
-            pw.println(kvp);
+            manifest.append(kvp + "\n");
         }
-        
-        pw.println();
+        manifest.append("\n");
         
         // create name sections for bundles
         for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            pw.println(keyValuePair("Name", be.getResName()));
+            manifest.append(keyValuePair("Name", be.getResName()) + "\n");
             for (Iterator beit = be.getAttrs().keySet().iterator(); beit.hasNext();) {
                 String key = (String) beit.next();
                 String rawKey = be.getAttrs().getRawKey(key);
                 String kvp = keyValuePair(rawKey, be.getAttrs().get(key));
-                pw.println(kvp);
+                manifest.append(kvp + "\n");
             }
-            pw.println();
+            manifest.append("\n");
         }
-        
-        pw.println();
         
         // create name sections for resources
         for (Iterator iter = dp.getResourceEntryIterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
-            pw.println(keyValuePair("Name", re.getResName()));
+            manifest.append(keyValuePair("Name", re.getResName()) + "\n");
             for (Iterator reit = re.getAttrs().keySet().iterator(); reit.hasNext();) {
                 String key = (String) reit.next();
                 String rawKey = re.getAttrs().getRawKey(key);
                 String kvp = keyValuePair(rawKey, re.getAttrs().get(key));
-                pw.println(kvp);
+                manifest.append(kvp + "\n");
             }
-            pw.println();
+            manifest.append("\n");
         }
-        
-        pw.close();
-        
-        Manifest mf = null;
-        try {
-            mf = new Manifest(new ByteArrayInputStream(bos.toByteArray()));
-            FileOutputStream fos = new FileOutputStream("/temp/mf.mf");
-            mf.write(fos);
-            fos.close();
-        }
-        catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
+       
+        System.out.println(manifest.toString());
+        return manifest.toString();
     }
 
     private String keyValuePair(String key, Object value) {
