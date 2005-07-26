@@ -7,4 +7,4 @@
 # See org.osgi.service.permissionadmin.PermissionInfo
 
 $(PACKAGEPERMISSIONS)
-(org.osgi.framework.AdminPermission "${p}.tb16b" "EXTENSIONLIFECYCLE")
+(org.osgi.framework.AdminPermission "*" "EXTENSIONLIFECYCLE, LIFECYCLE")
