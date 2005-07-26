@@ -112,7 +112,7 @@ public class PermissionInfo {
 			while (!Character.isWhitespace(encoded[pos]) && (encoded[pos] != ')')) {
 				pos++;
 			}
-			if (pos == begin) {
+			if (pos == begin || encoded[begin] == '"') {
 				throw new IllegalArgumentException("expecting type");
 			}
 			this.type = new String(encoded, begin, pos - begin);
