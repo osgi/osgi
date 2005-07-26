@@ -42,9 +42,8 @@ public interface DeploymentAdmin {
       * <code>DeploymentAdminPermission("&lt;filter&gt;", "list")</code> is 
       * needed for this operation. 
       * @return Array of <code>DeploymentPackage</code> objects representing all the installed deployment 
-      *         packages. Return value cannot be null. If there are no deployment packages installed it 
-      * gives back 
-      *         an empty array.  
+      *         packages (including the "System" deployment package). The return value cannot be null. In case 
+      *         of missing permissions it may give back an empty array.
       * @see DeploymentAdminPermission
       */
     DeploymentPackage[] listDeploymentPackages();
