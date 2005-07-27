@@ -74,7 +74,7 @@ public interface ExportedPackage {
 	 * 
 	 * @return The version of this exported package, or <code>null</code> if
 	 *         no version information is available.
-	 * @deprecated Since 1.3 this method has been replaced by
+	 * @deprecated Since 1.2 this method has been replaced by
 	 *             {@link #getVersion}.
 	 */
 	public String getSpecificationVersion();
@@ -83,9 +83,9 @@ public interface ExportedPackage {
 	 * Returns the version of this exported package.
 	 * 
 	 * @return The version of this exported package, or
-	 *         <code>Version.emptyVersion</code> if no version information is
+	 *         {@link Version#emptyVersion} if no version information is
 	 *         available.
-	 * @since 1.3
+	 * @since 1.2
 	 */
 	public Version getVersion();
 

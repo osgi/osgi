@@ -71,7 +71,7 @@ public interface RequiredBundle {
 	 * Returns the version of this required bundle.
 	 * 
 	 * @return The version of this required bundle, or
-	 *         <code>Version.emptyVersion</code> if no version information is
+	 *         {@link Version#emptyVersion} if no version information is
 	 *         available.
 	 */
 	public Version getVersion();
