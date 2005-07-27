@@ -11,19 +11,20 @@ import org.osgi.framework.Bundle;
 
 public class TestCondition implements Condition {
   private static final String CONDITION_TYPE = TestCondition.class.getName();
+  private static final String CONDITION_TYPE2 = TestConditionRecursive.class.getName();
 	private static final String TEST_BUNDLE = "http://127.0.0.1/permissionadmin.conditional/tb1.jar";
   
-  private static String testBundleLocation = TEST_BUNDLE;
-  public  static Vector satisfOrder = new Vector();
+  protected static String testBundleLocation = TEST_BUNDLE;
+  public    static Vector satisfOrder = new Vector();
   
-  private String info;
-  private boolean postponed;
-	private boolean satisfied;
-	private boolean mutable;
-  private String  name;
+  protected boolean postponed;
+  protected boolean satisfied;
+  protected boolean mutable;
+  protected String  name;
+  protected String  info;
   
   public TestCondition(Bundle bundle, ConditionInfo info) {
-    if (!CONDITION_TYPE.equals(info.getType()))
+    if (!CONDITION_TYPE.equals(info.getType()) && !CONDITION_TYPE2.equals(info.getType()))
       throw new IllegalArgumentException("ConditionInfo must be of type \"" + CONDITION_TYPE + "\"");
     String[] args = info.getArgs();
     if (args.length != 4)
@@ -70,7 +71,7 @@ public class TestCondition implements Condition {
       buf.append("\"");
     }
     buf.append("]");
-    this.info = buf.toString();
+    info = buf.toString();
   }
 
   public int hashCode() {
