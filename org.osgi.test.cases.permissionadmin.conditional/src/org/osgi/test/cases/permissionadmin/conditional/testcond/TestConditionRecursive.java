@@ -1,6 +1,8 @@
 
 package org.osgi.test.cases.permissionadmin.conditional.testcond;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.security.Permission;
 import java.util.Dictionary;
 
@@ -10,6 +12,7 @@ import org.osgi.service.condpermadmin.ConditionInfo;
 
 public class TestConditionRecursive extends TestCondition {
 	private static Permission permission;
+  private static Object service;
 
   public TestConditionRecursive(Bundle bundle, ConditionInfo info) {
     super(bundle, info);
@@ -26,11 +29,21 @@ public class TestConditionRecursive extends TestCondition {
     permission = perm;
   }
   
+  public static void setService(Object serv) {
+    service = serv;
+  }
+  
   public boolean isSatisfied() {
 //    System.out.println("#isSatisfied method checked of " + info);
     satisfOrder.addElement(name);
-    SecurityManager security = System.getSecurityManager();
-    security.checkPermission(permission);
+    try {
+      Method method = service.getClass().getMethod("checkPermission", new Class[] { Permission.class });
+      method.invoke(service, new Object[] { permission });
+    } catch (InvocationTargetException ite) {
+      satisfOrder.addElement(ite.getTargetException().toString());
+    } catch (Throwable t) {
+      satisfOrder.addElement(t.toString());
+    }
 		return satisfied;
 	}
   

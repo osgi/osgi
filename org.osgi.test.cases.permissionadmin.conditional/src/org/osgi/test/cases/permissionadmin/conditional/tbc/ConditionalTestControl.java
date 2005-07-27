@@ -724,6 +724,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     ConditionalPermissionInfo cpi2 = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { cInfo, tc2 },
         new Permission[] { perm2 });
     
+    TestConditionRecursive.setService(domTBC);
     TestConditionRecursive.setPermission(perm1);
     String message = "allowed " + utility.permToString(perm2);
     try {
@@ -732,23 +733,18 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     } catch (Throwable e) {
       fail(message + " but " + e.getClass().getName() + " was thrown");
     }
+    /* Recursion fails, because implies return false if depth is > 0 */
+    utility.testEqualArrays(new String[] { "TestConditionR", "java.lang.SecurityException: Conditions not satisfied" }, TestCondition.getSatisfOrder());
 
-    /* Recursion never happens, because checkPermission inside isSatisfied uses system protection domain
     TestConditionRecursive.setPermission(perm2);
     message = "not allowed " + utility.permToString(perm2);
-    Class wanted = SecurityException.class;
     try {
       domTBC.checkPermission(perm2);
-      failException(message, wanted);
+      pass(message);
     } catch (Throwable e) {
-      if (!e.getClass().equals(wanted.getClass()) && (wanted.isInstance(e))) {
-        pass(message + " and [" + e.getClass() + "] was thrown");
-      } else {
-        assertException(message, wanted, e);
-      }
+      fail(message + " but " + e.getClass().getName() + " was thrown");
     }
-    */
-    utility.testEqualArrays(new String[] { "TestConditionR", /*"TestConditionR"*/}, TestCondition.getSatisfOrder());
+    utility.testEqualArrays(new String[] { "TestConditionR", "java.lang.SecurityException: Conditions not satisfied" }, TestCondition.getSatisfOrder());
 
     cpi1.delete();
     cpi2.delete();
