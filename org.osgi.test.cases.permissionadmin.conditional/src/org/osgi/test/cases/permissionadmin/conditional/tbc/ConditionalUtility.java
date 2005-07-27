@@ -21,8 +21,6 @@ import org.osgi.test.cases.permissionadmin.conditional.testcond.TestCondition;
 public class ConditionalUtility {
 
 	private ConditionalTestControl 		testControl;
-	private ConditionalTBCService  		tbc;
-	private ConditionalPermTBCService	permTBC;
 	private PermissionAdmin		   		  pAdmin;
 	private ConditionalPermissionAdmin 	cpAdmin;
 	private Bundle	 testBundle;
@@ -43,20 +41,13 @@ public class ConditionalUtility {
 	
 	static String BUNDLE_VERSION 			= "Bundle-Version";
 
-	public ConditionalUtility(ConditionalTestControl testControl, ConditionalTBCService  tbc, 
-							  PermissionAdmin pAdmin, ConditionalPermissionAdmin cpAdmin, 
-							  ConditionalPermTBCService	permTBC) {
+	public ConditionalUtility(ConditionalTestControl testControl, 
+							  PermissionAdmin pAdmin, ConditionalPermissionAdmin cpAdmin) {
 		this.testControl = testControl;
-		this.tbc = tbc;
 		this.pAdmin = pAdmin;
 		this.cpAdmin = cpAdmin;
-		this.permTBC = permTBC;
 	}
   
-  public void setConditionalTBCService(ConditionalTBCService  tbc) {
-    this.tbc = tbc;
-  }
-	
 	public void setTestBunde(Bundle bundle, boolean hasPermissionsPerm) {
 		this.testBundle = bundle;
 		this.hasPermissionsPerm = hasPermissionsPerm;
@@ -91,7 +82,7 @@ public class ConditionalUtility {
 	}
 
 	void allowed(AdminPermission permission) {
-    String message = "allowed permission " + permToString(permission);
+    String message = "allowed " + permToString(permission);
 		try {
 			checkPermission(permission);
 			testControl.pass(message);
@@ -115,7 +106,7 @@ public class ConditionalUtility {
 		}
 	}
   
-  private String permToString(AdminPermission permission) {
+  protected String permToString(AdminPermission permission) {
     return "permission [" + permission.getName() + ", " + permission.getActions() + "]";
   }
   
@@ -139,9 +130,9 @@ public class ConditionalUtility {
 	private void checkPermission(AdminPermission permission) throws Throwable {
 		Permission p = getPermission(permission, testBundle);
 		if (hasPermissionsPerm) {
-			permTBC.checkPermission(p);
+      testControl.permTBC.checkPermission(p);
 		} else {
-			tbc.checkPermission(p);
+      testControl.tbc.checkPermission(p);
 		}
 	}
 	
@@ -300,9 +291,9 @@ public class ConditionalUtility {
     testControl.assertEquals("After delete there have to be no conditional permissions: ", 0, cpCounter);
   }
   
-  private void testEqualArrays(String[] array1, String[] array2) {
+  protected void testEqualArrays(String[] array1, String[] array2) {
     if (array1 != null && array2 != null) {
-      testControl.assertEquals("The number of checked TestCondionions: ", array1.length, array2.length);
+      testControl.assertEquals("The number of checked TestConditions: ", array1.length, array2.length);
       for (int i=0; i<array1.length; i++) {
         testControl.assertEquals("checked condition: ", array1[i], array2[i]);
       }

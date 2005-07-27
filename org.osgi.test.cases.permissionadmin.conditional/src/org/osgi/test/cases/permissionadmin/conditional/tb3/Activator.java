@@ -25,13 +25,30 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.permissionadmin.conditional.tbc;
+package org.osgi.test.cases.permissionadmin.conditional.tb3;
 
 import java.security.Permission;
 
-public interface ConditionalPermTBCService {
-	
-	public void checkPermission(Permission permission) throws SecurityException;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.test.cases.permissionadmin.conditional.tbc.ConditionalDomTBCService;
 
-  public void checkStack(Permission permission) throws SecurityException;
+
+public class Activator implements BundleActivator, ConditionalDomTBCService {
+	
+	public void start(BundleContext context) throws Exception {
+		context.registerService(ConditionalDomTBCService.class.getName(),this,null);
+	}
+	
+	public void stop(BundleContext context) throws Exception {
+	}
+  
+  public void checkPermission(final Permission permission) {
+    SecurityManager security = System.getSecurityManager();
+    security.checkPermission(permission);
+  }
+
+  public void checkStack(Permission permission) throws SecurityException {
+    checkPermission(permission);
+  }
 }

@@ -46,13 +46,12 @@ public class TestCondition implements Condition {
     testBundleLocation = bundleLocation;
   }
   
-	
 	public boolean isPostponed() {
 		return postponed;
 	}
 
 	public boolean isSatisfied() {
-    System.out.println("#isSatisfied method checked of " + info);
+//    System.out.println("#isSatisfied method checked of " + info);
     satisfOrder.addElement(name);
 		return satisfied;
 	}
@@ -71,12 +70,25 @@ public class TestCondition implements Condition {
       buf.append("\"");
     }
     buf.append("]");
-    this.info =buf.toString();
+    this.info = buf.toString();
   }
 
+  public int hashCode() {
+    return name.hashCode();
+  }
+  
+  public boolean equals(Object obj) {
+    return obj instanceof TestCondition && name.equals(((TestCondition) obj).name);
+  }
+  
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
 		for (int i = 0; i < conds.length; i++) {
-			if (!conds[i].isSatisfied()) {
+      Boolean isSatisfied = (Boolean) context.get(conds[i]);
+      if (isSatisfied == null) {
+        isSatisfied = conds[i].isSatisfied() ? Boolean.TRUE : Boolean.FALSE; 
+        context.put(conds[i], isSatisfied);
+      }
+			if (!isSatisfied.booleanValue()) {
 				return false;
 			}
 		}

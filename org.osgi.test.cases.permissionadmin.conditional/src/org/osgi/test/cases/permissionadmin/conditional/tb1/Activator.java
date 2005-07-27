@@ -33,16 +33,22 @@ import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 
 import org.osgi.framework.*;
+import org.osgi.test.cases.permissionadmin.conditional.tbc.ConditionalPermTBCService;
 import org.osgi.test.cases.permissionadmin.conditional.tbc.ConditionalTBCService;
 
 
 public class Activator implements BundleActivator, ConditionalTBCService {
 	
-	public void start(BundleContext context) throws Exception {
-		context.registerService(ConditionalTBCService.class.getName(),this,null);
+  private BundleContext context;
+  private ServiceRegistration reg;
+
+  public void start(BundleContext context) throws Exception {
+    this.context = context;
+		reg = context.registerService(ConditionalTBCService.class.getName(),this,null);
 	}
 	
 	public void stop(BundleContext context) throws Exception {
+    reg.unregister();
 	}
   
   public void checkPermission(final Permission permission) 
@@ -58,5 +64,12 @@ public class Activator implements BundleActivator, ConditionalTBCService {
     } catch (PrivilegedActionException e) {
       throw (SecurityException) e.getException();
     }
+  }
+
+  public void checkStack(Permission permission) throws SecurityException {
+    ServiceReference ref = context.getServiceReference(ConditionalPermTBCService.class.getName());
+    ConditionalPermTBCService service = (ConditionalPermTBCService) context.getService(ref);
+    service.checkStack(permission);
+    context.ungetService(ref);
   }
 }

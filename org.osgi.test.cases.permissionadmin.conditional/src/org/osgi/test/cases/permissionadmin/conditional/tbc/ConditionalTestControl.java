@@ -55,10 +55,13 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
   private String            permBundleLocation;
   private Bundle            permBundle;
   
+  private String            domBundleLocation;
+  private Bundle            domBundle;
+  
   private ConditionalPermissionAdmin  conditionalAdmin;
   private PermissionAdmin             permissionAdmin;
-  private ConditionalTBCService       tbc;
-  private ConditionalPermTBCService   permTBC;
+  protected ConditionalTBCService     tbc;
+  protected ConditionalPermTBCService permTBC;
   
   private ConditionalUtility          utility;
   
@@ -73,7 +76,8 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
                                                   "testMoreConditions", // "TC6"
                                                   "testConditionalPA_and_PA", //"TC7"
                                                   "testBundlePermissionInformation", //"TC8"
-                                                  "testCPInfosSetBeforeInstallBundle" //"TC9"
+                                                  "testCPInfosSetBeforeInstallBundle", //"TC9"
+                                                  "testMultipleBundlesOnStack" //"T10"
                                                   };
   
   
@@ -92,12 +96,15 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     permBundle = installBundle("tb2.jar");
     permBundleLocation = permBundle.getLocation();
         
+    domBundle = installBundle("tb3.jar");
+    domBundleLocation = domBundle.getLocation();
+        
     permissionAdmin = (PermissionAdmin)getService(PermissionAdmin.class);
     conditionalAdmin = (ConditionalPermissionAdmin)getService(ConditionalPermissionAdmin.class);
     tbc = (ConditionalTBCService)getService(ConditionalTBCService.class);
     permTBC = (ConditionalPermTBCService)getService(ConditionalPermTBCService.class);
       
-    utility = new ConditionalUtility(this, tbc, permissionAdmin, conditionalAdmin, permTBC);
+    utility = new ConditionalUtility(this, permissionAdmin, conditionalAdmin);
   }
 
   /**
@@ -114,6 +121,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       ((ConditionalPermissionInfo)infos.nextElement()).delete();
     }
     
+    permissionAdmin.setPermissions(domBundleLocation, null);
     permissionAdmin.setPermissions(permBundleLocation, null);
     permissionAdmin.setPermissions(testBundleLocation, null);
   }
@@ -582,7 +590,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     //install bundle again and see if the conditions permissions are applied to it
     try {
       testBundle = installBundle("tb1.jar");
-      utility.setConditionalTBCService((ConditionalTBCService)getService(ConditionalTBCService.class));
+      tbc = (ConditionalTBCService)getService(ConditionalTBCService.class);
       utility.setTestBunde(testBundle, false);
       utility.allowed(execPermissions);
       utility.notAllowed(allPermissions, SecurityException.class);
@@ -597,6 +605,98 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     } finally {
       condition.delete();
     }
+  }
+  
+  /**
+   * Tests the case when multiple bundles are on the call stack and all
+   * combinations of the tuples should be evaluated.
+   */
+  public void testMultipleBundlesOnStack() {//TC10
+    try {
+      TestCondition.setTestBundleLocation(testBundleLocation);
+    } catch (Exception ex) {
+      pass(ex.getMessage());
+      //it doesn't work because loadClass method in RI works with the system class loader only
+      if (ex instanceof ClassNotFoundException)
+        fail("Please use Target_tck95.launch for successful run of 'testMoreConditions' test case");
+    }
+    
+    ConditionInfo blcA = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { testBundleLocation });
+    ConditionInfo blcB = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { permBundleLocation });
+    ConditionInfo blcC = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { domBundleLocation });
+    
+    ConditionInfo ic  = utility.createTestCInfo(false, true, false, "TestCondition_100"); // not postponed, satisfied, immutable   
+    ConditionInfo ic0 = utility.createTestCInfo(false, false, true, "TestCondition_101"); // not postponed, satisfied, mutable   
+    ConditionInfo ic1 = utility.createTestCInfo(false, true,  true, "TestCondition_102"); // not postponed, satisfied, mutable   
+    ConditionInfo ic2 = utility.createTestCInfo(false, true,  true, "TestCondition_103"); // not postponed, satisfied, mutable   
+    ConditionInfo pc1 = utility.createTestCInfo(true,  false, true, "TestCondition_104"); // postponed, satisfied, mutable   
+    ConditionInfo pc2 = utility.createTestCInfo(true,  true,  true, "TestCondition_105"); // postponed, satisfied, mutable
+    
+    AdminPermission permissionP = new AdminPermission("*", AdminPermission.PERMISSION);
+    AdminPermission permissionQ = new AdminPermission("*", AdminPermission.EXECUTE);
+    AdminPermission permissionR = new AdminPermission("*", AdminPermission.RESOLVE);
+    AdminPermission permissionS = new AdminPermission("*", AdminPermission.STARTLEVEL);
+
+    ConditionalPermissionInfo[][] cpi = new ConditionalPermissionInfo[3][4];
+    PackagePermission pp = new PackagePermission("*", "import,export");
+    ServicePermission sp = new ServicePermission("*", "get,register");
+    ConditionInfo cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { testBundleLocation });
+    cpi[0][0] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { cInfo }, 
+        new Permission[] { pp, sp });
+
+    cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { permBundleLocation });
+    cpi[1][0] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { cInfo }, 
+        new Permission[] { pp, sp });
+
+    cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { domBundleLocation });
+    cpi[2][0] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { cInfo }, 
+        new Permission[] { pp, sp });
+    
+    cpi[0][1] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcA, ic1, pc1 },
+        new Permission[] { permissionP, permissionQ });
+    cpi[0][2] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcA, ic2 },
+        new Permission[] { permissionP, permissionR });
+    cpi[0][3] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcA, ic },
+        new Permission[] { permissionS });
+    
+    TestCondition.setTestBundleLocation(permBundleLocation);
+    cpi[1][1] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcB, ic1, pc1, pc2 },
+        new Permission[] { permissionP, permissionR });
+    cpi[1][2] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcB, pc2 },
+        new Permission[] { permissionP, permissionR });
+    cpi[1][3] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcB, ic },
+        new Permission[] { permissionQ });
+    
+    TestCondition.setTestBundleLocation(domBundleLocation);
+    cpi[2][1] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcC, ic },
+        new Permission[] { permissionQ });
+    cpi[2][2] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcC, ic0 },
+        new Permission[] { permissionP });
+    cpi[2][3] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcC, pc2 },
+        new Permission[] { permissionP });
+    
+    String message = "allowed " + utility.permToString(permissionP);
+    try {
+      tbc.checkStack(permissionP);
+      pass(message);
+    } catch (Throwable e) {
+      e.printStackTrace();
+      fail(message + " but " + e.getClass().getName() + " was thrown");
+    }
+    
+    String[] order = new String[] {
+        "TestCondition_100", "TestCondition_100", "TestCondition_100",
+        "TestCondition_101", "TestCondition_102", "TestCondition_102",
+        "TestCondition_103", "TestCondition_105", "TestCondition_104",
+    };
+    utility.testEqualArrays(order, TestCondition.getSatisfOrder());
+    
+    for (int i = 0; i < cpi.length; i++) {
+      for (int j = 0; j < cpi[i].length; j++) {
+        cpi[i][j].delete();
+      }
+    }
+    TestCondition.satisfOrder.removeAllElements();
   }
   
   /**
