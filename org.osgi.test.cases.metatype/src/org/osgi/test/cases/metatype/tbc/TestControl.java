@@ -119,6 +119,9 @@ public class TestControl extends DefaultTestBundleControl {
 
 	/**
 	 * Test MetaTypeProvider implementation
+	 * 
+	 * @spec MetaTypeProvider.getObjectClassDefinition(String,String)
+	 * @spec MetaTypeProvider.getLocales()
 	 */
 	public void testMetaTypeProvider() {
 		MetaTypeInformation mti;
@@ -167,6 +170,11 @@ public class TestControl extends DefaultTestBundleControl {
 
 	/**
 	 * Test ObjectClassDefinition implementation
+	 * 
+	 * @spec ObjectClassDefinition.getID()
+	 * @spec ObjectClassDefinition.getDescription()
+	 * @spec ObjectClassDefinition.getAttributeDefinitions(int)
+	 * @spec ObjectClassDefinition.getIcon(int)
 	 */
 	public void testObjectClassDefinition() throws Exception {
 		MetaTypeInformation mti;
@@ -228,6 +236,13 @@ public class TestControl extends DefaultTestBundleControl {
 
 	/**
 	 * Test AttributeDefinition implementation
+	 * 
+	 * @spec AttributeDefinition.getID()
+	 * @spec AttributeDefinition.getName()
+	 * @spec AttributeDefinition.getDescription()
+	 * @spec AttributeDefinition.getOptionValues()
+	 * @spec AttributeDefinition.getOptionLabels()
+	 * @spec AttributeDefinition.getType()
 	 */
 	public void testAttributeDefinition() {
 		boolean found;
@@ -396,6 +411,9 @@ public class TestControl extends DefaultTestBundleControl {
 
 	/**
 	 * Test MetaTypeService when the bundle has an own implementation of MetaTypeProvider
+	 * 
+	 * @spec MetaTypeInformation.getPids()
+	 * @spec MetaTypeInformation.getObjectClassDefinition(String,String)
 	 */
 	public void testBundleMetaTypeProvider() throws Exception {
 		Bundle tb2;
