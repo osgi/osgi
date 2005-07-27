@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-Name: test.cases.wireadmin
 Bundle-Vendor: ProSyst, Bulgaria
-Bundle-Version: 1.0
+Bundle-Version: 1.2
 Bundle-Activator: org.osgi.test.cases.wireadmin.Activator
 Bundle-Category: test
-Bundle-Description: wireadmin test
+Bundle-Description: Tests the Wire Admin service
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
