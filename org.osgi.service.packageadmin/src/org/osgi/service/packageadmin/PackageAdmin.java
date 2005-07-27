@@ -15,7 +15,7 @@ import org.osgi.framework.Bundle;
 /**
  * Framework service which allows bundle programmers to inspect the package
  * wiring state of bundles in the Framework as well as other functions related
- * to the class loader network between bundles.
+ * to the class loader network among bundles.
  * 
  * <p>
  * If present, there will only be a single instance of this service registered
