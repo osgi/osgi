@@ -182,6 +182,8 @@ public class GetHeaders {
 	/**
 	 * Tests manifest headers localization for a bundle that does not have
 	 * locale file.
+	 * 
+	 * @spec Bundle.getHeaders()
 	 */
 	void testGetHeaders001() throws Exception {
 
@@ -208,6 +210,8 @@ public class GetHeaders {
 	 * Tests manifest headers localization for a bundle that has the default
 	 * locale properties file, as defined by
 	 * Constants.BUNDLE_LOCALIZATION_DEFAULT_BASENAME.
+	 * 
+	 * @spec Bundle.getHeaders()
 	 */
 	void testGetHeaders002() throws Exception {
 
@@ -244,6 +248,8 @@ public class GetHeaders {
 	/**
 	 * This method tests manifest headers localization for a bundle that has
 	 * specific locale files including the default locale.
+	 * 
+	 * @spec Bundle.getHeaders()
 	 */
 	void testGetHeaders003() throws Exception {
 		//specify default locale
@@ -312,6 +318,8 @@ public class GetHeaders {
 	/**
 	 * Tests manifest headers localization for a bundle that has specific locale
 	 * files but does not include the default locale.
+	 * 
+	 * @spec Bundle.getHeaders()
 	 */
 	void testGetHeaders004() throws Exception {
 		Locale.setDefault(new Locale("pt", "BR"));
@@ -335,6 +343,8 @@ public class GetHeaders {
 	/**
 	 * Tests manifest headers localization for a bundle that does not have
 	 * locale file.
+	 * 
+	 * @spec Bundle.getHeaders(String)
 	 */
 	void testGetHeaders005() throws Exception {
 		Locale.setDefault(new Locale("en", "US"));
@@ -360,6 +370,8 @@ public class GetHeaders {
 	 * Tests manifest headers localization for a bundle that has the default
 	 * locale file, as defined by
 	 * Constants.BUNDLE_LOCALIZATION_DEFAULT_BASENAME.
+	 * 
+	 * @spec Bundle.getHeaders(String)
 	 */
 	void testGetHeaders006() throws Exception {
 		Locale.setDefault(new Locale("en", "US"));
@@ -383,6 +395,8 @@ public class GetHeaders {
 	/**
 	 * Tests manifest headers localization for a bundle that has specific locale
 	 * files including the default locale.
+	 * 
+	 * @spec Bundle.getHeaders(String)
 	 */
 	void testGetHeaders007() throws Exception {
 		Bundle tb9 = _context.installBundle(_tcHome + "tb9.jar");
@@ -406,6 +420,8 @@ public class GetHeaders {
 	/**
 	 * Tests manifest headers localization for a bundle that has specific locale
 	 * files but does not include locale requested.
+	 * 
+	 * @spec Bundle.getHeaders(String)
 	 */
 	void testGetHeaders008() throws Exception {
 		Locale.setDefault(new Locale("en", "US"));
@@ -430,6 +446,8 @@ public class GetHeaders {
 	/**
 	 * Tests manifest headers localization for a bundle that has specific locale
 	 * files but does not include the default locale.
+	 * 
+	 * @spec Bundle.getHeaders(String)
 	 */
 	void testGetHeaders009() throws Exception {
 		Locale.setDefault(new Locale("pt", "BR"));
@@ -468,6 +486,8 @@ public class GetHeaders {
 	/**
 	 * Tests manifest localization when bundle is not on default location. Tests
 	 * manifest localization for a fragment bundle.
+	 * 
+	 * @spec Bundle.getHeaders(String)
 	 */
 	void testGetHeaders010() throws Exception {
 		Locale.setDefault(new Locale("pt", "BR"));
@@ -511,6 +531,8 @@ public class GetHeaders {
 
 	/**
 	 * Tests manifest localization for a host bundle.
+	 * 
+	 * @spec Bundle.getHeaders(String)
 	 */
 	void testGetHeaders011() throws Exception {
 
@@ -540,6 +562,8 @@ public class GetHeaders {
 
 	/**
 	 * Tests manifest localization for a fragment bundle.
+	 * 
+	 * @spec Bundle.getHeaders(String)
 	 */
 	void testGetHeaders012() throws Exception {
 
@@ -574,6 +598,8 @@ public class GetHeaders {
 
 	/**
 	 * Tests manifest localization for a fragment with multiple hosts bundle.
+	 * 
+	 * @spec Bundle.getHeaders(String)
 	 */
 	void testGetHeaders013() throws Exception {
 		//default locale should exist in any of the following

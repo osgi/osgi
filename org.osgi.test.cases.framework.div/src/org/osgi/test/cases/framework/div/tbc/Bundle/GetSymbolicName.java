@@ -68,6 +68,8 @@ public class GetSymbolicName {
 
 	/**
 	 * Test the method getSymbolicName() with a symbolic name in the manifest
+	 * 
+	 * @spec Bundle.getSymbolicName()
 	 */
 	public void testGetSymbolicName0001() throws Exception {
 		Bundle bundle;
@@ -84,6 +86,8 @@ public class GetSymbolicName {
 
 	/**
 	 * Test the method getSymbolicName() without a symbolic name in the manifest
+	 * 
+	 * @spec Bundle.getSymbolicName()
 	 */
 	public void testGetSymbolicName0002() throws Exception {
 		Bundle bundle;
@@ -101,6 +105,8 @@ public class GetSymbolicName {
 	/**
 	 * Test the method getSymbolicName() after uninstall the bundle (with a
 	 * symbolic name in the manifest)
+	 * 
+	 * @spec Bundle.getSymbolicName()
 	 */
 	public void testGetSymbolicName0003() throws Exception {
 		Bundle bundle;
@@ -117,6 +123,8 @@ public class GetSymbolicName {
 	/**
 	 * Test the method getSymbolicName() after uninstall the bundle (without a
 	 * symbolic name in the manifest)
+	 * 
+	 * @spec Bundle.getSymbolicName()
 	 */
 	public void testGetSymbolicName0004() throws Exception {
 		Bundle bundle;

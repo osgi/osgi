@@ -70,6 +70,8 @@ public class GetEntryPaths {
 
 	/**
 	 * Test the method invocation with existing entries
+	 * 
+	 * @spec Bundle.getEntryPaths(String)
 	 */
 	public void testGetEntryPaths0001() throws Exception {
 		int count;
@@ -111,6 +113,8 @@ public class GetEntryPaths {
 
 	/**
 	 * Test the method invocation with nonexistent entries
+	 * 
+	 * @spec Bundle.getEntryPaths(String)
 	 */
 	public void testGetEntryPaths0002() throws Exception {
 		Bundle bundle;
@@ -130,6 +134,8 @@ public class GetEntryPaths {
 
 	/**
 	 * Test the method invocation with an uninstalled bundle
+	 * 
+	 * @spec Bundle.getEntryPaths(String)
 	 */
 	public void testGetEntryPaths0003() throws Exception {
 		Bundle bundle;

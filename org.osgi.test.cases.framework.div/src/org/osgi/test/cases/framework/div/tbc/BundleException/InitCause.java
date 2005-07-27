@@ -65,6 +65,8 @@ public class InitCause {
 
 	/**
 	 * Test the method initCause()
+	 * 
+	 * @spec BundleException.initCause()
 	 */
 	public void testInitCause0001() throws Exception {
 		BundleException bundleException;

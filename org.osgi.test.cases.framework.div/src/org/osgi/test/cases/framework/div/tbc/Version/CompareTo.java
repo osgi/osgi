@@ -68,6 +68,8 @@ public class CompareTo {
 	/**
 	 * Test the method compareTo() with first version number less than second
 	 * version number
+	 * 
+	 * @spec Version.compareTo(Version);
 	 */
 	public void testCompareTo0001() throws Exception {
 		Version version1;
@@ -85,6 +87,8 @@ public class CompareTo {
 	/**
 	 * Test the method compareTo() with first version number greater than second
 	 * version number
+	 * 
+	 * @spec Version.compareTo(Version);
 	 */
 	public void testCompareTo0002() throws Exception {
 		Version version1;
@@ -101,6 +105,8 @@ public class CompareTo {
 
 	/**
 	 * Test the method compareTo() with same version numbers
+	 * 
+	 * @spec Version.compareTo(Version);
 	 */
 	public void testCompareTo0003() throws Exception {
 		Version version1;
@@ -117,6 +123,8 @@ public class CompareTo {
 
 	/**
 	 * Test the method compareTo() with an incorrect object
+	 * 
+	 * @spec Version.compareTo(Version);
 	 */
 	public void testCompareTo0004() throws Exception {
 		String incorrect;

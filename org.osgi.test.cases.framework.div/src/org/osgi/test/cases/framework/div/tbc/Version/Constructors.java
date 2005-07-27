@@ -71,6 +71,8 @@ public class Constructors {
 
 	/**
 	 * Test the Version constructor with legal parameters
+	 * 
+	 * @spec Version.<init>(int,int,int)
 	 */
 	public void testConstructors0001() throws Exception {
 		Version version;
@@ -80,6 +82,8 @@ public class Constructors {
 
 	/**
 	 * Test the Version constructor with legal parameters
+	 * 
+	 * @spec Version.<init>(int,int,int)
 	 */
 	public void testConstructors0002() throws Exception {
 		Version version;
@@ -89,6 +93,8 @@ public class Constructors {
 
 	/**
 	 * Test the Version constructor with legal parameters
+	 * 
+	 * @spec Version.<init>(int,int,int)
 	 */
 	public void testConstructors0003() throws Exception {
 		Version version;
@@ -98,6 +104,8 @@ public class Constructors {
 
 	/**
 	 * Test the Version constructor with illegal parameters
+	 * 
+	 * @spec Version.<init>(int,int,int)
 	 */
 	public void testConstructors0004() throws Exception {
 		Version version;
@@ -112,6 +120,8 @@ public class Constructors {
 
 	/**
 	 * Test the Version constructor with legal parameters
+	 * 
+	 * @spec Version.<init>(int,int,int)
 	 */
 	public void testConstructors0005() throws Exception {
 		Version version;
@@ -126,6 +136,8 @@ public class Constructors {
 
 	/**
 	 * Test the Version constructor with legal parameters
+	 * 
+	 * @spec Version.<init>(int,int,int)
 	 */
 	public void testConstructors0006() throws Exception {
 		Version version;

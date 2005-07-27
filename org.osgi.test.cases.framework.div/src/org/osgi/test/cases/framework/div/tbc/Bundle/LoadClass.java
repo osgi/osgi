@@ -70,6 +70,8 @@ public class LoadClass {
 
 	/**
 	 * Test the method loadClass() with an installed bundle and a existing class
+	 * 
+	 * @spec Bundle.loadClass(String)
 	 */
 	public void testLoadClass0001() throws Exception {
 		Bundle bundle;
@@ -108,6 +110,8 @@ public class LoadClass {
 	/**
 	 * Test the method loadClass() with an installed bundle and a nonexistent
 	 * class
+	 * 
+	 * @spec Bundle.loadClass(String)
 	 */
 	public void testLoadClass0002() throws Exception {
 		Bundle bundle;
@@ -131,6 +135,8 @@ public class LoadClass {
 	/**
 	 * Test the method loadClass() with a fragment bundle using a nonexistent
 	 * class
+	 * 
+	 * @spec Bundle.loadClass(String)
 	 */
 	public void testLoadClass0003() throws Exception {
 		Bundle bundle;
@@ -153,6 +159,8 @@ public class LoadClass {
 
 	/**
 	 * Test the method loadClass() with a fragment bundle using a existing class
+	 * 
+	 * @spec Bundle.loadClass(String)
 	 */
 	public void testLoadClass0004() throws Exception {
 		Bundle bundle;
@@ -175,6 +183,8 @@ public class LoadClass {
 
 	/**
 	 * Test the method after uninstall the bundle
+	 * 
+	 * @spec Bundle.loadClass(String)
 	 */
 	public void testLoadClass0005() throws Exception {
 		Bundle bundle;

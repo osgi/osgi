@@ -66,6 +66,8 @@ public class GetCause {
 
 	/**
 	 * Test the method getCause() with a cause
+	 * 
+	 * @spec BundleException.getCause()
 	 */
 	public void testGetCause0001() throws Exception {
 		BundleException bundleException;
@@ -82,6 +84,8 @@ public class GetCause {
 
 	/**
 	 * Test the method getCause() without a cause
+	 * 
+	 * @spec BundleException.getCause()
 	 */
 	public void testGetCause0002() throws Exception {
 		BundleException bundleException;

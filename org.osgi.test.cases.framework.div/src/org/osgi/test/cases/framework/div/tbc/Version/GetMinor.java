@@ -66,6 +66,8 @@ public class GetMinor {
 
 	/**
 	 * Test the method getMinor() using the constructor Version(int,int,int)
+	 * 
+	 * @spec Version.getMinor()
 	 */
 	public void testGetMinor0001() throws Exception {
 		Version version;
@@ -80,6 +82,8 @@ public class GetMinor {
 
 	/**
 	 * Test the method getMinor() using the constructor Version(String)
+	 * 
+	 * @spec Version.getMinor()
 	 */
 	public void testGetMinor0002() throws Exception {
 		Version version;

@@ -66,6 +66,8 @@ public class GetMicro {
 
 	/**
 	 * Test the method getMicro() using the constructor Version(int,int,int)
+	 * 
+	 * @spec Version.getMicro()
 	 */
 	public void testGetMicro0001() throws Exception {
 		Version version;
@@ -80,6 +82,8 @@ public class GetMicro {
 
 	/**
 	 * Test the method getMicro() using the constructor Version(String)
+	 * 
+	 * @spec Version.getMicro()
 	 */
 	public void testGetMicro0002() throws Exception {
 		Version version;

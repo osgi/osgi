@@ -66,6 +66,8 @@ public class GetMajor {
 
 	/**
 	 * Test the method getMajor() using the constructor Version(int,int,int)
+	 * 
+	 * @spec Version.getMajor()
 	 */
 	public void testGetMajor0001() throws Exception {
 		Version version;
@@ -80,6 +82,8 @@ public class GetMajor {
 
 	/**
 	 * Test the method getMajor() using the constructor Version(String)
+	 * 
+	 * @spec Version.getMajor()
 	 */
 	public void testGetMajor0002() throws Exception {
 		Version version;

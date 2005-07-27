@@ -64,6 +64,8 @@ public class InstanceOf {
 
 	/**
 	 * Check if the class is instance of Comparable
+	 * 
+	 * @spec Version(int,int,int)
 	 */
 	public void testInstanceOf0001() throws Exception {
 		Version version;

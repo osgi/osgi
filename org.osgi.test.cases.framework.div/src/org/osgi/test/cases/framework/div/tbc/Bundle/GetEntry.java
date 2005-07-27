@@ -70,6 +70,8 @@ public class GetEntry {
 
 	/**
 	 * Test the method invocation with an existing entry
+	 * 
+	 * @spec Bundle.getEntry(String)
 	 */
 	public void testGetEntry001() throws Exception {
 		Bundle bundle;
@@ -89,6 +91,8 @@ public class GetEntry {
 
 	/**
 	 * Test the method invocation with an nonexistent entries
+	 * 
+	 * @spec Bundle.getEntry(String)
 	 */
 	public void testGetEntry002() throws Exception {
 		Bundle bundle;
@@ -108,6 +112,8 @@ public class GetEntry {
 
 	/**
 	 * Test the method invocation with an uninstalled bundle
+	 * 
+	 * @spec Bundle.getEntry(String)
 	 */
 	public void testGetEntry003() throws Exception {
 		Bundle bundle;

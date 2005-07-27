@@ -74,6 +74,8 @@ public class GetResource {
 	/**
 	 * Test the method invocation with an existing resource (using a absolute
 	 * path)
+	 * 
+	 * @spec Bundle.getResource(String)
 	 */
 	public void testGetResource0001() throws Exception {
 		Bundle bundle;
@@ -92,6 +94,8 @@ public class GetResource {
 	/**
 	 * Test the method invocation with a bundle fragment and a nonexistent
 	 * resource
+	 * 
+	 * @spec Bundle.getResource(String)
 	 */
 	public void testGetResource0002() throws Exception {
 		Bundle bundle;
@@ -112,6 +116,8 @@ public class GetResource {
 	/**
 	 * Test the method invocation with a bundle fragment and an existing
 	 * resource
+	 * 
+	 * @spec Bundle.getResource(String)
 	 */
 	public void testGetResource0003() throws Exception {
 		Bundle bundle;
@@ -131,6 +137,8 @@ public class GetResource {
 
 	/**
 	 * Test the method invocation with a nonexistent resource
+	 * 
+	 * @spec Bundle.getResource(String)
 	 */
 	public void testGetResource0004() throws Exception {
 		Bundle bundle;
@@ -148,6 +156,8 @@ public class GetResource {
 
 	/**
 	 * Test the method invocation after uninstall the bundle
+	 * 
+	 * @spec Bundle.getResource(String)
 	 */
 	public void testGetResource0005() throws Exception {
 		Bundle bundle;

@@ -68,6 +68,8 @@ public class GetQualifier {
 	/**
 	 * Test the method getQualifier() using the constructor
 	 * Version(int,int,int,String)
+	 * 
+	 * @spec Version.getQualifier()
 	 */
 	public void testGetQualifier0001() throws Exception {
 		Version version;
@@ -82,6 +84,8 @@ public class GetQualifier {
 
 	/**
 	 * Test the method getQualifier using the constructor Version(String)
+	 * 
+	 * @spec Version.getQualifier()
 	 */
 	public void testGetQualifier0002() throws Exception {
 		Version version;

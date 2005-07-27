@@ -71,6 +71,8 @@ public class Equals {
 
 	/**
 	 * Test the method equals() with the same versions
+	 * 
+	 * @spec Version.equals(Object)
 	 */
 	public void testEquals0001() throws Exception {
 		Version version1;
@@ -87,6 +89,8 @@ public class Equals {
 
 	/**
 	 * Test the method equals() with the same versions
+	 * 
+	 * @spec Version.equals(Object)
 	 */
 	public void testEquals0002() throws Exception {
 		Version version1;
@@ -103,6 +107,8 @@ public class Equals {
 
 	/**
 	 * Test the method equals() with diferent versions
+	 * 
+	 * @spec Version.equals(Object)
 	 */
 	public void testEquals0003() throws Exception {
 		Version version1;
@@ -119,6 +125,8 @@ public class Equals {
 
 	/**
 	 * Test the method equals() with diferent versions
+	 * 
+	 * @spec Version.equals(Object)
 	 */
 	public void testEquals0004() throws Exception {
 		Version version1;
@@ -135,6 +143,8 @@ public class Equals {
 
 	/**
 	 * Test the method equals() with diferent versions
+	 * 
+	 * @spec Version.equals(Object)
 	 */
 	public void testEquals0005() throws Exception {
 		Version version1;
@@ -151,6 +161,8 @@ public class Equals {
 
 	/**
 	 * Test the method equals() with diferent versions
+	 * 
+	 * @spec Version.equals(Object)
 	 */
 	public void testEquals0006() throws Exception {
 		Version version1;
@@ -167,6 +179,8 @@ public class Equals {
 
 	/**
 	 * Test the method equals() with different versions
+	 * 
+	 * @spec Version.equals(Object)
 	 */
 	public void testEquals0007() throws Exception {
 		Version version1;

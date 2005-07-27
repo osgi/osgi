@@ -66,6 +66,8 @@ public class HashCode {
 
 	/**
 	 * Test the method hashCode() when the equals() returns true
+	 * 
+	 * @spec Version.hashCode();
 	 */
 	public void testHashCode0001() throws Exception {
 		Version version1;
@@ -82,6 +84,8 @@ public class HashCode {
 
 	/**
 	 * Test the method hashCode() when the equals() returns false
+	 * 
+	 * @spec Version.hashCode();
 	 */
 	public void testHashCode0002() throws Exception {
 		Version version1;
