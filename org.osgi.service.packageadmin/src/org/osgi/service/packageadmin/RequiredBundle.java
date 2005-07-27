@@ -26,8 +26,8 @@ import org.osgi.framework.Version;
  * 
  * <p>
  * The information about a required bundle provided by this object may change. A
- * <code>RequiredBundle</code> object becomes stale if the bundle it
- * references has been updated or removed as a result of calling
+ * <code>RequiredBundle</code> object becomes stale if an exported package of
+ * the bundle it references has been updated or removed as a result of calling
  * <code>PackageAdmin.refreshPackages()</code>).
  * 
  * If this object becomes stale, its <code>getSymbolicName()</code> and
