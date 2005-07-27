@@ -109,7 +109,7 @@ public class ConstantsValues {
 		"VISIBILITY_DIRECTIVE", "visibility",
 		"VISIBILITY_PRIVATE", "private",
 		"VISIBILITY_REEXPORT", "reexport",
-		"REEXPORT_PACKAGE", "Reexport-Package",
+		//"REEXPORT_PACKAGE", "Reexport-Package",
 	};
 
 	/**
