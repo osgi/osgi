@@ -28,14 +28,17 @@
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.jar.*;
 
 
-public class CaseInsensitiveMap extends Hashtable {
+public class CaseInsensitiveMap implements Map, Serializable {
     
+    private Hashtable             table = new Hashtable();
     private DeploymentPackageImpl dp;
     
     private static class Entry implements Serializable {
@@ -47,8 +50,6 @@ public class CaseInsensitiveMap extends Hashtable {
             this.value = value;
         }
     }
-
-    // TODO make other methods case insensitive
 
     public CaseInsensitiveMap(Map other, DeploymentPackageImpl dp) {
         this.dp = dp;
@@ -72,14 +73,14 @@ public class CaseInsensitiveMap extends Hashtable {
         if (!(value instanceof String))
             throw new IllegalArgumentException("Only String value is allowed");
         String upperKey = key.toString().toUpperCase(); 
-        return super.put(upperKey, new Entry(key.toString(), (String) value));
+        return table.put(upperKey, new Entry(key.toString(), (String) value));
     }
     
     public Object get(Object key) {
         if (!(key instanceof String))
             throw new IllegalArgumentException("Only String key is allowed");
         String upperKey = ((String) key).toUpperCase(); 
-        Entry entry = (Entry) super.get(upperKey);
+        Entry entry = (Entry) table.get(upperKey);
         if (null == entry)
             return null;
         if (null == dp.getResourceBundle())
@@ -94,10 +95,50 @@ public class CaseInsensitiveMap extends Hashtable {
         if (!(key instanceof String))
             throw new IllegalArgumentException("Only String key is allowed");
         String upperKey = ((String) key).toUpperCase(); 
-        Entry entry = (Entry) super.get(upperKey);
+        Entry entry = (Entry) table.get(upperKey);
         if (null == entry)
             return null;
         return entry.rawKey;
+    }
+    
+    public Set keySet() {
+        return table.keySet();
+    }
+
+    public void clear() {
+        table.clear();
+    }
+
+    public boolean containsKey(Object var0) {
+        return table.containsKey(var0);
+    }
+
+    public boolean containsValue(Object var0) {
+        return table.containsValue(var0);
+    }
+
+    public Set entrySet() {
+        return table.entrySet();
+    }
+
+    public boolean isEmpty() {
+        return table.isEmpty();
+    }
+
+    public void putAll(Map var0) {
+        fill(var0);
+    }
+
+    public Object remove(Object var0) {
+        return table.remove(var0);
+    }
+
+    public int size() {
+        return table.size();
+    }
+
+    public Collection values() {
+        return table.values();
     }
     
 }

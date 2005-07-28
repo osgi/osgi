@@ -141,6 +141,12 @@ public class PluginDownload extends DefaultHandler
                     if (null == exception) {
                         entry.setStatus(STATUS_DEPLOYED);
                         da.getDeployedPlugin().associateID(dp, entry.id);
+                        try {
+                            da.save();
+                        }
+                        catch (IOException e) {
+                            da.getLogger().log(e);
+                        }
                     } else 
                         entry.setStatus(STATUS_DEPLOYMENT_FAILED);
                     DeplAlertSender.sendAlert(exception, principal, correlator, nodeUri, da);
@@ -443,13 +449,6 @@ public class PluginDownload extends DefaultHandler
                     "be set");
         
         entries.start(nodeUri, correlator, session.getPrincipal());
-        try {
-            da.save();
-        }
-        catch (IOException e) {
-            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Changes cannot be " +
-                    "persisted", e); 
-        }
 	}
     
     public void nodeChanged(String nodeUri) throws DmtException {

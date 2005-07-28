@@ -761,4 +761,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return pluginDeployed;
     }
     
+    public Logger getLogger() {
+        return logger;
+    }
+    
 }
