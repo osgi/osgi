@@ -54,5 +54,9 @@ public class DAConstants {
     public static final String TOPIC_COMPLETE		= "org/osgi/service/deployment/COMPLETE";
     public static final String EVENTPROP_DPNAME		= "deploymentpackage.name";
     public static final String EVENTPROP_SUCCESSFUL	= "successful";
+
+    // MIME types
+    public static final String MIME_DP     = "application/vnd.osgi.dp";
+    public static final String MIME_BUNDLE = "application/java-archive";
     
 }

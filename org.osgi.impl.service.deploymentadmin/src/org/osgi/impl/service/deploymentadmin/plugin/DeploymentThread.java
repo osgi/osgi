@@ -3,39 +3,76 @@ package org.osgi.impl.service.deploymentadmin.plugin;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.osgi.framework.Bundle;
+import org.osgi.impl.service.deploymentadmin.DAConstants;
+import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
-import org.osgi.service.deploymentadmin.DeploymentAdmin;
 
 public class DeploymentThread extends Thread {
     
     private InputStream           is;
-    private DeploymentAdmin       da;
-    private Listener              listener;
+    private DeploymentAdminImpl   da;
+    private String                mimeType;
+    private String                location;
+    private ListenerDp            listenerDp;
+    private ListenerBundle        listenerBundle;
     
-    public interface Listener {
+    public interface ListenerDp {
         void onFinish(DeploymentPackageImpl dp, Exception exception);
     }
     
-    public DeploymentThread(DeploymentAdmin da, InputStream inputStream, Listener listener) {
+    public interface ListenerBundle {
+        void onFinish(Bundle b, Exception exception);
+    }
+    
+    public DeploymentThread(String mimeType, DeploymentAdminImpl da, InputStream inputStream, 
+            String dwnlID) 
+    {
         this.da = da;
         this.is = inputStream;
-        this.listener = listener;
+        this.mimeType = mimeType;
+        this.location = dwnlID;
+    }
+    
+    public void setDpListener(ListenerDp l) {
+        listenerDp = l;
+    }
+    
+    public void setBundleListener(ListenerBundle l) {
+        listenerBundle = l;
     }
     
     public void run() {
-        DeploymentPackageImpl dp = null;
-        try {
-            dp = (DeploymentPackageImpl) da.installDeploymentPackage(is);
-            listener.onFinish(dp, null);
-        } catch (Exception e) {
-            listener.onFinish(dp, e);
-        } finally {
-            if (null != is) {
-                try {
-                    is.close();
+        if (mimeType.equals(DAConstants.MIME_DP)) {
+            try {
+                DeploymentPackageImpl dp = (DeploymentPackageImpl) da.installDeploymentPackage(is);
+                listenerDp.onFinish(dp, null);
+            } catch (Exception e) {
+                listenerDp.onFinish(null, e);
+            } finally {
+                if (null != is) {
+                    try {
+                        is.close();
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-                catch (IOException e) {
-                    e.printStackTrace();
+            }
+        } else if (mimeType.equals(DAConstants.MIME_BUNDLE)) {
+            try {
+                Bundle b = da.getBundleContext().installBundle(location, is);
+                listenerBundle.onFinish(b, null);
+            } catch (Exception e) {
+                listenerBundle.onFinish(null, e);
+            } finally {
+                if (null != is) {
+                    try {
+                        is.close();
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

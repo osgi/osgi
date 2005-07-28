@@ -9,6 +9,7 @@ import java.util.Hashtable;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
@@ -120,7 +121,7 @@ public class PluginDownload extends DefaultHandler
             DownloadThread dwnlThr = new DownloadThread(parser, dwnlAgent, entry.uri);
             dwnlThr.start();
             
-            // waits until the DLOTA processor thread ends
+            // waits until the download thread ends
             try {
                 dwnlThr.join();
             } catch (InterruptedException e) {
@@ -134,9 +135,9 @@ public class PluginDownload extends DefaultHandler
                 return;
             }
 
-            DeploymentThread deplThr = new DeploymentThread(da, dwnlThr.getInputStream(), 
-                    new DeploymentThread.Listener() 
-            {
+            DeploymentThread deplThr = new DeploymentThread(dwnlThr.getMimeType(), da, 
+                    dwnlThr.getInputStream(), entry.id);
+            deplThr.setDpListener(new DeploymentThread.ListenerDp() {
                 public void onFinish(DeploymentPackageImpl dp, Exception exception) {
                     if (null == exception) {
                         entry.setStatus(STATUS_DEPLOYED);
@@ -145,13 +146,16 @@ public class PluginDownload extends DefaultHandler
                             da.save();
                         }
                         catch (IOException e) {
-                            da.getLogger().log(e);
+                            da.getLogger().log(e); 
                         }
                     } else 
                         entry.setStatus(STATUS_DEPLOYMENT_FAILED);
                     DeplAlertSender.sendAlert(exception, principal, correlator, nodeUri, da);
-                }
-            });
+                }});
+            deplThr.setBundleListener(new DeploymentThread.ListenerBundle() {
+                public void onFinish(Bundle b, Exception exception) {
+                    // TODO
+                }});
             deplThr.start();
         }
 

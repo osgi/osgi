@@ -252,33 +252,14 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
         catch (FileNotFoundException e) {
             throw new DmtException(nodeUri, DmtException.OTHER_ERROR, e.getMessage());
         }
-        DeploymentThread th = new DeploymentThread(da, is, new DeploymentThread.Listener() {
-            public void onFinish(DeploymentPackageImpl dp, Exception exception) {
-                DeplAlertSender.sendAlert(exception, null, null, nodeUri, da);
-                try {
-                    if (null != is)
-                        is.close();
-                }
-                catch (IOException ioe) {
-                    ioe.printStackTrace();
-                }
-                if (null == exception) {
-                    String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
-                    
-                    da.getDeployedPlugin().associateID(dp, nodeUriArr[5]);
-                    
-                    File f = new File(store, nodeUriArr[5]);
-                    f.delete();
-                    
-                    try {
-                        da.save();
-                    }
-                    catch (IOException e) {
-                        // TODO log 
-                    }
-                }
-            }});
-        th.start();
+        String mimeType;
+        if (f.getName().endsWith(".dp"))
+            mimeType = DAConstants.MIME_DP;
+        else 
+            mimeType = DAConstants.MIME_BUNDLE;
+        // TODO
+        //DeploymentThread th = new DeploymentThread(mimeType, da, is, );
+        //th.start();
     }
     
     ///////////////////////////////////////////////////////////////////////////

@@ -76,6 +76,10 @@ public class DownloadThread extends Thread {
                 return null;
             return description.toString().trim();
         }
+        
+        public String getMIMEType() {
+            return handler.getType();
+        }
 
         public void startElement(String uri, String localName, String qName,
                 Attributes attributes) throws SAXException 
@@ -214,6 +218,10 @@ public class DownloadThread extends Thread {
 
     public synchronized InputStream getInputStream() {
         return inputStream;
+    }
+    
+    public String getMimeType() {
+        return handler.getType();
     }
 
 }
