@@ -11,14 +11,8 @@
 
 package org.eclipse.osgi.framework.internal.core;
 
-import java.security.AccessControlContext;
-import java.security.AccessController;
-import java.security.Permission;
-import java.security.PrivilegedAction;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.security.*;
+import java.util.*;
 import org.osgi.service.condpermadmin.Condition;
 
 /**
@@ -39,10 +33,13 @@ public class FrameworkSecurityManager extends SecurityManager {
 	}
 
 	static class CheckContext {
-		// A non zero depth indicates that we are doing a recursive permission
-		// check.
-		int depth;
-		Vector condSets;
+		// A non zero depth indicates that we are doing a recursive permission check.
+		ArrayList depthCondSets = new ArrayList(2);
+		ArrayList CondClassSet;
+
+		public int getDepth() {
+			return depthCondSets.size() - 1;
+		}
 	}
 
 	/**
@@ -59,12 +56,12 @@ public class FrameworkSecurityManager extends SecurityManager {
 			// getting invoked directly.
 			return false;
 		}
-		if (cc.depth > 0)
-			return false; // no recursive checks
-		if (cc.condSets == null) {
-			cc.condSets = new Vector();
+		Vector condSets = (Vector) cc.depthCondSets.get(cc.getDepth());
+		if (condSets == null) {
+			condSets = new Vector(2);
+			cc.depthCondSets.set(cc.getDepth(), condSets);
 		}
-		cc.condSets.add(condSet);
+		condSets.add(condSet);
 		return true;
 	}
 
@@ -94,15 +91,16 @@ public class FrameworkSecurityManager extends SecurityManager {
 	public void internalCheckPermission(Permission perm, Object context) {
 		AccessControlContext acc = (AccessControlContext) context;
 		CheckContext cc = (CheckContext) localCheckContext.get();
-		if (cc != null) {
-			cc.depth++;
-		} else {
+		if (cc == null) {
 			cc = new CheckContext();
 			localCheckContext.set(cc);
 		}
+		cc.depthCondSets.add(null); // initialize postponed condition set to null
 		try {
 			acc.checkPermission(perm);
-			if (cc.depth == 0 && cc.condSets != null) {
+			// We want to pop the first set of postponed conditions and process them
+			Vector remainingSets = (Vector) cc.depthCondSets.get(cc.getDepth());
+			if (remainingSets != null) {
 				/*
 				 * In this bit of code we have to try every possible combination
 				 * of conditional permissions that still need to be evaluated. We
@@ -114,22 +112,15 @@ public class FrameworkSecurityManager extends SecurityManager {
 				 * up.
 				 */
 				Hashtable condContextDict = new Hashtable(2);
-				boolean passed = false;
-				// We want to pop the first set of conditions and process them
 				// The remainder we will process recursively.
-				Condition conds[][] = (Condition[][]) cc.condSets.get(0);
-				cc.condSets.removeElementAt(0);
-				for (int i = 0; i < conds.length && !passed; i++) {
-					passed = recursiveCheck(cc.condSets, conds[i], new Hashtable(2), condContextDict);
-				}
-				if (!passed)
-					throw new SecurityException("Conditions not satisfied");
+				Condition conds[][] = (Condition[][]) remainingSets.remove(0);
+				for (int i = 0; i < conds.length; i++)
+					if (recursiveCheck(remainingSets, conds[i], null, condContextDict, cc))
+						return; // found a pass return without SecurityException
+				throw new SecurityException("Conditions not satisfied"); //$NON-NLS-1$
 			}
 		} finally {
-			if (cc.depth == 0) {
-				localCheckContext.set(null);
-			}
-			cc.depth--;
+			cc.depthCondSets.remove(cc.getDepth());
 		}
 	}
 
@@ -143,9 +134,21 @@ public class FrameworkSecurityManager extends SecurityManager {
 	 *        check.
 	 * @param condContextDict a Dictionary of Dictionaries that will be passed
 	 *        to Condition.isSatisfied when performing repeated check.
+	 * @param cc the CheckContext
 	 * @return true if a successful combination was found.
 	 */
-	private boolean recursiveCheck(Vector remainingSets, Condition[] conditions, Hashtable condDict, Hashtable condContextDict) {
+	private boolean recursiveCheck(Vector remainingSets, Condition[] conditions, Hashtable condDict, Hashtable condContextDict, CheckContext cc) {
+		// clone condDict and clone each Vector in the condDict
+		if (condDict == null) {
+			condDict = new Hashtable(2);
+		} else {
+			Hashtable copyCondDict = new Hashtable(2);
+			for (Enumeration keys = condDict.keys(); keys.hasMoreElements();) {
+				Object key = keys.nextElement();
+				copyCondDict.put(key, ((Vector) condDict.get(key)).clone());
+			}
+			condDict = copyCondDict;
+		}
 		for (int i = 0; i < conditions.length; i++) {
 			if (conditions[i] == null)
 				continue;
@@ -157,15 +160,12 @@ public class FrameworkSecurityManager extends SecurityManager {
 			condList.add(conditions[i]);
 		}
 		if (remainingSets.size() > 0) {
-			boolean passed = false;
 			Condition conds[][] = (Condition[][]) remainingSets.get(0);
 			Vector newSets = (Vector) remainingSets.clone();
 			newSets.remove(0);
-			for (int i = 0; i < conds.length; i++) {
-				passed = recursiveCheck(newSets, conds[i], (Hashtable) condDict.clone(), condContextDict);
-				if (passed)
+			for (int i = 0; i < conds.length; i++)
+				if (recursiveCheck(newSets, conds[i], condDict, condContextDict, cc))
 					return true;
-			}
 			return false;
 		}
 		Enumeration keys = condDict.keys();
@@ -180,8 +180,17 @@ public class FrameworkSecurityManager extends SecurityManager {
 				context = new Hashtable(2);
 				condContextDict.put(key, context);
 			}
-			if (!condArray[0].isSatisfied(condArray, context))
-				return false;
+			if (cc.CondClassSet == null)
+				cc.CondClassSet = new ArrayList(2);
+			if (cc.CondClassSet.contains(condArray[0].getClass()))
+				return false; // doing recursion into same condition class
+			cc.CondClassSet.add(condArray[0].getClass());
+			try {
+				if (!condArray[0].isSatisfied(condArray, context))
+					return false;
+			} finally {
+				cc.CondClassSet.remove(condArray[0].getClass());
+			}
 		}
 		return true;
 	}
