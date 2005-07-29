@@ -45,15 +45,15 @@ import org.osgi.framework.ServiceReference;
  */
 public class CMEvent {
 	/** constant for an update event */
-	protected final static byte	UPDATED	= 0;
+	protected final static int	UPDATED	= 0;
 	/** constant for a delete event */
-	protected final static byte	DELETED	= 1;
+	protected final static int	DELETED	= 1;
 	/** Object been updated/deleted */
 	protected ConfigurationImpl	config;
 	/** Props with which the update has been done */
 	protected Dictionary		props;
 	/** Type of event: 0 for update and 1 for deletion */
-	protected byte				event;
+	protected int				event;
 	protected ServiceReference	sRef;
 
 	/**
@@ -63,7 +63,7 @@ public class CMEvent {
 	 * @param props Props with which the update has been done
 	 * @param event Type of event: 0 for update and 1 for deletion
 	 */
-	public CMEvent(ConfigurationImpl config, Dictionary props, byte event,
+	public CMEvent(ConfigurationImpl config, Dictionary props, int event,
 			ServiceReference sRef) {
 		this.config = config;
 		this.props = props;
