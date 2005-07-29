@@ -119,6 +119,7 @@ public class DmtSessionImpl implements DmtSession {
 	}
     
     // called directly before returning the session object in getSession()
+    // throws NODE_NOT_FOUND if the previously specified root does not exist
     void open() throws DmtException {
         if(lockMode == LOCK_TYPE_ATOMIC)
             // shallow copy is enough, URIs and DmtAcls are immutable 
@@ -537,6 +538,11 @@ public class DmtSessionImpl implements DmtSession {
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_LEAF);
         checkOperation(uri, DmtAcl.REPLACE, DmtMetaNode.CMD_REPLACE);
         checkValue(uri, data);
+
+        DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
+        if (metaNode != null && metaNode.getScope() == DmtMetaNode.PERMANENT)
+            throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
+                    "Cannot set the value of a permanent node.");
         
         if(data == null)
             getWritableDataPlugin(uri).setDefaultNodeValue(uri);
@@ -554,6 +560,12 @@ public class DmtSessionImpl implements DmtSession {
             throw new DmtException(uri, DmtException.COMMAND_FAILED,
                     "'null' value given for node type.");
         checkOperation(uri, DmtAcl.REPLACE, DmtMetaNode.CMD_REPLACE);
+        
+        DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
+        if (metaNode != null && metaNode.getScope() == DmtMetaNode.PERMANENT)
+            throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
+                    "Cannot set type property of permanent node.");
+
         if(isLeafNodeNoCheck(uri))
             checkMimeType(uri, type);
         getWritableDataPlugin(uri).setNodeType(uri, type);
