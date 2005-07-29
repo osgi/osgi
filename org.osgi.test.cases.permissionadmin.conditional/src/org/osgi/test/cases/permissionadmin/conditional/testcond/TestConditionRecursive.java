@@ -40,7 +40,7 @@ public class TestConditionRecursive extends TestCondition {
       Method method = service.getClass().getMethod("checkPermission", new Class[] { Permission.class });
       method.invoke(service, new Object[] { permission });
     } catch (InvocationTargetException ite) {
-      satisfOrder.addElement(ite.getTargetException().toString());
+      satisfOrder.addElement(ite.getTargetException().getClass().getName());
     } catch (Throwable t) {
       satisfOrder.addElement(t.toString());
     }
