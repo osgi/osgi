@@ -104,10 +104,10 @@ public interface MonitorAdmin {
      * All other status variables are silently ignored, they are omitted from
      * the result.
      * <p>
-     * The returned array contains the elements in no particular order. It
-     * cannot be <code>null</code>, an empty array is returned if no
-     * (authorized and readable) Status Variables are provided by the given
-     * <code>Monitorable</code>.
+     * The returned array does not contain duplicates, and the elements are in 
+     * no particular order. It cannot be <code>null</code>, an empty array is 
+     * returned if no (authorized and readable) Status Variables are provided 
+     * by the given <code>Monitorable</code>.
      * 
      * @param monitorableId the identifier of a <code>Monitorable</code>
      *        instance
@@ -134,10 +134,10 @@ public interface MonitorAdmin {
      * All other status variables are silently ignored, their names are omitted
      * from the list.
      * <p>
-     * The returned array contains the elements in alphabetical order. It cannot
-     * be <code>null</code>, an empty array is returned if no (authorized and
-     * readable) Status Variables are provided by the given
-     * <code>Monitorable</code>.
+     * The returned array does not contain duplicates, and the elements are in 
+     * alphabetical order. It cannot be <code>null</code>, an empty array is 
+     * returned if no (authorized and readable) Status Variables are provided 
+     * by the given <code>Monitorable</code>.
      * 
      * @param monitorableId the identifier of a <code>Monitorable</code>
      *        instance
@@ -155,10 +155,10 @@ public interface MonitorAdmin {
      * <code>StatusVariable</code>s. When the <code>MonitorAdmin</code> is
      * notified about a <code>StatusVariable</code> being updated it sends an
      * event unless this feature is switched off. Note that events within a
-     * monitoring job can not be switched off. It is not required that the event
-     * sending state of the <code>StatusVariables</code> is persistently stored.
-     * When a <code>StatusVariable</code> is registered its event sending state
-     * is ON by default.
+     * monitoring job can not be switched off. The event sending state of the 
+     * <code>StatusVariables</code> must not be persistently stored. When a 
+     * <code>StatusVariable</code> is registered for the first time in a 
+     * framework session, its event sending state is set to ON by default.
      * <p>
      * Usage of the "*" wildcard is allowed in the path argument of this method
      * as a convenience feature. The wildcard can be used in either or both path
