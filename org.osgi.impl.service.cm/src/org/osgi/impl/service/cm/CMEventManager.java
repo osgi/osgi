@@ -30,6 +30,7 @@ package org.osgi.impl.service.cm;
 import java.util.Vector;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.*;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -47,7 +48,7 @@ public class CMEventManager extends Thread {
 	private boolean			running;
 	private static boolean	isWaiting;
 	private BundleContext	bc;
-	private ServiceTracker listeners;
+	private static ServiceTracker listeners;
 
 	/**
 	 * Constructs the CMEventManager.
@@ -90,17 +91,20 @@ public class CMEventManager extends Thread {
 			}
 			while (eventQueue.size() > 0) {
 				Object object = eventQueue.elementAt(0);
-				if (object instanceof ConfigurationEvent) {
-					ConfigurationEvent event = (ConfigurationEvent) object;
-					Object[] services = listeners.getServices();
-					for (int i = 0; services!=null && i < services.length; i++) {
-						ConfigurationListener listener = (ConfigurationListener) services[i];
-						try {
-							listener.configurationEvent(event);
-						}
-						catch (Throwable e) {
-							Log.log(1,
-									"[CM]Error while calling ConfigurationListener.", e);
+				if (object instanceof ConfigEventSnapshot) {
+					ConfigEventSnapshot snapshot = (ConfigEventSnapshot) object;
+					ConfigurationEvent event = snapshot.event;
+					ServiceReference[] references = snapshot.references;
+					for (int i = 0; references!=null && i < references.length; i++) {
+						ConfigurationListener listener = (ConfigurationListener) listeners.getService(references[i]);
+						if (listener != null) {
+							try {
+								listener.configurationEvent(event);
+							}
+							catch (Throwable e) {
+								Log.log(1,
+										"[CM]Error while calling ConfigurationListener.", e);
+							}
 						}
 					}
 				}
@@ -147,7 +151,7 @@ public class CMEventManager extends Thread {
 	 * 
 	 * @param upEv event, holding info for update/deletion of a configuration.
 	 */
-	protected static void addEvent(Object upEv) {
+	protected static void addEvent(CMEvent upEv) {
 		eventQueue.addElement(upEv);
 		synchronized (synch) {
 			if (isWaiting) {
@@ -157,10 +161,35 @@ public class CMEventManager extends Thread {
 	}
 
 	/**
+	 * Add an event to the queue. The event will be forwarded to target service
+	 * as soon as possible.
+	 * 
+	 * @param event event, holding info for update/deletion of a configuration.
+	 */
+	protected static void addEvent(ConfigurationEvent event) {
+		eventQueue.addElement(new ConfigEventSnapshot(event, listeners.getServiceReferences()));
+		synchronized (synch) {
+			if (isWaiting) {
+				synch.notify();
+			}
+		}
+	}
+	
+	private static class ConfigEventSnapshot {
+		ServiceReference[] references;
+		ConfigurationEvent event;
+		ConfigEventSnapshot(ConfigurationEvent event, ServiceReference[] references) {
+			this.event = event;
+			this.references = references;
+		}
+	}
+
+	/**
 	 * Stops this thread, making it getting out of method run.
 	 */
 	public void stopIt() {
 		listeners.close();
+		listeners = null;
 		synchronized (synch) {
 			running = false;
 			synch.notify();
