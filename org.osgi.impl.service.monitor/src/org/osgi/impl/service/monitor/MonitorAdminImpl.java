@@ -583,12 +583,15 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
         public String[] getStatusVariableNames() {
             Bundle bundle = getBundle();
             String[] names = monitorable.getStatusVariableNames();
+            if(names == null) // only for stability (names must not be null)
+                return new String[] {};
             
             // filter out all status variable names 
             // - that the Monitorable does not have PUBLISH permissions for
             // - that contain illegal characters
+            // - that appear multiple times in the list
 
-            List validNameList = new Vector();
+            Set validNameList = new HashSet();
             for (int i = 0; i < names.length; i++) {
                 MonitorPermission publishPermission =
                     new MonitorPermission(id + '/' + names[i], 
