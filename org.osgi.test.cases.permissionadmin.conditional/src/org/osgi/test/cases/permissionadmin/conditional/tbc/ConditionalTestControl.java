@@ -137,6 +137,10 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     try {
       trace("Create only with type '[type]'");
       new ConditionInfo("[conditionType]");
+      new ConditionInfo("  [  conditionType  ]  ");
+      new ConditionInfo("\t[\rconditionType\n]\t");
+      new ConditionInfo("  [  conditionType  \"  location  \"  ]  ");
+      new ConditionInfo("  [  conditionType  \"  arg1 ] arg2  \"  ]  ");
     } catch (Exception e) {
       fail("ConditonInfo not created. " + e.getClass() + ": " + e.getMessage());
     }
@@ -152,7 +156,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     assertEquals("Identical types ", info1.getType(), info2.getType());
     assertEquals("Identical args ", arrayToString(info1.getArgs()), arrayToString(info2.getArgs()));
 
-    // Bad CondittionInfo
+    // Bad ConditionInfo
     trace("Test incorrect conditional infos creation:");
     utility.createBadConditionInfo(" with null type", null, new String[]{location},
                 NullPointerException.class);
@@ -170,10 +174,8 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
         location + "\"]", IllegalArgumentException.class);
     utility.createBadConditionInfo(" with missing closing args quote ", "[" + conditionType + " " +
         "\"" + location + "]", IllegalArgumentException.class);
-    utility.createBadConditionInfo(" with too much whitespace between type and args ", "[" + conditionType + "    " +
-        "\"" + location + "]", IllegalArgumentException.class);
     utility.createBadConditionInfo(" with comma separation between type and args ", "[" + conditionType + " ," +
-        "\"" + location + "]", IllegalArgumentException.class);
+        "\"" + location + "\"]", IllegalArgumentException.class);
   }
 
   /**
@@ -733,8 +735,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     } catch (Throwable e) {
       fail(message + " but " + e.getClass().getName() + " was thrown");
     }
-    /* Recursion fails, because implies return false if depth is > 0 */
-    utility.testEqualArrays(new String[] { "TestConditionR", "java.lang.SecurityException: Conditions not satisfied" }, TestCondition.getSatisfOrder());
+    utility.testEqualArrays(new String[] { "TestConditionR", "TestConditionNR" }, TestCondition.getSatisfOrder());
 
     TestConditionRecursive.setPermission(perm2);
     message = "not allowed " + utility.permToString(perm2);
@@ -744,7 +745,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     } catch (Throwable e) {
       fail(message + " but " + e.getClass().getName() + " was thrown");
     }
-    utility.testEqualArrays(new String[] { "TestConditionR", "java.lang.SecurityException: Conditions not satisfied" }, TestCondition.getSatisfOrder());
+    utility.testEqualArrays(new String[] { "TestConditionR", "java.lang.SecurityException" }, TestCondition.getSatisfOrder());
 
     cpi1.delete();
     cpi2.delete();
