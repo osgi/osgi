@@ -154,7 +154,18 @@ public class PluginDownload extends DefaultHandler
                 }});
             deplThr.setBundleListener(new DeploymentThread.ListenerBundle() {
                 public void onFinish(Bundle b, Exception exception) {
-                    // TODO
+                    if (null == exception) {
+                        entry.setStatus(STATUS_DEPLOYED);
+                        da.getDeployedPlugin().associateID(b, entry.id);
+                        try {
+                            da.save();
+                        }
+                        catch (IOException e) {
+                            da.getLogger().log(e); 
+                        }
+                    } else 
+                        entry.setStatus(STATUS_DEPLOYMENT_FAILED);
+                    DeplAlertSender.sendAlert(exception, principal, correlator, nodeUri, da);
                 }});
             deplThr.start();
         }

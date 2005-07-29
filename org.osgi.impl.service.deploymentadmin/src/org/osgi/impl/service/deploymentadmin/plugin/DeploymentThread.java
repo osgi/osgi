@@ -62,6 +62,7 @@ public class DeploymentThread extends Thread {
         } else if (mimeType.equals(DAConstants.MIME_BUNDLE)) {
             try {
                 Bundle b = da.getBundleContext().installBundle(location, is);
+                b.start();
                 listenerBundle.onFinish(b, null);
             } catch (Exception e) {
                 listenerBundle.onFinish(null, e);

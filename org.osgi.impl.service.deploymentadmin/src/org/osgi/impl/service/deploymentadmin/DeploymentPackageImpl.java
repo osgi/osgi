@@ -199,6 +199,17 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return null;
     }
     
+    public BundleEntry getBundleEntryByPid(String pid) {
+        for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
+            BundleEntry be = (BundleEntry) iter.next();
+            if (null == be.getPid())
+                continue;
+            if (be.getPid().equals(pid))
+                return be;
+        }
+        return null;
+    }
+    
     BundleEntry getBundleEntryByName(String name) {
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();

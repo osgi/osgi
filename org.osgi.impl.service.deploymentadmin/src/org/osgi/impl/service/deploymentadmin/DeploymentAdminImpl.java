@@ -291,7 +291,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private void updateDps() {
         if (session.getDeploymentAction() == DeploymentSessionImpl.INSTALL)
             addDp((DeploymentPackageImpl) session.getSourceDeploymentPackage());
-        else { // if (session.getDeploymentAction() == DeploymentSession.UPDATE) 
+        else { // if (session.getDeploymentAction() == DeploymentSessionImpl.UPDATE) 
             removeDp((DeploymentPackageImpl) session.getTargetDeploymentPackage());
             addDp((DeploymentPackageImpl) session.getSourceDeploymentPackage());
         }    
@@ -299,19 +299,29 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 
     private void addDp(DeploymentPackageImpl dp) {
         dps.add(dp);
-        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
-            BundleEntry	be = (BundleEntry) iter.next();
-            if (be.isCustomizer())
-                mappingRpDp.put(be.getPid(), dp.getName());
-        }
+        updateRpDpMapping(dp);
     }
 
     private void removeDp(DeploymentPackageImpl dp) {
         dps.remove(dp);
+        updateRpDpMapping(dp);
+    }
+    
+    private void updateRpDpMapping(DeploymentPackageImpl dp) {
+        for (Iterator iter = mappingRpDp.keySet().iterator(); iter.hasNext();) {
+            String key = (String) iter.next();
+            String dpName = (String) mappingRpDp.get(key);
+            if (dpName.equals(dp.getName())) {
+                BundleEntry be = dp.getBundleEntryByPid(key);
+                if (null == be)
+                    iter.remove();
+            }
+        }
+        
         for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
-            BundleEntry	be = (BundleEntry) iter.next();
+            BundleEntry be = (BundleEntry) iter.next();
             if (be.isCustomizer())
-                mappingRpDp.remove(be.getPid());
+                mappingRpDp.put(be.getPid(), dp.getName());
         }
     }
     

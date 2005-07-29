@@ -42,13 +42,17 @@ public class Logger {
     }
     
     public synchronized void log(Exception exception) {
+        log(exception, LOG_WARNING);
+    }
+    
+    public synchronized void log(Exception exception, int level) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintWriter pw = new PrintWriter(baos, true);
         exception.printStackTrace(pw);
         
         LogService service = (LogService) tracker.getService();
         if (null != service && !DAConstants.DEBUG) {
-            service.log(LOG_ERROR, baos.toString());
+            service.log(level, baos.toString());
         } else {
             System.out.println(sevLevels[1 - 1] + ": " + baos.toString());
         }
