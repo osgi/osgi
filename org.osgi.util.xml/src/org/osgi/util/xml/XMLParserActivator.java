@@ -42,21 +42,21 @@ import org.osgi.framework.*;
  * An XMLParserActivator assumes that it can find the class file names of the
  * factory classes in the following files:
  * <ul>
- * <li><code>/META-INF/services/javax.xml.parsers.SAXParserFactory</code> is a
- * file contained in a jar available to the runtime which contains the
+ * <li><code>/META-INF/services/javax.xml.parsers.SAXParserFactory</code> is
+ * a file contained in a jar available to the runtime which contains the
  * implementation class name(s) of the SAXParserFactory.
  * <li><code>/META-INF/services/javax.xml.parsers.DocumentBuilderFactory</code>
  * is a file contained in a jar available to the runtime which contains the
  * implementation class name(s) of the <code>DocumentBuilderFactory</code>
  * </ul>
  * <p>
- * If either of the files does not exist, <code>XMLParserActivator</code> assumes
- * that the parser does not support that parser type.
+ * If either of the files does not exist, <code>XMLParserActivator</code>
+ * assumes that the parser does not support that parser type.
  * 
  * <p>
  * <code>XMLParserActivator</code> attempts to instantiate both the
- * <code>SAXParserFactory</code> and the <code>DocumentBuilderFactory</code>. It
- * registers each factory with the framework along with service properties:
+ * <code>SAXParserFactory</code> and the <code>DocumentBuilderFactory</code>.
+ * It registers each factory with the framework along with service properties:
  * <ul>
  * <li>{@link #PARSER_VALIDATING}- indicates if this factory supports
  * validating parsers. It's value is a <code>Boolean</code>.
@@ -66,8 +66,8 @@ import org.osgi.framework.*;
  * <p>
  * Individual parser implementations may have additional features, properties,
  * or attributes which could be used to select a parser with a filter. These can
- * be added by extending this class and overriding the <code>setSAXProperties</code>
- * and <code>setDOMProperties</code> methods.
+ * be added by extending this class and overriding the
+ * <code>setSAXProperties</code> and <code>setDOMProperties</code> methods.
  */
 public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	/** Context of this bundle */
@@ -125,10 +125,10 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 * Framework's service registry.
 	 * 
 	 * @param context The execution context of the bundle being started.
-	 * @exception java.lang.Exception If this method throws an exception, this
-	 *            bundle is marked as stopped and the Framework will remove this
-	 *            bundle's listeners, unregister all services registered by this
-	 *            bundle, and release all services used by this bundle.
+	 * @throws java.lang.Exception If this method throws an exception, this
+	 *         bundle is marked as stopped and the Framework will remove this
+	 *         bundle's listeners, unregister all services registered by this
+	 *         bundle, and release all services used by this bundle.
 	 * @see Bundle#start
 	 */
 	public void start(BundleContext context) throws Exception {
@@ -156,11 +156,10 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 * automatically get unregistered when the bundle stops.
 	 * 
 	 * @param context The execution context of the bundle being stopped.
-	 * @exception java.lang.Exception If this method throws an exception, the
-	 *            bundle is still marked as stopped, and the Framework will
-	 *            remove the bundle's listeners, unregister all services
-	 *            registered by the bundle, and release all services used by the
-	 *            bundle.
+	 * @throws java.lang.Exception If this method throws an exception, the
+	 *         bundle is still marked as stopped, and the Framework will remove
+	 *         the bundle's listeners, unregister all services registered by the
+	 *         bundle, and release all services used by the bundle.
 	 * @see Bundle#stop
 	 */
 	public void stop(BundleContext context) throws Exception {
@@ -214,8 +213,9 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	/**
 	 * Register SAX Parser Factory Services with the framework.
 	 * 
-	 * @param parserFactoryClassNames - a <code>Vector</code> of <code>String</code>
-	 *        objects containing the names of the parser Factory Classes
+	 * @param parserFactoryClassNames - a <code>Vector</code> of
+	 *        <code>String</code> objects containing the names of the parser
+	 *        Factory Classes
 	 * @throws FactoryConfigurationError if thrown from <code>getFactory</code>
 	 */
 	private void registerSAXParsers(Vector parserFactoryClassNames)
@@ -253,10 +253,10 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 * <ul>
 	 * <li><code>SERVICE_DESCRIPTION</code>
 	 * <li><code>SERVICE_PID</code>
-	 * <li><code>PARSER_VALIDATING</code>- instantiates a parser and queries it
-	 * to find out whether it is validating or not
-	 * <li><code>PARSER_NAMESPACEAWARE</code>- instantiates a parser and queries
-	 * it to find out whether it is namespace aware or not
+	 * <li><code>PARSER_VALIDATING</code>- instantiates a parser and queries
+	 * it to find out whether it is validating or not
+	 * <li><code>PARSER_NAMESPACEAWARE</code>- instantiates a parser and
+	 * queries it to find out whether it is namespace aware or not
 	 * <ul>
 	 * 
 	 * @param factory The <code>SAXParserFactory</code> object
@@ -324,8 +324,9 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	/**
 	 * Register DOM Parser Factory Services with the framework.
 	 * 
-	 * @param parserFactoryClassNames - a <code>Vector</code> of <code>String</code>
-	 *        objects containing the names of the parser Factory Classes
+	 * @param parserFactoryClassNames - a <code>Vector</code> of
+	 *        <code>String</code> objects containing the names of the parser
+	 *        Factory Classes
 	 * @throws FactoryConfigurationError if thrown from <code>getFactory</code>
 	 */
 	private void registerDOMParsers(Vector parserFactoryClassNames)
@@ -432,8 +433,8 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	/**
 	 * Given a parser factory class name, instantiate that class.
 	 * 
-	 * @param parserFactoryClassName A <code>String</code> object containing the
-	 *        name of the parser factory class
+	 * @param parserFactoryClassName A <code>String</code> object containing
+	 *        the name of the parser factory class
 	 * @return a parserFactoryClass Object
 	 * @pre parserFactoryClassName!=null
 	 */
