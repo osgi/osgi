@@ -396,10 +396,10 @@ final class TopicPermissionCollection extends PermissionCollection {
 	 * 
 	 * @param permission The <code>TopicPermission</code> object to add.
 	 * 
-	 * @exception IllegalArgumentException If the permission is not a
+	 * @throws IllegalArgumentException If the permission is not a
 	 *            <code>TopicPermission</code> instance.
 	 * 
-	 * @exception SecurityException If this
+	 * @throws SecurityException If this
 	 *            <code>TopicPermissionCollection</code> object has been
 	 *            marked read-only.
 	 */

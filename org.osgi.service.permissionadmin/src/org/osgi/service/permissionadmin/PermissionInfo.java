@@ -52,9 +52,9 @@ public class PermissionInfo {
 	 *        argument to the constructor of the <code>Permission</code> class
 	 *        identified by <code>type</code>.
 	 * 
-	 * @exception java.lang.NullPointerException if <code>type</code> is
+	 * @throws java.lang.NullPointerException if <code>type</code> is
 	 *            <code>null</code>.
-	 * @exception java.lang.IllegalArgumentException if <code>action</code> is not
+	 * @throws java.lang.IllegalArgumentException if <code>action</code> is not
 	 *            <code>null</code> and <code>name</code> is <code>null</code>.
 	 */
 	public PermissionInfo(String type, String name, String actions) {
@@ -75,7 +75,7 @@ public class PermissionInfo {
 	 * 
 	 * @param encodedPermission The encoded <code>PermissionInfo</code>.
 	 * @see #getEncoded
-	 * @exception java.lang.IllegalArgumentException if
+	 * @throws java.lang.IllegalArgumentException if
 	 *            <code>encodedPermission</code> is not properly formatted.
 	 */
 	public PermissionInfo(String encodedPermission) {

@@ -343,7 +343,7 @@ public class Unit {
 	 * @return a new <code>Unit</code> that is the multiplication of this
 	 *         <code>Unit</code> and the <code>Unit</code> specified
 	 * 
-	 * @exception RuntimeException if both <code>Unit</code> s are special
+	 * @throws RuntimeException if both <code>Unit</code> s are special
 	 * 
 	 * @see Unit#isSpecial
 	 */
@@ -364,7 +364,7 @@ public class Unit {
 	 * @return a new <code>Unit</code> that is the division of this <code>Unit</code>
 	 *         and the <code>Unit</code> specified
 	 * 
-	 * @exception RuntimeException if both <code>Unit</code> s are special
+	 * @throws RuntimeException if both <code>Unit</code> s are special
 	 * 
 	 * @see Unit#isSpecial
 	 */
@@ -389,7 +389,7 @@ public class Unit {
 	 * @return a new <code>Unit</code> that is the addition of this <code>Unit</code>
 	 *         and the <code>Unit</code> specified.
 	 * 
-	 * @exception RuntimeException if the two <code>Unit</code> s are not the same
+	 * @throws RuntimeException if the two <code>Unit</code> s are not the same
 	 */
 	Unit add(Unit that) {
 		if (!this.equals(that)) {

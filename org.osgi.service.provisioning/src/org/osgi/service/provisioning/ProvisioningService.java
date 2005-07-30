@@ -163,7 +163,7 @@ public interface ProvisioningService {
 	 *        defined MIME types (<code>MIME_STRING</code>,
 	 *        <code>MIME_BYTE_ARRAY</code>,<code>MIME_BUNDLE</code>, and
 	 *        <code>MIME_BUNDLE_URL</code>) in will be silently ignored.
-	 * @exception IOException if an error occurs while processing the
+	 * @throws IOException if an error occurs while processing the
 	 *            ZipInputStream. No additions will be made to the Provisioning
 	 *            Information dictionary and no bundles must be started or
 	 *            installed.

@@ -24,7 +24,7 @@ public interface EventAdmin {
 	 * @param event The event to send to all listeners which subscribe
 	 *        to the topic of the event.
 	 * 
-	 * @exception SecurityException If the caller does not have
+	 * @throws SecurityException If the caller does not have
 	 *            <code>TopicPermission[topic,PUBLISH]</code> for the topic
 	 *            specified in the event.
 	 */
@@ -37,7 +37,7 @@ public interface EventAdmin {
 	 * @param event The event to send to all listeners which subscribe
 	 *        to the topic of the event.
 	 * 
-	 * @exception SecurityException If the caller does not have
+	 * @throws SecurityException If the caller does not have
 	 *            <code>TopicPermission[topic,PUBLISH]</code> for the topic
 	 *            specified in the event.
 	 */

@@ -625,10 +625,10 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 	 * 
 	 * @param permission The Permission object to add.
 	 * 
-	 * @exception IllegalArgumentException If the permission is not a
+	 * @throws IllegalArgumentException If the permission is not a
 	 *            ConfigurationPermission object.
 	 * 
-	 * @exception SecurityException If this
+	 * @throws SecurityException If this
 	 *            <code>ConfigurationPermissionCollection</code> object has
 	 *            been marked read-only.
 	 */

@@ -354,10 +354,10 @@ final class WirePermissionCollection extends PermissionCollection {
 	 * 
 	 * @param permission The Permission object to add.
 	 * 
-	 * @exception IllegalArgumentException If the permission is not a
+	 * @throws IllegalArgumentException If the permission is not a
 	 *            WirePermission object.
 	 * 
-	 * @exception SecurityException If this PermissionCollection has been marked
+	 * @throws SecurityException If this PermissionCollection has been marked
 	 *            read-only.
 	 */
 	public void add(Permission permission) {

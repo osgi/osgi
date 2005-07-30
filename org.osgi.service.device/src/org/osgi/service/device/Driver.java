@@ -60,7 +60,7 @@ public abstract interface Driver {
 	 *         Device service, or <code>Device.MATCH_NONE</code> if it cannot
 	 *         support the Device service at all
 	 * 
-	 * @exception java.lang.Exception if this Driver service cannot examine the
+	 * @throws java.lang.Exception if this Driver service cannot examine the
 	 *            Device service
 	 */
 	public abstract int match(ServiceReference reference) throws Exception;
@@ -93,7 +93,7 @@ public abstract interface Driver {
 	 *         to the given Device service, or the <code>DRIVER_ID</code> of a
 	 *         more suitable driver
 	 * 
-	 * @exception java.lang.Exception if the driver cannot attach to the given
+	 * @throws java.lang.Exception if the driver cannot attach to the given
 	 *            device and does not know of a more suitable driver
 	 */
 	public abstract String attach(ServiceReference reference) throws Exception;

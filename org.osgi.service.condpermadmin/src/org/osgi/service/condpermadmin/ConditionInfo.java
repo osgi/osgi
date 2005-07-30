@@ -47,7 +47,7 @@ public class ConditionInfo {
 	 *            The arguments that will be passed to the constructor of the
 	 *            <tt>Conditon</tt> class identified by <tt>type</tt>.
 	 * 
-	 * @exception java.lang.NullPointerException
+	 * @throws java.lang.NullPointerException
 	 *                if <tt>type</tt> is <tt>null</tt>.
 	 */
 	public ConditionInfo(String type, String args[]) {
@@ -65,7 +65,7 @@ public class ConditionInfo {
 	 * @param encodedCondition
 	 *            The encoded <tt>ConditionInfo</tt>.
 	 * @see #getEncoded
-	 * @exception java.lang.IllegalArgumentException
+	 * @throws java.lang.IllegalArgumentException
 	 *                if <tt>encodedCondition</tt> is not properly formatted.
 	 */
 	public ConditionInfo(String encodedCondition) {
