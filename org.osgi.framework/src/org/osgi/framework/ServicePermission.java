@@ -20,13 +20,13 @@ import java.util.Hashtable;
  * <ul>
  * <li>The <code>ServicePermission.REGISTER</code> action allows a bundle to
  * register a service on the specified names.
- * <li>The <code>ServicePermission.GET</code> action allows a bundle to detect a
- * service and get it.
+ * <li>The <code>ServicePermission.GET</code> action allows a bundle to
+ * detect a service and get it.
  * </ul>
  * Permission to get a service is required in order to detect events regarding
  * the service. Untrusted bundles should not be able to detect the presence of
- * certain services unless they have the appropriate <code>ServicePermission</code>
- * to get the specific service.
+ * certain services unless they have the appropriate
+ * <code>ServicePermission</code> to get the specific service.
  * 
  * @version $Revision$
  */
@@ -66,27 +66,27 @@ final public class ServicePermission extends BasicPermission {
 	 * The name of the service is specified as a fully qualified class name.
 	 * 
 	 * <pre>
-	 * 
-	 *  ClassName ::= &lt;class name&gt; | &lt;class name ending in &quot;.*&quot;&gt;
-	 *  
+	 * ClassName ::= &lt;class name&gt; | &lt;class name ending in &quot;.*&quot;&gt;
 	 * </pre>
 	 * 
 	 * Examples:
 	 * 
 	 * <pre>
-	 *     org.osgi.service.http.HttpService
-	 *     org.osgi.service.http.*
-	 *     org.osgi.service.snmp.*
+	 * org.osgi.service.http.HttpService
+	 * org.osgi.service.http.*
+	 * org.osgi.service.snmp.*
 	 * </pre>
 	 * 
 	 * <p>
-	 * There are two possible actions: <code>get</code> and <code>register</code>.
-	 * The <code>get</code> permission allows the owner of this permission to
-	 * obtain a service with this name. The <code>register</code> permission
-	 * allows the bundle to register a service under that name.
+	 * There are two possible actions: <code>get</code> and
+	 * <code>register</code>. The <code>get</code> permission allows the
+	 * owner of this permission to obtain a service with this name. The
+	 * <code>register</code> permission allows the bundle to register a
+	 * service under that name.
 	 * 
 	 * @param name class name
-	 * @param actions <code>get</code>,<code>register</code> (canonical order)
+	 * @param actions <code>get</code>,<code>register</code> (canonical
+	 *        order)
 	 */
 
 	public ServicePermission(String name, String actions) {
@@ -214,8 +214,8 @@ final public class ServicePermission extends BasicPermission {
 	 * specified permission.
 	 * 
 	 * @param p The target permission to check.
-	 * @return <code>true</code> if the specified permission is implied by this
-	 *         object; <code>false</code> otherwise.
+	 * @return <code>true</code> if the specified permission is implied by
+	 *         this object; <code>false</code> otherwise.
 	 */
 
 	public boolean implies(Permission p) {
@@ -276,9 +276,10 @@ final public class ServicePermission extends BasicPermission {
 	 * <code>ServicePermission</code>.
 	 * 
 	 * @param obj The object to test for equality.
-	 * @return true if obj is a <code>ServicePermission</code>, and has the same
-	 *         class name and actions as this <code>ServicePermission</code>
-	 *         object; <code>false</code> otherwise.
+	 * @return true if obj is a <code>ServicePermission</code>, and has the
+	 *         same class name and actions as this
+	 *         <code>ServicePermission</code> object; <code>false</code>
+	 *         otherwise.
 	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
@@ -366,7 +367,6 @@ final class ServicePermissionCollection extends PermissionCollection {
 
 	/**
 	 * Creates an empty ServicePermissions object.
-	 *  
 	 */
 
 	public ServicePermissionCollection() {
@@ -375,16 +375,16 @@ final class ServicePermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Adds a permission to the <code>ServicePermission</code> objects using the
-	 * key for the hash as the name.
+	 * Adds a permission to the <code>ServicePermission</code> objects using
+	 * the key for the hash as the name.
 	 * 
 	 * @param permission The Permission object to add.
 	 * 
-	 * @exception IllegalArgumentException If the permission is not a
-	 *            ServicePermission object.
-	 * 
-	 * @exception SecurityException If this <code>ServicePermissionCollection</code>
-	 *            object has been marked read-only.
+	 * @throws IllegalArgumentException If the permission is not a
+	 *         ServicePermission object.
+	 * @throws SecurityException If this
+	 *         <code>ServicePermissionCollection</code> object has been marked
+	 *         read-only.
 	 */
 
 	public void add(Permission permission) {
@@ -424,8 +424,9 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 * 
 	 * @param permission The Permission object to compare.
 	 * 
-	 * @return <code>true</code> if <code>permission</code> is a proper subset of a
-	 *         permission in the set; <code>false</code> otherwise.
+	 * @return <code>true</code> if <code>permission</code> is a proper
+	 *         subset of a permission in the set; <code>false</code>
+	 *         otherwise.
 	 */
 
 	public boolean implies(Permission permission) {
@@ -487,8 +488,8 @@ final class ServicePermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Returns an enumeration of all the <code>ServicePermission</code> objects in
-	 * the container.
+	 * Returns an enumeration of all the <code>ServicePermission</code>
+	 * objects in the container.
 	 * 
 	 * @return Enumeration of all the ServicePermission objects.
 	 */
@@ -497,4 +498,3 @@ final class ServicePermissionCollection extends PermissionCollection {
 		return (permissions.elements());
 	}
 }
-

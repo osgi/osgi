@@ -26,9 +26,9 @@ import java.security.PrivilegedAction;
  */
 public class FrameworkUtil {
 	/*
-	 * NOTE: A framework implementor may also choose to replace this
-	 * class in their distribution with a class that directly interfaces
-	 * with the framework implementation.
+	 * NOTE: A framework implementor may also choose to replace this class in
+	 * their distribution with a class that directly interfaces with the
+	 * framework implementation.
 	 */
 
 	/*
@@ -95,7 +95,7 @@ public class FrameworkUtil {
 	 * @param filter The filter string.
 	 * @return A <code>Filter</code> object encapsulating the filter string.
 	 * @throws InvalidSyntaxException If <code>filter</code> contains an
-	 *            invalid filter string that cannot be parsed.
+	 *         invalid filter string that cannot be parsed.
 	 * @throws NullPointerException If <code>filter</code> is null.
 	 * 
 	 * @see Filter
@@ -104,7 +104,8 @@ public class FrameworkUtil {
 			throws InvalidSyntaxException {
 		try {
 			try {
-				return (Filter) createFilter.invoke(null, new Object[] {filter});
+				return (Filter) createFilter
+						.invoke(null, new Object[] {filter});
 			}
 			catch (InvocationTargetException e) {
 				throw e.getTargetException();

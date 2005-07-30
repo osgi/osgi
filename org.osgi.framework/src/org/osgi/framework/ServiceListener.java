@@ -14,23 +14,29 @@ import java.util.EventListener;
 
 /**
  * A <code>ServiceEvent</code> listener.
- *
- * <p><code>ServiceListener</code> is a listener interface that may be implemented by a bundle
- * developer.
- * <p>A <code>ServiceListener</code> object is registered with the Framework using the
- * <code>BundleContext.addServiceListener</code> method.
- * <code>ServiceListener</code> objects are called with a <code>ServiceEvent</code> object when
- * a service is registered, modified, or is in the process of unregistering.
- *
- * <p><code>ServiceEvent</code> object delivery to <code>ServiceListener</code> objects is filtered by the
- * filter specified when the listener was registered. If the Java Runtime Environment
- * supports permissions, then additional filtering is done.
- * <code>ServiceEvent</code> objects are only delivered to the listener if the bundle which defines
- * the listener object's class has the appropriate <code>ServicePermission</code> to get the service
- * using at least one of the named classes the service was registered under.
- *
- * <p><code>ServiceEvent</code> object delivery to <code>ServiceListener</code> objects is
- * further filtered according to package sources as defined in
+ * 
+ * <p>
+ * <code>ServiceListener</code> is a listener interface that may be
+ * implemented by a bundle developer.
+ * <p>
+ * A <code>ServiceListener</code> object is registered with the Framework
+ * using the <code>BundleContext.addServiceListener</code> method.
+ * <code>ServiceListener</code> objects are called with a
+ * <code>ServiceEvent</code> object when a service is registered, modified, or
+ * is in the process of unregistering.
+ * 
+ * <p>
+ * <code>ServiceEvent</code> object delivery to <code>ServiceListener</code>
+ * objects is filtered by the filter specified when the listener was registered.
+ * If the Java Runtime Environment supports permissions, then additional
+ * filtering is done. <code>ServiceEvent</code> objects are only delivered to
+ * the listener if the bundle which defines the listener object's class has the
+ * appropriate <code>ServicePermission</code> to get the service using at
+ * least one of the named classes the service was registered under.
+ * 
+ * <p>
+ * <code>ServiceEvent</code> object delivery to <code>ServiceListener</code>
+ * objects is further filtered according to package sources as defined in
  * {@link ServiceReference#isAssignableTo(Bundle, String)}.
  * 
  * @version $Revision$
@@ -38,14 +44,11 @@ import java.util.EventListener;
  * @see ServicePermission
  */
 
-public abstract interface ServiceListener extends EventListener
-{
-    /**
-     * Receives notification that a service has had a lifecycle change.
-     *
-     * @param event The <code>ServiceEvent</code> object.
-     */
-    public abstract void serviceChanged(ServiceEvent event);
+public interface ServiceListener extends EventListener {
+	/**
+	 * Receives notification that a service has had a lifecycle change.
+	 * 
+	 * @param event The <code>ServiceEvent</code> object.
+	 */
+	public void serviceChanged(ServiceEvent event);
 }
-
-

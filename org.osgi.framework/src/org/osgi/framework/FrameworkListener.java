@@ -16,10 +16,11 @@ import java.util.EventListener;
  * A <code>FrameworkEvent</code> listener.
  * 
  * <p>
- * <code>FrameworkListener</code> is a listener interface that may be implemented
- * by a bundle developer. A <code>FrameworkListener</code> object is registered
- * with the Framework using the {@link BundleContext#addFrameworkListener}
- * method. <code>FrameworkListener</code> objects are called with a
+ * <code>FrameworkListener</code> is a listener interface that may be
+ * implemented by a bundle developer. A <code>FrameworkListener</code> object
+ * is registered with the Framework using the
+ * {@link BundleContext#addFrameworkListener} method.
+ * <code>FrameworkListener</code> objects are called with a
  * <code>FrameworkEvent</code> objects when the Framework starts and when
  * asynchronous errors occur.
  * 
@@ -27,13 +28,12 @@ import java.util.EventListener;
  * @see FrameworkEvent
  */
 
-public abstract interface FrameworkListener extends EventListener {
+public interface FrameworkListener extends EventListener {
 
 	/**
 	 * Receives notification of a general <code>FrameworkEvent</code> object.
 	 * 
 	 * @param event The <code>FrameworkEvent</code> object.
 	 */
-	public abstract void frameworkEvent(FrameworkEvent event);
+	public void frameworkEvent(FrameworkEvent event);
 }
-

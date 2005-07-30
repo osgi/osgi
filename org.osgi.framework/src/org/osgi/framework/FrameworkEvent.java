@@ -16,9 +16,9 @@ import java.util.EventObject;
  * A general Framework event.
  * 
  * <p>
- * <code>FrameworkEvent</code> is the event class used when notifying listeners of
- * general events occuring within the OSGI environment. A type code is used to
- * identify the event type for future extendability.
+ * <code>FrameworkEvent</code> is the event class used when notifying
+ * listeners of general events occuring within the OSGI environment. A type code
+ * is used to identify the event type for future extendability.
  * 
  * <p>
  * OSGi Alliance reserves the right to extend the set of event types.

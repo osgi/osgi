@@ -93,14 +93,15 @@ public class Version implements Comparable {
 	 * Here is the grammar for version strings.
 	 * 
 	 * <pre>
-	 *       version ::= major('.'minor('.'micro('.'qualifier)?)?)?
-	 *       major ::= digit+
-	 *       minor ::= digit+
-	 *       micro ::= digit+
-	 *       qualifier ::= (alpha|digit|'_'|'-')+
-	 *       digit ::= [0..9]
-	 *       alpha ::= [a..zA..Z]
+	 * version ::= major('.'minor('.'micro('.'qualifier)?)?)?
+	 * major ::= digit+
+	 * minor ::= digit+
+	 * micro ::= digit+
+	 * qualifier ::= (alpha|digit|'_'|'-')+
+	 * digit ::= [0..9]
+	 * alpha ::= [a..zA..Z]
 	 * </pre>
+	 * 
 	 * There must be no whitespace in version.
 	 * 
 	 * @param version String representation of the version identifier.

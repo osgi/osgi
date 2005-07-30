@@ -58,7 +58,7 @@ import java.util.Enumeration;
  * 
  * @version $Revision$
  */
-public abstract interface Bundle {
+public interface Bundle {
 	/**
 	 * This bundle is uninstalled and may not be used.
 	 * 
@@ -99,17 +99,17 @@ public abstract interface Bundle {
 	 * <li>The bundle's class path from its {@link Constants#BUNDLE_CLASSPATH}
 	 * Manifest header.
 	 * <li>The bundle's package dependencies from its
-	 * {@link Constants#EXPORT_PACKAGE}and {@link Constants#IMPORT_PACKAGE}
+	 * {@link Constants#EXPORT_PACKAGE} and {@link Constants#IMPORT_PACKAGE}
 	 * Manifest headers.
 	 * <li>The bundle's required bundle dependencies from its
-	 * {@link Constants#REQUIRE_BUNDLE}Manifest header.
+	 * {@link Constants#REQUIRE_BUNDLE} Manifest header.
 	 * <li>A fragment bundle's host dependency from its
-	 * {@link Constants#FRAGMENT_HOST}Manifest header.
+	 * {@link Constants#FRAGMENT_HOST} Manifest header.
 	 * </ul>
 	 * <p>
 	 * Note that the bundle is not active yet. A bundle must be put in the
 	 * <code>RESOLVED</code> state before it can be started. The Framework may
-	 * attempt to resolve a bundle at any time. 
+	 * attempt to resolve a bundle at any time.
 	 * <p>
 	 * The value of <code>RESOLVED</code> is 0x00000004.
 	 */
@@ -121,7 +121,7 @@ public abstract interface Bundle {
 	 * <p>
 	 * A bundle is in the <code>STARTING</code> state when the {@link #start}
 	 * method is active. A bundle must be in this state when the bundle's
-	 * {@link BundleActivator#start}is called. If this method completes without
+	 * {@link BundleActivator#start} is called. If this method completes without
 	 * exception, then the bundle has successfully started and must move to the
 	 * <code>ACTIVE</code> state.
 	 * <p>
@@ -135,7 +135,7 @@ public abstract interface Bundle {
 	 * <p>
 	 * A bundle is in the <code>STOPPING</code> state when the {@link #stop}
 	 * method is active. A bundle must be in this state when the bundle's
-	 * {@link BundleActivator#stop}method is called. When this method completes
+	 * {@link BundleActivator#stop} method is called. When this method completes
 	 * the bundle is stopped and must move to the <code>RESOLVED</code> state.
 	 * <p>
 	 * The value of <code>STOPPING</code> is 0x00000010.
@@ -163,7 +163,7 @@ public abstract interface Bundle {
 	 *         <code>RESOLVED</code>,<code>STARTING</code>,
 	 *         <code>STOPPING</code>,<code>ACTIVE</code>.
 	 */
-	public abstract int getState();
+	public int getState();
 
 	/**
 	 * Starts this bundle.
@@ -198,7 +198,7 @@ public abstract interface Bundle {
 	 * 
 	 * <li>This bundle's state is set to <code>STARTING</code>.
 	 * 
-	 * <li>The {@link BundleActivator#start}method of this bundle's
+	 * <li>The {@link BundleActivator#start} method of this bundle's
 	 * <code>BundleActivator</code>, if one is specified, is called. If the
 	 * <code>BundleActivator</code> is invalid or throws an exception, this
 	 * bundle's state is set back to <code>RESOLVED</code>.<br>
@@ -213,7 +213,7 @@ public abstract interface Bundle {
 	 * 
 	 * <li>This bundle's state is set to <code>ACTIVE</code>.
 	 * 
-	 * <li>A bundle event of type {@link BundleEvent#STARTED}is broadcast.
+	 * <li>A bundle event of type {@link BundleEvent#STARTED} is broadcast.
 	 * </ol>
 	 * 
 	 * <b>Preconditions </b>
@@ -236,17 +236,17 @@ public abstract interface Bundle {
 	 * <code>ACTIVE</code>}.
 	 * </ul>
 	 * 
-	 * @exception BundleException If this bundle could not be started. This
-	 *            could be because a code dependency could not be resolved or
-	 *            the specified <code>BundleActivator</code> could not be
-	 *            loaded or threw an exception.
-	 * @exception java.lang.IllegalStateException If this bundle has been
-	 *            uninstalled or this bundle tries to change its own state.
-	 * @exception java.lang.SecurityException If the caller does not have the
-	 *            appropriate <code>AdminPermission[bundle, EXECUTE]</code>,
-	 *            and the Java Runtime Environment supports permissions.
+	 * @throws BundleException If this bundle could not be started. This could
+	 *         be because a code dependency could not be resolved or the
+	 *         specified <code>BundleActivator</code> could not be loaded or
+	 *         threw an exception.
+	 * @throws java.lang.IllegalStateException If this bundle has been
+	 *         uninstalled or this bundle tries to change its own state.
+	 * @throws java.lang.SecurityException If the caller does not have the
+	 *         appropriate <code>AdminPermission[EXECUTE]</code>, and the
+	 *         Java Runtime Environment supports permissions.
 	 */
-	public abstract void start() throws BundleException;
+	public void start() throws BundleException;
 
 	/**
 	 * Stops this bundle.
@@ -271,7 +271,7 @@ public abstract interface Bundle {
 	 * 
 	 * <li>This bundle's state is set to <code>STOPPING</code>.
 	 * 
-	 * <li>The {@link BundleActivator#stop}method of this bundle's
+	 * <li>The {@link BundleActivator#stop} method of this bundle's
 	 * <code>BundleActivator</code>, if one is specified, is called. If that
 	 * method throws an exception, this method must continue to stop this
 	 * bundle. A <code>BundleException</code> must be thrown after completion
@@ -287,7 +287,7 @@ public abstract interface Bundle {
 	 * 
 	 * <li>This bundle's state is set to <code>RESOLVED</code>.
 	 * 
-	 * <li>A bundle event of type {@link BundleEvent#STOPPED}is broadcast.
+	 * <li>A bundle event of type {@link BundleEvent#STOPPED} is broadcast.
 	 * </ol>
 	 * 
 	 * <b>Preconditions </b>
@@ -307,15 +307,15 @@ public abstract interface Bundle {
 	 * <li>Bundle persistent state is marked as stopped.
 	 * </ul>
 	 * 
-	 * @exception BundleException If this bundle's <code>BundleActivator</code>
-	 *            could not be loaded or threw an exception.
-	 * @exception java.lang.IllegalStateException If this bundle has been
-	 *            uninstalled or this bundle tries to change its own state.
-	 * @exception java.lang.SecurityException If the caller does not have the
-	 *            appropriate <code>AdminPermission[bundle, EXECUTE]</code>,
-	 *            and the Java Runtime Environment supports permissions.
+	 * @throws BundleException If this bundle's <code>BundleActivator</code>
+	 *         could not be loaded or threw an exception.
+	 * @throws java.lang.IllegalStateException If this bundle has been
+	 *         uninstalled or this bundle tries to change its own state.
+	 * @throws java.lang.SecurityException If the caller does not have the
+	 *         appropriate <code>AdminPermission[EXECUTE]</code>, and the
+	 *         Java Runtime Environment supports permissions.
 	 */
-	public abstract void stop() throws BundleException;
+	public void stop() throws BundleException;
 
 	/**
 	 * Updates this bundle.
@@ -344,7 +344,7 @@ public abstract interface Bundle {
 	 * 
 	 * <li>The download location of the new version of this bundle is
 	 * determined from either the bundle's
-	 * {@link Constants#BUNDLE_UPDATELOCATION}Manifest header (if available) or
+	 * {@link Constants#BUNDLE_UPDATELOCATION} Manifest header (if available) or
 	 * the bundle's original location.
 	 * 
 	 * <li>The location is interpreted in an implementation dependent manner,
@@ -366,12 +366,12 @@ public abstract interface Bundle {
 	 * <li>This bundle's state is set to <code>INSTALLED</code>.
 	 * 
 	 * <li>If the new version of this bundle was successfully installed, a
-	 * bundle event of type {@link BundleEvent#UPDATED}is broadcast.
+	 * bundle event of type {@link BundleEvent#UPDATED} is broadcast.
 	 * 
 	 * <li>If this bundle's state was originally <code>ACTIVE</code>, the
 	 * updated bundle is started as described in the <code>Bundle.start</code>
 	 * method. If <code>Bundle.start</code> throws an exception, a Framework
-	 * event of type {@link FrameworkEvent#ERROR}is broadcast containing the
+	 * event of type {@link FrameworkEvent#ERROR} is broadcast containing the
 	 * exception.
 	 * </ol>
 	 * 
@@ -392,17 +392,17 @@ public abstract interface Bundle {
 	 * <li>Original bundle is still used; no update occurred.
 	 * </ul>
 	 * 
-	 * @exception BundleException If the update fails.
-	 * @exception java.lang.IllegalStateException If this bundle has been
-	 *            uninstalled or this bundle tries to change its own state.
-	 * @exception java.lang.SecurityException If the caller does not have the
-	 *            appropriate <code>AdminPermission[bundle, LIFECYCLE]</code> for both
-	 *            the current bundle and the updated bundle,
-	 *            and the Java Runtime Environment supports permissions.
+	 * @throws BundleException If the update fails.
+	 * @throws java.lang.IllegalStateException If this bundle has been
+	 *         uninstalled or this bundle tries to change its own state.
+	 * @throws java.lang.SecurityException If the caller does not have the
+	 *         appropriate <code>AdminPermission[LIFECYCLE]</code> for both
+	 *         the current bundle and the updated bundle, and the Java Runtime
+	 *         Environment supports permissions.
 	 * @see #stop()
 	 * @see #start()
 	 */
-	public abstract void update() throws BundleException;
+	public void update() throws BundleException;
 
 	/**
 	 * Updates this bundle from an <code>InputStream</code>.
@@ -417,17 +417,17 @@ public abstract interface Bundle {
 	 * 
 	 * @param in The <code>InputStream</code> from which to read the new
 	 *        bundle.
-	 * @exception BundleException If the provided stream cannot be read or the
-	 *            update fails.
-	 * @exception java.lang.IllegalStateException If this bundle has been
-	 *            uninstalled or this bundle tries to change its own state.
-	 * @exception java.lang.SecurityException If the caller does not have the
-	 *            appropriate <code>AdminPermission[bundle, LIFECYCLE]</code> for both
-	 *            the current bundle and the updated bundle,
-	 *            and the Java Runtime Environment supports permissions.
+	 * @throws BundleException If the provided stream cannot be read or the
+	 *         update fails.
+	 * @throws java.lang.IllegalStateException If this bundle has been
+	 *         uninstalled or this bundle tries to change its own state.
+	 * @throws java.lang.SecurityException If the caller does not have the
+	 *         appropriate <code>AdminPermission[LIFECYCLE]</code> for both
+	 *         the current bundle and the updated bundle, and the Java Runtime
+	 *         Environment supports permissions.
 	 * @see #update()
 	 */
-	public abstract void update(InputStream in) throws BundleException;
+	public void update(InputStream in) throws BundleException;
 
 	/**
 	 * Uninstalls this bundle.
@@ -454,11 +454,11 @@ public abstract interface Bundle {
 	 * <code>STARTING</code> or <code>STOPPING</code>, this bundle is
 	 * stopped as described in the <code>Bundle.stop</code> method. If
 	 * <code>Bundle.stop</code> throws an exception, a Framework event of type
-	 * {@link FrameworkEvent#ERROR}is broadcast containing the exception.
+	 * {@link FrameworkEvent#ERROR} is broadcast containing the exception.
 	 * 
 	 * <li>This bundle's state is set to <code>UNINSTALLED</code>.
 	 * 
-	 * <li>A bundle event of type {@link BundleEvent#UNINSTALLED}is broadcast.
+	 * <li>A bundle event of type {@link BundleEvent#UNINSTALLED} is broadcast.
 	 * 
 	 * <li>This bundle and any persistent storage area provided for this bundle
 	 * by the Framework are removed.
@@ -479,17 +479,17 @@ public abstract interface Bundle {
 	 * <li>This Bundle has not been uninstalled.
 	 * </ul>
 	 * 
-	 * @exception BundleException If the uninstall failed. This can occur if
-	 *            another thread is attempting to change the bundle's state and
-	 *            does not complete in a timely manner.
-	 * @exception java.lang.IllegalStateException If this bundle has been
-	 *            uninstalled or this bundle tries to change its own state.
-	 * @exception java.lang.SecurityException If the caller does not have the
-	 *            appropriate <code>AdminPermission[bundle, LIFECYCLE]</code>,
-	 *            and the Java Runtime Environment supports permissions.
+	 * @throws BundleException If the uninstall failed. This can occur if
+	 *         another thread is attempting to change the bundle's state and
+	 *         does not complete in a timely manner.
+	 * @throws java.lang.IllegalStateException If this bundle has been
+	 *         uninstalled or this bundle tries to change its own state.
+	 * @throws java.lang.SecurityException If the caller does not have the
+	 *         appropriate <code>AdminPermission[LIFECYCLE]</code>, and the
+	 *         Java Runtime Environment supports permissions.
 	 * @see #stop()
 	 */
-	public abstract void uninstall() throws BundleException;
+	public void uninstall() throws BundleException;
 
 	/**
 	 * Returns this bundle's Manifest headers and values. This method returns
@@ -509,12 +509,12 @@ public abstract interface Bundle {
 	 * they are present in the Manifest file:
 	 * 
 	 * <pre>
-	 *        Bundle-Name
-	 *        Bundle-Vendor
-	 *        Bundle-Version
-	 *        Bundle-Description
-	 *        Bundle-DocURL
-	 *        Bundle-ContactAddress
+	 *          Bundle-Name
+	 *          Bundle-Vendor
+	 *          Bundle-Version
+	 *          Bundle-Description
+	 *          Bundle-DocURL
+	 *          Bundle-ContactAddress
 	 * </pre>
 	 * 
 	 * <p>
@@ -524,13 +524,13 @@ public abstract interface Bundle {
 	 * @return A <code>Dictionary</code> object containing this bundle's
 	 *         Manifest headers and values.
 	 * 
-	 * @exception java.lang.SecurityException If the caller does not have the appropriate
-	 *            <code>AdminPermission[bundle, METADATA]</code>, and the
-	 *            Java Runtime Environment supports permissions.
+	 * @throws java.lang.SecurityException If the caller does not have the
+	 *         appropriate <code>AdminPermission[METADATA]</code>, and the
+	 *         Java Runtime Environment supports permissions.
 	 * 
 	 * @see Constants#BUNDLE_LOCALIZATION
 	 */
-	public abstract Dictionary getHeaders();
+	public Dictionary getHeaders();
 
 	/**
 	 * Returns this bundle's identifier. The bundle is assigned a unique
@@ -553,7 +553,7 @@ public abstract interface Bundle {
 	 * 
 	 * @return The unique identifier of this bundle.
 	 */
-	public abstract long getBundleId();
+	public long getBundleId();
 
 	/**
 	 * Returns this bundle's location identifier.
@@ -569,11 +569,11 @@ public abstract interface Bundle {
 	 * while this bundle is in the <code>UNINSTALLED</code> state.
 	 * 
 	 * @return The string representation of this bundle's location identifier.
-	 * @exception java.lang.SecurityException If the caller does not have the
-	 *            appropriate <code>AdminPermission[bundle, METADATA]</code>,
-	 *            and the Java Runtime Environment supports permissions.
+	 * @throws java.lang.SecurityException If the caller does not have the
+	 *         appropriate <code>AdminPermission[METADATA]</code>, and the
+	 *         Java Runtime Environment supports permissions.
 	 */
-	public abstract String getLocation();
+	public String getLocation();
 
 	/**
 	 * Returns this bundle's <code>ServiceReference</code> list for all
@@ -593,13 +593,13 @@ public abstract interface Bundle {
 	 * 
 	 * @return An array of <code>ServiceReference</code> objects or
 	 *         <code>null</code>.
-	 * @exception java.lang.IllegalStateException If this bundle has been
-	 *            uninstalled.
+	 * @throws java.lang.IllegalStateException If this bundle has been
+	 *         uninstalled.
 	 * @see ServiceRegistration
 	 * @see ServiceReference
 	 * @see ServicePermission
 	 */
-	public abstract ServiceReference[] getRegisteredServices();
+	public ServiceReference[] getRegisteredServices();
 
 	/**
 	 * Returns this bundle's <code>ServiceReference</code> list for all
@@ -620,12 +620,12 @@ public abstract interface Bundle {
 	 * 
 	 * @return An array of <code>ServiceReference</code> objects or
 	 *         <code>null</code>.
-	 * @exception java.lang.IllegalStateException If this bundle has been
-	 *            uninstalled.
+	 * @throws java.lang.IllegalStateException If this bundle has been
+	 *         uninstalled.
 	 * @see ServiceReference
 	 * @see ServicePermission
 	 */
-	public abstract ServiceReference[] getServicesInUse();
+	public ServiceReference[] getServicesInUse();
 
 	/**
 	 * Determines if this bundle has the specified permissions.
@@ -653,10 +653,10 @@ public abstract interface Bundle {
 	 *         specified permission or <code>permission</code> is not an
 	 *         <code>instanceof</code> <code>java.security.Permission</code>.
 	 * 
-	 * @exception java.lang.IllegalStateException If this bundle has been
-	 *            uninstalled.
+	 * @throws java.lang.IllegalStateException If this bundle has been
+	 *         uninstalled.
 	 */
-	public abstract boolean hasPermission(Object permission);
+	public boolean hasPermission(Object permission);
 
 	/**
 	 * Find the specified resource from this bundle.
@@ -670,17 +670,17 @@ public abstract interface Bundle {
 	 * @param name The name of the resource. See
 	 *        <code>java.lang.ClassLoader.getResource</code> for a description
 	 *        of the format of a resource name.
-	 * @return a URL to the named resource, or <code>null</code> if the
+	 * @return A URL to the named resource, or <code>null</code> if the
 	 *         resource could not be found or if this bundle is a fragment
 	 *         bundle or if the caller does not have the appropriate
-	 *         <code>AdminPermission[bundle, RESOURCE]</code>, and the Java
-	 *         Runtime Environment supports permissions.
+	 *         <code>AdminPermission[RESOURCE]</code>, and the Java Runtime
+	 *         Environment supports permissions.
 	 * 
 	 * @since 1.1
-	 * @exception java.lang.IllegalStateException If this bundle has been
-	 *            uninstalled.
+	 * @throws java.lang.IllegalStateException If this bundle has been
+	 *         uninstalled.
 	 */
-	public abstract URL getResource(String name);
+	public URL getResource(String name);
 
 	/**
 	 * Returns this bundle's Manifest headers and values localized to the
@@ -717,9 +717,9 @@ public abstract interface Bundle {
 	 * @return A <code>Dictionary</code> object containing this bundle's
 	 *         Manifest headers and values.
 	 * 
-	 * @exception java.lang.SecurityException If the caller does not have the appropriate
-	 *            <code>AdminPermission[bundle, METADATA]</code>, and the
-	 *            Java Runtime Environment supports permissions.
+	 * @throws java.lang.SecurityException If the caller does not have the
+	 *         appropriate <code>AdminPermission[METADATA]</code>, and the
+	 *         Java Runtime Environment supports permissions.
 	 * 
 	 * @see #getHeaders()
 	 * @see Constants#BUNDLE_LOCALIZATION
@@ -757,7 +757,7 @@ public abstract interface Bundle {
 	 * 
 	 * <p>
 	 * If the bundle cannot be resolved, a Framework event of type
-	 * {@link FrameworkEvent#ERROR}is broadcast containing a
+	 * {@link FrameworkEvent#ERROR} is broadcast containing a
 	 * <code>BundleException</code> with details of the reason the bundle
 	 * could not be resolved. This method must then throw a
 	 * <code>ClassNotFoundException</code>.
@@ -768,12 +768,12 @@ public abstract interface Bundle {
 	 * 
 	 * @param name The name of the class to load.
 	 * @return The Class object for the requested class.
-	 * @exception java.lang.ClassNotFoundException If no such class can be found
-	 *            or if this bundle is a fragment bundle or if the caller does
-	 *            not have the appropriate <code>AdminPermission[bundle, CLASS]</code>,
-	 *            and the Java Runtime Environment supports permissions.
-	 * @exception java.lang.IllegalStateException If this bundle has been
-	 *            uninstalled.
+	 * @throws java.lang.ClassNotFoundException If no such class can be found or
+	 *         if this bundle is a fragment bundle or if the caller does not
+	 *         have the appropriate <code>AdminPermission[CLASS]</code>, and
+	 *         the Java Runtime Environment supports permissions.
+	 * @throws java.lang.IllegalStateException If this bundle has been
+	 *         uninstalled.
 	 * @since 1.3
 	 */
 	public Class loadClass(String name) throws ClassNotFoundException;
@@ -790,43 +790,38 @@ public abstract interface Bundle {
 	 * @param name The name of the resource. See
 	 *        <code>java.lang.ClassLoader.getResources</code> for a
 	 *        description of the format of a resource name.
-	 * @return an Enumeration of URLs to the named resources, or
+	 * @return An enumeration of URLs to the named resources, or
 	 *         <code>null</code> if the resource could not be found or if this
-	 *         bundle is a fragment bundle or if the caller does not have the appropriate
-	 *         <code>AdminPermission[bundle, RESOURCE]</code>, and the Java
-	 *         Runtime Environment supports permissions.
+	 *         bundle is a fragment bundle or if the caller does not have the
+	 *         appropriate <code>AdminPermission[RESOURCE]</code>, and the
+	 *         Java Runtime Environment supports permissions.
 	 * 
 	 * @since 1.3
-	 * @exception java.lang.IllegalStateException If this bundle has been
-	 *            uninstalled.
+	 * @throws java.lang.IllegalStateException If this bundle has been
+	 *         uninstalled.
 	 * @throws java.io.IOException If there is an I/O error.
 	 */
 	public Enumeration getResources(String name) throws IOException;
 
 	/**
-	 * Returns an Enumeration of all the paths (<code>String</code>) objects) to 
-	 * entries within the bundle whose longest sub-path matches the supplied path 
-	 * argument. The bundle's classloader is not used to search for entries. Only 
-	 * the contents of the bundle is searched.  A specified path of &quot;/&quot; 
-	 * indicates the root of the bundle.
+	 * Returns an Enumeration of all the paths (<code>String</code> objects)
+	 * to entries within the bundle whose longest sub-path matches the supplied
+	 * path argument. The bundle's classloader is not used to search for
+	 * entries. Only the contents of the bundle is searched. A specified path of
+	 * &quot;/&quot; indicates the root of the bundle.
 	 * 
 	 * <p>
 	 * Returned paths indicating subdirectory paths end with a &quot;/&quot;.
 	 * The returned paths are all relative to the root of the bundle.
 	 * 
-	 * <p>
-	 * This method returns <code>null</code> if no entries could be found that
-	 * match the specified path or if the caller does not have the appropriate
-	 * <code>AdminPermission[bundle, RESOURCE]</code> and the Java 
-	 * Runtime Environment supports permissions.
-	 * 
-	 * @param path the path name to get the entry path for.
-	 * @return An Enumeration of the entry paths (<code>String</code> objects) 
-	 *         or <code>null</code> if an entry could not be found or if the 
-	 *         caller does not have the appropriate <code>AdminPermission[bundle, RESOURCE]</code> 
-	 *         and the Java Runtime Environment supports permissions.
-	 * @exception java.lang.IllegalStateException If this bundle has been
-	 *            uninstalled.
+	 * @param path The path name for which to return entry paths.
+	 * @return An Enumeration of the entry paths (<code>String</code>
+	 *         objects) or <code>null</code> if no entry could be found or if
+	 *         the caller does not have the appropriate
+	 *         <code>AdminPermission[RESOURCE]</code> and the Java Runtime
+	 *         Environment supports permissions.
+	 * @throws java.lang.IllegalStateException If this bundle has been
+	 *         uninstalled.
 	 * @since 1.3
 	 */
 	public Enumeration getEntryPaths(String path);
@@ -837,22 +832,16 @@ public abstract interface Bundle {
 	 * contents of the bundle is searched for the specified entry. A specified
 	 * path of &quot;/&quot; indicates the root of the bundle.
 	 * 
-	 * <p>
-	 * This method returns a URL to the specified entry, or <code>null</code>
-	 * if the entry could not be found or if the caller does not have the appropriate
-	 * <code>AdminPermission[bundle, RESOURCE]</code> and the Java Runtime
-	 * Environment supports permissions.
-	 * 
 	 * @param name The name of the entry. See
 	 *        <code>java.lang.ClassLoader.getResource</code> for a description
 	 *        of the format of a resource name.
-	 * @return A URL to the specified entry, or <code>null</code> if the entry
-	 *         could not be found or if the caller does not have the appropriate
-	 *         <code>AdminPermission[bundle, RESOURCE]</code> and the Java
-	 *         Runtime Environment supports permissions.
+	 * @return A URL to the specified entry, or <code>null</code> if no entry
+	 *         could be found or if the caller does not have the appropriate
+	 *         <code>AdminPermission[RESOURCE]</code> and the Java Runtime
+	 *         Environment supports permissions.
 	 * 
-	 * @exception java.lang.IllegalStateException If this bundle has been
-	 *            uninstalled.
+	 * @throws java.lang.IllegalStateException If this bundle has been
+	 *         uninstalled.
 	 * @since 1.3
 	 */
 	public URL getEntry(String name);
@@ -873,12 +862,12 @@ public abstract interface Bundle {
 	/**
 	 * Returns entries in this bundle and its attached fragments. The bundle's
 	 * classloader is not used to search for entries. Only the contents of the
-	 * bundle and its attached fragments are searched for the specified
-	 * entries.
+	 * bundle and its attached fragments are searched for the specified entries.
 	 * 
 	 * If this bundle's state is <code>INSTALLED</code>, this method must
-	 * attempt to resolve the bundle before attempting to find entries.<p>
+	 * attempt to resolve the bundle before attempting to find entries.
 	 * 
+	 * <p>
 	 * This method is intended to be used to obtain configuration, setup,
 	 * localization and other information from this bundle. This method takes
 	 * into account that the &quot;contents&quot; of this bundle can be extended
@@ -894,13 +883,15 @@ public abstract interface Bundle {
 	 * returned.
 	 * <p>
 	 * Examples:
+	 * 
 	 * <pre>
 	 * // List all XML files in the OSGI-INF directory and below
-	 * Enumeration	e	= b.findEntries(&quot;OSGI-INF&quot;, &quot;*.xml&quot;, true);
+	 * Enumeration e = b.findEntries(&quot;OSGI-INF&quot;, &quot;*.xml&quot;, true);
 	 * 
 	 * // Find a specific localization file
 	 * Enumeration e = b.findEntries(&quot;OSGI-INF/l10n&quot;, 
-	 *    &quot;bundle_nl_DU.properties&quot;, false);
+	 *                               &quot;bundle_nl_DU.properties&quot;, 
+	 *                               false);
 	 * if (e.hasMoreElements())
 	 * 	return (URL) e.nextElement();
 	 * </pre>
@@ -919,11 +910,11 @@ public abstract interface Bundle {
 	 * @return An enumeration of URL objects for each matching entry, or
 	 *         <code>null</code> if an entry could not be found or if the
 	 *         caller does not have the appropriate
-	 *         <code>AdminPermission[bundle, RESOURCE]</code>, and the Java
-	 *         Runtime Environment supports permissions. The URLs are sorted
-	 *         such that entries from this bundle are returned first followed by
-	 *         the entries from attached fragments in ascending bundle id order.
-	 *         If this bundle is a fragment, then only matching entries in this
+	 *         <code>AdminPermission[RESOURCE]</code>, and the Java Runtime
+	 *         Environment supports permissions. The URLs are sorted such that
+	 *         entries from this bundle are returned first followed by the
+	 *         entries from attached fragments in ascending bundle id order. If
+	 *         this bundle is a fragment, then only matching entries in this
 	 *         fragment are returned.
 	 * @since 1.3
 	 */

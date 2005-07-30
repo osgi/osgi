@@ -15,9 +15,10 @@ import java.util.EventObject;
 /**
  * A Framework event describing a bundle lifecycle change.
  * <p>
- * <code>BundleEvent</code> objects are delivered to <code>BundleListener</code>
- * objects when a change occurs in a bundle's lifecycle. A type code is used to
- * identify the event type for future extendability.
+ * <code>BundleEvent</code> objects are delivered to
+ * <code>BundleListener</code> objects when a change occurs in a bundle's
+ * lifecycle. A type code is used to identify the event type for future
+ * extendability.
  * 
  * <p>
  * OSGi Alliance reserves the right to extend the set of types.
@@ -90,7 +91,7 @@ public class BundleEvent extends EventObject {
 	 * @see Bundle#RESOLVED
 	 * @since 1.3
 	 */
-	public final static int	RESOLVED	= 0x00000020;
+	public final static int	RESOLVED			= 0x00000020;
 
 	/**
 	 * The bundle has been unresolved.
@@ -100,7 +101,7 @@ public class BundleEvent extends EventObject {
 	 * @see Bundle#INSTALLED
 	 * @since 1.3
 	 */
-	public final static int	UNRESOLVED	= 0x00000040;
+	public final static int	UNRESOLVED			= 0x00000040;
 
 	/**
 	 * Creates a bundle event of the specified type.

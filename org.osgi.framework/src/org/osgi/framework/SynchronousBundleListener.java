@@ -20,17 +20,17 @@ package org.osgi.framework;
  * A <code>SynchronousBundleListener</code> object is registered with the
  * Framework using the {@link BundleContext#addBundleListener} method.
  * <code>SynchronousBundleListener</code> objects are called with a
- * <code>BundleEvent</code> object when a bundle has been installed,
- * resolved, started, stopped, updated, unresolved, or uninstalled.
+ * <code>BundleEvent</code> object when a bundle has been installed, resolved,
+ * started, stopped, updated, unresolved, or uninstalled.
  * <p>
  * Unlike normal <code>BundleListener</code> objects,
- * <code>SynchronousBundleListener</code>s are synchronously called during bundle
- * lifecycle processing. The bundle lifecycle processing will not proceed
+ * <code>SynchronousBundleListener</code>s are synchronously called during
+ * bundle lifecycle processing. The bundle lifecycle processing will not proceed
  * until all <code>SynchronousBundleListener</code>s have completed.
  * <code>SynchronousBundleListener</code> objects will be called prior to
  * <code>BundleListener</code> objects.
  * <p>
- * <code>AdminPermission</code> is required to add or remove a
+ * <code>AdminPermission[LISTENER]</code> is required to add or remove a
  * <code>SynchronousBundleListener</code> object.
  * 
  * @version $Revision$
@@ -38,6 +38,6 @@ package org.osgi.framework;
  * @see BundleEvent
  */
 
-public abstract interface SynchronousBundleListener extends BundleListener {
+public interface SynchronousBundleListener extends BundleListener {
+	// This is a marker interface
 }
-

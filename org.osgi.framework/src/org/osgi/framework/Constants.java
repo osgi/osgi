@@ -17,8 +17,8 @@ import java.util.Dictionary;
  * and Manifest header attribute keys.
  * 
  * <p>
- * The values associated with these keys are of type <code>java.lang.String</code>,
- * unless otherwise indicated.
+ * The values associated with these keys are of type
+ * <code>java.lang.String</code>, unless otherwise indicated.
  * 
  * @version $Revision$
  * @since 1.1
@@ -35,8 +35,9 @@ public interface Constants {
 	public static final String	SYSTEM_BUNDLE_LOCATION					= "System Bundle";
 
 	/**
-	 * Alias for the symbolic name of the OSGi <i>system bundle </i>. It is defined
-	 * to be &quot;system.bundle&quot;.
+	 * Alias for the symbolic name of the OSGi <i>system bundle </i>. It is
+	 * defined to be &quot;system.bundle&quot;.
+	 * 
 	 * @since 1.3
 	 */
 	public static final String	SYSTEM_BUNDLE_SYMBOLICNAME				= "system.bundle";
@@ -52,8 +53,8 @@ public interface Constants {
 
 	/**
 	 * Manifest header (named &quot;Bundle-ClassPath&quot;) identifying a list
-	 * of directories and embedded JAR files, which are bundle resources used
-	 * to extend the bundle's classpath.
+	 * of directories and embedded JAR files, which are bundle resources used to
+	 * extend the bundle's classpath.
 	 * 
 	 * <p>
 	 * The attribute value may be retrieved from the <code>Dictionary</code>
@@ -100,8 +101,8 @@ public interface Constants {
 	public static final String	BUNDLE_NATIVECODE						= "Bundle-NativeCode";
 
 	/**
-	 * Manifest header (named &quot;Export-Package&quot;) identifying 
-	 * the packages that the bundle offers to the Framework for export.
+	 * Manifest header (named &quot;Export-Package&quot;) identifying the
+	 * packages that the bundle offers to the Framework for export.
 	 * 
 	 * <p>
 	 * The attribute value may be retrieved from the <code>Dictionary</code>
@@ -121,8 +122,8 @@ public interface Constants {
 	public static final String	EXPORT_SERVICE							= "Export-Service";
 
 	/**
-	 * Manifest header (named &quot;Import-Package&quot;) identifying
-	 * the packages on which the bundle depends.
+	 * Manifest header (named &quot;Import-Package&quot;) identifying the
+	 * packages on which the bundle depends.
 	 * 
 	 * <p>
 	 * The attribute value may be retrieved from the <code>Dictionary</code>
@@ -131,9 +132,8 @@ public interface Constants {
 	public static final String	IMPORT_PACKAGE							= "Import-Package";
 
 	/**
-	 * Manifest header (named &quot;DynamicImport-Package&quot;) identifying
-	 * the packages that the bundle may dynamically import during
-	 * execution.
+	 * Manifest header (named &quot;DynamicImport-Package&quot;) identifying the
+	 * packages that the bundle may dynamically import during execution.
 	 * 
 	 * <p>
 	 * The attribute value may be retrieved from the <code>Dictionary</code>
@@ -203,8 +203,8 @@ public interface Constants {
 	 * <p>
 	 * If present, this header specifies the name of the bundle resource class
 	 * that implements the <code>BundleActivator</code> interface and whose
-	 * <code>start</code> and <code>stop</code> methods are called by the Framework
-	 * when the bundle is started and stopped, respectively.
+	 * <code>start</code> and <code>stop</code> methods are called by the
+	 * Framework when the bundle is started and stopped, respectively.
 	 * 
 	 * <p>
 	 * The attribute value may be retrieved from the <code>Dictionary</code>
@@ -233,9 +233,11 @@ public interface Constants {
 	 * manifest header like:
 	 * 
 	 * <pre>
-	 *  Import-Package: org.osgi.framework ; specification-version=&quot;1.1&quot;
+	 *   Import-Package: org.osgi.framework ; specification-version=&quot;1.1&quot;
 	 * </pre>
-	 * @deprecated Since 1.3, this has been replaced by {@link #VERSION_ATTRIBUTE}.
+	 * 
+	 * @deprecated Since 1.3. This has been replaced by
+	 *             {@link #VERSION_ATTRIBUTE}.
 	 */
 	public static final String	PACKAGE_SPECIFICATION_VERSION			= "specification-version";
 
@@ -249,7 +251,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *  Bundle-NativeCode: http.so ; processor=x86 ...
+	 *   Bundle-NativeCode: http.so ; processor=x86 ...
 	 * </pre>
 	 */
 	public static final String	BUNDLE_NATIVECODE_PROCESSOR				= "processor";
@@ -263,7 +265,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *  Bundle-NativeCode: http.so ; osname=Linux ...
+	 *   Bundle-NativeCode: http.so ; osname=Linux ...
 	 * </pre>
 	 */
 	public static final String	BUNDLE_NATIVECODE_OSNAME				= "osname";
@@ -277,7 +279,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *  Bundle-NativeCode: http.so ; osversion=&quot;2.34&quot; ...
+	 *   Bundle-NativeCode: http.so ; osversion=&quot;2.34&quot; ...
 	 * </pre>
 	 */
 	public static final String	BUNDLE_NATIVECODE_OSVERSION				= "osversion";
@@ -291,7 +293,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *  Bundle-NativeCode: http.so ; language=nl_be ...
+	 *   Bundle-NativeCode: http.so ; language=nl_be ...
 	 * </pre>
 	 */
 	public static final String	BUNDLE_NATIVECODE_LANGUAGE				= "language";
@@ -394,35 +396,34 @@ public interface Constants {
 
 	/**
 	 * Framework environment property (named
-	 * &quot;org.osgi.framework.bootdelegation&quot;) identifying
-	 * packages for which the Framework must delegate class loading to the boot class path.
+	 * &quot;org.osgi.framework.bootdelegation&quot;) identifying packages for
+	 * which the Framework must delegate class loading to the boot class path.
 	 * <p>
 	 * The value of this property may be retrieved by calling the
 	 * <code>BundleContext.getProperty</code> method.
 	 * 
 	 * @since 1.3
 	 */
-	public static final String	FRAMEWORK_BOOTDELEGATION			= "org.osgi.framework.bootdelegation";
+	public static final String	FRAMEWORK_BOOTDELEGATION				= "org.osgi.framework.bootdelegation";
 
 	/**
 	 * Framework environment property (named
-	 * &quot;org.osgi.framework.system.packages&quot;) identifying
-	 * package which the system bundle must export.
+	 * &quot;org.osgi.framework.system.packages&quot;) identifying package which
+	 * the system bundle must export.
 	 * <p>
 	 * The value of this property may be retrieved by calling the
 	 * <code>BundleContext.getProperty</code> method.
 	 * 
 	 * @since 1.3
 	 */
-	public static final String	FRAMEWORK_SYSTEMPACKAGES			= "org.osgi.framework.system.packages";
+	public static final String	FRAMEWORK_SYSTEMPACKAGES				= "org.osgi.framework.system.packages";
 
 	/**
 	 * Framework environment property (named
-	 * &quot;org.osgi.supports.framework.extension&quot;) identifying
-	 * whether the Framework supports framework extension bundles.
-	 * If the value of this property is <code>true</code>, then the Framework
-	 * supports framework extension bundles.
-	 * The default value is <code>false</code>.
+	 * &quot;org.osgi.supports.framework.extension&quot;) identifying whether
+	 * the Framework supports framework extension bundles. If the value of this
+	 * property is <code>true</code>, then the Framework supports framework
+	 * extension bundles. The default value is <code>false</code>.
 	 * <p>
 	 * The value of this property may be retrieved by calling the
 	 * <code>BundleContext.getProperty</code> method.
@@ -434,10 +435,10 @@ public interface Constants {
 	/**
 	 * Framework environment property (named
 	 * &quot;org.osgi.supports.bootclasspath.extension&quot;) identifying
-	 * whether the Framework supports bootclasspath extension bundles.
-	 * If the value of this property is <code>true</code>, then the Framework
-	 * supports bootclasspath extension bundles.
-	 * The default value is <code>false</code>.
+	 * whether the Framework supports bootclasspath extension bundles. If the
+	 * value of this property is <code>true</code>, then the Framework
+	 * supports bootclasspath extension bundles. The default value is
+	 * <code>false</code>.
 	 * <p>
 	 * The value of this property may be retrieved by calling the
 	 * <code>BundleContext.getProperty</code> method.
@@ -448,33 +449,32 @@ public interface Constants {
 
 	/**
 	 * Framework environment property (named
-	 * &quot;org.osgi.supports.framework.fragment&quot;) identifying
-	 * whether the Framework supports fragment bundles.
-	 * If the value of this property is <code>true</code>, then the Framework
-	 * supports fragment bundles.
-	 * The default value is <code>false</code>.
+	 * &quot;org.osgi.supports.framework.fragment&quot;) identifying whether the
+	 * Framework supports fragment bundles. If the value of this property is
+	 * <code>true</code>, then the Framework supports fragment bundles. The
+	 * default value is <code>false</code>.
 	 * <p>
 	 * The value of this property may be retrieved by calling the
 	 * <code>BundleContext.getProperty</code> method.
 	 * 
 	 * @since 1.3
 	 */
-	public static final String	SUPPORTS_FRAMEWORK_FRAGMENT			= "org.osgi.supports.framework.fragment";
+	public static final String	SUPPORTS_FRAMEWORK_FRAGMENT				= "org.osgi.supports.framework.fragment";
 
 	/**
 	 * Framework environment property (named
 	 * &quot;org.osgi.supports.framework.requirebundle&quot;) identifying
-	 * whether the Framework supports the <code>Require-Bundle</code> manifest header.
-	 * If the value of this property is <code>true</code>, then the Framework
-	 * supports the <code>Require-Bundle</code> manifest header.
-	 * The default value is <code>false</code>.
+	 * whether the Framework supports the <code>Require-Bundle</code> manifest
+	 * header. If the value of this property is <code>true</code>, then the
+	 * Framework supports the <code>Require-Bundle</code> manifest header. The
+	 * default value is <code>false</code>.
 	 * <p>
 	 * The value of this property may be retrieved by calling the
 	 * <code>BundleContext.getProperty</code> method.
 	 * 
 	 * @since 1.3
 	 */
-	public static final String	SUPPORTS_FRAMEWORK_REQUIREBUNDLE			= "org.osgi.supports.framework.requirebundle";
+	public static final String	SUPPORTS_FRAMEWORK_REQUIREBUNDLE		= "org.osgi.supports.framework.requirebundle";
 
 	/*
 	 * Service properties.
@@ -535,19 +535,20 @@ public interface Constants {
 	 * <p>
 	 * The service ranking is used by the Framework to determine the <i>default
 	 * </i> service to be returned from a call to the
-	 * {@link BundleContext#getServiceReference}method: If more than one
+	 * {@link BundleContext#getServiceReference} method: If more than one
 	 * service implements the specified class, the <code>ServiceReference</code>
 	 * object with the highest ranking is returned.
 	 * 
 	 * <p>
 	 * The default ranking is zero (0). A service with a ranking of
-	 * <code>Integer.MAX_VALUE</code> is very likely to be returned as the default
-	 * service, whereas a service with a ranking of <code>Integer.MIN_VALUE</code>
-	 * is very unlikely to be returned.
+	 * <code>Integer.MAX_VALUE</code> is very likely to be returned as the
+	 * default service, whereas a service with a ranking of
+	 * <code>Integer.MIN_VALUE</code> is very unlikely to be returned.
 	 * 
 	 * <p>
-	 * If the supplied property value is not of type <code>java.lang.Integer</code>,
-	 * it is deemed to have a ranking value of zero.
+	 * If the supplied property value is not of type
+	 * <code>java.lang.Integer</code>, it is deemed to have a ranking value
+	 * of zero.
 	 */
 	public static final String	SERVICE_RANKING							= "service.ranking";
 
@@ -591,7 +592,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *  Bundle-SymbolicName: com.acme.module.test; singleton:=true
+	 *   Bundle-SymbolicName: com.acme.module.test; singleton:=true
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -608,7 +609,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *  Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;never&quot;
+	 *   Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;never&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#FRAGMENT_ATTACHMENT_ALWAYS
@@ -630,7 +631,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *  Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;always&quot;
+	 *   Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;always&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#FRAGMENT_ATTACHMENT_DIRECTIVE
@@ -650,7 +651,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *  Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;resolve-time&quot;
+	 *   Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;resolve-time&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#FRAGMENT_ATTACHMENT_DIRECTIVE
@@ -669,7 +670,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *  Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;never&quot;
+	 *   Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;never&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#FRAGMENT_ATTACHMENT_DIRECTIVE
@@ -719,8 +720,8 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *  Require-Bundle: com.acme.module.test; bundle-version=&quot;1.1&quot;
-	 *  Require-Bundle: com.acme.module.test; bundle-version=&quot;[1.0,2.0)&quot;
+	 *   Require-Bundle: com.acme.module.test; bundle-version=&quot;1.1&quot;
+	 *   Require-Bundle: com.acme.module.test; bundle-version=&quot;[1.0,2.0)&quot;
 	 * </pre>
 	 * 
 	 * <p>
@@ -754,7 +755,7 @@ public interface Constants {
 	 * The directive value is encoded in the Fragment-Host manifest header like:
 	 * 
 	 * <pre>
-	 *  Fragment-Host: com.acme.module.test; multiple-hosts:=&quot;false&quot;
+	 *   Fragment-Host: com.acme.module.test; multiple-hosts:=&quot;false&quot;
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -769,7 +770,7 @@ public interface Constants {
 	 * The attribute value is encoded in manifest headers like:
 	 * 
 	 * <pre>
-	 *  Bundle-NativeCode: libgtk.so; selection-filter=&quot;(ws=gtk)&quot;; ...
+	 *   Bundle-NativeCode: libgtk.so; selection-filter=&quot;(ws=gtk)&quot;; ...
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -804,7 +805,7 @@ public interface Constants {
 	 * manifest header like:
 	 * 
 	 * <pre>
-	 *  Import-Package: org.osgi.framework; version=&quot;1.1&quot;
+	 *   Import-Package: org.osgi.framework; version=&quot;1.1&quot;
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -821,7 +822,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *  Import-Package: org.osgi.framework; bundle-symbolic-name=&quot;com.acme.module.test&quot;
+	 *   Import-Package: org.osgi.framework; bundle-symbolic-name=&quot;com.acme.module.test&quot;
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -837,8 +838,8 @@ public interface Constants {
 	 * manifest header like:
 	 * 
 	 * <pre>
-	 *  Import-Package: org.osgi.framework; resolution:=&quot;optional&quot;
-	 *  Require-Bundle: com.acme.module.test; resolution:=&quot;optional&quot;
+	 *   Import-Package: org.osgi.framework; resolution:=&quot;optional&quot;
+	 *   Require-Bundle: com.acme.module.test; resolution:=&quot;optional&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#RESOLUTION_MANDATORY
@@ -859,8 +860,8 @@ public interface Constants {
 	 * manifest header like:
 	 * 
 	 * <pre>
-	 *  Import-Package: org.osgi.framework; resolution:=&quot;manditory&quot;
-	 *  Require-Bundle: com.acme.module.test; resolution:=&quot;manditory&quot;
+	 *   Import-Package: org.osgi.framework; resolution:=&quot;manditory&quot;
+	 *   Require-Bundle: com.acme.module.test; resolution:=&quot;manditory&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#RESOLUTION_DIRECTIVE
@@ -881,8 +882,8 @@ public interface Constants {
 	 * manifest header like:
 	 * 
 	 * <pre>
-	 *  Import-Package: org.osgi.framework; resolution:=&quot;optional&quot;
-	 *  Require-Bundle: com.acme.module.test; resolution:=&quot;optional&quot;
+	 *   Import-Package: org.osgi.framework; resolution:=&quot;optional&quot;
+	 *   Require-Bundle: com.acme.module.test; resolution:=&quot;optional&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#RESOLUTION_DIRECTIVE
@@ -895,15 +896,16 @@ public interface Constants {
 	 * packages that an exported package uses.
 	 * 
 	 * <p>
-	 * The directive value is encoded in the Export-Package manifest header like:
+	 * The directive value is encoded in the Export-Package manifest header
+	 * like:
 	 * 
 	 * <pre>
-	 *  Export-Package: org.osgi.util.tracker; uses:=&quot;org.osgi.framework&quot;
+	 *   Export-Package: org.osgi.util.tracker; uses:=&quot;org.osgi.framework&quot;
 	 * </pre>
 	 * 
 	 * @since 1.3
 	 */
-	public final static String	USES_DIRECTIVE						= "uses";
+	public final static String	USES_DIRECTIVE							= "uses";
 
 	/**
 	 * Manifest header directive (named &quot;include&quot;) identifying a list
@@ -915,7 +917,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *  Export-Package: org.osgi.framework; include:=&quot;MyStuff*&quot;
+	 *   Export-Package: org.osgi.framework; include:=&quot;MyStuff*&quot;
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -932,7 +934,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *  Export-Package: org.osgi.framework; exclude:=&quot;MyStuff*&quot;
+	 *   Export-Package: org.osgi.framework; exclude:=&quot;MyStuff*&quot;
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -949,7 +951,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *  Export-Package: org.osgi.framework; mandatory:=&quot;bundle-symbolic-name&quot;
+	 *   Export-Package: org.osgi.framework; mandatory:=&quot;bundle-symbolic-name&quot;
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -965,7 +967,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *  Require-Bundle: com.acme.module.test; visibility:=&quot;reexport&quot;
+	 *   Require-Bundle: com.acme.module.test; visibility:=&quot;reexport&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#VISIBILITY_PRIVATE
@@ -985,7 +987,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *  Require-Bundle: com.acme.module.test; visibility:=&quot;private&quot;
+	 *   Require-Bundle: com.acme.module.test; visibility:=&quot;private&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#VISIBILITY_DIRECTIVE
@@ -1005,7 +1007,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *  Require-Bundle: com.acme.module.test; visibility:=&quot;reexport&quot;
+	 *   Require-Bundle: com.acme.module.test; visibility:=&quot;reexport&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#VISIBILITY_DIRECTIVE

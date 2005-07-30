@@ -14,8 +14,8 @@ package org.osgi.framework;
  * A Framework exception.
  * 
  * <p>
- * An <code>InvalidSyntaxException</code> object indicates that a filter string
- * parameter has an invalid syntax and cannot be parsed.
+ * An <code>InvalidSyntaxException</code> object indicates that a filter
+ * string parameter has an invalid syntax and cannot be parsed.
  * 
  * <p>
  * See {@link Filter} for a description of the filter string syntax.
@@ -38,8 +38,9 @@ public class InvalidSyntaxException extends Exception {
 	 * Creates an exception of type <code>InvalidSyntaxException</code>.
 	 * 
 	 * <p>
-	 * This method creates an <code>InvalidSyntaxException</code> object with the
-	 * specified message and the filter string which generated the exception.
+	 * This method creates an <code>InvalidSyntaxException</code> object with
+	 * the specified message and the filter string which generated the
+	 * exception.
 	 * 
 	 * @param msg The message.
 	 * @param filter The invalid filter string.
@@ -54,8 +55,9 @@ public class InvalidSyntaxException extends Exception {
 	 * Creates an exception of type <code>InvalidSyntaxException</code>.
 	 * 
 	 * <p>
-	 * This method creates an <code>InvalidSyntaxException</code> object with the
-	 * specified message and the filter string which generated the exception.
+	 * This method creates an <code>InvalidSyntaxException</code> object with
+	 * the specified message and the filter string which generated the
+	 * exception.
 	 * 
 	 * @param msg The message.
 	 * @param filter The invalid filter string.
@@ -81,11 +83,11 @@ public class InvalidSyntaxException extends Exception {
 	}
 
 	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause was
-	 * specified when this exception was created.
+	 * Returns the cause of this exception or <code>null</code> if no cause
+	 * was specified when this exception was created.
 	 * 
-	 * @return The cause of this exception or <code>null</code> if no cause was
-	 *         specified.
+	 * @return The cause of this exception or <code>null</code> if no cause
+	 *         was specified.
 	 * @since 1.3
 	 */
 	public Throwable getCause() {
@@ -104,4 +106,3 @@ public class InvalidSyntaxException extends Exception {
 		throw new IllegalStateException();
 	}
 }
-

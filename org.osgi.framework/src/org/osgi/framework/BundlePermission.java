@@ -253,10 +253,10 @@ public final class BundlePermission extends BasicPermission {
 	 * named symbolic name.
 	 * 
 	 * <pre>
-	 *      x.y.*,&quot;provide&quot; -&gt; x.y.z,&quot;provide&quot; is true
-	 *      *,&quot;require&quot; -&gt; x.y, &quot;require&quot;      is true
-	 *      *,&quot;provide&quot; -&gt; x.y, &quot;require&quot;      is true
-	 *      x.y,&quot;provide&quot; -&gt; x.y.z, &quot;provide&quot;  is false
+	 *       x.y.*,&quot;provide&quot; -&gt; x.y.z,&quot;provide&quot; is true
+	 *       *,&quot;require&quot; -&gt; x.y, &quot;require&quot;      is true
+	 *       *,&quot;provide&quot; -&gt; x.y, &quot;require&quot;      is true
+	 *       x.y,&quot;provide&quot; -&gt; x.y.z, &quot;provide&quot;  is false
 	 * </pre>
 	 * 
 	 * @param p The target permission to interrogate.
@@ -453,12 +453,10 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 * 
 	 * @param permission The <code>BundlePermission</code> object to add.
 	 * 
-	 * @exception IllegalArgumentException If the permission is not a
-	 *            <code>BundlePermission</code> instance.
-	 * 
-	 * @exception SecurityException If this
-	 *            <code>BundlePermissionCollection</code> object has been
-	 *            marked read-only.
+	 * @throws IllegalArgumentException If the permission is not a
+	 *         <code>BundlePermission</code> instance.
+	 * @throws SecurityException If this <code>BundlePermissionCollection</code>
+	 *         object has been marked read-only.
 	 */
 
 	public void add(Permission permission) {
