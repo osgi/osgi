@@ -114,7 +114,7 @@ public abstract interface HttpContext {
 	 * @return <code>true</code> if the request should be serviced, <code>false</code>
 	 *         if the request should not be serviced and Http Service will send
 	 *         the response back to the client.
-	 * @exception java.io.IOException may be thrown by this method. If this
+	 * @throws java.io.IOException may be thrown by this method. If this
 	 *            occurs, the Http Service will terminate the request and close
 	 *            the socket.
 	 */

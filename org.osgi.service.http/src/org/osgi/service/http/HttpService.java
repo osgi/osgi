@@ -61,12 +61,12 @@ public abstract interface HttpService {
 	 * @param context the <code>HttpContext</code> object for the registered
 	 *        servlet, or <code>null</code> if a default <code>HttpContext</code> is
 	 *        to be created and used.
-	 * @exception NamespaceException if the registration fails because the alias
+	 * @throws NamespaceException if the registration fails because the alias
 	 *            is already in use.
-	 * @exception javax.servlet.ServletException if the servlet's <code>init</code>
+	 * @throws javax.servlet.ServletException if the servlet's <code>init</code>
 	 *            method throws an exception, or the given servlet object has
 	 *            already been registered at a different alias.
-	 * @exception java.lang.IllegalArgumentException if any of the arguments are
+	 * @throws java.lang.IllegalArgumentException if any of the arguments are
 	 *            invalid
 	 */
 	public abstract void registerServlet(String alias, Servlet servlet,
@@ -105,9 +105,9 @@ public abstract interface HttpService {
 	 * @param context the <code>HttpContext</code> object for the registered
 	 *        resources, or <code>null</code> if a default <code>HttpContext</code>
 	 *        is to be created and used.
-	 * @exception NamespaceException if the registration fails because the alias
+	 * @throws NamespaceException if the registration fails because the alias
 	 *            is already in use.
-	 * @exception java.lang.IllegalArgumentException if any of the parameters
+	 * @throws java.lang.IllegalArgumentException if any of the parameters
 	 *            are invalid
 	 */
 	public abstract void registerResources(String alias, String name,
@@ -134,7 +134,7 @@ public abstract interface HttpService {
 	 * bundle registering the servlet.
 	 * 
 	 * @param alias name in the URI name-space of the registration to unregister
-	 * @exception java.lang.IllegalArgumentException if there is no registration
+	 * @throws java.lang.IllegalArgumentException if there is no registration
 	 *            for the alias or the calling bundle was not the bundle which
 	 *            registered the alias.
 	 */
@@ -158,8 +158,8 @@ public abstract interface HttpService {
 	 * context bundle; this method calls the context bundle's
 	 * <code>Bundle.getResource</code> method, and returns the appropriate URL to
 	 * access the resource. On a Java runtime environment that supports
-	 * permissions, the Http Service needs to be granted the
-	 * <code>org.osgi.framework.AdminPermission</code>.
+	 * permissions, the Http Service needs to be granted 
+	 * <code>org.osgi.framework.AdminPermission[*,RESOURCE]</code>.
 	 * </ul>
 	 * 
 	 * @return a default <code>HttpContext</code> object.
