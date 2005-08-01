@@ -38,6 +38,8 @@
  */
 package org.osgi.test.cases.policy.tbc;
 
+import java.security.AllPermission;
+
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.PackagePermission;
@@ -129,9 +131,11 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 	
 	public static final String LOCATION_PERMISSION_NODE =  POLICY_JAVA_NODE + "/LocationPermission";
 	
+	public static final String LOCATIONS_NODE =  LOCATION_PERMISSION_NODE + "/Locations";
+	
 	public static final String DEFAULT_PERMISSION_NODE =  LOCATION_PERMISSION_NODE + "/Default";
 	
-	public static final String PRINCIPAL_PERMISSION_NODE =  POLICY_JAVA_NODE + "/PrincipalPermission";
+	public static final String PRINCIPAL_PERMISSION_NODE =  POLICY_JAVA_NODE + "/DmtPrincipalPermission";
 	
 	public static final String CONDITIONAL_PERMISSION_NODE =  POLICY_JAVA_NODE + "/ConditionalPermission";
 	
@@ -275,10 +279,12 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 		testBundleTB1 = tb1Service.getTestClasses(this);
 		setPermissions(new PermissionInfo(DmtPermission.class.getName(),
 				ALL_NODES, ALL_ACTIONS));
+		
 	}
 
 
 	public void setPermissions(PermissionInfo permission) {
+		new TopicPermission("*",TopicPermission.PUBLISH);
 		pa.setPermissions(LOCATION,
 				new PermissionInfo[] {
 						new PermissionInfo(TopicPermission.class.getName(),
@@ -301,7 +307,7 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 						new PermissionInfo(ServicePermission.class.getName(),
 								"*", "GET"),
 						new PermissionInfo(AdminPermission.class.getName(),
-								"*", "*"), permission });
+								"*", "*"), permission , new PermissionInfo(AllPermission.class.getName(),"*","*")});
 	}
 
 	public void closeSession(DmtSession session) {

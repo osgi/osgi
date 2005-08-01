@@ -46,9 +46,9 @@ import org.osgi.test.cases.policy.tbc.util.MessagesConstants;
 import org.osgi.util.mobile.TransferCostCondition;
 
 /**
- * @methodUnderTest org.osgi.util.mobile.TransferCostCondition#resetTransferCost
- * @generalDescription This class tests resetTransferCost method according with
- *                     MEG specification (rfc0092)
+ * This Test Class Validates the implementation of
+ * <code>resetTransferCost<code> method, according to MEG
+ * reference documentation.
  */
 public class ResetTransferCost {
 
@@ -67,11 +67,14 @@ public class ResetTransferCost {
 		testResetTransferCost006();
 	}
 
-	/**
-	 * @testID testResetTransferCost001
-	 * @testDescription Asserts if isSatisfied method returns true after
-	 *                  resetTransferCost method call
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true after
+     * resetTransferCost method call
+     *
+     * @spec TransferCostCondition.resetTransferCost()
+     */
+
 	public void testResetTransferCost001() {
         tbc.log("#testResetTransferCost001");
         try {
@@ -95,11 +98,14 @@ public class ResetTransferCost {
 		}
 	}
 	
-	/**
-	 * @testID testResetTransferCost002
-	 * @testDescription Asserts if isSatisfied method returns true after
-	 *                  resetTransferCost method call
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true after
+     * resetTransferCost method call
+     *
+     * @spec TransferCostCondition.resetTransferCost()
+     */
+
 	public void testResetTransferCost002() {
         tbc.log("#testResetTransferCost002");
 		try {
@@ -123,11 +129,14 @@ public class ResetTransferCost {
 		}
 	}
 	
-	/**
-	 * @testID testResetTransferCost003
-	 * @testDescription Asserts if isSatisfied method returns true after
-	 *                  resetTransferCost method call
-	 */
+	
+    /**
+     * This test asserts if isSatisfied method returns true after
+     *                  resetTransferCost method call
+     *
+     * @spec TransferCostCondition.resetTransferCost()
+     */
+
 	public void testResetTransferCost003() {
         tbc.log("#testResetTransferCost003");
 		try {
@@ -151,11 +160,14 @@ public class ResetTransferCost {
 		}
 	}
 
-	/**
-	 * @testID testResetTransferCost004
-	 * @testDescription Asserts if isSatisfied method returns true after
-	 *                  is reseted
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true after
+     * is reseted
+     *
+     * @spec TransferCostCondition.resetTransferCost()
+     */
+
 	public void testResetTransferCost004() {
         tbc.log("#testResetTransferCost004");
 		try {
@@ -180,11 +192,14 @@ public class ResetTransferCost {
 		}
 	}
 	
-	/**
-	 * @testID testResetTransferCost005
-	 * @testDescription Asserts if isSatisfied method returns true after
-	 *                  is reseted
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true after
+     * is reseted
+     *
+     * @spec TransferCostCondition.resetTransferCost()
+     */
+
 	public void testResetTransferCost005() {
         tbc.log("#testResetTransferCost005");
 		try {
@@ -209,11 +224,14 @@ public class ResetTransferCost {
 		}
 	}
 	
-	/**
-	 * @testID testResetTransferCost006
-	 * @testDescription Asserts if isSatisfied method returns true after
-	 *                  is reseted
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true after
+     * is reseted
+     *
+     * @spec TransferCostCondition.resetTransferCost()
+     */
+
 	public void testResetTransferCost006() {
         tbc.log("#testResetTransferCost006");
 		try {

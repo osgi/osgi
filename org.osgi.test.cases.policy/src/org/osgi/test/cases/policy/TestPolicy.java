@@ -40,12 +40,13 @@ import org.osgi.test.cases.util.DefaultTestCase;
 
 /**
  * This Test Case Validates the implementation of
- * <code>Policy<code> service, according to MEG reference
+ * <code>Policy<code> service, according to SPEC
  * documentation.
- *                     
- *  @testcase org.osgi.util.gsm
- *  @testcase org.osgi.util.mobile
+ * 
+ * @testcase org.osgi.test.cases.policy
+ * @version $Revision$
  */
+
 public class TestPolicy extends DefaultTestCase {
 
 }

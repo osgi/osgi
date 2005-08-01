@@ -49,9 +49,9 @@ import org.osgi.test.cases.policy.tbc.util.MessagesConstants;
 import org.osgi.util.mobile.TransferCostCondition;
 
 /**
- * @methodUnderTest org.osgi.util.mobile.TransferCostCondition#setTransferCost
- * @generalDescription This class tests setTransferCost method according with
- *                     MEG specification (rfc0092)
+ * This Test Class Validates the implementation of
+ * <code>setTransferCost<code> method, according to MEG
+ * reference documentation.
  */
 public class SetTransferCost {
 
@@ -74,12 +74,15 @@ public class SetTransferCost {
 		testSetTransferCost010();
 	}
 
-	/**
-	 * @testID testSetTransferCost001
-	 * @testDescription Asserts if isSatisfied method returns true if
-	 *                  setTransferCost method is called with a value equals to
-	 *                  the current condition value
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true if
+     * setTransferCost method is called with a value equals to
+     * the current condition value
+     *
+     * @spec TransferCostCondition.setTransferCost(String)
+     */
+
 	public void testSetTransferCost001() {
         tbc.log("#testSetTransferCost001");
 		try {
@@ -105,12 +108,15 @@ public class SetTransferCost {
 		}
 	}
 
-	/**
-	 * @testID testSetTransferCost002
-	 * @testDescription Asserts if isSatisfied method returns true if
-	 *                  setTransferCost method is called with a value equals to
-	 *                  the current condition value
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true if
+     * setTransferCost method is called with a value equals to
+     * the current condition value
+     *
+     * @spec TransferCostCondition.setTransferCost(String)
+     */
+
 	public void testSetTransferCost002() {
         tbc.log("#testSetTransferCost002");
 		try {
@@ -136,12 +142,15 @@ public class SetTransferCost {
 		}
 	}
 
-	/**
-	 * @testID testSetTransferCost003
-	 * @testDescription Asserts if isSatisfied method returns true if
-	 *                  setTransferCost method is called with a value equals to
-	 *                  the current condition value
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true if
+     * setTransferCost method is called with a value equals to
+     * the current condition value
+     *
+     * @spec TransferCostCondition.setTransferCost(String)
+     */
+
 	public void testSetTransferCost003() {
         tbc.log("#testSetTransferCost003");
 		try {
@@ -167,12 +176,15 @@ public class SetTransferCost {
 		}
 	}
 
-	/**
-	 * @testID testSetTransferCost004
-	 * @testDescription Asserts if isSatisfied method returns true if
-	 *                  setTransferCost method is called with a value higher to
-	 *                  the current condition value
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true if
+     * setTransferCost method is called with a value higher to
+     * the current condition value
+     *
+     * @spec TransferCostCondition.setTransferCost(String)
+     */
+
 	public void testSetTransferCost004() {
         tbc.log("#testSetTransferCost004");
 		try {
@@ -198,12 +210,15 @@ public class SetTransferCost {
 		}
 	}
 
-	/**
-	 * @testID testSetTransferCost005
-	 * @testDescription Asserts if isSatisfied method returns true if
-	 *                  setTransferCost method is called with a value higher to
-	 *                  the current condition value
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true if
+     * setTransferCost method is called with a value higher to
+     * the current condition value
+     *
+     * @spec TransferCostCondition.setTransferCost(String)
+     */
+
 	public void testSetTransferCost005() {
         tbc.log("#testSetTransferCost005");
 		try {
@@ -229,12 +244,15 @@ public class SetTransferCost {
 		}
 	}
 
-	/**
-	 * @testID testSetTransferCost006
-	 * @testDescription Asserts if isSatisfied method returns true if
-	 *                  setTransferCost method is called with a value higher to
-	 *                  the current condition value
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true if
+     * setTransferCost method is called with a value higher to
+     * the current condition value
+     *
+     * @spec TransferCostCondition.setTransferCost(String)
+     */
+
 	public void testSetTransferCost006() {
         tbc.log("#testSetTransferCost006");
 		try {
@@ -260,12 +278,15 @@ public class SetTransferCost {
 		}
 	}
 
-	/**
-	 * @testID testSetTransferCost007
-	 * @testDescription Asserts if isSatisfied method returns false if
-	 *                  setTransferCost method is called with a value lower to
-	 *                  the current condition value
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns false if
+     * setTransferCost method is called with a value lower to
+     * the current condition value
+     *
+     * @spec TransferCostCondition.setTransferCost(String)
+     */
+
 	public void testSetTransferCost007() {
         tbc.log("#testSetTransferCost007");
 		try {
@@ -291,12 +312,15 @@ public class SetTransferCost {
 		}
 	}
 
-	/**
-	 * @testID testSetTransferCost008
-	 * @testDescription Asserts if isSatisfied method returns false if
-	 *                  setTransferCost method is called with a value lower to
-	 *                  the current condition value
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns false if
+     * setTransferCost method is called with a value lower to
+     * the current condition value
+     *
+     * @spec TransferCostCondition.setTransferCost(String)
+     */
+
 	public void testSetTransferCost008() {
         tbc.log("#testSetTransferCost008");
         try {
@@ -322,12 +346,15 @@ public class SetTransferCost {
 		}
 	}
 
-	/**
-	 * @testID testSetTransferCost009
-	 * @testDescription Asserts if isSatisfied method returns false if
-	 *                  setTransferCost method is called with a value lower to
-	 *                  the current condition value
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns false if
+     * setTransferCost method is called with a value lower to
+     * the current condition value
+     *
+     * @spec TransferCostCondition.setTransferCost(String)
+     */
+
 	public void testSetTransferCost009() {
         tbc.log("#testSetTransferCost009");
 		try {
@@ -353,11 +380,13 @@ public class SetTransferCost {
 		}
 	}
 
-	/**
-	 * @testID testSetTransferCost010
-	 * @testDescription Asserts if an IllegalArgumentException is throw
-	 *  				if the cost parameter is not from the possible values.
-	 */
+    /**
+     * This test asserts if an IllegalArgumentException is throw
+     * if the cost parameter is not from the possible values.
+     *
+     * @spec TransferCostCondition.setTransferCost(String)
+     */
+
 	public void testSetTransferCost010() {
         tbc.log("#testSetTransferCost010");
 		try {

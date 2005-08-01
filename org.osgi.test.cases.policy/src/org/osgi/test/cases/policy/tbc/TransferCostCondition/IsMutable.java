@@ -46,9 +46,9 @@ import org.osgi.test.cases.policy.tbc.util.MessagesConstants;
 import org.osgi.util.mobile.TransferCostCondition;
 
 /**
- * @methodUnderTest org.osgi.util.mobile.TransferCostCondition#isMutable
- * @generalDescription This class tests isMutable method according with MEG
- *                     specification (rfc0092)
+ * This Test Class Validates the implementation of
+ * <code>isMutable<code> method, according to MEG
+ * reference documentation.
  */
 public class IsMutable {
 
@@ -64,12 +64,15 @@ public class IsMutable {
 		testIsMutable003();
 	}
 
-	/**
-	 * @testID testIsMutable001
-	 * @testDescription Asserts if IsMutable method returns false when "HIGH"
-	 *                  value is passed as costLimit parameter to getInstance
-	 *                  method
-	 */
+
+    /**
+     * This test asserts if IsMutable method returns false when "HIGH"
+     * value is passed as costLimit parameter to getInstance
+     * method
+     *
+     * @spec TransferCostCondition.isMutable()
+     */
+
 	public void testIsMutable001() {
         tbc.log("#testIsMutable001");
 		try {
@@ -91,12 +94,15 @@ public class IsMutable {
 		}
 	}
 
-	/**
-	 * @testID testIsMutable002
-	 * @testDescription Asserts if IsMutable method returns true when "LOW"
-	 *                  value is passed as costLimit parameter to getInstance
-	 *                  method
-	 */
+
+    /**
+     * This test asserts if IsMutable method returns true when "LOW"
+     * value is passed as costLimit parameter to getInstance
+     * method
+     *
+     * @spec TransferCostCondition.isMutable()
+     */
+
 	public void testIsMutable002() {
         tbc.log("#testIsMutable002");
 		try {
@@ -118,12 +124,15 @@ public class IsMutable {
 		}
 	}
 
-	/**
-	 * @testID testIsMutable003
-	 * @testDescription Asserts if IsMutable method returns true when "MEDIUM"
-	 *                  value is passed as costLimit parameter to getInstance
-	 *                  method
-	 */
+
+    /**
+     * This test asserts if IsMutable method returns true when "MEDIUM"
+     * value is passed as costLimit parameter to getInstance
+     * method
+     *
+     * @spec TransferCostCondition.isMutable()
+     */
+
 	public void testIsMutable003() {
         tbc.log("#testIsMutable003");
 		try {

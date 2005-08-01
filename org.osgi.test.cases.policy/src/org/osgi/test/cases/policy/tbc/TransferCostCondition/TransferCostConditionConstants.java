@@ -40,11 +40,6 @@ import org.osgi.test.cases.policy.tbc.PolicyTestControl;
 import org.osgi.test.cases.policy.tbc.util.MessagesConstants;
 import org.osgi.util.mobile.TransferCostCondition;
 
-/**
- * @generalDescription This Test Case Validates the values of all
- *                     <code>constants<code> of TransferCostCondition, according to MEG reference
- *                     documentation.
- */
 public class TransferCostConditionConstants {
 	private PolicyTestControl tbc;
 
@@ -56,10 +51,13 @@ public class TransferCostConditionConstants {
 		testConstants();
 	}
 
-	/**
-	 * @testID testConstants
-	 * @testDescription Asserts constants values of TransferCostCondition
-	 */
+
+    /**
+     * This test asserts constants values of TransferCostCondition
+     *
+     * @spec 119.8.2.1, 119.8.2.2, 119.8.2.3
+     */
+
 	public void testConstants() {
 		tbc.assertEquals(MessagesConstants.getMessage(
 				MessagesConstants.ASSERT_EQUALS, new String[] { "LOW",

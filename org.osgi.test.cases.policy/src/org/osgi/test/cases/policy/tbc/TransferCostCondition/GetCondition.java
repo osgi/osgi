@@ -49,9 +49,9 @@ import org.osgi.test.cases.policy.tbc.util.MessagesConstants;
 import org.osgi.util.mobile.TransferCostCondition;
 
 /**
- * @methodUnderTest org.osgi.util.mobile.TransferCostCondition#getCondition
- * @generalDescription This class tests getCondition method according with MEG
- *                     specification (rfc0092)
+ * This Test Class Validates the implementation of
+ * <code>getCondition<code> method, according to MEG
+ * reference documentation.
  */
 public class GetCondition {
 	private PolicyTestControl tbc;
@@ -69,12 +69,13 @@ public class GetCondition {
 		testGetCondition006();
 	}
 
-	/**
-	 * @testID testGetCondition001
-	 * @testDescription Asserts if a condition is sucessfully created when "LOW"
-	 *                  is passed as costLimit parameter
-	 * 
-	 */
+    /**
+     * This test asserts if a condition is sucessfully created when "LOW"
+     * is passed as costLimit parameter
+     *
+     * @spec TransferCostCondition.getCondition(Bundle,ConditionInfo)
+     */
+
 	public void testGetCondition001() {
 		tbc.log("#testGetCondition001");
 		try {
@@ -98,12 +99,14 @@ public class GetCondition {
 		}
 	}
 
-	/**
-	 * @testID testGetCondition002
-	 * @testDescription Asserts if a condition is sucessfully created when
-	 *                  "MEDIUM" is passed as costLimit parameter
-	 * 
-	 */
+
+    /**
+     * This test asserts if a condition is sucessfully created when
+     * "MEDIUM" is passed as costLimit parameter
+     *
+     * @spec TransferCostCondition.getCondition(Bundle,ConditionInfo)
+     */
+
 	public void testGetCondition002() {
 		tbc.log("#testGetCondition002");
 		try {
@@ -127,12 +130,14 @@ public class GetCondition {
 		}
 	}
 
-	/**
-	 * @testID testGetCondition003
-	 * @testDescription Asserts if a condition is sucessfully created when
-	 *                  "HIGH" is passed as costLimit parameter
-	 * 
-	 */
+
+    /**
+     * This test asserts if a condition is sucessfully created when
+     * "HIGH" is passed as costLimit parameter
+     *
+     * @spec TransferCostCondition.getCondition(Bundle,ConditionInfo)
+     */
+
 	public void testGetCondition003() {
 		tbc.log("#testGetCondition003");
 		try {
@@ -156,12 +161,14 @@ public class GetCondition {
 		}
 	}
 
-	/**
-	 * @testID testGetCondition004
-	 * @testDescription Asserts if an IllegalArgumentException is thrown if the
-	 *                  costLimit parameter is not from the possible values
-	 * 
-	 */
+
+    /**
+     * This test asserts if an IllegalArgumentException is thrown if the
+     * costLimit parameter is not from the possible values
+     *
+     * @spec TransferCostCondition.getCondition(Bundle,ConditionInfo)
+     */
+
 	public void testGetCondition004() {
 		tbc.log("#testGetCondition004");
 		try {
@@ -185,12 +192,14 @@ public class GetCondition {
 		}
 	}
 
-	/**
-	 * @testID testGetCondition005
-	 * @testDescription Asserts if a NullPointerException is thrown if one of
-	 *                  the parameters is null
-	 * 
-	 */
+
+    /**
+     * This test asserts if a NullPointerException is thrown if one of
+     * the parameters is null
+     *
+     * @spec TransferCostCondition.getCondition(Bundle,ConditionInfo)
+     */
+
 	public void testGetCondition005() {
 		tbc.log("#testGetCondition005");
 		try {
@@ -214,12 +223,14 @@ public class GetCondition {
 		}
 	}
 
-	/**
-	 * @testID testGetCondition006
-	 * @testDescription Asserts if a NullPointerException is thrown if one of
-	 *                  the parameters is null
-	 * 
-	 */
+
+    /**
+     * This test asserts if a NullPointerException is thrown if one of
+     * the parameters is null
+     *
+     * @spec TransferCostCondition.getCondition(Bundle,ConditionInfo)
+     */
+
 	public void testGetCondition006() {
 		tbc.log("#testGetCondition006");
 		try {

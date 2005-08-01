@@ -50,9 +50,9 @@ import org.osgi.test.cases.policy.tbc.util.MessagesConstants;
 import org.osgi.util.gsm.IMEICondition;
 
 /**
- * @methodUnderTest org.osgi.util.gsm.IMEICondition#getCondition
- * @generalDescription This class tests getCondition method according with MEG
- *                     specification (rfc0092)
+ * This Test Class Validates the implementation of
+ * <code>getCondition<code> method, according to MEG
+ * reference documentation.
  */
 public class GetCondition {
     private PolicyTestControl tbc;
@@ -74,11 +74,14 @@ public class GetCondition {
 
 
 
+
     /**
-     * @testID testGetCondition001
-     * @testDescription Asserts if a condition is sucessfully created when imei
-     *                  parameter is a valid code
+     * This test asserts if a condition is sucessfully created when imei
+     * parameter is a valid code
+     *
+     * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
      */
+
     public void testGetCondition001() {
         tbc.log("#testGetCondition001");
         try {
@@ -97,11 +100,14 @@ public class GetCondition {
         }
     }
 
+
     /**
-     * @testID testGetCondition002
-     * @testDescription Asserts if NullPointerException is thrown when null is
-     *                  passed for the first parameter
+     * This test asserts if NullPointerException is thrown when null is
+     * passed for the first parameter
+     *
+     * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
      */
+
     public void testGetCondition002() {
         tbc.log("#testGetCondition002");
         try {
@@ -121,11 +127,14 @@ public class GetCondition {
         }
     }
 
+
     /**
-     * @testID testGetCondition003
-     * @testDescription Asserts if NullPointerException is thrown when null is
-     *                  passed for the second parameter
+     * This test asserts if NullPointerException is thrown when null is
+     * passed for the second parameter
+     *
+     * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
      */
+
     public void testGetCondition003() {
         tbc.log("#testGetCondition003");
         try {
@@ -145,11 +154,14 @@ public class GetCondition {
         }
     }
 
+
     /**
-     * @testID testGetCondition004
-     * @testDescription Asserts if IllegalArgumentException is thrown if the
-     *                  imei code is not a valid string
+     * This test asserts if IllegalArgumentException is thrown if the
+     * imei code is not a valid string
+     *
+     * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
      */
+
     public void testGetCondition004() {
         tbc.log("#testGetCondition004");
         try {
@@ -170,11 +182,14 @@ public class GetCondition {
         }
     }
 
+
     /**
-     * @testID testGetCondition005
-     * @testDescription Asserts if IllegalArgumentException is thrown if the
-     *                  imei code is a string with less than 15 digits
+     * This test asserts if IllegalArgumentException is thrown if the
+     * imei code is a string with less than 15 digits
+     *
+     * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
      */
+
     public void testGetCondition005() {
         tbc.log("#testGetCondition005");
         try {
@@ -195,11 +210,14 @@ public class GetCondition {
         }
     }
     
+
     /**
-     * @testID testGetCondition006
-     * @testDescription Asserts if IllegalArgumentException is thrown if the
-     *                  imei code is a string with more than 15 digits
+     * This test asserts if IllegalArgumentException is thrown if the
+     * imei code is a string with more than 15 digits
+     *
+     * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
      */
+
     public void testGetCondition006() {
         tbc.log("#testGetCondition006");
         try {
@@ -220,11 +238,14 @@ public class GetCondition {
         }
     }
 
+
     /**
-     * @testID testGetCondition007
-     * @testDescription Asserts if a condition is not created when imei
-     *                  parameter is a char code
+     * This test asserts if a condition is not created when imei
+     * parameter is a char code
+     *
+     * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
      */
+
     public void testGetCondition007() {
         tbc.log("#testGetCondition007");
         try {
@@ -244,11 +265,14 @@ public class GetCondition {
         }
     }
     
+
     /**
-     * @testID testGetCondition008
-     * @testDescription Asserts if IllegalArgumentException is thrown if the
-     *                  imei code is a string with hyphens
+     * This test asserts if IllegalArgumentException is thrown if the
+     * imei code is a string with hyphens
+     *
+     * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
      */
+
     public void testGetCondition008() {
         tbc.log("#testGetCondition008");
         try {

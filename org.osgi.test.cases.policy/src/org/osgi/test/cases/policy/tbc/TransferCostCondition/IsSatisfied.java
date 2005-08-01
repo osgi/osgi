@@ -52,9 +52,9 @@ import org.osgi.test.cases.policy.tbc.util.MessagesConstants;
 import org.osgi.util.mobile.TransferCostCondition;
 
 /**
- * @methodUnderTest org.osgi.util.mobile.TransferCostCondition#IsSatisfied
- * @generalDescription This class tests isEvaluated method according with MEG
- *                     specification (rfc0092)
+ * This Test Class Validates the implementation of
+ * <code>isSatisfied<code> method, according to MEG
+ * reference documentation.
  */
 public class IsSatisfied {
 	private PolicyTestControl tbc;
@@ -93,13 +93,15 @@ public class IsSatisfied {
         testIsSatisfied027();
 	}
 
-/**
-	 * @testID testIsSatisfied001
-	 * @testDescription Asserts if isSatisfied method returns true when all
-	 *                  transfer costs passed as parameter are equal to the
-	 *                  thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true when all
+     * transfer costs passed as parameter are equal to the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied(Condition[], Dictionary)
+     */
+
 	public void testIsSatisfied001() {
         tbc.log("#testIsSatisfied001");
         try {
@@ -129,13 +131,15 @@ public class IsSatisfied {
 		}
 	}
 
-	/**
-	 * @testID testIsSatisfied002
-	 * @testDescription Asserts if isSatisfied method returns true when all
-	 *                  transfer costs passed as parameter are equal to the
-	 *                  thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true when all
+     * transfer costs passed as parameter are equal to the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied(Condition[], Dictionary)
+     */
+
 	public void testIsSatisfied002() {
         tbc.log("#testIsSatisfied002");
 		try {
@@ -165,13 +169,15 @@ public class IsSatisfied {
 		}
 	}
 
-	/**
-	 * @testID testIsSatisfied003
-	 * @testDescription Asserts if isSatisfied method returns true when all
-	 *                  transfer costs passed as parameter are equal to the
-	 *                  thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true when all
+     * transfer costs passed as parameter are equal to the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied(Condition[], Dictionary)
+     */
+    
 	public void testIsSatisfied003() {
         tbc.log("#testIsSatisfied003");
 		try {
@@ -201,13 +207,15 @@ public class IsSatisfied {
 		}
 	}
 
-	/**
-	 * @testID testIsSatisfied004
-	 * @testDescription Asserts if isSatisfied method returns true when all
-	 *                  transfer costs passed as parameter are higher than the
-	 *                  thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true when all
+     * transfer costs passed as parameter are higher than the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied(Condition[], Dictionary)
+     */
+    
 	public void testIsSatisfied004() {
         tbc.log("#testIsSatisfied004");
         try {
@@ -237,13 +245,15 @@ public class IsSatisfied {
 		}
 	}
 
-	/**
-	 * @testID testIsSatisfied005
-	 * @testDescription Asserts if isSatisfied method returns true when all
-	 *                  transfer costs passed as parameter are higher than the
-	 *                  thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true when all
+     * transfer costs passed as parameter are higher than the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied(Condition[], Dictionary)
+     */
+    
 	public void testIsSatisfied005() {
         tbc.log("#testIsSatisfied005");
 		try {
@@ -273,13 +283,15 @@ public class IsSatisfied {
 		}
 	}
 
-	/**
-	 * @testID testIsSatisfied006
-	 * @testDescription Asserts if isSatisfied method returns true when all
-	 *                  transfer costs passed as parameter are higher than the
-	 *                  thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true when all
+     * transfer costs passed as parameter are higher than the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied(Condition[], Dictionary)
+     */
+    
 	public void testIsSatisfied006() {
         tbc.log("#testIsSatisfied006");
 		try {
@@ -309,13 +321,15 @@ public class IsSatisfied {
 		}
 	}
 
-	/**
-	 * @testID testIsSatisfied007
-	 * @testDescription Asserts if isSatisfied method returns true when the
-	 *                  transfer costs passed as parameter are higher than or
-	 *                  equal the thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true when the
+     * transfer costs passed as parameter are higher than or
+     * equal the thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied(Condition[], Dictionary)
+     */
+    
 	public void testIsSatisfied007() {
         tbc.log("#testIsSatisfied007");
 		try {
@@ -345,13 +359,15 @@ public class IsSatisfied {
 		}
 	}
 
-	/**
-	 * @testID testIsSatisfied008
-	 * @testDescription Asserts if isSatisfied method returns true when the
-	 *                  transfer costs passed as parameter are higher than or
-	 *                  equal the thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true when the
+     * transfer costs passed as parameter are higher than or
+     * equal the thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied(Condition[], Dictionary)
+     */
+    
 	public void testIsSatisfied008() {
         tbc.log("#testIsSatisfied008");
 		try {
@@ -381,13 +397,15 @@ public class IsSatisfied {
 		}
 	}
 
-	/**
-	 * @testID testIsSatisfied009
-	 * @testDescription Asserts if isSatisfied method returns false when all
-	 *                  transfer costs passed as parameter are lower than the
-	 *                  thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns false when all
+     * transfer costs passed as parameter are lower than the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied(Condition[], Dictionary)
+     */
+    
 	public void testIsSatisfied009() {
         tbc.log("#testIsSatisfied009");
 		try {
@@ -417,13 +435,15 @@ public class IsSatisfied {
 		}
 	}
 
-	/**
-	 * @testID testIsSatisfied010
-	 * @testDescription Asserts if isSatisfied method returns false when all
-	 *                  transfer costs passed as parameter are lower than the
-	 *                  thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns false when all
+     * transfer costs passed as parameter are lower than the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied(Condition[], Dictionary)
+     */
+    
 	public void testIsSatisfied010() {
         tbc.log("#testIsSatisfied010");
 		try {
@@ -453,13 +473,15 @@ public class IsSatisfied {
 		}
 	}
 
-	/**
-	 * @testID testIsSatisfied011
-	 * @testDescription Asserts if isSatisfied method returns false when all
-	 *                  transfer costs passed as parameter are lower than the
-	 *                  thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns false when all
+     * transfer costs passed as parameter are lower than the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied(Condition[], Dictionary)
+     */
+    
 	public void testIsSatisfied011() {
         tbc.log("#testIsSatisfied011");
 		try {
@@ -489,13 +511,14 @@ public class IsSatisfied {
 		}
 	}
 	
-	/**
-	 * @testID testIsSatisfied012
-	 * @testDescription Asserts if isSatisfied method returns false when one of the
-	 *                  transfer costs passed as parameter is lower than the
-	 *                  thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns false when one of the
+     * transfer costs passed as parameter is lower than the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied(Condition[], Dictionary)
+     */
 	public void testIsSatisfied012() {
         tbc.log("#testIsSatisfied012");
 		try {
@@ -525,13 +548,13 @@ public class IsSatisfied {
 		}
 	}
 	
-	/**
-	 * @testID testIsSatisfied013
-	 * @testDescription Asserts if isSatisfied method returns false when one of the
-	 *                  transfer costs passed as parameter is lower than the
-	 *                  thread cost value
-	 * 
-	 */
+    /**
+     * This test asserts if isSatisfied method returns false when one of the
+     * transfer costs passed as parameter is lower than the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied(Condition[], Dictionary)
+     */
 	public void testIsSatisfied013() {
         tbc.log("#testIsSatisfied013");
 		try {
@@ -562,13 +585,15 @@ public class IsSatisfied {
 	}
 	
 
-	/**
-	 * @testID testIsSatisfied014
-	 * @testDescription Asserts if isSatisfied method returns false when one of the
-	 *                  transfer costs passed as parameter is lower than the
-	 *                  thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns false when one of the
+     * transfer costs passed as parameter is lower than the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied(Condition[], Dictionary)
+     */
+    
 	public void testIsSatisfied014() {
         tbc.log("#testIsSatisfied014");
 		try {
@@ -598,13 +623,15 @@ public class IsSatisfied {
 		}
 	}
 
-	/**
-	 * @testID testIsSatisfied015
-	 * @testDescription Asserts if isSatisfied method returns true when the
-	 *                  transfer costs passed as parameter are higher than or
-	 *                  equal the thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true when the
+     * transfer costs passed as parameter are higher than or
+     * equal the thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied(Condition[], Dictionary)
+     */
+    
 	public void testIsSatisfied015() {
         tbc.log("#testIsSatisfied015");
 		try {
@@ -634,13 +661,15 @@ public class IsSatisfied {
 		}
 	}
 	
-	/**
-	 * @testID testIsSatisfied016
-	 * @testDescription Asserts if isSatisfied method returns false when the
-	 *                  transfer costs passed as parameter are lower than 
-	 *                  the thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns false when the
+     * transfer costs passed as parameter are lower than 
+     * the thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied(Condition[], Dictionary)
+     */
+    
 	public void testIsSatisfied016() {
         tbc.log("#testIsSatisfied016");
 		try {
@@ -670,13 +699,15 @@ public class IsSatisfied {
 		}
 	}
 	
-	/**
-	 * @testID testIsSatisfied017
-	 * @testDescription Asserts if isSatisfied method returns false when the
-	 *                  transfer costs passed as parameter are lower than 
-	 *                  the thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns false when the
+     * transfer costs passed as parameter are lower than 
+     * the thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied(Condition[], Dictionary)
+     */
+    
 	public void testIsSatisfied017() {
         tbc.log("#testIsSatisfied017");
 		try {
@@ -706,13 +737,15 @@ public class IsSatisfied {
 		}
 	}
 	
-	/**
-	 * @testID testIsSatisfied018
-	 * @testDescription Asserts if isSatisfied method returns true when the
-	 *                  transfer costs passed as parameter are higher than or
-	 *                  equal the thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true when the
+     * transfer costs passed as parameter are higher than or
+     * equal the thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied(Condition[], Dictionary)
+     */
+    
 	public void testIsSatisfied018() {
         tbc.log("#testIsSatisfied018");
 		try {
@@ -742,13 +775,15 @@ public class IsSatisfied {
 		}
 	}
 	
-	/**
-	 * @testID testIsSatisfied019
-	 * @testDescription Asserts if isSatisfied method returns true when the
-	 *                  transfer costs passed as parameter is higher or equal than the
-	 *                  thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true when the
+     * transfer costs passed as parameter is higher or equal than the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied()
+     */
+    
 	public void testIsSatisfied019() {
         tbc.log("#testIsSatisfied019");
 		try {
@@ -774,13 +809,15 @@ public class IsSatisfied {
 		}
 	}
 
-	/**
-	 * @testID testIsSatisfied020
-	 * @testDescription Asserts if isSatisfied method returns true when the
-	 *                  transfer costs passed as parameter is higher or equal than the
-	 *                  thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns true when the
+     * transfer costs passed as parameter is higher or equal than the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied()
+     */
+    
 	public void testIsSatisfied020() {
         tbc.log("#testIsSatisfied020");
 		try {
@@ -806,13 +843,15 @@ public class IsSatisfied {
 		}
 	}
 	
-	/**
-	 * @testID testIsSatisfied021
-	 * @testDescription Asserts if isSatisfied method returns true when the
-	 *                  transfer costs passed as parameter is higher or equal than the
-	 *                  thread cost value
-	 * 
-	 */
+	
+    /**
+     * This test asserts if isSatisfied method returns true when the
+     * transfer costs passed as parameter is higher or equal than the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied()
+     */
+    
 	public void testIsSatisfied021() {
         tbc.log("#testIsSatisfied021");
 		try {
@@ -838,13 +877,15 @@ public class IsSatisfied {
 		}
 	}
 	
-	/**
-	 * @testID testIsSatisfied022
-	 * @testDescription Asserts if isSatisfied method returns false when the
-	 *                  transfer costs passed as parameter is lower or equal than the
-	 *                  thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns false when the
+     * transfer costs passed as parameter is lower or equal than the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied()
+     */
+    
 	public void testIsSatisfied022() {
         tbc.log("#testIsSatisfied022");
 		try {
@@ -870,13 +911,15 @@ public class IsSatisfied {
 		}
 	}
 	
-	/**
-	 * @testID testIsSatisfied023
-	 * @testDescription Asserts if isSatisfied method returns false when the
-	 *                  transfer costs passed as parameter is lower or equal than the
-	 *                  thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns false when the
+     * transfer costs passed as parameter is lower or equal than the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied()
+     */
+    
 	public void testIsSatisfied023() {
         tbc.log("#testIsSatisfied023");
 		try {
@@ -902,13 +945,15 @@ public class IsSatisfied {
 		}
 	}
 	
-	/**
-	 * @testID testIsSatisfied024
-	 * @testDescription Asserts if isSatisfied method returns false when the
-	 *                  transfer costs passed as parameter is lower or equal than the
-	 *                  thread cost value
-	 * 
-	 */
+
+    /**
+     * This test asserts if isSatisfied method returns false when the
+     * transfer costs passed as parameter is lower or equal than the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied()
+     */
+    
 	public void testIsSatisfied024() {
         tbc.log("#testIsSatisfied024");
 		try {
@@ -935,13 +980,15 @@ public class IsSatisfied {
 		}
 	}
     
+
     /**
-     * @testID testIsSatisfied025
-     * @testDescription Asserts if isSatisfied method returns true when the
-     *                  transfer costs passed as parameter is higher or equal than the
-     *                  thread cost value
-     * 
+     * This test asserts if isSatisfied method returns true when the
+     * transfer costs passed as parameter is higher or equal than the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied()
      */
+    
     public void testIsSatisfied025() {
         tbc.log("#testIsSatisfied025");
         try {
@@ -966,13 +1013,15 @@ public class IsSatisfied {
             TransferCostCondition.resetTransferCost();
         }
     }
+
     /**
-     * @testID testIsSatisfied026
-     * @testDescription Asserts if isSatisfied method returns true when the
-     *                  transfer costs passed as parameter is higher or equal than the
-     *                  thread cost value
-     * 
+     * This test asserts if isSatisfied method returns true when the
+     * transfer costs passed as parameter is higher or equal than the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied()
      */
+    
     public void testIsSatisfied026() {
         tbc.log("#testIsSatisfied026");
         try {
@@ -999,12 +1048,13 @@ public class IsSatisfied {
     }
     
     /**
-     * @testID testIsSatisfied027
-     * @testDescription Asserts if isSatisfied method returns true when the
-     *                  transfer costs passed as parameter is higher or equal than the
-     *                  thread cost value
-     * 
+     * This test asserts if isSatisfied method returns true when the
+     * transfer costs passed as parameter is higher or equal than the
+     * thread cost value
+     *
+     * @spec TransferCostCondition.isSatisfied()
      */
+    
     public void testIsSatisfied027() {
         tbc.log("#testIsSatisfied027");
         try {

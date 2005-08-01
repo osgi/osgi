@@ -50,9 +50,9 @@ import org.osgi.util.gsm.IMEICondition;
 import org.osgi.util.gsm.IMSICondition;
 
 /**
- * @methodUnderTest org.osgi.util.gsm.IMSICondition#getCondition
- * @generalDescription This class tests getCondition method according with MEG
- *                     specification (rfc0092)
+ * This Test Class Validates the implementation of
+ * <code>getCondition<code> method, according to MEG
+ * reference documentation.
  */
 public class GetCondition {
     private PolicyTestControl tbc;
@@ -73,11 +73,14 @@ public class GetCondition {
     }
 
 
+
     /**
-     * @testID testGetCondition001
-     * @testDescription Asserts if a condition is sucessfully created when imsi
-     *                  parameter is a valid code
+     * This test asserts if a condition is sucessfully created when imsi
+     * parameter is a valid code
+     *
+     * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
      */
+
     public void testGetCondition001() {
         tbc.log("#testGetCondition001");
         try {
@@ -96,11 +99,14 @@ public class GetCondition {
         }
     }
 
+
     /**
-     * @testID testGetCondition002
-     * @testDescription Asserts if NullPointerException is thrown when null is
-     *                  passed for the first parameter
+     * This test asserts if NullPointerException is thrown when null is
+     * passed for the first parameter
+     *
+     * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
      */
+
     public void testGetCondition002() {
         tbc.log("#testGetCondition002");
         try {
@@ -120,11 +126,14 @@ public class GetCondition {
         }
     }
 
+
     /**
-     * @testID testGetCondition003
-     * @testDescription Asserts if NullPointerException is thrown when null is
-     *                  passed for the second parameter
+     * This test asserts if NullPointerException is thrown when null is
+     * passed for the second parameter
+     *
+     * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
      */
+
     public void testGetCondition003() {
         tbc.log("#testGetCondition003");
         try {
@@ -144,11 +153,14 @@ public class GetCondition {
         }
     }
 
+
     /**
-     * @testID testGetCondition004
-     * @testDescription Asserts if IllegalArgumentException is thrown if the
-     *                  imsi is not a valid string
+     * This test asserts if IllegalArgumentException is thrown if the
+     * imsi is not a valid string
+     *
+     * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
      */
+
     public void testGetCondition004() {
         tbc.log("#testGetCondition004");
         try {
@@ -169,11 +181,14 @@ public class GetCondition {
         }
     }
 
+
     /**
-     * @testID testGetCondition005
-     * @testDescription Asserts if IllegalArgumentException is thrown if the
-     *                  imsi code is with more than 15 digits
+     * This test asserts if IllegalArgumentException is thrown if the
+     * imsi code is with more than 15 digits
+     *
+     * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
      */
+
     public void testGetCondition005() {
         tbc.log("#testGetCondition005");
         try {
@@ -194,11 +209,14 @@ public class GetCondition {
         }
     }
 
+
     /**
-     * @testID testGetCondition006
-     * @testDescription Asserts if a condition is not created when imsi
-     *                  parameter is an invalid char code
+     * This test asserts if a condition is not created when imsi
+     * parameter is an invalid char code
+     *
+     * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
      */
+
     public void testGetCondition006() {
         tbc.log("#testGetCondition006");
         try {
@@ -218,11 +236,14 @@ public class GetCondition {
         }
     }
 
+
     /**
-     * @testID testGetCondition007
-     * @testDescription Asserts if IllegalArgumentException is thrown if the
-     *                  imsi code is with less than 15 digits
+     * This test asserts if IllegalArgumentException is thrown if the
+     * imsi code is with less than 15 digits
+     *
+     * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
      */
+
     public void testGetCondition007() {
         tbc.log("#testGetCondition007");
         try {
@@ -243,11 +264,14 @@ public class GetCondition {
         }
     }
     
+
     /**
-     * @testID testGetCondition008
-     * @testDescription Asserts if IllegalArgumentException is thrown if the
-     *                  imsi code is a string with hyphens
+     * This test asserts if IllegalArgumentException is thrown if the
+     * imsi code is a string with hyphens
+     *
+     * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
      */
+
     public void testGetCondition008() {
         tbc.log("#testGetCondition008");
         try {

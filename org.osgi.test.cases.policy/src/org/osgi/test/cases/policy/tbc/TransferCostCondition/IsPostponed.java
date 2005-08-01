@@ -43,9 +43,9 @@ import org.osgi.test.cases.policy.tbc.util.MessagesConstants;
 import org.osgi.util.mobile.TransferCostCondition;
 
 /**
- * @methodUnderTest org.osgi.util.mobile.TransferCostCondition#isPostponed
- * @generalDescription This class tests isMutable method according with MEG
- *                     specification (rfc0092)
+ * This Test Class Validates the implementation of
+ * <code>isPostponed<code> method, according to MEG
+ * reference documentation.
  */
 public class IsPostponed {
 
@@ -62,11 +62,14 @@ public class IsPostponed {
 
     }
 
+
     /**
-     * @testID testIsPostponed001
-     * @testDescription Asserts if condition evaluation is postponed with HIGH parameter, because isSatisfied() cannot give 
-     * answer instantly.
-     */                  
+     * This test asserts if condition evaluation is postponed with HIGH parameter, 
+     * because isSatisfied() cannot give answer instantly.
+     *
+     * @spec TransferCostCondition.isPostponed()
+     */
+
     public void testIsPostponed001() {
         tbc.log("#testIsMutable001");
         try {
@@ -81,11 +84,14 @@ public class IsPostponed {
         }
     }
 
+
     /**
-     * @testID testIsPostponed002
-     * @testDescription Asserts if condition evaluation is postponed with MEDIUM parameter, because isSatisfied() cannot give 
-     * answer instantly.
-     */                  
+     * This test asserts if condition evaluation is postponed with MEDIUM parameter,
+     * because isSatisfied() cannot give answer instantly.
+     *
+     * @spec TransferCostCondition.isPostponed()
+     */
+
     public void testIsPostponed002() {
         tbc.log("#testIsMutable002");
         try {
@@ -100,11 +106,14 @@ public class IsPostponed {
         }
     }
     
+           
     /**
-     * @testID testIsPostponed003
-     * @testDescription Asserts if condition evaluation is postponed with LOW parameter, because isSatisfied() cannot give 
-     * answer instantly.
-     */                  
+     * This test asserts if condition evaluation is postponed with LOW parameter, 
+     * because isSatisfied() cannot give answer instantly.
+     *
+     * @spec TransferCostCondition.isPostponed()
+     */
+
     public void testIsPostponed003() {
         tbc.log("#testIsMutable003");
         try {
