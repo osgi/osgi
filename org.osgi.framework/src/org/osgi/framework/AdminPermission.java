@@ -17,6 +17,7 @@ import java.security.*;
 /**
  * Indicates the caller's authority to perform specific privileged
  * administrative operations on or to get sensitive information about a bundle.
+ * The actions for this permission are:
  * 
  * <pre>
  *  Action               Methods
@@ -36,6 +37,9 @@ import java.security.*;
  *                       Bundle.getLocation
  *  permission           PermissionAdmin.setPermissions
  *                       PermissionAdmin.setDefaultPermissions
+ *                       ConditionalPermissionAdmin.addConditionalPermissionInfo
+ *                       ConditionalPermissionAdmin.setConditionalPermissionInfo
+ *                       ConditionalPermissionInfo.delete
  *  resolve              PackageAdmin.refreshPackages
  *                       PackageAdmin.resolveBundles
  *  resource             Bundle.getResource
@@ -50,6 +54,17 @@ import java.security.*;
  * 
  * <p>
  * The special action "*" will represent all actions.
+ * <p>
+ * The name of this permission is a filter expression. The 
+ * filter gives access to the following parameters:
+ * <ul>
+ * <li>signer - A Distinguished Name chain used to sign a bundle.  
+ * Wildcards in a DN are not matched according to the filter string rules, 
+ * but according to the rules defined for a DN chain.</li>
+ * <li>location - The location of a bundle.</li>
+ * <li>id - The bundle ID of the designated bundle.</li>
+ * <li>name - The symbolic name of a bundle.</li>
+ * </ul>
  * 
  * @version $Revision$
  */
@@ -173,18 +188,28 @@ public final class AdminPermission extends Permission {
 	 * 
 	 * This constructor must only be used to create a permission that is going
 	 * to be checked.
-	 * 
 	 * <p>
-	 * Null arguments are equivalent to "*"
+	 * Examples:
+	 * <pre>
+	 *           (signer=\*,o=ACME,c=US)   
+	 *           (&amp;(signer=\*,o=ACME,c=US)(name=com.acme.*)(location=http://www.acme.com/bundles/*))
+	 *           (id>=1)
+	 * </pre>
+	 * <p>
+	 * When a signer key is used within the filter expression the signer value
+	 * must escape the special filter chars ('*', '(', ')').
+	 * <p>
+	 * Null arguments are equivalent to "*".
 	 * 
-	 * ### This parameter description is wrong. This is a filter string!
-	 * @param filter an X.500 Distinguished Name suffix or "*" to match all
-	 *        bundles
+	 * @param filter A filter expression that can use signer, location, id, and name keys.
+	 *        A value of &quot;*&quot or <code>null</code> matches all bundle.
 	 * @param actions <code>class</code>, <code>execute</code>,
+	 *        <code>extensionLifecycle</code>,
 	 *        <code>lifecycle</code>, <code>listener</code>,
 	 *        <code>metadata</code>, <code>permission</code>,
-	 *        <code>resolve</code>, <code>resource</code>,
-	 *        <code>startlevel</code>, or "*" to indicate all actions
+	 *        <code>resolve</code>, <code>resource</code>, or
+	 *        <code>startlevel</code>.  A value of "*" or <code>null</code> 
+	 *        indicates all actions
 	 */
 	public AdminPermission(String filter, String actions) {
 		// arguments will be null if called from a PermissionInfo defined with
@@ -219,7 +244,7 @@ public final class AdminPermission extends Permission {
 	 *        <code>lifecycle</code>, <code>listener</code>,
 	 *        <code>metadata</code>, <code>permission</code>,
 	 *        <code>resolve</code>, <code>resource</code>,
-	 *        <code>startlevel</code>, or "*" to indicate all actions
+	 *        <code>startlevel</code>
 	 */
 	public AdminPermission(Bundle bundle, String actions) {
 		super(Long.toString(bundle.getBundleId()));
@@ -303,15 +328,15 @@ public final class AdminPermission extends Permission {
 	 * This method returns <code>true</code> if The specified permission is an
 	 * AdminPermission AND
 	 * <ul>
-	 * <li>this object's filter is an X.500 Distinguished name suffix that
-	 * matches the specified permission's bundle OR
-	 * <li>this object's filter is "*" OR
-	 * <li>this object's bundle is a equal to the specified permission's bundle
+	 * <li>this object's filter matches the specified permission's bundle ID, 
+	 * bundle symbolic name, bundle location and bundle signer distinguished name 
+	 * chain OR</li>
+	 * <li>this object's filter is "*"</li>
 	 * </ul>
 	 * AND this object's actions include all of the specified permission's
-	 * actions
-	 * 
-	 * Special case: if the specified permission was constructed with "*", then
+	 * actions.
+	 * <p>
+	 * Special case: if the specified permission was constructed with "*" filter, then
 	 * this method returns <code>true</code> if this object's filter is "*"
 	 * and this object's actions include all of the specified permission's
 	 * actions
