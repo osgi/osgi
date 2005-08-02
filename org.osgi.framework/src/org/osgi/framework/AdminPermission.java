@@ -241,13 +241,14 @@ public final class AdminPermission extends Permission {
 	 * 
 	 * @param bundle A bundle
 	 * @param actions <code>class</code>, <code>execute</code>,
+	 *        <code>extensionLifecycle</code>,
 	 *        <code>lifecycle</code>, <code>listener</code>,
 	 *        <code>metadata</code>, <code>permission</code>,
 	 *        <code>resolve</code>, <code>resource</code>,
 	 *        <code>startlevel</code>
 	 */
 	public AdminPermission(Bundle bundle, String actions) {
-		super(Long.toString(bundle.getBundleId()));
+		super(createName(bundle));
 		try {
 			try {
 				delegate = (Permission) initBundleString
@@ -266,6 +267,14 @@ public final class AdminPermission extends Permission {
 		catch (Throwable e) {
 			throw new RuntimeException(e.toString());
 		}
+	}
+
+	private static String createName(Bundle bundle) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("(id=");
+		sb.append(bundle.getBundleId());
+		sb.append(")");
+		return sb.toString();
 	}
 
 	/**
@@ -306,11 +315,12 @@ public final class AdminPermission extends Permission {
 	 * 
 	 * <p>
 	 * Always returns present <code>AdminPermission</code> actions in the
-	 * following order: <code>CLASS</code>, <code>EXECUTE</code>,
-	 * <code>EXTENSIONLIFECYCLE</code>, <code>LIFECYCLE</code>,
-	 * <code>LISTENER</code>, <code>METADATA</code>,
-	 * <code>PERMISSION</code>, <code>RESOLVE</code>,
-	 * <code>RESOURCE</code>, <code>STARTLEVEL</code>.
+	 * following order: <code>class</code>, <code>execute</code>,
+	 *        <code>extensionLifecycle</code>,
+	 *        <code>lifecycle</code>, <code>listener</code>,
+	 *        <code>metadata</code>, <code>permission</code>,
+	 *        <code>resolve</code>, <code>resource</code>,
+	 *        <code>startlevel</code>.
 	 * 
 	 * @return Canonical string representation of the
 	 *         <code>AdminPermission</code> actions.
