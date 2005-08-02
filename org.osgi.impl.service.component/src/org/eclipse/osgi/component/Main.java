@@ -29,10 +29,10 @@ import org.eclipse.osgi.component.workqueue.WorkDispatcher;
 import org.eclipse.osgi.component.workqueue.WorkQueue;
 import org.eclipse.osgi.util.tracker.BundleTracker;
 import org.eclipse.osgi.util.tracker.BundleTrackerCustomizer;
+import org.eclipse.osgi.component.Log;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkEvent;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.util.tracker.ServiceTracker;
@@ -57,7 +57,13 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	protected Hashtable bundleToComponentDescriptions;
 	protected Hashtable bundleToLastModified;
 	protected List enableCDs;
-
+	
+	/**
+	 * Utility reference to Log class, necessary for communication with Log
+	 * Service.
+	 */
+	protected Log					log;
+	
 	/**
 	 * Bundle is being added to SCR tracked bundles.
 	 */
@@ -75,6 +81,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	public void start(BundleContext context) {
 		this.context = context;
 		framework = new FrameworkHook();
+		log = new Log(context);
 		cache = new ComponentDescriptionCache(this);
 		bundleToComponentDescriptions = new Hashtable();
 		bundleToLastModified = new Hashtable();
@@ -462,7 +469,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 				(componentDescription.getService() != null) &&
 				(componentDescription.getService().isServicefactory())) {
 			componentDescription.setValid(false);
-			framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(), new Throwable("invalid to specify both ComponentFactory and ServiceFactory"));
+			Log.log(1, "validate componentDescription: ", new Throwable("invalid to specify both ComponentFactory and ServiceFactory"));
 		} else {
 			componentDescription.setValid(true);
 		}

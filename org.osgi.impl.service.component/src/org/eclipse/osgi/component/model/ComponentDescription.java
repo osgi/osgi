@@ -28,6 +28,7 @@ public class ComponentDescription {
 	protected Bundle bundle;
 	protected String name;
 	protected boolean autoenable;
+	protected boolean immediate;
 	protected boolean enabled;
 	protected boolean eligible;
 	protected boolean reactivate;
@@ -47,6 +48,7 @@ public class ComponentDescription {
 	public ComponentDescription(Bundle bundle) {
 		this.bundle = bundle;
 		autoenable = true;
+		immediate = false;
 		reactivate = false;
 		properties = new ArrayList();
 		references = new ArrayList();
@@ -67,6 +69,20 @@ public class ComponentDescription {
 		this.autoenable = autoenable;
 	}
 
+	/**
+	 * @return Returns the immediate.
+	 */
+	public boolean isImmediate() {
+		return immediate;
+	}
+
+	/**
+	 * @param autoenable The autoenable to set.
+	 */
+	public void setImmediate(boolean immediate) {
+		this.immediate = immediate;
+	}
+	
 	/**
 	 * @return Returns the bundle.
 	 */

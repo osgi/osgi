@@ -30,6 +30,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.ComponentException;
 import org.osgi.service.component.ComponentInstance;
@@ -70,19 +71,13 @@ import org.osgi.service.component.ComponentInstance;
  * 
  * @version $Revision$
  */
-/**
- *
- * TODO Add Javadoc comment for this type.
- * 
- * @version $Revision$
- */
 public class ComponentContextImpl implements ComponentContext {
 
 	/** The BundleContext this component is associated with */
 	protected BundleContext bundleContext;
 
 	/* ComponentInstance instance */
-	ComponentInstance componentInstance;
+	ComponentInstanceImpl componentInstance;
 
 	/* ComponentDescription */
 	ComponentDescription componentDescription;
@@ -101,7 +96,7 @@ public class ComponentContextImpl implements ComponentContext {
 	 *
 	 * @param bundle The ComponentDescriptionProp we are wrapping.
 	 */
-	public ComponentContextImpl(Main main, Bundle usingBundle, ComponentDescriptionProp component, ComponentInstance ci) {
+	public ComponentContextImpl(Main main, Bundle usingBundle, ComponentDescriptionProp component, ComponentInstanceImpl ci) {
 		this.cdp = component;
 		this.componentDescription = component.getComponentDescription();
 		this.componentInstance = ci;
@@ -183,22 +178,69 @@ public class ComponentContextImpl implements ComponentContext {
 							thisReference.getReferenceDescription().getInterfacename()
 							);
 				}
-				return main.resolver.instanceProcess.buildDispose.getService(
+				Object serviceObject =  main.resolver.instanceProcess.buildDispose.getService(
 						cdp,
 						thisReference,
 						bundleContext,
 						serviceReference
 						);
+				componentInstance.addServiceReference(serviceReference,serviceObject);
+				return serviceObject;
 			}
 
 			return null;
 
-		} catch (Exception e) {
-			throw new ComponentException(e.getMessage());
+		} catch (ComponentException e) {
+			throw e;
 		}
 
 	}
 
+	/**
+	 * Returns the service object for the specified reference name and <code>ServiceReference</code>.
+	 * 
+	 * @param name The name of a reference as specified in a
+	 *        <code>reference</code> element in this component's description.
+	 * @param reference The <code>ServiceReference</code> to a specific bound service. This must
+	 * 			be a <code>ServiceReference</code> provided to the component via the bind
+	 * 			or unbind method for the specified reference name.        
+	 * @return A service object for the referenced service or <code>null</code>
+	 *         if the specified <code>ServiceReference</code> is not a bound 
+	 *         service for the specified reference name.
+	 * @throws ComponentException If the Service Component Runtime catches an
+	 *         exception while activating the bound service.
+	 */
+	public Object locateService(String name, ServiceReference serviceReference) throws ComponentException{
+		try {
+			//find the Reference Description with the specified name
+			Iterator references = cdp.getReferences().iterator();
+			Reference thisReference = null;
+			while(references.hasNext()) {
+				Reference reference = (Reference)references.next();
+				if (reference.getReferenceDescription().getName().equals(name)) {
+					thisReference = reference;
+					break;
+				}
+			}
+			
+			if (thisReference != null) {
+				Object serviceObject = main.resolver.instanceProcess.buildDispose.getService(
+						cdp,
+						thisReference,
+						bundleContext,
+						serviceReference
+						);
+				componentInstance.addServiceReference(serviceReference,serviceObject);
+				return serviceObject;
+			}
+
+			return null;
+
+		} catch (ComponentException e) {
+			throw e;
+		}
+	}
+	
 	/**
 	 * Returns the service objects for the specified service reference name.
 	 * 
@@ -234,10 +276,11 @@ public class ComponentContextImpl implements ComponentContext {
 						cdp,
 						thisReference,
 						bundleContext,
-						serviceReference
+						serviceReferences[counter]
 						);
 					if (serviceObject != null) {
 						serviceObjects.add(serviceObject);
+						componentInstance.addServiceReference(serviceReferences[counter],serviceObject);
 					}
 				} //end for serviceReferences
 				if (!serviceObjects.isEmpty()) {
@@ -246,7 +289,7 @@ public class ComponentContextImpl implements ComponentContext {
 			} 
 			return null;
 
-		} catch (Exception e) {
+		} catch (InvalidSyntaxException e) {
 			throw new ComponentException(e.getMessage());
 		}
 	}
@@ -346,18 +389,6 @@ public class ComponentContextImpl implements ComponentContext {
 	 */
 	public ServiceReference getServiceReference(){
 		return this.serviceReference;
-	}
-
-	
-	/**
-	 * TODO Need to omplement this method.
-	 * @param name
-	 * @param reference
-	 * @return
-	 * @see org.osgi.service.component.ComponentContext#locateService(java.lang.String, org.osgi.framework.ServiceReference)
-	 */
-	public Object locateService(String name, ServiceReference reference) {
-		throw new UnsupportedOperationException("TODO Need to implement!");
 	}
 
 }

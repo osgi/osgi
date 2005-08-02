@@ -24,11 +24,13 @@ public class ComponentElement extends DefaultHandler {
 	protected ParserHandler root;
 	protected ParserHandler parent;
 	protected ComponentDescription component;
+	protected boolean immediateSet;
 
 	public ComponentElement(ParserHandler root, Attributes attributes) {
 		this.root = root;
 		this.parent = root;
 		component = new ComponentDescription(root.bundle);
+		immediateSet = false;
 
 		int size = attributes.getLength();
 		for (int i = 0; i < size; i++) {
@@ -49,6 +51,11 @@ public class ComponentElement extends DefaultHandler {
 			}
 			if (key.equals(ParserConstants.FACTORY_ATTRIBUTE)) {
 				component.setFactory(value);
+				continue;
+			}
+			if (key.equals(ParserConstants.IMMEDIATE_ATTRIBUTE)) {
+				component.setImmediate(value.equalsIgnoreCase("true"));
+				immediateSet = true;
 				continue;
 			}
 			root.logError("unrecognized component element attribute: " + key);
@@ -101,6 +108,12 @@ public class ComponentElement extends DefaultHandler {
 	}
 
 	public void endElement(String uri, String localName, String qName) {
+		
+		// if unset, immediate attribute is false if service element is specified or true otherwise
+		if (!immediateSet) {
+			component.setImmediate(component.getService() == null);
+		}
+		
 		if (component.getImplementation() == null) {
 			root.logError("no implementation element");
 		}

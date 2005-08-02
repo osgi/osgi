@@ -20,14 +20,16 @@ import org.eclipse.osgi.component.model.ComponentDescription;
 import org.eclipse.osgi.component.model.ComponentDescriptionProp;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.component.ComponentException;
 import org.osgi.service.component.ComponentFactory;
 import org.osgi.service.component.ComponentInstance;
 
 /**
- * When a component is declared with the <code>factory</code> attribute on it's
- * <code>component</code> element, the Service Component Runtime will register a
- * ComponentFactory service to allow instances of the component to be created
- * rather than automatically create component instances as necessary.
+ * When a component is declared with the <code>factory</code> attribute on its
+ * <code>component</code> element, the Service Component Runtime will register
+ * a ComponentFactory service to allow new component configurations to be
+ * created and activated rather than automatically creating and activating
+ * component configuration as necessary.
  * 
  * @version $Revision$
  */
@@ -56,18 +58,24 @@ public class ComponentFactoryImpl implements ComponentFactory {
 		this.bundleContext = bundleContext;
 		this.instanceProcess = instanceProcess;
 
+		//if the Component Description includes a Service 
 		if (componentDescription.getService() != null)
 			registerService = true;
 
 	}
 
 	/**
-	 * Create a new instance of the component. Additional properties may be
-	 * provided for the component instance.
+	 * Create and activate a new component configuration. Additional properties
+	 * may be provided for the component configuration.
 	 * 
-	 * @param properties Additional properties for the component instance.
-	 * @return A ComponentInstance object encapsulating the component instance.
-	 *         The returned component instance has been activated.
+	 * @param properties Additional properties for the component configuration.
+	 * @return A ComponentInstance object encapsulating the component
+	 *         configuration. The returned component configuration has been
+	 *         activated and, if the component specifies a <code>service</code>
+	 *         element, the component configuration has been registered as a
+	 *         service.
+	 * @throws ComponentException If the Service Component Runtime is unable to
+	 *         activate the component configuration.
 	 */
 	public ComponentInstance newInstance(Dictionary properties) {
 
@@ -76,15 +84,15 @@ public class ComponentFactoryImpl implements ComponentFactory {
 			instance = instanceProcess.buildDispose.build(bundleContext, null, componentDescriptionProp, properties);
 
 			if (registerService) {
-				//instanceProcess.registerServices(bundleContext, componentDescriptionProp);
+				
 				serviceRegistration = instanceProcess.registerServices(bundleContext, componentDescriptionProp);
 				ComponentInstanceImpl componentInstanceImpl = (ComponentInstanceImpl) instance;
 				componentInstanceImpl.setServiceRegistration(serviceRegistration);
 			}
-		} catch (Exception e) {
-			//TODO what to do here?  we need to add throws to the interface
+		} catch (ComponentException e) {
 			System.err.println("Could not create instance of " + componentDescription + " with properties " + properties);
 			e.printStackTrace();
+			throw e;
 		}
 
 		return instance;

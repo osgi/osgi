@@ -31,6 +31,7 @@ public interface ParserConstants {
 	static final String PROPERTY_ELEMENT = "property";
 	static final String PROPERTIES_ELEMENT = "properties";
 	static final String NAME_ATTRIBUTE = "name";
+	static final String IMMEDIATE_ATTRIBUTE = "immediate";
 	static final String VALUE_ATTRIBUTE = "value";
 	static final String TYPE_ATTRIBUTE = "type";
 	static final String ENTRY_ATTRIBUTE = "entry";

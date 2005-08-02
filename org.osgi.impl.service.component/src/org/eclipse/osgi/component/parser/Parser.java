@@ -14,6 +14,7 @@
 package org.eclipse.osgi.component.parser;
 
 import java.io.InputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -22,12 +23,14 @@ import java.util.List;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 
+import org.eclipse.osgi.component.Log;
 import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.FrameworkEvent;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -85,7 +88,7 @@ public class Parser {
 		try {
 			return ManifestElement.parseHeader(ComponentConstants.SERVICE_COMPONENT, files);
 		} catch (BundleException e) {
-			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, e);
+			Log.log(1, "[SCR] Error attempting parse Manifest Element Header. ", e);
 			return new ManifestElement[0];
 		}
 	}
@@ -110,8 +113,14 @@ public class Parser {
 			parserFactory.setValidating(false);
 			SAXParser saxParser = parserFactory.newSAXParser();
 			saxParser.parse(is, new ParserHandler(main, bundle, result));
-		} catch (Exception e) {
-			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, e);
+		} catch (IOException e) {
+			Log.log(1, "[SCR] IOException attempting to parse ComponentDescription XML. ", e);
+		} catch (BundleException e) {
+			Log.log(1, "[SCR] BundleException attempting to parse ComponentDescription XML. ", e);
+		} catch (SAXException e) {
+			Log.log(1, "[SCR] SAXException attempting to parse ComponentDescription XML. ", e);
+		} catch (ParserConfigurationException e) {
+			Log.log(1, "[SCR] ParserConfigurationException attempting to parse ComponentDescription XML. ", e);
 		}
 
 		return result;

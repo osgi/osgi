@@ -14,8 +14,8 @@
 package org.eclipse.osgi.impl.service.component;
 
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Set;
 
 import org.eclipse.osgi.component.instance.BuildDispose;
 import org.eclipse.osgi.component.model.ComponentDescriptionProp;
@@ -90,8 +90,8 @@ public class ComponentInstanceImpl implements ComponentInstance {
 		serviceReferenceToServiceObject.put(serviceReference,serviceObject);
 	}
 	
-	public Set getServiceReferences() {
-		return serviceReferenceToServiceObject.entrySet();
+	public Enumeration getServiceReferences() {
+		return serviceReferenceToServiceObject.keys();
 	}
 	
 	public void removeServiceReference(ServiceReference serviceReference)

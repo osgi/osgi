@@ -43,7 +43,8 @@ class InvokeMethod {
 		// Create an array of parameters to pass to the method 
 		// The activate method requires the ComponentContext 
 		Object[] parameterTypes = new Object[] {context};
-		invokeMethod("activate", instance, parameterTypes);
+		Method method = findMethod("activate", instance);
+		invokeMethod(method, instance, parameterTypes);
 	}
 
 	/**
@@ -56,7 +57,8 @@ class InvokeMethod {
 		// Create an array of parameters to pass to the method 
 		// The deactivate method requires the ComponentContext 
 		Object[] parameterTypes = new Object[] {context};
-		invokeMethod("deactivate", instance, parameterTypes);
+		Method method = findMethod("deactivate", instance);
+		invokeMethod(method, instance, parameterTypes);
 	}
 
 	/** 
@@ -67,10 +69,10 @@ class InvokeMethod {
 	 * @param serviceObject
 	 */
 
-	void bindComponent(String bind, Object instance, Object serviceObject) throws IllegalAccessException, InvocationTargetException {
+	void bindComponent(Method bindMethod, Object instance, Object serviceObject) throws IllegalAccessException, InvocationTargetException {
 		// Create an array of parameters to pass to the method 
 		Object[] parameterTypes = new Object[] {serviceObject};
-		invokeMethod(bind, instance, parameterTypes);
+		invokeMethod(bindMethod, instance, parameterTypes);
 	}
 
 	/**
@@ -81,10 +83,10 @@ class InvokeMethod {
 	 * @param serviceObject
 	 */
 
-	void unbindComponent(String unbind, Object instance, Object serviceObject) throws IllegalAccessException, InvocationTargetException {
+	void unbindComponent(Method unbindMethod, Object instance, Object serviceObject) throws IllegalAccessException, InvocationTargetException {
 		// Create an array of parameters to pass to the method 
 		Object[] parameterTypes = new Object[] {serviceObject};
-		invokeMethod(unbind, instance, parameterTypes);
+		invokeMethod(unbindMethod, instance, parameterTypes);
 	}
 
 	/**
@@ -95,8 +97,29 @@ class InvokeMethod {
 	 * @param parameterTypes - array of parameters to pass to the method
 	 */
 
-	private void invokeMethod(String methodName, Object instance, Object[] parameterTypes) throws IllegalAccessException, InvocationTargetException {
+	private void invokeMethod(Method method, Object instance, Object[] parameterTypes) throws IllegalAccessException, InvocationTargetException {
 
+		if (method == null) {
+			//should log error here
+			return;
+		}
+		//If the method is declared protected or public, SCR will call the method
+		int mod = method.getModifiers();
+		if ((Modifier.isProtected(mod)) || (Modifier.isPublic(mod))) {
+			//if the method is protected must set accessibility(true) to invoke it
+			if (Modifier.isProtected(mod))
+				method.setAccessible(true);
+			//invoke the method
+			method.invoke(instance, parameterTypes);
+		}
+	}
+
+	/**
+	 * Search through class and the superclasses for a method
+	 * @param methodName name of method to look for
+	 * @param instance Object to look in
+	 */
+	Method findMethod(String methodName, Object instance) {
 		// Get the runtime class of the Service Component object
 		Class c = instance.getClass();
 		//get all methods declared by the class, including package, protected, and private (Class.getDeclaredMethods()).
@@ -121,19 +144,7 @@ class InvokeMethod {
 				ssName = ss.getName();
 			}
 		}
-		if (method == null) {
-			//should log error here
-			return;
-		}
-		//If the method is declared protected or public, SCR will call the method
-		int mod = method.getModifiers();
-		if ((Modifier.isProtected(mod)) || (Modifier.isPublic(mod))) {
-			//if the method is protected must set accessibility(true) to invoke it
-			if (Modifier.isProtected(mod))
-				method.setAccessible(true);
-			//invoke the method
-			method.invoke(instance, parameterTypes);
-		}
+		return method;
 	}
 
 	private Method getMethod(String methodName, Method[] methods) {

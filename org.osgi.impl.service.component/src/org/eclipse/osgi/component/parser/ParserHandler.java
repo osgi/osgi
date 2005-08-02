@@ -14,10 +14,11 @@
 package org.eclipse.osgi.component.parser;
 
 import java.util.List;
+
+import org.eclipse.osgi.component.Log;
 import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.component.model.ComponentDescription;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkEvent;
 import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -64,7 +65,7 @@ public class ParserHandler extends DefaultHandler {
 
 	public void logError(String msg) {
 		error = true;
-		main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, new SAXException(msg));
+		Log.log(1, "[SCR] Parser Error. ", new SAXException(msg));
 	}
 
 	public void startDocument() throws SAXException {

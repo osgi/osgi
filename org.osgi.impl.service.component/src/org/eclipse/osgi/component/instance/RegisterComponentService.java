@@ -19,6 +19,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Enumeration;
 
+import org.eclipse.osgi.component.Log;
 import org.eclipse.osgi.component.model.ComponentDescriptionProp;
 import org.eclipse.osgi.component.model.ProvideDescription;
 import org.osgi.framework.Bundle;
@@ -27,6 +28,7 @@ import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentInstance;
+import org.osgi.service.component.ComponentException;
 
 /**
  *
@@ -103,11 +105,10 @@ abstract class RegisterComponentService {
 					try {
 						componentInstance = instanceProcess.buildDispose.build(bundleContext, bundle, component, null);
 						instance = componentInstance.getInstance();
-					} catch (Exception e) {
-						//what to do here?
-						System.err.println("Could not create instance of " + component.getComponentDescription());
-						e.printStackTrace();
+					} catch (ComponentException e) {
+						Log.log(1, "[SCR] Error attempting to register a Service Factory.", e);
 					}
+					
 					if (componentInstance != null && instance != null) {
 						//save so we can dispose later
 						if (instances == null) {
@@ -122,6 +123,7 @@ abstract class RegisterComponentService {
 				public void ungetService(Bundle bundle, ServiceRegistration registration, Object service) {
 					if (DEBUG)
 						System.out.println("RegisterComponentServiceFactory:ungetService: registration = " + registration);
+					
 					((ComponentInstance)instances.get(service)).dispose();
 					instances.remove(service);
 					if (instances.isEmpty()) {
@@ -145,10 +147,8 @@ abstract class RegisterComponentService {
 					if (component.getInstances().isEmpty()) {
 						try {
 							instance = instanceProcess.buildDispose.build(bundleContext, null, component, null);
-						} catch (Exception e) {
-							//TODO handle error
-							System.err.println("Could not create instance of " + component.getComponentDescription());
-							e.printStackTrace();
+						} catch (ComponentException e) {
+							Log.log(1, "[SCR] Error attempting to register a Service.", e);				
 							return null;
 						}
 					}

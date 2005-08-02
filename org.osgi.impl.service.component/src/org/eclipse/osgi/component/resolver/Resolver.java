@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+import org.eclipse.osgi.component.Log;
 import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.component.instance.InstanceProcess;
 import org.eclipse.osgi.component.model.ComponentDescription;
@@ -34,11 +35,11 @@ import org.eclipse.osgi.component.workqueue.WorkDispatcher;
 import org.eclipse.osgi.component.workqueue.WorkQueue;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.AllServiceListener;
-import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.ComponentException;
@@ -148,9 +149,8 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	 *            resolve CD+P
 	 * 
 	 */
-	public void enableComponents(List componentDescriptions) throws IOException {
+	public void enableComponents(List componentDescriptions) throws IOException, ComponentException {
 
-		//ComponentDescriptionProp componentDescriptionProp = null;
 		Configuration config = null;
 		Configuration[] configs = null;
 
@@ -160,11 +160,11 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 				ComponentDescription componentDescription = (ComponentDescription) it.next();
 
 				// check for a Configuration properties for this component
-
 				try {
 					config = componentProperties.getConfiguration(componentDescription.getName());
-				} catch (Exception e) {
-					main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(), e);
+				} catch (IOException e) {
+					//Log it and continue
+					Log.log(1, "[SCR] IOException when getting Configuration Properties. ", e);
 				}
 
 				// if no Configuration
@@ -183,13 +183,14 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 						if (componentDescription.getFactory() != null) {
 							throw new ComponentException("incompatible to specify both ComponentFactory and ManagedServiceFactory are incompatible");
 						}
+						
 						try {
-							// configs = configurationAdmin.listConfigurations("(service.factoryPid="+config.getFactoryPid()+")");
 							ConfigurationAdmin cm = (ConfigurationAdmin) configAdminTracker.getService();
 							configs = cm.listConfigurations("(service.factoryPid=" + config.getFactoryPid() + ")");
-						} catch (Exception e) {
-							main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(), e);
+						} catch (InvalidSyntaxException e) {
+							Log.log(1, "[SCR] InvalidSyntaxException when getting CM Configurations. ", e);
 						}
+						
 						// for each MSF set of properties(P), map(CD, new CD+P(CD,P))
 						if (configs != null) {
 							for (int index = 0; index < configs.length; index++) {
@@ -245,8 +246,8 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 
 			try {
 				componentConfig = componentProperties.getConfiguration(componentDescription.getName());
-			} catch (Exception e) {
-				main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(), e);
+			} catch (IOException e) {
+				Log.log(1, "[SCR] IOException when checking for existing component configurations ", e);
 			}
 
 			// if no component configuration then create one, else get the current properties
@@ -452,11 +453,11 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 			List sortedCDPs = sortCDPs(enabledCDPs);
 			return sortedCDPs;
 		} catch (CircularityException ex) {
-			ComponentDescriptionProp circularCDP = ex.getCircularDependency();
+			//ComponentDescriptionProp circularCDP = ex.getCircularDependency();
 
 			//log the error
-			main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, circularCDP.getComponentDescription().getBundle(), ex);
-
+			Log.log(1, "[SCR] Circularity Exception.", ex);
+			
 			//remove offending CDP and re-resolve
 			componentDescriptionPropsEnabled.remove(ex.getCircularDependency());
 			return resolveEligible();
@@ -468,11 +469,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	 * 
 	 */
 	public void addServiceListener() {
-		try {
-			main.context.addServiceListener(this);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		main.context.addServiceListener(this);
 	}
 
 	/**
@@ -480,11 +477,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	 * 
 	 */
 	public void removeServiceListener() {
-		try {
-			main.context.removeServiceListener(this);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		main.context.removeServiceListener(this);
 	}
 
 	/**
@@ -601,8 +594,8 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 		if (!componentDescriptions.isEmpty()) {
 			try {
 				enableComponents(componentDescriptions);
-			} catch (Exception e) {
-				main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(), e);
+			} catch (IOException e) {
+				Log.log(1, "[SCR] IOException when enabling Component. ", e);
 			}
 		}
 	}

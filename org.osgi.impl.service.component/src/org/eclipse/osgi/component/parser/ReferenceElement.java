@@ -93,9 +93,6 @@ public class ReferenceElement extends DefaultHandler {
 
 	public void endElement(String uri, String localName, String qName) {
 		ComponentDescription component = parent.getComponentDescription();
-		if (((reference.getBind() == null) && (reference.getUnbind() != null)) || ((reference.getBind() != null) && (reference.getUnbind() == null))) {
-			root.logError("missing bind or unbind method");
-		}
 		component.addReference(reference);
 		root.setHandler(parent);
 	}

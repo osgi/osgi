@@ -13,8 +13,8 @@
 
 package org.eclipse.osgi.component.workqueue;
 
+import org.eclipse.osgi.component.Log;
 import org.eclipse.osgi.component.Main;
-import org.osgi.framework.FrameworkEvent;
 
 /**
  * This class is used for asynchronously dispatching work items.
@@ -61,7 +61,7 @@ public class WorkQueue extends Thread {
 				dispatcher.dispatchWork(action, object);
 			} catch (Throwable t) {
 				t.printStackTrace();
-				main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, main.context.getBundle(), t);
+				Log.log(1, "[SCR] Error dispatching work ", t);
 			}
 		}
 	}

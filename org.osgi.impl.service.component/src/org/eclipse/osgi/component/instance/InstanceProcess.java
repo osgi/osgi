@@ -19,7 +19,9 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.io.IOException;
 
+import org.eclipse.osgi.component.Log;
 import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.component.model.ComponentDescription;
 import org.eclipse.osgi.component.model.ComponentDescriptionProp;
@@ -28,12 +30,13 @@ import org.eclipse.osgi.component.resolver.Reference;
 import org.eclipse.osgi.component.resolver.Resolver;
 import org.eclipse.osgi.component.workqueue.WorkDispatcher;
 import org.eclipse.osgi.component.workqueue.WorkQueue;
+import org.osgi.service.component.ComponentException;
 import org.eclipse.osgi.impl.service.component.ComponentFactoryImpl;
 import org.eclipse.osgi.impl.service.component.ComponentInstanceImpl;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationEvent;
@@ -159,45 +162,50 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 
 				BundleContext bundleContext = main.framework.getBundleContext(componentDescription.getBundle());
 
-				//if Service not provided - create instance immediately
-				if (componentDescription.getService() == null) {
+				//if component is immediate - create instance immediately
+				if (componentDescription.isImmediate()) {
 					try {
 						buildDispose.build(bundleContext, null, componentDescriptionProp, null);
-					} catch (Exception e) {
-						main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(), e);
-					}
-				} else {
-
-					// ComponentFactory
-					if (componentDescription.getFactory() != null) {
-						if (DEBUG)
-							System.out.println("InstanceProcess: buildInstances: ComponentFactory");
-						//check if MSF
-						configurationAdmin = componentProperties.getConfigurationAdmin();
-
-						try {
-							Configuration config = configurationAdmin.getConfiguration(componentDescription.getName());
-							if (config != null)
-								factoryPid = config.getFactoryPid();
-						} catch (Exception e) {
-							main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, componentDescription.getBundle(), e);
-						}
-
-						//if MSF throw exception - can't be ComponentFactory add MSF
-						if (factoryPid != null) {
-							throw new org.osgi.service.component.ComponentException("ManagedServiceFactory and ConfigurationFactory are incompatible");
-						}
-						ComponentFactory factory = new ComponentFactoryImpl(bundleContext, componentDescriptionProp, this);
-						registerComponentFactory(bundleContext, componentDescriptionProp, factory);
-
-						// if ServiceFactory
-					} else if (componentDescription.getService().isServicefactory()) {
-						registrations.put(componentDescriptionProp, RegisterComponentService.registerService(this, bundleContext, componentDescriptionProp, true, null));
-						// if Service
-					} else {
-						registrations.put(componentDescriptionProp, RegisterComponentService.registerService(this, bundleContext, componentDescriptionProp, false, null));
-					}
+					} catch (ComponentException e) {
+						Log.log(1, "[SCR] Error attempting to build Component.", e);
+					} 
 				}
+
+				// ComponentFactory
+				if (componentDescription.getFactory() != null) {
+					if (DEBUG)
+						System.out.println("InstanceProcess: buildInstances: ComponentFactory");
+					//check if MSF
+					configurationAdmin = componentProperties.getConfigurationAdmin();
+
+					try {
+						Configuration config = configurationAdmin.getConfiguration(componentDescription.getName());
+						if (config != null)
+							factoryPid = config.getFactoryPid();
+					} catch (IOException e) {
+						Log.log(1, "[SCR] Error attempting to create componentFactory. ", e);
+					}
+
+					//if MSF throw exception - can't be ComponentFactory add MSF
+					if (factoryPid != null) {
+						throw new org.osgi.service.component.ComponentException("ManagedServiceFactory and ConfigurationFactory are incompatible");
+					}
+					ComponentFactory factory = new ComponentFactoryImpl(bundleContext, componentDescriptionProp, this);
+					registerComponentFactory(bundleContext, componentDescriptionProp, factory);
+
+					// if ServiceFactory or Service
+				} else if (componentDescription.getService() != null) {
+					registrations.put(
+							componentDescriptionProp, 
+							RegisterComponentService.registerService(
+									this, 
+									bundleContext, 
+									componentDescriptionProp, 
+									componentDescription.getService().isServicefactory(), 
+									null)
+								);
+				}
+				
 			}//end while(more componentDescriptionProps)
 		}//end if (componentDescriptionProps != null)
 	}
@@ -316,11 +324,8 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 			while (it.hasNext()) {
 				ComponentInstanceImpl compInstance = (ComponentInstanceImpl) it.next();
 				if (compInstance != null) {
-					try {
-						buildDispose.bindReference(cdp, reference, compInstance, main.framework.getBundleContext(cdp.getComponentDescription().getBundle()));
-					} catch (Exception ex) {
-						ex.printStackTrace();
-					}
+					buildDispose.bindReference(cdp, reference, compInstance, main.framework.getBundleContext(cdp.getComponentDescription().getBundle()));
+					
 				}
 			}
 		}
@@ -413,8 +418,10 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 				ConfigurationAdmin cm = (ConfigurationAdmin) configAdminTracker.getService();
 				try {
 					config = cm.listConfigurations("(service.pid=" + pid + ")");
-				} catch (Exception e) {
-					main.framework.publishFrameworkEvent(FrameworkEvent.ERROR, null, e);
+				} catch (IOException e) {
+					Log.log(1, "[SCR] Error attempting to list CM Configurations ", e);
+				} catch (InvalidSyntaxException e) {
+					Log.log(1, "[SCR] Error attempting to list CM Configurations ", e);
 				}
 
 				//If a MSF
