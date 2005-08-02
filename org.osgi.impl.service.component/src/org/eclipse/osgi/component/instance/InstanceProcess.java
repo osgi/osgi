@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) IBM Corporation (2005)
  *
  * These materials have been contributed  to the OSGi Alliance as 
