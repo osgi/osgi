@@ -13,8 +13,7 @@ package org.eclipse.osgi.framework.internal.core;
 
 import java.io.*;
 import java.net.URL;
-import java.security.Permission;
-import java.security.ProtectionDomain;
+import java.security.*;
 import java.util.Vector;
 import org.eclipse.osgi.framework.adaptor.BundleProtectionDomain;
 import org.eclipse.osgi.framework.adaptor.PermissionStorage;
@@ -182,11 +181,12 @@ public class PermissionAdminImpl implements PermissionAdmin {
 	 * @param permissions The permissions to be assigned, or <tt>null</tt>
 	 * if the specified location is to be removed from the permission table.
 	 * @exception SecurityException if the caller does not have the
-	 * <tt>AdminPermission</tt>.
+	 * <tt>AllPermission</tt>.
 	 */
 	public void setPermissions(String location, PermissionInfo[] permissions) {
-		framework.checkAdminPermission(framework.systemBundle, AdminPermission.PERMISSION);
-
+		SecurityManager sm = System.getSecurityManager();
+		if (sm != null)
+			sm.checkPermission(new AllPermission());
 		if (location == null) {
 			throw new NullPointerException();
 		}
@@ -295,11 +295,12 @@ public class PermissionAdminImpl implements PermissionAdmin {
 	 *
 	 * @param permissions The default permissions.
 	 * @exception SecurityException if the caller does not have the
-	 * <tt>AdminPermission</tt>.
+	 * <tt>AllPermission</tt>.
 	 */
 	public void setDefaultPermissions(PermissionInfo[] permissions) {
-		framework.checkAdminPermission(framework.systemBundle, AdminPermission.PERMISSION);
-
+		SecurityManager sm = System.getSecurityManager();
+		if (sm != null)
+			sm.checkPermission(new AllPermission());
 		PermissionStorage storage = new org.eclipse.osgi.framework.internal.core.SecurePermissionStorage(this.storage);
 
 		try {

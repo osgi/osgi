@@ -13,8 +13,7 @@ package org.eclipse.osgi.framework.internal.core;
 
 import java.io.Serializable;
 import java.lang.reflect.*;
-import java.security.Permission;
-import java.security.PermissionCollection;
+import java.security.*;
 import org.osgi.framework.Bundle;
 import org.osgi.service.condpermadmin.*;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -187,6 +186,9 @@ public class ConditionalPermissionInfoImpl implements ConditionalPermissionInfo,
 	 * @see org.osgi.service.condpermadmin.ConditionalPermissionInfo#delete()
 	 */
 	public void delete() {
+		SecurityManager sm = System.getSecurityManager();
+		if (sm != null)
+			sm.checkPermission(new AllPermission());
 		deleted = true;
 		condAdmin.deleteConditionalPermissionInfo(this);
 	}
