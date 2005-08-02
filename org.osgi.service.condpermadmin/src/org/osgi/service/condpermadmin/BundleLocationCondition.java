@@ -13,13 +13,14 @@ import java.io.File;
 import java.io.FilePermission;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.Hashtable;
 
-import org.osgi.framework.Bundle;
+import org.osgi.framework.*;
 
 /**
  * 
  * Checks to see if a Bundle matches the given location pattern. Pattern
- * matching is done using FilePermission style patterns.
+ * matching is done according to the filter string matching rules.
  * 
  * @version $Revision$
  */
@@ -33,8 +34,8 @@ public class BundleLocationCondition {
 	 * @param bundle the Bundle being evaluated.
 	 * @param info the ConditionInfo to construct the condition for. The args of
 	 *        the ConditionInfo specify the location to match the Bundle
-	 *        location to. Matching is done according to the patterns documented
-	 *        in FilePermission.
+	 *        location to. Matching is done according to the filter string 
+	 *        matching rules.
 	 */
 	static public Condition getCondition(final Bundle bundle, ConditionInfo info) {
 		if (!CONDITION_TYPE.equals(info.getType()))
@@ -44,22 +45,22 @@ public class BundleLocationCondition {
 		if (args.length != 1)
 			throw new IllegalArgumentException("Illegal number of args: "
 					+ args.length);
-		String location = args[0];
 		String bundleLocation = (String) AccessController.doPrivileged(new PrivilegedAction() {
 					public Object run() {
 						return bundle.getLocation();
 					}
 				});
-
-		if ('/' != File.separatorChar) {
-			// must use the seperatorChar of the platform for FilePermission to work
-			location = location.replace('/', File.separatorChar);
-			bundleLocation = bundleLocation.replace('/', File.separatorChar);
+		Filter filter = null;
+		try {
+			filter = FrameworkUtil.createFilter("(location=" + args[0] + ")");
 		}
-		FilePermission locationPat = new FilePermission(location, "read");
-		FilePermission sourcePat = new FilePermission(bundleLocation, "read");
-		return locationPat.implies(sourcePat) ? Condition.TRUE
-				: Condition.FALSE;
+		catch (InvalidSyntaxException e) {
+			// this should never happen, but just incase
+			throw new RuntimeException("Invalid filter: " + e.getFilter());
+		}
+		Hashtable matchProps = new Hashtable(2);
+		matchProps.put("location", bundleLocation);
+		return filter.match(matchProps) ? Condition.TRUE : Condition.FALSE;
 	}
 
 	private BundleLocationCondition() {
