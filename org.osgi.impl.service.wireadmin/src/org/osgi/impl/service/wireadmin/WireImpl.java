@@ -24,6 +24,7 @@ public class WireImpl implements Wire, WireConstants {
 	private Filter				filter				= null;
 	private long				timeStamp			= -1;
 	Vector						scope;
+	private boolean				filteredByProducer	= false;
 
 	public WireImpl() {
 	}
@@ -240,7 +241,7 @@ public class WireImpl implements Wire, WireConstants {
 		}
 		// Was 		if (isCorrectType(value.getClass())) {
 		if (isCorrectType(value)) {
-			if (filter != null) {
+			if ((filter != null) && (!filteredByProducer)) {
 				if (lastValue == null) {
 					lastValue = value;
 				}
@@ -482,11 +483,12 @@ public class WireImpl implements Wire, WireConstants {
 
 	public void setProducer(ServiceReference producer) {
 		this.producerReference = producer;
+		filteredByProducer = false;
 		if (producerReference != null
 				&& producerReference
 						.getProperty(WireConstants.WIREADMIN_PRODUCER_FILTERS) != null) {
 			// producer will do the filtering
-			filter = null;
+			filteredByProducer = true;
 		}
 		checkConnection();
 	}
