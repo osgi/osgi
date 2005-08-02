@@ -35,11 +35,6 @@ import java.security.*;
  *                       BundleContext.removeBundleListener for SynchronousBundleListener
  *  metadata             Bundle.getHeaders
  *                       Bundle.getLocation
- *  permission           PermissionAdmin.setPermissions
- *                       PermissionAdmin.setDefaultPermissions
- *                       ConditionalPermissionAdmin.addConditionalPermissionInfo
- *                       ConditionalPermissionAdmin.setConditionalPermissionInfo
- *                       ConditionalPermissionInfo.delete
  *  resolve              PackageAdmin.refreshPackages
  *                       PackageAdmin.resolveBundles
  *  resource             Bundle.getResource
@@ -97,10 +92,6 @@ public final class AdminPermission extends Permission {
 	 * The action string <code>metadata</code> (Value is "metadata").
 	 */
 	public final static String			METADATA			= "metadata";
-	/**
-	 * The action string <code>permission</code> (Value is "permission").
-	 */
-	public final static String			PERMISSION			= "permission";
 	/**
 	 * The action string <code>resolve</code> (Value is "resolve").
 	 */

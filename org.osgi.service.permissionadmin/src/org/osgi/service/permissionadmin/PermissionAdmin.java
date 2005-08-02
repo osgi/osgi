@@ -72,7 +72,7 @@ public interface PermissionAdmin {
 	 * @param permissions The permissions to be assigned, or <code>null</code> if
 	 *        the specified location is to be removed from the permission table.
 	 * @throws SecurityException if the caller does not have the
-	 *            <code>AdminPermission</code>.
+	 *            <code>AllPermission</code>.
 	 */
 	void setPermissions(String location, PermissionInfo[] permissions);
 
@@ -107,7 +107,7 @@ public interface PermissionAdmin {
 	 * @param permissions The default permissions, or <code>null</code> if the
 	 *        default permissions are to be removed from the permission table.
 	 * @throws SecurityException if the caller does not have the
-	 *            <code>AdminPermission</code>.
+	 *            <code>AllPermission</code>.
 	 */
 	void setDefaultPermissions(PermissionInfo[] permissions);
 }

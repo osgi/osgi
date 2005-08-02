@@ -34,6 +34,8 @@ public interface ConditionalPermissionInfo {
 	/**
 	 * Removes the ConditionalPermissionCollection from the
 	 * ConditionalPermissionAdmin.
+	 * @throws SecurityException if the caller does not have the
+	 *         <code>AllPermission</code>.
 	 */
 	void delete();
 	

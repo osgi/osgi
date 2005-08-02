@@ -32,6 +32,8 @@ public interface ConditionalPermissionAdmin {
 	 *        Conditions are satisfied.
 	 * @return the ConditionalPermissionInfo that for the newly added Conditions
 	 *         and Permissions.
+	 * @throws SecurityException if the caller does not have the
+	 *         <code>AllPermission</code>.
 	 */
 	ConditionalPermissionInfo addConditionalPermissionInfo(
 			ConditionInfo conds[], PermissionInfo perms[]);
@@ -52,6 +54,8 @@ public interface ConditionalPermissionAdmin {
 	 *        Conditions are satisfied.
 	 * @return the ConditionalPermissionInfo that for the newly added Conditions
 	 *         and Permissions.
+	 * @throws SecurityException if the caller does not have the
+	 *         <code>AllPermission</code>.
 	 */
 	ConditionalPermissionInfo setConditionalPermissionInfo(String name,
 			ConditionInfo conds[], PermissionInfo perms[]);
