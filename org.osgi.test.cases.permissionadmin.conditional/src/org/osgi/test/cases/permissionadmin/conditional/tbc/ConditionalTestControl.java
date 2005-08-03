@@ -65,7 +65,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
   protected ConditionalDomTBCService  domTBC;
 
   private ConditionalUtility          utility;
-
+  
   private String            BUNDLE_LOCATION_CONDITION = BundleLocationCondition.class.getName();
   private String            BUNDLE_SIGNER_CONDITION = BundleSignerCondition.class.getName();
   private static String[] methods = new String[] {"testConditionInfoCreation", // "TC1"
@@ -632,7 +632,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     ConditionInfo pc1 = utility.createTestCInfo(true,  false, true, "TestCondition_104"); // postponed, satisfied, mutable
     ConditionInfo pc2 = utility.createTestCInfo(true,  true,  true, "TestCondition_105"); // postponed, satisfied, mutable
 
-    AdminPermission permissionP = new AdminPermission("*", AdminPermission.PERMISSION);
+    AdminPermission permissionP = new AdminPermission("*", AdminPermission.LIFECYCLE);
     AdminPermission permissionQ = new AdminPermission("*", AdminPermission.EXECUTE);
     AdminPermission permissionR = new AdminPermission("*", AdminPermission.RESOLVE);
     AdminPermission permissionS = new AdminPermission("*", AdminPermission.STARTLEVEL);
