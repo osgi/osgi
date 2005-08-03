@@ -148,7 +148,7 @@ public class ConditionalUtility {
     
     while (index != -1) {
       lastIndex = index + 1;
-      result.addElement(value.substring(0, lastIndex) + "-");
+      result.addElement(value.substring(0, lastIndex) + "*");
       index = value.indexOf("/", lastIndex); 
     }               
     return result;
