@@ -267,18 +267,21 @@ public class WireAdminImpl implements ServiceListener, WireAdmin,
 	 */
 	public void updateWire(Wire wire, Dictionary properties) {
 		try {
-			Dictionary wireProps = wire.getProperties();
-			String pid = (String) wireProps.get(WireConstants.WIREADMIN_PID);
-			String consumerPID = (String) wireProps
+			// The updated wire must be valid
+			if (wire.isValid()) {
+				Dictionary wireProps = wire.getProperties();
+				String pid = (String) wireProps.get(WireConstants.WIREADMIN_PID);
+				String consumerPID = (String) wireProps
 					.get(WireConstants.WIREADMIN_CONSUMER_PID);
-			String producerPID = (String) wireProps
+				String producerPID = (String) wireProps
 					.get(WireConstants.WIREADMIN_PRODUCER_PID);
-			properties.put(WireConstants.WIREADMIN_PRODUCER_PID, producerPID);
-			properties.put(WireConstants.WIREADMIN_CONSUMER_PID, consumerPID);
-			properties.put(WireConstants.WIREADMIN_PID, String.valueOf(pid));
-			getCM().getConfiguration(((WireImpl) wire).getPID()).update(
+				properties.put(WireConstants.WIREADMIN_PRODUCER_PID, producerPID);
+				properties.put(WireConstants.WIREADMIN_CONSUMER_PID, consumerPID);
+				properties.put(WireConstants.WIREADMIN_PID, String.valueOf(pid));
+				getCM().getConfiguration(((WireImpl) wire).getPID()).update(
 					properties);
-			((WireImpl)wire).setProperties(properties);
+				((WireImpl)wire).setProperties(properties);
+			}
 		}
 		catch (IOException iox) {
 			getLogService().log(LogService.LOG_ERROR,
