@@ -9,8 +9,6 @@
  */
 package org.osgi.service.condpermadmin;
 
-import java.io.File;
-import java.io.FilePermission;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Hashtable;
