@@ -93,9 +93,11 @@ public class ConfigurationImpl implements Configuration, Serializable {
 	 * 
 	 * @exception IOException if delete fails.
 	 * @exception IllegalStateException if configuration already deleted.
+	 * @throws SecurityException If the caller does not have <code>ConfigurationPermission[SET]</code>.
 	 */
 	public void delete() throws IOException {
 		checkIfDeleted();
+		// ### check ConfigurationPermission[SET]
 		synchronized (ServiceAgent.storage) {
 			ServiceAgent.storage.deleteConfig(this);
 			ServiceReference sRef = ServiceAgent.searchForService(this, false);
@@ -122,10 +124,12 @@ public class ConfigurationImpl implements Configuration, Serializable {
 	 * @return bundle location of configured bundle.
 	 * @exception SecurityException When caller has no admin permission
 	 * @exception IllegalStateException if configuration already deleted.
+	 * @throws SecurityException If the caller does not have <code>ConfigurationPermission[REBIND]</code>.
 	 */
 	public String getBundleLocation() throws SecurityException {
-		ConfigurationAdminImpl.checkPermission();
 		checkIfDeleted();
+		// ### check ConfigurationPermission[REBIND]
+		ConfigurationAdminImpl.checkPermission();
 		return location;
 	}
 
@@ -167,11 +171,18 @@ public class ConfigurationImpl implements Configuration, Serializable {
 	 * 
 	 * @exception SecurityException When caller has no admin permission
 	 * @exception IllegalStateException if configuration already deleted.
+	 * @throws SecurityException If the caller does not have <code>ConfigurationPermission[REBIND]</code>.
 	 */
 	public void setBundleLocation(String bundleLocation)
 			throws SecurityException {
-		ConfigurationAdminImpl.checkPermission();
 		checkIfDeleted();
+		// ### check ConfigurationPermission[REBIND]
+		SecurityManager security = System.getSecurityManager();
+		if (security != null) {
+			security.checkPermission(new ConfigurationPermission(/* bundle? */null, pid, fPid, ConfigurationPermission.REBIND));
+		}
+
+		//ConfigurationAdminImpl.checkPermission();
 		setLocation(bundleLocation, true);
 		stronglyBound = (bundleLocation != null);
 	}
@@ -181,9 +192,11 @@ public class ConfigurationImpl implements Configuration, Serializable {
 	 * 
 	 * @exception IOException if storage error occurs.
 	 * @exception IllegalStateException if configuration already deleted.
+	 * @throws SecurityException If the caller does not have <code>ConfigurationPermission[SET]</code>.
 	 */
 	public void update() throws IOException {
 		checkIfDeleted();
+		// ### check ConfigurationPermission[SET]
 		callBackManagedService(null, null);
 	}
 
@@ -197,6 +210,7 @@ public class ConfigurationImpl implements Configuration, Serializable {
 	 * @exception IllegalStateException if configuration already deleted.
 	 * @exception IllegalArgumentException if properties contain wrong data
 	 *            types.
+	 * @throws SecurityException If the caller does not have <code>ConfigurationPermission[SET]</code>.
 	 */
 	public void update(Dictionary properties) throws IOException,
 			IllegalArgumentException {
@@ -208,6 +222,7 @@ public class ConfigurationImpl implements Configuration, Serializable {
 			throw new IllegalArgumentException(
 					"Properties contain incorrect type!");
 		}
+		// ### check ConfigurationPermission[SET]
 		callBackManagedService(null, properties);
 
 		// notify ConfigurationListeners of update

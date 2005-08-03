@@ -71,9 +71,9 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 	 * @param factoryPid pid of ManagedServiceFactory
 	 * @return a new Configuration object or null if factory pid is null
 	 * @exception IOException when new configuration can not be stored
-	 * @exception SecurityException if a configuration with this factory pid
-	 *            already exists and is bound to another non null location
-	 *            (different from caller's)
+	 * @throws SecurityException if caller does not have
+	 *         <code>ConfigurationPermission[READ]</code> and the
+	 *         <code>factoryPid</code> is bound to another bundle.
 	 */
 	public Configuration createFactoryConfiguration(String factoryPid)
 			throws IOException, SecurityException {
@@ -88,6 +88,7 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 					fConfig = (ConfigurationImpl) factoryConfigs.elementAt(i);
 					if (fConfig.location != null
 							&& !location.equals(fConfig.location)) {
+						// ### check ConfigurationPermission[READ]
 						checkPermission();
 						break; /*
 							    * if we have permission, there is no need to
@@ -111,13 +112,15 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 	 * @param location bundle location of configured bundle
 	 * @return a new Configuration object or null - if factory pid is null
 	 * @exception IOException when db is unable to store new configuration
-	 * @exception SecurityException if caller bundle has no admin permission
+	 * @throws SecurityException if caller does not have
+	 *         <code>ConfigurationPermission[READ]</code>.
 	 */
 	public Configuration createFactoryConfiguration(String factoryPid,
 			String location) throws IOException, SecurityException {
-		checkPermission();
 		if (factoryPid == null)
 			return null;
+		// ### check ConfigurationPermission[READ]
+		checkPermission();
 		synchronized (ServiceAgent.storage) {
 			ConfigurationImpl config = new ConfigurationImpl(factoryPid,
 					ServiceAgent.storage.getNextPID(), location);
@@ -142,13 +145,15 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 	 *        ManagedService
 	 * @return a Configuration object; null only if passing null for pid
 	 * @exception IOException If db fails to save new configuration
-	 * @exception SecurityException if caller has no admin permission
+	 * @throws SecurityException if the caller does not have
+	 *         <code>ConfigurationPermission[READ]</code>.
 	 */
 	public Configuration getConfiguration(String pid, String location)
 			throws IOException, SecurityException {
-		checkPermission();
 		if (pid == null)
 			return null;
+		// ### check ConfigurationPermission[READ]
+		checkPermission();
 		synchronized (ServiceAgent.storage) {
 			ConfigurationImpl config = (ConfigurationImpl) ConfigurationStorage.configs
 					.get(pid);
@@ -175,8 +180,9 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 	 *        designed
 	 * @return a Configuration object; null only if pid passed is null
 	 * @exception IOException if db fails to write new configuration
-	 * @exception SecurityException if caller has no admin permission and is
-	 *            trying to access another bundle's configuration
+	 * @throws SecurityException if caller does not have
+	 *         <code>ConfigurationPermission[READ]</code> and the location of the 
+	 *         <code>Configuration</code> does not match the location of the calling bundle.
 	 */
 	public Configuration getConfiguration(String pid) throws IOException,
 			SecurityException {
@@ -196,6 +202,7 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 				}
 				else
 					if (!config.location.equals(location)) {
+						// ### check ConfigurationPermission[READ]
 						checkPermission();
 					}
 			return config;
@@ -203,14 +210,47 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 	}
 
 	/**
-	 * Lists the configurations, matching the filter. For non-admin bundle
-	 * callers, only configurations matching their location are scanned.
+	 * List the current <code>Configuration</code> objects which match the
+	 * filter.
 	 * 
-	 * @param filter LDAP valid filter or null.
-	 * @return a list of configurations matching the filter; if none - null
-	 * @exception IOException here it is never thrown
-	 * @exception InvalidSyntaxException if filter string is incorrect LDAP
-	 *            filter
+	 * <p>
+	 * Only <code>Configuration</code> objects with non- <code>null</code>
+	 * properties are considered current. That is,
+	 * <code>Configuration.getProperties()</code> is guaranteed not to return
+	 * <code>null</code> for each of the returned <code>Configuration</code>
+	 * objects.
+	 * 
+	 * <p>
+	 * Normally only <code>Configuration</code> objects that are bound to the
+	 * location of the calling bundle are returned.
+	 * Otherwise, all matching
+	 * <code>Configuration</code> objects are returned for which the caller has 
+	 * <code>ConfigurationPermission[READ]</code> access.
+	 * 
+	 * <p>
+	 * The returned array must only contain Configuration objects that for which
+	 * the caller has <code>ConfigurationPermission[READ]</code> access.
+	 * <p>
+	 * The syntax of the filter string is as defined in the <code>Filter</code>
+	 * class. The filter can test any configuration parameters including the
+	 * following system properties:
+	 * <ul>
+	 * <li><code>service.pid</code>-<code>String</code>- the PID under
+	 * which this is registered</li>
+	 * <li><code>service.factoryPid</code>-<code>String</code>- the
+	 * factory if applicable</li>
+	 * <li><code>service.bundleLocation</code>-<code>String</code>- the
+	 * bundle location</li>
+	 * </ul>
+	 * The filter can also be <code>null</code>, meaning that all
+	 * <code>Configuration</code> objects should be returned.
+	 * 
+	 * @param filter a <code>Filter</code> object, or <code>null</code> to
+	 *        retrieve all <code>Configuration</code> objects.
+	 * @return all matching <code>Configuration</code> objects, or
+	 *         <code>null</code> if there aren't any
+	 * @throws IOException if access to persistent storage fails
+	 * @throws InvalidSyntaxException if the filter string is invalid
 	 */
 	public Configuration[] listConfigurations(String filter)
 			throws IOException, InvalidSyntaxException {
@@ -230,6 +270,7 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 				if (config.props != null) {
 					try {
 						if (!location.equals(config.location)) {
+							// ### check ConfigurationPermission[READ]
 							checkPermission();
 						}
 						//properties should not contain service.bundleLocaiton

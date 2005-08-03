@@ -42,18 +42,32 @@ import org.osgi.framework.*;
  * <p>
  * The actions for this permission are:
  * <ul>
- * <li>SET - The right to update a configuration. Checked during the
- * <code>update</code> method. This implies READ.</li>
- * <li>GET - The right to be updated. The Configuration Admin must verify that
+ * <li>set - The right to update a configuration. Checked during the
+ * <code>update</code> method. This implies read.</li>
+ * <li>get - The right to be updated. The Configuration Admin must verify that
  * the target bundle that receives the configuration has permission with the
  * <code>hasPermission</code> method before it calls the the
  * <code>updated</code> method.</li>
- * <li>READ - The right to see a Configuration object. This action is needed
+ * <li>read - The right to see a Configuration object. This action is needed
  * also when creating a new configuration.</li>
- * <li>REBIND - The right to change the binding of an existing bound
+ * <li>rebind - The right to view or change the binding of an existing bound
  * configuration.</li>
  * </ul>
- * Every bundle must be given the permission to set its own configuration.
+ * <pre>
+ *  Action               Methods
+ *  set                  Configuration.update
+ *                       Configuration.delete
+ *  rebind               Configuration.setBundleLocation
+ *                       Configuration.getBundleLocation
+ *  read                 ConfigurationAdmin.createFactoryConfiguration
+ *                       ConfigurationAdmin.getConfiguration
+ *                       ConfigurationAdmin.listConfigurations
+ *  get                  ManagedService.updated
+ *                       ManagedServiceFactory.updated
+ *                       ManagedServiceFactory.deleted                       
+ * </pre>
+ *
+ * No permission check is made when a bundle sets its own configurations. 
  * 
  * @version $Revision$
  * @since 1.2
@@ -147,7 +161,7 @@ public final class ConfigurationPermission extends Permission {
 	 * binding of an existing bound configuration. The <code>set</code> action
 	 * implies <code>read</code>.
 	 * 
-	 * @param name A filter expression that can use signer, location, name, pid
+	 * @param name A filter expression that can use signer, location, name, id, pid
 	 *        or factoryPid
 	 * @param actions <code>get</code>, <code>set</code>,
 	 *        <code>read</code> (canonical order)

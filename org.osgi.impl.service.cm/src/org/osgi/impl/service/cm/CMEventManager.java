@@ -29,8 +29,7 @@ package org.osgi.impl.service.cm;
 
 import java.util.Vector;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
+import org.osgi.framework.*;
 import org.osgi.service.cm.*;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -149,10 +148,19 @@ public class CMEventManager extends Thread {
 	 * Add an event to the queue. The event will be forwarded to target service
 	 * as soon as possible.
 	 * 
-	 * @param upEv event, holding info for update/deletion of a configuration.
+	 * @param event Event holding info for update/deletion of a configuration.
 	 */
-	protected static void addEvent(CMEvent upEv) {
-		eventQueue.addElement(upEv);
+	protected static void addEvent(CMEvent event) {
+		// check ConfigurationPermission[GET]
+		SecurityManager security = System.getSecurityManager();
+		if (security != null) {
+			Bundle target = event.sRef.getBundle();
+			if (!target.hasPermission(new ConfigurationPermission(target, event.config.pid, event.config.fPid, ConfigurationPermission.GET))) {
+				return;
+			}
+		}
+
+		eventQueue.addElement(event);
 		synchronized (synch) {
 			if (isWaiting) {
 				synch.notify();

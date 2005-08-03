@@ -126,12 +126,11 @@ public interface ConfigurationAdmin {
 	 * calling bundle.
 	 * 
 	 * @param factoryPid PID of factory (not <code>null</code>).
-	 * @return a new <code>Configuration</code> object.
+	 * @return A new <code>Configuration</code> object.
 	 * @throws IOException if access to persistent storage fails.
 	 * @throws SecurityException if caller does not have
-	 *         <code>ConfigurationPermission[READ]</code> and
-	 *         <code>factoryPid</code> is bound to another bundle
-	 * 
+	 *         <code>ConfigurationPermission[READ]</code> and the
+	 *         <code>factoryPid</code> is bound to another bundle.
 	 */
 	Configuration createFactoryConfiguration(String factoryPid)
 			throws IOException;
@@ -153,15 +152,12 @@ public interface ConfigurationAdmin {
 	 * the first bundle that registers a Managed Service Factory with a
 	 * corresponding PID.
 	 * 
-	 * <p>
-	 * This method requires <code>ConfigurationPermission[READ]</code>.
-	 * 
 	 * @param factoryPid PID of factory (not <code>null</code>).
-	 * @param location a bundle location string, or <code>null</code>.
+	 * @param location A bundle location string, or <code>null</code>.
 	 * @return a new <code>Configuration</code> object.
 	 * @throws IOException if access to persistent storage fails.
 	 * @throws SecurityException if caller does not have
-	 *         <code>ConfigurationPermission[READ]</code>
+	 *         <code>ConfigurationPermission[READ]</code>.
 	 */
 	Configuration createFactoryConfiguration(String factoryPid, String location)
 			throws IOException;
@@ -182,15 +178,12 @@ public interface ConfigurationAdmin {
 	 * Managed Service with the corresponding PID is registered for the first
 	 * time.
 	 * 
-	 * <p>
-	 * This method requires <code>ConfigurationPermission[READ]</code>.
-	 * 
-	 * @param pid persistent identifier.
-	 * @param location the bundle location string, or <code>null</code>.
-	 * @return an existing or new <code>Configuration</code> object.
+	 * @param pid Persistent identifier.
+	 * @param location The bundle location string, or <code>null</code>.
+	 * @return An existing or new <code>Configuration</code> object.
 	 * @throws IOException if access to persistent storage fails.
 	 * @throws SecurityException if the caller does not have
-	 *         <code>ConfigurationPermission[READ]</code>
+	 *         <code>ConfigurationPermission[READ]</code>.
 	 */
 	Configuration getConfiguration(String pid, String location)
 			throws IOException;
@@ -205,19 +198,15 @@ public interface ConfigurationAdmin {
 	 * bundle's location.
 	 * 
 	 * <p>
-	 * Else, if the location of the existing <code>Configuration</code> object
+	 * Otherwise, if the location of the existing <code>Configuration</code> object
 	 * is <code>null</code>, set it to the calling bundle's location.
-	 * <p>
-	 * If the location of the <code>Configuration</code> object does not match
-	 * the calling bundle, throw a <code>SecurityException</code>.
 	 * 
 	 * @param pid persistent identifier.
 	 * @return an existing or new <code>Configuration</code> matching the PID.
 	 * @throws IOException if access to persistent storage fails.
-	 * @throws SecurityException if the <code>Configuration</code> object is
-	 *         bound to a location different from that of the calling bundle and
-	 *         it has no <code>AdminPermission</code> or
-	 *         <code>ConfigurationPermission[READ]</code>
+	 * @throws SecurityException if caller does not have
+	 *         <code>ConfigurationPermission[READ]</code> and the location of the 
+	 *         <code>Configuration</code> does not match the location of the calling bundle.
 	 */
 	Configuration getConfiguration(String pid) throws IOException;
 
@@ -234,9 +223,10 @@ public interface ConfigurationAdmin {
 	 * 
 	 * <p>
 	 * Normally only <code>Configuration</code> objects that are bound to the
-	 * location of the calling bundle are returned. If the caller has
-	 * <code>ConfigurationPermission[READ]</code>, then all matching
-	 * <code>Configuration</code> objects are returned that match this permission.
+	 * location of the calling bundle are returned.
+	 * Otherwise, all matching
+	 * <code>Configuration</code> objects are returned for which the caller has 
+	 * <code>ConfigurationPermission[READ]</code> access.
 	 * 
 	 * <p>
 	 * The returned array must only contain Configuration objects that for which
