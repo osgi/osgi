@@ -10,6 +10,9 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
  * Contains the test methods of the wireadmin test case
  * 
  * $Log$
+ * Revision 1.7  2005/08/03 16:32:17  pdobrev
+ * fix last issues
+ *
  * Revision 1.6  2005/07/27 15:13:31  pdobrev
  * fixes issue#387
  *
@@ -173,6 +176,17 @@ public class WireAdminControl extends DefaultTestBundleControl {
 			log("**** timed out");
 		synchCounterx = 0;
 	}
+	
+	private boolean checkForAdditionalNotifications(int maxDelay) throws InterruptedException {
+		while (synchCounterx == 0 && maxDelay-- > 0)
+			Thread.sleep(100);
+		if (synchCounterx > 0) {
+		  log("Warning:Additional producer/consumer notification detected");
+		  synchCounterx = 0;
+		  return true;
+		}
+		return false;
+	}
 
 	public void syncup(String pid) {
 		//System.out.println("Syncing up " + pid);
@@ -325,6 +339,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		h.put("org.osgi.test.wireadmin", "yes");
 		wire = wa.createWire("producer.ProducerImplA", "consumer.ConsumerImplB", h);
 		delay(2, 200);
+		checkForAdditionalNotifications(5); // check for possible unneeded/undesired producer/consumer notifications
 		compareConnected("producer.ProducerImplA", "consumer.ConsumerImplB");
 		if (wire.isValid() && wire.isConnected() && notUpdated(wire)) {
 			log("Test createWire with incompatible flavors",
@@ -370,17 +385,12 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		properties.put("org.osgi.test.wireadmin", "yes");
 		try {
 			wa.updateWire(wire, properties);
-			if (compareWireProperties(wire.getProperties(), properties)) {
-				log("Test updateWire with case insensitive properties' keys","NOT OK.");
-				try {
-			      // Wait some seconds to avoid upcomming invalid sync notifications
-				  Thread.sleep(3000); 
-				  synchCounterx = 0; // reset the sync counter synce it may have been updated
-				} catch (InterruptedException ie) {}
-			} else {
-				log("Test updateWire with case insensitive properties' keys",
-						"Operation passed: OK.");
-			}
+			log("Test updateWire with case insensitive properties' keys","NOT OK. Exception was not thrown");
+			try {
+		      // Wait some seconds to avoid upcomming invalid sync notifications
+			  Thread.sleep(3000); 
+			  synchCounterx = 0; // reset the sync counter synce it may have been updated
+			} catch (InterruptedException ie) {}
 		} catch (Exception e) {
 			log("Test updateWire with case insensitive properties' keys",
 					"Operation passed: OK.Exception thrown.");
@@ -462,6 +472,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		helper.registerProducer("producer.ProducerImplC", new Class[] {
 				String.class, Float.class, Boolean.class});
 		delay(2, 100);
+		checkForAdditionalNotifications(5); // check for possible unneeded/undesired producer/consumer notifications
 		compareConnected("producer.ProducerImplC", "consumer.ConsumerImplC");
 		try {
 			wire = wa
@@ -489,6 +500,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		helper.registerConsumer("consumer.ConsumerImplC", new Class[] {
 				String.class, Integer.class, Float.class});
 		delay(2, 100);
+		checkForAdditionalNotifications(5); // check for possible unneeded/undesired producer/consumer notifications
 		compareConnected("producer.ProducerImplC", "consumer.ConsumerImplC");
 		try {
 			wire = wa
@@ -583,6 +595,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		helper.registerConsumer("consumer.ConsumerImplC", new Class[] {
 				String.class, Integer.class, Float.class});
 		delay(2, 100);
+		checkForAdditionalNotifications(5); // check for possible unneeded/undesired producer/consumer notifications
 		compareConnected("producer.ProducerImplC", "consumer.ConsumerImplC");
 		try {
 			wire = wa
@@ -698,7 +711,8 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		try {
 		  Thread.sleep(3000);
 		  synchCounterx = 0; //reset the synch counter since it may have changed
-		} catch (InterruptedException ie) {}
+		} catch (InterruptedException ie) {
+		}
 	}
 
 	/**
@@ -736,6 +750,10 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		helper.registerProducer("producer.ProducerImplC", new Class[] {
 				String.class, Float.class, Boolean.class});
 		
+		//wait for producers/consumersConnected(null) calls when beeing registered without existing wires  
+		delay(4, 100);
+		checkForAdditionalNotifications(5); // check for possible unneeded/undesired producer/consumer notifications
+		
 		Hashtable properties = new Hashtable();
 		properties.put("property1", new Integer(1));
 		properties.put("property2", new Float(1.0));
@@ -744,7 +762,6 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		wire = wa.createWire("producer.ProducerImplA", "consumer.ConsumerImplA", properties);
 		wire = wa.createWire("producer.ProducerImplC", "consumer.ConsumerImplC", properties);
 		delay(4, 100);
-		
 		log("Must call both consumersConnected(..) for producer.ProducerImplA and producersConnected(..) for consumer.ConsumerImplC");
 		Hashtable h = new Hashtable();
 		h.put("org.osgi.test.wireadmin", "yes");
@@ -774,6 +791,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		log("and producersConnected(..) for: consumer.ConsumerImplA and consumer.ConsumerImplC");
 		helper.registerProducer("producer.ProducerImplA", new Class[] {String.class, Float.class});
 		delay(4, 100);
+		checkForAdditionalNotifications(5); // check for possible unneeded/undesired producer/consumer notifications
 		compareConnected("producer.ProducerImplA", "consumer.ConsumerImplA");
 		compareConnected("", "consumer.ConsumerImplC");
 		if (compareWires_Flavors(correct, wa.getWires("(org.osgi.test.wireadmin=yes)"))) {
@@ -800,6 +818,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		helper.registerConsumer("consumer.ConsumerImplC", new Class[] {
 				String.class, Integer.class, Float.class});
 		delay(4, 100);
+		checkForAdditionalNotifications(5); // check for possible unneeded/undesired producer/consumer notifications
 		compareConnected("producer.ProducerImplA", "");
 		compareConnected("producer.ProducerImplC", "consumer.ConsumerImplC");
 		if (compareWires_Flavors(correct, wa.getWires("(org.osgi.test.wireadmin=yes)"))) {
@@ -1049,7 +1068,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		// The test must wait several seconds. 
 		//The events, genereated from the operations above, must be delivered in order not to interfere with the next test 
 		try {
-		  Thread.sleep(3000);
+		  Thread.sleep(4000);
 		} catch (InterruptedException ie) {}
 	}
 

@@ -49,7 +49,7 @@ Must call both consumersConnected(..) for producer.ProducerImplA and producersCo
 {producer.ProducerImplA} Invokes consumersConnected(..) : "CORRECT"
 {consumer.ConsumerImplA} Invokes producersConnected(..) : "CORRECT"
 Test updateWire with incorrect properties' keys: "Operation passed: OK.Exception thrown."
-Test updateWire with case insensitive properties' keys: "Operation passed: OK."
+Test updateWire with case insensitive properties' keys: "Operation passed: OK.Exception thrown."
 Must call both consumersConnected(..) for producer.ProducerImplA and producersConected(..) for consumer.ConsumerImplA
 {producer.ProducerImplA} Invokes consumersConnected(..) : "CORRECT"
 {consumer.ConsumerImplA} Invokes producersConnected(..) : "CORRECT"
