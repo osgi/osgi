@@ -33,14 +33,16 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
-import org.osgi.framework.FrameworkEvent;
-import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentFactory;
 import org.osgi.service.component.ComponentInstance;
+import org.osgi.service.log.LogEntry;
+import org.osgi.service.log.LogListener;
+import org.osgi.service.log.LogReaderService;
+import org.osgi.service.log.LogService;
 import org.osgi.test.cases.component.tb2.ServiceConsumerLookup;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
@@ -52,7 +54,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @version $Revision$
  */
 public class DeclarativeServicesControl extends DefaultTestBundleControl
-		implements FrameworkListener {
+		implements LogListener {
 
 	private static final String	PROVIDER_CLASS	= "org.osgi.test.cases.component.tbc.ServiceProvider";
 	private static final String	LOOKUP_CLASS	= "org.osgi.test.cases.component.tb2.ServiceConsumerLookup";
@@ -165,6 +167,13 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		trackerNamedService.close();
 		trackerNamedServiceFactory.close();
 	}
+
+  /**
+   * Clean up after each method. Notice that during debugging many times the
+   * unsetState is never reached.
+   */
+  public void unsetState() {
+  }
 
 	/**
 	 * Tests registering / unregistering of the component bundles and their
@@ -356,7 +365,13 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				trackerNamedService.getService());
 	}
 
-	Bundle	errorBundle;
+	boolean errorLog = false;
+
+  public void logged(LogEntry e) {
+    if (e.getLevel() == LogService.LOG_ERROR) {
+      errorLog = true;
+    }
+  }
 
 	/**
 	 * This method tests the behaviour of the service component runtime against
@@ -381,20 +396,21 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		tb1.uninstall();
 
 		// clear any previously reported 'error' bundles
-		errorBundle = null;
-		bc.addFrameworkListener(this);
+    errorLog = false;
+    LogReaderService logService = (LogReaderService) getService(LogReaderService.class);
+    logService.addLogListener(this);
 
 		// the bundle contains some illegal definitions
 		tb1 = installBundle("tb1.jar");
 		tb1.start();
 		Thread.sleep(SLEEP);
 
-		bc.removeFrameworkListener(this);
+    logService.removeLogListener(this);
 
 		// make sure that SCR reports some errors for tb1
-		assertSame(
-				"The Service Component Runtime should post a framework error for tb1",
-				tb1, errorBundle);
+		assertTrue(
+				"The Service Component Runtime should post a log error for tb1",
+				errorLog);
 
 		// make sure that the services are not registered
 		ServiceReference ref;
@@ -417,12 +433,21 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				ref);
 	}
 
-	/**
-	 * Clean up after each method. Notice that during debugging many times the
-	 * unsetState is never reached.
-	 */
-	public void unsetState() {
-	}
+  private Bundle getSCRBundle() {
+    String bundleName = System.getProperty("scr.bundle.name");
+    if (bundleName != null) {
+      Bundle[] bundles = getContext().getBundles();
+      for (int i = 0; i < bundles.length; i++) {
+        Bundle current = bundles[i];
+        Dictionary headers = current.getHeaders(null);
+        String name = (String) headers.get(Constants.BUNDLE_NAME);
+        if (bundleName.equals(name)) {
+          return current;
+        }
+      }
+    }
+    return null;
+  }
 
 	/**
 	 * This test check if the SCR will unregister all components when it is
@@ -466,28 +491,6 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		}
 		else {
 			log("testStartStopSCR test was ignored, please set the property named 'scr.bundle.name'");
-		}
-	}
-
-	private Bundle getSCRBundle() {
-		String bundleName = System.getProperty("scr.bundle.name");
-		if (bundleName != null) {
-			Bundle[] bundles = getContext().getBundles();
-			for (int i = 0; i < bundles.length; i++) {
-				Bundle current = bundles[i];
-				Dictionary headers = current.getHeaders(null);
-				String name = (String) headers.get(Constants.BUNDLE_NAME);
-				if (bundleName.equals(name)) {
-					return current;
-				}
-			}
-		}
-		return null;
-	}
-
-	public void frameworkEvent(FrameworkEvent e) {
-		if (e.getType() == FrameworkEvent.ERROR) {
-			errorBundle = e.getBundle();
 		}
 	}
 
