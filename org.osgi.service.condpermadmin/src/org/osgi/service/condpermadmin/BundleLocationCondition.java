@@ -33,7 +33,9 @@ public class BundleLocationCondition {
 	 * @param info the ConditionInfo to construct the condition for. The args of
 	 *        the ConditionInfo specify the location to match the Bundle
 	 *        location to. Matching is done according to the filter string 
-	 *        matching rules.
+	 *        matching rules.  Any '*' characters in the location argument are
+	 *        used as wildcards when matching bundle locations unless they are
+	 *        escaped with a '\' character.
 	 */
 	static public Condition getCondition(final Bundle bundle, ConditionInfo info) {
 		if (!CONDITION_TYPE.equals(info.getType()))
@@ -50,7 +52,7 @@ public class BundleLocationCondition {
 				});
 		Filter filter = null;
 		try {
-			filter = FrameworkUtil.createFilter("(location=" + args[0] + ")");
+			filter = FrameworkUtil.createFilter("(location=" + encodeLocation(args[0]) + ")");
 		}
 		catch (InvalidSyntaxException e) {
 			// this should never happen, but just incase
@@ -63,5 +65,42 @@ public class BundleLocationCondition {
 
 	private BundleLocationCondition() {
 		// private constructor to prevent objects of this type
+	}
+	/**
+	 * Encode the value string such that '(', ')'
+	 * and '\' are escaped.  The '\' char is only escaped if it is not
+	 * followed by a '*'.
+	 *
+	 * @param value unencoded value string.
+	 * @return encoded value string.
+	 */
+	private static String encodeLocation(String value) {
+		boolean encoded = false;
+		int inlen = value.length();
+		int outlen = inlen << 1; /* inlen * 2 */
+
+		char[] output = new char[outlen];
+		value.getChars(0, inlen, output, inlen);
+
+		int cursor = 0;
+		for (int i = inlen; i < outlen; i++) {
+			char c = output[i];
+			switch (c) {
+				case '\\' :
+					if (i + 1 < outlen && output[i + 1] == '*')
+						break;
+				case '(' :
+				case ')' :
+					output[cursor] = '\\';
+					cursor++;
+					encoded = true;
+					break;
+			}
+
+			output[cursor] = c;
+			cursor++;
+		}
+
+		return encoded ? new String(output, 0, cursor) : value;
 	}
 }
