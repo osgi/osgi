@@ -358,10 +358,13 @@ public class WireImpl implements Wire, WireConstants {
 		else {
 			filter = null;
 		}
-		parent.getUpdateDispatcher().addProducerUpdate(getProducer(), this,
-				parent.getProducerWires(producerPID));
-		parent.getUpdateDispatcher().addConsumerUpdate(getConsumer(), this,
-				parent.getConsumerWires(consumerPID));
+		
+		if ((getProducer()) != null &&  (getConsumer() != null)) {
+			parent.getUpdateDispatcher().addProducerUpdate(getProducer(), this,
+					parent.getProducerWires(producerPID));
+			parent.getUpdateDispatcher().addConsumerUpdate(getConsumer(), this,
+					parent.getConsumerWires(consumerPID));
+		}
 	}
 
 	public void setProducerPID(String PID) {
