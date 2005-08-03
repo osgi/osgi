@@ -848,10 +848,8 @@ public class BundleLoader implements ClassLoaderDelegate {
 		PackageSource result = findImportedSource(pkgName);
 		if (result != null)
 			return result;
-		result = findRequiredSource(pkgName);
-		if (result == null)
-			result = findDynamicSource(pkgName);
-		return result;
+		// Note that dynamic imports are not checked to avoid aggressive wiring (bug 105779)  
+		return findRequiredSource(pkgName);
 	}
 
 	private PackageSource findImportedSource(String pkgName) {
