@@ -71,7 +71,9 @@ public class PermissionInfo {
 
 	/**
 	 * Constructs a <code>PermissionInfo</code> object from the given encoded
-	 * <code>PermissionInfo</code> string.
+	 * <code>PermissionInfo</code> string. White space in the encoded
+	 * <code>PermissionInfo</code> string is ignored.
+	 * 
 	 * 
 	 * @param encodedPermission The encoded <code>PermissionInfo</code>.
 	 * @see #getEncoded
