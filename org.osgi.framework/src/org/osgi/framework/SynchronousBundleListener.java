@@ -30,7 +30,7 @@ package org.osgi.framework;
  * <code>SynchronousBundleListener</code> objects will be called prior to
  * <code>BundleListener</code> objects.
  * <p>
- * <code>AdminPermission[LISTENER]</code> is required to add or remove a
+ * <code>AdminPermission[bundle,LISTENER]</code> is required to add or remove a
  * <code>SynchronousBundleListener</code> object.
  * 
  * @version $Revision$

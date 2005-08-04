@@ -128,8 +128,8 @@ public interface PackageAdmin {
 	 * @param bundles The bundles whose exported packages are to be updated or
 	 *        removed, or <code>null</code> for all bundles updated or
 	 *        uninstalled since the last call to this method.
-	 * @throws SecurityException if the caller does not have
-	 *         <code>AdminPermission[RESOLVE]</code> and the Java runtime
+	 * @throws SecurityException If the caller does not have
+	 *         <code>AdminPermission[System Bundle,RESOLVE]</code> and the Java runtime
 	 *         environment supports permissions.
 	 */
 	public void refreshPackages(Bundle[] bundles);
@@ -150,8 +150,8 @@ public interface PackageAdmin {
 	 * @param bundles The bundles to resolve or <code>null</code> to resolve
 	 *        all unresolved bundles installed in the Framework.
 	 * @return <code>true</code> if all specified bundles are resolved;
-	 * @throws SecurityException if the caller does not have
-	 *         <code>AdminPermission[RESOLVE]</code> and the Java runtime
+	 * @throws SecurityException If the caller does not have
+	 *         <code>AdminPermission[System Bundle,RESOLVE]</code> and the Java runtime
 	 *         environment supports permissions.
 	 * @since 1.2
 	 */

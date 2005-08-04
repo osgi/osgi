@@ -125,8 +125,8 @@ public interface StartLevel {
 	 * @param startlevel The requested start level for the Framework.
 	 * @throws IllegalArgumentException If the specified start level is less
 	 *         than or equal to zero.
-	 * @throws SecurityException If the caller does not have the
-	 *         <code>AdminPermission[STARTLEVEL]</code> and the Java runtime
+	 * @throws SecurityException If the caller does not have
+	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the Java runtime
 	 *         environment supports permissions.
 	 */
 	public abstract void setStartLevel(int startlevel);
@@ -167,8 +167,8 @@ public interface StartLevel {
 	 * @throws IllegalArgumentException If the specified bundle has been
 	 *         uninstalled or if the specified start level is less than or equal
 	 *         to zero, or the specified bundle is the system bundle.
-	 * @throws SecurityException if the caller does not have the
-	 *         <code>AdminPermission[EXECUTE]</code> and the Java runtime
+	 * @throws SecurityException If the caller does not have 
+	 *         <code>AdminPermission[bundle,EXECUTE]</code> and the Java runtime
 	 *         environment supports permissions.
 	 */
 	public abstract void setBundleStartLevel(Bundle bundle, int startlevel);
@@ -205,8 +205,8 @@ public interface StartLevel {
 	 * @param startlevel The initial start level for newly installed bundles.
 	 * @throws IllegalArgumentException If the specified start level is less
 	 *         than or equal to zero.
-	 * @throws SecurityException if the caller does not have the
-	 *         <code>AdminPermission[STARTLEVEL]</code> and the Java runtime
+	 * @throws SecurityException If the caller does not have
+	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the Java runtime
 	 *         environment supports permissions.
 	 */
 	public abstract void setInitialBundleStartLevel(int startlevel);

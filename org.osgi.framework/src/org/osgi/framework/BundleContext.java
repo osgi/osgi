@@ -167,7 +167,7 @@ public interface BundleContext {
 	 * @return The <code>Bundle</code> object of the installed bundle.
 	 * @throws BundleException If the installation failed.
 	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[LIFECYCLE]</code>, and the
+	 *         appropriate <code>AdminPermission[installed bundle,LIFECYCLE]</code>, and the
 	 *         Java Runtime Environment supports permissions.
 	 * @throws java.lang.IllegalStateException If this BundleContext is no
 	 *         longer valid.
@@ -196,7 +196,7 @@ public interface BundleContext {
 	 * @throws BundleException If the provided stream cannot be read or the
 	 *         installation failed.
 	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[LIFECYCLE]</code>, and the
+	 *         appropriate <code>AdminPermission[installed bundle,LIFECYCLE]</code>, and the
 	 *         Java Runtime Environment supports permissions.
 	 * @throws java.lang.IllegalStateException If this BundleContext is no
 	 *         longer valid.
@@ -329,7 +329,7 @@ public interface BundleContext {
 	 *         longer valid.
 	 * @throws java.lang.SecurityException If listener is a
 	 *         <code>SynchronousBundleListener</code> and the caller does not
-	 *         have the appropriate <code>AdminPermission[LISTENER]</code>,
+	 *         have the appropriate <code>AdminPermission[context bundle,LISTENER]</code>,
 	 *         and the Java Runtime Environment supports permissions.
 	 * 
 	 * @see BundleEvent
@@ -350,7 +350,7 @@ public interface BundleContext {
 	 *         longer valid.
 	 * @throws java.lang.SecurityException If listener is a
 	 *         <code>SynchronousBundleListener</code> and the caller does not
-	 *         have the appropriate <code>AdminPermission[LISTENER]</code>,
+	 *         have the appropriate <code>AdminPermission[context bundle,LISTENER]</code>,
 	 *         and the Java Runtime Environment supports permissions.
 	 */
 	public void removeBundleListener(BundleListener listener);

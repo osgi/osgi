@@ -243,7 +243,7 @@ public interface Bundle {
 	 * @throws java.lang.IllegalStateException If this bundle has been
 	 *         uninstalled or this bundle tries to change its own state.
 	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[EXECUTE]</code>, and the
+	 *         appropriate <code>AdminPermission[this,EXECUTE]</code>, and the
 	 *         Java Runtime Environment supports permissions.
 	 */
 	public void start() throws BundleException;
@@ -312,7 +312,7 @@ public interface Bundle {
 	 * @throws java.lang.IllegalStateException If this bundle has been
 	 *         uninstalled or this bundle tries to change its own state.
 	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[EXECUTE]</code>, and the
+	 *         appropriate <code>AdminPermission[this,EXECUTE]</code>, and the
 	 *         Java Runtime Environment supports permissions.
 	 */
 	public void stop() throws BundleException;
@@ -396,7 +396,7 @@ public interface Bundle {
 	 * @throws java.lang.IllegalStateException If this bundle has been
 	 *         uninstalled or this bundle tries to change its own state.
 	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[LIFECYCLE]</code> for both
+	 *         appropriate <code>AdminPermission[this,LIFECYCLE]</code> for both
 	 *         the current bundle and the updated bundle, and the Java Runtime
 	 *         Environment supports permissions.
 	 * @see #stop()
@@ -422,7 +422,7 @@ public interface Bundle {
 	 * @throws java.lang.IllegalStateException If this bundle has been
 	 *         uninstalled or this bundle tries to change its own state.
 	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[LIFECYCLE]</code> for both
+	 *         appropriate <code>AdminPermission[this,LIFECYCLE]</code> for both
 	 *         the current bundle and the updated bundle, and the Java Runtime
 	 *         Environment supports permissions.
 	 * @see #update()
@@ -485,7 +485,7 @@ public interface Bundle {
 	 * @throws java.lang.IllegalStateException If this bundle has been
 	 *         uninstalled or this bundle tries to change its own state.
 	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[LIFECYCLE]</code>, and the
+	 *         appropriate <code>AdminPermission[this,LIFECYCLE]</code>, and the
 	 *         Java Runtime Environment supports permissions.
 	 * @see #stop()
 	 */
@@ -525,7 +525,7 @@ public interface Bundle {
 	 *         Manifest headers and values.
 	 * 
 	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[METADATA]</code>, and the
+	 *         appropriate <code>AdminPermission[this,METADATA]</code>, and the
 	 *         Java Runtime Environment supports permissions.
 	 * 
 	 * @see Constants#BUNDLE_LOCALIZATION
@@ -570,7 +570,7 @@ public interface Bundle {
 	 * 
 	 * @return The string representation of this bundle's location identifier.
 	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[METADATA]</code>, and the
+	 *         appropriate <code>AdminPermission[this,METADATA]</code>, and the
 	 *         Java Runtime Environment supports permissions.
 	 */
 	public String getLocation();
@@ -673,7 +673,7 @@ public interface Bundle {
 	 * @return A URL to the named resource, or <code>null</code> if the
 	 *         resource could not be found or if this bundle is a fragment
 	 *         bundle or if the caller does not have the appropriate
-	 *         <code>AdminPermission[RESOURCE]</code>, and the Java Runtime
+	 *         <code>AdminPermission[this,RESOURCE]</code>, and the Java Runtime
 	 *         Environment supports permissions.
 	 * 
 	 * @since 1.1
@@ -718,7 +718,7 @@ public interface Bundle {
 	 *         Manifest headers and values.
 	 * 
 	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[METADATA]</code>, and the
+	 *         appropriate <code>AdminPermission[this,METADATA]</code>, and the
 	 *         Java Runtime Environment supports permissions.
 	 * 
 	 * @see #getHeaders()
@@ -770,7 +770,7 @@ public interface Bundle {
 	 * @return The Class object for the requested class.
 	 * @throws java.lang.ClassNotFoundException If no such class can be found or
 	 *         if this bundle is a fragment bundle or if the caller does not
-	 *         have the appropriate <code>AdminPermission[CLASS]</code>, and
+	 *         have the appropriate <code>AdminPermission[this,CLASS]</code>, and
 	 *         the Java Runtime Environment supports permissions.
 	 * @throws java.lang.IllegalStateException If this bundle has been
 	 *         uninstalled.
@@ -793,7 +793,7 @@ public interface Bundle {
 	 * @return An enumeration of URLs to the named resources, or
 	 *         <code>null</code> if the resource could not be found or if this
 	 *         bundle is a fragment bundle or if the caller does not have the
-	 *         appropriate <code>AdminPermission[RESOURCE]</code>, and the
+	 *         appropriate <code>AdminPermission[this,RESOURCE]</code>, and the
 	 *         Java Runtime Environment supports permissions.
 	 * 
 	 * @since 1.3
@@ -818,7 +818,7 @@ public interface Bundle {
 	 * @return An Enumeration of the entry paths (<code>String</code>
 	 *         objects) or <code>null</code> if no entry could be found or if
 	 *         the caller does not have the appropriate
-	 *         <code>AdminPermission[RESOURCE]</code> and the Java Runtime
+	 *         <code>AdminPermission[this,RESOURCE]</code> and the Java Runtime
 	 *         Environment supports permissions.
 	 * @throws java.lang.IllegalStateException If this bundle has been
 	 *         uninstalled.
@@ -837,7 +837,7 @@ public interface Bundle {
 	 *        of the format of a resource name.
 	 * @return A URL to the specified entry, or <code>null</code> if no entry
 	 *         could be found or if the caller does not have the appropriate
-	 *         <code>AdminPermission[RESOURCE]</code> and the Java Runtime
+	 *         <code>AdminPermission[this,RESOURCE]</code> and the Java Runtime
 	 *         Environment supports permissions.
 	 * 
 	 * @throws java.lang.IllegalStateException If this bundle has been
@@ -910,7 +910,7 @@ public interface Bundle {
 	 * @return An enumeration of URL objects for each matching entry, or
 	 *         <code>null</code> if an entry could not be found or if the
 	 *         caller does not have the appropriate
-	 *         <code>AdminPermission[RESOURCE]</code>, and the Java Runtime
+	 *         <code>AdminPermission[this,RESOURCE]</code>, and the Java Runtime
 	 *         Environment supports permissions. The URLs are sorted such that
 	 *         entries from this bundle are returned first followed by the
 	 *         entries from attached fragments in ascending bundle id order. If
