@@ -36,7 +36,7 @@ public class FrameworkUtil {
 	 * @param filter The filter string.
 	 * @return A <code>Filter</code> object encapsulating the filter string.
 	 * @throws InvalidSyntaxException If <code>filter</code> contains an
-	 *            invalid filter string that cannot be parsed.
+	 *         invalid filter string that cannot be parsed.
 	 * @throws NullPointerException If <code>filter</code> is null.
 	 * 
 	 * @see Filter

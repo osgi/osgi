@@ -307,7 +307,7 @@ public class BundleHost extends AbstractBundle {
 						}
 					}
 					state = STARTING;
-
+					framework.publishBundleEvent(BundleEvent.STARTING, this);
 					context = createContext();
 					try {
 						context.start();
@@ -389,7 +389,7 @@ public class BundleHost extends AbstractBundle {
 			}
 
 			state = STOPPING;
-
+			framework.publishBundleEvent(BundleEvent.STOPPING, this);
 			try {
 				context.stop();
 			} finally {

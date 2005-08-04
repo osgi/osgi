@@ -1450,9 +1450,9 @@ public class Framework implements EventDispatcher, EventPublisher {
 				contexts.dispatchEventSynchronous(BUNDLEEVENTSYNC, listenersSync);
 			}
 		}
-		/* Collect snapshot of BundleListeners */
+		/* Collect snapshot of BundleListeners; only if the event is NOT STARTING or STOPPING */
 		ListenerQueue listenersAsync = null;
-		if (bundleEvent != null) {
+		if (bundleEvent != null && (event.getType() & (BundleEvent.STARTING | BundleEvent.STOPPING)) == 0)  {
 			/* queue to hold set of listeners */
 			listenersAsync = new ListenerQueue(eventManager);
 			/* queue to hold set of BundleContexts w/ listeners */
