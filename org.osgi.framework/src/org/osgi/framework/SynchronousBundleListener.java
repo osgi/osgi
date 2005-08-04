@@ -21,7 +21,7 @@ package org.osgi.framework;
  * Framework using the {@link BundleContext#addBundleListener} method.
  * <code>SynchronousBundleListener</code> objects are called with a
  * <code>BundleEvent</code> object when a bundle has been installed, resolved,
- * started, stopped, updated, unresolved, or uninstalled.
+ * starting, started, stopping, stopped, updated, unresolved, or uninstalled.
  * <p>
  * Unlike normal <code>BundleListener</code> objects,
  * <code>SynchronousBundleListener</code>s are synchronously called during

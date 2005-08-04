@@ -104,6 +104,26 @@ public class BundleEvent extends EventObject {
 	public final static int	UNRESOLVED			= 0x00000040;
 
 	/**
+	 * The bundle is about to start.
+	 * <p>
+	 * The value of <code>STARTING</code> is 0x00000080.
+	 * 
+	 * @see Bundle#start()
+	 * @since 1.3
+	 */
+	public final static int	STARTING			= 0x00000080;
+
+	/**
+	 * The bundle is about to stop.
+	 * <p>
+	 * The value of <code>STOPPING</code> is 0x00000100.
+	 * 
+	 * @see Bundle#stop()
+	 * @since 1.3
+	 */
+	public final static int	STOPPING			= 0x00000100;
+
+	/**
 	 * Creates a bundle event of the specified type.
 	 * 
 	 * @param type The event type.
@@ -136,6 +156,8 @@ public class BundleEvent extends EventObject {
 	 * <li>{@link #UNINSTALLED}
 	 * <li>{@link #RESOLVED}
 	 * <li>{@link #UNRESOLVED}
+	 * <li>{@link #STARTING}
+	 * <li>{@link #STOPPING}
 	 * </ul>
 	 * 
 	 * @return The type of lifecycle event.

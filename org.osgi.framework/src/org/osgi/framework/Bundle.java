@@ -198,6 +198,9 @@ public interface Bundle {
 	 * 
 	 * <li>This bundle's state is set to <code>STARTING</code>.
 	 * 
+	 * <li>A bundle event of type {@link BundleEvent#STARTING} is sent to
+	 * {@link SynchronousBundleListener}s.
+	 * 
 	 * <li>The {@link BundleActivator#start} method of this bundle's
 	 * <code>BundleActivator</code>, if one is specified, is called. If the
 	 * <code>BundleActivator</code> is invalid or throws an exception, this
@@ -270,6 +273,9 @@ public interface Bundle {
 	 * returns immediately.
 	 * 
 	 * <li>This bundle's state is set to <code>STOPPING</code>.
+	 * 
+	 * <li>A bundle event of type {@link BundleEvent#STOPPING} is sent to
+	 * {@link SynchronousBundleListener}s.
 	 * 
 	 * <li>The {@link BundleActivator#stop} method of this bundle's
 	 * <code>BundleActivator</code>, if one is specified, is called. If that
