@@ -56,7 +56,7 @@ public interface ServiceRegistration {
 	 * <ol>
 	 * <li>The service's properties are replaced with the provided properties.
 	 * <li>A service event of type {@link ServiceEvent#MODIFIED} is
-	 * synchronously sent.
+	 * fired.
 	 * </ol>
 	 * 
 	 * @param properties The properties for this service. See {@link Constants}
@@ -84,7 +84,7 @@ public interface ServiceRegistration {
 	 * it can no longer be used. <code>ServiceReference</code> objects for the
 	 * service may no longer be used to get a service object for the service.
 	 * <li>A service event of type {@link ServiceEvent#UNREGISTERING} is
-	 * synchronously sent so that bundles using this service can release their
+	 * fired so that bundles using this service can release their
 	 * use of it.
 	 * <li>For each bundle whose use count for this service is greater than
 	 * zero: <br>

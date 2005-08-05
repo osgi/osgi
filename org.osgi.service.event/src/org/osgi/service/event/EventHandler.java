@@ -16,7 +16,7 @@ package org.osgi.service.event;
  * <p>
  * <code>EventHandler</code> objects are registered with the Framework service
  * registry and are notified with an <code>Event</code> object when an
- * event is broadcast.
+ * event is sent or posted.
  * <p>
  * <code>EventHandler</code> objects can inspect the received
  * <code>Event</code> object to determine its topic and properties.

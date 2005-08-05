@@ -114,12 +114,12 @@ public interface PackageAdmin {
 	 * unresolvable until another bundle offering a compatible package for
 	 * export has been installed in the Framework.
 	 * <li>A framework event of type
-	 * <code>FrameworkEvent.PACKAGES_REFRESHED</code> is broadcast.
+	 * <code>FrameworkEvent.PACKAGES_REFRESHED</code> is fired.
 	 * </ol>
 	 * 
 	 * <p>
 	 * For any exceptions that are thrown during any of these steps, a
-	 * <code>FrameworkEvent</code> of type <code>ERROR</code> is broadcast,
+	 * <code>FrameworkEvent</code> of type <code>ERROR</code> is fired
 	 * containing the exception. The source bundle for these events should be
 	 * the specific bundle to which the exception is related. If no specific
 	 * bundle can be associated with the exception then the System Bundle must

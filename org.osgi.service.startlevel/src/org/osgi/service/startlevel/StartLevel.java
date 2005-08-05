@@ -46,7 +46,7 @@ import org.osgi.framework.Bundle;
  * <code>Bundle.getBundleId</code>. The Framework will continue to increase
  * the start level, starting bundles at each start level, until the Framework
  * has reached a beginning start level. At this point the Framework has
- * completed starting bundles and will then broadcast a Framework event of type
+ * completed starting bundles and will then fire a Framework event of type
  * <code>FrameworkEvent.STARTED</code> to announce it has completed its
  * launch.
  * 
@@ -91,7 +91,7 @@ public interface StartLevel {
 	 * <code>Bundle.getBundleId</code>.
 	 * </ol>
 	 * When this process completes after the specified start level is reached,
-	 * the Framework will broadcast a Framework event of type
+	 * the Framework will fire a Framework event of type
 	 * <code>FrameworkEvent.STARTLEVEL_CHANGED</code> to announce it has moved
 	 * to the specified start level.
 	 * 
@@ -111,13 +111,13 @@ public interface StartLevel {
 	 * <li>Change the active start level to the intermediate start level value.
 	 * </ol>
 	 * When this process completes after the specified start level is reached,
-	 * the Framework will broadcast a Framework event of type
+	 * the Framework will fire a Framework event of type
 	 * <code>FrameworkEvent.STARTLEVEL_CHANGED</code> to announce it has moved
 	 * to the specified start level.
 	 * 
 	 * <p>
 	 * If the specified start level is equal to the active start level, then no
-	 * bundles are started or stopped, however, the Framework must broadcast a
+	 * bundles are started or stopped, however, the Framework must fire a
 	 * Framework event of type <code>FrameworkEvent.STARTLEVEL_CHANGED</code>
 	 * to announce it has finished moving to the specified start level. This
 	 * event may arrive before the this method return.

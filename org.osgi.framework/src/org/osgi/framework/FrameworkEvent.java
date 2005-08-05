@@ -13,7 +13,7 @@ package org.osgi.framework;
 import java.util.EventObject;
 
 /**
- * A general Framework event.
+ * A general event from the Framework.
  * 
  * <p>
  * <code>FrameworkEvent</code> is the event class used when notifying
@@ -47,7 +47,7 @@ public class FrameworkEvent extends EventObject {
 	 * The Framework has started.
 	 * 
 	 * <p>
-	 * This event is broadcast when the Framework has started after all
+	 * This event is fired when the Framework has started after all
 	 * installed bundles that are marked to be started have been started and the
 	 * Framework has reached the intitial start level.
 	 * 
@@ -73,7 +73,7 @@ public class FrameworkEvent extends EventObject {
 	 * A PackageAdmin.refreshPackage operation has completed.
 	 * 
 	 * <p>
-	 * This event is broadcast when the Framework has completed the refresh
+	 * This event is fired when the Framework has completed the refresh
 	 * packages operation initiated by a call to the
 	 * PackageAdmin.refreshPackages method.
 	 * 
@@ -89,7 +89,7 @@ public class FrameworkEvent extends EventObject {
 	 * A StartLevel.setStartLevel operation has completed.
 	 * 
 	 * <p>
-	 * This event is broadcast when the Framework has completed changing the
+	 * This event is fired when the Framework has completed changing the
 	 * active start level initiated by a call to the StartLevel.setStartLevel
 	 * method.
 	 * 

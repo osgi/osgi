@@ -198,8 +198,8 @@ public interface Bundle {
 	 * 
 	 * <li>This bundle's state is set to <code>STARTING</code>.
 	 * 
-	 * <li>A bundle event of type {@link BundleEvent#STARTING} is sent to
-	 * {@link SynchronousBundleListener}s.
+	 * <li>A bundle event of type {@link BundleEvent#STARTING} is fired. This event is only delivered to
+	 * <code>SynchronousBundleListener</code>s. It is not delivered to <code>BundleListener</code>s.
 	 * 
 	 * <li>The {@link BundleActivator#start} method of this bundle's
 	 * <code>BundleActivator</code>, if one is specified, is called. If the
@@ -216,7 +216,7 @@ public interface Bundle {
 	 * 
 	 * <li>This bundle's state is set to <code>ACTIVE</code>.
 	 * 
-	 * <li>A bundle event of type {@link BundleEvent#STARTED} is broadcast.
+	 * <li>A bundle event of type {@link BundleEvent#STARTED} is fired.
 	 * </ol>
 	 * 
 	 * <b>Preconditions </b>
@@ -274,8 +274,8 @@ public interface Bundle {
 	 * 
 	 * <li>This bundle's state is set to <code>STOPPING</code>.
 	 * 
-	 * <li>A bundle event of type {@link BundleEvent#STOPPING} is sent to
-	 * {@link SynchronousBundleListener}s.
+	 * <li>A bundle event of type {@link BundleEvent#STOPPING} is fired. This event is only delivered to
+	 * <code>SynchronousBundleListener</code>s. It is not delivered to <code>BundleListener</code>s.
 	 * 
 	 * <li>The {@link BundleActivator#stop} method of this bundle's
 	 * <code>BundleActivator</code>, if one is specified, is called. If that
@@ -293,7 +293,7 @@ public interface Bundle {
 	 * 
 	 * <li>This bundle's state is set to <code>RESOLVED</code>.
 	 * 
-	 * <li>A bundle event of type {@link BundleEvent#STOPPED} is broadcast.
+	 * <li>A bundle event of type {@link BundleEvent#STOPPED} is fired.
 	 * </ol>
 	 * 
 	 * <b>Preconditions </b>
@@ -372,12 +372,12 @@ public interface Bundle {
 	 * <li>This bundle's state is set to <code>INSTALLED</code>.
 	 * 
 	 * <li>If the new version of this bundle was successfully installed, a
-	 * bundle event of type {@link BundleEvent#UPDATED} is broadcast.
+	 * bundle event of type {@link BundleEvent#UPDATED} is fired.
 	 * 
 	 * <li>If this bundle's state was originally <code>ACTIVE</code>, the
 	 * updated bundle is started as described in the <code>Bundle.start</code>
 	 * method. If <code>Bundle.start</code> throws an exception, a Framework
-	 * event of type {@link FrameworkEvent#ERROR} is broadcast containing the
+	 * event of type {@link FrameworkEvent#ERROR} is fired containing the
 	 * exception.
 	 * </ol>
 	 * 
@@ -460,11 +460,11 @@ public interface Bundle {
 	 * <code>STARTING</code> or <code>STOPPING</code>, this bundle is
 	 * stopped as described in the <code>Bundle.stop</code> method. If
 	 * <code>Bundle.stop</code> throws an exception, a Framework event of type
-	 * {@link FrameworkEvent#ERROR} is broadcast containing the exception.
+	 * {@link FrameworkEvent#ERROR} is fired containing the exception.
 	 * 
 	 * <li>This bundle's state is set to <code>UNINSTALLED</code>.
 	 * 
-	 * <li>A bundle event of type {@link BundleEvent#UNINSTALLED} is broadcast.
+	 * <li>A bundle event of type {@link BundleEvent#UNINSTALLED} is fired.
 	 * 
 	 * <li>This bundle and any persistent storage area provided for this bundle
 	 * by the Framework are removed.
@@ -763,7 +763,7 @@ public interface Bundle {
 	 * 
 	 * <p>
 	 * If the bundle cannot be resolved, a Framework event of type
-	 * {@link FrameworkEvent#ERROR} is broadcast containing a
+	 * {@link FrameworkEvent#ERROR} is fired containing a
 	 * <code>BundleException</code> with details of the reason the bundle
 	 * could not be resolved. This method must then throw a
 	 * <code>ClassNotFoundException</code>.

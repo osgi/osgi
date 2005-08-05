@@ -11,7 +11,8 @@
 package org.osgi.framework;
 
 /**
- * A synchronous <code>BundleEvent</code> listener.
+ * A synchronous <code>BundleEvent</code> listener. When a <code>BundleEvent</code> is
+ * fired, it is synchronously delivered to a <code>BundleListener</code>.
  * 
  * <p>
  * <code>SynchronousBundleListener</code> is a listener interface that may be

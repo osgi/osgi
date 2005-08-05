@@ -147,7 +147,7 @@ public interface BundleContext {
 	 * 
 	 * <li>The bundle's state is set to <code>INSTALLED</code>.
 	 * 
-	 * <li>A bundle event of type {@link BundleEvent#INSTALLED} is broadcast.
+	 * <li>A bundle event of type {@link BundleEvent#INSTALLED} is fired.
 	 * 
 	 * <li>The <code>Bundle</code> object for the newly or previously
 	 * installed bundle is returned.
@@ -421,7 +421,7 @@ public interface BundleContext {
 	 * <li>The service is added to the Framework service registry and may now
 	 * be used by other bundles.
 	 * <li>A service event of type {@link ServiceEvent#REGISTERED} is
-	 * synchronously sent.
+	 * fired.
 	 * <li>A <code>ServiceRegistration</code> object for this registration is
 	 * returned.
 	 * </ol>
@@ -694,7 +694,7 @@ public interface BundleContext {
 	 * object is not an <code>instanceof</code> all the classes named when the
 	 * service was registered or the <code>ServiceFactory</code> object throws
 	 * an exception, <code>null</code> is returned and a Framework event of
-	 * type {@link FrameworkEvent#ERROR} is broadcast.
+	 * type {@link FrameworkEvent#ERROR} is fired.
 	 * <li>The service object for the service is returned.
 	 * </ol>
 	 * 

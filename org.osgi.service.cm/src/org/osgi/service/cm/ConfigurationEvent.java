@@ -49,7 +49,7 @@ public class ConfigurationEvent {
 	 * This <code>ConfigurationEvent</code> type that indicates that a
 	 * <code>Configuration</code> object has been updated with new properties.
 	 * 
-	 * An event is asynchronously broadcast when a call to
+	 * An event is fired when a call to
 	 * <code>Configuration.update</code> successfully changed a configuration.
 	 * 
 	 * <p>
@@ -63,7 +63,7 @@ public class ConfigurationEvent {
 	 * This <code>ConfigurationEvent</code> type that indicates that a
 	 * <code>Configuration</code> object has been deleted.
 	 * 
-	 * An event is asynchronously broadcast when a call to
+	 * An event is fired when a call to
 	 * <code>Configuration.delete</code> successfully deletes a configuration.
 	 * 
 	 * <p>

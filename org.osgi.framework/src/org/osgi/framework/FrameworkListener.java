@@ -13,7 +13,8 @@ package org.osgi.framework;
 import java.util.EventListener;
 
 /**
- * A <code>FrameworkEvent</code> listener.
+ * A <code>FrameworkEvent</code> listener. When a <code>FrameworkEvent</code> is
+ * fired, it is asynchronously delivered to a <code>FrameworkListener</code>.
  * 
  * <p>
  * <code>FrameworkListener</code> is a listener interface that may be

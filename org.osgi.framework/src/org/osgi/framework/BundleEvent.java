@@ -13,7 +13,7 @@ package org.osgi.framework;
 import java.util.EventObject;
 
 /**
- * A Framework event describing a bundle lifecycle change.
+ * An event from the Framework describing a bundle lifecycle change.
  * <p>
  * <code>BundleEvent</code> objects are delivered to
  * <code>BundleListener</code> objects when a change occurs in a bundle's
@@ -150,14 +150,14 @@ public class BundleEvent extends EventObject {
 	 * Returns the type of lifecyle event. The type values are:
 	 * <ul>
 	 * <li>{@link #INSTALLED}
+	 * <li>{@link #RESOLVED}
+	 * <li>{@link #STARTING}
 	 * <li>{@link #STARTED}
+	 * <li>{@link #STOPPING}
 	 * <li>{@link #STOPPED}
 	 * <li>{@link #UPDATED}
-	 * <li>{@link #UNINSTALLED}
-	 * <li>{@link #RESOLVED}
 	 * <li>{@link #UNRESOLVED}
-	 * <li>{@link #STARTING}
-	 * <li>{@link #STOPPING}
+	 * <li>{@link #UNINSTALLED}
 	 * </ul>
 	 * 
 	 * @return The type of lifecycle event.

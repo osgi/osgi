@@ -13,7 +13,8 @@ package org.osgi.framework;
 import java.util.EventListener;
 
 /**
- * A <code>BundleEvent</code> listener.
+ * A <code>BundleEvent</code> listener. When a <code>BundleEvent</code> is
+ * fired, it is asynchronously delivered to a <code>BundleListener</code>.
  * 
  * <p>
  * <code>BundleListener</code> is a listener interface that may be implemented

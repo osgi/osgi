@@ -14,7 +14,7 @@ import java.util.Dictionary;
 import java.util.EventObject;
 
 /**
- * A service lifecycle change event.
+ * An event from the Framework describing a service lifecycle change.
  * <p>
  * <code>ServiceEvent</code> objects are delivered to a
  * <code>ServiceListener</code> objects when a change occurs in this service's
@@ -43,7 +43,7 @@ public class ServiceEvent extends EventObject {
 	/**
 	 * This service has been registered.
 	 * <p>
-	 * This event is synchronously delivered <strong>after </strong> the service
+	 * This event is synchronously delivered <strong>after</strong> the service
 	 * has been registered with the Framework.
 	 * 
 	 * <p>
@@ -56,7 +56,7 @@ public class ServiceEvent extends EventObject {
 	/**
 	 * The properties of a registered service have been modified.
 	 * <p>
-	 * This event is synchronously delivered <strong>after </strong> the service
+	 * This event is synchronously delivered <strong>after</strong> the service
 	 * properties have been modified.
 	 * 
 	 * <p>
@@ -69,7 +69,7 @@ public class ServiceEvent extends EventObject {
 	/**
 	 * This service is in the process of being unregistered.
 	 * <p>
-	 * This event is synchronously delivered <strong>before </strong> the
+	 * This event is synchronously delivered <strong>before</strong> the
 	 * service has completed unregistering.
 	 * 
 	 * <p>
@@ -109,7 +109,7 @@ public class ServiceEvent extends EventObject {
 	 * @return Reference to the service that had a lifecycle change.
 	 */
 	public ServiceReference getServiceReference() {
-		return (reference);
+		return reference;
 	}
 
 	/**
@@ -124,6 +124,6 @@ public class ServiceEvent extends EventObject {
 	 */
 
 	public int getType() {
-		return (type);
+		return type;
 	}
 }
