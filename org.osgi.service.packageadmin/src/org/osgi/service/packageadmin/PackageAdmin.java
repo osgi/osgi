@@ -129,8 +129,8 @@ public interface PackageAdmin {
 	 *        removed, or <code>null</code> for all bundles updated or
 	 *        uninstalled since the last call to this method.
 	 * @throws SecurityException If the caller does not have
-	 *         <code>AdminPermission[System Bundle,RESOLVE]</code> and the Java runtime
-	 *         environment supports permissions.
+	 *         <code>AdminPermission[System Bundle,RESOLVE]</code> and the
+	 *         Java runtime environment supports permissions.
 	 */
 	public void refreshPackages(Bundle[] bundles);
 
@@ -151,8 +151,8 @@ public interface PackageAdmin {
 	 *        all unresolved bundles installed in the Framework.
 	 * @return <code>true</code> if all specified bundles are resolved;
 	 * @throws SecurityException If the caller does not have
-	 *         <code>AdminPermission[System Bundle,RESOLVE]</code> and the Java runtime
-	 *         environment supports permissions.
+	 *         <code>AdminPermission[System Bundle,RESOLVE]</code> and the
+	 *         Java runtime environment supports permissions.
 	 * @since 1.2
 	 */
 	public boolean resolveBundles(Bundle[] bundles);
@@ -212,14 +212,14 @@ public interface PackageAdmin {
 	public Bundle[] getFragments(Bundle bundle);
 
 	/**
-	 * Returns an array of host bundles to which the specified fragment bundle
-	 * is attached or <code>null</code> if the specified bundle is not
-	 * attached to a host or is not a fragment bundle. A fragment may only be
-	 * attached to a single host bundle.
+	 * Returns an array containing the host bundle to which the specified
+	 * fragment bundle is attached or <code>null</code> if the specified
+	 * bundle is not attached to a host or is not a fragment bundle. A fragment
+	 * may only be attached to a single host bundle.
 	 * 
-	 * @param bundle The bundle whose host bundles are to be returned.
-	 * @return An array of host bundles or <code>null</code> if the bundle
-	 *         does not have any host bundles.
+	 * @param bundle The bundle whose host bundle is to be returned.
+	 * @return An array containing the host bundle or <code>null</code> if the
+	 *         bundle does not have a host bundle.
 	 * @since 1.2
 	 */
 	public Bundle[] getHosts(Bundle bundle);
