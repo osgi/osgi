@@ -12,82 +12,84 @@ package org.osgi.service.condpermadmin;
 
 import java.security.AccessControlContext;
 import java.util.Enumeration;
+
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 /**
- * This is a framework service that allows ConditionalPermissionInfos to be
- * added to, retrieved from, and removed from the framework.
+ * Framework service to administer Conditional Permissions. Conditional
+ * Permissions can be added to, retrieved from, and removed from the framework.
  * 
  * @version $Revision$
  */
 public interface ConditionalPermissionAdmin {
 	/**
-	 * Add a new Conditional Permission Info to the repository.
+	 * Create a new Conditional Permission Info.
 	 * 
-	 * The Conditional Permission Info will be given a unique, never reused name.
+	 * The Conditional Permission Info will be given a unique, never reused
+	 * name.
 	 * 
-	 * @param conds the Conditions that need to be satisfied to enable the
+	 * @param conds The Conditions that need to be satisfied to enable the
 	 *        corresponding Permissions.
-	 * @param perms the Permissions that are enable when the corresponding
+	 * @param perms The Permissions that are enable when the corresponding
 	 *        Conditions are satisfied.
-	 * @return the ConditionalPermissionInfo that for the newly added Conditions
-	 *         and Permissions.
-	 * @throws SecurityException if the caller does not have the
+	 * @return The ConditionalPermissionInfo for the specified Conditions and
+	 *         Permissions.
+	 * @throws SecurityException If the caller does not have
 	 *         <code>AllPermission</code>.
 	 */
-	ConditionalPermissionInfo addConditionalPermissionInfo(
+	public ConditionalPermissionInfo addConditionalPermissionInfo(
 			ConditionInfo conds[], PermissionInfo perms[]);
 
 	/**
-	 * Set or create a Conditional Permission Info with conditions and
-	 * permissions.
+	 * Set or create a Conditional Permission Info with a specified name.
 	 * 
-	 * If the given <code>name</code> is null or not used in the repository
-	 * yet, a new Conditional Permission Info must be created, otherwise the
-	 * existing Conditional Permission Info must be reused.
+	 * If the specified name is <code>null</code>, a new Conditional
+	 * Permission Info must be created and will be given a unique, never reused
+	 * name. If there is currently no Conditional Permission Info with the
+	 * specified name, a new Conditional Permission Info must be created with
+	 * the specified name. Otherwise, the Conditional Permission Info with the
+	 * specified name must be updated with the specified Conditions and
+	 * Permissions.
 	 * 
-	 * @param name the name of this Conditional Permission Info, or
+	 * @param name The name of the Conditional Permission Info, or
 	 *        <code>null</code>.
-	 * @param conds the Conditions that need to be satisfied to enable the
+	 * @param conds The Conditions that need to be satisfied to enable the
 	 *        corresponding Permissions.
-	 * @param perms the Permissions that are enable when the corresponding
+	 * @param perms The Permissions that are enable when the corresponding
 	 *        Conditions are satisfied.
-	 * @return the ConditionalPermissionInfo that for the newly added Conditions
-	 *         and Permissions.
-	 * @throws SecurityException if the caller does not have the
+	 * @return The ConditionalPermissionInfo that for the specified name,
+	 *         Conditions and Permissions.
+	 * @throws SecurityException If the caller does not have
 	 *         <code>AllPermission</code>.
 	 */
-	ConditionalPermissionInfo setConditionalPermissionInfo(String name,
+	public ConditionalPermissionInfo setConditionalPermissionInfo(String name,
 			ConditionInfo conds[], PermissionInfo perms[]);
 
 	/**
-	 * Returns the ConditionalPermissionInfos that are currently managed by
-	 * ConditionalPermissionAdmin. The Enumeration is made up of
-	 * ConditionalPermissionInfos. Calling ConditionalPermissionInfo.delete()
-	 * will remove the ConditionalPermissionInfo from
-	 * ConditionalPermissionAdmin.
+	 * Returns the Conditional Permission Infos that are currently managed by
+	 * Conditional Permission Admin. Calling
+	 * {@link ConditionalPermissionInfo#delete()} will remove the Conditional
+	 * Permission Info from Conditional Permission Admin.
 	 * 
-	 * @return the ConditionalPermissionInfos that are currently managed by
-	 *         ConditionalPermissionAdmin. The Enumeration is made up of
-	 *         ConditionalPermissionInfos.
+	 * @return An enumeration of the Conditional Permission Infos that are
+	 *         currently managed by Conditional Permission Admin.
 	 */
-	Enumeration getConditionalPermissionInfos();
+	public Enumeration getConditionalPermissionInfos();
 
 	/**
-	 * Return the the Conditional Permission Info with the given name.
+	 * Return the the Conditional Permission Info with the specified name.
 	 * 
-	 * @param name the name of the Conditional Permission Info that must be
-	 *        returned
+	 * @param name The name of the Conditional Permission Info to be returned.
 	 */
-	ConditionalPermissionInfo getConditionalPermissionInfo(String name);
+	public ConditionalPermissionInfo getConditionalPermissionInfo(String name);
 
 	/**
-	 * Returns the AccessControlContext that corresponds to the given signers.
+	 * Returns the Access Control Context that corresponds to the specified
+	 * signers.
 	 * 
-	 * @param signers the signers that will be checked agains
-	 *        BundleSignerCondition.
-	 * @return an AccessControlContext that has the Permissions associated with
-	 *         the signer.
+	 * @param signers The signers for which to return an Access Control Context.
+	 * @return An <code>AccessControlContext</code> that has the Permissions
+	 *         associated with the signer.
 	 */
-	AccessControlContext getAccessControlContext(String signers[]);
+	public AccessControlContext getAccessControlContext(String[] signers);
 }

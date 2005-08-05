@@ -17,40 +17,45 @@ import java.util.ArrayList;
  * 
  * <p>
  * This class encapsulates two pieces of information: a Condition <i>type</i>
- * (class name), which must implement <tt>Condition</tt>, and the arguments
- * passed to its constructor.
+ * (class name), which must implement <code>Condition</code>, and the
+ * arguments passed to its constructor.
  * 
  * <p>
- * In order for a Condition represented by a <tt>ConditionInfo</tt> to be
+ * In order for a Condition represented by a <code>ConditionInfo</code> to be
  * instantiated and considered during a permission check, its Condition class
  * must be available from the system classpath.
  * 
+ * <p>
+ * The Condition class must either:
+ * <ul>
+ * <li>Declare a public static <code>getCondition</code> method that takes a
+ * <code>Bundle</code> object and a <code>ConditionInfo</code> object as
+ * arguments. That method must return an object that implements the
+ * <code>Condition</code> interface.</li>
+ * <li>Implement the <code>Condition</code> interface and define a public
+ * constructor that takes a <code>Bundle</code> object and a
+ * <code>ConditionInfo</code> object as arguments.
+ * </ul>
+ * 
+ * @version $Revision$
  */
-
 public class ConditionInfo {
-
-	private String type;
-
-	private String args[];
+	private String		type;
+	private String[]	args;
 
 	/**
-	 * Constructs a <tt>ConditionInfo</tt> from the given type and args.
+	 * Constructs a <code>ConditionInfo</code> from the specified type and
+	 * args.
 	 * 
-	 * @param type
-	 *            The fully qualified class name of the condition represented by
-	 *            this <tt>ConditionInfo</tt>. The class must implement
-	 *            <tt>Condition</tt> and must define a constructor that takes
-	 *            a <tt>Bundle</tt> and the correct number of argument
-	 *            strings.
-	 * 
-	 * @param args
-	 *            The arguments that will be passed to the constructor of the
-	 *            <tt>Conditon</tt> class identified by <tt>type</tt>.
-	 * 
-	 * @throws java.lang.NullPointerException
-	 *                if <tt>type</tt> is <tt>null</tt>.
+	 * @param type The fully qualified class name of the Condition represented
+	 *        by this <code>ConditionInfo</code>.
+	 * @param args The arguments for the Condition. These arguments are
+	 *        available to the newly created Condition by calling the
+	 *        {@link #getArgs()} method.
+	 * @throws java.lang.NullPointerException If <code>type</code> is
+	 *         <code>null</code>.
 	 */
-	public ConditionInfo(String type, String args[]) {
+	public ConditionInfo(String type, String[] args) {
 		this.type = type;
 		this.args = args != null ? args : new String[0];
 		if (type == null) {
@@ -59,14 +64,14 @@ public class ConditionInfo {
 	}
 
 	/**
-	 * Constructs a <tt>ConditionInfo</tt> object from the given encoded
-	 * <tt>ConditionInfo</tt> string.
+	 * Constructs a <code>ConditionInfo</code> object from the specified
+	 * encoded <code>ConditionInfo</code> string. White space in the encoded
+	 * <code>ConditionInfo</code> string is ignored.
 	 * 
-	 * @param encodedCondition
-	 *            The encoded <tt>ConditionInfo</tt>.
+	 * @param encodedCondition The encoded <code>ConditionInfo</code>.
 	 * @see #getEncoded
-	 * @throws java.lang.IllegalArgumentException
-	 *                if <tt>encodedCondition</tt> is not properly formatted.
+	 * @throws java.lang.IllegalArgumentException If the
+	 *         <code>encodedCondition</code> is not properly formatted.
 	 */
 	public ConditionInfo(String encodedCondition) {
 		if (encodedCondition == null) {
@@ -79,16 +84,15 @@ public class ConditionInfo {
 			char[] encoded = encodedCondition.toCharArray();
 			int length = encoded.length;
 			int pos = 0;
-			
+
 			/* skip whitespace */
 			while (Character.isWhitespace(encoded[pos])) {
 				pos++;
 			}
-			
+
 			/* the first character must be '[' */
 			if (encoded[pos] != '[') {
-				throw new IllegalArgumentException(
-						"expecting open bracket");
+				throw new IllegalArgumentException("expecting open bracket");
 			}
 			pos++;
 
@@ -96,22 +100,23 @@ public class ConditionInfo {
 			while (Character.isWhitespace(encoded[pos])) {
 				pos++;
 			}
-			
+
 			/* type is not quoted or encoded */
 			int begin = pos;
-			while (!Character.isWhitespace(encoded[pos]) && (encoded[pos] != ']')) {
+			while (!Character.isWhitespace(encoded[pos])
+					&& (encoded[pos] != ']')) {
 				pos++;
 			}
 			if (pos == begin || encoded[begin] == '"') {
 				throw new IllegalArgumentException("expecting type");
 			}
 			this.type = new String(encoded, begin, pos - begin);
-			
+
 			/* skip whitespace */
 			while (Character.isWhitespace(encoded[pos])) {
 				pos++;
 			}
-			
+
 			/* type may be followed by args which are quoted and encoded */
 			ArrayList argsList = new ArrayList();
 			while (encoded[pos] == '"') {
@@ -133,9 +138,10 @@ public class ConditionInfo {
 					}
 				}
 			}
-			this.args = (String[]) argsList.toArray(new String[argsList.size()]);
-			
-			/* the final character must be ')' */
+			this.args = (String[]) argsList
+					.toArray(new String[argsList.size()]);
+
+			/* the final character must be ']' */
 			char c = encoded[pos];
 			pos++;
 			while ((pos < length) && Character.isWhitespace(encoded[pos])) {
@@ -151,29 +157,28 @@ public class ConditionInfo {
 	}
 
 	/**
-	 * Returns the string encoding of this <tt>ConditionInfo</tt> in a form
-	 * suitable for restoring this <tt>ConditionInfo</tt>.
+	 * Returns the string encoding of this <code>ConditionInfo</code> in a
+	 * form suitable for restoring this <code>ConditionInfo</code>.
 	 * 
 	 * <p>
 	 * The encoding format is:
 	 * 
 	 * <pre>
-	 * 
-	 *  [type &quot;arg0&quot; &quot;arg1&quot; ...]
-	 *  
+	 *   [type &quot;arg0&quot; &quot;arg1&quot; ...]
 	 * </pre>
 	 * 
-	 * where <i>argX</i> are strings that are encoded for proper parsing.
-	 * Specifically, the <tt>"</tt>, <tt>\</tt>, carriage return, and
-	 * linefeed characters are escaped using <tt>\"</tt>, <tt>\\</tt>,
-	 * <tt>\r</tt>, and <tt>\n</tt>, respectively.
+	 * where <i>argN</i> are strings that are encoded for proper parsing.
+	 * Specifically, the <code>"</code>, <code>\</code>, carriage return,
+	 * and linefeed characters are escaped using <code>\"</code>,
+	 * <code>\\</code>, <code>\r</code>, and <code>\n</code>,
+	 * respectively.
 	 * 
 	 * <p>
-	 * The encoded string must contain no leading or trailing whitespace
-	 * characters. A single space character must be used between type and "<i>arg0</i>"
-	 * and between all arguments.
+	 * The encoded string contains no leading or trailing whitespace characters.
+	 * A single space character is used between type and "<i>arg0</i>" and
+	 * between the arguments.
 	 * 
-	 * @return The string encoding of this <tt>ConditionInfo</tt>.
+	 * @return The string encoding of this <code>ConditionInfo</code>.
 	 */
 	public final String getEncoded() {
 		StringBuffer output = new StringBuffer();
@@ -188,61 +193,62 @@ public class ConditionInfo {
 
 		output.append(']');
 
-		return (output.toString());
+		return output.toString();
 	}
 
 	/**
-	 * Returns the string representation of this <tt>ConditionInfo</tt>. The
-	 * string is created by calling the <tt>getEncoded</tt> method on this
-	 * <tt>ConditionInfo</tt>.
+	 * Returns the string representation of this <code>ConditionInfo</code>.
+	 * The string is created by calling the <code>getEncoded</code> method on
+	 * this <code>ConditionInfo</code>.
 	 * 
-	 * @return The string representation of this <tt>ConditionInfo</tt>.
+	 * @return The string representation of this <code>ConditionInfo</code>.
 	 */
 	public String toString() {
-		return (getEncoded());
+		return getEncoded();
 	}
 
 	/**
 	 * Returns the fully qualified class name of the condition represented by
-	 * this <tt>ConditionInfo</tt>.
+	 * this <code>ConditionInfo</code>.
 	 * 
 	 * @return The fully qualified class name of the condition represented by
-	 *         this <tt>ConditionInfo</tt>.
+	 *         this <code>ConditionInfo</code>.
 	 */
 	public final String getType() {
-		return (type);
+		return type;
 	}
 
 	/**
-	 * Returns arguments of this <tt>ConditionInfo</tt>.
+	 * Returns arguments of this <code>ConditionInfo</code>.
 	 * 
-	 * @return The arguments of this <tt>ConditionInfo</tt>.  An empty array
-	 * is returned if the <tt>ConditionInfo</tt> has no arguments.
+	 * @return The arguments of this <code>ConditionInfo</code>. An empty
+	 *         array is returned if the <code>ConditionInfo</code> has no
+	 *         arguments.
 	 */
 	public final String[] getArgs() {
-		return (args);
+		return args;
 	}
 
 	/**
-	 * Determines the equality of two <tt>ConditionInfo</tt> objects.
+	 * Determines the equality of two <code>ConditionInfo</code> objects.
 	 * 
 	 * This method checks that specified object has the same type and args as
-	 * this <tt>ConditionInfo</tt> object.
+	 * this <code>ConditionInfo</code> object.
 	 * 
-	 * @param obj
-	 *            The object to test for equality with this
-	 *            <tt>ConditionInfo</tt> object.
-	 * @return <tt>true</tt> if <tt>obj</tt> is a <tt>ConditionInfo</tt>,
-	 *         and has the same type and args as this <tt>ConditionInfo</tt>
-	 *         object; <tt>false</tt> otherwise.
+	 * @param obj The object to test for equality with this
+	 *        <code>ConditionInfo</code> object.
+	 * @return <code>true</code> if <code>obj</code> is a
+	 *         <code>ConditionInfo</code>, and has the same type and args as
+	 *         this <code>ConditionInfo</code> object; <code>false</code>
+	 *         otherwise.
 	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
-			return (true);
+			return true;
 		}
 
 		if (!(obj instanceof ConditionInfo)) {
-			return (false);
+			return false;
 		}
 
 		ConditionInfo other = (ConditionInfo) obj;
@@ -269,7 +275,7 @@ public class ConditionInfo {
 		for (int i = 0; i < args.length; i++) {
 			hash ^= args[i].hashCode();
 		}
-		return (hash);
+		return hash;
 	}
 
 	/**
@@ -329,7 +335,7 @@ public class ConditionInfo {
 			}
 			output.append(c);
 		}
-		
+
 		return output.toString();
 	}
 }

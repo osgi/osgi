@@ -13,85 +13,108 @@ package org.osgi.service.condpermadmin;
 import java.util.Dictionary;
 
 /**
- * This interface is used to implement Conditions that are bound to Permissions
- * using ConditionalPermissionCollection. The Permissions of the
- * ConditionalPermissionCollection can only be used if the associated Condition
- * is satisfied.
+ * The interface implemented by a Condition. Conditions are bound to Permissions
+ * using Conditional Permission Info. The Permissions of a ConditionalPermission
+ * Info can only be used if the associated Conditions are satisfied.
+ * 
+ * @version $Revision$
  */
 public interface Condition {
 	/**
-	 * A condition object that will always evaluate to true and that is never postponed.
+	 * A Condition object that will always evaluate to true and that is never
+	 * postponed.
 	 */
-	public final static Condition TRUE = new BooleanCondition(true);
+	public final static Condition	TRUE	= new BooleanCondition(true);
 
 	/**
-	 * A condition object that will always evaluate to false and that is never postponed.
+	 * A Condition object that will always evaluate to false and that is never
+	 * postponed.
 	 */
-	public final static Condition FALSE = new BooleanCondition(false);
+	public final static Condition	FALSE	= new BooleanCondition(false);
 
 	/**
-	 * This method returns true if the evaluation of the Condition must be postponed
-	 * until the end of the permission check. If it returns false, it must be able
-	 * to directly answer the isSatisfied method. In other
-	 * words, isSatisfied() will return very quickly since no external sources,
-	 * such as for example users, need to be consulted.
+	 * Returns whether the evaluation must be postponed until the end of the
+	 * permission check. This method returns <code>true</code> if the
+	 * evaluation of the Condition must be postponed until the end of the
+	 * permission check. If this method returns <code>false</code>, this
+	 * Condition must be able to directly answer the {@link #isSatisfied()}
+	 * method. In other words, isSatisfied() will return very quickly since no
+	 * external sources, such as for example users, need to be consulted.
 	 * 
-	 * @return false if evaluation is immediate, otherwise true to indicate the evaluation must be postponed.
+	 * @return <code>true</code> to indicate the evaluation must be postponed.
+	 *         Otherwise, <code>false</code> if the evaluation can be
+	 *         immediately performed.
 	 */
 	boolean isPostponed();
 
 	/**
-	 * This method returns true if the Condition is satisfied.
+	 * Returns whether the Condition is satisfied.
+	 * 
+	 * @return <code>true</code> to indicate the Conditions is satisfied. must
+	 *         be postponed. Otherwise, <code>false</code> if the Condition is
+	 *         not satisfied.
 	 */
 	boolean isSatisfied();
 
 	/**
-	 * This method returns true if the satisfiability may change.
+	 * Returns whether the Condition is mutable.
+	 * 
+	 * @return <code>true</code> to indicate the value returned by
+	 *         {@link #isSatisfied()} can change. Otherwise, <code>false</code>
+	 *         if the value returned by {@link #isSatisfied()} will not change.
 	 */
 	boolean isMutable();
 
 	/**
-	 * This method returns true if the set of Conditions are satisfied. Although
-	 * this method is not static, it should be implemented as if it were static.
-	 * All of the passed Conditions will have the same type and will correspond
-	 * to the class type of the object on which this method is invoked.
-	 *
-	 * @param conds the array of Conditions that must be satisfied
-	 * @param context a Dictionary object that implementors can use to track 
-	 * state. If this method is invoked multiple times in the same permission 
-	 * evaluation, the same Dictionary will be passed multiple times. The
-	 * SecurityManager treats this Dictionary as an opaque object simply
-	 * creates an empty dictionary and passes it to subsequent invocations
-	 * if multiple invocatios are needed.
-	 * @return true if all the Conditions are satisfied.
+	 * Returns whether a the set of Conditions are satisfied. Although this
+	 * method is not static, it must be implemented as if it were static. All of
+	 * the passed Conditions will be of the same type and will correspond to the
+	 * class type of the object on which this method is invoked.
+	 * 
+	 * @param conditions The array of Conditions.
+	 * @param context A Dictionary object that implementors can use to track
+	 *        state. If this method is invoked multiple times in the same
+	 *        permission evaluation, the same Dictionary will be passed multiple
+	 *        times. The SecurityManager treats this Dictionary as an opaque
+	 *        object and simply creates an empty dictionary and passes it to
+	 *        subsequent invocations if multiple invocatios are needed.
+	 * @return <code>true</code> if all the Conditions are satisfied.
+	 *         Otherwise, <code>false</code> if one of the Conditions is not
+	 *         satisfied.
 	 */
-	boolean isSatisfied(Condition conds[], Dictionary context);
+	boolean isSatisfied(Condition conditions[], Dictionary context);
 
-	/**
-	 * Package internal class used to define the {@link Condition#FALSE} and 
-	 * {@link Condition#TRUE} constants.
-	 */
-	final static class BooleanCondition implements Condition {
-		boolean satisfied;
-		BooleanCondition(boolean satisfied) {
-			this.satisfied = satisfied;
-		}
-		public boolean isPostponed() {
-			return false;
-		}
-		public boolean isSatisfied() {
-			return satisfied;
-		}
-		public boolean isMutable() {
-			return false;
-		}
-		public boolean isSatisfied(Condition[] conds, Dictionary context) {
-			for(int i = 0; i < conds.length; i++) {
-				if (!conds[i].isSatisfied())
-					return false;
-			}
-			return true;
-		}
-		
+}
+
+/**
+ * Package internal class used to define the {@link Condition#FALSE} and
+ * {@link Condition#TRUE} constants.
+ */
+final class BooleanCondition implements Condition {
+	final boolean	satisfied;
+
+	BooleanCondition(boolean satisfied) {
+		this.satisfied = satisfied;
 	}
+
+	public boolean isPostponed() {
+		return false;
+	}
+
+	public boolean isSatisfied() {
+		return satisfied;
+	}
+
+	public boolean isMutable() {
+		return false;
+	}
+
+	public boolean isSatisfied(Condition[] conds, Dictionary context) {
+		for (int i = 0; i < conds.length; i++) {
+			if (!conds[i].isSatisfied())
+				return false;
+		}
+		return true;
+	}
+
 }

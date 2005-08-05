@@ -7,6 +7,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this 
  * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
  */
+
 package org.osgi.service.condpermadmin;
 
 import java.security.AccessController;
@@ -16,8 +17,7 @@ import java.util.Hashtable;
 import org.osgi.framework.*;
 
 /**
- * 
- * Checks to see if a Bundle matches the given location pattern. Pattern
+ * Condition to test if the location of a bundle matches a pattern. Pattern
  * matching is done according to the filter string matching rules.
  * 
  * @version $Revision$
@@ -29,13 +29,14 @@ public class BundleLocationCondition {
 	 * Constructs a condition that tries to match the passed Bundle's location
 	 * to the location pattern.
 	 * 
-	 * @param bundle the Bundle being evaluated.
-	 * @param info the ConditionInfo to construct the condition for. The args of
-	 *        the ConditionInfo specify the location to match the Bundle
-	 *        location to. Matching is done according to the filter string 
-	 *        matching rules.  Any '*' characters in the location argument are
-	 *        used as wildcards when matching bundle locations unless they are
-	 *        escaped with a '\' character.
+	 * @param bundle The Bundle being evaluated.
+	 * @param info The ConditionInfo to construct the condition for. The args of
+	 *        the ConditionInfo must be a single String which specifies the
+	 *        location pattern to match against the Bundle location. Matching is
+	 *        done according to the filter string matching rules. Any '*'
+	 *        characters in the location argument are used as wildcards when
+	 *        matching bundle locations unless they are escaped with a '\'
+	 *        character.
 	 */
 	static public Condition getCondition(final Bundle bundle, ConditionInfo info) {
 		if (!CONDITION_TYPE.equals(info.getType()))
@@ -45,14 +46,16 @@ public class BundleLocationCondition {
 		if (args.length != 1)
 			throw new IllegalArgumentException("Illegal number of args: "
 					+ args.length);
-		String bundleLocation = (String) AccessController.doPrivileged(new PrivilegedAction() {
+		String bundleLocation = (String) AccessController
+				.doPrivileged(new PrivilegedAction() {
 					public Object run() {
 						return bundle.getLocation();
 					}
 				});
 		Filter filter = null;
 		try {
-			filter = FrameworkUtil.createFilter("(location=" + encodeLocation(args[0]) + ")");
+			filter = FrameworkUtil.createFilter("(location="
+					+ escapeLocation(args[0]) + ")");
 		}
 		catch (InvalidSyntaxException e) {
 			// this should never happen, but just incase
@@ -66,16 +69,16 @@ public class BundleLocationCondition {
 	private BundleLocationCondition() {
 		// private constructor to prevent objects of this type
 	}
+
 	/**
-	 * Encode the value string such that '(', ')'
-	 * and '\' are escaped.  The '\' char is only escaped if it is not
-	 * followed by a '*'.
-	 *
-	 * @param value unencoded value string.
-	 * @return encoded value string.
+	 * Escape the value string such that '(', ')' and '\' are escaped. The '\'
+	 * char is only escaped if it is not followed by a '*'.
+	 * 
+	 * @param value unescaped value string.
+	 * @return escaped value string.
 	 */
-	private static String encodeLocation(String value) {
-		boolean encoded = false;
+	private static String escapeLocation(String value) {
+		boolean escaped = false;
 		int inlen = value.length();
 		int outlen = inlen << 1; /* inlen * 2 */
 
@@ -93,7 +96,7 @@ public class BundleLocationCondition {
 				case ')' :
 					output[cursor] = '\\';
 					cursor++;
-					encoded = true;
+					escaped = true;
 					break;
 			}
 
@@ -101,6 +104,6 @@ public class BundleLocationCondition {
 			cursor++;
 		}
 
-		return encoded ? new String(output, 0, cursor) : value;
+		return escaped ? new String(output, 0, cursor) : value;
 	}
 }
