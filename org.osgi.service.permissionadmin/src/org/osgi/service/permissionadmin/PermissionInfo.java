@@ -35,7 +35,7 @@ public class PermissionInfo {
 	private String	actions;
 
 	/**
-	 * Constructs a <code>PermissionInfo</code> from the given type, name, and
+	 * Constructs a <code>PermissionInfo</code> from the specified type, name, and
 	 * actions.
 	 * 
 	 * @param type The fully qualified class name of the permission represented
@@ -70,14 +70,14 @@ public class PermissionInfo {
 	}
 
 	/**
-	 * Constructs a <code>PermissionInfo</code> object from the given encoded
+	 * Constructs a <code>PermissionInfo</code> object from the specified encoded
 	 * <code>PermissionInfo</code> string. White space in the encoded
 	 * <code>PermissionInfo</code> string is ignored.
 	 * 
 	 * 
 	 * @param encodedPermission The encoded <code>PermissionInfo</code>.
 	 * @see #getEncoded
-	 * @throws java.lang.IllegalArgumentException if
+	 * @throws java.lang.IllegalArgumentException If the 
 	 *            <code>encodedPermission</code> is not properly formatted.
 	 */
 	public PermissionInfo(String encodedPermission) {
