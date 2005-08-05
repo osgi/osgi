@@ -274,7 +274,7 @@ public class ResolverBundle extends VersionSupplier {
 		return getRequire(bundleName) != null;
 	}
 
-	ResolverExport[] attachFragment(ResolverBundle fragment, boolean addExports) {
+	ResolverExport[] attachFragment(ResolverBundle fragment, boolean dynamicAttach) {
 		if (isFragment())
 			return new ResolverExport[0]; // cannot attach to fragments;
 		if (!getBundle().attachFragments() || (isResolved() && !getBundle().dynamicFragments()))
@@ -286,7 +286,8 @@ public class ResolverBundle extends VersionSupplier {
 		BundleSpecification[] newRequires = fragment.getBundle().getRequiredBundles();
 		ExportPackageDescription[] newExports = fragment.getBundle().getExportPackages();
 
-		if (constraintsConflict(newImports, newRequires))
+		// if this is not during initialization then check if constraints conflict
+		if (dynamicAttach && constraintsConflict(newImports, newRequires))
 			return new ResolverExport[0]; // do not allow fragments with conflicting constraints
 		if (isResolved() && newExports.length > 0)
 			fragment.setNewFragmentExports(true);
@@ -314,7 +315,7 @@ public class ResolverBundle extends VersionSupplier {
 		}
 
 		ArrayList hostExports = new ArrayList(newExports.length);
-		if (newExports.length > 0 && addExports) {
+		if (newExports.length > 0 && dynamicAttach) {
 			StateObjectFactory factory = resolver.getState().getFactory();
 			for (int i = 0; i < newExports.length; i++) {
 				if (!isExported(newExports[i].getName())) {
