@@ -108,7 +108,8 @@ public final class AdminPermission extends Permission {
 	/*
 	 * NOTE: A framework implementor may also choose to replace this class in
 	 * their distribution with a class that directly interfaces with the
-	 * framework implementation.
+	 * framework implementation. This replacement class MUST NOT
+	 * alter the public/protected signature of this class.
 	 */
 
 	/*
