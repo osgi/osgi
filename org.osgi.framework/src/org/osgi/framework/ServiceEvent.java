@@ -10,7 +10,6 @@
 
 package org.osgi.framework;
 
-import java.util.Dictionary;
 import java.util.EventObject;
 
 /**
@@ -49,7 +48,7 @@ public class ServiceEvent extends EventObject {
 	 * <p>
 	 * The value of <code>REGISTERED</code> is 0x00000001.
 	 * 
-	 * @see BundleContext#registerService(String[],Object,Dictionary)
+	 * @see BundleContext#registerService(String[],Object,java.util.Dictionary)
 	 */
 	public final static int		REGISTERED			= 0x00000001;
 
