@@ -196,7 +196,7 @@ public final class AdminPermission extends Permission {
 	 * Null arguments are equivalent to "*".
 	 * 
 	 * @param filter A filter expression that can use signer, location, id, and
-	 *        name keys. A value of &quot;*&quot or <code>null</code> matches
+	 *        name keys. A value of &quot;*&quot; or <code>null</code> matches
 	 *        all bundle.
 	 * @param actions <code>class</code>, <code>execute</code>,
 	 *        <code>extensionLifecycle</code>, <code>lifecycle</code>,
