@@ -5,33 +5,34 @@ import java.security.AccessControlException;
 import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.impl.service.deploymentadmin.perm.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
+import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtAlertItem;
 import org.osgi.service.dmt.DmtData;
 
 public class DeplAlertSender {
 
     static void sendAlert(Exception exception, String principal, 
-            String correlator, String nodeUri, DeploymentAdminImpl da) 
+            String correlator, String nodeUri, DmtAdmin dmtA) 
     {
         if (null == principal)
             return;
 
         try {
             if (null == exception)
-                da.getDmtAdmin().sendAlert(principal, 1226, correlator, new DmtAlertItem[] {
+                dmtA.sendAlert(principal, 1226, correlator, new DmtAlertItem[] {
                       new DmtAlertItem(nodeUri, "org.osgi.deployment.downloadandinstallandactivate",
                       null, new DmtData(AlertCodes.RESULT_SUCCESSFUL))});
             else {
                 if (exception instanceof DeploymentException) {
                     DeploymentException de = (DeploymentException) exception;
                     int res = getResultCodeToExceptionCode(de.getCode());
-                    da.getDmtAdmin().sendAlert(principal, 1226, correlator, new DmtAlertItem[] {
+                    dmtA.sendAlert(principal, 1226, correlator, new DmtAlertItem[] {
                         new DmtAlertItem(nodeUri, "org.osgi.deployment.downloadandinstallandactivate",
                         null, new DmtData(res))});
                 } else if (exception instanceof AccessControlException) {
                     AccessControlException ae = (AccessControlException) exception;
                     if (ae.getPermission() instanceof DeploymentAdminPermission)
-                        da.getDmtAdmin().sendAlert(principal, 1226, correlator, new DmtAlertItem[] {
+                        dmtA.sendAlert(principal, 1226, correlator, new DmtAlertItem[] {
                             new DmtAlertItem(nodeUri, "org.osgi.deployment.downloadandinstallandactivate",
                             null, new DmtData(AlertCodes.RESULT_AUTHORIZATION_FAILURE))});
                 }

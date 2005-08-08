@@ -35,6 +35,7 @@ import org.osgi.impl.service.deploymentadmin.CaseInsensitiveMap;
 import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.Metanode;
+import org.osgi.impl.service.deploymentadmin.PluginCtx;
 import org.osgi.impl.service.deploymentadmin.ResourceEntry;
 import org.osgi.impl.service.deploymentadmin.Splitter;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
@@ -47,19 +48,19 @@ import org.osgi.service.dmt.DmtSession;
 
 public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Serializable {
 
-    private transient DeploymentAdminImpl da;
+    private transient PluginCtx pluginCtx;
     private Hashtable dpIdMappings     = new Hashtable();
     private Hashtable bundleIdMappings = new Hashtable();
 
     public PluginDeployed(DeploymentAdminImpl da) {
-        this.da= da;
+        this.pluginCtx = pluginCtx;
     }
 
     private Hashtable getMangleTable() {
         Hashtable ht = new Hashtable();
-        DeploymentPackage[] dps = da.listDeploymentPackages();
+        DeploymentPackage[] dps = pluginCtx.listDeploymentPackages();
         for (int i = 0; i < dps.length; i++) {
-            String mv = da.getDmtAdmin().mangle(null, dps[i].getName());
+            String mv = pluginCtx.getDmtAdmin().mangle(null, dps[i].getName());
             ht.put(mv, dps[i]);
         }
         return ht;
@@ -95,7 +96,7 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
     }
 
     private String[] getImportedPackages(BundleEntry be) {
-        BundleContext context = da.getBundleContext();
+        BundleContext context = pluginCtx.getBundleContext();
         Bundle b = context.getBundle(be.getBundleId());
         String iph = (String) b.getHeaders().get("Import-Package");
         if (null == iph)
@@ -108,7 +109,7 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
     }
 
     private String[] getExportedPackages(BundleEntry be) {
-        BundleContext context = da.getBundleContext();
+        BundleContext context = pluginCtx.getBundleContext();
         Bundle b = context.getBundle(be.getBundleId());
         String iph = (String) b.getHeaders().get("Export-Package");
         if (null == iph)
@@ -121,32 +122,32 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
     }
 
     private String getBundleSymbolicName(BundleEntry be) {
-        BundleContext context = da.getBundleContext();
+        BundleContext context = pluginCtx.getBundleContext();
         Bundle b = context.getBundle(be.getBundleId());
         return b.getSymbolicName();
     }
     
     private String getBundleLocation(BundleEntry be) {
-        BundleContext context = da.getBundleContext();
+        BundleContext context = pluginCtx.getBundleContext();
         Bundle b = context.getBundle(be.getBundleId());
         return b.getLocation();
     }
     
     private String getBundleVersion(BundleEntry be) {
-        BundleContext context = da.getBundleContext();
+        BundleContext context = pluginCtx.getBundleContext();
         Bundle b = context.getBundle(be.getBundleId());
         String ver = (String) b.getHeaders().get("Bundle-Version");
         return ver;
     }
     
     private int getBundleState(BundleEntry be) {
-        BundleContext context = da.getBundleContext();
+        BundleContext context = pluginCtx.getBundleContext();
         Bundle b = context.getBundle(be.getBundleId());
         return b.getState();
     }
 
     private String getBundleNativeCode(BundleEntry be) {
-        BundleContext context = da.getBundleContext();
+        BundleContext context = pluginCtx.getBundleContext();
         Bundle b = context.getBundle(be.getBundleId());
         String nc = (String) b.getHeaders().get("Bundle-NativeCode");
         return nc;
@@ -494,40 +495,40 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
         Hashtable mt = getMangleTable();
         final DeploymentPackageImpl dp = (DeploymentPackageImpl) mt.get(nodeUriArr[5]);
         if (null != dp) {
-            UndeployThread undThread = new UndeployThread(da, dp);
+            UndeployThread undThread = new UndeployThread(dp);
             undThread.setListener(new UndeployThread.Listener() {
                 public void onFinish(Exception exception) {
                     if (null == exception) {
                         dpIdMappings.remove(dp.getName());
                         try {
-                            da.save();
+                            pluginCtx.save();
                         }
                         catch (IOException e) {
-                            da.getLogger().log(e);
+                            pluginCtx.getLogger().log(e);
                         }
                     }
                     else
-                        da.getLogger().log(exception);
+                        pluginCtx.getLogger().log(exception);
                     // TODO send alert
                 }
             });
         } else {
             Object[] pair = (Object[]) bundleIdMappings.get(nodeUriArr[5]);
-            Bundle bundle = da.getBundleContext().getBundle(((Long) pair[1]).longValue());
-            UndeployThread undThread = new UndeployThread(da, bundle);
+            Bundle bundle = pluginCtx.getBundleContext().getBundle(((Long) pair[1]).longValue());
+            UndeployThread undThread = new UndeployThread(bundle);
             undThread.setListener(new UndeployThread.Listener() {
                 public void onFinish(Exception exception) {
                     if (null == exception) {
                         bundleIdMappings.remove(nodeUriArr[5]);
                         try {
-                            da.save();
+                            pluginCtx.save();
                         }
                         catch (IOException e) {
-                            da.getLogger().log(e);
+                            pluginCtx.getLogger().log(e);
                         }
                     }
                     else
-                        da.getLogger().log(exception);
+                        pluginCtx.getLogger().log(exception);
                     // TODO send alert
                 }
             });
@@ -623,8 +624,8 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
            new Object[] {id, new Long(b.getBundleId())});
     }
 
-    public void setDeploymentAdmin(DeploymentAdminImpl da) {
-        this.da = da;
+    public void setPluginCtx(PluginCtx pluginCtx) {
+        this.pluginCtx = pluginCtx;
     }
 
 }

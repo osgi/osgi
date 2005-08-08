@@ -4,14 +4,16 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.deploymentadmin.DAConstants;
 import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
+import org.osgi.impl.service.deploymentadmin.PluginCtx;
 
 public class DeploymentThread extends Thread {
     
     private InputStream           is;
-    private DeploymentAdminImpl   da;
+    private PluginCtx             pluginCtx;
     private String                mimeType;
     private String                location;
     private ListenerDp            listenerDp;
@@ -25,10 +27,10 @@ public class DeploymentThread extends Thread {
         void onFinish(Bundle b, Exception exception);
     }
     
-    public DeploymentThread(String mimeType, DeploymentAdminImpl da, InputStream inputStream, 
+    public DeploymentThread(String mimeType, PluginCtx pluginCtx, InputStream inputStream, 
             String dwnlID) 
     {
-        this.da = da;
+        this.pluginCtx = pluginCtx;
         this.is = inputStream;
         this.mimeType = mimeType;
         this.location = dwnlID;
@@ -45,7 +47,7 @@ public class DeploymentThread extends Thread {
     public void run() {
         if (mimeType.equals(DAConstants.MIME_DP)) {
             try {
-                DeploymentPackageImpl dp = (DeploymentPackageImpl) da.installDeploymentPackage(is);
+                DeploymentPackageImpl dp = (DeploymentPackageImpl) pluginCtx.installDeploymentPackage(is);
                 listenerDp.onFinish(dp, null);
             } catch (Exception e) {
                 listenerDp.onFinish(null, e);
@@ -61,7 +63,7 @@ public class DeploymentThread extends Thread {
             }
         } else if (mimeType.equals(DAConstants.MIME_BUNDLE)) {
             try {
-                Bundle b = da.getBundleContext().installBundle(location, is);
+                Bundle b = pluginCtx.getBundleContext().installBundle(location, is);
                 b.start();
                 listenerBundle.onFinish(b, null);
             } catch (Exception e) {

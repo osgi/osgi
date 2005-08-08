@@ -49,27 +49,22 @@ public class DeploymentSessionImpl implements DeploymentSession {
      */
     static final int UNINSTALL = 2;   
     
+    private DeploymentSessionCtx        sessionCtx;
     private DeploymentPackageImpl       srcDp;
     private DeploymentPackageImpl       targetDp;
     private Transaction                 transaction;
-    private Logger                      logger;
-    private BundleContext               context;
     private TrackerRp                   trackRp;
     private TrackerPerm                 trackPerm;
     private TrackerCondPerm             trackCondPerm;
     private TrackerPackageAdmin         trackPackAdmin;
-    private DeploymentAdminImpl         da;
     private boolean                     forced;
-    
-    // getDataFile uses this. 
-    private String 				        fwBundleDir;
     
     /*
      * Class to track resource processors
      */
     private class TrackerRp extends ServiceTracker {
         public TrackerRp() {
-            super(DeploymentSessionImpl.this.context, 
+            super(DeploymentSessionImpl.this.sessionCtx.getBundleContext(), 
                     ResourceProcessor.class.getName(), null);
         }
     }
@@ -79,7 +74,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
      */
     private class TrackerPerm extends ServiceTracker {
         public TrackerPerm() {
-            super(DeploymentSessionImpl.this.context, 
+            super(DeploymentSessionImpl.this.sessionCtx.getBundleContext(), 
                     "org.osgi.service.permissionadmin.PermissionAdmin", null);
         }
     }
@@ -89,7 +84,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
      */
     private class TrackerCondPerm extends ServiceTracker {
         public TrackerCondPerm() {
-            super(DeploymentSessionImpl.this.context, 
+            super(DeploymentSessionImpl.this.sessionCtx.getBundleContext(), 
                     "org.osgi.service.condpermadmin.ConditionalPermissionAdmin", null);
         }
     }
@@ -99,41 +94,22 @@ public class DeploymentSessionImpl implements DeploymentSession {
      */
     private class TrackerPackageAdmin extends ServiceTracker {
         public TrackerPackageAdmin() {
-            super(DeploymentSessionImpl.this.context, 
+            super(DeploymentSessionImpl.this.sessionCtx.getBundleContext(), 
                     "org.osgi.service.packageadmin.PackageAdmin", null);
         }
     }
 
     DeploymentSessionImpl(DeploymentPackageImpl srcDp, 
-                          DeploymentPackageImpl targetDp, 
-                          Logger logger, 
-                          final BundleContext context,
-                          String fwbd,
-                          DeploymentAdminImpl da) 
+                          DeploymentPackageImpl targetDp,
+                          DeploymentSessionCtx sessionCtx)
     {
         this.srcDp = srcDp;
         this.targetDp = targetDp;
-        this.logger = logger;
-        this.context = context;
+        this.sessionCtx = sessionCtx;
         trackRp = new TrackerRp();
         trackPerm = new TrackerPerm();
         trackCondPerm = new TrackerCondPerm();
         trackPackAdmin = new TrackerPackageAdmin();
-        this.fwBundleDir = fwbd;
-        this.da = da;
-        
-        /*AccessController.doPrivileged(new PrivilegedAction() {
-            public Object run() {
-                StringBuffer sb = new StringBuffer(fwBundleDir);
-                char sc = (sb.toString().indexOf("/") != -1 ? '/' : '\\');
-                int i = sb.toString().indexOf(sc);
-                while (-1 != i) {
-                    sb.setCharAt(i, File.separatorChar);
-                    i = sb.toString().indexOf(sc);
-                }
-                fwBundleDir = sb.toString();
-                return null;
-            }});*/
     }
 
     private Hashtable setFilePermissionForCustomizers() {
@@ -163,7 +139,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
                 new ArrayList(Arrays.asList(old)) : new ArrayList();
         for (Iterator iter = srcDp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            File rootDir = new File(fwBundleDir + "/" + be.getBundleId() + "/" + "data/-");
+            File rootDir = new File(sessionCtx.getFwBundleDir() + "/" + be.getBundleId() + 
+                    "/" + "data/-");
             permInfos.add(new PermissionInfo(FilePermission.class.getName(), rootDir.toString(), 
                     "read, write, execute, delete"));
         }
@@ -256,7 +233,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         for (Iterator iter = bes.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             if (be.getBundleId() == b.getBundleId()) {
-                String dir = fwBundleDir + "/" + b.getBundleId() + "/data";
+                String dir = sessionCtx.getFwBundleDir() + "/" + b.getBundleId() + "/data";
                 final File f = new File(dir);
                 AccessController.doPrivileged(new PrivilegedAction() {
                     public Object run() {
@@ -275,7 +252,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
 
     void installUpdate(DeploymentPackageJarInputStream wjis) throws DeploymentException {
         openTrackers();
-        transaction = Transaction.createTransaction(this, logger);
+        transaction = Transaction.createTransaction(this, sessionCtx.getLogger());
         Hashtable oldPerms = null;
         int numOfErrors = 0;
         try {
@@ -326,7 +303,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         this.forced = forced;
         boolean ret = true;
         openTrackers();
-        transaction = Transaction.createTransaction(this, logger);
+        transaction = Transaction.createTransaction(this, sessionCtx.getLogger());
         try {
             transaction.start();
             stopBundles();
@@ -342,7 +319,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
                 throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR, 
                         e.getMessage(), e);
             }  
-            logger.log(e);
+            sessionCtx.getLogger().log(e);
             ret = false;
         }
         transaction.commit();
@@ -361,14 +338,14 @@ public class DeploymentSessionImpl implements DeploymentSession {
         int numOfErrors = 0;
         for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry entry = (BundleEntry) iter.next();
-            Bundle b = context.getBundle(entry.getBundleId());
+            Bundle b = sessionCtx.getBundleContext().getBundle(entry.getBundleId());
             if (entry.isCustomizer())
                 continue;
             try {
                 startBundle(b);
             }
             catch (BundleException e) {
-                logger.log(e);
+                sessionCtx.getLogger().log(e);
                 ++numOfErrors;
             }
         }
@@ -387,7 +364,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry entry = (BundleEntry) iter.next();
             try {
-                Bundle b = context.getBundle(entry.getBundleId());
+                Bundle b = sessionCtx.getBundleContext().getBundle(entry.getBundleId());
                 if (!entry.isCustomizer())
                     continue;
                 startBundle(b);
@@ -396,7 +373,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
                 entry.setPid(pid);
             } catch (Exception e) {
                 if (forced)
-                    logger.log(e);
+                    sessionCtx.getLogger().log(e);
                 else
                     throw e;
             }
@@ -425,12 +402,12 @@ public class DeploymentSessionImpl implements DeploymentSession {
         for (ListIterator iter = targetDp.getReverseBundleEntryIterator(); iter.hasPrevious();) {
             BundleEntry entry = (BundleEntry) iter.previous();
             try {
-	            Bundle b = context.getBundle(entry.getBundleId());
+	            Bundle b = sessionCtx.getBundleContext().getBundle(entry.getBundleId());
 	            stopBundle(b);
             } catch (Exception e) {
                 // Exceptions are ignored in this phase to allow repairs 
                 // to always succeed, even if the existing package is corrupted.
-                logger.log(e);
+                sessionCtx.getLogger().log(e);
             }
         }
     }
@@ -493,7 +470,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
             } catch (Exception e) {
                 // Exceptions are ignored in this phase to allow repairs 
                 // to always succeed, even if the existing package is corrupted.
-                logger.log(e);
+                sessionCtx.getLogger().log(e);
             }
         }
     }
@@ -530,7 +507,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
 	            }
             } catch (Exception e) {
                 if (forced)
-                    logger.log(e);
+                    sessionCtx.getLogger().log(e);
                 else
                     throw e;
             }
@@ -567,7 +544,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
             } catch (Exception e) {
                 // Exceptions are ignored in this phase to allow repairs 
                 // to always succeed, even if the existing package is corrupted.
-                logger.log(e);
+                sessionCtx.getLogger().log(e);
             }
         }
     }
@@ -591,7 +568,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
      * Drops a bundle
      */
     private void dropBundle(BundleEntry be) throws BundleException, DeploymentException {
-        Bundle b = context.getBundle(be.getBundleId());
+        Bundle b = sessionCtx.getBundleContext().getBundle(be.getBundleId());
         if (null == b)
             throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
                 "Bundle " + b + " was removed directly");
@@ -650,10 +627,10 @@ public class DeploymentSessionImpl implements DeploymentSession {
         String pid = entry.getAttributes().getValue(DAConstants.RP_PID);
         if (null == pid)
             return;
-        String mDp = da.getMappedDp(pid);
-        if (null != mDp && !srcDp.getName().equals(mDp))
+        Object dp = sessionCtx.getMappedDp(pid);
+        if (null != dp && !srcDp.getName().equals(dp))
             throw new DeploymentException(DeploymentException.CODE_FOREIGN_CUSTOMIZER,
-                    "PID '" + pid + "' belongs to another DP (" + mDp + ")");
+                    "PID '" + pid + "' belongs to another DP (" + dp + ")");
             
         ResourceProcessor proc = findProcessor(pid);
         if (null == proc)
@@ -733,7 +710,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         try {
             b = (Bundle) AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws Exception {
-                    Bundle ret = context.installBundle(location, is);
+                    Bundle ret = sessionCtx.getBundleContext().installBundle(location, is);
                     return ret;
                 }});
         }
@@ -750,7 +727,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     {
         final String location = DeploymentAdminImpl.location(be.getSymbName(),
                 be.getVersion());
-        final Bundle[] bundles = context.getBundles();
+        final Bundle[] bundles = sessionCtx.getBundleContext().getBundles();
         for (int i = 0; i < bundles.length; i++) {
             final Bundle b = bundles[i];
             Boolean found;

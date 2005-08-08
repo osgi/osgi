@@ -13,6 +13,7 @@ import org.osgi.impl.service.deploymentadmin.DAConstants;
 import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.Metanode;
+import org.osgi.impl.service.deploymentadmin.PluginCtx;
 import org.osgi.impl.service.deploymentadmin.Splitter;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtData;
@@ -25,7 +26,7 @@ import org.osgi.service.dmt.RemoteAlertSender;
 
 public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
     
-	private DeploymentAdminImpl da;
+	private transient PluginCtx pluginCtx;
 	private File                store;
 
 	public PluginDelivered(DeploymentAdminImpl da) {
@@ -36,7 +37,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
 	    if (!store.exists())
 	        throw new RuntimeException("Delivered area ('" + delArea + "') does not exist. " +
                 "Set the " + DAConstants.DELIVERED_AREA + " system property");
-		this.da = da;		
+		this.pluginCtx = pluginCtx;		
 	}
 
     public void open(String subtreeUri, DmtSession session) throws DmtException {
@@ -266,7 +267,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
     // Private methods
     
     private File[] getFiles(String nodeUri) {
-        DmtAdmin dmtA = da.getDmtAdmin();
+        DmtAdmin dmtA = pluginCtx.getDmtAdmin();
         if (null == dmtA)
             throw new RuntimeException("DMT Admin doesn't run");
         File[] files = store.listFiles();

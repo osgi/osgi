@@ -14,6 +14,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.Metanode;
+import org.osgi.impl.service.deploymentadmin.PluginCtx;
 import org.osgi.impl.service.deploymentadmin.Splitter;
 import org.osgi.impl.service.deploymentadmin.api.DownloadAgent;
 import org.osgi.impl.service.deploymentadmin.perm.DeploymentAdminPermission;
@@ -39,11 +40,11 @@ public class PluginDownload extends DefaultHandler
     private static final int STATUS_DEPLOYMENT_FAILED      = 70;
     private static final int STATUS_DEPLOYED               = 80;
     
-	private transient DeploymentAdminImpl da;
-	private Entries                       entries = new Entries();
+	private transient PluginCtx pluginCtx;
+	private Entries             entries = new Entries();
     
-    public PluginDownload(DeploymentAdminImpl da) {
-        this.da = da;       
+    public PluginDownload(PluginCtx pluginCtx) {
+        this.pluginCtx = pluginCtx;       
     }
 	
     ///////////////////////////////////////////////////////////////////////////
@@ -95,7 +96,7 @@ public class PluginDownload extends DefaultHandler
             
             entry.setStatus(STATUS_STREAMING);
             
-            DownloadAgent dwnlAgent = da.getDownloadAgent();
+            DownloadAgent dwnlAgent = pluginCtx.getDownloadAgent();
             if (null == dwnlAgent) {
                 entry.setStatus(STATUS_DOWNLD_FAILED);
                 throw new DmtException(nodeUri, DmtException.OTHER_ERROR, 
@@ -104,13 +105,13 @@ public class PluginDownload extends DefaultHandler
 
             SAXParser parser = null;
             try {
-                ServiceReference refs[] = da.getBundleContext().getServiceReferences(
+                ServiceReference refs[] = pluginCtx.getBundleContext().getServiceReferences(
                         SAXParserFactory.class.getName(),
                         "(&(parser.namespaceAware=true)" + "(parser.validating=true))");
                 if (refs == null)
                     throw new DmtException(nodeUri, DmtException.OTHER_ERROR, 
                         "SAX Parser is not available");
-                SAXParserFactory factory = (SAXParserFactory) da.getBundleContext().
+                SAXParserFactory factory = (SAXParserFactory) pluginCtx.getBundleContext().
                         getService(refs[0]);
                 parser = factory.newSAXParser();
             } catch (Exception e) {
@@ -135,37 +136,39 @@ public class PluginDownload extends DefaultHandler
                 return;
             }
 
-            DeploymentThread deplThr = new DeploymentThread(dwnlThr.getMimeType(), da, 
+            DeploymentThread deplThr = new DeploymentThread(dwnlThr.getMimeType(), pluginCtx, 
                     dwnlThr.getInputStream(), entry.id);
             deplThr.setDpListener(new DeploymentThread.ListenerDp() {
                 public void onFinish(DeploymentPackageImpl dp, Exception exception) {
                     if (null == exception) {
                         entry.setStatus(STATUS_DEPLOYED);
-                        da.getDeployedPlugin().associateID(dp, entry.id);
+                        pluginCtx.getDeployedPlugin().associateID(dp, entry.id);
                         try {
-                            da.save();
+                            pluginCtx.save();
                         }
                         catch (IOException e) {
-                            da.getLogger().log(e); 
+                            pluginCtx.getLogger().log(e); 
                         }
                     } else 
                         entry.setStatus(STATUS_DEPLOYMENT_FAILED);
-                    DeplAlertSender.sendAlert(exception, principal, correlator, nodeUri, da);
+                    DeplAlertSender.sendAlert(exception, principal, correlator, nodeUri, 
+                            pluginCtx.getDmtAdmin());
                 }});
             deplThr.setBundleListener(new DeploymentThread.ListenerBundle() {
                 public void onFinish(Bundle b, Exception exception) {
                     if (null == exception) {
                         entry.setStatus(STATUS_DEPLOYED);
-                        da.getDeployedPlugin().associateID(b, entry.id);
+                        pluginCtx.getDeployedPlugin().associateID(b, entry.id);
                         try {
-                            da.save();
+                            pluginCtx.save();
                         }
                         catch (IOException e) {
-                            da.getLogger().log(e); 
+                            pluginCtx.getLogger().log(e); 
                         }
                     } else 
                         entry.setStatus(STATUS_DEPLOYMENT_FAILED);
-                    DeplAlertSender.sendAlert(exception, principal, correlator, nodeUri, da);
+                    DeplAlertSender.sendAlert(exception, principal, correlator, nodeUri,
+                            pluginCtx.getDmtAdmin());
                 }});
             deplThr.start();
         }
@@ -175,7 +178,7 @@ public class PluginDownload extends DefaultHandler
                 return;
 
             try {
-                da.getDmtAdmin().sendAlert(principal, 1226, correlator, new DmtAlertItem[] {
+                pluginCtx.getDmtAdmin().sendAlert(principal, 1226, correlator, new DmtAlertItem[] {
                         new DmtAlertItem(nodeUri, "org.osgi.deployment.downloadandinstallandactivate",
                         null, new DmtData(alertCode))});
             }
@@ -219,7 +222,7 @@ public class PluginDownload extends DefaultHandler
         if (nodeUriArr[5].equals("EnvType"))
             entries.get(nodeUriArr[4]).envType = data.getString();
         try {
-            da.save();
+            pluginCtx.save();
         }
         catch (IOException e) {
             throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Changes cannot be " +
@@ -240,7 +243,7 @@ public class PluginDownload extends DefaultHandler
             throw new RuntimeException("Internal error");
         entries.remove(nodeUriArr[4]);
         try {
-            da.save();
+            pluginCtx.save();
         }
         catch (IOException e) {
             throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Changes cannot be " +
@@ -257,7 +260,7 @@ public class PluginDownload extends DefaultHandler
             throw new DmtException(nodeUri, DmtException.NODE_ALREADY_EXISTS, "");
         entries.add(nodeUriArr[4]);
         try {
-            da.save();
+            pluginCtx.save();
         }
         catch (IOException e) {
             throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Changes cannot be " +
@@ -472,8 +475,8 @@ public class PluginDownload extends DefaultHandler
     ///////////////////////////////////////////////////////////////////////////
     // Private methods
     
-    public void setDeploymentAdmin(DeploymentAdminImpl da) {
-        this.da = da;
+    public void setPluginCtx(PluginCtx pluginCtx) {
+        this.pluginCtx = pluginCtx;
     }
 
 }

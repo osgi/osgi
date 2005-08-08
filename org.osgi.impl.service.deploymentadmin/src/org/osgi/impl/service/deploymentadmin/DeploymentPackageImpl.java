@@ -44,7 +44,7 @@ import org.osgi.service.deploymentadmin.ResourceProcessor;
 
 public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
-    private transient DeploymentAdminImpl   da;
+    private transient DeploymentPackageCtx  dpCtx;
 
     private DeploymentPackageResourceBundle dprb;
     private CaseInsensitiveMap              mainSection;
@@ -59,12 +59,12 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     private DeploymentPackageImpl() {
     }
     
-    DeploymentPackageImpl(DeploymentAdminImpl da, Manifest manifest,
+    DeploymentPackageImpl(DeploymentPackageCtx dpCtx, Manifest manifest,
             List certChains) throws DeploymentException 
     {
-        if (null == da)
+        if (null == dpCtx)
             throw new IllegalArgumentException("Internal error");
-        this.da = da;
+        this.dpCtx = dpCtx;
 
         if (null == manifest)
             mainSection = new CaseInsensitiveMap(null, this);
@@ -81,12 +81,12 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     /*
      * Creates an empty DP
      */
-    static DeploymentPackageImpl createEmpty(DeploymentAdminImpl da) {
-        if (null == da)
+    static DeploymentPackageImpl createEmpty(DeploymentPackageCtx dpCtx) {
+        if (null == dpCtx)
             throw new IllegalArgumentException("Internal error");
         
         DeploymentPackageImpl dp = new DeploymentPackageImpl();
-        dp.da = da;
+        dp.dpCtx = dpCtx;
         dp.mainSection = new CaseInsensitiveMap(null, dp);
         dp.mainSection.put(DAConstants.DP_NAME, "");
         dp.mainSection.put(DAConstants.DP_VERSION, "0.0.0");
@@ -359,7 +359,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     public Bundle getBundle(final String symbName) {
         checkStale();
         
-        Bundle[] bs = da.getBundleContext().getBundles();
+        Bundle[] bs = dpCtx.getBundleContext().getBundles();
         for (int i = 0; i < bs.length; i++) {
             final Bundle b = bs[i];
             String location = (String) AccessController.doPrivileged(new PrivilegedAction() {
@@ -386,7 +386,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             ResourceEntry re = (ResourceEntry) iter.next();
             if (re.getResName().equals(resName)) {
                 	try {
-                        ServiceReference[] refs = da.getBundleContext().getServiceReferences(
+                        ServiceReference[] refs = dpCtx.getBundleContext().getServiceReferences(
                                 ResourceProcessor.class.getName(),
                                 "(" + Constants.SERVICE_PID + "=" + re.getPid() + ")");
                         if (null != refs && refs.length != 0)
@@ -409,9 +409,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         if (isSystem() || isEmpty())
             throw new RuntimeException("\"System\" deployment package cannot be uninstalled");
         
-        da.checkPermission(this, DeploymentAdminPermission.ACTION_UNINSTALL);
+        dpCtx.checkPermission(this, DeploymentAdminPermission.ACTION_UNINSTALL);
         
-        da.uninstall(this);
+        dpCtx.uninstall(this);
         
         stale = Boolean.TRUE;
     }
@@ -425,11 +425,11 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         if (isSystem() || isEmpty())
             throw new RuntimeException("\"System\" deployment package cannot be uninstalled");
         
-        da.checkPermission(this, DeploymentAdminPermission.ACTION_UNINSTALL_FORCED);
+        dpCtx.checkPermission(this, DeploymentAdminPermission.ACTION_UNINSTALL_FORCED);
         
         stale = Boolean.TRUE;
         
-        return da.uninstallForced(this);
+        return dpCtx.uninstallForced(this);
     }
 
     void setProcessorPid(String resName, String pid) {
@@ -441,8 +441,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         }
     }
 
-    void setDeploymentAdmin(DeploymentAdminImpl da) {
-        this.da = da;
+    void setDeploymentPackageCtx(DeploymentPackageCtx dpCtx) {
+        this.dpCtx = dpCtx;
     }
 
     void setVersion(Version version) {
@@ -539,7 +539,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                         DAConstants.MISSING + " header is only allowed in fix-pack (" +
                         dp + ")");
             
-            Set set = da.getDeploymentPackages();
+            Set set = dpCtx.getDeploymentPackages();
             for (Iterator iter = set.iterator(); iter.hasNext();) {
                 DeploymentPackageImpl eDp = (DeploymentPackageImpl) iter.next();
                 if (dp.getName().equals(eDp.getName()))

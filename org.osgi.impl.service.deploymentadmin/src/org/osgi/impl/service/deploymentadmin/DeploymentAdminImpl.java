@@ -77,9 +77,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private boolean				  busy;
 
     // DMT plugins
-    private PluginDownload  pluginDownload  = new PluginDownload(this);
-    private PluginDeployed  pluginDeployed  = new PluginDeployed(this);
-    private PluginDelivered pluginDelivered = new PluginDelivered(this);
+    private PluginDownload  pluginDownload;
+    private PluginDeployed  pluginDeployed;
+    private PluginDelivered pluginDelivered;
     
     // persisted fields
     private Set       dps = new HashSet(); // deployment packages
@@ -134,6 +134,12 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         if (null == fwBundleDir)
             throw new RuntimeException("The '" + DAConstants.FW_BUNDLES_DIR + "' system " +
             		"property is missing.");
+        
+        // initialise DMT plugins
+        pluginDownload  = new PluginDownload(
+                PluginCtx.getInstance(logger, context, this));
+        pluginDeployed  = new PluginDeployed(this);
+        pluginDelivered = new PluginDelivered(this);
         
         String s = System.getProperty(DAConstants.SESSION_TIMEOUT);
         if (null == s)
@@ -246,7 +252,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             if (!checkCertificateChains(wjis.getCertificateChains()))
                 throw new DeploymentException(DeploymentException.CODE_SIGNING_ERROR, 
                     "No certificate was found in the keystore for the deployment package");
-            srcDp = new DeploymentPackageImpl(this, wjis.getManifest(), 
+            srcDp = new DeploymentPackageImpl(DeploymentPackageCtx.
+                    getInstance(logger, context, this), wjis.getManifest(), 
                     wjis.getCertificateChainStringArrays());
             srcDp.setResourceBundle(wjis.getResourceBundle());
         
@@ -465,13 +472,14 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         // not found -> install
         if (null == targetDp) {
             // creates an empty dp
-            targetDp = DeploymentPackageImpl.createEmpty(this);
-	        return new DeploymentSessionImpl(srcDp, targetDp, logger, context, 
-	                fwBundleDir, this);
+            targetDp = DeploymentPackageImpl.createEmpty(
+                    DeploymentPackageCtx.getInstance(logger, context, this));
+	        return new DeploymentSessionImpl(srcDp, targetDp, 
+                    DeploymentSessionCtx.getInstance(logger, context, fwBundleDir, mappingRpDp));
         }
         // found -> update
         DeploymentSessionImpl ret = new DeploymentSessionImpl(srcDp, targetDp, 
-            logger, context, fwBundleDir, this);
+                DeploymentSessionCtx.getInstance(logger, context, fwBundleDir, mappingRpDp));
         if (null != srcDp.getFixPackRange()) {
             VersionRange range = srcDp.getFixPackRange();
             Version ver = targetDp.getVersion();
@@ -488,15 +496,16 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 			throws DeploymentException 
 	{
         // creates an empty dp
-        DeploymentPackageImpl srcDp = DeploymentPackageImpl.createEmpty(this);
+        DeploymentPackageImpl srcDp = DeploymentPackageImpl.createEmpty(
+                DeploymentPackageCtx.getInstance(logger, context, this));
 
         // find the package among installed packages
         DeploymentPackageImpl dp = findDp(targetDp);
         if (null == dp)
             throw new RuntimeException("Internal error");
         
-        return new DeploymentSessionImpl(srcDp, targetDp, logger,
-                context, fwBundleDir, this);
+        return new DeploymentSessionImpl(srcDp, targetDp, 
+                DeploymentSessionCtx.getInstance(logger, context, fwBundleDir, mappingRpDp));
 	}
 
     private DeploymentPackageImpl findDp(DeploymentPackageImpl srcDp) {
@@ -687,13 +696,16 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         protected Object resolveObject(Object obj) throws IOException {
             if (obj instanceof DeploymentPackageImpl) {
                 DeploymentPackageImpl dp = (DeploymentPackageImpl) obj;
-                dp.setDeploymentAdmin(DeploymentAdminImpl.this);
+                dp.setDeploymentPackageCtx(DeploymentPackageCtx.getInstance(
+                        logger, context, DeploymentAdminImpl.this));
             } else if (obj instanceof PluginDownload) {
                 PluginDownload p = (PluginDownload) obj;
-                p.setDeploymentAdmin(DeploymentAdminImpl.this);
+                p.setPluginCtx(PluginCtx.getInstance(logger, context, 
+                        DeploymentAdminImpl.this));
             } else if (obj instanceof PluginDeployed) {
                 PluginDeployed p = (PluginDeployed) obj;
-                p.setDeploymentAdmin(DeploymentAdminImpl.this);
+                p.setPluginCtx(PluginCtx.getInstance(logger, context, 
+                        DeploymentAdminImpl.this));
             }  
             
             return obj;
@@ -746,10 +758,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
         return result;
     }
-    
-    public BundleContext getBundleContext() {
-        return context;
-    }
 
     static String location(String symbName, Version version) {
         return "osgi-dp:" + symbName;
@@ -759,20 +767,16 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return dps;
     }
     
-    public DmtAdmin getDmtAdmin() {
+    DmtAdmin getDmtAdmin() {
         return (DmtAdmin) trackDmt.getService();
     }
 
-    public DownloadAgent getDownloadAgent() {
+    DownloadAgent getDownloadAgent() {
         return (DownloadAgent) trackDownloadAgent.getService();
     }
 
-    public PluginDeployed getDeployedPlugin() {
+    PluginDeployed getDeployedPlugin() {
         return pluginDeployed;
-    }
-    
-    public Logger getLogger() {
-        return logger;
     }
     
 }

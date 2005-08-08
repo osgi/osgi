@@ -12,7 +12,6 @@ import org.osgi.impl.service.deploymentadmin.plugin.DeploymentThread.ListenerDp;
 
 public class UndeployThread extends Thread {
 
-    private DeploymentAdminImpl   da;
     private DeploymentPackageImpl dp;
     private Bundle                bundle;
     private Listener              listener;
@@ -21,17 +20,11 @@ public class UndeployThread extends Thread {
         void onFinish(Exception exception);
     }
 
-    private UndeployThread(DeploymentAdminImpl da) {
-        this.da = da;
-    }
-    
-    public UndeployThread(DeploymentAdminImpl da, DeploymentPackageImpl dp) {
-        this(da);
+    public UndeployThread(DeploymentPackageImpl dp) {
         this.dp = dp;
     }
     
-    public UndeployThread(DeploymentAdminImpl da, Bundle bundle) {
-        this(da);
+    public UndeployThread(Bundle bundle) {
         this.bundle = bundle;
     }
     
