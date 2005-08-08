@@ -66,17 +66,15 @@ public class CMDictionary extends Hashtable {
 	 * @param key key to look for
 	 * @return the value corresponding to the key.
 	 */
-	public Object get(Object key) {
+	public synchronized Object get(Object key) {
 		Object value = super.get(key);
-		if (value != null)
-			return value;
-		Object realCase = lowerToRealCase.get(((String) key).toLowerCase());
-		if (realCase != null) {
-			return super.get(realCase);
+		if (value == null) {
+			Object realCase = lowerToRealCase.get(((String) key).toLowerCase());
+			if (realCase != null) {
+				value = super.get(realCase);
+			}
 		}
-		else {
-			return null;
-		}
+		return value;
 	}
 
 	/**
@@ -89,20 +87,18 @@ public class CMDictionary extends Hashtable {
 	 * @return the previous value corresponding to this key or to any key which
 	 *         is equal-ignore-case to the new key.
 	 */
-	public Object put(Object key, Object value) {
-		Object oldValue = super.put(key, value);
+	public synchronized Object put(Object key, Object value) {
+		Object removed = super.put(key, value);
 		//at deserialization lowerToRealCase is null
-		if (oldValue == null && lowerToRealCase != null) {
-			Object oldKey = lowerToRealCase.put(((String) key).toLowerCase(),
+		if (removed == null && lowerToRealCase != null) {
+			Object realCase = lowerToRealCase.put(((String) key).toLowerCase(),
 					key);
-			if (oldKey != null && !oldKey.equals(key)) {
-				return super.remove(oldKey);
-			}
-			else {
-				return null;
+			if (realCase != null && !realCase.equals(key)) {
+				removed = super.remove(realCase);
 			}
 		}
-		return oldValue;
+
+		return removed;
 	}
 
 	/**
@@ -113,7 +109,7 @@ public class CMDictionary extends Hashtable {
 	 * @param key to be removed
 	 * @return the value for this key or null
 	 */
-	public Object remove(Object key) {
+	public synchronized Object remove(Object key) {
 		String lowerCase = ((String) key).toLowerCase();
 		Object realCase = lowerToRealCase.remove(lowerCase);
 		if (realCase != null) {
@@ -130,9 +126,22 @@ public class CMDictionary extends Hashtable {
 	 */
 	public void copyFrom(Dictionary props) {
 		Enumeration keys = props.keys();
-		Enumeration values = props.elements();
 		while (keys.hasMoreElements()) {
-			put(keys.nextElement(), values.nextElement());
+			Object key = keys.nextElement();
+			Object removed = put(key, props.get(key));
+			if (removed != null) {
+				throw new IllegalArgumentException("Dictionary contains case variants of the same key");
+			}
+
 		}
+	}
+
+	/**
+	 * 
+	 * @see java.util.Hashtable#clear()
+	 */
+	public synchronized void clear() {
+		super.clear();
+		lowerToRealCase.clear();
 	}
 }
