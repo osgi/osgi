@@ -47,7 +47,8 @@ public class DeploymentThread extends Thread {
     public void run() {
         if (mimeType.equals(DAConstants.MIME_DP)) {
             try {
-                DeploymentPackageImpl dp = (DeploymentPackageImpl) pluginCtx.installDeploymentPackage(is);
+                DeploymentPackageImpl dp = (DeploymentPackageImpl) pluginCtx.
+                        getDeploymentAdmin().installDeploymentPackage(is);
                 listenerDp.onFinish(dp, null);
             } catch (Exception e) {
                 listenerDp.onFinish(null, e);

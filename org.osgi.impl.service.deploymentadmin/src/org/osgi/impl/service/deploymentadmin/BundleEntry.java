@@ -39,9 +39,9 @@ public class BundleEntry implements Serializable {
                                          
     private CaseInsensitiveMap attrs;
     private List               certChains; // list of cerificate chains
-                                           // (one chain is a String[]
+                                           // (one chain is One String[])
     
-    public BundleEntry(String name,
+    private BundleEntry(String name,
             String symbName, 
             String version, 
             long id,
@@ -66,12 +66,12 @@ public class BundleEntry implements Serializable {
     {
         this(name, symbName, version, -1, missing, attrs, dp);
     }
-    
-    public BundleEntry(BundleEntry other) {
-        this(other.getResName(), other.getSymbName(), other.version,
-             other.getBundleId(), other.isMissing(), other.attrs, null);
-    }
-    
+
+    /*
+     * 1) When creating the "System" DP the BundleEntries are constructed 
+     *    directly from the bundle objects because there is no physical DP.
+     * 2) DeploymentSessionImpl.checkDpBundleConformity uses it 
+     */
     public BundleEntry(final Bundle b) {
         Object[] triple = (Object[]) AccessController.doPrivileged(new PrivilegedAction() {
             public Object run() {

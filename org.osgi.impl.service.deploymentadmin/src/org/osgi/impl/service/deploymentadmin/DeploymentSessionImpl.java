@@ -698,7 +698,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
             throw new DeploymentException(DeploymentException.CODE_BUNDLE_NAME_ERROR, 
                     "The symbolic name or version in the deployment package manifest is " +
                     		"not the same as the symbolic name and version in the bundle " +
-                    		"(" + be + ")");
+                    		"(" + b + ")");
     }
 
     private Bundle installBundle(BundleEntry be, final InputStream is)

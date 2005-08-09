@@ -32,6 +32,7 @@ import java.io.InputStream;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.deploymentadmin.api.DownloadAgent;
 import org.osgi.impl.service.deploymentadmin.plugin.PluginDeployed;
+import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.dmt.DmtAdmin;
@@ -75,9 +76,9 @@ public class PluginCtx {
         return da.getDownloadAgent();
     }
 
-    public DeploymentPackageImpl installDeploymentPackage(InputStream is) throws DeploymentException {
-        return (DeploymentPackageImpl) da.installDeploymentPackage(is);
-    }
+//    public DeploymentPackageImpl installDeploymentPackage(InputStream is) throws DeploymentException {
+//        return (DeploymentPackageImpl) da.installDeploymentPackage(is);
+//    }
 
     public PluginDeployed getDeployedPlugin() {
         return da.getDeployedPlugin();
@@ -91,8 +92,12 @@ public class PluginCtx {
         return da.getDmtAdmin();
     }
 
-    public DeploymentPackage[] listDeploymentPackages() {
-        return da.listDeploymentPackages();
+//    public DeploymentPackage[] listDeploymentPackages() {
+//        return da.listDeploymentPackages();
+//    }
+
+    public DeploymentAdmin getDeploymentAdmin() {
+        return da;
     }
 
 }

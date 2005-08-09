@@ -125,21 +125,24 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 		trackDownloadAgent = new TrackerDownloadAgent();
 		trackDownloadAgent.open();
 		
-		load();
         registerService(DeploymentAdmin.class.getName(), this, null);
         logger = new Logger(context);
+
+        load();
         
+        // initialise DMT plugins
+        if (null == pluginDownload)
+            pluginDownload  = new PluginDownload(PluginCtx.getInstance(logger, context, this));
+        if (null == pluginDeployed)
+            pluginDeployed  = new PluginDeployed(PluginCtx.getInstance(logger, context, this));
+        if (null == pluginDelivered)
+            pluginDelivered = new PluginDelivered(this);
+
         initKeyStore();
         fwBundleDir = System.getProperty(DAConstants.FW_BUNDLES_DIR);
         if (null == fwBundleDir)
             throw new RuntimeException("The '" + DAConstants.FW_BUNDLES_DIR + "' system " +
             		"property is missing.");
-        
-        // initialise DMT plugins
-        pluginDownload  = new PluginDownload(
-                PluginCtx.getInstance(logger, context, this));
-        pluginDeployed  = new PluginDeployed(this);
-        pluginDelivered = new PluginDelivered(this);
         
         String s = System.getProperty(DAConstants.SESSION_TIMEOUT);
         if (null == s)
