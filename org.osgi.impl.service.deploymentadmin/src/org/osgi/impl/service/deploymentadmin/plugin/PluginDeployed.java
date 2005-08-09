@@ -17,11 +17,16 @@
  */
 package org.osgi.impl.service.deploymentadmin.plugin;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -45,11 +50,14 @@ import org.osgi.service.dmt.DmtExecPlugin;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtReadOnlyDataPlugin;
 import org.osgi.service.dmt.DmtSession;
+import org.xml.sax.InputSource;
 
 public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Serializable {
 
-    private static final String DP_PREF     = "DP:";
-    private static final String BUNDLE_PREF = "Bundle:";
+    private static final String DP_PREF            = "DP:";
+    private static final String BUNDLE_PREF        = "Bundle:";
+    private static final int    PACKAGETYPE_DP     = 1;
+    private static final int    PACKAGETYPE_BUNDLE = 2;
     
     private transient PluginCtx pluginCtx;
     private Hashtable dpIdMappings     = new Hashtable();
@@ -355,6 +363,12 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
             if (l == 8) {
                 if ("Manifest".equals(nodeUriArr[7]))
                     return new DmtData(createManifest(symbName));
+                if ("PackageType".equals(nodeUriArr[7])) {
+                    if (dpNode(nodeUriArr[5]))
+                        return new DmtData(PACKAGETYPE_DP);
+                    else
+                        return new DmtData(PACKAGETYPE_BUNDLE);
+                }
             }
             if (l == 9) {
                 // TODO Signers
@@ -369,8 +383,14 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
                     return new DmtData(b.getState());
                 if ("ApplicationType".equals(nodeUriArr[9]))
                     return new DmtData(0); // TODO
-                if ("Manifest".equals(nodeUriArr[9]))
-                    return new DmtData(""); // TODO
+                if ("Manifest".equals(nodeUriArr[9])) {
+                    try {
+                        return new DmtData(getManifest(b));
+                    }
+                    catch (IOException e) {
+                        throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "", e);
+                    }
+                }
             }
             // TODO
         }
@@ -506,9 +526,6 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
                     return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
                             "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
             }
-//            Set s = new HashSet(Arrays.asList(getBundleIDs(dp)));
-//            if (!s.contains(nodeUriArr[8]))
-//                throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
             if (l == 9) {
                 if ("Signers".equals(nodeUriArr[7]))
                     return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
@@ -559,6 +576,7 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
                     // TODO send alert
                 }
             });
+            undThread.start();
         } else {
             Object[] pair = (Object[]) bundleIdMappings.get(nodeUriArr[5]);
             Bundle bundle = pluginCtx.getBundleContext().getBundle(((Long) pair[1]).longValue());
@@ -597,6 +615,19 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
             signers[i] = sb.toString();
         }
         return signers;
+    }
+    
+    private String getManifest(Bundle b) throws IOException {
+        URL url = b.getEntry("/META-INF/MANIFEST.MF");
+        StringBuffer sb = new StringBuffer();
+        BufferedReader br = new BufferedReader(
+                new InputStreamReader(url.openStream()));
+        String line = br.readLine();
+        while (null != line) {
+            sb.append(line + "\n");
+            line = br.readLine();
+        }
+        return sb.toString();
     }
     
     private String createManifest(String symbName) {
