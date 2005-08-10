@@ -243,6 +243,10 @@ public class Log implements BundleActivator, BundleListener, ServiceListener,
 				return ("BundleEvent STARTED");
 			case BundleEvent.STOPPED :
 				return ("BundleEvent STOPPED");
+			case BundleEvent.RESOLVED :
+				return ("BundleEvent RESOLVED");
+			case BundleEvent.UNRESOLVED :
+				return ("BundleEvent UNRESOLVED");
 			default :
 				return ("BundleEvent " + Integer.toHexString(type));
 		}
@@ -279,6 +283,10 @@ public class Log implements BundleActivator, BundleListener, ServiceListener,
 				return ("FrameworkEvent PACKAGES REFRESHED");
 			case FrameworkEvent.STARTLEVEL_CHANGED :
 				return ("FrameworkEvent STARTLEVEL CHANGED");
+			case FrameworkEvent.WARNING :
+				return ("FrameworkEvent WARNING");
+			case FrameworkEvent.INFO :
+				return ("FrameworkEvent INFO");
 			default :
 				return ("FrameworkEvent " + Integer.toHexString(type));
 		}
