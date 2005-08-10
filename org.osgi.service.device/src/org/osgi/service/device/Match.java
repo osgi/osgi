@@ -19,18 +19,18 @@ import org.osgi.framework.ServiceReference;
  * @since 1.1
  * @see DriverSelector
  */
-public abstract interface Match {
+public interface Match {
 	/**
 	 * Return the reference to a Driver service.
 	 * 
 	 * @return <code>ServiceReference</code> object to a Driver service.
 	 */
-	public abstract ServiceReference getDriver();
+	public ServiceReference getDriver();
 
 	/**
 	 * Return the match value of this object.
 	 * 
 	 * @return the match value returned by this Driver service.
 	 */
-	public abstract int getMatchValue();
+	public int getMatchValue();
 }

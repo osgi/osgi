@@ -28,7 +28,7 @@ import java.util.EventListener;
  * @see LogReaderService#addLogListener(LogListener)
  * @see LogReaderService#removeLogListener(LogListener)
  */
-public abstract interface LogListener extends EventListener {
+public interface LogListener extends EventListener {
 	/**
 	 * Listener method called for each LogEntry object created.
 	 * 
@@ -39,5 +39,5 @@ public abstract interface LogListener extends EventListener {
 	 * @param entry A <code>LogEntry</code> object containing log information.
 	 * @see LogEntry
 	 */
-	public abstract void logged(LogEntry entry);
+	public void logged(LogEntry entry);
 }

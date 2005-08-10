@@ -23,7 +23,7 @@ import org.osgi.framework.ServiceReference;
  * @version $Revision$
  * @since 1.1
  */
-public abstract interface DriverSelector {
+public interface DriverSelector {
 	/**
 	 * Return value from <code>DriverSelector.select</code>, if no Driver service
 	 * should be attached to the Device service. The value is -1.
@@ -42,5 +42,5 @@ public abstract interface DriverSelector {
 	 * @return index into the array of <code>Match</code> objects, or
 	 *         <code>SELECT_NONE</code> if no Driver service should be attached
 	 */
-	public abstract int select(ServiceReference reference, Match[] matches);
+	public int select(ServiceReference reference, Match[] matches);
 }

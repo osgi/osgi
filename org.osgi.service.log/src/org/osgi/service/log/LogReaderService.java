@@ -28,7 +28,7 @@ import java.util.Enumeration;
  * @see LogListener
  * @see LogListener#logged(LogEntry)
  */
-public abstract interface LogReaderService {
+public interface LogReaderService {
 	/**
 	 * Subscribes to <code>LogEntry</code> objects.
 	 * 
@@ -54,7 +54,7 @@ public abstract interface LogReaderService {
 	 * @see LogEntry
 	 * @see LogListener#logged(LogEntry)
 	 */
-	public abstract void addLogListener(LogListener listener);
+	public void addLogListener(LogListener listener);
 
 	/**
 	 * Unsubscribes to <code>LogEntry</code> objects.
@@ -70,7 +70,7 @@ public abstract interface LogReaderService {
 	 * @param listener A <code>LogListener</code> object to unregister.
 	 * @see LogListener
 	 */
-	public abstract void removeLogListener(LogListener listener);
+	public void removeLogListener(LogListener listener);
 
 	/**
 	 * Returns an <code>Enumeration</code> of all <code>LogEntry</code> objects in
@@ -84,5 +84,5 @@ public abstract interface LogReaderService {
 	 * whether informational and debug <code>LogEntry</code> objects are included
 	 * in the enumeration.
 	 */
-	public abstract Enumeration getLog();
+	public Enumeration getLog();
 }

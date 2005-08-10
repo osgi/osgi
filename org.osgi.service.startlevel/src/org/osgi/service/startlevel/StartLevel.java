@@ -66,7 +66,7 @@ public interface StartLevel {
 	 * 
 	 * @return The active start level value of the Framework.
 	 */
-	public abstract int getStartLevel();
+	public int getStartLevel();
 
 	/**
 	 * Modify the active start level of the Framework.
@@ -129,7 +129,7 @@ public interface StartLevel {
 	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the Java runtime
 	 *         environment supports permissions.
 	 */
-	public abstract void setStartLevel(int startlevel);
+	public void setStartLevel(int startlevel);
 
 	/**
 	 * Return the assigned start level value for the specified Bundle.
@@ -139,7 +139,7 @@ public interface StartLevel {
 	 * @throws java.lang.IllegalArgumentException If the specified bundle has
 	 *         been uninstalled.
 	 */
-	public abstract int getBundleStartLevel(Bundle bundle);
+	public int getBundleStartLevel(Bundle bundle);
 
 	/**
 	 * Assign a start level value to the specified Bundle.
@@ -171,7 +171,7 @@ public interface StartLevel {
 	 *         <code>AdminPermission[bundle,EXECUTE]</code> and the Java runtime
 	 *         environment supports permissions.
 	 */
-	public abstract void setBundleStartLevel(Bundle bundle, int startlevel);
+	public void setBundleStartLevel(Bundle bundle, int startlevel);
 
 	/**
 	 * Return the initial start level value that is assigned to a Bundle when it
@@ -180,7 +180,7 @@ public interface StartLevel {
 	 * @return The initial start level value for Bundles.
 	 * @see #setInitialBundleStartLevel
 	 */
-	public abstract int getInitialBundleStartLevel();
+	public int getInitialBundleStartLevel();
 
 	/**
 	 * Set the initial start level value that is assigned to a Bundle when it is
@@ -209,7 +209,7 @@ public interface StartLevel {
 	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the Java runtime
 	 *         environment supports permissions.
 	 */
-	public abstract void setInitialBundleStartLevel(int startlevel);
+	public void setInitialBundleStartLevel(int startlevel);
 
 	/**
 	 * Return the persistent state of the specified bundle.
@@ -225,5 +225,5 @@ public interface StartLevel {
 	 * @throws java.lang.IllegalArgumentException If the specified bundle has
 	 *         been uninstalled.
 	 */
-	public abstract boolean isBundlePersistentlyStarted(Bundle bundle);
+	public boolean isBundlePersistentlyStarted(Bundle bundle);
 }

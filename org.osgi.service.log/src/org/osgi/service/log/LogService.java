@@ -30,7 +30,7 @@ import org.osgi.framework.ServiceReference;
  * 
  * @version $Revision$
  */
-public abstract interface LogService {
+public interface LogService {
 	/**
 	 * An error message (Value 1).
 	 * 
@@ -80,7 +80,7 @@ public abstract interface LogService {
 	 * @see #LOG_INFO
 	 * @see #LOG_DEBUG
 	 */
-	public abstract void log(int level, String message);
+	public void log(int level, String message);
 
 	/**
 	 * Logs a message with an exception.
@@ -101,7 +101,7 @@ public abstract interface LogService {
 	 * @see #LOG_INFO
 	 * @see #LOG_DEBUG
 	 */
-	public abstract void log(int level, String message, Throwable exception);
+	public void log(int level, String message, Throwable exception);
 
 	/**
 	 * Logs a message associated with a specific <code>ServiceReference</code>
@@ -123,7 +123,7 @@ public abstract interface LogService {
 	 * @see #LOG_INFO
 	 * @see #LOG_DEBUG
 	 */
-	public abstract void log(ServiceReference sr, int level, String message);
+	public void log(ServiceReference sr, int level, String message);
 
 	/**
 	 * Logs a message with an exception associated and a
@@ -143,6 +143,6 @@ public abstract interface LogService {
 	 * @see #LOG_INFO
 	 * @see #LOG_DEBUG
 	 */
-	public abstract void log(ServiceReference sr, int level, String message,
+	public void log(ServiceReference sr, int level, String message,
 			Throwable exception);
 }

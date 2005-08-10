@@ -25,7 +25,7 @@ import org.osgi.framework.ServiceReference;
  * @see LogReaderService#getLog
  * @see LogListener
  */
-public abstract interface LogEntry {
+public interface LogEntry {
 	/**
 	 * Returns the bundle that created this <code>LogEntry</code> object.
 	 * 
@@ -33,7 +33,7 @@ public abstract interface LogEntry {
 	 *         <code>null</code> if no bundle is associated with this
 	 *         <code>LogEntry</code> object.
 	 */
-	public abstract Bundle getBundle();
+	public Bundle getBundle();
 
 	/**
 	 * Returns the <code>ServiceReference</code> object for the service associated
@@ -43,7 +43,7 @@ public abstract interface LogEntry {
 	 *         with this <code>LogEntry</code> object; <code>null</code> if no
 	 *         <code>ServiceReference</code> object was provided.
 	 */
-	public abstract ServiceReference getServiceReference();
+	public ServiceReference getServiceReference();
 
 	/**
 	 * Returns the severity level of this <code>LogEntry</code> object.
@@ -59,7 +59,7 @@ public abstract interface LogEntry {
 	 * @see LogService#LOG_INFO
 	 * @see LogService#LOG_DEBUG
 	 */
-	public abstract int getLevel();
+	public int getLevel();
 
 	/**
 	 * Returns the human readable message associated with this <code>LogEntry</code>
@@ -68,7 +68,7 @@ public abstract interface LogEntry {
 	 * @return <code>String</code> containing the message associated with this
 	 *         <code>LogEntry</code> object.
 	 */
-	public abstract String getMessage();
+	public String getMessage();
 
 	/**
 	 * Returns the exception object associated with this <code>LogEntry</code>
@@ -87,7 +87,7 @@ public abstract interface LogEntry {
 	 *         <code>LogEntry</code>;<code>null</code> if no exception is
 	 *         associated with this <code>LogEntry</code> object.
 	 */
-	public abstract Throwable getException();
+	public Throwable getException();
 
 	/**
 	 * Returns the value of <code>currentTimeMillis()</code> at the time this
@@ -97,5 +97,5 @@ public abstract interface LogEntry {
 	 *         object was created.
 	 * @see "System.currentTimeMillis()"
 	 */
-	public abstract long getTime();
+	public long getTime();
 }

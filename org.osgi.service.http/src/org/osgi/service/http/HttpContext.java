@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
  * 
  * @version $Revision$
  */
-public abstract interface HttpContext {
+public interface HttpContext {
 	/**
 	 * <code>HttpServletRequest</code> attribute specifying the name of the
 	 * authenticated user. The value of the attribute can be retrieved by
@@ -118,7 +118,7 @@ public abstract interface HttpContext {
 	 *            occurs, the Http Service will terminate the request and close
 	 *            the socket.
 	 */
-	public abstract boolean handleSecurity(HttpServletRequest request,
+	public boolean handleSecurity(HttpServletRequest request,
 			HttpServletResponse response) throws IOException;
 
 	/**
@@ -139,7 +139,7 @@ public abstract interface HttpContext {
 	 * @return URL that Http Service can use to read the resource or
 	 *         <code>null</code> if the resource does not exist.
 	 */
-	public abstract URL getResource(String name);
+	public URL getResource(String name);
 
 	/**
 	 * Maps a name to a MIME type.
@@ -155,5 +155,5 @@ public abstract interface HttpContext {
 	 *         indicate that the Http Service should determine the MIME type
 	 *         itself.
 	 */
-	public abstract String getMimeType(String name);
+	public String getMimeType(String name);
 }

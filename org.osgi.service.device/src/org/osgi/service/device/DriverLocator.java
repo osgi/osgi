@@ -25,7 +25,7 @@ import java.io.IOException;
  * @version $Revision$
  * @see Driver
  */
-public abstract interface DriverLocator {
+public interface DriverLocator {
 	/**
 	 * Returns an array of <code>DRIVER_ID</code> strings of drivers capable of
 	 * attaching to a device with the given properties.
@@ -40,7 +40,7 @@ public abstract interface DriverLocator {
 	 *         <code>null</code> if this Driver Locator service does not know of
 	 *         any such drivers
 	 */
-	public abstract String[] findDrivers(Dictionary props);
+	public String[] findDrivers(Dictionary props);
 
 	/**
 	 * Get an <code>InputStream</code> from which the driver bundle providing a
@@ -54,5 +54,5 @@ public abstract interface DriverLocator {
 	 * @throws java.io.IOException the input stream for the bundle cannot be
 	 *         created
 	 */
-	public abstract InputStream loadDriver(String id) throws IOException;
+	public InputStream loadDriver(String id) throws IOException;
 }

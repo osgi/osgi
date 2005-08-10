@@ -21,7 +21,7 @@ import java.util.Dictionary;
  * @version $Revision$
  * @see HttpContext
  */
-public abstract interface HttpService {
+public interface HttpService {
 	/**
 	 * Registers a servlet into the URI namespace.
 	 * 
@@ -69,7 +69,7 @@ public abstract interface HttpService {
 	 * @throws java.lang.IllegalArgumentException if any of the arguments are
 	 *            invalid
 	 */
-	public abstract void registerServlet(String alias, Servlet servlet,
+	public void registerServlet(String alias, Servlet servlet,
 			Dictionary initparams, HttpContext context)
 			throws ServletException, NamespaceException;
 
@@ -110,7 +110,7 @@ public abstract interface HttpService {
 	 * @throws java.lang.IllegalArgumentException if any of the parameters
 	 *            are invalid
 	 */
-	public abstract void registerResources(String alias, String name,
+	public void registerResources(String alias, String name,
 			HttpContext context) throws NamespaceException;
 
 	/**
@@ -138,7 +138,7 @@ public abstract interface HttpService {
 	 *            for the alias or the calling bundle was not the bundle which
 	 *            registered the alias.
 	 */
-	public abstract void unregister(String alias);
+	public void unregister(String alias);
 
 	/**
 	 * Creates a default <code>HttpContext</code> for registering servlets or
@@ -165,5 +165,5 @@ public abstract interface HttpService {
 	 * @return a default <code>HttpContext</code> object.
 	 * @since 1.1
 	 */
-	public abstract HttpContext createDefaultHttpContext();
+	public HttpContext createDefaultHttpContext();
 }

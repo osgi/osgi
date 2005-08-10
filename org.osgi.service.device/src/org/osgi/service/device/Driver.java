@@ -23,7 +23,7 @@ import org.osgi.framework.ServiceReference;
  * @see Device
  * @see DriverLocator
  */
-public abstract interface Driver {
+public interface Driver {
 	/**
 	 * Checks whether this Driver service can be attached to the Device service.
 	 * 
@@ -63,7 +63,7 @@ public abstract interface Driver {
 	 * @throws java.lang.Exception if this Driver service cannot examine the
 	 *            Device service
 	 */
-	public abstract int match(ServiceReference reference) throws Exception;
+	public int match(ServiceReference reference) throws Exception;
 
 	/**
 	 * Attaches this Driver service to the Device service represented by the
@@ -96,5 +96,5 @@ public abstract interface Driver {
 	 * @throws java.lang.Exception if the driver cannot attach to the given
 	 *            device and does not know of a more suitable driver
 	 */
-	public abstract String attach(ServiceReference reference) throws Exception;
+	public String attach(ServiceReference reference) throws Exception;
 }

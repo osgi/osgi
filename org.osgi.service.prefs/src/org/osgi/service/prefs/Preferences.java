@@ -115,7 +115,7 @@ public interface Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
-	public abstract void put(String key, String value);
+	public void put(String key, String value);
 
 	/**
 	 * Returns the value associated with the specified <code>key</code> in this
@@ -133,7 +133,7 @@ public interface Preferences {
 	 * @throws NullPointerException if <code>key</code> is <code>null</code>. (A
 	 *         <code>null</code> default <i>is </i> permitted.)
 	 */
-	public abstract String get(String key, String def);
+	public String get(String key, String def);
 
 	/**
 	 * Removes the value associated with the specified <code>key</code> in this
@@ -144,7 +144,7 @@ public interface Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
-	public abstract void remove(String key);
+	public void remove(String key);
 
 	/**
 	 * Removes all of the properties (key-value associations) in this node. This
@@ -157,7 +157,7 @@ public interface Preferences {
 	 *         removed with the {@link #removeNode()}method.
 	 * @see #remove(String)
 	 */
-	public abstract void clear() throws BackingStoreException;
+	public void clear() throws BackingStoreException;
 
 	/**
 	 * Associates a <code>String</code> object representing the specified
@@ -183,7 +183,7 @@ public interface Preferences {
 	 *         removed with the {@link #removeNode()}method.
 	 * @see #getInt(String,int)
 	 */
-	public abstract void putInt(String key, int value);
+	public void putInt(String key, int value);
 
 	/**
 	 * Returns the <code>int</code> value represented by the <code>String</code>
@@ -212,7 +212,7 @@ public interface Preferences {
 	 * @see #putInt(String,int)
 	 * @see #get(String,String)
 	 */
-	public abstract int getInt(String key, int def);
+	public int getInt(String key, int def);
 
 	/**
 	 * Associates a <code>String</code> object representing the specified
@@ -240,7 +240,7 @@ public interface Preferences {
 	 *         removed with the {@link #removeNode()}method.
 	 * @see #getLong(String,long)
 	 */
-	public abstract void putLong(String key, long value);
+	public void putLong(String key, long value);
 
 	/**
 	 * Returns the <code>long</code> value represented by the <code>String</code>
@@ -269,7 +269,7 @@ public interface Preferences {
 	 * @see #putLong(String,long)
 	 * @see #get(String,String)
 	 */
-	public abstract long getLong(String key, long def);
+	public long getLong(String key, long def);
 
 	/**
 	 * Associates a <code>String</code> object representing the specified
@@ -297,7 +297,7 @@ public interface Preferences {
 	 * @see #getBoolean(String,boolean)
 	 * @see #get(String,String)
 	 */
-	public abstract void putBoolean(String key, boolean value);
+	public void putBoolean(String key, boolean value);
 
 	/**
 	 * Returns the <code>boolean</code> value represented by the <code>String</code>
@@ -328,7 +328,7 @@ public interface Preferences {
 	 * @see #get(String,String)
 	 * @see #putBoolean(String,boolean)
 	 */
-	public abstract boolean getBoolean(String key, boolean def);
+	public boolean getBoolean(String key, boolean def);
 
 	/**
 	 * Associates a <code>String</code> object representing the specified
@@ -355,7 +355,7 @@ public interface Preferences {
 	 *         removed with the {@link #removeNode()}method.
 	 * @see #getFloat(String,float)
 	 */
-	public abstract void putFloat(String key, float value);
+	public void putFloat(String key, float value);
 
 	/**
 	 * Returns the float <code>value</code> represented by the <code>String</code>
@@ -384,7 +384,7 @@ public interface Preferences {
 	 * @see #putFloat(String,float)
 	 * @see #get(String,String)
 	 */
-	public abstract float getFloat(String key, float def);
+	public float getFloat(String key, float def);
 
 	/**
 	 * Associates a <code>String</code> object representing the specified
@@ -412,7 +412,7 @@ public interface Preferences {
 	 *         removed with the {@link #removeNode()}method.
 	 * @see #getDouble(String,double)
 	 */
-	public abstract void putDouble(String key, double value);
+	public void putDouble(String key, double value);
 
 	/**
 	 * Returns the <code>double</code> value represented by the <code>String</code>
@@ -441,7 +441,7 @@ public interface Preferences {
 	 * @see #putDouble(String,double)
 	 * @see #get(String,String)
 	 */
-	public abstract double getDouble(String key, double def);
+	public double getDouble(String key, double def);
 
 	/**
 	 * Associates a <code>String</code> object representing the specified
@@ -474,7 +474,7 @@ public interface Preferences {
 	 * @see #getByteArray(String,byte[])
 	 * @see #get(String,String)
 	 */
-	public abstract void putByteArray(String key, byte[] value);
+	public void putByteArray(String key, byte[] value);
 
 	/**
 	 * Returns the <code>byte[]</code> value represented by the <code>String</code>
@@ -508,7 +508,7 @@ public interface Preferences {
 	 * @see #get(String,String)
 	 * @see #putByteArray(String,byte[])
 	 */
-	public abstract byte[] getByteArray(String key, byte[] def);
+	public byte[] getByteArray(String key, byte[] def);
 
 	/**
 	 * Returns all of the keys that have an associated value in this node. (The
@@ -522,7 +522,7 @@ public interface Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
-	public abstract String[] keys() throws BackingStoreException;
+	public String[] keys() throws BackingStoreException;
 
 	/**
 	 * Returns the names of the children of this node. (The returned array will
@@ -535,7 +535,7 @@ public interface Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
-	public abstract String[] childrenNames() throws BackingStoreException;
+	public String[] childrenNames() throws BackingStoreException;
 
 	/**
 	 * Returns the parent of this node, or <code>null</code> if this is the root.
@@ -544,7 +544,7 @@ public interface Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
-	public abstract Preferences parent();
+	public Preferences parent();
 
 	/**
 	 * Returns a named <code>Preferences</code> object (node), creating it and any
@@ -570,7 +570,7 @@ public interface Preferences {
 	 * @throws NullPointerException if path name is <code>null</code>.
 	 * @see #flush()
 	 */
-	public abstract Preferences node(String pathName);
+	public Preferences node(String pathName);
 
 	/**
 	 * Returns true if the named node exists. Accepts a relative or absolute
@@ -600,7 +600,7 @@ public interface Preferences {
 	 *         contains multiple consecutive slash characters, or ends with a
 	 *         slash character and is more than one character long).
 	 */
-	public abstract boolean nodeExists(String pathName)
+	public boolean nodeExists(String pathName)
 			throws BackingStoreException;
 
 	/**
@@ -623,14 +623,14 @@ public interface Preferences {
 	 *         with it.
 	 * @see #flush()
 	 */
-	public abstract void removeNode() throws BackingStoreException;
+	public void removeNode() throws BackingStoreException;
 
 	/**
 	 * Returns this node's name, relative to its parent.
 	 * 
 	 * @return this node's name, relative to its parent.
 	 */
-	public abstract String name();
+	public String name();
 
 	/**
 	 * Returns this node's absolute path name. Note that:
@@ -646,7 +646,7 @@ public interface Preferences {
 	 * 
 	 * @return this node's absolute path name.
 	 */
-	public abstract String absolutePath();
+	public String absolutePath();
 
 	/**
 	 * Forces any changes in the contents of this node and its descendants to
@@ -674,7 +674,7 @@ public interface Preferences {
 	 *         removed with the {@link #removeNode()}method.
 	 * @see #sync()
 	 */
-	public abstract void flush() throws BackingStoreException;
+	public void flush() throws BackingStoreException;
 
 	/**
 	 * Ensures that future reads from this node and its descendants reflect any
@@ -690,5 +690,5 @@ public interface Preferences {
 	 *         removed with the {@link #removeNode()}method.
 	 * @see #flush()
 	 */
-	public abstract void sync() throws BackingStoreException;
+	public void sync() throws BackingStoreException;
 }

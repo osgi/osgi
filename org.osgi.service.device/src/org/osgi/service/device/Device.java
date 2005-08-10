@@ -32,7 +32,7 @@ package org.osgi.service.device;
  * @version $Revision$
  * @see Driver
  */
-public abstract interface Device {
+public interface Device {
 	/**
 	 * Return value from {@link Driver#match}indicating that the driver cannot
 	 * refine the device presented to it by the device manager.
@@ -50,5 +50,5 @@ public abstract interface Device {
 	 * driver that registered this <code>Device</code> object may unregister it
 	 * and register a different Device service instead.
 	 */
-	public abstract void noDriverFound();
+	public void noDriverFound();
 }

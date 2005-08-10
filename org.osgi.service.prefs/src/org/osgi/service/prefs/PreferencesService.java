@@ -27,15 +27,15 @@ public interface PreferencesService {
 	/**
 	 * Returns the root system node for the calling bundle.
 	 */
-	public abstract Preferences getSystemPreferences();
+	public Preferences getSystemPreferences();
 
 	/**
 	 * Returns the root node for the specified user and the calling bundle.
 	 */
-	public abstract Preferences getUserPreferences(String name);
+	public Preferences getUserPreferences(String name);
 
 	/**
 	 * Returns the names of users for which node trees exist.
 	 */
-	public abstract String[] getUsers();
+	public String[] getUsers();
 }
