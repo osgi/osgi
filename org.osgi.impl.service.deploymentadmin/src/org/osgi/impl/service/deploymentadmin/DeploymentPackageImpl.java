@@ -253,7 +253,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return null;
     }
     
-    List getCertChains() {
+    public List getCertChains() {
         return certChains;
     }
 
