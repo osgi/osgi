@@ -61,20 +61,35 @@ import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
+/**
+ * Implementation of the DeploymentAdmin interface. This is the 
+ * entry point to the Deployment Admin Service.
+ */
 public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     
 	private BundleContext 		  context;
+    
+    // contains the ServiceRegistration objects for the registered 
+    // DMT plugins to ease handling of them
 	private HashSet               serviceRegs = new HashSet();
+    
     private Logger 				  logger;
     private DeploymentSessionImpl session;
     private KeyStore              keystore;
-    private TrackerEvent          trackEvent;
-    private TrackerDmt            trackDmt;
-    private TrackerDownloadAgent  trackDownloadAgent;
+    private TrackerEvent          trackEvent;         // tracks the EventAdmin
+    private TrackerDmt            trackDmt;           // tracks the DmtAdmin
+    private TrackerDownloadAgent  trackDownloadAgent; // tracks the DownloadAgent
+    
+    // the directory where the framework stores the 
+    // private area of the bundles
     private String                fwBundleDir;
     
+    // max wait time before Deployment Admin throws exception with code 
+    // DeploymentException.CODE_TIMEOUT
     private long                  sessionTimeout;
-    private boolean				  busy;
+    
+    private boolean				  busy;   // indicates that the Deployment Admin 
+                                          // is busy
 
     // DMT plugins
     private PluginDownload  pluginDownload;
@@ -82,8 +97,15 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private PluginDelivered pluginDelivered;
     
     // persisted fields
+    
     private Set       dps = new HashSet(); // deployment packages
+    
+    // ease to find foreign customizers (when a resource processor service 
+    // is a customizer from another deployment package) 
     private Hashtable mappingRpDp = new Hashtable();
+    
+    // Private class definitions
+    ///////////////////////////////////////////////////////////////////////
     
     /*
      * Class to track the event admin
@@ -115,45 +137,215 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
     }
     
+    // BundleActivator interface implementation
+    ///////////////////////////////////////////////////////////////////////
+    
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
 
-		trackEvent = new TrackerEvent();
-		trackEvent.open();
-		trackDmt = new TrackerDmt();
-		trackDmt.open();
-		trackDownloadAgent = new TrackerDownloadAgent();
-		trackDownloadAgent.open();
+        // starts service trackers
+		initTrackers();
 		
+        // registers Deployment Admin service
         registerService(DeploymentAdmin.class.getName(), this, null);
+        
+        // initialize logger
         logger = new Logger(context);
 
+        // load persisten data (e.g. Deployment Package meta information)
         load();
         
         // initialise DMT plugins
-        if (null == pluginDownload)
-            pluginDownload  = new PluginDownload(PluginCtx.getInstance(logger, context, this));
-        if (null == pluginDeployed)
-            pluginDeployed  = new PluginDeployed(PluginCtx.getInstance(logger, context, this));
-        if (null == pluginDelivered)
-            pluginDelivered = new PluginDelivered(PluginCtx.getInstance(logger, context, this));
+        initDmtPlugins();
 
+        // initialize keystore
         initKeyStore();
+        
+        // fetch fw bundle dir system property
         fwBundleDir = System.getProperty(DAConstants.FW_BUNDLES_DIR);
         if (null == fwBundleDir)
             throw new RuntimeException("The '" + DAConstants.FW_BUNDLES_DIR + "' system " +
             		"property is missing.");
         
+        // fetch session timeout system property
         String s = System.getProperty(DAConstants.SESSION_TIMEOUT);
         if (null == s)
             sessionTimeout = 1000;
         else
             sessionTimeout = Long.parseLong(s);
         
-        registerDmtPlugin();
+        // registers DMT plugins
+        registerDmtPlugins();
 	}
+    
+    public void stop(BundleContext context) throws Exception {
+        unregisterServices();
+        logger.stop();
+        trackEvent.close();
+        trackDmt.close();
+        trackDownloadAgent.close();
+    }
+    
+    // DeploymentAdmin interface implementation
+    ///////////////////////////////////////////////////////////////////////
+
+    /**
+     * @see org.osgi.service.deploymentadmin.DeploymentAdmin#installDeploymentPackage(java.io.InputStream)
+     */
+    public DeploymentPackage installDeploymentPackage(InputStream in)
+            throws DeploymentException
+    {
+        waitIfBusy();
+        DeploymentPackageJarInputStream wjis = null;
+        DeploymentPackageImpl srcDp = null;
+        DeploymentException bundleStartException = null;
+        boolean result = false;
+        try {
+            // create the source DP
+            wjis = new DeploymentPackageJarInputStream(in);
+            if (!checkCertificateChains(wjis.getCertificateChains()))
+                throw new DeploymentException(DeploymentException.CODE_SIGNING_ERROR, 
+                    "No certificate was found in the keystore for the deployment package");
+            srcDp = new DeploymentPackageImpl(DeploymentPackageCtx.
+                    getInstance(logger, context, this), wjis.getManifest(), 
+                    wjis.getCertificateChainStringArrays());
+            srcDp.setResourceBundle(wjis.getResourceBundle());
+        
+            // does the caller have the install permission?
+            checkPermission(srcDp, DeploymentAdminPermission.ACTION_INSTALL);
+            sendInstallEvent(srcDp.getName());
+            session = createInstallUpdateSession(srcDp);
+        
+            // checks the session
+            if (equalSymbNameAndVersion())
+                return session.getTargetDeploymentPackage();
+            checkMissingEntities();
+
+            // the real work take place here
+            try {
+                session.installUpdate(wjis);
+            } catch (DeploymentException e) {
+                // if CODE_BUNDLE_START exception was thrown we remeber this 
+                // but it doesn't mean that the operation has failed
+                if (e.getCode() != DeploymentException.CODE_BUNDLE_START)
+                    throw e;
+                bundleStartException = e;
+            }
+            
+            // update Deployment Package metainfo
+            updateDps();
+            
+            // persist
+            save();
+            
+            result = true;
+        } catch (DeploymentException e) {
+            // DeploymentException during the process has to be propagated to the caller
+            throw e;
+        } catch (CancelException e) {
+            // the operation was cancelled
+            return null;
+        } catch (SecurityException e) {
+            throw e;
+        } catch (Exception e) {
+            // other exceptions are wrapped into DeploymentException 
+            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
+                e.getMessage(), e);
+        } finally {
+            sendCompleteEvent(result);
+            clearSession();
+        }
+        
+        if (null != bundleStartException)
+            throw bundleStartException;
+        
+        return srcDp;
+    }
+
+    /**
+     * @see org.osgi.service.deploymentadmin.DeploymentAdmin#getDeploymentPackage(java.lang.String)
+     */
+    public DeploymentPackage getDeploymentPackage(String symbName) {
+        if (null == symbName)
+            throw new IllegalArgumentException("Deployment package symbolic name " +
+                    "cannot be null");
+        
+        for (Iterator iter = dps.iterator(); iter.hasNext();) {
+            DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();
+            if (dp.getName().equals(symbName)) {
+                checkPermission(dp, DeploymentAdminPermission.ACTION_LIST);
+                return dp;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * @see org.osgi.service.deploymentadmin.DeploymentAdmin#cancel()
+     */
+    public boolean cancel() {
+        if (null == session)
+            return false;
+
+        if (DeploymentSessionImpl.UNINSTALL == session.getDeploymentAction())
+            checkPermission((DeploymentPackageImpl) session.getTargetDeploymentPackage(), 
+                    DeploymentAdminPermission.ACTION_CANCEL);
+        else
+            checkPermission((DeploymentPackageImpl) session.getSourceDeploymentPackage(), 
+                    DeploymentAdminPermission.ACTION_CANCEL);
+        session.cancel();
+        return true;
+    }
+
+    /**
+     * @see org.osgi.service.deploymentadmin.DeploymentAdmin#listDeploymentPackages()
+     */
+    public DeploymentPackage[] listDeploymentPackages() {
+        Vector ret = new Vector();
+        DeploymentPackageImpl[] src = (DeploymentPackageImpl[]) dps.toArray(
+                new DeploymentPackageImpl[] {});
+        for (int i = 0; i < src.length; i++) {
+            try {
+                checkPermission(src[i], DeploymentAdminPermission.ACTION_LIST);
+                ret.add(src[i]);
+            } catch (SecurityException e) {
+                // do nothing
+            }
+        }
+        
+        DeploymentPackageImpl sysDp = createSystemDp();
+        try {
+            checkPermission(sysDp, DeploymentAdminPermission.ACTION_LIST);
+            ret.add(sysDp);
+        } catch (SecurityException e) {
+            // do nothing
+        }
+        
+        return (DeploymentPackage[]) ret.toArray(new DeploymentPackage[] {});
+    }
+
+    // Private methods
+    ///////////////////////////////////////////////////////////////////////
 	
-    private void registerDmtPlugin() {
+    private void initDmtPlugins() {
+        if (null == pluginDownload)
+            pluginDownload  = new PluginDownload(PluginCtx.getInstance(logger, context, this));
+        if (null == pluginDeployed)
+            pluginDeployed  = new PluginDeployed(PluginCtx.getInstance(logger, context, this));
+        if (null == pluginDelivered)
+            pluginDelivered = new PluginDelivered(PluginCtx.getInstance(logger, context, this));
+    }
+
+    private void initTrackers() {
+        trackEvent = new TrackerEvent();
+        trackEvent.open();
+        trackDmt = new TrackerDmt();
+        trackDmt.open();
+        trackDownloadAgent = new TrackerDownloadAgent();
+        trackDownloadAgent.open();
+    }
+
+    private void registerDmtPlugins() {
         Hashtable props;
                 
         props = new Hashtable();
@@ -211,16 +403,15 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                     DAConstants.KEYSTORE_PWD + " system property!");
         keystore = KeyStore.getInstance("JKS");
         keystore.load(new FileInputStream(file), pwd.toCharArray());
+        if (null == keystore)
+            throw new RuntimeException("Loading keystore failed");
     }
 
-    public void stop(BundleContext context) throws Exception {
-        unregisterServices();
-	    logger.stop();
-	    trackEvent.close();
-	    trackDmt.close();
-	    trackDownloadAgent.close();
-	}
-    
+    /*
+     * Waits for a preset amount of time. If the deployment operation is 
+     * not able to start till that time throws a DeploymentException 
+     * with code DeploymentException.CODE_TIMEOUT
+     */
     private synchronized void waitIfBusy() throws DeploymentException {
         if (busy) {
             try {
@@ -235,69 +426,19 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         busy = true;
     }
     
+    /*
+     * Releases the Deployment Admin service. It is ready to carry out 
+     * the subsequent request.  
+     */
     private synchronized void clearSession() {
         session = null;
         busy = false;
         notify();
     }
-    
-    public DeploymentPackage installDeploymentPackage(InputStream in)
-    		throws DeploymentException
-    {
-        waitIfBusy();
-        DeploymentPackageJarInputStream wjis = null;
-        DeploymentPackageImpl srcDp = null;
-        DeploymentException bundleStartException = null;
-        boolean result = false;
-        try {
-            // create the source DP
-            wjis = new DeploymentPackageJarInputStream(in);
-            if (!checkCertificateChains(wjis.getCertificateChains()))
-                throw new DeploymentException(DeploymentException.CODE_SIGNING_ERROR, 
-                    "No certificate was found in the keystore for the deployment package");
-            srcDp = new DeploymentPackageImpl(DeploymentPackageCtx.
-                    getInstance(logger, context, this), wjis.getManifest(), 
-                    wjis.getCertificateChainStringArrays());
-            srcDp.setResourceBundle(wjis.getResourceBundle());
         
-	        checkPermission(srcDp, DeploymentAdminPermission.ACTION_INSTALL);
-	        sendInstallEvent(srcDp.getName());
-	        session = createInstallUpdateSession(srcDp);
-        
-	        // checks the session
-	        if (equalSymbNameAndVersion())
-	            return session.getTargetDeploymentPackage();
-	        checkMissingEntities();
-
-            try {
-                session.installUpdate(wjis);
-            } catch (DeploymentException e) {
-                if (e.getCode() != DeploymentException.CODE_BUNDLE_START)
-                    throw e;
-                else
-                    bundleStartException = e;
-            }
-            updateDps();
-            save();
-            result = true;
-        } catch (DeploymentException e) {
-            throw e;
-        } catch (CancelException e) {
-            return null;
-        } catch (SecurityException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
-                e.getMessage(), e);
-        } finally {
-            sendCompleteEvent(result);
-            clearSession();
-        }
-        if (null != bundleStartException)
-            throw bundleStartException;
-        return srcDp;
-    }
-    
+    /*
+     * Updates Deployment Package metainfo
+     */
     private void updateDps() {
         if (session.getDeploymentAction() == DeploymentSessionImpl.INSTALL)
             addDp((DeploymentPackageImpl) session.getSourceDeploymentPackage());
@@ -317,6 +458,10 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         updateRpDpMapping(dp);
     }
     
+    /*
+     * Ease to find foreign customizers (when a resource processor service 
+     * is a customizer from another deployment package)  
+     */
     private void updateRpDpMapping(DeploymentPackageImpl dp) {
         for (Iterator iter = mappingRpDp.keySet().iterator(); iter.hasNext();) {
             String key = (String) iter.next();
@@ -334,11 +479,11 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                 mappingRpDp.put(be.getPid(), dp.getName());
         }
     }
-    
-    String getMappedDp(String pid) {
-        return (String) mappingRpDp.get(pid);
-    }
 
+    /*
+     * Thorws exception if an entry is said to be missing in the manifest but 
+     * such an entity doesn't exist in the target Deployment Package.
+     */
     private void checkMissingEntities() throws DeploymentException {
         DeploymentPackageImpl srcDp = (DeploymentPackageImpl) session.getSourceDeploymentPackage();
         DeploymentPackageImpl tarDp = (DeploymentPackageImpl) session.getTargetDeploymentPackage();
@@ -358,7 +503,12 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
     }
 
-    private boolean equalSymbNameAndVersion() throws DeploymentException {
+    /*
+     * Indicates the the source and the target Deployment Package have the 
+     * same name and version. In this case the Deployment Admin mustn't 
+     * start the deployment action. 
+     */
+    private boolean equalSymbNameAndVersion() {
         DeploymentPackage sDp = session.getSourceDeploymentPackage();
         DeploymentPackage tDp = session.getTargetDeploymentPackage();
         if (sDp.getName().equals(tDp.getName()) &&
@@ -367,11 +517,14 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return false;
     }
 
+    /*
+     * Checks that the Deployment Package signers are in the keystore.
+     */
     private boolean checkCertificateChains(List certChains) throws KeyStoreException {
-        if (null == keystore)
-            return true;
+        // if the Deployment Package is not signed there is nothing to do
         if (null == certChains || certChains.isEmpty())
             return true;
+        
         for (Iterator iter = certChains.iterator(); iter.hasNext();) {
             Certificate[] certChain = (Certificate[]) iter.next();
             if (certChain.length > 0 &&
@@ -382,6 +535,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return false;
     }
     
+    /*
+     * Check whether the Certificate is in the keystore
+     */
     private boolean checkCertificate(Certificate cert) throws KeyStoreException {
         String alias = keystore.getCertificateAlias(cert);
         if (null != alias) {
@@ -392,12 +548,15 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                 cert.verify(kCert.getPublicKey());
                 return true;
             } catch (Exception e) {
-                // do nothing
+                // do nothing false will be returned
             }
         }
         return false;
     }
 
+    /*
+     * Convenience method to make DeploymentAdminPermissions
+     */
     private DeploymentAdminPermission createPermission(String dpName, 
             String[] certChain, String action) 
     {
@@ -415,6 +574,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return perm;
     }
 
+    /*
+     * Convenience method to send events
+     */
     private void sendInstallEvent(String dpName) {
         final EventAdmin ea = (EventAdmin) trackEvent.getService();
         if (null == ea)
@@ -429,6 +591,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             });
     }
 
+    /*
+     * Convenience method to send events
+     */
     private void sendUninstallEvent(String dpName) {
         final EventAdmin ea = (EventAdmin) trackEvent.getService();
         if (null == ea)
@@ -442,6 +607,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             }});
     }
 
+    /*
+     * Convenience method to send events
+     */
     private void sendCompleteEvent(boolean succ) {
         final EventAdmin ea = (EventAdmin) trackEvent.getService();
         if (null == ea)
@@ -461,6 +629,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             }});
     }
 
+    /*
+     * Creates an install/update session
+     */
     private DeploymentSessionImpl createInstallUpdateSession(
             DeploymentPackageImpl srcDp) throws DeploymentException 
     {
@@ -473,6 +644,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                 "Target of the fix-pack is missing");
         
         // not found -> install
+        
         if (null == targetDp) {
             // creates an empty dp
             targetDp = DeploymentPackageImpl.createEmpty(
@@ -480,7 +652,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	        return new DeploymentSessionImpl(srcDp, targetDp, 
                     DeploymentSessionCtx.getInstance(logger, context, fwBundleDir, mappingRpDp));
         }
+        
         // found -> update
+        
         DeploymentSessionImpl ret = new DeploymentSessionImpl(srcDp, targetDp, 
                 DeploymentSessionCtx.getInstance(logger, context, fwBundleDir, mappingRpDp));
         if (null != srcDp.getFixPackRange()) {
@@ -495,6 +669,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return ret;
     }
     
+    /*
+     * Creates uninstall session
+     */
     private DeploymentSessionImpl createUninstallSession(DeploymentPackageImpl targetDp) 
 			throws DeploymentException 
 	{
@@ -511,6 +688,10 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                 DeploymentSessionCtx.getInstance(logger, context, fwBundleDir, mappingRpDp));
 	}
 
+    /*
+     * Finds a deployment package among installed packages or return null.
+     * IMPORTANT: Deployment Package version is ignored
+     */
     private DeploymentPackageImpl findDp(DeploymentPackageImpl srcDp) {
         for (Iterator iter = dps.iterator(); iter.hasNext();) {
             DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();
@@ -519,59 +700,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
         return null;
     }
-
-    public DeploymentPackage getDeploymentPackage(String symbName) {
-        if (null == symbName)
-            throw new IllegalArgumentException("Deployment package symbolic name " +
-            		"cannot be null");
-        
-        for (Iterator iter = dps.iterator(); iter.hasNext();) {
-            DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();
-            if (dp.getName().equals(symbName)) {
-                checkPermission(dp, DeploymentAdminPermission.ACTION_LIST);
-                return dp;
-            }
-        }
-        return null;
-	}
-	
-	public boolean cancel() {
-	    if (null == session)
-	        return false;
-
-        if (DeploymentSessionImpl.UNINSTALL == session.getDeploymentAction())
-            checkPermission((DeploymentPackageImpl) session.getTargetDeploymentPackage(), 
-                    DeploymentAdminPermission.ACTION_CANCEL);
-        else
-            checkPermission((DeploymentPackageImpl) session.getSourceDeploymentPackage(), 
-                    DeploymentAdminPermission.ACTION_CANCEL);
-        session.cancel();
-        return true;
-	}
-
-	public DeploymentPackage[] listDeploymentPackages() {
-	    Vector ret = new Vector();
-	    DeploymentPackageImpl[] src = (DeploymentPackageImpl[]) dps.toArray(
-	            new DeploymentPackageImpl[] {});
-	    for (int i = 0; i < src.length; i++) {
-	        try {
-	            checkPermission(src[i], DeploymentAdminPermission.ACTION_LIST);
-	            ret.add(src[i]);
-	        } catch (SecurityException e) {
-	            // do nothing
-	        }
-        }
-	    
-	    DeploymentPackageImpl sysDp = createSystemDp();
-	    try {
-	        checkPermission(sysDp, DeploymentAdminPermission.ACTION_LIST);
-	        ret.add(sysDp);
-	    } catch (SecurityException e) {
-            // do nothing
-        }
-	    
-		return (DeploymentPackage[]) ret.toArray(new DeploymentPackage[] {});
-	}
 
     private DeploymentPackageImpl createSystemDp() {
         Set all = new HashSet();
@@ -717,6 +845,11 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
 	}
 
+    /*
+     * DeploymentPackageImpl calls this method to notify the Deploymnet Admin 
+     * about uninstallation of a Deployment Package (DeploymentPackageImpl.uninstall()
+     * was called).
+     */
     void uninstall(DeploymentPackageImpl dp) throws DeploymentException {
         waitIfBusy();
         checkPermission(dp, DeploymentAdminPermission.ACTION_UNINSTALL);
@@ -738,7 +871,12 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             clearSession();
         }
     }
-    
+
+    /*
+     * DeploymentPackageImpl calls this method to notify the Deploymnet Admin 
+     * about uninstallation of a Deployment Package 
+     * (DeploymentPackageImpl.uninstallForced(DeploymentPackageImpl) was called).
+     */
     boolean uninstallForced(DeploymentPackageImpl dp) {
         try {
             waitIfBusy();
@@ -764,6 +902,10 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return result;
     }
 
+    /*
+     * Says how the Deployment Admin creates location for bundles form the 
+     * symbolic name and version.
+     */
     static String location(String symbName, Version version) {
         return "osgi-dp:" + symbName;
     }
