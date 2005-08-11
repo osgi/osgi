@@ -33,7 +33,7 @@ public interface MetaTypeProvider {
 	 * @throws IllegalArgumentException If the id or locale arguments are not
 	 *         valid
 	 */
-	ObjectClassDefinition getObjectClassDefinition(String id, String locale);
+	public ObjectClassDefinition getObjectClassDefinition(String id, String locale);
 
 	/**
 	 * Return a list of available locales.
@@ -45,5 +45,5 @@ public interface MetaTypeProvider {
 	 *         locale specific localization can be found.
 	 *  
 	 */
-	String[] getLocales();
+	public String[] getLocales();
 }

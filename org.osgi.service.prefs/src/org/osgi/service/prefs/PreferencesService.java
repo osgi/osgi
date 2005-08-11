@@ -26,16 +26,23 @@ package org.osgi.service.prefs;
 public interface PreferencesService {
 	/**
 	 * Returns the root system node for the calling bundle.
+	 * 
+	 * @return The root system node for the calling bundle.
 	 */
 	public Preferences getSystemPreferences();
 
 	/**
 	 * Returns the root node for the specified user and the calling bundle.
+	 * 
+	 * @param name The user for which to return the preference root node. 
+	 * @return The root node for the specified user and the calling bundle.
 	 */
 	public Preferences getUserPreferences(String name);
 
 	/**
 	 * Returns the names of users for which node trees exist.
+	 * 
+	 * @return The names of users for which node trees exist.
 	 */
 	public String[] getUsers();
 }

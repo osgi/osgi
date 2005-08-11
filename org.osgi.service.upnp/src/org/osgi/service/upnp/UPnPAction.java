@@ -104,10 +104,10 @@ public interface UPnPAction {
 	 * @return A <code>Dictionary</code> with the output arguments.
 	 *         <code>null</code> if the action has no output arguments.
 	 *
-	 * @throws Exception The execution fails for some reason.
 	 * @throws UPnPException  A UPnP error has occured.
+	 * @throws Exception The execution fails for some reason.
 	 *
 	 * @see UPnPStateVariable
 	 */
-	Dictionary invoke(Dictionary args) throws Exception, UPnPException;
+	Dictionary invoke(Dictionary args) throws Exception;
 }

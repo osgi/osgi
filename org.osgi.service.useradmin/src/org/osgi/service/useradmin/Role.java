@@ -45,6 +45,7 @@ public interface Role {
 	/**
 	 * The name of the predefined role, user.anyone, that all users and groups
 	 * belong to.
+	 * @since 1.1
 	 */
 	public static final String	USER_ANYONE	= "user.anyone";
 	/**

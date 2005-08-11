@@ -29,8 +29,8 @@ import java.util.Hashtable;
  * </pre>
  * 
  * <p>
- * <code>TopicPermission</code> has two actions: <code>PUBLISH</code> and
- * <code>SUBSCRIBE</code>.
+ * <code>TopicPermission</code> has two actions: <code>publish</code> and
+ * <code>subscribe</code>.
  * 
  * @version $Revision$
  */
@@ -87,7 +87,7 @@ public final class TopicPermission extends Permission {
 	 * <p>
 	 * 
 	 * @param name Topic name.
-	 * @param actions <code>PUBLISH</code>,<code>SUBSCRIBE</code>
+	 * @param actions <code>publish</code>,<code>subscribe</code>
 	 *        (canonical order).
 	 */
 	public TopicPermission(String name, String actions) {
@@ -255,7 +255,7 @@ public final class TopicPermission extends Permission {
 	 * 
 	 * <p>
 	 * Always returns present <code>TopicPermission</code> actions in the
-	 * following order: <code>PUBLISH</code>,<code>SUBSCRIBE</code>.
+	 * following order: <code>publish</code>,<code>subscribe</code>.
 	 * 
 	 * @return Canonical string representation of the
 	 *         <code>TopicPermission</code> actions.

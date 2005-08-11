@@ -482,6 +482,15 @@ public interface BundleContext {
 	 * {@link Constants#OBJECTCLASS} property will be an array of strings,
 	 * rather than just a single string.
 	 * 
+	 * @param clazz The class name under which the service can be located.
+	 * @param service The service object or a <code>ServiceFactory</code>
+	 *        object.
+	 * @param properties The properties for this service. 
+	 * 
+	 * @return A <code>ServiceRegistration</code> object for use by the bundle
+	 *         registering the service to update the service's properties or to
+	 *         unregister the service.
+	 *         
 	 * @throws java.lang.IllegalStateException If this BundleContext is no
 	 *         longer valid.
 	 * @see #registerService(java.lang.String[], java.lang.Object,
@@ -621,6 +630,7 @@ public interface BundleContext {
 	 *         invalid filter string that cannot be parsed.
 	 * @throws java.lang.IllegalStateException If this BundleContext is no
 	 *         longer valid.
+	 * @since 1.3
 	 */
 	public ServiceReference[] getAllServiceReferences(String clazz,
 			String filter) throws InvalidSyntaxException;

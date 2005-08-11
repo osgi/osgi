@@ -27,7 +27,7 @@ public interface AttributeDefinition {
 	 * <code>Vector</code> with <code>String</code> or <code>String[]</code> objects,
 	 * depending on the <code>getCardinality()</code> value.
 	 */
-	final int	STRING		= 1;
+	public static final int	STRING		= 1;
 	/**
 	 * The <code>LONG</code> (2) type.
 	 * 
@@ -35,7 +35,7 @@ public interface AttributeDefinition {
 	 * <code>Vector</code> with <code>Long</code> or <code>long[]</code> objects,
 	 * depending on the <code>getCardinality()</code> value.
 	 */
-	final int	LONG		= 2;
+	public static final int	LONG		= 2;
 	/**
 	 * The <code>INTEGER</code> (3) type.
 	 * 
@@ -43,7 +43,7 @@ public interface AttributeDefinition {
 	 * <code>Vector</code> with <code>Integer</code> or <code>int[]</code> objects,
 	 * depending on the <code>getCardinality()</code> value.
 	 */
-	final int	INTEGER		= 3;
+	public static final int	INTEGER		= 3;
 	/**
 	 * The <code>SHORT</code> (4) type.
 	 * 
@@ -51,7 +51,7 @@ public interface AttributeDefinition {
 	 * <code>Vector</code> with <code>Short</code> or <code>short[]</code> objects,
 	 * depending on the <code>getCardinality()</code> value.
 	 */
-	final int	SHORT		= 4;
+	public static final int	SHORT		= 4;
 	/**
 	 * The <code>CHARACTER</code> (5) type.
 	 * 
@@ -59,7 +59,7 @@ public interface AttributeDefinition {
 	 * <code>Vector</code> with <code>Character</code> or <code>char[]</code> objects,
 	 * depending on the <code>getCardinality()</code> value.
 	 */
-	final int	CHARACTER	= 5;
+	public static final int	CHARACTER	= 5;
 	/**
 	 * The <code>BYTE</code> (6) type.
 	 * 
@@ -67,7 +67,7 @@ public interface AttributeDefinition {
 	 * <code>Vector</code> with <code>Byte</code> or <code>byte[]</code> objects,
 	 * depending on the <code>getCardinality()</code> value.
 	 */
-	final int	BYTE		= 6;
+	public static final int	BYTE		= 6;
 	/**
 	 * The <code>DOUBLE</code> (7) type.
 	 * 
@@ -75,7 +75,7 @@ public interface AttributeDefinition {
 	 * <code>Vector</code> with <code>Double</code> or <code>double[]</code> objects,
 	 * depending on the <code>getCardinality()</code> value.
 	 */
-	final int	DOUBLE		= 7;
+	public static final int	DOUBLE		= 7;
 	/**
 	 * The <code>FLOAT</code> (8) type.
 	 * 
@@ -83,7 +83,7 @@ public interface AttributeDefinition {
 	 * <code>Vector</code> with <code>Float</code> or <code>float[]</code> objects,
 	 * depending on the <code>getCardinality()</code> value.
 	 */
-	final int	FLOAT		= 8;
+	public static final int	FLOAT		= 8;
 	/**
 	 * The <code>BIGINTEGER</code> (9) type.
 	 * 
@@ -93,7 +93,7 @@ public interface AttributeDefinition {
 	 * 
 	 * @deprecated Since 1.1
 	 */
-	final int	BIGINTEGER	= 9;
+	public static final int	BIGINTEGER	= 9;
 	/**
 	 * The <code>BIGDECIMAL</code> (10) type.
 	 * 
@@ -103,7 +103,7 @@ public interface AttributeDefinition {
 	 * 
 	 * @deprecated Since 1.1
 	 */
-	final int	BIGDECIMAL	= 10;
+	public static final int	BIGDECIMAL	= 10;
 	/**
 	 * The <code>BOOLEAN</code> (11) type.
 	 * 
@@ -111,14 +111,14 @@ public interface AttributeDefinition {
 	 * <code>Vector</code> with <code>Boolean</code> or <code>boolean[]</code> objects
 	 * depending on <code>getCardinality()</code>.
 	 */
-	final int	BOOLEAN		= 11;
+	public static final int	BOOLEAN		= 11;
 
 	/**
 	 * Get the name of the attribute. This name may be localized.
 	 * 
 	 * @return The localized name of the definition.
 	 */
-	String getName();
+	public String getName();
 
 	/**
 	 * Unique identity for this attribute.
@@ -138,7 +138,7 @@ public interface AttributeDefinition {
 	 * 
 	 * @return The id or oid
 	 */
-	String getID();
+	public String getID();
 
 	/**
 	 * Return a description of this attribute.
@@ -148,7 +148,7 @@ public interface AttributeDefinition {
 	 * 
 	 * @return The localized description of the definition.
 	 */
-	String getDescription();
+	public String getDescription();
 
 	/**
 	 * Return the cardinality of this attribute.
@@ -165,8 +165,10 @@ public interface AttributeDefinition {
 	 *    x = 0                     1 occurrence required
 	 *  
 	 * </pre>
+	 * 
+	 * @return The cardinality of this attribute. 
 	 */
-	int getCardinality();
+	public int getCardinality();
 
 	/**
 	 * Return the type for this attribute.
@@ -176,8 +178,10 @@ public interface AttributeDefinition {
 	 * type. <code>STRING</code>,<code>LONG</code>,<code>INTEGER</code>,
 	 * <code>CHAR</code>,<code>BYTE</code>,<code>DOUBLE</code>,<code>FLOAT</code>,
 	 * <code>BOOLEAN</code>.
+	 *
+	 * @return The type for this attribute.
 	 */
-	int getType();
+	public int getType();
 
 	/**
 	 * Return a list of option values that this attribute can take.
@@ -203,7 +207,7 @@ public interface AttributeDefinition {
 	 * 
 	 * @return A list values
 	 */
-	String[] getOptionValues();
+	public String[] getOptionValues();
 
 	/**
 	 * Return a list of labels of option values.
@@ -228,7 +232,7 @@ public interface AttributeDefinition {
 	 * 
 	 * @return A list values
 	 */
-	String[] getOptionLabels();
+	public String[] getOptionLabels();
 
 	/**
 	 * Validate an attribute in <code>String</code> form.
@@ -246,7 +250,7 @@ public interface AttributeDefinition {
 	 * @param value The value before turning it into the basic data type
 	 * @return <code>null</code>, "", or another string
 	 */
-	String validate(String value);
+	public String validate(String value);
 
 	/**
 	 * Return a default for this attribute.
@@ -263,5 +267,5 @@ public interface AttributeDefinition {
 	 * 
 	 * @return Return a default value or <code>null</code> if no default exists.
 	 */
-	String[] getDefaultValue();
+	public String[] getDefaultValue();
 }

@@ -83,6 +83,8 @@ public interface LogReaderService {
 	 * recent past is implementation-specific. Also implementation-specific is
 	 * whether informational and debug <code>LogEntry</code> objects are included
 	 * in the enumeration.
+	 * @return An <code>Enumeration</code> of all <code>LogEntry</code> objects in
+	 * the log.
 	 */
 	public Enumeration getLog();
 }

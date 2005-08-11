@@ -46,7 +46,6 @@ final public class WirePermission extends BasicPermission {
 	private final static int	ACTION_ALL		= ACTION_PRODUCE
 														| ACTION_CONSUME;
 	private final static int	ACTION_NONE		= 0;
-	private final static int	ACTION_ERROR	= 0x80000000;
 	/**
 	 * The actions mask.
 	 */
@@ -61,6 +60,9 @@ final public class WirePermission extends BasicPermission {
 	/**
 	 * Create a new WirePermission with the given name (may be wildcard) and
 	 * actions.
+	 * @param name Wire name.
+	 * @param actions <code>produce</code>, <code>consume</code>
+	 *        (canonical order).
 	 */
 	public WirePermission(String name, String actions) {
 		this(name, getMask(actions));

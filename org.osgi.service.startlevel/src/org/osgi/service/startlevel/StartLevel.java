@@ -219,6 +219,7 @@ public interface StartLevel {
 	 * state of a bundle indicates whether a bundle is persistently marked to be
 	 * started when it's start level is reached.
 	 * 
+	 * @param bundle The bundle for which to return the persistently started state.
 	 * @return <code>true</code> if the bundle is persistently marked to be
 	 *         started, <code>false</code> if the bundle is not persistently
 	 *         marked to be started.

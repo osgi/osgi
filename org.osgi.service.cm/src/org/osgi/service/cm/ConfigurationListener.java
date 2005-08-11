@@ -37,5 +37,5 @@ public interface ConfigurationListener {
 	 * 
 	 * @param event The <code>ConfigurationEvent</code>.
 	 */
-	void configurationEvent(ConfigurationEvent event);
+	public void configurationEvent(ConfigurationEvent event);
 }

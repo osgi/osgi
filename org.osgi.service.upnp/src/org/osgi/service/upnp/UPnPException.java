@@ -9,14 +9,14 @@
  */
 package org.osgi.service.upnp;
 
+import java.lang.Exception;
+
 /**
  * There are several defined error situations describing UPnP problems while a
  * control point invokes actions to UPnPDevices.
  * 
  * @since 1.1
  */
-import java.lang.Exception;
-
 public class UPnPException extends Exception {
 	static final long		serialVersionUID		= -262013318122195146L;
 

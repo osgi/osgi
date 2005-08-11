@@ -132,7 +132,7 @@ public interface ConfigurationAdmin {
 	 *         <code>ConfigurationPermission[READ]</code> and the
 	 *         <code>factoryPid</code> is bound to another bundle.
 	 */
-	Configuration createFactoryConfiguration(String factoryPid)
+	public Configuration createFactoryConfiguration(String factoryPid)
 			throws IOException;
 
 	/**
@@ -159,7 +159,7 @@ public interface ConfigurationAdmin {
 	 * @throws SecurityException if caller does not have
 	 *         <code>ConfigurationPermission[READ]</code>.
 	 */
-	Configuration createFactoryConfiguration(String factoryPid, String location)
+	public Configuration createFactoryConfiguration(String factoryPid, String location)
 			throws IOException;
 
 	/**
@@ -185,7 +185,7 @@ public interface ConfigurationAdmin {
 	 * @throws SecurityException if the caller does not have
 	 *         <code>ConfigurationPermission[READ]</code>.
 	 */
-	Configuration getConfiguration(String pid, String location)
+	public Configuration getConfiguration(String pid, String location)
 			throws IOException;
 
 	/**
@@ -208,7 +208,7 @@ public interface ConfigurationAdmin {
 	 *         <code>ConfigurationPermission[READ]</code> and the location of the 
 	 *         <code>Configuration</code> does not match the location of the calling bundle.
 	 */
-	Configuration getConfiguration(String pid) throws IOException;
+	public Configuration getConfiguration(String pid) throws IOException;
 
 	/**
 	 * List the current <code>Configuration</code> objects which match the
@@ -253,6 +253,6 @@ public interface ConfigurationAdmin {
 	 * @throws IOException if access to persistent storage fails
 	 * @throws InvalidSyntaxException if the filter string is invalid
 	 */
-	Configuration[] listConfigurations(String filter) throws IOException,
+	public Configuration[] listConfigurations(String filter) throws IOException,
 			InvalidSyntaxException;
 }

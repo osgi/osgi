@@ -37,6 +37,7 @@ public class BundleLocationCondition {
 	 *        characters in the location argument are used as wildcards when
 	 *        matching bundle locations unless they are escaped with a '\'
 	 *        character.
+	 * @return Condition object for the requested condition.
 	 */
 	static public Condition getCondition(final Bundle bundle, ConditionInfo info) {
 		if (!CONDITION_TYPE.equals(info.getType()))

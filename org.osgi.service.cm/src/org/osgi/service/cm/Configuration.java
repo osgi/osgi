@@ -61,7 +61,7 @@ public interface Configuration {
 	 * @return the PID for this <code>Configuration</code> object.
 	 * @throws IllegalStateException if this configuration has been deleted
 	 */
-	String getPid();
+	public String getPid();
 
 	/**
 	 * Return the properties of this <code>Configuration</code> object.
@@ -81,7 +81,7 @@ public interface Configuration {
 	 *         be obtained from the <code>getBundleLocation</code> method.
 	 * @throws IllegalStateException if this configuration has been deleted
 	 */
-	Dictionary getProperties();
+	public Dictionary getProperties();
 
 	/**
 	 * Update the properties of this <code>Configuration</code> object.
@@ -112,7 +112,7 @@ public interface Configuration {
 	 * @throws IllegalStateException if this configuration has been deleted
 	 * @throws SecurityException If the caller does not have <code>ConfigurationPermission[SET]</code>.
 	 */
-	void update(Dictionary properties) throws IOException;
+	public void update(Dictionary properties) throws IOException;
 
 	/**
 	 * Delete this <code>Configuration</code> object.
@@ -132,7 +132,7 @@ public interface Configuration {
 	 * @throws IllegalStateException if this configuration has been deleted
 	 * @throws SecurityException If the caller does not have <code>ConfigurationPermission[SET]</code>.
 	 */
-	void delete() throws IOException;
+	public void delete() throws IOException;
 
 	/**
 	 * For a factory configuration return the PID of the corresponding Managed
@@ -141,7 +141,7 @@ public interface Configuration {
 	 * @return factory PID or <code>null</code>
 	 * @throws IllegalStateException if this configuration has been deleted
 	 */
-	String getFactoryPid();
+	public String getFactoryPid();
 
 	/**
 	 * Update the <code>Configuration</code> object with the current
@@ -162,7 +162,7 @@ public interface Configuration {
 	 * @throws IllegalStateException if this configuration has been deleted
 	 * @throws SecurityException when the caller does not have <code>ConfigurationPermission[SET]</code>
 	 */
-	void update() throws IOException;
+	public void update() throws IOException;
 
 	/**
 	 * Bind this <code>Configuration</code> object to the specified bundle
@@ -182,7 +182,7 @@ public interface Configuration {
 	 * @throws IllegalStateException if this configuration has been deleted
 	 * @throws SecurityException If the caller does not have <code>ConfigurationPermission[REBIND]</code>.
 	 */
-	void setBundleLocation(String bundleLocation);
+	public void setBundleLocation(String bundleLocation);
 
 	/**
 	 * Get the bundle location.
@@ -199,7 +199,7 @@ public interface Configuration {
 	 * @throws IllegalStateException if this <code>Configuration</code> object
 	 *         has been deleted.
 	 */
-	String getBundleLocation();
+	public String getBundleLocation();
 
 	/**
 	 * Equality is defined to have equal PIDs
@@ -210,7 +210,7 @@ public interface Configuration {
 	 * @return <code>true</code> if equal, <code>false</code> if not a
 	 *         <code>Configuration</code> object or one with a different PID.
 	 */
-	boolean equals(Object other);
+	public boolean equals(Object other);
 
 	/**
 	 * Hash code is based on PID.
@@ -220,5 +220,5 @@ public interface Configuration {
 	 * 
 	 * @return hash code for this Configuration object
 	 */
-	int hashCode();
+	public int hashCode();
 }

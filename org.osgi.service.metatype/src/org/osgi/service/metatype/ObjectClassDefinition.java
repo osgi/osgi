@@ -24,21 +24,21 @@ public interface ObjectClassDefinition {
 	 * <code>REQUIRED</code> indicates that only the required definitions are
 	 * returned. The value is 1.
 	 */
-	final int	REQUIRED	= 1;
+	public static final int	REQUIRED	= 1;
 	/**
 	 * Argument for <code>getAttributeDefinitions(int)</code>.
 	 * <p>
 	 * <code>OPTIONAL</code> indicates that only the optional definitions are
 	 * returned. The value is 2.
 	 */
-	final int	OPTIONAL	= 2;
+	public static final int	OPTIONAL	= 2;
 	/**
 	 * Argument for <code>getAttributeDefinitions(int)</code>.
 	 * <p>
 	 * <code>ALL</code> indicates that all the definitions are returned. The value
 	 * is -1.
 	 */
-	final int	ALL			= 0xFFFFFFFF;
+	public static final int	ALL			= 0xFFFFFFFF;
 
 	/**
 	 * Return the name of this object class.
@@ -47,7 +47,7 @@ public interface ObjectClassDefinition {
 	 * 
 	 * @return The name of this object class.
 	 */
-	String getName();
+	public String getName();
 
 	/**
 	 * Return the id of this object class.
@@ -67,7 +67,7 @@ public interface ObjectClassDefinition {
 	 * 
 	 * @return The id of this object class.
 	 */
-	String getID();
+	public String getID();
 
 	/**
 	 * Return a description of this object class.
@@ -76,7 +76,7 @@ public interface ObjectClassDefinition {
 	 * 
 	 * @return The description of this object class.
 	 */
-	String getDescription();
+	public String getDescription();
 
 	/**
 	 * Return the attribute definitions for this object class.
@@ -90,7 +90,7 @@ public interface ObjectClassDefinition {
 	 * @return An array of attribute definitions or <code>null</code> if no
 	 *         attributes are selected
 	 */
-	AttributeDefinition[] getAttributeDefinitions(int filter);
+	public AttributeDefinition[] getAttributeDefinitions(int filter);
 
 	/**
 	 * Return an <code>InputStream</code> object that can be used to create an
@@ -107,6 +107,7 @@ public interface ObjectClassDefinition {
 	 * @param size Requested size of an icon, e.g. a 16x16 pixels icon then size =
 	 *        16
 	 * @return An InputStream representing an icon or <code>null</code>
+	 * @throws IOException If the <code>InputStream</code> cannot be returned.
 	 */
-	InputStream getIcon(int size) throws IOException;
+	public InputStream getIcon(int size) throws IOException;
 }

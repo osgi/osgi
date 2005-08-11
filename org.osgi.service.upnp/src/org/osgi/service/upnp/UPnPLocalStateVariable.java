@@ -16,10 +16,16 @@
  **/
 package org.osgi.service.upnp;
 
+/**
+ * A local UPnP state variable which allows the value of the state variable to
+ * be queried.
+ * 
+ * @since 1.1
+ */
 public interface UPnPLocalStateVariable extends UPnPStateVariable {
 	/**
-	 * This method will keep the current values of UPnPStateVariables of
-	 * a UPnPDevice whenever UPnPStateVariable's value is changed , this method
+	 * This method will keep the current values of UPnPStateVariables of a
+	 * UPnPDevice whenever UPnPStateVariable's value is changed , this method
 	 * must be called.
 	 * 
 	 * @return <code>Object</code> current value of UPnPStateVariable. if the

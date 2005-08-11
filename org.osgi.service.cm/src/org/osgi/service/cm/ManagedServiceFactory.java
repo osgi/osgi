@@ -93,7 +93,7 @@ public interface ManagedServiceFactory {
 	 * 
 	 * @return the name for the factory, which might be localized
 	 */
-	String getName();
+	public String getName();
 
 	/**
 	 * Create a new instance, or update the configuration of an existing
@@ -136,7 +136,7 @@ public interface ManagedServiceFactory {
 	 * @throws ConfigurationException when the configuration properties are
 	 *         invalid.
 	 */
-	void updated(String pid, Dictionary properties)
+	public void updated(String pid, Dictionary properties)
 			throws ConfigurationException;
 
 	/**
@@ -155,5 +155,5 @@ public interface ManagedServiceFactory {
 	 * 
 	 * @param pid the PID of the service to be removed
 	 */
-	void deleted(String pid);
+	public void deleted(String pid);
 }

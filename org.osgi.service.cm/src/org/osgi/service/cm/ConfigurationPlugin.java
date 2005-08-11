@@ -78,7 +78,7 @@ public interface ConfigurationPlugin {
 	 * property is not set, or the target service's PID is listed in this
 	 * property.
 	 */
-	String	CM_TARGET	= "cm.target";
+	public static final String	CM_TARGET	= "cm.target";
 	/**
 	 * A service property to specify the order in which plugins are invoked.
 	 * 
@@ -91,7 +91,7 @@ public interface ConfigurationPlugin {
 	 * 
 	 * @since 1.2
 	 */
-	String	CM_RANKING	= "service.cmRanking";
+	public static final String	CM_RANKING	= "service.cmRanking";
 
 	/**
 	 * View and possibly modify the a set of configuration properties before
@@ -115,5 +115,5 @@ public interface ConfigurationPlugin {
 	 *        property may be obtained from the
 	 *        <code>Configuration.getBundleLocation</code> method.
 	 */
-	void modifyConfiguration(ServiceReference reference, Dictionary properties);
+	public void modifyConfiguration(ServiceReference reference, Dictionary properties);
 }

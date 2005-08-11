@@ -550,9 +550,10 @@ public final class ConfigurationPermission extends Permission {
 		// The ConditionInfo object for this signer
 		private Object	info;
 
-		/*
+		/**
 		 * Constructor used by the Filter match operation to construct a
 		 * SignerWrapper with a given string value.
+		 * @param pattern 
 		 */
 		public SignerWrapper(String pattern) {
 			try {

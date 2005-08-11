@@ -44,6 +44,7 @@ package org.osgi.framework;
  * @version $Revision$
  * @see ServiceEvent
  * @see ServicePermission
+ * @since 1.3
  */
 
 public interface AllServiceListener extends ServiceListener {

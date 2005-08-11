@@ -84,6 +84,7 @@ public interface UPnPIcon {
 	 * method.
 	 * 
 	 * @return An InputStream to read the icon graphics data from.
+	 * @throws IOException If the <code>InputStream</code> cannot be returned.
 	 * @see UPnPIcon#getMimeType()
 	 */
 	InputStream getInputStream() throws IOException;

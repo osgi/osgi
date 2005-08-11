@@ -262,6 +262,7 @@ public interface PackageAdmin {
 	 * If a bundle is not one or more of the defined types then 0x00000000 is
 	 * returned.
 	 * 
+	 * @param bundle The bundle for which to return the special type.
 	 * @return The special type of the bundle.
 	 * @since 1.2
 	 */

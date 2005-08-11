@@ -77,9 +77,10 @@ public interface ConditionalPermissionAdmin {
 	public Enumeration getConditionalPermissionInfos();
 
 	/**
-	 * Return the the Conditional Permission Info with the specified name.
+	 * Return the Conditional Permission Info with the specified name.
 	 * 
 	 * @param name The name of the Conditional Permission Info to be returned.
+	 * @return The Conditional Permission Info with the specified name.
 	 */
 	public ConditionalPermissionInfo getConditionalPermissionInfo(String name);
 

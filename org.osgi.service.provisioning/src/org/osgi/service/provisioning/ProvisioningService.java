@@ -124,6 +124,7 @@ public interface ProvisioningService {
 	 * <code>UnsupportedOperationException</code> to be thrown. Changes must be
 	 * done using the <code>setInformation</code> and <code>addInformation</code>
 	 * methods of this service.
+	 * @return A reference to the Provisioning Dictionary.
 	 */
 	public Dictionary getInformation();
 

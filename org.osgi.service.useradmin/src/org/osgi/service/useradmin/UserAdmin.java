@@ -110,6 +110,7 @@ public interface UserAdmin {
 	 *         whose properties match the specified filter criteria, or all
 	 *         <code>Role</code> objects if a <code>null</code> filter is specified.
 	 *         If no roles match the filter, <code>null</code> will be returned.
+	 * @throws InvalidSyntaxException If the filter is not well formed.
 	 *  
 	 */
 	public Role[] getRoles(String filter) throws InvalidSyntaxException;

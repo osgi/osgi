@@ -129,5 +129,5 @@ public interface ManagedService {
 	 *        method.
 	 * @throws ConfigurationException when the update fails
 	 */
-	void updated(Dictionary properties) throws ConfigurationException;
+	public void updated(Dictionary properties) throws ConfigurationException;
 }
