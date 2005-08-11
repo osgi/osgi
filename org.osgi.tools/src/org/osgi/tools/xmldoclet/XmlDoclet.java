@@ -4,14 +4,14 @@ import com.sun.javadoc.*;
 import java.io.*;
 import java.util.*;
 
-public class XmlDocletx extends Doclet {
+public class XmlDoclet extends Doclet {
 	PrintWriter				pw;
 	String					currentPackage;
 	
 	public static boolean start( RootDoc doc ) {
 		try {
 			System.out.println("Hello world!");
-			XmlDocletx doclet = new XmlDocletx();
+			XmlDoclet doclet = new XmlDoclet();
 			doclet.startx( doc );
 			return true;
 		}
