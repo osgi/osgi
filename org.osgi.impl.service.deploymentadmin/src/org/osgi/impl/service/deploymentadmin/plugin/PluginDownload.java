@@ -422,23 +422,23 @@ public class PluginDownload extends DefaultHandler
         if (l == 6) {
             if (nodeUriArr[5].equals("ID"))
                 return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF,
-    					DmtMetaNode.DYNAMIC, "", 1, !Metanode.ZERO_OCC, null, 0,
+    					DmtMetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
     					0, null, DmtData.FORMAT_STRING).orOperation(DmtMetaNode.CMD_REPLACE);
 		    if (nodeUriArr[5].equals("URI"))
 		        return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF,
-    					DmtMetaNode.DYNAMIC, "", 1, !Metanode.ZERO_OCC, null, 0,
+    					DmtMetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
     					0, null, DmtData.FORMAT_STRING).orOperation(DmtMetaNode.CMD_REPLACE);
 		    if (nodeUriArr[5].equals("EnvType"))
                 return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF,
-                        DmtMetaNode.DYNAMIC, "", 1, !Metanode.ZERO_OCC, null, 0,
+                        DmtMetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
                         0, null, DmtData.FORMAT_STRING).orOperation(DmtMetaNode.CMD_REPLACE);
 		    if (nodeUriArr[5].equals("Status"))
 		        return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF,
-    					DmtMetaNode.DYNAMIC, "", 1, !Metanode.ZERO_OCC, null, 0,
+    					DmtMetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
     					0, null, DmtData.FORMAT_STRING);
             if (nodeUriArr[5].equals("Operations"))
                 return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF,
-    					DmtMetaNode.DYNAMIC, "", 1, !Metanode.ZERO_OCC, null, 0,
+    					DmtMetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
     					0, null, DmtData.FORMAT_NODE);
         }
         if (l == 7) {

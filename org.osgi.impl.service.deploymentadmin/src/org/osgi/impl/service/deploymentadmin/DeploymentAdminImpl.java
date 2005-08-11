@@ -136,7 +136,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         if (null == pluginDeployed)
             pluginDeployed  = new PluginDeployed(PluginCtx.getInstance(logger, context, this));
         if (null == pluginDelivered)
-            pluginDelivered = new PluginDelivered(this);
+            pluginDelivered = new PluginDelivered(PluginCtx.getInstance(logger, context, this));
 
         initKeyStore();
         fwBundleDir = System.getProperty(DAConstants.FW_BUNDLES_DIR);
@@ -610,6 +610,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                     oos.writeObject(mappingRpDp);
                     oos.writeObject(pluginDownload);
                     oos.writeObject(pluginDeployed);
+                    oos.writeObject(pluginDelivered);
                     oos.close();
                     fos.close();
                     return null;
@@ -636,6 +637,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             mappingRpDp = (Hashtable) ois.readObject();
             pluginDownload = (PluginDownload) ois.readObject();
             pluginDeployed = (PluginDeployed) ois.readObject();
+            pluginDelivered = (PluginDelivered) ois.readObject();
             ois.close();
             fis.close();
         } catch (FileNotFoundException e) {

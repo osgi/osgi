@@ -141,8 +141,11 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
         } else {
             Bundle[] bundles = pluginCtx.getBundleContext().getBundles();
             for (int i = 0; i < bundles.length; i++) {
-                if (bundles[i].getSymbolicName().equals(symbName)) {
-                    ret.add(new Long(bundles[i].getBundleId()));
+                String bSymbName = bundles[i].getSymbolicName();
+                if (null == bSymbName)
+                    continue;
+                if (bSymbName.equals(symbName)) {
+                    ret.add(String.valueOf(bundles[i].getBundleId()));
                     break; 
                 }
             }
@@ -370,6 +373,7 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
             if (nodeUriArr[6].equals("ID")) {
                 if (dpNode(nodeUriArr[5]))
                     return new DmtData((String) dpIdMappings.get(symbName));
+                return new DmtData((String) bundleIdMappings.get(symbName));
             }
             if (nodeUriArr[6].equals("EnvType"))
                 return new DmtData("OSGi.R4");
@@ -445,15 +449,8 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
         if (l < 5)
             throw new RuntimeException("Internal error");
         Set mset = nodeIdMangleSet();
-        if (l == 5) {
-            ArrayList ret = new ArrayList(mset);
-            for (Iterator iter = bundleIdMappings.keySet().iterator(); iter.hasNext();) {
-                String key = (String) iter.next();
-                Object[] pair = (Object[]) bundleIdMappings.get(key);
-                ret.add(pair[0]);
-            }
-            return (String[]) ret.toArray(new String[] {});
-        }
+        if (l == 5)
+            return (String[]) mset.toArray(new String[] {});
         if (!mset.contains(nodeUriArr[5]))
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");                
         if (l == 6)
@@ -515,60 +512,60 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
         if (!mset.contains(nodeUriArr[5]))
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
         if (l == 6)
-            return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+            return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.AUTOMATIC,
                     "", Integer.MAX_VALUE, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
         if (l == 7) {
             if ("ID".equals(nodeUriArr[6]))
-                return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.AUTOMATIC,
                         "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
             if ("EnvType".equals(nodeUriArr[6]))
-                return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.AUTOMATIC,
                         "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
             if ("Operations".equals(nodeUriArr[6]))
-                return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.AUTOMATIC,
                         "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
             if ("Ext".equals(nodeUriArr[6]))
-                return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.AUTOMATIC,
                         "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
         }
         if ("Operations".equals(nodeUriArr[6])) {
             if (nodeUriArr[7].equals("Remove"))
-                return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.AUTOMATIC,
                         "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_BOOLEAN).
                         orOperation(DmtMetaNode.CMD_EXECUTE);
             throw new RuntimeException("Internal error");
         } else if ("Ext".equals(nodeUriArr[6])) {
             if (l == 8) {
                 if ("Signers".equals(nodeUriArr[7]))
-                    return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                    return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.AUTOMATIC,
                             "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
                 if ("Manifest".equals(nodeUriArr[7]))
-                    return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                    return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.AUTOMATIC,
                             "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
                 if ("PackageType".equals(nodeUriArr[7]))
-                    return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                    return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.AUTOMATIC,
                             "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
                 if ("Bundles".equals(nodeUriArr[7]))
-                    return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                    return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.AUTOMATIC,
                             "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
             }
             if (l == 9) {
                 if ("Signers".equals(nodeUriArr[7]))
-                    return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                    return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.AUTOMATIC,
                         "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
-                return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.AUTOMATIC,
                         "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
             }
             if (l == 10) {
                 if ("Signers".equals(nodeUriArr[9]) ||
                     "ServiceComponent".equals(nodeUriArr[9]))
-                    return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                    return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.AUTOMATIC,
                             "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
-                return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF, DmtMetaNode.AUTOMATIC,
                     "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
             }
             if (l == 10)
-                return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.DYNAMIC,
+                return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.AUTOMATIC,
                     "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
         }
         
@@ -604,13 +601,13 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
             });
             undThread.start();
         } else {
-            Object[] pair = (Object[]) bundleIdMappings.get(nodeUriArr[5]);
-            Bundle bundle = pluginCtx.getBundleContext().getBundle(((Long) pair[1]).longValue());
+            String symbName = nodeIdToSymbName(nodeUriArr[5]);
+            Bundle bundle = getBundleBySymbName(symbName);
             UndeployThread undThread = new UndeployThread(bundle);
             undThread.setListener(new UndeployThread.Listener() {
                 public void onFinish(Exception exception) {
                     if (null == exception) {
-                        bundleIdMappings.remove(nodeUriArr[5]);
+                        bundleIdMappings.remove(nodeIdToSymbName(nodeUriArr[5]));
                         try {
                             pluginCtx.save();
                         }
@@ -618,13 +615,26 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
                             pluginCtx.getLogger().log(e);
                         }
                     }
-                    else
+                    else {
                         pluginCtx.getLogger().log(exception);
-                    // TODO send alert
+                        // TODO send alert
+                    }
                 }
             });
             undThread.start();
         }
+    }
+    
+    private Bundle getBundleBySymbName(String symbName) {
+        Bundle[] bundles = pluginCtx.getBundleContext().getBundles();
+        for (int i = 0; i < bundles.length; i++) {
+            String bSymbName = bundles[i].getSymbolicName();
+            if (null == bSymbName)
+                continue;
+            if (bSymbName.equals(symbName))
+                return bundles[i];
+        }
+        return null;
     }
 
     /*private String[] extractSigners(BundleEntry be) {

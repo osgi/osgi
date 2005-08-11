@@ -5,10 +5,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
+import org.osgi.framework.Bundle;
 import org.osgi.impl.service.deploymentadmin.DAConstants;
 import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
@@ -24,12 +26,12 @@ import org.osgi.service.dmt.DmtReadOnlyDataPlugin;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.RemoteAlertSender;
 
-public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
+public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin, Serializable {
     
 	private transient PluginCtx pluginCtx;
-	private File                store;
+	private transient File      store;
 
-	public PluginDelivered(DeploymentAdminImpl da) {
+	public PluginDelivered(PluginCtx pluginCtx) {
 	    String delArea = System.getProperty(DAConstants.DELIVERED_AREA);
 	    if (null == delArea)
 	        delArea = "/temp";
@@ -37,6 +39,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
 	    if (!store.exists())
 	        throw new RuntimeException("Delivered area ('" + delArea + "') does not exist. " +
                 "Set the " + DAConstants.DELIVERED_AREA + " system property");
+        
 		this.pluginCtx = pluginCtx;		
 	}
 
@@ -105,7 +108,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
 		if (l == 7) {
 		    if (nodeUriArr[6].equals("ID"))
-		        return null; // TODO
+		        return new DmtData(nodeUriArr[5]); // TODO globally unique
 		    if (nodeUriArr[6].equals("Data")) {
 		        File f = new File(store, nodeUriArr[5]);
 		        FileInputStream is = null;
@@ -199,29 +202,29 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
         if (l == 6)
 			return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF,
-					DmtMetaNode.DYNAMIC, "", 1, !Metanode.ZERO_OCC, null, 0,
+					DmtMetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
 					0, null, DmtData.FORMAT_NODE).orOperation(DmtMetaNode.CMD_ADD);
         if (l == 7) {
             if (nodeUriArr[6].equals("ID"))
                 return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF,
-    					DmtMetaNode.DYNAMIC, "", 1, !Metanode.ZERO_OCC, null, 0,
+    					DmtMetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
     					0, null, DmtData.FORMAT_STRING).orOperation(DmtMetaNode.CMD_REPLACE);
 		    if (nodeUriArr[6].equals("Data"))
 		        return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF,
-    					DmtMetaNode.DYNAMIC, "", 1, !Metanode.ZERO_OCC, null, 0,
+    					DmtMetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
     					0, null, DmtData.FORMAT_BINARY);
 		    if (nodeUriArr[6].equals("EnvType"))
 		        return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF,
-    					DmtMetaNode.DYNAMIC, "", 1, !Metanode.ZERO_OCC, null, 0,
+    					DmtMetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
     					0, null, DmtData.FORMAT_STRING);
             if (nodeUriArr[6].equals("Operations"))
                 return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF,
-    					DmtMetaNode.DYNAMIC, "", 1, !Metanode.ZERO_OCC, null, 0,
+    					DmtMetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
     					0, null, DmtData.FORMAT_NODE);
         }
         if (l == 8) {
             return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF,
-					DmtMetaNode.DYNAMIC, "", 1, !Metanode.ZERO_OCC, null, 0,
+					DmtMetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
 					0, null, DmtData.FORMAT_NULL).orOperation(DmtMetaNode.CMD_EXECUTE);
         }
         
@@ -258,9 +261,41 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin {
             mimeType = DAConstants.MIME_DP;
         else 
             mimeType = DAConstants.MIME_BUNDLE;
-        // TODO
-        //DeploymentThread th = new DeploymentThread(mimeType, da, is, );
-        //th.start();
+
+        final String id = nodeUriArr[5];
+        DeploymentThread deplThr = new DeploymentThread(mimeType, 
+                pluginCtx, is, id);
+        deplThr.setDpListener(new DeploymentThread.ListenerDp() {
+            public void onFinish(DeploymentPackageImpl dp, Exception exception) {
+                if (null == exception) {
+                    pluginCtx.getDeployedPlugin().associateID(dp, id);
+                    try {
+                        pluginCtx.save();
+                        // TODO sendAlert
+                    }
+                    catch (IOException e) {
+                        pluginCtx.getLogger().log(e); 
+                    }
+                } else { 
+                    pluginCtx.getLogger().log(exception);
+                    // TODO sendAlert
+            }}});
+        deplThr.setBundleListener(new DeploymentThread.ListenerBundle() {
+            public void onFinish(Bundle b, Exception exception) {
+                if (null == exception) {
+                    pluginCtx.getDeployedPlugin().associateID(b, id);
+                    try {
+                        pluginCtx.save();
+                        // TODO sendAlert
+                    }
+                    catch (IOException e) {
+                        pluginCtx.getLogger().log(e); 
+                    }
+                } else {
+                    pluginCtx.getLogger().log(exception);
+                    // TODO sendAlert
+            }}});
+        deplThr.start();
     }
     
     ///////////////////////////////////////////////////////////////////////////
