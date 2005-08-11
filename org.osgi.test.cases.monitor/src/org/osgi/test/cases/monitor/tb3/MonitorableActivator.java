@@ -42,6 +42,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.monitor.Monitorable;
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 
 /**
@@ -61,7 +62,7 @@ public class MonitorableActivator implements BundleActivator {
 		testMonitorableImpl = new MonitorableImpl();
 		
 		Hashtable ht = new Hashtable();
-		ht.put("service.pid", MonitorTestControl.SV_MONITORABLEID2);		
+		ht.put("service.pid", MonitorConstants.SV_MONITORABLEID2);		
 		
 		String[] ifs = new String[] { Monitorable.class.getName() };
 		servReg = bc.registerService(ifs, testMonitorableImpl, ht);

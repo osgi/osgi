@@ -42,6 +42,7 @@
  */
 package org.osgi.test.cases.monitor.tbc.StatusVariable;
 
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
@@ -49,7 +50,7 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
  * @author Leonardo Barros
  * 
  * This test class validates the implementation of
- * <code>StatusVariable<code> method, according to MEG reference documentation.
+ * <code>StatusVariable</code> method, according to MEG reference documentation.
  */
 public class StatusVariable {
 	private MonitorTestControl tbc;
@@ -111,9 +112,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable001");
 			new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.INVALID_ID,
+					MonitorConstants.INVALID_ID,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INT_VALUE);
+					MonitorConstants.SV_INT_VALUE);
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -137,9 +138,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable002");
 			new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.INVALID_ID,
+					MonitorConstants.INVALID_ID,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_STRING_VALUE);
+					MonitorConstants.SV_STRING_VALUE);
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -163,9 +164,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable003");
 			new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.INVALID_ID,
+					MonitorConstants.INVALID_ID,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_FLOAT_VALUE);
+					MonitorConstants.SV_FLOAT_VALUE);
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -189,9 +190,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable004");
 			new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.INVALID_ID,
+					MonitorConstants.INVALID_ID,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
+					MonitorConstants.SV_BOOLEAN_VALUE);
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -216,7 +217,7 @@ public class StatusVariable {
 			tbc.log("#testStatusVariable005");
 			new org.osgi.service.monitor.StatusVariable(null,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INT_VALUE);
+					MonitorConstants.SV_INT_VALUE);
 			tbc.failException("", java.lang.NullPointerException.class);
 		} catch (java.lang.NullPointerException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -241,7 +242,7 @@ public class StatusVariable {
 			tbc.log("#testStatusVariable006");
 			new org.osgi.service.monitor.StatusVariable(null,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_FLOAT_VALUE);
+					MonitorConstants.SV_FLOAT_VALUE);
 			tbc.failException("", java.lang.NullPointerException.class);
 		} catch (java.lang.NullPointerException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -266,7 +267,7 @@ public class StatusVariable {
 			tbc.log("#testStatusVariable007");
 			new org.osgi.service.monitor.StatusVariable(null,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_STRING_VALUE);
+					MonitorConstants.SV_STRING_VALUE);
 			tbc.failException("", java.lang.NullPointerException.class);
 		} catch (java.lang.NullPointerException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -291,7 +292,7 @@ public class StatusVariable {
 			tbc.log("#testStatusVariable008");
 			new org.osgi.service.monitor.StatusVariable(null,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
+					MonitorConstants.SV_BOOLEAN_VALUE);
 			tbc.failException("", java.lang.NullPointerException.class);
 		} catch (java.lang.NullPointerException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -315,8 +316,8 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable009");
 			new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1, MonitorTestControl.INVALID_CM,
-					MonitorTestControl.SV_INT_VALUE);
+					MonitorConstants.SV_NAME1, MonitorConstants.INVALID_CM,
+					MonitorConstants.SV_INT_VALUE);
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -340,8 +341,8 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable010");
 			new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1, MonitorTestControl.INVALID_CM,
-					MonitorTestControl.SV_FLOAT_VALUE);
+					MonitorConstants.SV_NAME1, MonitorConstants.INVALID_CM,
+					MonitorConstants.SV_FLOAT_VALUE);
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -365,8 +366,8 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable011");
 			new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1, MonitorTestControl.INVALID_CM,
-					MonitorTestControl.SV_STRING_VALUE);
+					MonitorConstants.SV_NAME1, MonitorConstants.INVALID_CM,
+					MonitorConstants.SV_STRING_VALUE);
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -390,8 +391,8 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable012");
 			new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1, MonitorTestControl.INVALID_CM,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
+					MonitorConstants.SV_NAME1, MonitorConstants.INVALID_CM,
+					MonitorConstants.SV_BOOLEAN_VALUE);
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -415,22 +416,22 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable013");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_FLOAT_VALUE);
+					MonitorConstants.SV_FLOAT_VALUE);
 
 			float val = sv.getFloat();
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"getDouble() result",
-							MonitorTestControl.SV_FLOAT_VALUE + "" }),
-					MonitorTestControl.SV_FLOAT_VALUE, val, 0);
+							MonitorConstants.SV_FLOAT_VALUE + "" }),
+					MonitorConstants.SV_FLOAT_VALUE, val, 0);
 
 			String id = sv.getID();
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
-							"getID() result", MonitorTestControl.SV_NAME1 }),
-					MonitorTestControl.SV_NAME1, id);
+							"getID() result", MonitorConstants.SV_NAME1 }),
+					MonitorConstants.SV_NAME1, id);
 
 			int type = sv.getType();
 			tbc
@@ -477,22 +478,22 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable014");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INT_VALUE);
+					MonitorConstants.SV_INT_VALUE);
 
 			int val = sv.getInteger();
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"getLong() results",
-							MonitorTestControl.SV_INT_VALUE + "", }),
-					MonitorTestControl.SV_INT_VALUE, val);
+							MonitorConstants.SV_INT_VALUE + "", }),
+					MonitorConstants.SV_INT_VALUE, val);
 
 			String id = sv.getID();
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
-							"getID() results", MonitorTestControl.SV_NAME1 }),
-					MonitorTestControl.SV_NAME1, id);
+							"getID() results", MonitorConstants.SV_NAME1 }),
+					MonitorConstants.SV_NAME1, id);
 
 			int type = sv.getType();
 			tbc
@@ -540,22 +541,22 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable015");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_STRING_VALUE);
+					MonitorConstants.SV_STRING_VALUE);
 
 			String val = sv.getString();
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"getString() results",
-							MonitorTestControl.SV_STRING_VALUE }),
-					MonitorTestControl.SV_STRING_VALUE, val);
+							MonitorConstants.SV_STRING_VALUE }),
+					MonitorConstants.SV_STRING_VALUE, val);
 
 			String id = sv.getID();
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
-							"getID() results", MonitorTestControl.SV_NAME1 }),
-					MonitorTestControl.SV_NAME1, id);
+							"getID() results", MonitorConstants.SV_NAME1 }),
+					MonitorConstants.SV_NAME1, id);
 
 			int type = sv.getType();
 			tbc.assertEquals(MessagesConstants.getMessage(
@@ -598,22 +599,22 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable016");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
+					MonitorConstants.SV_BOOLEAN_VALUE);
 
 			boolean val = sv.getBoolean();
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"getBoolean() results",
-							MonitorTestControl.SV_BOOLEAN_VALUE + "" }),
-					MonitorTestControl.SV_BOOLEAN_VALUE, val);
+							MonitorConstants.SV_BOOLEAN_VALUE + "" }),
+					MonitorConstants.SV_BOOLEAN_VALUE, val);
 
 			String id = sv.getID();
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
-							"getID() results", MonitorTestControl.SV_NAME1 }),
-					MonitorTestControl.SV_NAME1, id);
+							"getID() results", MonitorConstants.SV_NAME1 }),
+					MonitorConstants.SV_NAME1, id);
 
 			int type = sv.getType();
 			tbc
@@ -661,9 +662,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable017");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_FLOAT_VALUE);
+					MonitorConstants.SV_FLOAT_VALUE);
 			sv.getInteger();
 			tbc.failException("", java.lang.IllegalStateException.class);
 		} catch (java.lang.IllegalStateException e) {
@@ -688,9 +689,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable018");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INT_VALUE);
+					MonitorConstants.SV_INT_VALUE);
 			sv.getFloat();
 			tbc.failException("", java.lang.IllegalStateException.class);
 		} catch (java.lang.IllegalStateException e) {
@@ -715,9 +716,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable019");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INT_VALUE);
+					MonitorConstants.SV_INT_VALUE);
 			sv.getString();
 			tbc.failException("", java.lang.IllegalStateException.class);
 		} catch (java.lang.IllegalStateException e) {
@@ -742,9 +743,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable020");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INT_VALUE);
+					MonitorConstants.SV_INT_VALUE);
 			sv.getBoolean();
 			tbc.failException("", java.lang.IllegalStateException.class);
 		} catch (java.lang.IllegalStateException e) {
@@ -769,9 +770,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable021");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_FLOAT_VALUE);
+					MonitorConstants.SV_FLOAT_VALUE);
 			sv.getString();
 			tbc.failException("", java.lang.IllegalStateException.class);
 		} catch (java.lang.IllegalStateException e) {
@@ -796,9 +797,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable022");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_FLOAT_VALUE);
+					MonitorConstants.SV_FLOAT_VALUE);
 			sv.getBoolean();
 			tbc.failException("", java.lang.IllegalStateException.class);
 		} catch (java.lang.IllegalStateException e) {
@@ -823,9 +824,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable023");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_STRING_VALUE);
+					MonitorConstants.SV_STRING_VALUE);
 			sv.getFloat();
 			tbc.failException("", java.lang.IllegalStateException.class);
 		} catch (java.lang.IllegalStateException e) {
@@ -850,9 +851,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable024");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_STRING_VALUE);
+					MonitorConstants.SV_STRING_VALUE);
 			sv.getInteger();
 			tbc.failException("", java.lang.IllegalStateException.class);
 		} catch (java.lang.IllegalStateException e) {
@@ -877,9 +878,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable025");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_STRING_VALUE);
+					MonitorConstants.SV_STRING_VALUE);
 			sv.getBoolean();
 			tbc.failException("", java.lang.IllegalStateException.class);
 		} catch (java.lang.IllegalStateException e) {
@@ -904,9 +905,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable026");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
+					MonitorConstants.SV_BOOLEAN_VALUE);
 			sv.getInteger();
 			tbc.failException("", java.lang.IllegalStateException.class);
 		} catch (java.lang.IllegalStateException e) {
@@ -931,9 +932,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable027");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
+					MonitorConstants.SV_BOOLEAN_VALUE);
 			sv.getFloat();
 			tbc.failException("", java.lang.IllegalStateException.class);
 		} catch (java.lang.IllegalStateException e) {
@@ -958,9 +959,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable028");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
+					MonitorConstants.SV_BOOLEAN_VALUE);
 			sv.getString();
 			tbc.failException("", java.lang.IllegalStateException.class);
 		} catch (java.lang.IllegalStateException e) {
@@ -986,7 +987,7 @@ public class StatusVariable {
 			tbc.log("#testStatusVariable029");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					"", org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
+					MonitorConstants.SV_BOOLEAN_VALUE);
 			sv.getString();
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -1012,7 +1013,7 @@ public class StatusVariable {
 			tbc.log("#testStatusVariable030");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					"", org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_FLOAT_VALUE);
+					MonitorConstants.SV_FLOAT_VALUE);
 			sv.getString();
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -1038,7 +1039,7 @@ public class StatusVariable {
 			tbc.log("#testStatusVariable031");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					"", org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INT_VALUE);
+					MonitorConstants.SV_INT_VALUE);
 			sv.getString();
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -1064,7 +1065,7 @@ public class StatusVariable {
 			tbc.log("#testStatusVariable032");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
 					"", org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_STRING_VALUE);
+					MonitorConstants.SV_STRING_VALUE);
 			sv.getString();
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -1089,9 +1090,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable033");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.LONGID,
+					MonitorConstants.LONGID,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_FLOAT_VALUE);
+					MonitorConstants.SV_FLOAT_VALUE);
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -1115,9 +1116,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable034");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.LONGID,
+					MonitorConstants.LONGID,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
+					MonitorConstants.SV_BOOLEAN_VALUE);
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -1141,9 +1142,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable035");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.LONGID,
+					MonitorConstants.LONGID,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INT_VALUE);
+					MonitorConstants.SV_INT_VALUE);
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -1167,9 +1168,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable036");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.LONGID,
+					MonitorConstants.LONGID,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_STRING_VALUE);
+					MonitorConstants.SV_STRING_VALUE);
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -1193,9 +1194,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable037");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.VALID_ID,
+					MonitorConstants.INEXISTENT_MONITORABLE,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_STRING_VALUE);
+					MonitorConstants.SV_STRING_VALUE);
 			tbc.pass("Passed. No exception was thrown.");
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
@@ -1213,9 +1214,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable038");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.VALID_ID,
+					MonitorConstants.INEXISTENT_MONITORABLE,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_BOOLEAN_VALUE);
+					MonitorConstants.SV_BOOLEAN_VALUE);
 			tbc.pass("Passed. No exception was thrown.");
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
@@ -1233,9 +1234,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable039");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.VALID_ID,
+					MonitorConstants.INEXISTENT_MONITORABLE,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_FLOAT_VALUE);
+					MonitorConstants.SV_FLOAT_VALUE);
 			tbc.pass("Passed. No exception was thrown.");
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
@@ -1253,9 +1254,9 @@ public class StatusVariable {
 		try {
 			tbc.log("#testStatusVariable040");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.VALID_ID,
+					MonitorConstants.INEXISTENT_MONITORABLE,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INT_VALUE);
+					MonitorConstants.SV_INT_VALUE);
 			tbc.pass("Passed. No exception was thrown.");
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "

@@ -44,7 +44,7 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
  * @author Leonardo Barros
  * 
  * This test class validates the implementation of
- * <code>hashCode<code> method, according to MEG reference
+ * <code>hashCode</code> method, according to MEG reference
  * documentation.
  */
 

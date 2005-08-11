@@ -46,7 +46,7 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
  * @author Leonardo Barros
  * 
  * This test class validates the implementation of
- * <code>implies<code> method, according to MEG reference
+ * <code>implies</code> method, according to MEG reference
  * documentation.
  */
 public class Implies {

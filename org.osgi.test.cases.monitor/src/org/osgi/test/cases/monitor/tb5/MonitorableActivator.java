@@ -30,18 +30,18 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 08/03/2005   Alexandre Santos
+ * 01/07/2005   Alexandre Santos
  * 14           Implement MEG TCK
  * ===========  ==============================================================
  */
-package org.osgi.test.cases.monitor.tbc.Activators;
+package org.osgi.test.cases.monitor.tb5;
 
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.dmt.RemoteAlertSender;
+import org.osgi.service.monitor.Monitorable;
 import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 
@@ -49,28 +49,24 @@ import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
  * @author Alexandre Santos
  *
  */
-public class RemoteAlertSenderActivator implements BundleActivator {
+public class MonitorableActivator implements BundleActivator {
 
 	private ServiceRegistration servReg;
 	
 	private MonitorTestControl tbc;
 
-	private RemoteAlertSenderImpl testRemoteAlertSenderImpl;
+	private MonitorableImpl testMonitorableImpl;
 
-	public RemoteAlertSenderActivator(MonitorTestControl tbc) {
-		this.tbc = tbc;
-	}
-	
 	public void start(BundleContext bc) throws Exception {
 		// creating the service
-		testRemoteAlertSenderImpl = new RemoteAlertSenderImpl(tbc);
+		testMonitorableImpl = new MonitorableImpl();
 		
 		Hashtable ht = new Hashtable();
-		ht.put("servers", new String[] { MonitorConstants.REMOTE_SERVER });		
-			
-		String[] ifs = new String[] { RemoteAlertSender.class.getName() };
-		servReg = bc.registerService(ifs, testRemoteAlertSenderImpl, ht);
-		System.out.println("RemoteAlertSender activated.");
+		ht.put("service.pid", MonitorConstants.SV_MONITORABLEID3);		
+		
+		String[] ifs = new String[] { Monitorable.class.getName() };
+		servReg = bc.registerService(ifs, testMonitorableImpl, ht);
+		System.out.println("Monitorable activated.");
 	}
 
 	public void stop(BundleContext arg0) throws Exception {

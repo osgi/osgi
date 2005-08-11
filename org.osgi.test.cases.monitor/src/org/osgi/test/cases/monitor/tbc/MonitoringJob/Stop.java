@@ -40,6 +40,7 @@
 package org.osgi.test.cases.monitor.tbc.MonitoringJob;
 
 import org.osgi.service.monitor.MonitoringJob;
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
@@ -47,7 +48,7 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
  * @author Alexandre Alves
  * 
  * This Test Class Validates the implementation of
- * <code>stop<code> method, according to MEG reference
+ * <code>stop</code> method, according to MEG reference
  * documentation.
  */
 public class Stop {
@@ -75,17 +76,17 @@ public class Stop {
 			tbc.stopRunningJobs();
 			
 			MonitoringJob job = tbc.getMonitorAdmin().startJob(
-					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
-					MonitorTestControl.COUNT);
+					MonitorConstants.INITIATOR, MonitorConstants.SVS,
+					MonitorConstants.COUNT);
 			job.stop();
 
 			MonitoringJob[] jobs = tbc.getMonitorAdmin().getRunningJobs();
 			for (int i = 0; i < jobs.length; i++) {
 				if ((jobs[i].getInitiator()
-						.equals(MonitorTestControl.INITIATOR))
+						.equals(MonitorConstants.INITIATOR))
 						&& (jobs[i].getStatusVariableNames()
-								.equals(MonitorTestControl.SVS))
-						&& (jobs[i].getReportCount() == MonitorTestControl.COUNT)
+								.equals(MonitorConstants.SVS))
+						&& (jobs[i].getReportCount() == MonitorConstants.COUNT)
 						) {
 					tbc
 							.fail("The MonitoringJob was started and after a stop call, it didn't stop.");
@@ -109,18 +110,18 @@ public class Stop {
 			tbc.stopRunningJobs();
 
 			MonitoringJob job = tbc.getMonitorAdmin().startScheduledJob(
-					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
-					MonitorTestControl.SCHEDULE, MonitorTestControl.COUNT);
+					MonitorConstants.INITIATOR, MonitorConstants.SVS,
+					MonitorConstants.SCHEDULE, MonitorConstants.COUNT);
 			job.stop();
 
 			MonitoringJob[] jobs = tbc.getMonitorAdmin().getRunningJobs();
 			for (int i = 0; i < jobs.length; i++) {
 				if ((jobs[i].getInitiator()
-						.equals(MonitorTestControl.INITIATOR))
+						.equals(MonitorConstants.INITIATOR))
 						&& (jobs[i].getStatusVariableNames()
-								.equals(MonitorTestControl.SVS))
-						&& (jobs[i].getReportCount() == MonitorTestControl.COUNT)
-						&& (jobs[i].getSchedule() == MonitorTestControl.SCHEDULE)) {
+								.equals(MonitorConstants.SVS))
+						&& (jobs[i].getReportCount() == MonitorConstants.COUNT)
+						&& (jobs[i].getSchedule() == MonitorConstants.SCHEDULE)) {
 					tbc
 							.fail("The MonitoringJob was started and after a stop call, it didn't stop.");
 				}

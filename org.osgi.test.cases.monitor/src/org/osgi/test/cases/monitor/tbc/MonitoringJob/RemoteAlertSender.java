@@ -41,6 +41,7 @@ import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.monitor.StatusVariable;
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.TestingMonitorable;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
@@ -75,31 +76,31 @@ public class RemoteAlertSender {
     	DmtSession session = null;
         try {
         	session = tbc.getDmtAdmin().getSession(".");					
-			session.createInteriorNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
-			session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[1], new DmtData("EV"));
-			session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[2], new DmtData(MonitorTestControl.COUNT));
-			session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[3], new DmtData(true));
+			session.createInteriorNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
+			session.setNodeValue(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[1], new DmtData("EV"));
+			session.setNodeValue(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[2], new DmtData(MonitorConstants.COUNT));
+			session.setNodeValue(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[3], new DmtData(true));
 					
 			tbc.resetAlert();
 			
 			TestingMonitorable monitorable = tbc.getMonitorableInterface();
-			StatusVariable sv = new StatusVariable(MonitorTestControl.SV_NAME1,
+			StatusVariable sv = new StatusVariable(MonitorConstants.SV_NAME1,
 					StatusVariable.CM_CC, "test1");
 			monitorable.setStatusVariable(sv);			
 			
 			tbc.getMonitorListener().updated(
-					MonitorTestControl.SV_MONITORABLEID1,
+					MonitorConstants.SV_MONITORABLEID1,
 					sv);		
 			
 			tbc.assertTrue("Asserting if our implementation of RemoteAlertSender was called.", tbc.isReceivedAlert());
-			tbc.assertEquals("Asserting if we receive the correct value of serverId.", MonitorTestControl.REMOTE_SERVER, tbc.getServerId());
+			tbc.assertEquals("Asserting if we receive the correct value of serverId.", MonitorConstants.REMOTE_SERVER, tbc.getServerId());
 			tbc.assertNull("Asserting if we receive the correct value of correlator(null).", tbc.getCorrelator());
 			
 			DmtAlertItem[] alerts = tbc.getAlerts();
 			tbc.assertNotNull("Asserting that a non-null value was passed.", alerts);
 			tbc.assertEquals("Asserting that only one AlertItem was passed.", 1, alerts.length);
-			tbc.assertEquals("Asserting the source value in the AlertItem object.", MonitorTestControl.DMT_URI_MONITORABLE1_SV1, alerts[0].getSource());
-			tbc.assertEquals("Asserting the oma trap format in the AlertItem object.", MonitorTestControl.MONITOR_XML_MONITORABLE1_SV1, alerts[0].getType());
+			tbc.assertEquals("Asserting the source value in the AlertItem object.", MonitorConstants.DMT_URI_MONITORABLE1_SV1, alerts[0].getSource());
+			tbc.assertEquals("Asserting the oma trap format in the AlertItem object.", MonitorConstants.MONITOR_XML_MONITORABLE1_SV1, alerts[0].getType());
 			tbc.assertNull("Asserting that null is returned when getMark is called in AlertItem object.", alerts[0].getMark());
 			tbc.assertEquals("Asserting if the value in AlertItem object is the expected.", "test1", alerts[0].getData().getString());
 			
@@ -107,8 +108,8 @@ public class RemoteAlertSender {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			try {
-				session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[3], new DmtData(false));
-				session.deleteNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]);
+				session.setNodeValue(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[3], new DmtData(false));
+				session.deleteNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0]);
 				session.close();
 			} catch (DmtException e1) {
 				tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e1.getClass().getName());
@@ -130,22 +131,22 @@ public class RemoteAlertSender {
 			tbc.resetAlert();        	
         	
         	session = tbc.getDmtAdmin().getSession(".");					
-			session.createInteriorNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
-			session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[1], new DmtData("TM"));
-			session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[2], new DmtData(MonitorTestControl.SCHEDULE));
-			session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[3], new DmtData(true));
+			session.createInteriorNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
+			session.setNodeValue(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[1], new DmtData("TM"));
+			session.setNodeValue(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[2], new DmtData(MonitorConstants.SCHEDULE));
+			session.setNodeValue(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[3], new DmtData(true));
 							
-			wait(MonitorTestControl.SHORT_TIMEOUT);			
+			wait(MonitorConstants.SHORT_TIMEOUT);			
 			
 			tbc.assertTrue("Asserting if our implementation of RemoteAlertSender was called.", tbc.isReceivedAlert());
-			tbc.assertEquals("Asserting if we receive the correct value of serverId.", MonitorTestControl.REMOTE_SERVER, tbc.getServerId());
+			tbc.assertEquals("Asserting if we receive the correct value of serverId.", MonitorConstants.REMOTE_SERVER, tbc.getServerId());
 			tbc.assertNull("Asserting if we receive the correct value of correlator(null).", tbc.getCorrelator());			
 
 			DmtAlertItem[] alerts = tbc.getAlerts();
 			tbc.assertNotNull("Asserting that a non-null value was passed.", alerts);
 			tbc.assertEquals("Asserting that only one AlertItem was passed.", 1, alerts.length);
-			tbc.assertEquals("Asserting the source value in the AlertItem object.", MonitorTestControl.DMT_URI_MONITORABLE1_SV1, alerts[0].getSource());
-			tbc.assertEquals("Asserting the oma trap format in the AlertItem object.", MonitorTestControl.MONITOR_XML_MONITORABLE1_SV1, alerts[0].getType());
+			tbc.assertEquals("Asserting the source value in the AlertItem object.", MonitorConstants.DMT_URI_MONITORABLE1_SV1, alerts[0].getSource());
+			tbc.assertEquals("Asserting the oma trap format in the AlertItem object.", MonitorConstants.MONITOR_XML_MONITORABLE1_SV1, alerts[0].getType());
 			tbc.assertNull("Asserting that null is returned when getMark is called in AlertItem object.", alerts[0].getMark());
 			tbc.assertEquals("Asserting if the value in AlertItem object is the expected.", "test1", alerts[0].getData().getString());			
 			
@@ -153,8 +154,8 @@ public class RemoteAlertSender {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			try {
-				session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[3], new DmtData(false));
-				session.deleteNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]);
+				session.setNodeValue(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[3], new DmtData(false));
+				session.deleteNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0]);
 				session.close();
 			} catch (DmtException e1) {
 				tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e1.getClass().getName());

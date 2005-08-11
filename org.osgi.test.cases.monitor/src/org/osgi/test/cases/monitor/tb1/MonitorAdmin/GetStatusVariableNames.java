@@ -45,8 +45,11 @@
  */
 package org.osgi.test.cases.monitor.tb1.MonitorAdmin;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 import org.osgi.service.monitor.MonitorPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.TestInterface;
 import org.osgi.test.cases.monitor.tbc.Activators.MonitorableActivatorInvalid;
@@ -56,7 +59,7 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
  * @author Alexandre Alves
  * 
  * This Test Class Validates the implementation of
- * <code>getStatusVariableNames<code> method, according to MEG reference
+ * <code>getStatusVariableNames</code> method, according to MEG reference
  * documentation.
  */
 public class GetStatusVariableNames implements TestInterface {
@@ -76,6 +79,7 @@ public class GetStatusVariableNames implements TestInterface {
 		testGetStatusVariableNames007();
 		testGetStatusVariableNames008();
 		testGetStatusVariableNames009();
+		testGetStatusVariableNames010();
 	}
 
 	/**
@@ -112,7 +116,7 @@ public class GetStatusVariableNames implements TestInterface {
 		tbc.log("#testGetStatusVariableNames002");
 		try {
 			tbc.getMonitorAdmin().getStatusVariableNames(
-					MonitorTestControl.INVALID_ID);
+					MonitorConstants.INVALID_ID);
 
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -129,7 +133,7 @@ public class GetStatusVariableNames implements TestInterface {
 
 	/**
 	 * This method asserts that an IllegalArgumentException is thrown
-	 * when we pass a path that points to a non-existing monitorable.
+	 * when we pass a path that points to a non-existing Monitorable.
 	 * 
 	 * @spec MonitorAdmin.getStatusVariableNames(string)
 	 */
@@ -137,7 +141,7 @@ public class GetStatusVariableNames implements TestInterface {
 		tbc.log("#testGetStatusVariableNames003");
 		try {
 			tbc.getMonitorAdmin().getStatusVariableNames(
-					MonitorTestControl.INVALID_MONITORABLE_SV);
+					MonitorConstants.INVALID_MONITORABLE_SV);
 
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -169,25 +173,25 @@ public class GetStatusVariableNames implements TestInterface {
 					.getName(), "*/*", MonitorPermission.READ));
 
 			String[] sv = tbc.getMonitorAdmin().getStatusVariableNames(
-					MonitorTestControl.SV_MONITORABLEID1);
+					MonitorConstants.SV_MONITORABLEID1);
 
 			tbc.assertTrue(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"length of statusvariable names",
-							MonitorTestControl.SV_LENGTH + "" }),
-					(MonitorTestControl.SV_LENGTH == sv.length));
+							MonitorConstants.SV_LENGTH + "" }),
+					(MonitorConstants.SV_LENGTH == sv.length));
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"the first statusvariable name",
-							MonitorTestControl.SV_NAME1 }),
-					MonitorTestControl.SV_NAME1, sv[0]);
+							MonitorConstants.SV_NAME1 }),
+					MonitorConstants.SV_NAME1, sv[0]);
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"second statusvariable name",
-							MonitorTestControl.SV_NAME2 }),
-					MonitorTestControl.SV_NAME2, sv[1]);
+							MonitorConstants.SV_NAME2 }),
+					MonitorConstants.SV_NAME2, sv[1]);
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
@@ -199,7 +203,7 @@ public class GetStatusVariableNames implements TestInterface {
 	}
 
 	/**
-	 * This method asserts that no statusvariable names is 
+	 * This method asserts that no StatusVariable names is 
 	 * returned when the caller has no read permission.
 	 * 
 	 * @spec MonitorAdmin.getStatusVariableNames(string)
@@ -215,7 +219,7 @@ public class GetStatusVariableNames implements TestInterface {
 					.getName(), "*/*", null));
 
 			String[] sv = tbc.getMonitorAdmin().getStatusVariableNames(
-					MonitorTestControl.SV_MONITORABLEID1);
+					MonitorConstants.SV_MONITORABLEID1);
 
 			tbc
 					.assertEquals(
@@ -232,8 +236,8 @@ public class GetStatusVariableNames implements TestInterface {
 	}
 
 	/**
-	 * This method asserts that no statusvariable names is 
-	 * returned when the caller has read permission for other monitorable.
+	 * This method asserts that no StatusVariable names is 
+	 * returned when the caller has read permission for other Monitorable.
 	 * 
 	 * @spec MonitorAdmin.getStatusVariableNames(string)
 	 */
@@ -245,11 +249,11 @@ public class GetStatusVariableNames implements TestInterface {
 					tbc.getTb1Location());
 
 			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class
-					.getName(), MonitorTestControl.SV_MONITORABLEID2 + "/*",
+					.getName(), MonitorConstants.SV_MONITORABLEID2 + "/*",
 					MonitorPermission.READ));
 
 			String[] sv = tbc.getMonitorAdmin().getStatusVariableNames(
-					MonitorTestControl.SV_MONITORABLEID1);
+					MonitorConstants.SV_MONITORABLEID1);
 
 			tbc.assertNotNull("Asserting that a non-null value is returned by getStatusVariableNames().", sv);
 			
@@ -268,7 +272,7 @@ public class GetStatusVariableNames implements TestInterface {
 	}
 
 	/**
-	 * This method asserts that only the statusvariable that 
+	 * This method asserts that only the StatusVariable that 
 	 * we have set permission is returned.
 	 * 
 	 * @spec MonitorAdmin.getStatusVariableNames(string)
@@ -281,11 +285,11 @@ public class GetStatusVariableNames implements TestInterface {
 					tbc.getTb1Location());
 
 			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class
-					.getName(), MonitorTestControl.SVS[0],
+					.getName(), MonitorConstants.SVS[0],
 					MonitorPermission.READ));
 
 			String[] sv = tbc.getMonitorAdmin().getStatusVariableNames(
-					MonitorTestControl.SV_MONITORABLEID1);
+					MonitorConstants.SV_MONITORABLEID1);
 
 			tbc
 					.assertEquals(
@@ -295,7 +299,7 @@ public class GetStatusVariableNames implements TestInterface {
 			tbc
 					.assertEquals(
 							"Asserting if the returned statusvariable has the expected name.",
-							MonitorTestControl.SV_NAME1, sv[0]);
+							MonitorConstants.SV_NAME1, sv[0]);
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
@@ -307,9 +311,9 @@ public class GetStatusVariableNames implements TestInterface {
 	}
 
 	/**
-	 * This method asserts that only the statusvariable that 
-	 * has publish action permission set by its monitorable is returned
-	 * even if all statusvariable has read action permission.
+	 * This method asserts that only the StatusVariable that 
+	 * has publish action permission set by its Monitorable is returned
+	 * even if all StatusVariable has read action permission.
 	 * 
 	 * @spec MonitorAdmin.getStatusVariableNames(string)
 	 */
@@ -332,7 +336,7 @@ public class GetStatusVariableNames implements TestInterface {
 
 			String[] statusVariables = tbc.getMonitorAdmin()
 					.getStatusVariableNames(
-							MonitorTestControl.SV_MONITORABLEID2);
+							MonitorConstants.SV_MONITORABLEID2);
 
 			tbc.assertTrue("Asserting if only one StatusVariable is returned.",
 					(statusVariables.length == 1));
@@ -340,14 +344,14 @@ public class GetStatusVariableNames implements TestInterface {
 			tbc
 					.assertEquals(
 							"Asserting if the MonitorAdmin returns the StatusVariable that we expect.",
-							MonitorTestControl.SV_NAME1, statusVariables[0]);
+							MonitorConstants.SV_NAME1, statusVariables[0]);
 
-			tbc.setLocalPermission(MonitorTestControl.SV_MONITORABLEID1 + "/*",
+			tbc.setLocalPermission(MonitorConstants.SV_MONITORABLEID1 + "/*",
 					org.osgi.service.monitor.MonitorPermission.PUBLISH);
 
 			statusVariables = tbc.getMonitorAdmin()
 					.getStatusVariableNames(
-							MonitorTestControl.SV_MONITORABLEID1);
+							MonitorConstants.SV_MONITORABLEID1);
 
 			tbc.assertTrue("Asserting if two StatusVariables are returned.",
 					(statusVariables.length == 2));
@@ -355,12 +359,12 @@ public class GetStatusVariableNames implements TestInterface {
 			tbc
 					.assertEquals(
 							"Asserting if the MonitorAdmin returns the StatusVariable that we expect.",
-							MonitorTestControl.SV_NAME1, statusVariables[0]);
+							MonitorConstants.SV_NAME1, statusVariables[0]);
 			
 			tbc
 			.assertEquals(
 					"Asserting if the MonitorAdmin returns the StatusVariable that we expect.",
-					MonitorTestControl.SV_NAME2, statusVariables[1]);			
+					MonitorConstants.SV_NAME2, statusVariables[1]);			
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
@@ -374,8 +378,8 @@ public class GetStatusVariableNames implements TestInterface {
 	}
 	
 	/**
-	 * This method asserts that if our monitorable
-	 * returns null, MonitorAdmin must returns a empty array instead of throws
+	 * This method asserts that if our Monitorable
+	 * returns null, MonitorAdmin must returns an empty array instead of throwing
 	 * NullPointerException.
 	 * 
 	 * @spec MonitorAdmin.getStatusVariableNames(string)
@@ -392,12 +396,12 @@ public class GetStatusVariableNames implements TestInterface {
 					.getName(), "*/*",
 					MonitorPermission.READ));
 			
-			monitorableActivator = new MonitorableActivatorInvalid(tbc, MonitorTestControl.INVALID_MONITORABLE_SV);
+			monitorableActivator = new MonitorableActivatorInvalid(tbc, MonitorConstants.INVALID_MONITORABLE_SV);
 			monitorableActivator.start(tbc.getContext());
 			
 
 			String[] sv = tbc.getMonitorAdmin().getStatusVariableNames(
-					MonitorTestControl.INVALID_MONITORABLE_SV);
+					MonitorConstants.INVALID_MONITORABLE_SV);
 
 			tbc
 					.assertNotNull("Asserting that a non-null value was returned by MonitorAdmin.", sv);
@@ -412,11 +416,38 @@ public class GetStatusVariableNames implements TestInterface {
 			try {
 				monitorableActivator.stop(tbc.getContext());
 			} catch (Exception e1) {
-				tbc.log("error on stopping the monitorable.");
+				tbc.log("#error on stopping the monitorable.");
 			}
 			tbc.getPermissionAdmin()
 					.setPermissions(tbc.getTb1Location(), infos);
 		}
 	}	
+	
+	/**
+	 * This method asserts that the returned array does not contain duplicates
+	 * when we install a monitorable with equals StatusVariable names. 
+	 * 
+	 * @spec MonitorAdmin.getStatusVariableNames(string)
+	 */		
+	private void testGetStatusVariableNames010() {
+		Bundle bundle = null;
+		try {
+			tbc.log("#testGetStatusVariableNames010");	
+			bundle = tbc.installBundle("tb4.jar");		
+			String[] names = tbc.getMonitorAdmin().getStatusVariableNames("sameSV");
+			tbc.assertEquals("Asserting if getStatusVariableNames returns an array of 1 element.", 1, names.length);
+			tbc.assertEquals("Asserting if getStatusVariableNames returns the correct element name.", MonitorConstants.SV_NAME1, names[0]);
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		} finally {
+			try {
+				bundle.uninstall();
+			} catch (BundleException e1) {
+				tbc.log("fail when we try to uninstall the tb4.");
+			}
+		}
+	}		
+	
+	
 
 }

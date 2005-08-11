@@ -44,6 +44,7 @@ package org.osgi.test.cases.monitor.tb1.MonitorAdmin;
 
 import org.osgi.service.monitor.MonitorPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.TestInterface;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
@@ -52,7 +53,7 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
  * @author Alexandre Alves
  * 
  * This Test Class Validates the implementation of
- * <code>getDescription<code> method, according to MEG reference
+ * <code>getDescription</code> method, according to MEG reference
  * documentation.
  */
 public class GetDescription implements TestInterface {
@@ -79,7 +80,7 @@ public class GetDescription implements TestInterface {
 	 * This method asserts if a IllegalArgumentException is thrown
 	 * when we pass null as parameter.
 	 * 
-	 * @spec MonitorAdmin.getDescription(string)
+	 * @spec MonitorAdmin.getDescription(String)
 	 */
 	private void testGetDescription001() {
 		try { 
@@ -103,12 +104,12 @@ public class GetDescription implements TestInterface {
 	 * This method asserts if a IllegalArgumentException is thrown
 	 * when we pass an invalid characters as parameter.
 	 * 
-	 * @spec MonitorAdmin.getDescription(string)
+	 * @spec MonitorAdmin.getDescription(String)
 	 */
 	private void testGetDescription002() {
 		try {
 			tbc.log("#testGetDescription002");
-			tbc.getMonitorAdmin().getDescription(MonitorTestControl.INVALID_ID);
+			tbc.getMonitorAdmin().getDescription(MonitorConstants.INVALID_ID);
 
 			tbc.failException("", IllegalArgumentException.class);
 			
@@ -126,18 +127,18 @@ public class GetDescription implements TestInterface {
 
 	/**
 	 * This method asserts if a IllegalArgumentException is thrown
-	 * when we pass a path to a inexistent statusvariable.
+	 * when we pass a path to a inexistent StatusVariable.
 	 * 
-	 * @spec MonitorAdmin.getDescription(string)
+	 * @spec MonitorAdmin.getDescription(String)
 	 */
 	private void testGetDescription003() {
 		PermissionInfo[] infos = null;
 		try {
 			tbc.log("#testGetDescription003");
 			infos = tbc.getPermissionAdmin().getPermissions(tbc.getTb1Location());
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.INEXISTENT_SVS, MonitorPermission.READ));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.INEXISTENT_SVS, MonitorPermission.READ));
 			
-			tbc.getMonitorAdmin().getDescription(MonitorTestControl.INEXISTENT_SVS);
+			tbc.getMonitorAdmin().getDescription(MonitorConstants.INEXISTENT_SVS);
 
 			tbc.failException("", IllegalArgumentException.class);
 			
@@ -156,19 +157,19 @@ public class GetDescription implements TestInterface {
 	}
 
 	/**
-	 * This method asserts if the monitoradmin returns the value (null)
-	 * returned by our monitorable.
+	 * This method asserts if the MonitorAdmin returns the value (null)
+	 * returned by our Monitorable.
 	 * 
-	 * @spec MonitorAdmin.getDescription(string)
+	 * @spec MonitorAdmin.getDescription(String)
 	 */
 	private void testGetDescription004() {
 		tbc.log("#testGetDescription004");
 		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(tbc.getTb1Location());
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[0], MonitorPermission.READ));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.SVS[0], MonitorPermission.READ));
 
-			String desc = tbc.getMonitorAdmin().getDescription(MonitorTestControl.SVS[0]);
+			String desc = tbc.getMonitorAdmin().getDescription(MonitorConstants.SVS[0]);
 			
 			tbc.assertNull("The description was correctly returned by MonitorAdmin", desc);
 			
@@ -180,10 +181,10 @@ public class GetDescription implements TestInterface {
 	}
 
 	/**
-	 * This method asserts that a securityexception is thrown when
-	 * we have set no permission to the statusvariable that we are using.
+	 * This method asserts that a SecurityException is thrown when
+	 * we have set no permission to the StatusVariable that we are using.
 	 * 
-	 * @spec MonitorAdmin.getDescription(string)
+	 * @spec MonitorAdmin.getDescription(String)
 	 */
 	private void testGetDescription005() {
 		tbc.log("#testGetDescription005");
@@ -192,9 +193,9 @@ public class GetDescription implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[0], null));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.SVS[0], null));
 
-			tbc.getMonitorAdmin().getDescription(MonitorTestControl.SVS[0]);
+			tbc.getMonitorAdmin().getDescription(MonitorConstants.SVS[0]);
 
 			tbc.failException("", SecurityException.class);
 
@@ -214,10 +215,10 @@ public class GetDescription implements TestInterface {
 	}
 
 	/**
-	 * This method asserts that a securityexception is thrown when
-	 * we have set other action permission to the statusvariable that we are using.
+	 * This method asserts that a SecurityException is thrown when
+	 * we have set other action permission to the StatusVariable that we are using.
 	 * 
-	 * @spec MonitorAdmin.getDescription(string)
+	 * @spec MonitorAdmin.getDescription(String)
 	 */
 	private void testGetDescription006() {
 		tbc.log("#testGetDescription006");
@@ -226,9 +227,9 @@ public class GetDescription implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[0], MonitorPermission.PUBLISH));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.SVS[0], MonitorPermission.PUBLISH));
 
-			tbc.getMonitorAdmin().getDescription(MonitorTestControl.SVS[0]);
+			tbc.getMonitorAdmin().getDescription(MonitorConstants.SVS[0]);
 
 			tbc.failException("", SecurityException.class);
 
@@ -248,10 +249,10 @@ public class GetDescription implements TestInterface {
 	}
 	
 	/**
-	 * This method asserts that a securityexception is thrown when
-	 * we have set read action permission to other statusvariable.
+	 * This method asserts that a SecurityException is thrown when
+	 * we have set read action permission to other StatusVariable.
 	 * 
-	 * @spec MonitorAdmin.getDescription(string)
+	 * @spec MonitorAdmin.getDescription(String)
 	 */
 	private void testGetDescription007() {
 		tbc.log("#testGetDescription007");
@@ -260,9 +261,9 @@ public class GetDescription implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[1], MonitorPermission.READ));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.SVS[1], MonitorPermission.READ));
 
-			tbc.getMonitorAdmin().getDescription(MonitorTestControl.SVS[0]);
+			tbc.getMonitorAdmin().getDescription(MonitorConstants.SVS[0]);
 
 			tbc.failException("", SecurityException.class);
 

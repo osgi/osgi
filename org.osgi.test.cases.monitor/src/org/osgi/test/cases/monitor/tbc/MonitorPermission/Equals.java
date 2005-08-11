@@ -44,7 +44,7 @@ import org.osgi.service.monitor.MonitorPermission;
  * @author Leonardo Barros
  * 
  * This test class validates the implementation of
- * <code>equals<code> method, according to MEG reference
+ * <code>equals</code> method, according to MEG reference
  * documentation.
  */
 

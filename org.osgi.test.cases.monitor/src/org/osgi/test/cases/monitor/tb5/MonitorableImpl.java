@@ -30,12 +30,12 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 29/03/2005   Alexandre Santos
+ * 01/07/2005   Alexandre Santos
  * 14           Implement MEG TCK
  * ===========  ==============================================================
  */
 
-package org.osgi.test.cases.monitor.tb3;
+package org.osgi.test.cases.monitor.tb5;
 
 import org.osgi.service.monitor.Monitorable;
 import org.osgi.service.monitor.StatusVariable;

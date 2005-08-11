@@ -39,7 +39,7 @@ package org.osgi.test.cases.monitor.tb4;
 
 import org.osgi.service.monitor.Monitorable;
 import org.osgi.service.monitor.StatusVariable;
-import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 
 /**
  * @author Alexandre Alves
@@ -49,8 +49,8 @@ public class MonitorableSameSvImpl implements Monitorable {
 	private static StatusVariable sv1;
 	
 	static {
-		sv0 = new StatusVariable(MonitorTestControl.SV_NAME1,StatusVariable.CM_CC,"test");
-		sv1 = new StatusVariable(MonitorTestControl.SV_NAME1,StatusVariable.CM_DER,"test");
+		sv0 = new StatusVariable(MonitorConstants.SV_NAME1,StatusVariable.CM_CC,"test");
+		sv1 = new StatusVariable(MonitorConstants.SV_NAME1,StatusVariable.CM_DER,"test");
 	}
 
 	public String[] getStatusVariableNames() {
@@ -60,13 +60,11 @@ public class MonitorableSameSvImpl implements Monitorable {
 
 	public StatusVariable getStatusVariable(String arg0) throws IllegalArgumentException {
 	
-		if(arg0==null || arg0.equals(MonitorTestControl.INVALID_MONITORABLE_SV)){
+		if(arg0==null || arg0.equals(MonitorConstants.INVALID_MONITORABLE_SV)){
 			throw new IllegalArgumentException();
 		}else {
-			if (arg0.equals(MonitorTestControl.SV_NAME1)) {
+			if (arg0.equals(MonitorConstants.SV_NAME1)) {
 				return sv0;				
-			} else if (arg0.equals(MonitorTestControl.SV_NAME2) ){
-				return sv1;
 			} else {
 				throw new IllegalArgumentException();			
 			}
@@ -75,11 +73,11 @@ public class MonitorableSameSvImpl implements Monitorable {
 
 	public boolean notifiesOnChange(String arg0) throws IllegalArgumentException {
 		
-		if(arg0==null || arg0.equals(MonitorTestControl.INVALID_MONITORABLE_SV)){
+		if(arg0==null || arg0.equals(MonitorConstants.INVALID_MONITORABLE_SV)){
 			throw new IllegalArgumentException();
 		}else {
 			// according to JSTD-MEGTCK-CODE-INSP011.xls, use sv to return false and other to return true
-			if ((arg0.equals(MonitorTestControl.SV_NAME1)) || (arg0.equals(MonitorTestControl.SV_NAME2))) {
+			if (arg0.equals(MonitorConstants.SV_NAME1)) {
 				return true;				
 			} else {
 				throw new IllegalArgumentException();
@@ -88,10 +86,10 @@ public class MonitorableSameSvImpl implements Monitorable {
 	}
 
 	public boolean resetStatusVariable(String arg0) throws IllegalArgumentException {
-		if(arg0==null || arg0.equals(MonitorTestControl.INVALID_MONITORABLE_SV)){
+		if(arg0==null || arg0.equals(MonitorConstants.INVALID_MONITORABLE_SV)){
 			throw new IllegalArgumentException();
 		}else {
-			if ((arg0.equals(MonitorTestControl.SV_NAME1)) || (arg0.equals(MonitorTestControl.SV_NAME2))) {
+			if (arg0.equals(MonitorConstants.SV_NAME1)) {
 				return false;				
 			} else {
 				throw new IllegalArgumentException();
@@ -101,10 +99,10 @@ public class MonitorableSameSvImpl implements Monitorable {
 
 	public String getDescription(String arg0) throws IllegalArgumentException  {		
 	
-		if(arg0==null || arg0.equals(MonitorTestControl.INVALID_MONITORABLE_SV)){
+		if(arg0==null || arg0.equals(MonitorConstants.INVALID_MONITORABLE_SV)){
 			throw new IllegalArgumentException();
 		}else {
-			if ((arg0.equals(MonitorTestControl.SV_NAME1)) || (arg0.equals(MonitorTestControl.SV_NAME2))) {
+			if (arg0.equals(MonitorConstants.SV_NAME1)) {
 				return null;				
 			} else {
 				throw new IllegalArgumentException();

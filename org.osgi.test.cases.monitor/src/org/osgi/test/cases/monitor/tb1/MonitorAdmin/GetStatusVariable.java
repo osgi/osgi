@@ -45,6 +45,7 @@ package org.osgi.test.cases.monitor.tb1.MonitorAdmin;
 import org.osgi.service.monitor.MonitorPermission;
 import org.osgi.service.monitor.StatusVariable;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.TestInterface;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
@@ -53,7 +54,7 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
  * @author Alexandre Alves
  * 
  * This Test Class Validates the implementation of
- * <code>getStatusVariable<code> method, according to MEG reference
+ * <code>getStatusVariable</code> method, according to MEG reference
  * documentation.
  */
 public class GetStatusVariable implements TestInterface {
@@ -71,6 +72,7 @@ public class GetStatusVariable implements TestInterface {
 		testGetStatusVariable005();
 		testGetStatusVariable006();
 		testGetStatusVariable007();
+		testGetStatusVariable008();
 	}
 
 	/**
@@ -107,7 +109,7 @@ public class GetStatusVariable implements TestInterface {
 		tbc.log("#testGetStatusVariable002");
 		try {
 			tbc.getMonitorAdmin().getStatusVariable(
-					MonitorTestControl.INVALID_ID);
+					MonitorConstants.INVALID_ID);
 
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -134,9 +136,9 @@ public class GetStatusVariable implements TestInterface {
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.INEXISTENT_SVS, MonitorPermission.READ));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.INEXISTENT_SVS, MonitorPermission.READ));
 			
-			tbc.getMonitorAdmin().getStatusVariable(MonitorTestControl.INEXISTENT_SVS);
+			tbc.getMonitorAdmin().getStatusVariable(MonitorConstants.INEXISTENT_SVS);
 
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -154,7 +156,7 @@ public class GetStatusVariable implements TestInterface {
 	}
 
 	/**
-	 * This method asserts that the returned statusvariable correspond to
+	 * This method asserts that the returned StatusVariable correspond to
 	 * the path passed.
 	 * 
 	 * @spec MonitorAdmin.getStatusVariable(string)
@@ -167,10 +169,10 @@ public class GetStatusVariable implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[0], MonitorPermission.READ));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.SVS[0], MonitorPermission.READ));
 
 			StatusVariable sv = tbc.getMonitorAdmin().getStatusVariable(
-					MonitorTestControl.SVS[0]);
+					MonitorConstants.SVS[0]);
 
 			tbc.assertNotNull(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_NOT_NULL,
@@ -182,10 +184,10 @@ public class GetStatusVariable implements TestInterface {
 									.getMessage(
 											MessagesConstants.ASSERT_EQUALS,
 											new String[] { "ID", 
-													MonitorTestControl.SVS[0]
-															.substring(MonitorTestControl.SVS[0]
+													MonitorConstants.SVS[0]
+															.substring(MonitorConstants.SVS[0]
 																	.indexOf("/") + 1) }),
-							MonitorTestControl.SV_NAME1, sv.getID());
+							MonitorConstants.SV_NAME1, sv.getID());
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
@@ -196,8 +198,8 @@ public class GetStatusVariable implements TestInterface {
 	}
 
 	/**
-	 * This method asserts that a securityexception is thrown when
-	 * we have set no permission to the statusvariable that we are using.
+	 * This method asserts that a SecurityException is thrown when
+	 * we have set no permission to the StatusVariable that we are using.
 	 * 
 	 * @spec MonitorAdmin.getStatusVariable(string)
 	 */
@@ -208,9 +210,9 @@ public class GetStatusVariable implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[0], null));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.SVS[0], null));
 
-			tbc.getMonitorAdmin().getStatusVariable(MonitorTestControl.SVS[0]);
+			tbc.getMonitorAdmin().getStatusVariable(MonitorConstants.SVS[0]);
 
 			tbc.failException("", SecurityException.class);
 
@@ -230,8 +232,8 @@ public class GetStatusVariable implements TestInterface {
 	}
 
 	/**
-	 * This method asserts that a securityexception is thrown when
-	 * we have set other action permission to the statusvariable that we are using.
+	 * This method asserts that a SecurityException is thrown when
+	 * we have set other action permission to the StatusVariable that we are using.
 	 * 
 	 * @spec MonitorAdmin.getStatusVariable(string)
 	 */
@@ -242,9 +244,9 @@ public class GetStatusVariable implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[0], MonitorPermission.PUBLISH));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.SVS[0], MonitorPermission.PUBLISH));
 
-			tbc.getMonitorAdmin().getStatusVariable(MonitorTestControl.SVS[0]);
+			tbc.getMonitorAdmin().getStatusVariable(MonitorConstants.SVS[0]);
 
 			tbc.failException("", SecurityException.class);
 
@@ -264,8 +266,8 @@ public class GetStatusVariable implements TestInterface {
 	}
 	
 	/**
-	 * This method asserts that a securityexception is thrown when
-	 * we have set read action permission to other statusvariable.
+	 * This method asserts that a SecurityException is thrown when
+	 * we have set read action permission to other StatusVariable.
 	 * 
 	 * @spec MonitorAdmin.getStatusVariable(string)
 	 */
@@ -276,9 +278,9 @@ public class GetStatusVariable implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[1], MonitorPermission.READ));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.SVS[1], MonitorPermission.READ));
 
-			tbc.getMonitorAdmin().getStatusVariable(MonitorTestControl.SVS[0]);
+			tbc.getMonitorAdmin().getStatusVariable(MonitorConstants.SVS[0]);
 
 			tbc.failException("", SecurityException.class);
 
@@ -296,6 +298,37 @@ public class GetStatusVariable implements TestInterface {
 					tbc.getTb1Location(), infos);
 		}
 	}
+	
+	/**
+	 * This method asserts that null is returned
+	 * when we try to get a StatusVariable that does not
+	 * have publish permission.
+	 * 
+	 * @spec MonitorAdmin.getStatusVariable(string)
+	 */
+	private void testGetStatusVariable008() {
+		tbc.log("#testGetStatusVariable008");
+		PermissionInfo[] infos = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb1Location());
+
+			tbc.setLocalPermission(new PermissionInfo[] {
+					new PermissionInfo(MonitorPermission.class.getName(),"cesar2/test0", MonitorPermission.READ)
+			});
+			
+			
+			StatusVariable sv = tbc.getMonitorAdmin().getStatusVariable("cesar2/test0");
+			
+			tbc.assertNull("Asserting that a null value was returned by MonitorAdmin.", sv);
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		} finally {
+			tbc.getPermissionAdmin().setPermissions(
+					tbc.getTb1Location(), infos);
+		}
+	}	
 	
 
 }

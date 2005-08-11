@@ -52,7 +52,7 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
  * @author Leonardo Barros
  * 
  * This test class validates the implementation of
- * <code>MonitorPermission<code> method, according to MEG reference
+ * <code>MonitorPermission</code> method, according to MEG reference
  * documentation.
  */
 public class MonitorPermission {

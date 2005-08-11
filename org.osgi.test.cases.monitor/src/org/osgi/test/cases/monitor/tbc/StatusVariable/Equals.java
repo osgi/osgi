@@ -40,6 +40,7 @@
 package org.osgi.test.cases.monitor.tbc.StatusVariable;
 
 import org.osgi.service.monitor.StatusVariable;
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
@@ -47,7 +48,7 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
  * @author Leonardo Barros
  * 
  * This test class validates the implementation of
- * <code>equals<code> method, according to MEG reference
+ * <code>equals</code> method, according to MEG reference
  * documentation.
  */
 public class Equals {
@@ -84,11 +85,11 @@ public class Equals {
 			StatusVariable sv2 = null;
 
 			for (int i = 0; i < 4; i++) {
-				sv = new StatusVariable(MonitorTestControl.SV_NAME1, i,
-						MonitorTestControl.SV_INT_VALUE);
+				sv = new StatusVariable(MonitorConstants.SV_NAME1, i,
+						MonitorConstants.SV_INT_VALUE);
 				for (int j = 0; j < 4; j++) {
-					sv2 = new StatusVariable(MonitorTestControl.SV_NAME1, j,
-							MonitorTestControl.SV_INT_VALUE);
+					sv2 = new StatusVariable(MonitorConstants.SV_NAME1, j,
+							MonitorConstants.SV_INT_VALUE);
 					if (i == j) {
 						tbc
 								.assertTrue(
@@ -123,11 +124,11 @@ public class Equals {
 			StatusVariable sv2 = null;
 
 			for (int i = 0; i < 4; i++) {
-				sv = new StatusVariable(MonitorTestControl.SV_NAME1, i,
-						MonitorTestControl.SV_BOOLEAN_VALUE);
+				sv = new StatusVariable(MonitorConstants.SV_NAME1, i,
+						MonitorConstants.SV_BOOLEAN_VALUE);
 				for (int j = 0; j < 4; j++) {
-					sv2 = new StatusVariable(MonitorTestControl.SV_NAME1, j,
-							MonitorTestControl.SV_BOOLEAN_VALUE);
+					sv2 = new StatusVariable(MonitorConstants.SV_NAME1, j,
+							MonitorConstants.SV_BOOLEAN_VALUE);
 					if (i == j) {
 						tbc
 								.assertTrue(
@@ -162,11 +163,11 @@ public class Equals {
 			StatusVariable sv2 = null;
 
 			for (int i = 0; i < 4; i++) {
-				sv = new StatusVariable(MonitorTestControl.SV_NAME1, i,
-						MonitorTestControl.SV_STRING_VALUE);
+				sv = new StatusVariable(MonitorConstants.SV_NAME1, i,
+						MonitorConstants.SV_STRING_VALUE);
 				for (int j = 0; j < 4; j++) {
-					sv2 = new StatusVariable(MonitorTestControl.SV_NAME1, j,
-							MonitorTestControl.SV_STRING_VALUE);
+					sv2 = new StatusVariable(MonitorConstants.SV_NAME1, j,
+							MonitorConstants.SV_STRING_VALUE);
 					if (i == j) {
 						tbc
 								.assertTrue(
@@ -201,11 +202,11 @@ public class Equals {
 			StatusVariable sv2 = null;
 
 			for (int i = 0; i < 4; i++) {
-				sv = new StatusVariable(MonitorTestControl.SV_NAME1, i,
-						MonitorTestControl.SV_FLOAT_VALUE);
+				sv = new StatusVariable(MonitorConstants.SV_NAME1, i,
+						MonitorConstants.SV_FLOAT_VALUE);
 				for (int j = 0; j < 4; j++) {
-					sv2 = new StatusVariable(MonitorTestControl.SV_NAME1, j,
-							MonitorTestControl.SV_FLOAT_VALUE);
+					sv2 = new StatusVariable(MonitorConstants.SV_NAME1, j,
+							MonitorConstants.SV_FLOAT_VALUE);
 					if (i == j) {
 						tbc
 								.assertTrue(
@@ -240,33 +241,33 @@ public class Equals {
 
 			for (int i = 0; i < 4; i++) {
 				if (i == 0) {
-					sv = new StatusVariable(MonitorTestControl.SV_NAME1,
+					sv = new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC,
-							MonitorTestControl.SV_INT_VALUE);
-					sv2 = new StatusVariable(MonitorTestControl.SV_NAME1,
+							MonitorConstants.SV_INT_VALUE);
+					sv2 = new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC,
-							MonitorTestControl.SV_INT_VALUE);
+							MonitorConstants.SV_INT_VALUE);
 				} else if (i == 1) {
-					sv = new StatusVariable(MonitorTestControl.SV_NAME1,
+					sv = new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC,
-							MonitorTestControl.SV_BOOLEAN_VALUE);
-					sv2 = new StatusVariable(MonitorTestControl.SV_NAME1,
+							MonitorConstants.SV_BOOLEAN_VALUE);
+					sv2 = new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC,
-							MonitorTestControl.SV_BOOLEAN_VALUE);
+							MonitorConstants.SV_BOOLEAN_VALUE);
 				} else if (i == 2) {
-					sv = new StatusVariable(MonitorTestControl.SV_NAME1,
+					sv = new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC,
-							MonitorTestControl.SV_FLOAT_VALUE);
-					sv2 = new StatusVariable(MonitorTestControl.SV_NAME1,
+							MonitorConstants.SV_FLOAT_VALUE);
+					sv2 = new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC,
-							MonitorTestControl.SV_FLOAT_VALUE);
+							MonitorConstants.SV_FLOAT_VALUE);
 				} else if (i == 3) {
-					sv = new StatusVariable(MonitorTestControl.SV_NAME1,
+					sv = new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC,
-							MonitorTestControl.SV_STRING_VALUE);
-					sv2 = new StatusVariable(MonitorTestControl.SV_NAME1,
+							MonitorConstants.SV_STRING_VALUE);
+					sv2 = new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC,
-							MonitorTestControl.SV_STRING_VALUE);
+							MonitorConstants.SV_STRING_VALUE);
 				}
 
 				tbc
@@ -295,40 +296,40 @@ public class Equals {
 
 			for (int i = 0; i < 4; i++) {
 				if (i == 0) {
-					sv = new StatusVariable(MonitorTestControl.SV_NAME1,
+					sv = new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC,
-							MonitorTestControl.SV_INT_VALUE);
+							MonitorConstants.SV_INT_VALUE);
 				} else if (i == 1) {
-					sv = new StatusVariable(MonitorTestControl.SV_NAME1,
+					sv = new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC,
-							MonitorTestControl.SV_BOOLEAN_VALUE);
+							MonitorConstants.SV_BOOLEAN_VALUE);
 				} else if (i == 2) {
-					sv = new StatusVariable(MonitorTestControl.SV_NAME1,
+					sv = new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC,
-							MonitorTestControl.SV_FLOAT_VALUE);
+							MonitorConstants.SV_FLOAT_VALUE);
 				} else if (i == 3) {
-					sv = new StatusVariable(MonitorTestControl.SV_NAME1,
+					sv = new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC,
-							MonitorTestControl.SV_STRING_VALUE);
+							MonitorConstants.SV_STRING_VALUE);
 				}
 				for (int j = 0; j < 4; j++) {
 
 					if (j == 0) {
-						sv2 = new StatusVariable(MonitorTestControl.SV_NAME1,
+						sv2 = new StatusVariable(MonitorConstants.SV_NAME1,
 								StatusVariable.CM_CC,
-								MonitorTestControl.SV_INT_VALUE + 1);
+								MonitorConstants.SV_INT_VALUE + 1);
 					} else if (j == 1) {
-						sv2 = new StatusVariable(MonitorTestControl.SV_NAME1,
+						sv2 = new StatusVariable(MonitorConstants.SV_NAME1,
 								StatusVariable.CM_CC,
-								!MonitorTestControl.SV_BOOLEAN_VALUE);
+								!MonitorConstants.SV_BOOLEAN_VALUE);
 					} else if (j == 2) {
-						sv2 = new StatusVariable(MonitorTestControl.SV_NAME1,
+						sv2 = new StatusVariable(MonitorConstants.SV_NAME1,
 								StatusVariable.CM_CC,
-								MonitorTestControl.SV_FLOAT_VALUE + 1.0f);
+								MonitorConstants.SV_FLOAT_VALUE + 1.0f);
 					} else if (j == 3) {
-						sv2 = new StatusVariable(MonitorTestControl.SV_NAME1,
+						sv2 = new StatusVariable(MonitorConstants.SV_NAME1,
 								StatusVariable.CM_CC,
-								MonitorTestControl.SV_STRING_VALUE + "a");
+								MonitorConstants.SV_STRING_VALUE + "a");
 					}
 					tbc
 							.assertTrue(
@@ -352,14 +353,14 @@ public class Equals {
 		try {
 			tbc.log("#testEquals007");
 			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_NAME1,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INT_VALUE);
+					MonitorConstants.SV_INT_VALUE);
 
 			org.osgi.service.monitor.StatusVariable sv2 = new org.osgi.service.monitor.StatusVariable(
-					MonitorTestControl.SV_NAME2,
+					MonitorConstants.SV_NAME2,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
-					MonitorTestControl.SV_INT_VALUE);
+					MonitorConstants.SV_INT_VALUE);
 
 			tbc
 					.assertTrue(

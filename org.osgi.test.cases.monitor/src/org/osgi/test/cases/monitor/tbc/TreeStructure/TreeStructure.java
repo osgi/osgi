@@ -39,6 +39,7 @@ package org.osgi.test.cases.monitor.tbc.TreeStructure;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
@@ -89,10 +90,10 @@ public class TreeStructure {
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc.assertTrue("Asserts if ./OSGi/Monitor is a valid node", session
-					.isNodeUri(MonitorTestControl.DMT_OSGI_MONITOR));
+					.isNodeUri(MonitorConstants.DMT_OSGI_MONITOR));
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(MonitorTestControl.DMT_OSGI_MONITOR);
+					.getMetaNode(MonitorConstants.DMT_OSGI_MONITOR);
 
 			tbc.assertEquals("Asserts $/Monitor metanode scope",
 					DmtMetaNode.PERMANENT, metaNode.getScope());
@@ -136,14 +137,14 @@ public class TreeStructure {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					MonitorTestControl.DMT_OSGI_MONITOR,
+					MonitorConstants.DMT_OSGI_MONITOR,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc.assertTrue("Asserts if ./OSGi/Monitor is a valid node", session
-					.isNodeUri(MonitorTestControl.DMT_URI_MONITORABLE1));
+					.isNodeUri(MonitorConstants.DMT_URI_MONITORABLE1));
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(MonitorTestControl.DMT_URI_MONITORABLE1);
+					.getMetaNode(MonitorConstants.DMT_URI_MONITORABLE1);
 
 			tbc.assertEquals("Asserts $/Monitor/cesar metanode scope",
 					DmtMetaNode.PERMANENT, metaNode.getScope());
@@ -189,17 +190,17 @@ public class TreeStructure {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					MonitorTestControl.DMT_URI_MONITORABLE1,
+					MonitorConstants.DMT_URI_MONITORABLE1,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc
 					.assertTrue(
 							"Asserts if ./OSGi/Monitor/cesar/test0 is a valid node",
 							session
-									.isNodeUri(MonitorTestControl.DMT_URI_MONITORABLE1_SV1));
+									.isNodeUri(MonitorConstants.DMT_URI_MONITORABLE1_SV1));
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(MonitorTestControl.DMT_URI_MONITORABLE1_SV1);
+					.getMetaNode(MonitorConstants.DMT_URI_MONITORABLE1_SV1);
 
 			tbc.assertEquals("Asserts $/Monitor/cesar/test0 metanode scope",
 					DmtMetaNode.PERMANENT, metaNode.getScope());
@@ -246,17 +247,17 @@ public class TreeStructure {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					MonitorTestControl.DMT_URI_MONITORABLE1,
+					MonitorConstants.DMT_URI_MONITORABLE1,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc
 					.assertTrue(
 							"Asserts if ./OSGi/Monitor/cesar/test0/TrapID is a valid node",
 							session
-									.isNodeUri(MonitorTestControl.DMT_URI_MONITORABLE_SV1_TRAPID));
+									.isNodeUri(MonitorConstants.DMT_URI_MONITORABLE_SV1_TRAPID));
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(MonitorTestControl.DMT_URI_MONITORABLE_SV1_TRAPID);
+					.getMetaNode(MonitorConstants.DMT_URI_MONITORABLE_SV1_TRAPID);
 
 			tbc.assertEquals(
 					"Asserts $/Monitor/cesar/test0/TrapID metanode scope",
@@ -289,10 +290,10 @@ public class TreeStructure {
 			tbc
 					.assertEquals(
 							"Asserting the value stored in /Monitor/cesar/test0/TrapID",
-							MonitorTestControl.SVS[0],
+							MonitorConstants.SVS[0],
 							session
 									.getNodeValue(
-											MonitorTestControl.DMT_URI_MONITORABLE_SV1_TRAPID)
+											MonitorConstants.DMT_URI_MONITORABLE_SV1_TRAPID)
 									.getString());
 
 		} catch (Exception e) {
@@ -317,17 +318,17 @@ public class TreeStructure {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					MonitorTestControl.DMT_URI_MONITORABLE1,
+					MonitorConstants.DMT_URI_MONITORABLE1,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc
 					.assertTrue(
 							"Asserts if ./OSGi/Monitor/cesar/test0/CM is a valid node",
 							session
-									.isNodeUri(MonitorTestControl.DMT_URI_MONITORABLE_SV1_CM));
+									.isNodeUri(MonitorConstants.DMT_URI_MONITORABLE_SV1_CM));
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(MonitorTestControl.DMT_URI_MONITORABLE_SV1_CM);
+					.getMetaNode(MonitorConstants.DMT_URI_MONITORABLE_SV1_CM);
 
 			tbc.assertEquals("Asserts $/Monitor/cesar/test0/CM metanode scope",
 					DmtMetaNode.PERMANENT, metaNode.getScope());
@@ -355,7 +356,7 @@ public class TreeStructure {
 			tbc.assertEquals(
 					"Asserting the value stored in /Monitor/cesar/test0/CM",
 					"CC", session.getNodeValue(
-							MonitorTestControl.DMT_URI_MONITORABLE_SV1_CM)
+							MonitorConstants.DMT_URI_MONITORABLE_SV1_CM)
 							.getString());
 
 		} catch (Exception e) {
@@ -380,17 +381,17 @@ public class TreeStructure {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					MonitorTestControl.DMT_URI_MONITORABLE1,
+					MonitorConstants.DMT_URI_MONITORABLE1,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc
 					.assertTrue(
 							"Asserts if ./OSGi/Monitor/cesar/test0/Results is a valid node",
 							session
-									.isNodeUri(MonitorTestControl.DMT_URI_MONITORABLE_SV1_RESULTS));
+									.isNodeUri(MonitorConstants.DMT_URI_MONITORABLE_SV1_RESULTS));
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(MonitorTestControl.DMT_URI_MONITORABLE_SV1_RESULTS);
+					.getMetaNode(MonitorConstants.DMT_URI_MONITORABLE_SV1_RESULTS);
 
 			tbc.assertEquals(
 					"Asserts $/Monitor/cesar/test0/Results metanode scope",
@@ -428,7 +429,7 @@ public class TreeStructure {
 							"test1",
 							session
 									.getNodeValue(
-											MonitorTestControl.DMT_URI_MONITORABLE_SV1_RESULTS)
+											MonitorConstants.DMT_URI_MONITORABLE_SV1_RESULTS)
 									.getString());
 
 		} catch (Exception e) {
@@ -453,17 +454,17 @@ public class TreeStructure {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					MonitorTestControl.DMT_URI_MONITORABLE1,
+					MonitorConstants.DMT_URI_MONITORABLE1,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc
 					.assertTrue(
 							"Asserts if ./OSGi/Monitor/cesar/test0/Server is a valid node",
 							session
-									.isNodeUri(MonitorTestControl.DMT_URI_MONITORABLE_SV1_SERVER));
+									.isNodeUri(MonitorConstants.DMT_URI_MONITORABLE_SV1_SERVER));
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(MonitorTestControl.DMT_URI_MONITORABLE_SV1_SERVER);
+					.getMetaNode(MonitorConstants.DMT_URI_MONITORABLE_SV1_SERVER);
 
 			tbc.assertEquals(
 					"Asserts $/Monitor/cesar/test0/Server metanode scope",
@@ -515,14 +516,14 @@ public class TreeStructure {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					MonitorTestControl.DMT_URI_MONITORABLE1,
+					MonitorConstants.DMT_URI_MONITORABLE1,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			session
-					.createInteriorNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
+					.createInteriorNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]);
+					.getMetaNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0]);
 
 			tbc
 					.assertEquals(
@@ -569,7 +570,7 @@ public class TreeStructure {
 			tbc
 					.cleanUp(
 							session,
-							new String[] { MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0] });
+							new String[] { MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0] });
 		}
 	}
 
@@ -586,14 +587,14 @@ public class TreeStructure {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					MonitorTestControl.DMT_URI_MONITORABLE1,
+					MonitorConstants.DMT_URI_MONITORABLE1,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			session
-					.createInteriorNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
+					.createInteriorNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[4]);
+					.getMetaNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[4]);
 
 			tbc
 					.assertEquals(
@@ -635,10 +636,10 @@ public class TreeStructure {
 			tbc
 					.assertEquals(
 							"Asserting the value stored in /Monitor/cesar/test0/Server/remoteServer/ServerId",
-							MonitorTestControl.REMOTE_SERVER,
+							MonitorConstants.REMOTE_SERVER,
 							session
 									.getNodeValue(
-											MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[4])
+											MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[4])
 									.getString());
 
 		} catch (Exception e) {
@@ -649,7 +650,7 @@ public class TreeStructure {
 			tbc
 					.cleanUp(
 							session,
-							new String[] { MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0] });
+							new String[] { MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0] });
 		}
 	}
 
@@ -666,14 +667,14 @@ public class TreeStructure {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					MonitorTestControl.DMT_URI_MONITORABLE1,
+					MonitorConstants.DMT_URI_MONITORABLE1,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			session
-					.createInteriorNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
+					.createInteriorNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[3]);
+					.getMetaNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[3]);
 
 			tbc
 					.assertEquals(
@@ -717,7 +718,7 @@ public class TreeStructure {
 							"Asserting the value stored in /Monitor/cesar/test0/Server/remoteServer/Enabled",
 							!session
 									.getNodeValue(
-											MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[4])
+											MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[4])
 									.getBoolean());
 
 		} catch (Exception e) {
@@ -728,7 +729,7 @@ public class TreeStructure {
 			tbc
 					.cleanUp(
 							session,
-							new String[] { MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0] });
+							new String[] { MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0] });
 		}
 	}
 
@@ -746,14 +747,14 @@ public class TreeStructure {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					MonitorTestControl.DMT_URI_MONITORABLE1,
+					MonitorConstants.DMT_URI_MONITORABLE1,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			session
-					.createInteriorNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
+					.createInteriorNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[5]);
+					.getMetaNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[5]);
 
 			tbc
 					.assertEquals(
@@ -800,7 +801,7 @@ public class TreeStructure {
 			tbc
 					.cleanUp(
 							session,
-							new String[] { MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0] });
+							new String[] { MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0] });
 		}
 	}
 
@@ -818,14 +819,14 @@ public class TreeStructure {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					MonitorTestControl.DMT_URI_MONITORABLE1,
+					MonitorConstants.DMT_URI_MONITORABLE1,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			session
-					.createInteriorNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
+					.createInteriorNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[1]);
+					.getMetaNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[1]);
 
 			tbc
 					.assertEquals(
@@ -872,7 +873,7 @@ public class TreeStructure {
 			tbc
 					.cleanUp(
 							session,
-							new String[] { MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0] });
+							new String[] { MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0] });
 		}
 	}
 
@@ -890,14 +891,14 @@ public class TreeStructure {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					MonitorTestControl.DMT_URI_MONITORABLE1,
+					MonitorConstants.DMT_URI_MONITORABLE1,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			session
-					.createInteriorNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
+					.createInteriorNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[2]);
+					.getMetaNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[2]);
 
 			tbc
 					.assertEquals(
@@ -944,7 +945,7 @@ public class TreeStructure {
 			tbc
 					.cleanUp(
 							session,
-							new String[] { MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0] });
+							new String[] { MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0] });
 		}
 	}
 
@@ -961,14 +962,14 @@ public class TreeStructure {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					MonitorTestControl.DMT_URI_MONITORABLE1,
+					MonitorConstants.DMT_URI_MONITORABLE1,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			session
-					.createInteriorNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
+					.createInteriorNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[6]);
+					.getMetaNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[6]);
 
 			tbc
 					.assertEquals(
@@ -1015,7 +1016,7 @@ public class TreeStructure {
 			tbc
 					.cleanUp(
 							session,
-							new String[] { MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0] });
+							new String[] { MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0] });
 		}
 	}
 
@@ -1033,17 +1034,17 @@ public class TreeStructure {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					MonitorTestControl.DMT_URI_MONITORABLE1,
+					MonitorConstants.DMT_URI_MONITORABLE1,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			session
-					.createInteriorNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
+					.createInteriorNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
 
 			session
-					.createInteriorNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[7]);
+					.createInteriorNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[7]);
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[7]);
+					.getMetaNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[7]);
 
 			tbc
 					.assertEquals(
@@ -1088,8 +1089,8 @@ public class TreeStructure {
 							.getClass().getName() }));
 		} finally {
 			tbc.cleanUp(session, new String[] {
-					MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[7],
-					MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0] });
+					MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[7],
+					MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0] });
 		}
 	}
 
@@ -1107,17 +1108,17 @@ public class TreeStructure {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					MonitorTestControl.DMT_URI_MONITORABLE1,
+					MonitorConstants.DMT_URI_MONITORABLE1,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			session
-					.createInteriorNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
+					.createInteriorNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
 
 			session
-					.createInteriorNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[7]);
+					.createInteriorNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[7]);
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[8]);
+					.getMetaNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[8]);
 
 			tbc
 					.assertEquals(
@@ -1162,8 +1163,8 @@ public class TreeStructure {
 							.getClass().getName() }));
 		} finally {
 			tbc.cleanUp(session, new String[] {
-					MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[7],
-					MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0] });
+					MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[7],
+					MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0] });
 		}
 	}
 

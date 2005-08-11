@@ -42,6 +42,7 @@ package org.osgi.test.cases.monitor.tbc.Activators;
 
 import org.osgi.service.monitor.Monitorable;
 import org.osgi.service.monitor.StatusVariable;
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.TestingMonitorable;
 
@@ -54,8 +55,8 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
 	private MonitorTestControl tbc;
 	
 	static {
-		sv0 = new StatusVariable(MonitorTestControl.SV_NAME1,StatusVariable.CM_CC,"test");
-		sv1 = new StatusVariable(MonitorTestControl.SV_NAME2,StatusVariable.CM_DER,"test");
+		sv0 = new StatusVariable(MonitorConstants.SV_NAME1,StatusVariable.CM_CC,"test");
+		sv1 = new StatusVariable(MonitorConstants.SV_NAME2,StatusVariable.CM_DER,"test");
 	}
 	
 	public MonitorableImpl(MonitorTestControl tbc) {
@@ -89,12 +90,12 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
 	public StatusVariable getStatusVariable(String arg0) throws IllegalArgumentException {
 		tbc.log("#Start getStatusVariable()");
 		
-		if(arg0==null || arg0.equals(MonitorTestControl.INVALID_MONITORABLE_SV)){
+		if(arg0==null || arg0.equals(MonitorConstants.INVALID_MONITORABLE_SV)){
 			throw new IllegalArgumentException();
 		}else {
-			if (arg0.equals(MonitorTestControl.SV_NAME1)) {
+			if (arg0.equals(MonitorConstants.SV_NAME1)) {
 				return sv0;				
-			} else if (arg0.equals(MonitorTestControl.SV_NAME2) ){
+			} else if (arg0.equals(MonitorConstants.SV_NAME2) ){
 				return sv1;
 			} else {
 				tbc.fail("Receive an argument different of original passed as parameter.");
@@ -123,11 +124,11 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
 		tbc.log("#Start notifiesOnChange()");
 		tbc.log("#notifiesOnChange receives " + arg0 + " as argument.");
 		
-		if(arg0==null || arg0.equals(MonitorTestControl.INVALID_MONITORABLE_SV)){
+		if(arg0==null || arg0.equals(MonitorConstants.INVALID_MONITORABLE_SV)){
 			throw new IllegalArgumentException();
 		}else {
 			// according to JSTD-MEGTCK-CODE-INSP011.xls, use sv to return false and other to return true
-			if ((arg0.equals(MonitorTestControl.SV_NAME1)) || (arg0.equals(MonitorTestControl.SV_NAME2))) {
+			if ((arg0.equals(MonitorConstants.SV_NAME1)) || (arg0.equals(MonitorConstants.SV_NAME2))) {
 				return true;				
 			} else {
 				tbc.fail("Receive an argument different of original passed as parameter.");
@@ -153,10 +154,10 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
 	public boolean resetStatusVariable(String arg0) throws IllegalArgumentException {
 		tbc.log("#Start resetStatusVariable()");
 		
-		if(arg0==null || arg0.equals(MonitorTestControl.INVALID_MONITORABLE_SV)){
+		if(arg0==null || arg0.equals(MonitorConstants.INVALID_MONITORABLE_SV)){
 			throw new IllegalArgumentException();
 		}else {
-			if ((arg0.equals(MonitorTestControl.SV_NAME1)) || (arg0.equals(MonitorTestControl.SV_NAME2))) {
+			if ((arg0.equals(MonitorConstants.SV_NAME1)) || (arg0.equals(MonitorConstants.SV_NAME2))) {
 				return false;				
 			} else {
 				tbc.fail("Receive an argument different of original passed as parameter.");
@@ -178,13 +179,13 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
 	public String getDescription(String arg0) throws java.lang.IllegalArgumentException {
 		tbc.log("#Start MonitorableImpl#getDescription()");
 		
-		if(arg0==null || arg0.equals(MonitorTestControl.INVALID_MONITORABLE_SV)){
+		if(arg0==null || arg0.equals(MonitorConstants.INVALID_MONITORABLE_SV)){
 			throw new IllegalArgumentException();
 		} else {
-			if (arg0.equals(MonitorTestControl.SV_NAME1)) {
+			if (arg0.equals(MonitorConstants.SV_NAME1)) {
 				return null;				
-			} else if (arg0.equals(MonitorTestControl.SV_NAME2)) {
-				return MonitorTestControl.SVS[1];
+			} else if (arg0.equals(MonitorConstants.SV_NAME2)) {
+				return MonitorConstants.SVS[1];
 			} else {
 				tbc.fail("Receive an argument different of original passed as parameter.");
 			}

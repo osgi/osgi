@@ -47,6 +47,7 @@ package org.osgi.test.cases.monitor.tb1.MonitorAdmin;
 
 import org.osgi.service.monitor.MonitorPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.TestInterface;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
@@ -55,7 +56,7 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
  * @author Alexandre Alves
  * 
  * This Test Class Validates the implementation of
- * <code>resetStatusVariable<code> method, according to MEG reference
+ * <code>resetStatusVariable</code> method, according to MEG reference
  * documentation.
  */
 public class ResetStatusVariable implements TestInterface {
@@ -86,7 +87,7 @@ public class ResetStatusVariable implements TestInterface {
 		tbc.log("#testResetStatusVariable001");
 		try {
 			tbc.getMonitorAdmin().resetStatusVariable(
-					MonitorTestControl.INVALID_ID);
+					MonitorConstants.INVALID_ID);
 			tbc.failException("", IllegalArgumentException.class);
 
 		} catch (IllegalArgumentException e) {
@@ -136,10 +137,10 @@ public class ResetStatusVariable implements TestInterface {
 		PermissionInfo[] infos = null;		
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(tbc.getTb1Location());
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.INEXISTENT_SVS, MonitorPermission.RESET));			
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.INEXISTENT_SVS, MonitorPermission.RESET));			
 			
 			tbc.getMonitorAdmin()
-					.resetStatusVariable(MonitorTestControl.INEXISTENT_SVS);
+					.resetStatusVariable(MonitorConstants.INEXISTENT_SVS);
 			tbc.failException("", IllegalArgumentException.class);
 
 		} catch (IllegalArgumentException e) {
@@ -158,7 +159,7 @@ public class ResetStatusVariable implements TestInterface {
 
 	/**
 	 * This method asserts if MonitorAdmin returns the value
-	 * returned by our monitorable implementation.
+	 * returned by our Monitorable implementation.
 	 * 
 	 * @spec MonitorAdmin.resetStatusVariable(string)
 	 */
@@ -169,10 +170,10 @@ public class ResetStatusVariable implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[0], MonitorPermission.RESET));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.SVS[0], MonitorPermission.RESET));
 
 			boolean result = tbc.getMonitorAdmin().resetStatusVariable(
-					MonitorTestControl.SVS[0]);
+					MonitorConstants.SVS[0]);
 
 			tbc.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE,
 					new String[] { "resetStatusVariable was called in correct implementation returning false as result. " }), result);
@@ -187,7 +188,7 @@ public class ResetStatusVariable implements TestInterface {
 
 	/**
 	 * This method asserts that a SecurityException is thrown when
-	 * we have set other action permission to the statusvariable that we are using.
+	 * we have set other action permission to the StatusVariable that we are using.
 	 * 
 	 * @spec MonitorAdmin.resetStatusVariable(string)
 	 */
@@ -198,10 +199,10 @@ public class ResetStatusVariable implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[0], MonitorPermission.PUBLISH));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.SVS[0], MonitorPermission.PUBLISH));
 
 			tbc.getMonitorAdmin().resetStatusVariable(
-					MonitorTestControl.SVS[0]);
+					MonitorConstants.SVS[0]);
 
 			tbc.failException("", SecurityException.class);
 
@@ -222,7 +223,7 @@ public class ResetStatusVariable implements TestInterface {
 
 	/**
 	 * This method asserts that a SecurityException is thrown when
-	 * we have no action permission to the statusvariable that we are using.
+	 * we have no action permission to the StatusVariable that we are using.
 	 * 
 	 * @spec MonitorAdmin.resetStatusVariable(string)
 	 */
@@ -233,10 +234,10 @@ public class ResetStatusVariable implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[1], null));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.SVS[1], null));
 
 			tbc.getMonitorAdmin().resetStatusVariable(
-					MonitorTestControl.SVS[1]);
+					MonitorConstants.SVS[1]);
 
 			tbc.failException("", SecurityException.class);
 
@@ -257,7 +258,7 @@ public class ResetStatusVariable implements TestInterface {
 	
 	/**
 	 * This method asserts that a SecurityException is thrown when
-	 * we have reset permission to other statusvariable.
+	 * we have reset permission to other StatusVariable.
 	 * 
 	 * @spec MonitorAdmin.resetStatusVariable(string)
 	 */
@@ -268,10 +269,10 @@ public class ResetStatusVariable implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS[1], MonitorPermission.RESET));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.SVS[1], MonitorPermission.RESET));
 
 			tbc.getMonitorAdmin().resetStatusVariable(
-					MonitorTestControl.SVS[0]);
+					MonitorConstants.SVS[0]);
 
 			tbc.failException("", SecurityException.class);
 

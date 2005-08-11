@@ -48,6 +48,7 @@
  **/
 package org.osgi.test.cases.monitor.tb1.MonitorAdmin;
 
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.TestInterface;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
@@ -56,7 +57,7 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
  * @author Alexandre Alves
  * 
  * This Test Class Validates the implementation of
- * <code>getMonitorableNames<code> method, according to MEG reference
+ * <code>getMonitorableNames</code> method, according to MEG reference
  * documentation.
  */
 public class GetMonitorableNames implements TestInterface {
@@ -73,7 +74,7 @@ public class GetMonitorableNames implements TestInterface {
 	}
 
 	/**
-	 * This method asserts if the monitoradmin returns
+	 * This method asserts if the MonitorAdmin returns
 	 * the correct list of monitorables.
 	 * 
 	 * @spec MonitorAdmin.getMonitorableNames()
@@ -91,9 +92,9 @@ public class GetMonitorableNames implements TestInterface {
 			boolean hasMon2 = false;
 			for (int i = 0; i < monitorableNames.length
 					&& !(hasMon1 && hasMon2); i++) {
-				if (monitorableNames[i].equals(MonitorTestControl.SV_MONITORABLEID1)) {
+				if (monitorableNames[i].equals(MonitorConstants.SV_MONITORABLEID1)) {
 					hasMon1 = true;
-				} else if (monitorableNames[i].equals(MonitorTestControl.SV_MONITORABLEID2)) {
+				} else if (monitorableNames[i].equals(MonitorConstants.SV_MONITORABLEID2)) {
 					hasMon2 = true;
 				}
 			}
@@ -107,7 +108,7 @@ public class GetMonitorableNames implements TestInterface {
 	}
 
 	/**
-	 * This method asserts if the monitoradmin returns
+	 * This method asserts if the MonitorAdmin returns
 	 * the correct list of monitorables in alphabetical order.
 	 * 
 	 * @spec MonitorAdmin.getMonitorableNames()
@@ -135,7 +136,7 @@ public class GetMonitorableNames implements TestInterface {
 
 	/**
 	 * This method asserts if an empty array is returned 
-	 * if no Monitorable services are registered.
+	 * if no Monitorable service is registered.
 	 * 
 	 * @spec MonitorAdmin.getMonitorableNames()
 	 */

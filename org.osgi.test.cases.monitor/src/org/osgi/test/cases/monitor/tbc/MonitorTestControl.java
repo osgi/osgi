@@ -81,100 +81,7 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
  */
 public class MonitorTestControl extends DefaultTestBundleControl {
 	
-	public static final String LONGID = "abcdefghjklmnoprstuvw";
-
-	public final static String INVALID_ID = ";/?:@&=+$,";
-
-	public final static String SV_MONITORABLEID1 = "cesar";
-
-	public final static String SV_MONITORABLEID2 = "cesar2";
-
-	public final static int MONITORABLE_LENGTH = 1;
-
-	public final static int SV_LENGTH = 2;
-
-	public final static String SV_NAME1 = "test0";
-
-	public final static String SV_NAME2 = "test1";
-
-	public final static String VALID_ID = "a23_-.";
-
-	public final static String IDENTIFY_ID = "ID";
-
-	public final static String DESCRIPTION = "description";
-
-	public final static int INVALID_CM = -1;
-
-	public final static int SV_INT_VALUE = 1;
-
-	public final static float SV_FLOAT_VALUE = 0.0f;
-
-	public final static boolean SV_BOOLEAN_VALUE = false;
-
-	public final static String SV_STRING_VALUE = "value";
-
-	public final static String INITIATOR = "initiator";
-
-	public final static String[] SVS = { "cesar/test0", "cesar/test1" };
-
-	public final static String[] SVS_NOT_SUPPORT_NOTIFICATION = { "cesar2/test0" };
-
-	public final static String INEXISTENT_SVS = "cesar/tmp";
-
-	public final static int SCHEDULE = 1;
-
-	public final static int COUNT = 1;
-
-	public final static int INVALID_SCHEDULE = -1;
-
-	public final static int INVALID_COUNT = -1;
-
-	public final static String INVALID_MONITORABLE_SV = "tmp";
-
-	public static int EVENT_COUNT = 0;
-	
-	public static int SWITCH_EVENTS_COUNT = 0;
-	
-	public static final int TIMEOUT = 1000;
-	public static final int SHORT_TIMEOUT = 2000;
-	
-	private int eventClassCode = -1;
-	
-	public static final String CONST_STATUSVARIABLE_NAME = "mon.statusvariable.name";
-	public static final String CONST_STATUSVARIABLE_VALUE = "mon.statusvariable.value";
-	public static final String CONST_MONITORABLE_PID = "mon.monitorable.pid";
-	public static final String CONST_LISTENER_ID = "mon.listener.id";
-	
-	public static final String DMT_OSGI_MONITOR = "./OSGi/Monitor";
-	
-	public final static String DMT_URI_MONITORABLE1 = DMT_OSGI_MONITOR + "/"+SV_MONITORABLEID1;
-	public final static String DMT_URI_MONITORABLE2 = DMT_OSGI_MONITOR + "/"+SV_MONITORABLEID2;
-	
-	public final static String MONITOR_XML_MONITORABLE1_SV1 = "x-oma-trap:"+SV_MONITORABLEID1+"/"+SV_NAME1;
-		
-	public final static String DMT_URI_MONITORABLE1_SV1 = DMT_URI_MONITORABLE1+"/"+SV_NAME1;
-	public final static String DMT_URI_MONITORABLE1_SV2 = DMT_URI_MONITORABLE1+"/"+SV_NAME2;
-	public final static String DMT_URI_MONITORABLE2_SV1 = DMT_URI_MONITORABLE2+"/"+SV_NAME1;
-	public final static String DMT_URI_MONITORABLE2_SV2 = DMT_URI_MONITORABLE2+"/"+SV_NAME2;
-	
-	public static final String DMT_URI_MONITORABLE_SV1_TRAPID = DMT_URI_MONITORABLE1_SV1 + "/TrapID";
-	public static final String DMT_URI_MONITORABLE_SV1_CM = DMT_URI_MONITORABLE1_SV1 + "/CM";
-	public static final String DMT_URI_MONITORABLE_SV1_RESULTS = DMT_URI_MONITORABLE1_SV1 + "/Results";
-	public static final String DMT_URI_MONITORABLE_SV1_SERVER = DMT_URI_MONITORABLE1_SV1 + "/Server";
-	
-	public static final String REMOTE_SERVER = "remoteServer";
-	
-	public final static String[] DMT_URI_MONITORABLE1_PROPERTIES = {
-		DMT_URI_MONITORABLE_SV1_SERVER+"/"+REMOTE_SERVER,
-		DMT_URI_MONITORABLE_SV1_SERVER+"/"+REMOTE_SERVER+"/Reporting/Type",
-		DMT_URI_MONITORABLE_SV1_SERVER+"/"+REMOTE_SERVER+"/Reporting/Value",
-		DMT_URI_MONITORABLE_SV1_SERVER+"/"+REMOTE_SERVER+"/Enabled",
-		DMT_URI_MONITORABLE_SV1_SERVER+"/"+REMOTE_SERVER+"/ServerId",
-		DMT_URI_MONITORABLE_SV1_SERVER+"/"+REMOTE_SERVER+"/Reporting",
-		DMT_URI_MONITORABLE_SV1_SERVER+"/"+REMOTE_SERVER+"/TrapRef",
-		DMT_URI_MONITORABLE_SV1_SERVER+"/"+REMOTE_SERVER+"/TrapRef/testId",
-		DMT_URI_MONITORABLE_SV1_SERVER+"/"+REMOTE_SERVER+"/TrapRef/testId/TrapRefID"
-	};
+	private boolean broadcast = false;
 	
 	private MonitorAdmin monitorAdmin;
 
@@ -209,6 +116,7 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	
 	private Bundle tb2 = null;
 	private Bundle tb3 = null;
+	private Bundle tb5 = null;
 	
 	private String statusVariableName = null;
 	private String statusVariableValue = null;
@@ -237,14 +145,14 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 			tb3 = this.installBundle("tb3.jar");						
 			
 			ServiceReference[] refs = getContext().getServiceReferences(
-					Monitorable.class.getName(), "(service.pid=" + SV_MONITORABLEID2 + ")");
+					Monitorable.class.getName(), "(service.pid=" + MonitorConstants.SV_MONITORABLEID2 + ")");
 			
 			((TestingMonitorable) getContext().getService(refs[0])).setMonitorTestControlInterface(this);
 			
 			tb2 = this.installBundle("tb2.jar");			
 			
 			refs = getContext().getServiceReferences(
-					Monitorable.class.getName(), "(service.pid=" + SV_MONITORABLEID1 + ")");
+					Monitorable.class.getName(), "(service.pid=" + MonitorConstants.SV_MONITORABLEID1 + ")");
 			
 			monitorable = (Monitorable) getContext().getService(refs[0]);
 			
@@ -564,7 +472,7 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 		try {
 			this.stopMonitorables();
 		} catch (Exception e) {
-			this.fail("Unexpected exception at unprepare. " + e.getClass());
+			this.log("#Unexpected exception at unprepare. " + e.getClass());
 		}
 	}
 
@@ -587,7 +495,35 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 			}
 		}
 
+	}
+	
+	/**
+	 * Install tb5 for verify its event sending state.
+	 */	
+	public void installNewTestMonitorable() {
+		try {
+			tb5 = this.installBundle("tb5.jar");
+			ServiceReference[] refs = getContext().getServiceReferences(
+					Monitorable.class.getName(), "(service.pid=" + MonitorConstants.SV_MONITORABLEID3 + ")");
+			
+			((TestingMonitorable) getContext().getService(refs[0])).setMonitorTestControlInterface(this);			
+		} catch (Exception e) {
+			log("fail when try to install tb5.jar");
+		}		
+	}
+	
+	/**
+	 * uninstall tb5.
+	 */	
+	public void uninstallNewTestMonitorable() {
+		try {
+			uninstallBundle(tb5);
+		} catch (Exception e) {
+			log("fail when try to install tb5.jar");
+		}		
 	}	
+	
+	
 	/**
 	 * @return Returns the tb1Location.
 	 */
@@ -597,7 +533,9 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	
 	public void closeSession(DmtSession session) {
 		try {
-			session.close();
+			if (session.getState() == DmtSession.STATE_OPEN) {
+				session.close();
+			}
 		} catch (DmtException e) {
 			log("#fail when closing the session.");
 		}
@@ -645,7 +583,7 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 		correlator = null;
 		receivedAlert = false;
 		alerts = null;
-		eventClassCode = -1;
+		broadcast = false;
 	}
 	
 	/**
@@ -759,7 +697,7 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	
 	public TestingMonitorable getMonitorableInterface() {
 		try {
-			ServiceReference[] rfs = getContext().getServiceReferences(Monitorable.class.getName(), "(service.pid="+MonitorTestControl.SV_MONITORABLEID1+")");
+			ServiceReference[] rfs = getContext().getServiceReferences(Monitorable.class.getName(), "(service.pid="+MonitorConstants.SV_MONITORABLEID1+")");
 			return rfs == null ? null: (TestingMonitorable) getContext().getService(rfs[0]);
 		} catch (InvalidSyntaxException e) {
 			log("Error on TestingMonitorableInterface");
@@ -772,12 +710,12 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 			this.uninstallBundle(tb2);
 			tb2 = this.installBundle("tb2.jar");
 			ServiceReference[] refs = getContext().getServiceReferences(
-					Monitorable.class.getName(), "(service.pid=" + SV_MONITORABLEID1 + ")");
+					Monitorable.class.getName(), "(service.pid=" + MonitorConstants.SV_MONITORABLEID1 + ")");
 			
 			monitorable = (Monitorable) getContext().getService(refs[0]);			
 			((TestingMonitorable) monitorable).setMonitorTestControlInterface(this);			
 		} catch (Exception e) {
-			log("Fail when we try to reinstall the monitorable");
+			log("Fail to reinstall the monitorable");
 		}
 	}
 	
@@ -802,14 +740,14 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	/**
 	 * @return Returns the eventClassCode.
 	 */
-	public int getEventClassCode() {
-		return eventClassCode;
+	public boolean isBroadcast() {
+		return broadcast;
 	}
 	/**
 	 * @param eventClassCode The eventClassCode to set.
 	 */
-	public void setEventClassCode(int eventClassCode) {
-		this.eventClassCode = eventClassCode;
+	public void setBroadcast(boolean broadcast) {
+		this.broadcast = broadcast;
 	}
 	/**
 	 * @return Returns the alerts.

@@ -36,6 +36,7 @@
  */
 package org.osgi.test.cases.monitor.tbc.StatusVariable;
 
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
@@ -43,7 +44,7 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
  * @author Leonardo Barros
  * 
  * This Test Class Validates the implementation of
- * <code>toString<code> method, according to MEG reference
+ * <code>toString</code> method, according to MEG reference
  *                     documentation.
  */
 public class ToString {
@@ -78,17 +79,17 @@ public class ToString {
 
 			for (int i = 0; i < 4; i++) {
 				sv = new org.osgi.service.monitor.StatusVariable(
-						MonitorTestControl.SV_NAME1, i,
-						MonitorTestControl.SV_INT_VALUE);
+						MonitorConstants.SV_NAME1, i,
+						MonitorConstants.SV_INT_VALUE);
 
 				tbc.assertEquals(MessagesConstants.getMessage(
 						MessagesConstants.ASSERT_EQUALS, new String[] {
 								"sv.toString()",
-								"StatusVariable(" + MonitorTestControl.SV_NAME1
+								"StatusVariable(" + MonitorConstants.SV_NAME1
 										+ ", " + CM[i] + ", "
 										+ sv.getTimeStamp() + ", INTEGER, "
 										+ sv.getInteger() + ")" }),
-						"StatusVariable(" + MonitorTestControl.SV_NAME1 + ", "
+						"StatusVariable(" + MonitorConstants.SV_NAME1 + ", "
 								+ CM[i] + ", " + sv.getTimeStamp()
 								+ ", INTEGER, " + sv.getInteger() + ")", sv
 								.toString());
@@ -117,17 +118,17 @@ public class ToString {
 
 			for (int i = 0; i < 4; i++) {
 				sv = new org.osgi.service.monitor.StatusVariable(
-						MonitorTestControl.SV_NAME1, i,
-						MonitorTestControl.SV_BOOLEAN_VALUE);
+						MonitorConstants.SV_NAME1, i,
+						MonitorConstants.SV_BOOLEAN_VALUE);
 
 				tbc.assertEquals(MessagesConstants.getMessage(
 						MessagesConstants.ASSERT_EQUALS, new String[] {
 								"sv.toString()",
-								"StatusVariable(" + MonitorTestControl.SV_NAME1
+								"StatusVariable(" + MonitorConstants.SV_NAME1
 										+ ", " + CM[i] + ", "
 										+ sv.getTimeStamp() + ", BOOLEAN, "
 										+ sv.getBoolean() + ")" }),
-						"StatusVariable(" + MonitorTestControl.SV_NAME1 + ", "
+						"StatusVariable(" + MonitorConstants.SV_NAME1 + ", "
 								+ CM[i] + ", " + sv.getTimeStamp()
 								+ ", BOOLEAN, " + sv.getBoolean() + ")", sv
 								.toString());
@@ -156,17 +157,17 @@ public class ToString {
 
 			for (int i = 0; i < 4; i++) {
 				sv = new org.osgi.service.monitor.StatusVariable(
-						MonitorTestControl.SV_NAME1, i,
-						MonitorTestControl.SV_FLOAT_VALUE);
+						MonitorConstants.SV_NAME1, i,
+						MonitorConstants.SV_FLOAT_VALUE);
 
 				tbc.assertEquals(MessagesConstants.getMessage(
 						MessagesConstants.ASSERT_EQUALS, new String[] {
 								"sv.toString()",
-								"StatusVariable(" + MonitorTestControl.SV_NAME1
+								"StatusVariable(" + MonitorConstants.SV_NAME1
 										+ ", " + CM[i] + ", "
 										+ sv.getTimeStamp() + ", FLOAT, "
 										+ sv.getFloat() + ")" }),
-						"StatusVariable(" + MonitorTestControl.SV_NAME1 + ", "
+						"StatusVariable(" + MonitorConstants.SV_NAME1 + ", "
 								+ CM[i] + ", " + sv.getTimeStamp()
 								+ ", FLOAT, " + sv.getFloat() + ")", sv
 								.toString());
@@ -195,17 +196,17 @@ public class ToString {
 
 			for (int i = 0; i < 4; i++) {
 				sv = new org.osgi.service.monitor.StatusVariable(
-						MonitorTestControl.SV_NAME1, i,
-						MonitorTestControl.SV_STRING_VALUE);
+						MonitorConstants.SV_NAME1, i,
+						MonitorConstants.SV_STRING_VALUE);
 
 				tbc.assertEquals(MessagesConstants.getMessage(
 						MessagesConstants.ASSERT_EQUALS, new String[] {
 								"sv.toString()",
-								"StatusVariable(" + MonitorTestControl.SV_NAME1
+								"StatusVariable(" + MonitorConstants.SV_NAME1
 										+ ", " + CM[i] + ", "
 										+ sv.getTimeStamp() + ", STRING, "
 										+ sv.getString() + ")" }),
-						"StatusVariable(" + MonitorTestControl.SV_NAME1 + ", "
+						"StatusVariable(" + MonitorConstants.SV_NAME1 + ", "
 								+ CM[i] + ", " + sv.getTimeStamp()
 								+ ", STRING, " + sv.getString() + ")", sv
 								.toString());

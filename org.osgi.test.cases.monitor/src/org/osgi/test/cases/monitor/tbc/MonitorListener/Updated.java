@@ -37,6 +37,7 @@
 package org.osgi.test.cases.monitor.tbc.MonitorListener;
 
 import org.osgi.service.monitor.StatusVariable;
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
@@ -44,7 +45,7 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
  * @author Alexandre Alves
  * 
  * This Test Class Validates the implementation of
- * <code>updated<code> method, according to MEG reference
+ * <code>updated</code> method, according to MEG reference
  * documentation.
  */
 public class Updated {
@@ -75,7 +76,7 @@ public class Updated {
 			tbc.log("#testUpdated001");
 			tbc.getMonitorListener().updated(null, 
 					new StatusVariable(
-							MonitorTestControl.SV_NAME1, StatusVariable.CM_CC,
+							MonitorConstants.SV_NAME1, StatusVariable.CM_CC,
 							"test1"));
 			tbc.failException("", IllegalArgumentException.class);
 			
@@ -100,9 +101,9 @@ public class Updated {
 	private void testUpdated002() {
 		try {
 			tbc.log("#testUpdated002");
-			tbc.getMonitorListener().updated(MonitorTestControl.INVALID_ID, 
+			tbc.getMonitorListener().updated(MonitorConstants.INVALID_ID, 
 					new StatusVariable(
-							MonitorTestControl.SV_NAME1, StatusVariable.CM_CC,
+							MonitorConstants.SV_NAME1, StatusVariable.CM_CC,
 							"test1"));
 
 			tbc.failException("", IllegalArgumentException.class);
@@ -128,9 +129,9 @@ public class Updated {
 	private void testUpdated003() {
 		try {
 			tbc.log("#testUpdated003");
-			tbc.getMonitorListener().updated(MonitorTestControl.INVALID_MONITORABLE_SV, 
+			tbc.getMonitorListener().updated(MonitorConstants.INVALID_MONITORABLE_SV, 
 					new StatusVariable(
-							MonitorTestControl.SV_NAME1, StatusVariable.CM_CC,
+							MonitorConstants.SV_NAME1, StatusVariable.CM_CC,
 							"test1"));
 
 			tbc.failException("", IllegalArgumentException.class);
@@ -158,7 +159,7 @@ public class Updated {
 			tbc.log("#testUpdated004");
 			tbc.getMonitorListener().updated("", 
 					new StatusVariable(
-							MonitorTestControl.SV_NAME1, StatusVariable.CM_CC,
+							MonitorConstants.SV_NAME1, StatusVariable.CM_CC,
 							"test1"));
 
 			tbc.failException("", IllegalArgumentException.class);
@@ -184,7 +185,7 @@ public class Updated {
 	private void testUpdated005() {
 		try {
 			tbc.log("#testUpdated005");
-			tbc.getMonitorListener().updated(MonitorTestControl.SV_MONITORABLEID1, null);
+			tbc.getMonitorListener().updated(MonitorConstants.SV_MONITORABLEID1, null);
 
 			tbc.failException("", IllegalArgumentException.class);
 			
@@ -210,8 +211,8 @@ public class Updated {
 		try {
 			tbc.log("#testUpdated006");
 			tbc.getMonitorListener().updated(
-					MonitorTestControl.SV_MONITORABLEID1,
-					new StatusVariable(MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_MONITORABLEID1,
+					new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC, "test"));
 
 			tbc.pass("No exception was thrown. Passed.");

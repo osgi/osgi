@@ -38,6 +38,7 @@ package org.osgi.test.cases.monitor.tbc.Activators;
 
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 
 /**
@@ -57,12 +58,12 @@ public class MonitorHandlerImpl implements EventHandler {
 	 */
 	public void handleEvent(Event arg0) {
 		String listenerId = (String) arg0
-				.getProperty(MonitorTestControl.CONST_LISTENER_ID);
+				.getProperty(MonitorConstants.CONST_LISTENER_ID);
 
 		if ((listenerId != null)
-				&& (listenerId.equals(MonitorTestControl.INITIATOR))) {
+				&& (listenerId.equals(MonitorConstants.INITIATOR))) {
 
-			MonitorTestControl.EVENT_COUNT += 1;
+			MonitorConstants.EVENT_COUNT += 1;
 
 			tbc.resetEvent();
 
@@ -70,34 +71,34 @@ public class MonitorHandlerImpl implements EventHandler {
 
 			for (int i = 0; i < properties.length; i++) {
 				if (properties[i]
-						.equals(MonitorTestControl.CONST_MONITORABLE_PID)) {
+						.equals(MonitorConstants.CONST_MONITORABLE_PID)) {
 					tbc.setMonitorablePid(true);
 				} else if (properties[i]
-						.equals(MonitorTestControl.CONST_STATUSVARIABLE_NAME)) {
+						.equals(MonitorConstants.CONST_STATUSVARIABLE_NAME)) {
 					tbc.setStatusVariableName(true);
 				} else if (properties[i]
-						.equals(MonitorTestControl.CONST_STATUSVARIABLE_VALUE)) {
+						.equals(MonitorConstants.CONST_STATUSVARIABLE_VALUE)) {
 					tbc.setStatusVariableValue(true);
 				} else if (properties[i]
-						.equals(MonitorTestControl.CONST_LISTENER_ID)) {
+						.equals(MonitorConstants.CONST_LISTENER_ID)) {
 					tbc.setListenerId(true);
 				}
 			}
 
 			tbc.setStatusVariableName((String) arg0
-					.getProperty(MonitorTestControl.CONST_STATUSVARIABLE_NAME));
+					.getProperty(MonitorConstants.CONST_STATUSVARIABLE_NAME));
 
 			tbc
 					.setStatusVariableValue((String) arg0
-							.getProperty(MonitorTestControl.CONST_STATUSVARIABLE_VALUE));
+							.getProperty(MonitorConstants.CONST_STATUSVARIABLE_VALUE));
 
 			tbc.setMonitorablePid((String) arg0
-					.getProperty(MonitorTestControl.CONST_MONITORABLE_PID));
+					.getProperty(MonitorConstants.CONST_MONITORABLE_PID));
 
 			tbc.setListenerId((String) arg0
-					.getProperty(MonitorTestControl.CONST_LISTENER_ID));
+					.getProperty(MonitorConstants.CONST_LISTENER_ID));
 
-			if (tbc.getEventClassCode() == 0) { // we are listening to events
+			if (!tbc.isBroadcast()) { // we are listening to events
 												// with listenerId
 				synchronized (tbc) {
 					tbc.notifyAll();
@@ -106,9 +107,9 @@ public class MonitorHandlerImpl implements EventHandler {
 
 		} else {
 
-			MonitorTestControl.SWITCH_EVENTS_COUNT += 1;
+			MonitorConstants.SWITCH_EVENTS_COUNT += 1;
 
-			if (tbc.getEventClassCode() == 1) { // we are listening to broadcast
+			if (tbc.isBroadcast()) { // we are listening to broadcast
 												// events
 				synchronized (tbc) {
 					tbc.notifyAll();

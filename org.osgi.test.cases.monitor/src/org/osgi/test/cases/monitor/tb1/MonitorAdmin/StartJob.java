@@ -49,6 +49,7 @@ import org.osgi.service.monitor.MonitorPermission;
 import org.osgi.service.monitor.MonitoringJob;
 import org.osgi.service.monitor.StatusVariable;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.TestInterface;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
@@ -57,7 +58,7 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
  * @author Alexandre Alves
  * 
  * This Test Class Validates the implementation of
- * <code>startJob<code> method, according to MEG reference
+ * <code>startJob</code> method, according to MEG reference
  * documentation.
  */
 public class StartJob implements TestInterface {
@@ -94,8 +95,8 @@ public class StartJob implements TestInterface {
 		try {
 
 			job = tbc.getMonitorAdmin().startJob(
-					MonitorTestControl.INITIATOR, null,
-					MonitorTestControl.COUNT);
+					MonitorConstants.INITIATOR, null,
+					MonitorConstants.COUNT);
 
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -114,7 +115,7 @@ public class StartJob implements TestInterface {
 
 	/**
 	 * This method asserts if IllegalArgumentException is thrown
-	 * when we pass a empty list of statusvariable.
+	 * when we pass a empty list of StatusVariable.
 	 * 
 	 * @spec MonitorAdmin.startJob(String,String[],int)
 	 */
@@ -124,8 +125,8 @@ public class StartJob implements TestInterface {
 		try {
 
 			job = tbc.getMonitorAdmin().startJob(
-					MonitorTestControl.INITIATOR, new String[] {},
-					MonitorTestControl.COUNT);			
+					MonitorConstants.INITIATOR, new String[] {},
+					MonitorConstants.COUNT);			
 
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -154,8 +155,8 @@ public class StartJob implements TestInterface {
 		try {
 
 			job = tbc.getMonitorAdmin().startJob(
-					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
-					MonitorTestControl.INVALID_COUNT);
+					MonitorConstants.INITIATOR, MonitorConstants.SVS,
+					MonitorConstants.INVALID_COUNT);
 
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -173,8 +174,8 @@ public class StartJob implements TestInterface {
 	}
 
 	/**
-	 * This method tests the get methods for monitoringjob.
-	 * It asserts the values passed in startJob.
+	 * This method tests the get methods for MonitoringJob.
+	 * It asserts the values passed in StartJob.
 	 * 
 	 * @spec MonitorAdmin.startJob(String,String[],int)
 	 */
@@ -192,17 +193,17 @@ public class StartJob implements TestInterface {
 							new PermissionInfo(
 									org.osgi.service.monitor.MonitorPermission.class
 											.getName(),
-									MonitorTestControl.SVS[0],
+									MonitorConstants.SVS[0],
 									org.osgi.service.monitor.MonitorPermission.STARTJOB),
 							new PermissionInfo(
 									org.osgi.service.monitor.MonitorPermission.class
 											.getName(),
-									MonitorTestControl.SVS[1],
+									MonitorConstants.SVS[1],
 									org.osgi.service.monitor.MonitorPermission.STARTJOB) });
 
 			mj = tbc.getMonitorAdmin().startJob(
-					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
-					MonitorTestControl.COUNT);
+					MonitorConstants.INITIATOR, MonitorConstants.SVS,
+					MonitorConstants.COUNT);
 
 			tbc.assertNotNull(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_NOT_NULL,
@@ -211,35 +212,35 @@ public class StartJob implements TestInterface {
 			String init = mj.getInitiator();
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
-							"initiator", MonitorTestControl.INITIATOR }),
-					MonitorTestControl.INITIATOR, init);
+							"initiator", MonitorConstants.INITIATOR }),
+					MonitorConstants.INITIATOR, init);
 
 			int varNamesLen = mj.getStatusVariableNames().length;
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"length of statusvariable names",
-							MonitorTestControl.SV_LENGTH + "" }),
-					MonitorTestControl.SV_LENGTH, varNamesLen);
+							MonitorConstants.SV_LENGTH + "" }),
+					MonitorConstants.SV_LENGTH, varNamesLen);
 
 			String varName0 = mj.getStatusVariableNames()[0];
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"first statusvariable name",
-							MonitorTestControl.SVS[0] }),
-					MonitorTestControl.SVS[0], varName0);
+							MonitorConstants.SVS[0] }),
+					MonitorConstants.SVS[0], varName0);
 
 			String varName1 = mj.getStatusVariableNames()[1];
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"second statusvariable name",
-							MonitorTestControl.SVS[1] }),
-					MonitorTestControl.SVS[1], varName1);
+							MonitorConstants.SVS[1] }),
+					MonitorConstants.SVS[1], varName1);
 
 			int repCount = mj.getReportCount();
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] { "count",
-							MonitorTestControl.COUNT + "" }),
-					MonitorTestControl.COUNT, repCount);
+							MonitorConstants.COUNT + "" }),
+					MonitorConstants.COUNT, repCount);
 			
 			long schedule = mj.getSchedule();
 			tbc.assertEquals("Asserting that 0 is returned when we have started a based job.", 0, schedule);
@@ -256,7 +257,7 @@ public class StartJob implements TestInterface {
 
 	/**
 	 * This method asserts that a SecurityException is thrown when
-	 * one of the statusvariables does not have startjob permission.
+	 * one of the StatusVariables does not have StartJob permission.
 	 * 
 	 * @spec MonitorAdmin.startJob(String,String[],int)
 	 */
@@ -274,17 +275,17 @@ public class StartJob implements TestInterface {
 							new PermissionInfo(
 									org.osgi.service.monitor.MonitorPermission.class
 											.getName(),
-									MonitorTestControl.SVS[0],
+									MonitorConstants.SVS[0],
 									org.osgi.service.monitor.MonitorPermission.STARTJOB),
 							new PermissionInfo(
 									org.osgi.service.monitor.MonitorPermission.class
 											.getName(),
-									MonitorTestControl.SVS[1],
+									MonitorConstants.SVS[1],
 									org.osgi.service.monitor.MonitorPermission.PUBLISH) });
 
 			job = tbc.getMonitorAdmin().startJob(
-					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
-					MonitorTestControl.COUNT);
+					MonitorConstants.INITIATOR, MonitorConstants.SVS,
+					MonitorConstants.COUNT);
 
 			tbc.failException("", SecurityException.class);
 
@@ -306,7 +307,7 @@ public class StartJob implements TestInterface {
 
 	/**
 	 * This method asserts that a SecurityException is thrown when
-	 * the statusvariables does not have permission.
+	 * the StatusVariables does not have permission.
 	 * 
 	 * @spec MonitorAdmin.startJob(String,String[],int)
 	 */
@@ -324,15 +325,15 @@ public class StartJob implements TestInterface {
 							new PermissionInfo(
 									org.osgi.service.monitor.MonitorPermission.class
 											.getName(),
-									MonitorTestControl.SVS[0], null),
+									MonitorConstants.SVS[0], null),
 							new PermissionInfo(
 									org.osgi.service.monitor.MonitorPermission.class
 											.getName(),
-									MonitorTestControl.SVS[1], null) });
+									MonitorConstants.SVS[1], null) });
 
 			mj = tbc.getMonitorAdmin().startJob(
-					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
-					MonitorTestControl.COUNT);
+					MonitorConstants.INITIATOR, MonitorConstants.SVS,
+					MonitorConstants.COUNT);
 
 			tbc.failException("", SecurityException.class);
 
@@ -354,7 +355,7 @@ public class StartJob implements TestInterface {
 
 	/**
 	 * This method asserts that an IllegalArgumentException is thrown when
-	 * one of the statusvariables does not support notifications.
+	 * one of the StatusVariables does not support notifications.
 	 * 
 	 * @spec MonitorAdmin.startJob(String,String[],int)
 	 */
@@ -365,12 +366,12 @@ public class StartJob implements TestInterface {
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorTestControl.SVS_NOT_SUPPORT_NOTIFICATION[0], MonitorPermission.STARTJOB));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.SVS_NOT_SUPPORT_NOTIFICATION[0], MonitorPermission.STARTJOB));
 
 			job = tbc.getMonitorAdmin().startJob(
-					MonitorTestControl.INITIATOR,
-					MonitorTestControl.SVS_NOT_SUPPORT_NOTIFICATION,
-					MonitorTestControl.COUNT);
+					MonitorConstants.INITIATOR,
+					MonitorConstants.SVS_NOT_SUPPORT_NOTIFICATION,
+					MonitorConstants.COUNT);
 
 			tbc.failException("", IllegalArgumentException.class);
 
@@ -412,49 +413,49 @@ public class StartJob implements TestInterface {
 							new PermissionInfo(
 									org.osgi.service.monitor.MonitorPermission.class
 											.getName(),
-									MonitorTestControl.SVS[0],
+									MonitorConstants.SVS[0],
 									org.osgi.service.monitor.MonitorPermission.STARTJOB),
 							new PermissionInfo(
 									org.osgi.service.monitor.MonitorPermission.class
 											.getName(),
-									MonitorTestControl.SVS[1],
+									MonitorConstants.SVS[1],
 									org.osgi.service.monitor.MonitorPermission.STARTJOB) });
 
-			MonitorTestControl.EVENT_COUNT = 0;
+			MonitorConstants.EVENT_COUNT = 0;
 
 			tbc.resetEvent();
 			
-			tbc.setEventClassCode(0); // listen only for events with listenerId			
+			tbc.setBroadcast(false); // listen only for events with listenerId			
 
 			mj = tbc.getMonitorAdmin().startJob(
-					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
-					MonitorTestControl.COUNT + 1);
+					MonitorConstants.INITIATOR, MonitorConstants.SVS,
+					MonitorConstants.COUNT + 1);
 
 			tbc.getMonitorListener().updated(
-					MonitorTestControl.SV_MONITORABLEID1,
-					new StatusVariable(MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_MONITORABLEID1,
+					new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC, "test1"));
 			
-			wait(MonitorTestControl.SHORT_TIMEOUT);	
+			wait(MonitorConstants.SHORT_TIMEOUT);	
 			
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"variable of event modification", 0 + "" }), 0,
-					MonitorTestControl.EVENT_COUNT);
+					MonitorConstants.EVENT_COUNT);
 
 			tbc.getMonitorListener().updated(
-					MonitorTestControl.SV_MONITORABLEID1,
-					new StatusVariable(MonitorTestControl.SV_NAME1,
+					MonitorConstants.SV_MONITORABLEID1,
+					new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC, "test1"));
 
 			synchronized (tbc) {
-				tbc.wait(MonitorTestControl.TIMEOUT);
+				tbc.wait(MonitorConstants.TIMEOUT);
 			}	
 			
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"variable of event modification", 1 + "" }), 1,
-					MonitorTestControl.EVENT_COUNT);
+					MonitorConstants.EVENT_COUNT);
 
 			tbc
 					.assertTrue(
@@ -474,9 +475,9 @@ public class StartJob implements TestInterface {
 											MessagesConstants.ASSERT_EQUALS,
 											new String[] {
 													"the value in "
-															+ MonitorTestControl.CONST_STATUSVARIABLE_NAME,
-													MonitorTestControl.SV_NAME1 }),
-							MonitorTestControl.SV_NAME1, tbc
+															+ MonitorConstants.CONST_STATUSVARIABLE_NAME,
+													MonitorConstants.SV_NAME1 }),
+							MonitorConstants.SV_NAME1, tbc
 									.getStatusVariableName());
 
 			tbc
@@ -486,24 +487,24 @@ public class StartJob implements TestInterface {
 											MessagesConstants.ASSERT_EQUALS,
 											new String[] {
 													"the value in "
-															+ MonitorTestControl.CONST_STATUSVARIABLE_VALUE,
+															+ MonitorConstants.CONST_STATUSVARIABLE_VALUE,
 													"test1" }), "test1", tbc
 									.getStatusVariableValue());
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"the value in "
-									+ MonitorTestControl.CONST_MONITORABLE_PID,
-							MonitorTestControl.SV_MONITORABLEID1 }),
-					MonitorTestControl.SV_MONITORABLEID1, tbc
+									+ MonitorConstants.CONST_MONITORABLE_PID,
+							MonitorConstants.SV_MONITORABLEID1 }),
+					MonitorConstants.SV_MONITORABLEID1, tbc
 							.getMonitorablePid());
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"the value in "
-									+ MonitorTestControl.CONST_LISTENER_ID,
-							MonitorTestControl.INITIATOR }),
-					MonitorTestControl.INITIATOR, tbc.getListenerId());
+									+ MonitorConstants.CONST_LISTENER_ID,
+							MonitorConstants.INITIATOR }),
+					MonitorConstants.INITIATOR, tbc.getListenerId());
 			
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + " "
@@ -527,7 +528,7 @@ public class StartJob implements TestInterface {
 		try {
 
 			job = tbc.getMonitorAdmin().startJob(null,
-					MonitorTestControl.SVS, MonitorTestControl.COUNT);
+					MonitorConstants.SVS, MonitorConstants.COUNT);
 
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -557,7 +558,7 @@ public class StartJob implements TestInterface {
 		try {
 
 			job = tbc.getMonitorAdmin().startJob("",
-					MonitorTestControl.SVS, MonitorTestControl.COUNT);
+					MonitorConstants.SVS, MonitorConstants.COUNT);
 
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -577,7 +578,7 @@ public class StartJob implements TestInterface {
 
 	/**
 	 * This method asserts if IllegalArgumentException is thrown
-	 * when we pass invalid characters as statusvariable parameter.
+	 * when we pass invalid characters as StatusVariable parameter.
 	 * 
 	 * @spec MonitorAdmin.startJob(String,String[],int)
 	 */
@@ -587,9 +588,9 @@ public class StartJob implements TestInterface {
 		try {
 
 			job = tbc.getMonitorAdmin().startJob(
-					MonitorTestControl.INITIATOR,
-					new String[] { "cesar/" + MonitorTestControl.INVALID_ID },
-					MonitorTestControl.COUNT);
+					MonitorConstants.INITIATOR,
+					new String[] { "cesar/" + MonitorConstants.INVALID_ID },
+					MonitorConstants.COUNT);
 
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {

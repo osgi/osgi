@@ -36,6 +36,7 @@
  */
 package org.osgi.test.cases.monitor.tbc.Monitorable;
 
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.Activators.MonitorableActivatorInvalid;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
@@ -60,7 +61,6 @@ public class Monitorables {
 		testMonitorables001();
 		testMonitorables002();
 		testMonitorables003();
-		testMonitorables004();
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class Monitorables {
 		try {
 			tbc.log("#testMonitorables002");
 			String[] monitorablesBefore = tbc.getMonitorAdmin().getMonitorableNames();
-			MonitorableActivatorInvalid monitorableActivatorInvalid = new MonitorableActivatorInvalid(tbc, MonitorTestControl.INVALID_ID);
+			MonitorableActivatorInvalid monitorableActivatorInvalid = new MonitorableActivatorInvalid(tbc, MonitorConstants.INVALID_ID);
 			monitorableActivatorInvalid.start(tbc.getContext());		
 			String[] monitorablesAfter = tbc.getMonitorAdmin().getMonitorableNames();
 			tbc.assertEquals("Asserting if no monitorables was installed when we use a monitorable an invalid id as service.pid.", monitorablesBefore, monitorablesAfter);
@@ -112,7 +112,7 @@ public class Monitorables {
 		try {
 			tbc.log("#testMonitorables003");
 			String[] monitorablesBefore = tbc.getMonitorAdmin().getMonitorableNames();
-			MonitorableActivatorInvalid monitorableActivatorInvalid = new MonitorableActivatorInvalid(tbc, MonitorTestControl.LONGID);
+			MonitorableActivatorInvalid monitorableActivatorInvalid = new MonitorableActivatorInvalid(tbc, MonitorConstants.LONGID);
 			monitorableActivatorInvalid.start(tbc.getContext());		
 			String[] monitorablesAfter = tbc.getMonitorAdmin().getMonitorableNames();
 			tbc.assertEquals("Asserting if no monitorables was installed when we use a monitorable id with more than 20 characters.", monitorablesBefore, monitorablesAfter);
@@ -120,23 +120,4 @@ public class Monitorables {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}	
-	
-	/**
-	 * This method asserts that a monitorable with two equals statusvariable
-	 * is ignored.
-	 * 
-	 * @spec 120.7.2 Monitorable
-	 */		
-	private void testMonitorables004() {
-		try {
-			tbc.log("#testMonitorables004");
-			String[] monitorablesBefore = tbc.getMonitorAdmin().getMonitorableNames();
-			tbc.installBundle("tb4.jar");		
-			String[] monitorablesAfter = tbc.getMonitorAdmin().getMonitorableNames();
-			tbc.assertEquals("Asserting if no monitorables was installed when we use a monitorable with two statusvariable with same name.", monitorablesBefore, monitorablesAfter);
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		}
-	}		
-
 }

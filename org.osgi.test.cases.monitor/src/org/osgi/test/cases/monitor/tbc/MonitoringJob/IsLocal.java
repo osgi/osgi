@@ -40,6 +40,7 @@ import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.monitor.MonitoringJob;
+import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
@@ -47,7 +48,7 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
  * @author Alexandre Alves
  * 
  * This Test Class Validates the implementation of
- * <code>isLocal<code> method, according to MEG reference
+ * <code>isLocal</code> method, according to MEG reference
  * documentation.
  */
 public class IsLocal {
@@ -76,8 +77,8 @@ public class IsLocal {
 			tbc.stopRunningJobs();
 			
 			mj = tbc.getMonitorAdmin().startJob(
-					MonitorTestControl.INITIATOR, MonitorTestControl.SVS,
-					MonitorTestControl.COUNT + 1);
+					MonitorConstants.INITIATOR, MonitorConstants.SVS,
+					MonitorConstants.COUNT + 1);
 
 			tbc
 			.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE, new String[] { "a local monitoring job returns true to isLocal()." }),
@@ -104,10 +105,10 @@ public class IsLocal {
         	tbc.stopRunningJobs();
         	
         	session = tbc.getDmtAdmin().getSession(".");					
-			session.createInteriorNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
-			session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[1], new DmtData("EV"));
-			session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[2], new DmtData(MonitorTestControl.COUNT));
-			session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[3], new DmtData(true));
+			session.createInteriorNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0]); // serverId
+			session.setNodeValue(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[1], new DmtData("EV"));
+			session.setNodeValue(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[2], new DmtData(MonitorConstants.COUNT));
+			session.setNodeValue(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[3], new DmtData(true));
 					
 			MonitoringJob[] jobs = tbc.getMonitorAdmin().getRunningJobs();
 			if (jobs.length!=1) {
@@ -122,8 +123,8 @@ public class IsLocal {
         	tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			try {
-				session.setNodeValue(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[3], new DmtData(false));
-				session.deleteNode(MonitorTestControl.DMT_URI_MONITORABLE1_PROPERTIES[0]);
+				session.setNodeValue(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[3], new DmtData(false));
+				session.deleteNode(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0]);
 				session.close();
 			} catch (DmtException e1) {
 				tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e1.getClass().getName());
