@@ -429,6 +429,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * @param timeout time interval in milliseconds to wait. If zero, the method
 	 *        will wait indefinately.
 	 * @return Returns the result of <code>getService()</code>.
+	 * @throws InterruptedException If another thread has interrupted the current thread.
 	 * @throws IllegalArgumentException If the value of timeout is negative.
 	 */
 	public Object waitForService(long timeout) throws InterruptedException {
@@ -735,6 +736,12 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 			System.out.println("ServiceTracker.modified: " + filter); //$NON-NLS-1$
 		}
 	}
+
+    /**
+	 * Finalize. This method no longer performs any function but it kept
+	 * to maintain binary compatibility with prior versions of this class.
+	 */
+    protected void finalize() throws Throwable { }
 
 	/**
 	 * Inner class to track services. If a <code>ServiceTracker</code> object
