@@ -742,22 +742,6 @@ public interface Constants {
 	public final static String	FRAGMENT_HOST							= "Fragment-Host";
 
 	/**
-	 * Manifest header directive (named &quot;multiple-hosts&quot;) identifying
-	 * if the fragment should attach to each bundle selected by the
-	 * Fragment-Host manifest header. The default value is <code>false</code>.
-	 * 
-	 * <p>
-	 * The directive value is encoded in the Fragment-Host manifest header like:
-	 * 
-	 * <pre>
-	 *   Fragment-Host: com.acme.module.test; multiple-hosts:=&quot;false&quot;
-	 * </pre>
-	 * 
-	 * @since 1.3
-	 */
-	public final static String	MULTIPLE_HOSTS_DIRECTIVE				= "multiple-hosts";
-
-	/**
 	 * Manifest header attribute (named &quot;selection-filter&quot;) is used
 	 * for selection by filtering based upon system properties.
 	 * 
