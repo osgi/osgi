@@ -110,7 +110,6 @@ public interface Configuration {
 	 *         contains invalid configuration types or contains case variants of
 	 *         the same key name.
 	 * @throws IllegalStateException if this configuration has been deleted
-	 * @throws SecurityException If the caller does not have <code>ConfigurationPermission[SET]</code>.
 	 */
 	public void update(Dictionary properties) throws IOException;
 
@@ -130,7 +129,6 @@ public interface Configuration {
 	 * 
 	 * @throws IOException If delete fails
 	 * @throws IllegalStateException if this configuration has been deleted
-	 * @throws SecurityException If the caller does not have <code>ConfigurationPermission[SET]</code>.
 	 */
 	public void delete() throws IOException;
 
@@ -160,7 +158,6 @@ public interface Configuration {
 	 * @throws IOException if update cannot access the properties in persistent
 	 *         storage
 	 * @throws IllegalStateException if this configuration has been deleted
-	 * @throws SecurityException when the caller does not have <code>ConfigurationPermission[SET]</code>
 	 */
 	public void update() throws IOException;
 
@@ -180,7 +177,6 @@ public interface Configuration {
 	 * 
 	 * @param bundleLocation a bundle location or <code>null</code>
 	 * @throws IllegalStateException if this configuration has been deleted
-	 * @throws SecurityException If the caller does not have <code>ConfigurationPermission[REBIND]</code>.
 	 */
 	public void setBundleLocation(String bundleLocation);
 
@@ -194,8 +190,7 @@ public interface Configuration {
 	 * 
 	 * @return location to which this configuration is bound, or
 	 *         <code>null</code>.
-	 * @throws SecurityException If the caller does not have
-	 *         <code>ConfigurationPermission[REBIND]</code>.
+     * @throws SecurityException if the caller does not have <code>ConfigurationPermission[configure]</code>.
 	 * @throws IllegalStateException if this <code>Configuration</code> object
 	 *         has been deleted.
 	 */

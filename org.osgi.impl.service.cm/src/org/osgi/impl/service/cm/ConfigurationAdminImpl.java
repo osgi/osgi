@@ -27,15 +27,11 @@
  */
 package org.osgi.impl.service.cm;
 
-import java.util.Enumeration;
-import java.util.Vector;
 import java.io.IOException;
-import org.osgi.service.cm.ConfigurationAdmin;
-import org.osgi.service.cm.Configuration;
-import org.osgi.framework.AdminPermission;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.Filter;
+import java.util.*;
+
+import org.osgi.framework.*;
+import org.osgi.service.cm.*;
 
 /**
  * Implementation class of Configuration Manager. Cares for creation of, access
@@ -48,10 +44,11 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 	/**
 	 * Object for checking availability of Admin Permission.
 	 */
-	protected static AdminPermission	adminPermission	= new AdminPermission();
-	private static final String			BUNDLE_LOCATION	= "service.bundleLocation";
-	private BundleContext				bc;
-	private String						location;
+	protected static ConfigurationPermission	configurationPermission	= new ConfigurationPermission(
+																				ConfigurationPermission.ACTION_CONFIGURE);
+	private static final String					BUNDLE_LOCATION			= "service.bundleLocation";
+	private BundleContext						bc;
+	private String								location;
 
 	/**
 	 * Constructor. Bundle Caller's location is necessary to check access rights
@@ -71,9 +68,9 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 	 * @param factoryPid pid of ManagedServiceFactory
 	 * @return a new Configuration object or null if factory pid is null
 	 * @exception IOException when new configuration can not be stored
-	 * @throws SecurityException if caller does not have
-	 *         <code>ConfigurationPermission[READ]</code> and the
-	 *         <code>factoryPid</code> is bound to another bundle.
+	 * @exception SecurityException if a configuration with this factory pid
+	 *            already exists and is bound to another non null location
+	 *            (different from caller's)
 	 */
 	public Configuration createFactoryConfiguration(String factoryPid)
 			throws IOException, SecurityException {
@@ -88,12 +85,11 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 					fConfig = (ConfigurationImpl) factoryConfigs.elementAt(i);
 					if (fConfig.location != null
 							&& !location.equals(fConfig.location)) {
-						// ### check ConfigurationPermission[READ]
 						checkPermission();
 						break; /*
-							    * if we have permission, there is no need to
-							    * keep checking
-							    */
+								 * if we have permission, there is no need to
+								 * keep checking
+								 */
 					}
 				}
 			}
@@ -113,14 +109,13 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 	 * @return a new Configuration object or null - if factory pid is null
 	 * @exception IOException when db is unable to store new configuration
 	 * @throws SecurityException if caller does not have
-	 *         <code>ConfigurationPermission[READ]</code>.
+	 *         <code>ConfigurationPermission[CONFIGURE]</code>.
 	 */
 	public Configuration createFactoryConfiguration(String factoryPid,
 			String location) throws IOException, SecurityException {
+		checkPermission();
 		if (factoryPid == null)
 			return null;
-		// ### check ConfigurationPermission[READ]
-		checkPermission();
 		synchronized (ServiceAgent.storage) {
 			ConfigurationImpl config = new ConfigurationImpl(factoryPid,
 					ServiceAgent.storage.getNextPID(), location);
@@ -146,14 +141,13 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 	 * @return a Configuration object; null only if passing null for pid
 	 * @exception IOException If db fails to save new configuration
 	 * @throws SecurityException if the caller does not have
-	 *         <code>ConfigurationPermission[READ]</code>.
+	 *         <code>ConfigurationPermission[CONFIGURE]</code>.
 	 */
 	public Configuration getConfiguration(String pid, String location)
 			throws IOException, SecurityException {
+		checkPermission();
 		if (pid == null)
 			return null;
-		// ### check ConfigurationPermission[READ]
-		checkPermission();
 		synchronized (ServiceAgent.storage) {
 			ConfigurationImpl config = (ConfigurationImpl) ConfigurationStorage.configs
 					.get(pid);
@@ -181,8 +175,9 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 	 * @return a Configuration object; null only if pid passed is null
 	 * @exception IOException if db fails to write new configuration
 	 * @throws SecurityException if caller does not have
-	 *         <code>ConfigurationPermission[READ]</code> and the location of the 
-	 *         <code>Configuration</code> does not match the location of the calling bundle.
+	 *         <code>ConfigurationPermission[CONFIGURE]</code> and the location of
+	 *         the <code>Configuration</code> does not match the location of
+	 *         the calling bundle.
 	 */
 	public Configuration getConfiguration(String pid) throws IOException,
 			SecurityException {
@@ -195,16 +190,13 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 				config = new ConfigurationImpl(null, pid, location);
 				ServiceAgent.storage.storeConfig(config, true);
 			}
-			else
-				if (config.location == null) {
-					config.setLocation(location, false);
-					ServiceAgent.storage.storeConfig(config, false);
-				}
-				else
-					if (!config.location.equals(location)) {
-						// ### check ConfigurationPermission[READ]
-						checkPermission();
-					}
+			else if (config.location == null) {
+				config.setLocation(location, false);
+				ServiceAgent.storage.storeConfig(config, false);
+			}
+			else if (!config.location.equals(location)) {
+				checkPermission();
+			}
 			return config;
 		}
 	}
@@ -222,10 +214,9 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 	 * 
 	 * <p>
 	 * Normally only <code>Configuration</code> objects that are bound to the
-	 * location of the calling bundle are returned.
-	 * Otherwise, all matching
-	 * <code>Configuration</code> objects are returned for which the caller has 
-	 * <code>ConfigurationPermission[READ]</code> access.
+	 * location of the calling bundle are returned. Otherwise, all matching
+	 * <code>Configuration</code> objects are returned for which the caller
+	 * has <code>ConfigurationPermission[READ]</code> access.
 	 * 
 	 * <p>
 	 * The returned array must only contain Configuration objects that for which
@@ -270,10 +261,9 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 				if (config.props != null) {
 					try {
 						if (!location.equals(config.location)) {
-							// ### check ConfigurationPermission[READ]
 							checkPermission();
 						}
-						//properties should not contain service.bundleLocaiton
+						// properties should not contain service.bundleLocaiton
 						// key
 						if (filterContainsBundleLocation
 								&& config.location != null) {
@@ -288,9 +278,9 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 						}
 					}
 					catch (SecurityException e) {
-						//the configuration objects which cause this security
+						// the configuration objects which cause this security
 						// exc
-						//will not be returned; listConfigurations methods does
+						// will not be returned; listConfigurations methods does
 						// not throw security exc.
 					}
 				}
@@ -306,10 +296,10 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 		}
 	}
 
-	protected static void checkPermission() {
+	static void checkPermission() {
 		SecurityManager security = System.getSecurityManager();
 		if (security != null) {
-			security.checkPermission(adminPermission);
+			security.checkPermission(configurationPermission);
 		}
 	}
 }

@@ -67,7 +67,7 @@ import org.osgi.framework.InvalidSyntaxException;
  * In general, bundles having permission to use the Configuration Admin service
  * can only access and modify their own configuration information. Accessing or
  * modifying the configuration of another bundle requires
- * <code>ConfigurationPermission</code>.
+ * <code>ConfigurationPermission[CONFIGURE]</code>.
  * 
  * <p>
  * <code>Configuration</code> objects can be <i>bound </i> to a specified
@@ -128,9 +128,7 @@ public interface ConfigurationAdmin {
 	 * @param factoryPid PID of factory (not <code>null</code>).
 	 * @return A new <code>Configuration</code> object.
 	 * @throws IOException if access to persistent storage fails.
-	 * @throws SecurityException if caller does not have
-	 *         <code>ConfigurationPermission[READ]</code> and the
-	 *         <code>factoryPid</code> is bound to another bundle.
+	 * @throws SecurityException if caller does not have <code>ConfigurationPermission[CONFIGURE]</code> and <code>factoryPid</code> is bound to another bundle.
 	 */
 	public Configuration createFactoryConfiguration(String factoryPid)
 			throws IOException;
@@ -156,8 +154,7 @@ public interface ConfigurationAdmin {
 	 * @param location A bundle location string, or <code>null</code>.
 	 * @return a new <code>Configuration</code> object.
 	 * @throws IOException if access to persistent storage fails.
-	 * @throws SecurityException if caller does not have
-	 *         <code>ConfigurationPermission[READ]</code>.
+	 * @throws SecurityException if caller does not have <code>ConfigurationPermission[CONFIGURE]</code>.
 	 */
 	public Configuration createFactoryConfiguration(String factoryPid, String location)
 			throws IOException;
@@ -182,8 +179,7 @@ public interface ConfigurationAdmin {
 	 * @param location The bundle location string, or <code>null</code>.
 	 * @return An existing or new <code>Configuration</code> object.
 	 * @throws IOException if access to persistent storage fails.
-	 * @throws SecurityException if the caller does not have
-	 *         <code>ConfigurationPermission[READ]</code>.
+	 * @throws SecurityException if the caller does not have <code>ConfigurationPermission[CONFIGURE]</code>.
 	 */
 	public Configuration getConfiguration(String pid, String location)
 			throws IOException;
@@ -204,9 +200,7 @@ public interface ConfigurationAdmin {
 	 * @param pid persistent identifier.
 	 * @return an existing or new <code>Configuration</code> matching the PID.
 	 * @throws IOException if access to persistent storage fails.
-	 * @throws SecurityException if caller does not have
-	 *         <code>ConfigurationPermission[READ]</code> and the location of the 
-	 *         <code>Configuration</code> does not match the location of the calling bundle.
+	 * @throws SecurityException if the <code>Configuration</code> object is bound to a location different from that of the calling bundle and it has no <code>ConfigurationPermission[CONFIGURE]</code>.
 	 */
 	public Configuration getConfiguration(String pid) throws IOException;
 
@@ -223,14 +217,9 @@ public interface ConfigurationAdmin {
 	 * 
 	 * <p>
 	 * Normally only <code>Configuration</code> objects that are bound to the
-	 * location of the calling bundle are returned.
-	 * Otherwise, all matching
-	 * <code>Configuration</code> objects are returned for which the caller has 
-	 * <code>ConfigurationPermission[READ]</code> access.
+	 * location of the calling bundle are returned, or all if the caller has 
+	 * <code>ConfigurationPermission[CONFIGURE]</code>.
 	 * 
-	 * <p>
-	 * The returned array must only contain Configuration objects that for which
-	 * the caller has <code>ConfigurationPermission[READ]</code> access.
 	 * <p>
 	 * The syntax of the filter string is as defined in the <code>Filter</code>
 	 * class. The filter can test any configuration parameters including the

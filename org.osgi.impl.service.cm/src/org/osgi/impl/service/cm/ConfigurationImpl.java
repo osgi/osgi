@@ -97,7 +97,6 @@ public class ConfigurationImpl implements Configuration, Serializable {
 	 */
 	public void delete() throws IOException {
 		checkIfDeleted();
-		// ### check ConfigurationPermission[SET]
 		synchronized (ServiceAgent.storage) {
 			ServiceAgent.storage.deleteConfig(this);
 			ServiceReference sRef = ServiceAgent.searchForService(this, false);
@@ -128,7 +127,6 @@ public class ConfigurationImpl implements Configuration, Serializable {
 	 */
 	public String getBundleLocation() throws SecurityException {
 		checkIfDeleted();
-		// ### check ConfigurationPermission[REBIND]
 		ConfigurationAdminImpl.checkPermission();
 		return location;
 	}
@@ -176,13 +174,7 @@ public class ConfigurationImpl implements Configuration, Serializable {
 	public void setBundleLocation(String bundleLocation)
 			throws SecurityException {
 		checkIfDeleted();
-		// ### check ConfigurationPermission[REBIND]
-		SecurityManager security = System.getSecurityManager();
-		if (security != null) {
-			security.checkPermission(new ConfigurationPermission(/* bundle? */null, pid, fPid, ConfigurationPermission.REBIND));
-		}
-
-		//ConfigurationAdminImpl.checkPermission();
+		ConfigurationAdminImpl.checkPermission();
 		setLocation(bundleLocation, true);
 		stronglyBound = (bundleLocation != null);
 	}
@@ -196,7 +188,6 @@ public class ConfigurationImpl implements Configuration, Serializable {
 	 */
 	public void update() throws IOException {
 		checkIfDeleted();
-		// ### check ConfigurationPermission[SET]
 		callBackManagedService(null, null);
 	}
 
@@ -222,7 +213,6 @@ public class ConfigurationImpl implements Configuration, Serializable {
 			throw new IllegalArgumentException(
 					"Properties contain incorrect type!");
 		}
-		// ### check ConfigurationPermission[SET]
 		callBackManagedService(null, properties);
 
 		// notify ConfigurationListeners of update

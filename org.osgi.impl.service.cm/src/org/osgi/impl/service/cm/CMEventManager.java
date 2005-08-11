@@ -151,15 +151,6 @@ public class CMEventManager extends Thread {
 	 * @param event Event holding info for update/deletion of a configuration.
 	 */
 	protected static void addEvent(CMEvent event) {
-		// check ConfigurationPermission[GET]
-		SecurityManager security = System.getSecurityManager();
-		if (security != null) {
-			Bundle target = event.sRef.getBundle();
-			if (!target.hasPermission(new ConfigurationPermission(target, event.config.pid, event.config.fPid, ConfigurationPermission.GET))) {
-				return;
-			}
-		}
-
 		eventQueue.addElement(event);
 		synchronized (synch) {
 			if (isWaiting) {
