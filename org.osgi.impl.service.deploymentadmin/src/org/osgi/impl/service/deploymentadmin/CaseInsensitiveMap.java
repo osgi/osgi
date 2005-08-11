@@ -1,30 +1,20 @@
 /*
- * $Header$
+ * ============================================================================
+ * (c) Copyright 2004 Nokia
+ * This material, including documentation and any related computer programs,
+ * is protected by copyright controlled by Nokia and its licensors. 
+ * All rights are reserved.
  * 
- * Copyright (c) OSGi Alliance (2005). All Rights Reserved.
- * 
- * Implementation of certain elements of the OSGi Specification may be subject
- * to third party intellectual property rights, including without limitation,
- * patent rights (such a third party may or may not be a member of the OSGi
- * Alliance). The OSGi Alliance is not responsible and shall not be held
- * responsible in any manner for identifying or failing to identify any or all
- * such third party intellectual property rights.
- * 
- * This document and the information contained herein are provided on an "AS IS"
- * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
- * HEREIN WILL NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF
- * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE
- * OSGI ALLIANCE BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF
- * USE OF DATA, INTERRUPTION OF BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR
- * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
- * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
- * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
- * All Company, brand and product names may be trademarks that are the sole
- * property of their respective owners. All rights reserved.
+ * These materials have been contributed  to the Open Services Gateway 
+ * Initiative (OSGi)as "MEMBER LICENSED MATERIALS" as defined in, and subject 
+ * to the terms of, the OSGi Member Agreement specifically including, but not 
+ * limited to, the license rights and warranty disclaimers as set forth in 
+ * Sections 3.2 and 12.1 thereof, and the applicable Statement of Work. 
+ * All company, brand and product names contained within this document may be 
+ * trademarks that are the sole property of the respective owners.  
+ * The above notice must be included on all copies of this document.
+ * ============================================================================
  */
-
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.Serializable;
@@ -35,18 +25,26 @@ import java.util.Map;
 import java.util.Set;
 import java.util.jar.*;
 
-
+/**
+ * Maintains a case insensitive map. It means that the keys are 
+ * case insensitive.
+ */
 public class CaseInsensitiveMap implements Map, Serializable {
     
     private Hashtable             table = new Hashtable();
-    private DeploymentPackageImpl dp;
+    private DeploymentPackageImpl dp; // it has the ResourceBundle for
+                                      // localization
     
+    /**
+     * The <code>table</code> Hashtable contains this type of objects.
+     * In this way the original (not capitalized) keys are also available.
+     */
     private static class Entry implements Serializable {
-        private String rawKey;
+        private String originalKey;
         private String value;
         
         private Entry(String rawKey, String value) {
-            this.rawKey = rawKey;
+            this.originalKey = rawKey;
             this.value = value;
         }
     }
@@ -81,24 +79,40 @@ public class CaseInsensitiveMap implements Map, Serializable {
             throw new IllegalArgumentException("Only String key is allowed");
         String upperKey = ((String) key).toUpperCase(); 
         Entry entry = (Entry) table.get(upperKey);
+        
+        // key was not found
         if (null == entry)
             return null;
-        if (null == dp.getResourceBundle())
+        
+        // there is no resource bundle so there is no need to localize
+        if (null == dp || null == dp.getResourceBundle())
             return entry.value;
-        if (entry.value.startsWith("%")) {
+        
+        // localize
+        if (entry.value.startsWith("%"))
             return dp.getResourceBundle().getString(entry.value.substring(1));
-        }
+        
+        // there is resource bundle but the there is node need for 
+        // localization (there is no '%' char at the begining of the value)
         return entry.value;
     }
     
+    /**
+     * Return the original (not capitalized) key.  
+     * @param case insensitive key
+     * @return the original (not capitalized) key
+     */
     public String getRawKey(Object key) {
         if (!(key instanceof String))
             throw new IllegalArgumentException("Only String key is allowed");
         String upperKey = ((String) key).toUpperCase(); 
         Entry entry = (Entry) table.get(upperKey);
+        
+        // key was not found
         if (null == entry)
             return null;
-        return entry.rawKey;
+        
+        return entry.originalKey;
     }
     
     public Set keySet() {
@@ -109,12 +123,15 @@ public class CaseInsensitiveMap implements Map, Serializable {
         table.clear();
     }
 
-    public boolean containsKey(Object var0) {
-        return table.containsKey(var0);
+    public boolean containsKey(Object key) {
+        if (!(key instanceof String))
+            throw new IllegalArgumentException("Only String key is allowed");
+        String upperKey = ((String) key).toUpperCase();
+        return table.containsKey(upperKey);
     }
 
-    public boolean containsValue(Object var0) {
-        return table.containsValue(var0);
+    public boolean containsValue(Object obj) {
+        return table.containsValue(obj);
     }
 
     public Set entrySet() {
@@ -125,12 +142,15 @@ public class CaseInsensitiveMap implements Map, Serializable {
         return table.isEmpty();
     }
 
-    public void putAll(Map var0) {
-        fill(var0);
+    public void putAll(Map other) {
+        fill(other);
     }
 
-    public Object remove(Object var0) {
-        return table.remove(var0);
+    public Object remove(Object key) {
+        if (!(key instanceof String))
+            throw new IllegalArgumentException("Only String key is allowed");
+        String upperKey = ((String) key).toUpperCase();
+        return table.remove(upperKey);
     }
 
     public int size() {

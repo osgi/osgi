@@ -315,7 +315,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             if (be.getResName().equals(name))
-                return be.getValue(header);
+                return (String) be.getAttrs().get(header);
         }
 
         return null;

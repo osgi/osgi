@@ -20,7 +20,6 @@ package org.osgi.impl.service.deploymentadmin;
 import java.io.Serializable;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.List;
 import java.util.Map;
 import java.util.jar.Attributes;
 
@@ -28,18 +27,23 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Entry;
 
+/**
+ * Represents an OSGi bundle contained by a Deployment Package.<p> 
+ * A Deployment Package maintains a list of its contained bundles. 
+ * The list consists of BundleEntries. A BundleEntry contains additional 
+ * meta information about the bundle. E.g. resource name, 
+ * PID (in case of customizers), etc.
+ */
 public class BundleEntry implements Serializable {
     
     private String             resName;    // name in the manifest
     private String             symbName;   // Bundle-SymbolicName
-    private String             version;
-    private Long               bundleId;
-    private Boolean            missing;
+    private String             version;    // Bundle-Version
+    private Long               bundleId;   // ID returned by Bundle.getBundleId() 
+    private Boolean            missing;    // is it a mising entry (see DeploymentPackage-Missing)
     private String             pid;        // if it's a customizer
                                          
-    private CaseInsensitiveMap attrs;
-    private List               certChains; // list of cerificate chains
-                                           // (one chain is One String[])
+    private CaseInsensitiveMap attrs;      // attributes in the manifest for the bundle
     
     private BundleEntry(String name,
             String symbName, 
@@ -67,11 +71,6 @@ public class BundleEntry implements Serializable {
         this(name, symbName, version, -1, missing, attrs, dp);
     }
 
-    /*
-     * 1) When creating the "System" DP the BundleEntries are constructed 
-     *    directly from the bundle objects because there is no physical DP.
-     * 2) DeploymentSessionImpl.checkDpBundleConformity uses it 
-     */
     public BundleEntry(final Bundle b) {
         Object[] triple = (Object[]) AccessController.doPrivileged(new PrivilegedAction() {
             public Object run() {
@@ -94,6 +93,13 @@ public class BundleEntry implements Serializable {
              entry.getAttributes(), null);
     }
 
+    /**
+     * Two BundleEntries are equal if they have equal symbolic names and 
+     * versions. 
+     * @param obj the other BundleEntry 
+     * @return <code>true<code> if the symbolic names and versions are equal
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     public boolean equals(Object obj) {
         if (null == obj)
             return false;
@@ -101,22 +107,22 @@ public class BundleEntry implements Serializable {
             return false;
         BundleEntry other = (BundleEntry) obj;
         
-        // TODO bit ugly
+        // sometimes the bundle symbolic name is null
         return ((null == symbName && null == other.symbName) || symbName.equals(other.symbName)) &&
                ((null == version && null == other.version) || version.equals(other.version));
     }
-    
+
+    /**
+     * HashCode based on the symolic name and version.
+     * @return hash code
+     * @see java.lang.Object#hashCode()
+     */
     public int hashCode() {
         return (symbName + version).hashCode();
     }
     
     public String toString() {
         return "[SymbolicName: " + symbName + " Version: " + version + "]";
-    }
-
-    // PluginDeployed uses this
-    public List getCertificateChainStringArrays() {
-        return certChains;
     }
 
     public boolean isCustomizer() {
@@ -146,22 +152,6 @@ public class BundleEntry implements Serializable {
         return attrs;
     }
     
-    void setAttrs(CaseInsensitiveMap attrs) {
-        this.attrs = attrs;
-    }
-
-    public void setSymbName(String symbName) {
-        this.symbName = symbName;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public String getValue(String header) {
-        return (String) attrs.get(header);
-    }
-
     public long getBundleId() {
         if (null == bundleId)
             throw new RuntimeException("Internal error");
