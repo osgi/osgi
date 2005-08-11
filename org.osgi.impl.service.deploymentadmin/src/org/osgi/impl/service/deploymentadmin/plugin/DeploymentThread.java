@@ -45,7 +45,7 @@ public class DeploymentThread extends Thread {
     }
     
     public void run() {
-        if (mimeType.equals(DAConstants.MIME_DP)) {
+        if (mimeType.equals(PluginConstants.MIME_DP)) {
             try {
                 DeploymentPackageImpl dp = (DeploymentPackageImpl) pluginCtx.
                         getDeploymentAdmin().installDeploymentPackage(is);
@@ -62,7 +62,7 @@ public class DeploymentThread extends Thread {
                     }
                 }
             }
-        } else if (mimeType.equals(DAConstants.MIME_BUNDLE)) {
+        } else if (mimeType.equals(PluginConstants.MIME_BUNDLE)) {
             try {
                 Bundle b = pluginCtx.getBundleContext().installBundle(location, is);
                 b.start();

@@ -16,11 +16,11 @@ import org.xml.sax.helpers.DefaultHandler;
 public class DownloadThread extends Thread {
     
     public static final int OK                        =  0;
-    public static final int NOT_ACCEPTABLE_CONTENT    =  AlertCodes.RESULT_NOT_ACCEPTABLE_CONTENT;
-    public static final int DWNL_SERVER_NOT_AVAILABLE =  AlertCodes.RESULT_DWNL_SERVER_NOT_AVAILABLE;
-    public static final int DWNLD_DESCR_ERROR         =  AlertCodes.RESULT_DWNLD_DESCR_ERROR;
-    public static final int USER_CANCELLED            =  AlertCodes.RESULT_USER_CANCELLED;
-    public static final int UNDEFINED_ERROR           =  AlertCodes.RESULT_UNDEFINED_ERROR;
+    public static final int NOT_ACCEPTABLE_CONTENT    =  PluginConstants.RESULT_NOT_ACCEPTABLE_CONTENT;
+    public static final int DWNL_SERVER_NOT_AVAILABLE =  PluginConstants.RESULT_DWNL_SERVER_NOT_AVAILABLE;
+    public static final int DWNLD_DESCR_ERROR         =  PluginConstants.RESULT_DWNLD_DESCR_ERROR;
+    public static final int USER_CANCELLED            =  PluginConstants.RESULT_USER_CANCELLED;
+    public static final int UNDEFINED_ERROR           =  PluginConstants.RESULT_UNDEFINED_ERROR;
     
     private SAXParser     parser;
     private Handler       handler = new Handler();

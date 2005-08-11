@@ -258,9 +258,9 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin, Se
         }
         String mimeType;
         if (f.getName().endsWith(".dp"))
-            mimeType = DAConstants.MIME_DP;
+            mimeType = PluginConstants.MIME_DP;
         else 
-            mimeType = DAConstants.MIME_BUNDLE;
+            mimeType = PluginConstants.MIME_BUNDLE;
 
         final String id = nodeUriArr[5];
         DeploymentThread deplThr = new DeploymentThread(mimeType, 

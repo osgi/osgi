@@ -3,8 +3,9 @@ package org.osgi.impl.service.deploymentadmin.plugin;
 /*
  * Generic alert result codes
  */
-public final class AlertCodes {
+public final class PluginConstants {
     
+    // alert codes
     static final int RESULT_SUCCESSFUL                           = 200;
     static final int RESULT_BUNDLE_START_WARNING                 = 250;
     
@@ -35,5 +36,9 @@ public final class AlertCodes {
     static final int RESULT_DEPL_UNDEFINED                       = 463;
     static final int RESULT_DEPL_RES_PROC_MISSING                = 464;
     static final int RESULT_DEPL_TIMEOUT                         = 465;
+
+    // MIME types
+    public static final String MIME_DP     = "application/vnd.osgi.dp";
+    public static final String MIME_BUNDLE = "application/java-archive";
 
 }

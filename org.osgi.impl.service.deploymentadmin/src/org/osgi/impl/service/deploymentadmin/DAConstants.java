@@ -17,7 +17,6 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
-
 public class DAConstants {
     
     // debug mode
@@ -46,6 +45,7 @@ public class DAConstants {
     public static final String USER_PROMPT          = "org.osgi.impl.service.deploymentadmin.userprompt";
     public static final String SESSION_TIMEOUT      = "org.osgi.impl.service.deploymentadmin.sessiontimeout";
     
+    // default location of the l10n files
     public static final String DEF_LOC_PATH         = "OSGI-INF/l10n/bundle";
     
     // event related constants
@@ -54,9 +54,5 @@ public class DAConstants {
     public static final String TOPIC_COMPLETE		= "org/osgi/service/deployment/COMPLETE";
     public static final String EVENTPROP_DPNAME		= "deploymentpackage.name";
     public static final String EVENTPROP_SUCCESSFUL	= "successful";
-
-    // MIME types
-    public static final String MIME_DP     = "application/vnd.osgi.dp";
-    public static final String MIME_BUNDLE = "application/java-archive";
     
 }
