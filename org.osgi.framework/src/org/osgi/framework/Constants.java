@@ -993,4 +993,60 @@ public interface Constants {
 	 * @since 1.3
 	 */
 	public final static String	VISIBILITY_REEXPORT						= "reexport";
+	/**
+	 * Manifest header directive (named &quot;extension&quot;)
+	 * identifying the type of the extension fragment.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Fragment-Host manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *   Fragment-Host: system.bundle; extension:=&quot;framework&quot;
+	 * </pre>
+	 * 
+	 * @see Constants#EXTENSION_FRAMEWORK
+	 * @see Constants#EXTENSION_BOOTCLASSPATH
+	 * @since 1.3
+	 */
+	public final static String	EXTENSION_DIRECTIVE			= "extension";
+
+	/**
+	 * Manifest header directive value (named &quot;framework&quot;) identifying 
+	 * the type of extension fragment. An extension fragment type of framework
+	 * indicates that the extension fragment is to be loaded by
+	 * the framework's class loader.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Fragment-Host manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *   Fragment-Host: system.bundle; extension:=&quot;framework&quot;
+	 * </pre>
+	 * 
+	 * @see Constants#EXTENSION_DIRECTIVE
+	 * @since 1.3
+	 */
+	public final static String	EXTENSION_FRAMEWORK				= "framework";
+
+	/**
+	 * Manifest header directive value (named &quot;bootclasspath&quot;) identifying 
+	 * the type of extension fragment. An extension fragment type of bootclasspath
+	 * indicates that the extension fragment is to be loaded by
+	 * the boot class loader.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Fragment-Host manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *   Fragment-Host: system.bundle; extension:=&quot;bootclasspath&quot;
+	 * </pre>
+	 * 
+	 * @see Constants#EXTENSION_DIRECTIVE
+	 * @since 1.3
+	 */
+	public final static String	EXTENSION_BOOTCLASSPATH			= "bootclasspath";
+
 }
