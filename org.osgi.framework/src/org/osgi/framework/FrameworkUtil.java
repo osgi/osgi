@@ -83,6 +83,12 @@ public class FrameworkUtil {
 				});
 	}
 
+	
+	/**
+	 * FrameworkUtil objects may not be constructed. 
+	 */
+	private FrameworkUtil() {}
+	
 	/**
 	 * Creates a <code>Filter</code> object. This <code>Filter</code> object
 	 * may be used to match a <code>ServiceReference</code> object or a
