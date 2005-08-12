@@ -18,17 +18,25 @@
 package org.osgi.impl.service.deploymentadmin;
 
 import org.osgi.framework.*;
+import org.osgi.impl.service.dwnlimpl.DownloadAgentImpl;
+import org.osgi.impl.service.dwnlimpl.URLProtocolPlugin;
 
 public class Activator implements BundleActivator {
 
-    DeploymentAdminImpl			deploymentAdmin = new DeploymentAdminImpl();
+    DeploymentAdminImpl deploymentAdmin   = new DeploymentAdminImpl();
+    DownloadAgentImpl   downloadAgent     = new DownloadAgentImpl();
+    URLProtocolPlugin   urlProtocolPlugin = new URLProtocolPlugin();
     
 	public void start(BundleContext context) throws Exception {
-		deploymentAdmin.start(context);
+        downloadAgent.start(context);
+        urlProtocolPlugin.start(context);
+        deploymentAdmin.start(context);
 	}
     
 	public void stop(BundleContext context) throws Exception {
         deploymentAdmin.stop(context);
+        urlProtocolPlugin.stop(context);
+        downloadAgent.stop(context);
 	}
 	
 }

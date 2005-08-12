@@ -8,7 +8,7 @@ import java.util.Set;
 
 import javax.xml.parsers.SAXParser;
 
-import org.osgi.impl.service.deploymentadmin.api.DownloadAgent;
+import org.osgi.impl.service.dwnl.DownloadAgent;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;

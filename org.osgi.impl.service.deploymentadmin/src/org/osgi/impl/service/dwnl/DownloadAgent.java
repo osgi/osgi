@@ -15,36 +15,24 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package org.osgi.impl.service.deploymentadmin.api;
+package org.osgi.impl.service.dwnl;
 
 import java.io.InputStream;
 import java.util.Map;
 
 /**
- * The interface is available as a standard OSGi service under the
- * <code>org.osgi.impl.service.deploymentadmin.api.ProtocolPlugin</code>
- * service name. {@link org.osgi.impl.service.deploymentadmin.api.DownloadAgent} 
- * implementations use (tracks) these services to provide dowload functionality.<p>
+ * The <code>DownloadAgent</code> iterface is used internally in the OSGi MEG
+ * reference implementation. It provides download service for an arbitrary
+ * module of the MEG reference implementation (e.g. for Deployment DMT plugin).
  */
-public interface ProtocolPlugin {
+public interface DownloadAgent {
 
     /**
-	 * Key to the service registration <code>Dictionary</code> to identify 
-	 * the protocol the download plugin supports.
-	 */
-	String	PROTOCOL	= "protocol";
-	
-    /**
-	 * Gives back an {@link DownloadInputStream}created according to the got
-	 * <code>Map</code>. The exact content of the <code>
-	 * Map</code> is
-	 * implementation specific.
-	 * <p>
-	 * 
+	 * Opens an input stream to the received URL.
 	 * @param attr attributes needed for the InputStream creation
-	 * @return the InputStream to the requested resource 
+	 * @return the InputStream to the resource
 	 * @throws Exception if any error occures
 	 */
-	InputStream download(Map attr) throws Exception;
+	InputStream download(String protocol, Map attr) throws Exception;
 	
 }

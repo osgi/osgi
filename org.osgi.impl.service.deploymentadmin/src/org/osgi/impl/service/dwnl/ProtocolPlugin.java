@@ -15,34 +15,36 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package org.osgi.impl.service.deploymentadmin.dwnl.plugins;
+package org.osgi.impl.service.dwnl;
 
 import java.io.InputStream;
-import java.net.*;
-import java.util.*;
-import org.osgi.framework.*;
-import org.osgi.impl.service.deploymentadmin.api.*;
+import java.util.Map;
 
-public class URLProtocolPlugin implements ProtocolPlugin, BundleActivator {
-    
-    private ServiceRegistration reg;
+/**
+ * The interface is available as a standard OSGi service under the
+ * <code>org.osgi.impl.service.deploymentadmin.api.ProtocolPlugin</code>
+ * service name. {@link org.osgi.impl.service.dwnl.DownloadAgent} 
+ * implementations use (tracks) these services to provide dowload functionality.<p>
+ */
+public interface ProtocolPlugin {
 
-    public InputStream download(Map attr) throws Exception {
-		URL url = new URL((String) attr.get("url"));
-		if (null == url)
-			throw new Exception("URL is missing");
-		URLConnection connection = url.openConnection();
-		return connection.getInputStream();
-	}
-
-	public void start(BundleContext context) throws Exception {
-		Dictionary dict = new Hashtable();
-		dict.put(ProtocolPlugin.PROTOCOL, "url");
-		reg = context.registerService(ProtocolPlugin.class.getName(), this, dict);
-	}
-
-	public void stop(BundleContext context) throws Exception {
-	    reg.unregister();
-	}
+    /**
+	 * Key to the service registration <code>Dictionary</code> to identify 
+	 * the protocol the download plugin supports.
+	 */
+	String	PROTOCOL	= "protocol";
+	
+    /**
+	 * Gives back an {@link DownloadInputStream}created according to the got
+	 * <code>Map</code>. The exact content of the <code>
+	 * Map</code> is
+	 * implementation specific.
+	 * <p>
+	 * 
+	 * @param attr attributes needed for the InputStream creation
+	 * @return the InputStream to the requested resource 
+	 * @throws Exception if any error occures
+	 */
+	InputStream download(Map attr) throws Exception;
 	
 }

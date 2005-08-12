@@ -15,24 +15,34 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package org.osgi.impl.service.deploymentadmin.api;
+package org.osgi.impl.service.dwnlimpl;
 
 import java.io.InputStream;
-import java.util.Map;
+import java.net.*;
+import java.util.*;
+import org.osgi.framework.*;
+import org.osgi.impl.service.dwnl.*;
 
-/**
- * The <code>DownloadAgent</code> iterface is used internally in the OSGi MEG
- * reference implementation. It provides download service for an arbitrary
- * module of the MEG reference implementation (e.g. for Deployment DMT plugin).
- */
-public interface DownloadAgent {
+public class URLProtocolPlugin implements ProtocolPlugin, BundleActivator {
+    
+    private ServiceRegistration reg;
 
-    /**
-	 * Opens an input stream to the received URL.
-	 * @param attr attributes needed for the InputStream creation
-	 * @return the InputStream to the resource
-	 * @throws Exception if any error occures
-	 */
-	InputStream download(String protocol, Map attr) throws Exception;
+    public InputStream download(Map attr) throws Exception {
+		URL url = new URL((String) attr.get("url"));
+		if (null == url)
+			throw new Exception("URL is missing");
+		URLConnection connection = url.openConnection();
+		return connection.getInputStream();
+	}
+
+	public void start(BundleContext context) throws Exception {
+		Dictionary dict = new Hashtable();
+		dict.put(ProtocolPlugin.PROTOCOL, "url");
+		reg = context.registerService(ProtocolPlugin.class.getName(), this, dict);
+	}
+
+	public void stop(BundleContext context) throws Exception {
+	    reg.unregister();
+	}
 	
 }

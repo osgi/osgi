@@ -15,13 +15,13 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package org.osgi.impl.service.deploymentadmin.dwnl;
+package org.osgi.impl.service.dwnlimpl;
 
 import java.io.InputStream;
 import java.util.*;
 
 import org.osgi.framework.*;
-import org.osgi.impl.service.deploymentadmin.api.*;
+import org.osgi.impl.service.dwnl.*;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class DownloadAgentImpl implements DownloadAgent, BundleActivator {
