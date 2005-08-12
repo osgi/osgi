@@ -42,9 +42,11 @@ public final class ConfigurationPermission extends BasicPermission {
 		if (!name.equals("*")) {
 			throw new IllegalArgumentException("name must be *");
 		}
-		if (!actions.equalsIgnoreCase(CONFIGURE)) {
-			throw new IllegalArgumentException("actions must be " + CONFIGURE);
-		}
+		actions = actions.trim();
+		if (actions.equalsIgnoreCase(CONFIGURE)||actions.equals("*"))
+			return;
+		
+		throw new IllegalArgumentException("actions must be " + CONFIGURE);
 	}
 
 	/**
