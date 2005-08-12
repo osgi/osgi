@@ -99,7 +99,6 @@ public abstract class DefaultTestBundleControl
     private Thread                  thisThread;
     private Registry                mainRegistry;
     private Hashtable               sharedContexts = new Hashtable();
-    private Hashtable               sharedContextCounter = new Hashtable();
 
     protected Registry              registry;
 
@@ -239,7 +238,6 @@ public abstract class DefaultTestBundleControl
 	This function performs the tests.
 	 */
     public void run() {
-        int             progress = 0;
 
         timeout = Integer.parseInt(System.getProperty("org.osgi.test.testcase.timeout", "60000"));
         try {
