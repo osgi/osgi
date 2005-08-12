@@ -55,7 +55,7 @@ public interface WireConstants {
 	 * one kind of value. This property is only used during registration,
 	 * modifying the property must not have any effect of the <code>Wire</code>
 	 * object's scope. Each name in the given list mist have
-	 * <code>WirePermission[PRODUCE,name]</code> or else is ignored. The type of
+	 * <code>WirePermission[name,PRODUCE]</code> or else is ignored. The type of
 	 * this service registration property must be <code>String[]</code>.
 	 * 
 	 * @see Wire#getScope
@@ -70,7 +70,7 @@ public interface WireConstants {
 	 * produce more than one kind of value. This property is only used during
 	 * registration, modifying the property must not have any effect of the
 	 * <code>Wire</code> object's scope. Each name in the given list mist have
-	 * <code>WirePermission[CONSUME]</code> or else is ignored. The type of this
+	 * <code>WirePermission[name,CONSUME]</code> or else is ignored. The type of this
 	 * service registration property must be <code>String[]</code>.
 	 * 
 	 * @see Wire#getScope

@@ -48,9 +48,9 @@ package org.osgi.service.wireadmin;
  * 
  * <p>
  * Security Considerations. Data producing bundles will require
- * <code>ServicePermission[REGISTER,Producer]</code> to register a Producer
+ * <code>ServicePermission[Producer,REGISTER]</code> to register a Producer
  * service. In general, only the Wire Admin service should have
- * <code>ServicePermission[GET,Producer]</code>. Thus only the Wire Admin service
+ * <code>ServicePermission[Producer,GET]</code>. Thus only the Wire Admin service
  * may directly call a Producer service. Care must be taken in the sharing of
  * <code>Wire</code> objects with other bundles.
  * <p>

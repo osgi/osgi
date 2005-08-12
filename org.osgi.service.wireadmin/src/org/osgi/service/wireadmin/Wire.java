@@ -31,10 +31,10 @@ import java.util.Dictionary;
  * Security Considerations. <code>Wire</code> objects are available to Producer
  * and Consumer services connected to a given <code>Wire</code> object and to
  * bundles which can access the <code>WireAdmin</code> service. A bundle must have
- * <code>ServicePermission[GET,WireAdmin]</code> to get the <code>WireAdmin</code>
+ * <code>ServicePermission[WireAdmin,GET]</code> to get the <code>WireAdmin</code>
  * service to access all <code>Wire</code> objects. A bundle registering a
  * Producer service or a Consumer service must have the appropriate
- * <code>ServicePermission[REGISTER,Consumer|Producer]</code> to register the
+ * <code>ServicePermission[Consumer|Producer,REGISTER]</code> to register the
  * service and will be passed <code>Wire</code> objects when the service object's
  * <code>consumersConnected</code> or <code>producersConnected</code> method is
  * called.
@@ -234,8 +234,8 @@ public interface Wire {
 	 * Consumer services modifies its scope.
 	 * <p>
 	 * A scope name is permitted for a Producer service when the registering
-	 * bundle has <code>WirePermission[PRODUCE]</code>, and for a Consumer
-	 * service when the registering bundle has <code>WirePermission[CONSUME]</code>.
+	 * bundle has <code>WirePermission[name,PRODUCE]</code>, and for a Consumer
+	 * service when the registering bundle has <code>WirePermission[name,CONSUME]</code>.
 	 * <p>
 	 * If either Consumer service or Producer service has not set a
 	 * <code>WIREADMIN_*_SCOPE</code> property, then the returned value must be

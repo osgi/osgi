@@ -42,7 +42,7 @@ package org.osgi.service.wireadmin;
  * 
  * <p>
  * Security Considerations. Bundles wishing to monitor <code>WireAdminEvent</code>
- * objects will require <code>ServicePermission[REGISTER,WireAdminListener]</code>
+ * objects will require <code>ServicePermission[WireAdminListener,REGISTER]</code>
  * to register a <code>WireAdminListener</code> service. Since
  * <code>WireAdminEvent</code> objects contain <code>Wire</code> objects, care must
  * be taken in assigning permission to register a <code>WireAdminListener</code>

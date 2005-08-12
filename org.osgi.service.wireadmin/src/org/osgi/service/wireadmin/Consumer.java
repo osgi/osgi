@@ -36,7 +36,7 @@ package org.osgi.service.wireadmin;
  * 
  * <p>
  * Security Considerations - Data consuming bundles will require
- * <code>ServicePermission[REGISTER,Consumer]</code>. In general, only the Wire
+ * <code>ServicePermission[Consumer,REGISTER]</code>. In general, only the Wire
  * Admin service bundle should have this permission. Thus only the Wire Admin
  * service may directly call a Consumer service. Care must be taken in the
  * sharing of <code>Wire</code> objects with other bundles.
