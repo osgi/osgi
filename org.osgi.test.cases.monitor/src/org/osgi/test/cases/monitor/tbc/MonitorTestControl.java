@@ -81,6 +81,18 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
  */
 public class MonitorTestControl extends DefaultTestBundleControl {
 	
+	// TODO Added because they were unresolved
+	public static final String	SV_MONITORABLEID1	= null;
+	public static final String	SV_MONITORABLEID2	= null;
+	public static final String	SV_NAME1	= null;
+	public static final String	SV_NAME2	= null;
+	public static final String	INVALID_MONITORABLE_SV	= null;
+	public static final int	SV_LENGTH	= 10;
+    // END 
+
+
+
+
 	private boolean broadcast = false;
 	
 	private MonitorAdmin monitorAdmin;

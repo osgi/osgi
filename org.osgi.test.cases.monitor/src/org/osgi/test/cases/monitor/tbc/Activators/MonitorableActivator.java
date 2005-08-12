@@ -66,7 +66,7 @@ public class MonitorableActivator implements BundleActivator {
 		
 		Hashtable ht = new Hashtable();
 		ht.put("service.pid", MonitorTestControl.SV_MONITORABLEID1);
-		
+	
 			
 		String[] ifs = new String[] { Monitorable.class.getName() };
 		servReg = bc.registerService(ifs, testMonitorableImpl, ht);

@@ -54,7 +54,7 @@ public class MonitorableImpl2 implements Monitorable, SetStatusVariableInterface
 		sv0 = new StatusVariable(MonitorTestControl.SV_NAME1,StatusVariable.CM_CC,"test");
 		sv1 = new StatusVariable(MonitorTestControl.SV_NAME2,StatusVariable.CM_DER,"test");
 	}
-	
+
 	public MonitorableImpl2(MonitorTestControl tbc) {
 		this.tbc = tbc;
 	}
