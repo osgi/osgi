@@ -9,8 +9,9 @@
  */
 package org.osgi.service.cm;
 
-import java.util.*;
-import org.osgi.framework.*;
+import java.util.Dictionary;
+
+import org.osgi.framework.ServiceReference;
 
 /**
  * A service interface for processing configuration dictionary before the
@@ -23,32 +24,34 @@ import org.osgi.framework.*;
  * registrations of Configuration Plugin services and must call these services
  * every time before it calls the <code>ManagedService</code> or
  * <code>ManagedServiceFactory</code>
- * <code>updated</code> method. The Configuration
- * Plugin service thus has the opportunity to view and modify the properties
- * before they are passed to the ManagedS ervice or Managed Service Factory.
+ * <code>updated</code> method. The
+ * Configuration Plugin service thus has the opportunity to view and modify the
+ * properties before they are passed to the ManagedS ervice or Managed Service
+ * Factory.
  * 
  * <p>
  * Configuration Plugin (plugin) services have full read/write access to all
  * configuration information. Therefore, bundles using this facility should be
  * trusted. Access to this facility should be limited with
- * <code>ServicePermission[REGISTER, ConfigurationPlugin]</code>. Implementations
- * of a Configuration Plugin service should assure that they only act on
- * appropriate configurations.
+ * <code>ServicePermission[ConfigurationPlugin,REGISTER]</code>.
+ * Implementations of a Configuration Plugin service should assure that they
+ * only act on appropriate configurations.
  * 
  * <p>
- * The <code>Integer</code> <code>service.cmRanking</code> registration property may
- * be specified. Not specifying this registration property, or setting it to
- * something other than an <code>Integer</code>, is the same as setting it to the
- * <code>Integer</code> zero. The <code>service.cmRanking</code> property determines
- * the order in which plugins are invoked. Lower ranked plugins are called
- * before higher ranked ones. In the event of more than one plugin having the
- * same value of <code>service.cmRanking</code>, then the Configuration Admin
- * service arbitrarily chooses the order in which they are called.
+ * The <code>Integer</code> <code>service.cmRanking</code> registration
+ * property may be specified. Not specifying this registration property, or
+ * setting it to something other than an <code>Integer</code>, is the same as
+ * setting it to the <code>Integer</code> zero. The
+ * <code>service.cmRanking</code> property determines the order in which
+ * plugins are invoked. Lower ranked plugins are called before higher ranked
+ * ones. In the event of more than one plugin having the same value of
+ * <code>service.cmRanking</code>, then the Configuration Admin service
+ * arbitrarily chooses the order in which they are called.
  * 
  * <p>
  * By convention, plugins with <code>service.cmRanking&lt; 0</code> or
- * <code>service.cmRanking &gt; 1000</code> should not make modifications to the
- * properties.
+ * <code>service.cmRanking &gt; 1000</code> should not make modifications to
+ * the properties.
  * 
  * <p>
  * The Configuration Admin service has the right to hide properties from
@@ -57,13 +60,13 @@ import org.osgi.framework.*;
  * defined.
  * 
  * <p>
- * A plugin may optionally specify a <code>cm.target</code> registration property
- * whose value is the PID of the Managed Service or Managed Service Factory
- * whose configuration updates the plugin is intended to intercept. The plugin
- * will then only be called with configuration updates that are targetted at the
- * Managed Service or Managed Service Factory with the specified PID. Omitting
- * the <code>cm.target</code> registration property means that the plugin is
- * called for all configuration updates.
+ * A plugin may optionally specify a <code>cm.target</code> registration
+ * property whose value is the PID of the Managed Service or Managed Service
+ * Factory whose configuration updates the plugin is intended to intercept. The
+ * plugin will then only be called with configuration updates that are targetted
+ * at the Managed Service or Managed Service Factory with the specified PID.
+ * Omitting the <code>cm.target</code> registration property means that the
+ * plugin is called for all configuration updates.
  * 
  * @version $Revision$
  */
@@ -82,9 +85,9 @@ public interface ConfigurationPlugin {
 	/**
 	 * A service property to specify the order in which plugins are invoked.
 	 * 
-	 * This property contains an <code>Integer</code> ranking of the plugin. Not
-	 * specifying this registration property, or setting it to something other
-	 * than an <code>Integer</code>, is the same as setting it to the
+	 * This property contains an <code>Integer</code> ranking of the plugin.
+	 * Not specifying this registration property, or setting it to something
+	 * other than an <code>Integer</code>, is the same as setting it to the
 	 * <code>Integer</code> zero. This property determines the order in which
 	 * plugins are invoked. Lower ranked plugins are called before higher ranked
 	 * ones.
@@ -97,16 +100,16 @@ public interface ConfigurationPlugin {
 	 * View and possibly modify the a set of configuration properties before
 	 * they are sent to the Managed Service or the Managed Service Factory. The
 	 * Configuration Plugin services are called in increasing order of their
-	 * <code>service.cmRanking</code> property. If this property is undefined or
-	 * is a non- <code>Integer</code> type, 0 is used.
+	 * <code>service.cmRanking</code> property. If this property is undefined
+	 * or is a non- <code>Integer</code> type, 0 is used.
 	 * 
 	 * <p>
 	 * This method should not modify the properties unless the
 	 * <code>service.cmRanking</code> of this plugin is in the range
 	 * <code>0 &lt;= service.cmRanking &lt;= 1000</code>.
 	 * <p>
-	 * If this method throws any <code>Exception</code>, the Configuration Admin
-	 * service must catch it and should log it.
+	 * If this method throws any <code>Exception</code>, the Configuration
+	 * Admin service must catch it and should log it.
 	 * 
 	 * @param reference reference to the Managed Service or Managed Service
 	 *        Factory
@@ -115,5 +118,6 @@ public interface ConfigurationPlugin {
 	 *        property may be obtained from the
 	 *        <code>Configuration.getBundleLocation</code> method.
 	 */
-	public void modifyConfiguration(ServiceReference reference, Dictionary properties);
+	public void modifyConfiguration(ServiceReference reference,
+			Dictionary properties);
 }

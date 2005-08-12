@@ -10,21 +10,20 @@
 
 package org.osgi.service.cm;
 
-import java.io.IOException;
 import java.security.*;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.NoSuchElementException;
 
 /**
  * Indicates a bundle's authority to configure bundles.
  * 
  * This permission has only a single action: CONFIGURE.
  * 
- * 
  * @version $Revision$
  * @since 1.2
  */
 
-public final class ConfigurationPermission extends Permission {
+public final class ConfigurationPermission extends BasicPermission {
 	static final long			serialVersionUID	= 5716868734811965383L;
 	/**
 	 * The action string <code>configure</code>.
@@ -32,35 +31,20 @@ public final class ConfigurationPermission extends Permission {
 	public final static String	CONFIGURE			= "configure";
 
 	/**
-	 * The mask for a configuration action.
-	 */
-	public static int	ACTION_CONFIGURE	= 0x00000001;
-	private final static int	ACTION_ALL			= ACTION_CONFIGURE;
-	private final static int	ACTION_NONE			= 0;
-
-	private transient int		action_mask			= ACTION_NONE;
-	private String				actions				= null;
-
-	/**
 	 * Create a new ConfigurationPermission.
 	 * 
-	 * @param name This parameter is not used
-	 * @param actions <code>configure</code> (canonical order)
+	 * @param name Name must be &quot;*&quot;.
+	 * @param actions <code>configure</code> (canonical order).
 	 */
 
 	public ConfigurationPermission(String name, String actions) {
 		super(name);
-		init(getMask(actions));
-	}
-
-	/**
-	 * Create a new ConfigurationPermission used to do the check.
-	 * 
-	 * @param actions
-	 */
-	public ConfigurationPermission(int actions) {
-		super("");
-		init(actions);
+		if (!name.equals("*")) {
+			throw new IllegalArgumentException("name must be *");
+		}
+		if (!actions.equalsIgnoreCase(CONFIGURE)) {
+			throw new IllegalArgumentException("actions must be " + CONFIGURE);
+		}
 	}
 
 	/**
@@ -73,38 +57,7 @@ public final class ConfigurationPermission extends Permission {
 	 */
 
 	public boolean implies(Permission p) {
-		ConfigurationPermission target = (ConfigurationPermission) p;
-		return ((action_mask & target.action_mask) == target.action_mask);
-	}
-
-	/**
-	 * Returns the canonical string representation of the
-	 * <code>ConfigurationPermission</code> actions.
-	 * 
-	 * <p>
-	 * Always returns present <code>ConfigurationPermission</code> actions in
-	 * the following order: <code>CONFIGURE</code>
-	 * 
-	 * @return Canonical string representation of the
-	 *         <code>ConfigurationPermission</code> actions.
-	 */
-	public String getActions() {
-		if (actions == null) {
-			if ((action_mask & ACTION_CONFIGURE) == ACTION_CONFIGURE) {
-				return CONFIGURE;
-			}
-		}
-		return "";
-	}
-
-	/**
-	 * Returns a new <code>PermissionCollection</code> object suitable for
-	 * storing <code>ConfigurationPermission</code>s.
-	 * 
-	 * @return A new <code>PermissionCollection</code> object.
-	 */
-	public PermissionCollection newPermissionCollection() {
-		return new ConfigurationPermissionCollection();
+		return p instanceof ConfigurationPermission;
 	}
 
 	/**
@@ -119,12 +72,7 @@ public final class ConfigurationPermission extends Permission {
 	 *         otherwise.
 	 */
 	public boolean equals(Object obj) {
-		if (obj == this)
-			return true;
-		if (!(obj instanceof ConfigurationPermission))
-			return false;
-		ConfigurationPermission p = (ConfigurationPermission) obj;
-		return ((action_mask == p.action_mask));
+		return obj instanceof ConfigurationPermission;
 	}
 
 	/**
@@ -134,69 +82,33 @@ public final class ConfigurationPermission extends Permission {
 	 */
 
 	public int hashCode() {
-		return (getName().hashCode() ^ getActions().hashCode());
+		return getName().hashCode() ^ getActions().hashCode();
 	}
 
 	/**
-	 * Called by constructors.
+	 * Returns the canonical string representation of the
+	 * <code>ConfigurationPermission</code> actions.
 	 * 
-	 * @param mask action mask
-	 */
-	private void init(int mask) {
-		if ((mask == ACTION_NONE) || ((mask & ACTION_ALL) != mask))
-			throw new IllegalArgumentException("invalid action string");
-		action_mask = mask;
-	}
-
-	/**
-	 * Parse action string into action mask.
-	 * 
-	 * @param actions Action string.
-	 * @return action mask.
-	 */
-	private static int getMask(String actions) {
-		if ( actions.trim().equalsIgnoreCase(CONFIGURE))
-			return ACTION_CONFIGURE;		
-		else 
-			throw new IllegalArgumentException("invalid permission: " + actions);
-	}
-	
-	/**
-	 * Returns the current action mask.
 	 * <p>
-	 * Used by the PermissionCollection class.
+	 * Always returns present <code>ConfigurationPermission</code> actions in
+	 * the following order: <code>CONFIGURE</code>
 	 * 
-	 * @return Current action mask.
+	 * @return Canonical string representation of the
+	 *         <code>ConfigurationPermission</code> actions.
 	 */
-	int getMask() {
-		return action_mask;
+	public String getActions() {
+		return CONFIGURE;
 	}
 
 	/**
-	 * WriteObject is called to save the state of this permission to a stream.
-	 * The actions are serialized, and the superclass takes care of the name.
+	 * Returns a new <code>PermissionCollection</code> object suitable for
+	 * storing <code>ConfigurationPermission</code>s.
+	 * 
+	 * @return A new <code>PermissionCollection</code> object.
 	 */
-
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-			throws IOException {
-		// Write out the actions. The superclass takes care of the name
-		// call getActions to make sure actions field is initialized
-		if (actions == null)
-			getActions();
-		s.defaultWriteObject();
+	public PermissionCollection newPermissionCollection() {
+		return new ConfigurationPermissionCollection();
 	}
-
-	/**
-	 * readObject is called to restore the state of this permission from a
-	 * stream.
-	 */
-	private synchronized void readObject(java.io.ObjectInputStream s)
-			throws IOException, ClassNotFoundException {
-		// Read in the action, then initialize the rest
-		s.defaultReadObject();
-		init(getMask(actions));
-	}
-
 }
 
 /**
@@ -208,50 +120,88 @@ public final class ConfigurationPermission extends Permission {
  */
 final class ConfigurationPermissionCollection extends PermissionCollection {
 	static final long	serialVersionUID	= -6917638867081695839L;
-	Vector				elements			= new Vector();
+	/**
+	 * True if collection is non-empty.
+	 * 
+	 * @serial
+	 */
+	private boolean		hasElement;
 
 	/**
-	 * Creates an empty ConfigurationPermissions object.
+	 * Creates an empty <tt>ConfigurationPermissionCollection</tt> object.
 	 * 
 	 */
 	public ConfigurationPermissionCollection() {
+		hasElement = false;
 	}
 
 	/**
-	 * Adds a permission to the <code>ConfigurationPermission</code> objects
-	 * using the key for the hash as the name.
+	 * Adds the specified permission to the
+	 * <tt>ConfigurationPermissionCollection</tt>. The key for the hash is
+	 * the interface name of the service.
 	 * 
-	 * @param permission The Permission object to add.
+	 * @param permission The <tt>Permission</tt> object to add.
 	 * 
-	 * @throws IllegalArgumentException If the permission is not a
-	 *         ConfigurationPermission object.
+	 * @exception IllegalArgumentException If the permission is not an
+	 *            <tt>ConfigurationPermission</tt>.
 	 * 
-	 * @throws SecurityException If this
-	 *         <code>ConfigurationPermissionCollection</code> object has been
-	 *         marked read-only.
+	 * @exception SecurityException If this ConfigurationPermissionCollection
+	 *            object has been marked read-only.
 	 */
 
 	public void add(Permission permission) {
-		elements.add(permission);
+		if (!(permission instanceof ConfigurationPermission)) {
+			throw new IllegalArgumentException("invalid permission: "
+					+ permission);
+		}
+
+		if (isReadOnly())
+			throw new SecurityException("attempt to add a Permission to a "
+					+ "readonly PermissionCollection");
+
+		hasElement = true;
 	}
 
 	/**
-	 * Determines if a set of permissions implies the permissions expressed in
-	 * <code>permission</code>.
+	 * Determines if the specified set of permissions implies the permissions
+	 * expressed in the parameter <tt>permission</tt>.
 	 * 
-	 * @param permission The Permission object to compare.
+	 * @param p The Permission object to compare.
 	 * 
-	 * @return <code>true</code> if <code>permission</code> is a proper
-	 *         subset of a permission in the set; <code>false</code>
-	 *         otherwise.
+	 * @return true if permission is a proper subset of a permission in the set;
+	 *         false otherwise.
 	 */
 
-	public boolean implies(Permission permission) {
-		return !elements.isEmpty();
+	public boolean implies(Permission p) {
+		return hasElement && (p instanceof ConfigurationPermission);
 	}
 
+	/**
+	 * Returns an enumeration of an <tt>ConfigurationPermission</tt> object.
+	 * 
+	 * @return Enumeration of an <tt>ConfigurationPermission</tt> object.
+	 */
+
 	public Enumeration elements() {
-		return elements.elements();
+		return new Enumeration() {
+			private boolean	more	= hasElement;
+
+			public boolean hasMoreElements() {
+				return more;
+			}
+
+			public Object nextElement() {
+				if (more) {
+					more = false;
+
+					return new ConfigurationPermission("*",
+							ConfigurationPermission.CONFIGURE);
+				}
+				else {
+					throw new NoSuchElementException();
+				}
+			}
+		};
 	}
 
 }

@@ -10,16 +10,16 @@
 package org.osgi.service.cm;
 
 /**
- * An <code>Exception</code> class to inform the Configuration Admin service of
- * problems with configuration data.
+ * An <code>Exception</code> class to inform the Configuration Admin service
+ * of problems with configuration data.
  * 
  * @version $Revision$
  */
 public class ConfigurationException extends Exception {
-    static final long serialVersionUID = -1690090413441769377L;
-    
-	private String	property;
-	private String	reason;
+	static final long	serialVersionUID	= -1690090413441769377L;
+
+	private String		property;
+	private String		reason;
 
 	/**
 	 * Nested exception.
@@ -46,10 +46,11 @@ public class ConfigurationException extends Exception {
 	 * @param property name of the property that caused the problem,
 	 *        <code>null</code> if no specific property was the cause
 	 * @param reason reason for failure
-     * @param cause The cause of this exception.
-     * @since 1.2
+	 * @param cause The cause of this exception.
+	 * @since 1.2
 	 */
-	public ConfigurationException(String property, String reason, Throwable cause) {
+	public ConfigurationException(String property, String reason,
+			Throwable cause) {
 		super(property + " : " + reason);
 		this.property = property;
 		this.reason = reason;
@@ -76,25 +77,25 @@ public class ConfigurationException extends Exception {
 	}
 
 	/**
-	 * Returns the cause of this exception or <code>null</code> if no
-	 * cause was specified when this exception was created.
-	 *
-	 * @return  The cause of this exception or <code>null</code> if no
-	 * cause was specified.
-	 * @since 1.2 
+	 * Returns the cause of this exception or <code>null</code> if no cause
+	 * was specified when this exception was created.
+	 * 
+	 * @return The cause of this exception or <code>null</code> if no cause
+	 *         was specified.
+	 * @since 1.2
 	 */
 	public Throwable getCause() {
-	    return cause;
+		return cause;
 	}
 
 	/**
 	 * The cause of this exception can only be set when constructed.
-	 *
+	 * 
 	 * @param cause Cause of the exception.
 	 * @return This object.
-	 * @throws java.lang.IllegalStateException
-	 * This method will always throw an <code>IllegalStateException</code>
-	 * since the cause of this exception can only be set when constructed.
+	 * @throws java.lang.IllegalStateException This method will always throw an
+	 *         <code>IllegalStateException</code> since the cause of this
+	 *         exception can only be set when constructed.
 	 * @since 1.2
 	 */
 	public Throwable initCause(Throwable cause) {

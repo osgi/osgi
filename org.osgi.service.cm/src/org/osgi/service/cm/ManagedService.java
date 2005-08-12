@@ -9,7 +9,7 @@
  */
 package org.osgi.service.cm;
 
-import java.util.*;
+import java.util.Dictionary;
 
 /**
  * A service that can receive configuration data from a Configuration Admin
@@ -18,77 +18,79 @@ import java.util.*;
  * <p>
  * A Managed Service is a service that needs configuration data. Such an object
  * should be registered with the Framework registry with the
- * <code>service.pid</code> property set to some unique identitifier called a PID.
+ * <code>service.pid</code> property set to some unique identitifier called a
+ * PID.
  * 
  * <p>
  * If the Configuration Admin service has a <code>Configuration</code> object
- * corresponding to this PID, it will callback the <code>updated()</code> method
- * of the <code>ManagedService</code> object, passing the properties of that
- * <code>Configuration</code> object.
+ * corresponding to this PID, it will callback the <code>updated()</code>
+ * method of the <code>ManagedService</code> object, passing the properties of
+ * that <code>Configuration</code> object.
  * 
  * <p>
- * If it has no such <code>Configuration</code> object, then it calls back with a
- * <code>null</code> properties argument. Registering a Managed Service will
- * always result in a callback to the <code>updated()</code> method provided the
- * Configuration Admin service is, or becomes active. This callback must always
- * be done asynchronously.
+ * If it has no such <code>Configuration</code> object, then it calls back
+ * with a <code>null</code> properties argument. Registering a Managed Service
+ * will always result in a callback to the <code>updated()</code> method
+ * provided the Configuration Admin service is, or becomes active. This callback
+ * must always be done asynchronously.
  * 
  * <p>
- * Else, every time that either of the <code>updated()</code> methods is called on
- * that <code>Configuration</code> object, the <code>ManagedService.updated()</code>
- * method with the new properties is called. If the <code>delete()</code> method
- * is called on that <code>Configuration</code> object,
- * <code>ManagedService.updated()</code> is called with a <code>null</code> for the
- * properties parameter. All these callbacks must be done asynchronously.
+ * Else, every time that either of the <code>updated()</code> methods is
+ * called on that <code>Configuration</code> object, the
+ * <code>ManagedService.updated()</code> method with the new properties is
+ * called. If the <code>delete()</code> method is called on that
+ * <code>Configuration</code> object, <code>ManagedService.updated()</code>
+ * is called with a <code>null</code> for the properties parameter. All these
+ * callbacks must be done asynchronously.
  * 
  * <p>
  * The following example shows the code of a serial port that will create a port
  * depending on configuration information.
  * 
  * <pre>
- * 
- *  class SerialPort implements ManagedService {
- * 
- *    ServiceRegistration registration;
- *    Hashtable configuration;
- *    CommPortIdentifier id;
- * 
- *    synchronized void open(CommPortIdentifier id,
- *    BundleContext context) {
- *      this.id = id;
-  *      registration = context.registerService(
- *        ManagedService.class.getName(),
- *        this,
- *        getDefaults()
- *      );
- *    }
- * 
- *    Hashtable getDefaults() {
- *      Hashtable defaults = new Hashtable();
- *      defaults.put( &quot;port&quot;, id.getName() );
- *      defaults.put( &quot;product&quot;, &quot;unknown&quot; );
- *      defaults.put( &quot;baud&quot;, &quot;9600&quot; );
- *      defaults.put( Constants.SERVICE_PID,
- *        &quot;com.acme.serialport.&quot; + id.getName() );
- *      return defaults;
- *    }
- * 
- *    public synchronized void updated(
- *      Dictionary configuration  ) {
- *      if ( configuration == 
+ *  
+ *   class SerialPort implements ManagedService {
+ *  
+ *     ServiceRegistration registration;
+ *     Hashtable configuration;
+ *     CommPortIdentifier id;
+ *  
+ *     synchronized void open(CommPortIdentifier id,
+ *     BundleContext context) {
+ *       this.id = id;
+ *       registration = context.registerService(
+ *         ManagedService.class.getName(),
+ *         this,
+ *         getDefaults()
+ *       );
+ *     }
+ *  
+ *     Hashtable getDefaults() {
+ *       Hashtable defaults = new Hashtable();
+ *       defaults.put( &quot;port&quot;, id.getName() );
+ *       defaults.put( &quot;product&quot;, &quot;unknown&quot; );
+ *       defaults.put( &quot;baud&quot;, &quot;9600&quot; );
+ *       defaults.put( Constants.SERVICE_PID,
+ *         &quot;com.acme.serialport.&quot; + id.getName() );
+ *       return defaults;
+ *     }
+ *  
+ *     public synchronized void updated(
+ *       Dictionary configuration  ) {
+ *       if ( configuration == 
  * <code>
  * null
  * </code>
- *  )
- *        registration.setProperties( getDefaults() );
- *      else {
- *        setSpeed( configuration.get(&quot;baud&quot;) );
- *        registration.setProperties( configuration );
- *      }
- *    }
- *    ...
- *  }
- *  
+ *   )
+ *         registration.setProperties( getDefaults() );
+ *       else {
+ *         setSpeed( configuration.get(&quot;baud&quot;) );
+ *         registration.setProperties( configuration );
+ *       }
+ *     }
+ *     ...
+ *   }
+ *   
  * </pre>
  * 
  * <p>
@@ -106,21 +108,18 @@ public interface ManagedService {
 	 * <p>
 	 * When the implementation of <code>updated(Dictionary)</code> detects any
 	 * kind of error in the configuration properties, it should create a new
-	 * <code>ConfigurationException</code> which describes the problem. This can
-	 * allow a management system to provide useful information to a human
+	 * <code>ConfigurationException</code> which describes the problem. This
+	 * can allow a management system to provide useful information to a human
 	 * administrator.
 	 * 
 	 * <p>
-	 * If this method throws any other <code>Exception</code>, the Configuration
-	 * Admin service must catch it and should log it.
+	 * If this method throws any other <code>Exception</code>, the
+	 * Configuration Admin service must catch it and should log it.
 	 * <p>
 	 * The Configuration Admin service must call this method asynchronously
 	 * which initiated the callback. This implies that implementors of Managed
 	 * Service can be assured that the callback will not take place during
 	 * registration when they execute the registration in a synchronized method.
-	 * <p>
-	 * The implementer of this method must have <code>ConfigurationPermission[GET]</code>. This 
-	 * must be tested with the hasPermission method for the receiving bundle.
 	 * 
 	 * @param properties A copy of the Configuration properties, or
 	 *        <code>null</code>. This argument must not contain the

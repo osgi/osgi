@@ -24,12 +24,13 @@ import java.util.Dictionary;
  * Each of these <i>service instances </i> is represented, in the persistent
  * storage of the Configuration Admin service, by a factory
  * <code>Configuration</code> object that has a PID. When such a
- * <code>Configuration</code> is updated, the Configuration Admin service calls
- * the <code>ManagedServiceFactory</code> updated method with the new properties.
- * When <code>updated</code> is called with a new PID, the Managed Service Factory
- * should create a new factory instance based on these configuration properties.
- * When called with a PID that it has seen before, it should update that
- * existing service instance with the new configuration information.
+ * <code>Configuration</code> is updated, the Configuration Admin service
+ * calls the <code>ManagedServiceFactory</code> updated method with the new
+ * properties. When <code>updated</code> is called with a new PID, the Managed
+ * Service Factory should create a new factory instance based on these
+ * configuration properties. When called with a PID that it has seen before, it
+ * should update that existing service instance with the new configuration
+ * information.
  * 
  * <p>
  * In general it is expected that the implementation of this interface will
@@ -37,52 +38,52 @@ import java.util.Dictionary;
  * created. The semantics of a factory instance are defined by the Managed
  * Service Factory. However, if the factory instance is registered as a service
  * object with the service registry, its PID should match the PID of the
- * corresponding <code>Configuration</code> object (but it should <b>not </b> be
- * registered as a Managed Service!).
+ * corresponding <code>Configuration</code> object (but it should <b>not </b>
+ * be registered as a Managed Service!).
  * 
  * <p>
  * An example that demonstrates the use of a factory. It will create serial
  * ports under command of the Configuration Admin service.
  * 
  * <pre>
- * 
- *  class SerialPortFactory
- *    implements ManagedServiceFactory {
- *    ServiceRegistration registration;
- *    Hashtable ports;
- *    void start(BundleContext context) {
- *      Hashtable properties = new Hashtable();
- *      properties.put( Constants.SERVICE_PID,
- *        &quot;com.acme.serialportfactory&quot; );
- *      registration = context.registerService(
- *        ManagedServiceFactory.class.getName(),
- *        this,
- *        properties
- *      );
- *    }
- *    public void updated( String pid,
- *      Dictionary properties  ) {
- *      String portName = (String) properties.get(&quot;port&quot;);
- *      SerialPortService port =
- *        (SerialPort) ports.get( pid );
- *      if ( port == null ) {
- *        port = new SerialPortService();
- *        ports.put( pid, port );
- *        port.open();
- *      }
- *      if ( port.getPortName().equals(portName) )
- *        return;
- *      port.setPortName( portName );
- *    }
- *    public void deleted( String pid ) {
- *      SerialPortService port =
- *        (SerialPort) ports.get( pid );
- *      port.close();
- *      ports.remove( pid );
- *    }
- *    ...
- *  }
  *  
+ *   class SerialPortFactory
+ *     implements ManagedServiceFactory {
+ *     ServiceRegistration registration;
+ *     Hashtable ports;
+ *     void start(BundleContext context) {
+ *       Hashtable properties = new Hashtable();
+ *       properties.put( Constants.SERVICE_PID,
+ *         &quot;com.acme.serialportfactory&quot; );
+ *       registration = context.registerService(
+ *         ManagedServiceFactory.class.getName(),
+ *         this,
+ *         properties
+ *       );
+ *     }
+ *     public void updated( String pid,
+ *       Dictionary properties  ) {
+ *       String portName = (String) properties.get(&quot;port&quot;);
+ *       SerialPortService port =
+ *         (SerialPort) ports.get( pid );
+ *       if ( port == null ) {
+ *         port = new SerialPortService();
+ *         ports.put( pid, port );
+ *         port.open();
+ *       }
+ *       if ( port.getPortName().equals(portName) )
+ *         return;
+ *       port.setPortName( portName );
+ *     }
+ *     public void deleted( String pid ) {
+ *       SerialPortService port =
+ *         (SerialPort) ports.get( pid );
+ *       port.close();
+ *       ports.remove( pid );
+ *     }
+ *     ...
+ *   }
+ *   
  * </pre>
  * 
  * @version $Revision$
@@ -99,10 +100,10 @@ public interface ManagedServiceFactory {
 	 * Create a new instance, or update the configuration of an existing
 	 * instance.
 	 * 
-	 * If the PID of the <code>Configuration</code> object is new for the Managed
-	 * Service Factory, then create a new factory instance, using the
-	 * configuration <code>properties</code> provided. Else, update the service
-	 * instance with the provided <code>properties</code>.
+	 * If the PID of the <code>Configuration</code> object is new for the
+	 * Managed Service Factory, then create a new factory instance, using the
+	 * configuration <code>properties</code> provided. Else, update the
+	 * service instance with the provided <code>properties</code>.
 	 * 
 	 * <p>
 	 * If the factory instance is registered with the Framework, then the
@@ -111,8 +112,8 @@ public interface ManagedServiceFactory {
 	 * should obviously not be copied.
 	 * 
 	 * <p>
-	 * If this method throws any <code>Exception</code>, the Configuration Admin
-	 * service must catch it and should log it.
+	 * If this method throws any <code>Exception</code>, the Configuration
+	 * Admin service must catch it and should log it.
 	 * 
 	 * <p>
 	 * When the implementation of updated detects any kind of error in the
@@ -124,9 +125,6 @@ public interface ManagedServiceFactory {
 	 * This implies that implementors of the <code>ManagedServiceFactory</code>
 	 * class can be assured that the callback will not take place during
 	 * registration when they execute the registration in a synchronized method.
-	 * <p>
-	 * The implementer of this method must have <code>ConfigurationPermission[GET]</code>. This 
-	 * must be tested with the hasPermission method for the receiving bundle.
 	 * 
 	 * @param pid The PID for this configuration.
 	 * @param properties A copy of the configuration properties. This argument
@@ -145,13 +143,10 @@ public interface ManagedServiceFactory {
 	 * Remove the factory instance associated with the PID. If the instance was
 	 * registered with the service registry, it should be unregistered.
 	 * <p>
-	 * If this method throws any <code>Exception</code>, the Configuration Admin
-	 * service must catch it and should log it.
+	 * If this method throws any <code>Exception</code>, the Configuration
+	 * Admin service must catch it and should log it.
 	 * <p>
 	 * The Configuration Admin service must call this method asynchronously.
-	 * <p>
-	 * The implementer of this method must have <code>ConfigurationPermission[GET]</code>. This 
-	 * must be tested with the hasPermission method for the receiving bundle.
 	 * 
 	 * @param pid the PID of the service to be removed
 	 */

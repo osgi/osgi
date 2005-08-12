@@ -44,8 +44,7 @@ public class ConfigurationAdminImpl implements ConfigurationAdmin {
 	/**
 	 * Object for checking availability of Admin Permission.
 	 */
-	protected static ConfigurationPermission	configurationPermission	= new ConfigurationPermission(
-																				ConfigurationPermission.ACTION_CONFIGURE);
+	protected static ConfigurationPermission	configurationPermission	= new ConfigurationPermission("*",ConfigurationPermission.CONFIGURE);
 	private static final String					BUNDLE_LOCATION			= "service.bundleLocation";
 	private BundleContext						bc;
 	private String								location;

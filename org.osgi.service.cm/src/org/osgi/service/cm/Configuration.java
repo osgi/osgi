@@ -9,8 +9,8 @@
  */
 package org.osgi.service.cm;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.Dictionary;
 
 /**
  * The configuration information for a <code>ManagedService</code> or
@@ -101,8 +101,9 @@ public interface Configuration {
 	 * callback is delayed until aforementioned registration occurs.
 	 * 
 	 * <p>
-	 * Also intiates an asynchronous call to all <code>ConfigurationListener</code>s
-	 * with a <code>ConfigurationEvent.CM_UPDATED</code> event.
+	 * Also intiates an asynchronous call to all
+	 * <code>ConfigurationListener</code>s with a
+	 * <code>ConfigurationEvent.CM_UPDATED</code> event.
 	 * 
 	 * @param properties the new set of properties for this configuration
 	 * @throws IOException if update cannot be made persistent
@@ -124,8 +125,9 @@ public interface Configuration {
 	 * call to its <code>deleted</code> method.
 	 * 
 	 * <p>
-	 * Also intiates an asynchronous call to all <code>ConfigurationListener</code>s
-	 * with a <code>ConfigurationEvent.CM_DELETED</code> event.
+	 * Also intiates an asynchronous call to all
+	 * <code>ConfigurationListener</code>s with a
+	 * <code>ConfigurationEvent.CM_DELETED</code> event.
 	 * 
 	 * @throws IOException If delete fails
 	 * @throws IllegalStateException if this configuration has been deleted
@@ -172,11 +174,10 @@ public interface Configuration {
 	 * object via the updated method and before any plugins are called. The
 	 * bundle location will be set persistently.
 	 * 
-	 * <p>
-	 * This method requires <code>ConfigurationPermission[REBIND]</code>.
-	 * 
 	 * @param bundleLocation a bundle location or <code>null</code>
-	 * @throws IllegalStateException if this configuration has been deleted
+	 * @throws IllegalStateException If this configuration has been deleted.
+	 * @throws SecurityException If the caller does not have
+	 *         <code>ConfigurationPermission[*,CONFIGURE]</code>.
 	 */
 	public void setBundleLocation(String bundleLocation);
 
@@ -185,14 +186,13 @@ public interface Configuration {
 	 * 
 	 * Returns the bundle location to which this configuration is bound, or
 	 * <code>null</code> if it is not yet bound to a bundle location.
-	 * <p>
-	 * This call requires <code>ConfigurationPermission[REBIND]</code>.
 	 * 
 	 * @return location to which this configuration is bound, or
 	 *         <code>null</code>.
-     * @throws SecurityException if the caller does not have <code>ConfigurationPermission[configure]</code>.
-	 * @throws IllegalStateException if this <code>Configuration</code> object
+	 * @throws IllegalStateException If this <code>Configuration</code> object
 	 *         has been deleted.
+	 * @throws SecurityException If the caller does not have
+	 *         <code>ConfigurationPermission[*,CONFIGURE]</code>.
 	 */
 	public String getBundleLocation();
 

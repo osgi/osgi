@@ -16,8 +16,8 @@ import org.osgi.framework.ServiceReference;
  * 
  * <p>
  * <code>ConfigurationEvent</code> objects are delivered to all registered
- * <code>ConfigurationListener</code> service objects. ConfigurationEvents must be
- * asynchronously delivered in chronological order with respect to each
+ * <code>ConfigurationListener</code> service objects. ConfigurationEvents
+ * must be asynchronously delivered in chronological order with respect to each
  * listener.
  * 
  * <p>
@@ -30,9 +30,9 @@ import org.osgi.framework.ServiceReference;
  * Additional event types may be defined in the future.
  * 
  * <p>
- * Security Considerations. <code>ConfigurationEvent</code> objects do not provide
- * <code>Configuration</code> objects, so no sensitive configuration information
- * is available from the event. If the listener wants to locate the
+ * Security Considerations. <code>ConfigurationEvent</code> objects do not
+ * provide <code>Configuration</code> objects, so no sensitive configuration
+ * information is available from the event. If the listener wants to locate the
  * <code>Configuration</code> object for the specified pid, it must use
  * <code>ConfigurationAdmin</code>.
  * 
@@ -49,8 +49,8 @@ public class ConfigurationEvent {
 	 * This <code>ConfigurationEvent</code> type that indicates that a
 	 * <code>Configuration</code> object has been updated with new properties.
 	 * 
-	 * An event is fired when a call to
-	 * <code>Configuration.update</code> successfully changed a configuration.
+	 * An event is fired when a call to <code>Configuration.update</code>
+	 * successfully changes a configuration.
 	 * 
 	 * <p>
 	 * The value of <code>CM_UPDATED</code> is 1.
@@ -63,8 +63,8 @@ public class ConfigurationEvent {
 	 * This <code>ConfigurationEvent</code> type that indicates that a
 	 * <code>Configuration</code> object has been deleted.
 	 * 
-	 * An event is fired when a call to
-	 * <code>Configuration.delete</code> successfully deletes a configuration.
+	 * An event is fired when a call to <code>Configuration.delete</code>
+	 * successfully deletes a configuration.
 	 * 
 	 * <p>
 	 * The value of <code>CM_DELETED</code> is 2.
@@ -147,8 +147,8 @@ public class ConfigurationEvent {
 	}
 
 	/**
-	 * Return the <code>ServiceReference</code> object of the Configuration Admin
-	 * service that created this event.
+	 * Return the <code>ServiceReference</code> object of the Configuration
+	 * Admin service that created this event.
 	 * 
 	 * @return The <code>ServiceReference</code> object for the Configuration
 	 *         Admin service that created this event.

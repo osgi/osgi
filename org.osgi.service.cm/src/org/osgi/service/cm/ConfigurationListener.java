@@ -10,17 +10,18 @@
 package org.osgi.service.cm;
 
 /**
- * Listener for Configuration Events. When a <code>ConfigurationEvent</code> is
- * fired, it is asynchronously delivered to a <code>ConfigurationListener</code>.
+ * Listener for Configuration Events. When a <code>ConfigurationEvent</code>
+ * is fired, it is asynchronously delivered to a
+ * <code>ConfigurationListener</code>.
  * 
  * <p>
- * <code>ConfigurationListener</code> objects are registered with the Framework
- * service registry and are notified with a <code>ConfigurationEvent</code> object
- * when an event is fired.
+ * <code>ConfigurationListener</code> objects are registered with the
+ * Framework service registry and are notified with a
+ * <code>ConfigurationEvent</code> object when an event is fired.
  * <p>
  * <code>ConfigurationListener</code> objects can inspect the received
- * <code>ConfigurationEvent</code> object to determine its type, the pid of the
- * <code>Configuration</code> object with which it is associated, and the
+ * <code>ConfigurationEvent</code> object to determine its type, the pid of
+ * the <code>Configuration</code> object with which it is associated, and the
  * Configuration Admin service that fired the event.
  * 
  * <p>
