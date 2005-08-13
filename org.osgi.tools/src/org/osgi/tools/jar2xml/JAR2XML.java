@@ -98,14 +98,14 @@ public class JAR2XML {
 	Tag doClass( JavaClass clazz ) {
 		Tag		c = new Tag("class");
 	
-		c.addAttribute( "className", clazz.getClassName() );
-		c.addAttribute( "short", mkShort(clazz.getClassName(),clazz) );
+		c.addAttribute( "className", clazz.getClassName().replace('$','.') );
+		c.addAttribute( "short", mkShort(clazz.getClassName(),clazz).replace('$','.') );
 		c.addAttribute( "fileName", clazz.getFileName() );
 		c.addAttribute( "sourceFileName", clazz.getSourceFileName() );
 		c.addAttribute( "major", clazz.getMajor()+"" );
 		c.addAttribute( "minor", clazz.getMinor()+"" );
 		c.addAttribute( "package", clazz.getPackageName() );
-		c.addAttribute( "extends", mkShort(clazz.getSuperclassName(),clazz) );
+		c.addAttribute( "extends", mkShort(clazz.getSuperclassName(),clazz).replace('$','.') );
 
 		doAccess( c, clazz );
 		Field[] fields = clazz.getFields();
@@ -196,7 +196,7 @@ public class JAR2XML {
 	void doFieldOrMethod(  Tag fm, JavaClass clazz, FieldOrMethod form ) {
 		doAccess( fm, form );
 		if ( form.getName().equals("<init>") ) {
-			fm.addAttribute( "name", mkShort(clazz.getClassName(),clazz) );
+			fm.addAttribute( "name", mkShort(clazz.getClassName(),clazz).replace('$','.') );
 			fm.addAttribute( "constructor", "true" );
 		}
 		else
@@ -320,7 +320,7 @@ public class JAR2XML {
 			result = new Tag("returns");
 		
 		type = type.replace('/','.');
-		result.addAttribute( "type", mkShort(type,clazz) );
+		result.addAttribute( "type", mkShort(type,clazz).replace('$','.') );
 
 		String shrt = type;
 		String pack = "";
@@ -329,7 +329,7 @@ public class JAR2XML {
 			pack = shrt.substring(0,n);
 			shrt = shrt.substring(n+1);
 		}
-		result.addAttribute( "short", shrt );
+		result.addAttribute( "short", shrt.replace('$','.') );
 		if (pack.length() > 0 )
 			result.addAttribute( "package", pack );
 		result.addAttribute( "dim", dim+"" );
