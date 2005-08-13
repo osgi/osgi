@@ -35,7 +35,7 @@
 	<target name="ees" depends="init">
 		<java classname="org.osgi.tools.jar2xml.JAR2XML" 
 			classpath="../org.osgi.tools/osgi.tools.jar" 
-			 fork="true" output="ee.xml">
+			 fork="true" output="ee.xml" >
 			<arg line="-tagged minimum ${workspace}/ee.minimum/ee.minimum.jar"/>
 			<arg line="-tagged foundation ${workspace}/ee.foundation/ee.foundation.jar"/>
 		</java>
