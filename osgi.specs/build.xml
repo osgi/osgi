@@ -32,6 +32,35 @@
 			inheritAll="true" />
 	</target>
 	
+	<target name="ees" depends="init">
+		<java classname="org.osgi.tools.jar2xml.JAR2XML" 
+			classpath="../org.osgi.tools/osgi.tools.jar" 
+			 fork="true" output="ee.xml">
+			<arg line="-tagged minimum ${workspace}/ee.minimum/ee.minimum.jar"/>
+			<arg line="-tagged foundation ${workspace}/ee.foundation/ee.foundation.jar"/>
+		</java>
+		<echo>Converted JARs to XML</echo>
+		<java classname="com.icl.saxon.StyleSheet" 
+			classpath="../cnf/jar/saxon.jar" 
+			 fork="true"
+			output="ee.html">
+			<arg line="ee.xml xsl/ee.xsl"/>
+		</java>
+		<echo>Generated HTML file</echo>
+		<java classname="com.icl.saxon.StyleSheet" 
+			classpath="${workspace}/cnf/jar/saxon.jar" 
+			fork="true"
+			output="ee.tmp">
+			<arg line="ee.html xsl/html2mif.xsl"/>
+		</java>
+		<java classname="org.osgi.tools.xml2mif.XML2MIF" 
+			fork="true"
+			classpath="${project.classpath}"
+			input="ee.tmp"
+			output="mif/ee.mif">
+		</java>
+	</target>	
+
 	<target name="-html2mif">
 		<java classname="com.icl.saxon.StyleSheet" 
 			classpath="${workspace}/cnf/jar/saxon.jar" fork="true">
