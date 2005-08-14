@@ -1,3 +1,3 @@
 *.backup.*
-osgi-meg.book.log
+*.log
 *.lck

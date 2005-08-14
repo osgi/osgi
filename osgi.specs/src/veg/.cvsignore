@@ -1,2 +1,3 @@
 *.backup.*
-veg-book.book.log
+*.log
+*.lck
