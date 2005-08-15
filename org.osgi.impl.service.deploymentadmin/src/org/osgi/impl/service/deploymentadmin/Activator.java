@@ -38,5 +38,5 @@ public class Activator implements BundleActivator {
         urlProtocolPlugin.stop(context);
         downloadAgent.stop(context);
 	}
-	
+
 }

@@ -166,6 +166,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         if (null == fwBundleDir)
             throw new RuntimeException("The '" + DAConstants.FW_BUNDLES_DIR + "' system " +
             		"property is missing.");
+        File f = new File(fwBundleDir);
+        fwBundleDir = f.getAbsolutePath();
         
         // fetch session timeout system property
         String s = System.getProperty(DAConstants.SESSION_TIMEOUT);
