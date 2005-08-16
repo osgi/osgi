@@ -8,6 +8,7 @@ import org.osgi.service.wireadmin.*;
  * in the rfc
  * 
  * @author Vasil Panushev
+ * @version 1.1 Aug 2005
  */
 public class TestWireAdminListener implements WireAdminListener {
 	private WireAdminControl	control	= null;
@@ -59,10 +60,10 @@ public class TestWireAdminListener implements WireAdminListener {
 							"wrong Throwable passed! Error");
 			}
 		}
+		called = true;
 		synchronized (WireAdminControl.synch) {
 			WireAdminControl.synch.notify();
 		}
-		called = true;
 	}
 
 	private String getEventName(int type) {
