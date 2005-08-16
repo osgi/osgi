@@ -20,9 +20,9 @@ public final class Framework {
      * specified application instance. Subsequent calls to this method with the same 
      * application instance must return the same context object
      * 
+     * @param applicationInstance is the representative object of an application instance
      * @throws java.lang.IllegalArgumentException if  called with an object that is not 
      *     the representative object of an application.
-     * @param applicationInstance is the representative object of an application instance
      * @return the {@link ApplicationContext} of the specified application instance.
      */
     public static ApplicationContext getMyApplicationContext(Object applicationInstance) {
