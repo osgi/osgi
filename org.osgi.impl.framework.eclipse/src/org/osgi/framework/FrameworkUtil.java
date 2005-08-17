@@ -2,6 +2,7 @@
  * $Header$
  * 
  * Copyright (c) OSGi Alliance (2005). All Rights Reserved.
+ * Copyright (c) 2005 IBM Corporation and others.
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this 
@@ -24,6 +25,11 @@ import org.eclipse.osgi.framework.internal.core.FilterImpl;
  */
 public class FrameworkUtil {
 
+	/**
+	 * FrameworkUtil objects may not be constructed. 
+	 */
+	private FrameworkUtil() {}
+	
 	/**
 	 * Creates a <code>Filter</code> object. This <code>Filter</code> object
 	 * may be used to match a <code>ServiceReference</code> object or a
