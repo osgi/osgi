@@ -182,7 +182,6 @@
 	-->
 	<target name="-jar">
 		<echo>JAR ${item.jarFile}</echo>
-		<echo>JAR ${}</echo>
 		<btool jar="${project}/${item.jarFile}"
 		       failok="${btool.failok}"
 		       eclipse="${project}"

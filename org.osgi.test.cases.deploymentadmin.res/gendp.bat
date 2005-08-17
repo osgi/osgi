@@ -14,10 +14,11 @@ jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck bundle0
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\bundles_update\bundle001.jar megtck
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\bundles_update\bundle002.jar megtck
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\bundles_update\bundle005.jar megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck rp_bundle.jar megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck rp_bundle_tc2.jar megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck rp_bundle2.jar megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck rp_bundle3.jar megtck
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck rp_bundle_tc1_rp1.jar megtck
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck rp_bundle_tc1_rp2.jar megtck
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck rp_bundle_tc2_rp1.jar megtck
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck rp_bundle_tc2_rp2.jar megtck
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck rp_bundle_tc2_rp3.jar megtck
 
 ECHO Signing resources
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck conf.txt megtck
@@ -32,6 +33,12 @@ jar -cvfm ..\res\simple.dp ..\res\simple_dp.mf bundle001.jar bundle002.jar
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\simple.dp megtck
 copy ..\res\simple.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 move ..\res\simple.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
+
+REM Renaming resource processors bundles to be compliant with deployment packages manifests
+del rp_bundle.jar
+del rp_bundle2.jar
+ren rp_bundle_tc1_rp1.jar rp_bundle.jar
+ren rp_bundle_tc1_rp2.jar rp_bundle2.jar
 
 ECHO Creating TC1 deployment packages
 jar -cvfm ..\res\simple_clone.dp ..\res\simple_clone_dp.mf bundle001.jar bundle002.jar
@@ -182,11 +189,13 @@ jar -cvfm ..\res\wrong_format.jar ..\res\wrong_format.mf bundle001.jar bundles\b
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\wrong_format.jar megtck
 move /y ..\res\wrong_format.jar ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
-REM Renaming bundles
+REM Renaming resource processors bundles to be compliant with deployment packages manifests
 del rp_bundle.jar
-ren rp_bundle_tc2.jar rp_bundle.jar
 del rp_bundle2.jar
-ren rp_bundle2_tc2.jar rp_bundle2.jar
+del rp_bundle3.jar
+ren rp_bundle_tc2_rp1.jar rp_bundle.jar
+ren rp_bundle_tc2_rp2.jar rp_bundle2.jar
+ren rp_bundle_tc2_rp3.jar rp_bundle3.jar
 
 ECHO Creating TC2 deployment packages
 jar -cvfm ..\res\session_resource_processor.dp ..\res\session_resource_processor_dp.mf bundle001.jar bundle002.jar rp_bundle3.jar simple_resource.xml
