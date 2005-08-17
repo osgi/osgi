@@ -1,0 +1,6 @@
+Manifest-Version: 1.2
+DeploymentPackage-SymbolicName: rp_resource_dp
+DeploymentPackage-Version: 1.2
+DeploymentPackage-FixPack: [1.0,2.0]
+DeploymentPackage-Missing: true
+
