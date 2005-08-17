@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: bundles.tb2
+Bundle-Version: 0.5
+Bundle-Activator: br.org.cesar.bundles.tb2.TB2Activator
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
