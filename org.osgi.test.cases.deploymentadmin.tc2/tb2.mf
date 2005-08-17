@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}.tb2
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.tb2.ManagedServiceFactoryImpl
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+

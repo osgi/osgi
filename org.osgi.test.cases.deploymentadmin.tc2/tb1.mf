@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}.tb1
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.tb1.Activator
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
