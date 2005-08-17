@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bundle-Activator: ${p}.TestDeployment
+Bundle-Activator: ${p}.TestDeploymentAdmin
 Bundle-Name: ${p}
 Bundle-SymbolicName: ${p}
 Bundle-Version: 1.0
