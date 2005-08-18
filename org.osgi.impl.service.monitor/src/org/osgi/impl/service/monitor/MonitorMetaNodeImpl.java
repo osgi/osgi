@@ -165,6 +165,7 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
             if(intValue < min || intValue > max)
                 return false;
         } catch(DmtException e) {
+            // TODO change this to ignore IllegalStateException according to new API
             // ignore OTHER_ERROR if format of value was not FORMAT_INTEGER
         }
             
