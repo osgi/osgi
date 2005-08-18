@@ -198,7 +198,7 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 	public void createInteriorNode(String nodeUri) throws DmtException {
 		String path[] = getPath(nodeUri);
 		switchToWriteMode(nodeUri);
-		if (path.length!=1) throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,"");
+		if (path.length!=1) throw new IllegalStateException(); // should not get here
 		currentState.put(path[0],new PrincipalPermission("",null));
 	}
 
@@ -214,10 +214,10 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 			PrincipalPermission element = (PrincipalPermission) iter.next();
 			String principal = element.principal;
 			if ((principal==null)||(principal.equals(""))) {
-				throw new DmtException(ROOT,DmtException.OTHER_ERROR,"empty principal");
+				throw new DmtException(ROOT,DmtException.COMMAND_FAILED,"empty principal");
 			}
 			if (principals.contains(principal)) {
-				throw new DmtException(ROOT,DmtException.OTHER_ERROR,"principal name "+principal+" occurs twice");
+				throw new DmtException(ROOT,DmtException.COMMAND_FAILED,"principal name "+principal+" occurs twice");
 			}
 			principals.add(principal);
 			systemState.put(principal,element.permissionInfo);
