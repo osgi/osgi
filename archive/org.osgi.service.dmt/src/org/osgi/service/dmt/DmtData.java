@@ -309,6 +309,8 @@ public class DmtData {
      * <li>{@link #FORMAT_BOOLEAN}: 1
      * <li>{@link #FORMAT_NULL}: 0
      * </ul>
+     * 
+     * @return the size of the data stored by this object
      */
     public int getSize() {
         switch(format) {
