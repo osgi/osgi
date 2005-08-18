@@ -253,7 +253,7 @@ public class MonitorPlugin implements DmtDataPlugin
     }
 
     public void setNodeType(String nodeUri, String type) throws DmtException {
-        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
+        throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, 
                                "Cannot set type property of monitoring nodes.");
     }
 
@@ -282,8 +282,8 @@ public class MonitorPlugin implements DmtDataPlugin
     public void createInteriorNode(String nodeUri) throws DmtException {
         String[] path = prepareUri(nodeUri);
 
-        // path.length > 3, because the higher interior nodes' parents do not 
-        // have ADD access type in their meta-data
+        // path.length > 3, because the higher interior nodes do not have ADD
+        // access type in their meta-data
         
         StatusVarWrapper var = getStatusVar(path[0], path[1], nodeUri);
 
@@ -296,22 +296,15 @@ public class MonitorPlugin implements DmtDataPlugin
 
         Server server = var.getServer(path[3], nodeUri);
 
-        // path.length > 5 && path[4].equals("TrapRef"), because only these 
-        // nodes' parents can have ADD access type in their meta-data  
-
-        if(path.length == 6) {
-            server.addTrapRef(path[5], nodeUri);
-            return;
-        }
-
-        // path.length == 7
-
-        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
-                               "Cannot add interior node at the specified position.");
+        // path.length == 6 && path[4].equals("TrapRef"), because only these 
+        // nodes have ADD access type and are interior nodes according to their 
+        // meta-data 
+        
+        server.addTrapRef(path[5], nodeUri);
     }
 
     public void createInteriorNode(String nodeUri, String type) throws DmtException {
-        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
+        throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, 
                                "Cannot set type property of monitoring nodes.");
     }
 
@@ -320,36 +313,11 @@ public class MonitorPlugin implements DmtDataPlugin
     }
 
     public void createLeafNode(String nodeUri, DmtData value) throws DmtException {
-        // No leaf node can be created by the caller in the current implementation 
-        String[] path = prepareUri(nodeUri);
-
-        // path.length > 3, because the higher interior nodes' parents do not 
-        // have ADD access type in their meta-data
+        // No leaf node can be created by the caller in the current implementation
         
-        StatusVarWrapper var = getStatusVar(path[0], path[1], nodeUri);
-
-        // path[2].equals("Server") because parent must be an interior node
-
-        if(path.length == 4)
-            throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
-                                   "Cannot add leaf node at the specified position.");
-
-        Server server = var.getServer(path[3], nodeUri);
-        
-        // path.length > 5 && path[4].equals("TrapRef"), because only these 
-        // nodes' parents can have ADD access type in their meta-data  
-        
-        if(path.length == 6)
-            throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
-                                   "Cannot add leaf node at the specified position.");
-
-        server.getTrapRefId(path[5], nodeUri);
-        
-        // path.length == 7, path[5] is not an existing trap reference name
-
-        // ENHANCE allow adding TrapRefID leaf nodes (currently created together with parent)
-        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
-                               "Cannot add TrapRefID nodes manually.");
+        // should never be reached
+        throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
+                "Leaf nodes cannot be created in the monitoring tree.");
     }
 
     public void createLeafNode(String nodeUri, DmtData value, String mimeType)
@@ -365,7 +333,7 @@ public class MonitorPlugin implements DmtDataPlugin
     }
 
     public void renameNode(String nodeUri, String newName) throws DmtException {
-        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
+        throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, 
                                "Cannot rename monitoring nodes.");
     }
 
