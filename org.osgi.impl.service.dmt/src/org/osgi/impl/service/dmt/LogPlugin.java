@@ -183,7 +183,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
             lr.maxrecords = data.getInt();
         else {
             // should never happen because of meta-data
-            throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+            throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
                 "Node cannot be modified");
         }
 	}
@@ -207,12 +207,12 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
             lr.maxrecords = DEFAULT_MAXR;
         
         // should never happen because of meta-data
-        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+        throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
             "Node cannot be modified");
     }
     
 	public void setNodeType(String nodeUri, String type) throws DmtException {
-		throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+		throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
 				               "Cannot set type property of log nodes.");
 	}
 
@@ -245,27 +245,27 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 
 	public void createInteriorNode(String nodeUri, String type)
             throws DmtException {
-        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
+        throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, 
                 "Cannot set type property of search request nodes.");
     }
 
     public void createLeafNode(String nodeUri) throws DmtException {
         // should never be reached because of meta-data, every leaf is automatic
-        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+        throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
                                "All leaf nodes are created automatically.");
     }
     
 	public void createLeafNode(String nodeUri, DmtData value)
             throws DmtException {
         // should never be reached because of meta-data, every leaf is automatic
-        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+        throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
                                "All leaf nodes are created automatically.");
     }
 
     public void createLeafNode(String nodeUri, DmtData value, String mimeType)
             throws DmtException {
         // should never be reached because of meta-data, every leaf is automatic
-        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+        throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
                                "All leaf nodes are created automatically.");
     }
     
@@ -277,7 +277,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 	}
 
 	public void renameNode(String nodeUri, String newName) throws DmtException {
-		throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+		throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
 				               "Cannot rename log request nodes.");
 	}
 
@@ -426,7 +426,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
         // TODO LogResult subtree
         
         // should never be reached
-        throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+        throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
                                "The specified URI points to a leaf node.");
     }
 
@@ -435,7 +435,8 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
             String data) throws DmtException {
 		String[] path = prepareUri(nodeUri);
 		if (path.length != 1) {
-			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+            // should never be reached
+			throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
 					"Cannot execute node on this level");
 		}
 		LogRequest lr = (LogRequest) requests.get(path[0]);
@@ -584,7 +585,7 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 			if (!lr.filter.equals(""))
                 filter = bc.createFilter(lr.filter);
 		} catch (InvalidSyntaxException e) {
-			throw new DmtException(lr.uri, DmtException.OTHER_ERROR,
+			throw new DmtException(lr.uri, DmtException.COMMAND_FAILED,
 					"Cannot parse filter", e);
 		}
         

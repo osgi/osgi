@@ -196,11 +196,12 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 		if (path.length == 3) {
 			if (!prop.isCompleteScalar())
 				throw new DmtException(nodeUri,
-						DmtException.COMMAND_NOT_ALLOWED,
+						DmtException.COMMAND_FAILED,
 						"Cannot update node values for incomplete or non-scalar properties.");
 			if (!path[2].equals("value"))
+                // should never happen because of meta-data
 				throw new DmtException(nodeUri,
-						DmtException.COMMAND_NOT_ALLOWED,
+						DmtException.METADATA_MISMATCH,
 						"Only the 'value' leaf node can be updated for scalar properties.");
 			prop.setValue(value.getString(), service, nodeUri);
 			return;
@@ -228,7 +229,7 @@ public class ConfigurationPlugin implements DmtDataPlugin {
     
 	public void setNodeType(String nodeUri, String type) throws DmtException {
         // TODO allow for leaf nodes (see TODO at top of file)
-		throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+		throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
 				"Cannot set type property of configuration nodes.");
 	}
 
@@ -249,7 +250,8 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 		}
 
         if (path.length == 3)
-			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+            // should never happen because of meta-data
+			throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
 					"Descendents of key nodes cannot be deleted, except for array/vector members.");
 
         // path.length == 4
@@ -286,8 +288,9 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 		Property prop = service.getProperty(path[1], nodeUri);
 		if (path.length == 3) { // create 'values' node for non-scalar properties
 			if (!path[2].equals("values"))
+                // should never happen because of meta-data                
 				throw new DmtException(nodeUri,
-                        DmtException.COMMAND_NOT_ALLOWED,
+                        DmtException.METADATA_MISMATCH,
 						"Only the 'values' interior node is allowed in the configuration data tree.");
 			if (!prop.isNonScalar())
 				throw new DmtException(nodeUri,
@@ -301,13 +304,14 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 			prop.createValueNode();
 			return;
 		}
-		throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+        // should never happen because of meta-data
+		throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
 				"Illegal node name for new interior node.");
 	}
 
 	public void createInteriorNode(String nodeUri, String type)
 			throws DmtException {
-		throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+		throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
 				"Cannot set type property of configuration nodes.");
 	}
 
@@ -377,7 +381,8 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 		try {
 			i = Integer.parseInt(path[3]);
 		} catch (NumberFormatException e) {
-			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+            // should never happen because of meta-data
+			throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
 					"Invalid URI, last segment not parseable as an integer.", e);
 		}
         
@@ -409,7 +414,7 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 	public void renameNode(String nodeUri, String newName) throws DmtException {
 		// TODO allow renaming index, key 
 	    // TODO check if pid can be renamed in configuration admin
-		throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+		throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
 				"Cannot rename configuration nodes.");
 	}
 
@@ -591,14 +596,19 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 
 	public String[] getChildNodeNames(String nodeUri) throws DmtException {
 		String[] path = prepareUri(nodeUri);
+        
 		if (path.length == 0)
 			// get service PIDs
 			return Service.listServicePids(nodeUri);
+        
 		Service service = Service.getService(path[0], nodeUri);
-		if (path.length == 1)
+		
+        if (path.length == 1)
 			return service.listPropertyNames(nodeUri);
+        
 		Property prop = service.getProperty(path[1], nodeUri);
-		if (path.length == 2) {
+		
+        if (path.length == 2) {
 			Vector v = new Vector();
 			if (prop.hasType()) {
 				v.add("type");
@@ -620,14 +630,8 @@ public class ConfigurationPlugin implements DmtDataPlugin {
 		if (!prop.isCompleteNonScalar())
 			throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
 					"'values' node not set for the specified configuration item.");
-		if (path.length == 3)
-			return prop.getIndexNames();
-		// should not happen because of !isLeafNode...
-		if (prop.getIndex(path[3]) < 0)
-			throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND,
-					"Value index out of range.");
-		throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
-				"The specified URI points to a leaf node.");
+		// path.length == 3 because there are no interior nodes below this
+        return prop.getIndexNames();
 	}
 
 	//----- Package private methods -----//
@@ -990,7 +994,7 @@ class Service {
 					"Error looking up configuration.", e);
 		}
 		catch (InvalidSyntaxException e) {
-			throw new DmtException(nodeUri, DmtException.OTHER_ERROR,
+			throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
 					"The specified service PID '" + pid
 							+ "' is syntactically incorrect.", e);
 		}
@@ -1407,7 +1411,7 @@ class Property {
 							+ "' from the specifed value string.", e);
 		}
 		catch (Exception e) {
-			throw new DmtException(null, DmtException.OTHER_ERROR,
+			throw new DmtException(null, DmtException.COMMAND_FAILED,
 					"Internal error, cannot create scalar value object.", e);
 		}
 	}
