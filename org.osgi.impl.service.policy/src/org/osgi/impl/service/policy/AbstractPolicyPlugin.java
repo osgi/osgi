@@ -79,7 +79,9 @@ public abstract class AbstractPolicyPlugin implements DmtDataPlugin {
 	 * @throws DmtException
 	 */
 	protected final void switchToWriteMode(String nodeUri) throws DmtException {
-		if (!atomic) throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,
+		if (!atomic)
+            // TODO by Tamas: this check will not be needed in new API, plugin can indicate at session open if it only supports atomic write
+            throw new DmtException(nodeUri,DmtException.COMMAND_FAILED,
 				"modifying tree is only allowed in atomic sessions");
 		dirty=true;
 	}
