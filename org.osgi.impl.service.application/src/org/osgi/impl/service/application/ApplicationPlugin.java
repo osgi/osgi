@@ -87,7 +87,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		String[] path = prepareUri( nodeUri );
 		
 		if( path.length == 0 )
-      throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Can not get metadata");
+		    throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, "Can not get metadata");
 		
 		/* ./OSGi/apps ./OSGi/app_instances */
 		if ( path.length == 1 ) 
@@ -108,21 +108,23 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		}
 		
 		if( !path[ 0 ].equals( PREFIX_APPS ) ) {
-			throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Can not get metadata");
+			throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "Can not get metadata");
 		}
 		
-		String uid = path[1];
-		ServiceReference sref = getApplicationDescriptorRef(uid);
-		if ( sref == null )
-			throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "Node (" + nodeUri + ") not found.");
 		if ( path.length == 2 ) /* ./OSGi/apps/<unique_id> */
 			return new ApplicationMetaNode(!ApplicationMetaNode.ISLEAF, ApplicationMetaNode.CANGET);
 		if ( path.length == 3 && path[2].equals("launch")) /* ./OSGi/apps/<unique_id>/launch */
-			return new ApplicationMetaNode(ApplicationMetaNode.CANDELETE,
+			return new ApplicationMetaNode(!ApplicationMetaNode.CANDELETE,
 					ApplicationMetaNode.CANADD, ApplicationMetaNode.CANGET,
 					!ApplicationMetaNode.CANREPLACE,
 					!ApplicationMetaNode.CANEXECUTE,
 					!ApplicationMetaNode.ISLEAF);
+        if ( path.length == 3 && path[2].equals("locked")) /* ./OSGi/apps/<unique_id>/locked */
+            return new ApplicationMetaNode(!ApplicationMetaNode.CANDELETE,
+                    !ApplicationMetaNode.CANADD, ApplicationMetaNode.CANGET,
+                    ApplicationMetaNode.CANREPLACE,
+                    !ApplicationMetaNode.CANEXECUTE,
+                    ApplicationMetaNode.ISLEAF);
 		if ( path.length == 3 ) /* ./OSGi/apps/<unique_id>/singleton or ... */
 			return new ApplicationMetaNode(ApplicationMetaNode.ISLEAF,
 					ApplicationMetaNode.CANGET);
@@ -133,7 +135,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 					ApplicationMetaNode.CANEXECUTE, !ApplicationMetaNode.ISLEAF);
 		if ( path.length == 5 && path[2].equals("launch") ) /* ./OSGi/apps/<unique_id>/launch/<exec_id>/<parameter> */
 			return new ApplicationMetaNode(ApplicationMetaNode.CANDELETE,
-					!ApplicationMetaNode.CANADD, ApplicationMetaNode.CANGET,
+					ApplicationMetaNode.CANADD, ApplicationMetaNode.CANGET,
 					ApplicationMetaNode.CANREPLACE,
 					!ApplicationMetaNode.CANEXECUTE,
 					ApplicationMetaNode.ISLEAF);
@@ -151,7 +153,8 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 
 		/* ./OSGi/apps/<unique_id>/launch/<exec_id> */
 		if ( path.length != 4 || !path[ 0 ].equals( PREFIX_APPS ) || !path[ 2 ].equals("launch") )
-			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+            // should never happen because of meta-data
+			throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
 					"Operation is not allowed.");
 		
 		checkUniqueID( nodeUri, path[ 1 ]);
@@ -162,8 +165,8 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 	public void createInteriorNode(String nodeUri, String type)
 			throws DmtException {
 		
-		throw new DmtException( nodeUri, DmtException.COMMAND_NOT_ALLOWED, 
-														"Cannot set type property of application nodes!" );
+		throw new DmtException( nodeUri, DmtException.COMMAND_FAILED, 
+		        "Cannot set type property of application nodes!" );
 	}
 
 	public void createLeafNode(String nodeUri, DmtData value)
@@ -173,7 +176,8 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		
 		/* ./OSGi/apps/<unique_id>/launch/<exec_id>/<parameter> */
 		if ( path.length != 5 || !path[ 0 ].equals( PREFIX_APPS ) || !path[ 2 ].equals("launch")  )
-			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+            // should never happen because of meta-data
+		    throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
 					"Operation is not allowed.");
 		
 		checkUniqueID( nodeUri, path[ 1 ]);
@@ -436,7 +440,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			}
 		}
 		catch (Exception e) {
-			throw new DmtException(nodeUri, DmtException.OTHER_ERROR, e
+			throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, e
 					.getMessage(), e);
 		}
 	}
@@ -484,14 +488,15 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 				bc.ungetService( hrefs[ 0 ] );
 				return;
 			}catch( Exception e ) {
-				throw new DmtException(nodeUri, DmtException.OTHER_ERROR,
+				throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
 						"Execution of " + nodeUri + " is failed.");
 			}
 		}
 		
 		/* ./OSGi/apps/<unique_id>/launch/<exec_id> */
 		if ( path.length != 4 || !path[ 0 ].equals( PREFIX_APPS ))
-			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED,
+            // should never happen because of meta-data
+			throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH,
 					"Execution of " + nodeUri + " is not allowed.");
 		
 		ServiceReference appDescRef = getApplicationDescriptorRef( path[ 1 ] );
@@ -541,7 +546,7 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			execIds.remove( key );
 		}
 		catch (Exception e) {
-			throw new DmtException(nodeUri, DmtException.OTHER_ERROR, e.getMessage(), e);
+			throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, e.getMessage(), e);
 		}
 		bc.ungetService( appDescRef );
 	}
@@ -658,7 +663,8 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			return;
 		}
 		
-		throw new DmtException( nodeUri, DmtException.COMMAND_NOT_ALLOWED, "Cannot delete the specified node!" );
+        // should never happen because of meta-data
+		throw new DmtException( nodeUri, DmtException.METADATA_MISMATCH, "Cannot delete the specified node!" );
 	}
 
 	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
@@ -669,7 +675,8 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 		if( path.length == 3 && path[ 2 ].equals( "locked" ) ) {
 			
 			if( data.getFormat() != DmtData.FORMAT_BOOLEAN )
-				throw new DmtException( nodeUri, DmtException.FORMAT_NOT_SUPPORTED, "Only binary is supported here!" );
+                // should not happen once the format check in implemented in MetaNode.isValidValue
+				throw new DmtException( nodeUri, DmtException.METADATA_MISMATCH, "Only boolean is supported here!" );
 			
 			String uid = path [ 1 ];		
 			ServiceReference appDescRef = getApplicationDescriptorRef( uid );
@@ -702,7 +709,8 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 			return;
 		}
 		
-		throw new DmtException( nodeUri, DmtException.COMMAND_NOT_ALLOWED, "Cannot change the value of the node!" );
+        // should never happen because of meta-data
+		throw new DmtException( nodeUri, DmtException.METADATA_MISMATCH, "Cannot change the value of the node!" );
 	}
 	
 	public String getNodeType(String nodeUri) throws DmtException {
