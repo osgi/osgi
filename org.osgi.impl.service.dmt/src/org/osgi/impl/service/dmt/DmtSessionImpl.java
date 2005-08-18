@@ -541,7 +541,7 @@ public class DmtSessionImpl implements DmtSession {
 
         DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
         if (metaNode != null && metaNode.getScope() == DmtMetaNode.PERMANENT)
-            throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
+            throw new DmtException(uri, DmtException.METADATA_MISMATCH,
                     "Cannot set the value of a permanent node.");
         
         if(data == null)
@@ -563,7 +563,7 @@ public class DmtSessionImpl implements DmtSession {
         
         DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
         if (metaNode != null && metaNode.getScope() == DmtMetaNode.PERMANENT)
-            throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
+            throw new DmtException(uri, DmtException.METADATA_MISMATCH,
                     "Cannot set type property of permanent node.");
 
         if(isLeafNodeNoCheck(uri))
@@ -576,11 +576,15 @@ public class DmtSessionImpl implements DmtSession {
 		checkSession();
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
 		checkOperation(uri, DmtAcl.DELETE, DmtMetaNode.CMD_DELETE);
+        
+        if(Utils.parentUri(uri) == null)
+            throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
+                    "Cannot delete root node.");
 
         DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
 		if (metaNode != null) {
 		    if(metaNode.getScope() == DmtMetaNode.PERMANENT)
-		        throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
+		        throw new DmtException(uri, DmtException.METADATA_MISMATCH,
 		            "Cannot delete permanent node.");
             
             if(!metaNode.isZeroOccurrenceAllowed()) {
@@ -632,12 +636,9 @@ public class DmtSessionImpl implements DmtSession {
                 throw new DmtException(uri, DmtException.METADATA_MISMATCH,
                         "Cannot create the specified interior node, " +
                         "meta-data defines it as a leaf node.");
-        checkNewNodeName(uri);
+
+        checkNewNode(uri);
         checkMaxOccurrence(uri);
-        
-        // it is forbidden to create permanent nodes, but this is not checked
-        // here: a permanent node must always exist, so NODE_ALREADY_EXISTS
-        // exception will be thrown anyway
         
         // it is not really useful to allow creating automatic nodes, but this
         // is not a hard requirement, and should be enforced by the (lack of 
@@ -692,15 +693,11 @@ public class DmtSessionImpl implements DmtSession {
                 throw new DmtException(uri, DmtException.METADATA_MISMATCH,
                         "Cannot create the specified leaf node, meta-data " +
                         "defines it as an interior node.");
-        checkNewNodeName(uri);
+        checkNewNode(uri);
         checkValue(uri, value);
         if(mimeType != null)
             checkMimeType(uri, mimeType);
         checkMaxOccurrence(uri);
-
-        // it is forbidden to create permanent nodes, but this is not checked
-        // here: a permanent node must always exist, so NODE_ALREADY_EXISTS
-        // exception will be thrown anyway
 
         // it is not really useful to allow creating automatic nodes, but this
         // is not a hard requirement, and should be enforced by the (lack of 
@@ -744,7 +741,7 @@ public class DmtSessionImpl implements DmtSession {
             checkNodePermission(newParentUri, DmtAcl.ADD);
             checkNodeCapability(newUri, DmtMetaNode.CMD_ADD);
 
-			checkNewNodeName(newUri);
+			checkNewNode(newUri);
             checkMaxOccurrence(newUri);
 
             // for leaf nodes: since we are not passing a data object to the 
@@ -770,13 +767,13 @@ public class DmtSessionImpl implements DmtSession {
 					"Cannot rename root node.");
 		DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
 		if (metaNode != null && metaNode.getScope() == DmtMetaNode.PERMANENT)
-			throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
+			throw new DmtException(uri, DmtException.METADATA_MISMATCH,
 					"Cannot rename permanent node.");
 		String newUri = Utils.createAbsoluteUri(parent, newName);
 		checkNode(newUri, SHOULD_NOT_EXIST);
 		checkOperation(uri, DmtAcl.REPLACE, DmtMetaNode.CMD_REPLACE);
 
-		checkNewNodeName(newUri);
+		checkNewNode(newUri);
 
         // for leaf nodes: since we are not passing a data object to the 
         // plugin, checking the value and mime-type against the new 
@@ -940,7 +937,7 @@ public class DmtSessionImpl implements DmtSession {
 		}
 		catch (DmtException e) {
 			if (e.getCode() != DmtException.PERMISSION_DENIED)
-				throw e;
+				throw e; // should not happen
 			if (principal != null) {
                 DmtAcl parentAcl = getEffectiveNodeAclNoCheck(parent);
                 DmtAcl newAcl = parentAcl.addPermission(principal, DmtAcl.ADD
@@ -1009,7 +1006,7 @@ public class DmtSessionImpl implements DmtSession {
         
         if(writable && !plugin.isWritableDataPlugin())
             throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
-                    "Cannot perform operation on Read-Only plugin.");
+                    "Cannot perform write operation on Read-Only plugin.");
         
         PluginWrapper wrappedPlugin = 
             new PluginWrapper(plugin, lockMode, securityContext);
@@ -1047,7 +1044,7 @@ public class DmtSessionImpl implements DmtSession {
             throws DmtException {
         DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
         if(metaNode != null && !metaNode.can(capability))
-            throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
+            throw new DmtException(uri, DmtException.METADATA_MISMATCH,
                     "Node meta-data does not allow the " + 
                     capabilityName(capability) + " operation for this node.");
         // default for all capabilities is 'true', if no meta-data is provided
@@ -1098,12 +1095,16 @@ public class DmtSessionImpl implements DmtSession {
         */
     }
     
-    private void checkNewNodeName(String uri) throws DmtException {
+    private void checkNewNode(String uri) throws DmtException {
         DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
 
         if(metaNode == null)
             return;
         
+        if(metaNode.getScope() == DmtMetaNode.PERMANENT)
+            throw new DmtException(uri, DmtException.METADATA_MISMATCH,
+                    "Cannot create permanent node.");
+
         String name = Utils.getUriPart(uri, false, true);
         if(!metaNode.isValidName(name))
             throw new DmtException(uri, DmtException.METADATA_MISMATCH,
@@ -1155,7 +1156,7 @@ public class DmtSessionImpl implements DmtSession {
         String normNodeUri = Utils.validateAndNormalizeUri(nodeUri);
 		if (Utils.isAbsoluteUri(normNodeUri)) {
 			if (!Utils.isAncestor(subtreeUri, normNodeUri))
-				throw new DmtException(nodeUri, DmtException.OTHER_ERROR,
+				throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
 						"Specified URI points outside the subtree of this session.");
 			return normNodeUri;
 		}
