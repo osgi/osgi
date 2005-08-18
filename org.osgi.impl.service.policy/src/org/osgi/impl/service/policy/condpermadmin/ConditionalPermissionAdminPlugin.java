@@ -225,18 +225,14 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 	public void deleteNode(String nodeUri) throws DmtException {
 		String path[] = getPath(nodeUri);
 		switchToWriteMode(nodeUri);
-		if (path.length!=1) {
-			throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,"");
-		}
+		if (path.length!=1) throw new IllegalStateException(); // should not get here
 		conditionalPermissions.remove(path[0]);
 	}
 
 	public void createInteriorNode(String nodeUri) throws DmtException {
 		String[] path = getPath(nodeUri);
 		switchToWriteMode(nodeUri);
-		if (path.length!=1) {
-			throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,"");
-		}
+		if (path.length!=1) throw new IllegalStateException(); // should not get here
 		conditionalPermissions.put(path[0],new ConditionalPermission());
 	}
 
