@@ -412,7 +412,7 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
                         return new DmtData(getManifest(b));
                     }
                     catch (IOException e) {
-                        throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "", e);
+                        throw new DmtException(nodeUri, DmtException.DATA_STORE_FAILURE, "", e);
                     }
                 }
             }

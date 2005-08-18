@@ -123,7 +123,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin, Se
 		            } 
                 }
                 catch (Exception e) {
-                    throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "", e);
+                    throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, "", e);
                 }
                 finally {
                     try {
@@ -254,7 +254,7 @@ public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin, Se
             is = new FileInputStream(f);
         }
         catch (FileNotFoundException e) {
-            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, e.getMessage());
+            throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, e.getMessage());
         }
         String mimeType;
         if (f.getName().endsWith(".dp"))

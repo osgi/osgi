@@ -99,7 +99,7 @@ public class PluginDownload extends DefaultHandler
             DownloadAgent dwnlAgent = pluginCtx.getDownloadAgent();
             if (null == dwnlAgent) {
                 entry.setStatus(STATUS_DOWNLD_FAILED);
-                throw new DmtException(nodeUri, DmtException.OTHER_ERROR, 
+                throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, 
                     "Download Agent service is not available");
             }
 
@@ -109,7 +109,7 @@ public class PluginDownload extends DefaultHandler
                         SAXParserFactory.class.getName(),
                         "(&(parser.namespaceAware=true)" + "(parser.validating=true))");
                 if (refs == null)
-                    throw new DmtException(nodeUri, DmtException.OTHER_ERROR, 
+                    throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, 
                         "SAX Parser is not available");
                 SAXParserFactory factory = (SAXParserFactory) pluginCtx.getBundleContext().
                         getService(refs[0]);
@@ -225,8 +225,8 @@ public class PluginDownload extends DefaultHandler
             pluginCtx.save();
         }
         catch (IOException e) {
-            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Changes cannot be " +
-                    "persisted", e); 
+            throw new DmtException(nodeUri, DmtException.DATA_STORE_FAILURE, 
+                    "Changes cannot be persisted", e); 
         }
     }
 
@@ -246,8 +246,8 @@ public class PluginDownload extends DefaultHandler
             pluginCtx.save();
         }
         catch (IOException e) {
-            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Changes cannot be " +
-                    "persisted", e); 
+            throw new DmtException(nodeUri, DmtException.DATA_STORE_FAILURE, 
+                    "Changes cannot be persisted", e); 
         }
 	}
 
@@ -263,8 +263,8 @@ public class PluginDownload extends DefaultHandler
             pluginCtx.save();
         }
         catch (IOException e) {
-            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "Changes cannot be " +
-                    "persisted", e); 
+            throw new DmtException(nodeUri, DmtException.DATA_STORE_FAILURE, 
+                    "Changes cannot be persisted", e); 
         }
 	}
 
@@ -459,11 +459,11 @@ public class PluginDownload extends DefaultHandler
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
         String envType = entries.get(nodeUriArr[4]).envType;
         if (null == envType || !envType.equals("OSGi.R4"))
-            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "EnvType has to " +
+            throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, "EnvType has to " +
                     "be 'OSGi.R4'");
         String id = entries.get(nodeUriArr[4]).id;
         if (null == id || id.trim().length() == 0)
-            throw new DmtException(nodeUri, DmtException.OTHER_ERROR, "ID has to " +
+            throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, "ID has to " +
                     "be set");
         
         entries.start(nodeUri, correlator, session.getPrincipal());
