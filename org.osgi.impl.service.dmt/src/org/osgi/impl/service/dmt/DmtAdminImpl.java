@@ -131,7 +131,7 @@ public class DmtAdminImpl implements DmtAdmin {
         if (lockMode != DmtSession.LOCK_TYPE_SHARED
                 && lockMode != DmtSession.LOCK_TYPE_EXCLUSIVE
                 && lockMode != DmtSession.LOCK_TYPE_ATOMIC)
-            throw new DmtException(null, DmtException.OTHER_ERROR, 
+            throw new DmtException(null, DmtException.COMMAND_FAILED, 
                     "Unknown lockMode '" + lockMode + "' specified.");
     }
     
