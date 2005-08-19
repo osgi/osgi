@@ -53,10 +53,6 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.event.TopicPermission;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.policy.tbc.TransferCostCondition.IsPostponed;
-import org.osgi.test.cases.policy.tbc.TransferCostCondition.ResetTransferCost;
-import org.osgi.test.cases.policy.tbc.TransferCostCondition.SetTransferCost;
-import org.osgi.test.cases.policy.tbc.TransferCostCondition.TransferCostConditionConstants;
 import org.osgi.test.cases.policy.tbc.util.TestBundle;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
@@ -65,86 +61,10 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
  */
 public class PolicyTestControl extends DefaultTestBundleControl {
 	
-	public static final String IMEI_PHONE_CODE = System
-			.getProperty("org.osgi.util.gsm.imei");
-
-
-	public static final String IMSI_PHONE_CODE = System
-			.getProperty("org.osgi.util.gsm.imsi");
-
-	
-	public static String LOCATION = "";
-
-	public static final String ALL_ACTIONS = DmtPermission.ADD + ","
-			+ DmtPermission.DELETE + "," + DmtPermission.EXEC + ","
-			+ DmtPermission.GET + "," + DmtPermission.REPLACE;
-	public static final String ALL_NODES = "./*";
-
-
 	private TB1Service tb1Service;
 
 	private TestInterface[] testBundleTB1;
 
-	public static final String IMEI_VALID_CODE = "012345678912345";
-	
-	public static final String IMEI_INVALID_CODE = "0123456-8912345";
-
-	public static final String IMEI_CHAR_CODE = "abcdefghijklmno";
-
-	public static final String IMEI_LESS_DIGIT_CODE = "12345";
-	
-	public static final String IMEI_MORE_DIGIT_CODE = "1234567890123456";
-	
-	public static final String IMSI_VALID_CODE = "012345678912345";
-	
-	public static final String IMSI_CHAR_CODE = "abcdefghijklmno";
-
-	public static final String IMSI_LESS_DIGIT_CODE = "12345";
-	
-	public static final String IMSI_INVALID_CODE = "0123456-8912345";
-	
-	public static final String IMSI_MORE_DIGIT_CODE = "1234567890123456";
-
-	public static final String INVALID_CODE = "@#$%sA!&_";
-
-	public static final String CONDITION_HASH = "Egtd5i+S33Y94dHent1bFdlb_ak";
-	
-	public static final String PRINCIPAL = "www.cesar.org.br";
-
-	public static final String OSGI_ROOT = "./OSGi";
-	
-	public static final String TEST_NODE = "test";
-	
-	public static final String TEST_NODE_LOCATION = "test/Location";
-	
-	public static final String PRINCIPAL_LOCATION = PRINCIPAL+ "/Principal";
-	
-	public static final String PRINCIPAL_PERMISSION = PRINCIPAL+ "/PermissionInfo";
-	
-	public static final String CONDITIONAL_PERMISSIONINFO = CONDITION_HASH+ "/PermissionInfo";
-	
-	public static final String CONDITIONAL_CONDITIONINFO = CONDITION_HASH+ "/ConditionInfo";
-	
-	public static final String TEST_NODE_PERMISSION = "test/PermissionInfo";
-	
-	public static final String POLICY_JAVA_NODE =  OSGI_ROOT + "/Policy/Java";
-	
-	public static final String LOCATION_PERMISSION_NODE =  POLICY_JAVA_NODE + "/LocationPermission";
-	
-	public static final String LOCATIONS_NODE =  LOCATION_PERMISSION_NODE + "/Locations";
-	
-	public static final String DEFAULT_PERMISSION_NODE =  LOCATION_PERMISSION_NODE + "/Default";
-	
-	public static final String PRINCIPAL_PERMISSION_NODE =  POLICY_JAVA_NODE + "/DmtPrincipalPermission";
-	
-	public static final String CONDITIONAL_PERMISSION_NODE =  POLICY_JAVA_NODE + "/ConditionalPermission";
-	
-	public static final Bundle TEST_BUNDLE = new TestBundle();
-	
-	public static final String INVALID_COST_LIMIT = "TEST";
-	
-	public static final String CATALOG_NAME = "com.provider.messages.userprompt";
-	
 	private DmtSession session;
 	
 	private ConditionalPermissionAdmin cpa;
@@ -189,58 +109,15 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 				.run();
 	}
 
+	
 	/*
-	 * Calls TransferCostCondition's constants test method
+	 * Calls UserPromptCondition.getCondition test methods
 	 */
-	public void testTransferCostConditionConstants() {
-		new TransferCostConditionConstants(this).run();
-	}
-
-	/*
-	 * Calls TransferCostCondition.getCondition test methods
-	 */
-	public void testTransferCostConditionGetCondition() {
-		new org.osgi.test.cases.policy.tbc.TransferCostCondition.GetCondition(
+	public void testUserPromptConditionGetCondition() {
+		new org.osgi.test.cases.policy.tbc.UserPromptCondition.GetCondition(
 				this).run();
 	}
 
-	/*
-	 * Calls TransferCostCondition.isMutable test methods
-	 */
-	public void testTransferCostConditionIsMutable() {
-		new org.osgi.test.cases.policy.tbc.TransferCostCondition.IsMutable(this)
-				.run();
-	}
-
-	/*
-	 * Calls TransferCostCondition.isSatisfied test methods
-	 */
-	public void testTransferCostConditionIsSatisfied() {
-		new org.osgi.test.cases.policy.tbc.TransferCostCondition.IsSatisfied(
-				this).run();
-	}
-	
-	/*
-	 * Calls TransferCostCondition.resetTransferCost test methods
-	 */
-	public void testTransferCostConditionResetTransferCost() {
-		new ResetTransferCost(this).run();
-	}
-
-	/*
-	 * Calls TransferCostCondition.SetTransferCost test methods
-	 */
-	public void testTransferCostConditionSetTransferCost() {
-		new SetTransferCost(this).run();
-	}
-    
-    /*
-     * Calls TransferCostCondition.SetTransferCost test methods
-     */
-    public void testTransferCostConditionIsPostponed() {
-        new IsPostponed(this).run();
-    }
-	
 	/*
 	 * Executes test methods for tree structure
 	 */
@@ -274,18 +151,18 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 		}
 		ServiceReference tb1SvrReference = getContext().getServiceReference(
 				TB1Service.class.getName());
-		LOCATION = tb1SvrReference.getBundle().getLocation();
+		PolicyConstants.LOCATION = tb1SvrReference.getBundle().getLocation();
 		tb1Service = (TB1Service) getContext().getService(tb1SvrReference);
 		testBundleTB1 = tb1Service.getTestClasses(this);
 		setPermissions(new PermissionInfo(DmtPermission.class.getName(),
-				ALL_NODES, ALL_ACTIONS));
+				PolicyConstants.ALL_NODES, PolicyConstants.ALL_ACTIONS));
 		
 	}
 
 
 	public void setPermissions(PermissionInfo permission) {
 		new TopicPermission("*",TopicPermission.PUBLISH);
-		pa.setPermissions(LOCATION,
+		pa.setPermissions(PolicyConstants.LOCATION,
 				new PermissionInfo[] {
 						new PermissionInfo(TopicPermission.class.getName(),
 								"org/osgi/service/dmt/ADDED",

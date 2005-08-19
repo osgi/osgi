@@ -49,6 +49,7 @@ import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.policy.tbc.PolicyConstants;
 import org.osgi.test.cases.policy.tbc.PolicyTestControl;
 import org.osgi.test.cases.policy.tbc.TestInterface;
 import org.osgi.test.cases.policy.tbc.util.MessagesConstants;
@@ -104,11 +105,11 @@ public class TreeStructure implements TestInterface {
 		tbc.log("#testTreeStructure001");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(PolicyTestControl.OSGI_ROOT,
+			session = tbc.getDmtAdmin().getSession(PolicyConstants.OSGI_ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc.assertTrue("Asserts if $/Policy/Java is a valid node", session
-					.isNodeUri(PolicyTestControl.POLICY_JAVA_NODE));
+					.isNodeUri(PolicyConstants.POLICY_JAVA_NODE));
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -129,14 +130,14 @@ public class TreeStructure implements TestInterface {
 		tbc.log("#testTreeStructure002");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(PolicyTestControl.OSGI_ROOT,
+			session = tbc.getDmtAdmin().getSession(PolicyConstants.OSGI_ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc
 					.assertTrue(
 							"Asserts if $/Policy/Java/LocationPermission is a valid node",
 							session
-									.isNodeUri(PolicyTestControl.LOCATION_PERMISSION_NODE));
+									.isNodeUri(PolicyConstants.LOCATION_PERMISSION_NODE));
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -158,13 +159,13 @@ public class TreeStructure implements TestInterface {
 		tbc.log("#testTreeStructure003");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(PolicyTestControl.OSGI_ROOT,
+			session = tbc.getDmtAdmin().getSession(PolicyConstants.OSGI_ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc
 					.assertTrue(
 							"Asserts if $/Policy/Java/LocationPermission/Locations is a valid node",
-							session.isNodeUri(PolicyTestControl.LOCATIONS_NODE));
+							session.isNodeUri(PolicyConstants.LOCATIONS_NODE));
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -185,14 +186,14 @@ public class TreeStructure implements TestInterface {
 		tbc.log("#testTreeStructure004");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(PolicyTestControl.OSGI_ROOT,
+			session = tbc.getDmtAdmin().getSession(PolicyConstants.OSGI_ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc
 					.assertTrue(
 							"Asserts if $/Policy/Java/DmtPrincipalPermission is a valid node",
 							session
-									.isNodeUri(PolicyTestControl.PRINCIPAL_PERMISSION_NODE));
+									.isNodeUri(PolicyConstants.PRINCIPAL_PERMISSION_NODE));
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -214,14 +215,14 @@ public class TreeStructure implements TestInterface {
 		tbc.log("#testTreeStructure005");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(PolicyTestControl.OSGI_ROOT,
+			session = tbc.getDmtAdmin().getSession(PolicyConstants.OSGI_ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc
 					.assertTrue(
 							"Asserts if $/Policy/Java/ConditionalPermission is a valid node",
 							session
-									.isNodeUri(PolicyTestControl.CONDITIONAL_PERMISSION_NODE));
+									.isNodeUri(PolicyConstants.CONDITIONAL_PERMISSION_NODE));
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -245,24 +246,24 @@ public class TreeStructure implements TestInterface {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.LOCATIONS_NODE,
+					PolicyConstants.LOCATIONS_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.createInteriorNode(PolicyTestControl.TEST_NODE);
+			session.createInteriorNode(PolicyConstants.TEST_NODE);
 
-			session.setNodeValue(PolicyTestControl.TEST_NODE_LOCATION,
-					new DmtData(PolicyTestControl.TEST_NODE));
+			session.setNodeValue(PolicyConstants.TEST_NODE_LOCATION,
+					new DmtData(PolicyConstants.TEST_NODE));
 
 			PermissionInfo pInfo = new PermissionInfo(AdminPermission.class
 					.getName(), "*", "*");
 
-			session.setNodeValue(PolicyTestControl.TEST_NODE_PERMISSION,
+			session.setNodeValue(PolicyConstants.TEST_NODE_PERMISSION,
 					new DmtData(pInfo.getEncoded() + "\n"));
 
 			session.close();
 
 			PermissionInfo pi[] = tbc.getPermissionAdmin().getPermissions(
-					PolicyTestControl.TEST_NODE);
+					PolicyConstants.TEST_NODE);
 
 			tbc
 					.assertEquals(
@@ -270,15 +271,15 @@ public class TreeStructure implements TestInterface {
 							pInfo.getEncoded(), pi[0].getEncoded());
 
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.LOCATIONS_NODE,
+					PolicyConstants.LOCATIONS_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.deleteNode(PolicyTestControl.TEST_NODE);
+			session.deleteNode(PolicyConstants.TEST_NODE);
 
 			session.close();
 
 			pi = tbc.getPermissionAdmin().getPermissions(
-					PolicyTestControl.TEST_NODE);
+					PolicyConstants.TEST_NODE);
 
 			tbc
 					.assertNull(
@@ -310,30 +311,30 @@ public class TreeStructure implements TestInterface {
 					.getName(), "*", "*");
 
 			tbc.getPermissionAdmin()
-					.setPermissions(PolicyTestControl.TEST_NODE,
+					.setPermissions(PolicyConstants.TEST_NODE,
 							new PermissionInfo[] { pInfo });
 
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.LOCATIONS_NODE,
+					PolicyConstants.LOCATIONS_NODE,
 					DmtSession.LOCK_TYPE_SHARED);
 			
 			tbc
 					.assertEquals(
 							"Asserts if the correct permission is added in DMT when setting permissions through permission admin service",
 							pInfo.getEncoded()+"\n",
-							session.getNodeValue(PolicyTestControl.TEST_NODE_PERMISSION).getString());
+							session.getNodeValue(PolicyConstants.TEST_NODE_PERMISSION).getString());
 
 			session.close();
 
 			tbc.getPermissionAdmin().setPermissions(
-					PolicyTestControl.TEST_NODE, null);
+					PolicyConstants.TEST_NODE, null);
 
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.LOCATIONS_NODE,
+					PolicyConstants.LOCATIONS_NODE,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc.assertTrue("Asserts if permission was removed from DMT",
-					!session.isNodeUri(PolicyTestControl.TEST_NODE));
+					!session.isNodeUri(PolicyConstants.TEST_NODE));
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -363,11 +364,11 @@ public class TreeStructure implements TestInterface {
 					java.security.AllPermission.class.getName(), null, null);
 
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.LOCATION_PERMISSION_NODE,
+					PolicyConstants.LOCATION_PERMISSION_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 
-			if (session.isNodeUri(PolicyTestControl.DEFAULT_PERMISSION_NODE)) {
-				session.deleteNode(PolicyTestControl.DEFAULT_PERMISSION_NODE);
+			if (session.isNodeUri(PolicyConstants.DEFAULT_PERMISSION_NODE)) {
+				session.deleteNode(PolicyConstants.DEFAULT_PERMISSION_NODE);
 			}
 
 			session.close();
@@ -381,13 +382,13 @@ public class TreeStructure implements TestInterface {
 							perm.getEncoded(), infos[0].getEncoded());
 
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.LOCATION_PERMISSION_NODE,
+					PolicyConstants.LOCATION_PERMISSION_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 
 			session
-					.createLeafNode(PolicyTestControl.DEFAULT_PERMISSION_NODE);
+					.createLeafNode(PolicyConstants.DEFAULT_PERMISSION_NODE);
 
-			session.setNodeValue(PolicyTestControl.DEFAULT_PERMISSION_NODE,
+			session.setNodeValue(PolicyConstants.DEFAULT_PERMISSION_NODE,
 					new DmtData(perm.getEncoded() + "\n"));
 
 			session.close();
@@ -425,15 +426,15 @@ public class TreeStructure implements TestInterface {
 					java.security.AllPermission.class.getName(), null, null);
 
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.LOCATION_PERMISSION_NODE,
+					PolicyConstants.LOCATION_PERMISSION_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 
-			if (!session.isNodeUri(PolicyTestControl.DEFAULT_PERMISSION_NODE)) {
+			if (!session.isNodeUri(PolicyConstants.DEFAULT_PERMISSION_NODE)) {
 				session.createLeafNode(
-						PolicyTestControl.DEFAULT_PERMISSION_NODE, new DmtData(
+						PolicyConstants.DEFAULT_PERMISSION_NODE, new DmtData(
 								""));
 			} else {
-				session.setNodeValue(PolicyTestControl.DEFAULT_PERMISSION_NODE,
+				session.setNodeValue(PolicyConstants.DEFAULT_PERMISSION_NODE,
 						new DmtData(""));
 			}
 
@@ -448,10 +449,10 @@ public class TreeStructure implements TestInterface {
 							infos);
 
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.LOCATION_PERMISSION_NODE,
+					PolicyConstants.LOCATION_PERMISSION_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.setNodeValue(PolicyTestControl.DEFAULT_PERMISSION_NODE, new DmtData(perm.getEncoded()
+			session.setNodeValue(PolicyConstants.DEFAULT_PERMISSION_NODE, new DmtData(perm.getEncoded()
 					+ "\n"));
 
 			session.close();
@@ -490,19 +491,19 @@ public class TreeStructure implements TestInterface {
 
 			ConditionInfo cInfo = new ConditionInfo(
 					BundleLocationCondition.class.getName(),
-					new String[] { PolicyTestControl.PRINCIPAL });
+					new String[] { PolicyConstants.PRINCIPAL });
 
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.CONDITIONAL_PERMISSION_NODE,
+					PolicyConstants.CONDITIONAL_PERMISSION_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.createInteriorNode(PolicyTestControl.CONDITION_HASH);
+			session.createInteriorNode(PolicyConstants.CONDITION_HASH);
 
-			session.setNodeValue(PolicyTestControl.CONDITIONAL_PERMISSIONINFO,
+			session.setNodeValue(PolicyConstants.CONDITIONAL_PERMISSIONINFO,
 					new DmtData(pInfo1.getEncoded() + "\n"
 							+ pInfo2.getEncoded() + "\n"));
 
-			session.setNodeValue(PolicyTestControl.CONDITIONAL_CONDITIONINFO,
+			session.setNodeValue(PolicyConstants.CONDITIONAL_CONDITIONINFO,
 					new DmtData(cInfo.getEncoded() + "\n"));
 
 			session.close();
@@ -536,10 +537,10 @@ public class TreeStructure implements TestInterface {
 					conditionInserted);
 
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.CONDITIONAL_PERMISSION_NODE,
+					PolicyConstants.CONDITIONAL_PERMISSION_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.deleteNode(PolicyTestControl.CONDITION_HASH);
+			session.deleteNode(PolicyConstants.CONDITION_HASH);
 
 			session.close();
 
@@ -601,23 +602,23 @@ public class TreeStructure implements TestInterface {
 
 			ConditionInfo cInfo = new ConditionInfo(
 					BundleLocationCondition.class.getName(),
-					new String[] { PolicyTestControl.PRINCIPAL });
+					new String[] { PolicyConstants.PRINCIPAL });
 
 			tbc.getConditionalPermissionAdmin().addConditionalPermissionInfo(
 					new ConditionInfo[] { cInfo },
 					new PermissionInfo[] { pInfo1, pInfo2 });
 
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.CONDITIONAL_PERMISSION_NODE,
+					PolicyConstants.CONDITIONAL_PERMISSION_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			
 			tbc.assertTrue("Asserts if ConditionalPermission is added in DMT",
-					session.isNodeUri(PolicyTestControl.CONDITION_HASH));
+					session.isNodeUri(PolicyConstants.CONDITION_HASH));
 
 			tbc.assertEquals("Asserts ConditionInfo node value", cInfo
 					.getEncoded()
 					+ "\n", session.getNodeValue(
-					PolicyTestControl.CONDITIONAL_CONDITIONINFO).getString());
+					PolicyConstants.CONDITIONAL_CONDITIONINFO).getString());
 
 			tbc
 					.assertEquals(
@@ -625,9 +626,9 @@ public class TreeStructure implements TestInterface {
 							pInfo1.getEncoded() + "\n" + pInfo2.getEncoded()
 									+ "\n",
 							session
-									.getNodeValue(PolicyTestControl.CONDITIONAL_PERMISSIONINFO).getString());
+									.getNodeValue(PolicyConstants.CONDITIONAL_PERMISSIONINFO).getString());
 
-			session.deleteNode(PolicyTestControl.CONDITION_HASH);
+			session.deleteNode(PolicyConstants.CONDITION_HASH);
 
 			session.close();
 
@@ -682,11 +683,11 @@ public class TreeStructure implements TestInterface {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.POLICY_JAVA_NODE,
+					PolicyConstants.POLICY_JAVA_NODE,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyTestControl.LOCATION_PERMISSION_NODE);
+					.getMetaNode(PolicyConstants.LOCATION_PERMISSION_NODE);
 
 			tbc.assertEquals(
 					"Asserts if $/Policy/Java/LocationPermission is a permanent node",
@@ -735,17 +736,17 @@ public class TreeStructure implements TestInterface {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.LOCATION_PERMISSION_NODE,
+					PolicyConstants.LOCATION_PERMISSION_NODE,
 					DmtSession.LOCK_TYPE_SHARED);
 
-			if (!session.isNodeUri(PolicyTestControl.DEFAULT_PERMISSION_NODE)) {
+			if (!session.isNodeUri(PolicyConstants.DEFAULT_PERMISSION_NODE)) {
 				session.createLeafNode(
-						PolicyTestControl.DEFAULT_PERMISSION_NODE, new DmtData(
+						PolicyConstants.DEFAULT_PERMISSION_NODE, new DmtData(
 								""));
 			}
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyTestControl.DEFAULT_PERMISSION_NODE);
+					.getMetaNode(PolicyConstants.DEFAULT_PERMISSION_NODE);
 
 			tbc
 					.assertEquals(
@@ -808,13 +809,13 @@ public class TreeStructure implements TestInterface {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.LOCATIONS_NODE,
+					PolicyConstants.LOCATIONS_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.createInteriorNode(PolicyTestControl.TEST_NODE);
+			session.createInteriorNode(PolicyConstants.TEST_NODE);
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyTestControl.TEST_NODE);
+					.getMetaNode(PolicyConstants.TEST_NODE);
 
 			tbc
 					.assertEquals(
@@ -859,7 +860,7 @@ public class TreeStructure implements TestInterface {
 							DmtException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.cleanUp(session, new String[] { PolicyTestControl.TEST_NODE });
+			tbc.cleanUp(session, new String[] { PolicyConstants.TEST_NODE });
 		}
 	}
 
@@ -877,13 +878,13 @@ public class TreeStructure implements TestInterface {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.LOCATIONS_NODE,
+					PolicyConstants.LOCATIONS_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.createInteriorNode(PolicyTestControl.TEST_NODE);
+			session.createInteriorNode(PolicyConstants.TEST_NODE);
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyTestControl.TEST_NODE_PERMISSION);
+					.getMetaNode(PolicyConstants.TEST_NODE_PERMISSION);
 
 			tbc
 					.assertEquals(
@@ -925,7 +926,7 @@ public class TreeStructure implements TestInterface {
 							DmtException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.cleanUp(session, new String[] { PolicyTestControl.TEST_NODE });
+			tbc.cleanUp(session, new String[] { PolicyConstants.TEST_NODE });
 		}
 	}
 
@@ -943,13 +944,13 @@ public class TreeStructure implements TestInterface {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.LOCATIONS_NODE,
+					PolicyConstants.LOCATIONS_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.createInteriorNode(PolicyTestControl.TEST_NODE);
+			session.createInteriorNode(PolicyConstants.TEST_NODE);
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyTestControl.TEST_NODE_LOCATION);
+					.getMetaNode(PolicyConstants.TEST_NODE_LOCATION);
 
 			tbc
 					.assertEquals(
@@ -991,7 +992,7 @@ public class TreeStructure implements TestInterface {
 							DmtException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.cleanUp(session, new String[] { PolicyTestControl.TEST_NODE });
+			tbc.cleanUp(session, new String[] { PolicyConstants.TEST_NODE });
 		}
 	}
 
@@ -1008,11 +1009,11 @@ public class TreeStructure implements TestInterface {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.POLICY_JAVA_NODE,
+					PolicyConstants.POLICY_JAVA_NODE,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyTestControl.PRINCIPAL_PERMISSION_NODE);
+					.getMetaNode(PolicyConstants.PRINCIPAL_PERMISSION_NODE);
 
 			tbc.assertEquals(
 					"Asserts if $/Policy/Java/DmtPrincipalPermission node is permanent",
@@ -1063,13 +1064,13 @@ public class TreeStructure implements TestInterface {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.PRINCIPAL_PERMISSION_NODE,
+					PolicyConstants.PRINCIPAL_PERMISSION_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.createInteriorNode(PolicyTestControl.PRINCIPAL);
+			session.createInteriorNode(PolicyConstants.PRINCIPAL);
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyTestControl.PRINCIPAL);
+					.getMetaNode(PolicyConstants.PRINCIPAL);
 
 			tbc
 					.assertEquals(
@@ -1111,7 +1112,7 @@ public class TreeStructure implements TestInterface {
 							DmtException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.cleanUp(session, new String[] { PolicyTestControl.PRINCIPAL });
+			tbc.cleanUp(session, new String[] { PolicyConstants.PRINCIPAL });
 		}
 	}
 
@@ -1128,13 +1129,13 @@ public class TreeStructure implements TestInterface {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.PRINCIPAL_PERMISSION_NODE,
+					PolicyConstants.PRINCIPAL_PERMISSION_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.createInteriorNode(PolicyTestControl.PRINCIPAL);
+			session.createInteriorNode(PolicyConstants.PRINCIPAL);
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyTestControl.PRINCIPAL_LOCATION);
+					.getMetaNode(PolicyConstants.PRINCIPAL_LOCATION);
 
 			tbc
 					.assertEquals(
@@ -1176,7 +1177,7 @@ public class TreeStructure implements TestInterface {
 							DmtException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.cleanUp(session, new String[] { PolicyTestControl.PRINCIPAL });
+			tbc.cleanUp(session, new String[] { PolicyConstants.PRINCIPAL });
 		}
 	}
 
@@ -1193,13 +1194,13 @@ public class TreeStructure implements TestInterface {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.PRINCIPAL_PERMISSION_NODE,
+					PolicyConstants.PRINCIPAL_PERMISSION_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.createInteriorNode(PolicyTestControl.PRINCIPAL);
+			session.createInteriorNode(PolicyConstants.PRINCIPAL);
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyTestControl.PRINCIPAL_PERMISSION);
+					.getMetaNode(PolicyConstants.PRINCIPAL_PERMISSION);
 
 			tbc
 					.assertEquals(
@@ -1241,7 +1242,7 @@ public class TreeStructure implements TestInterface {
 							DmtException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.cleanUp(session, new String[] { PolicyTestControl.PRINCIPAL });
+			tbc.cleanUp(session, new String[] { PolicyConstants.PRINCIPAL });
 		}
 	}
 
@@ -1258,11 +1259,11 @@ public class TreeStructure implements TestInterface {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.POLICY_JAVA_NODE,
+					PolicyConstants.POLICY_JAVA_NODE,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyTestControl.CONDITIONAL_PERMISSION_NODE);
+					.getMetaNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE);
 
 			tbc.assertEquals(
 					"Asserts if $/Policy/Java/ConditionalPermission node is permanent",
@@ -1314,16 +1315,16 @@ public class TreeStructure implements TestInterface {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.POLICY_JAVA_NODE,
+					PolicyConstants.POLICY_JAVA_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 
 			session
-					.createInteriorNode(PolicyTestControl.CONDITIONAL_PERMISSION_NODE
-							+ "/" + PolicyTestControl.CONDITION_HASH);
+					.createInteriorNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
+							+ "/" + PolicyConstants.CONDITION_HASH);
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyTestControl.CONDITIONAL_PERMISSION_NODE
-							+ "/" + PolicyTestControl.CONDITION_HASH);
+					.getMetaNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
+							+ "/" + PolicyConstants.CONDITION_HASH);
 
 			tbc
 					.assertEquals(
@@ -1368,8 +1369,8 @@ public class TreeStructure implements TestInterface {
 			tbc
 			.cleanUp(
 					session,
-					new String[] { PolicyTestControl.CONDITIONAL_PERMISSION_NODE
-							+ "/" + PolicyTestControl.CONDITION_HASH });
+					new String[] { PolicyConstants.CONDITIONAL_PERMISSION_NODE
+							+ "/" + PolicyConstants.CONDITION_HASH });
 		}
 	}
 
@@ -1386,16 +1387,16 @@ public class TreeStructure implements TestInterface {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.POLICY_JAVA_NODE,
+					PolicyConstants.POLICY_JAVA_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 
 			session
-					.createInteriorNode(PolicyTestControl.CONDITIONAL_PERMISSION_NODE
-							+ "/" + PolicyTestControl.CONDITION_HASH);
+					.createInteriorNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
+							+ "/" + PolicyConstants.CONDITION_HASH);
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyTestControl.CONDITIONAL_PERMISSION_NODE
-							+ "/" + PolicyTestControl.CONDITIONAL_CONDITIONINFO);
+					.getMetaNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
+							+ "/" + PolicyConstants.CONDITIONAL_CONDITIONINFO);
 
 			tbc
 					.assertEquals(
@@ -1440,8 +1441,8 @@ public class TreeStructure implements TestInterface {
 			tbc
 					.cleanUp(
 							session,
-							new String[] { PolicyTestControl.CONDITIONAL_PERMISSION_NODE
-									+ "/" + PolicyTestControl.CONDITION_HASH });
+							new String[] { PolicyConstants.CONDITIONAL_PERMISSION_NODE
+									+ "/" + PolicyConstants.CONDITION_HASH });
 		}
 	}
 
@@ -1458,17 +1459,17 @@ public class TreeStructure implements TestInterface {
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(
-					PolicyTestControl.POLICY_JAVA_NODE,
+					PolicyConstants.POLICY_JAVA_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 
 			session
-					.createInteriorNode(PolicyTestControl.CONDITIONAL_PERMISSION_NODE
-							+ "/" + PolicyTestControl.CONDITION_HASH);
+					.createInteriorNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
+							+ "/" + PolicyConstants.CONDITION_HASH);
 
 			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyTestControl.CONDITIONAL_PERMISSION_NODE
+					.getMetaNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
 							+ "/"
-							+ PolicyTestControl.CONDITIONAL_PERMISSIONINFO);
+							+ PolicyConstants.CONDITIONAL_PERMISSIONINFO);
 
 			tbc
 					.assertEquals(
@@ -1513,8 +1514,8 @@ public class TreeStructure implements TestInterface {
 			tbc
 					.cleanUp(
 							session,
-							new String[] { PolicyTestControl.CONDITIONAL_PERMISSION_NODE
-									+ "/" + PolicyTestControl.CONDITION_HASH });
+							new String[] { PolicyConstants.CONDITIONAL_PERMISSION_NODE
+									+ "/" + PolicyConstants.CONDITION_HASH });
 		}
 	}
 

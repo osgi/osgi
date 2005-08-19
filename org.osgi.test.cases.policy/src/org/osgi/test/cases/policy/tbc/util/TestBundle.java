@@ -45,25 +45,25 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 
 public class TestBundle implements Bundle {
-	public int getState() { throw new IllegalStateException(); }
-	public void start() throws BundleException { throw new IllegalStateException(); }
-	public void stop() throws BundleException { throw new IllegalStateException(); }
-	public void update() throws BundleException { throw new IllegalStateException(); }
-	public void update(InputStream in) throws BundleException { throw new IllegalStateException(); }
-	public void uninstall() throws BundleException { throw new IllegalStateException(); }
-	public Dictionary getHeaders() { throw new IllegalStateException(); }
-	public long getBundleId() { throw new IllegalStateException(); }
-	public String getLocation() { throw new IllegalStateException(); }
-	public ServiceReference[] getRegisteredServices() { throw new IllegalStateException(); }
-	public ServiceReference[] getServicesInUse() { throw new IllegalStateException(); }
-	public boolean hasPermission(Object permission) { throw new IllegalStateException(); }
-	public URL getResource(String name) { throw new IllegalStateException(); }
-	public Dictionary getHeaders(String locale) { throw new IllegalStateException(); }
-	public String getSymbolicName() { throw new IllegalStateException(); }
-	public Class loadClass(String name) throws ClassNotFoundException { throw new IllegalStateException(); }
-	public Enumeration getResources(String name) { throw new IllegalStateException(); }
-	public Enumeration getEntryPaths(String path) { throw new IllegalStateException(); }
-	public URL getEntry(String name) { throw new IllegalStateException(); }
-	public long getLastModified() { throw new IllegalStateException(); }
-	public Enumeration findEntries(String path, String filePattern, boolean recurse) { throw new IllegalStateException(); }
+	public int getState() {return 0; }
+	public void start() throws BundleException { }
+	public void stop() throws BundleException { }
+	public void update() throws BundleException { }
+	public void update(InputStream in) throws BundleException { }
+	public void uninstall() throws BundleException { }
+	public Dictionary getHeaders() {return null; }
+	public long getBundleId() { return 0; }
+	public String getLocation() {return ""; }
+	public ServiceReference[] getRegisteredServices() {return null; }
+	public ServiceReference[] getServicesInUse() {return null; }
+	public boolean hasPermission(Object permission) {return true; }
+	public URL getResource(String name) { return null;}
+	public Dictionary getHeaders(String locale) { return null;}
+	public String getSymbolicName() {return ""; }
+	public Class loadClass(String name) throws ClassNotFoundException { return null;}
+	public Enumeration getResources(String name) {return null; }
+	public Enumeration getEntryPaths(String path) { return null; }
+	public URL getEntry(String name) { return null; }
+	public long getLastModified() { return 0; }
+	public Enumeration findEntries(String path, String filePattern, boolean recurse) { return null; }
 }
