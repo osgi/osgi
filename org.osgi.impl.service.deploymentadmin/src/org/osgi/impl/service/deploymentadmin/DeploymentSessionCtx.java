@@ -36,39 +36,31 @@ public class DeploymentSessionCtx {
     
     private final Logger        logger; 
     private final BundleContext bundleContext;
-    private final String        fwBundleDir;
     private final Map           mappingRpDp;
     
     private static DeploymentSessionCtx INSTANCE;
     
     static DeploymentSessionCtx getInstance(Logger logger, 
             BundleContext bundleContext, 
-            String fwBundleDir, 
             Map mappingRpDp) 
     {
         if (null == INSTANCE)
             INSTANCE = new DeploymentSessionCtx(logger,
-                    bundleContext, fwBundleDir, mappingRpDp);
+                    bundleContext, mappingRpDp);
         return INSTANCE;
     }
     
     private DeploymentSessionCtx(Logger logger, 
             BundleContext bundleContext, 
-            String fwBundleDir, 
             Map mappingRpDp) 
     {
         this.logger = logger;
         this.bundleContext = bundleContext;
-        this.fwBundleDir = fwBundleDir;
         this.mappingRpDp = mappingRpDp;
     }
 
     public BundleContext getBundleContext() {
         return bundleContext;
-    }
-
-    public String getFwBundleDir() {
-        return fwBundleDir;
     }
 
     public Logger getLogger() {

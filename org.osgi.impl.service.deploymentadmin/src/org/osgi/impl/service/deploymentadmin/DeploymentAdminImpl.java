@@ -80,10 +80,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private TrackerDmt            trackDmt;           // tracks the DmtAdmin
     private TrackerDownloadAgent  trackDownloadAgent; // tracks the DownloadAgent
     
-    // the directory where the framework stores the 
-    // private area of the bundles
-    private String                fwBundleDir;
-    
     // max wait time before Deployment Admin throws exception with code 
     // DeploymentException.CODE_TIMEOUT
     private long                  sessionTimeout;
@@ -160,14 +156,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 
         // initialize keystore
         initKeyStore();
-        
-        // fetch fw bundle dir system property
-        fwBundleDir = System.getProperty(DAConstants.FW_BUNDLES_DIR);
-        if (null == fwBundleDir)
-            throw new RuntimeException("The '" + DAConstants.FW_BUNDLES_DIR + "' system " +
-            		"property is missing.");
-        File f = new File(fwBundleDir);
-        fwBundleDir = f.getAbsolutePath();
         
         // fetch session timeout system property
         String s = System.getProperty(DAConstants.SESSION_TIMEOUT);
@@ -652,13 +640,13 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             targetDp = DeploymentPackageImpl.createEmpty(
                     DeploymentPackageCtx.getInstance(logger, context, this));
 	        return new DeploymentSessionImpl(srcDp, targetDp, 
-                    DeploymentSessionCtx.getInstance(logger, context, fwBundleDir, mappingRpDp));
+                    DeploymentSessionCtx.getInstance(logger, context, mappingRpDp));
         }
         
         // found -> update
         
         DeploymentSessionImpl ret = new DeploymentSessionImpl(srcDp, targetDp, 
-                DeploymentSessionCtx.getInstance(logger, context, fwBundleDir, mappingRpDp));
+                DeploymentSessionCtx.getInstance(logger, context, mappingRpDp));
         if (null != srcDp.getFixPackRange()) {
             VersionRange range = srcDp.getFixPackRange();
             Version ver = targetDp.getVersion();
@@ -687,7 +675,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             throw new RuntimeException("Internal error");
         
         return new DeploymentSessionImpl(srcDp, targetDp, 
-                DeploymentSessionCtx.getInstance(logger, context, fwBundleDir, mappingRpDp));
+                DeploymentSessionCtx.getInstance(logger, context, mappingRpDp));
 	}
 
     /*

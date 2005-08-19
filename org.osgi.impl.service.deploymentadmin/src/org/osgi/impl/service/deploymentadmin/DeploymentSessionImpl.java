@@ -138,10 +138,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
         final ArrayList permInfos = null != old ? 
                 new ArrayList(Arrays.asList(old)) : new ArrayList();
         for (Iterator iter = srcDp.getBundleEntryIterator(); iter.hasNext();) {
-            BundleEntry be = (BundleEntry) iter.next();
-            File rootDir = new File(sessionCtx.getFwBundleDir() + "/" + be.getBundleId() + 
-                    "/" + "data/-");
-            permInfos.add(new PermissionInfo(FilePermission.class.getName(), rootDir.toString(), 
+            final BundleEntry be = (BundleEntry) iter.next();
+            File f = new File(getBundleDir(be), "-"); 
+            permInfos.add(new PermissionInfo(FilePermission.class.getName(), f.getAbsolutePath(), 
                     "read, write, execute, delete"));
         }
         AccessController.doPrivileged(new PrivilegedAction(){
@@ -149,6 +148,18 @@ public class DeploymentSessionImpl implements DeploymentSession {
                 pa.setPermissions(location, (PermissionInfo[]) permInfos.toArray(new PermissionInfo[] {}));
                 return null;
             }});
+    }
+
+    private String getBundleDir(final BundleEntry be) {
+        return (String) AccessController.doPrivileged(new PrivilegedAction() {
+            public Object run() {
+                BundleUtil bu = new BundleUtil();
+                Bundle b = sessionCtx.getBundleContext().getBundle(
+                        be.getBundleId());
+                File ret = bu.getDataFile(b);
+                return ret.getAbsolutePath();
+            }
+        });
     }
 
     private void resetFilePermissionForCustomizers(Hashtable oldPerms) {
@@ -243,7 +254,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         for (Iterator iter = bes.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             if (be.getBundleId() == b.getBundleId()) {
-                String dir = sessionCtx.getFwBundleDir() + "/" + b.getBundleId() + "/data";
+                String dir = getBundleDir(be);
                 final File f = new File(dir);
                 AccessController.doPrivileged(new PrivilegedAction() {
                     public Object run() {
