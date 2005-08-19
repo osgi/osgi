@@ -128,14 +128,14 @@ public class DeploymentSessionImpl implements DeploymentSession {
     }
 
     private void setFilePermissionForCustomizer(BundleEntry beCust, Hashtable oldPerms) {
-        String location = DeploymentAdminImpl.location(beCust.getSymbName(), 
+        final String location = DeploymentAdminImpl.location(beCust.getSymbName(), 
                 beCust.getVersion());
-        PermissionAdmin pa = (PermissionAdmin) trackPerm.getService();
+        final PermissionAdmin pa = (PermissionAdmin) trackPerm.getService();
         
         PermissionInfo[] old = pa.getPermissions(location);
         if (null != old)
             oldPerms.put(location, old);
-        ArrayList permInfos = null != old ? 
+        final ArrayList permInfos = null != old ? 
                 new ArrayList(Arrays.asList(old)) : new ArrayList();
         for (Iterator iter = srcDp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
@@ -144,7 +144,11 @@ public class DeploymentSessionImpl implements DeploymentSession {
             permInfos.add(new PermissionInfo(FilePermission.class.getName(), rootDir.toString(), 
                     "read, write, execute, delete"));
         }
-        pa.setPermissions(location, (PermissionInfo[]) permInfos.toArray(new PermissionInfo[] {}));
+        AccessController.doPrivileged(new PrivilegedAction(){
+            public Object run() {
+                pa.setPermissions(location, (PermissionInfo[]) permInfos.toArray(new PermissionInfo[] {}));
+                return null;
+            }});
     }
 
     private void resetFilePermissionForCustomizers(Hashtable oldPerms) {
@@ -159,12 +163,18 @@ public class DeploymentSessionImpl implements DeploymentSession {
         }
     }
 
-    private void resetFilePermissionForCustomizer(BundleEntry beCust, Hashtable oldPerms) {
-        String location = DeploymentAdminImpl.location(beCust.getSymbName(), 
+    private void resetFilePermissionForCustomizer(BundleEntry beCust, final Hashtable oldPerms) {
+        final String location = DeploymentAdminImpl.location(beCust.getSymbName(), 
                 beCust.getVersion());
-        PermissionAdmin pa = (PermissionAdmin) trackPerm.getService();
-        pa.setPermissions(location, null);
-        pa.setPermissions(location, (PermissionInfo[]) oldPerms.get(location));
+        final PermissionAdmin pa = (PermissionAdmin) trackPerm.getService();
+        AccessController.doPrivileged(new PrivilegedAction() {
+            public Object run() {
+                pa.setPermissions(location, null);
+                pa.setPermissions(location, (PermissionInfo[]) oldPerms.
+                        get(location));
+                return null;
+            }
+        });
     }
 
     int getDeploymentAction() {
