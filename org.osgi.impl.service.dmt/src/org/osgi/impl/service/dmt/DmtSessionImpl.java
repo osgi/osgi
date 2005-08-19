@@ -38,6 +38,8 @@ import org.osgi.util.tracker.ServiceTracker;
 // Needed for meta-data name and value pattern matching
 //import java.util.regex.Pattern;
 
+// TODO throw IllegalStateException if operation is not allowed in the current session lock type
+
 // OPTIMIZE node handling (e.g. retrieve plugin from dispatcher only once per API call), maybe with new URI class
 // OPTIMIZE only retrieve meta-data once per API call
 // OPTIMIZE only call commit/rollback for plugins that were actually modified since the last transaction boundary
@@ -593,8 +595,8 @@ public class DmtSessionImpl implements DmtSession {
                 // then we have to check whether this is the last one.
                 if(metaNode.getMaxOccurrence() == 1 
                         || getNodeCardinality(uri) == 1)
-                throw new DmtException(uri, DmtException.METADATA_MISMATCH,
-                        "Metadata does not allow deleting last instance of this node.");
+                    throw new DmtException(uri, DmtException.METADATA_MISMATCH,
+                            "Metadata does not allow deleting last instance of this node.");
             }
         }
         
@@ -627,6 +629,7 @@ public class DmtSessionImpl implements DmtSession {
         if(parent == null)
             throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
                     "Cannot create root node.");
+        // TODO automatically create missing parent node 
         checkNode(parent, SHOULD_BE_INTERIOR);
         checkNodePermission(parent, DmtAcl.ADD);
         checkNodeCapability(uri, DmtMetaNode.CMD_ADD);
@@ -654,36 +657,29 @@ public class DmtSessionImpl implements DmtSession {
     }
 
     public synchronized void createLeafNode(String nodeUri) throws DmtException {
-        checkSession();
         commonCreateLeafNode(nodeUri, null, null, true);
     }
     
     public synchronized void createLeafNode(String nodeUri, DmtData value)
 			throws DmtException {
-        // this must behave the same way as createLeafNode/3 with null MIME type
-        createLeafNode(nodeUri, value, null);
+        commonCreateLeafNode(nodeUri, value, null, true);
 	}
     
     public synchronized void createLeafNode(String nodeUri, DmtData value, 
             String mimeType) throws DmtException {
-        checkSession();
-        if (value == null)
-            throw new DmtException(makeAbsoluteUri(nodeUri), 
-                    DmtException.COMMAND_FAILED, 
-                    "'null' value given for DmtData argument.");
-        // mimeType not checked, null means use default from meta-data
         commonCreateLeafNode(nodeUri, value, mimeType, true);
     }
     
     // also used by copy() to create leaf nodes without triggering an event
     private void commonCreateLeafNode(String nodeUri, DmtData value,
             String mimeType, boolean sendEvent) throws DmtException {
-        
+        checkSession();
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_NOT_EXIST);
         String parent = Utils.parentUri(uri);
         if(parent == null)
             throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
                     "Cannot create root node.");
+        // TODO automatically create missing parent node 
         checkNode(parent, SHOULD_BE_INTERIOR);
         checkNodePermission(parent, DmtAcl.ADD);
         checkNodeCapability(uri, DmtMetaNode.CMD_ADD);
@@ -695,8 +691,7 @@ public class DmtSessionImpl implements DmtSession {
                         "defines it as an interior node.");
         checkNewNode(uri);
         checkValue(uri, value);
-        if(mimeType != null)
-            checkMimeType(uri, mimeType);
+        checkMimeType(uri, mimeType);
         checkMaxOccurrence(uri);
 
         // it is not really useful to allow creating automatic nodes, but this
@@ -759,22 +754,53 @@ public class DmtSessionImpl implements DmtSession {
 	public synchronized void renameNode(String nodeUri, String newNodeName) 
             throws DmtException {
 		checkSession();
-        String newName = Utils.validateAndNormalizeNodeName(newNodeName);
 		String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
-		String parent = Utils.parentUri(uri);
+        checkOperation(uri, DmtAcl.REPLACE, DmtMetaNode.CMD_REPLACE);
+
+        String parent = Utils.parentUri(uri);
 		if (parent == null)
 			throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
 					"Cannot rename root node.");
-		DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
-		if (metaNode != null && metaNode.getScope() == DmtMetaNode.PERMANENT)
-			throw new DmtException(uri, DmtException.METADATA_MISMATCH,
-					"Cannot rename permanent node.");
+        
+        String newName = Utils.validateAndNormalizeNodeName(newNodeName);
 		String newUri = Utils.createAbsoluteUri(parent, newName);
 		checkNode(newUri, SHOULD_NOT_EXIST);
-		checkOperation(uri, DmtAcl.REPLACE, DmtMetaNode.CMD_REPLACE);
-
 		checkNewNode(newUri);
-
+        
+		DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
+        DmtMetaNode newMetaNode = getMetaNodeNoCheck(newUri);
+        
+		if (metaNode != null) {
+		    if(metaNode.getScope() == DmtMetaNode.PERMANENT)
+		        throw new DmtException(uri, DmtException.METADATA_MISMATCH,
+		                "Cannot rename permanent node.");
+		    
+		    int maxOcc = metaNode.getMaxOccurrence();
+        
+            // sanity check: all siblings of a node must either have a  
+            // cardinality of 1, or they must be part of the same multi-node 
+    		if(newMetaNode != null && maxOcc != newMetaNode.getMaxOccurrence())
+                throw new DmtException(uri, DmtException.COMMAND_FAILED,
+                        "Cannot rename node, illegal meta-data found (a " + 
+                        "member of a multi-node has a sibling with different " +
+                        "meta-data).");
+        
+            // if this is a multi-node (maxOcc > 1), renaming does not affect 
+            // the cardinality
+            if(maxOcc == 1 && !metaNode.isZeroOccurrenceAllowed())
+                throw new DmtException(uri, DmtException.METADATA_MISMATCH,
+                        "Metadata does not allow deleting last instance of " +
+                        "this node.");
+        }
+        
+		// the new node must be the same (leaf/interior) as the original
+		if(newMetaNode != null && newMetaNode.isLeaf() != isLeafNodeNoCheck(uri))
+		    throw new DmtException(newUri, DmtException.METADATA_MISMATCH,
+		            "The destination of the rename operation is " +
+                    (newMetaNode.isLeaf() ? "a leaf" : "an interior") + 
+                    " node according to the meta-data, which does not match " +
+                    "the source node.");
+        
         // for leaf nodes: since we are not passing a data object to the 
         // plugin, checking the value and mime-type against the new 
         // meta-data is the responsibility of the plugin itself
@@ -999,7 +1025,7 @@ public class DmtSessionImpl implements DmtSession {
         return getPlugin(uri, true);
 	}
     
-    // 'synchronized' is just indication, all entry points are synch. anyway
+    // 'synchronized' is just indication, all entry points are synch'd anyway
     private synchronized PluginWrapper getPlugin(String uri, boolean writable) 
             throws DmtException {
         Plugin plugin = dispatcher.getDataPlugin(uri);
@@ -1126,6 +1152,10 @@ public class DmtSessionImpl implements DmtSession {
         DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
         
         if(metaNode == null)
+            return;
+        
+        if(type == null) // default MIME type was requested
+            // TODO maybe check that meta-data defines at least one MIME type
             return;
         
         String[] validMimeTypes = metaNode.getMimeTypes();
