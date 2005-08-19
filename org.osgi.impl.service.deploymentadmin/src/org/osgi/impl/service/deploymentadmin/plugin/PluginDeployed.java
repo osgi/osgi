@@ -36,6 +36,7 @@ import java.util.Set;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.deploymentadmin.BundleEntry;
+import org.osgi.impl.service.deploymentadmin.BundleUtil;
 import org.osgi.impl.service.deploymentadmin.CaseInsensitiveMap;
 import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
@@ -219,6 +220,13 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
         if (!bundleSet.contains(bundleId))
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
     }
+    
+    private void checkStandaloneSignerExistance(String[] signers, int n,
+            String nodeUri) throws DmtException {
+        int lim = signers.length - 1;
+        if (n < 0 || n > lim)
+            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
+    }
 
     private String createCertString(String[] sa) {
         StringBuffer sb = new StringBuffer();
@@ -299,7 +307,10 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
                 if (l == 10)
                     return true;
                 if ("Signers".equals(nodeUriArr[9])) {
-                    // TODO Signers
+                    String[] signers = getStandaloneBundleSigners(nodeUriArr[8]);
+                    int lim = signers.length - 1;
+                    int n = Integer.parseInt(nodeUriArr[10]);
+                    return n >= 0 && n <= lim;
                 } 
                 if ("ServiceComponent".equals(nodeUriArr[9])) {
                     // TODO
@@ -352,9 +363,14 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
 	                	return true;
 	            return false;
             }
-            if (l == 11) 
-                // TODO
+            if (l == 11) {
+                if ("Signers".equals(nodeUriArr[9])) {
+                    String[] signers = getStandaloneBundleSigners(nodeUriArr[8]);
+                    checkStandaloneSignerExistance(signers, 
+                            Integer.parseInt(nodeUriArr[10]), nodeUri);
+                }
                 return true;
+            }
         }
         
         throw new RuntimeException("Internal error");
@@ -416,7 +432,14 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
                     }
                 }
             }
-            // TODO
+            if (l == 11) {
+                if ("Signers".equals(nodeUriArr[9])) {
+                    String[] signers = getStandaloneBundleSigners(nodeUriArr[8]);
+                    int n = Integer.parseInt(nodeUriArr[10]);
+                    checkStandaloneSignerExistance(signers, n, nodeUri);
+                    return new DmtData(signers[n]);
+                }
+            }
         }
         
         throw new RuntimeException("Internal error");
@@ -486,8 +509,13 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
                     "ServiceComponent", "Location"};
             if (l == 10) {
                 if ("Signers".equals(nodeUriArr[9])) {
-                    // TODO Signers
-                    return new String[] {"TODO"};
+                    String[] signers = getStandaloneBundleSigners(nodeUriArr[8]);
+                    if (null == signers)
+                        return new String[] {};
+                    ArrayList al = new ArrayList();
+                    for (int i = 0; i < signers.length; i++)
+                        al.add(String.valueOf(i));
+                    return (String[]) al.toArray(new String[] {});
                 }
                 if ("ServiceComponent".equals(nodeUriArr[9])) {
                     // TODO
@@ -567,8 +595,13 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
             if (l == 10)
                 return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.AUTOMATIC,
                     "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
+            if (l == 11) {
+                if ("Signers".equals(nodeUriArr[9]))
+                    return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF, DmtMetaNode.AUTOMATIC,
+                        "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);        
+            }
         }
-        
+       
         throw new RuntimeException("Internal error");
     }
 
@@ -726,6 +759,13 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
         }
         ret.append(tmp);
         return ret.toString();
+    }
+    
+    private String[] getStandaloneBundleSigners(String bStr) {
+        Bundle b = pluginCtx.getBundleContext().getBundle(
+                Long.parseLong(bStr));
+        BundleUtil bu = new BundleUtil();
+        return bu.getDNChains(b);
     }
 
     public void nodeChanged(String nodeUri) throws DmtException {
