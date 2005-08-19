@@ -2,10 +2,9 @@ Manifest-Version: 1.0
 Bundle-Name: ${p}.tb3
 Bundle-SymbolicName: ${p}.tb3
 Bundle-Version: 4
-DynamicImport-Package: *
+$(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
-Service-Component: org/osgi/test/cases/component/tb3/impl/missingbindmethods.xml, 
-  org/osgi/test/cases/component/tb3/impl/serviceconsumerevent.xml
+Service-Component: org/osgi/test/cases/component/tb3/impl/serviceconsumerevent.xml
 
 
