@@ -25,12 +25,14 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.component.tb2;
-
-import org.osgi.test.cases.component.tbc.ComponentEnabler;
+package org.osgi.test.cases.component.tbc;
 
 /**
+ * Extended by ServiceConsumerLookup to break dependency of tbc on tb2.
+ * 
  * @version $Revision$
  */
-public interface ServiceConsumerLookup extends ComponentEnabler {
+public interface ComponentEnabler extends TBCService {
+
+  public void enableComponent(String name, boolean flag);
 }
