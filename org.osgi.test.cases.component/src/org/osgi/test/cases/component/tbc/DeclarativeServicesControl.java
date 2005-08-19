@@ -43,7 +43,6 @@ import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
-import org.osgi.test.cases.component.tb2.ServiceConsumerLookup;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -425,12 +424,6 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertNull(
 				"The BadService2 shouldn't be registered because component & service factories are incompatible",
 				ref);
-
-		ref = bc
-				.getServiceReference("org.osgi.test.cases.component.tb3.MissingBindMethods");
-		assertNull(
-				"The MissingBindMethods shouldn't be registered because doesn't have both bind & unbind methods",
-				ref);
 	}
 
   private Bundle getSCRBundle() {
@@ -654,7 +647,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				0, count);
 
 		// enable the all services (actually only dyn service)
-		ServiceConsumerLookup lookupService = (ServiceConsumerLookup) trackerConsumerLookup
+		ComponentEnabler lookupService = (ComponentEnabler) trackerConsumerLookup
 				.getService();
 		lookupService.enableComponent(null, true);
 		Thread.sleep(SLEEP); // let SCR complete
