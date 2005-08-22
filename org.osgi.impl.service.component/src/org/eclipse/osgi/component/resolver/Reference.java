@@ -24,14 +24,14 @@ import org.eclipse.osgi.component.model.ReferenceDescription;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.component.ComponentConstants;
 
 /**
  * 
- * Wrapper for a References Description includes eligible state
+ * Wrapper for a References Description includes satisfied state
  * 
  * @version $Revision$
  */
@@ -104,24 +104,29 @@ public class Reference {
 	}
 
 	/**
-	 * hasLegacyProviders
+	 * hasProviders
 	 * 
 	 * @param scrBundleContext
 	 */
-	public boolean hasLegacyProviders(BundleContext scrBundleContext) {
+	public boolean hasProvider(BundleContext context) {
+
+		//check if this bundle has the permission to GET the Service it Requires
+		Bundle bundle = context.getBundle();
+		if (!bundle.hasPermission(new ServicePermission(referenceDescription.getInterfacename(), ServicePermission.GET))) {
+			return false;
+		}
 
 		// Get all service references for this target filter
 		try {
 			ServiceReference[] serviceReferences = null;
-			serviceReferences = scrBundleContext.getServiceReferences(referenceDescription.getInterfacename(), "(&" + target + "(!(" + ComponentConstants.COMPONENT_ID + "=*)))");
+			serviceReferences = context.getServiceReferences(referenceDescription.getInterfacename(),target);
 			// if there is no service published that this Service ComponentReferences
 			if (serviceReferences != null) {
 				return true;
 			}
 			return false;
 		} catch (InvalidSyntaxException e) {
-			System.out.print("Filter " + target + " is invalid.  Error:");
-			System.out.println(e.getMessage());
+			//won't ever happen because filter is null;
 			return false;
 		}
 	}
@@ -140,17 +145,17 @@ public class Reference {
 
 	//	if the cardinality is "0..1" or "0..n" then this refernce is not required
 	public boolean isRequired() {
-		//we want to re-resolve if the component is static and already eligible
+		//we want to re-resolve if the component is static and already satisfied
 		//		if (policy.equals("static") && cd.isEligible())
 		//		return true;
 		return (cardinality.charAt(0) == '1');
 	}
 
-	public boolean bindNewReference(ServiceReference reference) {
+	public boolean dynamicBindReference(ServiceReference serviceReference) {
 		if ("static".equals(policy)) {
 			return false;
 		}
-		String[] serviceName = (String[]) (reference.getProperty("objectClass"));
+		String[] serviceName = (String[]) (serviceReference.getProperty("objectClass"));
 		if (!serviceName[0].equals(referenceDescription.getInterfacename())) {
 			return false;
 		}
@@ -162,16 +167,10 @@ public class Reference {
 
 	}
 
-	public boolean unBindReference(ServiceReference serviceReference) {
+	public boolean dynamicUnbindReference(ServiceReference serviceReference) {
 
 		// nothing dynamic to do if static
 		if ("static".equals(policy)) {
-			return false;
-		}
-
-		//first compare the service name and the interface name
-		String[] serviceName = (String[]) (serviceReference.getProperty("objectClass"));
-		if (!serviceName[0].equals(referenceDescription.getInterfacename())) {
 			return false;
 		}
 
@@ -191,6 +190,10 @@ public class Reference {
 	public void removeServiceReference(ServiceReference serviceReference) {
 		serviceReferences.remove(serviceReference);
 	}
+	
+	public void clearServiceReferences() {
+		serviceReferences.clear();
+	}
 
 	public List getServiceReferences() {
 		return serviceReferences;
@@ -200,42 +203,28 @@ public class Reference {
 		return serviceReferences.contains(serviceReference);
 	}
 
-	public boolean matchProperties(ComponentDescriptionProp cdp, BundleContext context) {
-		if (target == null) {
-			return true;
-		}
+	public boolean matchProperties(ComponentDescriptionProp cdp) {
 		Dictionary properties = cdp.getProperties();
 		Filter filter;
 		try {
-			filter = context.createFilter(target);
+			filter = FrameworkUtil.createFilter(target);
 			return filter.match(properties);
 		} catch (InvalidSyntaxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false; //TODO - is this correct?
+			return false;
 		}
 	}
 
 	/**
-	 * Check if this reference can be satisfied for a particular CDP and set of enabled CDPs
+	 * Check if this reference can be satisfied by a CDP in a set of 
+	 * enabled CDPs
 	 * 
-	 * @param cdp
-	 * @param bc the bundle context of the cdp
 	 * @param enabledCDPs the list of enabled cdps
-	 * @return true if the reference can be resolved
+	 * @return the providing CDP or null if none
 	 */
-	public boolean resolve(ComponentDescriptionProp cdp, BundleContext bc, List enabledCDPs) {
+	public ComponentDescriptionProp findProviderCDP(List enabledCDPs) {
 
-		//check if this bundle has the permission to GET the Service it Requires
-		Bundle bundle = bc.getBundle();
-		if (!bundle.hasPermission(new ServicePermission(referenceDescription.getInterfacename(), ServicePermission.GET))) {
-			return false;
-		}
-
-		if (this.hasLegacyProviders(bc))
-			return true; //we found an availible provider in the legacy services
-
-		// loop thru all components to match providers of services
+		// loop thru all enabled cdps to match providers of services
 		Iterator it = enabledCDPs.iterator();
 		while (it.hasNext()) {
 			ComponentDescriptionProp cdpRefLookup = (ComponentDescriptionProp) it.next();
@@ -243,19 +232,13 @@ public class Reference {
 
 			if (provideList.contains(this.getReferenceDescription().getInterfacename())) {
 				//check the target field
-				if (this.matchProperties(cdpRefLookup, bc)) {
-					cdp.setReferenceCDP(this, cdpRefLookup);
-					return true;
+				if (matchProperties(cdpRefLookup)) {
+					return cdpRefLookup;
 				}
 			}
 		}
 
-		//if the cardinality is "0..1" or "0..n" then this refernce is not required
-		//TODO - how do we place this reference in the ordering?
-		if (!this.isRequired())
-			return true;
-
-		return false;
+		return null;
 	}
 
 }
