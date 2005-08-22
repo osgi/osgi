@@ -1519,7 +1519,7 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 		while (entryPaths.hasMoreElements()) {
 			String entry = (String) entryPaths.nextElement();
 			int slashIndex = entry.lastIndexOf('/');
-			String fileName = slashIndex < 0 ? entry : entry.substring(slashIndex + 1);
+			String fileName = slashIndex < 0 || slashIndex == entry.length() - 1 ? entry : entry.substring(slashIndex + 1);
 			if (patternProps != null)
 				// set the filename to the current entry
 				patternProps.put("filename", fileName); //$NON-NLS-1$

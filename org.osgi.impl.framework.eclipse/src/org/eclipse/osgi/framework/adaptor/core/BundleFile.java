@@ -412,7 +412,7 @@ abstract public class BundleFile {
 					}
 				}
 			}
-			return vEntries.elements();
+			return vEntries.size() == 0 ? null : vEntries.elements();
 		}
 
 		public void close() throws IOException {
@@ -469,17 +469,11 @@ abstract public class BundleFile {
 		public Enumeration getEntryPaths(final String path) {
 			final java.io.File pathFile = new java.io.File(basefile, path);
 			if (!secureAction.exists(pathFile))
-				return new Enumeration() {
-					public boolean hasMoreElements() {
-						return false;
-					}
-
-					public Object nextElement() {
-						throw new NoSuchElementException();
-					}
-				};
+				return null;
 			if (secureAction.isDirectory(pathFile)) {
 				final String[] fileList = secureAction.list(pathFile);
+				if (fileList == null || fileList.length == 0)
+					return null;
 				final String dirPath = path.length() == 0 || path.charAt(path.length() - 1) == '/' ? path : path + '/';
 				return new Enumeration() {
 					int cur = 0;
