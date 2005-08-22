@@ -228,35 +228,32 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 				componentDescriptionProp = (ComponentDescriptionProp) it.next();
 				componentDescription = componentDescriptionProp.getComponentDescription();
 
-				//if no Services provided - dispose of instance immediately
-				if (componentDescription.getService() == null) {
-					buildDispose.disposeComponent(componentDescriptionProp);
-					//if ComponentFactory or if just Services
-				} else {
-					// if ComponentFactory 
-					if (componentDescription.getFactory() != null) {
-						buildDispose.disposeComponent(componentDescriptionProp);
-						ServiceRegistration reg = (ServiceRegistration) factories.get(componentDescriptionProp);
-						try {
-							reg.unregister();
-						} catch (IllegalStateException e) {
-							//Service is already unregistered
-							//do nothing
-						}
-					}
-					//unregister all services
-					ServiceRegistration serviceRegistration = (ServiceRegistration) registrations.get(componentDescriptionProp);
+				// if ComponentFactory 
+				if (componentDescription.getFactory() != null) {
+					ServiceRegistration reg = (ServiceRegistration) factories.get(componentDescriptionProp);
 					try {
-						if (serviceRegistration != null)
-							serviceRegistration.unregister();
+						reg.unregister();
 					} catch (IllegalStateException e) {
 						//Service is already unregistered
 						//do nothing
 					}
-
-					//remove from service registrations list
-					registrations.remove(componentDescriptionProp);
 				}
+
+				//unregister all services
+				ServiceRegistration serviceRegistration = (ServiceRegistration) registrations.get(componentDescriptionProp);
+				try {
+					if (serviceRegistration != null)
+						serviceRegistration.unregister();
+				} catch (IllegalStateException e) {
+					//Service is already unregistered
+					//do nothing
+				}
+
+				//remove from service registrations list
+				registrations.remove(componentDescriptionProp);
+
+				//dispose component
+				buildDispose.disposeComponent(componentDescriptionProp);
 			}
 		}
 
