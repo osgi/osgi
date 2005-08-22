@@ -26,15 +26,18 @@ import java.util.Iterator;
  * method of <code>DmtSession</code> that tries to close multiple plugins, and
  * has to report the exceptions of all failures.
  * <p>
+ * Each constructor has two variants, one accepts a <code>String</code> node
+ * URI, the other accepts a <code>String[]</code> node path.  The former is
+ * used by the Dmt Admin implementation, the latter by the plugins, who receive
+ * the node URI as an array of segment names.  The constructors are otherwise
+ * identical.
+ * <p>
  * Getter methods are provided to retrieve the values of the additional
- * parameters, and the <code>printStackTrace</code> methods are extended to
- * print the stack trace of all causing throwables as well.
+ * parameters, and the <code>printStackTrace(PrintWriter)</code> method is 
+ * extended to print the stack trace of all causing throwables as well.
  */
 public class DmtException extends Exception {
 	// TODO add static final serialVersionUID
-    // TODO clarify exception codes so that there is no overlap (or define precedence, see below)
-    // define which specific errors "eclipse" general errors, e.g.
-    // NODE_NOT_FOUND gives more information than METADATA_MISMATCH
 
     //----- Public constants -----//
     
@@ -285,10 +288,10 @@ public class DmtException extends Exception {
      * <code>message</code> parameters are optional. No originating exception
      * is specified.
      * 
-     * @param uri The node on which the failed DMT operation was issued, or
+     * @param uri the node on which the failed DMT operation was issued, or
      *        <code>null</code> if the operation is not associated with a node
-     * @param code The error code of the failure
-     * @param message The message associated with the exception, or
+     * @param code the error code of the failure
+     * @param message the message associated with the exception, or
      *        <code>null</code> if there is no error message
      */
     public DmtException(String uri, int code, String message) {
@@ -303,12 +306,12 @@ public class DmtException extends Exception {
      * <code>uri</code>, <code>message</code> and <code>cause</code>
      * parameters are optional.
      * 
-     * @param uri The node on which the failed DMT operation was issued, or
+     * @param uri the node on which the failed DMT operation was issued, or
      *        <code>null</code> if the operation is not associated with a node
-     * @param code The error code of the failure
-     * @param message The message associated with the exception, or
+     * @param code the error code of the failure
+     * @param message the message associated with the exception, or
      *        <code>null</code> if there is no error message
-     * @param cause The originating exception, or <code>null</code> if there
+     * @param cause the originating exception, or <code>null</code> if there
      *        is no originating exception
      */
     public DmtException(String uri, int code, String message,
@@ -331,14 +334,14 @@ public class DmtException extends Exception {
      * open plugins will be rolled back automatically, except if the fatal
      * exception was thrown during commit.
      * 
-     * @param uri The node on which the failed DMT operation was issued, or
+     * @param uri the node on which the failed DMT operation was issued, or
      *        <code>null</code> if the operation is not associated with a node
-     * @param code The error code of the failure
-     * @param message The message associated with the exception, or
+     * @param code the error code of the failure
+     * @param message the message associated with the exception, or
      *        <code>null</code> if there is no error message
-     * @param causes The list of originating exceptions, or empty list or
+     * @param causes the list of originating exceptions, or empty list or
      *        <code>null</code> if there are no originating exceptions
-     * @param fatal Whether the exception is fatal
+     * @param fatal whether the exception is fatal
      */
     public DmtException(String uri, int code, String message,
                         Vector causes, boolean fatal) {
@@ -350,19 +353,56 @@ public class DmtException extends Exception {
     
     /**
      * Create an instance of the exception, specifying the target node as an
+     * array of path segments.  This method behaves in exactly the same way as
+     * if the path was given as a URI string.
+     * 
+     * @param path the path of the node on which the failed DMT operation was
+     *        issued, or <code>null</code> if the operation is not associated
+     *        with a node
+     * @param code the error code of the failure
+     * @param message the message associated with the exception, or
+     *        <code>null</code> if there is no error message
+     * @see #DmtException(String, int, String)
+     */
+    public DmtException(String[] path, int code, String message) {
+        this(pathToUri(path), code, message);
+    }
+
+    /**
+     * Create an instance of the exception, specifying the target node as an
+     * array of path segments, and specifying the cause exception.  This method 
+     * behaves in exactly the same way as if the path was given as a URI string.
+     * 
+     * @param path the path of the node on which the failed DMT operation was
+     *        issued, or <code>null</code> if the operation is not associated
+     *        with a node
+     * @param code the error code of the failure
+     * @param message the message associated with the exception, or
+     *        <code>null</code> if there is no error message
+     * @param cause the originating exception, or <code>null</code> if there
+     *        is no originating exception
+     * @see #DmtException(String, int, String, Throwable)
+     */
+    public DmtException(String[] path, int code, String message,
+                        Throwable cause) {
+        this(pathToUri(path), code, message, cause);
+    }
+
+    /**
+     * Create an instance of the exception, specifying the target node as an
      * array of path segments, the list of cause exceptions, and whether the
      * exception is a fatal one.  This method behaves in exactly the same way
      * as if the path was given as a URI string.
      * 
-     * @param path The path of the node on which the failed DMT operation was
+     * @param path the path of the node on which the failed DMT operation was
      *        issued, or <code>null</code> if the operation is not associated
      *        with a node
-     * @param code The error code of the failure
-     * @param message The message associated with the exception, or
+     * @param code the error code of the failure
+     * @param message the message associated with the exception, or
      *        <code>null</code> if there is no error message
-     * @param causes The list of originating exceptions, or empty list or
+     * @param causes the list of originating exceptions, or empty list or
      *        <code>null</code> if there are no originating exceptions
-     * @param fatal Whether the exception is fatal
+     * @param fatal whether the exception is fatal
      * @see #DmtException(String, int, String, Vector, boolean)
      */
     public DmtException(String[] path, int code, String message,
