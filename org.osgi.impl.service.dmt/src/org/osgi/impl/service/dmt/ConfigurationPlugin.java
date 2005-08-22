@@ -698,6 +698,8 @@ class Service {
 		System.out.println("Commit (intermediate=" + intermediate
 				+ ", lockMode=" + lockMode + ")");
         
+        // TODO check that invalid error codes are not thrown (e.g. NODE_NOT_FOUND)
+        
 		String root = ConfigurationPluginActivator.PLUGIN_ROOT + '/';
 		String pid;
         // TODO handle case when deletedPids or services is not empty because of an error
