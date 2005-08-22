@@ -38,8 +38,6 @@ import org.osgi.util.tracker.ServiceTracker;
 // Needed for meta-data name and value pattern matching
 //import java.util.regex.Pattern;
 
-// TODO throw IllegalStateException if operation is not allowed in the current session lock type
-
 // OPTIMIZE node handling (e.g. retrieve plugin from dispatcher only once per API call), maybe with new URI class
 // OPTIMIZE only retrieve meta-data once per API call
 // OPTIMIZE only call commit/rollback for plugins that were actually modified since the last transaction boundary
@@ -227,13 +225,12 @@ public class DmtSessionImpl implements DmtSession {
     public synchronized void commit() throws DmtException {
         checkSession();
 
+        if (lockMode != LOCK_TYPE_ATOMIC)
+            throw new IllegalStateException("Commit can only be requested for atomic sessions.");
+        
         // changed back to OPEN if this method finishes without error
         state = STATE_INVALID; 
 
-        if (lockMode != LOCK_TYPE_ATOMIC)
-            throw new DmtException(null, DmtException.FEATURE_NOT_SUPPORTED,
-                    "Commit can only be requested for atomic sessions.");
-        
         commitPlugins();
 
         savedAcls = (Hashtable) acls.clone();
@@ -275,13 +272,12 @@ public class DmtSessionImpl implements DmtSession {
     public synchronized void rollback() throws DmtException {
 		checkSession();
 
+		if (lockMode != LOCK_TYPE_ATOMIC)
+			throw new IllegalStateException("Rollback can only be requested for atomic sessions.");
+        
         // changed back to OPEN if this method finishes without error
         state = STATE_INVALID; 
 
-		if (lockMode != LOCK_TYPE_ATOMIC)
-			throw new DmtException(null, DmtException.FEATURE_NOT_SUPPORTED,
-					"Rollback can only be requested for atomic sessions.");
-        
         acls = (Hashtable) savedAcls.clone();
 		
         rollbackPlugins();
@@ -388,7 +384,7 @@ public class DmtSessionImpl implements DmtSession {
 	// REPLACE property op
 	public synchronized void setNodeAcl(String nodeUri, DmtAcl acl) 
             throws DmtException {
-		checkSession();
+		checkWriteSession();
 		String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
         
 		// check for REPLACE permission:
@@ -496,7 +492,7 @@ public class DmtSessionImpl implements DmtSession {
 	// REPLACE property op
     public synchronized void setNodeTitle(String nodeUri, String title)
             throws DmtException {
-        checkSession();
+        checkWriteSession();
         internalSetNodeTitle(nodeUri, title, true); // send event if successful
     }
     
@@ -532,7 +528,7 @@ public class DmtSessionImpl implements DmtSession {
     
     private void commonSetNodeValue(String nodeUri, DmtData data)
             throws DmtException {
-        checkSession();
+        checkWriteSession();
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_LEAF);
         checkOperation(uri, DmtAcl.REPLACE, DmtMetaNode.CMD_REPLACE);
         checkValue(uri, data);
@@ -552,7 +548,7 @@ public class DmtSessionImpl implements DmtSession {
     // SyncML DMTND 7.5 (p16) Type: only the Get command is applicable!
     public synchronized void setNodeType(String nodeUri, String type)
             throws DmtException {
-        checkSession();
+        checkWriteSession();
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
         checkOperation(uri, DmtAcl.REPLACE, DmtMetaNode.CMD_REPLACE);
         
@@ -573,7 +569,7 @@ public class DmtSessionImpl implements DmtSession {
     }
 
 	public synchronized void deleteNode(String nodeUri) throws DmtException {
-		checkSession();
+		checkWriteSession();
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
 		checkOperation(uri, DmtAcl.DELETE, DmtMetaNode.CMD_DELETE);
         
@@ -616,7 +612,7 @@ public class DmtSessionImpl implements DmtSession {
     // also used by copy() to create interior nodes without triggering an event
     private void commonCreateInteriorNode(String nodeUri, String type,
             boolean sendEvent) throws DmtException {
-    	checkSession();
+    	checkWriteSession();
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_NOT_EXIST);
         String parent = Utils.parentUri(uri);
         if(parent == null)
@@ -669,7 +665,7 @@ public class DmtSessionImpl implements DmtSession {
     // also used by copy() to create leaf nodes without triggering an event
     private void commonCreateLeafNode(String nodeUri, DmtData value,
             String mimeType, boolean sendEvent) throws DmtException {
-        checkSession();
+        checkWriteSession();
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_NOT_EXIST);
         String parent = Utils.parentUri(uri);
         if(parent == null)
@@ -709,7 +705,7 @@ public class DmtSessionImpl implements DmtSession {
 	// part of the tree has been copied.
 	public synchronized void copy(String nodeUri, String newNodeUri, 
             boolean recursive) throws DmtException {
-		checkSession();
+		checkWriteSession();
         
 		String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
 		String newUri = makeAbsoluteUriAndCheck(newNodeUri, SHOULD_NOT_EXIST);
@@ -749,7 +745,7 @@ public class DmtSessionImpl implements DmtSession {
 
 	public synchronized void renameNode(String nodeUri, String newNodeName) 
             throws DmtException {
-		checkSession();
+		checkWriteSession();
 		String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
         checkOperation(uri, DmtAcl.REPLACE, DmtMetaNode.CMD_REPLACE);
 
@@ -845,6 +841,14 @@ public class DmtSessionImpl implements DmtSession {
         if(state != STATE_OPEN)
             throw new IllegalStateException(
                     "Session is not open, cannot perform DMT operations.");
+    }
+    
+    private void checkWriteSession() {
+        checkSession();
+        if(lockMode == LOCK_TYPE_SHARED)
+            throw new IllegalStateException(
+                    "Session is not open for writing, cannot perform " +
+                    "requested write operation.");
     }
     
     private void purgeEvents(String[] roots) {
