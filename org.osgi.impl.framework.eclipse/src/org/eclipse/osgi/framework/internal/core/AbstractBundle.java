@@ -1518,16 +1518,31 @@ public abstract class AbstractBundle implements Bundle, Comparable, KeyedElement
 			return;
 		while (entryPaths.hasMoreElements()) {
 			String entry = (String) entryPaths.nextElement();
-			int slashIndex = entry.lastIndexOf('/');
-			String fileName = slashIndex < 0 || slashIndex == entry.length() - 1 ? entry : entry.substring(slashIndex + 1);
-			if (patternProps != null)
+			int lastSlash = entry.lastIndexOf('/');
+			if (patternProps != null) {
+				int secondToLastSlash = entry.lastIndexOf('/', lastSlash - 1);
+				int fileStart;
+				int fileEnd = entry.length();
+				if (lastSlash < 0)
+					fileStart = 0;
+				else if (lastSlash != entry.length() - 1)
+					fileStart = lastSlash + 1;
+				else { 
+					fileEnd = lastSlash; // leave the lastSlash out
+					if (secondToLastSlash < 0)
+						fileStart = 0;
+					else
+						fileStart = secondToLastSlash + 1;
+				}
+				String fileName = entry.substring(fileStart, fileEnd);
 				// set the filename to the current entry
 				patternProps.put("filename", fileName); //$NON-NLS-1$
+			}
 			// prevent duplicates and match on the patterFilter
 			if (!pathList.contains(entry) && (patternFilter == null || patternFilter.matchCase(patternProps)))
 				pathList.add(entry);
 			// rescurse only into entries that are directories
-			if (recurse && !entry.equals(path) && entry.length() > 0 && slashIndex == (entry.length() - 1))
+			if (recurse && !entry.equals(path) && entry.length() > 0 && lastSlash == (entry.length() - 1))
 				findLocalEntryPaths(entry, patternFilter, patternProps, recurse, pathList);
 		}
 		return;
