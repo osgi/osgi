@@ -30,8 +30,7 @@ public class ComponentDescription {
 	protected boolean autoenable;
 	protected boolean immediate;
 	protected boolean enabled;
-	protected boolean eligible;
-	protected boolean reactivate;
+	protected boolean satisfied;
 	protected boolean valid;
 	protected String factory;
 
@@ -49,7 +48,6 @@ public class ComponentDescription {
 		this.bundle = bundle;
 		autoenable = true;
 		immediate = false;
-		reactivate = false;
 		properties = new ArrayList();
 		references = new ArrayList();
 		componentDescriptionProps = new ArrayList();
@@ -82,7 +80,7 @@ public class ComponentDescription {
 	public void setImmediate(boolean immediate) {
 		this.immediate = immediate;
 	}
-	
+
 	/**
 	 * @return Returns the bundle.
 	 */
@@ -195,17 +193,17 @@ public class ComponentDescription {
 	}
 
 	/**
-	 * @return Returns true if eligible
+	 * @return Returns true if satisfied
 	 */
-	synchronized public boolean isEligible() {
-		return eligible;
+	synchronized public boolean isSatisfied() {
+		return satisfied;
 	}
 
 	/**
-	 * @param eligible set the value
+	 * @param satisfied set the value
 	 */
-	synchronized public void setEligible(boolean eligible) {
-		this.eligible = eligible;
+	synchronized public void setSatisfied(boolean eligible) {
+		this.satisfied = eligible;
 	}
 
 	/**
@@ -222,20 +220,6 @@ public class ComponentDescription {
 		this.valid = valid;
 	}
 
-	/**
-	 * @param reactivate
-	 */
-	public void setReactivate(boolean reactivate) {
-		this.reactivate = reactivate;
-	}
-
-	/**
-	 * @return Returns true if needed to be reactivated
-	 */
-	public boolean isReactivate() {
-		return reactivate;
-	}
-
 	public void addComponentDescriptionProp(ComponentDescriptionProp cdp) {
 		componentDescriptionProps.add(cdp);
 	}
@@ -244,7 +228,7 @@ public class ComponentDescription {
 		return componentDescriptionProps;
 	}
 
-	public void removeComponentDescriptionProp(ComponentDescriptionProp cdp) {
-		componentDescriptionProps.remove(cdp);
+	public void clearComponentDescriptionProps() {
+		componentDescriptionProps.clear();
 	}
 }
