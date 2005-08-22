@@ -88,31 +88,34 @@ abstract class RegisterComponentService {
 			}
 		}
 
-		//	register the service using a ServiceFactory
+		// register the service using a ServiceFactory
 		ServiceRegistration serviceRegistration = null;
 		if (factory) {
-			//	register the service using a ServiceFactory
+			// register the service using a ServiceFactory
 			serviceRegistration = bundleContext.registerService(interfaces, new ServiceFactory() {
-				/* map of instace:componentInstance*/
+				// map of instance:componentInstance
 				Hashtable instances;
 
-				//ServiceFactory.getService method.
+				// ServiceFactory.getService method.
 				public Object getService(Bundle bundle, ServiceRegistration registration) {
 					if (DEBUG)
 						System.out.println("RegisterComponentServiceFactory:getService: registration:" + registration);
+					
 					ComponentInstance componentInstance = null;
 					Object instance = null;
 					try {
 						componentInstance = instanceProcess.buildDispose.build(bundleContext, bundle, component, null);
 						instance = componentInstance.getInstance();
 					} catch (ComponentException e) {
-						Log.log(1, "[SCR] Error attempting to register a Service Factory.", e);
-					}
+						Log.log(1, "[SCR] Error attempting to register a Service Factory.", e);						
+					} 
 					
 					if (componentInstance != null && instance != null) {
 						//save so we can dispose later
-						if (instances == null) {
-							instances = new Hashtable();
+						synchronized(this) {
+							if (instances == null) {
+								instances = new Hashtable();
+							}
 						}
 						instances.put(instance,componentInstance);
 					}
@@ -123,11 +126,12 @@ abstract class RegisterComponentService {
 				public void ungetService(Bundle bundle, ServiceRegistration registration, Object service) {
 					if (DEBUG)
 						System.out.println("RegisterComponentServiceFactory:ungetService: registration = " + registration);
-					
 					((ComponentInstance)instances.get(service)).dispose();
 					instances.remove(service);
-					if (instances.isEmpty()) {
-						instances = null;
+					synchronized(this) {
+						if (instances.isEmpty()) {
+							instances = null;
+						}
 					}
 				}
 			}, properties);
@@ -144,28 +148,35 @@ abstract class RegisterComponentService {
 				public Object getService(Bundle bundle, ServiceRegistration registration) {
 					if (DEBUG)
 						System.out.println("RegisterComponentService: getService: registration = " + registration);
-					if (component.getInstances().isEmpty()) {
-						try {
-							instance = instanceProcess.buildDispose.build(bundleContext, null, component, null);
-						} catch (ComponentException e) {
-							Log.log(1, "[SCR] Error attempting to register a Service.", e);				
-							return null;
+					
+					synchronized(this) {
+						
+						if (component.getInstances().isEmpty()) {
+							try {
+								instance = instanceProcess.buildDispose.build(bundleContext, null, component, null);
+							} catch (ComponentException e) {
+								Log.log(1, "[SCR] Error attempting to register Service.", e);
+								return null;
+							}		
 						}
+						references++;
 					}
-					references++;
-					return ((ComponentInstance) component.getInstances().get(0)).getInstance();
+					return ((ComponentInstance)component.getInstances().get(0)).getInstance();
 				}
 
 				// ServiceFactory.ungetService method.
 				public void ungetService(Bundle bundle, ServiceRegistration registration, Object service) {
 					if (DEBUG)
 						System.out.println("RegisterComponentService: ungetService: registration = " + registration);
-					references--;
-					if (references == 0 && instance != null) {
-						//if instance != null then we created it
-						//dispose instance
-						instance.dispose();
-						instance = null;
+					
+					synchronized(this) {
+						references--;
+						if (references < 1 && instance != null) {
+							//if instance != null then we created it
+							//dispose instance						
+							instance.dispose();
+							instance = null;
+						}
 					}
 				}
 			}, properties);
