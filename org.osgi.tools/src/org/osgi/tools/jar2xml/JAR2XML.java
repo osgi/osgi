@@ -337,7 +337,7 @@ public class JAR2XML {
 		sb.append( mkShort(type,clazz) );
 		for ( int i=0; i<dim; i++ )
 			sb.append("[]");
-		result.addAttribute( "toString", sb.toString().replace('/','.') );
+		result.addAttribute( "toString", sb.toString().replace('/','.').replace('$','.') );
 		
 		s.addContent( result );
 	}
