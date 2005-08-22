@@ -17,6 +17,7 @@ package org.eclipse.osgi.impl.service.component;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -28,9 +29,9 @@ import org.eclipse.osgi.component.model.ComponentDescriptionProp;
 import org.eclipse.osgi.component.resolver.Reference;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.ComponentException;
 import org.osgi.service.component.ComponentInstance;
@@ -123,7 +124,7 @@ public class ComponentContextImpl implements ComponentContext {
 		          new PrivilegedAction() {
 		            public Object run() {
 		                
-		                Dictionary props = ((ComponentInstanceImpl) componentInstance).getProperties();
+		                Dictionary props = componentInstance.getProperties();
 
 		        		if (props != null) {
 		        			Dictionary properties = cdp.getProperties();
@@ -270,6 +271,10 @@ public class ComponentContextImpl implements ComponentContext {
 							thisReference.getReferenceDescription().getInterfacename(),
 							thisReference.getTarget()
 							);
+				
+				//sort by service ranking and service id
+				Arrays.sort(serviceReferences);
+				
 				List serviceObjects = new ArrayList(serviceReferences.length);
 				for (int counter = 0;counter < serviceReferences.length;counter++) {
 					Object serviceObject = main.resolver.instanceProcess.buildDispose.getService(
