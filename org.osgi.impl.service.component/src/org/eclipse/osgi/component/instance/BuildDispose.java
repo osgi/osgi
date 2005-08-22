@@ -14,7 +14,7 @@ package org.eclipse.osgi.component.instance;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -58,7 +58,6 @@ public class BuildDispose implements WorkDispatcher {
 	protected long componentid;
 
 	private int stackCount;
-	private List delayedActivateCDPs;
 	private Hashtable delayedBindTable;
 	private static final int BUILD = 1;
 
@@ -76,6 +75,7 @@ public class BuildDispose implements WorkDispatcher {
 		invoke = new InvokeMethod();
 		this.main = main;
 		stackCount = 0;
+		delayedBindTable = new Hashtable();
 	}
 
 	/**
@@ -120,34 +120,26 @@ public class BuildDispose implements WorkDispatcher {
 				activate(cdp, usingBundle, componentInstance);
 
 				cdp.addInstance(componentInstance);
-
+				
 			} catch (ComponentException e) {
 				Log.log(1, "[SCR] Error attempting to build component ", e);
 				throw e;
-
+				
 			} finally {
 
 				stackCount--;
 
 			}
 
-			if (stackCount == 0 && delayedBindTable != null) {
-				//put delayed activates and dynamic binds on the queue.
+			if (stackCount == 0 && !delayedBindTable.isEmpty()) {
+				//put delayed dynamic binds on the queue.
 				//(this is used to handle circularity)
-				Iterator cdps = delayedActivateCDPs.iterator();
-				while (cdps.hasNext()) {
-					ComponentDescriptionProp cdpnext = (ComponentDescriptionProp) cdps.next();
-					if (cdpnext.getInstances().isEmpty()) {
-						main.resolver.instanceProcess.workQueue.enqueueWork(this, BUILD, cdpnext);
-					}
-				}
-				main.resolver.instanceProcess.workQueue.enqueueWork(main.resolver, Resolver.DYNAMICBIND, delayedBindTable);
-				delayedActivateCDPs = null;
-				delayedBindTable = null;
+				main.resolver.instanceProcess.workQueue.enqueueWork(main.resolver, Resolver.DYNAMICBIND, delayedBindTable.clone());
+				delayedBindTable.clear();
 			}
 
 			return componentInstance;
-		}
+		} //end synchronized(this)
 	}
 
 	/** dispose of the Component Instances
@@ -162,11 +154,15 @@ public class BuildDispose implements WorkDispatcher {
 			if (instances != null) {
 				Iterator it = instances.iterator();
 				while (it.hasNext()) {
-					disposeComponentInstance(cdp, (ComponentInstanceImpl) it.next());
+					disposeComponentInstance(cdp,(ComponentInstanceImpl) it.next());
 				}
 			}
 			cdp.removeAllInstances();
-			cdp.clearReferenceCDPs();
+			Iterator it = cdp.getReferences().iterator();
+			while (it.hasNext()) {
+				Reference reference = (Reference)it.next();
+				reference.clearServiceReferences();
+			}
 			cdp.clearDelayActivateCDPNames();
 		}
 	}
@@ -180,14 +176,14 @@ public class BuildDispose implements WorkDispatcher {
 
 		synchronized (this) {
 			ComponentInstanceImpl componentInstance = (ComponentInstanceImpl) ci;
-			deactivate(cdp, componentInstance.getInstance());
+			deactivate(componentInstance);
 			unbind(cdp, componentInstance);
-
+			
 			//unget any remaining service references
 			Enumeration serviceReferences = componentInstance.getServiceReferences();
-			while (serviceReferences.hasMoreElements()) {
-				cdp.getComponentContext().getBundleContext().ungetService((ServiceReference) serviceReferences.nextElement());
-
+			while(serviceReferences.hasMoreElements()) {
+				componentInstance.getComponentContext().getBundleContext().ungetService((ServiceReference)serviceReferences.nextElement());
+				
 			}
 			componentInstance = null;
 		}
@@ -199,7 +195,7 @@ public class BuildDispose implements WorkDispatcher {
 	 * @param componentDescription
 	 * @return Object instance
 	 */
-
+	
 	private Object createInstance(ComponentDescription componentDescription) throws ComponentException {
 		Object instance = null;
 		String classname = componentDescription.getImplementation().getClassname();
@@ -207,15 +203,15 @@ public class BuildDispose implements WorkDispatcher {
 			instance = ((componentDescription.getBundle()).loadClass(classname)).newInstance();
 		} catch (IllegalAccessException e) {
 			Log.log(1, "[SCR] IllegalAccessException attempting to create instance ", e);
-			throw new ComponentException(e.getMessage());
+			throw new ComponentException(e.getMessage()); 
 		} catch (ClassNotFoundException e) {
 			Log.log(1, "[SCR] ClassNotFoundException attempting to create instance. ", e);
-			throw new ComponentException(e.getMessage());
+			throw new ComponentException(e.getMessage()); 
 		} catch (InstantiationException e) {
 			Log.log(1, "[SCR] InstantiationException attempting to create instance. ", e);
-			throw new ComponentException(e.getMessage());
+			throw new ComponentException(e.getMessage()); 
 		}
-
+		
 		return instance;
 	}
 
@@ -267,9 +263,9 @@ public class BuildDispose implements WorkDispatcher {
 			try {
 				//get All Registered services using this target filter
 				serviceReferences = bundleContext.getServiceReferences(reference.getReferenceDescription().getInterfacename(), reference.getReferenceDescription().getTarget());
-
-				//If a bind method throws an exception, SCR must log an error message containing the exception with the Log Service but 
-				//the activation of the component configuration does not fail.
+				
+			//If a bind method throws an exception, SCR must log an error message containing the exception with the Log Service but 
+			//the activation of the component configuration does not fail.
 			} catch (InvalidSyntaxException e) {
 				Log.log(1, "[SCR] InvalidSyntaxException attempting to bindReference ", e);
 			}
@@ -282,6 +278,9 @@ public class BuildDispose implements WorkDispatcher {
 				return;
 			}
 
+			//sort by service ranking and service id
+			Arrays.sort(serviceReferences);
+			
 			//we only want to bind one service
 			if ((cardinality.equals("1..1")) || (cardinality.equals("0..1"))) {
 				bindServiceToReference(cdp, reference, serviceReferences[0], componentInstance, bundleContext);
@@ -296,12 +295,12 @@ public class BuildDispose implements WorkDispatcher {
 	}
 
 	//helper method for bindReference
-	private void bindServiceToReference(ComponentDescriptionProp cdp, Reference reference, ServiceReference serviceReference, ComponentInstanceImpl componentInstance, BundleContext bundleContext) {
+	private void bindServiceToReference(ComponentDescriptionProp cdp, Reference reference, ServiceReference serviceReference, ComponentInstanceImpl componentInstance, BundleContext bundleContext) {	
 		//	make sure we have not already bound this object
 		if (!reference.bindedToServiceReference(serviceReference)) {
 
 			try {
-
+	
 				Method method = invoke.findMethod(reference.getReferenceDescription().getBind(), componentInstance.getInstance());
 				Object param = null;
 				if (method.getParameterTypes()[0].equals(ServiceReference.class)) {
@@ -309,7 +308,7 @@ public class BuildDispose implements WorkDispatcher {
 				} else {
 					param = getService(cdp, reference, bundleContext, serviceReference);
 				}
-
+	
 				if (param != null && reference.getReferenceDescription().getBind() != null) {
 					invoke.bindComponent(method, componentInstance.getInstance(), param);
 					//if this succeeds, save the servicereference and service object so we can call unbind later
@@ -320,66 +319,90 @@ public class BuildDispose implements WorkDispatcher {
 					}
 
 				}
-				//If a bind method throws an exception, SCR must log an error message containing 
-				//the exception with the Log Service but the activation of the component configuration does not fail.
+			//If a bind method throws an exception, SCR must log an error message containing 
+			//the exception with the Log Service but the activation of the component configuration does not fail.
 			} catch (IllegalAccessException e) {
 				Log.log(1, "[SCR] IllegalAccessException attempting to bind Service to Reference ", e);
 			} catch (InvocationTargetException e) {
 				Log.log(1, "[SCR] InvocationTargetException attempting to bind Service to Reference ", e);
-
+			
 			}
 		}
 	}
 
 	public Object getService(ComponentDescriptionProp consumerCDP, Reference reference, BundleContext bundleContext, ServiceReference serviceReference) {
-
-		//if we are building a component and 
-		//if service is provided by a Service Component that is not active yet,
-		//check to see if we would be causing a circularity
-		String producerComponentName = (String) serviceReference.getProperty(ComponentConstants.COMPONENT_NAME);
-		if (stackCount != 0 && producerComponentName != null && consumerCDP.getDelayActivateCDPNames().contains(producerComponentName)) {
-
-			//find producer cdp
-			ComponentDescriptionProp producerCDP = null;
-			Iterator enabledCDPs = main.resolver.componentDescriptionPropsEnabled.iterator();
-			while (enabledCDPs.hasNext()) {
-				ComponentDescriptionProp cdp = (ComponentDescriptionProp) enabledCDPs.next();
-				if (producerComponentName.equals(cdp.getComponentDescription().getName())) {
-					//found the producer cdp
-					producerCDP = cdp;
-					break;
-				}
-			}
-
-			//check if producerCDP has not been activated already
-			if (producerCDP != null && producerCDP.getInstances().isEmpty()) {
-
-				//producer cdp is not active - do not activate it because that would cause circularity
-
-				//if reference has bind method and policy=dynamic, activate later and bind
-				if (reference.getReferenceDescription().getBind() != null && reference.getPolicy().equalsIgnoreCase("dynamic")) {
-					//delay bind by putting on the queue later
-					if (delayedBindTable == null) {
-						delayedActivateCDPs = new ArrayList();
-						delayedBindTable = new Hashtable();
-					}
-					if (!delayedActivateCDPs.contains(producerCDP)) {
-						delayedActivateCDPs.add(producerCDP);
-					}
-					delayedBindTable.put(reference, consumerCDP);
-				}
-
-				//can't get service now because of circularity - we will bind later
-				//(dynamically) if the reference had a bind method and was dynamic
-				return null;
-
-			} //end if producerCDP was not already active
-
+		//check if getting this service would cause a circularity
+		if (couldCauseCycle(consumerCDP,reference,bundleContext,serviceReference)) {
+			return null;
 		}
-
+		
 		//getting this service will not cause a circularity
 		return bundleContext.getService(serviceReference);
 
+	}
+
+	private boolean couldCauseCycle(ComponentDescriptionProp consumerCDP, Reference reference, BundleContext bundleContext, ServiceReference serviceReference) {
+		//if we are not building a component, no cycles possible
+		if (stackCount == 0) {
+			return false;
+		}
+		
+		String producerComponentName = (String) serviceReference.getProperty(ComponentConstants.COMPONENT_NAME);
+		
+		//if producer is not a service component, no cycles possible
+		if (producerComponentName == null) {
+			return false;
+		}
+		
+		//check if producer is on our "do not activate" list
+		if (!consumerCDP.getDelayActivateCDPNames().contains(producerComponentName)) {
+			return false;
+		}
+		
+		//find producer cdp
+		ComponentDescriptionProp producerCDP = null;
+		Iterator it = main.resolver.satisfiedCDPs.iterator();
+		while (it.hasNext()) {
+			ComponentDescriptionProp cdp = (ComponentDescriptionProp) it.next();
+			if (producerComponentName.equals(cdp.getComponentDescription().getName())) {
+				//found the producer cdp
+				producerCDP = cdp;
+				break;
+			}
+		}
+
+		if (producerCDP.getComponentDescription().getService().isServicefactory()) {
+			//producer is a service factory - there is a new instance for every
+			//bundle, so see if one of the instances is used by this bundle
+			it = producerCDP.getInstances().iterator();
+			Bundle bundle = bundleContext.getBundle();
+			while(it.hasNext()) {
+				ComponentInstanceImpl producerComponentInstance = (ComponentInstanceImpl)it.next();
+				if (producerComponentInstance.getComponentContext().getUsingBundle().equals(bundle)) {
+					//a producer already exists, so no cycle possible
+					return false;
+				}
+			}
+		} else {
+			//producer is not a service factory - there will only ever be one
+			//instance - if it exists then no cycle possible
+			if (!producerCDP.getInstances().isEmpty()) {
+				return false;
+			}
+		}
+		
+		//producer cdp is not active - do not activate it because that could
+		//cause circularity
+
+		//if reference has bind method and policy=dynamic, activate later and bind
+		if (reference.getReferenceDescription().getBind() != null && reference.getPolicy().equalsIgnoreCase("dynamic")) {
+			//delay bind by putting on the queue later
+			delayedBindTable.put(reference, consumerCDP);
+		}
+
+		//can't get service now because of circularity - we will bind later
+		//(dynamically) if the reference had a bind method and was dynamic
+		return true;
 	}
 
 	/**
@@ -395,10 +418,7 @@ public class BuildDispose implements WorkDispatcher {
 		//unbind in reverse order
 		ListIterator itr = references.listIterator(references.size());
 		while (itr.hasPrevious()) {
-			Reference reference = (Reference) itr.previous();
-			if (reference.getReferenceDescription().getUnbind() != null) {
-				unbindReference(reference, componentInstance);
-			}
+			unbindReference((Reference) itr.previous(), componentInstance);
 		}
 	}
 
@@ -425,7 +445,7 @@ public class BuildDispose implements WorkDispatcher {
 	 * @param componentInstance 
 	 * @param serviceReference
 	 */
-
+	
 	void unbindDynamicReference(ComponentDescriptionProp cdp, Reference reference, ComponentInstanceImpl componentInstance, ServiceReference serviceReference) {
 		synchronized (this) {
 			//rebind if we can
@@ -441,13 +461,23 @@ public class BuildDispose implements WorkDispatcher {
 	private void unbindServiceFromReference(Reference reference, ComponentInstanceImpl componentInstance, ServiceReference serviceReference) {
 		String unbind = reference.getReferenceDescription().getUnbind();
 		Object serviceObject = componentInstance.getServiceObject(serviceReference);
-		Object param = null;
 		if (unbind != null) {
+			Object param = null;
+			
 			Method method = invoke.findMethod(unbind, componentInstance.getInstance());
-
 			if (method.getParameterTypes()[0].equals(ServiceReference.class)) {
 				param = serviceReference;
-			} else {
+			} else {	
+				//if we don't have a service object, create one
+				if (serviceObject == null) {
+					serviceObject = getService(
+							componentInstance.component,
+							reference,
+							main.framework.getBundleContext(
+									componentInstance.getComponentContext().getBundleContext().getBundle()
+									),
+							serviceReference);
+				}
 				param = serviceObject;
 			}
 			// If an unbind method throws an exception, SCR must log an error message 
@@ -455,14 +485,14 @@ public class BuildDispose implements WorkDispatcher {
 			try {
 				invoke.unbindComponent(method, componentInstance.getInstance(), param);
 			} catch (InvocationTargetException e) {
-				Log.log(1, "[SCR] InvocationTargetException attempting to unbind reference.", e);
+				Log.log(1, "[SCR] InvocationTargetException attempting to unbind reference." , e);
 			} catch (IllegalAccessException e) {
 				Log.log(1, "[SCR] IllegalAccessException attempting to unbind reference.", e);
 			}
 		}
 		//release service object
 		if (serviceObject != null) {
-			componentInstance.component.getComponentContext().getBundleContext().ungetService(serviceReference);
+			componentInstance.getComponentContext().getBundleContext().ungetService(serviceReference);
 		}
 		componentInstance.removeServiceReference(serviceReference);
 	}
@@ -477,7 +507,7 @@ public class BuildDispose implements WorkDispatcher {
 	private void activate(ComponentDescriptionProp cdp, Bundle usingBundle, ComponentInstanceImpl componentInstance) throws ComponentException {
 
 		ComponentContext componentContext = createComponentContext(cdp, usingBundle, componentInstance);
-
+		
 		//If the activate method throws an exception, SCR must log an error message 
 		// containing the exception with the Log Service and the component configuration is not activated.
 		try {
@@ -497,18 +527,18 @@ public class BuildDispose implements WorkDispatcher {
 	 * @param cdp - ComponentDescriptionProperty object
 	 * @param instance 
 	 */
-	private void deactivate(ComponentDescriptionProp cdp, Object instance) {
+	private void deactivate(ComponentInstanceImpl componentInstance) {
 
 		// If the deactivate method throws an exception, SCR must log an error message 
 		// containing the exception with the Log Service and the component configuration will continue.
 		try {
-			invoke.deactivateComponent(instance, getComponentContext(cdp));
+			invoke.deactivateComponent(componentInstance.getInstance(), componentInstance.getComponentContext());
 		} catch (InvocationTargetException e) {
-			Log.log(1, "[SCR] InvocationTargetException attempting to deactivate component.", e);
+			Log.log(1, "[SCR] InvocationTargetException attempting to deactivate component." , e);
 		} catch (IllegalAccessException e) {
 			Log.log(1, "[SCR] IllegalAccessException attempting to deactivate component. ", e);
 		}
-
+		
 	}
 
 	/**
@@ -521,12 +551,8 @@ public class BuildDispose implements WorkDispatcher {
 	 */
 	private ComponentContext createComponentContext(ComponentDescriptionProp cdp, Bundle usingBundle, ComponentInstanceImpl componentInstance) {
 		ComponentContext context = new ComponentContextImpl(main, usingBundle, cdp, componentInstance);
-		cdp.setComponentContext(context);
+		componentInstance.setComponentContext(context);
 		return context;
-	}
-
-	private ComponentContext getComponentContext(ComponentDescriptionProp cdp) {
-		return cdp.getComponentContext();
 	}
 
 	/**
@@ -552,7 +578,8 @@ public class BuildDispose implements WorkDispatcher {
 				BundleContext bundleContext = main.framework.getBundleContext(cdp.getComponentDescription().getBundle());
 				build(bundleContext, null, cdp, null);
 		}
-
+		
 	}
 
 }
+
