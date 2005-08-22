@@ -522,10 +522,6 @@ public class DmtSessionImpl implements DmtSession {
 
 	public synchronized void setNodeValue(String nodeUri, DmtData data)
             throws DmtException {
-        if (data == null)
-            throw new DmtException(makeAbsoluteUri(nodeUri), 
-                    DmtException.COMMAND_FAILED,
-                    "'null' value given for DmtData argument.");
         commonSetNodeValue(nodeUri, data);
     }
     
@@ -558,9 +554,6 @@ public class DmtSessionImpl implements DmtSession {
             throws DmtException {
         checkSession();
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
-        if (type == null)
-            throw new DmtException(uri, DmtException.COMMAND_FAILED,
-                    "'null' value given for node type.");
         checkOperation(uri, DmtAcl.REPLACE, DmtMetaNode.CMD_REPLACE);
         
         DmtMetaNode metaNode = getMetaNodeNoCheck(uri);
@@ -570,6 +563,11 @@ public class DmtSessionImpl implements DmtSession {
 
         if(isLeafNodeNoCheck(uri))
             checkMimeType(uri, type);
+        
+        // could check type string for interior nodes, but this impl. does not 
+        // handle it anyway, so we leave it to the plugins if they need it
+        // (same in createInteriorNode/2)
+
         getWritableDataPlugin(uri).setNodeType(uri, type);
         enqueueEvent(EventList.REPLACE, uri);
     }
@@ -607,23 +605,18 @@ public class DmtSessionImpl implements DmtSession {
     
 	public synchronized void createInteriorNode(String nodeUri)
             throws DmtException {
-        checkSession();
         commonCreateInteriorNode(nodeUri, null, true);
     }
 
 	public synchronized void createInteriorNode(String nodeUri, String type)
 			throws DmtException {
-        checkSession();
-	    if(type == null)
-            throw new DmtException(makeAbsoluteUri(nodeUri), 
-                    DmtException.COMMAND_FAILED, 
-                    "'null' value given for interior node type.");
         commonCreateInteriorNode(nodeUri, type, true);
 	}
     
     // also used by copy() to create interior nodes without triggering an event
     private void commonCreateInteriorNode(String nodeUri, String type,
             boolean sendEvent) throws DmtException {
+    	checkSession();
         String uri = makeAbsoluteUriAndCheck(nodeUri, SHOULD_NOT_EXIST);
         String parent = Utils.parentUri(uri);
         if(parent == null)
@@ -639,6 +632,9 @@ public class DmtSessionImpl implements DmtSession {
                 throw new DmtException(uri, DmtException.METADATA_MISMATCH,
                         "Cannot create the specified interior node, " +
                         "meta-data defines it as a leaf node.");
+
+        // could check type string, but this impl. does not handle it anyway
+        // so we leave it to the plugins if they need it (same in setNodeType)
 
         checkNewNode(uri);
         checkMaxOccurrence(uri);
@@ -913,14 +909,14 @@ public class DmtSessionImpl implements DmtSession {
 	private void copyNoCheck(String uri, String newUri, boolean recursive) 
             throws DmtException {
 		boolean isLeaf = isLeafNodeNoCheck(uri);
+        String type = getNodeType(uri);
         
 		// create new node (without sending a separate event about it)
 		if (isLeaf)
 		    // if getNodeValue() returns null, we attempt to set the default
-            // TODO copy node type as well?
-            commonCreateLeafNode(newUri, getNodeValue(uri), null, false);
+            commonCreateLeafNode(newUri, getNodeValue(uri), type, false);
 		else
-			commonCreateInteriorNode(newUri, getNodeType(uri), false);
+			commonCreateInteriorNode(newUri, type, false);
         
 		// copy Title property (without sending event) if it is supported by 
         // both source and target plugins
@@ -1157,6 +1153,8 @@ public class DmtSessionImpl implements DmtSession {
         if(type == null) // default MIME type was requested
             // TODO maybe check that meta-data defines at least one MIME type
             return;
+        
+        // TODO check that 'type' is a proper MIME type string, COMMAND_FAILED if not
         
         String[] validMimeTypes = metaNode.getMimeTypes();
         if(validMimeTypes != null && !Arrays.asList(validMimeTypes).contains(type))
