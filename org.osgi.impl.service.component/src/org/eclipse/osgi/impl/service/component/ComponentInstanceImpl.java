@@ -21,6 +21,7 @@ import org.eclipse.osgi.component.instance.BuildDispose;
 import org.eclipse.osgi.component.model.ComponentDescriptionProp;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.ComponentInstance;
 
 /**
@@ -37,8 +38,9 @@ public class ComponentInstanceImpl implements ComponentInstance {
 	BuildDispose buildDispose;
 	public ComponentDescriptionProp component;
 	ServiceRegistration serviceRegistration = null;
-
-	//ServiceReference:ServiceObject that binded to this reference
+	private ComponentContext componentContext;
+	
+	//ServiceReference:ServiceObject that binded to this instance
 	private Hashtable serviceReferenceToServiceObject = new Hashtable();
 
 	/** ComponentInstanceImpl
@@ -52,6 +54,15 @@ public class ComponentInstanceImpl implements ComponentInstance {
 		this.properties = properties;
 		this.component = component;
 
+	}
+	
+	
+	public void setComponentContext(ComponentContext context) {
+		this.componentContext = context;
+	}
+
+	public ComponentContext getComponentContext() {
+		return componentContext;
 	}
 
 	/**

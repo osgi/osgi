@@ -27,11 +27,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Properties;
 
-import org.eclipse.osgi.component.resolver.ComponentProperties;
-import org.eclipse.osgi.component.resolver.Reference;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
-import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.ComponentException;
 
 /**
@@ -46,12 +43,9 @@ public class ComponentDescriptionProp {
 	static final boolean DEBUG = false;
 
 	protected ComponentDescription componentDescription;
-	protected ComponentProperties componentProperties;
 	protected Hashtable properties;
-	protected ComponentContext componentContext;
 
 	protected List delayActivateCDPNames;
-	protected List referenceCDPs;
 	protected List servicesProvided;
 	protected List references;
 	protected List instances;
@@ -59,11 +53,10 @@ public class ComponentDescriptionProp {
 	/**
 	 * @param bundle The bundle to set.
 	 */
-	public ComponentDescriptionProp(ComponentDescription cd, Dictionary configProperties) throws IOException {
+	public ComponentDescriptionProp(ComponentDescription cd, Dictionary configProperties){
 
 		this.componentDescription = cd;
 		properties = new Hashtable();
-		referenceCDPs = new ArrayList();
 		delayActivateCDPNames = new ArrayList();
 		servicesProvided = new ArrayList();
 		instances = new ArrayList();
@@ -83,7 +76,7 @@ public class ComponentDescriptionProp {
 	 * 
 	 * @return Dictionary properties
 	 */
-	public void initProperties(Dictionary configProperties) throws IOException {
+	public void initProperties(Dictionary configProperties){
 
 		//load initial properties
 		properties.putAll((Hashtable)configProperties);
@@ -118,7 +111,7 @@ public class ComponentDescriptionProp {
 	 * 
 	 * @param propertyEntryName - the name of the properties file
 	 */
-	private void addEntryProperties(String propertyEntryName) throws IOException {
+	private void addEntryProperties(String propertyEntryName) {
 
 		URL url = null;
 		Properties props = new Properties();
@@ -129,24 +122,28 @@ public class ComponentDescriptionProp {
 			throw new ComponentException("Properties entry file " + propertyEntryName + " cannot be found");
 		}
 
-		InputStream in = null;
-		File file = new File(propertyEntryName);
-
-		if (file.exists()) {
-			in = new FileInputStream(file);
-		}
-		if (in == null) {
-			in = getClass().getResourceAsStream(propertyEntryName);
-		}
-		if (in == null) {
-			in = url.openStream();
-		}
-		if (in != null) {
-			props.load(new BufferedInputStream(in));
-			in.close();
-		} else {
-			if (DEBUG)
-				System.out.println("Unable to find properties file " + propertyEntryName);
+		try {
+			InputStream in = null;
+			File file = new File(propertyEntryName);
+		
+			if (file.exists()) {
+				in = new FileInputStream(file);
+			}
+			if (in == null) {
+				in = getClass().getResourceAsStream(propertyEntryName);
+			}
+			if (in == null) {
+				in = url.openStream();
+			}
+			if (in != null) {
+				props.load(new BufferedInputStream(in));
+				in.close();
+			} else {
+				if (DEBUG)
+					System.out.println("Unable to find properties file " + propertyEntryName);
+			}
+		} catch (IOException e) {
+			throw new ComponentException("Properties entry file " + propertyEntryName + " cannot be read");
 		}
 
 		//Get the properties value from the file and store them in the properties object
@@ -178,41 +175,6 @@ public class ComponentDescriptionProp {
 	 */
 	public ComponentDescription getComponentDescription() {
 		return componentDescription;
-	}
-
-	public void setComponentContext(ComponentContext context) {
-		this.componentContext = context;
-	}
-
-	public ComponentContext getComponentContext() {
-		return componentContext;
-	}
-
-	static public class ReferenceCDP {
-		public ComponentDescriptionProp consumer;
-		public Reference ref;
-		public ComponentDescriptionProp producer;
-
-		protected ReferenceCDP(ComponentDescriptionProp consumer, Reference ref, ComponentDescriptionProp producer) {
-			this.consumer = consumer;
-			this.ref = ref;
-			this.producer = producer;
-		}
-
-	}
-
-	public void setReferenceCDP(Reference ref, ComponentDescriptionProp cdp) {
-		ReferenceCDP refCDP = new ReferenceCDP(this, ref, cdp);
-		if (!referenceCDPs.contains(refCDP))
-			referenceCDPs.add(refCDP);
-	}
-
-	public List getReferenceCDPs() {
-		return referenceCDPs == null ? Collections.EMPTY_LIST : referenceCDPs;
-	}
-
-	public void clearReferenceCDPs() {
-		referenceCDPs.clear();
 	}
 
 	public void setDelayActivateCDPName(String cdpName) {
