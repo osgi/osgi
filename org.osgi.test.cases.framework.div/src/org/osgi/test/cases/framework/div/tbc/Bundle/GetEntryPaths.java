@@ -124,7 +124,7 @@ public class GetEntryPaths {
 
 		enumeration = bundle
 				.getEntryPaths("/org/osgi/test/cases/framework/div/tb10/nonexistent");
-		if (enumeration.hasMoreElements()) {
+		if (enumeration != null) {
 			throw new BundleTestException(
 					"Testing the method invocation with nonexistent entries");
 		}
