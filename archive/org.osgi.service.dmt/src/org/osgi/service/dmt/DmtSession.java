@@ -9,6 +9,8 @@
  */
 package org.osgi.service.dmt;
 
+import java.util.Date;
+
 /**
  * DmtSession provides concurrent access to the DMT. All DMT manipulation
  * commands for management applications are available on the
@@ -20,16 +22,14 @@ package org.osgi.service.dmt;
  * URI the session was opened with.
  * <p>
  * If the URI specified does not correspond to a legitimate node in the tree an
- * exception is thrown. The only exception is the
- * {@link DmtReadOnly#isNodeUri isNodeUri()} method which returns
- * <code>false</code> in case of an invalid URI.
+ * exception is thrown. The only exception is the {@link #isNodeUri(String)} 
+ * method which returns <code>false</code> in case of an invalid URI.
  * <p>
  * Each method of <code>DmtSession</code> that accesses the tree in any way
- * (including all methods inherited from <code>Dmt</code> and
- * <code>DmtReadOnly</code>) can throw <code>IllegalStateException</code>
- * if the session has been closed or invalidated due to timeout.
+ * can throw <code>IllegalStateException</code> if the session has been closed
+ * or invalidated due to timeout.
  */
-public interface DmtSession extends Dmt {
+public interface DmtSession {
     /**
      * Sessions created with <code>LOCK_TYPE_SHARED</code> lock allows
      * read-only access to the tree, but can be shared between multiple readers.
@@ -71,15 +71,16 @@ public interface DmtSession extends Dmt {
     /**
      * Get the current state of this session.
      * 
-     * @return the state of the session, one of the <code>STATE_...</code>
-     *         constants
+     * @return the state of the session, one of {@link #STATE_OPEN},
+     *         {@link #STATE_CLOSED} and {@link #STATE_INVALID}
      */
     int getState();
 
     /**
      * Gives the type of lock the session currently has.
      * 
-     * @return One of the <code>LOCK_TYPE_...</code> constants.
+     * @return the lock type of the session, one of {@link #LOCK_TYPE_SHARED},
+     *         {@link #LOCK_TYPE_EXCLUSIVE} and {@link #LOCK_TYPE_ATOMIC}
      */
     int getLockType();
 
@@ -102,135 +103,6 @@ public interface DmtSession extends Dmt {
     int getSessionId();
 
     /**
-     * Executes a node. This corresponds to the EXEC operation in OMA DM. The
-     * semantics of an EXEC operation depend on the definition of the managed
-     * object on which it is issued.
-     * 
-     * @param nodeUri the node on which the execute operation is issued
-     * @param data the parameters to the execute operation. The format of the
-     *        data string is described by the managed object definition. Can be
-     *        <code>null</code>.
-     * @throws DmtException with the following possible error codes
-     *         <li><code>NODE_NOT_FOUND</code> if the node does not exist and
-     *         the plugin does not allow executing unexisting nodes
-     *         <li><code>URI_TOO_LONG</code>
-     *         <li><code>INVALID_URI</code>
-     *         <li><code>OTHER_ERROR</code> if the URI is not within the
-     *         current
-     *         <li><code>PERMISSION_DENIED</code> session's subtree
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the node is
-     *         non-executable
-     *         <li><code>FEATURE_NOT_SUPPORTED</code>
-     *         <li><code>COMMAND_FAILED</code> if no DmtExecPlugin is
-     *         associated with the node
-     *         <li><code>DATA_STORE_FAILURE</code>
-     * @throws IllegalStateException if the session is invalidated because of
-     *         timeout, or if the session is already closed.
-     * @see #execute(String, String, String)
-     */
-    void execute(String nodeUri, String data) throws DmtException;
-
-    /**
-     * Executes a node, also specifying a correlation ID for use in response
-     * alerts. The semantics of an EXEC operation depend on the definition of
-     * the managed object on which it is issued.
-     * 
-     * @param nodeUri the node on which the execute operation is issued
-     * @param correlator an identifier to associate this operation with any
-     *        alerts sent in response to it, can be <code>null</code> if not
-     *        needed
-     * @param data the parameters to the execute operation. The format of the
-     *        data string is described by the managed object definition. Can be
-     *        <code>null</code>.
-     * @throws DmtException with the following possible error codes
-     *         <li><code>NODE_NOT_FOUND</code> if the node does not exist and
-     *         the plugin does not allow executing unexisting nodes
-     *         <li><code>URI_TOO_LONG</code>
-     *         <li><code>INVALID_URI</code>
-     *         <li><code>OTHER_ERROR</code> if the URI is not within the
-     *         current
-     *         <li><code>PERMISSION_DENIED</code> session's subtree
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the node is
-     *         non-executable
-     *         <li><code>FEATURE_NOT_SUPPORTED</code>
-     *         <li><code>COMMAND_FAILED</code> if no DmtExecPlugin is
-     *         associated with the node
-     *         <li><code>DATA_STORE_FAILURE</code>
-     * @throws IllegalStateException if the session is invalidated because of
-     *         timeout, or if the session is already closed.
-     * @see #execute(String, String)
-     */
-    void execute(String nodeUri, String correlator, String data) 
-            throws DmtException;
-    
-    /**
-     * Gives the Access Control List associated with a given node. The returned
-     * <code>DmtAcl</code> does not take inheritance into account, it gives
-     * the ACL specifically given to the node.
-     * 
-     * @param nodeUri the URI of the node
-     * @return the Access Control List belonging to the node or
-     *         <code>null</code> if none defined
-     * @throws DmtException with the following possible error codes
-     *         <li><code>NODE_NOT_FOUND</code>
-     *         <li><code>URI_TOO_LONG</code>
-     *         <li><code>INVALID_URI</code>
-     *         <li><code>PERMISSION_DENIED</code>
-     *         <li><code>OTHER_ERROR</code> if the URI is not within the
-     *         current session's subtree
-     *         <li><code>COMMAND_NOT_ALLOWED</code>
-     *         <li><code>DATA_STORE_FAILURE</code>
-     * @throws IllegalStateException if the session is invalidated because of
-     *         timeout, or if the session is already closed.
-     * @see #getEffectiveNodeAcl
-     */
-    DmtAcl getNodeAcl(String nodeUri) throws DmtException;
-
-    /**
-     * Gives the Access Control List in effect for a given node. The returned
-     * <code>DmtAcl</code> takes inheritance into accout, that is if there is
-     * no ACL defined for the node, it will be derived from the closest ancestor
-     * having an ACL defined.
-     * 
-     * @param nodeUri the URI of the node
-     * @return the Access Control List belonging to the node
-     * @throws DmtException with the following possible error codes
-     *         <li><code>NODE_NOT_FOUND</code>
-     *         <li><code>URI_TOO_LONG</code>
-     *         <li><code>INVALID_URI</code>
-     *         <li><code>PERMISSION_DENIED</code>
-     *         <li><code>OTHER_ERROR</code> if the URI is not within the
-     *         current session's subtree
-     *         <li><code>COMMAND_NOT_ALLOWED</code>
-     *         <li><code>DATA_STORE_FAILURE</code>
-     * @throws IllegalStateException if the session is invalidated because of
-     *         timeout, or if the session is already closed.
-     * @see #getNodeAcl
-     */
-    DmtAcl getEffectiveNodeAcl(String nodeUri) throws DmtException;
-
-    /**
-     * Set the Access Control List associated with a given node.
-     * 
-     * @param nodeUri the URI of the node
-     * @param acl the Access Control List to be set on the node. It can be
-     *        <code>null</code> meaning that the ACL of the node is deleted,
-     *        in which case the node will inherit the ACL from its parent node.
-     * @throws DmtException with the following possible error codes
-     *         <li><code>NODE_NOT_FOUND</code>
-     *         <li><code>URI_TOO_LONG</code>
-     *         <li><code>INVALID_URI</code>
-     *         <li><code>PERMISSION_DENIED</code>
-     *         <li><code>OTHER_ERROR</code> if the URI is not within the
-     *         current session's subtree
-     *         <li><code>COMMAND_NOT_ALLOWED</code>
-     *         <li><code>DATA_STORE_FAILURE</code>
-     * @throws IllegalStateException if the session is invalidated because of
-     *         timeout, or if the session is already closed.
-     */
-    void setNodeAcl(String nodeUri, DmtAcl acl) throws DmtException;
-
-    /**
      * Get the root URI associated with this session. Gives "<code>.</code>"
      * if the session was created without specifying a root, which means that
      * the target of this session is the whole DMT.
@@ -238,4 +110,1395 @@ public interface DmtSession extends Dmt {
      * @return the root URI
      */
     String getRootUri();
+
+    /**
+     * Returns a node name that is valid for the tree operation methods, based
+     * on the given node name.  This is just a convenience method to provide
+     * easier access to the {@link DmtAdmin#mangle(String)} method for users of
+     * this interface.
+     * <p> 
+     * This transformation does not have a fix point, so
+     * it must not be called with a parameter that is the result of a previous
+     * <code>mangle</code> method call.
+     * <p>
+     * Node name mangling is needed in the following cases:
+     * <ul>
+     * <li>if the name contains '/' or '\' characters
+     * <li>if the length of the name exceeds the limit defined by the
+     * implementation
+     * </ul>
+     * <p>
+     * A node name that does not suffer from either of these problems is
+     * guaranteed to remain unchanged by this method. Therefore the client may
+     * skip the mangling if the node name is known to be valid (though it is
+     * always safe to call this method).
+     * <p>
+     * The method returns the normalized <code>nodeName</code> as described
+     * below. Invalid node names are normalized in different ways, depending on
+     * the cause. If the length of the name does not exceed the limit, but the
+     * name contains '/' or '\' characters, then these are simply escaped by
+     * inserting an additional '\' before each occurrence. If the length of the
+     * name does exceed the limit, the following mechanism is used to normalize
+     * it:
+     * <ul>
+     * <li>the SHA 1 digest of the name is calculated
+     * <li>the digest is encoded with the base 64 algorithm
+     * <li>all '/' characters in the encoded digest are replaced with '_'
+     * <li>trailing '=' signs are removed
+     * </ul>
+     * 
+     * @param nodeName the node name to be mangled (if necessary), must not be
+     *        <code>null</code> or empty
+     * @return the normalized node name that is valid for tree operations
+     * @throws NullPointerException if <code>nodeName</code> is
+     *         <code>null</code>
+     * @throws IllegalArgumentException if <code>nodeName</code> is empty
+     * @see DmtAdmin#mangle
+     */
+    String mangle(String nodeName);
+
+    /**
+     * Commits a series of DMT operations issued in the current atomic session
+     * since the last transaction boundary. Transaction boundaries are the
+     * creation of this object that starts the session, and all
+     * subsequent {@link #commit} and {@link #rollback} calls.
+     * <p>
+     * This method can fail even if all operations were successful. This can
+     * happen due to some multi-node semantic constraints defined by a specific
+     * implementation. For example, node A can be required to always have
+     * children A.B, A.C and A.D. If this condition is broken when
+     * <code>commit()</code> is executed, the method will fail, and throw a
+     * <code>COMMAND_FAILED</code> exception.
+     * <p>
+     * An error situation can arise due to the lack of a two phase commit
+     * mechanism in the underlying plugins. As an example, if plugin A has
+     * committed successfully but plugin B failed, the whole session must fail,
+     * but there is no way to undo the commit performed by A. To provide
+     * predictable behaviour, the commit operation should continue with the
+     * remaining plugins even after detecting a failure. All exceptions received
+     * from failed commits are aggregated into one
+     * <code>TRANSACTION_ERROR</code> exception thrown by this method.
+     * <p>
+     * In many cases the tree is not the only way to manage a given part of the
+     * system.  It may happen that while modifying some nodes in an atomic
+     * session, the underlying settings are modified parallelly outside the 
+     * scope of the DMT. If this is detected during commit, an exception with 
+     * the code <code>CONCURRENT_ACCESS</code> is thrown.
+     * 
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>METADATA_MISMATCH</code> if the operation failed
+     *         because of meta-data restrictions
+     *         <li><code>CONCURRENT_ACCESS</code> if it is detected that some
+     *         modification has been made outside the scope of the DMT to the
+     *         nodes affected in the session's operations
+     *         <li><code>TRANSACTION_ERROR</code> if an error occured during
+     *         the commit of any of the underlying plugins
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if some multi-node semantic
+     *         constraint was violated during the course of the session, or if 
+     *         some unspecified error is encountered while attempting to 
+     *         complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session was not opened using the 
+     *         <code>LOCK_TYPE_ATOMIC</code> lock type, or if the session is 
+     *         already closed or invalidated because of timeout
+     * @throws SecurityException if the caller does not have the necessary
+     *         permissions to execute the underlying management operation
+     */
+    void commit() throws DmtException;
+
+    /**
+     * Rolls back a series of DMT operations issued in the current atomic
+     * session since the last transaction boundary. Transaction boundaries are
+     * the creation of this object that starts the session, and all
+     * subsequent {@link #commit} and {@link #rollback} calls.
+     * 
+     * @throws DmtException with the error code <code>ROLLBACK_FAILED</code> 
+     *         in case the rollback did not succeed
+     * @throws IllegalStateException if the session was not opened using the 
+     *         <code>LOCK_TYPE_ATOMIC</code> lock type, or if the session is 
+     *         already closed or invalidated because of timeout
+     * @throws SecurityException if the caller does not have the necessary
+     *         permissions to execute the underlying management operation
+     */
+    void rollback() throws DmtException;
+
+    /**
+     * Closes a session. If the session was opened with atomic lock mode, the
+     * <code>DmtSession</code> must first persist the changes made to the DMT
+     * by calling <code>commit()</code> on all (transactional) plugins
+     * participating in the session. See the documentation of the
+     * {@link #commit} method for details and possible errors during this
+     * operation.
+     * <p>
+     * The state of the session changes to <code>DmtSession.STATE_CLOSED</code> 
+     * if the close operation completed successfully, otherwise it becomes
+     * <code>DmtSession.STATE_INVALID</code>.
+     * 
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>METADATA_MISMATCH</code> in case of atomic sessions, if
+     *         the commit operation failed because of meta-data restrictions
+     *         <li><code>CONCURRENT_ACCESS</code> in case of atomic sessions, if
+     *         the commit operation failed because of some modification outside 
+     *         the scope of the DMT to the nodes affected in the session
+     *         <li><code>TRANSACTION_ERROR</code> in case of atomic sessions, if
+     *         an underlying plugin failed to commit
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if an underlying plugin failed
+     *         to close, if (in case of atomic sessions) the commit failed
+     *         because of some multi-node constraint, or if some unspecified 
+     *         error is encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session is invalidated because of
+     *         timeout, or if the session is already closed
+     * @throws SecurityException if the caller does not have the necessary
+     *         permissions to execute the underlying management operation
+     */
+    void close() throws DmtException;
+
+    /**
+     * Executes a node. This corresponds to the EXEC operation in OMA DM. 
+     * <p>
+     * The semantics of an execute operation and the data parameter it takes
+     * depends on the definition of the managed object on which the command is
+     * issued.
+     * 
+     * @param nodeUri the node on which the execute operation is issued
+     * @param data the parameter of the execute operation, can be
+     *        <code>null</code>
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if the node does not exist and
+     *         the plugin does not allow executing unexisting nodes
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Execute</code> operation for the associated principal 
+     *         <li><code>METADATA_MISMATCH</code> if the node cannot be
+     *         executed according to the meta-data (does not have 
+     *         <code>MetaNode.CMD_EXECUTE</code> access type)
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, if no DmtExecPlugin is associated with
+     *         the node, or if some unspecified error is encountered while 
+     *         attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session is invalidated because of
+     *         timeout, or if the session is already closed
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the node with the Exec action 
+     *         present 
+     *         
+     * @see #execute(String, String, String)
+     */
+    void execute(String nodeUri, String data) throws DmtException;
+
+    /**
+     * Executes a node, also specifying a correlation ID for use in response
+     * alerts. This operation corresponds to the EXEC command in OMA DM.
+     * <p>
+     * The semantics of an execute operation and the data parameter it takes
+     * depends on the definition of the managed object on which the command is
+     * issued. If a correlation ID is specified, it should be used
+     * as the <code>correlator</code> parameter for alerts sent in response to
+     * this execute operation.
+     * 
+     * @param nodeUri the node on which the execute operation is issued
+     * @param correlator an identifier to associate this operation with any
+     *        alerts sent in response to it, can be <code>null</code> if not
+     *        needed
+     * @param data the parameter of the execute operation, can be
+     *        <code>null</code>
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if the node does not exist and
+     *         the plugin does not allow executing unexisting nodes
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Execute</code> operation for the associated principal 
+     *         <li><code>METADATA_MISMATCH</code> if the node cannot be
+     *         executed according to the meta-data (does not have 
+     *         <code>MetaNode.CMD_EXECUTE</code> access type)
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, if no DmtExecPlugin is associated with
+     *         the node, or if some unspecified error is encountered while 
+     *         attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session is invalidated because of
+     *         timeout, or if the session is already closed
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the node with the Exec action 
+     *         present 
+     * @see #execute(String, String)
+     */
+    void execute(String nodeUri, String correlator, String data) 
+            throws DmtException;
+    
+    /**
+     * Get the Access Control List associated with a given node. The returned
+     * <code>Acl</code> object does not take inheritance into account, it gives
+     * the ACL specifically given to the node.
+     * 
+     * @param nodeUri the URI of the node
+     * @return the Access Control List belonging to the node or
+     *         <code>null</code> if none defined
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a non-existing node
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Get</code> operation for the associated principal 
+     *         <li><code>METADATA_MISMATCH</code> if node information cannot
+     *         be retrieved according to the meta-data (the node does not have 
+     *         <code>MetaNode.CMD_GET</code> access type)
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session is invalidated because of
+     *         timeout, or if the session is already closed
+     * @throws SecurityException in case of local sessions, if the caller does
+     *         not have <code>DmtPermission</code> for the node with the Get 
+     *         action present
+     * @see #getEffectiveNodeAcl
+     */
+    Acl getNodeAcl(String nodeUri) throws DmtException;
+
+    /**
+     * Gives the Access Control List in effect for a given node. The returned
+     * <code>Acl</code> takes inheritance into accout, that is if there is
+     * no ACL defined for the node, it will be derived from the closest ancestor
+     * having an ACL defined.
+     * 
+     * @param nodeUri the URI of the node
+     * @return the Access Control List belonging to the node
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a non-existing node
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Get</code> operation for the associated principal 
+     *         <li><code>METADATA_MISMATCH</code> if node information cannot
+     *         be retrieved according to the meta-data (the node does not have 
+     *         <code>MetaNode.CMD_GET</code> access type)
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session is invalidated because of
+     *         timeout, or if the session is already closed
+     * @throws SecurityException in case of local sessions, if the caller does
+     *         not have <code>DmtPermission</code> for the node with the Get 
+     *         action present
+     * @see #getNodeAcl
+     */
+    Acl getEffectiveNodeAcl(String nodeUri) throws DmtException;
+
+    /**
+     * Set the Access Control List associated with a given node.  To perform
+     * this operation, the caller needs to have replace rights
+     * (<code>Acl.REPLACE</code> or the corresponding Java permission depending 
+     * on the session type) as described below:
+     * <ul>
+     * <li>if <code>nodeUri</code> specifies a leaf node, replace rights are
+     * needed on the parent of the node
+     * <li>if <code>nodeUri</code> specifies an interior node, replace rights on
+     * either the node or its parent are sufficient
+     * </ul>   
+     * 
+     * @param nodeUri the URI of the node
+     * @param acl the Access Control List to be set on the node. It can be
+     *        <code>null</code> meaning that the ACL of the node is deleted,
+     *        in which case the node will inherit the ACL from its parent node.
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a non-existing node
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node or its parent (see 
+     *         above) does not allow the <code>Replace</code> operation for the 
+     *         associated principal 
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the command
+     *         attempts to set the ACL of the root node not to include Add 
+     *         rights for all principals 
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session was opened using the 
+     *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is 
+     *         already closed or invalidated because of timeout
+     * @throws SecurityException in case of local sessions, if the caller does
+     *         not have <code>DmtPermission</code> for the node or its parent
+     *         (see above) with the Replace action present
+     */
+    void setNodeAcl(String nodeUri, Acl acl) throws DmtException;
+
+    /**
+     * Create a copy of a node or a whole subtree.  Beside the structure and 
+     * values of the nodes, most properties are also copied, with the exception 
+     * of the ACL (Access Control List), Timestamp and Version properties.
+     * <p>
+     * The copy method is essentially a convenience method that could be
+     * substituted with a sequence of retrieval and update operations.  This
+     * determines the permissions required for copying.  However, some 
+     * optimization can be possible if the source and target nodes are all 
+     * handled by Dmt Admin or by the same plugin.  In this case, the handler
+     * might be able to perform the underlying management operation more 
+     * efficiently: for example, a configuration table can be copied at once 
+     * instead of reading each node for each entry and creating it in the new 
+     * tree.
+     * <p>
+     * This method may result in any of the errors possible for the contributing
+     * operations.  Most of these are collected in the exception descriptions 
+     * below, but for the full list also consult the documentation of 
+     * {@link #getChildNodeNames(String)}, {@link #isLeafNode(String)}, 
+     * {@link #getNodeValue(String)}, {@link #getNodeType(String)},
+     * {@link #getNodeTitle(String)}, {@link #setNodeTitle(String, String)}, 
+     * {@link #createLeafNode(String, DmtData, String)}
+     * and {@link #createInteriorNode(String, String)}.
+     * 
+     * @param nodeUri the node or root of a subtree to be copied
+     * @param newNodeUri the URI of the new node or root of a subtree
+     * @param recursive <code>false</code> if only a single node is copied,
+     *        <code>true</code> if the whole subtree is copied
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or 
+     *         <code>newNodeUri</code> or any segment of them is too long, or if
+     *         they have too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> or
+     *         <code>newNodeUri</code> is <code>null</code> or syntactically 
+     *         invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a non-existing node, or if <code>newNodeUri</code> points to
+     *         a node that cannot exist in the tree according to the meta-data
+     *         (see {@link #getMetaNode(String)})
+     *         <li><code>NODE_ALREADY_EXISTS</code> if <code>newNodeUri</code>
+     *         points to a node that already exists
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the copied node(s) does not allow
+     *         the <code>Get</code> operation, or the ACL of the parent of the
+     *         target node does not allow the <code>Add</code> operation for the
+     *         associated principal
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if <code>nodeUri</code> is 
+     *         an ancestor of <code>newNodeUri</code>, or if any of the implied 
+     *         retrieval or update operations are not allowed
+     *         <li><code>METADATA_MISMATCH</code> if any of the meta-data 
+     *         constraints of the implied retrieval or update operations are
+     *         violated
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the copy operation
+     *         is not supported by the Dmt Admin implementation or the 
+     *         underlying plugin(s)
+     *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
+     *         underlying plugin does not support atomic transactions
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if either URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session was opened using the 
+     *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is 
+     *         already closed or invalidated because of timeout
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the copied node(s) with the Get
+     *         action present, or for the parent of the target node with the Add
+     *         action
+     */
+    void copy(String nodeUri, String newNodeUri, boolean recursive)
+        throws DmtException;
+
+    /**
+     * Create an interior node.
+     * <p>
+     * If meta-data is available for the node, several checks are made before 
+     * creating it.  The node must have <code>MetaNode.CMD_ADD</code> access
+     * type, it must be defined as a non-permanent interior node, the node name 
+     * must conform to the valid names, and the creation of the new node must 
+     * not cause the maximum occurrence number to be exceeded.
+     * <p>
+     * If the meta-data cannot be retrieved because the given node cannot
+     * possibly exist in the tree (it is not defined in the specification), the
+     * <code>NODE_NOT_FOUND</code> error code is returned 
+     * (see {@link #getMetaNode(String)}).
+     * 
+     * @param nodeUri the URI of the node to create
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code>
+     *         points to a node that cannot exist in the tree (see above)
+     *         <li><code>NODE_ALREADY_EXISTS</code> if <code>nodeUri</code>
+     *         points to a node that already exists
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the parent node does not allow
+     *         the <code>Add</code> operation for the associated principal
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
+     *         is read-only, if the parent node is not an interior node, or if 
+     *         the target node is the root of the tree
+     *         <li><code>METADATA_MISMATCH</code> if the node could not be
+     *         created because of meta-data restrictions (see above)
+     *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
+     *         underlying plugin does not support atomic transactions
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session was opened using the 
+     *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is 
+     *         already closed or invalidated because of timeout
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the parent node with the Add
+     *         action present 
+     */
+    void createInteriorNode(String nodeUri) throws DmtException;
+
+    /**
+     * Create an interior node with a given type. The type of interior node, if
+     * specified, is a URI identifying a DDF document.
+     * <p>
+     * If meta-data is available for the node, several checks are made before 
+     * creating it.  The node must have <code>MetaNode.CMD_ADD</code> access
+     * type, it must be defined as a non-permanent interior node, the node name 
+     * must conform to the valid names, and the creation of the new node must 
+     * not cause the maximum occurrence number to be exceeded. 
+     * <p>
+     * If the meta-data cannot be retrieved because the given node cannot
+     * possibly exist in the tree (it is not defined in the specification), the
+     * <code>NODE_NOT_FOUND</code> error code is returned 
+     * (see {@link #getMetaNode(String)}).
+     * 
+     * @param nodeUri the URI of the node to create
+     * @param type the type URI of the interior node, can be <code>null</code>
+     *        if no node type is defined
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code>
+     *         points to a node that cannot exist in the tree (see above)
+     *         <li><code>NODE_ALREADY_EXISTS</code> if <code>nodeUri</code>
+     *         points to a node that already exists
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the parent node does not allow
+     *         the <code>Add</code> operation for the associated principal
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
+     *         is read-only, if the parent node is not an interior node, or if 
+     *         the target node is the root of the tree
+     *         <li><code>METADATA_MISMATCH</code> if the node could not be
+     *         created because of meta-data restrictions (see above)
+     *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
+     *         underlying plugin does not support atomic transactions
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, if the type string is
+     *         invalid, or if some unspecified error is encountered while
+     *         attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session was opened using the 
+     *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is 
+     *         already closed or invalidated because of timeout
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the parent node with the Add
+     *         action present 
+     * @see #createInteriorNode(String)
+     */
+    void createInteriorNode(String nodeUri, String type) throws DmtException;
+
+    /**
+     * Create a leaf node with default value and MIME type. If a node does not 
+     * have a default value or MIME type, this method will throw a 
+     * <code>DmtException</code> with error code <code>METADATA_MISMATCH</code>.
+     * <p>
+     * If meta-data is available for a node, several checks are made before 
+     * creating it.  The node must have <code>MetaNode.CMD_ADD</code> access
+     * type, it must be defined as a non-permanent leaf node, the node name must 
+     * conform to the valid names, and the creation of the new node must not 
+     * cause the maximum occurrence number to be exceeded. 
+     * <p>
+     * If the meta-data cannot be retrieved because the given node cannot
+     * possibly exist in the tree (it is not defined in the specification), the
+     * <code>NODE_NOT_FOUND</code> error code is returned 
+     * (see {@link #getMetaNode(String)}).
+     * 
+     * @param nodeUri the URI of the node to create
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code>
+     *         points to a node that cannot exist in the tree (see above)
+     *         <li><code>NODE_ALREADY_EXISTS</code> if <code>nodeUri</code>
+     *         points to a node that already exists
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the parent node does not allow
+     *         the <code>Add</code> operation for the associated principal
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
+     *         is read-only, if the parent node is not an interior node, or if 
+     *         the target node is the root of the tree
+     *         <li><code>METADATA_MISMATCH</code> if the node could not be
+     *         created because of meta-data restrictions (see above)
+     *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
+     *         underlying plugin does not support atomic transactions
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session was opened using the 
+     *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is 
+     *         already closed or invalidated because of timeout
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the parent node with the Add
+     *         action present 
+     * @see #createLeafNode(String, DmtData)
+     */
+    void createLeafNode(String nodeUri) throws DmtException;
+
+    /**
+     * Create a leaf node with a given value and the default MIME type. If the 
+     * specified value is <code>null</code>, the default value is taken.  If the
+     * node does not have a default MIME type or value (if needed), this method 
+     * will throw a <code>DmtException</code> with error code 
+     * <code>METADATA_MISMATCH</code>.
+     * <p>
+     * If meta-data is available for a node, several checks are made before 
+     * creating it.  The node must have <code>MetaNode.CMD_ADD</code> access
+     * type, it must be defined as a non-permanent leaf node, the node name must 
+     * conform to the valid names, the node value must conform to the value
+     * constraints, and the creation of the new node must not cause the maximum 
+     * occurrence number to be exceeded.
+     * <p>
+     * If the meta-data cannot be retrieved because the given node cannot
+     * possibly exist in the tree (it is not defined in the specification), the
+     * <code>NODE_NOT_FOUND</code> error code is returned 
+     * (see {@link #getMetaNode(String)}).
+     * <p>
+     * Nodes of <code>null</code> format can be created by using 
+     * {@link DmtData#NULL_VALUE} as second argument.
+     * 
+     * @param nodeUri the URI of the node to create
+     * @param value the value to be given to the new node, can be
+     *        <code>null</code>
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code>
+     *         points to a node that cannot exist in the tree (see above)
+     *         <li><code>NODE_ALREADY_EXISTS</code> if <code>nodeUri</code>
+     *         points to a node that already exists
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the parent node does not allow
+     *         the <code>Add</code> operation for the associated principal
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
+     *         is read-only, if the parent node is not an interior node, or if 
+     *         the target node is the root of the tree
+     *         <li><code>METADATA_MISMATCH</code> if the node could not be
+     *         created because of meta-data restrictions (see above)
+     *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
+     *         underlying plugin does not support atomic transactions
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session was opened using the 
+     *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is 
+     *         already closed or invalidated because of timeout
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the parent node with the Add
+     *         action present 
+     */
+    void createLeafNode(String nodeUri, DmtData value) throws DmtException;
+
+    /**
+     * Create a leaf node with a given value and MIME type. If the specified
+     * value or MIME type is <code>null</code>, their default values are taken.
+     * If the node does not have the necessary defaults, this method will throw
+     * a <code>DmtException</code> with error code 
+     * <code>METADATA_MISMATCH</code>.
+     * <p>
+     * If meta-data is available for a node, several checks are made before 
+     * creating it.  The node must have <code>MetaNode.CMD_ADD</code> access
+     * type, it must be defined as a non-permanent leaf node, the node name must 
+     * conform to the valid names, the node value must conform to the value
+     * constraints, the MIME type must be among the listed types, and the 
+     * creation of the new node must not cause the maximum occurrence number to
+     * be exceeded.
+     * <p>
+     * If the meta-data cannot be retrieved because the given node cannot
+     * possibly exist in the tree (it is not defined in the specification), the
+     * <code>NODE_NOT_FOUND</code> error code is returned 
+     * (see {@link #getMetaNode(String)}).
+     * <p>
+     * Nodes of <code>null</code> format can be created by using 
+     * {@link DmtData#NULL_VALUE} as second argument.
+     * 
+     * @param nodeUri the URI of the node to create
+     * @param value the value to be given to the new node, can be
+     *        <code>null</code>
+     * @param mimeType the MIME type to be given to the new node, can be
+     *        <code>null</code>
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code>
+     *         points to a node that cannot exist in the tree (see above)
+     *         <li><code>NODE_ALREADY_EXISTS</code> if <code>nodeUri</code>
+     *         points to a node that already exists
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the parent node does not allow
+     *         the <code>Add</code> operation for the associated principal
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
+     *         is read-only, if the parent node is not an interior node, or if 
+     *         the target node is the root of the tree
+     *         <li><code>METADATA_MISMATCH</code> if the node could not be
+     *         created because of meta-data restrictions (see above)
+     *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
+     *         underlying plugin does not support atomic transactions
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, if <code>mimeType</code> is not a
+     *         proper MIME type string, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session was opened using the 
+     *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is 
+     *         already closed or invalidated because of timeout
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the parent node with the Add
+     *         action present 
+     * @see #createLeafNode(String, DmtData)
+     */
+    void createLeafNode(String nodeUri, DmtData value, String mimeType)
+                    throws DmtException;
+
+    /**
+     * Delete the given node. Deleting interior nodes is recursive, the whole
+     * subtree under the given node is deleted.
+     * <p>
+     * If meta-data is available for a node, several checks are made before 
+     * deleting it.  The node must be non-permanent, it must have the
+     * <code>MetaNode.CMD_DELETE</code> access type, and if zero occurrences
+     * of the node are not allowed, it must not be the last one.
+     * 
+     * @param nodeUri the URI of the node
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a non-existing node
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Delete</code> operation for the associated principal
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
+     *         is read-only, or if the target node is the root of the tree
+     *         <li><code>METADATA_MISMATCH</code> if the node could not be
+     *         deleted because of meta-data restrictions (see above)
+     *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
+     *         underlying plugin does not support atomic transactions
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session was opened using the 
+     *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is 
+     *         already closed or invalidated because of timeout
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the node with the Delete action
+     *         present 
+     */
+    void deleteNode(String nodeUri) throws DmtException;
+
+    /**
+     * Rename a node. The value and the other properties of the node do not
+     * change.  The new name of the node must be provided, the new URI is
+     * constructed from the base of the old URI and the given name.
+     * <p>
+     * If available, the meta-data of the original and the new nodes are checked
+     * before performing the rename operation.  Neither node can be permanent,
+     * their leaf/interior property must match, and the name change must not 
+     * violate any of the cardinality constraints. The original node must have 
+     * the <code>MetaNode.CMD_REPLACE</code> access type, and the name of the
+     * new node must conform to the valid names.
+     * 
+     * @param nodeUri the URI of the node to rename
+     * @param newName the new name property of the node
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a 
+     *         segment of it is too long, if <code>nodeUri</code> has too many 
+     *         segments, or if <code>newName</code> is too long
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> or
+     *         <code>newName</code> is <code>null</code> or syntactically 
+     *         invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a non-existing node, or if the new node is not defined in the
+     *         tree according to the meta-data (see 
+     *         {@link #getMetaNode(String)})
+     *         <li><code>NODE_ALREADY_EXISTS</code> if there already exists
+     *         a sibling of <code>nodeUri</code> with the name 
+     *         <code>newName</code>
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Replace</code> operation for the associated principal
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
+     *         is read-only, or if the target node is the root of the tree
+     *         <li><code>METADATA_MISMATCH</code> if the node could not be
+     *         renamed because of meta-data restrictions (see above)
+     *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
+     *         underlying plugin does not support atomic transactions
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session was opened using the 
+     *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is 
+     *         already closed or invalidated because of timeout
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the node with the Replace action
+     *         present 
+     */
+    void renameNode(String nodeUri, String newName) throws DmtException;
+
+    /**
+     * Set the value of a leaf node to its default as defined by the node's meta
+     * data. The method throws a <code>METADATA_MISMATCH</code> exception if
+     * there is no default defined.
+     * 
+     * @param nodeUri the URI of the node
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a non-existing node
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Replace</code> operation for the associated principal
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
+     *         is read-only, or if the specified node is not a leaf node
+     *         <li><code>METADATA_MISMATCH</code> if the node is permanent or
+     *         cannot be modified according to the meta-data (does not have the 
+     *         <code>MetaNode.CMD_REPLACE</code> access type), or if there is no
+     *         default value defined for this node
+     *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
+     *         underlying plugin does not support atomic transactions
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session was opened using the 
+     *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is 
+     *         already closed or invalidated because of timeout
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the node with the Replace action
+     *         present 
+     * @see #setNodeValue
+     */
+    void setDefaultNodeValue(String nodeUri) throws DmtException;
+
+    /**
+     * Set the value of a leaf node. The format of the node is contained in the
+     * <code>DmtData</code> object. If the specified value is <code>null</code>,
+     * the default value is taken. In this case, if the node does not have a 
+     * default value, this method will throw a <code>DmtException</code> with 
+     * error code <code>METADATA_MISMATCH</code>.
+     * <p>
+     * Nodes of <code>null</code> format can be set by using 
+     * {@link DmtData#NULL_VALUE} as second argument.
+     * 
+     * @param nodeUri the URI of the node
+     * @param data the data to be set, can be <code>null</code>
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a non-existing node
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Replace</code> operation for the associated principal
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
+     *         is read-only, or if the specified node is not a leaf node
+     *         <li><code>METADATA_MISMATCH</code> if the node is permanent or
+     *         cannot be modified according to the meta-data (does not have the 
+     *         <code>MetaNode.CMD_REPLACE</code> access type), or if the given
+     *         value does not conform to the meta-data value constraints
+     *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
+     *         underlying plugin does not support atomic transactions
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session was opened using the 
+     *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is 
+     *         already closed or invalidated because of timeout
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the node with the Replace action
+     *         present 
+     */
+    void setNodeValue(String nodeUri, DmtData data) throws DmtException;
+
+    /**
+     * Set the title property of a node.  The length of the title string in
+     * UTF-8 encoding must not exceed 255 bytes.
+     * 
+     * @param nodeUri the URI of the node
+     * @param title the title text of the node, can be <code>null</code>
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a non-existing node
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Replace</code> operation for the associated principal
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
+     *         is read-only
+     *         <li><code>METADATA_MISMATCH</code> if the node cannot be modified
+     *         according to the meta-data (does not have the 
+     *         <code>MetaNode.CMD_REPLACE</code> access type)
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the Title property
+     *         is not supported by the Dmt Admin implementation or the 
+     *         underlying plugin
+     *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
+     *         underlying plugin does not support atomic transactions
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the title string is too long,
+     *         if the URI is not within the current session's subtree, or if 
+     *         some unspecified error is encountered while attempting to 
+     *         complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session was opened using the 
+     *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is 
+     *         already closed or invalidated because of timeout
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the node with the Replace action
+     *         present 
+     */
+    void setNodeTitle(String nodeUri, String title) throws DmtException;
+
+    /**
+     * Set the type of a node. The type of leaf node is the MIME type of the
+     * data it contains. The type of an interior node is a URI identifying a DDF
+     * document.
+     * <p>
+     * For interior nodes, a <code>null</code> type string means that there is
+     * no DDF document overriding the tree structure defined by the ancestors.
+     * For leaf nodes, it requests that the default MIME type is used for the
+     * given node.  If the node does not have a default MIME type this method 
+     * will throw a <code>DmtException</code> with error code 
+     * <code>METADATA_MISMATCH</code>.
+     * 
+     * @param nodeUri the URI of the node
+     * @param type the type of the node, can be <code>null</code>
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a non-existing node
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Replace</code> operation for the associated principal
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
+     *         is read-only
+     *         <li><code>METADATA_MISMATCH</code> if the node is permanent or
+     *         cannot be modified according to the meta-data (does not have the 
+     *         <code>MetaNode.CMD_REPLACE</code> access type), and in case of
+     *         leaf nodes, if the given MIME type is not allowed
+     *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
+     *         underlying plugin does not support atomic transactions
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, if the type string is invalid, or if
+     *         some unspecified error is encountered while attempting to 
+     *         complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session was opened using the 
+     *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is 
+     *         already closed or invalidated because of timeout
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the node with the Replace action
+     *         present 
+     */
+    void setNodeType(String nodeUri, String type) throws DmtException;
+
+    /**
+     * Get the list of children names of a node. The returned array contains the
+     * names - not the URIs - of the immediate children nodes of the given node.
+     * The returned array must not contain <code>null</code> entries.
+     * 
+     * @param nodeUri the URI of the node
+     * @return the list of child node names as a string array or an empty string
+     *         array if the node has no children
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a non-existing node
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Get</code> operation for the associated principal
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the specified node is not
+     *         an interior node
+     *         <li><code>METADATA_MISMATCH</code> if node information cannot be
+     *         retrieved according to the meta-data (it does not have 
+     *         <code>MetaNode.CMD_GET</code> access type)
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session is invalidated because of
+     *         timeout, or if the session is already closed
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the node with the Get action
+     *         present 
+     */
+    String[] getChildNodeNames(String nodeUri) throws DmtException;
+
+    /**
+     * Get the meta data which describes a given node. Meta data can be only
+     * inspected, it can not be changed.
+     * <p>
+     * The <code>MetaNode</code> object returned to the the client is the
+     * combination of the meta data returned by the data plugin (if any) plus
+     * the meta data returned by the Dmt Admin. If there are differences in the
+     * meta data elements known by the plugin and the Dmt Admin then the plugin
+     * specific elements take precedence.
+     * <p>
+     * Note, that a node does not have to exist for having meta-data associated
+     * with it. This method may provide meta-data for any node that can possibly
+     * exist in the tree (any node defined in the specification).  For nodes 
+     * that are not defined, it may throw <code>DmtException</code> with the 
+     * error code <code>NODE_NOT_FOUND</code>.  To allow easier implementation 
+     * of plugins that do not provide meta-data, it is allowed to return 
+     * <code>null</code> for any node, regardless of whether it is defined or 
+     * not. 
+     * 
+     * @param nodeUri the URI of the node
+     * @return a MetaNode which describes meta data information, can be
+     *         <code>null</code> if there is no meta data available for the
+     *         given node
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a node that is not defined in the tree (see above)
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Get</code> operation for the associated principal
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session is invalidated because of
+     *         timeout, or if the session is already closed
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the node with the Get action
+     *         present 
+     */
+    MetaNode getMetaNode(String nodeUri) throws DmtException;
+
+    /**
+     * Get the size of the data in a leaf node. The returned value depends on
+     * the format of the data in the node, see the description of the
+     * {@link DmtData#getSize()} method for the definition of node size for each
+     * format.
+     * 
+     * @param nodeUri the URI of the leaf node
+     * @return the size of the data in the node
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a non-existing node
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Get</code> operation for the associated principal
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the specified node is not
+     *         a leaf node
+     *         <li><code>METADATA_MISMATCH</code> if node information cannot be
+     *         retrieved according to the meta-data (it does not have 
+     *         <code>MetaNode.CMD_GET</code> access type)
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the Size property is
+     *         not supported by the Dmt Admin implementation or the underlying
+     *         plugin
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session is invalidated because of
+     *         timeout, or if the session is already closed
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the node with the Get action
+     *         present 
+     * @see DmtData#getSize
+     */
+    int getNodeSize(String nodeUri) throws DmtException;
+
+    /**
+     * Get the timestamp when the node was last modified.
+     * 
+     * @param nodeUri the URI of the node
+     * @return the timestamp of the last modification
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a non-existing node
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Get</code> operation for the associated principal
+     *         <li><code>METADATA_MISMATCH</code> if node information cannot be
+     *         retrieved according to the meta-data (it does not have 
+     *         <code>MetaNode.CMD_GET</code> access type)
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the Timestamp property
+     *         is not supported by the Dmt Admin implementation or the
+     *         underlying plugin
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session is invalidated because of
+     *         timeout, or if the session is already closed
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the node with the Get action
+     *         present 
+     */
+    Date getNodeTimestamp(String nodeUri) throws DmtException;
+
+    /**
+     * Get the title of a node.  There might be no title property set for a
+     * node.
+     * 
+     * @param nodeUri the URI of the node
+     * @return the title of the node, or <code>null</code> if the node has no
+     *         title
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a non-existing node
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Get</code> operation for the associated principal
+     *         <li><code>METADATA_MISMATCH</code> if node information cannot be
+     *         retrieved according to the meta-data (it does not have 
+     *         <code>MetaNode.CMD_GET</code> access type)
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the Title property
+     *         is not supported by the Dmt Admin implementation or the
+     *         underlying plugin
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session is invalidated because of
+     *         timeout, or if the session is already closed
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the node with the Get action
+     *         present 
+     */
+    String getNodeTitle(String nodeUri) throws DmtException;
+
+    /**
+     * Get the type of a node. The type of leaf node is the MIME type of the
+     * data it contains. The type of an interior node is a URI identifying a DDF
+     * document; a <code>null</code> type means that there is no DDF document 
+     * overriding the tree structure defined by the ancestors.
+     * 
+     * @param nodeUri the URI of the node
+     * @return the type of the node, can be <code>null</code>
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a non-existing node
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Get</code> operation for the associated principal
+     *         <li><code>METADATA_MISMATCH</code> if node information cannot be
+     *         retrieved according to the meta-data (it does not have 
+     *         <code>MetaNode.CMD_GET</code> access type)
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session is invalidated because of
+     *         timeout, or if the session is already closed
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the node with the Get action
+     *         present 
+     */
+    String getNodeType(String nodeUri) throws DmtException;
+
+    /**
+     * Get the data contained in a leaf node.
+     * 
+     * @param nodeUri the URI of the node to retrieve
+     * @return the data of the leaf node, can not be <code>null</code>
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a non-existing node
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Get</code> operation for the associated principal
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the specified node is not
+     *         a leaf node
+     *         <li><code>METADATA_MISMATCH</code> if the node value cannot be
+     *         retrieved according to the meta-data (it does not have 
+     *         <code>MetaNode.CMD_GET</code> access type)
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session is invalidated because of
+     *         timeout, or if the session is already closed
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the node with the Get action
+     *         present 
+     */
+    DmtData getNodeValue(String nodeUri) throws DmtException;
+
+    /**
+     * Get the version of a node. The version can not be set, it is calculated
+     * automatically by the device. It is incremented after every modification 
+     * for both a leaf and an interior node modulo 0x10000. When a node is 
+     * created the initial value is 0.
+     * 
+     * @param nodeUri the URI of the node
+     * @return the version of the node
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a non-existing node
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Get</code> operation for the associated principal
+     *         <li><code>METADATA_MISMATCH</code> if node information cannot be
+     *         retrieved according to the meta-data (it does not have 
+     *         <code>MetaNode.CMD_GET</code> access type)
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the Version property
+     *         is not supported by the Dmt Admin implementation or the
+     *         underlying plugin
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session is invalidated because of
+     *         timeout, or if the session is already closed
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the node with the Get action
+     *         present 
+     */
+    int getNodeVersion(String nodeUri) throws DmtException;
+
+    /**
+     * Tells whether a node is a leaf or an interior node of the DMT.
+     * 
+     * @param nodeUri the URI of the node
+     * @return true if the given node is a leaf node
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
+     *         <li><code>INVALID_URI</code> if <code>nodeUri</code> is
+     *         <code>null</code> or syntactically invalid
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code> points
+     *         to a non-existing node
+     *         <li><code>PERMISSION_DENIED</code> if the session is associated
+     *         with a principal and the ACL of the node does not allow the
+     *         <code>Get</code> operation for the associated principal
+     *         <li><code>METADATA_MISMATCH</code> if node information cannot be
+     *         retrieved according to the meta-data (it does not have 
+     *         <code>MetaNode.CMD_GET</code> access type)
+     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         accessing the data store
+     *         <li><code>COMMAND_FAILED</code> if the URI is not within the
+     *         current session's subtree, or if some unspecified error is 
+     *         encountered while attempting to complete the command
+     *         </ul>
+     * @throws IllegalStateException if the session is invalidated because of
+     *         timeout, or if the session is already closed
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the node with the Get action
+     *         present 
+     */
+    boolean isLeafNode(String nodeUri) throws DmtException;
+
+    /**
+     * Check whether the specified URI corresponds to a valid node in the DMT.
+     * 
+     * @param nodeUri the URI to check
+     * @return true if the given node exists in the DMT
+     * @throws IllegalStateException if the session is invalidated because of
+     *         timeout, or if the session is already closed
+     */
+    boolean isNodeUri(String nodeUri);
 }

@@ -7,7 +7,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this 
  * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package org.osgi.service.dmt;
+package org.osgi.service.dmt.security;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
@@ -17,6 +17,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+import org.osgi.service.dmt.Acl;
 
 /**
  * DmtPermission controls access to management objects in the Device
@@ -108,11 +109,11 @@ public class DmtPermission extends Permission {
 
     // initializes the member fields from the given URI and actions mask
     private void init(String dmtUri, int mask) {
-        if(dmtUri == null)
+        if(dmtUri == null || dmtUri.length() == 0)
             throw new NullPointerException(
-                    "'dmtUri' parameter cannot be null.");
+                    "'dmtUri' parameter cannot be null or empty.");
         
-        // TODO check all other constraints for URIs (e.g. valid characters) 
+        // TODO check all other constraints for URIs
         // URI must be absolute, i.e. equal to . or beginning with ./
         if(!dmtUri.startsWith("./") && !dmtUri.equals("."))
             throw new IllegalArgumentException(
@@ -248,22 +249,22 @@ public class DmtPermission extends Permission {
                     "'actions' parameter cannot be null.");
 
         if(actions.equals("*"))
-            return DmtAcl.ALL_PERMISSION;
+            return Acl.ALL_PERMISSION;
 
         // empty tokens (swallowed by StringTokenizer) are not considered errors
         StringTokenizer st = new StringTokenizer(actions, ",");
         while(st.hasMoreTokens()) {
             String action = st.nextToken();
             if (action.equalsIgnoreCase(GET)) {
-                mask |= DmtAcl.GET;
+                mask |= Acl.GET;
             } else if (action.equalsIgnoreCase(ADD)) {
-                mask |= DmtAcl.ADD;
+                mask |= Acl.ADD;
             } else if (action.equalsIgnoreCase(REPLACE)) {
-                mask |= DmtAcl.REPLACE;
+                mask |= Acl.REPLACE;
             } else if (action.equalsIgnoreCase(DELETE)) {
-                mask |= DmtAcl.DELETE;
+                mask |= Acl.DELETE;
             } else if (action.equalsIgnoreCase(EXEC)) {
-                mask |= DmtAcl.EXEC;
+                mask |= Acl.EXEC;
             } else
                 throw new IllegalArgumentException(
                         "Invalid action '" + action + "'");
@@ -275,11 +276,11 @@ public class DmtPermission extends Permission {
     // generates the canonical string representation of the action list
     private static String canonicalActions(int mask) {
         StringBuffer sb = new StringBuffer();
-        addAction(sb, mask, DmtAcl.ADD,     ADD);
-        addAction(sb, mask, DmtAcl.DELETE,  DELETE);
-        addAction(sb, mask, DmtAcl.EXEC,    EXEC);
-        addAction(sb, mask, DmtAcl.GET,     GET);
-        addAction(sb, mask, DmtAcl.REPLACE, REPLACE);
+        addAction(sb, mask, Acl.ADD,     ADD);
+        addAction(sb, mask, Acl.DELETE,  DELETE);
+        addAction(sb, mask, Acl.EXEC,    EXEC);
+        addAction(sb, mask, Acl.GET,     GET);
+        addAction(sb, mask, Acl.REPLACE, REPLACE);
         return sb.toString();
     }
     

@@ -10,7 +10,7 @@
 package org.osgi.service.dmt;
 
 /**
- * The DmtMetaNode contains meta data both standard for OMA DM and defined by
+ * The MetaNode contains meta data both standard for OMA DM and defined by
  * OSGi MEG (without breaking the compatibility) to provide for better DMT data
  * quality in an environment where many software components manipulate this
  * data.
@@ -41,7 +41,7 @@ package org.osgi.service.dmt;
  * piece of meta information is not defined for the node or providing this
  * information is not supported. Methods of this class do not throw exceptions.
  */
-public interface DmtMetaNode {
+public interface MetaNode {
 
     /**
      * Constant for the ADD access type. If {@link #can(int)} returns
@@ -113,7 +113,7 @@ public interface DmtMetaNode {
      * Check whether the given operation is valid for this node. If no meta-data
      * is provided for a node, all operations are valid. 
      * 
-     * @param operation One of the <code>DmtMetaNode.CMD_...</code> constants.
+     * @param operation One of the <code>MetaNode.CMD_...</code> constants.
      * @return <code>false</code> if the operation is not valid for this node
      *         or the operation code is not one of the allowed constants
      */
@@ -128,9 +128,9 @@ public interface DmtMetaNode {
 
     /**
      * Return the scope of the node. Valid values are
-     * {@link #PERMANENT DmtMetaNode.PERMANENT},
-     * {@link #DYNAMIC DmtMetaNode.DYNAMIC} and
-     * {@link #AUTOMATIC DmtMetaNode.AUTOMATIC}. Note that a permanent node is
+     * {@link #PERMANENT MetaNode.PERMANENT},
+     * {@link #DYNAMIC MetaNode.DYNAMIC} and
+     * {@link #AUTOMATIC MetaNode.AUTOMATIC}. Note that a permanent node is
      * not the same as a node where the DELETE operation is not allowed.
      * Permanent nodes never can be deleted, whereas a non-deletable node can
      * disappear in a recursive DELETE operation issued on one of its parents.
@@ -180,10 +180,9 @@ public interface DmtMetaNode {
     DmtData getDefault();
 
     /**
-     * Get the list of MIME types this node can hold. If there is a default
-     * value defined for this node then the associated MIME type (if any) must
-     * be the first element of the list. If no meta-data is provided for a node,
-     * all MIME types are considered valid.
+     * Get the list of MIME types this node can hold.  The default MIME type
+     * of the node must be the first element in the returned list.  If no 
+     * meta-data is provided for a node, all MIME types are considered valid.
      * 
      * @return The list of allowed MIME types for this node or <code>null</code>
      *         if not defined
