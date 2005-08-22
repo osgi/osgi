@@ -51,7 +51,8 @@ public interface DeploymentSession {
      * @return file representing the private area of the bundle. It cannot be null.
      * @throws SecurityException if the caller is not the customizer of the corresponding 
      *         deployment package.
-     * @see DeploymentPackage, DeploymentCustomizerPermission
+     * @see DeploymentPackage
+     * @see DeploymentCustomizerPermission
      */     
     java.io.File getDataFile(org.osgi.framework.Bundle bundle);
      
