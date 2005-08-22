@@ -40,12 +40,19 @@ public interface DmtAdmin {
      * @param subtreeUri the subtree on which DMT manipulations can be performed
      *        within the returned session
      * @return a <code>DmtSession</code> object for the requested subtree
-     * @throws DmtException with the following possible error codes
-     *         <li><code>NODE_NOT_FOUND</code>
-     *         <li><code>URI_TOO_LONG</code>
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>subtreeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
      *         <li><code>INVALID_URI</code> if <code>subtreeUri</code> is
      *         <code>null</code> or syntactically invalid
-     *         <li><code>TIMEOUT</code>
+     *         <li><code>NODE_NOT_FOUND</code> if <code>subtreeUri</code>
+     *         specifies a non-existing node
+     *         <li><code>TIMEOUT</code> if the operation timed out because of
+     *         another ongoing session
+     *         <li><code>COMMAND_FAILED</code> for unspecified errors
+     *         encountered while attempting to complete the command
+     *         </ul>
      */
     DmtSession getSession(String subtreeUri) throws DmtException;
 
@@ -62,13 +69,23 @@ public interface DmtAdmin {
      * @param lockMode one of the locking modes specified in
      *        <code>DmtSession</code>
      * @return a <code>DmtSession</code> object for the requested subtree
-     * @throws DmtException with the following possible error codes
-     *         <li><code>NODE_NOT_FOUND</code>
-     *         <li><code>URI_TOO_LONG</code>
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>subtreeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
      *         <li><code>INVALID_URI</code> if <code>subtreeUri</code> is
      *         <code>null</code> or syntactically invalid
-     *         <li><code>OTHER_ERROR</code> if the lockMode is unknown
-     *         <li><code>TIMEOUT</code>
+     *         <li><code>NODE_NOT_FOUND</code> if <code>subtreeUri</code>
+     *         specifies a non-existing node
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> if atomic sessions are
+     *         not supported and <code>lockMode</code> requests an atomic 
+     *         session
+     *         <li><code>TIMEOUT</code> if the operation timed out because of
+     *         another ongoing session
+     *         <li><code>COMMAND_FAILED</code> if <code>lockMode</code> is
+     *         unknown, or some unspecified error is encountered while 
+     *         attempting to complete the command
+     *         </ul>
      */
     DmtSession getSession(String subtreeUri, int lockMode)
         throws DmtException;
@@ -93,25 +110,35 @@ public interface DmtAdmin {
      * @param lockMode one of the locking modes specified in
      *        <code>DmtSession</code>
      * @return a <code>DmtSession</code> object for the requested subtree
-     * @throws DmtException with the following possible error codes
-     *         <li><code>NODE_NOT_FOUND</code>
-     *         <li><code>URI_TOO_LONG</code>
+     * @throws DmtException with the following possible error codes:
+     *         <ul>
+     *         <li><code>URI_TOO_LONG</code> if <code>subtreeUri</code> or a
+     *         segment of it is too long, or if it has too many segments
      *         <li><code>INVALID_URI</code> if <code>subtreeUri</code> is
      *         <code>null</code> or syntactically invalid
-     *         <li><code>OTHER_ERROR</code> if the lockMode is unknown
-     *         <li><code>TIMEOUT</code>
+     *         <li><code>NODE_NOT_FOUND</code> if <code>subtreeUri</code>
+     *         specifies a non-existing node
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> if atomic sessions are
+     *         not supported and <code>lockMode</code> requests an atomic 
+     *         session
+     *         <li><code>TIMEOUT</code> if the operation timed out because of
+     *         another ongoing session
+     *         <li><code>COMMAND_FAILED</code> if <code>lockMode</code> is
+     *         unknown, or some unspecified error is encountered while 
+     *         attempting to complete the command
+     *         </ul>
      * @throws SecurityException if the caller does not have the required
      *         <code>DmtPrincipalPermission</code> with a target matching the
      *         <code>principal</code> parameter
-     * @see DmtPrincipalPermission
      */
     DmtSession getSession(String principal, String subtreeUri, int lockMode)
         throws DmtException;
     
     /**
-     * Creates a valid URI string from the given base URI and node name. The
-     * base URI is assumed to be valid, while the node name is assumed
-     * un-mangled.
+     * Returns a node name that is valid for the tree operation methods, based
+     * on the given node name. This transformation does not have a fix point, so
+     * it must not be called with a parameter that is the result of a previous
+     * <code>mangle</code> method call.
      * <p>
      * Node name mangling is needed in the following cases:
      * <ul>
@@ -125,12 +152,10 @@ public interface DmtAdmin {
      * skip the mangling if the node name is known to be valid (though it is
      * always safe to call this method).
      * <p>
-     * The method returns a URI created by appending together the
-     * <code>base</code> URI, the '/' separator (if <code>base</code> does
-     * not already end with it), and the normalized <code>nodeName</code>.
-     * Invalid node names are normalized in different ways, depending on the
-     * cause. If the length of the name does not exceed the limit, but the name
-     * contains '/' or '\' characters, then these are simply escaped by
+     * The method returns the normalized <code>nodeName</code> as described
+     * below. Invalid node names are normalized in different ways, depending on
+     * the cause. If the length of the name does not exceed the limit, but the
+     * name contains '/' or '\' characters, then these are simply escaped by
      * inserting an additional '\' before each occurrence. If the length of the
      * name does exceed the limit, the following mechanism is used to normalize
      * it:
@@ -140,22 +165,16 @@ public interface DmtAdmin {
      * <li>all '/' characters in the encoded digest are replaced with '_'
      * <li>trailing '=' signs are removed
      * </ul>
-     * <p>
-     * If the <code>base</code> parameter is <code>null</code>, the
-     * returned string contains only the normalized version of the
-     * <code>nodeName</code> parameter, without any prefix.
      * 
-     * @param base the URI to be used as the base of the returned URI, can be
-     *        <code>null</code>
      * @param nodeName the node name to be mangled (if necessary), must not be
      *        <code>null</code> or empty
-     * @return the URI containing the <code>base</code> prefix and the
-     *         possibly mangled node name as the last segment
+     * @return the normalized node name that is valid for tree operations
      * @throws NullPointerException if <code>nodeName</code> is
      *         <code>null</code>
      * @throws IllegalArgumentException if <code>nodeName</code> is empty
+     * @see DmtSession#mangle
      */
-    String mangle(String base, String nodeName);
+    String mangle(String nodeName);
 
     /**
      * Sends an alert to a named principal. If OMA DM is used as a management
@@ -163,19 +182,20 @@ public interface DmtAdmin {
      * value in <code>./SyncML/DMAcc/x/ServerId</code>. It is the DmtAdmin's
      * responsibility to route the alert to the given principal.
      * <p>
-     * In remotely initiated sessions the principal name corresponds to a remote
-     * server ID, which can be obtained using the session's
+     * In remotely initiated sessions the principal name identifies the remote
+     * server that created the session, this can be obtained using the session's
      * {@link DmtSession#getPrincipal getPrincipal} call.
      * <p>
      * The principal name may be omitted if the client does not know the
      * principal name. Even in this case the routing might be possible if the
-     * <code>DmtAdmin</code> is connected to only one protocol adapter, which
-     * is connected to only one remote server.
+     * Dmt Admin finds an appropriate default destination (for example if it is 
+     * only connected to one protocol adapter, which is only connected to one 
+     * management server).
      * <p>
      * In case the alert is an asynchronous response to a previous 
      * {@link DmtSession#execute(String, String, String) execute} command,
      * a correlation identifier can be specified to provide the association
-     * between the exec and the alert.
+     * between the execute and the alert.
      * 
      * @param principal the principal name which is the recepient of this alert,
      *        can be <code>null</code>
@@ -185,14 +205,16 @@ public interface DmtAdmin {
      *        needed
      * @param items the data of the alert items carried in this alert, can be
      *        <code>null</code> or empty if not needed
-     * @throws DmtException with the following possible error codes
+     * @throws DmtException with the following possible error codes:
      *         <ul>
      *         <li><code>ALERT_NOT_ROUTED</code> when the alert can not be
-     *         routed to the server
+     *         routed to the given principal
      *         <li><code>REMOTE_ERROR</code> in case of communication
-     *         problems between the device and the server
+     *         problems between the device and the destination
+     *         <li><code>COMMAND_FAILED</code> for unspecified errors
+     *         encountered while attempting to complete the command
      *         </ul>
      */
     void sendAlert(String principal, int code, String correlator, 
-            DmtAlertItem[] items) throws DmtException;
+            AlertItem[] items) throws DmtException;
 }

@@ -11,7 +11,7 @@ package org.osgi.service.dmt;
 
 /**
  * Data structure carried in an alert (client initiated notification). The
- * <code>DmtAlertItem</code> describes details of various alerts that can be
+ * <code>AlertItem</code> describes details of various alerts that can be
  * sent by the client of the OMA DM protocol. The use cases include the client
  * sending a session request to the server (alert 1201), the client notifying
  * the server of completion of a software update operation (alert 1226) or
@@ -23,7 +23,7 @@ package org.osgi.service.dmt;
  * <code>null</code>. For example, for alert 1201 (client-initiated session)
  * all elements will be <code>null</code>.
  */
-public class DmtAlertItem {
+public class AlertItem {
 
     private String  source;
     private String  type;
@@ -46,7 +46,7 @@ public class DmtAlertItem {
      *        value of the data in the alert item
      * @param mark the mark parameter of the alert item
      */
-    public DmtAlertItem(String source, String type, String mark, DmtData data) {
+    public AlertItem(String source, String type, String mark, DmtData data) {
         this.source = source;
         this.type   = type;
         this.mark   = mark;
@@ -109,7 +109,7 @@ public class DmtAlertItem {
     /**
      * Returns the string representation of this alert item. The returned string
      * includes all parameters of the alert item, and has the following format:
-     * <pre> DmtAlertItem(&lt;source&gt;, &lt;type&gt;, &lt;mark&gt;, &lt;data&gt;)</pre>
+     * <pre> AlertItem(&lt;source&gt;, &lt;type&gt;, &lt;mark&gt;, &lt;data&gt;)</pre>
      * The last parameter is the string representation of the data value.  The 
      * format of the data is not explicitly included.
      * 
@@ -117,6 +117,6 @@ public class DmtAlertItem {
      */
     public String toString() {
         return
-            "DmtAlertItem(\"" + source + "\", \"" + type + "\", \"" + mark + "\", \"" + data + "\")";
+            "AlertItem(\"" + source + "\", \"" + type + "\", \"" + mark + "\", \"" + data + "\")";
     }
 }

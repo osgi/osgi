@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 /**
- * <code>DmtAcl</code> is an immutable class representing structured access to
+ * <code>Acl</code> is an immutable class representing structured access to
  * DMT ACLs. Under OMA DM the ACLs are defined as strings with an internal
  * syntax.
  * <p>
@@ -25,7 +25,7 @@ import java.util.Map;
  * {@link DmtAdmin#getSession(String, String, int) DmtAdmin.getSession}), as
  * well as &quot; <code>*</code> &quot; indicating any principal.
  */
-public class DmtAcl implements Cloneable {
+public class Acl implements Cloneable {
 
     //----- Public constants -----//
 
@@ -80,7 +80,7 @@ public class DmtAcl implements Cloneable {
 
     //----- Private fields -----//
 
-    // the implementation takes advantage of this being a sorted map
+        // the implementation takes advantage of this being a sorted map
     private TreeMap principalPermissions;
     private int globalPermissions;
 
@@ -91,7 +91,7 @@ public class DmtAcl implements Cloneable {
      * Create an instance of the ACL that represents an empty list of principals
      * with no permissions.
      */
-    public DmtAcl()
+    public Acl()
     {
         clearPermissions();
     }
@@ -104,7 +104,7 @@ public class DmtAcl implements Cloneable {
      *        with no permissions.
      * @throws IllegalArgumentException if acl is not a valid OMA DM ACL string
      */
-    public DmtAcl(String acl)
+    public Acl(String acl)
     {
         parseAcl(acl);
     }
@@ -113,7 +113,7 @@ public class DmtAcl implements Cloneable {
      * Creates an instance with specifying the list of principals and the
      * permissions they hold. The two arrays run in parallel, that is
      * <code>principals[i]</code> will hold <code>permissions[i]</code> in
-     * the ACL.  Entries with no permissions (value 0) are silently ignored.
+     * the ACL.
      * <p>
      * A principal name may not appear multiple times in the 'principals'
      * argument. If the &quot;*&quot; principal appears in the array, the
@@ -126,7 +126,7 @@ public class DmtAcl implements Cloneable {
      *         the same, if any array element is invalid, or if a principal
      *         appears multiple times in the <code>principals</code> array
      */
-    public DmtAcl(String[] principals, int[] permissions) {
+    public Acl(String[] principals, int[] permissions) {
         if(principals.length != permissions.length)
             throw new IllegalArgumentException(
                     "The lengths of the principal and permission arrays are not the same.");
@@ -137,18 +137,15 @@ public class DmtAcl implements Cloneable {
             // allow one * in 'principals' array, remove after loop
             if(!ALL_PRINCIPALS.equals(principals[i]))
                 checkPrincipal(principals[i]);
-            
-            // check that next element in permissions array has only perm. bits
             checkPermissions(permissions[i]);
+            // ### That previous line looks VERY fishy
         
-            if(permissions[i] != 0) {
-                Integer permInt = new Integer(permissions[i]);
-                Object old = principalPermissions.put(principals[i], permInt);                
-                if(old != null)
-                    throw new IllegalArgumentException("Principal '" + 
-                            principals[i] + 
-                            "' appears multiple times in the principal array.");
-            }
+            Integer permInt = new Integer(permissions[i]);
+            Object old = principalPermissions.put(principals[i], permInt);                
+            if(old != null)
+                throw new IllegalArgumentException("Principal '" + 
+                        principals[i] + 
+                        "' appears multiple times in the principal array.");
         }
         
         // set the global permissions if there was a * in the array
@@ -162,13 +159,13 @@ public class DmtAcl implements Cloneable {
     /**
      * Creates a copy of this ACL object.
      * 
-     * @return a <code>DmtAcl</code> instance describing the same permissions
+     * @return a <code>Acl</code> instance describing the same permissions
      *         as this instance
      */
     public Object clone() {
-        DmtAcl cloned = null;
+        Acl cloned = null;
         try {
-            cloned = (DmtAcl) super.clone();
+            cloned = (Acl) super.clone();
         } catch(CloneNotSupportedException e) {
             // never happens because this class is Cloneable
             throw new UnsupportedOperationException();
@@ -182,11 +179,11 @@ public class DmtAcl implements Cloneable {
     }
 
     /**
-     * Checks whether the given object is equal to this <code>DmtAcl</code>
-     * instance. Two <code>DmtAcl</code> instances are equal if they allow the
+     * Checks whether the given object is equal to this <code>Acl</code>
+     * instance. Two <code>Acl</code> instances are equal if they allow the
      * same set of permissions for the same set of principals.
      * 
-     * @param obj the object to compare with this <code>DmtAcl</code> instance
+     * @param obj the object to compare with this <code>Acl</code> instance
      * @return <code>true</code> if the parameter represents the same ACL as
      *         this instance
      */
@@ -194,10 +191,10 @@ public class DmtAcl implements Cloneable {
         if(obj == this)
             return true;
         
-        if(!(obj instanceof DmtAcl))
+        if(!(obj instanceof Acl))
             return false;
         
-        DmtAcl other = (DmtAcl) obj;
+        Acl other = (Acl) obj;
         
         if(globalPermissions != other.globalPermissions ||
                 principalPermissions.size() != other.principalPermissions.size())
@@ -205,14 +202,14 @@ public class DmtAcl implements Cloneable {
         
         // principalPermissions sets cannot be easily compared, because they are
         // not canonical: the global permissions may or may not be present for 
-        // each principal, without changing the meaning of the DmtAcl object.
+        // each principal, without changing the meaning of the Acl object.
         
         // Compare canonical string representations, inefficient but simple.
         return toString().equals(other.toString());
     }
     
     /**
-     * Returns the hash code for this ACL instance. If two <code>DmtAcl</code>
+     * Returns the hash code for this ACL instance. If two <code>Acl</code>
      * instances are equal according to the {@link #equals} method, then calling
      * this method on each of them must produce the same integer result.
      * 
@@ -225,7 +222,7 @@ public class DmtAcl implements Cloneable {
     }
 
     /**
-     * Create a new <code>DmtAcl</code> instance by adding a specific
+     * Create a new <code>Acl</code> instance by adding a specific
      * permission to a given principal. The already existing permissions of the
      * principal are not affected.
      * 
@@ -234,13 +231,13 @@ public class DmtAcl implements Cloneable {
      * @param permissions The permissions to be given. The parameter can be a
      *        logical <code>or</code> of more permission constants defined in
      *        this class.
-     * @return a new <code>DmtAcl</code> instance
+     * @return a new <code>Acl</code> instance
      * @throws IllegalArgumentException if <code>principal</code> is not a
      *         valid principal name or if <code>permissions</code> is not a
      *         valid combination of the permission constants defined in this
      *         class
      */
-    public synchronized DmtAcl addPermission(String principal, int permissions)
+    public synchronized Acl addPermission(String principal, int permissions)
     {
         checkPermissions(permissions);
 
@@ -249,7 +246,7 @@ public class DmtAcl implements Cloneable {
     }
 
     /**
-     * Create a new <code>DmtAcl</code> instance by revoking a specific
+     * Create a new <code>Acl</code> instance by revoking a specific
      * permission from a given principal. Other permissions of the principal are
      * not affected.
      * <p>
@@ -261,14 +258,14 @@ public class DmtAcl implements Cloneable {
      * @param permissions The permissions to be revoked. The parameter can be a
      *        logical <code>or</code> of more permission constants defined in
      *        this class.
-     * @return a new <code>DmtAcl</code> instance
+     * @return a new <code>Acl</code> instance
      * @throws IllegalArgumentException if <code>principal</code> is not a
      *         valid principal name, if <code>permissions</code> is not a
      *         valid combination of the permission constants defined in this
      *         class, or if a globally granted permission would have been
      *         revoked from a specific principal
      */
-    public synchronized DmtAcl deletePermission(String principal, int permissions)
+    public synchronized Acl deletePermission(String principal, int permissions)
     {
         checkPermissions(permissions);
 
@@ -323,7 +320,7 @@ public class DmtAcl implements Cloneable {
     }
 
     /**
-     * Create a new <code>DmtAcl</code> instance by setting the list of
+     * Create a new <code>Acl</code> instance by setting the list of
      * permissions a given principal has. All permissions the principal had will
      * be overwritten.
      * <p>
@@ -336,18 +333,18 @@ public class DmtAcl implements Cloneable {
      * @param permissions The set of permissions to be given. The parameter can
      *        be a logical <code>or</code> of the permission constants defined
      *        in this class.
-     * @return a new <code>DmtAcl</code> instance
+     * @return a new <code>Acl</code> instance
      * @throws IllegalArgumentException if <code>principal</code> is not a
      *         valid principal name, if <code>permissions</code> is not a
      *         valid combination of the permission constants defined in this
      *         class, or if a globally granted permission would have been
      *         revoked from a specific principal
      */
-    public synchronized DmtAcl setPermission(String principal, int permissions)
+    public synchronized Acl setPermission(String principal, int permissions)
     {
         checkPermissions(permissions);
         
-        DmtAcl newPermission = (DmtAcl) clone();
+        Acl newPermission = (Acl) clone();
         newPermission.changePermission(principal, permissions);
         return newPermission;
     }
@@ -412,7 +409,7 @@ public class DmtAcl implements Cloneable {
      * principal had will be overwritten.
      * <p>
      * Assumes that the permissions parameter has been checked. All
-     * modifications of a <code>DmtAcl</code> instance (add, delete, set) are
+     * modifications of a <code>Acl</code> instance (add, delete, set) are
      * done through this method.
      * 
      * @param principal The entity to which permission should be granted.

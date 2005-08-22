@@ -7,8 +7,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this 
  * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-
-package org.osgi.service.dmt;
+package org.osgi.service.dmt.security;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
@@ -19,35 +18,33 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Indicates the callers authority to create DMT sessions on behalf of a remote
- * management server. Only protocol adapters communicating with management
- * servers should be granted this permission.
+ * Indicates the callers authority to send alerts to management servers.
  * <p>
- * <code>DmtPrincipalPermission</code> has a target string which controls the
- * name of the principal on whose behalf the protocol adapter can act. A
- * wildcard is allowed at the end of the target string, to allow using any
- * principal name with the given prefix. The &quot;*&quot; target means the
- * adapter can create a session in the name of any principal.
+ * <code>AlertPermission</code> has a target string which controls the name
+ * of the server where alerts can be sent. A wildcard is allowed at the end of
+ * the target string, to allow sending alerts to any server with a name matching
+ * the given prefix. The &quot;*&quot; target means the adapter send alerts to
+ * any management server.
  */
-public class DmtPrincipalPermission extends Permission {
+public class AlertPermission extends Permission {
     // TODO add static final serialVersionUID
 
     // specifies whether the target string had a wildcard at the end
     private boolean isPrefix;
 
     // the target string without the wildcard (if there was one)
-    private String principal;
+    private String serverId;
     
     /**
-     * Creates a new <code>DmtPrincipalPermission</code> object with its name
+     * Creates a new <code>AlertPermission</code> object with its name
      * set to the target string.  Name must be non-null and non-empty.
      * 
-     * @param target the name of the principal, can end with <code>*</code> to
-     *        match any principal with the given prefix
+     * @param target the name of the server, can end with <code>*</code> to
+     *        match any server identifier with the given prefix
      * @throws NullPointerException if <code>name</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>name</code> is empty
      */
-    public DmtPrincipalPermission(String target) {
+    public AlertPermission(String target) {
         super(target);
         
         if (target == null)
@@ -60,26 +57,26 @@ public class DmtPrincipalPermission extends Permission {
 
         isPrefix = target.endsWith("*");
         if(isPrefix)
-            principal = target.substring(0, target.length()-1);
+            serverId = target.substring(0, target.length()-1);
         else
-            principal = target;
+            serverId = target;
     }
 
     /**
-     * Creates a new <code>DmtPrincipalPermission</code> object using the
+     * Creates a new <code>AlertPermission</code> object using the
      * 'canonical' two argument constructor. In this version this class does not
      * define any actions, the second argument of this constructor must be "*"
      * so that this class can later be extended in a backward compatible way.
      * 
-     * @param target the name of the principal, can end with <code>*</code> to
-     *        match any principal with the given prefix
+     * @param target the name of the server, can end with <code>*</code> to
+     *        match any server identifier with the given prefix
      * @param actions no actions defined, must be "*" for forward compatibility
      * @throws NullPointerException if <code>name</code> or
      *         <code>actions</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>name</code> is empty or
      *         <code>actions</code> is not "*"
      */
-    public DmtPrincipalPermission(String target, String actions) {
+    public AlertPermission(String target, String actions) {
         this(target);
         
         if(actions == null)
@@ -92,11 +89,11 @@ public class DmtPrincipalPermission extends Permission {
     }
 
     /**
-     * Checks whether the given object is equal to this DmtPrincipalPermission
-     * instance. Two DmtPrincipalPermission instances are equal if they have the
+     * Checks whether the given object is equal to this AlertPermission
+     * instance. Two AlertPermission instances are equal if they have the
      * same target string.
      * 
-     * @param obj the object to compare to this DmtPrincipalPermission instance
+     * @param obj the object to compare to this AlertPermission instance
      * @return <code>true</code> if the parameter represents the same
      *         permissions as this instance
      */
@@ -104,14 +101,14 @@ public class DmtPrincipalPermission extends Permission {
         if(obj == this)
             return true;
         
-        if(!(obj instanceof DmtPrincipalPermission))
+        if(!(obj instanceof AlertPermission))
             return false;
 
-        DmtPrincipalPermission other = (DmtPrincipalPermission) obj;
+        AlertPermission other = (AlertPermission) obj;
 
         return
             isPrefix == other.isPrefix &&
-            principal.equals(other.principal);
+            serverId.equals(other.serverId);
     }
 
     /**
@@ -125,80 +122,80 @@ public class DmtPrincipalPermission extends Permission {
 
     /**
      * Returns the hash code for this permission object. If two
-     * DmtPrincipalPermission objects are equal according to the {@link #equals}
+     * AlertPermission objects are equal according to the {@link #equals}
      * method, then calling this method on each of the two
-     * DmtPrincipalPermission objects must produce the same integer result.
+     * AlertPermission objects must produce the same integer result.
      * 
      * @return hash code for this permission object
      */
     public int hashCode() {
-        return new Boolean(isPrefix).hashCode() ^ principal.hashCode();
+        return new Boolean(isPrefix).hashCode() ^ serverId.hashCode();
     }
 
     /**
-     * Checks if this DmtPrincipalPermission object implies the specified
+     * Checks if this AlertPermission object implies the specified
      * permission.
      * 
      * @param p the permission to check for implication
-     * @return true if this DmtPrincipalPermission instance implies the
+     * @return true if this AlertPermission instance implies the
      *         specified permission
      */
     public boolean implies(Permission p) {
-        if(!(p instanceof DmtPrincipalPermission))
+        if(!(p instanceof AlertPermission))
             return false;
 
-        DmtPrincipalPermission other = (DmtPrincipalPermission) p;
+        AlertPermission other = (AlertPermission) p;
 
-        return impliesPrincipal(other);
+        return impliesServer(other);
     }
 
     /**
      * Returns a new PermissionCollection object for storing
-     * DmtPrincipalPermission objects.
+     * AlertPermission objects.
      *
      * @return the new PermissionCollection
      */
     public PermissionCollection newPermissionCollection() {
-        return new DmtPrincipalPermissionCollection();
+        return new DmtAlertPermissionCollection();
     }
     
-    /* Returns true if the principal parameter of the given
-     * DmtPrincipalPermission is implied by the principal of this permission,
-     * i.e. this principal is a prefix of the other principal but ends with a *,
-     * or the two principal strings are equal.
+    /* Returns true if the server name parameter of the given
+     * AlertPermission is implied by the server name of this permission,
+     * i.e. this server name is a prefix of the other one but ends with a *,
+     * or the two server names are equal.
      */
-    boolean impliesPrincipal(DmtPrincipalPermission p) {
-        return isPrefix ? p.principal.startsWith(principal) :
-            !p.isPrefix && p.principal.equals(principal);
+    boolean impliesServer(AlertPermission p) {
+        return isPrefix ? p.serverId.startsWith(serverId) :
+            !p.isPrefix && p.serverId.equals(serverId);
     }
 }
 
 /**
- * Represents a homogeneous collection of DmtPrincipalPermission objects.
+ * Represents a homogeneous collection of AlertPermission objects.
  */
-final class DmtPrincipalPermissionCollection extends PermissionCollection {
+final class DmtAlertPermissionCollection extends PermissionCollection {
     // TODO serialization
     
     private List perms;
     
     /**
-     * Create an empty DmtPrincipalPermissionCollection object.
+     * Create an empty DmtAlertPermissionCollection object.
      */
-    public DmtPrincipalPermissionCollection() {
+    public DmtAlertPermissionCollection() {
         perms = new ArrayList();
     }
     
     /**
-     * Adds a permission to the DmtPrincipalPermissionCollection.
+     * Adds a permission to the DmtAlertPermissionCollection.
      * 
      * @param permission the Permission object to add
      * @exception IllegalArgumentException if the permission is not a
-     *            DmtPrincipalPermission
-     * @exception SecurityException if this DmtPrincipalPermissionCollection
+     *            AlertPermission
+     * @exception SecurityException if this DmtAlertPermissionCollection
      *            object has been marked readonly
      */
     public void add(Permission permission) {
-        if (!(permission instanceof DmtPrincipalPermission))
+        if (!(permission instanceof AlertPermission))
             throw new IllegalArgumentException(
                     "Cannot add permission, invalid permission type: "
                             + permission);
@@ -212,7 +209,7 @@ final class DmtPrincipalPermissionCollection extends PermissionCollection {
             // remove all permissions that are implied by the new one
             Iterator i = perms.iterator();
             while(i.hasNext())
-                if(permission.implies((DmtPrincipalPermission) i.next()))
+                if(permission.implies((AlertPermission) i.next()))
                     i.remove();
                 
             // no need to synchronize because all adds are done sequentially
@@ -232,24 +229,24 @@ final class DmtPrincipalPermissionCollection extends PermissionCollection {
      */
     public boolean implies(Permission permission) 
     {
-        if (!(permission instanceof DmtPrincipalPermission))
+        if (!(permission instanceof AlertPermission))
             return false;
         
-        DmtPrincipalPermission other = (DmtPrincipalPermission) permission;
+        AlertPermission other = (AlertPermission) permission;
         
         Iterator i = perms.iterator();
         while (i.hasNext())
-            if (((DmtPrincipalPermission) i.next()).impliesPrincipal(other))
+            if (((AlertPermission) i.next()).impliesServer(other))
                 return true;
 
         return false;
     }
     
     /**
-     * Returns an enumeration of all the DmtPrincipalPermission objects in the
+     * Returns an enumeration of all the AlertPermission objects in the
      * container. The returned value cannot be <code>null</code>.
      * 
-     * @return an enumeration of all the DmtPrincipalPermission objects
+     * @return an enumeration of all the AlertPermission objects
      */
     public Enumeration elements() {
         // Convert Iterator into Enumeration
