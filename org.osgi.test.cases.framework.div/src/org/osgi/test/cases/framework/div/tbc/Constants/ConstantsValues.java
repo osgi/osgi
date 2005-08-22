@@ -94,7 +94,6 @@ public class ConstantsValues {
 		"REQUIRE_BUNDLE", "Require-Bundle",
 		"BUNDLE_VERSION_ATTRIBUTE", "bundle-version",
 		"FRAGMENT_HOST", "Fragment-Host",
-		"MULTIPLE_HOSTS_DIRECTIVE", "multiple-hosts",
 		"SELECTION_FILTER_ATTRIBUTE", "selection-filter",
 		"BUNDLE_MANIFESTVERSION", "Bundle-ManifestVersion",
 		"VERSION_ATTRIBUTE", "version",
