@@ -76,7 +76,7 @@ public class UserPromptCondition implements Condition {
 	 * 		it starts with a '%' sign, then the message is looked up from the catalog specified previously.
 	 * 		The key is the rest of the string after the '%' sign.</li>
 	 * </ol>
-	 * @throws IllegalArgumentException if the parameters are malformed.</li>
+	 * @throws IllegalArgumentException if the parameters are malformed.
 	 * @throws NullPointerException if one of the parameters is <code>null</code>.
 	 */
 	public static Condition getCondition(Bundle bundle,ConditionInfo conditionInfo)
