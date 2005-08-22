@@ -13,7 +13,6 @@
 
 package org.eclipse.osgi.component;
 
-import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
@@ -29,7 +28,6 @@ import org.eclipse.osgi.component.workqueue.WorkDispatcher;
 import org.eclipse.osgi.component.workqueue.WorkQueue;
 import org.eclipse.osgi.util.tracker.BundleTracker;
 import org.eclipse.osgi.util.tracker.BundleTrackerCustomizer;
-import org.eclipse.osgi.component.Log;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -63,16 +61,12 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	 * Service.
 	 */
 	protected Log					log;
-	
+
 	/**
 	 * Bundle is being added to SCR tracked bundles.
 	 */
 	public static final int ADD = 1;
-	/**
-	 * Bundle is being removed from SCR tracked bundles.
-	 */
-	public static final int REMOVE = 2;
-	
+
 	/**
 	 * Start the SCR bundle.
 	 * 
@@ -225,7 +219,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 			while (it.hasNext()) {
 				ComponentDescription ComponentDescription = (ComponentDescription) it.next();
 
-				//check if enabled && eligible
+				//check if enabled && satisfied
 				if ((ComponentDescription.isEnabled())) {
 
 					//add to disabled list
@@ -243,7 +237,8 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 
 		// publish event to resolver ( or dissolver if there is one) with list of CD's to disable 
 		//workQueue.enqueueWork(this, REMOVE, bundle);
-		workQueue.enqueueWork(this, REMOVE, disableComponentDescriptions);
+		//workQueue.enqueueWork(this, REMOVE, disableComponentDescriptions);
+		resolver.disableComponents(disableComponentDescriptions);
 		return;
 	}
 
@@ -407,7 +402,8 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 		}
 
 		// publish to resolver the list of CDs to disable
-		workQueue.enqueueWork(this, REMOVE, disableComponentDescriptions);
+		//workQueue.enqueueWork(this, REMOVE, disableComponentDescriptions);
+		resolver.disableComponents(disableComponentDescriptions);
 		return;
 	}
 
@@ -423,16 +419,8 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 		descriptions = (List) workObject;
 		switch (workAction) {
 			case ADD :
-				try {
-					resolver.enableComponents(descriptions);
-				} catch (IOException ex) {
-					ex.printStackTrace();
-					//TODO - fix to use correct error handling
-				}
-				break;
-			case REMOVE :
-				resolver.disableComponents(descriptions);
-				break;
+				resolver.enableComponents(descriptions);
+			break;
 		}
 	}
 
@@ -463,13 +451,28 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	 */
 	public void validate(ComponentDescription componentDescription) {
 
-		// if ComponentFactory and ServiceFactory are both specified then mark ComponentDescription as invalid
 		if (
 				(componentDescription.getFactory() != null) &&
 				(componentDescription.getService() != null) &&
 				(componentDescription.getService().isServicefactory())) {
 			componentDescription.setValid(false);
 			Log.log(1, "validate componentDescription: ", new Throwable("invalid to specify both ComponentFactory and ServiceFactory"));
+		} else if (
+				(componentDescription.isImmediate()) &&
+				(componentDescription.getService() != null) &&
+				(componentDescription.getService().isServicefactory())) {
+			componentDescription.setValid(false);
+			Log.log(1, "validate componentDescription: ", new Throwable("invalid to specify both immediate and ServiceFactory"));
+		} else if (
+				(componentDescription.isImmediate()) &&
+				(componentDescription.getFactory() != null )) {
+			componentDescription.setValid(false);
+			Log.log(1, "validate componentDescription: ", new Throwable("invalid to specify both immediate and ComponentFactory"));
+		} else if (
+				(!componentDescription.isImmediate()) &&
+				(componentDescription.getService() == null )) {
+			componentDescription.setValid(false);
+			Log.log(1, "validate componentDescription: ", new Throwable("invalid set immediate to false and provide no Service"));
 		} else {
 			componentDescription.setValid(true);
 		}
