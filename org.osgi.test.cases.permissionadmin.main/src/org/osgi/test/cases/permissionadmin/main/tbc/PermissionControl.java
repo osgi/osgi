@@ -167,24 +167,25 @@ public class PermissionControl extends DefaultTestBundleControl {
 		createBadPermissionInfo("Comma separation between name and action",
 				"(java.io.FilePermission \"<<ALL FILES>>\", \"read\")",
 				IllegalArgumentException.class);
-		createBadPermissionInfo("Too much whitespace between type and name",
-				"(java.io.FilePermission  \"<<ALL FILES>>\" \"read\")",
-				IllegalArgumentException.class);
-		createBadPermissionInfo("Too much whitespace between name and action",
-				"(java.io.FilePermission \"<<ALL FILES>>\"  \"read\")",
-				IllegalArgumentException.class);
-		createBadPermissionInfo("Leading whitespace",
-				" (java.io.FilePermission \"<<ALL FILES>>\" \"read\")",
-				IllegalArgumentException.class);
-		createBadPermissionInfo("Whitespace after opening parenthesis",
-				"( java.io.FilePermission \"<<ALL FILES>>\" \"read\")",
-				IllegalArgumentException.class);
-		createBadPermissionInfo("Trailing whitespace",
-				"(java.io.FilePermission \"<<ALL FILES>>\" \"read\") ",
-				IllegalArgumentException.class);
-		createBadPermissionInfo("Whitespace before closing parenthesis",
-				"(java.io.FilePermission \"<<ALL FILES>>\" \"read\" )",
-				IllegalArgumentException.class);
+// in R4 we are more forgiving about whitespace
+//		createBadPermissionInfo("Too much whitespace between type and name",
+//				"(java.io.FilePermission  \"<<ALL FILES>>\" \"read\")",
+//				IllegalArgumentException.class);
+//		createBadPermissionInfo("Too much whitespace between name and action",
+//				"(java.io.FilePermission \"<<ALL FILES>>\"  \"read\")",
+//				IllegalArgumentException.class);
+//		createBadPermissionInfo("Leading whitespace",
+//				" (java.io.FilePermission \"<<ALL FILES>>\" \"read\")",
+//				IllegalArgumentException.class);
+//		createBadPermissionInfo("Whitespace after opening parenthesis",
+//				"( java.io.FilePermission \"<<ALL FILES>>\" \"read\")",
+//				IllegalArgumentException.class);
+//		createBadPermissionInfo("Trailing whitespace",
+//				"(java.io.FilePermission \"<<ALL FILES>>\" \"read\") ",
+//				IllegalArgumentException.class);
+//		createBadPermissionInfo("Whitespace before closing parenthesis",
+//				"(java.io.FilePermission \"<<ALL FILES>>\" \"read\" )",
+//				IllegalArgumentException.class);
 	}
 
 	/**
