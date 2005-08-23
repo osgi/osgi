@@ -29,7 +29,7 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 		try {
 			delegate = (Delegate) implementation
 					.newInstance();
-			delegate.setMegletDescriptor( this );
+			delegate.setMidletDescriptor( this );
 		}
 		catch (Exception e) {
 			// Too bad ...
@@ -58,7 +58,7 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 	}
 
 	public interface Delegate {
-		void setMegletDescriptor( MidletDescriptor descriptor );
+		void setMidletDescriptor( MidletDescriptor descriptor );
 		ApplicationHandle launchSpecific(Map arguments) throws Exception;
 		Map getPropertiesSpecific(String locale);
 		void lockSpecific();
