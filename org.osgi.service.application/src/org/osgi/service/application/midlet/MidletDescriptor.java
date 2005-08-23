@@ -52,7 +52,7 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 		delegate.unlockSpecific();
 	}
 	
-	protected  MegletDescriptor(String pid) {
+	protected  MidletDescriptor(String pid) {
 		super( pid );
 
 		try {
@@ -87,7 +87,7 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 	}
 
 	public interface Delegate {
-		void setMegletDescriptor( MegletDescriptor descriptor );
+		void setMegletDescriptor( MidletDescriptor descriptor );
 		ApplicationHandle launchSpecific(Map arguments) throws Exception;
 		Map getPropertiesSpecific(String locale);
 		void lockSpecific();
