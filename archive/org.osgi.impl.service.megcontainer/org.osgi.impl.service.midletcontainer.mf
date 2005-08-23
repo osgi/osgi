@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-Name: MIDletContainer
+Bundle-SymbolicName: org.osgi.impl.service.midletcontainer
+Bundle-Vendor: Nokia
+Bundle-Version: 1.0
+Bundle-ClassPath: .
+Bundle-Activator: org.osgi.impl.service.midletcontainer.Activator
+MIDlet-Container-Name: Nokia Sample MIDlet Container
+MIDlet-Container-Version: 1.0
+DynamicImport-Package: *
+Import-Package: org.osgi.framework, javax.microedition.midlet, org.osgi.servi
+ ce.application, org.osgi.service.application.midlet, org.osgi.service.event,
+  org.osgi.service.log
+Export-Package: org.osgi.impl.service.midletcontainer
+
+
