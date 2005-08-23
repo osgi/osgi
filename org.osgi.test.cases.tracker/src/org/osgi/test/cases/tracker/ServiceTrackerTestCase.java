@@ -1,7 +1,5 @@
 /*
- * $Header:
- * /cvshome/repository/org/osgi/test/cases/servicetracker/ServiceTrackerTestCase.java,v
- * 1.1 2002/08/20 00:57:57 nnilsson Exp $
+ * $Header$
  * 
  * Copyright (c) OSGi Alliance (2000-2001). All Rights
  * Reserved.

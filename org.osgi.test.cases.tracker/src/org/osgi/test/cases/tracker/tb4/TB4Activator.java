@@ -27,7 +27,7 @@ public class TB4Activator implements BundleActivator
 
         this.bc=bc;
 
-        ServiceReference sr = bc.getServiceReference("org.osgi.test.cases.servicetracker.tb2.TestService2");
+        ServiceReference sr = bc.getServiceReference("org.osgi.test.cases.tracker.tb2.TestService2");
         TestService2 ts2 = (TestService2)bc.getService(sr);
     }
 

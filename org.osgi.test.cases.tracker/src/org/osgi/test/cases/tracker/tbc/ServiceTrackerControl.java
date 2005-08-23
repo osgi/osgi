@@ -52,7 +52,7 @@ public class ServiceTrackerControl extends DefaultTestBundleControl
         log("Now a bundle that contains TestService1 is started.");
 
         //Creates ServiceTracker object with ServiceReference to testservice1
-        ServiceReference sr = getContext().getServiceReference("org.osgi.test.cases.servicetracker.tb1.TestService1");
+        ServiceReference sr = getContext().getServiceReference("org.osgi.test.cases.tracker.tb1.TestService1");
         ServiceTracker st = new ServiceTracker(getContext(), sr, null);
         st.open();
 
@@ -136,17 +136,17 @@ public class ServiceTrackerControl extends DefaultTestBundleControl
         //Creates ServiceTracker1 object with testservice1
         //Call ServiceTracker.open()
         st1 = new ServiceTracker(context,
-                                 "org.osgi.test.cases.servicetracker.tb1.TestService1",null);
+                                 "org.osgi.test.cases.tracker.tb1.TestService1",null);
         st1.open();
         //Creates ServiceTracker2 object with testservice2
         //Call ServiceTracker.open()
         st2 = new ServiceTracker(context,
-                                 "org.osgi.test.cases.servicetracker.tb2.TestService2",null);
+                                 "org.osgi.test.cases.tracker.tb2.TestService2",null);
         st2.open();
         //Creates ServiceTracker3 object with testservice3
         //Call ServiceTracker.open()
         st3 = new ServiceTracker(context,
-                                 "org.osgi.test.cases.servicetracker.tb3.TestService3",null);
+                                 "org.osgi.test.cases.tracker.tb3.TestService3",null);
         st3.open();
         log("ServiceTracker is created for Testbundle 1, Testbundle 2 and Testbundle 3");
 
@@ -277,7 +277,7 @@ public class ServiceTrackerControl extends DefaultTestBundleControl
         //Call ServiceTracker.open()
         log("Install a ServiceTracker.");
         ServiceTracker st = new ServiceTracker(context,
-                                               "org.osgi.test.cases.servicetracker.tb1.TestService1",this);
+                                               "org.osgi.test.cases.tracker.tb1.TestService1",this);
         st.open();
         //Call ServiceTracker.size()
         log("The number of Services being tracked by ServiceTracker 1 is: 0 : '"+st.size()+"'");
@@ -386,7 +386,7 @@ public class ServiceTrackerControl extends DefaultTestBundleControl
         }
 
         //ServiceReference.getUsingBundles
-        ServiceReference sru = context.getServiceReference("org.osgi.test.cases.servicetracker.tb2.TestService2");
+        ServiceReference sru = context.getServiceReference("org.osgi.test.cases.tracker.tb2.TestService2");
         if(sru!=null){
             Bundle[] bus = sru.getUsingBundles();
             boolean u1=false;
@@ -408,7 +408,7 @@ public class ServiceTrackerControl extends DefaultTestBundleControl
             log("Is Testbundle 3 using TestService2: false : '"+u3+"'");
             log("Is Testbundle 4 using TestService2: true : '"+u4+"'");
         } else {
-            log("org.osgi.test.cases.servicetracker.tb2.TestService2 does not seem to exist.");
+            log("org.osgi.test.cases.tracker.tb2.TestService2 does not seem to exist.");
         }
 
 
@@ -437,7 +437,7 @@ public class ServiceTrackerControl extends DefaultTestBundleControl
 
         //Call ServiceTracker.remove(ServiceReference to testservice1 in tb2)
         log("TestService1 in Testbundle 2 is removed");
-        ServiceReference sr = context.getServiceReference("org.osgi.test.cases.servicetracker.tb2.TestService2");
+        ServiceReference sr = context.getServiceReference("org.osgi.test.cases.tracker.tb2.TestService2");
         st.remove(sr);
         //Call ServiceTracker.getServiceReferences()
         //Should find tb1, tb3
