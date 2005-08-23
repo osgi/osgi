@@ -782,5 +782,4 @@ public class TestMidletContainerBundleActivator
     private static final int APPLICATION_RESUME = 3;
     private static final int APPLICATION_STOPPED = 5;
     private static final int APPLICATION_STOPPED_AFTER_PAUSE = 6;
-    static Class class$0; /* synthetic field */
 }
