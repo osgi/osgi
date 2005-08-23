@@ -69,8 +69,10 @@ public class TestMidletContainerBundleActivator
         try
         {
             Event event;
-            while(!event.getTopic().startsWith("org/osgi/application/") && !event.getTopic().startsWith("com/nokia/midlettest/")) 
-                event = getEvent();
+            do {
+            	event = getEvent();
+            }while(!event.getTopic().startsWith("org/osgi/application/") && !event.getTopic().startsWith("com/nokia/midlettest/"));
+                
             if(!event.getTopic().equals(name))
                 throw new Exception("Received: " + event.getTopic() + "    Expected:" + name);
             else
