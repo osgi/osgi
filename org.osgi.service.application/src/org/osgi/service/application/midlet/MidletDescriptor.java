@@ -46,10 +46,11 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 	static Class					implementation;
 	static String					cName;
 
+	static
 	{
 		try {
 			cName = System
-					.getProperty("org.osgi.vendor.application.meglet.MegletDescriptor");
+					.getProperty("org.osgi.vendor.application.midlet.MidletDescriptor");
 			implementation = Class.forName(cName);
 		}
 		catch (Throwable t) {
