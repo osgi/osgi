@@ -4,71 +4,67 @@ import java.io.*;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 import org.osgi.service.log.LogService;
+import org.osgi.application.*;
 
-public class TestMidlet extends MIDlet
-{
+public class TestMidlet extends MIDlet {
+	String                      fileName;
+	String                      storedString;
+	boolean                     paused;
+	static long		              staticFieldChecker	= 0L;
+	private LogService	        logService;
+	private long		            myStaticFieldChecker;
+	private ApplicationContext  myApplicationContext;
+	
 
-    public TestMidlet()
-    {
-        fileName = null;
-        storedString = null;
-        paused = false;
-        myStaticFieldChecker = 0L;
-    }
+	public TestMidlet() {
+		fileName = null;
+		storedString = null;
+		paused = false;
+		myStaticFieldChecker = 0L;
+	}
 
-    public void startApp()
-        throws MIDletStateChangeException
-    {
-        logService.log(4, "Checking whether the log service is working.");
-        staticFieldChecker = myStaticFieldChecker = System.currentTimeMillis();
-        if(paused)
-        {
-            writeResult("RESUME");
-        } else
-        {
-            fileName = getAppProperty("TestResult");
-            writeResult("START");
-        }
-    }
+	public void startApp() throws MIDletStateChangeException {
+		logService.log(4, "Checking whether the log service is working.");
+		staticFieldChecker = myStaticFieldChecker = System.currentTimeMillis();
 
-    public void destroyApp(boolean immediate)
-        throws MIDletStateChangeException
-    {
-        if(myStaticFieldChecker == staticFieldChecker)
-        {
-            writeResult("STOP");
-        } else
-        {
-            writeResult("ERROR");
-            System.err.println("Static field sharing in multiple midlet instances!");
-        }
-    }
+		myApplicationContext = org.osgi.application.Framework.getApplicationContext( this );
+		if( myApplicationContext == null )
+			System.err.println( "OAT didn't create the ApplicationContext!" );
 
-    public void pauseApp()
-    {
-        paused = true;
-        writeResult("PAUSE");
-    }
+		if (paused) {
+			writeResult("RESUME");
+		}
+		else {
+			fileName = getAppProperty("TestResult");
+			writeResult("START");
+		}
+	}
 
-    private void writeResult(String result)
-    {
-        try
-        {
-            if(fileName == null)
-                return;
-            File file = new File(fileName);
-            FileOutputStream stream = new FileOutputStream(file);
-            stream.write(result.getBytes());
-            stream.close();
-        }
-        catch(IOException ioexception) { }
-    }
+	public void destroyApp(boolean immediate) throws MIDletStateChangeException {
+		if (myStaticFieldChecker == staticFieldChecker) {
+			writeResult("STOP");
+		}
+		else {
+			writeResult("ERROR");
+			System.err
+					.println("Static field sharing in multiple midlet instances!");
+		}
+	}
 
-    String fileName;
-    String storedString;
-    boolean paused;
-    static long staticFieldChecker = 0L;
-    private LogService logService;
-    private long myStaticFieldChecker;
+	public void pauseApp() {
+		paused = true;
+		writeResult("PAUSE");
+	}
 
+	private void writeResult(String result) {
+		try {
+			if (fileName == null)
+				return;
+			File file = new File(fileName);
+			FileOutputStream stream = new FileOutputStream(file);
+			stream.write(result.getBytes());
+			stream.close();
+		}
+		catch (IOException ioexception) {}
+	}
 }
