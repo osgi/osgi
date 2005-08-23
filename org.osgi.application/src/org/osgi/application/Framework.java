@@ -1,6 +1,8 @@
 
 package org.osgi.application;
 
+import java.util.Hashtable;
+
 /**
  * Using this class, OSGi-aware applications can obtain their {@link ApplicationContext} 
  *
@@ -8,6 +10,8 @@ package org.osgi.application;
 public final class Framework {
 
     private Framework() { }
+    
+    private static Hashtable appContextHash;
     
     /**
      * This method needs an argument, an object that represents the application instance. 
@@ -25,8 +29,10 @@ public final class Framework {
      *     the representative object of an application.
      * @return the {@link ApplicationContext} of the specified application instance.
      */
-    public static ApplicationContext getMyApplicationContext(Object applicationInstance) {
-        return null;        
+    public static ApplicationContext getApplicationContext(Object applicationInstance) {
+    	  ApplicationContext appContext = (ApplicationContext)appContextHash.get( applicationInstance );
+    	  if( appContext == null )
+    	  	throw new IllegalArgumentException( "Application Context not found!" );
+        return appContext;        
     }
-
 }
