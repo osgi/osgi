@@ -22,15 +22,15 @@ import java.io.InputStream;
 public interface DeploymentAdmin {
 
 	/**
-	 * Installs a deployment package from an Input Stream. If a version of that deployment package
+	 * Installs a deployment package from an input stream. If a version of that deployment package
 	 * is already installed and the versions are different, the installed version is updated
 	 * with this new version even if it is older. If the two versions are the same, then this 
-	 * method simply returns without any action. 
+	 * method simply returns with the old (target) deployment package without any action. 
 	 * <code>DeploymentAdminPermission("&lt;filter&gt;", "install")</code> is 
 	 * needed for this operation.
-	 * @param  in The input stream which where the deployment package can be read. It mustn't be null.
+	 * @param  in the input stream the deployment package can be read from. It mustn't be null.
 	 * @return A DeploymentPackage object representing the newly installed/updated deployment package. 
-	 *         Return value can only be null if the action was cancelled (see {@see #cancel}).
+	 *         Return value can only be null if the action was cancelled (see {@link #cancel}).
 	 * @throws DeploymentException if the installation was not successful
 	 * @throws SecurityException if access is not permitted based on the current security policy.
 	 * @see DeploymentAdminPermission
@@ -40,25 +40,33 @@ public interface DeploymentAdmin {
     /**
       * Lists the deployment packages currently installed on the platform.
       * <code>DeploymentAdminPermission("&lt;filter&gt;", "list")</code> is 
-      * needed for this operation. 
-      * @return Array of <code>DeploymentPackage</code> objects representing all the installed deployment 
-      *         packages (including the "System" deployment package). The return value cannot be null. In case 
-      *         of missing permissions it may give back an empty array.
-      * @see DeploymentAdminPermission
+      * needed for this operation.<p>
+      * During an installation of an existing package (update), the target must remain 
+      * in this list until the installation process is completed, after which the source 
+      * replaces the target.
+      * @return the array of <code>DeploymentPackage</code> objects representing all the 
+      *         installed deployment packages (including the "System" deployment package). 
+      *         The return value cannot be null. In case of missing permissions it may 
+      *         give back an empty array.
+      * @see DeploymentPackage, DeploymentAdminPermission
       */
     DeploymentPackage[] listDeploymentPackages();
 
     /**
-     * Get the deployment package instance based on its symbolic name.
-     * {@link DeploymentAdminPermission}("&lt;filter&gt;", "list") is 
-     * needed for this operation. 
-     * @param  symbolic name of the deployment package to be retrieved. It mustn't be null.
+     * Gets the currenlty installed {@link DeploymentPackage} instance which has the given 
+     * symbolic name. {@link DeploymentAdminPermission}("&lt;filter&gt;", "list") is 
+     * needed for this operation.<p>
+     * During an installation of an existing package (update), the target deployment package 
+     * must remain the return value until the installation process is completed, after which 
+     * the source is the return value.
+     * @param  the symbolic name of the deployment package to be retrieved. It mustn't be null.
      * @return The <code>DeploymentPackage</code> for the given symbolic name. 
-     *         If there is no deployment package with that symbolic name, null is returned.
-     * @throws SecurityException if access to the deployment package identified by <code>id</code> 
+     *         If there is no deployment package with that symbolic name currently installed, 
+     *         null is returned.
+     * @throws SecurityException if access to the deployment package identified by the symbolic name 
      * 	       is not permitted based on the current security policy.
      * @throws IllegalArgumentException if the given <code>symbName</code> is null
-     * @see DeploymentAdminPermission
+     * @see DeploymentPackage, DeploymentAdminPermission
      */
     DeploymentPackage getDeploymentPackage(String symbName);  
   

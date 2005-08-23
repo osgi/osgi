@@ -41,8 +41,10 @@ public interface DeploymentPackage {
  
 	/**
 	 * Gives back the state of the deployment package (it is stale or not).
+     * After uninstall of a deployment package it becomes stale.
 	 * @return <code>true</code> if the deployment package is stale. <code>false</code>
 	 *         otherwise
+     * @see uninstall(), uninstallForced()
 	 */
     boolean isStale();
 	  
