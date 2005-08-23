@@ -9,6 +9,7 @@ package org.osgi.test.cases.framework.lifecycle.tbc;
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
+import java.security.AllPermission;
 import java.util.*;
 import org.osgi.framework.*;
 import org.osgi.service.permissionadmin.*;
@@ -40,8 +41,7 @@ public class TestBundleControl extends Thread implements LogProxy,
 	String						_tcHome;
 	boolean						_continue		= true;
 	boolean						_called;
-	int							_eventQueue[]	= new int[8];
-	int							_in, _out;
+	Vector						_eventQueue		= new Vector(16);
 	static String[]				methods			= new String[] {
 			"testNormalInstallStartStopUninstall",
 			"testStartStopWithException", "testUnavailableURL",
@@ -248,9 +248,11 @@ public class TestBundleControl extends Thread implements LogProxy,
 	 * Used by the Event test below to receive bundle events.
 	 */
 	public synchronized void bundleChanged(BundleEvent be) {
-		System.out.println("In " + _in + " event : " + event(be.getType()));
-		_eventQueue[_in] = be.getType();
-		_in = inc(_in + 1);
+		// TODO should really test for RESOLVED/UNRESOLVED.  Filtering for now until ...
+		if ((be.getType() & (BundleEvent.RESOLVED | BundleEvent.UNRESOLVED)) != 0)
+			return;
+		System.out.println("In " + _eventQueue.size() + " event : " + event(be.getType()));
+		_eventQueue.add(be);
 		notify();
 	}
 
@@ -530,20 +532,19 @@ public class TestBundleControl extends Thread implements LogProxy,
 
 	synchronized void syncBundle(String test, int event) throws IOException {
 		try {
-			if (_in == _out) {
+			if (_eventQueue.size() == 0) {
 				System.out.println("Waiting for event");
 				wait(10000);
 			}
-			if (_in == _out)
+			if (_eventQueue.size() == 0)
 				log(test, "Time out on event receive " + event(event));
 			else {
-				if (_eventQueue[_out] == event)
+				BundleEvent be = (BundleEvent) _eventQueue.remove(0);
+				if (be.getType() == event)
 					log(test, " correct event " + event(event) + " Ok");
 				else
-					log(test, " invalid event " + event(_eventQueue[_out])
+					log(test, " invalid event " + event(be.getType())
 							+ ", expected " + event(event));
-				_eventQueue[_out] = 0;
-				_out = inc(_out + 1);
 			}
 		}
 		catch (InterruptedException x) {/* cannot happen */
@@ -564,13 +565,17 @@ public class TestBundleControl extends Thread implements LogProxy,
 				return "STOPPED(" + BundleEvent.STOPPED + ")";
 			case BundleEvent.UNINSTALLED :
 				return "UNINSTALLED(" + BundleEvent.UNINSTALLED + ")";
+			case BundleEvent.RESOLVED:
+				return "RESOLVED(" + BundleEvent.RESOLVED + ")";
+			case BundleEvent.UNRESOLVED:
+				return "UNRESOLVED(" + BundleEvent.UNRESOLVED + ")";
+			case BundleEvent.STARTING:
+				return "STARTING(" + BundleEvent.STARTING + ")";
+			case BundleEvent.STOPPING:
+				return "STOPPING(" + BundleEvent.STOPPING + ")";
 			default :
 				return "UNKNOWN(" + event + ")";
 		}
-	}
-
-	int inc(int n) {
-		return n % _eventQueue.length;
 	}
 
 	void setPermissions() {
@@ -582,15 +587,18 @@ public class TestBundleControl extends Thread implements LogProxy,
 		if (permissionAdmin != null) {
 			//set the required permissions for the testcontrol and target
 			// bundle
+//			PermissionInfo[] permInfoArrayLocation = {
+//					new PermissionInfo(AdminPermission.class.getName(), "*",
+//							"*"),
+//					new PermissionInfo(ServicePermission.class.getName(), "*",
+//							"get,register"),
+//					new PermissionInfo(PackagePermission.class.getName(), "*",
+//							"EXPORT,IMPORT"),
+//					new PermissionInfo(SocketPermission.class.getName(), "*",
+//							"accept,connect,listen,resolve")};
 			PermissionInfo[] permInfoArrayLocation = {
-					new PermissionInfo(AdminPermission.class.getName(), "*",
-							"*"),
-					new PermissionInfo(ServicePermission.class.getName(), "*",
-							"get,register"),
-					new PermissionInfo(PackagePermission.class.getName(), "*",
-							"EXPORT,IMPORT"),
-					new PermissionInfo(SocketPermission.class.getName(), "*",
-							"accept,connect,listen,resolve")};
+					new PermissionInfo(AllPermission.class.getName(), null, null)
+			};
 			permissionAdmin
 					.setPermissions((_context.getBundle()).getLocation(),
 							permInfoArrayLocation);
