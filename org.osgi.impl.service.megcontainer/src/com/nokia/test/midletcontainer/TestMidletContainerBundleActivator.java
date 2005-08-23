@@ -21,6 +21,22 @@ import org.osgi.service.event.EventHandler;
 public class TestMidletContainerBundleActivator
     implements BundleActivator, BundleListener, EventHandler, Runnable
 {
+    private BundleContext bc;
+    private Thread testerThread;
+    private Bundle midletBundle;
+    private Bundle midletContainerBundle;
+    private Bundle logServiceBundle;
+    private ApplicationDescriptor appDescs[];
+    private ApplicationHandle appHandle;
+    private String installedAppUID;
+    private long installedBundleID;
+    private ServiceRegistration serviceReg;
+    private LinkedList receivedEvents;
+    private static final int APPLICATION_START = 1;
+    private static final int APPLICATION_PAUSE = 2;
+    private static final int APPLICATION_RESUME = 3;
+    private static final int APPLICATION_STOPPED = 5;
+    private static final int APPLICATION_STOPPED_AFTER_PAUSE = 6;
 
     public TestMidletContainerBundleActivator()
     {
@@ -765,21 +781,4 @@ public class TestMidletContainerBundleActivator
         }
         return false;
     }
-
-    private BundleContext bc;
-    private Thread testerThread;
-    private Bundle midletBundle;
-    private Bundle midletContainerBundle;
-    private Bundle logServiceBundle;
-    private ApplicationDescriptor appDescs[];
-    private ApplicationHandle appHandle;
-    private String installedAppUID;
-    private long installedBundleID;
-    private ServiceRegistration serviceReg;
-    private LinkedList receivedEvents;
-    private static final int APPLICATION_START = 1;
-    private static final int APPLICATION_PAUSE = 2;
-    private static final int APPLICATION_RESUME = 3;
-    private static final int APPLICATION_STOPPED = 5;
-    private static final int APPLICATION_STOPPED_AFTER_PAUSE = 6;
 }
