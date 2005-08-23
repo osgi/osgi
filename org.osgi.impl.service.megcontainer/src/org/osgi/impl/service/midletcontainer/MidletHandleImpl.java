@@ -1,8 +1,3 @@
-// Decompiled by Jad v1.5.8e. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.geocities.com/kpdus/jad.html
-// Decompiler options: packimports(3) 
-// Source File Name:   MidletHandleImpl.java
-
 package org.osgi.impl.service.midletcontainer;
 
 import java.io.File;
@@ -12,9 +7,6 @@ import javax.microedition.midlet.MIDlet;
 import org.osgi.framework.*;
 import org.osgi.service.application.midlet.MidletDescriptor;
 import org.osgi.service.application.midlet.MidletHandle;
-
-// Referenced classes of package org.osgi.impl.service.midletcontainer:
-//            MidletDescriptorImpl, MidletContainer
 
 public final class MidletHandleImpl
     implements ServiceListener, org.osgi.service.application.midlet.MidletHandle.Delegate
