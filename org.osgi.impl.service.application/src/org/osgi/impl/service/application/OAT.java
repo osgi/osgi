@@ -27,18 +27,53 @@
 
 package org.osgi.impl.service.application;
 
-import org.osgi.framework.Bundle;
+import org.osgi.framework.*;
+import java.lang.reflect.*;
+import java.util.*;
 
 public class OAT implements OATContainerInterface {
+	
+	private Hashtable oatHashtable = null;
+	private Hashtable bundleMainClassHash = null;
+	private ServiceRegistration containerService = null;
 
-	public void createApplicationContext(Bundle bundle, Object mainClass)
+	public OAT() {
+		bundleMainClassHash = new Hashtable();
+	}
+	
+	public void start( BundleContext bc ) throws Exception {
+		oatHashtable = getApplicationContextHashRef();
+		
+		containerService = bc.registerService( OATContainerInterface.class.getName(), this, new Hashtable() );
+	}
+	
+	public void stop( BundleContext bc ) throws Exception {
+		containerService.unregister();
+		
+		oatHashtable.clear();
+		oatHashtable = null;
+	}
+	
+	public void createApplicationContext(Bundle bundle, Map args, Object mainClass)
 			throws Exception {
-	// TODO Auto-generated method stub
-
+		
+		OATApplicationContextImpl appCtx = new OATApplicationContextImpl( bundle, args );
+		oatHashtable.put( mainClass, appCtx );
+    
+		bundleMainClassHash.put( bundle, mainClass );
 	}
 
 	public void removeApplicationContext(Bundle bundle) throws Exception {
-	// TODO Auto-generated method stub
-
+		Object mainClass = bundleMainClassHash.remove( bundle );
+		OATApplicationContextImpl appCtx = (OATApplicationContextImpl)oatHashtable.remove( mainClass );
+    appCtx.ungetServiceReferences();
+	}
+	
+	private Hashtable getApplicationContextHashRef() throws Exception {
+		Class appFrameworkClass = org.osgi.application.Framework.class;
+		Field field = appFrameworkClass.getDeclaredField( "appContextHash" );
+		field.setAccessible(true);
+		
+		return (Hashtable)field.get( null );
 	}
 }
