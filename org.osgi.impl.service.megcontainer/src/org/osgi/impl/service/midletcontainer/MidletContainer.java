@@ -122,7 +122,7 @@ public class MidletContainer implements BundleListener, EventHandler {
 				.get(new Long(bundleID));
 		if (desc == null)
 			throw new Exception(
-					"Application wasn't installed onto the meglet container!");
+					"Application wasn't installed onto the midlet container!");
 		else
 			return desc;
 	}
@@ -134,7 +134,7 @@ public class MidletContainer implements BundleListener, EventHandler {
 				return i;
 
 		throw new Exception(
-				"Application wasn't installed onto the meglet container!");
+				"Application wasn't installed onto the midlet container!");
 	}
 
 	private String checkDependencies(MidletDescriptorImpl appDesc,
@@ -157,7 +157,7 @@ public class MidletContainer implements BundleListener, EventHandler {
 			log(
 					bc,
 					1,
-					"Exception occurred at checking the dependencies of a meglet!",
+					"Exception occurred at checking the dependencies of a midlet!",
 					e);
 		}
 		return "Exception occurred at checking the dependencies!";
@@ -188,7 +188,7 @@ public class MidletContainer implements BundleListener, EventHandler {
 			log(
 					bc,
 					1,
-					"Exception occurred at checking the singletonity of a meglet!",
+					"Exception occurred at checking the singletonity of a midlet!",
 					e);
 		}
 		return false;
@@ -218,7 +218,7 @@ public class MidletContainer implements BundleListener, EventHandler {
 			log(
 					bc,
 					1,
-					"Exception occurred at checking if the meglet is launchable!",
+					"Exception occurred at checking if the midlet is launchable!",
 					e);
 		}
 		return false;
@@ -246,7 +246,7 @@ public class MidletContainer implements BundleListener, EventHandler {
 			log(
 					bc,
 					1,
-					"Exception occurred at checking trying to autostart a meglet!",
+					"Exception occurred at checking trying to autostart a midlet!",
 					e);
 		}
 	}
@@ -345,6 +345,7 @@ public class MidletContainer implements BundleListener, EventHandler {
 				installApplication(b.getBundleId());
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			log(bc, 1, "Exception occurred at installing the midlet!", e);
 		}
 	}
@@ -528,7 +529,7 @@ public class MidletContainer implements BundleListener, EventHandler {
 			return descs;
 		}
 		catch (Throwable e) {
-			log(bc, 1, "Exception occurred at parsing a meglet bundle!", e);
+			log(bc, 1, "Exception occurred at parsing a midlet bundle!", e);
 		}
 		return null;
 	}
@@ -646,18 +647,18 @@ public class MidletContainer implements BundleListener, EventHandler {
 			Constructor constructor = midletDescriptorClass
 					.getDeclaredConstructor(new Class[] {java.lang.String.class});
 			constructor.setAccessible(true);
-			MidletDescriptor megletDescriptor = (MidletDescriptor) constructor
+			MidletDescriptor midletDescriptor = (MidletDescriptor) constructor
 					.newInstance(new Object[] {pid});
 			Field delegate = midletDescriptorClass.getDeclaredField("delegate");
 			delegate.setAccessible(true);
 			MidletDescriptorImpl megDesc = (MidletDescriptorImpl) delegate
-					.get(megletDescriptor);
+					.get(midletDescriptor);
 			megDesc.init(bc, props, names, icons, defaultLang, startClass,
 					bundle, this);
-			return megletDescriptor;
+			return midletDescriptor;
 		}
 		catch (Exception e) {
-			log(bc, 1, "Exception occurred at creating meglet descriptor!", e);
+			log(bc, 1, "Exception occurred at creating midlet descriptor!", e);
 		}
 		return null;
 	}
