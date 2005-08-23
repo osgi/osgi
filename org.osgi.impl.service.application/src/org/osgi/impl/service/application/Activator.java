@@ -18,6 +18,8 @@
 package org.osgi.impl.service.application;
 
 import org.osgi.framework.*;
+import org.osgi.service.log.LogService;
+
 /**
  *
  * The Bundle Activator of the MEG container
@@ -26,39 +28,56 @@ public class Activator extends Object implements
 		BundleActivator {
 	static  Scheduler					scheduler;
 	static  BundleContext 		bc;
+	private ApplicationPlugin appPlugin;
 
 	public Activator() {
 		super();
 	}
 
 	public void start(BundleContext bc) throws Exception {
-        // Application tree has changed, commenting out until it is properly
-        // defined and implemented.
-        System.out.println("Application service is currently disabled.");
-        
-        /*
-		Activator.bc = bc;
-		scheduler = new Scheduler(bc);
+		  System.out.println( "Application service is currently disabled!" );
 		
-		appPlugin = new ApplicationPlugin();
-		appPlugin.start( bc );
+//		Activator.bc = bc;
+//		scheduler = new Scheduler(bc);
 		
-		System.out.println("Application service started successfully!");
-        */
+//		appPlugin = new ApplicationPlugin();
+//		appPlugin.start( bc );
+		
+//		System.out.println("Application service started successfully!");
 	}
 
 	public void stop(BundleContext bc) throws Exception {
-        /*
-		//unregistering the service
-		appPlugin.stop( bc );
-		appPlugin = null;
+//		appPlugin.stop( bc );
+//		appPlugin = null;
 		
-		scheduler.stop();
-		scheduler = null;
+//		scheduler.stop();
+//		scheduler = null;
 		
-		Activator.bc = null;
+//		Activator.bc = null;
 		
-		System.out.println("Application service stopped successfully!");
-        */
+//		System.out.println("Application service stopped successfully!");
+	}
+
+
+	static boolean log(BundleContext bc, int severity, String message,
+			Throwable throwable) {
+		System.out.println("Serverity:" + severity + " Message:" + message
+				+ " Throwable:" + throwable);
+
+		ServiceReference serviceRef = bc
+				.getServiceReference("org.osgi.service.log.LogService");
+		if (serviceRef != null) {
+			LogService logService = (LogService) bc.getService(serviceRef);
+			if (logService != null) {
+				try {
+					logService.log(severity, message, throwable);
+					return true;
+				}
+				finally {
+					bc.ungetService(serviceRef);
+				}
+			}
+		}
+		return false;
 	}
 }

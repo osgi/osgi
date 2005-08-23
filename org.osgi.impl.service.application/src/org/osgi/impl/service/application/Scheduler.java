@@ -122,7 +122,7 @@ public class Scheduler implements Runnable, EventHandler {
 			}
 		}
 		catch (Exception e) {
-			log(
+			Activator.log(
 					bc,
 					LogService.LOG_ERROR,
 					"Exception occurred at loading the scheduled applications!",
@@ -139,7 +139,7 @@ public class Scheduler implements Runnable, EventHandler {
 			os.close();
 		}
 		catch (Exception e) {
-			log(bc, LogService.LOG_ERROR,
+			Activator.log(bc, LogService.LOG_ERROR,
 					"Exception occurred at saving the scheduled applications!",
 					e);
 		}
@@ -175,7 +175,7 @@ public class Scheduler implements Runnable, EventHandler {
 				}
 		}
 		catch (Exception ex) {
-			log(
+			Activator.log(
 					bc,
 					LogService.LOG_ERROR,
 					"Exception occurred at scheduling an application!",
@@ -213,27 +213,5 @@ public class Scheduler implements Runnable, EventHandler {
 				}
 			}
 		}
-	}
-
-	static boolean log(BundleContext bc, int severity, String message,
-			Throwable throwable) {
-		System.out.println("Serverity:" + severity + " Message:" + message
-				+ " Throwable:" + throwable);
-
-		ServiceReference serviceRef = bc
-				.getServiceReference("org.osgi.service.log.LogService");
-		if (serviceRef != null) {
-			LogService logService = (LogService) bc.getService(serviceRef);
-			if (logService != null) {
-				try {
-					logService.log(severity, message, throwable);
-					return true;
-				}
-				finally {
-					bc.ungetService(serviceRef);
-				}
-			}
-		}
-		return false;
 	}
 }
