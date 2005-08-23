@@ -1,13 +1,3 @@
-/*
- * $Header$
- * 
- * Copyright (c) OSGi Alliance (2004, 2005). All Rights Reserved.
- * 
- * This program and the accompanying materials are made available under the
- * terms of the Eclipse Public License v1.0 which accompanies this 
- * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
- */
-
 package org.osgi.service.application.midlet;
 
 import java.util.Map;
@@ -15,27 +5,8 @@ import java.util.Map;
 import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
 
-/**
- * Specialization of the application descriptor. Represents a Meglet and
- * provides generic methods inherited from the application descriptor. It is a
- * service.
- */
 public final class MidletDescriptor extends ApplicationDescriptor {
 
-	/**
-	 * Called by launch() to create and start a new instance in an application
-	 * model specific way. It also creates and registeres the application handle
-	 * to represent the newly created and started instance.
-	 * 
-	 * @param arguments
-	 *            the startup parameters of the new application instance, may be
-	 *            null
-	 * 
-	 * @return <code>MegletHandle</code> for the newly created and started instance.
-	 * 
-	 * @throws Exception
-	 *             if any problem occures.
-	 */
 	protected ApplicationHandle launchSpecific(Map arguments) throws Exception {
 		return delegate.launchSpecific( arguments );
 	}
