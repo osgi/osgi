@@ -34,16 +34,16 @@ import org.osgi.framework.*;
 import org.osgi.application.*;
 import org.osgi.service.log.LogService;
 
-public class ApplicationContextImpl implements ApplicationContext {
+public class OATApplicationContextImpl implements ApplicationContext {
 	
 	private BundleContext bc = null;
 	private Map startupParams = null;
-	private Vector serviceList = null;
+	private LinkedList serviceList = null;
 	
-	public ApplicationContextImpl( Bundle bundle, Map startupParams ) {
+	public OATApplicationContextImpl( Bundle bundle, Map startupParams ) {
 		bc = frameworkHook( bundle );
 		this.startupParams = startupParams;
-		serviceList = new Vector();
+		serviceList = new LinkedList();
 	}
 
 	public void addBundleListener(BundleListener listener) {
@@ -67,7 +67,7 @@ public class ApplicationContextImpl implements ApplicationContext {
 		if( ref == null )
 		  return null;
 		Object service =  bc.getService( ref );
-		serviceList.add( service );
+		serviceList.add( ref );
 		return service;
 	}
 	
@@ -79,8 +79,10 @@ public class ApplicationContextImpl implements ApplicationContext {
 		
   		Object []objArray = new Object [ refs.length ];
 		
-	  	for( int i=0; i!=refs.length; i++ )
-		  	serviceList.add( objArray[ i ] = bc.getService( refs[ i ] ) );
+	  	for( int i=0; i!=refs.length; i++ ) {
+		  	objArray[ i ] = bc.getService( refs[ i ] );
+		  	serviceList.add( refs[ i ] );
+	  	}
 		
 		  return objArray;
 		}catch( Exception e ) {
@@ -103,6 +105,12 @@ public class ApplicationContextImpl implements ApplicationContext {
 	}
 	public void removeServiceListener(ServiceListener listener) {
 		bc.removeServiceListener( listener );
+	}
+	
+	void ungetServiceReferences()
+	{
+		while( !serviceList.isEmpty() )
+			bc.ungetService( (ServiceReference)serviceList.removeFirst() );
 	}
 	
 	private BundleContext frameworkHook( final Bundle bundle ) {
