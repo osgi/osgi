@@ -380,7 +380,8 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 		if (exceptionText.length() > 0) {
 			throw new IllegalArgumentException(exceptionText);
 		}
-
+		// first check the permission of the caller
+		framework.checkAdminPermission(bundle, AdminPermission.EXECUTE);
 		try {
 			// if the bundle's startlevel is not already at the requested startlevel
 			if (newSL != ((org.eclipse.osgi.framework.internal.core.AbstractBundle) bundle).getStartLevel()) {
@@ -399,9 +400,6 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 					}
 					throw (RuntimeException) e.getException();
 				}
-
-				framework.checkAdminPermission(bundle, AdminPermission.EXECUTE);
-
 				// handle starting or stopping the bundle asynchronously
 				issueEvent(new StartLevelEvent(StartLevelEvent.CHANGE_BUNDLE_SL, newSL, (AbstractBundle) bundle));
 			}
