@@ -146,7 +146,7 @@ public class PermissionSignatureUtility {
 
 	public boolean not_allowed_Bundle_loadClass(String message, Bundle bundle, String name) throws Exception {
 		return control.not_allowed_call("call Bundle.loadClass(String) " + message, "callBundle_loadClass", 
-				new Class[]{Bundle.class, String.class}, new Object[]{bundle, name}, SecurityException.class);
+				new Class[]{Bundle.class, String.class}, new Object[]{bundle, name}, java.lang.ClassNotFoundException.class);
 	}
 	
 	public Object allowed_Bundle_stop(String message, Bundle bundle) throws Exception {
