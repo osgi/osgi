@@ -19,14 +19,12 @@ package org.osgi.impl.service.deploymentadmin.plugin;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -34,11 +32,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.deploymentadmin.BundleEntry;
 import org.osgi.impl.service.deploymentadmin.BundleUtil;
 import org.osgi.impl.service.deploymentadmin.CaseInsensitiveMap;
-import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.Metanode;
 import org.osgi.impl.service.deploymentadmin.PluginCtx;
@@ -51,7 +47,6 @@ import org.osgi.service.dmt.DmtExecPlugin;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtReadOnlyDataPlugin;
 import org.osgi.service.dmt.DmtSession;
-import org.xml.sax.InputSource;
 
 public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Serializable {
 
@@ -68,73 +63,61 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
         this.pluginCtx = pluginCtx;
     }
     
-    private String symbNameToNodeId(String symbName) {
-        if (dpIdMappings.containsKey(symbName))
-            return DP_PREF + symbName;
-        return BUNDLE_PREF + symbName;
+    private String dpToNodeId(String dpsn) {
+        return DP_PREF + dpsn;
     }
     
-    private String nodeIdToSymbName(String nodeId) {
+    private String bundleToNodeId(long bid) {
+        return BUNDLE_PREF + String.valueOf(bid);
+    }
+    
+    private String bundleToNodeId(String bid) {
+        return BUNDLE_PREF + bid;
+    }
+    
+    private String fromNodeId(String nodeId) {
         if (nodeId.startsWith(DP_PREF))
             return nodeId.substring(DP_PREF.length());
         return nodeId.substring(BUNDLE_PREF.length());
     }
-    
+
+
+    private String createIdForBundle(Bundle b) {
+        // TODO if thereis Bundle Symbolic Name
+        return b.getLocation();
+    }
+
     private boolean dpNode(String nodeId) {
         return nodeId.startsWith(DP_PREF);
     }
     
-    private boolean bundleNode(String nodeId) {
-        return bundleIdMappings.containsKey(nodeIdToSymbName(nodeId));
-    }
-
     private Set nodeIdMangleSet() {
         HashSet set = new HashSet();
         
         // gathers deployed DPs
-        for (Iterator iter = dpIdMappings.keySet().iterator(); iter.hasNext();) {
-            String symbName = (String) iter.next();
-            String mv = pluginCtx.getDmtAdmin().mangle(null, symbNameToNodeId(symbName));
+        DeploymentPackage[] dps = pluginCtx.getDeploymentAdmin().listDeploymentPackages();
+        for (int i = 0; i < dps.length; i++) {
+            String mv = pluginCtx.getDmtAdmin().mangle(null, dpToNodeId(dps[i].getName()));
             set.add(mv);
         }
         
         // gathers deployed bundles
-        for (Iterator iter = bundleIdMappings.keySet().iterator(); iter.hasNext();) {
-            String symbName = (String) iter.next();
-            String mv = pluginCtx.getDmtAdmin().mangle(null, symbNameToNodeId(symbName));
+        Bundle[] bs = pluginCtx.getBundleContext().getBundles();
+        for (int i = 0; i < bs.length; i++) {
+            String mv = pluginCtx.getDmtAdmin().mangle(null, bundleToNodeId(bs[i].getBundleId()));
             set.add(mv);
         }
         
         return set;
     }
     
-    private String[] getCustomizers(DeploymentPackageImpl dp) {
-        ArrayList ret = new ArrayList();
-        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
-            BundleEntry be = (BundleEntry) iter.next();
-            if (be.isCustomizer())
-                ret.add(be.getSymbName());
-        }
-        return (String[]) ret.toArray(new String[] {});
-    }
-
-    private String[] getCustomizerPIDs(DeploymentPackageImpl dp) {
-        ArrayList ret = new ArrayList();
-        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
-            BundleEntry be = (BundleEntry) iter.next();
-            if (be.isCustomizer())
-                ret.add(be.getPid());
-        }
-        return (String[]) ret.toArray(new String[] {});
-    }
-
     private String[] getBundleIDs(String nodeId) {
         ArrayList ret = new ArrayList();
-        String symbName = nodeIdToSymbName(nodeId);
+        String str = fromNodeId(nodeId);
 
         if (dpNode(nodeId)) {
             DeploymentPackageImpl dp = (DeploymentPackageImpl) pluginCtx.
-                    getDeploymentAdmin().getDeploymentPackage(symbName);
+                    getDeploymentAdmin().getDeploymentPackage(str);
             for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
                 BundleEntry be = (BundleEntry) iter.next();
                 ret.add(String.valueOf(be.getBundleId()));
@@ -142,75 +125,15 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
         } else {
             Bundle[] bundles = pluginCtx.getBundleContext().getBundles();
             for (int i = 0; i < bundles.length; i++) {
-                String bSymbName = bundles[i].getSymbolicName();
-                if (null == bSymbName)
-                    continue;
-                if (bSymbName.equals(symbName)) {
-                    ret.add(String.valueOf(bundles[i].getBundleId()));
+                long bid = bundles[i].getBundleId();
+                if (bid == Long.parseLong(str)) {
+                    ret.add(String.valueOf(bid));
                     break; 
                 }
             }
         }
         
         return (String[]) ret.toArray(new String[] {});
-    }
-
-    private String[] getImportedPackages(BundleEntry be) {
-        BundleContext context = pluginCtx.getBundleContext();
-        Bundle b = context.getBundle(be.getBundleId());
-        String iph = (String) b.getHeaders().get("Import-Package");
-        if (null == iph)
-            return new String[] {};
-        String[] fip = Splitter.split(iph, ',', 0);
-        ArrayList ipal = new ArrayList();
-        for (int i = 0; i < fip.length; i++)
-            ipal.add(Splitter.split(fip[i], ';', 0)[0].trim());
-        return (String[]) ipal.toArray(new String[] {});
-    }
-
-    private String[] getExportedPackages(BundleEntry be) {
-        BundleContext context = pluginCtx.getBundleContext();
-        Bundle b = context.getBundle(be.getBundleId());
-        String iph = (String) b.getHeaders().get("Export-Package");
-        if (null == iph)
-            return new String[] {};
-        String[] fip = Splitter.split(iph, ',', 0);
-        ArrayList ipal = new ArrayList();
-        for (int i = 0; i < fip.length; i++)
-            ipal.add(Splitter.split(fip[i], ';', 0)[0].trim());
-        return (String[]) ipal.toArray(new String[] {});
-    }
-
-    private String getBundleSymbolicName(BundleEntry be) {
-        BundleContext context = pluginCtx.getBundleContext();
-        Bundle b = context.getBundle(be.getBundleId());
-        return b.getSymbolicName();
-    }
-    
-    private String getBundleLocation(BundleEntry be) {
-        BundleContext context = pluginCtx.getBundleContext();
-        Bundle b = context.getBundle(be.getBundleId());
-        return b.getLocation();
-    }
-    
-    private String getBundleVersion(BundleEntry be) {
-        BundleContext context = pluginCtx.getBundleContext();
-        Bundle b = context.getBundle(be.getBundleId());
-        String ver = (String) b.getHeaders().get("Bundle-Version");
-        return ver;
-    }
-    
-    private int getBundleState(BundleEntry be) {
-        BundleContext context = pluginCtx.getBundleContext();
-        Bundle b = context.getBundle(be.getBundleId());
-        return b.getState();
-    }
-
-    private String getBundleNativeCode(BundleEntry be) {
-        BundleContext context = pluginCtx.getBundleContext();
-        Bundle b = context.getBundle(be.getBundleId());
-        String nc = (String) b.getHeaders().get("Bundle-NativeCode");
-        return nc;
     }
 
     private void checkBundleExistance(String nodeUri, String nodeId,
@@ -287,7 +210,7 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
             if ("Signers".equals(nodeUriArr[7])) {
                 // DP signers
                 DeploymentPackageImpl dp = (DeploymentPackageImpl) pluginCtx.getDeploymentAdmin().
-                    getDeploymentPackage(nodeIdToSymbName(nodeUriArr[5]));
+                    getDeploymentPackage(fromNodeId(nodeUriArr[5]));
                 int lim = dp.getCertChains().size() - 1;
                 int n = Integer.parseInt(nodeUriArr[8]);
                 return n >= 0 && n <= lim;
@@ -384,12 +307,23 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
         Set mset = nodeIdMangleSet();
         if (!mset.contains(nodeUriArr[5]))
             throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
-        String symbName = nodeIdToSymbName(nodeUriArr[5]);
+        String str = fromNodeId(nodeUriArr[5]);
         if (l == 7) {
             if (nodeUriArr[6].equals("ID")) {
-                if (dpNode(nodeUriArr[5]))
-                    return new DmtData((String) dpIdMappings.get(symbName));
-                return new DmtData((String) bundleIdMappings.get(symbName));
+                if (dpNode(nodeUriArr[5])) {
+                    String id = (String) dpIdMappings.get(str);
+                    if (null == id) {
+                        DeploymentPackage dp = pluginCtx.getDeploymentAdmin().getDeploymentPackage(str);
+                        id = dp.getName();
+                    }
+                    return new DmtData(id);
+                }
+                String id = (String) bundleIdMappings.get(new Long(str));
+                if (null == id) {
+                    Bundle b = pluginCtx.getBundleContext().getBundle(Long.parseLong(str));
+                    id = createIdForBundle(b);
+                }
+                return new DmtData(id);
             }
             if (nodeUriArr[6].equals("EnvType"))
                 return new DmtData("OSGi.R4");
@@ -397,18 +331,17 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
         if ("Ext".equals(nodeUriArr[6])) {
             if (l == 8) {
                 if ("Manifest".equals(nodeUriArr[7]))
-                    return new DmtData(createManifest(symbName));
+                    return new DmtData(createManifest(str));
                 if ("PackageType".equals(nodeUriArr[7])) {
                     if (dpNode(nodeUriArr[5]))
                         return new DmtData(PACKAGETYPE_DP);
-                    else
-                        return new DmtData(PACKAGETYPE_BUNDLE);
+                    return new DmtData(PACKAGETYPE_BUNDLE);
                 }
             }
             if (l == 9) {
                 // DP signers
                 DeploymentPackageImpl dp = (DeploymentPackageImpl) pluginCtx.getDeploymentAdmin().
-                    getDeploymentPackage(nodeIdToSymbName(nodeUriArr[5]));
+                    getDeploymentPackage(fromNodeId(nodeUriArr[5]));
                 int n = Integer.parseInt(nodeUriArr[8]);
                 List certs = dp.getCertChains();
                 return new DmtData(createCertString((String[]) certs.get(n)));
@@ -491,7 +424,7 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
                 if ("Signers".equals(nodeUriArr[7])) {
                     // DP signers
                     DeploymentPackageImpl dp = (DeploymentPackageImpl) pluginCtx.getDeploymentAdmin().
-                        getDeploymentPackage(nodeIdToSymbName(nodeUriArr[5]));
+                        getDeploymentPackage(fromNodeId(nodeUriArr[5]));
                     List certs = dp.getCertChains();
                     ArrayList al = new ArrayList();
                     for (int i = 0; i < certs.size(); i++)
@@ -613,7 +546,7 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
             throw new RuntimeException("Internal error");
         
         final DeploymentPackageImpl dp = (DeploymentPackageImpl) pluginCtx.getDeploymentAdmin().
-                getDeploymentPackage(nodeIdToSymbName(nodeUriArr[5]));
+                getDeploymentPackage(fromNodeId(nodeUriArr[5]));
         if (null != dp) {
             UndeployThread undThread = new UndeployThread(dp);
             undThread.setListener(new UndeployThread.Listener() {
@@ -634,13 +567,13 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
             });
             undThread.start();
         } else {
-            String symbName = nodeIdToSymbName(nodeUriArr[5]);
+            String symbName = fromNodeId(nodeUriArr[5]);
             Bundle bundle = getBundleBySymbName(symbName);
             UndeployThread undThread = new UndeployThread(bundle);
             undThread.setListener(new UndeployThread.Listener() {
                 public void onFinish(Exception exception) {
                     if (null == exception) {
-                        bundleIdMappings.remove(nodeIdToSymbName(nodeUriArr[5]));
+                        bundleIdMappings.remove(fromNodeId(nodeUriArr[5]));
                         try {
                             pluginCtx.save();
                         }
@@ -776,7 +709,7 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
     }
     
     public void associateID(Bundle b, String id) {
-       bundleIdMappings.put(b.getSymbolicName(), id);
+       bundleIdMappings.put(new Long(b.getBundleId()), id);
     }
 
     public void setPluginCtx(PluginCtx pluginCtx) {

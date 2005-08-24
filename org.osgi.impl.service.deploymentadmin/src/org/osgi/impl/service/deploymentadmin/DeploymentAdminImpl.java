@@ -260,14 +260,24 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             throw new IllegalArgumentException("Deployment package symbolic name " +
                     "cannot be null");
         
-        for (Iterator iter = dps.iterator(); iter.hasNext();) {
-            DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();
-            if (dp.getName().equals(symbName)) {
-                checkPermission(dp, DeploymentAdminPermission.ACTION_LIST);
-                return dp;
+        DeploymentPackage dp = null;
+        
+        if ("System".equals(symbName)) {
+            dp = createSystemDp();
+        } else {
+            for (Iterator iter = dps.iterator(); iter.hasNext();) {
+                DeploymentPackage tdp = (DeploymentPackageImpl) iter.next();
+                if (tdp.getName().equals(symbName)) {
+                    dp = tdp;
+                    break;
+                }
             }
         }
-        return null;
+        
+        if (null != dp)
+            checkPermission((DeploymentPackageImpl) dp, DeploymentAdminPermission.ACTION_LIST);
+        
+        return dp;
     }
     
     /**
