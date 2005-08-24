@@ -32,7 +32,7 @@ public final class Framework {
     public static ApplicationContext getApplicationContext(Object applicationInstance) {
     	  ApplicationContext appContext = (ApplicationContext)appContextHash.get( applicationInstance );
     	  if( appContext == null )
-    	  	throw new IllegalArgumentException( "Application Context not found!" );
+    	  	throw new IllegalArgumentException( "ApplicationContext not found!" );
         return appContext;        
     }
 }

@@ -34,15 +34,14 @@ import java.util.*;
 public class OAT implements OATContainerInterface {
 	
 	private Hashtable oatHashtable = null;
-	private Hashtable bundleMainClassHash = null;
 	private ServiceRegistration containerService = null;
 
 	public OAT() {
-		bundleMainClassHash = new Hashtable();
+		oatHashtable = new Hashtable();
 	}
 	
 	public void start( BundleContext bc ) throws Exception {
-		oatHashtable = getApplicationContextHashRef();
+		setApplicationContextHashRef();
 		
 		containerService = bc.registerService( OATContainerInterface.class.getName(), this, new Hashtable() );
 	}
@@ -54,26 +53,22 @@ public class OAT implements OATContainerInterface {
 		oatHashtable = null;
 	}
 	
-	public void createApplicationContext(Bundle bundle, Map args, Object mainClass)
+	public void createApplicationContext(Object mainClass, Map args, Bundle bundle )
 			throws Exception {
 		
 		OATApplicationContextImpl appCtx = new OATApplicationContextImpl( bundle, args );
-		oatHashtable.put( mainClass, appCtx );
-    
-		bundleMainClassHash.put( bundle, mainClass );
+		oatHashtable.put( mainClass, appCtx );    
 	}
 
-	public void removeApplicationContext(Bundle bundle) throws Exception {
-		Object mainClass = bundleMainClassHash.remove( bundle );
+	public void removeApplicationContext(Object mainClass) throws Exception {
 		OATApplicationContextImpl appCtx = (OATApplicationContextImpl)oatHashtable.remove( mainClass );
     appCtx.ungetServiceReferences();
 	}
 	
-	private Hashtable getApplicationContextHashRef() throws Exception {
+	private void setApplicationContextHashRef() throws Exception {
 		Class appFrameworkClass = org.osgi.application.Framework.class;
 		Field field = appFrameworkClass.getDeclaredField( "appContextHash" );
 		field.setAccessible(true);
-		
-		return (Hashtable)field.get( null );
+    field.set( null, oatHashtable);		
 	}
 }

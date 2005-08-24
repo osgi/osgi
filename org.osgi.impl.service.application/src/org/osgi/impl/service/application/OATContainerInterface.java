@@ -31,8 +31,8 @@ import org.osgi.framework.*;
 import java.util.*;
 
 public interface OATContainerInterface {
-  public void createApplicationContext( Bundle bundle, Map args, Object mainClass )
+  public void createApplicationContext( Object mainClass, Map args, Bundle bundle )
                                         throws Exception;
-  public void removeApplicationContext( Bundle bundle )
+  public void removeApplicationContext( Object mainClass )
                                         throws Exception;
 }

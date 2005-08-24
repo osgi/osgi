@@ -11,19 +11,21 @@ import org.osgi.impl.service.application.OATContainerInterface;
 
 public final class MidletHandleImpl implements ServiceListener,
 		org.osgi.service.application.midlet.MidletHandle.Delegate {
-	private String					status;
-	private MIDlet					midlet;
-	private ServiceReference		appDescRef;
+	
+	private String					      status;
+	private MIDlet					      midlet;
+	private ServiceReference		  appDescRef;
 	private ServiceRegistration		serviceReg;
-	private File					suspendedFileName;
-	private String					pid;
-	private MidletHandle			midletHandle;
+	private File					        suspendedFileName;
+	private String					      pid;
+	private MidletHandle			    midletHandle;
 	private MidletDescriptorImpl	midletDelegate;
-	private MidletContainer			midletContainer;
-	private BundleContext			bc;
-	private Vector					serviceRefs;
-	private Object					baseClass;
-
+	private MidletContainer			  midletContainer;
+	private BundleContext			    bc;
+	private Vector					      serviceRefs;
+	private Object					      baseClass;
+	private OATContainerInterface oat = null;
+	private ServiceReference      oatRef = null;
 	public MidletHandleImpl() {
 		suspendedFileName = null;
 	}
@@ -40,9 +42,10 @@ public final class MidletHandleImpl implements ServiceListener,
 			throw new Exception("Invalid State");
 		if (midlet != null) {
 			midletCommand(midlet, "MidletHandle", midletHandle);
+			registerToOATHash( args );
 			midletCommand(midlet, "Start", args);
 			setStatus("RUNNING");
-			registerAppHandle(args);
+			registerAppHandle();
 			return serviceReg.getReference();
 		}
 		else {
@@ -58,6 +61,7 @@ public final class MidletHandleImpl implements ServiceListener,
 			midlet = null;
 		}
 		setStatus(null);
+		unregisterFromOATHash();
 		unregisterAppHandle();
 		bc.removeServiceListener(this);
 	}
@@ -101,21 +105,23 @@ public final class MidletHandleImpl implements ServiceListener,
 		return props;
 	}
 
-	private void registerAppHandle(Map args) throws Exception {
-		ServiceReference oatRef = bc
-				.getServiceReference(OATContainerInterface.class.getName());
-		if (oatRef == null)
-			throw new Exception(
-					"Cannot register the MidletHandle as OAT is not running!");
-		OATContainerInterface oat = (OATContainerInterface) bc
-				.getService(oatRef);
-		if (oat == null)
-			throw new Exception(
-					"Cannot register the MidletHandle as OAT is not running!");
-		oat.createApplicationContext(midletDelegate.getBundle(), args,
-				baseClass);
-		bc.ungetService(oatRef);
-
+	private void registerToOATHash( Map args ) throws Exception {
+		oatRef = bc .getServiceReference(OATContainerInterface.class.getName());
+    if (oatRef == null)
+	    throw new Exception("Cannot register the MidletHandle as OAT is not running!");
+    oat = (OATContainerInterface) bc.getService(oatRef);
+    if (oat == null)
+	    throw new Exception("Cannot register the MidletHandle as OAT is not running!");
+    oat.createApplicationContext(baseClass, args, midletDelegate.getBundle());
+	}
+	
+	private void unregisterFromOATHash() throws Exception {
+		oat.removeApplicationContext( baseClass );
+		
+    bc.ungetService(oatRef);		
+	}
+	
+	private void registerAppHandle() {
 		serviceReg = bc.registerService(
 				"org.osgi.service.application.ApplicationHandle", midletHandle,
 				properties());
@@ -123,22 +129,6 @@ public final class MidletHandleImpl implements ServiceListener,
 
 	private void unregisterAppHandle() {
 		if (serviceReg != null) {
-			try {
-				ServiceReference oatRef = bc
-						.getServiceReference(OATContainerInterface.class
-								.getName());
-				if (oatRef != null) {
-					OATContainerInterface oat = (OATContainerInterface) bc
-							.getService(oatRef);
-					if (oat != null)
-						oat
-								.removeApplicationContext(midletDelegate
-										.getBundle());
-					bc.ungetService(oatRef);
-				}
-			}
-			catch (Exception e) {}
-
 			serviceReg.unregister();
 			serviceReg = null;
 		}
