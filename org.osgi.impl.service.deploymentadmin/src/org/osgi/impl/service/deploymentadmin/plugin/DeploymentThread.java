@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.impl.service.deploymentadmin.DAConstants;
-import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.PluginCtx;
 

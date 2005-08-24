@@ -83,8 +83,10 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
 
 
     private String createIdForBundle(Bundle b) {
-        // TODO if thereis Bundle Symbolic Name
-        return b.getLocation();
+        String ret = b.getSymbolicName();
+        if (null == ret)
+            b.getLocation();
+        return ret;
     }
 
     private boolean dpNode(String nodeId) {

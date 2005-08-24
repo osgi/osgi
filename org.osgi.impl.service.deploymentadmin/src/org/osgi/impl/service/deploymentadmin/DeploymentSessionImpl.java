@@ -25,7 +25,6 @@ import org.osgi.framework.*;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Entry;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.deploymentadmin.*;
-import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.permissionadmin.*;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -309,7 +308,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         }
     }
     
-    private void refreshPackages() {
+    /*private void refreshPackages() {
         final PackageAdmin packAdmin = (PackageAdmin) trackPackAdmin.getService();
         if (null != packAdmin) {
             AccessController.doPrivileged(new PrivilegedAction() {
@@ -318,7 +317,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
                     return null;
                 }});
         }
-    }
+    }*/
 
     boolean uninstall(boolean forced) throws DeploymentException {
         this.forced = forced;

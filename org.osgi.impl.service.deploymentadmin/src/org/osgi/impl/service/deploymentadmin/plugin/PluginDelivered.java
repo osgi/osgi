@@ -12,7 +12,6 @@ import java.util.Date;
 
 import org.osgi.framework.Bundle;
 import org.osgi.impl.service.deploymentadmin.DAConstants;
-import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.Metanode;
 import org.osgi.impl.service.deploymentadmin.PluginCtx;
@@ -24,7 +23,6 @@ import org.osgi.service.dmt.DmtExecPlugin;
 import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtReadOnlyDataPlugin;
 import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.RemoteAlertSender;
 
 public class PluginDelivered implements DmtReadOnlyDataPlugin, DmtExecPlugin, Serializable {
     

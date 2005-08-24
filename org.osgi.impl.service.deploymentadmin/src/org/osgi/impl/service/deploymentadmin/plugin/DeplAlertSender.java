@@ -2,7 +2,6 @@ package org.osgi.impl.service.deploymentadmin.plugin;
 
 import java.security.AccessControlException;
 
-import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.impl.service.deploymentadmin.perm.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.dmt.DmtAdmin;

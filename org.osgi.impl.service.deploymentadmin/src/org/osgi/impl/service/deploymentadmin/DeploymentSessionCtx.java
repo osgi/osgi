@@ -26,11 +26,9 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
-import java.util.Hashtable;
 import java.util.Map;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.service.deploymentadmin.DeploymentPackage;
 
 public class DeploymentSessionCtx {
     

@@ -2,7 +2,6 @@ package org.osgi.impl.service.deploymentadmin.plugin;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.security.AccessControlException;
 import java.util.Date;
 import java.util.Hashtable;
 
@@ -11,14 +10,11 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
-import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.Metanode;
 import org.osgi.impl.service.deploymentadmin.PluginCtx;
 import org.osgi.impl.service.deploymentadmin.Splitter;
-import org.osgi.impl.service.deploymentadmin.perm.DeploymentAdminPermission;
 import org.osgi.impl.service.dwnl.DownloadAgent;
-import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.dmt.DmtAlertItem;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtDataPlugin;
