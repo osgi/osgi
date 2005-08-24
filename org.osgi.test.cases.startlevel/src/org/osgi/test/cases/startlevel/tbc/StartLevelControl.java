@@ -36,6 +36,7 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
   private StartLevel sl;
   private BundleContext bc;
   private boolean logStartLevelChanged = false;
+  private int ibsl;
 
 	String methods[] = {
 		"testInitialBundleStartLevel",
@@ -59,10 +60,13 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
   public void prepare() throws Exception
   {
     sl = (StartLevel)getService(StartLevel.class);
+    ibsl = sl.getInitialBundleStartLevel();
     getContext().addFrameworkListener(this);
   }
 
-  public void unprepare() throws Exception {}
+  public void unprepare() throws Exception {
+	  sl.setInitialBundleStartLevel(ibsl);
+  }
   public void setState() throws Exception {}
   public void clearState() throws Exception {}
 
