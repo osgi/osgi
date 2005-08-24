@@ -53,7 +53,7 @@ public class ContentHandlerProxy extends ContentHandler implements ServiceTracke
 			realHandler = new DefaultContentHandler();
 		}
 		contentHandlerServiceTracker = new ServiceTracker(context, ContentHandler.class.getName(), this);
-		contentHandlerServiceTracker.open();
+		StreamHandlerFactory.secureAction.open(contentHandlerServiceTracker);
 	}
 
 	private void setNewHandler(ServiceReference reference, int rank) {

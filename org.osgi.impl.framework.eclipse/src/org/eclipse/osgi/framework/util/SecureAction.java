@@ -18,6 +18,7 @@ import java.util.Properties;
 import java.util.zip.ZipFile;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * Utility class to execute common privileged code.
@@ -317,5 +318,20 @@ public class SecureAction {
 				throw (ClassNotFoundException) e.getException();
 			throw (RuntimeException) e.getException();
 		}
+	}
+
+	/**
+	 * Opens a ServiceTracker. Same as calling tracker.open()
+	 * @param tracker the ServiceTracker to open.
+	 */
+	public void open(final ServiceTracker tracker) {
+		if (System.getSecurityManager() == null)
+			tracker.open();
+		AccessController.doPrivileged(new PrivilegedAction() {
+			public Object run() {
+				tracker.open();
+				return null;
+			}
+		}, controlContext);
 	}
 }

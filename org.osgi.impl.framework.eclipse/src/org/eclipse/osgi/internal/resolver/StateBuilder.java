@@ -61,8 +61,11 @@ class StateBuilder {
 		String version = (String) manifest.get(Constants.BUNDLE_VERSION);
 		try {
 			result.setVersion((version != null) ? Version.parseVersion(version) : Version.emptyVersion);
-		} catch (NumberFormatException ex) {
-			throw new BundleException(ex.getMessage());
+		} catch (IllegalArgumentException ex) {
+			if (manifestVersion >= 2)
+				throw new BundleException(ex.getMessage());
+			// prior to R4 the Bundle-Version header was not interpreted by the Framework;
+			// must not fail for old R3 style bundles
 		}
 		result.setLocation(location);
 		result.setPlatformFilter((String) manifest.get(Constants.ECLIPSE_PLATFORMFILTER));

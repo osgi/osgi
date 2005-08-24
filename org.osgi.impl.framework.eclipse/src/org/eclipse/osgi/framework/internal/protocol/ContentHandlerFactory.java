@@ -52,7 +52,7 @@ public class ContentHandlerFactory implements java.net.ContentHandlerFactory {
 	public ContentHandler createContentHandler(String contentType) {
 		//first, we check to see if there exists a built in content handler for
 		//this content type.  we can not overwrite built in ContentHandlers
-		String builtInHandlers = System.getProperty(CONTENT_HANDLER_PKGS);
+		String builtInHandlers = StreamHandlerFactory.secureAction.getProperty(CONTENT_HANDLER_PKGS);
 		builtInHandlers = builtInHandlers == null ? DEFAULT_VM_CONTENT_HANDLERS : DEFAULT_VM_CONTENT_HANDLERS + '|' + builtInHandlers;
 		Class clazz = null;
 		if (builtInHandlers != null) {

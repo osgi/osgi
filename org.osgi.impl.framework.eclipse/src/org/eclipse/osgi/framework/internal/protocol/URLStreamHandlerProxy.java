@@ -58,7 +58,7 @@ public class URLStreamHandlerProxy extends URLStreamHandler implements ServiceTr
 		setNewHandler(reference, getRank(reference));
 
 		urlStreamHandlerServiceTracker = new ServiceTracker(context, StreamHandlerFactory.URLSTREAMHANDLERCLASS, this);
-		urlStreamHandlerServiceTracker.open();
+		StreamHandlerFactory.secureAction.open(urlStreamHandlerServiceTracker);
 	}
 
 	private void setNewHandler(ServiceReference reference, int rank) {

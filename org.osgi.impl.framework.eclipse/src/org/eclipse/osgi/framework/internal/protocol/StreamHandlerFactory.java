@@ -64,7 +64,7 @@ public class StreamHandlerFactory implements java.net.URLStreamHandlerFactory {
 	public URLStreamHandler createURLStreamHandler(String protocol) {
 
 		//first check for built in handlers
-		String builtInHandlers = System.getProperty(PROTOCOL_HANDLER_PKGS);
+		String builtInHandlers = secureAction.getProperty(PROTOCOL_HANDLER_PKGS);
 		Class clazz = null;
 		if (builtInHandlers != null) {
 			StringTokenizer tok = new StringTokenizer(builtInHandlers, "|"); //$NON-NLS-1$
