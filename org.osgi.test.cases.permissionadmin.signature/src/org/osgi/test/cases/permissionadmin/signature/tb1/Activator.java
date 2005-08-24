@@ -36,21 +36,18 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 
 import org.osgi.service.packageadmin.PackageAdmin;
 
-import org.osgi.service.cm.ConfigurationAdmin;
-import org.osgi.service.cm.Configuration;
+//import org.osgi.service.cm.ConfigurationAdmin;
+//import org.osgi.service.cm.Configuration;
 
 import org.osgi.test.cases.permissionadmin.signature.tbc.PermissionSignatureTBCService;
-
 
 import java.io.InputStream;
 import java.io.IOException;
 
 import java.util.Dictionary;
-//import java.util.Hashtable;
 import java.util.Enumeration;
 
 import java.net.URL;
-
 
 /**
  * A bundle that registers a PermissionSignatureTBCService 
@@ -61,11 +58,11 @@ import java.net.URL;
  */
 public class Activator implements BundleActivator, PermissionSignatureTBCService, SynchronousBundleListener {
 	
-	private BundleContext 		bc;
-	private StartLevel 			startLevel;
-	private PermissionAdmin 	permissionAdmin;
-	private PackageAdmin		packageAdmin;
-	private ConfigurationAdmin 	configurationAdmin;
+	private BundleContext      bc;
+  private StartLevel         startLevel;
+  private PermissionAdmin    permissionAdmin;
+  private PackageAdmin       packageAdmin;
+//  private ConfigurationAdmin configurationAdmin;
 	
 	public void start(BundleContext context) throws Exception {
 		this.bc = context;
@@ -74,14 +71,13 @@ public class Activator implements BundleActivator, PermissionSignatureTBCService
 		startLevel = (StartLevel)getService(StartLevel.class.getName());
 		permissionAdmin = (PermissionAdmin)getService(PermissionAdmin.class.getName());
 		packageAdmin = (PackageAdmin)getService(PackageAdmin.class.getName());
-		configurationAdmin = (ConfigurationAdmin)getService(ConfigurationAdmin.class.getName());
+//		configurationAdmin = (ConfigurationAdmin)getService(ConfigurationAdmin.class.getName());
 	}
 	
 	public void stop(BundleContext context) throws Exception {
 	}
 	
 	public void bundleChanged(BundleEvent event) {
-		
 	}
 	
 	private Object getService(String serviceName) {
@@ -89,11 +85,8 @@ public class Activator implements BundleActivator, PermissionSignatureTBCService
 		if (reference != null) {
 			return bc.getService(reference);
 		}
-		
 		return null;
 	}
-	
-	
 	
 	public Dictionary callBundle_getHeaders(Bundle bundle) {
 		return bundle.getHeaders();
@@ -102,7 +95,6 @@ public class Activator implements BundleActivator, PermissionSignatureTBCService
 	public Dictionary callBundle_getHeaders(Bundle bundle, String localeString) {
 		return bundle.getHeaders(localeString);
 	}
-	
 	
 	public String callBundle_getLocation(Bundle bundle) {
 		return bundle.getLocation();
@@ -148,8 +140,7 @@ public class Activator implements BundleActivator, PermissionSignatureTBCService
 		bundle.start();
 	}
 
-	
-// from BundleContext class	
+  // from BundleContext class	
 	public Bundle callBundleContext_installBundle(BundleContext context, String location) throws BundleException {
 		return context.installBundle(location);
 	}
@@ -166,10 +157,9 @@ public class Activator implements BundleActivator, PermissionSignatureTBCService
 		context.removeBundleListener(this);
 	}
 	
-
-// from StartLevel service
+  // from StartLevel service
 	public void callStartLevel_setBundleStartLevel(Bundle bundle, Integer level) {
-		startLevel.setBundleStartLevel(bundle, level.intValue());
+		startLevel.setBundleStartLevel(bundle, level.intValue() + 1);
 	}
 	
 	public void callStartLevel_setStartLevel(Integer level) {
@@ -180,8 +170,7 @@ public class Activator implements BundleActivator, PermissionSignatureTBCService
 		startLevel.setInitialBundleStartLevel(level.intValue());
 	}
 
-
-// from PermisssionAdmin service
+  // from PermisssionAdmin service
 	public void callPermissionAdmin_setPermissions(String location, PermissionInfo[] permissions) {
 		permissionAdmin.setPermissions(location, permissions);
 	}
@@ -190,8 +179,7 @@ public class Activator implements BundleActivator, PermissionSignatureTBCService
 		permissionAdmin.setDefaultPermissions(permissions);
 	}
 	
-	
-// from PackageAdmin service	
+  // from PackageAdmin service	
 	public void callPackageAdmin_refreshPackages(Bundle[] bundles) {
 		packageAdmin.refreshPackages(bundles);
 	}
@@ -200,49 +188,44 @@ public class Activator implements BundleActivator, PermissionSignatureTBCService
 		return packageAdmin.resolveBundles(bundles);
 	}
 	
-	
-	public Configuration callConfigurationAdmin_getConfiguration(String pid) throws IOException {
-		return configurationAdmin.getConfiguration(pid);
-	}
-
-	public Configuration callConfigurationAdmin_getConfiguration(String pid, String location) throws IOException {
-		return configurationAdmin.getConfiguration(pid, location);
-	}
-
-	public Configuration[] callConfigurationAdmin_listConfigurations(String filter) throws Exception {
-		return configurationAdmin.listConfigurations(filter);
-	}
-
-	public void callConfiguration_delete(String pid) throws IOException {
-		Configuration configuration = callConfigurationAdmin_getConfiguration(pid);
-		configuration.delete();
-	}
-	
-	public void callConfiguration_update(String pid) throws IOException {
-		Configuration configuration = callConfigurationAdmin_getConfiguration(pid);
-		configuration.update();
-	}
-	
-	public void callConfiguration_update(String pid, Dictionary properties) throws IOException {
-		Configuration configuration = configurationAdmin.getConfiguration(pid);
-		configuration.update(properties);
-	}
-
-	public void callConfiguration_setBundleLocation(String pid) throws IOException  {
-		Configuration configuration = configurationAdmin.getConfiguration(pid);
-		configuration.setBundleLocation(null);
-	}
-	
-	
-	public Configuration callConfigurationAdmin_createFactoryConfiguration(String factoryPid) throws IOException {
-		return configurationAdmin.createFactoryConfiguration(factoryPid);
-	}
-	
-	
-	public Configuration callConfigurationAdmin_createFactoryConfiguration(String factoryPid, String location)  throws IOException {
-		return configurationAdmin.createFactoryConfiguration(factoryPid, location);
-	}
-	
-	
-	
+  // from ConfigurationAdmin service
+//	public Configuration callConfigurationAdmin_getConfiguration(String pid) throws IOException {
+//		return configurationAdmin.getConfiguration(pid);
+//	}
+//
+//	public Configuration callConfigurationAdmin_getConfiguration(String pid, String location) throws IOException {
+//		return configurationAdmin.getConfiguration(pid, location);
+//	}
+//
+//	public Configuration[] callConfigurationAdmin_listConfigurations(String filter) throws Exception {
+//		return configurationAdmin.listConfigurations(filter);
+//	}
+//
+//	public void callConfiguration_delete(String pid) throws IOException {
+//		Configuration configuration = callConfigurationAdmin_getConfiguration(pid);
+//		configuration.delete();
+//	}
+//	
+//	public void callConfiguration_update(String pid) throws IOException {
+//		Configuration configuration = callConfigurationAdmin_getConfiguration(pid);
+//		configuration.update();
+//	}
+//	
+//	public void callConfiguration_update(String pid, Dictionary properties) throws IOException {
+//		Configuration configuration = configurationAdmin.getConfiguration(pid);
+//		configuration.update(properties);
+//	}
+//
+//	public void callConfiguration_setBundleLocation(String pid) throws IOException  {
+//		Configuration configuration = configurationAdmin.getConfiguration(pid);
+//		configuration.setBundleLocation(null);
+//	}
+//	
+//	public Configuration callConfigurationAdmin_createFactoryConfiguration(String factoryPid) throws IOException {
+//		return configurationAdmin.createFactoryConfiguration(factoryPid);
+//	}
+//	
+//	public Configuration callConfigurationAdmin_createFactoryConfiguration(String factoryPid, String location)  throws IOException {
+//		return configurationAdmin.createFactoryConfiguration(factoryPid, location);
+//	}
 }
