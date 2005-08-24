@@ -1,3 +1,29 @@
+/*
+ * $Header$
+ * 
+ * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * 
+ * Implementation of certain elements of the OSGi Specification may be subject
+ * to third party intellectual property rights, including without limitation,
+ * patent rights (such a third party may or may not be a member of the OSGi
+ * Alliance). The OSGi Alliance is not responsible and shall not be held
+ * responsible in any manner for identifying or failing to identify any or all
+ * such third party intellectual property rights.
+ * 
+ * This document and the information contained herein are provided on an "AS IS"
+ * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
+ * HEREIN WILL NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE
+ * OSGI ALLIANCE BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF
+ * USE OF DATA, INTERRUPTION OF BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR
+ * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
+ * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
+ * 
+ * All Company, brand and product names may be trademarks that are the sole
+ * property of their respective owners. All rights reserved.
+ */
 package org.osgi.test.cases.permissionadmin.signature.tbc;
 
 import java.io.InputStream;
@@ -10,69 +36,34 @@ import org.osgi.framework.BundleContext;
 
 import org.osgi.service.permissionadmin.PermissionInfo;
 
-
 public class PermissionSignatureUtility {
 	
-	// AdminPermission actions
-/*	
-	static final String METADATA 	= AdminPermission.METADATA;
-	static final String RESOURCE 	= AdminPermission.RESOURCE;	
-	static final String CLASS 		= AdminPermission.CLASS;
-	static final String LIFECYCLE 	= AdminPermission.LIFECYCLE;
-	static final String EXECUTE 	= AdminPermission.EXECUTE;
-	static final String LISTENER 	= AdminPermission.LISTENER;
-	static final String PERMISSION 	= AdminPermission.PERMISSION;
-	static final String RESOLVE 	= AdminPermission.RESOLVE;
-	static final String SLART_LEVEL = AdminPermission.STARTLEVEL;
+  // Signature keys
+	static final String                    ID              = "id";
+  static final String                    LOCATION        = "location";
+  static final String                    NAME            = "name";
+  static final String                    SIGNER          = "signer";
+  static final String                    DN_S            = "DNs";
+	
+	static final String                    CONFIG_FPID     = "permission.config.test.fpid";
+  static final String                    CONFIG_PROPERTY = "config.property";
 
-	static final String EXTENSION_LIFECYCLE = AdminPermission.EXTENSIONLIFECYCLE;
-*/
-	
-	static final String METADATA 	= "metadata";
-	static final String RESOURCE 	= "resource";	
-	static final String CLASS 		= "class";
-	static final String LIFECYCLE 	= "lifecycle";
-	static final String EXECUTE 	= "execute";
-	static final String LISTENER 	= "listener";
-	static final String PERMISSION 	= "permission";
-	static final String RESOLVE 	= "resolve";
-	static final String SLART_LEVEL = "startlevel";
-
-	static final String EXTENSION_LIFECYCLE = "extensionLifecycle";
-
-	
-	// Signature keys
-	static final String ID 		 = "id";
-	static final String LOCATION = "location";	
-	static final String NAME 	 = "name";
-	static final String SIGNER   = "signer";
-	static final String DN_S	 = "DNs";
-	
-	//static final String[] AttributeTypeX_500 = {"CN", "L", "ST", "O", "OU", "C", "STREET", "DC", "UID"}; 
-	
-	static final String CONFIG_FPID = "permission.config.test.fpid";
-	static final String	CONFIG_PROPERTY = "config.property";
-	
-	private PermissionSignatureTestControl 	control;
-	private PermissionSignatureTBCService 	tbc;
-	private BundleContext					context;
+  private PermissionSignatureTestControl control;
+  private BundleContext                  context;
 	
 	public PermissionSignatureUtility(PermissionSignatureTestControl control, 
 									  PermissionSignatureTBCService tbc,
 									  BundleContext context){
 		this.control = control;
-		this.tbc = tbc;
 		this.context = context;
 	}
 
-	
 	//	 returns true if 'method' succeed
 	public Object allowed_Bundle_getHeaders(String message, Bundle bundle) throws Exception {
 		return control.allowed_call("call Bundle.getHeaders() " + message, "callBundle_getHeaders",
 				new Class[]{Bundle.class}, new Object[]{bundle});
 	}
 
-	
 	//	 returns true if 'method' failed
 	public boolean not_allowed_Bundle_getHeaders(String message, Bundle bundle) throws Exception {
 		return control.not_allowed_call("call Bundle.getHeaders() " + message, "callBundle_getHeaders",
@@ -155,7 +146,7 @@ public class PermissionSignatureUtility {
 
 	public boolean not_allowed_Bundle_loadClass(String message, Bundle bundle, String name) throws Exception {
 		return control.not_allowed_call("call Bundle.loadClass(String) " + message, "callBundle_loadClass", 
-				new Class[]{Bundle.class, String.class}, new Object[]{bundle, name}, java.lang.ClassNotFoundException.class);
+				new Class[]{Bundle.class, String.class}, new Object[]{bundle, name}, SecurityException.class);
 	}
 	
 	public Object allowed_Bundle_stop(String message, Bundle bundle) throws Exception {
@@ -296,7 +287,7 @@ public class PermissionSignatureUtility {
 
 	public boolean not_allowed_StartLevel_setInitialBundleStartLevel(String message, int startlevel) throws Exception {
 		return control.not_allowed_call("call StartLevel.setInitialBundleStartLevel(int) " + message, 
-				"callStartLevel_setInitialBundleStartLevell", new Class[]{Integer.class}, 
+				"callStartLevel_setInitialBundleStartLevel", new Class[]{Integer.class}, 
 				new Object[]{new Integer(startlevel)}, SecurityException.class);
 	}
 
@@ -491,32 +482,32 @@ public class PermissionSignatureUtility {
 		return infos;
 	}
 
-// !!! AdminPermission(id, action) must be the first element in the Vector		
-// name -> id, location, Name, signer
 	Vector getPInfosForAdminPermisssion(String action, long bundleId, String location, String symbolicName) {
 		Vector permissions = new Vector();
 		
-		// TO DO -> AdminPermission(id, action) ???
-		if (bundleId != -1) {
-			PermissionInfo info = new PermissionInfo(AdminPermission.class.getName(),
-													 String.valueOf(bundleId), action);
-			permissions.addElement(info);
-			info = new PermissionInfo(AdminPermission.class.getName(),
-									  ID + "=" + bundleId, action);
-			permissions.addElement(info);
-		}
-		
-		if (location != null) {
-			permissions.addAll(createWildcardPermissionInfo(AdminPermission.class, 
-															LOCATION, action, location));
-		}
-		
-		if (symbolicName != null) {
-			permissions.addAll(createWildcardPermissionInfo(AdminPermission.class, 
-															NAME, action, symbolicName));
-		}
-		
-		permissions.addAll(getSignerFilter(action));
+    PermissionInfo info = new PermissionInfo(AdminPermission.class.getName(),
+        "*", action);
+    permissions.addElement(info);
+    
+//		if (bundleId != -1) {
+//			info = new PermissionInfo(AdminPermission.class.getName(),
+//			    ID + "=" + bundleId, action);
+//			permissions.addElement(info);
+//		}
+//		
+//		if (location != null) {
+//      info = new PermissionInfo(AdminPermission.class.getName(),
+//          LOCATION + "=" + location, action);
+//      permissions.addElement(info);
+//		}
+//		
+//		if (symbolicName != null) {
+//      info = new PermissionInfo(AdminPermission.class.getName(),
+//          NAME + "=" + symbolicName, action);
+//      permissions.addElement(info);
+//		}
+//		
+//		permissions.addAll(getSignerFilter(action));
 				
 		return permissions;
 	}
@@ -524,8 +515,6 @@ public class PermissionSignatureUtility {
 	Vector getSignerFilter(String action) {
 		Vector dns = createWildcardDNs(SignatureResource.getString(DN_S));
 		Vector infos = new Vector();
-		String filter = SIGNER + "=";
-		String key;
 		PermissionInfo info;
 		for (int i = 0; i < dns.size(); ++i) {
 			info = new PermissionInfo(AdminPermission.class.getName(),
@@ -536,17 +525,13 @@ public class PermissionSignatureUtility {
 		return infos;
 	}
 	
-	
-	
-	Vector createWildcardDNs(String value) {
+	private Vector createWildcardDNs(String value) {
 		Vector result = new Vector();
 		String semicolon = ";";
-		String asterisk = "*";
 		
 		int lastIndex = 0;
 		int semicolonIndex = value.indexOf(semicolon);
 		String element;
-		String rdns;
 		String prefix;
 		String suffix;
 		while (semicolonIndex != -1) {
@@ -554,7 +539,6 @@ public class PermissionSignatureUtility {
 			element = value.substring(lastIndex, semicolonIndex);
 			suffix = value.substring(semicolonIndex);
 			
-			//result.addElement(prefix + asterisk + suffix);
 			result.addAll(addVector(createWildcardRDNs(element), prefix, suffix));
 			
 			lastIndex = semicolonIndex + 1;
@@ -565,7 +549,6 @@ public class PermissionSignatureUtility {
 			prefix = value.substring(0, lastIndex);
 			element = value.substring(lastIndex);
 			
-			//result.addElement(prefix + asterisk);
 			result.addAll(addVector(createWildcardRDNs(element), prefix, ""));
 		} else {
 			result.addAll(createWildcardRDNs(value));
@@ -583,13 +566,10 @@ public class PermissionSignatureUtility {
 		return result;
 	}
 	
-	
 	private Vector createWildcardRDNs(String value) {
 		Vector result = new Vector();
 		String comma = ",";
-		//String semicolon = ";";
 		String equal = "=";
-		String space = " ";
 		String asterisk = "*";
 		
 		int lastIndex = 0;
@@ -614,10 +594,6 @@ public class PermissionSignatureUtility {
 			result.addElement(value.substring(0, equalIndex + 1) + asterisk);
 		}
 
-		
 		return result;
 	}
-	
-	
-	
 }
