@@ -71,10 +71,6 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
         return BUNDLE_PREF + String.valueOf(bid);
     }
     
-    private String bundleToNodeId(String bid) {
-        return BUNDLE_PREF + bid;
-    }
-    
     private String fromNodeId(String nodeId) {
         if (nodeId.startsWith(DP_PREF))
             return nodeId.substring(DP_PREF.length());
