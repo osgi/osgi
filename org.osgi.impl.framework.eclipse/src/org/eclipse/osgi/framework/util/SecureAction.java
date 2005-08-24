@@ -159,7 +159,7 @@ public class SecureAction {
 			return file.exists();
 		return ((Boolean) AccessController.doPrivileged(new PrivilegedAction() {
 			public Object run() {
-				return new Boolean(file.exists());
+				return file.exists() ? Boolean.TRUE : Boolean.FALSE;
 			}
 		}, controlContext)).booleanValue();
 	}
@@ -175,7 +175,7 @@ public class SecureAction {
 			return file.isDirectory();
 		return ((Boolean) AccessController.doPrivileged(new PrivilegedAction() {
 			public Object run() {
-				return new Boolean(file.isDirectory());
+				return file.isDirectory() ? Boolean.TRUE : Boolean.FALSE;
 			}
 		}, controlContext)).booleanValue();
 	}

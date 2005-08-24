@@ -328,7 +328,7 @@ class StateReader {
 			else if (type == 1)
 				value = readList(in);
 			else if (type == 2)
-				value = new Boolean(in.readBoolean());
+				value = in.readBoolean() ? Boolean.TRUE : Boolean.FALSE;
 			result.put(key, value);
 		}
 		return result;

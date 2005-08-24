@@ -145,7 +145,7 @@ public class MetaData {
 	 * @param val the value of the metadata
 	 */
 	public void setBoolean(String key, boolean val) {
-		properties.put(key, new Boolean(val).toString());
+		properties.put(key, (val ? Boolean.TRUE : Boolean.FALSE).toString());
 	}
 
 	/**
