@@ -11,7 +11,7 @@
 			docletpath="${workspace}/org.osgi.tools/src" 
 			classpath="${project.classpath}" 
 			encoding="utf-8"
-			packagenames="${specs}">
+			packagenames="${javadoc}">
 			<sourcepath>
 				<dirset dir="${workspace}">
 					<include name="*/src" />
