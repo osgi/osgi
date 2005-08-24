@@ -69,13 +69,29 @@ public class Synchronizer {
 	 *         <code>false</code> otherwise.
 	 */
 	public synchronized boolean waitForSignal(long timemilli) {
-		if (signalCount == 0) {
+		return waitForSignal(timemilli, 1);
+	}
+
+	/**
+	 * Consumes some signals from the queue. If no signal is available, waits for
+	 * <code>timemilli</code> milliseconds and then checks again if there's
+	 * signals to be consumed.
+	 * 
+	 * @param timemilli the time (in millisends) to wait for a signal if none is
+	 *        available.
+	 * @param compareCount the amount of signals to consume
+	 * @return <code>true</code> if there was a signal to be consumed.
+	 *         <code>false</code> otherwise.
+	 */	
+	public synchronized boolean waitForSignal(long timemilli, int compareCount) {
+		if (signalCount < compareCount) {
 			try {
 				wait(timemilli);
 			}
 			catch (InterruptedException e) {
 			}
 		}
-		return signalCount != 0;
+		
+		return signalCount >= compareCount;
 	}
 }
