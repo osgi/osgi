@@ -470,7 +470,8 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 			Log.log(1, "validate componentDescription: ", new Throwable("invalid to specify both immediate and ComponentFactory"));
 		} else if (
 				(!componentDescription.isImmediate()) &&
-				(componentDescription.getService() == null )) {
+				(componentDescription.getService() == null ) &&
+				(componentDescription.getFactory() == null )) {
 			componentDescription.setValid(false);
 			Log.log(1, "validate componentDescription: ", new Throwable("invalid set immediate to false and provide no Service"));
 		} else {

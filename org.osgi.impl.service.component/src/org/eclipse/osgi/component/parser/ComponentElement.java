@@ -110,7 +110,8 @@ public class ComponentElement extends DefaultHandler {
 	public void endElement(String uri, String localName, String qName) {
 		
 		// if unset, immediate attribute is false if service element is specified or true otherwise
-		if (!immediateSet) {
+		// except if component factory then immediate by default is false
+		if (!immediateSet && (component.getFactory() == null)) {
 			component.setImmediate(component.getService() == null);
 		}
 		
