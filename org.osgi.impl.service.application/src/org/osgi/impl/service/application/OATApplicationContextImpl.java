@@ -34,7 +34,6 @@ import org.osgi.framework.*;
 import org.osgi.application.*;
 import org.osgi.service.application.*;
 import org.osgi.service.log.LogService;
-import org.osgi.service.log.*;
 
 public class OATApplicationContextImpl implements ApplicationContext {
 	
@@ -159,6 +158,15 @@ public class OATApplicationContextImpl implements ApplicationContext {
 				{
 					Activator.log( LogService.LOG_ERROR, "Invalid filter syntax for reference '" + referenceName + "'!", e );
 					return new Object[ 0 ];
+				}
+				
+				if( refs == null || refs.length == 0 ) {
+		    	if( service.getCardinality() == OATServiceData.CARDINALITY1_1 || 
+		    			service.getCardinality() == OATServiceData.CARDINALITY1_n ) {
+		    		requestTermination();
+		    		throw new RuntimeException( "The requested service not found!" );
+		    	}
+		    	return new Object[ 0 ];					
 				}
 				
 				Object[] result = new Object[ refs.length ];
