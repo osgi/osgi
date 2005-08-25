@@ -34,6 +34,7 @@ import org.osgi.framework.*;
 import org.osgi.application.*;
 import org.osgi.service.application.*;
 import org.osgi.service.log.LogService;
+import org.osgi.service.log.*;
 
 public class OATApplicationContextImpl implements ApplicationContext {
 	
@@ -101,8 +102,12 @@ public class OATApplicationContextImpl implements ApplicationContext {
 				
 				try {
 		      refs = bc.getServiceReferences( service.getInterface(),
-		    	                                  service.getTarget() );
-				}catch( InvalidSyntaxException e ) {}
+		    	                                service.getTarget() );
+				}catch( InvalidSyntaxException e ) 
+				{
+					Activator.log( LogService.LOG_ERROR, "Invalid filter syntax for reference '" + referenceName + "'!", e );
+					return null;
+				}
 				
 		    if( refs == null || refs.length == 0 ) {
 		    	if( service.getCardinality() == OATServiceData.CARDINALITY1_1 || 
@@ -137,23 +142,41 @@ public class OATApplicationContextImpl implements ApplicationContext {
 		return null;
 	}
 	
-	public Object[] locateServices(String referenceName) { /* TODO TODO TODO */
-		try {
-  		ServiceReference refs [] = bc.getServiceReferences( referenceName, null /* TODO */ );
-	  	if( refs == null || refs.length == 0)
-		    return null;
-		
-  		Object []objArray = new Object [ refs.length ];
-		
-	  	for( int i=0; i!=refs.length; i++ ) {
-		  	objArray[ i ] = bc.getService( refs[ i ] );
-		  	serviceList.add( refs[ i ] );
-	  	}
-		
-		  return objArray;
-		}catch( Exception e ) {
-			return null;
+	public Object[] locateServices(String referenceName) {
+		for( int i=0; i != oatAppData.getServices().length; i++ ) {
+			if( oatAppData.getServices()[ i ].getName().equals( referenceName )) {
+								
+				/* getting the service references */
+				
+				OATServiceData service = oatAppData.getServices()[ i ];
+				
+				ServiceReference refs[] = null;
+				
+				try {
+		      refs = bc.getServiceReferences( service.getInterface(),
+		    	                                service.getTarget() );
+				}catch( InvalidSyntaxException e ) 
+				{
+					Activator.log( LogService.LOG_ERROR, "Invalid filter syntax for reference '" + referenceName + "'!", e );
+					return new Object[ 0 ];
+				}
+				
+				Object[] result = new Object[ refs.length ];
+				for( int j=0; j != refs.length; j++ ) {
+					Service serv = getServiceByReference( refs[ i ] );
+					if( serv != null )
+						result[ j ] = serv.serviceObject;
+					else {
+				    serv = new Service();
+				    serv.serviceData = service;
+				    serv.serviceReference = refs[ j ];
+				    result[ j ] = serv.serviceObject = bc.getService( refs[ j ] );						
+					}
+				}
+				return result;
+			}
 		}
+		return new Object[ 0 ];
 	}
 	public ServiceRegistration registerService(String clazz, Object service,
 			Dictionary properties) {
@@ -246,6 +269,17 @@ public class OATApplicationContextImpl implements ApplicationContext {
   		return true;
   	}
   	return false;
+	}
+	
+	private Service getServiceByReference( ServiceReference ref ) {
+		Iterator iterator = serviceList.iterator();
+		while( iterator.hasNext() ) {
+			Service serv = (Service)iterator.next();
+			
+			if( serv.serviceReference == ref ) 
+				return serv;
+		}
+		return null;
 	}
 	
 	private void requestTermination() {
