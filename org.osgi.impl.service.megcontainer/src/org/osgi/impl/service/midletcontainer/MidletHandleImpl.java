@@ -24,8 +24,6 @@ public final class MidletHandleImpl implements ServiceListener,
 	private BundleContext			    bc;
 	private Vector					      serviceRefs;
 	private Object					      baseClass;
-	private OATContainerInterface oat = null;
-	private ServiceReference      oatRef = null;
 	public MidletHandleImpl() {
 		suspendedFileName = null;
 	}
@@ -106,19 +104,11 @@ public final class MidletHandleImpl implements ServiceListener,
 	}
 
 	private void registerToOATHash( Map args ) throws Exception {
-		oatRef = bc .getServiceReference(OATContainerInterface.class.getName());
-    if (oatRef == null)
-	    throw new Exception("Cannot register the MidletHandle as OAT is not running!");
-    oat = (OATContainerInterface) bc.getService(oatRef);
-    if (oat == null)
-	    throw new Exception("Cannot register the MidletHandle as OAT is not running!");
-    oat.createApplicationContext(baseClass, midletHandle, args, midletDelegate.getBundle());
+		midletContainer.getOATInterface().createApplicationContext(baseClass, midletHandle, args, midletDelegate.getBundle());
 	}
 	
 	private void unregisterFromOATHash() throws Exception {
-		oat.removeApplicationContext( baseClass );
-		
-    bc.ungetService(oatRef);		
+		midletContainer.getOATInterface().removeApplicationContext( baseClass );		
 	}
 	
 	private void registerAppHandle() {
