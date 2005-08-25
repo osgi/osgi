@@ -35,6 +35,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.impl.service.deploymentadmin.BundleEntry;
 import org.osgi.impl.service.deploymentadmin.BundleUtil;
 import org.osgi.impl.service.deploymentadmin.CaseInsensitiveMap;
+import org.osgi.impl.service.deploymentadmin.DeploymentAdminImpl;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.Metanode;
 import org.osgi.impl.service.deploymentadmin.PluginCtx;
@@ -98,11 +99,24 @@ public class PluginDeployed implements DmtReadOnlyDataPlugin, DmtExecPlugin, Ser
             String mv = pluginCtx.getDmtAdmin().mangle(null, dpToNodeId(dps[i].getName()));
             set.add(mv);
         }
-        
-        // gathers deployed bundles
+
+        // gathers deployed bundles (not bilonging to any DP)
+        Set bset = new HashSet();
         Bundle[] bs = pluginCtx.getBundleContext().getBundles();
-        for (int i = 0; i < bs.length; i++) {
-            String mv = pluginCtx.getDmtAdmin().mangle(null, bundleToNodeId(bs[i].getBundleId()));
+        for (int i = 0; i < bs.length; i++)
+            bset.add(new Long(bs[i].getBundleId()));
+        for (int i = 0; i < dps.length; i++) {
+            if ("System".equals(dps[i].getName()))
+                continue;
+            for (Iterator iter = ((DeploymentPackageImpl) dps[i]).
+                    getBundleEntryIterator(); iter.hasNext();) {
+                BundleEntry be = (BundleEntry) iter.next();
+                bset.remove(new Long(be.getBundleId()));
+            }
+        }
+        for (Iterator iter = bset.iterator(); iter.hasNext();) {
+            Long bid = (Long) iter.next();
+            String mv = pluginCtx.getDmtAdmin().mangle(null, bundleToNodeId(bid.longValue()));
             set.add(mv);
         }
         

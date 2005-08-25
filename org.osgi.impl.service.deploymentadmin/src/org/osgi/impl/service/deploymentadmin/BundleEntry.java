@@ -108,8 +108,10 @@ public class BundleEntry implements Serializable {
         BundleEntry other = (BundleEntry) obj;
         
         // sometimes the bundle symbolic name is null
-        return ((null == symbName && null == other.symbName) || symbName.equals(other.symbName)) &&
-               ((null == version && null == other.version) || version.equals(other.version));
+        if (null == symbName || null == other.symbName)
+            return bundleId.equals(other.bundleId);
+        
+        return symbName.equals(other.symbName);
     }
 
     /**
@@ -122,7 +124,8 @@ public class BundleEntry implements Serializable {
     }
     
     public String toString() {
-        return "[SymbolicName: " + symbName + " Version: " + version + "]";
+        return "[SymbolicName: " + symbName + " Version: " + version + " BundleId: " + 
+                bundleId + "]";
     }
 
     public boolean isCustomizer() {
