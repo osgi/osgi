@@ -7,5 +7,6 @@
 	<classpathentry kind="src" path="/org.osgi.service.dmt"/>
 	<classpathentry kind="src" path="/org.osgi.application"/>
 	<classpathentry kind="lib" path="/cnf/jar/saxon.jar"/>
+	<classpathentry sourcepath="/home/ckarai/dfs" kind="lib" path="/cnf/ant/lib/xercesImpl.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

@@ -122,9 +122,7 @@ public class Scheduler implements Runnable, EventHandler {
 			}
 		}
 		catch (Exception e) {
-			Activator.log(
-					bc,
-					LogService.LOG_ERROR,
+			Activator.log( LogService.LOG_ERROR,
 					"Exception occurred at loading the scheduled applications!",
 					e);
 		}
@@ -139,7 +137,7 @@ public class Scheduler implements Runnable, EventHandler {
 			os.close();
 		}
 		catch (Exception e) {
-			Activator.log(bc, LogService.LOG_ERROR,
+			Activator.log( LogService.LOG_ERROR,
 					"Exception occurred at saving the scheduled applications!",
 					e);
 		}
@@ -176,7 +174,6 @@ public class Scheduler implements Runnable, EventHandler {
 		}
 		catch (Exception ex) {
 			Activator.log(
-					bc,
 					LogService.LOG_ERROR,
 					"Exception occurred at scheduling an application!",
 					ex);

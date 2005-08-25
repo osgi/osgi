@@ -140,11 +140,11 @@ public class OATApplicationContextImpl implements ApplicationContext {
 		try {
 			return method.invoke(object, args);
 		} catch (IllegalAccessException e) {
-			Activator.log( bc, LogService.LOG_ERROR,
+			Activator.log( LogService.LOG_ERROR,
 					"No access rights to method '" + methodName+ "' in class '" +
 					clazz.getName() + "' !", e);
 		} catch (InvocationTargetException e) {
-			Activator.log( bc, LogService.LOG_ERROR,
+			Activator.log( LogService.LOG_ERROR,
 					"InvocationTargetException at method '" + methodName+ "' in class '" +
 					clazz.getName() + "' !", e);
 		}
@@ -167,7 +167,7 @@ public class OATApplicationContextImpl implements ApplicationContext {
 			}
 		}
 
-		Activator.log( bc, LogService.LOG_ERROR,
+		Activator.log( LogService.LOG_ERROR,
 				"Method '" + methodName + "' not found in class '" + 
 				origClassName + "' !", exception);
 		return null;
