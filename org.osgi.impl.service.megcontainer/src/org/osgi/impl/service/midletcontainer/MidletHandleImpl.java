@@ -112,7 +112,7 @@ public final class MidletHandleImpl implements ServiceListener,
     oat = (OATContainerInterface) bc.getService(oatRef);
     if (oat == null)
 	    throw new Exception("Cannot register the MidletHandle as OAT is not running!");
-    oat.createApplicationContext(baseClass, args, midletDelegate.getBundle());
+    oat.createApplicationContext(baseClass, midletHandle, args, midletDelegate.getBundle());
 	}
 	
 	private void unregisterFromOATHash() throws Exception {
