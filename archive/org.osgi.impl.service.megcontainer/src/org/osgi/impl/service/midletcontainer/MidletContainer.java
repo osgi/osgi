@@ -41,10 +41,25 @@ class MEGBundleDescriptor {
 }
 
 public class MidletContainer implements BundleListener, EventHandler {
+	private BundleContext	bc;
+	private Vector			bundleIDs;
+	private Hashtable		bundleHash;
+	private int				height;
+	private int				width;
+	private OATContainerInterface oat;
+	ServiceReference oatRef = null;
 
 	public MidletContainer(BundleContext bc) throws Exception {
 		this.bc = bc;
 		bundleHash = new Hashtable();
+		
+		oatRef = bc .getServiceReference(OATContainerInterface.class.getName());
+    if (oatRef == null)
+	    throw new Exception("Cannot start the MidletContainer as OAT is not running!");
+    oat = (OATContainerInterface) bc.getService(oatRef);
+    if (oat == null)
+	    throw new Exception("Cannot start the MidletContainer as OAT is not running!");
+		
 		bundleIDs = loadVector("BundleIDs");
 		for (int j = 0; j < bundleIDs.size(); j++) {
 			Bundle bundle = bc.getBundle(Long.parseLong((String) bundleIDs
@@ -73,14 +88,7 @@ public class MidletContainer implements BundleListener, EventHandler {
 		if (bundleIDs.contains(Long.toString(bundleID)))
 			return;
 		
-		ServiceReference oatRef = bc .getServiceReference(OATContainerInterface.class.getName());
-    if (oatRef == null)
-	    throw new Exception("Cannot register the MidletDescriptor as OAT is not running!");
-    OATContainerInterface oat = (OATContainerInterface) bc.getService(oatRef);
-    if (oat == null)
-	    throw new Exception("Cannot register the MidletDescriptor as OAT is not running!");
     oat.registerOATBundle( bc.getBundle( bundleID ) );
-    bc.ungetService( oatRef );
 		
 		ApplicationDescriptor appDescs[] = registerBundle(bundleID);
 		if (appDescs == null) {
@@ -211,6 +219,8 @@ public class MidletContainer implements BundleListener, EventHandler {
 				return false;
 			if (appDesc.isLocked())
 				return false;
+			if( !oat.isLaunchable( appDesc.getBundle(), appDesc.getStartClass() ) )
+				return false;
 			MEGBundleDescriptor desc = getBundleDescriptor(appDesc
 					.getBundleId());
 			if (desc == null)
@@ -267,6 +277,8 @@ public class MidletContainer implements BundleListener, EventHandler {
 			unregisterApplicationDescriptors(Long.parseLong((String) bundleIDs
 					.get(i)));
 
+		bc.ungetService( oatRef );
+		bc.removeBundleListener( this );
 	}
 
 	private ApplicationDescriptor[] registerBundle(long bundleID) {
@@ -685,10 +697,8 @@ public class MidletContainer implements BundleListener, EventHandler {
 
 		return convertedTable;
 	}
-
-	private BundleContext	bc;
-	private Vector			bundleIDs;
-	private Hashtable		bundleHash;
-	private int				height;
-	private int				width;
+	
+	OATContainerInterface getOATInterface() {
+		return oat;
+	}
 }

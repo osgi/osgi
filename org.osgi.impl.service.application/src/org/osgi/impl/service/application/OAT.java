@@ -33,6 +33,7 @@ import java.lang.reflect.*;
 import java.net.URL;
 import java.util.*;
 import org.osgi.service.application.*;
+import org.osgi.service.log.LogService;
 
 public class OAT implements OATContainerInterface, BundleListener {
 	
@@ -71,6 +72,9 @@ public class OAT implements OATContainerInterface, BundleListener {
 	public void createApplicationContext(Object mainClass, ApplicationHandle appHandle, Map args, Bundle bundle )
 			throws Exception {
 		
+		if( !isLaunchable( bundle, mainClass.getClass().getName() ) )
+			throw new Exception( "ApplicationContext can only be created for launchable applications!" );
+		
 		OATApplicationData []oatAppDatas = (OATApplicationData [])oatAppDescHash.get( bundle );
 		if( oatAppDatas == null )
 			throw new Exception( "Application bundle is not registered in OAT" );
@@ -102,5 +106,42 @@ public class OAT implements OATContainerInterface, BundleListener {
 			oatAppDescHash.remove( event.getBundle() );
 			/* Do we need to terminate all of the applications? */
 		}
+	}
+
+	public boolean isLaunchable(Bundle bundle, String baseClass) {
+		try {
+			OATApplicationData []oatAppDatas = (OATApplicationData [])oatAppDescHash.get( bundle );
+			if( oatAppDatas == null )
+				return false;
+
+			for( int i = 0; i != oatAppDatas.length; i++) {			
+				if( oatAppDatas[ i ].getBaseClass().equals( baseClass ) ) {
+					OATApplicationData appData = oatAppDatas[ i ];
+					
+					for( int j = 0; j != appData.getServices().length; j++ ) {
+						OATServiceData service = appData.getServices()[ j ];
+						
+						if( service.getCardinality() == OATServiceData.CARDINALITY1_1 ||
+								service.getCardinality() == OATServiceData.CARDINALITY1_n ) {
+						
+							ServiceReference refs[] = null;
+					    try {
+						    refs = bc.getServiceReferences( service.getInterface(), service.getTarget() );
+					    }catch( InvalidSyntaxException e ) {
+							  Activator.log( LogService.LOG_ERROR, "Invalid filter syntax for reference '" + service.getName() + "'!", e );
+							  return false;
+						  }
+					    
+					    if( refs == null || refs.length == 0 )
+					    	return false;					    	
+						}						
+					}
+					return true;
+				}
+			}			
+		}catch( Exception e ){
+			return false;			
+		}
+		return false;
 	}
 }
