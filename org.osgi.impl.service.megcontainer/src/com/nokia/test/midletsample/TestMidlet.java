@@ -24,12 +24,14 @@ public class TestMidlet extends MIDlet {
 	}
 
 	public void startApp() throws MIDletStateChangeException {
-		logService.log(4, "Checking whether the log service is working.");
 		staticFieldChecker = myStaticFieldChecker = System.currentTimeMillis();
 
 		myApplicationContext = org.osgi.application.Framework.getApplicationContext( this );
 		if( myApplicationContext == null )
 			System.err.println( "OAT didn't create the ApplicationContext!" );
+		else
+			((LogService)myApplicationContext.locateService( "log" )).
+				log( LogService.LOG_INFO, "Service loaded successfully!" );
 
 		if (paused) {
 			writeResult("RESUME");
