@@ -33,6 +33,9 @@
  * 07/03/2005   Leonardo Barros
  * CR 33        Implement MEG TCK
  * ===========  ==============================================================
+ * 25/08/2005   Andre Assad
+ * CR 178       Policy Plugins Refactoring
+ * ===========  ==============================================================
  */
 package org.osgi.test.cases.policy.tb1.TreeStructure;
 
@@ -45,8 +48,6 @@ import org.osgi.service.condpermadmin.BundleLocationCondition;
 import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.policy.tbc.PolicyConstants;
@@ -68,57 +69,41 @@ public class TreeStructure implements TestInterface {
 	}
 
 	public void run() {
-		testTreeStructure001();
-		testTreeStructure002();
-		testTreeStructure003();
-		testTreeStructure004();
-		testTreeStructure005();
-		testTreeStructure006();
-		testTreeStructure007();
-		testTreeStructure008();
-		testTreeStructure009();
-		testTreeStructure010();
-		testTreeStructure011();
-		testTreeStructure012();
-		testTreeStructure013();
-		testTreeStructure014();
-		testTreeStructure015();
-		testTreeStructure016();
-		testTreeStructure017();
-		testTreeStructure018();
-		testTreeStructure019();
-		testTreeStructure020();
-		testTreeStructure021();
-		testTreeStructure022();
-		testTreeStructure023();
-		testTreeStructure024();
-	}
-
+        testTreeStructure001();
+        testTreeStructure002();
+        testTreeStructure003();
+        testTreeStructure004();
+        testTreeStructure005();
+        testTreeStructure006();
+        testTreeStructure007();
+        testTreeStructure008();
+        testTreeStructure009();
+        testTreeStructure010();
+        testTreeStructure011();
+    }
 
     /**
      * This test asserts if $/Policy/Java is a valid node
-     *
+     * 
      * @spec 3.7 Policy Management Object, Figure 3-12
      */
 
-	public void testTreeStructure001() {
-		tbc.log("#testTreeStructure001");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(PolicyConstants.OSGI_ROOT,
-					DmtSession.LOCK_TYPE_SHARED);
-
-			tbc.assertTrue("Asserts if $/Policy/Java is a valid node", session
-					.isNodeUri(PolicyConstants.POLICY_JAVA_NODE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-							.getClass().getName() }));
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
+	private void testTreeStructure001() {
+        tbc.log("#testTreeStructure001");
+        DmtSession session = null;
+        try {
+            session = tbc.getDmtAdmin().getSession(PolicyConstants.OSGI_ROOT,
+                DmtSession.LOCK_TYPE_SHARED);
+            
+            tbc.assertTrue("Asserts if $/Policy/Java is a valid node", 
+                session.isNodeUri(PolicyConstants.POLICY_JAVA_NODE));
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.closeSession(session);
+        }
+    }
 
     /**
      * This test asserts if $/Policy/Java/LocationPermission is a valid node
@@ -126,27 +111,23 @@ public class TreeStructure implements TestInterface {
      * @spec 3.7 Policy Management Object, Figure 3-12
      */
 
-	public void testTreeStructure002() {
-		tbc.log("#testTreeStructure002");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(PolicyConstants.OSGI_ROOT,
-					DmtSession.LOCK_TYPE_SHARED);
+	private void testTreeStructure002() {
+        tbc.log("#testTreeStructure002");
+        DmtSession session = null;
+        try {
+            session = tbc.getDmtAdmin().getSession(PolicyConstants.OSGI_ROOT,
+                DmtSession.LOCK_TYPE_SHARED);
 
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission is a valid node",
-							session
-									.isNodeUri(PolicyConstants.LOCATION_PERMISSION_NODE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-							.getClass().getName() }));
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
+            tbc.assertTrue(
+                "Asserts if $/Policy/Java/LocationPermission is a valid node",
+                session.isNodeUri(PolicyConstants.LOCATION_PERMISSION_NODE));
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.closeSession(session);
+        }
+    }
 
 
     /**
@@ -154,146 +135,114 @@ public class TreeStructure implements TestInterface {
      *
      * @spec 3.7.2 Location Permission Management Object, Figure 3-13
      */
+	private void testTreeStructure003() {
+        tbc.log("#testTreeStructure003");
+        DmtSession session = null;
+        try {
+            session = tbc.getDmtAdmin().getSession(PolicyConstants.OSGI_ROOT,
+                DmtSession.LOCK_TYPE_SHARED);
 
-	public void testTreeStructure003() {
-		tbc.log("#testTreeStructure003");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(PolicyConstants.OSGI_ROOT,
-					DmtSession.LOCK_TYPE_SHARED);
-
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/Locations is a valid node",
-							session.isNodeUri(PolicyConstants.LOCATIONS_NODE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-							.getClass().getName() }));
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
+            tbc.assertTrue(
+                    "Asserts if $/Policy/Java/LocationPermission/Locations is a valid node",
+                    session.isNodeUri(PolicyConstants.LOCATIONS_NODE));
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.closeSession(session);
+        }
+    }
 
     /**
      * This test asserts if $/Policy/Java/DmtPrincipalPermission is a valid node
      *
      * @spec 3.7 Policy Management Object, Figure 3-12
      */
-    
-	public void testTreeStructure004() {
-		tbc.log("#testTreeStructure004");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(PolicyConstants.OSGI_ROOT,
-					DmtSession.LOCK_TYPE_SHARED);
+	private void testTreeStructure004() {
+        tbc.log("#testTreeStructure004");
+        DmtSession session = null;
+        try {
+            session = tbc.getDmtAdmin().getSession(PolicyConstants.OSGI_ROOT,
+                DmtSession.LOCK_TYPE_SHARED);
 
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission is a valid node",
-							session
-									.isNodeUri(PolicyConstants.PRINCIPAL_PERMISSION_NODE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-							.getClass().getName() }));
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
+            tbc.assertTrue(
+                    "Asserts if $/Policy/Java/DmtPrincipalPermission is a valid node",
+                    session.isNodeUri(PolicyConstants.PRINCIPAL_PERMISSION_NODE));
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e
+                    .getClass().getName()}));
+        } finally {
+            tbc.closeSession(session);
+        }
+    }
 
 
     /**
      * This test asserts if $/Policy/Java/ConditionalPermission is a valid node
      *
      * @spec 3.7 Policy Management Object, Figure 3-12
-     */
-    
-	public void testTreeStructure005() {
-		tbc.log("#testTreeStructure005");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(PolicyConstants.OSGI_ROOT,
-					DmtSession.LOCK_TYPE_SHARED);
+     */    
+	private void testTreeStructure005() {
+        tbc.log("#testTreeStructure005");
+        DmtSession session = null;
+        try {
+            session = tbc.getDmtAdmin().getSession(PolicyConstants.OSGI_ROOT,
+                DmtSession.LOCK_TYPE_SHARED);
 
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/ConditionalPermission is a valid node",
-							session
-									.isNodeUri(PolicyConstants.CONDITIONAL_PERMISSION_NODE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-							.getClass().getName() }));
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
+            tbc.assertTrue(
+                    "Asserts if $/Policy/Java/ConditionalPermission is a valid node",
+                    session.isNodeUri(PolicyConstants.CONDITIONAL_PERMISSION_NODE));
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.closeSession(session);
+        }
+    }
 
 	
     /**
      * This test asserts if the correct permission is added in the
-     * permission admin when setting permissions through DMT structure
+     * Permission Admin when setting permissions through DMT structure
      *
      * @spec 3.7.2 Location Permission Management Object
-     */
-    
-	public void testTreeStructure006() {
-		tbc.log("#testTreeStructure006");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.LOCATIONS_NODE,
-					DmtSession.LOCK_TYPE_ATOMIC);
+     */    
+	private void testTreeStructure006() {
+        tbc.log("#testTreeStructure006");
+        DmtSession session = null;
+        try {
+            session = tbc.getDmtAdmin().getSession(PolicyConstants.LOCATIONS_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+            
+            session.createInteriorNode(PolicyConstants.TEST_NODE);
+            session.setNodeValue(PolicyConstants.TEST_NODE_LOCATION,
+                new DmtData(PolicyConstants.TEST_NODE));
+            
+            PermissionInfo pInfo = new PermissionInfo(AdminPermission.class.getName(), "*", "*");
+            
+            session.setNodeValue(PolicyConstants.TEST_NODE_PERMISSION, new DmtData(pInfo.getEncoded() + "\n"));
+            session.close();
+            
+            PermissionInfo pi[] = tbc.getPermissionAdmin().getPermissions(PolicyConstants.TEST_NODE);
+            
+            tbc.assertEquals(
+                    "Asserts if the correct permission is added in the permission admin when setting permissions through DMT structure",
+                    pInfo.getEncoded(), pi[0].getEncoded());
+            
+            session = tbc.getDmtAdmin().getSession(PolicyConstants.LOCATIONS_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+            session.deleteNode(PolicyConstants.TEST_NODE);
+            session.close();
 
-			session.createInteriorNode(PolicyConstants.TEST_NODE);
-
-			session.setNodeValue(PolicyConstants.TEST_NODE_LOCATION,
-					new DmtData(PolicyConstants.TEST_NODE));
-
-			PermissionInfo pInfo = new PermissionInfo(AdminPermission.class
-					.getName(), "*", "*");
-
-			session.setNodeValue(PolicyConstants.TEST_NODE_PERMISSION,
-					new DmtData(pInfo.getEncoded() + "\n"));
-
-			session.close();
-
-			PermissionInfo pi[] = tbc.getPermissionAdmin().getPermissions(
-					PolicyConstants.TEST_NODE);
-
-			tbc
-					.assertEquals(
-							"Asserts if the correct permission is added in the permission admin when setting permissions through DMT structure",
-							pInfo.getEncoded(), pi[0].getEncoded());
-
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.LOCATIONS_NODE,
-					DmtSession.LOCK_TYPE_ATOMIC);
-
-			session.deleteNode(PolicyConstants.TEST_NODE);
-
-			session.close();
-
-			pi = tbc.getPermissionAdmin().getPermissions(
-					PolicyConstants.TEST_NODE);
-
-			tbc
-					.assertNull(
-							"Asserts if permission was removed from permission admin",
-							pi);
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-							.getClass().getName() }));
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
+            pi = tbc.getPermissionAdmin().getPermissions(PolicyConstants.TEST_NODE);
+            tbc.assertNull("Asserts if permission was removed from permission admin", pi);
+            
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.closeSession(session);
+        }
+    }
 
 
     /**
@@ -302,174 +251,133 @@ public class TreeStructure implements TestInterface {
      *
      * @spec 3.7.2 Location Permission Management Object
      */
-    
-	public void testTreeStructure007() {
-		tbc.log("#testTreeStructure007");
-		DmtSession session = null;
-		try {
-			PermissionInfo pInfo = new PermissionInfo(AdminPermission.class
-					.getName(), "*", "*");
+	private void testTreeStructure007() {
+        tbc.log("#testTreeStructure007");
+        DmtSession session = null;
+        try {
+            PermissionInfo pInfo = new PermissionInfo(AdminPermission.class.getName(), "*", "*");
+            
+            tbc.getPermissionAdmin().setPermissions(PolicyConstants.TEST_NODE,
+                new PermissionInfo[]{pInfo});
+            
+            session = tbc.getDmtAdmin().getSession(
+                PolicyConstants.LOCATIONS_NODE, DmtSession.LOCK_TYPE_SHARED);
+            
+            tbc.assertEquals(
+                    "Asserts if the correct permission is added in DMT when setting permissions through permission admin service",
+                    pInfo.getEncoded() + "\n", session.getNodeValue(
+                        PolicyConstants.TEST_NODE_PERMISSION).getString());
+            
+            session.close();
+            
+            tbc.getPermissionAdmin().setPermissions(PolicyConstants.TEST_NODE, null);
+            
+            session = tbc.getDmtAdmin().getSession(
+                PolicyConstants.LOCATIONS_NODE, DmtSession.LOCK_TYPE_SHARED);
 
-			tbc.getPermissionAdmin()
-					.setPermissions(PolicyConstants.TEST_NODE,
-							new PermissionInfo[] { pInfo });
-
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.LOCATIONS_NODE,
-					DmtSession.LOCK_TYPE_SHARED);
-			
-			tbc
-					.assertEquals(
-							"Asserts if the correct permission is added in DMT when setting permissions through permission admin service",
-							pInfo.getEncoded()+"\n",
-							session.getNodeValue(PolicyConstants.TEST_NODE_PERMISSION).getString());
-
-			session.close();
-
-			tbc.getPermissionAdmin().setPermissions(
-					PolicyConstants.TEST_NODE, null);
-
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.LOCATIONS_NODE,
-					DmtSession.LOCK_TYPE_SHARED);
-
-			tbc.assertTrue("Asserts if permission was removed from DMT",
-					!session.isNodeUri(PolicyConstants.TEST_NODE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-							.getClass().getName() }));
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
+            tbc.assertTrue("Asserts if permission was removed from DMT",
+                !session.isNodeUri(PolicyConstants.TEST_NODE));
+            
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.closeSession(session);
+        }
+    }
 
 
     /**
      * This test asserts if the absence of a Default node is equivalent
      * to having All Permission as the default permission
      *
-     * @spec 3.7.3 Dmt Principal Permission Management Object, Table 3-10
+     * @spec 3.7.2 Location Permission Management Object, Table 15 
      */
+    private void testTreeStructure008() {
+        tbc.log("#testTreeStructure008");
+        DmtSession session = null;
+        PermissionInfo info[] = null;
+        try {
+            info = tbc.getPermissionAdmin().getDefaultPermissions();
 
-    public void testTreeStructure008() {
-		tbc.log("#testTreeStructure008");
-		DmtSession session = null;
-		PermissionInfo info[] = null;
-		try {
-			info = tbc.getPermissionAdmin().getDefaultPermissions();
-
-			PermissionInfo perm = new PermissionInfo(
-					java.security.AllPermission.class.getName(), null, null);
-
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.LOCATION_PERMISSION_NODE,
-					DmtSession.LOCK_TYPE_ATOMIC);
-
-			if (session.isNodeUri(PolicyConstants.DEFAULT_PERMISSION_NODE)) {
-				session.deleteNode(PolicyConstants.DEFAULT_PERMISSION_NODE);
-			}
-
-			session.close();
-
-			PermissionInfo infos[] = tbc.getPermissionAdmin()
-					.getDefaultPermissions();
-
-			tbc
-					.assertEquals(
-							"Asserts if the absence of a Default node is equivalent to having AllPermission as the default permission",
-							perm.getEncoded(), infos[0].getEncoded());
-
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.LOCATION_PERMISSION_NODE,
-					DmtSession.LOCK_TYPE_ATOMIC);
-
-			session
-					.createLeafNode(PolicyConstants.DEFAULT_PERMISSION_NODE);
-
-			session.setNodeValue(PolicyConstants.DEFAULT_PERMISSION_NODE,
-					new DmtData(perm.getEncoded() + "\n"));
-
-			session.close();
-
-			tbc.assertEquals("Asserts if the default permission is restored",
-					perm.getEncoded(), tbc.getPermissionAdmin()
-							.getDefaultPermissions()[0].getEncoded());
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-							.getClass().getName() }));
-		} finally {
-			tbc.closeSession(session);
-			tbc.getPermissionAdmin().setDefaultPermissions(info);
-		}
-	}
+            PermissionInfo perm = new PermissionInfo(
+                java.security.AllPermission.class.getName(), null, null);
+            
+            session = tbc.getDmtAdmin().getSession(PolicyConstants.LOCATION_PERMISSION_NODE,
+                DmtSession.LOCK_TYPE_ATOMIC);
+            
+            if (session.isNodeUri(PolicyConstants.DEFAULT_PERMISSION_NODE)) {
+                session.deleteNode(PolicyConstants.DEFAULT_PERMISSION_NODE);
+            }
+            session.close();
+            PermissionInfo infos[] = tbc.getPermissionAdmin().getDefaultPermissions();
+            
+            tbc.assertEquals(
+                    "Asserts if the absence of a Default node is equivalent to having AllPermission as the default permission",
+                    perm.getEncoded(), infos[0].getEncoded());
+            
+            session = tbc.getDmtAdmin().getSession(PolicyConstants.LOCATION_PERMISSION_NODE,
+                DmtSession.LOCK_TYPE_ATOMIC);
+            
+            session.createLeafNode(PolicyConstants.DEFAULT_PERMISSION_NODE);
+            session.setNodeValue(PolicyConstants.DEFAULT_PERMISSION_NODE, new DmtData(perm.getEncoded() + "\n"));
+            session.close();
+            
+            tbc.assertEquals("Asserts if the default permission is restored",
+                perm.getEncoded(), tbc.getPermissionAdmin().getDefaultPermissions()[0].getEncoded());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.closeSession(session);
+            tbc.getPermissionAdmin().setDefaultPermissions(info);
+        }
+    }
 
 
     /**
      * This test asserts that creating a Default node with an empty
      * string makes the default permissions empty
      *
-     * @spec 3.7.3 Dmt Principal Permission Management Object, Table 3-10
+     * @spec 3.7.2 Location Permission Management Object, Table 15
      */
-
-	public void testTreeStructure009() {
-		tbc.log("#testTreeStructure009");
-		DmtSession session = null;
-		PermissionInfo info[] = null;
-		try {
-			info = tbc.getPermissionAdmin().getDefaultPermissions();
-
-			PermissionInfo perm = new PermissionInfo(
-					java.security.AllPermission.class.getName(), null, null);
-
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.LOCATION_PERMISSION_NODE,
-					DmtSession.LOCK_TYPE_ATOMIC);
-
-			if (!session.isNodeUri(PolicyConstants.DEFAULT_PERMISSION_NODE)) {
-				session.createLeafNode(
-						PolicyConstants.DEFAULT_PERMISSION_NODE, new DmtData(
-								""));
-			} else {
-				session.setNodeValue(PolicyConstants.DEFAULT_PERMISSION_NODE,
-						new DmtData(""));
-			}
-
-			session.close();
-
-			PermissionInfo infos[] = tbc.getPermissionAdmin()
-					.getDefaultPermissions();
-
-			tbc
-					.assertNull(
-							"Asserts if permission was removed from permission admin",
-							infos);
-
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.LOCATION_PERMISSION_NODE,
-					DmtSession.LOCK_TYPE_ATOMIC);
-
-			session.setNodeValue(PolicyConstants.DEFAULT_PERMISSION_NODE, new DmtData(perm.getEncoded()
-					+ "\n"));
-
-			session.close();
-
-			tbc.assertEquals("Asserts if the default permission is restored",
-					perm.getEncoded(), tbc.getPermissionAdmin()
-							.getDefaultPermissions()[0].getEncoded());
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-							.getClass().getName() }));
-		} finally {
-			tbc.closeSession(session);
-			tbc.getPermissionAdmin().setDefaultPermissions(info);
-		}
-	}
+	private void testTreeStructure009() {
+        tbc.log("#testTreeStructure009");
+        DmtSession session = null;
+        PermissionInfo info[] = null;
+        try {
+            info = tbc.getPermissionAdmin().getDefaultPermissions();
+            PermissionInfo perm = new PermissionInfo(
+                java.security.AllPermission.class.getName(), null, null);
+            
+            session = tbc.getDmtAdmin().getSession(PolicyConstants.LOCATION_PERMISSION_NODE,
+                DmtSession.LOCK_TYPE_ATOMIC);
+            
+            if (!session.isNodeUri(PolicyConstants.DEFAULT_PERMISSION_NODE)) {
+                session.createLeafNode(PolicyConstants.DEFAULT_PERMISSION_NODE, new DmtData(""));
+            } else {
+                session.setNodeValue(PolicyConstants.DEFAULT_PERMISSION_NODE, new DmtData(""));
+            }
+            session.close();
+            PermissionInfo infos[] = tbc.getPermissionAdmin().getDefaultPermissions();
+            
+            tbc.assertNull( "Asserts if permission was removed from permission admin", infos);
+            
+            session = tbc.getDmtAdmin().getSession(PolicyConstants.LOCATION_PERMISSION_NODE,
+                DmtSession.LOCK_TYPE_ATOMIC);
+            session.setNodeValue(PolicyConstants.DEFAULT_PERMISSION_NODE, new DmtData(perm.getEncoded() + "\n"));
+            session.close();
+            
+            tbc.assertEquals("Asserts if the default permission is restored",
+                perm.getEncoded(), tbc.getPermissionAdmin() .getDefaultPermissions()[0].getEncoded());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.closeSession(session);
+            tbc.getPermissionAdmin().setDefaultPermissions(info);
+        }
+    }
 
 
     /**
@@ -478,108 +386,80 @@ public class TreeStructure implements TestInterface {
      *
      * @spec 3.7.4 Conditional Permission Management Object
      */
+	private void testTreeStructure010() {
+        tbc.log("#testTreeStructure010");
+        DmtSession session = null;
+        try {
+            PermissionInfo pInfo1 = new PermissionInfo(ServicePermission.class.getName(), "org.osgi.service.http.HttpService", "register");
+            PermissionInfo pInfo2 = new PermissionInfo(PackagePermission.class.getName(), "org.osgi.*", "IMPORT");
+            ConditionInfo cInfo = new ConditionInfo(BundleLocationCondition.class.getName(),
+                new String[]{PolicyConstants.PRINCIPAL});
+            
+            session = tbc.getDmtAdmin().getSession(PolicyConstants.CONDITIONAL_PERMISSION_NODE,
+                DmtSession.LOCK_TYPE_ATOMIC);
+            
+            session.createInteriorNode(PolicyConstants.CONDITION_HASH);
+            session.setNodeValue(PolicyConstants.CONDITIONAL_PERMISSIONINFO,
+                new DmtData(pInfo1.getEncoded() + "\n" + pInfo2.getEncoded() + "\n"));
+            session.setNodeValue(PolicyConstants.CONDITIONAL_CONDITIONINFO,
+                new DmtData(cInfo.getEncoded() + "\n"));
+            session.close();
+            
+            boolean conditionInserted = false;
+            Enumeration en = tbc.getConditionalPermissionAdmin().getConditionalPermissionInfos();
 
-	public void testTreeStructure010() {
-		tbc.log("#testTreeStructure010");
-		DmtSession session = null;
-		try {
-			PermissionInfo pInfo1 = new PermissionInfo(ServicePermission.class
-					.getName(), "org.osgi.service.http.HttpService", "register");
-
-			PermissionInfo pInfo2 = new PermissionInfo(PackagePermission.class
-					.getName(), "org.osgi.*", "IMPORT");
-
-			ConditionInfo cInfo = new ConditionInfo(
-					BundleLocationCondition.class.getName(),
-					new String[] { PolicyConstants.PRINCIPAL });
-
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.CONDITIONAL_PERMISSION_NODE,
-					DmtSession.LOCK_TYPE_ATOMIC);
-
-			session.createInteriorNode(PolicyConstants.CONDITION_HASH);
-
-			session.setNodeValue(PolicyConstants.CONDITIONAL_PERMISSIONINFO,
-					new DmtData(pInfo1.getEncoded() + "\n"
-							+ pInfo2.getEncoded() + "\n"));
-
-			session.setNodeValue(PolicyConstants.CONDITIONAL_CONDITIONINFO,
-					new DmtData(cInfo.getEncoded() + "\n"));
-
-			session.close();
-
-			boolean conditionInserted = false;
-
-			Enumeration en = tbc.getConditionalPermissionAdmin()
-					.getConditionalPermissionInfos();
-
-			while (en.hasMoreElements()) {
-				ConditionalPermissionInfo cpi = (ConditionalPermissionInfo) en
-						.nextElement();
-
-				ConditionInfo ci[] = cpi.getConditionInfos();
-				if (ci != null) {
-					for (int i = 0; i < ci.length; i++) {
-						if (ci[i].getEncoded().equals(cInfo.getEncoded())) {
-							conditionInserted = true;
-							break;
-						}
-					}
-					if (conditionInserted) {
-						break;
-					}
-				}
-			}
-
-			tbc.assertTrue(MessagesConstants.getMessage(
-					MessagesConstants.ASSERT_TRUE,
-					new String[] { "conditions were inserted in conditional permission service" }),
-					conditionInserted);
-
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.CONDITIONAL_PERMISSION_NODE,
-					DmtSession.LOCK_TYPE_ATOMIC);
-
-			session.deleteNode(PolicyConstants.CONDITION_HASH);
-
-			session.close();
-
-			conditionInserted = false;
-
-			en = tbc.getConditionalPermissionAdmin()
-					.getConditionalPermissionInfos();
-
-			while (en.hasMoreElements()) {
-				ConditionalPermissionInfo cpi = (ConditionalPermissionInfo) en
-						.nextElement();
-
-				ConditionInfo ci[] = cpi.getConditionInfos();
-				if (ci != null) {
-					for (int i = 0; i < ci.length; i++) {
-						if (ci[i].getEncoded().equals(cInfo.getEncoded())) {
-							conditionInserted = true;
-							break;
-						}
-					}
-					if (conditionInserted) {
-						break;
-					}
-				}
-			}
-
-			tbc.assertTrue(MessagesConstants.getMessage(
-					MessagesConstants.ASSERT_TRUE,
-					new String[] { "conditions were removed from conditional permission service" }),
-					!conditionInserted);
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-							.getClass().getName() }));
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
+            while (en.hasMoreElements()) {
+                ConditionalPermissionInfo cpi = (ConditionalPermissionInfo) en.nextElement();
+                ConditionInfo ci[] = cpi.getConditionInfos();
+                if (ci != null) {
+                    for (int i = 0; i < ci.length; i++) {
+                        if (ci[i].getEncoded().equals(cInfo.getEncoded())) {
+                            conditionInserted = true;
+                            break;
+                        }
+                    }
+                    if (conditionInserted) {
+                        break;
+                    }
+                }
+            }
+            
+            tbc.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE,
+                            new String[]{"conditions were inserted in conditional permission service"}),conditionInserted);
+            
+            session = tbc.getDmtAdmin().getSession(PolicyConstants.CONDITIONAL_PERMISSION_NODE,
+                DmtSession.LOCK_TYPE_ATOMIC);
+            
+            session.deleteNode(PolicyConstants.CONDITION_HASH);
+            session.close();
+            
+            conditionInserted = false;
+            en = tbc.getConditionalPermissionAdmin().getConditionalPermissionInfos();
+            while (en.hasMoreElements()) {
+                ConditionalPermissionInfo cpi = (ConditionalPermissionInfo) en.nextElement();
+                ConditionInfo ci[] = cpi.getConditionInfos();
+                if (ci != null) {
+                    for (int i = 0; i < ci.length; i++) {
+                        if (ci[i].getEncoded().equals(cInfo.getEncoded())) {
+                            conditionInserted = true;
+                            break;
+                        }
+                    }
+                    if (conditionInserted) {
+                        break;
+                    }
+                }
+            }
+            
+            tbc.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE,
+                            new String[]{"conditions were removed from conditional permission service"}),!conditionInserted);
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.closeSession(session);
+        }
+    }
 
 
     /**
@@ -589,934 +469,61 @@ public class TreeStructure implements TestInterface {
      *
      * @spec 3.7.4 Conditional Permission Management Object
      */
-
-	public void testTreeStructure011() {
-		tbc.log("#testTreeStructure011");
-		DmtSession session = null;
-		try {
-			PermissionInfo pInfo1 = new PermissionInfo(ServicePermission.class
-					.getName(), "org.osgi.service.http.HttpService", "register");
-
-			PermissionInfo pInfo2 = new PermissionInfo(PackagePermission.class
-					.getName(), "org.osgi.*", "IMPORT");
-
-			ConditionInfo cInfo = new ConditionInfo(
-					BundleLocationCondition.class.getName(),
-					new String[] { PolicyConstants.PRINCIPAL });
-
-			tbc.getConditionalPermissionAdmin().addConditionalPermissionInfo(
-					new ConditionInfo[] { cInfo },
-					new PermissionInfo[] { pInfo1, pInfo2 });
-
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.CONDITIONAL_PERMISSION_NODE,
-					DmtSession.LOCK_TYPE_ATOMIC);
-			
-			tbc.assertTrue("Asserts if ConditionalPermission is added in DMT",
-					session.isNodeUri(PolicyConstants.CONDITION_HASH));
-
-			tbc.assertEquals("Asserts ConditionInfo node value", cInfo
-					.getEncoded()
-					+ "\n", session.getNodeValue(
-					PolicyConstants.CONDITIONAL_CONDITIONINFO).getString());
-
-			tbc
-					.assertEquals(
-							"Asserts PermissionInfo node value",
-							pInfo1.getEncoded() + "\n" + pInfo2.getEncoded()
-									+ "\n",
-							session
-									.getNodeValue(PolicyConstants.CONDITIONAL_PERMISSIONINFO).getString());
-
-			session.deleteNode(PolicyConstants.CONDITION_HASH);
-
-			session.close();
-
-			boolean conditionInserted = false;
-
-			Enumeration en = tbc.getConditionalPermissionAdmin()
-					.getConditionalPermissionInfos();
-
-			while (en.hasMoreElements()) {
-				ConditionalPermissionInfo cpi = (ConditionalPermissionInfo) en
-						.nextElement();
-
-				ConditionInfo ci[] = cpi.getConditionInfos();
-				if (ci != null) {
-					for (int i = 0; i < ci.length; i++) {
-						if (ci[i].getEncoded().equals(cInfo.getEncoded())) {
-							conditionInserted = true;
-							break;
-						}
-					}
-					if (conditionInserted) {
-						break;
-					}
-				}
-			}
-
-			tbc.assertTrue(MessagesConstants.getMessage(
-					MessagesConstants.ASSERT_TRUE,
-					new String[] { "conditions were removed from conditional permission service" }),
-					!conditionInserted);
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-							.getClass().getName() }));
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-
-    /**
-     * This test asserts Scope, Type, Cardinality, Add Permission, Get Permission,
-     * Replace Permission, Delete Permission and Execute Permission of
-     * $/Policy/Java/LocationPermission metanode
-     *
-     * @spec 3.7.3 Dmt Principal Permission Management Object, Table 3-10
-     */
-
-	public void testTreeStructure012() {
-		tbc.log("#testTreeStructure012");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.POLICY_JAVA_NODE,
-					DmtSession.LOCK_TYPE_SHARED);
-
-			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyConstants.LOCATION_PERMISSION_NODE);
-
-			tbc.assertEquals(
-					"Asserts if $/Policy/Java/LocationPermission is a permanent node",
-					DmtMetaNode.PERMANENT, metaNode.getScope());
-
-			tbc.assertEquals(
-					"Asserts format of $/Policy/Java/LocationPermission node",
-					DmtData.FORMAT_NODE, metaNode.getFormat());
-
-			tbc.assertTrue("Asserts cardinality of $/Policy/Java/LocationPermission node",
-					!metaNode.isZeroOccurrenceAllowed()
-							&& metaNode.getMaxOccurrence() == 1);
-
-			tbc.assertTrue("Asserts if $/Policy/Java/LocationPermission node can add",
-					!metaNode.can(DmtMetaNode.CMD_ADD));
-			tbc.assertTrue("Asserts if $/Policy/Java/LocationPermission node can get",
-					metaNode.can(DmtMetaNode.CMD_GET));
-			tbc.assertTrue("Asserts if $/Policy/Java/LocationPermission node can replace",
-					!metaNode.can(DmtMetaNode.CMD_REPLACE));
-			tbc.assertTrue("Asserts if $/Policy/Java/LocationPermission node can delete",
-					!metaNode.can(DmtMetaNode.CMD_DELETE));
-			tbc.assertTrue("Asserts if $/Policy/Java/LocationPermission node can execute",
-					!metaNode.can(DmtMetaNode.CMD_EXECUTE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							DmtException.class.getName(),
-							e.getClass().getName() }));
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-
-    /**
-     * This test asserts Scope, Type, Cardinality, Add Permission, Get Permission,
-     * Replace Permission, Delete Permission and Execute Permission of
-     * $/Policy/Java/LocationPermission/Default metanode
-     *
-     * @spec 3.7.3 Dmt Principal Permission Management Object, Table 3-10
-     */
-
-	public void testTreeStructure013() {
-		tbc.log("#testTreeStructure013");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.LOCATION_PERMISSION_NODE,
-					DmtSession.LOCK_TYPE_SHARED);
-
-			if (!session.isNodeUri(PolicyConstants.DEFAULT_PERMISSION_NODE)) {
-				session.createLeafNode(
-						PolicyConstants.DEFAULT_PERMISSION_NODE, new DmtData(
-								""));
-			}
-
-			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyConstants.DEFAULT_PERMISSION_NODE);
-
-			tbc
-					.assertEquals(
-							"Asserts if $/Policy/Java/LocationPermission/Default node is dynamic",
-							DmtMetaNode.DYNAMIC, metaNode.getScope());
-
-			tbc
-					.assertEquals(
-							"Asserts format of $/Policy/Java/LocationPermission/Default node",
-							DmtData.FORMAT_STRING, metaNode.getFormat());
-
-			tbc
-					.assertTrue(
-							"Asserts cardinality $/Policy/Java/LocationPermission/Default node",
-							metaNode.isZeroOccurrenceAllowed()
-									&& metaNode.getMaxOccurrence() == 1);
-
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/Default node can add",
-							metaNode.can(DmtMetaNode.CMD_ADD));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/Default node can get",
-							metaNode.can(DmtMetaNode.CMD_GET));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/Default node can replace",
-							metaNode.can(DmtMetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/Default node can delete",
-							metaNode.can(DmtMetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/Default node can execute",
-							!metaNode.can(DmtMetaNode.CMD_EXECUTE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							DmtException.class.getName(),
-							e.getClass().getName() }));
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-
-    /**
-     * This test asserts Scope, Type, Cardinality, Add Permission, Get Permission,
-     * Replace Permission, Delete Permission and Execute Permission of
-     * $/Policy/Java/LocationPermission/<location> metanode
-     *
-     * @spec 3.7.3 Dmt Principal Permission Management Object, Table 3-10
-     */
-
-	public void testTreeStructure014() {
-		tbc.log("#testTreeStructure014");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.LOCATIONS_NODE,
-					DmtSession.LOCK_TYPE_ATOMIC);
-
-			session.createInteriorNode(PolicyConstants.TEST_NODE);
-
-			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyConstants.TEST_NODE);
-
-			tbc
-					.assertEquals(
-							"Asserts if $/Policy/Java/LocationPermission/<location> node is dynamic",
-							DmtMetaNode.DYNAMIC, metaNode.getScope());
-
-			tbc
-					.assertEquals(
-							"Asserts format of $/Policy/Java/LocationPermission/<location> node",
-							DmtData.FORMAT_NODE, metaNode.getFormat());
-
-			tbc
-					.assertTrue(
-							"Asserts cardinality of $/Policy/Java/LocationPermission/<location> node",
-							metaNode.isZeroOccurrenceAllowed()
-									&& metaNode.getMaxOccurrence() == Integer.MAX_VALUE);
-
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/<location> node can add",
-							metaNode.can(DmtMetaNode.CMD_ADD));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/<location> node can get",
-							metaNode.can(DmtMetaNode.CMD_GET));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/<location> node can replace",
-							!metaNode.can(DmtMetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/<location> node can delete",
-							metaNode.can(DmtMetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/<location> node can execute",
-							!metaNode.can(DmtMetaNode.CMD_EXECUTE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							DmtException.class.getName(),
-							e.getClass().getName() }));
-		} finally {
-			tbc.cleanUp(session, new String[] { PolicyConstants.TEST_NODE });
-		}
-	}
-
-
-    /**
-     * This test asserts Scope, Type, Cardinality, Add Permission, Get Permission,
-     * Replace Permission, Delete Permission and Execute Permission of
-     * $/Policy/Java/LocationPermission/<location>/PermissionInfo metanode
-     *
-     * @spec 3.7.3 Dmt Principal Permission Management Object, Table 3-10
-     */
-
-	public void testTreeStructure015() {
-		tbc.log("#testTreeStructure015");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.LOCATIONS_NODE,
-					DmtSession.LOCK_TYPE_ATOMIC);
-
-			session.createInteriorNode(PolicyConstants.TEST_NODE);
-
-			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyConstants.TEST_NODE_PERMISSION);
-
-			tbc
-					.assertEquals(
-							"Asserts if $/Policy/Java/LocationPermission/<location>/PermissionInfo node id automatic",
-							DmtMetaNode.AUTOMATIC, metaNode.getScope());
-			tbc
-					.assertEquals(
-							"Asserts format of $/Policy/Java/LocationPermission/<location>/PermissionInfo node",
-							DmtData.FORMAT_STRING, metaNode.getFormat());
-			tbc
-					.assertTrue(
-							"Asserts cardinality of $/Policy/Java/LocationPermission/<location>/PermissionInfo node",
-							!metaNode.isZeroOccurrenceAllowed()
-									&& metaNode.getMaxOccurrence() == 1);
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/<location>/PermissionInfo node can add",
-							!metaNode.can(DmtMetaNode.CMD_ADD));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/<location>/PermissionInfo node can get",
-							metaNode.can(DmtMetaNode.CMD_GET));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/<location>/PermissionInfo node can replace",
-							metaNode.can(DmtMetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/<location>/PermissionInfo node can delete",
-							!metaNode.can(DmtMetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/<location>/PermissionInfo node can execute",
-							!metaNode.can(DmtMetaNode.CMD_EXECUTE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							DmtException.class.getName(),
-							e.getClass().getName() }));
-		} finally {
-			tbc.cleanUp(session, new String[] { PolicyConstants.TEST_NODE });
-		}
-	}
-
-
-    /**
-     * This test asserts Scope, Type, Cardinality, Add Permission, Get Permission,
-     * Replace Permission, Delete Permission and Execute Permission of
-     * $/Policy/Java/LocationPermission/<location>/Location metanode
-     *
-     * @spec 3.7.3 Dmt Principal Permission Management Object, Table 3-10
-     */
-
-	public void testTreeStructure016() {
-		tbc.log("#testTreeStructure016");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.LOCATIONS_NODE,
-					DmtSession.LOCK_TYPE_ATOMIC);
-
-			session.createInteriorNode(PolicyConstants.TEST_NODE);
-
-			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyConstants.TEST_NODE_LOCATION);
-
-			tbc
-					.assertEquals(
-							"Asserts if $/Policy/Java/LocationPermission/<location>/Location node is automatic",
-							DmtMetaNode.AUTOMATIC, metaNode.getScope());
-			tbc
-					.assertEquals(
-							"Asserts format of $/Policy/Java/LocationPermission/<location>/Location node",
-							DmtData.FORMAT_STRING, metaNode.getFormat());
-			tbc
-					.assertTrue(
-							"Asserts cardinality of $/Policy/Java/LocationPermission/<location>/Location node",
-							!metaNode.isZeroOccurrenceAllowed()
-									&& metaNode.getMaxOccurrence() == 1);
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/<location>/Location node can add",
-							!metaNode.can(DmtMetaNode.CMD_ADD));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/<location>/Location node can get",
-							metaNode.can(DmtMetaNode.CMD_GET));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/<location>/Location node can replace",
-							metaNode.can(DmtMetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/<location>/Location node can delete",
-							!metaNode.can(DmtMetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/LocationPermission/<location>/Location node can execute",
-							!metaNode.can(DmtMetaNode.CMD_EXECUTE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							DmtException.class.getName(),
-							e.getClass().getName() }));
-		} finally {
-			tbc.cleanUp(session, new String[] { PolicyConstants.TEST_NODE });
-		}
-	}
-
-    /**
-     * This test asserts Scope, Type, Cardinality, Add Permission, Get Permission,
-     * Replace Permission, Delete Permission and Execute Permission of
-     * $/Policy/Java/DmtPrincipalPermission metanode
-     *
-     * @spec 3.7.3 Dmt Principal Permission Management Object, Table 3-11
-     */
-
-	public void testTreeStructure017() {
-		tbc.log("#testTreeStructure017");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.POLICY_JAVA_NODE,
-					DmtSession.LOCK_TYPE_SHARED);
-
-			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyConstants.PRINCIPAL_PERMISSION_NODE);
-
-			tbc.assertEquals(
-					"Asserts if $/Policy/Java/DmtPrincipalPermission node is permanent",
-					DmtMetaNode.PERMANENT, metaNode.getScope());
-			tbc.assertEquals(
-					"Asserts format of $/Policy/Java/DmtPrincipalPermission node",
-					DmtData.FORMAT_NODE, metaNode.getFormat());
-			tbc.assertTrue(
-					"Asserts cardinality of $/Policy/Java/DmtPrincipalPermission node",
-					!metaNode.isZeroOccurrenceAllowed()
-							&& metaNode.getMaxOccurrence() == 1);
-			tbc.assertTrue(
-					"Asserts if $/Policy/Java/DmtPrincipalPermission node can add",
-					!metaNode.can(DmtMetaNode.CMD_ADD));
-			tbc.assertTrue(
-					"Asserts if $/Policy/Java/DmtPrincipalPermission node can get",
-					metaNode.can(DmtMetaNode.CMD_GET));
-			tbc.assertTrue(
-					"Asserts if $/Policy/Java/DmtPrincipalPermission node can replace",
-					!metaNode.can(DmtMetaNode.CMD_REPLACE));
-			tbc.assertTrue(
-					"Asserts if $/Policy/Java/DmtPrincipalPermission node can delete",
-					!metaNode.can(DmtMetaNode.CMD_DELETE));
-			tbc.assertTrue(
-					"Asserts if $/Policy/Java/DmtPrincipalPermission node can execute",
-					!metaNode.can(DmtMetaNode.CMD_EXECUTE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							DmtException.class.getName(),
-							e.getClass().getName() }));
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-    /**
-     * This test asserts Scope, Type, Cardinality, Add Permission, Get Permission,
-     * Replace Permission, Delete Permission and Execute Permission of
-     * $/Policy/Java/DmtPrincipalPermission/<principal> metanode
-     *
-     * @spec 3.7.3 Dmt Principal Permission Management Object, Table 3-11
-     */
-
-	public void testTreeStructure018() {
-		tbc.log("#testTreeStructure018");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.PRINCIPAL_PERMISSION_NODE,
-					DmtSession.LOCK_TYPE_ATOMIC);
-
-			session.createInteriorNode(PolicyConstants.PRINCIPAL);
-
-			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyConstants.PRINCIPAL);
-
-			tbc
-					.assertEquals(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission/<principal> node is dynamic",
-							DmtMetaNode.DYNAMIC, metaNode.getScope());
-			tbc
-					.assertEquals(
-							"Asserts format of $/Policy/Java/DmtPrincipalPermission/<principal> node",
-							DmtData.FORMAT_NODE, metaNode.getFormat());
-			tbc
-					.assertTrue(
-							"Asserts cardinality of $/Policy/Java/DmtPrincipalPermission/<principal> node",
-							metaNode.isZeroOccurrenceAllowed()
-									&& metaNode.getMaxOccurrence() == Integer.MAX_VALUE);
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission/<principal> node can add",
-							metaNode.can(DmtMetaNode.CMD_ADD));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission/<principal> node can get",
-							metaNode.can(DmtMetaNode.CMD_GET));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission/<principal> node can replace",
-							!metaNode.can(DmtMetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission/<principal> node can delete",
-							metaNode.can(DmtMetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission/<principal> node can execute",
-							!metaNode.can(DmtMetaNode.CMD_EXECUTE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							DmtException.class.getName(),
-							e.getClass().getName() }));
-		} finally {
-			tbc.cleanUp(session, new String[] { PolicyConstants.PRINCIPAL });
-		}
-	}
-
-    /**
-     * This test asserts Scope, Type, Cardinality, Add Permission, Get Permission,
-     * Replace Permission, Delete Permission and Execute Permission of
-     * $/Policy/Java/DmtPrincipalPermission/<principal>/Principal metanode
-     *
-     * @spec 3.7.3 Dmt Principal Permission Management Object, Table 3-11
-     */
-
-	public void testTreeStructure019() {
-		tbc.log("#testTreeStructure019");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.PRINCIPAL_PERMISSION_NODE,
-					DmtSession.LOCK_TYPE_ATOMIC);
-
-			session.createInteriorNode(PolicyConstants.PRINCIPAL);
-
-			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyConstants.PRINCIPAL_LOCATION);
-
-			tbc
-					.assertEquals(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/Principal node is automatic",
-							DmtMetaNode.AUTOMATIC, metaNode.getScope());
-			tbc
-					.assertEquals(
-							"Asserts format of $/Policy/Java/DmtPrincipalPermission/<principal>/Principal node",
-							DmtData.FORMAT_STRING, metaNode.getFormat());
-			tbc
-					.assertTrue(
-							"Asserts cardinality of $/Policy/Java/DmtPrincipalPermission/<principal>/Principal node",
-							!metaNode.isZeroOccurrenceAllowed()
-									&& metaNode.getMaxOccurrence() == 1);
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/Principal node can add",
-							!metaNode.can(DmtMetaNode.CMD_ADD));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/Principal node can get",
-							metaNode.can(DmtMetaNode.CMD_GET));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/Principal node can replace",
-							metaNode.can(DmtMetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/Principal node can delete",
-							!metaNode.can(DmtMetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/Principal node can execute",
-							!metaNode.can(DmtMetaNode.CMD_EXECUTE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							DmtException.class.getName(),
-							e.getClass().getName() }));
-		} finally {
-			tbc.cleanUp(session, new String[] { PolicyConstants.PRINCIPAL });
-		}
-	}
-
-    /**
-     * This test asserts Scope, Type, Cardinality, Add Permission, Get Permission,
-     * Replace Permission, Delete Permission and Execute Permission of
-     * $/Policy/Java/DmtPrincipalPermission/<principal>/PermissionInfo metanode
-     *
-     * @spec 3.7.3 Dmt Principal Permission Management Object, Table 3-11
-     */
-
-	public void testTreeStructure020() {
-		tbc.log("#testTreeStructure020");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.PRINCIPAL_PERMISSION_NODE,
-					DmtSession.LOCK_TYPE_ATOMIC);
-
-			session.createInteriorNode(PolicyConstants.PRINCIPAL);
-
-			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyConstants.PRINCIPAL_PERMISSION);
-
-			tbc
-					.assertEquals(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/PermissionInfo is automatic",
-							DmtMetaNode.AUTOMATIC, metaNode.getScope());
-			tbc
-					.assertEquals(
-							"Asserts format of $/Policy/Java/DmtPrincipalPermission/<principal>/PermissionInfo node",
-							DmtData.FORMAT_STRING, metaNode.getFormat());
-			tbc
-					.assertTrue(
-							"Asserts cardinality of $/Policy/Java/DmtPrincipalPermission/<principal>/PermissionInfo node",
-							!metaNode.isZeroOccurrenceAllowed()
-									&& metaNode.getMaxOccurrence() == 1);
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/PermissionInfo node can add",
-							!metaNode.can(DmtMetaNode.CMD_ADD));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/PermissionInfo node can get",
-							metaNode.can(DmtMetaNode.CMD_GET));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/PermissionInfo node can replace",
-							metaNode.can(DmtMetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/PermissionInfo node can delete",
-							!metaNode.can(DmtMetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/PermissionInfo node can execute",
-							!metaNode.can(DmtMetaNode.CMD_EXECUTE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							DmtException.class.getName(),
-							e.getClass().getName() }));
-		} finally {
-			tbc.cleanUp(session, new String[] { PolicyConstants.PRINCIPAL });
-		}
-	}
-
-    /**
-     * This test asserts Scope, Type, Cardinality, Add Permission, Get Permission,
-     * Replace Permission, Delete Permission and Execute Permission of
-     * $/Policy/Java/ConditionalPermission metanode
-     *
-     * @spec 3.7.4 Conditional Permission Management Object, Table 3-12
-     */
-
-	public void testTreeStructure021() {
-		tbc.log("#testTreeStructure021");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.POLICY_JAVA_NODE,
-					DmtSession.LOCK_TYPE_SHARED);
-
-			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE);
-
-			tbc.assertEquals(
-					"Asserts if $/Policy/Java/ConditionalPermission node is permanent",
-					DmtMetaNode.PERMANENT, metaNode.getScope());
-			tbc.assertEquals(
-					"Asserts format of $/Policy/Java/ConditionalPermission node",
-					DmtData.FORMAT_NODE, metaNode.getFormat());
-			tbc.assertTrue(
-					"Asserts cardinality of $/Policy/Java/ConditionalPermission node",
-					metaNode.isZeroOccurrenceAllowed()
-							&& metaNode.getMaxOccurrence() == 1);
-			tbc.assertTrue(
-					"Asserts if $/Policy/Java/ConditionalPermission node can add",
-					!metaNode.can(DmtMetaNode.CMD_ADD));
-			tbc.assertTrue(
-					"Asserts if $/Policy/Java/ConditionalPermission node can get",
-					metaNode.can(DmtMetaNode.CMD_GET));
-			tbc.assertTrue(
-					"Asserts if $/Policy/Java/ConditionalPermission node can replace",
-					!metaNode.can(DmtMetaNode.CMD_REPLACE));
-			tbc.assertTrue(
-					"Asserts if $/Policy/Java/ConditionalPermission node can delete",
-					!metaNode.can(DmtMetaNode.CMD_DELETE));
-			tbc.assertTrue(
-					"Asserts if $/Policy/Java/ConditionalPermission node can execute",
-					!metaNode.can(DmtMetaNode.CMD_EXECUTE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							DmtException.class.getName(),
-							e.getClass().getName() }));
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-
-    /**
-     * This test asserts Scope, Type, Cardinality, Add Permission, Get Permission,
-     * Replace Permission, Delete Permission and Execute Permission of
-     * $/Policy/Java/ConditionalPermission/<hash> metanode
-     *
-     * @spec 3.7.4 Conditional Permission Management Object, Table 3-12
-     */
-
-	public void testTreeStructure022() {
-		tbc.log("#testTreeStructure022");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.POLICY_JAVA_NODE,
-					DmtSession.LOCK_TYPE_ATOMIC);
-
-			session
-					.createInteriorNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
-							+ "/" + PolicyConstants.CONDITION_HASH);
-
-			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
-							+ "/" + PolicyConstants.CONDITION_HASH);
-
-			tbc
-					.assertEquals(
-							"Asserts if $/Policy/Java/ConditionalPermission/<hash> node is dynamic",
-							DmtMetaNode.DYNAMIC, metaNode.getScope());
-			tbc
-					.assertEquals(
-							"Asserts format of $/Policy/Java/ConditionalPermission/<hash> node",
-							DmtData.FORMAT_NODE, metaNode.getFormat());
-			tbc
-					.assertTrue(
-							"Asserts cardinality of $/Policy/Java/ConditionalPermission/<hash> node",
-							metaNode.isZeroOccurrenceAllowed()
-									&& metaNode.getMaxOccurrence() == Integer.MAX_VALUE);
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/ConditionalPermission/<hash> node can add",
-							metaNode.can(DmtMetaNode.CMD_ADD));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/ConditionalPermission/<hash> node can get",
-							metaNode.can(DmtMetaNode.CMD_GET));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/ConditionalPermission/<hash> node can replace",
-							!metaNode.can(DmtMetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/ConditionalPermission/<hash> node can delete",
-							metaNode.can(DmtMetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/ConditionalPermission/<hash> node can execute",
-							!metaNode.can(DmtMetaNode.CMD_EXECUTE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							DmtException.class.getName(),
-							e.getClass().getName() }));
-		} finally {
-			tbc
-			.cleanUp(
-					session,
-					new String[] { PolicyConstants.CONDITIONAL_PERMISSION_NODE
-							+ "/" + PolicyConstants.CONDITION_HASH });
-		}
-	}
-
-    /**
-     * This test asserts Scope, Type, Cardinality, Add Permission, Get Permission,
-     * Replace Permission, Delete Permission and Execute Permission of
-     * $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo metanode
-     *
-     * @spec 3.7.4 Conditional Permission Management Object, Table 3-12
-     */
-
-	public void testTreeStructure023() {
-		tbc.log("#testTreeStructure023");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.POLICY_JAVA_NODE,
-					DmtSession.LOCK_TYPE_ATOMIC);
-
-			session
-					.createInteriorNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
-							+ "/" + PolicyConstants.CONDITION_HASH);
-
-			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
-							+ "/" + PolicyConstants.CONDITIONAL_CONDITIONINFO);
-
-			tbc
-					.assertEquals(
-							"Asserts if $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo is automatic",
-							DmtMetaNode.AUTOMATIC, metaNode.getScope());
-			tbc
-					.assertEquals(
-							"Asserts format of $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo node",
-							DmtData.FORMAT_STRING, metaNode.getFormat());
-			tbc
-					.assertTrue(
-							"Asserts cardinality of $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo node",
-							!metaNode.isZeroOccurrenceAllowed()
-									&& metaNode.getMaxOccurrence() == 1);
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo node can add",
-							!metaNode.can(DmtMetaNode.CMD_ADD));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo node can get",
-							metaNode.can(DmtMetaNode.CMD_GET));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo node can replace",
-							metaNode.can(DmtMetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo node can delete",
-							!metaNode.can(DmtMetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo node can execute",
-							!metaNode.can(DmtMetaNode.CMD_EXECUTE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							DmtException.class.getName(),
-							e.getClass().getName() }));
-		} finally {
-			tbc
-					.cleanUp(
-							session,
-							new String[] { PolicyConstants.CONDITIONAL_PERMISSION_NODE
-									+ "/" + PolicyConstants.CONDITION_HASH });
-		}
-	}
-
-    /**
-     * This test asserts Scope, Type, Cardinality, Add Permission, Get Permission,
-     * Replace Permission, Delete Permission and Execute Permission of
-     * $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo metanode
-     *
-     * @spec 3.7.4 Conditional Permission Management Object, Table 3-12
-     */
-
-	public void testTreeStructure024() {
-		tbc.log("#testTreeStructure024");
-		DmtSession session = null;
-		try {
-			session = tbc.getDmtAdmin().getSession(
-					PolicyConstants.POLICY_JAVA_NODE,
-					DmtSession.LOCK_TYPE_ATOMIC);
-
-			session
-					.createInteriorNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
-							+ "/" + PolicyConstants.CONDITION_HASH);
-
-			DmtMetaNode metaNode = session
-					.getMetaNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
-							+ "/"
-							+ PolicyConstants.CONDITIONAL_PERMISSIONINFO);
-
-			tbc
-					.assertEquals(
-							"Asserts if $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo node is automatic",
-							DmtMetaNode.AUTOMATIC, metaNode.getScope());
-			tbc
-					.assertEquals(
-							"Asserts format $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo node",
-							DmtData.FORMAT_STRING, metaNode.getFormat());
-			tbc
-					.assertTrue(
-							"Asserts cardinality of $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo node",
-							!metaNode.isZeroOccurrenceAllowed()
-									&& metaNode.getMaxOccurrence() == 1);
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo node can add",
-							!metaNode.can(DmtMetaNode.CMD_ADD));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo node can get",
-							metaNode.can(DmtMetaNode.CMD_GET));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo node can replace",
-							metaNode.can(DmtMetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo node can delete",
-							!metaNode.can(DmtMetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts if $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo node can execute",
-							!metaNode.can(DmtMetaNode.CMD_EXECUTE));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							DmtException.class.getName(),
-							e.getClass().getName() }));
-		} finally {
-			tbc
-					.cleanUp(
-							session,
-							new String[] { PolicyConstants.CONDITIONAL_PERMISSION_NODE
-									+ "/" + PolicyConstants.CONDITION_HASH });
-		}
-	}
-
+	private void testTreeStructure011() {
+        tbc.log("#testTreeStructure011");
+        DmtSession session = null;
+        try {
+            PermissionInfo pInfo1 = new PermissionInfo(ServicePermission.class.getName(), 
+                "org.osgi.service.http.HttpService", "register");
+            PermissionInfo pInfo2 = new PermissionInfo(PackagePermission.class.getName(), 
+                "org.osgi.*", "IMPORT");
+            ConditionInfo cInfo = new ConditionInfo(BundleLocationCondition.class.getName(),
+                new String[]{PolicyConstants.PRINCIPAL});
+            
+            tbc.getConditionalPermissionAdmin().addConditionalPermissionInfo(
+                new ConditionInfo[]{cInfo},
+                new PermissionInfo[]{pInfo1, pInfo2});
+            
+            session = tbc.getDmtAdmin().getSession(PolicyConstants.CONDITIONAL_PERMISSION_NODE,
+                DmtSession.LOCK_TYPE_ATOMIC);
+            
+            tbc.assertTrue("Asserts if ConditionalPermission is added in DMT",
+                session.isNodeUri(PolicyConstants.CONDITION_HASH));
+            tbc.assertEquals("Asserts ConditionInfo node value", cInfo.getEncoded() + "\n", 
+                session.getNodeValue(PolicyConstants.CONDITIONAL_CONDITIONINFO).getString());
+            tbc.assertEquals("Asserts PermissionInfo node value", pInfo1.getEncoded()
+                + "\n" + pInfo2.getEncoded() + "\n", session.getNodeValue(
+                PolicyConstants.CONDITIONAL_PERMISSIONINFO).getString());
+            
+            session.deleteNode(PolicyConstants.CONDITION_HASH);
+            session.close();
+            
+            boolean conditionInserted = false;
+            Enumeration en = tbc.getConditionalPermissionAdmin().getConditionalPermissionInfos();
+            
+            while (en.hasMoreElements()) {
+                ConditionalPermissionInfo cpi = (ConditionalPermissionInfo) en.nextElement();
+                ConditionInfo ci[] = cpi.getConditionInfos();
+                if (ci != null) {
+                    for (int i = 0; i < ci.length; i++) {
+                        if (ci[i].getEncoded().equals(cInfo.getEncoded())) {
+                            conditionInserted = true;
+                            break;
+                        }
+                    }
+                    if (conditionInserted) {
+                        break;
+                    }
+                }
+            }
+            
+            tbc.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE,
+                            new String[]{"conditions were removed from conditional permission service"}),!conditionInserted);
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.closeSession(session);
+        }
+    }
 }

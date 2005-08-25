@@ -37,7 +37,7 @@
 package org.osgi.test.cases.policy.tbc;
 
 import org.osgi.framework.Bundle;
-import org.osgi.service.dmt.DmtPermission;
+import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.test.cases.policy.tbc.util.TestBundle;
 
 public class PolicyConstants {

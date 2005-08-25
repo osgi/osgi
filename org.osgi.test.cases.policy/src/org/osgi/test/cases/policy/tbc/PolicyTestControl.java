@@ -39,7 +39,6 @@
 package org.osgi.test.cases.policy.tbc;
 
 import java.security.AllPermission;
-
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.PackagePermission;
@@ -48,8 +47,8 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtPermission;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.service.event.TopicPermission;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -124,6 +123,13 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 	public void testTreeStructure() {
 		testBundleTB1[0].run();
 	}
+    
+    /*
+     * Executes test methods for tree structure meta nodes
+     */
+    public void testMetaNode() {
+        testBundleTB1[1].run();
+    }
 
 	public ConditionalPermissionAdmin getConditionalPermissionAdmin() {
 		return cpa;
