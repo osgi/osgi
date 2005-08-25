@@ -35,7 +35,7 @@ import org.osgi.application.*;
 import org.osgi.service.application.*;
 import org.osgi.service.log.LogService;
 
-public class OATApplicationContextImpl implements ApplicationContext {
+public class OATApplicationContextImpl implements ApplicationContext, ServiceListener {
 	
 	private BundleContext bc = null;
 	private Map startupParams = null;
@@ -55,6 +55,7 @@ public class OATApplicationContextImpl implements ApplicationContext {
 		serviceList = new LinkedList();
 		oatAppData = appData;
 		this.appHandle = appHandle;
+		bc.addServiceListener( this );
 	}
 
 	public void addBundleListener(BundleListener listener) {
@@ -304,5 +305,13 @@ public class OATApplicationContextImpl implements ApplicationContext {
 		
 		DestroyerThread st = new DestroyerThread();
 		st.start();		
+	}
+
+	public void serviceChanged(ServiceEvent event) {
+		if( event.getType() == ServiceEvent.UNREGISTERING ) {
+			Service serv = getServiceByReference( event.getServiceReference() );
+			if( serv != null )
+				removeService( serv );
+		}
 	}
 }
