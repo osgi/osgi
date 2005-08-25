@@ -60,7 +60,7 @@ public class OAT implements OATContainerInterface {
 			throws Exception {
 		
 		URL url = bc.getBundle( bundle.getBundleId() ).getResource(	"OSGI-INF/app/apps.xml");
-		new OATXMLParser().parse( bc, url );
+		new OATXMLParser().parse( bc, url, mainClass.getClass().getName() );
 		OATApplicationContextImpl appCtx = new OATApplicationContextImpl( bundle, args );		
 		
 		oatHashtable.put( mainClass, appCtx );    
