@@ -325,8 +325,10 @@ public class SecureAction {
 	 * @param tracker the ServiceTracker to open.
 	 */
 	public void open(final ServiceTracker tracker) {
-		if (System.getSecurityManager() == null)
+		if (System.getSecurityManager() == null) {
 			tracker.open();
+			return;
+		}
 		AccessController.doPrivileged(new PrivilegedAction() {
 			public Object run() {
 				tracker.open();
