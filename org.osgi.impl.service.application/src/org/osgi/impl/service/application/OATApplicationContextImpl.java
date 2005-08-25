@@ -86,7 +86,7 @@ public class OATApplicationContextImpl implements ApplicationContext {
 					if( serv.serviceData.getName().equals( referenceName ) ) {
 						if( serv.serviceReference.getBundle() == null ) {
 							if( removeService( serv ) )
-								return null; /* termination is requested */
+								throw new RuntimeException( "Static service terminated!" ); /* termination is requested */
 							iterator = serviceList.iterator();
 						} else							
 						  return serv.serviceObject;
