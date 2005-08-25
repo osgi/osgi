@@ -207,8 +207,10 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	
 	void ungetServiceReferences()
 	{
-		while( !serviceList.isEmpty() )
-			bc.ungetService( (ServiceReference)serviceList.removeFirst() );
+		while( !serviceList.isEmpty() ) {
+			Service serv = (Service)serviceList.removeFirst();
+			bc.ungetService( serv.serviceReference );
+		}
 	}
 	
 	private BundleContext frameworkHook( final Bundle bundle ) {
@@ -273,6 +275,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 
 	private boolean removeService( Service service ) {
 		serviceList.remove( service );
+		bc.ungetService( service.serviceReference );
   	if( service.serviceData.getPolicy() == OATServiceData.STATIC ) {
   		requestTermination();
   		return true;
