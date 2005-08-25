@@ -81,11 +81,11 @@ public class ComponentFactoryImpl implements ComponentFactory {
 
 		ComponentInstance instance = null;
 		try {
-			instance = instanceProcess.buildDispose.build(bundleContext, null, componentDescriptionProp, properties);
+			instance = instanceProcess.buildDispose.build(null, componentDescriptionProp, properties);
 
 			if (registerService) {
 				
-				serviceRegistration = instanceProcess.registerServices(bundleContext, componentDescriptionProp);
+				serviceRegistration = instanceProcess.registerServices(bundleContext, componentDescriptionProp,properties);
 				ComponentInstanceImpl componentInstanceImpl = (ComponentInstanceImpl) instance;
 				componentInstanceImpl.setServiceRegistration(serviceRegistration);
 			}

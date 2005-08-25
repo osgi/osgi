@@ -26,6 +26,7 @@ import org.eclipse.osgi.component.Log;
 import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.component.model.ComponentDescription;
 import org.eclipse.osgi.component.model.ComponentDescriptionProp;
+import org.eclipse.osgi.component.model.ReferenceDescription;
 import org.eclipse.osgi.component.resolver.Reference;
 import org.eclipse.osgi.component.resolver.Resolver;
 import org.eclipse.osgi.component.workqueue.WorkDispatcher;
@@ -72,7 +73,7 @@ public class BuildDispose implements WorkDispatcher {
 	 */
 
 	public BuildDispose(Main main) {
-		invoke = new InvokeMethod();
+		invoke = new InvokeMethod(this);
 		this.main = main;
 		stackCount = 0;
 		delayedBindTable = new Hashtable();
@@ -99,7 +100,7 @@ public class BuildDispose implements WorkDispatcher {
 	 * @return ComponentInstance
 	 */
 
-	public ComponentInstance build(BundleContext bundleContext, Bundle usingBundle, ComponentDescriptionProp cdp, Dictionary properties) throws ComponentException {
+	public ComponentInstance build(Bundle usingBundle, ComponentDescriptionProp cdp, Dictionary properties) throws ComponentException {
 
 		synchronized (this) {
 
@@ -114,10 +115,12 @@ public class BuildDispose implements WorkDispatcher {
 				Object instance = createInstance(componentDescription);
 
 				componentInstance = instantiate(cdp, instance, properties);
+				
+				createComponentContext(cdp,usingBundle,componentInstance);
 
-				bind(cdp, componentInstance, bundleContext);
+				bind(cdp, componentInstance);
 
-				activate(cdp, usingBundle, componentInstance);
+				activate(componentInstance);
 
 				cdp.addInstance(componentInstance);
 				
@@ -233,7 +236,7 @@ public class BuildDispose implements WorkDispatcher {
 	 * @param componentInstance 
 	 * @param context - BundleContext 
 	 */
-	private void bind(ComponentDescriptionProp cdp, ComponentInstanceImpl componentInstance, BundleContext context) {
+	private void bind(ComponentDescriptionProp cdp, ComponentInstanceImpl componentInstance) {
 		//Get all the required service Reference Descriptions for this Service Component
 		//bind them in order
 		List references = cdp.getReferences();
@@ -242,7 +245,7 @@ public class BuildDispose implements WorkDispatcher {
 		while (itr.hasNext()) {
 			Reference reference = (Reference) itr.next();
 			if (reference.getReferenceDescription().getBind() != null) {
-				bindReference(cdp, reference, componentInstance, context);
+				bindReference(reference, componentInstance);
 			}
 		}
 	}
@@ -256,13 +259,13 @@ public class BuildDispose implements WorkDispatcher {
 	 * @param bundleContext
 	 * 
 	 */
-	public void bindReference(ComponentDescriptionProp cdp, Reference reference, ComponentInstanceImpl componentInstance, BundleContext bundleContext) {
+	public void bindReference(Reference reference, ComponentInstanceImpl componentInstance) {
 		synchronized (this) {
 			ServiceReference[] serviceReferences = null;
 			//if there is a published service, then get the ServiceObject and call bind
 			try {
 				//get All Registered services using this target filter
-				serviceReferences = bundleContext.getServiceReferences(reference.getReferenceDescription().getInterfacename(), reference.getReferenceDescription().getTarget());
+				serviceReferences = componentInstance.getComponentContext().getBundleContext().getServiceReferences(reference.getReferenceDescription().getInterfacename(), reference.getReferenceDescription().getTarget());
 				
 			//If a bind method throws an exception, SCR must log an error message containing the exception with the Log Service but 
 			//the activation of the component configuration does not fail.
@@ -283,11 +286,11 @@ public class BuildDispose implements WorkDispatcher {
 			
 			//we only want to bind one service
 			if ((cardinality.equals("1..1")) || (cardinality.equals("0..1"))) {
-				bindServiceToReference(cdp, reference, serviceReferences[0], componentInstance, bundleContext);
+				bindServiceToReference(reference, serviceReferences[0], componentInstance);
 				//here we can bind more than one service, if availible
 			} else if ((cardinality.equals("1..n")) || (cardinality.equals("0..n"))) {
 				for (int j = 0; j < serviceReferences.length; j++) {
-					bindServiceToReference(cdp, reference, serviceReferences[j], componentInstance, bundleContext);
+					bindServiceToReference(reference, serviceReferences[j], componentInstance);
 				}
 			}
 		} //end synchronized(this)
@@ -295,30 +298,26 @@ public class BuildDispose implements WorkDispatcher {
 	}
 
 	//helper method for bindReference
-	private void bindServiceToReference(ComponentDescriptionProp cdp, Reference reference, ServiceReference serviceReference, ComponentInstanceImpl componentInstance, BundleContext bundleContext) {	
+	private void bindServiceToReference(Reference reference, ServiceReference serviceReference, ComponentInstanceImpl componentInstance) {
+		ReferenceDescription rd = reference.getReferenceDescription();
 		//	make sure we have not already bound this object
-		if (!reference.bindedToServiceReference(serviceReference)) {
+		if (!reference.bindedToServiceReference(serviceReference) && rd.getBind() != null) {
 
 			try {
-	
-				Method method = invoke.findMethod(reference.getReferenceDescription().getBind(), componentInstance.getInstance());
+				Method method = invoke.findBindOrUnbindMethod(componentInstance, reference,serviceReference,rd.getBind());
+				if (method == null) {
+					//could be circularity break
+					return;
+				}
 				Object param = null;
 				if (method.getParameterTypes()[0].equals(ServiceReference.class)) {
 					param = serviceReference;
 				} else {
-					param = getService(cdp, reference, bundleContext, serviceReference);
+					//componentInstance.getServiceObject(...) is populated by the findBindOrUnbindBeMethod function
+					param = componentInstance.getServiceObject(serviceReference);
 				}
 	
-				if (param != null && reference.getReferenceDescription().getBind() != null) {
-					invoke.bindComponent(method, componentInstance.getInstance(), param);
-					//if this succeeds, save the servicereference and service object so we can call unbind later
-					reference.addServiceReference(serviceReference);
-					if (serviceReference != param) {
-						//we created a service object, (got the service) so save it for disposal later
-						componentInstance.addServiceReference(serviceReference, param);
-					}
-
-				}
+				invoke.bindComponent(method, componentInstance.getInstance(), param);
 			//If a bind method throws an exception, SCR must log an error message containing 
 			//the exception with the Log Service but the activation of the component configuration does not fail.
 			} catch (IllegalAccessException e) {
@@ -327,6 +326,7 @@ public class BuildDispose implements WorkDispatcher {
 				Log.log(1, "[SCR] InvocationTargetException attempting to bind Service to Reference ", e);
 			
 			}
+			reference.addServiceReference(serviceReference);
 		}
 	}
 
@@ -446,10 +446,10 @@ public class BuildDispose implements WorkDispatcher {
 	 * @param serviceReference
 	 */
 	
-	void unbindDynamicReference(ComponentDescriptionProp cdp, Reference reference, ComponentInstanceImpl componentInstance, ServiceReference serviceReference) {
+	void unbindDynamicReference(Reference reference, ComponentInstanceImpl componentInstance, ServiceReference serviceReference) {
 		synchronized (this) {
 			//rebind if we can
-			bindReference(cdp, reference, componentInstance, main.framework.getBundleContext(cdp.getComponentDescription().getBundle()));
+			bindReference(reference, componentInstance);
 
 			unbindServiceFromReference(reference, componentInstance, serviceReference);
 
@@ -459,25 +459,20 @@ public class BuildDispose implements WorkDispatcher {
 
 	//unbindReference helper method
 	private void unbindServiceFromReference(Reference reference, ComponentInstanceImpl componentInstance, ServiceReference serviceReference) {
-		String unbind = reference.getReferenceDescription().getUnbind();
-		Object serviceObject = componentInstance.getServiceObject(serviceReference);
-		if (unbind != null) {
+		ReferenceDescription rd = reference.getReferenceDescription();
+		String unbind = rd.getUnbind();
+		Object serviceObject = null;
+		Method method = null;
+		if (unbind != null) {			
+			method = invoke.findBindOrUnbindMethod(componentInstance,reference,serviceReference,unbind);
+		}
+		if (method != null) {
 			Object param = null;
-			
-			Method method = invoke.findMethod(unbind, componentInstance.getInstance());
 			if (method.getParameterTypes()[0].equals(ServiceReference.class)) {
 				param = serviceReference;
 			} else {	
 				//if we don't have a service object, create one
-				if (serviceObject == null) {
-					serviceObject = getService(
-							componentInstance.component,
-							reference,
-							main.framework.getBundleContext(
-									componentInstance.getComponentContext().getBundleContext().getBundle()
-									),
-							serviceReference);
-				}
+				serviceObject = componentInstance.getServiceObject(serviceReference);
 				param = serviceObject;
 			}
 			// If an unbind method throws an exception, SCR must log an error message 
@@ -489,7 +484,8 @@ public class BuildDispose implements WorkDispatcher {
 			} catch (IllegalAccessException e) {
 				Log.log(1, "[SCR] IllegalAccessException attempting to unbind reference.", e);
 			}
-		}
+		} //end if (method != null)
+		
 		//release service object
 		if (serviceObject != null) {
 			componentInstance.getComponentContext().getBundleContext().ungetService(serviceReference);
@@ -504,14 +500,12 @@ public class BuildDispose implements WorkDispatcher {
 	 * @param usingBundle - 
 	 * @param componentInstance - 
 	 */
-	private void activate(ComponentDescriptionProp cdp, Bundle usingBundle, ComponentInstanceImpl componentInstance) throws ComponentException {
+	private void activate(ComponentInstanceImpl componentInstance) throws ComponentException {
 
-		ComponentContext componentContext = createComponentContext(cdp, usingBundle, componentInstance);
-		
 		//If the activate method throws an exception, SCR must log an error message 
 		// containing the exception with the Log Service and the component configuration is not activated.
 		try {
-			invoke.activateComponent(componentInstance.getInstance(), componentContext);
+			invoke.activateComponent(componentInstance.getInstance(), componentInstance.getComponentContext());
 		} catch (IllegalAccessException e) {
 			Log.log(1, "[SCR] IllegalAccessException attempting to activate component ", e);
 			throw new ComponentException(e.getMessage());
@@ -549,10 +543,9 @@ public class BuildDispose implements WorkDispatcher {
 	 * @param componentInstance
 	 * @return
 	 */
-	private ComponentContext createComponentContext(ComponentDescriptionProp cdp, Bundle usingBundle, ComponentInstanceImpl componentInstance) {
+	private void createComponentContext(ComponentDescriptionProp cdp, Bundle usingBundle, ComponentInstanceImpl componentInstance) {
 		ComponentContext context = new ComponentContextImpl(main, usingBundle, cdp, componentInstance);
 		componentInstance.setComponentContext(context);
-		return context;
 	}
 
 	/**
@@ -575,11 +568,9 @@ public class BuildDispose implements WorkDispatcher {
 		switch (workAction) {
 			case BUILD :
 				ComponentDescriptionProp cdp = (ComponentDescriptionProp) workObject;
-				BundleContext bundleContext = main.framework.getBundleContext(cdp.getComponentDescription().getBundle());
-				build(bundleContext, null, cdp, null);
+				build(null, cdp, null);
 		}
 		
 	}
 
 }
-

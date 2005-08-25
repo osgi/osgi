@@ -104,7 +104,7 @@ abstract class RegisterComponentService {
 					ComponentInstance componentInstance = null;
 					Object instance = null;
 					try {
-						componentInstance = instanceProcess.buildDispose.build(bundleContext, bundle, component, null);
+						componentInstance = instanceProcess.buildDispose.build(bundle, component, null);
 						instance = componentInstance.getInstance();
 					} catch (ComponentException e) {
 						Log.log(1, "[SCR] Error attempting to register a Service Factory.", e);						
@@ -153,7 +153,7 @@ abstract class RegisterComponentService {
 						
 						if (component.getInstances().isEmpty()) {
 							try {
-								instance = instanceProcess.buildDispose.build(bundleContext, null, component, null);
+								instance = instanceProcess.buildDispose.build(null, component, null);
 							} catch (ComponentException e) {
 								Log.log(1, "[SCR] Error attempting to register Service.", e);
 								return null;

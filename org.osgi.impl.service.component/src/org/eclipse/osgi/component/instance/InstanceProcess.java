@@ -165,7 +165,7 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 				//if component is immediate - create instance immediately
 				if (componentDescription.isImmediate()) {
 					try {
-						buildDispose.build(bundleContext, null, componentDescriptionProp, null);
+						buildDispose.build(null, componentDescriptionProp, null);
 					} catch (ComponentException e) {
 						Log.log(1, "[SCR] Error attempting to build Component.", e);
 					} 
@@ -268,8 +268,8 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 	 * 
 	 */
 
-	public ServiceRegistration registerServices(BundleContext bundleContext, ComponentDescriptionProp componentDescriptionProp) {
-		ServiceRegistration reg = RegisterComponentService.registerService(this, bundleContext, componentDescriptionProp, false, null);
+	public ServiceRegistration registerServices(BundleContext bundleContext, ComponentDescriptionProp componentDescriptionProp, Dictionary props) {
+		ServiceRegistration reg = RegisterComponentService.registerService(this, bundleContext, componentDescriptionProp, false, props);
 		registrations.put(componentDescriptionProp, reg);
 		return reg;
 	}
@@ -321,7 +321,7 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 			while (it.hasNext()) {
 				ComponentInstanceImpl compInstance = (ComponentInstanceImpl) it.next();
 				if (compInstance != null) {
-					buildDispose.bindReference(cdp, reference, compInstance, main.framework.getBundleContext(cdp.getComponentDescription().getBundle()));
+					buildDispose.bindReference(reference, compInstance);
 					
 				}
 			}
@@ -352,7 +352,7 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 				Object instance = compInstance.getInstance();
 				if (instance != null) {
 					try {
-						buildDispose.unbindDynamicReference(cdp, reference, compInstance, serviceReference);
+						buildDispose.unbindDynamicReference(reference, compInstance, serviceReference);
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}

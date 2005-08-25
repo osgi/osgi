@@ -15,10 +15,16 @@
 
 package org.eclipse.osgi.component.instance;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import org.osgi.service.component.*;
+
+import org.eclipse.osgi.component.Log;
+import org.eclipse.osgi.component.resolver.Reference;
+import org.eclipse.osgi.impl.service.component.ComponentInstanceImpl;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.log.LogService;
 
 /**
  *
@@ -33,6 +39,11 @@ class InvokeMethod {
 	/* set this to true to compile in debug messages */
 	static final boolean DEBUG = false;
 
+	private BuildDispose buildDispose;
+	
+	InvokeMethod(BuildDispose buildDispose) {
+		this.buildDispose = buildDispose;
+	}
 	/**
 	 * Invoke the activate method of the Service Component
 	 * 
@@ -43,8 +54,10 @@ class InvokeMethod {
 		// Create an array of parameters to pass to the method 
 		// The activate method requires the ComponentContext 
 		Object[] parameterTypes = new Object[] {context};
-		Method method = findMethod("activate", instance);
-		invokeMethod(method, instance, parameterTypes);
+		Method method = findActivateOrDeactivateMethod("activate", instance.getClass());
+		if (method != null) {
+			invokeMethod(method, instance, parameterTypes);
+		}
 	}
 
 	/**
@@ -57,8 +70,10 @@ class InvokeMethod {
 		// Create an array of parameters to pass to the method 
 		// The deactivate method requires the ComponentContext 
 		Object[] parameterTypes = new Object[] {context};
-		Method method = findMethod("deactivate", instance);
-		invokeMethod(method, instance, parameterTypes);
+		Method method = findActivateOrDeactivateMethod("deactivate", instance.getClass());
+		if (method != null) {
+			invokeMethod(method, instance, parameterTypes);
+		}
 	}
 
 	/** 
@@ -99,10 +114,6 @@ class InvokeMethod {
 
 	private void invokeMethod(Method method, Object instance, Object[] parameterTypes) throws IllegalAccessException, InvocationTargetException {
 
-		if (method == null) {
-			//should log error here
-			return;
-		}
 		//If the method is declared protected or public, SCR will call the method
 		int mod = method.getModifiers();
 		if ((Modifier.isProtected(mod)) || (Modifier.isPublic(mod))) {
@@ -114,45 +125,156 @@ class InvokeMethod {
 		}
 	}
 
+	private static final Class [] PARAM_COMPONENTCONTEXT = new Class [] {ComponentContext.class};
+	private static final Class [] PARAM_SERVICEREFERENCE = new Class [] {ServiceReference.class};
+
+	/**
+	 * Search through class and the superclasses for an activate or deactivate method
+	 * @param methodName name of method to look for
+	 * @param instance Object to look in
+	 */
+	Method findActivateOrDeactivateMethod(String methodName, Class consumerClass) {
+		Method method = null;
+		while (!consumerClass.equals(java.lang.Object.class) && method == null) {
+			
+			//search this class' methods
+			try {
+				method = consumerClass.getDeclaredMethod(methodName,PARAM_COMPONENTCONTEXT);
+			} catch (NoSuchMethodException e) {
+				//we'll try the superclass
+			}
+			if (method != null) break;
+			
+			//we couldn't find the method - try the superclass
+			consumerClass = consumerClass.getSuperclass();
+		}
+		
+		//if method is not protected or public, log error message
+		if (method != null) {
+			int modifier = method.getModifiers();
+			if (!(Modifier.isProtected(modifier) || Modifier.isPublic(modifier))) {
+				//log error
+				Log.log(LogService.LOG_ERROR,"[SCR] Method " + methodName + " is not protected or public.");
+				method = null;
+			}
+		}
+		
+		return method;
+	}	
+
 	/**
 	 * Search through class and the superclasses for a method
 	 * @param methodName name of method to look for
 	 * @param instance Object to look in
 	 */
-	Method findMethod(String methodName, Object instance) {
-		// Get the runtime class of the Service Component object
-		Class c = instance.getClass();
-		//get all methods declared by the class, including package, protected, and private (Class.getDeclaredMethods()).
-		//and check for the specifed methodName
-		Method method = getMethod(methodName, c.getDeclaredMethods());
-		if (method == null) {
-			//check inherited public methods
-			//get a list of all public methods of the class, including those inherited (Class.getMethods())
-			//and check for the specifed methodName
-			method = getMethod(methodName, c.getMethods());
-		}
-		if (method == null) {
-			//check inherited public and protected methods
-			//search thru all the superclasses until you hit Object or find the method
-			Class ss = c.getSuperclass();
-			String ssName = ss.getName();
-			while (!ssName.equals("java.lang.Object") && (method == null)) {
-				//get a list of all public methods of the class, including those inherited (Class.getMethods())
-				//and check for the specifed methodName
-				method = getMethod(methodName, ss.getDeclaredMethods());
-				ss = ss.getSuperclass();
-				ssName = ss.getName();
+	Method findBindOrUnbindMethod(ComponentInstanceImpl componentInstance, Reference reference, ServiceReference serviceReference, String methodName) {
+		Class consumerClass = componentInstance.getInstance().getClass();
+		Object serviceObject = null;
+		Class serviceObjectClass = null;
+		Class interfaceClass = null;
+		Class [] param_interfaceClass = null;
+		Method method = null;
+		while (consumerClass != null) {
+			
+			//search this class' methods
+			//look for various forms of bind methods
+			
+			//1) check for bind(ServiceReference) method
+			try {
+				method = consumerClass.getDeclaredMethod(methodName,PARAM_SERVICEREFERENCE);
+			} catch (NoSuchMethodException e) {
 			}
-		}
-		return method;
-	}
+			if (method != null) break;
+			
+			//we need a serviceObject to keep looking, create one if necessary
+			if (serviceObject == null) {
+				serviceObject = componentInstance.getServiceObject(serviceReference);
+				if (serviceObject == null) {
+					serviceObject = buildDispose.getService(
+							componentInstance.component,
+							reference,
+							componentInstance.getComponentContext().getBundleContext(),
+							serviceReference
+							);
+				}
+				if (serviceObject == null) {
+					//we could not create a serviceObject because of circularity
+					return null;
+				}
+				componentInstance.addServiceReference(serviceReference,serviceObject);
+				serviceObjectClass = serviceObject.getClass();
+								
+				//figure out the interface class - this is guaranteed to succeed or else
+				//the framework would not have let us have the service object
+				Class searchForInterfaceClass = serviceObjectClass;
+				String interfaceName = reference.getReferenceDescription().getInterfacename();
+				while(searchForInterfaceClass != null) {
+					//first look through interfaces
+					Class [] interfaceClasses = searchForInterfaceClass.getInterfaces();
+					for (int i = 0; i < interfaceClasses.length;i++) {
+						if (interfaceClasses[i].getName().equals(interfaceName)) {
+							interfaceClass = interfaceClasses[i];
+							break;
+						}
+					}
+					if (interfaceClass != null) {
+						break;
+					}
+					
+					//also check the class itself
+					if (searchForInterfaceClass.getName().equals(interfaceName)) {
+						interfaceClass = searchForInterfaceClass;
+						break;
+					}
+					
+					//advance up the superclasses
+					searchForInterfaceClass = searchForInterfaceClass.getSuperclass();
+				}
+				
+				param_interfaceClass = new Class [] {interfaceClass};
+				
+			} //end if(serviceObject == null)
 
-	private Method getMethod(String methodName, Method[] methods) {
-		for (int i = 0; i < methods.length; i++) {
-			if (methodName.equals(methods[i].getName())) {
-				return methods[i];
+			//2) check for bind(Service interface) method
+			try {
+				method = consumerClass.getDeclaredMethod(methodName,param_interfaceClass);
+			} catch (NoSuchMethodException e) {
 			}
+			if (method != null) break;
+			
+			//3) check for bind(class.isAssignableFrom(serviceObjectClass)) method
+			Method [] methods = consumerClass.getDeclaredMethods();
+			for (int i = 0; i < methods.length; i++) {
+				Class [] params = methods[i].getParameterTypes();
+				if (params.length == 1 &&
+					methods[i].getName().equals(methodName) &&
+					params[0].isAssignableFrom(serviceObjectClass)) {
+					
+					method = methods[i];
+					break;
+				}
+			}
+			if (method != null) break;
+				
+			//we couldn't find the method - try the superclass
+			consumerClass = consumerClass.getSuperclass();
 		}
-		return null;
-	}
+		
+		if (method == null) {
+			//log error = we could not find the method
+			Log.log(LogService.LOG_ERROR, "[SCR] Could not find method " + methodName + ".");
+			return null;
+		}
+		
+		//if method is not protected or public, log error message
+		int modifier = method.getModifiers();
+		if (!(Modifier.isProtected(modifier) || Modifier.isPublic(modifier))) {
+			//log error
+			Log.log(LogService.LOG_ERROR,"[SCR] Method " + methodName + " is not protected or public.");
+			return null;
+		}
+		
+		return method;
+	}	
+
 }
