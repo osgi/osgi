@@ -28,19 +28,22 @@
 package org.osgi.impl.service.application;
 
 import org.osgi.framework.*;
+
 import java.lang.reflect.*;
 import java.net.URL;
 import java.util.*;
 import org.osgi.service.application.*;
 
-public class OAT implements OATContainerInterface {
+public class OAT implements OATContainerInterface, BundleListener {
 	
 	private Hashtable oatHashtable = null;
+	private Hashtable oatAppDescHash = null;
 	private ServiceRegistration containerService = null;
 	private BundleContext bc = null;
 
 	public OAT() {
 		oatHashtable = new Hashtable();
+		oatAppDescHash = new Hashtable();
 	}
 	
 	public void start( BundleContext bc ) throws Exception {
@@ -48,28 +51,43 @@ public class OAT implements OATContainerInterface {
 		setApplicationContextHashRef();
 		
 		containerService = bc.registerService( OATContainerInterface.class.getName(), this, new Hashtable() );
+		bc.addBundleListener( this );
 	}
 	
 	public void stop( BundleContext bc ) throws Exception {
 		containerService.unregister();
+		bc.removeBundleListener( this );
 		
 		oatHashtable = null;
 		bc = null;
 	}
 	
+	public void registerOATBundle(Bundle bundle) throws Exception {
+		URL url = bc.getBundle( bundle.getBundleId() ).getResource(	"OSGI-INF/app/apps.xml");
+		OATApplicationData []oatAppDatas = (new OATXMLParser( bc )).parse( url );
+		oatAppDescHash.put( bundle, oatAppDatas );
+	}
+	
 	public void createApplicationContext(Object mainClass, ApplicationHandle appHandle, Map args, Bundle bundle )
 			throws Exception {
 		
-		URL url = bc.getBundle( bundle.getBundleId() ).getResource(	"OSGI-INF/app/apps.xml");
-		OATApplicationData oatAppData = (new OATXMLParser()).parse( bc, url, mainClass.getClass().getName() );
-		OATApplicationContextImpl appCtx = new OATApplicationContextImpl( bundle, args, oatAppData, appHandle );		
+		OATApplicationData []oatAppDatas = (OATApplicationData [])oatAppDescHash.get( bundle );
+		if( oatAppDatas == null )
+			throw new Exception( "Application bundle is not registered in OAT" );
 		
-		oatHashtable.put( mainClass, appCtx );    
+		for( int i = 0; i != oatAppDatas.length; i++) {			
+			if( oatAppDatas[ i ].getBaseClass().equals( mainClass.getClass().getName() ) ) {
+				OATApplicationContextImpl appCtx = new OATApplicationContextImpl( bundle, args, oatAppDatas[ i ], appHandle );						
+				oatHashtable.put( mainClass, appCtx );
+				return;
+			}
+		}
+		throw new Exception( "Application base class is not registered in OAT" );		
 	}
 
 	public void removeApplicationContext(Object mainClass) throws Exception {
 		OATApplicationContextImpl appCtx = (OATApplicationContextImpl)oatHashtable.remove( mainClass );
-    appCtx.ungetServiceReferences();
+    appCtx.destroy();
 	}
 	
 	private void setApplicationContextHashRef() throws Exception {
@@ -77,5 +95,12 @@ public class OAT implements OATContainerInterface {
 		Field field = appFrameworkClass.getDeclaredField( "appContextHash" );
 		field.setAccessible(true);
     field.set( null, oatHashtable);		
+	}
+
+	public void bundleChanged(BundleEvent event) {
+		if( event.getType() == BundleEvent.UNINSTALLED ) {
+			oatAppDescHash.remove( event.getBundle() );
+			/* Do we need to terminate all of the applications? */
+		}
 	}
 }

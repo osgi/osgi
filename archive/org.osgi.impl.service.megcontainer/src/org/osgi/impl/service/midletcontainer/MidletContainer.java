@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import javax.microedition.midlet.MIDlet;
 import org.osgi.framework.*;
+import org.osgi.impl.service.application.OATContainerInterface;
 import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.application.midlet.MidletDescriptor;
@@ -71,9 +72,19 @@ public class MidletContainer implements BundleListener, EventHandler {
 	public void installApplication(long bundleID) throws IOException, Exception {
 		if (bundleIDs.contains(Long.toString(bundleID)))
 			return;
+		
+		ServiceReference oatRef = bc .getServiceReference(OATContainerInterface.class.getName());
+    if (oatRef == null)
+	    throw new Exception("Cannot register the MidletDescriptor as OAT is not running!");
+    OATContainerInterface oat = (OATContainerInterface) bc.getService(oatRef);
+    if (oat == null)
+	    throw new Exception("Cannot register the MidletDescriptor as OAT is not running!");
+    oat.registerOATBundle( bc.getBundle( bundleID ) );
+    bc.ungetService( oatRef );
+		
 		ApplicationDescriptor appDescs[] = registerBundle(bundleID);
 		if (appDescs == null) {
-			throw new Exception("Not a valid MEG bundle!");
+			throw new Exception("Not a valid MIDlet bundle!");
 		}
 		else {
 			bundleIDs.add(Long.toString(bundleID));

@@ -205,12 +205,20 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		bc.removeServiceListener( listener );
 	}
 	
-	void ungetServiceReferences()
+	void destroy()
 	{
 		while( !serviceList.isEmpty() ) {
 			Service serv = (Service)serviceList.removeFirst();
 			bc.ungetService( serv.serviceReference );
 		}
+		
+		bc.removeServiceListener( this );
+		
+		appHandle = null;
+		bc = null;
+		oatAppData = null;
+		serviceList = null;
+		startupParams = null;
 	}
 	
 	private BundleContext frameworkHook( final Bundle bundle ) {

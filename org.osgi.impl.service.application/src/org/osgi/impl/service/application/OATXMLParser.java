@@ -116,8 +116,14 @@ public class OATXMLParser {
   public static final String JAXP_SCHEMA_SOURCE = "http://java.sun.com/xml/jaxp/properties/schemaSource";
   
   private boolean errorAtParse;
-
-	public OATApplicationData parse( BundleContext bc, URL url, String baseClass ) throws Exception {		    
+  private BundleContext bc = null;
+  
+  public OATXMLParser( BundleContext bc ) {
+  	this.bc = bc;
+  }
+  
+  
+	public OATApplicationData[] parse( URL url ) throws Exception {		    
 		if( url == null ) {
 			Activator.log( LogService.LOG_ERROR, "Cannot open the OAT XML file!", null );
 			throw new Exception( "Cannot open the OAT XML file!" );			
@@ -157,7 +163,7 @@ public class OATXMLParser {
 		Document doc = domParser.parse( in );
 		in.close();
 		
-		OATApplicationData result = fetchApplicationData( doc, baseClass );
+		OATApplicationData result[] = fetchApplicationDatas( doc );
 		
 		bc.ungetService( domParserReference );
 		return result;
@@ -179,7 +185,7 @@ public class OATXMLParser {
 		return null;
 	}
 	
-	private OATApplicationData fetchApplicationData( Document doc, String baseClass ) throws Exception {
+	private OATApplicationData[] fetchApplicationDatas( Document doc ) throws Exception {
 		
 		NodeList listNodeList = doc.getElementsByTagName( "descriptor" );
 
@@ -189,12 +195,15 @@ public class OATXMLParser {
 		Node listNode = listNodeList.item( 0 );
 		
 		Node applicationNode = listNode.getFirstChild();
+		
+		LinkedList appList = new LinkedList();
 
 		while( applicationNode != null ) {
 			if( applicationNode.getNodeType() == Node.ELEMENT_NODE  && 
 					applicationNode.getNodeName().equals( "application" ) &&
-					getAttributeValue( applicationNode, "class" ) != null &&
-					getAttributeValue( applicationNode, "class" ).equals( baseClass )) {
+					getAttributeValue( applicationNode, "class" ) != null ) {
+				
+				String baseClass = getAttributeValue( applicationNode, "class" );
 				
 				/* the desired application element found */
 				
@@ -246,11 +255,17 @@ public class OATXMLParser {
 				int i=0;
 				while( requiredServices.size() != 0 )
 					services_[ i++ ] = (OATServiceData)requiredServices.removeFirst();
-				return new OATApplicationData( baseClass, services_ );
+				appList.add( new OATApplicationData( baseClass, services_ ) );
 			}
 			applicationNode = applicationNode.getNextSibling();
 	  }
-		throw new Exception( "Application description wasn't found for '"+ baseClass +"' base class!" );
+		
+		OATApplicationData []appArray = new OATApplicationData[ appList.size() ];
+		for( int j=0; j != appArray.length; j++ ) {
+			appArray[ j ] = (OATApplicationData)appList.removeFirst();
+		}
+		
+		return appArray;
 	}
 	
 	private void validateXMLStream( BundleContext bc, InputStream stream ) throws Exception {
