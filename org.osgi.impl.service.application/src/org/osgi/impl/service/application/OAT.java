@@ -31,6 +31,7 @@ import org.osgi.framework.*;
 import java.lang.reflect.*;
 import java.net.URL;
 import java.util.*;
+import org.osgi.service.application.*;
 
 public class OAT implements OATContainerInterface {
 	
@@ -56,12 +57,12 @@ public class OAT implements OATContainerInterface {
 		bc = null;
 	}
 	
-	public void createApplicationContext(Object mainClass, Map args, Bundle bundle )
+	public void createApplicationContext(Object mainClass, ApplicationHandle appHandle, Map args, Bundle bundle )
 			throws Exception {
 		
 		URL url = bc.getBundle( bundle.getBundleId() ).getResource(	"OSGI-INF/app/apps.xml");
-		new OATXMLParser().parse( bc, url, mainClass.getClass().getName() );
-		OATApplicationContextImpl appCtx = new OATApplicationContextImpl( bundle, args );		
+		OATApplicationData oatAppData = (new OATXMLParser()).parse( bc, url, mainClass.getClass().getName() );
+		OATApplicationContextImpl appCtx = new OATApplicationContextImpl( bundle, args, oatAppData, appHandle );		
 		
 		oatHashtable.put( mainClass, appCtx );    
 	}

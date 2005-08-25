@@ -32,6 +32,7 @@ import java.security.*;
 import java.util.*;
 import org.osgi.framework.*;
 import org.osgi.application.*;
+import org.osgi.service.application.*;
 import org.osgi.service.log.LogService;
 
 public class OATApplicationContextImpl implements ApplicationContext {
@@ -39,11 +40,21 @@ public class OATApplicationContextImpl implements ApplicationContext {
 	private BundleContext bc = null;
 	private Map startupParams = null;
 	private LinkedList serviceList = null;
+	private OATApplicationData oatAppData = null;
+	private ApplicationHandle appHandle = null;
+
+	class Service {
+		OATServiceData    serviceData;
+		Object            serviceObject;
+		ServiceReference  serviceReference;
+	}
 	
-	public OATApplicationContextImpl( Bundle bundle, Map startupParams ) {
+	public OATApplicationContextImpl( Bundle bundle, Map startupParams, OATApplicationData appData, ApplicationHandle appHandle ) {
 		bc = frameworkHook( bundle );
 		this.startupParams = startupParams;
 		serviceList = new LinkedList();
+		oatAppData = appData;
+		this.appHandle = appHandle;
 	}
 
 	public void addBundleListener(BundleListener listener) {
@@ -62,13 +73,68 @@ public class OATApplicationContextImpl implements ApplicationContext {
 	public Map getStartupParameters() {
 		return startupParams;
 	}
-	public Object locateService(String referenceName) { /* TODO TODO TODO */
-		ServiceReference ref = bc.getServiceReference( referenceName );
-		if( ref == null )
-		  return null;
-		Object service =  bc.getService( ref );
-		serviceList.add( ref );
-		return service;
+	public Object locateService(String referenceName) {
+		for( int i=0; i != oatAppData.getServices().length; i++ ) {
+			if( oatAppData.getServices()[ i ].getName().equals( referenceName )) {				
+				
+				/* checks whether a reference exists in the service list */
+				
+				Iterator iterator = serviceList.iterator();
+				while( iterator.hasNext() ) {
+					Service serv = (Service)iterator.next();
+					
+					if( serv.serviceData.getName().equals( referenceName ) ) {
+						if( serv.serviceReference.getBundle() == null ) {
+							if( removeService( serv ) )
+								return null; /* termination is requested */
+							iterator = serviceList.iterator();
+						} else							
+						  return serv.serviceObject;
+					}
+				}
+				
+				/* getting the service references */
+				
+				OATServiceData service = oatAppData.getServices()[ i ];
+				
+				ServiceReference refs[] = null;
+				
+				try {
+		      refs = bc.getServiceReferences( service.getInterface(),
+		    	                                  service.getTarget() );
+				}catch( InvalidSyntaxException e ) {}
+				
+		    if( refs == null || refs.length == 0 ) {
+		    	if( service.getCardinality() == OATServiceData.CARDINALITY1_1 || 
+		    			service.getCardinality() == OATServiceData.CARDINALITY1_n ) {
+		    		requestTermination();
+		    		throw new RuntimeException( "The requested service not found!" );
+		    	}
+		    	return null;
+		    }
+		    
+		    ServiceReference selectedReference = refs[ 0 ];
+		    int              selectedRanking   = ((Integer)refs[ 0 ].getProperty( Constants.SERVICE_RANKING )).intValue();
+		    long             selectedServiceId = ((Long)refs[ 0 ].getProperty( Constants.SERVICE_ID )).longValue(); 
+		    
+		    for( int j=1; j < refs.length; j++ ) {
+		    	int rank = ((Integer)refs[ j ].getProperty( Constants.SERVICE_RANKING )).intValue();
+		    	long serviceID = ((Long)refs[ j ].getProperty( Constants.SERVICE_ID )).longValue();
+		    	
+		    	if( rank > selectedRanking || ( rank == selectedRanking && serviceID < selectedServiceId) )
+		    		selectedReference = refs[ j ];
+		    }
+
+		    Service srv = new Service();
+		    srv.serviceData = service;
+		    srv.serviceReference = selectedReference;
+		    srv.serviceObject = bc.getService( selectedReference );
+		    
+		    serviceList.add( srv );
+		    return srv.serviceObject;
+			}
+		}
+		return null;
 	}
 	
 	public Object[] locateServices(String referenceName) { /* TODO TODO TODO */
@@ -171,5 +237,30 @@ public class OATApplicationContextImpl implements ApplicationContext {
 				"Method '" + methodName + "' not found in class '" + 
 				origClassName + "' !", exception);
 		return null;
+	}
+
+	private boolean removeService( Service service ) {
+		serviceList.remove( service );
+  	if( service.serviceData.getPolicy() == OATServiceData.STATIC ) {
+  		requestTermination();
+  		return true;
+  	}
+  	return false;
+	}
+	
+	private void requestTermination() {
+		class DestroyerThread extends Thread {
+			public void run() {
+        
+				try {
+					appHandle.destroy();
+				}catch( Exception e ) {
+					e.printStackTrace();
+				}          
+			};
+		}
+		
+		DestroyerThread st = new DestroyerThread();
+		st.start();		
 	}
 }
