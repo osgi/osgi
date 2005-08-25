@@ -41,15 +41,14 @@
 package org.osgi.test.cases.monitor.tbc;
 
 import java.net.SocketPermission;
-
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.dmt.AlertItem;
 import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtAlertItem;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.event.TopicPermission;
@@ -105,7 +104,7 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	
 	private String correlator = null;
 	
-	private DmtAlertItem[] alerts = null;
+	private AlertItem[] alerts = null;
 	
 	private boolean receivedAlert = false;
 
@@ -752,13 +751,13 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	/**
 	 * @return Returns the alerts.
 	 */
-	public DmtAlertItem[] getAlerts() {
+	public AlertItem[] getAlerts() {
 		return alerts;
 	}
 	/**
 	 * @param alerts The alerts to set.
 	 */
-	public void setAlerts(DmtAlertItem[] alerts) {
+	public void setAlerts(AlertItem[] alerts) {
 		this.alerts = alerts;
 	}
 }

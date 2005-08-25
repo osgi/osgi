@@ -36,7 +36,7 @@
  */
 package org.osgi.test.cases.monitor.tbc.MonitoringJob;
 
-import org.osgi.service.dmt.DmtAlertItem;
+import org.osgi.service.dmt.AlertItem;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
@@ -96,7 +96,7 @@ public class RemoteAlertSender {
 			tbc.assertEquals("Asserting if we receive the correct value of serverId.", MonitorConstants.REMOTE_SERVER, tbc.getServerId());
 			tbc.assertNull("Asserting if we receive the correct value of correlator(null).", tbc.getCorrelator());
 			
-			DmtAlertItem[] alerts = tbc.getAlerts();
+			AlertItem[] alerts = tbc.getAlerts();
 			tbc.assertNotNull("Asserting that a non-null value was passed.", alerts);
 			tbc.assertEquals("Asserting that only one AlertItem was passed.", 1, alerts.length);
 			tbc.assertEquals("Asserting the source value in the AlertItem object.", MonitorConstants.DMT_URI_MONITORABLE1_SV1, alerts[0].getSource());
@@ -142,7 +142,7 @@ public class RemoteAlertSender {
 			tbc.assertEquals("Asserting if we receive the correct value of serverId.", MonitorConstants.REMOTE_SERVER, tbc.getServerId());
 			tbc.assertNull("Asserting if we receive the correct value of correlator(null).", tbc.getCorrelator());			
 
-			DmtAlertItem[] alerts = tbc.getAlerts();
+			AlertItem[] alerts = tbc.getAlerts();
 			tbc.assertNotNull("Asserting that a non-null value was passed.", alerts);
 			tbc.assertEquals("Asserting that only one AlertItem was passed.", 1, alerts.length);
 			tbc.assertEquals("Asserting the source value in the AlertItem object.", MonitorConstants.DMT_URI_MONITORABLE1_SV1, alerts[0].getSource());

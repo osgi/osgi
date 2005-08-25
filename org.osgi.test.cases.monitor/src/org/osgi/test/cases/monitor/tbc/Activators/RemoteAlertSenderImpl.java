@@ -36,7 +36,7 @@
  */
 package org.osgi.test.cases.monitor.tbc.Activators;
 
-import org.osgi.service.dmt.DmtAlertItem;
+import org.osgi.service.dmt.AlertItem;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 
 /**
@@ -52,7 +52,7 @@ public class RemoteAlertSenderImpl implements
 	}
 
 	public void sendAlert(String serverId, int code, String correlator,
-			DmtAlertItem[] items) throws Exception {
+			AlertItem[] items) throws Exception {
 		
 		tbc.setReceivedAlert(true);
 		tbc.setServerId(serverId);
