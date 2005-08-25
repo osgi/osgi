@@ -61,20 +61,26 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	public void addBundleListener(BundleListener listener) {
 	  bc.addBundleListener( listener );
 	}
+	
 	public void addFrameworkListener(FrameworkListener listener) {
     bc.addFrameworkListener( listener );
 	}
+	
 	public void addServiceListener(ServiceListener listener, String filter)
 			throws InvalidSyntaxException {
 		bc.addServiceListener( listener, filter );
 	}
+	
 	public void addServiceListener(ServiceListener listener) {
     bc.addServiceListener( listener );
 	}
+	
 	public Map getStartupParameters() {
 		return startupParams;
 	}
+	
 	public Object locateService(String referenceName) {
+		
 		for( int i=0; i != oatAppData.getServices().length; i++ ) {
 			if( oatAppData.getServices()[ i ].getName().equals( referenceName )) {				
 				
@@ -119,11 +125,14 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		    }
 		    
 		    ServiceReference selectedReference = refs[ 0 ];
-		    int              selectedRanking   = ((Integer)refs[ 0 ].getProperty( Constants.SERVICE_RANKING )).intValue();
+		    
+		    Integer selRanking = (Integer)refs[ 0 ].getProperty( Constants.SERVICE_RANKING );		    
+		    int              selectedRanking   = (selRanking == null) ? 0 : selRanking.intValue();
 		    long             selectedServiceId = ((Long)refs[ 0 ].getProperty( Constants.SERVICE_ID )).longValue(); 
 		    
 		    for( int j=1; j < refs.length; j++ ) {
-		    	int rank = ((Integer)refs[ j ].getProperty( Constants.SERVICE_RANKING )).intValue();
+			    Integer rankW = (Integer)refs[ 0 ].getProperty( Constants.SERVICE_RANKING );		    
+			    int  rank = (rankW == null) ? 0 : rankW.intValue();
 		    	long serviceID = ((Long)refs[ j ].getProperty( Constants.SERVICE_ID )).longValue();
 		    	
 		    	if( rank > selectedRanking || ( rank == selectedRanking && serviceID < selectedServiceId) )
@@ -187,20 +196,25 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		}
 		return new Object[ 0 ];
 	}
+	
 	public ServiceRegistration registerService(String clazz, Object service,
 			Dictionary properties) {
 		return bc.registerService( clazz, service, properties );
 	}
+	
 	public ServiceRegistration registerService(String[] clazzes,
 			Object service, Dictionary properties) {
 		return bc.registerService( clazzes, service, properties );
 	}
+	
 	public void removeBundleListener(BundleListener listener) {
 		bc.removeBundleListener( listener );
 	}
+	
 	public void removeFrameworkListener(FrameworkListener listener) {
     bc.removeFrameworkListener( listener );
 	}
+	
 	public void removeServiceListener(ServiceListener listener) {
 		bc.removeServiceListener( listener );
 	}
