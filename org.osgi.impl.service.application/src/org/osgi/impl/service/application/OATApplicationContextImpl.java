@@ -321,7 +321,8 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			public void run() {
         
 				try {
-					appHandle.destroy();
+					if( appHandle != null )
+					  appHandle.destroy();
 				}catch( Exception e ) {
 					e.printStackTrace();
 				}          
