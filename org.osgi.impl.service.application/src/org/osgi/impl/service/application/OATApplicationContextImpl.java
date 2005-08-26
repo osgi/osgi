@@ -44,6 +44,8 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	private LinkedList bundleListenerList = null;
 	private LinkedList serviceListenerList = null;
 	private LinkedList frameworkListenerList = null;
+	private Vector mandatoryServiceList = null;
+	private Vector mandatoryTargetList = null;
 	private OATApplicationData oatAppData = null;
 	private ApplicationHandle appHandle = null;
 
@@ -52,7 +54,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		Object            serviceObject;
 		ServiceReference  serviceReference;
 	}
-	
+		
 	public OATApplicationContextImpl( Bundle bundle, Map startupParams, OATApplicationData appData, ApplicationHandle appHandle ) {
 		bc = frameworkHook( bundle );
 		this.startupParams = startupParams;
@@ -62,6 +64,18 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		serviceListenerList = new LinkedList();
 		frameworkListenerList = new LinkedList();
 		oatAppData = appData;
+		
+		mandatoryServiceList = new Vector();
+		mandatoryTargetList = new Vector();
+		
+		for( int i=0; i != appData.getServices().length; i++ ) {
+			OATServiceData service = appData.getServices()[ i ];
+			if( service.getCardinality() == OATServiceData.CARDINALITY1_1 ||
+					service.getCardinality() == OATServiceData.CARDINALITY1_n )
+				mandatoryServiceList.add( service.getInterface() );
+			  mandatoryTargetList.add( service.getTarget() );
+		}			
+		
 		this.appHandle = appHandle;
 		bc.addServiceListener( this );
 	}
@@ -367,19 +381,21 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		return null;
 	}
 
+	private void terminateImmediately() {
+		Thread destroyerThread = requestTermination();		
+		try {
+			destroyerThread.join( 5000 );
+		}catch(InterruptedException e) {}
+		
+		if( destroyerThread.isAlive() )
+			Activator.log( LogService.LOG_ERROR, "Stop method of the application didn't finish at 5s!", null );		
+	}
+	
 	private boolean removeService( Service service ) {
 		serviceList.remove( service );
 		bc.ungetService( service.serviceReference );
   	if( service.serviceData.getPolicy() == OATServiceData.STATIC ) {
-  		
-  		Thread destroyerThread = requestTermination();		
-  		try {
-  			destroyerThread.join( 5000 );
-  		}catch(InterruptedException e) {}
-  		
-  		if( destroyerThread.isAlive() )
-  			Activator.log( LogService.LOG_ERROR, "Stop method of the application didn't finish at 5s!", null );
-  		
+  		terminateImmediately();
   		return true;
   	}
   	return false;
@@ -419,7 +435,34 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		if( event.getType() == ServiceEvent.UNREGISTERING ) {
 			Service serv = getServiceByReference( event.getServiceReference() );
 			if( serv != null )
-				removeService( serv );
+				if( removeService( serv ) )
+					return;
+				
+			/* checking whether a mandatory service was stopped */
+			
+			Object classes[] = (Object []) event.getServiceReference().
+			                                 getProperty( Constants.OBJECTCLASS );
+			if( classes == null )
+				return;
+			for( int i = 0; i != classes.length; i++ ) {
+				String service = (String)classes[ i ];
+				if( mandatoryServiceList.contains( service ) ) {
+					int index = mandatoryServiceList.indexOf( service );
+					String target = (String)mandatoryTargetList.get( index );
+					
+					ServiceReference refs[] = null;
+					
+					try {
+					  refs = bc.getServiceReferences( service, target );
+					}catch( InvalidSyntaxException e ) {}
+					
+					if( refs == null || refs.length == 0 ||
+							((refs.length == 1 ) && refs[ 0 ] == event.getServiceReference())) {
+						terminateImmediately();
+						return;
+					}
+				}
+			}
 		}
 	}
 }
