@@ -73,7 +73,7 @@ public class ProvisioningTestCase extends DefaultTestCase {
 		tracker = new ServiceTracker(getBundleContext(), HttpService.class
 				.getName(), null) {
 			public Object addingService(ServiceReference ref) {
-				HttpService http = (HttpService) getBundleContext();
+				HttpService http = (HttpService) super.addingService(ref);
 				try {
 					getBundleContext().getService(ref);
 					http
@@ -86,6 +86,7 @@ public class ProvisioningTestCase extends DefaultTestCase {
 				return http;
 			}
 		};
+		tracker.open();
 	}
 
 	public void xdeinit() {

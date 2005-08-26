@@ -13,4 +13,3 @@ Comment: Created by $(DELIVER) at $(DATE)
 CVS-Header: $Header$
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
-
