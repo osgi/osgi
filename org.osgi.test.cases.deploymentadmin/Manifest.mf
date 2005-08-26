@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-Activator: ${p}.TestDeployment
-Bundle-Name: ${p}
+Bundle-Name: test.deploymentadmin
 Bundle-SymbolicName: ${p}
 Bundle-Version: 1.0
-Bundle-Copyright: Copyright (c) OSGi Alliance (2000-2005). All Rights Reserved.
+Bundle-Copyright: ${copyright}
 Bundle-Description: Deployment Test Case.
 Bundle-Vendor: OSGi Alliance
 Bundle-DocUrl: http://www.osgi.org/testcases/4/test.cases.template

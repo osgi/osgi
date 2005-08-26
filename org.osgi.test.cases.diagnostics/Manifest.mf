@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-Activator: ${p}.TestCase
-Bundle-Name: ${p}
+Bundle-Name: test.diagnostics
 Bundle-SymbolicName: ${p}
 Bundle-Version: 4
-Bundle-Copyright: Copyright (c) OSGi Alliance (2000-2005). All Rights Reserved.
+Bundle-Copyright: ${copyright}
 Bundle-Description: A test case for the diagnostics control units implementation.
 Bundle-Vendor: OSGi Alliance
 Bundle-DocUrl: http://www.osgi.org/testcases/4/test.cases.template

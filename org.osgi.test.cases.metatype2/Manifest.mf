@@ -1,9 +1,10 @@
 Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}
 Bundle-Activator: ${p}.TestCase
-Bundle-Name: ${p}
+Bundle-Name: test.metatype2
 Bundle-SymbolicName: ${p}
 Bundle-Version: 4
-Bundle-Copyright: Copyright (c) OSGi Alliance (2000-2005). All Rights Reserved.
+Bundle-Copyright: ${copyright}
 Bundle-Description: This is a template description. It should contain 
   general information about the test case. The test tool allows this text to be
   displayed by double clicking on the test case.
