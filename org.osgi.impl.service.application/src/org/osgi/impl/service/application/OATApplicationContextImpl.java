@@ -42,6 +42,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	private LinkedList serviceList = null;
 	private LinkedList registeredServiceList = null;
 	private LinkedList bundleListenerList = null;
+	private LinkedList serviceListenerList = null;
 	private OATApplicationData oatAppData = null;
 	private ApplicationHandle appHandle = null;
 
@@ -57,6 +58,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		serviceList = new LinkedList();
 		registeredServiceList = new LinkedList();
 		bundleListenerList = new LinkedList();
+		serviceListenerList = new LinkedList();
 		oatAppData = appData;
 		this.appHandle = appHandle;
 		bc.addServiceListener( this );
@@ -84,7 +86,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			throw new RuntimeException( "Application is not running!" );
 		
 		bc.addServiceListener( listener, filter );
-    /* TODO */
+		serviceListenerList.add( listener );
 	}
 	
 	public void addServiceListener(ServiceListener listener) {
@@ -92,7 +94,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			throw new RuntimeException( "Application is not running!" );
 		
     bc.addServiceListener( listener );
-    /* TODO */
+    serviceListenerList.add( listener );
 	}
 	
 	public Map getStartupParameters() {
@@ -266,11 +268,15 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			throw new RuntimeException( "Application is not running!" );
 		
 		bc.removeServiceListener( listener );
-    /* TODO */
+		serviceListenerList.remove( listener );
 	}
 	
 	void destroy()
 	{
+		while( !serviceListenerList.isEmpty() ) { /* This line must be the first for proper working */
+			bc.removeServiceListener( (ServiceListener)serviceListenerList.removeFirst() );
+		}
+		
 		while( !serviceList.isEmpty() ) {
 			Service serv = (Service)serviceList.removeFirst();
 			bc.ungetService( serv.serviceReference );
@@ -285,7 +291,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		while( !bundleListenerList.isEmpty() ) {
 			bc.removeBundleListener( (BundleListener)bundleListenerList.removeFirst() );
 		}
-		
+				
 		/* TODO */
 		
 		bc.removeServiceListener( this );
