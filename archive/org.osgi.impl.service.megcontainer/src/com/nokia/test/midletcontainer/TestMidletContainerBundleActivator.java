@@ -187,7 +187,11 @@ public class TestMidletContainerBundleActivator
         if(!testCase_oatServiceListener())
             System.out.println("Checking OAT service listener                    FAILED");
         else
-            System.out.println("Checking OAT service listene                     PASSED");
+            System.out.println("Checking OAT service listener                    PASSED");
+        if(!testCase_oatFrameworkListener())
+            System.out.println("Checking OAT framework listener                  FAILED");
+        else
+            System.out.println("Checking OAT framework listener                  PASSED");
         if(!testCase_launchAfterRestart())
             System.out.println("Launching Midlet app after container restart     FAILED");
         else
@@ -211,7 +215,7 @@ public class TestMidletContainerBundleActivator
         System.out.println("\n\nMidlet container tester thread finished!");
     }
 
-	boolean installMidletBundle(String resourceName)
+  	boolean installMidletBundle(String resourceName)
     {
         try
         {
@@ -966,6 +970,28 @@ public class TestMidletContainerBundleActivator
   				throw new Exception("Service listener was not removed after stop!");
   		  
         return true;  		
+      }
+      catch(Exception e) {
+          e.printStackTrace();
+      }
+      return false;  		
+  	}
+
+  	boolean testCase_oatFrameworkListener() {
+      try {     	
+      	if( !testCase_launchApplication() )
+      		return false;
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/AddFrameworkListener", 
+                                    "FRAMEWORK LISTENER ADDED") )
+          return false;
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/RemoveFrameworkListener", 
+                                    "FRAMEWORK LISTENER REMOVED") )
+          return false;
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/AddFrameworkListener", 
+                                    "FRAMEWORK LISTENER ADDED") )  	  	
+  		  if( !testCase_stopApplication() )
+	  	  	return false;
+  		  return true;
       }
       catch(Exception e) {
           e.printStackTrace();
