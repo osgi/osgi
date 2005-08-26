@@ -6,8 +6,9 @@ import javax.microedition.midlet.MIDletStateChangeException;
 import org.osgi.service.log.LogService;
 import org.osgi.application.*;
 import org.osgi.service.event.*;
+import org.osgi.framework.*;
 
-public class TestMidlet extends MIDlet implements EventHandler {
+public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundleListener {
 	String                      fileName;
 	String                      storedString;
 	boolean                     paused;
@@ -79,5 +80,17 @@ public class TestMidlet extends MIDlet implements EventHandler {
 			logger.log( LogService.LOG_INFO, "Service works fine!" );
 			writeResult("LOG SERVICE OPERABLE");			
 		}
+		else if (event.getTopic().equals("com/nokia/megtest/AddBundleListener")) {
+			myApplicationContext.addBundleListener( this );
+			writeResult("BUNDLE LISTENER ADDED");			
+		}
+		else if (event.getTopic().equals("com/nokia/megtest/RemoveBundleListener")) {
+			myApplicationContext.removeBundleListener( this );
+			writeResult("BUNDLE LISTENER REMOVED");			
+		}
+	}
+
+	public void bundleChanged(BundleEvent event) {
+		writeResult("BUNDLE CHANGE RECEIVED");			
 	}
 }
