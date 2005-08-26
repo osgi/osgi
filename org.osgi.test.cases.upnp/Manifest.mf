@@ -1,5 +1,7 @@
 Manifest-Version: 1.0
-Bundle-Name: test.cases.upnp
+Bundle-SymbolicName: ${p}
+Bundle-Name: test.upnp
+Bundle-Copyright: ${copyright}
 Bundle-Description: Tests Universal Plug and Play Device Architecture.
 Bundle-Vendor: ProSyst Software AG
 Bundle-Version: 1.0
@@ -8,5 +10,7 @@ Bundle-ContactAddress: p_kosseff@prosyst.bg
 Bundle-Category: test
 Bundle-Activator: org.osgi.test.cases.upnp.UPnPTestCase
 $(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
 Comment: NO EXPORT
 

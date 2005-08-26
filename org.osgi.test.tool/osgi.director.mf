@@ -1,7 +1,8 @@
 Manifest-Version: 1.0
 Bundle-Name: test.director
+Bundle-SymbolicName: ${p}.director
 Bundle-Activator: org.osgi.test.director.Director
-Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
+Bundle-Copyright: ${copyright}
 Bundle-Description: Director for test harness. This is a test harness used to test for compliance
   verification. The options of this utility are available on http://membercvs.osgi.org/testing.
   A (possible stale) copy of this can be found at /www/index.html at the local web server when
