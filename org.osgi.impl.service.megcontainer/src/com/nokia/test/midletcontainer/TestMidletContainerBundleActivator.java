@@ -193,10 +193,14 @@ public class TestMidletContainerBundleActivator
             System.out.println("Checking OAT framework listener                  FAILED");
         else
             System.out.println("Checking OAT framework listener                  PASSED");
-        if(!testCase_oatStaticServiceRemove())
-            System.out.println("Checking OAT static service remove               FAILED");
+        if(!testCase_oatStaticServiceDies())
+            System.out.println("Checking OAT static service dies                 FAILED");
         else
-            System.out.println("Checking OAT static service remove               PASSED");
+            System.out.println("Checking OAT static service dies                 PASSED");
+        if(!testCase_oatMandatoryServiceDies())
+            System.out.println("Checking OAT mandatory service dies              FAILED");
+        else
+            System.out.println("Checking OAT mandatory service dies              PASSED");
         if(!testCase_launchAfterRestart())
             System.out.println("Launching Midlet app after container restart     FAILED");
         else
@@ -1035,7 +1039,7 @@ public class TestMidletContainerBundleActivator
   	}
 
 
-  	boolean testCase_oatStaticServiceRemove() {
+  	boolean testCase_oatStaticServiceDies() {
       try {     	
       	if( !testCase_launchApplication() )
       		return false;
@@ -1045,6 +1049,43 @@ public class TestMidletContainerBundleActivator
   	  	if( !checkResponseForEvent( "com/nokia/megtest/LocateService", 
                                     "LOG SERVICE OPERABLE") )
   	  		return false;
+  	  	if( !restart_logService() )
+  	  		return false;
+  	  	
+        if(!checkResultFile("STOP"))
+          throw new Exception("Result of the stop is not STOP!");
+
+        ServiceReference appList[] = bc.getServiceReferences("org.osgi.service.application.ApplicationHandle", "(service.pid=" + pid + ")");
+        if(appList != null && appList.length != 0) {
+          for(int i = 0; i != appList.length; i++)
+          {
+              ApplicationHandle handle = (ApplicationHandle)bc.getService(appList[i]);
+              bc.ungetService(appList[i]);
+              if(handle == appHandle)
+                  throw new Exception("Application handle doesn't removed after stop!");
+          }
+        }
+        try {
+          appHandle.getState();
+        }catch(Exception e) {
+          return true;
+        }
+        
+        throw new Exception("The status didn't change to NONEXISTENT!");
+      }
+      catch(Exception e) {
+          e.printStackTrace();
+      }
+      return false;  		
+  	}
+
+  	boolean testCase_oatMandatoryServiceDies() {
+      try {     	
+      	if( !testCase_launchApplication() )
+      		return false;
+
+      	String pid = getPID(getAppDesc(appHandle));
+        
   	  	if( !restart_logService() )
   	  		return false;
   	  	
