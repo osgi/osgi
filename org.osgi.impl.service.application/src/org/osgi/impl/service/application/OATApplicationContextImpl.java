@@ -43,6 +43,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	private LinkedList registeredServiceList = null;
 	private LinkedList bundleListenerList = null;
 	private LinkedList serviceListenerList = null;
+	private LinkedList frameworkListenerList = null;
 	private OATApplicationData oatAppData = null;
 	private ApplicationHandle appHandle = null;
 
@@ -59,6 +60,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		registeredServiceList = new LinkedList();
 		bundleListenerList = new LinkedList();
 		serviceListenerList = new LinkedList();
+		frameworkListenerList = new LinkedList();
 		oatAppData = appData;
 		this.appHandle = appHandle;
 		bc.addServiceListener( this );
@@ -77,7 +79,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			throw new RuntimeException( "Application is not running!" );
 		
     bc.addFrameworkListener( listener );
-    /* TODO */
+    frameworkListenerList.add( listener );
 	}
 	
 	public void addServiceListener(ServiceListener listener, String filter)
@@ -260,7 +262,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			throw new RuntimeException( "Application is not running!" );
 		
     bc.removeFrameworkListener( listener );
-    /* TODO */
+    frameworkListenerList.remove( listener );
 	}
 	
 	public void removeServiceListener(ServiceListener listener) {
@@ -292,7 +294,9 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			bc.removeBundleListener( (BundleListener)bundleListenerList.removeFirst() );
 		}
 				
-		/* TODO */
+		while( !frameworkListenerList.isEmpty() ) {
+			bc.removeFrameworkListener( (FrameworkListener)frameworkListenerList.removeFirst() );			
+		}
 		
 		bc.removeServiceListener( this );
 		
