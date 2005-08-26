@@ -201,6 +201,10 @@ public class TestMidletContainerBundleActivator
             System.out.println("Checking OAT mandatory service dies              FAILED");
         else
             System.out.println("Checking OAT mandatory service dies              PASSED");
+        if(!testCase_oatCheckStartupParams())
+            System.out.println("Checking OAT startup parameters                  FAILED");
+        else
+            System.out.println("Checking OAT startup parameters                  PASSED");
         if(!testCase_launchAfterRestart())
             System.out.println("Launching Midlet app after container restart     FAILED");
         else
@@ -224,7 +228,7 @@ public class TestMidletContainerBundleActivator
         System.out.println("\n\nMidlet container tester thread finished!");
     }
 
-  	boolean installMidletBundle(String resourceName)
+	  boolean installMidletBundle(String resourceName)
     {
         try
         {
@@ -1109,6 +1113,23 @@ public class TestMidletContainerBundleActivator
         }
         
         throw new Exception("The status didn't change to NONEXISTENT!");
+      }
+      catch(Exception e) {
+          e.printStackTrace();
+      }
+      return false;  		
+  	}
+
+  	boolean testCase_oatCheckStartupParams() {
+      try {
+      	if( !testCase_launchApplication() )
+      		return false;
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/CheckStartupParams", 
+                                    "STARTUP PARAMETERS OK") )
+  		  	return false;
+  		  if( !testCase_stopApplication() )
+	  	  	return false;
+        return true;  		
       }
       catch(Exception e) {
           e.printStackTrace();
