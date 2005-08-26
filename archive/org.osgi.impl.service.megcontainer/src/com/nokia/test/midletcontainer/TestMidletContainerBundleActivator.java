@@ -18,6 +18,7 @@ import org.osgi.service.application.midlet.MidletHandle;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventHandler;
+import org.osgi.service.log.*;
 
 public class TestMidletContainerBundleActivator
     implements BundleActivator, BundleListener, EventHandler, Runnable
@@ -192,6 +193,10 @@ public class TestMidletContainerBundleActivator
             System.out.println("Checking OAT framework listener                  FAILED");
         else
             System.out.println("Checking OAT framework listener                  PASSED");
+        if(!testCase_oatStaticServiceRemove())
+            System.out.println("Checking OAT static service remove               FAILED");
+        else
+            System.out.println("Checking OAT static service remove               PASSED");
         if(!testCase_launchAfterRestart())
             System.out.println("Launching Midlet app after container restart     FAILED");
         else
@@ -871,7 +876,7 @@ public class TestMidletContainerBundleActivator
       	if( !testCase_launchApplication() )
       		return false;
   	  	if( !checkResponseForEvent( "com/nokia/megtest/LocateService", 
-                                  "LOG SERVICE OPERABLE") )
+                                    "LOG SERVICE OPERABLE") )
   		  	return false;
   		  if( !testCase_stopApplication() )
 	  	  	return false;
@@ -988,10 +993,81 @@ public class TestMidletContainerBundleActivator
                                     "FRAMEWORK LISTENER REMOVED") )
           return false;
   	  	if( !checkResponseForEvent( "com/nokia/megtest/AddFrameworkListener", 
-                                    "FRAMEWORK LISTENER ADDED") )  	  	
+                                    "FRAMEWORK LISTENER ADDED") )  	
+  	  		return false;
   		  if( !testCase_stopApplication() )
 	  	  	return false;
   		  return true;
+      }
+      catch(Exception e) {
+          e.printStackTrace();
+      }
+      return false;  		
+  	}
+  	
+  	private boolean restart_logService() {
+      try
+      {
+      	ServiceReference ref = bc.getServiceReference( LogService.class.getName() );
+      	Bundle logServiceBundle = ref.getBundle();
+      	
+      	System.out.println( "Stopping the log service..." );
+      	logServiceBundle.stop();
+      	
+        while(logServiceBundle.getState() != Bundle.RESOLVED ) 
+          try {
+            Thread.sleep(100L);
+          }catch(InterruptedException interruptedexception) {}
+        
+        
+       	System.out.println( "Starting the log service..." );
+        logServiceBundle.start();
+        while(midletContainerBundle.getState() != Bundle.ACTIVE) 
+          try {
+            Thread.sleep(100L);
+        }catch(InterruptedException interruptedexception1) { }
+        return true;
+      }
+      catch(Exception e) {
+          e.printStackTrace();
+      }
+      return false;  		
+  	}
+
+
+  	boolean testCase_oatStaticServiceRemove() {
+      try {     	
+      	if( !testCase_launchApplication() )
+      		return false;
+
+      	String pid = getPID(getAppDesc(appHandle));
+        
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/LocateService", 
+                                    "LOG SERVICE OPERABLE") )
+  	  		return false;
+  	  	if( !restart_logService() )
+  	  		return false;
+  	  	
+        if(!checkResultFile("STOP"))
+          throw new Exception("Result of the stop is not STOP!");
+
+        ServiceReference appList[] = bc.getServiceReferences("org.osgi.service.application.ApplicationHandle", "(service.pid=" + pid + ")");
+        if(appList != null && appList.length != 0) {
+          for(int i = 0; i != appList.length; i++)
+          {
+              ApplicationHandle handle = (ApplicationHandle)bc.getService(appList[i]);
+              bc.ungetService(appList[i]);
+              if(handle == appHandle)
+                  throw new Exception("Application handle doesn't removed after stop!");
+          }
+        }
+        try {
+          appHandle.getState();
+        }catch(Exception e) {
+          return true;
+        }
+        
+        throw new Exception("The status didn't change to NONEXISTENT!");
       }
       catch(Exception e) {
           e.printStackTrace();
