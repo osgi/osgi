@@ -9,7 +9,7 @@ import org.osgi.service.event.*;
 import org.osgi.framework.*;
 
 public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundleListener,
-                                                  ServiceListener {
+                                                  ServiceListener, FrameworkListener {
 	String                      fileName;
 	String                      storedString;
 	boolean                     paused;
@@ -97,6 +97,14 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 			myApplicationContext.removeServiceListener( this );
 			writeResult("SERVICE LISTENER REMOVED");			
 		}
+		else if (event.getTopic().equals("com/nokia/megtest/AddFrameworkListener")) {
+			myApplicationContext.addFrameworkListener( this );
+			writeResult("FRAMEWORK LISTENER ADDED");			
+		}
+		else if (event.getTopic().equals("com/nokia/megtest/RemoveFrameworkListener")) {
+			myApplicationContext.removeFrameworkListener( this );
+			writeResult("FRAMEWORK LISTENER REMOVED");			
+		}
 	}
 
 	public void bundleChanged(BundleEvent event) {
@@ -105,5 +113,9 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 
 	public void serviceChanged(ServiceEvent event) {
 		writeResult("SERVICE CHANGE RECEIVED");			
+	}
+
+	public void frameworkEvent(FrameworkEvent event) {
+		// TODO Auto-generated method stub		
 	}
 }
