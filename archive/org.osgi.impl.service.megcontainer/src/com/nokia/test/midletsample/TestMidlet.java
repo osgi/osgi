@@ -119,6 +119,14 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 			}
 			writeResult("STARTUP PARAMETERS OK");			
 		}
+		else if (event.getTopic().equals("com/nokia/megtest/LocateServices")) {
+			Object services[] = myApplicationContext.locateServices( "log" );
+			for( int k=0; k != services.length; k++ ) {
+				LogService logger = (LogService)services[ k ];
+				logger.log( LogService.LOG_INFO, "LocateServices works fine!" );
+			}
+			writeResult("LOCATE SERVICES OK");			
+		}
 	}
 
 	public void bundleChanged(BundleEvent event) {

@@ -181,6 +181,10 @@ public class TestMidletContainerBundleActivator
             System.out.println("Checking OAT locate service                      FAILED");
         else
             System.out.println("Checking OAT locate service                      PASSED");
+        if(!testCase_oatLocateServices())
+            System.out.println("Checking OAT locate services                     FAILED");
+        else
+            System.out.println("Checking OAT locate services                     PASSED");
         if(!testCase_oatBundleListener())
             System.out.println("Checking OAT bundle listener                     FAILED");
         else
@@ -886,6 +890,46 @@ public class TestMidletContainerBundleActivator
   	  	if( !checkResponseForEvent( "com/nokia/megtest/LocateService", 
                                     "LOG SERVICE OPERABLE") )
   		  	return false;
+  		  if( !testCase_stopApplication() )
+	  	  	return false;
+      	if( !testCase_launchApplication() )
+      		return false;
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/LocateService", 
+                                    "LOG SERVICE OPERABLE") )
+  		  	return false;
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/LocateService", 
+                                    "LOG SERVICE OPERABLE") )
+          return false;
+  		  if( !testCase_stopApplication() )
+	  	  	return false;
+        return true;  		
+      }
+      catch(Exception e) {
+          e.printStackTrace();
+      }
+      return false;  		
+  	}
+
+  	boolean testCase_oatLocateServices() {
+      try {
+      	if( !testCase_launchApplication() )
+      		return false;
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/LocateServices", 
+                                    "LOCATE SERVICES OK") )
+  		  	return false;
+  		  if( !testCase_stopApplication() )
+	  	  	return false;
+      	if( !testCase_launchApplication() )
+      		return false;
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/LocateService", 
+                                    "LOG SERVICE OPERABLE") )
+  		  	return false;
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/LocateServices", 
+                                    "LOCATE SERVICES OK") )
+          return false;
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/LocateService", 
+                                    "LOG SERVICE OPERABLE") )
+          return false;
   		  if( !testCase_stopApplication() )
 	  	  	return false;
         return true;  		
