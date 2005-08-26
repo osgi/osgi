@@ -361,7 +361,15 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		serviceList.remove( service );
 		bc.ungetService( service.serviceReference );
   	if( service.serviceData.getPolicy() == OATServiceData.STATIC ) {
-  		requestTermination();
+  		
+  		Thread destroyerThread = requestTermination();		
+  		try {
+  			destroyerThread.join( 5000 );
+  		}catch(InterruptedException e) {}
+  		
+  		if( destroyerThread.isAlive() )
+  			Activator.log( LogService.LOG_ERROR, "Stop method of the application didn't finish at 5s!", null );
+  		
   		return true;
   	}
   	return false;
@@ -378,7 +386,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		return null;
 	}
 	
-	private void requestTermination() {
+	private Thread requestTermination() {
 		class DestroyerThread extends Thread {
 			public void run() {
         
@@ -392,7 +400,9 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		}
 		
 		DestroyerThread st = new DestroyerThread();
-		st.start();		
+		st.start();	
+		
+		return st;
 	}
 
 	public void serviceChanged(ServiceEvent event) {
