@@ -40,6 +40,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	private BundleContext bc = null;
 	private Map startupParams = null;
 	private LinkedList serviceList = null;
+	private LinkedList registeredServiceList = null;
 	private OATApplicationData oatAppData = null;
 	private ApplicationHandle appHandle = null;
 
@@ -53,33 +54,51 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		bc = frameworkHook( bundle );
 		this.startupParams = startupParams;
 		serviceList = new LinkedList();
+		registeredServiceList = new LinkedList();
 		oatAppData = appData;
 		this.appHandle = appHandle;
 		bc.addServiceListener( this );
 	}
 
 	public void addBundleListener(BundleListener listener) {
+		if( appHandle == null )
+			throw new RuntimeException( "Application is not running!" );
+		
 	  bc.addBundleListener( listener );
 	}
 	
 	public void addFrameworkListener(FrameworkListener listener) {
+		if( appHandle == null )
+			throw new RuntimeException( "Application is not running!" );
+		
     bc.addFrameworkListener( listener );
 	}
 	
 	public void addServiceListener(ServiceListener listener, String filter)
 			throws InvalidSyntaxException {
+		if( appHandle == null )
+			throw new RuntimeException( "Application is not running!" );
+		
 		bc.addServiceListener( listener, filter );
 	}
 	
 	public void addServiceListener(ServiceListener listener) {
+		if( appHandle == null )
+			throw new RuntimeException( "Application is not running!" );
+		
     bc.addServiceListener( listener );
 	}
 	
 	public Map getStartupParameters() {
+		if( appHandle == null )
+			throw new RuntimeException( "Application is not running!" );
+		
 		return startupParams;
 	}
 	
 	public Object locateService(String referenceName) {
+		if( appHandle == null )
+			throw new RuntimeException( "Application is not running!" );
 		
 		for( int i=0; i != oatAppData.getServices().length; i++ ) {
 			if( oatAppData.getServices()[ i ].getName().equals( referenceName )) {				
@@ -152,6 +171,9 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	}
 	
 	public Object[] locateServices(String referenceName) {
+		if( appHandle == null )
+			throw new RuntimeException( "Application is not running!" );
+		
 		for( int i=0; i != oatAppData.getServices().length; i++ ) {
 			if( oatAppData.getServices()[ i ].getName().equals( referenceName )) {
 								
@@ -199,23 +221,42 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	
 	public ServiceRegistration registerService(String clazz, Object service,
 			Dictionary properties) {
-		return bc.registerService( clazz, service, properties );
+		if( appHandle == null )
+			throw new RuntimeException( "Application is not running!" );
+		
+		ServiceRegistration servReg = bc.registerService( clazz, service, properties );
+		registeredServiceList.add( servReg );
+		return servReg;
 	}
 	
 	public ServiceRegistration registerService(String[] clazzes,
 			Object service, Dictionary properties) {
-		return bc.registerService( clazzes, service, properties );
+		if( appHandle == null )
+			throw new RuntimeException( "Application is not running!" );
+		
+		ServiceRegistration servReg = bc.registerService( clazzes, service, properties );
+		registeredServiceList.add( servReg );
+		return servReg;
 	}
 	
 	public void removeBundleListener(BundleListener listener) {
+		if( appHandle == null )
+			throw new RuntimeException( "Application is not running!" );
+		
 		bc.removeBundleListener( listener );
 	}
 	
 	public void removeFrameworkListener(FrameworkListener listener) {
+		if( appHandle == null )
+			throw new RuntimeException( "Application is not running!" );
+		
     bc.removeFrameworkListener( listener );
 	}
 	
 	public void removeServiceListener(ServiceListener listener) {
+		if( appHandle == null )
+			throw new RuntimeException( "Application is not running!" );
+		
 		bc.removeServiceListener( listener );
 	}
 	
@@ -224,6 +265,12 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		while( !serviceList.isEmpty() ) {
 			Service serv = (Service)serviceList.removeFirst();
 			bc.ungetService( serv.serviceReference );
+		}
+		
+		while( !registeredServiceList.isEmpty() ) {
+			ServiceRegistration servReg = (ServiceRegistration)registeredServiceList.removeFirst();
+			if( servReg.getReference().getBundle() != null ) /* service was not unregistered? */
+				servReg.unregister();
 		}
 		
 		bc.removeServiceListener( this );

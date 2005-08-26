@@ -73,6 +73,11 @@ public class TestMidlet extends MIDlet implements EventHandler {
 	public void handleEvent(Event event) {
 		if (event.getTopic().equals("com/nokia/megtest/CheckRegistered")) {
 			writeResult("REGISTERED SUCCESSFULLY");
-		}		
+		}
+		else if (event.getTopic().equals("com/nokia/megtest/LocateService")) {
+			LogService logger = (LogService)myApplicationContext.locateService( "log" );
+			logger.log( LogService.LOG_INFO, "Service works fine!" );
+			writeResult("LOG SERVICE OPERABLE");			
+		}
 	}
 }
