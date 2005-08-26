@@ -7,6 +7,7 @@ import org.osgi.service.log.LogService;
 import org.osgi.application.*;
 import org.osgi.service.event.*;
 import org.osgi.framework.*;
+import java.util.*;
 
 public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundleListener,
                                                   ServiceListener, FrameworkListener {
@@ -104,6 +105,19 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 		else if (event.getTopic().equals("com/nokia/megtest/RemoveFrameworkListener")) {
 			myApplicationContext.removeFrameworkListener( this );
 			writeResult("FRAMEWORK LISTENER REMOVED");			
+		}
+		else if (event.getTopic().equals("com/nokia/megtest/CheckStartupParams")) {
+			Map startupArgs = myApplicationContext.getStartupParameters();
+			
+			Iterator iterator = startupArgs.keySet().iterator();
+			while( iterator.hasNext() ) {
+				String key = (String)iterator.next(); 
+				if( !startupArgs.get( key ).equals( getAppProperty(key) ) ) {
+					writeResult("STARTUP PARAMETER FAILURE");			
+					return;
+				}
+			}
+			writeResult("STARTUP PARAMETERS OK");			
 		}
 	}
 
