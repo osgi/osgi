@@ -177,7 +177,7 @@ public class ServiceTrackerControl extends DefaultTestBundleControl
         synchronized(this)
         {
             try {
-                wait(1000);
+        		wait(5000);
             } catch (Exception e) {
                 log("Wait didn't work: Thread 1"+e);
             }
@@ -207,6 +207,7 @@ public class ServiceTrackerControl extends DefaultTestBundleControl
         String bundleName;
         Semaphore semaphore;
         Bundle bundle;
+        boolean isRunning() { return bundle.getState()==Bundle.ACTIVE; }
                 
         public BundleStarter(String bundleName, Semaphore semaphore){
             this.bundleName = bundleName;
