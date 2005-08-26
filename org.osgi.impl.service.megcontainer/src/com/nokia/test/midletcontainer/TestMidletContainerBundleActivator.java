@@ -171,9 +171,13 @@ public class TestMidletContainerBundleActivator
         else
             System.out.println("Stopping the Midlet application                  PASSED");
         if(!testCase_oatRegisterService())
-          System.out.println("Checking OAT service registration                FAILED");
-      else
-          System.out.println("Checking OAT service registration                PASSED");
+            System.out.println("Checking OAT service registration                FAILED");
+        else
+            System.out.println("Checking OAT service registration                PASSED");
+        if(!testCase_oatLocateService())
+            System.out.println("Checking OAT locate service                      FAILED");
+        else
+            System.out.println("Checking OAT locate service                      PASSED");
         if(!testCase_launchAfterRestart())
             System.out.println("Launching Midlet app after container restart     FAILED");
         else
@@ -809,16 +813,53 @@ public class TestMidletContainerBundleActivator
   		return false;
   	}
 
-  	private boolean testCase_oatRegisterService() {
+  	private boolean checkResponseForEvent( String eventName, String eventAnswer ) {
       try {
-  			sendEvent(new Event("com/nokia/megtest/CheckRegistered", null), false);
-  			if (!checkResultFile("REGISTERED SUCCESSFULLY"))
+  			sendEvent(new Event( eventName, null), false);
+  			if (!checkResultFile( eventAnswer ))
   				throw new Exception("Event handler service was not registered!");
       	return true;
       }
       catch(Exception e) {
           e.printStackTrace();
       }
-      return false;
+      return false;  		
+  	}
+  	
+  	boolean testCase_oatRegisterService() {
+      try {
+      	if( !testCase_launchApplication() )
+      		return false;
+  		  if( !checkResponseForEvent( "com/nokia/megtest/CheckRegistered", 
+  				                          "REGISTERED SUCCESSFULLY") )
+  		    return false;
+  		  if( !testCase_stopApplication() )
+  		  	return false;
+  			sendEvent(new Event( "com/nokia/megtest/CheckRegistered", null), false);
+  			if ( checkResultFile( "REGISTERED SUCCESSFULLY" ) )
+  				throw new Exception("Event handler was not unregistered after stop!");
+  		  
+      }
+      catch(Exception e) {
+          e.printStackTrace();
+      }
+      return false;  		
+  	}
+
+  	boolean testCase_oatLocateService() {
+      try {
+      	if( !testCase_launchApplication() )
+      		return false;
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/LocateService", 
+                                  "LOG SERVICE OPERABLE") )
+  		  	return false;
+  		  if( !testCase_stopApplication() )
+	  	  	return false;
+        return true;  		
+      }
+      catch(Exception e) {
+          e.printStackTrace();
+      }
+      return false;  		
   	}
 }
