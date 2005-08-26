@@ -211,7 +211,7 @@ public class ConfigurationImpl implements Configuration, Serializable {
 		}
 		if (!isCorrectType(properties)) {
 			throw new IllegalArgumentException(
-					"Properties contain incorrect type!");
+					"Properties contain incorrect type or duplicate case key! " + properties );
 		}
 		callBackManagedService(null, properties);
 
@@ -363,9 +363,12 @@ public class ConfigurationImpl implements Configuration, Serializable {
 	private static boolean isCorrectType(Dictionary props) {
 		Enumeration e = props.keys();
 		String key;
+		Set			keys = new HashSet();
 		while (e.hasMoreElements()) {
 			try {
 				key = (String) e.nextElement();
+				if ( !keys.add(key.toLowerCase()))
+					return false;
 			}
 			catch (ClassCastException cce) {
 				return false;
