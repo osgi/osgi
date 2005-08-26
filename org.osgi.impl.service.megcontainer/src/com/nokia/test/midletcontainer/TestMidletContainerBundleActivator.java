@@ -32,6 +32,7 @@ public class TestMidletContainerBundleActivator
     private String installedAppUID;
     private long installedBundleID;
     private ServiceRegistration serviceReg;
+    private Hashtable           serviceRegProps;
     private LinkedList receivedEvents;
     private static final int APPLICATION_START = 1;
     private static final int APPLICATION_PAUSE = 2;
@@ -42,13 +43,14 @@ public class TestMidletContainerBundleActivator
     public TestMidletContainerBundleActivator()
     {
         receivedEvents = new LinkedList();
+        serviceRegProps = new Hashtable();
     }
 
     public void start(BundleContext bc)
         throws Exception
     {
         this.bc = bc;
-        serviceReg = bc.registerService("org.osgi.service.event.EventHandler", this, null);
+        serviceReg = bc.registerService("org.osgi.service.event.EventHandler", this, serviceRegProps);
         bc.addBundleListener(this);
     }
 
@@ -182,6 +184,10 @@ public class TestMidletContainerBundleActivator
             System.out.println("Checking OAT bundle listener                     FAILED");
         else
             System.out.println("Checking OAT bundle listener                     PASSED");
+        if(!testCase_oatServiceListener())
+            System.out.println("Checking OAT service listener                    FAILED");
+        else
+            System.out.println("Checking OAT service listene                     PASSED");
         if(!testCase_launchAfterRestart())
             System.out.println("Launching Midlet app after container restart     FAILED");
         else
@@ -205,7 +211,7 @@ public class TestMidletContainerBundleActivator
         System.out.println("\n\nMidlet container tester thread finished!");
     }
 
-  	boolean installMidletBundle(String resourceName)
+	boolean installMidletBundle(String resourceName)
     {
         try
         {
@@ -911,6 +917,53 @@ public class TestMidletContainerBundleActivator
   			content = getResultFileContent();
   			if ( content != null && content.equals( "BUNDLE CHANGE RECEIVED" ) )
   				throw new Exception("Bundle listener was not removed after stop!");
+  		  
+        return true;  		
+      }
+      catch(Exception e) {
+          e.printStackTrace();
+      }
+      return false;  		
+  	}
+
+  	boolean testCase_oatServiceListener() {
+      try {     	
+      	if( !testCase_launchApplication() )
+      		return false;
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/AddServiceListener", 
+                                    "SERVICE LISTENER ADDED") )
+  		  	return false;
+
+  	  	serviceRegProps.put( "MyPropKey", "MyPropValue" );  	  	
+  	  	serviceReg.setProperties( serviceRegProps );
+  	  	
+  			if (!checkResultFile( "SERVICE CHANGE RECEIVED" ))
+  				throw new Exception("Event handler service was not registered!");
+  	  	
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/RemoveServiceListener", 
+                                    "SERVICE LISTENER REMOVED") )
+          return false;
+  	  	
+  	  	serviceRegProps.put( "MyPropKey", "MyPropValue2" );  	  	
+  	  	serviceReg.setProperties( serviceRegProps );
+  	  	
+  			String content = getResultFileContent();
+  			if ( content != null && content.equals( "SERVICE CHANGE RECEIVED" ) )
+  				throw new Exception("Service listener was not removed!");
+  	  	
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/AddServiceListener", 
+                                    "SERVICE LISTENER ADDED") )
+          return false;
+  	  	
+  		  if( !testCase_stopApplication() )
+	  	  	return false;
+  		  
+  		  serviceRegProps.remove( "MyPropKey" );
+  	  	serviceReg.setProperties( serviceRegProps );
+  	  	
+  			content = getResultFileContent();
+  			if ( content != null && content.equals( "SERVICE CHANGE RECEIVED" ) )
+  				throw new Exception("Service listener was not removed after stop!");
   		  
         return true;  		
       }

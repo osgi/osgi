@@ -7,7 +7,6 @@ import javax.microedition.midlet.MIDlet;
 import org.osgi.framework.*;
 import org.osgi.service.application.midlet.MidletDescriptor;
 import org.osgi.service.application.midlet.MidletHandle;
-import org.osgi.impl.service.application.OATContainerInterface;
 
 public final class MidletHandleImpl implements ServiceListener,
 		org.osgi.service.application.midlet.MidletHandle.Delegate {
