@@ -35,8 +35,9 @@ import org.osgi.service.dmt.DmtSession;
  * the nodes handled by this plugin.
  * <p>
  * The <code>sessionRoot</code> parameter of each method is a String array
- * containing the segments of the URI pointing to the root of the session.  
- * Special characters appear escaped in the segments.
+ * containing the segments of the URI pointing to the root of the session. This
+ * is an absolute path, so the first segment is always &quot;.&quot;.  Special 
+ * characters appear escaped in the segments.
  * <p>
  */
 public interface DataPluginFactory {

@@ -19,7 +19,8 @@ import org.osgi.service.dmt.MetaNode;
  * <p>
  * The <code>nodePath</code> parameters appearing in this interface always
  * contain an array of path segments identifying a node in the subtree of this
- * plugin.  Special characters appear escaped in the segments.
+ * plugin.  This parameter contains an absolute path, so the first segment is 
+ * always &quot;.&quot;. Special characters appear escaped in the segments.
  * <p>
  * <strong>Error handling</strong>
  * <p>

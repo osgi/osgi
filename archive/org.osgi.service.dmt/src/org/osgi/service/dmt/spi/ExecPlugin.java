@@ -41,7 +41,8 @@ public interface ExecPlugin {
      * this execute operation.
      * <p>
      * The <code>nodePath</code> parameter contains an array of path segments 
-     * identifying the node to be executed in the subtree of this plugin.  
+     * identifying the node to be executed in the subtree of this plugin. This
+     * is an absolute path, so the first segment is always &quot;.&quot;. 
      * Special characters appear escaped in the segments.
      * 
      * @param session a reference to the session in which the operation was
