@@ -5,8 +5,9 @@ import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 import org.osgi.service.log.LogService;
 import org.osgi.application.*;
+import org.osgi.service.event.*;
 
-public class TestMidlet extends MIDlet {
+public class TestMidlet extends MIDlet implements EventHandler {
 	String                      fileName;
 	String                      storedString;
 	boolean                     paused;
@@ -30,8 +31,7 @@ public class TestMidlet extends MIDlet {
 		if( myApplicationContext == null )
 			System.err.println( "OAT didn't create the ApplicationContext!" );
 		else
-			((LogService)myApplicationContext.locateService( "log" )).
-				log( LogService.LOG_INFO, "Service loaded successfully!" );
+			myApplicationContext.registerService( EventHandler.class.getName(), this, null );
 
 		if (paused) {
 			writeResult("RESUME");
@@ -68,5 +68,11 @@ public class TestMidlet extends MIDlet {
 			stream.close();
 		}
 		catch (IOException ioexception) {}
+	}
+
+	public void handleEvent(Event event) {
+		if (event.getTopic().equals("com/nokia/megtest/CheckRegistered")) {
+			writeResult("REGISTERED SUCCESSFULLY");
+		}		
 	}
 }
