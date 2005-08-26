@@ -16,10 +16,9 @@ public class JaxpActivator implements BundleActivator {
 				f.setNamespaceAware(true);
 				f.setValidating(true);
 				Hashtable properties = new Hashtable();
-				properties.put(XMLParserActivator.PARSER_NAMESPACEAWARE, ""
-						+ f.isNamespaceAware());
-				properties.put(XMLParserActivator.PARSER_VALIDATING, ""
-						+ f.isValidating());
+				properties.put(XMLParserActivator.PARSER_NAMESPACEAWARE, new Boolean(f.isNamespaceAware()));
+				properties.put(XMLParserActivator.PARSER_VALIDATING,
+						new Boolean(f.isValidating()));
 				context.registerService(DocumentBuilderFactory.class.getName(),
 						f, properties);
 			}
@@ -35,10 +34,10 @@ public class JaxpActivator implements BundleActivator {
 				s.setNamespaceAware(true);
 				s.setValidating(true);
 				Hashtable properties = new Hashtable();
-				properties.put(XMLParserActivator.PARSER_NAMESPACEAWARE, ""
-						+ s.isNamespaceAware());
-				properties.put(XMLParserActivator.PARSER_VALIDATING, ""
-						+ s.isValidating());
+				properties.put(XMLParserActivator.PARSER_NAMESPACEAWARE, 
+						new Boolean(s.isNamespaceAware()));
+				properties.put(XMLParserActivator.PARSER_VALIDATING, 
+						new Boolean(s.isValidating()));
 				context.registerService(SAXParserFactory.class.getName(), s,
 						properties);
 			}
