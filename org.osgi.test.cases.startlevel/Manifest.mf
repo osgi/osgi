@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
-Bundle-Name: test.cases.startlevel
+Bundle-SymbolicName: ${p}
+Bundle-Name: test.startlevel
 Bundle-Description: Tests the StartLevel service
 Bundle-Version: 3.0
 Bundle-Activator: $(p).StartLevelTestCase

@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Activator: org.osgi.impl.service.prefs.Activator
+Bundle-SymbolicName: ${p}
 Bundle-Name: impl.service.prefs
 Bundle-Description: OSGi Preferences Service Reference Implementation by Sun Microsystems.
 Bundle-Copyright: Copyright (c) 2000-2002 Sun Microsystems, Inc. All Rights Reserved.

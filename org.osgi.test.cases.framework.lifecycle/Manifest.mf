@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
-Bundle-Name: test.cases.framework.lifecycle
-Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
+Bundle-SymbolicName: ${p}
+Bundle-Name: test.framework.lifecycle
+Bundle-Copyright: ${copyright}
 Bundle-Description: Tests lifecycle operations: <br><br>
  <pre>
   testNormalInstallStartStopUninstall   Normal lifecycles<br>

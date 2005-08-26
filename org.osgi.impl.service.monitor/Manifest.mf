@@ -1,9 +1,10 @@
 Manifest-Version: 1.0
-Bundle-Name: MonitorAdmin
+Bundle-Name: impl.service.monitor
 Bundle-SymbolicName: ${p}
 Bundle-Vendor: Nokia
 Bundle-Version: 1.0
 Bundle-Activator: $(p).Activator
+Bundle-Copyright: ${copyright}
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
 $(PRIVATE-PACKAGE)

@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
-Bundle-Name: Service Component Runtime
+Bundle-Name: impl.service.component
 Bundle-Description: Service Component Runtime Reference Implementation
 Bundle-Copyright: Copyright (c) IBM Corporation (2005). All Rights Reserved.
 Bundle-Vendor: IBM Corporation
-Bundle-SymbolicName: org.eclipse.osgi.component.runtime
+Bundle-SymbolicName: ${p}
 Bundle-Version: 1.0
 Bundle-Activator: org.eclipse.osgi.component.Main
 Bundle-Category: osgi

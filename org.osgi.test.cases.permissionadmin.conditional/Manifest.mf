@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-Activator: ${p}.ConditionalTestCase
-Bundle-Name: ${p}
+Bundle-Name: test.permissionadmin.conditional
 Bundle-SymbolicName: ${p}
 Bundle-Version: 4
-Bundle-Copyright: Copyright (c) OSGi Alliance (2000-2005). All Rights Reserved.
+Bundle-Copyright: ${copyright}
 Bundle-Description: conditional permission test case.
 Bundle-Vendor: OSGi Alliance
 Bundle-DocUrl: http://www.osgi.org/testcases/4/test.cases.template

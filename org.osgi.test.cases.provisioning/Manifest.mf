@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
-Bundle-Name: test.cases.provisioning
+Bundle-SymbolicName: ${p}
+Bundle-Name: test.provisioning
 Bundle-Description: Tests the Initial Provisioning
 Bundle-Version: 3.0
 Bundle-Activator: $(p).ProvisioningTestCase

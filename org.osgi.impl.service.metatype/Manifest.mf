@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-SymbolicName: ${p}
-Bundle-Name: ${p}
+Bundle-Name: impl.service.metatype
 Bundle-Activator: ${p}.MetaTypeActivator
 Bundle-Description: OSGi Metatype Service Reference Implementation by IBM Corporation.
 Bundle-Copyright: (C) Copyright IBM Corporation 2000-2005.

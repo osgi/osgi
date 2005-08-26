@@ -1,9 +1,10 @@
 Manifest-Version: 1.0
-Bundle-Name: DmtAdmin
+Bundle-Name: impl.service.dmt
 Bundle-SymbolicName: ${p}
 Bundle-Vendor: Nokia
 Bundle-Version: 1.0
 Bundle-Activator: $(p).Activator
+Bundle-Copyright: ${copyright}
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)

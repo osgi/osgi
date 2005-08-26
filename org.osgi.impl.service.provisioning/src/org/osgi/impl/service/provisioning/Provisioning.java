@@ -17,13 +17,14 @@ public class Provisioning extends Thread implements
 	ProvisioningServiceImpl	svc;
 	ServiceRegistration		reg;
 	SimpleWebInterface		swi;
-	ProvisioningLog			log		= new ProvisioningLog();
+	ProvisioningLog			log	;
 	Hashtable				regDict	= new Hashtable();
 
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(BundleContext)
 	 */
 	public void start(BundleContext bc) throws Exception {
+		log = new ProvisioningLog(bc);
 		ProvisioningDictionary dict = null;
 		svc = new ProvisioningServiceImpl(bc, log, regDict);
 		dict = (ProvisioningDictionary) svc.getInformation();

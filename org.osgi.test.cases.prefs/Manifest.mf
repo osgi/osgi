@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
-Bundle-Name: test.cases.prefs
+Bundle-SymbolicName: ${p}
+Bundle-Name: test.prefs
 Bundle-Description: Tests the Preferences service
 Bundle-Version: 3.0
 Bundle-Activator: $(p).PrefsTestCase

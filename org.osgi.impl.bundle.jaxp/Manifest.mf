@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-Activator: org.osgi.impl.bundle.jaxp.JaxpActivator
-Bundle-Name: JaxpBundle
+Bundle-SymbolicName: ${p}
+Bundle-Name: impl.bundle.jaxp
 Bundle-Description: OSGi XML JAXP Implementation. Registers an 
-Bundle-Copyright: Copyright (c) OSGi Alliance (2002). All Rights Reserved.
+Bundle-Copyright: ${copyright}
 Bundle-Vendor: OSGi Alliance
 Bundle-Version: 1.0
 Bundle-Category: osgi,xml

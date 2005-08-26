@@ -1,9 +1,10 @@
 Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}
 Bundle-Name: impl.service.device.basicdriverlocator
 Bundle-Description: OSGi Device Manager Reference Implementation by Gatespace AB
 Bundle-Vendor: OSGi Alliance
 Bundle-Version: 1.1
-Bundle-Copyright: Copyright (c) OSGi Alliance (2000-2002). All Rights Reserved.
+Bundle-Copyright: ${copyright}
 Bundle-DocURL: http://www.gatespace.com
 Bundle-ContactAddress: osgiref@gatespace.com
 Bundle-Activator: org.osgi.impl.service.device.basicdriverlocator.DriverLocatorBA

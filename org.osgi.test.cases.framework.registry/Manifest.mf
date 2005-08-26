@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
-Bundle-Name: test.cases.framework.registry
+Bundle-SymbolicName: ${p}
+Bundle-Name: test.framework.registry
 Bundle-Description: Tests the Service Registry
 Bundle-Version: 3.0
 Bundle-Activator: $(p).RegistryTestCase

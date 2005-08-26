@@ -1,13 +1,12 @@
 Manifest-Version: 1.0
-Bundle-Name: OSGi Initial Provisioning Bundle
+Bundle-SymbolicName: ${p}
+Bundle-Name: impl.service.provisioning
 Bundle-Version: 1.0
 Bundle-Activator: org.osgi.impl.service.provisioning.Provisioning
 Bundle-Category: osgi
-Bundle-Copyright: Copyright (c) OSGi Alliance (2002). All Rights Reserved.
+Bundle-Copyright: ${copyright}
 Bundle-Description: Provides the Initial Provisioning Service for the framework.
 Bundle-Vendor: OSGi Alliance
-Import-Package: org.osgi.framework; specification-version=1.2,
- org.osgi.service.permissionadmin; specification-version=1.0,
- org.osgi.service.provisioning; specification-version=1.0,
- org.osgi.util.tracker; specification-version=1.1
-Export-Package: org.osgi.service.provisioning;specification-version=1.0
+${IMPORT-PACKAGE}
+${EXPORT-PACKAGE}
+${PRIVATE-PACKAGE}

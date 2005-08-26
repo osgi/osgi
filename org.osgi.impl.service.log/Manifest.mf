@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Activator: org.osgi.impl.service.log.Log
+Bundle-SymbolicName: ${p}
 Bundle-Name: impl.service.log
 Bundle-Description: OSGi Log Service Reference Implementation by IBM Corporation.
 Bundle-Copyright: (C) Copyright IBM Corporation 2000-2005.

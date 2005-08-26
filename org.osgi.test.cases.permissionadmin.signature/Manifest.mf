@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-Activator: ${p}.PermissionSignatureTestCase
-Bundle-Name: ${p}
+Bundle-Name: test.permissionadmin.signature
 Bundle-SymbolicName: ${p}
 Bundle-Version: 4
-Bundle-Copyright: Copyright (c) OSGi Alliance (2000-2005). All Rights Reserved.
+Bundle-Copyright: ${copyright}
 Bundle-Description: permission signature test case
 Bundle-DocUrl: http://www.osgi.org/testcases/4/test.cases.template
 Bundle-ContactAddress: speccomments@mail.osgi.org

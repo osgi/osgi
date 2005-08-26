@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-SymbolicName: ${p}
-Bundle-Name: ${p}
+Bundle-Name: impl.service.power
 Bundle-Vendor: Siemens AG
 Bundle-Copyright: All Rights Reserved, (c) OSGi Alliance, 2000-2005
 Bundle-Version: 0.0.0.0

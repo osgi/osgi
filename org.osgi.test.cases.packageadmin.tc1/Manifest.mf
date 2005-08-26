@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
-Bundle-Name: test.cases.packageadmin.tc1
-Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
+Bundle-SymbolicName: ${p}
+Bundle-Name: test.packageadmin.tc1
+Bundle-Copyright: ${copyright}
 Bundle-Description: Tests exporting packages and re-exporting packages. <BR>
  Testing the methods in PackageAdmin<BR>
  Tests that PackageAdmin is exported by the System Bundle.<BR>

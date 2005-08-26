@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
-Bundle-Name: test.cases.packageadmin.tc3
-Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
+Bundle-SymbolicName: ${p}
+Bundle-Name: test.packageadmin.tc3
+Bundle-Copyright: ${copyright}
 Bundle-Description: Tests new bundle exporting same package. <BR>
  Tests two bundles exporting the same package.<BR>
 Bundle-Vendor: OSGi Alliance

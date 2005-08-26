@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
-Bundle-Name: test.cases.position
+Bundle-SymbolicName: ${p}
+Bundle-Name: test.position
 Bundle-Description: Tests the Position classes
 Bundle-Version: 3.0
 Bundle-Activator: $(p).PositionTestCase

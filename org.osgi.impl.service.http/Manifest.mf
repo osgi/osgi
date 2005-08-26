@@ -1,4 +1,6 @@
 Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}
+Bundle-Copyright: ${copyright}
 Bundle-Name: impl.service.http
 Bundle-Description: The OSGi HTTP service Reference Implementation by Gatespace AB.
 Bundle-Vendor: OSGi Alliance

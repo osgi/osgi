@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}
 Bundle-Name: test.cases.cm.tbc
 Bundle-Description: Configuration Management Test R4
 Bundle-Version: 4.0

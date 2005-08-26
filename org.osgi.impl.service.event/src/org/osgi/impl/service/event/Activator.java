@@ -48,7 +48,6 @@ public class Activator implements BundleActivator {
 				eventAdminImpl, null);
 		redeliverer = new EventRedeliverer(bc);
 		redeliverer.open();
-		System.out.println("EventAdmin started successfully!");
 	}
 
 	public void stop(BundleContext bc) throws Exception {
@@ -57,6 +56,5 @@ public class Activator implements BundleActivator {
 		eventAdminImpl.stop();
 		eventAdminServiceReg.unregister();
 		this.bc = null;
-		System.out.println("EventAdmin stopped successfully!");
 	}
 }

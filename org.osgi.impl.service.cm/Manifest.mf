@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-Activator: ${p}.CMActivator
 Bundle-Name: impl.service.cm
+Bundle-SymbolicName: ${p}
 Bundle-Description: OSGi Configuration Administration Reference Implementation by ProSyst GmbH.
-Bundle-Copyright: Copyright (c) OSGi Alliance 2002, 2005. All Rights Reserved.
+Bundle-Copyright: ${copyright}
 Bundle-Vendor: OSGi Alliance
 Bundle-Version: 2.1
 Bundle-Category: osgi

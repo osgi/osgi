@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
-Bundle-Name: test.cases.io
-Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
+Bundle-SymbolicName: ${p}
+Bundle-Name: test.io
+Bundle-Copyright: ${copyright}
 Bundle-Description: Tests the IO Service
 Bundle-Vendor: OSGi Alliance
 Bundle-Version: 3.0

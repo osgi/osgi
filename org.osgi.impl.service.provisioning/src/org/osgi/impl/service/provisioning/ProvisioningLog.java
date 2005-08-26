@@ -1,8 +1,10 @@
 package org.osgi.impl.service.provisioning;
 
-import java.util.Enumeration;
-import java.util.Vector;
-import java.util.Date;
+import java.util.*;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.service.log.LogService;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * A Simple Event tracker for the ProvisioningService. If a LogService could be
@@ -11,14 +13,23 @@ import java.util.Date;
  * 
  * @author breed
  */
-public class ProvisioningLog {
+public class ProvisioningLog extends ServiceTracker {
 	Vector	log	= new Vector();
 
+	ProvisioningLog( BundleContext context ) {
+		super(context, LogService.class.getName(), null );
+		open();
+	}
+	
 	/** Adds a message to the long and timestamps it. */
 	synchronized void log(String message) {
 		String msg = new Date().toString() + ": " + message;
 		log.add(0, msg);
-		System.out.println(msg);
+		LogService log = (LogService) getService();
+		if ( log != null )
+			log.log(LogService.LOG_WARNING, msg );
+		else
+			System.out.println(msg);
 	}
 
 	/** Returns the full log. Most recent messages will be first. */
